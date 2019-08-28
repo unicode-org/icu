@@ -197,7 +197,7 @@ public:
      * @return   a copy of the object
      * @stable ICU 4.0
      */
-    virtual DateIntervalInfo* clone(void) const;
+    virtual DateIntervalInfo* clone() const;
 
     /**
      * Destructor.

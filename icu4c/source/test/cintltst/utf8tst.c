@@ -35,7 +35,7 @@
  * the macros below do not attempt to assemble such pairs.
  */
 
-#define L8_NEXT(s, i, length, c) { \
+#define L8_NEXT(s, i, length, c) UPRV_BLOCK_MACRO_BEGIN { \
     (c)=(uint8_t)(s)[(i)++]; \
     if((c)>=0x80) { \
         if(U8_IS_LEAD(c)) { \
@@ -44,9 +44,9 @@
             (c)=U_SENTINEL; \
         } \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define L8_PREV(s, start, i, c) { \
+#define L8_PREV(s, start, i, c) UPRV_BLOCK_MACRO_BEGIN { \
     (c)=(uint8_t)(s)[--(i)]; \
     if((c)>=0x80) { \
         if((c)<=0xbf) { \
@@ -55,7 +55,7 @@
             (c)=U_SENTINEL; \
         } \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
 /* -------------------------------------------------------------------------- */
 

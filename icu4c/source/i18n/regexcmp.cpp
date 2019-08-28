@@ -561,7 +561,7 @@ UBool RegexCompile::doParseActions(int32_t action)
         //               sequence; don't change without making updates there too.
         //
         // Compiles to
-        //    1    START_LA     dataLoc     Saves SP, Input Pos
+        //    1    LA_START     dataLoc     Saves SP, Input Pos, Active input region.
         //    2.   STATE_SAVE   4            on failure of lookahead, goto 4
         //    3    JMP          6           continue ...
         //
@@ -575,10 +575,14 @@ UBool RegexCompile::doParseActions(int32_t action)
         //    8.     code for parenthesized stuff.
         //    9.   LA_END
         //
-        //  Two data slots are reserved, for saving the stack ptr and the input position.
+        //  Four data slots are reserved, for saving state on entry to the look-around
+        //    0:   stack pointer on entry.
+        //    1:   input position on entry.
+        //    2:   fActiveStart, the active bounds start on entry.
+        //    3:   fActiveLimit, the active bounds limit on entry.
         {
             fixLiterals();
-            int32_t dataLoc = allocateData(2);
+            int32_t dataLoc = allocateData(4);
             appendOp(URX_LA_START, dataLoc);
             appendOp(URX_STATE_SAVE, fRXPat->fCompiledPat->size()+ 2);
             appendOp(URX_JMP, fRXPat->fCompiledPat->size()+ 3);
@@ -599,18 +603,23 @@ UBool RegexCompile::doParseActions(int32_t action)
     case doOpenLookAheadNeg:
         // Negated Lookahead.   (?! stuff )
         // Compiles to
-        //    1.    START_LA    dataloc
+        //    1.    LA_START    dataloc
         //    2.    SAVE_STATE  7         // Fail within look-ahead block restores to this state,
         //                                //   which continues with the match.
         //    3.    NOP                   // Std. Open Paren sequence, for possible '|'
         //    4.       code for parenthesized stuff.
-        //    5.    END_LA                // Cut back stack, remove saved state from step 2.
+        //    5.    LA_END                // Cut back stack, remove saved state from step 2.
         //    6.    BACKTRACK             // code in block succeeded, so neg. lookahead fails.
         //    7.    END_LA                // Restore match region, in case look-ahead was using
         //                                        an alternate (transparent) region.
+        //  Four data slots are reserved, for saving state on entry to the look-around
+        //    0:   stack pointer on entry.
+        //    1:   input position on entry.
+        //    2:   fActiveStart, the active bounds start on entry.
+        //    3:   fActiveLimit, the active bounds limit on entry.
         {
             fixLiterals();
-            int32_t dataLoc = allocateData(2);
+            int32_t dataLoc = allocateData(4);
             appendOp(URX_LA_START, dataLoc);
             appendOp(URX_STATE_SAVE, 0);    // dest address will be patched later.
             appendOp(URX_NOP, 0);
@@ -644,14 +653,16 @@ UBool RegexCompile::doParseActions(int32_t action)
             //          Allocate a block of matcher data, to contain (when running a match)
             //              0:    Stack ptr on entry
             //              1:    Input Index on entry
-            //              2:    Start index of match current match attempt.
-            //              3:    Original Input String len.
+            //              2:    fActiveStart, the active bounds start on entry.
+            //              3:    fActiveLimit, the active bounds limit on entry.
+            //              4:    Start index of match current match attempt.
+            //          The first four items must match the layout of data for LA_START / LA_END
 
             // Generate match code for any pending literals.
             fixLiterals();
 
             // Allocate data space
-            int32_t dataLoc = allocateData(4);
+            int32_t dataLoc = allocateData(5);
 
             // Emit URX_LB_START
             appendOp(URX_LB_START, dataLoc);
@@ -696,14 +707,16 @@ UBool RegexCompile::doParseActions(int32_t action)
             //          Allocate a block of matcher data, to contain (when running a match)
             //              0:    Stack ptr on entry
             //              1:    Input Index on entry
-            //              2:    Start index of match current match attempt.
-            //              3:    Original Input String len.
+            //              2:    fActiveStart, the active bounds start on entry.
+            //              3:    fActiveLimit, the active bounds limit on entry.
+            //              4:    Start index of match current match attempt.
+            //          The first four items must match the layout of data for LA_START / LA_END
 
             // Generate match code for any pending literals.
             fixLiterals();
 
             // Allocate data space
-            int32_t dataLoc = allocateData(4);
+            int32_t dataLoc = allocateData(5);
 
             // Emit URX_LB_START
             appendOp(URX_LB_START, dataLoc);
@@ -3381,7 +3394,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
                 //   it assumes that the look-ahead match might be zero-length.
                 //   TODO:  Positive lookahead could recursively do the block, then continue
                 //          with the longer of the block or the value coming in.  Ticket 6060
-                int32_t  depth = (opType == URX_LA_START? 2: 1);;
+                int32_t  depth = (opType == URX_LA_START? 2: 1);
                 for (;;) {
                     loc++;
                     op = (int32_t)fRXPat->fCompiledPat->elementAti(loc);

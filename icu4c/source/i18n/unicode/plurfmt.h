@@ -450,7 +450,7 @@ public:
      * result and should delete it when done.
      * @stable ICU 4.0
      */
-    virtual Format* clone(void) const;
+    virtual PluralFormat* clone() const;
 
    /**
     * Formats a plural message for a number taken from a Formattable object.

@@ -352,7 +352,7 @@ UBool
 TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ) 
 {
     UErrorCode status = U_ZERO_ERROR;
-    // GregorianCalendar testCal = (GregorianCalendar)aCal.clone(); 
+    // GregorianCalendar testCal = aCal.clone(); 
 
     int32_t tzOffset, tzRawOffset; 
     float tzOffsetFloat,tzRawOffsetFloat; 
@@ -922,26 +922,26 @@ void TimeZoneRegressionTest::Test4176686() {
     // that does have a DST savings (which should be ignored).
     UErrorCode status = U_ZERO_ERROR;
     int32_t offset = 90 * 60000; // 1:30
-    SimpleTimeZone* z1 = new SimpleTimeZone(offset, "_std_zone_");
-    z1->setDSTSavings(45 * 60000, status); // 0:45
+    SimpleTimeZone z1(offset, "_std_zone_");
+    z1.setDSTSavings(45 * 60000, status); // 0:45
 
     // Construct a zone that observes DST for the first 6 months.
-    SimpleTimeZone* z2 = new SimpleTimeZone(offset, "_dst_zone_");
-    z2->setDSTSavings(45 * 60000, status); // 0:45
-    z2->setStartRule(UCAL_JANUARY, 1, 0, status);
-    z2->setEndRule(UCAL_JULY, 1, 0, status);
+    SimpleTimeZone z2(offset, "_dst_zone_");
+    z2.setDSTSavings(45 * 60000, status); // 0:45
+    z2.setStartRule(UCAL_JANUARY, 1, 0, status);
+    z2.setEndRule(UCAL_JULY, 1, 0, status);
 
     // Also check DateFormat
-    DateFormat* fmt1 = new SimpleDateFormat(UnicodeString("z"), status);
+    SimpleDateFormat fmt1(UnicodeString(u"z"), status);
     if (U_FAILURE(status)) {
         dataerrln("Failure trying to construct: %s", u_errorName(status));
         return;
     }
-    fmt1->setTimeZone(*z1); // Format uses standard zone
-    DateFormat* fmt2 = new SimpleDateFormat(UnicodeString("z"), status);
+    fmt1.setTimeZone(z1); // Format uses standard zone
+    SimpleDateFormat fmt2(UnicodeString(u"z"), status);
     if(!assertSuccess("trying to construct", status))return;
-    fmt2->setTimeZone(*z2); // Format uses DST zone
-    Calendar* tempcal = Calendar::createInstance(status);
+    fmt2.setTimeZone(z2); // Format uses DST zone
+    LocalPointer<Calendar> tempcal(Calendar::createInstance(status));
     tempcal->clear();
     tempcal->set(1970, UCAL_FEBRUARY, 1);
     UDate dst = tempcal->getTime(status); // Time in DST
@@ -951,26 +951,26 @@ void TimeZoneRegressionTest::Test4176686() {
     // Description, Result, Expected Result
     UnicodeString a,b,c,d,e,f,g,h,i,j,k,l;
     UnicodeString DATA[] = {
-        "z1->getDisplayName(false, SHORT)/std zone",
-        z1->getDisplayName(FALSE, TimeZone::SHORT, a), "GMT+1:30",
-        "z1->getDisplayName(false, LONG)/std zone",
-        z1->getDisplayName(FALSE, TimeZone::LONG, b), "GMT+01:30",
-        "z1->getDisplayName(true, SHORT)/std zone",
-        z1->getDisplayName(TRUE, TimeZone::SHORT, c), "GMT+1:30",
-        "z1->getDisplayName(true, LONG)/std zone",
-        z1->getDisplayName(TRUE, TimeZone::LONG, d ), "GMT+01:30",
-        "z2->getDisplayName(false, SHORT)/dst zone",
-        z2->getDisplayName(FALSE, TimeZone::SHORT, e), "GMT+1:30",
-        "z2->getDisplayName(false, LONG)/dst zone",
-        z2->getDisplayName(FALSE, TimeZone::LONG, f ), "GMT+01:30",
-        "z2->getDisplayName(true, SHORT)/dst zone",
-        z2->getDisplayName(TRUE, TimeZone::SHORT, g), "GMT+2:15",
-        "z2->getDisplayName(true, LONG)/dst zone",
-        z2->getDisplayName(TRUE, TimeZone::LONG, h ), "GMT+02:15",
-        "DateFormat.format(std)/std zone", fmt1->format(std, i), "GMT+1:30",
-        "DateFormat.format(dst)/std zone", fmt1->format(dst, j), "GMT+1:30",
-        "DateFormat.format(std)/dst zone", fmt2->format(std, k), "GMT+1:30",
-        "DateFormat.format(dst)/dst zone", fmt2->format(dst, l), "GMT+2:15",
+        "z1.getDisplayName(false, SHORT)/std zone",
+        z1.getDisplayName(FALSE, TimeZone::SHORT, a), "GMT+1:30",
+        "z1.getDisplayName(false, LONG)/std zone",
+        z1.getDisplayName(FALSE, TimeZone::LONG, b), "GMT+01:30",
+        "z1.getDisplayName(true, SHORT)/std zone",
+        z1.getDisplayName(TRUE, TimeZone::SHORT, c), "GMT+1:30",
+        "z1.getDisplayName(true, LONG)/std zone",
+        z1.getDisplayName(TRUE, TimeZone::LONG, d ), "GMT+01:30",
+        "z2.getDisplayName(false, SHORT)/dst zone",
+        z2.getDisplayName(FALSE, TimeZone::SHORT, e), "GMT+1:30",
+        "z2.getDisplayName(false, LONG)/dst zone",
+        z2.getDisplayName(FALSE, TimeZone::LONG, f ), "GMT+01:30",
+        "z2.getDisplayName(true, SHORT)/dst zone",
+        z2.getDisplayName(TRUE, TimeZone::SHORT, g), "GMT+2:15",
+        "z2.getDisplayName(true, LONG)/dst zone",
+        z2.getDisplayName(TRUE, TimeZone::LONG, h ), "GMT+02:15",
+        "DateFormat.format(std)/std zone", fmt1.format(std, i), "GMT+1:30",
+        "DateFormat.format(dst)/std zone", fmt1.format(dst, j), "GMT+1:30",
+        "DateFormat.format(std)/dst zone", fmt2.format(std, k), "GMT+1:30",
+        "DateFormat.format(dst)/dst zone", fmt2.format(dst, l), "GMT+2:15",
     };
 
     for (int32_t idx=0; idx<UPRV_LENGTHOF(DATA); idx+=3) {
@@ -978,11 +978,6 @@ void TimeZoneRegressionTest::Test4176686() {
             errln("FAIL: " + DATA[idx] + " -> " + DATA[idx+1] + ", exp " + DATA[idx+2]);
         }
     }
-    delete z1;
-    delete z2;
-    delete fmt1;
-    delete fmt2;
-    delete tempcal;
 }
 
 /**

@@ -601,7 +601,7 @@ public:
    * @return a pointer to a new Normalizer
    * @deprecated ICU 56 Use Normalizer2 instead.
    */
-  Normalizer*        clone(void) const;
+  Normalizer*        clone() const;
 
   /**
    * Generates a hash code for this iterator.

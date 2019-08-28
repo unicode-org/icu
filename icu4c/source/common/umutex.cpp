@@ -98,6 +98,7 @@ std::mutex *UMutex::getMutex() {
             gListHead = this;
         }
     }
+    U_ASSERT(retPtr != nullptr);
     return retPtr;
 }
 

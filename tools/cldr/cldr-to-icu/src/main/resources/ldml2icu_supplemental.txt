@@ -1,0 +1,202 @@
+# ldml2icu_supplemental.txt
+#
+# © 2016 and later: Unicode, Inc. and others.
+#
+# CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+# For terms of use, see http://www.unicode.org/copyright.html
+#
+# Used by SupplementalMapper.
+# Data-driven file for mapping supplemental LDML paths to ICU paths.
+# See ldml2icu_readme.txt for a detailed explanation of this file.
+
+# Attribute value
+%A=[^"']++
+# Attribute value, no underscore
+%B=[^"'_]++
+# Word/Zone match
+%W=[\s\w\-/]++
+# Greedy word match
+%G=[\s\w\-]+
+# Number match
+%N=[\d\.]++
+
+# supplementalData.xml
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@iso4217="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$2
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@iso4217="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$3
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@iso4217="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$3
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@to="(%W)"][@iso4217="(%W)"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$4
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($3, to)
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@from="(%W)"][@to="(%W)"][@iso4217="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$4
+     ; /CurrencyMap/$1/<FIFO>/from:intvector ; values=&date($2, from)
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($3, to)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/region[@iso3166="(%W)"]/currency[@to="(%W)"][@iso4217="(%W)"][@tender="false"]
+     ; /CurrencyMap/$1/<FIFO>/id ; values=$3
+     ; /CurrencyMap/$1/<FIFO>/to:intvector ; values=&date($2, to)
+     ; /CurrencyMap/$1/<FIFO>/tender ; values=false
+//supplementalData/currencyData/fractions/info[@iso4217="(%W)"][@digits="(%N)"][@rounding="(%N)"][@cashDigits="(%N)"][@cashRounding="(%N)"] ; /CurrencyMeta/$1:intvector ; values=$2 $3 $4 $5
+//supplementalData/currencyData/fractions/info[@iso4217="(%W)"][@digits="(%N)"][@rounding="(%N)"][@cashRounding="(%N)"] ; /CurrencyMeta/$1:intvector ; values=$2 $3 $2 $4
+//supplementalData/currencyData/fractions/info[@iso4217="(%W)"][@digits="(%N)"][@rounding="(%N)"] ; /CurrencyMeta/$1:intvector ; values=$2 $3 $2 $3
+
+//supplementalData/calendarPreferenceData/calendarPreference[@territories="(%A)"][@ordering="(%A)"] ; /calendarPreferenceData/$1    ; values=$2
+//supplementalData/codeMappings/territoryCodes[@type="(%W)"][@numeric="(%N)"][@alpha3="(%W)"].* ; /codeMappings/<$1> ; values=$1 $2 $3
+
+//supplementalData/codeMappings/currencyCodes[@type="(%W)"][@numeric="(%N)"].* ; /codeMappingsCurrency/<$1> ; values=$1 $2
+
+//supplementalData/languageData/language[@type="(%W)"][@scripts="(%W)"][@territories="(%W)"][@alt="secondary"]
+     ; /languageData/$1/secondary/scripts ; values=$2
+     ; /languageData/$1/secondary/territories ; values=$3
+//supplementalData/languageData/language[@type="(%W)"][@scripts="(%W)"][@alt="secondary"] ; /languageData/$1/secondary/scripts ; values=$2
+//supplementalData/languageData/language[@type="(%W)"][@territories="(%G)"][@alt="secondary"] ; /languageData/$1/secondary/territories ; values=$2
+
+//supplementalData/languageData/language[@type="(%W)"][@scripts="(%W)"][@territories="(%W)"]
+     ; /languageData/$1/primary/scripts ; values=$2
+     ; /languageData/$1/primary/territories; values=$3
+//supplementalData/languageData/language[@type="(%W)"][@scripts="(%W)"] ; /languageData/$1/primary/scripts ; values=$2
+//supplementalData/languageData/language[@type="(%W)"][@territories="(%W)"] ; /languageData/$1/primary/territories ; values=$2
+
+//supplementalData/territoryContainment/group[@type="(%W)"][@contains="(%A)"][@status="deprecated"] ; /territoryContainment/deprecated/$1 ; values=$2
+//supplementalData/territoryContainment/group[@type="(%W)"][@contains="(%A)"][@status="grouping"] ; /territoryContainment/containedGroupings/$1 ; values=$2
+//supplementalData/territoryContainment/group[@type="(%W)"][@contains="(%A)"][@grouping="true"] ; /territoryContainment/grouping/$1 ; values=$2
+//supplementalData/territoryContainment/group[@type="(%W)"][@contains="(%A)"]; /territoryContainment/$1 ; values=$2
+
+//supplementalData/subdivisionContainment/subgroup[@type="(%W)"][@contains="(%A)"]; /subdivisionContainment/$1 ; values=$2
+//supplementalData/subdivisionContainment/subgroup[@type="(%W)"][@subtype="(%W)"][@contains="(%A)"]; /subdivisionContainment/$1-$2 ; values=$3
+
+//supplementalData/weekData/firstDay[@day="(%W)"][@territories="(%W)"](?:[@references="(?:%A)"])?[@alt="(%A)"] ; /weekData%$3/$2:intvector ; values=&day_number($1) ; fallback=/weekData/001:intvector[0]
+
+//supplementalData/weekData/firstDay[@day="(%W)"][@territories="(%W)"]     ; /weekData/$2:intvector ; values=&day_number($1) ; fallback=/weekData/001:intvector[0]
+//supplementalData/weekData/minDays[@count="(%N)"][@territories="(%W)"]    ; /weekData/$2:intvector ; values=$1 ; fallback=/weekData/001:intvector[1]
+//supplementalData/weekData/weekendStart[@day="(%W)"][@territories="(%W)"] ; /weekData/$2:intvector ; values=&day_number($1) 0 ; fallback=/weekData/001:intvector[2] /weekData/001:intvector[3]
+//supplementalData/weekData/weekendEnd[@day="(%W)"][@territories="(%W)"]   ; /weekData/$2:intvector ; values=&day_number($1) 86400000 ; fallback=/weekData/001:intvector[4] /weekData/001:intvector[5]
+
+//supplementalData/weekData/weekOfPreference[@locales="(%A)"][@ordering="(%A)"] ; /weekOfPreference/$1    ; values=$2
+
+//supplementalData/timeData/hours[@allowed="(%W)"][@preferred="(%W)"][@regions="(%W)"]
+     ; /timeData/$3/allowed ; values=$1
+     ; /timeData/$3/preferred ; values=$2
+
+//supplementalData/measurementData/measurementSystem[@type="metric"][@category="(%W)"][@territories="(%W)"] ; /measurementData/$2/MeasurementSystemCategory/$1:int ; values=0
+//supplementalData/measurementData/measurementSystem[@type="US"][@category="(%W)"][@territories="(%W)"] ; /measurementData/$2/MeasurementSystemCategory/$1:int ; values=1
+//supplementalData/measurementData/measurementSystem[@type="UK"][@category="(%W)"][@territories="(%W)"] ; /measurementData/$2/MeasurementSystemCategory/$1:int ; values=2
+
+//supplementalData/measurementData/measurementSystem[@type="metric"][@territories="(%W)"] ; /measurementData/$1/MeasurementSystem:int ; values=0
+//supplementalData/measurementData/measurementSystem[@type="US"][@territories="(%W)"] ; /measurementData/$1/MeasurementSystem:int ; values=1
+//supplementalData/measurementData/measurementSystem[@type="UK"][@territories="(%W)"] ; /measurementData/$1/MeasurementSystem:int ; values=2
+//supplementalData/measurementData/paperSize[@type="A4"][@territories="(%W)"] ; /measurementData/$1/PaperSize:intvector ; values=297 210
+//supplementalData/measurementData/paperSize[@type="US-Letter"][@territories="(%W)"] ; /measurementData/$1/PaperSize:intvector ; values=279 216
+
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"][@scope="small"]/unitPreference[@regions="(%A)"][@alt="informal"] ; /unitPreferenceData/$3/$1-$2-small-informal
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"][@scope="small"]/unitPreference[@regions="(%A)"] ; /unitPreferenceData/$3/$1-$2-small
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@alt="informal"] ; /unitPreferenceData/$3/$1-$2-informal
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"] ; /unitPreferenceData/$3/$1-$2
+
+//supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@writingPercent="(%N)"][@populationPercent="(%N)"][@officialStatus="(%W)"](?:[@references="%W"])?
+    ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
+    ; /territoryInfo/$1/$5/writingShareF:int ; values=&exp($6,-2)
+    ; /territoryInfo/$1/$5/populationShareF:int ; values=&exp($7,-2)
+    ; /territoryInfo/$1/$5/officialStatus ; values=$8
+
+//supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@writingPercent="(%N)"][@populationPercent="(%N)"](?:[@references="%W"])?
+    ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
+    ; /territoryInfo/$1/$5/writingShareF:int ; values=&exp($6,-2)
+    ; /territoryInfo/$1/$5/populationShareF:int ; values=&exp($7,-2)
+
+//supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@literacyPercent="(%N)"][@populationPercent="(%N)"][@officialStatus="(%W)"](?:[@references="%W"])?
+    ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
+    ; /territoryInfo/$1/$5/literacyShareF:int ; values=&exp($6,-2)
+    ; /territoryInfo/$1/$5/populationShareF:int ; values=&exp($7,-2)
+    ; /territoryInfo/$1/$5/officialStatus ; values=$8
+
+//supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@literacyPercent="(%N)"][@populationPercent="(%N)"](?:[@references="%W"])?
+    ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
+    ; /territoryInfo/$1/$5/literacyShareF:int ; values=&exp($6,-2)
+    ; /territoryInfo/$1/$5/populationShareF:int ; values=&exp($7,-2)
+
+//supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@populationPercent="(%N)"][@officialStatus="(%W)"](?:[@@references="%W"])?
+    ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
+    ; /territoryInfo/$1/$5/populationShareF:int ; values=&exp($6,-2)
+    ; /territoryInfo/$1/$5/officialStatus ; values=$7
+
+//supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@populationPercent="(%N)"](?:[@references="%W"])?
+    ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
+    ; /territoryInfo/$1/$5/populationShareF:int ; values=&exp($6,-2)
+
+# This only exists right now for 'ZZ', which has no <languagePopulation> child elements.
+//supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]
+    ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
+
+//supplementalData/calendarData/calendar[@type="(%W)"]/calendarSystem[@type="(%W)"] ; /calendarData/$1/system ; values=$2
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"][@named="(%W)"]
+    ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
+    ; /calendarData/$1/eras/$2/named ; values=$5
+//supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"]
+    ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
+
+# languageInfo.xml
+
+//supplementalData/languageMatching/languageMatches[@type="(%B)_new"]/paradigmLocales[@locales="(%A)"] ; /languageMatchingInfo/$1/paradigmLocales ; values=$2
+//supplementalData/languageMatching/languageMatches[@type="(%B)_new"]/matchVariable[@id="\$(%A)"][@value="(%A)"] ; /languageMatchingInfo/$1/matchVariable/$2 ; values=$3
+
+//supplementalData/languageMatching/languageMatches[@type="(%B)_new"]/languageMatch[@desired="(%A)"][@supported="(%A)"][@distance="(%N)"][@oneway="true"] ; /languageMatchingNew/$1/<FIFO> ; values=$2 $3 $4 1
+//supplementalData/languageMatching/languageMatches[@type="(%B)_new"]/languageMatch[@desired="(%A)"][@supported="(%A)"][@distance="(%N)"] ; /languageMatchingNew/$1/<FIFO> ; values=$2 $3 $4 0
+
+//supplementalData/languageMatching/languageMatches[@type="(%B)"]/languageMatch[@desired="(%A)"][@supported="(%A)"][@percent="(%N)"][@oneway="true"] ; /languageMatching/$1/<FIFO> ; values=$2 $3 $4 1
+//supplementalData/languageMatching/languageMatches[@type="(%B)"]/languageMatch[@desired="(%A)"][@supported="(%A)"][@percent="(%N)"] ; /languageMatching/$1/<FIFO> ; values=$2 $3 $4 0
+
+# likelySubtags.xml
+//supplementalData/likelySubtags/likelySubtag[@from="(%A)"][@to="(%A)"] ; /$1 ; values=$2
+
+# metaZones.xml - metaZones.txt
+//supplementalData/metaZones/mapTimezones[@type="metazones"]/mapZone[@type="(%A)"][@other="(%W)"][@territory="(%W)"] ; /mapTimezones/$2/$3 ; values=$1
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$2
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "$2" "9999-12-31 23:59"
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "$2" "$3"
+//supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "$2"
+
+//supplementalData/primaryZones/primaryZone[@iso3166="(%W)"] ; /primaryZones/$1 ; values={value}
+
+# numberingSystems.txt
+//supplementalData/numberingSystems/numberingSystem[@type="algorithmic"][@id="(%W)"][@rules="(%A)"]
+     ; /numberingSystems/$1/algorithmic:int ; values=1
+     ; /numberingSystems/$1/desc ; values=&algorithm($2)
+     ; /numberingSystems/$1/radix:int ; values=10
+
+//supplementalData/numberingSystems/numberingSystem[@type="numeric"][@id="(%W)"][@digits="(%A)"]
+     ; /numberingSystems/$1/algorithmic:int ; values=0
+     ; /numberingSystems/$1/desc ; values=$2
+     ; /numberingSystems/$1/radix:int ; values=10
+
+# windowsZones.txt
+//supplementalData/windowsZones/mapTimezones/mapZone[@type="(%A)"][@other="(%A)"][@territory="(%W)"] ; /mapTimezones/"$2"/$3 ; values="$1"
+
+# genderList.txt
+//supplementalData/gender/personList[@type="(%W)"][@locales="(%W)"] ; /genderList/$2 ; values=$1
+
+# locale info
+//supplementalData/parentLocales/parentLocale[@parent="(%A)"][@locales="(%A)"] ; /parentLocales/$1 ; values=$2
+
+# supplementalMetadata.xml (metadata.txt)
+//supplementalData/metadata/defaultContent[@locales="(%A)"] ; /defaultContent ; values=$1
+//supplementalData/metadata/alias/(language|script|territory|subdivision|variant)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]
+     ; /alias/$1/$2/reason ; values="$4"
+     ; /alias/$1/$2/replacement ; values="$3"
+
+# Region codes used by ICU's Region class
+# Specify the value explicitly so that the LDMLConverter will split it.
+//supplementalData/metadata/validity/variable[@type="choice"][@id="\$territory"] ; /regionCodes ; values={value}
+
+# validity
+//supplementalData/idValidity/id[@type="(%A)"][@idStatus="(%A)"] ; /idValidity/$1/$2 ; values={value}

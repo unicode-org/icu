@@ -99,7 +99,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_ARM32_ARM64_Release
   displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2017)'
-  timeoutInMinutes: 30
+  timeoutInMinutes: 60
   pool:
     vmImage: 'vs2017-win2016'
     demands: 
@@ -150,7 +150,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Debug
   displayName: 'C: MSVC 32-bit Debug (VS 2017)'
-  timeoutInMinutes: 45
+  timeoutInMinutes: 60
   pool:
     vmImage: 'vs2017-win2016'
     demands: 

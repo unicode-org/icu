@@ -34,11 +34,17 @@
  */
 
 
-#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) {\
-dataerrln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
+#define TEST_ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        dataerrln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr) == FALSE) { \
-    errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);};}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr) == FALSE) { \
+        errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 void RBBIAPITest::TestCloneEquals()
 {
@@ -126,8 +132,8 @@ void RBBIAPITest::TestCloneEquals()
 
 
     logln((UnicodeString)"Testing clone()");
-    RuleBasedBreakIterator* bi1clone = dynamic_cast<RuleBasedBreakIterator *>(bi1->clone());
-    RuleBasedBreakIterator* bi2clone = dynamic_cast<RuleBasedBreakIterator *>(bi2->clone());
+    RuleBasedBreakIterator* bi1clone = bi1->clone();
+    RuleBasedBreakIterator* bi2clone = bi2->clone();
 
     if(*bi1clone != *bi1 || *bi1clone  != *biequal  ||
       *bi1clone == *bi3 || *bi1clone == *bi2)
@@ -197,7 +203,7 @@ void RBBIAPITest::TestgetRules()
     UnicodeString text(u"Hello there");
     bi1->setText(text);
 
-    LocalPointer <RuleBasedBreakIterator> bi3((RuleBasedBreakIterator*)bi1->clone());
+    LocalPointer <RuleBasedBreakIterator> bi3(bi1->clone());
 
     UnicodeString temp=bi1->getRules();
     UnicodeString temp2=bi2->getRules();
@@ -232,8 +238,8 @@ void RBBIAPITest::TestHashCode()
     bi2->setText((UnicodeString)"Hash code");
     bi3->setText((UnicodeString)"Hash code");
 
-    RuleBasedBreakIterator* bi1clone= (RuleBasedBreakIterator*)bi1->clone();
-    RuleBasedBreakIterator* bi2clone= (RuleBasedBreakIterator*)bi2->clone();
+    RuleBasedBreakIterator* bi1clone= bi1->clone();
+    RuleBasedBreakIterator* bi2clone= bi2->clone();
 
     if(bi1->hashCode() != bi1clone->hashCode() ||  bi1->hashCode() != bi3->hashCode() ||
         bi1clone->hashCode() != bi3->hashCode() || bi2->hashCode() != bi2clone->hashCode())
@@ -294,7 +300,7 @@ void RBBIAPITest::TestGetSetAdoptText()
     TEST_ASSERT(tstr == str1);
 
 
-    LocalPointer<RuleBasedBreakIterator> rb((RuleBasedBreakIterator*)wordIter1->clone());
+    LocalPointer<RuleBasedBreakIterator> rb(wordIter1->clone());
     rb->adoptText(text1);
     if(rb->getText() != *text1)
         errln((UnicodeString)"ERROR:1 error in adoptText ");
@@ -1041,7 +1047,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
                 __FILE__, __LINE__, u_errorName(status), parseError.line, parseError.offset);
         errln(UnicodeString(builtSource));
         return;
-    };
+    }
     rbbiRules = brkItr->getBinaryRules(length);
     logln("Comparing \"%s\" len=%d", dataFile, length);
     if (memcmp(builtRules, rbbiRules, (int32_t)length) != 0) {

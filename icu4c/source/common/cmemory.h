@@ -94,7 +94,7 @@ uprv_calloc(size_t num, size_t size) U_MALLOC_ATTR U_ALLOC_SIZE_ATTR2(1,2);
  */
 #define STATIC_NEW(type) [] () { \
     alignas(type) static char storage[sizeof(type)]; \
-    return new(storage) type();} ();
+    return new(storage) type();} ()
 
 /**
   *  Heap clean up function, called from u_cleanup()

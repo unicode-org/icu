@@ -266,7 +266,7 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
     if (rbtz1->hasSameRules(*rbtz3)) {
         errln("FAIL: rbtz1 and rbtz3 have different rules, but returned true.");
     }
-    RuleBasedTimeZone *rbtz1c = (RuleBasedTimeZone*)rbtz1->clone();
+    RuleBasedTimeZone *rbtz1c = rbtz1->clone();
     if (!rbtz1->hasSameRules(*rbtz1c)) {
         errln("FAIL: Cloned RuleBasedTimeZone must have the same rules with the original.");
     }
@@ -548,7 +548,7 @@ TimeZoneRuleTest::TestHistoricalRuleBasedTimeZone(void) {
     if (ny->hasSameRules(*rbtz) || rbtz->hasSameRules(*ny)) {
         errln("FAIL: hasSameRules must return false");
     }
-    RuleBasedTimeZone *rbtzc = (RuleBasedTimeZone*)rbtz->clone();
+    RuleBasedTimeZone *rbtzc = rbtz->clone();
     if (!rbtz->hasSameRules(*rbtzc) || !rbtz->hasEquivalentTransitions(*rbtzc, jan1_1950, jan1_2010, TRUE, status)) {
         errln("FAIL: hasSameRules/hasEquivalentTransitions must return true for cloned RBTZs");
     }
@@ -742,7 +742,7 @@ TimeZoneRuleTest::TestHasEquivalentTransitions(void) {
     }
 
     // Cloned TimeZone
-    BasicTimeZone *newyork2 = (BasicTimeZone*)newyork->clone();
+    BasicTimeZone *newyork2 = newyork->clone();
     if (!newyork->hasEquivalentTransitions(*newyork2, jan1_1971, jan1_2011, FALSE, status)) {
         errln("FAIL: Cloned TimeZone must have the same transitions");
     }
@@ -1695,7 +1695,7 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
 
     // setRawOffset
     const int32_t RAW = -10*HOUR;
-    VTimeZone *tmpvtz = (VTimeZone*)vtz->clone();
+    VTimeZone *tmpvtz = vtz->clone();
     tmpvtz->setRawOffset(RAW);
     if (tmpvtz->getRawOffset() != RAW) {
         logln("setRawOffset is implemented in VTimeZone");

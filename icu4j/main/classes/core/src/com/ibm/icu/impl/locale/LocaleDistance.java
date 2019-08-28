@@ -19,10 +19,15 @@ import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.ULocale;
 
 /**
- * Off-line-built data for LocaleMatcher.
+ * Offline-built data for LocaleMatcher.
  * Mostly but not only the data for mapping locales to their maximized forms.
  */
 public class LocaleDistance {
+    /**
+     * Bit flag used on the last character of a subtag in the trie.
+     * Must be set consistently by the builder and the lookup code.
+     */
+    public static final int END_OF_SUBTAG = 0x80;
     /** Distance value bit flag, set by the builder. */
     public static final int DISTANCE_SKIP_SCRIPT = 0x80;
     /** Distance value bit flag, set by trieNext(). */
@@ -148,15 +153,21 @@ public class LocaleDistance {
     public static final LocaleDistance INSTANCE = new LocaleDistance(Data.load());
 
     private LocaleDistance(Data data) {
-        this.trie = new BytesTrie(data.trie, 0);
-        this.regionToPartitionsIndex = data.regionToPartitionsIndex;
-        this.partitionArrays = data.partitionArrays;
-        this.paradigmLSRs = data.paradigmLSRs;
+        trie = new BytesTrie(data.trie, 0);
+        regionToPartitionsIndex = data.regionToPartitionsIndex;
+        partitionArrays = data.partitionArrays;
+        paradigmLSRs = data.paradigmLSRs;
         defaultLanguageDistance = data.distances[IX_DEF_LANG_DISTANCE];
         defaultScriptDistance = data.distances[IX_DEF_SCRIPT_DISTANCE];
         defaultRegionDistance = data.distances[IX_DEF_REGION_DISTANCE];
-        this.minRegionDistance = data.distances[IX_MIN_REGION_DISTANCE];
+        minRegionDistance = data.distances[IX_MIN_REGION_DISTANCE];
 
+        // For the default demotion value, use the
+        // default region distance between unrelated Englishes.
+        // Thus, unless demotion is turned off,
+        // a mere region difference for one desired locale
+        // is as good as a perfect match for the next following desired locale.
+        // As of CLDR 36, we have <languageMatch desired="en_*_*" supported="en_*_*" distance="5"/>.
         LSR en = new LSR("en", "Latn", "US");
         LSR enGB = new LSR("en", "Latn", "GB");
         defaultDemotionPerDesiredLocale = getBestIndexAndDistance(en, new LSR[] { enGB },
@@ -188,18 +199,18 @@ public class LocaleDistance {
      * (negative if none has a distance below the threshold),
      * and its distance (0..ABOVE_THRESHOLD) in bits 7..0.
      */
-    public int getBestIndexAndDistance(LSR desired, LSR[] supportedLsrs,
+    public int getBestIndexAndDistance(LSR desired, LSR[] supportedLSRs,
             int threshold, FavorSubtag favorSubtag) {
         BytesTrie iter = new BytesTrie(trie);
         // Look up the desired language only once for all supported LSRs.
         // Its "distance" is either a match point value of 0, or a non-match negative value.
         // Note: The data builder verifies that there are no <*, supported> or <desired, *> rules.
         int desLangDistance = trieNext(iter, desired.language, false);
-        long desLangState = desLangDistance >= 0 && supportedLsrs.length > 1 ? iter.getState64() : 0;
+        long desLangState = desLangDistance >= 0 && supportedLSRs.length > 1 ? iter.getState64() : 0;
         // Index of the supported LSR with the lowest distance.
         int bestIndex = -1;
-        for (int slIndex = 0; slIndex < supportedLsrs.length; ++slIndex) {
-            LSR supported = supportedLsrs[slIndex];
+        for (int slIndex = 0; slIndex < supportedLSRs.length; ++slIndex) {
+            LSR supported = supportedLSRs[slIndex];
             boolean star = false;
             int distance = desLangDistance;
             if (distance >= 0) {
@@ -227,6 +238,11 @@ public class LocaleDistance {
                 star = true;
             }
             assert 0 <= distance && distance <= 100;
+            // We implement "favor subtag" by reducing the language subtag distance
+            // (unscientifically reducing it to a quarter of the normal value),
+            // so that the script distance is relatively more important.
+            // For example, given a default language distance of 80, we reduce it to 20,
+            // which is below the default threshold of 50, which is the default script distance.
             if (favorSubtag == FavorSubtag.SCRIPT) {
                 distance >>= 2;
             }
@@ -312,9 +328,10 @@ public class LocaleDistance {
         int desLength = desiredPartitions.length();
         int suppLength = supportedPartitions.length();
         if (desLength == 1 && suppLength == 1) {
-            BytesTrie.Result result = iter.next(desiredPartitions.charAt(0) | 0x80);
+            // Fastpath for single desired/supported partitions.
+            BytesTrie.Result result = iter.next(desiredPartitions.charAt(0) | END_OF_SUBTAG);
             if (result.hasNext()) {
-                result = iter.next(supportedPartitions.charAt(0) | 0x80);
+                result = iter.next(supportedPartitions.charAt(0) | END_OF_SUBTAG);
                 if (result.hasValue()) {
                     return iter.getValue();
                 }
@@ -328,11 +345,11 @@ public class LocaleDistance {
         for (int di = 0;;) {
             // Look up each desired-partition string only once,
             // not for each (desired, supported) pair.
-            BytesTrie.Result result = iter.next(desiredPartitions.charAt(di++) | 0x80);
+            BytesTrie.Result result = iter.next(desiredPartitions.charAt(di++) | END_OF_SUBTAG);
             if (result.hasNext()) {
                 long desState = suppLength > 1 ? iter.getState64() : 0;
                 for (int si = 0;;) {
-                    result = iter.next(supportedPartitions.charAt(si++) | 0x80);
+                    result = iter.next(supportedPartitions.charAt(si++) | END_OF_SUBTAG);
                     int d;
                     if (result.hasValue()) {
                         d = iter.getValue();
@@ -391,7 +408,7 @@ public class LocaleDistance {
                 }
             } else {
                 // last character of this subtag
-                BytesTrie.Result result = iter.next(c | 0x80);
+                BytesTrie.Result result = iter.next(c | END_OF_SUBTAG);
                 if (wantValue) {
                     if (result.hasValue()) {
                         int value = iter.getValue();

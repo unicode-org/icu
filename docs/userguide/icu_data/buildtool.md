@@ -222,7 +222,7 @@ There are two concrete differences between additive and subtractive mode:
 |                         | Additive    | Subtractive |
 |-------------------------|-------------|-------------|
 | Default Feature Filter  | `"exclude"` | `"include"` |
-| Default Resource Filter | `"-/*"`     | `"+/*"`     |
+| Default Resource Filter | `"-/"`      | `"+/"`      |
 
 To enable additive mode, add the following setting to your filter file:
 
@@ -702,8 +702,21 @@ configuration file:
         {
           src: "Zawgyi_my.txt"
           dest: "translit/Zawgyi_my.txt"
-        }
+        },
+        "misc/dayPeriods.txt"
       ]
     }
+
+`directory` should either be an absolute path, or a path starting with one of
+the following, and it should not contain a trailing slash:
+
+- "$SRC" for the *icu4c/source/data* directory in the source tree
+- "$FILTERS" for the directory containing filters.json
+- "$CWD" for your current working directory
+
+When the entry in the `replacements` array is an object, the `src` and `dest`
+fields indicate, for each file in the source directory (`src`), what file in
+the ICU hierarchy it should replace (`dest`). When the entry is a string, the
+same relative path is used for both `src` and `dest`.
 
 Whole-file substitution happens before all other filters are applied.

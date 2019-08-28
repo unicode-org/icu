@@ -151,7 +151,7 @@ class U_I18N_API OlsonTimeZone: public BasicTimeZone {
     /**
      * TimeZone API.
      */
-    virtual TimeZone* clone() const;
+    virtual OlsonTimeZone* clone() const;
 
     /**
      * TimeZone API.

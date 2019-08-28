@@ -1543,7 +1543,7 @@ void MeasureFormatTest::TestBasic() {
     if (!(*ptr1 != *ptr3)) {
         errln("Expect != to work.");
     }
-    MeasureUnit *ptr4 = (MeasureUnit *) ptr1->clone();
+    MeasureUnit *ptr4 = ptr1->clone();
     if (*ptr1 != *ptr4) {
         errln("Expect clone to work.");
     }
@@ -1874,7 +1874,7 @@ void MeasureFormatTest::TestFormatPeriodEn() {
         return;
     }
     nf->setMaximumFractionDigits(4);
-    MeasureFormat mf(en, UMEASFMT_WIDTH_WIDE, (NumberFormat *) nf->clone(), status);
+    MeasureFormat mf(en, UMEASFMT_WIDTH_WIDE, nf->clone(), status);
     if (!assertSuccess("Error creating measure format en WIDE", status)) {
         return;
     }
@@ -1887,21 +1887,21 @@ void MeasureFormatTest::TestFormatPeriodEn() {
     }
     // exercise clone
     {
-        MeasureFormat *mf3 = (MeasureFormat *) mf.clone();
+        MeasureFormat *mf3 = mf.clone();
         verifyFormat("en WIDE copy", *mf3, fullData, UPRV_LENGTHOF(fullData));
         delete mf3;
     }
-    mf = MeasureFormat(en, UMEASFMT_WIDTH_SHORT, (NumberFormat *) nf->clone(), status);
+    mf = MeasureFormat(en, UMEASFMT_WIDTH_SHORT, nf->clone(), status);
     if (!assertSuccess("Error creating measure format en SHORT", status)) {
         return;
     }
     verifyFormat("en SHORT", mf, abbrevData, UPRV_LENGTHOF(abbrevData));
-    mf = MeasureFormat(en, UMEASFMT_WIDTH_NARROW, (NumberFormat *) nf->clone(), status);
+    mf = MeasureFormat(en, UMEASFMT_WIDTH_NARROW, nf->clone(), status);
     if (!assertSuccess("Error creating measure format en NARROW", status)) {
         return;
     }
     verifyFormat("en NARROW", mf, narrowData, UPRV_LENGTHOF(narrowData));
-    mf = MeasureFormat(en, UMEASFMT_WIDTH_NUMERIC, (NumberFormat *) nf->clone(), status);
+    mf = MeasureFormat(en, UMEASFMT_WIDTH_NUMERIC, nf->clone(), status);
     if (!assertSuccess("Error creating measure format en NUMERIC", status)) {
         return;
     }
@@ -1913,12 +1913,12 @@ void MeasureFormatTest::TestFormatPeriodEn() {
         return;
     }
     nf->setMaximumFractionDigits(4);
-    mf = MeasureFormat(de, UMEASFMT_WIDTH_WIDE, (NumberFormat *) nf->clone(), status);
+    mf = MeasureFormat(de, UMEASFMT_WIDTH_WIDE, nf->clone(), status);
     if (!assertSuccess("Error creating measure format de WIDE", status)) {
         return;
     }
     verifyFormat("de WIDE", mf, fullDataDe, UPRV_LENGTHOF(fullDataDe));
-    mf = MeasureFormat(de, UMEASFMT_WIDTH_NUMERIC, (NumberFormat *) nf->clone(), status);
+    mf = MeasureFormat(de, UMEASFMT_WIDTH_NUMERIC, nf->clone(), status);
     if (!assertSuccess("Error creating measure format de NUMERIC", status)) {
         return;
     }
@@ -1930,7 +1930,7 @@ void MeasureFormatTest::TestFormatPeriodEn() {
         return;
     }
     nf->setMaximumFractionDigits(4);
-    mf = MeasureFormat(bengali, UMEASFMT_WIDTH_NUMERIC, (NumberFormat *) nf->clone(), status);
+    mf = MeasureFormat(bengali, UMEASFMT_WIDTH_NUMERIC, nf->clone(), status);
     if (!assertSuccess("Error creating measure format bn NUMERIC", status)) {
         return;
     }
@@ -1942,7 +1942,7 @@ void MeasureFormatTest::TestFormatPeriodEn() {
         return;
     }
     nf->setMaximumFractionDigits(4);
-    mf = MeasureFormat(bengaliLatin, UMEASFMT_WIDTH_NUMERIC, (NumberFormat *) nf->clone(), status);
+    mf = MeasureFormat(bengaliLatin, UMEASFMT_WIDTH_NUMERIC, nf->clone(), status);
     if (!assertSuccess("Error creating measure format bn-u-nu-latn NUMERIC", status)) {
         return;
     }
@@ -2248,7 +2248,7 @@ void MeasureFormatTest::helperTestSimplePer(
     if (!assertSuccess("Error creating format object", status)) {
         return;
     }
-    Measure measure(value, (MeasureUnit *) unit.clone(), status);
+    Measure measure(value, unit.clone(), status);
     if (!assertSuccess("Error creating measure object", status)) {
         return;
     }
@@ -2756,7 +2756,7 @@ void MeasureFormatTest::TestNumericTime() {
     Measure fhours(112.8765, MeasureUnit::createHour(status), status);
     Measure fminutes(113.8765, MeasureUnit::createMinute(status), status);
     Measure fseconds(114.8765, MeasureUnit::createSecond(status), status);
-    assertSuccess("", status);
+    if (status.errDataIfFailureAndReset(WHERE)) return;
 
     verifyFormat("hours", fmt, &hours, 1, "112h");
     verifyFormat("minutes", fmt, &minutes, 1, "113m");
@@ -2805,12 +2805,13 @@ void MeasureFormatTest::TestNumericTimeSomeSpecialFormats() {
 
     Measure fhours(2.8765432, MeasureUnit::createHour(status), status);
     Measure fminutes(3.8765432, MeasureUnit::createMinute(status), status);
-    assertSuccess("", status);
+    if (status.errDataIfFailureAndReset(WHERE)) return;
 
     Measure fhoursFminutes[2] = {fhours, fminutes};
 
     // Latvian is one of the very few locales 0-padding the hour
     MeasureFormat fmtLt("lt", UMEASFMT_WIDTH_NUMERIC, status);
+    if (status.errDataIfFailureAndReset(WHERE)) return;
     verifyFormat("Latvian fhoursFminutes", fmtLt, fhoursFminutes, 2, "02:03,877");
 
     // Danish is one of the very few locales using '.' as separator

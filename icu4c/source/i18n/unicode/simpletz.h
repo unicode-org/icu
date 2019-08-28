@@ -705,7 +705,7 @@ public:
      * @return   A new copy of this TimeZone object.
      * @stable ICU 2.0
      */
-    virtual TimeZone* clone(void) const;
+    virtual SimpleTimeZone* clone() const;
 
     /**
      * Gets the first time zone transition after the base time.

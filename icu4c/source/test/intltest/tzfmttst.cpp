@@ -728,7 +728,9 @@ void TimeZoneFormatTest::RunAdoptDefaultThreadSafeTests(int32_t threadNumber) {
     if (threadNumber % 2 == 0) {
         for (int32_t i = 0; i < kAdoptDefaultIteration; i++) {
             std::unique_ptr<icu::StringEnumeration> timezones(
-            icu::TimeZone::createEnumeration());
+                    icu::TimeZone::createEnumeration());
+            // Fails with missing data.
+            if (!assertTrue(WHERE, (bool)timezones, false, true)) {return;}
             while (const icu::UnicodeString* timezone = timezones->snext(status)) {
                 status = U_ZERO_ERROR;
                 icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone(*timezone));

@@ -179,7 +179,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 
     // Ported from C++ Collator::makeInstance().
     private static final Collator makeInstance(ULocale desiredLocale) {
-        Output<ULocale> validLocale = new Output<ULocale>(ULocale.ROOT);
+        Output<ULocale> validLocale = new Output<>(ULocale.ROOT);
         CollationTailoring t =
             CollationLoader.loadTailoring(desiredLocale, validLocale);
         return new RuleBasedCollator(t, validLocale.value);

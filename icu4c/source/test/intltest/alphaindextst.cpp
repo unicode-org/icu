@@ -71,10 +71,19 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
     TESTCASE_AUTO_END;
 }
 
-#define TEST_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: Test failure.  status=%s", \
-                                                              __FILE__, __LINE__, u_errorName(status)); return;}}
+#define TEST_CHECK_STATUS UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        dataerrln("%s:%d: Test failure.  status=%s", \
+                  __FILE__, __LINE__, u_errorName(status)); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);};}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        errln("%s:%d: Test failure \n", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 //
 //  APITest.   Invoke every function at least once, and check that it does something.
@@ -87,34 +96,35 @@ void AlphabeticIndexTest::APITest() {
     UErrorCode status = U_ZERO_ERROR;
     int32_t lc = 0;
     int32_t i  = 0;
-    AlphabeticIndex *index = new AlphabeticIndex(Locale::getEnglish(), status);
+    LocalPointer<AlphabeticIndex> index(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     lc = index->getBucketCount(status);
     TEST_CHECK_STATUS;
     TEST_ASSERT(28 == lc);    // 26 letters plus two under/overflow labels.
     //printf("getBucketCount() == %d\n", lc);
-    delete index;
+    index.adoptInstead(nullptr);
 
     // Constructor from a Collator
     //
     status = U_ZERO_ERROR;
-    RuleBasedCollator *coll = dynamic_cast<RuleBasedCollator *>(
-        Collator::createInstance(Locale::getGerman(), status));
+    LocalPointer<RuleBasedCollator> coll(dynamic_cast<RuleBasedCollator *>(
+        Collator::createInstance(Locale::getGerman(), status)), status);
     TEST_CHECK_STATUS;
-    TEST_ASSERT(coll != NULL);
-    index = new AlphabeticIndex(coll, status);
+    TEST_ASSERT(coll.isValid());
+    RuleBasedCollator *originalColl = coll.getAlias();
+    index.adoptInstead(new AlphabeticIndex(coll.orphan(), status));
     TEST_CHECK_STATUS;
-    TEST_ASSERT(coll == &index->getCollator());
+    TEST_ASSERT(originalColl == &index->getCollator());
     assertEquals("only the underflow label in an index built from a collator",
                  1, index->getBucketCount(status));
     TEST_CHECK_STATUS;
-    delete index;
+    index.adoptInstead(nullptr);
     
 
     // addLabels()
 
     status = U_ZERO_ERROR;
-    index = new AlphabeticIndex(Locale::getEnglish(), status);
+    index.adoptInstead(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     UnicodeSet additions;
     additions.add((UChar32)0x410).add((UChar32)0x415);   // A couple of Cyrillic letters
@@ -125,32 +135,31 @@ void AlphabeticIndexTest::APITest() {
     assertEquals("underflow, A-Z, inflow, 2 Cyrillic, overflow",
                  31, index->getBucketCount(status));
     // std::cout << lc << std::endl;
-    delete index;
+    index.adoptInstead(nullptr);
 
 
     // addLabels(Locale)
 
     status = U_ZERO_ERROR;
-    index = new AlphabeticIndex(Locale::getEnglish(), status);
+    index.adoptInstead(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     AlphabeticIndex &aip = index->addLabels(Locale::getJapanese(), status);
-    TEST_ASSERT(&aip == index);
+    TEST_ASSERT(&aip == index.getAlias());
     TEST_CHECK_STATUS;
     lc = index->getBucketCount(status);
     TEST_CHECK_STATUS;
     TEST_ASSERT(35 < lc);  // Japanese should add a bunch.  Don't rely on the exact value.
-    delete index;
+    index.adoptInstead(nullptr);
 
     // GetCollator(),  Get under/in/over flow labels
 
     status = U_ZERO_ERROR;
-    index = new AlphabeticIndex(Locale::getGerman(), status);
+    index.adoptInstead(new AlphabeticIndex(Locale::getGerman(), status));
     TEST_CHECK_STATUS;
-    Collator *germanCol = Collator::createInstance(Locale::getGerman(), status);
+    LocalPointer<Collator> germanCol(Collator::createInstance(Locale::getGerman(), status));
     TEST_CHECK_STATUS;
     const RuleBasedCollator &indexCol = index->getCollator();
     TEST_ASSERT(*germanCol == indexCol);
-    delete germanCol;
 
     UnicodeString ELLIPSIS;  ELLIPSIS.append((UChar32)0x2026);
     UnicodeString s = index->getUnderflowLabel();
@@ -171,7 +180,7 @@ void AlphabeticIndexTest::APITest() {
 
 
 
-    delete index;
+    index.adoptInstead(nullptr);
 
 
 
@@ -185,7 +194,7 @@ void AlphabeticIndexTest::APITest() {
     // addRecord(), verify that it comes back out.
     //
     status = U_ZERO_ERROR;
-    index = new AlphabeticIndex(Locale::getEnglish(), status);
+    index.adoptInstead(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     index->addRecord(UnicodeString("Adam"), this, status);
     UBool   b;
@@ -208,12 +217,12 @@ void AlphabeticIndexTest::APITest() {
     const void *itemContext = index->getRecordData();
     TEST_ASSERT(itemContext == this);
 
-    delete index;
+    index.adoptInstead(nullptr);
 
     // clearRecords, addRecord(), Iteration
 
     status = U_ZERO_ERROR;
-    index = new AlphabeticIndex(Locale::getEnglish(), status);
+    index.adoptInstead(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     while (index->nextBucket(status)) {
         TEST_CHECK_STATUS;
@@ -256,12 +265,12 @@ void AlphabeticIndexTest::APITest() {
         }
     }
     TEST_CHECK_STATUS;
-    delete index;
+    index.adoptInstead(nullptr);
 
     // getBucketLabel(), getBucketType()
 
     status = U_ZERO_ERROR;
-    index = new AlphabeticIndex(Locale::getEnglish(), status);
+    index.adoptInstead(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     index->setUnderflowLabel(adam, status).setOverflowLabel(charlie, status);
     TEST_CHECK_STATUS;
@@ -285,12 +294,12 @@ void AlphabeticIndexTest::APITest() {
         }
     }
     TEST_ASSERT(i==28);
-    delete index;
+    index.adoptInstead(nullptr);
 
     // getBucketIndex()
 
     status = U_ZERO_ERROR;
-    index = new AlphabeticIndex(Locale::getEnglish(), status);
+    index.adoptInstead(new AlphabeticIndex(Locale::getEnglish(), status));
     TEST_CHECK_STATUS;
     int32_t n = index->getBucketIndex(adam, status);
     TEST_CHECK_STATUS;
@@ -310,8 +319,8 @@ void AlphabeticIndexTest::APITest() {
     }
     TEST_ASSERT(i == 28);
 
-    delete index;
-    index = new AlphabeticIndex(Locale::createFromName("ru"), status);
+    index.adoptInstead(nullptr);
+    index.adoptInstead(new AlphabeticIndex(Locale::createFromName("ru"), status));
     TEST_CHECK_STATUS;
     assertEquals("Russian index.getBucketCount()", 32, index->getBucketCount(status));
     // Latin-script names should go into the underflow label (0)
@@ -332,8 +341,6 @@ void AlphabeticIndexTest::APITest() {
     assertEquals("Russian index.getBucketIndex(Cyrillic)", 1, n);
     n = index->getBucketIndex(zed, status);
     assertEquals("Russian index.getBucketIndex(zed)", expectedLatinIndex, n);
-
-    delete index;
 
 }
 

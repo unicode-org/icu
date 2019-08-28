@@ -20,6 +20,7 @@
 
 #include "xmlparser.h"
 
+#include <memory>
 #include <stdlib.h>
 #include <string.h>
 
@@ -27,18 +28,22 @@
 #include <stdio.h>
 #endif
 
-#define NEW_ARRAY(type,count) (type *) /*uprv_*/malloc((count) * sizeof(type))
-#define DELETE_ARRAY(array) /*uprv_*/free((void *) (array))
 
 #define CH_SPACE 0x0020
 #define CH_SLASH 0x002F
 
-#define TEST_ASSERT(x) {if (!(x)) { \
-    errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
+#define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(x)) { \
+        errln("Failure in file %s, line %d", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_SUCCESS(errcode) { if (U_FAILURE(errcode)) { \
-    errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));\
-    return;}}
+#define TEST_ASSERT_SUCCESS(errcode) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(errcode)) { \
+        errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode)); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
 //---------------------------------------------------------------------------
@@ -142,23 +147,18 @@ static char *extractBytes(const UnicodeString &source, const char *codepage, int
     length = source.extract(0, sLength, NULL, codepage);
 
     if (length > 0) {
-        bytes = NEW_ARRAY(char, length + 1);
+        bytes = new char[length + 1];
         source.extract(0, sLength, bytes, codepage);
     }
     
     return bytes;
 }
 
-static void freeBytes(char *bytes)
-{
-    DELETE_ARRAY(bytes);
-}
-
 void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const UnicodeString &encoding, const UnicodeString &id)
 {
     int32_t splits = 0;
     int32_t testLength = testString.length();
-    UnicodeString *eSplit = split(encoding, CH_SLASH, splits);
+    std::unique_ptr<UnicodeString []> eSplit(split(encoding, CH_SLASH, splits));
     UErrorCode status = U_ZERO_ERROR;
     int32_t cpLength = eSplit[0].length();
     char codepage[64];
@@ -169,16 +169,16 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
     LocalUCharsetDetectorPointer csd(ucsdet_open(&status));
 
     int32_t byteLength = 0;
-    char *bytes = extractBytes(testString, codepage, byteLength);
+    std::unique_ptr<char []> bytes(extractBytes(testString, codepage, byteLength));
 
-    if (bytes == NULL) {
+    if (! bytes) {
 #if !UCONFIG_NO_LEGACY_CONVERSION
         dataerrln("Can't open a " + encoding + " converter for " + id);
 #endif
         return;
     }
 
-    ucsdet_setText(csd.getAlias(), bytes, byteLength, &status);
+    ucsdet_setText(csd.getAlias(), bytes.get(), byteLength, &status);
 
     int32_t matchCount = 0;
     const UCharsetMatch **matches = ucsdet_detectAll(csd.getAlias(), &matchCount, &status);
@@ -191,7 +191,7 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
 
     if (matchCount == 0) {
         errln("Encoding detection failure for " + id + ": expected " + eSplit[0] + ", got no matches");
-        goto bail;
+        return;
     }
 
     if (name.compare(eSplit[0]) != 0) {
@@ -206,15 +206,15 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
             printf("%s (%s) %d\n", name, lang, confidence);
         }
 #endif
-        goto bail;
+        return;
     }
 
     if (splits > 1 && lang.compare(eSplit[1]) != 0) {
         errln("Language detection failure for " + id + ", " + eSplit[0] + ": expected " + eSplit[1] + ", got " + lang);
-        goto bail;
+        return;
     }
 
-    decoded = NEW_ARRAY(UChar, testLength);
+    decoded = new UChar[testLength];
     dLength = ucsdet_getUChars(matches[0], decoded, testLength, &status);
 
     if (testString.compare(decoded, dLength) != 0) {
@@ -231,11 +231,7 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
 
     }
 
-    DELETE_ARRAY(decoded);
-
-bail:
-    freeBytes(bytes);
-    delete[] eSplit;
+    delete[] decoded;
 }
 
 const char *CharsetDetectionTest::getPath(char buffer[2048], const char *filename) {
@@ -328,7 +324,7 @@ void CharsetDetectionTest::UTF8Test()
     char *bytes = extractBytes(s, "UTF-8", byteLength);
     UCharsetDetector *csd = ucsdet_open(&status);
     const UCharsetMatch *match;
-    UChar *detected = NEW_ARRAY(UChar, sLength);
+    UChar *detected = new UChar[sLength];
 
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
@@ -347,8 +343,8 @@ void CharsetDetectionTest::UTF8Test()
     ucsdet_setDeclaredEncoding(csd, "UTF-8", 5, &status); /* for coverage */
 
 bail:
-    DELETE_ARRAY(detected);
-    freeBytes(bytes);
+    delete[] detected;
+    delete[] bytes;
     ucsdet_close(csd);
 }
 
@@ -364,66 +360,55 @@ void CharsetDetectionTest::UTF16Test()
         0x064a, 0x062a, 0x0000};
     UnicodeString s(chars);
     int32_t beLength = 0, leLength = 0;
-    char *beBytes = extractBytes(s, "UTF-16BE", beLength);
-    char *leBytes = extractBytes(s, "UTF-16LE", leLength);
-    UCharsetDetector *csd = ucsdet_open(&status);
+    std::unique_ptr<char []>beBytes(extractBytes(s, "UTF-16BE", beLength));
+    std::unique_ptr<char []>leBytes(extractBytes(s, "UTF-16LE", leLength));
+    LocalUCharsetDetectorPointer csd(ucsdet_open(&status));
     const UCharsetMatch *match;
     const char *name;
     int32_t conf;
 
-    ucsdet_setText(csd, beBytes, beLength, &status);
-    match = ucsdet_detect(csd, &status);
+    ucsdet_setText(csd.getAlias(), beBytes.get(), beLength, &status);
+    match = ucsdet_detect(csd.getAlias(), &status);
 
     if (match == NULL) {
         errln("Encoding detection failure for UTF-16BE: got no matches.");
-        goto try_le;
+    } else {
+
+        name  = ucsdet_getName(match, &status);
+        conf  = ucsdet_getConfidence(match, &status);
+
+        if (strcmp(name, "UTF-16BE") != 0) {
+            errln("Encoding detection failure for UTF-16BE: got %s", name);
+        } else if (conf != 100) {
+            errln("Did not get 100%% confidence for UTF-16BE: got %d", conf);
+        }
     }
 
-    name  = ucsdet_getName(match, &status);
-    conf  = ucsdet_getConfidence(match, &status);
-
-    if (strcmp(name, "UTF-16BE") != 0) {
-        errln("Encoding detection failure for UTF-16BE: got %s", name);
-        goto try_le; // no point in looking at confidence if we got the wrong character set.
-    }
-
-    if (conf != 100) {
-        errln("Did not get 100%% confidence for UTF-16BE: got %d", conf);
-    }
-
-try_le:
-    ucsdet_setText(csd, leBytes, leLength, &status);
-    match = ucsdet_detect(csd, &status);
+    ucsdet_setText(csd.getAlias(), leBytes.get(), leLength, &status);
+    match = ucsdet_detect(csd.getAlias(), &status);
 
     if (match == NULL) {
         errln("Encoding detection failure for UTF-16LE: got no matches.");
-        goto bail;
+        return;
     }
 
     name  = ucsdet_getName(match, &status);
     conf = ucsdet_getConfidence(match, &status);
 
-
     if (strcmp(name, "UTF-16LE") != 0) {
         errln("Enconding detection failure for UTF-16LE: got %s", name);
-        goto bail; // no point in looking at confidence if we got the wrong character set.
+        return;
     }
 
     if (conf != 100) {
         errln("Did not get 100%% confidence for UTF-16LE: got %d", conf);
     }
-
-bail:
-    freeBytes(leBytes);
-    freeBytes(beBytes);
-    ucsdet_close(csd);
 }
 
 void CharsetDetectionTest::InputFilterTest()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString ss = "<a> <lot> <of> <English> <inside> <the> <markup> Un tr\\u00E8s petit peu de Fran\\u00E7ais. <to> <confuse> <the> <detector>";
-    UnicodeString s  = ss.unescape();
+    UnicodeString s(u"<a> <lot> <of> <English> <inside> <the> <markup> Un très petit peu de Français. <to> <confuse> <the> <detector>");
     int32_t byteLength = 0;
     char *bytes = extractBytes(s, "ISO-8859-1", byteLength);
     UCharsetDetector *csd = ucsdet_open(&status);
@@ -480,7 +465,7 @@ turn_off:
     }
 
 bail:
-    freeBytes(bytes);
+    delete[] bytes;
     ucsdet_close(csd);
 }
 
@@ -527,8 +512,8 @@ void CharsetDetectionTest::C1BytesTest()
     }
 
 bail:
-    freeBytes(bWindows);
-    freeBytes(bISO);
+    delete[] bWindows;
+    delete[] bISO;
 
     ucsdet_close(csd);
 #endif
@@ -674,8 +659,8 @@ void CharsetDetectionTest::IBM424Test()
     }
 
 bail:
-    freeBytes(bytes);
-    freeBytes(bytes_r);
+    delete[] bytes;
+    delete[] bytes_r;
     ucsdet_close(csd);
 #endif
 }
@@ -764,8 +749,8 @@ void CharsetDetectionTest::IBM420Test()
     }
 
 bail:
-    freeBytes(bytes);
-    freeBytes(bytes_r);
+    delete[] bytes;
+    delete[] bytes_r;
     ucsdet_close(csd);
 #endif
 }
@@ -825,23 +810,23 @@ void CharsetDetectionTest::Ticket6954Test() {
                             "It also includes some \\u201CC1\\u201D bytes.", -1, US_INV);
     UnicodeString sWindows  = ssWindows.unescape();
     int32_t lISO = 0, lWindows = 0;
-    char *bISO = extractBytes(sISO, "ISO-8859-1", lISO);
-    char *bWindows = extractBytes(sWindows, "windows-1252", lWindows);
+    std::unique_ptr<char[]> bISO(extractBytes(sISO, "ISO-8859-1", lISO));
+    std::unique_ptr<char[]> bWindows(extractBytes(sWindows, "windows-1252", lWindows));
 
     // First do a plain vanilla detect of 1252 text
 
-    UCharsetDetector *csd1 = ucsdet_open(&status);
-    ucsdet_setText(csd1, bWindows, lWindows, &status);
-    const UCharsetMatch *match1 = ucsdet_detect(csd1, &status);
+    LocalUCharsetDetectorPointer csd1(ucsdet_open(&status));
+    ucsdet_setText(csd1.getAlias(), bWindows.get(), lWindows, &status);
+    const UCharsetMatch *match1 = ucsdet_detect(csd1.getAlias(), &status);
     const char *name1 = ucsdet_getName(match1, &status);
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(strcmp(name1, "windows-1252")==0);
 
     // Next, using a completely separate detector, detect some 8859-1 text
 
-    UCharsetDetector *csd2 = ucsdet_open(&status);
-    ucsdet_setText(csd2, bISO, lISO, &status);
-    const UCharsetMatch *match2 = ucsdet_detect(csd2, &status);
+    LocalUCharsetDetectorPointer csd2(ucsdet_open(&status));
+    ucsdet_setText(csd2.getAlias(), bISO.get(), lISO, &status);
+    const UCharsetMatch *match2 = ucsdet_detect(csd2.getAlias(), &status);
     const char *name2 = ucsdet_getName(match2, &status);
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(strcmp(name2, "ISO-8859-1")==0);
@@ -852,10 +837,5 @@ void CharsetDetectionTest::Ticket6954Test() {
     name1 = ucsdet_getName(match1, &status);
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(strcmp(name1, "windows-1252")==0);
-
-    ucsdet_close(csd1);
-    ucsdet_close(csd2);
-    freeBytes(bISO);
-    freeBytes(bWindows);
 #endif
 }

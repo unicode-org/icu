@@ -482,14 +482,15 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
 /* Test if the locale id has BCP47 u extension and does not have '@' */
 #define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getShortestSubtagLength(localeID) == 1)
 /* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
-#define _ConvertBCP47(finalID, id, buffer, length,err) \
-        if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 ||  \
-                U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) { \
-            finalID=id; \
-            if (*err == U_STRING_NOT_TERMINATED_WARNING) { *err = U_BUFFER_OVERFLOW_ERROR; } \
-        } else { \
-            finalID=buffer; \
-        }
+#define _ConvertBCP47(finalID, id, buffer, length,err) UPRV_BLOCK_MACRO_BEGIN { \
+    if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 || \
+            U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) { \
+        finalID=id; \
+        if (*err == U_STRING_NOT_TERMINATED_WARNING) { *err = U_BUFFER_OVERFLOW_ERROR; } \
+    } else { \
+        finalID=buffer; \
+    } \
+} UPRV_BLOCK_MACRO_END
 /* Gets the size of the shortest subtag in the given localeID. */
 static int32_t getShortestSubtagLength(const char *localeID) {
     int32_t localeIDLength = static_cast<int32_t>(uprv_strlen(localeID));

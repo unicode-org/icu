@@ -6,6 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <functional>
 #include <iterator>
 #include <set>
 #include <utility>
@@ -146,13 +147,12 @@ static const char* const rawData[33][8] = {
    the macro is ugly but makes the tests pretty.
 */
 
-#define test_assert(test) \
-    { \
-        if(!(test)) \
-            errln("FAIL: " #test " was not true. In " __FILE__ " on line %d", __LINE__ ); \
-        else \
-            logln("PASS: asserted " #test); \
-    }
+#define test_assert(test) UPRV_BLOCK_MACRO_BEGIN { \
+    if(!(test)) \
+        errln("FAIL: " #test " was not true. In " __FILE__ " on line %d", __LINE__ ); \
+    else \
+        logln("PASS: asserted " #test); \
+} UPRV_BLOCK_MACRO_END
 
 /*
  Usage:
@@ -164,16 +164,17 @@ static const char* const rawData[33][8] = {
    the macro is ugly but makes the tests pretty.
 */
 
-#define test_assert_print(test,print) \
-    { \
-        if(!(test)) \
-            errln("FAIL: " #test " was not true. " + UnicodeString(print) ); \
-        else \
-            logln("PASS: asserted " #test "-> " + UnicodeString(print)); \
-    }
+#define test_assert_print(test,print) UPRV_BLOCK_MACRO_BEGIN { \
+    if(!(test)) \
+        errln("FAIL: " #test " was not true. " + UnicodeString(print) ); \
+    else \
+        logln("PASS: asserted " #test "-> " + UnicodeString(print)); \
+} UPRV_BLOCK_MACRO_END
 
 
-#define test_dumpLocale(l) { logln(#l " = " + UnicodeString(l.getName(), "")); }
+#define test_dumpLocale(l) UPRV_BLOCK_MACRO_BEGIN { \
+    logln(#l " = " + UnicodeString(l.getName(), "")); \
+} UPRV_BLOCK_MACRO_END
 
 LocaleTest::LocaleTest()
 : dataTable(NULL)
@@ -266,6 +267,10 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestUndScript);
     TESTCASE_AUTO(TestUndRegion);
     TESTCASE_AUTO(TestUndCAPI);
+    TESTCASE_AUTO(TestRangeIterator);
+    TESTCASE_AUTO(TestPointerConvertingIterator);
+    TESTCASE_AUTO(TestTagConvertingIterator);
+    TESTCASE_AUTO(TestCapturingTagConvertingIterator);
     TESTCASE_AUTO_END;
 }
 
@@ -2695,7 +2700,7 @@ void LocaleTest::TestCurrencyByDate(void)
 #if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UDate date = uprv_getUTCtime();
-	UChar TMP[4];
+	UChar TMP[4] = {0, 0, 0, 0};
 	int32_t index = 0;
 	int32_t resLen = 0;
     UnicodeString tempStr, resultStr;
@@ -3831,4 +3836,119 @@ void LocaleTest::TestUndCAPI() {
     status.errIfFailureAndReset("\"%s\"", und_region);
     assertTrue("reslen >= 0", reslen >= 0);
     assertEquals("uloc_getLanguage()", empty, tmp);
+}
+
+#define ARRAY_RANGE(array) (array), ((array) + UPRV_LENGTHOF(array))
+
+void LocaleTest::TestRangeIterator() {
+    IcuTestErrorCode status(*this, "TestRangeIterator");
+    Locale locales[] = { "fr", "en_GB", "en" };
+    Locale::RangeIterator<Locale *> iter(ARRAY_RANGE(locales));
+
+    assertTrue("0.hasNext()", iter.hasNext());
+    const Locale &l0 = iter.next();
+    assertEquals("0.next()", "fr", l0.getName());
+    assertTrue("&0.next()", &l0 == &locales[0]);
+
+    assertTrue("1.hasNext()", iter.hasNext());
+    const Locale &l1 = iter.next();
+    assertEquals("1.next()", "en_GB", l1.getName());
+    assertTrue("&1.next()", &l1 == &locales[1]);
+
+    assertTrue("2.hasNext()", iter.hasNext());
+    const Locale &l2 = iter.next();
+    assertEquals("2.next()", "en", l2.getName());
+    assertTrue("&2.next()", &l2 == &locales[2]);
+
+    assertFalse("3.hasNext()", iter.hasNext());
+}
+
+void LocaleTest::TestPointerConvertingIterator() {
+    IcuTestErrorCode status(*this, "TestPointerConvertingIterator");
+    Locale locales[] = { "fr", "en_GB", "en" };
+    Locale *pointers[] = { locales, locales + 1, locales + 2 };
+    // Lambda with explicit reference return type to prevent copy-constructing a temporary
+    // which would be destructed right away.
+    Locale::ConvertingIterator<Locale **, std::function<const Locale &(const Locale *)>> iter(
+        ARRAY_RANGE(pointers), [](const Locale *p) -> const Locale & { return *p; });
+
+    assertTrue("0.hasNext()", iter.hasNext());
+    const Locale &l0 = iter.next();
+    assertEquals("0.next()", "fr", l0.getName());
+    assertTrue("&0.next()", &l0 == pointers[0]);
+
+    assertTrue("1.hasNext()", iter.hasNext());
+    const Locale &l1 = iter.next();
+    assertEquals("1.next()", "en_GB", l1.getName());
+    assertTrue("&1.next()", &l1 == pointers[1]);
+
+    assertTrue("2.hasNext()", iter.hasNext());
+    const Locale &l2 = iter.next();
+    assertEquals("2.next()", "en", l2.getName());
+    assertTrue("&2.next()", &l2 == pointers[2]);
+
+    assertFalse("3.hasNext()", iter.hasNext());
+}
+
+namespace {
+
+class LocaleFromTag {
+public:
+    LocaleFromTag() : locale(Locale::getRoot()) {}
+    const Locale &operator()(const char *tag) { return locale = Locale(tag); }
+
+private:
+    // Store the locale in the converter, rather than return a reference to a temporary,
+    // or a value which could go out of scope with the caller's reference to it.
+    Locale locale;
+};
+
+}  // namespace
+
+void LocaleTest::TestTagConvertingIterator() {
+    IcuTestErrorCode status(*this, "TestTagConvertingIterator");
+    const char *tags[] = { "fr", "en_GB", "en" };
+    LocaleFromTag converter;
+    Locale::ConvertingIterator<const char **, LocaleFromTag> iter(ARRAY_RANGE(tags), converter);
+
+    assertTrue("0.hasNext()", iter.hasNext());
+    const Locale &l0 = iter.next();
+    assertEquals("0.next()", "fr", l0.getName());
+
+    assertTrue("1.hasNext()", iter.hasNext());
+    const Locale &l1 = iter.next();
+    assertEquals("1.next()", "en_GB", l1.getName());
+
+    assertTrue("2.hasNext()", iter.hasNext());
+    const Locale &l2 = iter.next();
+    assertEquals("2.next()", "en", l2.getName());
+
+    assertFalse("3.hasNext()", iter.hasNext());
+}
+
+void LocaleTest::TestCapturingTagConvertingIterator() {
+    IcuTestErrorCode status(*this, "TestCapturingTagConvertingIterator");
+    const char *tags[] = { "fr", "en_GB", "en" };
+    // Store the converted locale in a locale variable,
+    // rather than return a reference to a temporary,
+    // or a value which could go out of scope with the caller's reference to it.
+    Locale locale;
+    // Lambda with explicit reference return type to prevent copy-constructing a temporary
+    // which would be destructed right away.
+    Locale::ConvertingIterator<const char **, std::function<const Locale &(const char *)>> iter(
+        ARRAY_RANGE(tags), [&](const char *tag) -> const Locale & { return locale = Locale(tag); });
+
+    assertTrue("0.hasNext()", iter.hasNext());
+    const Locale &l0 = iter.next();
+    assertEquals("0.next()", "fr", l0.getName());
+
+    assertTrue("1.hasNext()", iter.hasNext());
+    const Locale &l1 = iter.next();
+    assertEquals("1.next()", "en_GB", l1.getName());
+
+    assertTrue("2.hasNext()", iter.hasNext());
+    const Locale &l2 = iter.next();
+    assertEquals("2.next()", "en", l2.getName());
+
+    assertFalse("3.hasNext()", iter.hasNext());
 }

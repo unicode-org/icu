@@ -263,6 +263,14 @@ public:
     virtual ~NumberFormat();
 
     /**
+     * Clones this object polymorphically.
+     * The caller owns the result and should delete it when done.
+     * @return clone, or nullptr if an error occurred
+     * @stable ICU 2.0
+     */
+    virtual NumberFormat* clone() const = 0;
+
+    /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
      * @return    true if the given Format objects are semantically equal.
@@ -641,7 +649,9 @@ public:
      * @param result        Formattable to be set to the parse result.
      *                      If parse fails, return contents are undefined.
      * @param status        Output parameter set to a failure error code
-     *                      when a failure occurs.
+     *                      when a failure occurs. The error code when the
+     *                      string fails to parse is U_INVALID_FORMAT_ERROR,
+     *                      unless overridden by a subclass.
      * @see                 NumberFormat::isParseIntegerOnly
      * @stable ICU 2.0
      */

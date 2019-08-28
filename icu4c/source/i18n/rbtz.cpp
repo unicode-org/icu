@@ -356,8 +356,8 @@ cleanup:
     fUpToDate = FALSE;
 }
 
-TimeZone*
-RuleBasedTimeZone::clone(void) const {
+RuleBasedTimeZone*
+RuleBasedTimeZone::clone() const {
     return new RuleBasedTimeZone(*this);
 }
 

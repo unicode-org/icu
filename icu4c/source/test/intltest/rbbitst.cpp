@@ -51,11 +51,17 @@
 #include "unicode/filteredbrk.h"
 #endif // !UCONFIG_NO_FILTERED_BREAK_ITERATION
 
-#define TEST_ASSERT(x) {if (!(x)) { \
-    errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
+#define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(x)) { \
+        errln("Failure in file %s, line %d", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_SUCCESS(errcode) { if (U_FAILURE(errcode)) { \
-    errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
+#define TEST_ASSERT_SUCCESS(errcode) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(errcode)) { \
+        errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 //---------------------------------------------
 // runIndexedTest
@@ -1237,7 +1243,7 @@ cleanUpAndReturn:
         delete []retPtr;
         retPtr = 0;
         ulen   = 0;
-    };
+    }
     return retPtr;
 }
 
@@ -2033,7 +2039,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             c3 = fText->char32At(p3);
             if (fCRSet->contains(c2) || fLFSet->contains(c2) || fNewlineSet->contains(c2)) {
                break;
-            };
+            }
         }
         while (fFormatSet->contains(c3) || fExtendSet->contains(c3) || fZWJSet->contains(c3));
 
@@ -2059,10 +2065,10 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         //
         if (fCRSet->contains(c1) || fLFSet->contains(c1) || fNewlineSet->contains(c1)) {
             break;
-        };
+        }
         if (fCRSet->contains(c2) || fLFSet->contains(c2) || fNewlineSet->contains(c2)) {
             break;
-        };
+        }
 
         // Rule (3c)    ZWJ x Extended_Pictographic
         //              Not ignoring extend chars, so peek into input text to
@@ -4426,11 +4432,11 @@ void RBBITest::TestBug12519() {
     assertTrue(WHERE, Locale::getFrench() == biFr->getLocale(ULOC_VALID_LOCALE, status));
     assertTrue(WHERE "Locales do not participate in BreakIterator equality.", *biEn == *biFr);
 
-    LocalPointer<RuleBasedBreakIterator>cloneEn((RuleBasedBreakIterator *)biEn->clone());
+    LocalPointer<RuleBasedBreakIterator>cloneEn(biEn->clone());
     assertTrue(WHERE, *biEn == *cloneEn);
     assertTrue(WHERE, Locale::getEnglish() == cloneEn->getLocale(ULOC_VALID_LOCALE, status));
 
-    LocalPointer<RuleBasedBreakIterator>cloneFr((RuleBasedBreakIterator *)biFr->clone());
+    LocalPointer<RuleBasedBreakIterator>cloneFr(biFr->clone());
     assertTrue(WHERE, *biFr == *cloneFr);
     assertTrue(WHERE, Locale::getFrench() == cloneFr->getLocale(ULOC_VALID_LOCALE, status));
 

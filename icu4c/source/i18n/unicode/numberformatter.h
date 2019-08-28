@@ -11,8 +11,9 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/appendable.h"
-#include "unicode/dcfmtsym.h"
+#include "unicode/bytestream.h"
 #include "unicode/currunit.h"
+#include "unicode/dcfmtsym.h"
 #include "unicode/fieldpos.h"
 #include "unicode/formattedvalue.h"
 #include "unicode/fpositer.h"
@@ -2520,6 +2521,27 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      */
     void getAllFieldPositions(FieldPositionIterator &iterator, UErrorCode &status) const;
 
+    /**
+     * Export the formatted number as a "numeric string" conforming to the
+     * syntax defined in the Decimal Arithmetic Specification, available at
+     * http://speleotrove.com/decimal
+     * 
+     * This endpoint is useful for obtaining the exact number being printed
+     * after scaling and rounding have been applied by the number formatter.
+     *
+     * Example call site:
+     *
+     *     auto decimalNumber = fn.toDecimalNumber<std::string>(status);
+     *
+     * @tparam StringClass A string class compatible with StringByteSink;
+     *         for example, std::string.
+     * @param status Set if an error occurs.
+     * @return A StringClass containing the numeric string.
+     * @draft ICU 65
+     */
+    template<typename StringClass>
+    inline StringClass toDecimalNumber(UErrorCode& status) const;
+
 #ifndef U_HIDE_INTERNAL_API
 
     /**
@@ -2553,12 +2575,25 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     explicit FormattedNumber(UErrorCode errorCode)
         : fData(nullptr), fErrorCode(errorCode) {}
 
+    // TODO(ICU-20775): Propose this as API.
+    void toDecimalNumber(ByteSink& sink, UErrorCode& status) const;
+
     // To give LocalizedNumberFormatter format methods access to this class's constructor:
     friend class LocalizedNumberFormatter;
 
     // To give C API access to internals
     friend struct impl::UFormattedNumberImpl;
 };
+
+#ifndef U_HIDE_DRAFT_API
+template<typename StringClass>
+StringClass FormattedNumber::toDecimalNumber(UErrorCode& status) const {
+    StringClass result;
+    StringByteSink<StringClass> sink(&result);
+    toDecimalNumber(sink, status);
+    return result;
+};
+#endif  // U_HIDE_DRAFT_API
 
 /**
  * See the main description in numberformatter.h for documentation and examples.

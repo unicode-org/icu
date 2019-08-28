@@ -59,24 +59,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\x86\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\x86\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\x86\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\x86\DebugUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\x64\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\x64\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\x64\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\x64\DebugUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">.\arm\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">.\arm\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">.\arm\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">.\arm\DebugUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">.\arm64\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">.\arm64\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">.\arm64\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">.\arm64\DebugUWP\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
+    <OutDir>.\$(Platform)\$(Configuration)UWP\</OutDir>
+    <IntDir>.\$(Platform)\$(Configuration)UWP\</IntDir>
+    <!-- The ICU projects use "Win32" to mean "x86", so we need to special case it. -->
+    <OutDir Condition="'$(Platform)'=='Win32'">.\x86\$(Configuration)UWP\</OutDir>
+    <IntDir Condition="'$(Platform)'=='Win32'">.\x86\$(Configuration)UWP\</IntDir>
+    <!-- Disable Incremental Linking for Release builds as it prevents Link-time Code Generation -->
     <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Midl>
@@ -100,6 +90,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
@@ -139,7 +130,6 @@
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -302,7 +292,7 @@
       <ProgramDataBaseFileName>.\ARM64\ReleaseUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\binARM64uwp\icuin62.dll</OutputFile>
+      <OutputFile>..\..\binARM64uwp\icuin64.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\libARM64uwp\icuin.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\libARM64uwp\icuin.lib</ImportLibrary>
       <AdditionalDependencies>..\..\libARM64uwp\icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -319,7 +309,7 @@
       <ProgramDataBaseFileName>.\ARM64\DebugUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\binARM64uwp\icuin62d.dll</OutputFile>
+      <OutputFile>..\..\binARM64uwp\icuin64d.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\libARM64uwp\icuind.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\libARM64uwp\icuind.lib</ImportLibrary>
       <AdditionalDependencies>..\..\libARM64uwp\icuucd.lib;%(AdditionalDependencies)</AdditionalDependencies>

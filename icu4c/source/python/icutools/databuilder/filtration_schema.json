@@ -38,7 +38,7 @@
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "pattern": "^[+-]/[\\S]+$"
+                            "pattern": "^[+-]/[\\S]*$"
                         }
                     }
                 },
@@ -49,17 +49,25 @@
         "fileReplacements": {
             "type": "object",
             "properties": {
-                "directory": { "type": "string" },
+                "directory": {
+                    "type": "string",
+                    "pattern": "^(\\$SRC|\\$FILTERS|\\$CWD|/$|/[^/]+)(/[^/]+)*$"
+                },
                 "replacements": {
                     "type": "array",
                     "items": {
-                        "type": "object",
-                        "properties": {
-                            "src": { "type": "string" },
-                            "dest": { "type": "string" }
-                        },
-                        "additionalProperties": false,
-                        "required": ["src", "dest"]
+                        "oneOf": [
+                            { "type": "string" },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "src": { "type": "string" },
+                                    "dest": { "type": "string" }
+                                },
+                                "additionalProperties": false,
+                                "required": ["src", "dest"]
+                            }
+                        ]
                     }
                 }
             },

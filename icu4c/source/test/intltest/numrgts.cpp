@@ -78,7 +78,7 @@ public:
     {
         NumberFormat::parse(text, result, status);
     }
-    virtual Format* clone() const 
+    virtual MyNumberFormatTest* clone() const 
     { return NULL; }
 
     virtual UnicodeString& format(int32_t, 
@@ -850,15 +850,15 @@ void NumberFormatRegressionTest::Test4092480 (void)
 void NumberFormatRegressionTest::Test4087244 (void) {
     UErrorCode status = U_ZERO_ERROR;
     char loc[256] = {0};
+
     uloc_canonicalize("pt_PT@currency=PTE", loc, 256, &status);
-    Locale *de = new Locale(loc);
-    NumberFormat *nf = NumberFormat::createCurrencyInstance(*de, status);
+    Locale de(loc);
+    LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance(de, status));
     if(U_FAILURE(status)) {
-      dataerrln("Error creating DecimalFormat: %s", u_errorName(status));
-      delete nf;
-      return;
+        dataerrln("Error creating DecimalFormat: %s", u_errorName(status));
+        return;
     }
-    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
+    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf.getAlias());
     if(df == NULL) {
         errln("expected DecimalFormat!");
         return;
@@ -887,8 +887,6 @@ void NumberFormatRegressionTest::Test4087244 (void) {
               monStr +
               "\" and not \"" + decStr + '"');
     }
-    delete de;
-    delete nf;
 }
 /* @bug 4070798
  * Number format data rounding errors for locale FR
@@ -998,7 +996,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     if (failure(status, "NumberFormat::createInstance", Locale::getCanadaFrench(), TRUE)){
         delete formatter;
         return;
-    };
+    }
     tempString = formatter->format (-5789.9876, tempString);
 
     if (tempString == expectedDefault) {
@@ -1132,7 +1130,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
     if (failure(status, "NumberFormat::createNumberInstance", TRUE)){
         delete formatter;
         return;
-    };
+    }
     tempString = formatter->format (-5789.9876, tempString);
 
     if (tempString == expectedDefault) {
@@ -1942,7 +1940,7 @@ void NumberFormatRegressionTest::Test4145457() {
     if (failure(status, "NumberFormat::createInstance", TRUE)){
         delete nff;
         return;
-    };
+    }
     DecimalFormat *nf = dynamic_cast<DecimalFormat *>(nff);
     if(nf == NULL) {
         errln("DecimalFormat needed to continue");
@@ -2185,7 +2183,7 @@ void NumberFormatRegressionTest::Test4167494(void) {
     if (failure(status, "NumberFormat::createInstance", TRUE)){
         delete fmt;
         return;
-    };
+    }
 
     double a = DBL_MAX * 0.99; // DBL_MAX itself overflows to +Inf
     UnicodeString s;
@@ -2515,7 +2513,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
     if (failure(status, "createInstance", Locale::getUS(), TRUE)){
         delete fmt;
         return;
-    };
+    }
     int32_t DATA[] = { INT32_MIN, INT32_MAX, -100000000, 100000000 };
     int DATA_length = UPRV_LENGTHOF(DATA);
     for (int i=0; i<DATA_length; ++i) {
@@ -2557,7 +2555,7 @@ void NumberFormatRegressionTest::Test4217661(void) {
     if (failure(status, "createInstance", Locale::getUS(), TRUE)){
         delete fmt;
         return;
-    };
+    }
     fmt->setMaximumFractionDigits(2);
     for (int i=0; i<D_length; i++) {
         UnicodeString s;
@@ -2578,7 +2576,7 @@ void NumberFormatRegressionTest::Test4161100(void) {
     if (failure(status, "createInstance", Locale::getUS(), TRUE)){
         delete nf;
         return;
-    };
+    }
     nf->setMinimumFractionDigits(1);
     nf->setMaximumFractionDigits(1);
     double a = -0.09;
@@ -2681,18 +2679,18 @@ void NumberFormatRegressionTest::TestJ691(void) {
     Locale loc("fr", "CH");
 
     // set up the input date string & expected output
-    UnicodeString udt("11.10.2000", "");
-    UnicodeString exp("11.10.00", "");
+    UnicodeString udt(u"11.10.2000");
+    UnicodeString exp(u"11.10.00");
 
     // create a Calendar for this locale
-    Calendar *cal = Calendar::createInstance(loc, status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(loc, status));
     if (U_FAILURE(status)) {
         dataerrln("FAIL: Calendar::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
     }
 
     // create a NumberFormat for this locale
-    NumberFormat *nf = NumberFormat::createInstance(loc, status);
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance(loc, status));
     if (U_FAILURE(status)) {
         dataerrln("FAIL: NumberFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
@@ -2705,14 +2703,14 @@ void NumberFormatRegressionTest::TestJ691(void) {
     // so they are done in DateFormat::adoptNumberFormat
 
     // create the DateFormat
-    DateFormat *df = DateFormat::createDateInstance(DateFormat::kShort, loc);
+    LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kShort, loc));
     if (U_FAILURE(status)) {
         errln("FAIL: DateFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
         return;
     }
 
-    df->adoptCalendar(cal);
-    df->adoptNumberFormat(nf);
+    df->adoptCalendar(cal.orphan());
+    df->adoptNumberFormat(nf.orphan());
 
     // set parsing to lenient & parse
     df->setLenient(TRUE);
@@ -2725,8 +2723,6 @@ void NumberFormatRegressionTest::TestJ691(void) {
     if (outString != exp) {
         errln("FAIL: " + udt + " => " + outString);
     }
-
-    delete df;
 }
 
 //---------------------------------------------------------------------------
@@ -2734,27 +2730,28 @@ void NumberFormatRegressionTest::TestJ691(void) {
 //   Error Checking / Reporting macros
 //
 //---------------------------------------------------------------------------
-#define TEST_CHECK_STATUS(status) { \
+#define TEST_CHECK_STATUS(status) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         if (status == U_MISSING_RESOURCE_ERROR) { \
             dataerrln("File %s, Line %d: status=%s", __FILE__, __LINE__, u_errorName(status)); \
         } else { \
             errln("File %s, Line %d: status=%s", __FILE__, __LINE__, u_errorName(status)); \
         } return; \
-    }}
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) \
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
     if ((expr)==FALSE) {\
         errln("File %s, line %d: Assertion Failed: " #expr "\n", __FILE__, __LINE__);\
-    }
-#define TEST_ASSERT_EQUALS(x,y)                  \
-    {                                                                     \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define TEST_ASSERT_EQUALS(x,y) UPRV_BLOCK_MACRO_BEGIN { \
       char _msg[1000]; \
       int32_t len = sprintf (_msg,"File %s, line %d: " #x "==" #y, __FILE__, __LINE__); \
       (void)len;                                                         \
       U_ASSERT(len < (int32_t) sizeof(_msg));                            \
       assertEquals((const char*) _msg, x,y);                             \
-    }
+} UPRV_BLOCK_MACRO_END
 
 
 // Ticket 8199:  Parse failure for numbers in the range of 1E10 - 1E18
@@ -2911,7 +2908,7 @@ void NumberFormatRegressionTest::Test9780(void) {
     if (failure(status, "NumberFormat::createInstance", TRUE)){
         delete nf;
         return;
-    };
+    }
     DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
     if(df == NULL) {
         errln("DecimalFormat needed to continue");
@@ -3025,7 +3022,6 @@ void NumberFormatRegressionTest::Test9677(void) {
         errln("FAIL: with different neg prefix , parse error %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else {
-;
         if(n!=-123456789) {
           errln("FAIL: with different neg prefix , unum_parse status %s, result %d expected -123456789\n", u_errorName(status), n);
         } else {

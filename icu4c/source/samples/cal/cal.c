@@ -697,7 +697,7 @@ print_year(UCalendar *c,
                 if(left_current == 0) {
                     break;
                 }
-            };
+            }
             
             /* If the current day isn't 0, indent to make up for missing
             days at the end of the month */
@@ -745,7 +745,7 @@ print_year(UCalendar *c,
                     break;
                 }
                 
-            };
+            }
             
             /* Output a newline */
             putc('\n', stdout);

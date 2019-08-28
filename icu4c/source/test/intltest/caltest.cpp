@@ -25,23 +25,33 @@
 
 #define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
 
-#define TEST_CHECK_STATUS { \
+#define TEST_CHECK_STATUS UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         if (status == U_MISSING_RESOURCE_ERROR) { \
             dataerrln("%s:%d: Test failure.  status=%s", __FILE__, __LINE__, u_errorName(status)); \
         } else { \
             errln("%s:%d: Test failure.  status=%s", __FILE__, __LINE__, u_errorName(status)); \
-        } return;}}
+        } \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_CHECK_STATUS_LOCALE(testlocale) { \
+#define TEST_CHECK_STATUS_LOCALE(testlocale) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         if (status == U_MISSING_RESOURCE_ERROR) { \
             dataerrln("%s:%d: Test failure, locale %s.  status=%s", __FILE__, __LINE__, testlocale, u_errorName(status)); \
         } else { \
             errln("%s:%d: Test failure, locale %s.  status=%s", __FILE__, __LINE__, testlocale, u_errorName(status)); \
-        } return;}}
+        } \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);};}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        errln("%s:%d: Test failure \n", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 // *****************************************************************************
 // class CalendarTest
@@ -740,7 +750,7 @@ CalendarTest::TestClonesUnique908()
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance(status);
     if (failure(status, "Calendar::createInstance", TRUE)) return;
-    Calendar *d = (Calendar*) c->clone();
+    Calendar *d = c->clone();
     c->set(UCAL_MILLISECOND, 123);
     d->set(UCAL_MILLISECOND, 456);
     if (c->get(UCAL_MILLISECOND, status) != 123 ||
@@ -1722,7 +1732,7 @@ void
 CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
 {
     UErrorCode status = U_ZERO_ERROR;
-    Calendar *cur = (Calendar*) cal->clone();
+    Calendar *cur = cal->clone();
     int32_t initialDOW = cur->get(UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     int32_t DOW, newDOW = initialDOW;
@@ -1747,11 +1757,12 @@ CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
     delete cur;
 }
 
-#define CHECK(status, msg) \
+#define CHECK(status, msg) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         errcheckln(status, msg); \
         return; \
-    }
+    } \
+} UPRV_BLOCK_MACRO_END
 
 void CalendarTest::TestWOY(void) {
     /*
@@ -2173,7 +2184,7 @@ int32_t CalendarTest::testLocaleCount()
   if(gLocaleCount < 0) {
     int32_t i;
     for(i=0;testLocaleID(i) != NULL;i++) {
-      ;
+      // do nothing
     }
     gLocaleCount = i;
   }

@@ -82,6 +82,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void copyMove();
     void localPointerCAPI();
     void toObject();
+    void toDecimalNumber();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -287,6 +288,13 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
       const char16_t* expected);
 };
 
+class NumberPermutationTest : public IntlTest {
+  public:
+    void testPermutations();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+};
+
 
 // NOTE: This macro is identical to the one in itformat.cpp
 #define TESTCLASS(id, TestClass)          \
@@ -318,6 +326,7 @@ class NumberTest : public IntlTest {
         TESTCLASS(7, NumberParserTest);
         TESTCLASS(8, NumberSkeletonTest);
         TESTCLASS(9, NumberRangeFormatterTest);
+        TESTCLASS(10, NumberPermutationTest);
         default: name = ""; break; // needed to end loop
         }
     }

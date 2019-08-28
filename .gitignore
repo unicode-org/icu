@@ -6,17 +6,23 @@ __pycache__/
 /.git
 .vscode
 icu4c/bin
+icu4c/binARM
 icu4c/bin32uwp
 icu4c/bin64
+icu4c/binARM64
 icu4c/bin64uwp
 icu4c/binARMUWP
+icu4c/binARM64UWP
 icu4c/commondata
 icu4c/include
 icu4c/lib
+icu4c/libARM
 icu4c/lib32uwp
 icu4c/lib64
+icu4c/libARM64
 icu4c/lib64uwp
 icu4c/libARMuwp
+icu4c/libARM64uwp
 icu4c/source/Doxyfile
 icu4c/source/Makefile
 icu4c/source/README
@@ -43,6 +49,7 @@ icu4c/source/common/Makefile
 icu4c/source/common/Makefile.local
 icu4c/source/common/Release
 icu4c/source/common/arm
+icu4c/source/common/arm64
 icu4c/source/common/common.res
 icu4c/source/common/common.vcproj.*.*.user
 icu4c/source/common/debug
@@ -85,6 +92,8 @@ icu4c/source/data/rules.mk
 icu4c/source/data/uni-core-data
 icu4c/source/data/x64
 icu4c/source/data/x86
+icu4c/source/data/arm
+icu4c/source/data/arm64
 icu4c/source/dist
 icu4c/source/doc
 icu4c/source/extra/Makefile
@@ -112,6 +121,8 @@ icu4c/source/extra/uconv/uconv.vcproj.*.*.user
 icu4c/source/extra/uconv/uconvmsg
 icu4c/source/extra/uconv/x64
 icu4c/source/extra/uconv/x86
+icu4c/source/extra/uconv/ARM
+icu4c/source/extra/uconv/ARM64
 icu4c/source/i18n/*.ao
 icu4c/source/i18n/*.d
 icu4c/source/i18n/*.o
@@ -123,12 +134,15 @@ icu4c/source/i18n/Makefile
 icu4c/source/i18n/Makefile.local
 icu4c/source/i18n/Release
 icu4c/source/i18n/arm
+icu4c/source/i18n/arm64
 icu4c/source/i18n/debug
 icu4c/source/i18n/i18n.res
 icu4c/source/i18n/i18n.vcproj.*.*.user
 icu4c/source/i18n/release
 icu4c/source/i18n/x64
 icu4c/source/i18n/x86
+icu4c/source/i18n/ARM
+icu4c/source/i18n/ARM64
 icu4c/source/icudefs.local
 icu4c/source/icudefs.mk
 icu4c/source/io/*.ao
@@ -144,6 +158,8 @@ icu4c/source/io/io.vcproj.*.*.user
 icu4c/source/io/release
 icu4c/source/io/x64
 icu4c/source/io/x86
+icu4c/source/io/ARM
+icu4c/source/io/ARM64
 icu4c/source/layoutex/*.ao
 icu4c/source/layoutex/*.d
 icu4c/source/layoutex/*.o
@@ -409,6 +425,8 @@ icu4c/source/stubdata/stubdata.vcproj.*.*.user
 icu4c/source/stubdata/stubdatabuilt.txt
 icu4c/source/stubdata/x64
 icu4c/source/stubdata/x86
+icu4c/source/stubdata/ARM
+icu4c/source/stubdata/ARM64
 icu4c/source/test-*.xml
 icu4c/source/test/Makefile
 icu4c/source/test/cintltst/*.d
@@ -427,6 +445,8 @@ icu4c/source/test/cintltst/debug
 icu4c/source/test/cintltst/release
 icu4c/source/test/cintltst/x64
 icu4c/source/test/cintltst/x86
+icu4c/source/test/cintltst/ARM
+icu4c/source/test/cintltst/ARM64
 icu4c/source/test/compat/Makefile
 icu4c/source/test/fuzzer/Makefile
 icu4c/source/test/fuzzer/*.d
@@ -448,6 +468,8 @@ icu4c/source/test/intltest/intltest.vcproj.*.*.user
 icu4c/source/test/intltest/release
 icu4c/source/test/intltest/x64
 icu4c/source/test/intltest/x86
+icu4c/source/test/intltest/ARM
+icu4c/source/test/intltest/ARM64
 icu4c/source/test/iotest/*.d
 icu4c/source/test/iotest/*.dSYM
 icu4c/source/test/iotest/*.o
@@ -462,6 +484,8 @@ icu4c/source/test/iotest/iotest.vcproj.*.*.user
 icu4c/source/test/iotest/release
 icu4c/source/test/iotest/x64
 icu4c/source/test/iotest/x86
+icu4c/source/test/iotest/ARM
+icu4c/source/test/iotest/ARM64
 icu4c/source/test/letest/*.d
 icu4c/source/test/letest/*.o
 icu4c/source/test/letest/*.opensdf
@@ -658,6 +682,8 @@ icu4c/source/tools/ctestfw/libsicutest*
 icu4c/source/tools/ctestfw/release
 icu4c/source/tools/ctestfw/x64
 icu4c/source/tools/ctestfw/x86
+icu4c/source/tools/ctestfw/ARM
+icu4c/source/tools/ctestfw/ARM64
 icu4c/source/tools/escapesrc/*.d
 icu4c/source/tools/escapesrc/*.o
 icu4c/source/tools/escapesrc/Makefile
@@ -677,6 +703,8 @@ icu4c/source/tools/genbrk/genbrk.vcproj.*.*.user
 icu4c/source/tools/genbrk/release
 icu4c/source/tools/genbrk/x64
 icu4c/source/tools/genbrk/x86
+icu4c/source/tools/genbrk/ARM
+icu4c/source/tools/genbrk/ARM64
 icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.o
 icu4c/source/tools/genccode/*.pdb
@@ -692,6 +720,8 @@ icu4c/source/tools/genccode/genccode.vcproj.*.*.user
 icu4c/source/tools/genccode/release
 icu4c/source/tools/genccode/x64
 icu4c/source/tools/genccode/x86
+icu4c/source/tools/genccode/ARM
+icu4c/source/tools/genccode/ARM64
 icu4c/source/tools/gencfu/*.d
 icu4c/source/tools/gencfu/*.o
 icu4c/source/tools/gencfu/*.pdb
@@ -707,6 +737,8 @@ icu4c/source/tools/gencfu/gencfu.vcproj.*.*.user
 icu4c/source/tools/gencfu/release
 icu4c/source/tools/gencfu/x64
 icu4c/source/tools/gencfu/x86
+icu4c/source/tools/gencfu/ARM
+icu4c/source/tools/gencfu/ARM64
 icu4c/source/tools/gencmn/*.d
 icu4c/source/tools/gencmn/*.o
 icu4c/source/tools/gencmn/*.pdb
@@ -723,6 +755,8 @@ icu4c/source/tools/gencmn/gencmn.vcproj.*.*.user
 icu4c/source/tools/gencmn/release
 icu4c/source/tools/gencmn/x64
 icu4c/source/tools/gencmn/x86
+icu4c/source/tools/gencmn/ARM
+icu4c/source/tools/gencmn/ARM64
 icu4c/source/tools/gencnval/*.d
 icu4c/source/tools/gencnval/*.ncb
 icu4c/source/tools/gencnval/*.o
@@ -741,6 +775,8 @@ icu4c/source/tools/gencnval/gencnval.vcproj.*.*.user
 icu4c/source/tools/gencnval/release
 icu4c/source/tools/gencnval/x64
 icu4c/source/tools/gencnval/x86
+icu4c/source/tools/gencnval/ARM
+icu4c/source/tools/gencnval/ARM64
 icu4c/source/tools/gencolusb/Makefile.local
 icu4c/source/tools/gencolusb/extract_unsafe_backwards
 icu4c/source/tools/gencolusb/verify_uset
@@ -755,6 +791,8 @@ icu4c/source/tools/gendict/Makefile
 icu4c/source/tools/gendict/Release
 icu4c/source/tools/gendict/x64
 icu4c/source/tools/gendict/x86
+icu4c/source/tools/gendict/ARM
+icu4c/source/tools/gendict/ARM64
 icu4c/source/tools/gennorm2/*.d
 icu4c/source/tools/gennorm2/*.o
 icu4c/source/tools/gennorm2/*.pdb
@@ -770,6 +808,8 @@ icu4c/source/tools/gennorm2/gennorm2.vcproj.*.*.user
 icu4c/source/tools/gennorm2/release
 icu4c/source/tools/gennorm2/x64
 icu4c/source/tools/gennorm2/x86
+icu4c/source/tools/gennorm2/ARM
+icu4c/source/tools/gennorm2/ARM64
 icu4c/source/tools/genrb/*.1
 icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.o
@@ -792,6 +832,8 @@ icu4c/source/tools/genrb/release
 icu4c/source/tools/genrb/temp
 icu4c/source/tools/genrb/x64
 icu4c/source/tools/genrb/x86
+icu4c/source/tools/genrb/ARM
+icu4c/source/tools/genrb/ARM64
 icu4c/source/tools/genren/ICUunrenamed
 icu4c/source/tools/genren/Makefile.local
 icu4c/source/tools/genren/urename.*
@@ -811,6 +853,8 @@ icu4c/source/tools/gensprep/gensprep.vcproj.*.*.user
 icu4c/source/tools/gensprep/release
 icu4c/source/tools/gensprep/x64
 icu4c/source/tools/gensprep/x86
+icu4c/source/tools/gensprep/ARM
+icu4c/source/tools/gensprep/ARM64
 icu4c/source/tools/gentest/*.d
 icu4c/source/tools/gentest/*.o
 icu4c/source/tools/gentest/*.pdb
@@ -825,6 +869,8 @@ icu4c/source/tools/gentest/gentest.vcproj.*.*.user
 icu4c/source/tools/gentest/release
 icu4c/source/tools/gentest/x64
 icu4c/source/tools/gentest/x86
+icu4c/source/tools/gentest/ARM
+icu4c/source/tools/gentest/ARM64
 icu4c/source/tools/icuinfo/*.d
 icu4c/source/tools/icuinfo/*.dSYM
 icu4c/source/tools/icuinfo/*.dylib
@@ -841,6 +887,8 @@ icu4c/source/tools/icuinfo/icuplugins*.txt
 !icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt
 icu4c/source/tools/icuinfo/x64
 icu4c/source/tools/icuinfo/x86
+icu4c/source/tools/icuinfo/ARM
+icu4c/source/tools/icuinfo/ARM64
 icu4c/source/tools/icupkg/*.8
 icu4c/source/tools/icupkg/*.d
 icu4c/source/tools/icupkg/*.ncb
@@ -859,6 +907,8 @@ icu4c/source/tools/icupkg/icupkg.vcproj.*.*.user
 icu4c/source/tools/icupkg/release
 icu4c/source/tools/icupkg/x64
 icu4c/source/tools/icupkg/x86
+icu4c/source/tools/icupkg/ARM
+icu4c/source/tools/icupkg/ARM64
 icu4c/source/tools/icuswap/*.d
 icu4c/source/tools/icuswap/*.ncb
 icu4c/source/tools/icuswap/*.o
@@ -889,6 +939,8 @@ icu4c/source/tools/makeconv/makeconv.vcproj.*.*.user
 icu4c/source/tools/makeconv/release
 icu4c/source/tools/makeconv/x64
 icu4c/source/tools/makeconv/x86
+icu4c/source/tools/makeconv/ARM
+icu4c/source/tools/makeconv/ARM64
 icu4c/source/tools/pkgdata/*.1
 icu4c/source/tools/pkgdata/*.d
 icu4c/source/tools/pkgdata/*.ncb
@@ -907,6 +959,8 @@ icu4c/source/tools/pkgdata/pkgdata.vcproj.*.*.user
 icu4c/source/tools/pkgdata/release
 icu4c/source/tools/pkgdata/x64
 icu4c/source/tools/pkgdata/x86
+icu4c/source/tools/pkgdata/ARM
+icu4c/source/tools/pkgdata/ARM64
 icu4c/source/tools/toolutil/*.ao
 icu4c/source/tools/toolutil/*.d
 icu4c/source/tools/toolutil/*.ncb
@@ -924,6 +978,8 @@ icu4c/source/tools/toolutil/release
 icu4c/source/tools/toolutil/toolutil.vcproj.*.*.user
 icu4c/source/tools/toolutil/x64
 icu4c/source/tools/toolutil/x86
+icu4c/source/tools/toolutil/ARM
+icu4c/source/tools/toolutil/ARM64
 icu4c/source/tools/tzcode/*.ao
 icu4c/source/tools/tzcode/*.o
 icu4c/source/tools/tzcode/.vs

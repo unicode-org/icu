@@ -21,5 +21,16 @@
       },
       "rules": ["+/*"]
     }
-  ]
+  ],
+// Test fileReplacements (relative path)
+  "fileReplacements": {
+    "directory": "$SRC",
+    "replacements": [
+      {
+	"src": "translit/Zawgyi_my.txt",
+	"dest": "translit/Zawgyi_my.txt"
+      },
+      "misc/dayPeriods.txt"
+    ]
+  }
 }

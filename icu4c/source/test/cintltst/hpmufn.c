@@ -42,17 +42,20 @@ addHeapMutexTest(TestNode** root)
 
 static int32_t gMutexFailures = 0;
 
-#define TEST_STATUS(status, expected) \
-if (status != expected) { \
-log_err_status(status, "FAIL at  %s:%d. Actual status = \"%s\";  Expected status = \"%s\"\n", \
-  __FILE__, __LINE__, u_errorName(status), u_errorName(expected)); gMutexFailures++; }
+#define TEST_STATUS(status, expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if (status != expected) { \
+        log_err_status(status, "FAIL at  %s:%d. Actual status = \"%s\";  Expected status = \"%s\"\n", \
+                       __FILE__, __LINE__, u_errorName(status), u_errorName(expected)); gMutexFailures++; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
-#define TEST_ASSERT(expr) \
-if (!(expr)) { \
-    log_err("FAILED Assertion \"" #expr "\" at  %s:%d.\n", __FILE__, __LINE__); \
-    gMutexFailures++; \
-}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(expr)) { \
+        log_err("FAILED Assertion \"" #expr "\" at  %s:%d.\n", __FILE__, __LINE__); \
+        gMutexFailures++; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
 /*  These tests do cleanup and reinitialize ICU in the course of their operation.

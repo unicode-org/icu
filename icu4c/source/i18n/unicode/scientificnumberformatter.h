@@ -159,7 +159,7 @@ public:
 
     class U_I18N_API SuperscriptStyle : public Style {
     public:
-        virtual Style *clone() const;
+        virtual SuperscriptStyle *clone() const;
     protected:
         virtual UnicodeString &format(
                 const UnicodeString &original,
@@ -177,7 +177,7 @@ public:
                 : Style(),
                   fBeginMarkup(beginMarkup),
                   fEndMarkup(endMarkup) { }
-        virtual Style *clone() const;
+        virtual MarkupStyle *clone() const;
     protected:
         virtual UnicodeString &format(
                 const UnicodeString &original,

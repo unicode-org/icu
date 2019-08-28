@@ -188,7 +188,11 @@ void QuantityFormatter::formatAndSelect(
     if (df != nullptr) {
         number::impl::UFormattedNumberData fn;
         fn.quantity.setToDouble(quantity);
-        df->toNumberFormatter().formatImpl(&fn, status);
+        const number::LocalizedNumberFormatter* lnf = df->toNumberFormatter(status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        lnf->formatImpl(&fn, status);
         if (U_FAILURE(status)) {
             return;
         }

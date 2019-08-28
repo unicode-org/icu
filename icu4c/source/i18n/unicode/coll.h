@@ -267,7 +267,7 @@ public:
      * @return a copy of this object, owned by the caller
      * @stable ICU 2.0
      */
-    virtual Collator* clone(void) const = 0;
+    virtual Collator* clone() const = 0;
 
     /**
      * Creates the Collator object for the current default locale.
@@ -981,7 +981,7 @@ public:
      * @see clone()
      * @deprecated ICU 50 no need to have two methods for cloning
      */
-    virtual Collator* safeClone(void) const;
+    virtual Collator* safeClone() const;
 
     /**
      * Get the sort key as an array of bytes from a UnicodeString.

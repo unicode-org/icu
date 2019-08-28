@@ -588,11 +588,13 @@ static void TestComposeDecompose(void) {
     coll = ucol_open("", &status);
     if (U_FAILURE(status)) {
         log_data_err("Error opening collator -> %s (Are you missing data?)\n", u_errorName(status));
+        uset_close(charsToTest);
         return;
     }
     charsToTestSize = uset_size(charsToTest);
     if (charsToTestSize <= 0) {
         log_err("Set was zero. Missing data?\n");
+        uset_close(charsToTest);
         return;
     }
     t = (tester **)malloc(charsToTestSize * sizeof(tester *));

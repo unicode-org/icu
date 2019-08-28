@@ -71,6 +71,7 @@ ICUSRCDATA_RELATIVE_PATH=..\..\..
 # Timestamp files to keep track of current build state
 TOOLS_TS=$(ICUTMP)\tools.timestamp
 COREDATA_TS=$(ICUTMP)\coredata.timestamp
+ARM_CROSSBUILD_TS=
 
 #  ICUCOL
 #       The directory that contains colfiles.mk files along with *.txt collation data files
@@ -106,6 +107,8 @@ ICUDATA=$(ICUP)\source\data
 #
 !IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
 DLL_OUTPUT=$(ICUP)\binARM$(UWP)
+!ELSE IF "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+DLL_OUTPUT=$(ICUP)\binARM64$(UWP)
 !ELSE IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
 DLL_OUTPUT=$(ICUP)\bin64$(UWP)
 !ELSE IF "$(UWP)" == "UWP"
@@ -113,6 +116,7 @@ DLL_OUTPUT=$(ICUP)\bin32$(UWP)
 !ELSE
 DLL_OUTPUT=$(ICUP)\bin$(UWP)
 !ENDIF
+!MESSAGE ICU data DLL_OUTPUT path is $(DLL_OUTPUT)
 
 #
 #  TESTDATA
@@ -138,20 +142,39 @@ TESTDATABLD=$(ICUP)\source\test\testdata\out\build
 ICUTOOLS=$(ICUP)\source\tools
 !MESSAGE ICU tools path is $(ICUTOOLS)
 
+#   ARM_CROSS_BUILD
+#       In order to support cross-compiling for ARM/ARM64 using the x64 tools
+#       we need to know if we're building the ARM/ARM64 data DLL, otherwise
+#       the existence of the x64 bits will cause us to think we are already done.
+#    Note: This is only for the "regular" builds, the UWP builds have a separate project file entirely.
+ARM_CROSS_BUILD=
+!IF "$(UWP)" == ""
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
+ARM_CROSS_BUILD=ARM
+ARM_CROSSBUILD_TS=$(ICUTMP)\$(ARM_CROSS_BUILD).timestamp
+!ELSE IF "$(CFG)" == "ARM64\Release"  || "$(CFG)" == "ARM64\Debug"
+ARM_CROSS_BUILD=ARM64
+ARM_CROSSBUILD_TS=$(ICUTMP)\$(ARM_CROSS_BUILD).timestamp
+!ENDIF
+!ENDIF
+
 #
 #  TOOLS CFG PATH
-#      ARM needs to use one of the other tools, so make sure to get an usable cfg path
+#      Generally the tools want to run on the same architecture as is being built.
+#      Thus ARM and ARM64 need to use another build of the other tools, so make sure to get an usable cfg path.
 #      Since tools, particularly pkggen, have architecture built-in, we made x64 on
 #      Windows be machine-independent and use those tools.
 #
+!IF "$(ARM_CROSS_BUILD)" == ""
 CFGTOOLS=$(CFG)
-!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
+!ELSE
 CFGTOOLS=x64\Release
 !ENDIF
 !MESSAGE ICU tools CFG subpath is $(CFGTOOLS)
 
+
 # The current ICU tools need to be in the path first.
-# x86 uses x86, x64 and arm use x64
+# x86 uses x86; x64, arm, and arm64 use x64
 !IF "$(CFG)" == "x86\Release" || "$(CFG)" == "x86\Debug"
 PATH = $(ICUP)\bin;$(PATH)
 ICUPBIN=$(ICUP)\bin
@@ -190,9 +213,12 @@ COMMON_ICUDATA_DEPENDENCIES="$(ICUPBIN)\pkgdata.exe" "$(ICUTMP)\icudata.res" "$(
 COMMON_ICUDATA_ARGUMENTS=-f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -L $(U_ICUDATA_NAME) -d "$(ICUBLD_PKG)" -s .
 !IF "$(UWP)" == "UWP"
 COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -u
-!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
-COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a
 !ENDIF
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
+COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a ARM
+!ENDIF
+!IF "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a ARM64
 !ENDIF
 
 #############################################################################
@@ -204,6 +230,7 @@ COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a
 #				Building the common dll in $(ICUBLD_PKG) unconditionally copies it to $(DLL_OUTPUT) too.
 #
 #############################################################################
+!IF "$(ARM_CROSS_BUILD)" == ""
 ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat"
 	@echo All targets are up to date
 
@@ -212,6 +239,11 @@ ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat"
     copy "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat" "$(ICUMAKE)\..\..\commondata\"
 !ENDIF
 
+!ELSE
+ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat" $(ARM_CROSSBUILD_TS)
+	@echo All targets are up to date
+
+!ENDIF
 
 # Three main targets: tools, core data, and test data.
 # Keep track of whether they are built via timestamp files.
@@ -378,6 +410,18 @@ icu4j-data-install :
 	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUTMP)\$(ICUPKG).dat"
 !ENDIF
+
+"$(ARM_CROSSBUILD_TS)" : $(COMMON_ICUDATA_DEPENDENCIES) "$(ICU_LIB_TARGET)"
+    @echo Building ICU data for "$(ARM_CROSS_BUILD)" from x64
+	cd "$(ICUBLD_PKG)"
+	"$(ICUPBIN)\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) $(ICUTMP)\icudata.lst
+	-@erase "$(ICU_LIB_TARGET)"
+	@if not exist "$(DLL_OUTPUT)" mkdir "$(DLL_OUTPUT)"
+	copy "$(U_ICUDATA_NAME).dll" "$(ICU_LIB_TARGET)"
+	-@erase "$(U_ICUDATA_NAME).dll"
+	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
+	-@erase "$(ICUTMP)\$(ICUPKG).dat"
+    @echo "timestamp" > $(ARM_CROSSBUILD_TS)
 
 # utility target to create missing directories
 # Most directories are made by Python, but still create ICUTMP

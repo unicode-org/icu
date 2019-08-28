@@ -712,7 +712,7 @@ int gTestFilter3ClassID = 0;
  */
 class TestFilter1 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter1ClassID; }
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter1* clone() const {
         return new TestFilter1(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -733,7 +733,7 @@ class TestFilter1 : public UnicodeFilter {
 };
 class TestFilter2 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter2ClassID; }
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter2* clone() const {
         return new TestFilter2(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -754,7 +754,7 @@ class TestFilter2 : public UnicodeFilter {
 };
 class TestFilter3 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter3ClassID; }
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter3* clone() const {
         return new TestFilter3(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -915,8 +915,12 @@ void TransliteratorAPITest::doTest(const UnicodeString& message, const UnicodeSt
 //                    transliterator, just to verify that they don't fail in some
 //                    destructive way.
 //
-#define CEASSERT(a) {if (!(a)) { \
-errln("FAIL at line %d from line %d: %s", __LINE__, line, #a);  return; }}
+#define CEASSERT(a) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(a)) { \
+        errln("FAIL at line %d from line %d: %s", __LINE__, line, #a); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
     Transliterator *clonedTR = tr->clone();

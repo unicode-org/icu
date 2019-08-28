@@ -14,6 +14,11 @@
 *   created by: Markus W. Scherer
 */
 
+#if U_HAVE_STRING_VIEW
+#include <string_view>
+#endif
+
+#include <cstddef>
 #include <string.h>
 
 #include "unicode/utypes.h"
@@ -28,6 +33,7 @@
 #include "cstr.h"
 #include "intltest.h"
 #include "strtest.h"
+#include "uinvchar.h"
 
 StringTest::~StringTest() {}
 
@@ -142,6 +148,64 @@ StringTest::Test_UNICODE_STRING_SIMPLE() {
     }
 }
 
+namespace {
+
+// See U_CHARSET_FAMILY in unicode/platform.h.
+const char *nativeInvChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz"
+    "0123456789 \"%&'()*+,-./:;<=>?_";
+const char16_t *asciiInvChars =
+    u"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    u"abcdefghijklmnopqrstuvwxyz"
+    u"0123456789 \"%&'()*+,-./:;<=>?_";
+
+}  // namespace
+
+void
+StringTest::TestUpperOrdinal() {
+    for (int32_t i = 0;; ++i) {
+        char ic = nativeInvChars[i];
+        uint8_t ac = asciiInvChars[i];
+        int32_t expected = ac - 'A';
+        int32_t actual = uprv_upperOrdinal(ic);
+        if (0 <= expected && expected <= 25) {
+            if (actual != expected) {
+                errln("uprv_upperOrdinal('%c')=%d != expected %d",
+                      ic, (int)actual, (int)expected);
+            }
+        } else {
+            if (0 <= actual && actual <= 25) {
+                errln("uprv_upperOrdinal('%c')=%d should have been outside 0..25",
+                      ic, (int)actual);
+            }
+        }
+        if (ic == 0) { break; }
+    }
+}
+
+void
+StringTest::TestLowerOrdinal() {
+    for (int32_t i = 0;; ++i) {
+        char ic = nativeInvChars[i];
+        uint8_t ac = asciiInvChars[i];
+        int32_t expected = ac - 'a';
+        int32_t actual = uprv_lowerOrdinal(ic);
+        if (0 <= expected && expected <= 25) {
+            if (actual != expected) {
+                errln("uprv_lowerOrdinal('%c')=%d != expected %d",
+                      ic, (int)actual, (int)expected);
+            }
+        } else {
+            if (0 <= actual && actual <= 25) {
+                errln("uprv_lowerOrdinal('%c')=%d should have been outside 0..25",
+                      ic, (int)actual);
+            }
+        }
+        if (ic == 0) { break; }
+    }
+}
+
 void
 StringTest::Test_UTF8_COUNT_TRAIL_BYTES() {
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
@@ -173,10 +237,16 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(Test_U_STRING);
     TESTCASE_AUTO(Test_UNICODE_STRING);
     TESTCASE_AUTO(Test_UNICODE_STRING_SIMPLE);
+    TESTCASE_AUTO(TestUpperOrdinal);
+    TESTCASE_AUTO(TestLowerOrdinal);
     TESTCASE_AUTO(Test_UTF8_COUNT_TRAIL_BYTES);
     TESTCASE_AUTO(TestSTLCompatibility);
     TESTCASE_AUTO(TestStringPiece);
     TESTCASE_AUTO(TestStringPieceComparisons);
+    TESTCASE_AUTO(TestStringPieceOther);
+#if U_HAVE_STRING_VIEW
+    TESTCASE_AUTO(TestStringPieceStringView);
+#endif
     TESTCASE_AUTO(TestByteSink);
     TESTCASE_AUTO(TestCheckedArrayByteSink);
     TESTCASE_AUTO(TestStringByteSink);
@@ -345,6 +415,36 @@ StringTest::TestStringPieceComparisons() {
         errln("abc==abx");
     }
 }
+
+void
+StringTest::TestStringPieceOther() {
+    static constexpr char msg[] = "Kapow!";
+
+    // Another string piece implementation.
+    struct Other {
+        const char* data() { return msg; }
+        size_t size() { return sizeof msg - 1; }
+    };
+
+    Other other;
+    StringPiece piece(other);
+
+    assertEquals("size()", piece.size(), other.size());
+    assertEquals("data()", piece.data(), other.data());
+}
+
+#if U_HAVE_STRING_VIEW
+void
+StringTest::TestStringPieceStringView() {
+    static constexpr char msg[] = "Kapow!";
+
+    std::string_view view(msg);  // C++17
+    StringPiece piece(view);
+
+    assertEquals("size()", piece.size(), view.size());
+    assertEquals("data()", piece.data(), view.data());
+}
+#endif
 
 // Verify that ByteSink is subclassable and Flush() overridable.
 class SimpleByteSink : public ByteSink {

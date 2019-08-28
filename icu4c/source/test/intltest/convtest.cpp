@@ -651,26 +651,26 @@ ConversionTest::TestDefaultIgnorableCallback() {
     const char *pattern_ignorable = "[:Default_Ignorable_Code_Point:]";
     const char *pattern_not_ignorable = "[:^Default_Ignorable_Code_Point:]";
 
-    UnicodeSet *set_ignorable = new UnicodeSet(pattern_ignorable, status);
+    LocalPointer<UnicodeSet> set_ignorable(new UnicodeSet(pattern_ignorable, status));
     if (U_FAILURE(status)) {
         dataerrln("Unable to create Unicodeset: %s - %s\n", pattern_ignorable, u_errorName(status));
         return;
     }
 
-    UnicodeSet *set_not_ignorable = new UnicodeSet(pattern_not_ignorable, status);
+    LocalPointer<UnicodeSet> set_not_ignorable(new UnicodeSet(pattern_not_ignorable, status));
     if (U_FAILURE(status)) {
         dataerrln("Unable to create Unicodeset: %s - %s\n", pattern_not_ignorable, u_errorName(status));
         return;
     }
 
-    UConverter *cnv = cnv_open(cnv_name, status);
+    LocalUConverterPointer cnv(cnv_open(cnv_name, status));
     if (U_FAILURE(status)) {
         dataerrln("Unable to open converter: %s - %s\n", cnv_name, u_errorName(status));
         return;
     }
 
     // set callback for the converter 
-    ucnv_setFromUCallBack(cnv, UCNV_FROM_U_CALLBACK_SUBSTITUTE, NULL, NULL, NULL, &status);
+    ucnv_setFromUCallBack(cnv.getAlias(), UCNV_FROM_U_CALLBACK_SUBSTITUTE, NULL, NULL, NULL, &status);
 
     UChar32 input[1];
     char output[10];
@@ -684,7 +684,7 @@ ConversionTest::TestDefaultIgnorableCallback() {
 
         input[0] = set_ignorable->charAt(i);
 
-        outputLength = ucnv_fromUChars(cnv, output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
+        outputLength = ucnv_fromUChars(cnv.getAlias(), output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
         if (U_FAILURE(status) || outputLength != 0) {
             errln("Ignorable code point: U+%04X not skipped as expected - %s", input[0], u_errorName(status));
         }
@@ -702,15 +702,11 @@ ConversionTest::TestDefaultIgnorableCallback() {
             continue;
         }
 
-        outputLength = ucnv_fromUChars(cnv, output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
+        outputLength = ucnv_fromUChars(cnv.getAlias(), output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
         if (U_FAILURE(status) || outputLength <= 0) {
             errln("Non-ignorable code point: U+%04X skipped unexpectedly - %s", input[0], u_errorName(status));
         }
     }
-    
-    ucnv_close(cnv);
-    delete set_not_ignorable;
-    delete set_ignorable;
 }
 
 void

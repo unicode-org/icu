@@ -106,7 +106,7 @@ public:
 
     virtual UBool operator==(const TimeZoneNames& other) const;
     virtual UBool operator!=(const TimeZoneNames& other) const {return !operator==(other);}
-    virtual TimeZoneNames* clone() const;
+    virtual TimeZoneNamesDelegate* clone() const;
 
     StringEnumeration* getAvailableMetaZoneIDs(UErrorCode& status) const;
     StringEnumeration* getAvailableMetaZoneIDs(const UnicodeString& tzID, UErrorCode& status) const;
@@ -233,7 +233,7 @@ TimeZoneNamesDelegate::operator==(const TimeZoneNames& other) const {
     return FALSE;
 }
 
-TimeZoneNames*
+TimeZoneNamesDelegate*
 TimeZoneNamesDelegate::clone() const {
     TimeZoneNamesDelegate* other = new TimeZoneNamesDelegate();
     if (other != NULL) {

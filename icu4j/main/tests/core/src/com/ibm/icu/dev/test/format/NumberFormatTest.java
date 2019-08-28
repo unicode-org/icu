@@ -43,7 +43,6 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.format.IntlTestDecimalFormatAPIC.FieldContainer;
-import com.ibm.icu.dev.text.DecimalFormat_ICU58;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
@@ -1701,9 +1700,7 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestLocalizedPatternSymbolCoverage() {
         String[] standardPatterns = { "#,##0.05+%;#,##0.05-%", "* @@@E0‰" };
-        String[] standardPatterns58 = { "#,##0.05+%;#,##0.05-%", "* @@@E0‰;* -@@@E0‰" };
         String[] localizedPatterns = { "▰⁖▰▰໐⁘໐໕†⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱" };
-        String[] localizedPatterns58 = { "▰⁖▰▰໐⁘໐໕+⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱⁙⁂ ‡⁕⁕⁕⁑⁑໐‱" };
 
         DecimalFormatSymbols dfs = new DecimalFormatSymbols();
         dfs.setGroupingSeparator('⁖');
@@ -1721,9 +1718,7 @@ public class NumberFormatTest extends TestFmwk {
 
         for (int i=0; i<2; i++) {
             String standardPattern = standardPatterns[i];
-            String standardPattern58 = standardPatterns58[i];
             String localizedPattern = localizedPatterns[i];
-            String localizedPattern58 = localizedPatterns58[i];
 
             DecimalFormat df1 = new DecimalFormat("#", dfs);
             df1.applyPattern(standardPattern);
@@ -1735,22 +1730,6 @@ public class NumberFormatTest extends TestFmwk {
                     standardPattern, df2.toPattern());
             assertEquals("toLocalizedPattern should match on standardPattern instance",
                     localizedPattern, df1.toLocalizedPattern());
-
-            // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
-            if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) continue;
-
-            // Note: ICU 58 does not support plus signs in patterns
-            // Note: ICU 58 always prints the negative part of scientific notation patterns,
-            //       even when the negative part is not necessary
-            DecimalFormat_ICU58 df3 = new DecimalFormat_ICU58("#", dfs);
-            df3.applyPattern(standardPattern); // Reading standardPattern is OK
-            DecimalFormat_ICU58 df4 = new DecimalFormat_ICU58("#", dfs);
-            df4.applyLocalizedPattern(localizedPattern58);
-            // Note: DecimalFormat#equals() is broken on ICU 58
-            assertEquals("toPattern should match on ICU58 localizedPattern instance",
-                    standardPattern58, df4.toPattern());
-            assertEquals("toLocalizedPattern should match on ICU58 standardPattern instance",
-                    localizedPattern58, df3.toLocalizedPattern());
         }
     }
 

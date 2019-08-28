@@ -849,7 +849,7 @@ void TestCloneBinary(){
         ucol_getSortKey(col, t, -1, k2, l2);
         if (strcmp((char *)k1,(char *)k2) != 0){
             log_err("ucol_openBinary - new collator should equal to old one\n");
-        };
+        }
         free(k1);
         free(k2);
     }

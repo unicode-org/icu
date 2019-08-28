@@ -139,7 +139,7 @@ public:
      * method which subclasses implement.
      * @stable ICU 2.0
      */
-    virtual BreakIterator* clone(void) const = 0;
+    virtual BreakIterator* clone() const = 0;
 
     /**
      * Return a polymorphic class ID for this object. Different subclasses

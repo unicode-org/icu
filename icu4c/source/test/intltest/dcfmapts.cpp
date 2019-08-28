@@ -453,9 +453,10 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
     UErrorCode status = U_ZERO_ERROR;
 
-    CurrencyPluralInfo *cpi = new CurrencyPluralInfo(status);
+    LocalPointer<CurrencyPluralInfo>cpi(new CurrencyPluralInfo(status), status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: CurrencyPluralInfo(UErrorCode) could not be created");
+        return;
     }
 
     CurrencyPluralInfo cpi1 = *cpi;
@@ -479,19 +480,18 @@ void IntlTestDecimalFormatAPI::TestCurrencyPluralInfo(){
         errln((UnicodeString)"ERROR: CurrencyPluralInfo::setPluralRules");
     }
 
-    DecimalFormat *df = new DecimalFormat(status);
+    LocalPointer<DecimalFormat>df(new DecimalFormat(status));
     if(U_FAILURE(status)) {
         errcheckln(status, "ERROR: Could not create DecimalFormat - %s", u_errorName(status));
         return;
     }
 
-    df->adoptCurrencyPluralInfo(cpi);
+    df->adoptCurrencyPluralInfo(cpi.orphan());
 
     df->getCurrencyPluralInfo();
 
     df->setCurrencyPluralInfo(cpi1);
 
-    delete df;
 }
 
 void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
@@ -642,14 +642,15 @@ void IntlTestDecimalFormatAPI::TestScale()
 }
 
 
-#define ASSERT_EQUAL(expect, actual) { \
+#define ASSERT_EQUAL(expect, actual) UPRV_BLOCK_MACRO_BEGIN { \
     /* ICU-20080: Use temporary variables to avoid strange compiler behaviour \
        (with the nice side-effect of avoiding repeated function calls too). */ \
     auto lhs = (expect); \
     auto rhs = (actual); \
     char tmp[200]; \
     sprintf(tmp, "(%g==%g)", (double)lhs, (double)rhs); \
-    assertTrue(tmp, (lhs==rhs), FALSE, TRUE, __FILE__, __LINE__); }
+    assertTrue(tmp, (lhs==rhs), FALSE, TRUE, __FILE__, __LINE__); \
+} UPRV_BLOCK_MACRO_END
 
 #if defined(_MSC_VER)
 // Ignore the noisy warning 4805 (comparisons between int and bool) in the function below as we use the ICU TRUE/FALSE macros

@@ -180,10 +180,12 @@ public final class XLikelySubtags {
 
     // VisibleForTesting
     public LSR makeMaximizedLsrFrom(ULocale locale) {
-        String name = locale.getName();
+        String name = locale.getName();  // Faster than .toLanguageTag().
         if (name.startsWith("@x=")) {
+            String tag = locale.toLanguageTag();
+            assert tag.startsWith("x-");
             // Private use language tag x-subtag-subtag...
-            return new LSR(name, "", "");
+            return new LSR(tag, "", "");
         }
         return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
                 locale.getVariant());
@@ -238,7 +240,7 @@ public final class XLikelySubtags {
         language = getCanonical(languageAliases, language);
         // (We have no script mappings.)
         region = getCanonical(regionAliases, region);
-        return INSTANCE.maximize(language, script, region);
+        return maximize(language, script, region);
     }
 
     /**

@@ -431,11 +431,13 @@ public abstract class Precision implements Cloneable {
     static Precision constructFractionSignificant(FractionPrecision base_, int minSig, int maxSig) {
         assert base_ instanceof FractionRounderImpl;
         FractionRounderImpl base = (FractionRounderImpl) base_;
+        Precision returnValue;
         if (base.minFrac == 0 && base.maxFrac == 0 && minSig == 2 /* && maxSig == -1 */) {
-            return COMPACT_STRATEGY;
+            returnValue = COMPACT_STRATEGY;
         } else {
-            return new FracSigRounderImpl(base.minFrac, base.maxFrac, minSig, maxSig);
+            returnValue = new FracSigRounderImpl(base.minFrac, base.maxFrac, minSig, maxSig);
         }
+        return returnValue.withMode(base.mathContext);
     }
 
     static Precision constructIncrement(BigDecimal increment) {
@@ -474,13 +476,15 @@ public abstract class Precision implements Cloneable {
         assert base_ instanceof CurrencyRounderImpl;
         CurrencyRounderImpl base = (CurrencyRounderImpl) base_;
         double incrementDouble = currency.getRoundingIncrement(base.usage);
+        Precision returnValue;
         if (incrementDouble != 0.0) {
             BigDecimal increment = BigDecimal.valueOf(incrementDouble);
-            return constructIncrement(increment);
+            returnValue = constructIncrement(increment);
         } else {
             int minMaxFrac = currency.getDefaultFractionDigits(base.usage);
-            return constructFraction(minMaxFrac, minMaxFrac);
+            returnValue = constructFraction(minMaxFrac, minMaxFrac);
         }
+        return returnValue.withMode(base.mathContext);
     }
 
     static Precision constructPassThrough() {

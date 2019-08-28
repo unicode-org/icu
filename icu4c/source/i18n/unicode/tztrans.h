@@ -70,7 +70,7 @@ public:
      * @return  A copy of the object.
      * @stable ICU 3.8
      */
-    TimeZoneTransition* clone(void) const;
+    TimeZoneTransition* clone() const;
 
     /**
      * Assignment operator.

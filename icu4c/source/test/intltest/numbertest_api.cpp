@@ -104,6 +104,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(copyMove);
         TESTCASE_AUTO(localPointerCAPI);
         TESTCASE_AUTO(toObject);
+        TESTCASE_AUTO(toDecimalNumber);
     TESTCASE_AUTO_END;
 }
 
@@ -2819,7 +2820,7 @@ void NumberFormatterApiTest::validRanges() {
 
 #define EXPECTED_MAX_INT_FRAC_SIG 999
 
-#define VALID_RANGE_ASSERT(status, method, lowerBound, argument) { \
+#define VALID_RANGE_ASSERT(status, method, lowerBound, argument) UPRV_BLOCK_MACRO_BEGIN { \
     UErrorCode expectedStatus = ((lowerBound <= argument) && (argument <= EXPECTED_MAX_INT_FRAC_SIG)) \
         ? U_ZERO_ERROR \
         : U_NUMBER_ARG_OUTOFBOUNDS_ERROR; \
@@ -2828,17 +2829,17 @@ void NumberFormatterApiTest::validRanges() {
             + Int64ToUnicodeString(argument), \
         expectedStatus, \
         status); \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define VALID_RANGE_ONEARG(setting, method, lowerBound) { \
+#define VALID_RANGE_ONEARG(setting, method, lowerBound) UPRV_BLOCK_MACRO_BEGIN { \
     for (int32_t argument = -2; argument <= EXPECTED_MAX_INT_FRAC_SIG + 2; argument++) { \
         UErrorCode status = U_ZERO_ERROR; \
         NumberFormatter::with().setting(method(argument)).copyErrorTo(status); \
         VALID_RANGE_ASSERT(status, method, lowerBound, argument); \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define VALID_RANGE_TWOARGS(setting, method, lowerBound) { \
+#define VALID_RANGE_TWOARGS(setting, method, lowerBound) UPRV_BLOCK_MACRO_BEGIN { \
     for (int32_t argument = -2; argument <= EXPECTED_MAX_INT_FRAC_SIG + 2; argument++) { \
         UErrorCode status = U_ZERO_ERROR; \
         /* Pass EXPECTED_MAX_INT_FRAC_SIG as the second argument so arg1 <= arg2 in expected cases */ \
@@ -2854,7 +2855,7 @@ void NumberFormatterApiTest::validRanges() {
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR, \
             status); \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
     VALID_RANGE_ONEARG(precision, Precision::fixedFraction, 0);
     VALID_RANGE_ONEARG(precision, Precision::minFraction, 0);
@@ -3031,6 +3032,18 @@ void NumberFormatterApiTest::toObject() {
     {
         NumberFormatter::with().clone();
     }
+}
+
+void NumberFormatterApiTest::toDecimalNumber() {
+    IcuTestErrorCode status(*this, "toDecimalNumber");
+    FormattedNumber fn = NumberFormatter::withLocale("bn-BD")
+        .scale(Scale::powerOfTen(2))
+        .precision(Precision::maxSignificantDigits(5))
+        .formatDouble(9.87654321e12, status);
+    assertEquals("Should have expected localized string result",
+        u"৯৮,৭৬,৫০,০০,০০,০০,০০০", fn.toString(status));
+    assertEquals(u"Should have expected toDecimalNumber string result",
+        "9.8765E+14", fn.toDecimalNumber<std::string>(status).c_str());
 }
 
 

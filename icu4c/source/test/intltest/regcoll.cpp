@@ -142,7 +142,7 @@ void CollationRegressionTest::Test4054238(/* char* par */)
 {
     const UChar chars3[] = {0x61, 0x00FC, 0x62, 0x65, 0x63, 0x6b, 0x20, 0x47, 0x72, 0x00F6, 0x00DF, 0x65, 0x20, 0x4c, 0x00FC, 0x62, 0x63, 0x6b, 0};
     const UnicodeString test3(chars3);
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
 
     // NOTE: The Java code uses en_us to create the CollationElementIterators
     // but I'm pretty sure that's wrong, so I've changed this to use c.
@@ -184,7 +184,7 @@ void CollationRegressionTest::Test4054734(/* char* par */)
 
 
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
 
     c->setStrength(Collator::IDENTICAL);
 
@@ -201,7 +201,7 @@ void CollationRegressionTest::Test4054734(/* char* par */)
 void CollationRegressionTest::Test4054736(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
 
     c->setStrength(Collator::SECONDARY);
     c->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
@@ -425,11 +425,11 @@ void CollationRegressionTest::Test4066189(/* char* par */)
     // NOTE: The java code used en_us to create the
     // CollationElementIterator's. I'm pretty sure that
     // was wrong, so I've change the code to use c1 and c2
-    RuleBasedCollator *c1 = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c1 = en_us->clone();
     c1->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
     CollationElementIterator *i1 = c1->createCollationElementIterator(test1);
 
-    RuleBasedCollator *c2 = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c2 = en_us->clone();
     c2->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_OFF, status);
     CollationElementIterator *i2 = c2->createCollationElementIterator(test2);
 
@@ -495,7 +495,7 @@ void CollationRegressionTest::Test4076676(/* char* par */)
     static const UChar s1[] = {0x41, 0x0301, 0x0302, 0x0300, 0};
     static const UChar s2[] = {0x41, 0x0302, 0x0300, 0x0301, 0};
 
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
     c->setStrength(Collator::TERTIARY);
 
     if (c->compare(s1,s2) == 0)
@@ -573,7 +573,7 @@ void CollationRegressionTest::Test4081866(/* char* par */)
     static const UChar s2[] = {0x41, 0x0327, 0x0316, 0x0315, 0x0300, 0};
 
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
     c->setStrength(Collator::TERTIARY);
 
     // Now that the default collators are set to NO_DECOMPOSITION
@@ -628,7 +628,7 @@ void CollationRegressionTest::Test4087241(/* char* par */)
 //
 void CollationRegressionTest::Test4087243(/* char* par */)
 {
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
     c->setStrength(Collator::TERTIARY);
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
@@ -738,7 +738,7 @@ void CollationRegressionTest::Test4101940(/* char* par */)
 //
 void CollationRegressionTest::Test4103436(/* char* par */)
 {
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
     c->setStrength(Collator::TERTIARY);
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
@@ -759,7 +759,7 @@ void CollationRegressionTest::Test4103436(/* char* par */)
 void CollationRegressionTest::Test4114076(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
     c->setStrength(Collator::TERTIARY);
 
     //
@@ -884,7 +884,7 @@ void CollationRegressionTest::Test4114077(/* char* par */)
     // as we do with it on....
 
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *c = en_us->clone();
     c->setStrength(Collator::TERTIARY);
 
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
@@ -1253,7 +1253,7 @@ void CollationRegressionTest::TestT7189() {
 }
 
 void CollationRegressionTest::TestCaseFirstCompression() {
-    RuleBasedCollator *col = (RuleBasedCollator *) en_us->clone();
+    RuleBasedCollator *col = en_us->clone();
     UErrorCode status = U_ZERO_ERROR;
 
     // default

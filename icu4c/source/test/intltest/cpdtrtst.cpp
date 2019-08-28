@@ -159,10 +159,10 @@ void CompoundTransliteratorTest::TestCloneEqual(){
         errln("Error: =operator or copy constructor failed");
     }
 
-    CompoundTransliterator *clonect1a=(CompoundTransliterator*)ct1->clone();
-    CompoundTransliterator *clonect1b=(CompoundTransliterator*)equalct1.clone();
-    CompoundTransliterator *clonect2a=(CompoundTransliterator*)ct2->clone();
-    CompoundTransliterator *clonect2b=(CompoundTransliterator*)copyct2->clone();
+    CompoundTransliterator *clonect1a=ct1->clone();
+    CompoundTransliterator *clonect1b=equalct1.clone();
+    CompoundTransliterator *clonect2a=ct2->clone();
+    CompoundTransliterator *clonect2b=copyct2->clone();
 
 
     if(clonect1a->getID()  != ct1->getID()       || clonect1a->getCount() != ct1->getCount()        ||

@@ -173,7 +173,7 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
                 curOffset += 1 + t;  // BACKSLAH and NewlineMark
                 continue;
             }
-        };
+        }
         buf.append(c);
         curOffset++;
     }

@@ -1228,7 +1228,7 @@ void LocaleBuilderTest::TestSetExtensionValidateUWellFormed() {
             errln("setExtension('u', \"%s\") got Error: %s\n",
                   extension, u_errorName(status));
         }
-    };
+    }
 }
 
 void LocaleBuilderTest::TestSetExtensionValidateUIllFormed() {
@@ -1364,7 +1364,7 @@ void LocaleBuilderTest::TestSetExtensionValidateTWellFormed() {
             errln("setExtension('t', \"%s\") got Error: %s\n",
                   extension, u_errorName(status));
         }
-    };
+    }
 }
 
 void LocaleBuilderTest::TestSetExtensionValidateTIllFormed() {
@@ -1469,7 +1469,7 @@ void LocaleBuilderTest::TestSetExtensionValidatePUWellFormed() {
             errln("setExtension('x', \"%s\") got Error: %s\n",
                   extension, u_errorName(status));
         }
-    };
+    }
 }
 
 void LocaleBuilderTest::TestSetExtensionValidatePUIllFormed() {
@@ -1558,7 +1558,7 @@ void LocaleBuilderTest::TestSetExtensionValidateOthersWellFormed() {
             errln("setExtension('%c', \"%s\") got Error: %s\n",
                   ch, extension, u_errorName(status));
         }
-    };
+    }
 
     const char* someChars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`~!@#$%^&*()-_=+;:,.<>?";

@@ -29,22 +29,37 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-    errcheckln(status, "Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
+#define TEST_ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        errcheckln(status, "Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
-    errln("Test Failure at file %s, line %d: \"%s\" is false.", __FILE__, __LINE__, #expr);};}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        errln("Test Failure at file %s, line %d: \"%s\" is false.", __FILE__, __LINE__, #expr); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_MSG(expr, msg) {if ((expr)==FALSE) { \
-    dataerrln("Test Failure at file %s, line %d, %s: \"%s\" is false.", __FILE__, __LINE__, msg, #expr);};}
+#define TEST_ASSERT_MSG(expr, msg) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        dataerrln("Test Failure at file %s, line %d, %s: \"%s\" is false.", __FILE__, __LINE__, msg, #expr); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_EQ(a, b) { if ((a) != (b)) { \
-    errln("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d)", \
-             __FILE__, __LINE__, #a, (a), #b, (b)); }}
+#define TEST_ASSERT_EQ(a, b) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((a) != (b)) { \
+        errln("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d)", \
+              __FILE__, __LINE__, #a, (a), #b, (b)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_NE(a, b) { if ((a) == (b)) { \
-    errln("Test Failure at file %s, line %d: \"%s\" (%d) == \"%s\" (%d)", \
-             __FILE__, __LINE__, #a, (a), #b, (b)); }}
+#define TEST_ASSERT_NE(a, b) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((a) == (b)) { \
+        errln("Test Failure at file %s, line %d: \"%s\" (%d) == \"%s\" (%d)", \
+              __FILE__, __LINE__, #a, (a), #b, (b)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 /*
  *   TEST_SETUP and TEST_TEARDOWN
@@ -52,7 +67,7 @@
  *         Put arbitrary test code between SETUP and TEARDOWN.
  *         "sc" is the ready-to-go  SpoofChecker for use in the tests.
  */
-#define TEST_SETUP {  \
+#define TEST_SETUP UPRV_BLOCK_MACRO_BEGIN { \
     UErrorCode status = U_ZERO_ERROR; \
     USpoofChecker *sc;     \
     sc = uspoof_open(&status);  \
@@ -67,7 +82,7 @@
     TEST_ASSERT_SUCCESS(status);  \
     uspoof_closeCheckResult(checkResult); \
     uspoof_close(sc);  \
-}
+} UPRV_BLOCK_MACRO_END
 
 
 
@@ -128,9 +143,9 @@ void IntlTestSpoof::testSpoofAPI() {
 }
 
 
-#define CHECK_SKELETON(type, input, expected) { \
+#define CHECK_SKELETON(type, input, expected) UPRV_BLOCK_MACRO_BEGIN { \
     checkSkeleton(sc, type, input, expected, __LINE__); \
-    }
+} UPRV_BLOCK_MACRO_END
 
 
 // testSkeleton.   Spot check a number of confusable skeleton substitutions from the 
@@ -639,7 +654,7 @@ void IntlTestSpoof::testMixedNumbers() {
             TEST_ASSERT_MSG((expectedSet.size() > 1) == mixedNumberFailure, msgBuf);
             const UnicodeSet* actualSet = UnicodeSet::fromUSet(uspoof_getCheckResultNumerics(checkResult, &status));
             TEST_ASSERT_MSG(expectedSet == *actualSet, msgBuf);
-        TEST_TEARDOWN
+        TEST_TEARDOWN;
     }
 }
 

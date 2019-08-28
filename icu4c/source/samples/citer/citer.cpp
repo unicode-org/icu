@@ -59,7 +59,7 @@ void Test::TestUChariter() {
     const UChar *testText = testString.getTerminatedBuffer();
 
     UCharCharacterIterator iter(testText, u_strlen(testText));
-    UCharCharacterIterator* test2 = (UCharCharacterIterator*)iter.clone();
+    UCharCharacterIterator* test2 = iter.clone();
 
     u_fprintf(out, "testText = %s", testChars);
 
@@ -126,7 +126,7 @@ void Test::TestStringiter() {
     const UChar *testText    = testString.getTerminatedBuffer();
 
     StringCharacterIterator iter(testText, u_strlen(testText));
-    StringCharacterIterator* test2 = (StringCharacterIterator*)iter.clone();
+    StringCharacterIterator* test2 = iter.clone();
 
     if (iter != *test2 ) {
         u_fprintf(out, "clone() or equals() failed: Two clones tested unequal\n");

@@ -294,6 +294,7 @@ UnicodeSet* TransliteratorIDParser::parseGlobalFilter(const UnicodeString& id, i
         pos = ppos.getIndex();
 
         if (withParens == 1 && !ICU_Utility::parseChar(id, pos, CLOSE_REV)) {
+            delete filter;
             pos = start;
             return NULL;
         }
