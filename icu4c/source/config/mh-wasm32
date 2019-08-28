@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Copyright (C) 2016 and later: Unicode, Inc. and others.
 ## License & terms of use: http://www.unicode.org/copyright.html
-## Linux-specific setup
+## WASM32-specific setup
 ## Copyright (c) 1999-2013, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -10,16 +10,17 @@ GEN_DEPS.c=  $(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc= $(CXX) -E -MM $(DEFS) $(CPPFLAGS) $(CXXFLAGS)
 
 ## Flags for position independent code
-SHAREDLIBCFLAGS = -fPIC
-SHAREDLIBCXXFLAGS = -fPIC
-SHAREDLIBCPPFLAGS = -DPIC
+#SHAREDLIBCFLAGS = -fPIC
+#SHAREDLIBCXXFLAGS = -fPIC
+#SHAREDLIBCPPFLAGS = -DPIC
+EXEEXT = .js
 
 ## Additional flags when building libraries and with threads
-THREADSCPPFLAGS = -D_REENTRANT
+THREADSCPPFLAGS =
 LIBCPPFLAGS =
 
 ## Compiler switch to embed a runtime search path
-LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN 
+LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN
 LD_RPATH_PRE = -Wl,-rpath,
 
 ## These are the library specific LDFLAGS
@@ -27,12 +28,12 @@ LDFLAGSICUDT=-nodefaultlibs -nostdlib
 
 ## Compiler switch to embed a library name
 # The initial tab in the next line is to prevent icu-config from reading it.
-	LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
+LD_SONAME = #-Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
 #SH# # We can't depend on MIDDLE_SO_TARGET being set.
 #SH# LD_SONAME=
 
 ## Shared library options
-LD_SOOPTIONS= -Wl,-Bsymbolic
+LD_SOOPTIONS= #-Wl,-Bsymbolic
 
 ## Shared object suffix
 SO = so
@@ -74,14 +75,22 @@ STATIC_O = ao
 ##  Bind internal references
 
 # LDflags that pkgdata will use
-BIR_LDFLAGS= -Wl,-Bsymbolic
+#BIR_LDFLAGS= -Wl,-Bsymbolic
 
 # Dependencies [i.e. map files] for the final library
 BIR_DEPS=
 
 ## Remove shared library 's'
-STATIC_PREFIX_WHEN_USED = 
-STATIC_PREFIX = 
+STATIC_PREFIX_WHEN_USED =
+STATIC_PREFIX =
 
-## End Linux-specific setup
+INVOKE = node
+PKGDATA_INVOKE = node
+
+LINK.cc += -s TOTAL_MEMORY=48MB -s ALLOW_MEMORY_GROWTH=1 -s EXIT_RUNTIME=1 -s FORCE_FILESYSTEM=1 -s NODERAWFS=1
+
+LIBICUTOOLUTIL +=	--js-library $(top_builddir)/tools/toolutil/nodejs-system.js
+
+
+## End WASM32-specific setup
 

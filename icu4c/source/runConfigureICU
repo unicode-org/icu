@@ -352,11 +352,12 @@ case $platform in
         THE_COMP="wasm32 emscripten"
         CC=emcc; export CC
         CXX=em++; export CXX
-	CFLAGS="-s TOTAL_MEMORY=32MB -s WASM=1"; export CFLAGS
-	CPPFLAGS="-s TOTAL_MEMORY=32MB -s WASM=1"; export CPPFLAGS
-	CXXFLAGS="-s TOTAL_MEMORY=32MB -s WASM=1 -std=c++11"; export CXXPPFLAGS
-	CONFIGURE_WRAPPER=emconfigure; export CONFIGURE_WRAPPER
-        OPTS="$OPTS --build=wasm32 --target=wasm32"; export OPTS
+        EMCFLAGS="-DUSE_SINGLE_CCODE_FILE -DU_HAVE_MMAP=0 -s WASM=1"
+        CFLAGS="-O3 $EMCFLAGS"; export CFLAGS
+        CPPFLAGS="$EMCFLAGS"; export CPPFLAGS
+        CXXFLAGS="-O3 $EMCFLAGS -std=c++11"; export CXXPPFLAGS
+        CONFIGURE_WRAPPER=emconfigure; export CONFIGURE_WRAPPER
+        OPTS="$OPTS --enable-static --build=wasm32 --target=wasm32"; export OPTS
 	;;
     zOS)
         THE_OS="z/OS (OS/390)"
