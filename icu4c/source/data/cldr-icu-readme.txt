@@ -35,21 +35,6 @@
 #
 #----
 #
-# CLDR dtd caching
-#
-# Parts of the build process (notably building the new ICU data files in step 4)
-# require http: access to files in the CLDR repository; for example, processing
-# the files in icu4c/source/data/xml/ may require access to
-# http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd
-#
-# Unless you cache the dtds locally by
-# 1. creating a temp directory e.g. ~/.cldrdtd
-# 2. setting CLDR_DTD_CACHE to it e.g. -DCLDR_DTD_CACHE=~/.cldrdtd
-# your system will make excessive network requests, which will result in the
-# Unicode server blocking access.
-#
-#----
-#
 # There are several environment variables that need to be defined.
 #
 # a) Java- and ant-related variables
@@ -62,9 +47,6 @@
 #
 #                -Xmx4096m, to give Java more memory; otherwise it may run out
 #                 of heap.
-#                -DCLDR_DTD_CACHE=~/.cldrdtd (or some other temp directory
-#                 that already exists), to reduce frequent http: access to dtds
-#                 and consequent blockage by Unicode server.
 #
 # b) CLDR-related variables
 #
@@ -72,6 +54,9 @@
 #                tools directories.
 # CLDR_CLASSES:  Path to the CLDR Tools classes directory. If not set, defaults
 #                to $CLDR_DIR/tools/java/classes
+#
+# CLDR_TMP_DIR:  Parent of temporary CLDR production data.
+#                Defaults to $CLDR_DIR/../cldr-aux (sibling to CLDR_DIR).
 #
 # c) ICU-related variables
 # These variables only need to be set if you're directly reusing the
@@ -140,7 +125,7 @@
 # 1a. Java and ant variables, adjust for your system
 
 export JAVA_HOME=`/usr/libexec/java_home`
-export ANT_OPTS="-Xmx4096m -DCLDR_DTD_CACHE=~/.cldrdtd"
+export ANT_OPTS="-Xmx4096m"
 
 # 1b. CLDR variables, adjust for your setup; with cygwin it might be e.g.
 # CLDR_DIR=`cygpath -wp /build/cldr`
@@ -152,26 +137,11 @@ export CLDR_DIR=$HOME/cldr/trunk
 export ICU4C_DIR=$HOME/icu/icu4c
 export ICU4J_ROOT=$HOME/icu/icu4j
 
-# 1d. Pre-populate your CLDR DTD cache. You need to do this only once.
-
-mkdir ~/.cldrdtd
-cd ~/.cldrdtd
-curl http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd \
-    -o http___www.unicode.org_repos_cldr_trunk_common_dtd_ldml.dtd
-# WAIT before hitting the server again; it WILL NOT give you a second chance!
-sleep 5
-curl http://www.unicode.org/repos/cldr/trunk/common/dtd/ldmlICU.dtd \
-    -o http___www.unicode.org_repos_cldr_trunk_common_dtd_ldmlICU.dtd
-sleep 5
-curl http://www.unicode.org/repos/cldr/trunk/common/dtd/ldmlSupplemental.dtd \
-    -o http___www.unicode.org_repos_cldr_trunk_common_dtd_ldmlSupplemental.dtd
-
-# 2. Build the CLDR Java tools
-# Optionally build the jar, but ant will look inside the classes directory anyway
+# 2. Build the CLDR Java tools and jar
 
 cd $CLDR_DIR/tools/java
 ant all
-#ant jar
+ant jar
 
 # 3. Configure ICU4C, build and test without new data first, to verify that
 # there are no pre-existing errors. Here <platform> is the runConfigureICU
@@ -193,21 +163,14 @@ make check 2>&1 | tee /tmp/icu4c-oldData-makeCheck.txt
 # Running "ant setup" is not required, but it will print useful errors to
 # debug issues with your path when it fails.
 #
-# If you see timeout errors when building the rbnf data, for example, then you are
-# likely not using a CLDR dtd cache; see "CLDR dtd caching" above. If you are using
-# a dtd cache and are still having timeout problems, the IP address of your system
-# may have been blocked due to previous excessive access. In this case you may need
-# to contact a Unicode sysadmin to restore access.
-#
-# Unfortunately, even if you have your DTD cache variable enabled, you may still
-# get blocked and unable to populate your cache because of multiple successive
-# requests to download the required DTD files. It is recommended that you
-# pre-populate your cache as shown above in step 1d.
 
 cd $ICU4C_DIR/source/data
 ant setup
 ant clean
 ant all 2>&1 | tee /tmp/cldr-newData-buildLog.txt
+
+# NOTE: if you change the CLDR data, please run "ant cleanprod" to clean out the
+# temporary production data directory (usually $CLDR_DIR/../cldr-aux/production )
 
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the
