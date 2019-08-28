@@ -1388,6 +1388,10 @@ void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
 void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
     if (fields == nullptr) { return; }
     if (newValue == fields->properties.maximumFractionDigits) { return; }
+    // cap for backward compatibility, formerly 340, now 999
+    if (newValue > kMaxIntFracSig) {
+        newValue = kMaxIntFracSig;
+    }
     // For backwards compatibility, conflicting min/max need to keep the most recent setting.
     int32_t min = fields->properties.minimumFractionDigits;
     if (min >= 0 && min > newValue) {
