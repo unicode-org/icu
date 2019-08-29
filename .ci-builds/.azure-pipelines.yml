@@ -256,3 +256,16 @@ jobs:
        set MSYSTEM=MINGW64
        c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW && make -j2 check"
       displayName: 'Build and Test ICU4C'
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang_MacOSX_WarningsAsErrors
+  displayName: 'C: macOSX Clang WarningsAsErrors (Mojave 10.14)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'macOS-10.14'
+  steps:
+    - script: |
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 tests
+      displayName: 'Build only (WarningsAsErrors)'
+      env:
+        CC: clang
+        CXX: clang++
