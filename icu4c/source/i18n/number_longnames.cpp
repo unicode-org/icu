@@ -265,6 +265,26 @@ UnicodeString LongNameHandler::getUnitDisplayName(
     return simpleFormats[DNAM_INDEX];
 }
 
+UnicodeString LongNameHandler::getUnitPattern(
+        const Locale& loc,
+        const MeasureUnit& unit,
+        UNumberUnitWidth width,
+        StandardPlural::Form pluralForm,
+        UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    UnicodeString simpleFormats[ARRAY_LENGTH];
+    getMeasureData(loc, unit, width, simpleFormats, status);
+    // The above already handles fallback from other widths to short
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    // Now handle fallback from other plural forms to OTHER
+    return (!(simpleFormats[pluralForm]).isBogus())? simpleFormats[pluralForm]:
+            simpleFormats[StandardPlural::Form::OTHER];
+}
+
 LongNameHandler* LongNameHandler::forCurrencyLongNames(const Locale &loc, const CurrencyUnit &currency,
                                                       const PluralRules *rules,
                                                       const MicroPropsGenerator *parent,

@@ -28,6 +28,7 @@
 #include "charstr.h"
 #include "cstr.h"
 #include "unicode/reldatefmt.h"
+#include "unicode/rbnf.h"
 
 struct ExpectedResult {
     const Measure *measures;
@@ -1699,6 +1700,10 @@ void MeasureFormatTest::TestExamplesInDocs() {
 
 void MeasureFormatTest::TestFormatPeriodEn() {
     UErrorCode status = U_ZERO_ERROR;
+    Measure t_1y[] = {Measure((double)1, MeasureUnit::createYear(status), status)};
+    Measure t_5M[] = {Measure((double)5, MeasureUnit::createMonth(status), status)};
+    Measure t_4d[] = {Measure((double)4, MeasureUnit::createDay(status), status)};
+    Measure t_2h[] = {Measure((double)2, MeasureUnit::createHour(status), status)};
     Measure t_19m[] = {Measure((double)19, MeasureUnit::createMinute(status), status)};
     Measure t_1h_23_5s[] = {
             Measure((double)1.0, MeasureUnit::createHour(status), status),
@@ -1867,6 +1872,20 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             {t_6h_56_92m, UPRV_LENGTHOF(t_6h_56_92m), "6:56.92"},
             {t_3h_5h, UPRV_LENGTHOF(t_3h_5h), "3 \\u0998\\u0983, 5 \\u0998\\u0983"}};
 
+    ExpectedResult fullDataSpellout[] = {
+            {t_1y, UPRV_LENGTHOF(t_1y), "one year"},
+            {t_5M, UPRV_LENGTHOF(t_5M), "five months"},
+            {t_4d, UPRV_LENGTHOF(t_4d), "four days"},
+            {t_2h, UPRV_LENGTHOF(t_2h), "two hours"},
+            {t_19m, UPRV_LENGTHOF(t_19m), "nineteen minutes"}};
+
+    ExpectedResult fullDataSpelloutFr[] = {
+            {t_1y, UPRV_LENGTHOF(t_1y), "un\\u00A0an"},
+            {t_5M, UPRV_LENGTHOF(t_5M), "cinq\\u00A0mois"},
+            {t_4d, UPRV_LENGTHOF(t_4d), "quatre\\u00A0jours"},
+            {t_2h, UPRV_LENGTHOF(t_2h), "deux\\u00A0heures"},
+            {t_19m, UPRV_LENGTHOF(t_19m), "dix-neuf minutes"}};
+
     Locale en(Locale::getEnglish());
     LocalPointer<NumberFormat> nf(NumberFormat::createInstance(en, status));
     if (U_FAILURE(status)) {
@@ -1947,6 +1966,30 @@ void MeasureFormatTest::TestFormatPeriodEn() {
         return;
     }
     verifyFormat("bn-u-nu-latn NUMERIC", mf, numericDataBnLatn, UPRV_LENGTHOF(numericDataBnLatn));
+
+    status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedNumberFormat> rbnf(new RuleBasedNumberFormat(URBNF_SPELLOUT, en, status));
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating rbnf en object - %s", u_errorName(status));
+        return;
+    }
+    mf = MeasureFormat(en, UMEASFMT_WIDTH_WIDE, rbnf->clone(), status);
+    if (!assertSuccess("Error creating measure format en WIDE with rbnf", status)) {
+        return;
+    }
+    verifyFormat("en WIDE rbnf", mf, fullDataSpellout, UPRV_LENGTHOF(fullDataSpellout));
+
+    Locale fr(Locale::getFrench());
+    LocalPointer<RuleBasedNumberFormat> rbnffr(new RuleBasedNumberFormat(URBNF_SPELLOUT, fr, status));
+    if (U_FAILURE(status)) {
+        dataerrln("Error creating rbnf fr object - %s", u_errorName(status));
+        return;
+    }
+    mf = MeasureFormat(fr, UMEASFMT_WIDTH_WIDE, rbnffr->clone(), status);
+    if (!assertSuccess("Error creating measure format fr WIDE with rbnf", status)) {
+        return;
+    }
+    verifyFormat("fr WIDE rbnf", mf, fullDataSpelloutFr, UPRV_LENGTHOF(fullDataSpellout));
 }
 
 void MeasureFormatTest::Test10219FractionalPlurals() {
