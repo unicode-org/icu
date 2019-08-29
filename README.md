@@ -8,13 +8,14 @@ The ICU project is under the stewardship of [The Unicode Consortium](https://www
 
 ![ICU Logo](./tools/images/iculogo_64.png)
 
-### Build Status
+### Build Status (master branch)
 
 Build | Status
 ------|-------
 TravisCI | [![Build Status](https://travis-ci.org/unicode-org/icu.svg?branch=master)](https://travis-ci.org/unicode-org/icu)
-Win x64 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/ICU4C%20Build%20and%20Test%20%5Bx64%20Release%5D%20(CI))](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=8)
-Win x86 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/ICU4C%20Build%20and%20Test%20%5Bx86%20Release%5D%20(CI))](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=7)
+Azure Pipelines | [![Build Status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/Azure%20CI?branchName=master)](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=21&branchName=master)
+Azure Pipelines (Exhaustive Tests) | [![Build Status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/Azure%20CI%20%5BExhaustive%20Tests%5D?branchName=master)](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=24&branchName=master)
+AppVeyor | [![Build status](https://ci.appveyor.com/api/projects/status/6ev1ssb6efahsvs2?svg=true)](https://ci.appveyor.com/project/unicode-org/icu)
 
 
 ### Subdirectories and Information
