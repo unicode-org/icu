@@ -32,7 +32,8 @@ jobs:
   steps:
     - script: |
         git clone https://github.com/emscripten-core/emsdk.git
-        cd emsdk && ./emsdk install latest && ./emsdk activate latest && source ./emsdk/emsdk_env.sh 
+        (cd emsdk && ./emsdk install latest && ./emsdk activate latest)
+        source ./emsdk/emsdk_env.sh 
         cd icu4c/source && ./runConfigureICU Wasm32 && make -j8 
       displayName: 'Build and !Test'
 #-------------------------------------------------------------------------
