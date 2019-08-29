@@ -744,7 +744,8 @@
         across library and compiler versions is very hard to achieve.
         Most ICU C++ APIs are in header files that contain a comment with
         <code>\brief C++ API</code>.
-        Consider not installing these header files.</li>
+        Consider not installing these header files, or define <code>U_SHOW_CPLUSPLUS_API</code>
+        to be <code>0</code> by modifying unicode/utypes.h before installing it.</li>
       <li><b>Disable renaming:</b> By default, ICU library entry point names
         have an ICU version suffix. Turn this off for a system-level installation,
         to enable upgrading ICU without breaking applications. For example:<br />
