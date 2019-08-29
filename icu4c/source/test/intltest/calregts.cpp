@@ -96,6 +96,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(52,TestPersianCalOverflow);
         CASE(53,TestIslamicCalOverflow);
         CASE(54,TestWeekOfYear13548);
+        CASE(55,Test13745);
     default: name = ""; break;
     }
 }
@@ -1535,6 +1536,41 @@ void CalendarRegressionTest::test4141665()
     delete cal;
     delete cal2;
 }
+
+const UDate MILLIS_IN_DAY = 86400000.0;
+/**
+ * ICU-13745
+ * GregorianCalendar::setGregorianChange() overflow
+ */
+void CalendarRegressionTest::Test13745()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar *cal = new GregorianCalendar(status);
+    if(U_FAILURE(status)) {
+      dataerrln("Error creating calendar %s", u_errorName(status));
+      delete cal;
+      return;
+    }
+
+    // this line would overflow before fix 13745
+    cal->setGregorianChange(((double)INT32_MAX+1.0) * MILLIS_IN_DAY, status);
+    if(U_FAILURE(status)) {
+        errln("%s:%d Failure setting INT32_MAX+1 change on calendar: %s\n", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    assertEquals("getGregorianChange()", (double)INT32_MAX * MILLIS_IN_DAY, cal->getGregorianChange());
+
+    // test underflow
+    cal->setGregorianChange(((double)INT32_MIN-1.0) * MILLIS_IN_DAY, status);
+    if(U_FAILURE(status)) {
+        errln("%s:%d Failure setting INT32_MAX-1 change on calendar: %s\n", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    assertEquals("getGregorianChange()", (double)INT32_MIN * MILLIS_IN_DAY, cal->getGregorianChange());
+
+    delete cal;
+}
+
 
 /**
  * @bug 4142933
