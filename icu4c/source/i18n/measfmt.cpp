@@ -685,9 +685,19 @@ UnicodeString &MeasureFormat::formatMeasure(
     }
     auto* df = dynamic_cast<const DecimalFormat*>(&nf);
     if (df == nullptr) {
-        // Don't know how to handle other types of NumberFormat
-        status = U_UNSUPPORTED_ERROR;
-        return appendTo;
+        // Handle other types of NumberFormat using the ICU 63 code, modified to
+        // get the unitPattern from LongNameHandler and handle fallback to OTHER.
+        UnicodeString formattedNumber;
+        StandardPlural::Form pluralForm = QuantityFormatter::selectPlural(
+                amtNumber, nf, **pluralRules, formattedNumber, pos, status);
+        UnicodeString pattern = number::impl::LongNameHandler::getUnitPattern(getLocale(status),
+                amtUnit, getUnitWidth(fWidth), pluralForm, status);
+        // The above  handles fallback from other widths to short, and from other plural forms to OTHER
+        if (U_FAILURE(status)) {
+            return appendTo;
+        }
+        SimpleFormatter formatter(pattern, 0, 1, status);
+        return QuantityFormatter::format(formatter, formattedNumber, appendTo, pos, status);
     }
     number::FormattedNumber result;
     if (auto* lnf = df->toNumberFormatter(status)) {
