@@ -34,7 +34,7 @@ jobs:
         git clone https://github.com/emscripten-core/emsdk.git
         (cd emsdk && ./emsdk install latest && ./emsdk activate latest)
         source ./emsdk/emsdk_env.sh 
-        cd icu4c/source && ./runConfigureICU Wasm32 && make -j8 
+        cd icu4c/source && ./runConfigureICU wasm32 && make -j8 
       displayName: 'Build and !Test'
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Ubuntu_1604
