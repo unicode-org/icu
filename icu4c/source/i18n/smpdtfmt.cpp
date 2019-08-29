@@ -3999,6 +3999,7 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   DateFormatSymbols *newSymbols =
           DateFormatSymbols::createForLocale(calLocale, status);
   if (U_FAILURE(status)) {
+      delete calendarToAdopt;
       return;
   }
   DateFormat::adoptCalendar(calendarToAdopt);

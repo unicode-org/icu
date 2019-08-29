@@ -262,6 +262,7 @@ public:
     void TestMinuteSecondFieldsInOddPlaces();
     void TestDayPeriodParsing();
     void TestParseRegression13744();
+    void TestAdoptCalendarLeak();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);
