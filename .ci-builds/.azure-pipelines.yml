@@ -26,7 +26,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_Wasm32_Emscripten
   displayName: 'C: Wasm32 Emscripten'
-  timeoutInMinutes: 30
+  timeoutInMinutes: 60
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:
