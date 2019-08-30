@@ -237,7 +237,7 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      */
     @Override
     public int hashCode() {
-        int result = bytes.length;
+        int result = size;
         for (int i = 0; i < size; ++i) {
             result = 37*result + bytes[i];
         }
