@@ -526,11 +526,29 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    private void compareLocaleResults(String loc1, String loc2, String loc3) {
+        PluralRules rules1 = PluralRules.forLocale(new ULocale(loc1));
+        PluralRules rules2 = PluralRules.forLocale(new ULocale(loc2));
+        PluralRules rules3 = PluralRules.forLocale(new ULocale(loc3));
+        for (int value = 0; value <= 12; value++) {
+            String result1 = rules1.select(value);
+            String result2 = rules2.select(value);
+            String result3 = rules3.select(value);
+            if (!result1.equals(result2) || !result1.equals(result3)) {
+                errln("PluralRules.select(" + value + ") does not return the same values for "
+                        + loc1 + ", " + loc2 + ", " + loc3);
+            }
+        }
+    }
+
     @Test
     public void testLocaleExtension() {
         PluralRules rules = PluralRules.forLocale(new ULocale("pt@calendar=gregorian"));
         String key = rules.select(1);
         assertEquals("pt@calendar=gregorian select(1)", "one", key);
+        compareLocaleResults("ar", "ar_SA", "ar_SA@calendar=gregorian");
+        compareLocaleResults("ru", "ru_UA", "ru-u-cu-RUB");
+        compareLocaleResults("fr", "fr_CH", "fr@ms=uksystem");
     }
 
     @Test

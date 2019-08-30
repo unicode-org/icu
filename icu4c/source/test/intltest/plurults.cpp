@@ -1037,12 +1037,34 @@ void PluralRulesTest::testSelectTrailingZeros() {
     }
 }
 
+void PluralRulesTest::compareLocaleResults(const char* loc1, const char* loc2, const char* loc3) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<PluralRules> rules1(PluralRules::forLocale(loc1, status));
+    LocalPointer<PluralRules> rules2(PluralRules::forLocale(loc2, status));
+    LocalPointer<PluralRules> rules3(PluralRules::forLocale(loc3, status));
+    if (U_FAILURE(status)) {
+        dataerrln("Failed to create PluralRules for one of %s, %s, %s: %s\n", loc1, loc2, loc3, u_errorName(status));
+        return;
+    }
+    for (int32_t value = 0; value <= 12; value++) {
+        UnicodeString result1 = rules1->select(value);
+        UnicodeString result2 = rules2->select(value);
+        UnicodeString result3 = rules3->select(value);
+        if (result1 != result2 || result1 != result3) {
+            errln("PluralRules.select(%d) does not return the same values for %s, %s, %s\n", value, loc1, loc2, loc3);
+        }
+    }
+}
+
 void PluralRulesTest::testLocaleExtension() {
     IcuTestErrorCode errorCode(*this, "testLocaleExtension");
     LocalPointer<PluralRules> rules(PluralRules::forLocale("pt@calendar=gregorian", errorCode));
     if (errorCode.errIfFailureAndReset("PluralRules::forLocale()")) { return; }
     UnicodeString key = rules->select(1);
     assertEquals("pt@calendar=gregorian select(1)", u"one", key);
+    compareLocaleResults("ar", "ar_SA", "ar_SA@calendar=gregorian");
+    compareLocaleResults("ru", "ru_UA", "ru-u-cu-RUB");
+    compareLocaleResults("fr", "fr_CH", "fr@ms=uksystem");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
