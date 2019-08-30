@@ -212,7 +212,9 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * similar functionality as the Java String and StringBuffer/StringBuilder classes.
  * It is a concrete implementation of the abstract class Replaceable (for transliteration).
  *
- * A UnicodeString may also "alias" an external array of characters
+ * The UnicodeString equivalent of std::string’s clear() is remove().
+ *
+ * A UnicodeString may "alias" an external array of characters
  * (that is, point to it, rather than own the array)
  * whose lifetime must then at least match the lifetime of the aliasing object.
  * This aliasing may be preserved when returning a UnicodeString by value,
@@ -2095,8 +2097,7 @@ public:
    *   s.truncate(0);        // set to an empty string (complete truncation), or
    *   s=UnicodeString();    // assign an empty string, or
    *   s.setTo((UChar32)-1); // set to a pseudo code point that is out of range, or
-   *   static const char16_t nul=0;
-   *   s.setTo(&nul, 0);     // set to an empty C Unicode string
+   *   s.setTo(u"", 0);      // set to an empty C Unicode string
    * }
    * \endcode
    *
@@ -2537,11 +2538,14 @@ public:
   /* Remove operations */
 
   /**
-   * Remove all characters from the UnicodeString object.
+   * Removes all characters from the UnicodeString object and clears the bogus flag.
+   * This is the UnicodeString equivalent of std::string’s clear().
+   *
    * @return a reference to this
+   * @see setToBogus
    * @stable ICU 2.0
    */
-  inline UnicodeString& remove(void);
+  inline UnicodeString& remove();
 
   /**
    * Remove the characters in the range
