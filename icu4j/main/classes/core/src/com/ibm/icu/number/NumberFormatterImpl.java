@@ -3,8 +3,8 @@
 package com.ibm.icu.number;
 
 import com.ibm.icu.impl.CurrencyData;
-import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.ConstantAffixModifier;

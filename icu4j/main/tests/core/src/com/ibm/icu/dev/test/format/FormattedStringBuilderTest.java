@@ -12,8 +12,8 @@ import java.text.Format.Field;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.text.NumberFormat;
 
 /** @author sffc */
