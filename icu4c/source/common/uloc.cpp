@@ -1457,31 +1457,32 @@ static const UEnumeration gKeywordsEnum = {
 U_CAPI UEnumeration* U_EXPORT2
 uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCode* status)
 {
-    UKeywordsContext *myContext = NULL;
-    UEnumeration *result = NULL;
+    LocalPointer<UKeywordsContext> myContext;
+    LocalPointer<UEnumeration> result;
 
-    if(U_FAILURE(*status)) {
-        return NULL;
+    if (U_FAILURE(*status)) {
+        return nullptr;
     }
-    result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-    /* Null pointer test */
-    if (result == NULL) {
+    result.adoptInsteadAndCheckErrorCode(static_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration))), *status);
+    if (U_FAILURE(*status)) {
+        return nullptr;
+    }
+    uprv_memcpy(result.getAlias(), &gKeywordsEnum, sizeof(UEnumeration));
+    
+    myContext.adoptInsteadAndCheckErrorCode(static_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext))), *status);
+    if (U_FAILURE(*status)) {
+        return nullptr;
+    }
+    myContext->keywords = static_cast<char *>(uprv_malloc(keywordListSize+1));
+    if (myContext->keywords == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
-    uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
-    myContext = static_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext)));
-    if (myContext == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(result);
-        return NULL;
-    }
-    myContext->keywords = (char *)uprv_malloc(keywordListSize+1);
     uprv_memcpy(myContext->keywords, keywordList, keywordListSize);
     myContext->keywords[keywordListSize] = 0;
     myContext->current = myContext->keywords;
-    result->context = myContext;
-    return result;
+    result->context = myContext.orphan();
+    return result.orphan();
 }
 
 U_CAPI UEnumeration* U_EXPORT2
