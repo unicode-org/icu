@@ -126,7 +126,7 @@ public class DisplayNameTest extends TestFmwk {
             @Override
             public String get(ULocale loc, String code, Object context) {
                 Currency s = Currency.getInstance(code);
-                return s.getName(loc, ((Integer)context).intValue(), new boolean[1]);
+                return s.getName(loc, ((Integer)context).intValue(), null /* isChoiceFormat */);
             }
         });
         // comment this out, because the zone string information is lost

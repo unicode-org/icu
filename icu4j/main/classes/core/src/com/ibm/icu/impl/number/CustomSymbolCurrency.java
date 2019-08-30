@@ -42,6 +42,9 @@ public class CustomSymbolCurrency extends Currency {
     @Override
     public String getName(ULocale locale, int nameStyle, boolean[] isChoiceFormat) {
         if (nameStyle == SYMBOL_NAME) {
+            if (isChoiceFormat != null) {
+                isChoiceFormat[0] = false;
+            }
             return symbol1;
         }
         return super.getName(locale, nameStyle, isChoiceFormat);

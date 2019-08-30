@@ -713,7 +713,9 @@ ucurr_getName(const UChar* currency,
 
     // We no longer support choice format data in names.  Data should not contain
     // choice patterns.
-    *isChoiceFormat = FALSE;
+    if (isChoiceFormat != NULL) {
+        *isChoiceFormat = FALSE;
+    }
     if (U_SUCCESS(ec2)) {
         U_ASSERT(s != NULL);
         return s;
@@ -1595,10 +1597,9 @@ uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
 {
     U_NAMESPACE_USE
 
-    UBool isChoiceFormat;
     int32_t len;
     const UChar* currname = ucurr_getName(iso, loc, UCURR_SYMBOL_NAME,
-                                          &isChoiceFormat, &len, &ec);
+                                          nullptr /* isChoiceFormat */, &len, &ec);
     if (U_SUCCESS(ec)) {
         result.setTo(currname, len);
     }
