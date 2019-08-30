@@ -3197,15 +3197,14 @@ U_STABLE UBool U_EXPORT2
 u_isprint(UChar32 c);
 
 /**
- * Determines whether the specified code point is a base character.
+ * Non-standard: Determines whether the specified code point is a base character.
  * True for general categories "L" (letters), "N" (numbers),
  * "Mc" (spacing combining marks), and "Me" (enclosing marks).
  *
- * Note that this is different from the Unicode definition in
- * chapter 3.5, conformance clause D13,
- * which defines base characters to be all characters (not Cn)
- * that do not graphically combine with preceding characters (M)
- * and that are neither control (Cc) or format (Cf) characters.
+ * Note that this is different from the Unicode Standard definition in
+ * chapter 3.6, conformance clause D51 “Base character”,
+ * which defines base characters as the code points with general categories
+ * Letter (L), Number (N), Punctuation (P), Symbol (S), or Space Separator (Zs).
  *
  * @param c the code point to be tested
  * @return TRUE if the code point is a base character according to this function
