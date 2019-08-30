@@ -15,10 +15,11 @@ import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
-
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
+
+import com.google.common.annotations.VisibleForTesting;
 
 /**
  * A mapper to collect day-period data from {@link CldrDataType#SUPPLEMENTAL SUPPLEMENTAL}
@@ -47,8 +48,12 @@ public final class DayPeriodsMapper {
      * @return the IcuData instance to be written to a file.
      */
     public static IcuData process(CldrDataSupplier src) {
+        return process(src.getDataForType(SUPPLEMENTAL));
+    }
+
+    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
+    static IcuData process(CldrData data) {
         RuleSetVisitor mapper = new RuleSetVisitor();
-        CldrData data = src.getDataForType(SUPPLEMENTAL);
         data.accept(ARBITRARY, mapper);
         return mapper.icuData;
     }

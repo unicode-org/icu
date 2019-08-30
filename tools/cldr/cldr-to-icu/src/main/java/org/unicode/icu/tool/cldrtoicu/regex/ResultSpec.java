@@ -26,14 +26,14 @@ import java.util.stream.Stream;
 
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
+import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.DynamicVars;
+import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
+import org.unicode.icu.tool.cldrtoicu.RbPath;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.DynamicVars;
-import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
-import org.unicode.icu.tool.cldrtoicu.RbPath;
 
 /**
  * A specification for building a result from the arguments in a matched xpath. Results always
@@ -74,7 +74,7 @@ final class ResultSpec {
     private static final Splitter VALUE_SPLITTER = Splitter.on(whitespace()).omitEmptyStrings();
 
     // Matcher for "&foo_bar(a,b,c)" which captures function name and complete argument list.
-    private static final Pattern FUNCTION = Pattern.compile("\\&(\\w++)\\(([^\\)]++)\\)");
+    private static final Pattern FUNCTION = Pattern.compile("&(\\w++)\\(([^)]++)\\)");
 
     // Resource bundle path specification with placeholders (e.g. "/foo/$1/bar") exactly as it
     // appears in the configuration file.
@@ -168,7 +168,7 @@ final class ResultSpec {
         CldrValue value, List<String> args, DynamicVars varLookupFn) {
         return new MatchedResult(
             getRbPath(args),
-            getValues(value.getValue(), args, varLookupFn),
+            getValues(value.getValue(), args),
             getResultPath(value.getPath(), args, varLookupFn));
     }
 
@@ -197,8 +197,7 @@ final class ResultSpec {
     // Create an array of output values according to the CLDR value (if present) and the
     // "values" instruction in the result specification (if present). Any functions present in
     // the "values" instruction are invoked here.
-    private ImmutableList<String> getValues(
-        String value, List<String> args, DynamicVars varLookupFn) {
+    private ImmutableList<String> getValues(String value, List<String> args) {
         VarString valuesSpec = instructions.get(Instruction.VALUES);
         if (valuesSpec == null) {
             // No "values" instruction, so just use the _unsplit_ CLDR value. To split a CLDR

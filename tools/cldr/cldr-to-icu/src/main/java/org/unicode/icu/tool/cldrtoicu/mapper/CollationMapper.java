@@ -16,13 +16,13 @@ import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
-
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Splitter;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
 
 /**
  * A mapper to collect collation data from {@link CldrDataType#LDML LDML} data via the paths:

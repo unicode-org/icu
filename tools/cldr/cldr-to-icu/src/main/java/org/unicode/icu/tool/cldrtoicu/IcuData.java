@@ -4,6 +4,8 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +24,7 @@ import com.google.common.collect.ListMultimap;
  */
 public final class IcuData {
     private static final RbPath RB_VERSION = RbPath.of("Version");
-    private static final Pattern ARRAY_INDEX = Pattern.compile("(/[^\\[]++)(?:\\[(\\d++)\\])?$");
+    private static final Pattern ARRAY_INDEX = Pattern.compile("(/[^\\[]++)(?:\\[(\\d++)])?$");
 
     private final String name;
     private final boolean hasFallback;
@@ -161,5 +163,19 @@ public final class IcuData {
     /** Returns whether there are any paths in this instance. */
     public boolean isEmpty() {
         return paths.isEmpty();
+    }
+
+    @Override public String toString() {
+        StringWriter out = new StringWriter();
+        PrintWriter w = new PrintWriter(out);
+        w.format("IcuData{ name=%s, fallback=%s\n", name, hasFallback);
+        commentLines.forEach(c -> w.format("  # %s\n", c));
+        paths.forEach(p -> {
+            w.format("  %s:\n", p);
+            rbPathToValues.get(p).forEach(v -> w.format("    %s\n", v));
+        });
+        w.format("}\n");
+        w.flush();
+        return out.toString();
     }
 }

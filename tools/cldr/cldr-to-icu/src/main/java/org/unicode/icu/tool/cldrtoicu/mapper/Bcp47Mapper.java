@@ -20,20 +20,22 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import org.unicode.cldr.api.AttributeKey;
+import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrData.PrefixVisitor;
 import org.unicode.cldr.api.CldrData.ValueVisitor;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
+import org.unicode.icu.tool.cldrtoicu.IcuData;
+import org.unicode.icu.tool.cldrtoicu.PathMatcher;
+import org.unicode.icu.tool.cldrtoicu.RbPath;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Ascii;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathMatcher;
-import org.unicode.icu.tool.cldrtoicu.RbPath;
 
 /**
  * A mapper to collect BCP-47 data from {@link CldrDataType#BCP47 BCP47} data under paths
@@ -80,8 +82,13 @@ public final class Bcp47Mapper {
      * @return A list of IcuData instances containing BCP-47 data to be written to files.
      */
     public static ImmutableList<IcuData> process(CldrDataSupplier src) {
+        return process(src.getDataForType(BCP47));
+    }
+
+    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
+    static ImmutableList<IcuData> process(CldrData cldrData) {
         Bcp47Visitor visitor = new Bcp47Visitor();
-        src.getDataForType(BCP47).accept(ARBITRARY, visitor);
+        cldrData.accept(ARBITRARY, visitor);
         visitor.addKeyMapValues();
         return ImmutableList.of(visitor.keyTypeData.icuData, visitor.tzData.icuData);
     }
@@ -168,13 +175,15 @@ public final class Bcp47Mapper {
                 // replacement and these will be processed below (in particular we need to emit
                 // the fact that they are deprecated).
 
-                // According to the old mapper code, it's an error not to have an alias, but
-                // it's emitted via debug logging and not actually enforced.
-                // TODO: Consider making this an error if possible.
+                // Not all key elements have an alias. E.g. in calendar.xml:
+                //     <key name="fw" description="First day of week" since="28">
+                // But we still add it as a alias to itself (which is later turned into a path with
+                // an empty value).
                 String keyAlias = toLowerCase(KEY_ALIAS.valueFrom(value, keyName));
 
                 keyMap.put(keyName, keyAlias);
                 RbPath typeMapPrefix = RbPath.of("typeMap", keyAlias);
+
                 List<String> typeAliases = TYPE_ALIASES.listOfValuesFrom(value);
                 if (typeAliases.isEmpty()) {
                     // Generate type map entry using empty value (an empty value indicates same

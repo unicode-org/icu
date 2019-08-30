@@ -6,7 +6,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Ordering.natural;
-import static org.unicode.cldr.api.AttributeKey.keyOf;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
@@ -16,24 +15,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrData.ValueVisitor;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrValue;
-
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.SetMultimap;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.DynamicVars;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
 import org.unicode.icu.tool.cldrtoicu.SupplementalData;
+
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.SetMultimap;
 
 /**
  * Generate locale {@link IcuData} by transforming {@link CldrDataType#LDML LDML} data using a
@@ -43,11 +40,6 @@ import org.unicode.icu.tool.cldrtoicu.SupplementalData;
  * {@code RegexTransformer}, but could use any {@link PathValueTransformer} implementation.
  */
 public final class LocaleMapper {
-    // Match territory paths so we can skip processing deprecated territories.
-    private static final PathMatcher TERRITORY = PathMatcher.of(
-        "ldml/localeDisplayNames/territories/territory[@type=*]");
-    private static final AttributeKey TERRITORY_TYPE = keyOf("territory", "type");
-
     // The default calendar (only set is different from inherited parent value).
     private static final RbPath RB_CALENDAR = RbPath.of("calendar", "default");
 

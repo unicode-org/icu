@@ -23,12 +23,12 @@ import java.util.regex.Pattern;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
+import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
+import org.unicode.icu.tool.cldrtoicu.RbPath;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSetMultimap;
-import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
-import org.unicode.icu.tool.cldrtoicu.RbPath;
 
 /**
  * Path/value transformer configured by {@code ldml2icu_xxx.txt} mapping and configuration files.

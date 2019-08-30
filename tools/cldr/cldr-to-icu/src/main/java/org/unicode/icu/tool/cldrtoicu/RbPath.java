@@ -54,10 +54,6 @@ public final class RbPath implements Comparable<RbPath> {
     private static final CharMatcher UNQUOTED_SEGMENT_CHARS =
         QUOTED_SEGMENT_CHARS.and(whitespace().negate());
 
-    // Characters allowed in path segments which separate the "base name" from any suffix (e.g.
-    // the base name of "Foo:intvector" is "Foo").
-    private static final CharMatcher SEGMENT_SEPARATORS = CharMatcher.anyOf("%:");
-
     private static final RbPath EMPTY = new RbPath(ImmutableList.of());
 
     public static RbPath empty() {
@@ -97,12 +93,10 @@ public final class RbPath implements Comparable<RbPath> {
         this.segments = ImmutableList.copyOf(segments);
         this.hashCode = Objects.hash(this.segments);
         for (String segment : this.segments) {
-            checkArgument(!segment.isEmpty(),
-                "empty path segments not permitted: %s", this.segments);
+            checkArgument(!segment.isEmpty(), "path segments must not be empty: %s", this.segments);
             // Either the label is quoted (e.g. "foo") or it is bar (e.g. foo) but it can only
             // contain double quotes at either end, or not at all. If the string is quoted, only
             // validate the content, and not the quotes themselves.
-            String toValidate;
             switch (segment.charAt(0)) {
             case '<':
                 // Allow anything in hidden labels, since they will be removed later and never
@@ -155,30 +149,6 @@ public final class RbPath implements Comparable<RbPath> {
 
     public RbPath mapSegments(Function<? super String, String> fn) {
         return new RbPath(segments.stream().map(fn).collect(toImmutableList()));
-    }
-
-    /**
-     * Returns whether the first element of this path is prefix by the given "base name".
-     *
-     * <p>Resource bundle paths relating to semantically similar data are typically grouped by the
-     * same first path element. This is not as simple as just comparing the first element, as in
-     * {@code path.startsWith(prefix)} however, since path elements can have suffixes, such as
-     * {@code "Foo:alias"} or {@code "Foo%subtype"}.
-     *
-     * @param baseName the base name to test for.
-     * @return true is the "base name" of the first path element is the given prefix.
-     */
-    public boolean hasPrefix(String baseName) {
-        checkArgument(!baseName.isEmpty() && SEGMENT_SEPARATORS.matchesNoneOf(baseName));
-        if (length() == 0) {
-            return false;
-        }
-        String firstElement = getSegment(0);
-        // Slightly subtle (but safe) access to the separator character, since:
-        // (!a.equals(b) && a.startsWith(b)) ==> a.length() > b.length().
-        return firstElement.equals(baseName)
-            || (firstElement.startsWith(baseName)
-                && SEGMENT_SEPARATORS.matches(firstElement.charAt(baseName.length())));
     }
 
     public boolean startsWith(RbPath prefix) {
