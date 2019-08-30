@@ -148,12 +148,11 @@ void getCurrencyLongNameData(const Locale &locale, const CurrencyUnit &currency,
         if (pattern.isBogus()) {
             continue;
         }
-        UBool isChoiceFormat = FALSE;
         int32_t longNameLen = 0;
         const char16_t *longName = ucurr_getPluralName(
                 currency.getISOCurrency(),
                 locale.getName(),
-                &isChoiceFormat,
+                nullptr /* isChoiceFormat */,
                 StandardPlural::getKeyword(static_cast<StandardPlural::Form>(i)),
                 &longNameLen,
                 &status);
