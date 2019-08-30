@@ -215,7 +215,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (macros.symbols.isDecimalFormatSymbols()) {
         fMicros.symbols = macros.symbols.getDecimalFormatSymbols();
     } else {
-        fMicros.symbols = new DecimalFormatSymbols(macros.locale, *ns, status);
+        auto newSymbols = new DecimalFormatSymbols(macros.locale, *ns, status);
+        if (newSymbols == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        fMicros.symbols = newSymbols;
         // Give ownership to the NumberFormatterImpl.
         fSymbols.adoptInstead(fMicros.symbols);
     }
@@ -229,7 +234,11 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         if (info.exists) {
             pattern = info.pattern;
             // It's clunky to clone an object here, but this code is not frequently executed.
-            auto* symbols = new DecimalFormatSymbols(*fMicros.symbols);
+            auto symbols = new DecimalFormatSymbols(*fMicros.symbols);
+            if (symbols == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return nullptr;
+            }
             fMicros.symbols = symbols;
             fSymbols.adoptInstead(symbols);
             symbols->setSymbol(
@@ -260,6 +269,10 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         pattern = utils::getPatternForStyle(macros.locale, nsName, patternStyle, status);
     }
     auto patternInfo = new ParsedPatternInfo();
+    if (patternInfo == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     fPatternInfo.adoptInstead(patternInfo);
     PatternParser::parseToPatternInfo(UnicodeString(pattern), *patternInfo, status);
 
@@ -337,7 +350,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Inner modifier (scientific notation)
     if (macros.notation.fType == Notation::NTN_SCIENTIFIC) {
-        fScientificHandler.adoptInstead(new ScientificHandler(&macros.notation, fMicros.symbols, chain));
+        auto newScientificHandler = new ScientificHandler(&macros.notation, fMicros.symbols, chain);
+        if (newScientificHandler == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        fScientificHandler.adoptInstead(newScientificHandler);
         chain = fScientificHandler.getAlias();
     } else {
         // No inner modifier required
@@ -346,6 +364,10 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Middle modifier (patterns, positive/negative, currency symbols, percent)
     auto patternModifier = new MutablePatternModifier(false);
+    if (patternModifier == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     fPatternModifier.adoptInstead(patternModifier);
     patternModifier->setPatternInfo(
             macros.affixProvider != nullptr ? macros.affixProvider
@@ -401,16 +423,20 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (macros.notation.fType == Notation::NTN_COMPACT) {
         CompactType compactType = (isCurrency && unitWidth != UNUM_UNIT_WIDTH_FULL_NAME)
                                   ? CompactType::TYPE_CURRENCY : CompactType::TYPE_DECIMAL;
-        fCompactHandler.adoptInstead(
-                new CompactHandler(
-                        macros.notation.fUnion.compactStyle,
-                        macros.locale,
-                        nsName,
-                        compactType,
-                        resolvePluralRules(macros.rules, macros.locale, status),
-                        safe ? patternModifier : nullptr,
-                        chain,
-                        status));
+        auto newCompactHandler = new CompactHandler(
+            macros.notation.fUnion.compactStyle,
+            macros.locale,
+            nsName,
+            compactType,
+            resolvePluralRules(macros.rules, macros.locale, status),
+            safe ? patternModifier : nullptr,
+            chain,
+            status);
+        if (newCompactHandler == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        fCompactHandler.adoptInstead(newCompactHandler);
         chain = fCompactHandler.getAlias();
     }
 
