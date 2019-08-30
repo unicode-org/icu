@@ -19,12 +19,13 @@ import org.unicode.cldr.api.CldrData.PrefixVisitor;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 
 /**
  * A mapper to collect plural data from {@link CldrDataType#SUPPLEMENTAL SUPPLEMENTAL} data via
@@ -53,8 +54,13 @@ public final class PluralsMapper {
      * @return the IcuData instance to be written to a file.
      */
     public static IcuData process(CldrDataSupplier src) {
-        PluralsVisitor visitor = new PluralsVisitor();
         CldrData data = src.getDataForType(SUPPLEMENTAL);
+        return process(data);
+    }
+
+    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
+    static IcuData process(CldrData data) {
+        PluralsVisitor visitor = new PluralsVisitor();
         // Note: We explicitly reset the type to mimic the order of the existing code, since this
         // affects the set indices we generate during processing. Ideally this would all be immune
         // to ordering (or just enforce DTD ordering) but right now it's very dependent on

@@ -14,11 +14,12 @@ import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
-
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
+
+import com.google.common.annotations.VisibleForTesting;
 
 /**
  * A mapper to collect plural data from {@link CldrDataType#SUPPLEMENTAL SUPPLEMENTAL} data via
@@ -28,6 +29,10 @@ import org.unicode.icu.tool.cldrtoicu.RbValue;
  * }</pre>
  */
 public final class PluralRangesMapper {
+    // Note that this mapper only matches when there's no "type" specified on the "plurals" element.
+    // This is a bit weird, since the PluralsMapper expects a type (e.g. cardinal or ordinal) to
+    // be present. Really this just illustrates that the plural ranges just should not be under the
+    // same parent element as plurals.
     private static final PathMatcher RANGES =
         PathMatcher.of("supplementalData/plurals/pluralRanges[@locales=*]");
     private static final AttributeKey RANGES_LOCALES = keyOf("pluralRanges", "locales");
@@ -47,8 +52,13 @@ public final class PluralRangesMapper {
      * @return the IcuData instance to be written to a file.
      */
     public static IcuData process(CldrDataSupplier src) {
-        PluralRangesVisitor visitor = new PluralRangesVisitor();
         CldrData data = src.getDataForType(SUPPLEMENTAL);
+        return process(data);
+    }
+
+    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
+    static IcuData process(CldrData data) {
+        PluralRangesVisitor visitor = new PluralRangesVisitor();
         data.accept(ARBITRARY, visitor);
         return visitor.icuData;
     }
@@ -61,7 +71,6 @@ public final class PluralRangesMapper {
 
         @Override
         public void visitPrefixStart(CldrPath prefix, Context ctx) {
-            // Captured type is either "cardinal" or "ordinal" (and will cause exception otherwise).
             if (RANGES.matches(prefix)) {
                 ruleLabel = String.format("set%02d", setIndex++);
                 RANGES_LOCALES.listOfValuesFrom(prefix)

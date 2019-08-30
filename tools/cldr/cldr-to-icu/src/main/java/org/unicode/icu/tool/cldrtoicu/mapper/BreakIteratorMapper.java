@@ -15,11 +15,12 @@ import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
-
-import com.google.common.escape.UnicodeEscaper;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
+
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.escape.UnicodeEscaper;
 
 /**
  * A mapper to collect break-iterator data from {@link CldrDataType#LDML LDML} data under
@@ -31,9 +32,11 @@ import org.unicode.icu.tool.cldrtoicu.RbPath;
  */
 // TODO: This class can almost certainly be replace with a small RegexTransformer config.
 public final class BreakIteratorMapper {
-    // The "type" attribute is not required here, so cannot appear in the matcher.
-    private static final PathMatcher SUPPRESSION =
-        PathMatcher.of("ldml/segmentations/segmentation/suppressions/suppression");
+    // The "type" attribute in /suppressions/ is not required so cannot be in the matcher. And
+    // its default (and only) value is "standard".
+    // TODO: Understand and document why this is the case.
+    private static final PathMatcher SUPPRESSION = PathMatcher.of(
+        "ldml/segmentations/segmentation[@type=*]/suppressions/suppression");
     private static final AttributeKey SEGMENTATION_TYPE = keyOf("segmentation", "type");
 
     // Note: This could be done with an intermediate matcher for
@@ -58,9 +61,15 @@ public final class BreakIteratorMapper {
     public static IcuData process(
         String localeId, CldrDataSupplier src, Optional<CldrData> icuSpecialData) {
 
+        CldrData cldrData = src.getDataForLocale(localeId, UNRESOLVED);
+        return process(localeId, cldrData, icuSpecialData);
+    }
+
+    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
+    static IcuData process(String localeId, CldrData cldrData, Optional<CldrData> icuSpecialData) {
         BreakIteratorMapper mapper = new BreakIteratorMapper(localeId);
         icuSpecialData.ifPresent(s -> s.accept(ARBITRARY, mapper::addSpecials));
-        src.getDataForLocale(localeId, UNRESOLVED).accept(DTD, mapper::addSuppression);
+        cldrData.accept(DTD, mapper::addSuppression);
         return mapper.icuData;
     }
 

@@ -3,7 +3,6 @@
 package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.Integer.parseInt;
 
 import java.time.LocalDate;
@@ -13,10 +12,11 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.unicode.icu.tool.cldrtoicu.regex.NamedFunction;
+
 import com.google.common.base.Ascii;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableMap;
-import org.unicode.icu.tool.cldrtoicu.regex.NamedFunction;
 
 /**
  * The named functions used by the {@code RegexTransformer} for {@code ldml2icu_supplemental.txt}.
@@ -46,7 +46,7 @@ final class IcuFunctions {
             return hiBits + " " + loBits;
         });
 
-    // TODO(dbeaumont): Improve this documentation (e.g. why is this being done, give examples?).
+    // TODO: Improve this documentation (e.g. why is this being done, give examples?).
     /**
      * Inserts '%' into numberingSystems descriptions.
      *

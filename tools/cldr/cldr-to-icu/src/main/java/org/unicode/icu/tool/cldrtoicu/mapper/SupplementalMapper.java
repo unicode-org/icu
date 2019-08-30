@@ -12,16 +12,15 @@ import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrValue;
-
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.SetMultimap;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
+
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.SetMultimap;
 
 /**
  * Generate supplemental {@link IcuData} by transforming {@link CldrDataType#SUPPLEMENTAL
