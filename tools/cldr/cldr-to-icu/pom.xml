@@ -79,6 +79,7 @@
     </repositories>
 
     <dependencies>
+        <!-- Local dependencies (see lib/README.txt). -->
         <dependency>
             <groupId>org.unicode.cldr</groupId>
             <artifactId>cldr-api</artifactId>
@@ -89,16 +90,31 @@
             <artifactId>icu-utilities</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+
+        <!-- ICU4J - which should be kept as up-to-date as possible. -->
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
-            <version>65.1</version>
+            <version>64.2</version>
         </dependency>
+
+        <!-- Useful common libraries. Note that some of the code in the CLDR library is also
+             built against a version of Guava that might not be as recent as this, so they
+             be kept approximately in sync for good measure. -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>27.1-jre</version>
         </dependency>
+
+        <!-- Ant: Only used for running the conversion tool, not compiling it. -->
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.10.6</version>
+        </dependency>
+
+        <!-- Testing only dependencies. -->
         <dependency>
             <groupId>com.google.truth</groupId>
             <artifactId>truth</artifactId>
@@ -110,11 +126,6 @@
             <artifactId>truth-java8-extension</artifactId>
             <version>1.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.10.6</version>
         </dependency>
     </dependencies>
 </project>
