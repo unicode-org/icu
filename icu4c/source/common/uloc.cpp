@@ -1457,22 +1457,19 @@ static const UEnumeration gKeywordsEnum = {
 U_CAPI UEnumeration* U_EXPORT2
 uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCode* status)
 {
-    LocalPointer<UKeywordsContext> myContext;
-    LocalPointer<UEnumeration> result;
+    LocalMemory<UKeywordsContext> myContext;
+    LocalMemory<UEnumeration> result;
 
     if (U_FAILURE(*status)) {
         return nullptr;
     }
-    result.adoptInsteadAndCheckErrorCode(static_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration))), *status);
-    if (U_FAILURE(*status)) {
+    myContext.adoptInstead(static_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext))));
+    result.adoptInstead(static_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration))));
+    if (myContext.isNull() || result.isNull()) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
     uprv_memcpy(result.getAlias(), &gKeywordsEnum, sizeof(UEnumeration));
-    
-    myContext.adoptInsteadAndCheckErrorCode(static_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext))), *status);
-    if (U_FAILURE(*status)) {
-        return nullptr;
-    }
     myContext->keywords = static_cast<char *>(uprv_malloc(keywordListSize+1));
     if (myContext->keywords == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
