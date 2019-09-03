@@ -42,7 +42,7 @@ There are three fairly distinct classes of use of UText. These are
     simple pattern. Only a very few UText APIs and only a few lines of code are
     required.
 
-2.  **Accessing the underlying text. **UText provides APIs for iterating over
+2.  **Accessing the underlying text.** UText provides APIs for iterating over
     the text in various ways, and for fetching individual code points from the
     text. These functions will probably be used primarily from within ICU, in
     the implementation of services that can accept input in the form of a UText.
@@ -94,28 +94,28 @@ of words in a nul-terminated UTF-8 string. The use of UText only adds two lines
 of code over what a similar function operating on normal UTF-16 strings would
 require.
 
-#include "unicode/utypes.h" #include "unicode/ubrk.h" #include "unicode/utext.h"
+    #include "unicode/utypes.h" #include "unicode/ubrk.h" #include "unicode/utext.h"
 
-int countWords(const char \*utf8String) {
+    int countWords(const char *utf8String) {
 
-UText \*ut = NULL;
-UBreakIterator \*bi = NULL;
-int wordCount = 0;
-UErrorCode status = U_ZERO_ERROR;
-ut = utext_openUTF8(ut, utf8String, -1, &status);
-bi = ubrk_open(UBRK_WORD, "en_us", NULL, 0, &status);
-ubrk_setUText(bi, ut, &status);
-while (ubrk_next(bi) != UBRK_DONE) {
-if (ubrk_getRuleStatus(bi) != UBRK_WORD_NONE) {
-/\* Count only words and numbers, not spaces or punctuation \*/
-wordCount++;
-}
-}
-utext_close(ut);
-ubrk_close(bi);
-assert(U_SUCCESS(status));
-return wordCount;
-}
+        UText *ut = NULL;
+        UBreakIterator *bi = NULL;
+        int wordCount = 0;
+        UErrorCode status = U_ZERO_ERROR;
+        ut = utext_openUTF8(ut, utf8String, -1, &status);
+        bi = ubrk_open(UBRK_WORD, "en_us", NULL, 0, &status);
+        ubrk_setUText(bi, ut, &status);
+        while (ubrk_next(bi) != UBRK_DONE) {
+            if (ubrk_getRuleStatus(bi) != UBRK_WORD_NONE) {
+                /* Count only words and numbers, not spaces or punctuation */
+                wordCount++;
+            }
+        }
+        utext_close(ut);
+        ubrk_close(bi);
+        assert(U_SUCCESS(status));
+        return wordCount;
+    }
 
 ## UText API Functions
 
@@ -129,32 +129,14 @@ existing text, then passing the UText to ICU functions for processing. For this
 kind of usage, all that is needed is the appropriate utext_open and close
 functions.
 
-functiondescription
-
-uext_openUChars()
-
-Open a UText over a standard ICU (UChar \*) string. The string consists of a
-UTF-16 array in memory, either nul terminated or with an explicit length.
-
-utext_openUnicodeString()
-
-Open a UText over an instance of an ICU C++ UnicodeString.
-
-Utext_
-openConstUnicodeString()
-
-Open a UText over a read-only UnicodeString. Disallows UText APIs that modify
-the text.
-
-utext_openReplaceable()
-
-Open a UText over an instance of an ICU C++ Replaceable.
-
-utext_openUTF8()
-
-Open a UText over a UTF-8 encoded C string. May be either Nul terminated or have
-an explicit length.utext_close()Close an open UText. Frees any allocated memory;
-required to prevent memory leaks.
+| function | description |
+|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| uext_openUChars() | Open a UText over a standard ICU (UChar *) string. The string consists of a UTF-16 array in memory, either nul terminated or with an explicit length. |
+| utext_openUnicodeString() | Open a UText over an instance of an ICU C++ UnicodeString. |
+| Utext_openConstUnicodeString() | Open a UText over a read-only UnicodeString. Disallows UText APIs that modify the text. |
+| utext_openReplaceable() | Open a UText over an instance of an ICU C++ Replaceable. |
+| utext_openUTF8() | Open a UText over a UTF-8 encoded C string. May be either Nul terminated or have an explicit length. |
+| utext_close() | Close an open UText. Frees any allocated memory; required to prevent memory leaks. |
 
 Here are some suggestions and techniques for efficient use of UText.
 
@@ -177,8 +159,8 @@ multithreaded, multiprocessor environments.
 
 Here is code for stack-allocating a UText:
 
-UText mytext = UTEXT_INITIALIZER;
-utext_openUChars(&myText, ...
+    UText mytext = UTEXT_INITIALIZER;
+    utext_openUChars(&myText, ...
 
 The first parameter to all utext_open functions is a pointer to a UText. If it
 is non-null, the supplied UText will be used; if it is null, a new UText will be
@@ -191,7 +173,7 @@ uninitialized instance will fail to open.
 
 Here is code for creating a heap allocated UText:
 
-UText \*mytext = utext_openUChars(NULL, ...
+    UText *mytext = utext_openUChars(NULL, ...
 
 This is slightly smaller and more convenient to write than the stack allocated
 code, and there is no reason not to use heap allocated UText objects in the vast
@@ -208,16 +190,20 @@ wrapping each in a UText and passing it off to another function. On the first
 time through the loop the utext open function will heap allocate a UText. On
 each subsequent iterations the existing UText will be reused.
 
-#include "unicode/utypes.h" #include "unicode/utext.h"void f(char \*\*strings,
-int numStrings) { UText \*ut = NULL; UErrorCode status; int i; for (i=0;
-i<numStrings; i++) {
-status = U_ZERO_ERROR;
-ut = utext_openUTF8(ut, strings\[i\], -1, &status);
-assert(U_SUCCESS(status));
-do_something(ut);
-}
-utext_close(ut);
-}
+    #include "unicode/utypes.h" 
+    #include "unicode/utext.h"
+    void f(char **strings, int numStrings) { 
+        UText *ut = NULL; 
+        UErrorCode status; 
+        int i; 
+        for (i=0; i<numStrings; i++) {
+            status = U_ZERO_ERROR;
+            ut = utext_openUTF8(ut, strings[i], -1, &status);
+            assert(U_SUCCESS(status));
+            do_something(ut);
+        }
+        utext_close(ut);
+    }
 
 #### close
 
@@ -261,33 +247,33 @@ also use them if the need arises.
 
 For more detailed descriptions of each, see the API reference.
 
-FunctionDescription
-utext_nativeLengthGet the length of the text string in terms of the underlying
-native storage – bytes for UTF-8, for exampleutext_isLengthExpensiveIndicate
-whether determining the length of the string would require scanning the
-string.utext_char32AtGet the code point at the specified
-index.utext_current32Get the code point at the current iteration position. Does
-not advance the position.utext_next32Get the next code point, iterating
-forwards.utext_previous32Get the previous code point, iterating
-backwards.utext_next32FromBegin a forwards iteration at a specified
-index.utext_previous32FromBegin a reverse iteration at a specified
-index.utext_getNativeIndexGet the current iteration
-index.utext_setNativeIndexSet the iteration index.utext_moveIndex32Move the
-current index forwards or backwards by the specified number of code points.
-utext_extractRetrieve a range of text, placing it into a UTF-16
-buffer.UTEXT_NEXT32inline (high performance) version of
-utext_next32UTEXT_PREVIOUS32inline (high performance) version of
-utext_previous32
+| Function | Description |
+|-------------------------|------------------------------------------------------------------------------------------------------------|
+| utext_nativeLength | Get the length of the text string in terms of the underlying native storage – bytes for UTF-8, for example |
+| utext_isLengthExpensive | Indicate whether determining the length of the string would require scanning the string. |
+| utext_char32At | Get the code point at the specified index. |
+| utext_current32 | Get the code point at the current iteration position. Does not advance the position. |
+| utext_next32 | Get the next code point, iterating forwards. |
+| utext_previous32 | Get the previous code point, iterating backwards. |
+| utext_next32From | Begin a forwards iteration at a specified index. |
+| utext_previous32From | Begin a reverse iteration at a specified index. |
+| utext_getNativeIndex | Get the current iteration index. |
+| utext_setNativeIndex | Set the iteration index. |
+| utext_moveIndex32 | Move the current index forwards or backwards by the specified number of code points. |
+| utext_extract | Retrieve a range of text, placing it into a UTF-16 buffer. |
+| UTEXT_NEXT32 | inline (high performance) version of utext_next32 |
+| UTEXT_PREVIOUS32 | inline (high performance) version of utext_previous32 |
 
 ## Modifying the Text
 
 UText provides API for modifying or editing the text.
 
-FunctionDescriptionutext_replace()Replace a range of the original text with a
-replacement string.utext_copy()Copy or Move a range of the text to a new
-position.utext_isWritable()Test whether a UText supports writing
-operations.utext_hasMetaData()Test whether the text includes metadata. See class
-Replaceable for more information on meta data..
+| Function | Description |
+|---------------------|----------------------------------------------------------------------------------------------------|
+| utext_replace() | Replace a range of the original text with a replacement string. |
+| utext_copy() | Copy or Move a range of the text to a new position. |
+| utext_isWritable() | Test whether a UText supports writing operations. |
+| utext_hasMetaData() | Test whether the text includes metadata. See class Replaceable for more information on meta data.. |
 
 Certain conventions must be followed when modifying text using these functions:
 
@@ -306,10 +292,10 @@ Certain conventions must be followed when modifying text using these functions:
 
 UText instances may be cloned. The clone function,
 
-uUText \* utext_clone(UText \*dest,
-const UText \*src,
-UBool deep,
-UErrorCode \*status)
+    uUText * utext_clone(UText *dest,
+        const UText *src,
+        UBool deep,
+        UErrorCode *status)
 
 behaves very much like a UText open functions, with the source of the text being
 another UText rather than some other form of a string.
@@ -361,16 +347,17 @@ possible.
 
 Here is the list of text provider functions.
 
-FunctionDescriptionUTextAccessSet up the Text Chunk associated with this UText
-so that it includes a requested index position.UTextNativeLengthReturn the full
-length of the text.UTextCloneClone the UText. UTextExtractExtract a range of
-text into a caller-supplied bufferUTextReplaceReplace a range of text with a
-caller-supplied replacement. May expand or shrink the overall text.UTextCopyMove
-or copy a range of text to a new position.UTextMapOffsetToNativeWithin the
-current text chunk, translate a UTF-16 buffer offset to an absolute native
-index. UTextMapNativeIndexToUTF16Translate an absolute native index to a UTF-16
-buffer offset within the current text.UTextCloseProvider specific close. Free
-storage as required.
+| Function | Description |
+|----------------------------|----------------------------------------------------------------------------------------------------|
+| UTextAccess | Set up the Text Chunk associated with this UText so that it includes a requested index position. |
+| UTextNativeLength | Return the full length of the text. |
+| UTextClone | Clone the UText. |
+| UTextExtract | Extract a range of text into a caller-supplied buffer |
+| UTextReplace | Replace a range of text with a caller-supplied replacement. May expand or shrink the overall text. |
+| UTextCopy | Move or copy a range of text to a new position. |
+| UTextMapOffsetToNative | Within the current text chunk, translate a UTF-16 buffer offset to an absolute native index. |
+| UTextMapNativeIndexToUTF16 | Translate an absolute native index to a UTF-16 buffer offset within the current text. |
+| UTextClose | Provider specific close. Free storage as required. |
 
 Not every provider type requires all of the functions. If the text type is
 read-only, no implementation for Replace or Copy is required. If the text is in
