@@ -63,23 +63,23 @@ macros in `unicode/utf16.h`. The macros handle many cases inline, but call
 internal functions for complicated parts of the UTF-8 encoding form. For
 example, the following code snippet counts white space characters in a string:
 
-`#include "unicode/utypes.h"`
-`#include "unicode/stringpiece.h"`
-`#include "unicode/utf8.h"`
-`#include "unicode/uchar.h"`
-`int32_t countWhiteSpace(StringPiece sp) {`
-` const char *s=sp.data();`
-` int32_t length=sp.length();`
-` int32_t count=0;`
-` for(int32_t i=0; i<length;) {`
-` UChar32 c;`
-` U8_NEXT(s, i, length, c);`
-` if(u_isUWhiteSpace(c)) {`
-` ++count;`
-` }`
-` }`
-` return count;`
-`}`
+    #include "unicode/utypes.h"
+    #include "unicode/stringpiece.h"
+    #include "unicode/utf8.h"
+    #include "unicode/uchar.h"
+    int32_t countWhiteSpace(StringPiece sp) {
+     const char *s=sp.data();
+     int32_t length=sp.length();
+     int32_t count=0;
+     for(int32_t i=0; i<length;) {
+     UChar32 c;
+     U8_NEXT(s, i, length, c);
+     if(u_isUWhiteSpace(c)) {
+     ++count;
+     }
+     }
+     return count;
+    }
 
 ## Dedicated UTF-8 APIs
 
