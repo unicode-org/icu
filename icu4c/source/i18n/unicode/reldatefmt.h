@@ -169,13 +169,13 @@ typedef enum UDateAbsoluteUnit {
      */
     UDAT_ABSOLUTE_NOW,
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Quarter
-     * @draft ICU 63
+     * @stable ICU 63
      */
     UDAT_ABSOLUTE_QUARTER,
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Hour
      * @draft ICU 65

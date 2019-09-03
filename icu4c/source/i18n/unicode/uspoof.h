@@ -473,7 +473,6 @@ typedef enum USpoofChecks {
      */
     USPOOF_MIXED_NUMBERS            = 128,
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Check that an identifier does not have a combining character following a character in which that
      * combining character would be hidden; for example 'i' followed by a U+0307 combining dot.
@@ -491,10 +490,9 @@ typedef enum USpoofChecks {
      *
      * This list and the number of combing characters considered by this check may grow over time.
      *
-     * @draft ICU 62
+     * @stable ICU 62
      */
     USPOOF_HIDDEN_OVERLAY            = 256,
-#endif  /* U_HIDE_DRAFT_API */
 
    /**
      * Enable all spoof checks.

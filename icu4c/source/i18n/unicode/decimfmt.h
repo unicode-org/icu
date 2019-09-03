@@ -1334,7 +1334,6 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     virtual void setMultiplier(int32_t newValue);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the power of ten by which number should be multiplied before formatting, which
      * can be combined with setMultiplier() to multiply by any arbitrary decimal value.
@@ -1345,7 +1344,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * This method is analogous to UNUM_SCALE in getAttribute.
      *
      * @return    the current value of the power-of-ten multiplier.
-     * @draft ICU 62
+     * @stable ICU 62
      */
     int32_t getMultiplierScale(void) const;
 
@@ -1366,10 +1365,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * This method is analogous to UNUM_SCALE in setAttribute.
      *
      * @param newValue    the new value of the power-of-ten multiplier.
-     * @draft ICU 62
+     * @stable ICU 62
      */
     void setMultiplierScale(int32_t newValue);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Get the rounding increment.
