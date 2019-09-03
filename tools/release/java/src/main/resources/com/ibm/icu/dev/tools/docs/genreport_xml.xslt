@@ -29,7 +29,7 @@
 
   <xsl:template match="/">
     <xsl:comment>
-      Copyright (C)  <xsl:value-of select="$ourYear" />: Unicode, Inc. and others.
+      Copyright © <xsl:value-of select="$ourYear" />: Unicode, Inc. and others.
       License &amp; terms of use: http://www.unicode.org/copyright.html
     </xsl:comment>
     <changeReport>

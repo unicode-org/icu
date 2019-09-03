@@ -134,3 +134,11 @@ matrix:
     - name: "lint"
       script:
           - perl tools/scripts/cpysearch/cpyscan.pl
+
+    - name: "j: icu4c release tools"
+      language: "java"
+      script:
+        - mvn -f tools/release/java/pom.xml package dependency:analyze
+      cache:
+        directories:
+        - $HOME/.m2

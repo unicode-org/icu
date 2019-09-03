@@ -144,11 +144,11 @@ public class StableAPI {
         Set<JoinedFunction> full = new TreeSet<JoinedFunction>();
 
         System.err.println("Reading C++...");
-        Set<JoinedFunction> setCpp = this.getFullList(dumpCppXsltStream, CPPXSLT);
+        Set<JoinedFunction> setCpp = this.getFullList(dumpCppXsltStream, dumpCppXslt.getName());
         full.addAll(setCpp);
         System.out.println("read "+setCpp.size() +" C++.  Reading C:");
 
-        Set<JoinedFunction> setC = this.getFullList(dumpCXsltStream, CXSLT);
+        Set<JoinedFunction> setC = this.getFullList(dumpCXsltStream, dumpCXslt.getName());
         full.addAll(setC);
 
         System.out.println("read "+setC.size() +" C. Setting node:");
@@ -218,7 +218,8 @@ public class StableAPI {
     	InputStream stream = null;
     	if(argFile != null) {
     		try {
-	    		stream = new FileInputStream(argFile);
+                stream = new FileInputStream(argFile);
+                System.out.println("Loaded file " + argFile.getName());
 	    	} catch (IOException ioe) {
 	    		throw new RuntimeException("Error: Could not load " + argName +" " + argFile.getPath() + " - " + ioe.toString(), ioe);
 	    	}
@@ -519,7 +520,8 @@ public class StableAPI {
                                               "[ ]*,", ", ",                         // No spaces preceding commas.
                                               "[ ]*\\*[ ]*", "* ",                   // No spaces preceding '*'.
                                               "[ ]*=[ ]*0[ ]*$", "=0 ",              // No spaces in " = 0".
-                                              "[ ]{2,}", " ",                        // Multiple spaces collapse to single.
+                                              "[ ]{2,}", " ",   
+                                              "\n", " "                     // Multiple spaces collapse to single.
             						};
 
         /**
@@ -529,7 +531,9 @@ public class StableAPI {
             "[ ]*=[ ]*0[ ]*$", "",      // remove pure virtual - TODO: notify about this difference, separately
             "[ ]*U_NOEXCEPT", "",       // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is retroactive)
             "[ ]*U_OVERRIDE", "",       // remove U_OVERRIDE
-            "\\s+$", ""                 // remove trailing spaces.
+            "^([^\\* ]+)\\*(.*)::(clone|safeClone|cloneAsThawed|freeze|createBufferClone)\\((.*)", "void*$2::$3($4",
+            "\\s+$", "",                 // remove trailing spaces.
+            "^U_NAMESPACE_END ", "" // Bug in processing of uspoof.h
         };
 
         /**
