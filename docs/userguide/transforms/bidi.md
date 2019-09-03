@@ -27,8 +27,14 @@ There are over 300 million people who depend on bidirectional scripts, including
 Farsi and Urdu which share the same script as Arabic, but have additional
 characters.
 
-LanguageNumber of CountriesArabic18 Farsi1 (Iran) Urdu2 (India, Pakistan)Hebrew1
-(Israel)YiddishIsrael, North America, South America, Russia, Europe
+| Language | Number of Countries |
+|----------|------------------------------------------------------|
+| Arabic | 18 |
+| Farsi | 1 (Iran) |
+| Urdu | 2 (India, Pakistan) |
+| Hebrew | 1 (Israel) |
+| Yiddish | Israel, North America, South America, Russia, Europe |
+
 
 ## Logical Order versus Visual Order
 
@@ -45,13 +51,13 @@ Consider the following example, where Arabic or Hebrew letters are represented
 by uppercase English letters and English text is represented by lowercase
 letters:
 
-english CIBARA text
+    english CIBARA text
 
 The English letter h is visually followed by the Arabic letter C, but logically
 h is followed by the rightmost letter A. The next letter, in logical order, will
 be R. In other words, the logical and storage order of the same text would be:
 
-english ARABIC text
+    english ARABIC text
 
 Text is stored and processed in logical order to make processing feasible: A
 contiguous substring of logical-order text (e.g., from a copy&paste operation)
