@@ -352,9 +352,9 @@ it includes (utf.h is in turn included with utypes.h).
 
 Macros for 16-bit Unicode strings have a U16_ prefix. For example:
 
-U16_NEXT(s, i, length, c)
-U16_PREV(s, start, i, c)
-U16_APPEND(s, i, length, c, isError)
+    U16_NEXT(s, i, length, c)
+    U16_PREV(s, start, i, c)
+    U16_APPEND(s, i, length, c, isError)
 
 There are also macros with a U_ prefix for code point range checks (e.g., test
 for non-character code point), and U8_ macros for 8-bit (UTF-8) strings. See the
@@ -378,25 +378,25 @@ C Unicode String Literals
 There is a pair of macros that together enable users to instantiate a Unicode
 string in C — a UChar \[\] array — from a C string literal:
 
-/\*
-\* In C, we need two macros: one to declare the UChar\[\] array, and
-\* one to populate it; the second one is a noop on platforms where
-\* wchar_t is compatible with UChar and ASCII-based.
-\* The length of the string literal must be counted for both macros.
-\*/
-/\* declare the invString array for the string \*/
-U_STRING_DECL(invString, "such characters are safe 123 %-.", 32);
-/\* populate it with the characters \*/
-U_STRING_INIT(invString, "such characters are safe 123 %-.", 32);
+    /*
+    * In C, we need two macros: one to declare the UChar[] array, and
+    * one to populate it; the second one is a noop on platforms where
+    * wchar_t is compatible with UChar and ASCII-based.
+    * The length of the string literal must be counted for both macros.
+    */
+    /* declare the invString array for the string */
+    U_STRING_DECL(invString, "such characters are safe 123 %-.", 32);
+    /* populate it with the characters */
+    U_STRING_INIT(invString, "such characters are safe 123 %-.", 32);
 
 With invariant characters, it is also possible to efficiently convert char \*
-strings to and from UChar \* strings:
+strings to and from UChar \ strings:
 
-static const char \*cs1="such characters are safe 123 %-.";
-static UChar us1\[40\];
-static char cs2\[40\];
-u_charsToUChars(cs1, us1, 33); /\* include the terminating NUL \*/
-u_UCharsToChars(us1, cs2, 33);
+    static const char *cs1="such characters are safe 123 %-.";
+    static UChar us1[40];
+    static char cs2[40];
+    u_charsToUChars(cs1, us1, 33); /* include the terminating NUL */
+    u_UCharsToChars(us1, cs2, 33);
 
 ## Testing for well-formed UTF-16 strings
 
@@ -453,8 +453,8 @@ Like in C, there are macros that enable users to instantiate a UnicodeString
 from a C string literal. One macro requires the length of the string as in the C
 macros, the other one implies a strlen().
 
-UnicodeString s1=UNICODE_STRING("such characters are safe 123 %-.", 32);
-UnicodeString s1=UNICODE_STRING_SIMPLE("such characters are safe 123 %-.");
+    UnicodeString s1=UNICODE_STRING("such characters are safe 123 %-.", 32);
+    UnicodeString s1=UNICODE_STRING_SIMPLE("such characters are safe 123 %-.");
 
 It is possible to efficiently convert between invariant-character strings and
 UnicodeStrings by using constructor, setTo() or extract() overloads that take
