@@ -8,9 +8,11 @@ patterns or by building them programmatically.
 
 Here are a few examples of sets:
 
-Pattern Description \[a-z\] The lower case letters a through z \[abc123\] The
-six characters a,b,c,1,2 and 3 \[\\p{Letter}\] All characters with the Unicode
-General Category of Letter.
+| Pattern | Description |
+|--------------|-------------------------------------------------------------|
+| [a-z] | The lower case letters a through z |
+| [abc123] | The six characters a,b,c,1,2 and 3 |
+| [\p{Letter}] | All characters with the Unicode General Category of Letter. |
 
 String Values In addition to being a set of characters (of Unicode code points),
 a UnicodeSet may also contain string values. Conceptually, the UnicodeSet is
@@ -46,29 +48,28 @@ table shows the "Negative", which is a property that excludes all characters of
 a given kind. For example, \[:^Letter:\] matches all characters that are not
 \[:Letter:\].
 
-Positive Negative POSIX-style Syntax \[:type=value:\] \[:^type=value:\]
-Perl-style Syntax \\p{type=value} \\P{type=value}
+|  | Positive | Negative |
+|--------------------|----------------|-----------------|
+| POSIX-style Syntax | [:type=value:] | [:^type=value:] |
+| Perl-style Syntax | \p{type=value} | \P{type=value} |
 
 These following low-level lists or properties then can be freely combined with
 the normal set operations (union, inverse, difference, and intersection):
 
-Example ** Corresponding Method** Meaning A B \[\[:letter:\] \[:number:\]\]
-A.addAll(B) To union two sets A and B, simply concatenate them A & B
-\[\[:letter:\] & \[a-z\]\]
-A.retainAll(B) To intersect two sets A and B, use the '&' operator. A - B
-\[\[:letter:\] - \[a-z\]\] A.removeAll(B) To take the set-difference of two sets
-A and B, use the '-' operator. \[^A\] \[^a-z\] A.complement(B) To invert a set
-A, place a '^' immediately after the opening '\['.
-Note that the complement only affects code points, not string values. In any
-other location, the '^' does not have a special meaning.
+|  | Example | Corresponding Method | Meaning |
+|-------|-------------------------|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| A B | [[:letter:] [:number:]] | A.addAll(B) | To union two sets A and B, simply concatenate them |
+| A & B | [[:letter:] & [a-z]] | A.retainAll(B) | To intersect two sets A and B, use the '&' operator. |
+| A - B | [[:letter:] - [a-z]] | A. removeAll (B) | To take the set-difference of two sets  A and B, use the '-' operator. |
+| [^A] | [^a-z] | A. complement (B) | To invert a set A, place a '^' immediately after the opening '['.  Note that the complement only affects code points, not string values. In any other location, the '^' does not have a special meaning. |
 
 ### Precedence
 
 The binary operators of union, intersection, and set-difference have equal
 precedence and bind left-to-right. Thus the following are equivalent:
 
-*   \[\[:letter:\] - \[a-z\] \[:number:\] & \[\\u0100-\\u01FF\]\]
-*   \[\[\[\[\[:letter:\] - \[a-z\]\] \[:number:\]\] & \[\\u0100-\\u01FF\]\].
+*   [[:letter:] - [a-z] [:number:] & [\u0100-\u01FF]]
+*   [[[[[:letter:] - [a-z]] [:number:]] & [\u0100-\u01FF]].
 
 Another example is that the set \[\[ace\]\[bdf\] - \[abc\]\[def\]\] is **not**
 the empty set, but instead the set \[def\]. That is because the syntax
@@ -93,29 +94,25 @@ the set of uppercase letters except for 'A', enclose the 'A' in a set:
 
 ### Examples
 
-\[a\] The set containing 'a' \[a-z\] The set containing 'a' through 'z' and all
-letters in between, in Unicode order \[^a-z\] The set containing all characters
-but 'a' through 'z', that is, U+0000 through 'a'-1 and 'z'+1 through U+FFFF
-\[\[pat1\]\[pat2\]\] The union of sets specified by pat1 and pat2
-\[\[pat1\]&\[pat2\]\] The intersection of sets specified by pat1 and pat2
-\[\[pat1\]-\[pat2\]\] The asymmetric difference of sets specified by pat1 and
-pat2 \[:Lu:\] The set of characters belonging to the given Unicode category, as
-defined by Character.getType(); in this case, Unicode uppercase letters. The
-long form for this is \[:UppercaseLetter:\]. \[:L:\] The set of characters
-belonging to all Unicode categories starting with 'L', that is,
-\[\[:Lu:\]\[:Ll:\]\[:Lt:\]\[:Lm:\]\[:Lo:\]\]. The long form for this is
-\[:Letter:\].
+| [a] | The set containing 'a' |
+|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [a-z] | The set containing 'a' through 'z' and all letters in between, in Unicode order |
+| [^a-z] | The set containing all characters but 'a' through 'z', that is, U+0000 through 'a'-1 and 'z'+1 through U+FFFF |
+| [[pat1][pat2]] | The union of sets specified by pat1 and pat2 |
+| [[pat1]& [pat2]] | The intersection of sets specified by pat1 and pat2 |
+| [[pat1]- [pat2]] | The asymmetric difference of sets specified by pat1 and pat2 |
+| [:Lu:] | The set of characters belonging to the given Unicode category, as defined by  Character.getType(); in this case, Unicode uppercase letters. The long form for this is  [:UppercaseLetter:]. |
+| [:L:] | The set of characters belonging to all Unicode categories starting with 'L', that is,  [[:Lu:][:Ll:][:Lt:][:Lm:][:Lo:]]. The long form for this is  [:Letter:]. |
 
 ### String Values in Sets
 
 String values are enclosed in {curly brackets}.
 
-Set expression Description \[abc{def}\] A set containing four members, the
-single characters a, b and c, and the string “def” \[{abc}{def}\] A set
-containing two members, the string “abc” and the string “def”.
-\[{a}{b}{c}\]\[abc\] These two sets are equivalent. Each contains three items,
-the three individual characters a, b and c. A {string} containing a single
-character is equivalent to that same character specified in any other way.
+| Set expression | Description |
+|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [abc{def}] | A set containing four members, the single characters a, b and c, and the string “def” |
+| [{abc}{def}] | A set containing two members, the string “abc” and the string “def”. |
+| [{a}{b}{c}][abc] | These two sets are equivalent. Each contains three items, the three individual characters a, b and c. A {string} containing a single character is equivalent to that same character specified in any other way. |
 
 ### Character Quoting and Escaping in Unicode Set Patterns
 
@@ -136,11 +133,19 @@ BACKSLASH ESCAPES
 
 Outside of single quotes, certain backslashed characters have special meaning:
 
-\\uhhhh Exactly 4 hex digits; h in \[0-9A-Fa-f\] \\Uhhhhhhhh Exactly 8 hex
-digits \\xhh 1-2 hex digits \\ooo 1-3 octal digits; o in \[0-7\] \\a U+0007
-(BELL) \\b U+0008 (BACKSPACE) \\t U+0009 (HORIZONTAL TAB) \\n U+000A (LINE FEED)
-\\v U+000B (VERTICAL TAB) \\f U+000C (FORM FEED) \\r U+000D (CARRIAGE RETURN)
-\\\\ U+005C (BACKSLASH)
+| \uhhhh | Exactly 4 hex digits; h in [0-9A-Fa-f] |
+|------------|----------------------------------------|
+| \Uhhhhhhhh | Exactly 8 hex digits |
+| \xhh | 1-2 hex digits |
+| \ooo | 1-3 octal digits; o in [0-7] |
+| \a | U+0007 (BELL) |
+| \b | U+0008 (BACKSPACE) |
+| \t | U+0009 (HORIZONTAL TAB) |
+| \n | U+000A (LINE FEED) |
+| \v | U+000B (VERTICAL TAB) |
+| \f | U+000C (FORM FEED) |
+| \r | U+000D (CARRIAGE RETURN) |
+| \\ | U+005C (BACKSLASH) |
 
 Anything else following a backslash is mapped to itself, except in an
 environment where it is defined to have some special meaning. For example,
@@ -190,10 +195,11 @@ add (union) operations.
 
 The following property value variants are recognized:
 
-** Format** ** Description** ** Example** short omits the type (used to prevent
-ambiguity and only allowed with the Category and Script properties) Lu medium
-uses an abbreviated type and value gc=Lu long uses a full type and value
-General_Category=Uppercase_Letter
+| Format | Description | Example |
+|--------|-----------------------------------------------------------------------------------------------------|-----------------------------------|
+| short | omits the type (used to prevent ambiguity and only allowed with the Category and Script properties) | Lu |
+| medium | uses an abbreviated type and value | gc=Lu |
+| long | uses a full type and value | General_Category=Uppercase_Letter |
 
 If the type or value is omitted, then the equals sign is also omitted. The short
 style is only
@@ -219,42 +225,42 @@ Locale and then getting the UnicodeSet based on the generated pattern.
 
 **In C:**
 
-UErrorCode err = U_ZERO_ERROR;
-const int32_t capacity = 10;
-const char\* shortname = NULL;
-int32_t num, j;
-int32_t strLength =4;
-UChar32 c = 0x00003096 ;
-UScriptCode script\[10\] = {USCRIPT_INVALID_CODE};
-UScriptCode scriptcode = USCRIPT_INVALID_CODE;
-num = uscript_getCode("ja",script,capacity, &err);
-printf("%s %d \\n" ,"Number of script code associated are :", num);
-UnicodeString temp = UnicodeString("\[", 1, US_INV);
-UnicodeString pattern;
-for(j=0;j<num;j++){
-shortname = uscript_getShortName(script\[j\]);
-UnicodeString str(shortname,strLength,US_INV);
-temp.append("\[:");
-temp.append(str);
-temp.append(":\]+");
-}
-pattern = temp.remove(temp.length()-1,1);
-pattern.append("\]");
-UnicodeSet cnvSet(pattern, err);
-printf("%d\\n", cnvSet.size());
-printf("%d\\n", cnvSet.contains(c));
+    UErrorCode err = U_ZERO_ERROR;
+    const int32_t capacity = 10;
+    const char * shortname = NULL;
+    int32_t num, j;
+    int32_t strLength =4;
+    UChar32 c = 0x00003096 ;
+    UScriptCode script[10] = {USCRIPT_INVALID_CODE};
+    UScriptCode scriptcode = USCRIPT_INVALID_CODE;
+    num = uscript_getCode("ja",script,capacity, &err);
+    printf("%s %d \n" ,"Number of script code associated are :", num);
+    UnicodeString temp = UnicodeString("[", 1, US_INV);
+    UnicodeString pattern;
+    for(j=0;j<num;j++){
+        shortname = uscript_getShortName(script[j]);
+        UnicodeString str(shortname,strLength,US_INV);
+        temp.append("[:");
+        temp.append(str);
+        temp.append(":]+");
+    }
+    pattern = temp.remove(temp.length()-1,1);
+    pattern.append("]");
+    UnicodeSet cnvSet(pattern, err);
+    printf("%d\n", cnvSet.size());
+    printf("%d\n", cnvSet.contains(c));
 
 **In Java:**
 
-ULocale ul = new ULocale("ja");
-int script\[\] = UScript.getCode(ul);
-String str ="\[";
-for(int i=0;i<script.length;i++){
-str = str + "\[:"+UScript.getShortName(script\[i\])+":\]+";
-}
-String pattern =str.substring(0, (str.length()-1));
-pattern = pattern + "\]";
-System.out.println(pattern);
-UnicodeSet ucs = new UnicodeSet(pattern);
-System.out.println(ucs.size());
-System.out.println(ucs.contains(0x00003096));
+    ULocale ul = new ULocale("ja");
+    int script[] = UScript.getCode(ul);
+    String str ="[";
+    for(int i=0;i<script.length;i++){
+        str = str + "[:"+UScript.getShortName(script[i])+":]+";
+    }
+    String pattern =str.substring(0, (str.length()-1));
+    pattern = pattern + "]";
+    System.out.println(pattern);
+    UnicodeSet ucs = new UnicodeSet(pattern);
+    System.out.println(ucs.size());
+    System.out.println(ucs.contains(0x00003096));
