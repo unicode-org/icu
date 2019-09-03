@@ -141,6 +141,7 @@ typedef enum UTraceFunctionNumber {
      * Indicates that a resource bundle was opened.
      *
      * Provides one C-style string to UTraceData: file name.
+     * @draft ICU 65
      */
     UTRACE_UDATA_BUNDLE,
 
