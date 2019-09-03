@@ -10,11 +10,11 @@ A tool to generate a report of API status changes between two ICU4C releases.
 Requirements:
   - Everything needed to build ICU4C from a command line (UNIX) environment
   - Doxygen (for generating docs).
-     Doxygen 1.8.13 or newer is recommended for ICU API docs, 
+     Doxygen 1.8.13 or newer is recommended for ICU API docs,
      but an older Doxygen may work for the API Change Report.
-  - Java JDK 1.7+
+  - Java JDK 1.8+
   - Apache Ant
-  - Note: if you have trouble with null output, put xalan.jar and xercesImpl.jar from <http://xalan.apache.org/xalan-j/downloads.html#latest-release> into ./lib/
+  - Maven
 
 To use the utility:
  1. Put both old and new ICU source trees on your system
@@ -28,6 +28,9 @@ To use the utility:
            indicating the build location:
                         OLD_ICU_BUILD=/xsrl/E/icu-build-m48
                         NEW_ICU_BUILD=/xsrl/E/icu-build
- 4. from this directory, (tools/release/java/) run Make to build docs:
+ 4. from this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
             make
  5. This will create an 'APIChangeReport.html' file in this directory. Look it over, and then check it in to ${NEW_ICU}/APIChangeReport.html (parent of icu/source).
+
+Note: the ant build and makefile do not attempt to rebuild the jar. Run 'mvn package' separately if
+developing on the Java tool.

@@ -30,7 +30,7 @@ doctype-system="http://www.w3.org/TR/html4/loose.dtd"
   <xsl:template match="/">
     <html>
 	<xsl:comment>
-     Copyright (C) 2016 and later: Unicode, Inc. and others.
+     Copyright © <xsl:value-of select="$ourYear" />: Unicode, Inc. and others.
      License &amp; terms of use: http://www.unicode.org/copyright.html
 	</xsl:comment>
     <head>
@@ -52,7 +52,7 @@ doctype-system="http://www.w3.org/TR/html4/loose.dtd"
 	    	<li><a href="#promoted">Promoted to stable in <xsl:value-of select="$rightVer" /></a></li>
 	    	<li><a href="#added">Added in <xsl:value-of select="$rightVer" /></a></li>
 	    	<li><a href="#other">Other existing drafts in <xsl:value-of select="$rightVer" /></a></li>
-	    	<li><a href="#purevirtual">Signature Simplifications</a> <sup style='background-color: yellow; font-size: smallest;'>(new)</sup></li>
+	    	<li><a href="#simplifications">Signature Simplifications</a></li>
 	    </ul>
 	    <hr />
 	</div>
@@ -101,7 +101,7 @@ doctype-system="http://www.w3.org/TR/html4/loose.dtd"
     </div>
     <P/><a href="#_top">(jump back to top)</a><hr/>
 
-    <a name="purevirtual"></a>
+    <a name="simplifications"></a>
     <h2>Signature Simplifications</h2>
     <i>This section shows cases where the signature was "simplified" for the sake of comparison. The simplified form is in bold, followed by
     	all possible variations in "original" form.</i>
