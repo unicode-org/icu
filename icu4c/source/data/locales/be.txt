@@ -15,10 +15,11 @@ be{
     }
     ExemplarCharacters{"[а б в г д {дж} {дз} е ё ж з і й к л м н о п р с т у ў ф х ц ч ш ы ь э ю я]"}
     ExemplarCharactersIndex{"[А Б В Г Д Е Ж З І Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Ы Э Ю Я]"}
-    ExemplarCharactersNumbers{"[  \\- , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . « » ( ) \\[ \\] \\{ \\}]"}
+    ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . « » ( ) \\[ \\] \\{ \\}]"}
     MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             miscPatterns{
                 approximately{"≈{0}"}
@@ -40,72 +41,96 @@ be{
                         many{"0 тысяч"}
                         one{"0 тысяча"}
                         other{"0 тысячы"}
+                        two{"0 тыс'.'"}
+                        zero{"0 тыс'.'"}
                     }
                     10000{
                         few{"00 тысячы"}
                         many{"00 тысяч"}
                         one{"00 тысяча"}
                         other{"00 тысячы"}
+                        two{"00 тыс'.'"}
+                        zero{"00 тыс'.'"}
                     }
                     100000{
                         few{"000 тысячы"}
                         many{"000 тысяч"}
                         one{"000 тысяча"}
                         other{"000 тысячы"}
+                        two{"000 тыс'.'"}
+                        zero{"000 тыс'.'"}
                     }
                     1000000{
                         few{"0 мільёны"}
                         many{"0 мільёнаў"}
                         one{"0 мільён"}
                         other{"0 мільёна"}
+                        two{"0 млн"}
+                        zero{"0 млн"}
                     }
                     10000000{
                         few{"00 мільёны"}
                         many{"00 мільёнаў"}
                         one{"00 мільён"}
                         other{"00 мільёна"}
+                        two{"00 млн"}
+                        zero{"00 млн"}
                     }
                     100000000{
                         few{"000 мільёны"}
                         many{"000 мільёнаў"}
                         one{"000 мільён"}
                         other{"000 мільёна"}
+                        two{"000 млн"}
+                        zero{"000 млн"}
                     }
                     1000000000{
                         few{"0 мільярды"}
                         many{"0 мільярдаў"}
                         one{"0 мільярд"}
                         other{"0 мільярда"}
+                        two{"0 млрд"}
+                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 мільярды"}
                         many{"00 мільярдаў"}
                         one{"00 мільярд"}
                         other{"00 мільярда"}
+                        two{"00 млрд"}
+                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 мільярды"}
                         many{"000 мільярдаў"}
                         one{"000 мільярд"}
                         other{"000 мільярда"}
+                        two{"000 млрд"}
+                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 трыльёны"}
                         many{"0 трыльёнаў"}
                         one{"0 трыльён"}
                         other{"0 трыльёна"}
+                        two{"0 трлн"}
+                        zero{"0 трлн"}
                     }
                     10000000000000{
                         few{"00 трыльёны"}
                         many{"00 трыльёнаў"}
                         one{"00 трыльён"}
                         other{"00 трыльёна"}
+                        two{"00 трлн"}
+                        zero{"00 трлн"}
                     }
                     100000000000000{
                         few{"000 трыльёны"}
                         many{"000 трыльёнаў"}
                         one{"000 трыльён"}
                         other{"000 трыльёна"}
+                        two{"000 трлн"}
+                        zero{"000 трлн"}
                     }
                 }
             }
@@ -190,72 +215,96 @@ be{
                         many{"0 тыс'.'"}
                         one{"0 тыс'.'"}
                         other{"0 тыс'.'"}
+                        two{"0 тыс'.'"}
+                        zero{"0 тыс'.'"}
                     }
                     10000{
                         few{"00 тыс'.'"}
                         many{"00 тыс'.'"}
                         one{"00 тыс'.'"}
                         other{"00 тыс'.'"}
+                        two{"00 тыс'.'"}
+                        zero{"00 тыс'.'"}
                     }
                     100000{
                         few{"000 тыс'.'"}
                         many{"000 тыс'.'"}
                         one{"000 тыс'.'"}
                         other{"000 тыс'.'"}
+                        two{"000 тыс'.'"}
+                        zero{"000 тыс'.'"}
                     }
                     1000000{
                         few{"0 млн"}
                         many{"0 млн"}
                         one{"0 млн"}
                         other{"0 млн"}
+                        two{"0 млн"}
+                        zero{"0 млн"}
                     }
                     10000000{
                         few{"00 млн"}
                         many{"00 млн"}
                         one{"00 млн"}
                         other{"00 млн"}
+                        two{"00 млн"}
+                        zero{"00 млн"}
                     }
                     100000000{
                         few{"000 млн"}
                         many{"000 млн"}
                         one{"000 млн"}
                         other{"000 млн"}
+                        two{"000 млн"}
+                        zero{"000 млн"}
                     }
                     1000000000{
                         few{"0 млрд"}
                         many{"0 млрд"}
                         one{"0 млрд"}
                         other{"0 млрд"}
+                        two{"0 млрд"}
+                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 млрд"}
                         many{"00 млрд"}
                         one{"00 млрд"}
                         other{"00 млрд"}
+                        two{"00 млрд"}
+                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 млрд"}
                         many{"000 млрд"}
                         one{"000 млрд"}
                         other{"000 млрд"}
+                        two{"000 млрд"}
+                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 трлн"}
                         many{"0 трлн"}
                         one{"0 трлн"}
                         other{"0 трлн"}
+                        two{"0 трлн"}
+                        zero{"0 трлн"}
                     }
                     10000000000000{
                         few{"00 трлн"}
                         many{"00 трлн"}
                         one{"00 трлн"}
                         other{"00 трлн"}
+                        two{"00 трлн"}
+                        zero{"00 трлн"}
                     }
                     100000000000000{
                         few{"000 трлн"}
                         many{"000 трлн"}
                         one{"000 трлн"}
                         other{"000 трлн"}
+                        two{"000 трлн"}
+                        zero{"000 трлн"}
                     }
                 }
             }
@@ -286,8 +335,9 @@ be{
             }
         }
         minimumGroupingDigits{"2"}
+        native{"latn"}
     }
-    Version{"2.1.49.82"}
+    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -361,8 +411,8 @@ be{
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 H{"HH"}
-                Hm{"HH.mm"}
-                Hms{"HH.mm.ss"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
                 M{"L"}
                 MEd{"E, d.M"}
                 MMM{"LLL"}
@@ -372,8 +422,8 @@ be{
                 Md{"d.M"}
                 d{"d"}
                 h{"h a"}
-                hm{"h.mm a"}
-                hms{"h.mm.ss a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
                 yyyy{"y G"}
@@ -397,6 +447,44 @@ be{
                     h{"h:mm – h:mm B"}
                     m{"h:mm – h:mm B"}
                 }
+                Gy{
+                    G{"y G – y G"}
+                    y{"y – y G"}
+                }
+                GyM{
+                    G{"M.y GGGGG – M.y GGGGG"}
+                    M{"M.y – M.y GGGGG"}
+                    y{"M.y – M.y GGGGG"}
+                }
+                GyMEd{
+                    G{"E, d.M.y GGGGG – E, d.M.y GGGGG"}
+                    M{"E, d.M.y – E, d.M.y GGGGG"}
+                    d{"E, d.M.y – E, d.M.y GGGGG"}
+                    y{"E, d.M.y – E, d.M.y GGGGG"}
+                }
+                GyMMM{
+                    G{"MMM y G – MMM y G"}
+                    M{"MMM – MMM y G"}
+                    y{"MMM y – MMM y G"}
+                }
+                GyMMMEd{
+                    G{"E, d MMM y G – E, d MMM y G"}
+                    M{"E, d MMM – E, d MMM y G"}
+                    d{"E, d MMM – E, d MMM y G"}
+                    y{"E, d MMM y – E, d MMM y G"}
+                }
+                GyMMMd{
+                    G{"d MMM y G – d MMM y G"}
+                    M{"d MMM – d MMM y G"}
+                    d{"d – d MMM y G"}
+                    y{"d MMM y – d MMM y G"}
+                }
+                GyMd{
+                    G{"d.M.y GGGGG – d.M.y GGGGG"}
+                    M{"d.M.y GGGGG – d.M.y GGGGG"}
+                    d{"d.M.y – d.M.y GGGGG"}
+                    y{"d.M.y GGGGG – d.M.y GGGGG"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -409,11 +497,11 @@ be{
                 }
                 MMMEd{
                     M{"E, d MMM – E, d MMM"}
-                    d{"E, d – E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
-                    d{"d–d MMM"}
+                    d{"d – d MMM"}
                 }
                 Md{
                     M{"d.M – d.M"}
@@ -422,18 +510,18 @@ be{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 y{
-                    y{"y–y G"}
+                    y{"y – y G"}
                 }
                 yM{
-                    M{"M.y – M.y G"}
-                    y{"M.y – M.y G"}
+                    M{"M.y – M.y GGGGG"}
+                    y{"M.y – M.y GGGGG"}
                 }
                 yMEd{
-                    M{"E, d.M.y – E, d.M.y G"}
-                    d{"E, d.M.y – E, d.M.y G"}
-                    y{"E, d.M.y – E, d.M.y G"}
+                    M{"E, d.M.y – E, d.M.y GGGGG"}
+                    d{"E, d.M.y – E, d.M.y GGGGG"}
+                    y{"E, d.M.y – E, d.M.y GGGGG"}
                 }
                 yMMM{
                     M{"LLL–LLL y G"}
@@ -441,7 +529,7 @@ be{
                 }
                 yMMMEd{
                     M{"E, d MMM – E, d MMM y G"}
-                    d{"E, d – E, d MMM y G"}
+                    d{"E, d MMM – E, d MMM y G"}
                     y{"E, d MMM y – E, d MMM y G"}
                 }
                 yMMMM{
@@ -450,13 +538,13 @@ be{
                 }
                 yMMMd{
                     M{"d MMM – d MMM y G"}
-                    d{"d–d MMM y G"}
+                    d{"d – d MMM y G"}
                     y{"d MMM y – d MMM y G"}
                 }
                 yMd{
-                    M{"d.M.y – d.M.y G"}
-                    d{"d.M.y – d.M.y G"}
-                    y{"d.M.y – d.M.y G"}
+                    M{"d.M.y – d.M.y GGGGG"}
+                    d{"d.M.y – d.M.y GGGGG"}
+                    y{"d.M.y – d.M.y GGGGG"}
                 }
             }
         }
@@ -646,6 +734,10 @@ be{
             }
             eras{
                 abbreviated{
+                    "да н.э.",
+                    "н.э.",
+                }
+                abbreviated%variant{
                     "да н.э.",
                     "н.э.",
                 }
@@ -938,13 +1030,13 @@ be{
         activities{"Віды дзейнасці"}
         african_scripts{"Афрыканскія пісьмы"}
         american_scripts{"Амерыканскія пісьмы"}
-        animal{"жывёліна"}
+        animal{"Жывёлы"}
         animals_nature{"Жывёлы і прырода"}
         arrows{"Стрэлкі"}
-        body{"цела"}
+        body{"Цела"}
         box_drawing{"Рысаванне квадратаў"}
         braille{"Брайль"}
-        building{"будынак"}
+        building{"Будынак"}
         bullets_stars{"Маркеры/Зоркі"}
         consonantal_jamo{"Кансанантнае чамо"}
         currency_symbols{"Знакі валют"}
@@ -953,12 +1045,12 @@ be{
         dingbats{"Сімвалы-піктаграмы"}
         divination_symbols{"Гадальныя сімвалы"}
         downwards_arrows{"Стрэлкі ўніз"}
-        downwards_upwards_arrows{"Стрэлкі ўверх"}
+        downwards_upwards_arrows{"Стрэлкі ўніз і ўверх"}
         east_asian_scripts{"Усходнеазіяцкія пісьмы"}
         emoji{"Эмодзі"}
         european_scripts{"Еўрапейскія пісьмы"}
-        female{"жанчына"}
-        flag{"сцяг"}
+        female{"Жанчына"}
+        flag{"Сцяг"}
         flags{"Сцягі"}
         food_drink{"Ежа і напоі"}
         format{"Фарматаванне"}
@@ -971,54 +1063,54 @@ be{
         hanja{"Ханча"}
         hanzi_simplified{"Ханьцзы"}
         hanzi_traditional{"Ханьцзы (традыцыйнае)"}
-        heart{"сэрца"}
+        heart{"Сэрца"}
         historic_scripts{"Гістарычныя пісьмы"}
         ideographic_desc_characters{"Ідэаграфічныя апісальныя сімвалы"}
         japanese_kana{"Японская кана"}
         kanbun{"Камбун"}
         kanji{"Кандзі"}
-        keycap{"клавіша"}
+        keycap{"Клавіша"}
         leftwards_arrows{"Стрэлкі ўлева"}
         leftwards_rightwards_arrows{"Стрэлкі ўлева і ўправа"}
-        letterlike_symbols{"Сімвалы з падабенствам літар"}
+        letterlike_symbols{"Літарападобныя сімвалы"}
         limited_use{"Абмежаванае выкарыстанне"}
-        male{"мужчына"}
+        male{"Мужчына"}
         math_symbols{"Матэматычныя сімвалы"}
         middle_eastern_scripts{"Блізкаўсходнія пісьмы"}
         miscellaneous{"Рознае"}
         modern_scripts{"Сучасныя пісьмы"}
         modifier{"Знак-мадыфікатар"}
         musical_symbols{"Музычныя сімвалы"}
-        nature{"прырода"}
+        nature{"Прырода"}
         nonspacing{"Знак без шырыні"}
         numbers{"Лікі"}
         objects{"Аб’екты"}
         other{"Іншае"}
         paired{"Парныя"}
-        person{"чалавек"}
-        phonetic_alphabet{"Знак з шырынёй"}
+        person{"Чалавек"}
+        phonetic_alphabet{"Фанетычны алфавіт"}
         pictographs{"Піктаграмы"}
-        place{"месца"}
-        plant{"расліна"}
+        place{"Месца"}
+        plant{"Расліна"}
         punctuation{"Пунктуацыя"}
         rightwards_arrows{"Стрэлкі ўправа"}
         sign_standard_symbols{"Знакі і сімвалы"}
         small_form_variant{"Варыянты малых формаў"}
-        smiley{"смайлік"}
+        smiley{"Смайлікі"}
         smileys_people{"Смайлікі і людзі"}
         south_asian_scripts{"Усходнеазіяцкія пісьмы"}
         southeast_asian_scripts{"Паўднёваўсходнеазіяцкія пісьмы"}
-        spacing{"Знакі з шырынёй"}
-        sport{"спорт"}
+        spacing{"Інтэрвалы"}
+        sport{"Спорт"}
         symbols{"Спецыяльныя сімвалы"}
         technical_symbols{"Тэхнічныя сімвалы"}
         tone_marks{"Знакі тонаў"}
-        travel{"падарожжа"}
+        travel{"Падарожжа"}
         travel_places{"Падарожжы і месцы"}
         upwards_arrows{"Стрэлкі ўверх"}
         variant_forms{"Варыянтныя формы"}
         vocalic_jamo{"Вакалічнае чамо"}
-        weather{"надвор’е"}
+        weather{"Надвор’е"}
         western_asian_scripts{"Заходнеазіяцкія пісьмы"}
         whitespace{"Недрукаваны знак"}
     }
@@ -1372,6 +1464,11 @@ be{
         }
         month-narrow{
             dn{"мес."}
+            relative{
+                "-1"{"у мін. мес."}
+                "0"{"у гэтым мес."}
+                "1"{"у наст. мес."}
+            }
             relativeTime{
                 future{
                     few{"праз {0} мес."}
@@ -1389,6 +1486,11 @@ be{
         }
         month-short{
             dn{"мес."}
+            relative{
+                "-1"{"у мін. мес."}
+                "0"{"у гэтым мес."}
+                "1"{"у наст. мес."}
+            }
             relativeTime{
                 future{
                     few{"праз {0} мес."}
@@ -1854,6 +1956,11 @@ be{
         }
         week-narrow{
             dn{"тыд"}
+            relative{
+                "-1"{"на мін. тыд."}
+                "0"{"на гэтым тыд."}
+                "1"{"на наст. тыд."}
+            }
             relativePeriod{"тыдзень {0}"}
             relativeTime{
                 future{
@@ -1872,6 +1979,11 @@ be{
         }
         week-short{
             dn{"тыд"}
+            relative{
+                "-1"{"на мін. тыд."}
+                "0"{"на гэтым тыд."}
+                "1"{"на наст. тыд."}
+            }
             relativePeriod{"тыдзень {0}"}
             relativeTime{
                 future{
@@ -1939,6 +2051,11 @@ be{
         }
         year-narrow{
             dn{"г."}
+            relative{
+                "-1"{"у мін. годзе"}
+                "0"{"у гэтым годзе"}
+                "1"{"у наст. годзе"}
+            }
             relativeTime{
                 future{
                     few{"праз {0} г."}
@@ -1956,6 +2073,11 @@ be{
         }
         year-short{
             dn{"г."}
+            relative{
+                "-1"{"у мін. годзе"}
+                "0"{"у гэтым годзе"}
+                "1"{"у наст. годзе"}
+            }
             relativeTime{
                 future{
                     few{"праз {0} г."}

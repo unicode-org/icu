@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ha_NE{
-    Version{"2.1.48.77"}
+    Version{"36"}
     zoneStrings{
         "America:Adak"{
             ec{"Adak"}
@@ -330,9 +330,6 @@ ha_NE{
         "Etc:UTC"{
             ls{"Hadewa duniya lokaci"}
         }
-        "Etc:Unknown"{
-            ec{"Birni da ba a sani ba"}
-        }
         "meta:Alaska"{
             ld{"Lokaci rana ta Alaska"}
             lg{"Lokaci ta Alaska"}
@@ -368,24 +365,6 @@ ha_NE{
             lg{"Lokaci ta Kuba"}
             ls{"Ida Lokaci ta Kuba"}
         }
-        "meta:Europe_Central"{
-            ld{"Tsakiyar bazara a lokaci turai"}
-            lg{"Tsakiyar a lokaci turai"}
-            ls{"Ida Tsakiyar a Lokaci Turai"}
-        }
-        "meta:Europe_Eastern"{
-            ld{"Gabas a lokaci turai da bazara"}
-            lg{"Lokaci a turai gabas"}
-            ls{"Ida lokaci a turai gabas"}
-        }
-        "meta:Europe_Western"{
-            ld{"Ida lokaci ta yammacin turai da bazara"}
-            lg{"Lokaci ta yammacin turai"}
-            ls{"Ida lokaci ta yammacin turai"}
-        }
-        "meta:GMT"{
-            ls{"Lokacin Greenwhich a London"}
-        }
         "meta:Greenland_Eastern"{
             ld{"Lokaci rana a gabas ta Greeland"}
             lg{"Lokaci a gabas ta Greeland"}
@@ -395,11 +374,6 @@ ha_NE{
             ld{"Lokaci rana a yammacin ta Greeland"}
             lg{"Lokaci a yammacin ta Greeland"}
             ls{"Ida Lokaci a yammacin ta Greeland"}
-        }
-        "meta:Hawaii_Aleutian"{
-            ld{"Lokaci rana ta Hawaii-Aleutian"}
-            lg{"Lokaci ta Hawaii-Aleutian"}
-            ls{"Ida Lokaci ta Hawaii-Aleutian"}
         }
         "meta:Mexico_Northwest"{
             ld{"Lokaci rana a arewa da yammacin ta Mesiko"}
@@ -425,8 +399,6 @@ ha_NE{
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0} Lokaci"}
         regionFormatDaylight{"{0} Lokaci rana"}
-        regionFormatStandard{"{0} Daidai ta ce lokaci"}
     }
 }

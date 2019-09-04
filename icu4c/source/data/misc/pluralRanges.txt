@@ -5,6 +5,7 @@ pluralRanges:table(nofallback){
         af{"set05"}
         ak{"set02"}
         am{"set01"}
+        an{"set05"}
         ar{"set18"}
         as{"set01"}
         az{"set04"}

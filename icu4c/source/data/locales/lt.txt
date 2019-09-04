@@ -19,9 +19,10 @@ lt{
     ExemplarCharacters{"[a ą b c č d e ę ė f g h i į y j k l m n o p r s š t u ų ū v z ž]"}
     ExemplarCharactersIndex{"[A Ą B C Č D E Ę Ė F G H I Į Y J K L M N O P R S Š T U Ų Ū V Z Ž]"}
     ExemplarCharactersNumbers{"[  , % ‰ + − 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … “ „ ( ) \\[ \\] \\{ \\}]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . … “ „ ( ) \\[ \\] \\{ \\}]"}
     MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             miscPatterns{
                 approximately{"~{0}"}
@@ -32,6 +33,7 @@ lt{
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
@@ -42,72 +44,96 @@ lt{
                         many{"0 tūkstančio"}
                         one{"0 tūkstantis"}
                         other{"0 tūkstančių"}
+                        two{"0 tūkst'.'"}
+                        zero{"0 tūkst'.'"}
                     }
                     10000{
                         few{"00 tūkstančiai"}
                         many{"00 tūkstančio"}
                         one{"00 tūkstantis"}
                         other{"00 tūkstančių"}
+                        two{"00 tūkst'.'"}
+                        zero{"00 tūkst'.'"}
                     }
                     100000{
                         few{"000 tūkstančiai"}
                         many{"000 tūkstančio"}
                         one{"000 tūkstantis"}
                         other{"000 tūkstančių"}
+                        two{"000 tūkst'.'"}
+                        zero{"000 tūkst'.'"}
                     }
                     1000000{
                         few{"0 milijonai"}
                         many{"0 milijono"}
                         one{"0 milijonas"}
                         other{"0 milijonų"}
+                        two{"0 mln'.'"}
+                        zero{"0 mln'.'"}
                     }
                     10000000{
                         few{"00 milijonai"}
                         many{"00 milijono"}
                         one{"00 milijonas"}
                         other{"00 milijonų"}
+                        two{"00 mln'.'"}
+                        zero{"00 mln'.'"}
                     }
                     100000000{
                         few{"000 milijonai"}
                         many{"000 milijono"}
                         one{"000 milijonas"}
                         other{"000 milijonų"}
+                        two{"000 mln'.'"}
+                        zero{"000 mln'.'"}
                     }
                     1000000000{
                         few{"0 milijardai"}
                         many{"0 milijardo"}
                         one{"0 milijardas"}
                         other{"0 milijardų"}
+                        two{"0 mlrd'.'"}
+                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 milijardai"}
                         many{"00 milijardo"}
                         one{"00 milijardas"}
                         other{"00 milijardų"}
+                        two{"00 mlrd'.'"}
+                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 milijardai"}
                         many{"000 milijardo"}
                         one{"000 milijardas"}
                         other{"000 milijardų"}
+                        two{"000 mlrd'.'"}
+                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 trilijonai"}
                         many{"0 trilijono"}
                         one{"0 trilijonas"}
                         other{"0 trilijonų"}
+                        two{"0 trln'.'"}
+                        zero{"0 trln'.'"}
                     }
                     10000000000000{
                         few{"00 trilijonai"}
                         many{"00 trilijono"}
                         one{"00 trilijonas"}
                         other{"00 trilijonų"}
+                        two{"00 trln'.'"}
+                        zero{"00 trln'.'"}
                     }
                     100000000000000{
                         few{"000 trilijonai"}
                         many{"000 trilijono"}
                         one{"000 trilijonas"}
                         other{"000 trilijonų"}
+                        two{"000 trln'.'"}
+                        zero{"000 trln'.'"}
                     }
                 }
             }
@@ -192,72 +218,96 @@ lt{
                         many{"0 tūkst'.'"}
                         one{"0 tūkst'.'"}
                         other{"0 tūkst'.'"}
+                        two{"0 tūkst'.'"}
+                        zero{"0 tūkst'.'"}
                     }
                     10000{
                         few{"00 tūkst'.'"}
                         many{"00 tūkst'.'"}
                         one{"00 tūkst'.'"}
                         other{"00 tūkst'.'"}
+                        two{"00 tūkst'.'"}
+                        zero{"00 tūkst'.'"}
                     }
                     100000{
                         few{"000 tūkst'.'"}
                         many{"000 tūkst'.'"}
                         one{"000 tūkst'.'"}
                         other{"000 tūkst'.'"}
+                        two{"000 tūkst'.'"}
+                        zero{"000 tūkst'.'"}
                     }
                     1000000{
                         few{"0 mln'.'"}
                         many{"0 mln'.'"}
                         one{"0 mln'.'"}
                         other{"0 mln'.'"}
+                        two{"0 mln'.'"}
+                        zero{"0 mln'.'"}
                     }
                     10000000{
                         few{"00 mln'.'"}
                         many{"00 mln'.'"}
                         one{"00 mln'.'"}
                         other{"00 mln'.'"}
+                        two{"00 mln'.'"}
+                        zero{"00 mln'.'"}
                     }
                     100000000{
                         few{"000 mln'.'"}
                         many{"000 mln'.'"}
                         one{"000 mln'.'"}
                         other{"000 mln'.'"}
+                        two{"000 mln'.'"}
+                        zero{"000 mln'.'"}
                     }
                     1000000000{
                         few{"0 mlrd'.'"}
                         many{"0 mlrd'.'"}
                         one{"0 mlrd'.'"}
                         other{"0 mlrd'.'"}
+                        two{"0 mlrd'.'"}
+                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 mlrd'.'"}
                         many{"00 mlrd'.'"}
                         one{"00 mlrd'.'"}
                         other{"00 mlrd'.'"}
+                        two{"00 mlrd'.'"}
+                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 mlrd'.'"}
                         many{"000 mlrd'.'"}
                         one{"000 mlrd'.'"}
                         other{"000 mlrd'.'"}
+                        two{"000 mlrd'.'"}
+                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 trln'.'"}
                         many{"0 trln'.'"}
                         one{"0 trln'.'"}
                         other{"0 trln'.'"}
+                        two{"0 trln'.'"}
+                        zero{"0 trln'.'"}
                     }
                     10000000000000{
                         few{"00 trln'.'"}
                         many{"00 trln'.'"}
                         one{"00 trln'.'"}
                         other{"00 trln'.'"}
+                        two{"00 trln'.'"}
+                        zero{"00 trln'.'"}
                     }
                     100000000000000{
                         few{"000 trln'.'"}
                         many{"000 trln'.'"}
                         one{"000 trln'.'"}
                         other{"000 trln'.'"}
+                        two{"000 trln'.'"}
+                        zero{"000 trln'.'"}
                     }
                 }
             }
@@ -266,10 +316,12 @@ lt{
                 exponential{"×10^"}
                 group{" "}
                 infinity{"∞"}
+                list{";"}
                 minusSign{"−"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
+                plusSign{"+"}
                 superscriptingExponent{"×"}
                 timeSeparator{":"}
             }
@@ -288,7 +340,7 @@ lt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.48.42"}
+    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -320,10 +372,18 @@ lt{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d, E"}
                 Gy{"U"}
                 GyMMM{"U MMM"}
                 GyMMMEd{"U MMM d, E"}
                 GyMMMd{"U MMM d"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                d{"d"}
                 y{"U"}
                 yMd{"y-MM-dd"}
                 yyyy{"U"}
@@ -337,6 +397,24 @@ lt{
                 yyyyQQQQ{"U QQQQ"}
             }
             cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "zi",
+                            "chou",
+                            "yin",
+                            "mao",
+                            "chen",
+                            "si",
+                            "wu",
+                            "wei",
+                            "shen",
+                            "you",
+                            "xu",
+                            "hai",
+                        }
+                    }
+                }
                 solarTerms{
                     format{
                         abbreviated{
@@ -367,6 +445,72 @@ lt{
                         }
                     }
                 }
+                years{
+                    format{
+                        abbreviated{
+                            "jia-zi",
+                            "yi-chou",
+                            "bing-yin",
+                            "ding-mao",
+                            "wu-chen",
+                            "ji-si",
+                            "geng-wu",
+                            "xin-wei",
+                            "ren-shen",
+                            "gui-you",
+                            "jia-xu",
+                            "yi-hai",
+                            "bing-zi",
+                            "ding-chou",
+                            "wu-yin",
+                            "ji-mao",
+                            "geng-chen",
+                            "xin-si",
+                            "ren-wu",
+                            "gui-wei",
+                            "jia-shen",
+                            "yi-you",
+                            "bing-xu",
+                            "ding-hai",
+                            "wu-zi",
+                            "ji-chou",
+                            "geng-yin",
+                            "xin-mao",
+                            "ren-chen",
+                            "gui-si",
+                            "jia-wu",
+                            "yi-wei",
+                            "bing-shen",
+                            "ding-you",
+                            "wu-xu",
+                            "ji-hai",
+                            "geng-zi",
+                            "xin-chou",
+                            "ren-yin",
+                            "gui-mao",
+                            "jia-chen",
+                            "yi-si",
+                            "bing-wu",
+                            "ding-wei",
+                            "wu-shen",
+                            "ji-you",
+                            "geng-xu",
+                            "xin-hai",
+                            "ren-zi",
+                            "gui-chou",
+                            "jia-yin",
+                            "yi-mao",
+                            "bing-chen",
+                            "ding-si",
+                            "wu-wu",
+                            "ji-wei",
+                            "geng-shen",
+                            "xin-you",
+                            "ren-xu",
+                            "gui-hai",
+                        }
+                    }
+                }
                 zodiacs{
                     format{
                         abbreviated{
@@ -387,9 +531,15 @@ lt{
                 }
             }
             intervalFormats{
+                M{
+                    M{"MM–MM"}
+                }
                 MEd{
                     M{"MM-dd, E–MM-dd, E"}
                     d{"MM-dd, E–MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"MMM d, E–MMM d, E"}
@@ -397,10 +547,17 @@ lt{
                 }
                 MMMd{
                     M{"MMM d–MMM d"}
+                    d{"MMM d–d"}
                 }
                 Md{
                     M{"MM-dd–MM-dd"}
                     d{"MM-dd–MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                y{
+                    y{"U–U"}
                 }
                 yM{
                     M{"y-MM–y-MM"}
@@ -412,6 +569,7 @@ lt{
                     y{"y-MM-dd, E–y-MM-dd, E"}
                 }
                 yMMM{
+                    M{"U MMM–MMM"}
                     y{"U MMM–U MMM"}
                 }
                 yMMMEd{
@@ -420,10 +578,12 @@ lt{
                     y{"U MMM d, E–U MMM d, E"}
                 }
                 yMMMM{
+                    M{"U MMMM–MMMM"}
                     y{"U MMMM–U MMMM"}
                 }
                 yMMMd{
                     M{"U MMM d–MMM d"}
+                    d{"U MMM d–d"}
                     y{"U MMM d–U MMM d"}
                 }
                 yMd{
@@ -519,6 +679,23 @@ lt{
                         "10",
                         "11",
                         "12",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"{0}bis"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"{0}bis"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"{0}b"}
                     }
                 }
             }
@@ -652,10 +829,18 @@ lt{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d, E"}
                 Gy{"U"}
                 GyMMM{"U MMM"}
                 GyMMMEd{"U MMM d, E"}
                 GyMMMd{"U MMM d"}
+                M{"L"}
+                MEd{"MM-dd, E"}
+                MMM{"LLL"}
+                MMMEd{"MMM d, E"}
+                MMMd{"MMM d"}
+                Md{"MM-dd"}
+                d{"d"}
                 y{"U"}
                 yMd{"y-MM-dd"}
                 yyyy{"U"}
@@ -669,6 +854,24 @@ lt{
                 yyyyQQQQ{"U QQQQ"}
             }
             cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "zi",
+                            "chou",
+                            "yin",
+                            "mao",
+                            "chen",
+                            "si",
+                            "wu",
+                            "wei",
+                            "shen",
+                            "you",
+                            "xu",
+                            "hai",
+                        }
+                    }
+                }
                 solarTerms{
                     format{
                         abbreviated{
@@ -699,6 +902,72 @@ lt{
                         }
                     }
                 }
+                years{
+                    format{
+                        abbreviated{
+                            "jia-zi",
+                            "yi-chou",
+                            "bing-yin",
+                            "ding-mao",
+                            "wu-chen",
+                            "ji-si",
+                            "geng-wu",
+                            "xin-wei",
+                            "ren-shen",
+                            "gui-you",
+                            "jia-xu",
+                            "yi-hai",
+                            "bing-zi",
+                            "ding-chou",
+                            "wu-yin",
+                            "ji-mao",
+                            "geng-chen",
+                            "xin-si",
+                            "ren-wu",
+                            "gui-wei",
+                            "jia-shen",
+                            "yi-you",
+                            "bing-xu",
+                            "ding-hai",
+                            "wu-zi",
+                            "ji-chou",
+                            "geng-yin",
+                            "xin-mao",
+                            "ren-chen",
+                            "gui-si",
+                            "jia-wu",
+                            "yi-wei",
+                            "bing-shen",
+                            "ding-you",
+                            "wu-xu",
+                            "ji-hai",
+                            "geng-zi",
+                            "xin-chou",
+                            "ren-yin",
+                            "gui-mao",
+                            "jia-chen",
+                            "yi-si",
+                            "bing-wu",
+                            "ding-wei",
+                            "wu-shen",
+                            "ji-you",
+                            "geng-xu",
+                            "xin-hai",
+                            "ren-zi",
+                            "gui-chou",
+                            "jia-yin",
+                            "yi-mao",
+                            "bing-chen",
+                            "ding-si",
+                            "wu-wu",
+                            "ji-wei",
+                            "geng-shen",
+                            "xin-you",
+                            "ren-xu",
+                            "gui-hai",
+                        }
+                    }
+                }
                 zodiacs{
                     format{
                         abbreviated{
@@ -719,9 +988,15 @@ lt{
                 }
             }
             intervalFormats{
+                M{
+                    M{"MM–MM"}
+                }
                 MEd{
                     M{"MM-dd, E–MM-dd, E"}
                     d{"MM-dd, E–MM-dd, E"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"MMM d, E–MMM d, E"}
@@ -729,10 +1004,17 @@ lt{
                 }
                 MMMd{
                     M{"MMM d–MMM d"}
+                    d{"MMM d–d"}
                 }
                 Md{
                     M{"MM-dd–MM-dd"}
                     d{"MM-dd–MM-dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                y{
+                    y{"U–U"}
                 }
                 yM{
                     M{"y-MM–y-MM"}
@@ -744,6 +1026,7 @@ lt{
                     y{"y-MM-dd, E–y-MM-dd, E"}
                 }
                 yMMM{
+                    M{"U MMM–MMM"}
                     y{"U MMM–U MMM"}
                 }
                 yMMMEd{
@@ -752,10 +1035,12 @@ lt{
                     y{"U MMM d, E–U MMM d, E"}
                 }
                 yMMMM{
+                    M{"U MMMM–MMMM"}
                     y{"U MMMM–U MMMM"}
                 }
                 yMMMd{
                     M{"U MMM d–MMM d"}
+                    d{"U MMM d–d"}
                     y{"U MMM d–U MMM d"}
                 }
                 yMd{
@@ -767,6 +1052,20 @@ lt{
             monthNames{
                 format{
                     abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
                         "1",
                         "2",
                         "3",
@@ -810,6 +1109,20 @@ lt{
                         "11",
                         "12",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "1",
                         "2",
@@ -823,6 +1136,23 @@ lt{
                         "10",
                         "11",
                         "12",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    wide{
+                        leap{"{0}bis"}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{"{0}bis"}
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        leap{"{0}b"}
                     }
                 }
             }
@@ -939,6 +1269,16 @@ lt{
                 }
             }
         }
+        ethiopic-amete-alem{
+            eras{
+                abbreviated{
+                    "ERA0",
+                }
+                wide{
+                    "ERA0",
+                }
+            }
+        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -1000,52 +1340,19 @@ lt{
                 yyyyQQQQ{"y G QQQQ"}
             }
             intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h–h B"}
+                H{
+                    H{"HH–HH"}
                 }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                    h{"h:mm–h:mm B"}
-                    m{"h:mm–h:mm B"}
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
-                GyM{
-                    G{"GGGGG y-MM – GGGGG y-MM"}
-                    M{"GGGGG y-MM – y-MM"}
-                    y{"GGGGG y-MM – y-MM"}
-                }
-                GyMEd{
-                    G{"GGGGG y-MM-dd, E – GGGGG y-MM-dd, E"}
-                    M{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    d{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    y{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                }
-                GyMMM{
-                    G{"G y MMM – G y MMM"}
-                    M{"G y MMM–MMM"}
-                    y{"G y MMM – y MMM"}
-                }
-                GyMMMEd{
-                    G{"G y MMM d, E – G y MMM d, E"}
-                    M{"G y MMM d, E – MMM d, E"}
-                    d{"G y MMM d, E – MMM d, E"}
-                    y{"G y MMM d, E – y MMM d, E"}
-                }
-                GyMMMd{
-                    G{"G y MMM d – G y MMM d"}
-                    M{"G y MMM d – MMM d"}
-                    d{"G y MMM d–d"}
-                    y{"G y MMM d – y MMM d"}
-                }
-                GyMd{
-                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
-                    M{"GGGGG y-MM-dd – y-MM-dd"}
-                    d{"GGGGG y-MM-dd – y-MM-dd"}
-                    y{"GGGGG y-MM-dd – y-MM-dd"}
+                Hv{
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}
@@ -1075,15 +1382,21 @@ lt{
                 fallback{"{0} – {1}"}
                 h{
                     a{"h a–h a"}
+                    h{"h–h a"}
                 }
                 hm{
                     a{"hh:mm a–hh:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
                     a{"hh:mm a–hh:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
                     a{"h a–h a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y G"}
@@ -3473,12 +3786,6 @@ lt{
             start{"{0}, {1}"}
         }
         standard{
-            2{"{0} ir {1}"}
-            end{"{0} ir {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
-        }
-        standard-narrow{
             2{"{0} ir {1}"}
             end{"{0} ir {1}"}
             middle{"{0}, {1}"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr_Latn_BA{
-    Version{"2.1.48.77"}
+    Version{"36"}
     calendar{
         generic{
             intervalFormats{
@@ -169,6 +169,7 @@ sr_Latn_BA{
         week{
             relative{
                 "-1"{"prethodne nedelje"}
+                "0"{"ove nedelje"}
                 "1"{"naredne nedelje"}
             }
         }

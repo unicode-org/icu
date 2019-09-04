@@ -509,15 +509,13 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: percent
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit PERCENT = MeasureUnit.internalGetInstance("concentr", "percent");
 
     /**
      * Constant for unit of concentr: permille
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit PERMILLE = MeasureUnit.internalGetInstance("concentr", "permille");
 
@@ -602,8 +600,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of digital: petabyte
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit PETABYTE = MeasureUnit.internalGetInstance("digital", "petabyte");
 
@@ -637,6 +634,13 @@ public class MeasureUnit implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit DAY_PERSON = MeasureUnit.internalGetInstance("duration", "day-person");
+
+    /**
+     * Constant for unit of duration: decade
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit DECADE = MeasureUnit.internalGetInstance("duration", "decade");
 
     /**
      * Constant for unit of duration: hour
@@ -788,6 +792,13 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit KILOWATT_HOUR = MeasureUnit.internalGetInstance("energy", "kilowatt-hour");
 
     /**
+     * Constant for unit of energy: therm-us
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit THERM_US = MeasureUnit.internalGetInstance("energy", "therm-us");
+
+    /**
      * Constant for unit of force: newton
      * @draft ICU 64
      * @provisional This API might change or be removed in a future release.
@@ -824,6 +835,55 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit MEGAHERTZ = MeasureUnit.internalGetInstance("frequency", "megahertz");
+
+    /**
+     * Constant for unit of graphics: dot-per-centimeter
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit DOT_PER_CENTIMETER = MeasureUnit.internalGetInstance("graphics", "dot-per-centimeter");
+
+    /**
+     * Constant for unit of graphics: dot-per-inch
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit DOT_PER_INCH = MeasureUnit.internalGetInstance("graphics", "dot-per-inch");
+
+    /**
+     * Constant for unit of graphics: em
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit EM = MeasureUnit.internalGetInstance("graphics", "em");
+
+    /**
+     * Constant for unit of graphics: megapixel
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MEGAPIXEL = MeasureUnit.internalGetInstance("graphics", "megapixel");
+
+    /**
+     * Constant for unit of graphics: pixel
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit PIXEL = MeasureUnit.internalGetInstance("graphics", "pixel");
+
+    /**
+     * Constant for unit of graphics: pixel-per-centimeter
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit PIXEL_PER_CENTIMETER = MeasureUnit.internalGetInstance("graphics", "pixel-per-centimeter");
+
+    /**
+     * Constant for unit of graphics: pixel-per-inch
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit PIXEL_PER_INCH = MeasureUnit.internalGetInstance("graphics", "pixel-per-inch");
 
     /**
      * Constant for unit of length: astronomical-unit
@@ -1090,10 +1150,16 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of pressure: atmosphere
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit ATMOSPHERE = MeasureUnit.internalGetInstance("pressure", "atmosphere");
+
+    /**
+     * Constant for unit of pressure: bar
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit BAR = MeasureUnit.internalGetInstance("pressure", "bar");
 
     /**
      * Constant for unit of pressure: hectopascal
@@ -1132,6 +1198,13 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit MILLIMETER_OF_MERCURY = MeasureUnit.internalGetInstance("pressure", "millimeter-of-mercury");
+
+    /**
+     * Constant for unit of pressure: pascal
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit PASCAL = MeasureUnit.internalGetInstance("pressure", "pascal");
 
     /**
      * Constant for unit of pressure: pound-per-square-inch
@@ -1371,11 +1444,13 @@ public class MeasureUnit implements Serializable {
     static {
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.LITER, MeasureUnit.KILOMETER), MeasureUnit.LITER_PER_KILOMETER);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.POUND, MeasureUnit.SQUARE_INCH), MeasureUnit.POUND_PER_SQUARE_INCH);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.PIXEL, MeasureUnit.CENTIMETER), MeasureUnit.PIXEL_PER_CENTIMETER);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.HOUR), MeasureUnit.MILE_PER_HOUR);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILLIGRAM, MeasureUnit.DECILITER), MeasureUnit.MILLIGRAM_PER_DECILITER);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON_IMPERIAL), MeasureUnit.MILE_PER_GALLON_IMPERIAL);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.KILOMETER, MeasureUnit.HOUR), MeasureUnit.KILOMETER_PER_HOUR);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON), MeasureUnit.MILE_PER_GALLON);
+        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.PIXEL, MeasureUnit.INCH), MeasureUnit.PIXEL_PER_INCH);
         unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.METER, MeasureUnit.SECOND), MeasureUnit.METER_PER_SECOND);
     }
 

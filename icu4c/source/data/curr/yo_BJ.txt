@@ -182,10 +182,6 @@ yo_BJ{
             "SHP",
             "Pɔɔun ti Orílɛ́ède ̣Elena",
         }
-        SLL{
-            "SLL",
-            "Lioni",
-        }
         SOS{
             "SOS",
             "Sile ti Orílɛ́ède Somali",
@@ -197,10 +193,6 @@ yo_BJ{
         STN{
             "STN",
             "Dobira ti Orílɛ́ède Sao tome Ati Pirisipe",
-        }
-        SZL{
-            "SZL",
-            "Lilangeni",
         }
         TND{
             "TND",
@@ -261,9 +253,6 @@ yo_BJ{
         BRL{
             other{"Awon owó ti Orílɛ̀-èdè Brazil"}
         }
-        EUR{
-            other{"Awon owó Yúrò"}
-        }
         RUB{
             other{"Owó ruble ti ilɛ̀ Rɔ́shíà"}
         }
@@ -274,8 +263,5 @@ yo_BJ{
             other{"owóníná àìmɔ̀"}
         }
     }
-    CurrencyUnitPatterns{
-        other{"{0} {1}"}
-    }
-    Version{"2.1.48.77"}
+    Version{"36"}
 }

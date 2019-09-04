@@ -17,10 +17,10 @@ dz{
         "\u0FB1 \u0FB2 \u0FB3 \u0FB5 \u0FB6 \u0FB7]"
     }
     ExemplarCharactersIndex{"[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཨ]"}
-    ExemplarCharactersNumbers{"[\\- , . % ‰ + 0༠ 1༡ 2༢ 3༣ 4༤ 5༥ 6༦ 7༧ 8༨ 9༩]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0༠ 1༡ 2༢ 3༣ 4༤ 5༥ 6༦ 7༧ 8༨ 9༩]"}
     ExemplarCharactersPunctuation{
-        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] ༼ ༽ § @ * / \\& # † "
-        "‡ ༄ ༅ ༆ ༈ ༉ ༊ ࿐ ࿑ ༒ ࿒ ࿓ ࿔ ༶ ྾ ྿ ༌ ། ༎ ༏ ༐ ༑ ༔ ༴]"
+        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] ༼ ༽ § @ * / \\& # "
+        "† ‡ ༄ ༅ ༆ ༈ ༉ ༊ ࿐ ࿑ ༒ ࿒ ࿓ ࿔ ༶ ྾ ྿ ༌ ། ༎ ༏ ༐ ༑ ༔ ༴]"
     }
     MoreInformation{"?"}
     NumberElements{
@@ -35,39 +35,51 @@ dz{
             patternsLong{
                 decimalFormat{
                     1000{
+                        one{"0K"}
                         other{"སྟོང་ཕྲག 0"}
                     }
                     10000{
+                        one{"00K"}
                         other{"ཁྲི་ཕྲག 0"}
                     }
                     100000{
+                        one{"000K"}
                         other{"འབུམ་ཕྲག 0"}
                     }
                     1000000{
+                        one{"0M"}
                         other{"ས་ཡ་ 0"}
                     }
                     10000000{
+                        one{"00M"}
                         other{"བྱེ་བ་ 0"}
                     }
                     100000000{
+                        one{"000M"}
                         other{"དུང་ཕྱུར་ 0"}
                     }
                     1000000000{
+                        one{"0G"}
                         other{"དུང་ཕྱུར་ 00"}
                     }
                     10000000000{
+                        one{"00G"}
                         other{"དུང་ཕྱུར་བརྒྱ་ 0"}
                     }
                     100000000000{
+                        one{"000G"}
                         other{"དུང་ཕྱུར་སྟོང 0"}
                     }
                     1000000000000{
+                        one{"0T"}
                         other{"དུང་ཕྱུར་ཁྲི་ 0"}
                     }
                     10000000000000{
+                        one{"00T"}
                         other{"དུང་ཕྱུར་འབུམ་ 0"}
                     }
                     100000000000000{
+                        one{"000T"}
                         other{"དུང་ཕྱུར་ས་ཡ་ 0"}
                     }
                 }
@@ -106,7 +118,7 @@ dz{
             }
         }
     }
-    Version{"2.1.47.82"}
+    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{

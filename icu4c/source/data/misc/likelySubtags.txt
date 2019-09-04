@@ -44,6 +44,7 @@ likelySubtags:table(nofallback){
     amn{"amn_Latn_ZZ"}
     amo{"amo_Latn_NG"}
     amp{"amp_Latn_ZZ"}
+    an{"an_Latn_ES"}
     anc{"anc_Latn_ZZ"}
     ank{"ank_Latn_ZZ"}
     ann{"ann_Latn_ZZ"}
@@ -234,6 +235,7 @@ likelySubtags:table(nofallback){
     cho{"cho_Latn_US"}
     chp{"chp_Latn_CA"}
     chr{"chr_Cher_US"}
+    cic{"cic_Latn_US"}
     cja{"cja_Arab_KH"}
     cjm{"cjm_Cham_VN"}
     cjv{"cjv_Latn_ZZ"}

@@ -12,7 +12,7 @@ sah{
     }
     ExemplarCharacters{"[а б г ҕ д {дь} и й к л м н {нь} ҥ о ө п р с т у ү х һ ч ы э]"}
     ExemplarCharactersIndex{"[А Б Г Ҕ Д {Дь} И Й К Л М Н {Нь} Ҥ О Ө П Р С Т У Ү Х Һ Ч Ы Э]"}
-    ExemplarCharactersNumbers{"[  \\- , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersNumbers{"[  \\- ‑ , % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{"[\\:]"}
     MoreInformation{"?"}
     NumberElements{
@@ -32,39 +32,51 @@ sah{
             patternsLong{
                 decimalFormat{
                     1000{
+                        one{"0 тыһ'.'"}
                         other{"0 тыһыынча"}
                     }
                     10000{
+                        one{"00 тыһ'.'"}
                         other{"00 тыһыынча"}
                     }
                     100000{
+                        one{"000 тыһ'.'"}
                         other{"000 тыһыынча"}
                     }
                     1000000{
+                        one{"0 мөл"}
                         other{"0 мөлүйүөн"}
                     }
                     10000000{
+                        one{"00 мөл"}
                         other{"00 мөлүйүөн"}
                     }
                     100000000{
+                        one{"000 мөл"}
                         other{"000 мөлүйүөн"}
                     }
                     1000000000{
+                        one{"0 млрд"}
                         other{"0 миллиард"}
                     }
                     10000000000{
+                        one{"00 млрд"}
                         other{"00 миллиард"}
                     }
                     100000000000{
+                        one{"000 млрд"}
                         other{"000 миллиард"}
                     }
                     1000000000000{
+                        one{"0 трлн"}
                         other{"0 триллион"}
                     }
                     10000000000000{
+                        one{"00 трлн"}
                         other{"00 триллион"}
                     }
                     100000000000000{
+                        one{"000 трлн"}
                         other{"000 триллион"}
                     }
                 }
@@ -110,39 +122,51 @@ sah{
                 }
                 decimalFormat{
                     1000{
+                        one{"0 тыһ'.'"}
                         other{"0 тыһ'.'"}
                     }
                     10000{
+                        one{"00 тыһ'.'"}
                         other{"00 тыһ'.'"}
                     }
                     100000{
+                        one{"000 тыһ'.'"}
                         other{"000 тыһ'.'"}
                     }
                     1000000{
+                        one{"0 мөл"}
                         other{"0 мөл"}
                     }
                     10000000{
+                        one{"00 мөл"}
                         other{"00 мөл"}
                     }
                     100000000{
+                        one{"000 мөл"}
                         other{"000 мөл"}
                     }
                     1000000000{
+                        one{"0 млрд"}
                         other{"0 млрд"}
                     }
                     10000000000{
+                        one{"00 млрд"}
                         other{"00 млрд"}
                     }
                     100000000000{
+                        one{"000 млрд"}
                         other{"000 млрд"}
                     }
                     1000000000000{
+                        one{"0 трлн"}
                         other{"0 трлн"}
                     }
                     10000000000000{
+                        one{"00 трлн"}
                         other{"00 трлн"}
                     }
                     100000000000000{
+                        one{"000 трлн"}
                         other{"000 трлн"}
                     }
                 }
@@ -164,7 +188,7 @@ sah{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.47.82"}
+    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
