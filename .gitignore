@@ -99,8 +99,10 @@ icu4c/source/doc
 icu4c/source/extra/Makefile
 icu4c/source/extra/scrptrun/Makefile
 icu4c/source/extra/scrptrun/scrptrun.d
+icu4c/source/extra/scrptrun/scrptrun.o
 icu4c/source/extra/scrptrun/srtest
 icu4c/source/extra/scrptrun/srtest.d
+icu4c/source/extra/scrptrun/srtest.o
 icu4c/source/extra/uconv/*.d
 icu4c/source/extra/uconv/*.o
 icu4c/source/extra/uconv/*.vcxproj.user
