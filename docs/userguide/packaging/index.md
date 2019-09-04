@@ -37,16 +37,16 @@ certain features from being built.
 All of these switches are defined to '0' by default, unless overridden by the
 build environment, or by modifying uconfig.h itself.
 
-Switch NameLibraryEffect if #defined to '1'UCONFIG_ONLY_COLLATIONcommon
-& i18nTurn off all other modules named here except collation and legacy
-conversionUCONFIG_NO_LEGACY_CONVERSIONcommonTurn off conversion apart from UTF,
-CESU-8, SCSU, BOCU-1, US-ASCII, and ISO-8859-1. Not possible to turn off legacy
-conversion on EBCDIC platforms.UCONFIG_NO_BREAK_ITERATIONcommonTurn off break
-iterationUCONFIG_NO_COLLATIONi18nTurn off collation and collation-based string
-search.UCONFIG_NO_FORMATTINGi18nTurn off all formatting (date, time, number,
-etc), and calendar/timezone services.UCONFIG_NO_TRANSLITERATIONi18nTurn off
-script-to-script transliterationUCONFIG_NO_REGULAR_EXPRESSIONSi18nTurn off the
-regular expression functionality
+| Switch Name | Library | Effect if #defined to '1' |
+|--------------------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| UCONFIG_ONLY_COLLATION | common & i18n | Turn off all other modules named here except collation and legacy conversion |
+| UCONFIG_NO_LEGACY_CONVERSION | common | Turn off conversion apart from UTF, CESU-8, SCSU, BOCU-1, US-ASCII, and ISO-8859-1. Not possible to turn off legacy conversion on EBCDIC platforms. |
+| UCONFIG_NO_BREAK_ITERATION | common | Turn off break iteration |
+| UCONFIG_NO_COLLATION | i18n | Turn off collation and collation-based string search. |
+| UCONFIG_NO_FORMATTING | i18n | Turn off all formatting (date, time, number, etc), and calendar/timezone services. |
+| UCONFIG_NO_TRANSLITERATION | i18n | Turn off script-to-script transliteration |
+| UCONFIG_NO_REGULAR_EXPRESSIONS | i18n | Turn off the regular expression functionality |
+
 *These switches do not necessarily disable data generation. For example, disabling formatting does not prevent formatting data from being built into the resource bundles. See the section on ICU data, for information on changing data packaging.*
 *However, some ICU data builders will not function with these switches set, such
 as UCONFIG_NO_FILE_IO or UCONFIG_NO_REGULAR_EXPRESSIONS. If using these
@@ -59,7 +59,7 @@ This method involves setting an environment variable when ICU is built. For
 example, on a POSIX-like platform, settings may be chosen at the point
 runConfigureICU is run:
 
-env CPPFLAGS="-DUCONFIG_NO_COLLATION=1 -DUCONFIGU_NO_FORMATTING=1" \\
+    env CPPFLAGS="-DUCONFIG_NO_COLLATION=1 -DUCONFIGU_NO_FORMATTING=1" \\
 runConfigureICU SOLARISCC ...
 
 Note that when end-user code is compiled, it must also have the same CPPFLAGS
@@ -76,12 +76,12 @@ next version of ICU is installed.
 Modify 'uconfig.h' to add the following lines before the first #ifndef
 UCONFIG_... section
 
-#ifndef UCONFIG_NO_COLLATION
-#define UCONFIG_NO_COLLATION 1
-#enddif
-#ifndef UCONFIG_NO_FORMATTING
-#define UCONFIG_NO_FORMATTING 1
-#endif
+    #ifndef UCONFIG_NO_COLLATION
+    #define UCONFIG_NO_COLLATION 1
+    #enddif
+    #ifndef UCONFIG_NO_FORMATTING
+    #define UCONFIG_NO_FORMATTING 1
+    #endif
 
 ### Reduce ICU Data used
 
@@ -95,7 +95,7 @@ data to be installed and removed without rebuilding ICU. For details, see the
 
 (This section assumes the reader is familiar with ICU version numbers (§) as
 covered in the [Design](../design.md) chapter, and filename conventions for
-libraries in the
+libraries in the    
 [ReadMe](http://source.icu-project.org/repos/icu/icu/trunk//readme.html#HowToPackage)
 .)
 
@@ -105,11 +105,13 @@ The following table gives an example of the dynamically linked library and
 symbolic links built by ICU for the common ('uc') library, version 5.4.3, for
 Linux
 
-FileLinks toPurposelibicuuc.solibicuuc.so.54.3Required for link: Applications
-compiled with '-licuuc' will follow this
-symlink.libicuuc.so.54libicuuc.so.54.3Required for runtime: This name is what
-applications actually link against.libicuuc.so.54.3Actual libraryRequired for
-runtime and link. Contains the name 'libicuuc.so.54'. *This discussion gives
+| File | Links to | Purpose |
+|------------------|------------------|------------------------------------------------------------------------------------|
+| libicuuc.so | libicuuc.so.54.3 | Required for link: Applications compiled with ' -licuuc' will follow this symlink. |
+| libicuuc.so.54 | libicuuc.so.54.3 | Required for runtime: This name is what applications actually link against. |
+| libicuuc.so.54.3 | Actual library | Required for runtime and link. Contains the name 'libicuuc.so.54'. |
+
+*This discussion gives
 Linux as an example, but it is typical for most platforms, of which AIX and 390
 (zOS) are exceptions.*
 
@@ -123,12 +125,11 @@ that share the same major+minor number.
 If ICU version 5.4.**7** is subsequently installed, the following files may be
 updated.
 
-FileLinks toPurposelibicuuc.solibicuuc.so.54.7Required for link: Newly linked
-applications will follow this link, which should not cause any functional
-difference at link time.libicuuc.so.54libicuuc.so.54.7Required for runtime:
-Because it now links to version .7, existing applications linked to version
-5.4.3 will follow this link and use the 5.4.7 code.libicuuc.so.54.7Actual
-libraryRequired for runtime and link. Contains the name 'libicuuc.so.54'.
+| File | Links to | Purpose |
+|------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| libicuuc.so | libicuuc.so.54.7 | Required for link: Newly linked applications will follow this link, which should not cause any functional difference at link time. |
+| libicuuc.so.54 | libicuuc.so.54.7 | Required for runtime: Because it now links to version .7, existing applications linked to version 5.4.3 will follow this link and use the 5.4.7 code. |
+| libicuuc.so.54.7 | Actual library | Required for runtime and link. Contains the name 'libicuuc.so.54'. |
 
 If ICU version 5.6.3 or 3.2.9 were installed, they would not affect
 already-linked applications, because the major+minor numbers are different - 56
@@ -160,10 +161,12 @@ not be linked together, nor may 5.4.3 and 5.4.3-myapp be linked together.
 
 Assuming ICU version 5.4.3, Windows library names will follow this pattern:
 
-FilePurposeicu**uc**.libRelease Link-time library. Needed for development.
-Contains 'icuuc54.dll' name internally.icuuc54.dllRelease runtime library.
-Needed for runtime.icuuc**d**.libDebug link-time library
-(The 'd' suffix indicates debug)icuuc54**d**.dllDebug runtime library.
+| File | Purpose |
+|---------------|--------------------------------------------------------------------------------------------|
+| icu uc.lib | Release Link-time library. Needed for development. Contains 'icuuc54.dll' name internally. |
+| icuuc54.dll | Release runtime library. Needed for runtime. |
+| icuuc d.lib | Debug link-time library  (The 'd' suffix indicates debug) |
+| icuuc54 d.dll | Debug runtime library. |
 
 Debug applications must be linked with debug libraries, and release applications
 with release libraries.
