@@ -61,8 +61,7 @@ import com.ibm.icu.util.ULocale;
  * design doc</a>.
  *
  * @author Shane Carr
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 60
  */
 public final class NumberFormatter {
 
@@ -83,8 +82,7 @@ public final class NumberFormatter {
      * <p>
      * This enum is similar to {@link com.ibm.icu.text.MeasureFormat.FormatWidth}.
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public static enum UnitWidth {
@@ -98,8 +96,7 @@ public final class NumberFormatter {
          * In CLDR, this option corresponds to the "Narrow" format for measure units and the "¤¤¤¤¤"
          * placeholder for currencies.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         NARROW,
@@ -116,8 +113,7 @@ public final class NumberFormatter {
          * In CLDR, this option corresponds to the "Short" format for measure units and the "¤"
          * placeholder for currencies.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         SHORT,
@@ -129,8 +125,7 @@ public final class NumberFormatter {
          * In CLDR, this option corresponds to the default format for measure units and the "¤¤¤"
          * placeholder for currencies.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         FULL_NAME,
@@ -142,8 +137,7 @@ public final class NumberFormatter {
          * <p>
          * In CLDR, this option corresponds to the "¤¤" placeholder for currencies.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         ISO_CODE,
@@ -153,8 +147,7 @@ public final class NumberFormatter {
          * currencies, apply monetary symbols and formats as with SHORT, but omit the currency symbol.
          * For measure units, the behavior is equivalent to not specifying the unit at all.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         HIDDEN,
@@ -184,16 +177,14 @@ public final class NumberFormatter {
      * Note: This enum specifies the strategy for grouping sizes. To set which character to use as the
      * grouping separator, use the "symbols" setter.
      *
-     * @draft ICU 61
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 61
      * @see NumberFormatter
      */
     public static enum GroupingStrategy {
         /**
          * Do not display grouping separators in any locale.
          *
-         * @draft ICU 61
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 61
          * @see NumberFormatter
          */
         OFF,
@@ -210,8 +201,7 @@ public final class NumberFormatter {
          * Locale data is used to determine whether to separate larger numbers into groups of 2
          * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
          *
-         * @draft ICU 61
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 61
          * @see NumberFormatter
          */
         MIN2,
@@ -227,8 +217,7 @@ public final class NumberFormatter {
          * Locale data is used to determine whether to separate larger numbers into groups of 2
          * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
          *
-         * @draft ICU 61
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 61
          * @see NumberFormatter
          */
         AUTO,
@@ -245,8 +234,7 @@ public final class NumberFormatter {
          * Locale data is used to determine whether to separate larger numbers into groups of 2
          * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
          *
-         * @draft ICU 61
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 61
          * @see NumberFormatter
          */
         ON_ALIGNED,
@@ -255,8 +243,7 @@ public final class NumberFormatter {
          * Use the Western defaults: groups of 3 and enabled for all numbers 1000 or greater. Do not use
          * locale data for determining the grouping strategy.
          *
-         * @draft ICU 61
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 61
          * @see NumberFormatter
          */
         THOUSANDS
@@ -279,8 +266,7 @@ public final class NumberFormatter {
      * <p>
      * The exact format, including the position and the code point of the sign, differ by locale.
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public static enum SignDisplay {
@@ -288,8 +274,7 @@ public final class NumberFormatter {
          * Show the minus sign on negative numbers, and do not show the sign on positive numbers. This is
          * the default behavior.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         AUTO,
@@ -298,8 +283,7 @@ public final class NumberFormatter {
          * Show the minus sign on negative numbers and the plus sign on positive numbers, including zero.
          * To hide the sign on zero, see {@link #EXCEPT_ZERO}.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         ALWAYS,
@@ -307,8 +291,7 @@ public final class NumberFormatter {
         /**
          * Do not show the sign on positive or negative numbers.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         NEVER,
@@ -326,8 +309,7 @@ public final class NumberFormatter {
          * back to the AUTO sign display strategy when formatting without a currency unit. This
          * limitation may be lifted in the future.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         ACCOUNTING,
@@ -338,8 +320,7 @@ public final class NumberFormatter {
          * ACCOUNTING sign display strategy. To hide the sign on zero, see
          * {@link #ACCOUNTING_EXCEPT_ZERO}.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         ACCOUNTING_ALWAYS,
@@ -348,8 +329,7 @@ public final class NumberFormatter {
          * Show the minus sign on negative numbers and the plus sign on positive numbers. Do not show a
          * sign on zero or NaN, unless the sign bit is set (-0.0 gets a sign).
          *
-         * @draft ICU 61
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 61
          * @see NumberFormatter
          */
         EXCEPT_ZERO,
@@ -360,8 +340,7 @@ public final class NumberFormatter {
          * sign). For more information on the accounting format, see the ACCOUNTING sign display
          * strategy.
          *
-         * @draft ICU 61
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 61
          * @see NumberFormatter
          */
         ACCOUNTING_EXCEPT_ZERO,
@@ -376,8 +355,7 @@ public final class NumberFormatter {
      * <li>ALWAYS: "1." and "1.1"
      * </ul>
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public static enum DecimalSeparatorDisplay {
@@ -385,8 +363,7 @@ public final class NumberFormatter {
          * Show the decimal separator when there are one or more digits to display after the separator,
          * and do not show it otherwise. This is the default behavior.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         AUTO,
@@ -394,8 +371,7 @@ public final class NumberFormatter {
         /**
          * Always show the decimal separator, even if there are no digits to display after the separator.
          *
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          * @see NumberFormatter
          */
         ALWAYS,
@@ -419,8 +395,7 @@ public final class NumberFormatter {
      * currently known at the call site.
      *
      * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public static UnlocalizedNumberFormatter with() {
         return BASE;
@@ -433,8 +408,7 @@ public final class NumberFormatter {
      * @param locale
      *            The locale from which to load formats and symbols for number formatting.
      * @return A {@link LocalizedNumberFormatter}, to be used for chaining.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public static LocalizedNumberFormatter withLocale(Locale locale) {
         return BASE.locale(locale);
@@ -447,8 +421,7 @@ public final class NumberFormatter {
      * @param locale
      *            The locale from which to load formats and symbols for number formatting.
      * @return A {@link LocalizedNumberFormatter}, to be used for chaining.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public static LocalizedNumberFormatter withLocale(ULocale locale) {
         return BASE.locale(locale);
@@ -462,8 +435,7 @@ public final class NumberFormatter {
      *            The skeleton string off of which to base this NumberFormatter.
      * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
      * @throws SkeletonSyntaxException If the given string is not a valid number formatting skeleton.
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      */
     public static UnlocalizedNumberFormatter forSkeleton(String skeleton) {
         return NumberSkeletonImpl.getOrCreate(skeleton);
