@@ -32,7 +32,7 @@ one of the Java/ICU formats needs to be used for authoring and translation.
 Java PropertyResourceBundle uses runtime-parsed .properties files. They contain
 key-value pairs where both keys and values are Unicode strings. No other native
 data types (e.g., integers or binaries) are supported. There is no way to
-specify a charset, therefore .properties files must be in ISO 8859-1 with \\u
+specify a charset, therefore .properties files must be in ISO 8859-1 with \u
 escape sequences (see the Java native2ascii tool).
 
 Defined at:
@@ -40,8 +40,8 @@ Defined at:
 
 Example: (example_de.properties)
 
-key1=Deutsche Sprache schwere Sprache
-key2=Düsseldorf
+    key1=Deutsche Sprache schwere Sprache
+    key2=Düsseldorf
 
 ### .java ListResourceBundle files
 
@@ -53,23 +53,23 @@ can be nested.
 
 Although the Java compiler allows to specify a charset on the command line, this
 is uncommon, and .java resource bundle files are therefore usually encoded in
-ISO 8859-1 with \\u escapes like .properties files.
+ISO 8859-1 with \u escapes like .properties files.
 
 Defined at:
 <http://java.sun.com/j2se/1.4/docs/api/java/util/ListResourceBundle.html>
 
 Example: (example_de.java)
 
-public class example_de extends ListResourceBundle {
-public Object\[\]\[\] getContents() {
-return contents;
-}
-static final Object\[\]\[\] contents={
-{ "key1", "Deutsche Sprache " +
-"schwere Sprache" },
-{ "key2", "Düsseldorf" }
-};
-}
+    public class example_de extends ListResourceBundle {
+        public Object[][] getContents() {
+            return contents;
+        }
+        static final Object[][] contents={
+            { "key1", "Deutsche Sprache " +
+                "schwere Sprache" },
+            { "key2", "Düsseldorf" }
+        };
+    }
 
 ICU4J can also access the ICU4C resource bundles described in the next section,
 using the API described in the
@@ -127,11 +127,11 @@ section of this userguide.
 
 Example: (de.txt)
 
-de {
-key1 { "Deutsche Sprache "
-"schwere Sprache" }
-key2 { "Düsseldorf" }
-}
+    de {
+        key1 { "Deutsche Sprache "
+            "schwere Sprache" }
+        key2 { "Düsseldorf" }
+    }
 
 ### ICU4C XML resource bundles
 
@@ -170,31 +170,31 @@ Defined at: <http://www.oasis-open.org/committees/xliff/>
 
 Example: (example.xlf)
 
-<<?xml version="1.0" encoding="utf-8"?>
-<xliff version = "1.1" xmlns='urn:oasis:names:tc:xliff:document:1.1'
-xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-xsi:schemaLocation='urn:oasis:names:tc:xliff:document:1.1
-http://www.oasis-open.org/committees/xliff/documents/xliff-core-1.1.xsd'>
-<file xml:space = "preserve" source-language = "en" target-language = "sh"
-datatype = "x-icu-resource-bundle" original = "root.txt"
-date = "2007-08-17T21:17:08Z">
-<header>
-<tool tool-id = "genrb-3.3-icu-3.8" tool-name = "genrb"/>
-</header>
-<body>
-<group id = "root" restype = "x-icu-table">
-<trans-unit id = "optionMessage" resname = "optionMessage">
-<source>unrecognized command line option:</source>
-<target>nepoznata opcija na komandnoj liniji:</target>
-</trans-unit>
-<trans-unit id = "usage" resname = "usage">
-<source>usage: ufortune \[-v\] \[-l locale\]</source>
-<target>upotreba: ufortune \[-v\] \[-l lokal\]</target>
-</trans-unit>
-</group>
-</body>
-</file>
-</xliff>
+    <<?xml version="1.0" encoding="utf-8"?>
+    <xliff version = "1.1" xmlns='urn:oasis:names:tc:xliff:document:1.1'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='urn:oasis:names:tc:xliff:document:1.1
+    http://www.oasis-open.org/committees/xliff/documents/xliff-core-1.1.xsd'>
+        <file xml:space = "preserve" source-language = "en" target-language = "sh"
+        datatype = "x-icu-resource-bundle" original = "root.txt"
+        date = "2007-08-17T21:17:08Z">
+            <header>
+                <tool tool-id = "genrb-3.3-icu-3.8" tool-name = "genrb"/>
+            </header>
+            <body>
+                <group id = "root" restype = "x-icu-table">
+                    <trans-unit id = "optionMessage" resname = "optionMessage">
+                        <source>unrecognized command line option:</source>
+                        <target>nepoznata opcija na komandnoj liniji:</target>
+                    </trans-unit>
+                    <trans-unit id = "usage" resname = "usage">
+                        <source>usage: ufortune [-v] [-l locale]</source>
+                        <target>upotreba: ufortune [-v] [-l lokal]</target>
+                    </trans-unit>
+                </group>
+            </body>
+        </file>
+    </xliff>
 
 For examples on using ICU tools to produce and read XLIFF format see the XLIFF
 Usage (§) section in the [resource management chapter](resources.md).
@@ -234,11 +234,11 @@ Defined at: Annex C of the Li18nux-2000 specification, see above.
 
 Example: (example.po)
 
-domain "example_domain"
-msgid "key1"
-msgstr "Deutsche Sprache schwere Sprache"
-msgid "key2"
-msgstr "Düsseldorf"
+    domain "example_domain"
+    msgid "key1"
+    msgstr "Deutsche Sprache schwere Sprache"
+    msgid "key2"
+    msgstr "Düsseldorf"
 
 ## POSIX/catgets
 
@@ -254,9 +254,9 @@ Defined at:
 
 Example: (example.txt)
 
-1 Deutsche Sprache \\
-schwere Sprache
-2 Düsseldorf
+    1 Deutsche Sprache \
+    schwere Sprache
+    2 Düsseldorf
 
 ## Windows
 
@@ -317,36 +317,36 @@ There are currently no ICU tools for XLIFF.
 The following genrb invocation generates a ListResourceBundle from de.txt (see
 the example file de.txt above):
 
-genrb -j -b TestName -p com.example de.txt
+    genrb -j -b TestName -p com.example de.txt
 
 The -j option causes .java output, -b is an arbitrary bundle name prefix, and -p
 is an arbitrary package name. "Arbitrary" means "depends on your product" and
 may be truly arbitrary if the generated .java files are not actually used in a
 Java application. genrb auto-detects .txt files encoded in Unicode charsets like
 UTF-8 or UTF-16 if they have a signature byte sequence ("BOM"). The .java output
-file is in native2ascii format, i.e., it is encoded in US-ASCII with \\u
+file is in native2ascii format, i.e., it is encoded in US-ASCII with \u
 escapes.
 
 The output of the above genrb invocation is TestName_de.java:
 
-package com.example;
-import java.util.ListResourceBundle;
-import com.ibm.icu.impl.ICUListResourceBundle;
-public class TestName_de extends ICUListResourceBundle {
-public TestName_de () {
-super.contents = data;
-}
-static final Object\[\]\[\] data = new Object\[\]\[\] {
-{
-"key1",
-"Deutsche Sprache schwere Sprache",
-},
-{
-"key2",
-"D\\u00FCsseldorf",
-},
-};
-}
+    package com.example;
+    import java.util.ListResourceBundle;
+    import com.ibm.icu.impl.ICUListResourceBundle;
+    public class TestName_de extends ICUListResourceBundle {
+        public TestName_de () {
+            super.contents = data;
+        }
+        static final Object[][] data = new Object[][] {
+            {
+                "key1",
+                "Deutsche Sprache schwere Sprache",
+            },
+            {
+                "key2",
+                "D\u00FCsseldorf",
+            },
+        };
+    }
 
 ### Converting a ListResourceBundle back to .txt
 
@@ -375,10 +375,10 @@ converted to an ICU4C .txt file with the following steps:
 
 The last step generates a new de.txt in native2ascii format:
 
-de {
-key2{"D\\u00FCsseldorf"}
-key1{"Deutsche Sprache schwere Sprache"}
-}
+    de {
+        key2{"D\u00FCsseldorf"}
+        key1{"Deutsche Sprache schwere Sprache"}
+    }
 
 ## Further information
 
@@ -396,123 +396,123 @@ This file (winrc.rc) was generated with MSVC 6, using the New Project wizard to
 generate a simple "Hello World!" application, changing the LCIDs to German, then
 adding the two example strings as above.
 
-//Microsoft Developer Studio generated resource script.
-//
-#include "resource.h"
-#define APSTUDIO_READONLY_SYMBOLS
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 2 resource.
-//
-#define APSTUDIO_HIDDEN_SYMBOLS
-#include "windows.h"
-#undef APSTUDIO_HIDDEN_SYMBOLS
-#include "resource.h"
-/////////////////////////////////////////////////////////////////////////////
-#undef APSTUDIO_READONLY_SYMBOLS
-/////////////////////////////////////////////////////////////////////////////
-// German (Germany) resources
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
-#ifdef _WIN32
-LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
-#pragma code_page(1252)
-#endif //_WIN32
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_WINRC ICON DISCARDABLE "winrc.ICO"
-IDI_SMALL ICON DISCARDABLE "SMALL.ICO"
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menu
-//
-IDC_WINRC MENU DISCARDABLE
-BEGIN
-POPUP "&File"
-BEGIN
-MENUITEM "E&xit", IDM_EXIT
-END
-POPUP "&Help"
-BEGIN
-MENUITEM "&About ...", IDM_ABOUT
-END
-END
-/////////////////////////////////////////////////////////////////////////////
-//
-// Accelerator
-//
-IDC_WINRC ACCELERATORS MOVEABLE PURE
-BEGIN
-"?", IDM_ABOUT, ASCII, ALT
-"/", IDM_ABOUT, ASCII, ALT
-END
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-IDD_ABOUTBOX DIALOG DISCARDABLE 22, 17, 230, 75
-STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
-CAPTION "About"
-FONT 8, "System"
-BEGIN
-ICON IDI_WINRC,IDC_MYICON,14,9,16,16
-LTEXT "winrc Version 1.0",IDC_STATIC,49,10,119,8,SS_NOPREFIX
-LTEXT "Copyright (C) 2002",IDC_STATIC,49,20,119,8
-DEFPUSHBUTTON "OK",IDOK,195,6,30,11,WS_GROUP
-END
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-STRINGTABLE DISCARDABLE
-BEGIN
-IDS_APP_TITLE "winrc"
-IDS_HELLO "Hello World!"
-IDC_WINRC "WINRC"
-IDS_SENTENCE "Deutsche Sprache schwere Sprache"
-IDS_CITY "Düsseldorf"
-END
-#endif // German (Germany) resources
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// English (U.S.) resources
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-#pragma code_page(1252)
-#endif //_WIN32
-#ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXTINCLUDE
-//
-2 TEXTINCLUDE DISCARDABLE
-BEGIN
-"#define APSTUDIO_HIDDEN_SYMBOLS\\r\\n"
-"#include ""windows.h""\\r\\n"
-"#undef APSTUDIO_HIDDEN_SYMBOLS\\r\\n"
-"#include ""resource.h""\\r\\n"
-"\\0"
-END
-3 TEXTINCLUDE DISCARDABLE
-BEGIN
-"\\r\\n"
-"\\0"
-END
-1 TEXTINCLUDE DISCARDABLE
-BEGIN
-"resource.h\\0"
-END
-#endif // APSTUDIO_INVOKED
-#endif // English (U.S.) resources
-/////////////////////////////////////////////////////////////////////////////
-#ifndef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 3 resource.
-//
-/////////////////////////////////////////////////////////////////////////////
-#endif // not APSTUDIO_INVOKED
+    //Microsoft Developer Studio generated resource script.
+    //
+    #include "resource.h"
+    #define APSTUDIO_READONLY_SYMBOLS
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Generated from the TEXTINCLUDE 2 resource.
+    //
+    #define APSTUDIO_HIDDEN_SYMBOLS
+    #include "windows.h"
+    #undef APSTUDIO_HIDDEN_SYMBOLS
+    #include "resource.h"
+    /////////////////////////////////////////////////////////////////////////////
+    #undef APSTUDIO_READONLY_SYMBOLS
+    /////////////////////////////////////////////////////////////////////////////
+    // German (Germany) resources
+    #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_DEU)
+    #ifdef _WIN32
+    LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+    #pragma code_page(1252)
+    #endif //_WIN32
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Icon
+    //
+    // Icon with lowest ID value placed first to ensure application icon
+    // remains consistent on all systems.
+    IDI_WINRC ICON DISCARDABLE "winrc.ICO"
+    IDI_SMALL ICON DISCARDABLE "SMALL.ICO"
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Menu
+    //
+    IDC_WINRC MENU DISCARDABLE
+    BEGIN
+        POPUP "&File"
+        BEGIN
+            MENUITEM "E&xit", IDM_EXIT
+        END
+        POPUP "&Help"
+        BEGIN
+            MENUITEM "&About ...", IDM_ABOUT
+        END
+    END
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Accelerator
+    //
+    IDC_WINRC ACCELERATORS MOVEABLE PURE
+    BEGIN
+        "?", IDM_ABOUT, ASCII, ALT
+        "/", IDM_ABOUT, ASCII, ALT
+    END
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Dialog
+    //
+    IDD_ABOUTBOX DIALOG DISCARDABLE 22, 17, 230, 75
+    STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+    CAPTION "About"
+    FONT 8, "System"
+    BEGIN
+        ICON IDI_WINRC,IDC_MYICON,14,9,16,16
+        LTEXT "winrc Version 1.0",IDC_STATIC,49,10,119,8,SS_NOPREFIX
+        LTEXT "Copyright (C) 2002",IDC_STATIC,49,20,119,8
+        DEFPUSHBUTTON "OK",IDOK,195,6,30,11,WS_GROUP
+    END
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // String Table
+    //
+    STRINGTABLE DISCARDABLE
+    BEGIN
+    IDS_APP_TITLE "winrc"
+    IDS_HELLO "Hello World!"
+    IDC_WINRC "WINRC"
+    IDS_SENTENCE "Deutsche Sprache schwere Sprache"
+    IDS_CITY "Düsseldorf"
+    END
+    #endif // German (Germany) resources
+    /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+    // English (U.S.) resources
+    #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+    #ifdef _WIN32
+    LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+    #pragma code_page(1252)
+    #endif //_WIN32
+    #ifdef APSTUDIO_INVOKED
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // TEXTINCLUDE
+    //
+    2 TEXTINCLUDE DISCARDABLE
+    BEGIN
+        "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+        "#include ""windows.h""\r\n"
+        "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+        "#include ""resource.h""\r\n"
+        "\0"
+    END
+    3 TEXTINCLUDE DISCARDABLE
+    BEGIN
+        "\r\n"
+        "\0"
+    END
+    1 TEXTINCLUDE DISCARDABLE
+    BEGIN
+        "resource.h\0"
+    END
+    #endif // APSTUDIO_INVOKED
+    #endif // English (U.S.) resources
+    /////////////////////////////////////////////////////////////////////////////
+    #ifndef APSTUDIO_INVOKED
+    /////////////////////////////////////////////////////////////////////////////
+    //
+    // Generated from the TEXTINCLUDE 3 resource.
+    //
+    /////////////////////////////////////////////////////////////////////////////
+    #endif // not APSTUDIO_INVOKED
