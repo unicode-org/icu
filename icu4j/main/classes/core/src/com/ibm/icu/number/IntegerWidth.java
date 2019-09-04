@@ -10,8 +10,7 @@ import com.ibm.icu.impl.number.RoundingUtils;
  * <p>
  * To create an IntegerWidth, use one of the factory methods.
  *
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 60
  * @see NumberFormatter
  */
 public class IntegerWidth {
@@ -36,8 +35,7 @@ public class IntegerWidth {
      * @param minInt
      *            The minimum number of places before the decimal separator.
      * @return An IntegerWidth for chaining or passing to the NumberFormatter integerWidth() setter.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public static IntegerWidth zeroFillTo(int minInt) {
@@ -61,8 +59,7 @@ public class IntegerWidth {
      *            The maximum number of places before the decimal separator. maxInt == -1 means no
      *            truncation.
      * @return An IntegerWidth for passing to the NumberFormatter integerWidth() setter.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public IntegerWidth truncateAt(int maxInt) {

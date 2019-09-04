@@ -31,8 +31,7 @@ import com.ibm.icu.util.ULocale;
  * This class exposes no public functionality. To create a CompactNotation, use one of the factory
  * methods in {@link Notation}.
  *
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 60
  * @see NumberFormatter
  */
 public class CompactNotation extends Notation {

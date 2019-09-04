@@ -12,8 +12,7 @@ import java.util.NoSuchElementException;
  * Abstract map from Unicode code points (U+0000..U+10FFFF) to integer values.
  * This does not implement java.util.Map.
  *
- * @draft ICU 63
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 63
  */
 public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     /**
@@ -21,16 +20,14 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * Most users should use NORMAL.
      *
      * @see #getRange
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public enum RangeOption {
         /**
          * getRange() enumerates all same-value ranges as stored in the map.
          * Most users should use this option.
          *
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         NORMAL,
         /**
@@ -47,8 +44,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          * or for special error behavior for unpaired surrogates,
          * but those values are not to be associated with the lead surrogate code *points*.
          *
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         FIXED_LEAD_SURROGATES,
         /**
@@ -65,8 +61,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          * or for special error behavior for unpaired surrogates,
          * but those values are not to be associated with the lead surrogate code *points*.
          *
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         FIXED_ALL_SURROGATES
     }
@@ -82,8 +77,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      *
      * @see #getRange
      * @see #iterator
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public interface ValueFilter {
         /**
@@ -91,8 +85,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          *
          * @param value map value
          * @return modified value
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public int apply(int value);
     }
@@ -105,8 +98,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      *
      * @see #getRange
      * @see #iterator
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final class Range {
         private int start;
@@ -116,8 +108,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
         /**
          * Constructor. Sets start and end to -1 and value to 0.
          *
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public Range() {
             start = end = -1;
@@ -126,20 +117,17 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
         /**
          * @return the start code point
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public int getStart() { return start; }
         /**
          * @return the (inclusive) end code point
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public int getEnd() { return end; }
         /**
          * @return the range value
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public int getValue() { return value; }
         /**
@@ -149,8 +137,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          * @param start new start code point
          * @param end new end code point
          * @param value new value
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public void set(int start, int end, int value) {
             this.start = start;
@@ -199,8 +186,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      *
      * <p>This class is not intended for public subclassing.
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public class StringIterator {
         /**
@@ -245,8 +231,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          *
          * @param s string to iterate over
          * @param sIndex string index where the iteration will start
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public void reset(CharSequence s, int sIndex) {
             this.s = s;
@@ -262,8 +247,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          *
          * @return true if the string index was not yet at the end of the string;
          *         otherwise the iterator did not advance
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public boolean next() {
             if (sIndex >= s.length()) {
@@ -282,8 +266,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          *
          * @return true if the string index was not yet at the start of the string;
          *         otherwise the iterator did not advance
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public boolean previous() {
             if (sIndex <= 0) {
@@ -296,22 +279,19 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
         }
         /**
          * @return the string index
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public final int getIndex() { return sIndex; }
         /**
          * @return the code point
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public final int getCodePoint() { return c; }
         /**
          * @return the map value,
          *         or an implementation-defined error value if
          *         the code point is an unpaired surrogate
-         * @draft ICU 63
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 63
          */
         public final int getValue() { return value; }
     }
@@ -319,8 +299,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     /**
      * Protected no-args constructor.
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     protected CodePointMap() {
     }
@@ -333,8 +312,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * @return the map value,
      *         or an implementation-defined error value if
      *         the code point is not in the range 0..U+10FFFF
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public abstract int get(int c);
 
@@ -371,8 +349,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      *     or null if the values from the map are to be used unmodified
      * @param range the range object that will be set to the code point range and value
      * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public abstract boolean getRange(int start, ValueFilter filter, Range range);
 
@@ -395,8 +372,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      *     or null if the values from the map are to be used unmodified
      * @param range the range object that will be set to the code point range and value
      * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public boolean getRange(int start, RangeOption option, int surrogateValue,
             ValueFilter filter, Range range) {
@@ -453,8 +429,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * <p>The iterator always returns the same Range object.
      *
      * @return a Range iterator
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public Iterator<Range> iterator() {
@@ -468,8 +443,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * @param s string to iterate over
      * @param sIndex string index where the iteration will start
      * @return the iterator
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public StringIterator stringIterator(CharSequence s, int sIndex) {
         return new StringIterator(s, sIndex);

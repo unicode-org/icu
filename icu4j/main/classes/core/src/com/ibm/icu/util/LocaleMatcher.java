@@ -88,7 +88,7 @@ public final class LocaleMatcher {
     /**
      * Builder option for whether the language subtag or the script subtag is most important.
      *
-     * @see Builder#setFavorSubtag(FavorSubtag)
+     * @see LocaleMatcher.Builder#setFavorSubtag(LocaleMatcher.FavorSubtag)
      * @draft ICU 65
      * @provisional This API might change or be removed in a future release.
      */
@@ -114,7 +114,7 @@ public final class LocaleMatcher {
      * Builder option for whether all desired locales are treated equally or
      * earlier ones are preferred.
      *
-     * @see Builder#setDemotionPerDesiredLocale(Demotion)
+     * @see LocaleMatcher.Builder#setDemotionPerDesiredLocale(LocaleMatcher.Demotion)
      * @draft ICU 65
      * @provisional This API might change or be removed in a future release.
      */

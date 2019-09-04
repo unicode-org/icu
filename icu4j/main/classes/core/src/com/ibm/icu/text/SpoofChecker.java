@@ -471,8 +471,7 @@ public class SpoofChecker {
      * <p>
      * This list and the number of combing characters considered by this check may grow over time.
      *
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      */
     public static final int HIDDEN_OVERLAY = 256;
 

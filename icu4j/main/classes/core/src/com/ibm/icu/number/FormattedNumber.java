@@ -21,8 +21,7 @@ import com.ibm.icu.text.PluralRules.IFixedDecimal;
  *
  * Instances of this class are immutable and thread-safe.
  *
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 60
  * @see NumberFormatter
  */
 public class FormattedNumber implements FormattedValue {
@@ -37,8 +36,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     @Override
     public String toString() {
@@ -81,8 +79,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     @Override
     public <A extends Appendable> A appendTo(A appendable) {
@@ -103,8 +100,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      */
     @Override
     public AttributedCharacterIterator toCharacterIterator() {
@@ -155,8 +151,7 @@ public class FormattedNumber implements FormattedValue {
      * pipeline.
      *
      * @return A BigDecimal representation of the formatted number.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public BigDecimal toBigDecimal() {

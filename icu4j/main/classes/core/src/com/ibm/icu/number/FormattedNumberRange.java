@@ -23,8 +23,7 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * Instances of this class are immutable and thread-safe.
  *
  * @author sffc
- * @draft ICU 63
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 63
  * @see NumberRangeFormatter
  */
 public class FormattedNumberRange implements FormattedValue {
@@ -44,8 +43,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public String toString() {
@@ -55,8 +53,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public <A extends Appendable> A appendTo(A appendable) {
@@ -149,8 +146,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public AttributedCharacterIterator toCharacterIterator() {
@@ -162,8 +158,7 @@ public class FormattedNumberRange implements FormattedValue {
      * printed after scaling and rounding have been applied by the number range formatting pipeline.
      *
      * @return A BigDecimal representation of the first formatted number.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      * @see #getSecondBigDecimal
      */
@@ -176,8 +171,7 @@ public class FormattedNumberRange implements FormattedValue {
      * printed after scaling and rounding have been applied by the number range formatting pipeline.
      *
      * @return A BigDecimal representation of the second formatted number.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      * @see #getFirstBigDecimal
      */
@@ -191,8 +185,7 @@ public class FormattedNumberRange implements FormattedValue {
      * identity fallback was used.
      *
      * @return A RangeIdentityType indicating the resulting identity situation in the formatted number range.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      * @see NumberRangeFormatter.RangeIdentityFallback
      */

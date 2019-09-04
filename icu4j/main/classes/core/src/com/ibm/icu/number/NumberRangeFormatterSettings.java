@@ -13,8 +13,7 @@ import com.ibm.icu.util.ULocale;
  * public subclassing.
  *
  * @author sffc
- * @draft ICU 63
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 63
  * @see NumberRangeFormatter
  */
 public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatterSettings<?>> {
@@ -49,8 +48,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @param formatter
      *            The formatter to use for both numbers in the range.
      * @return The fluent chain.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
@@ -68,8 +66,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @param formatterFirst
      *            The formatter to use for the first number in the range.
      * @return The fluent chain.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
@@ -87,8 +84,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @param formatterSecond
      *            The formatter to use for the second number in the range.
      * @return The fluent chain.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
@@ -111,8 +107,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @param collapse
      *            The collapsing strategy to use for this range.
      * @return The fluent chain.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      */
     public T collapse(RangeCollapse collapse) {
@@ -136,8 +131,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @param identityFallback
      *            The strategy to use when formatting two numbers that end up being the same.
      * @return The fluent chain.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      */
     public T identityFallback(RangeIdentityFallback identityFallback) {
@@ -210,8 +204,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public int hashCode() {
@@ -221,8 +214,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public boolean equals(Object other) {
