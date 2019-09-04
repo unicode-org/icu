@@ -148,12 +148,11 @@ void getCurrencyLongNameData(const Locale &locale, const CurrencyUnit &currency,
         if (pattern.isBogus()) {
             continue;
         }
-        UBool isChoiceFormat = FALSE;
         int32_t longNameLen = 0;
         const char16_t *longName = ucurr_getPluralName(
                 currency.getISOCurrency(),
                 locale.getName(),
-                &isChoiceFormat,
+                nullptr /* isChoiceFormat */,
                 StandardPlural::getKeyword(static_cast<StandardPlural::Form>(i)),
                 &longNameLen,
                 &status);
@@ -263,6 +262,26 @@ UnicodeString LongNameHandler::getUnitDisplayName(
     UnicodeString simpleFormats[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, simpleFormats, status);
     return simpleFormats[DNAM_INDEX];
+}
+
+UnicodeString LongNameHandler::getUnitPattern(
+        const Locale& loc,
+        const MeasureUnit& unit,
+        UNumberUnitWidth width,
+        StandardPlural::Form pluralForm,
+        UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    UnicodeString simpleFormats[ARRAY_LENGTH];
+    getMeasureData(loc, unit, width, simpleFormats, status);
+    // The above already handles fallback from other widths to short
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    // Now handle fallback from other plural forms to OTHER
+    return (!(simpleFormats[pluralForm]).isBogus())? simpleFormats[pluralForm]:
+            simpleFormats[StandardPlural::Form::OTHER];
 }
 
 LongNameHandler* LongNameHandler::forCurrencyLongNames(const Locale &loc, const CurrencyUnit &currency,

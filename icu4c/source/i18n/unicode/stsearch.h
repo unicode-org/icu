@@ -121,8 +121,7 @@ U_NAMESPACE_BEGIN
  *      pos != USEARCH_DONE; 
  *      pos = iter.next(error))
  * {
- *     printf("Found match at %d pos, length is %d\n", pos, 
- *                                             iter.getMatchLength());
+ *     printf("Found match at %d pos, length is %d\n", pos, iter.getMatchedLength());
  * }
  * </code></pre>
  * <p>

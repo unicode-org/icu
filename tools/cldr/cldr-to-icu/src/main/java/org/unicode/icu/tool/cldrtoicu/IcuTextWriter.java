@@ -27,7 +27,7 @@ final class IcuTextWriter {
     // List of characters to escape in UnicodeSets
     // ('\' followed by any of '\', '[', ']', '{', '}', '-', '&', ':', '^', '=').
     private static final Pattern UNICODESET_ESCAPE =
-        Pattern.compile("\\\\[\\\\\\[\\]\\{\\}\\-&:^=]");
+        Pattern.compile("\\\\[\\\\\\[\\]{}\\-&:^=]");
     // Only escape \ and " from other strings.
     private static final Pattern STRING_ESCAPE = Pattern.compile("(?!')\\\\\\\\(?!')");
     private static final Pattern QUOTE_ESCAPE = Pattern.compile("\\\\?\"");
@@ -54,7 +54,7 @@ final class IcuTextWriter {
     }
 
     // TODO: Write a UTF-8 header (see https://unicode-org.atlassian.net/browse/ICU-10197).
-    private void writeTo(PrintWriter out, List<String> header) throws IOException {
+    private void writeTo(PrintWriter out, List<String> header) {
         out.write('\uFEFF');
         writeHeaderAndComments(out, header, icuData.getFileComment());
 
@@ -83,20 +83,20 @@ final class IcuTextWriter {
             // account for the implicit root segment.
             int commonDepth = RbPath.getCommonPrefixLength(lastPath, path) + 1;
             // Before closing, the "cursor" is at the end of the last value written.
-            closeLastPath(lastPath, commonDepth, out);
+            closeLastPath(commonDepth, out);
             // After opening the value will be ready for the next value to be written.
             openNextPath(path, out);
             valueWasInline = appendValues(icuData.getName(), path, icuData.get(path), out);
             lastPath = path;
         }
-        closeLastPath(lastPath, 0, out);
+        closeLastPath(0, out);
         out.println();
         out.close();
     }
 
     // Before: Cursor is at the end of the previous line.
     // After: Cursor is positioned immediately after the last closed '}'
-    private void closeLastPath(RbPath lastPath, int minDepth, PrintWriter out) {
+    private void closeLastPath(int minDepth, PrintWriter out) {
         if (valueWasInline) {
             depth--;
             out.print('}');
@@ -164,7 +164,7 @@ final class IcuTextWriter {
         boolean isSequence = rbPath.endsWith(RB_SEQUENCE);
         if (values.size() == 1 && !mustBeArray(true, name, rbPath)) {
             onlyValue = values.get(0);
-            if (onlyValue.size() == 1 && !mustBeArray(false, name, rbPath)) {
+            if (onlyValue.isSingleton() && !mustBeArray(false, name, rbPath)) {
                 // Value has a single element and is not being forced to be an array.
                 String onlyElement = onlyValue.getElement(0);
                 if (quote) {
@@ -195,7 +195,7 @@ final class IcuTextWriter {
             }
         } else {
             for (RbValue value : values) {
-                if (value.size() == 1) {
+                if (value.isSingleton()) {
                     // Single-value array: print normally.
                     printArray(value, quote, isSequence, out);
                 } else {
@@ -238,9 +238,9 @@ final class IcuTextWriter {
     }
 
     private void printArray(RbValue rbValue, boolean quote, boolean isSequence, PrintWriter out) {
-        for (int n = 0; n < rbValue.size(); n++) {
+        for (String v : rbValue.getElements()) {
             newLineAndIndent(out);
-            printValue(out, quoteInside(rbValue.getElement(n)), quote);
+            printValue(out, quoteInside(v), quote);
             if (!isSequence) {
                 out.print(",");
             }

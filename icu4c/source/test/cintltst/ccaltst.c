@@ -2403,6 +2403,11 @@ static const UChar tzTronto[] = /* America/Toronto */
 static const UChar sBogus[] = /* Bogus */
     {0x42,0x6F,0x67,0x75,0x73,0x00};
 
+#ifndef U_DEBUG
+static const UChar sBogusWithVariantCharacters[] = /* Bogus with Variant characters: Hèℓℓô Wôřℓδ */
+    {0x48,0xE8,0x2113,0x2113,0xF4,0x20,0x57,0xF4,0x159,0x2113,0x3B4,0x00};
+#endif
+
 void TestGetWindowsTimeZoneID() {
     UErrorCode status;
     UChar winID[64];
@@ -2469,7 +2474,6 @@ void TestGetTimeZoneIDByWindowsID() {
             log_err("FAIL: TZ ID for Eastern Standard Time - CA\n");
         }
     }
-
     {
         status = U_ZERO_ERROR;
         len = ucal_getTimeZoneIDForWindowsID(sBogus, -1, NULL, tzID, UPRV_LENGTHOF(tzID), &status);
@@ -2479,6 +2483,15 @@ void TestGetTimeZoneIDByWindowsID() {
             log_err("FAIL: TZ ID for Bogus\n");
         }
     }
+#ifndef U_DEBUG
+    // This test is only for release mode because it will cause an assertion failure in debug builds.
+    // We don't check the API result for errors as the only purpose of this test is to ensure that
+    // input variant characters don't cause abort() to be called and/or that ICU doesn't crash.
+    {
+        status = U_ZERO_ERROR;
+        len = ucal_getTimeZoneIDForWindowsID(sBogusWithVariantCharacters, -1, NULL, tzID, UPRV_LENGTHOF(tzID), &status);
+    }
+#endif
 }
 
 // The following currently assumes that Reiwa is the last known/valid era.

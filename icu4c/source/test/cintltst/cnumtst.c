@@ -73,6 +73,7 @@ static void Test12052_NullPointer(void);
 static void TestParseCases(void);
 static void TestSetMaxFracAndRoundIncr(void);
 static void TestIgnorePadding(void);
+static void TestSciNotationMaxFracCap(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -112,6 +113,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestParseCases);
     TESTCASE(TestSetMaxFracAndRoundIncr);
     TESTCASE(TestIgnorePadding);
+    TESTCASE(TestSciNotationMaxFracCap);
 }
 
 /* test Parse int 64 */
@@ -3433,6 +3435,40 @@ static void TestIgnorePadding(void) {
                         log_err("unum_formatDecimal result expect 24 but get %s\n", bbuf);
                     }
                 }
+            }
+        }
+        unum_close(unum);
+    }
+}
+
+static void TestSciNotationMaxFracCap(void) {
+    static const UChar* pat1 = u"#.##E+00;-#.##E+00";
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* unum = unum_open(UNUM_PATTERN_DECIMAL, pat1, -1, "en_US", NULL, &status);
+    if ( U_FAILURE(status) ) {
+        log_data_err("unum_open UNUM_PATTERN_DECIMAL with scientific pattern for \"en_US\" fails with %s\n", u_errorName(status));
+    } else {
+        double value;
+        UChar ubuf[kUBufMax];
+        char bbuf[kBBufMax];
+        int32_t ulen;
+
+        unum_setAttribute(unum, UNUM_MIN_FRACTION_DIGITS, 0);
+        unum_setAttribute(unum, UNUM_MAX_FRACTION_DIGITS, 2147483647);
+        ulen = unum_toPattern(unum, FALSE, ubuf, kUBufMax, &status);
+        if ( U_SUCCESS(status) ) {
+            u_austrncpy(bbuf, ubuf, kUBufMax);
+            log_info("unum_toPattern (%d): %s\n", ulen, bbuf);
+        }
+
+        for (value = 10.0; value < 1000000000.0; value *= 10.0) {
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, value, ubuf, kUBufMax, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("unum_formatDouble value %.1f status %s\n", value, u_errorName(status));
+            } else if (u_strncmp(ubuf,u"1E+0",4) != 0) {
+                u_austrncpy(bbuf, ubuf, kUBufMax);
+                log_err("unum_formatDouble value %.1f expected result to begin with 1E+0, got %s\n", value, bbuf);
             }
         }
         unum_close(unum);

@@ -63,8 +63,8 @@ jobs:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_Release
-  displayName: 'C: MSVC 64-bit Release (VS 2017)'
+- job: ICU4C_MSVC_x64_Release_Distrelease
+  displayName: 'C: MSVC 64-bit Release (VS 2017) + Distrelease'
   timeoutInMinutes: 30
   pool:
     vmImage: 'vs2017-win2016'
@@ -85,17 +85,46 @@ jobs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Release'
     - task: PowerShell@2
-      displayName: 'PowerShell: Distrelease script'
+      displayName: 'PowerShell: Distrelease script (x64)'
       inputs:
         targetType: filePath
         filePath: 'icu4c/packaging/distrelease.ps1'
         arguments: '-arch x64'
         workingDirectory: icu4c
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifacts: icu-windows.zip'
+      displayName: 'Publish x64 Artifacts: icu-windows.zip'
       inputs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x86_Release_Distrelease
+  displayName: 'C: MSVC 32-bit Release (VS 2017) + Distrelease'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'vs2017-win2016'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: Win32
+        configuration: Release
+    - task: PowerShell@2
+      displayName: 'PowerShell: Distrelease script (x86)'
+      inputs:
+        targetType: filePath
+        filePath: 'icu4c/packaging/distrelease.ps1'
+        arguments: '-arch x86'
+        workingDirectory: icu4c
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish x86 Artifacts: icu-windows.zip'
+      inputs:
+        PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
+        ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x86_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_ARM32_ARM64_Release
   displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2017)'
@@ -227,3 +256,16 @@ jobs:
        set MSYSTEM=MINGW64
        c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW && make -j2 check"
       displayName: 'Build and Test ICU4C'
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang_MacOSX_WarningsAsErrors
+  displayName: 'C: macOSX Clang WarningsAsErrors (Mojave 10.14)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'macOS-10.14'
+  steps:
+    - script: |
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 tests
+      displayName: 'Build only (WarningsAsErrors)'
+      env:
+        CC: clang
+        CXX: clang++

@@ -23,11 +23,11 @@ import org.unicode.cldr.api.CldrData.ValueVisitor;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrValue;
-
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
+
 import com.ibm.icu.text.Transliterator;
 
 /**
@@ -99,6 +99,7 @@ public final class TransformsMapper {
 
             // I have _no_ idea what any of this is about, I'm just trying to mimic the original
             // (complex and undocumented) code in "ConvertTransforms.java".
+            // TODO: Understand and document each of the cases below.
             icuData.add(RbPath.of("TransliteratorNamePattern"), "{0,choice,0#|1#{1}|2#{1}-{2}}");
             // Note that this quoting of path segments is almost certainly unnecessary. It matches
             // the old "ConvertTransforms" behaviour, but '%' is used elsewhere without quoting, so

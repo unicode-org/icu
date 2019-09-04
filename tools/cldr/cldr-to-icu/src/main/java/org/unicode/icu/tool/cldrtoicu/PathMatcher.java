@@ -148,12 +148,13 @@ public abstract class PathMatcher {
     // Make a new, non-interned, unique instance here which we can test by reference to
     // determine if the argument is to be captured (needed as ImmutableMap prohibits null).
     // DO NOT change this code to assign "*" as the value directly, it MUST be a new instance.
+    @SuppressWarnings("StringOperationCanBeSimplified")
     private static final String WILDCARD = new String("*");
 
     private static final Pattern ELEMENT_START_REGEX =
         Pattern.compile("(\\*|[-:\\w]+)(?:/|\\[|$)");
     private static final Pattern ATTRIBUTE_REGEX =
-        Pattern.compile("\\[@([-:\\w]+)=(?:\\*|\"([^\"]*)\")\\]");
+        Pattern.compile("\\[@([-:\\w]+)=(?:\\*|\"([^\"]*)\")]");
 
     // element := foo, foo[@bar="baz"], foo[@bar=*]
     // pathspec := element{/element}*

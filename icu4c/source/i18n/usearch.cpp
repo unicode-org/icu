@@ -3545,6 +3545,10 @@ const CEI *CEIBuffer::get(int32_t index) {
     //   that is allowed.
     if (index != limitIx) {
         U_ASSERT(FALSE);
+        // TODO: In ICU 64 the above assert was changed to use UPRV_UNREACHABLE instead
+        // which unconditionally calls abort(). However, there were cases where this was
+        // being hit. This change is reverted for now, restoring the existing behavior.
+        // ICU-20792 tracks the follow-up work/further investigation on this.
         return NULL;
     }
 
@@ -3583,6 +3587,10 @@ const CEI *CEIBuffer::getPrevious(int32_t index) {
     //   that is allowed.
     if (index != limitIx) {
         U_ASSERT(FALSE);
+        // TODO: In ICU 64 the above assert was changed to use UPRV_UNREACHABLE instead
+        // which unconditionally calls abort(). However, there were cases where this was
+        // being hit. This change is reverted for now, restoring the existing behavior.
+        // ICU-20792 tracks the follow-up work/further investigation on this.
         return NULL;
     }
 

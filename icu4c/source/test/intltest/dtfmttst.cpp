@@ -127,6 +127,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestMinuteSecondFieldsInOddPlaces);
     TESTCASE_AUTO(TestDayPeriodParsing);
     TESTCASE_AUTO(TestParseRegression13744);
+    TESTCASE_AUTO(TestAdoptCalendarLeak);
 
     TESTCASE_AUTO_END;
 }
@@ -5538,6 +5539,19 @@ void DateFormatTest::TestParseRegression13744() {
     UnicodeString inDate("4/27/18");
     dfmt->parse(inDate, pos);
     assertEquals("Error index", inDate.length(), pos.getErrorIndex());
+}
+
+void DateFormatTest::TestAdoptCalendarLeak() {
+    UErrorCode status = U_ZERO_ERROR;
+    // This test relies on the locale fullName exceeding ULOC_FULLNAME_CAPACITY
+    // in order for setKeywordValue to fail.
+    SimpleDateFormat sdf(
+        "d.M.y",
+        Locale("de__POSIX@colstrength=primary;currency=eur;em=default;"
+               "hours=h23;lb=strict;lw=normal;measure=metric;numbers=latn;"
+               "rg=atzzzz;sd=atat1;ss=none;timezone=Europe/Vienna"),
+        status);
+    sdf.adoptCalendar(Calendar::createInstance(status));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

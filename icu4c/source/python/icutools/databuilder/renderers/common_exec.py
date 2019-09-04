@@ -98,7 +98,7 @@ def run_helper(request, common_vars, platform, tool_dir, verbose, tool_cfg=None,
             if platform == "windows":
                 # Note: this / to \ substitution may be too aggressive?
                 command_line = command_line.replace("/", "\\")
-            returncode = run_shell_command(command_line, verbose)
+            returncode = run_shell_command(command_line, platform, verbose)
             if returncode != 0:
                 return returncode
         return 0
@@ -111,23 +111,36 @@ def run_helper(request, common_vars, platform, tool_dir, verbose, tool_cfg=None,
         if platform == "windows":
             # Note: this / to \ substitution may be too aggressive?
             command_line = command_line.replace("/", "\\")
-        returncode = run_shell_command(command_line, verbose)
+        returncode = run_shell_command(command_line, platform, verbose)
         return returncode
     assert False
 
-def run_shell_command(command_line, verbose):
+def run_shell_command(command_line, platform, verbose):
+    changed_windows_comspec = False
+    # If the command line length on Windows exceeds the absolute maximum that CMD supports (8191), then
+    # we temporarily switch over to use PowerShell for the command, and then switch back to CMD.
+    # We don't want to use PowerShell for everything though, as it tends to be slower.
+    if (platform == "windows") and (len(command_line) > 8190):
+        if verbose:
+            print("Command length exceeds the max length for CMD on Windows, using PowerShell instead.")
+        previous_comspec = os.environ["COMSPEC"]
+        os.environ["COMSPEC"] = 'powershell'
+        changed_windows_comspec = True
     if verbose:
         print("Running: %s" % command_line)
-        return subprocess.call(
+        returncode = subprocess.call(
             command_line,
             shell = True
         )
     else:
         # Pipe output to /dev/null in quiet mode
         with open(os.devnull, "w") as devnull:
-            return subprocess.call(
+            returncode = subprocess.call(
                 command_line,
                 shell = True,
                 stdout = devnull,
                 stderr = devnull
             )
+    if changed_windows_comspec:
+        os.environ["COMSPEC"] = previous_comspec
+    return returncode

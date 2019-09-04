@@ -12,11 +12,11 @@
 
 ##############################################################################
 # Keep the following in sync with the version - see common/unicode/uvernum.h
-U_ICUDATA_NAME=icudt64
+U_ICUDATA_NAME=icudt65
 ##############################################################################
 !IF "$(UWP)" == "UWP"
 # Optionally change the name of the data file for the UWP version.
-U_ICUDATA_NAME=icudt64
+U_ICUDATA_NAME=icudt65
 !ENDIF
 U_ICUDATA_ENDIAN_SUFFIX=l
 UNICODE_VERSION=12.1
@@ -412,7 +412,7 @@ icu4j-data-install :
 !ENDIF
 
 "$(ARM_CROSSBUILD_TS)" : $(COMMON_ICUDATA_DEPENDENCIES) "$(ICU_LIB_TARGET)"
-    @echo Building ICU data for "$(ARM_CROSS_BUILD)" from x64
+	@echo Building ICU data for "$(ARM_CROSS_BUILD)" from x64
 	cd "$(ICUBLD_PKG)"
 	"$(ICUPBIN)\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) $(ICUTMP)\icudata.lst
 	-@erase "$(ICU_LIB_TARGET)"
@@ -421,7 +421,7 @@ icu4j-data-install :
 	-@erase "$(U_ICUDATA_NAME).dll"
 	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUTMP)\$(ICUPKG).dat"
-    @echo "timestamp" > $(ARM_CROSSBUILD_TS)
+	@echo "timestamp" > $(ARM_CROSSBUILD_TS)
 
 # utility target to create missing directories
 # Most directories are made by Python, but still create ICUTMP
@@ -431,6 +431,7 @@ CREATE_DIRS :
 	@if not exist "$(ICUTMP)\$(NULL)" mkdir "$(ICUTMP)"
 	@if not exist "$(ICUOUT)\build\$(NULL)" mkdir "$(ICUOUT)\build"
 	@if not exist "$(ICUBLD_PKG)\$(NULL)" mkdir "$(ICUBLD_PKG)"
+	@if not exist "$(TESTDATAOUT)" mkdir "$(TESTDATAOUT)"
 
 # utility target to send us to the right dir
 GODATA : CREATE_DIRS
@@ -439,53 +440,11 @@ GODATA : CREATE_DIRS
 # This is to remove all the data files
 CLEAN : GODATA
 	@echo Cleaning up the data files.
-	@cd "$(ICUBLD_PKG)"
-	-@erase "*.cnv"
-	-@erase "*.exp"
-	-@erase "*.icu"
-	-@erase "*.lib"
-	-@erase "*.nrm"
-	-@erase "*.res"
-	-@erase "*.spp"
-	-@erase "*.txt"
-	-@erase "*.cfu"
-	-@erase "curr\*.res"
-	-@erase "curr\*.txt"
-	-@erase "lang\*.res"
-	-@erase "lang\*.txt"
-	-@erase "region\*.res"
-	-@erase "region\*.txt"
-	-@erase "zone\*.res"
-	-@erase "zone\*.txt"
-	-@erase "$(ICUBRK)\*.brk"
-	-@erase "$(ICUBRK)\*.res"
-	-@erase "$(ICUBRK)\*.txt"
-	-@erase "$(ICUBRK)\*.dict"
-	-@erase "$(ICUCOL)\*.res"
-	-@erase "$(ICUCOL)\*.txt"
-	-@erase "$(ICURBNF)\*.res"
-	-@erase "$(ICURBNF)\*.txt"
-	-@erase "$(ICUTRNS)\*.res"
+	@cd "$(ICUOUT)"
 	-@erase "$(ICUOUT)\*.dat"
-	-@erase "$(ICUTMP)\*.html"
-	-@erase "$(ICUTMP)\*.lst"
-	-@erase "$(ICUTMP)\*.mak"
-	-@erase "$(ICUTMP)\*.obj"
-	-@erase "$(ICUTMP)\*.res"
-	-@erase "$(ICUTMP)\*.timestamp"
-	-@erase "$(TESTDATABLD)\*.cnv"
-	-@erase "$(TESTDATABLD)\*.icu"
-	-@erase "$(TESTDATABLD)\*.mak"
-	-@erase "$(TESTDATABLD)\*.nrm"
-	-@erase "$(TESTDATABLD)\*.res"
-	-@erase "$(TESTDATABLD)\*.spp"
-	-@erase "$(TESTDATABLD)\*.txt"
-	-@erase "$(TESTDATAOUT)\*.dat"
-	-@erase "$(TESTDATAOUT)\testdata\*.typ"
-	-@erase "$(TESTDATAOUT)\testdata\*.res"
-	-@erase "$(TESTDATAOUT)\testdata\*.txt"
-	-@erase "$(TESTDATAOUT)\testdata\*.lst"
-
+	@rmdir $(ICUBLD) /s /q
+	@rmdir $(ICUTMP) /s /q
+	@rmdir $(TESTDATAOUT) /s /q
 
 # DLL version information
 # If you modify this, modify winmode.c in pkgdata.

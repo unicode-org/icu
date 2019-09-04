@@ -6,7 +6,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
 
@@ -34,9 +33,14 @@ public final class RbValue {
         checkArgument(!this.elements.isEmpty(), "Resource bundle values cannot be empty");
     }
 
-    /** Returns the (non zero) number of elements in this value. */
-    public int size() {
-        return elements.size();
+    /** Returns the non-empty list of value elements. */
+    public ImmutableList<String> getElements() {
+        return elements;
+    }
+
+    /** Returns whether this is a single element value. */
+    public boolean isSingleton() {
+        return elements.size() == 1;
     }
 
     /** Returns the Nth element of this value. */

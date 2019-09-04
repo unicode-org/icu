@@ -15,11 +15,11 @@ import java.util.stream.Stream;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
-
-import com.google.common.collect.ImmutableList;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.DynamicVars;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
+
+import com.google.common.collect.ImmutableList;
 
 /*
  * Each rule corresponds to a single target xpath specification in the configuration file
