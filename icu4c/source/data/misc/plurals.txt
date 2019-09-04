@@ -5,6 +5,7 @@ plurals:table(nofallback){
         af{"set8"}
         ak{"set6"}
         am{"set1"}
+        an{"set8"}
         ar{"set33"}
         ars{"set33"}
         as{"set1"}
@@ -15,7 +16,7 @@ plurals:table(nofallback){
         bem{"set8"}
         bez{"set8"}
         bg{"set8"}
-        bh{"set6"}
+        bho{"set6"}
         bm{"set0"}
         bn{"set1"}
         bo{"set0"}
@@ -136,6 +137,7 @@ plurals:table(nofallback){
         om{"set8"}
         or{"set8"}
         os{"set8"}
+        osa{"set0"}
         pa{"set6"}
         pap{"set8"}
         pl{"set25"}
@@ -176,6 +178,7 @@ plurals:table(nofallback){
         ss{"set8"}
         ssy{"set8"}
         st{"set8"}
+        su{"set0"}
         sv{"set4"}
         sw{"set4"}
         syr{"set8"}
@@ -214,6 +217,7 @@ plurals:table(nofallback){
     locales_ordinals{
         af{"set36"}
         am{"set36"}
+        an{"set36"}
         ar{"set36"}
         as{"set56"}
         az{"set54"}

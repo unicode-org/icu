@@ -12,19 +12,22 @@ ro{
     }
     ExemplarCharacters{"[a ă â b c d e f g h i î j k l m n o p r s ș t ț u v w x y z]"}
     ExemplarCharactersIndex{"[A Ă Â B C D E F G H I Î J K L M N O P Q R S Ș T Ț U V W X Y Z]"}
-    ExemplarCharactersNumbers{"[\\- , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … ' ‘ \u0022 “ ” „ « » ( ) \\[ \\] @ * /]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ \u0022 “ ” „ « » ( ) \\[ \\] @ * /]"}
     MoreInformation{"..."}
     NumberElements{
         default{"latn"}
         latn{
             miscPatterns{
+                approximately{"~{0}"}
                 atLeast{"≥{0}"}
+                atMost{"≤{0}"}
                 range{"{0} - {1}"}
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
@@ -32,63 +35,99 @@ ro{
                 decimalFormat{
                     1000{
                         few{"0 mii"}
+                        many{"0 K"}
                         one{"0 mie"}
                         other{"0 de mii"}
+                        two{"0 K"}
+                        zero{"0 K"}
                     }
                     10000{
                         few{"00 mii"}
+                        many{"00 K"}
                         one{"00 mie"}
                         other{"00 de mii"}
+                        two{"00 K"}
+                        zero{"00 K"}
                     }
                     100000{
                         few{"000 mii"}
+                        many{"000 K"}
                         one{"000 mie"}
                         other{"000 de mii"}
+                        two{"000 K"}
+                        zero{"000 K"}
                     }
                     1000000{
                         few{"0 milioane"}
+                        many{"0 mil'.'"}
                         one{"0 milion"}
                         other{"0 de milioane"}
+                        two{"0 mil'.'"}
+                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 milioane"}
+                        many{"00 mil'.'"}
                         one{"00 milion"}
                         other{"00 de milioane"}
+                        two{"00 mil'.'"}
+                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 milioane"}
+                        many{"000 mil'.'"}
                         one{"000 milion"}
                         other{"000 de milioane"}
+                        two{"000 mil'.'"}
+                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 miliarde"}
+                        many{"0 mld'.'"}
                         one{"0 miliard"}
                         other{"0 de miliarde"}
+                        two{"0 mld'.'"}
+                        zero{"0 mld'.'"}
                     }
                     10000000000{
                         few{"00 miliarde"}
+                        many{"00 mld'.'"}
                         one{"00 miliard"}
                         other{"00 de miliarde"}
+                        two{"00 mld'.'"}
+                        zero{"00 mld'.'"}
                     }
                     100000000000{
                         few{"000 miliarde"}
+                        many{"000 mld'.'"}
                         one{"000 miliard"}
                         other{"000 de miliarde"}
+                        two{"000 mld'.'"}
+                        zero{"000 mld'.'"}
                     }
                     1000000000000{
                         few{"0 trilioane"}
+                        many{"0 tril'.'"}
                         one{"0 trilion"}
                         other{"0 de trilioane"}
+                        two{"0 tril'.'"}
+                        zero{"0 tril'.'"}
                     }
                     10000000000000{
                         few{"00 trilioane"}
+                        many{"00 tril'.'"}
                         one{"00 trilion"}
                         other{"00 de trilioane"}
+                        two{"00 tril'.'"}
+                        zero{"00 tril'.'"}
                     }
                     100000000000000{
                         few{"000 trilioane"}
+                        many{"000 tril'.'"}
                         one{"000 trilion"}
                         other{"000 de trilioane"}
+                        two{"000 tril'.'"}
+                        zero{"000 tril'.'"}
                     }
                 }
             }
@@ -158,63 +197,99 @@ ro{
                 decimalFormat{
                     1000{
                         few{"0 K"}
+                        many{"0 K"}
                         one{"0 K"}
                         other{"0 K"}
+                        two{"0 K"}
+                        zero{"0 K"}
                     }
                     10000{
                         few{"00 K"}
+                        many{"00 K"}
                         one{"00 K"}
                         other{"00 K"}
+                        two{"00 K"}
+                        zero{"00 K"}
                     }
                     100000{
                         few{"000 K"}
+                        many{"000 K"}
                         one{"000 K"}
                         other{"000 K"}
+                        two{"000 K"}
+                        zero{"000 K"}
                     }
                     1000000{
                         few{"0 mil'.'"}
+                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
+                        two{"0 mil'.'"}
+                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
+                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
+                        two{"00 mil'.'"}
+                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
+                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
+                        two{"000 mil'.'"}
+                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mld'.'"}
+                        many{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
+                        two{"0 mld'.'"}
+                        zero{"0 mld'.'"}
                     }
                     10000000000{
                         few{"00 mld'.'"}
+                        many{"00 mld'.'"}
                         one{"00 mld'.'"}
                         other{"00 mld'.'"}
+                        two{"00 mld'.'"}
+                        zero{"00 mld'.'"}
                     }
                     100000000000{
                         few{"000 mld'.'"}
+                        many{"000 mld'.'"}
                         one{"000 mld'.'"}
                         other{"000 mld'.'"}
+                        two{"000 mld'.'"}
+                        zero{"000 mld'.'"}
                     }
                     1000000000000{
                         few{"0 tril'.'"}
+                        many{"0 tril'.'"}
                         one{"0 tril'.'"}
                         other{"0 tril'.'"}
+                        two{"0 tril'.'"}
+                        zero{"0 tril'.'"}
                     }
                     10000000000000{
                         few{"00 tril'.'"}
+                        many{"00 tril'.'"}
                         one{"00 tril'.'"}
                         other{"00 tril'.'"}
+                        two{"00 tril'.'"}
+                        zero{"00 tril'.'"}
                     }
                     100000000000000{
                         few{"000 tril'.'"}
+                        many{"000 tril'.'"}
                         one{"000 tril'.'"}
                         other{"000 tril'.'"}
+                        two{"000 tril'.'"}
+                        zero{"000 tril'.'"}
                     }
                 }
             }
@@ -224,9 +299,11 @@ ro{
                 group{"."}
                 infinity{"∞"}
                 list{";"}
+                minusSign{"-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
+                plusSign{"+"}
                 superscriptingExponent{"×"}
                 timeSeparator{":"}
             }
@@ -245,7 +322,7 @@ ro{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.49.82"}
+    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -264,17 +341,21 @@ ro{
                 "{1}, {0}",
             }
             availableFormats{
+                E{"ccc"}
                 Ed{"E d"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                M{"L"}
                 MEd{"E, dd.MM"}
+                MMM{"LLL"}
                 MMMEd{"E, d MMM"}
                 MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 Md{"dd.MM"}
+                d{"d"}
                 y{"y"}
                 yyyy{"y G"}
                 yyyyM{"MM.y G"}
@@ -299,6 +380,20 @@ ro{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -320,6 +415,28 @@ ro{
                 Md{
                     M{"dd.MM – dd.MM"}
                     d{"dd.MM – dd.MM"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y G"}
@@ -454,6 +571,21 @@ ro{
                         "Mesori",
                         "Pi Kogi Enavot",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
                     wide{
                         "Thout",
                         "Paopi",
@@ -485,6 +617,21 @@ ro{
                         "Epip",
                         "Mesori",
                         "Pi Kogi Enavot",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
                     }
                     wide{
                         "Thout",
@@ -536,6 +683,21 @@ ro{
                         "nehase",
                         "pagumen",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
                     wide{
                         "meskerem",
                         "taqemt",
@@ -567,6 +729,21 @@ ro{
                         "hamle",
                         "nehase",
                         "pagumen",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
                     }
                     wide{
                         "meskerem",
@@ -647,15 +824,6 @@ ro{
                 yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h–h B"}
-                }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                    h{"h:mm–h:mm B"}
-                    m{"h:mm–h:mm B"}
-                }
                 Gy{
                     G{"y G – y G"}
                     y{"y – y G"}
@@ -694,6 +862,20 @@ ro{
                     d{"dd.MM.y – dd.MM.y GGGGG"}
                     y{"dd.MM.y – dd.MM.y GGGGG"}
                 }
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
                 M{
                     M{"M–M"}
                 }
@@ -720,6 +902,24 @@ ro{
                     d{"d–d"}
                 }
                 fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
                 y{
                     y{"y–y G"}
                 }
@@ -1012,14 +1212,9 @@ ro{
                 }
             }
             intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h–h B"}
-                }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                    h{"h:mm–h:mm B"}
-                    m{"h:mm–h:mm B"}
+                Gy{
+                    G{"y G – y G"}
+                    y{"y – y G"}
                 }
                 GyM{
                     G{"MM.y GGGGG – MM.y GGGGG"}
@@ -1309,6 +1504,22 @@ ro{
                         "Elul",
                         "Adar II",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                        "7",
+                    }
                     wide{
                         "Tișrei",
                         "Heșvan",
@@ -1342,6 +1553,22 @@ ro{
                         "Av",
                         "Elul",
                         "Adar II",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                        "7",
                     }
                     wide{
                         "Tișrei",
@@ -1363,6 +1590,17 @@ ro{
             }
         }
         indian{
+            eras{
+                abbreviated{
+                    "Saka",
+                }
+                narrow{
+                    "Saka",
+                }
+                wide{
+                    "Saka",
+                }
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -1378,6 +1616,20 @@ ro{
                         "Pausha",
                         "Magh",
                         "Phalguna",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
                         "Chaitra",
@@ -1408,6 +1660,20 @@ ro{
                         "Pausha",
                         "Magh",
                         "Phalguna",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
                         "Chaitra",
@@ -1431,8 +1697,101 @@ ro{
                 abbreviated{
                     "AH",
                 }
+                narrow{
+                    "AH",
+                }
                 wide{
                     "A.H.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
                 }
             }
         }
@@ -1464,6 +1823,20 @@ ro{
                         "Bahman",
                         "Esfand",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
                     wide{
                         "Farvardin",
                         "Ordibehesht",
@@ -1493,6 +1866,20 @@ ro{
                         "Dey",
                         "Bahman",
                         "Esfand",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
                         "Farvardin",
@@ -2428,7 +2815,7 @@ ro{
             dn{"săpt."}
             relative{
                 "-1"{"săpt. trecută"}
-                "0"{"săptămâna aceasta"}
+                "0"{"săpt. aceasta"}
                 "1"{"săpt. viitoare"}
             }
             relativePeriod{"săpt. cu {0}"}
@@ -2567,6 +2954,8 @@ ro{
         or{
             2{"{0} sau {1}"}
             end{"{0} sau {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
             2{"{0} și {1}"}
@@ -2577,8 +2966,6 @@ ro{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} și {1}"}
@@ -2635,6 +3022,10 @@ ro{
                 "[\\-‒⁻₋−➖﹣－]",
                 "[,،٫、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
+            }
+            stricter{
+                "[,٫︐﹐，]",
+                "[.․﹒．｡]",
             }
         }
     }

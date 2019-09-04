@@ -12,8 +12,8 @@ id{
     }
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersNumbers{"[\\- , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ “ ” ( ) \\[ \\] /]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ “ ” ( ) \\[ \\] /]"}
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}
@@ -27,45 +27,58 @@ id{
             patterns{
                 accountingFormat{"¤#,##0.00"}
                 currencyFormat{"¤#,##0.00"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
             patternsLong{
                 decimalFormat{
                     1000{
+                        one{"0 rb"}
                         other{"0 ribu"}
                     }
                     10000{
+                        one{"00 rb"}
                         other{"00 ribu"}
                     }
                     100000{
+                        one{"000 rb"}
                         other{"000 ribu"}
                     }
                     1000000{
+                        one{"0 jt"}
                         other{"0 juta"}
                     }
                     10000000{
+                        one{"00 jt"}
                         other{"00 juta"}
                     }
                     100000000{
+                        one{"000 jt"}
                         other{"000 juta"}
                     }
                     1000000000{
+                        one{"0 M"}
                         other{"0 miliar"}
                     }
                     10000000000{
+                        one{"00 M"}
                         other{"00 miliar"}
                     }
                     100000000000{
+                        one{"000 M"}
                         other{"000 miliar"}
                     }
                     1000000000000{
+                        one{"0 T"}
                         other{"0 triliun"}
                     }
                     10000000000000{
+                        one{"00 T"}
                         other{"00 triliun"}
                     }
                     100000000000000{
+                        one{"000 T"}
                         other{"000 triliun"}
                     }
                 }
@@ -111,39 +124,51 @@ id{
                 }
                 decimalFormat{
                     1000{
+                        one{"0 rb"}
                         other{"0 rb"}
                     }
                     10000{
+                        one{"00 rb"}
                         other{"00 rb"}
                     }
                     100000{
+                        one{"000 rb"}
                         other{"000 rb"}
                     }
                     1000000{
+                        one{"0 jt"}
                         other{"0 jt"}
                     }
                     10000000{
+                        one{"00 jt"}
                         other{"00 jt"}
                     }
                     100000000{
+                        one{"000 jt"}
                         other{"000 jt"}
                     }
                     1000000000{
+                        one{"0 M"}
                         other{"0 M"}
                     }
                     10000000000{
+                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000000{
+                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000000{
+                        one{"0 T"}
                         other{"0 T"}
                     }
                     10000000000000{
+                        one{"00 T"}
                         other{"00 T"}
                     }
                     100000000000000{
+                        one{"000 T"}
                         other{"000 T"}
                     }
                 }
@@ -153,9 +178,12 @@ id{
                 exponential{"E"}
                 group{"."}
                 infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
+                plusSign{"+"}
                 superscriptingExponent{"×"}
                 timeSeparator{"."}
             }
@@ -171,7 +199,7 @@ id{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.48.42"}
+    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -538,7 +566,6 @@ id{
             }
             intervalFormats{
                 Bh{
-                    B{"h B – h B"}
                     h{"h – h B"}
                 }
                 Bhm{
@@ -911,7 +938,6 @@ id{
             }
             intervalFormats{
                 Bh{
-                    B{"h B – h B"}
                     h{"h – h B"}
                 }
                 Bhm{
@@ -1345,60 +1371,60 @@ id{
                     abbreviated{
                         "Muh.",
                         "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Jum. I",
-                        "Jum. II",
+                        "Rab. Awal",
+                        "Rab. Akhir",
+                        "Jum. Awal",
+                        "Jum. Akhir",
                         "Raj.",
-                        "Sha.",
+                        "Sya.",
                         "Ram.",
                         "Syaw.",
-                        "Dhuʻl-Q.",
-                        "Dhuʻl-H.",
+                        "Zulka.",
+                        "Zulhi.",
                     }
                     wide{
-                        "Muharram",
+                        "Muharam",
                         "Safar",
-                        "Rabiʻ I",
-                        "Rabiʻ II",
-                        "Jumada I",
-                        "Jumada II",
+                        "Rabiulawal",
+                        "Rabiulakhir",
+                        "Jumadilawal",
+                        "Jumadilakhir",
                         "Rajab",
-                        "Sya’ban",
-                        "Ramadhan",
+                        "Syakban",
+                        "Ramadan",
                         "Syawal",
-                        "Dhuʻl-Qiʻdah",
-                        "Dhuʻl-Hijjah",
+                        "Zulkaidah",
+                        "Zulhijah",
                     }
                 }
                 stand-alone{
                     abbreviated{
                         "Muh.",
                         "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Jum. I",
-                        "Jum. II",
+                        "Rab. Awal",
+                        "Rab. Akhir",
+                        "Jum. Awal",
+                        "Jum. Akhir",
                         "Raj.",
-                        "Sha.",
+                        "Sya.",
                         "Ram.",
                         "Syaw.",
-                        "Dhuʻl-Q.",
-                        "Dhuʻl-H.",
+                        "Zulka.",
+                        "Zulhi.",
                     }
                     wide{
-                        "Muharram",
+                        "Muharam",
                         "Safar",
-                        "Rabiʻ I",
-                        "Rabiʻ II",
-                        "Jumada I",
-                        "Jumada II",
+                        "Rabiulawal",
+                        "Rabiulakhir",
+                        "Jumadilawal",
+                        "Jumadilakhir",
                         "Rajab",
-                        "Sya’ban",
-                        "Ramadhan",
+                        "Syakban",
+                        "Ramadan",
                         "Syawal",
-                        "Dhuʻl-Qiʻdah",
-                        "Dhuʻl-Hijjah",
+                        "Zulkaidah",
+                        "Zulhijah",
                     }
                 }
             }
@@ -1861,13 +1887,13 @@ id{
             }
         }
         dayOfYear{
-            dn{"Hari dalam Setahun"}
+            dn{"hari dalam setahun"}
         }
         dayOfYear-narrow{
-            dn{"Hari dalam Setahun"}
+            dn{"hari dlm 1 thn"}
         }
         dayOfYear-short{
-            dn{"Hari dalam Setahun"}
+            dn{"hari dlm setahun"}
         }
         dayperiod{
             dn{"AM/PM"}
@@ -2067,6 +2093,11 @@ id{
         }
         month-narrow{
             dn{"bln."}
+            relative{
+                "-1"{"bln lalu"}
+                "0"{"bln ini"}
+                "1"{"bln berikutnya"}
+            }
             relativeTime{
                 future{
                     other{"dlm {0} bln"}
@@ -2078,6 +2109,11 @@ id{
         }
         month-short{
             dn{"bln."}
+            relative{
+                "-1"{"bln lalu"}
+                "0"{"bln ini"}
+                "1"{"bln berikutnya"}
+            }
             relativeTime{
                 future{
                     other{"dlm {0} bln"}
@@ -2405,6 +2441,11 @@ id{
         }
         week-narrow{
             dn{"mgg."}
+            relative{
+                "-1"{"mgg lalu"}
+                "0"{"mgg ini"}
+                "1"{"mgg depan"}
+            }
             relativePeriod{"mgg ke-{0}"}
             relativeTime{
                 future{
@@ -2417,6 +2458,11 @@ id{
         }
         week-short{
             dn{"mgg."}
+            relative{
+                "-1"{"mgg lalu"}
+                "0"{"mgg ini"}
+                "1"{"mgg depan"}
+            }
             relativePeriod{"mgg ke-{0}"}
             relativeTime{
                 future{
@@ -2472,6 +2518,11 @@ id{
         }
         year-narrow{
             dn{"thn."}
+            relative{
+                "-1"{"thn lalu"}
+                "0"{"thn ini"}
+                "1"{"thn depan"}
+            }
             relativeTime{
                 future{
                     other{"dlm {0} thn"}
@@ -2483,6 +2534,11 @@ id{
         }
         year-short{
             dn{"thn."}
+            relative{
+                "-1"{"thn lalu"}
+                "0"{"thn ini"}
+                "1"{"thn depan"}
+            }
             relativeTime{
                 future{
                     other{"dlm {0} thn"}
@@ -2506,6 +2562,8 @@ id{
         or{
             2{"{0} atau {1}"}
             end{"{0}, atau {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
             2{"{0} dan {1}"}
@@ -2516,8 +2574,6 @@ id{
         standard-narrow{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
         }
         standard-short{
             2{"{0} dan {1}"}
@@ -2574,6 +2630,10 @@ id{
                 "[\\-‒⁻₋−➖﹣－]",
                 "[,،٫、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
+            }
+            stricter{
+                "[,٫︐﹐，]",
+                "[.․﹒．｡]",
             }
         }
     }

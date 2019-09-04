@@ -2,21 +2,13 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ga{
     AuxExemplarCharacters{"[å ḃ ċ ḋ ḟ ġ j k ṁ ṗ q ṡ ṫ v w x y z]"}
-    Ellipsis{
-        final{"{0}…"}
-        initial{"…{0}"}
-        medial{"{0}…{1}"}
-        word-final{"{0} …"}
-        word-initial{"… {0}"}
-        word-medial{"{0} … {1}"}
-    }
     ExemplarCharacters{"[a á b c d e é f g h i í l m n o ó p r s t u ú]"}
-    ExemplarCharactersNumbers{"[\\- , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{
-        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
-        "″]"
+        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
+        "′ ″]"
     }
-    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -40,6 +32,7 @@ ga{
                         one{"0 mhíle"}
                         other{"0 míle"}
                         two{"0 mhíle"}
+                        zero{"0k"}
                     }
                     10000{
                         few{"00 míle"}
@@ -47,6 +40,7 @@ ga{
                         one{"00 míle"}
                         other{"00 míle"}
                         two{"00 míle"}
+                        zero{"00k"}
                     }
                     100000{
                         few{"000 míle"}
@@ -54,6 +48,7 @@ ga{
                         one{"000 míle"}
                         other{"000 míle"}
                         two{"000 míle"}
+                        zero{"000k"}
                     }
                     1000000{
                         few{"0 mhilliún"}
@@ -61,6 +56,7 @@ ga{
                         one{"0 mhilliún"}
                         other{"0 milliún"}
                         two{"0 mhilliún"}
+                        zero{"0M"}
                     }
                     10000000{
                         few{"00 milliún"}
@@ -68,6 +64,7 @@ ga{
                         one{"00 milliún"}
                         other{"00 milliún"}
                         two{"00 milliún"}
+                        zero{"00M"}
                     }
                     100000000{
                         few{"000 milliún"}
@@ -75,6 +72,7 @@ ga{
                         one{"000 milliún"}
                         other{"000 milliún"}
                         two{"000 milliún"}
+                        zero{"000M"}
                     }
                     1000000000{
                         few{"0 bhilliún"}
@@ -82,6 +80,7 @@ ga{
                         one{"0 bhilliún"}
                         other{"0 billiún"}
                         two{"0 bhilliún"}
+                        zero{"0B"}
                     }
                     10000000000{
                         few{"00 billiún"}
@@ -89,6 +88,7 @@ ga{
                         one{"00 billiún"}
                         other{"00 billiún"}
                         two{"00 billiún"}
+                        zero{"00B"}
                     }
                     100000000000{
                         few{"000 billiún"}
@@ -96,6 +96,7 @@ ga{
                         one{"000 billiún"}
                         other{"000 billiún"}
                         two{"000 billiún"}
+                        zero{"000B"}
                     }
                     1000000000000{
                         few{"0 thrilliún"}
@@ -103,6 +104,7 @@ ga{
                         one{"0 trilliún"}
                         other{"0 trilliún"}
                         two{"0 thrilliún"}
+                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00 trilliún"}
@@ -110,6 +112,7 @@ ga{
                         one{"00 trilliún"}
                         other{"00 trilliún"}
                         two{"00 trilliún"}
+                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000 trilliún"}
@@ -117,6 +120,7 @@ ga{
                         one{"000 trilliún"}
                         other{"000 trilliún"}
                         two{"000 trilliún"}
+                        zero{"000T"}
                     }
                 }
             }
@@ -214,6 +218,7 @@ ga{
                         one{"0k"}
                         other{"0k"}
                         two{"0k"}
+                        zero{"0k"}
                     }
                     10000{
                         few{"00k"}
@@ -221,6 +226,7 @@ ga{
                         one{"00k"}
                         other{"00k"}
                         two{"00k"}
+                        zero{"00k"}
                     }
                     100000{
                         few{"000k"}
@@ -228,6 +234,7 @@ ga{
                         one{"000k"}
                         other{"000k"}
                         two{"000k"}
+                        zero{"000k"}
                     }
                     1000000{
                         few{"0M"}
@@ -235,6 +242,7 @@ ga{
                         one{"0M"}
                         other{"0M"}
                         two{"0M"}
+                        zero{"0M"}
                     }
                     10000000{
                         few{"00M"}
@@ -242,6 +250,7 @@ ga{
                         one{"00M"}
                         other{"00M"}
                         two{"00M"}
+                        zero{"00M"}
                     }
                     100000000{
                         few{"000M"}
@@ -249,6 +258,7 @@ ga{
                         one{"000M"}
                         other{"000M"}
                         two{"000M"}
+                        zero{"000M"}
                     }
                     1000000000{
                         few{"0B"}
@@ -256,6 +266,7 @@ ga{
                         one{"0B"}
                         other{"0B"}
                         two{"0B"}
+                        zero{"0B"}
                     }
                     10000000000{
                         few{"00B"}
@@ -263,6 +274,7 @@ ga{
                         one{"00B"}
                         other{"00B"}
                         two{"00B"}
+                        zero{"00B"}
                     }
                     100000000000{
                         few{"000B"}
@@ -270,6 +282,7 @@ ga{
                         one{"000B"}
                         other{"000B"}
                         two{"000B"}
+                        zero{"000B"}
                     }
                     1000000000000{
                         few{"0T"}
@@ -277,6 +290,7 @@ ga{
                         one{"0T"}
                         other{"0T"}
                         two{"0T"}
+                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00T"}
@@ -284,6 +298,7 @@ ga{
                         one{"00T"}
                         other{"00T"}
                         two{"00T"}
+                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000T"}
@@ -291,11 +306,13 @@ ga{
                         one{"000T"}
                         other{"000T"}
                         two{"000T"}
+                        zero{"000T"}
                     }
                 }
             }
             symbols{
                 exponential{"E"}
+                group{","}
                 infinity{"∞"}
                 nan{"NaN"}
                 perMille{"‰"}
@@ -320,7 +337,7 @@ ga{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.49.82"}
+    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -541,44 +558,6 @@ ga{
                     h{"h:mm – h:mm B"}
                     m{"h:mm – h:mm B"}
                 }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"GGGGG y-MM – GGGGG y-MM"}
-                    M{"GGGGG y-MM – y-MM"}
-                    y{"GGGGG y-MM – y-MM"}
-                }
-                GyMEd{
-                    G{"GGGGG y-MM-dd, E – GGGGG y-MM-dd, E"}
-                    M{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    d{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    y{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                }
-                GyMMM{
-                    G{"G y MMM – G y MMM"}
-                    M{"G y MMM–MMM"}
-                    y{"G y MMM – y MMM"}
-                }
-                GyMMMEd{
-                    G{"G y MMM d, E – G y MMM d, E"}
-                    M{"G y MMM d, E – MMM d, E"}
-                    d{"G y MMM d, E – MMM d, E"}
-                    y{"G y MMM d, E – y MMM d, E"}
-                }
-                GyMMMd{
-                    G{"G y MMM d – G y MMM d"}
-                    M{"G y MMM d – MMM d"}
-                    d{"G y MMM d–d"}
-                    y{"G y MMM d – y MMM d"}
-                }
-                GyMd{
-                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
-                    M{"GGGGG y-MM-dd – y-MM-dd"}
-                    d{"GGGGG y-MM-dd – y-MM-dd"}
-                    y{"GGGGG y-MM-dd – y-MM-dd"}
-                }
                 H{
                     H{"HH – HH"}
                 }
@@ -682,10 +661,6 @@ ga{
             AmPmMarkersAbbr{
                 "r.n.",
                 "i.n.",
-            }
-            AmPmMarkersNarrow{
-                "a",
-                "p",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -845,17 +820,13 @@ ga{
             }
             dayPeriod{
                 stand-alone{
-                    abbreviated{
-                        am{"a.m."}
-                        pm{"p.m."}
-                    }
                     narrow{
-                        am{"a"}
-                        pm{"p"}
+                        am{"r.n."}
+                        pm{"i.n."}
                     }
                     wide{
-                        am{"a.m."}
-                        pm{"p.m."}
+                        am{"r.n."}
+                        pm{"i.n."}
                     }
                 }
             }
@@ -894,9 +865,6 @@ ga{
                     B{"h:mm B – h:mm B"}
                     h{"h:mm – h:mm B"}
                     m{"h:mm – h:mm B"}
-                }
-                Gy{
-                    G{"G y – G y"}
                 }
                 H{
                     H{"HH – HH"}
@@ -1213,12 +1181,6 @@ ga{
         weather{"aimsir"}
         western_asian_scripts{"Scripteanna na hÁise Thiar"}
         whitespace{"Spás Bán"}
-    }
-    delimiters{
-        alternateQuotationEnd{"’"}
-        alternateQuotationStart{"‘"}
-        quotationEnd{"”"}
-        quotationStart{"“"}
     }
     fields{
         day{
@@ -2389,26 +2351,6 @@ ga{
             lenient{
                 "[\\--/]",
                 "[\\:∶]",
-            }
-        }
-        general{
-            lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄$]",
-                "[£₤]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
-            }
-        }
-        number{
-            lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
             }
         }
     }

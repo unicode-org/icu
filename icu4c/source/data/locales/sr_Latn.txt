@@ -13,8 +13,8 @@ sr_Latn{
     }
     ExemplarCharacters{"[a b c č ć d {dž} đ e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
     ExemplarCharactersIndex{"[A B C Č Ć D {DŽ} E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z Ž]"}
-    ExemplarCharactersNumbers{"[\\- , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – , ; \\: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] \\{ \\} * #]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – , ; \\: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] \\{ \\} * #]"}
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}
@@ -33,63 +33,99 @@ sr_Latn{
                 decimalFormat{
                     1000{
                         few{"0 hiljade"}
+                        many{"0 hilj'.'"}
                         one{"0 hiljada"}
                         other{"0 hiljada"}
+                        two{"0 hilj'.'"}
+                        zero{"0 hilj'.'"}
                     }
                     10000{
                         few{"00 hiljade"}
+                        many{"00 hilj'.'"}
                         one{"00 hiljada"}
                         other{"00 hiljada"}
+                        two{"00 hilj'.'"}
+                        zero{"00 hilj'.'"}
                     }
                     100000{
                         few{"000 hiljade"}
+                        many{"000 hilj'.'"}
                         one{"000 hiljada"}
                         other{"000 hiljada"}
+                        two{"000 hilj'.'"}
+                        zero{"000 hilj'.'"}
                     }
                     1000000{
                         few{"0 miliona"}
+                        many{"0 mil'.'"}
                         one{"0 milion"}
                         other{"0 miliona"}
+                        two{"0 mil'.'"}
+                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 miliona"}
+                        many{"00 mil'.'"}
                         one{"00 milion"}
                         other{"00 miliona"}
+                        two{"00 mil'.'"}
+                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 miliona"}
+                        many{"000 mil'.'"}
                         one{"000 milion"}
                         other{"000 miliona"}
+                        two{"000 mil'.'"}
+                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 milijarde"}
+                        many{"0 mlrd'.'"}
                         one{"0 milijarda"}
                         other{"0 milijardi"}
+                        two{"0 mlrd'.'"}
+                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 milijarde"}
+                        many{"00 mlrd'.'"}
                         one{"00 milijarda"}
                         other{"00 milijardi"}
+                        two{"00 mlrd'.'"}
+                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 milijarde"}
+                        many{"000 mlrd'.'"}
                         one{"000 milijarda"}
                         other{"000 milijardi"}
+                        two{"000 mlrd'.'"}
+                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 biliona"}
+                        many{"0 bil'.'"}
                         one{"0 bilion"}
                         other{"0 biliona"}
+                        two{"0 bil'.'"}
+                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 biliona"}
+                        many{"00 bil'.'"}
                         one{"00 bilion"}
                         other{"00 biliona"}
+                        two{"00 bil'.'"}
+                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 biliona"}
+                        many{"000 bil'.'"}
                         one{"000 bilion"}
                         other{"000 biliona"}
+                        two{"000 bil'.'"}
+                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -159,63 +195,99 @@ sr_Latn{
                 decimalFormat{
                     1000{
                         few{"0 hilj'.'"}
+                        many{"0 hilj'.'"}
                         one{"0 hilj'.'"}
                         other{"0 hilj'.'"}
+                        two{"0 hilj'.'"}
+                        zero{"0 hilj'.'"}
                     }
                     10000{
                         few{"00 hilj'.'"}
+                        many{"00 hilj'.'"}
                         one{"00 hilj'.'"}
                         other{"00 hilj'.'"}
+                        two{"00 hilj'.'"}
+                        zero{"00 hilj'.'"}
                     }
                     100000{
                         few{"000 hilj'.'"}
+                        many{"000 hilj'.'"}
                         one{"000 hilj'.'"}
                         other{"000 hilj'.'"}
+                        two{"000 hilj'.'"}
+                        zero{"000 hilj'.'"}
                     }
                     1000000{
                         few{"0 mil'.'"}
+                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
+                        two{"0 mil'.'"}
+                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
+                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
+                        two{"00 mil'.'"}
+                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
+                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
+                        two{"000 mil'.'"}
+                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mlrd'.'"}
+                        many{"0 mlrd'.'"}
                         one{"0 mlrd'.'"}
                         other{"0 mlrd'.'"}
+                        two{"0 mlrd'.'"}
+                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 mlrd'.'"}
+                        many{"00 mlrd'.'"}
                         one{"00 mlrd'.'"}
                         other{"00 mlrd'.'"}
+                        two{"00 mlrd'.'"}
+                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 mlrd'.'"}
+                        many{"000 mlrd'.'"}
                         one{"000 mlrd'.'"}
                         other{"000 mlrd'.'"}
+                        two{"000 mlrd'.'"}
+                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
+                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
+                        two{"0 bil'.'"}
+                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
+                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
+                        two{"00 bil'.'"}
+                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
+                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
+                        two{"000 bil'.'"}
+                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -243,7 +315,7 @@ sr_Latn{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.49.82"}
+    Version{"36"}
     calendar{
         buddhist{
             eras{

@@ -1327,17 +1327,18 @@ public class NumberFormatterApiTest {
                 "8.765",
                 "0");
 
-        // NOTE: Hungarian is interesting because it has minimumGroupingDigits=4 in locale data
+        // NOTE: Polish is interesting because it has minimumGroupingDigits=2 in locale data
+        // (Most locales have either 1 or 2)
         // If this test breaks due to data changes, find another locale that has minimumGroupingDigits.
         assertFormatDescendingBig(
-                "Hungarian Grouping",
+                "Polish Grouping",
                 "group-auto",
                 NumberFormatter.with().grouping(GroupingStrategy.AUTO),
-                new ULocale("hu"),
+                new ULocale("pl"),
                 "87 650 000",
                 "8 765 000",
-                "876500",
-                "87650",
+                "876 500",
+                "87 650",
                 "8765",
                 "876,5",
                 "87,65",
@@ -1345,14 +1346,14 @@ public class NumberFormatterApiTest {
                 "0");
 
         assertFormatDescendingBig(
-                "Hungarian Grouping, Min 2",
+                "Polish Grouping, Min 2",
                 "group-min2",
                 NumberFormatter.with().grouping(GroupingStrategy.MIN2),
-                new ULocale("hu"),
+                new ULocale("pl"),
                 "87 650 000",
                 "8 765 000",
-                "876500",
-                "87650",
+                "876 500",
+                "87 650",
                 "8765",
                 "876,5",
                 "87,65",
@@ -1360,10 +1361,10 @@ public class NumberFormatterApiTest {
                 "0");
 
         assertFormatDescendingBig(
-                "Hungarian Grouping, Always",
+                "Polish Grouping, Always",
                 "group-on-aligned",
                 NumberFormatter.with().grouping(GroupingStrategy.ON_ALIGNED),
-                new ULocale("hu"),
+                new ULocale("pl"),
                 "87 650 000",
                 "8 765 000",
                 "876 500",

@@ -2338,11 +2338,21 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         assignArray(fStandaloneNarrowMonths, fStandaloneNarrowMonthsCount, fShortMonths, fShortMonthsCount);
     }
 
-    // Load AM/PM markers
+    // Load AM/PM markers; if wide or narrow not available, use short
+    UErrorCode ampmStatus = U_ZERO_ERROR;
     initField(&fAmPms, fAmPmsCount, calendarSink,
-              buildResourcePath(path, gAmPmMarkersTag, status), status);
+              buildResourcePath(path, gAmPmMarkersTag, ampmStatus), ampmStatus);
+    if (U_FAILURE(ampmStatus)) {
+        initField(&fAmPms, fAmPmsCount, calendarSink,
+                  buildResourcePath(path, gAmPmMarkersAbbrTag, status), status);
+    }
+    ampmStatus = U_ZERO_ERROR;
     initField(&fNarrowAmPms, fNarrowAmPmsCount, calendarSink,
-              buildResourcePath(path, gAmPmMarkersNarrowTag, status), status);
+              buildResourcePath(path, gAmPmMarkersNarrowTag, ampmStatus), ampmStatus);
+    if (U_FAILURE(ampmStatus)) {
+        initField(&fNarrowAmPms, fNarrowAmPmsCount, calendarSink,
+                  buildResourcePath(path, gAmPmMarkersAbbrTag, status), status);
+    }
 
     // Load quarters
     initField(&fQuarters, fQuartersCount, calendarSink,
