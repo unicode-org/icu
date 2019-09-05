@@ -53,8 +53,8 @@ public final class SupplementalMapper extends AbstractPathValueMapper {
 
     @Override
     void addResults() {
-        // DTD and NESTED_GROUPING order differ because of how the magic <FIFO> label works (it
-        // basically enforces "encounter order" onto things in unlabeled sequences, which matches
+        // NESTED_GROUPING and DTD order differ because of how the magic <FIFO> label works (it
+        // basically enforces "encounter order" onto things in unlabelled sequences, which matches
         // the old behaviour). If it wouldn't break anything, it might be worth moving to DTD order
         // to remove any lingering implicit dependencies on the CLDR data behaviour.
         getCldrData().accept(NESTED_GROUPING, this::visit);

@@ -5,7 +5,7 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
+import static org.unicode.cldr.api.CldrData.PathOrder.NESTED_GROUPING;
 import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
 
 import java.util.ArrayList;
@@ -65,8 +65,8 @@ public final class PluralsMapper {
         // affects the set indices we generate during processing. Ideally this would all be immune
         // to ordering (or just enforce DTD ordering) but right now it's very dependent on
         // mimicking the order of the existing code to get identical output.
-        data.accept(ARBITRARY, visitor.setType("cardinal"));
-        data.accept(ARBITRARY, visitor.setType("ordinal"));
+        data.accept(NESTED_GROUPING, visitor.setType("cardinal"));
+        data.accept(NESTED_GROUPING, visitor.setType("ordinal"));
         return visitor.icuData;
     }
 
