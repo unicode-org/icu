@@ -357,7 +357,7 @@ case $platform in
         CPPFLAGS="$EMCFLAGS"; export CPPFLAGS
         CXXFLAGS="-O3 $EMCFLAGS -std=c++11"; export CXXPPFLAGS
         CONFIGURE_WRAPPER=emconfigure; export CONFIGURE_WRAPPER
-        OPTS="$OPTS --enable-static --build=wasm32 --target=wasm32"; export OPTS
+        OPTS="$OPTS --enable-static --build=wasm32 --target=wasm32 --disable-shared"; export OPTS
 	;;
     zOS)
         THE_OS="z/OS (OS/390)"
