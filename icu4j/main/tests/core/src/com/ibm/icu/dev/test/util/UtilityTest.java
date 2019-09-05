@@ -137,10 +137,10 @@ public class UtilityTest extends TestFmwk {
         }
 
         // test equality
-        if (!x.equals(y) || !x.equals(z))
-            errln("FAIL: test (operator ==): Failed!");
-        if (x.hashCode()!=y.hashCode())
-            errln("FAIL: identical objects have different hash codes.");
+        assertEquals("x==y", x, y);
+        assertEquals("y==z", y, z);
+        assertEquals("x.hashCode()==y.hashCode()", x.hashCode(), y.hashCode());
+        assertEquals("y.hashCode()==z.hashCode()", y.hashCode(), z.hashCode());
 
         // test non-equality
         y = new ByteArrayWrapper(bb, 4);

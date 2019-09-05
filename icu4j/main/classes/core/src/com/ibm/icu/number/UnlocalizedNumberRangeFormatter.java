@@ -12,8 +12,7 @@ import com.ibm.icu.util.ULocale;
  * Instances of this class are immutable and thread-safe.
  *
  * @author sffc
- * @draft ICU 63
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 63
  * @see NumberRangeFormatter
  */
 public class UnlocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter> {
@@ -41,8 +40,7 @@ public class UnlocalizedNumberRangeFormatter extends NumberRangeFormatterSetting
      * @param locale
      *            The locale to use when loading data for number range formatting.
      * @return The fluent chain
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public LocalizedNumberRangeFormatter locale(Locale locale) {
         return new LocalizedNumberRangeFormatter(this, KEY_LOCALE, ULocale.forLocale(locale));
@@ -55,8 +53,7 @@ public class UnlocalizedNumberRangeFormatter extends NumberRangeFormatterSetting
      *            The locale to use when loading data for number range formatting.
      * @return The fluent chain
      * @see #locale(Locale)
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public LocalizedNumberRangeFormatter locale(ULocale locale) {
         return new LocalizedNumberRangeFormatter(this, KEY_LOCALE, locale);

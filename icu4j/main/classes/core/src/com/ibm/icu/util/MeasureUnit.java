@@ -509,15 +509,13 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: percent
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit PERCENT = MeasureUnit.internalGetInstance("concentr", "percent");
 
     /**
      * Constant for unit of concentr: permille
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit PERMILLE = MeasureUnit.internalGetInstance("concentr", "permille");
 
@@ -602,8 +600,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of digital: petabyte
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit PETABYTE = MeasureUnit.internalGetInstance("digital", "petabyte");
 
@@ -1090,8 +1087,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of pressure: atmosphere
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     public static final MeasureUnit ATMOSPHERE = MeasureUnit.internalGetInstance("pressure", "atmosphere");
 

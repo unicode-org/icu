@@ -82,6 +82,8 @@ public:
     void TestIslamicCalOverflow(void);
     void TestWeekOfYear13548(void);
 
+    void Test13745(void);
+
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;
 

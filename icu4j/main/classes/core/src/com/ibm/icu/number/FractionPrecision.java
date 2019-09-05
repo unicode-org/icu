@@ -11,8 +11,7 @@ import com.ibm.icu.impl.number.RoundingUtils;
  * <p>
  * To create a FractionPrecision, use one of the factory methods on Precision.
  *
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 60
  * @see NumberFormatter
  */
 public abstract class FractionPrecision extends Precision {
@@ -35,8 +34,7 @@ public abstract class FractionPrecision extends Precision {
      * @param minSignificantDigits
      *            The number of significant figures to guarantee.
      * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public Precision withMinDigits(int minSignificantDigits) {
@@ -64,8 +62,7 @@ public abstract class FractionPrecision extends Precision {
      * @param maxSignificantDigits
      *            Round the number to no more than this number of significant figures.
      * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public Precision withMaxDigits(int maxSignificantDigits) {

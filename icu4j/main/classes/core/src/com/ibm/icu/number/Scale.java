@@ -15,8 +15,7 @@ import com.ibm.icu.impl.number.RoundingUtils;
  * <p>
  * To create a Multiplier, use one of the factory methods.
  *
- * @draft ICU 62
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 62
  * @see NumberFormatter
  */
 public class Scale {
@@ -68,8 +67,7 @@ public class Scale {
      * Do not change the value of numbers when formatting or parsing.
      *
      * @return A Multiplier to prevent any multiplication.
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public static Scale none() {
@@ -84,8 +82,7 @@ public class Scale {
      * </pre>
      *
      * @return A Multiplier for passing to the setter in NumberFormatter.
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public static Scale powerOfTen(int power) {
@@ -106,8 +103,7 @@ public class Scale {
      * This method takes a BigDecimal; also see the version that takes a double.
      *
      * @return A Multiplier for passing to the setter in NumberFormatter.
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public static Scale byBigDecimal(BigDecimal multiplicand) {
@@ -128,8 +124,7 @@ public class Scale {
      * This method takes a double; also see the version that takes a BigDecimal.
      *
      * @return A Multiplier for passing to the setter in NumberFormatter.
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public static Scale byDouble(double multiplicand) {
@@ -148,8 +143,7 @@ public class Scale {
      * Multiply a number by both a power of ten and by an arbitrary double value before formatting.
      *
      * @return A Multiplier for passing to the setter in NumberFormatter.
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public static Scale byDoubleAndPowerOfTen(double multiplicand, int power) {
