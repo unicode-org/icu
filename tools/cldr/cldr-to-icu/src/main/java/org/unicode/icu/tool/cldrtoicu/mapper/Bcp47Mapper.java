@@ -7,7 +7,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
+import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 import static org.unicode.cldr.api.CldrDataType.BCP47;
 
 import java.util.LinkedHashMap;
@@ -88,7 +88,7 @@ public final class Bcp47Mapper {
     @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
     static ImmutableList<IcuData> process(CldrData cldrData) {
         Bcp47Visitor visitor = new Bcp47Visitor();
-        cldrData.accept(ARBITRARY, visitor);
+        cldrData.accept(DTD, visitor);
         visitor.addKeyMapValues();
         return ImmutableList.of(visitor.keyTypeData.icuData, visitor.tzData.icuData);
     }

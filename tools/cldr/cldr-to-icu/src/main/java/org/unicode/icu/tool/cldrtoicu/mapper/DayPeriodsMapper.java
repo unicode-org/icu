@@ -3,7 +3,7 @@
 package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
+import static org.unicode.cldr.api.CldrData.PathOrder.NESTED_GROUPING;
 import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
 
 import java.util.Optional;
@@ -54,7 +54,7 @@ public final class DayPeriodsMapper {
     @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
     static IcuData process(CldrData data) {
         RuleSetVisitor mapper = new RuleSetVisitor();
-        data.accept(ARBITRARY, mapper);
+        data.accept(NESTED_GROUPING, mapper);
         return mapper.icuData;
     }
 
