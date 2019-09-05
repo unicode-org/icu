@@ -5551,6 +5551,7 @@ void DateFormatTest::TestAdoptCalendarLeak() {
                "hours=h23;lb=strict;lw=normal;measure=metric;numbers=latn;"
                "rg=atzzzz;sd=atat1;ss=none;timezone=Europe/Vienna"),
         status);
+    ASSERT_OK(status);
     sdf.adoptCalendar(Calendar::createInstance(status));
 }
 
