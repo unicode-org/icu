@@ -4,7 +4,7 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
+import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
 import java.util.Optional;
@@ -75,8 +75,8 @@ public final class CollationMapper {
     @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
     static IcuData process(String localeId, CldrData cldrData, Optional<CldrData> icuSpecialData) {
         CollationVisitor visitor = new CollationVisitor(localeId);
-        icuSpecialData.ifPresent(s -> s.accept(ARBITRARY, visitor));
-        cldrData.accept(ARBITRARY, visitor);
+        icuSpecialData.ifPresent(s -> s.accept(DTD, visitor));
+        cldrData.accept(DTD, visitor);
         return visitor.icuData;
     }
 

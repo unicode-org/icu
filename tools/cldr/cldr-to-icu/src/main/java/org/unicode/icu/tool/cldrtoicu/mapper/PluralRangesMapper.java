@@ -4,7 +4,7 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.base.Preconditions.checkState;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
+import static org.unicode.cldr.api.CldrData.PathOrder.NESTED_GROUPING;
 import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
 
 import org.unicode.cldr.api.AttributeKey;
@@ -59,7 +59,7 @@ public final class PluralRangesMapper {
     @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
     static IcuData process(CldrData data) {
         PluralRangesVisitor visitor = new PluralRangesVisitor();
-        data.accept(ARBITRARY, visitor);
+        data.accept(NESTED_GROUPING, visitor);
         return visitor.icuData;
     }
 
