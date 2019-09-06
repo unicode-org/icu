@@ -5,8 +5,6 @@ package org.unicode.icu.tool.cldrtoicu;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static com.google.common.truth.Truth8.assertThat;
-import static java.util.Arrays.asList;
-import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
 import static org.unicode.cldr.api.CldrValue.parseValue;
 
 import java.nio.file.Path;
@@ -25,6 +23,7 @@ import org.unicode.cldr.tool.LikelySubtags;
 import org.unicode.cldr.util.LanguageTagCanonicalizer;
 import org.unicode.cldr.util.LocaleIDParser;
 import org.unicode.cldr.util.SupplementalDataInfo;
+import org.unicode.icu.tool.cldrtoicu.testing.FakeDataSupplier;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
@@ -41,8 +40,7 @@ public class SupplementalDataTest {
     @BeforeClass
     public static void loadRegressionData() {
         Path cldrRoot = Paths.get(System.getProperty("CLDR_DIR"));
-        regressionData = SupplementalData
-            .create(CldrDataSupplier.forCldrFilesIn(cldrRoot).getDataForType(SUPPLEMENTAL));
+        regressionData = SupplementalData.create(CldrDataSupplier.forCldrFilesIn(cldrRoot));
         SupplementalDataInfo sdi =
             SupplementalDataInfo.getInstance(cldrRoot.resolve("common/supplemental").toString());
         likelySubtags = new LikelySubtags(sdi);
@@ -348,6 +346,6 @@ public class SupplementalDataTest {
     }
 
     private static SupplementalData fakeSupplementalData(CldrValue... values) {
-        return SupplementalData.create(CldrDataSupplier.forValues(asList(values)));
+        return SupplementalData.create(new FakeDataSupplier().addSupplementalData(values));
     }
 }

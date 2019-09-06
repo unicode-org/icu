@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,10 +37,14 @@ import com.google.common.collect.ImmutableList;
 @RunWith(JUnit4.class)
 public class TransformsMapperTest {
 
-    private static final ImmutableList<String> FILE_HEADER = ImmutableList.of(
-        "\uFEFF# © 2016 and later: Unicode, Inc. and others.",
-        "# License & terms of use: http://www.unicode.org/copyright.html#License",
-        "#");
+    private static final ImmutableList<String> HEADER_LINES = ImmutableList.of(
+        "First header line",
+        "Second header line");
+
+    private static final String FILE_HEADER =
+        "\uFEFF# First header line\n"
+            + "# Second header line\n"
+            + "#\n";
 
     private static final int DEFAULT_PATH_COUNT = 7;
 
@@ -64,7 +67,7 @@ public class TransformsMapperTest {
     @Test
     public void testDefaultContent() {
         Map<String, String> fileMap = new TreeMap<>();
-        IcuData icuData = TransformsMapper.process(cldrData(), wrap(fileMap));
+        IcuData icuData = TransformsMapper.process(cldrData(), wrap(fileMap), HEADER_LINES);
 
         assertThat(fileMap).isEmpty();
 
@@ -88,7 +91,7 @@ public class TransformsMapperTest {
             cldrData(oneWay("foo", "bar", FORWARD, null, INTERNAL, "first second third", ++idx));
 
         Map<String, String> fileMap = new TreeMap<>();
-        IcuData icuData = TransformsMapper.process(cldrData, wrap(fileMap));
+        IcuData icuData = TransformsMapper.process(cldrData, wrap(fileMap), HEADER_LINES);
 
         assertThat(icuData).getPaths().hasSize(DEFAULT_PATH_COUNT + 5);
         assertThat(icuData).hasValuesFor("RuleBasedTransliteratorIDs/first/alias", "foo-bar");
@@ -118,7 +121,7 @@ public class TransformsMapperTest {
             cldrData(oneWay("foo", "bar", BACKWARD, "variant", EXTERNAL, "one two three", ++idx));
 
         Map<String, String> fileMap = new TreeMap<>();
-        IcuData icuData = TransformsMapper.process(cldrData, wrap(fileMap));
+        IcuData icuData = TransformsMapper.process(cldrData, wrap(fileMap), HEADER_LINES);
 
         assertThat(icuData).getPaths().hasSize(DEFAULT_PATH_COUNT + 5);
         assertThat(icuData).hasValuesFor("RuleBasedTransliteratorIDs/one/alias", "bar-foo/variant");
@@ -149,7 +152,7 @@ public class TransformsMapperTest {
             both("foo", "bar", null, INTERNAL, "forward-alias", "backward-alias", ++idx));
 
         Map<String, String> fileMap = new TreeMap<>();
-        IcuData icuData = TransformsMapper.process(cldrData, wrap(fileMap));
+        IcuData icuData = TransformsMapper.process(cldrData, wrap(fileMap), HEADER_LINES);
 
         // 3 for each direction.
         assertThat(icuData).getPaths().hasSize(DEFAULT_PATH_COUNT + 6);
@@ -188,9 +191,7 @@ public class TransformsMapperTest {
     private String headerPlusLines(String... lines) {
         // For now the files always contain a blank line at the end (to match legacy behaviour) but
         // this can, and probably should be changed.
-        return Stream
-            .concat(FILE_HEADER.stream(), Arrays.stream(lines))
-            .collect(joining("\n", "", "\n\n"));
+        return Arrays.stream(lines).collect(joining("\n", FILE_HEADER, "\n\n"));
     }
 
     private static CldrData cldrData(CldrValue... values) {

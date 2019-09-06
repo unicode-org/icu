@@ -148,7 +148,8 @@ final class IcuTextWriter {
     // TODO: Sort this out so there isn't a messy mix of comment styles in the data files.
     private static void writeHeaderAndComments(
         PrintWriter out, List<String> header, List<String> comments) {
-        header.forEach(out::println);
+
+        header.forEach(s -> out.println("// " + s));
         if (!comments.isEmpty()) {
             // TODO: Don't use /* */ block quotes, just use inline // quotes.
             out.println(
