@@ -17,6 +17,12 @@
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
 
+#define ASSERT_OK(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if(U_FAILURE(status)) { \
+        errcheckln(status, #status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 class QuantityFormatterTest : public IntlTest {
 public:
@@ -117,6 +123,7 @@ void QuantityFormatterTest::TestBasic() {
                 NumberFormat::createInstance(Locale::getEnglish(), status));
         LocalPointer<PluralRules> plurrule(
                 PluralRules::forLocale("en", status));
+        ASSERT_OK(status);
         FieldPosition pos(FieldPosition::DONT_CARE);
         UnicodeString appendTo;
         assertEquals(
