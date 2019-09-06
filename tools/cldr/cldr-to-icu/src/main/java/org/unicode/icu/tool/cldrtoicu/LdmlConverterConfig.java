@@ -63,9 +63,6 @@ public interface LdmlConverterConfig {
      */
     Set<OutputType> getOutputTypes();
 
-    /** Returns the root directory in which the CLDR release is located. */
-    Path getCldrDirectory();
-
     /**
      * Returns an additional "specials" directory containing additional ICU specific XML
      * files depending on the given output type. This is where the converter finds any XML
@@ -83,11 +80,18 @@ public interface LdmlConverterConfig {
     CldrDraftStatus getMinimumDraftStatus();
 
     /**
-     * Returns the set of locale IDs to be processed for the given directory.
+     * Returns the complete set of locale IDs which should be considered for processing for this
+     * configuration.
      *
-     * <p>This set can contain IDs which have noICU data associated with them if they are
-     * suitable aliases (e.g. they are deprecated versions of locale IDs for which data does
+     * <p>Note that this set can contain IDs which have no CLDR data associated with them if they
+     * are suitable aliases (e.g. they are deprecated versions of locale IDs for which data does
      * exist).
+     */
+    Set<String> getAllLocaleIds();
+
+    /**
+     * Returns the set of locale IDs to be processed for the given directory. This set must always
+     * be a subset of {@link #getAllLocaleIds()}.
      */
     Set<String> getTargetLocaleIds(IcuLocaleDir dir);
 

@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -30,6 +31,7 @@ import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
 import com.ibm.icu.text.Transliterator;
 
 /**
@@ -78,7 +80,9 @@ public final class TransformsMapper {
      * @param ruleFileOutputDir the directory into which transliteration rule files will be written.
      * @return the IcuData instance to be written to a file.
      */
-    public static IcuData process(CldrDataSupplier src, Path ruleFileOutputDir) {
+    public static IcuData process(
+        CldrDataSupplier src, Path ruleFileOutputDir, List<String> header) {
+
         Function<Path, PrintWriter> fileWriterFn = p -> {
             Path file = ruleFileOutputDir.resolve(p);
             try {
@@ -88,12 +92,14 @@ public final class TransformsMapper {
             }
         };
         CldrData cldrData = src.getDataForType(SUPPLEMENTAL);
-        return process(cldrData, fileWriterFn);
+        return process(cldrData, fileWriterFn, header);
     }
 
     @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
-    static IcuData process(CldrData cldrData, Function<Path, PrintWriter> fileWriterFn) {
-        RuleVisitor visitor = new RuleVisitor(fileWriterFn);
+    static IcuData process(
+        CldrData cldrData, Function<Path, PrintWriter> fileWriterFn, List<String> header) {
+
+        RuleVisitor visitor = new RuleVisitor(fileWriterFn, header);
         cldrData.accept(DTD, visitor);
         addSpecialCaseValues(visitor.icuData);
         return visitor.icuData;
@@ -102,9 +108,11 @@ public final class TransformsMapper {
     private static class RuleVisitor implements ValueVisitor {
         private final IcuData icuData = new IcuData("root", false);
         private final Function<Path, PrintWriter> outFn;
+        private final ImmutableList<String> header;
 
-        RuleVisitor(Function<Path, PrintWriter> outFn) {
+        RuleVisitor(Function<Path, PrintWriter> outFn, List<String> header) {
             this.outFn = checkNotNull(outFn);
+            this.header = ImmutableList.copyOf(header);
             icuData.setFileComment("File: root.txt");
         }
 
@@ -124,8 +132,8 @@ public final class TransformsMapper {
 
         private void writeDataFile(String filename, CldrValue value) {
             try (PrintWriter out = outFn.apply(Paths.get(filename))) {
-                out.println("\uFEFF# © 2016 and later: Unicode, Inc. and others.");
-                out.println("# License & terms of use: http://www.unicode.org/copyright.html#License");
+                out.print("\uFEFF");
+                header.forEach(s -> out.println("# " + s));
                 out.println("#");
                 out.println("# File: " + filename);
                 out.println("# Generated from CLDR");
