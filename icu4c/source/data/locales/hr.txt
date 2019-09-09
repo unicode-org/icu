@@ -3,17 +3,23 @@
 hr{
     AuxExemplarCharacters{"[q w x y]"}
     Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
         medial{"{0}… {1}"}
         word-final{"{0}…"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{"[a b c č ć d {dž} đ e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
     ExemplarCharactersIndex{
         "[A B C Č Ć D {DŽ} Đ E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z "
         "Ž]"
     }
-    ExemplarCharactersNumbers{"[\\- , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{"[‐ – — , ; \\: ! ? . … ' ‘ ’ ‚ \u0022 “ ” „ ( ) \\[ \\] @ * / ′ ″]"}
+    MoreInformation{"?"}
     NumberElements{
+        default{"latn"}
         latn{
             miscPatterns{
                 approximately{"~{0}"}
@@ -24,6 +30,7 @@ hr{
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
@@ -31,63 +38,99 @@ hr{
                 decimalFormat{
                     1000{
                         few{"0 tisuće"}
+                        many{"0 tis'.'"}
                         one{"0 tisuća"}
                         other{"0 tisuća"}
+                        two{"0 tis'.'"}
+                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tisuće"}
+                        many{"00 tis'.'"}
                         one{"00 tisuća"}
                         other{"00 tisuća"}
+                        two{"00 tis'.'"}
+                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tisuće"}
+                        many{"000 tis'.'"}
                         one{"000 tisuća"}
                         other{"000 tisuća"}
+                        two{"000 tis'.'"}
+                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 milijuna"}
+                        many{"0 mil'.'"}
                         one{"0 milijun"}
                         other{"0 milijuna"}
+                        two{"0 mil'.'"}
+                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 milijuna"}
+                        many{"00 mil'.'"}
                         one{"00 milijun"}
                         other{"00 milijuna"}
+                        two{"00 mil'.'"}
+                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 milijuna"}
+                        many{"000 mil'.'"}
                         one{"000 milijun"}
                         other{"000 milijuna"}
+                        two{"000 mil'.'"}
+                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 milijarde"}
+                        many{"0 mlr'.'"}
                         one{"0 milijarda"}
                         other{"0 milijardi"}
+                        two{"0 mlr'.'"}
+                        zero{"0 mlr'.'"}
                     }
                     10000000000{
                         few{"00 milijarde"}
+                        many{"00 mlr'.'"}
                         one{"00 milijarda"}
                         other{"00 milijardi"}
+                        two{"00 mlr'.'"}
+                        zero{"00 mlr'.'"}
                     }
                     100000000000{
                         few{"000 milijarde"}
+                        many{"000 mlr'.'"}
                         one{"000 milijarda"}
                         other{"000 milijardi"}
+                        two{"000 mlr'.'"}
+                        zero{"000 mlr'.'"}
                     }
                     1000000000000{
                         few{"0 bilijuna"}
+                        many{"0 bil'.'"}
                         one{"0 bilijun"}
                         other{"0 bilijuna"}
+                        two{"0 bil'.'"}
+                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bilijuna"}
+                        many{"00 bil'.'"}
                         one{"00 bilijun"}
                         other{"00 bilijuna"}
+                        two{"00 bil'.'"}
+                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bilijuna"}
+                        many{"000 bil'.'"}
                         one{"000 bilijun"}
                         other{"000 bilijuna"}
+                        two{"000 bil'.'"}
+                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -157,63 +200,99 @@ hr{
                 decimalFormat{
                     1000{
                         few{"0 tis'.'"}
+                        many{"0 tis'.'"}
                         one{"0 tis'.'"}
                         other{"0 tis'.'"}
+                        two{"0 tis'.'"}
+                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tis'.'"}
+                        many{"00 tis'.'"}
                         one{"00 tis'.'"}
                         other{"00 tis'.'"}
+                        two{"00 tis'.'"}
+                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tis'.'"}
+                        many{"000 tis'.'"}
                         one{"000 tis'.'"}
                         other{"000 tis'.'"}
+                        two{"000 tis'.'"}
+                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 mil'.'"}
+                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
+                        two{"0 mil'.'"}
+                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
+                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
+                        two{"00 mil'.'"}
+                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
+                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
+                        two{"000 mil'.'"}
+                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mlr'.'"}
+                        many{"0 mlr'.'"}
                         one{"0 mlr'.'"}
                         other{"0 mlr'.'"}
+                        two{"0 mlr'.'"}
+                        zero{"0 mlr'.'"}
                     }
                     10000000000{
                         few{"00 mlr'.'"}
+                        many{"00 mlr'.'"}
                         one{"00 mlr'.'"}
                         other{"00 mlr'.'"}
+                        two{"00 mlr'.'"}
+                        zero{"00 mlr'.'"}
                     }
                     100000000000{
                         few{"000 mlr'.'"}
+                        many{"000 mlr'.'"}
                         one{"000 mlr'.'"}
                         other{"000 mlr'.'"}
+                        two{"000 mlr'.'"}
+                        zero{"000 mlr'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
+                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
+                        two{"0 bil'.'"}
+                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
+                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
+                        two{"00 bil'.'"}
+                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
+                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
+                        two{"000 bil'.'"}
+                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -223,9 +302,11 @@ hr{
                 group{"."}
                 infinity{"∞"}
                 list{";"}
+                minusSign{"-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
+                plusSign{"+"}
                 superscriptingExponent{"×"}
                 timeSeparator{":"}
             }
@@ -241,8 +322,9 @@ hr{
             }
         }
         minimumGroupingDigits{"1"}
+        native{"latn"}
     }
-    Version{"2.1.48.42"}
+    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -267,10 +349,107 @@ hr{
                 "{1} {0}",
                 "{1} {0}",
             }
+            cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "zi",
+                            "chou",
+                            "yin",
+                            "mao",
+                            "chen",
+                            "si",
+                            "wu",
+                            "wei",
+                            "shen",
+                            "you",
+                            "xu",
+                            "hai",
+                        }
+                    }
+                }
+                solarTerms{
+                    format{
+                        abbreviated{
+                            "spring begins",
+                            "rain water",
+                            "insects awaken",
+                            "spring equinox",
+                            "bright and clear",
+                            "grain rain",
+                            "summer begins",
+                            "grain full",
+                            "grain in ear",
+                            "summer solstice",
+                            "minor heat",
+                            "major heat",
+                            "autumn begins",
+                            "end of heat",
+                            "white dew",
+                            "autumn equinox",
+                            "cold dew",
+                            "frost descends",
+                            "winter begins",
+                            "minor snow",
+                            "major snow",
+                            "winter solstice",
+                            "minor cold",
+                            "major cold",
+                        }
+                    }
+                }
+            }
         }
         ethiopic{
             monthNames{
+                format{
+                    abbreviated{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
+                }
                 stand-alone{
+                    abbreviated{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
+                    }
                     narrow{
                         "1.",
                         "2.",
@@ -285,6 +464,21 @@ hr{
                         "11.",
                         "12.",
                         "13.",
+                    }
+                    wide{
+                        "Meskerem",
+                        "Tekemt",
+                        "Hedar",
+                        "Tahsas",
+                        "Ter",
+                        "Yekatit",
+                        "Megabit",
+                        "Miazia",
+                        "Genbot",
+                        "Sene",
+                        "Hamle",
+                        "Nehasse",
+                        "Pagumen",
                     }
                 }
             }
@@ -550,9 +744,9 @@ hr{
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMW{
-                    few{"W. 'tjedan' 'u' MMMM"}
-                    one{"W. 'tjedan' 'u' MMMM"}
-                    other{"W. 'tjedan' 'u' MMMM"}
+                    few{"W. 'tjedan' MMMM"}
+                    one{"W. 'tjedan' MMMM"}
+                    other{"W. 'tjedan' MMMM"}
                 }
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
@@ -1025,8 +1219,57 @@ hr{
             }
         }
         indian{
+            eras{
+                abbreviated{
+                    "Saka",
+                }
+            }
             monthNames{
+                format{
+                    abbreviated{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
+                }
                 stand-alone{
+                    abbreviated{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
+                    }
                     narrow{
                         "1.",
                         "2.",
@@ -1040,6 +1283,20 @@ hr{
                         "10.",
                         "11.",
                         "12.",
+                    }
+                    wide{
+                        "Chaitra",
+                        "Vaisakha",
+                        "Jyaistha",
+                        "Asadha",
+                        "Sravana",
+                        "Bhadra",
+                        "Asvina",
+                        "Kartika",
+                        "Agrahayana",
+                        "Pausa",
+                        "Magha",
+                        "Phalguna",
                     }
                 }
             }
@@ -1068,14 +1325,64 @@ hr{
                 GyMMMd{"d. MMM y. G"}
                 M{"L."}
                 MEd{"E, d. M."}
+                MMM{"LLL"}
                 MMMEd{"E, d. MMM"}
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
                 Md{"d. M."}
                 d{"d."}
             }
+            eras{
+                abbreviated{
+                    "AH",
+                }
+            }
             monthNames{
+                format{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
                 stand-alone{
+                    abbreviated{
+                        "Muh.",
+                        "Saf.",
+                        "Rab. I",
+                        "Rab. II",
+                        "Jum. I",
+                        "Jum. II",
+                        "Raj.",
+                        "Sha.",
+                        "Ram.",
+                        "Shaw.",
+                        "Dhuʻl-Q.",
+                        "Dhuʻl-H.",
+                    }
                     narrow{
                         "1.",
                         "2.",
@@ -1089,6 +1396,20 @@ hr{
                         "10.",
                         "11.",
                         "12.",
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabiʻ I",
+                        "Rabiʻ II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Shaʻban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
                     }
                 }
             }
@@ -1117,6 +1438,7 @@ hr{
                 GyMMMd{"d. MMM y. G"}
                 M{"L."}
                 MEd{"E, d. M."}
+                MMM{"LLL"}
                 MMMEd{"E, d. MMM"}
                 MMMMEd{"E, d. MMMM"}
                 MMMMd{"d. MMMM"}
@@ -1385,8 +1707,57 @@ hr{
             }
         }
         persian{
+            eras{
+                abbreviated{
+                    "AP",
+                }
+            }
             monthNames{
+                format{
+                    abbreviated{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
+                }
                 stand-alone{
+                    abbreviated{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
                     narrow{
                         "1.",
                         "2.",
@@ -1401,12 +1772,27 @@ hr{
                         "11.",
                         "12.",
                     }
+                    wide{
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordad",
+                        "Tir",
+                        "Mordad",
+                        "Shahrivar",
+                        "Mehr",
+                        "Aban",
+                        "Azar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
+                    }
                 }
             }
         }
         roc{
             availableFormats{
                 M{"L."}
+                MMM{"LLL"}
                 MMMEd{"E, d. MMM"}
                 MMMd{"d. MMM"}
                 d{"d."}
@@ -2460,12 +2846,10 @@ hr{
         or{
             2{"{0} ili {1}"}
             end{"{0} ili {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
-            2{"{0} i {1}"}
-            end{"{0} i {1}"}
-        }
-        standard-narrow{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
             middle{"{0}, {1}"}
@@ -2480,12 +2864,18 @@ hr{
         unit{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit-narrow{
             2{"{0} {1}"}
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
+        }
+        unit-short{
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -2518,6 +2908,10 @@ hr{
                 "[\\-‒⁻₋−➖﹣－]",
                 "[,،٫、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
+            }
+            stricter{
+                "[,٫︐﹐，]",
+                "[.․﹒．｡]",
             }
         }
     }

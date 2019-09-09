@@ -13,8 +13,8 @@ ccp{
         "𑄜 𑄝 𑄞 𑄟 𑄠 𑄡 𑄢 𑄣 𑄤 𑄥 𑄦]"
     }
     ExemplarCharactersPunctuation{
-        "[\\- ‐ – — , ; \\: ! ? 𑅃 . … 𑅁 𑅂 𑅀 ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / "
-        "\\& # † ‡ ′ ″]"
+        "[\\- ‐ ‑ – — , ; \\: ! ? 𑅃 . … 𑅁 𑅂 𑅀 ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * "
+        "/ \\& # † ‡ ′ ″]"
     }
     NumberElements{
         cakm{
@@ -49,13 +49,25 @@ ccp{
             patternsShort{
                 decimalFormat{
                     1000000000{
+                        one{"0G"}
                         other{"0G"}
                     }
                     10000000000{
+                        one{"00G"}
                         other{"00G"}
                     }
                     100000000000{
+                        one{"000G"}
                         other{"000G"}
+                    }
+                    1000000000000{
+                        one{"0T"}
+                    }
+                    10000000000000{
+                        one{"00T"}
+                    }
+                    100000000000000{
+                        one{"000T"}
                     }
                 }
             }
@@ -83,7 +95,7 @@ ccp{
         minimumGroupingDigits{"1"}
         native{"cakm"}
     }
-    Version{"2.1.48.88"}
+    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{

@@ -5231,7 +5231,7 @@ void DateFormatTest::TestDayPeriodWithLocales() {
     sdf.setTimeZone(*tz);
 
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
-    assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", UnicodeString("01:00:00 a.\\u00A0m.").unescape(),
+    assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", u"01:00:00 de la mañana",
         sdf.format(k010000, out.remove()));
 
     sdf = SimpleDateFormat(UnicodeString(), Locale("es"), errorCode);
@@ -5551,6 +5551,7 @@ void DateFormatTest::TestAdoptCalendarLeak() {
                "hours=h23;lb=strict;lw=normal;measure=metric;numbers=latn;"
                "rg=atzzzz;sd=atat1;ss=none;timezone=Europe/Vienna"),
         status);
+    ASSERT_OK(status);
     sdf.adoptCalendar(Calendar::createInstance(status));
 }
 

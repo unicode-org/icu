@@ -2,7 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_AU{
     %%Parent{"en_001"}
-    Version{"2.1.48.43"}
+    Version{"36"}
+    durationUnits{
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
+    }
     units{
         concentr{
             percent{
@@ -37,9 +42,6 @@ en_AU{
                 one{"tonne"}
                 other{"{0} tonnes"}
             }
-            stone{
-                one{"{0} stone"}
-            }
         }
         temperature{
             generic{
@@ -50,6 +52,9 @@ en_AU{
         }
     }
     unitsNarrow{
+        compound{
+            per{"{0}/{1}"}
+        }
         concentr{
             milligram-per-deciliter{
                 dnam{"mg/dL"}
@@ -77,8 +82,6 @@ en_AU{
         duration{
             millisecond{
                 dnam{"msec."}
-                one{"{0}ms"}
-                other{"{0}ms"}
             }
             minute{
                 dnam{"min."}
@@ -89,9 +92,6 @@ en_AU{
                 dnam{"sec."}
                 one{"{0}s."}
                 other{"{0}s."}
-            }
-            year{
-                one{"{0}y"}
             }
         }
         speed{
@@ -163,11 +163,6 @@ en_AU{
             degree{
                 one{"{0} deg."}
                 other{"{0} deg."}
-            }
-        }
-        area{
-            square-meter{
-                other{"{0} m²"}
             }
         }
         concentr{
@@ -291,6 +286,8 @@ en_AU{
         temperature{
             generic{
                 dnam{"deg."}
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
         volume{
@@ -302,12 +299,6 @@ en_AU{
                 dnam{"cL"}
                 one{"{0} cL"}
                 other{"{0} cL"}
-            }
-            cubic-centimeter{
-                one{"{0} cm³"}
-            }
-            cubic-mile{
-                one{"{0} mi³"}
             }
             deciliter{
                 dnam{"dL"}

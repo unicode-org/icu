@@ -5214,7 +5214,7 @@ public class DateFormatTest extends TestFmwk {
         sdf.setTimeZone(TimeZone.GMT_ZONE);
 
         sdf.applyPattern("hh:mm:ss BBBB");
-        assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", "01:00:00 a.\u00A0m.", sdf.format(k010000));
+        assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", "01:00:00 de la mañana", sdf.format(k010000));
 
         sdf = new SimpleDateFormat("", new ULocale("es"));
         sdf.setTimeZone(TimeZone.GMT_ZONE);

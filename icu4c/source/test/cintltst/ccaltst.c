@@ -114,7 +114,8 @@ static void TestCalendar()
     UChar *result = 0;
     int32_t resultlength, resultlengthneeded;
     char tempMsgBuf[1024];  // u_austrcpy() of some formatted dates & times.
-    UChar zone1[32], zone2[32];
+    char tempMsgBuf2[256];  // u_austrcpy() of some formatted dates & times.
+    UChar zone1[64], zone2[64];
     const char *tzver = 0;
     UChar canonicalID[64];
     UBool isSystemID = FALSE;
@@ -231,7 +232,7 @@ static void TestCalendar()
     /*Test ucal_set/getDefaultTimeZone and ucal_getHostTimeZone */
     status = U_ZERO_ERROR;
     i = ucal_getDefaultTimeZone(zone1, UPRV_LENGTHOF(zone1), &status);
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
         log_err("FAIL: ucal_getDefaultTimeZone() => %s\n",
                 u_errorName(status));
     } else {
@@ -250,11 +251,12 @@ static void TestCalendar()
                 } else {
                     // Redetect the host timezone, it should be the same as zone1 even though ICU's default timezone has been changed.
                     i = ucal_getHostTimeZone(zone2, UPRV_LENGTHOF(zone2), &status);
-                    if (U_FAILURE(status)) {
+                    if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
                         log_err("FAIL: ucal_getHostTimeZone() => %s\n", u_errorName(status));
                     } else {
                         if (u_strcmp(zone1, zone2) != 0) {
-                            log_err("FAIL: ucal_getHostTimeZone() should give the same host timezone even if the default changed.\n");
+                            log_err("FAIL: ucal_getHostTimeZone() should give the same host timezone even if the default changed. (Got '%s', Expected '%s').\n",
+                                u_austrcpy(tempMsgBuf, zone2), u_austrcpy(tempMsgBuf2, zone1));
                         }
                     }
                 }

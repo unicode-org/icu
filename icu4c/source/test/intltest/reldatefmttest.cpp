@@ -1288,7 +1288,7 @@ void RelativeDateTimeFormatterTest::TestSidewaysDataLoading(void) {
     fmt.format(-3.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_DAYS, actual.remove(), status);
     assertEquals("3 days ago (negative 3.0): ", expected, actual);
 
-    expected = "next yr.";
+    expected = "next yr";
     fmt.format(UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_YEAR, actual.remove(), status);
     assertEquals("next year: ", expected, actual);
 
@@ -1298,7 +1298,7 @@ void RelativeDateTimeFormatterTest::TestSidewaysDataLoading(void) {
     expected = "now";
     fmtshort.format(0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_SECONDS, actual.remove(), status);
 
-    expected = "next yr.";
+    expected = "next yr";
     fmt.format(UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_YEAR, actual.remove(), status);
     assertEquals("next year: ", expected, actual);
 }

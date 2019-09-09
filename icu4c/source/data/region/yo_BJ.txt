@@ -212,7 +212,6 @@ yo_BJ{
         US{"Orílɛ̀-èdè Amɛrikà"}
         UY{"Orílɛ́ède Nruguayi"}
         UZ{"Orílɛ́ède Nshibɛkisitani"}
-        VA{"Ìlú Vatican"}
         VC{"Orílɛ́ède Fisɛnnti ati Genadina"}
         VE{"Orílɛ́ède Fɛnɛshuɛla"}
         VG{"Orílɛ́ède Etíkun Fágínì ti ìlú Bírítísì"}
@@ -228,5 +227,5 @@ yo_BJ{
         ZW{"Orílɛ́ède shimibabe"}
         ZZ{"Àgbègbè àìmɔ̀"}
     }
-    Version{"2.1.48.77"}
+    Version{"36"}
 }
