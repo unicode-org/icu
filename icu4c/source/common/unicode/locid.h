@@ -1159,7 +1159,6 @@ Locale::operator!=(const    Locale&     other) const
     return !operator==(other);
 }
 
-#ifndef U_HIDE_DRAFT_API
 template<typename StringClass> inline StringClass
 Locale::toLanguageTag(UErrorCode& status) const
 {
@@ -1168,7 +1167,6 @@ Locale::toLanguageTag(UErrorCode& status) const
     toLanguageTag(sink, status);
     return result;
 }
-#endif  // U_HIDE_DRAFT_API
 
 inline const char *
 Locale::getCountry() const
@@ -1199,8 +1197,6 @@ Locale::getName() const
 {
     return fullName;
 }
-
-#ifndef U_HIDE_DRAFT_API
 
 template<typename StringClass, typename OutputIterator> inline void
 Locale::getKeywords(OutputIterator iterator, UErrorCode& status) const
@@ -1253,8 +1249,6 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) cons
     getUnicodeKeywordValue(keywordName, sink, status);
     return result;
 }
-
-#endif  // U_HIDE_DRAFT_API
 
 inline UBool
 Locale::isBogus(void) const {
