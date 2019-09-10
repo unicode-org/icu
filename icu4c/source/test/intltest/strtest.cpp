@@ -14,7 +14,7 @@
 *   created by: Markus W. Scherer
 */
 
-#if U_HAVE_STRING_VIEW
+#ifdef U_HAVE_STRING_VIEW
 #include <string_view>
 #endif
 
@@ -244,7 +244,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestStringPiece);
     TESTCASE_AUTO(TestStringPieceComparisons);
     TESTCASE_AUTO(TestStringPieceOther);
-#if U_HAVE_STRING_VIEW
+#ifdef U_HAVE_STRING_VIEW
     TESTCASE_AUTO(TestStringPieceStringView);
 #endif
     TESTCASE_AUTO(TestByteSink);
@@ -433,7 +433,7 @@ StringTest::TestStringPieceOther() {
     assertEquals("data()", piece.data(), other.data());
 }
 
-#if U_HAVE_STRING_VIEW
+#ifdef U_HAVE_STRING_VIEW
 void
 StringTest::TestStringPieceStringView() {
     static constexpr char msg[] = "Kapow!";
