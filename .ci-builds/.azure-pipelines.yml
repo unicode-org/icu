@@ -44,7 +44,7 @@ jobs:
     vmImage: 'Ubuntu 16.04'
   steps:
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
       displayName: 'Build only (WarningsAsErrors)'
       env:
         CC: clang
@@ -264,7 +264,7 @@ jobs:
     vmImage: 'macOS-10.14'
   steps:
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 tests
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 tests
       displayName: 'Build only (WarningsAsErrors)'
       env:
         CC: clang
