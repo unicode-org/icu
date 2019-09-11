@@ -2283,7 +2283,6 @@ private:
      * should only be called if this calendar is not lenient.
      * @see #isLenient
      * @see #validateField(int, int&)
-     * @internal
      */
     void validateFields(UErrorCode &status);
 
@@ -2293,7 +2292,6 @@ private:
      * <code>U_ILLEGAL_ARGUMENT_ERROR</code> will be set.  Subclasses may
      * use this method in their implementation of {@link
      * #validateField(int, int&)}.
-     * @internal
      */
     void validateField(UCalendarDateFields field, int32_t min, int32_t max, UErrorCode& status);
 
