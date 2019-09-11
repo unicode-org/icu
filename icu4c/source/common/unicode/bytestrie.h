@@ -97,6 +97,7 @@ public:
         return *this;
     }
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the state of this trie as a 64-bit integer.
      * The state value is never 0.
@@ -129,6 +130,7 @@ public:
         pos_ = bytes_ + (state & kState64PosMask);
         return *this;
     }
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * BytesTrie state object, for saving a trie's current state

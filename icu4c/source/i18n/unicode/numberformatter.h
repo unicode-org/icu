@@ -2410,14 +2410,14 @@ class U_I18N_API LocalizedNumberFormatter
 class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
   public:
 
-#ifndef U_HIDE_DRAFT_API
+    // Default constructor cannot have #ifndef U_HIDE_DRAFT_API
     /**
      * Default constructor; makes an empty FormattedNumber.
      * @draft ICU 64
      */
     FormattedNumber()
         : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
-#endif
+
     /**
      * Move constructor: Leaves the source FormattedNumber in an undefined state.
      * @stable ICU 62
@@ -2466,11 +2466,11 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      */
     Appendable &appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
 
-#ifndef U_HIDE_DRAFT_API
     // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
      * <em>field</em> in the output string. This allows you to determine the locations of, for example,
@@ -2522,7 +2522,9 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @see UNumberFormatFields
      */
     void getAllFieldPositions(FieldPositionIterator &iterator, UErrorCode &status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Export the formatted number as a "numeric string" conforming to the
      * syntax defined in the Decimal Arithmetic Specification, available at

@@ -457,13 +457,11 @@ private:
      * to non-resource bundle strings,
      * then regular UnicodeString copies must be used instead of fastCopyFrom().
      *
-     * @internal
      */
     UnicodeString fSymbols[kFormatSymbolCount];
 
     /**
      * Non-symbol variable for getConstSymbol(). Always empty.
-     * @internal
      */
     UnicodeString fNoSymbol;
 
