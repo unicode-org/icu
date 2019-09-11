@@ -720,7 +720,7 @@
         </jar>
     </target>
 
-    <target name="icu4jtestsJar" depends="info, tests" description="Build ICU4J all-in-one test jar">
+    <target name="icu4jtestsJar" depends="info, tests, tools" description="Build ICU4J all-in-one test jar">
         <jar jarfile="${icu4jtests.jar.file}"
                 compress="true">
             <fileset dir="${icu4j.test-framework.dir}/${bin.dir}" includes="**/*"/>
@@ -728,6 +728,7 @@
             <fileset dir="${icu4j.collate-tests.dir}/${bin.dir}" includes="**/*"/>
             <fileset dir="${icu4j.translit-tests.dir}/${bin.dir}" includes="**/*"/>
             <fileset dir="${icu4j.charset-tests.dir}/${bin.dir}" includes="**/*"/>
+            <fileset dir="${icu4j.tools.dir}/${bin.dir}" includes="com/ibm/icu/dev/tool/locale/**"/>
         </jar>
     </target>
 
