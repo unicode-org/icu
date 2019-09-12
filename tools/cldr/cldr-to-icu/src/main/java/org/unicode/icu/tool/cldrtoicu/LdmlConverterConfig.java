@@ -42,7 +42,7 @@ public interface LdmlConverterConfig {
         }
 
         /** Returns the relative output directory name. */
-        String getOutputDir() {
+        public String getOutputDir() {
             return dirName;
         }
 
@@ -51,7 +51,7 @@ public interface LdmlConverterConfig {
          * the supported set of locales for the "service" provided by the data in that
          * directory).
          */
-        // TODO: Document why there's a difference between directories for empty directories.
+        // TODO: Document why there's a difference between directories for empty files.
         boolean includeEmpty() {
             return includeEmpty;
         }
