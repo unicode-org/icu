@@ -4,8 +4,7 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.base.CharMatcher.whitespace;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
@@ -86,7 +85,8 @@ public final class TransformsMapper {
         Function<Path, PrintWriter> fileWriterFn = p -> {
             Path file = ruleFileOutputDir.resolve(p);
             try {
-                return new PrintWriter(Files.newBufferedWriter(file, CREATE, TRUNCATE_EXISTING));
+                // Specify "CREATE_NEW" since we don't want to overwrite any existing files.
+                return new PrintWriter(Files.newBufferedWriter(file, CREATE_NEW));
             } catch (IOException e) {
                 throw new RuntimeException("error opening file: " + file, e);
             }

@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -225,7 +224,7 @@ public final class LdmlConverter {
         this.localeTransformer =
             RegexTransformer.fromConfigLines(readLinesFromResource("/ldml2icu_locale.txt"),
                 IcuFunctions.CONTEXT_TRANSFORM_INDEX_FN);
-        this.fileHeader = ImmutableList.copyOf(readLinesFromResource("/ldml2icu_header.txt"));
+        this.fileHeader = readLinesFromResource("/ldml2icu_header.txt");
     }
 
     private void convertAll() {
@@ -237,9 +236,9 @@ public final class LdmlConverter {
         }
     }
 
-    private static List<String> readLinesFromResource(String name) {
+    private static ImmutableList<String> readLinesFromResource(String name) {
         try (InputStream in = LdmlConverter.class.getResourceAsStream(name)) {
-            return CharStreams.readLines(new InputStreamReader(in));
+            return ImmutableList.copyOf(CharStreams.readLines(new InputStreamReader(in)));
         } catch (IOException e) {
             throw new RuntimeException("cannot read resource: " + name, e);
         }
@@ -336,7 +335,7 @@ public final class LdmlConverter {
 
                 if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
                     splitData.setVersion(CldrDataSupplier.getCldrVersionString());
-                    write(splitData, outDir);
+                    write(splitData, outDir, false);
                     writtenLocaleIds.put(dir, id);
                 }
             }
@@ -472,7 +471,7 @@ public final class LdmlConverter {
 
             case TRANSFORMS:
                 Path transformDir = createDirectory(config.getOutputDir().resolve("translit"));
-                write(TransformsMapper.process(src, transformDir, fileHeader), transformDir);
+                write(TransformsMapper.process(src, transformDir, fileHeader), transformDir, false);
                 break;
 
             case KEY_TYPE_DATA:
@@ -502,7 +501,9 @@ public final class LdmlConverter {
     private void writeAliasFile(String srcId, String destId, Path dir) {
         IcuData icuData = new IcuData(srcId, true);
         icuData.add(RB_ALIAS, destId);
-        write(icuData, dir);
+        // Allow overwrite for aliases since some are "forced" and overwrite existing targets.
+        // TODO: Maybe tighten this up so only forced aliases for existing targets are overwritten.
+        write(icuData, dir, true);
     }
 
     private void writeEmptyFile(String id, Path dir, Collection<String> aliasTargets) {
@@ -516,16 +517,16 @@ public final class LdmlConverter {
             // which is itself not in the set of written ICU files. An "indirect alias target".
             icuData.setVersion(CldrDataSupplier.getCldrVersionString());
         }
-        write(icuData, dir);
+        write(icuData, dir, false);
     }
 
     private void write(IcuData icuData, String dir) {
-        write(icuData, config.getOutputDir().resolve(dir));
+        write(icuData, config.getOutputDir().resolve(dir), false);
     }
 
-    private void write(IcuData icuData, Path dir) {
+    private void write(IcuData icuData, Path dir, boolean allowOverwrite) {
         createDirectory(dir);
-        IcuTextWriter.writeToFile(icuData, dir, fileHeader);
+        IcuTextWriter.writeToFile(icuData, dir, fileHeader, allowOverwrite);
     }
 
     private Path createDirectory(Path dir) {
