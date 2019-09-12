@@ -538,6 +538,7 @@ public:
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * Deprecated functionality. Use clone() instead.
      *
@@ -567,7 +568,7 @@ public:
     virtual RuleBasedBreakIterator *createBufferClone(void *stackBuffer,
                                                       int32_t &BufferSize,
                                                       UErrorCode &status);
-
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
     /**
      * Return the binary form of compiled break rules,

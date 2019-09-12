@@ -66,6 +66,11 @@ matrix:
         - PATH="${PREFIX}/bin:$PATH" make -C test/hdrtst check
 
     # clang release build with some options to enforce useful constraints.
+    # Includes dependency checker on an in-source, optimized build.
+    # Includes checking @draft etc. API tags vs. ifndef guards like
+    # U_HIDE_DRAFT_API and U_FORCE_HIDE_DRAFT_API.
+    # (FORCE guards make this tool pass but won't compile to working code.
+    # See the testtagsguards.sh script for details.)
     - name: "c: linux clang"
       dist:     xenial
       language: cpp
@@ -81,6 +86,7 @@ matrix:
       script:
         - make -j2 check
         - ( cd test/depstest && python3 depstest.py ../../../source/ )
+        - ( cd .. && source/test/hdrtst/testtagsguards.sh )
 
     - name: "c: osx clang"
       language: cpp

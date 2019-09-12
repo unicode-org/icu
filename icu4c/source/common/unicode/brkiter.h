@@ -497,6 +497,7 @@ public:
     static UnicodeString& U_EXPORT2 getDisplayName(const Locale& objectLocale,
                                          UnicodeString& name);
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * Deprecated functionality. Use clone() instead.
      *
@@ -519,6 +520,7 @@ public:
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status) = 0;
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
 #ifndef U_HIDE_DEPRECATED_API
 
