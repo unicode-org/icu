@@ -19,9 +19,6 @@
 /**
  * \file
  * \brief C API: Deprecated macros for Unicode string handling
- */
-
-/**
  *
  * The macros in utf_old.h are all deprecated and their use discouraged.
  * Some of the design principles behind the set of UTF macros
@@ -139,11 +136,15 @@
  *
  * <hr>
  *
- * @deprecated ICU 2.4. Use the macros in utf.h, utf16.h, utf8.h instead.
+ * Deprecated ICU 2.4. Use the macros in utf.h, utf16.h, utf8.h instead.
  */
 
 #ifndef __UTF_OLD_H__
 #define __UTF_OLD_H__
+
+#include "unicode/utf.h"
+#include "unicode/utf8.h"
+#include "unicode/utf16.h"
 
 /**
  * \def U_HIDE_OBSOLETE_UTF_OLD_H
@@ -161,10 +162,6 @@
 #endif
 
 #if !defined(U_HIDE_DEPRECATED_API) && !U_HIDE_OBSOLETE_UTF_OLD_H
-
-#include "unicode/utf.h"
-#include "unicode/utf8.h"
-#include "unicode/utf16.h"
 
 /* Formerly utf.h, part 1 --------------------------------------------------- */
 

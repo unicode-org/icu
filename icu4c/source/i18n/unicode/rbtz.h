@@ -226,6 +226,7 @@ public:
      */
     virtual UBool useDaylightTime(void) const;
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * Queries if the given date is in daylight savings time in
      * this time zone.
@@ -240,6 +241,7 @@ public:
      * @deprecated ICU 2.4. Use Calendar::inDaylightTime() instead.
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& status) const;
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
     /**
      * Returns true if this zone has the same rule and offset as another zone.

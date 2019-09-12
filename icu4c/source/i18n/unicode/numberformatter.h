@@ -2411,12 +2411,14 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
   public:
 
     // Default constructor cannot have #ifndef U_HIDE_DRAFT_API
+#ifndef U_FORCE_HIDE_DRAFT_API
     /**
      * Default constructor; makes an empty FormattedNumber.
      * @draft ICU 64
      */
     FormattedNumber()
         : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
+#endif  // U_FORCE_HIDE_DRAFT_API
 
     /**
      * Move constructor: Leaves the source FormattedNumber in an undefined state.

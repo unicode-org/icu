@@ -29,6 +29,7 @@ U_NAMESPACE_BEGIN
 // The following cannot have #ifndef U_HIDE_DRAFT_API because
 // class FormattedValue depends on it, and FormattedValue cannot be
 // hidden becauseclass FormattedNumber (stable ICU 60) depends on it.
+#ifndef U_FORCE_HIDE_DRAFT_API
 /**
  * Represents a span of a string containing a given field.
  *
@@ -320,7 +321,7 @@ class U_I18N_API FormattedValue /* not : public UObject because this is an inter
      */
     virtual UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const = 0;
 };
-
+#endif  // U_FORCE_HIDE_DRAFT_API
 
 U_NAMESPACE_END
 
