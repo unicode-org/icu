@@ -239,7 +239,7 @@ class U_I18N_API ListFormatter : public UObject{
     UnicodeString& format(const UnicodeString items[], int32_t n_items,
         UnicodeString & appendTo, FieldPositionIterator* posIter,
         UErrorCode& errorCode) const;
-#endif  /* U_HIDE_DRAFT_API */
+#endif // U_HIDE_DRAFT_API
 
 #if !UCONFIG_NO_FORMATTING
 #ifndef U_HIDE_DRAFT_API

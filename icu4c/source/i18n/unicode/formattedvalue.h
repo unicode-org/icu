@@ -9,7 +9,6 @@
 #if U_SHOW_CPLUSPLUS_API
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/appendable.h"
 #include "unicode/fpositer.h"
@@ -27,6 +26,7 @@ U_NAMESPACE_BEGIN
  */
 
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Represents a span of a string containing a given field.
  *
@@ -234,6 +234,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
     int8_t fConstraint = 0;
 };
 
+#endif // U_HIDE_DRAFT_API
 
 /**
  * An abstract formatted value: a string with associated field attributes.
@@ -287,6 +288,7 @@ class U_I18N_API FormattedValue /* not : public UObject because this is an inter
      */
     virtual Appendable& appendTo(Appendable& appendable, UErrorCode& status) const = 0;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Iterates over field positions in the FormattedValue. This lets you determine the position
      * of specific types of substrings, like a month or a decimal separator.
@@ -310,12 +312,12 @@ class U_I18N_API FormattedValue /* not : public UObject because this is an inter
      * @draft ICU 64
      */
     virtual UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const = 0;
+#endif
 };
 
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif /* U_SHOW_CPLUSPLUS_API */

@@ -41,9 +41,7 @@ struct UFormattedList;
  * @draft ICU 64
  */
 typedef struct UFormattedList UFormattedList;
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * FieldPosition and UFieldPosition selectors for format fields
  * defined by ListFormatter.
@@ -61,7 +59,7 @@ typedef enum UListFormatterField {
      */
     ULISTFMT_ELEMENT_FIELD
 } UListFormatterField;
-#endif // U_HIDE_DRAFT_API
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Open a new UListFormatter object using the rules for a given locale.

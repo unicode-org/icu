@@ -287,16 +287,14 @@ public:
      */
     Locale(const    Locale& other);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Move constructor; might leave source in bogus state.
      * This locale will have the same contents that the source locale had.
      *
      * @param other The Locale object being moved in.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     Locale(Locale&& other) U_NOEXCEPT;
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Destructor
@@ -313,7 +311,6 @@ public:
      */
     Locale& operator=(const Locale& other);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Move assignment operator; might leave source in bogus state.
      * This locale will have the same contents that the source locale had.
@@ -321,10 +318,9 @@ public:
      *
      * @param other The Locale object being moved in.
      * @return      *this
-     * @draft ICU 63
+     * @stable ICU 63
      */
     Locale& operator=(Locale&& other) U_NOEXCEPT;
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Checks if two locale keys are the same.
@@ -392,7 +388,6 @@ public:
                                      UErrorCode&   success);
 #endif  /* U_HIDE_SYSTEM_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns a Locale for the specified BCP47 language tag string.
      * If the specified language tag contains any ill-formed subtags,
@@ -408,7 +403,7 @@ public:
      * @param tag     the input BCP47 language tag.
      * @param status  error information if creating the Locale failed.
      * @return        the Locale for the specified BCP47 language tag.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     static Locale U_EXPORT2 forLanguageTag(StringPiece tag, UErrorCode& status);
 
@@ -423,7 +418,7 @@ public:
      * @param sink    the output sink receiving the BCP47 language
      *                tag for this Locale.
      * @param status  error information if creating the language tag failed.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     void toLanguageTag(ByteSink& sink, UErrorCode& status) const;
 
@@ -435,11 +430,10 @@ public:
      *
      * @param status  error information if creating the language tag failed.
      * @return        the BCP47 language tag for this Locale.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     template<typename StringClass>
     inline StringClass toLanguageTag(UErrorCode& status) const;
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Creates a locale which has had minimal canonicalization
@@ -511,7 +505,6 @@ public:
      */
     const char * getBaseName() const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Add the likely subtags for this Locale, per the algorithm described
      * in the following CLDR technical report:
@@ -539,7 +532,7 @@ public:
      * @param status  error information if maximizing this Locale failed.
      *                If this Locale is not well-formed, the error code is
      *                U_ILLEGAL_ARGUMENT_ERROR.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     void addLikelySubtags(UErrorCode& status);
 
@@ -570,10 +563,9 @@ public:
      * @param status  error information if maximizing this Locale failed.
      *                If this Locale is not well-formed, the error code is
      *                U_ILLEGAL_ARGUMENT_ERROR.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     void minimizeSubtags(UErrorCode& status);
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Gets the list of keywords for the specified locale.
@@ -586,8 +578,6 @@ public:
      */
     StringEnumeration * createKeywords(UErrorCode &status) const;
 
-#ifndef U_HIDE_DRAFT_API
-
     /**
      * Gets the list of Unicode keywords for the specified locale.
      *
@@ -595,7 +585,7 @@ public:
      * @return pointer to StringEnumeration class, or NULL if there are no keywords.
      * Client must dispose of it by calling delete.
      * @see getUnicodeKeywords
-     * @draft ICU 63
+     * @stable ICU 63
      */
     StringEnumeration * createUnicodeKeywords(UErrorCode &status) const;
 
@@ -608,7 +598,7 @@ public:
      *
      * @param iterator  an STL style output iterator to write the keywords to.
      * @param status    error information if creating set of keywords failed.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     template<typename StringClass, typename OutputIterator>
     inline void getKeywords(OutputIterator iterator, UErrorCode& status) const;
@@ -622,12 +612,10 @@ public:
      *
      * @param iterator  an STL style output iterator to write the keywords to.
      * @param status    error information if creating set of keywords failed.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     template<typename StringClass, typename OutputIterator>
     inline void getUnicodeKeywords(OutputIterator iterator, UErrorCode& status) const;
-
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Gets the value for a keyword.
@@ -647,7 +635,6 @@ public:
      */
     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the value for a keyword.
      *
@@ -659,7 +646,7 @@ public:
      * @param keywordName  name of the keyword for which we want the value.
      * @param sink         the sink to receive the keyword value.
      * @param status       error information if getting the value failed.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     void getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& status) const;
 
@@ -674,7 +661,7 @@ public:
      * @param keywordName  name of the keyword for which we want the value.
      * @param status       error information if getting the value failed.
      * @return             the keyword value.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     template<typename StringClass>
     inline StringClass getKeywordValue(StringPiece keywordName, UErrorCode& status) const;
@@ -690,7 +677,7 @@ public:
      * @param keywordName  name of the keyword for which we want the value.
      * @param sink         the sink to receive the keyword value.
      * @param status       error information if getting the value failed.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     void getUnicodeKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& status) const;
 
@@ -705,11 +692,10 @@ public:
      * @param keywordName  name of the keyword for which we want the value.
      * @param status       error information if getting the value failed.
      * @return             the keyword value.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     template<typename StringClass>
     inline StringClass getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) const;
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Sets or removes the value for a keyword.
@@ -732,7 +718,6 @@ public:
      */
     void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Sets or removes the value for a keyword.
      *
@@ -749,7 +734,7 @@ public:
      *  NULL, will result in the keyword being removed. No error is given if
      *  that keyword does not exist.
      * @param status Returns any error information while performing this operation.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     void setKeywordValue(StringPiece keywordName, StringPiece keywordValue, UErrorCode& status);
 
@@ -769,10 +754,9 @@ public:
      *  NULL, will result in the keyword being removed. No error is given if
      *  that keyword does not exist.
      * @param status Returns any error information while performing this operation.
-     * @draft ICU 63
+     * @stable ICU 63
      */
     void setUnicodeKeywordValue(StringPiece keywordName, StringPiece keywordValue, UErrorCode& status);
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -1175,7 +1159,6 @@ Locale::operator!=(const    Locale&     other) const
     return !operator==(other);
 }
 
-#ifndef U_HIDE_DRAFT_API
 template<typename StringClass> inline StringClass
 Locale::toLanguageTag(UErrorCode& status) const
 {
@@ -1184,7 +1167,6 @@ Locale::toLanguageTag(UErrorCode& status) const
     toLanguageTag(sink, status);
     return result;
 }
-#endif  // U_HIDE_DRAFT_API
 
 inline const char *
 Locale::getCountry() const
@@ -1215,8 +1197,6 @@ Locale::getName() const
 {
     return fullName;
 }
-
-#ifndef U_HIDE_DRAFT_API
 
 template<typename StringClass, typename OutputIterator> inline void
 Locale::getKeywords(OutputIterator iterator, UErrorCode& status) const
@@ -1269,8 +1249,6 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) cons
     getUnicodeKeywordValue(keywordName, sink, status);
     return result;
 }
-
-#endif  // U_HIDE_DRAFT_API
 
 inline UBool
 Locale::isBogus(void) const {
