@@ -38,7 +38,9 @@ public final class SupplementalMapper extends AbstractPathValueMapper {
     public static IcuData process(
         CldrDataSupplier src, PathValueTransformer transformer, String icuName, PathMatcher paths) {
 
-        return new SupplementalMapper(src, transformer, paths).generateIcuData(icuName, false);
+        IcuData icuData = new IcuData(icuName, false);
+        new SupplementalMapper(src, transformer, paths).addIcuData(icuData);
+        return icuData;
     }
 
     private final PathMatcher paths;

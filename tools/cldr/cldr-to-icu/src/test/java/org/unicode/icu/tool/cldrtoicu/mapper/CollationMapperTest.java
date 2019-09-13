@@ -22,14 +22,17 @@ import com.google.common.base.Joiner;
 public class CollationMapperTest {
     @Test
     public void testEmpty() {
-        IcuData icuData = CollationMapper.process("xx", cldrData(), Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        CollationMapper.process(icuData, cldrData(), Optional.empty());
+
         assertThat(icuData).hasName("xx");
         assertThat(icuData).hasFallback(true);
         assertThat(icuData).getPaths().isEmpty();
 
         // Root gets a couple of special paths added to it due to the need to work around a CLDR
         // data bug.
-        IcuData rootData = CollationMapper.process("root", cldrData(), Optional.empty());
+        IcuData rootData = new IcuData("root", true);
+        CollationMapper.process(rootData, cldrData(), Optional.empty());
         assertThat(rootData).hasName("root");
         assertThat(rootData).hasFallback(true);
         assertThat(rootData).getPaths().hasSize(2);
@@ -42,7 +45,8 @@ public class CollationMapperTest {
         CldrData cldrData =
             cldrData(CldrValue.parseValue("//ldml/collations/defaultCollation", "any value"));
 
-        IcuData icuData = CollationMapper.process("xx", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        CollationMapper.process(icuData, cldrData, Optional.empty());
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/collations/default", "any value");
     }
@@ -61,7 +65,8 @@ public class CollationMapperTest {
             collationRule("foo", "alt2", "Second alt rule"),
             collationRule("foo", null, "First rule"));
 
-        IcuData icuData = CollationMapper.process("xx", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        CollationMapper.process(icuData, cldrData, Optional.empty());
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData).hasValuesFor("/collations/foo/Version", getCldrVersionString());
         assertThat(icuData).hasValuesFor("/collations/foo/Sequence", "Second alt rule");
@@ -78,7 +83,8 @@ public class CollationMapperTest {
                 "# And more comments to be stripped",
                 "And another value"));
 
-        IcuData icuData = CollationMapper.process("xx", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        CollationMapper.process(icuData, cldrData, Optional.empty());
         assertThat(icuData).hasValuesFor("/collations/foo/Sequence",
             "Here is a value",
             "And another value");
@@ -109,7 +115,8 @@ public class CollationMapperTest {
                     + "\uD83D\uDE19",
                 "  <*\uD83D\uDE0B\uD83D\uDE1B\uD83D\uDE1C\uD83E\uDD2A\uD83D\uDE1D\uD83E\uDD11"));
 
-        IcuData icuData = CollationMapper.process("xx", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        CollationMapper.process(icuData, cldrData, Optional.empty());
 
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData).hasValuesFor("/collations/emoji/Version", getCldrVersionString());
@@ -131,7 +138,8 @@ public class CollationMapperTest {
             CldrValue.parseValue("//ldml/special/icu:UCARules[@icu:uca_rules=\"special rule\"]", ""),
             CldrValue.parseValue("//ldml/special/icu:depends[@icu:dependency=\"special deps\"]", ""));
 
-        IcuData icuData = CollationMapper.process("xx", cldrData(), Optional.of(specials));
+        IcuData icuData = new IcuData("xx", true);
+        CollationMapper.process(icuData, cldrData(), Optional.of(specials));
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData).hasValuesFor("UCARules:process(uca_rules)", "special rule");
         assertThat(icuData).hasValuesFor("depends:process(dependency)", "special deps");
