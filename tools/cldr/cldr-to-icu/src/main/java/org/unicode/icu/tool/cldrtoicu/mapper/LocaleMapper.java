@@ -5,8 +5,6 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
-import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
-import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,16 +12,12 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.unicode.cldr.api.CldrData;
-import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
-import org.unicode.icu.tool.cldrtoicu.SupplementalData;
-
-import com.google.common.annotations.VisibleForTesting;
 
 /**
  * Generate locale {@link IcuData} by transforming {@link CldrDataType#LDML LDML} data using a
@@ -47,50 +41,30 @@ public final class LocaleMapper extends AbstractPathValueMapper {
      *        {@link org.unicode.cldr.api.CldrDataType#SUPPLEMENTAL SUPPLEMENTAL} data.
      * @return IcuData containing locale data for the given locale ID.
      */
-    public static IcuData process(
-        String localeId,
-        CldrDataSupplier src,
-        Optional<CldrData> icuSpecialData,
-        PathValueTransformer transformer,
-        SupplementalData supplementalData) {
-
-        return process(
-            localeId,
-            src,
-            icuSpecialData,
-            transformer,
-            supplementalData.getDefaultCalendar(localeId));
-    }
-
-    @VisibleForTesting  // Avoids needing to pass a complete SupplementalData instance in tests.
-    public static IcuData process(
-        String localeId,
-        CldrDataSupplier src,
+    public static void process(
+        IcuData icuData,
+        CldrData unresolved,
+        CldrData resolved,
         Optional<CldrData> icuSpecialData,
         PathValueTransformer transformer,
         Optional<String> defaultCalendar) {
 
-        IcuData icuData =
-            new LocaleMapper(localeId, src, icuSpecialData, transformer)
-                .generateIcuData(localeId, true);
+        new LocaleMapper(unresolved, resolved, icuSpecialData, transformer).addIcuData(icuData);
         doDateTimeHack(icuData);
         defaultCalendar.ifPresent(c -> icuData.add(RB_CALENDAR, c));
-        return icuData;
     }
 
-    private final String localeId;
-    private final CldrDataSupplier src;
+    private final CldrData unresolved;
     private final Optional<CldrData> icuSpecialData;
 
     private LocaleMapper(
-        String localeId,
-        CldrDataSupplier src,
+        CldrData unresolved,
+        CldrData resolved,
         Optional<CldrData> icuSpecialData,
         PathValueTransformer transformer) {
 
-        super(src.getDataForLocale(localeId, RESOLVED), transformer);
-        this.localeId = localeId;
-        this.src = checkNotNull(src);
+        super(resolved, transformer);
+        this.unresolved = checkNotNull(unresolved);
         this.icuSpecialData = checkNotNull(icuSpecialData);
     }
 
@@ -102,7 +76,7 @@ public final class LocaleMapper extends AbstractPathValueMapper {
 
     private Set<RbPath> collectPaths() {
         Set<RbPath> validRbPaths = new HashSet<>();
-        src.getDataForLocale(localeId, UNRESOLVED)
+        unresolved
             .accept(DTD, v -> transformValue(v).forEach(r -> collectResultPath(r, validRbPaths)));
         return validRbPaths;
     }

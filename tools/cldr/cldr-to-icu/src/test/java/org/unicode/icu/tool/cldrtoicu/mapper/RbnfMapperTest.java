@@ -55,7 +55,8 @@ public class RbnfMapperTest {
             rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "1", "oh-=%first-set=;", ++idx),
             rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "10", "=%first-set=;", ++idx));
 
-        IcuData icuData = RbnfMapper.process("en", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        RbnfMapper.process(icuData, cldrData, Optional.empty());
 
         assertThat(icuData).hasValuesFor("/RBNFRules/SpelloutRules",
             // Double-% prefix for "private" access.
@@ -82,7 +83,8 @@ public class RbnfMapperTest {
             rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "NaN", "seven;", ++idx),
             rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "0", "eight;", ++idx));
 
-        IcuData icuData = RbnfMapper.process("en", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        RbnfMapper.process(icuData, cldrData, Optional.empty());
 
         assertThat(icuData).hasValuesFor("/RBNFRules/SpelloutRules",
             // Single-% prefix for "public" access.
@@ -115,7 +117,8 @@ public class RbnfMapperTest {
             rbnfRule(ORDINAL_RULES, "digits-ordinal", PUBLIC, "0",
                 "=#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;", ++idx));
 
-        IcuData icuData = RbnfMapper.process("en", cldrData, Optional.of(specials));
+        IcuData icuData = new IcuData("xx", true);
+        RbnfMapper.process(icuData, cldrData, Optional.of(specials));
 
         assertThat(icuData).hasValuesFor("/RBNFRules/OrdinalRules",
             RbValue.of("%digits-ordinal:"),
@@ -146,7 +149,8 @@ public class RbnfMapperTest {
             rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k3", "Ü Umlaut", ++idx),
             rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k4", "\uD83D\uDE03 Smiley", ++idx));
 
-        IcuData icuData = RbnfMapper.process("en", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        RbnfMapper.process(icuData, cldrData, Optional.empty());
 
         assertThat(icuData).hasValuesFor("/RBNFRules/SpelloutRules",
             RbValue.of("%escaping:"),
