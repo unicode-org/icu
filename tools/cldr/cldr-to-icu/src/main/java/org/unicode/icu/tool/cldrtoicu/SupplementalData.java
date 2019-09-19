@@ -93,7 +93,7 @@ public final class SupplementalData {
      * @param supplementalData the raw CLDR supplemental data instance.
      * @return the supplemental data API.
      */
-    static SupplementalData create(CldrData supplementalData) {
+    public static SupplementalData create(CldrData supplementalData) {
         Table<Alias, String, String> aliasTable = HashBasedTable.create();
         Map<String, String> parentLocaleMap = new HashMap<>();
         Map<String, String> defaultCalendarMap = new HashMap<>();

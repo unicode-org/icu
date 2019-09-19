@@ -190,10 +190,14 @@ public final class RbPath implements Comparable<RbPath> {
         return new RbPath(segments.stream().map(fn).collect(toImmutableList()));
     }
 
-    // TODO: Remove this in favour of having properly typed paths.
+    // TODO: Remove this and isAlias() in favour of having properly typed paths.
     boolean isIntPath() {
         String lastElement = segments.get(segments.size() - 1);
         return lastElement.endsWith(":int") || lastElement.endsWith(":intvector");
+    }
+
+    public boolean isAlias() {
+        return getSegment(length() - 1).endsWith(":alias");
     }
 
     @Override public int compareTo(RbPath other) {

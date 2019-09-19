@@ -198,7 +198,7 @@
 
 # Leap year names go after other month names.
 # "yeartype" is an #IMPLIED attribute in the DTD and it should implicitly default to "standard".
-# In practice "standard" is never explicitly given, but it could be (so must match it here).
+# In practice "standard" is never explicitly given, but it could be (so it must be matched here).
 //ldml/dates/calendars/calendar[@type="(%A)"]/(day|month)s/%W[@type="(%A)"]/%W[@type="(%A)"]/%W[@type="(%A)"](?:[@yeartype="standard"])? ; /calendar/$1/$2Names/$3/$4
 //ldml/dates/calendars/calendar[@type="(%A)"]/(day|month)s/%W[@type="(%A)"]/%W[@type="(%A)"]/%W[@type="(%A)"][@yeartype="leap"] ; /calendar/$1/$2Names/$3/$4
 
@@ -227,7 +227,6 @@
 # Locale Display Names
 
 //ldml/localeDisplayNames/codePatterns/codePattern[@type="(%A)"] ; /codePatterns/$1
-//ldml/localeDisplayNames/annotationPatterns/annotationPattern[@type="(%A)"] ; /codePatterns/$1
 
 //ldml/localeDisplayNames/keys/key[@type="(%A)"] ; /Keys/$1
 
@@ -264,23 +263,23 @@
 # Ordering of rules is critical here since they write into the same resource bundle path and the
 # last 3 values are grouped together as a single value (via the special <FIFO> hidden label).
 #
-# Note that the <FIFO> label is needed here (not the "group" instruction) because the grouped
+# Note that the <FORMAT> label is needed here (not the "group" instruction) because the grouped
 # values must be seen as having a resource bundle path that is a child of the "/Currencies/$1"
 # path. This is so that the grouped values only appear when one of them is present rather than
-# whenever any of the other values in the main resource bundle path exist.
+# whenever any of the other values in the main resource bundle path exists.
 #
 # Due to the optional nature of the final sub-array in the bundle, it would be very hard to ever
-# add more elements after it.
+# add any more elements after it.
 //ldml/numbers/currencies/currency[@type="(%W)"]/symbol
      ; /Currencies/$1 ; fallback=$1
 //ldml/numbers/currencies/currency[@type="(%W)"]/displayName
      ; /Currencies/$1 ; fallback=$1
 //ldml/numbers/currencies/currency[@type="(%W)"]/pattern[@type="standard"]
-     ; /Currencies/$1/<FIFO> ; fallback=//ldml/numbers/currencyFormats[@numberSystem="%D"]/currencyFormatLength/currencyFormat[@type="standard"]/pattern[@type="standard"]
+     ; /Currencies/$1/<FORMAT> ; fallback=//ldml/numbers/currencyFormats[@numberSystem="%D"]/currencyFormatLength/currencyFormat[@type="standard"]/pattern[@type="standard"]
 //ldml/numbers/currencies/currency[@type="(%W)"]/decimal
-     ; /Currencies/$1/<FIFO> ; fallback=//ldml/numbers/symbols[@numberSystem="%D"]/decimal
+     ; /Currencies/$1/<FORMAT> ; fallback=//ldml/numbers/symbols[@numberSystem="%D"]/decimal
 //ldml/numbers/currencies/currency[@type="(%W)"]/group
-     ; /Currencies/$1/<FIFO> ; fallback=//ldml/numbers/symbols[@numberSystem="%D"]/group
+     ; /Currencies/$1/<FORMAT> ; fallback=//ldml/numbers/symbols[@numberSystem="%D"]/group
 # ----
 
 //ldml/numbers/currencyFormats[@numberSystem="%D"]/currencySpacing/(%W)/(%W)  ; /currencySpacing/$1/$2
