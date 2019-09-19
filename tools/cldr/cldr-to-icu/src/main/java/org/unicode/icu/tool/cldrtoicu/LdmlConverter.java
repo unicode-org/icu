@@ -404,7 +404,7 @@ public final class LdmlConverter {
                 // Adding a parent locale makes the data non-empty and forces it to be written.
                 supplementalData.getExplicitParentLocaleOf(splitData.getName())
                     .ifPresent(p -> splitData.add(RB_PARENT, p));
-                if (!splitData.isEmpty() || isBaseLanguage || dir.includeEmpty()) {
+                if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
                     splitData.setVersion(CldrDataSupplier.getCldrVersionString());
                     write(splitData, outDir);
                     writtenLocaleIds.put(dir, id);
