@@ -38,14 +38,12 @@ public final class RbValue {
         return elements;
     }
 
-    /** Returns whether this is a single element value. */
+    /**
+     * Returns whether this is a single element value. Singleton values are treated different when
+     * writing out ICU data files.
+     */
     public boolean isSingleton() {
         return elements.size() == 1;
-    }
-
-    /** Returns the Nth element of this value. */
-    public String getElement(int n) {
-        return elements.get(n);
     }
 
     @Override public int hashCode() {
@@ -53,7 +51,7 @@ public final class RbValue {
     }
 
     @Override public boolean equals(Object obj) {
-        return obj instanceof  RbValue && elements.equals(((RbValue) obj).elements);
+        return obj instanceof RbValue && elements.equals(((RbValue) obj).elements);
     }
 
     @Override public String toString() {
