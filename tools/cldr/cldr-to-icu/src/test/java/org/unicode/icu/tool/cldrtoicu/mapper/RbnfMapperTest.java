@@ -49,11 +49,11 @@ public class RbnfMapperTest {
 
     @Test
     public void testSingleRuleset() {
-        int idx = 1;
+        int idx = 0;
         CldrData cldrData = cldrData(
-            rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "0", "hundred;", idx++),
-            rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "1", "oh-=%first-set=;", idx++),
-            rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "10", "=%first-set=;", idx++));
+            rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "0", "hundred;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "1", "oh-=%first-set=;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "2d-year", PRIVATE, "10", "=%first-set=;", ++idx));
 
         IcuData icuData = RbnfMapper.process("en", cldrData, Optional.empty());
 
@@ -71,16 +71,16 @@ public class RbnfMapperTest {
         // Note that input order of these paths shouldn't matter since they are ordered (and thus
         // grouped) by DTD order (relative order matters for values in the same set, but values
         // do not have to grouped together).
-        int idx = 1;
+        int idx = 0;
         CldrData cldrData = cldrData(
-            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "-x", "one;", idx++),
-            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "Inf", "two;", idx++),
-            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "-x", "five;", idx++),
-            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "Inf", "six;", idx++),
-            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "NaN", "three;", idx++),
-            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "0", "four;", idx++),
-            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "NaN", "seven;", idx++),
-            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "0", "eight;", idx++));
+            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "-x", "one;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "Inf", "two;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "-x", "five;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "Inf", "six;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "NaN", "three;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "first-set", PUBLIC, "0", "four;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "NaN", "seven;", ++idx),
+            rbnfRule(SPELLOUT_RULES, "second-set", PUBLIC, "0", "eight;", ++idx));
 
         IcuData icuData = RbnfMapper.process("en", cldrData, Optional.empty());
 
@@ -101,19 +101,19 @@ public class RbnfMapperTest {
 
     @Test
     public void testSpecials() {
-        int idx = 1;
+        int idx = 0;
         CldrData specials = cldrData(
-            rbnfRule(DURATION_RULES, "min", PRIVATE, "0", "0 minutes; 1 minute; =0= minutes;", idx++),
-            rbnfRule(DURATION_RULES, "hr", PRIVATE, "0", "0 hours; 1 hour; =0= hours;", idx++),
-            rbnfRule(DURATION_RULES, "in-numerals", PUBLIC, "0", "=0= sec.;", idx++),
-            rbnfRule(DURATION_RULES, "in-numerals", PUBLIC, "60", "=%%min-sec=;", idx++),
-            rbnfRule(DURATION_RULES, "in-numerals", PUBLIC, "3600", "=%%hr-min-sec=;", idx++));
+            rbnfRule(DURATION_RULES, "min", PRIVATE, "0", "0 minutes; 1 minute; =0= minutes;", ++idx),
+            rbnfRule(DURATION_RULES, "hr", PRIVATE, "0", "0 hours; 1 hour; =0= hours;", ++idx),
+            rbnfRule(DURATION_RULES, "in-numerals", PUBLIC, "0", "=0= sec.;", ++idx),
+            rbnfRule(DURATION_RULES, "in-numerals", PUBLIC, "60", "=%%min-sec=;", ++idx),
+            rbnfRule(DURATION_RULES, "in-numerals", PUBLIC, "3600", "=%%hr-min-sec=;", ++idx));
 
-        idx = 1;
+        idx = 0;
         CldrData cldrData = cldrData(
-            rbnfRule(ORDINAL_RULES, "digits-ordinal", PUBLIC, "-x", "−→→;", idx++),
+            rbnfRule(ORDINAL_RULES, "digits-ordinal", PUBLIC, "-x", "−→→;", ++idx),
             rbnfRule(ORDINAL_RULES, "digits-ordinal", PUBLIC, "0",
-                "=#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;", idx++));
+                "=#,##0=$(ordinal,one{st}two{nd}few{rd}other{th})$;", ++idx));
 
         IcuData icuData = RbnfMapper.process("en", cldrData, Optional.of(specials));
 
@@ -139,12 +139,12 @@ public class RbnfMapperTest {
     // the same, it's not entirely obviously why some of the special cases really exist.
     @Test
     public void testEscaping() {
-        int idx = 1;
+        int idx = 0;
         CldrData cldrData = cldrData(
-            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k1", "\\ Backslash", idx++),
-            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k2", "←← Arrows →→", idx++),
-            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k3", "Ü Umlaut", idx++),
-            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k4", "\uD83D\uDE03 Smiley", idx++));
+            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k1", "\\ Backslash", ++idx),
+            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k2", "←← Arrows →→", ++idx),
+            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k3", "Ü Umlaut", ++idx),
+            rbnfRule(SPELLOUT_RULES, "escaping", PUBLIC, "k4", "\uD83D\uDE03 Smiley", ++idx));
 
         IcuData icuData = RbnfMapper.process("en", cldrData, Optional.empty());
 
@@ -173,7 +173,8 @@ public class RbnfMapperTest {
 
         StringBuilder cldrPath = new StringBuilder("//ldml/rbnf");
         appendAttribute(cldrPath.append("/rulesetGrouping"), "type", group);
-        cldrPath.append("/ruleset");
+        // We aren't testing sort index (#N) here, but still need to set it to something.
+        cldrPath.append("/ruleset#0");
         appendAttribute(cldrPath, "type", setType);
         appendAttribute(cldrPath, "access", access);
         cldrPath.append("/rbnfrule#").append(ruleIndex);

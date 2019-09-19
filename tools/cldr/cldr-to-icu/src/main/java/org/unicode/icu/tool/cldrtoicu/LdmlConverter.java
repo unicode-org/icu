@@ -23,7 +23,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -146,14 +145,6 @@ public final class LdmlConverter {
     // Special path for adding to empty files which only exist to complete the parent chain.
     // TODO: Confirm that this has no meaningful effect and unify "empty" file contents.
     private static RbPath RB_EMPTY_ALIAS = RbPath.of("___");
-
-    /** Provisional entry point until better config support exists. */
-    public static void main(String... args) {
-        convert(IcuConverterConfig.builder()
-            .setOutputDir(Paths.get(args[0]))
-            .setEmitReport(true)
-            .build());
-    }
 
     /**
      * Output types defining specific subsets of the ICU data which can be converted separately.

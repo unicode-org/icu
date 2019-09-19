@@ -180,7 +180,8 @@ public class PluralsMapperTest {
         StringBuilder cldrPath = new StringBuilder("//supplementalData");
         appendAttribute(cldrPath.append("/plurals"), "type", type);
         appendAttribute(cldrPath.append("/pluralRules"), "locales", Joiner.on(' ').join(locales));
-        appendAttribute(cldrPath.append("/pluralRule"), "count", count);
+        // We aren't testing sort index (#N) here, but still need to set it to something.
+        appendAttribute(cldrPath.append("/pluralRule#0"), "count", count);
         return CldrValue.parseValue(cldrPath.toString(), value);
     }
 
