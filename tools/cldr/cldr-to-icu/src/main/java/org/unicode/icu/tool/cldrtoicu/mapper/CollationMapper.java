@@ -21,6 +21,7 @@ import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 
@@ -68,9 +69,14 @@ public final class CollationMapper {
     public static IcuData process(
         String localeId, CldrDataSupplier src, Optional<CldrData> icuSpecialData) {
 
+        return process(localeId, src.getDataForLocale(localeId, UNRESOLVED), icuSpecialData);
+    }
+
+    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
+    static IcuData process(String localeId, CldrData cldrData, Optional<CldrData> icuSpecialData) {
         CollationVisitor visitor = new CollationVisitor(localeId);
         icuSpecialData.ifPresent(s -> s.accept(ARBITRARY, visitor));
-        src.getDataForLocale(localeId, UNRESOLVED).accept(ARBITRARY, visitor);
+        cldrData.accept(ARBITRARY, visitor);
         return visitor.icuData;
     }
 
@@ -82,6 +88,7 @@ public final class CollationMapper {
             // Super special hack case because the XML data is a bit broken for the root collation
             // data (there's an empty <collation> element that's a non-leaf element and thus not
             // visited, but we should add an empty sequence to the output data.
+            // TODO: Fix CLDR (https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13131)
             if (localeId.equals("root")) {
                 icuData.replace(RB_STANDARD_SEQUENCE, "");
                 // TODO: Collation versioning probably needs to be improved.
@@ -108,12 +115,13 @@ public final class CollationMapper {
                 // "short" it can also have other values. This code was copied from CollationMapper
                 // which has the line;
                 //   isShort = attr.getValue("alt") != null;
+                // TODO: Raise a ticket to examine this.
                 boolean isShort = COLLATION_RULE_ALT.optionalValueFrom(v).isPresent();
 
                 // Note that it's not clear why there's a check for "contains()" here. The code
                 // from which this was derived is largely undocumented and this check could have
                 // been overly defensive (perhaps a duplicate key should be an error?).
-                if (isShort || !icuData.contains(rbPath)) {
+                if (isShort || !icuData.getPaths().contains(rbPath)) {
                     RbValue rules = RbValue.of(
                         LINE_SPLITTER.splitToList(v.getValue()).stream()
                             .map(CollationMapper::removeComment)

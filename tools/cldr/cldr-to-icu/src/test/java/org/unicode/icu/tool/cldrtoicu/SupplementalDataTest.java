@@ -199,10 +199,6 @@ public class SupplementalDataTest {
                 .that(regressionData.maximize(id).orElse(null))
                 .isEqualTo(likelySubtags.maximize(id));
         }
-
-        // ars currently a special case since it's in the ICU data as an alias, but not in the CLDR
-        // data at all. This while it's a structurally valid language code, it cannot be maximized.
-        assertThat(regressionData.maximize("ars")).isEmpty();
     }
 
     @Test
@@ -214,7 +210,7 @@ public class SupplementalDataTest {
             try {
                 ltc.transform(id);
             } catch (NullPointerException e) {
-                System.out.println("--> " + id);
+                // Occurs for sh_CS and sh_YU.
                 continue;
             }
             // Need to maximize to work around:

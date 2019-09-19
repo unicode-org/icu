@@ -30,6 +30,7 @@ import org.unicode.icu.tool.cldrtoicu.SupplementalData;
 
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.SetMultimap;
 
 /**
@@ -39,7 +40,7 @@ import com.google.common.collect.SetMultimap;
  * <p>This is currently driven by the {@code ldml2icu_locale.txt} configuration file via a
  * {@code RegexTransformer}, but could use any {@link PathValueTransformer} implementation.
  */
-public final class LocaleMapper {
+public final class LocaleMapper extends AbstractPathValueMapper {
     // The default calendar (only set is different from inherited parent value).
     private static final RbPath RB_CALENDAR = RbPath.of("calendar", "default");
 
@@ -62,11 +63,7 @@ public final class LocaleMapper {
         PathValueTransformer transformer,
         SupplementalData supplementalData) {
 
-        IcuData icuData = new IcuData(localeId, true);
-        // Write out the results into the IcuData class, preserving result grouping and expanding
-        // path references as necessary.
-        ResultsCollector collector = new ResultsCollector(transformer);
-        icuData.addResults(collector.collectResultsFor(localeId, src, icuSpecialData));
+        IcuData icuData = new LocaleMapper(localeId, src, icuSpecialData, transformer).transform();
         doDateTimeHack(icuData);
         supplementalData.getDefaultCalendar(icuData.getName())
             .ifPresent(c -> icuData.add(RB_CALENDAR, c));
@@ -97,79 +94,87 @@ public final class LocaleMapper {
         }
     }
 
-    private static final class ResultsCollector {
-        private final PathValueTransformer transformer;
-        private final Set<RbPath> validRbPaths = new HashSet<>();
+    private final String localeId;
+    private final CldrDataSupplier src;
+    private final Optional<CldrData> icuSpecialData;
+    private final PathValueTransformer transformer;
 
-        // WARNING: TreeMultimap() is NOT suitable here, even though it would sort the values for
-        // each key. The reason is that result comparison is not "consistent with equals", and
-        // TreeMultimap uses the comparator to decide if two elements are equal (not the equals()
-        // method), and it does this even if using the add() method of the sorted set (this is in
-        // fact in violation of the stated behaviour of Set#add).
-        private final SetMultimap<RbPath, Result> resultsByRbPath = LinkedHashMultimap.create();
+    private final Set<RbPath> validRbPaths = new HashSet<>();
 
-        ResultsCollector(PathValueTransformer transformer) {
-            this.transformer = checkNotNull(transformer);
-        }
+    // WARNING: TreeMultimap() is NOT suitable here, even though it would sort the values for
+    // each key. The reason is that result comparison is not "consistent with equals", and
+    // TreeMultimap uses the comparator to decide if two elements are equal (not the equals()
+    // method), and it does this even if using the add() method of the sorted set (this is in
+    // fact in violation of the stated behaviour of Set#add).
+    private final SetMultimap<RbPath, Result> resultsByRbPath = LinkedHashMultimap.create();
 
-        ImmutableListMultimap<RbPath, Result> collectResultsFor(
-            String localeId, CldrDataSupplier src, Optional<CldrData> icuSpecialData) {
+    private LocaleMapper(
+        String localeId,
+        CldrDataSupplier src,
+        Optional<CldrData> icuSpecialData,
+        PathValueTransformer transformer) {
 
-            CldrData unresolved = src.getDataForLocale(localeId, UNRESOLVED);
-            CldrData resolved = src.getDataForLocale(localeId, RESOLVED);
-            DynamicVars varFn = p -> {
-                CldrValue cldrValue = resolved.get(p);
-                return cldrValue != null ? cldrValue.getValue() : null;
-            };
+        super(localeId, true);
+        this.localeId = localeId;
+        this.src = checkNotNull(src);
+        this.icuSpecialData = checkNotNull(icuSpecialData);
+        this.transformer = checkNotNull(transformer);
+    }
 
-            collectPaths(unresolved, varFn);
-            collectResults(resolved, varFn);
-            icuSpecialData.ifPresent(s -> collectSpecials(s, varFn));
+    @Override
+    ListMultimap<RbPath, Result> getResults() {
+        CldrData unresolved = src.getDataForLocale(localeId, UNRESOLVED);
+        CldrData resolved = src.getDataForLocale(localeId, RESOLVED);
+        DynamicVars varFn = p -> {
+            CldrValue cldrValue = resolved.get(p);
+            return cldrValue != null ? cldrValue.getValue() : null;
+        };
 
-            ImmutableListMultimap.Builder<RbPath, Result> out = ImmutableListMultimap.builder();
-            out.orderValuesBy(natural());
-            for (RbPath rbPath : resultsByRbPath.keySet()) {
-                Set<Result> existingResults = resultsByRbPath.get(rbPath);
-                out.putAll(rbPath, existingResults);
-                for (Result fallback : transformer.getFallbackResultsFor(rbPath, varFn)) {
-                    if (existingResults.stream().noneMatch(fallback::isFallbackFor)) {
-                        out.put(rbPath, fallback);
-                    }
+        collectPaths(unresolved, varFn);
+        collectResults(resolved, varFn);
+        icuSpecialData.ifPresent(s -> collectSpecials(s, varFn));
+
+        ImmutableListMultimap.Builder<RbPath, Result> out = ImmutableListMultimap.builder();
+        out.orderValuesBy(natural());
+        for (RbPath rbPath : resultsByRbPath.keySet()) {
+            Set<Result> existingResults = resultsByRbPath.get(rbPath);
+            out.putAll(rbPath, existingResults);
+            for (Result fallback : transformer.getFallbackResultsFor(rbPath, varFn)) {
+                if (existingResults.stream().noneMatch(fallback::isFallbackFor)) {
+                    out.put(rbPath, fallback);
                 }
             }
-            return out.build();
         }
+        return out.build();
+    }
 
-        private void collectPaths(CldrData unresolved, DynamicVars varFn) {
-            ValueVisitor collectPaths =
-                v -> transformer.transform(v, varFn).forEach(this::collectResultPath);
-            unresolved.accept(DTD, collectPaths);
-        }
+    private void collectPaths(CldrData unresolved, DynamicVars varFn) {
+        ValueVisitor collectPaths =
+            v -> transformer.transform(v, varFn).forEach(this::collectResultPath);
+        unresolved.accept(DTD, collectPaths);
+    }
 
-        private void collectResultPath(Result result) {
-            RbPath rbPath = result.getKey();
-            validRbPaths.add(rbPath);
-            if (rbPath.isAnonymous()) {
-                RbPath parent = rbPath.getParent();
-                checkState(!parent.isAnonymous(),
-                    "anonymous paths should not be nested: %s", rbPath);
-                validRbPaths.add(parent);
-            }
-        }
-
-        void collectResults(CldrData resolved, DynamicVars varFn) {
-            ValueVisitor collectResults =
-                v -> transformer.transform(v, varFn).stream()
-                    .filter(r -> validRbPaths.contains(r.getKey()))
-                    .forEach(r -> resultsByRbPath.put(r.getKey(), r));
-            resolved.accept(DTD, collectResults);
-        }
-
-        private void collectSpecials(CldrData cldrData, DynamicVars varFn) {
-            cldrData.accept(DTD, v ->
-                transformer.transform(v, varFn).forEach(r -> resultsByRbPath.put(r.getKey(), r)));
+    private void collectResultPath(Result result) {
+        RbPath rbPath = result.getKey();
+        validRbPaths.add(rbPath);
+        if (rbPath.isAnonymous()) {
+            RbPath parent = rbPath.getParent();
+            checkState(!parent.isAnonymous(),
+                "anonymous paths should not be nested: %s", rbPath);
+            validRbPaths.add(parent);
         }
     }
 
-    private LocaleMapper() {}
+    private void collectResults(CldrData resolved, DynamicVars varFn) {
+        ValueVisitor collectResults =
+            v -> transformer.transform(v, varFn).stream()
+                .filter(r -> validRbPaths.contains(r.getKey()))
+                .forEach(r -> resultsByRbPath.put(r.getKey(), r));
+        resolved.accept(DTD, collectResults);
+    }
+
+    private void collectSpecials(CldrData cldrData, DynamicVars varFn) {
+        cldrData.accept(DTD, v ->
+            transformer.transform(v, varFn).forEach(r -> resultsByRbPath.put(r.getKey(), r)));
+    }
 }
