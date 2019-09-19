@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Iterables;
+
 /**
  * Writes an IcuData object to a text file. A lot of this class was copied directly from the
  * original {@code IcuTextWriter} in the CLDR project and has a number of very idiosyncratic
@@ -76,7 +78,7 @@ final class IcuTextWriter {
         out.print("{");
         depth++;
 
-        RbPath lastPath = RbPath.empty();
+        RbPath lastPath = RbPath.of();
         for (RbPath path : icuData.getPaths()) {
             // Close any blocks up to the common path length. Since paths are all distinct, the
             // common length should always be shorter than either path. We add 1 since we must also
@@ -166,7 +168,7 @@ final class IcuTextWriter {
             onlyValue = values.get(0);
             if (onlyValue.isSingleton() && !mustBeArray(false, name, rbPath)) {
                 // Value has a single element and is not being forced to be an array.
-                String onlyElement = onlyValue.getElement(0);
+                String onlyElement = Iterables.getOnlyElement(onlyValue.getElements());
                 if (quote) {
                     onlyElement = quoteInside(onlyElement);
                 }
