@@ -3,12 +3,8 @@
 package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Ordering.natural;
 import static org.unicode.cldr.api.CldrData.PathOrder.NESTED_GROUPING;
 
-import java.util.Set;
-
-import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrValue;
@@ -17,10 +13,6 @@ import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
-
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.SetMultimap;
 
 /**
  * Generate supplemental {@link IcuData} by transforming {@link CldrDataType#SUPPLEMENTAL
@@ -46,70 +38,48 @@ public final class SupplementalMapper extends AbstractPathValueMapper {
     public static IcuData process(
         CldrDataSupplier src, PathValueTransformer transformer, String icuName, PathMatcher paths) {
 
-        return new SupplementalMapper(src, transformer, icuName, paths).transform();
+        return new SupplementalMapper(src, transformer, paths).generateIcuData(icuName, false);
     }
 
-    private final CldrDataSupplier src;
     private final PathMatcher paths;
-    private final PathValueTransformer transformer;
-
-    // WARNING: TreeMultimap() is NOT suitable here, even though it would sort the values for
-    // each key. The reason is that result comparison is not "consistent with equals", and
-    // TreeMultimap uses the comparator to decide if two elements are equal (not the equals()
-    // method), and it does this even if using the add() method of the sorted set (this is in
-    // fact in violation of the stated behaviour of Set#add).
-    private final SetMultimap<RbPath, Result> resultsByRbPath = LinkedHashMultimap.create();
     private int fifoCounter = 0;
 
     private SupplementalMapper(
-        CldrDataSupplier src, PathValueTransformer transformer, String icuName, PathMatcher paths) {
+        CldrDataSupplier src, PathValueTransformer transformer, PathMatcher pathFilter) {
 
-        super(icuName, false);
-        this.src = checkNotNull(src);
-        this.paths = checkNotNull(paths);
-        this.transformer = checkNotNull(transformer);
+        super(src.getDataForType(CldrDataType.SUPPLEMENTAL), transformer);
+        this.paths = checkNotNull(pathFilter);
     }
 
     @Override
-    ImmutableListMultimap<RbPath, Result> getResults() {
+    void addResults() {
         // DTD and NESTED_GROUPING order differ because of how the magic <FIFO> label works (it
         // basically enforces "encounter order" onto things in unlabeled sequences, which matches
         // the old behaviour). If it wouldn't break anything, it might be worth moving to DTD order
         // to remove any lingering implicit dependencies on the CLDR data behaviour.
-        CldrData supplementalData = src.getDataForType(CldrDataType.SUPPLEMENTAL);
-        PathValueTransformer.DynamicVars varFn = p -> {
-            CldrValue cldrValue = supplementalData.get(p);
-            return cldrValue != null ? cldrValue.getValue() : null;
-        };
-
-        supplementalData.accept(NESTED_GROUPING, this::visit);
-
-        ImmutableListMultimap.Builder<RbPath, Result> out = ImmutableListMultimap.builder();
-        out.orderValuesBy(natural());
-        for (RbPath rbPath : resultsByRbPath.keySet()) {
-            Set<Result> existingResults = resultsByRbPath.get(rbPath);
-            out.putAll(rbPath, existingResults);
-            for (Result fallback : transformer.getFallbackResultsFor(rbPath, varFn)) {
-                if (existingResults.stream().noneMatch(fallback::isFallbackFor)) {
-                    out.put(rbPath, fallback);
-                }
-            }
-        }
-        return out.build();
+        getCldrData().accept(NESTED_GROUPING, this::visit);
     }
 
     private void visit(CldrValue value) {
         if (paths.matchesPrefixOf(value.getPath())) {
-            for (Result r : transformer.transform(value)) {
-                RbPath rbPath = r.getKey();
-                if (rbPath.contains(RB_FIFO)) {
-                    // The fifo counter needs to be formatted with leading zeros for sorting.
-                    rbPath = rbPath.mapSegments(
-                        s -> s.equals("<FIFO>") ? String.format("<%04d>", fifoCounter) : s);
-                }
-                resultsByRbPath.put(rbPath, r);
-            }
+            transformValue(value).forEach(this::collectResult);
             fifoCounter++;
         }
+    }
+
+    // <FIFO> hidden labels could be supported in the abstract mapper, but would need a "bulk" add
+    // method for results (since the counter is updated once per batch, which corresponds to once
+    // per rule). Having the same FIFO counter value for the same group of values is essential
+    // since it serves to group them.
+    //
+    // TODO: Improve this and push this up into the abstract class (so it works with LocaleMapper).
+    private void collectResult(Result r) {
+        RbPath rbPath = r.getKey();
+        if (rbPath.contains(RB_FIFO)) {
+            // The fifo counter needs to be formatted with leading zeros for sorting.
+            rbPath = rbPath.mapSegments(
+                s -> s.equals("<FIFO>") ? String.format("<%04d>", fifoCounter) : s);
+        }
+        addResult(rbPath, r);
     }
 }
