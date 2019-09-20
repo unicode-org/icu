@@ -164,7 +164,6 @@ br{
                         one{"0 miliad"}
                         other{"0 miliad"}
                         two{"0 viliad"}
-                        zero{"0k"}
                     }
                     10000{
                         few{"00 miliad"}
@@ -172,7 +171,6 @@ br{
                         one{"00 miliad"}
                         other{"00 miliad"}
                         two{"00 viliad"}
-                        zero{"00k"}
                     }
                     100000{
                         few{"000 miliad"}
@@ -180,7 +178,6 @@ br{
                         one{"000 miliad"}
                         other{"000 miliad"}
                         two{"000 viliad"}
-                        zero{"000k"}
                     }
                     1000000{
                         few{"0 milion"}
@@ -188,7 +185,6 @@ br{
                         one{"0 milion"}
                         other{"0 milion"}
                         two{"0 v/milion"}
-                        zero{"0M"}
                     }
                     10000000{
                         few{"00 milion"}
@@ -196,7 +192,6 @@ br{
                         one{"00 milion"}
                         other{"00 milion"}
                         two{"00 v/milion"}
-                        zero{"00M"}
                     }
                     100000000{
                         few{"000 milion"}
@@ -204,7 +199,6 @@ br{
                         one{"000 milion"}
                         other{"000 milion"}
                         two{"000 v/milion"}
-                        zero{"000M"}
                     }
                     1000000000{
                         few{"0 miliard"}
@@ -212,7 +206,6 @@ br{
                         one{"0 miliard"}
                         other{"0 miliard"}
                         two{"0 viliard"}
-                        zero{"0G"}
                     }
                     10000000000{
                         few{"00 miliard"}
@@ -220,7 +213,6 @@ br{
                         one{"00 miliard"}
                         other{"00 miliard"}
                         two{"00 viliard"}
-                        zero{"00G"}
                     }
                     100000000000{
                         few{"000 miliard"}
@@ -228,7 +220,6 @@ br{
                         one{"000 miliard"}
                         other{"000 miliard"}
                         two{"000 viliard"}
-                        zero{"000G"}
                     }
                     1000000000000{
                         few{"0 bilion"}
@@ -236,7 +227,6 @@ br{
                         one{"0 bilion"}
                         other{"0 bilion"}
                         two{"0 v/bilion"}
-                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00 bilion"}
@@ -244,7 +234,6 @@ br{
                         one{"00 bilion"}
                         other{"00 bilion"}
                         two{"00 v/bilion"}
-                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000 bilion"}
@@ -252,7 +241,6 @@ br{
                         one{"000 bilion"}
                         other{"000 bilion"}
                         two{"000 v/bilion"}
-                        zero{"000T"}
                     }
                 }
             }
@@ -350,7 +338,6 @@ br{
                         one{"0k"}
                         other{"0k"}
                         two{"0k"}
-                        zero{"0k"}
                     }
                     10000{
                         few{"00k"}
@@ -358,7 +345,6 @@ br{
                         one{"00k"}
                         other{"00k"}
                         two{"00k"}
-                        zero{"00k"}
                     }
                     100000{
                         few{"000k"}
@@ -366,7 +352,6 @@ br{
                         one{"000k"}
                         other{"000k"}
                         two{"000k"}
-                        zero{"000k"}
                     }
                     1000000{
                         few{"0M"}
@@ -374,7 +359,6 @@ br{
                         one{"0M"}
                         other{"0M"}
                         two{"0M"}
-                        zero{"0M"}
                     }
                     10000000{
                         few{"00M"}
@@ -382,7 +366,6 @@ br{
                         one{"00M"}
                         other{"00M"}
                         two{"00M"}
-                        zero{"00M"}
                     }
                     100000000{
                         few{"000M"}
@@ -390,7 +373,6 @@ br{
                         one{"000M"}
                         other{"000M"}
                         two{"000M"}
-                        zero{"000M"}
                     }
                     1000000000{
                         few{"0G"}
@@ -398,7 +380,6 @@ br{
                         one{"0G"}
                         other{"0G"}
                         two{"0G"}
-                        zero{"0G"}
                     }
                     10000000000{
                         few{"00G"}
@@ -406,7 +387,6 @@ br{
                         one{"00G"}
                         other{"00G"}
                         two{"00G"}
-                        zero{"00G"}
                     }
                     100000000000{
                         few{"000G"}
@@ -414,7 +394,6 @@ br{
                         one{"000G"}
                         other{"000G"}
                         two{"000G"}
-                        zero{"000G"}
                     }
                     1000000000000{
                         few{"0T"}
@@ -422,7 +401,6 @@ br{
                         one{"0T"}
                         other{"0T"}
                         two{"0T"}
-                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00T"}
@@ -430,7 +408,6 @@ br{
                         one{"00T"}
                         other{"00T"}
                         two{"00T"}
-                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000T"}
@@ -438,7 +415,6 @@ br{
                         one{"000T"}
                         other{"000T"}
                         two{"000T"}
-                        zero{"000T"}
                     }
                 }
             }

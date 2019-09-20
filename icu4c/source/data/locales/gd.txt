@@ -540,99 +540,75 @@ gd{
                 decimalFormat{
                     1000{
                         few{"0 mìltean"}
-                        many{"0K"}
                         one{"0 mhìle"}
                         other{"0 mìle"}
                         two{"0 mhìle"}
-                        zero{"0K"}
                     }
                     10000{
                         few{"00 mìltean"}
-                        many{"00K"}
                         one{"00 mhìle"}
                         other{"00 mìle"}
                         two{"00 mhìle"}
-                        zero{"00K"}
                     }
                     100000{
                         few{"000 mìltean"}
-                        many{"000K"}
                         one{"000 mhìle"}
                         other{"000 mìle"}
                         two{"000 mhìle"}
-                        zero{"000K"}
                     }
                     1000000{
                         few{"0 milleanan"}
-                        many{"0M"}
                         one{"0 mhillean"}
                         other{"0 millean"}
                         two{"0 mhillean"}
-                        zero{"0M"}
                     }
                     10000000{
                         few{"00 milleanan"}
-                        many{"00M"}
                         one{"00 mhillean"}
                         other{"00 millean"}
                         two{"00 mhillean"}
-                        zero{"00M"}
                     }
                     100000000{
                         few{"000 milleanan"}
-                        many{"000M"}
                         one{"000 mhillean"}
                         other{"000 millean"}
                         two{"000 mhillean"}
-                        zero{"000M"}
                     }
                     1000000000{
                         few{"0 billeanan"}
-                        many{"0B"}
                         one{"0 bhillean"}
                         other{"0 billean"}
                         two{"0 bhillean"}
-                        zero{"0B"}
                     }
                     10000000000{
                         few{"00 billeanan"}
-                        many{"00B"}
                         one{"00 bhillean"}
                         other{"00 billean"}
                         two{"00 bhillean"}
-                        zero{"00B"}
                     }
                     100000000000{
                         few{"000 billeanan"}
-                        many{"000B"}
                         one{"000 bhillean"}
                         other{"000 billean"}
                         two{"000 bhillean"}
-                        zero{"000B"}
                     }
                     1000000000000{
                         few{"0 trilleanan"}
-                        many{"0T"}
                         one{"0 trillean"}
                         other{"0 trillean"}
                         two{"0 thrillean"}
-                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00 trilleanan"}
-                        many{"00T"}
                         one{"00 trillean"}
                         other{"00 trillean"}
                         two{"00 thrillean"}
-                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000 trilleanan"}
-                        many{"000T"}
                         one{"000 trillean"}
                         other{"000 trillean"}
                         two{"000 thrillean"}
-                        zero{"000T"}
                     }
                 }
             }
@@ -714,99 +690,75 @@ gd{
                 decimalFormat{
                     1000{
                         few{"0K"}
-                        many{"0K"}
                         one{"0K"}
                         other{"0K"}
                         two{"0K"}
-                        zero{"0K"}
                     }
                     10000{
                         few{"00K"}
-                        many{"00K"}
                         one{"00K"}
                         other{"00K"}
                         two{"00K"}
-                        zero{"00K"}
                     }
                     100000{
                         few{"000K"}
-                        many{"000K"}
                         one{"000K"}
                         other{"000K"}
                         two{"000K"}
-                        zero{"000K"}
                     }
                     1000000{
                         few{"0M"}
-                        many{"0M"}
                         one{"0M"}
                         other{"0M"}
                         two{"0M"}
-                        zero{"0M"}
                     }
                     10000000{
                         few{"00M"}
-                        many{"00M"}
                         one{"00M"}
                         other{"00M"}
                         two{"00M"}
-                        zero{"00M"}
                     }
                     100000000{
                         few{"000M"}
-                        many{"000M"}
                         one{"000M"}
                         other{"000M"}
                         two{"000M"}
-                        zero{"000M"}
                     }
                     1000000000{
                         few{"0B"}
-                        many{"0B"}
                         one{"0B"}
                         other{"0B"}
                         two{"0B"}
-                        zero{"0B"}
                     }
                     10000000000{
                         few{"00B"}
-                        many{"00B"}
                         one{"00B"}
                         other{"00B"}
                         two{"00B"}
-                        zero{"00B"}
                     }
                     100000000000{
                         few{"000B"}
-                        many{"000B"}
                         one{"000B"}
                         other{"000B"}
                         two{"000B"}
-                        zero{"000B"}
                     }
                     1000000000000{
                         few{"0T"}
-                        many{"0T"}
                         one{"0T"}
                         other{"0T"}
                         two{"0T"}
-                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00T"}
-                        many{"00T"}
                         one{"00T"}
                         other{"00T"}
                         two{"00T"}
-                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000T"}
-                        many{"000T"}
                         one{"000T"}
                         other{"000T"}
                         two{"000T"}
-                        zero{"000T"}
                     }
                 }
             }

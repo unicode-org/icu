@@ -4,9 +4,6 @@ en_AU{
     %%Parent{"en_001"}
     Version{"36"}
     zoneStrings{
-        "America:St_Barthelemy"{
-            ec{"St Barthélemy"}
-        }
         "Asia:Rangoon"{
             ec{"Rangoon"}
         }

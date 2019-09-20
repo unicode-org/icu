@@ -425,7 +425,7 @@ en_AU{
         }
         SHP{
             "SHP",
-            "St. Helena Pound",
+            "St Helena Pound",
         }
         SLL{
             "SLL",

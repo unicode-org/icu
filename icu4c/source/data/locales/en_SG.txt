@@ -124,19 +124,5 @@ en_SG{
                 }
             }
         }
-        week-short{
-            relative{
-                "-1"{"last wk"}
-                "0"{"this wk"}
-                "1"{"next wk"}
-            }
-        }
-        year-short{
-            relative{
-                "-1"{"last yr"}
-                "0"{"this yr"}
-                "1"{"next yr"}
-            }
-        }
     }
 }

@@ -79,19 +79,25 @@ yue_Hans{
     }
     MoreInformation{"？"}
     NumberElements{
+        default{"latn"}
         finance{"hansfin"}
         hanidec{
             patterns{
                 currencyFormat{"¤#,##0.00"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
             symbols{
+                decimal{"."}
                 exponential{"E"}
+                group{","}
                 infinity{"∞"}
+                minusSign{"-"}
                 nan{"非数值"}
                 perMille{"‰"}
                 percentSign{"%"}
+                plusSign{"+"}
                 superscriptingExponent{"×"}
             }
         }
@@ -105,57 +111,46 @@ yue_Hans{
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0"}
                         other{"0"}
                     }
                     10000{
-                        one{"0万"}
                         other{"0万"}
                     }
                     100000{
-                        one{"00万"}
                         other{"00万"}
                     }
                     1000000{
-                        one{"000万"}
                         other{"000万"}
                     }
                     10000000{
-                        one{"0000万"}
                         other{"0000万"}
                     }
                     100000000{
-                        one{"0亿"}
                         other{"0亿"}
                     }
                     1000000000{
-                        one{"00亿"}
                         other{"00亿"}
                     }
                     10000000000{
-                        one{"000亿"}
                         other{"000亿"}
                     }
                     100000000000{
-                        one{"0000亿"}
                         other{"0000亿"}
                     }
                     1000000000000{
-                        one{"0兆"}
                         other{"0兆"}
                     }
                     10000000000000{
-                        one{"00兆"}
                         other{"00兆"}
                     }
                     100000000000000{
-                        one{"000兆"}
                         other{"000兆"}
                     }
                 }
@@ -201,62 +196,54 @@ yue_Hans{
                 }
                 decimalFormat{
                     1000{
-                        one{"0"}
                         other{"0"}
                     }
                     10000{
-                        one{"0万"}
                         other{"0万"}
                     }
                     100000{
-                        one{"00万"}
                         other{"00万"}
                     }
                     1000000{
-                        one{"000万"}
                         other{"000万"}
                     }
                     10000000{
-                        one{"0000万"}
                         other{"0000万"}
                     }
                     100000000{
-                        one{"0亿"}
                         other{"0亿"}
                     }
                     1000000000{
-                        one{"00亿"}
                         other{"00亿"}
                     }
                     10000000000{
-                        one{"000亿"}
                         other{"000亿"}
                     }
                     100000000000{
-                        one{"0000亿"}
                         other{"0000亿"}
                     }
                     1000000000000{
-                        one{"0兆"}
                         other{"0兆"}
                     }
                     10000000000000{
-                        one{"00兆"}
                         other{"00兆"}
                     }
                     100000000000000{
-                        one{"000兆"}
                         other{"000兆"}
                     }
                 }
             }
             symbols{
+                decimal{"."}
                 exponential{"E"}
+                group{","}
                 infinity{"∞"}
                 list{";"}
+                minusSign{"-"}
                 nan{"非数值"}
                 perMille{"‰"}
                 percentSign{"%"}
+                plusSign{"+"}
                 superscriptingExponent{"×"}
                 timeSeparator{":"}
             }
@@ -269,6 +256,7 @@ yue_Hans{
                 other{"{0} 本书"}
             }
         }
+        minimumGroupingDigits{"1"}
         native{"hanidec"}
         traditional{"hans"}
     }
@@ -1585,6 +1573,44 @@ yue_Hans{
                     B{"Bh:mm至Bh:mm"}
                     h{"Bh:mm至h:mm"}
                     m{"Bh:mm至h:mm"}
+                }
+                Gy{
+                    G{"Gy年至Gy年"}
+                    y{"Gy年至y年"}
+                }
+                GyM{
+                    G{"GGGGGy年M月至y年M月"}
+                    M{"GGGGGy年M月至y年M月"}
+                    y{"GGGGGy年M月至y年M月"}
+                }
+                GyMEd{
+                    G{"GGGGGy年M月dd日E至GGGGGy年M月dd日E"}
+                    M{"GGGGGy年M月dd日E至y年M月dd日E"}
+                    d{"GGGGGy年M月dd日E至y年M月dd日E"}
+                    y{"GGGGGy年M月dd日E至y年M月dd日E"}
+                }
+                GyMMM{
+                    G{"Gy年MMM至Gy年MMM"}
+                    M{"G y年MMM至MMM"}
+                    y{"Gy年MMM至y年MMM"}
+                }
+                GyMMMEd{
+                    G{"Gy 年MMMd日E至Gy年MMMd日E"}
+                    M{"Gy年MMMd日E至MMMd日E"}
+                    d{"Gy年MMMd日E至MMMd日E"}
+                    y{"Gy年MMMd日E至y年MMMd日E"}
+                }
+                GyMMMd{
+                    G{"Gy年MMMd日至Gy年MMMd日"}
+                    M{"Gy年MMMd日至MMMd日"}
+                    d{"Gy年MMMd至d日"}
+                    y{"Gy年MMMd日至y年MMMd日"}
+                }
+                GyMd{
+                    G{"GGGGGy年M月dd日y年M月dd日"}
+                    M{"GGGGGy年M月dd日至y年M月dd日"}
+                    d{"GGGGGy年M月dd日至y年M月dd日"}
+                    y{"GGGGGy年M月dd日至y年M月dd日"}
                 }
                 H{
                     H{"HH–HH"}
@@ -3417,12 +3443,6 @@ yue_Hans{
             middle{"{0}、{1}"}
             start{"{0}、{1}"}
         }
-        standard-narrow{
-            2{"{0}同{1}"}
-            end{"{0}同{1}"}
-            middle{"{0}、{1}"}
-            start{"{0}、{1}"}
-        }
         standard-short{
             2{"{0}同{1}"}
             end{"{0}同{1}"}
@@ -3452,37 +3472,5 @@ yue_Hans{
         UK{"英制"}
         US{"美制"}
         metric{"公制"}
-    }
-    parse{
-        date{
-            lenient{
-                "[\\--/]",
-                "[\\:∶︓﹕：]",
-            }
-        }
-        general{
-            lenient{
-                "[.․。︒﹒．｡]",
-                "['ʼ՚᾽᾿’＇]",
-                "[%٪﹪％]",
-                "[؉‰]",
-                "[\$﹩＄]",
-                "[£₤￡]",
-                "[¥￥]",
-                "[₩￦]",
-                "[₨₹{Rp}{Rs}]",
-            }
-        }
-        number{
-            lenient{
-                "[\\-‐‒–⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
-            }
-            stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
-            }
-        }
     }
 }

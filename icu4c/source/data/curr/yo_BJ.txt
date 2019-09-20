@@ -70,10 +70,6 @@ yo_BJ{
             "ETB",
             "Biri ti Orílɛ́ède Eutopia",
         }
-        EUR{
-            "€",
-            "owó Yúrò",
-        }
         GBP{
             "£",
             "Pɔ́n-ùn ti Orilɛ̀-èdè Gɛ̀ɛ́sì",
@@ -239,19 +235,12 @@ yo_BJ{
             "Dɔla ti Orílɛ́ède Siibabuwe",
         }
     }
-    Currencies%narrow{
-        BRL{"R$"}
-        CNY{"¥"}
-        EUR{"€"}
-        GBP{"£"}
-        INR{"₹"}
-        JPY{"¥"}
-        RUB{"₽"}
-        USD{"$"}
-    }
     CurrencyPlurals{
         BRL{
             other{"Awon owó ti Orílɛ̀-èdè Brazil"}
+        }
+        EGP{
+            other{"pɔ́nùn"}
         }
         RUB{
             other{"Owó ruble ti ilɛ̀ Rɔ́shíà"}

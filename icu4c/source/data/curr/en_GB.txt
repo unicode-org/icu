@@ -2,17 +2,5 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_GB{
     %%Parent{"en_001"}
-    Currencies{
-        SHP{
-            "SHP",
-            "St Helena Pound",
-        }
-    }
-    CurrencyPlurals{
-        SHP{
-            one{"St Helena pound"}
-            other{"St Helena pounds"}
-        }
-    }
     Version{"36"}
 }
