@@ -38,99 +38,63 @@ hr{
                 decimalFormat{
                     1000{
                         few{"0 tisuće"}
-                        many{"0 tis'.'"}
                         one{"0 tisuća"}
                         other{"0 tisuća"}
-                        two{"0 tis'.'"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tisuće"}
-                        many{"00 tis'.'"}
                         one{"00 tisuća"}
                         other{"00 tisuća"}
-                        two{"00 tis'.'"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tisuće"}
-                        many{"000 tis'.'"}
                         one{"000 tisuća"}
                         other{"000 tisuća"}
-                        two{"000 tis'.'"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 milijuna"}
-                        many{"0 mil'.'"}
                         one{"0 milijun"}
                         other{"0 milijuna"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 milijuna"}
-                        many{"00 mil'.'"}
                         one{"00 milijun"}
                         other{"00 milijuna"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 milijuna"}
-                        many{"000 mil'.'"}
                         one{"000 milijun"}
                         other{"000 milijuna"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 milijarde"}
-                        many{"0 mlr'.'"}
                         one{"0 milijarda"}
                         other{"0 milijardi"}
-                        two{"0 mlr'.'"}
-                        zero{"0 mlr'.'"}
                     }
                     10000000000{
                         few{"00 milijarde"}
-                        many{"00 mlr'.'"}
                         one{"00 milijarda"}
                         other{"00 milijardi"}
-                        two{"00 mlr'.'"}
-                        zero{"00 mlr'.'"}
                     }
                     100000000000{
                         few{"000 milijarde"}
-                        many{"000 mlr'.'"}
                         one{"000 milijarda"}
                         other{"000 milijardi"}
-                        two{"000 mlr'.'"}
-                        zero{"000 mlr'.'"}
                     }
                     1000000000000{
                         few{"0 bilijuna"}
-                        many{"0 bil'.'"}
                         one{"0 bilijun"}
                         other{"0 bilijuna"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bilijuna"}
-                        many{"00 bil'.'"}
                         one{"00 bilijun"}
                         other{"00 bilijuna"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bilijuna"}
-                        many{"000 bil'.'"}
                         one{"000 bilijun"}
                         other{"000 bilijuna"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -200,99 +164,63 @@ hr{
                 decimalFormat{
                     1000{
                         few{"0 tis'.'"}
-                        many{"0 tis'.'"}
                         one{"0 tis'.'"}
                         other{"0 tis'.'"}
-                        two{"0 tis'.'"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tis'.'"}
-                        many{"00 tis'.'"}
                         one{"00 tis'.'"}
                         other{"00 tis'.'"}
-                        two{"00 tis'.'"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tis'.'"}
-                        many{"000 tis'.'"}
                         one{"000 tis'.'"}
                         other{"000 tis'.'"}
-                        two{"000 tis'.'"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 mil'.'"}
-                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
-                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
-                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mlr'.'"}
-                        many{"0 mlr'.'"}
                         one{"0 mlr'.'"}
                         other{"0 mlr'.'"}
-                        two{"0 mlr'.'"}
-                        zero{"0 mlr'.'"}
                     }
                     10000000000{
                         few{"00 mlr'.'"}
-                        many{"00 mlr'.'"}
                         one{"00 mlr'.'"}
                         other{"00 mlr'.'"}
-                        two{"00 mlr'.'"}
-                        zero{"00 mlr'.'"}
                     }
                     100000000000{
                         few{"000 mlr'.'"}
-                        many{"000 mlr'.'"}
                         one{"000 mlr'.'"}
                         other{"000 mlr'.'"}
-                        two{"000 mlr'.'"}
-                        zero{"000 mlr'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
-                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
-                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
-                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }

@@ -202,23 +202,6 @@ ee{
     }
     Version{"36"}
     calendar{
-        chinese{
-            DateTimePatterns{
-                "a 'ga' h:mm:ss zzzz",
-                "a 'ga' h:mm:ss z",
-                "a 'ga' h:mm:ss",
-                "a 'ga' h:mm",
-                "r(U) MMMM d, EEEE",
-                "r(U) MMMM d",
-                "r MMM d",
-                "r-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
         generic{
             DateTimePatterns{
                 "a 'ga' h:mm:ss zzzz",
@@ -828,40 +811,6 @@ ee{
                         "kɔta enelia",
                     }
                 }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "a 'ga' h:mm:ss zzzz",
-                "a 'ga' h:mm:ss z",
-                "a 'ga' h:mm:ss",
-                "a 'ga' h:mm",
-                "EEEE, MMMM d 'lia' y G",
-                "MMMM d 'lia' y G",
-                "MMM d 'lia', y G",
-                "M/d/y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "a 'ga' h:mm:ss zzzz",
-                "a 'ga' h:mm:ss z",
-                "a 'ga' h:mm:ss",
-                "a 'ga' h:mm",
-                "EEEE, MMMM d 'lia' y G",
-                "MMMM d 'lia' y G",
-                "MMM d 'lia', y G",
-                "M/d/y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
             }
         }
     }

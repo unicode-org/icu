@@ -40,51 +40,39 @@ ms{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0K"}
                         other{"0 ribu"}
                     }
                     10000{
-                        one{"00K"}
                         other{"00 ribu"}
                     }
                     100000{
-                        one{"000K"}
                         other{"000 ribu"}
                     }
                     1000000{
-                        one{"0J"}
                         other{"0 juta"}
                     }
                     10000000{
-                        one{"00J"}
                         other{"00 juta"}
                     }
                     100000000{
-                        one{"000J"}
                         other{"000 juta"}
                     }
                     1000000000{
-                        one{"0B"}
                         other{"0 bilion"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00 bilion"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000 bilion"}
                     }
                     1000000000000{
-                        one{"0T"}
                         other{"0 trilion"}
                     }
                     10000000000000{
-                        one{"00T"}
                         other{"00 trilion"}
                     }
                     100000000000000{
-                        one{"000T"}
                         other{"000 trilion"}
                     }
                 }
@@ -130,51 +118,39 @@ ms{
                 }
                 decimalFormat{
                     1000{
-                        one{"0K"}
                         other{"0K"}
                     }
                     10000{
-                        one{"00K"}
                         other{"00K"}
                     }
                     100000{
-                        one{"000K"}
                         other{"000K"}
                     }
                     1000000{
-                        one{"0J"}
                         other{"0J"}
                     }
                     10000000{
-                        one{"00J"}
                         other{"00J"}
                     }
                     100000000{
-                        one{"000J"}
                         other{"000J"}
                     }
                     1000000000{
-                        one{"0B"}
                         other{"0B"}
                     }
                     10000000000{
-                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
-                        one{"000B"}
                         other{"000B"}
                     }
                     1000000000000{
-                        one{"0T"}
                         other{"0T"}
                     }
                     10000000000000{
-                        one{"00T"}
                         other{"00T"}
                     }
                     100000000000000{
-                        one{"000T"}
                         other{"000T"}
                     }
                 }
