@@ -26,7 +26,6 @@ Win x86 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_api
 
 ### License
 
-Please see [./icu4c/LICENSE](./icu4j/LICENSE) 
 
 lagingsapol77:Rolando-Gopez
 
