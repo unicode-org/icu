@@ -26,7 +26,7 @@ Win x86 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_api
 
 ### License
 
-Please see [./icu4c/LICENSE](./icu4c/LICENSE) (C and J are under an identical license file.)
+
 
 Apache License
                            Version 2.0, January 2004
