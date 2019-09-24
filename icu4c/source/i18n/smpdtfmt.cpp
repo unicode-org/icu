@@ -1981,9 +1981,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                 break;
         }
         if (titlecase) {
+            BreakIterator* const mutableCapitalizationBrkIter = fCapitalizationBrkIter->clone();
             UnicodeString firstField(appendTo, beginOffset);
-            firstField.toTitle(fCapitalizationBrkIter, fLocale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
+            firstField.toTitle(mutableCapitalizationBrkIter, fLocale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
             appendTo.replaceBetween(beginOffset, appendTo.length(), firstField);
+            delete mutableCapitalizationBrkIter;
         }
     }
 #endif
