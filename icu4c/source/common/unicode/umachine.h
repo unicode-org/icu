@@ -155,8 +155,9 @@
 // such code the wrapper is itself defined as macros so that it's possible to
 // build ICU 65 and later with the old macro behaviour, like this:
 //
-// CPPFLAGS='-DUPRV_BLOCK_MACRO_BEGIN="" -DUPRV_BLOCK_MACRO_END=""' \
+// export CPPFLAGS='-DUPRV_BLOCK_MACRO_BEGIN="" -DUPRV_BLOCK_MACRO_END=""'
 // runConfigureICU ...
+//
 
 /**
  * \def UPRV_BLOCK_MACRO_BEGIN
