@@ -196,7 +196,7 @@ TEST(BignumDtoaVariousDoubles) {
   CHECK_EQ("1", buffer.start());
   CHECK_EQ(-22, point);
 
-  uint64_t smallest_normal64 = UINT64_2PART_C(0x00100000, 00000000);
+  uint64_t smallest_normal64 = DOUBLE_CONVERSION_UINT64_2PART_C(0x00100000, 00000000);
   double v = Double(smallest_normal64).value();
   BignumDtoa(v, BIGNUM_DTOA_SHORTEST, 0, buffer, &length, &point);
   CHECK_EQ("22250738585072014", buffer.start());
@@ -208,7 +208,7 @@ TEST(BignumDtoaVariousDoubles) {
   CHECK_EQ("22250738585072013831", buffer.start());
   CHECK_EQ(-307, point);
 
-  uint64_t largest_denormal64 = UINT64_2PART_C(0x000FFFFF, FFFFFFFF);
+  uint64_t largest_denormal64 = DOUBLE_CONVERSION_UINT64_2PART_C(0x000FFFFF, FFFFFFFF);
   v = Double(largest_denormal64).value();
   BignumDtoa(v, BIGNUM_DTOA_SHORTEST, 0, buffer, &length, &point);
   CHECK_EQ("2225073858507201", buffer.start());
