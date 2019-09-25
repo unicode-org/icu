@@ -317,7 +317,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
         uprv_free(pattern->ces);
     }
 
-    uint16_t  offset      = 0;
+    uint32_t  offset      = 0;
     uint16_t  result      = 0;
     int32_t   ce;
 
@@ -388,7 +388,7 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
         uprv_free(pattern->pces);
     }
 
-    uint16_t  offset = 0;
+    uint32_t  offset = 0;
     uint16_t  result = 0;
     int64_t   pce;
 
