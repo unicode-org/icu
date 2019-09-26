@@ -86,6 +86,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         // TODO: Add this method if currency symbols override support is added.
         //TESTCASE_AUTO(symbolsOverride);
         TESTCASE_AUTO(sign);
+        TESTCASE_AUTO(signNearZero);
         TESTCASE_AUTO(signCoverage);
         TESTCASE_AUTO(decimal);
         TESTCASE_AUTO(scale);
@@ -2104,6 +2105,49 @@ void NumberFormatterApiTest::sign() {
             u"-444,444.00 US dollars");
 }
 
+void NumberFormatterApiTest::signNearZero() {
+    // https://unicode-org.atlassian.net/browse/ICU-20709
+    IcuTestErrorCode status(*this, "signNearZero");
+    const struct TestCase {
+        UNumberSignDisplay sign;
+        double input;
+        const char16_t* expected;
+    } cases[] = {
+        { UNUM_SIGN_AUTO,  1.1, u"1" },
+        { UNUM_SIGN_AUTO,  0.9, u"1" },
+        { UNUM_SIGN_AUTO,  0.1, u"0" },
+        { UNUM_SIGN_AUTO, -0.1, u"-0" }, // interesting case
+        { UNUM_SIGN_AUTO, -0.9, u"-1" },
+        { UNUM_SIGN_AUTO, -1.1, u"-1" },
+        { UNUM_SIGN_ALWAYS,  1.1, u"+1" },
+        { UNUM_SIGN_ALWAYS,  0.9, u"+1" },
+        { UNUM_SIGN_ALWAYS,  0.1, u"+0" },
+        { UNUM_SIGN_ALWAYS, -0.1, u"-0" },
+        { UNUM_SIGN_ALWAYS, -0.9, u"-1" },
+        { UNUM_SIGN_ALWAYS, -1.1, u"-1" },
+        { UNUM_SIGN_EXCEPT_ZERO,  1.1, u"+1" },
+        { UNUM_SIGN_EXCEPT_ZERO,  0.9, u"+1" },
+        { UNUM_SIGN_EXCEPT_ZERO,  0.1, u"0" }, // interesting case
+        { UNUM_SIGN_EXCEPT_ZERO, -0.1, u"0" }, // interesting case
+        { UNUM_SIGN_EXCEPT_ZERO, -0.9, u"-1" },
+        { UNUM_SIGN_EXCEPT_ZERO, -1.1, u"-1" },
+    };
+    for (auto& cas : cases) {
+        auto sign = cas.sign;
+        auto input = cas.input;
+        auto expected = cas.expected;
+        auto actual = NumberFormatter::with()
+            .sign(sign)
+            .precision(Precision::integer())
+            .locale(Locale::getUS())
+            .formatDouble(input, status)
+            .toString(status);
+        assertEquals(
+            DoubleToUnicodeString(input) + " @ SignDisplay " + Int64ToUnicodeString(sign),
+            expected, actual);
+    }
+}
+
 void NumberFormatterApiTest::signCoverage() {
     // https://unicode-org.atlassian.net/browse/ICU-20708
     IcuTestErrorCode status(*this, "signCoverage");
@@ -2114,7 +2158,7 @@ void NumberFormatterApiTest::signCoverage() {
         { UNUM_SIGN_AUTO, {        u"-∞", u"-1", u"-0",  u"0",  u"1",  u"∞",  u"NaN", u"-NaN" } },
         { UNUM_SIGN_ALWAYS, {      u"-∞", u"-1", u"-0", u"+0", u"+1", u"+∞", u"+NaN", u"-NaN" } },
         { UNUM_SIGN_NEVER, {        u"∞",  u"1",  u"0",  u"0",  u"1",  u"∞",  u"NaN",  u"NaN" } },
-        { UNUM_SIGN_EXCEPT_ZERO, { u"-∞", u"-1", u"-0",  u"0", u"+1", u"+∞",  u"NaN", u"-NaN" } },
+        { UNUM_SIGN_EXCEPT_ZERO, { u"-∞", u"-1",  u"0",  u"0", u"+1", u"+∞",  u"NaN",  u"NaN" } },
     };
     double negNaN = std::copysign(uprv_getNaN(), -0.0);
     const double inputs[] = {

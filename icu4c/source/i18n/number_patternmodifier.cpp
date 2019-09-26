@@ -81,8 +81,10 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
         for (StandardPlural::Form plural : STANDARD_PLURAL_VALUES) {
             setNumberProperties(SIGNUM_POS, plural);
             pm->adoptModifier(SIGNUM_POS, plural, createConstantModifier(status));
-            setNumberProperties(SIGNUM_ZERO, plural);
-            pm->adoptModifier(SIGNUM_ZERO, plural, createConstantModifier(status));
+            setNumberProperties(SIGNUM_NEG_ZERO, plural);
+            pm->adoptModifier(SIGNUM_NEG_ZERO, plural, createConstantModifier(status));
+            setNumberProperties(SIGNUM_POS_ZERO, plural);
+            pm->adoptModifier(SIGNUM_POS_ZERO, plural, createConstantModifier(status));
             setNumberProperties(SIGNUM_NEG, plural);
             pm->adoptModifier(SIGNUM_NEG, plural, createConstantModifier(status));
         }
@@ -95,8 +97,10 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
         // Faster path when plural keyword is not needed.
         setNumberProperties(SIGNUM_POS, StandardPlural::Form::COUNT);
         pm->adoptModifierWithoutPlural(SIGNUM_POS, createConstantModifier(status));
-        setNumberProperties(SIGNUM_ZERO, StandardPlural::Form::COUNT);
-        pm->adoptModifierWithoutPlural(SIGNUM_ZERO, createConstantModifier(status));
+        setNumberProperties(SIGNUM_NEG_ZERO, StandardPlural::Form::COUNT);
+        pm->adoptModifierWithoutPlural(SIGNUM_NEG_ZERO, createConstantModifier(status));
+        setNumberProperties(SIGNUM_POS_ZERO, StandardPlural::Form::COUNT);
+        pm->adoptModifierWithoutPlural(SIGNUM_POS_ZERO, createConstantModifier(status));
         setNumberProperties(SIGNUM_NEG, StandardPlural::Form::COUNT);
         pm->adoptModifierWithoutPlural(SIGNUM_NEG, createConstantModifier(status));
         if (U_FAILURE(status)) {

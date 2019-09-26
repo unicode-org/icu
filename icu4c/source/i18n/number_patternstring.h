@@ -22,6 +22,15 @@ namespace impl {
 // Forward declaration
 class PatternParser;
 
+enum PatternSignType {
+    // Render using negative subpattern rules
+    PATTERN_SIGN_TYPE_NEG,
+    // Render using normal positive subpattern rules
+    PATTERN_SIGN_TYPE_POS,
+    // Render using rules to force the display of a plus sign
+    PATTERN_SIGN_TYPE_POS_SIGN
+};
+
 // Exported as U_I18N_API because it is a public member field of exported ParsedSubpatternInfo
 struct U_I18N_API Endpoints {
     int32_t start = 0;
@@ -303,6 +312,8 @@ class U_I18N_API PatternStringUtils {
     /** @return The number of chars inserted. */
     static int escapePaddingString(UnicodeString input, UnicodeString& output, int startIndex,
                                    UErrorCode& status);
+
+    static PatternSignType resolveSignDisplay(UNumberSignDisplay signDisplay, Signum signum);
 };
 
 } // namespace impl
