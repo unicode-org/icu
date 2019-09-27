@@ -23120,7 +23120,7 @@ supplementalData:table(nofallback){
             "no20",
             "no21",
             "no22",
-            "no23",
+            "no50",
         }
         NP{
             "np1",
@@ -25653,12 +25653,6 @@ supplementalData:table(nofallback){
             "itvi",
             "itvr",
         }
-        it36{
-            "itgo",
-            "itpn",
-            "itts",
-            "itud",
-        }
         it42{
             "itge",
             "itim",
@@ -25755,13 +25749,10 @@ supplementalData:table(nofallback){
         }
         it88{
             "itca",
-            "itci",
             "itnu",
-            "itog",
             "itor",
-            "itot",
+            "itsd",
             "itss",
-            "itvs",
         }
         knk{
             "kn01",
@@ -25861,6 +25852,7 @@ supplementalData:table(nofallback){
             "manou",
             "marab",
             "masal",
+            "masik",
             "masil",
             "maskh",
         }
@@ -25874,12 +25866,13 @@ supplementalData:table(nofallback){
         ma06{
             "mabes",
             "mabrr",
+            "macas",
             "macht",
             "majdi",
             "mamed",
             "mamoh",
+            "maset",
             "masib",
-            "masik",
         }
         ma07{
             "machi",
@@ -25892,11 +25885,9 @@ supplementalData:table(nofallback){
             "mayus",
         }
         ma08{
-            "macas",
             "maerr",
             "mamid",
             "maoua",
-            "maset",
             "matin",
             "mazag",
         }
