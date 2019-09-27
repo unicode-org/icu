@@ -40,9 +40,6 @@ IntegerWidth IntegerWidth::truncateAt(int32_t maxInt) {
 }
 
 void IntegerWidth::apply(impl::DecimalQuantity& quantity, UErrorCode& status) const {
-    if (isBogus()) {
-        return;
-    }
     if (fHasError) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     } else if (fUnion.minMaxInt.fMaxInt == -1) {

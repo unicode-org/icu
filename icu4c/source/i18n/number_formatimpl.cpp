@@ -111,6 +111,7 @@ void NumberFormatterImpl::preProcess(DecimalQuantity& inValue, MicroProps& micro
         return;
     }
     fMicroPropsGenerator->processQuantity(inValue, microsOut, status);
+    microsOut.integerWidth.apply(inValue, status);
 }
 
 MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErrorCode& status) {
@@ -122,6 +123,7 @@ MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErr
         return fMicros; // must always return a value
     }
     fMicroPropsGenerator->processQuantity(inValue, fMicros, status);
+    fMicros.integerWidth.apply(inValue, status);
     return fMicros;
 }
 

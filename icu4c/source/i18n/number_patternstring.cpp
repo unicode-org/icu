@@ -1000,12 +1000,9 @@ PatternStringUtils::convertLocalized(const UnicodeString& input, const DecimalFo
 }
 
 void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& patternInfo, bool isPrefix,
-                                                    Signum signum, UNumberSignDisplay signDisplay,
+                                                    PatternSignType patternSignType,
                                                     StandardPlural::Form plural,
                                                     bool perMilleReplacesPercent, UnicodeString& output) {
-
-    // Resolve which of the three options to use for displaying the sign.
-    PatternSignType patternSignType = resolveSignDisplay(signDisplay, signum);
 
     // Should the output render '+' where '-' would normally appear in the pattern?
     bool plusReplacesMinusSign = (patternSignType == PATTERN_SIGN_TYPE_POS_SIGN)

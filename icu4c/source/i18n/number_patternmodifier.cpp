@@ -125,7 +125,6 @@ void ImmutablePatternModifier::processQuantity(DecimalQuantity& quantity, MicroP
                                                UErrorCode& status) const {
     parent->processQuantity(quantity, micros, status);
     micros.rounder.apply(quantity, status);
-    micros.integerWidth.apply(quantity, status);
     if (micros.modMiddle != nullptr) {
         return;
     }
@@ -165,7 +164,6 @@ void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& mi
                                              UErrorCode& status) const {
     fParent->processQuantity(fq, micros, status);
     micros.rounder.apply(fq, status);
-    micros.integerWidth.apply(fq, status);
     if (micros.modMiddle != nullptr) {
         return;
     }
@@ -274,7 +272,12 @@ int32_t MutablePatternModifier::insertSuffix(FormattedStringBuilder& sb, int pos
 /** This method contains the heart of the logic for rendering LDML affix strings. */
 void MutablePatternModifier::prepareAffix(bool isPrefix) {
     PatternStringUtils::patternInfoToStringBuilder(
-            *fPatternInfo, isPrefix, fSignum, fSignDisplay, fPlural, fPerMilleReplacesPercent, currentAffix);
+            *fPatternInfo,
+            isPrefix,
+            PatternStringUtils::resolveSignDisplay(fSignDisplay, fSignum),
+            fPlural,
+            fPerMilleReplacesPercent,
+            currentAffix);
 }
 
 UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
