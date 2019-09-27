@@ -384,8 +384,6 @@ public abstract class Precision implements Cloneable {
     static final CurrencyRounderImpl MONETARY_STANDARD = new CurrencyRounderImpl(CurrencyUsage.STANDARD);
     static final CurrencyRounderImpl MONETARY_CASH = new CurrencyRounderImpl(CurrencyUsage.CASH);
 
-    static final PassThroughRounderImpl PASS_THROUGH = new PassThroughRounderImpl();
-
     static Precision constructInfinite() {
         return NONE;
     }
@@ -472,10 +470,6 @@ public abstract class Precision implements Cloneable {
             returnValue = constructFraction(minMaxFrac, minMaxFrac);
         }
         return returnValue.withMode(base.mathContext);
-    }
-
-    static Precision constructPassThrough() {
-        return PASS_THROUGH;
     }
 
     /**
@@ -710,17 +704,6 @@ public abstract class Precision implements Cloneable {
         public void apply(DecimalQuantity value) {
             // Call .withCurrency() before .apply()!
             throw new AssertionError();
-        }
-    }
-
-    static class PassThroughRounderImpl extends Precision {
-
-        public PassThroughRounderImpl() {
-        }
-
-        @Override
-        public void apply(DecimalQuantity value) {
-            // TODO: Assert that value has already been rounded
         }
     }
 

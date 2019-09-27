@@ -384,11 +384,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         patternModifier->setSymbols(fMicros.symbols, currencySymbols, unitWidth, nullptr);
     }
     if (safe) {
-        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutableAndChain(chain, status));
-        chain = fImmutablePatternModifier.getAlias();
-    } else {
-        patternModifier->addToChain(chain);
-        chain = patternModifier;
+        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutable(status));
     }
 
     // Outer modifier (CLDR units and currency long names)
@@ -418,8 +414,6 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
 
     // Compact notation
-    // NOTE: Compact notation can (but might not) override the middle modifier and rounding.
-    // It therefore needs to go at the end of the chain.
     if (macros.notation.fType == Notation::NTN_COMPACT) {
         CompactType compactType = (isCurrency && unitWidth != UNUM_UNIT_WIDTH_FULL_NAME)
                                   ? CompactType::TYPE_CURRENCY : CompactType::TYPE_DECIMAL;
@@ -429,7 +423,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             nsName,
             compactType,
             resolvePluralRules(macros.rules, macros.locale, status),
-            safe ? patternModifier : nullptr,
+            patternModifier,
+            safe,
             chain,
             status);
         if (newCompactHandler == nullptr) {
@@ -438,6 +433,15 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         }
         fCompactHandler.adoptInstead(newCompactHandler);
         chain = fCompactHandler.getAlias();
+    }
+
+    // Always add the pattern modifier as the last element of the chain.
+    if (safe) {
+        fImmutablePatternModifier->addToChain(chain);
+        chain = fImmutablePatternModifier.getAlias();
+    } else {
+        patternModifier->addToChain(chain);
+        chain = patternModifier;
     }
 
     return chain;

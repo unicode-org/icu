@@ -50,9 +50,11 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator, public U
 
     const Modifier* getModifier(Signum signum, StandardPlural::Form plural) const;
 
+    // Non-const method:
+    void addToChain(const MicroPropsGenerator* parent);
+
   private:
-    ImmutablePatternModifier(AdoptingModifierStore* pm, const PluralRules* rules,
-                             const MicroPropsGenerator* parent);
+    ImmutablePatternModifier(AdoptingModifierStore* pm, const PluralRules* rules);
 
     const LocalPointer<AdoptingModifierStore> pm;
     const PluralRules* rules;
@@ -164,21 +166,6 @@ class U_I18N_API MutablePatternModifier
      * @return An immutable that supports both positive and negative numbers.
      */
     ImmutablePatternModifier *createImmutable(UErrorCode &status);
-
-    /**
-     * Creates a new quantity-dependent Modifier that behaves the same as the current instance, but which is immutable
-     * and can be saved for future use. The number properties in the current instance are mutated; all other properties
-     * are left untouched.
-     *
-     * <p>
-     * CREATES A NEW HEAP OBJECT; THE CALLER GETS OWNERSHIP.
-     *
-     * @param parent
-     *            The QuantityChain to which to chain this immutable.
-     * @return An immutable that supports both positive and negative numbers.
-     */
-    ImmutablePatternModifier *
-    createImmutableAndChain(const MicroPropsGenerator *parent, UErrorCode &status);
 
     MicroPropsGenerator &addToChain(const MicroPropsGenerator *parent);
 

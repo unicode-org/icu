@@ -55,12 +55,6 @@ bool MutablePatternModifier::needsPlurals() const {
 }
 
 ImmutablePatternModifier* MutablePatternModifier::createImmutable(UErrorCode& status) {
-    return createImmutableAndChain(nullptr, status);
-}
-
-ImmutablePatternModifier*
-MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* parent, UErrorCode& status) {
-
     // TODO: Move StandardPlural VALUES to standardplural.h
     static const StandardPlural::Form STANDARD_PLURAL_VALUES[] = {
             StandardPlural::Form::ZERO,
@@ -92,7 +86,7 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
             delete pm;
             return nullptr;
         }
-        return new ImmutablePatternModifier(pm, fRules, parent);  // adopts pm
+        return new ImmutablePatternModifier(pm, fRules);  // adopts pm
     } else {
         // Faster path when plural keyword is not needed.
         setNumberProperties(SIGNUM_POS, StandardPlural::Form::COUNT);
@@ -107,7 +101,7 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
             delete pm;
             return nullptr;
         }
-        return new ImmutablePatternModifier(pm, nullptr, parent);  // adopts pm
+        return new ImmutablePatternModifier(pm, nullptr);  // adopts pm
     }
 }
 
@@ -124,13 +118,15 @@ ConstantMultiFieldModifier* MutablePatternModifier::createConstantModifier(UErro
     }
 }
 
-ImmutablePatternModifier::ImmutablePatternModifier(AdoptingModifierStore* pm, const PluralRules* rules,
-                                                   const MicroPropsGenerator* parent)
-        : pm(pm), rules(rules), parent(parent) {}
+ImmutablePatternModifier::ImmutablePatternModifier(AdoptingModifierStore* pm, const PluralRules* rules)
+        : pm(pm), rules(rules), parent(nullptr) {}
 
 void ImmutablePatternModifier::processQuantity(DecimalQuantity& quantity, MicroProps& micros,
                                                UErrorCode& status) const {
     parent->processQuantity(quantity, micros, status);
+    if (micros.modMiddle != nullptr) {
+        return;
+    }
     applyToMicros(micros, quantity, status);
 }
 
@@ -152,6 +148,10 @@ const Modifier* ImmutablePatternModifier::getModifier(Signum signum, StandardPlu
     }
 }
 
+void ImmutablePatternModifier::addToChain(const MicroPropsGenerator* parent) {
+    this->parent = parent;
+}
+
 
 /** Used by the unsafe code path. */
 MicroPropsGenerator& MutablePatternModifier::addToChain(const MicroPropsGenerator* parent) {
@@ -162,6 +162,9 @@ MicroPropsGenerator& MutablePatternModifier::addToChain(const MicroPropsGenerato
 void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& micros,
                                              UErrorCode& status) const {
     fParent->processQuantity(fq, micros, status);
+    if (micros.modMiddle != nullptr) {
+        return;
+    }
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);
