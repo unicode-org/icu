@@ -126,9 +126,10 @@ void ImmutablePatternModifier::processQuantity(DecimalQuantity& quantity, MicroP
     parent->processQuantity(quantity, micros, status);
     micros.rounder.apply(quantity, status);
     micros.integerWidth.apply(quantity, status);
-    if (micros.modMiddle == nullptr) {
-        applyToMicros(micros, quantity, status);
+    if (micros.modMiddle != nullptr) {
+        return;
     }
+    applyToMicros(micros, quantity, status);
 }
 
 void ImmutablePatternModifier::applyToMicros(
@@ -165,6 +166,9 @@ void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& mi
     fParent->processQuantity(fq, micros, status);
     micros.rounder.apply(fq, status);
     micros.integerWidth.apply(fq, status);
+    if (micros.modMiddle != nullptr) {
+        return;
+    }
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);

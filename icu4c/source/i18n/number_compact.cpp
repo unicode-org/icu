@@ -316,6 +316,7 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
         ParsedPatternInfo &patternInfo = const_cast<CompactHandler *>(this)->unsafePatternInfo;
         PatternParser::parseToPatternInfo(UnicodeString(patternString), patternInfo, status);
         unsafePatternModifier->setPatternInfo(&unsafePatternInfo, UNUM_COMPACT_FIELD);
+        unsafePatternModifier->setNumberProperties(quantity.signum(), StandardPlural::Form::COUNT);
         micros.modMiddle = unsafePatternModifier;
     }
 
