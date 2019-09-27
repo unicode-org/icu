@@ -2114,7 +2114,7 @@ void NumberFormatterApiTest::signCoverage() {
         { UNUM_SIGN_AUTO, {        u"-∞", u"-1", u"-0",  u"0",  u"1",  u"∞",  u"NaN", u"-NaN" } },
         { UNUM_SIGN_ALWAYS, {      u"-∞", u"-1", u"-0", u"+0", u"+1", u"+∞", u"+NaN", u"-NaN" } },
         { UNUM_SIGN_NEVER, {        u"∞",  u"1",  u"0",  u"0",  u"1",  u"∞",  u"NaN",  u"NaN" } },
-        { UNUM_SIGN_EXCEPT_ZERO, { u"-∞", u"-1", u"-0",  u"0", u"+1", u"+∞",  u"NaN", u"-NaN" } },
+        { UNUM_SIGN_EXCEPT_ZERO, { u"-∞", u"-1",  u"0",  u"0", u"+1", u"+∞",  u"NaN",  u"NaN" } },
     };
     double negNaN = std::copysign(uprv_getNaN(), -0.0);
     const double inputs[] = {

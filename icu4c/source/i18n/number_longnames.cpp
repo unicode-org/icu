@@ -308,7 +308,7 @@ void LongNameHandler::simpleFormatsToModifiers(const UnicodeString *simpleFormat
         if (U_FAILURE(status)) { return; }
         SimpleFormatter compiledFormatter(simpleFormat, 0, 1, status);
         if (U_FAILURE(status)) { return; }
-        fModifiers[i] = SimpleModifier(compiledFormatter, field, false, {this, SIGNUM_ZERO, plural});
+        fModifiers[i] = SimpleModifier(compiledFormatter, field, false, {this, SIGNUM_POS_ZERO, plural});
     }
 }
 
@@ -325,7 +325,7 @@ void LongNameHandler::multiSimpleFormatsToModifiers(const UnicodeString *leadFor
         if (U_FAILURE(status)) { return; }
         SimpleFormatter compoundCompiled(compoundFormat, 0, 1, status);
         if (U_FAILURE(status)) { return; }
-        fModifiers[i] = SimpleModifier(compoundCompiled, field, false, {this, SIGNUM_ZERO, plural});
+        fModifiers[i] = SimpleModifier(compoundCompiled, field, false, {this, SIGNUM_POS_ZERO, plural});
     }
 }
 

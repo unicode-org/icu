@@ -12,6 +12,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
@@ -262,7 +263,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
             String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 0, 1);
             Modifier.Parameters parameters = new Modifier.Parameters();
             parameters.obj = this;
-            parameters.signum = 0;
+            parameters.signum = null;// Signum ignored
             parameters.plural = plural;
             modifiers.put(plural, new SimpleModifier(compiled, field, false, parameters));
         }
@@ -281,7 +282,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
                     .compileToStringMinMaxArguments(compoundFormat, sb, 0, 1);
             Modifier.Parameters parameters = new Modifier.Parameters();
             parameters.obj = this;
-            parameters.signum = 0;
+            parameters.signum = null; // Signum ignored
             parameters.plural = plural;
             modifiers.put(plural, new SimpleModifier(compoundCompiled, field, false, parameters));
         }
@@ -296,7 +297,8 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
     }
 
     @Override
-    public Modifier getModifier(int signum, StandardPlural plural) {
+    public Modifier getModifier(Signum signum, StandardPlural plural) {
+        // Signum ignored
         return modifiers.get(plural);
     }
 }

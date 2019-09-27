@@ -319,10 +319,14 @@ bool DecimalQuantity::isNegative() const {
 }
 
 Signum DecimalQuantity::signum() const {
-    if (isNegative()) {
+    bool isZero = (isZeroish() && !isInfinite());
+    bool isNeg = isNegative();
+    if (isZero && isNeg) {
+        return SIGNUM_NEG_ZERO;
+    } else if (isZero) {
+        return SIGNUM_POS_ZERO;
+    } else if (isNeg) {
         return SIGNUM_NEG;
-    } else if (isZeroish() && !isInfinite()) {
-        return SIGNUM_ZERO;
     } else {
         return SIGNUM_POS;
     }

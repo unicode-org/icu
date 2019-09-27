@@ -92,9 +92,10 @@ enum CompactType {
 };
 
 enum Signum {
-    SIGNUM_NEG = -1,
-    SIGNUM_ZERO = 0,
-    SIGNUM_POS = 1
+    SIGNUM_NEG = 0,
+    SIGNUM_NEG_ZERO = 1,
+    SIGNUM_POS_ZERO = 2,
+    SIGNUM_POS = 3
 };
 
 
