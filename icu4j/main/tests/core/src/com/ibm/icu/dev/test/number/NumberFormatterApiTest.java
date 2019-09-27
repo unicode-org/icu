@@ -1625,6 +1625,57 @@ public class NumberFormatterApiTest {
                 "00.008765",
                 "00");
 
+        assertFormatDescending(
+                "Integer Width Compact",
+                "compact-short integer-width/000",
+                NumberFormatter.with()
+                    .notation(Notation.compactShort())
+                    .integerWidth(IntegerWidth.zeroFillTo(3).truncateAt(3)),
+                ULocale.ENGLISH,
+                "088K",
+                "008.8K",
+                "876",
+                "088",
+                "008.8",
+                "000.88",
+                "000.088",
+                "000.0088",
+                "000");
+
+        assertFormatDescending(
+                "Integer Width Scientific",
+                "scientific integer-width/000",
+                NumberFormatter.with()
+                    .notation(Notation.scientific())
+                    .integerWidth(IntegerWidth.zeroFillTo(3).truncateAt(3)),
+                ULocale.ENGLISH,
+                "008.765E4",
+                "008.765E3",
+                "008.765E2",
+                "008.765E1",
+                "008.765E0",
+                "008.765E-1",
+                "008.765E-2",
+                "008.765E-3",
+                "000E0");
+
+        assertFormatDescending(
+                "Integer Width Engineering",
+                "engineering integer-width/000",
+                NumberFormatter.with()
+                    .notation(Notation.engineering())
+                    .integerWidth(IntegerWidth.zeroFillTo(3).truncateAt(3)),
+                ULocale.ENGLISH,
+                "087.65E3",
+                "008.765E3",
+                "876.5E0",
+                "087.65E0",
+                "008.765E0",
+                "876.5E-3",
+                "087.65E-3",
+                "008.765E-3",
+                "000E0");
+
         assertFormatSingle(
                 "Integer Width Remove All A",
                 "integer-width/00",
@@ -2027,6 +2078,45 @@ public class NumberFormatterApiTest {
                 ULocale.CANADA,
                 -444444,
                 "-444,444.00 US dollars");
+    }
+
+    @Test
+    public void signNearZero() {
+        // https://unicode-org.atlassian.net/browse/ICU-20709
+        Object[][] cases = {
+            { SignDisplay.AUTO,  1.1, "1" },
+            { SignDisplay.AUTO,  0.9, "1" },
+            { SignDisplay.AUTO,  0.1, "0" },
+            { SignDisplay.AUTO, -0.1, "-0" }, // interesting case
+            { SignDisplay.AUTO, -0.9, "-1" },
+            { SignDisplay.AUTO, -1.1, "-1" },
+            { SignDisplay.ALWAYS,  1.1, "+1" },
+            { SignDisplay.ALWAYS,  0.9, "+1" },
+            { SignDisplay.ALWAYS,  0.1, "+0" },
+            { SignDisplay.ALWAYS, -0.1, "-0" },
+            { SignDisplay.ALWAYS, -0.9, "-1" },
+            { SignDisplay.ALWAYS, -1.1, "-1" },
+            { SignDisplay.EXCEPT_ZERO,  1.1, "+1" },
+            { SignDisplay.EXCEPT_ZERO,  0.9, "+1" },
+            { SignDisplay.EXCEPT_ZERO,  0.1, "0" }, // interesting case
+            { SignDisplay.EXCEPT_ZERO, -0.1, "0" }, // interesting case
+            { SignDisplay.EXCEPT_ZERO, -0.9, "-1" },
+            { SignDisplay.EXCEPT_ZERO, -1.1, "-1" },
+        };
+        for (Object[] cas : cases) {
+            SignDisplay sign = (SignDisplay) cas[0];
+            double input = (Double) cas[1];
+            String expected = (String) cas[2];
+            String actual = NumberFormatter.with()
+                .sign(sign)
+                .precision(Precision.integer())
+                .locale(Locale.US)
+                .format(input)
+                .toString();
+            assertEquals(
+                input + " @ SignDisplay " + sign,
+                expected, actual);
+        }
     }
 
     @Test

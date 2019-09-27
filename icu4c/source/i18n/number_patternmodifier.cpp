@@ -124,6 +124,7 @@ ImmutablePatternModifier::ImmutablePatternModifier(AdoptingModifierStore* pm, co
 void ImmutablePatternModifier::processQuantity(DecimalQuantity& quantity, MicroProps& micros,
                                                UErrorCode& status) const {
     parent->processQuantity(quantity, micros, status);
+    micros.rounder.apply(quantity, status);
     if (micros.modMiddle != nullptr) {
         return;
     }
@@ -162,6 +163,7 @@ MicroPropsGenerator& MutablePatternModifier::addToChain(const MicroPropsGenerato
 void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& micros,
                                              UErrorCode& status) const {
     fParent->processQuantity(fq, micros, status);
+    micros.rounder.apply(fq, status);
     if (micros.modMiddle != nullptr) {
         return;
     }

@@ -96,7 +96,7 @@ public class NumberPermutationTest extends TestFmwk {
 
         // Build up the golden data string as we evaluate all permutations
         ArrayList<String> resultLines = new ArrayList<>();
-        resultLines.add("# © 2017 and later: Unicode, Inc. and others.");
+        resultLines.add("# © 2019 and later: Unicode, Inc. and others.");
         resultLines.add("# License & terms of use: http://www.unicode.org/copyright.html");
         resultLines.add("");
 

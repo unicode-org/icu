@@ -86,6 +86,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         // TODO: Add this method if currency symbols override support is added.
         //TESTCASE_AUTO(symbolsOverride);
         TESTCASE_AUTO(sign);
+        TESTCASE_AUTO(signNearZero);
         TESTCASE_AUTO(signCoverage);
         TESTCASE_AUTO(decimal);
         TESTCASE_AUTO(scale);
@@ -1694,6 +1695,57 @@ void NumberFormatterApiTest::integerWidth() {
             u"00.008765",
             u"00");
 
+    assertFormatDescending(
+            u"Integer Width Compact",
+            u"compact-short integer-width/000",
+            NumberFormatter::with()
+                .notation(Notation::compactShort())
+                .integerWidth(IntegerWidth::zeroFillTo(3).truncateAt(3)),
+            Locale::getEnglish(),
+            u"088K",
+            u"008.8K",
+            u"876",
+            u"088",
+            u"008.8",
+            u"000.88",
+            u"000.088",
+            u"000.0088",
+            u"000");
+
+    assertFormatDescending(
+            u"Integer Width Scientific",
+            u"scientific integer-width/000",
+            NumberFormatter::with()
+                .notation(Notation::scientific())
+                .integerWidth(IntegerWidth::zeroFillTo(3).truncateAt(3)),
+            Locale::getEnglish(),
+            u"008.765E4",
+            u"008.765E3",
+            u"008.765E2",
+            u"008.765E1",
+            u"008.765E0",
+            u"008.765E-1",
+            u"008.765E-2",
+            u"008.765E-3",
+            u"000E0");
+
+    assertFormatDescending(
+            u"Integer Width Engineering",
+            u"engineering integer-width/000",
+            NumberFormatter::with()
+                .notation(Notation::engineering())
+                .integerWidth(IntegerWidth::zeroFillTo(3).truncateAt(3)),
+            Locale::getEnglish(),
+            u"087.65E3",
+            u"008.765E3",
+            u"876.5E0",
+            u"087.65E0",
+            u"008.765E0",
+            u"876.5E-3",
+            u"087.65E-3",
+            u"008.765E-3",
+            u"000E0");
+
     assertFormatSingle(
             u"Integer Width Remove All A",
             u"integer-width/00",
@@ -2102,6 +2154,49 @@ void NumberFormatterApiTest::sign() {
             Locale::getCanada(),
             -444444,
             u"-444,444.00 US dollars");
+}
+
+void NumberFormatterApiTest::signNearZero() {
+    // https://unicode-org.atlassian.net/browse/ICU-20709
+    IcuTestErrorCode status(*this, "signNearZero");
+    const struct TestCase {
+        UNumberSignDisplay sign;
+        double input;
+        const char16_t* expected;
+    } cases[] = {
+        { UNUM_SIGN_AUTO,  1.1, u"1" },
+        { UNUM_SIGN_AUTO,  0.9, u"1" },
+        { UNUM_SIGN_AUTO,  0.1, u"0" },
+        { UNUM_SIGN_AUTO, -0.1, u"-0" }, // interesting case
+        { UNUM_SIGN_AUTO, -0.9, u"-1" },
+        { UNUM_SIGN_AUTO, -1.1, u"-1" },
+        { UNUM_SIGN_ALWAYS,  1.1, u"+1" },
+        { UNUM_SIGN_ALWAYS,  0.9, u"+1" },
+        { UNUM_SIGN_ALWAYS,  0.1, u"+0" },
+        { UNUM_SIGN_ALWAYS, -0.1, u"-0" },
+        { UNUM_SIGN_ALWAYS, -0.9, u"-1" },
+        { UNUM_SIGN_ALWAYS, -1.1, u"-1" },
+        { UNUM_SIGN_EXCEPT_ZERO,  1.1, u"+1" },
+        { UNUM_SIGN_EXCEPT_ZERO,  0.9, u"+1" },
+        { UNUM_SIGN_EXCEPT_ZERO,  0.1, u"0" }, // interesting case
+        { UNUM_SIGN_EXCEPT_ZERO, -0.1, u"0" }, // interesting case
+        { UNUM_SIGN_EXCEPT_ZERO, -0.9, u"-1" },
+        { UNUM_SIGN_EXCEPT_ZERO, -1.1, u"-1" },
+    };
+    for (auto& cas : cases) {
+        auto sign = cas.sign;
+        auto input = cas.input;
+        auto expected = cas.expected;
+        auto actual = NumberFormatter::with()
+            .sign(sign)
+            .precision(Precision::integer())
+            .locale(Locale::getUS())
+            .formatDouble(input, status)
+            .toString(status);
+        assertEquals(
+            DoubleToUnicodeString(input) + " @ SignDisplay " + Int64ToUnicodeString(sign),
+            expected, actual);
+    }
 }
 
 void NumberFormatterApiTest::signCoverage() {
