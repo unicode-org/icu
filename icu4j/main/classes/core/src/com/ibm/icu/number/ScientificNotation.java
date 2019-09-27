@@ -196,7 +196,7 @@ public class ScientificNotation extends Notation implements Cloneable {
             }
 
             // We already performed rounding. Do not perform it again.
-            micros.rounder = Precision.constructPassThrough();
+            micros.rounder = null;
 
             return micros;
         }

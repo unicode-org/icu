@@ -155,6 +155,8 @@ class DecNum;
 class NumberRangeFormatterImpl;
 struct RangeMacroProps;
 struct UFormattedNumberImpl;
+class MutablePatternModifier;
+class ImmutablePatternModifier;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -980,8 +982,12 @@ class U_I18N_API IntegerWidth : public UMemory {
     friend struct impl::MacroProps;
     friend struct impl::MicroProps;
 
-    // To allow NumberFormatterImpl to access isBogus() and perform other operations:
+    // To allow NumberFormatterImpl to access isBogus():
     friend class impl::NumberFormatterImpl;
+
+    // To allow the use of this class when formatting:
+    friend class impl::MutablePatternModifier;
+    friend class impl::ImmutablePatternModifier;
 
     // So that NumberPropertyMapper can create instances
     friend class impl::NumberPropertyMapper;

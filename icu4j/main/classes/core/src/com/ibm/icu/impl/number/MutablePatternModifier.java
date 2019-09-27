@@ -155,19 +155,6 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
      * @return An immutable that supports both positive and negative numbers.
      */
     public ImmutablePatternModifier createImmutable() {
-        return createImmutableAndChain(null);
-    }
-
-    /**
-     * Creates a new quantity-dependent Modifier that behaves the same as the current instance, but which
-     * is immutable and can be saved for future use. The number properties in the current instance are
-     * mutated; all other properties are left untouched.
-     *
-     * @param parent
-     *            The QuantityChain to which to chain this immutable.
-     * @return An immutable that supports both positive and negative numbers.
-     */
-    public ImmutablePatternModifier createImmutableAndChain(MicroPropsGenerator parent) {
         FormattedStringBuilder a = new FormattedStringBuilder();
         FormattedStringBuilder b = new FormattedStringBuilder();
         if (needsPlurals()) {
@@ -184,7 +171,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
                 pm.setModifier(Signum.NEG, plural, createConstantModifier(a, b));
             }
             pm.freeze();
-            return new ImmutablePatternModifier(pm, rules, parent);
+            return new ImmutablePatternModifier(pm, rules);
         } else {
             // Faster path when plural keyword is not needed.
             setNumberProperties(Signum.POS, null);
@@ -196,7 +183,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             setNumberProperties(Signum.NEG, null);
             Modifier negative = createConstantModifier(a, b);
             AdoptingModifierStore pm = new AdoptingModifierStore(positive, posZero, negZero, negative);
-            return new ImmutablePatternModifier(pm, null, parent);
+            return new ImmutablePatternModifier(pm, null);
         }
     }
 
@@ -226,20 +213,27 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     public static class ImmutablePatternModifier implements MicroPropsGenerator {
         final AdoptingModifierStore pm;
         final PluralRules rules;
-        final MicroPropsGenerator parent;
+        /* final */ MicroPropsGenerator parent;
 
         ImmutablePatternModifier(
                 AdoptingModifierStore pm,
-                PluralRules rules,
-                MicroPropsGenerator parent) {
+                PluralRules rules) {
             this.pm = pm;
             this.rules = rules;
+            this.parent = null;
+        }
+
+        public ImmutablePatternModifier addToChain(MicroPropsGenerator parent) {
             this.parent = parent;
+            return this;
         }
 
         @Override
         public MicroProps processQuantity(DecimalQuantity quantity) {
             MicroProps micros = parent.processQuantity(quantity);
+            if (micros.modMiddle != null) {
+                return micros;
+            }
             applyToMicros(micros, quantity);
             return micros;
         }
@@ -274,6 +268,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     @Override
     public MicroProps processQuantity(DecimalQuantity fq) {
         MicroProps micros = parent.processQuantity(fq);
+        if (micros.modMiddle != null) {
+            return micros;
+        }
         if (needsPlurals()) {
             StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, fq);
             setNumberProperties(fq.signum(), pluralForm);
