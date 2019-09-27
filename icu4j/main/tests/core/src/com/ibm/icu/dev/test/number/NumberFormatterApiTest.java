@@ -2098,8 +2098,8 @@ public class NumberFormatterApiTest {
             { SignDisplay.ALWAYS, -1.1, "-1" },
             { SignDisplay.EXCEPT_ZERO,  1.1, "+1" },
             { SignDisplay.EXCEPT_ZERO,  0.9, "+1" },
-// TODO     { SignDisplay.EXCEPT_ZERO,  0.1, "0" }, // interesting case
-// TODO     { SignDisplay.EXCEPT_ZERO, -0.1, "0" }, // interesting case
+            { SignDisplay.EXCEPT_ZERO,  0.1, "0" }, // interesting case
+            { SignDisplay.EXCEPT_ZERO, -0.1, "0" }, // interesting case
             { SignDisplay.EXCEPT_ZERO, -0.9, "-1" },
             { SignDisplay.EXCEPT_ZERO, -1.1, "-1" },
         };

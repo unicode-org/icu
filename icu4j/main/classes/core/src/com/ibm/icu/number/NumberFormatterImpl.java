@@ -98,7 +98,6 @@ class NumberFormatterImpl {
      */
     public MicroProps preProcess(DecimalQuantity inValue) {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
-        micros.rounder.apply(inValue);
         if (micros.integerWidth.maxInt == -1) {
             inValue.setMinInteger(micros.integerWidth.minInt);
         } else {
@@ -112,7 +111,6 @@ class NumberFormatterImpl {
         MicroProps micros = new MicroProps(false);
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, micros, false);
         micros = microPropsGenerator.processQuantity(inValue);
-        micros.rounder.apply(inValue);
         if (micros.integerWidth.maxInt == -1) {
             inValue.setMinInteger(micros.integerWidth.minInt);
         } else {

@@ -245,6 +245,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         @Override
         public MicroProps processQuantity(DecimalQuantity quantity) {
             MicroProps micros = parent.processQuantity(quantity);
+            if (micros.rounder != null) {
+                micros.rounder.apply(quantity);
+            }
             if (micros.modMiddle != null) {
                 return micros;
             }
@@ -282,6 +285,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     @Override
     public MicroProps processQuantity(DecimalQuantity fq) {
         MicroProps micros = parent.processQuantity(fq);
+        if (micros.rounder != null) {
+            micros.rounder.apply(fq);
+        }
         if (micros.modMiddle != null) {
             return micros;
         }

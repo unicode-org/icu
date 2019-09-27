@@ -157,7 +157,7 @@ public class CompactNotation extends Notation {
             }
 
             // We already performed rounding. Do not perform it again.
-            micros.rounder = Precision.constructPassThrough();
+            micros.rounder = null;
 
             return micros;
         }
