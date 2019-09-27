@@ -1695,6 +1695,57 @@ void NumberFormatterApiTest::integerWidth() {
             u"00.008765",
             u"00");
 
+    assertFormatDescending(
+            u"Integer Width Compact",
+            u"compact-short integer-width/000",
+            NumberFormatter::with()
+                .notation(Notation::compactShort())
+                .integerWidth(IntegerWidth::zeroFillTo(3).truncateAt(3)),
+            Locale::getEnglish(),
+            u"088K",
+            u"008.8K",
+            u"876",
+            u"088",
+            u"008.8",
+            u"000.88",
+            u"000.088",
+            u"000.0088",
+            u"000");
+
+    assertFormatDescending(
+            u"Integer Width Scientific",
+            u"scientific integer-width/000",
+            NumberFormatter::with()
+                .notation(Notation::scientific())
+                .integerWidth(IntegerWidth::zeroFillTo(3).truncateAt(3)),
+            Locale::getEnglish(),
+            u"008.765E4",
+            u"008.765E3",
+            u"008.765E2",
+            u"008.765E1",
+            u"008.765E0",
+            u"008.765E-1",
+            u"008.765E-2",
+            u"008.765E-3",
+            u"000E0");
+
+    assertFormatDescending(
+            u"Integer Width Engineering",
+            u"engineering integer-width/000",
+            NumberFormatter::with()
+                .notation(Notation::engineering())
+                .integerWidth(IntegerWidth::zeroFillTo(3).truncateAt(3)),
+            Locale::getEnglish(),
+            u"087.65E3",
+            u"008.765E3",
+            u"876.5E0",
+            u"087.65E0",
+            u"008.765E0",
+            u"876.5E-3",
+            u"087.65E-3",
+            u"008.765E-3",
+            u"000E0");
+
     assertFormatSingle(
             u"Integer Width Remove All A",
             u"integer-width/00",

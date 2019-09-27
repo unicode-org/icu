@@ -111,8 +111,6 @@ void NumberFormatterImpl::preProcess(DecimalQuantity& inValue, MicroProps& micro
         return;
     }
     fMicroPropsGenerator->processQuantity(inValue, microsOut, status);
-    microsOut.rounder.apply(inValue, status);
-    microsOut.integerWidth.apply(inValue, status);
 }
 
 MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErrorCode& status) {
@@ -124,8 +122,6 @@ MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErr
         return fMicros; // must always return a value
     }
     fMicroPropsGenerator->processQuantity(inValue, fMicros, status);
-    fMicros.rounder.apply(inValue, status);
-    fMicros.integerWidth.apply(inValue, status);
     return fMicros;
 }
 
@@ -384,11 +380,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         patternModifier->setSymbols(fMicros.symbols, currencySymbols, unitWidth, nullptr);
     }
     if (safe) {
-        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutableAndChain(chain, status));
-        chain = fImmutablePatternModifier.getAlias();
-    } else {
-        patternModifier->addToChain(chain);
-        chain = patternModifier;
+        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutable(status));
     }
 
     // Outer modifier (CLDR units and currency long names)
@@ -429,7 +421,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             nsName,
             compactType,
             resolvePluralRules(macros.rules, macros.locale, status),
-            safe ? patternModifier : nullptr,
+            patternModifier,
+            safe,
             chain,
             status);
         if (newCompactHandler == nullptr) {
@@ -438,6 +431,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         }
         fCompactHandler.adoptInstead(newCompactHandler);
         chain = fCompactHandler.getAlias();
+    }
+
+    if (safe) {
+        fImmutablePatternModifier->addToChain(chain);
+        chain = fImmutablePatternModifier.getAlias();
+    } else {
+        patternModifier->addToChain(chain);
+        chain = patternModifier;
     }
 
     return chain;

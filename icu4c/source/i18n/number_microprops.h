@@ -35,10 +35,10 @@ struct MicroProps : public MicroPropsGenerator {
     char nsName[9];
 
     // Note: This struct has no direct ownership of the following pointers.
-    const DecimalFormatSymbols* symbols;
-    const Modifier* modOuter;
-    const Modifier* modMiddle;
-    const Modifier* modInner;
+    const DecimalFormatSymbols* symbols = nullptr;
+    const Modifier* modOuter = nullptr;
+    const Modifier* modMiddle = nullptr;
+    const Modifier* modInner = nullptr;
 
     // The following "helper" fields may optionally be used during the MicroPropsGenerator.
     // They live here to retain memory.

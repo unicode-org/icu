@@ -215,19 +215,25 @@ void CompactData::CompactDataSink::put(const char *key, ResourceValue &value, UB
 /// END OF CompactData.java; BEGIN CompactNotation.java ///
 ///////////////////////////////////////////////////////////
 
-CompactHandler::CompactHandler(CompactStyle compactStyle, const Locale &locale, const char *nsName,
-                               CompactType compactType, const PluralRules *rules,
-                               MutablePatternModifier *buildReference, const MicroPropsGenerator *parent,
-                               UErrorCode &status)
-        : rules(rules), parent(parent) {
+CompactHandler::CompactHandler(
+        CompactStyle compactStyle,
+        const Locale &locale,
+        const char *nsName,
+        CompactType compactType,
+        const PluralRules *rules,
+        MutablePatternModifier *buildReference,
+        bool safe,
+        const MicroPropsGenerator *parent,
+        UErrorCode &status)
+        : rules(rules), parent(parent), safe(safe) {
     data.populate(locale, nsName, compactStyle, compactType, status);
-    if (buildReference != nullptr) {
+    if (safe) {
         // Safe code path
         precomputeAllModifiers(*buildReference, status);
-        safe = TRUE;
     } else {
         // Unsafe code path
-        safe = FALSE;
+        // Store the MutablePatternModifier reference.
+        unsafePatternModifier = buildReference;
     }
 }
 
@@ -309,8 +315,8 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
         // C++ Note: Use unsafePatternInfo for proper lifecycle.
         ParsedPatternInfo &patternInfo = const_cast<CompactHandler *>(this)->unsafePatternInfo;
         PatternParser::parseToPatternInfo(UnicodeString(patternString), patternInfo, status);
-        static_cast<MutablePatternModifier*>(const_cast<Modifier*>(micros.modMiddle))
-            ->setPatternInfo(&patternInfo, UNUM_COMPACT_FIELD);
+        unsafePatternModifier->setPatternInfo(&unsafePatternInfo, UNUM_COMPACT_FIELD);
+        micros.modMiddle = unsafePatternModifier;
     }
 
     // We already performed rounding. Do not perform it again.
