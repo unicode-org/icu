@@ -2131,6 +2131,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"SX"}
             }
+            no23{
+                reason{"deprecated"}
+                replacement{"no50"}
+            }
             nzn{
                 reason{"deprecated"}
                 replacement{"nzauk nzbop nzgis nzhkb nzmwt nzntl nztki nzwgn nzwko"}
