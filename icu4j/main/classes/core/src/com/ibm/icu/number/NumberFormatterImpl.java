@@ -17,6 +17,7 @@ import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
 import com.ibm.icu.impl.number.MultiplierFormatHandler;
 import com.ibm.icu.impl.number.MutablePatternModifier;
+import com.ibm.icu.impl.number.MutablePatternModifier.ImmutablePatternModifier;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
@@ -341,10 +342,9 @@ class NumberFormatterImpl {
         } else {
             patternMod.setSymbols(micros.symbols, currency, unitWidth, null);
         }
+        ImmutablePatternModifier immPatternMod = null;
         if (safe) {
-            chain = patternMod.createImmutableAndChain(chain);
-        } else {
-            chain = patternMod.addToChain(chain);
+            immPatternMod = patternMod.createImmutable();
         }
 
         // Outer modifier (CLDR units and currency long names)
@@ -367,8 +367,6 @@ class NumberFormatterImpl {
         }
 
         // Compact notation
-        // NOTE: Compact notation can (but might not) override the middle modifier and rounding.
-        // It therefore needs to go at the end of the chain.
         if (macros.notation instanceof CompactNotation) {
             if (rules == null) {
                 // Lazily create PluralRules
@@ -381,8 +379,16 @@ class NumberFormatterImpl {
                     micros.nsName,
                     compactType,
                     rules,
-                    safe ? patternMod : null,
+                    patternMod,
+                    safe,
                     chain);
+        }
+
+        // Always add the pattern modifier as the last element of the chain.
+        if (safe) {
+            chain = immPatternMod.addToChain(chain);
+        } else {
+            chain = patternMod.addToChain(chain);
         }
 
         return chain;

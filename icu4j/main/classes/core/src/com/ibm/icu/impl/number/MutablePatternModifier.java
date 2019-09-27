@@ -226,7 +226,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     public static class ImmutablePatternModifier implements MicroPropsGenerator {
         final AdoptingModifierStore pm;
         final PluralRules rules;
-        final MicroPropsGenerator parent;
+        /* final */ MicroPropsGenerator parent;
 
         ImmutablePatternModifier(
                 AdoptingModifierStore pm,
@@ -237,9 +237,17 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             this.parent = parent;
         }
 
+        public ImmutablePatternModifier addToChain(MicroPropsGenerator parent) {
+            this.parent = parent;
+            return this;
+        }
+
         @Override
         public MicroProps processQuantity(DecimalQuantity quantity) {
             MicroProps micros = parent.processQuantity(quantity);
+            if (micros.modMiddle != null) {
+                return micros;
+            }
             applyToMicros(micros, quantity);
             return micros;
         }
@@ -274,6 +282,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     @Override
     public MicroProps processQuantity(DecimalQuantity fq) {
         MicroProps micros = parent.processQuantity(fq);
+        if (micros.modMiddle != null) {
+            return micros;
+        }
         if (needsPlurals()) {
             StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, fq);
             setNumberProperties(fq.signum(), pluralForm);
