@@ -2036,7 +2036,7 @@ public class NumberFormatterApiTest {
             { {SignDisplay.AUTO}, { "-∞", "-1", "-0", "0", "1", "∞", "NaN", "-NaN" } },
             { {SignDisplay.ALWAYS}, { "-∞", "-1", "-0", "+0", "+1", "+∞", "+NaN", "-NaN" } },
             { {SignDisplay.NEVER}, { "∞", "1", "0", "0", "1", "∞", "NaN", "NaN" } },
-            { {SignDisplay.EXCEPT_ZERO}, { "-∞", "-1", "-0", "0", "+1", "+∞", "NaN", "-NaN" } },
+            { {SignDisplay.EXCEPT_ZERO}, { "-∞", "-1", "0", "0", "+1", "+∞", "NaN", "NaN" } },
         };
         double negNaN = Math.copySign(Double.NaN, -0.0);
         double inputs[] = new double[] {

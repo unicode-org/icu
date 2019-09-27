@@ -9,6 +9,7 @@ import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.UFieldPosition;
@@ -303,8 +304,18 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     @Override
-    public int signum() {
-        return isNegative() ? -1 : (isZeroish() && !isInfinite()) ? 0 : 1;
+    public Signum signum() {
+        boolean isZero = (isZeroish() && !isInfinite());
+        boolean isNeg = isNegative();
+        if (isZero && isNeg) {
+            return Signum.NEG_ZERO;
+        } else if (isZero) {
+            return Signum.POS_ZERO;
+        } else if (isNeg) {
+            return Signum.NEG;
+        } else {
+            return Signum.POS;
+        }
     }
 
     @Override

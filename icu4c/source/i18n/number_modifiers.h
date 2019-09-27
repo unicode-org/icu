@@ -319,12 +319,12 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
 
   private:
     // NOTE: mods is zero-initialized (to nullptr)
-    const Modifier *mods[3 * StandardPlural::COUNT] = {};
+    const Modifier *mods[4 * StandardPlural::COUNT] = {};
 
     inline static int32_t getModIndex(Signum signum, StandardPlural::Form plural) {
-        U_ASSERT(signum >= -1 && signum <= 1);
+        U_ASSERT(signum >= 0 && signum <= 3);
         U_ASSERT(plural >= 0 && plural < StandardPlural::COUNT);
-        return static_cast<int32_t>(plural) * 3 + (signum + 1);
+        return static_cast<int32_t>(plural) * 4 + signum;
     }
 };
 
