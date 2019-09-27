@@ -7,6 +7,7 @@ import java.math.MathContext;
 import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.UFieldPosition;
 
@@ -130,8 +131,8 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     /** @return Whether the value represented by this {@link DecimalQuantity} is less than zero. */
     public boolean isNegative();
 
-    /** @return -1 if the value is negative; 1 if positive; or 0 if zero. */
-    public int signum();
+    /** @return The appropriate value from the Signum enum. */
+    public Signum signum();
 
     /** @return Whether the value represented by this {@link DecimalQuantity} is infinite. */
     @Override

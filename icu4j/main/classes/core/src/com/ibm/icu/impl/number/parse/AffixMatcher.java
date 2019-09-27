@@ -12,7 +12,7 @@ import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.PatternStringUtils;
-import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.impl.number.PatternStringUtils.PatternSignType;
 
 /**
  * @author sffc
@@ -90,20 +90,29 @@ public class AffixMatcher implements NumberParseMatcher {
         StringBuilder sb = new StringBuilder();
         ArrayList<AffixMatcher> matchers = new ArrayList<>(6);
         boolean includeUnpaired = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
-        SignDisplay signDisplay = (0 != (parseFlags & ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED))
-                ? SignDisplay.ALWAYS
-                : SignDisplay.AUTO;
 
         AffixPatternMatcher posPrefix = null;
         AffixPatternMatcher posSuffix = null;
 
         // Pre-process the affix strings to resolve LDML rules like sign display.
-        for (int signum = 1; signum >= -1; signum--) {
+        for (PatternSignType patternSignType : PatternSignType.VALUES) {
+            boolean isPosPattern = patternSignType == PatternSignType.POS;
+            boolean isPosSignPattern = patternSignType == PatternSignType.POS_SIGN;
+
+            // Skip affixes in some cases
+            if (isPosPattern
+                    && 0 != (parseFlags & ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED)) {
+                continue;
+            }
+            if (isPosSignPattern
+                    && 0 == (parseFlags & ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED)) {
+                continue;
+            }
+
             // Generate Prefix
             PatternStringUtils.patternInfoToStringBuilder(patternInfo,
                     true,
-                    signum,
-                    signDisplay,
+                    patternSignType,
                     StandardPlural.OTHER,
                     false,
                     sb);
@@ -113,15 +122,14 @@ public class AffixMatcher implements NumberParseMatcher {
             // Generate Suffix
             PatternStringUtils.patternInfoToStringBuilder(patternInfo,
                     false,
-                    signum,
-                    signDisplay,
+                    patternSignType,
                     StandardPlural.OTHER,
                     false,
                     sb);
             AffixPatternMatcher suffix = AffixPatternMatcher
                     .fromAffixPattern(sb.toString(), factory, parseFlags);
 
-            if (signum == 1) {
+            if (isPosPattern) {
                 posPrefix = prefix;
                 posSuffix = suffix;
             } else if (Objects.equals(prefix, posPrefix) && Objects.equals(suffix, posSuffix)) {
@@ -130,17 +138,17 @@ public class AffixMatcher implements NumberParseMatcher {
             }
 
             // Flags for setting in the ParsedNumber; the token matchers may add more.
-            int flags = (signum == -1) ? ParsedNumber.FLAG_NEGATIVE : 0;
+            int flags = (patternSignType == PatternSignType.NEG) ? ParsedNumber.FLAG_NEGATIVE : 0;
 
             // Note: it is indeed possible for posPrefix and posSuffix to both be null.
             // We still need to add that matcher for strict mode to work.
             matchers.add(getInstance(prefix, suffix, flags));
             if (includeUnpaired && prefix != null && suffix != null) {
                 // The following if statements are designed to prevent adding two identical matchers.
-                if (signum == 1 || !Objects.equals(prefix, posPrefix)) {
+                if (isPosPattern || !Objects.equals(prefix, posPrefix)) {
                     matchers.add(getInstance(prefix, null, flags));
                 }
-                if (signum == 1 || !Objects.equals(suffix, posSuffix)) {
+                if (isPosPattern || !Objects.equals(suffix, posSuffix)) {
                     matchers.add(getInstance(null, suffix, flags));
                 }
             }
