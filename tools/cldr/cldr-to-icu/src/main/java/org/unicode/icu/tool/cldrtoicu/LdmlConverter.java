@@ -23,12 +23,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,6 +60,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
@@ -113,21 +112,6 @@ public final class LdmlConverter {
     private static final PathMatcher WINDOWS_ZONES_PATHS =
         supplementalMatcher("windowsZones");
 
-    // Special IDs which are not supported via CLDR, but for which synthetic data is injected.
-    // The "TRADITIONAL" variants are here because their calendar differs from the non-variant
-    // locale. However CLDR cannot represent this currently because calendar defaults are in
-    // supplemental data (rather than locale data) and are keyed only on territory.
-    private static final ImmutableSet<String> PHANTOM_LOCALE_IDS =
-        ImmutableSet.of("ja_JP_TRADITIONAL", "th_TH_TRADITIONAL");
-
-    // Special alias mapping which exists in ICU even though "no_NO_NY" is simply not a
-    // structurally valid locale ID. This is injected manually when creating the alias map.
-    // This does mean that nobody can ever parse the _keys_ of the alias map, but so far there
-    // has been no need for that.
-    // TODO: Get "ars" into CLDR and remove this hack.
-    private static final Map<String, String> PHANTOM_ALIASES =
-        ImmutableMap.of("ars", "ar_SA", "no_NO_NY", "nn_NO");
-
     private static PathMatcher supplementalMatcher(String... spec) {
         checkArgument(spec.length > 0, "must supply at least one matcher spec");
         if (spec.length == 1) {
@@ -146,14 +130,6 @@ public final class LdmlConverter {
     // Special path for adding to empty files which only exist to complete the parent chain.
     // TODO: Confirm that this has no meaningful effect and unify "empty" file contents.
     private static RbPath RB_EMPTY_ALIAS = RbPath.of("___");
-
-    /** Provisional entry point until better config support exists. */
-    public static void main(String... args) {
-        convert(IcuConverterConfig.builder()
-            .setOutputDir(Paths.get(args[0]))
-            .setEmitReport(true)
-            .build());
-    }
 
     /**
      * Output types defining specific subsets of the ICU data which can be converted separately.
@@ -232,42 +208,35 @@ public final class LdmlConverter {
     }
 
     /** Converts CLDR data according to the given configuration. */
-    public static void convert(LdmlConverterConfig config) {
-        CldrDataSupplier src = CldrDataSupplier
-            .forCldrFilesIn(config.getCldrDirectory())
-            .withDraftStatusAtLeast(config.getMinimumDraftStatus());
-        new LdmlConverter(config, src).convertAll(config);
+    public static void convert(
+        CldrDataSupplier src, SupplementalData supplementalData, LdmlConverterConfig config) {
+        new LdmlConverter(src, supplementalData, config).convertAll();
     }
 
-    // The configuration controlling conversion behaviour.
-    private final LdmlConverterConfig config;
     // The supplier for all data to be converted.
     private final CldrDataSupplier src;
-    // The set of available locale IDs.
-    // TODO: Make available IDs include specials files (or fail if specials are not available).
-    private final ImmutableSet<String> availableIds;
     // Supplemental data available to mappers if needed.
     private final SupplementalData supplementalData;
+    // The configuration controlling conversion behaviour.
+    private final LdmlConverterConfig config;
+    // The set of expanded target locale IDs.
+    // TODO: Make available IDs include specials files (or fail if specials are not available).
+    private final ImmutableSet<String> availableIds;
     // Transformer for locale data.
     private final PathValueTransformer localeTransformer;
     // Transformer for supplemental data.
     private final PathValueTransformer supplementalTransformer;
-    // Header string to go into every ICU data file.
-    private final ImmutableList<String> icuFileHeader;
+    // Header string to go into every ICU data and transliteration rule file (comment prefixes
+    // are not present and must be added by the code writing the file).
+    private final ImmutableList<String> fileHeader;
 
-    private LdmlConverter(LdmlConverterConfig config, CldrDataSupplier src) {
-        this.config = checkNotNull(config);
+    private LdmlConverter(
+        CldrDataSupplier src, SupplementalData supplementalData, LdmlConverterConfig config) {
         this.src = checkNotNull(src);
-        this.supplementalData = SupplementalData.create(src.getDataForType(SUPPLEMENTAL));
-        // Sort the set of available locale IDs but add "root" at the front. This is the
-        // set of non-alias locale IDs to be processed.
-        Set<String> localeIds = new LinkedHashSet<>();
-        localeIds.add("root");
-        localeIds.addAll(
-            Sets.intersection(src.getAvailableLocaleIds(), config.getTargetLocaleIds(LOCALES)));
-        localeIds.addAll(PHANTOM_LOCALE_IDS);
-        this.availableIds = ImmutableSet.copyOf(localeIds);
-
+        this.supplementalData = checkNotNull(supplementalData);
+        this.config = checkNotNull(config);
+        this.availableIds = ImmutableSet.copyOf(
+            Sets.intersection(supplementalData.getAvailableLocaleIds(), config.getAllLocaleIds()));
         // Load the remaining path value transformers.
         this.supplementalTransformer =
             RegexTransformer.fromConfigLines(readLinesFromResource("/ldml2icu_supplemental.txt"),
@@ -279,10 +248,10 @@ public final class LdmlConverter {
         this.localeTransformer =
             RegexTransformer.fromConfigLines(readLinesFromResource("/ldml2icu_locale.txt"),
                 IcuFunctions.CONTEXT_TRANSFORM_INDEX_FN);
-        this.icuFileHeader = ImmutableList.copyOf(readLinesFromResource("/ldml2icu_header.txt"));
+        this.fileHeader = ImmutableList.copyOf(readLinesFromResource("/ldml2icu_header.txt"));
     }
 
-    private void convertAll(LdmlConverterConfig config) {
+    private void convertAll() {
         ListMultimap<CldrDataType, OutputType> groupByType = LinkedListMultimap.create();
         for (OutputType t : config.getOutputTypes()) {
             groupByType.put(t.getCldrType(), t);
@@ -370,7 +339,7 @@ public final class LdmlConverter {
         SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
         Path baseDir = config.getOutputDir();
 
-        for (String id : config.getTargetLocaleIds(LOCALES)) {
+        for (String id : config.getAllLocaleIds()) {
             // Skip "target" IDs that are aliases (they are handled later).
             if (!availableIds.contains(id)) {
                 continue;
@@ -404,7 +373,7 @@ public final class LdmlConverter {
                 // Adding a parent locale makes the data non-empty and forces it to be written.
                 supplementalData.getExplicitParentLocaleOf(splitData.getName())
                     .ifPresent(p -> splitData.add(RB_PARENT, p));
-                if (!splitData.isEmpty() || isBaseLanguage || dir.includeEmpty()) {
+                if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
                     splitData.setVersion(CldrDataSupplier.getCldrVersionString());
                     write(splitData, outDir);
                     writtenLocaleIds.put(dir, id);
@@ -438,13 +407,17 @@ public final class LdmlConverter {
         //    and must be manually mapped (e.g. legacy locale IDs which don't even parse).
         // 4: It is a "super special" forced alias, which might replace existing aliases in
         //    some output directories.
+
+        // Even forced aliases only apply if they are in the set of locale IDs for the directory.
+        Map<String, String> forcedAliases =
+            Maps.filterKeys(config.getForcedAliases(dir), localeIds::contains);
+
         Map<String, String> aliasMap = new LinkedHashMap<>();
         for (String id : localeIds) {
-            if (PHANTOM_ALIASES.keySet().contains(id)) {
-                checkArgument(!availableIds.contains(id),
-                    "phantom aliases should never be otherwise supported: %s\n"
-                        + "(maybe the phantom alias can now be removed?)", id);
-                aliasMap.put(id, PHANTOM_ALIASES.get(id));
+            if (forcedAliases.keySet().contains(id)) {
+                // Forced aliases will be added later and don't need to be processed here. This
+                // is especially necessary if the ID is not structurally valid (e.g. "no_NO_NY")
+                // since that cannot be processed by the code below.
                 continue;
             }
             String canonicalId = supplementalData.replaceDeprecatedTags(id);
@@ -468,7 +441,7 @@ public final class LdmlConverter {
         // Important that we overwrite entries which might already exist here, since we might have
         // already calculated a "natural" alias for something that we want to force (and we should
         // replace the existing target, since that affects how we determine empty files later).
-        aliasMap.putAll(config.getForcedAliases(dir));
+        aliasMap.putAll(forcedAliases);
         return aliasMap;
     }
 
@@ -499,7 +472,7 @@ public final class LdmlConverter {
 
     private void processTransforms() {
         Path transformDir = createDirectory(config.getOutputDir().resolve("translit"));
-        write(TransformsMapper.process(src, transformDir), transformDir);
+        write(TransformsMapper.process(src, transformDir, fileHeader), transformDir);
     }
 
     private static final RbPath RB_CLDR_VERSION = RbPath.of("cldrVersion");
@@ -542,7 +515,7 @@ public final class LdmlConverter {
 
     private void write(IcuData icuData, Path dir) {
         createDirectory(dir);
-        IcuTextWriter.writeToFile(icuData, dir, icuFileHeader);
+        IcuTextWriter.writeToFile(icuData, dir, fileHeader);
     }
 
     private Path createDirectory(Path dir) {

@@ -3,7 +3,6 @@
 package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
@@ -68,7 +67,7 @@ public final class BreakIteratorMapper {
     @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
     static IcuData process(String localeId, CldrData cldrData, Optional<CldrData> icuSpecialData) {
         BreakIteratorMapper mapper = new BreakIteratorMapper(localeId);
-        icuSpecialData.ifPresent(s -> s.accept(ARBITRARY, mapper::addSpecials));
+        icuSpecialData.ifPresent(s -> s.accept(DTD, mapper::addSpecials));
         cldrData.accept(DTD, mapper::addSuppression);
         return mapper.icuData;
     }

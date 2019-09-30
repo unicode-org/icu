@@ -4,7 +4,6 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
-import static org.junit.Assert.fail;
 import static org.unicode.cldr.api.CldrPath.parseDistinguishingPath;
 import static org.unicode.icu.tool.cldrtoicu.testing.AssertUtils.assertThrows;
 
@@ -76,16 +75,48 @@ public class PathMatcherTest {
     }
 
     @Test
-    public void testAnyOf() {
-        PathMatcher monthMatch = PathMatcher.of("monthWidth[@type=\"narrow\"]/month[@type=*]");
-        PathMatcher dayMatch = PathMatcher.of("dayWidth[@type=\"narrow\"]/day[@type=*]");
-        PathMatcher combined = PathMatcher.anyOf(monthMatch, dayMatch);
+    public void testAnyOf_match() {
+        PathMatcher narrowMonth =
+            PathMatcher.of("ldml/dates/calendars/calendar[@type=*]/months"
+                + "/monthContext[@type=\"format\"]/monthWidth[@type=\"narrow\"]/month[@type=*]");
+        PathMatcher narrowDay =
+            PathMatcher.of("ldml/dates/calendars/calendar[@type=*]/days"
+                + "/dayContext[@type=\"format\"]/dayWidth[@type=\"narrow\"]/day[@type=*]");
+        PathMatcher prefix = PathMatcher.anyOf(narrowMonth, narrowDay);
 
-        assertThat(combined.matchesSuffixOf(monthInfo("generic", "format", "narrow", 1))).isTrue();
-        assertThat(combined.matchesSuffixOf(dayInfo("generic", "format", "narrow", "sun"))).isTrue();
+        assertThat(prefix.matches(monthInfo("gregorian", "format", "narrow", 1))).isTrue();
+        assertThat(prefix.matches(dayInfo("buddhist", "format", "narrow", "sun"))).isTrue();
 
-        assertThat(combined.matchesSuffixOf(monthInfo("generic", "format", "wide", 1))).isFalse();
-        assertThat(combined.matchesSuffixOf(dayInfo("generic", "format", "wide", "mon"))).isFalse();
+        assertThat(prefix.matches(monthInfo("hindu", "format", "wide", 1))).isFalse();
+        assertThat(prefix.matches(dayInfo("hindu", "format", "wide", "mon"))).isFalse();
+    }
+
+    @Test
+    public void testAnyOf_suffix() {
+        PathMatcher monthSuffix = PathMatcher.of("monthWidth[@type=\"narrow\"]/month[@type=*]");
+        PathMatcher daySuffix = PathMatcher.of("dayWidth[@type=\"narrow\"]/day[@type=*]");
+        PathMatcher suffix = PathMatcher.anyOf(monthSuffix, daySuffix);
+
+        assertThat(suffix.matchesSuffixOf(monthInfo("generic", "format", "narrow", 1))).isTrue();
+        assertThat(suffix.matchesSuffixOf(dayInfo("generic", "format", "narrow", "sun"))).isTrue();
+
+        assertThat(suffix.matchesSuffixOf(monthInfo("generic", "format", "wide", 1))).isFalse();
+        assertThat(suffix.matchesSuffixOf(dayInfo("generic", "format", "wide", "mon"))).isFalse();
+    }
+
+    @Test
+    public void testAnyOf_prefix() {
+        PathMatcher monthPrefix =
+            PathMatcher.of("ldml/dates/calendars/calendar[@type=\"gregorian\"]/months");
+        PathMatcher dayPrefix =
+            PathMatcher.of("ldml/dates/calendars/calendar[@type=\"buddhist\"]/days");
+        PathMatcher prefix = PathMatcher.anyOf(monthPrefix, dayPrefix);
+
+        assertThat(prefix.matchesPrefixOf(monthInfo("gregorian", "format", "narrow", 1))).isTrue();
+        assertThat(prefix.matchesPrefixOf(dayInfo("buddhist", "format", "narrow", "sun"))).isTrue();
+
+        assertThat(prefix.matchesPrefixOf(monthInfo("hindu", "format", "wide", 1))).isFalse();
+        assertThat(prefix.matchesPrefixOf(dayInfo("hindu", "format", "wide", "mon"))).isFalse();
     }
 
     @Test
