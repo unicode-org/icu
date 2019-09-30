@@ -297,6 +297,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test20358_GroupingInPattern();
     void Test13731_DefaultCurrency();
     void Test20499_CurrencyVisibleDigitsPlural();
+    void Test13735_GroupingSizeGetter();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);

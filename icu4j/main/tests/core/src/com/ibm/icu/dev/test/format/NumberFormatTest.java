@@ -6669,4 +6669,25 @@ public class NumberFormatTest extends TestFmwk {
             assertEquals("iteration " + i, expected, actual);
         }
     }
+
+    @Test
+    public void test13735_GroupingSizeGetter() {
+        DecimalFormatSymbols EN = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        {
+            DecimalFormat df = new DecimalFormat("0", EN);
+            assertEquals("pat 0: ", 0, df.getGroupingSize());
+            df.setGroupingUsed(false);
+            assertEquals("pat 0 then disabled: ", 0, df.getGroupingSize());
+            df.setGroupingUsed(true);
+            assertEquals("pat 0 then enabled: ", 0, df.getGroupingSize());
+        }
+        {
+            DecimalFormat df = new DecimalFormat("#,##0", EN);
+            assertEquals("pat #,##0: ", 3, df.getGroupingSize());
+            df.setGroupingUsed(false);
+            assertEquals("pat #,##0 then disabled: ", 3, df.getGroupingSize());
+            df.setGroupingUsed(true);
+            assertEquals("pat #,##0 then enabled: ", 3, df.getGroupingSize());
+        }
+    }
 }

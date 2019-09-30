@@ -354,7 +354,7 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
 UnicodeString CalendarTest::fieldName(UCalendarDateFields f) {
     switch (f) {
-#define FIELD_NAME_STR(x) case x: return (#x+5)
+#define FIELD_NAME_STR(x) case x: return (#x)+5
       FIELD_NAME_STR( UCAL_ERA );
       FIELD_NAME_STR( UCAL_YEAR );
       FIELD_NAME_STR( UCAL_MONTH );

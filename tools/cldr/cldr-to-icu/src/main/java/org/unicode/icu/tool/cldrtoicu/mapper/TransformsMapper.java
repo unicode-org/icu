@@ -15,10 +15,12 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 import org.unicode.cldr.api.AttributeKey;
+import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrData.ValueVisitor;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
@@ -28,6 +30,8 @@ import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
 import com.ibm.icu.text.Transliterator;
 
 /**
@@ -76,47 +80,40 @@ public final class TransformsMapper {
      * @param ruleFileOutputDir the directory into which transliteration rule files will be written.
      * @return the IcuData instance to be written to a file.
      */
-    public static IcuData process(CldrDataSupplier src, Path ruleFileOutputDir) {
-        RuleVisitor visitor = new RuleVisitor(p -> {
+    public static IcuData process(
+        CldrDataSupplier src, Path ruleFileOutputDir, List<String> header) {
+
+        Function<Path, PrintWriter> fileWriterFn = p -> {
             Path file = ruleFileOutputDir.resolve(p);
             try {
                 return new PrintWriter(Files.newBufferedWriter(file, CREATE, TRUNCATE_EXISTING));
             } catch (IOException e) {
                 throw new RuntimeException("error opening file: " + file, e);
             }
-        });
-        src.getDataForType(SUPPLEMENTAL).accept(DTD, visitor);
+        };
+        CldrData cldrData = src.getDataForType(SUPPLEMENTAL);
+        return process(cldrData, fileWriterFn, header);
+    }
+
+    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
+    static IcuData process(
+        CldrData cldrData, Function<Path, PrintWriter> fileWriterFn, List<String> header) {
+
+        RuleVisitor visitor = new RuleVisitor(fileWriterFn, header);
+        cldrData.accept(DTD, visitor);
+        addSpecialCaseValues(visitor.icuData);
         return visitor.icuData;
     }
 
     private static class RuleVisitor implements ValueVisitor {
         private final IcuData icuData = new IcuData("root", false);
         private final Function<Path, PrintWriter> outFn;
+        private final ImmutableList<String> header;
 
-        RuleVisitor(Function<Path, PrintWriter> outFn) {
+        RuleVisitor(Function<Path, PrintWriter> outFn, List<String> header) {
             this.outFn = checkNotNull(outFn);
+            this.header = ImmutableList.copyOf(header);
             icuData.setFileComment("File: root.txt");
-
-            // I have _no_ idea what any of this is about, I'm just trying to mimic the original
-            // (complex and undocumented) code in "ConvertTransforms.java".
-            // TODO: Understand and document each of the cases below.
-            icuData.add(RbPath.of("TransliteratorNamePattern"), "{0,choice,0#|1#{1}|2#{1}-{2}}");
-            // Note that this quoting of path segments is almost certainly unnecessary. It matches
-            // the old "ConvertTransforms" behaviour, but '%' is used elsewhere without quoting, so
-            // it seems very likely that it's not needed here.
-            // TODO: Once migration done, remove quotes here & check in RbPath for unwanted quotes.
-            icuData.add(RbPath.of("\"%Translit%Hex\""), "%Translit%Hex");
-            icuData.add(RbPath.of("\"%Translit%UnicodeName\""), "%Translit%UnicodeName");
-            icuData.add(RbPath.of("\"%Translit%UnicodeChar\""), "%Translit%UnicodeChar");
-            // Special case, where Latin is a no-op.
-            icuData.add(RbPath.of("TransliterateLATIN"), RbValue.of("", ""));
-            // Some hard-coded special case mappings.
-            icuData.add(
-                RB_TRANSLITERATOR_IDS.extendBy("Tone-Digit", "alias"),
-                "Pinyin-NumericPinyin");
-            icuData.add(
-                RB_TRANSLITERATOR_IDS.extendBy("Digit-Tone", "alias"),
-                "NumericPinyin-Pinyin");
         }
 
         @Override public void visit(CldrValue value) {
@@ -135,8 +132,8 @@ public final class TransformsMapper {
 
         private void writeDataFile(String filename, CldrValue value) {
             try (PrintWriter out = outFn.apply(Paths.get(filename))) {
-                out.println("\uFEFF# © 2016 and later: Unicode, Inc. and others.");
-                out.println("# License & terms of use: http://www.unicode.org/copyright.html#License");
+                out.print("\uFEFF");
+                header.forEach(s -> out.println("# " + s));
                 out.println("#");
                 out.println("# File: " + filename);
                 out.println("# Generated from CLDR");
@@ -153,6 +150,7 @@ public final class TransformsMapper {
             String status = visibility == Visibility.internal ? "internal" : "file";
 
             Direction dir = TRANSFORM_DIRECTION.valueFrom(value, Direction.class);
+            // TODO: Consider checks for unused data (e.g. forward aliases in a backward rule).
             if (dir != Direction.backward) {
                 String id = getId(source, target, variant);
                 TRANSFORM_ALIAS.listOfValuesFrom(value)
@@ -172,6 +170,33 @@ public final class TransformsMapper {
         }
     }
 
+    private static void addSpecialCaseValues(IcuData icuData) {
+        // I have _no_ idea what any of this is about, I'm just trying to mimic the original
+        // (complex and undocumented) code in "ConvertTransforms.java".
+        // TODO: Understand and document each of the cases below.
+        icuData.add(RbPath.of("TransliteratorNamePattern"), "{0,choice,0#|1#{1}|2#{1}-{2}}");
+        // Note that this quoting of path segments is almost certainly unnecessary. It matches
+        // the old "ConvertTransforms" behaviour, but '%' is used elsewhere without quoting, so
+        // it seems very likely that it's not needed here.
+        // TODO: Once migration done, remove quotes here & check in RbPath for unwanted quotes.
+        icuData.add(RbPath.of("\"%Translit%Hex\""), "%Translit%Hex");
+        icuData.add(RbPath.of("\"%Translit%UnicodeName\""), "%Translit%UnicodeName");
+        icuData.add(RbPath.of("\"%Translit%UnicodeChar\""), "%Translit%UnicodeChar");
+        // Special case, where Latin is a no-op.
+        icuData.add(RbPath.of("TransliterateLATIN"), RbValue.of("", ""));
+        // Some hard-coded special case mappings.
+        icuData.add(
+            RB_TRANSLITERATOR_IDS.extendBy("Tone-Digit", "alias"),
+            "Pinyin-NumericPinyin");
+        icuData.add(
+            RB_TRANSLITERATOR_IDS.extendBy("Digit-Tone", "alias"),
+            "NumericPinyin-Pinyin");
+    }
+
+    // It is important to note that this ID contains a '/' but this is a literal in the path
+    // element and does not add an extra laying in the resource bundle path (the use of '/' to
+    // separate path elements is a purely internal detail for things like LocaleMapper and the
+    // regex-based configuration.
     private static String getId(String from, String to, Optional<String> variant) {
         String baseId = from + "-" + to;
         return variant.map(v -> baseId + "/" + v).orElse(baseId);
