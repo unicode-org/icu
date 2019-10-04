@@ -25,23 +25,6 @@ gv{
     }
     Version{"36"}
     calendar{
-        generic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "G y MMMM d, EEEE",
-                "G y MMMM d",
-                "G y MMM d",
-                "GGGGG y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "a.m.",
@@ -50,21 +33,6 @@ gv{
             AmPmMarkersAbbr{
                 "a.m.",
                 "p.m.",
-            }
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "y MMMM d, EEEE",
-                "y MMMM d",
-                "y MMM d",
-                "y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
             }
             dayNames{
                 format{

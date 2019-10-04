@@ -5,7 +5,7 @@ ceb{
         ar{"Arabic"}
         ar_001{"Modern Standard Arabic"}
         bn{"Bangla"}
-        ceb{"Cebuano"}
+        ceb{"Binisaya"}
         de{"Aleman"}
         de_AT{"Aleman (Austriano)"}
         de_CH{"Aleman (Swiss Hataas nga Aleman)"}

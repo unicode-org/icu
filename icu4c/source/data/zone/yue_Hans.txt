@@ -811,6 +811,9 @@ yue_Hans{
         "Asia:Qatar"{
             ec{"卡达"}
         }
+        "Asia:Qostanay"{
+            ec{"科斯塔奈"}
+        }
         "Asia:Qyzylorda"{
             ec{"克孜勒奥尔达"}
         }

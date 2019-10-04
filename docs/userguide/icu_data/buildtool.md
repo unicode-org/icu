@@ -222,11 +222,16 @@ There are two concrete differences between additive and subtractive mode:
 |                         | Additive    | Subtractive |
 |-------------------------|-------------|-------------|
 | Default Feature Filter  | `"exclude"` | `"include"` |
-| Default Resource Filter | `"-/"`      | `"+/"`      |
+| Default Resource Filter | `"-/"`, `"+/%%ALIAS"`, `"+/%%Parent"` | `"+/"` |
 
 To enable additive mode, add the following setting to your filter file:
 
     strategy: "additive"
+
+**Caution:** If using `"-/"` or similar top-level exclusion rules, be aware of
+the fields `"+/%%Parent"` and `"+/%%ALIAS"`, which are required in locale tree
+resource bundles. Excluding these paths may cause unexpected locale fallback
+behavior.
 
 #### Filter Types
 

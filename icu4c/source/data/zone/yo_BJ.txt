@@ -3,9 +3,6 @@
 yo_BJ{
     Version{"36"}
     zoneStrings{
-        "Africa:Lagos"{
-            ec{"Lagos"}
-        }
         "Etc:UTC"{
             ls{"Àpapɔ̀ Àkókò Àgbáyé"}
         }
@@ -52,7 +49,6 @@ yo_BJ{
             lg{"Àkókò Ìwɔ Oòrùn Europe"}
             ls{"Àkókò àsikò Ìwɔ Oòrùn Europe"}
         }
-        regionFormat{"{0} Ìgbà"}
         regionFormatDaylight{"{0} Àkókò ojúmɔmɔ"}
     }
 }

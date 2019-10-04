@@ -449,6 +449,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      */
     Derived identityFallback(UNumberRangeIdentityFallback identityFallback) &&;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the current (Un)LocalizedNumberRangeFormatter as a LocalPointer
      * wrapping a heap-allocated copy of the current object.
@@ -470,6 +471,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * @draft ICU 64
      */
     LocalPointer<Derived> clone() &&;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Sets the UErrorCode if an error occurred in the fluent chain.
@@ -654,7 +656,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
     void formatImpl(impl::UFormattedNumberRangeData& results, bool equalBeforeRounding,
                     UErrorCode& status) const;
 
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Destruct this LocalizedNumberRangeFormatter, cleaning up any memory it might own.
@@ -721,11 +723,11 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      */
     Appendable &appendTo(Appendable &appendable, UErrorCode& status) const U_OVERRIDE;
 
-#ifndef U_HIDE_DRAFT_API
     // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
      * <em>field</em> in the output string. This allows you to determine the locations of, for example,
@@ -855,7 +857,6 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
 
     /**
      * Internal constructor from data type. Adopts the data pointer.
-     * @internal
      */
     explicit FormattedNumberRange(impl::UFormattedNumberRangeData *results)
         : fData(results), fErrorCode(U_ZERO_ERROR) {}
