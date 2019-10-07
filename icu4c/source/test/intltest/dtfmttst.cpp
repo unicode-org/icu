@@ -128,6 +128,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestDayPeriodParsing);
     TESTCASE_AUTO(TestParseRegression13744);
     TESTCASE_AUTO(TestAdoptCalendarLeak);
+    TESTCASE_AUTO(Test20741_ABFields);
 
     TESTCASE_AUTO_END;
 }
@@ -5568,6 +5569,46 @@ void DateFormatTest::TestAdoptCalendarLeak() {
         status);
     ASSERT_OK(status);
     sdf.adoptCalendar(Calendar::createInstance(status));
+}
+
+/**
+ * Test that 'a' and 'B' fields are not duplicated in the field position iterator.
+ */
+void DateFormatTest::Test20741_ABFields() {
+    IcuTestErrorCode status(*this, "Test20741_ABFields");
+
+    const char16_t timeZone[] = u"PST8PDT";
+
+    UnicodeString skeleton = u"EEEEEBBBBB"; 
+    int32_t count = 0;
+    const Locale* locales = Locale::getAvailableLocales(count);
+    for (int32_t i = 0; i < count; i++) {
+        if (quick && (i % 17) != 0) { continue; }
+
+        const Locale locale = locales[i];
+        LocalPointer<DateTimePatternGenerator> gen(DateTimePatternGenerator::createInstance(locale, status));
+        UnicodeString pattern = gen->getBestPattern(skeleton, status);
+
+        SimpleDateFormat dateFormat(pattern, locale, status);
+        FieldPositionIterator fpositer;
+        UnicodeString result;
+        LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
+        calendar->setTime(UDate(0), status);
+        dateFormat.format(*calendar, result, &fpositer, status);
+
+        FieldPosition curFieldPosition;
+        FieldPosition lastFieldPosition;
+        lastFieldPosition.setBeginIndex(-1);
+        lastFieldPosition.setEndIndex(-1);
+        while(fpositer.next(curFieldPosition)) {
+            if (curFieldPosition.getBeginIndex() == lastFieldPosition.getBeginIndex() && curFieldPosition.getEndIndex() == lastFieldPosition.getEndIndex()) {
+                if (logKnownIssue("20741")) continue;
+                assertEquals("Different fields at same position", 'B', PATTERN_CHARS[lastFieldPosition.getField()]);   
+            }
+
+            lastFieldPosition = curFieldPosition;
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
