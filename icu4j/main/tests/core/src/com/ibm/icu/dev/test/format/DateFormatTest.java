@@ -49,6 +49,7 @@ import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormat.BooleanAttribute;
 import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -5456,6 +5457,36 @@ public class DateFormatTest extends TestFmwk {
             DateFormat fmt = DateFormat.getInstanceForSkeleton( cas[0], locale);
             String pattern = ((SimpleDateFormat) fmt).toPattern();
             assertEquals("Format pattern", cas[1], pattern);
+        }
+    }
+
+    @Test
+    public void test20741_ABFields() {
+        ULocale[] locales = ULocale.getAvailableLocales();
+        for (int i = 0; i < locales.length; i++) {
+            ULocale locale = locales[i];
+            if (isQuick() && (i % 17 != 0)) continue;
+
+            DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
+            String pattern = gen.getBestPattern("EEEEEBBBBB");
+            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, locale);
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST8PDT"));
+            calendar.setTime(new Date(0));
+
+            FieldPosition pos_c = new FieldPosition(DateFormat.Field.DAY_OF_WEEK);
+            dateFormat.format(calendar, new StringBuffer(""), pos_c);
+            assertFalse("'Day of week' field was not found", pos_c.getBeginIndex() == 0 && pos_c.getEndIndex() == 0);
+
+            FieldPosition pos_B = new FieldPosition(DateFormat.Field.FLEXIBLE_DAY_PERIOD);
+            dateFormat.format(calendar, new StringBuffer(""), pos_B);
+            assertFalse("'Flexible day period' field was not found", pos_B.getBeginIndex() == 0 && pos_B.getEndIndex() == 0);
+
+            FieldPosition pos_a = new FieldPosition(DateFormat.Field.AM_PM);
+            dateFormat.format(calendar, new StringBuffer(""), pos_a);
+            if (pos_B.getBeginIndex() == pos_a.getBeginIndex() && pos_B.getEndIndex() == pos_a.getEndIndex()) {
+                if (logKnownIssue("20741", "Format Fields reports same field position as \"a\" and \"B\"")) continue;
+                fail("Duplicated field found");
+            }
         }
     }
 }
