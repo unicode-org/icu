@@ -57,6 +57,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(8, testTicket11669);
         TESTCASE(9, testTicket12065);
         TESTCASE(10, testFormattedDateInterval);
+        TESTCASE(11, testCreateInstanceForAllLocales);
         default: name = ""; break;
     }
 }
@@ -1768,5 +1769,40 @@ void DateIntervalFormatTest::testFormattedDateInterval() {
     }
 }
 
+void DateIntervalFormatTest::testCreateInstanceForAllLocales() {
+    IcuTestErrorCode status(*this, "testCreateInstanceForAllLocales");
+    int32_t locale_count = 0;
+    const Locale* locales = icu::Locale::getAvailableLocales(locale_count);
+    // Iterate through all locales
+    for (int32_t i = 0; i < locale_count; i++) {
+        std::unique_ptr<icu::StringEnumeration> calendars(
+            icu::Calendar::getKeywordValuesForLocale(
+                "calendar", locales[i], FALSE, status));
+        int32_t calendar_count = calendars->count(status);
+        if (status.errIfFailureAndReset()) { break; }
+        // In quick mode, only run 1/5 of locale combination
+        // to make the test run faster.
+        if (quick && (i % 5 != 0)) continue;
+        LocalPointer<DateIntervalFormat> fmt(
+            DateIntervalFormat::createInstance(u"dMMMMy", locales[i], status),
+            status);
+        if (status.errIfFailureAndReset(locales[i].getName())) {
+            continue;
+        }
+        // Iterate through all calendars in this locale
+        for (int32_t j = 0; j < calendar_count; j++) {
+            // In quick mode, only run 1/7 of locale/calendar combination
+            // to make the test run faster.
+            if (quick && ((i * j) % 7 != 0)) continue;
+            const char* calendar = calendars->next(nullptr, status);
+            Locale locale(locales[i]);
+            locale.setKeywordValue("calendar", calendar, status);
+            fmt.adoptInsteadAndCheckErrorCode(
+                DateIntervalFormat::createInstance(u"dMMMMy", locale, status),
+                status);
+            status.errIfFailureAndReset(locales[i].getName());
+        }
+    }
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

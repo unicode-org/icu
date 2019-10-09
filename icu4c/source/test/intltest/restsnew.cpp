@@ -7,6 +7,7 @@
 
 #include "unicode/utypes.h"
 
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "unicode/unistr.h"
@@ -14,6 +15,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/utrace.h"
 #include "unicode/ucurr.h"
+#include "uresimp.h"
 #include "restsnew.h"
 
 #include <stdlib.h>
@@ -40,6 +42,7 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
 
     TESTCASE_AUTO(TestGetByFallback);
     TESTCASE_AUTO(TestFilter);
+    TESTCASE_AUTO(TestIntervalAliasFallbacks);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTrace);
@@ -1389,6 +1392,67 @@ void NewResourceBundleTest::TestFilter() {
         assertEquals("northDakota", northDakota.getType(), URES_STRING);
         assertEquals("northDakota", u"west-virginia", northDakota.getString(status));
         REQUIRE_SUCCESS(status);
+    }
+}
+
+void NewResourceBundleTest::TestIntervalAliasFallbacks() {
+    const char* locales[] = {
+        // Thee will not cause infinity loop
+        "en",
+        "ja",
+
+        // These will cause infinity loop
+        "fr_CA",
+        "en_150",
+        "es_419",
+        "id",
+        "in",
+        "pl",
+        "pt_PT",
+        "sr_ME",
+        "zh_Hant",
+        "zh_Hant_TW",
+        "zh_TW",
+    };
+    const char* calendars[] = {
+        // These won't cause infinity loop
+        "gregorian",
+        "chinese",
+
+        // These will cause infinity loop
+        "islamic",
+        "islamic-civil",
+        "islamic-tbla",
+        "islamic-umalqura",
+        "ethiopic-amete-alem",
+        "islamic-rgsa",
+        "japanese",
+        "roc",
+    };
+
+    for (int lidx = 0; lidx < UPRV_LENGTHOF(locales); lidx++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UResourceBundle *rb = ures_open(NULL, locales[lidx], &status);
+        if (U_FAILURE(status)) {
+            errln("Cannot open bundle for locale %s", locales[lidx]);
+            break;
+        }
+        for (int cidx = 0; cidx < UPRV_LENGTHOF(calendars); cidx++) {
+            CharString key;
+            key.append("calendar/", status);
+            key.append(calendars[cidx], status);
+            key.append("/intervalFormats/fallback", status);
+            if (! logKnownIssue("20400")) {
+                int32_t resStrLen = 0;
+                ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
+            }
+            if (U_FAILURE(status)) {
+                errln("Cannot ures_getStringByKeyWithFallback('%s') on locale %s",
+                      key.data(), locales[lidx]);
+                break;
+            }
+        }
+        ures_close(rb);
     }
 }
 
