@@ -2032,4 +2032,22 @@ public class DateIntervalFormatTest extends TestFmwk {
                 expectedFieldPositions);
         }
     }
+    @Test
+    public void testCreateInstanceForAllLocales() {
+        boolean quick = (getExhaustiveness() <= 5);
+        int count = 0;
+        for (ULocale locale : ULocale.getAvailableLocalesByType(
+                ULocale.AvailableType.WITH_LEGACY_ALIASES)) {
+            // Only test 1/5 of the locale in quick mode.
+            if (quick && (count++ % 5 > 0)) continue;
+            DateIntervalFormat fmt = DateIntervalFormat.getInstance("dMMMMy", locale);
+            for (String calendar : Calendar.getKeywordValuesForLocale(
+                    "calendar", locale, false)) {
+                // Only test 1/7 of case in quick mode.
+                if (quick && (count++ % 7 > 0)) continue;
+                ULocale l = locale.setKeywordValue("calendar", calendar);
+                fmt = DateIntervalFormat.getInstance("dMMMMy", l);
+            }
+        }
+    }
 }
