@@ -270,7 +270,7 @@ $(COREDATA_TS):
 		--mode windows-exec \
 		--src_dir "$(ICUSRCDATA)" \
 		--tool_dir "$(ICUTOOLS)" \
-		--tool_cfg "$(CFG)" \
+		--tool_cfg "$(CFGTOOLS)" \
 		--out_dir "$(ICUBLD_PKG)" \
 		--tmp_dir "$(ICUTMP)" \
 		--filter_file "$(ICU_DATA_FILTER_FILE)" \
