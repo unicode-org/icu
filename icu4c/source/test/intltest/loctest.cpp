@@ -271,6 +271,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestPointerConvertingIterator);
     TESTCASE_AUTO(TestTagConvertingIterator);
     TESTCASE_AUTO(TestCapturingTagConvertingIterator);
+    TESTCASE_AUTO(TestSetUnicodeKeywordValueInLongLocale);
+    TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
     TESTCASE_AUTO_END;
 }
 
@@ -3951,4 +3953,70 @@ void LocaleTest::TestCapturingTagConvertingIterator() {
     assertEquals("2.next()", "en", l2.getName());
 
     assertFalse("3.hasNext()", iter.hasNext());
+}
+
+void LocaleTest::TestSetUnicodeKeywordValueInLongLocale() {
+    IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueInLongLocale");
+    const char* value = "efghijkl";
+    icu::Locale l("de");
+    char keyword[3];
+    CharString expected("de-u", status);
+    keyword[2] = '\0';
+    for (char i = 'a'; i < 's'; i++) {
+        keyword[0] = keyword[1] = i;
+        expected.append("-", status);
+        expected.append(keyword, status);
+        expected.append("-", status);
+        expected.append(value, status);
+        l.setUnicodeKeywordValue(keyword, value, status);
+        if (status.errIfFailureAndReset(
+            "setUnicodeKeywordValue(\"%s\", \"%s\") fail while locale is \"%s\"",
+            keyword, value, l.getName())) {
+            return;
+        }
+        std::string tag = l.toLanguageTag<std::string>(status);
+        if (status.errIfFailureAndReset(
+            "toLanguageTag fail on \"%s\"", l.getName())) {
+            return;
+        }
+        if (tag != expected.data()) {
+            errln("Expected to get \"%s\" bug got \"%s\"", tag.c_str(),
+                  expected.data());
+            return;
+        }
+    }
+}
+
+void LocaleTest::TestSetUnicodeKeywordValueNullInLongLocale() {
+    IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueNullInLongLocale");
+    const char *exts[] = {"cf", "cu", "em", "kk", "kr", "ks", "kv", "lb", "lw",
+      "ms", "nu", "rg", "sd", "ss", "tz"};
+    for (int32_t i = 0; i < UPRV_LENGTHOF(exts); i++) {
+        CharString tag("de-u", status);
+        for (int32_t j = 0; j <= i; j++) {
+            tag.append("-", status).append(exts[j], status);
+        }
+        if (status.errIfFailureAndReset(
+                "Cannot create tag \"%s\"", tag.data())) {
+            continue;
+        }
+        Locale l = Locale::forLanguageTag(tag.data(), status);
+        if (status.errIfFailureAndReset(
+                "Locale::forLanguageTag(\"%s\") failed", tag.data())) {
+            continue;
+        }
+        for (int32_t j = 0; j <= i; j++) {
+            l.setUnicodeKeywordValue(exts[j], nullptr, status);
+            if (status.errIfFailureAndReset(
+                    "Locale(\"%s\").setUnicodeKeywordValue(\"%s\", nullptr) failed",
+                    tag.data(), exts[j])) {
+                 continue;
+            }
+        }
+        if (strcmp("de", l.getName()) != 0) {
+            errln("setUnicodeKeywordValue should remove all extensions from "
+                  "\"%s\" and only have \"de\", but is \"%s\" instead.",
+                  tag.data(), l.getName());
+        }
+    }
 }

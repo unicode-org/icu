@@ -145,6 +145,8 @@ public:
     void TestPointerConvertingIterator();
     void TestTagConvertingIterator();
     void TestCapturingTagConvertingIterator();
+    void TestSetUnicodeKeywordValueInLongLocale();
+    void TestSetUnicodeKeywordValueNullInLongLocale();
 
 private:
     void _checklocs(const char* label,
