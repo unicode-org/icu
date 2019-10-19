@@ -105,6 +105,7 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
     TESTCASE_AUTO(TestBug13631);
     TESTCASE_AUTO(TestBug13632);
     TESTCASE_AUTO(TestBug20359);
+    TESTCASE_AUTO(TestBug20863);
     TESTCASE_AUTO_END;
 }
 
@@ -5912,5 +5913,96 @@ void RegexTest::TestBug20359() {
     assertEquals(WHERE, 3, uregex_start(re.getAlias(), 0, &status));
     assertSuccess(WHERE, status);
 }
+
+
+void RegexTest::TestBug20863() {
+    // Test that patterns with a large number of named capture groups work correctly.
+    //
+    // The ticket was not for a bug per se, but to reduce memory usage by using lazy
+    // construction of the map from capture names to numbers, and decreasing the
+    // default size of the map.
+
+    constexpr int GROUP_COUNT = 2000;
+    std::vector<UnicodeString> groupNames;
+    for (int32_t i=0; i<GROUP_COUNT; ++i) {
+        UnicodeString name;
+        name.append(u"name");
+        name.append(Int64ToUnicodeString(i));
+        groupNames.push_back(name);
+    }
+
+    UnicodeString patternString;
+    for (UnicodeString name: groupNames) {
+        patternString.append(u"(?<");
+        patternString.append(name);
+        patternString.append(u">.)");
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError pe;
+    LocalPointer<RegexPattern> pattern(RegexPattern::compile(patternString, pe, status), status);
+    if (!assertSuccess(WHERE, status)) {
+        return;
+    }
+
+    for (int32_t i=0; i<GROUP_COUNT; ++i) {
+        int32_t group = pattern->groupNumberFromName(groupNames[i], status);
+        if (!assertSuccess(WHERE, status)) {
+            return;
+        }
+        assertEquals(WHERE, i+1, group);
+        // Note: group 0 is the overall match; group 1 is the first separate capture group.
+    }
+
+    // Verify that assignment of patterns with various combinations of named capture work.
+    // Lazy creation of the internal named capture map changed the implementation logic here.
+    {
+        LocalPointer<RegexPattern> pat1(RegexPattern::compile(u"abc", pe, status), status);
+        LocalPointer<RegexPattern> pat2(RegexPattern::compile(u"a(?<name>b)c", pe, status), status);
+        assertSuccess(WHERE, status);
+        assertFalse(WHERE, *pat1 == *pat2);
+        *pat1 = *pat2;
+        assertTrue(WHERE, *pat1 == *pat2);
+        assertEquals(WHERE, 1, pat1->groupNumberFromName(u"name", status));
+        assertEquals(WHERE, 1, pat2->groupNumberFromName(u"name", status));
+        assertSuccess(WHERE, status);
+    }
+
+    {
+        LocalPointer<RegexPattern> pat1(RegexPattern::compile(u"abc", pe, status), status);
+        LocalPointer<RegexPattern> pat2(RegexPattern::compile(u"a(?<name>b)c", pe, status), status);
+        assertSuccess(WHERE, status);
+        assertFalse(WHERE, *pat1 == *pat2);
+        *pat2 = *pat1;
+        assertTrue(WHERE, *pat1 == *pat2);
+        assertEquals(WHERE, 0, pat1->groupNumberFromName(u"name", status));
+        assertEquals(WHERE, U_REGEX_INVALID_CAPTURE_GROUP_NAME, status);
+        status = U_ZERO_ERROR;
+        assertEquals(WHERE, 0, pat2->groupNumberFromName(u"name", status));
+        assertEquals(WHERE, U_REGEX_INVALID_CAPTURE_GROUP_NAME, status);
+        status = U_ZERO_ERROR;
+    }
+
+    {
+        LocalPointer<RegexPattern> pat1(RegexPattern::compile(u"a(?<name1>b)c", pe, status), status);
+        LocalPointer<RegexPattern> pat2(RegexPattern::compile(u"a(?<name2>b)c", pe, status), status);
+        assertSuccess(WHERE, status);
+        assertFalse(WHERE, *pat1 == *pat2);
+        *pat2 = *pat1;
+        assertTrue(WHERE, *pat1 == *pat2);
+        assertEquals(WHERE, 1, pat1->groupNumberFromName(u"name1", status));
+        assertSuccess(WHERE, status);
+        assertEquals(WHERE, 1, pat2->groupNumberFromName(u"name1", status));
+        assertSuccess(WHERE, status);
+        assertEquals(WHERE, 0, pat1->groupNumberFromName(u"name2", status));
+        assertEquals(WHERE, U_REGEX_INVALID_CAPTURE_GROUP_NAME, status);
+        status = U_ZERO_ERROR;
+        assertEquals(WHERE, 0, pat2->groupNumberFromName(u"name2", status));
+        assertEquals(WHERE, U_REGEX_INVALID_CAPTURE_GROUP_NAME, status);
+        status = U_ZERO_ERROR;
+    }
+
+}
+
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
