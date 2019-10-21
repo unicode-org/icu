@@ -79,7 +79,7 @@ TEST(FastDtoaShortestVariousDoubles) {
     CHECK_EQ(299, point);
   }
 
-  uint64_t smallest_normal64 = UINT64_2PART_C(0x00100000, 00000000);
+  uint64_t smallest_normal64 = DOUBLE_CONVERSION_UINT64_2PART_C(0x00100000, 00000000);
   double v = Double(smallest_normal64).value();
   status = FastDtoa(v, FAST_DTOA_SHORTEST, 0, buffer, &length, &point);
   if (status) {
@@ -87,7 +87,7 @@ TEST(FastDtoaShortestVariousDoubles) {
     CHECK_EQ(-307, point);
   }
 
-  uint64_t largest_denormal64 = UINT64_2PART_C(0x000FFFFF, FFFFFFFF);
+  uint64_t largest_denormal64 = DOUBLE_CONVERSION_UINT64_2PART_C(0x000FFFFF, FFFFFFFF);
   v = Double(largest_denormal64).value();
   status = FastDtoa(v, FAST_DTOA_SHORTEST, 0, buffer, &length, &point);
   if (status) {
@@ -244,14 +244,14 @@ TEST(FastDtoaPrecisionVariousDoubles) {
   CHECK_EQ("35844466", buffer.start());
   CHECK_EQ(299, point);
 
-  uint64_t smallest_normal64 = UINT64_2PART_C(0x00100000, 00000000);
+  uint64_t smallest_normal64 = DOUBLE_CONVERSION_UINT64_2PART_C(0x00100000, 00000000);
   double v = Double(smallest_normal64).value();
   status = FastDtoa(v, FAST_DTOA_PRECISION, 17, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ("22250738585072014", buffer.start());
   CHECK_EQ(-307, point);
 
-  uint64_t largest_denormal64 = UINT64_2PART_C(0x000FFFFF, FFFFFFFF);
+  uint64_t largest_denormal64 = DOUBLE_CONVERSION_UINT64_2PART_C(0x000FFFFF, FFFFFFFF);
   v = Double(largest_denormal64).value();
   status = FastDtoa(v, FAST_DTOA_PRECISION, 17, buffer, &length, &point);
   CHECK(status);

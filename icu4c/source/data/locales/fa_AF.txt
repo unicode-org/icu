@@ -74,18 +74,14 @@ fa_AF{
                     }
                     narrow{
                         afternoon1{"بعد از چاشت"}
-                        afternoon2{"ع"}
                         morning1{"ب"}
-                        morning2{"ص"}
                         night1{"ش"}
-                        night2{"ن"}
                     }
                     wide{
                         afternoon1{"ظهر"}
                         afternoon2{"بعدازچاشت"}
                         morning1{"بامداد"}
                         morning2{"صبح"}
-                        night1{"شب"}
                         night2{"نیمه‌شب"}
                     }
                 }

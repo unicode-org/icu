@@ -948,9 +948,10 @@ group: listformatter
     resourcebundle simpleformatter format uclean_i18n formatted_value_iterimpl
 
 group: double_conversion
-    double-conversion.o double-conversion-bignum.o double-conversion-bignum-dtoa.o
-    double-conversion-cached-powers.o double-conversion-diy-fp.o
-    double-conversion-fast-dtoa.o double-conversion-strtod.o
+    double-conversion-bignum.o double-conversion-double-to-string.o
+    double-conversion-bignum-dtoa.o double-conversion-cached-powers.o
+    double-conversion-string-to-double.o double-conversion-fast-dtoa.o
+    double-conversion-strtod.o
   deps
     platform
 

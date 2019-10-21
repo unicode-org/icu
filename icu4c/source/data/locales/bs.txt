@@ -35,99 +35,63 @@ bs{
                 decimalFormat{
                     1000{
                         few{"0 hiljade"}
-                        many{"0 hilj'.'"}
                         one{"0 hiljada"}
                         other{"0 hiljada"}
-                        two{"0 hilj'.'"}
-                        zero{"0 hilj'.'"}
                     }
                     10000{
                         few{"00 hiljade"}
-                        many{"00 hilj'.'"}
                         one{"00 hiljada"}
                         other{"00 hiljada"}
-                        two{"00 hilj'.'"}
-                        zero{"00 hilj'.'"}
                     }
                     100000{
                         few{"000 hiljade"}
-                        many{"000 hilj'.'"}
                         one{"000 hiljada"}
                         other{"000 hiljada"}
-                        two{"000 hilj'.'"}
-                        zero{"000 hilj'.'"}
                     }
                     1000000{
                         few{"0 miliona"}
-                        many{"0 mil'.'"}
                         one{"0 milion"}
                         other{"0 miliona"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 miliona"}
-                        many{"00 mil'.'"}
                         one{"00 milion"}
                         other{"00 miliona"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 miliona"}
-                        many{"000 mil'.'"}
                         one{"000 milion"}
                         other{"000 miliona"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 milijarde"}
-                        many{"0 mlr'.'"}
                         one{"0 milijarda"}
                         other{"0 milijardi"}
-                        two{"0 mlr'.'"}
-                        zero{"0 mlr'.'"}
                     }
                     10000000000{
                         few{"00 milijarde"}
-                        many{"00 mlr'.'"}
                         one{"00 milijarda"}
                         other{"00 milijardi"}
-                        two{"00 mlr'.'"}
-                        zero{"00 mlr'.'"}
                     }
                     100000000000{
                         few{"000 milijarde"}
-                        many{"000 mlr'.'"}
                         one{"000 milijarda"}
                         other{"000 milijardi"}
-                        two{"000 mlr'.'"}
-                        zero{"000 mlr'.'"}
                     }
                     1000000000000{
                         few{"0 biliona"}
-                        many{"0 bil'.'"}
                         one{"0 bilion"}
                         other{"0 biliona"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 biliona"}
-                        many{"00 bil'.'"}
                         one{"00 bilion"}
                         other{"00 biliona"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 biliona"}
-                        many{"000 bil'.'"}
                         one{"000 bilion"}
                         other{"000 biliona"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -197,99 +161,63 @@ bs{
                 decimalFormat{
                     1000{
                         few{"0 hilj'.'"}
-                        many{"0 hilj'.'"}
                         one{"0 hilj'.'"}
                         other{"0 hilj'.'"}
-                        two{"0 hilj'.'"}
-                        zero{"0 hilj'.'"}
                     }
                     10000{
                         few{"00 hilj'.'"}
-                        many{"00 hilj'.'"}
                         one{"00 hilj'.'"}
                         other{"00 hilj'.'"}
-                        two{"00 hilj'.'"}
-                        zero{"00 hilj'.'"}
                     }
                     100000{
                         few{"000 hilj'.'"}
-                        many{"000 hilj'.'"}
                         one{"000 hilj'.'"}
                         other{"000 hilj'.'"}
-                        two{"000 hilj'.'"}
-                        zero{"000 hilj'.'"}
                     }
                     1000000{
                         few{"0 mil'.'"}
-                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
-                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
-                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mlr'.'"}
-                        many{"0 mlr'.'"}
                         one{"0 mlr'.'"}
                         other{"0 mlr'.'"}
-                        two{"0 mlr'.'"}
-                        zero{"0 mlr'.'"}
                     }
                     10000000000{
                         few{"00 mlr'.'"}
-                        many{"00 mlr'.'"}
                         one{"00 mlr'.'"}
                         other{"00 mlr'.'"}
-                        two{"00 mlr'.'"}
-                        zero{"00 mlr'.'"}
                     }
                     100000000000{
                         few{"000 mlr'.'"}
-                        many{"000 mlr'.'"}
                         one{"000 mlr'.'"}
                         other{"000 mlr'.'"}
-                        two{"000 mlr'.'"}
-                        zero{"000 mlr'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
-                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
-                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
-                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -322,23 +250,6 @@ bs{
     }
     Version{"36"}
     calendar{
-        chinese{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "r(U) MMMM d, EEEE",
-                "r(U) MMMM d",
-                "r MMM d",
-                "r-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",

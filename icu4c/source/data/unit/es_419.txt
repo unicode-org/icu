@@ -179,7 +179,6 @@ es_419{
         volume{
             cup{
                 one{"{0} tza."}
-                other{"{0} tza."}
             }
         }
     }

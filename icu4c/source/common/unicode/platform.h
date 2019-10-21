@@ -882,4 +882,4 @@ namespace std {
 #endif
 /* @} */
 
-#endif
+#endif  // _PLATFORM_H

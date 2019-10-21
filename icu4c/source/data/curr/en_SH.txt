@@ -9,7 +9,7 @@ en_SH{
         }
         SHP{
             "£",
-            "St. Helena Pound",
+            "St Helena Pound",
         }
     }
     Version{"36"}

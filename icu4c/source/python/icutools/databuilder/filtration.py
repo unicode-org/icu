@@ -319,9 +319,15 @@ class ResourceFilterInfo(object):
             )
         ]
         if self.strategy == "additive":
-            self.rules_by_file = [["-/"] for _ in range(len(files))]
+            self.rules_by_file = [
+                [r"-/", r"+/%%ALIAS", r"+/%%Parent"]
+                for _ in range(len(files))
+            ]
         else:
-            self.rules_by_file = [["+/"] for _ in range(len(files))]
+            self.rules_by_file = [
+                [r"+/"]
+                for _ in range(len(files))
+            ]
 
     def add_rules(self, file_filter, rules):
         for file, rule_list in zip(self.input_files, self.rules_by_file):

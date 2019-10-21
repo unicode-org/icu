@@ -627,6 +627,14 @@ yue_Hans{
         zxx{"无语言内容"}
         zza{"扎扎文"}
     }
+    Languages%long{
+        zh_Hans{"简体中文 (普通话)"}
+        zh_Hant{"繁体中文 (普通话)"}
+    }
+    Languages%menu{
+        yue{"中文 (粤语)"}
+        zh{"中文 (普通话)"}
+    }
     Languages%short{
         az{"亚塞拜然文"}
     }

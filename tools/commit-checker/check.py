@@ -36,6 +36,11 @@ flag_parser.add_argument(
     required = True
 )
 flag_parser.add_argument(
+    "--repo-root",
+    help = "Path to the repository to check",
+    default = os.path.join(os.path.dirname(__file__), "..", "..")
+)
+flag_parser.add_argument(
     "--jira-hostname",
     help = "Hostname of the Jira instance",
     default = "unicode-org.atlassian.net"
@@ -55,17 +60,22 @@ flag_parser.add_argument(
     help = "JQL query load tickets; this should match tickets expected to correspond to the commits being checked. Example: 'project=ICU and fixVersion=63.1'; set fixVersion to the upcoming version.",
     required = True
 )
+flag_parser.add_argument(
+    "--github-url",
+    help = "Base URL of the GitHub repo",
+    default = "https://github.com/unicode-org/icu"
+)
 
 
 def issue_id_to_url(issue_id, jira_hostname, **kwargs):
     return "https://%s/browse/%s" % (jira_hostname, issue_id)
 
 
-def pretty_print_commit(commit, **kwargs):
+def pretty_print_commit(commit, github_url, **kwargs):
     print("- %s `%s`" % (commit.commit.hexsha[:7], commit.commit.summary))
     print("\t- Authored by %s <%s>" % (commit.commit.author.name, commit.commit.author.email))
     print("\t- Committed at %s" % commit.commit.committed_datetime.isoformat())
-    print("\t- GitHub Link: %s" % "https://github.com/unicode-org/icu/commit/%s" % commit.commit.hexsha)
+    print("\t- GitHub Link: %s" % "%s/commit/%s" % (github_url, commit.commit.hexsha))
 
 
 def pretty_print_issue(issue, **kwargs):
@@ -77,14 +87,13 @@ def pretty_print_issue(issue, **kwargs):
     print("\t- Jira Link: %s" % issue_id_to_url(issue.issue_id, **kwargs))
 
 
-def get_commits(rev_range, **kwargs):
+def get_commits(repo_root, rev_range, **kwargs):
     """
     Yields an ICUCommit for each commit in the user-specified rev-range.
     """
-    repo_path = os.path.join(os.path.dirname(__file__), "..", "..")
-    repo = Repo(repo_path)
+    repo = Repo(repo_root)
     for commit in repo.iter_commits(rev_range):
-        match = re.search(r"^(ICU-\d+) ", commit.message)
+        match = re.search(r"^(\w+-\d+) ", commit.message)
         if match:
             yield ICUCommit(match.group(1), commit)
         else:

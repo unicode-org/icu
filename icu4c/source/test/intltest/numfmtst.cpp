@@ -242,6 +242,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13731_DefaultCurrency);
   TESTCASE_AUTO(Test20499_CurrencyVisibleDigitsPlural);
   TESTCASE_AUTO(Test13735_GroupingSizeGetter);
+  TESTCASE_AUTO(Test13734_StrictFlexibleWhitespace);
   TESTCASE_AUTO_END;
 }
 
@@ -9723,6 +9724,28 @@ void NumberFormatTest::Test13735_GroupingSizeGetter() {
         assertEquals("pat #,##0 then disabled: ", 3, df.getGroupingSize());
         df.setGroupingUsed(true);
         assertEquals("pat #,##0 then enabled: ", 3, df.getGroupingSize());
+    }
+}
+
+void NumberFormatTest::Test13734_StrictFlexibleWhitespace() {
+    IcuTestErrorCode status(*this, "Test13734_StrictFlexibleWhitespace");
+    {
+        DecimalFormat df("+0", {"en", status}, status);
+        df.setLenient(FALSE);
+        Formattable result;
+        ParsePosition ppos;
+        df.parse("+  33", result, ppos);
+        assertEquals("ppos : ", 0, ppos.getIndex());
+        assertEquals("result : ", "0", result.getDecimalNumber(status).data());
+    }
+    {
+        DecimalFormat df("+ 0", {"en", status}, status);
+        df.setLenient(FALSE);
+        Formattable result;
+        ParsePosition ppos;
+        df.parse("+  33", result, ppos);
+        assertEquals("ppos : ", 0, ppos.getIndex());
+        assertEquals("result : ", "0", result.getDecimalNumber(status).data());
     }
 }
 

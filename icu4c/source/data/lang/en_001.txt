@@ -5,6 +5,10 @@ en_001{
         colCaseLevel{"Case-Sensitive Sorting"}
         colNormalization{"Normalised Sorting"}
     }
+    Languages{
+        mus{"Creek"}
+        nds_NL{"West Low German"}
+    }
     Types{
         colNormalization{
             no{"Sort Without Normalisation"}

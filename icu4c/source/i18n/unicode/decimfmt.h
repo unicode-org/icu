@@ -2021,12 +2021,14 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     void setCurrency(const char16_t* theCurrency, UErrorCode& ec) U_OVERRIDE;
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * Sets the currency used to display currency amounts.  See
      * setCurrency(const char16_t*, UErrorCode&).
      * @deprecated ICU 3.0. Use setCurrency(const char16_t*, UErrorCode&).
      */
     virtual void setCurrency(const char16_t* theCurrency);
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
     /**
      * Sets the `Currency Usage` object used to display currency.

@@ -10,11 +10,6 @@ en_AU{
     }
     units{
         concentr{
-            percent{
-                dnam{"per cent"}
-                one{"{0} per cent"}
-                other{"{0} per cent"}
-            }
             permille{
                 dnam{"per mill"}
                 one{"{0} per mill"}
@@ -38,7 +33,6 @@ en_AU{
         }
         mass{
             metric-ton{
-                dnam{"tonnes"}
                 one{"tonne"}
                 other{"{0} tonnes"}
             }
@@ -48,6 +42,13 @@ en_AU{
                 dnam{"degrees"}
                 one{"{0} degree"}
                 other{"{0} degrees"}
+            }
+        }
+        volume{
+            fluid-ounce{
+                dnam{"fluid ounces"}
+                one{"{0} fluid ounce"}
+                other{"{0} fluid ounces"}
             }
         }
     }
@@ -175,9 +176,6 @@ en_AU{
                 one{"{0} mmol/L"}
                 other{"{0} mmol/L"}
             }
-            percent{
-                dnam{"per cent"}
-            }
             permille{
                 dnam{"per mill"}
             }
@@ -266,10 +264,18 @@ en_AU{
             }
         }
         pressure{
+            inch-hg{
+                dnam{"in Hg"}
+            }
             millibar{
                 dnam{"mb"}
                 one{"{0} mb"}
                 other{"{0} mb"}
+            }
+            millimeter-of-mercury{
+                dnam{"mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
             }
         }
         speed{
@@ -304,6 +310,11 @@ en_AU{
                 dnam{"dL"}
                 one{"{0} dL"}
                 other{"{0} dL"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                one{"{0} fl oz"}
+                other{"{0} fl oz"}
             }
             gallon{
                 dnam{"US gal."}

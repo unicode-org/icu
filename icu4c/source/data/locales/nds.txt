@@ -8,23 +8,4 @@ nds{
         "/ \\& #]"
     }
     Version{"36"}
-    calendar{
-        generic{
-            DateTimePatterns{
-                "'Klock' H.mm:ss (zzzz)",
-                "'Klock' H.mm:ss (z)",
-                "'Klock' H.mm:ss",
-                "'Kl'. H.mm",
-                "G y MMMM d, EEEE",
-                "G y MMMM d",
-                "G y MMM d",
-                "GGGGG y-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
-    }
 }

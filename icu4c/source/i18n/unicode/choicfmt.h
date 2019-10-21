@@ -34,13 +34,14 @@
  */
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DEPRECATED_API
 
 #include "unicode/fieldpos.h"
 #include "unicode/format.h"
 #include "unicode/messagepattern.h"
 #include "unicode/numfmt.h"
 #include "unicode/unistr.h"
+
+#ifndef U_HIDE_DEPRECATED_API
 
 U_NAMESPACE_BEGIN
 

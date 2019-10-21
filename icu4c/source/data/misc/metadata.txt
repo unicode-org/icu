@@ -67,6 +67,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"jbo"}
             }
+            asd{
+                reason{"deprecated"}
+                replacement{"snz"}
+            }
             asm{
                 reason{"overlong"}
                 replacement{"as"}
@@ -302,6 +306,10 @@ metadata:table(nofallback){
             diq{
                 reason{"macrolanguage"}
                 replacement{"zza"}
+            }
+            dit{
+                reason{"deprecated"}
+                replacement{"dif"}
             }
             div{
                 reason{"overlong"}
@@ -847,6 +855,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"lt"}
             }
+            llo{
+                reason{"deprecated"}
+                replacement{"ngt"}
+            }
             lmm{
                 reason{"deprecated"}
                 replacement{"rmx"}
@@ -967,6 +979,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"my"}
             }
+            myd{
+                reason{"deprecated"}
+                replacement{"aog"}
+            }
             myt{
                 reason{"deprecated"}
                 replacement{"mry"}
@@ -1010,6 +1026,10 @@ metadata:table(nofallback){
             nno{
                 reason{"overlong"}
                 replacement{"nn"}
+            }
+            nns{
+                reason{"deprecated"}
+                replacement{"nbr"}
             }
             nnx{
                 reason{"deprecated"}
@@ -2110,6 +2130,10 @@ metadata:table(nofallback){
             nlsx{
                 reason{"overlong"}
                 replacement{"SX"}
+            }
+            no23{
+                reason{"deprecated"}
+                replacement{"no50"}
             }
             nzn{
                 reason{"deprecated"}

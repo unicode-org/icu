@@ -441,11 +441,13 @@ enum UCalendarDateFields {
 
     /* Do not conditionalize the following with #ifndef U_HIDE_DEPRECATED_API,
      * it is needed for layout of Calendar, DateFormat, and other objects */
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UCalendarDateFields value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-  UCAL_FIELD_COUNT,
+    UCAL_FIELD_COUNT,
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
  /**
    * Field number indicating the

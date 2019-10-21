@@ -58,6 +58,13 @@
 # CLDR_TMP_DIR:  Parent of temporary CLDR production data.
 #                Defaults to $CLDR_DIR/../cldr-aux (sibling to CLDR_DIR).
 #
+#                *** NOTE ***: In CLDR release-36-beta, the GenerateProductionData
+#                tool no longer generates data into $CLDR_TMP_DIR/production; instead
+#                it generates data into $CLDR_DIR/../cldr-staging/production. However
+#                the rest of the build still assumes that the generated data is in
+#                $CLDR_TMP_DIR/production. So CLDR_TMP_DIR must be defined to be
+#                $CLDR_DIR/../cldr-staging
+#
 # c) ICU-related variables
 # These variables only need to be set if you're directly reusing the
 # commands below.
