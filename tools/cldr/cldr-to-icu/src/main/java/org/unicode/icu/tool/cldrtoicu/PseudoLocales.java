@@ -52,6 +52,7 @@ import com.google.common.collect.Sets;
  * text so that, if the system using the data is configured correctly, the results will look
  * "normal" (i.e. Latin text will appear displayed left-to-right because of the BiDi markers).
  */
+// TODO(CLDR-13381): Move this all into the CLDR API once the dust has settled.
 public final class PseudoLocales {
     private enum PseudoType {
         BIDI("ar_XB", PseudoLocales::bidi, "abcdefghijklmnopqrstuvwxyz"),
@@ -107,13 +108,17 @@ public final class PseudoLocales {
     private static final class PseudoSupplier extends CldrDataSupplier {
         private final CldrDataSupplier src;
         private final Set<String> srcIds;
+        private final CldrData enData;
 
         PseudoSupplier(CldrDataSupplier src) {
             this.src = checkNotNull(src);
             this.srcIds = src.getAvailableLocaleIds();
+            // Use resolved data to ensure we get all the values (e.g. values in "en_001").
+            this.enData = src.getDataForLocale("en", RESOLVED);
+            // Just check that we aren't wrapping an already wrapped supplier.
             PseudoType.getLocaleIds()
                 .forEach(id -> checkArgument(!srcIds.contains(id),
-                    "pseudo locale %s already supported", id));
+                    "pseudo locale %s already supported by given data supplier", id));
         }
 
         @Override public CldrDataSupplier withDraftStatusAtLeast(CldrDraftStatus draftStatus) {
@@ -122,8 +127,6 @@ public final class PseudoLocales {
 
         @Override public CldrData getDataForLocale(String localeId, CldrResolution resolution) {
             if (PseudoType.getLocaleIds().contains(localeId)) {
-                // Use resolved data to ensure we get all the values (e.g. values in "en_001").
-                CldrData enData = src.getDataForLocale("en", RESOLVED);
                 return new PseudoLocaleData(enData, resolution, PseudoType.fromId(localeId));
             } else {
                 return src.getDataForLocale(localeId, resolution);

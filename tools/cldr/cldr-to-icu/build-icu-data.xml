@@ -45,7 +45,7 @@
              "en_GB" or "en_001" etc. -->
         <property name="localeIdFilter" value=""/>
 
-        <!-- Whether to synthetically generate "pseudo locale" data ("ar_XA" and "en_XB"). -->
+        <!-- Whether to synthetically generate "pseudo locale" data ("en_XA" and "ar_XB"). -->
         <property name="includePseudoLocales" value="false"/>
 
         <!-- Whether to emit a debug report containing some possibly useful information after

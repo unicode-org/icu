@@ -61,7 +61,7 @@ public final class ConvertIcuDataTask extends Task {
     private final IcuConverterConfig.Builder config = IcuConverterConfig.builder();
     // Don't try and resolve actual paths until inside the execute method.
     private final Map<String, String> altPathMap = new HashMap<>();
-    // TODO: Maybe move into CLDR API; e.g. withPseduoLocales()
+    // TODO(CLDR-13381): Move into CLDR API; e.g. withPseudoLocales()
     private boolean includePseudoLocales = false;
     private Predicate<String> idFilter = id -> true;
 
