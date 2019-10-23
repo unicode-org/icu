@@ -3154,6 +3154,7 @@ void LocaleTest::TestForLanguageTag() {
     static const char tag_ill[] = "!";
     static const char tag_no_nul[] = { 'e', 'n', '-', 'G', 'B' };
     static const char tag_ext[] = "en-GB-1-abc-efg-a-xyz";
+    static const char tag_var[] = "sl-rozaj-biske-1994";
 
     static const Locale loc_en("en_US");
     static const Locale loc_oed("en_GB_OXENDICT");
@@ -3161,6 +3162,7 @@ void LocaleTest::TestForLanguageTag() {
     static const Locale loc_null("");
     static const Locale loc_gb("en_GB");
     static const Locale loc_ext("en_GB@1=abc-efg;a=xyz");
+    static const Locale loc_var("sl__1994_BISKE_ROZAJ");
 
     Locale result_en = Locale::forLanguageTag(tag_en, status);
     status.errIfFailureAndReset("\"%s\"", tag_en);
@@ -3173,6 +3175,10 @@ void LocaleTest::TestForLanguageTag() {
     Locale result_af = Locale::forLanguageTag(tag_af, status);
     status.errIfFailureAndReset("\"%s\"", tag_af);
     assertEquals(tag_af, loc_af.getName(), result_af.getName());
+
+    Locale result_var = Locale::forLanguageTag(tag_var, status);
+    status.errIfFailureAndReset("\"%s\"", tag_var);
+    assertEquals(tag_var, loc_var.getName(), result_var.getName());
 
     Locale result_ill = Locale::forLanguageTag(tag_ill, status);
     assertEquals(tag_ill, U_ILLEGAL_ARGUMENT_ERROR, status.reset());
@@ -3208,12 +3214,14 @@ void LocaleTest::TestToLanguageTag() {
     static const Locale loc_ext("en@0=abc;a=xyz");
     static const Locale loc_empty("");
     static const Locale loc_ill("!");
+    static const Locale loc_variant("sl__ROZAJ_BISKE_1994");
 
     static const char tag_c[] = "en-US-u-va-posix";
     static const char tag_en[] = "en-US";
     static const char tag_af[] = "af-t-ar-i0-handwrit-u-ca-coptic-x-foo";
     static const char tag_ext[] = "en-0-abc-a-xyz";
     static const char tag_und[] = "und";
+    static const char tag_variant[] = "sl-1994-biske-rozaj";
 
     std::string result;
     StringByteSink<std::string> sink(&result);
@@ -3244,6 +3252,10 @@ void LocaleTest::TestToLanguageTag() {
     std::string result_ill = loc_ill.toLanguageTag<std::string>(status);
     status.errIfFailureAndReset("\"%s\"", loc_ill.getName());
     assertEquals(loc_ill.getName(), tag_und, result_ill.c_str());
+
+    std::string result_variant = loc_variant.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", loc_variant.getName());
+    assertEquals(loc_variant.getName(), tag_variant, result_variant.c_str());
 
     Locale loc_bogus;
     loc_bogus.setToBogus();

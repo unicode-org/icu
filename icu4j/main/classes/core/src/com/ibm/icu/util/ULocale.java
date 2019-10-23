@@ -3246,7 +3246,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         }
 
         List<String>subtags = tag.getVariants();
-        for (String s : subtags) {
+        // ICU-20478: Sort variants per UTS35.
+        ArrayList<String> variants = new ArrayList<String>(subtags);
+        Collections.sort(variants);
+        for (String s : variants) {
             buf.append(LanguageTag.SEP);
             buf.append(LanguageTag.canonicalizeVariant(s));
         }
