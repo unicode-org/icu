@@ -17,38 +17,20 @@ import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
-import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
 import org.unicode.icu.tool.cldrtoicu.testing.FakeResult;
 import org.unicode.icu.tool.cldrtoicu.testing.FakeTransformer;
 
-import com.google.common.collect.ImmutableList;
-
 @RunWith(JUnit4.class)
 public class AbstractPathValueMapperTest {
-    @Test
-    public void testNameAndIcuFallback() {
-        IcuData foo = new FakeMapper().generateIcuData("foo", false);
-        IcuData bar = new FakeMapper().generateIcuData("bar", true);
-
-        assertThat(foo).getPaths().isEmpty();
-        assertThat(foo).hasName("foo");
-        assertThat(foo).hasFallback(false);
-
-        assertThat(bar).getPaths().isEmpty();
-        assertThat(bar).hasName("bar");
-        assertThat(bar).hasFallback(true);
-    }
-
     @Test
     public void testUngroupedConcatenation() {
         FakeMapper mapper = new FakeMapper();
         mapper.addUngroupedResult("foo/bar", "one", "two");
         mapper.addUngroupedResult("foo/baz", "other", "path");
         mapper.addUngroupedResult("foo/bar", "three", "four");
-        IcuData icuData = mapper.generateIcuData("foo", false);
+        IcuData icuData = mapper.addIcuData("foo");
 
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData).hasValuesFor("foo/bar", singletonValues("one", "two", "three", "four"));
@@ -61,7 +43,7 @@ public class AbstractPathValueMapperTest {
         mapper.addGroupedResult("foo/bar", "one", "two");
         mapper.addGroupedResult("foo/baz", "other", "path");
         mapper.addGroupedResult("foo/bar", "three", "four");
-        IcuData icuData = mapper.generateIcuData("foo", false);
+        IcuData icuData = mapper.addIcuData("foo");
 
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData)
@@ -89,25 +71,25 @@ public class AbstractPathValueMapperTest {
             .addResult(explicit1)
             .addResult(explicit2)
             .addResult(explicit3)
-            .generateIcuData("foo", false);
+            .addIcuData("foo");
         assertThat(noFallback).hasValuesFor("foo/bar", singletonValues("one", "two", "three"));
 
         // Missing explicit results trigger fallbacks.
         IcuData firstFallback = new FakeMapper(transformer)
             .addResult(explicit2)
             .addResult(explicit3)
-            .generateIcuData("foo", false);
+            .addIcuData("foo");
         assertThat(firstFallback).hasValuesFor("foo/bar", singletonValues("<ONE>", "two", "three"));
 
         // Fallbacks can appear in any part of the result sequence.
         IcuData lastFallbacks = new FakeMapper(transformer)
             .addResult(explicit1)
-            .generateIcuData("foo", false);
+            .addIcuData("foo");
         assertThat(lastFallbacks)
             .hasValuesFor("foo/bar", singletonValues("one", "<TWO>", "<THREE>"));
 
         // Without a single result to "seed" the fallback group, nothing is emitted.
-        IcuData allFallbacks = new FakeMapper(transformer).generateIcuData("foo", false);
+        IcuData allFallbacks = new FakeMapper(transformer).addIcuData("foo");
         assertThat(allFallbacks).getPaths().isEmpty();
     }
 
@@ -119,7 +101,7 @@ public class AbstractPathValueMapperTest {
         mapper.addUngroupedResult("foo/alias-1", "start", "/alias/target[1]", "end");
         mapper.addUngroupedResult("foo/alias-2", "start", "/alias/target[2]", "end");
         mapper.addUngroupedResult("alias/target", "first", "second", "third");
-        IcuData icuData = mapper.generateIcuData("foo", false);
+        IcuData icuData = mapper.addIcuData("foo");
 
         assertThat(icuData).getPaths().hasSize(5);
         assertThat(icuData)
@@ -142,7 +124,7 @@ public class AbstractPathValueMapperTest {
         mapper.addGroupedResult("foo/bar", "/alias/target[1]");
         mapper.addUngroupedResult("alias/target", "first", "second");
 
-        IcuData icuData = mapper.generateIcuData("foo", false);
+        IcuData icuData = mapper.addIcuData("foo");
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData)
             .hasValuesFor("foo/bar",
@@ -157,7 +139,7 @@ public class AbstractPathValueMapperTest {
         mapper.addUngroupedResult("foo/bar:alias", "/alias/target");
         mapper.addUngroupedResult("foo/bar", "/alias/target");
         mapper.addUngroupedResult("alias/target", "alias-value");
-        IcuData icuData = mapper.generateIcuData("foo", false);
+        IcuData icuData = mapper.addIcuData("foo");
 
         assertThat(icuData).getPaths().hasSize(3);
         assertThat(icuData).hasValuesFor("foo/bar:alias", singletonValues("/alias/target"));
@@ -172,7 +154,7 @@ public class AbstractPathValueMapperTest {
         mapper.addUngroupedResult("first/alias", "hello");
         mapper.addUngroupedResult("foo/bar", "/first/alias", "/last/alias");
         mapper.addUngroupedResult("last/alias", "world");
-        IcuData icuData = mapper.generateIcuData("foo", false);
+        IcuData icuData = mapper.addIcuData("foo");
 
         assertThat(icuData).hasValuesFor("foo/bar", singletonValues("hello", "world"));
     }
@@ -184,7 +166,7 @@ public class AbstractPathValueMapperTest {
         mapper.addUngroupedResult("alias/target", "hello");
         mapper.addUngroupedResult("foo/bar", "/alias/target[0]", "/alias/target[1]");
         mapper.addUngroupedResult("alias/target", "world");
-        IcuData icuData = mapper.generateIcuData("foo", false);
+        IcuData icuData = mapper.addIcuData("foo");
 
         assertThat(icuData).hasValuesFor("foo/bar", singletonValues("hello", "world"));
     }
@@ -195,7 +177,7 @@ public class AbstractPathValueMapperTest {
         mapper.addUngroupedResult("alias/target", "value");
         mapper.addUngroupedResult("foo/bar", "/no-such-alias/target");
         IllegalArgumentException e =
-            assertThrows(IllegalArgumentException.class, () -> mapper.generateIcuData("foo", false));
+            assertThrows(IllegalArgumentException.class, () -> mapper.addIcuData("foo"));
         assertThat(e).hasMessageThat().contains("no such alias value");
         assertThat(e).hasMessageThat().contains("/no-such-alias/target");
     }
@@ -206,7 +188,7 @@ public class AbstractPathValueMapperTest {
         mapper.addUngroupedResult("alias/target", "value");
         mapper.addUngroupedResult("foo/bar", "/alias/target[1]");
         IllegalArgumentException e =
-            assertThrows(IllegalArgumentException.class, () -> mapper.generateIcuData("foo", false));
+            assertThrows(IllegalArgumentException.class, () -> mapper.addIcuData("foo"));
         assertThat(e).hasMessageThat().contains("out of bounds");
         assertThat(e).hasMessageThat().contains("/alias/target[1]");
     }
@@ -218,7 +200,7 @@ public class AbstractPathValueMapperTest {
         mapper.addUngroupedResult("other/alias", "/other/alias");
         mapper.addUngroupedResult("foo/bar", "/alias/target");
         IllegalStateException e =
-            assertThrows(IllegalStateException.class, () -> mapper.generateIcuData("foo", false));
+            assertThrows(IllegalStateException.class, () -> mapper.addIcuData("foo"));
         assertThat(e).hasMessageThat().contains("recursive alias resolution is not supported");
     }
 
@@ -227,7 +209,7 @@ public class AbstractPathValueMapperTest {
         FakeMapper mapper = new FakeMapper();
         mapper.addUngroupedResult("foo/bar:alias", "first", "second");
         IllegalArgumentException e =
-            assertThrows(IllegalArgumentException.class, () -> mapper.generateIcuData("foo", false));
+            assertThrows(IllegalArgumentException.class, () -> mapper.addIcuData("foo"));
         assertThat(e).hasMessageThat().contains("explicit aliases must be singleton values");
         assertThat(e).hasMessageThat().contains("foo/bar:alias");
     }
@@ -248,25 +230,6 @@ public class AbstractPathValueMapperTest {
                 }
             };
 
-        // We could also just use Mockito for this (it's not yet a project dependency however).
-        private final PathValueTransformer transformer =
-            new PathValueTransformer() {
-                @Override public ImmutableList<Result> transform(CldrValue cldrValue) {
-                    throw new UnsupportedOperationException("should not be called by test");
-                }
-
-                @Override
-                public ImmutableList<Result> transform(CldrValue cldrValue, DynamicVars varFn) {
-                    throw new UnsupportedOperationException("should not be called by test");
-                }
-
-                @Override
-                public ImmutableList<Result> getFallbackResultsFor(RbPath key, DynamicVars varFn) {
-                    // TODO: Test fallbacks.
-                    return ImmutableList.of();
-                }
-            };
-
         // This preserves insertion order in a well defined way (good for testing alias order).
         private final List<Result> fakeResults = new ArrayList<>();
 
@@ -276,6 +239,13 @@ public class AbstractPathValueMapperTest {
 
         FakeMapper(FakeTransformer transformer) {
             super(EXPLODING_DATA, transformer);
+        }
+
+        // Helper method to neaten up the tests a bit.
+        IcuData addIcuData(String localeId) {
+            IcuData icuData = new IcuData(localeId, true);
+            addIcuData(icuData);
+            return icuData;
         }
 
         FakeMapper addUngroupedResult(String path, String... values) {

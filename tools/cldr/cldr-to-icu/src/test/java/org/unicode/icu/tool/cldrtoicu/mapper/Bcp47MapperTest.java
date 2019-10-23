@@ -205,12 +205,12 @@ public class Bcp47MapperTest {
 
         // Only the type-map paths/values are split into the timezone data.
         assertThat(tzData).getPaths().hasSize(4);
-        assertThat(tzData).hasValuesFor("/typeMap/tz/\"foo:bar\"", "escaped");
         assertThat(tzData).hasValuesFor("/typeMap/tz/foo_bar", "unescaped");
-
-        // TODO: Check this is correct! Having foo/bar as the value rather than foo:bar seems wrong.
-        assertThat(tzData).hasValuesFor("/typeAlias/tz/\"hello:world\"", "foo/bar");
         assertThat(tzData).hasValuesFor("/typeAlias/tz/hello_world", "foo_bar");
+
+        // TODO: Raise bug - having alias target "foo/bar" not match the key "foo:bar" is a bug!
+        assertThat(tzData).hasValuesFor("/typeMap/tz/\"foo:bar\"", "escaped");
+        assertThat(tzData).hasValuesFor("/typeAlias/tz/\"hello:world\"", "foo/bar");
     }
 
     private static CldrData cldrData(CldrValue... values) {

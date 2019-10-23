@@ -3,9 +3,9 @@
 package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
-import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
 import java.util.Optional;
 
@@ -21,7 +21,6 @@ import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 
@@ -61,20 +60,15 @@ public final class CollationMapper {
     /**
      * Processes data from the given supplier to generate collation data for a set of locale IDs.
      *
-     * @param localeId the locale ID to generate data for.
-     * @param src the CLDR data supplier to process.
+     * @param icuData the ICU data to be filled.
+     * @param cldrData the unresolved CLDR data to process.
      * @param icuSpecialData additional ICU data (in the "icu:" namespace)
      * @return IcuData containing RBNF data for the given locale ID.
      */
     public static IcuData process(
-        String localeId, CldrDataSupplier src, Optional<CldrData> icuSpecialData) {
+        IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData) {
 
-        return process(localeId, src.getDataForLocale(localeId, UNRESOLVED), icuSpecialData);
-    }
-
-    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
-    static IcuData process(String localeId, CldrData cldrData, Optional<CldrData> icuSpecialData) {
-        CollationVisitor visitor = new CollationVisitor(localeId);
+        CollationVisitor visitor = new CollationVisitor(icuData);
         icuSpecialData.ifPresent(s -> s.accept(DTD, visitor));
         cldrData.accept(DTD, visitor);
         return visitor.icuData;
@@ -83,13 +77,13 @@ public final class CollationMapper {
     final static class CollationVisitor implements PrefixVisitor {
         private final IcuData icuData;
 
-        CollationVisitor(String localeId) {
-            this.icuData = new IcuData(localeId, true);
+        CollationVisitor(IcuData icuData) {
+            this.icuData = checkNotNull(icuData);
             // Super special hack case because the XML data is a bit broken for the root collation
             // data (there's an empty <collation> element that's a non-leaf element and thus not
             // visited, but we should add an empty sequence to the output data.
             // TODO: Fix CLDR (https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13131)
-            if (localeId.equals("root")) {
+            if (icuData.getName().equals("root")) {
                 icuData.replace(RB_STANDARD_SEQUENCE, "");
                 // TODO: Collation versioning probably needs to be improved.
                 icuData.replace(RB_STANDARD_VERSION, CldrDataSupplier.getCldrVersionString());

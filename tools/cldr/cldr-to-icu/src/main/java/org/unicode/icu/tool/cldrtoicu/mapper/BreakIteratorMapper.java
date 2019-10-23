@@ -2,15 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu.mapper;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
-import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
 import java.util.Optional;
 
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
-import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
@@ -18,7 +17,6 @@ import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.escape.UnicodeEscaper;
 
 /**
@@ -52,21 +50,15 @@ public final class BreakIteratorMapper {
      * Processes data from the given supplier to generate break-iterator data for a set of locale
      * IDs.
      *
-     * @param localeId the locale ID to generate data for.
-     * @param src the CLDR data supplier to process.
+     * @param icuData the ICU data to be filled.
+     * @param cldrData the unresolved CLDR data to process.
      * @param icuSpecialData additional ICU data (in the "icu:" namespace)
      * @return IcuData containing break-iterator data for the given locale ID.
      */
     public static IcuData process(
-        String localeId, CldrDataSupplier src, Optional<CldrData> icuSpecialData) {
+        IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData) {
 
-        CldrData cldrData = src.getDataForLocale(localeId, UNRESOLVED);
-        return process(localeId, cldrData, icuSpecialData);
-    }
-
-    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
-    static IcuData process(String localeId, CldrData cldrData, Optional<CldrData> icuSpecialData) {
-        BreakIteratorMapper mapper = new BreakIteratorMapper(localeId);
+        BreakIteratorMapper mapper = new BreakIteratorMapper(icuData);
         icuSpecialData.ifPresent(s -> s.accept(DTD, mapper::addSpecials));
         cldrData.accept(DTD, mapper::addSuppression);
         return mapper.icuData;
@@ -75,8 +67,8 @@ public final class BreakIteratorMapper {
     // The per-locale ICU data being collected by this visitor.
     private final IcuData icuData;
 
-    private BreakIteratorMapper(String localeId) {
-        this.icuData = new IcuData(localeId, true);
+    private BreakIteratorMapper(IcuData icuData) {
+        this.icuData = checkNotNull(icuData);
     }
 
     private void addSuppression(CldrValue v) {

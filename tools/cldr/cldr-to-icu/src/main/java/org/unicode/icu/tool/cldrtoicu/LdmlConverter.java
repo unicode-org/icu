@@ -4,7 +4,9 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.toList;
+import static com.google.common.collect.ImmutableList.toImmutableList;
+import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
+import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 import static org.unicode.cldr.api.CldrDataType.BCP47;
 import static org.unicode.cldr.api.CldrDataType.LDML;
 import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
@@ -32,8 +34,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,6 +56,7 @@ import org.unicode.icu.tool.cldrtoicu.regex.RegexTransformer;
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.LinkedListMultimap;
@@ -137,75 +138,47 @@ public final class LdmlConverter {
      * hide what are essentially implementation specific data splits.
      */
     public enum OutputType {
-        LOCALES(LDML, LdmlConverter::processLocales),
-        BRKITR(LDML, LdmlConverter::processBrkitr),
-        COLL(LDML, LdmlConverter::processCollation),
-        RBNF(LDML, LdmlConverter::processRbnf),
+        LOCALES(LDML),
+        BRKITR(LDML),
+        COLL(LDML),
+        RBNF(LDML),
+        DAY_PERIODS(SUPPLEMENTAL),
+        GENDER_LIST(SUPPLEMENTAL),
+        LIKELY_SUBTAGS(SUPPLEMENTAL),
+        SUPPLEMENTAL_DATA(SUPPLEMENTAL),
+        CURRENCY_DATA(SUPPLEMENTAL),
+        METADATA(SUPPLEMENTAL),
+        META_ZONES(SUPPLEMENTAL),
+        NUMBERING_SYSTEMS(SUPPLEMENTAL),
+        PLURALS(SUPPLEMENTAL),
+        PLURAL_RANGES(SUPPLEMENTAL),
+        WINDOWS_ZONES(SUPPLEMENTAL),
+        TRANSFORMS(SUPPLEMENTAL),
+        KEY_TYPE_DATA(BCP47);
 
-        DAY_PERIODS(
-            SUPPLEMENTAL,
-            LdmlConverter::processDayPeriods),
-        GENDER_LIST(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("genderList", GENDER_LIST_PATHS, "misc", false)),
-        LIKELY_SUBTAGS(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("likelySubtags", LIKELY_SUBTAGS_PATHS, "misc", false)),
-        SUPPLEMENTAL_DATA(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("supplementalData", SUPPLEMENTAL_DATA_PATHS, "misc", true)),
-        CURRENCY_DATA(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", true)),
-        METADATA(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("metadata", METADATA_PATHS, "misc", false)),
-        META_ZONES(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("metaZones", METAZONE_PATHS, "misc", false)),
-        NUMBERING_SYSTEMS(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("numberingSystems", NUMBERING_SYSTEMS_PATHS, "misc", false)),
-        PLURALS(
-            SUPPLEMENTAL,
-            LdmlConverter::processPlurals),
-        PLURAL_RANGES(
-            SUPPLEMENTAL,
-            LdmlConverter::processPluralRanges),
-        WINDOWS_ZONES(
-            SUPPLEMENTAL,
-            c -> c.processSupplemental("windowsZones", WINDOWS_ZONES_PATHS, "misc", false)),
-        TRANSFORMS(
-            SUPPLEMENTAL,
-            LdmlConverter::processTransforms),
-        KEY_TYPE_DATA(
-            BCP47,
-            LdmlConverter::processKeyTypeData),
-
-        // Batching by type.
-        DTD_LDML(LDML, c -> c.processAll(LDML)),
-        DTD_SUPPLEMENTAL(SUPPLEMENTAL, c -> c.processAll(SUPPLEMENTAL)),
-        DTD_BCP47(BCP47, c -> c.processAll(BCP47));
-
-        public static final ImmutableSet<OutputType> ALL =
-            ImmutableSet.of(DTD_BCP47, DTD_SUPPLEMENTAL, DTD_LDML);
+        public static final ImmutableSet<OutputType> ALL = ImmutableSet.copyOf(OutputType.values());
 
         private final CldrDataType type;
-        private final Consumer<LdmlConverter> converterFn;
 
-        OutputType(CldrDataType type, Consumer<LdmlConverter> converterFn) {
+        OutputType(CldrDataType type) {
             this.type = checkNotNull(type);
-            this.converterFn = checkNotNull(converterFn);
-        }
-
-        void convert(LdmlConverter converter) {
-            converterFn.accept(converter);
         }
 
         CldrDataType getCldrType() {
             return type;
         }
     }
+
+    // Map to convert the rather arbitrarily defined "output types" to the directories into which
+    // the data is written. This is only for "LDML" types since other mappers don't need to split
+    // data into multiple directories.
+    private static final ImmutableListMultimap<OutputType, IcuLocaleDir> TYPE_TO_DIR =
+        ImmutableListMultimap.<OutputType, IcuLocaleDir>builder()
+            .putAll(OutputType.LOCALES, CURR, LANG, LOCALES, REGION, UNIT, ZONE)
+            .putAll(OutputType.BRKITR, BRKITR)
+            .putAll(OutputType.COLL, COLL)
+            .putAll(OutputType.RBNF, RBNF)
+            .build();
 
     /** Converts CLDR data according to the given configuration. */
     public static void convert(
@@ -252,15 +225,8 @@ public final class LdmlConverter {
     }
 
     private void convertAll() {
-        ListMultimap<CldrDataType, OutputType> groupByType = LinkedListMultimap.create();
-        for (OutputType t : config.getOutputTypes()) {
-            groupByType.put(t.getCldrType(), t);
-        }
-        for (CldrDataType cldrType : groupByType.keySet()) {
-            for (OutputType t : groupByType.get(cldrType)) {
-                t.convert(this);
-            }
-        }
+        processLdml();
+        processSupplemental();
         if (config.emitReport()) {
             System.out.println("Supplemental Data Transformer=" + supplementalTransformer);
             System.out.println("Locale Data Transformer=" + localeTransformer);
@@ -272,24 +238,6 @@ public final class LdmlConverter {
             return CharStreams.readLines(new InputStreamReader(in));
         } catch (IOException e) {
             throw new RuntimeException("cannot read resource: " + name, e);
-        }
-    }
-
-    private PathValueTransformer getLocaleTransformer() {
-        return localeTransformer;
-    }
-
-    private PathValueTransformer getSupplementalTransformer() {
-        return supplementalTransformer;
-    }
-
-    private void processAll(CldrDataType cldrType) {
-        List<OutputType> targets = Arrays.stream(OutputType.values())
-            .filter(t -> t.getCldrType().equals(cldrType))
-            .filter(t -> !t.name().startsWith("DTD_"))
-            .collect(toList());
-        for (OutputType t : targets) {
-            t.convert(this);
         }
     }
 
@@ -310,31 +258,12 @@ public final class LdmlConverter {
         }
     }
 
-    private void processLocales() {
-        // TODO: Pre-load specials files to avoid repeatedly re-loading them.
-        processAndSplitLocaleFiles(
-            id -> LocaleMapper.process(
-                id, src, loadSpecialsData(id), getLocaleTransformer(), supplementalData),
-            CURR, LANG, LOCALES, REGION, UNIT, ZONE);
-    }
-
-    private void processBrkitr() {
-        processAndSplitLocaleFiles(
-            id -> BreakIteratorMapper.process(id, src, loadSpecialsData(id)), BRKITR);
-    }
-
-    private void processCollation() {
-        processAndSplitLocaleFiles(
-            id -> CollationMapper.process(id, src, loadSpecialsData(id)), COLL);
-    }
-
-    private void processRbnf() {
-        processAndSplitLocaleFiles(
-            id -> RbnfMapper.process(id, src, loadSpecialsData(id)), RBNF);
-    }
-
-    private void processAndSplitLocaleFiles(
-        Function<String, IcuData> icuFn, IcuLocaleDir... splitDirs) {
+    private void processLdml() {
+        ImmutableList<IcuLocaleDir> splitDirs =
+            config.getOutputTypes().stream()
+                .filter(t -> t.getCldrType() == LDML)
+                .flatMap(t -> TYPE_TO_DIR.get(t).stream())
+                .collect(toImmutableList());
 
         SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
         Path baseDir = config.getOutputDir();
@@ -344,7 +273,20 @@ public final class LdmlConverter {
             if (!availableIds.contains(id)) {
                 continue;
             }
-            IcuData icuData = icuFn.apply(id);
+
+            IcuData icuData = new IcuData(id, true);
+
+            Optional<CldrData> specials = loadSpecialsData(id);
+            CldrData unresolved = src.getDataForLocale(id, UNRESOLVED);
+
+            BreakIteratorMapper.process(icuData, unresolved, specials);
+            CollationMapper.process(icuData, unresolved, specials);
+            RbnfMapper.process(icuData, unresolved, specials);
+
+            CldrData resolved = src.getDataForLocale(id, RESOLVED);
+            Optional<String> defaultCalendar = supplementalData.getDefaultCalendar(id);
+            LocaleMapper.process(
+                icuData, unresolved, resolved, specials, localeTransformer, defaultCalendar);
 
             ListMultimap<IcuLocaleDir, RbPath> splitPaths = LinkedListMultimap.create();
             for (RbPath p : icuData.getPaths()) {
@@ -399,6 +341,15 @@ public final class LdmlConverter {
         }
     }
 
+    private static final CharMatcher PATH_MODIFIER = CharMatcher.anyOf(":%");
+
+    // Resource bundle paths elements can have variants (e.g. "Currencies%narrow) or type
+    // annotations (e.g. "languages:intvector"). We strip these when considering the element name.
+    private static String getBaseSegmentName(String segment) {
+        int idx = PATH_MODIFIER.indexIn(segment);
+        return idx == -1 ? segment : segment.substring(0, idx);
+    }
+
     private Map<String, String> getAliasMap(Set<String> localeIds, IcuLocaleDir dir) {
         // There are four reasons for treating a locale ID as an alias.
         // 1: It contains deprecated subtags (e.g. "sr_YU", which should be "sr_Cyrl_RS").
@@ -445,34 +396,69 @@ public final class LdmlConverter {
         return aliasMap;
     }
 
-    private static final CharMatcher PATH_MODIFIER = CharMatcher.anyOf(":%");
+    private void processSupplemental() {
+        for (OutputType type : config.getOutputTypes()) {
+            if (type.getCldrType() == LDML) {
+                continue;
+            }
+            switch (type) {
+            case DAY_PERIODS:
+                write(DayPeriodsMapper.process(src), "misc");
+                break;
 
-    // Resource bundle paths elements can have variants (e.g. "Currencies%narrow) or type
-    // annotations (e.g. "languages:intvector"). We strip these when considering the element name.
-    private static String getBaseSegmentName(String segment) {
-        int idx = PATH_MODIFIER.indexIn(segment);
-        return idx == -1 ? segment : segment.substring(0, idx);
-    }
+            case GENDER_LIST:
+                processSupplemental("genderList", GENDER_LIST_PATHS, "misc", false);
+                break;
 
-    private void processDayPeriods() {
-        write(DayPeriodsMapper.process(src), "misc");
-    }
+            case LIKELY_SUBTAGS:
+                processSupplemental("likelySubtags", LIKELY_SUBTAGS_PATHS, "misc", false);
+                break;
 
-    private void processPlurals() {
-        write(PluralsMapper.process(src), "misc");
-    }
+            case SUPPLEMENTAL_DATA:
+                processSupplemental("supplementalData", SUPPLEMENTAL_DATA_PATHS, "misc", true);
+                break;
 
-    private void processPluralRanges() {
-        write(PluralRangesMapper.process(src), "misc");
-    }
+            case CURRENCY_DATA:
+                processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", true);
+                break;
 
-    private void processKeyTypeData() {
-        Bcp47Mapper.process(src).forEach(d -> write(d, "misc"));
-    }
+            case METADATA:
+                processSupplemental("metadata", METADATA_PATHS, "misc", false);
+                break;
 
-    private void processTransforms() {
-        Path transformDir = createDirectory(config.getOutputDir().resolve("translit"));
-        write(TransformsMapper.process(src, transformDir, fileHeader), transformDir);
+            case META_ZONES:
+                processSupplemental("metaZones", METAZONE_PATHS, "misc", false);
+                break;
+
+            case NUMBERING_SYSTEMS:
+                processSupplemental("numberingSystems", NUMBERING_SYSTEMS_PATHS, "misc", false);
+                break;
+
+            case PLURALS:
+                write(PluralsMapper.process(src), "misc");
+                break;
+
+            case PLURAL_RANGES:
+                write(PluralRangesMapper.process(src), "misc");
+                break;
+
+            case WINDOWS_ZONES:
+                processSupplemental("windowsZones", WINDOWS_ZONES_PATHS, "misc", false);
+                break;
+
+            case TRANSFORMS:
+                Path transformDir = createDirectory(config.getOutputDir().resolve("translit"));
+                write(TransformsMapper.process(src, transformDir, fileHeader), transformDir);
+                break;
+
+            case KEY_TYPE_DATA:
+                Bcp47Mapper.process(src).forEach(d -> write(d, "misc"));
+                break;
+
+            default:
+                throw new AssertionError("Unsupported supplemental type: " + type);
+            }
+        }
     }
 
     private static final RbPath RB_CLDR_VERSION = RbPath.of("cldrVersion");
@@ -480,7 +466,7 @@ public final class LdmlConverter {
     private void processSupplemental(
         String label, PathMatcher paths, String dir, boolean addCldrVersion) {
         IcuData icuData =
-            SupplementalMapper.process(src, getSupplementalTransformer(), label, paths);
+            SupplementalMapper.process(src, supplementalTransformer, label, paths);
         // A hack for "supplementalData.txt" since the "cldrVersion" value doesn't come from the
         // supplemental data XML files.
         if (addCldrVersion) {
