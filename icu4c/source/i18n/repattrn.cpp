@@ -850,7 +850,7 @@ void RegexPattern::dumpPattern() const {
     }
 
     printf("Named Capture Groups:\n");
-    if (uhash_count(fNamedCaptureMap) == 0) {
+    if (!fNamedCaptureMap || uhash_count(fNamedCaptureMap) == 0) {
         printf("   None\n");
     } else {
         int32_t pos = UHASH_FIRST;
