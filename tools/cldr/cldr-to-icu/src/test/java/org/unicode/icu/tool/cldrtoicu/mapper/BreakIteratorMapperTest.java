@@ -50,7 +50,8 @@ public class BreakIteratorMapperTest {
             suppression(SENTENCE_BREAK, "Alt.", ++idx),
             suppression(SENTENCE_BREAK, "Approx.", ++idx));
 
-        IcuData icuData = BreakIteratorMapper.process("en", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        BreakIteratorMapper.process(icuData, cldrData, Optional.empty());
 
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/exceptions/SentenceBreak:array",
@@ -72,7 +73,8 @@ public class BreakIteratorMapperTest {
             suppression(LINE_BREAK, "Bar", ++idx),
             suppression(LINE_BREAK, "Baz", ++idx));
 
-        IcuData icuData = BreakIteratorMapper.process("en", cldrData, Optional.empty());
+        IcuData icuData = new IcuData("xx", true);
+        BreakIteratorMapper.process(icuData, cldrData, Optional.empty());
 
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData).hasValuesFor("/exceptions/SentenceBreak:array",
@@ -91,7 +93,8 @@ public class BreakIteratorMapperTest {
             dictionary("foo", "<foo deps>"),
             dictionary("bar", "<bar deps>"));
 
-        IcuData icuData = BreakIteratorMapper.process("en", cldrData(), Optional.of(specials));
+        IcuData icuData = new IcuData("xx", true);
+        BreakIteratorMapper.process(icuData, cldrData(), Optional.of(specials));
 
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData).hasValuesFor("/dictionaries/foo:process(dependency)", "<foo deps>");
@@ -104,7 +107,8 @@ public class BreakIteratorMapperTest {
             boundaries(GRAPHEME, "<grapheme deps>", null),
             boundaries(SENTENCE, "<sentence deps>", "altName"));
 
-        IcuData icuData = BreakIteratorMapper.process("en", cldrData(), Optional.of(specials));
+        IcuData icuData = new IcuData("xx", true);
+        BreakIteratorMapper.process(icuData, cldrData(), Optional.of(specials));
 
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData)

@@ -4,6 +4,8 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Optional.empty;
+import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
+import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 import static org.unicode.cldr.api.CldrValue.parseValue;
 import static org.unicode.icu.tool.cldrtoicu.testing.AssertUtils.assertThrows;
 import static org.unicode.icu.tool.cldrtoicu.testing.IcuDataSubjectFactory.assertThat;
@@ -14,8 +16,6 @@ import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.unicode.cldr.api.CldrData;
-import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
@@ -38,9 +38,7 @@ public class LocaleMapperTest {
             ldml("units/durationUnit[@type=\"foo\"]/durationUnitPattern", "Bar"),
             simpleResult("/durationUnits/foo", "Bar"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
-
+        IcuData icuData = process("xx");
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/durationUnits/foo", "Bar");
     }
@@ -55,9 +53,7 @@ public class LocaleMapperTest {
         src.addLocaleData(
             "zz", ldml("units/durationUnit[@type=\"foo\"]/durationUnitPattern", "ZZ"));
 
-        IcuData icuData =
-            LocaleMapper.process("yy", src, empty(), transformer, empty());
-
+        IcuData icuData = process("yy");
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/durationUnits/foo", "YY");
     }
@@ -73,8 +69,7 @@ public class LocaleMapperTest {
             ldml("localeDisplayNames/keys/key[@type=\"sometype\"]", "Value"),
             simpleResult("/Keys/sometype", "Value"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
+        IcuData icuData = process("xx");
 
         // The 2nd mapping is not used because it does not appear in the unresolved CldrData.
         assertThat(icuData).getPaths().hasSize(1);
@@ -95,8 +90,7 @@ public class LocaleMapperTest {
             ldml("numbers/currencies/currency[@type=\"USD\"]/displayName", "US Dollar"),
             simpleResult("/Currencies/USD", 2, "US Dollar"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
+        IcuData icuData = process("xx");
 
         // Now the inherited mapping is used because the path appeared for the unresolved CldrData.
         assertThat(icuData).getPaths().hasSize(1);
@@ -121,8 +115,7 @@ public class LocaleMapperTest {
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"one\"]", "Bar"),
             simpleResult("/calendar/foo/availableFormats/bar/one", "Bar"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
+        IcuData icuData = process("xx");
 
         // Now the inherited mapping is used because the path appeared for the unresolved CldrData.
         assertThat(icuData).getPaths().hasSize(1);
@@ -141,8 +134,7 @@ public class LocaleMapperTest {
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"one\"]", "Bar"),
             simpleResult("/calendar/foo/availableFormats/bar/one", "Bar"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
+        IcuData icuData = process("xx");
 
         // Now the inherited mapping is used because the path appeared for the unresolved CldrData.
         assertThat(icuData).getPaths().hasSize(1);
@@ -177,8 +169,7 @@ public class LocaleMapperTest {
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"many\"]", "Child-2"),
             simpleResult("/calendar/foo/availableFormats/bar/<HIDDEN>", 2, "Child-2"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
+        IcuData icuData = process("xx");
 
         assertThat(icuData).getPaths().hasSize(2);
         assertThat(icuData).hasValuesFor("/calendar/foo/availableFormats/bar", "Parent");
@@ -246,8 +237,7 @@ public class LocaleMapperTest {
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"many\"]", "Child-2"),
             simpleResult("/calendar/foo/availableFormats/bar/<HIDDEN>", 2, "Child-2"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
+        IcuData icuData = process("xx");
 
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/calendar/foo/availableFormats/bar", "Parent");
@@ -255,9 +245,7 @@ public class LocaleMapperTest {
 
     @Test
     public void testDefaultCalendar() {
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, Optional.of("pastafarian"));
-
+        IcuData icuData = process("xx", Optional.of("pastafarian"));
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/calendar/default", "pastafarian");
     }
@@ -302,8 +290,7 @@ public class LocaleMapperTest {
             format("dateTime", "short", "twelve"),
             simpleResult("/calendar/foo/DateTimePatterns", 12, "twelve"));
 
-        IcuData icuData =
-            LocaleMapper.process("xx", src, empty(), transformer, empty());
+        IcuData icuData = process("xx");
 
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/calendar/foo/DateTimePatterns",
@@ -351,10 +338,7 @@ public class LocaleMapperTest {
             format("dateTime", "short", "twelve"),
             simpleResult("/calendar/foo/DateTimePatterns", 12, "twelve"));
 
-        IllegalStateException e = assertThrows(
-            IllegalStateException.class,
-            () -> LocaleMapper.process("xx", src, empty(), transformer, empty()));
-
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> process("xx"));
         assertThat(e).hasMessageThat().contains("unexpected");
         assertThat(e).hasMessageThat().contains("/calendar/foo/DateTimePatterns");
     }
@@ -366,6 +350,24 @@ public class LocaleMapperTest {
                 + "/%1$sFormatLength[@type=\"%2$s\"]"
                 + "/%1$sFormat[@type=\"standard\"]/pattern[@type=\"%3$s\"]",
             type, length, pattern));
+    }
+
+    // ---- Helper methods ----
+
+    IcuData process(String localeId) {
+        return process(localeId, empty());
+    }
+
+    IcuData process(String localeId, Optional<String> defCalendar) {
+        IcuData icuData = new IcuData(localeId, true);
+        LocaleMapper.process(
+            icuData,
+            src.getDataForLocale(localeId, UNRESOLVED),
+            src.getDataForLocale(localeId, RESOLVED),
+            empty(),
+            transformer,
+            defCalendar);
+        return icuData;
     }
 
     private void addMapping(String locale, CldrValue value, Result... results) {
@@ -386,16 +388,12 @@ public class LocaleMapperTest {
         return FakeResult.of(path, index, false, value);
     }
 
-    private static CldrData cldrData(CldrValue... values) {
-        return CldrDataSupplier.forValues(Arrays.asList(values));
-    }
-
     private static CldrValue ldml(String path) {
         return ldml(path, "");
     }
 
     private static CldrValue ldml(String path, String value) {
-        return parseValue("//ldml/" + path, "");
+        return parseValue("//ldml/" + path, value);
     }
 
     private static RbValue[] singletonValues(String... values) {

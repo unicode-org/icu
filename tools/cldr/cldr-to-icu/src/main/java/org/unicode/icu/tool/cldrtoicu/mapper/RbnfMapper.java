@@ -2,9 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu.mapper;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
 import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
-import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,14 +12,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrData.PrefixVisitor;
-import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
 import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.escape.UnicodeEscaper;
 
 /**
@@ -46,23 +44,18 @@ public final class RbnfMapper {
     /**
      * Processes data from the given supplier to generate RBNF data for a set of locale IDs.
      *
-     * @param localeId the locale ID to generate data for.
-     * @param src the CLDR data supplier to process.
+     * @param icuData the ICU data to be filled.
+     * @param cldrData the unresolved CLDR data to process.
      * @param icuSpecialData additional ICU data (in the "icu:" namespace)
      * @return IcuData containing RBNF data for the given locale ID.
      */
     public static IcuData process(
-        String localeId, CldrDataSupplier src, Optional<CldrData> icuSpecialData) {
+        IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData) {
 
-        return process(localeId, src.getDataForLocale(localeId, UNRESOLVED), icuSpecialData);
-    }
-
-    @VisibleForTesting // It's easier to supply a fake data instance than a fake supplier.
-    static IcuData process(String localeId, CldrData cldrData, Optional<CldrData> icuSpecialData) {
         // Using DTD order is essential here because the RBNF paths contain ordered elements,
         // so we must ensure that they appear in sorted order (otherwise we'd have to do more
         // work at this end to re-sort the results).
-        RulesetVisitor visitor = new RulesetVisitor(localeId);
+        RulesetVisitor visitor = new RulesetVisitor(icuData);
         icuSpecialData.ifPresent(s -> s.accept(DTD, visitor));
         cldrData.accept(DTD, visitor);
         return visitor.icuData;
@@ -72,8 +65,8 @@ public final class RbnfMapper {
 
         private final IcuData icuData;
 
-        private RulesetVisitor(String localeId) {
-            this.icuData = new IcuData(localeId, true);
+        private RulesetVisitor(IcuData icuData) {
+            this.icuData = checkNotNull(icuData);
         }
 
         @Override public void visitPrefixStart(CldrPath prefix, Context context) {
