@@ -4106,8 +4106,8 @@ public class ULocaleTest extends TestFmwk {
                 {"aa_BB_CYRL",  "aa-BB-x-lvariant-cyrl"},
                 {"en_US_1234",  "en-US-1234"},
                 {"en_US_VARIANTA_VARIANTB", "en-US-varianta-variantb"},
-                {"en_US_VARIANTB_VARIANTA", "en-US-variantb-varianta"},
-                {"ja__9876_5432",   "ja-9876-5432"},
+                {"en_US_VARIANTB_VARIANTA", "en-US-varianta-variantb"}, /* ICU-20478 */
+                {"ja__9876_5432",   "ja-5432-9876"}, /* ICU-20478 */
                 {"zh_Hant__VAR",    "zh-Hant-x-lvariant-var"},
                 {"es__BADVARIANT_GOODVAR",  "es"},
                 {"es__GOODVAR_BAD_BADVARIANT",  "es-goodvar-x-lvariant-bad"},
@@ -4131,6 +4131,9 @@ public class ULocaleTest extends TestFmwk {
                 {"en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",   "en-a-bar-u-baz-ca-islamic-civil-x-u-foo"},
                 /* ICU-20320*/
                 {"en@9=efg;a=baz",   "en-9-efg-a-baz"},
+                /* ICU-20478 */
+                {"sl__ROZAJ_BISKE_1994",   "sl-1994-biske-rozaj"},
+                {"en__SCOUSE_FONIPA",   "en-fonipa-scouse"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -4228,7 +4231,7 @@ public class ULocaleTest extends TestFmwk {
                 {"bogus",               "bogus",                NOERROR},
                 {"boguslang",           "",                     Integer.valueOf(0)},
                 {"EN-lATN-us",          "en_Latn_US",           NOERROR},
-                {"und-variant-1234",    "__VARIANT_1234",       NOERROR},
+                {"und-variant-1234",    "__1234_VARIANT",       NOERROR}, /* ICU-20478 */
                 {"und-varzero-var1-vartwo", "__VARZERO",        Integer.valueOf(12)},
                 {"en-u-ca-gregory",     "en@calendar=gregorian",    NOERROR},
                 {"en-U-cu-USD",         "en@currency=usd",      NOERROR},
@@ -4274,6 +4277,16 @@ public class ULocaleTest extends TestFmwk {
                 /* #20410 */
                 {"art-lojban-x-0", "jbo@x=0", NOERROR},
                 {"zh-xiang-u-nu-thai-x-0", "hsn@numbers=thai;x=0", NOERROR},
+                /* ICU-20478 */
+                {"ja-9876-5432",    "ja__5432_9876",       NOERROR},
+                {"en-US-variantb-varianta",    "en_US_VARIANTA_VARIANTB",       NOERROR},
+                {"en-US-varianta-variantb",    "en_US_VARIANTA_VARIANTB",       NOERROR},
+                {"sl-rozaj-biske-1994",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"sl-biske-rozaj-1994",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"sl-biske-1994-rozaj",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"sl-1994-biske-rozaj",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"en-fonipa-scouse",    "en__FONIPA_SCOUSE",       NOERROR},
+                {"en-scouse-fonipa",    "en__FONIPA_SCOUSE",       NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
