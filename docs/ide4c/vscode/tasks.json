@@ -19,6 +19,23 @@
                 "--debug", // Enable debug mode.
                 "-j8" // Use 8 cores.
             ]
+        },
+        {
+            "label": "buildTest", // for building test cases before running it.
+            "command": "make", // Could be any other shell command
+            "args": [
+                "-j16",
+                "-C",
+                "${workspaceFolder}/test/intltest"
+            ],
+            "type": "shell"            
+        },
+        {
+            "label": "runTestCases", // For excuting the test cases.
+            "command": "${workspaceFolder}/test/intltest/intltest", // Could be any other shell command
+            "args": [
+            ],
+            "type": "shell"
         }
     ]
 }

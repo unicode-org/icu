@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch", // Use "(lldb) launch" for mac osx.
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "x64",
+            "program": "${workspaceFolder}/test/intltest/intltest",
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH", // Use "DYLD_LIBRARY_PATH" for mac osx.
+                    "value": "${workspaceRoot}/lib:${workspaceRoot}/stubdata:${workspaceRoot}/tools/ctestfw"
+                },
+                {
+                    "name": "ICU_DATA",
+                    "value": "${workspaceRoot}/data/out"
+                }
+            ],
+            "args": [ // Here you add wich test cases you want to run, leaving it empty will run all the test cases.
+             "rbbi/RBBITest" // Just for example.
+            ],
+            "stopAtEntry": false, // If you want to add a break point in the begining of the program (i.e. test cases).
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false, //set to true to see output in an external terminal instead
+            "MIMode": "gdb", // Use "lldb" for mac osx.
+            "logging": {
+                "trace": true,
+                "traceResponse": true,
+                "engineLogging": true,
+                "programOutput": true
+            },
+            "preLaunchTask": "buildTest"
+        }
+    ]
+}
