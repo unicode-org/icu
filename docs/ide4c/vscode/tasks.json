@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Makefile", // You can choose your own label.
+            "type": "shell",
+            "command": "make",
+            // Make this the default build command.
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always"
+            },
+            // You can pass all the building arguments here.
+            "args": [
+                "all",
+                "--debug", // Enable debug mode.
+                "-j8" // Use 8 cores.
+            ]
+        }
+    ]
+}
