@@ -1072,6 +1072,8 @@ PatternSignType PatternStringUtils::resolveSignDisplay(UNumberSignDisplay signDi
                 case SIGNUM_POS_ZERO:
                 case SIGNUM_POS:
                     return PATTERN_SIGN_TYPE_POS;
+                default:
+                    break;
             }
             break;
 
@@ -1084,6 +1086,8 @@ PatternSignType PatternStringUtils::resolveSignDisplay(UNumberSignDisplay signDi
                 case SIGNUM_POS_ZERO:
                 case SIGNUM_POS:
                     return PATTERN_SIGN_TYPE_POS_SIGN;
+                default:
+                    break;
             }
             break;
 
@@ -1097,6 +1101,8 @@ PatternSignType PatternStringUtils::resolveSignDisplay(UNumberSignDisplay signDi
                     return PATTERN_SIGN_TYPE_POS;
                 case SIGNUM_POS:
                     return PATTERN_SIGN_TYPE_POS_SIGN;
+                default:
+                    break;
             }
             break;
 

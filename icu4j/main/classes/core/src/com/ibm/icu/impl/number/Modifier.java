@@ -21,7 +21,9 @@ public interface Modifier {
         NEG,
         NEG_ZERO,
         POS_ZERO,
-        POS
+        POS;
+
+        static final int COUNT = Signum.values().length;
     };
 
     /**
