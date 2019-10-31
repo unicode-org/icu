@@ -86,6 +86,6 @@ public class AdoptingModifierStore implements ModifierStore {
     private static int getModIndex(Signum signum, StandardPlural plural) {
         assert signum != null;
         assert plural != null;
-        return plural.ordinal() * 4 + signum.ordinal();
+        return plural.ordinal() * Signum.COUNT + signum.ordinal();
     }
 }

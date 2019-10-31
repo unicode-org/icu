@@ -322,9 +322,9 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
     const Modifier *mods[4 * StandardPlural::COUNT] = {};
 
     inline static int32_t getModIndex(Signum signum, StandardPlural::Form plural) {
-        U_ASSERT(signum >= 0 && signum <= 3);
+        U_ASSERT(signum >= 0 && signum < SIGNUM_COUNT);
         U_ASSERT(plural >= 0 && plural < StandardPlural::COUNT);
-        return static_cast<int32_t>(plural) * 4 + signum;
+        return static_cast<int32_t>(plural) * SIGNUM_COUNT + signum;
     }
 };
 
