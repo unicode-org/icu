@@ -1,29 +1,28 @@
 # Layout Engine
 
-## Deprecation
+## Line Layout Deprecation
 
-***The ICU LayoutEngine has been removed in ICU 58.*** It had not had active
-development for some time, had [many open
-bugs](http://bugs.icu-project.org/trac/query?status=accepted&status=design&status=new&status=reviewfeedback&status=reviewing&component=layout&or&status=closed&resolution=wontfix&resolution=no-time-to-do-this&component=layout&col=id&col=summary&col=status&col=owner&col=type&col=priority&col=milestone&col=resolution&order=priority),
-and had been deprecated in ICU 54.
+> :warning: ***The ICU Line LayoutEngine has been removed in ICU 58.*** It had not had active
+> development for some time, had many open abugs,
+> and had been deprecated in ICU 54.
 
-Users of ICU Layout are **strongly** encouraged to consider the HarfBuzz project
-as a replacement for the ICU Layout Engine. An ICU team member responsible for
-the Layout Engine is contributing fixes and features to HarfBuzz, and a drop in
-wrapper is available to allow use of HarfBuzz as a direct replacement for the
-ICU layout engine.
+> Users of ICU Layout are **strongly** encouraged to consider the HarfBuzz project
+> as a replacement for the ICU Layout Engine. An ICU team member responsible for
+> the Layout Engine is contributing fixes and features to HarfBuzz, and a drop in
+> wrapper is available to allow use of HarfBuzz as a direct replacement for the
+> ICU layout engine.
 
-HarfBuzz has its own active mailing lists, please use those for discussion of
+> HarfBuzz has its own active mailing lists, please use those for discussion of
 HarfBuzz and its use as a replacement for the ICU layout engine.
 See:
 [​http://www.freedesktop.org/wiki/Software/HarfBuzz](http://www.freedesktop.org/wiki/Software/HarfBuzz)
 
-**Users of the "layoutex" ParagraphLayout library**: Please see information
+> :point_right: **Users of the "layoutex" ParagraphLayout library**: Please see information
 about how to build "layoutex" on the [Paragraph Layout](paragraph.md) page.
 
 ## Overview
 
-**See deletion/deprecation notice, above.**
+:warning: **See deletion/deprecation notice, above.**
 
 The Latin script, which is the most commonly used script among software
 developers, is also the least complex script to display especially when it is
@@ -54,8 +53,8 @@ TrueType fonts have the following characteristics:
 2.  There is a mapping from Unicode code points to glyph ids. There may be
     glyphs in the font for which there is no mapping.
 
-3.  The font contains data tables referred to by 4 byte tags. (e.g. ''GSUB'',
-    ''cmap''). These tables can be read into memory for processing.
+3.  The font contains data tables referred to by 4 byte tags. (e.g. `GSUB`,
+    `cmap`). These tables can be read into memory for processing.
 
 4.  There is a method to get the width of a glyph.
 
@@ -71,7 +70,7 @@ points.
 A concrete instance of this base class must be written for each target platform.
 For a simple example which uses the standard C library to access a TrueType
 font, look at the PortableFontInstance class in
-[icu/source/test/letest](http://source.icu-project.org/repos/icu/icu/trunk/source/test/letest/)
+[icu/source/test/letest](https://github.com/unicode-org/icu/tree/master/icu4c/source/test/letest)
 .
 
 The ICU LayoutEngine supports complex text in the following ways:
@@ -106,7 +105,7 @@ font. It is written in a single direction (left-to-right or right-to-left), and
 is written in a single script. Clients can use ICU's
 [Bidi](../transforms/bidi.md) processing to determine the direction of the text
 and use the ScriptRun class in
-[icu/source/extra/scrptrun](http://source.icu-project.org/repos/icu/icu/trunk/source/extra/scrptrun/)
+[icu/source/extra/scrptrun](https://github.com/unicode-org/icu/tree/master/icu4c/source/extra/scrptrun)
 to find a run of text in the same script. Since the representation of font
 information is application specific, ICU cannot help clients find these runs of
 text.
@@ -116,6 +115,7 @@ the LayoutEngineFactory method to create an instance of the LayoutEngine class
 that is specific to the text. The following demonstrates a call to the
 LayoutEngineFactory:
 
+```c
 LEFontInstace \*font = <the text's font>;
 UScriptCode script = <the text's script>;
 LEErrorCode error = LE_NO_ERROR;
@@ -134,36 +134,40 @@ float x, y = <starting x, y position of the text>;
 le_int32 glyphCount;
 glyphCount = engine->layoutChars(text, offset, count, max, rtl,
 x, y, error);
+```
 
 This previous example computes three arrays: an array of glyph indices in
 display order, an array of x, y position pairs for each glyph, and an array that
 maps each output glyph back to the input text array. Use the following get
 methods to copy these arrays:
 
+```c
 LEGlyphID \*glyphs = new LEGlyphID\[glyphCount\];
 le_int32 \*indices = new le_int32\[glyphCount\];
 float \*positions = new float\[(glyphCount \* 2) + 2\];
 engine->getGlyphs(glyphs, error);
 engine->getCharIndices(indices, error);
 engine->getGlyphPositions(positions, error);
-*The positions array contains (glyphCount \* 2) + 2 entries. This is because
-there is an x and a y position for each glyph. The extra two positions hold the
-x, y position of the end of the text run. *
+```
+
+> :point_right: **Note** The positions array contains (glyphCount \* 2) + 2 entries. This is because
+> there is an x and a y position for each glyph. The extra two positions hold the
+> x, y position of the end of the text run.
 
 Once users have the glyph indices and positions, they can use the
 platform-specific code to draw the glyphs. For example, on Windows 2000, users
-can call ExtTextOut with the ETO_GLYPH_INDEX option to draw the glyphs and on
-Linux, users can call TT_Load_Glyph to get the bitmap for each glyph. However,
+can call `ExtTextOut` with the `ETO_GLYPH_INDEX` option to draw the glyphs and on
+Linux, users can call `TT_Load_Glyph` to get the bitmap for each glyph. However,
 users must draw the bitmaps themselves.
 
-*The ICU LayoutEngine was developed separately from the rest of ICU and uses
-different coding conventions and basic types. To use the LayoutEngine with ICU
-coding conventions, users can use the ICULayoutEngine class, which is a thin
-wrapper around the LayoutEngine class that incorporates ICU conventions and
-basic types. *
+> :point_right: **Note:** The ICU LayoutEngine was developed separately from the rest of ICU and uses
+> different coding conventions and basic types. To use the LayoutEngine with ICU
+> coding conventions, users can use the ICULayoutEngine class, which is a thin
+> wrapper around the LayoutEngine class that incorporates ICU conventions and
+> basic types.
 
 For a more detailed example of how to call the LayoutEngine, look at
-[icu/source/test/letest/letest.cpp](http://source.icu-project.org/repos/icu/icu/trunk/source/test/letest/letest.cpp)
+[icu/source/test/letest/letest.cpp](https://github.com/unicode-org/icu/tree/master/icu4c/source/test/letest/letest.cpp)
 . This is a simple test used to verify that the LayoutEngine is working
 properly. It does not do any complex text rendering.
 
@@ -172,4 +176,4 @@ Specification](http://www.microsoft.com/typography/tt/tt.htm) , and the
 [TrueType Font File
 Specification](http://developer.apple.com/fonts/TTRefMan/RM06/Chap6.html) .
 
-**See deprecation notice, above.**
+> :warning: **Note:** See deprecation notice, above.
