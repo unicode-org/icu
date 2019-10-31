@@ -18,7 +18,7 @@ have different equivalents in COBOL, depending on the platform and even the
 specific COBOL compiler used.
 
 This document is supplemented with three [sample
-programs](http://download.icu-project.org/files/samples/ICU-COBOL.zip)
+programs](https://sourceforge.net/projects/icu/files/OldFiles/samples/ICU-COBOL.zip)
 illustrating using ICU APIs for code page conversion, collation and
 normalization. Description of the sample programs appears in the appendix at the
 end of this document.
@@ -37,7 +37,7 @@ end of this document.
     used for the CALL statement.
 
 5.  Character string arguments to C/C++ must be null-terminated. In COBOL, this
-    means using the Z“xxx” format for literals, and adding X“00” at the end of
+    means using the `Z"xxx"` format for literals, and adding `X"00"` at the end of
     the content of variables.
 
 6.  Special consideration must be given when a pointer is the value returned by
@@ -49,7 +49,7 @@ end of this document.
 The following table (extracted from IBM VisualAge COBOL documentation) shows the
 correspondence between the data types available in COBOL and C/C++.
 
-*Parts of identifier names in Cobol are separated by ‘-’, not by ‘_’ like in C.
+> :point_right: **Note**: Parts of identifier names in Cobol are separated by `-`, not by `_` as in C.
 
 | C/C++ data types          	| COBOL data types                                                                                  	|
 |---------------------------	|---------------------------------------------------------------------------------------------------	|
@@ -94,6 +94,7 @@ possible ways to simulate these enumerations.
 
 #### C example
 
+```c
     typedef enum {
         /** No decomposition/composition. @draft ICU 1.8 */
         UNORM_NONE = 1,
@@ -101,9 +102,11 @@ possible ways to simulate these enumerations.
         UNORM_NFD = 2,
         . . .
     } UNormalizationMode;
+```
 
 #### COBOL example
 
+```cobol
     WORKING-STORAGE section.
     *--------------- Ported from unorm.h ------------
     * enum UNormalizationMode {
@@ -112,20 +115,24 @@ possible ways to simulate these enumerations.
     77 UNORM-NFD PIC
     S9(9) Binary value 2.
         …
+```
 
 ### Enumerations (second possibility)
 
 #### C example
 
+```c
     /*==== utypes.h ========*/
     typedef enum UErrorCode {
         U_USING_FALLBACK_WARNING = -128, /* (not an error) */
         U_USING_DEFAULT_WARNING = -127, /* (not an error) */
         . . .
     } UErrorCode;
+```
 
 #### COBOL example
 
+```cobol
     *==== utypes.h ========
     01 UerrorCode PIC S9(9) Binary value 0.
     * A resource bundle lookup returned a fallback
@@ -134,10 +141,11 @@ possible ways to simulate these enumerations.
     * (not an error)
         88 U-USING-DEFAULT-WARNING value -127.
         . . .
+```
 
 ## Call statement, calling by value or by reference
 
-In general, arguments defined in C as pointers (‘\*’) must be listed in the
+In general, arguments defined in C as pointers (`\*`) must be listed in the
 COBOL Call statement with the using by reference clause. Arguments which are not
 pointers must be transferred with the using by value clause. The exception to
 this requirement is when an argument is a pointer which has been assigned to a
@@ -149,6 +157,7 @@ conversion APIs.
 
 #### C (API definition in \*.h file)
 
+```c
     /*--------------------- UCNV.H ---------------------------*/
     U_CAPI int32_t U_EXPORT2
     ucnv_toUChars(UConverter * cnv,
@@ -157,9 +166,11 @@ conversion APIs.
         const char * src,
         int32_t srcLength,
         UErrorCode * pErrorCode);
+```
 
 #### COBOL
 
+```cobol
     PROCEDURE DIVISION.
         Call API-Pointer using
             by value Converter-toU-Pointer
@@ -169,6 +180,7 @@ conversion APIs.
             by value srcLength
             by reference UErrorCode
             Returning Text-Length.
+```
 
 ## Call statement, Returning clause
 
@@ -176,12 +188,15 @@ conversion APIs.
 
 #### C (API definition in \*.h file)
 
+```c
     U_CAPI UConverter * U_EXPORT2
     ucnv_open(const char * converterName,
         UErrorCode * err);
+```
 
 #### COBOL
 
+```cobol
     WORKING-STORAGE section.
         01 Converter-Pointer PIC S9(9) BINARY.
     PROCEDURE DIVISION
@@ -191,19 +206,23 @@ conversion APIs.
             by reference converterNameSource
             by reference UErrorCode
             Returning Converter-Pointer.
+```
 
 ### Returned value is a Pointer to string
 
-If the returned value in C is a string pointer (‘char \*’), then in COBOL we
+If the returned value in C is a string pointer (`char \*`), then in COBOL we
 must use a pointer to string defined in the Linkage section.
 
 #### C ( API definition in \*.h file)
 
+```c
     U_CAPI const char * U_EXPORT2
     ucnv_getAvailableName(int32_t n);
+```
 
 #### COBOL
 
+```cobol
     DATA DIVISION.
     WORKING-STORAGE section.
         01 Converter-Name-Link-Pointer Usage is Pointer.
@@ -217,6 +236,7 @@ must use a pointer to string defined in the Linkage section.
             to Converter-Name-Link-Pointer.
     . . .
         Move Converter-Name-String to Debug-Value.
+```
 
 ## How to invoke ICU APIs
 
@@ -264,7 +284,7 @@ This is done as follows:
     IF DLL-Handle = ZEROS
         Perform error handling. . .
 
-Return value: DLL Handle, defined as PIC S9(9) BINARY
+Return value: DLL Handle, defined as `PIC S9(9) BINARY`
 Input Value: DLL Name (null-terminated string)
 
 Errors may happen if the DLL name is not correct, or the string is not
