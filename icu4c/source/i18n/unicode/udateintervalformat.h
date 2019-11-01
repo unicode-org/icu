@@ -14,6 +14,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/ucal.h"
 #include "unicode/umisc.h"
 #include "unicode/localpointer.h"
 #include "unicode/uformattedvalue.h"
@@ -277,6 +278,31 @@ udtitvfmt_formatToResult(
                 UFormattedDateInterval* result,
                 UDate           fromDate,
                 UDate           toDate,
+                UErrorCode*     status);
+
+/**
+ * Formats a date/time range using the conventions established for the
+ * UDateIntervalFormat object.
+ * @param formatter
+ *            The UDateIntervalFormat object specifying the format conventions.
+ * @param fromCalendar
+ *            The starting point of the range.
+ * @param toCalendar
+ *            The ending point of the range.
+ * @param result
+ *            The UFormattedDateInterval to contain the result of the
+ *            formatting operation.
+ * @param status
+ *            A pointer to a UErrorCode to receive any errors.
+ * @draft ICU 67
+ */
+
+U_DRAFT void U_EXPORT2
+udtitvfmt_formatCalendarToResult(
+                const UDateIntervalFormat* formatter,
+                UCalendar*      fromCalendar,
+                UCalendar*      toCalendar,
+                UFormattedDateInterval* result,
                 UErrorCode*     status);
 #endif /* U_HIDE_DRAFT_API */
 
