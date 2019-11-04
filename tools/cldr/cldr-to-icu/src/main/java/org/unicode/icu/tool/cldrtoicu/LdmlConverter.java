@@ -419,7 +419,7 @@ public final class LdmlConverter {
                 break;
 
             case CURRENCY_DATA:
-                processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", true);
+                processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", false);
                 break;
 
             case METADATA:
