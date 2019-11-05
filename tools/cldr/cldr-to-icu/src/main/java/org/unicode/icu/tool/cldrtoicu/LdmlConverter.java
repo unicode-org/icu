@@ -323,11 +323,16 @@ public final class LdmlConverter {
                 // The split data can still be empty for this directory, but that's expected (it
                 // might only be written because it has an explicit parent added below).
                 splitPaths.get(dir).forEach(p -> splitData.add(p, icuData.get(p)));
-                // If we add an explicit parent locale, it forces the data to be written.
-                parent.ifPresent(p -> {
-                    splitData.add(RB_PARENT, p);
-                    graphMetadata.get(dir).addParent(id, p);
-                });
+
+                // If we add an explicit parent locale, it forces the data to be written. This is
+                // where we check for forced overrides of the parent relationship (which is a per
+                // directory thing).
+                parent
+                    .map(p -> config.getForcedParents(dir).getOrDefault(id, p))
+                    .ifPresent(p -> {
+                        splitData.add(RB_PARENT, p);
+                        graphMetadata.get(dir).addParent(id, p);
+                    });
 
                 if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
                     splitData.setVersion(CldrDataSupplier.getCldrVersionString());
@@ -384,7 +389,7 @@ public final class LdmlConverter {
 
         Map<String, String> aliasMap = new LinkedHashMap<>();
         for (String id : localeIds) {
-            if (forcedAliases.keySet().contains(id)) {
+            if (forcedAliases.containsKey(id)) {
                 // Forced aliases will be added later and don't need to be processed here. This
                 // is especially necessary if the ID is not structurally valid (e.g. "no_NO_NY")
                 // since that cannot be processed by the code below.

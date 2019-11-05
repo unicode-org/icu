@@ -45,6 +45,7 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
         private boolean emitReport = false;
         private final SetMultimap<IcuLocaleDir, String> localeIdsMap = TreeMultimap.create();
         private final Table<IcuLocaleDir, String, String> forcedAliases = TreeBasedTable.create();
+        private final Table<IcuLocaleDir, String, String> forcedParents = TreeBasedTable.create();
 
         /**
          * Sets the output directory in which the ICU data directories and files will go. This is
@@ -95,6 +96,11 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
             return this;
         }
 
+        public Builder addForcedParent(IcuLocaleDir dir, String localeId, String parent) {
+            forcedParents.put(dir, localeId, parent);
+            return this;
+        }
+
         /** Returns a converter config from the current builder state. */
         public LdmlConverterConfig build() {
             return new IcuConverterConfig(this);
@@ -109,6 +115,7 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     private final ImmutableSet<String> allLocaleIds;
     private final ImmutableSetMultimap<IcuLocaleDir, String> localeIdsMap;
     private final ImmutableTable<IcuLocaleDir, String, String> forcedAliases;
+    private final ImmutableTable<IcuLocaleDir, String, String> forcedParents;
 
     private IcuConverterConfig(Builder builder) {
         this.outputDir = checkNotNull(builder.outputDir);
@@ -128,6 +135,7 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
         this.allLocaleIds = ImmutableSet.copyOf(builder.localeIdsMap.values());
         this.localeIdsMap = ImmutableSetMultimap.copyOf(builder.localeIdsMap);
         this.forcedAliases = ImmutableTable.copyOf(builder.forcedAliases);
+        this.forcedParents = ImmutableTable.copyOf(builder.forcedParents);
     }
 
     public static Builder builder() {
@@ -162,6 +170,11 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     @Override
     public ImmutableMap<String, String> getForcedAliases(IcuLocaleDir dir) {
         return forcedAliases.row(dir);
+    }
+
+    @Override
+    public ImmutableMap<String, String> getForcedParents(IcuLocaleDir dir) {
+        return forcedParents.row(dir);
     }
 
     @Override public ImmutableSet<String> getAllLocaleIds() {
