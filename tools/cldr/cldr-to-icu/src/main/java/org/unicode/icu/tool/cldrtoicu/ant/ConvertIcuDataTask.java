@@ -65,9 +65,10 @@ public final class ConvertIcuDataTask extends Task {
     private Path cldrPath;
     private CldrDraftStatus minimumDraftStatus;
     // Set of default locale ID specifiers (wildcard IDs which are expanded).
-    private ImmutableSet<String> localeIdSpec;
+    private LocaleIds localeIds = null;
     // Per directory overrides (fully specified locale IDs).
     private final SetMultimap<IcuLocaleDir, String> perDirectoryIds = HashMultimap.create();
+    private final SetMultimap<IcuLocaleDir, String> inheritLanguageSubtag = HashMultimap.create();
     private final IcuConverterConfig.Builder config = IcuConverterConfig.builder();
     // Don't try and resolve actual paths until inside the execute method.
     private final List<AltPath> altPaths = new ArrayList<>();
@@ -136,9 +137,11 @@ public final class ConvertIcuDataTask extends Task {
         }
     }
 
-    public static final class DirectoryFilter extends Task {
+    public static final class Directory extends Task {
         private IcuLocaleDir dir;
-        private ImmutableSet<String> ids;
+        private ImmutableSet<String> inheritLanguageSubtag = ImmutableSet.of();
+        private final List<ForcedAlias> forcedAliases = new ArrayList<>();
+        private LocaleIds localeIds = null;
 
         @SuppressWarnings("unused")
         public void setDir(String directory) {
@@ -146,26 +149,32 @@ public final class ConvertIcuDataTask extends Task {
         }
 
         @SuppressWarnings("unused")
-        public void addText(String localeIds) {
-            this.ids = parseLocaleIds(localeIds);
+        public void setInheritLanguageSubtag(String localeIds) {
+            this.inheritLanguageSubtag = parseLocaleIds(localeIds);
+        }
+
+        @SuppressWarnings("unused")
+        public void addConfiguredForcedAlias(ForcedAlias alias) {
+            forcedAliases.add(alias);
+        }
+
+        @SuppressWarnings("unused")
+        public void addConfiguredLocaleIds(LocaleIds localeIds) {
+            checkBuild(this.localeIds == null,
+                "Cannot add more that one <localeIds> element for <directory>: %s", dir);
+            this.localeIds =  localeIds;
         }
 
         @Override
         public void init() throws BuildException {
-            checkBuild(dir != null, "Directory must be specified");
-            checkBuild(!ids.isEmpty(), "Locale IDs must be specified");
+            checkBuild(dir != null, "Directory attribute 'dir' must be specified");
+            checkBuild(localeIds != null, "<localeIds> must be specified for <directory>: %s", dir);
         }
     }
 
     public static final class ForcedAlias extends Task {
-        private Optional<IcuLocaleDir> dir = Optional.empty();
         private String source = "";
         private String target = "";
-
-        @SuppressWarnings("unused")
-        public void setDir(String directory) {
-            this.dir = resolveDir(directory);
-        }
 
         @SuppressWarnings("unused")
         public void setSource(String source) {
@@ -183,7 +192,6 @@ public final class ConvertIcuDataTask extends Task {
             checkBuild(!target.isEmpty(), "Alias target must not be empty");
         }
     }
-
 
     public static final class AltPath extends Task {
         private String source = "";
@@ -214,23 +222,22 @@ public final class ConvertIcuDataTask extends Task {
 
     @SuppressWarnings("unused")
     public void addConfiguredLocaleIds(LocaleIds localeIds) {
-        checkBuild(this.localeIdSpec == null, "Cannot add more that one <localeIds> element");
-        this.localeIdSpec =  localeIds.ids;
+        checkBuild(this.localeIds == null, "Cannot add more that one <localeIds> element");
+        this.localeIds =  localeIds;
     }
 
     @SuppressWarnings("unused")
-    public void addConfiguredDirectoryFilter(DirectoryFilter filter) {
-        perDirectoryIds.putAll(filter.dir, filter.ids);
+    public void addConfiguredDirectory(Directory filter) {
+        perDirectoryIds.putAll(filter.dir, filter.localeIds.ids);
+        inheritLanguageSubtag.putAll(filter.dir, filter.inheritLanguageSubtag);
+        filter.forcedAliases.forEach(a -> config.addForcedAlias(filter.dir, a.source, a.target));
     }
 
+    // Aliases on the outside are applied to all directories.
     @SuppressWarnings("unused")
     public void addConfiguredForcedAlias(ForcedAlias alias) {
-        if (alias.dir.isPresent()) {
-            config.addForcedAlias(alias.dir.get(), alias.source, alias.target);
-        } else {
-            for (IcuLocaleDir dir : IcuLocaleDir.values()) {
-                config.addForcedAlias(dir, alias.source, alias.target);
-            }
+        for (IcuLocaleDir dir : IcuLocaleDir.values()) {
+            config.addForcedAlias(dir, alias.source, alias.target);
         }
     }
 
@@ -244,6 +251,8 @@ public final class ConvertIcuDataTask extends Task {
 
     @SuppressWarnings("unused")
     public void execute() throws BuildException {
+        checkBuild(localeIds != null, "<localeIds> must be specified");
+
         CldrDataSupplier src = CldrDataSupplier
             .forCldrFilesIn(cldrPath)
             .withDraftStatusAtLeast(minimumDraftStatus);
@@ -260,10 +269,20 @@ public final class ConvertIcuDataTask extends Task {
 
         SupplementalData supplementalData = SupplementalData.create(src);
         ImmutableSet<String> defaultTargetIds =
-            LocaleIdResolver.expandTargetIds(this.localeIdSpec, supplementalData);
+            LocaleIdResolver.expandTargetIds(this.localeIds.ids, supplementalData);
         for (IcuLocaleDir dir : IcuLocaleDir.values()) {
             Iterable<String> ids = perDirectoryIds.asMap().getOrDefault(dir, defaultTargetIds);
             config.addLocaleIds(dir, Iterables.filter(ids, idFilter::test));
+
+            // We should only have locale IDs like "zh_Hant" here (language + script) and only
+            // those which would naturally inherit to "root"
+            inheritLanguageSubtag.get(dir).forEach(id -> {
+                checkArgument(id.matches("[a-z]{2}_[A-Z][a-z]{3}"),
+                    "Invalid locale ID for inheritLanguageSubtag (expect '<lang>_<Script>'): ", id);
+                checkArgument(supplementalData.getParent(id).equals("root"),
+                    "Invalid locale ID for inheritLanguageSubtag (parent must be 'root'): ", id);
+                config.addForcedParent(dir, id, id.substring(0, 2));
+            });
         }
         config.setMinimumDraftStatus(minimumDraftStatus);
         LdmlConverter.convert(src, supplementalData, config.build());

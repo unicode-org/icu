@@ -96,12 +96,21 @@ public interface LdmlConverterConfig {
     Set<String> getTargetLocaleIds(IcuLocaleDir dir);
 
     /**
-     * Return a map of locale IDs which specifies aliases which are applied to the given
-     * directory in contradiction to the natural alias or parent ID which would otherwise
-     * be generated. This is a mechanism for restructuring the parent chain and linking
-     * locales together in non-standard and unexpected ways.
+     * Returns a map of locale IDs which specifies aliases which are applied to the given directory
+     * in contradiction to the natural alias which would otherwise be generated. This mechanism
+     * allows for restructuring locale relationships on a per directory basis for special-case
+     * behaviour (such as sharing data which would otherwise need to be copied).
      */
     Map<String, String> getForcedAliases(IcuLocaleDir dir);
+
+    /**
+     * Returns a map of locale IDs which specifies aliases which are applied to the given directory
+     * in contradiction to the natural parent which would otherwise be generated. This mechanism
+     * allows for restructuring locale relationships on a per directory basis for special-case
+     * behaviour (such as sharing data which would otherwise need to be copied).
+     */
+    // TODO: Combine this and the force aliases into a single mechanism at this level.
+    Map<String, String> getForcedParents(IcuLocaleDir dir);
 
     /**
      * Whether to emit a summary report for debug purposes after conversion is complete.
