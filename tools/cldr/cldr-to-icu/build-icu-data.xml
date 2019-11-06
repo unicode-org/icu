@@ -305,8 +305,9 @@
 
                  This feature is typically used to select alternate translations (e.g. short forms)
                  for certain paths. -->
-            <!-- <altPath target="//path/to/value[@attr='foo']" source="//path/to/value[@attr='bar']"/> -->
-
+            <!-- <altPath target="//path/to/value[@attr='foo']"
+                          source="//path/to/value[@attr='bar']"
+                          locales="xx,yy_ZZ"/> -->
         </convert>
     </target>
 </project>

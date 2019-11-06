@@ -8,12 +8,17 @@ import static com.google.common.base.CharMatcher.whitespace;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
+import static com.google.common.collect.ImmutableTable.toImmutableTable;
+import static com.google.common.collect.Tables.immutableCell;
 import static java.util.stream.Collectors.joining;
 import static org.unicode.cldr.api.CldrPath.parseDistinguishingPath;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -38,9 +43,14 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Table;
+import com.google.common.collect.Table.Cell;
+import com.google.common.collect.Tables;
 
 // Note: Auto-magical Ant methods are listed as "unused" by IDEs, unless the warning is suppressed.
 public final class ConvertIcuDataTask extends Task {
@@ -60,7 +70,7 @@ public final class ConvertIcuDataTask extends Task {
     private final SetMultimap<IcuLocaleDir, String> perDirectoryIds = HashMultimap.create();
     private final IcuConverterConfig.Builder config = IcuConverterConfig.builder();
     // Don't try and resolve actual paths until inside the execute method.
-    private final Map<String, String> altPathMap = new HashMap<>();
+    private final List<AltPath> altPaths = new ArrayList<>();
     // TODO(CLDR-13381): Move into CLDR API; e.g. withPseudoLocales()
     private boolean includePseudoLocales = false;
     private Predicate<String> idFilter = id -> true;
@@ -178,6 +188,7 @@ public final class ConvertIcuDataTask extends Task {
     public static final class AltPath extends Task {
         private String source = "";
         private String target = "";
+        private ImmutableSet<String> localeIds = ImmutableSet.of();
 
         @SuppressWarnings("unused")
         public void setTarget(String target) {
@@ -187,6 +198,11 @@ public final class ConvertIcuDataTask extends Task {
         @SuppressWarnings("unused")
         public void setSource(String source) {
             this.source = source.replace('\'', '"');
+        }
+
+        @SuppressWarnings("unused")
+        public void setLocales(String localeIds) {
+            this.localeIds = parseLocaleIds(localeIds);
         }
 
         @Override
@@ -223,8 +239,7 @@ public final class ConvertIcuDataTask extends Task {
         // Don't convert to CldrPath here (it triggers a bunch of CLDR data loading for the DTDs).
         // Wait until the "execute()" method since in future we expect to use the configured CLDR
         // directory explicitly there.
-        checkBuild(this.altPathMap.put(altPath.target, altPath.source) == null,
-            "Duplicate <altPath> elements (same target): %s", altPath.target);
+        altPaths.add(altPath);
     }
 
     @SuppressWarnings("unused")
@@ -236,11 +251,8 @@ public final class ConvertIcuDataTask extends Task {
         // We must do this wrapping of the data supplier _before_ creating the supplemental data
         // instance since adding pseudo locales affects the set of available locales.
         // TODO: Move some/all of this into the base converter and control it via the config.
-        if (!altPathMap.isEmpty()) {
-            Map<CldrPath, CldrPath> pathMap = new HashMap<>();
-            altPathMap.forEach(
-                (t, s) -> pathMap.put(parseDistinguishingPath(t), parseDistinguishingPath(s)));
-            src = AlternateLocaleData.transform(src, pathMap);
+        if (!altPaths.isEmpty()) {
+            src = AlternateLocaleData.transform(src, getGlobalAltPaths(), getLocaleAltPaths());
         }
         if (includePseudoLocales) {
             src = PseudoLocales.addPseudoLocalesTo(src);
@@ -255,6 +267,27 @@ public final class ConvertIcuDataTask extends Task {
         }
         config.setMinimumDraftStatus(minimumDraftStatus);
         LdmlConverter.convert(src, supplementalData, config.build());
+    }
+
+    private ImmutableMap<CldrPath, CldrPath> getGlobalAltPaths() {
+        // This fails if the same key appears more than once.
+        return altPaths.stream()
+            .filter(a -> a.localeIds.isEmpty())
+            .collect(toImmutableMap(
+                a -> parseDistinguishingPath(a.target),
+                a -> parseDistinguishingPath(a.source)));
+    }
+
+    private ImmutableTable<String, CldrPath, CldrPath> getLocaleAltPaths() {
+        return altPaths.stream()
+            .flatMap(
+                a -> a.localeIds.stream().map(
+                    id -> immutableCell(
+                        id,
+                        parseDistinguishingPath(a.target),
+                        parseDistinguishingPath(a.source))))
+            // Weirdly there's no collector method to just collect cells.
+            .collect(toImmutableTable(Cell::getRowKey, Cell::getColumnKey, Cell::getValue));
     }
 
     private static void checkBuild(boolean condition, String message, Object... args) {
