@@ -77,8 +77,8 @@ public final class RbnfMapper {
 
                 // This is rather hacky because the access attribute lives on the parent path
                 // element, but we cannot use it until we visit the child values (because it's a
-                // value attribute and will not be in the prefix path. So we need to add the header
-                // only once, just before we start adding the values relating to the child
+                // value attribute and will not be in the prefix path). So we need to add the
+                // header only once, just before we start adding the values relating to the child
                 // elements, so we need a flag.
                 //
                 // This cannot be a boolean field since it must be "effectively final".

@@ -29,7 +29,7 @@ import com.google.common.collect.ImmutableMap;
  * {@code "foo/*[@x="z"]/bar[@y=*]"}, where element names and attribute values can be wildcards.
  *
  * <p>Note that the path fragment represented by the specification does not include either leading
- * or trailing {@code '/'}. This is because matching can occur at any point in a {@code CdlrPath}.
+ * or trailing {@code '/'}. This is because matching can occur at any point in a {@link CldrPath}.
  * The choice of where to match in the path is governed by the match method used (e.g.
  * {@link PathMatcher#matchesSuffixOf(CldrPath)}.
  */
