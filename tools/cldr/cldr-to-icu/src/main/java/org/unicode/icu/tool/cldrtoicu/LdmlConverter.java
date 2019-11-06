@@ -5,6 +5,7 @@ package org.unicode.icu.tool.cldrtoicu;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 import static org.unicode.cldr.api.CldrDataType.BCP47;
@@ -20,13 +21,16 @@ import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.RE
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.UNIT;
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.ZONE;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -265,6 +269,9 @@ public final class LdmlConverter {
                 .flatMap(t -> TYPE_TO_DIR.get(t).stream())
                 .collect(toImmutableList());
 
+        Map<IcuLocaleDir, DependencyGraph> graphMetadata = new HashMap<>();
+        splitDirs.forEach(d -> graphMetadata.put(d, new DependencyGraph()));
+
         SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
         Path baseDir = config.getOutputDir();
 
@@ -294,6 +301,7 @@ public final class LdmlConverter {
                 splitPaths.put(LOCALE_SPLIT_INFO.getOrDefault(rootName, LOCALES), p);
             }
 
+            Optional<String> parent = supplementalData.getExplicitParentLocaleOf(id);
             // We always write base languages (even if empty).
             boolean isBaseLanguage = !id.contains("_");
             // Run through all directories (not just the keySet() of the split path map) since we
@@ -308,13 +316,19 @@ public final class LdmlConverter {
                     }
                     continue;
                 }
+
                 Path outDir = baseDir.resolve(dir.getOutputDir());
                 IcuData splitData = new IcuData(icuData.getName(), icuData.hasFallback());
-                // The split data can still be empty for this directory, but that's expected.
+
+                // The split data can still be empty for this directory, but that's expected (it
+                // might only be written because it has an explicit parent added below).
                 splitPaths.get(dir).forEach(p -> splitData.add(p, icuData.get(p)));
-                // Adding a parent locale makes the data non-empty and forces it to be written.
-                supplementalData.getExplicitParentLocaleOf(splitData.getName())
-                    .ifPresent(p -> splitData.add(RB_PARENT, p));
+                // If we add an explicit parent locale, it forces the data to be written.
+                parent.ifPresent(p -> {
+                    splitData.add(RB_PARENT, p);
+                    graphMetadata.get(dir).addParent(id, p);
+                });
+
                 if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
                     splitData.setVersion(CldrDataSupplier.getCldrVersionString());
                     write(splitData, outDir);
@@ -326,18 +340,23 @@ public final class LdmlConverter {
         for (IcuLocaleDir dir : splitDirs) {
             Path outDir = baseDir.resolve(dir.getOutputDir());
             Set<String> targetIds = config.getTargetLocaleIds(dir);
+            DependencyGraph depGraph = graphMetadata.get(dir);
 
+            // TODO: Maybe calculate alias map directly into the dependency graph?
             Map<String, String> aliasMap = getAliasMap(targetIds, dir);
             aliasMap.forEach((s, t) -> {
+                depGraph.addAlias(s, t);
+                writeAliasFile(s, t, outDir);
                 // It's only important to record which alias files are written because of forced
                 // aliases, but since it's harmless otherwise, we just do it unconditionally.
                 // Normal alias files don't affect the empty file calculation, but forced ones can.
                 writtenLocaleIds.put(dir, s);
-                writeAliasFile(s, t, outDir);
             });
 
             calculateEmptyFiles(writtenLocaleIds.get(dir), aliasMap.values())
                 .forEach(id -> writeEmptyFile(id, outDir, aliasMap.values()));
+
+            writeDependencyGraph(outDir, depGraph);
         }
     }
 
@@ -511,6 +530,16 @@ public final class LdmlConverter {
             throw new RuntimeException("cannot create directory: " + dir, e);
         }
         return dir;
+    }
+
+    private void writeDependencyGraph(Path dir, DependencyGraph depGraph) {
+        try (BufferedWriter w = Files.newBufferedWriter(dir.resolve("LOCALE_DEPS.json"), UTF_8);
+            PrintWriter out = new PrintWriter(w)) {
+            depGraph.writeJsonTo(out, fileHeader);
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException("cannot write dependency graph file: " + dir, e);
+        }
     }
 
     // The set of IDs to process is:
