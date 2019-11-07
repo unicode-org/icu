@@ -326,12 +326,10 @@ public final class LdmlConverter {
                 // If we add an explicit parent locale, it forces the data to be written. This is
                 // where we check for forced overrides of the parent relationship (which is a per
                 // directory thing).
-                parent
-                    .map(p -> config.getForcedParents(dir).getOrDefault(id, p))
-                    .ifPresent(p -> {
-                        splitData.add(RB_PARENT, p);
-                        graphMetadata.get(dir).addParent(id, p);
-                    });
+                getIcuParent(id, parent, dir).ifPresent(p -> {
+                    splitData.add(RB_PARENT, p);
+                    graphMetadata.get(dir).addParent(id, p);
+                });
 
                 if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
                     splitData.setVersion(CldrDataSupplier.getCldrVersionString());
@@ -364,6 +362,7 @@ public final class LdmlConverter {
         }
     }
 
+
     private static final CharMatcher PATH_MODIFIER = CharMatcher.anyOf(":%");
 
     // Resource bundle paths elements can have variants (e.g. "Currencies%narrow) or type
@@ -373,15 +372,16 @@ public final class LdmlConverter {
         return idx == -1 ? segment : segment.substring(0, idx);
     }
 
+    /*
+     * There are four reasons for treating a locale ID as an alias.
+     * 1: It contains deprecated subtags (e.g. "sr_YU", which should be "sr_Cyrl_RS").
+     * 2: It has no CLDR data but is missing a script subtag.
+     * 3: It is one of the special "phantom" alias which cannot be represented normally
+     *    and must be manually mapped (e.g. legacy locale IDs which don't even parse).
+     * 4: It is a "super special" forced alias, which might replace existing aliases in
+     *    some output directories.
+     */
     private Map<String, String> getAliasMap(Set<String> localeIds, IcuLocaleDir dir) {
-        // There are four reasons for treating a locale ID as an alias.
-        // 1: It contains deprecated subtags (e.g. "sr_YU", which should be "sr_Cyrl_RS").
-        // 2: It has no CLDR data but is missing a script subtag.
-        // 3: It is one of the special "phantom" alias which cannot be represented normally
-        //    and must be manually mapped (e.g. legacy locale IDs which don't even parse).
-        // 4: It is a "super special" forced alias, which might replace existing aliases in
-        //    some output directories.
-
         // Even forced aliases only apply if they are in the set of locale IDs for the directory.
         Map<String, String> forcedAliases =
             Maps.filterKeys(config.getForcedAliases(dir), localeIds::contains);
@@ -419,6 +419,23 @@ public final class LdmlConverter {
         return aliasMap;
     }
 
+    /*
+     * Helper to determine the correct parent ID to be written into the ICU data file. The rules
+     * are:
+     * 1: If no forced parent exists (common) write the explicit parent (if that exists)
+     * 2: If a forced parent exists, but the forced value is what you would get by just truncating
+     *    the current locale ID, write nothing (ICU libraries truncate when no parent is set).
+     * 3: Write the forced parent (this is an exceptional case, and may not even occur in data).
+     */
+    private Optional<String> getIcuParent(String id, Optional<String> parent, IcuLocaleDir dir) {
+        String forcedParentId = config.getForcedParents(dir).get(id);
+        if (forcedParentId == null) {
+            return parent;
+        }
+        return id.contains("_") && forcedParentId.regionMatches(0, id, 0, id.lastIndexOf('_'))
+            ? Optional.empty() : Optional.of(forcedParentId);
+    }
+
     private void processSupplemental() {
         for (OutputType type : config.getOutputTypes()) {
             if (type.getCldrType() == LDML) {
@@ -442,7 +459,7 @@ public final class LdmlConverter {
                 break;
 
             case CURRENCY_DATA:
-                processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", true);
+                processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", false);
                 break;
 
             case METADATA:
