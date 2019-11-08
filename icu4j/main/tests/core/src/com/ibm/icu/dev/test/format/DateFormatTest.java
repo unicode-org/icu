@@ -5431,4 +5431,31 @@ public class DateFormatTest extends TestFmwk {
         dfmt.parse(inDate, pos);
         assertEquals("Error index", inDate.length(), pos.getErrorIndex());
     }
+
+    @Test
+    public void test20739_MillisecondsWithoutSeconds() {
+        String[][] cases = new String[][]{
+            {"SSSSm", "mm:ss.SSSS"},
+            {"mSSSS", "mm:ss.SSSS"},
+            {"SSSm", "mm:ss.SSS"},
+            {"mSSS", "mm:ss.SSS"},
+            {"SSm", "mm:ss.SS"},
+            {"mSS", "mm:ss.SS"},
+            {"Sm", "mm:ss.S"},
+            {"mS", "mm:ss.S"},
+            {"S", "S"},
+            {"SS", "SS"},
+            {"SSS", "SSS"},
+            {"SSSS", "SSSS"},
+            {"jmsSSS", "h:mm:ss.SSS a"},
+            {"jmSSS", "h:mm:ss.SSS a"}
+        };
+
+        ULocale locale = ULocale.ENGLISH;
+        for (String[] cas : cases) {
+            DateFormat fmt = DateFormat.getInstanceForSkeleton( cas[0], locale);
+            String pattern = ((SimpleDateFormat) fmt).toPattern();
+            assertEquals("Format pattern", cas[1], pattern);
+        }
+    }
 }
