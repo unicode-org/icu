@@ -2649,6 +2649,25 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 if (subField > 0) subField += value.length();
                 type[field] = subField;
             }
+
+            // #20739, we have a skeleton with milliseconde, but no seconds
+            if (!original.isFieldEmpty(FRACTIONAL_SECOND) && original.isFieldEmpty(SECOND)) {
+                // Force the use of seconds
+                for (int i = 0; i < types.length; ++i) {
+                    int[] row = types[i];
+                    if (row[1] == SECOND) {
+                        // first entry for SECOND
+                        original.populate(SECOND, (char)row[0], row[3]);
+                        baseOriginal.populate(SECOND, (char)row[0], row[3]);
+                        // We add value.length, same as above, when type is first initialized.
+                        // The value we want to "fake" here is "s", and 1 means "s".length()
+                        int subField = row[2];
+                        type[SECOND] = (subField > 0) ? subField + 1 : subField;
+                        break;
+                    }
+                }
+            }
+
             // #13183, handle special behavior for day period characters (a, b, B)
             if (!original.isFieldEmpty(HOUR)) {
                 if (original.getFieldChar(HOUR)=='h' || original.getFieldChar(HOUR)=='K') {
