@@ -1648,7 +1648,7 @@ void NumberFormatterApiTest::integerWidth() {
             u".8765",
             u".08765",
             u".008765",
-            u""); // TODO: Avoid the empty string here?
+            u"0");  // see ICU-20844
 
     assertFormatDescending(
             u"Integer Width Zero Fill 3",
