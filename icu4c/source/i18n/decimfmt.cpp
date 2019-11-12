@@ -1834,7 +1834,8 @@ void DecimalFormat::doFastFormatInt32(int32_t input, bool isNegative, UnicodeStr
     char16_t localBuffer[localCapacity];
     char16_t* ptr = localBuffer + localCapacity;
     int8_t group = 0;
-    for (int8_t i = 0; i < fields->fastData.maxInt && (input != 0 || i < fields->fastData.minInt); i++) {
+    int8_t minInt = (fields->fastData.minInt < 1)? 1: fields->fastData.minInt;
+    for (int8_t i = 0; i < fields->fastData.maxInt && (input != 0 || i < minInt); i++) {
         if (group++ == 3 && fields->fastData.cpGroupingSeparator != 0) {
             *(--ptr) = fields->fastData.cpGroupingSeparator;
             group = 1;
