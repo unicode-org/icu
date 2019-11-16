@@ -332,7 +332,7 @@ static void TestFormatToResult() {
     {
         const char* message = "Field position test 1";
         const UChar* expectedString = u"27. September 2010, 15:00 – 2. März 2011, 18:30";
-        udtitvfmt_formatToResult(fmt, fdi, Date201009270800, Date201103021030, &ec);
+        udtitvfmt_formatToResult(fmt, Date201009270800, Date201103021030, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // category, field, begin index, end index
@@ -358,7 +358,7 @@ static void TestFormatToResult() {
     {
         const char* message = "Field position test 2";
         const UChar* expectedString = u"27. September 2010, 15:00–22:00 Uhr";
-        udtitvfmt_formatToResult(fmt, fdi, Date201009270800, Date201009270800 + 7*_HOUR, &ec);
+        udtitvfmt_formatToResult(fmt, Date201009270800, Date201009270800 + 7*_HOUR, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // category, field, begin index, end index
