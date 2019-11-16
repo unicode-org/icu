@@ -119,9 +119,9 @@ udtitvfmt_format(const UDateIntervalFormat* formatter,
 U_DRAFT void U_EXPORT2
 udtitvfmt_formatToResult(
                 const UDateIntervalFormat* formatter,
-                UFormattedDateInterval* result,
                 UDate           fromDate,
                 UDate           toDate,
+                UFormattedDateInterval* result,
                 UErrorCode*     status) {
     if (U_FAILURE(*status)) {
         return;
