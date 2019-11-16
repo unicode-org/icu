@@ -9,6 +9,7 @@
 package com.ibm.icu.dev.test.format;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -17,6 +18,9 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.ListFormatter;
+import com.ibm.icu.text.ListFormatter.FormattedList;
+import com.ibm.icu.text.ListFormatter.Type;
+import com.ibm.icu.text.ListFormatter.Width;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
@@ -208,5 +212,84 @@ public class ListFormatterTest extends TestFmwk {
     private boolean isDefaultLocaleEnglishLike() {
         ULocale defaultLocale = ULocale.getDefault(ULocale.Category.FORMAT);
         return defaultLocale.equals(ULocale.ENGLISH) || defaultLocale.equals(ULocale.US);
+    }
+
+    @Test
+    public void TestFormattedValue() {
+        ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH);
+
+        {
+            String message = "Field position test 1";
+            String expectedString = "hello, wonderful, and world";
+            String[] inputs = {
+                "hello",
+                "wonderful",
+                "world"
+            };
+            FormattedList result = fmt.formatToValue(Arrays.asList(inputs));
+            Object[][] expectedFieldPositions = new Object[][] {
+                // field, begin index, end index
+                {ListFormatter.SpanField.LIST_SPAN, 0, 5, 0},
+                {ListFormatter.Field.ELEMENT, 0, 5},
+                {ListFormatter.Field.LITERAL, 5, 7},
+                {ListFormatter.SpanField.LIST_SPAN, 7, 16, 1},
+                {ListFormatter.Field.ELEMENT, 7, 16},
+                {ListFormatter.Field.LITERAL, 16, 22},
+                {ListFormatter.SpanField.LIST_SPAN, 22, 27, 2},
+                {ListFormatter.Field.ELEMENT, 22, 27}};
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions);
+        }
+    }
+
+    @Test
+    public void TestCreateStyled() {
+        // Locale en has interesting data
+        Object[][] cases = {
+            { "pt", Type.AND, Width.WIDE, "A, B e C" },
+            { "pt", Type.AND, Width.SHORT, "A, B e C" },
+            { "pt", Type.AND, Width.NARROW, "A, B, C" },
+            { "pt", Type.OR, Width.WIDE, "A, B ou C" },
+            { "pt", Type.OR, Width.SHORT, "A, B ou C" },
+            { "pt", Type.OR, Width.NARROW, "A, B ou C" },
+            { "pt", Type.UNITS, Width.WIDE, "A, B e C" },
+            { "pt", Type.UNITS, Width.SHORT, "A, B e C" },
+            { "pt", Type.UNITS, Width.NARROW, "A B C" },
+            { "en", Type.AND, Width.WIDE, "A, B, and C" },
+            { "en", Type.AND, Width.SHORT, "A, B, & C" },
+            { "en", Type.AND, Width.NARROW, "A, B, C" },
+            { "en", Type.OR, Width.WIDE, "A, B, or C" },
+            { "en", Type.OR, Width.SHORT, "A, B, or C" },
+            { "en", Type.OR, Width.NARROW, "A, B, or C" },
+            { "en", Type.UNITS, Width.WIDE, "A, B, C" },
+            { "en", Type.UNITS, Width.SHORT, "A, B, C" },
+            { "en", Type.UNITS, Width.NARROW, "A B C" },
+        };
+        for (Object[] cas : cases) {
+            Locale loc = new Locale((String) cas[0]);
+            ULocale uloc = new ULocale((String) cas[0]);
+            Type type = (Type) cas[1];
+            Width width = (Width) cas[2];
+            String expected = (String) cas[3];
+            ListFormatter fmt1 = ListFormatter.getInstance(loc, type, width);
+            ListFormatter fmt2 = ListFormatter.getInstance(uloc, type, width);
+            String message = "TestCreateStyled loc="
+                + loc + " type="
+                + type + " width="
+                + width;
+            String[] inputs = {
+                "A",
+                "B",
+                "C"
+            };
+            String result = fmt1.format(Arrays.asList(inputs));
+            assertEquals(message, expected, result);
+            // Coverage for the other factory method overload:
+            result = fmt2.format(Arrays.asList(inputs));
+            assertEquals(message, expected, result);
+        }
     }
 }

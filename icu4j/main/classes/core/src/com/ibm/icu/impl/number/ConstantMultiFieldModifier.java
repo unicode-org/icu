@@ -18,8 +18,8 @@ public class ConstantMultiFieldModifier implements Modifier {
     // value and is treated internally as immutable.
     protected final char[] prefixChars;
     protected final char[] suffixChars;
-    protected final Field[] prefixFields;
-    protected final Field[] suffixFields;
+    protected final Object[] prefixFields;
+    protected final Object[] suffixFields;
     private final boolean overwrite;
     private final boolean strong;
 
