@@ -26,6 +26,7 @@
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 #include "unicode/formattedvalue.h"
+#include "unicode/ulistformatter.h"
 
 U_NAMESPACE_BEGIN
 
@@ -185,9 +186,26 @@ class U_I18N_API ListFormatter : public UObject{
      */
     static ListFormatter* createInstance(const Locale& locale, UErrorCode& errorCode);
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Creates a ListFormatter for the given locale, list type, and style.
+     *
+     * @param locale The locale.
+     * @param type The type of list formatting to use.
+     * @param width The width of formatting to use.
+     * @param errorCode ICU error code, set if no data available for the given locale.
+     * @return A ListFormatter object created from internal data derived from CLDR data.
+     * @draft ICU 67
+     */
+    static ListFormatter* createInstance(
+      const Locale& locale, UListFormatterType type, UListFormatterWidth width, UErrorCode& errorCode);
+#endif  /* U_HIDE_DRAFT_API */
+
 #ifndef U_HIDE_INTERNAL_API
     /**
      * Creates a ListFormatter appropriate for a locale and style.
+     *
+     * TODO(ICU-20888): Remove this in ICU 68.
      *
      * @param locale The locale.
      * @param style the style, either "standard", "or", "unit", "unit-narrow", or "unit-short"
