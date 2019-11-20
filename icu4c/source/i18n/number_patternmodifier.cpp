@@ -195,7 +195,7 @@ int32_t MutablePatternModifier::apply(FormattedStringBuilder& output, int32_t le
                 UnicodeString(),
                 0,
                 0,
-                UNUM_FIELD_COUNT,
+                kUndefinedField,
                 status);
     }
     CurrencySpacingEnabledModifier::applyCurrencySpacing(
@@ -239,7 +239,7 @@ bool MutablePatternModifier::isStrong() const {
     return fStrong;
 }
 
-bool MutablePatternModifier::containsField(UNumberFormatFields field) const {
+bool MutablePatternModifier::containsField(Field field) const {
     (void)field;
     // This method is not currently used.
     UPRV_UNREACHABLE;

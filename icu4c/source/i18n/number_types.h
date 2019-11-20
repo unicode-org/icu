@@ -194,7 +194,7 @@ class U_I18N_API Modifier {
     /**
      * Whether the modifier contains at least one occurrence of the given field.
      */
-    virtual bool containsField(UNumberFormatFields field) const = 0;
+    virtual bool containsField(Field field) const = 0;
 
     /**
      * A fill-in for getParameters(). obj will always be set; if non-null, the other
