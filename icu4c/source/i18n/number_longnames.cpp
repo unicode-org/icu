@@ -209,7 +209,7 @@ LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef, c
     UnicodeString simpleFormats[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, simpleFormats, status);
     if (U_FAILURE(status)) { return result; }
-    result->simpleFormatsToModifiers(simpleFormats, UNUM_MEASURE_UNIT_FIELD, status);
+    result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
     return result;
 }
 
@@ -247,7 +247,7 @@ LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit, con
         compiled.format(UnicodeString(u"{0}"), secondaryString, perUnitFormat, status);
         if (U_FAILURE(status)) { return result; }
     }
-    result->multiSimpleFormatsToModifiers(primaryData, perUnitFormat, UNUM_MEASURE_UNIT_FIELD, status);
+    result->multiSimpleFormatsToModifiers(primaryData, perUnitFormat, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
     return result;
 }
 
@@ -296,7 +296,7 @@ LongNameHandler* LongNameHandler::forCurrencyLongNames(const Locale &loc, const 
     UnicodeString simpleFormats[ARRAY_LENGTH];
     getCurrencyLongNameData(loc, currency, simpleFormats, status);
     if (U_FAILURE(status)) { return nullptr; }
-    result->simpleFormatsToModifiers(simpleFormats, UNUM_CURRENCY_FIELD, status);
+    result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
     return result;
 }
 
