@@ -1223,6 +1223,25 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 64 */
         public static final int WANCHO_ID = 300; /*[1E2C0]*/
 
+        // New blocks in Unicode 13.0
+
+        /** @stable ICU 66 */
+        public static final int CHORASMIAN_ID = 301; /*[10FB0]*/
+        /** @stable ICU 66 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G_ID = 302; /*[30000]*/
+        /** @stable ICU 66 */
+        public static final int DIVES_AKURU_ID = 303; /*[11900]*/
+        /** @stable ICU 66 */
+        public static final int KHITAN_SMALL_SCRIPT_ID = 304; /*[18B00]*/
+        /** @stable ICU 66 */
+        public static final int LISU_SUPPLEMENT_ID = 305; /*[11FB0]*/
+        /** @stable ICU 66 */
+        public static final int SYMBOLS_FOR_LEGACY_COMPUTING_ID = 306; /*[1FB00]*/
+        /** @stable ICU 66 */
+        public static final int TANGUT_SUPPLEMENT_ID = 307; /*[18D00]*/
+        /** @stable ICU 66 */
+        public static final int YEZIDI_ID = 308; /*[10E80]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1230,7 +1249,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 301;
+        public static final int COUNT = 309;
 
         // blocks objects ---------------------------------------------------
 
@@ -2571,6 +2590,33 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 64 */
         public static final UnicodeBlock WANCHO = new UnicodeBlock("WANCHO", WANCHO_ID); /*[1E2C0]*/
 
+        // New blocks in Unicode 13.0
+
+        /** @stable ICU 66 */
+        public static final UnicodeBlock CHORASMIAN =
+                new UnicodeBlock("CHORASMIAN", CHORASMIAN_ID); /*[10FB0]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G =
+                new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G",
+                        CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G_ID); /*[30000]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock DIVES_AKURU =
+                new UnicodeBlock("DIVES_AKURU", DIVES_AKURU_ID); /*[11900]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock KHITAN_SMALL_SCRIPT =
+                new UnicodeBlock("KHITAN_SMALL_SCRIPT", KHITAN_SMALL_SCRIPT_ID); /*[18B00]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock LISU_SUPPLEMENT =
+                new UnicodeBlock("LISU_SUPPLEMENT", LISU_SUPPLEMENT_ID); /*[11FB0]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock SYMBOLS_FOR_LEGACY_COMPUTING =
+                new UnicodeBlock("SYMBOLS_FOR_LEGACY_COMPUTING", SYMBOLS_FOR_LEGACY_COMPUTING_ID); /*[1FB00]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock TANGUT_SUPPLEMENT =
+                new UnicodeBlock("TANGUT_SUPPLEMENT", TANGUT_SUPPLEMENT_ID); /*[18D00]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock YEZIDI = new UnicodeBlock("YEZIDI", YEZIDI_ID); /*[10E80]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -3780,6 +3826,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int TOP_AND_RIGHT = 13;
         /** @stable ICU 63 */
         public static final int VISUAL_ORDER_LEFT = 14;
+        /** @stable ICU 66 */
+        public static final int TOP_AND_BOTTOM_AND_LEFT = 15;
     }
 
     /**
