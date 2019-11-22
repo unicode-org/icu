@@ -6,7 +6,14 @@
 # file: line.txt
 #
 # Reference Line Break rules for intltest rbbi/RBBIMonkeyTest.
-# Rules derived from Unicode Standard Annex #14 Revision 44 for Unicode 13.0
+# Rules derived from Unicode Standard Annex #14 Revision 44 for Unicode 13.0,
+# with the following modification:
+#
+#         Boundaries between hyphens and following letters are suppressed when
+#         there is a boundary preceding the hyphen. See rule 20.9
+#
+#         This corresponds to CSS line-break=strict (BCP47 -u-lb-strict).
+#         It sets characters of class CJ to behave like NS.
 #
 # Note: Rule syntax and the monkey test itself are still a work in progress.
 #       They are expected to change with review and the addition of support for rule tailoring.
@@ -172,7 +179,7 @@ LB21.2:      BB CM* [^CM CB];
 
 LB21b:       SY CM* HL;
 
-LB22.2:       . CM* IN;
+LB22:        . CM* IN;
 
 LB23.1:      (AL | HL | CM) CM* NU;
 LB23.2:      NU CM* (AL | HL);
