@@ -6,13 +6,34 @@
 Basic instructions for running the LdmlConverter via Maven
 ==========================================================
 
+Requirements
+------------
+
+* A CLDR release for supplying CLDR data and the CLDR API.
+* The Maven build tool
+* The Ant build tool
+
 Important directories
 ---------------------
 
-<CLDR_DIR>  = The root directory of the CLDR release.
+<CLDR_DIR>  = The top-level directory for the CLDR production data (typically
+              the "production" directory in the staging repository).
 
 <OUT_DIR>   = The output directory into which ICU data files should be written.
 
+
+Initial Setup
+-------------
+
+This project relies on the Maven build tool for managing dependencies and uses
+Ant for configuration purposes, so both will need to be installed. On a debian
+based system, this should be as simple as:
+
+$ sudo apt-get install maven ant
+
+See also lib/README.txt for instructions on how to install the CLDR JAR files
+which contains the CLDR API used by these tools. This step will only need to
+be repeated when you update the CLDR project you are using.
 
 Generating all ICU data
 -----------------------
@@ -25,9 +46,7 @@ $ CLDR_DIR=<CLDR_DIR> ant -f build-icu-data.xml
 Running unit tests
 ------------------
 
-$ mvn test \
-  -DCLDR_DIR='<CLDR_DIR>' \
-  -DCLDR_DTD_CACHE='<DTD_CACHE>'
+$ mvn test -DCLDR_DIR=<CLDR_DIR>
 
 
 Importing and running from an IDE
