@@ -3,7 +3,7 @@
 # License & terms of use: http://www.unicode.org/copyright.html#License
 
 data = {
-    "cldrVersion": "36",
+    "cldrVersion": "36.1",
     "aliases": {
         "ars": "ar_SA",
         "az_AZ": "az_Latn_AZ",
