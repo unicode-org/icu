@@ -128,11 +128,12 @@ public class CompactNotation extends Notation {
 
             // Treat zero, NaN, and infinity as if they had magnitude 0
             int magnitude;
+            int multiplier = 0;
             if (quantity.isZeroish()) {
                 magnitude = 0;
                 micros.rounder.apply(quantity);
             } else {
-                int multiplier = micros.rounder.chooseMultiplierAndApply(quantity, data);
+                multiplier = micros.rounder.chooseMultiplierAndApply(quantity, data);
                 magnitude = quantity.isZeroish() ? 0 : quantity.getMagnitude();
                 magnitude -= multiplier;
             }
@@ -155,6 +156,11 @@ public class CompactNotation extends Notation {
                 unsafePatternModifier.setNumberProperties(quantity.signum(), null);
                 micros.modMiddle = unsafePatternModifier;
             }
+
+            // Change the exponent only after we select appropriate plural form
+            // for formatting purposes so that we preserve expected formatted
+            // string behavior.
+            quantity.adjustExponent(-1 * multiplier);
 
             // We already performed rounding. Do not perform it again.
             micros.rounder = null;

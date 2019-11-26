@@ -180,6 +180,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
         isApproximate = false;
         origDouble = 0;
         origDelta = 0;
+        exponent = 0;
     }
 
     @Override
@@ -254,11 +255,11 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
             }
             BigDecimal result = BigDecimal.valueOf(tempLong);
             // Test that the new scale fits inside the BigDecimal
-            long newScale = result.scale() + scale;
+            long newScale = result.scale() + scale + exponent;
             if (newScale <= Integer.MIN_VALUE) {
                 result = BigDecimal.ZERO;
             } else {
-                result = result.scaleByPowerOfTen(scale);
+                result = result.scaleByPowerOfTen(scale + exponent);
             }
             if (isNegative()) {
                 result = result.negate();

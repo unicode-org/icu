@@ -86,6 +86,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     protected int lReqPos = 0;
     protected int rReqPos = 0;
 
+    /**
+     * The value of the (suppressed) exponent after the number has been put into
+     * a notation with exponents (ex: compact, scientific).
+     */
+    protected int exponent = 0;
+
     @Override
     public void copyFrom(DecimalQuantity _other) {
         copyBcdFrom(_other);
@@ -98,13 +104,14 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         origDouble = other.origDouble;
         origDelta = other.origDelta;
         isApproximate = other.isApproximate;
+        exponent = other.exponent;
     }
 
     public DecimalQuantity_AbstractBCD clear() {
         lReqPos = 0;
         rReqPos = 0;
         flags = 0;
-        setBcdToZero(); // sets scale, precision, hasDouble, origDouble, origDelta, and BCD data
+        setBcdToZero(); // sets scale, precision, hasDouble, origDouble, origDelta, exponent, and BCD data
         return this;
     }
 
@@ -217,6 +224,16 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     @Override
+    public int getExponent() {
+        return exponent;
+    }
+
+    @Override
+    public void adjustExponent(int delta) {
+        exponent = exponent + delta;
+    }
+
+    @Override
     public StandardPlural getStandardPlural(PluralRules rules) {
         if (rules == null) {
             // Fail gracefully if the user didn't provide a PluralRules
@@ -246,6 +263,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             return fractionCount();
         case w:
             return fractionCountWithoutTrailingZeros();
+        case e:
+            return getExponent();
         default:
             return Math.abs(toDouble());
         }
@@ -291,11 +310,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     private int fractionCount() {
-        return -getLowerDisplayMagnitude();
+        return Math.max(0, -getLowerDisplayMagnitude() - exponent);
     }
 
     private int fractionCountWithoutTrailingZeros() {
-        return Math.max(-scale, 0);
+        return Math.max(-scale - exponent, 0);
     }
 
     @Override
@@ -577,7 +596,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     /**
      * Returns a long approximating the internal BCD. A long can only represent the integral part of the
-     * number.
+     * number.  Note: this method incorporates the value of {@code exponent}
+     * (for cases such as compact notation) to return the proper long value
+     * represented by the result.
      *
      * @param truncateIfOverflow if false and the number does NOT fit, fails with an assertion error.
      * @return A 64-bit integer representation of the internal BCD.
@@ -588,12 +609,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         // Fallback behavior upon truncateIfOverflow is to truncate at 17 digits.
         assert(truncateIfOverflow || fitsInLong());
         long result = 0L;
-        int upperMagnitude = scale + precision - 1;
+        int upperMagnitude = exponent + scale + precision - 1;
         if (truncateIfOverflow) {
             upperMagnitude = Math.min(upperMagnitude, 17);
         }
         for (int magnitude = upperMagnitude; magnitude >= 0; magnitude--) {
-            result = result * 10 + getDigitPos(magnitude - scale);
+            result = result * 10 + getDigitPos(magnitude - scale - exponent);
         }
         if (isNegative()) {
             result = -result;
@@ -605,10 +626,13 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * This returns a long representing the fraction digits of the number, as required by PluralRules.
      * For example, if we represent the number "1.20" (including optional and required digits), then this
      * function returns "20" if includeTrailingZeros is true or "2" if false.
+     * Note: this method incorporates the value of {@code exponent}
+     * (for cases such as compact notation) to return the proper long value
+     * represented by the result.
      */
     public long toFractionLong(boolean includeTrailingZeros) {
         long result = 0L;
-        int magnitude = -1;
+        int magnitude = -1 - exponent;
         int lowerMagnitude = scale;
         if (includeTrailingZeros) {
             lowerMagnitude = Math.min(lowerMagnitude, rReqPos);
@@ -638,7 +662,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (isZeroish()) {
             return true;
         }
-        if (scale < 0) {
+        if (exponent + scale < 0) {
             return false;
         }
         int magnitude = getMagnitude();
@@ -991,20 +1015,38 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     @Override
     public String toPlainString() {
-        // NOTE: This logic is duplicated between here and DecimalQuantity_SimpleStorage.
         StringBuilder sb = new StringBuilder();
-        if (isNegative()) {
-            sb.append('-');
-        }
-        if (precision == 0 || getMagnitude() < 0) {
-            sb.append('0');
-        }
-        for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
-            sb.append((char) ('0' + getDigit(m)));
-            if (m == 0)
-                sb.append('.');
-        }
+        toPlainString(sb);
         return sb.toString();
+    }
+
+    public void toPlainString(StringBuilder result) {
+        assert(!isApproximate);
+        if (isNegative()) {
+            result.append('-');
+        }
+        if (precision == 0) {
+            result.append('0');
+            return;
+        }
+
+        int upper = scale + precision + exponent - 1;
+        int lower = scale + exponent;
+        if (upper < lReqPos - 1) {
+            upper = lReqPos - 1;
+        }
+        if (lower > rReqPos) {
+            lower = rReqPos;
+        }
+
+        int p = upper;
+        for (; p >= 0; p--) {
+            result.append((char) ('0' + getDigitPos(p - scale - exponent)));
+        }
+        result.append('.');
+        for(; p >= lower; p--) {
+            result.append((char) ('0' + getDigitPos(p - scale - exponent)));
+        }
     }
 
     public String toScientificString() {
@@ -1035,7 +1077,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             }
         }
         result.append('E');
-        int _scale = upperPos + scale;
+        int _scale = upperPos + scale + exponent;
         if (_scale == Integer.MIN_VALUE) {
             result.append("-2147483648");
             return;
@@ -1146,7 +1188,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     /**
      * Sets the internal representation to zero. Clears any values stored in scale, precision, hasDouble,
-     * origDouble, origDelta, and BCD data.
+     * origDouble, origDelta, exponent, and BCD data.
      */
     protected abstract void setBcdToZero();
 

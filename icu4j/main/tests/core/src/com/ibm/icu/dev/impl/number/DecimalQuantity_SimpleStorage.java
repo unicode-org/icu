@@ -95,6 +95,8 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
     1000000000000000000L
   };
 
+  private int origPrimaryScale;
+
   @Override
   public int maxRepresentableDigits() {
     return Integer.MAX_VALUE;
@@ -110,6 +112,7 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
     primaryScale = 0;
     primaryPrecision = computePrecision(primary);
     fallback = null;
+    origPrimaryScale = primaryScale;
   }
 
   /**
@@ -189,6 +192,8 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
       primary = -1;
       fallback = new BigDecimal(temp);
     }
+
+    origPrimaryScale = primaryScale;
   }
 
   static final double LOG_2_OF_TEN = 3.32192809489;
@@ -279,6 +284,7 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
     primaryPrecision = _other.primaryPrecision;
     fallback = _other.fallback;
     flags = _other.flags;
+    origPrimaryScale = _other.origPrimaryScale;
   }
 
   @Override
@@ -915,5 +921,15 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
       ((UFieldPosition) fp)
           .setFractionDigits((int) getPluralOperand(Operand.v), (long) getPluralOperand(Operand.f));
     }
+  }
+
+  @Override
+  public int getExponent() {
+    return origPrimaryScale;
+  }
+
+  @Override
+  public void adjustExponent(int delta) {
+      origPrimaryScale = origPrimaryScale + delta;
   }
 }
