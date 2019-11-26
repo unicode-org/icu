@@ -350,6 +350,15 @@ public class NumberFormatterApiTest {
                 "1 millón");
 
         assertFormatSingle(
+                "Compact Plural One with rounding",
+                "compact-long precision-integer",
+                "KK precision-integer",
+                NumberFormatter.with().notation(Notation.compactLong()).precision(Precision.integer()),
+                ULocale.forLanguageTag("es"),
+                1222222,
+                "1 millón");
+
+        assertFormatSingle(
                 "Compact Plural Other",
                 "compact-long",
                 "KK",
