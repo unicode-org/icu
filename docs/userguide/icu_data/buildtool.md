@@ -43,7 +43,8 @@ The configuration file may be written in either [JSON](http://json.org/) or
 `ICU_DATA_FILTER_FILE` environment variable when running `runConfigureICU` on
 Unix or when building the data package on Windows.  For example:
 
-    ICU_DATA_FILTER_FILE=filters.json path/to/icu4c/source/runConfigureICU Linux
+    ICU_DATA_FILTER_FILE=filters.json
+    path/to/icu4c/source/runConfigureICU Linux
 
 **Important:** You *must* have the data sources in order to use the ICU Data
 Build Tool. Check for the file icu4c/source/data/locales/root.txt. If that file
