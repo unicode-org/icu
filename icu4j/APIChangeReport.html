@@ -4,258 +4,73 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- © 2019 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html#License -->
-<title>ICU4J API Comparison: ICU4J 64.2 with ICU4J 65.1</title>
+<title>ICU4J API Comparison: ICU4J 65.1 with ICU4J 66.0.1</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 64.2 with ICU4J 65.1</h1>
+<h1>ICU4J API Comparison: ICU4J 65.1 with ICU4J 66.0.1</h1>
 
 <hr/>
-<h2>Removed from ICU4J 64.2</h2>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-LocaleMatcher
-<ul>
-<li><span style='color:green'>(stable)</span> public ULocale <i>getBestMatch</i>(LocalePriorityList)</li>
-</ul>
-</ul>
-
+<h2>Removed from ICU4J 65.1</h2>
+<p>(no API removed)</p>
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 65.1</h2>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-LocaleMatcher
-<ul>
-<li><span style='color:gray'>(deprecated)</span> public double <i>match</i>(ULocale, ULocale, ULocale, ULocale)</li>
-</ul>
-</ul>
-
+<h2>Deprecated or Obsoleted in ICU4J 66.0.1</h2>
+<p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 65.1 (old, new)</h2>
+<h2>Changed in ICU4J 66.0.1 (old, new)</h2>
 <p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 65.1</h2>
+<h2>Promoted to stable in ICU4J 66.0.1</h2>
+<p>(no API promoted to stable)</p>
+
+<hr/>
+<h2>Added in ICU4J 66.0.1</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
-<li><span style='color:green'>(stable)</span> public final class <i>CharacterProperties</i></li>
+UCharacter.IndicPositionalCategory
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int TOP_AND_BOTTOM_AND_LEFT</li>
 </ul>
-
-<h3>Package com.ibm.icu.number</h3>
+UCharacter.UnicodeBlock
 <ul>
-<li><span style='color:green'>(stable)</span> public class <i>CompactNotation</i></li>
-<li><span style='color:green'>(stable)</span> public abstract class <i>CurrencyPrecision</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>FormattedNumber</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>FormattedNumberRange</i></li>
-<li><span style='color:green'>(stable)</span> public abstract class <i>FractionPrecision</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>IntegerWidth</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>LocalizedNumberFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>LocalizedNumberRangeFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>Notation</i></li>
-<li><span style='color:green'>(stable)</span> public final class <i>NumberFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public abstract class <i>NumberFormatterSettings</i></li>
-<li><span style='color:green'>(stable)</span> public abstract class <i>NumberRangeFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public abstract class <i>NumberRangeFormatterSettings</i></li>
-<li><span style='color:green'>(stable)</span> public abstract class <i>Precision</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>Scale</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>ScientificNotation</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>SimpleNotation</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>SkeletonSyntaxException</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>UnlocalizedNumberFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>UnlocalizedNumberRangeFormatter</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>NumberFormatter.DecimalSeparatorDisplay</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>NumberFormatter.GroupingStrategy</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>NumberFormatter.SignDisplay</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>NumberFormatter.UnitWidth</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>NumberRangeFormatter.RangeCollapse</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>NumberRangeFormatter.RangeIdentityFallback</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>NumberRangeFormatter.RangeIdentityResult</i></li>
-NumberFormatter.DecimalSeparatorDisplay
-<ul>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.DecimalSeparatorDisplay ALWAYS</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.DecimalSeparatorDisplay AUTO</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CHORASMIAN</li>
+<li><span style='color:green'>(stable)</span> public static final int CHORASMIAN_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G</li>
+<li><span style='color:green'>(stable)</span> public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock DIVES_AKURU</li>
+<li><span style='color:green'>(stable)</span> public static final int DIVES_AKURU_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock KHITAN_SMALL_SCRIPT</li>
+<li><span style='color:green'>(stable)</span> public static final int KHITAN_SMALL_SCRIPT_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock LISU_SUPPLEMENT</li>
+<li><span style='color:green'>(stable)</span> public static final int LISU_SUPPLEMENT_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SYMBOLS_FOR_LEGACY_COMPUTING</li>
+<li><span style='color:green'>(stable)</span> public static final int SYMBOLS_FOR_LEGACY_COMPUTING_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TANGUT_SUPPLEMENT</li>
+<li><span style='color:green'>(stable)</span> public static final int TANGUT_SUPPLEMENT_ID</li>
+<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock YEZIDI</li>
+<li><span style='color:green'>(stable)</span> public static final int YEZIDI_ID</li>
 </ul>
-NumberFormatter.GroupingStrategy
+UScript
 <ul>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.GroupingStrategy AUTO</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.GroupingStrategy MIN2</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.GroupingStrategy OFF</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.GroupingStrategy ON_ALIGNED</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.GroupingStrategy THOUSANDS</li>
-</ul>
-NumberFormatter.SignDisplay
-<ul>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay ACCOUNTING</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay ACCOUNTING_ALWAYS</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay ACCOUNTING_EXCEPT_ZERO</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay ALWAYS</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay AUTO</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay EXCEPT_ZERO</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay NEVER</li>
-</ul>
-NumberFormatter.UnitWidth
-<ul>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.UnitWidth FULL_NAME</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.UnitWidth HIDDEN</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.UnitWidth ISO_CODE</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.UnitWidth NARROW</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormatter.UnitWidth SHORT</li>
-</ul>
-NumberRangeFormatter.RangeCollapse
-<ul>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeCollapse ALL</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeCollapse AUTO</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeCollapse NONE</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeCollapse UNIT</li>
-</ul>
-NumberRangeFormatter.RangeIdentityFallback
-<ul>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeIdentityFallback APPROXIMATELY</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeIdentityFallback APPROXIMATELY_OR_SINGLE_VALUE</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeIdentityFallback RANGE</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeIdentityFallback SINGLE_VALUE</li>
-</ul>
-NumberRangeFormatter.RangeIdentityResult
-<ul>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeIdentityResult EQUAL_AFTER_ROUNDING</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeIdentityResult EQUAL_BEFORE_ROUNDING</li>
-<li><span style='color:green'>(stable)</span> public static final NumberRangeFormatter.RangeIdentityResult NOT_EQUAL</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-DecimalFormat
-<ul>
-<li><span style='color:green'>(stable)</span> public LocalizedNumberFormatter <i>toNumberFormatter</i>()</li>
-</ul>
-SpoofChecker
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int HIDDEN_OVERLAY</li>
+<li><span style='color:green'>(stable)</span> public static final int CHORASMIAN</li>
+<li><span style='color:green'>(stable)</span> public static final int DIVES_AKURU</li>
+<li><span style='color:green'>(stable)</span> public static final int KHITAN_SMALL_SCRIPT</li>
+<li><span style='color:green'>(stable)</span> public static final int YEZIDI</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-<li><span style='color:green'>(stable)</span> public abstract class <i>CodePointMap</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>CodePointMap.Range</i></li>
-<li><span style='color:green'>(stable)</span> public class <i>CodePointMap.StringIterator</i></li>
-<li><span style='color:green'>(stable)</span> public static interface <i>CodePointMap.ValueFilter</i></li>
-<li><span style='color:green'>(stable)</span> public abstract class <i>CodePointTrie</i></li>
-<li><span style='color:green'>(stable)</span> public static abstract class <i>CodePointTrie.Fast</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>CodePointTrie.Fast16</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>CodePointTrie.Fast32</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>CodePointTrie.Fast8</i></li>
-<li><span style='color:green'>(stable)</span> public static abstract class <i>CodePointTrie.Small</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>CodePointTrie.Small16</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>CodePointTrie.Small32</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>CodePointTrie.Small8</i></li>
-<li><span style='color:green'>(stable)</span> public final class <i>MutableCodePointTrie</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>CodePointMap.RangeOption</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>CodePointTrie.Type</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>CodePointTrie.ValueWidth</i></li>
-CodePointMap.RangeOption
+VersionInfo
 <ul>
-<li><span style='color:green'>(stable)</span> public static final CodePointMap.RangeOption FIXED_ALL_SURROGATES</li>
-<li><span style='color:green'>(stable)</span> public static final CodePointMap.RangeOption FIXED_LEAD_SURROGATES</li>
-<li><span style='color:green'>(stable)</span> public static final CodePointMap.RangeOption NORMAL</li>
-</ul>
-CodePointTrie.Type
-<ul>
-<li><span style='color:green'>(stable)</span> public static final CodePointTrie.Type FAST</li>
-<li><span style='color:green'>(stable)</span> public static final CodePointTrie.Type SMALL</li>
-</ul>
-CodePointTrie.ValueWidth
-<ul>
-<li><span style='color:green'>(stable)</span> public static final CodePointTrie.ValueWidth BITS_16</li>
-<li><span style='color:green'>(stable)</span> public static final CodePointTrie.ValueWidth BITS_32</li>
-<li><span style='color:green'>(stable)</span> public static final CodePointTrie.ValueWidth BITS_8</li>
-</ul>
-MeasureUnit
-<ul>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit ATMOSPHERE</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit PERCENT</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit PERMILLE</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit PETABYTE</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Added in ICU4J 65.1</h2>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-RelativeDateTimeFormatter.AbsoluteUnit
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.AbsoluteUnit HOUR</li>
-<li><span style='color:orange'>(draft)</span> public static final RelativeDateTimeFormatter.AbsoluteUnit MINUTE</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final class <i>LocaleMatcher.Builder</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>LocaleMatcher.Result</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>LocaleMatcher.Demotion</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>LocaleMatcher.FavorSubtag</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>ULocale.AvailableType</i></li>
-LocaleMatcher
-<ul>
-<li><span style='color:orange'>(draft)</span> public static LocaleMatcher.Builder <i>builder</i>()</li>
-<li><span style='color:orange'>(draft)</span> public java.util.Locale <i>getBestLocale</i>(java.lang.Iterable&lt;java.util.Locale&gt;)</li>
-<li><span style='color:orange'>(draft)</span> public java.util.Locale <i>getBestLocale</i>(java.util.Locale)</li>
-<li><span style='color:orange'>(draft)</span> public LocaleMatcher.Result <i>getBestLocaleResult</i>(java.lang.Iterable&lt;java.util.Locale&gt;)</li>
-<li><span style='color:orange'>(draft)</span> public LocaleMatcher.Result <i>getBestLocaleResult</i>(java.util.Locale)</li>
-<li><span style='color:green'>(stable)</span> public ULocale <i>getBestMatch</i>(java.lang.Iterable&lt;ULocale&gt;)</li>
-<li><span style='color:orange'>(draft)</span> public LocaleMatcher.Result <i>getBestMatchResult</i>(ULocale)</li>
-<li><span style='color:orange'>(draft)</span> public LocaleMatcher.Result <i>getBestMatchResult</i>(java.lang.Iterable&lt;ULocale&gt;)</li>
-</ul>
-LocaleMatcher.Demotion
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final LocaleMatcher.Demotion NONE</li>
-<li><span style='color:orange'>(draft)</span> public static final LocaleMatcher.Demotion REGION</li>
-</ul>
-LocaleMatcher.FavorSubtag
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final LocaleMatcher.FavorSubtag LANGUAGE</li>
-<li><span style='color:orange'>(draft)</span> public static final LocaleMatcher.FavorSubtag SCRIPT</li>
-</ul>
-LocalePriorityList
-<ul>
-<li><span style='color:orange'>(draft)</span> public java.util.Set&lt;ULocale&gt; <i>getULocales</i>()</li>
-</ul>
-MeasureUnit
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit BAR</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit DECADE</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit DOT_PER_CENTIMETER</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit DOT_PER_INCH</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit EM</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MEGAPIXEL</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PASCAL</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PIXEL</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PIXEL_PER_CENTIMETER</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PIXEL_PER_INCH</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit THERM_US</li>
-</ul>
-ULocale
-<ul>
-<li><span style='color:orange'>(draft)</span> public static java.util.Collection&lt;ULocale&gt; <i>getAvailableLocalesByType</i>(ULocale.AvailableType)</li>
-</ul>
-ULocale.AvailableType
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final ULocale.AvailableType DEFAULT</li>
-<li><span style='color:orange'>(draft)</span> public static final ULocale.AvailableType ONLY_LEGACY_ALIASES</li>
-<li><span style='color:orange'>(draft)</span> public static final ULocale.AvailableType WITH_LEGACY_ALIASES</li>
+<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_13_0</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Fri Sep 27 18:04:19 EDT 2019<br/>© 2019 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Dec 03 17:17:51 EST 2019<br/>© 2019 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>
