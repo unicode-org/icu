@@ -11,8 +11,8 @@ import com.ibm.icu.impl.CalType;
 import com.ibm.icu.impl.EraRules;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.JapaneseCalendar;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Tests for EraRules class
