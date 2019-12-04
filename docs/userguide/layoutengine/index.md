@@ -116,16 +116,16 @@ that is specific to the text. The following demonstrates a call to the
 LayoutEngineFactory:
 
 ```c
-LEFontInstace \*font = <the text's font>;
+LEFontInstace *font = <the text's font>;
 UScriptCode script = <the text's script>;
 LEErrorCode error = LE_NO_ERROR;
-LayoutEngine \*engine;
+LayoutEngine *engine;
 engine = LayoutEngine::layoutEngineFactory(font,
 script,
 0, // language - ignored
 error);
 The following example shows how to use the LayoutEngine to process the text:
-LEUnicode text\[\] = <the text to process>;
+LEUnicode text[] = <the text to process>;
 le_int32 offset = <the starting offset of the text to process>;
 le_int32 count = <the number of code points to process>;
 le_int32 max = <the total number of characters in text>;
@@ -142,15 +142,15 @@ maps each output glyph back to the input text array. Use the following get
 methods to copy these arrays:
 
 ```c
-LEGlyphID \*glyphs = new LEGlyphID\[glyphCount\];
-le_int32 \*indices = new le_int32\[glyphCount\];
-float \*positions = new float\[(glyphCount \* 2) + 2\];
+LEGlyphID *glyphs = new LEGlyphID[glyphCount];
+le_int32 *indices = new le_int32[glyphCount];
+float *positions = new float[(glyphCount * 2) + 2];
 engine->getGlyphs(glyphs, error);
 engine->getCharIndices(indices, error);
 engine->getGlyphPositions(positions, error);
 ```
 
-> :point_right: **Note** The positions array contains (glyphCount \* 2) + 2 entries. This is because
+> :point_right: **Note** The positions array contains (glyphCount * 2) + 2 entries. This is because
 > there is an x and a y position for each glyph. The extra two positions hold the
 > x, y position of the end of the text run.
 
