@@ -81,3 +81,6 @@ configure text !eol
 *.gz filter=lfs diff=lfs merge=lfs -text
 *.bz2 filter=lfs diff=lfs merge=lfs -text
 *.gif filter=lfs diff=lfs merge=lfs -text
+
+# Enable syntax highlighting on GitHub.com
+.cpyskip.txt linguist-language=Ignore-List
