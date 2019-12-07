@@ -52,6 +52,7 @@ public class CurrencyTest extends TestFmwk {
         Currency usd = Currency.getInstance("USD");
         /*int hash = */usd.hashCode();
         Currency jpy = Currency.getInstance("JPY");
+        Currency jpy2 = Currency.getInstance("jpy");
         if (usd.equals(jpy)) {
             errln("FAIL: USD == JPY");
         }
@@ -63,6 +64,12 @@ public class CurrencyTest extends TestFmwk {
         }
         if (!usd.equals(usd)) {
             errln("FAIL: USD != USD");
+        }
+        if (!jpy.equals(jpy2)) {
+            errln("FAIL: JPY != jpy");
+        }
+        if (!jpy2.equals(jpy)) {
+            errln("FAIL: jpy != JPY");
         }
 
         try {

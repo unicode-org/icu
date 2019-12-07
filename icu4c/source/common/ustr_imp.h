@@ -47,6 +47,18 @@ U_CAPI int32_t U_EXPORT2
 ustr_hashICharsN(const char *str, int32_t length);
 
 /**
+ * Convert an ASCII-range lowercase character to uppercase.
+ * 
+ * @param c A UChar.
+ * @return If UChar is a lowercase ASCII character, returns the uppercase version.
+ *         Otherwise, returns the input character.
+ */
+U_CAPI UChar U_EXPORT2
+u_asciiToUpper(UChar c);
+
+// TODO: Add u_asciiToLower if/when there is a need for it.
+
+/**
  * NUL-terminate a UChar * string if possible.
  * If length  < destCapacity then NUL-terminate.
  * If length == destCapacity then do not terminate but set U_STRING_NOT_TERMINATED_WARNING.
