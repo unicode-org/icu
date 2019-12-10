@@ -5462,30 +5462,36 @@ public class DateFormatTest extends TestFmwk {
 
     @Test
     public void test20741_ABFields() {
+        String [] skeletons = {"EEEEEBBBBB", "EEEEEbbbbb"};
         ULocale[] locales = ULocale.getAvailableLocales();
-        for (int i = 0; i < locales.length; i++) {
-            ULocale locale = locales[i];
-            if (isQuick() && (i % 17 != 0)) continue;
+        for (String skeleton : skeletons) {
+            for (int i = 0; i < locales.length; i++) {
+                ULocale locale = locales[i];
+                if (isQuick() && (i % 17 != 0)) continue;
 
-            DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
-            String pattern = gen.getBestPattern("EEEEEBBBBB");
-            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, locale);
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST8PDT"));
-            calendar.setTime(new Date(0));
+                DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
+                String pattern = gen.getBestPattern(skeleton);
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, locale);
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST8PDT"));
+                calendar.setTime(new Date(0));
 
-            FieldPosition pos_c = new FieldPosition(DateFormat.Field.DAY_OF_WEEK);
-            dateFormat.format(calendar, new StringBuffer(""), pos_c);
-            assertFalse("'Day of week' field was not found", pos_c.getBeginIndex() == 0 && pos_c.getEndIndex() == 0);
+                FieldPosition pos_c = new FieldPosition(DateFormat.Field.DAY_OF_WEEK);
+                dateFormat.format(calendar, new StringBuffer(""), pos_c);
+                assertFalse("'Day of week' field was not found", pos_c.getBeginIndex() == 0 && pos_c.getEndIndex() == 0);
 
-            FieldPosition pos_B = new FieldPosition(DateFormat.Field.FLEXIBLE_DAY_PERIOD);
-            dateFormat.format(calendar, new StringBuffer(""), pos_B);
-            assertFalse("'Flexible day period' field was not found", pos_B.getBeginIndex() == 0 && pos_B.getEndIndex() == 0);
+                if (skeleton.equals("EEEEEBBBBB")) {
+                    FieldPosition pos_B = new FieldPosition(DateFormat.Field.FLEXIBLE_DAY_PERIOD);
+                    dateFormat.format(calendar, new StringBuffer(""), pos_B);
+                    assertFalse("'Flexible day period' field was not found", pos_B.getBeginIndex() == 0 && pos_B.getEndIndex() == 0);
+                } else {
+                    FieldPosition pos_b = new FieldPosition(DateFormat.Field.AM_PM_MIDNIGHT_NOON);
+                    dateFormat.format(calendar, new StringBuffer(""), pos_b);
+                    assertFalse("'AM/PM/Midnight/Noon' field was not found", pos_b.getBeginIndex() == 0 && pos_b.getEndIndex() == 0);
+                }
 
-            FieldPosition pos_a = new FieldPosition(DateFormat.Field.AM_PM);
-            dateFormat.format(calendar, new StringBuffer(""), pos_a);
-            if (pos_B.getBeginIndex() == pos_a.getBeginIndex() && pos_B.getEndIndex() == pos_a.getEndIndex()) {
-                if (logKnownIssue("20741", "Format Fields reports same field position as \"a\" and \"B\"")) continue;
-                fail("Duplicated field found");
+                FieldPosition pos_a = new FieldPosition(DateFormat.Field.AM_PM);
+                dateFormat.format(calendar, new StringBuffer(""), pos_a);
+                assertTrue("'AM/PM' field was found", pos_a.getBeginIndex() == 0 && pos_a.getEndIndex() == 0);
             }
         }
     }
