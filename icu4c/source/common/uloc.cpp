@@ -466,15 +466,16 @@ typedef struct CanonicalizationMap {
  * different semantic kinds of transformations.
  */
 static const CanonicalizationMap CANONICALIZE_MAP[] = {
-    { "art_LOJBAN",     "jbo" }, /* registered name */
+    { "art__LOJBAN",    "jbo" }, /* registered name */
     { "hy__AREVELA",    "hy" }, /* Registered IANA variant */
     { "hy__AREVMDA",    "hyw" }, /* Registered IANA variant */
+    { "zh__GUOYU",      "zh" }, /* registered name */
+    { "zh__HAKKA",      "hak" }, /* registered name */
+    { "zh__XIANG",      "hsn" }, /* registered name */
+    // subtags with 3 chars won't be treated as variants.
     { "zh_GAN",         "gan" }, /* registered name */
-    { "zh_GUOYU",       "zh" }, /* registered name */
-    { "zh_HAKKA",       "hak" }, /* registered name */
     { "zh_MIN_NAN",     "nan" }, /* registered name */
     { "zh_WUU",         "wuu" }, /* registered name */
-    { "zh_XIANG",       "hsn" }, /* registered name */
     { "zh_YUE",         "yue" }, /* registered name */
 };
 

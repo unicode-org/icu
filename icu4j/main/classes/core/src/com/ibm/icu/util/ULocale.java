@@ -389,23 +389,24 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * canonicalized id.
      */
     private static String[][] CANONICALIZE_MAP = {
-        { "art_LOJBAN",     "jbo" }, /* registered name */
-        { "cel_GAULISH",    "cel__GAULISH" }, /* registered name */
-        { "de_1901",        "de__1901" }, /* registered name */
-        { "de_1906",        "de__1906" }, /* registered name */
-        { "en_BOONT",       "en__BOONT" }, /* registered name */
-        { "en_SCOUSE",      "en__SCOUSE" }, /* registered name */
+        { "art__LOJBAN",    "jbo" }, /* registered name */
+        { "cel__GAULISH",   "cel__GAULISH" }, /* registered name */
+        { "de__1901",       "de__1901" }, /* registered name */
+        { "de__1906",       "de__1906" }, /* registered name */
+        { "en__BOONT",      "en__BOONT" }, /* registered name */
+        { "en__SCOUSE",     "en__SCOUSE" }, /* registered name */
         { "hy__AREVELA",    "hy", null, null }, /* Registered IANA variant */
         { "hy__AREVMDA",    "hyw", null, null }, /* Registered IANA variant */
-        { "sl_ROZAJ",       "sl__ROZAJ" }, /* registered name */
-        { "zh_GAN",         "zh__GAN" }, /* registered name */
-        { "zh_GUOYU",       "zh" }, /* registered name */
-        { "zh_HAKKA",       "zh__HAKKA" }, /* registered name */
+        { "sl__ROZAJ",      "sl__ROZAJ" }, /* registered name */
+        { "zh__GUOYU",      "zh" }, /* registered name */
+        { "zh__HAKKA",      "hak" }, /* registered name */
+        { "zh__XIANG",      "hsn" }, /* registered name */
+        // Three letter subtags won't be treated as variants.
+        { "zh_GAN",         "gan" }, /* registered name */
         { "zh_MIN",         "zh__MIN" }, /* registered name */
-        { "zh_MIN_NAN",     "zh__MINNAN" }, /* registered name */
-        { "zh_WUU",         "zh__WUU" }, /* registered name */
-        { "zh_XIANG",       "zh__XIANG" }, /* registered name */
-        { "zh_YUE",         "zh__YUE" } /* registered name */
+        { "zh_MIN_NAN",     "nan" }, /* registered name */
+        { "zh_WUU",         "wuu" }, /* registered name */
+        { "zh_YUE",         "yue" } /* registered name */
     };
 
     /**
