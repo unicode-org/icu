@@ -3,12 +3,16 @@
 package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.stream.Collectors.joining;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -34,11 +38,18 @@ final class IcuTextWriter {
     private static final Pattern STRING_ESCAPE = Pattern.compile("(?!')\\\\\\\\(?!')");
     private static final Pattern QUOTE_ESCAPE = Pattern.compile("\\\\?\"");
 
+    private static final OpenOption[] ONLY_NEW_FILES = { CREATE_NEW };
+    private static final OpenOption[] OVERWRITE_FILES = { CREATE, TRUNCATE_EXISTING };
+
     /** Write a file in ICU data format with the specified header. */
-    static void writeToFile(IcuData icuData, Path outDir, List<String> header) {
+    static void writeToFile(
+        IcuData icuData, Path outDir, List<String> header, boolean allowOverwrite) {
+
         try {
             Files.createDirectories(outDir);
-            try (Writer w = Files.newBufferedWriter(outDir.resolve(icuData.getName() + ".txt"));
+            Path file = outDir.resolve(icuData.getName() + ".txt");
+            OpenOption[] fileOptions = allowOverwrite ? OVERWRITE_FILES : ONLY_NEW_FILES;
+            try (Writer w = Files.newBufferedWriter(file, fileOptions);
                 PrintWriter out = new PrintWriter(w)) {
                 new IcuTextWriter(icuData).writeTo(out, header);
             }

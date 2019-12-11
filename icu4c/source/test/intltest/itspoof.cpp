@@ -424,6 +424,13 @@ void IntlTestSpoof::testConfData() {
 
 
 void IntlTestSpoof::testScriptSet() {
+    // ScriptSet::SCRIPT_LIMIT is hardcoded.
+    // Increase it by multiples of 32 if there are too many script codes.
+    TEST_ASSERT(USCRIPT_CODE_LIMIT <= ScriptSet::SCRIPT_LIMIT);
+    // USCRIPT_CODE_LIMIT should include all script codes,
+    // but theoretically the data may define more.
+    TEST_ASSERT(u_getIntPropertyMaxValue(UCHAR_SCRIPT) < ScriptSet::SCRIPT_LIMIT);
+
     ScriptSet s1;
     ScriptSet s2;
     UErrorCode status = U_ZERO_ERROR;
@@ -439,15 +446,16 @@ void IntlTestSpoof::testScriptSet() {
     s1.reset(USCRIPT_ARABIC, status);
     TEST_ASSERT(s1 == s2);
 
+    static constexpr UScriptCode LAST_SCRIPT_CODE = (UScriptCode)(USCRIPT_CODE_LIMIT - 1);
     status = U_ZERO_ERROR;
     s1.setAll();
     TEST_ASSERT(s1.test(USCRIPT_COMMON, status));
     TEST_ASSERT(s1.test(USCRIPT_ETHIOPIC, status));
-    TEST_ASSERT(s1.test(USCRIPT_CODE_LIMIT, status));
+    TEST_ASSERT(s1.test(LAST_SCRIPT_CODE, status));
     s1.resetAll();
     TEST_ASSERT(!s1.test(USCRIPT_COMMON, status));
     TEST_ASSERT(!s1.test(USCRIPT_ETHIOPIC, status));
-    TEST_ASSERT(!s1.test(USCRIPT_CODE_LIMIT, status));
+    TEST_ASSERT(!s1.test(LAST_SCRIPT_CODE, status));
 
     status = U_ZERO_ERROR;
     s1.set(USCRIPT_TAKRI, status);

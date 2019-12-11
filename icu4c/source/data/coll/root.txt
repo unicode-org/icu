@@ -5,7 +5,7 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"36"}
+    Version{"36.1"}
     collations{
         default{"standard"}
         emoji{
@@ -382,7 +382,7 @@ root{
                 "& 👨 << 🧔 <<👱‍♂ <<👱🏻‍♂ <<👱🏼‍♂ <<👱🏽‍♂ <<👱🏾‍♂ <<👱🏿‍♂"
                 "& 👩 << 👱‍♀ << 👱🏻‍♀ << 👱🏼‍♀ << 👱🏽‍♀ << 👱🏾‍♀ << 👱🏿‍♀"
             }
-            Version{"36"}
+            Version{"36.1"}
         }
         eor{
             Sequence{
@@ -922,7 +922,7 @@ root{
                 "&ք"
                 "<և"
             }
-            Version{"36"}
+            Version{"36.1"}
         }
         private-unihan{
             Sequence{
@@ -1016,7 +1016,7 @@ root{
                 "&父=\uFDD0父"
                 "&爻=\uFDD0爻"
                 "&丬=\uFDD0爿"
-                "&𬌒=\uFDD0丬"
+                "&𰠗=\uFDD0丬"
                 "&片=\uFDD0片"
                 "&牙=\uFDD0牙"
                 "&牛=\uFDD0牛"
@@ -1140,7 +1140,7 @@ root{
                 "&鳥=\uFDD0鳥"
                 "&鸟=\uFDD0鸟"
                 "&鹵=\uFDD0鹵"
-                "&𮭰=\uFDD0卤"
+                "&𱊺=\uFDD0卤"
                 "&鹿=\uFDD0鹿"
                 "&麥=\uFDD0麥"
                 "&麦=\uFDD0麦"
@@ -1165,7 +1165,7 @@ root{
                 "&龟=\uFDD0龟"
                 "&龠=\uFDD0龠"
             }
-            Version{"36"}
+            Version{"36.1"}
         }
         search{
             Sequence{
@@ -1284,11 +1284,11 @@ root{
                 "&ᅳᅵ"
                 "=ᅴ"
             }
-            Version{"36"}
+            Version{"36.1"}
         }
         standard{
             Sequence{""}
-            Version{"36"}
+            Version{"36.1"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

@@ -2692,6 +2692,8 @@ private:
     UnicodeSet  *fEB;
     UnicodeSet  *fEM;
     UnicodeSet  *fZWJ;
+    UnicodeSet  *fOP30;
+    UnicodeSet  *fCP30;
 
     BreakIterator        *fCharBI;
     const UnicodeString  *fText;
@@ -2757,7 +2759,9 @@ RBBILineMonkey::RBBILineMonkey() :
     fXX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=XX}]"), status);
     fEB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EB}]"), status);
     fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EM}]"), status);
-    fZWJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
+    fZWJ   = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
+    fOP30  = new UnicodeSet(u"[\\p{Line_break=OP}-[\\p{ea=F}\\p{ea=W}\\p{ea=H}]]", status);
+    fCP30  = new UnicodeSet(u"[\\p{Line_break=CP}-[\\p{ea=F}\\p{ea=W}\\p{ea=H}]]", status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2815,6 +2819,9 @@ RBBILineMonkey::RBBILineMonkey() :
     fSets->addElement(fEB, status); classNames.push_back("fEB");
     fSets->addElement(fEM, status); classNames.push_back("fEM");
     fSets->addElement(fZWJ, status); classNames.push_back("fZWJ");
+    // TODO: fOP30 & fCP30 overlap with plain fOP. Probably OK, but fOP/CP chars will be over-represented.
+    fSets->addElement(fOP30, status); classNames.push_back("fOP30");
+    fSets->addElement(fCP30, status); classNames.push_back("fCP30");
 
     const char *rules =
             "((\\p{Line_Break=PR}|\\p{Line_Break=PO})(\\p{Line_Break=CM}|\\u200d)*)?"
@@ -3232,12 +3239,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        if ((fAL->contains(prevChar) && fIN->contains(thisChar)) ||
-            (fEX->contains(prevChar) && fIN->contains(thisChar)) ||
-            (fHL->contains(prevChar) && fIN->contains(thisChar)) ||
-            ((fID->contains(prevChar) || fEB->contains(prevChar) || fEM->contains(prevChar)) && fIN->contains(thisChar)) ||
-            (fIN->contains(prevChar) && fIN->contains(thisChar)) ||
-            (fNU->contains(prevChar) && fIN->contains(thisChar)) )   {
+        if (fIN->contains(thisChar))   {
             setAppliedRule(pos, "LB 22");
             continue;
         }
@@ -3336,11 +3338,11 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
         //          (AL | NU) x OP
         //          CP x (AL | NU)
-        if ((fAL->contains(prevChar) || fHL->contains(prevChar) || fNU->contains(prevChar)) && fOP->contains(thisChar)) {
+        if ((fAL->contains(prevChar) || fHL->contains(prevChar) || fNU->contains(prevChar)) && fOP30->contains(thisChar)) {
             setAppliedRule(pos,  "LB 30 No break in letters, numbers, or ordinary symbols, opening/closing punctuation.");
             continue;
         }
-        if (fCP->contains(prevChar) && (fAL->contains(thisChar) || fHL->contains(thisChar) || fNU->contains(thisChar))) {
+        if (fCP30->contains(prevChar) && (fAL->contains(thisChar) || fHL->contains(thisChar) || fNU->contains(thisChar))) {
             setAppliedRule(pos,  "LB 30 No break in letters, numbers, or ordinary symbols, opening/closing punctuation.");
             continue;
         }
@@ -3423,6 +3425,8 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fEB;
     delete fEM;
     delete fZWJ;
+    delete fOP30;
+    delete fCP30;
 
     delete fCharBI;
     delete fNumberMatcher;
