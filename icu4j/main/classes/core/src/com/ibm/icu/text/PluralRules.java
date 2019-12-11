@@ -174,18 +174,8 @@ public class PluralRules implements Serializable {
     static final UnicodeSet ALLOWED_ID = new UnicodeSet("[a-z]").freeze();
 
     // TODO Remove RulesList by moving its API and fields into PluralRules.
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static final String CATEGORY_SEPARATOR = ";  ";
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static final String KEYWORD_RULE_SEPARATOR = ": ";
+
+    private static final String CATEGORY_SEPARATOR = ";  ";
 
     private static final long serialVersionUID = 1;
 
@@ -195,14 +185,14 @@ public class PluralRules implements Serializable {
     /**
      * Provides a factory for returning plural rules
      *
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static abstract class Factory {
         /**
          * Sole constructor
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -223,7 +213,7 @@ public class PluralRules implements Serializable {
          * @return The predefined <code>PluralRules</code> object for this locale. If there's no predefined rules for
          *         this locale, the rules for the closest parent in the locale hierarchy that has one will be returned.
          *         The final fallback always returns the default rules.
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -233,7 +223,7 @@ public class PluralRules implements Serializable {
          * Utility for getting CARDINAL rules.
          * @param locale the locale
          * @return plural rules.
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -244,7 +234,7 @@ public class PluralRules implements Serializable {
         /**
          * Returns the locales for which there is plurals data.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -263,7 +253,7 @@ public class PluralRules implements Serializable {
          *            if not null and of length &gt; 0, this will hold 'true' at index 0 if locale is directly defined
          *            (without fallback) as having plural rules
          * @return the functionally-equivalent locale
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -271,7 +261,7 @@ public class PluralRules implements Serializable {
 
         /**
          * Returns the default factory.
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -281,7 +271,7 @@ public class PluralRules implements Serializable {
 
         /**
          * Returns whether or not there are overrides.
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -415,7 +405,7 @@ public class PluralRules implements Serializable {
     public static final PluralRules DEFAULT = new PluralRules(new RuleList().addRule(DEFAULT_RULE));
 
     /**
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -423,7 +413,7 @@ public class PluralRules implements Serializable {
         /**
          * The double value of the entire number.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -432,7 +422,7 @@ public class PluralRules implements Serializable {
         /**
          * The integer value, with the fraction digits truncated off.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -441,7 +431,7 @@ public class PluralRules implements Serializable {
         /**
          * All visible fraction digits as an integer, including trailing zeros.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -450,7 +440,7 @@ public class PluralRules implements Serializable {
         /**
          * Visible fraction digits as an integer, not including trailing zeros.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -459,7 +449,7 @@ public class PluralRules implements Serializable {
         /**
          * Number of visible fraction digits.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -468,7 +458,7 @@ public class PluralRules implements Serializable {
         /**
          * Number of visible fraction digits, not including trailing zeros.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -483,7 +473,7 @@ public class PluralRules implements Serializable {
          * <p>For example, "j is 3" is equivalent to "i is 3 and v is 0": it matches
          * "3" but not "3.1" or "3.0".
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -493,7 +483,7 @@ public class PluralRules implements Serializable {
     /**
      * An interface to FixedDecimal, allowing for other implementations.
      *
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -502,21 +492,21 @@ public class PluralRules implements Serializable {
          * Returns the value corresponding to the specified operand (n, i, f, t, v, or w).
          * If the operand is 'n', returns a double; otherwise, returns an integer.
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public double getPluralOperand(Operand operand);
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public boolean isNaN();
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -524,7 +514,7 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -550,7 +540,7 @@ public class PluralRules implements Serializable {
         private final int baseFactor;
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -559,7 +549,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -568,7 +558,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -577,7 +567,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -586,7 +576,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -595,7 +585,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -604,7 +594,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -613,7 +603,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -622,7 +612,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -633,7 +623,7 @@ public class PluralRules implements Serializable {
         static final long MAX = (long)1E18;
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          * @param n is the original number
          * @param v number of digits to the right of the decimal place. e.g 1.00 = 2 25. = 0
@@ -680,7 +670,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -702,7 +692,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -711,7 +701,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -724,7 +714,7 @@ public class PluralRules implements Serializable {
          * Return a guess as to the number of decimals that would be displayed. This is only a guess; callers should
          * always supply the decimals explicitly if possible. Currently, it is up to 6 decimals (without trailing zeros).
          * Returns 0 for infinities and nans.
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          *
          */
@@ -772,7 +762,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -794,7 +784,7 @@ public class PluralRules implements Serializable {
         /**
          * {@inheritDoc}
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Override
@@ -812,7 +802,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -822,7 +812,7 @@ public class PluralRules implements Serializable {
 
         /**
          * We're not going to care about NaN.
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Override
@@ -845,7 +835,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -865,7 +855,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -876,7 +866,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -886,7 +876,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -895,7 +885,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -906,7 +896,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -916,7 +906,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -926,7 +916,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -936,7 +926,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -958,7 +948,7 @@ public class PluralRules implements Serializable {
         /**
          * {@inheritDoc}
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -970,7 +960,7 @@ public class PluralRules implements Serializable {
         /**
          * {@inheritDoc}
          *
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -982,19 +972,19 @@ public class PluralRules implements Serializable {
 
     /**
      * Selection parameter for either integer-only or decimal-only.
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public enum SampleType {
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         INTEGER,
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -1003,25 +993,25 @@ public class PluralRules implements Serializable {
 
     /**
      * A range of NumberInfo that includes all values with the same visibleFractionDigitCount.
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static class FixedDecimalRange {
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public final FixedDecimal start;
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public final FixedDecimal end;
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -1033,7 +1023,7 @@ public class PluralRules implements Serializable {
             this.end = end;
         }
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -1045,25 +1035,25 @@ public class PluralRules implements Serializable {
 
     /**
      * A list of NumberInfo that includes all values with the same visibleFractionDigitCount.
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
     public static class FixedDecimalSamples {
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public final SampleType sampleType;
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public final Set<FixedDecimalRange> samples;
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -1133,7 +1123,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -1151,7 +1141,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -1174,7 +1164,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -1183,7 +1173,7 @@ public class PluralRules implements Serializable {
         }
 
         /**
-         * @internal
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
@@ -2064,7 +2054,7 @@ public class PluralRules implements Serializable {
      *
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
-     * @internal
+     * @internal Visible For Testing
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -2078,7 +2068,7 @@ public class PluralRules implements Serializable {
      *
      * @param number The number information for which the rule has to be determined.
      * @return The keyword of the selected rule.
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -2091,7 +2081,7 @@ public class PluralRules implements Serializable {
      *
      * @param sample The number information for which the rule has to be determined.
      * @param keyword The keyword to filter on
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -2148,7 +2138,7 @@ public class PluralRules implements Serializable {
      * @return the values that trigger this keyword, or null.  The returned collection
      * is immutable. It will be empty if the keyword is not defined.
      *
-     * @internal
+     * @internal Visible For Testing
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -2185,7 +2175,7 @@ public class PluralRules implements Serializable {
      * @param keyword the keyword to test
      * @param sampleType the type of samples requested, INTEGER or DECIMAL
      * @return a list of values matching the keyword.
-     * @internal
+     * @internal CLDR
      * @deprecated ICU internal only
      */
     @Deprecated
@@ -2225,12 +2215,7 @@ public class PluralRules implements Serializable {
         return result.size() == 0 ? null : Collections.unmodifiableSet(result);
     }
 
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public boolean addSample(String keyword, Number sample, int maxCount, Set<Double> result) {
+    private boolean addSample(String keyword, Number sample, int maxCount, Set<Double> result) {
         String selectedKeyword = sample instanceof FixedDecimal ? select((FixedDecimal)sample) : select(sample.doubleValue());
         if (selectedKeyword.equals(keyword)) {
             result.add(sample.doubleValue());
@@ -2251,7 +2236,7 @@ public class PluralRules implements Serializable {
      * @param keyword the keyword to test
      * @param sampleType the type of samples requested, INTEGER or DECIMAL
      * @return a list of values matching the keyword.
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -2398,7 +2383,7 @@ public class PluralRules implements Serializable {
      * @param uniqueValue
      *            If non null, set to the unique value.
      * @return the KeywordStatus
-     * @internal
+     * @internal Visible For Testing
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -2454,7 +2439,7 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * @internal
+     * @internal CLDR
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
@@ -2478,7 +2463,7 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * @internal
+     * @internal CLDR
      * @deprecated internal
      */
     @Deprecated
@@ -2486,17 +2471,12 @@ public class PluralRules implements Serializable {
         return toString().compareTo(other.toString());
     }
 
-    /**
-     * @internal
-     * @deprecated internal
-     */
-    @Deprecated
-    public Boolean isLimited(String keyword) {
+    Boolean isLimited(String keyword) {
         return rules.isLimited(keyword, SampleType.INTEGER);
     }
 
     /**
-     * @internal
+     * @internal Visible For Testing
      * @deprecated internal
      */
     @Deprecated
@@ -2505,7 +2485,7 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * @internal
+     * @internal CLDR
      * @deprecated internal
      */
     @Deprecated
