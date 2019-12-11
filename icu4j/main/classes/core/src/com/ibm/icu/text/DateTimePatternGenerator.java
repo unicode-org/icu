@@ -1205,7 +1205,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private static final int APPENDITEM_WIDTH_INT = APPENDITEM_WIDTH.ordinal();
     private static final DisplayWidth[] CLDR_FIELD_WIDTH = DisplayWidth.values();
 
-
     // Option masks for getBestPattern, replaceFieldTypes (individual masks may be ORed together)
 
     /**
@@ -1311,6 +1310,20 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      */
     public String getAppendItemName(int field) {
         return getFieldDisplayName(field, APPENDITEM_WIDTH);
+    }
+
+    /**
+     * Return the default hour cycle.
+     * @draft ICU 67
+     */
+    public DateFormat.HourCycle getDefaultHourCycle() {
+      switch(getDefaultHourFormatChar()) {
+        case 'h': return DateFormat.HourCycle.HOUR_CYCLE_12;
+        case 'H': return DateFormat.HourCycle.HOUR_CYCLE_23;
+        case 'k': return DateFormat.HourCycle.HOUR_CYCLE_24;
+        case 'K': return DateFormat.HourCycle.HOUR_CYCLE_11;
+        default: throw new AssertionError("should be unreachable");
+      }
     }
 
     /**

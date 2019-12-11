@@ -20,6 +20,7 @@
 #define __UDATPG_H__
 
 #include "unicode/utypes.h"
+#include "unicode/udat.h"
 #include "unicode/uenum.h"
 #include "unicode/localpointer.h"
 
@@ -650,5 +651,19 @@ U_STABLE const UChar * U_EXPORT2
 udatpg_getPatternForSkeleton(const UDateTimePatternGenerator *dtpg,
                              const UChar *skeleton, int32_t skeletonLength,
                              int32_t *pLength);
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Return the default hour cycle.
+ *
+ * @param dtpg a pointer to UDateTimePatternGenerator.
+ * @param pErrorCode a pointer to the UErrorCode which must not indicate a
+ *                   failure before the function call.
+ * @return the default hour cycle.
+ * @draft ICU 67
+ */
+U_DRAFT UDateFormatHourCycle U_EXPORT2
+udatpg_getDefaultHourCycle(const UDateTimePatternGenerator *dtpg, UErrorCode* pErrorCode);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif

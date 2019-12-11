@@ -687,6 +687,22 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
     }
 }
 
+UDateFormatHourCycle
+DateTimePatternGenerator::getDefaultHourCycle(UErrorCode& /*status*/) const {
+  switch(fDefaultHourFormatChar) {
+    case CAP_K:
+      return UDAT_HOUR_CYCLE_11;
+    case LOW_H:
+      return UDAT_HOUR_CYCLE_12;
+    case CAP_H:
+      return UDAT_HOUR_CYCLE_23;
+    case LOW_K:
+      return UDAT_HOUR_CYCLE_24;
+    default:
+      UPRV_UNREACHABLE;
+  }
+}
+
 UnicodeString
 DateTimePatternGenerator::getSkeleton(const UnicodeString& pattern, UErrorCode&
 /*status*/) {

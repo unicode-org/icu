@@ -483,6 +483,17 @@ public:
      */
     const UnicodeString& getDecimal() const;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Get the default hour cycle.
+     * @param status  Output param set to success/failure code on exit,
+     *               which must not indicate a failure before the function call.
+     * @return the default hour cycle.
+     * @draft ICU 67
+     */
+    UDateFormatHourCycle getDefaultHourCycle(UErrorCode& status) const;
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
