@@ -119,6 +119,7 @@ public:
     void TestBug13277();
     void TestBug13554();
     void TestBug20410();
+    void TestBug20900();
     void TestConstructorAcceptsBCP47();
 
     void TestAddLikelySubtags();

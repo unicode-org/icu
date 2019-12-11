@@ -255,6 +255,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestBug13277);
     TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO(TestBug20410);
+    TESTCASE_AUTO(TestBug20900);
     TESTCASE_AUTO(TestConstructorAcceptsBCP47);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
@@ -3099,13 +3100,39 @@ void LocaleTest::TestBug20410() {
 
     static const char locid3[] = "art__lojban@x=0";
     Locale result3 = Locale::createCanonical(locid3);
-    static const Locale expected3("art__LOJBAN@x=0");
+    static const Locale expected3("jbo@x=0");
     assertEquals(locid3, expected3.getName(), result3.getName());
 
     static const char locid4[] = "art-lojban-x-0";
     Locale result4 = Locale::createCanonical(locid4);
     static const Locale expected4("jbo@x=0");
     assertEquals(locid4, expected4.getName(), result4.getName());
+}
+
+void LocaleTest::TestBug20900() {
+    static const struct {
+        const char *localeID;    /* input */
+        const char *canonicalID; /* expected canonicalize() result */
+    } testCases[] = {
+        { "art-lojban", "jbo" },
+        { "zh-guoyu", "zh" },
+        { "zh-hakka", "hak" },
+        { "zh-xiang", "hsn" },
+        { "zh-min-nan", "nan" },
+        { "zh-gan", "gan" },
+        { "zh-wuu", "wuu" },
+        { "zh-yue", "yue" },
+    };
+
+    IcuTestErrorCode status(*this, "TestBug20900");
+    for (int32_t i=0; i < UPRV_LENGTHOF(testCases); i++) {
+        Locale loc = Locale::createCanonical(testCases[i].localeID);
+        std::string result = loc.toLanguageTag<std::string>(status);
+        const char* tag = loc.isBogus() ? "BOGUS" : result.c_str();
+        status.errIfFailureAndReset("FAIL: createCanonical(%s).toLanguageTag() expected \"%s\"",
+                    testCases[i].localeID, tag);
+        assertEquals("createCanonical", testCases[i].canonicalID, tag);
+    }
 }
 
 void LocaleTest::TestConstructorAcceptsBCP47() {

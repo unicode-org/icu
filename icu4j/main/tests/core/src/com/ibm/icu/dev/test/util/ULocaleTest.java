@@ -5130,4 +5130,21 @@ public class ULocaleTest extends TestFmwk {
         Assert.assertEquals(displayName, locale_tag.getDisplayName(displayLocale));
         Assert.assertEquals(displayName, locale_build.getDisplayName(displayLocale));
     }
+
+    @Test
+    public void Test20900() {
+        final String [][] testData = new String[][]{
+            {"art-lojban", "jbo"},
+            {"zh-guoyu", "zh"},
+            {"zh-hakka", "hak"},
+            {"zh-xiang", "hsn"},
+            {"zh-min-nan", "nan"},
+            {"zh-gan", "gan"},
+            {"zh-yue", "yue"},
+        };
+        for (int row=0;row<testData.length;row++) {
+            ULocale loc = ULocale.createCanonical(testData[row][0]);
+            Assert.assertEquals(testData[row][1], loc.toLanguageTag());
+        }
+    }
 }
