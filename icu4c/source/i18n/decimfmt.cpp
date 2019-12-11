@@ -1801,7 +1801,7 @@ bool DecimalFormat::fastFormatDouble(double input, UnicodeString& output) const 
         return false;
     }
     if (std::isnan(input)
-            || std::trunc(input) != input
+            || uprv_trunc(input) != input
             || input <= INT32_MIN
             || input > INT32_MAX) {
         return false;
