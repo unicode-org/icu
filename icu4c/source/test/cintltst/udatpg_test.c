@@ -43,6 +43,7 @@ static void TestUsage(void);
 static void TestBuilder(void);
 static void TestOptions(void);
 static void TestGetFieldDisplayNames(void);
+static void TestGetDefaultHourCycle(void);
 
 void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestOpenClose);
@@ -50,6 +51,7 @@ void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestBuilder);
     TESTCASE(TestOptions);
     TESTCASE(TestGetFieldDisplayNames);
+    TESTCASE(TestGetDefaultHourCycle);
 }
 
 /*
@@ -504,6 +506,48 @@ static void TestGetFieldDisplayNames() {
                     log_err("ERROR udatpg_getFieldDisplayName locale %s field %d width %d, overflow expected len %d & BUFFER_OVERFLOW_ERROR, got %d & status %s\n",
                         testDataPtr->locale, testDataPtr->field, testDataPtr->width, getLen, getNewLen, u_errorName(status) );
                 }
+            }
+            udatpg_close(dtpgen);
+        }
+    }
+}
+
+typedef struct HourCycleData {
+    const char *         locale;
+    UDateFormatHourCycle   expected;
+} HourCycleData;
+
+static void TestGetDefaultHourCycle() {
+    const HourCycleData testData[] = {
+        /*loc      expected */
+        { "ar_EG",    UDAT_HOUR_CYCLE_12 },
+        { "de_DE",    UDAT_HOUR_CYCLE_23 },
+        { "en_AU",    UDAT_HOUR_CYCLE_12 },
+        { "en_CA",    UDAT_HOUR_CYCLE_12 },
+        { "en_US",    UDAT_HOUR_CYCLE_12 },
+        { "es_ES",    UDAT_HOUR_CYCLE_23 },
+        { "fi",       UDAT_HOUR_CYCLE_23 },
+        { "fr",       UDAT_HOUR_CYCLE_23 },
+        { "ja_JP",    UDAT_HOUR_CYCLE_23 },
+        { "zh_CN",    UDAT_HOUR_CYCLE_12 },
+        { "zh_HK",    UDAT_HOUR_CYCLE_12 },
+        { "zh_TW",    UDAT_HOUR_CYCLE_12 },
+        { "ko_KR",    UDAT_HOUR_CYCLE_12 },
+    };
+    int count = UPRV_LENGTHOF(testData);
+    const HourCycleData * testDataPtr = testData;
+    for (; count-- > 0; ++testDataPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        UDateTimePatternGenerator * dtpgen =
+            udatpg_open(testDataPtr->locale, &status);
+        if ( U_FAILURE(status) ) {
+            log_data_err( "ERROR udatpg_open failed for locale %s : %s - (Are you missing data?)\n",
+                         testDataPtr->locale, myErrorName(status));
+        } else {
+            UDateFormatHourCycle actual = udatpg_getDefaultHourCycle(dtpgen, &status);
+            if (U_FAILURE(status) || testDataPtr->expected != actual) {
+                log_err("ERROR dtpgen locale %s udatpg_getDefaultHourCycle expecte to get %d but get %d\n",
+                        testDataPtr->locale, testDataPtr->expected, actual);
             }
             udatpg_close(dtpgen);
         }

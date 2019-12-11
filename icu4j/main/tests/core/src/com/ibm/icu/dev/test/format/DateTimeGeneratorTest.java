@@ -1733,14 +1733,14 @@ public class DateTimeGeneratorTest extends TestFmwk {
         String[][] cases = new String[][]{
             // ars is interesting because it does not have a region, but it aliases
             // to ar_SA, which has a region.
-            {"ars", "h a", "h:mm a"},
+            {"ars", "h a", "h:mm a", "HOUR_CYCLE_12"},
             // en_NH is interesting because NH is a depregated region code.
-            {"en_NH", "h a", "h:mm a"},
+            {"en_NH", "h a", "h:mm a", "HOUR_CYCLE_12"},
             // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.
             // {"cn_ZH", "HH", "H:mm"}, // TODO(ICU-20653): Desired behavior
-            {"cn_ZH", "HH", "h:mm a"}, // Actual behavior
+            {"cn_ZH", "HH", "h:mm a", "HOUR_CYCLE_23"}, // Actual behavior
             // a non-BCP47 locale without a country code should not fail
-            {"ja_TRADITIONAL", "H時", "H:mm"},
+            {"ja_TRADITIONAL", "H時", "H:mm", "HOUR_CYCLE_23"},
         };
 
         for (String[] cas : cases) {
@@ -1755,6 +1755,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 cas[1], dtpgPattern);
             assertEquals("timePattern " + cas[1],
                 cas[2], timePattern);
+            assertEquals("default hour cycle " + cas[3],
+                cas[3], dtpg.getDefaultHourCycle().toString());
         }
     }
 }

@@ -535,6 +535,36 @@ public abstract class DateFormat extends UFormat {
      */
     private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class);
 
+    /**
+     * Hour Cycle
+     * @draft ICU 67
+     */
+    public enum HourCycle {
+        /**
+         * hour in am/pm (0~11)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_11,
+
+        /**
+         * hour in am/pm (1~12)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_12,
+
+        /**
+         * hour in day (0~23)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_23,
+
+        /**
+         * hour in day (1~24)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_24;
+    };
+
     /*
      * Capitalization setting, hoisted to DateFormat ICU 53
      * Note that SimpleDateFormat serialization may call getContext/setContext to read/write
