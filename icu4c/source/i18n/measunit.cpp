@@ -1990,10 +1990,10 @@ MeasureUnit MeasureUnit::getTeaspoon() {
 // End generated code
 
 static int32_t binarySearch(
-        const char * const * array, int32_t start, int32_t end, const char * key) {
+        const char * const * array, int32_t start, int32_t end, StringPiece key) {
     while (start < end) {
         int32_t mid = (start + end) / 2;
-        int32_t cmp = uprv_strcmp(array[mid], key);
+        int32_t cmp = StringPiece(array[mid]).compare(key);
         if (cmp < 0) {
             start = mid + 1;
             continue;
@@ -2136,6 +2136,53 @@ int32_t MeasureUnit::internalGetIndexForTypeAndSubtype(const char *type, const c
         return st;
     }
     return gIndexes[t] + st - gOffsets[t];
+}
+
+bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
+    for (int32_t t = 0; t < UPRV_LENGTHOF(gOffsets) - 1; t++) {
+        // Skip currency units
+        if (gIndexes[t] == gIndexes[t + 1]) {
+            continue;
+        }
+        int32_t st = binarySearch(gSubTypes, gOffsets[t], gOffsets[t + 1], subType);
+        if (st >= 0) {
+            output->setTo(t, st - gOffsets[t]);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool MeasureUnit::parseCoreUnitIdentifier(
+        StringPiece coreUnitIdentifier,
+        MeasureUnit* numerator,
+        MeasureUnit* denominator,
+        UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return false;
+    }
+
+    // First search for the whole code unit identifier as a subType
+    if (findBySubType(coreUnitIdentifier, numerator)) {
+        return false; // found a numerator but not denominator
+    }
+
+    // If not found, try breaking apart numerator and denominator
+    int32_t perIdx = coreUnitIdentifier.find("-per-", 0);
+    if (perIdx == -1) {
+        // String does not contain "-per-"
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return false;
+    }
+    StringPiece numeratorStr(coreUnitIdentifier, 0, perIdx);
+    StringPiece denominatorStr(coreUnitIdentifier, perIdx + 5);
+    if (findBySubType(numeratorStr, numerator) && findBySubType(denominatorStr, denominator)) {
+        return true; // found both a numerator and denominator
+    }
+
+    // The numerator or denominator were invalid
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    return false;
 }
 
 MeasureUnit MeasureUnit::resolveUnitPerUnit(
