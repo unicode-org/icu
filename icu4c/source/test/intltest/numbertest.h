@@ -114,16 +114,38 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     DecimalFormatSymbols SWISS_SYMBOLS;
     DecimalFormatSymbols MYANMAR_SYMBOLS;
 
-    void assertFormatDescending(const char16_t* message, const char16_t* skeleton,
-                                const UnlocalizedNumberFormatter& f, Locale locale, ...);
+    /**
+     * skeleton is the full length skeleton, which must round-trip.
+     *
+     * conciseSkeleton should be the shortest available skeleton.
+     * The concise skeleton can be read but not printed.
+     */
+    void assertFormatDescending(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      ...);
 
-    void assertFormatDescendingBig(const char16_t* message, const char16_t* skeleton,
-                                   const UnlocalizedNumberFormatter& f, Locale locale, ...);
+    /** See notes above regarding skeleton vs conciseSkeleton */
+    void assertFormatDescendingBig(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      ...);
 
-    FormattedNumber
-    assertFormatSingle(const char16_t* message, const char16_t* skeleton,
-                       const UnlocalizedNumberFormatter& f, Locale locale, double input,
-                       const UnicodeString& expected);
+    /** See notes above regarding skeleton vs conciseSkeleton */
+    FormattedNumber assertFormatSingle(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      double input,
+      const UnicodeString& expected);
 
     void assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f);
 

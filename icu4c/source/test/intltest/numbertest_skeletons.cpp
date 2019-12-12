@@ -70,6 +70,7 @@ void NumberSkeletonTest::validTokens() {
             u"measure-unit/length-meter",
             u"measure-unit/area-square-meter",
             u"measure-unit/energy-joule per-measure-unit/length-meter",
+            u"unit/square-meter-per-square-meter",
             u"currency/XXX",
             u"currency/ZZZ",
             u"currency/usd",
@@ -105,7 +106,20 @@ void NumberSkeletonTest::validTokens() {
             u"numbering-system/latn",
             u"precision-integer/@##",
             u"precision-integer rounding-mode-ceiling",
-            u"precision-currency-cash rounding-mode-ceiling"};
+            u"precision-currency-cash rounding-mode-ceiling",
+            u"0",
+            u"00",
+            u"000",
+            u"E0",
+            u"E00",
+            u"E000",
+            u"EE0",
+            u"EE00",
+            u"EE+?0",
+            u"EE+?00",
+            u"EE+!0",
+            u"EE+!00",
+    };
 
     for (auto& cas : cases) {
         UnicodeString skeletonString(cas);
@@ -151,7 +165,20 @@ void NumberSkeletonTest::invalidTokens() {
             u"integer-width/+0#",
             u"integer-width/+#",
             u"integer-width/+#0",
-            u"scientific/foo"};
+            u"scientific/foo",
+            u"E",
+            u"E1",
+            u"E+",
+            u"E+?",
+            u"E+!",
+            u"E+0",
+            u"EE",
+            u"EE+",
+            u"EEE",
+            u"EEE0",
+            u"001",
+            u"00+",
+    };
 
     expectedErrorSkeleton(cases, UPRV_LENGTHOF(cases));
 }
