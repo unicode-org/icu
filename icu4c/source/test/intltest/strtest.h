@@ -43,6 +43,7 @@ private:
     void TestLowerOrdinal();
     void Test_UTF8_COUNT_TRAIL_BYTES();
     void TestStringPiece();
+    void TestStringPieceFind();
     void TestStringPieceComparisons();
     void TestStringPieceOther();
 #ifdef U_HAVE_STRING_VIEW

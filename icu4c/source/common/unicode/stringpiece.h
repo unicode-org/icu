@@ -212,6 +212,26 @@ class U_COMMON_API StringPiece : public UMemory {
     }
   }
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Searches the StringPiece for the given search string (needle);
+   * @param needle The string for which to search.
+   * @param offset Where to start searching within this string (haystack).
+   * @return The offset of needle in haystack, or -1 if not found.
+   * @draft ICU 67
+   */
+  int32_t find(StringPiece needle, int32_t offset);
+
+  /**
+   * Compares this StringPiece with the other StringPiece, with semantics
+   * similar to std::string::compare().
+   * @param other The string to compare to.
+   * @return below zero if this < other; above zero if this > other; 0 if this == other.
+   * @draft ICU 67
+   */
+  int32_t compare(StringPiece other);
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Maximum integer, used as a default value for substring methods.
    * @stable ICU 4.2
