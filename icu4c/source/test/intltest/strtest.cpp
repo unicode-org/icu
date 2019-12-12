@@ -243,6 +243,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestSTLCompatibility);
     TESTCASE_AUTO(TestStringPiece);
     TESTCASE_AUTO(TestStringPieceComparisons);
+    TESTCASE_AUTO(TestStringPieceFind);
     TESTCASE_AUTO(TestStringPieceOther);
 #ifdef U_HAVE_STRING_VIEW
     TESTCASE_AUTO(TestStringPieceStringView);
@@ -407,12 +408,86 @@ StringTest::TestStringPieceComparisons() {
     if(abc==abcd) {
         errln("abc==abcd");
     }
+
+    assertTrue("null<abc", null.compare(abc) < 0);
+    assertTrue("abc>null", abc.compare(null) > 0);
+    assertTrue("abc<abcd", abc.compare(abcd) < 0);
+    assertTrue("abcd>abc", abcd.compare(abc) > 0);
+    assertTrue("abc<abx", abc.compare(abx) < 0);
+    assertTrue("abx>abc", abx.compare(abc) > 0);
+    assertTrue("abx>abcd", abx.compare(abcd) > 0);
+    assertTrue("abcd<abx", abcd.compare(abx) < 0);
+    assertTrue("abx==abx", abx.compare(abx) == 0);
+
+    // Behavior should be the same as std::string::compare
+    {
+        std::string null("");
+        std::string abc("abc");
+        std::string abcd("abcdefg", 4);
+        std::string abx("abx");
+
+        assertTrue("std: null<abc", null.compare(abc) < 0);
+        assertTrue("std: abc>null", abc.compare(null) > 0);
+        assertTrue("std: abc<abcd", abc.compare(abcd) < 0);
+        assertTrue("std: abcd>abc", abcd.compare(abc) > 0);
+        assertTrue("std: abc<abx", abc.compare(abx) < 0);
+        assertTrue("std: abx>abc", abx.compare(abc) > 0);
+        assertTrue("std: abx>abcd", abx.compare(abcd) > 0);
+        assertTrue("std: abcd<abx", abcd.compare(abx) < 0);
+        assertTrue("std: abx==abx", abx.compare(abx) == 0);
+    }
+
     abcd.remove_suffix(1);
     if(abc!=abcd) {
         errln("abc!=abcd.remove_suffix(1)");
     }
     if(abc==abx) {
         errln("abc==abx");
+    }
+}
+
+void
+StringTest::TestStringPieceFind() {
+    struct TestCase {
+        const char* haystack;
+        const char* needle;
+        int32_t expected;
+    } cases[] = {
+        { "", "", 0 },
+        { "", "x", -1 },
+        { "x", "", 0 },
+        { "x", "x", 0 },
+        { "xy", "x", 0 },
+        { "xy", "y", 1 },
+        { "xy", "xy", 0 },
+        { "xy", "xyz", -1 },
+        { "qwerty", "qqw", -1 },
+        { "qwerty", "qw", 0 },
+        { "qwerty", "er", 2 },
+        { "qwerty", "err", -1 },
+        { "qwerty", "ert", 2 },
+        { "qwerty", "ty", 4 },
+        { "qwerty", "tyy", -1 },
+        { "qwerty", "a", -1 },
+        { "qwerty", "abc", -1 }
+    };
+    int32_t caseNumber = 0;
+    for (auto& cas : cases) {
+        StringPiece haystack(cas.haystack);
+        StringPiece needle(cas.needle);
+        assertEquals(Int64ToUnicodeString(caseNumber),
+            cas.expected, haystack.find(needle, 0));
+        // Should be same as std::string::find
+        std::string stdhaystack(cas.haystack);
+        std::string stdneedle(cas.needle);
+        assertEquals(Int64ToUnicodeString(caseNumber) + u" (std)",
+            cas.expected, stdhaystack.find(stdneedle, 0));
+        // Test offsets against std::string::find
+        for (int32_t offset = 0; offset < haystack.length(); offset++) {
+            assertEquals(Int64ToUnicodeString(caseNumber) + "u @ " + Int64ToUnicodeString(offset),
+                stdhaystack.find(stdneedle, offset), haystack.find(needle, offset));
+        }
+        caseNumber++;
     }
 }
 
