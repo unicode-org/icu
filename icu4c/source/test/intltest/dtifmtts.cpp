@@ -58,6 +58,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(9, testTicket12065);
         TESTCASE(10, testFormattedDateInterval);
         TESTCASE(11, testCreateInstanceForAllLocales);
+        TESTCASE(12, testTicket20707);
         default: name = ""; break;
     }
 }
@@ -1802,6 +1803,45 @@ void DateIntervalFormatTest::testCreateInstanceForAllLocales() {
                 status);
             status.errIfFailureAndReset(locales[i].getName());
         }
+    }
+}
+
+void DateIntervalFormatTest::testTicket20707() {
+    IcuTestErrorCode status(*this, "testTicket20707");
+
+    const char16_t timeZone[] = u"UTC";
+    Locale locales[] = {"en-u-hc-h24", "en-u-hc-h23", "en-u-hc-h12", "en-u-hc-h11", "en", "en-u-hc-h25", "hi-IN-u-hc-h11"};
+
+    // Clomuns: hh, HH, kk, KK, jj, JJs, CC
+    UnicodeString expected[][7] = {
+        // Hour-cycle: k
+        {u"12 AM", u"24", u"24", u"12 AM", u"24", u"0 (hour: 24)", u"12 AM"},
+        // Hour-cycle: H
+        {u"12 AM", u"00", u"00", u"12 AM", u"00", u"0 (hour: 00)", u"12 AM"},
+        // Hour-cycle: h
+        {u"12 AM", u"00", u"00", u"12 AM", u"12 AM", u"0 (hour: 12)", u"12 AM"},
+        // Hour-cycle: K
+        {u"0 AM", u"00", u"00", u"0 AM", u"0 AM", u"0 (hour: 00)", u"0 AM"},
+        {u"12 AM", u"00", u"00", u"12 AM", u"12 AM", u"0 (hour: 12)", u"12 AM"},
+        {u"12 AM", u"00", u"00", u"12 AM", u"12 AM", u"0 (hour: 12)", u"12 AM"},
+        // Hour-cycle: K
+        {u"0 am", u"00", u"00", u"0 am", u"0 am", u"0 (\u0918\u0902\u091F\u093E: 00)", u"\u0930\u093E\u0924 0"}
+    };
+
+    int32_t i = 0;
+    for (Locale locale : locales) {
+        int32_t j = 0;
+        for (const UnicodeString skeleton : {u"hh", u"HH", u"kk", u"KK", u"jj", u"JJs", u"CC"}) {
+            LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance(skeleton, locale, status));
+            FieldPosition fposition;
+            UnicodeString result;
+            LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
+            calendar->setTime(UDate(1563235200000), status);
+            dtifmt->format(*calendar, *calendar, result, fposition, status);
+
+            assertEquals("Formatted result", expected[i][j++], result);
+        }
+        i++;
     }
 }
 

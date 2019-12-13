@@ -67,6 +67,8 @@ public:
     void testFormattedDateInterval();
     void testCreateInstanceForAllLocales();
 
+    void testTicket20707();
+
 private:
     /**
      * Test formatting against expected result

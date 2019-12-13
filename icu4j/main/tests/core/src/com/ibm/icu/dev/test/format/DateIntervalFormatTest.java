@@ -2050,4 +2050,48 @@ public class DateIntervalFormatTest extends TestFmwk {
             }
         }
     }
+
+    @Test
+    public void testTicket20707() {
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        Locale locales[] = {
+            new Locale("en-u-hc-h24"),
+            new Locale("en-u-hc-h23"),
+            new Locale("en-u-hc-h12"),
+            new Locale("en-u-hc-h11"),
+            new Locale("en"),
+            new Locale("en-u-hc-h25"),
+            new Locale("hi-IN-u-hc-h11")
+        };
+
+        // Clomuns: hh, HH, kk, KK, jj, JJs, CC
+        String expected[][] = {
+            // Hour-cycle: k
+            {"12 AM", "24", "24", "12 AM", "24", "0 (hour: 24)", "12 AM"},
+            // Hour-cycle: H
+            {"12 AM", "00", "00", "12 AM", "00", "0 (hour: 00)", "12 AM"},
+            // Hour-cycle: h
+            {"12 AM", "00", "00", "12 AM", "12 AM", "0 (hour: 12)", "12 AM"},
+            // Hour-cycle: K
+            {"0 AM", "00", "00", "0 AM", "0 AM", "0 (hour: 00)", "0 AM"},
+            {"12 AM", "00", "00", "12 AM", "12 AM", "0 (hour: 12)", "12 AM"},
+            {"12 AM", "00", "00", "12 AM", "12 AM", "0 (hour: 12)", "12 AM"},
+            {"0 am", "00", "00", "0 am", "0 am", "0 (\u0918\u0902\u091F\u093E: 00)", "\u0930\u093E\u0924 0"}
+        };
+
+        int i = 0;
+        for (Locale locale : locales) {
+            int j = 0;
+            String skeletons[] = {"hh", "HH", "kk", "KK", "jj", "JJs", "CC"};
+            for (String skeleton : skeletons) {
+                DateIntervalFormat dateFormat = DateIntervalFormat.getInstance(skeleton, locale);
+                Calendar calendar = Calendar.getInstance(tz);
+                calendar.setTime(new Date(1563235200000L));
+                StringBuffer resultBuffer = dateFormat.format(calendar, calendar, new StringBuffer(""), new FieldPosition(0));
+
+                assertEquals("Formatted result for " + skeleton + " locale: " + locale.getDisplayName(), expected[i][j++], resultBuffer.toString());
+            }
+            i++;
+        }
+    }
 }
