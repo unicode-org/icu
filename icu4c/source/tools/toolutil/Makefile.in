@@ -12,6 +12,7 @@
 ## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
+platform = @platform@
 
 top_builddir = ../..
 
@@ -94,11 +95,16 @@ ifneq ($(ENABLE_STATIC),)
 	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)
 endif
 ifneq ($(ENABLE_SHARED),)
+ifeq ($(platform), U_MINGW)
+	@$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(bindir)
+else
 	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)
 ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(notdir $(SO_TARGET)) && ln -s $(notdir $(FINAL_SO_TARGET)) $(notdir $(SO_TARGET))
 ifneq ($(FINAL_SO_TARGET),$(MIDDLE_SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(notdir $(MIDDLE_SO_TARGET)) && ln -s $(notdir $(FINAL_SO_TARGET)) $(notdir $(MIDDLE_SO_TARGET))
+endif
 endif
 endif
 ifneq ($(IMPORT_LIB_EXT),)
