@@ -576,19 +576,19 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
     // First check for "blueprint" stems, which start with a "signal char"
     switch (segment.charAt(0)) {
         case u'.':
-        CHECK_NULL(seen, precision, status);
+            CHECK_NULL(seen, precision, status);
             blueprint_helpers::parseFractionStem(segment, macros, status);
             return STATE_FRACTION_PRECISION;
         case u'@':
-        CHECK_NULL(seen, precision, status);
+            CHECK_NULL(seen, precision, status);
             blueprint_helpers::parseDigitsStem(segment, macros, status);
             return STATE_NULL;
         case u'E':
-        CHECK_NULL(seen, notation, status);
+            CHECK_NULL(seen, notation, status);
             blueprint_helpers::parseScientificStem(segment, macros, status);
             return STATE_NULL;
         case u'0':
-        CHECK_NULL(seen, notation, status);
+            CHECK_NULL(seen, integerWidth, status);
             blueprint_helpers::parseIntegerStem(segment, macros, status);
             return STATE_NULL;
         default:
@@ -614,7 +614,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_SCIENTIFIC:
         case STEM_ENGINEERING:
         case STEM_NOTATION_SIMPLE:
-        CHECK_NULL(seen, notation, status);
+            CHECK_NULL(seen, notation, status);
             macros.notation = stem_to_object::notation(stem);
             switch (stem) {
                 case STEM_SCIENTIFIC:
@@ -627,13 +627,13 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_BASE_UNIT:
         case STEM_PERCENT:
         case STEM_PERMILLE:
-        CHECK_NULL(seen, unit, status);
+            CHECK_NULL(seen, unit, status);
             macros.unit = stem_to_object::unit(stem);
             return STATE_NULL;
 
         case STEM_PERCENT_100:
-        CHECK_NULL(seen, scale, status);
-        CHECK_NULL(seen, unit, status);
+            CHECK_NULL(seen, scale, status);
+            CHECK_NULL(seen, unit, status);
             macros.scale = Scale::powerOfTen(2);
             macros.unit = NoUnit::percent();
             return STATE_NULL;
@@ -642,7 +642,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_PRECISION_UNLIMITED:
         case STEM_PRECISION_CURRENCY_STANDARD:
         case STEM_PRECISION_CURRENCY_CASH:
-        CHECK_NULL(seen, precision, status);
+            CHECK_NULL(seen, precision, status);
             macros.precision = stem_to_object::precision(stem);
             switch (stem) {
                 case STEM_PRECISION_INTEGER:
@@ -659,7 +659,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_ROUNDING_MODE_HALF_DOWN:
         case STEM_ROUNDING_MODE_HALF_UP:
         case STEM_ROUNDING_MODE_UNNECESSARY:
-        CHECK_NULL(seen, roundingMode, status);
+            CHECK_NULL(seen, roundingMode, status);
             macros.roundingMode = stem_to_object::roundingMode(stem);
             return STATE_NULL;
 
@@ -668,12 +668,12 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_GROUP_AUTO:
         case STEM_GROUP_ON_ALIGNED:
         case STEM_GROUP_THOUSANDS:
-        CHECK_NULL(seen, grouper, status);
+            CHECK_NULL(seen, grouper, status);
             macros.grouper = Grouper::forStrategy(stem_to_object::groupingStrategy(stem));
             return STATE_NULL;
 
         case STEM_LATIN:
-        CHECK_NULL(seen, symbols, status);
+            CHECK_NULL(seen, symbols, status);
             macros.symbols.setTo(NumberingSystem::createInstanceByName("latn", status));
             return STATE_NULL;
 
@@ -682,7 +682,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_UNIT_WIDTH_FULL_NAME:
         case STEM_UNIT_WIDTH_ISO_CODE:
         case STEM_UNIT_WIDTH_HIDDEN:
-        CHECK_NULL(seen, unitWidth, status);
+            CHECK_NULL(seen, unitWidth, status);
             macros.unitWidth = stem_to_object::unitWidth(stem);
             return STATE_NULL;
 
@@ -693,49 +693,49 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_SIGN_ACCOUNTING_ALWAYS:
         case STEM_SIGN_EXCEPT_ZERO:
         case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
-        CHECK_NULL(seen, sign, status);
+            CHECK_NULL(seen, sign, status);
             macros.sign = stem_to_object::signDisplay(stem);
             return STATE_NULL;
 
         case STEM_DECIMAL_AUTO:
         case STEM_DECIMAL_ALWAYS:
-        CHECK_NULL(seen, decimal, status);
+            CHECK_NULL(seen, decimal, status);
             macros.decimal = stem_to_object::decimalSeparatorDisplay(stem);
             return STATE_NULL;
 
             // Stems requiring an option:
 
         case STEM_PRECISION_INCREMENT:
-        CHECK_NULL(seen, precision, status);
+            CHECK_NULL(seen, precision, status);
             return STATE_INCREMENT_PRECISION;
 
         case STEM_MEASURE_UNIT:
-        CHECK_NULL(seen, unit, status);
+            CHECK_NULL(seen, unit, status);
             return STATE_MEASURE_UNIT;
 
         case STEM_PER_MEASURE_UNIT:
-        CHECK_NULL(seen, perUnit, status);
+            CHECK_NULL(seen, perUnit, status);
             return STATE_PER_MEASURE_UNIT;
 
         case STEM_UNIT:
-        CHECK_NULL(seen, unit, status);
-        CHECK_NULL(seen, perUnit, status);
+            CHECK_NULL(seen, unit, status);
+            CHECK_NULL(seen, perUnit, status);
             return STATE_IDENTIFIER_UNIT;
 
         case STEM_CURRENCY:
-        CHECK_NULL(seen, unit, status);
+            CHECK_NULL(seen, unit, status);
             return STATE_CURRENCY_UNIT;
 
         case STEM_INTEGER_WIDTH:
-        CHECK_NULL(seen, integerWidth, status);
+            CHECK_NULL(seen, integerWidth, status);
             return STATE_INTEGER_WIDTH;
 
         case STEM_NUMBERING_SYSTEM:
-        CHECK_NULL(seen, symbols, status);
+            CHECK_NULL(seen, symbols, status);
             return STATE_NUMBERING_SYSTEM;
 
         case STEM_SCALE:
-        CHECK_NULL(seen, scale, status);
+            CHECK_NULL(seen, scale, status);
             return STATE_SCALE;
 
         default:
