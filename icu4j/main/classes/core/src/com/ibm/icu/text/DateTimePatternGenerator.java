@@ -368,6 +368,26 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         String[] list = getAllowedHourFormatsLangCountry(language, country);
 
+        // We need to check if there is an hour cycle on locale
+        Character defaultCharFromLocale = null;
+        String hourCycle = uLocale.getKeywordValue("hours");
+        if (hourCycle != null) {
+            switch(hourCycle) {
+                case "h24":
+                    defaultCharFromLocale = 'k';
+                    break;
+                case "h23":
+                    defaultCharFromLocale = 'H';
+                    break;
+                case "h12":
+                    defaultCharFromLocale = 'h';
+                    break;
+                case "h11":
+                    defaultCharFromLocale = 'K';
+                    break;
+            }
+        }
+
         // Check if the region has an alias
         if (list == null) {
             try {
@@ -380,11 +400,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         if (list != null) {
-            defaultHourFormatChar = list[0].charAt(0);
+            defaultHourFormatChar = defaultCharFromLocale != null ? defaultCharFromLocale : list[0].charAt(0);
             allowedHourFormats = Arrays.copyOfRange(list, 1, list.length - 1);
         } else {
             allowedHourFormats = LAST_RESORT_ALLOWED_HOUR_FORMAT;
-            defaultHourFormatChar = allowedHourFormats[0].charAt(0);
+            defaultHourFormatChar = (defaultCharFromLocale != null) ? defaultCharFromLocale : allowedHourFormats[0].charAt(0);
         }
     }
 
@@ -2117,8 +2137,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     // - "field" is the field from the found pattern.
                     //
                     // The adjusted field should consist of characters from the originally requested
-                    // skeleton, except in the case of HOUR or MONTH or WEEKDAY or YEAR, in which case it
-                    // should consist of characters from the found pattern.
+                    // skeleton, except in the case of MONTH or WEEKDAY or YEAR, in which case it
+                    // should consist of characters from the found pattern. There is some adjustment
+                    // in some cases of HOUR to "defaultHourFormatChar". There is explanation
+                    // how it is done below.
                     //
                     // The length of the adjusted field (adjFieldLen) should match that in the originally
                     // requested skeleton, except that in the following cases the length of the adjusted field
@@ -2163,8 +2185,25 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                             && (type != YEAR || reqFieldChar=='Y'))
                             ? reqFieldChar
                             : fieldBuilder.charAt(0);
-                    if (type == HOUR && flags.contains(DTPGflags.SKELETON_USES_CAP_J)) {
-                        c = defaultHourFormatChar;
+                    if (type == HOUR) {
+                        // The adjustment here is required to match spec (https://www.unicode.org/reports/tr35/tr35-dates.html#dfst-hour).
+                        // It is necessary to match the hour-cycle preferred by the Locale.
+                        // Given that, we need to do the following adjustments:
+                        // 1. When hour-cycle is h11 it should replace 'h' by 'K'.
+                        // 2. When hour-cycle is h23 it should replace 'H' by 'k'.
+                        // 3. When hour-cycle is h24 it should replace 'k' by 'H'.
+                        // 4. When hour-cycle is h12 it should replace 'K' by 'h'.
+                        if (flags.contains(DTPGflags.SKELETON_USES_CAP_J) || reqFieldChar == defaultHourFormatChar) {
+                            c = defaultHourFormatChar;
+                        } else if (reqFieldChar == 'h' && defaultHourFormatChar == 'K') {
+                            c = 'K';
+                        } else if (reqFieldChar == 'H' && defaultHourFormatChar == 'k') {
+                            c = 'k';
+                        } else if (reqFieldChar == 'k' && defaultHourFormatChar == 'H') {
+                            c = 'H';
+                        } else if (reqFieldChar == 'K' && defaultHourFormatChar == 'h') {
+                            c = 'h';
+                        }
                     }
                     fieldBuilder = new StringBuilder();
                     for (int i = adjFieldLen; i > 0; --i) fieldBuilder.append(c);
