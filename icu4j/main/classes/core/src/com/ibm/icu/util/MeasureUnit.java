@@ -205,6 +205,47 @@ public class MeasureUnit implements Serializable {
         return MeasureUnit.addUnit(type, subType, factory);
     }
 
+    private static MeasureUnit findBySubType(String subType) {
+        populateCache();
+        for (Map<String, MeasureUnit> unitsForType : cache.values()) {
+            if (unitsForType.containsKey(subType)) {
+                return unitsForType.get(subType);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * For ICU use only.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static MeasureUnit[] parseCoreUnitIdentifier(String coreUnitIdentifier) {
+        // First search for the whole code unit identifier as a subType
+        MeasureUnit whole = findBySubType(coreUnitIdentifier);
+        if (whole != null) {
+            return new MeasureUnit[] { whole }; // found a numerator but not denominator
+        }
+
+        // If not found, try breaking apart numerator and denominator
+        int perIdx = coreUnitIdentifier.indexOf("-per-");
+        if (perIdx == -1) {
+            // String does not contain "-per-"
+            return null;
+        }
+        String numeratorStr = coreUnitIdentifier.substring(0, perIdx);
+        String denominatorStr = coreUnitIdentifier.substring(perIdx + 5);
+        MeasureUnit numerator = findBySubType(numeratorStr);
+        MeasureUnit denominator = findBySubType(denominatorStr);
+        if (numerator != null && denominator != null) {
+            return new MeasureUnit[] { numerator, denominator }; // found both a numerator and denominator
+        }
+
+        // The numerator or denominator were invalid
+        return null;
+    }
+
     /**
      * For ICU use only.
      * @internal
