@@ -221,8 +221,14 @@ public class StringSegment implements CharSequence {
         return Utility.charSequenceHashCode(this);
     }
 
+    /** Returns a string representation useful for debugging. */
     @Override
     public String toString() {
         return str.substring(0, start) + "[" + str.substring(start, end) + "]" + str.substring(end);
+    }
+
+    /** Returns a String that is equivalent to the CharSequence representation. */
+    public String asString() {
+        return str.substring(start, end);
     }
 }
