@@ -27,11 +27,11 @@ has fields for language, country, and an optional code to specify further
 variants or subdivisions. These fields also can be represented as a string with
 the fields separated by an underscore.
 
-In C++ API, locale is represented by the locale class, which provides methods
-for finding language, country and variant components. In C API the locale is
-defined simply by a character string. In Java API, the locale is represented by
-ULocale which is analogous to Locale class but provide additional support for
-ICU protocol. All the locale-sensitive ICU services use the locale information
+In the C++ API, the locale is represented by the `Locale` class, which provides
+methods for finding language, country and variant components. In C API the locale
+is defined simply by a character string. In Java API, the locale is represented by
+`ULocale` which is analogous to the `Locale` class but provide additional support
+for ICU protocol. All the locale-sensitive ICU services use the locale information
 to determine language and other locale specific parameters of their function.
 The list of locale-sensitive services can be found in the Introduction to ICU
 section. Other parts of the library use the locale as an indicator to
@@ -57,9 +57,10 @@ locale.
 A locale provides a means of identifying a specific region for the purposes of
 internationalization and localization.
 
-*An ICU locale is frequently confused with a Portable Operating System Interface
-(POSIX) locale ID. An ICU locale ID is not a POSIX locale ID. ICU locales do not
-specify the encoding and specify variant locales differently.*
+> :point_right: **Note**: An ICU locale is frequently confused with a Portable
+> Operating System Interface (POSIX) locale ID. An ICU locale ID is not a POSIX
+> locale ID. ICU locales do not specify the encoding and specify variant locales
+> differently.
 
 A locale consists of one or more pieces of ordered information:
 
@@ -67,14 +68,14 @@ A locale consists of one or more pieces of ordered information:
 
 The languages are specified using a two- or three-letter lowercase code for a
 particular language. For example, Spanish is "es", English is "en" and French is
-"fr". The two-letter language code uses the
-[ISO-639](http://www.loc.gov/standards/iso639-2/) standard.
+"fr". The two-letter language code uses the 
+[ISO-639](https://www.loc.gov/standards/iso639-2/) standard.
 
 ### Script code
 
 The optional four-letter script code follows the language code. If specified, it
-should be a valid script code as listed on the [Unicode ISO 15924
-Registry](http://www.unicode.org/iso15924/iso15924-codes.html) .
+should be a valid script code as listed on the 
+[Unicode ISO 15924 Registry](https://www.unicode.org/iso15924/iso15924-codes.html).
 
 ### Country code
 
@@ -84,8 +85,7 @@ the currencies are different in each country. To allow for these differences
 among specific geographical, political, or cultural regions, locales are
 specified by two-letter, uppercase codes. For example, "ES" represents Spain and
 "MX" represents Mexico. The two letter country code uses the
-[ISO-3166](http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html)
-standard.
+[ISO-3166](https://www.iso.org/iso-3166-country-codes.html) standard.
 
 Java supports two letter country codes that uses ISO-3166 and UN M.49 code.
 
@@ -114,35 +114,12 @@ their values. Keywords must be unique. Their order is not significant. Unknown
 keywords are ignored. The handling of keywords depends on the specific services
 that utilize them. Currently, the following keywords are recognized:
 
-KeywordPossible ValuesDescriptioncalendarA calendar specifier such as
-"gregorian", "islamic", "chinese", "islamic-civil", "hebrew", "japanese", or
-"buddhist". See the Key/Type Definitions table in the [Locale Data Markup
-Language](http://www.unicode.org/reports/tr35/) for a list of recognized
-values.If present, the calendar keyword specifies the calendar type that the
-Calendar factor methods create. See the calendar locale and keyword handling
-section (§) of the [Calendar Classes](../datetime/calendar/index.md) chapter for
-details.collationA collation specifier such as "phonebook", "pinyin",
-"traditional", "stroke", "direct", or "posix". See the Key/Type Definitions
-table in the [Locale Data Markup Language](http://www.unicode.org/reports/tr35/)
-for a list of recognized values.If present, the collation keyword modifies how
-the collation service searches through the locale data when instantiating a
-collator. See the collation locale and keyword handling section (§) of the
-[Collation Services Architecture](../collation/architecture.md) chapter for
-details.currencyAny standard three-letter currency code, such as "USD" or "JPY".
-See the LocaleExplorer [currency
-list](http://demo.icu-project.org/icu-bin/locexp?_=en&SHOWCurrencies=1#Currencies)
-for a list of currently recognized currency codes.If present, the currency
-keyword is used by NumberFormat to determine the currency to use to format a
-currency value, and by ucurr_forLocale() to specify a currency. numbers A
-numbering system specifier such as "latn", "arab", "deva", "hansfin" or "thai".
-See the Key/Type Definitions table in the [Locale Data Markup
-Language](http://www.unicode.org/reports/tr35/) for a list of recognized values.
-If present, the numbers keyword is used by NumberFormat to determine the
-numbering system to be used for formatting and parsing numbers. The numbering
-system defines the set of digits used for decimal formatting, such as "latn" for
-western ( ASCII ) digits, or "thai" for Thai digits. The numbering system may
-also define complex algorithms for number formatting, such as "hansfin" for
-simplified Chinese numerals using financial ideographs.
+Keyword | Possible Values | Description
+--------|-----------------|------------
+calendar | A calendar specifier such as "gregorian", "islamic", "chinese", "islamic-civil", "hebrew", "japanese", or "buddhist". See the Key/Type Definitions table in the [Locale Data Markup Language](http://www.unicode.org/reports/tr35/) for a list of recognized values. | If present, the calendar keyword specifies the calendar type that the `Calendar` factory methods create. See the calendar locale and keyword handling section (§) of the [Calendar Classes](../datetime/calendar/index.md) chapter for details.
+collation | A collation specifier such as "phonebook", "pinyin", "traditional", "stroke", "direct", or "posix". See the Key/Type Definitions table in the [Locale Data Markup Language](http://www.unicode.org/reports/tr35/) for a list of recognized values. | If present, the collation keyword modifies how the collation service searches through the locale data when instantiating a collator. See the collation locale and keyword handling section (§) of the [Collation Services Architecture](../collation/architecture.md) chapter for details.
+currency | Any standard three-letter currency code, such as "USD" or "JPY". See the LocaleExplorer [currency list](http://demo.icu-project.org/icu-bin/locexp?_=en&SHOWCurrencies=1#Currencies) for a list of currently recognized currency codes. | If present, the currency keyword is used by `NumberFormat` to determine the currency to use to format a currency value, and by `ucurr_forLocale()` to specify a currency.
+numbers | A numbering system specifier such as "latn", "arab", "deva", "hansfin" or "thai". See the Key/Type Definitions table in the [Locale Data Markup Language](http://www.unicode.org/reports/tr35/) for a list of recognized values. | If present, the numbers keyword is used by `NumberFormat` to determine the numbering system to be used for formatting and parsing numbers. The numbering system defines the set of digits used for decimal formatting, such as "latn" for western (ASCII) digits, or "thai" for Thai digits. The numbering system may also define complex algorithms for number formatting, such as "hansfin" for simplified Chinese numerals using financial ideographs.
 
 If any of these keywords is absent, the service requesting it will typically use
 the rest of the locale specifier in order to determine the appropriate behavior
@@ -151,32 +128,15 @@ default behavior.
 
 ### Examples
 
-Locale IDLanguageScriptCountryVariantKeywordsDefinitionen_USen
-US
-English, United States of America. Browse in
-[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=en_US)
-.en_IE_PREEUROen
-IE
-English, Ireland. Browse in
-[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=en_IE_PREEURO)
-.en_IE@currency=IEPen
-IE
-currency=
-IEPEnglish, Ireland with Irish Pound. Browse in
-[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=en_IE@currency=IEP)
-.eoeo
-Esperanto. Browse in
-[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=eo)
-.fr@collation=phonebook;calendar=islamic-civilfr
-collation=phonebook
-calendar=
-islamic-civilFrench (Calendar=Islamic-Civil Calendar, Collation=Phonebook
-Order). Browse in
-[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=fr@collation=phonebook;calendar=islamic-civil)
-.sr_Latn_RS_REVISED@currency=USDsrLatnRSREVISEDcurrency=USDSerbian (Latin,
-Yugoslavia, Revised Orthography, Currency=US Dollar) Browse in
-[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?d_=en&_=sr_Latn_RS_REVISED@currency=USD)
-.
+Locale ID | Language | Script | Country | Variant | Keywords | Definition
+----------|----------|--------|---------|---------|----------|-----------
+en_US | en | | US | | | English, United States of America. <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=en_US)
+en_IE_PREEURO | en | | IE | | | English, Ireland. <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=en_IE_PREEURO)
+en_IE@currency=IEP | en | | IE | | currency=IEP | English, Ireland with Irish Pound. <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=en_IE@currency=IEP)
+eo | eo | | | | | Esperanto. <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=eo)
+fr@collation=phonebook;calendar=islamic-civil | fr | | | | collation=phonebook <br>calendar=islamic-civil | French (Calendar=Islamic-Civil Calendar, Collation=Phonebook Order). <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=fr@collation=phonebook;calendar=islamic-civil)
+sr_Latn_RS_REVISED@currency=USD | sr | Latn | RS | REVISED | currency=USD | Serbian (Latin, Yugoslavia, Revised Orthography, Currency=US Dollar) <br>Browse in[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?d_=en&_=sr_Latn_RS_REVISED@currency=USD)
+
 
 ### Default Locales
 
@@ -187,11 +147,11 @@ international object. The default locale is set to be the system locale on that
 platform.
 
 For example, when you set the default locale, the change affects the default
-behavior of the Collator and NumberFormat instances. When the default locale is
+behavior of the `Collator` and `NumberFormat` instances. When the default locale is
 not wanted, you can set the desired locale using a factory method supplied with
-the classes such as Collator::createInstance().
+the classes such as `Collator::createInstance()`.
 
-Using the ICU C functions, NULL can be passed for a locale parameter to specify
+Using the ICU C functions, `NULL` can be passed for a locale parameter to specify
 the default locale.
 
 ## Locales and Services
@@ -245,25 +205,25 @@ locale is reachable from the valid locale via zero or more fallback steps.
 ### getLocale()
 
 Client code may wish to know what the valid and actual locales are for a given
-service object. To support this, ICU services provide the method getLocale().
-getLocale() takes an argument specifying whether the actual or valid locale is
-to be returned.
+service object. To support this, ICU services provide the method `getLocale()`.
+The `getLocale()` method takes an argument specifying whether the actual or 
+valid locale is to be returned.
 
-Some service object will have an empty or null return from getLocale(). This
+Some service object will have an empty or null return from `getLocale()`. This
 indicates that the given service object was not created from locale data, or
 that it has since been modified so that it no longer reflects locale data,
 typically through alteration of the pattern (but not localized symbol changes --
 such changes do not reset the actual and valid locale settings).
 
-Currently, the services that support the getLocale() API are the following
+Currently, the services that support the `getLocale()` API are the following
 classes and their subclasses:
 
 ### Functional Equivalence
 
-Various services provide the API getFunctionalEquivalent to allow callers
+Various services provide the API `getFunctionalEquivalent` to allow callers
 determine the **functionally equivalent locale** for a requested locale. For
-example, when instantiating a collator for the locale en_US_CALIFORNIA, the
-functionally equivalent locale may be en.
+example, when instantiating a collator for the locale `en_US_CALIFORNIA`, the
+functionally equivalent locale may be `en`.
 
 The purpose of this is to allow applications to do intelligent caching. If an
 application opens a service object for locale A with a functional equivalent Q
@@ -272,10 +232,12 @@ first check if locale B has the **same functional equivalent** as locale A; if
 so, it can reuse the cached A object for the B locale, and be guaranteed the
 same results as if it has instantiated a service object for B. In other words,
 
+```
 Service.getFunctionalEquivalent(A) == Service.getFunctionalEquivalent(B)
+```
 
-implies that the object returned by Service.getInstance(A) will behave
-equivalently to the object returned by Service.getInstance(B).
+implies that the object returned by `Service.getInstance(A)` will behave
+equivalently to the object returned by `Service.getInstance(B)`.
 
 Here is a pseudo-code example:
 
@@ -287,10 +249,10 @@ equivalent.
 
 While two locales with the same functional equivalent are guaranteed to be
 equivalent, the converse is **not** true: If two locales are in fact equivalent,
-they may **not** return the same result from getFunctionalEquivalent. That is,
-if the object returned by Service.getInstance(A) behaves equivalently to the
-object returned by Service.getInstance(B), Service.getFunctionalEquivalent(A)
-**may or may not** be equal to Service.getFunctionalEquivalent(B). Take again
+they may **not** return the same result from `getFunctionalEquivalent`. That is,
+if the object returned by `Service.getInstance(A)` behaves equivalently to the
+object returned by `Service.getInstance(B)`, `Service.getFunctionalEquivalent(A)`
+**may or may not** be equal to `Service.getFunctionalEquivalent(B)`. Take again
 the example of Greek and Hebrew, with respect to collation. These locales may
 happen to be functional equivalents (since they each just turn on full
 normalization), but it may or may not be the case that they return the same
@@ -325,7 +287,7 @@ following character set and syntax restrictions:
     without a value. The same keyword may not appear twice.
 
 ICU performs two kinds of canonicalizing operations on 'ICU format' locale IDs.
-Level 1 canonicalization is performed routinely and automatically by ICU API.
+Level 1 canonicalization is performed routinely and automatically by ICU APIs.
 The recommended procedure for client code using locale IDs from outside sources
 (e.g., POSIX, user input, etc.) is to pass such "foreign IDs" through level 2
 canonicalization before use.
@@ -334,16 +296,16 @@ canonicalization before use.
 such as changing "en-us" to "en_US". Level 1 canonicalization is **not**
 designed to handle "foreign" locale IDs (POSIX, .NET) but rather IDs that are in
 ICU format, but which do not have normalized case and delimiters. Level 1
-canonicalization is accomplished by the ICU functions uloc_getName,
-Locale::createFromName, and Locale::Locale. The latter two API exist in both C++
-and Java.
+canonicalization is accomplished by the ICU functions `uloc_getName`,
+`Locale::createFromName`, and `Locale::Locale`. The latter two APIs exist in both
+C++ and Java.
 
 1.  Level 1 canonicalization is defined only on ICU format locale IDs as defined
     above. Behavior with any other kind of input is unspecified.
 
 2.  Case is normalized. Elements interpreted as **language** strings will be
     converted to lowercase. **Country** and **variant** elements will be
-    converted to uppercase. **Script** elements will be titlecased. **Keywords**
+    converted to uppercase. **Script** elements will be title-cased. **Keywords**
     will be converted to lowercase. **Keyword values** will remain unchanged.
 
 3.  Hyphens are converted to underscores.
@@ -361,8 +323,8 @@ possibly replacing entire elements of the ID. An example is changing
 "fr-fr@EURO" to "fr_FR@currency=EUR". Level 2 canonicalization is designed to
 translate POSIX and .NET IDs, as well as nonstandard ICU locale IDs. Level 2 is
 a **superset** of level 1; every operation performed by level 1 is also
-performed by level 2. Level 2 canonicalization is performed by uloc_canonicalize
-and Locale::createCanonical. The latter API exists in both C++ and Java.
+performed by level 2. Level 2 canonicalization is performed by `uloc_canonicalize`
+and `Locale::createCanonical`. The latter API exists in both C++ and Java.
 
 1.  Level 2 canonicalization operates on ICU format locale IDs with the
     following additions:
@@ -430,109 +392,124 @@ canonicalization. These are listed here for completeness.
     combined together with keywords is not defined. For example,
     fr_FR_EURO@currency=FRF has an undefined level 2 canonicalization.
 
-All API (with a few exceptions) in ICU4C that take a const char\* locale
+All APIs (with a few exceptions) in ICU4C that take a `const char* locale` 
 parameter can be assumed to automatically peform level 1 canonicalization before
 using the locale ID to do resource lookup, keyword interpretation, etc.
-Specifically, the static API getLanguage, getScript, getCountry, and getVariant
-behave exactly like their non-static counterparts in the class Locale. That is,
-for any locale ID loc, new Locale(loc).getFoo() == Locale::getFoo(loc), where
+Specifically, the static API `getLanguage`, `getScript`, `getCountry`, and `getVariant`
+behave exactly like their non-static counterparts in the class `Locale`. That is,
+for any locale ID `loc`, `new Locale(loc).getFoo() == Locale::getFoo(loc)`, where
 Foo is one of Language, Script, Country, or Variant.
 
-The Locale constructor (in C++ and Java) taking multiple strings behaves exactly
+The `Locale` constructor (in C++ and Java) taking multiple strings behaves exactly
 as if those strings were concatenated, with the '_' separator inserted between
-two adjacent non-empty strings, and the result passed to uloc_getName.
+two adjacent non-empty strings, and the result passed to `uloc_getName`.
 
-*Note: Throughout this discussion Locale refers to both the C++ Locale class and
-the ICU4J com.ibm.icu.util.ULocale class. Although C++ notation is used, all
-statements made regarding Locale apply equally to com.ibm.icu.util.ULocale. *
+> :point_right: **Note**: Throughout this discussion `Locale` refers to both the
+> C++ `Locale` class and the ICU4J `com.ibm.icu.util.ULocale` class. Although C++
+> notation is used, all statements made regarding `Locale` apply equally to
+> `com.ibm.icu.util.ULocale`.
 
 ## Usage: Creating Locales
 
 If you are localizing an application to a locale that is not already supported,
-you need to create your own Locale object. New Locale objects are created using
+you need to create your own `Locale` object. New `Locale` objects are created using
 one of the three constructors in this class:
 
-Locale( const char \* newLanguage);
-Locale( const char \* language,
-const char \* country);
-Locale( const char \* language,
-const char \* country,
-const char \* variant);
+```c++
+Locale( const char * language);
+Locale( const char * language, const char * country);
+Locale( const char * language, const char * country, const char * variant);
+```
 
 Because a locale object is just an identifier for a region, no validity check is
 performed. If you want to verify that the particular resources are available for
 the locale you construct, you must query those resources. For example, you can
-query the NumberFormat object for the locales it supports using its
-getAvailableLocales() method.
+query the `NumberFormat` object for the locales it supports using its
+`getAvailableLocales()` method.
 
-New ULocale objects in java are created using one the following three
+New `ULocale` objects in Java are created using one the following three
 constructor in this class:
 
+```java
 ULocale( String localeID)
 ULocale( String a, String b)
 ULocale( String a, String b, String c)
+```
 
 The locale ID passed in the constructor consists of optional languages, scripts,
 country and variant fields in that oder, separated by underscore, followed by an
-optional
-keywords. For example, “en_US”, “sy_Cyrl_YU”, “zh__pinyin”,
-“[es_ES@currency](mailto:es_ES@currency) =EUR,collation=traditional”. The fields
-a, b, c in the other two constructors are the components of the locale ID. For
-example, the following two locale object are same:
+optional keywords. For example, "en_US", "sy_Cyrl_YU", "zh__pinyin",
+"es_ES@currency=EUR,collation=traditional". The fields a, b, c in the other two
+constructors are the components of the locale ID. For example, the following two
+locale object are same:
 
-ULocale ul = new Ulocale(“sy_Cyrl_YU”);
-ULocale ul = new ULocale(“sy”,”Cyrl”,”YU”);
+```java
+ULocale ul = new Ulocale("sy_Cyrl_YU");
+ULocale ul = new ULocale("sy", "Cyrl", "YU");
+```
 
-In C++, the Locale class provides a number of convenient constants that you can
-use to create locales. For example, the following refers to aNumberFormat object
+In C++, the `Locale` class provides a number of convenient constants that you can
+use to create locales. For example, the following refers to a `NumberFormat` object
 for the United States:
 
+```c++
 Locale::getUS()
+```
 
 In C, a string with the language country and variant concatenated together with
 an underscore '_' describe a locale. For example, "en_US" is a locale that is
 based on the English language in the United States. The following can be used as
 equivalents to the locale constants:
 
+```c
 ULOC_US
+```
 
-In Java, the ULocale provides a number of convenient constants that can be used
+In Java, the `ULocale` provides a number of convenient constants that can be used
 to create locales.
 
+```java
 ULocale.US;
+```
 
 ## Usage: Retrieving Locales
 
-Locale-sensitive classes have a getAvailableLocales() method that returns all of
+Locale-sensitive classes have a `getAvailableLocales()` method that returns all of
 the locales supported by that class. This method also shows the other methods
 that get locale information from the resource bundle. For example, the following
-shows that the NumberFormat class provides three convenience methods for
-creating a default NumberFormat object::
+shows that the `NumberFormat` class provides three convenience methods for
+creating a default `NumberFormat` object:
 
+```c++
 NumberFormat::createInstance();
 NumberFormat::createCurrencyInstance();
 NumberFormat::createPercentInstance();
+```
 
-Locale-sensitive classes in java also have a getAvailableULocales() method that
+Locale-sensitive classes in Java also have a `getAvailableULocales()` method that
 returns all of the locales supported by that class.
 
 ### Displayable Names
 
-Once you've created a Locale in C++ and a ULocale in java, you can perform a
+Once you've created a `Locale` in C++ and a `ULocale` in java, you can perform a
 query of the locale for information about itself. The following shows the
 information you can receive from a locale:
 
-MethodDescriptiongetCountry()Retrieves the ISO Country
-CodegetLanguage()Retrieves the ISO LanguagegetDisplayCountry()Shows the name of
-the country suitable for displaying information to the
-usergetDisplayLanguage()Shows the name of the language suitable for displaying
-to the user *The getDisplayXXX methods are themselves locale-sensitive and have
-two versions in C++: one that uses the default locale and one that takes a
-locale as an argument and displays the name or country in a language appropriate
-to that locale.*
-*In Java, the getDisplayXXX methods have three versions:one that uses the
-default locale, the other takes a locale as an argument and the third one which
-takes locale ID as an argument.*
+Method | Description 
+-------|------------
+`getCountry()` | Retrieves the ISO Country Code
+`getLanguage()` | Retrieves the ISO Language
+`getDisplayCountry()` | Shows the name of the country suitable for displaying information to the user
+`getDisplayLanguage()` | Shows the name of the language suitable for displaying to the user
+
+> :point_right: **Note**: The `getDisplayXXX` methods are themselves locale-sensitive 
+> and have two versions in C++: one that uses the default locale and one that takes a
+> locale as an argument and displays the name or country in a language appropriate to
+> that locale.
+
+> :point_right: **Note**: In Java, the `getDisplayXXX` methods have three versions:
+> one that uses the default locale, the other takes a locale as an argument and the
+> third one which takes locale ID as an argument.
 
 Each class that performs locale-sensitive operations allows you to get all the
 available objects of that type. You can sift through these objects by language,
@@ -545,7 +522,7 @@ given language.
 ICU provides functions to negotiate the best locale to use for an operation,
 given a user's list of acceptable locales, and the application's list of
 available locales. For example, a browser sends the web server the HTTP
-“Accept-Language” header indicating which locales, with a ranking, are
+"`Accept-Language`" header indicating which locales, with a ranking, are
 acceptable to the user. The server must determine which locale to use when
 returning content to the user.
 
@@ -553,32 +530,38 @@ Here is an example of selecting an acceptable locale within a CGI application:
 
 C:
 
-char resultLocale\[200\];
+```c
+char resultLocale[200];
 UAcceptResult outResult;
-available = ures_openAvailableLocales(“myBundle”, &status);
-int32_t len = uloc_acceptLanguageFromHTTP(resultLocale, 200, &outResult,
-getenv(“HTTP_ACCEPT_LANGUAGE”), available, &status);
+available = ures_openAvailableLocales("myBundle", &status);
+int32_t len = uloc_acceptLanguageFromHTTP(resultLocale, 200, &outResult, 
+                getenv("HTTP_ACCEPT_LANGUAGE"), available, &status);
 if(U_SUCCESS(status)) {
-printf(“Using locale %s\\n”, outResult);
+    printf("Using locale %s\n", outResult);
 }
+```
 
 Here is an example of selecting an acceptable locale within a Java application:
 
 Java:
 
-ULocale\[\] availableLocales = ULocale.getAvailableLocales();
-boolean\[\] fallback = { false };
+```java
+ULocale[] availableLocales = ULocale.getAvailableLocales();
+boolean[] fallback = { false };
 ULocale result = ULocale.acceptLanguage(availableLocales, fallback);
-System.out.println(“Using locale “ + result);
-*Note: As of this writing, this functionality is available in both C and Java.
-Please read the following two linked documents for important considerations and
-recommendations when using this header in a web application.*
-*For further information about the Accept-Language HTTP header:*
-*<http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4> *
-*Notes and cautions about the use of this header:*
-*<http://www.w3.org/International/questions/qa-accept-lang-locales> *
+
+System.out.println("Using locale " + result);
+```
+
+> :point_right: **Note**: As of this writing, this functionality is available in
+> both C and Java. Please read the following two linked documents for important 
+> considerations and recommendations when using this header in a web application.
+
+> *For further information about the Accept-Language HTTP header:* <br>
+> https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4 <br>
+> *Notes and cautions about the use of this header:* <br>
+> https://www.w3.org/International/questions/qa-accept-lang-locales
 
 ## Programming in C vs. C++ vs. Java
 
-See Programming for Locale in [C, C++ and Java](examples.md) for more
-information.
+See Programming for Locale in [C, C++ and Java](examples.md) for more information.
