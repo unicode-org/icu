@@ -434,10 +434,10 @@ only data. Using an API on a resource of a wrong type will result in an error.
 
 Strings:
 
-Language | API
----------|----
-C        | `const UChar* ures_getString(const UResourceBundle* resourceBundle, int32_t* len, UErrorCode* status)`
-C++      | `UnicodeString getString(UErrorCode& status) const`
+| Language | API                                                                                                    |
+| -------- | ------------------------------------------------------------------------------------------------------ |
+| C        | `const UChar* ures_getString(const UResourceBundle* resourceBundle, int32_t* len, UErrorCode* status)` |
+| C++      | `UnicodeString getString(UErrorCode& status) const`                                                    |
 
 Example:
 
@@ -454,24 +454,24 @@ ures_close(version);
 
 Binaries:
 
-Language | API
----------|----
-C        | `const uint8_t* ures_getBinary(const UResourceBundle* resourceBundle, int32_t* len, UErrorCode* status)`
-C++      | `const uint8_t* getBinary(int32_t& len, UErrorCode& status) const`
+| Language | API                                                                                                      |
+| -------- | -------------------------------------------------------------------------------------------------------- |
+| C        | `const uint8_t* ures_getBinary(const UResourceBundle* resourceBundle, int32_t* len, UErrorCode* status)` |
+| C++      | `const uint8_t* getBinary(int32_t& len, UErrorCode& status) const`                                       |
 
 Integers, signed and unsigned:
 
-Language | API
----------|----
-C        | `int32_t ures_getInt(const UResourceBundle* resourceBundle, UErrorCode* status)` `uint32_t ures_getUInt(const UResourceBundle* resourceBundle, UErrorCode* status)`
-C++      | `int32_t getInt(UErrorCode& status) const` <br> `uint32_t getUInt(UErrorCode& status) const`
+| Language | API                                                                                                                                                                 |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| C        | `int32_t ures_getInt(const UResourceBundle* resourceBundle, UErrorCode* status)` `uint32_t ures_getUInt(const UResourceBundle* resourceBundle, UErrorCode* status)` |
+| C++      | `int32_t getInt(UErrorCode& status) const` <br> `uint32_t getUInt(UErrorCode& status) const`                                                                        |
 
 Integer Arrays:
 
-Language | API
----------|----
-C        | `const int32_t* ures_getIntVector(const UResourceBundle* resourceBundle, int32_t* len, UErrorCode* status)`
-C++      | `const int32_t* getIntVector(int32_t& len, UErrorCode& status) const`
+| Language | API                                                                                                         |
+| -------- | ----------------------------------------------------------------------------------------------------------- |
+| C        | `const int32_t* ures_getIntVector(const UResourceBundle* resourceBundle, int32_t* len, UErrorCode* status)` |
+| C++      | `const int32_t* getIntVector(int32_t& len, UErrorCode& status) const`                                       |
 
 #### Convenience APIs
 
@@ -487,28 +487,28 @@ objects.
 
 APIs that allow retrieving strings by specifying a key:
 
-Language (Return Type) | API
------------------------|----
-C (UChar*)             | `const UChar* ures_getStringByKey(const UResourceBundle* resB, const char* key, int32_t* len, UErrorCode* status)`
-C (UnicodeString)      | `UnicodeString ures_getUnicodeStringByKey(const UResourceBundle* resB, const char* key, UErrorCode* status)`
-C++                    | `UnicodeString getStringEx(const char* key, UErrorCode& status) const`
+| Language (Return Type) | API                                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| C (UChar*)             | `const UChar* ures_getStringByKey(const UResourceBundle* resB, const char* key, int32_t* len, UErrorCode* status)` |
+| C (UnicodeString)      | `UnicodeString ures_getUnicodeStringByKey(const UResourceBundle* resB, const char* key, UErrorCode* status)`       |
+| C++                    | `UnicodeString getStringEx(const char* key, UErrorCode& status) const`                                             |
 
 
 APIs that allow retrieving strings by specifying an index:
 
-Language (Return Type) | API
------------------------|----
-C (UChar*)             | `const UChar* ures_getStringByIndex(const UResourceBundle* resB, int32_t indexS, int32_t* len, UErrorCode* status)`
-C (UnicodeString)      | `UnicodeString ures_getUnicodeStringByIndex(const UResourceBundle* resB, int32_t indexS, UErrorCode* status)`
-C++                    | `UnicodeString getStringEx(int32_t index, UErrorCode& status) const`
+| Language (Return Type) | API                                                                                                                 |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| C (UChar*)             | `const UChar* ures_getStringByIndex(const UResourceBundle* resB, int32_t indexS, int32_t* len, UErrorCode* status)` |
+| C (UnicodeString)      | `UnicodeString ures_getUnicodeStringByIndex(const UResourceBundle* resB, int32_t indexS, UErrorCode* status)`       |
+| C++                    | `UnicodeString getStringEx(int32_t index, UErrorCode& status) const`                                                |
 
 APIs for retrieving strings through iteration:
 
-Language (Return Type) | API
------------------------|----
-C (UChar*)             | `const UChar* ures_getNextString(UResourceBundle* resourceBundle, int32_t* len, const char** key, UErrorCode* status)`
-C (UnicodeString)      | `UnicodeString ures_getNextUnicodeString(UResourceBundle* resB, const char** key, UErrorCode* status)`
-C++                    | `UnicodeString getNextString(UErrorCode& status)`
+| Language (Return Type) | API                                                                                                                    |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| C (UChar*)             | `const UChar* ures_getNextString(UResourceBundle* resourceBundle, int32_t* len, const char** key, UErrorCode* status)` |
+| C (UnicodeString)      | `UnicodeString ures_getNextUnicodeString(UResourceBundle* resB, const char** key, UErrorCode* status)`                 |
+| C++                    | `UnicodeString getNextString(UErrorCode& status)`                                                                      |
 
 #### Other APIs
 
@@ -516,40 +516,40 @@ Resource bundle framework provides a number of additional APIs that allow you to
 get more information on the resources you are using. They are summarized in the
 following tables.
 
-Language | API
----------|----
-C        | `int32_t ures_getSize(UResourceBundle* resourceBundle)`
-C++      | `int32_t getSize(void) const`
+| Language | API                                                     |
+| -------- | ------------------------------------------------------- |
+| C        | `int32_t ures_getSize(UResourceBundle* resourceBundle)` |
+| C++      | `int32_t getSize(void) const`                           |
 
 Gets the number of items in a resource. Simple resources always return size 1.
 
-Language | API
----------|----
-C        | `UResType ures_getType(UResourceBundle* resourceBundle)`
-C++      | `UResType getType(void)`
+| Language | API                                                      |
+| -------- | -------------------------------------------------------- |
+| C        | `UResType ures_getType(UResourceBundle* resourceBundle)` |
+| C++      | `UResType getType(void)`                                 |
 
 Gets the type of the resource. For a list of resource types, see:
 [unicode/ures.h](../../../icu4c/source/common/unicode/ures.h)
 
-Language | API
----------|----
-C        | `const char* ures_getKey(UResourceBundle* resB)`
-C++      | `const char* getKey(void)`
+| Language | API                                              |
+| -------- | ------------------------------------------------ |
+| C        | `const char* ures_getKey(UResourceBundle* resB)` |
+| C++      | `const char* getKey(void)`                       |
 
 Gets the key of a named resource or `NULL` if this resource is a member of an
 array.
 
-Language | API
----------|----
-C        | `void ures_getVersion(const UResourceBundle* resB, UVersionInfo versionInfo)`
-C++      | `void getVersion(UVersionInfo versionInfo) const`
+| Language | API                                                                           |
+| -------- | ----------------------------------------------------------------------------- |
+| C        | `void ures_getVersion(const UResourceBundle* resB, UVersionInfo versionInfo)` |
+| C++      | `void getVersion(UVersionInfo versionInfo) const`                             |
 
 Fills out the version structure for this resource.
 
-Language | API
----------|----
-C        | `const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)`
-C++      | `const Locale& getLocale(void) const`
+| Language | API                                                                                     |
+| -------- | --------------------------------------------------------------------------------------- |
+| C        | `const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)` |
+| C++      | `const Locale& getLocale(void) const`                                                   |
 
 Returns the locale this resource is from. This API is going to change, so stay
 tuned.
@@ -653,15 +653,15 @@ header file.
 Syntax of the resources that can be stored in resource bundles is specified in
 the following table:
 
-Data Type | Format | Description
-----------|--------|------------
-Tables | `[name][:table] { subname1 { subresource1 } ... subnameN { subresourceN } }` | Tables are a complex resource that holds named resources. If it is a part of an array, it does not have a name. At this point, a resource bundle is a table. Access is allowed by key, index, and iteration.
-Arrays | `[name][:array] {subresource1, ... subresourceN }` | Arrays are a complex resource that holds unnamed resources. If it is a part of an array, it does not have a name. Arrays require less memory than tables (since they don't store the name of sub-resources) but the index and iteration access are as fast as with tables.
-Strings | `[name][:string] { ["]UnicodeText["] }` | Strings are simple resources that hold a chunk of Unicode encoded data. If it is a part of an array, it does not have a name.
-Binaries | `name:bin { binarydata } name:import{ "fileNameToImport" }` | Binaries are used for storing binary information (processed data, images etc). Information is stored on a byte level.
-Integers | `name:int { integervalue }` | Integers are used for storing a 32 bit integer value.
-Integer Vectors | `name:intvector { integervalue, ... integervalueN }` |  Integer vectors are used for storing 32 bit integer values.
-Aliases | `name:alias { locale and path to aliased resource }` | Aliases point to other resources. They are useful for preventing duplication of data in resources that are not on the same branch of the fallback chain. Alias can also have an empty path. In that case the position of the alias resource is used to find the aliased resource.
+| Data Type       | Format                                                                       | Description                                                                                                                                                                                                                                                                       |
+| --------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tables          | `[name][:table] { subname1 { subresource1 } ... subnameN { subresourceN } }` | Tables are a complex resource that holds named resources. If it is a part of an array, it does not have a name. At this point, a resource bundle is a table. Access is allowed by key, index, and iteration.                                                                      |
+| Arrays          | `[name][:array] {subresource1, ... subresourceN }`                           | Arrays are a complex resource that holds unnamed resources. If it is a part of an array, it does not have a name. Arrays require less memory than tables (since they don't store the name of sub-resources) but the index and iteration access are as fast as with tables.        |
+| Strings         | `[name][:string] { ["]UnicodeText["] }`                                      | Strings are simple resources that hold a chunk of Unicode encoded data. If it is a part of an array, it does not have a name.                                                                                                                                                     |
+| Binaries        | `name:bin { binarydata } name:import{ "fileNameToImport" }`                  | Binaries are used for storing binary information (processed data, images etc). Information is stored on a byte level.                                                                                                                                                             |
+| Integers        | `name:int { integervalue }`                                                  | Integers are used for storing a 32 bit integer value.                                                                                                                                                                                                                             |
+| Integer Vectors | `name:intvector { integervalue, ... integervalueN }`                         | Integer vectors are used for storing 32 bit integer values.                                                                                                                                                                                                                       |
+| Aliases         | `name:alias { locale and path to aliased resource }`                         | Aliases point to other resources. They are useful for preventing duplication of data in resources that are not on the same branch of the fallback chain. Alias can also have an empty path. In that case the position of the alias resource is used to find the aliased resource. |
 
 Although specifying type for some resources can be omitted for backward
 compatibility reasons, you are strongly encouraged to always specify the type of
