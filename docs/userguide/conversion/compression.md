@@ -18,7 +18,7 @@ Unicode (usually in the Basic Latin range).
 For additional detail about the compression algorithm, which has been approved
 by the Unicode Consortium, please refer to [Unicode Technical Report #6 (A
 Standard Compression Scheme for
-Unicode)](http://www.unicode.org/unicode/reports/tr6/) .
+Unicode)](http://www.unicode.org/unicode/reports/tr6/).
 
 The Standard Compression Scheme for Unicode (SCSU) is used to:
 
@@ -28,14 +28,14 @@ The Standard Compression Scheme for Unicode (SCSU) is used to:
 
 *   facilitate the use of short strings
 
-*   provide transparency for characters between U+0020-U+00FF, as well as CR, LF
-    and TAB
+*   provide transparency for characters between `U+0020`-`U+00FF`, as well as `CR`, `LF`
+    and `TAB`
 
 *   support very simple decoders
 
 *   support simple as well as sophisticated encoders
 
-It does not attempt to avoid the use of control bytes (including NUL) in the
+It does not attempt to avoid the use of control bytes (including `NUL`) in the
 compressed stream.
 
 The compression scheme is mainly intended for use with short to medium length
@@ -48,7 +48,7 @@ intended as processing format or as general purpose interchange format.
 
 A MIME compatible encoding called BOCU-1 is also available in ICU. Details about
 this encoding can be found in the [Unicode Technical Note
-#6](http://www.unicode.org/notes/tn6/) . Both SCSU and BOCU-1 are IANA
+#6](http://www.unicode.org/notes/tn6/). Both SCSU and BOCU-1 are IANA
 registered names.
 
 ## Usage
@@ -58,23 +58,30 @@ the semantics of converters. For more information on how to use ICU's conversion
 service, please refer to the Usage Model section in the [Using
 Converters](converters.md) chapter.
 
-uint16_t germanUTF16\[\]={
-0x00d6, 0x006c, 0x0020, 0x0066, 0x006c, 0x0069, 0x0065, 0x00df, 0x0074
+```c++
+uint16_t germanUTF16[]={
+    0x00d6, 0x006c, 0x0020, 0x0066, 0x006c, 0x0069, 0x0065, 0x00df, 0x0074
 };
-uint8_t germanSCSU\[\]={
-0xd6, 0x6c, 0x20, 0x66, 0x6c, 0x69, 0x65, 0xdf, 0x74
+
+uint8_t germanSCSU[]={
+    0xd6, 0x6c, 0x20, 0x66, 0x6c, 0x69, 0x65, 0xdf, 0x74
 };
-char target\[100\];
-UChar uTarget\[100\];
+char target[100];
+UChar uTarget[100];
 UErrorCode status = U_ZERO_ERROR;
-UConverter \*conv;
+UConverter *conv;
 int32_t len;
-/\* set up the SCSU converter \*/
+
+/* set up the SCSU converter */
 conv = ucnv_open("SCSU", &status);
 assert(U_SUCCESS(status));
-/\* compress the string using SCSU \*/
+
+/* compress the string using SCSU */
 len = ucnv_fromUChars(conv, target, 100, germanUTF16, -1, &status);
 assert(U_SUCCESS(status));
-len = ucnv_toUChars(conv, uTarget,100, germanSCSU, -1, &status);
-/\* close the converter \*/
+
+len = ucnv_toUChars(conv, uTarget, 100, germanSCSU, -1, &status);
+
+/* close the converter */
 ucnv_close(conv);
+```

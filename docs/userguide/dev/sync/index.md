@@ -39,22 +39,28 @@ For examples of use, search the ICU library code.
 
 **Low Level Atomics**
 
-typedef u_atomic_int32_t A 32 bit integer type for use with low level atomic
-operationsumtx_atomic_inc(u_atomic_int32_t &var)
-umtx_atomic_dec(u_atomic_int32_t &var)
+| Type/Function                          | Description                                                     |
+|----------------------------------------|-----------------------------------------------------------------|
+| typedef u_atomic_int32_t               | A 32 bit integer type for use with low level atomic operations. |
+| umtx_atomic_inc(u_atomic_int32_t &var) |                                                                 |
+| umtx_atomic_dec(u_atomic_int32_t &var) |                                                                 |
 
 **Mutexes**
 
-struct UMutex An ICU mutex. All instances must be static. U_MUTEX_INITIALIZER A
-C style initializer for a UMutex umtx_lock(UMutex \*mutex) Lock a mutex.
-umtx_unlock(UMutex\* mutex) Unlock a mutex. class Mutex C++ Mutex wrapper with
-automatic lock & unlock. See header mutex.h
+| Type/Function               | Description                                                        |
+|-----------------------------|--------------------------------------------------------------------|
+| struct UMutex               | An ICU mutex. All instances must be static.                        |
+| U_MUTEX_INITIALIZER         | A C style initializer for a UMutex.                                |
+| umtx_lock(UMutex *mutex)  | Lock a mutex.                                                      |
+| umtx_unlock(UMutex* mutex) | Unlock a mutex.                                                    |
+| class Mutex                 | C++ Mutex wrapper withautomatic lock & unlock. See header mutex.h. |
 
 **One Time Initialization**
 
-struct UInitOnce Provides an efficient facility for one-time initialization of
-static or global objects. umtx_initOnce(UInitOnce, ... A family of
-initialization functions
+| Type/Function                 | Description                                                                             |
+|-------------------------------|-----------------------------------------------------------------------------------------|
+| struct UInitOnce              | Provides an efficient facility for one-time initialization of static or global objects. |
+| umtx_initOnce(UInitOnce, ...) | A family of initialization functions.                                                   |
 
 All of these functions are for internal ICU implementation use only. They are
 not exported, and not intended for external use.
