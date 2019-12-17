@@ -47,13 +47,13 @@ For examples of use, search the ICU library code.
 
 **Mutexes**
 
-| Type/Function               | Description                                                        |
-|-----------------------------|--------------------------------------------------------------------|
-| struct UMutex               | An ICU mutex. All instances must be static.                        |
-| U_MUTEX_INITIALIZER         | A C style initializer for a UMutex.                                |
-| umtx_lock(UMutex *mutex)  | Lock a mutex.                                                      |
+| Type/Function              | Description                                                        |
+|----------------------------|--------------------------------------------------------------------|
+| struct UMutex              | An ICU mutex. All instances must be static.                        |
+| U_MUTEX_INITIALIZER        | A C style initializer for a UMutex.                                |
+| umtx_lock(UMutex *mutex)   | Lock a mutex.                                                      |
 | umtx_unlock(UMutex* mutex) | Unlock a mutex.                                                    |
-| class Mutex                 | C++ Mutex wrapper withautomatic lock & unlock. See header mutex.h. |
+| class Mutex                | C++ Mutex wrapper withautomatic lock & unlock. See header mutex.h. |
 
 **One Time Initialization**
 
