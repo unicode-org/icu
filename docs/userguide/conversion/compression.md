@@ -18,7 +18,7 @@ Unicode (usually in the Basic Latin range).
 For additional detail about the compression algorithm, which has been approved
 by the Unicode Consortium, please refer to [Unicode Technical Report #6 (A
 Standard Compression Scheme for
-Unicode)](http://www.unicode.org/unicode/reports/tr6/).
+Unicode)](https://www.unicode.org/unicode/reports/tr6/).
 
 The Standard Compression Scheme for Unicode (SCSU) is used to:
 
@@ -48,7 +48,7 @@ intended as processing format or as general purpose interchange format.
 
 A MIME compatible encoding called BOCU-1 is also available in ICU. Details about
 this encoding can be found in the [Unicode Technical Note
-#6](http://www.unicode.org/notes/tn6/). Both SCSU and BOCU-1 are IANA
+#6](https://www.unicode.org/notes/tn6/). Both SCSU and BOCU-1 are IANA
 registered names.
 
 ## Usage
