@@ -12,7 +12,7 @@ upgrade to a new ICU release.
 
 ## Current Process
 
-See <http://site.icu-project.org/processes/contribute>
+See <http://site.icu-project.org/processes/contribute>.
 
 ## Historical
 
@@ -41,8 +41,8 @@ of the copyright assignment.
 
 If you would like to make a contribution only once or infrequently, please use
 the *Joint Copyright Assignment - One-time Contribution* form.
-(<http://source.icu-project.org/repos/icu/icuhtml/trunkl/legal/contributions/Copyright_Assignment.rtf>
-). The contribution will be identified by a bug ID which is unique to the
+(<http://source.icu-project.org/repos/icu/icuhtml/trunkl/legal/contributions/Copyright_Assignment.rtf>).
+The contribution will be identified by a bug ID which is unique to the
 contribution and entered into the form. Therefore, please make sure that there
 is an appropriate bug (or Request For Enhancement) in the ICU bug database, or
 submit one.
@@ -61,7 +61,7 @@ assignment form.
 If you are interested in making frequent contributions to ICU, then the ICU
 Project Management Committee may agree to invite you as an ongoing contributor.
 Ongoing contributors may be individuals but are more typically expected to be
-companies with one or more people (“authors”) writing different parts of one or
+companies with one or more people ("authors") writing different parts of one or
 more contributions.
 
 In this case, the relationship between the contributor and the ICU team is much
@@ -76,8 +76,7 @@ The process for ongoing contributors involves two types of forms: Initially, and
 only once, an ongoing contributor submits a *Joint Copyright Assignment by
 Ongoing Contributor* form, agreeing to essentially the same terms as in the
 one-time contributor form, for all future contributions. (See the form at
-<http://source.icu-project.org/repos/icu/icuhtml/trunk/legal/contributions/Copyright_Assignment_ongoing.rtf>
-)
+<http://source.icu-project.org/repos/icu/icuhtml/trunk/legal/contributions/Copyright_Assignment_ongoing.rtf>).
 
 The contributor must also send another form, *Addendum to Joint Copyright
 Assignment by Ongoing Contributor: Authors*, for the initial set and each
@@ -87,8 +86,7 @@ additional authors need to be listed on each such form.) The contributor agrees
 to ensure that all of these authors agree to adhere to the terms of the
 associated *Joint Copyright Assignment by Ongoing Contributor Agreement*. (See
 the Authors Addendum form at
-<http://source.icu-project.org/repos/icu/icuhtml/trunk/legal/contributions/Copyright_Assignment_authors.rtf>
-)
+<http://source.icu-project.org/repos/icu/icuhtml/trunk/legal/contributions/Copyright_Assignment_authors.rtf>).
 
 Some of an ongoing contributor's authors will have commit access to the ICU
 source code repository. Their committer IDs need to be established before
