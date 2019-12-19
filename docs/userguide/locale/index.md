@@ -28,8 +28,8 @@ variants or subdivisions. These fields also can be represented as a string with
 the fields separated by an underscore.
 
 In the C++ API, the locale is represented by the `Locale` class, which provides
-methods for finding language, country and variant components. In C API the locale
-is defined simply by a character string. In Java API, the locale is represented by
+methods for finding language, country and variant components. In the C API the locale
+is defined simply by a character string. In the Java API, the locale is represented by
 `ULocale` which is analogous to the `Locale` class but provide additional support
 for ICU protocol. All the locale-sensitive ICU services use the locale information
 to determine language and other locale specific parameters of their function.
@@ -135,7 +135,7 @@ en_IE_PREEURO | en | | IE | | | English, Ireland. <br>Browse in [LocaleExplorer]
 en_IE@currency=IEP | en | | IE | | currency=IEP | English, Ireland with Irish Pound. <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=en_IE@currency=IEP)
 eo | eo | | | | | Esperanto. <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=eo)
 fr@collation=phonebook;calendar=islamic-civil | fr | | | | collation=phonebook <br>calendar=islamic-civil | French (Calendar=Islamic-Civil Calendar, Collation=Phonebook Order). <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?_=fr@collation=phonebook;calendar=islamic-civil)
-sr_Latn_RS_REVISED@currency=USD | sr | Latn | RS | REVISED | currency=USD | Serbian (Latin, Yugoslavia, Revised Orthography, Currency=US Dollar) <br>Browse in[LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?d_=en&_=sr_Latn_RS_REVISED@currency=USD)
+sr_Latn_RS_REVISED@currency=USD | sr | Latn | RS | REVISED | currency=USD | Serbian (Latin, Yugoslavia, Revised Orthography, Currency=US Dollar) <br>Browse in [LocaleExplorer](http://demo.icu-project.org/icu-bin/locexp?d_=en&_=sr_Latn_RS_REVISED@currency=USD)
 
 
 ### Default Locales
