@@ -34,6 +34,17 @@ public class LocaleDistance {
     private static final int DISTANCE_IS_FINAL = 0x100;
     private static final int DISTANCE_IS_FINAL_OR_SKIP_SCRIPT =
             DISTANCE_IS_FINAL | DISTANCE_SKIP_SCRIPT;
+
+    // The distance is shifted left to gain some fraction bits.
+    private static final int DISTANCE_SHIFT = 3;
+    private static final int DISTANCE_FRACTION_MASK = 7;
+    // 7 bits for 0..100
+    private static final int DISTANCE_INT_SHIFT = 7;
+    private static final int INDEX_SHIFT = DISTANCE_INT_SHIFT + DISTANCE_SHIFT;
+    private static final int DISTANCE_MASK = 0x3ff;
+    // vate static final int MAX_INDEX = 0x1fffff;  // avoids sign bit
+    private static final int INDEX_NEG_1 = 0xfffffc00;
+
     // Indexes into array of distances.
     public static final int IX_DEF_LANG_DISTANCE = 0;
     public static final int IX_DEF_SCRIPT_DISTANCE = 1;
@@ -66,6 +77,28 @@ public class LocaleDistance {
     private final int defaultRegionDistance;
     private final int minRegionDistance;
     private final int defaultDemotionPerDesiredLocale;
+
+    public static final int shiftDistance(int distance) {
+        return distance << DISTANCE_SHIFT;
+    }
+
+    public static final int getShiftedDistance(int indexAndDistance) {
+        return indexAndDistance & DISTANCE_MASK;
+    }
+
+    public static final double getDistanceDouble(int indexAndDistance) {
+        double shiftedDistance = getShiftedDistance(indexAndDistance);
+        return shiftedDistance / (1 << DISTANCE_SHIFT);
+    }
+
+    private static final int getDistanceFloor(int indexAndDistance) {
+        return (indexAndDistance & DISTANCE_MASK) >> DISTANCE_SHIFT;
+    }
+
+    public static final int getIndex(int indexAndDistance) {
+        assert indexAndDistance >= 0;
+        return indexAndDistance >> INDEX_SHIFT;
+    }
 
     // VisibleForTesting
     public static final class Data {
@@ -121,7 +154,8 @@ public class LocaleDistance {
                 String[] paradigms = value.getStringArray();
                 paradigmLSRs = new HashSet<>(paradigms.length / 3);
                 for (int i = 0; i < paradigms.length; i += 3) {
-                    paradigmLSRs.add(new LSR(paradigms[i], paradigms[i + 1], paradigms[i + 2]));
+                    paradigmLSRs.add(new LSR(paradigms[i], paradigms[i + 1], paradigms[i + 2],
+                            LSR.DONT_CARE_FLAGS));
                 }
             } else {
                 paradigmLSRs = Collections.emptySet();
@@ -168,10 +202,11 @@ public class LocaleDistance {
         // a mere region difference for one desired locale
         // is as good as a perfect match for the next following desired locale.
         // As of CLDR 36, we have <languageMatch desired="en_*_*" supported="en_*_*" distance="5"/>.
-        LSR en = new LSR("en", "Latn", "US");
-        LSR enGB = new LSR("en", "Latn", "GB");
-        defaultDemotionPerDesiredLocale = getBestIndexAndDistance(en, new LSR[] { enGB },
-                50, FavorSubtag.LANGUAGE) & 0xff;
+        LSR en = new LSR("en", "Latn", "US", LSR.EXPLICIT_LSR);
+        LSR enGB = new LSR("en", "Latn", "GB", LSR.EXPLICIT_LSR);
+        int indexAndDistance = getBestIndexAndDistance(en, new LSR[] { enGB },
+                shiftDistance(50), FavorSubtag.LANGUAGE);
+        defaultDemotionPerDesiredLocale  = getDistanceFloor(indexAndDistance);
 
         if (DEBUG_OUTPUT) {
             System.out.println("*** locale distance");
@@ -187,20 +222,26 @@ public class LocaleDistance {
             int threshold, FavorSubtag favorSubtag) {
         LSR supportedLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported);
         LSR desiredLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired);
-        return getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR },
-                threshold, favorSubtag) & 0xff;
+        int indexAndDistance = getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR },
+                shiftDistance(threshold), favorSubtag);
+        return getDistanceFloor(indexAndDistance);
     }
 
     /**
      * Finds the supported LSR with the smallest distance from the desired one.
      * Equivalent LSR subtags must be normalized into a canonical form.
      *
-     * <p>Returns the index of the lowest-distance supported LSR in bits 31..8
+     * <p>Returns the index of the lowest-distance supported LSR in the high bits
      * (negative if none has a distance below the threshold),
-     * and its distance (0..ABOVE_THRESHOLD) in bits 7..0.
+     * and its distance (0..ABOVE_THRESHOLD) in the low bits.
      */
     public int getBestIndexAndDistance(LSR desired, LSR[] supportedLSRs,
-            int threshold, FavorSubtag favorSubtag) {
+            int shiftedThreshold, FavorSubtag favorSubtag) {
+        // Round up the shifted threshold (if fraction bits are not 0)
+        // for comparison with un-shifted distances until we need fraction bits.
+        // (If we simply shifted non-zero fraction bits away, then we might ignore a language
+        // when it's really still a micro distance below the threshold.)
+        int roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
         BytesTrie iter = new BytesTrie(trie);
         // Look up the desired language only once for all supported LSRs.
         // Its "distance" is either a match point value of 0, or a non-match negative value.
@@ -246,7 +287,7 @@ public class LocaleDistance {
             if (favorSubtag == FavorSubtag.SCRIPT) {
                 distance >>= 2;
             }
-            if (distance >= threshold) {
+            if (distance >= roundedThreshold) {
                 continue;
             }
 
@@ -264,7 +305,7 @@ public class LocaleDistance {
                 scriptDistance &= ~DISTANCE_IS_FINAL;
             }
             distance += scriptDistance;
-            if (distance >= threshold) {
+            if (distance >= roundedThreshold) {
                 continue;
             }
 
@@ -273,7 +314,7 @@ public class LocaleDistance {
             } else if (star || (flags & DISTANCE_IS_FINAL) != 0) {
                 distance += defaultRegionDistance;
             } else {
-                int remainingThreshold = threshold - distance;
+                int remainingThreshold = roundedThreshold - distance;
                 if (minRegionDistance >= remainingThreshold) {
                     continue;
                 }
@@ -289,15 +330,23 @@ public class LocaleDistance {
                         partitionsForRegion(supported),
                         remainingThreshold);
             }
-            if (distance < threshold) {
-                if (distance == 0) {
-                    return slIndex << 8;
+            int shiftedDistance = shiftDistance(distance);
+            if (shiftedDistance == 0) {
+                // Distinguish between equivalent but originally unequal locales via an
+                // additional micro distance.
+                shiftedDistance |= (desired.flags ^ supported.flags);
+            }
+            if (shiftedDistance < shiftedThreshold) {
+                if (shiftedDistance == 0) {
+                    return slIndex << INDEX_SHIFT;
                 }
                 bestIndex = slIndex;
-                threshold = distance;
+                shiftedThreshold = shiftedDistance;
             }
         }
-        return bestIndex >= 0 ? (bestIndex << 8) | threshold : 0xffffff00 | ABOVE_THRESHOLD;
+        return bestIndex >= 0 ?
+                (bestIndex << INDEX_SHIFT) | shiftedThreshold :
+                INDEX_NEG_1 | shiftDistance(ABOVE_THRESHOLD);
     }
 
     private static final int getDesSuppScriptDistance(BytesTrie iter, long startState,
@@ -439,7 +488,17 @@ public class LocaleDistance {
     }
 
     public boolean isParadigmLSR(LSR lsr) {
-        return paradigmLSRs.contains(lsr);
+        // Linear search for a very short list (length 6 as of 2019),
+        // because we look for equivalence not equality, and
+        // HashSet does not support customizing equality.
+        // If there are many paradigm LSRs we should revisit this.
+        assert paradigmLSRs.size() <= 15;
+        for (LSR plsr : paradigmLSRs) {
+            if (lsr.isEquivalentTo(plsr)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // VisibleForTesting
@@ -455,9 +514,6 @@ public class LocaleDistance {
         return defaultDemotionPerDesiredLocale;
     }
 
-    // TODO: When we build data offline,
-    // write test code to compare the loaded table with the builder output.
-    // Fail if different, with instructions for how to update the data file.
     // VisibleForTesting
     public Map<String, Integer> testOnlyGetDistanceTable() {
         Map<String, Integer> map = new TreeMap<>();

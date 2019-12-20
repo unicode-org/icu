@@ -64,7 +64,7 @@ import com.ibm.icu.impl.locale.XLikelySubtags;
  * @stable ICU 4.4
  */
 public final class LocaleMatcher {
-    private static final LSR UND_LSR = new LSR("und","","");
+    private static final LSR UND_LSR = new LSR("und","","", LSR.EXPLICIT_LSR);
     // In ULocale, "und" and "" make the same object.
     private static final ULocale UND_ULOCALE = new ULocale("und");
     // In Locale, "und" and "" make different objects.
@@ -680,6 +680,9 @@ public final class LocaleMatcher {
                 builder.demotion == Demotion.NONE ? 0 :
                     LocaleDistance.INSTANCE.getDefaultDemotionPerDesiredLocale();  // null or REGION
         favorSubtag = builder.favor;
+        if (TRACE_MATCHER) {
+            System.err.printf("new LocaleMatcher: %s\n", toString());
+        }
     }
 
     private static final void putIfAbsent(Map<LSR, Integer> lsrToIndex, LSR lsr, int i) {
@@ -938,26 +941,34 @@ public final class LocaleMatcher {
     private int getBestSuppIndex(LSR desiredLSR, LsrIterator remainingIter) {
         int desiredIndex = 0;
         int bestSupportedLsrIndex = -1;
-        for (int bestDistance = thresholdDistance;;) {
+        StringBuilder sb = null;
+        if (TRACE_MATCHER) {
+            sb = new StringBuilder("LocaleMatcher desired:");
+        }
+        for (int bestShiftedDistance = LocaleDistance.shiftDistance(thresholdDistance);;) {
+            if (TRACE_MATCHER) {
+                sb.append(' ').append(desiredLSR);
+            }
             // Quick check for exact maximized LSR.
             Integer index = supportedLsrToIndex.get(desiredLSR);
             if (index != null) {
                 int suppIndex = index;
                 if (TRACE_MATCHER) {
-                    System.err.printf("Returning %s: desiredLSR=supportedLSR\n",
-                            supportedULocales[suppIndex]);
+                    System.err.printf("%s --> best=%s: desiredLSR=supportedLSR\n",
+                            sb, supportedULocales[suppIndex]);
                 }
                 if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
                 return suppIndex;
             }
             int bestIndexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                    desiredLSR, supportedLSRs, bestDistance, favorSubtag);
+                    desiredLSR, supportedLSRs, bestShiftedDistance, favorSubtag);
             if (bestIndexAndDistance >= 0) {
-                bestDistance = bestIndexAndDistance & 0xff;
+                bestShiftedDistance = LocaleDistance.getShiftedDistance(bestIndexAndDistance);
                 if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
-                bestSupportedLsrIndex = bestIndexAndDistance >> 8;
+                bestSupportedLsrIndex = LocaleDistance.getIndex(bestIndexAndDistance);
             }
-            if ((bestDistance -= demotionPerDesiredLocale) <= 0) {
+            if ((bestShiftedDistance -= LocaleDistance.shiftDistance(demotionPerDesiredLocale))
+                    <= 0) {
                 break;
             }
             if (remainingIter == null || !remainingIter.hasNext()) {
@@ -968,14 +979,14 @@ public final class LocaleMatcher {
         }
         if (bestSupportedLsrIndex < 0) {
             if (TRACE_MATCHER) {
-                System.err.printf("Returning default %s: no good match\n", defaultULocale);
+                System.err.printf("%s --> best=default %s: no good match\n", sb, defaultULocale);
             }
             return -1;
         }
         int suppIndex = supportedIndexes[bestSupportedLsrIndex];
         if (TRACE_MATCHER) {
-            System.err.printf("Returning %s: best matching supported locale\n",
-                    supportedULocales[suppIndex]);
+            System.err.printf("%s --> best=%s: best matching supported locale\n",
+                    sb, supportedULocales[suppIndex]);
         }
         return suppIndex;
     }
@@ -1000,11 +1011,16 @@ public final class LocaleMatcher {
     @Deprecated
     public double match(ULocale desired, ULocale desiredMax, ULocale supported, ULocale supportedMax) {
         // Returns the inverse of the distance: That is, 1-distance(desired, supported).
-        int distance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
+        int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
                 getMaximalLsrOrUnd(desired),
                 new LSR[] { getMaximalLsrOrUnd(supported) },
-                thresholdDistance, favorSubtag) & 0xff;
-        return (100 - distance) / 100.0;
+                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag);
+        double distance = LocaleDistance.getDistanceDouble(indexAndDistance);
+        if (TRACE_MATCHER) {
+            System.err.printf("LocaleMatcher distance(desired=%s, supported=%s)=%g\n",
+                Objects.toString(desired), Objects.toString(supported), distance);
+        }
+        return (100.0 - distance) / 100.0;
     }
 
     /**
@@ -1032,16 +1048,17 @@ public final class LocaleMatcher {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder().append("{LocaleMatcher");
-        if (supportedULocales.length > 0) {
-            s.append(" supported={").append(supportedULocales[0].toString());
-            for (int i = 1; i < supportedULocales.length; ++i) {
-                s.append(", ").append(supportedULocales[i].toString());
+        // Supported languages in the order that we try to match them.
+        if (supportedLSRs.length > 0) {
+            s.append(" supportedLSRs={").append(supportedLSRs[0].toString());
+            for (int i = 1; i < supportedLSRs.length; ++i) {
+                s.append(", ").append(supportedLSRs[i].toString());
             }
             s.append('}');
         }
         s.append(" default=").append(Objects.toString(defaultULocale));
         if (favorSubtag != null) {
-            s.append(" distance=").append(favorSubtag.toString());
+            s.append(" favor=").append(favorSubtag.toString());
         }
         if (thresholdDistance >= 0) {
             s.append(String.format(" threshold=%d", thresholdDistance));

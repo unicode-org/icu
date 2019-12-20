@@ -7,6 +7,13 @@ import java.util.Objects;
 public final class LSR {
     public static final int REGION_INDEX_LIMIT = 1001 + 26 * 26;
 
+    public static final int EXPLICIT_LSR = 7;
+    public static final int EXPLICIT_LANGUAGE = 4;
+    public static final int EXPLICIT_SCRIPT = 2;
+    public static final int EXPLICIT_REGION = 1;
+    public static final int IMPLICIT_LSR = 0;
+    public static final int DONT_CARE_FLAGS = 0;
+
     public static final boolean DEBUG_OUTPUT = false;
 
     public final String language;
@@ -14,12 +21,14 @@ public final class LSR {
     public final String region;
     /** Index for region, negative if ill-formed. @see indexForRegion */
     final int regionIndex;
+    public final int flags;
 
-    public LSR(String language, String script, String region) {
+    public LSR(String language, String script, String region, int flags) {
         this.language = language;
         this.script = script;
         this.region = region;
         regionIndex = indexForRegion(region);
+        this.flags = flags;
     }
 
     /**
@@ -57,6 +66,13 @@ public final class LSR {
         }
         return result.toString();
     }
+
+    public boolean isEquivalentTo(LSR other) {
+        return language.equals(other.language)
+                && script.equals(other.script)
+                && region.equals(other.region);
+    }
+
     @Override
     public boolean equals(Object obj) {
         LSR other;
@@ -65,10 +81,12 @@ public final class LSR {
                 && obj.getClass() == this.getClass()
                 && language.equals((other = (LSR) obj).language)
                 && script.equals(other.script)
-                && region.equals(other.region));
+                && region.equals(other.region)
+                && flags == other.flags);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(language, script, region);
+        return Objects.hash(language, script, region, flags);
     }
 }

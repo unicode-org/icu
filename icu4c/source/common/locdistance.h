@@ -26,19 +26,36 @@ class LocaleDistance final : public UMemory {
 public:
     static const LocaleDistance *getSingleton(UErrorCode &errorCode);
 
+    static int32_t shiftDistance(int32_t distance) {
+        return distance << DISTANCE_SHIFT;
+    }
+
+    static int32_t getShiftedDistance(int32_t indexAndDistance) {
+        return indexAndDistance & DISTANCE_MASK;
+    }
+
+    static double getDistanceDouble(int32_t indexAndDistance) {
+        double shiftedDistance = getShiftedDistance(indexAndDistance);
+        return shiftedDistance / (1 << DISTANCE_SHIFT);
+    }
+
+    static int32_t getIndex(int32_t indexAndDistance) {
+        // assert indexAndDistance >= 0;
+        return indexAndDistance >> INDEX_SHIFT;
+    }
+
     /**
      * Finds the supported LSR with the smallest distance from the desired one.
      * Equivalent LSR subtags must be normalized into a canonical form.
      *
-     * <p>Returns the index of the lowest-distance supported LSR in bits 31..8
+     * <p>Returns the index of the lowest-distance supported LSR in the high bits
      * (negative if none has a distance below the threshold),
-     * and its distance (0..ABOVE_THRESHOLD) in bits 7..0.
+     * and its distance (0..ABOVE_THRESHOLD) in the low bits.
      */
     int32_t getBestIndexAndDistance(const LSR &desired,
                                     const LSR **supportedLSRs, int32_t supportedLSRsLength,
-                                    int32_t threshold, ULocMatchFavorSubtag favorSubtag) const;
-
-    int32_t getParadigmLSRsLength() const { return paradigmLSRsLength; }
+                                    int32_t shiftedThreshold,
+                                    ULocMatchFavorSubtag favorSubtag) const;
 
     UBool isParadigmLSR(const LSR &lsr) const;
 
@@ -51,6 +68,20 @@ public:
     }
 
 private:
+    // The distance is shifted left to gain some fraction bits.
+    static constexpr int32_t DISTANCE_SHIFT = 3;
+    static constexpr int32_t DISTANCE_FRACTION_MASK = 7;
+    // 7 bits for 0..100
+    static constexpr int32_t DISTANCE_INT_SHIFT = 7;
+    static constexpr int32_t INDEX_SHIFT = DISTANCE_INT_SHIFT + DISTANCE_SHIFT;
+    static constexpr int32_t DISTANCE_MASK = 0x3ff;
+    // tic constexpr int32_t MAX_INDEX = 0x1fffff;  // avoids sign bit
+    static constexpr int32_t INDEX_NEG_1 = 0xfffffc00;
+
+    static int32_t getDistanceFloor(int32_t indexAndDistance) {
+        return (indexAndDistance & DISTANCE_MASK) >> DISTANCE_SHIFT;
+    }
+
     LocaleDistance(const LocaleDistanceData &data);
     LocaleDistance(const LocaleDistance &other) = delete;
     LocaleDistance &operator=(const LocaleDistance &other) = delete;
