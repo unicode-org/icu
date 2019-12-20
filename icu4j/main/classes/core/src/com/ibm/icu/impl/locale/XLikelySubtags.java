@@ -97,13 +97,18 @@ public final class XLikelySubtags {
         @Override
         public boolean equals(Object other) {
             if (this == other) { return true; }
-            if (!getClass().equals(other.getClass())) { return false; }
+            if (other == null || !getClass().equals(other.getClass())) { return false; }
             Data od = (Data)other;
             return
                     languageAliases.equals(od.languageAliases) &&
                     regionAliases.equals(od.regionAliases) &&
                     Arrays.equals(trie, od.trie) &&
                     Arrays.equals(lsrs, od.lsrs);
+        }
+
+        @Override
+        public int hashCode() {  // unused; silence ErrorProne
+            return 1;
         }
     }
 

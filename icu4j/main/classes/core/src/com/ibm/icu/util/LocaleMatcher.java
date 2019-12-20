@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import com.ibm.icu.impl.locale.LSR;
 import com.ibm.icu.impl.locale.LocaleDistance;
@@ -522,19 +521,19 @@ public final class LocaleMatcher {
         public String toString() {
             StringBuilder s = new StringBuilder().append("{LocaleMatcher.Builder");
             if (supportedLocales != null && !supportedLocales.isEmpty()) {
-                s.append(" supported={").append(supportedLocales.toString()).append('}');
+                s.append(" supported={").append(supportedLocales).append('}');
             }
             if (defaultLocale != null) {
-                s.append(" default=").append(defaultLocale.toString());
+                s.append(" default=").append(defaultLocale);
             }
             if (favor != null) {
-                s.append(" distance=").append(favor.toString());
+                s.append(" distance=").append(favor);
             }
             if (thresholdDistance >= 0) {
                 s.append(String.format(" threshold=%d", thresholdDistance));
             }
             if (demotion != null) {
-                s.append(" demotion=").append(demotion.toString());
+                s.append(" demotion=").append(demotion);
             }
             return s.append('}').toString();
         }
@@ -1018,7 +1017,7 @@ public final class LocaleMatcher {
         double distance = LocaleDistance.getDistanceDouble(indexAndDistance);
         if (TRACE_MATCHER) {
             System.err.printf("LocaleMatcher distance(desired=%s, supported=%s)=%g\n",
-                Objects.toString(desired), Objects.toString(supported), distance);
+                String.valueOf(desired), String.valueOf(supported), distance);
         }
         return (100.0 - distance) / 100.0;
     }
@@ -1050,15 +1049,15 @@ public final class LocaleMatcher {
         StringBuilder s = new StringBuilder().append("{LocaleMatcher");
         // Supported languages in the order that we try to match them.
         if (supportedLSRs.length > 0) {
-            s.append(" supportedLSRs={").append(supportedLSRs[0].toString());
+            s.append(" supportedLSRs={").append(supportedLSRs[0]);
             for (int i = 1; i < supportedLSRs.length; ++i) {
-                s.append(", ").append(supportedLSRs[i].toString());
+                s.append(", ").append(supportedLSRs[i]);
             }
             s.append('}');
         }
-        s.append(" default=").append(Objects.toString(defaultULocale));
+        s.append(" default=").append(defaultULocale);
         if (favorSubtag != null) {
-            s.append(" favor=").append(favorSubtag.toString());
+            s.append(" favor=").append(favorSubtag);
         }
         if (thresholdDistance >= 0) {
             s.append(String.format(" threshold=%d", thresholdDistance));
