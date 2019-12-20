@@ -250,7 +250,8 @@ struct XLikelySubtagsData {
         for (int32_t i = 0, j = 0; i < lsrSubtagsLength; i += 3, ++j) {
             lsrs[j] = LSR(strings.get(lsrSubtagIndexes[i]),
                           strings.get(lsrSubtagIndexes[i + 1]),
-                          strings.get(lsrSubtagIndexes[i + 2]));
+                          strings.get(lsrSubtagIndexes[i + 2]),
+                          LSR::IMPLICIT_LSR);
         }
 
         if (partitionsLength > 0) {
@@ -275,7 +276,8 @@ struct XLikelySubtagsData {
             for (int32_t i = 0, j = 0; i < paradigmSubtagsLength; i += 3, ++j) {
                 paradigms[j] = LSR(strings.get(paradigmSubtagIndexes[i]),
                                    strings.get(paradigmSubtagIndexes[i + 1]),
-                                   strings.get(paradigmSubtagIndexes[i + 2]));
+                                   strings.get(paradigmSubtagIndexes[i + 2]),
+                                   LSR::DONT_CARE_FLAGS);
             }
             distanceData.paradigms = paradigms;
         }
@@ -383,7 +385,7 @@ LSR XLikelySubtags::makeMaximizedLsrFrom(const Locale &locale, UErrorCode &error
     const char *name = locale.getName();
     if (uprv_isAtSign(name[0]) && name[1] == 'x' && name[2] == '=') {  // name.startsWith("@x=")
         // Private use language tag x-subtag-subtag...
-        return LSR(name, "", "");
+        return LSR(name, "", "", LSR::EXPLICIT_LSR);
     }
     return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
                             locale.getVariant(), errorCode);
@@ -407,26 +409,31 @@ LSR XLikelySubtags::makeMaximizedLsr(const char *language, const char *script, c
     if (region[0] == 'X' && (c1 = region[1]) != 0 && region[2] == 0) {
         switch (c1) {
         case 'A':
-            return LSR(PSEUDO_ACCENTS_PREFIX, language, script, region, errorCode);
+            return LSR(PSEUDO_ACCENTS_PREFIX, language, script, region,
+                       LSR::EXPLICIT_LSR, errorCode);
         case 'B':
-            return LSR(PSEUDO_BIDI_PREFIX, language, script, region, errorCode);
+            return LSR(PSEUDO_BIDI_PREFIX, language, script, region,
+                       LSR::EXPLICIT_LSR, errorCode);
         case 'C':
-            return LSR(PSEUDO_CRACKED_PREFIX, language, script, region, errorCode);
+            return LSR(PSEUDO_CRACKED_PREFIX, language, script, region,
+                       LSR::EXPLICIT_LSR, errorCode);
         default:  // normal locale
             break;
         }
     }
 
     if (variant[0] == 'P' && variant[1] == 'S') {
+        int32_t lsrFlags = *region == 0 ?
+            LSR::EXPLICIT_LANGUAGE | LSR::EXPLICIT_SCRIPT : LSR::EXPLICIT_LSR;
         if (uprv_strcmp(variant, "PSACCENT") == 0) {
             return LSR(PSEUDO_ACCENTS_PREFIX, language, script,
-                       *region == 0 ? "XA" : region, errorCode);
+                       *region == 0 ? "XA" : region, lsrFlags, errorCode);
         } else if (uprv_strcmp(variant, "PSBIDI") == 0) {
             return LSR(PSEUDO_BIDI_PREFIX, language, script,
-                       *region == 0 ? "XB" : region, errorCode);
+                       *region == 0 ? "XB" : region, lsrFlags, errorCode);
         } else if (uprv_strcmp(variant, "PSCRACK") == 0) {
             return LSR(PSEUDO_CRACKED_PREFIX, language, script,
-                       *region == 0 ? "XC" : region, errorCode);
+                       *region == 0 ? "XC" : region, lsrFlags, errorCode);
         }
         // else normal locale
     }
@@ -448,7 +455,7 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
         region = "";
     }
     if (*script != 0 && *region != 0 && *language != 0) {
-        return LSR(language, script, region);  // already maximized
+        return LSR(language, script, region, LSR::EXPLICIT_LSR);  // already maximized
     }
 
     uint32_t retainOldMask = 0;
@@ -535,7 +542,7 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
     if (retainOldMask == 0) {
         // Quickly return a copy of the lookup-result LSR
         // without new allocation of the subtags.
-        return LSR(result.language, result.script, result.region);
+        return LSR(result.language, result.script, result.region, result.flags);
     }
     if ((retainOldMask & 4) == 0) {
         language = result.language;
@@ -546,7 +553,8 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
     if ((retainOldMask & 1) == 0) {
         region = result.region;
     }
-    return LSR(language, script, region);
+    // retainOldMask flags = LSR explicit-subtag flags
+    return LSR(language, script, region, retainOldMask);
 }
 
 int32_t XLikelySubtags::trieNext(BytesTrie &iter, const char *s, int32_t i) {
@@ -615,9 +623,9 @@ LSR XLikelySubtags::minimizeSubtags(const char *languageIn, const char *scriptIn
     boolean favorRegionOk = false;
     if (result.script.equals(value00.script)) { //script is default
         if (result.region.equals(value00.region)) {
-            return new LSR(result.language, "", "");
+            return new LSR(result.language, "", "", LSR.DONT_CARE_FLAGS);
         } else if (fieldToFavor == ULocale.Minimize.FAVOR_REGION) {
-            return new LSR(result.language, "", result.region);
+            return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
         } else {
             favorRegionOk = true;
         }
@@ -627,9 +635,9 @@ LSR XLikelySubtags::minimizeSubtags(const char *languageIn, const char *scriptIn
     // Maybe do later, but for now use the straightforward code.
     LSR result2 = maximize(languageIn, scriptIn, "");
     if (result2.equals(result)) {
-        return new LSR(result.language, result.script, "");
+        return new LSR(result.language, result.script, "", LSR.DONT_CARE_FLAGS);
     } else if (favorRegionOk) {
-        return new LSR(result.language, "", result.region);
+        return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
     }
     return result;
 }

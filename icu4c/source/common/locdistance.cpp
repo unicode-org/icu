@@ -97,17 +97,23 @@ LocaleDistance::LocaleDistance(const LocaleDistanceData &data) :
     // a mere region difference for one desired locale
     // is as good as a perfect match for the next following desired locale.
     // As of CLDR 36, we have <languageMatch desired="en_*_*" supported="en_*_*" distance="5"/>.
-    LSR en("en", "Latn", "US");
-    LSR enGB("en", "Latn", "GB");
+    LSR en("en", "Latn", "US", LSR::EXPLICIT_LSR);
+    LSR enGB("en", "Latn", "GB", LSR::EXPLICIT_LSR);
     const LSR *p_enGB = &enGB;
-    defaultDemotionPerDesiredLocale = getBestIndexAndDistance(en, &p_enGB, 1,
-            50, ULOCMATCH_FAVOR_LANGUAGE) & 0xff;
+    int32_t indexAndDistance = getBestIndexAndDistance(en, &p_enGB, 1,
+            shiftDistance(50), ULOCMATCH_FAVOR_LANGUAGE);
+    defaultDemotionPerDesiredLocale  = getDistanceFloor(indexAndDistance);
 }
 
 int32_t LocaleDistance::getBestIndexAndDistance(
         const LSR &desired,
         const LSR **supportedLSRs, int32_t supportedLSRsLength,
-        int32_t threshold, ULocMatchFavorSubtag favorSubtag) const {
+        int32_t shiftedThreshold, ULocMatchFavorSubtag favorSubtag) const {
+    // Round up the shifted threshold (if fraction bits are not 0)
+    // for comparison with un-shifted distances until we need fraction bits.
+    // (If we simply shifted non-zero fraction bits away, then we might ignore a language
+    // when it's really still a micro distance below the threshold.)
+    int32_t roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
     BytesTrie iter(trie);
     // Look up the desired language only once for all supported LSRs.
     // Its "distance" is either a match point value of 0, or a non-match negative value.
@@ -153,7 +159,7 @@ int32_t LocaleDistance::getBestIndexAndDistance(
         if (favorSubtag == ULOCMATCH_FAVOR_SCRIPT) {
             distance >>= 2;
         }
-        if (distance >= threshold) {
+        if (distance >= roundedThreshold) {
             continue;
         }
 
@@ -171,7 +177,7 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             scriptDistance &= ~DISTANCE_IS_FINAL;
         }
         distance += scriptDistance;
-        if (distance >= threshold) {
+        if (distance >= roundedThreshold) {
             continue;
         }
 
@@ -180,7 +186,7 @@ int32_t LocaleDistance::getBestIndexAndDistance(
         } else if (star || (flags & DISTANCE_IS_FINAL) != 0) {
             distance += defaultRegionDistance;
         } else {
-            int32_t remainingThreshold = threshold - distance;
+            int32_t remainingThreshold = roundedThreshold - distance;
             if (minRegionDistance >= remainingThreshold) {
                 continue;
             }
@@ -196,15 +202,23 @@ int32_t LocaleDistance::getBestIndexAndDistance(
                     partitionsForRegion(supported),
                     remainingThreshold);
         }
-        if (distance < threshold) {
-            if (distance == 0) {
-                return slIndex << 8;
+        int32_t shiftedDistance = shiftDistance(distance);
+        if (shiftedDistance == 0) {
+            // Distinguish between equivalent but originally unequal locales via an
+            // additional micro distance.
+            shiftedDistance |= (desired.flags ^ supported.flags);
+        }
+        if (shiftedDistance < shiftedThreshold) {
+            if (shiftedDistance == 0) {
+                return slIndex << INDEX_SHIFT;
             }
             bestIndex = slIndex;
-            threshold = distance;
+            shiftedThreshold = shiftedDistance;
         }
     }
-    return bestIndex >= 0 ? (bestIndex << 8) | threshold : 0xffffff00 | ABOVE_THRESHOLD;
+    return bestIndex >= 0 ?
+            (bestIndex << INDEX_SHIFT) | shiftedThreshold :
+            INDEX_NEG_1 | shiftDistance(ABOVE_THRESHOLD);
 }
 
 int32_t LocaleDistance::getDesSuppScriptDistance(
@@ -352,11 +366,14 @@ int32_t LocaleDistance::trieNext(BytesTrie &iter, const char *s, bool wantValue)
 }
 
 UBool LocaleDistance::isParadigmLSR(const LSR &lsr) const {
-    // Linear search for a very short list (length 6 as of 2019).
-    // If there are many paradigm LSRs we should use a hash set.
+    // Linear search for a very short list (length 6 as of 2019),
+    // because we look for equivalence not equality, and
+    // because it's easy.
+    // If there are many paradigm LSRs we should use a hash set
+    // with custom comparator and hasher.
     U_ASSERT(paradigmLSRsLength <= 15);
     for (int32_t i = 0; i < paradigmLSRsLength; ++i) {
-        if (lsr == paradigmLSRs[i]) { return true; }
+        if (lsr.isEquivalentTo(paradigmLSRs[i])) { return true; }
     }
     return false;
 }

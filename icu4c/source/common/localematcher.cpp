@@ -22,7 +22,7 @@
 #include "uhash.h"
 #include "uvector.h"
 
-#define UND_LSR LSR("und", "", "")
+#define UND_LSR LSR("und", "", "", LSR::EXPLICIT_LSR)
 
 /**
  * Indicator for the lifetime of desired-locale objects passed into the LocaleMatcher.
@@ -393,26 +393,27 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
         // 3. Remaining locales in builder order.
         // In Java, we use a LinkedHashMap for both map & ordered lists.
         // In C++, we use separate structures.
-        // We over-allocate arrays of LSRs and indexes for simplicity.
-        // We reserve slots at the array starts for the default and paradigm locales,
-        // plus enough for all supported locales.
-        // If there are few paradigm locales and few duplicate supported LSRs,
-        // then the amount of wasted space is small.
+        //
+        // We allocate arrays of LSRs and indexes,
+        // with as many slots as supported locales, for simplicity.
+        // We write the default and paradigm LSRs starting from the front of the arrays,
+        // and others starting from the back.
+        // At the end we reverse the non-paradigm LSRs.
+        // We end up wasting as many array slots as there are duplicate supported LSRs,
+        // but the amount of wasted space is small as long as there are few duplicates.
         supportedLsrToIndex = uhash_openSize(hashLSR, compareLSRs, uhash_compareLong,
                                              supportedLocalesLength, &errorCode);
         if (U_FAILURE(errorCode)) { return; }
-        int32_t paradigmLimit = 1 + localeDistance.getParadigmLSRsLength();
-        int32_t suppLSRsCapacity = paradigmLimit + supportedLocalesLength;
         supportedLSRs = static_cast<const LSR **>(
-            uprv_malloc(suppLSRsCapacity * sizeof(const LSR *)));
+            uprv_malloc(supportedLocalesLength * sizeof(const LSR *)));
         supportedIndexes = static_cast<int32_t *>(
-            uprv_malloc(suppLSRsCapacity * sizeof(int32_t)));
+            uprv_malloc(supportedLocalesLength * sizeof(int32_t)));
         if (supportedLSRs == nullptr || supportedIndexes == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
         int32_t paradigmIndex = 0;
-        int32_t otherIndex = paradigmLimit;
+        int32_t otherIndex = supportedLocalesLength;
         if (idef >= 0) {
             uhash_puti(supportedLsrToIndex, const_cast<LSR *>(defLSR), idef + 1, &errorCode);
             supportedLSRs[0] = defLSR;
@@ -446,21 +447,32 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
                         supportedLSRs[paradigmIndex] = &lsr;
                         supportedIndexes[paradigmIndex++] = i;
                     } else {
-                        supportedLSRs[otherIndex] = &lsr;
-                        supportedIndexes[otherIndex++] = i;
+                        supportedLSRs[--otherIndex] = &lsr;
+                        supportedIndexes[otherIndex] = i;
                     }
                 }
             }
             if (U_FAILURE(errorCode)) { return; }
         }
-        // Squeeze out unused array slots.
-        if (paradigmIndex < paradigmLimit && paradigmLimit < otherIndex) {
-            uprv_memmove(supportedLSRs + paradigmIndex, supportedLSRs + paradigmLimit,
-                         (otherIndex - paradigmLimit) * sizeof(const LSR *));
-            uprv_memmove(supportedIndexes + paradigmIndex, supportedIndexes + paradigmLimit,
-                         (otherIndex - paradigmLimit) * sizeof(int32_t));
+        // Reverse the non-paradigm LSRs to be in order, right after the paradigm LSRs.
+        // First fill the unused slots between paradigm LSRs and other LSRs.
+        // This gap is as large as the number of locales with duplicate LSRs.
+        int32_t i = paradigmIndex;
+        int32_t j = supportedLocalesLength - 1;
+        while (i < otherIndex && otherIndex <= j) {
+            supportedLSRs[i] = supportedLSRs[j];
+            supportedIndexes[i++] = supportedIndexes[j--];
         }
-        supportedLSRsLength = otherIndex - (paradigmLimit - paradigmIndex);
+        // Swap remaining non-paradigm LSRs in place.
+        while (i < j) {
+            const LSR *tempLSR = supportedLSRs[i];
+            supportedLSRs[i] = supportedLSRs[j];
+            supportedLSRs[j] = tempLSR;
+            int32_t tempIndex = supportedIndexes[i];
+            supportedIndexes[i++] = supportedIndexes[j];
+            supportedIndexes[j--] = tempIndex;
+        }
+        supportedLSRsLength = supportedLocalesLength - (otherIndex - paradigmIndex);
     }
 
     if (def != nullptr && (idef < 0 || def != supportedLocales[idef])) {
@@ -662,7 +674,7 @@ int32_t LocaleMatcher::getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remai
     if (U_FAILURE(errorCode)) { return -1; }
     int32_t desiredIndex = 0;
     int32_t bestSupportedLsrIndex = -1;
-    for (int32_t bestDistance = thresholdDistance;;) {
+    for (int32_t bestShiftedDistance = LocaleDistance::shiftDistance(thresholdDistance);;) {
         // Quick check for exact maximized LSR.
         // Returns suppIndex+1 where 0 means not found.
         if (supportedLsrToIndex != nullptr) {
@@ -677,16 +689,17 @@ int32_t LocaleMatcher::getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remai
             }
         }
         int32_t bestIndexAndDistance = localeDistance.getBestIndexAndDistance(
-                desiredLSR, supportedLSRs, supportedLSRsLength, bestDistance, favorSubtag);
+                desiredLSR, supportedLSRs, supportedLSRsLength, bestShiftedDistance, favorSubtag);
         if (bestIndexAndDistance >= 0) {
-            bestDistance = bestIndexAndDistance & 0xff;
+            bestShiftedDistance = LocaleDistance::getShiftedDistance(bestIndexAndDistance);
             if (remainingIter != nullptr) {
                 remainingIter->rememberCurrent(desiredIndex, errorCode);
                 if (U_FAILURE(errorCode)) { return -1; }
             }
-            bestSupportedLsrIndex = bestIndexAndDistance >= 0 ? bestIndexAndDistance >> 8 : -1;
+            bestSupportedLsrIndex = bestIndexAndDistance >= 0 ?
+                LocaleDistance::getIndex(bestIndexAndDistance) : -1;
         }
-        if ((bestDistance -= demotionPerDesiredLocale) <= 0) {
+        if ((bestShiftedDistance -= LocaleDistance::shiftDistance(demotionPerDesiredLocale)) <= 0) {
             break;
         }
         if (remainingIter == nullptr || !remainingIter->hasNext()) {
@@ -708,11 +721,12 @@ double LocaleMatcher::internalMatch(const Locale &desired, const Locale &support
     LSR suppLSR = getMaximalLsrOrUnd(likelySubtags, supported, errorCode);
     if (U_FAILURE(errorCode)) { return 0; }
     const LSR *pSuppLSR = &suppLSR;
-    int32_t distance = localeDistance.getBestIndexAndDistance(
+    int32_t indexAndDistance = localeDistance.getBestIndexAndDistance(
             getMaximalLsrOrUnd(likelySubtags, desired, errorCode),
             &pSuppLSR, 1,
-            thresholdDistance, favorSubtag) & 0xff;
-    return (100 - distance) / 100.0;
+            LocaleDistance::shiftDistance(thresholdDistance), favorSubtag);
+    double distance = LocaleDistance::getDistanceDouble(indexAndDistance);
+    return (100.0 - distance) / 100.0;
 }
 
 U_NAMESPACE_END
