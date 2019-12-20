@@ -173,13 +173,18 @@ public class LocaleDistance {
         @Override
         public boolean equals(Object other) {
             if (this == other) { return true; }
-            if (!getClass().equals(other.getClass())) { return false; }
+            if (other == null || !getClass().equals(other.getClass())) { return false; }
             Data od = (Data)other;
             return Arrays.equals(trie, od.trie) &&
                     Arrays.equals(regionToPartitionsIndex, od.regionToPartitionsIndex) &&
                     Arrays.equals(partitionArrays, od.partitionArrays) &&
                     paradigmLSRs.equals(od.paradigmLSRs) &&
                     Arrays.equals(distances, od.distances);
+        }
+
+        @Override
+        public int hashCode() {  // unused; silence ErrorProne
+            return 1;
         }
     }
 
