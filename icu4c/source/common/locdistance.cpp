@@ -69,7 +69,7 @@ void U_CALLCONV LocaleDistance::initLocaleDistance(UErrorCode &errorCode) {
         errorCode = U_MISSING_RESOURCE_ERROR;
         return;
     }
-    gLocaleDistance = new LocaleDistance(data);
+    gLocaleDistance = new LocaleDistance(data, likely);
     if (gLocaleDistance == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -83,7 +83,8 @@ const LocaleDistance *LocaleDistance::getSingleton(UErrorCode &errorCode) {
     return gLocaleDistance;
 }
 
-LocaleDistance::LocaleDistance(const LocaleDistanceData &data) :
+LocaleDistance::LocaleDistance(const LocaleDistanceData &data, const XLikelySubtags &likely) :
+        likelySubtags(likely),
         trie(data.distanceTrieBytes),
         regionToPartitionsIndex(data.regionToPartitions), partitionArrays(data.partitions),
         paradigmLSRs(data.paradigms), paradigmLSRsLength(data.paradigmsLength),
@@ -122,6 +123,8 @@ int32_t LocaleDistance::getBestIndexAndDistance(
     uint64_t desLangState = desLangDistance >= 0 && supportedLSRsLength > 1 ? iter.getState64() : 0;
     // Index of the supported LSR with the lowest distance.
     int32_t bestIndex = -1;
+    // Cached lookup info from XLikelySubtags.compareLikely().
+    int32_t bestLikelyInfo = -1;
     for (int32_t slIndex = 0; slIndex < supportedLSRsLength; ++slIndex) {
         const LSR &supported = *supportedLSRs[slIndex];
         bool star = false;
@@ -207,13 +210,29 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             // Distinguish between equivalent but originally unequal locales via an
             // additional micro distance.
             shiftedDistance |= (desired.flags ^ supported.flags);
-        }
-        if (shiftedDistance < shiftedThreshold) {
-            if (shiftedDistance == 0) {
-                return slIndex << INDEX_SHIFT;
+            if (shiftedDistance < shiftedThreshold) {
+                if (shiftedDistance == 0) {
+                    return slIndex << INDEX_SHIFT;
+                }
+                bestIndex = slIndex;
+                shiftedThreshold = shiftedDistance;
+                bestLikelyInfo = -1;
             }
-            bestIndex = slIndex;
-            shiftedThreshold = shiftedDistance;
+        } else {
+            if (shiftedDistance < shiftedThreshold) {
+                bestIndex = slIndex;
+                shiftedThreshold = shiftedDistance;
+                bestLikelyInfo = -1;
+            } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
+                bestLikelyInfo = likelySubtags.compareLikely(
+                        supported, *supportedLSRs[bestIndex], bestLikelyInfo);
+                if ((bestLikelyInfo & 1) != 0) {
+                    // This supported locale matches as well as the previous best match,
+                    // and neither matches perfectly,
+                    // but this one is "more likely" (has more-default subtags).
+                    bestIndex = slIndex;
+                }
+            }
         }
     }
     return bestIndex >= 0 ?

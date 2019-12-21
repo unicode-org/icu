@@ -557,6 +557,106 @@ LSR XLikelySubtags::maximize(const char *language, const char *script, const cha
     return LSR(language, script, region, retainOldMask);
 }
 
+int32_t XLikelySubtags::compareLikely(const LSR &lsr, const LSR &other, int32_t likelyInfo) const {
+    // If likelyInfo >= 0:
+    // likelyInfo bit 1 is set if the previous comparison with lsr
+    // was for equal language and script.
+    // Otherwise the scripts differed.
+    if (uprv_strcmp(lsr.language, other.language) != 0) {
+        return 0xfffffffc;  // negative, lsr not better than other
+    }
+    if (uprv_strcmp(lsr.script, other.script) != 0) {
+        int32_t index;
+        if (likelyInfo >= 0 && (likelyInfo & 2) == 0) {
+            index = likelyInfo >> 2;
+        } else {
+            index = getLikelyIndex(lsr.language, "");
+            likelyInfo = index << 2;
+        }
+        const LSR &likely = lsrs[index];
+        if (uprv_strcmp(lsr.script, likely.script) == 0) {
+            return likelyInfo | 1;
+        } else {
+            return likelyInfo & ~1;
+        }
+    }
+    if (uprv_strcmp(lsr.region, other.region) != 0) {
+        int32_t index;
+        if (likelyInfo >= 0 && (likelyInfo & 2) != 0) {
+            index = likelyInfo >> 2;
+        } else {
+            index = getLikelyIndex(lsr.language, lsr.region);
+            likelyInfo = (index << 2) | 2;
+        }
+        const LSR &likely = lsrs[index];
+        if (uprv_strcmp(lsr.region, likely.region) == 0) {
+            return likelyInfo | 1;
+        } else {
+            return likelyInfo & ~1;
+        }
+    }
+    return likelyInfo & ~1;  // lsr not better than other
+}
+
+// Subset of maximize().
+int32_t XLikelySubtags::getLikelyIndex(const char *language, const char *script) const {
+    if (uprv_strcmp(language, "und") == 0) {
+        language = "";
+    }
+    if (uprv_strcmp(script, "Zzzz") == 0) {
+        script = "";
+    }
+
+    BytesTrie iter(trie);
+    uint64_t state;
+    int32_t value;
+    // Small optimization: Array lookup for first language letter.
+    int32_t c0;
+    if (0 <= (c0 = uprv_lowerOrdinal(language[0])) && c0 <= 25 &&
+            language[1] != 0 &&  // language.length() >= 2
+            (state = trieFirstLetterStates[c0]) != 0) {
+        value = trieNext(iter.resetToState64(state), language, 1);
+    } else {
+        value = trieNext(iter, language, 0);
+    }
+    if (value >= 0) {
+        state = iter.getState64();
+    } else {
+        iter.resetToState64(trieUndState);  // "und" ("*")
+        state = 0;
+    }
+
+    if (value > 0) {
+        // Intermediate or final value from just language.
+        if (value == SKIP_SCRIPT) {
+            value = 0;
+        }
+    } else {
+        value = trieNext(iter, script, 0);
+        if (value >= 0) {
+            state = iter.getState64();
+        } else {
+            if (state == 0) {
+                iter.resetToState64(trieUndZzzzState);  // "und-Zzzz" ("**")
+            } else {
+                iter.resetToState64(state);
+                value = trieNext(iter, "", 0);
+                U_ASSERT(value >= 0);
+                state = iter.getState64();
+            }
+        }
+    }
+
+    if (value > 0) {
+        // Final value from just language or language+script.
+    } else {
+        value = trieNext(iter, "", 0);
+        U_ASSERT(value > 0);
+    }
+    U_ASSERT(value < lsrsLength);
+    return value;
+}
+
 int32_t XLikelySubtags::trieNext(BytesTrie &iter, const char *s, int32_t i) {
     UStringTrieResult result;
     uint8_t c;
