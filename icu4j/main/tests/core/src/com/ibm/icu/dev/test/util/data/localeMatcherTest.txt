@@ -733,7 +733,7 @@ ja >> fr
 @favor=script
 en-GB >> en-GB
 en-US >> en
-fr >> en-GB
+fr >> en
 ja >> fr
 
 ** test: testEmptyWithDefault
@@ -761,8 +761,8 @@ en-GB >> en-GB
 en-US >> en
 fr-FR >> fr
 ja-JP >> fr
+zu >> en
 # For a language that doesn't match anything, return the default.
-zu >> en-GB
 zxx >> fr
 
 @favor=script
@@ -770,7 +770,7 @@ en-GB >> en-GB
 en-US >> en
 fr-FR >> fr
 ja-JP >> fr
-zu >> en-GB
+zu >> en
 zxx >> en
 
 ** test: TestExactMatch
@@ -1322,7 +1322,7 @@ en >> en-US
 @favor=script
 und >> und
 ja >> und
-fr-CA >> en-GB
+fr-CA >> en-US
 en-AU >> en-GB
 en-BZ >> en-GB
 en-CA >> en-GB
@@ -1359,8 +1359,8 @@ fr >> und
 @supported=en-GB, en-US, en, en-AU
 und >> und
 ja >> und
-fr-CA >> en-GB
-fr >> en-GB
+fr-CA >> en-US
+fr >> en-US
 @supported=en-AU, ja, ca
 fr >> en-AU
 @supported=pl, ja, ca
@@ -1901,7 +1901,7 @@ fr-FR >> fr # Parent match is chosen.
 fr-FR >> fr-CA # Sibling match is chosen.
 @supported=fr-CA, fr-FR
 fr >> fr-FR # Inferred region match is chosen.
-fr-SN >> fr-CA
+fr-SN >> fr-FR
 @supported=en, fr-FR
 fr >> fr-FR # Child match is chosen.
 @supported=de, en, it
@@ -1931,7 +1931,7 @@ fr-FR >> fr
 fr-FR >> fr-CA
 @supported=fr-CA, fr-FR
 fr >> fr-FR
-fr-SN >> fr-CA
+fr-SN >> fr-FR
 @supported=en, fr-FR
 fr >> fr-FR
 @supported=de, en, it
@@ -1951,3 +1951,10 @@ ru >> uk
 zh-CN >> zh-TW
 @supported=ja
 ru >> und
+
+** test: favor a more-default locale among equally imperfect matches
+@supported=fr-CA, fr-CH, fr-FR, fr-GB
+fr-SN >> fr-FR
+@supported=sr-Latn, sr-Cyrl, sr-Grek
+@threshold=60
+sr-Thai >> sr-Cyrl

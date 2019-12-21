@@ -367,6 +367,114 @@ public final class XLikelySubtags {
         return new LSR(language, script, region, retainOldMask);
     }
 
+    /**
+     * Tests whether lsr is "more likely" than other.
+     * For example, fr-Latn-FR is more likely than fr-Latn-CH because
+     * FR is the default region for fr-Latn.
+     *
+     * <p>The likelyInfo caches lookup information between calls.
+     * The return value is an updated likelyInfo value,
+     * with bit 0 set if lsr is "more likely".
+     * The initial value of likelyInfo must be negative.
+     */
+    int compareLikely(LSR lsr, LSR other, int likelyInfo) {
+        // If likelyInfo >= 0:
+        // likelyInfo bit 1 is set if the previous comparison with lsr
+        // was for equal language and script.
+        // Otherwise the scripts differed.
+        if (!lsr.language.equals(other.language)) {
+            return 0xfffffffc;  // negative, lsr not better than other
+        }
+        if (!lsr.script.equals(other.script)) {
+            int index;
+            if (likelyInfo >= 0 && (likelyInfo & 2) == 0) {
+                index = likelyInfo >> 2;
+            } else {
+                index = getLikelyIndex(lsr.language, "");
+                likelyInfo = index << 2;
+            }
+            LSR likely = lsrs[index];
+            if (lsr.script.equals(likely.script)) {
+                return likelyInfo | 1;
+            } else {
+                return likelyInfo & ~1;
+            }
+        }
+        if (!lsr.region.equals(other.region)) {
+            int index;
+            if (likelyInfo >= 0 && (likelyInfo & 2) != 0) {
+                index = likelyInfo >> 2;
+            } else {
+                index = getLikelyIndex(lsr.language, lsr.region);
+                likelyInfo = (index << 2) | 2;
+            }
+            LSR likely = lsrs[index];
+            if (lsr.region.equals(likely.region)) {
+                return likelyInfo | 1;
+            } else {
+                return likelyInfo & ~1;
+            }
+        }
+        return likelyInfo & ~1;  // lsr not better than other
+    }
+
+    // Subset of maximize().
+    private int getLikelyIndex(String language, String script) {
+        if (language.equals("und")) {
+            language = "";
+        }
+        if (script.equals("Zzzz")) {
+            script = "";
+        }
+
+        BytesTrie iter = new BytesTrie(trie);
+        long state;
+        int value;
+        // Small optimization: Array lookup for first language letter.
+        int c0;
+        if (language.length() >= 2 && 0 <= (c0 = language.charAt(0) - 'a') && c0 <= 25 &&
+                (state = trieFirstLetterStates[c0]) != 0) {
+            value = trieNext(iter.resetToState64(state), language, 1);
+        } else {
+            value = trieNext(iter, language, 0);
+        }
+        if (value >= 0) {
+            state = iter.getState64();
+        } else {
+            iter.resetToState64(trieUndState);  // "und" ("*")
+            state = 0;
+        }
+
+        if (value > 0) {
+            // Intermediate or final value from just language.
+            if (value == SKIP_SCRIPT) {
+                value = 0;
+            }
+        } else {
+            value = trieNext(iter, script, 0);
+            if (value >= 0) {
+                state = iter.getState64();
+            } else {
+                if (state == 0) {
+                    iter.resetToState64(trieUndZzzzState);  // "und-Zzzz" ("**")
+                } else {
+                    iter.resetToState64(state);
+                    value = trieNext(iter, "", 0);
+                    assert value >= 0;
+                    state = iter.getState64();
+                }
+            }
+        }
+
+        if (value > 0) {
+            // Final value from just language or language+script.
+        } else {
+            value = trieNext(iter, "", 0);
+            assert value > 0;
+        }
+        return value;
+    }
+
     private static final int trieNext(BytesTrie iter, String s, int i) {
         BytesTrie.Result result;
         if (s.isEmpty()) {

@@ -255,6 +255,8 @@ public class LocaleDistance {
         long desLangState = desLangDistance >= 0 && supportedLSRs.length > 1 ? iter.getState64() : 0;
         // Index of the supported LSR with the lowest distance.
         int bestIndex = -1;
+        // Cached lookup info from XLikelySubtags.compareLikely().
+        int bestLikelyInfo = -1;
         for (int slIndex = 0; slIndex < supportedLSRs.length; ++slIndex) {
             LSR supported = supportedLSRs[slIndex];
             boolean star = false;
@@ -340,13 +342,29 @@ public class LocaleDistance {
                 // Distinguish between equivalent but originally unequal locales via an
                 // additional micro distance.
                 shiftedDistance |= (desired.flags ^ supported.flags);
-            }
-            if (shiftedDistance < shiftedThreshold) {
-                if (shiftedDistance == 0) {
-                    return slIndex << INDEX_SHIFT;
+                if (shiftedDistance < shiftedThreshold) {
+                    if (shiftedDistance == 0) {
+                        return slIndex << INDEX_SHIFT;
+                    }
+                    bestIndex = slIndex;
+                    shiftedThreshold = shiftedDistance;
+                    bestLikelyInfo = -1;
                 }
-                bestIndex = slIndex;
-                shiftedThreshold = shiftedDistance;
+            } else {
+                if (shiftedDistance < shiftedThreshold) {
+                    bestIndex = slIndex;
+                    shiftedThreshold = shiftedDistance;
+                    bestLikelyInfo = -1;
+                } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
+                    bestLikelyInfo = XLikelySubtags.INSTANCE.compareLikely(
+                            supported, supportedLSRs[bestIndex], bestLikelyInfo);
+                    if ((bestLikelyInfo & 1) != 0) {
+                        // This supported locale matches as well as the previous best match,
+                        // and neither matches perfectly,
+                        // but this one is "more likely" (has more-default subtags).
+                        bestIndex = slIndex;
+                    }
+                }
             }
         }
         return bestIndex >= 0 ?

@@ -82,7 +82,7 @@ private:
         return (indexAndDistance & DISTANCE_MASK) >> DISTANCE_SHIFT;
     }
 
-    LocaleDistance(const LocaleDistanceData &data);
+    LocaleDistance(const LocaleDistanceData &data, const XLikelySubtags &likely);
     LocaleDistance(const LocaleDistance &other) = delete;
     LocaleDistance &operator=(const LocaleDistance &other) = delete;
 
@@ -109,6 +109,8 @@ private:
     int32_t getDefaultRegionDistance() const {
         return defaultRegionDistance;
     }
+
+    const XLikelySubtags &likelySubtags;
 
     // The trie maps each dlang+slang+dscript+sscript+dregion+sregion
     // (encoded in ASCII with bit 7 set on the last character of each subtag) to a distance.
