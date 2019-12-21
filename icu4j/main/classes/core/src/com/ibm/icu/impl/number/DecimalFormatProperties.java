@@ -65,7 +65,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         /**
          * Internal parse mode for increased compatibility with java.text.DecimalFormat.
          * Used by Android libcore. To enable this feature, java.text.DecimalFormat holds an instance of
-         * ICU4J's DecimalFormat and enable it by calling setParseStrictMode(ParseMode.COMPATIBILITY).
+         * ICU4J's DecimalFormat and enable it by calling setParseStrictMode(ParseMode.JAVA_COMPATIBILITY).
          */
         JAVA_COMPATIBILITY,
     }
