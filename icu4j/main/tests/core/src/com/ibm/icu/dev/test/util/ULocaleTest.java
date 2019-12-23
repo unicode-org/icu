@@ -4134,6 +4134,13 @@ public class ULocaleTest extends TestFmwk {
                 /* ICU-20478 */
                 {"sl__ROZAJ_BISKE_1994",   "sl-1994-biske-rozaj"},
                 {"en__SCOUSE_FONIPA",   "en-fonipa-scouse"},
+                /* ICU-20310 */
+                {"en-u-kn-true",   "en-u-kn"},
+                {"en-u-kn",   "en-u-kn"},
+                {"de-u-co-yes",   "de-u-co"},
+                {"de-u-co",   "de-u-co"},
+                {"de@collation=yes",   "de-u-co"},
+                {"cmn-hans-cn-u-ca-t-ca-x-t-u",   "cmn-Hans-CN-t-ca-u-ca-x-t-u"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {

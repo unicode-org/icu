@@ -258,6 +258,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestConstructorAcceptsBCP47);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
+    TESTCASE_AUTO(TestToLanguageTagOmitTrue);
     TESTCASE_AUTO(TestMoveAssign);
     TESTCASE_AUTO(TestMoveCtor);
     TESTCASE_AUTO(TestBug20407iVariantPreferredValue);
@@ -3264,6 +3265,32 @@ void LocaleTest::TestToLanguageTag() {
     std::string result_bogus = loc_bogus.toLanguageTag<std::string>(status);
     assertEquals("bogus", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
     assertTrue(result_bogus.c_str(), result_bogus.empty());
+}
+
+/* ICU-20310 */
+void LocaleTest::TestToLanguageTagOmitTrue() {
+    IcuTestErrorCode status(*this, "TestToLanguageTagOmitTrue()");
+    assertEquals("en-u-kn should drop true",
+                 "en-u-kn", Locale("en-u-kn-true").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+    assertEquals("en-u-kn should drop true",
+                 "en-u-kn", Locale("en-u-kn").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+
+    assertEquals("de-u-co should drop true",
+                 "de-u-co", Locale("de-u-co").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+    assertEquals("de-u-co should drop true",
+                 "de-u-co", Locale("de-u-co-yes").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+    assertEquals("de@collation=yes should drop true",
+                 "de-u-co", Locale("de@collation=yes").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+
+    assertEquals("cmn-Hans-CN-t-ca-u-ca-x-t-u should drop true",
+                 "cmn-Hans-CN-t-ca-u-ca-x-t-u",
+                 Locale("cmn-hans-cn-u-ca-t-ca-x-t-u").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
 }
 
 void LocaleTest::TestMoveAssign() {
