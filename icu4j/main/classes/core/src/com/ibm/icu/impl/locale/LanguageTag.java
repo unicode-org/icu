@@ -697,7 +697,21 @@ public class LanguageTag {
     }
 
     public static String canonicalizeExtension(String s) {
-        return AsciiUtil.toLowerString(s);
+        s = AsciiUtil.toLowerString(s);
+        int found;
+        while (s.endsWith("-true")) {
+            s = s.substring(0, s.length() - 5);  // length of "-true" is 5
+        }
+        while ((found = s.indexOf("-true-")) > 0) {
+            s = s.substring(0, found) + s.substring(found + 5);  // length of "-true" is 5
+        }
+        while (s.endsWith("-yes")) {
+            s = s.substring(0, s.length() - 4);  // length of "-yes" is 4
+        }
+        while ((found = s.indexOf("-yes-")) > 0) {
+            s = s.substring(0, found) + s.substring(found + 4);  // length of "-yes" is 5
+        }
+        return s;
     }
 
     public static String canonicalizeExtensionSingleton(String s) {

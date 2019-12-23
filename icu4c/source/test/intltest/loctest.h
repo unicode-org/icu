@@ -127,6 +127,7 @@ public:
 
     void TestForLanguageTag();
     void TestToLanguageTag();
+    void TestToLanguageTagOmitTrue();
 
     void TestMoveAssign();
     void TestMoveCtor();

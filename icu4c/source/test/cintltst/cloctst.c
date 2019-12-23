@@ -6062,6 +6062,14 @@ const char* const locale_to_langtag[][3] = {
     // The following now uses standard canonicalization.
     {"az_AZ_CYRL", "az-AZ-x-lvariant-cyrl", NULL},
 
+
+    /* ICU-20310 */
+    {"en-u-kn-true",   "en-u-kn", "en-u-kn"},
+    {"en-u-kn",   "en-u-kn", "en-u-kn"},
+    {"de-u-co-yes",   "de-u-co", "de-u-co"},
+    {"de-u-co",   "de-u-co", "de-u-co"},
+    {"de@collation=yes",   "de-u-co", "de-u-co"},
+    {"cmn-hans-cn-u-ca-t-ca-x-t-u",   "cmn-Hans-CN-t-ca-u-ca-x-t-u", "cmn-Hans-CN-t-ca-u-ca-x-t-u"},
     {NULL,          NULL,           NULL}
 };
 

@@ -1508,8 +1508,11 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                 } else {
                     sink.Append("-", 1);
                     sink.Append(ext->key, static_cast<int32_t>(uprv_strlen(ext->key)));
-                    sink.Append("-", 1);
-                    sink.Append(ext->value, static_cast<int32_t>(uprv_strlen(ext->value)));
+                    if (uprv_strcmp(ext->value, "true") != 0 &&
+                        uprv_strcmp(ext->value, "yes") != 0) {
+                      sink.Append("-", 1);
+                      sink.Append(ext->value, static_cast<int32_t>(uprv_strlen(ext->value)));
+                    }
                 }
             }
         }
