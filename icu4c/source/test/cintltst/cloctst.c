@@ -251,6 +251,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestUResourceBundle);
     TESTCASE(TestDisplayName); 
     TESTCASE(TestAcceptLanguage); 
+    TESTCASE(TestAcceptLanguageLimited);
     TESTCASE(TestGetLocaleForLCID);
     TESTCASE(TestOrientation);
     TESTCASE(TestLikelySubtags);
@@ -3066,6 +3067,73 @@ static void TestAcceptLanguage(void) {
     }
 }
 
+// Same test as above, except the list of available locales is a very small
+// and specific subset of all locales.
+static void TestAcceptLanguageLimited(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UAcceptResult outResult;
+    UEnumeration *available;
+    char tmp[200];
+    int i;
+    int32_t rc = 0;
+
+    struct {
+        int32_t httpSet;       /**< Which of http[] should be used? */
+        const char *icuSet;    /**< ? */
+        const char *expect;    /**< The expected locale result */
+        UAcceptResult res;     /**< The expected error code */
+        UErrorCode expectStatus; /**< expected status */
+        int32_t availablesSet; /**< Which of availables[] should be used? */
+    } tests[] = {
+        // Regression test for ICU-20931.
+        /*0*/{ 0, NULL, "es", ULOC_ACCEPT_FALLBACK, U_ZERO_ERROR, 0,},
+        /*1*/{ 0, NULL, "nl", ULOC_ACCEPT_VALID, U_ZERO_ERROR, 1, },
+        /*2*/{ 0, NULL, "es", ULOC_ACCEPT_FALLBACK, U_ZERO_ERROR, 2,},
+    };
+    const int32_t numTests = UPRV_LENGTHOF(tests);
+    static const char *http[] = {
+        /*0*/ "es-mx, nl, ar-eg",
+    };
+    static const char *availables[][4] = {
+        /*0*/{"fr", "es", "de", "sr"},
+        /*1*/{"fr", "es", "nl", "sr"},
+        /*2*/{"fr", "es", "de", "sr_RS"},
+    };
+
+    for(i=0;i<numTests;i++) {
+        outResult = -3;
+        status=U_ZERO_ERROR;
+        log_verbose("test #%d: http[%s], ICU[%s], expect %s, %s\n", 
+            i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, acceptResult(tests[i].res));
+
+		    available = uenum_openCharStringsEnumeration(
+						availables[tests[i].availablesSet],
+						UPRV_LENGTHOF(availables[tests[i].availablesSet]),
+						&status);
+        tmp[0]=0;
+        rc = uloc_acceptLanguageFromHTTP(tmp, 199, &outResult, http[tests[i].httpSet], available, &status);
+        (void)rc;    /* Suppress set but not used warning. */
+        uenum_close(available);
+        log_verbose(" got %s, %s [%s]\n", tmp[0]?tmp:"(EMPTY)", acceptResult(outResult), u_errorName(status));
+        if(status != tests[i].expectStatus) {
+          log_err_status(status, "FAIL: expected status %s but got %s\n", u_errorName(tests[i].expectStatus), u_errorName(status));
+        } else if(U_SUCCESS(tests[i].expectStatus)) {
+            /* don't check content if expected failure */
+            if(outResult != tests[i].res) {
+            log_err_status(status, "FAIL: #%d: expected outResult of %s but got %s\n", i, 
+                acceptResult( tests[i].res), 
+                acceptResult( outResult));
+            log_info("test #%d: http[%s], ICU[%s], expect %s, %s\n", 
+                i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect,acceptResult(tests[i].res));
+            }
+            if((outResult>0)&&uprv_strcmp(tmp, tests[i].expect)) {
+              log_err_status(status, "FAIL: #%d: expected %s but got %s\n", i, tests[i].expect, tmp);
+              log_info("test #%d: http[%s], ICU[%s], expect %s, %s\n", 
+                       i, http[tests[i].httpSet], tests[i].icuSet, tests[i].expect, acceptResult(tests[i].res));
+            }
+        }
+    }
+}
 static const char* LOCALE_ALIAS[][2] = {
     {"in", "id"},
     {"in_ID", "id_ID"},

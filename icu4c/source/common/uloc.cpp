@@ -2371,7 +2371,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
         }
     }
 
-    for(maxLen--;maxLen>0;maxLen--) {
+    for(;maxLen>0;maxLen--) {
         for(i=0;i<acceptListCount;i++) {
             if(fallbackList[i] && ((int32_t)uprv_strlen(fallbackList[i])==maxLen)) {
 #if defined(ULOC_DEBUG)

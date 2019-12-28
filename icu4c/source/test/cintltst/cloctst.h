@@ -114,8 +114,8 @@ static void TestCollation(void);
 static void TestULocale(void);
 static void TestUResourceBundle(void);
 static void TestDisplayName(void);
-
 static void TestAcceptLanguage(void);
+static void TestAcceptLanguageLimited(void);
 
 static void TestOrientation(void);
 
