@@ -153,10 +153,14 @@ u_fopen_u(const UChar   *filename,
 
     u_austrcpy(buffer, filename);
 
+#if !U_PLATFORM_USES_ONLY_WIN32_API
     result = u_fopen(buffer, perm, locale, codepage);
-#if U_PLATFORM_USES_ONLY_WIN32_API
-    /* Try Windows API _wfopen if the above fails. */
-    if (!result) {
+#else
+    /* When Windows API is available, use Windows API _wfopen instead. */
+    /* Don't expect u_fopen to fail, because */
+    /* it might cause a mojibaked file name without a fail */
+    /* when perm contains "w" or "a". */
+    {
         // TODO: test this code path, including wperm.
         wchar_t wperm[40] = {};
         size_t  retVal;
