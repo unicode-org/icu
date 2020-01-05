@@ -151,9 +151,7 @@ u_fopen_u(const UChar   *filename,
     UFILE     *result;
 #if !U_PLATFORM_USES_ONLY_WIN32_API
     char buffer[256];
-
     u_austrcpy(buffer, filename);
-
     result = u_fopen(buffer, perm, locale, codepage);
 #else
     /* When Windows API is available, use Windows API _wfopen instead. */
