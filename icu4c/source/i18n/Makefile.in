@@ -12,7 +12,6 @@
 ## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-platform = @platform@
 
 top_builddir = ..
 
@@ -154,8 +153,9 @@ ifneq ($(ENABLE_STATIC),)
 	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)
 endif
 ifneq ($(ENABLE_SHARED),)
-ifeq ($(platform), U_MINGW)
-	@$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+# For MinGW, do we want the DLL to go in the bin location?
+ifeq ($(MINGW_MOVEDLLSTOBINDIR),YES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
 	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(bindir)
 else
 	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)
