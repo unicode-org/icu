@@ -2006,21 +2006,54 @@ static int32_t binarySearch(
     return -1;
 }
 
-MeasureUnit::MeasureUnit() {
-    fCurrency[0] = 0;
-    fTypeId = kBaseTypeIdx;
-    fSubTypeId = kBaseSubTypeIdx;
+MeasureUnit::MeasureUnit() : MeasureUnit(kBaseTypeIdx, kBaseSubTypeIdx) {
 }
 
-MeasureUnit::MeasureUnit(const MeasureUnit &other)
-        : fTypeId(other.fTypeId), fSubTypeId(other.fSubTypeId) {
+MeasureUnit::MeasureUnit(int32_t typeId, int32_t subTypeId)
+        : fId(nullptr), fSubTypeId(subTypeId), fTypeId(typeId) {
+    fCurrency[0] = 0;
+}
+
+MeasureUnit::MeasureUnit(const MeasureUnit &other) {
+    *this = other;
+}
+
+MeasureUnit::MeasureUnit(MeasureUnit &&other) noexcept
+        : fId(other.fId),
+        fSubTypeId(other.fSubTypeId),
+        fTypeId(other.fTypeId) {
     uprv_strcpy(fCurrency, other.fCurrency);
+    other.fId = nullptr;
 }
 
 MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     if (this == &other) {
         return *this;
     }
+    if (other.fId) {
+        auto* id = static_cast<char*>(uprv_malloc(uprv_strlen(other.fId) + 1));
+        if (!id) {
+            // Unrecoverable allocation error; set to the default unit
+            *this = MeasureUnit();
+            return *this;
+        }
+        uprv_strcpy(id, other.fId);
+        fId = id;
+    } else {
+        fId = nullptr;
+    }
+    fTypeId = other.fTypeId;
+    fSubTypeId = other.fSubTypeId;
+    uprv_strcpy(fCurrency, other.fCurrency);
+    return *this;
+}
+
+MeasureUnit &MeasureUnit::operator=(MeasureUnit &&other) noexcept {
+    if (this == &other) {
+        return *this;
+    }
+    fId = other.fId;
+    other.fId = nullptr;
     fTypeId = other.fTypeId;
     fSubTypeId = other.fSubTypeId;
     uprv_strcpy(fCurrency, other.fCurrency);
@@ -2032,6 +2065,8 @@ MeasureUnit *MeasureUnit::clone() const {
 }
 
 MeasureUnit::~MeasureUnit() {
+    uprv_free(const_cast<char*>(fId));
+    fId = nullptr;
 }
 
 const char *MeasureUnit::getType() const {
@@ -2042,6 +2077,10 @@ const char *MeasureUnit::getSubtype() const {
     return fCurrency[0] == 0 ? gSubTypes[getOffset()] : fCurrency;
 }
 
+const char *MeasureUnit::toString() const {
+    return fId ? fId : getSubtype();
+}
+
 UBool MeasureUnit::operator==(const UObject& other) const {
     if (this == &other) {  // Same object, equal
         return TRUE;
@@ -2050,10 +2089,7 @@ UBool MeasureUnit::operator==(const UObject& other) const {
         return FALSE;
     }
     const MeasureUnit &rhs = static_cast<const MeasureUnit&>(other);
-    return (
-            fTypeId == rhs.fTypeId
-            && fSubTypeId == rhs.fSubTypeId
-            && uprv_strcmp(fCurrency, rhs.fCurrency) == 0);
+    return uprv_strcmp(toString(), rhs.toString()) == 0;
 }
 
 int32_t MeasureUnit::getIndex() const {

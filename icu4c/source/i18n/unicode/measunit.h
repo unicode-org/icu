@@ -29,6 +29,162 @@
 U_NAMESPACE_BEGIN
 
 class StringEnumeration;
+class MeasureUnitFields;
+
+/**
+ * Enumeration for SI prefixes, such as "kilo".
+ *
+ * @draft ICU 67
+ */
+typedef enum UMeasureSIPrefix {
+
+    /**
+     * SI prefix: yotta, 10^24.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_YOTTA = 24,
+
+    /**
+     * SI prefix: zetta, 10^21.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_ZETTA = 21,
+
+    /**
+     * SI prefix: exa, 10^18.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_EXA = 18,
+
+    /**
+     * SI prefix: peta, 10^15.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_PETA = 15,
+
+    /**
+     * SI prefix: tera, 10^12.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_TERA = 12,
+
+    /**
+     * SI prefix: giga, 10^9.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_GIGA = 9,
+
+    /**
+     * SI prefix: mega, 10^6.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_MEGA = 6,
+
+    /**
+     * SI prefix: kilo, 10^3.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_KILO = 3,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_HECTO = 2,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_DEKA = 1,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_ONE = 0,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_DECI = -1,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_CENTI = -2,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_MILLI = -3,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_MICRO = -6,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_NANO = -9,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_PICO = -12,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_FEMTO = -15,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_ATTO = -18,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_ZEPTO = -21,
+
+    /**
+     * SI prefix: FIXME, 10^FIXME.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_SI_PREFIX_YOCTO = -24
+} UMeasureSIPrefix;
 
 /**
  * A unit such as length, mass, volume, currency, etc.  A unit is
@@ -52,12 +208,38 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 3.0
      */
     MeasureUnit(const MeasureUnit &other);
-        
+    
     /**
-     * Assignment operator.
+     * Move constructor.
+     * @stable ICU 3.0
+     */
+    MeasureUnit(MeasureUnit &&other) noexcept;
+
+    /**
+     * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
+     * Validates and canonicalizes the identifier.
+     *
+     * <pre>
+     * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
+     * </pre>
+     *
+     * @param id The CLDR Sequence Unit Identifier
+     * @param status Set if the identifier is invalid.
+     * @draft ICU 67
+     */
+    static MeasureUnit forIdentifier(const char* identifier, UErrorCode& status);
+
+    /**
+     * Copy assignment operator.
      * @stable ICU 3.0
      */
     MeasureUnit &operator=(const MeasureUnit &other);
+
+    /**
+     * Move assignment operator.
+     * @stable ICU 3.0
+     */
+    MeasureUnit &operator=(MeasureUnit &&other) noexcept;
 
     /**
      * Returns a polymorphic clone of this object.  The result will
@@ -90,15 +272,176 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * Get the type.
+     *
+     * If the unit does not have a type, the empty string is returned.
+     *
      * @stable ICU 53
      */
     const char *getType() const;
 
     /**
      * Get the sub type.
+     *
+     * If the unit does not have a subtype, the empty string is returned.
+     *
      * @stable ICU 53
      */
     const char *getSubtype() const;
+
+    /**
+     * Get the CLDR Sequence Unit Identifier for this MeasureUnit, as defined in UTS 35.
+     *
+     * @return The string form of this unit, owned by this MeasureUnit.
+     * @draft ICU 67
+     */
+    const char* toString() const;
+
+    /**
+     * Creates a MeasureUnit which is this MeasureUnit augmented with the specified SI prefix.
+     * For example, UMEASURE_SI_PREFIX_KILO for "kilo".
+     *
+     * There is sufficient locale data to format all standard SI prefixes.
+     *
+     * If the MeasureUnit is composed of multiple simple units, only the first simple unit is
+     * modified. For example, starting at "meter-kilogram-per-second", if you set the SI prefix
+     * to "centi", then you get "centimeter-kilogram-per-second".
+     *
+     * @param prefix The SI prefix, from UMeasureSIPrefix.
+     * @return A new MeasureUnit.
+     */
+    MeasureUnit withSIPrefix(UMeasureSIPrefix prefix) const;
+
+    /**
+     * Gets the current SI prefix of this MeasureUnit. For example, if the unit has the SI prefix
+     * "kilo", then UMEASURE_SI_PREFIX_KILO is returned.
+     *
+     * If the MeasureUnit is composed of multiple simple units, the SI prefix of the first simple
+     * unit is returned. For example, from "centimeter-kilogram-per-second", the SI prefix
+     * UMEASURE_SI_PREFIX_CENTI will be returned.
+     *
+     * @return The SI prefix of the first simple unit, from UMeasureSIPrefix.
+     */
+    UMeasureSIPrefix getSIPrefix() const;
+
+    /**
+     * Creates a MeasureUnit which is this MeasureUnit augmented with the specified power. For
+     * example, if power is 2, the unit will be squared.
+     *
+     * If the MeasureUnit is composed of multiple simple units, only the first simple unit is
+     * modified. For example, starting at "meter-kilogram-per-second", if you set the power to 2,
+     * then you get "square-meter-kilogram-per-second".
+     *
+     * @param power The power.
+     * @return A new MeasureUnit.
+     */
+    MeasureUnit withPower(int8_t power) const;
+
+    /**
+     * Gets the power of this MeasureUnit. For example, if the unit is square, then 2 is returned.
+     *
+     * If the MeasureUnit is composed of multiple simple units, the power of the first simple unit
+     * is returned. For example, from "cubic-meter-per-square-second", 3 is returned.
+     *
+     * @return The power of the first simple unit.
+     */
+    int8_t getPower() const;
+
+    /**
+     * Gets the reciprocal of the unit, with the numerator and denominator flipped.
+     *
+     * For example, if the receiver is "meter-per-second", the unit "second-per-meter" is returned.
+     *
+     * @return The reciprocal of the target unit.
+     */
+    MeasureUnit reciprocal() const;
+
+    /**
+     * Gets the product of this unit with another unit. This is a way to build units from
+     * constituent parts.
+     *
+     * The numerator and denominator are preserved through this operation.
+     *
+     * For example, if the receiver is "kilowatt" and the argument is "hour-per-day", then the
+     * unit "kilowatt-hour-per-day" is returned.
+     *
+     * @return The product of the target unit with the provided unit.
+     */
+    MeasureUnit product(const MeasureUnit& other) const;
+
+    /**
+     * Gets the number of constituent simple units.
+     *
+     * For example, if the receiver is "meter-per-square-second", then 2 is returned, since there
+     * are two simple units: "meter" and "second".
+     *
+     * @return The number of constituent units.
+     */
+    size_t getSimpleUnitCount() const;
+
+    /**
+     * Gets the constituent unit at the given index.
+     * 
+     * For example, to loop over all simple units:
+     * 
+     * <pre>
+     * MeasureUnit unit(u"meter-per-square-second");
+     * for (size_t i = 0; i < unit.getSimpleUnitCount(); i++) {
+     *     std::cout << unit.simpleUnitAt(i).toString() << std::endl;
+     * }
+     * </pre>
+     * 
+     * Expected output: meter, one-per-square-second
+     * 
+     * @param index Zero-based index. If out of range, the dimensionless unit is returned.
+     * @return The constituent simple unit at the specified position.
+     */
+    MeasureUnit simpleUnitAt(size_t index) const;
+
+    /**
+     * Composes this unit with a super unit.
+     * 
+     * A super unit, used for formatting only, should be a larger unit sharing the same dimension.
+     * For example, if the current unit is "inch", a super unit could be "foot", in order to
+     * render 71 inches as "5 feet, 11 inches". If the super unit is invalid, an error will occur
+     * during formatting.
+     *
+     * A unit can have multiple super units; for example, "second" could have both "minute" and
+     * "hour" as super units.
+     * 
+     * Super units are ignored and left untouched in most other methods, such as withSIPrefix,
+     * withPower, and reciprocal.
+     *
+     * @param other The super unit to compose with the target unit.
+     * @return The composition of the given super unit with this unit.
+     */
+    MeasureUnit withSuperUnit(const MeasureUnit& other) const;
+
+    /**
+     * Gets the number of super units in the receiver.
+     *
+     * For example, "foot+inch" has one super unit.
+     *
+     * @return The number of super units.
+     */
+    size_t getSuperUnitCount() const;
+
+    /**
+     * Gets the super unit at the given index.
+     *
+     * For example, to loop over all super units:
+     *
+     * <pre>
+     * MeasureUnit unit(u"hour+minute+second");
+     * for (size_t i = 0; i < unit.getSuperUnitCount(); i++) {
+     *     std::cout << unit.superUnitAt(i).toCoreUnitIdentifier() << std::endl;
+     * }
+     * </pre>
+     *
+     * Expected output: hour, minute
+     *
+     * @return The super unit at the specified position.
+     */
+    MeasureUnit superUnitAt(size_t index) const;
 
     /**
      * getAvailable gets all of the available units.
@@ -3353,13 +3696,13 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif  /* U_HIDE_INTERNAL_API */
 
 private:
-    int32_t fTypeId;
-    int32_t fSubTypeId;
-    char fCurrency[4];
 
-    MeasureUnit(int32_t typeId, int32_t subTypeId) : fTypeId(typeId), fSubTypeId(subTypeId) {
-        fCurrency[0] = 0;
-    }
+    const char* fId;
+    char fCurrency[4];
+    int16_t fSubTypeId;
+    int8_t fTypeId;
+
+    MeasureUnit(int32_t typeId, int32_t subTypeId);
     void setTo(int32_t typeId, int32_t subTypeId);
     int32_t getOffset() const;
     static MeasureUnit *create(int typeId, int subTypeId, UErrorCode &status);
