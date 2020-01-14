@@ -3704,6 +3704,7 @@ private:
     int8_t fTypeId;
 
     MeasureUnit(int32_t typeId, int32_t subTypeId);
+    MeasureUnit(char* idToAdopt);
     void setTo(int32_t typeId, int32_t subTypeId);
     int32_t getOffset() const;
     static MeasureUnit *create(int typeId, int subTypeId, UErrorCode &status);

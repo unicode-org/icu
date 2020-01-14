@@ -2025,6 +2025,10 @@ MeasureUnit::MeasureUnit(MeasureUnit &&other) noexcept
     other.fId = nullptr;
 }
 
+MeasureUnit::MeasureUnit(char* idToAdopt)
+        : fId(idToAdopt), fSubTypeId(-1), fTypeId(-1) {
+}
+
 MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     if (this == &other) {
         return *this;
