@@ -29,7 +29,6 @@
 U_NAMESPACE_BEGIN
 
 class StringEnumeration;
-class MeasureUnitFields;
 
 /**
  * Enumeration for SI prefixes, such as "kilo".
