@@ -59,6 +59,7 @@ The following names can be supplied as the argument for platform:
     Solaris/GCC         Use the GNU gcc/g++ compilers on Solaris
     SolarisX86          Use the Sun cc/CC compilers on Solaris x86
     TRU64V5.1/CXX       Use the Compaq cxx compiler on Tru64 (OSF)
+    wasm32              Use the emscripten to build for wasm32
     zOS                 Use the IBM cxx compiler on z/OS (os/390)
     zOSV1R2             Use the IBM cxx compiler for z/OS 1.2
 EOE
@@ -346,6 +347,18 @@ case $platform in
         CC=qcc; export CC
         CXX=QCC; export CXX
         ;;
+    wasm32)
+        THE_OS="wasm32"
+        THE_COMP="wasm32 emscripten"
+        CC=emcc; export CC
+        CXX=em++; export CXX
+        EMCFLAGS="-DUSE_SINGLE_CCODE_FILE -DU_HAVE_MMAP=0 -s WASM=1"
+        CFLAGS="-O3 $EMCFLAGS"; export CFLAGS
+        CPPFLAGS="$EMCFLAGS"; export CPPFLAGS
+        CXXFLAGS="-O3 $EMCFLAGS -std=c++11"; export CXXPPFLAGS
+        CONFIGURE_WRAPPER=emconfigure; export CONFIGURE_WRAPPER
+        OPTS="$OPTS --enable-static --build=wasm32 --target=wasm32 --disable-shared"; export OPTS
+	;;
     zOS)
         THE_OS="z/OS (OS/390)"
         THE_COMP="z/OS C/C++"
@@ -432,7 +445,7 @@ export LDFLAGS
 echo "export CPP=$CPP CC=$CC CXX=$CXX CPPFLAGS=$CPPFLAGS CFLAGS=$CFLAGS CXXFLAGS=$CXXFLAGS LDFLAGS=$LDFLAGS MAKE=$MAKE"
 echo "Running ./configure $OPTS $@ for $THE_OS using $THE_COMP compiler"
 echo
-if $configure $OPTS $@
+if $CONFIGURE_WRAPPER $configure $OPTS $@
 then
 	echo
 	echo If the result of the above commands looks okay to you, go to the directory

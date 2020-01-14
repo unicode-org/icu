@@ -15,6 +15,9 @@ AC_DEFUN([ICU_CHECK_MH_FRAG], [
 		[icu_cv_host_frag],
 		[
 case "${host}" in
+wasm32-*-*)
+	icu_cv_host_frag=mh-wasm32
+	;;
 *-*-solaris*)
 	if test "$GCC" = yes; then	
 		icu_cv_host_frag=mh-solaris-gcc
