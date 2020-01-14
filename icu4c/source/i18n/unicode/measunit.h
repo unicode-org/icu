@@ -3697,8 +3697,10 @@ class U_I18N_API MeasureUnit: public UObject {
 
 private:
 
-    const char* fId;
-    char fCurrency[4];
+    // If non-null, fId is owned by the MeasureUnit.
+    char* fId;
+
+    // These two ints are indices into static string lists in measunit.cpp
     int16_t fSubTypeId;
     int8_t fTypeId;
 
