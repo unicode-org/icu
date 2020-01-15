@@ -144,6 +144,9 @@ private:
         UMeasureSIPrefix siPrefix,
         int8_t power,
         const char* identifier);
+    void verifyUnitIdentifierOnly(
+        const MeasureUnit& unit,
+        const char* identifier);
 };
 
 void MeasureFormatTest::runIndexedTest(
@@ -3267,29 +3270,34 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer2);
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer3);
 
-    // MeasureUnit kiloSquareSecond = MeasureUnit::getSecond()
-    //     .withPower(2).withSIPrefix(UMEASURE_SI_PREFIX_KILO);
-    // MeasureUnit meterSecond = meter.product(kiloSquareSecond);
-    // MeasureUnit cubicMeterSecond1 = meter.withPower(3).product(kiloSquareSecond);
-    // MeasureUnit cubicMeterSecond2 = meterSecond.withPower(3);
-    // MeasureUnit centimeterSecond1 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI).product(kiloSquareSecond);
-    // MeasureUnit centimeterSecond2 = meterSecond.withSIPrefix(UMEASURE_SI_PREFIX_CENTI);
-    // MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withPower(3));
-    // MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI));
+    MeasureUnit kiloSquareSecond = MeasureUnit::getSecond()
+        .withPower(2, status).withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
+    MeasureUnit meterSecond = meter.product(kiloSquareSecond, status);
+    MeasureUnit cubicMeterSecond1 = meter.withPower(3, status).product(kiloSquareSecond, status);
+    MeasureUnit centimeterSecond1 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status).product(kiloSquareSecond, status);
+    MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withPower(3, status), status);
+    MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status), status);
 
-    // verifyUnitParts(kiloSquareSecond, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond");
-    // verifyUnitParts(meterSecond, UMEASURE_SI_PREFIX_ONE, 0, "meter-square-kilosecond");
-    // verifyUnitParts(cubicMeterSecond1, UMEASURE_SI_PREFIX_ONE, 2, "cubic-meter-square-kilosecond");
-    // verifyUnitParts(cubicMeterSecond2, UMEASURE_SI_PREFIX_ONE, 2, "cubic-meter-square-kilosecond");
-    // verifyUnitParts(centimeterSecond1, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter-square-kilosecond");
-    // verifyUnitParts(centimeterSecond2, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter-square-kilosecond");
-    // verifyUnitParts(secondCubicMeter, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond-cubic-meter");
-    // verifyUnitParts(secondCentimeter, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond-centimeter");
+    verifyUnitParts(kiloSquareSecond, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond");
+    verifyUnitIdentifierOnly(meterSecond, "meter-square-kilosecond");
+    verifyUnitIdentifierOnly(cubicMeterSecond1, "cubic-meter-square-kilosecond");
+    verifyUnitIdentifierOnly(centimeterSecond1, "centimeter-square-kilosecond");
+    verifyUnitIdentifierOnly(secondCubicMeter, "square-kilosecond-cubic-meter");
+    verifyUnitIdentifierOnly(secondCentimeter, "square-kilosecond-centimeter");
 
-    // assertTrue("multipart power equality", cubicMeterSecond1 == cubicMeterSecond2);
-    // assertTrue("multipart SI prefix equality", centimeterSecond1 == centimeterSecond2);
-    // assertTrue("order matters inequality", cubicMeterSecond1 != secondCubicMeter);
-    // assertTrue("additional simple units inequality", secondCubicMeter != secondCentimeter);
+    // Don't allow get/set power or SI prefix on compound units
+    status.errIfFailureAndReset();
+    meterSecond.getPower(status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    meterSecond.withPower(3, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    meterSecond.getSIPrefix(status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    meterSecond.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+
+    assertTrue("order matters inequality", cubicMeterSecond1 != secondCubicMeter);
+    assertTrue("additional simple units inequality", secondCubicMeter != secondCentimeter);
 }
 
 
@@ -3369,17 +3377,36 @@ void MeasureFormatTest::verifyUnitParts(
         int8_t power,
         const char* identifier) {
     IcuTestErrorCode status(*this, "verifyUnitParts");
-    assertEquals(UnicodeString(identifier) + ": SI prefix",
+    UnicodeString uid(identifier, -1, US_INV);
+    assertEquals(uid + ": SI prefix",
         siPrefix,
         unit.getSIPrefix(status));
-    assertEquals(UnicodeString(identifier) + ": Power",
+    status.errIfFailureAndReset("%s: SI prefix", identifier);
+    assertEquals(uid + ": Power",
         static_cast<int32_t>(power),
         static_cast<int32_t>(unit.getPower(status)));
-    assertEquals(UnicodeString(identifier) + ": Identifier",
+    status.errIfFailureAndReset("%s: Power", identifier);
+    assertEquals(uid + ": Identifier",
         identifier,
         unit.getIdentifier());
-    assertTrue(UnicodeString(identifier) + ": Constructor",
+    status.errIfFailureAndReset("%s: Identifier", identifier);
+    assertTrue(uid + ": Constructor",
         unit == MeasureUnit::forIdentifier(identifier, status));
+    status.errIfFailureAndReset("%s: Constructor", identifier);
+}
+
+void MeasureFormatTest::verifyUnitIdentifierOnly(
+        const MeasureUnit& unit,
+        const char* identifier) {
+    IcuTestErrorCode status(*this, "verifyUnitIdentifierOnly");
+    UnicodeString uid(identifier, -1, US_INV);
+    assertEquals(uid + ": Identifier",
+        identifier,
+        unit.getIdentifier());
+    status.errIfFailureAndReset("%s: Identifier", identifier);
+    assertTrue(uid + ": Constructor",
+        unit == MeasureUnit::forIdentifier(identifier, status));
+    status.errIfFailureAndReset("%s: Constructor", identifier);
 }
 
 extern IntlTest *createMeasureFormatTest() {
