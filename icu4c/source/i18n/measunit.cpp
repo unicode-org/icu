@@ -2083,10 +2083,10 @@ const char *MeasureUnit::getSubtype() const {
     if (fTypeId == -1) {
         return "";
     }
-    return toString();
+    return getIdentifier();
 }
 
-const char *MeasureUnit::toString() const {
+const char *MeasureUnit::getIdentifier() const {
     return fId ? fId : gSubTypes[getOffset()];
 }
 
@@ -2098,7 +2098,7 @@ UBool MeasureUnit::operator==(const UObject& other) const {
         return FALSE;
     }
     const MeasureUnit &rhs = static_cast<const MeasureUnit&>(other);
-    return uprv_strcmp(toString(), rhs.toString()) == 0;
+    return uprv_strcmp(getIdentifier(), rhs.getIdentifier()) == 0;
 }
 
 int32_t MeasureUnit::getIndex() const {

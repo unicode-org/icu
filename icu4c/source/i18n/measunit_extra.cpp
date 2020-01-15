@@ -88,6 +88,7 @@ const struct SIPrefixStrings {
 
 // FIXME: Get this list from data
 const char16_t* const gSimpleUnits[] = {
+    u"one", // note: expected to be index 0
     u"100kilometer",
     u"acre",
     u"ampere",
@@ -262,6 +263,7 @@ public:
         TYPE_SI_PREFIX,
         TYPE_COMPOUND_PART,
         TYPE_POWER_PART,
+        TYPE_ONE,
         TYPE_SIMPLE_UNIT,
     };
 
@@ -274,6 +276,8 @@ public:
             return TYPE_COMPOUND_PART;
         } else if (fMatch < kSimpleUnitOffset) {
             return TYPE_POWER_PART;
+        } else if (fMatch == kSimpleUnitOffset) {
+            return TYPE_ONE;
         } else {
             return TYPE_SIMPLE_UNIT;
         }
@@ -285,14 +289,17 @@ public:
     }
 
     int32_t getMatch() const {
+        U_ASSERT(getType() == TYPE_COMPOUND_PART);
         return fMatch;
     }
 
     int8_t getPower() const {
+        U_ASSERT(getType() == TYPE_POWER_PART);
         return static_cast<int8_t>(fMatch - kPowerPartOffset);
     }
 
     int32_t getSimpleUnitOffset() const {
+        U_ASSERT(getType() == TYPE_SIMPLE_UNIT);
         return fMatch - kSimpleUnitOffset;
     }
 
@@ -302,11 +309,10 @@ private:
 
 struct PowerUnit {
     int8_t power = 0;
-    bool plus = false;
     UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
     StringPiece id;
 
-    void toString(CharString& builder, UErrorCode& status) {
+    void appendTo(CharString& builder, UErrorCode& status) {
         if (power == 0) {
             // no-op
         } else if (power == 1) {
@@ -348,50 +354,22 @@ struct PowerUnit {
 class UnitIdentifierParser {
 public:
     static UnitIdentifierParser from(StringPiece source, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return UnitIdentifierParser();
+        }
         umtx_initOnce(gUnitExtrasInitOnce, &initUnitExtras, status);
         if (U_FAILURE(status)) {
             return UnitIdentifierParser();
         }
         return UnitIdentifierParser(source);
     }
-    
-    Token nextToken(UErrorCode& status) {
-        fTrie.reset();
-        int32_t match = -1;
-        int32_t previ = -1;
-        do {
-            fTrie.next(fSource.data()[fIndex++]);
-            if (fTrie.current() == USTRINGTRIE_NO_MATCH) {
-                break;
-            } else if (fTrie.current() == USTRINGTRIE_NO_VALUE) {
-                continue;
-            } else if (fTrie.current() == USTRINGTRIE_FINAL_VALUE) {
-                match = fTrie.getValue();
-                previ = fIndex;
-                break;
-            } else if (fTrie.current() == USTRINGTRIE_INTERMEDIATE_VALUE) {
-                match = fTrie.getValue();
-                previ = fIndex;
-                continue;
-            } else {
-                UPRV_UNREACHABLE;
-            }
-        } while (fIndex < fSource.length());
-
-        if (match < 0) {
-            // TODO: Make a new status code?
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        } else {
-            fIndex = previ;
-        }
-        return Token(match);
-    }
 
     bool hasNext() const {
         return fIndex < fSource.length();
     }
 
-    PowerUnit nextUnit(UErrorCode& status) {
+    PowerUnit nextUnit(bool& sawPlus, UErrorCode& status) {
+        sawPlus = false;
         PowerUnit retval;
         if (U_FAILURE(status)) {
             return retval;
@@ -405,7 +383,7 @@ public:
         int32_t previ = fIndex;
 
         // Maybe read a compound part
-        if (!fExpectingUnit) {
+        if (fIndex != 0) {
             Token token = nextToken(status);
             if (U_FAILURE(status)) {
                 return retval;
@@ -425,7 +403,7 @@ public:
                     break;
 
                 case COMPOUND_PART_PLUS:
-                    retval.plus = true;
+                    sawPlus = true;
                     fAfterPer = false;
                     break;
             }
@@ -461,10 +439,11 @@ public:
                     state = 2;
                     break;
 
+                case Token::TYPE_ONE:
+                    // Skip "one" and go to the next unit
+                    return nextUnit(sawPlus, status);
+
                 case Token::TYPE_SIMPLE_UNIT:
-                    if (state > 2) {
-                        goto fail;
-                    }
                     retval.id = fSource.substr(previ, fIndex - previ);
                     return retval;
 
@@ -473,14 +452,24 @@ public:
             }
         }
 
-    fail:
-        // TODO: Make a new status code?
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return retval;
+        fail:
+            // TODO: Make a new status code?
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return retval;
     }
 
-    int32_t currentIndex() const {
-        return fIndex;
+    PowerUnit getOnlyUnit(UErrorCode& status) {
+        bool sawPlus;
+        PowerUnit retval = nextUnit(sawPlus, status);
+        if (U_FAILURE(status)) {
+            return retval;
+        }
+        if (sawPlus || hasNext()) {
+            // Expected to find only one unit in the string
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return retval;
+        }
+        return retval;
     }
 
 private:
@@ -489,12 +478,43 @@ private:
     UCharsTrie fTrie;
 
     bool fAfterPer = false;
-    bool fExpectingUnit = true;
 
     UnitIdentifierParser() : fSource(""), fTrie(u"") {}
 
     UnitIdentifierParser(StringPiece source)
         : fSource(source), fTrie(kSerializedUnitExtrasStemTrie) {}
+
+    Token nextToken(UErrorCode& status) {
+        fTrie.reset();
+        int32_t match = -1;
+        int32_t previ = -1;
+        do {
+            fTrie.next(fSource.data()[fIndex++]);
+            if (fTrie.current() == USTRINGTRIE_NO_MATCH) {
+                break;
+            } else if (fTrie.current() == USTRINGTRIE_NO_VALUE) {
+                continue;
+            } else if (fTrie.current() == USTRINGTRIE_FINAL_VALUE) {
+                match = fTrie.getValue();
+                previ = fIndex;
+                break;
+            } else if (fTrie.current() == USTRINGTRIE_INTERMEDIATE_VALUE) {
+                match = fTrie.getValue();
+                previ = fIndex;
+                continue;
+            } else {
+                UPRV_UNREACHABLE;
+            }
+        } while (fIndex < fSource.length());
+
+        if (match < 0) {
+            // TODO: Make a new status code?
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        } else {
+            fIndex = previ;
+        }
+        return Token(match);
+    }
 };
 
 } // namespace
@@ -507,62 +527,71 @@ MeasureUnit MeasureUnit::forIdentifier(const char* identifier, UErrorCode& statu
         return MeasureUnit();
     }
 
+    CharString builder;
+    bool afterPer = false;
     while (parser.hasNext()) {
-        parser.nextToken(status);
+        bool sawPlus;
+        PowerUnit powerUnit = parser.nextUnit(sawPlus, status);
         if (U_FAILURE(status)) {
             // Invalid syntax
             return MeasureUnit();
         }
+
+        if (sawPlus) {
+            builder.append('+', status);
+            afterPer = false;
+        }
+        if (powerUnit.power < 0 && !afterPer) {
+            if (builder.length() == 0 || sawPlus) {
+                builder.append("one", status);
+            }
+            builder.append("-per-", status);
+            powerUnit.power *= -1;
+        }
+        powerUnit.appendTo(builder, status);
     }
 
     // Success
-    return MeasureUnit(uprv_strdup(identifier));
+    return MeasureUnit(builder.cloneData(status));
 }
 
-UMeasureSIPrefix MeasureUnit::getSIPrefix() const {
-    ErrorCode status;
-    const char* id = toString();
-    return UnitIdentifierParser::from(id, status).nextUnit(status).siPrefix;
+UMeasureSIPrefix MeasureUnit::getSIPrefix(UErrorCode& status) const {
+    const char* id = getIdentifier();
+    return UnitIdentifierParser::from(id, status).getOnlyUnit(status).siPrefix;
 }
 
-MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix) const {
-    ErrorCode status;
-    const char* id = toString();
-    UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
-    PowerUnit powerUnit = parser.nextUnit(status);
-    if (status.isFailure()) {
+MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const {
+    const char* id = getIdentifier();
+    PowerUnit powerUnit = UnitIdentifierParser::from(id, status).getOnlyUnit(status);
+    if (U_FAILURE(status)) {
         return *this;
     }
 
     powerUnit.siPrefix = prefix;
     CharString builder;
-    powerUnit.toString(builder, status);
+    powerUnit.appendTo(builder, status);
     return MeasureUnit(builder.cloneData(status));
 }
 
-int8_t MeasureUnit::getPower() const {
-    ErrorCode status;
-    const char* id = toString();
-    return UnitIdentifierParser::from(id, status).nextUnit(status).power;
+int8_t MeasureUnit::getPower(UErrorCode& status) const {
+    const char* id = getIdentifier();
+    return UnitIdentifierParser::from(id, status).getOnlyUnit(status).power;
 }
 
-MeasureUnit MeasureUnit::withPower(int8_t power) const {
-    if (power < 0) {
-        // Don't know how to handle this yet
-        U_ASSERT(FALSE);
-    }
-
-    ErrorCode status;
-    const char* id = toString();
-    UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
-    PowerUnit powerUnit = parser.nextUnit(status);
-    if (status.isFailure()) {
+MeasureUnit MeasureUnit::withPower(int8_t power, UErrorCode& status) const {
+    const char* id = getIdentifier();
+    PowerUnit powerUnit = UnitIdentifierParser::from(id, status).getOnlyUnit(status);
+    if (U_FAILURE(status)) {
         return *this;
     }
 
-    powerUnit.power = power;
     CharString builder;
-    powerUnit.toString(builder, status);
+    if (power < 0) {
+        builder.append("one-per-", status);
+        power *= -1;
+    }
+    powerUnit.power = power;
+    powerUnit.appendTo(builder, status);
     return MeasureUnit(builder.cloneData(status));
 }
 

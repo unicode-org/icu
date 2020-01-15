@@ -188,6 +188,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(Test20332_PersonUnits);
     TESTCASE_AUTO(TestNumericTime);
     TESTCASE_AUTO(TestNumericTimeSomeSpecialFormats);
+    TESTCASE_AUTO(TestCompoundUnitOperations);
     TESTCASE_AUTO_END;
 }
 
@@ -3224,64 +3225,69 @@ void MeasureFormatTest::TestNumericTimeSomeSpecialFormats() {
 void MeasureFormatTest::TestCompoundUnitOperations() {
     IcuTestErrorCode status(*this, "TestCompoundUnitOperations");
 
+    MeasureUnit::forIdentifier("kilometer-per-second-joule", status);
+
     MeasureUnit kilometer = MeasureUnit::getKilometer();
-    MeasureUnit meter = kilometer.withSIPrefix(UMEASURE_SI_PREFIX_ONE);
-    MeasureUnit centimeter1 = kilometer.withSIPrefix(UMEASURE_SI_PREFIX_CENTI);
-    MeasureUnit centimeter2 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI);
+    MeasureUnit cubicMeter = MeasureUnit::getCubicMeter();
+    MeasureUnit meter = kilometer.withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
+    MeasureUnit centimeter1 = kilometer.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
+    MeasureUnit centimeter2 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
+    MeasureUnit cubicDecimeter = cubicMeter.withSIPrefix(UMEASURE_SI_PREFIX_DECI, status);
 
     verifyUnitParts(kilometer, UMEASURE_SI_PREFIX_KILO, 0, "kilometer");
     verifyUnitParts(meter, UMEASURE_SI_PREFIX_ONE, 0, "meter");
     verifyUnitParts(centimeter1, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter");
     verifyUnitParts(centimeter2, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter");
+    verifyUnitParts(cubicDecimeter, UMEASURE_SI_PREFIX_DECI, 3, "cubic-decimeter");
 
     assertTrue("centimeter equality", centimeter1 == centimeter2);
     assertTrue("kilometer inequality", centimeter1 != kilometer);
 
-    MeasureUnit squareMeter = meter.withPower(2);
-    MeasureUnit overCubicCentimeter = centimeter1.withPower(-3);
-    MeasureUnit quarticKilometer = kilometer.withPower(4);
-    MeasureUnit overQuarticKilometer1 = kilometer.withPower(-4);
+    MeasureUnit squareMeter = meter.withPower(2, status);
+    MeasureUnit overCubicCentimeter = centimeter1.withPower(-3, status);
+    MeasureUnit quarticKilometer = kilometer.withPower(4, status);
+    MeasureUnit overQuarticKilometer1 = kilometer.withPower(-4, status);
 
     verifyUnitParts(squareMeter, UMEASURE_SI_PREFIX_ONE, 2, "square-meter");
-    verifyUnitParts(overCubicCentimeter, UMEASURE_SI_PREFIX_CENTI, 2, "one-per-cubic-centimeter");
-    verifyUnitParts(quarticKilometer, UMEASURE_SI_PREFIX_ONE, 2, "p4-kilometer");
-    verifyUnitParts(overQuarticKilometer1, UMEASURE_SI_PREFIX_ONE, 2, "one-per-p4-kilometer");
+    verifyUnitParts(overCubicCentimeter, UMEASURE_SI_PREFIX_CENTI, -3, "one-per-cubic-centimeter");
+    verifyUnitParts(quarticKilometer, UMEASURE_SI_PREFIX_KILO, 4, "p4-kilometer");
+    verifyUnitParts(overQuarticKilometer1, UMEASURE_SI_PREFIX_KILO, -4, "one-per-p4-kilometer");
 
-    assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
+    // assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
 
-    MeasureUnit overQuarticKilometer2 = overQuarticKilometer1.reciprocal();
-    MeasureUnit overQuarticKilometer3 = kilometer.product(kilometer).product(kilometer)
-        .product(kilometer).reciprocal();
+    // MeasureUnit overQuarticKilometer2 = overQuarticKilometer1.reciprocal();
+    // MeasureUnit overQuarticKilometer3 = kilometer.product(kilometer).product(kilometer)
+    //     .product(kilometer).reciprocal();
 
-    verifyUnitParts(overQuarticKilometer2, UMEASURE_SI_PREFIX_ONE, 2, "one-per-p4-kilometer");
-    verifyUnitParts(overQuarticKilometer3, UMEASURE_SI_PREFIX_ONE, 2, "one-per-p4-kilometer");
+    // verifyUnitParts(overQuarticKilometer2, UMEASURE_SI_PREFIX_KILO, 2, "one-per-p4-kilometer");
+    // verifyUnitParts(overQuarticKilometer3, UMEASURE_SI_PREFIX_KILO, 2, "one-per-p4-kilometer");
 
-    assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer2);
-    assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer3);
+    // assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer2);
+    // assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer3);
 
-    MeasureUnit kiloSquareSecond = MeasureUnit::getSecond()
-        .withPower(2).withSIPrefix(UMEASURE_SI_PREFIX_KILO);
-    MeasureUnit meterSecond = meter.product(kiloSquareSecond);
-    MeasureUnit cubicMeterSecond1 = meter.withPower(3).product(kiloSquareSecond);
-    MeasureUnit cubicMeterSecond2 = meterSecond.withPower(3);
-    MeasureUnit centimeterSecond1 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI).product(kiloSquareSecond);
-    MeasureUnit centimeterSecond2 = meterSecond.withSIPrefix(UMEASURE_SI_PREFIX_CENTI);
-    MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withPower(3));
-    MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI));
+    // MeasureUnit kiloSquareSecond = MeasureUnit::getSecond()
+    //     .withPower(2).withSIPrefix(UMEASURE_SI_PREFIX_KILO);
+    // MeasureUnit meterSecond = meter.product(kiloSquareSecond);
+    // MeasureUnit cubicMeterSecond1 = meter.withPower(3).product(kiloSquareSecond);
+    // MeasureUnit cubicMeterSecond2 = meterSecond.withPower(3);
+    // MeasureUnit centimeterSecond1 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI).product(kiloSquareSecond);
+    // MeasureUnit centimeterSecond2 = meterSecond.withSIPrefix(UMEASURE_SI_PREFIX_CENTI);
+    // MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withPower(3));
+    // MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI));
 
-    verifyUnitParts(kiloSquareSecond, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond");
-    verifyUnitParts(meterSecond, UMEASURE_SI_PREFIX_ONE, 0, "meter-square-kilosecond");
-    verifyUnitParts(cubicMeterSecond1, UMEASURE_SI_PREFIX_ONE, 2, "cubic-meter-square-kilosecond");
-    verifyUnitParts(cubicMeterSecond2, UMEASURE_SI_PREFIX_ONE, 2, "cubic-meter-square-kilosecond");
-    verifyUnitParts(centimeterSecond1, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter-square-kilosecond");
-    verifyUnitParts(centimeterSecond2, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter-square-kilosecond");
-    verifyUnitParts(secondCubicMeter, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond-cubic-meter");
-    verifyUnitParts(secondCentimeter, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond-centimeter");
+    // verifyUnitParts(kiloSquareSecond, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond");
+    // verifyUnitParts(meterSecond, UMEASURE_SI_PREFIX_ONE, 0, "meter-square-kilosecond");
+    // verifyUnitParts(cubicMeterSecond1, UMEASURE_SI_PREFIX_ONE, 2, "cubic-meter-square-kilosecond");
+    // verifyUnitParts(cubicMeterSecond2, UMEASURE_SI_PREFIX_ONE, 2, "cubic-meter-square-kilosecond");
+    // verifyUnitParts(centimeterSecond1, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter-square-kilosecond");
+    // verifyUnitParts(centimeterSecond2, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter-square-kilosecond");
+    // verifyUnitParts(secondCubicMeter, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond-cubic-meter");
+    // verifyUnitParts(secondCentimeter, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond-centimeter");
 
-    assertTrue("multipart power equality", cubicMeterSecond1 == cubicMeterSecond2);
-    assertTrue("multipart SI prefix equality", centimeterSecond1 == centimeterSecond2);
-    assertTrue("order matters inequality", cubicMeterSecond1 != secondCubicMeter);
-    assertTrue("additional simple units inequality", secondCubicMeter != secondCentimeter);
+    // assertTrue("multipart power equality", cubicMeterSecond1 == cubicMeterSecond2);
+    // assertTrue("multipart SI prefix equality", centimeterSecond1 == centimeterSecond2);
+    // assertTrue("order matters inequality", cubicMeterSecond1 != secondCubicMeter);
+    // assertTrue("additional simple units inequality", secondCubicMeter != secondCentimeter);
 }
 
 
@@ -3361,10 +3367,17 @@ void MeasureFormatTest::verifyUnitParts(
         int8_t power,
         const char* identifier) {
     IcuTestErrorCode status(*this, "verifyUnitParts");
-    assertEquals(UnicodeString(identifier) + ": SI prefix", siPrefix, unit.getSIPrefix());
-    assertEquals(UnicodeString(identifier) + ": Power", power, unit.getPower());
-    assertEquals(UnicodeString(identifier) + ": Identifier", identifier, unit.toString());
-    assertTrue(UnicodeString(identifier) + ": Constructor", unit == MeasureUnit::forIdentifier(identifier, status));
+    assertEquals(UnicodeString(identifier) + ": SI prefix",
+        siPrefix,
+        unit.getSIPrefix(status));
+    assertEquals(UnicodeString(identifier) + ": Power",
+        static_cast<int32_t>(power),
+        static_cast<int32_t>(unit.getPower(status)));
+    assertEquals(UnicodeString(identifier) + ": Identifier",
+        identifier,
+        unit.getIdentifier());
+    assertTrue(UnicodeString(identifier) + ": Constructor",
+        unit == MeasureUnit::forIdentifier(identifier, status));
 }
 
 extern IntlTest *createMeasureFormatTest() {

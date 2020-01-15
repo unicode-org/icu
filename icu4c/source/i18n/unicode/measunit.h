@@ -293,7 +293,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @return The string form of this unit, owned by this MeasureUnit.
      * @draft ICU 67
      */
-    const char* toString() const;
+    const char* getIdentifier() const;
 
     /**
      * Creates a MeasureUnit which is this MeasureUnit augmented with the specified SI prefix.
@@ -301,14 +301,14 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * There is sufficient locale data to format all standard SI prefixes.
      *
-     * If the MeasureUnit is composed of multiple simple units, only the first simple unit is
-     * modified. For example, starting at "meter-kilogram-per-second", if you set the SI prefix
-     * to "centi", then you get "centimeter-kilogram-per-second".
+     * This method only works if the MeasureUnit is composed of only one simple unit. An error
+     * will be set if called on a MeasureUnit containing multiple units.
      *
      * @param prefix The SI prefix, from UMeasureSIPrefix.
+     * @param status ICU error code
      * @return A new MeasureUnit.
      */
-    MeasureUnit withSIPrefix(UMeasureSIPrefix prefix) const;
+    MeasureUnit withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const;
 
     /**
      * Gets the current SI prefix of this MeasureUnit. For example, if the unit has the SI prefix
@@ -320,20 +320,20 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @return The SI prefix of the first simple unit, from UMeasureSIPrefix.
      */
-    UMeasureSIPrefix getSIPrefix() const;
+    UMeasureSIPrefix getSIPrefix(UErrorCode& status) const;
 
     /**
      * Creates a MeasureUnit which is this MeasureUnit augmented with the specified power. For
      * example, if power is 2, the unit will be squared.
      *
-     * If the MeasureUnit is composed of multiple simple units, only the first simple unit is
-     * modified. For example, starting at "meter-kilogram-per-second", if you set the power to 2,
-     * then you get "square-meter-kilogram-per-second".
+     * This method only works if the MeasureUnit is composed of only one simple unit. An error
+     * will be set if called on a MeasureUnit containing multiple units.
      *
      * @param power The power.
+     * @param status ICU error code
      * @return A new MeasureUnit.
      */
-    MeasureUnit withPower(int8_t power) const;
+    MeasureUnit withPower(int8_t power, UErrorCode& status) const;
 
     /**
      * Gets the power of this MeasureUnit. For example, if the unit is square, then 2 is returned.
@@ -343,7 +343,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @return The power of the first simple unit.
      */
-    int8_t getPower() const;
+    int8_t getPower(UErrorCode& status) const;
 
     /**
      * Gets the reciprocal of the unit, with the numerator and denominator flipped.
@@ -352,7 +352,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @return The reciprocal of the target unit.
      */
-    MeasureUnit reciprocal() const;
+    MeasureUnit reciprocal(UErrorCode& status) const;
 
     /**
      * Gets the product of this unit with another unit. This is a way to build units from
@@ -365,7 +365,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @return The product of the target unit with the provided unit.
      */
-    MeasureUnit product(const MeasureUnit& other) const;
+    MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
 
     /**
      * Gets the number of constituent simple units.
@@ -375,7 +375,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @return The number of constituent units.
      */
-    size_t getSimpleUnitCount() const;
+    size_t getSimpleUnitCount(UErrorCode& status) const;
 
     /**
      * Gets the constituent unit at the given index.
@@ -394,7 +394,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param index Zero-based index. If out of range, the dimensionless unit is returned.
      * @return The constituent simple unit at the specified position.
      */
-    MeasureUnit simpleUnitAt(size_t index) const;
+    MeasureUnit simpleUnitAt(size_t index, UErrorCode& status) const;
 
     /**
      * Composes this unit with a super unit.
@@ -413,7 +413,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param other The super unit to compose with the target unit.
      * @return The composition of the given super unit with this unit.
      */
-    MeasureUnit withSuperUnit(const MeasureUnit& other) const;
+    MeasureUnit withSuperUnit(const MeasureUnit& other, UErrorCode& status) const;
 
     /**
      * Gets the number of super units in the receiver.
@@ -422,7 +422,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @return The number of super units.
      */
-    size_t getSuperUnitCount() const;
+    size_t getSuperUnitCount(UErrorCode& status) const;
 
     /**
      * Gets the super unit at the given index.
@@ -440,7 +440,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @return The super unit at the specified position.
      */
-    MeasureUnit superUnitAt(size_t index) const;
+    MeasureUnit superUnitAt(size_t index, UErrorCode& status) const;
 
     /**
      * getAvailable gets all of the available units.
