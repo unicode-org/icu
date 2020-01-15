@@ -36,7 +36,6 @@ constexpr int32_t kCompoundPartOffset = 128;
 enum CompoundPart {
     COMPOUND_PART_PER = kCompoundPartOffset,
     COMPOUND_PART_TIMES,
-    COMPOUND_PART_ONE_PER,
     COMPOUND_PART_PLUS,
 };
 
@@ -217,7 +216,6 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     // Add syntax parts (compound, power prefixes)
     b.add(u"-per-", COMPOUND_PART_PER, status);
     b.add(u"-", COMPOUND_PART_TIMES, status);
-    b.add(u"one-per-", COMPOUND_PART_ONE_PER, status);
     b.add(u"+", COMPOUND_PART_PLUS, status);
     b.add(u"square-", POWER_PART_P2, status);
     b.add(u"cubic-", POWER_PART_P3, status);
@@ -255,6 +253,98 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     uprv_memcpy(kSerializedUnitExtrasStemTrie, result.getBuffer(), numBytes);
 }
 
+class Token {
+public:
+    Token(int32_t match) : fMatch(match) {}
+
+    enum Type {
+        TYPE_UNDEFINED,
+        TYPE_SI_PREFIX,
+        TYPE_COMPOUND_PART,
+        TYPE_POWER_PART,
+        TYPE_SIMPLE_UNIT,
+    };
+
+    Type getType() const {
+        if (fMatch <= 0) {
+            UPRV_UNREACHABLE;
+        } else if (fMatch < kCompoundPartOffset) {
+            return TYPE_SI_PREFIX;
+        } else if (fMatch < kPowerPartOffset) {
+            return TYPE_COMPOUND_PART;
+        } else if (fMatch < kSimpleUnitOffset) {
+            return TYPE_POWER_PART;
+        } else {
+            return TYPE_SIMPLE_UNIT;
+        }
+    }
+
+    UMeasureSIPrefix getSIPrefix() const {
+        U_ASSERT(getType() == TYPE_SI_PREFIX);
+        return static_cast<UMeasureSIPrefix>(fMatch - kSIPrefixOffset);
+    }
+
+    int32_t getMatch() const {
+        return fMatch;
+    }
+
+    int8_t getPower() const {
+        return static_cast<int8_t>(fMatch - kPowerPartOffset);
+    }
+
+    int32_t getSimpleUnitOffset() const {
+        return fMatch - kSimpleUnitOffset;
+    }
+
+private:
+    int32_t fMatch;
+};
+
+struct PowerUnit {
+    int8_t power = 0;
+    bool plus = false;
+    UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
+    StringPiece id;
+
+    void toString(CharString& builder, UErrorCode& status) {
+        if (power == 0) {
+            // no-op
+        } else if (power == 1) {
+            UPRV_UNREACHABLE;
+        } else if (power == 2) {
+            builder.append("square-", status);
+        } else if (power == 3) {
+            builder.append("cubic-", status);
+        } else if (power < 10) {
+            builder.append('p', status);
+            builder.append(power + '0', status);
+            builder.append('-', status);
+        } else {
+            U_ASSERT(power <= 15);
+            builder.append("p1", status);
+            builder.append('0' + (power % 10), status);
+            builder.append('-', status);
+        }
+        if (U_FAILURE(status)) {
+            return;
+        }
+
+        if (siPrefix != UMEASURE_SI_PREFIX_ONE) {
+            for (const auto& siPrefixInfo : gSIPrefixStrings) {
+                if (siPrefixInfo.value == siPrefix) {
+                    builder.append(siPrefixInfo.string, status);
+                    break;
+                }
+            }
+        }
+        if (U_FAILURE(status)) {
+            return;
+        }
+
+        builder.append(id, status);
+    }
+};
+
 class UnitIdentifierParser {
 public:
     static UnitIdentifierParser from(StringPiece source, UErrorCode& status) {
@@ -265,7 +355,7 @@ public:
         return UnitIdentifierParser(source);
     }
     
-    int32_t nextToken(UErrorCode& status) {
+    Token nextToken(UErrorCode& status) {
         fTrie.reset();
         int32_t match = -1;
         int32_t previ = -1;
@@ -294,11 +384,99 @@ public:
         } else {
             fIndex = previ;
         }
-        return match;
+        return Token(match);
     }
 
     bool hasNext() const {
         return fIndex < fSource.length();
+    }
+
+    PowerUnit nextUnit(UErrorCode& status) {
+        PowerUnit retval;
+        if (U_FAILURE(status)) {
+            return retval;
+        }
+
+        // state:
+        // 0 = no tokens seen yet (will accept power, SI prefix, or simple unit)
+        // 1 = power token seen (will not accept another power token)
+        // 2 = SI prefix token seen (will not accept a power or SI prefix token)
+        int32_t state = 0;
+        int32_t previ = fIndex;
+
+        // Maybe read a compound part
+        if (!fExpectingUnit) {
+            Token token = nextToken(status);
+            if (U_FAILURE(status)) {
+                return retval;
+            }
+            if (token.getType() != Token::TYPE_COMPOUND_PART) {
+                goto fail;
+            }
+            switch (token.getMatch()) {
+                case COMPOUND_PART_PER:
+                    if (fAfterPer) {
+                        goto fail;
+                    }
+                    fAfterPer = true;
+                    break;
+
+                case COMPOUND_PART_TIMES:
+                    break;
+
+                case COMPOUND_PART_PLUS:
+                    retval.plus = true;
+                    fAfterPer = false;
+                    break;
+            }
+            previ = fIndex;
+        }
+
+        // Read a unit
+        while (hasNext()) {
+            Token token = nextToken(status);
+            if (U_FAILURE(status)) {
+                return retval;
+            }
+
+            switch (token.getType()) {
+                case Token::TYPE_POWER_PART:
+                    if (state > 0) {
+                        goto fail;
+                    }
+                    retval.power = token.getPower();
+                    if (fAfterPer) {
+                        retval.power *= -1;
+                    }
+                    previ = fIndex;
+                    state = 1;
+                    break;
+
+                case Token::TYPE_SI_PREFIX:
+                    if (state > 1) {
+                        goto fail;
+                    }
+                    retval.siPrefix = token.getSIPrefix();
+                    previ = fIndex;
+                    state = 2;
+                    break;
+
+                case Token::TYPE_SIMPLE_UNIT:
+                    if (state > 2) {
+                        goto fail;
+                    }
+                    retval.id = fSource.substr(previ, fIndex - previ);
+                    return retval;
+
+                default:
+                    goto fail;
+            }
+        }
+
+    fail:
+        // TODO: Make a new status code?
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return retval;
     }
 
     int32_t currentIndex() const {
@@ -309,6 +487,9 @@ private:
     int32_t fIndex = 0;
     StringPiece fSource;
     UCharsTrie fTrie;
+
+    bool fAfterPer = false;
+    bool fExpectingUnit = true;
 
     UnitIdentifierParser() : fSource(""), fTrie(u"") {}
 
@@ -332,20 +513,6 @@ MeasureUnit MeasureUnit::forIdentifier(const char* identifier, UErrorCode& statu
             // Invalid syntax
             return MeasureUnit();
         }
-
-        // if (match < kCompoundPartOffset) {
-        //     // SI Prefix
-        //     auto prefix = static_cast<UMeasureSIPrefix>(match - kSIPrefixOffset);
-        // } else if (match < kPowerPartOffset) {
-        //     // Compound part
-        //     const char* operation = (match == COMPOUND_PART_PER) ? "per" : "times/plus";
-        // } else if (match < kSimpleUnitOffset) {
-        //     // Power part
-        //     int32_t power = match - kPowerPartOffset;
-        // } else {
-        //     // Simple unit
-        //     const char16_t* simpleUnit = gSimpleUnits[match - kSimpleUnitOffset];
-        // }
     }
 
     // Success
@@ -355,101 +522,28 @@ MeasureUnit MeasureUnit::forIdentifier(const char* identifier, UErrorCode& statu
 UMeasureSIPrefix MeasureUnit::getSIPrefix() const {
     ErrorCode status;
     const char* id = toString();
-    UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
-    if (status.isFailure()) {
-        // Unrecoverable error
-        return UMEASURE_SI_PREFIX_ONE;
-    }
-
-    int32_t match = parser.nextToken(status);
-    if (status.isFailure()) {
-        // Invalid syntax
-        return UMEASURE_SI_PREFIX_ONE;
-    }
-
-    if (match >= kPowerPartOffset && match < kSimpleUnitOffset) {
-        // Skip the power part
-        match = parser.nextToken(status);
-        if (status.isFailure()) {
-            // Invalid syntax
-            return UMEASURE_SI_PREFIX_ONE;
-        }
-    }
-
-    if (match >= kCompoundPartOffset) {
-        // No SI prefix
-        return UMEASURE_SI_PREFIX_ONE;
-    }
-
-    return static_cast<UMeasureSIPrefix>(match - kSIPrefixOffset);
+    return UnitIdentifierParser::from(id, status).nextUnit(status).siPrefix;
 }
 
 MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix) const {
     ErrorCode status;
     const char* id = toString();
     UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
+    PowerUnit powerUnit = parser.nextUnit(status);
     if (status.isFailure()) {
-        // Unrecoverable error
         return *this;
     }
 
-    int32_t match = parser.nextToken(status);
-    if (status.isFailure()) {
-        // Invalid syntax
-        return *this;
-    }
-
+    powerUnit.siPrefix = prefix;
     CharString builder;
-    int32_t unitStart = 0;
-    if (match >= kPowerPartOffset && match < kSimpleUnitOffset) {
-        // Skip the power part
-        unitStart = parser.currentIndex();
-        builder.append(id, unitStart, status);
-        match = parser.nextToken(status);
-    }
-
-    // Append the new SI prefix
-    for (const auto& siPrefixInfo : gSIPrefixStrings) {
-        if (siPrefixInfo.value == prefix) {
-            builder.append(siPrefixInfo.string, status);
-            break;
-        }
-    }
-
-    if (match < kCompoundPartOffset) {
-        // Remove the old SI prefix
-        unitStart = parser.currentIndex();
-    }
-    builder.append(id + unitStart, status);
-    if (status.isFailure()) {
-        // Unrecoverable error
-        return *this;
-    }
-
+    powerUnit.toString(builder, status);
     return MeasureUnit(builder.cloneData(status));
 }
 
 int8_t MeasureUnit::getPower() const {
     ErrorCode status;
     const char* id = toString();
-    UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
-    if (status.isFailure()) {
-        // Unrecoverable error
-        return 0;
-    }
-
-    int32_t match = parser.nextToken(status);
-    if (status.isFailure()) {
-        // Invalid syntax
-        return 0;
-    }
-
-    if (match < kPowerPartOffset || match >= kSimpleUnitOffset) {
-        // No power part
-        return 0;
-    }
-
-    return static_cast<int8_t>(match - kPowerPartOffset);
+    return UnitIdentifierParser::from(id, status).nextUnit(status).power;
 }
 
 MeasureUnit MeasureUnit::withPower(int8_t power) const {
@@ -461,45 +555,14 @@ MeasureUnit MeasureUnit::withPower(int8_t power) const {
     ErrorCode status;
     const char* id = toString();
     UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
+    PowerUnit powerUnit = parser.nextUnit(status);
     if (status.isFailure()) {
-        // Unrecoverable error
         return *this;
     }
 
-    int32_t match = parser.nextToken(status);
-    if (status.isFailure()) {
-        // Invalid syntax
-        return *this;
-    }
-
-    // Append the new power
+    powerUnit.power = power;
     CharString builder;
-    if (power == 2) {
-        builder.append("square-", status);
-    } else if (power == 3) {
-        builder.append("cubic-", status);
-    } else if (power < 10) {
-        builder.append('p', status);
-        builder.append(power + '0', status);
-        builder.append('-', status);
-    } else {
-        builder.append("p1", status);
-        builder.append('0' + (power % 10), status);
-        builder.append('-', status);
-    }
-
-    if (match < kCompoundPartOffset) {
-        // Remove the old power
-        builder.append(id + parser.currentIndex(), status);
-    } else {
-        // Append the whole identifier
-        builder.append(id, status);
-    }
-    if (status.isFailure()) {
-        // Unrecoverable error
-        return *this;
-    }
-
+    powerUnit.toString(builder, status);
     return MeasureUnit(builder.cloneData(status));
 }
 
