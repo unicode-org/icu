@@ -3234,10 +3234,10 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     MeasureUnit centimeter2 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
     MeasureUnit cubicDecimeter = cubicMeter.withSIPrefix(UMEASURE_SI_PREFIX_DECI, status);
 
-    verifyUnitParts(kilometer, UMEASURE_SI_PREFIX_KILO, 0, "kilometer");
-    verifyUnitParts(meter, UMEASURE_SI_PREFIX_ONE, 0, "meter");
-    verifyUnitParts(centimeter1, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter");
-    verifyUnitParts(centimeter2, UMEASURE_SI_PREFIX_CENTI, 0, "centimeter");
+    verifyUnitParts(kilometer, UMEASURE_SI_PREFIX_KILO, 1, "kilometer");
+    verifyUnitParts(meter, UMEASURE_SI_PREFIX_ONE, 1, "meter");
+    verifyUnitParts(centimeter1, UMEASURE_SI_PREFIX_CENTI, 1, "centimeter");
+    verifyUnitParts(centimeter2, UMEASURE_SI_PREFIX_CENTI, 1, "centimeter");
     verifyUnitParts(cubicDecimeter, UMEASURE_SI_PREFIX_DECI, 3, "cubic-decimeter");
 
     assertTrue("centimeter equality", centimeter1 == centimeter2);
@@ -3253,17 +3253,19 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     verifyUnitParts(quarticKilometer, UMEASURE_SI_PREFIX_KILO, 4, "p4-kilometer");
     verifyUnitParts(overQuarticKilometer1, UMEASURE_SI_PREFIX_KILO, -4, "one-per-p4-kilometer");
 
-    // assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
+    assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
 
-    // MeasureUnit overQuarticKilometer2 = overQuarticKilometer1.reciprocal();
-    // MeasureUnit overQuarticKilometer3 = kilometer.product(kilometer).product(kilometer)
-    //     .product(kilometer).reciprocal();
+    MeasureUnit overQuarticKilometer2 = quarticKilometer.reciprocal(status);
+    MeasureUnit overQuarticKilometer3 = kilometer.product(kilometer, status)
+        .product(kilometer, status)
+        .product(kilometer, status)
+        .reciprocal(status);
 
-    // verifyUnitParts(overQuarticKilometer2, UMEASURE_SI_PREFIX_KILO, 2, "one-per-p4-kilometer");
-    // verifyUnitParts(overQuarticKilometer3, UMEASURE_SI_PREFIX_KILO, 2, "one-per-p4-kilometer");
+    verifyUnitParts(overQuarticKilometer2, UMEASURE_SI_PREFIX_KILO, -4, "one-per-p4-kilometer");
+    verifyUnitParts(overQuarticKilometer3, UMEASURE_SI_PREFIX_KILO, -4, "one-per-p4-kilometer");
 
-    // assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer2);
-    // assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer3);
+    assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer2);
+    assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer3);
 
     // MeasureUnit kiloSquareSecond = MeasureUnit::getSecond()
     //     .withPower(2).withSIPrefix(UMEASURE_SI_PREFIX_KILO);

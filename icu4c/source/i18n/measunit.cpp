@@ -2027,6 +2027,10 @@ MeasureUnit::MeasureUnit(MeasureUnit &&other) noexcept
 
 MeasureUnit::MeasureUnit(char* idToAdopt)
         : fId(idToAdopt), fSubTypeId(-1), fTypeId(-1) {
+    if (fId == nullptr) {
+        // Invalid; reset to the base dimensionless unit
+        setTo(kBaseTypeIdx, kBaseSubTypeIdx);
+    }
 }
 
 MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {

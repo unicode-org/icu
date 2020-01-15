@@ -725,6 +725,23 @@ public:
         return pool[count++] = new T(std::forward<Args>(args)...);
     }
 
+    /**
+     * @return Number of elements that have been allocated.
+     */
+    int32_t size() const {
+        return count;
+    }
+
+    /**
+     * Array item access (writable).
+     * No index bounds check.
+     * @param i array index
+     * @return reference to the array item
+     */
+    T *operator[](ptrdiff_t i) const {
+        return pool[i];
+    }
+
 private:
     int32_t count;
     MaybeStackArray<T*, stackCapacity> pool;
