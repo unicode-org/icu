@@ -406,6 +406,10 @@ public:
         src.ptr=NULL;
     }
 
+    static LocalArray<T> withLength(T *p, int32_t length) {
+        return LocalArray(p, length);
+    }
+
 #ifndef U_HIDE_DRAFT_API
     /**
      * Constructs a LocalArray from a C++11 std::unique_ptr of an array type.
@@ -537,6 +541,15 @@ public:
         return std::unique_ptr<T[]>(LocalPointerBase<T>::orphan());
     }
 #endif  /* U_HIDE_DRAFT_API */
+
+    int32_t length() const { return fLength; }
+
+private:
+    int32_t fLength = -1;
+
+    LocalArray(T *p, int32_t length) : LocalArray(p) {
+        fLength = length;
+    }
 };
 
 /**

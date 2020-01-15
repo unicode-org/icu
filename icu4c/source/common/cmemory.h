@@ -684,26 +684,26 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
 template<typename T, int32_t stackCapacity = 8>
 class MemoryPool : public UMemory {
 public:
-    MemoryPool() : count(0), pool() {}
+    MemoryPool() : fCount(0), fPool() {}
 
     ~MemoryPool() {
-        for (int32_t i = 0; i < count; ++i) {
-            delete pool[i];
+        for (int32_t i = 0; i < fCount; ++i) {
+            delete fPool[i];
         }
     }
 
     MemoryPool(const MemoryPool&) = delete;
     MemoryPool& operator=(const MemoryPool&) = delete;
 
-    MemoryPool(MemoryPool&& other) U_NOEXCEPT : count(other.count),
-                                                pool(std::move(other.pool)) {
-        other.count = 0;
+    MemoryPool(MemoryPool&& other) U_NOEXCEPT : fCount(other.fCount),
+                                                fPool(std::move(other.fPool)) {
+        other.fCount = 0;
     }
 
     MemoryPool& operator=(MemoryPool&& other) U_NOEXCEPT {
-        count = other.count;
-        pool = std::move(other.pool);
-        other.count = 0;
+        fCount = other.fCount;
+        fPool = std::move(other.fPool);
+        other.fCount = 0;
         return *this;
     }
 
@@ -716,20 +716,58 @@ public:
      */
     template<typename... Args>
     T* create(Args&&... args) {
-        int32_t capacity = pool.getCapacity();
-        if (count == capacity &&
-            pool.resize(capacity == stackCapacity ? 4 * capacity : 2 * capacity,
-                        capacity) == nullptr) {
+        int32_t capacity = fPool.getCapacity();
+        if (fCount == capacity &&
+            fPool.resize(capacity == stackCapacity ? 4 * capacity : 2 * capacity,
+                         capacity) == nullptr) {
             return nullptr;
         }
-        return pool[count++] = new T(std::forward<Args>(args)...);
+        return fPool[fCount++] = new T(std::forward<Args>(args)...);
     }
 
     /**
      * @return Number of elements that have been allocated.
      */
-    int32_t size() const {
-        return count;
+    int32_t count() const {
+        return fCount;
+    }
+
+protected:
+    int32_t fCount;
+    MaybeStackArray<T*, stackCapacity> fPool;
+};
+
+/**
+ * An internal Vector-like implementation based on MemoryPool.
+ *
+ * To append an item to the vector, use emplaceBack.
+ *
+ *     MaybeStackVector<MyType> vector;
+ *     MyType* element = vector.emplaceBack();
+ *     if (!element) {
+ *         status = U_MEMORY_ALLOCATION_ERROR;
+ *     }
+ *     // do stuff with element
+ *
+ * To loop over the vector, use a for loop with indices:
+ *
+ *     for (int32_t i = 0; i < vector.length(); i++) {
+ *         MyType* element = vector[i];
+ *     }
+ */
+template<typename T, int32_t stackCapacity = 8>
+class MaybeStackVector : protected MemoryPool<T, stackCapacity> {
+public:
+    using MemoryPool<T, stackCapacity>::MemoryPool;
+    using MemoryPool<T, stackCapacity>::operator=;
+
+    template<typename... Args>
+    T* emplaceBack(Args&&... args) {
+        return this->create(args...);
+    }
+
+    int32_t length() const {
+        return this->count();
     }
 
     /**
@@ -739,13 +777,10 @@ public:
      * @return reference to the array item
      */
     T *operator[](ptrdiff_t i) const {
-        return pool[i];
+        return this->fPool[i];
     }
-
-private:
-    int32_t count;
-    MaybeStackArray<T*, stackCapacity> pool;
 };
+
 
 U_NAMESPACE_END
 

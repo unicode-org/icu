@@ -20,6 +20,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/unistr.h"
+#include "unicode/localpointer.h"
 
 /**
  * \file 
@@ -376,6 +377,10 @@ class U_I18N_API MeasureUnit: public UObject {
      * @return The number of constituent units.
      */
     size_t getSimpleUnitCount(UErrorCode& status) const;
+
+    LocalArray<MeasureUnit> getSimpleUnits(UErrorCode& status) const;
+
+    LocalArray<MeasureUnit> getSequenceUnits(UErrorCode& status) const;
 
     /**
      * Gets the constituent unit at the given index.

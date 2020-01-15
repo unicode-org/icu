@@ -17,6 +17,7 @@
 #include "ucln_in.h"
 #include "umutex.h"
 #include "unicode/errorcode.h"
+#include "unicode/localpointer.h"
 #include "unicode/measunit.h"
 #include "unicode/ucharstrie.h"
 #include "unicode/ucharstriebuilder.h"
@@ -356,6 +357,8 @@ struct PowerUnit {
 
 class CompoundUnit {
 public:
+    typedef MaybeStackVector<PowerUnit, 3> PowerUnitList;
+
     void append(PowerUnit&& powerUnit, UErrorCode& status) {
         if (powerUnit.power >= 0) {
             appendImpl(numerator, std::move(powerUnit), status);
@@ -371,19 +374,26 @@ public:
     }
 
     void appendTo(CharString& builder, UErrorCode& status) {
-        if (numerator.size() == 0) {
+        if (numerator.length() == 0) {
             builder.append("one", status);
         } else {
-            appendToImpl(numerator, numerator.size(), builder, status);
+            appendToImpl(numerator, numerator.length(), builder, status);
         }
-        if (denominator.size() > 0) {
+        if (denominator.length() > 0) {
             builder.append("-per-", status);
-            appendToImpl(denominator, denominator.size(), builder, status);
+            appendToImpl(denominator, denominator.length(), builder, status);
         }
     }
 
+    const PowerUnitList& getNumeratorUnits() {
+        return numerator;
+    }
+
+    const PowerUnitList& getDenominatorUnits() {
+        return denominator;
+    }
+
 private:
-    typedef MemoryPool<PowerUnit, 3> PowerUnitList;
     PowerUnitList numerator;
     PowerUnitList denominator;
 
@@ -401,7 +411,7 @@ private:
 
     void appendImpl(PowerUnitList& unitList, PowerUnit&& powerUnit, UErrorCode& status) {
         // Check that the same simple unit doesn't already exist
-        for (int32_t i = 0; i < unitList.size(); i++) {
+        for (int32_t i = 0; i < unitList.length(); i++) {
             PowerUnit* candidate = unitList[i];
             if (candidate->simpleUnitIndex == powerUnit.simpleUnitIndex
                     && candidate->siPrefix == powerUnit.siPrefix) {
@@ -410,7 +420,7 @@ private:
             }
         }
         // Add a new unit
-        PowerUnit* destination = unitList.create();
+        PowerUnit* destination = unitList.emplaceBack();
         if (!destination) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -555,6 +565,7 @@ private:
                         goto fail;
                     }
                     fAfterPer = true;
+                    result.power = -1;
                     break;
 
                 case COMPOUND_PART_TIMES:
@@ -580,10 +591,7 @@ private:
                     if (state > 0) {
                         goto fail;
                     }
-                    result.power = token.getPower();
-                    if (fAfterPer) {
-                        result.power *= -1;
-                    }
+                    result.power *= token.getPower();
                     previ = fIndex;
                     state = 1;
                     break;
@@ -719,6 +727,33 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     CharString builder;
     compoundUnit.appendTo(builder, status);
     return MeasureUnit(builder.cloneData(status));
+}
+
+LocalArray<MeasureUnit> MeasureUnit::getSimpleUnits(UErrorCode& status) const {
+    const char* id = getIdentifier();
+    CompoundUnit compoundUnit = UnitIdentifierParser::from(id, status).getOnlyCompoundUnit(status);
+    if (U_FAILURE(status)) {
+        return LocalArray<MeasureUnit>::withLength(nullptr, 0);
+    }
+
+    const CompoundUnit::PowerUnitList& numerator = compoundUnit.getNumeratorUnits();
+    const CompoundUnit::PowerUnitList& denominator = compoundUnit.getDenominatorUnits();
+    int32_t count = numerator.length() + denominator.length();
+    MeasureUnit* arr = new MeasureUnit[count];
+
+    CharString builder;
+    int32_t i = 0;
+    for (int32_t j = 0; j < numerator.length(); j++) {
+        numerator[j]->appendTo(builder.clear(), status);
+        arr[i++] = MeasureUnit(builder.cloneData(status));
+    }
+    for (int32_t j = 0; j < denominator.length(); j++) {
+        builder.clear().append("one-per-", status);
+        denominator[j]->appendTo(builder, status);
+        arr[i++] = MeasureUnit(builder.cloneData(status));
+    }
+
+    return LocalArray<MeasureUnit>::withLength(arr, count);
 }
 
 
