@@ -32,6 +32,44 @@ U_NAMESPACE_BEGIN
 class StringEnumeration;
 
 /**
+ * Enumeration for unit complexity. There are three levels:
+ * 
+ * - SINGLE: A single unit, optionally with a power and/or SI prefix. Examples: hectare,
+ *           square-kilometer, kilojoule, one-per-second.
+ * - COMPOUND: A unit composed of the product of multiple single units. Examples:
+ *             meter-per-second, kilowatt-hour, kilogram-meter-per-square-second.
+ * - SEQUENCE: A unit composed of the sum of multiple compound units. Examples: foot+inch,
+ *             hour+minute+second, hectare+square-meter.
+ *
+ * The complexity determines which operations are available. For example, you cannot set the power
+ * or SI prefix of a compound unit.
+ *
+ * @draft ICU 67
+ */
+enum UMeasureUnitComplexity {
+    /**
+     * A single unit, like kilojoule.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_UNIT_SINGLE,
+
+    /**
+     * A compound unit, like meter-per-second.
+     * 
+     * @draft ICU 67
+     */
+    UMEASURE_UNIT_COMPOUND,
+
+    /**
+     * A sequence unit, like hour+minute.
+     *
+     * @draft ICU 67
+     */
+    UMEASURE_UNIT_SEQUENCE
+};
+
+/**
  * Enumeration for SI prefixes, such as "kilo".
  *
  * @draft ICU 67
@@ -297,60 +335,74 @@ class U_I18N_API MeasureUnit: public UObject {
     const char* getIdentifier() const;
 
     /**
-     * Creates a MeasureUnit which is this MeasureUnit augmented with the specified SI prefix.
+     * Compute the complexity of the unit. See UMeasureUnitComplexity for more information.
+     *
+     * @param status Set if an error occurs.
+     * @return The unit complexity.
+     * @draft ICU 67
+     */
+    UMeasureUnitComplexity getComplexity(UErrorCode& status) const;
+
+    /**
+     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified SI prefix.
      * For example, UMEASURE_SI_PREFIX_KILO for "kilo".
      *
      * There is sufficient locale data to format all standard SI prefixes.
      *
-     * This method only works if the MeasureUnit is composed of only one simple unit. An error
-     * will be set if called on a MeasureUnit containing multiple units.
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param prefix The SI prefix, from UMeasureSIPrefix.
-     * @param status ICU error code
-     * @return A new MeasureUnit.
+     * @param status Set if this is not a SINGLE unit or if another error occurs.
+     * @return A new SINGLE unit.
      */
     MeasureUnit withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const;
 
     /**
-     * Gets the current SI prefix of this MeasureUnit. For example, if the unit has the SI prefix
+     * Gets the current SI prefix of this SINGLE unit. For example, if the unit has the SI prefix
      * "kilo", then UMEASURE_SI_PREFIX_KILO is returned.
      *
-     * If the MeasureUnit is composed of multiple simple units, the SI prefix of the first simple
-     * unit is returned. For example, from "centimeter-kilogram-per-second", the SI prefix
-     * UMEASURE_SI_PREFIX_CENTI will be returned.
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @return The SI prefix of the first simple unit, from UMeasureSIPrefix.
+     * @param status Set if this is not a SINGLE unit or if another error occurs.
+     * @return The SI prefix of this SINGLE unit, from UMeasureSIPrefix.
      */
     UMeasureSIPrefix getSIPrefix(UErrorCode& status) const;
 
     /**
-     * Creates a MeasureUnit which is this MeasureUnit augmented with the specified power. For
+     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified power. For
      * example, if power is 2, the unit will be squared.
      *
-     * This method only works if the MeasureUnit is composed of only one simple unit. An error
-     * will be set if called on a MeasureUnit containing multiple units.
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param power The power.
-     * @param status ICU error code
-     * @return A new MeasureUnit.
+     * @param status Set if this is not a SINGLE unit or if another error occurs.
+     * @return A new SINGLE unit.
      */
     MeasureUnit withPower(int8_t power, UErrorCode& status) const;
 
     /**
      * Gets the power of this MeasureUnit. For example, if the unit is square, then 2 is returned.
      *
-     * If the MeasureUnit is composed of multiple simple units, the power of the first simple unit
-     * is returned. For example, from "cubic-meter-per-square-second", 3 is returned.
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @return The power of the first simple unit.
+     * @param status Set if this is not a SINGLE unit or if another error occurs.
+     * @return The power of this simple unit.
      */
     int8_t getPower(UErrorCode& status) const;
 
     /**
-     * Gets the reciprocal of the unit, with the numerator and denominator flipped.
+     * Gets the reciprocal of this MeasureUnit, with the numerator and denominator flipped.
      *
      * For example, if the receiver is "meter-per-second", the unit "second-per-meter" is returned.
      *
+     * NOTE: Only works on SINGLE and COMPOUND units. If this is a SEQUENCE unit, an error will
+     * occur. For more information, see UMeasureUnitComplexity.
+     *
+     * @param status Set if this is a SEQUENCE unit or if another error occurs.
      * @return The reciprocal of the target unit.
      */
     MeasureUnit reciprocal(UErrorCode& status) const;
@@ -364,88 +416,42 @@ class U_I18N_API MeasureUnit: public UObject {
      * For example, if the receiver is "kilowatt" and the argument is "hour-per-day", then the
      * unit "kilowatt-hour-per-day" is returned.
      *
+     * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
+     * SEQUENCE unit, an error will occur. For more information, see UMeasureUnitComplexity.
+     *
+     * @param status Set if this or other is a SEQUENCE unit or if another error occurs.
      * @return The product of the target unit with the provided unit.
      */
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
 
     /**
-     * Gets the number of constituent simple units.
+     * Gets the list of single units contained within a compound unit.
      *
-     * For example, if the receiver is "meter-per-square-second", then 2 is returned, since there
-     * are two simple units: "meter" and "second".
+     * For example, given "meter-kilogram-per-second", three units will be returned: "meter",
+     * "kilogram", and "one-per-second".
      *
-     * @return The number of constituent units.
+     * If this is a SINGLE unit, an array of length 1 will be returned.
+     *
+     * NOTE: Only works on SINGLE and COMPOUND units. If this is a SEQUENCE unit, an error will
+     * occur. For more information, see UMeasureUnitComplexity.
+     *
+     * @param status Set if this is a SEQUENCE unit or if another error occurs.
+     * @return An array of single units, owned by the caller.
      */
-    size_t getSimpleUnitCount(UErrorCode& status) const;
-
-    LocalArray<MeasureUnit> getSimpleUnits(UErrorCode& status) const;
-
-    LocalArray<MeasureUnit> getSequenceUnits(UErrorCode& status) const;
+    LocalArray<MeasureUnit> getSingleUnits(UErrorCode& status) const;
 
     /**
-     * Gets the constituent unit at the given index.
-     * 
-     * For example, to loop over all simple units:
-     * 
-     * <pre>
-     * MeasureUnit unit(u"meter-per-square-second");
-     * for (size_t i = 0; i < unit.getSimpleUnitCount(); i++) {
-     *     std::cout << unit.simpleUnitAt(i).toString() << std::endl;
-     * }
-     * </pre>
-     * 
-     * Expected output: meter, one-per-square-second
-     * 
-     * @param index Zero-based index. If out of range, the dimensionless unit is returned.
-     * @return The constituent simple unit at the specified position.
+     * Gets the list of compound units contained within a sequence unit.
+     *
+     * For example, given "hour+minute+second", three units will be returned: "hour", "minute",
+     * and "second".
+     *
+     * If this is a SINGLE or COMPOUND unit, an array of length 1 will be returned.
+     *
+     * @param status Set of an error occurs.
+     * @return An array of compound units, owned by the caller.
      */
-    MeasureUnit simpleUnitAt(size_t index, UErrorCode& status) const;
-
-    /**
-     * Composes this unit with a super unit.
-     * 
-     * A super unit, used for formatting only, should be a larger unit sharing the same dimension.
-     * For example, if the current unit is "inch", a super unit could be "foot", in order to
-     * render 71 inches as "5 feet, 11 inches". If the super unit is invalid, an error will occur
-     * during formatting.
-     *
-     * A unit can have multiple super units; for example, "second" could have both "minute" and
-     * "hour" as super units.
-     * 
-     * Super units are ignored and left untouched in most other methods, such as withSIPrefix,
-     * withPower, and reciprocal.
-     *
-     * @param other The super unit to compose with the target unit.
-     * @return The composition of the given super unit with this unit.
-     */
-    MeasureUnit withSuperUnit(const MeasureUnit& other, UErrorCode& status) const;
-
-    /**
-     * Gets the number of super units in the receiver.
-     *
-     * For example, "foot+inch" has one super unit.
-     *
-     * @return The number of super units.
-     */
-    size_t getSuperUnitCount(UErrorCode& status) const;
-
-    /**
-     * Gets the super unit at the given index.
-     *
-     * For example, to loop over all super units:
-     *
-     * <pre>
-     * MeasureUnit unit(u"hour+minute+second");
-     * for (size_t i = 0; i < unit.getSuperUnitCount(); i++) {
-     *     std::cout << unit.superUnitAt(i).toCoreUnitIdentifier() << std::endl;
-     * }
-     * </pre>
-     *
-     * Expected output: hour, minute
-     *
-     * @return The super unit at the specified position.
-     */
-    MeasureUnit superUnitAt(size_t index, UErrorCode& status) const;
+    LocalArray<MeasureUnit> getCompoundUnits(UErrorCode& status) const;
 
     /**
      * getAvailable gets all of the available units.

@@ -87,7 +87,7 @@ const struct SIPrefixStrings {
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
 };
 
-// FIXME: Get this list from data
+// TODO(ICU-20920): Get this list from data
 const char16_t* const gSimpleUnits[] = {
     u"one", // note: expected to be index 0
     u"100kilometer",
@@ -308,7 +308,7 @@ private:
     int32_t fMatch;
 };
 
-struct PowerUnit {
+struct SingleUnit {
     int8_t power = 1;
     UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
     int32_t simpleUnitIndex = 0;
@@ -357,13 +357,13 @@ struct PowerUnit {
 
 class CompoundUnit {
 public:
-    typedef MaybeStackVector<PowerUnit, 3> PowerUnitList;
+    typedef MaybeStackVector<SingleUnit, 3> SingleUnitList;
 
-    void append(PowerUnit&& powerUnit, UErrorCode& status) {
-        if (powerUnit.power >= 0) {
-            appendImpl(numerator, std::move(powerUnit), status);
+    void append(SingleUnit&& singleUnit, UErrorCode& status) {
+        if (singleUnit.power >= 0) {
+            appendImpl(numerator, std::move(singleUnit), status);
         } else {
-            appendImpl(denominator, std::move(powerUnit), status);
+            appendImpl(denominator, std::move(singleUnit), status);
         }
     }
 
@@ -373,7 +373,7 @@ public:
         denominator = std::move(temp);
     }
 
-    void appendTo(CharString& builder, UErrorCode& status) {
+    void appendTo(CharString& builder, UErrorCode& status) const {
         if (numerator.length() == 0) {
             builder.append("one", status);
         } else {
@@ -385,19 +385,23 @@ public:
         }
     }
 
-    const PowerUnitList& getNumeratorUnits() {
+    const SingleUnitList& getNumeratorUnits() const {
         return numerator;
     }
 
-    const PowerUnitList& getDenominatorUnits() {
+    const SingleUnitList& getDenominatorUnits() const {
         return denominator;
     }
 
-private:
-    PowerUnitList numerator;
-    PowerUnitList denominator;
+    bool isSingle() const {
+        return numerator.length() + denominator.length() == 1;
+    }
 
-    void appendToImpl(const PowerUnitList& unitList, int32_t len, CharString& builder, UErrorCode& status) {
+private:
+    SingleUnitList numerator;
+    SingleUnitList denominator;
+
+    void appendToImpl(const SingleUnitList& unitList, int32_t len, CharString& builder, UErrorCode& status) const {
         bool first = true;
         for (int32_t i = 0; i < len; i++) {
             if (first) {
@@ -409,23 +413,23 @@ private:
         }
     }
 
-    void appendImpl(PowerUnitList& unitList, PowerUnit&& powerUnit, UErrorCode& status) {
+    void appendImpl(SingleUnitList& unitList, SingleUnit&& singleUnit, UErrorCode& status) {
         // Check that the same simple unit doesn't already exist
         for (int32_t i = 0; i < unitList.length(); i++) {
-            PowerUnit* candidate = unitList[i];
-            if (candidate->simpleUnitIndex == powerUnit.simpleUnitIndex
-                    && candidate->siPrefix == powerUnit.siPrefix) {
-                candidate->power += powerUnit.power;
+            SingleUnit* candidate = unitList[i];
+            if (candidate->simpleUnitIndex == singleUnit.simpleUnitIndex
+                    && candidate->siPrefix == singleUnit.siPrefix) {
+                candidate->power += singleUnit.power;
                 return;
             }
         }
         // Add a new unit
-        PowerUnit* destination = unitList.emplaceBack();
+        SingleUnit* destination = unitList.emplaceBack();
         if (!destination) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        *destination = std::move(powerUnit);
+        *destination = std::move(singleUnit);
     }
 };
 
@@ -446,10 +450,10 @@ public:
         return fIndex < fSource.length();
     }
 
-    PowerUnit getOnlyPowerUnit(UErrorCode& status) {
+    SingleUnit getOnlySingleUnit(UErrorCode& status) {
         bool sawPlus;
-        PowerUnit retval;
-        nextPowerUnit(retval, sawPlus, status);
+        SingleUnit retval;
+        nextSingleUnit(retval, sawPlus, status);
         if (U_FAILURE(status)) {
             return retval;
         }
@@ -468,13 +472,13 @@ public:
         }
         while (hasNext()) {
             int32_t previ = fIndex;
-            PowerUnit powerUnit;
-            nextPowerUnit(powerUnit, sawPlus, status);
+            SingleUnit singleUnit;
+            nextSingleUnit(singleUnit, sawPlus, status);
             if (sawPlus) {
                 fIndex = previ;
                 break;
             }
-            result.append(std::move(powerUnit), status);
+            result.append(std::move(singleUnit), status);
         }
         return;
     }
@@ -537,7 +541,7 @@ private:
         return Token(match);
     }
 
-    void nextPowerUnit(PowerUnit& result, bool& sawPlus, UErrorCode& status) {
+    void nextSingleUnit(SingleUnit& result, bool& sawPlus, UErrorCode& status) {
         sawPlus = false;
         if (U_FAILURE(status)) {
             return;
@@ -607,7 +611,7 @@ private:
 
                 case Token::TYPE_ONE:
                     // Skip "one" and go to the next unit
-                    return nextPowerUnit(result, sawPlus, status);
+                    return nextSingleUnit(result, sawPlus, status);
 
                 case Token::TYPE_SIMPLE_UNIT:
                     result.simpleUnitIndex = token.getSimpleUnitIndex();
@@ -654,42 +658,61 @@ MeasureUnit MeasureUnit::forIdentifier(const char* identifier, UErrorCode& statu
     return MeasureUnit(builder.cloneData(status));
 }
 
+UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
+    const char* id = getIdentifier();
+    UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
+    if (U_FAILURE(status)) {
+        // Unrecoverable error
+        return UMEASURE_UNIT_SINGLE;
+    }
+
+    CompoundUnit compoundUnit;
+    parser.nextCompoundUnit(compoundUnit, status);
+    if (compoundUnit.isSingle()) {
+        return UMEASURE_UNIT_SINGLE;
+    } else if (parser.hasNext()) {
+        return UMEASURE_UNIT_SEQUENCE;
+    } else {
+        return UMEASURE_UNIT_COMPOUND;
+    }
+}
+
 UMeasureSIPrefix MeasureUnit::getSIPrefix(UErrorCode& status) const {
     const char* id = getIdentifier();
-    return UnitIdentifierParser::from(id, status).getOnlyPowerUnit(status).siPrefix;
+    return UnitIdentifierParser::from(id, status).getOnlySingleUnit(status).siPrefix;
 }
 
 MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const {
     const char* id = getIdentifier();
-    PowerUnit powerUnit = UnitIdentifierParser::from(id, status).getOnlyPowerUnit(status);
+    SingleUnit singleUnit = UnitIdentifierParser::from(id, status).getOnlySingleUnit(status);
     if (U_FAILURE(status)) {
         return *this;
     }
 
-    powerUnit.siPrefix = prefix;
+    singleUnit.siPrefix = prefix;
     CharString builder;
-    powerUnit.appendTo(builder, status);
+    singleUnit.appendTo(builder, status);
     return MeasureUnit(builder.cloneData(status));
 }
 
 int8_t MeasureUnit::getPower(UErrorCode& status) const {
     const char* id = getIdentifier();
-    return UnitIdentifierParser::from(id, status).getOnlyPowerUnit(status).power;
+    return UnitIdentifierParser::from(id, status).getOnlySingleUnit(status).power;
 }
 
 MeasureUnit MeasureUnit::withPower(int8_t power, UErrorCode& status) const {
     const char* id = getIdentifier();
-    PowerUnit powerUnit = UnitIdentifierParser::from(id, status).getOnlyPowerUnit(status);
+    SingleUnit singleUnit = UnitIdentifierParser::from(id, status).getOnlySingleUnit(status);
     if (U_FAILURE(status)) {
         return *this;
     }
 
     CharString builder;
-    powerUnit.power = power;
+    singleUnit.power = power;
     if (power < 0) {
         builder.append("one-per-", status);
     }
-    powerUnit.appendTo(builder, status);
+    singleUnit.appendTo(builder, status);
     return MeasureUnit(builder.cloneData(status));
 }
 
@@ -729,15 +752,15 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     return MeasureUnit(builder.cloneData(status));
 }
 
-LocalArray<MeasureUnit> MeasureUnit::getSimpleUnits(UErrorCode& status) const {
+LocalArray<MeasureUnit> MeasureUnit::getSingleUnits(UErrorCode& status) const {
     const char* id = getIdentifier();
     CompoundUnit compoundUnit = UnitIdentifierParser::from(id, status).getOnlyCompoundUnit(status);
     if (U_FAILURE(status)) {
         return LocalArray<MeasureUnit>::withLength(nullptr, 0);
     }
 
-    const CompoundUnit::PowerUnitList& numerator = compoundUnit.getNumeratorUnits();
-    const CompoundUnit::PowerUnitList& denominator = compoundUnit.getDenominatorUnits();
+    const CompoundUnit::SingleUnitList& numerator = compoundUnit.getNumeratorUnits();
+    const CompoundUnit::SingleUnitList& denominator = compoundUnit.getDenominatorUnits();
     int32_t count = numerator.length() + denominator.length();
     MeasureUnit* arr = new MeasureUnit[count];
 
