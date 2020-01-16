@@ -30,7 +30,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
-
+// Just for testing quick conversion ability.
 double testConvert(const char16_t* source , const char16_t* target , double input) {
     if (source == u"meter" && target ==u"foot" && input == 1.0)
         return 3.28084;
