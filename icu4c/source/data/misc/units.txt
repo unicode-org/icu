@@ -29,7 +29,7 @@ supplementalData:table(nofallback){
         celsius{
             fahrenheit:table{
                 factor{"5/9"}
-                offset{"273.15"}
+                offset{"-160/9"}
             }
             kelvin:table{
                 factor{"1"}
