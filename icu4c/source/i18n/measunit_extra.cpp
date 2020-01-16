@@ -312,9 +312,14 @@ struct SingleUnit {
     int8_t power = 1;
     UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
     int32_t simpleUnitIndex = 0;
-    StringPiece id;
+    StringPiece id = "one";
 
     void appendTo(CharString& builder, UErrorCode& status) const {
+        if (simpleUnitIndex == 0) {
+            // Don't propagate SI prefixes and powers on one
+            builder.append("one", status);
+            return;
+        }
         int8_t posPower = power < 0 ? -power : power;
         if (posPower == 0) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -353,6 +358,18 @@ struct SingleUnit {
 
         builder.append(id, status);
     }
+
+    char* build(UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
+        CharString builder;
+        if (power < 0) {
+            builder.append("one-per-", status);
+        }
+        appendTo(builder, status);
+        return builder.cloneData(status);
+    }
 };
 
 class CompoundUnit {
@@ -367,7 +384,7 @@ public:
         }
     }
 
-    void reciprocal() {
+    void takeReciprocal() {
         auto temp = std::move(numerator);
         numerator = std::move(denominator);
         denominator = std::move(temp);
@@ -377,12 +394,21 @@ public:
         if (numerator.length() == 0) {
             builder.append("one", status);
         } else {
-            appendToImpl(numerator, numerator.length(), builder, status);
+            appendToImpl(numerator, builder, status);
         }
         if (denominator.length() > 0) {
             builder.append("-per-", status);
-            appendToImpl(denominator, denominator.length(), builder, status);
+            appendToImpl(denominator, builder, status);
         }
+    }
+
+    char* build(UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
+        CharString builder;
+        appendTo(builder, status);
+        return builder.cloneData(status);
     }
 
     const SingleUnitList& getNumeratorUnits() const {
@@ -397,12 +423,17 @@ public:
         return numerator.length() + denominator.length() == 1;
     }
 
+    bool isEmpty() const {
+        return numerator.length() + denominator.length() == 0;
+    }
+
 private:
     SingleUnitList numerator;
     SingleUnitList denominator;
 
-    void appendToImpl(const SingleUnitList& unitList, int32_t len, CharString& builder, UErrorCode& status) const {
+    void appendToImpl(const SingleUnitList& unitList, CharString& builder, UErrorCode& status) const {
         bool first = true;
+        int32_t len = unitList.length();
         for (int32_t i = 0; i < len; i++) {
             if (first) {
                 first = false;
@@ -433,17 +464,63 @@ private:
     }
 };
 
-class UnitIdentifierParser {
+class SequenceUnit {
 public:
-    static UnitIdentifierParser from(StringPiece source, UErrorCode& status) {
+    typedef MaybeStackVector<CompoundUnit, 3> CompoundUnitList;
+
+    void append(CompoundUnit&& compoundUnit, UErrorCode& status) {
+        CompoundUnit* destination = units.emplaceBack();
+        if (!destination) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        *destination = std::move(compoundUnit);
+    }
+
+    void appendTo(CharString& builder, UErrorCode& status) const {
+        if (units.length() == 0) {
+            builder.append("one", status);
+            return;
+        }
+        bool isFirst = true;
+        for (int32_t i = 0; i < units.length(); i++) {
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                builder.append('+', status);
+            }
+            units[i]->appendTo(builder, status);
+        }
+    }
+
+    char* build(UErrorCode& status) {
         if (U_FAILURE(status)) {
-            return UnitIdentifierParser();
+            return nullptr;
+        }
+        CharString builder;
+        appendTo(builder, status);
+        return builder.cloneData(status);
+    }
+
+    const CompoundUnitList& getUnits() const {
+        return units;
+    }
+
+private:
+    CompoundUnitList units;
+};
+
+class Parser {
+public:
+    static Parser from(StringPiece source, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return Parser();
         }
         umtx_initOnce(gUnitExtrasInitOnce, &initUnitExtras, status);
         if (U_FAILURE(status)) {
-            return UnitIdentifierParser();
+            return Parser();
         }
-        return UnitIdentifierParser(source);
+        return Parser(source);
     }
 
     bool hasNext() const {
@@ -474,7 +551,10 @@ public:
             int32_t previ = fIndex;
             SingleUnit singleUnit;
             nextSingleUnit(singleUnit, sawPlus, status);
-            if (sawPlus) {
+            if (U_FAILURE(status)) {
+                return;
+            }
+            if (sawPlus && !result.isEmpty()) {
                 fIndex = previ;
                 break;
             }
@@ -497,6 +577,19 @@ public:
         return retval;
     }
 
+    SequenceUnit getOnlySequenceUnit(UErrorCode& status) {
+        SequenceUnit retval;
+        while (hasNext()) {
+            CompoundUnit compoundUnit;
+            nextCompoundUnit(compoundUnit, status);
+            if (U_FAILURE(status)) {
+                return retval;
+            }
+            retval.append(std::move(compoundUnit), status);
+        }
+        return retval;
+    }
+
 private:
     int32_t fIndex = 0;
     StringPiece fSource;
@@ -504,9 +597,9 @@ private:
 
     bool fAfterPer = false;
 
-    UnitIdentifierParser() : fSource(""), fTrie(u"") {}
+    Parser() : fSource(""), fTrie(u"") {}
 
-    UnitIdentifierParser(StringPiece source)
+    Parser(StringPiece source)
         : fSource(source), fTrie(kSerializedUnitExtrasStemTrie) {}
 
     Token nextToken(UErrorCode& status) {
@@ -544,6 +637,11 @@ private:
     void nextSingleUnit(SingleUnit& result, bool& sawPlus, UErrorCode& status) {
         sawPlus = false;
         if (U_FAILURE(status)) {
+            return;
+        }
+
+        if (!hasNext()) {
+            // probably "one"
             return;
         }
 
@@ -634,44 +732,22 @@ private:
 
 
 MeasureUnit MeasureUnit::forIdentifier(const char* identifier, UErrorCode& status) {
-    UnitIdentifierParser parser = UnitIdentifierParser::from(identifier, status);
-    if (U_FAILURE(status)) {
-        // Unrecoverable error
-        return MeasureUnit();
-    }
-
-    CharString builder;
-    while (parser.hasNext()) {
-        CompoundUnit compoundUnit;
-        parser.nextCompoundUnit(compoundUnit, status);
-        if (U_FAILURE(status)) {
-            // Invalid syntax
-            return MeasureUnit();
-        }
-        if (builder.length() > 0) {
-            builder.append('+', status);
-        }
-        compoundUnit.appendTo(builder, status);
-    }
-
-    // Success
-    return MeasureUnit(builder.cloneData(status));
+    return Parser::from(identifier, status).getOnlySequenceUnit(status).build(status);
 }
 
 UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
     const char* id = getIdentifier();
-    UnitIdentifierParser parser = UnitIdentifierParser::from(id, status);
+    Parser parser = Parser::from(id, status);
     if (U_FAILURE(status)) {
-        // Unrecoverable error
         return UMEASURE_UNIT_SINGLE;
     }
 
     CompoundUnit compoundUnit;
     parser.nextCompoundUnit(compoundUnit, status);
-    if (compoundUnit.isSingle()) {
-        return UMEASURE_UNIT_SINGLE;
-    } else if (parser.hasNext()) {
+    if (parser.hasNext()) {
         return UMEASURE_UNIT_SEQUENCE;
+    } else if (compoundUnit.isSingle()) {
+        return UMEASURE_UNIT_SINGLE;
     } else {
         return UMEASURE_UNIT_COMPOUND;
     }
@@ -679,65 +755,44 @@ UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
 
 UMeasureSIPrefix MeasureUnit::getSIPrefix(UErrorCode& status) const {
     const char* id = getIdentifier();
-    return UnitIdentifierParser::from(id, status).getOnlySingleUnit(status).siPrefix;
+    return Parser::from(id, status).getOnlySingleUnit(status).siPrefix;
 }
 
 MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const {
     const char* id = getIdentifier();
-    SingleUnit singleUnit = UnitIdentifierParser::from(id, status).getOnlySingleUnit(status);
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-
+    SingleUnit singleUnit = Parser::from(id, status).getOnlySingleUnit(status);
     singleUnit.siPrefix = prefix;
-    CharString builder;
-    singleUnit.appendTo(builder, status);
-    return MeasureUnit(builder.cloneData(status));
+    return singleUnit.build(status);
 }
 
 int8_t MeasureUnit::getPower(UErrorCode& status) const {
     const char* id = getIdentifier();
-    return UnitIdentifierParser::from(id, status).getOnlySingleUnit(status).power;
+    return Parser::from(id, status).getOnlySingleUnit(status).power;
 }
 
 MeasureUnit MeasureUnit::withPower(int8_t power, UErrorCode& status) const {
     const char* id = getIdentifier();
-    SingleUnit singleUnit = UnitIdentifierParser::from(id, status).getOnlySingleUnit(status);
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-
-    CharString builder;
+    SingleUnit singleUnit = Parser::from(id, status).getOnlySingleUnit(status);
     singleUnit.power = power;
-    if (power < 0) {
-        builder.append("one-per-", status);
-    }
-    singleUnit.appendTo(builder, status);
-    return MeasureUnit(builder.cloneData(status));
+    return singleUnit.build(status);
 }
 
 MeasureUnit MeasureUnit::reciprocal(UErrorCode& status) const {
     const char* id = getIdentifier();
-    CompoundUnit compoundUnit = UnitIdentifierParser::from(id, status).getOnlyCompoundUnit(status);
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-
-    compoundUnit.reciprocal();
-    CharString builder;
-    compoundUnit.appendTo(builder, status);
-    return MeasureUnit(builder.cloneData(status));
+    CompoundUnit compoundUnit = Parser::from(id, status).getOnlyCompoundUnit(status);
+    compoundUnit.takeReciprocal();
+    return compoundUnit.build(status);
 }
 
 MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) const {
     const char* id = getIdentifier();
-    CompoundUnit compoundUnit = UnitIdentifierParser::from(id, status).getOnlyCompoundUnit(status);
+    CompoundUnit compoundUnit = Parser::from(id, status).getOnlyCompoundUnit(status);
     if (U_FAILURE(status)) {
         return *this;
     }
 
     // Append other's first CompoundUnit to compoundUnit, then assert other has only one
-    UnitIdentifierParser otherParser = UnitIdentifierParser::from(other.getIdentifier(), status);
+    Parser otherParser = Parser::from(other.getIdentifier(), status);
     otherParser.nextCompoundUnit(compoundUnit, status);
     if (U_FAILURE(status)) {
         return *this;
@@ -747,16 +802,14 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
         return *this;
     }
 
-    CharString builder;
-    compoundUnit.appendTo(builder, status);
-    return MeasureUnit(builder.cloneData(status));
+    return compoundUnit.build(status);
 }
 
 LocalArray<MeasureUnit> MeasureUnit::getSingleUnits(UErrorCode& status) const {
     const char* id = getIdentifier();
-    CompoundUnit compoundUnit = UnitIdentifierParser::from(id, status).getOnlyCompoundUnit(status);
+    CompoundUnit compoundUnit = Parser::from(id, status).getOnlyCompoundUnit(status);
     if (U_FAILURE(status)) {
-        return LocalArray<MeasureUnit>::withLength(nullptr, 0);
+        return LocalArray<MeasureUnit>();
     }
 
     const CompoundUnit::SingleUnitList& numerator = compoundUnit.getNumeratorUnits();
@@ -764,16 +817,30 @@ LocalArray<MeasureUnit> MeasureUnit::getSingleUnits(UErrorCode& status) const {
     int32_t count = numerator.length() + denominator.length();
     MeasureUnit* arr = new MeasureUnit[count];
 
-    CharString builder;
     int32_t i = 0;
     for (int32_t j = 0; j < numerator.length(); j++) {
-        numerator[j]->appendTo(builder.clear(), status);
-        arr[i++] = MeasureUnit(builder.cloneData(status));
+        arr[i++] = numerator[j]->build(status);
     }
     for (int32_t j = 0; j < denominator.length(); j++) {
-        builder.clear().append("one-per-", status);
-        denominator[j]->appendTo(builder, status);
-        arr[i++] = MeasureUnit(builder.cloneData(status));
+        arr[i++] = denominator[j]->build(status);
+    }
+
+    return LocalArray<MeasureUnit>::withLength(arr, count);
+}
+
+LocalArray<MeasureUnit> MeasureUnit::getCompoundUnits(UErrorCode& status) const {
+    const char* id = getIdentifier();
+    SequenceUnit sequenceUnit = Parser::from(id, status).getOnlySequenceUnit(status);
+    if (U_FAILURE(status)) {
+        return LocalArray<MeasureUnit>();
+    }
+
+    const SequenceUnit::CompoundUnitList& unitVector = sequenceUnit.getUnits();
+    int32_t count = unitVector.length();
+    MeasureUnit* arr = new MeasureUnit[count];
+
+    for (int32_t i = 0; i < count; i++) {
+        arr[i] = unitVector[i]->build(status);
     }
 
     return LocalArray<MeasureUnit>::withLength(arr, count);

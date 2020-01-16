@@ -378,9 +378,9 @@ public:
      * @param p simple pointer to an array of T objects that is adopted
      * @stable ICU 4.4
      */
-    explicit LocalArray(T *p=NULL) : LocalPointerBase<T>(p) {}
+    explicit LocalArray(T *p=nullptr) : LocalPointerBase<T>(p), fLength(p==nullptr?0:-1) {}
     /**
-     * Constructor takes ownership and reports an error if NULL.
+     * Constructor takes ownership and reports an error if nullptr.
      *
      * This constructor is intended to be used with other-class constructors
      * that may report a failure UErrorCode,
@@ -389,11 +389,11 @@ public:
      *
      * @param p simple pointer to an array of T objects that is adopted
      * @param errorCode in/out UErrorCode, set to U_MEMORY_ALLOCATION_ERROR
-     *     if p==NULL and no other failure code had been set
+     *     if p==nullptr and no other failure code had been set
      * @stable ICU 56
      */
-    LocalArray(T *p, UErrorCode &errorCode) : LocalPointerBase<T>(p) {
-        if(p==NULL && U_SUCCESS(errorCode)) {
+    LocalArray(T *p, UErrorCode &errorCode) : LocalArray<T>(p) {
+        if(p==nullptr && U_SUCCESS(errorCode)) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     }
@@ -402,8 +402,8 @@ public:
      * @param src source smart pointer
      * @stable ICU 56
      */
-    LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
-        src.ptr=NULL;
+    LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalArray<T>(src.ptr) {
+        src.ptr=nullptr;
     }
 
     static LocalArray<T> withLength(T *p, int32_t length) {
@@ -422,7 +422,7 @@ public:
      * @draft ICU 64
      */
     explicit LocalArray(std::unique_ptr<T[]> &&p)
-        : LocalPointerBase<T>(p.release()) {}
+        : LocalArray<T>(p.release()) {}
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
@@ -442,7 +442,8 @@ public:
     LocalArray<T> &operator=(LocalArray<T> &&src) U_NOEXCEPT {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=src.ptr;
-        src.ptr=NULL;
+        src.ptr=nullptr;
+        fLength=src.fLength;
         return *this;
     }
 
@@ -457,6 +458,7 @@ public:
      */
     LocalArray<T> &operator=(std::unique_ptr<T[]> &&p) U_NOEXCEPT {
         adoptInstead(p.release());
+        fLength=-1;
         return *this;
     }
 #endif  /* U_HIDE_DRAFT_API */
@@ -470,6 +472,9 @@ public:
         T *temp=LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
+        int32_t tempLength=fLength;
+        fLength=other.fLength;
+        other.fLength=tempLength;
     }
     /**
      * Non-member LocalArray swap function.
@@ -489,6 +494,7 @@ public:
     void adoptInstead(T *p) {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=p;
+        fLength=-1;
     }
     /**
      * Deletes the array it owns,
@@ -515,6 +521,7 @@ public:
         } else {
             delete[] p;
         }
+        fLength=-1;
     }
     /**
      * Array item access (writable).
