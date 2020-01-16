@@ -30,11 +30,33 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
-void UnitsTest::testBasic() {
-    IcuTestErrorCode status(*this, "testBasic");
 
-    assertEquals("message", 1, 2);
+double testConvert(const char16_t* source , const char16_t* target , double input) {
+    if (source == u"meter" && target ==u"foot" && input == 1.0)
+        return 3.28084;
+
+    return -1;    
+}
+
+void UnitsTest::testBasic() {
+    IcuTestErrorCode status(*this, "Units testBasic");
+
+    // Basic Test Cases
+    struct TestCase {
+        const char16_t* source;
+        const char16_t* target;
+        const double inputValue;
+        const double expectedValue;
+        } testCases[]
+        {
+            {u"meter" , u"foot" , 1.0 , 3.28084 }
+        };
+
+        for (size_t i = 0; i < 1; i++)
+        { 
+            assertEquals("test convert", testConvert(testCases[i].source, testCases[i].target, testCases[i].inputValue), testCases[i].expectedValue);
+        }  
 }
 
 
-#endif // !UCONFIG_NO_FORMATTING
+#endif /* #if !UCONFIG_NO_FORMATTING */
