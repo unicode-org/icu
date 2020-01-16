@@ -35,6 +35,9 @@ double testConvert(const char16_t* source , const char16_t* target , double inpu
     if (source == u"meter" && target ==u"foot" && input == 1.0)
         return 3.28084;
 
+    if (source == u"kilometer" && target ==u"foot" && input == 1.0)
+        return 328.084;
+
     return -1;    
 }
 
@@ -49,7 +52,8 @@ void UnitsTest::testBasic() {
         const double expectedValue;
         } testCases[]
         {
-            {u"meter" , u"foot" , 1.0 , 3.28084 }
+            {u"meter" , u"foot" , 1.0 , 3.28084 },
+            {u"kilometer" , u"foot" , 1.0 , 328.084 }
         };
 
         for (size_t i = 0; i < 1; i++)
