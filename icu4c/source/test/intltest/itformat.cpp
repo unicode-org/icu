@@ -74,6 +74,7 @@ extern IntlTest *createScientificNumberFormatterTest();
 extern IntlTest *createFormattedValueTest();
 extern IntlTest *createFormattedStringBuilderTest();
 extern IntlTest *createStringSegmentTest();
+extern IntlTest *createUnitsTest();
 
 
 #define TESTCLASS(id, TestClass)          \
@@ -244,6 +245,15 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             logln("StringSegmentTest test---");
             logln((UnicodeString)"");
             LocalPointer<IntlTest> test(createStringSegmentTest());
+            callTest(*test, par);
+          }
+          break;
+        case 56:
+          name = "UnitsTest";
+          if (exec) {
+            logln("UnitsTest test---");
+            logln((UnicodeString)"");
+            LocalPointer<IntlTest> test(createUnitsTest());
             callTest(*test, par);
           }
           break;
