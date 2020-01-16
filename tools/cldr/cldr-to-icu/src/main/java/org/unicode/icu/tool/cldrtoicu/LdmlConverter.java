@@ -268,6 +268,10 @@ public final class LdmlConverter {
                 .flatMap(t -> TYPE_TO_DIR.get(t).stream())
                 .collect(toImmutableList());
 
+        if (splitDirs.isEmpty()) {
+          return;
+        }
+
         Map<IcuLocaleDir, DependencyGraph> graphMetadata = new HashMap<>();
         splitDirs.forEach(d -> graphMetadata.put(d, new DependencyGraph()));
 
