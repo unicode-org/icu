@@ -1,43 +1,288 @@
-﻿// TODO(CLDR-13488): This is a sample of the unitConstants and convertUnits
-// entries we intend to produce. Once all the plumbing is done, data is expected
-// to come from CDLR's common/supplemental/units.xml.
-//
-// The expected source XML for each of these lines is presented in comments.
-
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 units:table(nofallback){
+    cldrVersion{"36.1"}
     convertUnits{
         1{
-            one:table{
+            one{
                 factor{"1"}
             }
         }
+        bit{
+            byte{
+                factor{"8"}
+            }
+        }
         celsius{
-            fahrenheit:table{
+            fahrenheit{
                 factor{"5/9"}
                 offset{"-160/9"}
             }
-            kelvin:table{
+            kelvin{
                 factor{"1"}
                 offset{"273.15"}
             }
         }
-        square-meter{
-            hectare:table{
+        cubic-meter{
+            acre-foot{
+                factor{"ft2m^3 * 43560"}
+            }
+            barrel{
+                factor{"cup2m3 * 672"}
+            }
+            bushel{
+                factor{"0.03523907"}
+            }
+            cup{
+                factor{"cup2m3"}
+            }
+            cup-metric{
+                factor{"0.00025"}
+            }
+            fluid-ounce{
+                factor{"cup2m3/8"}
+            }
+            fluid-ounce-imperial{
+                factor{"0.00002841306"}
+            }
+            gallon{
+                factor{"cup2m3*16"}
+            }
+            gallon-imperial{
+                factor{"0.00454609"}
+            }
+            liter{
+                factor{"0.001"}
+            }
+            pint{
+                factor{"cup2m3 * 2"}
+            }
+            pint-metric{
+                factor{"0.0005"}
+            }
+            quart{
+                factor{"cup2m3 * 4"}
+            }
+            tablespoon{
+                factor{"cup2m3/16"}
+            }
+            teaspoon{
+                factor{"cup2m3/48"}
+            }
+        }
+        degree{
+            arc-minute{
+                factor{"1/60"}
+            }
+            arc-second{
+                factor{"1/360"}
+            }
+            radian{
+                factor{"180/PI"}
+            }
+            revolution{
+                factor{"360"}
+            }
+        }
+        kilogram{
+            carat{
+                factor{"0.0002"}
+            }
+            gram{
+                factor{"0.001"}
+            }
+            metric-ton{
+                factor{"1000"}
+            }
+            ounce{
+                factor{"lb2kg/16"}
+            }
+            ounce-troy{
+                factor{"0.03110348"}
+            }
+            pound{
+                factor{"lb2kg"}
+            }
+            stone{
+                factor{"lb2kg*14"}
+            }
+            ton{
+                factor{"lb2kg*2000"}
+            }
+        }
+        kilogram-meter-per-square-second{
+            newton{
+                factor{"1"}
+            }
+            pound-force{
+                factor{"lb2kg * gravity"}
+            }
+        }
+        kilogram-per-meter-square-second{
+            atmosphere{
+                factor{"101325"}
+            }
+            bar{
+                factor{"100000"}
+            }
+            inch-hg{
+                factor{"3386.389"}
+            }
+            pascal{
+                factor{"1"}
+            }
+        }
+        kilogram-square-meter-per-cubic-second{
+            watt{
+                factor{"1"}
+            }
+        }
+        kilogram-square-meter-per-cubic-second-ampere{
+            volt{
+                factor{"1"}
+            }
+        }
+        kilogram-square-meter-per-cubic-second-square-ampere{
+            ohm{
+                factor{"1"}
+            }
+        }
+        kilogram-square-meter-per-square-second{
+            calorie{
+                factor{"4.184"}
+            }
+            electronvolt{
+                factor{"1.602177E-19"}
+            }
+            foodcalorie{
+                factor{"4184"}
+            }
+            joule{
+                factor{"1"}
+            }
+            therm-us{
+                factor{"105506000"}
+            }
+        }
+        liter-per-kilometer{
+            mile-per-gallon{
+                factor{"235.215"}
+                reciprocal{"TRUE"}
+            }
+        }
+        meter{
+            astronomical-unit{
+                factor{"149597900000"}
+            }
+            centimeter{
+                factor{"1/100"}
+            }
+            fathom{
+                factor{"f2m * 6"}
+            }
+            foot{
+                factor{"f2m"}
+            }
+            furlong{
+                factor{"f2m*660"}
+            }
+            inch{
+                factor{"f2m/12"}
+            }
+            light-year{
+                factor{"9460730000000000"}
+            }
+            mile{
+                factor{"f2m*5280"}
+            }
+            mile-scandinavian{
                 factor{"10000"}
             }
-            acre:table{
+            nautical-mile{
+                factor{"1852"}
+            }
+            parsec{
+                factor{"30856780000000000"}
+            }
+            yard{
+                factor{"f2m*3"}
+            }
+        }
+        meter-per-second{
+            knot{
+                factor{"1852/3600"}
+            }
+        }
+        meter-per-square-second{
+            g-force{
+                factor{"gravity"}
+            }
+        }
+        one{
+            mole{
+                factor{"6.02214076E+23"}
+            }
+        }
+        one-per-one{
+            karat{
+                factor{"1/24"}
+            }
+            percent{
+                factor{"1/100"}
+            }
+            permille{
+                factor{"1/1000"}
+            }
+            permyriad{
+                factor{"1/10000"}
+            }
+        }
+        one-per-second{
+            hertz{
+                factor{"1"}
+            }
+        }
+        second{
+            day{
+                factor{"86400"}
+            }
+            day-person{
+                factor{"86400"}
+            }
+            hour{
+                factor{"3600"}
+            }
+            minute{
+                factor{"3600"}
+            }
+            week{
+                factor{"604800"}
+            }
+            week-person{
+                factor{"604800"}
+            }
+        }
+        square-meter{
+            acre{
                 factor{"f2m^2 * 43560"}
             }
-            dunam:table{
+            dunam{
                 factor{"1000"}
+            }
+            hectare{
+                factor{"10000"}
+            }
+        }
+        square-meter-kilogram-per-cubic-second{
+            horsepower{
+                factor{"ft2m * lb2kg * gravity * 550"}
             }
         }
     }
     unitConstants{
-        f2m{"0.3048"}
-        lb2kg{"0.45359237"}
-        gravity{"9.80665"}
         PI{"3.1415926535897932384626433832795"}
-        cup2m3{"231*f2m*f2m*f2m/16*12*12*12"}
+        f2m{"0.3048"}
+        gravity{"9.80665"}
+        lb2kg{"0.45359237"}
     }
 }
