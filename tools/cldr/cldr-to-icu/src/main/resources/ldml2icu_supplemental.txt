@@ -151,15 +151,18 @@
     ; /unitConstants/$1 ; values=$2
 
 //supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"]
-    ; /convertUnits/$2/$1/factor ; values="$3"
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
 
 //supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"][@offset="(%A)"]
-    ; /convertUnits/$2/$1/factor ; values="$3"
-    ; /convertUnits/$2/$1/offset ; values=$4
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/offset ; values=$4
 
 //supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"][@reciprocal="(%A)"]
-    ; /convertUnits/$2/$1/factor ; values="$3"
-    ; /convertUnits/$2/$1/reciprocal ; values=$4
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/reciprocal ; values=$4
 
 # languageInfo.xml
 
