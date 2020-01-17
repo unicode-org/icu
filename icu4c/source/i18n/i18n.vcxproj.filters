@@ -648,6 +648,9 @@
     <ClCompile Include="erarules.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="unitconverter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bocsu.cpp">
@@ -987,6 +990,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="umsg_imp.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="unitconveter.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="vzone.h">

@@ -114,7 +114,8 @@ numparse_symbols.o numparse_decimal.o numparse_scientific.o numparse_currency.o 
 numparse_affixes.o numparse_compositions.o numparse_validators.o \
 numrange_fluent.o numrange_impl.o \
 erarules.o \
-formattedvalue.o formattedval_iterimpl.o formattedval_sbimpl.o formatted_string_builder.o
+formattedvalue.o formattedval_iterimpl.o formattedval_sbimpl.o formatted_string_builder.o \
+unitconverter.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h
