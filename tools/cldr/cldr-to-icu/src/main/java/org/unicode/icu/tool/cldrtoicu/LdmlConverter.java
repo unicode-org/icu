@@ -269,7 +269,7 @@ public final class LdmlConverter {
                 .collect(toImmutableList());
 
         if (splitDirs.isEmpty()) {
-          return;
+            return;
         }
 
         Map<IcuLocaleDir, DependencyGraph> graphMetadata = new HashMap<>();
