@@ -4,7 +4,7 @@
 //
 // The expected source XML for each of these lines is presented in comments.
 
-supplementalData:table(nofallback){
+units:table(nofallback){
     unitConstants{
         // <unitConstant constant="f2m" value="0.3048"/>
         f2m{"0.3048"}
