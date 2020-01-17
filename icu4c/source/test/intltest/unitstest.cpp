@@ -32,7 +32,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testMass);
-    TESTCASE_AUTO(testTemprature);
+    TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO_END;
 }
 
@@ -96,8 +96,8 @@ void UnitsTest::testMass() {
         }
 }
 
-void UnitsTest::testTemprature() {
-    IcuTestErrorCode status(*this, "Units testTemprature");
+void UnitsTest::testTemperature() {
+    IcuTestErrorCode status(*this, "Units testTemperature");
     // Test Cases
     struct TestCase 
     {
