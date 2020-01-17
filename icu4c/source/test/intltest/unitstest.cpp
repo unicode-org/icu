@@ -17,9 +17,10 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
     void testBasic();
+    void testSiPrefixes();
     void testMass();
     void testTemperature();
-    void testSiPrefixes();
+    void testArea();
 };
 
 extern IntlTest *createUnitsTest()
@@ -35,9 +36,10 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testBasic);
+    TESTCASE_AUTO(testSiPrefixes);
     TESTCASE_AUTO(testMass);
     TESTCASE_AUTO(testTemperature);
-    TESTCASE_AUTO(testSiPrefixes);
+    TESTCASE_AUTO(testArea);
     TESTCASE_AUTO_END;
 }
 
@@ -144,6 +146,28 @@ void UnitsTest::testTemperature()
         {u"kelvin", u"fahrenheit", 300, 80.33},
         {u"kelvin", u"celsius", 0.0, -273.15},
         {u"kelvin", u"celsius", 300.0, 26.85}};
+
+    for (const auto &testCase : testCases)
+    {
+        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue), testCase.expectedValue);
+    }
+}
+
+void UnitsTest::testArea()
+{
+    IcuTestErrorCode status(*this, "Units Area");
+
+    // Test Cases
+    struct TestCase
+    {
+        const char16_t *source;
+        const char16_t *target;
+        const double inputValue;
+        const double expectedValue;
+    } testCases[]{
+        {u"square-meter", u"square-yard", 10.0, 11.9599},
+        {u"hectare", u"square-yard", 1.0, 11959.9},
+        {u"square-mile", u"square-foot", 0.0001, 2787.84}};
 
     for (const auto &testCase : testCases)
     {
