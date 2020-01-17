@@ -5,9 +5,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <vector>
 
 #include "intltest.h"
+#include "unicode/unistr.h"
 
 class UnitsTest : public IntlTest {
   public:
@@ -38,11 +38,11 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 }
 
 // Just for testing quick conversion ability.
-double testConvert(const char16_t *source, const char16_t *target, double input) {
+double testConvert(UnicodeString source, UnicodeString target, double input) {
     if (source == u"meter" && target == u"foot" && input == 1.0)
         return 3.28084;
 
-    if (source == u"kilometer" && target == u"foot" && input == 1.0)
+    if ( source == u"kilometer" && target == u"foot" && input == 1.0)
         return 328.084;
 
     return -1;
