@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <vector>
+
 #include "intltest.h"
 
 
@@ -15,6 +17,7 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
 
     void testBasic();
+    void testMass();
 };
 
 extern IntlTest *createUnitsTest() {
@@ -27,6 +30,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testBasic);
+    TESTCASE_AUTO(testMass);
     TESTCASE_AUTO_END;
 }
 
@@ -56,10 +60,38 @@ void UnitsTest::testBasic() {
             {u"kilometer" , u"foot" , 1.0 , 328.084 }
         };
 
-        for (size_t i = 0; i < 1; i++)
-        { 
-            assertEquals("test convert", testConvert(testCases[i].source, testCases[i].target, testCases[i].inputValue), testCases[i].expectedValue);
-        }  
+        for (const auto& testCase : testCases) 
+        {
+            assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue), testCase.expectedValue);
+        }
+}
+
+void UnitsTest::testMass() {
+    IcuTestErrorCode status(*this, "Units testMass");
+    ;
+    // Test Cases
+    struct TestCase 
+    {
+        const char16_t* source;
+        const char16_t* target;
+        const double inputValue;
+        const double expectedValue;
+    } testCases[] 
+        {
+            {u"gram", u"kilogram" , 1.0 , 0.001 },
+            {u"pound", u"kilogram" , 1.0 , 0.453592 },
+            {u"pound", u"kilogram" , 2.0 , 0.907185 },
+            {u"ounce", u"pound" , 16.0 , 1.0 },
+            {u"ounce", u"kilogram" , 16.0 , 0.453592 },
+            {u"ton" , u"pound" , 1.0 , 2000 },
+            {u"stone" , u"pound" , 1.0 , 14 },
+            {u"stone" , u"kilogram" , 1.0 , 6.35029 }
+        };
+
+        for (const auto& testCase : testCases) 
+        {
+            assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue), testCase.expectedValue);
+        }
 }
 
 
