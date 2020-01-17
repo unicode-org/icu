@@ -147,8 +147,8 @@
 
 # units.xml
 
-//supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%N)"]
-    ; /unitConstants/$1 ; values=$2
+//supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%A)"]
+    ; /unitConstants/$1 ; values="$2"
 
 //supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"]
     ; /convertUnits/$1/target ; values=$2

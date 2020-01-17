@@ -313,9 +313,9 @@ units:table(nofallback){
     }
     unitConstants{
         PI{"3.1415926535897932384626433832795"}
+        cup2m3{"231*f2m*f2m*f2m/16*12*12*12"}
         f2m{"0.3048"}
         gravity{"9.80665"}
         lb2kg{"0.45359237"}
-        cup2m3{"231*f2m*f2m*f2m/16*12*12*12"}
     }
 }
