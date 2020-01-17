@@ -731,7 +731,7 @@ private:
 } // namespace
 
 
-MeasureUnit MeasureUnit::forIdentifier(const char* identifier, UErrorCode& status) {
+MeasureUnit MeasureUnit::forIdentifier(StringPiece identifier, UErrorCode& status) {
     return Parser::from(identifier, status).getOnlySequenceUnit(status).build(status);
 }
 

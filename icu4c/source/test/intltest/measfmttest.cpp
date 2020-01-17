@@ -3355,6 +3355,11 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     meterSecond.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 
+    // Test that StringPiece does not overflow
+    MeasureUnit kiloSquareSecond2 = MeasureUnit::forIdentifier({secondCentimeter.getIdentifier(), 17}, status);
+    verifySingleUnit(kiloSquareSecond2, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond");
+    assertTrue("string piece equality", kiloSquareSecond == kiloSquareSecond2);
+
     MeasureUnit footInch = MeasureUnit::forIdentifier("foot+inch", status);
     MeasureUnit inchFoot = MeasureUnit::forIdentifier("inch+foot", status);
 

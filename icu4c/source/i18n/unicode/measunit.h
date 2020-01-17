@@ -265,7 +265,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param status Set if the identifier is invalid.
      * @draft ICU 67
      */
-    static MeasureUnit forIdentifier(const char* identifier, UErrorCode& status);
+    static MeasureUnit forIdentifier(StringPiece identifier, UErrorCode& status);
 
     /**
      * Copy assignment operator.
