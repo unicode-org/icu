@@ -1,0 +1,54 @@
+﻿// TODO(CLDR-13488): This is a sample of the unitConstants and convertUnits
+// entries we intend to produce. Once all the plumbing is done, data is expected
+// to come from CDLR's common/supplemental/units.xml.
+//
+// The expected source XML for each of these lines is presented in comments.
+
+supplementalData:table(nofallback){
+    unitConstants{
+        // <unitConstant constant="f2m" value="0.3048"/>
+        f2m{"0.3048"}
+        // <unitConstant constant="lb2kg" value="0.45359237"/>
+        lb2kg{"0.45359237"}
+        // <unitConstant constant="gravity" value="9.80665"/>
+        gravity{"9.80665"}
+        // <unitConstant constant="PI" value="3.1415926535897932384626433832795"/>
+        PI{"3.1415926535897932384626433832795"}
+        // <unitConstant constant="cup2m3" value="231*f2m*f2m*f2m/16*12*12*12"/>
+        cup2m3{"231*f2m*f2m*f2m/16*12*12*12"}
+    }
+    convertUnits{
+        // <convertUnit source='one' target='1' factor='1'/>
+        1{
+            one:table{
+                factor{"1"}
+            }
+        }
+        // <convertUnit source='fahrenheit' target='celsius' factor='5/9' offset='-160/9'/>
+        // <convertUnit source='kelvin' target='celsius' factor='1' offset='273.15'/>
+        celsius{
+            fahrenheit:table{
+                factor{"5/9"}
+                offset{"-160/9"}
+            }
+            kelvin:table{
+                factor{"1"}
+                offset{"273.15"}
+            }
+        }
+        // <convertUnit source='hectare' target='square-meter' factor='10000'/>
+        // <convertUnit source='acre' target='square-meter' factor='f2m^2 * 43560'/>
+        // <convertUnit source='dunam' target='square-meter' factor='1000'/>
+        square-meter{
+            hectare:table{
+                factor{"10000"}
+            }
+            acre:table{
+                factor{"f2m^2 * 43560"}
+            }
+            dunam:table{
+                factor{"1000"}
+            }
+        }
+    }
+}
