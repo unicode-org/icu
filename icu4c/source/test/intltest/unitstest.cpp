@@ -18,6 +18,7 @@ public:
 
     void testBasic();
     void testMass();
+    void testTemprature();
 };
 
 extern IntlTest *createUnitsTest() {
@@ -31,6 +32,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testMass);
+    TESTCASE_AUTO(testTemprature);
     TESTCASE_AUTO_END;
 }
 
@@ -68,7 +70,7 @@ void UnitsTest::testBasic() {
 
 void UnitsTest::testMass() {
     IcuTestErrorCode status(*this, "Units testMass");
-    ;
+
     // Test Cases
     struct TestCase 
     {
@@ -86,6 +88,33 @@ void UnitsTest::testMass() {
             {u"ton" , u"pound" , 1.0 , 2000 },
             {u"stone" , u"pound" , 1.0 , 14 },
             {u"stone" , u"kilogram" , 1.0 , 6.35029 }
+        };
+
+        for (const auto& testCase : testCases) 
+        {
+            assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue), testCase.expectedValue);
+        }
+}
+
+void UnitsTest::testTemprature() {
+    IcuTestErrorCode status(*this, "Units testTemprature");
+    // Test Cases
+    struct TestCase 
+    {
+        const char16_t* source;
+        const char16_t* target;
+        const double inputValue;
+        const double expectedValue;
+    } testCases[] 
+        {
+            {u"celsius", u"fahrenheit" , 0.0 , 32.0 },
+            {u"celsius", u"fahrenheit" , 10.0 , 50.0 },
+            {u"fahrenheit", u"celsius" , 32.0 , 0.0 },
+            {u"fahrenheit", u"celsius" , 89.6 , 32 },
+            {u"kelvin", u"fahrenheit" , 0.0 , -459.67 },
+            {u"kelvin", u"fahrenheit" , 300 , 80.33 },
+            {u"kelvin", u"celsius" , 0.0 , -273.15 },
+            {u"kelvin", u"celsius" , 300.0 , 26.85 },
         };
 
         for (const auto& testCase : testCases) 
