@@ -18,37 +18,37 @@ units:table(nofallback){
         cup2m3{"231*f2m*f2m*f2m/16*12*12*12"}
     }
     convertUnits{
-        // <convertUnit source='one' target='1' factor='1'/>
-        1{
-            one:table{
-                factor{"1"}
-            }
+        // <convertUnit source='one' target='one' factor='1'/>
+        one{
+            factor{"1"}
+            target{"one"}
         }
         // <convertUnit source='fahrenheit' target='celsius' factor='5/9' offset='-160/9'/>
         // <convertUnit source='kelvin' target='celsius' factor='1' offset='273.15'/>
-        celsius{
-            fahrenheit:table{
-                factor{"5/9"}
-                offset{"-160/9"}
-            }
-            kelvin:table{
-                factor{"1"}
-                offset{"273.15"}
-            }
+        fahrenheit{
+            factor{"5/9"}
+            offset{"-160/9"}
+            target{"celsius"}
+        }
+        kelvin{
+            factor{"1"}
+            offset{"273.15"}
+            target{"celsius"}
         }
         // <convertUnit source='hectare' target='square-meter' factor='10000'/>
         // <convertUnit source='acre' target='square-meter' factor='f2m^2 * 43560'/>
         // <convertUnit source='dunam' target='square-meter' factor='1000'/>
-        square-meter{
-            hectare:table{
-                factor{"10000"}
-            }
-            acre:table{
-                factor{"f2m^2 * 43560"}
-            }
-            dunam:table{
-                factor{"1000"}
-            }
+        hectare{
+            factor{"10000"}
+            target{"square-meter"}
+        }
+        acre{
+            factor{"f2m^2 * 43560"}
+            target{"square-meter"}
+        }
+        dunam{
+            factor{"1000"}
+            target{"square-meter"}
         }
     }
 }
