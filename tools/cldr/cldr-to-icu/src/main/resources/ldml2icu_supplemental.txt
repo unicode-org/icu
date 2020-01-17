@@ -145,6 +145,25 @@
 //supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"]
     ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
 
+# units.xml
+
+//supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%A)"]
+    ; /unitConstants/$1 ; values="$2"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"][@offset="(%A)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/offset ; values=$4
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"][@reciprocal="(%A)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/reciprocal ; values=$4
+
 # languageInfo.xml
 
 //supplementalData/languageMatching/languageMatches[@type="(%B)_new"]/paradigmLocales[@locales="(%A)"] ; /languageMatchingInfo/$1/paradigmLocales ; values=$2
