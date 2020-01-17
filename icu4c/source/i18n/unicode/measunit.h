@@ -31,6 +31,7 @@ U_NAMESPACE_BEGIN
 
 class StringEnumeration;
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for unit complexity. There are three levels:
  * 
@@ -223,6 +224,7 @@ typedef enum UMeasureSIPrefix {
      */
     UMEASURE_SI_PREFIX_YOCTO = -24
 } UMeasureSIPrefix;
+#endif // U_HIDE_DRAFT_API
 
 /**
  * A unit such as length, mass, volume, currency, etc.  A unit is
@@ -253,6 +255,7 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit(MeasureUnit &&other) noexcept;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
      * Validates and canonicalizes the identifier.
@@ -266,6 +269,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 67
      */
     static MeasureUnit forIdentifier(StringPiece identifier, UErrorCode& status);
+#endif // U_HIDE_DRAFT_API
 
     /**
      * Copy assignment operator.
@@ -326,6 +330,7 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     const char *getSubtype() const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Get the CLDR Sequence Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
@@ -452,6 +457,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @return An array of compound units, owned by the caller.
      */
     LocalArray<MeasureUnit> getCompoundUnits(UErrorCode& status) const;
+#endif // U_HIDE_DRAFT_API
 
     /**
      * getAvailable gets all of the available units.
