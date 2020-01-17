@@ -212,7 +212,7 @@ units:table(nofallback){
         }
         one{
             factor{"1"}
-            target{"1"}
+            target{"one"}
         }
         ounce{
             factor{"lb2kg/16"}
