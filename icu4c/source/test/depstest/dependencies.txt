@@ -1057,7 +1057,7 @@ group: sharedbreakiterator
 group: units_extra
     measunit_extra.o
   deps
-    units
+    units ucharstriebuilder ucharstrie uclean_i18n
 
 group: units
     measunit.o currunit.o nounit.o

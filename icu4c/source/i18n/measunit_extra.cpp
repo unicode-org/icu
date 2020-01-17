@@ -308,7 +308,7 @@ private:
     int32_t fMatch;
 };
 
-struct SingleUnit {
+struct SingleUnit : public UMemory {
     int8_t power = 1;
     UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
     int32_t simpleUnitIndex = 0;
@@ -372,7 +372,7 @@ struct SingleUnit {
     }
 };
 
-class CompoundUnit {
+class CompoundUnit : public UMemory {
 public:
     typedef MaybeStackVector<SingleUnit, 3> SingleUnitList;
 
@@ -464,7 +464,7 @@ private:
     }
 };
 
-class SequenceUnit {
+class SequenceUnit : public UMemory {
 public:
     typedef MaybeStackVector<CompoundUnit, 3> CompoundUnitList;
 
