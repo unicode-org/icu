@@ -54,8 +54,10 @@ $ mvn install:install-file \
   -DlocalRepositoryPath=. \
   -Dfile=<CLDR_ROOT>/tools/java/libs/utilities.jar
 
-And if you have updated one of these libraries, run:
+And if you have updated one of these libraries then from the main project directory
+(i.e. the parent of this directory) run:
 
 $ mvn dependency:purge-local-repository -DsnapshotsOnly=true
 
-If you choose to update the version number, then remember to update the root pom.xml.
+If you choose to update the version number of the snapshot, then remember to update the
+root pom.xml, but this is unlikely to be necessary.

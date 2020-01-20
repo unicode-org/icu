@@ -267,9 +267,14 @@ public final class LdmlConverter {
                 .filter(t -> t.getCldrType() == LDML)
                 .flatMap(t -> TYPE_TO_DIR.get(t).stream())
                 .collect(toImmutableList());
+        if (splitDirs.isEmpty()) {
+            return;
+        }
+
+        String cldrVersion = config.getCldrVersion();
 
         Map<IcuLocaleDir, DependencyGraph> graphMetadata = new HashMap<>();
-        splitDirs.forEach(d -> graphMetadata.put(d, new DependencyGraph()));
+        splitDirs.forEach(d -> graphMetadata.put(d, new DependencyGraph(cldrVersion)));
 
         SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
         Path baseDir = config.getOutputDir();
@@ -286,7 +291,7 @@ public final class LdmlConverter {
             CldrData unresolved = src.getDataForLocale(id, UNRESOLVED);
 
             BreakIteratorMapper.process(icuData, unresolved, specials);
-            CollationMapper.process(icuData, unresolved, specials);
+            CollationMapper.process(icuData, unresolved, specials, cldrVersion);
             RbnfMapper.process(icuData, unresolved, specials);
 
             CldrData resolved = src.getDataForLocale(id, RESOLVED);
@@ -332,7 +337,7 @@ public final class LdmlConverter {
                 });
 
                 if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
-                    splitData.setVersion(CldrDataSupplier.getCldrVersionString());
+                    splitData.setVersion(cldrVersion);
                     write(splitData, outDir, false);
                     writtenLocaleIds.put(dir, id);
                 }
@@ -510,7 +515,8 @@ public final class LdmlConverter {
         // A hack for "supplementalData.txt" since the "cldrVersion" value doesn't come from the
         // supplemental data XML files.
         if (addCldrVersion) {
-            icuData.add(RB_CLDR_VERSION, CldrDataSupplier.getCldrVersionString());
+            // Not the same path as used by "setVersion()"
+            icuData.add(RB_CLDR_VERSION, config.getCldrVersion());
         }
         write(icuData, dir);
     }
@@ -532,7 +538,7 @@ public final class LdmlConverter {
         } else {
             // These empty files only exist because the target of an alias has a parent locale
             // which is itself not in the set of written ICU files. An "indirect alias target".
-            icuData.setVersion(CldrDataSupplier.getCldrVersionString());
+            icuData.setVersion(config.getCldrVersion());
         }
         write(icuData, dir, false);
     }

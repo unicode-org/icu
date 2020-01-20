@@ -7,6 +7,7 @@ import static com.google.common.base.CharMatcher.is;
 import static com.google.common.base.CharMatcher.whitespace;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static com.google.common.collect.ImmutableTable.toImmutableTable;
@@ -17,12 +18,11 @@ import static org.unicode.cldr.api.CldrPath.parseDistinguishingPath;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -48,9 +48,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Table;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table.Cell;
-import com.google.common.collect.Tables;
 
 // Note: Auto-magical Ant methods are listed as "unused" by IDEs, unless the warning is suppressed.
 public final class ConvertIcuDataTask extends Task {
@@ -84,6 +83,11 @@ public final class ConvertIcuDataTask extends Task {
     @SuppressWarnings("unused")
     public void setCldrDir(Path path) {
         this.cldrPath = checkNotNull(path);
+    }
+
+    @SuppressWarnings("unused")
+    public void setCldrVersion(String cldrVersion) {
+        config.setCldrVersion(cldrVersion);
     }
 
     @SuppressWarnings("unused")
@@ -228,9 +232,45 @@ public final class ConvertIcuDataTask extends Task {
 
     @SuppressWarnings("unused")
     public void addConfiguredDirectory(Directory filter) {
-        perDirectoryIds.putAll(filter.dir, filter.localeIds.ids);
+        checkState(!perDirectoryIds.containsKey(filter.dir),
+            "directory %s specified twice", filter.dir);
+        ImmutableSet<String> ids = filter.localeIds.ids;
+        perDirectoryIds.putAll(filter.dir, ids);
+
+        // Check that any locale IDs marked to inherit the base language (instead of root) are
+        // listed in the set of generated locales.
         inheritLanguageSubtag.putAll(filter.dir, filter.inheritLanguageSubtag);
+        if (!ids.containsAll(filter.inheritLanguageSubtag)) {
+            log(String.format(
+                "WARNING: Locale IDs listed in 'inheritLanguageSubtag' should also be listed "
+                    + "in <localeIds> for that directory (%s): %s",
+                filter.dir, String.join(", ", Sets.difference(filter.inheritLanguageSubtag, ids))));
+            perDirectoryIds.putAll(filter.dir, filter.inheritLanguageSubtag);
+        }
+
+        // Check that locales specified for forced aliases in this directory are also listed in
+        // the set of generated locales.
         filter.forcedAliases.forEach(a -> config.addForcedAlias(filter.dir, a.source, a.target));
+        Set<String> sourceIds =
+            filter.forcedAliases.stream().map(a -> a.source).collect(Collectors.toSet());
+        if (!ids.containsAll(sourceIds)) {
+            Set<String> missingIds = Sets.difference(sourceIds, ids);
+            log(String.format(
+                "WARNING: Locale IDs listed as sources of a <forcedAlias> should also be listed "
+                    + "in <localeIds> for that directory (%s): %s",
+                filter.dir, String.join(", ", missingIds)));
+            perDirectoryIds.putAll(filter.dir, missingIds);
+        }
+        Set<String> targetIds =
+            filter.forcedAliases.stream().map(a -> a.target).collect(Collectors.toSet());
+        if (!ids.containsAll(targetIds)) {
+            Set<String> missingIds = Sets.difference(targetIds, ids);
+            log(String.format(
+                "WARNING: Locale IDs listed as targets of a <forcedAlias> should also be listed "
+                    + "in <localeIds> for that directory (%s): %s",
+                filter.dir, String.join(", ", missingIds)));
+            perDirectoryIds.putAll(filter.dir, missingIds);
+        }
     }
 
     // Aliases on the outside are applied to all directories.
@@ -320,10 +360,6 @@ public final class ConvertIcuDataTask extends Task {
         // inadvertantly joining two elements.
         localeIds = localeIds.replaceAll("//[^\n]*\n", "\n");
         return ImmutableSet.copyOf(LIST_SPLITTER.splitToList(localeIds));
-    }
-
-    private static Optional<IcuLocaleDir> resolveDir(String name) {
-        return !name.isEmpty() ? Optional.of(resolve(IcuLocaleDir.class, name)) : Optional.empty();
     }
 
     private static <T extends Enum<T>> T resolve(Class<T> enumClass, String name) {
