@@ -222,7 +222,7 @@ void AffixUtilsTest::testUnescapeWithSymbolProvider() {
         UnicodeString input(cas[0]);
         UnicodeString expected(cas[1]);
         sb.clear();
-        AffixUtils::unescape(input, sb, 0, provider, UNUM_FIELD_COUNT, status);
+        AffixUtils::unescape(input, sb, 0, provider, kUndefinedField, status);
         assertSuccess("Spot 1", status);
         assertEquals(input, expected, sb.toUnicodeString());
         assertEquals(input, expected, sb.toTempUnicodeString());
@@ -230,9 +230,9 @@ void AffixUtilsTest::testUnescapeWithSymbolProvider() {
 
     // Test insertion position
     sb.clear();
-    sb.append(u"abcdefg", UNUM_FIELD_COUNT, status);
+    sb.append(u"abcdefg", kUndefinedField, status);
     assertSuccess("Spot 2", status);
-    AffixUtils::unescape(u"-+%", sb, 4, provider, UNUM_FIELD_COUNT, status);
+    AffixUtils::unescape(u"-+%", sb, 4, provider, kUndefinedField, status);
     assertSuccess("Spot 3", status);
     assertEquals(u"Symbol provider into middle", u"abcd123efg", sb.toUnicodeString());
 }
@@ -240,7 +240,7 @@ void AffixUtilsTest::testUnescapeWithSymbolProvider() {
 UnicodeString AffixUtilsTest::unescapeWithDefaults(const SymbolProvider &defaultProvider,
                                                           UnicodeString input, UErrorCode &status) {
     FormattedStringBuilder nsb;
-    int32_t length = AffixUtils::unescape(input, nsb, 0, defaultProvider, UNUM_FIELD_COUNT, status);
+    int32_t length = AffixUtils::unescape(input, nsb, 0, defaultProvider, kUndefinedField, status);
     assertEquals("Return value of unescape", nsb.length(), length);
     return nsb.toUnicodeString();
 }

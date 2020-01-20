@@ -109,6 +109,10 @@ public final class LdmlConverter {
             "unitPreferenceData",
             "weekData",
             "weekOfPreference");
+    private static final PathMatcher UNITS_DATA_PATHS =
+        supplementalMatcher(
+            "convertUnits",
+            "unitConstants");
     private static final PathMatcher CURRENCY_DATA_PATHS =
         supplementalMatcher("currencyData");
     private static final PathMatcher NUMBERING_SYSTEMS_PATHS =
@@ -149,6 +153,7 @@ public final class LdmlConverter {
         GENDER_LIST(SUPPLEMENTAL),
         LIKELY_SUBTAGS(SUPPLEMENTAL),
         SUPPLEMENTAL_DATA(SUPPLEMENTAL),
+        UNITS(SUPPLEMENTAL),
         CURRENCY_DATA(SUPPLEMENTAL),
         METADATA(SUPPLEMENTAL),
         META_ZONES(SUPPLEMENTAL),
@@ -460,6 +465,10 @@ public final class LdmlConverter {
 
             case SUPPLEMENTAL_DATA:
                 processSupplemental("supplementalData", SUPPLEMENTAL_DATA_PATHS, "misc", true);
+                break;
+
+            case UNITS:
+                processSupplemental("units", UNITS_DATA_PATHS, "misc", true);
                 break;
 
             case CURRENCY_DATA:

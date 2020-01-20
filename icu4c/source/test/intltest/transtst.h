@@ -369,6 +369,7 @@ private:
      */
     void TestRegisterAlias(void);
 
+    void TestBasicTransliteratorEvenWithoutData(void);
     //======================================================================
     // Support methods
     //======================================================================
