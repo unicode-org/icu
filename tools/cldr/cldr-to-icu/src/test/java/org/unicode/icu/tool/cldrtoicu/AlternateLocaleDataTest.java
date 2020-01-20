@@ -21,6 +21,7 @@ import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.testing.FakeDataSupplier;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableTable;
 
 @RunWith(JUnit4.class)
 public class AlternateLocaleDataTest {
@@ -45,14 +46,16 @@ public class AlternateLocaleDataTest {
         FakeDataSupplier src = new FakeDataSupplier()
             .addLocaleData("xx", target, source, other)
             .addInheritedData("xx", inherited);
-        CldrDataSupplier transformed =
-            AlternateLocaleData.transform(src, ImmutableMap.of(target.getPath(), source.getPath()));
+        CldrDataSupplier transformed = AlternateLocaleData.transform(
+            src,
+            ImmutableMap.of(target.getPath(), source.getPath()),
+            ImmutableTable.of());
 
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
 
-        assertValuesUnordered(unresolved, altValue, source, other);
-        assertValuesUnordered(resolved, altValue, source, other, inherited);
+        assertValuesUnordered(unresolved, altValue, other);
+        assertValuesUnordered(resolved, altValue, other, inherited);
     }
 
     @Test
@@ -64,8 +67,10 @@ public class AlternateLocaleDataTest {
             ldml("numbers/currencies/currency[@type=\"USD\"][@alt=\"short\"]/displayName", "Name");
 
         FakeDataSupplier src = new FakeDataSupplier().addLocaleData("xx", target);
-        CldrDataSupplier transformed =
-            AlternateLocaleData.transform(src, ImmutableMap.of(target.getPath(), source.getPath()));
+        CldrDataSupplier transformed = AlternateLocaleData.transform(
+            src,
+            ImmutableMap.of(target.getPath(), source.getPath()),
+            ImmutableTable.of());
 
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
@@ -85,14 +90,15 @@ public class AlternateLocaleDataTest {
 
         FakeDataSupplier src = new FakeDataSupplier().addLocaleData("xx", source);
         CldrDataSupplier transformed =
-            AlternateLocaleData.transform(src, ImmutableMap.of(target.getPath(), source.getPath()));
+            AlternateLocaleData.transform(src, ImmutableMap.of(target.getPath(), source.getPath()),
+            ImmutableTable.of());
 
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
 
-        // No change because there's nothing to replace.
-        assertValuesUnordered(unresolved, source);
-        assertValuesUnordered(resolved, source);
+        // We still remove the source even if there was no target.
+        assertValuesUnordered(unresolved);
+        assertValuesUnordered(resolved);
     }
 
     @Test
@@ -106,7 +112,8 @@ public class AlternateLocaleDataTest {
         FakeDataSupplier src = new FakeDataSupplier();
         IllegalArgumentException e = assertThrows(
             IllegalArgumentException.class,
-            () -> AlternateLocaleData.transform(src, ImmutableMap.of(target, source)));
+            () -> AlternateLocaleData.transform(
+                src, ImmutableMap.of(target, source), ImmutableTable.of()));
         assertThat(e).hasMessageThat().contains("alternate paths must have the same namespace");
         assertThat(e).hasMessageThat().contains(target.toString());
         assertThat(e).hasMessageThat().contains(source.toString());
@@ -134,7 +141,8 @@ public class AlternateLocaleDataTest {
         FakeDataSupplier src = new FakeDataSupplier();
         IllegalArgumentException e = assertThrows(
             IllegalArgumentException.class,
-            () -> AlternateLocaleData.transform(src, ImmutableMap.of(target, source)));
+            () -> AlternateLocaleData.transform(
+                src, ImmutableMap.of(target, source), ImmutableTable.of()));
         assertThat(e).hasMessageThat().contains("only locale data (LDML) is supported");
         // At least one of the paths should be in the error message, so look for common substring.
         assertThat(e).hasMessageThat().contains("/weekData/firstDay[@day=\"sun\"]");
