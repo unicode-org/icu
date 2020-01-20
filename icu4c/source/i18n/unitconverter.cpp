@@ -20,13 +20,26 @@ namespace {
 //////////////////////////
 
 // Loaded Data Skeleton.
+enum Constants {
+    CONSTANT_FT2M, // ft2m stand for foot to meter.
+    CONSTANT_PI,
+    CONSTANT_G,      // G stands for Gravity.
+    CONSTANT_CUP2M3, // CUP2M3 stand for cup to cubic meter.
+
+    // Must be the last element.
+    CONSTANTS_COUNT
+};
+
+struct Factor {
+    int64_t factorNum;
+    int64_t factorDen;
+    int8_t constants[CONSTANTS_COUNT] = {};
+};
+
 struct ConvertUnit {
     UnicodeString source;
     UnicodeString target;
-    int32_t factorNum;
-    int32_t factorDen;
-    int32_t offsetNum;
-    int32_t offsetDen;
+    Factor factor;
     bool reciprocal;
 };
 
