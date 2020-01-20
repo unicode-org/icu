@@ -33,7 +33,7 @@ const DecimalQuantity* validateUFormattedNumberToDecimalQuantity(
  */
 class UFormattedNumberData : public FormattedValueStringBuilderImpl {
 public:
-    UFormattedNumberData() : FormattedValueStringBuilderImpl(0) {}
+    UFormattedNumberData() : FormattedValueStringBuilderImpl(kUndefinedField) {}
     virtual ~UFormattedNumberData();
 
     DecimalQuantity quantity;

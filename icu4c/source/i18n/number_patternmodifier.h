@@ -180,7 +180,7 @@ class U_I18N_API MutablePatternModifier
 
     bool isStrong() const U_OVERRIDE;
 
-    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+    bool containsField(Field field) const U_OVERRIDE;
 
     void getParameters(Parameters& output) const U_OVERRIDE;
 

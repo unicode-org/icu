@@ -37,7 +37,7 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
 
     bool isStrong() const U_OVERRIDE;
 
-    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+    bool containsField(Field field) const U_OVERRIDE;
 
     void getParameters(Parameters& output) const U_OVERRIDE;
 
@@ -73,7 +73,7 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
 
     bool isStrong() const U_OVERRIDE;
 
-    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+    bool containsField(Field field) const U_OVERRIDE;
 
     void getParameters(Parameters& output) const U_OVERRIDE;
 
@@ -166,7 +166,7 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
 
     bool isStrong() const U_OVERRIDE;
 
-    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+    bool containsField(Field field) const U_OVERRIDE;
 
     void getParameters(Parameters& output) const U_OVERRIDE;
 
@@ -255,7 +255,7 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
         return fStrong;
     }
 
-    bool containsField(UNumberFormatFields field) const U_OVERRIDE {
+    bool containsField(Field field) const U_OVERRIDE {
         (void)field;
         return false;
     }
