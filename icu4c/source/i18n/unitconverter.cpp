@@ -6,9 +6,11 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "charstr.h"
+#include "number_decnum.h"
 #include "resource.h"
 #include "unicode/stringpiece.h"
 #include "unicode/unistr.h"
+#include "unicode/utypes.h"
 #include "uresimp.h"
 
 U_NAMESPACE_BEGIN
@@ -79,6 +81,52 @@ class UnitConversionRatesSink : public ResourceSink {
   private:
     ConvertUnit *convertUnit;
 };
+
+void addFactorElement(Factor &factor, const UnicodeString &stringFactor, int32_t start, int32_t length,
+                      int32_t signal, UErrorCode &status) {
+    if (stringFactor.compare(start, length, u"ft2m")) {
+        factor.constants[CONSTANT_FT2M] += signal;
+    } else if (stringFactor.compare(start, length, u"G")) {
+        factor.constants[CONSTANT_G] += signal;
+    } else if (stringFactor.compare(start, length, u"cup2m3")) {
+        factor.constants[CONSTANT_CUP2M3] += signal;
+    } else if (stringFactor.compare(start, length, u"pi")) {
+        factor.constants[CONSTANT_PI] += signal;
+    } else {
+        CharString tempUTF8;
+        tempUTF8.appendInvariantChars(stringFactor.tempSubString(start, length), status);
+
+        if (status != U_ZERO_ERROR)
+            return;
+
+        number::impl::DecNum decNum;
+        decNum.setTo(tempUTF8.data(), status);
+        if (status != U_ZERO_ERROR)
+            return;
+    }
+}
+
+Factor extractFactor(UnicodeString stringFactor, UErrorCode &status) {
+    Factor result;
+
+    int32_t signal = 1;
+    for (int32_t i = 0, start = 0, length = stringFactor.length(); i < length; i++) {
+        const auto &c = stringFactor[i];
+        if (c == '*' || c == '/') {
+            addFactorElement(result, stringFactor, start, i - start, signal, status);
+
+            start = i + 1; // Set `start` to point to the new start point.
+        } else if (i == length - 1) {
+            // Last element
+            addFactorElement(result, stringFactor, start, i - start + 1, signal, status);
+        }
+
+        if (stringFactor[i] == '/')
+            signal = -1; // Change the signal because we reached the Denominator.
+    }
+
+    return result;
+}
 
 ConvertUnit loadConvertUnit(StringPiece source, UErrorCode &status) {
     LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "units", &status));
