@@ -869,7 +869,7 @@ library: i18n
     dayperiodrules
     listformatter
     formatting formattable_cnv regex regex_cnv translit
-    double_conversion number_representation number_output numberformatter numberparser
+    double_conversion number_representation number_output numberformatter number_skeletons numberparser
     units_extra
     universal_time_scale
     uclean_i18n
@@ -982,21 +982,28 @@ group: number_output
 
 group: numberformatter
     # ICU 60+ NumberFormatter API
-    number_affixutils.o number_asformat.o
-    number_capi.o number_compact.o number_currencysymbols.o
+    number_affixutils.o
+    number_compact.o number_currencysymbols.o
     number_decimfmtprops.o
     number_fluent.o number_formatimpl.o
     number_grouping.o number_integerwidth.o number_longnames.o
     number_mapper.o number_modifiers.o number_multiplier.o
     number_notation.o number_padding.o
     number_patternmodifier.o number_patternstring.o number_rounding.o
-    number_scientific.o number_skeletons.o
+    number_scientific.o
     currpinf.o dcfmtsym.o numsys.o
     numrange_fluent.o numrange_impl.o
   deps
     decnumber double_conversion formattable units
     number_representation number_output
     uclean_i18n common
+
+group: number_skeletons
+    # Number skeleton support; separated from numberformatter
+    number_skeletons.o number_capi.o number_asformat.o
+  deps
+    numberformatter
+    units_extra
 
 group: numberparser
     numparse_affixes.o numparse_compositions.o numparse_currency.o
@@ -1038,7 +1045,8 @@ group: formatting
     # messageformat
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
-    decnumber formattable format units numberformatter numberparser formatted_value_sbimpl
+    decnumber formattable format units numberformatter number_skeletons numberparser
+    formatted_value_sbimpl
     listformatter
     dayperiodrules
     collation collation_builder  # for rbnf

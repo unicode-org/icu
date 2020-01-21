@@ -22,6 +22,7 @@
 #include "charstr.h"
 #include "string_segment.h"
 #include "unicode/errorcode.h"
+#include "util.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -1681,6 +1682,37 @@ bool GeneratorHelpers::scale(const MacroProps& macros, UnicodeString& sb, UError
             sb,
             status);
     return true;
+}
+
+
+// Definitions of public API methods (put here for dependency disentanglement)
+
+template<typename Derived>
+UnicodeString NumberFormatterSettings<Derived>::toSkeleton(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    if (fMacros.copyErrorTo(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    return skeleton::generate(fMacros, status);
+}
+
+// Declare all classes that implement NumberFormatterSettings
+// See https://stackoverflow.com/a/495056/1407170
+template
+class icu::number::NumberFormatterSettings<icu::number::UnlocalizedNumberFormatter>;
+template
+class icu::number::NumberFormatterSettings<icu::number::LocalizedNumberFormatter>;
+
+UnlocalizedNumberFormatter
+NumberFormatter::forSkeleton(const UnicodeString& skeleton, UErrorCode& status) {
+    return skeleton::create(skeleton, nullptr, status);
+}
+
+UnlocalizedNumberFormatter
+NumberFormatter::forSkeleton(const UnicodeString& skeleton, UParseError& perror, UErrorCode& status) {
+    return skeleton::create(skeleton, &perror, status);
 }
 
 
