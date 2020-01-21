@@ -555,26 +555,6 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * ICU use only.
-     * @return Whether subType is known to ICU.
-     * @internal
-     */
-    static bool findBySubType(StringPiece subType, MeasureUnit* output);
-
-    /**
-     * ICU use only.
-     * Parse a core unit identifier into a numerator and denominator unit.
-     * @param coreUnitIdentifier The string to parse.
-     * @param numerator Output: set to the numerator unit.
-     * @param denominator Output: set to the denominator unit, if present.
-     * @param status Set to U_ILLEGAL_ARGUMENT_ERROR if the core unit identifier is not known.
-     * @return Whether both a numerator and denominator are returned.
-     * @internal
-     */
-    static bool parseCoreUnitIdentifier(
-        StringPiece coreUnitIdentifier, MeasureUnit* numerator, MeasureUnit* denominator, UErrorCode& status);
-
-    /**
-     * ICU use only.
      * @internal
      */
     static MeasureUnit resolveUnitPerUnit(
@@ -3725,6 +3705,11 @@ private:
     void setTo(int32_t typeId, int32_t subTypeId);
     int32_t getOffset() const;
     static MeasureUnit *create(int typeId, int subTypeId, UErrorCode &status);
+
+    /**
+     * @return Whether subType is known to ICU.
+     */
+    static bool findBySubType(StringPiece subType, MeasureUnit* output);
 };
 
 U_NAMESPACE_END

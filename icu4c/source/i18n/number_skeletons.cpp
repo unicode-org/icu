@@ -1040,11 +1040,21 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     ErrorCode internalStatus;
-    MeasureUnit::parseCoreUnitIdentifier(buffer.toStringPiece(), &macros.unit, &macros.perUnit, internalStatus);
+    MeasureUnit fullUnit = MeasureUnit::forIdentifier(buffer.toStringPiece(), internalStatus);
+    auto subUnits = fullUnit.getSingleUnits(internalStatus);
     if (internalStatus.isFailure()) {
         // throw new SkeletonSyntaxException("Invalid core unit identifier", segment, e);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
+    }
+
+    for (int32_t i = 0; i < subUnits.length(); i++) {
+        const MeasureUnit& subUnit = subUnits[i];
+        if (subUnit.getPower(status) > 0) {
+            macros.unit = macros.unit.product(subUnit, status);
+        } else {
+            macros.perUnit = macros.perUnit.product(subUnit.reciprocal(status), status);
+        }
     }
 }
 

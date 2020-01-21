@@ -3372,8 +3372,7 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
 
     assertTrue("order matters inequality", footInch != inchFoot);
 
-    // TODO(ICU-20920): Enable the one1 tests when the dimensionless base unit ID is updated
-    // MeasureUnit one1;
+    MeasureUnit one1;
     MeasureUnit one2 = MeasureUnit::forIdentifier("one", status);
     MeasureUnit one3 = MeasureUnit::forIdentifier("", status);
     MeasureUnit squareOne = one2.withPower(2, status);
@@ -3382,20 +3381,23 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     MeasureUnit onePerSquareKiloOne = squareKiloOne.reciprocal(status);
     MeasureUnit oneOne = MeasureUnit::forIdentifier("one-one", status);
     MeasureUnit onePlusOne = MeasureUnit::forIdentifier("one+one", status);
+    MeasureUnit kilometer2 = one2.product(kilometer, status);
 
-    // verifySingleUnit(one1, UMEASURE_SI_PREFIX_ONE, 1, "one");
+    verifySingleUnit(one1, UMEASURE_SI_PREFIX_ONE, 1, "one");
     verifySingleUnit(one2, UMEASURE_SI_PREFIX_ONE, 1, "one");
     verifySingleUnit(one3, UMEASURE_SI_PREFIX_ONE, 1, "one");
     verifySingleUnit(squareOne, UMEASURE_SI_PREFIX_ONE, 1, "one");
-    verifySingleUnit(onePerOne, UMEASURE_SI_PREFIX_ONE, -1, "one-per-one");
+    verifySingleUnit(onePerOne, UMEASURE_SI_PREFIX_ONE, 1, "one");
     verifySingleUnit(squareKiloOne, UMEASURE_SI_PREFIX_ONE, 1, "one");
-    verifySingleUnit(onePerSquareKiloOne, UMEASURE_SI_PREFIX_ONE, -1, "one-per-one");
+    verifySingleUnit(onePerSquareKiloOne, UMEASURE_SI_PREFIX_ONE, 1, "one");
     verifySingleUnit(oneOne, UMEASURE_SI_PREFIX_ONE, 1, "one");
     verifySingleUnit(onePlusOne, UMEASURE_SI_PREFIX_ONE, 1, "one");
+    verifySingleUnit(kilometer2, UMEASURE_SI_PREFIX_KILO, 1, "kilometer");
 
-    // assertTrue("one equality", one1 == one2);
+    assertTrue("one equality", one1 == one2);
     assertTrue("one equality", one2 == one3);
     assertTrue("one-per-one equality", onePerOne == onePerSquareKiloOne);
+    assertTrue("kilometer equality", kilometer == kilometer2);
 }
 
 

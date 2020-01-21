@@ -377,6 +377,9 @@ public:
     typedef MaybeStackVector<SingleUnit, 3> SingleUnitList;
 
     void append(SingleUnit&& singleUnit, UErrorCode& status) {
+        if (singleUnit.simpleUnitIndex == 0) {
+            return;
+        }
         if (singleUnit.power >= 0) {
             appendImpl(numerator, std::move(singleUnit), status);
         } else {
@@ -420,7 +423,7 @@ public:
     }
 
     bool isSingle() const {
-        return numerator.length() + denominator.length() == 1;
+        return numerator.length() + denominator.length() <= 1;
     }
 
     bool isEmpty() const {

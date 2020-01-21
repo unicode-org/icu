@@ -188,6 +188,12 @@ LongNameHandler*
 LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef, const MeasureUnit &perUnit,
                                 const UNumberUnitWidth &width, const PluralRules *rules,
                                 const MicroPropsGenerator *parent, UErrorCode &status) {
+    if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
+        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
+        status = U_UNSUPPORTED_ERROR;
+        return nullptr;
+    }
+
     MeasureUnit unit = unitRef;
     if (uprv_strcmp(perUnit.getType(), "none") != 0) {
         // Compound unit: first try to simplify (e.g., meters per second is its own unit).

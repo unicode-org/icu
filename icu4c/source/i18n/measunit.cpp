@@ -535,7 +535,7 @@ static const char * const gSubTypes[] = {
     "solar-mass",
     "stone",
     "ton",
-    "base",
+    "one",
     "percent",
     "permille",
     "gigawatt",
@@ -2030,6 +2030,8 @@ MeasureUnit::MeasureUnit(char* idToAdopt)
     if (fId == nullptr) {
         // Invalid; reset to the base dimensionless unit
         setTo(kBaseTypeIdx, kBaseSubTypeIdx);
+    } else if (findBySubType(idToAdopt, this)) {
+        // findBySubType frees fId
     }
 }
 
@@ -2199,38 +2201,6 @@ bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
             return true;
         }
     }
-    return false;
-}
-
-bool MeasureUnit::parseCoreUnitIdentifier(
-        StringPiece coreUnitIdentifier,
-        MeasureUnit* numerator,
-        MeasureUnit* denominator,
-        UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return false;
-    }
-
-    // First search for the whole code unit identifier as a subType
-    if (findBySubType(coreUnitIdentifier, numerator)) {
-        return false; // found a numerator but not denominator
-    }
-
-    // If not found, try breaking apart numerator and denominator
-    int32_t perIdx = coreUnitIdentifier.find("-per-", 0);
-    if (perIdx == -1) {
-        // String does not contain "-per-"
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return false;
-    }
-    StringPiece numeratorStr(coreUnitIdentifier, 0, perIdx);
-    StringPiece denominatorStr(coreUnitIdentifier, perIdx + 5);
-    if (findBySubType(numeratorStr, numerator) && findBySubType(denominatorStr, denominator)) {
-        return true; // found both a numerator and denominator
-    }
-
-    // The numerator or denominator were invalid
-    status = U_ILLEGAL_ARGUMENT_ERROR;
     return false;
 }
 

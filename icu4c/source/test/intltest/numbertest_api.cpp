@@ -674,7 +674,7 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
     assertFormatDescending(
             u"Meters Per Second Short (unit that simplifies) and perUnit method",
             u"measure-unit/length-meter per-measure-unit/duration-second",
-            u"~unit/meter-per-second", // does not round-trip to the full skeleton above
+            u"unit/meter-per-second",
             NumberFormatter::with().unit(METER).perUnit(SECOND),
             Locale::getEnglish(),
             u"87,650 m/s",
@@ -718,6 +718,23 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             u"0.08765 J/fur",
             u"0.008765 J/fur",
             u"0 J/fur");
+
+    // TODO(ICU-20941): Support constructions such as this one.
+    // assertFormatDescending(
+    //         u"Joules Per Furlong Short with unit identifier via API",
+    //         u"measure-unit/energy-joule per-measure-unit/length-furlong",
+    //         u"unit/joule-per-furlong",
+    //         NumberFormatter::with().unit(MeasureUnit::forIdentifier("joule-per-furlong", status)),
+    //         Locale::getEnglish(),
+    //         u"87,650 J/fur",
+    //         u"8,765 J/fur",
+    //         u"876.5 J/fur",
+    //         u"87.65 J/fur",
+    //         u"8.765 J/fur",
+    //         u"0.8765 J/fur",
+    //         u"0.08765 J/fur",
+    //         u"0.008765 J/fur",
+    //         u"0 J/fur");
 }
 
 void NumberFormatterApiTest::unitCurrency() {
@@ -2777,7 +2794,7 @@ void NumberFormatterApiTest::fieldPositionCoverage() {
         FormattedNumber result = assertFormatSingle(
                 message,
                 u"measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
-                u"~unit/meter-per-second unit-width-full-name", // does not round-trip to the full skeleton above
+                u"unit/meter-per-second unit-width-full-name",
                 NumberFormatter::with().unit(METER).perUnit(SECOND).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
                 "ky", // locale with the interesting data
                 68,
