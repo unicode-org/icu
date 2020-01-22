@@ -35600,46 +35600,70 @@ supplementalData:table(nofallback){
         "area"{
             "geograph"{
                 001{
-                    square-kilometer{""}
+                    square-kilometer{
+                        alt{""}
+                    }
                 }
                 GB{
-                    square-mile{""}
+                    square-mile{
+                        alt{""}
+                    }
                 }
                 US{
-                    square-mile{""}
+                    square-mile{
+                        alt{""}
+                    }
                 }
             }
             "land-agricult"{
                 001{
-                    hectare{""}
+                    hectare{
+                        alt{""}
+                    }
                 }
                 GB{
-                    acre{""}
+                    acre{
+                        alt{""}
+                    }
                 }
                 US{
-                    acre{""}
+                    acre{
+                        alt{""}
+                    }
                 }
             }
             "land-commercl"{
                 001{
-                    hectare{""}
+                    hectare{
+                        alt{""}
+                    }
                 }
                 GB{
-                    acre{""}
+                    acre{
+                        alt{""}
+                    }
                 }
                 US{
-                    acre{""}
+                    acre{
+                        alt{""}
+                    }
                 }
             }
             "land-residntl"{
                 001{
-                    hectare{""}
+                    hectare{
+                        alt{""}
+                    }
                 }
                 GB{
-                    acre{""}
+                    acre{
+                        alt{""}
+                    }
                 }
                 US{
-                    acre{""}
+                    acre{
+                        alt{""}
+                    }
                 }
             }
             _default{
@@ -35660,17 +35684,23 @@ supplementalData:table(nofallback){
         "duration"{
             "music-track"{
                 001{
-                    minute+second{""}
+                    minute+second{
+                        alt{""}
+                    }
                 }
             }
             "person-age"{
                 001{
-                    year-person+month-person{""}
+                    year-person+month-person{
+                        alt{""}
+                    }
                 }
             }
             "tv-program"{
                 001{
-                    minute+second{""}
+                    minute+second{
+                        alt{""}
+                    }
                 }
             }
             _default{
@@ -35699,7 +35729,9 @@ supplementalData:table(nofallback){
                     microsecond{
                         geq:1{""}
                     }
-                    nanosecond{""}
+                    nanosecond{
+                        alt{""}
+                    }
                 }
             }
         }
@@ -35707,10 +35739,14 @@ supplementalData:table(nofallback){
         "length"{
             "road"{
                 001{
-                    kilometer{""}
+                    kilometer{
+                        alt{""}
+                    }
                 }
                 GB{
-                    mile{""}
+                    mile{
+                        alt{""}
+                    }
                 }
                 SE{
                     mile-scandinavian{
@@ -35718,18 +35754,26 @@ supplementalData:table(nofallback){
                     }
                 }
                 US{
-                    mile{""}
+                    mile{
+                        alt{""}
+                    }
                 }
 		// DEMO: Current hack for _small, proposing we drop this info and simply use geq:
                 _small{
                     001{
-                        meter{""}
+                        meter{
+                            alt{""}
+                        }
                     }
                     GB{
-                        yard{""}
+                        yard{
+                            alt{""}
+                        }
                     }
                     US{
-                        foot{""}
+                        foot{
+                            alt{""}
+                        }
                     }
                 }
             }
@@ -35785,7 +35829,9 @@ supplementalData:table(nofallback){
                     micrometer{
                         geq:1{""}
                     }
-                    nanometer{""}
+                    nanometer{
+                        alt{""}
+                    }
                 }
                 GB{
                     mile{
@@ -35794,7 +35840,9 @@ supplementalData:table(nofallback){
                     foot{
                         geq:1{""}
                     }
-                    inch{""}
+                    inch{
+                        alt{""}
+                    }
                 }
                 US{
                     mile{
@@ -35803,7 +35851,9 @@ supplementalData:table(nofallback){
                     foot{
                         geq:1{""}
                     }
-                    inch{""}
+                    inch{
+                        alt{""}
+                    }
                 }
             }
         }
@@ -35822,7 +35872,9 @@ supplementalData:table(nofallback){
                     milligram{
                         geq:1{""}
                     }
-                    microgram{""}
+                    microgram{
+                        alt{""}
+                    }
                 }
                 GB{
                     stone{
@@ -35831,7 +35883,9 @@ supplementalData:table(nofallback){
                     pound{
                         geq:1{""}
                     }
-                    ounce{""}
+                    ounce{
+                        alt{""}
+                    }
                 }
                 US{
                     ton{
@@ -35840,7 +35894,9 @@ supplementalData:table(nofallback){
                     pound{
                         geq:1{""}
                     }
-                    ounce{""}
+                    ounce{
+                        alt{""}
+                    }
                 }
             }
         }
@@ -35859,7 +35915,9 @@ supplementalData:table(nofallback){
                     watt{
                         geq:1{""}
                     }
-                    milliwatt{""}
+                    milliwatt{
+                        alt{""}
+                    }
                 }
             }
         }
@@ -35872,7 +35930,9 @@ supplementalData:table(nofallback){
                     kilopascal{
                         geq:1{""}
                     }
-                    pascal{""}
+                    pascal{
+                        alt{""}
+                    }
                 }
             }
         }
@@ -35885,7 +35945,9 @@ supplementalData:table(nofallback){
                     liter{
                         geq:1{""}
                     }
-                    milliliter{""}
+                    milliliter{
+                        alt{""}
+                    }
                 }
             }
         }
