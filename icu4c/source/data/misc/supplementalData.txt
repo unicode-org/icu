@@ -35600,137 +35600,148 @@ supplementalData:table(nofallback){
         "area"{
             "geograph"{
                 001{
-                    square-kilometer{
-                        alt{""}
+                    0{
+		        unit{"square-kilometer"}
                     }
                 }
                 GB{
-                    square-mile{
-                        alt{""}
+		    0{
+		        unit{"square-mile"}
                     }
                 }
                 US{
-                    square-mile{
-                        alt{""}
+                    0{
+		        unit{"square-mile"}
                     }
                 }
             }
             "land-agricult"{
                 001{
-                    hectare{
-                        alt{""}
+                    0{
+		        unit{"hectare"}
                     }
                 }
                 GB{
-                    acre{
-                        alt{""}
+                    0{
+		        unit{"acre"}
                     }
                 }
                 US{
-                    acre{
-                        alt{""}
+                    0{
+		        unit{"acre"}
                     }
                 }
             }
             "land-commercl"{
                 001{
-                    hectare{
-                        alt{""}
+                    0{
+		        unit{"hectare"}
                     }
                 }
                 GB{
-                    acre{
-                        alt{""}
+                    0{
+		        unit{"acre"}
                     }
                 }
                 US{
-                    acre{
-                        alt{""}
+                    0{
+		        unit{"acre"}
                     }
                 }
             }
             "land-residntl"{
                 001{
-                    hectare{
-                        alt{""}
+                    0{
+		        unit{"hectare"}
                     }
                 }
                 GB{
-                    acre{
-                        alt{""}
+                    0{
+		        unit{"acre"}
                     }
                 }
                 US{
-                    acre{
-                        alt{""}
+                    0{
+		        unit{"acre"}
                     }
                 }
             }
             _default{
                 001{
-                    square-kilometer{
-                        geq:1{""}
+                    0{
+		        unit{"square-kilometer"}
                     }
-                    hectare{
-                        geq:1{""}
+                    1{
+		        unit{"hectare"}
                     }
-                    square-meter{
-                        geq:1{""}
+                    2{
+		        unit{"square-meter"}
                     }
-                    square-centimeter{""}
+                    3{
+		        unit{"square-centimeter"}
+		    }
                 }
             }
         }
         "duration"{
             "music-track"{
                 001{
-                    minute+second{
-                        alt{""}
+                    0{
+		        unit{"minute+second"}
+                    }
+                    1{
+		        unit{"second"}
                     }
                 }
             }
             "person-age"{
                 001{
-                    year-person+month-person{
-                        alt{""}
+                    0{
+		        unit{"year-person+month-person"}
+                    }
+                    1{
+		        unit{"month-person"}
                     }
                 }
             }
             "tv-program"{
                 001{
-                    minute+second{
-                        alt{""}
+                    0{
+		        unit{"minute+second"}
+                    }
+                    1{
+		        unit{"second"}
                     }
                 }
             }
             _default{
                 001{
-                    year{
-                        geq:1{""}
+                    0{
+		        unit{"year"}
                     }
-                    month{
-                        geq:1{""}
+                    1{
+		        unit{"month"}
                     }
-                    day{
-                        geq:1{""}
+                    2{
+		        unit{"day"}
                     }
-                    hour{
-                        geq:1{""}
+                    3{
+		        unit{"hour"}
                     }
-                    minute{
-                        geq:1{""}
+                    4{
+		        unit{"minute"}
                     }
-                    second{
-                        geq:1{""}
+                    5{
+		        unit{"second"}
                     }
-                    millisecond{
-                        geq:1{""}
+                    6{
+		        unit{"millisecond"}
                     }
-                    microsecond{
-                        geq:1{""}
+                    7{
+		        unit{"microsecond"}
                     }
-                    nanosecond{
-                        alt{""}
+                    8{
+		        unit{"nanosecond"}
                     }
                 }
             }
@@ -35739,120 +35750,134 @@ supplementalData:table(nofallback){
         "length"{
             "road"{
                 001{
-                    kilometer{
-                        alt{""}
+                    0{
+		        unit{"kilometer"}
                     }
                 }
                 GB{
-                    mile{
-                        alt{""}
+                    0{
+		        unit{"mile"}
                     }
                 }
                 SE{
-                    mile-scandinavian{
+                    0{
+		        unit{"mile-scandinavian"}
                         alt{"informal"}
                     }
                 }
                 US{
-                    mile{
-                        alt{""}
+                    0{
+		        unit{"mile"}
                     }
                 }
 		// DEMO: Current hack for _small, proposing we drop this info and simply use geq:
                 _small{
                     001{
-                        meter{
-                            alt{""}
+                        0{
+			    unit{"meter"}
                         }
                     }
                     GB{
-                        yard{
-                            alt{""}
+                        0{
+			    unit{"yard"}
                         }
                     }
                     US{
-                        foot{
-                            alt{""}
+                        0{
+			    unit{"foot"}
                         }
                     }
                 }
             }
             "road-travel"{
                 001{
-                    kilometer{
-                        geq:0.975{""}
+                    0{
+		        unit{"kilometer"}
+                        geq{0.975}
                     }
-                    meter{
-                        geq:300{
-                            skeleton{"precision-increment/50"}
-                        }
+                    1{
+		        unit{"meter"}
+                        geq{300}
+                        skeleton{"precision-increment/50"}
+                    }
+                    2{
+		        unit{"meter"}
                         skeleton{"precision-increment/10"}
                     }
                 }
                 GB{
-                    mile{
-                        geq:0.095{""}
+                    0{
+		        unit{"mile"}
+                        geq{0.095}
                     }
-                    yard{
-                        geq:300{
-                            skeleton{"precision-increment/50"}
-                        }
+                    1{
+		        unit{"yard"}
+                        geq{300}
+                        skeleton{"precision-increment/50"}
+                    }
+		        unit{"yard"}
                         skeleton{"precision-increment/10"}
                     }
                 }
                 US{
-                    mile{
-                        geq:0.095{""}
+                    0{
+		        unit{"mile"}
+                        geq{0.095}
                     }
-                    foot{
-                        geq:300{
-                            skeleton{"precision-increment/50"}
-                        }
+                    1{
+		        unit{"foot"}
+                        geq{300}
+                        skeleton{"precision-increment/50"}
+                    }
+                    2{
+		        unit{"foot"}
                         skeleton{"precision-increment/10"}
                     }
                 }
             }
             _default{
                 001{
-                    kilometer{
-                        geq:1{""}
+                    0{
+		        unit{"kilometer"}
                     }
-                    meter{
-                        geq:1{""}
+                    1{
+		        unit{"meter"}
                     }
-                    centimeter{
-                        geq:1{""}
+                    2{
+		        unit{"centimeter"}
                     }
-                    millimeter{
-                        geq:1{""}
+                    3{
+		        unit{"millimeter"}
                     }
-                    micrometer{
-                        geq:1{""}
+                    4{
+		        unit{"micrometer"}
                     }
-                    nanometer{
-                        alt{""}
+                    5{
+		        unit{"nanometer"}
                     }
                 }
                 GB{
-                    mile{
-                        geq:0.475{""}
+                    0{
+		        unit{"mile"}
+                        geq{0.475}
                     }
-                    foot{
-                        geq:1{""}
+                    1{
+		        unit{"foot"}
                     }
-                    inch{
-                        alt{""}
+                    2{
+		        unit{"inch"}
                     }
                 }
                 US{
-                    mile{
-                        geq:0.475{""}
+                    0{
+		        unit{"mile"}
+                        geq{0.475}
                     }
-                    foot{
-                        geq:1{""}
+                    1{
+		        unit{"foot"}
                     }
-                    inch{
-                        alt{""}
+                    2{
+		        unit{"inch"}
                     }
                 }
             }
@@ -35860,42 +35885,42 @@ supplementalData:table(nofallback){
         "mass"{
             _default{
                 001{
-                    metric-ton{
-                        geq:1{""}
+                    0{
+		        unit{"metric-ton"}
                     }
-                    kilogram{
-                        geq:1{""}
+                    1{
+		        unit{"kilogram"}
                     }
-                    gram{
-                        geq:1{""}
+                    2{
+		        unit{"gram"}
                     }
-                    milligram{
-                        geq:1{""}
+                    3{
+		        unit{"milligram"}
                     }
-                    microgram{
-                        alt{""}
+                    4{
+		        unit{"microgram"}
                     }
                 }
                 GB{
-                    stone{
-                        geq:1{""}
+                    0{
+		        unit{"stone"}
                     }
-                    pound{
-                        geq:1{""}
+                    1{
+		        unit{"pound"}
                     }
-                    ounce{
-                        alt{""}
+                    2{
+		        unit{"ounce"}
                     }
                 }
                 US{
-                    ton{
-                        geq:1{""}
+                    0{
+		        unit{"ton"}
                     }
-                    pound{
-                        geq:1{""}
+                    1{
+		        unit{"pound"}
                     }
-                    ounce{
-                        alt{""}
+                    2{
+		        unit{"ounce"}
                     }
                 }
             }
@@ -35903,20 +35928,20 @@ supplementalData:table(nofallback){
         "power"{
             _default{
                 001{
-                    gigawatt{
-                        geq:1{""}
+                    0{
+		        unit{"gigawatt"}
                     }
-                    megawatt{
-                        geq:1{""}
+                    1{
+		        unit{"megawatt"}
                     }
-                    kilowatt{
-                        geq:1{""}
+                    2{
+		        unit{"kilowatt"}
                     }
-                    watt{
-                        geq:1{""}
+                    3{
+		        unit{"watt"}
                     }
-                    milliwatt{
-                        alt{""}
+                    4{
+		        unit{"milliwatt"}
                     }
                 }
             }
@@ -35924,14 +35949,14 @@ supplementalData:table(nofallback){
         "pressure"{
             _default{
                 001{
-                    megapascal{
-                        geq:1{""}
+                    0{
+		        unit{"megapascal"}
                     }
-                    kilopascal{
-                        geq:1{""}
+                    1{
+		        unit{"kilopascal"}
                     }
-                    pascal{
-                        alt{""}
+                    2{
+		        unit{"pascal"}
                     }
                 }
             }
@@ -35939,14 +35964,14 @@ supplementalData:table(nofallback){
         "volume"{
             _default{
                 001{
-                    cubic-meter{
-                        geq:1{""}
+                    0{
+		        unit{"cubic-meter"}
                     }
-                    liter{
-                        geq:1{""}
+                    1{
+		        unit{"liter"}
                     }
-                    milliliter{
-                        alt{""}
+                    2{
+		        unit{"milliliter"}
                     }
                 }
             }
