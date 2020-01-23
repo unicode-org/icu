@@ -35815,6 +35815,7 @@ supplementalData:table(nofallback){
                         geq{300}
                         skeleton{"precision-increment/50"}
                     }
+                    2{
                         unit{"yard"}
                         skeleton{"precision-increment/10"}
                     }
