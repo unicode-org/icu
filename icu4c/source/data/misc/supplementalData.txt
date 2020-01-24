@@ -2104,7 +2104,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"36.1"}
+    cldrVersion{"37"}
     codeMappings{
         {
             "AA",
@@ -7860,6 +7860,7 @@ supplementalData:table(nofallback){
                 "Qaaj~p",
             }
             special{
+                "Aran",
                 "Qaag",
                 "Zanb",
                 "Zinh",
@@ -13554,7 +13555,10 @@ supplementalData:table(nofallback){
                 territories{"IN"}
             }
             secondary{
-                scripts{"Mahj"}
+                scripts{
+                    "Latn",
+                    "Mahj",
+                }
                 territories{
                     "FJ",
                     "ZA",
@@ -15832,13 +15836,13 @@ supplementalData:table(nofallback){
         }
         sat{
             primary{
-                scripts{"Latn"}
+                scripts{"Olck"}
             }
             secondary{
                 scripts{
                     "Beng",
                     "Deva",
-                    "Olck",
+                    "Latn",
                     "Orya",
                 }
                 territories{"IN"}
@@ -20532,15 +20536,19 @@ supplementalData:table(nofallback){
             "ff_Adlm",
             "ff_Arab",
             "ha_Arab",
+            "hi_Latn",
             "iu_Latn",
             "kk_Arab",
+            "ks_Deva",
             "ku_Arab",
             "ky_Arab",
             "ky_Latn",
             "ml_Arab",
             "mn_Mong",
+            "mni_Mtei",
             "ms_Arab",
             "pa_Arab",
+            "sat_Deva",
             "sd_Deva",
             "sd_Khoj",
             "sd_Sind",
@@ -33086,6 +33094,9 @@ supplementalData:table(nofallback){
             }
         }
         US{
+            cad{
+                populationShareF:int{0}
+            }
             cho{
                 populationShareF:int{45330000}
             }
@@ -35600,84 +35611,84 @@ supplementalData:table(nofallback){
         "area"{
             "geograph"{
                 001{
-                    0{
+                    {
                         unit{"square-kilometer"}
                     }
                 }
                 GB{
-                    0{
+                    {
                         unit{"square-mile"}
                     }
                 }
                 US{
-                    0{
+                    {
                         unit{"square-mile"}
                     }
                 }
             }
             "land-agricult"{
                 001{
-                    0{
+                    {
                         unit{"hectare"}
                     }
                 }
                 GB{
-                    0{
+                    {
                         unit{"acre"}
                     }
                 }
                 US{
-                    0{
+                    {
                         unit{"acre"}
                     }
                 }
             }
             "land-commercl"{
                 001{
-                    0{
+                    {
                         unit{"hectare"}
                     }
                 }
                 GB{
-                    0{
+                    {
                         unit{"acre"}
                     }
                 }
                 US{
-                    0{
+                    {
                         unit{"acre"}
                     }
                 }
             }
             "land-residntl"{
                 001{
-                    0{
+                    {
                         unit{"hectare"}
                     }
                 }
                 GB{
-                    0{
+                    {
                         unit{"acre"}
                     }
                 }
                 US{
-                    0{
+                    {
                         unit{"acre"}
                     }
                 }
             }
             _default{
                 001{
-                    0{
+                    {
                         unit{"square-kilometer"}
                     }
-                    1{
+                    {
                         unit{"hectare"}
                     }
-                    2{
+                    {
                         unit{"square-meter"}
                     }
-                    3{
+                    {
                         unit{"square-centimeter"}
                     }
                 }
@@ -35686,104 +35697,101 @@ supplementalData:table(nofallback){
         "duration"{
             "music-track"{
                 001{
-                    0{
+                    {
                         unit{"minute+second"}
                     }
-                    1{
+                    {
                         unit{"second"}
                     }
                 }
             }
             "person-age"{
                 001{
-                    0{
+                    {
                         unit{"year-person+month-person"}
                     }
-                    1{
+                    {
                         unit{"month-person"}
                     }
                 }
             }
             "tv-program"{
                 001{
-                    0{
+                    {
                         unit{"minute+second"}
                     }
-                    1{
+                    {
                         unit{"second"}
                     }
                 }
             }
             _default{
                 001{
-                    0{
+                    {
                         unit{"year"}
                     }
-                    1{
+                    {
                         unit{"month"}
                     }
-                    2{
+                    {
                         unit{"day"}
                     }
-                    3{
+                    {
                         unit{"hour"}
                     }
-                    4{
+                    {
                         unit{"minute"}
                     }
-                    5{
+                    {
                         unit{"second"}
                     }
-                    6{
+                    {
                         unit{"millisecond"}
                     }
-                    7{
+                    {
                         unit{"microsecond"}
                     }
-                    8{
+                    {
                         unit{"nanosecond"}
                     }
                 }
             }
         }
-        // DEMO: alt{"informal"}:
         "length"{
             "road"{
                 001{
-                    0{
+                    {
                         unit{"kilometer"}
                     }
                 }
                 GB{
-                    0{
+                    {
                         unit{"mile"}
                     }
                 }
                 SE{
-                    0{
+                    {
                         unit{"mile-scandinavian"}
-                        alt{"informal"}
                     }
                 }
                 US{
-                    0{
+                    {
                         unit{"mile"}
                     }
                 }
-                // DEMO: Current hack for _small, proposing we drop this info and simply use geq:
                 _small{
                     001{
-                        0{
+                        {
                             unit{"meter"}
                         }
                     }
                     GB{
-                        0{
+                        {
                             unit{"yard"}
                         }
                     }
                     US{
-                        0{
+                        {
                             unit{"foot"}
                         }
                     }
@@ -35791,93 +35799,93 @@ supplementalData:table(nofallback){
             }
             "road-travel"{
                 001{
-                    0{
+                    {
+                        geq{"0.975"}
                         unit{"kilometer"}
-                        geq{0.975}
                     }
-                    1{
-                        unit{"meter"}
-                        geq{300}
+                    {
+                        geq{"300"}
                         skeleton{"precision-increment/50"}
-                    }
-                    2{
                         unit{"meter"}
+                    }
+                    {
                         skeleton{"precision-increment/10"}
+                        unit{"meter"}
                     }
                 }
                 GB{
-                    0{
+                    {
+                        geq{"0.095"}
                         unit{"mile"}
-                        geq{0.095}
                     }
-                    1{
-                        unit{"yard"}
-                        geq{300}
+                    {
+                        geq{"300"}
                         skeleton{"precision-increment/50"}
-                    }
-                    2{
                         unit{"yard"}
+                    }
+                    {
                         skeleton{"precision-increment/10"}
+                        unit{"yard"}
                     }
                 }
                 US{
-                    0{
+                    {
+                        geq{"0.095"}
                         unit{"mile"}
-                        geq{0.095}
                     }
-                    1{
-                        unit{"foot"}
-                        geq{300}
+                    {
+                        geq{"300"}
                         skeleton{"precision-increment/50"}
-                    }
-                    2{
                         unit{"foot"}
+                    }
+                    {
                         skeleton{"precision-increment/10"}
+                        unit{"foot"}
                     }
                 }
             }
             _default{
                 001{
-                    0{
+                    {
                         unit{"kilometer"}
                     }
-                    1{
+                    {
                         unit{"meter"}
                     }
-                    2{
+                    {
                         unit{"centimeter"}
                     }
-                    3{
+                    {
                         unit{"millimeter"}
                     }
-                    4{
+                    {
                         unit{"micrometer"}
                     }
-                    5{
+                    {
                         unit{"nanometer"}
                     }
                 }
                 GB{
-                    0{
+                    {
+                        geq{"0.475"}
                         unit{"mile"}
-                        geq{0.475}
                     }
-                    1{
+                    {
                         unit{"foot"}
                     }
-                    2{
+                    {
                         unit{"inch"}
                     }
                 }
                 US{
-                    0{
+                    {
+                        geq{"0.475"}
                         unit{"mile"}
-                        geq{0.475}
                     }
-                    1{
+                    {
                         unit{"foot"}
                     }
-                    2{
+                    {
                         unit{"inch"}
                     }
                 }
@@ -35886,41 +35894,41 @@ supplementalData:table(nofallback){
         "mass"{
             _default{
                 001{
-                    0{
+                    {
                         unit{"metric-ton"}
                     }
-                    1{
+                    {
                         unit{"kilogram"}
                     }
-                    2{
+                    {
                         unit{"gram"}
                     }
-                    3{
+                    {
                         unit{"milligram"}
                     }
-                    4{
+                    {
                         unit{"microgram"}
                     }
                 }
                 GB{
-                    0{
+                    {
                         unit{"stone"}
                     }
-                    1{
+                    {
                         unit{"pound"}
                     }
-                    2{
+                    {
                         unit{"ounce"}
                     }
                 }
                 US{
-                    0{
+                    {
                         unit{"ton"}
                     }
-                    1{
+                    {
                         unit{"pound"}
                     }
-                    2{
+                    {
                         unit{"ounce"}
                     }
                 }
@@ -35929,19 +35937,19 @@ supplementalData:table(nofallback){
         "power"{
             _default{
                 001{
-                    0{
+                    {
                         unit{"gigawatt"}
                     }
-                    1{
+                    {
                         unit{"megawatt"}
                     }
-                    2{
+                    {
                         unit{"kilowatt"}
                     }
-                    3{
+                    {
                         unit{"watt"}
                     }
-                    4{
+                    {
                         unit{"milliwatt"}
                     }
                 }
@@ -35950,13 +35958,13 @@ supplementalData:table(nofallback){
         "pressure"{
             _default{
                 001{
-                    0{
+                    {
                         unit{"megapascal"}
                     }
-                    1{
+                    {
                         unit{"kilopascal"}
                     }
-                    2{
+                    {
                         unit{"pascal"}
                     }
                 }
@@ -35965,13 +35973,13 @@ supplementalData:table(nofallback){
         "volume"{
             _default{
                 001{
-                    0{
+                    {
                         unit{"cubic-meter"}
                     }
-                    1{
+                    {
                         unit{"liter"}
                     }
-                    2{
+                    {
                         unit{"milliliter"}
                     }
                 }
