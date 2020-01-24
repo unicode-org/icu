@@ -82,6 +82,42 @@ class UnitConversionRatesSink : public ResourceSink {
     ConvertUnit *convertUnit;
 };
 
+/*
+ Converts `UnicodeString` to a DecNum.
+*/
+number::impl::DecNum &convertStringPiece(StringPiece strPiece, UErrorCode &status) {
+    number::impl::DecNum result;
+    result.setTo(strPiece, status);
+    return result;
+}
+
+bool addFactorConstant(Factor &factor, StringPiece elementStr, int32_t signal, UErrorCode &status) {
+    StringPiece baseStr;
+    StringPiece powerStr;
+    number::impl::DecNum power("1");
+
+    // Search for the power part
+    int32_t powerInd = -1;
+    CharString charStr(elementStr, status);
+    for (int32_t i = 0, n = charStr.length(); i < n; ++i) {
+        if (charStr[i] == '^') {
+            powerInd = i;
+            break;
+        }
+    }
+
+
+    if (powerInd > -1) {
+        // There is power
+        baseStr = elementStr.substr(0, powerInd);
+        powerStr = elementStr.substr( powerInd +1 );
+        number::impl::DecNum =
+    }
+
+
+    return false;
+}
+
 void addFactorElement(Factor &factor, const UnicodeString &stringFactor, int32_t start, int32_t length,
                       int32_t signal, UErrorCode &status) {
     if (stringFactor.compare(start, length, u"ft2m")) {
@@ -111,8 +147,7 @@ Factor extractFactor(UnicodeString stringFactor, UErrorCode &status) {
 
     int32_t signal = 1;
     for (int32_t i = 0, start = 0, length = stringFactor.length(); i < length; i++) {
-        const auto &c = stringFactor[i];
-        if (c == '*' || c == '/') {
+        if (stringFactor[i] == '*' || stringFactor[i] == '/') {
             addFactorElement(result, stringFactor, start, i - start, signal, status);
 
             start = i + 1; // Set `start` to point to the new start point.
