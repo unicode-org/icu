@@ -264,7 +264,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
      * </pre>
      *
-     * @param id The CLDR Sequence Unit Identifier
+     * @param identifier The CLDR Sequence Unit Identifier
      * @param status Set if the identifier is invalid.
      * @draft ICU 67
      */
@@ -424,6 +424,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
      * SEQUENCE unit, an error will occur. For more information, see UMeasureUnitComplexity.
      *
+     * @param other The MeasureUnit to multiply with the target.
      * @param status Set if this or other is a SEQUENCE unit or if another error occurs.
      * @return The product of the target unit with the provided unit.
      */
