@@ -1040,10 +1040,15 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
 
         int p = upper;
+        if (p < 0) {
+            result.append('0');
+        }
         for (; p >= 0; p--) {
             result.append((char) ('0' + getDigitPos(p - scale - exponent)));
         }
-        result.append('.');
+        if (lower < 0) {
+            result.append('.');
+        }
         for(; p >= lower; p--) {
             result.append((char) ('0' + getDigitPos(p - scale - exponent)));
         }
