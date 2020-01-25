@@ -549,8 +549,6 @@ public class PluralRules implements Serializable {
 
         private final int baseFactor;
 
-        final int suppressedExponent;
-
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
@@ -632,15 +630,6 @@ public class PluralRules implements Serializable {
             return baseFactor;
         }
 
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public int getSuppressedExponent() {
-            return suppressedExponent;
-        }
-
         static final long MAX = (long)1E18;
 
         /**
@@ -661,7 +650,6 @@ public class PluralRules implements Serializable {
                     ? MAX
                             : (long)n;
             hasIntegerValue = source == integerValue;
-            suppressedExponent = 0;
             // check values. TODO make into unit test.
             //
             //            long visiblePower = (int) Math.pow(10, v);
@@ -819,7 +807,7 @@ public class PluralRules implements Serializable {
             case t: return decimalDigitsWithoutTrailingZeros;
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
-            case e: return suppressedExponent;
+            case e: return 0;
             default: return source;
             }
         }

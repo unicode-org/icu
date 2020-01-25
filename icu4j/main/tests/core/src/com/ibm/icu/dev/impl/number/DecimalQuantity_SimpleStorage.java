@@ -898,9 +898,17 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
       if (isNegative()) {
           sb.append('-');
       }
-      for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
-        sb.append(getDigit(m));
-        if (m == 0) sb.append('.');
+      int upper = getUpperDisplayMagnitude();
+      int lower = getLowerDisplayMagnitude();
+      int p = upper;
+      for (; p >= 0; p--) {
+          sb.append((char) ('0' + getDigit(p)));
+      }
+      if (lower < 0) {
+          sb.append('.');
+      }
+      for(; p >= lower; p--) {
+          sb.append((char) ('0' + getDigit(p)));
       }
       return sb.toString();
   }

@@ -280,12 +280,13 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
 
     // Treat zero, NaN, and infinity as if they had magnitude 0
     int32_t magnitude;
+    int32_t multiplier = 0;
     if (quantity.isZeroish()) {
         magnitude = 0;
         micros.rounder.apply(quantity, status);
     } else {
         // TODO: Revisit chooseMultiplierAndApply
-        int32_t multiplier = micros.rounder.chooseMultiplierAndApply(quantity, data, status);
+        multiplier = micros.rounder.chooseMultiplierAndApply(quantity, data, status);
         magnitude = quantity.isZeroish() ? 0 : quantity.getMagnitude();
         magnitude -= multiplier;
     }
@@ -321,6 +322,11 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
         unsafePatternModifier->setNumberProperties(quantity.signum(), StandardPlural::Form::COUNT);
         micros.modMiddle = unsafePatternModifier;
     }
+
+    // Change the exponent only after we select appropriate plural form
+    // for formatting purposes so that we preserve expected formatted
+    // string behavior.
+    quantity.adjustExponent(-1 * multiplier);
 
     // We already performed rounding. Do not perform it again.
     micros.rounder = RoundingImpl::passThrough();
