@@ -11,6 +11,11 @@
 
 U_NAMESPACE_BEGIN
 
+class UnitConverter {
+    
+}
+
+
 U_NAMESPACE_END
 
 #endif //__UNITCONVERTER_H__

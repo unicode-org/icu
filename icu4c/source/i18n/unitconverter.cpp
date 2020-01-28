@@ -38,7 +38,7 @@ struct Factor {
     int8_t constants[CONSTANTS_COUNT] = {};
 };
 
-struct ConvertUnit {
+struct ConversionRate {
     UnicodeString source;
     UnicodeString target;
     Factor factor;
@@ -47,16 +47,16 @@ struct ConvertUnit {
 
 class UnitConversionRatesSink : public ResourceSink {
   public:
-    explicit UnitConversionRatesSink(ConvertUnit *convertUnit) : convertUnit(convertUnit) {}
+    explicit UnitConversionRatesSink(ConversionRate *conversionRate) : conversionRate(conversionRate) {}
 
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
              UErrorCode &status) U_OVERRIDE {
-        ResourceTable convertUnitTable = value.getTable(status);
+        ResourceTable conversionRateTable = value.getTable(status);
         if (U_FAILURE(status)) {
             return;
         }
 
-        for (int32_t i = 0; convertUnitTable.getKeyAndValue(i, key, value); ++i) {
+        for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
             StringPiece keySP(key);
 
             if (keySP == "factor") {
@@ -69,7 +69,7 @@ class UnitConversionRatesSink : public ResourceSink {
             }
 
             else if (keySP == "target") {
-                convertUnit->target = value.getUnicodeString(status);
+                conversionRate->target = value.getUnicodeString(status);
             }
 
             if (U_FAILURE(status)) {
@@ -79,7 +79,7 @@ class UnitConversionRatesSink : public ResourceSink {
     }
 
   private:
-    ConvertUnit *convertUnit;
+    ConversionRate *conversionRate;
 };
 
 /*
@@ -91,10 +91,16 @@ number::impl::DecNum &convertStringPiece(StringPiece strPiece, UErrorCode &statu
     return result;
 }
 
-bool addFactorConstant(Factor &factor, StringPiece elementStr, int32_t signal, UErrorCode &status) {
+/*
+  Adds single factor for a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
+  However, complext factor are not included, such as "ft2m^3*200/3"
+*/
+void addSingleFactorConstant(Factor &factor, StringPiece elementStr, int32_t signal,
+                             UErrorCode &status) {
     StringPiece baseStr;
     StringPiece powerStr;
-    number::impl::DecNum power("1");
+    number::impl::DecNum power;
+    power.setTo(1.0, status);
 
     // Search for the power part
     int32_t powerInd = -1;
@@ -106,16 +112,13 @@ bool addFactorConstant(Factor &factor, StringPiece elementStr, int32_t signal, U
         }
     }
 
-
     if (powerInd > -1) {
         // There is power
         baseStr = elementStr.substr(0, powerInd);
-        powerStr = elementStr.substr( powerInd +1 );
-        number::impl::DecNum =
+        powerStr = elementStr.substr(powerInd + 1);
+
+        power.setTo(powerStr, status);
     }
-
-
-    return false;
 }
 
 void addFactorElement(Factor &factor, const UnicodeString &stringFactor, int32_t start, int32_t length,
@@ -163,18 +166,18 @@ Factor extractFactor(UnicodeString stringFactor, UErrorCode &status) {
     return result;
 }
 
-ConvertUnit loadConvertUnit(StringPiece source, UErrorCode &status) {
+ConversionRate loadConversionRate(StringPiece source, UErrorCode &status) {
     LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "units", &status));
     CharString key;
-    key.append("convertUnits/", status);
+    key.append("convertUnit/", status);
     key.append(source, status);
 
-    ConvertUnit convertUnit;
-    UnitConversionRatesSink sink(&convertUnit);
+    ConversionRate conversionRate;
+    UnitConversionRatesSink sink(&conversionRate);
 
     ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
 
-    return convertUnit;
+    return conversionRate;
 }
 
 } // namespace
