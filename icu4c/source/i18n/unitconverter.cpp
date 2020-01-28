@@ -11,6 +11,7 @@
 #include "unicode/stringpiece.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
+#include "unitconverter.h"
 #include "uresimp.h"
 
 U_NAMESPACE_BEGIN
@@ -20,30 +21,6 @@ namespace {
 //////////////////////////
 /// BEGIN DATA LOADING ///
 //////////////////////////
-
-// Loaded Data Skeleton.
-enum Constants {
-    CONSTANT_FT2M, // ft2m stand for foot to meter.
-    CONSTANT_PI,
-    CONSTANT_G,      // G stands for Gravity.
-    CONSTANT_CUP2M3, // CUP2M3 stand for cup to cubic meter.
-
-    // Must be the last element.
-    CONSTANTS_COUNT
-};
-
-struct Factor {
-    int64_t factorNum;
-    int64_t factorDen;
-    int8_t constants[CONSTANTS_COUNT] = {};
-};
-
-struct ConversionRate {
-    UnicodeString source;
-    UnicodeString target;
-    Factor factor;
-    bool reciprocal;
-};
 
 class UnitConversionRatesSink : public ResourceSink {
   public:
@@ -81,15 +58,6 @@ class UnitConversionRatesSink : public ResourceSink {
   private:
     ConversionRate *conversionRate;
 };
-
-/*
- Converts `UnicodeString` to a DecNum.
-*/
-number::impl::DecNum &convertStringPiece(StringPiece strPiece, UErrorCode &status) {
-    number::impl::DecNum result;
-    result.setTo(strPiece, status);
-    return result;
-}
 
 /*
   Adds single factor for a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
