@@ -767,7 +767,11 @@ public:
     }
 
     int32_t length() const {
-        return this->count();
+        return this->fCount;
+    }
+
+    T** getAlias() {
+        return this->fPool.getAlias();
     }
 
     /**
@@ -776,7 +780,7 @@ public:
      * @param i array index
      * @return reference to the array item
      */
-    T *operator[](ptrdiff_t i) const {
+    T* operator[](ptrdiff_t i) const {
         return this->fPool[i];
     }
 };

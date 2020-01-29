@@ -3283,10 +3283,10 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("centimeter equality", centimeter1 == centimeter2);
     assertTrue("kilometer inequality", centimeter1 != kilometer);
 
-    MeasureUnit squareMeter = meter.withPower(2, status);
-    MeasureUnit overCubicCentimeter = centimeter1.withPower(-3, status);
-    MeasureUnit quarticKilometer = kilometer.withPower(4, status);
-    MeasureUnit overQuarticKilometer1 = kilometer.withPower(-4, status);
+    MeasureUnit squareMeter = meter.withDimensionality(2, status);
+    MeasureUnit overCubicCentimeter = centimeter1.withDimensionality(-3, status);
+    MeasureUnit quarticKilometer = kilometer.withDimensionality(4, status);
+    MeasureUnit overQuarticKilometer1 = kilometer.withDimensionality(-4, status);
 
     verifySingleUnit(squareMeter, UMEASURE_SI_PREFIX_ONE, 2, "square-meter");
     verifySingleUnit(overCubicCentimeter, UMEASURE_SI_PREFIX_CENTI, -3, "one-per-cubic-centimeter");
@@ -3300,7 +3300,7 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
         .product(kilometer, status)
         .product(kilometer, status)
         .reciprocal(status);
-    MeasureUnit overQuarticKilometer4 = meter.withPower(4, status)
+    MeasureUnit overQuarticKilometer4 = meter.withDimensionality(4, status)
         .reciprocal(status)
         .withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
 
@@ -3313,11 +3313,11 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer4);
 
     MeasureUnit kiloSquareSecond = MeasureUnit::getSecond()
-        .withPower(2, status).withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
+        .withDimensionality(2, status).withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
     MeasureUnit meterSecond = meter.product(kiloSquareSecond, status);
-    MeasureUnit cubicMeterSecond1 = meter.withPower(3, status).product(kiloSquareSecond, status);
+    MeasureUnit cubicMeterSecond1 = meter.withDimensionality(3, status).product(kiloSquareSecond, status);
     MeasureUnit centimeterSecond1 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status).product(kiloSquareSecond, status);
-    MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withPower(3, status), status);
+    MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withDimensionality(3, status), status);
     MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status), status);
     MeasureUnit secondCentimeterPerKilometer = secondCentimeter.product(kilometer.reciprocal(status), status);
 
@@ -3331,24 +3331,24 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     const char* centimeterSecond1Sub[] = {"centimeter", "square-kilosecond"};
     verifyCompoundUnit(centimeterSecond1, "centimeter-square-kilosecond",
         centimeterSecond1Sub, UPRV_LENGTHOF(centimeterSecond1Sub));
-    const char* secondCubicMeterSub[] = {"square-kilosecond", "cubic-meter"};
-    verifyCompoundUnit(secondCubicMeter, "square-kilosecond-cubic-meter",
+    const char* secondCubicMeterSub[] = {"cubic-meter", "square-kilosecond"};
+    verifyCompoundUnit(secondCubicMeter, "cubic-meter-square-kilosecond",
         secondCubicMeterSub, UPRV_LENGTHOF(secondCubicMeterSub));
-    const char* secondCentimeterSub[] = {"square-kilosecond", "centimeter"};
-    verifyCompoundUnit(secondCentimeter, "square-kilosecond-centimeter",
+    const char* secondCentimeterSub[] = {"centimeter", "square-kilosecond"};
+    verifyCompoundUnit(secondCentimeter, "centimeter-square-kilosecond",
         secondCentimeterSub, UPRV_LENGTHOF(secondCentimeterSub));
-    const char* secondCentimeterPerKilometerSub[] = {"square-kilosecond", "centimeter", "one-per-kilometer"};
-    verifyCompoundUnit(secondCentimeterPerKilometer, "square-kilosecond-centimeter-per-kilometer",
+    const char* secondCentimeterPerKilometerSub[] = {"centimeter", "square-kilosecond", "one-per-kilometer"};
+    verifyCompoundUnit(secondCentimeterPerKilometer, "centimeter-square-kilosecond-per-kilometer",
         secondCentimeterPerKilometerSub, UPRV_LENGTHOF(secondCentimeterPerKilometerSub));
 
-    assertTrue("order matters inequality", cubicMeterSecond1 != secondCubicMeter);
+    assertTrue("reordering equality", cubicMeterSecond1 == secondCubicMeter);
     assertTrue("additional simple units inequality", secondCubicMeter != secondCentimeter);
 
     // Don't allow get/set power or SI prefix on compound units
     status.errIfFailureAndReset();
-    meterSecond.getPower(status);
+    meterSecond.getDimensionality(status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
-    meterSecond.withPower(3, status);
+    meterSecond.withDimensionality(3, status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     meterSecond.getSIPrefix(status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
@@ -3356,9 +3356,9 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 
     // Test that StringPiece does not overflow
-    MeasureUnit kiloSquareSecond2 = MeasureUnit::forIdentifier({secondCentimeter.getIdentifier(), 17}, status);
-    verifySingleUnit(kiloSquareSecond2, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond");
-    assertTrue("string piece equality", kiloSquareSecond == kiloSquareSecond2);
+    MeasureUnit centimeter3 = MeasureUnit::forIdentifier({secondCentimeter.getIdentifier(), 10}, status);
+    verifySingleUnit(centimeter3, UMEASURE_SI_PREFIX_CENTI, 1, "centimeter");
+    assertTrue("string piece equality", centimeter1 == centimeter3);
 
     MeasureUnit footInch = MeasureUnit::forIdentifier("foot+inch", status);
     MeasureUnit inchFoot = MeasureUnit::forIdentifier("inch+foot", status);
@@ -3375,7 +3375,7 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     MeasureUnit one1;
     MeasureUnit one2 = MeasureUnit::forIdentifier("one", status);
     MeasureUnit one3 = MeasureUnit::forIdentifier("", status);
-    MeasureUnit squareOne = one2.withPower(2, status);
+    MeasureUnit squareOne = one2.withDimensionality(2, status);
     MeasureUnit onePerOne = one2.reciprocal(status);
     MeasureUnit squareKiloOne = squareOne.withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
     MeasureUnit onePerSquareKiloOne = squareKiloOne.reciprocal(status);
@@ -3484,7 +3484,7 @@ void MeasureFormatTest::verifySingleUnit(
     status.errIfFailureAndReset("%s: SI prefix", identifier);
     assertEquals(uid + ": Power",
         static_cast<int32_t>(power),
-        static_cast<int32_t>(unit.getPower(status)));
+        static_cast<int32_t>(unit.getDimensionality(status)));
     status.errIfFailureAndReset("%s: Power", identifier);
     assertEquals(uid + ": Identifier",
         identifier,
@@ -3518,7 +3518,7 @@ void MeasureFormatTest::verifyCompoundUnit(
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    LocalArray<MeasureUnit> subUnits = unit.getSingleUnits(status);
+    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(status);
     assertEquals(uid + ": Length", subIdentifierCount, subUnits.length());
     for (int32_t i = 0;; i++) {
         if (i >= subIdentifierCount || i >= subUnits.length()) break;
@@ -3550,7 +3550,7 @@ void MeasureFormatTest::verifySequenceUnit(
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    LocalArray<MeasureUnit> subUnits = unit.getCompoundUnits(status);
+    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(status);
     assertEquals(uid + ": Length", subIdentifierCount, subUnits.length());
     for (int32_t i = 0;; i++) {
         if (i >= subIdentifierCount || i >= subUnits.length()) break;

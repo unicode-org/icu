@@ -13,6 +13,8 @@
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include "cstring.h"
+#include "measunit_impl.h"
+#include "uarrsort.h"
 #include "uassert.h"
 #include "ucln_in.h"
 #include "umutex.h"
@@ -308,211 +310,6 @@ private:
     int32_t fMatch;
 };
 
-struct SingleUnit : public UMemory {
-    int8_t power = 1;
-    UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
-    int32_t simpleUnitIndex = 0;
-    StringPiece id = "one";
-
-    void appendTo(CharString& builder, UErrorCode& status) const {
-        if (simpleUnitIndex == 0) {
-            // Don't propagate SI prefixes and powers on one
-            builder.append("one", status);
-            return;
-        }
-        int8_t posPower = power < 0 ? -power : power;
-        if (posPower == 0) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        } else if (posPower == 1) {
-            // no-op
-        } else if (posPower == 2) {
-            builder.append("square-", status);
-        } else if (posPower == 3) {
-            builder.append("cubic-", status);
-        } else if (posPower < 10) {
-            builder.append('p', status);
-            builder.append(posPower + '0', status);
-            builder.append('-', status);
-        } else if (posPower <= 15) {
-            builder.append("p1", status);
-            builder.append('0' + (posPower % 10), status);
-            builder.append('-', status);
-        } else {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        if (U_FAILURE(status)) {
-            return;
-        }
-
-        if (siPrefix != UMEASURE_SI_PREFIX_ONE) {
-            for (const auto& siPrefixInfo : gSIPrefixStrings) {
-                if (siPrefixInfo.value == siPrefix) {
-                    builder.append(siPrefixInfo.string, status);
-                    break;
-                }
-            }
-        }
-        if (U_FAILURE(status)) {
-            return;
-        }
-
-        builder.append(id, status);
-    }
-
-    char* build(UErrorCode& status) {
-        if (U_FAILURE(status)) {
-            return nullptr;
-        }
-        CharString builder;
-        if (power < 0) {
-            builder.append("one-per-", status);
-        }
-        appendTo(builder, status);
-        return builder.cloneData(status);
-    }
-};
-
-class CompoundUnit : public UMemory {
-public:
-    typedef MaybeStackVector<SingleUnit, 3> SingleUnitList;
-
-    void append(SingleUnit&& singleUnit, UErrorCode& status) {
-        if (singleUnit.simpleUnitIndex == 0) {
-            return;
-        }
-        if (singleUnit.power >= 0) {
-            appendImpl(numerator, std::move(singleUnit), status);
-        } else {
-            appendImpl(denominator, std::move(singleUnit), status);
-        }
-    }
-
-    void takeReciprocal() {
-        auto temp = std::move(numerator);
-        numerator = std::move(denominator);
-        denominator = std::move(temp);
-    }
-
-    void appendTo(CharString& builder, UErrorCode& status) const {
-        if (numerator.length() == 0) {
-            builder.append("one", status);
-        } else {
-            appendToImpl(numerator, builder, status);
-        }
-        if (denominator.length() > 0) {
-            builder.append("-per-", status);
-            appendToImpl(denominator, builder, status);
-        }
-    }
-
-    char* build(UErrorCode& status) {
-        if (U_FAILURE(status)) {
-            return nullptr;
-        }
-        CharString builder;
-        appendTo(builder, status);
-        return builder.cloneData(status);
-    }
-
-    const SingleUnitList& getNumeratorUnits() const {
-        return numerator;
-    }
-
-    const SingleUnitList& getDenominatorUnits() const {
-        return denominator;
-    }
-
-    bool isSingle() const {
-        return numerator.length() + denominator.length() <= 1;
-    }
-
-    bool isEmpty() const {
-        return numerator.length() + denominator.length() == 0;
-    }
-
-private:
-    SingleUnitList numerator;
-    SingleUnitList denominator;
-
-    void appendToImpl(const SingleUnitList& unitList, CharString& builder, UErrorCode& status) const {
-        bool first = true;
-        int32_t len = unitList.length();
-        for (int32_t i = 0; i < len; i++) {
-            if (first) {
-                first = false;
-            } else {
-                builder.append('-', status);
-            }
-            unitList[i]->appendTo(builder, status);
-        }
-    }
-
-    void appendImpl(SingleUnitList& unitList, SingleUnit&& singleUnit, UErrorCode& status) {
-        // Check that the same simple unit doesn't already exist
-        for (int32_t i = 0; i < unitList.length(); i++) {
-            SingleUnit* candidate = unitList[i];
-            if (candidate->simpleUnitIndex == singleUnit.simpleUnitIndex
-                    && candidate->siPrefix == singleUnit.siPrefix) {
-                candidate->power += singleUnit.power;
-                return;
-            }
-        }
-        // Add a new unit
-        SingleUnit* destination = unitList.emplaceBack();
-        if (!destination) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        *destination = std::move(singleUnit);
-    }
-};
-
-class SequenceUnit : public UMemory {
-public:
-    typedef MaybeStackVector<CompoundUnit, 3> CompoundUnitList;
-
-    void append(CompoundUnit&& compoundUnit, UErrorCode& status) {
-        CompoundUnit* destination = units.emplaceBack();
-        if (!destination) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        *destination = std::move(compoundUnit);
-    }
-
-    void appendTo(CharString& builder, UErrorCode& status) const {
-        if (units.length() == 0) {
-            builder.append("one", status);
-            return;
-        }
-        bool isFirst = true;
-        for (int32_t i = 0; i < units.length(); i++) {
-            if (isFirst) {
-                isFirst = false;
-            } else {
-                builder.append('+', status);
-            }
-            units[i]->appendTo(builder, status);
-        }
-    }
-
-    char* build(UErrorCode& status) {
-        if (U_FAILURE(status)) {
-            return nullptr;
-        }
-        CharString builder;
-        appendTo(builder, status);
-        return builder.cloneData(status);
-    }
-
-    const CompoundUnitList& getUnits() const {
-        return units;
-    }
-
-private:
-    CompoundUnitList units;
-};
-
 class Parser {
 public:
     static Parser from(StringPiece source, UErrorCode& status) {
@@ -526,71 +323,10 @@ public:
         return Parser(source);
     }
 
-    bool hasNext() const {
-        return fIndex < fSource.length();
-    }
-
-    SingleUnit getOnlySingleUnit(UErrorCode& status) {
-        bool sawPlus;
-        SingleUnit retval;
-        nextSingleUnit(retval, sawPlus, status);
-        if (U_FAILURE(status)) {
-            return retval;
-        }
-        if (sawPlus || hasNext()) {
-            // Expected to find only one unit in the string
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return retval;
-        }
-        return retval;
-    }
-
-    void nextCompoundUnit(CompoundUnit& result, UErrorCode& status) {
-        bool sawPlus;
-        if (U_FAILURE(status)) {
-            return;
-        }
-        while (hasNext()) {
-            int32_t previ = fIndex;
-            SingleUnit singleUnit;
-            nextSingleUnit(singleUnit, sawPlus, status);
-            if (U_FAILURE(status)) {
-                return;
-            }
-            if (sawPlus && !result.isEmpty()) {
-                fIndex = previ;
-                break;
-            }
-            result.append(std::move(singleUnit), status);
-        }
-        return;
-    }
-
-    CompoundUnit getOnlyCompoundUnit(UErrorCode& status) {
-        CompoundUnit retval;
-        nextCompoundUnit(retval, status);
-        if (U_FAILURE(status)) {
-            return retval;
-        }
-        if (hasNext()) {
-            // Expected to find only one unit in the string
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return retval;
-        }
-        return retval;
-    }
-
-    SequenceUnit getOnlySequenceUnit(UErrorCode& status) {
-        SequenceUnit retval;
-        while (hasNext()) {
-            CompoundUnit compoundUnit;
-            nextCompoundUnit(compoundUnit, status);
-            if (U_FAILURE(status)) {
-                return retval;
-            }
-            retval.append(std::move(compoundUnit), status);
-        }
-        return retval;
+    MeasureUnitImpl parse(UErrorCode& status) {
+        MeasureUnitImpl result;
+        parseImpl(result, status);
+        return result;
     }
 
 private:
@@ -604,6 +340,10 @@ private:
 
     Parser(StringPiece source)
         : fSource(source), fTrie(kSerializedUnitExtrasStemTrie) {}
+
+    inline bool hasNext() const {
+        return fIndex < fSource.length();
+    }
 
     Token nextToken(UErrorCode& status) {
         fTrie.reset();
@@ -637,7 +377,7 @@ private:
         return Token(match);
     }
 
-    void nextSingleUnit(SingleUnit& result, bool& sawPlus, UErrorCode& status) {
+    void nextSingleUnit(TempSingleUnit& result, bool& sawPlus, UErrorCode& status) {
         sawPlus = false;
         if (U_FAILURE(status)) {
             return;
@@ -670,7 +410,7 @@ private:
                         goto fail;
                     }
                     fAfterPer = true;
-                    result.power = -1;
+                    result.dimensionality = -1;
                     break;
 
                 case COMPOUND_PART_TIMES:
@@ -696,7 +436,7 @@ private:
                     if (state > 0) {
                         goto fail;
                     }
-                    result.power *= token.getPower();
+                    result.dimensionality *= token.getPower();
                     previ = fIndex;
                     state = 1;
                     break;
@@ -715,8 +455,8 @@ private:
                     return nextSingleUnit(result, sawPlus, status);
 
                 case Token::TYPE_SIMPLE_UNIT:
-                    result.simpleUnitIndex = token.getSimpleUnitIndex();
-                    result.id = fSource.substr(previ, fIndex - previ);
+                    result.index = token.getSimpleUnitIndex();
+                    result.identifier = fSource.substr(previ, fIndex - previ);
                     return;
 
                 default:
@@ -729,124 +469,306 @@ private:
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
     }
+
+    void parseImpl(MeasureUnitImpl& result, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return;
+        }
+        int32_t unitNum = 0;
+        while (hasNext()) {
+            bool sawPlus;
+            TempSingleUnit singleUnit;
+            nextSingleUnit(singleUnit, sawPlus, status);
+            if (U_FAILURE(status)) {
+                return;
+            }
+            if (singleUnit.index == 0) {
+                continue;
+            }
+            bool added = result.append(singleUnit, status);
+            if (sawPlus && !added) {
+                // Two similar units are not allowed in a sequence unit
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            if ((++unitNum) >= 2) {
+                UMeasureUnitComplexity complexity = sawPlus
+                    ? UMEASURE_UNIT_SEQUENCE
+                    : UMEASURE_UNIT_COMPOUND;
+                if (unitNum == 2) {
+                    U_ASSERT(result.complexity == UMEASURE_UNIT_SINGLE);
+                    result.complexity = complexity;
+                } else if (result.complexity != complexity) {
+                    // Mixed sequence and compound units
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
+            }
+        }
+    }
 };
+
+int32_t U_CALLCONV
+compareSingleUnits(const void* /*context*/, const void* left, const void* right) {
+    auto realLeft = static_cast<const TempSingleUnit* const*>(left);
+    auto realRight = static_cast<const TempSingleUnit* const*>(right);
+    return (*realLeft)->compareTo(**realRight);
+}
+
+/**
+ * Generate the identifier string for a single unit in place.
+ */
+void serializeSingle(const TempSingleUnit& singleUnit, bool first, CharString& output, UErrorCode& status) {
+    if (first && singleUnit.dimensionality < 0) {
+        output.append("one-per-", status);
+    }
+
+    if (singleUnit.index == 0) {
+        // Don't propagate SI prefixes and powers on one
+        output.append("one", status);
+        return;
+    }
+    int8_t posPower = std::abs(singleUnit.dimensionality);
+    if (posPower == 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    } else if (posPower == 1) {
+        // no-op
+    } else if (posPower == 2) {
+        output.append("square-", status);
+    } else if (posPower == 3) {
+        output.append("cubic-", status);
+    } else if (posPower < 10) {
+        output.append('p', status);
+        output.append(posPower + '0', status);
+        output.append('-', status);
+    } else if (posPower <= 15) {
+        output.append("p1", status);
+        output.append('0' + (posPower % 10), status);
+        output.append('-', status);
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
+        for (const auto& siPrefixInfo : gSIPrefixStrings) {
+            if (siPrefixInfo.value == singleUnit.siPrefix) {
+                output.append(siPrefixInfo.string, status);
+                break;
+            }
+        }
+    }
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    output.append(singleUnit.identifier, status);
+}
+
+/**
+ * Normalize a MeasureUnitImpl and generate the identifier string in place.
+ */
+void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    U_ASSERT(impl.identifier.isEmpty());
+    if (impl.units.length() == 0) {
+        impl.identifier.append("one", status);
+        return;
+    }
+    if (impl.complexity == UMEASURE_UNIT_COMPOUND) {
+        // Note: don't sort a SEQUENCE unit
+        uprv_sortArray(
+            impl.units.getAlias(),
+            impl.units.length(),
+            sizeof(impl.units[0]),
+            compareSingleUnits,
+            nullptr,
+            false,
+            &status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+    }
+    serializeSingle(*impl.units[0], true, impl.identifier, status);
+    if (impl.units.length() == 1) {
+        return;
+    }
+    for (int32_t i = 1; i < impl.units.length(); i++) {
+        const TempSingleUnit& prev = *impl.units[i-1];
+        const TempSingleUnit& curr = *impl.units[i];
+        if (impl.complexity == UMEASURE_UNIT_SEQUENCE) {
+            impl.identifier.append('+', status);
+            serializeSingle(curr, true, impl.identifier, status);
+        } else {
+            if (prev.dimensionality > 0 && curr.dimensionality < 0) {
+                impl.identifier.append("-per-", status);
+            } else {
+                impl.identifier.append('-', status);
+            }
+            serializeSingle(curr, false, impl.identifier, status);
+        }
+    }
+
+}
+
+/** @return true if a new item was added */
+bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& status) {
+    // Find a similar unit that already exists, to attempt to coalesce
+    TempSingleUnit* oldUnit = nullptr;
+    for (int32_t i = 0; i < impl.units.length(); i++) {
+        auto* candidate = impl.units[i];
+        if (candidate->index == unit.index && candidate->siPrefix == unit.siPrefix) {
+            oldUnit = candidate;
+        }
+    }
+    if (oldUnit) {
+        oldUnit->dimensionality += unit.dimensionality;
+    } else {
+        TempSingleUnit* destination = impl.units.emplaceBack();
+        if (!destination) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return false;
+        }
+        *destination = unit;
+    }
+    return (oldUnit == nullptr);
+}
 
 } // namespace
 
 
+TempSingleUnit TempSingleUnit::forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status) {
+    MeasureUnitImpl temp;
+    const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(measureUnit, temp, status);
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    if (impl.units.length() == 0) {
+        return {};
+    } else if (impl.units.length() == 1) {
+        return *impl.units[0];
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return {};
+    }
+}
+
+MeasureUnit TempSingleUnit::build(UErrorCode& status) {
+    MeasureUnitImpl temp;
+    temp.append(*this, status);
+    return std::move(temp).build(status);
+}
+
+
+MeasureUnitImpl MeasureUnitImpl::forIdentifier(StringPiece identifier, UErrorCode& status) {
+    return Parser::from(identifier, status).parse(status);
+}
+
+const MeasureUnitImpl& MeasureUnitImpl::forMeasureUnit(
+        const MeasureUnit& measureUnit, MeasureUnitImpl& memory, UErrorCode& status) {
+    if (measureUnit.fImpl) {
+        return *measureUnit.fImpl;
+    } else {
+        memory = Parser::from(measureUnit.getIdentifier(), status).parse(status);
+        return memory;
+    }
+}
+
+MeasureUnitImpl MeasureUnitImpl::forMeasureUnitMaybeCopy(
+        const MeasureUnit& measureUnit, UErrorCode& status) {
+    // TODO: Improve this algorithm to not round-trip through the identifier string?
+    return Parser::from(measureUnit.getIdentifier(), status).parse(status);
+}
+
+MeasureUnitImpl MeasureUnitImpl::forCurrencyCode(StringPiece currencyCode) {
+    MeasureUnitImpl result;
+    ErrorCode localStatus;
+    result.identifier.append(currencyCode, localStatus);
+    // localStatus is not expected to fail since currencyCode should be 3 chars long
+    return result;
+}
+
+void MeasureUnitImpl::takeReciprocal(UErrorCode& /*status*/) {
+    for (int32_t i = 0; i < units.length(); i++) {
+        units[i]->dimensionality *= -1;
+    }
+}
+
+bool MeasureUnitImpl::append(const TempSingleUnit& singleUnit, UErrorCode& status) {
+    return appendImpl(*this, singleUnit, status);
+}
+
+MeasureUnit MeasureUnitImpl::build(UErrorCode& status) && {
+    serialize(*this, status);
+    return MeasureUnit(std::move(*this));
+}
+
+
 MeasureUnit MeasureUnit::forIdentifier(StringPiece identifier, UErrorCode& status) {
-    return Parser::from(identifier, status).getOnlySequenceUnit(status).build(status);
+    return Parser::from(identifier, status).parse(status).build(status);
 }
 
 UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
-    const char* id = getIdentifier();
-    Parser parser = Parser::from(id, status);
-    if (U_FAILURE(status)) {
-        return UMEASURE_UNIT_SINGLE;
-    }
-
-    CompoundUnit compoundUnit;
-    parser.nextCompoundUnit(compoundUnit, status);
-    if (parser.hasNext()) {
-        return UMEASURE_UNIT_SEQUENCE;
-    } else if (compoundUnit.isSingle()) {
-        return UMEASURE_UNIT_SINGLE;
-    } else {
-        return UMEASURE_UNIT_COMPOUND;
-    }
+    MeasureUnitImpl temp;
+    return MeasureUnitImpl::forMeasureUnit(*this, temp, status).complexity;
 }
 
 UMeasureSIPrefix MeasureUnit::getSIPrefix(UErrorCode& status) const {
-    const char* id = getIdentifier();
-    return Parser::from(id, status).getOnlySingleUnit(status).siPrefix;
+    return TempSingleUnit::forMeasureUnit(*this, status).siPrefix;
 }
 
 MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const {
-    const char* id = getIdentifier();
-    SingleUnit singleUnit = Parser::from(id, status).getOnlySingleUnit(status);
+    TempSingleUnit singleUnit = TempSingleUnit::forMeasureUnit(*this, status);
     singleUnit.siPrefix = prefix;
     return singleUnit.build(status);
 }
 
-int8_t MeasureUnit::getPower(UErrorCode& status) const {
-    const char* id = getIdentifier();
-    return Parser::from(id, status).getOnlySingleUnit(status).power;
+int32_t MeasureUnit::getDimensionality(UErrorCode& status) const {
+    return TempSingleUnit::forMeasureUnit(*this, status).dimensionality;
 }
 
-MeasureUnit MeasureUnit::withPower(int8_t power, UErrorCode& status) const {
-    const char* id = getIdentifier();
-    SingleUnit singleUnit = Parser::from(id, status).getOnlySingleUnit(status);
-    singleUnit.power = power;
+MeasureUnit MeasureUnit::withDimensionality(int32_t dimensionality, UErrorCode& status) const {
+    TempSingleUnit singleUnit = TempSingleUnit::forMeasureUnit(*this, status);
+    singleUnit.dimensionality = dimensionality;
     return singleUnit.build(status);
 }
 
 MeasureUnit MeasureUnit::reciprocal(UErrorCode& status) const {
-    const char* id = getIdentifier();
-    CompoundUnit compoundUnit = Parser::from(id, status).getOnlyCompoundUnit(status);
-    compoundUnit.takeReciprocal();
-    return compoundUnit.build(status);
+    MeasureUnitImpl impl = MeasureUnitImpl::forMeasureUnitMaybeCopy(*this, status);
+    impl.takeReciprocal(status);
+    return std::move(impl).build(status);
 }
 
 MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) const {
-    const char* id = getIdentifier();
-    CompoundUnit compoundUnit = Parser::from(id, status).getOnlyCompoundUnit(status);
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-
-    // Append other's first CompoundUnit to compoundUnit, then assert other has only one
-    Parser otherParser = Parser::from(other.getIdentifier(), status);
-    otherParser.nextCompoundUnit(compoundUnit, status);
-    if (U_FAILURE(status)) {
-        return *this;
-    }
-    if (otherParser.hasNext()) {
+    MeasureUnitImpl impl = MeasureUnitImpl::forMeasureUnitMaybeCopy(*this, status);
+    MeasureUnitImpl temp;
+    const MeasureUnitImpl& otherImpl = MeasureUnitImpl::forMeasureUnit(other, temp, status);
+    if (impl.complexity == UMEASURE_UNIT_SEQUENCE || otherImpl.complexity == UMEASURE_UNIT_SEQUENCE) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return *this;
+        return {};
     }
-
-    return compoundUnit.build(status);
+    for (int32_t i = 0; i < otherImpl.units.length(); i++) {
+        impl.append(*otherImpl.units[i], status);
+    }
+    if (impl.units.length() > 1) {
+        impl.complexity = UMEASURE_UNIT_COMPOUND;
+    }
+    return std::move(impl).build(status);
 }
 
-LocalArray<MeasureUnit> MeasureUnit::getSingleUnits(UErrorCode& status) const {
-    const char* id = getIdentifier();
-    CompoundUnit compoundUnit = Parser::from(id, status).getOnlyCompoundUnit(status);
-    if (U_FAILURE(status)) {
-        return LocalArray<MeasureUnit>();
+LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(UErrorCode& status) const {
+    MeasureUnitImpl temp;
+    const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(*this, temp, status);
+    const int32_t length = impl.units.length();
+    MeasureUnit* arr = new MeasureUnit[length];
+    for (int32_t i = 0; i < length; i++) {
+        arr[i] = impl.units[i]->build(status);
     }
-
-    const CompoundUnit::SingleUnitList& numerator = compoundUnit.getNumeratorUnits();
-    const CompoundUnit::SingleUnitList& denominator = compoundUnit.getDenominatorUnits();
-    int32_t count = numerator.length() + denominator.length();
-    MeasureUnit* arr = new MeasureUnit[count];
-
-    int32_t i = 0;
-    for (int32_t j = 0; j < numerator.length(); j++) {
-        arr[i++] = numerator[j]->build(status);
-    }
-    for (int32_t j = 0; j < denominator.length(); j++) {
-        arr[i++] = denominator[j]->build(status);
-    }
-
-    return LocalArray<MeasureUnit>::withLength(arr, count);
-}
-
-LocalArray<MeasureUnit> MeasureUnit::getCompoundUnits(UErrorCode& status) const {
-    const char* id = getIdentifier();
-    SequenceUnit sequenceUnit = Parser::from(id, status).getOnlySequenceUnit(status);
-    if (U_FAILURE(status)) {
-        return LocalArray<MeasureUnit>();
-    }
-
-    const SequenceUnit::CompoundUnitList& unitVector = sequenceUnit.getUnits();
-    int32_t count = unitVector.length();
-    MeasureUnit* arr = new MeasureUnit[count];
-
-    for (int32_t i = 0; i < count; i++) {
-        arr[i] = unitVector[i]->build(status);
-    }
-
-    return LocalArray<MeasureUnit>::withLength(arr, count);
+    return LocalArray<MeasureUnit>::withLength(arr, length);
 }
 
 

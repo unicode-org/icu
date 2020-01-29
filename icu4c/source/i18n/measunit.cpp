@@ -17,9 +17,11 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/uenum.h"
+#include "unicode/errorcode.h"
 #include "ustrenum.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "measunit_impl.h"
 
 U_NAMESPACE_BEGIN
 
@@ -2010,28 +2012,25 @@ MeasureUnit::MeasureUnit() : MeasureUnit(kBaseTypeIdx, kBaseSubTypeIdx) {
 }
 
 MeasureUnit::MeasureUnit(int32_t typeId, int32_t subTypeId)
-        : fId(nullptr), fSubTypeId(subTypeId), fTypeId(typeId) {
+        : fImpl(nullptr), fSubTypeId(subTypeId), fTypeId(typeId) {
 }
 
 MeasureUnit::MeasureUnit(const MeasureUnit &other)
-        : fId(nullptr) {
+        : fImpl(nullptr) {
     *this = other;
 }
 
 MeasureUnit::MeasureUnit(MeasureUnit &&other) noexcept
-        : fId(other.fId),
+        : fImpl(other.fImpl),
         fSubTypeId(other.fSubTypeId),
         fTypeId(other.fTypeId) {
-    other.fId = nullptr;
+    other.fImpl = nullptr;
 }
 
-MeasureUnit::MeasureUnit(char* idToAdopt)
-        : fId(idToAdopt), fSubTypeId(-1), fTypeId(-1) {
-    if (fId == nullptr) {
-        // Invalid; reset to the base dimensionless unit
-        setTo(kBaseTypeIdx, kBaseSubTypeIdx);
-    } else if (findBySubType(idToAdopt, this)) {
-        // findBySubType frees fId
+MeasureUnit::MeasureUnit(MeasureUnitImpl&& impl)
+        : fImpl(nullptr), fSubTypeId(-1), fTypeId(-1) {
+    if (!findBySubType(impl.identifier.toStringPiece(), this)) {
+        fImpl = new MeasureUnitImpl(std::move(impl));
     }
 }
 
@@ -2039,16 +2038,17 @@ MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     if (this == &other) {
         return *this;
     }
-    uprv_free(fId);
-    if (other.fId) {
-        fId = uprv_strdup(other.fId);
-        if (!fId) {
+    uprv_free(fImpl);
+    if (other.fImpl) {
+        ErrorCode localStatus;
+        fImpl = new MeasureUnitImpl(MeasureUnitImpl::forMeasureUnitMaybeCopy(*this, localStatus));
+        if (!fImpl || localStatus.isFailure()) {
             // Unrecoverable allocation error; set to the default unit
             *this = MeasureUnit();
             return *this;
         }
     } else {
-        fId = nullptr;
+        fImpl = nullptr;
     }
     fTypeId = other.fTypeId;
     fSubTypeId = other.fSubTypeId;
@@ -2059,9 +2059,9 @@ MeasureUnit &MeasureUnit::operator=(MeasureUnit &&other) noexcept {
     if (this == &other) {
         return *this;
     }
-    uprv_free(fId);
-    fId = other.fId;
-    other.fId = nullptr;
+    uprv_free(fImpl);
+    fImpl = other.fImpl;
+    other.fImpl = nullptr;
     fTypeId = other.fTypeId;
     fSubTypeId = other.fSubTypeId;
     return *this;
@@ -2072,8 +2072,8 @@ MeasureUnit *MeasureUnit::clone() const {
 }
 
 MeasureUnit::~MeasureUnit() {
-    uprv_free(fId);
-    fId = nullptr;
+    uprv_free(fImpl);
+    fImpl = nullptr;
 }
 
 const char *MeasureUnit::getType() const {
@@ -2093,7 +2093,7 @@ const char *MeasureUnit::getSubtype() const {
 }
 
 const char *MeasureUnit::getIdentifier() const {
-    return fId ? fId : gSubTypes[getOffset()];
+    return fImpl ? fImpl->identifier.data() : gSubTypes[getOffset()];
 }
 
 UBool MeasureUnit::operator==(const UObject& other) const {
@@ -2259,15 +2259,15 @@ void MeasureUnit::initTime(const char *timeId) {
     fSubTypeId = result - gOffsets[fTypeId]; 
 }
 
-void MeasureUnit::initCurrency(const char *isoCurrency) {
+void MeasureUnit::initCurrency(StringPiece isoCurrency) {
     int32_t result = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), "currency");
     U_ASSERT(result != -1);
     fTypeId = result;
     result = binarySearch(
             gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], isoCurrency);
     if (result == -1) {
-        fId = uprv_strdup(isoCurrency);
-        if (fId) {
+        fImpl = new MeasureUnitImpl(MeasureUnitImpl::forCurrencyCode(isoCurrency));
+        if (fImpl) {
             fSubTypeId = -1;
             return;
         }
@@ -2291,8 +2291,8 @@ void MeasureUnit::initNoUnit(const char *subtype) {
 void MeasureUnit::setTo(int32_t typeId, int32_t subTypeId) {
     fTypeId = typeId;
     fSubTypeId = subTypeId;
-    uprv_free(fId);
-    fId = nullptr;
+    uprv_free(fImpl);
+    fImpl = nullptr;
 }
 
 int32_t MeasureUnit::getOffset() const {

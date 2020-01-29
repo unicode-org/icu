@@ -30,6 +30,7 @@
 U_NAMESPACE_BEGIN
 
 class StringEnumeration;
+struct MeasureUnitImpl;
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -376,28 +377,29 @@ class U_I18N_API MeasureUnit: public UObject {
     UMeasureSIPrefix getSIPrefix(UErrorCode& status) const;
 
     /**
-     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified power. For
-     * example, if power is 2, the unit will be squared.
+     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
+     * (power). For example, if dimensionality is 2, the unit will be squared.
      *
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param power The power.
+     * @param power The dimensionality (power).
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
      */
-    MeasureUnit withPower(int8_t power, UErrorCode& status) const;
+    MeasureUnit withDimensionality(int32_t dimensionality, UErrorCode& status) const;
 
     /**
-     * Gets the power of this MeasureUnit. For example, if the unit is square, then 2 is returned.
+     * Gets the dimensionality (power) of this MeasureUnit. For example, if the unit is square,
+     * then 2 is returned.
      *
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
-     * @return The power of this simple unit.
+     * @return The dimensionality (power) of this simple unit.
      */
-    int8_t getPower(UErrorCode& status) const;
+    int32_t getDimensionality(UErrorCode& status) const;
 
     /**
      * Gets the reciprocal of this MeasureUnit, with the numerator and denominator flipped.
@@ -431,33 +433,20 @@ class U_I18N_API MeasureUnit: public UObject {
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
 
     /**
-     * Gets the list of single units contained within a compound unit.
+     * Gets the list of SINGLE units contained within a SEQUENCE of COMPOUND unit.
      *
-     * For example, given "meter-kilogram-per-second", three units will be returned: "meter",
-     * "kilogram", and "one-per-second".
+     * Examples:
+     * - Given "meter-kilogram-per-second", three units will be returned: "meter",
+     *   "kilogram", and "one-per-second".
+     * - Given "hour+minute+second", three units will be returned: "hour", "minute",
+     *   and "second".
      *
      * If this is a SINGLE unit, an array of length 1 will be returned.
      *
-     * NOTE: Only works on SINGLE and COMPOUND units. If this is a SEQUENCE unit, an error will
-     * occur. For more information, see UMeasureUnitComplexity.
-     *
-     * @param status Set if this is a SEQUENCE unit or if another error occurs.
+     * @param status Set if an error occurs.
      * @return An array of single units, owned by the caller.
      */
-    LocalArray<MeasureUnit> getSingleUnits(UErrorCode& status) const;
-
-    /**
-     * Gets the list of compound units contained within a sequence unit.
-     *
-     * For example, given "hour+minute+second", three units will be returned: "hour", "minute",
-     * and "second".
-     *
-     * If this is a SINGLE or COMPOUND unit, an array of length 1 will be returned.
-     *
-     * @param status Set of an error occurs.
-     * @return An array of compound units, owned by the caller.
-     */
-    LocalArray<MeasureUnit> getCompoundUnits(UErrorCode& status) const;
+    LocalArray<MeasureUnit> splitToSingleUnits(UErrorCode& status) const;
 #endif // U_HIDE_DRAFT_API
 
     /**
@@ -3682,7 +3671,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * For ICU use only.
      * @internal
      */
-    void initCurrency(const char *isoCurrency);
+    void initCurrency(StringPiece isoCurrency);
 
     /**
      * For ICU use only.
@@ -3694,15 +3683,15 @@ class U_I18N_API MeasureUnit: public UObject {
 
 private:
 
-    // If non-null, fId is owned by the MeasureUnit.
-    char* fId;
+    // If non-null, fImpl is owned by the MeasureUnit.
+    MeasureUnitImpl* fImpl;
 
     // These two ints are indices into static string lists in measunit.cpp
     int16_t fSubTypeId;
     int8_t fTypeId;
 
     MeasureUnit(int32_t typeId, int32_t subTypeId);
-    MeasureUnit(char* idToAdopt);
+    MeasureUnit(MeasureUnitImpl&& impl);
     void setTo(int32_t typeId, int32_t subTypeId);
     int32_t getOffset() const;
     static MeasureUnit *create(int typeId, int subTypeId, UErrorCode &status);
@@ -3711,6 +3700,8 @@ private:
      * @return Whether subType is known to ICU.
      */
     static bool findBySubType(StringPiece subType, MeasureUnit* output);
+
+    friend struct MeasureUnitImpl;
 };
 
 U_NAMESPACE_END

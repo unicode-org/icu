@@ -612,6 +612,7 @@
     <ClInclude Include="indiancal.h" />
     <ClInclude Include="islamcal.h" />
     <ClInclude Include="japancal.h" />
+    <ClInclude Include="measunit_impl.h" />
     <ClInclude Include="msgfmt_impl.h" />
     <ClInclude Include="nfrlist.h" />
     <ClInclude Include="nfrs.h" />

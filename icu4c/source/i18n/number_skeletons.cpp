@@ -23,6 +23,7 @@
 #include "string_segment.h"
 #include "unicode/errorcode.h"
 #include "util.h"
+#include "measunit_impl.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -1041,20 +1042,21 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     ErrorCode internalStatus;
-    MeasureUnit fullUnit = MeasureUnit::forIdentifier(buffer.toStringPiece(), internalStatus);
-    auto subUnits = fullUnit.getSingleUnits(internalStatus);
+    auto fullUnit = MeasureUnitImpl::forIdentifier(buffer.toStringPiece(), internalStatus);
     if (internalStatus.isFailure()) {
         // throw new SkeletonSyntaxException("Invalid core unit identifier", segment, e);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
     }
 
-    for (int32_t i = 0; i < subUnits.length(); i++) {
-        const MeasureUnit& subUnit = subUnits[i];
-        if (subUnit.getPower(status) > 0) {
-            macros.unit = macros.unit.product(subUnit, status);
+    // TODO(ICU-20941): Clean this up.
+    for (int32_t i = 0; i < fullUnit.units.length(); i++) {
+        TempSingleUnit* subUnit = fullUnit.units[i];
+        if (subUnit->dimensionality > 0) {
+            macros.unit = macros.unit.product(subUnit->build(status), status);
         } else {
-            macros.perUnit = macros.perUnit.product(subUnit.reciprocal(status), status);
+            subUnit->dimensionality *= -1;
+            macros.perUnit = macros.perUnit.product(subUnit->build(status), status);
         }
     }
 }
