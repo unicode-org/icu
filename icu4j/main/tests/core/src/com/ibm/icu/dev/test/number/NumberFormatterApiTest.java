@@ -66,6 +66,7 @@ public class NumberFormatterApiTest {
     private static final Currency ESP = Currency.getInstance("ESP");
     private static final Currency PTE = Currency.getInstance("PTE");
     private static final Currency RON = Currency.getInstance("RON");
+    private static final Currency CNY = Currency.getInstance("CNY");
 
     @Test
     public void notationSimple() {
@@ -864,6 +865,15 @@ public class NumberFormatterApiTest {
                 ULocale.forLanguageTag("ro-RO"),
                 24,
                 "24,00 lei românești");
+
+        assertFormatSingle(
+                "Currency spacing in suffix (ICU-20954)",
+                "currency/CNY",
+                "currency/CNY",
+                NumberFormatter.with().unit(CNY),
+                ULocale.forLanguageTag("lu"),
+                123.12,
+                "123,12 CN¥");
     }
 
     @Test
