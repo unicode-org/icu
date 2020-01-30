@@ -383,7 +383,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param power The dimensionality (power).
+     * @param dimensionality The dimensionality (power).
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
      */
