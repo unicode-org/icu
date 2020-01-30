@@ -81,6 +81,8 @@ private:
     void TestNumericTimeSomeSpecialFormats();
     void TestInvalidIdentifiers();
     void TestCompoundUnitOperations();
+    void TestIdentifiers();
+
     void verifyFormat(
         const char *description,
         const MeasureFormat &fmt,
@@ -201,6 +203,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestNumericTimeSomeSpecialFormats);
     TESTCASE_AUTO(TestInvalidIdentifiers);
     TESTCASE_AUTO(TestCompoundUnitOperations);
+    TESTCASE_AUTO(TestIdentifiers);
     TESTCASE_AUTO_END;
 }
 
@@ -3398,6 +3401,29 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("one equality", one2 == one3);
     assertTrue("one-per-one equality", onePerOne == onePerSquareKiloOne);
     assertTrue("kilometer equality", kilometer == kilometer2);
+}
+
+void MeasureFormatTest::TestIdentifiers() {
+    IcuTestErrorCode status(*this, "TestIdentifiers");
+    struct TestCase {
+        bool valid;
+        const char* id;
+        const char* normalized;
+    } cases[] = {
+        { true, "square-meter-per-square-meter", "square-meter-per-square-meter" },
+        // TODO(ICU-20920): Add more test cases once the proper ranking is available.
+    };
+    for (const auto& cas : cases) {
+        status.setScope(cas.id);
+        MeasureUnit unit = MeasureUnit::forIdentifier(cas.id, status);
+        if (!cas.valid) {
+            status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+            continue;
+        }
+        const char* actual = unit.getIdentifier();
+        assertEquals(cas.id, cas.normalized, actual);
+        status.errIfFailureAndReset();
+    }
 }
 
 

@@ -1070,7 +1070,7 @@ group: units_extra
 group: units
     measunit.o currunit.o nounit.o
   deps
-    stringenumeration
+    stringenumeration errorcode
 
 group: decnumber
     decContext.o decNumber.o

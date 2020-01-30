@@ -45,6 +45,16 @@ struct TempSingleUnit : public UMemory {
         }
     }
 
+    /**
+     * Return whether this TempSingleUnit is compatible with another for the purpose of coalescing.
+     *
+     * Units with the same base unit and SI prefix should match, except that they must also have
+     * the same dimensionality sign, such that we don't merge numerator and denominator.
+     */
+    bool isCompatibleWith(const TempSingleUnit& other) const {
+        return (compareTo(other) == 0);
+    }
+
     /** Simple unit index, unique for every simple unit. */
     int32_t index = 0;
 
@@ -102,10 +112,27 @@ struct MeasureUnitImpl : public UMemory {
     /**
      * Used for currency units.
      */
-    static MeasureUnitImpl forCurrencyCode(StringPiece currencyCode);
+    static inline MeasureUnitImpl forCurrencyCode(StringPiece currencyCode) {
+        MeasureUnitImpl result;
+        UErrorCode localStatus = U_ZERO_ERROR;
+        result.identifier.append(currencyCode, localStatus);
+        // localStatus is not expected to fail since currencyCode should be 3 chars long
+        return result;
+    }
 
     /** Transform this MeasureUnitImpl into a MeasureUnit, simplifying if possible. */
     MeasureUnit build(UErrorCode& status) &&;
+
+    /**
+     * Create a copy of this MeasureUnitImpl. Don't use copy constructor to make this explicit.
+     */
+    inline MeasureUnitImpl copy(UErrorCode& status) const {
+        MeasureUnitImpl result;
+        result.complexity = complexity;
+        result.units.appendAll(units, status);
+        result.identifier.append(identifier, status);
+        return result;
+    }
 
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);

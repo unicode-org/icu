@@ -530,7 +530,7 @@ void serializeSingle(const TempSingleUnit& singleUnit, bool first, CharString& o
     }
     int8_t posPower = std::abs(singleUnit.dimensionality);
     if (posPower == 0) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+        status = U_INTERNAL_PROGRAM_ERROR;
     } else if (posPower == 1) {
         // no-op
     } else if (posPower == 2) {
@@ -621,7 +621,7 @@ bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& s
     TempSingleUnit* oldUnit = nullptr;
     for (int32_t i = 0; i < impl.units.length(); i++) {
         auto* candidate = impl.units[i];
-        if (candidate->index == unit.index && candidate->siPrefix == unit.siPrefix) {
+        if (candidate->isCompatibleWith(unit)) {
             oldUnit = candidate;
         }
     }
@@ -680,25 +680,22 @@ const MeasureUnitImpl& MeasureUnitImpl::forMeasureUnit(
 
 MeasureUnitImpl MeasureUnitImpl::forMeasureUnitMaybeCopy(
         const MeasureUnit& measureUnit, UErrorCode& status) {
-    // TODO: Improve this algorithm to not round-trip through the identifier string?
-    return Parser::from(measureUnit.getIdentifier(), status).parse(status);
-}
-
-MeasureUnitImpl MeasureUnitImpl::forCurrencyCode(StringPiece currencyCode) {
-    MeasureUnitImpl result;
-    ErrorCode localStatus;
-    result.identifier.append(currencyCode, localStatus);
-    // localStatus is not expected to fail since currencyCode should be 3 chars long
-    return result;
+    if (measureUnit.fImpl) {
+        return measureUnit.fImpl->copy(status);
+    } else {
+        return Parser::from(measureUnit.getIdentifier(), status).parse(status);
+    }
 }
 
 void MeasureUnitImpl::takeReciprocal(UErrorCode& /*status*/) {
+    identifier.clear();
     for (int32_t i = 0; i < units.length(); i++) {
         units[i]->dimensionality *= -1;
     }
 }
 
 bool MeasureUnitImpl::append(const TempSingleUnit& singleUnit, UErrorCode& status) {
+    identifier.clear();
     return appendImpl(*this, singleUnit, status);
 }
 

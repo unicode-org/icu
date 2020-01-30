@@ -2041,7 +2041,7 @@ MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     uprv_free(fImpl);
     if (other.fImpl) {
         ErrorCode localStatus;
-        fImpl = new MeasureUnitImpl(MeasureUnitImpl::forMeasureUnitMaybeCopy(*this, localStatus));
+        fImpl = new MeasureUnitImpl(other.fImpl->copy(localStatus));
         if (!fImpl || localStatus.isFailure()) {
             // Unrecoverable allocation error; set to the default unit
             *this = MeasureUnit();
@@ -2072,7 +2072,7 @@ MeasureUnit *MeasureUnit::clone() const {
 }
 
 MeasureUnit::~MeasureUnit() {
-    uprv_free(fImpl);
+    delete fImpl;
     fImpl = nullptr;
 }
 
