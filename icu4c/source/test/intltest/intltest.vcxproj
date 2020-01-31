@@ -301,6 +301,7 @@
     <ClCompile Include="formattedvaluetest.cpp" />
     <ClCompile Include="localebuildertest.cpp" />
     <ClCompile Include="localematchertest.cpp" />
+    <ClCompile Include="unitstest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colldata.h" />

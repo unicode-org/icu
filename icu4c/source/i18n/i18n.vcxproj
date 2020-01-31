@@ -187,6 +187,7 @@
     <ClCompile Include="ulistformatter.cpp" />
     <ClCompile Include="measfmt.cpp" />
     <ClCompile Include="measunit.cpp" />
+    <ClCompile Include="measunit_extra.cpp" />
     <ClCompile Include="measure.cpp" />
     <ClCompile Include="msgfmt.cpp" />
     <ClCompile Include="nfrs.cpp" />
@@ -265,6 +266,7 @@
     <ClCompile Include="ufieldpositer.cpp" />
     <ClCompile Include="ulocdata.cpp" />
     <ClCompile Include="umsg.cpp" />
+    <ClCompile Include="unitconverter.cpp" />
     <ClCompile Include="unum.cpp" />
     <ClCompile Include="unumsys.cpp" />
     <ClCompile Include="upluralrules.cpp" />
@@ -498,6 +500,7 @@
     <ClInclude Include="numparse_utils.h" />
     <ClInclude Include="numrange_impl.h" />
     <ClInclude Include="formattedval_impl.h" />
+    <ClInclude Include="unitconverter.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc" />

@@ -870,6 +870,7 @@ library: i18n
     listformatter
     formatting formattable_cnv regex regex_cnv translit
     double_conversion number_representation number_output numberformatter numberparser
+    units_extra
     universal_time_scale
     uclean_i18n
 
@@ -1052,6 +1053,11 @@ group: sharedbreakiterator
     sharedbreakiterator.o
   deps
     breakiterator
+
+group: units_extra
+    measunit_extra.o
+  deps
+    units
 
 group: units
     measunit.o currunit.o nounit.o
