@@ -97,6 +97,41 @@ public:
         return *this;
     }
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns the state of this trie as a 64-bit integer.
+     * The state value is never 0.
+     *
+     * @return opaque state value
+     * @see resetToState64
+     * @draft ICU 65
+     */
+    uint64_t getState64() const {
+        return (static_cast<uint64_t>(remainingMatchLength_ + 2) << kState64RemainingShift) |
+            (uint64_t)(pos_ - uchars_);
+    }
+
+    /**
+     * Resets this trie to the saved state.
+     * Unlike resetToState(State), the 64-bit state value
+     * must be from getState64() from the same trie object or
+     * from one initialized the exact same way.
+     * Because of no validation, this method is faster.
+     *
+     * @param state The opaque trie state value from getState64().
+     * @return *this
+     * @see getState64
+     * @see resetToState
+     * @see reset
+     * @draft ICU 65
+     */
+    UCharsTrie &resetToState64(uint64_t state) {
+        remainingMatchLength_ = static_cast<int32_t>(state >> kState64RemainingShift) - 2;
+        pos_ = uchars_ + (state & kState64PosMask);
+        return *this;
+    }
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
      * UCharsTrie state object, for saving a trie's current state
      * and resetting the trie back to this state later.
@@ -562,6 +597,13 @@ private:
     static const int32_t kThreeUnitDeltaLead=0xffff;
 
     static const int32_t kMaxTwoUnitDelta=((kThreeUnitDeltaLead-kMinTwoUnitDeltaLead)<<16)-1;  // 0x03feffff
+
+    // For getState64():
+    // The remainingMatchLength_ is -1..14=(kMaxLinearMatchLength=0x10)-2
+    // so we need at least 5 bits for that.
+    // We add 2 to store it as a positive value 1..16=kMaxLinearMatchLength.
+    static constexpr int32_t kState64RemainingShift = 59;
+    static constexpr uint64_t kState64PosMask = (UINT64_C(1) << kState64RemainingShift) - 1;
 
     char16_t *ownedArray_;
 

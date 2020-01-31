@@ -7,6 +7,7 @@ import java.math.MathContext;
 import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.UFieldPosition;
 
@@ -122,6 +123,26 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     public int getMagnitude() throws ArithmeticException;
 
     /**
+     * @return The value of the (suppressed) exponent after the number has been
+     * put into a notation with exponents (ex: compact, scientific).  Ex: given
+     * the number 1000 as "1K" / "1E3", the return value will be 3 (positive).
+     */
+    public int getExponent();
+
+    /**
+     * Adjusts the value for the (suppressed) exponent stored when using
+     * notation with exponents (ex: compact, scientific).
+     *
+     * <p>Adjusting the exponent is decoupled from {@link #adjustMagnitude} in
+     * order to allow flexibility for {@link StandardPlural} to be selected in
+     * formatting (ex: for compact notation) either with or without the exponent
+     * applied in the value of the number.
+     * @param delta
+     *             The value to adjust the exponent by.
+     */
+    public void adjustExponent(int delta);
+
+    /**
      * @return Whether the value represented by this {@link DecimalQuantity} is
      * zero, infinity, or NaN.
      */
@@ -130,8 +151,8 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     /** @return Whether the value represented by this {@link DecimalQuantity} is less than zero. */
     public boolean isNegative();
 
-    /** @return -1 if the value is negative; 1 if positive; or 0 if zero. */
-    public int signum();
+    /** @return The appropriate value from the Signum enum. */
+    public Signum signum();
 
     /** @return Whether the value represented by this {@link DecimalQuantity} is infinite. */
     @Override

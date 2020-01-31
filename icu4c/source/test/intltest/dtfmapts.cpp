@@ -235,7 +235,7 @@ if (fr != NULL && it != NULL && de != NULL)
     }
 
     const NumberFormat *nf = def->getNumberFormat();
-    NumberFormat *newNf = (NumberFormat*) nf->clone();
+    NumberFormat *newNf = nf->clone();
     de->adoptNumberFormat(newNf);   
     it->setNumberFormat(*newNf);
     if( *(de->getNumberFormat()) != *(it->getNumberFormat())) {

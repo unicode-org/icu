@@ -12,7 +12,7 @@ from . import *
 
 def dir_for(file):
     if isinstance(file, LocalFile):
-        return file.dirname
+        return get_local_dirname(file.dirname)
     if isinstance(file, SrcFile):
         return "{SRC_DIR}"
     if isinstance(file, InFile):
@@ -24,6 +24,45 @@ def dir_for(file):
     if isinstance(file, PkgFile):
         return "{PKG_DIR}"
     assert False
+
+
+LOCAL_DIRNAME_SUBSTITUTIONS = {
+    "SRC": "{SRC_DIR}",
+    "FILTERS": "{FILTERS_DIR}",
+    "CWD": "{CWD_DIR}"
+}
+
+
+def get_local_dirname(dirname):
+    if dirname.startswith("/"):
+        return dirname
+    elif dirname.startswith("$"):
+        # Note: directory separator substitution happens later
+        sep_idx = dirname.find("/")
+        if sep_idx == -1:
+            sep_idx = len(dirname)
+        variable = dirname[1:sep_idx]
+        if variable in LOCAL_DIRNAME_SUBSTITUTIONS:
+            return LOCAL_DIRNAME_SUBSTITUTIONS[variable] + dirname[sep_idx:]
+    print(
+        "Error: Local directory must be absolute, or relative to one of: " +
+        (", ".join("$%s" % v for v in LOCAL_DIRNAME_SUBSTITUTIONS.keys())),
+        file=sys.stderr
+    )
+    exit(1)
+
+
+ALL_TREES = [
+    "locales",
+    "curr",
+    "lang",
+    "region",
+    "zone",
+    "unit",
+    "coll",
+    "brkitr",
+    "rbnf",
+]
 
 
 def concat_dicts(*dicts):

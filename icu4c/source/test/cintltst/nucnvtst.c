@@ -3095,17 +3095,18 @@ TestHZ() {
     UChar *uTarget;
     char *cTarget;
     const char *cTargetLimit;
-    char *cBuf;
-    UChar *uBuf,*test;
+    char *cBuf = NULL;
+    UChar *uBuf = NULL;
+    UChar *test;
     int32_t uBufSize = 120;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv;
+    UConverter *cnv = NULL;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
     cnv=ucnv_open("HZ", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("Unable to open HZ converter: %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
@@ -3119,7 +3120,7 @@ TestHZ() {
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     cSource = cBuf;
     cSourceLimit =cTarget;
@@ -3128,7 +3129,7 @@ TestHZ() {
     ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
@@ -3144,6 +3145,8 @@ TestHZ() {
     TestSmallSourceBuffer(in,(const UChar*)in + UPRV_LENGTHOF(in),cnv);
     TestToAndFromUChars(in,(const UChar*)in + UPRV_LENGTHOF(in),cnv);
     TestJitterbug930("csISO2022JP");
+
+cleanup:
     ucnv_close(cnv);
     free(offsets);
     free(uBuf);
@@ -3314,17 +3317,18 @@ TestISO_2022_JP() {
     UChar *uTarget;
     char *cTarget;
     const char *cTargetLimit;
-    char *cBuf;
-    UChar *uBuf,*test;
+    char *cBuf = NULL;
+    UChar *uBuf = NULL;
+    UChar *test;
     int32_t uBufSize = 120;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv;
+    UConverter *cnv = NULL;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
     cnv=ucnv_open("ISO_2022_JP_1", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("Unable to open an ISO_2022_JP_1 converter: %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
@@ -3338,7 +3342,7 @@ TestISO_2022_JP() {
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     cSource = cBuf;
     cSourceLimit =cTarget;
@@ -3347,7 +3351,7 @@ TestISO_2022_JP() {
     ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uSource = (const UChar*)in;
@@ -3365,6 +3369,8 @@ TestISO_2022_JP() {
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-JP encoding");
     TestToAndFromUChars(in,(const UChar*)in + UPRV_LENGTHOF(in),cnv);
     TestJitterbug930("csISO2022JP");
+
+cleanup:
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -3946,17 +3952,18 @@ TestISO_2022_JP_2() {
     UChar *uTarget;
     char *cTarget;
     const char *cTargetLimit;
-    char *cBuf;
-    UChar *uBuf,*test;
+    char *cBuf = NULL;
+    UChar *uBuf = NULL;
+    UChar *test;
     int32_t uBufSize = 120;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv;
+    UConverter *cnv = NULL;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
     cnv=ucnv_open("ISO_2022_JP_2", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
@@ -3970,7 +3977,7 @@ TestISO_2022_JP_2() {
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     cSource = cBuf;
     cSourceLimit =cTarget;
@@ -3979,7 +3986,7 @@ TestISO_2022_JP_2() {
     ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
@@ -3999,6 +4006,8 @@ TestISO_2022_JP_2() {
         static const uint8_t source2[]={0x0e,0x24,0x053};
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-JP-2]");
     }
+
+cleanup:
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -4023,17 +4032,18 @@ TestISO_2022_KR() {
     UChar *uTarget;
     char *cTarget;
     const char *cTargetLimit;
-    char *cBuf;
-    UChar *uBuf,*test;
+    char *cBuf = NULL;
+    UChar *uBuf = NULL;
+    UChar *test;
     int32_t uBufSize = 120;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv;
+    UConverter *cnv = NULL;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
     cnv=ucnv_open("ISO_2022,locale=kr", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
@@ -4047,7 +4057,7 @@ TestISO_2022_KR() {
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     cSource = cBuf;
     cSourceLimit =cTarget;
@@ -4056,7 +4066,7 @@ TestISO_2022_KR() {
     ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
@@ -4078,6 +4088,8 @@ TestISO_2022_KR() {
         ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &errorCode);
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ILLEGAL_ESCAPE_SEQUENCE, "an invalid character [ISO-2022-KR]");
     }
+
+cleanup:
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -4102,17 +4114,18 @@ TestISO_2022_KR_1() {
     UChar *uTarget;
     char *cTarget;
     const char *cTargetLimit;
-    char *cBuf;
-    UChar *uBuf,*test;
+    char *cBuf = NULL;
+    UChar *uBuf = NULL;
+    UChar *test;
     int32_t uBufSize = 120;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv;
+    UConverter *cnv = NULL;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
     cnv=ucnv_open("ibm-25546", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
@@ -4126,7 +4139,7 @@ TestISO_2022_KR_1() {
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     cSource = cBuf;
     cSourceLimit =cTarget;
@@ -4135,7 +4148,7 @@ TestISO_2022_KR_1() {
     ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
@@ -4158,6 +4171,8 @@ TestISO_2022_KR_1() {
         ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &errorCode);
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ILLEGAL_ESCAPE_SEQUENCE, "an invalid character [ISO-2022-KR]");
     }
+
+cleanup:
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -4408,17 +4423,18 @@ TestISO_2022_CN_EXT() {
     UChar *uTarget;
     char *cTarget;
     const char *cTargetLimit;
-    char *cBuf;
-    UChar *uBuf,*test;
+    char *cBuf = NULL;
+    UChar *uBuf = NULL;
+    UChar *test;
     int32_t uBufSize = 180;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv;
+    UConverter *cnv = NULL;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
     cnv=ucnv_open("ISO_2022,locale=cn,version=1", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
@@ -4432,7 +4448,7 @@ TestISO_2022_CN_EXT() {
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     cSource = cBuf;
     cSourceLimit =cTarget;
@@ -4441,7 +4457,7 @@ TestISO_2022_CN_EXT() {
     ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
@@ -4462,6 +4478,8 @@ TestISO_2022_CN_EXT() {
         static const uint8_t source2[]={0x0e,0x24,0x053};
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-CN-EXT]");
     }
+
+cleanup:
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -4507,17 +4525,18 @@ TestISO_2022_CN() {
     UChar *uTarget;
     char *cTarget;
     const char *cTargetLimit;
-    char *cBuf;
-    UChar *uBuf,*test;
+    char *cBuf = NULL;
+    UChar *uBuf = NULL;
+    UChar *test;
     int32_t uBufSize = 180;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv;
+    UConverter *cnv = NULL;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) * 5);
     int32_t* myOff= offsets;
     cnv=ucnv_open("ISO_2022,locale=cn,version=0", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
 
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
@@ -4531,7 +4550,7 @@ TestISO_2022_CN() {
     ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     cSource = cBuf;
     cSourceLimit =cTarget;
@@ -4540,7 +4559,7 @@ TestISO_2022_CN() {
     ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
-        return;
+        goto cleanup;
     }
     uSource = (const UChar*)in;
     while(uSource<uSourceLimit){
@@ -4565,6 +4584,7 @@ TestISO_2022_CN() {
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [ISO-2022-CN]");
     }
 
+cleanup:
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);

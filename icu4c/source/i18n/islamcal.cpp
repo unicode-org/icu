@@ -227,7 +227,7 @@ const char *IslamicCalendar::getType() const {
     return sType;
 }
 
-Calendar* IslamicCalendar::clone() const {
+IslamicCalendar* IslamicCalendar::clone() const {
     return new IslamicCalendar(*this);
 }
 

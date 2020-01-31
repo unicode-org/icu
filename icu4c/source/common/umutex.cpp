@@ -36,15 +36,6 @@ U_NAMESPACE_BEGIN
 #error U_USER_MUTEX_CPP not supported
 #endif
 
-// Check that UMutex is trivially constructable & destructable, which ensures that
-// static instances are not running static constructors or destructors.
-#if (defined(__GNUG__) && __GNUC__ < 5) || (defined(__clang__) && __clang_major__ < 5)
-// skip
-#else
-static_assert(std::is_trivially_constructible<UMutex>::value, "UMutex not trivially constructable.");
-static_assert(std::is_trivially_destructible<UMutex>::value, "UMutex not trivially destructable.");
-#endif
-
 
 /*************************************************************************************************
  *
@@ -56,7 +47,8 @@ namespace {
 std::mutex *initMutex;
 std::condition_variable *initCondition;
 
-// The ICU global mutex. Used when ICU implementation code passes NULL for the mutex pointer.
+// The ICU global mutex.
+// Used when ICU implementation code passes nullptr for the mutex pointer.
 UMutex globalMutex;
 
 std::once_flag initFlag;
@@ -98,6 +90,7 @@ std::mutex *UMutex::getMutex() {
             gListHead = this;
         }
     }
+    U_ASSERT(retPtr != nullptr);
     return retPtr;
 }
 

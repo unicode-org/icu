@@ -185,7 +185,7 @@ void TestMessageFormat::testBug2()
     // {sfb} use double format in pattern, so result will match (not strictly necessary)
     const UnicodeString pattern = "There {0,choice,0#are no files|1#is one file|1<are {0, number} files} on disk {1}. ";
     logln("The input pattern : " + pattern);
-    MessageFormat *fmt = new MessageFormat(pattern, status);
+    LocalPointer<MessageFormat> fmt(new MessageFormat(pattern, status));
     if (U_FAILURE(status)) {
         dataerrln("MessageFormat pattern creation failed. - %s", u_errorName(status));
         return;
@@ -194,7 +194,6 @@ void TestMessageFormat::testBug2()
     if (pattern != result) {
         errln("MessageFormat::toPattern() failed.");
     }
-    delete fmt;
 }
 
 #if 0
@@ -300,10 +299,10 @@ void TestMessageFormat::PatternTest()
     for (int32_t i = 0; i < 9; ++i) {
         //it_out << "\nPat in:  " << testCases[i]);
 
-        MessageFormat *form = 0;
+        LocalPointer<MessageFormat> form;
         UErrorCode success = U_ZERO_ERROR;
         UnicodeString buffer;
-        form = new MessageFormat(testCases[i], Locale::getUS(), success);
+        form.adoptInstead(new MessageFormat(testCases[i], Locale::getUS(), success));
         if (U_FAILURE(success)) {
             dataerrln("MessageFormat creation failed.#1 - %s", u_errorName(success));
             logln(((UnicodeString)"MessageFormat for ") + testCases[i] + " creation failed.\n");
@@ -368,7 +367,6 @@ void TestMessageFormat::PatternTest()
         if (failed)
             errln("MessageFormat failed test #6");
 #endif
-        delete form;
     }
 }
 
@@ -676,13 +674,13 @@ MessageFormat* TestMessageFormat::internalCreate(
         UnicodeString pattern ,Locale locale ,UErrorCode &status ,  char* errMsg)
 {
     //Create the MessageFormat with simple SelectFormat
-    MessageFormat* msgFmt = new MessageFormat(pattern, locale, status);
+    LocalPointer<MessageFormat> msgFmt(new MessageFormat(pattern, locale, status));
     if (U_FAILURE(status)) {
         dataerrln( "%s error while constructing with ErrorCode as %s" ,errMsg, u_errorName(status) );
         logln(UnicodeString("TestMessageFormat::testMsgFormatSelect #1 with error code ")+(int32_t)status);
-        return NULL;
+        return nullptr;
     }
-    return msgFmt;
+    return msgFmt.orphan();
 }
 
 void TestMessageFormat::testMsgFormatSelect(/* char* par */)
@@ -809,7 +807,8 @@ void TestMessageFormat::testMsgFormatSelect(/* char* par */)
     //Select, plural, and number formats heavily nested 
     UnicodeString t6("{0} und {1, select, female {{2, plural, one {{3, select, female {ihre Freundin} other {ihr Freund}} } other {ihre {2, number, integer} {3, select, female {Freundinnen} other {Freunde}} } }} other{{2, plural, one {{3, select, female {seine Freundin} other {sein Freund}}} other {seine {2, number, integer} {3, select, female {Freundinnen} other {Freunde}}}}} } gingen nach Paris.");
     //Create the MessageFormat with Select, plural, and number formats heavily nested  
-    MessageFormat* msgFmt6 = internalCreate(t6, Locale("de"),err,(char*)"From TestMessageFormat::TestSelectFormat create t6");
+    LocalPointer<MessageFormat> msgFmt6(
+            internalCreate(t6, Locale("de"),err,(char*)"From TestMessageFormat::TestSelectFormat create t6"));
     if (!U_FAILURE(err)) {
         //Arguments 
         Formattable testArgs10[] = {"Kirti","other",(int32_t)1,"other"}; 
@@ -848,10 +847,9 @@ void TestMessageFormat::testMsgFormatSelect(/* char* par */)
         };
         //Format
         for( int i=0; i< 14; i++){
-            internalFormat( msgFmt6 , testArgs[i], 4, exp[i] ,(char*)"From TestMessageFormat::testSelectFormat format t6");
+            internalFormat( msgFmt6.getAlias(), testArgs[i], 4, exp[i] ,(char*)"From TestMessageFormat::testSelectFormat format t6");
         }
     }
-    delete msgFmt6;
 }
 
 //---------------------------------
@@ -923,7 +921,7 @@ void TestMessageFormat::testClone()
     MessageFormat *x = new MessageFormat("There are {0} files on {1}", success);
     MessageFormat *z = new MessageFormat("There are {0} files on {1} created", success);
     MessageFormat *y = 0;
-    y = (MessageFormat*)x->clone();
+    y = x->clone();
     if ( (*x == *y) && 
          (*x != *z) && 
          (*y != *z) )
@@ -1435,8 +1433,8 @@ static void _testCopyConstructor2()
         goto cleanup;
     }
 
-    fmt3 = (MessageFormat*) fmt1->clone();
-    fmt4 = (MessageFormat*) fmt2->clone();
+    fmt3 = fmt1->clone();
+    fmt4 = fmt2->clone();
 
     if (fmt3 == NULL) {
         it_err("testCopyConstructor2: (fmt3 != NULL)");

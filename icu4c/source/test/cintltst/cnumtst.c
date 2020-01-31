@@ -73,6 +73,8 @@ static void Test12052_NullPointer(void);
 static void TestParseCases(void);
 static void TestSetMaxFracAndRoundIncr(void);
 static void TestIgnorePadding(void);
+static void TestSciNotationMaxFracCap(void);
+static void TestMinIntMinFracZero(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -112,6 +114,8 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestParseCases);
     TESTCASE(TestSetMaxFracAndRoundIncr);
     TESTCASE(TestIgnorePadding);
+    TESTCASE(TestSciNotationMaxFracCap);
+    TESTCASE(TestMinIntMinFracZero);
 }
 
 /* test Parse int 64 */
@@ -498,7 +502,7 @@ free(result);
     pattern=unum_open(UNUM_IGNORE,temp1, u_strlen(temp1), NULL, NULL,&status);
     if(U_FAILURE(status))
     {
-        log_err("error in unum_openPattern(): %s\n", myErrorName(status) );;
+        log_err("error in unum_openPattern(): %s\n", myErrorName(status) );
     }
     else
         log_verbose("Pass: unum_openPattern() works fine\n");
@@ -1323,7 +1327,7 @@ static void TestNumberFormatPadding()
     pattern=unum_open(UNUM_IGNORE,temp1, u_strlen(temp1), "en_US",NULL, &status);
     if(U_FAILURE(status))
     {
-        log_err_status(status, "error in padding unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
+        log_err_status(status, "error in padding unum_openPattern(%s): %s\n", temp1, myErrorName(status) );
     }
     else {
         log_verbose("Pass: padding unum_openPattern() works fine\n");
@@ -1625,7 +1629,7 @@ static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
             /* set the default ruleset to the first one found, and retry */
 
             if (len > 0) {
-                for (i = 0; i < len && temp[i] != ';'; ++i){};
+                for (i = 0; i < len && temp[i] != ';'; ++i){}
                 if (i < len) {
                     buffer[i] = 0;
                     unum_setTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, -1, &status);
@@ -2565,8 +2569,8 @@ static void TestCurrencyIsoPluralFormat(void) {
         {"zh_CN",             "1234.56",  "USD", "US$1,234.56",        "US$1,234.56",        "US$1,234.56",        "USD\\u00A01,234.56",    "1,234.56\\u00A0\\u7F8E\\u5143"},
         // {"zh_CN",          "1",        "CHY", "CHY1.00",            "CHY1.00",            "CHY1.00",            "CHY1.00",        "1.00 CHY"}, // wrong ISO code
         // {"zh_CN",          "1234.56",  "CHY", "CHY1,234.56",        "CHY1,234.56",        "CHY1,234.56",        "CHY1,234.56",    "1,234.56 CHY"}, // wrong ISO code
-        {"zh_CN",             "1",        "CNY", "\\uFFE51.00",        "\\uFFE51.00",        "\\uFFE51.00",        "CNY\\u00A01.00",        "1.00\\u00A0\\u4EBA\\u6C11\\u5E01"},
-        {"zh_CN",             "1234.56",  "CNY", "\\uFFE51,234.56",    "\\uFFE51,234.56",    "\\uFFE51,234.56",    "CNY\\u00A01,234.56",    "1,234.56\\u00A0\\u4EBA\\u6C11\\u5E01"},
+        {"zh_CN",             "1",        "CNY", "\\u00A51.00",        "\\u00A51.00",        "\\u00A51.00",        "CNY\\u00A01.00",        "1.00\\u00A0\\u4EBA\\u6C11\\u5E01"},
+        {"zh_CN",             "1234.56",  "CNY", "\\u00A51,234.56",    "\\u00A51,234.56",    "\\u00A51,234.56",    "CNY\\u00A01,234.56",    "1,234.56\\u00A0\\u4EBA\\u6C11\\u5E01"},
         {"ru_RU",             "1",        "RUB", "1,00\\u00A0\\u20BD", "1,00\\u00A0\\u20BD", "1,00\\u00A0\\u20BD", "1,00\\u00A0RUB",        "1,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
                                                                                                                                             "\\u0440\\u0443\\u0431\\u043B\\u044F"},
         {"ru_RU",             "2",        "RUB", "2,00\\u00A0\\u20BD", "2,00\\u00A0\\u20BD", "2,00\\u00A0\\u20BD", "2,00\\u00A0RUB",        "2,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
@@ -3436,6 +3440,139 @@ static void TestIgnorePadding(void) {
             }
         }
         unum_close(unum);
+    }
+}
+
+static void TestSciNotationMaxFracCap(void) {
+    static const UChar* pat1 = u"#.##E+00;-#.##E+00";
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* unum = unum_open(UNUM_PATTERN_DECIMAL, pat1, -1, "en_US", NULL, &status);
+    if ( U_FAILURE(status) ) {
+        log_data_err("unum_open UNUM_PATTERN_DECIMAL with scientific pattern for \"en_US\" fails with %s\n", u_errorName(status));
+    } else {
+        double value;
+        UChar ubuf[kUBufMax];
+        char bbuf[kBBufMax];
+        int32_t ulen;
+
+        unum_setAttribute(unum, UNUM_MIN_FRACTION_DIGITS, 0);
+        unum_setAttribute(unum, UNUM_MAX_FRACTION_DIGITS, 2147483647);
+        ulen = unum_toPattern(unum, FALSE, ubuf, kUBufMax, &status);
+        if ( U_SUCCESS(status) ) {
+            u_austrncpy(bbuf, ubuf, kUBufMax);
+            log_info("unum_toPattern (%d): %s\n", ulen, bbuf);
+        }
+
+        for (value = 10.0; value < 1000000000.0; value *= 10.0) {
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, value, ubuf, kUBufMax, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("unum_formatDouble value %.1f status %s\n", value, u_errorName(status));
+            } else if (u_strncmp(ubuf,u"1E+0",4) != 0) {
+                u_austrncpy(bbuf, ubuf, kUBufMax);
+                log_err("unum_formatDouble value %.1f expected result to begin with 1E+0, got %s\n", value, bbuf);
+            }
+        }
+        unum_close(unum);
+    }
+}
+
+static void TestMinIntMinFracZero(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* unum = unum_open(UNUM_DECIMAL, NULL, 0, "en_US", NULL, &status);
+    if ( U_FAILURE(status) ) {
+        log_data_err("unum_open UNUM_DECIMAL for en_US fails with %s\n", u_errorName(status));
+    } else {
+        UChar ubuf[kUBufMax];
+        char  bbuf[kBBufMax];
+        int minInt, minFrac, ulen;
+
+        unum_setAttribute(unum, UNUM_MIN_INTEGER_DIGITS, 0);
+        unum_setAttribute(unum, UNUM_MIN_FRACTION_DIGITS, 0);
+        minInt = unum_getAttribute(unum, UNUM_MIN_INTEGER_DIGITS);
+        minFrac = unum_getAttribute(unum, UNUM_MIN_FRACTION_DIGITS);
+        if (minInt != 0 || minFrac != 0) {
+            log_err("after setting minInt=minFrac=0, get minInt %d, minFrac %d\n", minInt, minFrac);
+        }
+
+        ulen = unum_toPattern(unum, FALSE, ubuf, kUBufMax, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("unum_toPattern fails with %s\n", u_errorName(status));
+        } else if (ulen < 3 || u_strstr(ubuf, u"#.#")==NULL) {
+            u_austrncpy(bbuf, ubuf, kUBufMax);
+            log_info("after setting minInt=minFrac=0, expect pattern to contain \"#.#\", but get (%d): \"%s\"\n", ulen, bbuf);
+        }
+
+        status = U_ZERO_ERROR;
+        ulen = unum_formatDouble(unum, 10.0, ubuf, kUBufMax, NULL, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("unum_formatDouble 10.0 ulen %d fails with %s\n", ulen, u_errorName(status));
+        } else if (u_strcmp(ubuf, u"10") != 0) {
+            u_austrncpy(bbuf, ubuf, kUBufMax);
+            log_err("unum_formatDouble 10.0 expected \"10\", got \"%s\"\n", bbuf);
+        }
+
+        status = U_ZERO_ERROR;
+        ulen = unum_formatDouble(unum, 0.9, ubuf, kUBufMax, NULL, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("unum_formatDouble 0.9 ulen %d fails with %s\n", ulen, u_errorName(status));
+        } else if (u_strcmp(ubuf, u".9") != 0) {
+            u_austrncpy(bbuf, ubuf, kUBufMax);
+            log_err("unum_formatDouble 0.9 expected \".9\", got \"%s\"\n", bbuf);
+        }
+
+        status = U_ZERO_ERROR;
+        ulen = unum_formatDouble(unum, 0.0, ubuf, kUBufMax, NULL, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("unum_formatDouble 0.0 ulen %d fails with %s\n", ulen, u_errorName(status));
+        } else if (u_strcmp(ubuf, u"0") != 0) {
+            u_austrncpy(bbuf, ubuf, kUBufMax);
+            log_err("unum_formatDouble 0.0 expected \"0\", got \"%s\"\n", bbuf);
+        }
+
+        unum_close(unum);
+        status = U_ZERO_ERROR;
+        unum = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status);
+        if ( U_FAILURE(status) ) {
+            log_data_err("unum_open UNUM_CURRENCY for en_US fails with %s\n", u_errorName(status));
+        } else {
+            unum_setAttribute(unum, UNUM_MIN_INTEGER_DIGITS, 0);
+            unum_setAttribute(unum, UNUM_MIN_FRACTION_DIGITS, 0);
+            minInt = unum_getAttribute(unum, UNUM_MIN_INTEGER_DIGITS);
+            minFrac = unum_getAttribute(unum, UNUM_MIN_FRACTION_DIGITS);
+            if (minInt != 0 || minFrac != 0) {
+                log_err("after setting CURRENCY minInt=minFrac=0, get minInt %d, minFrac %d\n", minInt, minFrac);
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, 10.0, ubuf, kUBufMax, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("unum_formatDouble (CURRRENCY) 10.0 ulen %d fails with %s\n", ulen, u_errorName(status));
+            } else if (u_strcmp(ubuf, u"$10") != 0) {
+                u_austrncpy(bbuf, ubuf, kUBufMax);
+                log_err("unum_formatDouble (CURRRENCY) 10.0 expected \"$10\", got \"%s\"\n", bbuf);
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, 0.9, ubuf, kUBufMax, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("unum_formatDouble (CURRRENCY) 0.9 ulen %d fails with %s\n", ulen, u_errorName(status));
+            } else if (u_strcmp(ubuf, u"$.9") != 0) {
+                u_austrncpy(bbuf, ubuf, kUBufMax);
+                log_err("unum_formatDouble (CURRRENCY) 0.9 expected \"$.9\", got \"%s\"\n", bbuf);
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, 0.0, ubuf, kUBufMax, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("unum_formatDouble (CURRRENCY) 0.0 ulen %d fails with %s\n", ulen, u_errorName(status));
+            } else if (u_strcmp(ubuf, u"$0") != 0) {
+                u_austrncpy(bbuf, ubuf, kUBufMax);
+                log_err("unum_formatDouble (CURRRENCY) 0.0 expected \"$0\", got \"%s\"\n", bbuf);
+            }
+
+            unum_close(unum);
+        }
     }
 }
 

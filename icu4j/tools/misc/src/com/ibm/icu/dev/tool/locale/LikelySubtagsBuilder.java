@@ -139,10 +139,11 @@ public class LikelySubtagsBuilder {
         Map<LSR, Integer> lsrIndexes = new LinkedHashMap<>();
         // Reserve index 0 as "no value":
         // The runtime lookup returns 0 for an intermediate match with no value.
-        lsrIndexes.put(new LSR("", "", ""), 0);  // arbitrary LSR
+        lsrIndexes.put(new LSR("", "", "", LSR.DONT_CARE_FLAGS), 0);  // arbitrary LSR
         // Reserve index 1 for SKIP_SCRIPT:
         // The runtime lookup returns 1 for an intermediate match with a value.
-        lsrIndexes.put(new LSR("skip", "script", ""), 1);  // looks good when printing the data
+        // This LSR looks good when printing the data.
+        lsrIndexes.put(new LSR("skip", "script", "", LSR.DONT_CARE_FLAGS), 1);
         // We could prefill the lsrList with common locales to give them small indexes,
         // and see if that improves performance a little.
         for (Map.Entry<String, Map<String, Map<String, LSR>>> ls :  langTable.entrySet()) {
@@ -251,7 +252,7 @@ public class LikelySubtagsBuilder {
             }
         }
         // hack
-        set(result, "und", "Latn", "", new LSR("en", "Latn", "US"));
+        set(result, "und", "Latn", "", new LSR("en", "Latn", "US", LSR.DONT_CARE_FLAGS));
 
         // hack, ensure that if und-YY => und-Xxxx-YY, then we add Xxxx=>YY to the table
         // <likelySubtag from="und_GH" to="ak_Latn_GH"/>
@@ -294,7 +295,9 @@ public class LikelySubtagsBuilder {
         String lang = parts[0];
         String p2 = parts.length < 2 ? "" : parts[1];
         String p3 = parts.length < 3 ? "" : parts[2];
-        return p2.length() < 4 ? new LSR(lang, "", p2) : new LSR(lang, p2, p3);
+        return p2.length() < 4 ?
+                new LSR(lang, "", p2, LSR.DONT_CARE_FLAGS) :
+                new LSR(lang, p2, p3, LSR.DONT_CARE_FLAGS);
     }
 
     private static void set(Map<String, Map<String, Map<String, LSR>>> langTable,

@@ -43,7 +43,6 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.format.IntlTestDecimalFormatAPIC.FieldContainer;
-import com.ibm.icu.dev.text.DecimalFormat_ICU58;
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
@@ -527,9 +526,9 @@ public class NumberFormatTest extends TestFmwk {
                 {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD 1,234.56", "-US dollars 1,234.56"},
                 {"en_US", "\u00A4#,##0.00;-\u00A4#,##0.00", "1", "$1.00", "USD 1.00", "US dollars 1.00"},
                 // for CHINA locale
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1234.56", "\uFFE51,234.56", "CNY 1,234.56", "\u4EBA\u6C11\u5E01 1,234.56"},
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "-1234.56", "(\uFFE51,234.56)", "(CNY 1,234.56)", "(\u4EBA\u6C11\u5E01 1,234.56)"},
-                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1", "\uFFE51.00", "CNY 1.00", "\u4EBA\u6C11\u5E01 1.00"}
+                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1234.56", "\u00A51,234.56", "CNY 1,234.56", "\u4EBA\u6C11\u5E01 1,234.56"},
+                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "-1234.56", "(\u00A51,234.56)", "(CNY 1,234.56)", "(\u4EBA\u6C11\u5E01 1,234.56)"},
+                {"zh_CN", "\u00A4#,##0.00;(\u00A4#,##0.00)", "1", "\u00A51.00", "CNY 1.00", "\u4EBA\u6C11\u5E01 1.00"}
         };
 
         String doubleCurrencyStr = "\u00A4\u00A4";
@@ -770,8 +769,8 @@ public class NumberFormatTest extends TestFmwk {
                 {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD 1,234.56", "-1,234.56 US dollars"},
                 {"zh_CN", "1", "USD", "US$1.00", "USD 1.00", "1.00 美元"},
                 {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD 1,234.56", "1,234.56 美元"},
-                {"zh_CN", "1", "CNY", "￥1.00", "CNY 1.00", "1.00 人民币"},
-                {"zh_CN", "1234.56", "CNY", "￥1,234.56", "CNY 1,234.56", "1,234.56 人民币"},
+                {"zh_CN", "1", "CNY", "¥1.00", "CNY 1.00", "1.00 人民币"},
+                {"zh_CN", "1234.56", "CNY", "¥1,234.56", "CNY 1,234.56", "1,234.56 人民币"},
                 {"ru_RU", "1", "RUB", "1,00 \u20BD", "1,00 RUB", "1,00 российского рубля"},
                 {"ru_RU", "2", "RUB", "2,00 \u20BD", "2,00 RUB", "2,00 российского рубля"},
                 {"ru_RU", "5", "RUB", "5,00 \u20BD", "5,00 RUB", "5,00 российского рубля"},
@@ -1701,9 +1700,7 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestLocalizedPatternSymbolCoverage() {
         String[] standardPatterns = { "#,##0.05+%;#,##0.05-%", "* @@@E0‰" };
-        String[] standardPatterns58 = { "#,##0.05+%;#,##0.05-%", "* @@@E0‰;* -@@@E0‰" };
         String[] localizedPatterns = { "▰⁖▰▰໐⁘໐໕†⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱" };
-        String[] localizedPatterns58 = { "▰⁖▰▰໐⁘໐໕+⁜⁙▰⁖▰▰໐⁘໐໕‡⁜", "⁂ ⁕⁕⁕⁑⁑໐‱⁙⁂ ‡⁕⁕⁕⁑⁑໐‱" };
 
         DecimalFormatSymbols dfs = new DecimalFormatSymbols();
         dfs.setGroupingSeparator('⁖');
@@ -1721,9 +1718,7 @@ public class NumberFormatTest extends TestFmwk {
 
         for (int i=0; i<2; i++) {
             String standardPattern = standardPatterns[i];
-            String standardPattern58 = standardPatterns58[i];
             String localizedPattern = localizedPatterns[i];
-            String localizedPattern58 = localizedPatterns58[i];
 
             DecimalFormat df1 = new DecimalFormat("#", dfs);
             df1.applyPattern(standardPattern);
@@ -1735,22 +1730,6 @@ public class NumberFormatTest extends TestFmwk {
                     standardPattern, df2.toPattern());
             assertEquals("toLocalizedPattern should match on standardPattern instance",
                     localizedPattern, df1.toLocalizedPattern());
-
-            // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
-            if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) continue;
-
-            // Note: ICU 58 does not support plus signs in patterns
-            // Note: ICU 58 always prints the negative part of scientific notation patterns,
-            //       even when the negative part is not necessary
-            DecimalFormat_ICU58 df3 = new DecimalFormat_ICU58("#", dfs);
-            df3.applyPattern(standardPattern); // Reading standardPattern is OK
-            DecimalFormat_ICU58 df4 = new DecimalFormat_ICU58("#", dfs);
-            df4.applyLocalizedPattern(localizedPattern58);
-            // Note: DecimalFormat#equals() is broken on ICU 58
-            assertEquals("toPattern should match on ICU58 localizedPattern instance",
-                    standardPattern58, df4.toPattern());
-            assertEquals("toLocalizedPattern should match on ICU58 standardPattern instance",
-                    localizedPattern58, df3.toLocalizedPattern());
         }
     }
 
@@ -6688,6 +6667,48 @@ public class NumberFormatTest extends TestFmwk {
         for (int i=0; i<5; i++) {
             String actual = nf.format(24);
             assertEquals("iteration " + i, expected, actual);
+        }
+    }
+
+    @Test
+    public void test13735_GroupingSizeGetter() {
+        DecimalFormatSymbols EN = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        {
+            DecimalFormat df = new DecimalFormat("0", EN);
+            assertEquals("pat 0: ", 0, df.getGroupingSize());
+            df.setGroupingUsed(false);
+            assertEquals("pat 0 then disabled: ", 0, df.getGroupingSize());
+            df.setGroupingUsed(true);
+            assertEquals("pat 0 then enabled: ", 0, df.getGroupingSize());
+        }
+        {
+            DecimalFormat df = new DecimalFormat("#,##0", EN);
+            assertEquals("pat #,##0: ", 3, df.getGroupingSize());
+            df.setGroupingUsed(false);
+            assertEquals("pat #,##0 then disabled: ", 3, df.getGroupingSize());
+            df.setGroupingUsed(true);
+            assertEquals("pat #,##0 then enabled: ", 3, df.getGroupingSize());
+        }
+    }
+
+    @Test
+    public void test13734_StrictFlexibleWhitespace() {
+        DecimalFormatSymbols EN = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        {
+          DecimalFormat df = new DecimalFormat("+0", EN);
+          df.setParseStrict(true);
+          ParsePosition ppos = new ParsePosition(0);
+          Number result = df.parse("+  33", ppos);
+          assertEquals("ppos: ", 0, ppos.getIndex());
+          assertEquals("result: ", null, result);
+        }
+        {
+          DecimalFormat df = new DecimalFormat("+ 0", EN);
+          df.setParseStrict(true);
+          ParsePosition ppos = new ParsePosition(0);
+          Number result = df.parse("+  33", ppos);
+          assertEquals("ppos: ", 0, ppos.getIndex());
+          assertEquals("result: ", null, result);
         }
     }
 }

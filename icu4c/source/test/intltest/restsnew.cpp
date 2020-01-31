@@ -7,6 +7,7 @@
 
 #include "unicode/utypes.h"
 
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "unicode/unistr.h"
@@ -14,6 +15,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/utrace.h"
 #include "unicode/ucurr.h"
+#include "uresimp.h"
 #include "restsnew.h"
 
 #include <stdlib.h>
@@ -40,6 +42,7 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
 
     TESTCASE_AUTO(TestGetByFallback);
     TESTCASE_AUTO(TestFilter);
+    TESTCASE_AUTO(TestIntervalAliasFallbacks);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTrace);
@@ -66,11 +69,39 @@ enum E_Where
 
 //***************************************************************************************
 
-#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of " + (expected)); }
-#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x >= " + (expected)); }
-#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x != " + (expected)); }
+#define CONFIRM_EQ(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)==(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of " + (expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CONFIRM_GE(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((actual)>=(expected)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x >= " + (expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CONFIRM_NE(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)!=(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x != " + (expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (UnicodeString)u_errorName(actual) + (UnicodeString)" instead of " + (UnicodeString)u_errorName(expected)); }
+#define CONFIRM_UErrorCode(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)==(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (UnicodeString)u_errorName(actual) + (UnicodeString)" instead of " + (UnicodeString)u_errorName(expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 //***************************************************************************************
 
@@ -1211,17 +1242,17 @@ NewResourceBundleTest::TestGetByFallback() {
 }
 
 
-#define REQUIRE_SUCCESS(status) { \
+#define REQUIRE_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
     if (status.errIfFailureAndReset("line %d", __LINE__)) { \
         return; \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define REQUIRE_ERROR(expected, status) { \
+#define REQUIRE_ERROR(expected, status) UPRV_BLOCK_MACRO_BEGIN { \
     if (!status.expectErrorAndReset(expected, "line %d", __LINE__)) { \
         return; \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
 /**
  * Tests the --filterDir option in genrb.
@@ -1270,13 +1301,11 @@ void NewResourceBundleTest::TestFilter() {
     assertEquals("fornia", fornia.getType(), URES_TABLE);
 
     {
+        // Filter: hawaii should not be included based on parent inheritance
         ResourceBundle hawaii = fornia.get("hawaii", status);
-        REQUIRE_SUCCESS(status);
-        assertEquals("hawaii", hawaii.getType(), URES_STRING);
-        assertEquals("hawaii", u"idaho", hawaii.getString(status));
-        REQUIRE_SUCCESS(status);
+        REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
 
-        // Filter: illinois should not be included
+        // Filter: illinois should not be included based on direct rule
         ResourceBundle illinois = fornia.get("illinois", status);
         REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
     }
@@ -1349,6 +1378,81 @@ void NewResourceBundleTest::TestFilter() {
             ResourceBundle missouri = nevada.get("missouri", status);
             REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
         }
+    }
+
+    // Filter: northCarolina should be included based on direct rule,
+    // and so should its child, northDakota
+    ResourceBundle northCarolina = rb.get("northCarolina", status);
+    REQUIRE_SUCCESS(status);
+    assertEquals("northCarolina", northCarolina.getType(), URES_TABLE);
+
+    {
+        ResourceBundle northDakota = northCarolina.get("northDakota", status);
+        REQUIRE_SUCCESS(status);
+        assertEquals("northDakota", northDakota.getType(), URES_STRING);
+        assertEquals("northDakota", u"west-virginia", northDakota.getString(status));
+        REQUIRE_SUCCESS(status);
+    }
+}
+
+void NewResourceBundleTest::TestIntervalAliasFallbacks() {
+    const char* locales[] = {
+        // Thee will not cause infinity loop
+        "en",
+        "ja",
+
+        // These will cause infinity loop
+        "fr_CA",
+        "en_150",
+        "es_419",
+        "id",
+        "in",
+        "pl",
+        "pt_PT",
+        "sr_ME",
+        "zh_Hant",
+        "zh_Hant_TW",
+        "zh_TW",
+    };
+    const char* calendars[] = {
+        // These won't cause infinity loop
+        "gregorian",
+        "chinese",
+
+        // These will cause infinity loop
+        "islamic",
+        "islamic-civil",
+        "islamic-tbla",
+        "islamic-umalqura",
+        "ethiopic-amete-alem",
+        "islamic-rgsa",
+        "japanese",
+        "roc",
+    };
+
+    for (int lidx = 0; lidx < UPRV_LENGTHOF(locales); lidx++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UResourceBundle *rb = ures_open(NULL, locales[lidx], &status);
+        if (U_FAILURE(status)) {
+            errln("Cannot open bundle for locale %s", locales[lidx]);
+            break;
+        }
+        for (int cidx = 0; cidx < UPRV_LENGTHOF(calendars); cidx++) {
+            CharString key;
+            key.append("calendar/", status);
+            key.append(calendars[cidx], status);
+            key.append("/intervalFormats/fallback", status);
+            if (! logKnownIssue("20400")) {
+                int32_t resStrLen = 0;
+                ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
+            }
+            if (U_FAILURE(status)) {
+                errln("Cannot ures_getStringByKeyWithFallback('%s') on locale %s",
+                      key.data(), locales[lidx]);
+                break;
+            }
+        }
+        ures_close(rb);
     }
 }
 

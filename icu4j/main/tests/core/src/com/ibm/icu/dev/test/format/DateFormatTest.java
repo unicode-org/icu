@@ -49,6 +49,7 @@ import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormat.BooleanAttribute;
 import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -5214,7 +5215,7 @@ public class DateFormatTest extends TestFmwk {
         sdf.setTimeZone(TimeZone.GMT_ZONE);
 
         sdf.applyPattern("hh:mm:ss BBBB");
-        assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", "01:00:00 a.\u00A0m.", sdf.format(k010000));
+        assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", "01:00:00 de la mañana", sdf.format(k010000));
 
         sdf = new SimpleDateFormat("", new ULocale("es"));
         sdf.setTimeZone(TimeZone.GMT_ZONE);
@@ -5430,5 +5431,68 @@ public class DateFormatTest extends TestFmwk {
         final String inDate = "4/27/18";    // date only, no time
         dfmt.parse(inDate, pos);
         assertEquals("Error index", inDate.length(), pos.getErrorIndex());
+    }
+
+    @Test
+    public void test20739_MillisecondsWithoutSeconds() {
+        String[][] cases = new String[][]{
+            {"SSSSm", "mm:ss.SSSS"},
+            {"mSSSS", "mm:ss.SSSS"},
+            {"SSSm", "mm:ss.SSS"},
+            {"mSSS", "mm:ss.SSS"},
+            {"SSm", "mm:ss.SS"},
+            {"mSS", "mm:ss.SS"},
+            {"Sm", "mm:ss.S"},
+            {"mS", "mm:ss.S"},
+            {"S", "S"},
+            {"SS", "SS"},
+            {"SSS", "SSS"},
+            {"SSSS", "SSSS"},
+            {"jmsSSS", "h:mm:ss.SSS a"},
+            {"jmSSS", "h:mm:ss.SSS a"}
+        };
+
+        ULocale locale = ULocale.ENGLISH;
+        for (String[] cas : cases) {
+            DateFormat fmt = DateFormat.getInstanceForSkeleton( cas[0], locale);
+            String pattern = ((SimpleDateFormat) fmt).toPattern();
+            assertEquals("Format pattern", cas[1], pattern);
+        }
+    }
+
+    @Test
+    public void test20741_ABFields() {
+        String [] skeletons = {"EEEEEBBBBB", "EEEEEbbbbb"};
+        ULocale[] locales = ULocale.getAvailableLocales();
+        for (String skeleton : skeletons) {
+            for (int i = 0; i < locales.length; i++) {
+                ULocale locale = locales[i];
+                if (isQuick() && (i % 17 != 0)) continue;
+
+                DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
+                String pattern = gen.getBestPattern(skeleton);
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, locale);
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST8PDT"));
+                calendar.setTime(new Date(0));
+
+                FieldPosition pos_c = new FieldPosition(DateFormat.Field.DAY_OF_WEEK);
+                dateFormat.format(calendar, new StringBuffer(""), pos_c);
+                assertFalse("'Day of week' field was not found", pos_c.getBeginIndex() == 0 && pos_c.getEndIndex() == 0);
+
+                if (skeleton.equals("EEEEEBBBBB")) {
+                    FieldPosition pos_B = new FieldPosition(DateFormat.Field.FLEXIBLE_DAY_PERIOD);
+                    dateFormat.format(calendar, new StringBuffer(""), pos_B);
+                    assertFalse("'Flexible day period' field was not found", pos_B.getBeginIndex() == 0 && pos_B.getEndIndex() == 0);
+                } else {
+                    FieldPosition pos_b = new FieldPosition(DateFormat.Field.AM_PM_MIDNIGHT_NOON);
+                    dateFormat.format(calendar, new StringBuffer(""), pos_b);
+                    assertFalse("'AM/PM/Midnight/Noon' field was not found", pos_b.getBeginIndex() == 0 && pos_b.getEndIndex() == 0);
+                }
+
+                FieldPosition pos_a = new FieldPosition(DateFormat.Field.AM_PM);
+                dateFormat.format(calendar, new StringBuffer(""), pos_a);
+                assertTrue("'AM/PM' field was found", pos_a.getBeginIndex() == 0 && pos_a.getEndIndex() == 0);
+            }
+        }
     }
 }

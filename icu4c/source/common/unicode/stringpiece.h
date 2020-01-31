@@ -31,6 +31,9 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
+#include <cstddef>
+#include <type_traits>
+
 #include "unicode/uobject.h"
 #include "unicode/std_string.h"
 
@@ -77,6 +80,33 @@ class U_COMMON_API StringPiece : public UMemory {
    */
   StringPiece(const std::string& str)
     : ptr_(str.data()), length_(static_cast<int32_t>(str.size())) { }
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Constructs from some other implementation of a string piece class, from any
+   * C++ record type that has these two methods:
+   *
+   * \code{.cpp}
+   *
+   *   struct OtherStringPieceClass {
+   *     const char* data();
+   *     size_t size();
+   *   };
+   *
+   * \endcode
+   *
+   * The other string piece class will typically be std::string_view from C++17
+   * or absl::string_view from Abseil.
+   *
+   * @param str the other string piece
+   * @draft ICU 65
+   */
+  template <typename T,
+            typename = typename std::enable_if<
+                std::is_same<decltype(T().data()), const char*>::value &&
+                std::is_same<decltype(T().size()), size_t>::value>::type>
+  StringPiece(T str)
+      : ptr_(str.data()), length_(static_cast<int32_t>(str.size())) {}
+#endif  // U_HIDE_DRAFT_API
   /**
    * Constructs from a const char * pointer and a specified length.
    * @param offset a const char * pointer (need not be terminated)
@@ -181,6 +211,26 @@ class U_COMMON_API StringPiece : public UMemory {
       }
     }
   }
+
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Searches the StringPiece for the given search string (needle);
+   * @param needle The string for which to search.
+   * @param offset Where to start searching within this string (haystack).
+   * @return The offset of needle in haystack, or -1 if not found.
+   * @draft ICU 67
+   */
+  int32_t find(StringPiece needle, int32_t offset);
+
+  /**
+   * Compares this StringPiece with the other StringPiece, with semantics
+   * similar to std::string::compare().
+   * @param other The string to compare to.
+   * @return below zero if this < other; above zero if this > other; 0 if this == other.
+   * @draft ICU 67
+   */
+  int32_t compare(StringPiece other);
+#endif  // U_HIDE_DRAFT_API
 
   /**
    * Maximum integer, used as a default value for substring methods.

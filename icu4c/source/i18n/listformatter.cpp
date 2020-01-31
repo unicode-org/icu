@@ -80,7 +80,6 @@ UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedList)
 
 
 static Hashtable* listPatternHash = nullptr;
-static const char STANDARD_STYLE[] = "standard";
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV uprv_listformatter_cleanup() {
@@ -177,6 +176,50 @@ const ListFormatInternal* ListFormatter::getListFormatInternal(
         }
     }
     return result;
+}
+
+static const char* typeWidthToStyleString(UListFormatterType type, UListFormatterWidth width) {
+    switch (type) {
+        case ULISTFMT_TYPE_AND:
+            switch (width) {
+                case ULISTFMT_WIDTH_WIDE:
+                    return "standard";
+                case ULISTFMT_WIDTH_SHORT:
+                    return "standard-short";
+                case ULISTFMT_WIDTH_NARROW:
+                    return "standard-narrow";
+                default:
+                    return nullptr;
+            }
+            break;
+
+        case ULISTFMT_TYPE_OR:
+            switch (width) {
+                case ULISTFMT_WIDTH_WIDE:
+                    return "or";
+                case ULISTFMT_WIDTH_SHORT:
+                    return "or-short";
+                case ULISTFMT_WIDTH_NARROW:
+                    return "or-narrow";
+                default:
+                    return nullptr;
+            }
+            break;
+
+        case ULISTFMT_TYPE_UNITS:
+            switch (width) {
+                case ULISTFMT_WIDTH_WIDE:
+                    return "unit";
+                case ULISTFMT_WIDTH_SHORT:
+                    return "unit-short";
+                case ULISTFMT_WIDTH_NARROW:
+                    return "unit-narrow";
+                default:
+                    return nullptr;
+            }
+    }
+
+    return nullptr;
 }
 
 static const UChar solidus = 0x2F;
@@ -297,7 +340,17 @@ ListFormatter* ListFormatter::createInstance(UErrorCode& errorCode) {
 }
 
 ListFormatter* ListFormatter::createInstance(const Locale& locale, UErrorCode& errorCode) {
-    return createInstance(locale, STANDARD_STYLE, errorCode);
+    return createInstance(locale, ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_WIDE, errorCode);
+}
+
+ListFormatter* ListFormatter::createInstance(
+        const Locale& locale, UListFormatterType type, UListFormatterWidth width, UErrorCode& errorCode) {
+    const char* style = typeWidthToStyleString(type, width);
+    if (style == nullptr) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+    return createInstance(locale, style, errorCode);
 }
 
 ListFormatter* ListFormatter::createInstance(const Locale& locale, const char *style, UErrorCode& errorCode) {

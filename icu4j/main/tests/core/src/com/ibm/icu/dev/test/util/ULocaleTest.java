@@ -15,6 +15,7 @@ package com.ibm.icu.dev.test.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1022,6 +1023,49 @@ public class ULocaleTest extends TestFmwk {
                 errln("Got impossible locale from getAvailableLocales: " + locale.getName());
             }
         }
+    }
+
+    @Test
+    public void TestGetAvailableByType() {
+        assertEquals("countAvailable() should be same in old and new methods",
+            ULocale.getAvailableLocales().length,
+            ULocale.getAvailableLocalesByType(ULocale.AvailableType.DEFAULT).size());
+
+        assertEquals("getAvailable() should return same in old and new methods",
+            Arrays.asList(ULocale.getAvailableLocales()),
+            ULocale.getAvailableLocalesByType(ULocale.AvailableType.DEFAULT));
+
+        Collection<ULocale> legacyLocales = ULocale
+                .getAvailableLocalesByType(ULocale.AvailableType.ONLY_LEGACY_ALIASES);
+        assertTrue("getAvailable() legacy/alias should return nonempty", legacyLocales.size() > 0);
+
+        boolean found_he = false;
+        boolean found_iw = false;
+        for (ULocale loc : legacyLocales) {
+            if (loc.getName().equals("he")) {
+                found_he = true;
+            }
+            if (loc.getName().equals("iw")) {
+                found_iw = true;
+            }
+        }
+        assertFalse("Should NOT have found he amongst the legacy/alias locales", found_he);
+        assertTrue("Should have found iw amongst the legacy/alias locales", found_iw);
+
+        Collection<ULocale> allLocales = ULocale
+                .getAvailableLocalesByType(ULocale.AvailableType.WITH_LEGACY_ALIASES);
+        found_he = false;
+        found_iw = false;
+        for (ULocale loc : allLocales) {
+            if (loc.getName().equals("he")) {
+                found_he = true;
+            }
+            if (loc.getName().equals("iw")) {
+                found_iw = true;
+            }
+        }
+        assertTrue("Should have found he amongst the legacy/alias locales", found_he);
+        assertTrue("Should have found iw amongst the legacy/alias locales", found_iw);
     }
 
     @Test
@@ -4062,8 +4106,8 @@ public class ULocaleTest extends TestFmwk {
                 {"aa_BB_CYRL",  "aa-BB-x-lvariant-cyrl"},
                 {"en_US_1234",  "en-US-1234"},
                 {"en_US_VARIANTA_VARIANTB", "en-US-varianta-variantb"},
-                {"en_US_VARIANTB_VARIANTA", "en-US-variantb-varianta"},
-                {"ja__9876_5432",   "ja-9876-5432"},
+                {"en_US_VARIANTB_VARIANTA", "en-US-varianta-variantb"}, /* ICU-20478 */
+                {"ja__9876_5432",   "ja-5432-9876"}, /* ICU-20478 */
                 {"zh_Hant__VAR",    "zh-Hant-x-lvariant-var"},
                 {"es__BADVARIANT_GOODVAR",  "es"},
                 {"es__GOODVAR_BAD_BADVARIANT",  "es-goodvar-x-lvariant-bad"},
@@ -4087,6 +4131,16 @@ public class ULocaleTest extends TestFmwk {
                 {"en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",   "en-a-bar-u-baz-ca-islamic-civil-x-u-foo"},
                 /* ICU-20320*/
                 {"en@9=efg;a=baz",   "en-9-efg-a-baz"},
+                /* ICU-20478 */
+                {"sl__ROZAJ_BISKE_1994",   "sl-1994-biske-rozaj"},
+                {"en__SCOUSE_FONIPA",   "en-fonipa-scouse"},
+                /* ICU-20310 */
+                {"en-u-kn-true",   "en-u-kn"},
+                {"en-u-kn",   "en-u-kn"},
+                {"de-u-co-yes",   "de-u-co"},
+                {"de-u-co",   "de-u-co"},
+                {"de@collation=yes",   "de-u-co"},
+                {"cmn-hans-cn-u-ca-t-ca-x-t-u",   "cmn-Hans-CN-t-ca-u-ca-x-t-u"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -4154,7 +4208,7 @@ public class ULocaleTest extends TestFmwk {
 
         val = loc3.getKeywordValue("numbers");
         assertEquals("Default, ICU keyword", null, val);
-        
+
         // Note: ICU does not have getUnicodeKeywordValue()
     }
 
@@ -4184,7 +4238,7 @@ public class ULocaleTest extends TestFmwk {
                 {"bogus",               "bogus",                NOERROR},
                 {"boguslang",           "",                     Integer.valueOf(0)},
                 {"EN-lATN-us",          "en_Latn_US",           NOERROR},
-                {"und-variant-1234",    "__VARIANT_1234",       NOERROR},
+                {"und-variant-1234",    "__1234_VARIANT",       NOERROR}, /* ICU-20478 */
                 {"und-varzero-var1-vartwo", "__VARZERO",        Integer.valueOf(12)},
                 {"en-u-ca-gregory",     "en@calendar=gregorian",    NOERROR},
                 {"en-U-cu-USD",         "en@currency=usd",      NOERROR},
@@ -4230,6 +4284,16 @@ public class ULocaleTest extends TestFmwk {
                 /* #20410 */
                 {"art-lojban-x-0", "jbo@x=0", NOERROR},
                 {"zh-xiang-u-nu-thai-x-0", "hsn@numbers=thai;x=0", NOERROR},
+                /* ICU-20478 */
+                {"ja-9876-5432",    "ja__5432_9876",       NOERROR},
+                {"en-US-variantb-varianta",    "en_US_VARIANTA_VARIANTB",       NOERROR},
+                {"en-US-varianta-variantb",    "en_US_VARIANTA_VARIANTB",       NOERROR},
+                {"sl-rozaj-biske-1994",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"sl-biske-rozaj-1994",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"sl-biske-1994-rozaj",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"sl-1994-biske-rozaj",    "sl__1994_BISKE_ROZAJ",       NOERROR},
+                {"en-fonipa-scouse",    "en__FONIPA_SCOUSE",       NOERROR},
+                {"en-scouse-fonipa",    "en__FONIPA_SCOUSE",       NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
@@ -5072,5 +5136,22 @@ public class ULocaleTest extends TestFmwk {
         Assert.assertEquals(displayName, locale_legacy.getDisplayName(displayLocale));
         Assert.assertEquals(displayName, locale_tag.getDisplayName(displayLocale));
         Assert.assertEquals(displayName, locale_build.getDisplayName(displayLocale));
+    }
+
+    @Test
+    public void Test20900() {
+        final String [][] testData = new String[][]{
+            {"art-lojban", "jbo"},
+            {"zh-guoyu", "zh"},
+            {"zh-hakka", "hak"},
+            {"zh-xiang", "hsn"},
+            {"zh-min-nan", "nan"},
+            {"zh-gan", "gan"},
+            {"zh-yue", "yue"},
+        };
+        for (int row=0;row<testData.length;row++) {
+            ULocale loc = ULocale.createCanonical(testData[row][0]);
+            Assert.assertEquals(testData[row][1], loc.toLanguageTag());
+        }
     }
 }

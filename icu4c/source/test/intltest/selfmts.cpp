@@ -23,8 +23,13 @@
 #define EXP_FORMAT_RESULT_DATA 12
 #define NUM_OF_FORMAT_ARGS 3
 
-#define VERBOSE_INT(x) {logln("%s:%d:  int %s=%d\n", __FILE__, __LINE__, #x, (x));}
-#define VERBOSE_USTRING(text) {logln("%s:%d: UnicodeString %s(%d) = ", __FILE__, __LINE__, #text, text.length()); logln(UnicodeString(" \"")+text+UnicodeString("\";"));}
+#define VERBOSE_INT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    logln("%s:%d:  int %s=%d\n", __FILE__, __LINE__, #x, (x)); \
+} UPRV_BLOCK_MACRO_END
+#define VERBOSE_USTRING(text) UPRV_BLOCK_MACRO_BEGIN { \
+    logln("%s:%d: UnicodeString %s(%d) = ", __FILE__, __LINE__, #text, text.length()); \
+    logln(UnicodeString(" \"")+text+UnicodeString("\";")); \
+} UPRV_BLOCK_MACRO_END
 
 
 void SelectFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
@@ -230,7 +235,7 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
     // ======= Test clone && == operator.
     logln("SelectFormat API test: Testing clone and == operator ...");
     if ( U_SUCCESS(status[0])  ) {
-        selFmt[1] = (SelectFormat*)selFmt[0]->clone();
+        selFmt[1] = selFmt[0]->clone();
         if (selFmt[1]!=NULL) {
             if ( *selFmt[1] != *selFmt[0] ) {
                 errln("ERROR: SelectFormat API test clone test failed!");

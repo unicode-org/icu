@@ -57,6 +57,8 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(8, testTicket11669);
         TESTCASE(9, testTicket12065);
         TESTCASE(10, testFormattedDateInterval);
+        TESTCASE(11, testCreateInstanceForAllLocales);
+        TESTCASE(12, testTicket20707);
         default: name = ""; break;
     }
 }
@@ -132,7 +134,7 @@ void DateIntervalFormatTest::testAPI() {
     status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat clone");
 
-    DateIntervalFormat* another = (DateIntervalFormat*)dtitvfmt->clone();
+    DateIntervalFormat* another = dtitvfmt->clone();
     if ( (*another) != (*dtitvfmt) ) {
         dataerrln("%s:%d ERROR: clone failed", __FILE__, __LINE__);
     }
@@ -224,7 +226,7 @@ void DateIntervalFormatTest::testAPI() {
     }
 
     status = U_ZERO_ERROR;
-    DateFormat* nonConstFmt = (DateFormat*)fmt->clone();
+    DateFormat* nonConstFmt = fmt->clone();
     dtitvfmt->adoptDateFormat(nonConstFmt, status);
     anotherFmt = dtitvfmt->getDateFormat();
     if ( (*fmt) != (*anotherFmt) || U_FAILURE(status) ) {
@@ -250,7 +252,7 @@ void DateIntervalFormatTest::testAPI() {
     logln("Testing DateIntervalFormat constructor and assigment operator");
     status = U_ZERO_ERROR;
 
-    DateFormat* constFmt = (constFmt*)dtitvfmt->getDateFormat()->clone();
+    DateFormat* constFmt = dtitvfmt->getDateFormat()->clone();
     inf = dtitvfmt->getDateIntervalInfo()->clone();
 
 
@@ -1483,7 +1485,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
                 GregorianCalendar* gregCal = new GregorianCalendar(loc, ec);
                 if (!assertSuccess("GregorianCalendar()", ec)) return;
                 const DateFormat* dformat = dtitvfmt->getDateFormat();
-                DateFormat* newOne = (DateFormat*)dformat->clone();
+                DateFormat* newOne = dformat->clone();
                 newOne->adoptCalendar(gregCal);
                 //dtitvfmt->adoptDateFormat(newOne, ec);
                 dtitvfmt->setDateFormat(*newOne, ec);
@@ -1640,7 +1642,7 @@ void DateIntervalFormatTest::testTicket12065() {
         dataerrln("FAIL: DateIntervalFormat::createInstance failed for Locale::getEnglish()");
         return;
     }
-    LocalPointer<DateIntervalFormat> clone(dynamic_cast<DateIntervalFormat *>(formatter->clone()));
+    LocalPointer<DateIntervalFormat> clone(formatter->clone());
     if (*formatter != *clone) {
         errln("%s:%d DateIntervalFormat and clone are not equal.", __FILE__, __LINE__);
         return;
@@ -1768,5 +1770,79 @@ void DateIntervalFormatTest::testFormattedDateInterval() {
     }
 }
 
+void DateIntervalFormatTest::testCreateInstanceForAllLocales() {
+    IcuTestErrorCode status(*this, "testCreateInstanceForAllLocales");
+    int32_t locale_count = 0;
+    const Locale* locales = icu::Locale::getAvailableLocales(locale_count);
+    // Iterate through all locales
+    for (int32_t i = 0; i < locale_count; i++) {
+        std::unique_ptr<icu::StringEnumeration> calendars(
+            icu::Calendar::getKeywordValuesForLocale(
+                "calendar", locales[i], FALSE, status));
+        int32_t calendar_count = calendars->count(status);
+        if (status.errIfFailureAndReset()) { break; }
+        // In quick mode, only run 1/5 of locale combination
+        // to make the test run faster.
+        if (quick && (i % 5 != 0)) continue;
+        LocalPointer<DateIntervalFormat> fmt(
+            DateIntervalFormat::createInstance(u"dMMMMy", locales[i], status),
+            status);
+        if (status.errIfFailureAndReset(locales[i].getName())) {
+            continue;
+        }
+        // Iterate through all calendars in this locale
+        for (int32_t j = 0; j < calendar_count; j++) {
+            // In quick mode, only run 1/7 of locale/calendar combination
+            // to make the test run faster.
+            if (quick && ((i * j) % 7 != 0)) continue;
+            const char* calendar = calendars->next(nullptr, status);
+            Locale locale(locales[i]);
+            locale.setKeywordValue("calendar", calendar, status);
+            fmt.adoptInsteadAndCheckErrorCode(
+                DateIntervalFormat::createInstance(u"dMMMMy", locale, status),
+                status);
+            status.errIfFailureAndReset(locales[i].getName());
+        }
+    }
+}
+
+void DateIntervalFormatTest::testTicket20707() {
+    IcuTestErrorCode status(*this, "testTicket20707");
+
+    const char16_t timeZone[] = u"UTC";
+    Locale locales[] = {"en-u-hc-h24", "en-u-hc-h23", "en-u-hc-h12", "en-u-hc-h11", "en", "en-u-hc-h25", "hi-IN-u-hc-h11"};
+
+    // Clomuns: hh, HH, kk, KK, jj, JJs, CC
+    UnicodeString expected[][7] = {
+        // Hour-cycle: k
+        {u"12 AM", u"24", u"24", u"12 AM", u"24", u"0 (hour: 24)", u"12 AM"},
+        // Hour-cycle: H
+        {u"12 AM", u"00", u"00", u"12 AM", u"00", u"0 (hour: 00)", u"12 AM"},
+        // Hour-cycle: h
+        {u"12 AM", u"00", u"00", u"12 AM", u"12 AM", u"0 (hour: 12)", u"12 AM"},
+        // Hour-cycle: K
+        {u"0 AM", u"00", u"00", u"0 AM", u"0 AM", u"0 (hour: 00)", u"0 AM"},
+        {u"12 AM", u"00", u"00", u"12 AM", u"12 AM", u"0 (hour: 12)", u"12 AM"},
+        {u"12 AM", u"00", u"00", u"12 AM", u"12 AM", u"0 (hour: 12)", u"12 AM"},
+        // Hour-cycle: K
+        {u"0 am", u"00", u"00", u"0 am", u"0 am", u"0 (\u0918\u0902\u091F\u093E: 00)", u"\u0930\u093E\u0924 0"}
+    };
+
+    int32_t i = 0;
+    for (Locale locale : locales) {
+        int32_t j = 0;
+        for (const UnicodeString skeleton : {u"hh", u"HH", u"kk", u"KK", u"jj", u"JJs", u"CC"}) {
+            LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance(skeleton, locale, status));
+            FieldPosition fposition;
+            UnicodeString result;
+            LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
+            calendar->setTime(UDate(1563235200000), status);
+            dtifmt->format(*calendar, *calendar, result, fposition, status);
+
+            assertEquals("Formatted result", expected[i][j++], result);
+        }
+        i++;
+    }
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

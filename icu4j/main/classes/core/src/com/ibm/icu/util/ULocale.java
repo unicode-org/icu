@@ -13,6 +13,10 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -120,6 +124,52 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             return new LocaleIDParser(tmpLocaleID).getName();
         }
     };
+
+    /**
+     * Types for {@link ULocale#getAvailableLocalesByType}
+     *
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static enum AvailableType {
+        /**
+         * Locales that return data when passed to ICU APIs,
+         * but not including legacy or alias locales.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        DEFAULT,
+
+        /**
+         * Legacy or alias locales that return data when passed to ICU APIs.
+         * Examples of supported legacy or alias locales:
+         *
+         * <ul>
+         * <li>iw (alias to he)
+         * <li>mo (alias to ro)
+         * <li>zh_CN (alias to zh_Hans_CN)
+         * <li>sr_BA (alias to sr_Cyrl_BA)
+         * <li>ars (alias to ar_SA)
+         * </ul>
+         *
+         * The locales in this set are disjoint from the ones in
+         * DEFAULT. To get both sets at the same time, use
+         * WITH_LEGACY_ALIASES.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        ONLY_LEGACY_ALIASES,
+
+        /**
+         * The union of the locales in DEFAULT and ONLY_LEGACY_ALIASES.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        WITH_LEGACY_ALIASES,
+    }
 
     /**
      * Useful constant for language.
@@ -339,23 +389,24 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * canonicalized id.
      */
     private static String[][] CANONICALIZE_MAP = {
-        { "art_LOJBAN",     "jbo" }, /* registered name */
-        { "cel_GAULISH",    "cel__GAULISH" }, /* registered name */
-        { "de_1901",        "de__1901" }, /* registered name */
-        { "de_1906",        "de__1906" }, /* registered name */
-        { "en_BOONT",       "en__BOONT" }, /* registered name */
-        { "en_SCOUSE",      "en__SCOUSE" }, /* registered name */
+        { "art__LOJBAN",    "jbo" }, /* registered name */
+        { "cel__GAULISH",   "cel__GAULISH" }, /* registered name */
+        { "de__1901",       "de__1901" }, /* registered name */
+        { "de__1906",       "de__1906" }, /* registered name */
+        { "en__BOONT",      "en__BOONT" }, /* registered name */
+        { "en__SCOUSE",     "en__SCOUSE" }, /* registered name */
         { "hy__AREVELA",    "hy", null, null }, /* Registered IANA variant */
         { "hy__AREVMDA",    "hyw", null, null }, /* Registered IANA variant */
-        { "sl_ROZAJ",       "sl__ROZAJ" }, /* registered name */
-        { "zh_GAN",         "zh__GAN" }, /* registered name */
-        { "zh_GUOYU",       "zh" }, /* registered name */
-        { "zh_HAKKA",       "zh__HAKKA" }, /* registered name */
+        { "sl__ROZAJ",      "sl__ROZAJ" }, /* registered name */
+        { "zh__GUOYU",      "zh" }, /* registered name */
+        { "zh__HAKKA",      "hak" }, /* registered name */
+        { "zh__XIANG",      "hsn" }, /* registered name */
+        // Three letter subtags won't be treated as variants.
+        { "zh_GAN",         "gan" }, /* registered name */
         { "zh_MIN",         "zh__MIN" }, /* registered name */
-        { "zh_MIN_NAN",     "zh__MINNAN" }, /* registered name */
-        { "zh_WUU",         "zh__WUU" }, /* registered name */
-        { "zh_XIANG",       "zh__XIANG" }, /* registered name */
-        { "zh_YUE",         "zh__YUE" } /* registered name */
+        { "zh_MIN_NAN",     "nan" }, /* registered name */
+        { "zh_WUU",         "wuu" }, /* registered name */
+        { "zh_YUE",         "yue" } /* registered name */
     };
 
     /**
@@ -786,11 +837,38 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * {@icunote} Unlike the Locale API, this returns an array of <code>ULocale</code>,
-     * not <code>Locale</code>.  Returns a list of all installed locales.
+     * not <code>Locale</code>.
+     *
+     * <p>Returns a list of all installed locales. This is equivalent to calling
+     * {@link #getAvailableLocalesByType} with AvialableType.DEFAULT.
+     *
      * @stable ICU 3.0
      */
     public static ULocale[] getAvailableLocales() {
-        return ICUResourceBundle.getAvailableULocales();
+        return ICUResourceBundle.getAvailableULocales().clone();
+    }
+
+    /**
+     * Returns a list of all installed locales according to the specified type.
+     *
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static Collection<ULocale> getAvailableLocalesByType(AvailableType type) {
+        if (type == null) {
+            throw new IllegalArgumentException();
+        }
+        List<ULocale> result;
+        if (type == ULocale.AvailableType.WITH_LEGACY_ALIASES) {
+            result = new ArrayList<>();
+            Collections.addAll(result,
+                    ICUResourceBundle.getAvailableULocales(ULocale.AvailableType.DEFAULT));
+            Collections.addAll(result,
+                    ICUResourceBundle.getAvailableULocales(ULocale.AvailableType.ONLY_LEGACY_ALIASES));
+        } else {
+            result = Arrays.asList(ICUResourceBundle.getAvailableULocales(type));
+        }
+        return Collections.unmodifiableList(result);
     }
 
     /**
@@ -3169,7 +3247,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         }
 
         List<String>subtags = tag.getVariants();
-        for (String s : subtags) {
+        // ICU-20478: Sort variants per UTS35.
+        ArrayList<String> variants = new ArrayList<String>(subtags);
+        Collections.sort(variants);
+        for (String s : variants) {
             buf.append(LanguageTag.SEP);
             buf.append(LanguageTag.canonicalizeVariant(s));
         }

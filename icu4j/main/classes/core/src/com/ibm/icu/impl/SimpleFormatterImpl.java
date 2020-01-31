@@ -8,6 +8,11 @@
  */
 package com.ibm.icu.impl;
 
+import java.io.IOException;
+import java.text.Format;
+
+import com.ibm.icu.util.ICUUncheckedIOException;
+
 /**
  * Formats simple patterns like "{1} was born in {0}".
  * Internal version of {@link com.ibm.icu.text.SimpleFormatter}
@@ -304,17 +309,124 @@ public final class SimpleFormatterImpl {
         return sb.toString();
     }
 
-    /** Poor-man's iterator interface. See ICU-20406. */
-    public static class Int64Iterator {
+    /**
+     * Returns the length of the pattern text with none of the arguments.
+     * @param compiledPattern Compiled form of a pattern string.
+     * @param codePoints true to count code points; false to count code units.
+     * @return The number of code points or code units.
+     */
+    public static int getLength(String compiledPattern, boolean codePoints) {
+        int result = 0;
+        for (int i = 1; i < compiledPattern.length();) {
+            int segmentLength = compiledPattern.charAt(i++) - ARG_NUM_LIMIT;
+            if (segmentLength > 0) {
+                int limit = i + segmentLength;
+                if (codePoints) {
+                    result += Character.codePointCount(compiledPattern, i, limit);
+                } else {
+                    result += (limit - i);
+                }
+                i = limit;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the length in code units of the pattern text up until the first argument.
+     * @param compiledPattern Compiled form of a pattern string.
+     * @return The number of code units.
+     */
+    public static int getPrefixLength(String compiledPattern) {
+        if (compiledPattern.length() == 1) {
+            return 0;
+        } else if (compiledPattern.charAt(0) == 0) {
+            return compiledPattern.length() - 2;
+        } else if (compiledPattern.charAt(1) <= ARG_NUM_LIMIT) {
+            return 0;
+        } else {
+            return compiledPattern.charAt(1) - ARG_NUM_LIMIT;
+        }
+    }
+
+    /**
+     * Special case for using FormattedStringBuilder with patterns with 0 or 1 argument.
+     *
+     * With 1 argument, treat the current contents of the FormattedStringBuilder between
+     * start and end as the argument {0}. Insert the extra strings from compiledPattern
+     * to surround the argument in the output.
+     *
+     * With 0 arguments, overwrite the entire contents of the FormattedStringBuilder
+     * between start and end.
+     *
+     * @param compiledPattern Compiled form of a pattern string.
+     * @param field Field to use when adding chars to the output.
+     * @param start The start index of the argument already in the output string.
+     * @param end The end index of the argument already in the output string.
+     * @param output Destination for formatted output.
+     * @return Net number of characters added to the formatted string.
+     */
+    public static int formatPrefixSuffix(
+            String compiledPattern,
+            Format.Field field,
+            int start,
+            int end,
+            FormattedStringBuilder output) {
+        int argLimit = getArgumentLimit(compiledPattern);
+        if (argLimit == 0) {
+            // No arguments in compiled pattern; overwrite the entire segment with our string.
+            return output.splice(start, end, compiledPattern, 2, compiledPattern.length(), field);
+        } else {
+            assert argLimit == 1;
+            int suffixOffset;
+            int length = 0;
+            if (compiledPattern.charAt(1) != '\u0000') {
+                int prefixLength = compiledPattern.charAt(1) - ARG_NUM_LIMIT;
+                length = output.insert(start, compiledPattern, 2, 2 + prefixLength, field);
+                suffixOffset = 3 + prefixLength;
+            } else {
+                suffixOffset = 2;
+            }
+            if (suffixOffset < compiledPattern.length()) {
+                int suffixLength = compiledPattern.charAt(suffixOffset) - ARG_NUM_LIMIT;
+                length += output.insert(end + length, compiledPattern, 1 + suffixOffset,
+                        1 + suffixOffset + suffixLength, field);
+            }
+            return length;
+        }
+    }
+
+    /** Internal iterator interface for maximum efficiency.
+     *
+     * Usage boilerplate:
+     *
+     * <pre>
+     * long state = 0;
+     * while (true) {
+     *     state = IterInternal.step(state, compiledPattern, output);
+     *     if (state == IterInternal.DONE) {
+     *         break;
+     *     }
+     *     int argIndex = IterInternal.getArgIndex(state);
+     *     // Append the string corresponding to argIndex to output
+     * }
+     * </pre>
+     *
+     */
+    public static class IterInternal {
         public static final long DONE = -1;
 
-        public static long step(CharSequence compiledPattern, long state, StringBuffer output) {
+        public static long step(long state, CharSequence compiledPattern, Appendable output) {
             int i = (int) (state >>> 32);
             assert i < compiledPattern.length();
             i++;
             while (i < compiledPattern.length() && compiledPattern.charAt(i) > ARG_NUM_LIMIT) {
                 int limit = i + compiledPattern.charAt(i) + 1 - ARG_NUM_LIMIT;
-                output.append(compiledPattern, i + 1, limit);
+                try {
+                    output.append(compiledPattern, i + 1, limit);
+                } catch (IOException e) {
+                    throw new ICUUncheckedIOException(e);
+                }
                 i = limit;
             }
             if (i == compiledPattern.length()) {

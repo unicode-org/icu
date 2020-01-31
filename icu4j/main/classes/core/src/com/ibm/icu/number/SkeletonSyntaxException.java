@@ -5,8 +5,7 @@ package com.ibm.icu.number;
 /**
  * Exception used for illegal number skeleton strings.
  *
- * @draft ICU 62
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 62
  * @see NumberFormatter
  */
 public class SkeletonSyntaxException extends IllegalArgumentException {
@@ -15,8 +14,7 @@ public class SkeletonSyntaxException extends IllegalArgumentException {
     /**
      * Construct a new SkeletonSyntaxException with information about the token at the point of failure.
      *
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public SkeletonSyntaxException(String message, CharSequence token) {
@@ -26,8 +24,7 @@ public class SkeletonSyntaxException extends IllegalArgumentException {
     /**
      * Construct a new SkeletonSyntaxException with information about the token at the point of failure.
      *
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public SkeletonSyntaxException(String message, CharSequence token, Throwable cause) {

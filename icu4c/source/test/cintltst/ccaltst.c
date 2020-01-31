@@ -114,7 +114,8 @@ static void TestCalendar()
     UChar *result = 0;
     int32_t resultlength, resultlengthneeded;
     char tempMsgBuf[1024];  // u_austrcpy() of some formatted dates & times.
-    UChar zone1[32], zone2[32];
+    char tempMsgBuf2[256];  // u_austrcpy() of some formatted dates & times.
+    UChar zone1[64], zone2[64];
     const char *tzver = 0;
     UChar canonicalID[64];
     UBool isSystemID = FALSE;
@@ -228,10 +229,10 @@ static void TestCalendar()
         log_err("FAIL: ucal_getDSTSavings(PST) => %d, expect %d\n", i, 1*60*60*1000);
     }
 
-    /*Test ucal_set/getDefaultTimeZone*/
+    /*Test ucal_set/getDefaultTimeZone and ucal_getHostTimeZone */
     status = U_ZERO_ERROR;
     i = ucal_getDefaultTimeZone(zone1, UPRV_LENGTHOF(zone1), &status);
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
         log_err("FAIL: ucal_getDefaultTimeZone() => %s\n",
                 u_errorName(status));
     } else {
@@ -247,6 +248,17 @@ static void TestCalendar()
             } else {
                 if (u_strcmp(zone2, EUROPE_PARIS) != 0) {
                     log_data_err("FAIL: ucal_getDefaultTimeZone() did not return Europe/Paris (Are you missing data?)\n");
+                } else {
+                    // Redetect the host timezone, it should be the same as zone1 even though ICU's default timezone has been changed.
+                    i = ucal_getHostTimeZone(zone2, UPRV_LENGTHOF(zone2), &status);
+                    if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
+                        log_err("FAIL: ucal_getHostTimeZone() => %s\n", u_errorName(status));
+                    } else {
+                        if (u_strcmp(zone1, zone2) != 0) {
+                            log_err("FAIL: ucal_getHostTimeZone() should give the same host timezone even if the default changed. (Got '%s', Expected '%s').\n",
+                                u_austrcpy(tempMsgBuf, zone2), u_austrcpy(tempMsgBuf2, zone1));
+                        }
+                    }
                 }
             }
         }
@@ -346,6 +358,11 @@ static void TestCalendar()
     datdef=udat_open(UDAT_FULL,UDAT_FULL ,NULL, NULL, 0,NULL,0,&status);
     if(U_FAILURE(status)){
         log_data_err("FAIL: error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
+        ucal_close(caldef2);
+        ucal_close(calfr);
+        ucal_close(calit);
+        ucal_close(calfrclone);
+        ucal_close(caldef);
         return;
     }
     log_verbose("PASS: The current date and time fetched is %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datdef, now)) );
@@ -525,6 +542,10 @@ static void TestGetSetDateAPI()
     if(U_FAILURE(status))
     {
         log_data_err("error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
+        ucal_close(caldef);
+        ucal_close(caldef2);
+        ucal_close(caldef3);
+        udat_close(datdef);
         return;
     }
 
@@ -935,7 +956,7 @@ static void TestAddRollExtensive()
     
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
+    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open() failed : %s - (Are you missing data?)\n", u_errorName(status)); 
         return; 
@@ -1123,7 +1144,7 @@ static void TestGetLimits()
     
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
+    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open() for gregorian calendar failed in TestGetLimits: %s - (Are you missing data?)\n", u_errorName(status));
         return; 
@@ -1221,7 +1242,7 @@ static void TestDOWProgression()
     char tempMsgBuf[256];
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);;
+    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status));
         return; 
@@ -1238,30 +1259,33 @@ static void TestDOWProgression()
     log_verbose("\nTesting the DOW progression\n");
     
     initialDOW = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
-    if (U_FAILURE(status)) { log_data_err("ucal_get() failed: %s (Are you missing data?)\n", u_errorName(status) ); return; }
-    newDOW = initialDOW;
-    do {
-        DOW = newDOW;
-        log_verbose("DOW = %d...\n", DOW);
-        date1=ucal_getMillis(cal, &status);
-        if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); return;}
-        log_verbose("%s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)));
-        
-        ucal_add(cal,UCAL_DAY_OF_WEEK, delta, &status);
-        if (U_FAILURE(status)) { log_err("ucal_add() failed: %s\n", u_errorName(status)); return; }
-        
-        newDOW = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
-        if (U_FAILURE(status)) { log_err("ucal_get() failed: %s\n", u_errorName(status)); return; }
-        expectedDOW = 1 + (DOW + delta - 1) % 7;
-        date1=ucal_getMillis(cal, &status);
-        if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); return;}
-        if (newDOW != expectedDOW) {
-            log_err("Day of week should be %d instead of %d on %s", expectedDOW, newDOW, 
-                u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );    
-            return; 
+    if (U_FAILURE(status)) { 
+        log_data_err("ucal_get() failed: %s (Are you missing data?)\n", u_errorName(status) );
+    } else {
+        newDOW = initialDOW;
+        do {
+            DOW = newDOW;
+            log_verbose("DOW = %d...\n", DOW);
+            date1=ucal_getMillis(cal, &status);
+            if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); break;}
+            log_verbose("%s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)));
+
+            ucal_add(cal,UCAL_DAY_OF_WEEK, delta, &status);
+            if (U_FAILURE(status)) { log_err("ucal_add() failed: %s\n", u_errorName(status)); break; }
+
+            newDOW = ucal_get(cal, UCAL_DAY_OF_WEEK, &status);
+            if (U_FAILURE(status)) { log_err("ucal_get() failed: %s\n", u_errorName(status)); break; }
+            expectedDOW = 1 + (DOW + delta - 1) % 7;
+            date1=ucal_getMillis(cal, &status);
+            if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", u_errorName(status)); break;}
+            if (newDOW != expectedDOW) {
+                log_err("Day of week should be %d instead of %d on %s", expectedDOW, newDOW, 
+                        u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );    
+                break; 
+            }
         }
+        while (newDOW != initialDOW);
     }
-    while (newDOW != initialDOW);
     
     ucal_close(cal);
     udat_close(datfor);
@@ -1294,16 +1318,16 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     char tempMsgBuf[256];
 
     u_strcpy(tzID, fgGMTID);
-    gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);;
+    gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status)); 
-        return; 
+        goto cleanup; 
     }
     u_uastrcpy(tzID, "PST");
     cal = ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
         log_err("ucal_open failed: %s\n", u_errorName(status));
-        return; 
+        goto cleanup; 
     }
     
     datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1,NULL, 0, &status);
@@ -1314,13 +1338,13 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     ucal_setDateTime(gmtcal, yr, mo - 1, dt, hr, mn, sc, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_setDateTime failed: %s (Are you missing data?)\n", u_errorName(status));
-        return; 
+        goto cleanup; 
     }
     ucal_set(gmtcal, UCAL_MILLISECOND, 0);
     date1 = ucal_getMillis(gmtcal, &status);
     if (U_FAILURE(status)) {
         log_err("ucal_getMillis failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     log_verbose("date = %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );
 
@@ -1328,7 +1352,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     ucal_setMillis(cal, date1, &status);
     if (U_FAILURE(status)) {
         log_err("ucal_setMillis() failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
 
     offset = ucal_get(cal, UCAL_ZONE_OFFSET, &status);
@@ -1336,7 +1360,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
    
     if (U_FAILURE(status)) {
         log_err("ucal_get() failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     temp=(double)((double)offset / 1000.0 / 60.0 / 60.0);
     /*printf("offset for %s %f hr\n", austrdup(myDateFormat(datfor, date1)), temp);*/
@@ -1347,7 +1371,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
                     ucal_get(cal, UCAL_MILLISECOND, &status) - offset;
     if (U_FAILURE(status)) {
         log_err("ucal_get() failed: %s\n", u_errorName(status));
-        return;
+        goto cleanup;
     }
     
     expected = ((hr * 60 + mn) * 60 + sc) * 1000;
@@ -1357,6 +1381,8 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     }
     else
         log_verbose("PASS: the offset between local and GMT is correct\n");
+
+cleanup:
     ucal_close(gmtcal);
     ucal_close(cal);
     udat_close(datfor);
@@ -2379,6 +2405,11 @@ static const UChar tzTronto[] = /* America/Toronto */
 static const UChar sBogus[] = /* Bogus */
     {0x42,0x6F,0x67,0x75,0x73,0x00};
 
+#ifndef U_DEBUG
+static const UChar sBogusWithVariantCharacters[] = /* Bogus with Variant characters: Hèℓℓô Wôřℓδ */
+    {0x48,0xE8,0x2113,0x2113,0xF4,0x20,0x57,0xF4,0x159,0x2113,0x3B4,0x00};
+#endif
+
 void TestGetWindowsTimeZoneID() {
     UErrorCode status;
     UChar winID[64];
@@ -2445,7 +2476,6 @@ void TestGetTimeZoneIDByWindowsID() {
             log_err("FAIL: TZ ID for Eastern Standard Time - CA\n");
         }
     }
-
     {
         status = U_ZERO_ERROR;
         len = ucal_getTimeZoneIDForWindowsID(sBogus, -1, NULL, tzID, UPRV_LENGTHOF(tzID), &status);
@@ -2455,6 +2485,15 @@ void TestGetTimeZoneIDByWindowsID() {
             log_err("FAIL: TZ ID for Bogus\n");
         }
     }
+#ifndef U_DEBUG
+    // This test is only for release mode because it will cause an assertion failure in debug builds.
+    // We don't check the API result for errors as the only purpose of this test is to ensure that
+    // input variant characters don't cause abort() to be called and/or that ICU doesn't crash.
+    {
+        status = U_ZERO_ERROR;
+        len = ucal_getTimeZoneIDForWindowsID(sBogusWithVariantCharacters, -1, NULL, tzID, UPRV_LENGTHOF(tzID), &status);
+    }
+#endif
 }
 
 // The following currently assumes that Reiwa is the last known/valid era.

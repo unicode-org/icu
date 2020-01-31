@@ -79,7 +79,7 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
     TESTCASE_AUTO(Test20104);
 #endif /* #if !UCONFIG_NO_FORMATTING */
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
-    TESTCASE_AUTO_END
+    TESTCASE_AUTO_END;
 }
 
 

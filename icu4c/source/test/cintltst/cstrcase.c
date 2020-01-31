@@ -916,6 +916,7 @@ TestUCaseMapToTitle(void) {
     ucasemap_setOptions(csm, U_TITLECASE_NO_BREAK_ADJUSTMENT, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err_status(errorCode, "error: ucasemap_setOptions(U_TITLECASE_NO_BREAK_ADJUSTMENT) failed - %s\n", u_errorName(errorCode));
+        ucasemap_close(csm);
         return;
     }
 
@@ -951,6 +952,7 @@ TestUCaseMapToTitle(void) {
     ucasemap_setOptions(csm, U_TITLECASE_NO_LOWERCASE, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: ucasemap_setOptions(U_TITLECASE_NO_LOWERCASE) failed - %s\n", u_errorName(errorCode));
+        ucasemap_close(csm);
         return;
     }
 

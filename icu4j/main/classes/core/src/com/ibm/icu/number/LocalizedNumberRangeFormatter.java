@@ -11,8 +11,7 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
  * Instances of this class are immutable and thread-safe.
  *
  * @author sffc
- * @draft ICU 63
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 63
  * @see NumberRangeFormatter
  */
 public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<LocalizedNumberRangeFormatter> {
@@ -32,8 +31,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      */
     public FormattedNumberRange formatRange(int first, int second) {
@@ -51,8 +49,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      */
     public FormattedNumberRange formatRange(double first, double second) {
@@ -72,8 +69,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      * @see NumberRangeFormatter
      */
     public FormattedNumberRange formatRange(Number first, Number second) {

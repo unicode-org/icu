@@ -53,8 +53,8 @@ class RBBITableBuilder {
                                                    //   in RBBITableBuilder.fDStates
 
         RBBIStateDescriptor(int maxInputSymbol) {
-            fTagVals = new TreeSet<Integer>();
-            fPositions = new HashSet<RBBINode>();
+            fTagVals = new TreeSet<>();
+            fPositions = new HashSet<>();
             fDtran = new int[maxInputSymbol+1];    // fDtran needs to be pre-sized.
                                                     //   It is indexed by input symbols, and will
                                                     //   hold  the next state number for each
@@ -74,6 +74,9 @@ class RBBITableBuilder {
     /** Synthesized safe table, a List of row arrays.  */
     private List<short[]>    fSafeTable;
 
+    /** Map from rule number (fVal in look ahead nodes) to sequential lookahead index. */
+    int[] fLookAheadRuleMap;
+
     //-----------------------------------------------------------------------------
     //
     //  Constructor    for RBBITableBuilder.
@@ -84,7 +87,7 @@ class RBBITableBuilder {
     RBBITableBuilder(RBBIRuleBuilder rb,  int rootNodeIx)  {
            fRootIx     = rootNodeIx;
            fRB         = rb;
-           fDStates    = new ArrayList<RBBIStateDescriptor>();
+           fDStates    = new ArrayList<>();
         }
 
 
@@ -137,7 +140,7 @@ class RBBITableBuilder {
            RBBINode cn = new RBBINode(RBBINode.opCat);
            cn.fLeftChild = fRB.fTreeRoots[fRootIx];
            fRB.fTreeRoots[fRootIx].fParent = cn;
-           cn.fRightChild = new RBBINode(RBBINode.endMark);
+           RBBINode endMarkerNode = cn.fRightChild = new RBBINode(RBBINode.endMark);
            cn.fRightChild.fParent = cn;
            fRB.fTreeRoots[fRootIx] = cn;
 
@@ -172,7 +175,7 @@ class RBBITableBuilder {
            //  For "chained" rules, modify the followPos sets
            //
            if (fRB.fChainRules) {
-               calcChainedFollowPos(fRB.fTreeRoots[fRootIx]);
+               calcChainedFollowPos(fRB.fTreeRoots[fRootIx], endMarkerNode);
            }
 
            //
@@ -186,6 +189,7 @@ class RBBITableBuilder {
            // Build the DFA state transition tables.
            //
            buildStateTable();
+           mapLookAheadRules();
            flagAcceptingStates();
            flagLookAheadStates();
            flagTaggedStates();
@@ -390,13 +394,9 @@ class RBBITableBuilder {
        //                            to implement rule chaining.  NOT described by Aho
        //
        //-----------------------------------------------------------------------------
-       void calcChainedFollowPos(RBBINode tree) {
+       void calcChainedFollowPos(RBBINode tree, RBBINode endMarkNode) {
 
-           List<RBBINode> endMarkerNodes = new ArrayList<RBBINode>();
-           List<RBBINode> leafNodes      = new ArrayList<RBBINode>();
-
-            // get a list of all endmarker nodes.
-           tree.findNodes(endMarkerNodes, RBBINode.endMark);
+           List<RBBINode> leafNodes      = new ArrayList<>();
 
            // get a list all leaf nodes
            tree.findNodes(leafNodes, RBBINode.leafChar);
@@ -405,10 +405,10 @@ class RBBITableBuilder {
            // with inbound chaining enabled, which is the union of the
            // firstPosition sets from each of the rule root nodes.
 
-           List<RBBINode> ruleRootNodes = new ArrayList<RBBINode>();
+           List<RBBINode> ruleRootNodes = new ArrayList<>();
            addRuleRootNodes(ruleRootNodes, tree);
 
-           Set<RBBINode> matchStartNodes = new HashSet<RBBINode>();
+           Set<RBBINode> matchStartNodes = new HashSet<>();
            for (RBBINode node: ruleRootNodes) {
                if (node.fChainIn) {
                    matchStartNodes.addAll(node.fFirstPosSet);
@@ -417,28 +417,26 @@ class RBBITableBuilder {
 
            // Iterate over all leaf nodes,
            //
-           for (RBBINode tNode : leafNodes) {
-               RBBINode endNode = null;
+           for (RBBINode endNode : leafNodes) {
 
                // Identify leaf nodes that correspond to overall rule match positions.
-               //   These include an endMarkerNode in their followPos sets.
-               for (RBBINode endMarkerNode : endMarkerNodes) {
-                   if (tNode.fFollowPos.contains(endMarkerNode)) {
-                       endNode = tNode;
-                       break;
-                   }
-               }
-               if (endNode == null) {
-                   // node wasn't an end node.  Try again with the next.
+               //   These include the endMarkNode in their followPos sets.
+               //
+               // Note: do not consider other end marker nodes, those that are added to
+               //       look-ahead rules. These can't chain; a match immediately stops
+               //       further matching. This leaves exactly one end marker node, the one
+               //       at the end of the complete tree.
+
+               if (!endNode.fFollowPos.contains(endMarkNode)) {
                    continue;
                }
 
                // We've got a node that can end a match.
 
-               // Line Break Specific hack:  If this node's val correspond to the $CM char class,
-               //                            don't chain from it.
-               // TODO:  Add rule syntax for this behavior, get specifics out of here and
-               //        into the rule file.
+               // !!LBCMNoChain implementation:  If this node's val correspond to
+               // the Line Break $CM char class, don't chain from it.
+               // TODO:  Remove this. !!LBCMNoChain is deprecated, and is not used
+               //             by any of the standard ICU rules.
                if (fRB.fLBCMNoChain) {
                    int c = this.fRB.fSetBuilder.getFirstChar(endNode.fVal);
                    if (c != -1) {
@@ -571,7 +569,7 @@ class RBBITableBuilder {
                    for (RBBINode p : T.fPositions) {
                        if ((p.fType == RBBINode.leafChar) &&  (p.fVal == a)) {
                            if (U == null) {
-                               U = new HashSet<RBBINode>();
+                               U = new HashSet<>();
                            }
                            U.addAll(p.fFollowPos);
                        }
@@ -610,7 +608,66 @@ class RBBITableBuilder {
            }
        }
 
+      /**
+       * mapLookAheadRules
+       *
+       */
+      void mapLookAheadRules() {
+          fLookAheadRuleMap =  new int[fRB.fScanner.numRules() + 1];
+          int laSlotsInUse = 0;
 
+          for (RBBIStateDescriptor sd: fDStates) {
+              int laSlotForState = 0;
+
+              // Establish the look-ahead slot for this state, if the state covers
+              // any look-ahead nodes - corresponding to the '/' in look-ahead rules.
+
+              // If any of the look-ahead nodes already have a slot assigned, use it,
+              // otherwise assign a new one.
+
+              boolean sawLookAheadNode = false;
+              for (RBBINode node: sd.fPositions) {
+                  if (node.fType != RBBINode.lookAhead) {
+                      continue;
+                  }
+                  sawLookAheadNode = true;
+                  int ruleNum = node.fVal;     // Set when rule was originally parsed.
+                  assert(ruleNum < fLookAheadRuleMap.length);
+                  assert(ruleNum > 0);
+                  int laSlot = fLookAheadRuleMap[ruleNum];
+                  if (laSlot != 0) {
+                      if (laSlotForState == 0) {
+                          laSlotForState = laSlot;
+                      } else {
+                          // TODO: figure out if this can fail, change to setting an error code if so.
+                          assert(laSlot == laSlotForState);
+                      }
+                  }
+              }
+              if (!sawLookAheadNode) {
+                  continue;
+              }
+
+              if (laSlotForState == 0) {
+                  laSlotForState = ++laSlotsInUse;
+              }
+
+              // For each look ahead node covered by this state,
+              // set the mapping from the node's rule number to the look ahead slot.
+              // There can be multiple nodes/rule numbers going to the same la slot.
+
+              for (RBBINode node: sd.fPositions) {
+                  if (node.fType != RBBINode.lookAhead) {
+                      continue;
+                  }
+                  int ruleNum = node.fVal;     // Set when rule was originally parsed.
+                  int existingVal = fLookAheadRuleMap[ruleNum];
+                  assert(existingVal == 0 || existingVal == laSlotForState);
+                  fLookAheadRuleMap[ruleNum] = laSlotForState;
+              }
+          }
+
+      }
 
        //-----------------------------------------------------------------------------
        //
@@ -622,7 +679,7 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagAcceptingStates() {
-           List<RBBINode> endMarkerNodes = new ArrayList<RBBINode>();
+           List<RBBINode> endMarkerNodes = new ArrayList<>();
            RBBINode    endMarker;
            int     i;
            int     n;
@@ -640,29 +697,20 @@ class RBBITableBuilder {
                        // If no other value was specified, force it to -1.
 
                        if (sd.fAccepting==0) {
-                        // State hasn't been marked as accepting yet.  Do it now.
-                           sd.fAccepting = endMarker.fVal;
+                           // State hasn't been marked as accepting yet.  Do it now.
+                           sd.fAccepting = fLookAheadRuleMap[endMarker.fVal];
                            if (sd.fAccepting == 0) {
                                sd.fAccepting = -1;
-                        }
+                           }
                        }
                        if (sd.fAccepting==-1 && endMarker.fVal != 0) {
-                        // Both lookahead and non-lookahead accepting for this state.
-                        // Favor the look-ahead.  Expedient for line break.
-                        // TODO:  need a more elegant resolution for conflicting rules.
-                        sd.fAccepting = endMarker.fVal;
-                    }
-                        // implicit else:
-                        // if sd.fAccepting already had a value other than 0 or -1, leave it be.
-
-                       // If the end marker node is from a look-ahead rule, set
-                       //   the fLookAhead field for this state also.
-                       if (endMarker.fLookAheadEnd) {
-                        // TODO:  don't change value if already set?
-                        // TODO:  allow for more than one active look-ahead rule in engine.
-                        //        Make value here an index to a side array in engine?
-                           sd.fLookAhead = sd.fAccepting;
+                           // Both lookahead and non-lookahead accepting for this state.
+                           // Favor the look-ahead, because a look-ahead match needs to
+                           // immediately stop the run-time engine. First match, not longest.
+                           sd.fAccepting = fLookAheadRuleMap[endMarker.fVal];
                        }
+                       // implicit else:
+                       // if sd.fAccepting already had a value other than 0 or -1, leave it be.
                    }
                }
            }
@@ -675,7 +723,7 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagLookAheadStates() {
-           List<RBBINode> lookAheadNodes = new ArrayList<RBBINode>();
+           List<RBBINode> lookAheadNodes = new ArrayList<>();
            RBBINode    lookAheadNode;
            int     i;
            int     n;
@@ -683,11 +731,12 @@ class RBBITableBuilder {
            fRB.fTreeRoots[fRootIx].findNodes(lookAheadNodes, RBBINode.lookAhead);
            for (i=0; i<lookAheadNodes.size(); i++) {
                lookAheadNode = lookAheadNodes.get(i);
-
                for (n=0; n<fDStates.size(); n++) {
                    RBBIStateDescriptor sd = fDStates.get(n);
                    if (sd.fPositions.contains(lookAheadNode)) {
-                       sd.fLookAhead = lookAheadNode.fVal;
+                       int lookaheadSlot = fLookAheadRuleMap[lookAheadNode.fVal];
+                       assert(sd.fLookAhead == 0 || sd.fLookAhead == lookaheadSlot);
+                       sd.fLookAhead = lookaheadSlot;
                    }
                }
            }
@@ -702,7 +751,7 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagTaggedStates() {
-           List<RBBINode> tagNodes = new ArrayList<RBBINode>();
+           List<RBBINode> tagNodes = new ArrayList<>();
            RBBINode    tagNode;
            int     i;
            int     n;
@@ -765,10 +814,10 @@ class RBBITableBuilder {
                fRB.fRuleStatusVals.add(Integer.valueOf(1));    // Num of statuses in group
                fRB.fRuleStatusVals.add(Integer.valueOf(0));    //   and our single status of zero
 
-               SortedSet<Integer> s0 = new TreeSet<Integer>();
+               SortedSet<Integer> s0 = new TreeSet<>();
                Integer izero = Integer.valueOf(0);
                fRB.fStatusSets.put(s0, izero);
-               SortedSet<Integer> s1 = new TreeSet<Integer>();
+               SortedSet<Integer> s1 = new TreeSet<>();
                s1.add(izero);
                fRB.fStatusSets.put(s0, izero);
            }
@@ -986,16 +1035,6 @@ class RBBITableBuilder {
                    }
                    sd.fDtran[col] = newVal;
                }
-               if (sd.fAccepting == duplState) {
-                   sd.fAccepting = keepState;
-               } else if (sd.fAccepting > duplState) {
-                   sd.fAccepting--;
-               }
-               if (sd.fLookAhead == duplState) {
-                   sd.fLookAhead = keepState;
-               } else if (sd.fLookAhead > duplState) {
-                   sd.fLookAhead--;
-               }
            }
        }
 
@@ -1167,7 +1206,7 @@ class RBBITableBuilder {
            // fLookAhead, etc. are not needed for the safe table, and are omitted at this stage of building.
 
            assert(fSafeTable == null);
-           fSafeTable = new ArrayList<short[]>();
+           fSafeTable = new ArrayList<>();
            for (int row=0; row<numCharClasses + 2; ++row) {
                fSafeTable.add(new short[numCharClasses]);
            }

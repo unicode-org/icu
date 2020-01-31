@@ -460,7 +460,7 @@ UBool MeasureFormat::operator==(const Format &other) const {
             **numberFormat == **rhs.numberFormat);
 }
 
-Format *MeasureFormat::clone() const {
+MeasureFormat *MeasureFormat::clone() const {
     return new MeasureFormat(*this);
 }
 
@@ -685,9 +685,19 @@ UnicodeString &MeasureFormat::formatMeasure(
     }
     auto* df = dynamic_cast<const DecimalFormat*>(&nf);
     if (df == nullptr) {
-        // Don't know how to handle other types of NumberFormat
-        status = U_UNSUPPORTED_ERROR;
-        return appendTo;
+        // Handle other types of NumberFormat using the ICU 63 code, modified to
+        // get the unitPattern from LongNameHandler and handle fallback to OTHER.
+        UnicodeString formattedNumber;
+        StandardPlural::Form pluralForm = QuantityFormatter::selectPlural(
+                amtNumber, nf, **pluralRules, formattedNumber, pos, status);
+        UnicodeString pattern = number::impl::LongNameHandler::getUnitPattern(getLocale(status),
+                amtUnit, getUnitWidth(fWidth), pluralForm, status);
+        // The above  handles fallback from other widths to short, and from other plural forms to OTHER
+        if (U_FAILURE(status)) {
+            return appendTo;
+        }
+        SimpleFormatter formatter(pattern, 0, 1, status);
+        return QuantityFormatter::format(formatter, formattedNumber, appendTo, pos, status);
     }
     number::FormattedNumber result;
     if (auto* lnf = df->toNumberFormatter(status)) {
@@ -764,11 +774,6 @@ UnicodeString &MeasureFormat::formatNumeric(
             case u's': value = seconds; break;
         }
 
-        // For undefined field we use UNUM_FIELD_COUNT, for historical reasons.
-        // See cleanup bug: https://unicode-org.atlassian.net/browse/ICU-20665
-        // But we give it a clear name, to keep "the ugly part" in one place.
-        constexpr UNumberFormatFields undefinedField = UNUM_FIELD_COUNT;
-
         // There is not enough info to add Field(s) for the unit because all we have are plain
         // text patterns. For example in "21:51" there is no text for something like "hour",
         // while in something like "21h51" there is ("h"). But we can't really tell...
@@ -777,7 +782,7 @@ UnicodeString &MeasureFormat::formatNumeric(
             case u'm':
             case u's':
                 if (protect) {
-                    fsb.appendChar16(c, undefinedField, status);
+                    fsb.appendChar16(c, kUndefinedField, status);
                 } else {
                     UnicodeString tmp;
                     if ((i + 1 < patternLength) && pattern[i + 1] == c) { // doubled
@@ -787,20 +792,20 @@ UnicodeString &MeasureFormat::formatNumeric(
                         numberFormatter->format(value, tmp, status);
                     }
                     // TODO: Use proper Field
-                    fsb.append(tmp, undefinedField, status);
+                    fsb.append(tmp, kUndefinedField, status);
                 }
                 break;
             case u'\'':
                 // '' is escaped apostrophe
                 if ((i + 1 < patternLength) && pattern[i + 1] == c) {
-                    fsb.appendChar16(c, undefinedField, status);
+                    fsb.appendChar16(c, kUndefinedField, status);
                     i++;
                 } else {
                     protect = !protect;
                 }
                 break;
             default:
-                fsb.appendChar16(c, undefinedField, status);
+                fsb.appendChar16(c, kUndefinedField, status);
         }
     }
 

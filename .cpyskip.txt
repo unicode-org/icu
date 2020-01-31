@@ -16,6 +16,8 @@
 .travis.yml
 .appveyor.yml
 .ci-builds/*
+# PGP Keys
+KEYS
 # suffix matches - start with '*'.  They are turned into as RE, '.brk$'
 *.brk
 *.bz2

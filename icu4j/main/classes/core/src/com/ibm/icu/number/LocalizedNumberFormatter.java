@@ -24,8 +24,7 @@ import com.ibm.icu.util.MeasureUnit;
  * Instances of this class are immutable and thread-safe.
  *
  * @see NumberFormatter
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 60
  * @see NumberFormatter
  */
 public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedNumberFormatter> {
@@ -48,8 +47,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @param input
      *            The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public FormattedNumber format(long input) {
@@ -63,8 +61,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @param input
      *            The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public FormattedNumber format(double input) {
@@ -78,8 +75,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @param input
      *            The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public FormattedNumber format(Number input) {
@@ -97,8 +93,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @param input
      *            The number to format.
      * @return A FormattedNumber object; call .toString() to get the string.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      * @see NumberFormatter
      */
     public FormattedNumber format(Measure input) {
@@ -127,8 +122,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * method.
      *
      * @return A Format wrapping this LocalizedNumberFormatter.
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 62
      * @see NumberFormatter
      */
     public Format toFormat() {

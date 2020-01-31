@@ -519,6 +519,17 @@ public class Currency extends MeasureUnit {
      * given locale.
      * This is a convenient method for
      * getName(ULocale, int, boolean[]);
+     *
+     * @param locale locale in which to display currency
+     * @param nameStyle selector for which kind of name to return.
+     *                  The nameStyle should be SYMBOL_NAME, NARROW_SYMBOL_NAME,
+     *                  or LONG_NAME. Otherwise, throw IllegalArgumentException.
+     * @param isChoiceFormat isChoiceFormat[0] is always set to false, or isChoiceFormat can be null;
+     *     display names are static strings;
+     *     since ICU 4.4, ChoiceFormat patterns are no longer supported
+     * @return display string for this currency.  If the resource data
+     * contains no entry for this currency, then the ISO 4217 code is
+     * returned.
      * @stable ICU 3.2
      */
     public String getName(Locale locale,
@@ -531,19 +542,17 @@ public class Currency extends MeasureUnit {
      * Returns the display name for the given currency in the
      * given locale.  For example, the display name for the USD
      * currency object in the en_US locale is "$".
+     *
      * @param locale locale in which to display currency
      * @param nameStyle selector for which kind of name to return.
      *                  The nameStyle should be SYMBOL_NAME, NARROW_SYMBOL_NAME,
      *                  or LONG_NAME. Otherwise, throw IllegalArgumentException.
-     * @param isChoiceFormat fill-in; isChoiceFormat[0] is set to true
-     * if the returned value is a ChoiceFormat pattern; otherwise it
-     * is set to false
+     * @param isChoiceFormat isChoiceFormat[0] is always set to false, or isChoiceFormat can be null;
+     *     display names are static strings;
+     *     since ICU 4.4, ChoiceFormat patterns are no longer supported
      * @return display string for this currency.  If the resource data
      * contains no entry for this currency, then the ISO 4217 code is
-     * returned.  If isChoiceFormat[0] is true, then the result is a
-     * ChoiceFormat pattern.  Otherwise it is a static string. <b>Note:</b>
-     * as of ICU 4.4, choice formats are not used, and the value returned
-     * in isChoiceFormat is always false.
+     * returned.
      * <p>
      * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME
      *                                    or LONG_NAME.
@@ -573,6 +582,16 @@ public class Currency extends MeasureUnit {
     /**
      * Returns the display name for the given currency in the given locale.
      * This is a convenience overload of getName(ULocale, int, String, boolean[]);
+     *
+     * @param locale locale in which to display currency
+     * @param nameStyle selector for which kind of name to return
+     * @param pluralCount plural count string for this locale
+     * @param isChoiceFormat isChoiceFormat[0] is always set to false, or isChoiceFormat can be null;
+     *     display names are static strings;
+     *     since ICU 4.4, ChoiceFormat patterns are no longer supported
+     * @return display string for this currency.  If the resource data
+     * contains no entry for this currency, then the ISO 4217 code is
+     * returned.
      * @stable ICU 4.2
      */
     public String getName(Locale locale, int nameStyle, String pluralCount,
@@ -588,18 +607,16 @@ public class Currency extends MeasureUnit {
      * amount is plural is "US dollars", such as in "3.00 US dollars";
      * while the PLURAL_LONG_NAME for the USD currency object when the currency
      * amount is singular is "US dollar", such as in "1.00 US dollar".
+     *
      * @param locale locale in which to display currency
      * @param nameStyle selector for which kind of name to return
      * @param pluralCount plural count string for this locale
-     * @param isChoiceFormat fill-in; isChoiceFormat[0] is set to true
-     * if the returned value is a ChoiceFormat pattern; otherwise it
-     * is set to false
+     * @param isChoiceFormat isChoiceFormat[0] is always set to false, or isChoiceFormat can be null;
+     *     display names are static strings;
+     *     since ICU 4.4, ChoiceFormat patterns are no longer supported
      * @return display string for this currency.  If the resource data
      * contains no entry for this currency, then the ISO 4217 code is
-     * returned.  If isChoiceFormat[0] is true, then the result is a
-     * ChoiceFormat pattern.  Otherwise it is a static string. <b>Note:</b>
-     * as of ICU 4.4, choice formats are not used, and the value returned
-     * in isChoiceFormat is always false.
+     * returned.
      * @throws  IllegalArgumentException  if the nameStyle is not SYMBOL_NAME,
      *                                    LONG_NAME, or PLURAL_LONG_NAME.
      * @stable ICU 4.2

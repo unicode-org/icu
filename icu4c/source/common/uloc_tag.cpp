@@ -1110,6 +1110,19 @@ _appendRegionToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool stri
     }
 }
 
+static void _sortVariants(VariantListEntry* first) {
+    for (VariantListEntry* var1 = first; var1 != NULL; var1 = var1->next) {
+        for (VariantListEntry* var2 = var1->next; var2 != NULL; var2 = var2->next) {
+            // Swap var1->variant and var2->variant.
+            if (uprv_compareInvCharsAsAscii(var1->variant, var2->variant) > 0) {
+                const char* temp = var1->variant;
+                var1->variant = var2->variant;
+                var2->variant = temp;
+            }
+        }
+    }
+}
+
 static void
 _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool *hadPosix, UErrorCode* status) {
     char buf[ULOC_FULLNAME_CAPACITY];
@@ -1198,6 +1211,9 @@ _appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         if (U_SUCCESS(*status)) {
             if (varFirst != NULL) {
                 int32_t varLen;
+
+                /* per UTS35, we should sort the variants */
+                _sortVariants(varFirst);
 
                 /* write out validated/normalized variants to the target */
                 var = varFirst;
@@ -1492,8 +1508,11 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                 } else {
                     sink.Append("-", 1);
                     sink.Append(ext->key, static_cast<int32_t>(uprv_strlen(ext->key)));
-                    sink.Append("-", 1);
-                    sink.Append(ext->value, static_cast<int32_t>(uprv_strlen(ext->value)));
+                    if (uprv_strcmp(ext->value, "true") != 0 &&
+                        uprv_strcmp(ext->value, "yes") != 0) {
+                      sink.Append("-", 1);
+                      sink.Append(ext->value, static_cast<int32_t>(uprv_strlen(ext->value)));
+                    }
                 }
             }
         }
@@ -2822,6 +2841,7 @@ ulocimp_forLanguageTag(const char* langtag,
     }
 
     /* variants */
+    _sortVariants(lt.getAlias()->variants);
     n = ultag_getVariantsSize(lt.getAlias());
     if (n > 0) {
         if (noRegion) {

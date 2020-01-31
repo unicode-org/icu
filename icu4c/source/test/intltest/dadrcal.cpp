@@ -366,7 +366,7 @@ void DataDrivenCalendarTest::testConvert(int32_t n,
 void DataDrivenCalendarTest::testConvert(TestData *testData,
         const DataMap *settings, UBool forward) {
     UErrorCode status = U_ZERO_ERROR;
-    Calendar *toCalendar= NULL;
+    LocalPointer<Calendar> toCalendar;
     const DataMap *currentCase= NULL;
     char toCalLoc[256] = "";
     char fromCalLoc[256] = "";
@@ -374,7 +374,7 @@ void DataDrivenCalendarTest::testConvert(TestData *testData,
     UnicodeString testSetting = settings->getString("ToCalendar", status);
     if (U_SUCCESS(status)) {
         testSetting.extract(0, testSetting.length(), toCalLoc, (const char*)0);
-        toCalendar = Calendar::createInstance(toCalLoc, status);
+        toCalendar.adoptInstead(Calendar::createInstance(toCalLoc, status));
         if (U_FAILURE(status)) {
             dataerrln(UnicodeString("Unable to instantiate ToCalendar for ")+testSetting);
             return;
@@ -393,11 +393,11 @@ void DataDrivenCalendarTest::testConvert(TestData *testData,
     int n = 0;
     while (testData->nextCase(currentCase, status)) {
         ++n;
-        Calendar *fromCalendar= NULL;
+        LocalPointer<Calendar> fromCalendar;
         UnicodeString locale = currentCase->getString("locale", status);
         if (U_SUCCESS(status)) {
             locale.extract(0, locale.length(), fromCalLoc, (const char*)0); // default codepage.  Invariant codepage doesn't have '@'!
-            fromCalendar = Calendar::createInstance(fromCalLoc, status);
+            fromCalendar.adoptInstead(Calendar::createInstance(fromCalLoc, status));
             if (U_FAILURE(status)) {
                 errln("Unable to instantiate fromCalendar for "+locale);
                 return;
@@ -435,16 +435,13 @@ void DataDrivenCalendarTest::testConvert(TestData *testData,
         if (forward) {
             logln((UnicodeString)"#"+n+" "+locale+"/"+from+" >>> "+toCalLoc+"/"
                     +to);
-            testConvert(n, fromSet, fromCalendar, toSet, toCalendar, forward);
+            testConvert(n, fromSet, fromCalendar.getAlias(), toSet, toCalendar.getAlias(), forward);
         } else {
             logln((UnicodeString)"#"+n+" "+locale+"/"+from+" <<< "+toCalLoc+"/"
                     +to);
-            testConvert(n, toSet, toCalendar, fromSet, fromCalendar, forward);
+            testConvert(n, toSet, toCalendar.getAlias(), fromSet, fromCalendar.getAlias(), forward);
         }
-
-        delete fromCalendar;
     }
-    delete toCalendar;
 }
 
 void DataDrivenCalendarTest::processTest(TestData *testData) {

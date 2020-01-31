@@ -95,6 +95,7 @@ public final class DecimalQuantity_64BitBCD extends DecimalQuantity_AbstractBCD 
     isApproximate = false;
     origDouble = 0;
     origDelta = 0;
+    exponent = 0;
   }
 
   @Override

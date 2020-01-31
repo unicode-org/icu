@@ -14,6 +14,11 @@
 *   created by: Markus W. Scherer
 */
 
+#ifdef U_HAVE_STRING_VIEW
+#include <string_view>
+#endif
+
+#include <cstddef>
 #include <string.h>
 
 #include "unicode/utypes.h"
@@ -28,6 +33,7 @@
 #include "cstr.h"
 #include "intltest.h"
 #include "strtest.h"
+#include "uinvchar.h"
 
 StringTest::~StringTest() {}
 
@@ -142,6 +148,64 @@ StringTest::Test_UNICODE_STRING_SIMPLE() {
     }
 }
 
+namespace {
+
+// See U_CHARSET_FAMILY in unicode/platform.h.
+const char *nativeInvChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz"
+    "0123456789 \"%&'()*+,-./:;<=>?_";
+const char16_t *asciiInvChars =
+    u"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    u"abcdefghijklmnopqrstuvwxyz"
+    u"0123456789 \"%&'()*+,-./:;<=>?_";
+
+}  // namespace
+
+void
+StringTest::TestUpperOrdinal() {
+    for (int32_t i = 0;; ++i) {
+        char ic = nativeInvChars[i];
+        uint8_t ac = asciiInvChars[i];
+        int32_t expected = ac - 'A';
+        int32_t actual = uprv_upperOrdinal(ic);
+        if (0 <= expected && expected <= 25) {
+            if (actual != expected) {
+                errln("uprv_upperOrdinal('%c')=%d != expected %d",
+                      ic, (int)actual, (int)expected);
+            }
+        } else {
+            if (0 <= actual && actual <= 25) {
+                errln("uprv_upperOrdinal('%c')=%d should have been outside 0..25",
+                      ic, (int)actual);
+            }
+        }
+        if (ic == 0) { break; }
+    }
+}
+
+void
+StringTest::TestLowerOrdinal() {
+    for (int32_t i = 0;; ++i) {
+        char ic = nativeInvChars[i];
+        uint8_t ac = asciiInvChars[i];
+        int32_t expected = ac - 'a';
+        int32_t actual = uprv_lowerOrdinal(ic);
+        if (0 <= expected && expected <= 25) {
+            if (actual != expected) {
+                errln("uprv_lowerOrdinal('%c')=%d != expected %d",
+                      ic, (int)actual, (int)expected);
+            }
+        } else {
+            if (0 <= actual && actual <= 25) {
+                errln("uprv_lowerOrdinal('%c')=%d should have been outside 0..25",
+                      ic, (int)actual);
+            }
+        }
+        if (ic == 0) { break; }
+    }
+}
+
 void
 StringTest::Test_UTF8_COUNT_TRAIL_BYTES() {
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
@@ -173,10 +237,17 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(Test_U_STRING);
     TESTCASE_AUTO(Test_UNICODE_STRING);
     TESTCASE_AUTO(Test_UNICODE_STRING_SIMPLE);
+    TESTCASE_AUTO(TestUpperOrdinal);
+    TESTCASE_AUTO(TestLowerOrdinal);
     TESTCASE_AUTO(Test_UTF8_COUNT_TRAIL_BYTES);
     TESTCASE_AUTO(TestSTLCompatibility);
     TESTCASE_AUTO(TestStringPiece);
     TESTCASE_AUTO(TestStringPieceComparisons);
+    TESTCASE_AUTO(TestStringPieceFind);
+    TESTCASE_AUTO(TestStringPieceOther);
+#ifdef U_HAVE_STRING_VIEW
+    TESTCASE_AUTO(TestStringPieceStringView);
+#endif
     TESTCASE_AUTO(TestByteSink);
     TESTCASE_AUTO(TestCheckedArrayByteSink);
     TESTCASE_AUTO(TestStringByteSink);
@@ -337,6 +408,35 @@ StringTest::TestStringPieceComparisons() {
     if(abc==abcd) {
         errln("abc==abcd");
     }
+
+    assertTrue("null<abc", null.compare(abc) < 0);
+    assertTrue("abc>null", abc.compare(null) > 0);
+    assertTrue("abc<abcd", abc.compare(abcd) < 0);
+    assertTrue("abcd>abc", abcd.compare(abc) > 0);
+    assertTrue("abc<abx", abc.compare(abx) < 0);
+    assertTrue("abx>abc", abx.compare(abc) > 0);
+    assertTrue("abx>abcd", abx.compare(abcd) > 0);
+    assertTrue("abcd<abx", abcd.compare(abx) < 0);
+    assertTrue("abx==abx", abx.compare(abx) == 0);
+
+    // Behavior should be the same as std::string::compare
+    {
+        std::string null("");
+        std::string abc("abc");
+        std::string abcd("abcdefg", 4);
+        std::string abx("abx");
+
+        assertTrue("std: null<abc", null.compare(abc) < 0);
+        assertTrue("std: abc>null", abc.compare(null) > 0);
+        assertTrue("std: abc<abcd", abc.compare(abcd) < 0);
+        assertTrue("std: abcd>abc", abcd.compare(abc) > 0);
+        assertTrue("std: abc<abx", abc.compare(abx) < 0);
+        assertTrue("std: abx>abc", abx.compare(abc) > 0);
+        assertTrue("std: abx>abcd", abx.compare(abcd) > 0);
+        assertTrue("std: abcd<abx", abcd.compare(abx) < 0);
+        assertTrue("std: abx==abx", abx.compare(abx) == 0);
+    }
+
     abcd.remove_suffix(1);
     if(abc!=abcd) {
         errln("abc!=abcd.remove_suffix(1)");
@@ -345,6 +445,81 @@ StringTest::TestStringPieceComparisons() {
         errln("abc==abx");
     }
 }
+
+void
+StringTest::TestStringPieceFind() {
+    struct TestCase {
+        const char* haystack;
+        const char* needle;
+        int32_t expected;
+    } cases[] = {
+        { "", "", 0 },
+        { "", "x", -1 },
+        { "x", "", 0 },
+        { "x", "x", 0 },
+        { "xy", "x", 0 },
+        { "xy", "y", 1 },
+        { "xy", "xy", 0 },
+        { "xy", "xyz", -1 },
+        { "qwerty", "qqw", -1 },
+        { "qwerty", "qw", 0 },
+        { "qwerty", "er", 2 },
+        { "qwerty", "err", -1 },
+        { "qwerty", "ert", 2 },
+        { "qwerty", "ty", 4 },
+        { "qwerty", "tyy", -1 },
+        { "qwerty", "a", -1 },
+        { "qwerty", "abc", -1 }
+    };
+    int32_t caseNumber = 0;
+    for (auto& cas : cases) {
+        StringPiece haystack(cas.haystack);
+        StringPiece needle(cas.needle);
+        assertEquals(Int64ToUnicodeString(caseNumber),
+            cas.expected, haystack.find(needle, 0));
+        // Should be same as std::string::find
+        std::string stdhaystack(cas.haystack);
+        std::string stdneedle(cas.needle);
+        assertEquals(Int64ToUnicodeString(caseNumber) + u" (std)",
+            cas.expected, stdhaystack.find(stdneedle, 0));
+        // Test offsets against std::string::find
+        for (int32_t offset = 0; offset < haystack.length(); offset++) {
+            assertEquals(Int64ToUnicodeString(caseNumber) + "u @ " + Int64ToUnicodeString(offset),
+                stdhaystack.find(stdneedle, offset), haystack.find(needle, offset));
+        }
+        caseNumber++;
+    }
+}
+
+void
+StringTest::TestStringPieceOther() {
+    static constexpr char msg[] = "Kapow!";
+
+    // Another string piece implementation.
+    struct Other {
+        const char* data() { return msg; }
+        size_t size() { return sizeof msg - 1; }
+    };
+
+    Other other;
+    StringPiece piece(other);
+
+    assertEquals("size()", piece.size(), other.size());
+    assertEquals("data()", piece.data(), other.data());
+}
+
+#ifdef U_HAVE_STRING_VIEW
+void
+StringTest::TestStringPieceStringView() {
+    static constexpr char msg[] = "Kapow!";
+
+    std::string_view view(msg);  // C++17
+    StringPiece piece(view);
+
+    assertEquals("size()", piece.size(), view.size());
+    assertEquals("data()", piece.data(), view.data());
+}
+#endif
 
 // Verify that ByteSink is subclassable and Flush() overridable.
 class SimpleByteSink : public ByteSink {

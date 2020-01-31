@@ -612,12 +612,6 @@ private:
     UVector32       *fGroupMap;    // Map from capture group number to position of
                                    //   the group's variables in the matcher stack frame.
 
-    UnicodeSet     **fStaticSets;  // Ptr to static (shared) sets for predefined
-                                   //   regex character classes, e.g. Word.
-
-    Regex8BitSet   *fStaticSets8;  // Ptr to the static (shared) latin-1 only
-                                   //  sets for predefined regex classes.
-
     int32_t         fStartType;    // Info on how a match must start.
     int32_t         fInitialStringIdx;     //
     int32_t         fInitialStringLen;
@@ -635,8 +629,9 @@ private:
     //
     //  Implementation Methods
     //
-    void        init();            // Common initialization, for use by constructors.
-    void        zap();             // Common cleanup
+    void        init();                 // Common initialization, for use by constructors.
+    bool        initNamedCaptureMap();  // Lazy init for fNamedCaptureMap.
+    void        zap();                  // Common cleanup
 
     void        dumpOp(int32_t index) const;
 

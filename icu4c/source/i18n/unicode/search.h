@@ -72,8 +72,7 @@ U_NAMESPACE_BEGIN
  * UErrorCode      error = U_ZERO_ERROR;
  * for (int pos = iter->first(error); pos != USEARCH_DONE; 
  *                               pos = iter->next(error)) {
- *     printf("Found match at %d pos, length is %d\n", pos, 
- *                                             iter.getMatchLength());
+ *     printf("Found match at %d pos, length is %d\n", pos, iter.getMatchedLength());
  * }
  * </code></pre>
  *

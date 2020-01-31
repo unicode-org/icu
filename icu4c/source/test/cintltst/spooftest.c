@@ -31,19 +31,31 @@
 #include "cintltst.h"
 #include "cmemory.h"
 
-#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-    log_err_status(status, "Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));}}
+#define TEST_ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        log_err_status(status, "Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
-log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);};}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_EQ(a, b) { if ((a) != (b)) { \
-    log_err("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d) \n", \
-             __FILE__, __LINE__, #a, (a), #b, (b)); }}
+#define TEST_ASSERT_EQ(a, b) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((a) != (b)) { \
+        log_err("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d) \n", \
+                __FILE__, __LINE__, #a, (a), #b, (b)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_NE(a, b) { if ((a) == (b)) { \
-    log_err("Test Failure at file %s, line %d: \"%s\" (%d) == \"%s\" (%d) \n", \
-             __FILE__, __LINE__, #a, (a), #b, (b)); }}
+#define TEST_ASSERT_NE(a, b) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((a) == (b)) { \
+        log_err("Test Failure at file %s, line %d: \"%s\" (%d) == \"%s\" (%d) \n", \
+                __FILE__, __LINE__, #a, (a), #b, (b)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
 /*
@@ -52,7 +64,7 @@ log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE
  *         Put arbitrary test code between SETUP and TEARDOWN.
  *         "sc" is the ready-to-go  SpoofChecker for use in the tests.
  */
-#define TEST_SETUP {  \
+#define TEST_SETUP UPRV_BLOCK_MACRO_BEGIN { \
     UErrorCode status = U_ZERO_ERROR; \
     USpoofChecker *sc;     \
     sc = uspoof_open(&status);  \
@@ -63,7 +75,7 @@ log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE
     }  \
     TEST_ASSERT_SUCCESS(status);  \
     uspoof_close(sc);  \
-}
+} UPRV_BLOCK_MACRO_END
 
 static void TestOpenFromSource(void);
 static void TestUSpoofCAPI(void);
@@ -319,7 +331,7 @@ static void TestUSpoofCAPI(void) {
          result = uspoof_check(sc, scMixed, -1, NULL, &status);
          TEST_ASSERT_SUCCESS(status);
          TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT, result);
-     TEST_TEARDOWN
+     TEST_TEARDOWN;
 
 
     /*
@@ -358,7 +370,7 @@ static void TestUSpoofCAPI(void) {
         /* Default allowed locales list should be empty */
         allowedLocales = uspoof_getAllowedLocales(sc, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT(strcmp("", allowedLocales) == 0)
+        TEST_ASSERT(strcmp("", allowedLocales) == 0);
 
         /* Allow en and ru, which should enable Latin and Cyrillic only to pass */
         uspoof_setAllowedLocales(sc, "en, ru_RU", &status);

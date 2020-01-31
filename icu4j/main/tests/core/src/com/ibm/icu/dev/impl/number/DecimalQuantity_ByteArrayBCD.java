@@ -112,6 +112,7 @@ public final class DecimalQuantity_ByteArrayBCD extends DecimalQuantity_Abstract
     isApproximate = false;
     origDouble = 0;
     origDelta = 0;
+    exponent = 0;
   }
 
   @Override

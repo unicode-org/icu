@@ -23,6 +23,37 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
+                                       const char* &name, char* /*par */) {
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestRoot);
+    TESTCASE_AUTO(TestBogus);
+    TESTCASE_AUTO(TestEnglish);
+    TESTCASE_AUTO(TestEnglishUS);
+    TESTCASE_AUTO(TestRussian);
+    TESTCASE_AUTO(TestMalayalam);
+    TESTCASE_AUTO(TestZulu);
+    TESTCASE_AUTO(TestOutOfOrderPatterns);
+    TESTCASE_AUTO(Test9946);
+    TESTCASE_AUTO(TestEnglishGB);
+    TESTCASE_AUTO(TestNynorsk);
+    TESTCASE_AUTO(TestChineseTradHK);
+    TESTCASE_AUTO(TestFieldPositionIteratorWontCrash);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith1Item);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith1ItemAndDataBefore);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith2Items);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith2ItemsAndDataBefore);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith2ItemsPatternShift);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith3Items);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith3ItemsAndDataBefore);
+    TESTCASE_AUTO(TestFieldPositionIteratorWith3ItemsPatternShift);
+    TESTCASE_AUTO(TestFormattedValue);
+    TESTCASE_AUTO(TestDifferentStyles);
+    TESTCASE_AUTO(TestBadStylesFail);
+    TESTCASE_AUTO(TestCreateStyled);
+    TESTCASE_AUTO_END;
+}
+
 namespace {
 const char* attrString(int32_t attrId) {
   switch (attrId) {
@@ -611,58 +642,65 @@ void ListFormatterTest::TestBadStylesFail() {
     }
 }
 
-void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
-                                       const char* &name, char* /*par */) {
-    switch(index) {
-        case 0: name = "TestRoot"; if (exec) TestRoot(); break;
-        case 1: name = "TestBogus"; if (exec) TestBogus(); break;
-        case 2: name = "TestEnglish"; if (exec) TestEnglish(); break;
-        case 3: name = "TestEnglishUS"; if (exec) TestEnglishUS(); break;
-        case 4: name = "TestRussian"; if (exec) TestRussian(); break;
-        case 5: name = "TestMalayalam"; if (exec) TestMalayalam(); break;
-        case 6: name = "TestZulu"; if (exec) TestZulu(); break;
-        case 7: name = "TestOutOfOrderPatterns"; if (exec) TestOutOfOrderPatterns(); break;
-        case 8: name = "Test9946"; if (exec) Test9946(); break;
-        case 9: name = "TestEnglishGB"; if (exec) TestEnglishGB(); break;
-        case 10: name = "TestNynorsk"; if (exec) TestNynorsk(); break;
-        case 11: name = "TestChineseTradHK"; if (exec) TestChineseTradHK(); break;
-        case 12: name = "TestFieldPositionIteratorWontCrash";
-                 if (exec) TestFieldPositionIteratorWontCrash();
-                 break;
-        case 13: name = "TestFieldPositionIteratorWith1Item";
-                 if (exec) TestFieldPositionIteratorWith1Item();
-                 break;
-        case 14: name = "TestFieldPositionIteratorWith1ItemAndDataBefore";
-                 if (exec) TestFieldPositionIteratorWith1ItemAndDataBefore();
-                 break;
-        case 15: name = "TestFieldPositionIteratorWith2Items";
-                 if (exec) TestFieldPositionIteratorWith2Items();
-                 break;
-        case 16: name = "TestFieldPositionIteratorWith2ItemsAndDataBefore";
-                 if (exec) TestFieldPositionIteratorWith2ItemsAndDataBefore();
-                 break;
-        case 17: name = "TestFieldPositionIteratorWith2ItemsPatternShift";
-                 if (exec) TestFieldPositionIteratorWith2ItemsPatternShift();
-                 break;
-        case 18: name = "TestFieldPositionIteratorWith3Items";
-                 if (exec) TestFieldPositionIteratorWith3Items();
-                 break;
-        case 19: name = "TestFieldPositionIteratorWith3ItemsAndDataBefore";
-                 if (exec) TestFieldPositionIteratorWith3ItemsAndDataBefore();
-                 break;
-        case 20: name = "TestFieldPositionIteratorWith3ItemsPatternShift";
-                 if (exec) TestFieldPositionIteratorWith3ItemsPatternShift();
-                 break;
-        case 21: name = "TestFormattedValue";
-                 if (exec) TestFormattedValue();
-                 break;
-        case 22: name = "TestDifferentStyles";
-                 if (exec) TestDifferentStyles();
-                 break;
-        case 23: name = "TestBadStylesFail";
-                 if (exec) TestBadStylesFail();
-                 break;
-        default: name = ""; break;
+void ListFormatterTest::TestCreateStyled() {
+    IcuTestErrorCode status(*this, "TestCreateStyled");
+    // Locale en has interesting data
+    struct TestCase {
+        const char* locale;
+        UListFormatterType type;
+        UListFormatterWidth width;
+        const char16_t* expected3;
+        const char16_t* expected2;
+        const char16_t* expected1;
+    } cases[] = {
+        { "pt", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_WIDE, u"A, B e C", u"A e B", u"A" },
+        { "pt", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_SHORT, u"A, B e C", u"A e B", u"A" },
+        { "pt", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_NARROW, u"A, B, C", u"A, B", u"A" },
+        { "pt", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_WIDE, u"A, B ou C", u"A ou B", u"A" },
+        { "pt", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_SHORT, u"A, B ou C", u"A ou B", u"A" },
+        { "pt", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_NARROW, u"A, B ou C", u"A ou B", u"A" },
+        { "pt", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_WIDE, u"A, B e C", u"A e B", u"A" },
+        { "pt", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_SHORT, u"A, B e C", u"A e B", u"A" },
+        { "pt", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_NARROW, u"A B C", u"A B", u"A" },
+        { "en", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_WIDE, u"A, B, and C", u"A and B", u"A" },
+        { "en", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_SHORT, u"A, B, & C", u"A & B", u"A" },
+        { "en", ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_NARROW, u"A, B, C", u"A, B", u"A" },
+        { "en", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_WIDE, u"A, B, or C", u"A or B", u"A" },
+        { "en", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_SHORT, u"A, B, or C", u"A or B", u"A" },
+        { "en", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_NARROW, u"A, B, or C", u"A or B", u"A" },
+        { "en", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_WIDE, u"A, B, C", u"A, B", u"A" },
+        { "en", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_SHORT, u"A, B, C", u"A, B", u"A" },
+        { "en", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_NARROW, u"A B C", u"A B", u"A" },
+    };
+    for (auto cas : cases) {
+        LocalPointer<ListFormatter> fmt(
+            ListFormatter::createInstance(cas.locale, cas.type, cas.width, status),
+            status);
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+        UnicodeString message = UnicodeString(u"TestCreateStyled loc=")
+            + cas.locale + u" type="
+            + Int64ToUnicodeString(cas.type) + u" width="
+            + Int64ToUnicodeString(cas.width);
+        const UnicodeString inputs3[] = {
+            u"A",
+            u"B",
+            u"C"
+        };
+        FormattedList result = fmt->formatStringsToValue(inputs3, UPRV_LENGTHOF(inputs3), status);
+        assertEquals(message, cas.expected3, result.toTempString(status));
+        const UnicodeString inputs2[] = {
+            u"A",
+            u"B"
+        };
+        result = fmt->formatStringsToValue(inputs2, UPRV_LENGTHOF(inputs2), status);
+        assertEquals(message, cas.expected2, result.toTempString(status));
+        const UnicodeString inputs1[] = {
+            u"A"
+        };
+        result = fmt->formatStringsToValue(inputs1, UPRV_LENGTHOF(inputs1), status);
+        assertEquals(message, cas.expected1, result.toTempString(status));
     }
 }
 

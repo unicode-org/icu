@@ -1040,6 +1040,15 @@ public final class UScript {
     /** @stable ICU 64 */
     public static final int WANCHO = 188; /* Wcho */
 
+    /** @stable ICU 66 */
+    public static final int CHORASMIAN = 189; /* Chrs */
+    /** @stable ICU 66 */
+    public static final int DIVES_AKURU = 190; /* Diak */
+    /** @stable ICU 66 */
+    public static final int KHITAN_SMALL_SCRIPT = 191; /* Kits */
+    /** @stable ICU 66 */
+    public static final int YEZIDI = 192; /* Yezi */
+
     /**
      * One more than the highest normal UScript code.
      * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
@@ -1047,7 +1056,7 @@ public final class UScript {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int CODE_LIMIT   = 189;
+    public static final int CODE_LIMIT   = 193;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
@@ -1171,14 +1180,15 @@ public final class UScript {
     public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
             int scriptX=UCharacterProperty.INSTANCE.getAdditional(codepoint, 0)&UCharacterProperty.SCRIPT_X_MASK;
+            int codeOrIndex=UCharacterProperty.mergeScriptCodeOrIndex(scriptX);
             if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
-                return scriptX;
+                return codeOrIndex;
             } else if(scriptX<UCharacterProperty.SCRIPT_X_WITH_INHERITED) {
                 return UScript.COMMON;
             } else if(scriptX<UCharacterProperty.SCRIPT_X_WITH_OTHER) {
                 return UScript.INHERITED;
             } else {
-                return UCharacterProperty.INSTANCE.m_scriptExtensions_[scriptX&UCharacterProperty.SCRIPT_MASK_];
+                return UCharacterProperty.INSTANCE.m_scriptExtensions_[codeOrIndex];
             }
         }else{
             throw new IllegalArgumentException(Integer.toString(codepoint));
@@ -1200,12 +1210,13 @@ public final class UScript {
      */
     public static final boolean hasScript(int c, int sc) {
         int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
+        int codeOrIndex=UCharacterProperty.mergeScriptCodeOrIndex(scriptX);
         if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
-            return sc==scriptX;
+            return sc==codeOrIndex;
         }
 
         char[] scriptExtensions=UCharacterProperty.INSTANCE.m_scriptExtensions_;
-        int scx=scriptX&UCharacterProperty.SCRIPT_MASK_;  // index into scriptExtensions
+        int scx=codeOrIndex;  // index into scriptExtensions
         if(scriptX>=UCharacterProperty.SCRIPT_X_WITH_OTHER) {
             scx=scriptExtensions[scx+1];
         }
@@ -1249,13 +1260,14 @@ public final class UScript {
     public static final int getScriptExtensions(int c, BitSet set) {
         set.clear();
         int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
+        int codeOrIndex=UCharacterProperty.mergeScriptCodeOrIndex(scriptX);
         if(scriptX<UCharacterProperty.SCRIPT_X_WITH_COMMON) {
-            set.set(scriptX);
-            return scriptX;
+            set.set(codeOrIndex);
+            return codeOrIndex;
         }
 
         char[] scriptExtensions=UCharacterProperty.INSTANCE.m_scriptExtensions_;
-        int scx=scriptX&UCharacterProperty.SCRIPT_MASK_;  // index into scriptExtensions
+        int scx=codeOrIndex;  // index into scriptExtensions
         if(scriptX>=UCharacterProperty.SCRIPT_X_WITH_OTHER) {
             scx=scriptExtensions[scx+1];
         }
@@ -1515,6 +1527,10 @@ public final class UScript {
             0x1E108 | LIMITED_USE,  // Hmnp
             0x119CE | EXCLUSION,  // Nand
             0x1E2E1 | LIMITED_USE,  // Wcho
+            0x10FBF | EXCLUSION | RTL,  // Chrs
+            0x1190C | EXCLUSION,  // Diak
+            0x18C65 | EXCLUSION | LB_LETTERS,  // Kits
+            0x10E88 | EXCLUSION | RTL,  // Yezi
             // End copy-paste from parsescriptmetadata.py
         };
 

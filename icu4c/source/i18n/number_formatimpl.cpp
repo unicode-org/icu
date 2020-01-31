@@ -111,7 +111,6 @@ void NumberFormatterImpl::preProcess(DecimalQuantity& inValue, MicroProps& micro
         return;
     }
     fMicroPropsGenerator->processQuantity(inValue, microsOut, status);
-    microsOut.rounder.apply(inValue, status);
     microsOut.integerWidth.apply(inValue, status);
 }
 
@@ -124,7 +123,6 @@ MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErr
         return fMicros; // must always return a value
     }
     fMicroPropsGenerator->processQuantity(inValue, fMicros, status);
-    fMicros.rounder.apply(inValue, status);
     fMicros.integerWidth.apply(inValue, status);
     return fMicros;
 }
@@ -215,7 +213,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (macros.symbols.isDecimalFormatSymbols()) {
         fMicros.symbols = macros.symbols.getDecimalFormatSymbols();
     } else {
-        fMicros.symbols = new DecimalFormatSymbols(macros.locale, *ns, status);
+        auto newSymbols = new DecimalFormatSymbols(macros.locale, *ns, status);
+        if (newSymbols == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        fMicros.symbols = newSymbols;
         // Give ownership to the NumberFormatterImpl.
         fSymbols.adoptInstead(fMicros.symbols);
     }
@@ -229,7 +232,11 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         if (info.exists) {
             pattern = info.pattern;
             // It's clunky to clone an object here, but this code is not frequently executed.
-            auto* symbols = new DecimalFormatSymbols(*fMicros.symbols);
+            auto symbols = new DecimalFormatSymbols(*fMicros.symbols);
+            if (symbols == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return nullptr;
+            }
             fMicros.symbols = symbols;
             fSymbols.adoptInstead(symbols);
             symbols->setSymbol(
@@ -260,6 +267,10 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         pattern = utils::getPatternForStyle(macros.locale, nsName, patternStyle, status);
     }
     auto patternInfo = new ParsedPatternInfo();
+    if (patternInfo == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     fPatternInfo.adoptInstead(patternInfo);
     PatternParser::parseToPatternInfo(UnicodeString(pattern), *patternInfo, status);
 
@@ -337,7 +348,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Inner modifier (scientific notation)
     if (macros.notation.fType == Notation::NTN_SCIENTIFIC) {
-        fScientificHandler.adoptInstead(new ScientificHandler(&macros.notation, fMicros.symbols, chain));
+        auto newScientificHandler = new ScientificHandler(&macros.notation, fMicros.symbols, chain);
+        if (newScientificHandler == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        fScientificHandler.adoptInstead(newScientificHandler);
         chain = fScientificHandler.getAlias();
     } else {
         // No inner modifier required
@@ -346,11 +362,15 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Middle modifier (patterns, positive/negative, currency symbols, percent)
     auto patternModifier = new MutablePatternModifier(false);
+    if (patternModifier == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     fPatternModifier.adoptInstead(patternModifier);
     patternModifier->setPatternInfo(
             macros.affixProvider != nullptr ? macros.affixProvider
                                             : static_cast<const AffixPatternProvider*>(fPatternInfo.getAlias()),
-            UNUM_FIELD_COUNT);
+            kUndefinedField);
     patternModifier->setPatternAttributes(fMicros.sign, isPermille);
     if (patternModifier->needsPlurals()) {
         patternModifier->setSymbols(
@@ -362,11 +382,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         patternModifier->setSymbols(fMicros.symbols, currencySymbols, unitWidth, nullptr);
     }
     if (safe) {
-        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutableAndChain(chain, status));
-        chain = fImmutablePatternModifier.getAlias();
-    } else {
-        patternModifier->addToChain(chain);
-        chain = patternModifier;
+        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutable(status));
     }
 
     // Outer modifier (CLDR units and currency long names)
@@ -396,22 +412,34 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
 
     // Compact notation
-    // NOTE: Compact notation can (but might not) override the middle modifier and rounding.
-    // It therefore needs to go at the end of the chain.
     if (macros.notation.fType == Notation::NTN_COMPACT) {
         CompactType compactType = (isCurrency && unitWidth != UNUM_UNIT_WIDTH_FULL_NAME)
                                   ? CompactType::TYPE_CURRENCY : CompactType::TYPE_DECIMAL;
-        fCompactHandler.adoptInstead(
-                new CompactHandler(
-                        macros.notation.fUnion.compactStyle,
-                        macros.locale,
-                        nsName,
-                        compactType,
-                        resolvePluralRules(macros.rules, macros.locale, status),
-                        safe ? patternModifier : nullptr,
-                        chain,
-                        status));
+        auto newCompactHandler = new CompactHandler(
+            macros.notation.fUnion.compactStyle,
+            macros.locale,
+            nsName,
+            compactType,
+            resolvePluralRules(macros.rules, macros.locale, status),
+            patternModifier,
+            safe,
+            chain,
+            status);
+        if (newCompactHandler == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        fCompactHandler.adoptInstead(newCompactHandler);
         chain = fCompactHandler.getAlias();
+    }
+
+    // Always add the pattern modifier as the last element of the chain.
+    if (safe) {
+        fImmutablePatternModifier->addToChain(chain);
+        chain = fImmutablePatternModifier.getAlias();
+    } else {
+        patternModifier->addToChain(chain);
+        chain = patternModifier;
     }
 
     return chain;
@@ -452,14 +480,14 @@ int32_t NumberFormatterImpl::writeNumber(const MicroProps& micros, DecimalQuanti
         length += string.insert(
                 length + index,
                 micros.symbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kInfinitySymbol),
-                UNUM_INTEGER_FIELD,
+                {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD},
                 status);
 
     } else if (quantity.isNaN()) {
         length += string.insert(
                 length + index,
                 micros.symbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kNaNSymbol),
-                UNUM_INTEGER_FIELD,
+                {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD},
                 status);
 
     } else {
@@ -475,12 +503,23 @@ int32_t NumberFormatterImpl::writeNumber(const MicroProps& micros, DecimalQuanti
                             .symbols
                             ->getSymbol(
                                     DecimalFormatSymbols::ENumberFormatSymbol::kDecimalSeparatorSymbol),
-                    UNUM_DECIMAL_SEPARATOR_FIELD,
+                    {UFIELD_CATEGORY_NUMBER, UNUM_DECIMAL_SEPARATOR_FIELD},
                     status);
         }
 
         // Add the fraction digits
         length += writeFractionDigits(micros, quantity, string, length + index, status);
+
+        if (length == 0) {
+            // Force output of the digit for value 0
+            length += utils::insertDigitFromSymbols(
+                    string,
+                    index,
+                    0,
+                    *micros.symbols,
+                    {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD},
+                    status);
+        }
     }
 
     return length;
@@ -500,14 +539,20 @@ int32_t NumberFormatterImpl::writeIntegerDigits(const MicroProps& micros, Decima
                             DecimalFormatSymbols::ENumberFormatSymbol::kMonetaryGroupingSeparatorSymbol)
                                        : micros.symbols->getSymbol(
                             DecimalFormatSymbols::ENumberFormatSymbol::kGroupingSeparatorSymbol),
-                    UNUM_GROUPING_SEPARATOR_FIELD,
+                    {UFIELD_CATEGORY_NUMBER, UNUM_GROUPING_SEPARATOR_FIELD},
                     status);
         }
 
         // Get and append the next digit value
         int8_t nextDigit = quantity.getDigit(i);
         length += utils::insertDigitFromSymbols(
-                string, index, nextDigit, *micros.symbols, UNUM_INTEGER_FIELD, status);
+                string,
+                index,
+                nextDigit,
+                *micros.symbols,
+                {UFIELD_CATEGORY_NUMBER,
+                UNUM_INTEGER_FIELD},
+                status);
     }
     return length;
 }
@@ -521,7 +566,12 @@ int32_t NumberFormatterImpl::writeFractionDigits(const MicroProps& micros, Decim
         // Get and append the next digit value
         int8_t nextDigit = quantity.getDigit(-i - 1);
         length += utils::insertDigitFromSymbols(
-                string, length + index, nextDigit, *micros.symbols, UNUM_FRACTION_FIELD, status);
+                string,
+                length + index,
+                nextDigit,
+                *micros.symbols,
+                {UFIELD_CATEGORY_NUMBER, UNUM_FRACTION_FIELD},
+                status);
     }
     return length;
 }

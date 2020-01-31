@@ -21,6 +21,7 @@
 static void TestDateIntervalFormat(void);
 static void TestFPos_SkelWithSeconds(void);
 static void TestFormatToResult(void);
+static void TestFormatCalendarToResult(void);
 
 void addDateIntervalFormatTest(TestNode** root);
 
@@ -31,12 +32,15 @@ void addDateIntervalFormatTest(TestNode** root)
     TESTCASE(TestDateIntervalFormat);
     TESTCASE(TestFPos_SkelWithSeconds);
     TESTCASE(TestFormatToResult);
+    TESTCASE(TestFormatCalendarToResult);
 }
 
 static const char tzUSPacific[] = "US/Pacific";
 static const char tzAsiaTokyo[] = "Asia/Tokyo";
 #define Date201103021030 1299090600000.0 /* 2011-Mar-02 1030 in US/Pacific, 2011-Mar-03 0330 in Asia/Tokyo */
 #define Date201009270800 1285599629000.0 /* 2010-Sep-27 0800 in US/Pacific */
+#define Date158210140000 -12219379142000.0
+#define Date158210160000 -12219206342000.0
 #define _MINUTE (60.0*1000.0)
 #define _HOUR   (60.0*60.0*1000.0)
 #define _DAY    (24.0*60.0*60.0*1000.0)
@@ -328,7 +332,7 @@ static void TestFormatToResult() {
     {
         const char* message = "Field position test 1";
         const UChar* expectedString = u"27. September 2010, 15:00 – 2. März 2011, 18:30";
-        udtitvfmt_formatToResult(fmt, fdi, Date201009270800, Date201103021030, &ec);
+        udtitvfmt_formatToResult(fmt, Date201009270800, Date201103021030, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // category, field, begin index, end index
@@ -352,9 +356,9 @@ static void TestFormatToResult() {
             UPRV_LENGTHOF(expectedFieldPositions));
     }
     {
-        const char* message = "Field position test 1";
+        const char* message = "Field position test 2";
         const UChar* expectedString = u"27. September 2010, 15:00–22:00 Uhr";
-        udtitvfmt_formatToResult(fmt, fdi, Date201009270800, Date201009270800 + 7*_HOUR, &ec);
+        udtitvfmt_formatToResult(fmt, Date201009270800, Date201009270800 + 7*_HOUR, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // category, field, begin index, end index
@@ -376,6 +380,146 @@ static void TestFormatToResult() {
             UPRV_LENGTHOF(expectedFieldPositions));
     }
 
+    udtitvfmt_close(fmt);
+    udtitvfmt_closeResult(fdi);
+}
+
+static void TestFormatCalendarToResult() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UCalendar* ucal1 = ucal_open(zoneGMT, -1, "de", UCAL_DEFAULT, &ec);
+    ucal_setMillis(ucal1, Date201009270800, &ec);
+    UCalendar* ucal2 = ucal_open(zoneGMT, -1, "de", UCAL_DEFAULT, &ec);
+    ucal_setMillis(ucal2, Date201103021030, &ec);
+    UCalendar* ucal3 = ucal_open(zoneGMT, -1, "de", UCAL_DEFAULT, &ec);
+    ucal_setMillis(ucal3, Date201009270800 + 7*_HOUR, &ec);
+    UCalendar* ucal4 = ucal_open(zoneGMT, -1, "de", UCAL_DEFAULT, &ec);
+    UCalendar* ucal5 = ucal_open(zoneGMT, -1, "de", UCAL_DEFAULT, &ec);
+
+    UDateIntervalFormat* fmt = udtitvfmt_open("de", u"dMMMMyHHmm", -1, zoneGMT, -1, &ec);
+    UFormattedDateInterval* fdi = udtitvfmt_openResult(&ec);
+    assertSuccess("Opening", &ec);
+
+    {
+        const char* message = "Field position test 1";
+        const UChar* expectedString = u"27. September 2010, 15:00 – 2. März 2011, 18:30";
+        udtitvfmt_formatCalendarToResult(fmt, ucal1, ucal2, fdi, &ec);
+        assertSuccess("Formatting", &ec);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 0, 0, 25},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 0, 2},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 4, 13},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 14, 18},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 20, 22},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 23, 25},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 1, 28, 47},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 28, 29},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 31, 35},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 36, 40},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 42, 44},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 45, 47}};
+        checkMixedFormattedValue(
+            message,
+            udtitvfmt_resultAsValue(fdi, &ec),
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        const char* message = "Field position test 2";
+        const UChar* expectedString = u"27. September 2010, 15:00–22:00 Uhr";
+        udtitvfmt_formatCalendarToResult(fmt, ucal1, ucal3, fdi, &ec);
+        assertSuccess("Formatting", &ec);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 0, 2},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 4, 13},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 14, 18},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 0, 20, 25},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 20, 22},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 23, 25},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 1, 26, 31},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 26, 28},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 29, 31},
+            {UFIELD_CATEGORY_DATE, UDAT_AM_PM_FIELD, 32, 35}};
+        checkMixedFormattedValue(
+            message,
+            udtitvfmt_resultAsValue(fdi, &ec),
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        const char* message = "Field position test 3";
+        // Date across Julian Gregorian change date.
+        ucal_setMillis(ucal4, Date158210140000, &ec);
+        ucal_setMillis(ucal5, Date158210160000, &ec);
+        //                                        1         2         3         4
+        //                              012345678901234567890123456789012345678901234567890
+        const UChar* expectedString = u"4. Oktober 1582, 00:00 – 16. Oktober 1582, 00:00";
+        udtitvfmt_formatCalendarToResult(fmt, ucal4, ucal5, fdi, &ec);
+        assertSuccess("Formatting", &ec);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 0, 0, 22},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 0, 1},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 3, 10},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 11, 15},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 17, 19},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 20, 22},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 1, 25, 48},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 25, 27},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 29, 36},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 37, 41},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 43, 45},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 46, 48}};
+        checkMixedFormattedValue(
+            message,
+            udtitvfmt_resultAsValue(fdi, &ec),
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        // Date across Julian Gregorian change date.
+        // We set the Gregorian Change way back.
+        ucal_setGregorianChange(ucal5, (UDate)(-8.64e15), &ec);
+        ucal_setGregorianChange(ucal4, (UDate)(-8.64e15), &ec);
+        ucal_setMillis(ucal4, Date158210140000, &ec);
+        ucal_setMillis(ucal5, Date158210160000, &ec);
+        const char* message = "Field position test 4";
+        //                                        1         2         3         4
+        //                              012345678901234567890123456789012345678901234567890
+        const UChar* expectedString = u"14. Oktober 1582, 00:00 – 16. Oktober 1582, 00:00";
+        udtitvfmt_formatCalendarToResult(fmt, ucal4, ucal5, fdi, &ec);
+        assertSuccess("Formatting", &ec);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 0, 0, 23},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 0, 2},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 4, 11},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 12, 16},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 18, 20},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 21, 23},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 1, 26, 49},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 26, 28},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 30, 37},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 38, 42},
+            {UFIELD_CATEGORY_DATE, UDAT_HOUR_OF_DAY0_FIELD, 44, 46},
+            {UFIELD_CATEGORY_DATE, UDAT_MINUTE_FIELD, 47, 49}};
+        checkMixedFormattedValue(
+            message,
+            udtitvfmt_resultAsValue(fdi, &ec),
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    ucal_close(ucal1);
+    ucal_close(ucal2);
+    ucal_close(ucal3);
+    ucal_close(ucal4);
+    ucal_close(ucal5);
     udtitvfmt_close(fmt);
     udtitvfmt_closeResult(fdi);
 }

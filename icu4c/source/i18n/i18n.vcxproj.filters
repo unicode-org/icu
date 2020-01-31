@@ -117,16 +117,16 @@
     <ClCompile Include="double-conversion-cached-powers.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="double-conversion-diy-fp.cpp">
+    <ClCompile Include="double-conversion-double-to-string.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="double-conversion-fast-dtoa.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="double-conversion-strtod.cpp">
+    <ClCompile Include="double-conversion-string-to-double.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="double-conversion.cpp">
+    <ClCompile Include="double-conversion-strtod.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="dtfmtsym.cpp">
@@ -776,6 +776,9 @@
     <ClInclude Include="double-conversion-diy-fp.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="double-conversion-double-to-string.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="double-conversion-fast-dtoa.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -783,6 +786,12 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="double-conversion-utils.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-string-to-double.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-strtod.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="double-conversion.h">

@@ -118,7 +118,7 @@ U_NAMESPACE_BEGIN
 //-------------------------------------------------------------------------
 
 
-Calendar* ChineseCalendar::clone() const {
+ChineseCalendar* ChineseCalendar::clone() const {
     return new ChineseCalendar(*this);
 }
 

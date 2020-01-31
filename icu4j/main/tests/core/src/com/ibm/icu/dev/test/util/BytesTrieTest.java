@@ -768,16 +768,16 @@ public class BytesTrieTest extends TestFmwk {
                 (resultAtState.hasValue() && valueAtState!=trie.getValue())
             ) {
                 errln("trie.next(part of "+data[i].s+") changes current()/getValue() after "+
-                      "saveState/next(0)/resetToState");
+                      "getState64/next(0)/resetToState64");
             } else if(!(result=trie.next(expectedString, partialLength, stringLength)).hasValue() ||
                       result!=trie.current()) {
                 errln("trie.next(rest of "+data[i].s+") does not seem to contain "+data[i].s+" after "+
-                      "saveState/next(0)/resetToState");
+                      "getState64/next(0)/resetToState64");
             } else if(!(result=trie.resetToState64(state).
                                 next(expectedString, partialLength, stringLength)).hasValue() ||
                       result!=trie.current()) {
                 errln("trie does not seem to contain "+data[i].s+
-                      " after saveState/next(rest)/resetToState");
+                      " after getState64/next(rest)/resetToState64");
             } else if(trie.getValue()!=data[i].value) {
                 errln(String.format("trie value for %s is %d=0x%x instead of expected %d=0x%x",
                                     data[i].s,

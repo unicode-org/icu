@@ -119,6 +119,7 @@ public:
     void TestBug13277();
     void TestBug13554();
     void TestBug20410();
+    void TestBug20900();
     void TestConstructorAcceptsBCP47();
 
     void TestAddLikelySubtags();
@@ -127,6 +128,7 @@ public:
 
     void TestForLanguageTag();
     void TestToLanguageTag();
+    void TestToLanguageTagOmitTrue();
 
     void TestMoveAssign();
     void TestMoveCtor();
@@ -141,6 +143,12 @@ public:
     void TestUndScript();
     void TestUndRegion();
     void TestUndCAPI();
+    void TestRangeIterator();
+    void TestPointerConvertingIterator();
+    void TestTagConvertingIterator();
+    void TestCapturingTagConvertingIterator();
+    void TestSetUnicodeKeywordValueInLongLocale();
+    void TestSetUnicodeKeywordValueNullInLongLocale();
 
 private:
     void _checklocs(const char* label,

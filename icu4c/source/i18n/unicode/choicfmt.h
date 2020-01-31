@@ -34,13 +34,14 @@
  */
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DEPRECATED_API
 
 #include "unicode/fieldpos.h"
 #include "unicode/format.h"
 #include "unicode/messagepattern.h"
 #include "unicode/numfmt.h"
 #include "unicode/unistr.h"
+
+#ifndef U_HIDE_DEPRECATED_API
 
 U_NAMESPACE_BEGIN
 
@@ -250,7 +251,7 @@ public:
      * @return a copy of this object
      * @deprecated ICU 49 Use MessageFormat instead, with plural and select arguments.
      */
-    virtual Format* clone(void) const;
+    virtual ChoiceFormat* clone() const;
 
     /**
      * Returns true if the given Format objects are semantically equal.

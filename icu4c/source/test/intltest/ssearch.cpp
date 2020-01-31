@@ -32,15 +32,25 @@
 
 char testId[100];
 
-#define TEST_ASSERT(x) {if (!(x)) { \
-    errln("Failure in file %s, line %d, test ID = \"%s\"", __FILE__, __LINE__, testId);}}
+#define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(x)) { \
+        errln("Failure in file %s, line %d, test ID = \"%s\"", __FILE__, __LINE__, testId); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_M(x, m) {if (!(x)) { \
-    dataerrln("Failure in file %s, line %d.   \"%s\"", __FILE__, __LINE__, m);return;}}
+#define TEST_ASSERT_M(x, m) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(x)) { \
+        dataerrln("Failure in file %s, line %d.   \"%s\"", __FILE__, __LINE__, m); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_SUCCESS(errcode) {if (U_FAILURE(errcode)) { \
-    dataerrln("Failure in file %s, line %d, test ID \"%s\", status = \"%s\"", \
-          __FILE__, __LINE__, testId, u_errorName(errcode));}}
+#define TEST_ASSERT_SUCCESS(errcode) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(errcode)) { \
+        dataerrln("Failure in file %s, line %d, test ID \"%s\", status = \"%s\"", \
+                  __FILE__, __LINE__, testId, u_errorName(errcode)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 #define NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
@@ -173,7 +183,7 @@ void SSearchTest::searchTest()
             //  This assert is a little deceiving in that strength can be
             //   any of the allowed values, not just TERTIARY, but it will
             //   do the job of getting the error output.
-            TEST_ASSERT(*strength=="TERTIARY")
+            TEST_ASSERT(*strength=="TERTIARY");
         }
 
         //
@@ -201,7 +211,7 @@ void SSearchTest::searchTest()
         const UnicodeString *locale   = testCase->getAttribute("locale");
         if (locale == NULL || locale->length()==0) {
             locale = &defLocale;
-        };
+        }
         locale->extract(0, locale->length(), clocale, sizeof(clocale), NULL);
 
 

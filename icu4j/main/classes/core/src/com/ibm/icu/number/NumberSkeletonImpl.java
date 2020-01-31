@@ -53,6 +53,7 @@ class NumberSkeletonImpl {
         STATE_INCREMENT_PRECISION,
         STATE_MEASURE_UNIT,
         STATE_PER_MEASURE_UNIT,
+        STATE_IDENTIFIER_UNIT,
         STATE_CURRENCY_UNIT,
         STATE_INTEGER_WIDTH,
         STATE_NUMBERING_SYSTEM,
@@ -76,6 +77,7 @@ class NumberSkeletonImpl {
         STEM_BASE_UNIT,
         STEM_PERCENT,
         STEM_PERMILLE,
+        STEM_PERCENT_100, // concise-only
         STEM_PRECISION_INTEGER,
         STEM_PRECISION_UNLIMITED,
         STEM_PRECISION_CURRENCY_STANDARD,
@@ -113,6 +115,7 @@ class NumberSkeletonImpl {
         STEM_PRECISION_INCREMENT,
         STEM_MEASURE_UNIT,
         STEM_PER_MEASURE_UNIT,
+        STEM_UNIT,
         STEM_CURRENCY,
         STEM_INTEGER_WIDTH,
         STEM_NUMBERING_SYSTEM,
@@ -174,10 +177,26 @@ class NumberSkeletonImpl {
         b.add("precision-increment", StemEnum.STEM_PRECISION_INCREMENT.ordinal());
         b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
         b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
+        b.add("unit", StemEnum.STEM_UNIT.ordinal());
         b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
         b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
         b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
         b.add("scale", StemEnum.STEM_SCALE.ordinal());
+
+        // Section 3 (concise tokens):
+        b.add("K", StemEnum.STEM_COMPACT_SHORT.ordinal());
+        b.add("KK", StemEnum.STEM_COMPACT_LONG.ordinal());
+        b.add("%", StemEnum.STEM_PERCENT.ordinal());
+        b.add("%x100", StemEnum.STEM_PERCENT_100.ordinal());
+        b.add(",_", StemEnum.STEM_GROUP_OFF.ordinal());
+        b.add(",?", StemEnum.STEM_GROUP_MIN2.ordinal());
+        b.add(",!", StemEnum.STEM_GROUP_ON_ALIGNED.ordinal());
+        b.add("+!", StemEnum.STEM_SIGN_ALWAYS.ordinal());
+        b.add("+_", StemEnum.STEM_SIGN_NEVER.ordinal());
+        b.add("()", StemEnum.STEM_SIGN_ACCOUNTING.ordinal());
+        b.add("()!", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
+        b.add("+?", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
+        b.add("()?", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
 
         // Build the CharsTrie
         // TODO: Use SLOW or FAST here?
@@ -604,6 +623,14 @@ class NumberSkeletonImpl {
             checkNull(macros.precision, segment);
             BlueprintHelpers.parseDigitsStem(segment, macros);
             return ParseState.STATE_NULL;
+        case 'E':
+            checkNull(macros.notation, segment);
+            BlueprintHelpers.parseScientificStem(segment, macros);
+            return ParseState.STATE_NULL;
+        case '0':
+            checkNull(macros.notation, segment);
+            BlueprintHelpers.parseIntegerStem(segment, macros);
+            return ParseState.STATE_NULL;
         }
 
         // Now look at the stemsTrie, which is already be pointing at our stem.
@@ -639,6 +666,13 @@ class NumberSkeletonImpl {
         case STEM_PERMILLE:
             checkNull(macros.unit, segment);
             macros.unit = StemToObject.unit(stem);
+            return ParseState.STATE_NULL;
+
+        case STEM_PERCENT_100:
+            checkNull(macros.scale, segment);
+            checkNull(macros.unit, segment);
+            macros.scale = Scale.powerOfTen(2);
+            macros.unit = NoUnit.PERCENT;
             return ParseState.STATE_NULL;
 
         case STEM_PRECISION_INTEGER:
@@ -720,6 +754,11 @@ class NumberSkeletonImpl {
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_PER_MEASURE_UNIT;
 
+        case STEM_UNIT:
+            checkNull(macros.unit, segment);
+            checkNull(macros.perUnit, segment);
+            return ParseState.STATE_IDENTIFIER_UNIT;
+
         case STEM_CURRENCY:
             checkNull(macros.unit, segment);
             return ParseState.STATE_CURRENCY_UNIT;
@@ -760,6 +799,9 @@ class NumberSkeletonImpl {
             return ParseState.STATE_NULL;
         case STATE_PER_MEASURE_UNIT:
             BlueprintHelpers.parseMeasurePerUnitOption(segment, macros);
+            return ParseState.STATE_NULL;
+        case STATE_IDENTIFIER_UNIT:
+            BlueprintHelpers.parseIdentifierUnitOption(segment, macros);
             return ParseState.STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);
@@ -970,12 +1012,23 @@ class NumberSkeletonImpl {
         }
 
         private static void parseMeasurePerUnitOption(StringSegment segment, MacroProps macros) {
-            // A little bit of a hack: safe the current unit (numerator), call the main measure unit
+            // A little bit of a hack: save the current unit (numerator), call the main measure unit
             // parsing code, put back the numerator unit, and put the new unit into per-unit.
             MeasureUnit numerator = macros.unit;
             parseMeasureUnitOption(segment, macros);
             macros.perUnit = macros.unit;
             macros.unit = numerator;
+        }
+
+        private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
+            MeasureUnit[] units = MeasureUnit.parseCoreUnitIdentifier(segment.asString());
+            if (units == null) {
+                throw new SkeletonSyntaxException("Invalid core unit identifier", segment);
+            }
+            macros.unit = units[0];
+            if (units.length == 2) {
+                macros.perUnit = units[1];
+            }
         }
 
         private static void parseFractionStem(StringSegment segment, MacroProps macros) {
@@ -1012,7 +1065,11 @@ class NumberSkeletonImpl {
             }
             // Use the public APIs to enforce bounds checking
             if (maxFrac == -1) {
-                macros.precision = Precision.minFraction(minFrac);
+                if (minFrac == 0) {
+                    macros.precision = Precision.unlimited();
+                } else {
+                    macros.precision = Precision.minFraction(minFrac);
+                }
             } else {
                 macros.precision = Precision.minMaxFraction(minFrac, maxFrac);
             }
@@ -1079,6 +1136,71 @@ class NumberSkeletonImpl {
             } else {
                 appendMultiple(sb, '#', maxSig - minSig);
             }
+        }
+
+        private static void parseScientificStem(StringSegment segment, MacroProps macros) {
+            assert(segment.charAt(0) == 'E');
+            block:
+            {
+                int offset = 1;
+                if (segment.length() == offset) {
+                    break block;
+                }
+                boolean isEngineering = false;
+                if (segment.charAt(offset) == 'E') {
+                    isEngineering = true;
+                    offset++;
+                    if (segment.length() == offset) {
+                        break block;
+                    }
+                }
+                SignDisplay signDisplay = SignDisplay.AUTO;
+                if (segment.charAt(offset) == '+') {
+                    offset++;
+                    if (segment.length() == offset) {
+                        break block;
+                    }
+                    if (segment.charAt(offset) == '!') {
+                        signDisplay = SignDisplay.ALWAYS;
+                    } else if (segment.charAt(offset) == '?') {
+                        signDisplay = SignDisplay.EXCEPT_ZERO;
+                    } else {
+                        break block;
+                    }
+                    offset++;
+                    if (segment.length() == offset) {
+                        break block;
+                    }
+                }
+                int minDigits = 0;
+                for (; offset < segment.length(); offset++) {
+                    if (segment.charAt(offset) != '0') {
+                        break block;
+                    }
+                    minDigits++;
+                }
+                macros.notation = (isEngineering ? Notation.engineering() : Notation.scientific())
+                    .withExponentSignDisplay(signDisplay)
+                    .withMinExponentDigits(minDigits);
+                return;
+            }
+            throw new SkeletonSyntaxException("Invalid scientific stem", segment);
+        }
+
+        private static void parseIntegerStem(StringSegment segment, MacroProps macros) {
+            assert(segment.charAt(0) == '0');
+            int offset = 1;
+            for (; offset < segment.length(); offset++) {
+                if (segment.charAt(offset) != '0') {
+                    offset--;
+                    break;
+                }
+            }
+            if (offset < segment.length()) {
+                 throw new SkeletonSyntaxException("Invalid integer stem", segment);
+            }
+            macros.integerWidth = IntegerWidth.zeroFillTo(offset);
+            return;
         }
 
         /** @return Whether we successfully found and parsed a frac-sig option. */

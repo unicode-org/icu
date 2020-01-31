@@ -87,7 +87,7 @@ UnicodeString toString(UBool b);
 //|     TESTCASE_AUTO_END;
 //| }
 #define TESTCASE_AUTO_BEGIN \
-    for(;;) { \
+    do { \
         int32_t testCaseAutoNumber = 0
 
 #define TESTCASE_AUTO(test) \
@@ -99,7 +99,7 @@ UnicodeString toString(UBool b);
                 test(); \
             } \
             break; \
-        }
+        } else (void)0
 
 #define TESTCASE_AUTO_CLASS(TestClass) \
         if (index == testCaseAutoNumber++) { \
@@ -111,7 +111,7 @@ UnicodeString toString(UBool b);
                 callTest(test, par); \
             } \
             break; \
-        }
+        } else (void)0
 
 #define TESTCASE_AUTO_CREATE_CLASS(TestClass) \
         if (index == testCaseAutoNumber++) { \
@@ -123,12 +123,12 @@ UnicodeString toString(UBool b);
                 callTest(*test, par); \
             } \
             break; \
-        }
+        } else (void)0
 
 #define TESTCASE_AUTO_END \
         name = ""; \
         break; \
-    }
+    } while (TRUE)
 
 
 // WHERE Macro yields a literal string of the form "source_file_name:line number "
@@ -150,6 +150,7 @@ public:
     virtual UBool setLeaks( UBool leaks = TRUE );
     virtual UBool setNotime( UBool no_time = TRUE );
     virtual UBool setWarnOnMissingData( UBool warn_on_missing_data = TRUE );
+    virtual UBool setWriteGoldenData( UBool write_golden_data = TRUE );
     virtual int32_t setThreadCount( int32_t count = 1);
 
     virtual int32_t getErrors( void );
@@ -339,6 +340,7 @@ public:
     UBool       quick;
     UBool       leaks;
     UBool       warn_on_missing_data;
+    UBool       write_golden_data;
     UBool       no_time;
     int32_t     threadCount;
 

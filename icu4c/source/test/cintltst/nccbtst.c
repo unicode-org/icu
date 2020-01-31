@@ -914,7 +914,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleText1, UPRV_LENGTHOF(sampleText1),
                  expected1, UPRV_LENGTHOF(expected1),"utf8",
                 UCNV_TO_U_CALLBACK_SKIP, offsets1, NULL, 0 ))
-            log_err("utf8->u with skip did not match.\n");;
+            log_err("utf8->u with skip did not match.\n");
     }
 
     log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_SKIP \n");
@@ -1330,7 +1330,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleText1, UPRV_LENGTHOF(sampleText1),
                  expected1, UPRV_LENGTHOF(expected1),"utf8",
                 UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
-            log_err("utf8->u with stop did not match.\n");;
+            log_err("utf8->u with stop did not match.\n");
     }
     log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_STOP \n");
     {
@@ -1341,7 +1341,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleText1, UPRV_LENGTHOF(sampleText1),
                  expected1, UPRV_LENGTHOF(expected1),"SCSU",
                 UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
-            log_err("scsu->u with stop did not match.\n");;
+            log_err("scsu->u with stop did not match.\n");
     }
 
 }
@@ -1620,7 +1620,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleText1, UPRV_LENGTHOF(sampleText1),
                  expected1, UPRV_LENGTHOF(expected1),"utf8",
                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
-            log_err("utf8->u with substitute did not match.\n");;
+            log_err("utf8->u with substitute did not match.\n");
     }
     log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
     {
@@ -1631,7 +1631,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleText1, UPRV_LENGTHOF(sampleText1),
                  expected1, UPRV_LENGTHOF(expected1),"SCSU",
                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
-            log_err("scsu->u with stop did not match.\n");;
+            log_err("scsu->u with stop did not match.\n");
     }
 
 #if !UCONFIG_NO_LEGACY_CONVERSION

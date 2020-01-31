@@ -33,11 +33,17 @@
 #include "cintltst.h"
 #include "cmemory.h"
 
-#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-log_data_err("Failure at file %s:%d - error = %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status));}}
+#define TEST_ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        log_data_err("Failure at file %s:%d - error = %s (Are you missing data?)\n", __FILE__, __LINE__, u_errorName(status)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
-log_err("Test Failure at file %s:%d - ASSERT(%s) failed.\n", __FILE__, __LINE__, #expr);}}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        log_err("Test Failure at file %s:%d - ASSERT(%s) failed.\n", __FILE__, __LINE__, #expr); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 /*
  *   TEST_SETUP and TEST_TEARDOWN
@@ -50,7 +56,7 @@ log_err("Test Failure at file %s:%d - ASSERT(%s) failed.\n", __FILE__, __LINE__,
  *         Put arbitrary test code between SETUP and TEARDOWN.
  *         're" is the compiled, ready-to-go  regular expression.
  */
-#define TEST_SETUP(pattern, testString, flags) {  \
+#define TEST_SETUP(pattern, testString, flags) UPRV_BLOCK_MACRO_BEGIN { \
     UChar   *srcString = NULL;  \
     status = U_ZERO_ERROR; \
     re = uregex_openC(pattern, flags, NULL, &status);  \
@@ -60,14 +66,15 @@ log_err("Test Failure at file %s:%d - ASSERT(%s) failed.\n", __FILE__, __LINE__,
     u_uastrncpy(srcString, testString, testStringLen + 1); \
     uregex_setText(re, srcString, -1, &status); \
     TEST_ASSERT_SUCCESS(status);  \
-    if (U_SUCCESS(status)) {
-    
+    if (U_SUCCESS(status)) { \
+        UPRV_BLOCK_MACRO_BEGIN {} UPRV_BLOCK_MACRO_END
+
 #define TEST_TEARDOWN  \
     }  \
     TEST_ASSERT_SUCCESS(status);  \
     uregex_close(re);  \
     free(srcString);   \
-    }
+} UPRV_BLOCK_MACRO_END
 
 
 /**
@@ -691,7 +698,7 @@ static void TestRegexCAPI(void) {
         
         
         /* SetRegion(), getRegion() do something  */
-        TEST_SETUP(".*", "0123456789ABCDEF", 0)
+        TEST_SETUP(".*", "0123456789ABCDEF", 0);
         UChar resultString[40];
         TEST_ASSERT(uregex_regionStart(re, &status) == 0);
         TEST_ASSERT(uregex_regionEnd(re, &status) == 16);
@@ -699,7 +706,7 @@ static void TestRegexCAPI(void) {
         TEST_ASSERT(uregex_regionStart(re, &status) == 3);
         TEST_ASSERT(uregex_regionEnd(re, &status) == 6);
         TEST_ASSERT(uregex_findNext(re, &status));
-        TEST_ASSERT(uregex_group(re, 0, resultString, UPRV_LENGTHOF(resultString), &status) == 3)
+        TEST_ASSERT(uregex_group(re, 0, resultString, UPRV_LENGTHOF(resultString), &status) == 3);
         TEST_ASSERT_STRING("345", resultString, TRUE);
         TEST_TEARDOWN;
         
@@ -1322,7 +1329,7 @@ static void TestRegexCAPI(void) {
       *       to be invoked.  The nested '+' operators give exponential time
       *       behavior with increasing string length.
       */
-     TEST_SETUP("((.)+\\2)+x", "aaaaaaaaaaaaaaaaaaab", 0)
+     TEST_SETUP("((.)+\\2)+x", "aaaaaaaaaaaaaaaaaaab", 0);
      callBackContext cbInfo = {4, 0, 0};
      const void     *pContext   = &cbInfo;
      URegexMatchCallback    *returnedFn = &TestCallbackFn;

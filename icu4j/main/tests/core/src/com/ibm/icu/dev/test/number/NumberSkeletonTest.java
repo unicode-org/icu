@@ -57,6 +57,7 @@ public class NumberSkeletonTest {
                 "measure-unit/length-meter",
                 "measure-unit/area-square-meter",
                 "measure-unit/energy-joule per-measure-unit/length-meter",
+                "unit/square-meter-per-square-meter",
                 "currency/XXX",
                 "currency/ZZZ",
                 "currency/usd",
@@ -92,7 +93,20 @@ public class NumberSkeletonTest {
                 "numbering-system/latn",
                 "precision-integer/@##",
                 "precision-integer rounding-mode-ceiling",
-                "precision-currency-cash rounding-mode-ceiling" };
+                "precision-currency-cash rounding-mode-ceiling",
+                "0",
+                "00",
+                "000",
+                "E0",
+                "E00",
+                "E000",
+                "EE0",
+                "EE00",
+                "EE+?0",
+                "EE+?00",
+                "EE+!0",
+                "EE+!00",
+        };
 
         for (String cas : cases) {
             try {
@@ -137,7 +151,20 @@ public class NumberSkeletonTest {
                 "integer-width/+0#",
                 "integer-width/+#",
                 "integer-width/+#0",
-                "scientific/foo" };
+                "scientific/foo",
+                "E",
+                "E1",
+                "E+",
+                "E+?",
+                "E+!",
+                "E+0",
+                "EE",
+                "EE+",
+                "EEE",
+                "EEE0",
+                "001",
+                "00+",
+        };
 
         for (String cas : cases) {
             try {

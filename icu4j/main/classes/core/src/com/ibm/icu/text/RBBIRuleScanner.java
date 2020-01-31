@@ -73,7 +73,7 @@ class RBBIRuleScanner {
     RBBISymbolTable            fSymbolTable;         // symbol table, holds definitions of
                                                      //   $variable symbols.
 
-    HashMap<String, RBBISetTableEl> fSetTable = new HashMap<String, RBBISetTableEl>(); // UnicocodeSet hash table, holds indexes to
+    HashMap<String, RBBISetTableEl> fSetTable = new HashMap<>(); // UnicocodeSet hash table, holds indexes to
                                                                                        //   the sets created while parsing rules.
                                                                                        //   The key is the string used for creating
                                                                                        //   the set.
@@ -933,7 +933,7 @@ class RBBIRuleScanner {
             // Perform any action specified  by this row in the state table.
             if (doParseActions(tableEl.fAction) == false) {
                 // Break out of the state machine loop if the
-                //   the action signalled some kind of error, or
+                //   the action signaled some kind of error, or
                 //   the action was to exit, occurs on normal end-of-rules-input.
                 break;
             }
@@ -1070,7 +1070,7 @@ class RBBIRuleScanner {
             error(RBBIRuleBuilder.U_BRK_RULE_EMPTY_SET);
         }
 
-        // Advance the RBBI parse postion over the UnicodeSet pattern.
+        // Advance the RBBI parse position over the UnicodeSet pattern.
         //   Don't just set fScanIndex because the line/char positions maintained
         //   for error reporting would be thrown off.
         i = pos.getIndex();
@@ -1089,12 +1089,17 @@ class RBBIRuleScanner {
         n.fText = fRB.fRules.substring(n.fFirstPos, n.fLastPos);
         //  findSetFor() serves several purposes here:
         //     - Adopts storage for the UnicodeSet, will be responsible for deleting.
-        //     - Mantains collection of all sets in use, needed later for establishing
+        //     - Maintains collection of all sets in use, needed later for establishing
         //          character categories for run time engine.
-        //     - Eliminates mulitiple instances of the same set.
+        //     - Eliminates multiple instances of the same set.
         //     - Creates a new uset node if necessary (if this isn't a duplicate.)
         findSetFor(n.fText, n, uset);
     }
 
+    /**
+     * @return  the number of rules that have been seen.
+     */
+    int numRules() {
+        return fRuleNum;
+    }
 }
-

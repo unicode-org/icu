@@ -8,19 +8,25 @@
  */
 package com.ibm.icu.text;
 
-import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.text.AttributedCharacterIterator;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl.SpanFieldPlaceholder;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
-import com.ibm.icu.util.ICUUncheckedIOException;
+import com.ibm.icu.impl.SimpleFormatterImpl.IterInternal;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -41,6 +47,7 @@ final public class ListFormatter {
 
     /**
      * Indicates the style of Listformatter
+     * TODO(ICU-20888): Remove this in ICU 68.
      * @internal
      * @deprecated This API is ICU internal only.
      */
@@ -99,6 +106,242 @@ final public class ListFormatter {
     }
 
     /**
+     * Type of meaning expressed by the list.
+     *
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum Type {
+        /**
+         * Conjunction formatting, e.g. "Alice, Bob, Charlie, and Delta".
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        AND,
+
+        /**
+         * Disjunction (or alternative, or simply one of) formatting, e.g.
+         * "Alice, Bob, Charlie, or Delta".
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        OR,
+
+        /**
+         * Formatting of a list of values with units, e.g. "5 pounds, 12 ounces".
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        UNITS
+    };
+
+    /**
+     * Verbosity level of the list patterns.
+     *
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum Width {
+        /**
+         * Use list formatting with full words (no abbreviations) when possible.
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        WIDE,
+
+        /**
+         * Use list formatting of typical length.
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        SHORT,
+
+        /**
+         * Use list formatting of the shortest possible length.
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        NARROW,
+    };
+
+    /**
+     * Class for span fields in FormattedDateInterval.
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final class SpanField extends UFormat.SpanField {
+        private static final long serialVersionUID = 3563544214705634403L;
+
+        /**
+         * The concrete field used for spans in FormattedList.
+         *
+         * Instances of LIST_SPAN should have an associated value, the index
+         * within the input list that is represented by the span.
+         *
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final SpanField LIST_SPAN = new SpanField("list-span");
+
+        private SpanField(String name) {
+            super(name);
+        }
+
+        /**
+         * serizalization method resolve instances to the constant
+         * ListFormatter.SpanField values
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        @Override
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.getName().equals(LIST_SPAN.getName()))
+                return LIST_SPAN;
+
+            throw new InvalidObjectException("An invalid object.");
+        }
+    }
+
+    /**
+     * Field selectors for format fields defined by ListFormatter.
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final class Field extends Format.Field {
+        private static final long serialVersionUID = -8071145668708265437L;
+
+        /**
+         * The literal text in the result which came from the resources.
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static Field LITERAL = new Field("literal");
+
+        /**
+         * The element text in the result which came from the input strings.
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static Field ELEMENT = new Field("element");
+
+        private Field(String name) {
+            super(name);
+        }
+
+        /**
+         * Serizalization method resolve instances to the constant Field values
+         *
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.getName().equals(LITERAL.getName()))
+                return LITERAL;
+            if (this.getName().equals(ELEMENT.getName()))
+                return ELEMENT;
+
+            throw new InvalidObjectException("An invalid object.");
+        }
+    }
+
+    /**
+     * An immutable class containing the result of a list formatting operation.
+     *
+     * Instances of this class are immutable and thread-safe.
+     *
+     * Not intended for public subclassing.
+     *
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final class FormattedList implements FormattedValue {
+        private final FormattedStringBuilder string;
+
+        FormattedList(FormattedStringBuilder string) {
+            this.string = string;
+        }
+
+        /**
+         * {@inheritDoc}
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        public String toString() {
+            return string.toString();
+        }
+
+        /**
+         * {@inheritDoc}
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        public int length() {
+            return string.length();
+        }
+
+        /**
+         * {@inheritDoc}
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        public char charAt(int index) {
+            return string.charAt(index);
+        }
+
+        /**
+         * {@inheritDoc}
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        public CharSequence subSequence(int start, int end) {
+            return string.subString(start, end);
+        }
+
+        /**
+         * {@inheritDoc}
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        public <A extends Appendable> A appendTo(A appendable) {
+            return Utility.appendTo(string, appendable);
+        }
+
+        /**
+         * {@inheritDoc}
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        public boolean nextPosition(ConstrainedFieldPosition cfpos) {
+            return FormattedValueStringBuilderImpl.nextPosition(string, cfpos, null);
+        }
+
+        /**
+         * {@inheritDoc}
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        public AttributedCharacterIterator toCharacterIterator() {
+            return FormattedValueStringBuilderImpl.toCharacterIterator(string, null);
+        }
+    }
+
+    /**
      * <b>Internal:</b> Create a ListFormatter from component strings,
      * with definitions as in LDML.
      *
@@ -145,6 +388,50 @@ final public class ListFormatter {
      * @param locale
      *            the locale in question.
      * @return ListFormatter
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static ListFormatter getInstance(ULocale locale, Type type, Width width) {
+        String styleName = typeWidthToStyleString(type, width);
+        if (styleName == null) {
+            throw new IllegalArgumentException("Invalid list format type/width");
+        }
+        return cache.get(locale, styleName);
+    }
+
+    /**
+     * Create a list formatter that is appropriate for a locale.
+     *
+     * @param locale
+     *            the locale in question.
+     * @return ListFormatter
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static ListFormatter getInstance(Locale locale, Type type, Width width) {
+        return getInstance(ULocale.forLocale(locale), type, width);
+    }
+
+    /**
+     * Create a list formatter that is appropriate for a locale and style.
+     *
+     * @param locale the locale in question.
+     * @param style the style
+     * @return ListFormatter
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static ListFormatter getInstance(ULocale locale, Style style) {
+        return cache.get(locale, style.getName());
+    }
+
+    /**
+     * Create a list formatter that is appropriate for a locale.
+     *
+     * @param locale
+     *            the locale in question.
+     * @return ListFormatter
      * @stable ICU 50
      */
     public static ListFormatter getInstance(ULocale locale) {
@@ -161,20 +448,6 @@ final public class ListFormatter {
      */
     public static ListFormatter getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale), Style.STANDARD);
-    }
-
-    /**
-     * Create a list formatter that is appropriate for a locale and style.
-     *
-     * @param locale the locale in question.
-     * @param style the style
-     * @return ListFormatter
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static ListFormatter getInstance(ULocale locale, Style style) {
-        return cache.get(locale, style.getName());
     }
 
     /**
@@ -208,30 +481,59 @@ final public class ListFormatter {
      * @stable ICU 50
      */
     public String format(Collection<?> items) {
-        return format(items, -1).toString();
+        return formatImpl(items, false).toString();
+    }
+
+    /**
+     * Format a list of objects to a FormattedList. You can access the offsets
+     * of each element from the FormattedList.
+     *
+     * @param items
+     *            items to format. The toString() method is called on each.
+     * @return items formatted into a FormattedList
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public FormattedList formatToValue(Object... items) {
+        return formatToValue(Arrays.asList(items));
+    }
+
+
+    /**
+     * Format a collection of objects to a FormattedList. You can access the offsets
+     * of each element from the FormattedList.
+     *
+     * @param items
+     *            items to format. The toString() method is called on each.
+     * @return items formatted into a FormattedList
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public FormattedList formatToValue(Collection<?> items) {
+        return formatImpl(items, true).toValue();
     }
 
     // Formats a collection of objects and returns the formatted string plus the offset
     // in the string where the index th element appears. index is zero based. If index is
     // negative or greater than or equal to the size of items then this function returns -1 for
     // the offset.
-    FormattedListBuilder format(Collection<?> items, int index) {
+    FormattedListBuilder formatImpl(Collection<?> items, boolean needsFields) {
         Iterator<?> it = items.iterator();
         int count = items.size();
         switch (count) {
         case 0:
-            return new FormattedListBuilder("", false);
+            return new FormattedListBuilder("", needsFields);
         case 1:
-            return new FormattedListBuilder(it.next(), index == 0);
+            return new FormattedListBuilder(it.next(), needsFields);
         case 2:
-            return new FormattedListBuilder(it.next(), index == 0).append(two, it.next(), index == 1);
+            return new FormattedListBuilder(it.next(), needsFields).append(two, it.next(), 1);
         }
-        FormattedListBuilder builder = new FormattedListBuilder(it.next(), index == 0);
-        builder.append(start, it.next(), index == 1);
+        FormattedListBuilder builder = new FormattedListBuilder(it.next(), needsFields);
+        builder.append(start, it.next(), 1);
         for (int idx = 2; idx < count - 1; ++idx) {
-            builder.append(middle, it.next(), index == idx);
+            builder.append(middle, it.next(), idx);
         }
-        return builder.append(end, it.next(), index == count - 1);
+        return builder.append(end, it.next(), count - 1);
     }
 
     /**
@@ -246,7 +548,7 @@ final public class ListFormatter {
         if (count <= 0) {
             throw new IllegalArgumentException("count must be > 0");
         }
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             list.add(String.format("{%d}", i));
         }
@@ -265,64 +567,74 @@ final public class ListFormatter {
 
     // Builds a formatted list
     static class FormattedListBuilder {
-        private StringBuilder current;
-        private int offset;
+        private FormattedStringBuilder string;
+        boolean needsFields;
 
-        // Start is the first object in the list; If recordOffset is true, records the offset of
-        // this first object.
-        public FormattedListBuilder(Object start, boolean recordOffset) {
-            this.current = new StringBuilder(start.toString());
-            this.offset = recordOffset ? 0 : -1;
+        // Start is the first object in the list; If needsFields is true, enable the slightly
+        // more expensive code path that records offsets of each element.
+        public FormattedListBuilder(Object start, boolean needsFields) {
+            string = new FormattedStringBuilder();
+            this.needsFields = needsFields;
+            string.setAppendableField(Field.LITERAL);
+            appendElement(start, 0);
         }
 
         // Appends additional object. pattern is a template indicating where the new object gets
         // added in relation to the rest of the list. {0} represents the rest of the list; {1}
-        // represents the new object in pattern. next is the object to be added. If recordOffset
-        // is true, records the offset of next in the formatted string.
-        public FormattedListBuilder append(String pattern, Object next, boolean recordOffset) {
-            int[] offsets = (recordOffset || offsetRecorded()) ? new int[2] : null;
-            SimpleFormatterImpl.formatAndReplace(
-                    pattern, current, offsets, current, next.toString());
-            if (offsets != null) {
-                if (offsets[0] == -1 || offsets[1] == -1) {
-                    throw new IllegalArgumentException(
-                            "{0} or {1} missing from pattern " + pattern);
+        // represents the new object in pattern. next is the object to be added. position is the
+        // index of the next object in the list of inputs.
+        public FormattedListBuilder append(String compiledPattern, Object next, int position) {
+            assert SimpleFormatterImpl.getArgumentLimit(compiledPattern) == 2;
+            string.setAppendIndex(0);
+            long state = 0;
+            while (true) {
+                state = IterInternal.step(state, compiledPattern, string);
+                if (state == IterInternal.DONE) {
+                    break;
                 }
-                if (recordOffset) {
-                    offset = offsets[1];
+                int argIndex = IterInternal.getArgIndex(state);
+                if (argIndex == 0) {
+                    string.setAppendIndex(string.length());
                 } else {
-                    offset += offsets[0];
+                    appendElement(next, position);
                 }
             }
             return this;
         }
 
-        public void appendTo(Appendable appendable) {
-            try {
-                appendable.append(current);
-            } catch(IOException e) {
-                throw new ICUUncheckedIOException(e);
+        private void appendElement(Object element, int position) {
+            if (needsFields) {
+                SpanFieldPlaceholder field = new SpanFieldPlaceholder();
+                field.spanField = SpanField.LIST_SPAN;
+                field.normalField = Field.ELEMENT;
+                field.value = position;
+                string.append(element.toString(), field);
+            } else {
+                string.append(element.toString(), null);
             }
+        }
+
+        public void appendTo(Appendable appendable) {
+            Utility.appendTo(string, appendable);
+        }
+
+        public int getOffset(int fieldPositionFoundIndex) {
+            return FormattedValueStringBuilderImpl.findSpan(string, fieldPositionFoundIndex);
         }
 
         @Override
         public String toString() {
-            return current.toString();
+            return string.toString();
         }
 
-        // Gets the last recorded offset or -1 if no offset recorded.
-        public int getOffset() {
-            return offset;
-        }
-
-        private boolean offsetRecorded() {
-            return offset >= 0;
+        public FormattedList toValue() {
+            return new FormattedList(string);
         }
     }
 
     private static class Cache {
         private final ICUCache<String, ListFormatter> cache =
-            new SimpleCache<String, ListFormatter>();
+            new SimpleCache<>();
 
         public ListFormatter get(ULocale locale, String style) {
             String key = String.format("%s:%s", locale.toString(), style);
@@ -348,4 +660,42 @@ final public class ListFormatter {
     }
 
     static Cache cache = new Cache();
+
+    static String typeWidthToStyleString(Type type, Width width) {
+        switch (type) {
+            case AND:
+                switch (width) {
+                    case WIDE:
+                        return "standard";
+                    case SHORT:
+                        return "standard-short";
+                    case NARROW:
+                        return "standard-narrow";
+                }
+                break;
+
+            case OR:
+                switch (width) {
+                    case WIDE:
+                        return "or";
+                    case SHORT:
+                        return "or-short";
+                    case NARROW:
+                        return "or-narrow";
+                }
+                break;
+
+            case UNITS:
+                switch (width) {
+                    case WIDE:
+                        return "unit";
+                    case SHORT:
+                        return "unit-short";
+                    case NARROW:
+                        return "unit-narrow";
+                }
+        }
+
+        return null;
+    }
 }

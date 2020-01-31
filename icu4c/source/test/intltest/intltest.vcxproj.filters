@@ -292,6 +292,9 @@
     <ClCompile Include="numbertest_range.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="numbertest_permutation.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="numfmtst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -542,6 +545,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="localebuildertest.cpp">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
+    <ClCompile Include="localematchertest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
   </ItemGroup>

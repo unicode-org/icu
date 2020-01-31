@@ -64,6 +64,7 @@ public:
     void checkFirst(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
     void checkNext(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
     void checkNextWithState(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
+    void checkNextWithState64(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
     void checkNextString(BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
     void checkIterator(const BytesTrie &trie, const StringAndValue data[], int32_t dataLength);
     void checkIterator(BytesTrie::Iterator &iter, const StringAndValue data[], int32_t dataLength);
@@ -613,6 +614,7 @@ void BytesTrieTest::checkData(const StringAndValue data[], int32_t dataLength, U
     checkFirst(*trie, data, dataLength);
     checkNext(*trie, data, dataLength);
     checkNextWithState(*trie, data, dataLength);
+    checkNextWithState64(*trie, data, dataLength);
     checkNextString(*trie, data, dataLength);
     checkIterator(*trie, data, dataLength);
 }
@@ -814,6 +816,61 @@ void BytesTrieTest::checkNextWithState(BytesTrie &trie,
                                        stringLength-partialLength)) ||
                   result!=trie.current()) {
             errln("trie does not seem to contain %s after saveState/next(rest)/resetToState",
+                  data[i].s);
+        } else if(trie.getValue()!=data[i].value) {
+            errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",
+                  data[i].s,
+                  (long)trie.getValue(), (long)trie.getValue(),
+                  (long)data[i].value, (long)data[i].value);
+        }
+        trie.reset();
+    }
+}
+
+void BytesTrieTest::checkNextWithState64(BytesTrie &trie,
+                                         const StringAndValue data[], int32_t dataLength) {
+    assertTrue("trie(initial state).getState64()!=0", trie.getState64() != 0);
+    for(int32_t i=0; i<dataLength; ++i) {
+        const char *expectedString=data[i].s;
+        int32_t stringLength= static_cast<int32_t>(strlen(expectedString));
+        int32_t partialLength = stringLength / 3;
+        for(int32_t j=0; j<partialLength; ++j) {
+            if(!USTRINGTRIE_MATCHES(trie.next(expectedString[j]))) {
+                errln("trie.next()=USTRINGTRIE_NO_MATCH for a prefix of %s", data[i].s);
+                return;
+            }
+        }
+        uint64_t state = trie.getState64();
+        assertTrue("trie.getState64()!=0", state != 0);
+        UStringTrieResult resultAtState=trie.current();
+        UStringTrieResult result;
+        int32_t valueAtState=-99;
+        if(USTRINGTRIE_HAS_VALUE(resultAtState)) {
+            valueAtState=trie.getValue();
+        }
+        result=trie.next(0);  // mismatch
+        if(result!=USTRINGTRIE_NO_MATCH || result!=trie.current()) {
+            errln("trie.next(0) matched after part of %s", data[i].s);
+        }
+        if( resultAtState!=trie.resetToState64(state).current() ||
+            (USTRINGTRIE_HAS_VALUE(resultAtState) && valueAtState!=trie.getValue())
+        ) {
+            errln("trie.next(part of %s) changes current()/getValue() after "
+                  "getState64/next(0)/resetToState64",
+                  data[i].s);
+        } else if(!USTRINGTRIE_HAS_VALUE(
+                      result=trie.next(expectedString+partialLength,
+                                       stringLength-partialLength)) ||
+                  result!=trie.current()) {
+            errln("trie.next(rest of %s) does not seem to contain %s after "
+                  "getState64/next(0)/resetToState64",
+                  data[i].s, data[i].s);
+        } else if(!USTRINGTRIE_HAS_VALUE(
+                      result=trie.resetToState64(state).
+                                  next(expectedString+partialLength,
+                                       stringLength-partialLength)) ||
+                  result!=trie.current()) {
+            errln("trie does not seem to contain %s after getState64/next(rest)/resetToState64",
                   data[i].s);
         } else if(trie.getValue()!=data[i].value) {
             errln("trie value for %s is %ld=0x%lx instead of expected %ld=0x%lx",

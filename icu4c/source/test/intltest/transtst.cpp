@@ -196,6 +196,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(82,TestHalfwidthFullwidth);
         TESTCASE(83,TestThai);
         TESTCASE(84,TestAny);
+        TESTCASE(85,TestBasicTransliteratorEvenWithoutData);
         default: name = ""; break;
     }
 }
@@ -657,7 +658,7 @@ int gTestFilterClassID = 0;
  * Used by TestFiltering().
  */
 class TestFilter : public UnicodeFilter {
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter* clone() const {
         return new TestFilter(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -1509,6 +1510,81 @@ void TransliteratorTest::TestNormalizationTransliterator() {
 }
 
 /**
+ * Test we can create basic transliterator even without data.
+ */
+void TransliteratorTest::TestBasicTransliteratorEvenWithoutData() {
+    const char16_t* TEST_DATA = u"\u0124e\u0301 \uFB01nd x";
+    const char16_t* EXPECTED_RESULTS[] = {
+        u"H\u0302e\u0301 \uFB01nd x",  // NFD
+        u"\u0124\u00E9 \uFB01nd x",  // NFC
+        u"H\u0302e\u0301 find x",  // NFKD
+        u"\u0124\u00E9 find x",  // NFKC
+        u"\u0124e\u0301 \uFB01nd x",  // Hex-Any
+        u"\u0125e\u0301 \uFB01nd x",  // Lower
+        u"\u0124e\uFB01ndx",  // [:^L:]Remove
+        u"H\u0302e\u0301 \uFB01nd ",  // NFD; [x]Remove
+        u"h\u0302e\u0301 find x",  // Lower; NFKD;
+        u"hefindx",  // Lower; NFKD; [:^L:]Remove; NFC;
+        u"\u0124e \uFB01nd x",  // [:Nonspacing Mark:] Remove;
+        u"He \uFB01nd x",  // NFD; [:Nonspacing Mark:] Remove; NFC;
+        // end
+        0
+    };
+
+    const char* BASIC_TRANSLITERATOR_ID[] = {
+        "NFD",
+        "NFC",
+        "NFKD",
+        "NFKC",
+        "Hex-Any",
+        "Lower",
+        "[:^L:]Remove",
+        "NFD; [x]Remove",
+        "Lower; NFKD;",
+        "Lower; NFKD; [:^L:]Remove; NFC;",
+        "[:Nonspacing Mark:] Remove;",
+        "NFD; [:Nonspacing Mark:] Remove; NFC;",
+        // end
+        0
+    };
+    const char* BASIC_TRANSLITERATOR_RULES[] = {
+        "::Lower; ::NFKD;",
+        "::Lower; ::NFKD; ::[:^L:]Remove; ::NFC;",
+        "::[:Nonspacing Mark:] Remove;",
+        "::NFD; ::[:Nonspacing Mark:] Remove; ::NFC;",
+        // end
+        0
+    };
+    for (int32_t i=0; BASIC_TRANSLITERATOR_ID[i]; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError parseError;
+        std::unique_ptr<Transliterator> translit(Transliterator::createInstance(
+            BASIC_TRANSLITERATOR_ID[i], UTRANS_FORWARD, parseError, status));
+        if (translit.get() == nullptr || !U_SUCCESS(status)) {
+            dataerrln("FAIL: createInstance %s failed", BASIC_TRANSLITERATOR_ID[i]);
+        }
+        UnicodeString data(TEST_DATA);
+        UnicodeString expected(EXPECTED_RESULTS[i]);
+        translit->transliterate(data);
+        if (data != expected) {
+            dataerrln(UnicodeString("FAIL: expected translit(") +
+                      BASIC_TRANSLITERATOR_ID[i] + ") = '" +
+                      EXPECTED_RESULTS[i] + "' but got '" + data);
+        }
+    }
+    for (int32_t i=0; BASIC_TRANSLITERATOR_RULES[i]; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UParseError parseError;
+        std::unique_ptr<Transliterator> translit(Transliterator::createFromRules(
+            "Test",
+            BASIC_TRANSLITERATOR_RULES[i], UTRANS_FORWARD, parseError, status));
+        if (translit.get() == nullptr || !U_SUCCESS(status)) {
+            dataerrln("FAIL: createFromRules %s failed", BASIC_TRANSLITERATOR_RULES[i]);
+        }
+    }
+}
+
+/**
  * Test compound RBT rules.
  */
 void TransliteratorTest::TestCompoundRBT(void) {
@@ -1947,7 +2023,7 @@ class TestTrans : public Transliterator {
 public:
     TestTrans(const UnicodeString& id) : Transliterator(id, 0) {
     }
-    virtual Transliterator* clone(void) const {
+    virtual TestTrans* clone(void) const {
         return new TestTrans(getID());
     }
     virtual void handleTransliterate(Replaceable& /*text*/, UTransPosition& offsets,
@@ -2340,17 +2416,17 @@ void TransliteratorTest::TestCompoundFilterID(void) {
             exp = CharsToUnicodeString(DATA[i+3]);
         }
         UBool expOk = (DATA[i+1] != NULL);
-        Transliterator* t = NULL;
+        LocalPointer<Transliterator> t;
         UParseError pe;
         UErrorCode ec = U_ZERO_ERROR;
         if (id.charAt(0) == 0x23/*#*/) {
-            t = Transliterator::createFromRules("ID", id, direction, pe, ec);
+            t.adoptInstead(Transliterator::createFromRules("ID", id, direction, pe, ec));
         } else {
-            t = Transliterator::createInstance(id, direction, pe, ec);
+            t.adoptInstead(Transliterator::createInstance(id, direction, pe, ec));
         }
-        UBool ok = (t != NULL && U_SUCCESS(ec));
+        UBool ok = (t.isValid() && U_SUCCESS(ec));
         UnicodeString transID;
-        if (t!=0) {
+        if (t.isValid()) {
             transID = t->getID();
         }
         else {
@@ -2362,7 +2438,6 @@ void TransliteratorTest::TestCompoundFilterID(void) {
             if (source.length() != 0) {
                 expect(*t, source, exp);
             }
-            delete t;
         } else {
             dataerrln((UnicodeString)"FAIL: " + id + " => " + transID + ", " +
                   u_errorName(ec));
@@ -3176,12 +3251,12 @@ void TransliteratorTest::TestToRulesMark() {
     
     UParseError pe;
     UErrorCode ec = U_ZERO_ERROR;
-    Transliterator *t2 = Transliterator::createFromRules("source-target", UnicodeString(testRules, -1, US_INV), UTRANS_FORWARD, pe, ec);
-    Transliterator *t3 = Transliterator::createFromRules("target-source", UnicodeString(testRules, -1, US_INV), UTRANS_REVERSE, pe, ec);
+    LocalPointer<Transliterator> t2(
+            Transliterator::createFromRules("source-target", UnicodeString(testRules, -1, US_INV), UTRANS_FORWARD, pe, ec));
+    LocalPointer<Transliterator> t3(
+            Transliterator::createFromRules("target-source", UnicodeString(testRules, -1, US_INV), UTRANS_REVERSE, pe, ec));
 
     if (U_FAILURE(ec)) {
-        delete t2;
-        delete t3;
         dataerrln((UnicodeString)"FAIL: createFromRules => " + u_errorName(ec));
         return;
     }
@@ -3191,9 +3266,6 @@ void TransliteratorTest::TestToRulesMark() {
     
     checkRules("Failed toRules FORWARD", *t2, UnicodeString(testRulesForward, -1, US_INV));
     checkRules("Failed toRules BACKWARD", *t3, UnicodeString(testRulesBackward, -1, US_INV));
-
-    delete t2;
-    delete t3;
 }
 
 /**
@@ -4066,7 +4138,7 @@ void TransliteratorTest::TestAllCodepoints(){
 
 } 
 
-#define TEST_TRANSLIT_ID(id, cls) { \
+#define TEST_TRANSLIT_ID(id, cls) UPRV_BLOCK_MACRO_BEGIN { \
   UErrorCode ec = U_ZERO_ERROR; \
   Transliterator* t = Transliterator::createInstance(id, UTRANS_FORWARD, ec); \
   if (U_FAILURE(ec)) { \
@@ -4078,9 +4150,9 @@ void TransliteratorTest::TestAllCodepoints(){
     /* *t = *t; */ /*can't do this: coverage test for assignment op*/ \
   } \
   delete t; \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_TRANSLIT_RULE(rule, cls) { \
+#define TEST_TRANSLIT_RULE(rule, cls) UPRV_BLOCK_MACRO_BEGIN { \
   UErrorCode ec = U_ZERO_ERROR; \
   UParseError pe; \
   Transliterator* t = Transliterator::createFromRules("_", rule, UTRANS_FORWARD, pe, ec); \
@@ -4093,7 +4165,7 @@ void TransliteratorTest::TestAllCodepoints(){
     /* *t = *t; */ /*can't do this: coverage test for assignment op*/ \
   } \
   delete t; \
-}
+} UPRV_BLOCK_MACRO_END
 
 void TransliteratorTest::TestBoilerplate() {
     TEST_TRANSLIT_ID("Any-Latin", AnyTransliterator);

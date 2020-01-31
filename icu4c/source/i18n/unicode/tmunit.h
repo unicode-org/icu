@@ -73,7 +73,7 @@ public:
      * Override clone.
      * @stable ICU 4.2
      */
-    virtual UObject* clone() const;
+    virtual TimeUnit* clone() const;
 
     /**
      * Copy operator.

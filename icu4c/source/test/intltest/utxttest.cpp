@@ -29,17 +29,21 @@ static int    gTestNum = 0;
 // Forward decl
 UText *openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status);
 
-#define TEST_ASSERT(x) \
-{ if ((x)==FALSE) {errln("Test #%d failure in file %s at line %d\n", gTestNum, __FILE__, __LINE__);\
-                     gFailed = TRUE;\
-   }}
+#define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((x)==FALSE) { \
+        errln("Test #%d failure in file %s at line %d\n", gTestNum, __FILE__, __LINE__); \
+        gFailed = TRUE; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
-#define TEST_SUCCESS(status) \
-{ if (U_FAILURE(status)) {errln("Test #%d failure in file %s at line %d. Error = \"%s\"\n", \
-       gTestNum, __FILE__, __LINE__, u_errorName(status)); \
-       gFailed = TRUE;\
-   }}
+#define TEST_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        errln("Test #%d failure in file %s at line %d. Error = \"%s\"\n", \
+              gTestNum, __FILE__, __LINE__, u_errorName(status)); \
+        gFailed = TRUE; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 UTextTest::UTextTest() {
 }
@@ -266,7 +270,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     i = 0;   // native utf-8 index
     for (j=0; j<cpCount ; j++) {  // code point number
         u8Map[j].nativeIdx = i;
-        U8_NEXT(u8String, i, u8Len, c)
+        U8_NEXT(u8String, i, u8Len, c);
         u8Map[j].cp = c;
     }
     u8Map[cpCount].nativeIdx = u8Len;   // position following the last char in utf-8 string.

@@ -933,7 +933,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     public static final ULocale[] getAvailableULocales() {
         if (shim == null) {
             return ICUResourceBundle.getAvailableULocales(
-                ICUData.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                    ICUData.ICU_COLLATION_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         }
         return shim.getAvailableULocales();
     }

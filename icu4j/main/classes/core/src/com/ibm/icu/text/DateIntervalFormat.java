@@ -1032,11 +1032,11 @@ public class DateIntervalFormat extends UFormat {
                 fInfo.getFallbackIntervalPattern(), patternSB, 2, 2);
         long state = 0;
         while (true) {
-            state = SimpleFormatterImpl.Int64Iterator.step(compiledPattern, state, appendTo);
-            if (state == SimpleFormatterImpl.Int64Iterator.DONE) {
+            state = SimpleFormatterImpl.IterInternal.step(state, compiledPattern, appendTo);
+            if (state == SimpleFormatterImpl.IterInternal.DONE) {
                 break;
             }
-            if (SimpleFormatterImpl.Int64Iterator.getArgIndex(state) == 0) {
+            if (SimpleFormatterImpl.IterInternal.getArgIndex(state) == 0) {
                 if (output != null) {
                     output.register(0);
                 }
@@ -1090,11 +1090,11 @@ public class DateIntervalFormat extends UFormat {
             // {1} is single date portion
             long state = 0;
             while (true) {
-                state = SimpleFormatterImpl.Int64Iterator.step(compiledPattern, state, appendTo);
-                if (state == SimpleFormatterImpl.Int64Iterator.DONE) {
+                state = SimpleFormatterImpl.IterInternal.step(state, compiledPattern, appendTo);
+                if (state == SimpleFormatterImpl.IterInternal.DONE) {
                     break;
                 }
-                if (SimpleFormatterImpl.Int64Iterator.getArgIndex(state) == 0) {
+                if (SimpleFormatterImpl.IterInternal.getArgIndex(state) == 0) {
                     fDateFormat.applyPattern(fTimePattern);
                     fallbackFormatRange(fromCalendar, toCalendar, appendTo, patternSB, pos, output, attributes);
                 } else {

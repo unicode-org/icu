@@ -38,7 +38,7 @@
 #define ESC_LEN       2
 
 
-#define CONCAT_ESCAPE_MACRO( args, targetIndex,targetLength,strToAppend, err, len,sourceIndex){                             \
+#define CONCAT_ESCAPE_MACRO(args, targetIndex,targetLength,strToAppend, err, len,sourceIndex) UPRV_BLOCK_MACRO_BEGIN {      \
     while(len-->0){                                                                                                         \
         if(targetIndex < targetLength){                                                                                     \
             args->target[targetIndex] = (unsigned char) *strToAppend;                                                       \
@@ -53,7 +53,7 @@
         }                                                                                                                   \
         strToAppend++;                                                                                                      \
     }                                                                                                                       \
-}
+} UPRV_BLOCK_MACRO_END
 
 
 typedef struct{

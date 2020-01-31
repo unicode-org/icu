@@ -219,7 +219,7 @@ UBool hasCollationElements(const char *locName) {
 
   UErrorCode status = U_ZERO_ERROR;
 
-  UResourceBundle *loc = ures_open(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "coll", locName, &status);;
+  UResourceBundle *loc = ures_open(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "coll", locName, &status);
 
   if(U_SUCCESS(status)) {
     status = U_ZERO_ERROR;

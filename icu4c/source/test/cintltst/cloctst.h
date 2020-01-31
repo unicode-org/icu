@@ -36,7 +36,8 @@ static  void TestDisplayNames(void);
 /**
  * Test getAvailableLocales
  **/
- static  void TestGetAvailableLocales(void);
+static void TestGetAvailableLocales(void);
+static void TestGetAvailableLocalesByType(void);
 /**
  * Test functions to set and access a custom data directory
  **/

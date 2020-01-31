@@ -2195,6 +2195,17 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
+   * Android libcore uses this internal method to set {@link ParseMode#JAVA_COMPATIBILITY}.
+   * @internal
+   * @deprecated This API is ICU internal only.
+   */
+  @Deprecated
+public synchronized void setParseStrictMode(ParseMode parseMode) {
+    properties.setParseMode(parseMode);
+    refreshFormatter();
+  }
+
+  /**
    * {@inheritDoc}
    *
    * @see #setParseIntegerOnly
@@ -2475,8 +2486,7 @@ public class DecimalFormat extends NumberFormat {
    * @return An instance of {@link LocalizedNumberFormatter} with the same behavior as this instance of
    * DecimalFormat.
    * @see NumberFormatter
-   * @provisional This API might change or be removed in a future release.
-   * @draft ICU 60
+   * @stable ICU 60
    */
   public LocalizedNumberFormatter toNumberFormatter() {
       return formatter;

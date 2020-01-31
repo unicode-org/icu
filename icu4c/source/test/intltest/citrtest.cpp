@@ -57,7 +57,7 @@ public:
         return TRUE;
     }
 
-    virtual CharacterIterator* clone(void) const {
+    virtual SCharacterIterator* clone(void) const {
         return NULL;
     }
     virtual int32_t hashCode(void) const{
@@ -198,7 +198,7 @@ void CharIterTest::TestConstructionAndEquality() {
     UnicodeString  testText2("Don't bother using this string.");
     UnicodeString result1, result2, result3;
 
-    CharacterIterator* test1 = new StringCharacterIterator(testText);
+    StringCharacterIterator* test1 = new StringCharacterIterator(testText);
     CharacterIterator* test1b= new StringCharacterIterator(testText, -1);
     CharacterIterator* test1c= new StringCharacterIterator(testText, 100);
     CharacterIterator* test1d= new StringCharacterIterator(testText, -2, 100, 5);
@@ -257,7 +257,7 @@ void CharIterTest::TestConstructionAndEquality() {
    
     StringCharacterIterator* testChar1=new StringCharacterIterator(testText);
     StringCharacterIterator* testChar2=new StringCharacterIterator(testText2);
-    StringCharacterIterator* testChar3=(StringCharacterIterator*)test1->clone();
+    StringCharacterIterator* testChar3=test1->clone();
 
     testChar1->getText(result1);
     testChar2->getText(result2);
@@ -292,7 +292,7 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     UCharCharacterIterator* test2 = new UCharCharacterIterator(testText, u_strlen(testText), 5);
     UCharCharacterIterator* test3 = new UCharCharacterIterator(testText, u_strlen(testText), 2, 20, 5);
     UCharCharacterIterator* test4 = new UCharCharacterIterator(testText2, u_strlen(testText2));
-    UCharCharacterIterator* test5 = (UCharCharacterIterator*)test1->clone();
+    UCharCharacterIterator* test5 = test1->clone();
     UCharCharacterIterator* test6 = new UCharCharacterIterator(*test1);
 
     // j785: length=-1 will use u_strlen()

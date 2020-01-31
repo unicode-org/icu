@@ -274,7 +274,7 @@ public:
     virtual NumberFormat* createFormat(const Locale& /* loc */, UNumberFormatStyle formatType)
     {
         if (formatType == UNUM_CURRENCY) {
-            return (NumberFormat*)currencyStyle->clone();
+            return currencyStyle->clone();
         }
         return NULL;
     }
@@ -310,7 +310,7 @@ IntlTestNumberFormatAPI::testRegistration()
     LocalPointer<NumberFormat> f3a(NumberFormat::createCurrencyInstance(SRC_LOC, status));
     LocalPointer<NumberFormat> f4(NumberFormat::createInstance(SRC_LOC, status));
 
-    StringEnumeration* locs = NumberFormat::getAvailableLocales();
+    LocalPointer<StringEnumeration> locs(NumberFormat::getAvailableLocales());
 
     LocalUNumberFormatPointer uf3(unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(), NULL, &status));
     LocalUNumberFormatPointer uf4(unum_open(UNUM_DEFAULT, NULL, 0, SRC_LOC.getName(), NULL, &status));
@@ -325,7 +325,7 @@ IntlTestNumberFormatAPI::testRegistration()
     LocalUNumberFormatPointer uf5(unum_open(UNUM_CURRENCY, NULL, 0, SRC_LOC.getName(), NULL, &status));
 
     if (U_FAILURE(status)) {
-        dataerrln("Error creating instnaces.");
+        dataerrln("Error creating instanaces.");
         return;
     } else {
         float n = 1234.567f;
@@ -391,8 +391,6 @@ IntlTestNumberFormatAPI::testRegistration()
     for (res = locs->snext(status); res; res = locs->snext(status)) {
         logln(*res);
     }
-
-    delete locs;
 #endif
 }
 

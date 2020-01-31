@@ -319,10 +319,14 @@ bool DecimalQuantity::isNegative() const {
 }
 
 Signum DecimalQuantity::signum() const {
-    if (isNegative()) {
+    bool isZero = (isZeroish() && !isInfinite());
+    bool isNeg = isNegative();
+    if (isZero && isNeg) {
+        return SIGNUM_NEG_ZERO;
+    } else if (isZero) {
+        return SIGNUM_POS_ZERO;
+    } else if (isNeg) {
         return SIGNUM_NEG;
-    } else if (isZeroish() && !isInfinite()) {
-        return SIGNUM_ZERO;
     } else {
         return SIGNUM_POS;
     }
@@ -452,7 +456,7 @@ void DecimalQuantity::_setToDoubleFast(double n) {
         for (; i <= -22; i += 22) n /= 1e22;
         n /= DOUBLE_MULTIPLIERS[-i];
     }
-    auto result = static_cast<int64_t>(std::round(n));
+    auto result = static_cast<int64_t>(uprv_round(n));
     if (result != 0) {
         _setToLong(result);
         scale -= fracLength;

@@ -166,6 +166,7 @@ void Test4056591()
     if(U_FAILURE(status))
     {
         log_data_err("FAIL: error in creating the dateformat using u_openPattern(): %s - (Are you missing data?)\n", myErrorName(status));
+        ucal_close(cal);
         return;
     }
     start = 1800;

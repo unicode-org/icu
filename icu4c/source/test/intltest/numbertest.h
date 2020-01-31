@@ -68,6 +68,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     // TODO: Add this method if currency symbols override support is added.
     //void symbolsOverride();
     void sign();
+    void signNearZero();
     void signCoverage();
     void decimal();
     void scale();
@@ -82,6 +83,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void copyMove();
     void localPointerCAPI();
     void toObject();
+    void toDecimalNumber();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -112,16 +114,38 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     DecimalFormatSymbols SWISS_SYMBOLS;
     DecimalFormatSymbols MYANMAR_SYMBOLS;
 
-    void assertFormatDescending(const char16_t* message, const char16_t* skeleton,
-                                const UnlocalizedNumberFormatter& f, Locale locale, ...);
+    /**
+     * skeleton is the full length skeleton, which must round-trip.
+     *
+     * conciseSkeleton should be the shortest available skeleton.
+     * The concise skeleton can be read but not printed.
+     */
+    void assertFormatDescending(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      ...);
 
-    void assertFormatDescendingBig(const char16_t* message, const char16_t* skeleton,
-                                   const UnlocalizedNumberFormatter& f, Locale locale, ...);
+    /** See notes above regarding skeleton vs conciseSkeleton */
+    void assertFormatDescendingBig(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      ...);
 
-    FormattedNumber
-    assertFormatSingle(const char16_t* message, const char16_t* skeleton,
-                       const UnlocalizedNumberFormatter& f, Locale locale, double input,
-                       const UnicodeString& expected);
+    /** See notes above regarding skeleton vs conciseSkeleton */
+    FormattedNumber assertFormatSingle(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      double input,
+      const UnicodeString& expected);
 
     void assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f);
 
@@ -287,6 +311,13 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
       const char16_t* expected);
 };
 
+class NumberPermutationTest : public IntlTest {
+  public:
+    void testPermutations();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+};
+
 
 // NOTE: This macro is identical to the one in itformat.cpp
 #define TESTCLASS(id, TestClass)          \
@@ -318,6 +349,7 @@ class NumberTest : public IntlTest {
         TESTCLASS(7, NumberParserTest);
         TESTCLASS(8, NumberSkeletonTest);
         TESTCLASS(9, NumberRangeFormatterTest);
+        TESTCLASS(10, NumberPermutationTest);
         default: name = ""; break; // needed to end loop
         }
     }

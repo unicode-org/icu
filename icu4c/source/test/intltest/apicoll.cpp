@@ -2000,7 +2000,7 @@ void CollationAPITest::TestUClassID()
 class TestCollator  : public Collator
 {
 public:
-    virtual Collator* clone(void) const;
+    virtual TestCollator* clone() const;
 
     using Collator::compare;
 
@@ -2065,7 +2065,7 @@ inline UBool TestCollator::operator==(const Collator& other) const {
     //    (compare this vs. o's subclass fields)
 }
 
-Collator* TestCollator::clone() const
+TestCollator* TestCollator::clone() const
 {
     return new TestCollator();
 }
@@ -2345,7 +2345,7 @@ void CollationAPITest::TestClone() {
     dump("c1", c1, status);
     
     logln("\ninit c2");
-    RuleBasedCollator* c2 = (RuleBasedCollator*)c1->clone();
+    RuleBasedCollator* c2 = c1->clone();
     val = c2->getAttribute(UCOL_CASE_FIRST, status);
     if(val == UCOL_LOWER_FIRST){
         c2->setAttribute(UCOL_CASE_FIRST, UCOL_UPPER_FIRST, status);

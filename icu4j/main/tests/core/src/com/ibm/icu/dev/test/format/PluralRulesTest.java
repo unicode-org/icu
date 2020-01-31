@@ -42,6 +42,7 @@ import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
@@ -526,11 +527,29 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    private void compareLocaleResults(String loc1, String loc2, String loc3) {
+        PluralRules rules1 = PluralRules.forLocale(new ULocale(loc1));
+        PluralRules rules2 = PluralRules.forLocale(new ULocale(loc2));
+        PluralRules rules3 = PluralRules.forLocale(new ULocale(loc3));
+        for (int value = 0; value <= 12; value++) {
+            String result1 = rules1.select(value);
+            String result2 = rules2.select(value);
+            String result3 = rules3.select(value);
+            if (!result1.equals(result2) || !result1.equals(result3)) {
+                errln("PluralRules.select(" + value + ") does not return the same values for "
+                        + loc1 + ", " + loc2 + ", " + loc3);
+            }
+        }
+    }
+
     @Test
     public void testLocaleExtension() {
         PluralRules rules = PluralRules.forLocale(new ULocale("pt@calendar=gregorian"));
         String key = rules.select(1);
         assertEquals("pt@calendar=gregorian select(1)", "one", key);
+        compareLocaleResults("ar", "ar_SA", "ar_SA@calendar=gregorian");
+        compareLocaleResults("ru", "ru_UA", "ru-u-cu-RUB");
+        compareLocaleResults("fr", "fr_CH", "fr@ms=uksystem");
     }
 
     @Test
@@ -911,6 +930,66 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+
+
+    @Test
+    public void testCompactDecimalPluralKeyword() {
+        PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: e = 0 and i % 1000000 = 0 and v = 0 or " +
+                "e != 0 .. 5;  other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000, @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …");
+        ULocale locale = new ULocale("fr-FR");
+
+        Object[][] casesData = {
+                // unlocalized formatter skeleton, input, string output, plural rule keyword
+                {"",             0, "0", "one"},
+                {"compact-long", 0, "0", "one"},
+
+                {"",             1, "1", "one"},
+                {"compact-long", 1, "1", "one"},
+
+                {"",             2, "2", "other"},
+                {"compact-long", 2, "2", "other"},
+
+                {"",             1000000, "1 000 000", "many"},
+                {"compact-long", 1000000, "1 million", "many"},
+
+                {"",             1000001, "1 000 001", "other"},
+                {"compact-long", 1000001, "1 million", "many"},
+
+                {"",             120000, "1 200 000", "other"},
+                {"compact-long", 1200000, "1,2 millions", "many"},
+
+                {"",             1200001, "1 200 001", "other"},
+                {"compact-long", 1200001, "1,2 millions", "many"},
+
+                {"",             2000000, "2 000 000", "many"},
+                {"compact-long", 2000000, "2 millions", "many"},
+        };
+
+        for (Object[] caseDatum : casesData) {
+            String skeleton = (String) caseDatum[0];
+            int input = (int) caseDatum[1];
+            String expectedString = (String) caseDatum[2];
+            String expectPluralRuleKeyword = (String) caseDatum[3];
+
+            String actualPluralRuleKeyword =
+                    getPluralKeyword(rules, locale, input, skeleton);
+
+            assertEquals(
+                    String.format("PluralRules select %s: %d", skeleton, input),
+                    expectPluralRuleKeyword,
+                    actualPluralRuleKeyword);
+        }
+    }
+
+    private String getPluralKeyword(PluralRules rules, ULocale locale, double number, String skeleton) {
+        LocalizedNumberFormatter formatter =
+                NumberFormatter.forSkeleton(skeleton)
+                    .locale(locale);
+        FormattedNumber fn = formatter.format(number);
+        String pluralKeyword = rules.select(fn);
+        return pluralKeyword;
+    }
+
     enum StandardPluralCategories {
         zero, one, two, few, many, other;
         /**
@@ -1037,7 +1116,7 @@ public class PluralRulesTest extends TestFmwk {
             "ast,ca,de,en,et,fi,fy,gl,it,ji,nl,sv,sw,ur,yi; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",
             "pt; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",
             "si; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
-            "ak,bh,guw,ln,mg,nso,pa,ti,wa; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
+            "ak,bho,guw,ln,mg,nso,pa,ti,wa; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
             "tzm; one: @integer 0, 1, 11~24; other: @integer 2~10, 100~106, 1000, 10000, 100000, 1000000, …",
             "af,asa,az,bem,bez,bg,brx,cgg,chr,ckb,dv,ee,el,eo,es,eu,fo,fur,gsw,ha,haw,hu,jgo,jmc,ka,kaj,kcg,kk,kkj,kl,ks,ksb,ku,ky,lb,lg,mas,mgo,ml,mn,nah,nb,nd,ne,nn,nnh,no,nr,ny,nyn,om,or,os,pap,ps,rm,rof,rwk,saq,seh,sn,so,sq,ss,ssy,st,syr,ta,te,teo,tig,tk,tn,tr,ts,ug,uz,ve,vo,vun,wae,xh,xog; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",
             "pt_PT; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",

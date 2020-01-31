@@ -466,15 +466,16 @@ typedef struct CanonicalizationMap {
  * different semantic kinds of transformations.
  */
 static const CanonicalizationMap CANONICALIZE_MAP[] = {
-    { "art_LOJBAN",     "jbo" }, /* registered name */
+    { "art__LOJBAN",    "jbo" }, /* registered name */
     { "hy__AREVELA",    "hy" }, /* Registered IANA variant */
     { "hy__AREVMDA",    "hyw" }, /* Registered IANA variant */
+    { "zh__GUOYU",      "zh" }, /* registered name */
+    { "zh__HAKKA",      "hak" }, /* registered name */
+    { "zh__XIANG",      "hsn" }, /* registered name */
+    // subtags with 3 chars won't be treated as variants.
     { "zh_GAN",         "gan" }, /* registered name */
-    { "zh_GUOYU",       "zh" }, /* registered name */
-    { "zh_HAKKA",       "hak" }, /* registered name */
     { "zh_MIN_NAN",     "nan" }, /* registered name */
     { "zh_WUU",         "wuu" }, /* registered name */
-    { "zh_XIANG",       "hsn" }, /* registered name */
     { "zh_YUE",         "yue" }, /* registered name */
 };
 
@@ -482,14 +483,15 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
 /* Test if the locale id has BCP47 u extension and does not have '@' */
 #define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getShortestSubtagLength(localeID) == 1)
 /* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
-#define _ConvertBCP47(finalID, id, buffer, length,err) \
-        if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 ||  \
-                U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) { \
-            finalID=id; \
-            if (*err == U_STRING_NOT_TERMINATED_WARNING) { *err = U_BUFFER_OVERFLOW_ERROR; } \
-        } else { \
-            finalID=buffer; \
-        }
+#define _ConvertBCP47(finalID, id, buffer, length,err) UPRV_BLOCK_MACRO_BEGIN { \
+    if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 || \
+            U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) { \
+        finalID=id; \
+        if (*err == U_STRING_NOT_TERMINATED_WARNING) { *err = U_BUFFER_OVERFLOW_ERROR; } \
+    } else { \
+        finalID=buffer; \
+    } \
+} UPRV_BLOCK_MACRO_END
 /* Gets the size of the shortest subtag in the given localeID. */
 static int32_t getShortestSubtagLength(const char *localeID) {
     int32_t localeIDLength = static_cast<int32_t>(uprv_strlen(localeID));
@@ -765,6 +767,9 @@ uloc_getKeywordValue(const char* localeID,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
 {
+    if (buffer != nullptr) {
+        buffer[0] = '\0';
+    }
     const char* startSearchHere = NULL;
     const char* nextSeparator = NULL;
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
@@ -1456,31 +1461,29 @@ static const UEnumeration gKeywordsEnum = {
 U_CAPI UEnumeration* U_EXPORT2
 uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCode* status)
 {
-    UKeywordsContext *myContext = NULL;
-    UEnumeration *result = NULL;
+    LocalMemory<UKeywordsContext> myContext;
+    LocalMemory<UEnumeration> result;
 
-    if(U_FAILURE(*status)) {
-        return NULL;
+    if (U_FAILURE(*status)) {
+        return nullptr;
     }
-    result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
-    /* Null pointer test */
-    if (result == NULL) {
+    myContext.adoptInstead(static_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext))));
+    result.adoptInstead(static_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration))));
+    if (myContext.isNull() || result.isNull()) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
-    uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
-    myContext = static_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext)));
-    if (myContext == NULL) {
+    uprv_memcpy(result.getAlias(), &gKeywordsEnum, sizeof(UEnumeration));
+    myContext->keywords = static_cast<char *>(uprv_malloc(keywordListSize+1));
+    if (myContext->keywords == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(result);
-        return NULL;
+        return nullptr;
     }
-    myContext->keywords = (char *)uprv_malloc(keywordListSize+1);
     uprv_memcpy(myContext->keywords, keywordList, keywordListSize);
     myContext->keywords[keywordListSize] = 0;
     myContext->current = myContext->keywords;
-    result->context = myContext;
-    return result;
+    result->context = myContext.orphan();
+    return result.orphan();
 }
 
 U_CAPI UEnumeration* U_EXPORT2

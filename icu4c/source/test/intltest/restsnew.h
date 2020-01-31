@@ -39,6 +39,7 @@ public:
     void TestGetByFallback(void);
 
     void TestFilter(void);
+    void TestIntervalAliasFallbacks(void);
 
 #if U_ENABLE_TRACING
     void TestTrace(void);

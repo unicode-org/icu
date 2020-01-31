@@ -47,11 +47,10 @@ NamePrepTransform* NamePrepTransform::createInstance(UParseError& parseError, UE
 
 //constructor
 NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status)
-: unassigned(), prohibited(), labelSeparatorSet(){
+    : mapping(nullptr), unassigned(), prohibited(), labelSeparatorSet(), bundle(nullptr) {
         
-    mapping = NULL;
-    bundle = NULL;
-
+    LocalPointer<Transliterator> lmapping;
+    LocalUResourceBundlePointer   lbundle;
 
     const char* testDataName = IntlTest::loadTestData(status);
     
@@ -59,31 +58,31 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
         return;
     }
     
-    bundle = ures_openDirect(testDataName,"idna_rules",&status);
+    lbundle.adoptInstead(ures_openDirect(testDataName,"idna_rules",&status));
     
-    if(bundle != NULL && U_SUCCESS(status)){
+    if(lbundle.isValid() && U_SUCCESS(status)){
         // create the mapping transliterator
         int32_t ruleLen = 0;
-        const UChar* ruleUChar = ures_getStringByKey(bundle, "MapNFKC",&ruleLen, &status);
+        const UChar* ruleUChar = ures_getStringByKey(lbundle.getAlias(), "MapNFKC",&ruleLen, &status);
         int32_t mapRuleLen = 0;
-        const UChar *mapRuleUChar = ures_getStringByKey(bundle, "MapNoNormalization", &mapRuleLen, &status);
+        const UChar *mapRuleUChar = ures_getStringByKey(lbundle.getAlias(), "MapNoNormalization", &mapRuleLen, &status);
         UnicodeString rule(mapRuleUChar, mapRuleLen);
         rule.append(ruleUChar, ruleLen);
 
-        mapping = Transliterator::createFromRules(UnicodeString("NamePrepTransform", ""), rule,
-                                                   UTRANS_FORWARD, parseError,status);
+        lmapping.adoptInstead( Transliterator::createFromRules(UnicodeString("NamePrepTransform", ""), rule,
+                                                   UTRANS_FORWARD, parseError,status));
         if(U_FAILURE(status)) {
-          return;
+            return;
         }
 
         //create the unassigned set
         int32_t patternLen =0;
-        const UChar* pattern = ures_getStringByKey(bundle,"UnassignedSet",&patternLen, &status);
+        const UChar* pattern = ures_getStringByKey(lbundle.getAlias(),"UnassignedSet",&patternLen, &status);
         unassigned.applyPattern(UnicodeString(pattern, patternLen), status);
 
         //create prohibited set
         patternLen=0;
-        pattern =  ures_getStringByKey(bundle,"ProhibitedSet",&patternLen, &status);
+        pattern =  ures_getStringByKey(lbundle.getAlias(),"ProhibitedSet",&patternLen, &status);
         UnicodeString test(pattern,patternLen);
         prohibited.applyPattern(test,status);
 #ifdef NPTRANS_DEBUG
@@ -107,20 +106,18 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
         
         //create label separator set
         patternLen=0;
-        pattern =  ures_getStringByKey(bundle,"LabelSeparatorSet",&patternLen, &status);
+        pattern =  ures_getStringByKey(lbundle.getAlias(), "LabelSeparatorSet", &patternLen, &status);
         labelSeparatorSet.applyPattern(UnicodeString(pattern,patternLen),status);
     }
 
-    if(U_SUCCESS(status) && 
-        (mapping == NULL)
-      ){
+    if(U_SUCCESS(status) && (lmapping.isNull())) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        delete mapping;
-        ures_close(bundle);
-        mapping = NULL;
-        bundle = NULL;
     }
-        
+    if (U_FAILURE(status)) {
+        return;
+    }
+    mapping = lmapping.orphan();
+    bundle  = lbundle.orphan();
 }
 
 

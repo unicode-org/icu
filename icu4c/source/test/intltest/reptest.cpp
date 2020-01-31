@@ -71,7 +71,7 @@ public:
         this->styles = s;
     }
 
-    virtual Replaceable *clone() const {
+    virtual TestReplaceable *clone() const {
         return new TestReplaceable(chars, styles);
     }
 
@@ -289,7 +289,7 @@ void ReplaceableTest::check(const UnicodeString& transliteratorName,
                                             pe, status);
 
         // test clone()
-        TestReplaceable *tr2 = (TestReplaceable *)tr->clone();
+        TestReplaceable *tr2 = tr->clone();
         if(tr2 != NULL) {
             delete tr;
             tr = tr2;

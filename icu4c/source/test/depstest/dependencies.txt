@@ -184,7 +184,7 @@ library: common
     uinit utypes errorcode
     icuplug
     platform
-    localebuilder
+    localebuilder localematcher
 
 group: pluralmap
     # TODO: Move to i18n library, ticket #11926.
@@ -631,7 +631,7 @@ group: resourcebundle
     # We can probably only disentangle basic locale ID handling from resource bundle code
     # by hardcoding all of the locale ID data.
     locid.o locmap.o wintz.o
-    # Do we need class LocaleBased? http://bugs.icu-project.org/trac/ticket/8608
+    # Do we need class LocaleBased? https://unicode-org.atlassian.net/browse/ICU-8608
     locbased.o
     loclikely.o
   deps
@@ -639,11 +639,37 @@ group: resourcebundle
     sort stringenumeration uhash uvector
     uscript_props propname
     bytesinkutil
+    errorcode
 
 group: localebuilder
     localebuilder.o
   deps
     resourcebundle
+
+group: localematcher
+    localematcher.o
+  deps
+    localebuilder localeprioritylist loclikelysubtags locdistance lsr
+
+group: localeprioritylist
+    localeprioritylist.o
+  deps
+    resourcebundle
+
+group: locdistance
+    locdistance.o
+  deps
+    loclikelysubtags
+
+group: loclikelysubtags
+    loclikelysubtags.o
+  deps
+    lsr resourcebundle
+
+group: lsr
+    lsr.o
+  deps
+    platform
 
 group: udata
     udata.o ucmndata.o udatamem.o restrace.o
@@ -922,9 +948,10 @@ group: listformatter
     resourcebundle simpleformatter format uclean_i18n formatted_value_iterimpl
 
 group: double_conversion
-    double-conversion.o double-conversion-bignum.o double-conversion-bignum-dtoa.o
-    double-conversion-cached-powers.o double-conversion-diy-fp.o
-    double-conversion-fast-dtoa.o double-conversion-strtod.o
+    double-conversion-bignum.o double-conversion-double-to-string.o
+    double-conversion-bignum-dtoa.o double-conversion-cached-powers.o
+    double-conversion-string-to-double.o double-conversion-fast-dtoa.o
+    double-conversion-strtod.o
   deps
     platform
 

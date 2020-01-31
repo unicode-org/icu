@@ -1287,11 +1287,12 @@ _testReordering(UBiDi *pBiDi, int testNumber) {
     }
 }
 
-#define RETURN_IF_BAD_ERRCODE(x)    \
+#define RETURN_IF_BAD_ERRCODE(x) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(errorCode)) {      \
         log_err("\nbad errorCode %d at %s\n", errorCode, (x));  \
         return;     \
     }               \
+} UPRV_BLOCK_MACRO_END
 
 #define STRING_TEST_CASE(s) { (s), UPRV_LENGTHOF(s) }
 

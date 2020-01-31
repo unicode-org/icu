@@ -386,7 +386,7 @@ static void TestSelector()
     return;
   }
   if (!text_open(&text)) {
-    releaseAvailableNames();;
+    releaseAvailableNames();
   }
 
   excluded_sets[0] = uset_openEmpty();

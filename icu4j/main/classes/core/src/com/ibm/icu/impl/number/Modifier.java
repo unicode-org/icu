@@ -17,6 +17,15 @@ import com.ibm.icu.impl.StandardPlural;
  */
 public interface Modifier {
 
+    static enum Signum {
+        NEG,
+        NEG_ZERO,
+        POS_ZERO,
+        POS;
+
+        static final int COUNT = Signum.values().length;
+    };
+
     /**
      * Apply this Modifier to the string builder.
      *
@@ -65,7 +74,7 @@ public interface Modifier {
      */
     public static class Parameters {
         public ModifierStore obj;
-        public int signum;
+        public Signum signum;
         public StandardPlural plural;
     }
 

@@ -420,7 +420,7 @@ public:
      * result and should delete it when done.
      * @stable ICU 2.0
      */
-    virtual Format* clone(void) const;
+    virtual MessageFormat* clone() const;
 
     /**
      * Returns true if the given Format objects are semantically equal.
@@ -1089,7 +1089,7 @@ private:
     class U_I18N_API DummyFormat : public Format {
     public:
         virtual UBool operator==(const Format&) const;
-        virtual Format* clone() const;
+        virtual DummyFormat* clone() const;
         virtual UnicodeString& format(const Formattable& obj,
                               UnicodeString& appendTo,
                               UErrorCode& status) const;

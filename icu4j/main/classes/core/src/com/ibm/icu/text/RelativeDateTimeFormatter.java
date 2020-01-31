@@ -8,7 +8,6 @@
  */
 package com.ibm.icu.text;
 
-import java.io.IOException;
 import java.io.InvalidObjectException;
 import java.text.AttributedCharacterIterator;
 import java.text.Format;
@@ -16,21 +15,20 @@ import java.util.EnumMap;
 import java.util.Locale;
 
 import com.ibm.icu.impl.CacheBase;
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.impl.number.SimpleModifier;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ICUException;
-import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -531,13 +529,7 @@ public final class RelativeDateTimeFormatter {
          */
         @Override
         public <A extends Appendable> A appendTo(A appendable) {
-            try {
-                appendable.append(string);
-            } catch (IOException e) {
-                // Throw as an unchecked exception to avoid users needing try/catch
-                throw new ICUUncheckedIOException(e);
-            }
-            return appendable;
+            return Utility.appendTo(string, appendable);
         }
 
         /**
@@ -723,8 +715,7 @@ public final class RelativeDateTimeFormatter {
         StandardPlural pluralForm = StandardPlural.orOtherFromString(pluralKeyword);
 
         String compiledPattern = getRelativeUnitPluralPattern(style, unit, pastFutureIndex, pluralForm);
-        SimpleModifier modifier = new SimpleModifier(compiledPattern, Field.LITERAL, false);
-        modifier.formatAsPrefixSuffix(output, 0, output.length());
+        SimpleFormatterImpl.formatPrefixSuffix(compiledPattern, Field.LITERAL, 0, output.length(), output);
         return output;
     }
 

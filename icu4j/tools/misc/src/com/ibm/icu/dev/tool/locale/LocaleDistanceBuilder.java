@@ -153,7 +153,7 @@ public final class LocaleDistanceBuilder {
                     bytes[length++] = (byte) c;
                 } else {
                     // Mark the last character as a terminator to avoid overlap matches.
-                    bytes[length++] = (byte) (c | 0x80);
+                    bytes[length++] = (byte) (c | LocaleDistance.END_OF_SUBTAG);
                     break;
                 }
             }
@@ -487,7 +487,10 @@ public final class LocaleDistanceBuilder {
         Set<LSR> paradigmLSRs = new HashSet<>();  // could be TreeSet if LSR were Comparable
         for (String paradigm : paradigms) {
             ULocale pl = new ULocale(paradigm);
-            paradigmLSRs.add(XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl));
+            LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl);
+            // Clear the LSR flags to make the data equality test in
+            // LocaleDistanceTest happy.
+            paradigmLSRs.add(new LSR(max.language, max.script, max.region, LSR.DONT_CARE_FLAGS));
         }
 
         TerritoryContainment tc = new TerritoryContainment(supplementalData);

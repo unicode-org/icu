@@ -4,9 +4,9 @@ package com.ibm.icu.number;
 
 import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;

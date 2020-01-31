@@ -17,9 +17,6 @@ public class SimpleModifier implements Modifier {
     private final String compiledPattern;
     private final Field field;
     private final boolean strong;
-    private final int prefixLength;
-    private final int suffixOffset;
-    private final int suffixLength;
 
     // Parameters: used for number range formatting
     private final Parameters parameters;
@@ -39,53 +36,21 @@ public class SimpleModifier implements Modifier {
         this.field = field;
         this.strong = strong;
         this.parameters = parameters;
-
-        int argLimit = SimpleFormatterImpl.getArgumentLimit(compiledPattern);
-        if (argLimit == 0) {
-            // No arguments in compiled pattern
-            prefixLength = compiledPattern.charAt(1) - ARG_NUM_LIMIT;
-            assert 2 + prefixLength == compiledPattern.length();
-            // Set suffixOffset = -1 to indicate no arguments in compiled pattern.
-            suffixOffset = -1;
-            suffixLength = 0;
-        } else {
-            assert argLimit == 1;
-            if (compiledPattern.charAt(1) != '\u0000') {
-                prefixLength = compiledPattern.charAt(1) - ARG_NUM_LIMIT;
-                suffixOffset = 3 + prefixLength;
-            } else {
-                prefixLength = 0;
-                suffixOffset = 2;
-            }
-            if (3 + prefixLength < compiledPattern.length()) {
-                suffixLength = compiledPattern.charAt(suffixOffset) - ARG_NUM_LIMIT;
-            } else {
-                suffixLength = 0;
-            }
-        }
     }
 
     @Override
     public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
-        return formatAsPrefixSuffix(output, leftIndex, rightIndex);
+        return SimpleFormatterImpl.formatPrefixSuffix(compiledPattern, field, leftIndex, rightIndex, output);
     }
 
     @Override
     public int getPrefixLength() {
-        return prefixLength;
+        return SimpleFormatterImpl.getPrefixLength(compiledPattern);
     }
 
     @Override
     public int getCodePointCount() {
-        int count = 0;
-        if (prefixLength > 0) {
-            count += Character.codePointCount(compiledPattern, 2, 2 + prefixLength);
-        }
-        if (suffixLength > 0) {
-            count += Character
-                    .codePointCount(compiledPattern, 1 + suffixOffset, 1 + suffixOffset + suffixLength);
-        }
-        return count;
+        return SimpleFormatterImpl.getLength(compiledPattern, true);
     }
 
     @Override
@@ -115,49 +80,6 @@ public class SimpleModifier implements Modifier {
             return true;
         }
         return compiledPattern.equals(_other.compiledPattern) && field == _other.field && strong == _other.strong;
-    }
-
-    /**
-     * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
-     * DoubleSidedStringBuilder is an internal class and SimpleFormatterImpl feels like it should not
-     * depend on it.
-     *
-     * <p>
-     * Formats a value that is already stored inside the StringBuilder <code>result</code> between the
-     * indices <code>startIndex</code> and <code>endIndex</code> by inserting characters before the start
-     * index and after the end index.
-     *
-     * <p>
-     * This is well-defined only for patterns with exactly one argument.
-     *
-     * @param result
-     *            The StringBuilder containing the value argument.
-     * @param startIndex
-     *            The left index of the value within the string builder.
-     * @param endIndex
-     *            The right index of the value within the string builder.
-     * @return The number of characters (UTF-16 code points) that were added to the StringBuilder.
-     */
-    public int formatAsPrefixSuffix(
-            FormattedStringBuilder result,
-            int startIndex,
-            int endIndex) {
-        if (suffixOffset == -1) {
-            // There is no argument for the inner number; overwrite the entire segment with our string.
-            return result.splice(startIndex, endIndex, compiledPattern, 2, 2 + prefixLength, field);
-        } else {
-            if (prefixLength > 0) {
-                result.insert(startIndex, compiledPattern, 2, 2 + prefixLength, field);
-            }
-            if (suffixLength > 0) {
-                result.insert(endIndex + prefixLength,
-                        compiledPattern,
-                        1 + suffixOffset,
-                        1 + suffixOffset + suffixLength,
-                        field);
-            }
-            return prefixLength + suffixLength;
-        }
     }
 
     /**

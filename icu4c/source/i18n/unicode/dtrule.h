@@ -128,7 +128,7 @@ public:
      * @return    A copy of the object.
      * @stable ICU 3.8
      */
-    DateTimeRule* clone(void) const;
+    DateTimeRule* clone() const;
 
     /**
      * Assignment operator.

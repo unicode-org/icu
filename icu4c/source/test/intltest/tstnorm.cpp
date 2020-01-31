@@ -1369,7 +1369,7 @@ initExpectedSkippables(UnicodeSet skipSets[UNORM_MODE_COUNT], UErrorCode &errorC
     // We need not look at control codes, Han characters nor Hangul LVT syllables because they
     // do not combine forward. LV syllables are already removed.
     UnicodeSet notInteresting("[[:C:][:Unified_Ideograph:][:HST=LVT:]]", errorCode);
-    LocalPointer<UnicodeSet> unsure(&((UnicodeSet *)(skipSets[UNORM_NFC].clone()))->removeAll(notInteresting));
+    LocalPointer<UnicodeSet> unsure(&(skipSets[UNORM_NFC].clone())->removeAll(notInteresting));
     // System.out.format("unsure.size()=%d\n", unsure.size());
 
     // For each character about which we are unsure, see if it changes when we add
