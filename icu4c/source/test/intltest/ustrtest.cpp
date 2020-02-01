@@ -64,6 +64,8 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestUInt16Pointers);
     TESTCASE_AUTO(TestWCharPointers);
     TESTCASE_AUTO(TestNullPointers);
+    TESTCASE_AUTO(TestUnicodeStringInsertAppendToSelf);
+    TESTCASE_AUTO(TestLargeAppend);
     TESTCASE_AUTO_END;
 }
 
@@ -2246,7 +2248,6 @@ UnicodeStringTest::TestNullPointers() {
     UnicodeString(u"def").extract(nullptr, 0, errorCode);
     assertEquals("buffer overflow extracting to nullptr", U_BUFFER_OVERFLOW_ERROR, errorCode);
 }
-
 void UnicodeStringTest::TestUnicodeStringInsertAppendToSelf() {
     IcuTestErrorCode status(*this, "TestUnicodeStringAppendToSelf");
 

@@ -96,6 +96,8 @@ public:
     void TestUInt16Pointers();
     void TestWCharPointers();
     void TestNullPointers();
+    void TestUnicodeStringInsertAppendToSelf();
+    void TestLargeAppend();
 };
 
 #endif
