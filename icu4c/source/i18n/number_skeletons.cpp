@@ -30,6 +30,16 @@ using namespace icu::number;
 using namespace icu::number::impl;
 using namespace icu::number::impl::skeleton;
 
+#if (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(_MSC_VER)
+// Ignore MSVC warning 4661. This is generated for NumberFormatterSettings<>::toSkeleton() as this method
+// is defined elsewhere (in number_skeletons.cpp). The compiler is warning that the explicit template instantiation
+// inside this single translation unit (CPP file) is incomplete, and thus it isn't sure if the template class is
+// fully defined. However, since each translation unit explicitly instantiates all the necessary template classes,
+// they will all be passed to the linker, and the linker will still find and export all the class members.
+#pragma warning(push)
+#pragma warning(disable: 4661)
+#endif
+
 namespace {
 
 icu::UInitOnce gNumberSkeletonsInitOnce = U_INITONCE_INITIALIZER;
@@ -1717,5 +1727,9 @@ NumberFormatter::forSkeleton(const UnicodeString& skeleton, UParseError& perror,
     return skeleton::create(skeleton, &perror, status);
 }
 
+#if (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(_MSC_VER)
+// Warning 4661.
+#pragma warning(pop)
+#endif
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
