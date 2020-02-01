@@ -3401,6 +3401,22 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("one equality", one2 == one3);
     assertTrue("one-per-one equality", onePerOne == onePerSquareKiloOne);
     assertTrue("kilometer equality", kilometer == kilometer2);
+
+    // Test out-of-range powers
+    MeasureUnit power15 = MeasureUnit::forIdentifier("p15-kilometer", status);
+    verifySingleUnit(power15, UMEASURE_SI_PREFIX_KILO, 15, "p15-kilometer");
+    status.errIfFailureAndReset();
+    MeasureUnit power16a = MeasureUnit::forIdentifier("p16-kilometer", status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    MeasureUnit power16b = power15.product(kilometer, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    MeasureUnit powerN15 = MeasureUnit::forIdentifier("one-per-p15-kilometer", status);
+    verifySingleUnit(powerN15, UMEASURE_SI_PREFIX_KILO, -15, "one-per-p15-kilometer");
+    status.errIfFailureAndReset();
+    MeasureUnit powerN16a = MeasureUnit::forIdentifier("one-per-p16-kilometer", status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    MeasureUnit powerN16b = powerN15.product(overQuarticKilometer1, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 void MeasureFormatTest::TestIdentifiers() {
