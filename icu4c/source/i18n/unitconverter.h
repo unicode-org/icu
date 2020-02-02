@@ -33,10 +33,14 @@ struct Factor {
     int8_t constants[CONSTANTS_COUNT] = {};
 };
 
+/**
+ * Represents the conversion rate between `source` and `destincation`.
+ */
 struct ConversionRate {
     StringPiece source;
     StringPiece target;
-    Factor factor;
+    number::impl::DecNum factorNum;
+    number::impl::DecNum factorDen;
     bool reciprocal;
 };
 
@@ -45,7 +49,7 @@ struct ConversionRate {
  */
 class UnitConverter {
   public:
-    /*
+    /**
      * Constructor for `UnitConverter`.
      * NOTE:
      *   - source and target must be under the same category
@@ -53,7 +57,10 @@ class UnitConverter {
      */
     UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode status);
 
-    icu::Measure convert(icu::Measure quantity, UErrorCode status);
+    /**
+     * Convert quantity in the source unit to the corresponding quantity in the target unit.
+     */
+    decNumber convert(double quantity, UErrorCode status);
 
   private:
     ConversionRate conversion_rate_;

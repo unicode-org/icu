@@ -18,6 +18,26 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
+using number::impl::DecNum;
+
+decNumber UnitConverter::convert(double quantity, UErrorCode status) {
+    DecNum result;
+    result.setTo(quantity, status);
+
+    result.multiplyBy(this->conversion_rate_.factorNum, status);
+    result.divideBy(this->conversion_rate_.factorDen, status);
+     
+    if (conversion_rate_.reciprocal) { 
+        DecNum reciprocalResult;
+        reciprocalResult.setTo(1, status);
+        reciprocalResult.divideBy(result, status);
+
+        return *(reciprocalResult.getRawDecNumber());
+    }
+
+    return *(result.getRawDecNumber());
+}
+
 //////////////////////////
 /// BEGIN DATA LOADING ///
 //////////////////////////
