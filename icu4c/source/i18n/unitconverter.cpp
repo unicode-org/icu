@@ -174,6 +174,8 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode 
     auto sourceUnits = source.getSingleUnits(status);
     auto targetUnits = target.getSingleUnits(status);
     if (U_FAILURE(status)) return;
+
+    
 }
 
 decNumber UnitConverter::convert(double quantity, UErrorCode status) {
