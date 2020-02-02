@@ -20,31 +20,13 @@ namespace {
 
 using number::impl::DecNum;
 
-decNumber UnitConverter::convert(double quantity, UErrorCode status) {
-    DecNum result;
-    result.setTo(quantity, status);
-
-    result.multiplyBy(this->conversion_rate_.factorNum, status);
-    result.divideBy(this->conversion_rate_.factorDen, status);
-     
-    if (conversion_rate_.reciprocal) { 
-        DecNum reciprocalResult;
-        reciprocalResult.setTo(1, status);
-        reciprocalResult.divideBy(result, status);
-
-        return *(reciprocalResult.getRawDecNumber());
-    }
-
-    return *(result.getRawDecNumber());
-}
-
 //////////////////////////
 /// BEGIN DATA LOADING ///
 //////////////////////////
 
 class UnitConversionRatesSink : public ResourceSink {
   public:
-    explicit UnitConversionRatesSink(ConversionRate *conversionRate) : conversionRate(conversionRate) {}
+    explicit UnitConversionRatesSink(Factor *conversionFactor) : conversionFactor(conversionFactor) {}
 
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
              UErrorCode &status) U_OVERRIDE {
@@ -77,7 +59,7 @@ class UnitConversionRatesSink : public ResourceSink {
     }
 
   private:
-    ConversionRate *conversionRate;
+    Factor *conversionFactor;
 };
 
 /*/
@@ -170,19 +152,40 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
     }
 }
 
-void loadConversionRate(ConversionRate &conversionRate, StringPiece source, StringPiece target,
+/**
+ *  Extract conversion factor from `source` to `target`
+ */
+void loadConversionRate(Factor &conversionFactor, StringPiece source, StringPiece target,
                         UErrorCode &status) {
     LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "units", &status));
     CharString key;
     key.append("convertUnit/", status);
     key.append(source, status);
 
-    UnitConversionRatesSink sink(&conversionRate);
+    UnitConversionRatesSink sink(&conversionFactor);
 
     ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
 }
 
 } // namespace
+
+decNumber UnitConverter::convert(double quantity, UErrorCode status) {
+    DecNum result;
+    result.setTo(quantity, status);
+
+    result.multiplyBy(this->conversion_rate_.factorNum, status);
+    result.divideBy(this->conversion_rate_.factorDen, status);
+
+    if (conversion_rate_.reciprocal) {
+        DecNum reciprocalResult;
+        reciprocalResult.setTo(1, status);
+        reciprocalResult.divideBy(result, status);
+
+        return *(reciprocalResult.getRawDecNumber());
+    }
+
+    return *(result.getRawDecNumber());
+}
 
 U_NAMESPACE_END
 
