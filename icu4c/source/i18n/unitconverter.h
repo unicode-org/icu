@@ -7,9 +7,11 @@
 #ifndef __UNITCONVERTER_H__
 #define __UNITCONVERTER_H__
 
+#include "number_decnum.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
+#include "unicode/stringpiece.h"
 
 U_NAMESPACE_BEGIN
 
@@ -24,15 +26,16 @@ enum Constants {
     CONSTANTS_COUNT
 };
 
+/* Represents a conversion factor */
 struct Factor {
-    int64_t factorNum;
-    int64_t factorDen;
+    number::impl::DecNum factorNum;
+    number::impl::DecNum factorDen;
     int8_t constants[CONSTANTS_COUNT] = {};
 };
 
 struct ConversionRate {
-    UnicodeString source;
-    UnicodeString target;
+    StringPiece source;
+    StringPiece target;
     Factor factor;
     bool reciprocal;
 };

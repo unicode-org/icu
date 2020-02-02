@@ -46,7 +46,8 @@ class UnitConversionRatesSink : public ResourceSink {
             }
 
             else if (keySP == "target") {
-                conversionRate->target = value.getUnicodeString(status);
+                // TODO(younies): find a way to convert UnicodeStirng to StringPiece
+                // conversionRate->target.set(value.getUnicodeString(status));
             }
 
             if (U_FAILURE(status)) {
@@ -59,16 +60,46 @@ class UnitConversionRatesSink : public ResourceSink {
     ConversionRate *conversionRate;
 };
 
+/*/
+ * Add single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
+ */
+void addSingleFactorConstant(Factor &factor, StringPiece baseStr, number::impl::DecNum &power,
+                             int32_t signal, UErrorCode &status) {
+    if (baseStr == "ft2m") {
+        // factor.constants[CONSTANT_FT2M] +=  power;
+    } else if (baseStr == "G") {
+        // factor.constants[CONSTANT_G] += power;
+    } else if (baseStr == "cup2m3") {
+        // factor.constants[CONSTANT_CUP2M3] += power;
+    } else if (baseStr == "pi") {
+        // factor.constants[CONSTANT_PI] += power;
+    } else {
+        if (status != U_ZERO_ERROR)
+            return;
+
+        number::impl::DecNum factorNumber;
+        factorNumber.setTo(baseStr.data(), status);
+
+        if (signal < 0) { // negative number means add the factor to the denominator.
+            factor.factorDen.multiplyBy(factorNumber, status);
+        } else {
+            factor.factorNum.multiplyBy(factorNumber, status);
+        }
+    }
+}
+
 /*
   Adds single factor for a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
   However, complext factor are not included, such as "ft2m^3*200/3"
 */
-void addSingleFactorConstant(Factor &factor, StringPiece elementStr, int32_t signal,
-                             UErrorCode &status) {
+void addFactorElement(Factor &factor, StringPiece elementStr, int32_t signal, UErrorCode &status) {
     StringPiece baseStr;
     StringPiece powerStr;
     number::impl::DecNum power;
     power.setTo(1.0, status);
+
+    number::impl::DecNum signalDecNum;
+    signalDecNum.setTo(signal, status);
 
     // Search for the power part
     int32_t powerInd = -1;
@@ -86,66 +117,49 @@ void addSingleFactorConstant(Factor &factor, StringPiece elementStr, int32_t sig
         powerStr = elementStr.substr(powerInd + 1);
 
         power.setTo(powerStr, status);
-    }
-}
-
-void addFactorElement(Factor &factor, const UnicodeString &stringFactor, int32_t start, int32_t length,
-                      int32_t signal, UErrorCode &status) {
-    if (stringFactor.compare(start, length, u"ft2m")) {
-        factor.constants[CONSTANT_FT2M] += signal;
-    } else if (stringFactor.compare(start, length, u"G")) {
-        factor.constants[CONSTANT_G] += signal;
-    } else if (stringFactor.compare(start, length, u"cup2m3")) {
-        factor.constants[CONSTANT_CUP2M3] += signal;
-    } else if (stringFactor.compare(start, length, u"pi")) {
-        factor.constants[CONSTANT_PI] += signal;
     } else {
-        CharString tempUTF8;
-        tempUTF8.appendInvariantChars(stringFactor.tempSubString(start, length), status);
-
-        if (status != U_ZERO_ERROR)
-            return;
-
-        number::impl::DecNum decNum;
-        decNum.setTo(tempUTF8.data(), status);
-        if (status != U_ZERO_ERROR)
-            return;
+        baseStr = elementStr;
     }
+
+    power.multiplyBy(signalDecNum, status);
+    addSingleFactorConstant(factor, baseStr, power, signal, status);
 }
 
-Factor extractFactor(UnicodeString stringFactor, UErrorCode &status) {
-    Factor result;
+/*
+ * Extracts `Factor` from a complete string factor. e.g. "ft2m^3*1007/cup2m3*3"
+ */
+void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status) {
+    // Set factor to `1`
+    factor.factorNum.setTo("1", status);
+    factor.factorDen.setTo("1", status);
 
     int32_t signal = 1;
-    for (int32_t i = 0, start = 0, length = stringFactor.length(); i < length; i++) {
-        if (stringFactor[i] == '*' || stringFactor[i] == '/') {
-            addFactorElement(result, stringFactor, start, i - start, signal, status);
+    auto factorData = stringFactor.data();
+    for (int32_t i = 0, start = 0, n = stringFactor.length(); i < n; i++) {
+        if (factorData[i] == '*' || factorData[i] == '/') {
+            addFactorElement(factor, stringFactor.substr(start, i), signal, status);
 
-            start = i + 1; // Set `start` to point to the new start point.
-        } else if (i == length - 1) {
+            start = i + 1; // Set `start` to point to the start of the new element.
+        } else if (i == n - 1) {
             // Last element
-            addFactorElement(result, stringFactor, start, i - start + 1, signal, status);
+            addFactorElement(factor, stringFactor.substr(start, i + 1), signal, status);
         }
 
-        if (stringFactor[i] == '/')
+        if (factorData[i] == '/')
             signal = -1; // Change the signal because we reached the Denominator.
     }
-
-    return result;
 }
 
-ConversionRate loadConversionRate(StringPiece source, UErrorCode &status) {
+void loadConversionRate(ConversionRate &conversionRate, StringPiece source, StringPiece target,
+                        UErrorCode &status) {
     LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "units", &status));
     CharString key;
     key.append("convertUnit/", status);
     key.append(source, status);
 
-    ConversionRate conversionRate;
     UnitConversionRatesSink sink(&conversionRate);
 
     ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
-
-    return conversionRate;
 }
 
 } // namespace
