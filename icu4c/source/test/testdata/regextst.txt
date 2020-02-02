@@ -1482,6 +1482,10 @@
 #
 "(?<=(?<=b?(?=a)))"               "hello, world."
 
+# Bug ICU-20939
+# Incorrect word \b boundaries w UTF-8 input and non-ASCII text
+#
+"(?w)\b"                     2     "äää<0></0> äää"
 
 #  Random debugging, Temporary
 #
