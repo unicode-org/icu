@@ -2631,11 +2631,6 @@ UBool RegexMatcher::isUWordBoundary(int64_t pos) {
                             //    words are not boundaries.  All non-word chars stand by themselves,
                             //    with word boundaries on both sides.
     } else {
-        if (!UTEXT_USES_U16(fInputText)) {
-            // !!!: Would like a better way to do this!
-            UErrorCode status = U_ZERO_ERROR;
-            pos = utext_extract(fInputText, 0, pos, NULL, 0, &status);
-        }
         returnVal = fWordBreakItr->isBoundary((int32_t)pos);
     }
 #endif
