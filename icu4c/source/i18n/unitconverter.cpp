@@ -31,9 +31,7 @@ class UnitConversionRatesSink : public ResourceSink {
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
              UErrorCode &status) U_OVERRIDE {
         ResourceTable conversionRateTable = value.getTable(status);
-        if (U_FAILURE(status)) {
-            return;
-        }
+        if (U_FAILURE(status)) { return; }
 
         for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
             StringPiece keySP(key);
@@ -52,9 +50,7 @@ class UnitConversionRatesSink : public ResourceSink {
                 // conversionRate->target.set(value.getUnicodeString(status));
             }
 
-            if (U_FAILURE(status)) {
-                return;
-            }
+            if (U_FAILURE(status)) { return; }
         }
     }
 
@@ -76,8 +72,7 @@ void addSingleFactorConstant(Factor &factor, StringPiece baseStr, number::impl::
     } else if (baseStr == "pi") {
         // factor.constants[CONSTANT_PI] += power;
     } else {
-        if (status != U_ZERO_ERROR)
-            return;
+        if (U_FAILURE(status)) return;
 
         number::impl::DecNum factorNumber;
         factorNumber.setTo(baseStr.data(), status);
@@ -147,8 +142,7 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
             addFactorElement(factor, stringFactor.substr(start, i + 1), signal, status);
         }
 
-        if (factorData[i] == '/')
-            signal = -1; // Change the signal because we reached the Denominator.
+        if (factorData[i] == '/') signal = -1; // Change the signal because we reached the Denominator.
     }
 }
 
@@ -168,6 +162,19 @@ void loadConversionRate(Factor &conversionFactor, StringPiece source, StringPiec
 }
 
 } // namespace
+
+UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode status) {
+    // Deal with non-compound units only.
+    if (source.getCompoundUnits(status).length() > 1 || target.getCompoundUnits(status).length() > 1 ||
+        U_FAILURE(status)) {
+        status = UErrorCode::U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    auto sourceUnits = source.getSingleUnits(status);
+    auto targetUnits = target.getSingleUnits(status);
+    if (U_FAILURE(status)) return;
+}
 
 decNumber UnitConverter::convert(double quantity, UErrorCode status) {
     DecNum result;
