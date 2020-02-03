@@ -31,7 +31,9 @@ class UnitConversionRatesSink : public ResourceSink {
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
              UErrorCode &status) U_OVERRIDE {
         ResourceTable conversionRateTable = value.getTable(status);
-        if (U_FAILURE(status)) { return; }
+        if (U_FAILURE(status)) {
+            return;
+        }
 
         for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
             StringPiece keySP(key);
@@ -50,7 +52,9 @@ class UnitConversionRatesSink : public ResourceSink {
                 // conversionRate->target.set(value.getUnicodeString(status));
             }
 
-            if (U_FAILURE(status)) { return; }
+            if (U_FAILURE(status)) {
+                return;
+            }
         }
     }
 
@@ -174,8 +178,6 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode 
     auto sourceUnits = source.getSingleUnits(status);
     auto targetUnits = target.getSingleUnits(status);
     if (U_FAILURE(status)) return;
-
-    
 }
 
 decNumber UnitConverter::convert(double quantity, UErrorCode status) {

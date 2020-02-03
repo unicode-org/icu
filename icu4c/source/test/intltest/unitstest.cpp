@@ -5,8 +5,11 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-
+#include "../../i18n/unitconverter.h"
+#include "decNumber.h"
 #include "intltest.h"
+#include "number_decnum.h"
+#include "unicode/measunit.h"
 #include "unicode/unistr.h"
 
 class UnitsTest : public IntlTest {
@@ -20,6 +23,10 @@ class UnitsTest : public IntlTest {
     void testMass();
     void testTemperature();
     void testArea();
+
+    // TODO(younies): fix this.
+    void assertConversion(StringPiece message, StringPiece source, StringPiece target, double inputValue,
+                          double expectedValue);
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -37,15 +44,31 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
-// Just for testing quick conversion ability.
-double testConvert(UnicodeString source, UnicodeString target, double input) {
-    if (source == u"meter" && target == u"foot" && input == 1.0)
-        return 3.28084;
+// Assert if two dec numbers are equal.
+void UnitsTest::assertConversion(StringPiece message, StringPiece source, StringPiece target,
+                                 double inputValue, double expectedValue) {
+    UErrorCode status;
 
-    if ( source == u"kilometer" && target == u"foot" && input == 1.0)
-        return 328.084;
+    MeasureUnit sourceUnit = MeasureUnit::forIdentifier(source, status);
+    MeasureUnit targetUnit = MeasureUnit::forIdentifier(target, status);
 
-    return -1;
+    // assertSuccess("test Convert: Units Creation", status);
+
+    UnitConverter converter(sourceUnit, targetUnit, status);
+    // assertSuccess("test Convert: Unit Converter Creation", status);
+
+    decNumber actualConversionResult = converter.convert(inputValue, status);
+    // assertSuccess("test Convert: Converter Operation has been done!", status);
+
+    number::impl::DecNum decNum;
+    decNum.setTo(expectedValue, status);
+    decNumber expectedValueDecNumber = *(decNum.getRawDecNumber());
+
+    assertEquals(message.data(), actualConversionResult.digits, expectedValueDecNumber.digits);
+    assertEquals(message.data(), actualConversionResult.bits, expectedValueDecNumber.bits);
+    assertEquals(message.data(), actualConversionResult.exponent, expectedValueDecNumber.exponent);
+    // TODO(younies): fix
+    // assertEquals(message.data(), actualConversionResult.lsu, expectedValueDecNumber.lsu);
 }
 
 void UnitsTest::testBasic() {
@@ -53,15 +76,18 @@ void UnitsTest::testBasic() {
 
     // Test Cases
     struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
+        const StringPiece source;
+        const StringPiece target;
         const double inputValue;
         const double expectedValue;
-    } testCases[]{{u"meter", u"foot", 1.0, 3.28084}, {u"kilometer", u"foot", 1.0, 328.084}};
+    } testCases[]{
+        {"meter", "foot", 1.0, 3.28084},    //
+        {"kilometer", "foot", 1.0, 328.084} //
+    };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
+                         testCase.expectedValue);
     }
 }
 
@@ -69,22 +95,22 @@ void UnitsTest::testSiPrefixes() {
     IcuTestErrorCode status(*this, "Units testSiPrefixes");
     // Test Cases
     struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
+        const StringPiece source;
+        const StringPiece target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
-        {u"gram", u"kilogram", 1.0, 0.001},            //
-        {u"milligram", u"kilogram", 1.0, 0.000001},    //
-        {u"microgram", u"kilogram", 1.0, 0.000000001}, //
-        {u"megawatt", u"watt", 1, 1000000},            //
-        {u"megawatt", u"kilowatt", 1.0, 1000},         //
-        {u"gigabyte", u"byte", 1, 1000000000}          //
+        {"gram", "kilogram", 1.0, 0.001},            //
+        {"milligram", "kilogram", 1.0, 0.000001},    //
+        {"microgram", "kilogram", 1.0, 0.000000001}, //
+        {"megawatt", "watt", 1, 1000000},            //
+        {"megawatt", "kilowatt", 1.0, 1000},         //
+        {"gigabyte", "byte", 1, 1000000000}          //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
+                         testCase.expectedValue);
     }
 }
 
@@ -93,24 +119,24 @@ void UnitsTest::testMass() {
 
     // Test Cases
     struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
+        const StringPiece source;
+        const StringPiece target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
-        {u"gram", u"kilogram", 1.0, 0.001},      //
-        {u"pound", u"kilogram", 1.0, 0.453592},  //
-        {u"pound", u"kilogram", 2.0, 0.907185},  //
-        {u"ounce", u"pound", 16.0, 1.0},         //
-        {u"ounce", u"kilogram", 16.0, 0.453592}, //
-        {u"ton", u"pound", 1.0, 2000},           //
-        {u"stone", u"pound", 1.0, 14},           //
-        {u"stone", u"kilogram", 1.0, 6.35029}    //
+        {"gram", "kilogram", 1.0, 0.001},      //
+        {"pound", "kilogram", 1.0, 0.453592},  //
+        {"pound", "kilogram", 2.0, 0.907185},  //
+        {"ounce", "pound", 16.0, 1.0},         //
+        {"ounce", "kilogram", 16.0, 0.453592}, //
+        {"ton", "pound", 1.0, 2000},           //
+        {"stone", "pound", 1.0, 14},           //
+        {"stone", "kilogram", 1.0, 6.35029}    //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
+                         testCase.expectedValue);
     }
 }
 
@@ -118,24 +144,24 @@ void UnitsTest::testTemperature() {
     IcuTestErrorCode status(*this, "Units testTemperature");
     // Test Cases
     struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
+        const StringPiece source;
+        const StringPiece target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
-        {u"celsius", u"fahrenheit", 0.0, 32.0},   //
-        {u"celsius", u"fahrenheit", 10.0, 50.0},  //
-        {u"fahrenheit", u"celsius", 32.0, 0.0},   //
-        {u"fahrenheit", u"celsius", 89.6, 32},    //
-        {u"kelvin", u"fahrenheit", 0.0, -459.67}, //
-        {u"kelvin", u"fahrenheit", 300, 80.33},   //
-        {u"kelvin", u"celsius", 0.0, -273.15},    //
-        {u"kelvin", u"celsius", 300.0, 26.85}     //
+        {"celsius", "fahrenheit", 0.0, 32.0},   //
+        {"celsius", "fahrenheit", 10.0, 50.0},  //
+        {"fahrenheit", "celsius", 32.0, 0.0},   //
+        {"fahrenheit", "celsius", 89.6, 32},    //
+        {"kelvin", "fahrenheit", 0.0, -459.67}, //
+        {"kelvin", "fahrenheit", 300, 80.33},   //
+        {"kelvin", "celsius", 0.0, -273.15},    //
+        {"kelvin", "celsius", 300.0, 26.85}     //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
+                         testCase.expectedValue);
     }
 }
 
@@ -144,19 +170,19 @@ void UnitsTest::testArea() {
 
     // Test Cases
     struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
+        const StringPiece source;
+        const StringPiece target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
-        {u"square-meter", u"square-yard", 10.0, 11.9599}, //
-        {u"hectare", u"square-yard", 1.0, 11959.9},       //
-        {u"square-mile", u"square-foot", 0.0001, 2787.84} //
+        {"square-meter", "square-yard", 10.0, 11.9599}, //
+        {"hectare", "square-yard", 1.0, 11959.9},       //
+        {"square-mile", "square-foot", 0.0001, 2787.84} //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
+                         testCase.expectedValue);
     }
 }
 
