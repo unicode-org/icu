@@ -175,9 +175,23 @@ void UnitsTest::testArea() {
         const double inputValue;
         const double expectedValue;
     } testCases[]{
-        {"square-meter", "square-yard", 10.0, 11.9599}, //
-        {"hectare", "square-yard", 1.0, 11959.9},       //
+        {"square-meter", "square-yard", 10.0, 11.9599} //
+        ,
+        {"hectare", "square-yard", 1.0, 11959.9} //
+        ,
+        {"hectare", "square-meter", 1.0, 10000} //
+        ,
+        {"hectare", "square-meter", 0.0, 0.0} //
+        ,
         {"square-mile", "square-foot", 0.0001, 2787.84} //
+        ,
+        {"square-yard", "square-foot", 10, 90} //
+        ,
+        {"square-yard", "square-foot", 0, 0} //
+        ,
+        {"square-yard", "square-foot", 0.000001, 0.000009} //
+        ,
+        {"square-mile", "square-foot", 0.0, 0.0} //
     };
 
     for (const auto &testCase : testCases) {
