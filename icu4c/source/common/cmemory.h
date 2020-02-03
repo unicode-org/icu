@@ -767,7 +767,11 @@ public:
     }
 
     int32_t length() const {
-        return this->count();
+        return this->fCount;
+    }
+
+    T** getAlias() {
+        return this->fPool.getAlias();
     }
 
     /**
@@ -776,8 +780,21 @@ public:
      * @param i array index
      * @return reference to the array item
      */
-    T *operator[](ptrdiff_t i) const {
+    T* operator[](ptrdiff_t i) const {
         return this->fPool[i];
+    }
+
+    /**
+     * Append all the items from another MaybeStackVector to this one.
+     */
+    void appendAll(const MaybeStackVector& other, UErrorCode& status) {
+        for (int32_t i = 0; i < other.fCount; i++) {
+            T* item = emplaceBack(*other[i]);
+            if (!item) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+        }
     }
 };
 

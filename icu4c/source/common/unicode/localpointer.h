@@ -406,9 +406,19 @@ public:
         src.ptr=nullptr;
     }
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Construct a LocalArray with a specified length.
+     *
+     * @param p Pointer to the array to adopt.
+     * @param length The length of the array.
+     * @return A LocalArray with a length field.
+     * @draft ICU 67
+     */
     static LocalArray<T> withLength(T *p, int32_t length) {
         return LocalArray(p, length);
     }
+#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -549,7 +559,16 @@ public:
     }
 #endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * The length of the array contained in the LocalArray. The size must be
+     * provided when the LocalArray is constructed.
+     *
+     * @return The length of the array, or -1 if unknown.
+     * @draft ICU 67
+     */
     int32_t length() const { return fLength; }
+#endif // U_HIDE_DRAFT_API
 
 private:
     int32_t fLength = -1;

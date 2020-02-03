@@ -30,7 +30,9 @@
 U_NAMESPACE_BEGIN
 
 class StringEnumeration;
+struct MeasureUnitImpl;
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for unit complexity. There are three levels:
  * 
@@ -223,6 +225,7 @@ typedef enum UMeasureSIPrefix {
      */
     UMEASURE_SI_PREFIX_YOCTO = -24
 } UMeasureSIPrefix;
+#endif // U_HIDE_DRAFT_API
 
 /**
  * A unit such as length, mass, volume, currency, etc.  A unit is
@@ -253,6 +256,7 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit(MeasureUnit &&other) noexcept;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
      * Validates and canonicalizes the identifier.
@@ -261,11 +265,12 @@ class U_I18N_API MeasureUnit: public UObject {
      * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
      * </pre>
      *
-     * @param id The CLDR Sequence Unit Identifier
+     * @param identifier The CLDR Sequence Unit Identifier
      * @param status Set if the identifier is invalid.
      * @draft ICU 67
      */
     static MeasureUnit forIdentifier(StringPiece identifier, UErrorCode& status);
+#endif // U_HIDE_DRAFT_API
 
     /**
      * Copy assignment operator.
@@ -326,6 +331,7 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     const char *getSubtype() const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Get the CLDR Sequence Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
@@ -371,28 +377,29 @@ class U_I18N_API MeasureUnit: public UObject {
     UMeasureSIPrefix getSIPrefix(UErrorCode& status) const;
 
     /**
-     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified power. For
-     * example, if power is 2, the unit will be squared.
+     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
+     * (power). For example, if dimensionality is 2, the unit will be squared.
      *
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param power The power.
+     * @param dimensionality The dimensionality (power).
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
      */
-    MeasureUnit withPower(int8_t power, UErrorCode& status) const;
+    MeasureUnit withDimensionality(int32_t dimensionality, UErrorCode& status) const;
 
     /**
-     * Gets the power of this MeasureUnit. For example, if the unit is square, then 2 is returned.
+     * Gets the dimensionality (power) of this MeasureUnit. For example, if the unit is square,
+     * then 2 is returned.
      *
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
-     * @return The power of this simple unit.
+     * @return The dimensionality (power) of this simple unit.
      */
-    int8_t getPower(UErrorCode& status) const;
+    int32_t getDimensionality(UErrorCode& status) const;
 
     /**
      * Gets the reciprocal of this MeasureUnit, with the numerator and denominator flipped.
@@ -419,39 +426,28 @@ class U_I18N_API MeasureUnit: public UObject {
      * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
      * SEQUENCE unit, an error will occur. For more information, see UMeasureUnitComplexity.
      *
+     * @param other The MeasureUnit to multiply with the target.
      * @param status Set if this or other is a SEQUENCE unit or if another error occurs.
      * @return The product of the target unit with the provided unit.
      */
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
 
     /**
-     * Gets the list of single units contained within a compound unit.
+     * Gets the list of SINGLE units contained within a SEQUENCE of COMPOUND unit.
      *
-     * For example, given "meter-kilogram-per-second", three units will be returned: "meter",
-     * "kilogram", and "one-per-second".
+     * Examples:
+     * - Given "meter-kilogram-per-second", three units will be returned: "meter",
+     *   "kilogram", and "one-per-second".
+     * - Given "hour+minute+second", three units will be returned: "hour", "minute",
+     *   and "second".
      *
      * If this is a SINGLE unit, an array of length 1 will be returned.
      *
-     * NOTE: Only works on SINGLE and COMPOUND units. If this is a SEQUENCE unit, an error will
-     * occur. For more information, see UMeasureUnitComplexity.
-     *
-     * @param status Set if this is a SEQUENCE unit or if another error occurs.
+     * @param status Set if an error occurs.
      * @return An array of single units, owned by the caller.
      */
-    LocalArray<MeasureUnit> getSingleUnits(UErrorCode& status) const;
-
-    /**
-     * Gets the list of compound units contained within a sequence unit.
-     *
-     * For example, given "hour+minute+second", three units will be returned: "hour", "minute",
-     * and "second".
-     *
-     * If this is a SINGLE or COMPOUND unit, an array of length 1 will be returned.
-     *
-     * @param status Set of an error occurs.
-     * @return An array of compound units, owned by the caller.
-     */
-    LocalArray<MeasureUnit> getCompoundUnits(UErrorCode& status) const;
+    LocalArray<MeasureUnit> splitToSingleUnits(UErrorCode& status) const;
+#endif // U_HIDE_DRAFT_API
 
     /**
      * getAvailable gets all of the available units.
@@ -546,26 +542,6 @@ class U_I18N_API MeasureUnit: public UObject {
      * @internal
      */
     static int32_t internalGetIndexForTypeAndSubtype(const char *type, const char *subtype);
-
-    /**
-     * ICU use only.
-     * @return Whether subType is known to ICU.
-     * @internal
-     */
-    static bool findBySubType(StringPiece subType, MeasureUnit* output);
-
-    /**
-     * ICU use only.
-     * Parse a core unit identifier into a numerator and denominator unit.
-     * @param coreUnitIdentifier The string to parse.
-     * @param numerator Output: set to the numerator unit.
-     * @param denominator Output: set to the denominator unit, if present.
-     * @param status Set to U_ILLEGAL_ARGUMENT_ERROR if the core unit identifier is not known.
-     * @return Whether both a numerator and denominator are returned.
-     * @internal
-     */
-    static bool parseCoreUnitIdentifier(
-        StringPiece coreUnitIdentifier, MeasureUnit* numerator, MeasureUnit* denominator, UErrorCode& status);
 
     /**
      * ICU use only.
@@ -3695,7 +3671,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * For ICU use only.
      * @internal
      */
-    void initCurrency(const char *isoCurrency);
+    void initCurrency(StringPiece isoCurrency);
 
     /**
      * For ICU use only.
@@ -3707,18 +3683,25 @@ class U_I18N_API MeasureUnit: public UObject {
 
 private:
 
-    // If non-null, fId is owned by the MeasureUnit.
-    char* fId;
+    // If non-null, fImpl is owned by the MeasureUnit.
+    MeasureUnitImpl* fImpl;
 
     // These two ints are indices into static string lists in measunit.cpp
     int16_t fSubTypeId;
     int8_t fTypeId;
 
     MeasureUnit(int32_t typeId, int32_t subTypeId);
-    MeasureUnit(char* idToAdopt);
+    MeasureUnit(MeasureUnitImpl&& impl);
     void setTo(int32_t typeId, int32_t subTypeId);
     int32_t getOffset() const;
     static MeasureUnit *create(int typeId, int subTypeId, UErrorCode &status);
+
+    /**
+     * @return Whether subType is known to ICU.
+     */
+    static bool findBySubType(StringPiece subType, MeasureUnit* output);
+
+    friend struct MeasureUnitImpl;
 };
 
 U_NAMESPACE_END
