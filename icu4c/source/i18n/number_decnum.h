@@ -51,9 +51,19 @@ class U_I18N_API DecNum : public UMemory {
 
     void divideBy(const DecNum& rhs, UErrorCode& status);
 
+    void add(const DecNum& rhs, UErrorCode& status);
+
+    void subtract(const DecNum& rhs, UErrorCode& status);
+
     bool isNegative() const;
 
     bool isZero() const;
+
+    bool lessThan(const DecNum& rhs, UErrorCode& status) const;
+
+    bool greaterThan(const DecNum& rhs, UErrorCode& status) const;
+
+    bool equalTo(const DecNum& rhs, UErrorCode& status) const;
 
     void toString(ByteSink& output, UErrorCode& status) const;
 

@@ -244,12 +244,44 @@ void DecNum::divideBy(const DecNum& rhs, UErrorCode& status) {
     }
 }
 
+void DecNum::add(const DecNum& rhs, UErrorCode& status) {
+    uprv_decNumberAdd_66(fData, fData, rhs.fData, &fContext);
+    if (fContext.status != 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+    }
+}
+
+void DecNum::subtract(const DecNum& rhs, UErrorCode& status) {
+    uprv_decNumberSubtract_66(fData, fData, rhs.fData, &fContext);
+    if (fContext.status != 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+    }
+}
+
 bool DecNum::isNegative() const {
     return decNumberIsNegative(fData.getAlias());
 }
 
 bool DecNum::isZero() const {
     return decNumberIsZero(fData.getAlias());
+}
+
+bool DecNum::lessThan(const DecNum& rhs, UErrorCode& status) const {
+   // return uprv_decNumberCompare_66(fData, fData, rhs.fData, fContext);
+ 
+   return false; // TODO(younies): implement this function
+}
+
+bool DecNum::greaterThan(const DecNum& rhs, UErrorCode& status) const {
+   // return uprv_decNumberCompare_66(fData, fData, rhs.fData, fContext);
+ 
+   return false; // TODO(younies): implement this function
+}
+
+bool DecNum::equalTo(const DecNum& rhs, UErrorCode& status) const {
+   // return uprv_decNumberCompare_66(fData, fData, rhs.fData, fContext);
+ 
+   return false; // TODO(younies): implement this function
 }
 
 void DecNum::toString(ByteSink& output, UErrorCode& status) const {
