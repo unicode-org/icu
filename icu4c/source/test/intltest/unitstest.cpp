@@ -6,11 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "../../i18n/unitconverter.h"
-#include "decNumber.h"
 #include "intltest.h"
-#include "number_decnum.h"
-#include "unicode/measunit.h"
-#include "unicode/unistr.h"
 
 class UnitsTest : public IntlTest {
   public:
@@ -44,33 +40,6 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
-// Assert if two dec numbers are equal.
-void UnitsTest::assertConversion(StringPiece message, StringPiece source, StringPiece target,
-                                 double inputValue, double expectedValue) {
-    UErrorCode status;
-
-    MeasureUnit sourceUnit = MeasureUnit::forIdentifier(source, status);
-    MeasureUnit targetUnit = MeasureUnit::forIdentifier(target, status);
-
-    // assertSuccess("test Convert: Units Creation", status);
-
-    UnitConverter converter(sourceUnit, targetUnit, status);
-    // assertSuccess("test Convert: Unit Converter Creation", status);
-
-    decNumber actualConversionResult = converter.convert(inputValue, status);
-    // assertSuccess("test Convert: Converter Operation has been done!", status);
-
-    number::impl::DecNum decNum;
-    decNum.setTo(expectedValue, status);
-    decNumber expectedValueDecNumber = *(decNum.getRawDecNumber());
-
-    assertEquals(message.data(), actualConversionResult.digits, expectedValueDecNumber.digits);
-    assertEquals(message.data(), actualConversionResult.bits, expectedValueDecNumber.bits);
-    assertEquals(message.data(), actualConversionResult.exponent, expectedValueDecNumber.exponent);
-    // TODO(younies): fix
-    // assertEquals(message.data(), actualConversionResult.lsu, expectedValueDecNumber.lsu);
-}
-
 void UnitsTest::testBasic() {
     IcuTestErrorCode status(*this, "Units testBasic");
 
@@ -86,8 +55,23 @@ void UnitsTest::testBasic() {
     };
 
     for (const auto &testCase : testCases) {
-        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
-                         testCase.expectedValue);
+        UErrorCode status;
+
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        number::impl::DecNum inputValue;
+        inputValue.setTo(testCase.inputValue, status);
+
+        number::impl::DecNum expectedValue;
+        expectedValue.setTo(testCase.expectedValue, status);
+
+        number::impl::DecNum actualConversionResult;
+        converter.convert(inputValue, actualConversionResult, status);
+
+        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
     }
 }
 
@@ -109,8 +93,23 @@ void UnitsTest::testSiPrefixes() {
     };
 
     for (const auto &testCase : testCases) {
-        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
-                         testCase.expectedValue);
+        UErrorCode status;
+
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        number::impl::DecNum inputValue;
+        inputValue.setTo(testCase.inputValue, status);
+
+        number::impl::DecNum expectedValue;
+        expectedValue.setTo(testCase.expectedValue, status);
+
+        number::impl::DecNum actualConversionResult;
+        converter.convert(inputValue, actualConversionResult, status);
+
+        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
     }
 }
 
@@ -135,8 +134,23 @@ void UnitsTest::testMass() {
     };
 
     for (const auto &testCase : testCases) {
-        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
-                         testCase.expectedValue);
+        UErrorCode status;
+
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        number::impl::DecNum inputValue;
+        inputValue.setTo(testCase.inputValue, status);
+
+        number::impl::DecNum expectedValue;
+        expectedValue.setTo(testCase.expectedValue, status);
+
+        number::impl::DecNum actualConversionResult;
+        converter.convert(inputValue, actualConversionResult, status);
+
+        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
     }
 }
 
@@ -160,8 +174,23 @@ void UnitsTest::testTemperature() {
     };
 
     for (const auto &testCase : testCases) {
-        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
-                         testCase.expectedValue);
+        UErrorCode status;
+
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        number::impl::DecNum inputValue;
+        inputValue.setTo(testCase.inputValue, status);
+
+        number::impl::DecNum expectedValue;
+        expectedValue.setTo(testCase.expectedValue, status);
+
+        number::impl::DecNum actualConversionResult;
+        converter.convert(inputValue, actualConversionResult, status);
+
+        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
     }
 }
 
@@ -195,8 +224,23 @@ void UnitsTest::testArea() {
     };
 
     for (const auto &testCase : testCases) {
-        assertConversion("test Conversion", testCase.source, testCase.target, testCase.inputValue,
-                         testCase.expectedValue);
+        UErrorCode status;
+
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        number::impl::DecNum inputValue;
+        inputValue.setTo(testCase.inputValue, status);
+
+        number::impl::DecNum expectedValue;
+        expectedValue.setTo(testCase.expectedValue, status);
+
+        number::impl::DecNum actualConversionResult;
+        converter.convert(inputValue, actualConversionResult, status);
+
+        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
     }
 }
 

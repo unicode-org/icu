@@ -2155,6 +2155,52 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+std::string decNumToString(const number::impl::DecNum& decNum) {   
+    std::string result;
+    // TODO(younies): implement.
+    return result;
+}
+
+UBool IntlTest::assertEquals(const char* message,
+        const number::impl::DecNum& expected, const number::impl::DecNum& actual) {
+            UErrorCode status;
+    if (!expected.equalTo(actual, status)) {
+        std::string expectedAsString = decNumToString(expected);
+        std::string actualAsString = decNumToString(actual);
+        errln((UnicodeString)"FAIL: " + message +
+            "; got " + actualAsString.c_str() +
+            "; expected " + expectedAsString.c_str());
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + decNumToString(actual).c_str());
+    }
+#endif
+    return TRUE;
+}
+
+UBool IntlTest::assertNearlyEquals(const char* message,
+        const number::impl::DecNum& expected, const number::impl::DecNum& actual, double precision){
+            UErrorCode status;
+            double diff = std::abs( expected.toDouble(status) - actual.toDouble(status) );
+
+    if (!U_FAILURE(status) && diff <= precision) {
+        std::string expectedAsString = decNumToString(expected);
+        std::string actualAsString = decNumToString(actual);
+        errln((UnicodeString)"FAIL: " + message +
+            "; got " + actualAsString.c_str() +
+            "; expected " + expectedAsString.c_str());
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + decNumToString(actual).c_str());
+    }
+#endif
+    return TRUE;
+}
+     
 static char ASSERT_BUF[256];
 
 static const char* extractToAssertBuf(const UnicodeString& message) {

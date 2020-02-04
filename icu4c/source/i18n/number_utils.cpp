@@ -244,6 +244,12 @@ DecNum::setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative
     }
 }
 
+double DecNum::toDouble(UErrorCode& status) const {
+  double result = 0.0;
+  // TODO(younies): implement
+  return result;
+}
+
 void DecNum::normalize() {
     uprv_decNumberReduce(fData, fData, &fContext);
 }

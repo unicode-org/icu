@@ -17,6 +17,7 @@
 #include "unicode/fmtable.h"
 #include "unicode/testlog.h"
 #include "unicode/uniset.h"
+#include "number_decnum.h"
 
 #include <vector>
 #include <string>
@@ -303,6 +304,10 @@ public:
     UBool assertEquals(const char* message, const UnicodeSet& expected, const UnicodeSet& actual);
     UBool assertEquals(const char* message,
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
+    UBool assertEquals(const char* message,
+        const number::impl::DecNum& expected, const number::impl::DecNum& actual);
+    UBool assertNearlyEquals(const char* message,
+        const number::impl::DecNum& expected, const number::impl::DecNum& actual, double precision);     
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual, UBool possibleDataError=FALSE);
