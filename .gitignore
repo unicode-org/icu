@@ -103,6 +103,7 @@ icu4c/source/extra/scrptrun/scrptrun.o
 icu4c/source/extra/scrptrun/srtest
 icu4c/source/extra/scrptrun/srtest.d
 icu4c/source/extra/scrptrun/srtest.o
+icu4c/source/extra/scrptrun/srtest.exe
 icu4c/source/extra/uconv/*.d
 icu4c/source/extra/uconv/*.o
 icu4c/source/extra/uconv/*.vcxproj.user
@@ -420,6 +421,7 @@ icu4c/source/stubdata/Makefile
 icu4c/source/stubdata/Release
 icu4c/source/stubdata/cygicudata*.*
 icu4c/source/stubdata/debug
+icu4c/source/stubdata/icudt*.dll
 icu4c/source/stubdata/libicu*.*
 icu4c/source/stubdata/libsicu*.*
 icu4c/source/stubdata/release
