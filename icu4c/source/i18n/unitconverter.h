@@ -31,6 +31,11 @@ struct Factor {
     number::impl::DecNum factorNum;
     number::impl::DecNum factorDen;
     int8_t constants[CONSTANTS_COUNT] = {};
+
+    Factor(UErrorCode &status) {
+        factorNum.setTo(1.0, status);
+        factorDen.setTo(1.0, status);
+    }
 };
 
 /**
@@ -42,6 +47,11 @@ struct ConversionRate {
     number::impl::DecNum factorNum;
     number::impl::DecNum factorDen;
     bool reciprocal;
+
+    ConversionRate(UErrorCode &status) {
+        factorNum.setTo(1.0, status);
+        factorDen.setTo(1.0, status);
+    }
 };
 
 /**
@@ -50,17 +60,26 @@ struct ConversionRate {
 class UnitConverter {
   public:
     /**
-     * Constructor for `UnitConverter`.
+     * Constructor of `UnitConverter`.
      * NOTE:
      *   - source and target must be under the same category
      *      - e.g. meter to mile --> both of them are length units.
+     *
+     * @param source represents the source unit.
+     * @param target represents the target unit.
+     * @param status
      */
     UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode status);
 
     /**
-     * Convert quantity in the source unit to the corresponding quantity in the target unit.
+     * Convert a value in the source unit to another value in the target unit.
+     *
+     * @param input_value the value that needs to be converted.
+     * @param output_value the value that holds the result of the conversion.
+     * @param status
      */
-    decNumber convert(double quantity, UErrorCode status);
+    void convert(const number::impl::DecNum &input_value, number::impl::DecNum &output_value,
+                 UErrorCode status);
 
   private:
     ConversionRate conversion_rate_;

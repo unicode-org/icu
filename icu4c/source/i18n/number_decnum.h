@@ -33,6 +33,9 @@ class U_I18N_API DecNum : public UMemory {
     // Copy-like constructor; use the default move operators.
     DecNum(const DecNum& other, UErrorCode& status);
 
+    /** Sets the `DecNum` to have the value of another `DecNum`. */
+    void setTo(const DecNum& other, UErrorCode& status);
+
     /** Sets the decNumber to the StringPiece. */
     void setTo(StringPiece str, UErrorCode& status);
 

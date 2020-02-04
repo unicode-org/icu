@@ -167,35 +167,42 @@ void loadConversionRate(Factor &conversionFactor, StringPiece source, StringPiec
 
 } // namespace
 
-UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode status) {
+UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode status)
+    : conversion_rate_(status) {
+    // TODO(younies):: add the test of non-compound units here.
     // Deal with non-compound units only.
-    if (source.getCompoundUnits(status).length() > 1 || target.getCompoundUnits(status).length() > 1 ||
-        U_FAILURE(status)) {
-        status = UErrorCode::U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
+    // if (source.getCompoundUnits(status).length() > 1 || target.getCompoundUnits(status).length() > 1
+    // ||
+    //     U_FAILURE(status)) {
+    //     status = UErrorCode::U_ILLEGAL_ARGUMENT_ERROR;
+    //     return;
+    // }
 
-    auto sourceUnits = source.getSingleUnits(status);
-    auto targetUnits = target.getSingleUnits(status);
+    // Extract the single units from source and target.
+    auto sourceUnits = source.splitToSingleUnits(status);
+    auto targetUnits = target.splitToSingleUnits(status);
     if (U_FAILURE(status)) return;
+
+    // TODO(younies): implement.
 }
 
-decNumber UnitConverter::convert(double quantity, UErrorCode status) {
-    DecNum result;
-    result.setTo(quantity, status);
+void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UErrorCode status) {
 
-    result.multiplyBy(this->conversion_rate_.factorNum, status);
-    result.divideBy(this->conversion_rate_.factorDen, status);
+    DecNum result(input_value, status);
+    result.multiplyBy(conversion_rate_.factorNum, status);
+    result.divideBy(conversion_rate_.factorDen, status);
+
+    if (U_FAILURE(status)) return;
 
     if (conversion_rate_.reciprocal) {
         DecNum reciprocalResult;
         reciprocalResult.setTo(1, status);
         reciprocalResult.divideBy(result, status);
 
-        return *(reciprocalResult.getRawDecNumber());
+        output_value.setTo(result, status);
+    } else {
+        output_value.setTo(result, status);
     }
-
-    return *(result.getRawDecNumber());
 }
 
 U_NAMESPACE_END

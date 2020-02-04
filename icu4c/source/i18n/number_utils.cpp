@@ -117,6 +117,26 @@ DecNum::DecNum(const DecNum& other, UErrorCode& status)
             other.fData.getArrayLimit() - other.fData.getArrayStart());
 }
 
+void DecNum::setTo(const DecNum& other, UErrorCode& status) {
+    fContext = other.fContext;
+
+    // Allocate memory for the new DecNum.
+    U_ASSERT(fContext.digits == other.fData.getCapacity());
+    if (fContext.digits > kDefaultDigits) {
+        void* p = fData.resize(fContext.digits, 0);
+        if (p == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+    }
+
+    // Copy the data from the old DecNum to the new one.
+    uprv_memcpy(fData.getAlias(), other.fData.getAlias(), sizeof(decNumber));
+    uprv_memcpy(fData.getArrayStart(),
+            other.fData.getArrayStart(),
+            other.fData.getArrayLimit() - other.fData.getArrayStart());
+}
+
 void DecNum::setTo(StringPiece str, UErrorCode& status) {
     // We need NUL-terminated for decNumber; CharString guarantees this, but not StringPiece.
     CharString cstr(str, status);
