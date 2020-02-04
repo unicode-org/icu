@@ -26,18 +26,6 @@ enum Constants {
     CONSTANTS_COUNT
 };
 
-/* Represents a conversion factor */
-struct Factor {
-    number::impl::DecNum factorNum;
-    number::impl::DecNum factorDen;
-    int8_t constants[CONSTANTS_COUNT] = {};
-
-    Factor(UErrorCode &status) {
-        factorNum.setTo(1.0, status);
-        factorDen.setTo(1.0, status);
-    }
-};
-
 /**
  * Represents the conversion rate between `source` and `destincation`.
  */
@@ -46,11 +34,14 @@ struct ConversionRate {
     StringPiece target;
     number::impl::DecNum factorNum;
     number::impl::DecNum factorDen;
+    number::impl::DecNum offset;
     bool reciprocal;
 
     ConversionRate(UErrorCode &status) {
         factorNum.setTo(1.0, status);
         factorDen.setTo(1.0, status);
+        offset.setTo(0.0, status);
+        reciprocal = false;
     }
 };
 

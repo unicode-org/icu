@@ -24,6 +24,21 @@ using number::impl::DecNum;
 /// BEGIN DATA LOADING ///
 //////////////////////////
 
+/* Represents a conversion factor */
+struct Factor {
+    DecNum factorNum;
+    DecNum factorDen;
+    DecNum offset;
+
+    int8_t constants[CONSTANTS_COUNT] = {};
+
+    Factor(UErrorCode &status) {
+        factorNum.setTo(1.0, status);
+        factorDen.setTo(1.0, status);
+        offset.setTo(0.0, status);
+    }
+};
+
 class UnitConversionRatesSink : public ResourceSink {
   public:
     explicit UnitConversionRatesSink(Factor *conversionFactor) : conversionFactor(conversionFactor) {}
@@ -191,6 +206,7 @@ void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UEr
     DecNum result(input_value, status);
     result.multiplyBy(conversion_rate_.factorNum, status);
     result.divideBy(conversion_rate_.factorDen, status);
+    result.add(conversion_rate_.offset, status);
 
     if (U_FAILURE(status)) return;
 
