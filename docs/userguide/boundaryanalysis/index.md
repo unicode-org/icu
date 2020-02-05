@@ -268,8 +268,9 @@ void listWordBoundaries(const UChar* s, int32_t len) {
     }
     ubrk_close(bi);
 }
+```
 
-### Get the boundaries of the word that contains a double-click position:
+### Get the boundaries of the word that contains a double-click position
 
 **In C++:**
 
