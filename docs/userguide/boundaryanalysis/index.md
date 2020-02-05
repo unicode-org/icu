@@ -25,7 +25,7 @@ formatting and handling text. Examples of this process include:
 8.  Locating a particular unit of the text (For example, finding the third word
     in the document).
 
-The BreakIterator classes were designed to support these kinds of tasks. The
+The `BreakIterator` classes were designed to support these kinds of tasks. The
 BreakIterator objects maintain a location between two characters in the text.
 This location will always be a text boundary. Clients can move the location
 forward to the next boundary or backward to the previous boundary. Clients can
@@ -34,7 +34,7 @@ find the boundary which is before or after a particular location.
 
 ## Four Types of BreakIterator
 
-ICU BreakIterators can be used to locate the following kinds of text boundaries:
+ICU `BreakIterator`s can be used to locate the following kinds of text boundaries:
 
 1.  Character Boundary
 
@@ -57,9 +57,9 @@ These boundaries try to match what a user would think of as a "character"—a
 basic unit of a writing system for a language—which may be more than just a
 single Unicode code point.
 
-The letter Ä, for example, can be represented in Unicode either with a single
-code-point value or with two code-point values (one representing the A and
-another representing the umlaut). The character-boundary iterator will treat
+The letter `Ä`, for example, can be represented in Unicode either with a single
+code-point value or with two code-point values (one representing the `A` and
+another representing the umlaut `¨`). The character-boundary iterator will treat
 either representation as a single character.
 
 End-user characters, as described above, are also called grapheme clusters, in
@@ -80,6 +80,10 @@ different languages.
 Here's an example of a sentence, showing the boundary locations that will be
 identified by a word break iterator:
 
+<!--
+TODO: example
+-->
+
 ### Line-break Boundary
 
 The line-break iterator locates positions that would be appropriate points to
@@ -87,7 +91,11 @@ wrap lines when displaying the text. The boundary rules are define here:
 <https://www.unicode.org/reports/tr14/>
 
 This example shows the differences in the break locations produced by word and
-line break iterators
+line break iterators:
+
+<!--
+TODO: example
+-->
 
 ### Sentence Boundary
 
@@ -107,12 +115,12 @@ steps required by applications making use of the dictionaries.
 ## Usage
 
 To locate boundaries in a document, create a BreakIterator using the
-BreakIterator::create\*\*\*Instance family of methods in C++, or the ubrk_open()
-function (C). "\*\*\*" is Character, Word, Line or Sentence, depending on the
-type of iterator wanted. These factory methods also take a parameter that
-specifies the locale for the language of the text to be processed.
+`BreakIterator::create***Instance` family of methods in C++, or the `ubrk_open()`
+function (C), where "`***`" is `Character`, `Word`, `Line` or `Sentence`,
+depending on the type of iterator wanted. These factory methods also take a
+parameter that specifies the locale for the language of the text to be processed.
 
-When creating a BreakIterator, a locale is also specified, and the behavior of
+When creating a `BreakIterator`, a locale is also specified, and the behavior of
 the BreakIterator obtained may be specialized in some way for that locale. For
 most locales the default break iterator behavior is used.
 
@@ -126,44 +134,44 @@ startup, before opening services by locale ID.
 In the general-usage-model, applications will use the following basic steps to
 analyze a piece of text for boundaries:
 
-1.  Create a BreakIterator with the desired behavior
+1.  Create a `BreakIterator` with the desired behavior
 
-2.  Use the setText() method to set the iterator to analyze a particular piece
+2.  Use the `setText()` method to set the iterator to analyze a particular piece
     of text.
 
-3.  Locate the desired boundaries using the appropriate combination of first(),
-    last(), next(), previous(), preceding(), and following() methods.
+3.  Locate the desired boundaries using the appropriate combination of `first()`,
+    `last()`, `next()`, `previous()`, `preceding()`, and `following()` methods.
 
-The setText() method can be called more than once, allowing reuse of a
-BreakIterator on new pieces of text. Because the creation of a BreakIterator can
+The `setText()` method can be called more than once, allowing reuse of a
+BreakIterator on new pieces of text. Because the creation of a `BreakIterator` can
 be relatively time-consuming, it makes good sense to reuse them when practical.
 
 The iterator always points to a boundary position between two characters. The
-numerical value of the position, as returned by current() is the zero-based
+numerical value of the position, as returned by `current()` is the zero-based
 index of the character following the boundary. Thus a position of zero
 represents a boundary preceding the first character of the text, and a position
 of one represents a boundary between the first and second characters.
 
-The first() and last() methods reset the iterator's current position to the
+The `first()` and `last()` methods reset the iterator's current position to the
 beginning or end of the text (the beginning and the end are always considered
-boundaries). The next() and previous() methods advance the iterator one boundary
-forward or backward from the current position. If the next() or previous()
-methods run off the beginning or end of the text, it returns DONE. The current()
+boundaries). The `next()` and `previous()` methods advance the iterator one boundary
+forward or backward from the current position. If the `next()` or `previous()`
+methods run off the beginning or end of the text, it returns DONE. The `current()`
 method returns the current position.
 
-The following() and preceding() methods are used for random access, to move the
+The `following()` and `preceding()` methods are used for random access, to move the
 iterator to an arbitrary position within the text. Since a BreakIterator always
-points to a boundary position, the following() and preceding() methods will
+points to a boundary position, the `following()` and `preceding()` methods will
 never set the iterator to point to the position specified by the caller (even if
-it is, in fact, a boundary position). BreakIterator will, however, set the
+it is, in fact, a boundary position). `BreakIterator` will, however, set the
 iterator to the nearest boundary position before or after the specified
 position.
 
-isBoundary() returns true if the specified position is a boundary.
+`isBoundary()` returns true if the specified position is a boundary.
 
 ### Thread Safety
 
-Break Iterators are not thread safe. This is inherit in their design - break
+`BreakIterator`s are not thread safe. This is inherit in their design—break
 iterators are stateful, holding a reference to and position in the text, meaning
 that a single instance cannot operate in parallel on multiple texts.
 
@@ -178,16 +186,13 @@ CSS has the concept of "[Line Breaking
 Strictness](https://www.w3.org/TR/css-text-3/#line-break-property)". This
 property specifies the strictness of line-breaking rules applied within an
 element: especially how wrapping interacts with punctuation and symbols. ICU
-line break iterators can choose a strictness using locale tags
+line break iterators can choose a strictness using locale tags:
 
-en@lb=strict
-ja@lb=strict
-Breaks text using the most stringent set of line-breaking rules. en@lb=normal
-ja@lb=normal
-Breaks text using the most common set of line-breaking rules. en@lb=loose
-ja@lb=loose
-Breaks text using the least restrictive set of line-breaking rules. Typically
-used for short lines, such as in newspapers.
+| Locale       | Behavior    |
+| ------------ | ----------- |
+| `en@lb=strict` <br/> `ja@lb=strict`  | Breaks text using the most stringent set of line-breaking rules |
+| `en@lb=normal` <br/> `ja@lb=normal`  | Breaks text using the most common set of line-breaking rules. |
+| `en@lb=loose`  <br/> `ja@lb=loose`   | Breaks text using the least restrictive set of line-breaking rules. Typically used for short lines, such as in newspapers. |
 
 ### Sentence Break Filters
 
@@ -195,15 +200,19 @@ Sentence breaking can return false positives - an indication that sentence ends
 in an incorrect position - in the presence of abbreviations. For example,
 consider the sentence
 
-"In the meantime Mr. Weston arrived with his small ship." Default sentence break
-shows a false boundary following the "Mr."
+> In the meantime Mr. Weston arrived with his small ship.
+
+Default sentence break shows a false boundary following the "Mr."
 
 ICU includes lists of common abbreviations that can be used to filter, to
 ignore, these false sentence boundaries. Filtering is enabled by the presence of
-the "ss" locale tag when creating the break iterator.
+the `ss` locale tag when creating the break iterator.
 
-Locale Behavior en no filtering en@ss=standard Filter based on common English
-language abbreviations. es@ss=standard Filter with common Spanish abbreviations.
+| Locale           | Behavior                                                |
+| ---------------- | ------------------------------------------------------- |
+| `en`             |  no filtering                                           |
+| `en@ss=standard` |  Filter based on common English language abbreviations. |
+| `es@ss=standard` |  Filter with common Spanish abbreviations.              |
 
 Abbreviation lists are available (as of ICU 64) for English, German, Spanish,
 French, Italian and Portuguese.
@@ -229,82 +238,88 @@ boundary rules.
 
 **In C++:**
 
+```c++
 void listWordBoundaries(const UnicodeString& s) {
-UErrorCode status = U_ZERO_ERROR;
-BreakIterator\* bi = BreakIterator::createWordInstance(Locale::getUS(), status);
-bi->setText(s);
-int32_t p = bi->first();
-while (p != BreakIterator::DONE) {
-printf("Boundary at position %d\\n", p);
-p = bi->next();
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator* bi = BreakIterator::createWordInstance(Locale::getUS(), status);
+    bi->setText(s);
+    int32_t p = bi->first();
+    while (p != BreakIterator::DONE) {
+        printf("Boundary at position %d\n", p);
+        p = bi->next();
+    }
+    delete bi;
 }
-delete bi;
-}
+```
 
 **In C:**
 
-void listWordBoundaries(const UChar\* s,
-int32_t len) {
-UBreakIterator\* bi;
-int32_t p;
-UErrorCode err = U_ZERO_ERROR;
-bi = ubrk_open(UBRK_WORD, 0, s, len, &err);
-if (U_FAILURE(err)) return;
-p = ubrk_first(bi);
-while (p != UBRK_DONE) {
-printf("Boundary at position %d\\n", p);
-p = ubrk_next(bi);
-}
-ubrk_close(bi);
+```c
+void listWordBoundaries(const UChar* s, int32_t len) {
+    UBreakIterator* bi;
+    int32_t p;
+    UErrorCode err = U_ZERO_ERROR;
+    bi = ubrk_open(UBRK_WORD, 0, s, len, &err);
+    if (U_FAILURE(err)) return;
+    p = ubrk_first(bi);
+    while (p != UBRK_DONE) {
+        printf("Boundary at position %d\n", p);
+        p = ubrk_next(bi);
+    }
+    ubrk_close(bi);
 }
 
 ### Get the boundaries of the word that contains a double-click position:
 
 **In C++:**
 
+```c++
 void wordContaining(BreakIterator& wordBrk,
-int32_t idx,
-const UnicodeString& s,
-int32_t& start,
-int32_t& end) {
-// this function is written to assume that we have an
-// appropriate BreakIterator stored in an object or a
-// global variable somewhere-- When possible, programmers
-// should avoid having the create() and delete calls in
-// a function of this nature.
-if (s.isEmpty())
-return;
-wordBrk.setText(s);
-start = wordBrk.preceding(idx + 1);
-end = wordBrk.next();
-// NOTE: for this and similar operations, use preceding() and next()
-// as shown here, not following() and previous(). preceding() is
-// faster than following() and next() is faster than previous()
-// NOTE: By using preceding(idx + 1) above, we're adopting the convention
-// that if the double-click comes right on top of a word boundary, it
-// selects the word that _begins_ on that boundary (preceding(idx) would
-// instead select the word that _ends_ on that boundary).
+        int32_t idx,
+        const UnicodeString& s,
+        int32_t& start,
+        int32_t& end) {
+    // this function is written to assume that we have an
+    // appropriate BreakIterator stored in an object or a
+    // global variable somewhere-- When possible, programmers
+    // should avoid having the create() and delete calls in
+    // a function of this nature.
+    if (s.isEmpty())
+        return;
+    wordBrk.setText(s);
+    start = wordBrk.preceding(idx + 1);
+    end = wordBrk.next();
+    // NOTE: for this and similar operations, use preceding() and next()
+    // as shown here, not following() and previous(). preceding() is
+    // faster than following() and next() is faster than previous()
+    // NOTE: By using preceding(idx + 1) above, we're adopting the convention
+    // that if the double-click comes right on top of a word boundary, it
+    // selects the word that _begins_ on that boundary (preceding(idx) would
+    // instead select the word that _ends_ on that boundary).
 }
+```
 
 **In C:**
 
-void wordContaining(UBreakIterator\* wordBrk,
-int32_t idx,
-const UChar\* s,
-int32_t sLen,
-int32_t\* start,
-int32_t\* end,
-UErrorCode\* err) {
-if (wordBrk == NULL || s == NULL || start == NULL || end == NULL) {
-\*err = U_ILLEGAL_ARGUMENT_ERROR;
-return;
+```c
+void wordContaining(UBreakIterator* wordBrk,
+    int32_t idx,
+    const UChar* s,
+    int32_t sLen,
+    int32_t* start,
+    int32_t* end,
+    UErrorCode* err) {
+    if (wordBrk == NULL || s == NULL || start == NULL || end == NULL) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    ubrk_setText(wordBrk, s, sLen, err);
+    if (U_SUCCESS(*err)) {
+        *start = ubrk_preceding(wordBrk, idx + 1);
+        *end = ubrk_next(wordBrk);
+    }
 }
-ubrk_setText(wordBrk, s, sLen, err);
-if (U_SUCCESS(\*err)) {
-\*start = ubrk_preceding(wordBrk, idx + 1);
-\*end = ubrk_next(wordBrk);
-}
-}
+```
 
 ### Check for Whole Words
 
@@ -312,60 +327,64 @@ Use the following to check if a range of text is a "whole word":
 
 **In C++:**
 
+```c++
 UBool isWholeWord(BreakIterator& wordBrk,
-const UnicodeString& s,
-int32_t start,
-int32_t end) {
-if (s.isEmpty())
-return FALSE;
-wordBrk.setText(s);
-if (!wordBrk.isBoundary(start))
-return FALSE;
-return wordBrk.isBoundary(end); }
+    const UnicodeString& s,
+    int32_t start,
+    int32_t end) {
+    if (s.isEmpty())
+        return FALSE;
+    wordBrk.setText(s);
+    if (!wordBrk.isBoundary(start))
+        return FALSE;
+    return wordBrk.isBoundary(end);
+}
+```
 
 **In C:**
 
-UBool isWholeWord(UBreakIterator\* wordBrk,
-const UChar\* s,
-int32_t sLen,
-int32_t start,
-int32_t end,
-UErrorCode\* err) {
-UBool result = FALSE;
-if (wordBrk == NULL || s == NULL) {
-\*err = U_ILLEGAL_ARGUMENT_ERROR;
-return FALSE;
+```c
+UBool isWholeWord(UBreakIterator* wordBrk,
+    const UChar* s,
+    int32_t sLen,
+    int32_t start,
+    int32_t end,
+    UErrorCode* err) {
+    UBool result = FALSE;
+    if (wordBrk == NULL || s == NULL) {
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return FALSE;
+    }
+    ubrk_setText(wordBrk, s, sLen, err);
+    if (U_SUCCESS(*err)) {
+        result = ubrk_isBoundary(wordBrk, start) && ubrk_isBoundary(wordBrk, end);
+    }
+    return result;
 }
-ubrk_setText(wordBrk, s, sLen, err);
-if (U_SUCCESS(\*err)) {
-result = ubrk_isBoundary(wordBrk, start)
->> ubrk_isBoundary(wordBrk, end);
-}
-return result;
-}
+```
 
 Count the words in a document (C++ only):
 
-int32_t containsLetters(RuleBasedBreakIterator& bi,
-const UnicodeString& s,
-int32_t start) {
-bi.setText(s);
-int32_t count = 0;
-while (start != BreakIterator::DONE) {
-int breakType = bi.getRuleStatus();
-if (breakType != UBRK_WORD_NONE) {
-// Exclude spaces, punctuation, and the like.
-// A status value UBRK_WORD_NONE indicates that the boundary does
-// not start a word or number.
-//
-++count;
+```c++
+int32_t containsLetters(RuleBasedBreakIterator& bi, const UnicodeString& s, int32_t start) {
+    bi.setText(s);
+    int32_t count = 0;
+    while (start != BreakIterator::DONE) {
+        int breakType = bi.getRuleStatus();
+        if (breakType != UBRK_WORD_NONE) {
+            // Exclude spaces, punctuation, and the like.
+            // A status value UBRK_WORD_NONE indicates that the boundary does
+            // not start a word or number.
+            //
+            ++count;
+        }
+        start = bi.next();
+    }
+    return count;
 }
-start = bi.next();
-}
-return count;
-}
+```
 
-The function getRuleStatus() returns an enum giving additional information on
+The function `getRuleStatus()` returns an enum giving additional information on
 the text preceding the last break position found. Using this value, it is
 possible to distinguish between numbers, words, words containing kana
 characters, words containing ideographic characters, and non-word characters,
@@ -383,83 +402,93 @@ assumed that an outside process has already broken the document into paragraphs.
 For example, it is assumed that every string the function is passed has a single
 newline at the end only.
 
+```c++
 int32_t wrapParagraph(const UnicodeString& s,
-const Locale& locale,
-int32_t lineStarts\[\],
-int32_t trailingwhitespace\[\],
-int32_t maxLines,
-UErrorCode &status) {
-int32_t numLines = 0;
-int32_t p, q;
-const int32_t MAX_CHARS_PER_LINE = 72;
-UChar c;
-BreakIterator \*bi = BreakIterator::createLineInstance(locale, status);
-if (U_FAILURE(status)) {
-delete bi;
-return 0;
+                   const Locale& locale,
+                   int32_t lineStarts[],
+                   int32_t trailingwhitespace[],
+                   int32_t maxLines,
+                   UErrorCode &status) {
+
+    int32_t        numLines = 0;
+    int32_t        p, q;
+    const int32_t MAX_CHARS_PER_LINE = 72;
+    UChar          c;
+
+    BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
+    if (U_FAILURE(status)) {
+        delete bi;
+        return 0;
+    }
+    bi->setText(s);
+
+
+    p = 0;
+    while (p < s.length()) {
+        // jump ahead in the paragraph by the maximum number of
+        // characters that will fit
+        q = p + MAX_CHARS_PER_LINE;
+
+        // if this puts us on a white space character, a control character
+        // (which includes newlines), or a non-spacing mark, seek forward
+        // and stop on the next character that is not any of these things
+        // since none of these characters will be visible at the end of a
+        // line, we can ignore them for the purposes of figuring out how
+        // many characters will fit on the line)
+        if (q < s.length()) {
+            c = s[q];
+            while (q < s.length()
+                   && (u_isspace(c)
+                       || u_charType(c) == U_CONTROL_CHAR 
+                       || u_charType(c) == U_NON_SPACING_MARK
+            )) {
+                ++q;
+                c = s[q];
+            }
+        }
+
+        // then locate the last legal line-break decision at or before
+        // the current position ("at or before" is what causes the "+ 1")
+        q = bi->preceding(q + 1);
+
+        // if this causes us to wind back to where we started, then the
+        // line has no legal line-break positions. Break the line at
+        // the maximum number of characters
+        if (q == p) {
+            p += MAX_CHARS_PER_LINE;
+            lineStarts[numLines] = p;
+            trailingwhitespace[numLines] = 0;
+            ++numLines;
+        }
+        // otherwise, we got a good line-break position. Record the start of this
+        // line (p) and then seek back from the end of this line (q) until you find
+        // a non-white space character (same criteria as above) and
+        // record the number of white space characters at the end of the
+        // line in the other results array
+        else {
+            lineStarts[numLines] = p;
+            int32_t nextLineStart = q;
+
+            for (q--; q > p; q--) {
+                c = s[q];
+                if (!(u_isspace(c)
+                       || u_charType(c) == U_CONTROL_CHAR 
+                       || u_charType(c) == U_NON_SPACING_MARK)) {
+                    break;
+                }
+            } 
+            trailingwhitespace[numLines] = nextLineStart - q -1;
+            p = nextLineStart;
+           ++numLines;
+        }
+        if (numLines >= maxLines) {
+            break;
+        }
+    }
+    delete bi;
+    return numLines;
 }
-bi->setText(s);
-p = 0;
-while (p < s.length()) {
-// jump ahead in the paragraph by the maximum number of
-// characters that will fit
-q = p + MAX_CHARS_PER_LINE;
-// if this puts us on a white space character, a control character
-// (which includes newlines), or a non-spacing mark, seek forward
-// and stop on the next character that is not any of these things
-// since none of these characters will be visible at the end of a
-// line, we can ignore them for the purposes of figuring out how
-// many characters will fit on the line)
-if (q < s.length()) {
-c = s\[q\];
-while (q < s.length()
-&& (u_isspace(c)
-|| u_charType(c) == U_CONTROL_CHAR
-|| u_charType(c) == U_NON_SPACING_MARK
-)) {
-++q;
-c = s\[q\];
-}
-}
-// then locate the last legal line-break decision at or before
-// the current position ("at or before" is what causes the "+ 1")
-q = bi->preceding(q + 1);
-// if this causes us to wind back to where we started, then the
-// line has no legal line-break positions. Break the line at
-// the maximum number of characters
-if (q == p) {
-p += MAX_CHARS_PER_LINE;
-lineStarts\[numLines\] = p;
-trailingwhitespace\[numLines\] = 0;
-++numLines;
-}
-// otherwise, we got a good line-break position. Record the start of this
-// line (p) and then seek back from the end of this line (q) until you find
-// a non-white space character (same criteria as above) and
-// record the number of white space characters at the end of the
-// line in the other results array
-else {
-lineStarts\[numLines\] = p;
-int32_t nextLineStart = q;
-for (q--; q > p; q--) {
-c = s\[q\];
-if (!(u_isspace(c)
-|| u_charType(c) == U_CONTROL_CHAR
-|| u_charType(c) == U_NON_SPACING_MARK)) {
-break;
-}
-}
-trailingwhitespace\[numLines\] = nextLineStart - q -1;
-p = nextLineStart;
-++numLines;
-}
-if (numLines >= maxLines) {
-break;
-}
-}
-delete bi;
-return numLines;
-}
+```
 
 Most text editors would not break lines based on the number of characters on a
 line. Even with a monospaced font, there are still many Unicode characters that
