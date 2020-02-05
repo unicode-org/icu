@@ -2,7 +2,12 @@
 
 ## Introduction
 
-ICU locates boundary positions within text by means of rules, which are a form of regular expressions. The form of the rules is similar, but not identical, to the boundary rules from the Unicode specifications \[[UAX-14](https://unicode.org/reports/tr14/), [UAX-29](https://unicode.org/reports/tr29/)\], and there is a reasonably close correspondence between the two.
+ICU locates boundary positions within text by means of rules, which are a form
+of regular expressions. The form of the rules is similar, but not identical,
+to the boundary rules from the Unicode specifications
+[[UAX-14](https://unicode.org/reports/tr14/),
+[UAX-29](https://unicode.org/reports/tr29/)], and there is a reasonably close
+correspondence between the two.
 
 Taken as a set, the ICU rules describe how to move forward to the next boundary,
 starting from a known boundary.
@@ -91,11 +96,10 @@ In the example below, matching "`hello_world`",
 
 * '`2`' shows matches of the second rule, `$word_char $word_joiner $word_char`
 
-```
-hello_world
-11111 11111
-    222
-```
+    hello_world
+    11111 11111
+        222
+
 There is an overlap of the matched regions, which causes the chaining mechanism
 to join them into a single overall match.
 
@@ -161,7 +165,7 @@ Note: future versions of ICU may loosen the restrictions on explicit break
 rules. The behavior of rules with missing or overlapping contexts is subject to
 change.
 
-**Chaining Control**
+#### Chaining Control
 
 Chaining into a rule can be dis-allowed by beginning that rule with a '`^`'. Rules
 so marked can begin a match after a preceding boundary or at the start of text,
@@ -211,7 +215,7 @@ example
 
     pre-context / post-context {1234};
 
-**Word Dictionaries**
+### Word Dictionaries
 
 For some languages that don't normally use spaces between words, break iterators
 are able to supplement the rules with dictionary based breaking. Some languages,
@@ -221,10 +225,10 @@ breaking.
 
 To enable dictionary use,
 
-1.  The break rules must select, as unbroken chunks, ranges of text to be passed
-    off to the word dictionary for further subdivision.
-2.  The break rules must define a character class named `$dictionary` that
-    contains the characters (letters) to be handled by the dictionary.
+1. The break rules must select, as unbroken chunks, ranges of text to be passed
+   off to the word dictionary for further subdivision.
+2. The break rules must define a character class named `$dictionary` that
+   contains the characters (letters) to be handled by the dictionary.
 
 The dictionary implementation, on receiving a range of text, will map it to a
 specific dictionary based on script, and then delegate to that dictionary for
@@ -237,14 +241,14 @@ rules](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/brkitr/r
     #   limited to LineBreak=Complex_Context (SA).
     $dictionary = [$SA];
 
-**Rule Options**
+## Rule Options
 
 | Option          | Description |
 | --------------- | ----------- |
 | `!!chain`       |  Enable rule chaining. Default is no chaining. |
 | `!!forward`     |  The rules that follow are for forward iteration. Forward rules are now the only type of rules needed or used.   |
 
-**Deprecated Rule Options**
+### Deprecated Rule Options
 
 | Deprecated Option          | Description |
 | --------------- | ----------- |
@@ -264,57 +268,57 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 | control | (`!!forward` \| `!!reverse` \| `!!safe_forward` \| `!!safe_reverse` \| `!!chain`) `;`
 | assignment | variable `=` expr `;` | 5 |
 | rule | `^`? expr (`{`number`}`)? `;` | 8,9 |
-| number | [0-9]+ | 1 | 
+| number | [0-9]+ | 1 |
 | break-point | `/` | 10 |
 | expr | expr-q \| expr `|` expr \| expr expr | 3 |
 | expr-qterm | term `*` \| term `?` \| term `+` |
 | term | rule-char \| unicode-set \| variable \| quoted-sequence \| `(` expr `)` \| break-point |
 | rule-special | *any printing ascii character except letters or numbers* \| white-space |
 | rule-char | *any non-escaped character that is not rule-special* \| `.` \| *any escaped character except* `\p` *or* `\P` |
-| variable | `$` name-start-char name-char* | 7 | 
+| variable | `$` name-start-char name-char* | 7 |
 | name-start-char | `_` \| \p{L} |
 | name-char | name-start-char \| \\p{N} |
 | quoted-sequence | `'''` *(any char except single quote or line terminator or two adjacent single quotes)*+ `'''` |
 | escaped-char | *See “Character Quoting and Escaping” in the [UnicodeSet](../strings/unicodeset.md) chapter* |
-| unicode-set | See [UnicodeSet](../strings/unicodeset.md) | 4 | 
+| unicode-set | See [UnicodeSet](../strings/unicodeset.md) | 4 |
 | comment | unescaped `#` *(any char except new-line)** new-line | 2 |
 | s | unescaped \p{Z}, tab, LF, FF, CR, NEL | 6 |
 | new-line | LF, CR, NEL | 2 |
 
-### Notes:
+### Rule Syntax Notes
 
-1.  The number associated with a rule that actually determined a break position
-    is available to the application after the break has been returned. These
-    numbers are *not* Perl regular expression repeat counts.
+1. The number associated with a rule that actually determined a break position
+   is available to the application after the break has been returned. These
+   numbers are *not* Perl regular expression repeat counts.
 
-2.  Comments are recognized and removed separately from otherwise parsing the
-    rules. They may appear wherever a space would be allowed (and ignored.)
+2. Comments are recognized and removed separately from otherwise parsing the
+   rules. They may appear wherever a space would be allowed (and ignored.)
 
-3.  The implicit concatenation of adjacent terms has higher precedence than the
-    `|` operation. "`ab|cd`" is interpreted as "`(ab)|(cd)`", not as "`a(b|c)d`" or
-    "`(((ab)|c)d)`"
+3. The implicit concatenation of adjacent terms has higher precedence than the
+   `|` operation. "`ab|cd`" is interpreted as "`(ab)|(cd)`", not as "`a(b|c)d`" or
+   "`(((ab)|c)d)`"
 
-4.  The syntax for [unicode-set](../strings/unicodeset.md) is defined (and parsed) by the `UnicodeSet` class.
-    It is not repeated here.
+4. The syntax for [unicode-set](../strings/unicodeset.md) is defined (and parsed) by the `UnicodeSet` class.
+   It is not repeated here.
 
-5.  For `$`variables that will be referenced from inside of a `UnicodeSet`, the
-    definition must consist only of a Unicode Set. For example, when variable `$a`
-    is used in a rule like `[$a$b$c]`, then this definition of `$a` is ok: 
-    “`$a=[:Lu:];`” while this one “`$a=abcd;`” would cause an error when `$a` was
-    used.
+5. For `$`variables that will be referenced from inside of a `UnicodeSet`, the
+   definition must consist only of a Unicode Set. For example, when variable `$a`
+   is used in a rule like `[$a$b$c]`, then this definition of `$a` is ok:
+   “`$a=[:Lu:];`” while this one “`$a=abcd;`” would cause an error when `$a` was
+   used.
 
-6.  Spaces are allowed nearly anywhere, and are not significant unless escaped.
-    Exceptions to this are noted.
+6. Spaces are allowed nearly anywhere, and are not significant unless escaped.
+   Exceptions to this are noted.
 
-7.  No spaces are allowed within a variable name. The variable name `$dictionary`
-    is special. If defined, it must be a Unicode Set, the characters of which
-    will trigger the use of word dictionary based boundaries.
+7. No spaces are allowed within a variable name. The variable name `$dictionary`
+   is special. If defined, it must be a Unicode Set, the characters of which
+   will trigger the use of word dictionary based boundaries.
 
-8.  A leading `^` on a rule prevents chaining into that rule. It can only match
-    immediately after a preceding boundary, or at the start of text.
+8. A leading `^` on a rule prevents chaining into that rule. It can only match
+   immediately after a preceding boundary, or at the start of text.
 
-9.  `{`nnn`}` appearing at the end of a rule is a Rule Status number, not a repeat
-    count as it would be with conventional regular expression syntax.
+9. `{`nnn`}` appearing at the end of a rule is a Rule Status number, not a repeat
+   count as it would be with conventional regular expression syntax.
 
 10. A `/` in a rule specifies a hard break point. If the rule matches, a
     boundary will be forced at the position of the `/` within the match.
@@ -331,26 +335,30 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 
 ## Planned Changes and Removed or Deprecated Rule Features
 
-1.  Reverse rules could formerly be indicated by beginning them with an
-    exclamation `!`. This syntax is deprecated, and will be removed from a
-    future version of ICU.
-2.  `!!LBCMNoChain` was a global option that specified that characters with the
-    line break property of "Combining Character" would not participate in rule
-    chaining. This option was always considered internal, is deprecated and will
-    be removed from a future version of ICU.
-3.  Naked rule characters. Plain text, in the context of a rule, is treated as
-    literal text to be matched, much like normal regular expressions. This turns
-    out to be very error prone, has been the source of bugs in released versions
-    of ICU, and is not useful in implementing normal text boundary rules. A
-    future version will reject literal text that is not escaped.
-4.  Exact reverse rules and safe forward rules: planned changes to the break
-    engine implementation will remove the need for exact reverse rules and safe
-    forward rules.
-5.  `{bof}` and `{eof}`, appearing within `[`sets`]`, match the beginning or ending of
-    the input text, respectively. This is an internal (not documented) feature
-    that will probably be removed in a future version of ICU. They are currently
-    used by the standard rules for word, line and sentence breaking. An
-    alternative is probably needed. The existing implementation is incomplete.
+1. Reverse rules could formerly be indicated by beginning them with an
+   exclamation `!`. This syntax is deprecated, and will be removed from a
+   future version of ICU.
+
+2. `!!LBCMNoChain` was a global option that specified that characters with the
+   line break property of "Combining Character" would not participate in rule
+   chaining. This option was always considered internal, is deprecated and will
+   be removed from a future version of ICU.
+
+3. Naked rule characters. Plain text, in the context of a rule, is treated as
+   literal text to be matched, much like normal regular expressions. This turns
+   out to be very error prone, has been the source of bugs in released versions
+   of ICU, and is not useful in implementing normal text boundary rules. A
+   future version will reject literal text that is not escaped.
+
+4. Exact reverse rules and safe forward rules: planned changes to the break
+   engine implementation will remove the need for exact reverse rules and safe
+   forward rules.
+
+5. `{bof}` and `{eof}`, appearing within `[`sets`]`, match the beginning or ending of
+   the input text, respectively. This is an internal (not documented) feature
+   that will probably be removed in a future version of ICU. They are currently
+   used by the standard rules for word, line and sentence breaking. An
+   alternative is probably needed. The existing implementation is incomplete.
 
 ## Additional Sample Code
 
