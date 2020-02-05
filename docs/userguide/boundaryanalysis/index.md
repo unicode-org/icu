@@ -5,24 +5,24 @@
 Text boundary analysis is the process of locating linguistic boundaries while
 formatting and handling text. Examples of this process include:
 
-1.  Locating appropriate points to word-wrap text to fit within specific margins
-    while displaying or printing.
+1. Locating appropriate points to word-wrap text to fit within specific margins
+   while displaying or printing.
 
-2.  Locating the beginning of a word that the user has selected.
+2. Locating the beginning of a word that the user has selected.
 
-3.  Counting characters, words, sentences, or paragraphs.
+3. Counting characters, words, sentences, or paragraphs.
 
-4.  Determining how far to move the text cursor when the user hits an arrow key
+4. Determining how far to move the text cursor when the user hits an arrow key
     (Some characters require more than one position in the text store and some
     characters in the text store do not display at all).
 
-5.  Making a list of the unique words in a document.
+5. Making a list of the unique words in a document.
 
-6.  Figuring out if a given range of text contains only whole words.
+6. Figuring out if a given range of text contains only whole words.
 
-7.  Capitalizing the first letter of each word.
+7. Capitalizing the first letter of each word.
 
-8.  Locating a particular unit of the text (For example, finding the third word
+8. Locating a particular unit of the text (For example, finding the third word
     in the document).
 
 The `BreakIterator` classes were designed to support these kinds of tasks. The
@@ -36,13 +36,13 @@ find the boundary which is before or after a particular location.
 
 ICU `BreakIterator`s can be used to locate the following kinds of text boundaries:
 
-1.  Character Boundary
+1. Character Boundary
 
-2.  Word Boundary
+2. Word Boundary
 
-3.  Line-break Boundary
+3. Line-break Boundary
 
-4.  Sentence Boundary
+4. Sentence Boundary
 
 Each type of boundary is found in accordance with the rules specified by Unicode
 Standard Annex #29, *Unicode Text Segmentation*
@@ -134,13 +134,13 @@ startup, before opening services by locale ID.
 In the general-usage-model, applications will use the following basic steps to
 analyze a piece of text for boundaries:
 
-1.  Create a `BreakIterator` with the desired behavior
+1. Create a `BreakIterator` with the desired behavior
 
-2.  Use the `setText()` method to set the iterator to analyze a particular piece
-    of text.
+2. Use the `setText()` method to set the iterator to analyze a particular piece
+   of text.
 
-3.  Locate the desired boundaries using the appropriate combination of `first()`,
-    `last()`, `next()`, `previous()`, `preceding()`, and `following()` methods.
+3. Locate the desired boundaries using the appropriate combination of `first()`,
+   `last()`, `next()`, `previous()`, `preceding()`, and `following()` methods.
 
 The `setText()` method can be called more than once, allowing reuse of a
 BreakIterator on new pieces of text. Because the creation of a `BreakIterator` can
@@ -234,7 +234,7 @@ boundary rules.
 
 ## BreakIterator Boundary Analysis Examples
 
-### Print out all the word-boundary positions in a UnicodeString:
+### Print out all the word-boundary positions in a UnicodeString
 
 **In C++:**
 
@@ -391,7 +391,7 @@ characters, words containing ideographic characters, and non-word characters,
 such as spaces or punctuation. The sample uses the break status value to filter
 out, and not count, boundaries associated with non-word characters.
 
-### Word-wrap a document (C++ only):
+### Word-wrap a document (C++ only)
 
 The sample function below wraps a paragraph so that each line is less than or
 equal to 72 characters. The function fills in an array passed in by the caller
@@ -439,7 +439,7 @@ int32_t wrapParagraph(const UnicodeString& s,
             c = s[q];
             while (q < s.length()
                    && (u_isspace(c)
-                       || u_charType(c) == U_CONTROL_CHAR 
+                       || u_charType(c) == U_CONTROL_CHAR
                        || u_charType(c) == U_NON_SPACING_MARK
             )) {
                 ++q;
@@ -472,11 +472,11 @@ int32_t wrapParagraph(const UnicodeString& s,
             for (q--; q > p; q--) {
                 c = s[q];
                 if (!(u_isspace(c)
-                       || u_charType(c) == U_CONTROL_CHAR 
+                       || u_charType(c) == U_CONTROL_CHAR
                        || u_charType(c) == U_NON_SPACING_MARK)) {
                     break;
                 }
-            } 
+            }
             trailingwhitespace[numLines] = nextLineStart - q -1;
             p = nextLineStart;
            ++numLines;
