@@ -139,6 +139,7 @@ struct entry {
 } // namespace temporarily
 
 // Data Skeleton.
+
 enum Constants {
     CONSTANT_FT2M, // ft2m stands for foot to meter.
     CONSTANT_PI,

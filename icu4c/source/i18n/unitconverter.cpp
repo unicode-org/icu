@@ -20,15 +20,11 @@ namespace {
 
 using number::impl::DecNum;
 
-//////////////////////////
-/// BEGIN DATA LOADING ///
-//////////////////////////
-
 /* Represents a conversion factor */
 struct Factor {
-    DecNum factorNum;
-    DecNum factorDen;
-    DecNum offset;
+    number::impl::DecNum factorNum;
+    number::impl::DecNum factorDen;
+    number::impl::DecNum offset;
 
     int8_t constants[CONSTANTS_COUNT] = {};
 
@@ -37,7 +33,26 @@ struct Factor {
         factorDen.setTo(1.0, status);
         offset.setTo(0.0, status);
     }
+
+    void multiplyBy(const Factor &rhs, UErrorCode &status) {
+        factorNum.multiplyBy(rhs.factorNum, status);
+        factorDen.multiplyBy(rhs.factorDen, status);
+        for (int i = 0; i < CONSTANTS_COUNT; i++)
+            constants[i] += rhs.constants[i];
+        offset.add(rhs.offset, status); // TODO(younies): fix this.
+    }
+
+    void divideBy(const Factor &rhs, UErrorCode &status) {
+        factorNum.divideBy(rhs.factorNum, status);
+        factorDen.divideBy(rhs.factorDen, status);
+        for (int i = 0; i < CONSTANTS_COUNT; i++)
+            constants[i] -= rhs.constants[i]; // TODO(younies): fix this
+    }
 };
+
+//////////////////////////
+/// BEGIN DATA LOADING ///
+//////////////////////////
 
 class UnitConversionRatesSink : public ResourceSink {
   public:
