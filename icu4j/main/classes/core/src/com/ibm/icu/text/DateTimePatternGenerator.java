@@ -2068,6 +2068,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         //      if (SHOW_DISTANCE) System.out.println("Searching for: " + source.pattern
         //      + ", mask: " + showMask(includeMask));
         int bestDistance = Integer.MAX_VALUE;
+        int bestMissingFieldMask = Integer.MIN_VALUE;
         PatternWithMatcher bestPatternWithMatcher = new PatternWithMatcher("", null);
         DistanceInfo tempInfo = new DistanceInfo();
         for (DateTimeMatcher trial : skeleton2pattern.keySet()) {
@@ -2077,8 +2078,16 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             int distance = source.getDistance(trial, includeMask, tempInfo);
             //          if (SHOW_DISTANCE) System.out.println("\tDistance: " + trial.pattern + ":\t"
             //          + distance + ",\tmissing fields: " + tempInfo);
-            if (distance < bestDistance) {
+
+            // Because we iterate over a map the order is undefined. Can change between implementations,
+            // versions, and will very likely be different between Java and C/C++.
+            // So if we have patterns with the same distance we also look at the missingFieldMask,
+            // and we favour the smallest one. Because the field is a bitmask this technically means we
+            // favour differences in the "least significant fields". For example we prefer the one with differences
+            // in seconds field vs one with difference in the hours field.
+            if (distance < bestDistance || (distance == bestDistance && bestMissingFieldMask < tempInfo.missingFieldMask)) {
                 bestDistance = distance;
+                bestMissingFieldMask = tempInfo.missingFieldMask;
                 PatternWithSkeletonFlag patternWithSkelFlag = skeleton2pattern.get(trial);
                 bestPatternWithMatcher.pattern = patternWithSkelFlag.pattern;
                 // If the best raw match had a specified skeleton then return it too.
@@ -2702,8 +2711,15 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 type[field] = subField;
             }
 
-            // #20739, we have a skeleton with milliseconde, but no seconds
-            if (!original.isFieldEmpty(FRACTIONAL_SECOND) && original.isFieldEmpty(SECOND)) {
+            // #20739, we have a skeleton with minutes and milliseconds, but no seconds
+            //
+            // Theoretically we would need to check and fix all fields with "gaps":
+            // for example year-day (no month), month-hour (no day), and so on, All the possible field combinations.
+            // Plus some smartness: year + hour => should we add month, or add day-of-year?
+            // What about month + day-of-week, or month + am/pm indicator.
+            // I think beyond a certain point we should not try to fix bad developer input and try guessing what they mean.
+            // Garbage in, garbage out.
+            if (!original.isFieldEmpty(MINUTE) && !original.isFieldEmpty(FRACTIONAL_SECOND) && original.isFieldEmpty(SECOND)) {
                 // Force the use of seconds
                 for (int i = 0; i < types.length; ++i) {
                     int[] row = types[i];
