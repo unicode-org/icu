@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "charstr.h"
+#include "measunit_impl.h"
 #include "number_decnum.h"
 #include "resource.h"
 #include "unicode/stringpiece.h"
@@ -22,9 +23,12 @@ using number::impl::DecNum;
 
 /* Represents a conversion factor */
 struct Factor {
+    StringPiece source;
+    StringPiece target;
     number::impl::DecNum factorNum;
     number::impl::DecNum factorDen;
     number::impl::DecNum offset;
+    bool reciprocal = false;
 
     int8_t constants[CONSTANTS_COUNT] = {};
 
@@ -47,6 +51,54 @@ struct Factor {
         factorDen.divideBy(rhs.factorDen, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] -= rhs.constants[i]; // TODO(younies): fix this
+    }
+
+    // apply the power to the factor.
+    void power(int32_t power, UErrorCode &status) {
+        // multiply all the constant by the power.
+        for (int i = 0; i < CONSTANTS_COUNT; i++)
+            constants[i] *= power;
+
+        DecNum originNum(factorNum, status);
+        DecNum originDen(factorDen, status);
+
+        factorNum.setTo(1, status);
+        factorDen.setTo(1, status);
+
+        bool positive = power >= 0;
+        int32_t absPower = std::abs(power);
+
+        for (int i = 0; i < absPower; i++) {
+            factorNum.multiplyBy(originNum, status);
+            factorDen.multiplyBy(originNum, status);
+        }
+
+        if (!positive) {
+            DecNum temp(factorNum, status);
+            factorNum.setTo(factorDen, status);
+            factorDen.setTo(temp, status);
+        }
+    }
+
+    // Apply SI prefix to the `Factor`
+    void applySiPrefix(UMeasureSIPrefix siPrefix, UErrorCode &status) {
+        DecNum e;
+        e.setTo(1, status);
+        DecNum ten;
+        ten.setTo(10, status);
+
+        bool positive = siPrefix > 0;
+        int32_t absSi = std::abs(siPrefix);
+
+        for (int i = 0; i < absSi; i++) {
+            e.multiplyBy(ten, status);
+        }
+
+        if (positive) {
+            factorNum.multiplyBy(e, status);
+        } else {
+            factorDen.multiplyBy(e, status);
+        }
     }
 };
 
@@ -180,19 +232,103 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
     }
 }
 
+// Load factor for a single source
+void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
+    factor.source = source;
+    for (const auto &entry : temporarily::dataEntries) {
+        if (entry.source == factor.source) {
+            factor.target = entry.target;
+            extractFactor(factor, entry.factor, status);
+            factor.offset.setTo(entry.offset, status);
+            // TODO(younies): handle reciprocal by flip the target and the factor.
+            factor.reciprocal = factor.reciprocal;
+        }
+    }
+
+    status = UErrorCode::U_ARGUMENT_TYPE_MISMATCH;
+}
+
+// Load Factor for compound source
+// TODO(younies): handle `one-per-second` case
+void loadCompoundFactor(Factor &factor, StringPiece source, UErrorCode &status) {
+    icu::MeasureUnit compoundSourceUnit = icu::MeasureUnit::forIdentifier(source, status);
+    auto singleUnits = compoundSourceUnit.splitToSingleUnits(status);
+    for (int i = 0; i < singleUnits.length(); i++) {
+        Factor singleFactor(status);
+        auto singleUnit = TempSingleUnit::forMeasureUnit(singleUnits[i], status);
+
+        loadSingleFactor(singleFactor, singleUnit.identifier, status);
+        singleFactor.power(singleUnit.dimensionality, status);
+        singleFactor.applySiPrefix(singleUnit.siPrefix, status);
+        // TODO(younies): handle `one-per-second` case
+
+        factor.multiplyBy(singleFactor, status);
+    }
+}
+
+void substituteSingleConstant(Factor &factor, int32_t constValue,
+                              const DecNum &constSub /* constant actual value, e.g. G= 9.88888 */,
+                              UErrorCode &status) {
+    bool positive = constValue >= 0;
+    bool absConstValue = std::abs(constValue);
+
+    for (int i = 0; i < absConstValue; i++) {
+        if (positive) {
+            factor.factorNum.multiplyBy(constSub, status);
+        } else {
+            factor.factorDen.multiplyBy(constSub, status);
+        }
+    }
+}
+
+void substituteConstants(Factor &factor, UErrorCode &status) {
+
+    DecNum constSubs[CONSTANTS_COUNT];
+
+    constSubs[CONSTANT_FT2M].setTo(0.3048, status);
+    constSubs[CONSTANT_PI].setTo(3.142, status);
+    constSubs[CONSTANT_GRAVITY].setTo(9.80665, status);
+    constSubs[CONSTANT_G].setTo("0.0000000000667408", status);
+    constSubs[CONSTANT_CUP2M3].setTo("0.000236588", status);
+    constSubs[CONSTANT_LB2KG].setTo("0.453592", status);
+
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        substituteSingleConstant(factor, factor.constants[i], constSubs[i], status);
+    }
+}
+
 /**
- *  Extract conversion factor from `source` to `target`
+ *  Extract conversion rate from `source` to `target`
  */
-void loadConversionRate(Factor &conversionFactor, StringPiece source, StringPiece target,
+void loadConversionRate(ConversionRate &conversionRate, StringPiece source, StringPiece target,
                         UErrorCode &status) {
+
     LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "units", &status));
     CharString key;
     key.append("convertUnit/", status);
     key.append(source, status);
 
-    UnitConversionRatesSink sink(&conversionFactor);
+    Factor finalFactor(status);
+    Factor SourcetoMiddle(status);
+    Factor TargettoMiddle(status);
 
-    ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
+    loadCompoundFactor(SourcetoMiddle, source, status);
+    loadCompoundFactor(TargettoMiddle, target, status);
+
+    finalFactor.multiplyBy(SourcetoMiddle, status);
+    finalFactor.divideBy(SourcetoMiddle, status);
+
+    substituteConstants(finalFactor, status);
+
+    conversionRate.source = source;
+    conversionRate.target = target;
+    conversionRate.factorNum.setTo(finalFactor.factorNum, status);
+    conversionRate.factorDen.setTo(finalFactor.factorDen, status);
+    conversionRate.offset.setTo(finalFactor.offset, status);
+
+    // TODO(younies): use the database.
+    // UnitConversionRatesSink sink(&conversionFactor);
+    //  ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
 }
 
 } // namespace
@@ -208,12 +344,8 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode 
     //     return;
     // }
 
-    // Extract the single units from source and target.
-    auto sourceUnits = source.splitToSingleUnits(status);
-    auto targetUnits = target.splitToSingleUnits(status);
-    if (U_FAILURE(status)) return;
 
-    // TODO(younies): implement.
+    loadConversionRate(conversion_rate_, source.getIdentifier(), target.getIdentifier(), status);
 }
 
 void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UErrorCode status) {

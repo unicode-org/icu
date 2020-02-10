@@ -14,9 +14,41 @@
 #include "unicode/stringpiece.h"
 
 U_NAMESPACE_BEGIN
+// Data Skeleton.
+
+enum Constants {
+    CONSTANT_FT2M, // ft2m stands for foot to meter.
+    CONSTANT_PI,
+    CONSTANT_GRAVITY,
+    CONSTANT_G,      
+    CONSTANT_CUP2M3, // CUP2M3 stands for cup to cubic meter.
+    CONSTANT_LB2KG,
+
+    // Must be the last element.
+    CONSTANTS_COUNT
+};
+
+/**
+ * Represents the conversion rate between `source` and `destincation`.
+ */
+struct ConversionRate {
+    StringPiece source;
+    StringPiece target;
+    number::impl::DecNum factorNum;
+    number::impl::DecNum factorDen;
+    number::impl::DecNum offset;
+    bool reciprocal;
+
+    ConversionRate(UErrorCode &status) {
+        factorNum.setTo(1.0, status);
+        factorDen.setTo(1.0, status);
+        offset.setTo(0.0, status);
+        reciprocal = false;
+    }
+};
 
 // The data in this namespace are temporary, it is just for testing
-namespace temporarily {
+namespace temporarily {    
 
 struct entry {
     StringPiece source;
@@ -138,36 +170,7 @@ struct entry {
 
 } // namespace temporarily
 
-// Data Skeleton.
 
-enum Constants {
-    CONSTANT_FT2M, // ft2m stands for foot to meter.
-    CONSTANT_PI,
-    CONSTANT_G,      // G stands for Gravity.
-    CONSTANT_CUP2M3, // CUP2M3 stands for cup to cubic meter.
-
-    // Must be the last element.
-    CONSTANTS_COUNT
-};
-
-/**
- * Represents the conversion rate between `source` and `destincation`.
- */
-struct ConversionRate {
-    StringPiece source;
-    StringPiece target;
-    number::impl::DecNum factorNum;
-    number::impl::DecNum factorDen;
-    number::impl::DecNum offset;
-    bool reciprocal;
-
-    ConversionRate(UErrorCode &status) {
-        factorNum.setTo(1.0, status);
-        factorDen.setTo(1.0, status);
-        offset.setTo(0.0, status);
-        reciprocal = false;
-    }
-};
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
