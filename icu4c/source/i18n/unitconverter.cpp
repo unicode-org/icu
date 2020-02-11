@@ -87,7 +87,7 @@ struct Factor {
         factorNum.setTo(factorDen, status);
         factorDen.setTo(temp, status);
 
-        for (int i = 0; i< CONSTANTS_COUNT ; i++) {
+        for (int i = 0; i < CONSTANTS_COUNT; i++) {
             constants[i] *= -1;
         }
     }
@@ -268,7 +268,6 @@ void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
             if (reciprocal) {
                 factor.flip(status);
             }
-
 
             return;
         }
