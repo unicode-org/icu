@@ -80,6 +80,18 @@ struct Factor {
         }
     }
 
+    // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
+    void flip(UErrorCode &status) {
+        DecNum temp;
+        temp.setTo(factorNum, status);
+        factorNum.setTo(factorDen, status);
+        factorDen.setTo(temp, status);
+
+        for (int i = 0; i< CONSTANTS_COUNT ; i++) {
+            constants[i] *= -1;
+        }
+    }
+
     // Apply SI prefix to the `Factor`
     void applySiPrefix(UMeasureSIPrefix siPrefix, UErrorCode &status) {
         DecNum e;
@@ -239,13 +251,26 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
 // Load factor for a single source
 void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
     factor.source = source;
+    bool reciprocal = false;
+
+    // TODO(younies): illustrate this step.
+    if (source.substr(0, 7) == "one-per") {
+        reciprocal = true;
+        source = source.substr(8); // e.g. one-per-second --> second
+    }
     for (const auto &entry : temporarily::dataEntries) {
         if (entry.source == factor.source) {
             factor.target = entry.target;
             extractFactor(factor, entry.factor, status);
             factor.offset.setTo(entry.offset, status);
-            // TODO(younies): handle reciprocal by flip the target and the factor.
             factor.reciprocal = factor.reciprocal;
+
+            if (reciprocal) {
+                factor.flip(status);
+            }
+
+
+            return;
         }
     }
 
