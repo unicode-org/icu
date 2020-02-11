@@ -239,7 +239,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         {"fr_CA", "fr"},
         {"fr", "fr_CA"},
         {"es", "fr", "en_US"},
-        {"zh_CN", "zh_Hans", "zh_Hans_CN"},
+        {"zh_Hans", "zh_Hans_CN"},
         {"en_US_123"},
         {"es_US", "es"},
         {"de_DE", "es", "fr_FR"},
@@ -261,7 +261,7 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         {"fr_CA", "fr"},
         {"fr_CA", "fr"},
         {"es", "fr", "en_US", "en"},
-        {"zh_Hans_CN", "zh_CN", "zh_Hans", "zh"},
+        {"zh_Hans_CN", "zh_Hans", "zh"},
         {"en_US_123", "en_US", "en"},
         {"es_US", "es"},
         {"de_DE", "de", "es", "fr_FR", "fr"},
@@ -347,10 +347,14 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             gp.reset();
             gp.setLocales(acceptLanguage);
 
-            List resultLocales = gp.getLocales();
+            List<ULocale> resultLocales = gp.getLocales();
             if (resultLocales.size() != RESULTS_LOCALEIDS[i].length) {
+                StringBuilder res = new StringBuilder();
+                for (ULocale l : resultLocales) {
+                  res.append(l.toString()).append(",");
+                }
                 errln("FAIL: Number of locales mismatch - GP:" + resultLocales.size()
-                        + " Expected:" + RESULTS_LOCALEIDS[i].length);
+                        + " Expected:" + RESULTS_LOCALEIDS[i].length + " index: " + i + " " + res.toString());
             } else {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
