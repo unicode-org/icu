@@ -53,14 +53,20 @@ class U_I18N_API DecNum : public UMemory {
 
     void normalize();
 
+    void multiplyBy(double rhs, UErrorCode& status);
     void multiplyBy(const DecNum& rhs, UErrorCode& status);
 
+    void divideBy(double rhs, UErrorCode& status);
     void divideBy(const DecNum& rhs, UErrorCode& status);
 
+    void add(double rhs, UErrorCode& status);
     void add(const DecNum& rhs, UErrorCode& status);
 
+    void subtract(double rhs, UErrorCode& status);
     void subtract(const DecNum& rhs, UErrorCode& status);
 
+    void power(int32_t power);
+    
     bool isNegative() const;
 
     bool isZero() const;
@@ -70,6 +76,8 @@ class U_I18N_API DecNum : public UMemory {
     bool greaterThan(const DecNum& rhs, UErrorCode& status) const;
 
     bool equalTo(const DecNum& rhs, UErrorCode& status) const;
+
+    StringPiece toString(UErrorCode& status) const;
 
     void toString(ByteSink& output, UErrorCode& status) const;
 

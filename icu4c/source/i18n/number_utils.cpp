@@ -254,11 +254,23 @@ void DecNum::normalize() {
     uprv_decNumberReduce(fData, fData, &fContext);
 }
 
+void DecNum::multiplyBy(double rhs, UErrorCode& status){
+    DecNum rhsDecNum;
+    rhsDecNum.setTo(rhs, status);
+    multiplyBy(rhsDecNum, status);
+}
+
 void DecNum::multiplyBy(const DecNum& rhs, UErrorCode& status) {
     uprv_decNumberMultiply(fData, fData, rhs.fData, &fContext);
     if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
+}
+
+void DecNum::divideBy(double rhs, UErrorCode& status) {
+    DecNum rhsDecNum;
+    rhsDecNum.setTo(rhs, status);
+    divideBy(rhsDecNum, status);
 }
 
 void DecNum::divideBy(const DecNum& rhs, UErrorCode& status) {
@@ -270,11 +282,23 @@ void DecNum::divideBy(const DecNum& rhs, UErrorCode& status) {
     }
 }
 
+void DecNum::add(double rhs, UErrorCode& status) {
+    DecNum rhsDecNum;
+    rhsDecNum.setTo(rhs, status);
+    add(rhsDecNum, status);
+}
+
 void DecNum::add(const DecNum& rhs, UErrorCode& status) {
     uprv_decNumberAdd_66(fData, fData, rhs.fData, &fContext);
     if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
+}
+
+void DecNum::subtract(double rhs, UErrorCode& status) {
+    DecNum rhsDecNum;
+    rhsDecNum.setTo(rhs, status);
+    subtract(rhsDecNum, status);
 }
 
 void DecNum::subtract(const DecNum& rhs, UErrorCode& status) {
@@ -308,6 +332,14 @@ bool DecNum::equalTo(const DecNum& rhs, UErrorCode& status) const {
    // return uprv_decNumberCompare_66(fData, fData, rhs.fData, fContext);
  
    return false; // TODO(younies): implement this function
+}
+
+StringPiece DecNum::toString(UErrorCode& status) const {
+    StringPiece result;
+
+    // TODO(younies): implement
+
+    return result;
 }
 
 void DecNum::toString(ByteSink& output, UErrorCode& status) const {
