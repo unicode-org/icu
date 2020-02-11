@@ -150,13 +150,17 @@ class UnitConversionRatesSink : public ResourceSink {
 void addSingleFactorConstant(Factor &factor, StringPiece baseStr, number::impl::DecNum &power,
                              int32_t signal, UErrorCode &status) {
     if (baseStr == "ft2m") {
-        // factor.constants[CONSTANT_FT2M] +=  power;
+        factor.constants[CONSTANT_FT2M] += power.toDouble(status);
     } else if (baseStr == "G") {
-        // factor.constants[CONSTANT_G] += power;
+        factor.constants[CONSTANT_G] += power.toDouble(status);
+    } else if (baseStr == "gravity") {
+        factor.constants[CONSTANT_GRAVITY] += power.toDouble(status);
+    } else if (baseStr == "lb2kg") {
+        factor.constants[CONSTANT_LB2KG] += power.toDouble(status);
     } else if (baseStr == "cup2m3") {
-        // factor.constants[CONSTANT_CUP2M3] += power;
+        factor.constants[CONSTANT_CUP2M3] += power.toDouble(status);
     } else if (baseStr == "pi") {
-        // factor.constants[CONSTANT_PI] += power;
+        factor.constants[CONSTANT_PI] += power.toDouble(status);
     } else {
         if (U_FAILURE(status)) return;
 
@@ -343,7 +347,6 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode 
     //     status = UErrorCode::U_ILLEGAL_ARGUMENT_ERROR;
     //     return;
     // }
-
 
     loadConversionRate(conversion_rate_, source.getIdentifier(), target.getIdentifier(), status);
 }
