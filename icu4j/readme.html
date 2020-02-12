@@ -14,24 +14,24 @@ h3.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 66.0.1</h2>
-(Last Update: 2019-Nov-27)
+<h2>Read Me for ICU4J 66.1</h2>
+(Last Update: 2020-Feb-12)
 <hr size="2" width="100%">
 
 <p>
 <!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
 of inherited API and introduces new API or functionality. -->
-<b>Note:</b> This is a preview release of ICU4J 66.
+<!-- <b>Note:</b> This is a preview release of ICU4J 66.
 The contents of this document may not reflect the recent changes done
-for ICU 66 development. It is not recommended for production use.
+for ICU 66 development. It is not recommended for production use. -->
 <!-- <b>Note:</b> This is a development milestone of ICU4J 66.
 The contents of this document may not reflect the recent changes done
 for ICU 66 development. It is not recommended for production use. -->
-<!--<b>Note:</b> This is a release candidate of ICU4J 66.
+<b>Note:</b> This is a release candidate of ICU4J 66.
 The contents of this document may not reflect the recent changes done
 for ICU 66 development. This release candidate is intended for those
 wishing to verify ICU 66 integration before final release. It is not
-recommended for production use. -->
+recommended for production use.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -186,19 +186,19 @@ builds, and they are packaged in jar files for convenient download.
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
     &lt;artifactId&gt;icu4j&lt;/artifactId&gt;
-    &lt;version&gt;66.0.1&lt;/version&gt;
+    &lt;version&gt;66.1&lt;/version&gt;
 &lt;/dependency&gt;
 
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
     &lt;artifactId&gt;icu4j-charset&lt;/artifactId&gt;
-    &lt;version&gt;66.0.1&lt;/version&gt;
+    &lt;version&gt;66.1&lt;/version&gt;
 &lt;/dependency&gt;
 
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
     &lt;artifactId&gt;icu4j-localespi&lt;/artifactId&gt;
-    &lt;version&gt;66.0.1&lt;/version&gt;
+    &lt;version&gt;66.1&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
   </ul>
@@ -879,7 +879,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in icu4c/sourc
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
     <li>Checkout or download CLDR version 'release-36'</li>
-    <li>Checkout ICU with tag 'release-66-0-1'</li>
+    <li>Checkout ICU with tag 'release-66-1'</li>
     <li>cd to icu4c/source/data directory</li>
     <li>Follow the instructions in icu4c/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
