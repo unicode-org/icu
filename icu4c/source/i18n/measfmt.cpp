@@ -460,6 +460,10 @@ UBool MeasureFormat::operator==(const Format &other) const {
             **numberFormat == **rhs.numberFormat);
 }
 
+UBool MeasureFormat::operator!=(const Format &other) const {
+    return !operator==(other);
+}
+
 MeasureFormat *MeasureFormat::clone() const {
     return new MeasureFormat(*this);
 }

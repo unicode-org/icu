@@ -271,6 +271,11 @@ RuleBasedCollator::operator==(const Collator& other) const {
     return TRUE;
 }
 
+UBool
+RuleBasedCollator::operator!=(const Collator& other) const {
+    return !operator==(other);
+}
+
 int32_t
 RuleBasedCollator::hashCode() const {
     int32_t h = settings->hashCode();

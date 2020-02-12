@@ -432,6 +432,15 @@ public:
     virtual UBool operator==(const Format& other) const;
 
     /**
+     * Returns true if the given Format objects are not semantically equal.
+     * Objects of different subclasses are considered unequal.
+     * @param other  the object to be compared with.
+     * @return       false if the given Format objects are semantically equal.
+     * @stable ICU 2.0
+     */
+    virtual UBool operator!=(const Format& other) const;
+
+    /**
      * Sets the locale to be used for creating argument Format objects.
      * @param theLocale    the new locale value to be set.
      * @stable ICU 2.0

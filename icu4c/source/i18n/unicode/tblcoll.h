@@ -226,6 +226,14 @@ public:
     virtual UBool operator==(const Collator& other) const;
 
     /**
+     * Returns true if argument is the same as this object.
+     * @param other Collator object to be compared.
+     * @return true if arguments is the same as this object.
+     * @stable ICU 2.0
+     */
+    virtual UBool operator!=(const Collator& other) const;
+
+    /**
      * Makes a copy of this object.
      * @return a copy of this object, owned by the caller
      * @stable ICU 2.0

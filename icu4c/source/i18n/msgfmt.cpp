@@ -433,6 +433,12 @@ MessageFormat::operator==(const Format& rhs) const
     return TRUE;
 }
 
+UBool
+MessageFormat::operator!=(const Format& rhs) const
+{
+    return !operator==(rhs);
+}
+
 // -------------------------------------
 // Creates a copy of this MessageFormat, the caller owns the copy.
 

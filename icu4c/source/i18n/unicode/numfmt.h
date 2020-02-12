@@ -278,6 +278,13 @@ public:
      */
     virtual UBool operator==(const Format& other) const;
 
+    /**
+     * Return true if the given Format objects are semantically equal.
+     * Objects of different subclasses are considered unequal.
+     * @return    true if the given Format objects are semantically equal.
+     * @stable ICU 2.0
+     */
+    virtual UBool operator!=(const Format& other) const;
 
     using Format::format;
 

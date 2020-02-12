@@ -345,6 +345,12 @@ NumberFormat::operator==(const Format& that) const
               fCapitalizationContext == other->fCapitalizationContext)));
 }
 
+UBool
+NumberFormat::operator!=(const Format& that) const
+{
+    return !operator==(that);
+}
+
 // -------------------------------------
 // Default implementation sets unsupported error; subclasses should
 // override.

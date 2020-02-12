@@ -298,6 +298,7 @@ public:
      * @stable ICU 2.0
      */
     virtual UBool operator==(const SearchIterator &that) const;
+    virtual UBool operator!=(const SearchIterator &that) const;
 
     // public get and set methods ----------------------------------------
 

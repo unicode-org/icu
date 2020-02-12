@@ -220,6 +220,11 @@ DateIntervalFormat::clone() const {
     return new DateIntervalFormat(*this);
 }
 
+UBool
+DateIntervalFormat::operator!=(const Format& other) const {
+    return !operator==(other);
+}
+
 
 UBool
 DateIntervalFormat::operator==(const Format& other) const {

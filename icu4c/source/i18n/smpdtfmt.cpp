@@ -646,6 +646,11 @@ SimpleDateFormat::operator==(const Format& other) const
     return FALSE;
 }
 
+UBool
+SimpleDateFormat::operator!=(const Format& other) const
+{
+    return !operator==(other);
+}
 //----------------------------------------------------------------------
 
 void SimpleDateFormat::construct(EStyle timeStyle,

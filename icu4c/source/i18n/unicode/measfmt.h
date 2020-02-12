@@ -150,6 +150,12 @@ class U_I18N_API MeasureFormat : public Format {
     virtual UBool operator==(const Format &other) const;
 
     /**
+     * Return true if given Format objects are semantically equal.
+     * @stable ICU 66
+     */
+    virtual UBool operator!=(const Format &other) const;
+
+    /**
      * Clones this object polymorphically.
      * @stable ICU 53
      */

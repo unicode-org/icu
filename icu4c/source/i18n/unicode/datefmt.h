@@ -237,6 +237,11 @@ public:
      */
     virtual UBool operator==(const Format&) const;
 
+    /**
+     * Equality operator.  Returns true if the two formats have the same behavior.
+     * @stable ICU 2.0
+     */
+    virtual UBool operator!=(const Format&) const;
 
     using Format::format;
 

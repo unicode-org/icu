@@ -911,6 +911,15 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UBool operator==(const Format& other) const U_OVERRIDE;
 
+    /**
+     * Return true if the given Format objects are semantically equal.
+     * Objects of different subclasses are considered unequal.
+     *
+     * @param other    the object to be compared with.
+     * @return         true if the given Format objects are semantically equal.
+     * @stable ICU 2.0
+     */
+    UBool operator!=(const Format& other) const;
 
     using NumberFormat::format;
 

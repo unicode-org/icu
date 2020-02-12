@@ -95,15 +95,15 @@ TimeZoneTest::TestGenericAPI()
     if (zone->useDaylightTime()) errln("FAIL: useDaylightTime should return FALSE");
 
     TimeZone* zoneclone = zone->clone();
-    if (!(*zoneclone == *zone)) errln("FAIL: clone or operator== failed");
+    if (!(*zone == *zoneclone)) errln("FAIL: clone or operator== failed");
     zoneclone->setID("abc");
-    if (!(*zoneclone != *zone)) errln("FAIL: clone or operator!= failed");
+    if (!(*zone != *zoneclone)) errln("FAIL: clone or operator!= failed");
     delete zoneclone;
 
     zoneclone = zone->clone();
-    if (!(*zoneclone == *zone)) errln("FAIL: clone or operator== failed");
+    if (!(*zone == *zoneclone)) errln("FAIL: clone or operator== failed");
     zoneclone->setRawOffset(45678);
-    if (!(*zoneclone != *zone)) errln("FAIL: clone or operator!= failed");
+    if (!(*zone != *zoneclone)) errln("FAIL: clone or operator!= failed");
 
     SimpleTimeZone copy(*zone);
     if (!(copy == *zone)) errln("FAIL: copy constructor or operator== failed");
@@ -115,8 +115,8 @@ TimeZoneTest::TestGenericAPI()
 
     TimeZone::adoptDefault(zone);
     TimeZone* defaultzone = TimeZone::createDefault();
-    if (defaultzone == zone ||
-        !(*defaultzone == *zone))
+    if (zone == defaultzone ||
+        !(*zone == *defaultzone))
         errln("FAIL: createDefault failed");
     TimeZone::adoptDefault(saveDefault);
     delete defaultzone;

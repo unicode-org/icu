@@ -159,7 +159,7 @@ void AlphabeticIndexTest::APITest() {
     LocalPointer<Collator> germanCol(Collator::createInstance(Locale::getGerman(), status));
     TEST_CHECK_STATUS;
     const RuleBasedCollator &indexCol = index->getCollator();
-    TEST_ASSERT(*germanCol == indexCol);
+    TEST_ASSERT(indexCol == *germanCol);
 
     UnicodeString ELLIPSIS;  ELLIPSIS.append((UChar32)0x2026);
     UnicodeString s = index->getUnderflowLabel();

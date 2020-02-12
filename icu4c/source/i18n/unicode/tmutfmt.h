@@ -135,15 +135,6 @@ public:
     TimeUnitFormat& operator=(const TimeUnitFormat& other);
 
     /**
-     * Return true if the given Format objects are not semantically equal.
-     * Objects of different subclasses are considered unequal.
-     * @param other the object to be compared with.
-     * @return      true if the given Format objects are not semantically equal.
-     * @deprecated ICU 53
-     */
-    UBool operator!=(const Format& other) const;
-
-    /**
      * Set the locale used for formatting or parsing.
      * @param locale  the locale to be set
      * @param status  output param set to success/failure code on exit
@@ -236,10 +227,6 @@ private:
     friend struct TimeUnitFormatReadSink;
 };
 
-inline UBool
-TimeUnitFormat::operator!=(const Format& other) const  {
-    return !operator==(other);
-}
 
 U_NAMESPACE_END
 

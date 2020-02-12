@@ -120,7 +120,7 @@ public:
      * @return         Return true if the given Format objects are not semantically.
      * @stable ICU 2.0
      */
-    UBool operator!=(const Format& other) const { return !operator==(other); }
+    virtual UBool operator!=(const Format& other) const { return !operator==(other); }
 
     /**
      * Clone this object polymorphically.  The caller is responsible

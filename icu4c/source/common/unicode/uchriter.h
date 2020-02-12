@@ -122,6 +122,16 @@ public:
   virtual UBool          operator==(const ForwardCharacterIterator& that) const;
 
   /**
+   * Returns true if the iterators iterate over the same range of the
+   * same string and are pointing at the same character.
+   * @param that The ForwardCharacterIterator used to be compared for equality
+   * @return true if the iterators iterate over the same range of the
+   * same string and are pointing at the same character.
+   * @stable ICU 2.0
+   */
+  virtual UBool          operator!=(const ForwardCharacterIterator& that) const;
+
+  /**
    * Generates a hash code for this iterator.
    * @return the hash code.
    * @stable ICU 2.0

@@ -123,8 +123,12 @@ class CacheKey : public CacheKeyBase {
    /**
     * Two objects are equal if they are of the same type.
     */
-   virtual UBool operator == (const CacheKeyBase &other) const {
+   virtual UBool operator== (const CacheKeyBase &other) const {
        return typeid(*this) == typeid(other);
+   }
+
+   virtual UBool operator!= (const CacheKeyBase &other) const {
+       return !operator==(other);
    }
 };
 
@@ -144,12 +148,12 @@ class LocaleCacheKey : public CacheKey<T> {
    virtual int32_t hashCode() const {
        return (int32_t)(37u * (uint32_t)CacheKey<T>::hashCode() + (uint32_t)fLoc.hashCode());
    }
-   virtual UBool operator == (const CacheKeyBase &other) const {
+   virtual UBool operator==(const CacheKeyBase &other) const {
        // reflexive
        if (this == &other) {
            return TRUE;
        }
-       if (!CacheKey<T>::operator == (other)) {
+       if (!CacheKey<T>::operator== (other)) {
            return FALSE;
        }
        // We know this and other are of same class because operator== on
@@ -157,6 +161,9 @@ class LocaleCacheKey : public CacheKey<T> {
        const LocaleCacheKey<T> *fOther =
                static_cast<const LocaleCacheKey<T> *>(&other);
        return fLoc == fOther->fLoc;
+   }
+   virtual UBool operator!=(const CacheKeyBase &other) const {
+       return !operator==(other);
    }
    virtual CacheKeyBase *clone() const {
        return new LocaleCacheKey<T>(*this);

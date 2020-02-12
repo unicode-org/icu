@@ -141,6 +141,12 @@ ChoiceFormat::operator==(const Format& that) const
     return msgPattern == thatAlias.msgPattern;
 }
 
+UBool
+ChoiceFormat::operator!=(const Format& that) const
+{
+    return !operator==(that);
+}
+
 // -------------------------------------
 // copy constructor
 

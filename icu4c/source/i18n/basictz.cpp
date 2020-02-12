@@ -408,7 +408,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
                 if (!avail) {
                     break;
                 }
-                if (*(tzt0.getTo()) == *tar) {
+                if (*tar == *tzt0.getTo()) {
                     break;
                 }
                 t = tzt0.getTime();

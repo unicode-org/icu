@@ -84,6 +84,11 @@ UCharCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
         && end == realThat.end;
 }
 
+UBool
+UCharCharacterIterator::operator!=(const ForwardCharacterIterator& that) const {
+    return !operator==(that);
+}
+
 int32_t
 UCharCharacterIterator::hashCode() const {
     return ustr_hashUCharsN(text, textLength) ^ pos ^ begin ^ end;

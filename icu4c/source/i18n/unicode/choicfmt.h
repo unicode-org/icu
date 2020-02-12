@@ -264,6 +264,16 @@ public:
     virtual UBool operator==(const Format& other) const;
 
     /**
+     * Returns false if the given Format objects are semantically equal.
+     * Objects of different subclasses are considered unequal.
+     *
+     * @param other    ChoiceFormat object to be compared
+     * @return         false if other is the same as this.
+     * @deprecated ICU 49 Use MessageFormat instead, with plural and select arguments.
+     */
+    virtual UBool operator!=(const Format& other) const;
+
+    /**
      * Sets the pattern.
      * @param pattern   The pattern to be applied.
      * @param status    Output param set to success/failure code on

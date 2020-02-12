@@ -644,7 +644,7 @@ UBool Collator::operator==(const Collator& other) const
 
 UBool Collator::operator!=(const Collator& other) const
 {
-    return (UBool)!(*this == other);
+    return !operator==(other);
 }
 
 int32_t U_EXPORT2 Collator::getBound(const uint8_t       *source,

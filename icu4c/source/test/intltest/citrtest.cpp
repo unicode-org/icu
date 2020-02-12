@@ -57,6 +57,10 @@ public:
         return TRUE;
     }
 
+    virtual UBool operator!=(const ForwardCharacterIterator& /*that*/) const{
+        return FALSE;
+    }
+
     virtual SCharacterIterator* clone(void) const {
         return NULL;
     }
@@ -1086,6 +1090,11 @@ public:
         return
             this==&that ||
             (typeid(*this)==typeid(that) && pos==((SubCharIter &)that).pos);
+    }
+
+    // dummy implementations of other pure virtual base class functions
+    virtual UBool operator!=(const ForwardCharacterIterator &that) const {
+        return !operator==(that);
     }
 
     virtual int32_t hashCode() const {

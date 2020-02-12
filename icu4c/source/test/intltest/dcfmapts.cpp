@@ -202,7 +202,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     }
 
     Format *clone = def.clone();
-    if( ! (*clone == def) ) {
+    if( ! (def == *clone) ) {
         errln((UnicodeString)"ERROR: Clone() failed");
     }
     delete clone;

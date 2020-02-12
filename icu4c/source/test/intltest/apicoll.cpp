@@ -921,9 +921,9 @@ CollationAPITest::TestDuplicate(/* char* par */)
         logln("Collation tailoring failed.");
         return;
     }
-    doAssert((*col1 != *col3), "Cloned object is equal to some dummy");
+    doAssert((*col3 != *col1), "Cloned object is equal to some dummy");
     *col3 = *((RuleBasedCollator*)col1);
-    doAssert((*col1 == *col3), "Copied object is not equal to the orginal");
+    doAssert((*col3 == *col1), "Copied object is not equal to the orginal");
 
     UCollationResult res;
     UnicodeString first((UChar)0x0061);
@@ -2046,7 +2046,7 @@ public:
                              uint8_t*result, int32_t resultLength) const;
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
     virtual UBool operator==(const Collator& other) const;
-    // Collator::operator!= calls !Collator::operator== which works for all subclasses.
+    virtual UBool operator!=(const Collator& other) const;
     virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale);
     TestCollator() : Collator() {}
     TestCollator(UCollationStrength collationStrength, 
@@ -2064,6 +2064,11 @@ inline UBool TestCollator::operator==(const Collator& other) const {
     //    const TestCollator &o = (const TestCollator&)other;
     //    (compare this vs. o's subclass fields)
 }
+
+inline UBool TestCollator::operator!=(const Collator& other) const {
+    return !operator==(other);
+}
+
 
 TestCollator* TestCollator::clone() const
 {

@@ -126,7 +126,7 @@ public:
      * same text-storage object
      * @stable ICU 2.0
      */
-    inline UBool operator!=(const ForwardCharacterIterator& that) const;
+    virtual UBool operator!=(const ForwardCharacterIterator& that) const = 0;
     
     /**
      * Generates a hash code for this iterator.  
@@ -691,11 +691,6 @@ protected:
      */
     int32_t  end;
 };
-
-inline UBool
-ForwardCharacterIterator::operator!=(const ForwardCharacterIterator& that) const {
-    return !operator==(that);
-}
 
 inline int32_t
 CharacterIterator::setToStart() {
