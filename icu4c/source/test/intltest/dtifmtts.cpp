@@ -60,6 +60,8 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(11, testCreateInstanceForAllLocales);
         TESTCASE(12, testTicket20707);
         TESTCASE(13, testFormatMillisecond);
+        TESTCASE(14, testTicket20710);
+
         default: name = ""; break;
     }
 }
@@ -1953,6 +1955,52 @@ void DateIntervalFormatTest::testTicket20707() {
         }
         i++;
     }
+}
+
+void DateIntervalFormatTest::testTicket20710() {
+    IcuTestErrorCode status(*this, "testTicket20710");
+
+    const char16_t timeZone[] = u"PST";
+    int32_t count = 0;
+    const Locale* locales = Locale::getAvailableLocales(count);
+    const UnicodeString skeletons[] = {
+        u"EEEEMMMMdyhmmssazzzz",
+        u"EEEEMMMMdyhhmmssazzzz",
+        u"EEEEMMMMddyyyyhhmmssvvvva",
+        u"EEEEMMMMddhmszza",
+        u"EEMMMMddyyhhzza",
+        u"eeeeMMMddyyhhmma",
+        u"MMddyyyyhhmmazzzz",
+        u"hhmmazzzz",
+        u"hmmssazzzz",
+        u"hhmmsszzzz",
+        u"MMddyyyyhhmmzzzz"
+    };
+
+    for (int32_t i = 0; i < count; i++) {
+        if (quick && (i % 17) != 0) { continue; }
+        const Locale locale = locales[i];
+        for (auto skeleton : skeletons) {
+            LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance(skeleton, locale, status));
+
+            FieldPosition fposition;
+            UnicodeString resultIntervalFormat;
+            LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));
+            calendar->setTime(UDate(1563235200000), status);
+            dtifmt->format(*calendar, *calendar, resultIntervalFormat, fposition, status);
+
+            LocalPointer<DateTimePatternGenerator> gen(DateTimePatternGenerator::createInstance(locale, status));
+            UnicodeString pattern = gen->getBestPattern(skeleton, status);
+            SimpleDateFormat dateFormat(pattern, locale, status);
+
+            FieldPositionIterator fpositer;
+            UnicodeString resultDateFormat;
+
+            dateFormat.format(*calendar, resultDateFormat, &fpositer, status);
+            assertEquals("DateFormat should be a fallback of DateIntervalFormat when there is no span field", resultDateFormat, resultIntervalFormat);
+        }
+    }
+    
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
