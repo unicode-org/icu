@@ -238,11 +238,10 @@ void DecNum::setTo(const uint8_t *bcd, int32_t length, int32_t scale, bool isNeg
     }
 }
 
-double DecNum::toDouble(UErrorCode &status) const {
-    double result = 0.0;
-    // TODO(younies): implement
-    return result;
-}
+int32_t DecNum::toInt32() const {
+    decContext fContext;
+    return uprv_decNumberToInt32(fData, &fContext);
+ }
 
 void DecNum::normalize() { uprv_decNumberReduce(fData, fData, &fContext); }
 
@@ -281,7 +280,7 @@ void DecNum::add(double rhs, UErrorCode &status) {
 }
 
 void DecNum::add(const DecNum &rhs, UErrorCode &status) {
-    uprv_decNumberAdd_66(fData, fData, rhs.fData, &fContext);
+    uprv_decNumberAdd(fData, fData, rhs.fData, &fContext);
     if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
@@ -294,7 +293,7 @@ void DecNum::subtract(double rhs, UErrorCode &status) {
 }
 
 void DecNum::subtract(const DecNum &rhs, UErrorCode &status) {
-    uprv_decNumberSubtract_66(fData, fData, rhs.fData, &fContext);
+    uprv_decNumberSubtract(fData, fData, rhs.fData, &fContext);
     if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
@@ -305,29 +304,42 @@ bool DecNum::isNegative() const { return decNumberIsNegative(fData.getAlias()); 
 bool DecNum::isZero() const { return decNumberIsZero(fData.getAlias()); }
 
 bool DecNum::lessThan(const DecNum &rhs, UErrorCode &status) const {
-    // return uprv_decNumberCompare_66(fData, fData, rhs.fData, fContext);
-
-    return false; // TODO(younies): implement this function
+    // lhs < rhs --> lhs - rhs < 0 ==> lhs - rhs (is negative).
+    DecNum temp;
+    temp.setTo(*this, status);
+    temp.subtract(rhs, status);
+    return temp.isNegative();
 }
 
 bool DecNum::greaterThan(const DecNum &rhs, UErrorCode &status) const {
-    // return uprv_decNumberCompare_66(fData, fData, rhs.fData, fContext);
+    // lhs > rhs --> 0 > rhs - lhs ==> rhs - lhs (is negative).
+    DecNum temp;
+    temp.setTo(rhs, status);
+    temp.subtract(*this, status);
 
-    return false; // TODO(younies): implement this function
+    return temp.isNegative();
 }
 
 bool DecNum::equalTo(const DecNum &rhs, UErrorCode &status) const {
-    // return uprv_decNumberCompare_66(fData, fData, rhs.fData, fContext);
+    // lhs == rhs --> lhs - rhs == 0 ==> lhs - rhs (is zero).
+    DecNum temp;
+    temp.setTo(*this, status);
+    temp.subtract(rhs, status);
 
-    return false; // TODO(younies): implement this function
+    return temp.isZero();
 }
 
 StringPiece DecNum::toString(UErrorCode &status) const {
-    std::string result;
-    StringByteSink<std::string> output(&result);
-    toString(output, status);
+    if (U_FAILURE(status)) {
+        return StringPiece();
+    }
 
-    return StringPiece(result);
+    // "string must be at least dn->digits+14 characters long"
+    int32_t minCapacity = fData.getAlias()->digits + 14;
+    MaybeStackArray<char, 30> buffer(minCapacity);
+    uprv_decNumberToString(fData, buffer.getAlias());
+
+    return StringPiece(buffer.getAlias());
 }
 
 void DecNum::toString(ByteSink &output, UErrorCode &status) const {

@@ -30,7 +30,7 @@ struct Factor {
     number::impl::DecNum offset;
     bool reciprocal = false;
 
-    int8_t constants[CONSTANTS_COUNT] = {};
+    int32_t constants[CONSTANTS_COUNT] = {};
 
     Factor(UErrorCode &status) {
         factorNum.setTo(1.0, status);
@@ -47,7 +47,7 @@ struct Factor {
     }
 
     void divideBy(const Factor &rhs, UErrorCode &status) {
-        factorNum.divideBy(rhs.factorNum, status);
+        factorNum.divideBy(rhs.factorNum, status); // Error if Numerator equal zero !
         factorDen.divideBy(rhs.factorDen, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] -= rhs.constants[i]; // TODO(younies): fix this
@@ -162,17 +162,17 @@ class UnitConversionRatesSink : public ResourceSink {
 void addSingleFactorConstant(Factor &factor, StringPiece baseStr, number::impl::DecNum &power,
                              int32_t signal, UErrorCode &status) {
     if (baseStr == "ft2m") {
-        factor.constants[CONSTANT_FT2M] += power.toDouble(status);
+        factor.constants[CONSTANT_FT2M] += power.toInt32();
     } else if (baseStr == "G") {
-        factor.constants[CONSTANT_G] += power.toDouble(status);
+        factor.constants[CONSTANT_G] += power.toInt32();
     } else if (baseStr == "gravity") {
-        factor.constants[CONSTANT_GRAVITY] += power.toDouble(status);
+        factor.constants[CONSTANT_GRAVITY] += power.toInt32();
     } else if (baseStr == "lb2kg") {
-        factor.constants[CONSTANT_LB2KG] += power.toDouble(status);
+        factor.constants[CONSTANT_LB2KG] += power.toInt32();
     } else if (baseStr == "cup2m3") {
-        factor.constants[CONSTANT_CUP2M3] += power.toDouble(status);
+        factor.constants[CONSTANT_CUP2M3] += power.toInt32();
     } else if (baseStr == "pi") {
-        factor.constants[CONSTANT_PI] += power.toDouble(status);
+        factor.constants[CONSTANT_PI] += power.toInt32();
     } else {
         if (U_FAILURE(status)) return;
 
@@ -220,7 +220,7 @@ void addFactorElement(Factor &factor, StringPiece elementStr, int32_t signal, UE
         baseStr = elementStr;
     }
 
-    power.multiplyBy(signalDecNum, status);
+    power.multiplyBy(signalDecNum, status); // The power needs to take the same sign as `signal`.
     addSingleFactorConstant(factor, baseStr, power, signal, status);
 }
 
@@ -298,14 +298,16 @@ void substituteSingleConstant(Factor &factor, int32_t constValue,
                               const DecNum &constSub /* constant actual value, e.g. G= 9.88888 */,
                               UErrorCode &status) {
     bool positive = constValue >= 0;
-    bool absConstValue = std::abs(constValue);
+    int32_t absConstValue = std::abs(constValue);
 
-    for (int i = 0; i < absConstValue; i++) {
-        if (positive) {
-            factor.factorNum.multiplyBy(constSub, status);
-        } else {
-            factor.factorDen.multiplyBy(constSub, status);
-        }
+    DecNum finalConstSub;
+    finalConstSub.setTo(constSub, status);
+    finalConstSub.multiplyBy(absConstValue, status);
+
+    if (positive) {
+        factor.factorNum.multiplyBy(finalConstSub, status);
+    } else {
+        factor.factorDen.multiplyBy(finalConstSub, status);
     }
 }
 
@@ -321,7 +323,9 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
     constSubs[CONSTANT_LB2KG].setTo("0.453592", status);
 
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        if (factor.constants[i] == 0) continue;
         substituteSingleConstant(factor, factor.constants[i], constSubs[i], status);
+        factor.constants[i] = 0;
     }
 }
 
@@ -344,7 +348,7 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     loadCompoundFactor(TargettoMiddle, target, status);
 
     finalFactor.multiplyBy(SourcetoMiddle, status);
-    finalFactor.divideBy(SourcetoMiddle, status);
+    finalFactor.divideBy(TargettoMiddle, status);
 
     substituteConstants(finalFactor, status);
 
@@ -376,6 +380,9 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode 
 }
 
 void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UErrorCode status) {
+    std::printf(conversion_rate_.factorNum.toString(status).data());
+    std::printf(conversion_rate_.factorDen.toString(status).data());
+    std::printf(conversion_rate_.offset.toString(status).data());
 
     DecNum result(input_value, status);
     result.multiplyBy(conversion_rate_.factorNum, status);

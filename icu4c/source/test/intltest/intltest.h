@@ -306,7 +306,7 @@ public:
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
     UBool assertEquals(const char* message,
         const number::impl::DecNum& expected, const number::impl::DecNum& actual);
-    UBool assertNearlyEquals(const char* message,
+    UBool assertEqualsNear(const char* message,
         const number::impl::DecNum& expected, const number::impl::DecNum& actual, double precision);     
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,

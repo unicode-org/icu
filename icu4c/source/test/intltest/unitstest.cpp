@@ -7,6 +7,14 @@
 
 #include "../../i18n/unitconverter.h"
 #include "intltest.h"
+#include "number_decnum.h"
+
+struct UnitConversionTestCase {
+    const StringPiece source;
+    const StringPiece target;
+    const double inputValue;
+    const double expectedValue;
+};
 
 class UnitsTest : public IntlTest {
   public:
@@ -21,8 +29,7 @@ class UnitsTest : public IntlTest {
     void testArea();
 
     // TODO(younies): fix this.
-    void assertConversion(StringPiece message, StringPiece source, StringPiece target, double inputValue,
-                          double expectedValue);
+    void verifyTestCase(const UnitConversionTestCase &testCase);
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -40,22 +47,36 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
+void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
+    UErrorCode status;
+
+    MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+    MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+    UnitConverter converter(sourceUnit, targetUnit, status);
+
+    number::impl::DecNum inputValue;
+    inputValue.setTo(testCase.inputValue, status);
+
+    number::impl::DecNum expectedValue;
+    expectedValue.setTo(testCase.expectedValue, status);
+
+    number::impl::DecNum actualConversionResult;
+    converter.convert(inputValue, actualConversionResult, status);
+
+    assertEqualsNear("test Conversion", expectedValue, actualConversionResult, 0.01);
+}
+
 void UnitsTest::testBasic() {
     IcuTestErrorCode status(*this, "Units testBasic");
 
-    // Test Cases
-    struct TestCase {
-        const StringPiece source;
-        const StringPiece target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
+    UnitConversionTestCase testCases[]{
         {"meter", "foot", 1.0, 3.28084},    //
         {"kilometer", "foot", 1.0, 328.084} //
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status;
+        UErrorCode status = U_ZERO_ERROR;
 
         MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
@@ -71,19 +92,14 @@ void UnitsTest::testBasic() {
         number::impl::DecNum actualConversionResult;
         converter.convert(inputValue, actualConversionResult, status);
 
-        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
+        assertEqualsNear("test Conversion", expectedValue, actualConversionResult, 0.01);
     }
 }
 
 void UnitsTest::testSiPrefixes() {
     IcuTestErrorCode status(*this, "Units testSiPrefixes");
-    // Test Cases
-    struct TestCase {
-        const StringPiece source;
-        const StringPiece target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
+
+    UnitConversionTestCase testCases[]{
         {"gram", "kilogram", 1.0, 0.001},            //
         {"milligram", "kilogram", 1.0, 0.000001},    //
         {"microgram", "kilogram", 1.0, 0.000000001}, //
@@ -93,36 +109,14 @@ void UnitsTest::testSiPrefixes() {
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status;
-
-        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
-
-        UnitConverter converter(sourceUnit, targetUnit, status);
-
-        number::impl::DecNum inputValue;
-        inputValue.setTo(testCase.inputValue, status);
-
-        number::impl::DecNum expectedValue;
-        expectedValue.setTo(testCase.expectedValue, status);
-
-        number::impl::DecNum actualConversionResult;
-        converter.convert(inputValue, actualConversionResult, status);
-
-        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
+        verifyTestCase(testCase);
     }
 }
 
 void UnitsTest::testMass() {
     IcuTestErrorCode status(*this, "Units testMass");
 
-    // Test Cases
-    struct TestCase {
-        const StringPiece source;
-        const StringPiece target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
+    UnitConversionTestCase testCases[]{
         {"gram", "kilogram", 1.0, 0.001},      //
         {"pound", "kilogram", 1.0, 0.453592},  //
         {"pound", "kilogram", 2.0, 0.907185},  //
@@ -134,35 +128,14 @@ void UnitsTest::testMass() {
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status;
-
-        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
-
-        UnitConverter converter(sourceUnit, targetUnit, status);
-
-        number::impl::DecNum inputValue;
-        inputValue.setTo(testCase.inputValue, status);
-
-        number::impl::DecNum expectedValue;
-        expectedValue.setTo(testCase.expectedValue, status);
-
-        number::impl::DecNum actualConversionResult;
-        converter.convert(inputValue, actualConversionResult, status);
-
-        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
+        verifyTestCase(testCase);
     }
 }
 
 void UnitsTest::testTemperature() {
     IcuTestErrorCode status(*this, "Units testTemperature");
-    // Test Cases
-    struct TestCase {
-        const StringPiece source;
-        const StringPiece target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
+
+    UnitConversionTestCase testCases[]{
         {"celsius", "fahrenheit", 0.0, 32.0},   //
         {"celsius", "fahrenheit", 10.0, 50.0},  //
         {"fahrenheit", "celsius", 32.0, 0.0},   //
@@ -174,36 +147,14 @@ void UnitsTest::testTemperature() {
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status;
-
-        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
-
-        UnitConverter converter(sourceUnit, targetUnit, status);
-
-        number::impl::DecNum inputValue;
-        inputValue.setTo(testCase.inputValue, status);
-
-        number::impl::DecNum expectedValue;
-        expectedValue.setTo(testCase.expectedValue, status);
-
-        number::impl::DecNum actualConversionResult;
-        converter.convert(inputValue, actualConversionResult, status);
-
-        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
+        verifyTestCase(testCase);
     }
 }
 
 void UnitsTest::testArea() {
     IcuTestErrorCode status(*this, "Units Area");
 
-    // Test Cases
-    struct TestCase {
-        const StringPiece source;
-        const StringPiece target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
+    UnitConversionTestCase testCases[]{
         {"square-meter", "square-yard", 10.0, 11.9599} //
         ,
         {"hectare", "square-yard", 1.0, 11959.9} //
@@ -224,23 +175,7 @@ void UnitsTest::testArea() {
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status;
-
-        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
-
-        UnitConverter converter(sourceUnit, targetUnit, status);
-
-        number::impl::DecNum inputValue;
-        inputValue.setTo(testCase.inputValue, status);
-
-        number::impl::DecNum expectedValue;
-        expectedValue.setTo(testCase.expectedValue, status);
-
-        number::impl::DecNum actualConversionResult;
-        converter.convert(inputValue, actualConversionResult, status);
-
-        assertNearlyEquals("test Conversion", actualConversionResult, expectedValue, 0.01);
+        verifyTestCase(testCase);
     }
 }
 
