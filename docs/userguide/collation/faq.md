@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Collation FAQ
 
 ## Q. Should I turn Full Normalization on all the time?
@@ -29,12 +34,21 @@ Word sort is a way of sorting where certain interpunction characters are
 completely ignored, while other are considered. An example of word sort below
 ignores hyphens and apostrophes:
 
-Word SortString Sortbilletbill'sbills
-billetbill'sbillscannotcan'tcantcannotcan'tcantconco-opcoopconco-opcoop
+Word Sort | String Sort
+--------- | -----------
+billet    | bill's
+bills     | billet
+bill's    | bills
+cannot    | can't
+cant      | cannot
+can't     | cant
+con       | co-op
+coop      | con
+co-op     | coop
 
 This specific behavior can be mimicked using a tailoring that makes these
-characters completely ignorable. In this case, appropriate rule would be
-"&\\u0000 = '' = '-'".
+characters completely ignorable. In this case, an appropriate rule would be
+`"&\\u0000 = '' = '-'"`.
 
 Please note that we don't think that such solution is correct, since different
 languages have different word elements. Instead one should use shifted mode for

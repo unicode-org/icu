@@ -1,4 +1,9 @@
-# ICU String Search Service
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
+# String Search Service
 
 ## Overview
 
@@ -8,14 +13,14 @@ the basic string search algorithm in the implementations on most operating
 systems. With the popularity of Internet, the quantity of available data from
 different parts of the world has increased dramatically within a short time.
 Therefore, a string search algorithm that is language-aware has become more
-important. A bitwise match that uses the u_strstr (C), UnicodeString::indexOf
-(C++) or String.indexOf (Java) APIs will not yield the correct result specific
+important. A bitwise match that uses the `u_strstr` (C), `UnicodeString::indexOf`
+(C++) or `String.indexOf` (Java) APIs will not yield the correct result specific
 to a particular language's requirements. The APIs will not yield the correct
 result because all the issues that are important to language-sensitive collation
 are also applicable to text searching. The following lists those issues which
 are applicable to text searching:
 
-1.  Accented letters
+1.  Accented letters\
     In English, accents are treated as minor variations of a letter. In French,
     accented letters have much more significance as they can actually change the
     meaning of a word. Very often, an accented letter is actually a distinct
@@ -28,7 +33,7 @@ are applicable to text searching:
     may not be the same as those for sorting; in ICU, many languages provide a
     special "search" collator with the appropriate level settings for search.
 
-2.  The conjoined letters
+2.  Conjoined letters\
     Special handling is required when a single letter is treated equivalent to
     two distinct letters and vice versa. For example, in German, the letter 'ß'
     (\\u00df) is treated as 'ss' in sorting. Also, in most languages, 'æ'
@@ -37,7 +42,7 @@ are applicable to text searching:
     themselves. For example, 'ch' is treated as a distinct letter between the
     letter 'c' and the letter 'd' in Spanish.
 
-3.  Ignorable punctuation
+3.  Ignorable punctuation\
     As in collation, it is important that the user is able to choose to ignore
     punctuation symbols while the user searches for a pattern in the string. For
     example, a user may search for "blackbird" and want to include entries such
@@ -47,7 +52,7 @@ are applicable to text searching:
 
 The ICU string search service provides similar APIs to the other text iterating
 services. Allowing users to specify the starting position and direction within
-the text string to be searched. For more information, please see [Boundary
+the text string to be searched. For more information, please see the [Boundary
 Analysis](../boundaryanalysis/index.md) chapter. The user can locate one or all
 occurrences of a pattern in a string. For a given collator, a pattern match is
 located at the offsets <start, end> in a string if the collator finds that the
@@ -98,7 +103,10 @@ The default behavior is that described in option 2 above. To obtain the behavior
 described in option 1, you must set the normalization mode to ON in the collator
 used for search.
 
-*The "tightest match" behavior described above is defined as "Minimal Match" in [Section 8 Searching and Matching in UTS #10 Unicode Collation Collation Algorithm](http://www.unicode.org/reports/tr10/#Searching). "Medial Match" and "Maximal Match" are not yet implemented by ICU String Search service.*
+> :point_right: **Note**: The "tightest match" behavior described above
+> is defined as "Minimal Match" in
+> [Section 8 Searching and Matching in UTS #10 Unicode Collation Collation Algorithm](http://www.unicode.org/reports/tr10/#Searching).
+> "Medial Match" and "Maximal Match" are not yet implemented by the ICU String Search service.
 
 The string search service also supports two varieties of “asymmetric search” as
 described in *[Section 8.2 Asymmetric Search in UTS #10 Unicode Collation
@@ -125,10 +133,10 @@ for overlapping matching. For example, in English, if the string is "ababab" and
 the pattern is "abab", overlapping matching produces results of offsets <0, 3>
 and <2, 5>. Otherwise, the mutually exclusive matching produces the result
 offset <0, 3> only. To find a whole word match, the user can provide a
-locale-specific BreakIterator object to a StringSearch instance to correctly
+locale-specific `BreakIterator` object to a `StringSearch` instance to correctly
 locate the word boundaries. For example, if "c" exists in the string "abc", a
 match is returned. However, the behavior can be overwritten by supplying a word
-BreakIterator.
+`BreakIterator`.
 
 The minimum unit of match is aligned to an extended grapheme cluster in the ICU
 string search service implementation defined by [UAX #29 Unicode Text
@@ -151,67 +159,88 @@ the user searches for the pattern "´" (\\u00b4) in the string "A´´B",
 
 **In C:**
 
-char \*tgtstr = "The quick brown fox jumps over the lazy dog.";
-char \*patstr = "fox";
-UChar target\[64\];
-UChar pattern\[16\];
-int pos = 0;
-UErrorCode status = U_ZERO_ERROR;
-UStringSearch \*search = NULL;
-u_uastrcpy(target, tgtstr);
-u_uastrcpy(pattern, patstr);
-search = usearch_open(pattern, -1, target, -1, "en_US",
-NULL, &status);
-if (U_FAILURE(status)) {
-fprintf(stderr, "Could not create a UStringSearch.\\n");
-return;
-}
-for(pos = usearch_first(search, &status);
-U_SUCCESS(status) && pos != USEARCH_DONE;
-pos = usearch_next(search, &status))
-{
-fprintf(stdout, "Match found at position %d.\\n", pos);
-}
-if (U_FAILURE(status)) {
-fprintf(stderr, "Error searching for pattern.\\n");
-}
+```C
+    char *tgtstr = "The quick brown fox jumps over the lazy dog.";
+    char *patstr = "fox";
+    UChar target[64];
+
+    UChar pattern[16];
+    int pos = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    UStringSearch *search = NULL;
+
+    u_uastrcpy(target, tgtstr);
+    u_uastrcpy(pattern, patstr);
+
+
+    search = usearch_open(pattern, -1, target, -1, "en_US", 
+                          NULL, &status);
+
+
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "Could not create a UStringSearch.\n");
+        return;
+    }
+
+    for(pos = usearch_first(search, &status);
+        U_SUCCESS(status) && pos != USEARCH_DONE;
+        pos = usearch_next(search, &status))
+    {
+        fprintf(stdout, "Match found at position %d.\n", pos);
+    }
+
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "Error searching for pattern.\n");
+    }
+```
 
 **In C++:**
 
-UErrorCode status = U_ZERO_ERROR;
-UnicodeString target("Jackdaws love my big sphinx of quartz.");
-UnicodeString pattern("sphinx");
-StringSearch search(pattern, target, Locale::getUS(), NULL, status);
-if (U_FAILURE(status)) {
-fprintf(stderr, "Could not create a StringSearch object.\\n");
-return;
-}
-for(int pos = search.first(status);
-U_SUCCESS(status) && pos != USEARCH_DONE;
-pos = search.next(status))
-{
-fprintf(stdout, "Match found at position %d.\\n", pos);
-}
-if (U_FAILURE(status)) {
-fprintf(stderr, "Error searching for pattern.\\n");
-}
+```C++
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString target("Jackdaws love my big sphinx of quartz.");
+    UnicodeString pattern("sphinx");
+    StringSearch search(pattern, target, Locale::getUS(), NULL, status);
+
+
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "Could not create a StringSearch object.\n");
+        return;
+    }
+
+    for(int pos = search.first(status);
+        U_SUCCESS(status) && pos != USEARCH_DONE;
+        pos = search.next(status))
+    {
+        fprintf(stdout, "Match found at position %d.\n", pos);
+    }
+
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "Error searching for pattern.\n");
+    }
+```
 
 **In Java:**
 
-StringCharacterIterator target = new StringCharacterIterator(
-"Pack my box with five dozen liquor jugs.");
-String pattern = "box";
-try {
-StringSearch search = new StringSearch(pattern, target, Locale.US);
-for(int pos = search.first();
-pos != StringSearch.DONE;
-pos = search.next())
-{
-System.out.println("Match found for pattern at position " + pos);
-}
-} catch (Exception e) {
-System.err.println("StringSearch failure: " + e.toString());
-}
+```Java
+    StringCharacterIterator target = new StringCharacterIterator(
+                                         "Pack my box with five dozen liquor jugs.");
+    String pattern = "box";
+
+    try {
+        StringSearch search = new StringSearch(pattern, target, Locale.US);
+
+
+        for(int pos = search.first();
+            pos != StringSearch.DONE;
+            pos = search.next())
+        {
+            System.out.println("Match found for pattern at position " + pos); 
+        }
+    } catch (Exception e) {
+        System.err.println("StringSearch failure: " + e.toString());
+    }
+```
 
 ## Performance and Other Implications
 
@@ -219,41 +248,49 @@ The ICU string search service is designed to be on top of the ICU collation
 service. Therefore, all the performance implications that apply to a collator
 are also applicable to the string search service. To obtain the best
 performance, use the default collator attributes described in the Performance
-and Storage Implications on Attributes section (§) in the [Collation Service
-Architecture](architecture.md) chapter. In addition, users need to be aware of
-the following StringSearch specific considerations:
+and Storage Implications on Attributes section in the [Collation Service
+Architecture](architecture.md#-performance-and-storage-implications-on-attributes)
+chapter. In addition, users need to be aware of
+the following `StringSearch` specific considerations:
 
 ### Search Algorithm
 
 ICU4C releases up to 3.8 used the Boyer-Moore search algorithm in the string
-search service. There were some known issues in these previous releases (See ICU
-tickets [#5024](http://bugs.icu-project.org/trac/ticket/5024),
-[#5382](http://bugs.icu-project.org/trac/ticket/5382),
-[#5420](http://bugs.icu-project.org/trac/ticket/5420)). In ICU4C 4.0, the string
+search service. There were some known issues in these previous releases.
+(See ICU tickets [ICU-5024](https://unicode-org.atlassian.net/browse/ICU-5024),
+[ICU-5382](https://unicode-org.atlassian.net/browse/ICU-5382),
+[ICU-5420](https://unicode-org.atlassian.net/browse/ICU-5420))
+
+In ICU4C 4.0, the string
 search service was updated with the simple linear search algorithm, which
 locates a match by shifting a cursor in the target text one by one, and these
 issues were fixed. In ICU4C 4.0.1, the Boyer-Moore search code was reintroduced
-as a separated API set as a technology preview. The Boyer-Moore searching
+as a separated API set as a technology preview. In a later release, this code was deleted.
+
+The Boyer-Moore searching
 algorithm is based on automata or combinatorial properties of strings and
 pre-processes the pattern and known to be much faster than the linear search
 when search pattern length is longer. According to performance evaluation
 between these two implementations, the Boyer-Moore search is faster than the
 linear search when the pattern text is longer than 3 or 4 characters.
+However, it is very tricky to get correct results with a collation-based Boyer-Moore search.
 
 ### Change Iterating Direction
 
 The ICU string search service provides a set of very dynamic APIs that allow
 users to change the iterating direction randomly. For example, users can search
-for a particular word going forward by calling the usearch_next (C),
-StringSearch::next (C++) or StringSearch.next (Java) APIs and then search
-backwards at any point of the search operation by calling the usearch_previous
-(C), StringSearch::previous (C++) or StringSearch.previous (Java) APIs. Another
-way to change the iterating direction is by calling the usearch_reset (C),
-StringSearch::previous (C++) or StringSearch.previous (Java) APIs. Though the
+for a particular word going forward by calling the `usearch_next` (C),
+`StringSearch::next` (C++) or `StringSearch.next` (Java) APIs and then search
+backwards at any point of the search operation by calling the `usearch_previous`
+(C), `StringSearch::previous` (C++) or `StringSearch.previous` (Java) APIs. Another
+way to change the iterating direction is by calling the `usearch_reset` (C),
+`StringSearch::previous` (C++) or `StringSearch.previous` (Java) APIs. Though the
 direction change can occur without calling the reset APIs first, this operation
 comes with a reduction in speed.
 
-*The backward search is not available with ICU4C Boyer-Moore search technology preview introduced in ICU4C 4.0.1 and only available with the linear search implementation.*
+> :point_right: **Note**: The backward search is not available with the
+> ICU4C Boyer-Moore search technology preview introduced in ICU4C 4.0.1
+> and only available with the linear search implementation.
 
 ### Thai and Lao Character Boundaries
 

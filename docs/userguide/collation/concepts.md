@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Collation Concepts
 
 The previous section demonstrated many of the requirements imposed on string
@@ -111,7 +116,7 @@ Following is a list of the names for each level and an example usage:
     string are compared at this level, just in case there is no difference at
     levels 1-4 . For example, Hebrew cantillation marks are only distinguished
     at this level. This level should be used sparingly, as only code point
-    values differences between two strings is an extremely rare occurrence.
+    value differences between two strings is an extremely rare occurrence.
     Using this level substantially decreases the performance for
     both incremental comparison and sort key generation (as well as increasing
     the sort key length). It is also known as level 5 strength.
@@ -130,18 +135,12 @@ Sensitivity](http://www.unicode.org/reports/tr10/#Contextual_Sensitivity).
 
 Example:
 
-Forward
-secondary
-Backward
-secondary
-cote
-coté
-côte
-côté
-cote
-côte
-coté
-côté
+Forward secondary | Backward secondary
+----------------- | ------------------
+cote              | cote
+coté              | côte
+côte              | coté
+côté              | côté
 
 ## Contractions
 
@@ -158,33 +157,23 @@ respectively.
 
 Example:
 
-Order without contraction
-Order with contraction "lj" sorting after letter "l"
-la
-li
-lj
-lja
-ljz
-lk
-lz
-ma la
-li
-lk
-lz
-lj
-lja
-ljz
-ma
+Order without contraction | Order with contraction "lj" sorting after letter "l"
+------------------------- | ----------------------------------------------------
+la                        | la
+li                        | li
+lj                        | lk
+lja                       | lz
+ljz                       | lj
+lk                        | lja
+lz                        | ljz
+ma                        | ma
 
 Contracting sequences such as the above are not very common in most languages.
-They are very important, however, since they are also used in the ordering of
-accented letters. This is because the implementation of ICU treats tailored
-precomposed characters (such as Ã in Spanish) as contracting sequence (e.g. N +
-~).
 
-*Since ICU 2.2, and as required by the UCA, if a completely ignorable code point
-appears in text in the middle of contraction, it will not break the contraction.
-For example, in Czech sorting, cU+0000h will sort as it were ch*
+> :point_right: **Note** Since ICU 2.2, and as required by the UCA,
+> if a completely ignorable code point
+> appears in text in the middle of contraction, it will not break the contraction.
+> For example, in Czech sorting, cU+0000h will sort as it were ch.
 
 ## Expansions
 
@@ -212,11 +201,12 @@ It is possible to have contractions that produce expansions.
 One example occurs in Japanese, where the vowel with a prolonged sound mark is
 treated to be equivalent to the long vowel version:
 
-カアー<<< カイー and
+カアー<<< カイー and\
 キイー<<< キイー
 
-*Since ICU 2.0 Japanese tailoring uses prefix analysis (§) instead of
-contraction producing expansions.*
+> :point_right: **Note** Since ICU 2.0 Japanese tailoring uses
+> [prefix analysis](http://www.unicode.org/reports/tr35/tr35-collation.html#Context_Sensitive_Mappings)
+> instead of contraction producing expansions.
 
 ## Normalization
 
@@ -252,12 +242,12 @@ on. Any language that uses multiple combining characters such as Arabic, ancient
 Greek, Hebrew, Hindi, Thai or Vietnamese either requires Normalization Checking
 to be on, or the text to go through a normalization process before collation.
 
-For more information about Normalization related reordering please see [Unicode
-Technical Note #5](http://unicode.org/notes/tn5/) and [UAX
-#15.](http://www.unicode.org/reports/tr15/)
+For more information about Normalization related reordering please see
+[Unicode Technical Note #5](http://www.unicode.org/notes/tn5/) and
+[UAX #15.](http://www.unicode.org/reports/tr15/)
 
-*ICU supports two modes of normalization: on and off. Java.text.\* classes offer
-compatibility decomposition mode, which is not supported in ICU.*
+> :point_right: **Note** ICU supports two modes of normalization: on and off.
+> Java.text.\* classes offer compatibility decomposition mode, which is not supported in ICU.
 
 ## Ignoring Punctuation
 
@@ -286,38 +276,23 @@ equivalent to the identical terms without punctuation.
 For more options and details see the [“Ignore Punctuation”
 Options](customization/ignorepunct.md) page.
 
-Non-ignorable
-Ignorable and Quaternary strength
-Ignorable and Tertiary strength
-black bird
-black Bird
-black birds
-black-bird
-black-Bird
-black-birds
-blackbird
-blackBird
-blackbirds black bird
-black-bird
-blackbird
-black Bird
-black-Bird
-blackBird
-black birds
-black-birds
-blackbirds **black bird**
-**black-bird**
-**blackbird**
-black Bird
-black-Bird
-blackBird
-black birds
-black-birds
-blackbirds *The strings with the same font format in the last column are
-compared as equal by ICU Collator. *
-*Since ICU 2.2 and as prescribed by the UCA, primary ignorable code points that
-follow shifted code points will be completely ignored. This means that an accent
-following a space will compare as if it was a space alone.*
+Non-ignorable | Ignorable and Quaternary strength | Ignorable and Tertiary strength
+------------- | --------------------------------- | -------------------------------
+black bird    | black bird                        | **black bird**
+black Bird    | black-bird                        | **black-bird**
+black birds   | blackbird                         | **blackbird**
+black-bird    | black Bird                        | black Bird
+black-Bird    | black-Bird                        | black-Bird
+black-birds   | blackBird                         | blackBird
+blackbird     | black birds                       | black birds
+blackBird     | black-birds                       | black-birds
+blackbirds    | blackbirds                        | blackbirds
+
+> :point_right: **Note** The strings with the same font format in the last column are
+compared as equal by ICU Collator.\
+> Since ICU 2.2 and as prescribed by the UCA, primary ignorable code points that
+> follow shifted code points will be completely ignored. This means that an accent
+> following a space will compare as if it was a space alone.
 
 ## Case Ordering
 
@@ -376,36 +351,49 @@ may be used in searching.
 
 Example:
 
-Case-first off
-Case level off Lowercase-first
-Case level off Uppercase-first
-Case level off Lowercase-first
-Case level on Uppercase-first
-Case level on apple
-ⓐⓟⓟⓛⓔ
-Abernathy
-ⒶⒷⒺⓇⓃⒶⓉⒽⓎ
-ähnlich
-Ähnlichkeit apple
-ⓐⓟⓟⓛⓔ
-ähnlich
-Abernathy
-ⒶⒷⒺⓇⓃⒶⓉⒽⓎ
-Ähnlichkeit Abernathy
-ⒶⒷⒺⓇⓃⒶⓉⒽⓎ
+**Case-first off, Case level off**
+
+apple\
+ⓐⓟⓟⓛⓔ\
+Abernathy\
+ⒶⒷⒺⓇⓃⒶⓉⒽⓎ\
+ähnlich\
 Ähnlichkeit
-apple
-ⓐⓟⓟⓛⓔ
-ähnlich apple
-Abernathy
-ⓐⓟⓟⓛⓔ
-ⒶⒷⒺⓇⓃⒶⓉⒽⓎ
-ähnlich
-Ähnlichkeit Abernathy
-apple
-ⒶⒷⒺⓇⓃⒶⓉⒽⓎ
-ⓐⓟⓟⓛⓔ
+
+**Lowercase-first, Case level off**
+
+apple\
+ⓐⓟⓟⓛⓔ\
+ähnlich\
+Abernathy\
+ⒶⒷⒺⓇⓃⒶⓉⒽⓎ\
 Ähnlichkeit
+
+**Uppercase-first, Case level off**
+
+Abernathy\
+ⒶⒷⒺⓇⓃⒶⓉⒽⓎ\
+Ähnlichkeit\
+apple\
+ⓐⓟⓟⓛⓔ\
+ähnlich
+
+**Lowercase-first, Case level on**
+
+apple\
+Abernathy\
+ⓐⓟⓟⓛⓔ\
+ⒶⒷⒺⓇⓃⒶⓉⒽⓎ\
+ähnlich\
+Ähnlichkeit
+
+**Uppercase-first, Case level on**
+
+Abernathy\
+apple\
+ⒶⒷⒺⓇⓃⒶⓉⒽⓎ\
+ⓐⓟⓟⓛⓔ\
+Ähnlichkeit\
 ähnlich
 
 ## Script Reordering
@@ -432,30 +420,61 @@ Note: All examples below use the string equivalents for the scripts and reorder
 codes that would be used in collator rules. The script and reorder code
 constants that would be used in API calls will be different.
 
-**Example 1:** set reorder code - `[Grek]` result - `[space, punctuation,
-symbol, currency, digit, Grek, others]` **Example 2:** set reorder code -
-`[Grek]` result - `[space, punctuation, symbol, currency, digit, Grek, others]`
-followed by: set reorder code - `[Hani]` result -` [space, punctuation, symbol,
-currency, digit, Hani, others]` That is, setting a reordering always modifies
+**Example 1:**\
+set reorder code - `[Grek]`\
+result - `[space, punctuation, symbol, currency, digit, Grek, others]`
+
+**Example 2:**\
+set reorder code - `[Grek]`\
+result - `[space, punctuation, symbol, currency, digit, Grek, others]`
+
+followed by: set reorder code - `[Hani]`\
+result -` [space, punctuation, symbol, currency, digit, Hani, others]`
+
+That is, setting a reordering always modifies
 the DUCET/CLDR order, replacing whatever was previously set, rather than adding
 on to it. In order to cumulatively modify an ordering, you have to retrieve the
-existing ordering, modify it, and then set it. **Example 3:** set reorder code -
-`[others, digit]` result - `[space, punctuation, symbol, currency, others,
-digit]` **Example 4:** set reorder code - `[space, Grek, punctuation]` result -
-`[symbol, currency, digit, space, Grek, punctuation, others]` **Example 5:** set
-reorder code - `[Grek, others, Hani]` result - `[space, punctuation, symbol,
-currency, digit, Grek, others, Hani]` **Example 6:** set reorder code - `[Grek,
-others, Hani, symbol, Tglg]` result - `[space, punctuation, currency, digit,
-Grek, others, Hani, symbol, Tglg]` followed by: set reorder code - `[NONE]`
-result - DUCET/CLDR **Example 7:** set reorder code - `[Grek, others, Hani,
-symbol, Tglg]` result - `[space, punctuation, currency, digit, Grek, others,
-Hani, symbol, Tglg]` followed by: set reorder code - `[DEFAULT]` result -
-original reordering for the locale which may or may not be DUCET/CLDR **Example
-8:** set reorder code - `[Grek, others, Hani, symbol, Tglg]` result - `[space,
-punctuation, currency, digit, Grek, others, Hani, symbol, Tglg]` followed by:
-set reorder code - `[]` result - original reordering for the locale which may or
-may not be DUCET/CLDR **Example 9:** set reorder code - `[Hebr, Phnx]` result -
-error
+existing ordering, modify it, and then set it.
+
+**Example 3:**\
+set reorder code - `[others, digit]`\
+result - `[space, punctuation, symbol, currency, others, digit]`
+
+**Example 4:**\
+set reorder code - `[space, Grek, punctuation]`\
+result - `[symbol, currency, digit, space, Grek, punctuation, others]`
+
+**Example 5:**\
+set reorder code - `[Grek, others, Hani]`\
+result - `[space, punctuation, symbol, currency, digit, Grek, others, Hani]`
+
+**Example 6:**\
+set reorder code - `[Grek, others, Hani, symbol, Tglg]`\
+result - `[space, punctuation, currency, digit, Grek, others, Hani, symbol, Tglg]`
+
+followed by:\
+set reorder code - `[NONE]`\
+result - DUCET/CLDR
+
+**Example 7:**\
+set reorder code - `[Grek, others, Hani, symbol, Tglg]`\
+result - `[space, punctuation, currency, digit, Grek, others, Hani, symbol, Tglg]`
+
+followed by:\
+set reorder code - `[DEFAULT]`\
+result - original reordering for the locale which may or may not be DUCET/CLDR
+
+**Example 8:**\
+set reorder code - `[Grek, others, Hani, symbol, Tglg]`\
+result - `[space, punctuation, currency, digit, Grek, others, Hani, symbol, Tglg]`
+
+followed by:\
+set reorder code - `[]`\
+result - original reordering for the locale which may or may not be DUCET/CLDR
+
+**Example 9:**\
+set reorder code - `[Hebr, Phnx]`\
+result - error
 
 Beginning with ICU 55, scripts only reorder together if they are primary-equal,
 for example Hiragana and Katakana.
@@ -488,8 +507,9 @@ corresponding Katakana sequences.
 ### Prefix Analysis
 
 Another characteristics of sorting according to the JIS X 4061 is a large number
-of contractions followed by expansions (see Contractions Producing Expansions
-(§)). This causes all the Hiragana and Katakana codepoints to be treated as
+of contractions followed by expansions (see
+[Contractions Producing Expansions](#contractions-producing-expansions)).
+This causes all the Hiragana and Katakana codepoints to be treated as
 contractions, which reduces performance. The solution we adopted introduces the
 prefix concept which allows us to improve the performance of Japanese sorting.
 More about this can be found in the [customization
@@ -511,10 +531,10 @@ This rule takes effect when:
     range \\U0E81-\\U0EAE. In these cases the vowel is placed after the
     consonant for collation purposes.
 
-*There is a difference between java.text.\* classes and ICU in regard to Thai
-reordering. Java.text.\* classes allow tailorings to turn off reordering by
-using the '!' modifier. ICU ignores the '!' modifier and always reorders Thai
-prevowels. *
+> :point_right: **Note** There is a difference between java.text.\* classes and ICU in regard to Thai
+> reordering. Java.text.\* classes allow tailorings to turn off reordering by
+> using the '!' modifier. ICU ignores the '!' modifier and always reorders Thai
+> prevowels.
 
 ## Space Padding
 
@@ -528,17 +548,23 @@ compare "ä" as if it were "ae" (on a primary level), so the order will be "äd"
 will reverse the order, since the first will compare as if it were one character
 longer. In other words, when you start with strings 1 and 2
 
-1. a e d <space> 2. ä d <space> <space>
+1  | a  | e  | d         | \<space\>
+-- | -- | -- | --------- | ---------
+2  | ä  | d  | \<space\> | \<space\>
 
 they end up being compared on a primary level as if they were 1' and 2'
 
-1'. a e d <space> 2'. a e d <space> <space>
+1' | a  | e  | d  | \<space\> | &nbsp;
+-- | -- | -- | -- | --------- | ---------
+2' | a  | e  | d  | \<space\> | \<space\>
 
 Since 2' has an extra character (the extra space), it counts as having a primary
 difference when it shouldn't. The correct result occurs when the trailing
 padding spaces are removed, as in 1" and 2"
 
-1". a e d 2". a e d
+1" | a  | e  | d
+-- | -- | -- | --
+2" | a  | e  | d
 
 ## Collator naming scheme
 
@@ -562,8 +588,8 @@ A number of attribute values are common across different attributes; these
 include **Default** (abbreviated as D), **On** (O), and **Off** (X). Unless
 otherwise stated, the examples use the UCA alone with default settings.
 
-*In order to achieve uniqueness, collator name always has the attribute
-abbreviations sorted.*
+> :point_right: **Note** In order to achieve uniqueness, a collator name always
+> has the attribute abbreviations sorted.
 
 ### Main References
 
@@ -581,15 +607,28 @@ abbreviations sorted.*
 4.  For more detail on the precise effects of these options, see [Collation
     Customization](customization/index.md) .
 
-Attribute Ab. Possible Values Description Locale
-Script
-Region Variant Keyword L
-Z
-R
-V
-K <language>
-<script>
-<region> <variant> <keyword> The Locale attribute is typically the most
+#### Collator Naming Attributes
+
+Attribute              | Abbreviation | Possible Values
+---------------------- | ------------ | ---------------
+Locale                 | L            | \<language\>
+Script                 | Z            | \<script\>
+Region                 | R            | \<region\>
+Variant                | V            | \<variant\>
+Keyword                | K            | \<keyword\>
+&nbsp;                 | &nbsp;       | &nbsp;
+Strength               | S            | 1, 2, 3, 4, I, D
+Case_Level             | E            | X, O, D
+Case_First             | C            | X, L, U, D
+Alternate              | A            | N, S, D
+Variable_Top           | T            | \<hex digits\>
+Normalization Checking | N            | X, O, D
+French                 | F            | X, O, D
+Hiragana               | H            | X, O, D
+
+#### Collator Naming Attribute Descriptions
+
+The **Locale** attribute is typically the most
 important attribute for correct sorting and matching, according to the user
 expectations in different countries and regions. The default UCA ordering will
 only sort a few languages such as Dutch and Portuguese correctly ("correctly"
@@ -601,22 +640,28 @@ will automatically preset the values for all of the attributes to something that
 is reasonable for that locale. Thus most of the time the other attributes do not
 need to be explicitly set. In some cases, the choice of locale will make a
 difference in string comparison performance and/or sort key length.
-In short attribute names, **<language>_<script>_<region>_<keyword>** is
-represented by: **L<language>_Z<script>_R<region>_V<variant>_K<keyword>**. Not
+
+In short attribute names,
+`<language>_<script>_<region>_<variant>@collation=<keyword>` is
+represented by: `L<language>_Z<script>_R<region>_V<variant>_K<keyword>`. Not
 all the elements are required. Valid values for locale elements are general
 valid values for RFC 3066 locale naming.
-**Example:**
-**Locale="sv" (Swedish)** "Kypper" < "Köpfe"
+
+**Example:**\
+**Locale="sv" (Swedish)** "Kypper" < "Köpfe"\
 **Locale="de" (German)** "Köpfe" < "Kypper"
-Strength S 1, 2, 3, 4, I, D The Strength attribute determines whether accents or
+
+The **Strength** attribute determines whether accents or
 case are taken into account when collating or matching text. ( (In writing
 systems without case or accents, it controls similarly important features). The
 default strength setting usually does not need to be changed for collating
 (sorting), but often needs to be changed when **matching** (e.g. SELECT). The
 possible values include Default (D), Primary (1), Secondary (2), Tertiary (3),
 Quaternary (4), and Identical (I).
+
 For example, people may choose to ignore accents or ignore accents and case when
 searching for text.
+
 Almost all characters are distinguished by the first three levels, and in most
 locales the default value is thus Tertiary. However, if Alternate is set to be
 Shifted, then the Quaternary strength (4) can be used to break ties among
@@ -628,19 +673,23 @@ examples, look at the cells with white backgrounds in the collation charts).
 However, using levels higher than Tertiary - the Identical strength - result in
 significantly longer sort keys, and slower string comparison performance for
 equal strings.
-**Example:**
-**S=1** role = Role = rôle
-**S=2** role = Role < rôle
+
+**Example:**\
+**S=1** role = Role = rôle\
+**S=2** role = Role < rôle\
 **S=3** role < Role < rôle
-Case_Level E X, O, D The Case_Level attribute is used when ignoring accents
+
+The **Case_Level** attribute is used when ignoring accents
 **but not** case. In such a situation, set Strength to be Primary, and
 Case_Level to be On. In most locales, this setting is Off by default. There is a
 small string comparison performance and sort key impact if this attribute is set
 to be On.
-**Example:**
-**S=1, E=X** role = Role = rôle
+
+**Example:**\
+**S=1, E=X** role = Role = rôle\
 **S=1, E=O** role = rôle < Role
-Case_First C X, L, U, D The Case_First attribute is used to control whether
+
+The **Case_First** attribute is used to control whether
 uppercase letters come before lowercase letters or vice versa, in the absence of
 other differences in the strings. The possible values are Uppercase_First (U)
 and Lowercase_First (L), plus the standard Default and Off. There is almost no
@@ -650,10 +699,12 @@ typically users will not use Lowercase_First: only Off or Uppercase_First.
 the [Collation Customization](customization/index.md) ).
 Specifying either L or U won't affect string comparison performance, but will
 affect the sort key length.
-**Example:**
-**C=X or C=L** "china" < "China" < "denmark" < "Denmark"
+
+**Example:**\
+**C=X or C=L** "china" < "China" < "denmark" < "Denmark"\
 **C=U** "China" < "china" < "Denmark" < "denmark"
-Alternate A N, S, D The Alternate attribute is used to control the handling of
+
+The **Alternate** attribute is used to control the handling of
 the so-called **variable **characters in the UCA: whitespace, punctuation and
 symbols. If Alternate is set to Non-Ignorable (N), then differences among these
 characters are of the same importance as differences among letters. If Alternate
@@ -663,69 +714,101 @@ such a case, white-space, punctuation, and symbols are considered when comparing
 strings, but only if all other aspects of the strings (base letters, accents,
 and case) are identical. If Alternate is not set to Shifted, then there is no
 difference between a Strength of 3 and a Strength of 4.
+
 For more information and examples, see
 [Variable_Weighting](http://www.unicode.org/reports/tr10/#Variable_Weighting) in
-the UCA. The reason the Alternate values are not simply On and Off is that
-additional Alternate values may be added in the future. The UCA option
+the UCA.
+
+The reason the Alternate values are not simply On and Off is that
+additional Alternate values may be added in the future.
+
+The UCA option
 **Blanked** is expressed with Strength set to 3, and Alternate set to Shifted.
+
 The default for most locales is Non-Ignorable. If Shifted is selected, it may be
 slower if there are many strings that are the same except for punctuation; sort
 key length will not be affected unless the strength level is also increased.
-**Example:**
-**S=3, A=N** di Silva < Di Silva < diSilva < U.S.A. < USA
-**S=3, A=S **di Silva = diSilva < Di Silva < U.S.A. = USA
-**S=4, A=S **di Silva < diSilva < Di Silva < U.S.A. < USA
-Variable_Top T <hex digits> The Variable_Top attribute is only meaningful if the
+
+**Example:**\
+**S=3, A=N** di Silva < Di Silva < diSilva < U.S.A. < USA\
+**S=3, A=S** di Silva = diSilva < Di Silva < U.S.A. = USA\
+**S=4, A=S** di Silva < diSilva < Di Silva < U.S.A. < USA
+
+The **Variable_Top** attribute is only meaningful if the
 Alternate attribute is not set to Non-Ignorable. In such a case, it controls
-which characters count as ignorable. The <hex> value specifies the "highest"
+which characters count as ignorable. The \<hex\> value specifies the "highest"
 character sequence (in UCA order) weight that is to be considered ignorable.
+
 Thus, for example, if a user wanted white-space to be ignorable, but not any
 visible characters, then s/he would use the value Variable_Top=0020 (space). The
 digits should only be a single character. All characters of the same primary
 weight are equivalent, so Variable_Top=3000 (ideographic space) has the same
 effect as Variable_Top=0020.
+
 This setting (alone) has little impact on string comparison performance; setting
 it lower or higher will make sort keys slightly shorter or longer respectively.
-**Example:**
-**S=3, A=S **di Silva = diSilva < U.S.A. = USA
-**S=3, A=S, T=0020 **di Silva = diSilva < U.S.A. < USA
-Normalization Checking N X, O, D The Normalization setting determines whether
+
+**Example:**\
+**S=3, A=S** di Silva = diSilva < U.S.A. = USA\
+**S=3, A=S, T=0020** di Silva = diSilva < U.S.A. < USA
+
+The **Normalization** setting determines whether
 text is thoroughly normalized or not in comparison. Even if the setting is off
 (which is the default for many locales), text as represented in common usage
 will compare correctly (for details, see [UTN
-#5](http://www.unicode.org/notes/tn5/) ). Only if the accent marks are in
+#5](http://www.unicode.org/notes/tn5/)). Only if the accent marks are in
 non-canonical order will there be a problem. If the setting is On, then the best
 results are guaranteed for all possible text input.There is a medium string
 comparison performance cost if this attribute is On, depending on the frequency
 of sequences that require normalization. There is no significant effect on sort
 key length.If the input text is known to be in NFD or NFKD normalization forms,
 there is no need to enable this Normalization option.
-**Example:**
-**N=X **ä = a + ◌̈ < ä + ◌̣ < ạ + ◌̈
-**N=O **ä = a + ◌̈ < ä + ◌̣ = ạ + ◌̈
-French F X, O, D Some French dictionary ordering traditions sort strings with
+
+**Example:**\
+**N=X** ä = a + ◌̈ < ä + ◌̣ < ạ + ◌̈\
+**N=O** ä = a + ◌̈ < ä + ◌̣ = ạ + ◌̈
+
+Some **French** dictionary ordering traditions sort strings with
 different accents from the back of the string. This attribute is automatically
 set to On for the Canadian French locale (fr_CA). Users normally would not need
 to explicitly set this attribute. There is a string comparison performance cost
 when it is set On, but sort key length is unaffected.
-**Example:**
-**F=X **cote < coté < côte < côté
-**F=O **cote < côte < coté < côté
-Hiragana H X, O, D Compatibility with JIS x 4061 requires the introduction of an
-additional level to distinguish Hiragana and Katakana characters. If
+
+**Example:**\
+**F=X** cote < coté < côte < côté\
+**F=O** cote < côte < coté < côté
+
+Compatibility with JIS x 4061 requires the introduction of an
+additional level to distinguish **Hiragana** and Katakana characters. If
 compatibility with that standard is required, then this attribute is set On, and
 the strength should be set to at least Quaternary.
+
 This attribute is an implementation detail of the CLDR Japanese tailoring. The
 implementation might change to use a different mechanism to achieve the same
 Japanese sort order. Since ICU 50, this attribute is not settable any more.
-**Example:**
-**H=X, S=4** きゅう = キュウ < きゆう = キユウ
+
+**Example:**\
+**H=X, S=4** きゅう = キュウ < きゆう = キユウ\
 **H=O, S=4** きゅう < キュウ < きゆう < キユウ
-*If attributes in collator name are not overridden, it is assumed that they are
-the same as for the given locale. For example, a collator opened with an empty
-string has the same attribute settings as **AN_CX_EX_FX_HX_KX_NX_S3_T0000**.*
 
-### Summary of Value Abbreviations:
+> :point_right: **Note** If attributes in collator name are not overridden,
+> it is assumed that they are the same as for the given locale.
+> For example, a collator opened with an empty
+> string has the same attribute settings as **AN_CX_EX_FX_HX_KX_NX_S3_T0000**.*
 
-Value Abbreviation Default D On O Off X Primary 1 Secondary 2 Tertiary 3
-Quaternary 4 Identical I Shifted S Non-Ignorable N Lower-First L Upper-First U
+### Summary of Value Abbreviations
+
+Value         | Abbreviation
+------------- | ------------
+Default       | D
+On            | O
+Off           | X
+Primary       | 1
+Secondary     | 2
+Tertiary      | 3
+Quaternary    | 4
+Identical     | I
+Shifted       | S
+Non-Ignorable | N
+Lower-First   | L
+Upper-First   | U
