@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import com.ibm.icu.impl.number.AffixPatternProvider;
-import com.ibm.icu.impl.number.CurrencyPluralInfoAffixProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Grouper;
@@ -104,12 +103,7 @@ final class NumberPropertyMapper {
         // AFFIXES //
         /////////////
 
-        AffixPatternProvider affixProvider;
-        if (properties.getCurrencyPluralInfo() == null) {
-            affixProvider = new PropertiesAffixPatternProvider(properties);
-        } else {
-            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
-        }
+        AffixPatternProvider affixProvider = PropertiesAffixPatternProvider.forProperties(properties);
         macros.affixProvider = affixProvider;
 
         ///////////
