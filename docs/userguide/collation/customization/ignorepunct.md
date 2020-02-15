@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # “Ignore Punctuation” Options
 
 By default, spaces and punctuation characters add primary (base character)
@@ -30,12 +35,16 @@ See also
 
 Here is an overview of the sorting results with these options.
 
-Non-ignorable Blanked Shifted Shift-Trimmed Variable-After delug delug delug
-delug delug de-luge de-luge de-luge *deluge* *deluge* delu-ge delu-ge delu-ge
-de-luge deluge- *deluge* *deluge* *deluge* delu-ge delu-ge Deluge deluge-
-deluge- deluge- de-luge deluge- Deluge Deluge Deluge Deluge
+Non-ignorable | Blanked      | Shifted | Shift-Trimmed | Variable-After
+------------- | ------------ | ------- | ------------- | --------------
+delug         | delug        | delug   | delug         | delug
+de-luge       | de-luge      | de-luge | *deluge*      | *deluge*
+delu-ge       | delu-ge (*)  | delu-ge | de-luge       | deluge-
+*deluge*      | *deluge* (*) | *deluge* | delu-ge     | delu-ge
+Deluge        | deluge- (*)  | deluge-  | deluge-     | de-luge
+deluge-       | Deluge       | Deluge   | Deluge      | Deluge
 
-Underlined items compare equal to the preceding ones, and their relative order
+Items with (*) compare equal to the preceding ones, and their relative order
 is arbitrary. These only occur in the Blanked column. This table shows the
 results of a stable sort algorithm with the non-ignorable column as input.
 

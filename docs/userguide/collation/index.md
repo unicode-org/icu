@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Collation
 
 ## Overview
@@ -121,8 +126,7 @@ The basic ICU Collation Service is provided by two main categories of APIs:
     use index tables of sort keys to index strings quickly. Note, however, that
     this only improves performance for large numbers of strings because sorting
     via the comparison functions is very fast. For more information, see
-    [Sortkeys vs
-    Comparison](http://userguide.icu-project.org/collation/concepts#TOC-Sortkeys-vs-Comparison).
+    [Sortkeys vs Comparison](concepts.md#sortkeys-vs-comparison).
 
 ICU provides an AlphabeticIndex API for generating language-appropriate
 sorted-section labels like in dictionaries and phone books.
