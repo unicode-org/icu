@@ -439,9 +439,6 @@ void DecimalQuantity::_setToDoubleFast(double n) {
     // TODO: Make a fast path for other types of doubles.
     if (!std::numeric_limits<double>::is_iec559) {
         convertToAccurateDouble();
-        // Turn off the approximate double flag, since the value is now exact.
-        isApproximate = false;
-        origDouble = 0.0;
         return;
     }
 
@@ -456,8 +453,14 @@ void DecimalQuantity::_setToDoubleFast(double n) {
         return;
     }
 
+    if (exponent == -1023 || exponent == 1024) {
+        // The extreme values of exponent are special; use slow path.
+        convertToAccurateDouble();
+        return;
+    }
+
     // 3.3219... is log2(10)
-    auto fracLength = static_cast<int32_t> ((52 - exponent) / 3.32192809489);
+    auto fracLength = static_cast<int32_t> ((52 - exponent) / 3.32192809488736234787031942948939017586);
     if (fracLength >= 0) {
         int32_t i = fracLength;
         // 1e22 is the largest exact double.

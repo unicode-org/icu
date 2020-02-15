@@ -1350,6 +1350,24 @@ public class NumberFormatterApiTest {
                 "1",
                 "1",
                 "0");
+
+        assertFormatSingle(
+                "ICU-20974 Double.MIN_NORMAL",
+                "scientific",
+                "E0",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.MIN_NORMAL,
+                "2.225074E-308");
+
+        assertFormatSingle(
+                "ICU-20974 Double.MIN_VALUE",
+                "scientific",
+                "E0",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.MIN_VALUE,
+                "4.9E-324");
     }
 
     @Test

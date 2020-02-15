@@ -1391,6 +1391,30 @@ void NumberFormatterApiTest::roundingOther() {
             u"1",
             u"1",
             u"0");
+
+    assertFormatSingle(
+            u"ICU-20974 Double.MIN_NORMAL",
+            u"scientific",
+            u"E0",
+            NumberFormatter::with().notation(Notation::scientific()),
+            Locale::getEnglish(),
+            DBL_MIN,
+            u"2.225074E-308");
+
+#ifndef DBL_TRUE_MIN
+#define DBL_TRUE_MIN 4.9E-324
+#endif
+
+    // Note: this behavior is intentionally different from Java; see
+    // https://github.com/google/double-conversion/issues/126
+    assertFormatSingle(
+            u"ICU-20974 Double.MIN_VALUE",
+            u"scientific",
+            u"E0",
+            NumberFormatter::with().notation(Notation::scientific()),
+            Locale::getEnglish(),
+            DBL_TRUE_MIN,
+            u"5E-324");
 }
 
 void NumberFormatterApiTest::grouping() {
