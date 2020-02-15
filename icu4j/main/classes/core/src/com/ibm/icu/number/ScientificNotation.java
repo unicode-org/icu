@@ -195,6 +195,11 @@ public class ScientificNotation extends Notation implements Cloneable {
                 micros.modInner = this;
             }
 
+            // Change the exponent only after we select appropriate plural form
+            // for formatting purposes so that we preserve expected formatted
+            // string behavior.
+            quantity.adjustExponent(exponent);
+
             // We already performed rounding. Do not perform it again.
             micros.rounder = null;
 

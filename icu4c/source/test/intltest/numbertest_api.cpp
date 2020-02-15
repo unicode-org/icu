@@ -33,6 +33,7 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
           ESP(u"ESP", status),
           PTE(u"PTE", status),
           RON(u"RON", status),
+          CNY(u"CNY", status),
           FRENCH_SYMBOLS(Locale::getFrench(), status),
           SWISS_SYMBOLS(Locale("de-CH"), status),
           MYANMAR_SYMBOLS(Locale("my"), status) {
@@ -910,6 +911,15 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("ro-RO"),
             24,
             u"24,00 lei românești");
+
+    assertFormatSingle(
+            u"Currency spacing in suffix (ICU-20954)",
+            u"currency/CNY",
+            u"currency/CNY",
+            NumberFormatter::with().unit(CNY),
+            Locale("lu"),
+            123.12,
+            u"123,12 CN¥");
 }
 
 void NumberFormatterApiTest::unitPercent() {

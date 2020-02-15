@@ -498,13 +498,23 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Creates a ULocale from the id by first canonicalizing the id.
+     * {@icu} Creates a ULocale from the id by first canonicalizing the id according to CLDR.
      * @param nonCanonicalID the locale id to canonicalize
      * @return the locale created from the canonical version of the ID.
      * @stable ICU 3.0
      */
     public static ULocale createCanonical(String nonCanonicalID) {
         return new ULocale(canonicalize(nonCanonicalID), (Locale)null);
+    }
+
+    /**
+     * Creates a ULocale from the locale by first canonicalizing the locale according to CLDR.
+     * @param locale the ULocale to canonicalize
+     * @return the ULocale created from the canonical version of the ULocale.
+     * @draft ICU 67
+     */
+    public static ULocale createCanonical(ULocale locale) {
+        return createCanonical(locale.getName());
     }
 
     private static String lscvToID(String lang, String script, String country, String variant) {
@@ -1204,8 +1214,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns the canonical name for the specified locale ID.  This is used to
-     * convert POSIX and other grandfathered IDs to standard ICU form.
+     * {@icu} Returns the canonical name according to CLDR for the specified locale ID.
+     * This is used to convert POSIX and other grandfathered IDs to standard ICU form.
      * @param localeID the locale id
      * @return the canonicalized id
      * @stable ICU 3.0
@@ -1236,6 +1246,144 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         if (!foundVariant) {
             if (parser.getLanguage().equals("nb") && parser.getVariant().equals("NY")) {
                 parser.setBaseName(lscvToID("nn", parser.getScript(), parser.getCountry(), null));
+            }
+        }
+
+        // If the BCP 47 primary language subtag matches the type attribute of a languageAlias
+        // element in Supplemental Data, replace the language subtag with the replacement value.
+        // If there are additional subtags in the replacement value, add them to the result, but
+        // only if there is no corresponding subtag already in the tag.
+        // Five special deprecated grandfathered codes (such as i-default) are in type attributes, and are also replaced.
+        try {
+            UResourceBundle languageAlias = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
+                "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER)
+                .get("alias")
+                .get("language");
+            // language _ variant
+            if (!parser.getVariant().isEmpty()) {
+                String [] variants = parser.getVariant().split("_");
+                for (String variant : variants) {
+                    try {
+                        // Note the key in the metadata.txt is formatted as language_variant
+                        // instead of language__variant but lscvToID will generate
+                        // language__variant so we have to build the string ourselves.
+                        ULocale replaceLocale = new ULocale(languageAlias.get(
+                            (new StringBuilder(parser.getLanguage().length() + 1 + parser.getVariant().length()))
+                                .append(parser.getLanguage())
+                                .append("_")
+                                .append(variant)
+                                .toString())
+                            .get("replacement")
+                            .getString());
+                        StringBuilder replacedVariant = new StringBuilder(parser.getVariant().length());
+                        for (String current : variants) {
+                            if (current.equals(variant)) continue;
+                            if (replacedVariant.length() > 0) replacedVariant.append("_");
+                            replacedVariant.append(current);
+                        }
+                        parser = new LocaleIDParser(
+                            (new StringBuilder(localeID.length()))
+                                .append(lscvToID(replaceLocale.getLanguage(),
+                                    !parser.getScript().isEmpty() ? parser.getScript() : replaceLocale.getScript(),
+                                    !parser.getCountry().isEmpty() ? parser.getCountry() : replaceLocale.getCountry(),
+                                    replacedVariant.toString()))
+                                .append(parser.getName().substring(parser.getBaseName().length()))
+                                .toString());
+                    } catch (MissingResourceException e) {
+                    }
+                }
+            }
+
+            // language _ script _ country
+            // ug_Arab_CN -> ug_CN
+            if (!parser.getScript().isEmpty() && !parser.getCountry().isEmpty()) {
+                try {
+                    ULocale replaceLocale = new ULocale(languageAlias.get(
+                        lscvToID(parser.getLanguage(), parser.getScript(), parser.getCountry(), null))
+                        .get("replacement")
+                        .getString());
+                    parser = new LocaleIDParser((new StringBuilder(localeID.length()))
+                        .append(lscvToID(replaceLocale.getLanguage(),
+                            replaceLocale.getScript(),
+                            replaceLocale.getCountry(),
+                            parser.getVariant()))
+                        .append(parser.getName().substring(parser.getBaseName().length()))
+                        .toString());
+                } catch (MissingResourceException e) {
+                }
+            }
+            // language _ country
+            // eg. az_AZ -> az_Latn_AZ
+            if (!parser.getCountry().isEmpty()) {
+                try {
+                    ULocale replaceLocale = new ULocale(languageAlias.get(
+                        lscvToID(parser.getLanguage(), null, parser.getCountry(), null))
+                        .get("replacement")
+                        .getString());
+                    parser = new LocaleIDParser((new StringBuilder(localeID.length()))
+                        .append(lscvToID(replaceLocale.getLanguage(),
+                            parser.getScript().isEmpty() ? replaceLocale.getScript() : parser.getScript(),
+                            replaceLocale.getCountry(),
+                            parser.getVariant()))
+                        .append(parser.getName().substring(parser.getBaseName().length()))
+                        .toString());
+                } catch (MissingResourceException e) {
+                }
+            }
+            // only language
+            // e.g. twi -> ak
+            try {
+                ULocale replaceLocale = new ULocale(languageAlias.get(parser.getLanguage())
+                    .get("replacement")
+                    .getString());
+                parser = new LocaleIDParser((new StringBuilder(localeID.length()))
+                    .append(lscvToID(replaceLocale.getLanguage(),
+                        parser.getScript().isEmpty() ? replaceLocale.getScript() : parser.getScript() ,
+                        parser.getCountry().isEmpty() ? replaceLocale.getCountry() : parser.getCountry() ,
+                        parser.getVariant()))
+                    .append(parser.getName().substring(parser.getBaseName().length()))
+                    .toString());
+            } catch (MissingResourceException e) {
+            }
+        } catch (MissingResourceException e) {
+        }
+
+        // If the BCP 47 region subtag matches the type attribute of a
+        // territoryAlias element in Supplemental Data, replace the language
+        // subtag with the replacement value, as follows:
+        if (!parser.getCountry().isEmpty()) {
+            try {
+                String replacements[] = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
+                    "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER)
+                    .get("alias")
+                    .get("territory")
+                    .get(parser.getCountry())
+                    .get("replacement")
+                    .getString()
+                    .split(" ");
+                String replacement = replacements[0];
+                // If there is a single territory in the replacement, use it.
+                // If there are multiple territories:
+                // Look up the most likely territory for the base language code (and script, if there is one).
+                // If that likely territory is in the list, use it.
+                // Otherwise, use the first territory in the list.
+                if (replacements.length > 1) {
+                    String likelyCountry = ULocale.addLikelySubtags(
+                        new ULocale(lscvToID(parser.getLanguage(), parser.getScript(), null, parser.getVariant())))
+                        .getCountry();
+                    for (String country : replacements) {
+                        if (country.equals(likelyCountry)) {
+                            replacement = likelyCountry;
+                            break;
+                        }
+                    }
+                }
+                parser = new LocaleIDParser(
+                    (new StringBuilder(localeID.length()))
+                    .append(lscvToID(parser.getLanguage(), parser.getScript(), replacement, parser.getVariant()))
+                    .append(parser.getName().substring(parser.getBaseName().length()))
+                    .toString());
+            } catch (MissingResourceException e) {
             }
         }
 

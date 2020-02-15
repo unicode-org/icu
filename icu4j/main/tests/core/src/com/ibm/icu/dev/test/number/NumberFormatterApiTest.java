@@ -66,6 +66,7 @@ public class NumberFormatterApiTest {
     private static final Currency ESP = Currency.getInstance("ESP");
     private static final Currency PTE = Currency.getInstance("PTE");
     private static final Currency RON = Currency.getInstance("RON");
+    private static final Currency CNY = Currency.getInstance("CNY");
 
     @Test
     public void notationSimple() {
@@ -347,6 +348,15 @@ public class NumberFormatterApiTest {
                 NumberFormatter.with().notation(Notation.compactLong()),
                 ULocale.forLanguageTag("es"),
                 1000000,
+                "1 millón");
+
+        assertFormatSingle(
+                "Compact Plural One with rounding",
+                "compact-long precision-integer",
+                "KK precision-integer",
+                NumberFormatter.with().notation(Notation.compactLong()).precision(Precision.integer()),
+                ULocale.forLanguageTag("es"),
+                1222222,
                 "1 millón");
 
         assertFormatSingle(
@@ -855,6 +865,15 @@ public class NumberFormatterApiTest {
                 ULocale.forLanguageTag("ro-RO"),
                 24,
                 "24,00 lei românești");
+
+        assertFormatSingle(
+                "Currency spacing in suffix (ICU-20954)",
+                "currency/CNY",
+                "currency/CNY",
+                NumberFormatter.with().unit(CNY),
+                ULocale.forLanguageTag("lu"),
+                123.12,
+                "123,12 CN¥");
     }
 
     @Test

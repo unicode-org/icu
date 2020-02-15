@@ -270,8 +270,17 @@ jobs:
       displayName: 'Install mingw-w64-x86_64-toolchain'
     - script: |
        set MSYSTEM=MINGW64
-       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW && make -j2 check"
-      displayName: 'Build and Test ICU4C'
+       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW --prefix='/tmp/build-icu' && make -j2 check"
+      displayName: 'Build and Test'
+    - script: |
+       set MSYSTEM=MINGW64
+       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && make install && cd /tmp/build-icu && echo 'Recursive ls' && ls -lR"
+      displayName: 'make install'
+    - script: |
+       set MSYSTEM=MINGW64
+       c:\tools\msys64\usr\bin\bash.exe -lc "echo 'Run icuinfo from MSYS shell' && cd /tmp/build-icu/bin && ./icuinfo.exe"
+       echo 'Run icuinfo from CMD shell' && cd /d C:\tools\msys64\tmp\build-icu\bin && set PATH=C:\tools\msys64\mingw64\bin;%PATH% && icuinfo.exe"
+      displayName: 'run icuinfo'
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_MacOSX_WarningsAsErrors
   displayName: 'C: macOSX Clang WarningsAsErrors (Mojave 10.14)'
