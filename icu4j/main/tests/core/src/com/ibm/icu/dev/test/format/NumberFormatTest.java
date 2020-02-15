@@ -6711,4 +6711,10 @@ public class NumberFormatTest extends TestFmwk {
           assertEquals("result: ", null, result);
         }
     }
+
+    @Test
+    public void test20961_CurrencyPluralPattern() {
+        DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
+        assertEquals("Currency pattern", "#,##0.00 ¤¤¤", decimalFormat.toPattern());
+    }
 }

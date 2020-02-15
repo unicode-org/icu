@@ -63,17 +63,8 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // AFFIXES //
     /////////////
 
-    AffixPatternProvider* affixProvider;
-    if (properties.currencyPluralInfo.fPtr.isNull()) {
-        warehouse.currencyPluralInfoAPP.setToBogus();
-        warehouse.propertiesAPP.setTo(properties, status);
-        affixProvider = &warehouse.propertiesAPP;
-    } else {
-        warehouse.currencyPluralInfoAPP.setTo(*properties.currencyPluralInfo.fPtr, properties, status);
-        warehouse.propertiesAPP.setToBogus();
-        affixProvider = &warehouse.currencyPluralInfoAPP;
-    }
-    macros.affixProvider = affixProvider;
+    warehouse.affixProvider.setTo(properties, status);
+    macros.affixProvider = &warehouse.affixProvider.get();
 
     ///////////
     // UNITS //
@@ -83,7 +74,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
             !properties.currency.isNull() ||
             !properties.currencyPluralInfo.fPtr.isNull() ||
             !properties.currencyUsage.isNull() ||
-            affixProvider->hasCurrencySign());
+            warehouse.affixProvider.get().hasCurrencySign());
     CurrencyUnit currency = resolveCurrency(properties, locale, status);
     UCurrencyUsage currencyUsage = properties.currencyUsage.getOrDefault(UCURR_USAGE_STANDARD);
     if (useCurrency) {
