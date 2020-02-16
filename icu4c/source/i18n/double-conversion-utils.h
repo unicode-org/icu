@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
     defined(__riscv) || defined(__e2k__) || \
     defined(__or1k__) || defined(__arc__) || \
-    defined(__EMSCRIPTEN__)
+    defined(__EMSCRIPTEN__) || defined(__wasm__)
 #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
 #elif defined(__mc68000__) || \
     defined(__pnacl__) || defined(__native_client__)
