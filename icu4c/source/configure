@@ -645,6 +645,8 @@ ICULIBSUFFIX
 DATA_PACKAGING_MODE
 thepkgicudatadir
 pkgicudatadir
+U_HAVE_DATA
+DATA_TRUE
 U_HAVE_FUZZER
 FUZZER_TRUE
 U_HAVE_TOOLS
@@ -7766,6 +7768,16 @@ if test "$fuzzer" = true; then
 else
   FUZZER_TRUE='#'
   U_HAVE_FUZZER=0
+fi
+
+
+
+if test "$tools" = true || test "$cross_compiling" = "yes"; then
+  DATA_TRUE=
+  U_HAVE_DATA=1
+else
+  DATA_TRUE='#'
+  U_HAVE_DATA=0
 fi
 
 
