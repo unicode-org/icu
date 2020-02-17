@@ -2104,7 +2104,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"37"}
+    cldrVersion{"36.1"}
     codeMappings{
         {
             "AA",
@@ -7860,7 +7860,6 @@ supplementalData:table(nofallback){
                 "Qaaj~p",
             }
             special{
-                "Aran",
                 "Qaag",
                 "Zanb",
                 "Zinh",
@@ -13555,10 +13554,7 @@ supplementalData:table(nofallback){
                 territories{"IN"}
             }
             secondary{
-                scripts{
-                    "Latn",
-                    "Mahj",
-                }
+                scripts{"Mahj"}
                 territories{
                     "FJ",
                     "ZA",
@@ -15836,13 +15832,13 @@ supplementalData:table(nofallback){
         }
         sat{
             primary{
-                scripts{"Olck"}
+                scripts{"Latn"}
             }
             secondary{
                 scripts{
                     "Beng",
                     "Deva",
-                    "Latn",
+                    "Olck",
                     "Orya",
                 }
                 territories{"IN"}
@@ -20536,19 +20532,15 @@ supplementalData:table(nofallback){
             "ff_Adlm",
             "ff_Arab",
             "ha_Arab",
-            "hi_Latn",
             "iu_Latn",
             "kk_Arab",
-            "ks_Deva",
             "ku_Arab",
             "ky_Arab",
             "ky_Latn",
             "ml_Arab",
             "mn_Mong",
-            "mni_Mtei",
             "ms_Arab",
             "pa_Arab",
-            "sat_Deva",
             "sd_Deva",
             "sd_Khoj",
             "sd_Sind",
@@ -33094,9 +33086,6 @@ supplementalData:table(nofallback){
             }
         }
         US{
-            cad{
-                populationShareF:int{0}
-            }
             cho{
                 populationShareF:int{45330000}
             }
