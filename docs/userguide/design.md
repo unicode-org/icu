@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # ICU Architectural Design
 
 This chapter discusses the ICU design structure, the ICU versioning support, and
@@ -8,19 +13,13 @@ the introduction of namespace in C++.
 The JDK internationalization components and ICU components both share the same
 common basic architectures with regard to the following:
 
-1.  locales
-
-2.  data-driven services
-
-3.  ICU threading models and the open and close model
-
-4.  cloning customization
-
-5.  error handling
-
-6.  extensibility
-
-7.  resource bundle inheritance model
+1. locales
+2. data-driven services
+3. ICU threading models and the open and close model
+4. cloning customization
+5. error handling
+6. extensibility
+7. resource bundle inheritance model
 
 There are design features in ICU4C that are not in the Java Development Kit
 (JDK) due
@@ -45,12 +44,10 @@ nested arrays and tables.
 
 This results in the following:
 
-1.  Data used by the services can be built at compile time or run time.
-
-2.  For efficient loading, system data is pre-compiled to .dll files or files
-    that can be mapped into memory.
-
-3.  Data for services can be added and modified without source code changes.
+1. Data used by the services can be built at compile time or run time.
+2. For efficient loading, system data is pre-compiled to .dll files or files
+   that can be mapped into memory.
+3. Data for services can be added and modified without source code changes.
 
 ### ICU Threading Model and Open and Close Model
 
@@ -71,8 +68,8 @@ the same model used for the international services in Java™.
 When you use a service such as collation, the client opens the service using an
 ID, typically a locale. This service allocates a small chunk of memory used for
 the state of the service, with pointers to shared, read-only data in support of
-that service. (In Java, you call getInstance() to create an object; in C++,
-createInstance(). ICU uses the open and close metaphor in C because it is more
+that service. (In Java, you call `getInstance()` to create an object; in C++,
+`createInstance()`. ICU uses the open and close metaphor in C because it is more
 familiar to C programmers.)
 
 If no locale is supplied when a service is opened, ICU uses the default locale.
@@ -112,7 +109,7 @@ Some classes also implement the `Freezable` interface (or similar pattern in
 C++), for example `UnicodeSet` or `Collator`: An object that typically starts
 out mutable can be set up and then "frozen", which makes it immutable and thus
 usable concurrently because all non-const APIs are disabled. A frozen object can
-never be "thawed". For example, a Collator can be created, various attributes
+never be "thawed". For example, a `Collator` can be created, various attributes
 set, then frozen and then used from many threads for comparing strings and
 getting sort keys.
 
@@ -126,25 +123,22 @@ affect the original source service, or vice-versa.
 
 Thus, the normal mode of operation is to:
 
-1.  Open a service with a given locale.
+1. Open a service with a given locale.
+2. Use the service as long as needed. However, do not keep opening and closing
+   a service within a tight loop.
+3. Clone a service if it needs to be used in parallel in another thread.
+4. Close any clones that you open as well as any instances of the services that
+   are owned.
 
-2.  Use the service as long as needed. However, do not keep opening and closing
-    a service within a tight loop.
-
-3.  Clone a service if it needs to be used in parallel in another thread.
-
-4.  Close any clones that you open as well as any instances of the services that
-    are owned.
-
-*These service instances may be closed in any sequence. The preceding steps are
-given as an example.*
+> :point_right: **Note**: These service instances may be closed in any sequence.
+The preceding steps are given as an example.
 
 #### Cloning Customization
 
 Typically, the services supplied with ICU cover the vast majority of usages.
 However, there are circumstances where the service needs to be customized for a
 new locale. ICU (and Java) enable you to create customized services. For
-example, you can create a RuleBasedCollator by merging the rules for French and
+example, you can create a `RuleBasedCollator` by merging the rules for French and
 Arabic to get a custom French-Arabic collation sequence. By merging these rules,
 the pointer does not point to a read-only table that is shared between threads.
 Instead, the pointer refers to a table that is specific to your particular open
@@ -164,9 +158,9 @@ all the registrations. While you still might have multiple copies of data
 tables, it is faster to create a service from a registered ID than it is to
 create a service from rules.
 
-*To work around the lack of persistent registration, query the service for the
-parameters used to create it and then store those parameters in a file on a
-disk.*
+> :point_right: **Note**: To work around the lack of persistent registration,
+query the service for the parameters used to create it and then store those
+parameters in a file on a disk.
 
 For services whose IDs are locales, such as collation, the registered IDs must
 also be locales. For those services (like Transliteration or Timezones) that are
@@ -174,32 +168,39 @@ cross-locale, the IDs can be any string.
 
 Prospective future enhancements for this model are:
 
-1.  Having custom services share data tables, by making those tables reference
-    counted. This will reduce memory consumption and speed clone operations (a
-    performance enhancement chiefly useful for multiple threads using the same
-    customized service).
-
-2.  Expanding registration for all the international services.
-
-3.  Allowing persistent registration of services.
+1. Having custom services share data tables, by making those tables reference
+   counted. This will reduce memory consumption and speed clone operations (a
+   performance enhancement chiefly useful for multiple threads using the same
+   customized service).
+2. Expanding registration for all the international services.
+3. Allowing persistent registration of services.
 
 #### Per-client Locale ID vs Per-thread Locale ID
 
-#### Some application environments operate by setting a per thread (or per process) locale ID, and then not passing the locale ID as a parameter during processing. If this usage model were used with ICU in a multi-threaded server, it might result in ICU being requested to constantly open, use, and then close service objects. Instead, it is recommended that locale IDs be associated with each client be stored with other per-client data, along with any service objects (such as collators or formatters) that client might use. If operations involving a single client are short-lived, it might be more efficient to keep a pool of service objects, organized according to locale. Then, if a particular locale's formatter is in high demand, that formatter can be used, and then returned to the pool.
+Some application environments operate by setting a per thread (or per process)
+locale ID, and then not passing the locale ID as a parameter during processing.
+If this usage model were used with ICU in a multi-threaded server, it might
+result in ICU being requested to constantly open, use, and then close service
+objects. Instead, it is recommended that locale IDs be associated with each
+client be stored with other per-client data, along with any service objects
+(such as collators or formatters) that client might use. If operations involving
+a single client are short-lived, it might be more efficient to keep a pool of
+service objects, organized according to locale. Then, if a particular locale's
+formatter is in high demand, that formatter can be used, and then returned to
+the pool.
 
 ### ICU Memory Usage
 
 ICU4C APIs are designed to allow separate heaps for its libraries vs. the
 application. This is achieved by providing functions to allocate and release
 objects owned by ICU4C using only ICU4C library functions. For more details see
-the Memory Usage section in the [Coding Guidelines](dev/codingguidelines.md) .
+the Memory Usage section in the [Coding Guidelines](dev/codingguidelines.md).
 
 ### ICU Initialization and Termination
 
 The ICU library does not normally require any explicit initialization prior to
-use. An
-application begins use simply by calling any ICU API in the usual way. (There is
-one exception to this, described below.)
+use. An application begins use simply by calling any ICU API in the usual way.
+(There is one exception to this, described below.)
 
 In C++ programs, ICU objects and APIs may safely be used during static
 initialization of other application-defined classes or objects. There are no
@@ -208,75 +209,70 @@ libraries because ICU does not rely on C++ static object initialization for its
 normal operation.
 
 When an application is terminating, it may optionally call the function
-u_cleanup(void) , which will free any heap storage that has been allocated and
-held by the ICU library. The main benefit of u_cleanup() occurs when using
+`u_cleanup(void)`, which will free any heap storage that has been allocated and
+held by the ICU library. The main benefit of `u_cleanup()` occurs when using
 memory leak checking tools while debugging or testing an application. Without
-u_cleanup(), memory being held by the ICU library will be reported as leaks.
+`u_cleanup()`, memory being held by the ICU library will be reported as leaks.
 
-( For some platforms, the configure option **--enable-auto-cleanup** (or
-defining the option UCLN_NO_AUTO_CLEANUP to 0) will add code which automatically
-cleans up ICU when its shared library is unloaded. See comments in ucln_imp.h )
+(For some platforms, the configure option `--enable-auto-cleanup` (or
+defining the option `UCLN_NO_AUTO_CLEANUP` to 0) will add code which
+automatically cleans up ICU when its shared library is unloaded. See comments in
+`ucln_imp.h`)
 
 #### Initializing ICU in Multithreaded Environments
 
 There is one specialized case where extra care is needed to safely initialize
 ICU. This situation will arise only when ALL of the following conditions occur:
 
-1.  The application main program is written in plain C, not C++.
-
-2.  The application is multithreaded, with the first use of ICU within the
-    process possibly occurring simultaneously in more than one thread.
-
-3.  The application will be run on a platform that does not handle C++ static
-    constructors from libraries when the main program is not in C++. Platforms
-    known to exhibit this behavior are Mac OS X and HP/UX. Platforms that handle
-    C++ libraries correctly include Windows, Linux and Solaris.
+1. The application main program is written in plain C, not C++.
+2. The application is multithreaded, with the first use of ICU within the
+   process possibly occurring simultaneously in more than one thread.
+3. The application will be run on a platform that does not handle C++ static
+   constructors from libraries when the main program is not in C++. Platforms
+   known to exhibit this behavior are Mac OS X and HP/UX. Platforms that handle
+   C++ libraries correctly include Windows, Linux and Solaris.
 
 To safely initialize the ICU library when all of the above conditions apply, the
 application must explicitly arrange for a first-use of ICU from a single thread
 before the multi-threaded use of ICU begins (see below for basic steps in safely
 initializing the ICU library). A convenient ICU operation for this purpose is
-uloc_getDefault() , declared in the header file "unicode/uloc.h".
+`uloc_getDefault()` , declared in the header file `unicode/uloc.h`.
 
 #### Steps in Safely Initializing ICU in Single and Multi-threaded Environments
 
-1.  If needed, certain data loading functions, such as u_setCommonData() ,
-    u_setAppData() , and u_setDataDirectory() , must be called before any other
-    ICU function. In addition there are some other heap, mutex, and trace
-    functions, such as u_setMemoryFunctions() and u_setMutexFunctions() , which
-    also must be called during the initial and unused state of ICU.
-
-2.  Next, u_init() can be called to ensure proper loading and initialization of
-    data that are required internally by various ICU functions. Explicit use of
-    this function is needed in a multi-threaded application by the main thread.
-    Each subsequent thread does not need to call u_init() again after the main
-    thread has successfully executed this function. In a single threaded
-    program, calls to this function is not needed but
-    recommended.
-
-3.  After the successful initialization of ICU, normal use of ICU, whether using
-    multiple threads or just a single one, is permitted.
-
-4.  When the application is done using ICU, the individual threads must cease
-    all ICU services leaving only the main thread.
-
-5.  After all but the main thread have released ICU, u_cleanup() can be called.
-    The releasing of the individual threads to ICU is necessary because
-    u_cleanup() is not thread safe. In addition, all ICU items, including
-    collators, resource bundles, and converters, must be closed before calling
-    this function. u_cleanup() will free/delete all memory owned by the ICU
-    libraries returning them to their original load state. Generally, this
-    function should be called only once just before an application exits.
-    However, applications needing to dynamically load and unload the ICU
-    libraries can call this function just before the library unloads.
-    u_cleanup() also clears any ICU heap functions, mutex functions, or trace
-    functions that may haven been set for the process. If ICU is to be
-    reinitialized after calling u_cleanup() , these runtime override functions
-    will need to be setup again if they are still required. Great care needs to
-    be exercised when using u_cleanup() and should only be implemented by those
-    who know what they are doing. In any event, if the application doesn't exit
-    and requires ICU again after correctly calling u_cleanup() , go back to step
-    (1).
+1. If needed, certain data loading functions, such as `u_setCommonData()`,
+   `u_setAppData()`, and `u_setDataDirectory()`, must be called before any other
+   ICU function. In addition there are some other heap, mutex, and trace
+   functions, such as `u_setMemoryFunctions()` and `u_setMutexFunctions()`, which
+   also must be called during the initial and unused state of ICU.
+2. Next, `u_init()` can be called to ensure proper loading and initialization of
+   data that are required internally by various ICU functions. Explicit use of
+   this function is needed in a multi-threaded application by the main thread.
+   Each subsequent thread does not need to call `u_init()` again after the main
+   thread has successfully executed this function. In a single threaded
+   program, calls to this function is not needed but
+   recommended.
+3. After the successful initialization of ICU, normal use of ICU, whether using
+   multiple threads or just a single one, is permitted.
+4. When the application is done using ICU, the individual threads must cease
+   all ICU services leaving only the main thread.
+5. After all but the main thread have released ICU, `u_cleanup()` can be called.
+   The releasing of the individual threads to ICU is necessary because
+   `u_cleanup()` is not thread safe. In addition, all ICU items, including
+   collators, resource bundles, and converters, must be closed before calling
+   this function. `u_cleanup()` will free/delete all memory owned by the ICU
+   libraries returning them to their original load state. Generally, this
+   function should be called only once just before an application exits.
+   However, applications needing to dynamically load and unload the ICU
+   libraries can call this function just before the library unloads.
+   `u_cleanup()` also clears any ICU heap functions, mutex functions, or trace
+   functions that may haven been set for the process. If ICU is to be
+   reinitialized after calling `u_cleanup()`, these runtime override functions
+   will need to be setup again if they are still required. Great care needs to
+   be exercised when using `u_cleanup()` and should only be implemented by those
+   who know what they are doing. In any event, if the application doesn't exit
+   and requires ICU again after correctly calling `u_cleanup()`, go back to step
+   (1).
 
 ### Error Handling
 
@@ -290,12 +286,12 @@ error code parameter mechanism. Every function that can fail takes an error-code
 parameter by reference. This parameter is always the last parameter listed for
 the function.
 
-The UErrorCode parameter is defined as an enumerated type. Zero represents no
+The `UErrorCode` parameter is defined as an enumerated type. Zero represents no
 error, positive values represent errors, and negative values represent non-error
-status codes. Macros (U_SUCCESS and U_FAILURE) are provided to check the error
-code.
+status codes. Macros (`U_SUCCESS` and `U_FAILURE`) are provided to check the
+error code.
 
-The UErrorCode parameter is an input-output function. Every function tests the
+The `UErrorCode` parameter is an input-output function. Every function tests the
 error code before performing any other task and immediately exits if it produces
 a FAILURE error code. If the function fails later on, it sets the error code
 appropriately and exits without performing any other work, except for any
@@ -304,13 +300,12 @@ wants to signal, such as "encountered an unmapped character" in conversion, the
 function sets the error code appropriately and continues. Otherwise, the
 function leaves the error code unchanged.
 
-Generally, only the functions that do not take a UErrorCode parameter, but call
-functions that do, must declare a variable. Almost all functions that take a
-UErrorCode parameter,
-and also call other functions that do, merely have to propagate the error code
-that they were passed to the functions they call. Functions that declare a new
-UErrorCode parameter must initialize it to U_ZERO_ERROR before calling any other
-functions.
+Generally, only the functions that do not take a `UErrorCode` parameter, but
+call functions that do, must declare a variable. Almost all functions that take
+a `UErrorCode` parameter, and also call other functions that do, merely have to
+propagate the error code that they were passed to the functions they call.
+Functions that declare a new `UErrorCode` parameter must initialize it to
+`U_ZERO_ERROR` before calling any other functions.
 
 ICU enables you to call several functions (that take error codes) successively
 without having to check the error code after each function. Each function
@@ -324,26 +319,24 @@ protocol more closely.
 
 There are 3 major extensibility elements in ICU:
 
-1.  **Data Extensibility**
-    The user installs new locales or conversion data to enhance the existing ICU
-    support. For more details, refer to the package tool (TODO: need link)
-    chapter for more information.
-
-2.  **Code Extensibility**
-    The classes, data, and design are fully extensible. Examples of this
-    extensibility include the BreakIterator , RuleBasedBreakIterator and
-    DictionaryBasedBreakIterator classes.
-
-3.  **Error Handling Extensibility**
-    There are mechanisms available to enhance the built-in error handling when
-    it is necessary. For example, you can design and create your own conversion
-    callback functions when an error occurs. Refer to the
-    [Conversion](conversion/index.md) chapter callback section for more
-    information.
+1. **Data Extensibility**:
+   The user installs new locales or conversion data to enhance the existing ICU
+   support. For more details, refer to the package tool (TODO: need link)
+   chapter for more information.
+2. **Code Extensibility**:
+   The classes, data, and design are fully extensible. Examples of this
+   extensibility include the BreakIterator , RuleBasedBreakIterator and
+   DictionaryBasedBreakIterator classes.
+3. **Error Handling Extensibility**:
+   There are mechanisms available to enhance the built-in error handling when
+   it is necessary. For example, you can design and create your own conversion
+   callback functions when an error occurs. Refer to the
+   [Conversion](conversion/index.md) chapter callback section for more
+   information.
 
 ### Resource Bundle Inheritance Model
 
-A resource bundle is a set of <key,value> pairs that provide a mapping from key
+A resource bundle is a set of \<key,value> pairs that provide a mapping from key
 to value. A given program can have different sets of resource bundles; one set
 for error messages, one for menus, and so on. However, the program may be
 organized to combine all of its resource bundles into a single related set.
@@ -354,13 +347,13 @@ these levels. The set must contain a root that has all keys that can be used by
 the program accessing the resource bundles.
 
 Except for the root, each resource bundle has an immediate parent. For example,
-if there is a resource bundle "X_Y_Z", then there must be the resource bundles:
-"X_Y", and "X". Each child resource bundle can omit any <key,value> pair that is
+if there is a resource bundle `X_Y_Z`, then there must be the resource bundles:
+`X_Y`, and `X`. Each child resource bundle can omit any \<key,value> pair that is
 identical to its parent's pair. (Such omission is strongly encouraged as it
-reduces data size and maintenance effort). It must override any <key,value> pair
+reduces data size and maintenance effort). It must override any \<key,value> pair
 that is different from its parent's pair. If you have a resource bundle for the
-locale ID "language_country_variant", you must also have
-a bundle for the ID "language_country" and one for the ID "language."
+locale ID `language_country_variant`, you must also have
+a bundle for the ID `language_country` and one for the ID `language`.
 
 If a program doesn't find a key in a child resource bundle, it can be assumed
 that it has the same key as the parent. The default locale has no effect on
@@ -378,19 +371,22 @@ modified lookup and the default locale. The following are different lookup
 methods available:
 
 **Lookup chain** : Searching for a resource bundle.
-en_US_some-variant
-en_US
-en
-defaultLang_defaultCountry
-defaultLang
-root
 
-**Lookup chain** : Searching for a <key, value> pair after en_US_some-variant
-has ben loaded. ICU does not use the default locale in this case.
-en_US_some-variant
-en_US
-en
-root
+1. `en_US_<some-variant>`
+2. `en_US`
+3. `en`
+4. `<defaultLang>_<defaultCountry>`
+5. `<defaultLang>`
+6. `root`
+
+**Lookup chain** : Searching for a \<key, value> pair after
+`en_US_<some-variant>` has ben loaded. ICU does not use the default locale in
+this case.
+
+1. `en_US_<some-variant>`
+2. `en_US`
+3. `en`
+4. `root`
 
 ## Other ICU Design Principles
 
@@ -406,25 +402,22 @@ version numbers. Version numbers numerically and lexically increase as changes
 are made.
 
 All version numbers are used in Application Programming Interfaces (APIs) with a
-UVersionInfo structure. The UVersionInfo structure is an array of four unsigned
-bytes. These bytes are:
+`UVersionInfo` structure. The `UVersionInfo` structure is an array of four
+unsigned bytes. These bytes are:
 
-1.  Major version number
+1. Major version number
+2. Minor version number
+3. Milli version number
+4. Micro version number
 
-2.  Minor version number
-
-3.  Milli version number
-
-4.  Micro version number
-
-Two UVersionInfo structures may be compared using binary comparison (memcmp) to
-see which is larger or newer. Version numbers may be different for different
+Two `UVersionInfo` structures may be compared using binary comparison (`memcmp`)
+to see which is larger or newer. Version numbers may be different for different
 services. For instance, do not compare the ICU library version number to the ICU
 collator version number.
 
-UVersionNumber structures can be converted to and from string representations as
-dotted integers (such as "1.4.5.0") using the u_versionToString() and
-u_versionFromString() functions. String representations may omit trailing zeros.
+`UVersionInfo` structures can be converted to and from string representations as
+dotted integers (such as "1.4.5.0") using the `u_versionToString()` and
+`u_versionFromString()` functions. String representations may omit trailing zeros.
 
 The interpretation of version numbers depends on what is being described.
 
@@ -432,17 +425,17 @@ The interpretation of version numbers depends on what is being described.
 
 The first version number field contains the ICU release version number, for
 example 49. Each new version might contain new features, new locale data, and
-modified behavior. (See below for more information on ICU Binary Compatibility
-(§).)
+modified behavior. (See below for more information on
+[ICU Binary Compatibility](###icu-binary-compatibility).)
 
 The second field is 1 for the initial release (e.g., 49.1). The second and
 sometimes third fields are incremented for binary compatible maintenance
 releases.
 
-*   For maintenance releases for only either C or J, the third field is
-    incremented (e.g., ICU4C 49.1.1).
-*   For shared updates for C & J, the second field is incremented to 2 and
-    higher (e.g., ICU4C & ICU4J 49.2).
+* For maintenance releases for only either C or J, the third field is
+  incremented (e.g., ICU4C 49.1.1).
+* For shared updates for C & J, the second field is incremented to 2 and
+  higher (e.g., ICU4C & ICU4J 49.2).
 
 (The second field is 0 during development, with milestone numbers in the third
 field during that time. For example, 49.0.1 for 49 milestone 1.)
@@ -471,10 +464,12 @@ The data stored in resource bundles is tagged with version numbers. A resource
 bundle can contain a tagged string named "Version" that declares the version
 number in dotted-integer format. For example,
 
+```Text
 en {
 Version { "1.0.3.5" }
 ...
 }
+```
 
 A resource bundle may omit the "version" element and thus, will inherit a
 version along the usual chain. For example, if the resource bundle **en_US**
@@ -485,12 +480,14 @@ version number 0.
 
 Elements within a resource bundle may also contain version numbers. For example:
 
+```Text
 be {
-CollationElements {
-Version { "1.0.0.0" }
-...
+    CollationElements {
+        Version { "1.0.0.0" }
+        ...
+    }
 }
-}
+```
 
 In this example, the CollationElements data is version 1.0.0.0. This element
 version is not related to the version of the bundle.
@@ -508,24 +505,21 @@ backwards compatibility of the data file.
 
 ICU component version numbers may be found using:
 
-1.  u_getVersion() returns the version number of ICU as a whole in C++. In C,
-    ucol_getVersion() returns the version number of ICU as a whole.
-
-2.  ures_getVersion() and ResourceBundle::getVersion() return the version number
-    of a ResourceBundle. This is a data version number for the bundle as a whole
-    and subject to inheritance.
-
-3.  u_getUnicodeVersion() and Unicode::getUnicodeVersion() return the version
-    number of the Unicode character data that underlies ICU. This version
-    reflects the numbering of the Unicode releases. See
-    <http://www.unicode.org/> for more information.
-
-4.  Collator::getVersion() in C++ and ucol_getVersion() in C return the version
-    number of the Collator. This is a code version number for the collation code
-    and algorithm. It is a combination of version numbers for the collation
-    implementation, the Unicode Collation Algorithm data (which is the data that
-    is used for characters that are not mentioned in a locale's specific
-    collation elements), and the collation elements.
+1. `u_getVersion()` returns the version number of ICU as a whole in C++. In C,
+   `ucol_getVersion()` returns the version number of ICU as a whole.
+2. `ures_getVersion()` and `ResourceBundle::getVersion()` return the version
+   number of a ResourceBundle. This is a data version number for the bundle as a
+   whole and subject to inheritance.
+3. `u_getUnicodeVersion()` and `Unicode::getUnicodeVersion()` return the version
+   number of the Unicode character data that underlies ICU. This version
+   reflects the numbering of the Unicode releases. See
+   <http://www.unicode.org/> for more information.
+4. `Collator::getVersion()` in C++ and `ucol_getVersion()` in C return the version
+   number of the Collator. This is a code version number for the collation code
+   and algorithm. It is a combination of version numbers for the collation
+   implementation, the Unicode Collation Algorithm data (which is the data that
+   is used for characters that are not mentioned in a locale's specific
+   collation elements), and the collation elements.
 
 #### Configuration and Management
 
@@ -543,7 +537,7 @@ defined in the "icu_VersionNumber::" namespace, which is also aliased as
 namespace "icu". Starting with ICU 2.0, including any public ICU C++ header by
 default includes a "using namespace icu_VersionNumber" statement. This is for
 backward compatibility, and should be turned off in favor of explicitly using
-icu::UnicodeString etc. (see [How To Use ICU](howtouseicu.md)). (If entry point
+`icu::UnicodeString` etc. (see [How To Use ICU](howtouseicu.md)). (If entry point
 renaming is turned off, then only the unversioned "icu" namespace is used.)
 
 Starting with ICU 49, ICU4C requires namespace support.
@@ -554,23 +548,22 @@ It is sometimes useful to see a dependency chart between the public ICU APIs and
 ICU libraries. This chart can be useful to people that are new to ICU or to
 people that want only certain ICU libraries.
 
+**TODO**: The dependency chart is currently not available.
+
 Here are some things to realize about the chart.
 
-1.  It gives a general overview of the ICU library dependencies.
-
-2.  Internal dependencies, like the mutex API, are left out for clarity.
-
-3.  Similar APIs were lumped together for clarity (e.g. Formatting). Some of
-    these dependency details can be viewed from the ICU API reference.
-
-4.  The descriptions of each API can be found in our [ICU API
-    reference](http://icu-project.org/apiref/)
+1. It gives a general overview of the ICU library dependencies.
+2. Internal dependencies, like the mutex API, are left out for clarity.
+3. Similar APIs were lumped together for clarity (e.g. Formatting). Some of
+   these dependency details can be viewed from the ICU API reference.
+4. The descriptions of each API can be found in our [ICU API
+   reference](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/)
 
 ### Code Dependencies (C++)
 
 Starting with ICU 49, the dependencies of code files (.o files compiled from
 .c/.cpp) are documented in
-[source/test/depstest/dependencies.txt](http://bugs.icu-project.org/trac/browser/trunk/icu4c/source/test/depstest/dependencies.txt).
+[source/test/depstest/dependencies.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/depstest/dependencies.txt).
 Adjacent Python code is used to parse this file and to
 [verify](http://site.icu-project.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies)
 that it matches the actual dependencies of the code files.
@@ -591,39 +584,32 @@ see below.
 
 External ICU4C APIs are
 
-1.  declared in header files in unicode folders and exported at build/install
-    time to an include/unicode folder
-
-2.  when C++ class members, are public or protected
-
-3.  do not have an "**@internal**" label
+1. declared in header files in unicode folders and exported at build/install
+   time to an `include/unicode` folder
+2. when C++ class members, are `public` or `protected`
+3. do not have an `@internal` label
 
 Exception: Layout engine header files are not in a unicode folder, although the
-public ones are still copied to the include/unicode folder at build/install
+public ones are still copied to the `include/unicode` folder at build/install
 time. External layout engine APIs are the ones that have lifecycle labels and
-not an "@internal" label.
+not an `@internal` label.
 
 #### External ICU4J APIs
 
 External ICU4J APIs are
 
-1.  declared in one of the ICU4J core packages (com.ibm.icu.lang,
-    com.ibm.icu.math, com.ibm.icu.text, or com.ibm.icu.util) or one of the
-    RichText packages (com.ibm.richtext)
-
-2.  public or protected class members
-
-3.  public or protected contained classes
-
-4.  do not have an "**@internal**" label
+1. declared in one of the ICU4J core packages (`com.ibm.icu.lang`,
+   `com.ibm.icu.math`, `com.ibm.icu.text`, or `com.ibm.icu.util`).
+2. `public` or `protected` class members
+3. `public` or `protected` contained classes
+4. do not have an `@internal` label
 
 #### "System" APIs
 
 "System" APIs are external APIs that are intended only for special uses for
-system-level code, for example u_cleanup(). Normal users should not use them,
-although they are public and supported. System APIs have a "**@system**" label
-in addition to the lifecycle
-label that all external APIs have (see below).
+system-level code, for example `u_cleanup()`. Normal users should not use them,
+although they are public and supported. System APIs have a `@system` label
+in addition to the lifecycle label that all external APIs have (see below).
 
 #### Internal APIs
 
@@ -633,7 +619,7 @@ notice. Some of them are member functions of public C++ or Java classes, and are
 "technically public but logistically internal" for implementation reasons;
 typically because programming languages don't provide sufficiently access
 control (without clumsy mechanisms). In this case, such APIs have an
-"**@internal**" label.
+`@internal` label.
 
 ### ICU API compatibility
 
@@ -647,106 +633,131 @@ email to the icu-design mailing list that details what is proposed to be
 changed, with an expiration date of typically a week. This gives all mailing
 list members a chance to review upcoming changes, and to discuss them. A
 proposal often changes significantly as a result of discussion. Most proposals
-will eventually find consensus among list members; otherwise, the PMC decides
+will eventually find consensus among list members; otherwise, the ICU-TC decides
 what to do. If the addition or change of APIs would affect you, please subscribe
 to the main [icu-design mailing list](http://icu-project.org/contacts.html) .
 
-When a **new API** is added to ICU, it **is marked as draft with a "@draft ICU
-x.y"** label in the API documentation, **where x.y is the ICU version when the
+When a **new API** is added to ICU, it **is marked as draft with a `@draft ICU
+x.y` label in the API documentation, **where x.y is the ICU version when the
 API *signature* was introduced or last changed**. A draft API is not guaranteed
 to be stable! Although we will not make gratuitous changes, sometimes the draft
 APIs turns out to be unsatisfactory in actual practice and may need to be
 changed or even removed. Changes of "draft" API are subject to the proposal
 process described above.
 
-**When a @draft ICU x.y API is changed, it must remain @draft and its version
+**When a `@draft ICU x.y` API is changed, it must remain `@draft` and its version
 number must be updated.**
 
-In ICU4J 3.4.2 and earlier, @draft APIs were also marked with Java's @deprecated
+In ICU4J 3.4.2 and earlier, `@draft` APIs were also marked with Java's `@deprecated`
 tag, so that uses of draft APIs in client code would be flagged by the compiler.
-These uses of the @deprecated tag were indicated with the comment “This is a
+These uses of the `@deprecated` tag were indicated with the comment “This is a
 draft API and might change in a future release of ICU.” Many clients found this
 confusing and/or undesireable, so ICU4J 3.4.3 no longer marks draft APIs with
-the @deprecated tag by default. For clients who prefer the earlier behavior,
-ICU4J provides an ant build target, 'restoreDeprecated', which will update the
-source files to use the @deprecated tag. Then clients can just rebuild the ICU4J
+the `@deprecated` tag by default. For clients who prefer the earlier behavior,
+ICU4J provides an ant build target, `restoreDeprecated`, which will update the
+source files to use the `@deprecated` tag. Then clients can just rebuild the ICU4J
 jar as usual.
 
 When an API is judged to be stable and has not been changed for at least one ICU
-release, it is relabeled as stable with a "**@stable ICU x.y**" label in the API
+release, it is relabeled as stable with a `@stable ICU x.y**` label in the API
 documentation. A stable API is expected to be available in this form for a long
 time. The ICU version **x.y** indicates the last time the API *signature* was
-introduced or changed. **The promotion from @draft ICU x.y to @stable ICU x.y
+introduced or changed. **The promotion from `@draft ICU x.y` to `@stable ICU x.y`
 must not change the x.y version number.**
 
-We occasionally make an exception and allow adding new APIs marked as @stable
-ICU x.y APIs in the x.y release itself if we believe that they have to be
-stable. We might do this for enum constants that reflect 1:1 Unicode property
+We occasionally make an exception and allow adding new APIs marked as
+`@stable ICU x.y` APIs in the x.y release itself if we believe that they have to
+be stable. We might do this for enum constants that reflect 1:1 Unicode property
 aliases and property value aliases, for a Unicode upgrade in the x.y release.
 
-We sometimes **"broaden" a @stable** API function by changing its signature in a
-compatible way. For example, in Java, we might change an input parameter from a
-String to a CharSequence. In this case we keep the @stable but update the ICU
-version number indicating the function signature change.
+We sometimes **"broaden" a `@stable`** API function by changing its signature
+in a compatible way. For example, in Java, we might change an input parameter
+from a `String` to a `CharSequence`. In this case we keep the `@stable` but
+update the ICU version number indicating the function signature change.
 
 Even a stable API may eventually need to become deprecated or obsolete. Such
 APIs are strongly discouraged from use. Typically, an improved API is introduced
 at the time of deprecation/obsolescence of the old one.
 
-1.  Use of deprecated APIs is strongly discouraged, but they are retained for
-    backward compatibility. These are marked with labels like "**@deprecated ICU
-    x.y. Use u_abc() instead.**". **The ICU version x.y shows the ICU release in
-    which the API was first declared "deprecated".**
+1. Use of deprecated APIs is strongly discouraged, but they are retained for
+   backward compatibility. These are marked with labels like
+   `@deprecated ICU x.y Use u_abc() instead.`. **The ICU version x.y shows the
+   ICU release in which the API was first declared "deprecated".**
+2. In ICU4J, starting with release 57, a custom Javadoc tag `@discouraged`
+   was added. While similar to `@deprecated` it is used when either ICU wants
+   to discourage a particular API from use but the JDK hasn't deprecated it or
+   ICU needs to keep it for compatibility reasons. These are marked with labels
+   like `@discouraged ICU x.y. Use u_abc() instead.`.
+3. Obsolete APIs are are those whose continued retention will cause severe
+   conflicts or user error, or whose continued support would be a very
+   significant maintenance burden. We make every effort to keep these to a
+   minimum. Obsolete APIs are marked with labels like `@obsolete ICU x.y. Use
+   u_abc() instead since this API will be removed in that release.`.
+   **The x.y indicates that we plan to remove it in ICU version x.y.**
 
-2.  In ICU4J, starting with release 57, a custom Javadoc tag **@discouraged**
-    was added. While similar to **@deprecated** it is used when either ICU wants
-    to discourage a particular API from use but the JDK hasn't deprecated it or
-    ICU needs to keep it for compatibility reasons. These are marked with labels
-    like "**@discouraged ICU x.y. Use u_abc() instead.**"
+Stable C or Java APIs will not be obsoleted because doing so would break
+forward binary compatibility of the ICU library. Stable APIs may be
+deprecated, but they will be retained in the library.
 
-3.  Obsolete APIs are are those whose continued retention will cause severe
-    conflicts or user error, or whose continued support would be a very
-    significant maintenance burden. We make every effort to keep these to a
-    minimum. Obsolete APIs are marked with labels like "**@obsolete ICU x.y. Use
-    u_abc() instead since this API will be removed in that release.**". **The
-    x.y indicates that we plan to remove it in ICU version ****x.y.**
-
-    Stable C or Java APIs will not be obsoleted because doing so would break
-    forward binary compatibility of the ICU library. Stable APIs may be
-    deprecated, but they will be retained in the library.
-    An "obsolete" API will remain unchanged until it is removed in the indicated
-    ICU release, which will be usually one year after the API was declared
-    obsolete. Sometimes we still keep it available for some time via a
-    compile-time switch but stop maintaining it. In rare occasions, an API must
-    be replaced right away because of naming conflicts or severe defects; in
-    such cases we provide compile-time switches (#ifdef or other mechanisms) to
-    select the old API.
+An "obsolete" API will remain unchanged until it is removed in the indicated
+ICU release, which will be usually one year after the API was declared
+obsolete. Sometimes we still keep it available for some time via a
+compile-time switch but stop maintaining it. In rare occasions, an API must
+be replaced right away because of naming conflicts or severe defects; in
+such cases we provide compile-time switches (`#ifdef` or other mechanisms) to
+select the old API.
 
 For example, here is how an API might be tagged in various versions:
-**In ICU 0.2**
-`@draft ICU 0.2`
-`f(x)`
-The API is newly introduced as a draft in this release.
-**In ICU 0.4**
-`@draft ICU `**`0.4`**
-`f(x`**`,y`**`)`
-The draft version number is updated, because the signature changed.
-**In ICU 0.6**
-`@`**`stable`**` ICU `**`0.4`**
-`f(x,y)`
-The API is promoted from draft to stable, but the version number does not
-change, as the signature is the same.
-**In ICU 1.0**`@`**`stable`**` ICU `**`1.0`**
-`f(xbase,y)`The API is "broadened" in a compatible way. For example, changing an
-input parameter from char to int or from some class to a base class.
-The signature is changed (so we update the ICU version number), but old calling code continues to work unchanged (so we retain @stable if that's what it was.)**In ICU 1.2**
-`@**deprecated** ICU 1.2 Use g(x,y,z) instead.`
-*`or`*
-`@**obsolete** ICU 1.4. Use g(x,y,z) instead since this API will be removed in
-that release.`
-The API is demoted to deprecated (or obsolete) status
 
-### ICU Binary Compatibility: Using ICU as an Operating System Level Library
+* **In ICU 0.2**: The API is newly introduced as a draft in this release.
+
+  ```Text
+  @draft ICU 0.2
+  f(x)
+  ```
+
+* **In ICU 0.4**: The draft version number is updated, because the signature
+  changed.
+
+  ```Text
+  @draft ICU 0.4
+  f(x, y)
+  ```
+
+* **In ICU 0.6**: The API is promoted from draft to stable, but the version
+  number does not change, as the signature is the same.
+
+  ```Text
+  @stable ICU 0.4
+  f(x, y)
+  ```
+
+* **In ICU 1.0**: The API is "broadened" in a compatible way. For example,
+  changing an input parameter from char to int or from some class to a base
+  class. The signature is changed (so we update the ICU version number), but old
+  calling code continues to work unchanged (so we retain @stable if that's what
+  it was.)
+
+  ```Text
+  @stable ICU 1.0
+  f(xbase, y)
+  ```
+
+* **In ICU 1.2**: The API is demoted to deprecated (or obsolete) status.
+
+  ```Text
+  @deprecated ICU 1.2 Use g(x,y,z) instead.
+  f(xbase, y)
+  ```
+
+  or, when this API is planned to be removed in ICU 1.4:
+
+  ```Text
+  @obsolete ICU 1.4. Use g(x,y,z) instead.
+  f(xbase, y)
+  ```
+
+### ICU Binary Compatibility
 
 ICU4C may be configured for use as a system library in an environment where
 applications that are built with one version of ICU must continue to run without
@@ -754,16 +765,12 @@ change with later versions of the ICU shared library.
 
 Here are the requirements for enabling binary compatibility for ICU4C:
 
-1.  Applications must use only APIs that are marked as stable.
-
-2.  Applications must use only plain C APIs, never C++.
-
-3.  ICU must be built with function renaming disabled.
-
-4.  Applications must be built using an ICU that was configured for binary
-    compatibility.
-
-5.  Use ICU version 3.0 or later.
+1. Applications must use only APIs that are marked as stable.
+2. Applications must use only plain C APIs, never C++.
+3. ICU must be built with function renaming disabled.
+4. Applications must be built using an ICU that was configured for binary
+   compatibility.
+5. Use ICU version 3.0 or later.
 
 **Stable APIs Only.** APIs in the ICU library that are tagged as being stable
 will be maintained in future versions of the library. Stable functions will
@@ -771,16 +778,17 @@ continue to exist with the same signature and the same meaning, allowing
 applications to continue to work without change.
 
 Stable APIs do not guarantee that the results from every function will always be
-completely identical between ICU versions (see the Version Numbers (§) section
-above). Bugs may be fixed. The Unicode character data may change with new
-versions of the Unicode standard. Locale data may be updated or changed,
-yielding different results for operations like formatting or collation.
-Applications that require exact bit-for-bit, bug-for-bug compatibility of ICU
-results should not rely on ICU release-to-release binary compatibility, but
-should instead link against a specific version of ICU.
+completely identical between ICU versions (see the
+[Version Numbers in ICU](#version-numbers-in-icu) section above). Bugs may be
+fixed. The Unicode character data may change with new versions of the Unicode
+standard. Locale data may be updated or changed, yielding different results for
+operations like formatting or collation. Applications that require exact
+bit-for-bit, bug-for-bug compatibility of ICU results should not rely on ICU
+release-to-release binary compatibility, but should instead link against a
+specific version of ICU.
 
 To verify that an application uses only stable APIs, build it with the C
-preprocessor symbols U_HIDE_DRAFT_API and U_HIDE_DEPRECATED_API defined. This
+preprocessor symbols `U_HIDE_DRAFT_API` and `U_HIDE_DEPRECATED_API` defined. This
 will produce build errors if any draft, deprecated or obsolete APIs are used. An
 operating system level installation of ICU may set this option permanently.
 
@@ -801,13 +809,15 @@ Function renaming is enabled by default, and must be disabled at ICU build time
 to enable release to release binary compatibility. To disable renaming, use the
 configure option
 
-configure -–disable-renaming *\[other configure options\]*
+```Shell
+configure -–disable-renaming [other configure options]
+```
 
 (Configure options may also be passed to the runConfigureICU script.)
 
 To enable release-to-release binary compatibility, ICU must be built with
---disable-renaming, *and* applications must be built using the headers and
-libraries that resulted from the –-disable-renaming ICU build
+`--disable-renaming`, *and* applications must be built using the headers and
+libraries that resulted from the `–-disable-renaming` ICU build
 
 **ICU Version 3.0 or Later.** Binary compatibility of ICU releases is supported
 beginning with ICU version 3.0. Older versions of ICU (2.8 and earlier) do not
@@ -827,23 +837,23 @@ The major and minor numbers are the first and second numbers in a version
 number, separated by a period. For example, in the version numbers 3.4.2.1,
 3.4.2, or 3.4, "3" is the major, and "4" is the minor. Normally, ICU employs
 "symbol renaming", such that the C function names and C++ object names are
-#defined to contain the major and minor numbers. So, for example, if your
-application calls the function "ucnv_open()", it will link against
-"ucnv_open_3_4" if compiled against ICU 3.4, 3.4.2, or even 3.4.2.1. However, if
-compiled against ICU 3.8, the same code will link against "ucnv_open_3_8".
-Similarly, UnicodeString is renamed to UnicodeString_3_4, etc. This is normally
+`#defined` to contain the major and minor numbers. So, for example, if your
+application calls the function `ucnv_open()`, it will link against
+`ucnv_open_3_4` if compiled against ICU 3.4, 3.4.2, or even 3.4.2.1. However, if
+compiled against ICU 3.8, the same code will link against `ucnv_open_3_8`.
+Similarly, `UnicodeString` is renamed to `UnicodeString_3_4`, etc. This is normally
 transparent to the user, however, if you inspect the symbols of the library or
 your code, you will see the modified symbols.
 
 If there are multiple versions of ICU being linked against in one application,
 it will need to link against all relevant libraries for each version, for
 example, common, i18n, and data. ICU uses standard library renaming, where, for
-example, 'libicuuc.so' on one platform will actually be a symbolic link to
-'libicuuc.so.3.4'. When multiple ICU versions are used, the application may need
+example, `libicuuc.so` on one platform will actually be a symbolic link to
+`libicuuc.so.3.4`. When multiple ICU versions are used, the application may need
 to explicitly link against the exact versions of ICU being used.
 
-To disable renaming, build ICU with "--disable-renaming" passed to configure.
-Or, set the equivalent "#define U_DISABLE_RENAMING 1". Renaming must be disabled
+To disable renaming, build ICU with `--disable-renaming` passed to configure.
+Or, set the equivalent `#define U_DISABLE_RENAMING 1`. Renaming must be disabled
 both in the ICU build, and in the calling application.
 
 ### ICU Data Compatibility
@@ -877,8 +887,8 @@ maintenance releases.
 
 ### ICU4J Serialization Compatibility
 
-Starting in ICU4J 3.6, ICU4J stable API classes (marked as @stable) implementing
-java.io.Serializable support serialized objects to be deserialized by ICU4J 3.6
+Starting in ICU4J 3.6, ICU4J stable API classes (marked as `@stable`) implementing
+`java.io.Serializable` support serialized objects to be deserialized by ICU4J 3.6
 or newer version of ICU4J. Some classes perform only shallow serialization,
 therefore, it is not guaranteed that a deserialized object behaves exactly same
 with the original object across ICU4J versions. Also, when it is difficult to
