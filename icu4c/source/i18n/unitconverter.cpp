@@ -28,6 +28,12 @@ struct Factor {
     number::impl::DecNum factorNum;
     number::impl::DecNum factorDen;
     number::impl::DecNum offset;
+
+    /*For Debugging*/
+    StringPiece factorNumStr;
+    StringPiece factorDenStr;
+    StringPiece factorOffsetStr;
+
     bool reciprocal = false;
 
     int32_t constants[CONSTANTS_COUNT] = {};
@@ -38,12 +44,20 @@ struct Factor {
         offset.setTo(0.0, status);
     }
 
+    void setStrings(UErrorCode &status) {
+        factorNumStr = factorNum.toString(status);
+        factorDenStr = factorDen.toString(status);
+        factorOffsetStr = offset.toString(status);
+    }
+
     void multiplyBy(const Factor &rhs, UErrorCode &status) {
         factorNum.multiplyBy(rhs.factorNum, status);
         factorDen.multiplyBy(rhs.factorDen, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] += rhs.constants[i];
         offset.add(rhs.offset, status); // TODO(younies): fix this.
+
+       setStrings(status);
     }
 
     void divideBy(const Factor &rhs, UErrorCode &status) {
@@ -51,6 +65,8 @@ struct Factor {
         factorDen.divideBy(rhs.factorDen, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] -= rhs.constants[i]; // TODO(younies): fix this
+    
+       setStrings(status);
     }
 
     // apply the power to the factor.
@@ -78,6 +94,9 @@ struct Factor {
             factorNum.setTo(factorDen, status);
             factorDen.setTo(temp, status);
         }
+
+
+       setStrings(status);
     }
 
     // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
@@ -90,6 +109,9 @@ struct Factor {
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
             constants[i] *= -1;
         }
+
+
+       setStrings(status);
     }
 
     // Apply SI prefix to the `Factor`
@@ -111,6 +133,9 @@ struct Factor {
         } else {
             factorDen.multiplyBy(e, status);
         }
+
+
+       setStrings(status);
     }
 };
 
@@ -354,8 +379,10 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
 
     conversionRate.source = source;
     conversionRate.target = target;
+
     conversionRate.factorNum.setTo(finalFactor.factorNum, status);
     conversionRate.factorDen.setTo(finalFactor.factorDen, status);
+
     conversionRate.offset.setTo(finalFactor.offset, status);
 
     // TODO(younies): use the database.
@@ -380,10 +407,6 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode 
 }
 
 void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UErrorCode status) {
-    std::printf(conversion_rate_.factorNum.toString(status).data());
-    std::printf(conversion_rate_.factorDen.toString(status).data());
-    std::printf(conversion_rate_.offset.toString(status).data());
-
     DecNum result(input_value, status);
     result.multiplyBy(conversion_rate_.factorNum, status);
     result.divideBy(conversion_rate_.factorDen, status);
