@@ -48,7 +48,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 }
 
 void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
 
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
@@ -72,7 +72,7 @@ void UnitsTest::testBasic() {
 
     UnitConversionTestCase testCases[]{
         {"meter", "foot", 1.0, 3.28084},    //
-        {"kilometer", "foot", 1.0, 328.084} //
+        {"kilometer", "foot", 1.0, 3280.84} //
     };
 
     for (const auto &testCase : testCases) {

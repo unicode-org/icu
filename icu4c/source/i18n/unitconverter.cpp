@@ -29,11 +29,6 @@ struct Factor {
     number::impl::DecNum factorDen;
     number::impl::DecNum offset;
 
-    /*For Debugging*/
-    StringPiece factorNumStr;
-    StringPiece factorDenStr;
-    StringPiece factorOffsetStr;
-
     bool reciprocal = false;
 
     int32_t constants[CONSTANTS_COUNT] = {};
@@ -44,29 +39,19 @@ struct Factor {
         offset.setTo(0.0, status);
     }
 
-    void setStrings(UErrorCode &status) {
-        factorNumStr = factorNum.toString(status);
-        factorDenStr = factorDen.toString(status);
-        factorOffsetStr = offset.toString(status);
-    }
-
     void multiplyBy(const Factor &rhs, UErrorCode &status) {
         factorNum.multiplyBy(rhs.factorNum, status);
         factorDen.multiplyBy(rhs.factorDen, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] += rhs.constants[i];
         offset.add(rhs.offset, status); // TODO(younies): fix this.
-
-       setStrings(status);
     }
 
     void divideBy(const Factor &rhs, UErrorCode &status) {
-        factorNum.divideBy(rhs.factorNum, status); // Error if Numerator equal zero !
-        factorDen.divideBy(rhs.factorDen, status);
+        factorNum.multiplyBy(rhs.factorDen, status);
+        factorDen.multiplyBy(rhs.factorNum, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] -= rhs.constants[i]; // TODO(younies): fix this
-    
-       setStrings(status);
     }
 
     // apply the power to the factor.
@@ -75,28 +60,19 @@ struct Factor {
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] *= power;
 
-        DecNum originNum(factorNum, status);
-        DecNum originDen(factorDen, status);
-
-        factorNum.setTo(1, status);
-        factorDen.setTo(1, status);
-
-        bool positive = power >= 0;
+        bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
+                                     // the Numerator and Denomerator.
         int32_t absPower = std::abs(power);
 
-        for (int i = 0; i < absPower; i++) {
-            factorNum.multiplyBy(originNum, status);
-            factorDen.multiplyBy(originNum, status);
-        }
+        factorNum.power(absPower, status);
+        factorDen.power(absPower, status);
 
-        if (!positive) {
+        if (shouldFlip) {
+            // Flip Numerator and Denomirator.
             DecNum temp(factorNum, status);
             factorNum.setTo(factorDen, status);
             factorDen.setTo(temp, status);
         }
-
-
-       setStrings(status);
     }
 
     // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
@@ -109,33 +85,15 @@ struct Factor {
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
             constants[i] *= -1;
         }
-
-
-       setStrings(status);
     }
 
     // Apply SI prefix to the `Factor`
     void applySiPrefix(UMeasureSIPrefix siPrefix, UErrorCode &status) {
-        DecNum e;
-        e.setTo(1, status);
-        DecNum ten;
-        ten.setTo(10, status);
+        DecNum siPrefixDecNum;
+        siPrefixDecNum.setTo(10, status);
+        siPrefixDecNum.power(siPrefix, status);
 
-        bool positive = siPrefix > 0;
-        int32_t absSi = std::abs(siPrefix);
-
-        for (int i = 0; i < absSi; i++) {
-            e.multiplyBy(ten, status);
-        }
-
-        if (positive) {
-            factorNum.multiplyBy(e, status);
-        } else {
-            factorDen.multiplyBy(e, status);
-        }
-
-
-       setStrings(status);
+        factorNum.multiplyBy(siPrefixDecNum, status);
     }
 };
 
@@ -327,7 +285,7 @@ void substituteSingleConstant(Factor &factor, int32_t constValue,
 
     DecNum finalConstSub;
     finalConstSub.setTo(constSub, status);
-    finalConstSub.multiplyBy(absConstValue, status);
+    finalConstSub.power(absConstValue, status);
 
     if (positive) {
         factor.factorNum.multiplyBy(finalConstSub, status);
@@ -372,10 +330,24 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     loadCompoundFactor(SourcetoMiddle, source, status);
     loadCompoundFactor(TargettoMiddle, target, status);
 
+    double testing00 = finalFactor.factorNum.toDouble();
+    double testing0 = finalFactor.factorDen.toDouble();
+
+    double testing1 = SourcetoMiddle.factorNum.toDouble();
+    double testing2 = SourcetoMiddle.factorDen.toDouble();
+    double testing3 = TargettoMiddle.factorNum.toDouble();
+    double testing4 = TargettoMiddle.factorDen.toDouble();
+
     finalFactor.multiplyBy(SourcetoMiddle, status);
     finalFactor.divideBy(TargettoMiddle, status);
 
+    double testing5 = finalFactor.factorNum.toDouble();
+    double testing6 = finalFactor.factorDen.toDouble();
+
     substituteConstants(finalFactor, status);
+
+    double testing8 = finalFactor.factorNum.toDouble();
+    double testing9 = finalFactor.factorDen.toDouble();
 
     conversionRate.source = source;
     conversionRate.target = target;
@@ -407,6 +379,8 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode 
 }
 
 void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UErrorCode status) {
+
+    /*
     DecNum result(input_value, status);
     result.multiplyBy(conversion_rate_.factorNum, status);
     result.divideBy(conversion_rate_.factorDen, status);
@@ -422,7 +396,14 @@ void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UEr
         output_value.setTo(result, status);
     } else {
         output_value.setTo(result, status);
-    }
+    }*/
+
+    double result = input_value.toDouble();
+    double num = conversion_rate_.factorNum.toDouble();
+    double den = conversion_rate_.factorDen.toDouble();
+    result *= num / den;
+
+    output_value.setTo(result, status);
 }
 
 U_NAMESPACE_END

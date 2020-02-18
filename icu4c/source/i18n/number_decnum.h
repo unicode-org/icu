@@ -51,6 +51,9 @@ class U_I18N_API DecNum : public UMemory {
     /** Returns integral value of the `DecNum` */
     int32_t toInt32() const;
 
+    /** Returns double value of the `DecNum` */
+    double toDouble() const;
+
     void normalize();
 
     void multiplyBy(double rhs, UErrorCode& status);
@@ -65,8 +68,9 @@ class U_I18N_API DecNum : public UMemory {
     void subtract(double rhs, UErrorCode& status);
     void subtract(const DecNum& rhs, UErrorCode& status);
 
-    void power(int32_t power);
-    
+    void power(int32_t p, UErrorCode& status);
+    void power(const DecNum& rhs, UErrorCode& status);
+
     bool isNegative() const;
 
     bool isZero() const;

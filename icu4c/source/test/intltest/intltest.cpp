@@ -2184,10 +2184,10 @@ UBool IntlTest::assertEqualsNear(const char *message, const number::impl::DecNum
     decNumPrecision.setTo(precision, status);
 
     difference.setTo(expected, status);
-  //   difference.subtract(actual, status);
+    difference.subtract(actual, status);
     if (difference.isNegative()) difference.multiplyBy(-1, status);
 
-    if (difference.greaterThan(decNumPrecision, status) || U_FAILURE(status) || true) {
+    if (difference.greaterThan(decNumPrecision, status) || U_FAILURE(status)) {
         std::string expectedAsString = expected.toString(status).data();
         std::string actualAsString = actual.toString(status).data();
         errln((UnicodeString) "FAIL: " + message + "; got " + actualAsString.c_str() + "; expected " +

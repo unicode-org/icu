@@ -241,7 +241,17 @@ void DecNum::setTo(const uint8_t *bcd, int32_t length, int32_t scale, bool isNeg
 int32_t DecNum::toInt32() const {
     decContext fContext;
     return uprv_decNumberToInt32(fData, &fContext);
- }
+}
+
+double DecNum::toDouble() const {
+    UErrorCode status = U_ZERO_ERROR;
+    StringPiece strNumber = toString(status);
+    if (U_FAILURE(status)) {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
+
+    return std::atof(strNumber.data());
+}
 
 void DecNum::normalize() { uprv_decNumberReduce(fData, fData, &fContext); }
 
@@ -265,6 +275,16 @@ void DecNum::divideBy(double rhs, UErrorCode &status) {
 }
 
 void DecNum::divideBy(const DecNum &rhs, UErrorCode &status) {
+    if (rhs.isZero()) {
+        status = U_INTERNAL_PROGRAM_ERROR; // TODO(younies)
+        return;
+    }
+
+    // For testing (remove)
+    StringPiece lhsStr = toString(status);
+    StringPiece rhsStr = rhs.toString(status);
+    // End for testing
+
     uprv_decNumberDivide(fData, fData, rhs.fData, &fContext);
     if ((fContext.status & DEC_Inexact) != 0) {
         // Ignore.
@@ -295,6 +315,20 @@ void DecNum::subtract(double rhs, UErrorCode &status) {
 void DecNum::subtract(const DecNum &rhs, UErrorCode &status) {
     uprv_decNumberSubtract(fData, fData, rhs.fData, &fContext);
     if (fContext.status != 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+    }
+}
+
+void DecNum::power(int32_t p, UErrorCode &status) {
+    DecNum rhs;
+    rhs.setTo(p, status);
+    power(rhs, status);
+}
+
+void DecNum::power(const DecNum& rhs, UErrorCode& status) {
+    uprv_decNumberPower(fData, fData, rhs.fData, &fContext);
+    
+    if(fContext.status != 0){
         status = U_INTERNAL_PROGRAM_ERROR;
     }
 }
