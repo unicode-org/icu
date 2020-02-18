@@ -410,7 +410,7 @@ void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UEr
     DecNum result(input_value, status);
     result.multiplyBy(conversion_rate_.factorNum, status);
     result.divideBy(conversion_rate_.factorDen, status);
-    result.add(conversion_rate_.offset, status);
+    // TODO(younies): result.add(conversion_rate_.offset, status);
 
     if (U_FAILURE(status)) return;
 
