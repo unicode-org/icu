@@ -1991,10 +1991,15 @@ RBBIWordMonkey::RBBIWordMonkey()
     fMidNumLetSet     = new UnicodeSet(u"[\\p{Word_Break = MidNumLet}]",    status);
     fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter}]",    status);
     fMidNumSet        = new UnicodeSet(u"[\\p{Word_Break = MidNum}]",       status);
-    fNumericSet       = new UnicodeSet(u"[[\\p{Word_Break = Numeric}][\\uff10-\\uff19]]", status);
+    fNumericSet       = new UnicodeSet(u"[\\p{Word_Break = Numeric}]", status);
     fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);
     fExtendNumLetSet  = new UnicodeSet(u"[\\p{Word_Break = ExtendNumLet}]", status);
-    fExtendSet        = new UnicodeSet(u"[\\p{Word_Break = Extend}]",       status);
+    // There are some sc=Hani characters with WB=Extend.
+    // The break rules need to pick one or the other because
+    // Extend overlapping with something else is messy.
+    // For Unicode 13, we chose to keep U+16FF0 & U+16FF1
+    // in $Han (for $dictionary) and out of $Extend.
+    fExtendSet        = new UnicodeSet(u"[\\p{Word_Break = Extend}-[:Hani:]]", status);
     fWSegSpaceSet     = new UnicodeSet(u"[\\p{Word_Break = WSegSpace}]",    status);
 
     fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
