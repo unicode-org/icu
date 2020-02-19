@@ -96,9 +96,9 @@ In the example below, matching "`hello_world`",
 
 * '`2`' shows matches of the second rule, `$word_char $word_joiner $word_char`
 
-    hello_world
-    11111 11111
-        222
+      hello_world
+      11111 11111
+          222
 
 There is an overlap of the matched regions, which causes the chaining mechanism
 to join them into a single overall match.
