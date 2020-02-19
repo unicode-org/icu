@@ -270,15 +270,15 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 | rule | `^`? expr (`{`number`}`)? `;` | 8,9 |
 | number | [0-9]+ | 1 |
 | break-point | `/` | 10 |
-| expr | expr-q \| expr `|` expr \| expr expr | 3 |
-| expr-qterm | term `*` \| term `?` \| term `+` |
+| expr | expr-q \| expr `\|` expr \| expr expr | 3 |
+| expr-q | term \| term `*` \| term `?` \| term `+` |
 | term | rule-char \| unicode-set \| variable \| quoted-sequence \| `(` expr `)` \| break-point |
 | rule-special | *any printing ascii character except letters or numbers* \| white-space |
 | rule-char | *any non-escaped character that is not rule-special* \| `.` \| *any escaped character except* `\p` *or* `\P` |
 | variable | `$` name-start-char name-char* | 7 |
 | name-start-char | `_` \| \p{L} |
 | name-char | name-start-char \| \\p{N} |
-| quoted-sequence | `'''` *(any char except single quote or line terminator or two adjacent single quotes)*+ `'''` |
+| quoted-sequence | `'` *(any char except single quote or line terminator or two adjacent single quotes)*+ `'` |
 | escaped-char | *See “Character Quoting and Escaping” in the [UnicodeSet](../strings/unicodeset.md) chapter* |
 | unicode-set | See [UnicodeSet](../strings/unicodeset.md) | 4 |
 | comment | unescaped `#` *(any char except new-line)** new-line | 2 |
@@ -331,7 +331,7 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 | a+ | one or more instances of a |
 | a* | zero or more instances of a |
 | a \| b | either a or b, but not both |
-| `a` "`a`" | the literal string between the quotes or offset as `monospace` |
+| `a` "`a`" | the literal string between the quotes or displayed as `monospace` |
 
 ## Planned Changes and Removed or Deprecated Rule Features
 
