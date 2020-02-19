@@ -357,10 +357,15 @@ public class RBBITestMonkey extends TestFmwk {
             fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]");
             fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]");
             fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]");
-            fNumericSet      = new UnicodeSet("[[\\p{Word_Break = Numeric}][\\uFF10-\\uff19]]");
+            fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]");
             fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
             fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
-            fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]");
+            // There are some sc=Hani characters with WB=Extend.
+            // The break rules need to pick one or the other because
+            // Extend overlapping with something else is messy.
+            // For Unicode 13, we chose to keep U+16FF0 & U+16FF1
+            // in $Han (for $dictionary) and out of $Extend.
+            fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}-[:Hani:]]");
             fWSegSpaceSet    = new UnicodeSet("[\\p{Word_Break = WSegSpace}]");
             fZWJSet          = new UnicodeSet("[\\p{Word_Break = ZWJ}]");
             fExtendedPictSet = new UnicodeSet("[:Extended_Pictographic:]");
