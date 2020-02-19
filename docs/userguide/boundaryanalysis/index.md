@@ -80,9 +80,7 @@ different languages.
 Here's an example of a sentence, showing the boundary locations that will be
 identified by a word break iterator:
 
-<!--
-TODO: example
--->
+> :point_right: **Note**: TODO: An example needs to be added here.
 
 ### Line-break Boundary
 
@@ -93,9 +91,7 @@ wrap lines when displaying the text. The boundary rules are define here:
 This example shows the differences in the break locations produced by word and
 line break iterators:
 
-<!--
-TODO: example
--->
+> :point_right: **Note**: TODO: An example needs to be added here.
 
 ### Sentence Boundary
 
