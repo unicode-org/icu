@@ -935,7 +935,7 @@ void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
         if (*status != u'[') {
             errln("%s  status field does not start with '[': %s\n    %s", type, status, line);
         }
-        if (strcmp(status, u8"[]") != 0) {
+        if (strcmp(status, reinterpret_cast<const char*>(u8"[]")) != 0) {
             expectedHasErrors = TRUE;
         }
     }
