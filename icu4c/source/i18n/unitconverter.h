@@ -173,7 +173,7 @@ struct entry {
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
  */
-class UnitConverter {
+class U_I18N_API UnitConverter {
   public:
     /**
      * Constructor of `UnitConverter`.
