@@ -27,6 +27,7 @@ class UnitsTest : public IntlTest {
     void testMass();
     void testTemperature();
     void testArea();
+    void testComplicatedUnits();
 
     // TODO(younies): fix this.
     void verifyTestCase(const UnitConversionTestCase &testCase);
@@ -44,6 +45,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testMass);
     TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO(testArea);
+    TESTCASE_AUTO(testComplicatedUnits);
     TESTCASE_AUTO_END;
 }
 
@@ -172,6 +174,18 @@ void UnitsTest::testArea() {
         {"square-yard", "square-foot", 0.000001, 0.000009} //
         ,
         {"square-mile", "square-foot", 0.0, 0.0} //
+    };
+
+    for (const auto &testCase : testCases) {
+        verifyTestCase(testCase);
+    }
+}
+
+void UnitsTest::testComplicatedUnits() {
+        IcuTestErrorCode status(*this, "Units Area");
+
+    UnitConversionTestCase testCases[]{
+        {"meter-per-second", "meter-per-millisecond", 1000.0, 1.0} //
     };
 
     for (const auto &testCase : testCases) {

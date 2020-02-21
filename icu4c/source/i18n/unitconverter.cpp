@@ -234,23 +234,13 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
 // Load factor for a single source
 void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
     factor.source = source;
-    bool reciprocal = false;
 
-    // TODO(younies): illustrate this step.
-    if (source.substr(0, 7) == "one-per") {
-        reciprocal = true;
-        source = source.substr(8); // e.g. one-per-second --> second
-    }
     for (const auto &entry : temporarily::dataEntries) {
         if (entry.source == factor.source) {
             factor.target = entry.target;
             extractFactor(factor, entry.factor, status);
             factor.offset.setTo(entry.offset, status);
             factor.reciprocal = factor.reciprocal;
-
-            if (reciprocal) {
-                factor.flip(status);
-            }
 
             return;
         }
@@ -269,10 +259,12 @@ void loadCompoundFactor(Factor &factor, StringPiece source, UErrorCode &status) 
         auto singleUnit = TempSingleUnit::forMeasureUnit(singleUnits[i], status);
 
         loadSingleFactor(singleFactor, singleUnit.identifier, status);
-        singleFactor.power(singleUnit.dimensionality, status);
-        singleFactor.applySiPrefix(singleUnit.siPrefix, status);
-        // TODO(younies): handle `one-per-second` case
 
+        // You must apply SiPrefix before the power, because the power may be will flip the factor.
+        singleFactor.applySiPrefix(singleUnit.siPrefix, status);
+
+        singleFactor.power(singleUnit.dimensionality, status);
+        
         factor.multiplyBy(singleFactor, status);
     }
 }
