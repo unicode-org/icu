@@ -44,14 +44,17 @@ struct Factor {
         factorDen.multiplyBy(rhs.factorDen, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
             constants[i] += rhs.constants[i];
-        offset.add(rhs.offset, status); // TODO(younies): fix this.
+
+        offset.add(rhs.offset, status);
     }
 
     void divideBy(const Factor &rhs, UErrorCode &status) {
         factorNum.multiplyBy(rhs.factorDen, status);
         factorDen.multiplyBy(rhs.factorNum, status);
         for (int i = 0; i < CONSTANTS_COUNT; i++)
-            constants[i] -= rhs.constants[i]; // TODO(younies): fix this
+            constants[i] -= rhs.constants[i];
+
+        offset.add(rhs.offset, status);
     }
 
     // apply the power to the factor.
@@ -154,14 +157,14 @@ void addSingleFactorConstant(Factor &factor, StringPiece baseStr, number::impl::
         factor.constants[CONSTANT_LB2KG] += power.toInt32();
     } else if (baseStr == "cup2m3") {
         factor.constants[CONSTANT_CUP2M3] += power.toInt32();
-    } else if (baseStr == "pi") {
+    } else if (baseStr == "PI") {
         factor.constants[CONSTANT_PI] += power.toInt32();
     } else {
         if (U_FAILURE(status)) return;
 
         number::impl::DecNum factorNumber;
-        factorNumber.setTo(baseStr.data(), status);
-
+        factorNumber.setTo(baseStr, status);
+        // TODO(younies): do not use the signal, use the power.
         if (signal < 0) { // negative number means add the factor to the denominator.
             factor.factorDen.multiplyBy(factorNumber, status);
         } else {
@@ -219,7 +222,8 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
     auto factorData = stringFactor.data();
     for (int32_t i = 0, start = 0, n = stringFactor.length(); i < n; i++) {
         if (factorData[i] == '*' || factorData[i] == '/') {
-            addFactorElement(factor, stringFactor.substr(start, i), signal, status);
+            StringPiece factorElement = stringFactor.substr(start, i - start);
+            addFactorElement(factor, factorElement, signal, status);
 
             start = i + 1; // Set `start` to point to the start of the new element.
         } else if (i == n - 1) {
@@ -264,7 +268,7 @@ void loadCompoundFactor(Factor &factor, StringPiece source, UErrorCode &status) 
         singleFactor.applySiPrefix(singleUnit.siPrefix, status);
 
         singleFactor.power(singleUnit.dimensionality, status);
-        
+
         factor.multiplyBy(singleFactor, status);
     }
 }
@@ -291,7 +295,7 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
     DecNum constSubs[CONSTANTS_COUNT];
 
     constSubs[CONSTANT_FT2M].setTo(0.3048, status);
-    constSubs[CONSTANT_PI].setTo(3.142, status);
+    constSubs[CONSTANT_PI].setTo(3.14159265359, status);
     constSubs[CONSTANT_GRAVITY].setTo(9.80665, status);
     constSubs[CONSTANT_G].setTo("0.0000000000667408", status);
     constSubs[CONSTANT_CUP2M3].setTo("0.000236588", status);
@@ -302,6 +306,23 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
         substituteSingleConstant(factor, factor.constants[i], constSubs[i], status);
         factor.constants[i] = 0;
     }
+}
+
+/**
+ * Checks if the source unit and the target unit are singular. For example celsius or fahrenheit. But not
+ * square-celsius or square-fahrenheit.
+ */
+UBool checkSingularUnits(StringPiece source, UErrorCode &status) {
+    icu::MeasureUnit compoundSourceUnit = icu::MeasureUnit::forIdentifier(source, status);
+
+    auto singleUnits = compoundSourceUnit.splitToSingleUnits(status);
+    if (singleUnits.length() > 1) return false; // Singular unit contains only a single unit.
+
+    auto singleUnit = TempSingleUnit::forMeasureUnit(singleUnits[0], status);
+
+    if (singleUnit.dimensionality != 1) return false;
+    if (singleUnit.siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return true;
+    return false;
 }
 
 /**
@@ -347,7 +368,18 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     conversionRate.factorNum.setTo(finalFactor.factorNum, status);
     conversionRate.factorDen.setTo(finalFactor.factorDen, status);
 
-    conversionRate.offset.setTo(finalFactor.offset, status);
+    if (checkSingularUnits(source, status) && checkSingularUnits(target, status)) {
+
+        double num1 = SourcetoMiddle.factorNum.toDouble();
+        double den1 = SourcetoMiddle.factorDen.toDouble();
+        double newOffset1 = SourcetoMiddle.offset.toDouble() * den1 / num1;
+        conversionRate.sourceOffset.setTo(newOffset1, status);
+
+        double num2 = TargettoMiddle.factorNum.toDouble();
+        double den2 = TargettoMiddle.factorDen.toDouble();
+        double newOffset2 = TargettoMiddle.offset.toDouble() * den2 / num2;
+        conversionRate.targetOffset.setTo(newOffset2, status);
+    }
 
     // TODO(younies): use the database.
     // UnitConversionRatesSink sink(&conversionFactor);
@@ -390,10 +422,12 @@ void UnitConverter::convert(const DecNum &input_value, DecNum &output_value, UEr
         output_value.setTo(result, status);
     }*/
 
-    double result = input_value.toDouble();
+    double result = input_value.toDouble() + conversion_rate_.sourceOffset.toDouble();
     double num = conversion_rate_.factorNum.toDouble();
     double den = conversion_rate_.factorDen.toDouble();
     result *= num / den;
+
+    result -= conversion_rate_.targetOffset.toDouble();
 
     output_value.setTo(result, status);
 }

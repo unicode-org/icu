@@ -36,13 +36,15 @@ struct ConversionRate {
     StringPiece target;
     number::impl::DecNum factorNum;
     number::impl::DecNum factorDen;
-    number::impl::DecNum offset;
+    number::impl::DecNum sourceOffset;
+    number::impl::DecNum targetOffset;
     bool reciprocal;
 
     ConversionRate(UErrorCode &status) {
         factorNum.setTo(1.0, status);
         factorDen.setTo(1.0, status);
-        offset.setTo(0.0, status);
+        sourceOffset.setTo(0.0, status);
+        targetOffset.setTo(0.0, status);        
         reciprocal = false;
     }
 };
@@ -119,7 +121,7 @@ struct entry {
     {"horsepower", "kilogram-square-meter-per-cubic-second", "ft2m*lb2kg*gravity*550", "0", false},
     {"inch-hg", "kilogram-per-meter-square-second", "3386.389", "0", false},
     {"knot", "meter-per-second", "1852/3600", "0", false},
-    {"fahrenheit", "kelvin", "5/9", "2298.35/9", false},
+    {"fahrenheit", "kelvin", "5/9", "255.372222222", false}, //2298.35/9
     {"barrel", "cubic-meter", "cup2m3*672", "0", false},
     {"bushel", "cubic-meter", "0.03523907", "0", false},
     {"cup", "cubic-meter", "cup2m3", "0", false},
@@ -143,7 +145,7 @@ struct entry {
     {"watt", "kilogram-square-meter-per-cubic-second", "1", "0", false},
     {"bar", "kilogram-per-meter-square-second", "100000", "0", false},
     {"pascal", "kilogram-per-meter-square-second", "1", "0", false},
-    {"celsius", "kelvin", "1", "-273.15", false},
+    {"celsius", "kelvin", "1", "273.15", false},
     {"cup-metric", "cubic-meter", "0.00025", "0", false},
     {"liter", "cubic-meter", "0.001", "0", false},
     {"pint-metric", "cubic-meter", "0.0005", "0", false},
