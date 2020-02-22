@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # RuleBasedNumberFormat Examples
 
 ## Annotated RuleBasedNumberFormat Example
@@ -10,17 +15,19 @@ describes the rule syntax in more detail.
 This ruleset formats a number using standard decimal place-value notation, but
 using words instead of digits, e.g. 123.4 formats as 'one two three point four':
 
-"-x: minus >>;\\n"
-+ "x.x: << point >>;\\n"
-+ "zero; one; two; three; four; five; six;\\n"
-+ " seven; eight; nine;\\n"
-+ "10: << >>;\\n"
-+ "100: << >>>;\\n"
-+ "1000: <<, >>>;\\n"
-+ "1,000,000: <<, >>>;\\n"
-+ "1,000,000,000: <<, >>>;\\n"
-+ "1,000,000,000,000: <<, >>>;\\n"
-+ "1,000,000,000,000,000: =#,##0=;\\n";
+```
+"-x: minus >>;\n"
++ "x.x: << point >>;\n"
++ "zero; one; two; three; four; five; six;\n"
++ "    seven; eight; nine;\n"
++ "10: << >>;\n"
++ "100: << >>>;\n"
++ "1000: <<, >>>;\n"
++ "1,000,000: <<, >>>;\n"
++ "1,000,000,000: <<, >>>;\n"
++ "1,000,000,000,000: <<, >>>;\n"
++ "1,000,000,000,000,000: =#,##0=;\n";
+```
 
 In this example, the rules consist of one (unnamed) ruleset. It lists nineteen
 rules, each terminated by a semicolon. It starts with two special rules for

@@ -4,7 +4,7 @@
 
 Date and time formatters are used to convert dates and times from their internal
 representations to textual form and back again in a language-independent manner.
-The date and time formatters use UDate, which is the internal representation.
+The date and time formatters use `UDate`, which is the internal representation.
 Converting from the internal representation (milliseconds since midnight,
 January 1, 1970) to text is known as "formatting," and converting from text to
 milliseconds is known as "parsing." These processes involve two mappings:
@@ -30,25 +30,31 @@ The DateFormat interface in ICU enables you to format a Date in milliseconds
 into a string representation of the date. It also parses the string back to the
 internal Date representation in milliseconds.
 
-DateFormat\* df = DateFormat::createDateInstance();
+```cpp
+DateFormat* df = DateFormat::createDateInstance();
 UnicodeString myString;
-UDate myDateArr\[\] = { 0.0, 100000000.0, 2000000000.0 };
+UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 };
 for (int32_t i = 0; i < 3; ++i) {
-myString.remove();
-cout << df->format( myDateArr\[i\], myString ) << endl;
+  myString.remove();
+  cout << df->format( myDateArr[i], myString ) << endl;
 }
+```
 
 To format a date for a different Locale, specify it in the call to:
 
-DateFormat\* df = DateFormat::createDateInstance
-( DateFormat::SHORT, Locale::getFrance());
+```cpp
+DateFormat* df = DateFormat::createDateInstance
+   ( DateFormat::SHORT, Locale::getFrance());
+```
 
 ### Parsing Dates
 
 Use a DateFormat to parse also:
 
+```cpp
 UErrorCode status = ZERO_ERROR;
 UDate myDate = df->parse(myString, status);
+```
 
 When numeric fields abut one another directly, with no intervening delimiter
 characters, they constitute a run of abutting numeric fields. Such runs are
@@ -90,7 +96,7 @@ ICU currently provides limited support for formatting dates using a â€œrelativeâ
 style, specified using RELATIVE_SHORT, RELATIVE_MEDIUM, RELATIVE_LONG. or
 RELATIVE_FULL. As currently implemented, relative date formatting only affects
 the formatting of dates within a limited range of calendar days before or after
-the current date, based on the CLDR <field type="day">/<relative> data: For
+the current date, based on the CLDR `<field type="day">`/`<relative>` data: For
 example, in English, "Yesterday", "Today", and "Tomorrow". Within this range,
 the specific relative style currently makes no difference. Outside of this
 range, relative dates are formatted using the corresponding non-relative style
@@ -103,7 +109,7 @@ You can set the time zone on the format. If you want more control over the
 format or parsing, cast the DateFormat you get from the factory methods to a
 SimpleDateFormat. This works for the majority of countries.
 
-*Remember to check getDynamicClassID() before carrying out the cast.*
+:point_right: **Note**: *Remember to check getDynamicClassID() before carrying out the cast.*
 
 ### Working with Positions
 
