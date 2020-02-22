@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Formatting Messages
 
 ## Overview
@@ -105,50 +110,50 @@ obvious" → "This {isn't} obvious")
     program syntax, like quoting in MessageFormat. See the annotations for
     U+0027 Apostrophe in The Unicode Standard.
 
-### **Argument formatting**
+### Argument formatting
 
 Arguments are formatted according to their type, using the default ICU
 formatters for those types, unless otherwise specified. For unknown types the
-Java MessageFormat will call toString().
+Java `MessageFormat` will call `toString()`.
 
 There are also several ways to control the formatting.
 
-**Predefined styles (recommended)**
+#### Predefined styles (recommended)
 
-You can specify the argStyle to be one of the predefined values short, medium,
-long, full (to get one of the standard forms for dates / times) and integer,
-currency, percent (for number formatting).
+You can specify the `argStyle` to be one of the predefined values `short`, `medium`,
+`long`, `full` (to get one of the standard forms for dates / times) and `integer`,
+`currency`, `percent` (for number formatting).
 
-**Skeletons (recommended)**
+#### Skeletons (recommended)
 
-Numbers, dates, and times can use a skeleton in argStyle, prefixed with :: to
+Numbers, dates, and times can use a skeleton in `argStyle`, prefixed with `::` to
 distinguish them from patterns. These are locale-independent ways to specify the
 format, and this is the recommended mechanism if the predefined styles are not
 appropriate.
 
 Date skeletons:
 
-** ICU4J:**
+- **ICU4J:**
 <http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/SimpleDateFormat.html>
 
-** ICU4C:** <http://icu-project.org/apiref/icu4c/classSimpleDateFormat.html>
+- **ICU4C:** <http://icu-project.org/apiref/icu4c/classSimpleDateFormat.html>
 
 Number formatter skeletons:
 
-** ICU4J:**
+- **ICU4J:**
 <http://icu-project.org/apiref/icu4j/com/ibm/icu/number/NumberFormatter.html>
 
-** ICU4C:** <http://icu-project.org/apiref/icu4c/classicu_1_1NumberFormat.html>
+- **ICU4C:** <http://icu-project.org/apiref/icu4c/classicu_1_1NumberFormat.html>
 
-**Format the parameters separately (recommended)**
+#### Format the parameters separately (recommended)
 
-You can format the parameter as you need **before** calling MessageFormat, and
-then passing the resulting string as a parameter to MessageFormat.
+You can format the parameter as you need **before** calling `MessageFormat`, and
+then passing the resulting string as a parameter to `MessageFormat`.
 
 This offers maximum control, and is preferred to using custom format objects
 (see below).
 
-**String patterns (discouraged)**
+#### String patterns (discouraged)
 
 These can be used for numbers, dates, and times, but they are locale-sensitive,
 and they therefore would need to be localized by your translators, which adds
@@ -169,7 +174,7 @@ Arabic). So the translated patterns get used in tens of countries. On the other
 hand, skeletons are localized according to the MessageFormat locale, which
 should include regional variants (e.g., “fr-CA”).
 
-### Custom Format Objects (discouraged)
+#### Custom Format Objects (discouraged)
 
 The MessageFormat class allows setting custom Format objects to format
 arguments, overriding the arguments' pattern specification. This is discouraged:
@@ -191,20 +196,22 @@ methods address arguments by argument number ("index") or name.
 The following code fragment created this output: "At 4:34 PM on March 23, there
 was a disturbance in the Force on planet 7."
 
-UErrorCode err = U_ZERO_ERROR;
-Formattable arguments\[\] = {
-(int32_t)7,
-Formattable(Calendar.getNow(), Formattable::kIsDate),
-"a disturbance in the Force"
-};
-UnicodeString result;
-result = MessageFormat::format(
-"At {1,time,::jmm} on {1,date,::dMMMM}, there was {2} on
-planet{0,number,integer}.",
-arguments,
-3,
-result,
-err);
+```cpp
+    UErrorCode err = U_ZERO_ERROR;
+    Formattable arguments[] = {
+       (int32_t)7,
+       Formattable(Calendar.getNow(), Formattable::kIsDate),
+       "a disturbance in the Force"
+    };
+
+    UnicodeString result;
+    result = MessageFormat::format(
+       "At {1,time,::jmm} on {1,date,::dMMMM}, there was {2} on planet{0,number,integer}.",
+       arguments,
+       3,
+       result,
+       err);
+```
 
 There are several more usage examples for the MessageFormat and ChoiceFormat
 classes in [C , C++ and Java](examples.md).

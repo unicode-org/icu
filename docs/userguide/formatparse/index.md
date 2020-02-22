@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Formatting and Parsing
 
 ## Overview
@@ -23,7 +28,7 @@ reverse operation. It is the process of converting a string to an internal
 representation of the date, time, number, message or other object.
 
 Using the formatting classes is an important step in internationalizing your
-software because the format() and parse() methods in each of the classes make
+software because the `format()` and `parse()` methods in each of the classes make
 your software language neutral, by replacing implicit conversions with explicit
 formatting calls.
 
@@ -46,7 +51,9 @@ following:
 
 *   Avoid writing special routines to handle specific locales
 
-*   String objects formatted by format() are parseable by the parse() method
+*   String objects formatted by `format()` are parseable by the `parse()` method\*
+
+:point_right: **\* Note**: Although parsing is supported in several legacy ICU APIs, it is generally considered bad practice to parse localized strings.  For more information, read [Why You Should Not Parse Localized Strings](https://blog.sffc.xyz/post/190943794505/why-you-should-not-parse-localized-strings).
 
 ### Numbers and Currencies
 
@@ -55,15 +62,15 @@ representation. When displaying or printing a number it is converted to a
 locale-specific string. For example, the number 12345.67 is "12,345.67" in the
 US, "12 345,67" in France and "12.345,67" in Germany.
 
-By invoking the methods provided by the NumberFormat class, you can format
+By invoking the methods provided by the `NumberFormat` class, you can format
 numbers, currencies, and percentages according to the specified or default
-locale. NumberFormat is locale-sensitive so you need to create a new
-NumberFormat for each locale. NumberFormat methods format primitive-type
+locale. `NumberFormat` is locale-sensitive so you need to create a new
+`NumberFormat` for each locale. `NumberFormat` methods format primitive-type
 numbers, such as double and output the number as a locale-specific string.
 
-For currencies you call getCurrencyInstance to create a formatter that returns a
+For currencies you call `getCurrencyInstance` to create a formatter that returns a
 string with the formatted number and the appropriate currency sign. Of course,
-the NumberFormat class is unaware of exchange rates so, the number output is the
+the `NumberFormat` class is unaware of exchange rates so, the number output is the
 same regardless of the specified currency. This means that the same number has
 different monetary values depending on the currency locale. If the number is
 9988776.65 the results will be:
@@ -75,7 +82,7 @@ different monetary values depending on the currency locale. If the number is
 *   $9,988,776.65 in the United States
 
 In order to format percentages, create a locale-specific formatter and call the
-getPercentInstance method. With this formatter, a decimal fraction such as 0.75
+`getPercentInstance` method. With this formatter, a decimal fraction such as 0.75
 is displayed as 75%.
 
 #### Customizing Number Formats
@@ -97,7 +104,7 @@ Using NumberFormat (§) class methods (see the [Formatting
 Numbers](formatparse/numbers/index.md) chapter) with a predefined locale is the
 easiest and the most accurate way to format numbers, and currencies.
 
-* See *[*Properties and ICU Rule Syntax*](strings/properties.md) *for
+:point_right: **Note**: *See [Properties and ICU Rule Syntax](strings/properties.md) for
 information regarding syntax characters.*
 
 ### Date and Times
@@ -106,7 +113,7 @@ You display or print a Date by first converting it to a locale-specific string
 that conforms to the conventions of the end user's Locale. For example, Germans
 recognize 20.4.98 as a valid date, and Americans recognize 4/20/98.
 
-*The appropriate Calendar support is required for different locales. For
+:point_right: **Note**: *The appropriate Calendar support is required for different locales. For
 example, the Buddhist calendar is the official calendar in Thailand so the
 typical assumption of Gregorian Calendar usage should not be used. ICU will pick
 the appropriate Calendar based on the locale you supply when opening a Calendar
@@ -126,27 +133,27 @@ rooms for rent," where "for rent" is the only constant text among the three.
 ICU provides four major areas and twelve classes for formatting numbers, dates
 and messages:
 
-**General Formatting**
+### General Formatting
 
-*   Format
+*   `Format`:
     The abstract superclass of all format classes. It provides the basic methods
     for formatting and parsing numbers, dates, strings and other objects.
 
-*   FieldPosition
+*   `FieldPosition`:
     A concrete class for holding the field constant and the begin and end
     indices for number and date fields.
 
-*   ParsePosition
+*   `ParsePosition`:
     A concrete class for holding the parse position in a string during parsing.
 
-*   Formattable
+*   `Formattable`:
     Formattable objects can be passed to the Format class or its subclasses for
     formatting. It encapsulates a polymorphic piece of data to be formatted and
     is used with MessageFormat. Formattable is used by some formatting
     operations to provide a single "type" that encompasses all formattable
     values (e.g., it can hold a number, a date, or a string, and so on).
 
-*   UParseError
+*   `UParseError`:
     UParseError is used to returned detailed information about parsing errors.
     It is used by the ICU parsing engines that parse long rules, patterns, or
     programs. This is helpful when the text being parsed is long enough that
