@@ -1,6 +1,6 @@
 ﻿# UCA_Rules_SHORT.txt
-# Date: 2019-11-08, 22:14:11 GMT
-# © 2019 Unicode®, Inc.
+# Date: 2020-02-12, 17:50:33 GMT
+# © 2020 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # UCA Version: 13.0.0
@@ -19518,6 +19518,7 @@
  <	 ꦱ
  <	 ꦲ
  <	 ꦴ
+   <<<	 ꦵ
  <	 ꦼ
  <	 ꦶ
  <	 ꦷ
@@ -19526,7 +19527,6 @@
  <	 ꦽ
  <	 ꦺ
  <	 ꦻ
- <	 ꦵ
  <	 ꧀
  <	 ᢀ
  <	 ᢁ
