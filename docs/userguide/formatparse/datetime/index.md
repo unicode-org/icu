@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Formatting Dates and Times
 
 ## Formatting Dates and Times Overview
@@ -176,181 +181,69 @@ format (QQQQ), whereas "2nd quarter 2007" would use the regular format (qqqq
 yyyy).
 
 The pattern characters used in the Date Field Symbol Table are defined by CLDR;
-for more information see [CLDR Date Field
-SymbolTable](http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
+for more information see [CLDR Date Field Symbol Table](http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
 Note that the examples may not reflect current CLDR data.
 
 #### Date Field Symbol Table
 
-Symbol Meaning Example(s) G era designator G, GG, *or* GGG
-GGGG
-GGGGG AD
-Anno Domini
-A y year yy
-y *or* yyyy 96
-1996 Y year of "Week of Year" Y 1997 u extended year u 4601 U cyclic year name,
-as in Chinese lunar calendar U 甲子 r related Gregorian year r 1996 Q quarter Q
-QQ
-QQQ
-QQQQ
-QQQQQ 2
-02
-Q2
-2nd quarter
-2 q **Stand Alone** quarter q
-qq
-qqq
-qqqq
-qqqqq 2
-02
-Q2
-2nd quarter
-2 M month in year M
-MM
-MMM
-MMMM
-MMMMM 9
-09
-Sep
-September
-S L Stand Alone month in year L
-LL
-LLL
-LLLL
-LLLLL 9
-09
-Sep
-September
-S w week of year w
-ww 27
-27 W\\ week of month W 2 d day in month d
-dd 2
-02 D day of year D 189 F day of week in month F 2 (2nd Wed in July) g modified
-julian day g 2451334 E day of week E, EE, *or* EEE
-EEEE
-EEEEE
-EEEEEE Tue
-Tuesday
-T
-Tu e local day of week
-example: if Monday is 1st day, Tuesday is 2nd ) e *or *ee
-eee
-eeee
-eeeee
-eeeeee 2
-Tue
-Tuesday
-T
-Tu c Stand Alone local day of week c *or *cc
-ccc
-cccc
-ccccc
-cccccc 2
-Tue
-Tuesday
-T
-Tu a am/pm marker a pm h hour in am/pm (1~12) h
-hh 7
-07 H hour in day (0~23) H
-HH 0
-00 k hour in day (1~24) k
-kk 24
-24 K hour in am/pm (0~11) K
-KK 0
-00 m minute in hour m
-mm 4
-04 s second in minute s
-ss 5
-05 S fractional second - truncates (like other time fields)
-to the count of letters when formatting. Appends
-zeros if more than 3 letters specified. Truncates at
-three significant digits when parsing. S
-SS
-SSS
-SSSS 2
-23
-235
-2350 A milliseconds in day A 61201235 z Time Zone: specific non-location z, zz,
-*or* zzz
-zzzz PDT
-Pacific Daylight Time Z Time Zone: ISO8601 basic hms? / RFC 822
-Time Zone: long localized GMT (=OOOO)
-TIme Zone: ISO8601 extended hms? (=XXXXX) Z, ZZ, *or* ZZZ
-ZZZZ
-ZZZZZ -0800
-GMT-08:00
--08:00, -07:52:58, Z O Time Zone: short localized GMT
-Time Zone: long localized GMT (=ZZZZ) O
-OOOO GMT-8
-GMT-08:00 v Time Zone: generic non-location
-(falls back first to VVVV) v
-vvvv PT
-Pacific Time *or* Los Angeles Time V Time Zone: short time zone ID
-Time Zone: long time zone ID
-Time Zone: time zone exemplar city
-Time Zone: generic location (falls back to OOOO) V
-VV
-VVV
-VVVV uslax
-America/Los_Angeles
-Los Angeles
-Los Angeles Time X Time Zone: ISO8601 basic hm?, with Z for 0
-Time Zone: ISO8601 basic hm, with Z
-Time Zone: ISO8601 extended hm, with Z
-Time Zone: ISO8601 basic hms?, with Z
-Time Zone: ISO8601 extended hms?, with Z X
-XX
-XXX
-XXXX
-XXXXX -08, +0530, Z
--0800, Z
--08:00, Z
--0800, -075258, Z
--08:00, -07:52:58, Z x Time Zone: ISO8601 basic hm?, without Z for 0
-Time Zone: ISO8601 basic hm, without Z
-Time Zone: ISO8601 extended hm, without Z
-Time Zone: ISO8601 basic hms?, without Z
-Time Zone: ISO8601 extended hms?, without Z x
-xx
-xxx
-xxxx
-xxxxx -08, +0530
--0800
--08:00
--0800, -075258
--08:00, -07:52:58 ' escape for text ' (nothing) ' ' two single quotes produce
-one ' ' ' *Any characters in the pattern that are not in the ranges of
+| Symbol | Meaning | Pattern | Example Output |
+| --- | --- | --- | --- |
+| G | era designator | G, GG, or GGG<br/>GGGG<br/>GGGGG | AD<br/>Anno Domini<br/>A |
+| y | year | yy<br/>y or yyyy | 96<br/>1996 |
+| Y | year of "Week of Year" | Y | 1997 |
+| u | extended year | u | 4601 |
+| U | cyclic year name, as in Chinese lunar calendar | U | 甲子 |
+| r | related Gregorian year | r | 1996 |
+| Q | quarter | Q<br/>QQ<br/>QQQ<br/>QQQQ<br/>QQQQQ | 2<br/>02<br/>Q2<br/>2nd quarter<br/>2 |
+| q | Stand Alone quarter | q<br/>qq<br/>qqq<br/>qqqq<br/>qqqqq | 2<br/>02<br/>Q2<br/>2nd quarter<br/>2 |
+| M | month in year | M<br/>MM<br/>MMM<br/>MMMM<br/>MMMMM | 9<br/>09<br/>Sep<br/>September<br/>S |
+| L | Stand Alone month in year | L<br/>LL<br/>LLL<br/>LLLL<br/>LLLLL | 9<br/>09<br/>Sep<br/>September<br/>S |
+| w | week of year | w<br/>ww | 27<br/>27 |
+| W | week of month | W | 2 |
+| d | day in month | d<br/>dd | 2<br/>02 |
+| D | day of year | D | 189 |
+| F | day of week in month | F | 2 (2nd Wed in July) |
+| g | modified julian day | g | 2451334 |
+| E | day of week | E, EE, or EEE<br/>EEEE<br/>EEEEE<br/>EEEEEE | Tue<br/>Tuesday<br/>T<br/>Tu |
+| e | local day of week<br/>example: if Monday is 1st day, Tuesday is 2nd ) | e or ee<br/>eee<br/>eeee<br/>eeeee<br/>eeeeee | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
+| c | Stand Alone local day of week | c or cc<br/>ccc<br/>cccc<br/>ccccc<br/>cccccc | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
+| a | am/pm marker | a | pm |
+| h | hour in am/pm (1~12) | h<br/>hh | 7<br/>07 |
+| H | hour in day (0~23) | H<br/>HH | 0<br/>00 |
+| k | hour in day (1~24) | k<br/>kk | 24<br/>24 |
+| K | hour in am/pm (0~11) | K<br/>KK | 0<br/>00 |
+| m | minute in hour | m<br/>mm | 4<br/>04 |
+| s | second in minute | s<br/>ss | 5<br/>05 |
+| S | fractional second - truncates (like other time fields)<br/>to the count of letters when formatting. Appends<br/>zeros if more than 3 letters specified. Truncates at<br/>three significant digits when parsing. | S<br/>SS<br/>SSS<br/>SSSS | 2<br/>23<br/>235<br/>2350 |
+| A | milliseconds in day | A | 61201235 |
+| z | Time Zone: specific non-location | z, zz, or zzz<br/>zzzz | PDT<br/>Pacific Daylight Time |
+| Z | Time Zone: ISO8601 basic hms? / RFC 822<br/>Time Zone: long localized GMT (=OOOO)<br/>TIme Zone: ISO8601 extended hms? (=XXXXX) | Z, ZZ, or ZZZ<br/>ZZZZ<br/>ZZZZZ | -0800<br/>GMT-08:00<br/>-08:00, -07:52:58, Z |
+| O | Time Zone: short localized GMT<br/>Time Zone: long localized GMT (=ZZZZ) | O<br/>OOOO | GMT-8<br/>GMT-08:00 |
+| v | Time Zone: generic non-location<br/>(falls back first to VVVV) | v<br/>vvvv | PT<br/>Pacific Time or Los Angeles Time |
+| V | Time Zone: short time zone ID<br/>Time Zone: long time zone ID<br/>Time Zone: time zone exemplar city<br/>Time Zone: generic location (falls back to OOOO) | V<br/>VV<br/>VVV<br/>VVVV | uslax<br/>America/Los_Angeles<br/>Los Angeles<br/>Los Angeles Time |
+| X | Time Zone: ISO8601 basic hm?, with Z for 0<br/>Time Zone: ISO8601 basic hm, with Z<br/>Time Zone: ISO8601 extended hm, with Z<br/>Time Zone: ISO8601 basic hms?, with Z<br/>Time Zone: ISO8601 extended hms?, with Z | X<br/>XX<br/>XXX<br/>XXXX<br/>XXXXX | -08, +0530, Z<br/>-0800, Z<br/>-08:00, Z<br/>-0800, -075258, Z<br/>-08:00, -07:52:58, Z |
+| x | Time Zone: ISO8601 basic hm?, without Z for 0<br/>Time Zone: ISO8601 basic hm, without Z<br/>Time Zone: ISO8601 extended hm, without Z<br/>Time Zone: ISO8601 basic hms?, without Z<br/>Time Zone: ISO8601 extended hms?, without Z | x<br/>xx<br/>xxx<br/>xxxx<br/>xxxxx | -08, +0530<br/>-0800<br/>-08:00<br/>-0800, -075258<br/>-08:00, -07:52:58 |
+| ' | escape for text | ' | (nothing) |
+| ' ' | two single quotes produce one | ' ' | ' |
+
+:point_right: **Note**: *Any characters in the pattern that are not in the ranges of
 \['a'..'z'\] and \['A'..'Z'\] will be treated as quoted text. For instance,
 characters like ':', '.', ' ', '#' and '@' will appear in the resulting time
 text even they are not enclosed within single quotes.The single quote is used to
 'escape' letters. Two single quotes in a row, whether inside or outside a quoted
 sequence, represent a 'real' single quote.*
-*A pattern containing any invalid pattern letter results in a failing UErrorCode
-result during formatting or parsing.* Format Pattern Result
 
-yyyy.MM.dd G 'at' HH:mm:ss zzz
+:point_right: **Note**: *A pattern containing any invalid pattern letter results in a failing UErrorCode
+result during formatting or parsing.*
 
-1996.07.10 AD at 15:08:56 PDT
-
-EEE, MMM d, ''yy
-
-Wed, July 10, '96
-
-h:mm a
-
-12:08 PM
-
-hh 'o''clock' a, zzzz
-
-12 o'clock PM, Pacific Daylight Time
-
-K:mm a, z
-
-0:00 PM, PST
-
-yyyyy.MMMM.dd GGG hh:mm aaa
-
-01996.July.10 AD 12:08 PM
+| Format Pattern | Result |
+| --- | --- |
+| yyyy.MM.dd G 'at' HH:mm:ss zzz | 1996.07.10 AD at 15:08:56 PDT |
+| EEE, MMM d, ''yy | Wed, July 10, '96 |
+| h:mm a | 12:08 PM |
+| hh 'o''clock' a, zzzz | 12 o'clock PM, Pacific Daylight Time |
+| K:mm a, z | 0:00 PM, PST |
+| yyyyy.MMMM.dd GGG hh:mm aaa | 01996.July.10 AD 12:08 PM |
 
 ### Time Zone Display Names
 
@@ -370,7 +263,7 @@ until April 2, 2006, but it changes to *metazone* “America_Central” after th
 date. So the display name used for “America/Indiana/Tell_City” before the date
 (e.g. “Eastern Time”) differs from the one after the date (e.g. “Central Time).
 
-*Prior to ICU 3.8, a localized time zone name (except GMT format) and a time
+:point_right: **Note**: *Prior to ICU 3.8, a localized time zone name (except GMT format) and a time
 zone ID was in 1-to-1 relationship always. Therefore, a time zone name produced
 by DateFormat can be parsed back to the original time zone. This assumption no
 longer applies to ICU 3.8 and later releases for all time zone format types. If
@@ -382,27 +275,14 @@ specification.
 
 #### Time Zone Display Name Types
 
-Type Description Examples Generic non-location Reflects wall time, suited for
-displaying recurring events, meetings or anywhere people do not want to be
-overly specific. Available in two length options – long and short. Pacific
-TimePT Generic partial location Reflects wall time, used as a fallback format
-when the generic non-location format is not specific enough. A generic partial
-location name is constructed from a generic non-location name with a location
-name. For example, “PT” is shared by multiple time zones via *metazone*
-“America_Pacific”. When GMT offset in the time zone at the given time differs
-from the preferred time zone of the *metazone* for the locale, location name is
-appended to generic non-location name to distinguish the time zone from the
-preferred zone. Available in two length options – long and short. Pacific Time
-(Canada)PT (Yellowknife) Generic location Reflects wall time, suited for
-populating choice list for time zones. If the time zone is the single time zone
-available in the region (country), the generic location name is constructed with
-the region name. Otherwise, the name is constructed from the region name and the
-city name. Unlike other format types, this name is unique per time zone. United
-States (Los Angeles) TimeItaly Time Specific non-location Reflects a specific
-standard or daylight time. Available in two length options – long and short.
-Pacific Standard TimePDT Localized GMT A constant, specific offset from GMT in a
-localized form. GMT-08:00 RFC822 GMT A constant, specific offset from GMT in a
-locale insensitive format. -0800
+| Type | Description | Examples |
+| --- | --- | --- |
+| Generic non-location | Reflects wall time, suited for displaying recurring events, meetings or anywhere people do not want to be overly specific. Available in two length options – long and short. | Pacific Time<br/>PT |
+| Generic partial location | Reflects wall time, used as a fallback format when the generic non-location format is not specific enough. A generic partial location name is constructed from a generic non-location name with a location name. For example, “PT” is shared by multiple time zones via metazone “America_Pacific”. When GMT offset in the time zone at the given time differs from the preferred time zone of the metazone for the locale, location name is appended to generic non-location name to distinguish the time zone from the preferred zone. Available in two length options – long and short. | Pacific Time (Canada)<br/>PT (Yellowknife) |
+| Generic location | Reflects wall time, suited for populating choice list for time zones. If the time zone is the single time zone available in the region (country), the generic location name is constructed with the region name. Otherwise, the name is constructed from the region name and the city name. Unlike other format types, this name is unique per time zone. | United States (Los Angeles) Time<br/>Italy Time |
+| Specific non-location | Reflects a specific standard or daylight time. Available in two length options – long and short. | Pacific Standard Time<br/>PDT |
+| Localized GMT | A constant, specific offset from GMT in a localized form. | GMT-08:00 |
+| RFC822 GMT | A constant, specific offset from GMT in a locale insensitive format. | -0800 |
 
 Each format type in the above table is used as a primary type or a fallback in
 SimpleDateFormat. The table below explains how ICU time zone format pattern work
@@ -410,33 +290,16 @@ and its characteristics.
 
 #### Time Zone Pattern Usage
 
-Pattern Behavior Round-trip time at daylight transitions(\*) Round-trip Time
-Zone Suggested Usage z, zz, zzz Short specific non-location format (e.g.
-“PST”).If the localized data is not available or the short abbreviation is not
-commonly used for the locale, localized GMT format is used (e.g. GMT-08:00). yes
-no For displaying a time with a user friendly time zone name. zzzz Long specific
-non-location format (e.g. “Pacific Standard Time”).If the localized data is not
-available, localized GMT format is used (e.g. GMT-08:00). yes no Same as “z”,
-but longer format. v Short generic non-location format (e.g. “PT”).If the
-localized data is not available or the short abbreviation is not commonly used
-for the locale, generic location format (e.g. “United States(Los Angeles) Time”)
-is used.If the localized data comes from *metazone* and the GMT offset at the
-given time in the specified time zone differs from the preferred time zone of
-the *metazone* for the locale, generic partial location format (e.g. “PT
-(Canada)”) is used. no no For displaying a recurring wall time (e.g. events,
-meetings) or anywhere people do not want to be overly specific. vvvv Long
-generic non-location format (e.g. “Pacific Time”).If the localized data is not
-available, generic location format (e.g. “United States(Los Angeles) Time”) is
-used. no no Same as “v”, but longer format. V Same as “z”, except using the
-short abbreviation even it is not commonly used for the locale. yes no Same as
-“z”. VVVV Generic location format (e.g. “United States (Los Angeles) Time”). no
-yes For populating a choice list for time zones, because it supports 1-to-1
-name/zone ID mapping and is more uniform than other text formats.Also, this is
-only the pattern supporting time zone round-trip. If your program requires to
-preserve the original time zone information, use this pattern. Z, ZZ, ZZZ
-Localized GMT format (e.g. “GMT-08:00”). yes no For displaying a time in UI in a
-uniformed manner. ZZZZ RFC822 GMT format (e.g. “-0800”). yes no For formatting a
-time for non-user-facing data.
+| Pattern | Behavior | Round-trip time at daylight transitions(\*) | Round-trip Time Zone | Suggested Usage |
+| --- | --- | --- | --- | --- |
+| z, zz, zzz | Short specific non-location format (e.g. “PST”).If the localized data is not available or the short abbreviation is not commonly used for the locale, localized GMT format is used (e.g. GMT-08:00). | yes | no | For displaying a time with a user friendly time zone name. |
+| zzzz | Long specific non-location format (e.g. “Pacific Standard Time”).If the localized data is not available, localized GMT format is used (e.g. GMT-08:00). | yes | no | Same as “z”, but longer format. |
+| v | Short generic non-location format (e.g. “PT”).If the localized data is not available or the short abbreviation is not commonly used for the locale, generic location format (e.g. “United States(Los Angeles) Time”) is used.If the localized data comes from metazone and the GMT offset at the given time in the specified time zone differs from the preferred time zone of the metazone for the locale, generic partial location format (e.g. “PT (Canada)”) is used. | no | no | For displaying a recurring wall time (e.g. events, meetings) or anywhere people do not want to be overly specific. |
+| vvvv | Long generic non-location format (e.g. “Pacific Time”).If the localized data is not available, generic location format (e.g. “United States(Los Angeles) Time”) is used. | no | no | Same as “v”, but longer format. |
+| V | Same as “z”, except using the short abbreviation even it is not commonly used for the locale. | yes | no | Same as “z”. |
+| VVVV | Generic location format (e.g. “United States (Los Angeles) Time”). | no | yes | For populating a choice list for time zones, because it supports 1-to-1 name/zone ID mapping and is more uniform than other text formats.Also, this is only the pattern supporting time zone round-trip. If your program requires to preserve the original time zone information, use this pattern. |
+| Z, ZZ, ZZZ | Localized GMT format (e.g. “GMT-08:00”). | yes | no | For displaying a time in UI in a uniformed manner. |
+| ZZZZ | RFC822 GMT format (e.g. “-0800”). | yes | no | For formatting a time for non-user-facing data. |
 
 \* At a transition from daylight saving time to standard time, there is a wall
 time interval occurs twice.
@@ -456,9 +319,11 @@ even if the locale’s preferred hour-cycle type is 'h' or 'K'.
 For example, a skeleton of “MMMMdjmm” might result in the following format
 patterns for different locales:
 
-localeformat pattern for skeleton “MMMMdjmm”exampleen_US"MMMM d 'at' h:mm
-a"April 2 at 5:00 PMes_ES"d 'de' MMMM, H:mm"2 de abril, 17:00ja_JP"M月d日
-H:mm"4月2日 17:00
+| locale | format pattern for skeleton “MMMMdjmm” | example            |
+| ------ | -------------------------------------- | ------------------ |
+| en_US  | "MMMM d  'at'  h:mm a"                 | April 2 at 5:00 PM |
+| es_ES  | "d 'de' MMMM, H:mm"                    | 2 de abril, 17:00  |
+| ja_JP  | "M月d日 H:mm"                            | 4月2日 17:00         |
 
 The most important DateTimePatternGenerator methods are the varieties of
 getBestPattern.
@@ -485,17 +350,19 @@ of a date or time For example, the names of the months and days of the week, the
 strings for AM and PM and the day of the week considered to be the first day of
 the week (used in drawing calendar grids) are controlled by DateFormatSymbols.
 
-Create a date-time formatter using the createTimeInstance, createDateInstance,
-or createDateTimeInstance methods in DateFormat. Each of these methods can
+Create a date-time formatter using the `createTimeInstance`, `createDateInstance`,
+or `createDateTimeInstance` methods in DateFormat. Each of these methods can
 return a date/time formatter initialized with a default format pattern, along
 with the date-time formatting data for a given or default locale. After a
-formatter is created, modify the format pattern using applyPattern.
+formatter is created, modify the format pattern using `applyPattern`.
 
 If you want to create a date-time formatter with a particular format pattern and
 locale, use one of the SimpleDateFormat constructors:
 
+```cpp
 UnicodeString aPattern("GyyyyMMddHHmmssSSZ", "");
 new SimpleDateFormat(aPattern, new DateFormatSymbols(Locale::getUS())
+```
 
 This loads the appropriate date-time formatting data from the locale.s
 
