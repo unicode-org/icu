@@ -279,12 +279,19 @@ void substituteSingleConstant(Factor &factor, int32_t constValue,
     bool positive = constValue >= 0;
     int32_t absConstValue = std::abs(constValue);
 
+    double testConst = constSub.toDouble();
     DecNum finalConstSub;
     finalConstSub.setTo(constSub, status);
     finalConstSub.power(absConstValue, status);
 
+    double testfinalconst = finalConstSub.toDouble();
+
     if (positive) {
+        double testfactNum = factor.factorNum.toDouble();
+
         factor.factorNum.multiplyBy(finalConstSub, status);
+        
+        testfactNum = factor.factorNum.toDouble();
     } else {
         factor.factorDen.multiplyBy(finalConstSub, status);
     }
@@ -297,12 +304,16 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
     constSubs[CONSTANT_FT2M].setTo(0.3048, status);
     constSubs[CONSTANT_PI].setTo(3.14159265359, status);
     constSubs[CONSTANT_GRAVITY].setTo(9.80665, status);
-    constSubs[CONSTANT_G].setTo("0.0000000000667408", status);
+    constSubs[CONSTANT_G].setTo("6.67408E-11", status);
     constSubs[CONSTANT_CUP2M3].setTo("0.000236588", status);
-    constSubs[CONSTANT_LB2KG].setTo("0.453592", status);
+    constSubs[CONSTANT_LB2KG].setTo("0.45359237", status);
 
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        double test1 = factor.factorNum.toDouble();
+        double test2 = factor.factorDen.toDouble();
+
         if (factor.constants[i] == 0) continue;
+
         substituteSingleConstant(factor, factor.constants[i], constSubs[i], status);
         factor.constants[i] = 0;
     }

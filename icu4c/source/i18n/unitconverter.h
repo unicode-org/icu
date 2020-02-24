@@ -157,7 +157,7 @@ struct entry {
     {"month-person", "year", "12", "0", false},
     {"solar-luminosity", "kilogram-square-meter-per-cubic-second", "382800000000000000000000000", "0",
      false},
-    {"solar-radius", "meter", "132712440000000000000/G", "0", false},
+    {"solar-radius", "meter", "695700000", "0", false}, //132712440000000000000 TODO(younies): fill bug about StringPiece handling this string ??
     {"earth-radius", "meter", "6378100", "0", false},
     {"solar-mass", "kilogram", "19884700000000000000000000000000", "0", false},
     {"earth-mass", "kilogram", "5972200000000000000000000", "0", false},

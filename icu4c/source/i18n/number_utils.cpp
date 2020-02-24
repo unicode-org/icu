@@ -262,10 +262,17 @@ void DecNum::multiplyBy(double rhs, UErrorCode &status) {
 }
 
 void DecNum::multiplyBy(const DecNum &rhs, UErrorCode &status) {
-    uprv_decNumberMultiply(fData, fData, rhs.fData, &fContext);
-    if (fContext.status != 0) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-    }
+    // TODO(younies): this division temporary until we fix it
+    double dLhs = toDouble();
+    double dRhs = rhs.toDouble();
+    double result = dLhs * dRhs;
+    setTo(result, status);
+    return;
+
+    // uprv_decNumberMultiply(fData, fData, rhs.fData, &fContext);
+    // if (fContext.status != 0) {
+    //     status = U_INTERNAL_PROGRAM_ERROR;
+    // }
 }
 
 void DecNum::divideBy(double rhs, UErrorCode &status) {
@@ -276,21 +283,23 @@ void DecNum::divideBy(double rhs, UErrorCode &status) {
 
 void DecNum::divideBy(const DecNum &rhs, UErrorCode &status) {
     if (rhs.isZero()) {
-        status = U_INTERNAL_PROGRAM_ERROR; // TODO(younies)
+        status = U_INTERNAL_PROGRAM_ERROR; // TODO(younies): add better status (divide by zero error)
         return;
     }
 
-    // For testing (remove)
-    StringPiece lhsStr = toString(status);
-    StringPiece rhsStr = rhs.toString(status);
-    // End for testing
+    // TODO(younies): this division temporary until we fix it
+    double dLhs = toDouble();
+    double dRhs = rhs.toDouble();
 
-    uprv_decNumberDivide(fData, fData, rhs.fData, &fContext);
-    if ((fContext.status & DEC_Inexact) != 0) {
-        // Ignore.
-    } else if (fContext.status != 0) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-    }
+    setTo(dLhs / dRhs, status);
+    return;
+
+    // uprv_decNumberDivide(fData, fData, rhs.fData, &fContext);
+    // if ((fContext.status & DEC_Inexact) != 0) { // TODO(younies): write clarifications.
+    //     // Ignore.
+    // } else if (fContext.status != 0) {
+    //     status = U_INTERNAL_PROGRAM_ERROR;
+    // }
 }
 
 void DecNum::add(double rhs, UErrorCode &status) {
@@ -325,10 +334,10 @@ void DecNum::power(int32_t p, UErrorCode &status) {
     power(rhs, status);
 }
 
-void DecNum::power(const DecNum& rhs, UErrorCode& status) {
+void DecNum::power(const DecNum &rhs, UErrorCode &status) {
     uprv_decNumberPower(fData, fData, rhs.fData, &fContext);
-    
-    if(fContext.status != 0){
+
+    if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
 }

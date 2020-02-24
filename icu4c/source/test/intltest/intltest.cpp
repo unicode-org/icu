@@ -2178,16 +2178,19 @@ UBool IntlTest::assertEquals(const char* message,
 UBool IntlTest::assertEqualsNear(const char *message, const number::impl::DecNum &expected,
                                  const number::impl::DecNum &actual, double precision) {
     UErrorCode status = UErrorCode::U_ZERO_ERROR;
-    number::impl::DecNum difference;
+    number::impl::DecNum diffPercent;
 
     number::impl::DecNum decNumPrecision;
     decNumPrecision.setTo(precision, status);
 
-    difference.setTo(expected, status);
-    difference.subtract(actual, status);
-    if (difference.isNegative()) difference.multiplyBy(-1, status);
+    diffPercent.setTo(expected, status);
+    diffPercent.subtract(actual, status);
+    if (diffPercent.isNegative()) diffPercent.multiplyBy(-1, status);
 
-    if (difference.greaterThan(decNumPrecision, status) || U_FAILURE(status)) {
+    diffPercent.divideBy(expected, status);
+    
+
+    if (diffPercent.greaterThan(decNumPrecision, status) || U_FAILURE(status)) {
         std::string expectedAsString = expected.toString(status).data();
         std::string actualAsString = actual.toString(status).data();
         errln((UnicodeString) "FAIL: " + message + "; got " + actualAsString.c_str() + "; expected " +
