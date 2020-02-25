@@ -1,23 +1,27 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 units:table(nofallback){
-    cldrVersion{"36.1"}
+    cldrVersion{"37"}
     convertUnits{
+        100-kilometer{
+            factor{"100000"}
+            target{"meter"}
+        }
         acre{
-            factor{"ft2m^2 * 43560"}
+            factor{"ft2_to_m2 * 43560"}
             target{"square-meter"}
         }
-        acre-foot{
-            factor{"ft2m^3 * 43560"}
-            target{"cubic-meter"}
+        ampere{
+            factor{"1"}
+            target{"ampere"}
         }
         arc-minute{
-            factor{"1/60"}
-            target{"degree"}
+            factor{"1/360*60"}
+            target{"revolution"}
         }
         arc-second{
-            factor{"1/360"}
-            target{"degree"}
+            factor{"1/360*60*60"}
+            target{"revolution"}
         }
         astronomical-unit{
             factor{"149597900000"}
@@ -32,15 +36,19 @@ units:table(nofallback){
             target{"kilogram-per-meter-square-second"}
         }
         barrel{
-            factor{"cup2m3 * 672"}
+            factor{"42*gal_to_m3"}
             target{"cubic-meter"}
+        }
+        bit{
+            factor{"1"}
+            target{"bit"}
         }
         british-thermal-unit{
             factor{"1055.06"}
             target{"kilogram-square-meter-per-square-second"}
         }
         bushel{
-            factor{"0.03523907"}
+            factor{"2150.42*in3_to_m3"}
             target{"cubic-meter"}
         }
         byte{
@@ -51,9 +59,18 @@ units:table(nofallback){
             factor{"4.184"}
             target{"kilogram-square-meter-per-square-second"}
         }
+        candela{
+            factor{"1"}
+            target{"candela"}
+        }
         carat{
             factor{"0.0002"}
             target{"kilogram"}
+        }
+        celsius{
+            factor{"1"}
+            offset{"273.15"}
+            target{"kelvin"}
         }
         centimeter{
             factor{"1/100"}
@@ -64,7 +81,7 @@ units:table(nofallback){
             target{"year"}
         }
         cup{
-            factor{"cup2m3"}
+            factor{"gal_to_m3/16"}
             target{"cubic-meter"}
         }
         cup-metric{
@@ -87,8 +104,12 @@ units:table(nofallback){
             factor{"10"}
             target{"year"}
         }
+        degree{
+            factor{"1/360"}
+            target{"revolution"}
+        }
         dot{
-            factor{"100"}
+            factor{"1"}
             target{"pixel"}
         }
         dunam{
@@ -107,21 +128,25 @@ units:table(nofallback){
             factor{"1.602177E-19"}
             target{"kilogram-square-meter-per-square-second"}
         }
+        em{
+            factor{"1"}
+            target{"em"}
+        }
         fahrenheit{
             factor{"5/9"}
-            offset{"-160/9"}
-            target{"celsius"}
+            offset{"2298.35/9"}
+            target{"kelvin"}
         }
         fathom{
-            factor{"ft2m * 6"}
+            factor{"ft_to_m * 6"}
             target{"meter"}
         }
         fluid-ounce{
-            factor{"cup2m3/8"}
+            factor{"gal_to_m3/128"}
             target{"cubic-meter"}
         }
         fluid-ounce-imperial{
-            factor{"0.00002841306"}
+            factor{"gal_imp_to_m3/160"}
             target{"cubic-meter"}
         }
         foodcalorie{
@@ -129,11 +154,11 @@ units:table(nofallback){
             target{"kilogram-square-meter-per-square-second"}
         }
         foot{
-            factor{"ft2m"}
+            factor{"ft_to_m"}
             target{"meter"}
         }
         furlong{
-            factor{"ft2m*660"}
+            factor{"ft_to_m*660"}
             target{"meter"}
         }
         g-force{
@@ -141,11 +166,11 @@ units:table(nofallback){
             target{"meter-per-square-second"}
         }
         gallon{
-            factor{"cup2m3*16"}
+            factor{"gal_to_m3"}
             target{"cubic-meter"}
         }
         gallon-imperial{
-            factor{"0.00454609"}
+            factor{"gal_imp_to_m3"}
             target{"cubic-meter"}
         }
         gram{
@@ -158,23 +183,27 @@ units:table(nofallback){
         }
         hertz{
             factor{"1"}
-            target{"one-per-second"}
+            target{"revolution-per-second"}
         }
         horsepower{
-            factor{"ft2m * lb2kg * gravity * 550"}
-            target{"square-meter-kilogram-per-cubic-second"}
+            factor{"ft_to_m * lb_to_kg * gravity * 550"}
+            target{"kilogram-square-meter-per-cubic-second"}
         }
         hour{
             factor{"3600"}
             target{"second"}
         }
         inch{
-            factor{"ft2m/12"}
+            factor{"ft_to_m/12"}
             target{"meter"}
         }
         inch-hg{
             factor{"3386.389"}
             target{"kilogram-per-meter-square-second"}
+        }
+        item{
+            factor{"1"}
+            target{"item"}
         }
         joule{
             factor{"1"}
@@ -182,12 +211,15 @@ units:table(nofallback){
         }
         karat{
             factor{"1/24"}
-            target{"one-per-one"}
+            target{"portion"}
         }
         kelvin{
             factor{"1"}
-            offset{"273.15"}
-            target{"celsius"}
+            target{"kelvin"}
+        }
+        kilogram{
+            factor{"1"}
+            target{"kilogram"}
         }
         knot{
             factor{"1852/3600"}
@@ -201,36 +233,44 @@ units:table(nofallback){
             factor{"0.001"}
             target{"cubic-meter"}
         }
-        meter-per-mercury{
-            factor{"10132500/760"}
-            target{"kilogram-per-meter-square-second"}
+        lux{
+            factor{"1"}
+            target{"candela-square-meter-per-square-meter"}
+        }
+        meter{
+            factor{"1"}
+            target{"meter"}
         }
         metric-ton{
             factor{"1000"}
             target{"kilogram"}
         }
         mile{
-            factor{"ft2m*5280"}
+            factor{"ft_to_m*5280"}
             target{"meter"}
         }
         mile-scandinavian{
             factor{"10000"}
             target{"meter"}
         }
+        millimeter-of-mercury{
+            factor{"10132500/760000"}
+            target{"kilogram-per-meter-square-second"}
+        }
         minute{
-            factor{"3600"}
+            factor{"60"}
             target{"second"}
         }
         mole{
             factor{"6.02214076E+23"}
-            target{"one"}
+            target{"item"}
         }
         month{
-            factor{"12"}
+            factor{"1/12"}
             target{"year"}
         }
         month-person{
-            factor{"12"}
+            factor{"1/12"}
             target{"year"}
         }
         nautical-mile{
@@ -246,7 +286,7 @@ units:table(nofallback){
             target{"kilogram-square-meter-per-cubic-second-square-ampere"}
         }
         ounce{
-            factor{"lb2kg/16"}
+            factor{"lb_to_kg/16"}
             target{"kilogram"}
         }
         ounce-troy{
@@ -257,57 +297,69 @@ units:table(nofallback){
             factor{"30856780000000000"}
             target{"meter"}
         }
+        part-per-million{
+            factor{"1/1000000"}
+            target{"portion"}
+        }
         pascal{
             factor{"1"}
             target{"kilogram-per-meter-square-second"}
         }
         percent{
             factor{"1/100"}
-            target{"one-per-one"}
+            target{"portion"}
         }
         permille{
             factor{"1/1000"}
-            target{"one-per-one"}
-        }
-        permillion{
-            factor{"1/1000000"}
-            target{"one-per-one"}
+            target{"portion"}
         }
         permyriad{
             factor{"1/10000"}
-            target{"one-per-one"}
+            target{"portion"}
         }
         pint{
-            factor{"cup2m3 * 2"}
+            factor{"gal_to_m3/8"}
             target{"cubic-meter"}
         }
         pint-metric{
             factor{"0.0005"}
             target{"cubic-meter"}
         }
+        pixel{
+            factor{"1"}
+            target{"pixel"}
+        }
         point{
-            factor{"ft2m/864"}
+            factor{"ft_to_m/864"}
             target{"meter"}
         }
+        portion{
+            factor{"1"}
+            target{"portion"}
+        }
         pound{
-            factor{"lb2kg"}
+            factor{"lb_to_kg"}
             target{"kilogram"}
         }
         pound-force{
-            factor{"lb2kg * gravity"}
+            factor{"lb_to_kg * gravity"}
             target{"kilogram-meter-per-square-second"}
         }
         quart{
-            factor{"cup2m3 * 4"}
+            factor{"gal_to_m3/4"}
             target{"cubic-meter"}
         }
         radian{
-            factor{"180/PI"}
-            target{"degree"}
+            factor{"1/2*PI"}
+            target{"revolution"}
         }
         revolution{
-            factor{"360"}
-            target{"degree"}
+            factor{"1"}
+            target{"revolution"}
+        }
+        second{
+            factor{"1"}
+            target{"second"}
         }
         solar-luminosity{
             factor{"3.828E+26"}
@@ -318,19 +370,19 @@ units:table(nofallback){
             target{"kilogram"}
         }
         solar-radius{
-            factor{"1.3271244E20/G"}
+            factor{"695700000"}
             target{"meter"}
         }
         stone{
-            factor{"lb2kg*14"}
+            factor{"lb_to_kg*14"}
             target{"kilogram"}
         }
         tablespoon{
-            factor{"cup2m3/16"}
+            factor{"gal_to_m3/256"}
             target{"cubic-meter"}
         }
         teaspoon{
-            factor{"cup2m3/48"}
+            factor{"gal_to_m3/16*48"}
             target{"cubic-meter"}
         }
         therm-us{
@@ -338,7 +390,7 @@ units:table(nofallback){
             target{"kilogram-square-meter-per-square-second"}
         }
         ton{
-            factor{"lb2kg*2000"}
+            factor{"lb_to_kg*2000"}
             target{"kilogram"}
         }
         volt{
@@ -358,8 +410,12 @@ units:table(nofallback){
             target{"second"}
         }
         yard{
-            factor{"ft2m*3"}
+            factor{"ft_to_m*3"}
             target{"meter"}
+        }
+        year{
+            factor{"1"}
+            target{"year"}
         }
         year-person{
             factor{"1"}
@@ -367,11 +423,13 @@ units:table(nofallback){
         }
     }
     unitConstants{
-        G{"6.67408E-11"}
-        PI{"3.1415926535897932384626433832795"}
-        cup2m3{"231*ft2m*ft2m*ft2m/16*12*12*12"}
-        ft2m{"0.3048"}
+        ft2_to_m2{"ft_to_m*ft_to_m"}
+        ft3_to_m3{"ft_to_m*ft_to_m*ft_to_m"}
+        ft_to_m{"0.3048"}
+        gal_imp_to_m3{"0.00454609"}
+        gal_to_m3{"231*in3_to_m3"}
         gravity{"9.80665"}
-        lb2kg{"0.45359237"}
+        in3_to_m3{"ft3_to_m3/12*12*12"}
+        lb_to_kg{"0.45359237"}
     }
 }
