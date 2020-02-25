@@ -150,16 +150,34 @@
 //supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%A)"]
     ; /unitConstants/$1 ; values="$2"
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"]
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"][@offset="(%A)"]
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+    ; /convertUnits/$1/offset ; values=$3
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"
     ; /convertUnits/$1/offset ; values=$4
 
-//supplementalData/convertUnits/convertUnit[@source="(%W)"][@target="(%W)"][@factor="(%A)"][@reciprocal="(%A)"]
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"][@systems="(%W)"]
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/offset ; values=$4
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@reciprocal="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"
     ; /convertUnits/$1/reciprocal ; values=$4
