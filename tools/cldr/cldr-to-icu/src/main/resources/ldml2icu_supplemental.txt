@@ -98,10 +98,19 @@
 //supplementalData/measurementData/paperSize[@type="A4"][@territories="(%W)"] ; /measurementData/$1/PaperSize:intvector ; values=297 210
 //supplementalData/measurementData/paperSize[@type="US-Letter"][@territories="(%W)"] ; /measurementData/$1/PaperSize:intvector ; values=279 216
 
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"][@scope="small"]/unitPreference[@regions="(%A)"][@alt="informal"] ; /unitPreferenceData/$3/$1-$2-small-informal
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"][@scope="small"]/unitPreference[@regions="(%A)"] ; /unitPreferenceData/$3/$1-$2-small
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@alt="informal"] ; /unitPreferenceData/$3/$1-$2-informal
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"] ; /unitPreferenceData/$3/$1-$2
+# Quoting "$1" and "$2" in the output lets $3 expand space-separated regions: only the first unquoted output supports such expansion.
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@geq="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/geq ; values=$4
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@skeleton="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/skeleton ; values=$4
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@geq="(%A)"][@skeleton="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/geq ; values=$4
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/skeleton ; values=$5
 
 //supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@writingPercent="(%N)"][@populationPercent="(%N)"][@officialStatus="(%W)"](?:[@references="%W"])?
     ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
