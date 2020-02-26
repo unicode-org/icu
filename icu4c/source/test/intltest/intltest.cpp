@@ -2156,51 +2156,17 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
-UBool IntlTest::assertEquals(const char* message,
-        const number::impl::DecNum& expected, const number::impl::DecNum& actual) {
-            UErrorCode status;
-    if (!expected.equalTo(actual, status)) {
-        std::string expectedAsString = expected.toString(status).data();
-        std::string actualAsString = actual.toString(status).data();
-        errln((UnicodeString)"FAIL: " + message +
-            "; got " + actualAsString.c_str() +
-            "; expected " + expectedAsString.c_str());
+UBool IntlTest::assertEqualsNear(const char *message, double expected, double actual, double precision) {
+    double diff = std::abs(expected - actual);
+    double diffPercent = expected != 0? diff / expected : diff; // If the expected is equals zero, we 
+
+    if (diffPercent > precision) {
+        errln((UnicodeString) "FAIL: " + message + "; got " + actual + "; expected " + expected);
         return FALSE;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
-        logln((UnicodeString)"Ok: " + message + "; got " + static_cast<std::string>(actual.toString(status).data()).c_str());
-    }
-#endif
-    return TRUE;
-}
-
-UBool IntlTest::assertEqualsNear(const char *message, const number::impl::DecNum &expected,
-                                 const number::impl::DecNum &actual, double precision) {
-    UErrorCode status = UErrorCode::U_ZERO_ERROR;
-    number::impl::DecNum diffPercent;
-
-    number::impl::DecNum decNumPrecision;
-    decNumPrecision.setTo(precision, status);
-
-    diffPercent.setTo(expected, status);
-    diffPercent.subtract(actual, status);
-    if (diffPercent.isNegative()) diffPercent.multiplyBy(-1, status);
-
-    diffPercent.divideBy(expected, status);
-    
-
-    if (diffPercent.greaterThan(decNumPrecision, status) || U_FAILURE(status)) {
-        std::string expectedAsString = expected.toString(status).data();
-        std::string actualAsString = actual.toString(status).data();
-        errln((UnicodeString) "FAIL: " + message + "; got " + actualAsString.c_str() + "; expected " +
-              expectedAsString.c_str());
-        return FALSE;
-    }
-#ifdef VERBOSE_ASSERTIONS
-    else {
-        logln((UnicodeString) "Ok: " + message + "; got " +
-              static_cast<std::string>(actual.toString(status).data()).c_str());
+        logln((UnicodeString) "Ok: " + message + "; got " + expected);
     }
 #endif
     return TRUE;

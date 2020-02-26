@@ -7,7 +7,6 @@
 #ifndef __UNITCONVERTER_H__
 #define __UNITCONVERTER_H__
 
-#include "number_decnum.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
@@ -34,19 +33,11 @@ enum Constants {
 struct ConversionRate {
     StringPiece source;
     StringPiece target;
-    number::impl::DecNum factorNum;
-    number::impl::DecNum factorDen;
-    number::impl::DecNum sourceOffset;
-    number::impl::DecNum targetOffset;
+    double factorNum = 1;
+    double factorDen = 1;
+    double sourceOffset = 0;
+    double targetOffset = 0;
     bool reciprocal;
-
-    ConversionRate(UErrorCode &status) {
-        factorNum.setTo(1.0, status);
-        factorDen.setTo(1.0, status);
-        sourceOffset.setTo(0.0, status);
-        targetOffset.setTo(0.0, status);        
-        reciprocal = false;
-    }
 };
 
 // The data in this namespace are temporary, it is just for testing
@@ -121,7 +112,7 @@ struct entry {
     {"horsepower", "kilogram-square-meter-per-cubic-second", "ft2m*lb2kg*gravity*550", "0", false},
     {"inch-hg", "kilogram-per-meter-square-second", "3386.389", "0", false},
     {"knot", "meter-per-second", "1852/3600", "0", false},
-    {"fahrenheit", "kelvin", "5/9", "255.372222222", false}, //2298.35/9
+    {"fahrenheit", "kelvin", "5/9", "255.372222222", false}, // 2298.35/9
     {"barrel", "cubic-meter", "cup2m3*672", "0", false},
     {"bushel", "cubic-meter", "0.03523907", "0", false},
     {"cup", "cubic-meter", "cup2m3", "0", false},
@@ -152,14 +143,15 @@ struct entry {
     {"centimeter", "meter", "1/100", "0", false},
     {"century", "year", "100", "0", false},
     {"decade", "year", "10", "0", false},
-    {"dot", "pixel", "100", "0", false},
-    {"month", "year", "12", "0", false},
-    {"month-person", "year", "12", "0", false},
+    {"dot", "pixel", "1", "0", false},
+    {"month", "year", "1/12", "0", false},
+    {"month-person", "year", "1/12", "0", false},
     {"solar-luminosity", "kilogram-square-meter-per-cubic-second", "382800000000000000000000000", "0",
      false},
-    {"solar-radius", "meter", "695700000", "0", false}, //132712440000000000000 TODO(younies): fill bug about StringPiece handling this string ??
+    {"solar-radius", "meter", "695700000", "0",
+     false}, // 132712440000000000000 TODO(younies): fill bug about StringPiece handling this string ??
     {"earth-radius", "meter", "6378100", "0", false},
-    {"solar-mass", "kilogram", "19884700000000000000000000000000", "0", false},
+    {"solar-mass", "kilogram", "1.98847E+30", "0", false},
     {"earth-mass", "kilogram", "5972200000000000000000000", "0", false},
     {"year-person", "year", "1", "0", false},
     {"part-per-million", "portion", "1/1000000", "0", false},
@@ -196,11 +188,10 @@ class U_I18N_API UnitConverter {
      * @param output_value the value that holds the result of the conversion.
      * @param status
      */
-    void convert(const number::impl::DecNum &input_value, number::impl::DecNum &output_value,
-                 UErrorCode status);
+    double convert(double inputValue, UErrorCode status);
 
   private:
-    ConversionRate conversion_rate_;
+    ConversionRate conversionRate_;
 };
 
 U_NAMESPACE_END
