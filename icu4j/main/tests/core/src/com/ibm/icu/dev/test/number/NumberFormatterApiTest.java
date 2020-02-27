@@ -580,7 +580,7 @@ public class NumberFormatterApiTest {
                 NumberFormatter.with().unit(MeasureUnit.SQUARE_METER).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("en-GB"),
                 5.43,
-                "5.43 m²");
+                "5.43m²");
 
         // Try accessing a narrow unit directly from root.
         assertFormatSingle(

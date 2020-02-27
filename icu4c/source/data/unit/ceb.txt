@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ceb{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -902,6 +902,11 @@ ceb{
         }
     }
     unitsNarrow{
+        concentr{
+            percent{
+                dnam{"%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -911,6 +916,10 @@ ceb{
         }
         coordinate{
             dnam{"direksyon"}
+            east{"{0}E"}
+            north{"{0}N"}
+            south{"{0}S"}
+            west{"{0}W"}
         }
         duration{
             day{
@@ -931,7 +940,7 @@ ceb{
             minute{
                 dnam{"minuto"}
                 one{"{0} minuto"}
-                other{"{0}minuto"}
+                other{"{0} minuto"}
             }
             month{
                 dnam{"buwan"}

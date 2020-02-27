@@ -1,10 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-/**
- * ICU <specials> source: <path>/common/main/root.xml
- */
 root{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -222,8 +219,8 @@ root{
                 per{"{0}/h"}
             }
             microsecond{
-                dnam{"μs"}
-                other{"{0} μs"}
+                dnam{"µs"}
+                other{"{0} µs"}
             }
             millisecond{
                 dnam{"ms"}

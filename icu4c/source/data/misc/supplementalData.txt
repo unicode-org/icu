@@ -2104,7 +2104,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"36.1"}
+    cldrVersion{"37"}
     codeMappings{
         {
             "AA",
@@ -7860,6 +7860,7 @@ supplementalData:table(nofallback){
                 "Qaaj~p",
             }
             special{
+                "Aran",
                 "Qaag",
                 "Zanb",
                 "Zinh",
@@ -13554,7 +13555,10 @@ supplementalData:table(nofallback){
                 territories{"IN"}
             }
             secondary{
-                scripts{"Mahj"}
+                scripts{
+                    "Latn",
+                    "Mahj",
+                }
                 territories{
                     "FJ",
                     "ZA",
@@ -15832,13 +15836,13 @@ supplementalData:table(nofallback){
         }
         sat{
             primary{
-                scripts{"Latn"}
+                scripts{"Olck"}
             }
             secondary{
                 scripts{
                     "Beng",
                     "Deva",
-                    "Olck",
+                    "Latn",
                     "Orya",
                 }
                 territories{"IN"}
@@ -18248,625 +18252,625 @@ supplementalData:table(nofallback){
             {
                 "ab",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ach",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "af",
                 "nl",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ak",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ay",
                 "es",
-                "10",
+                "20",
                 "1",
             }
             {
                 "az",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "be",
                 "ru",
-                "10",
+                "20",
                 "1",
             }
             {
                 "bem",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "bh",
                 "hi",
-                "10",
+                "30",
                 "1",
             }
             {
                 "bn",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "br",
                 "fr",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ceb",
                 "fil",
-                "10",
+                "30",
                 "1",
             }
             {
                 "chr",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ckb",
                 "ar",
-                "10",
+                "30",
                 "1",
             }
             {
                 "co",
                 "fr",
-                "10",
+                "20",
                 "1",
             }
             {
                 "crs",
                 "fr",
-                "10",
+                "20",
                 "1",
             }
             {
                 "cy",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ee",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "eo",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "et",
                 "fi",
-                "10",
+                "30",
                 "1",
             }
             {
                 "eu",
                 "es",
-                "10",
+                "20",
                 "1",
             }
             {
                 "fo",
                 "da",
-                "10",
+                "20",
                 "1",
             }
             {
                 "fy",
                 "nl",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ga",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "gaa",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "gd",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "gl",
                 "es",
-                "10",
+                "20",
                 "1",
             }
             {
                 "gn",
                 "es",
-                "10",
+                "20",
                 "1",
             }
             {
                 "gu",
                 "hi",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ha",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "haw",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ht",
                 "fr",
-                "10",
+                "20",
                 "1",
             }
             {
                 "hy",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ia",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ig",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "is",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "jv",
                 "id",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ka",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "kg",
                 "fr",
-                "10",
+                "30",
                 "1",
             }
             {
                 "kk",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "km",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "kn",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "kri",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ku",
                 "tr",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ky",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "la",
                 "it",
-                "10",
+                "20",
                 "1",
             }
             {
                 "lg",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ln",
                 "fr",
-                "10",
+                "30",
                 "1",
             }
             {
                 "lo",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "loz",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "lua",
                 "fr",
-                "10",
+                "30",
                 "1",
             }
             {
                 "mfe",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "mg",
                 "fr",
-                "10",
+                "30",
                 "1",
             }
             {
                 "mi",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "mk",
                 "bg",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ml",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "mn",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "mr",
                 "hi",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ms",
                 "id",
-                "10",
+                "30",
                 "1",
             }
             {
                 "mt",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "my",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ne",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "nn",
                 "nb",
-                "10",
+                "20",
                 "0",
             }
             {
                 "nn",
                 "no",
-                "10",
+                "20",
                 "1",
             }
             {
                 "nso",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ny",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "nyn",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "oc",
                 "fr",
-                "10",
+                "20",
                 "1",
             }
             {
                 "om",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "or",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "pa",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "pcm",
                 "en",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ps",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "qu",
                 "es",
-                "10",
+                "30",
                 "1",
             }
             {
                 "rm",
                 "de",
-                "10",
+                "20",
                 "1",
             }
             {
                 "rn",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "rw",
                 "fr",
-                "10",
+                "30",
                 "1",
             }
             {
                 "sa",
                 "hi",
-                "10",
+                "30",
                 "1",
             }
             {
                 "sd",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "si",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "sn",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "so",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "sq",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "st",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "su",
                 "id",
-                "10",
+                "20",
                 "1",
             }
             {
                 "sw",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ta",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "te",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "tg",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ti",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "tk",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "tlh",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "tn",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "to",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "tt",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "tum",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "ug",
                 "zh",
-                "10",
+                "20",
                 "1",
             }
             {
                 "ur",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "uz",
                 "ru",
-                "10",
+                "30",
                 "1",
             }
             {
                 "wo",
                 "fr",
-                "10",
+                "30",
                 "1",
             }
             {
                 "xh",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "yi",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "yo",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
                 "zu",
                 "en",
-                "10",
+                "30",
                 "1",
             }
             {
@@ -20142,6 +20146,144 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "zh_Hani",
+                "zh_Hans",
+                "20",
+                "1",
+            }
+            {
+                "zh_Hani",
+                "zh_Hant",
+                "20",
+                "1",
+            }
+            {
+                "ar_Latn",
+                "ar_Arab",
+                "20",
+                "1",
+            }
+            {
+                "bn_Latn",
+                "bn_Beng",
+                "20",
+                "1",
+            }
+            {
+                "gu_Latn",
+                "gu_Gujr",
+                "20",
+                "1",
+            }
+            {
+                "hi_Latn",
+                "hi_Deva",
+                "20",
+                "1",
+            }
+            {
+                "kn_Latn",
+                "kn_Knda",
+                "20",
+                "1",
+            }
+            {
+                "ml_Latn",
+                "ml_Mlym",
+                "20",
+                "1",
+            }
+            {
+                "mr_Latn",
+                "mr_Deva",
+                "20",
+                "1",
+            }
+            {
+                "ta_Latn",
+                "ta_Taml",
+                "20",
+                "1",
+            }
+            {
+                "te_Latn",
+                "te_Telu",
+                "20",
+                "1",
+            }
+            {
+                "zh_Latn",
+                "zh_Hans",
+                "20",
+                "1",
+            }
+            {
+                "ja_Latn",
+                "ja_Jpan",
+                "5",
+                "1",
+            }
+            {
+                "ja_Hani",
+                "ja_Jpan",
+                "5",
+                "1",
+            }
+            {
+                "ja_Hira",
+                "ja_Jpan",
+                "5",
+                "1",
+            }
+            {
+                "ja_Kana",
+                "ja_Jpan",
+                "5",
+                "1",
+            }
+            {
+                "ja_Hrkt",
+                "ja_Jpan",
+                "5",
+                "1",
+            }
+            {
+                "ja_Hira",
+                "ja_Hrkt",
+                "5",
+                "1",
+            }
+            {
+                "ja_Kana",
+                "ja_Hrkt",
+                "5",
+                "1",
+            }
+            {
+                "ko_Hani",
+                "ko_Kore",
+                "5",
+                "1",
+            }
+            {
+                "ko_Hang",
+                "ko_Kore",
+                "5",
+                "1",
+            }
+            {
+                "ko_Jamo",
+                "ko_Kore",
+                "5",
+                "1",
+            }
+            {
+                "ko_Jamo",
+                "ko_Hang",
+                "5",
+                "1",
+            }
+            {
                 "*_*",
                 "*_*",
                 "50",
@@ -20532,15 +20674,19 @@ supplementalData:table(nofallback){
             "ff_Adlm",
             "ff_Arab",
             "ha_Arab",
+            "hi_Latn",
             "iu_Latn",
             "kk_Arab",
+            "ks_Deva",
             "ku_Arab",
             "ky_Arab",
             "ky_Latn",
             "ml_Arab",
             "mn_Mong",
+            "mni_Mtei",
             "ms_Arab",
             "pa_Arab",
+            "sat_Deva",
             "sd_Deva",
             "sd_Khoj",
             "sd_Sind",
@@ -33086,6 +33232,9 @@ supplementalData:table(nofallback){
             }
         }
         US{
+            cad{
+                populationShareF:int{0}
+            }
             cho{
                 populationShareF:int{45330000}
             }
@@ -35598,70 +35747,131 @@ supplementalData:table(nofallback){
     }
     unitPreferenceData{
         001{
-            area-land-agricult{"hectare"}
-            area-land-commercl{"hectare"}
-            area-land-residntl{"hectare"}
-            concentr-blood-glucose{"milligram-per-deciliter"}
-            consumption-vehicle-fuel{"liter-per-100kilometers"}
-            duration-music-track{"minute second"}
-            duration-person-age{"year-person month-person"}
-            duration-tv-program{"minute second"}
-            energy-food{"foodcalorie"}
-            energy-person-usage{"kilocalorie"}
+            area-default{
+                "square-kilometer",
+                "hectare",
+                "square-meter",
+                "square-centimeter",
+            }
+            area-geograph{"square-kilometer"}
+            area-land{"hectare"}
+            concentration-default{"item-per-cubic-meter"}
+            consumption-default{"liter-per-100-kilometer"}
+            consumption-inverse-default{"kilometer-per-centiliter"}
+            consumption-inverse-vehicle-fuel{"kilometer-per-centiliter"}
+            consumption-vehicle-fuel{"liter-per-100-kilometer"}
+            duration-default{
+                "day",
+                "hour",
+                "minute",
+                "second",
+                "millisecond",
+                "microsecond",
+                "nanosecond",
+            }
+            duration-media{
+                "minute-and-second",
+                "second",
+            }
+            energy-default{"kilowatt-hour"}
+            energy-food{"kilocalorie"}
+            length-default{
+                "kilometer",
+                "meter",
+                "centimeter",
+            }
             length-person{"centimeter"}
-            length-person-small{"centimeter"}
+            length-person-height{"centimeter"}
             length-rainfall{"millimeter"}
-            length-road{"kilometer"}
-            length-road-small{"meter"}
+            length-road{"meter"}
             length-snowfall{"centimeter"}
             length-vehicle{"meter"}
-            length-visiblty{"kilometer"}
-            length-visiblty-small{"meter"}
-            mass-person{"kilogram"}
-            mass-person-small{"gram"}
+            length-visiblty{"meter"}
+            mass-default{
+                "metric-ton",
+                "kilogram",
+                "gram",
+                "milligram",
+                "microgram",
+            }
+            mass-density-blood-glucose{"milligram-per-deciliter"}
+            mass-density-default{"kilogram-per-cubic-meter"}
+            mass-person{
+                "kilogram",
+                "gram",
+            }
+            power-default{
+                "gigawatt",
+                "megawatt",
+                "kilowatt",
+                "watt",
+                "milliwatt",
+            }
+            power-engine{"kilowatt"}
             pressure-baromtrc{"hectopascal"}
-            speed-road-travel{"kilometer-per-hour"}
+            pressure-default{
+                "megapascal",
+                "pascal",
+            }
+            speed-default{"kilometer-per-hour"}
             speed-wind{"kilometer-per-hour"}
-            temperature-person{"celsius"}
+            temperature-default{"celsius"}
             temperature-weather{"celsius"}
-            volume-vehicle-fuel{"liter"}
+            volume-default{
+                "cubic-meter",
+                "cubic-centimeter",
+            }
+            volume-fluid{
+                "liter",
+                "milliliter",
+            }
+            volume-oil{"barrel"}
+            volume-vehicle{"liter"}
+            year-duration-default{
+                "year",
+                "month",
+            }
+            year-duration-person-age{
+                "year-person-and-month-person",
+                "month-person",
+            }
         }
         AG{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         AI{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         AO{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         AT{
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         AU{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BA{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BE{
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         BG{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BH{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BM{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BN{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BR{
             consumption-vehicle-fuel{"liter-per-kilometer"}
-            length-person-informal{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
             length-rainfall{"centimeter"}
             pressure-baromtrc{"millibar"}
         }
@@ -35669,326 +35879,381 @@ supplementalData:table(nofallback){
             temperature-weather{"fahrenheit"}
         }
         BW{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BY{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         BZ{
             temperature-weather{"fahrenheit"}
         }
         CA{
-            concentr-blood-glucose{"millimole-per-liter"}
-            consumption-vehicle-fuel-informal{"mile-per-gallon-imperial"}
-            length-person-informal{"foot inch"}
-            length-person-small-informal{"inch"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            consumption-inverse-vehicle-fuel{"mile-per-gallon-imperial"}
+            length-person{"inch"}
         }
         CH{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         CM{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         CN{
-            concentr-blood-glucose{"millimole-per-liter"}
-            length-person-informal{"meter centimeter"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            length-person-height{"meter-and-centimeter"}
         }
         CZ{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         DE{
-            length-person-informal{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
             length-visiblty{"meter"}
         }
         DK{
-            concentr-blood-glucose{"millimole-per-liter"}
-            length-person-informal{"meter centimeter"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            length-person-height{"meter-and-centimeter"}
         }
         DM{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         DZ{
-            length-person{"meter centimeter"}
-            mass-person-small{"kilogram gram"}
+            length-person-height{"meter-and-centimeter"}
+            mass-person{"kilogram-and-gram"}
         }
         EE{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         EG{
-            length-person{"meter centimeter"}
-            mass-person-small{"kilogram gram"}
+            length-person-height{"meter-and-centimeter"}
+            mass-person{"kilogram-and-gram"}
             pressure-baromtrc{"millibar"}
         }
         ES{
-            length-person{"meter centimeter"}
-            mass-person-small{"kilogram gram"}
+            length-person-height{"meter-and-centimeter"}
+            mass-person{"kilogram-and-gram"}
         }
         FI{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
             speed-wind{"meter-per-second"}
         }
         FJ{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         FR{
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         GB{
-            area-land-agricult{"acre"}
-            area-land-commercl{"acre"}
-            area-land-residntl{"acre"}
-            concentr-blood-glucose{"millimole-per-liter"}
-            consumption-vehicle-fuel-informal{"mile-per-gallon-imperial"}
-            length-person-informal{"foot inch"}
-            length-person-small-informal{"inch"}
-            length-road{"mile"}
-            length-road-small{"yard"}
-            length-vehicle{"foot inch"}
-            length-visiblty{"mile"}
-            length-visiblty-small{"foot"}
-            mass-person{"stone pound"}
-            mass-person-small{"pound ounce"}
+            area-default{
+                "square-mile",
+                "acre",
+                "square-foot",
+                "square-inch",
+            }
+            area-geograph{"square-mile"}
+            area-land{"acre"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            consumption-inverse-vehicle-fuel{"mile-per-gallon-imperial"}
+            length-default{
+                "mile",
+                "foot",
+                "inch",
+            }
+            length-person{"inch"}
+            length-road{"yard"}
+            length-vehicle{"foot-and-inch"}
+            length-visiblty{
+                "mile",
+                "foot",
+            }
+            mass-default{
+                "ton",
+                "pound",
+                "ounce",
+            }
+            mass-person{
+                "stone-and-pound",
+                "pound-and-ounce",
+            }
+            power-engine{"horsepower"}
             pressure-baromtrc{"millibar"}
-            speed-road-travel{"mile-per-hour"}
+            pressure-default{"pound-force-per-square-inch"}
+            speed-default{"mile-per-hour"}
+            volume-default{
+                "cubic-foot",
+                "cubic-inch",
+            }
+            volume-fluid{
+                "gallon-imperial",
+                "fluid-ounce-imperial",
+            }
         }
         GD{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         HK{
-            concentr-blood-glucose{"millimole-per-liter"}
-            length-person{"meter centimeter"}
-            mass-person-small{"pound ounce"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            length-person-height{"meter-and-centimeter"}
+            mass-person{"pound-and-ounce"}
         }
         HR{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         HU{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         ID{
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         IE{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         IL{
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
             pressure-baromtrc{"millibar"}
         }
         IM{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         IN{
-            length-person-informal{"foot inch"}
-            length-person-small-informal{"inch"}
+            length-person{"inch"}
             pressure-baromtrc{"inch-hg"}
         }
         IS{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         IT{
             consumption-vehicle-fuel{"liter-per-kilometer"}
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         JO{
-            length-person{"meter centimeter"}
-            mass-person-small{"kilogram gram"}
+            length-person-height{"meter-and-centimeter"}
+            mass-person{"kilogram-and-gram"}
         }
         JP{
             consumption-vehicle-fuel{"liter-per-kilometer"}
         }
         KE{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         KN{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         KR{
             consumption-vehicle-fuel{"liter-per-kilometer"}
             speed-wind{"meter-per-second"}
         }
         KW{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         KY{
             temperature-weather{"fahrenheit"}
         }
         KZ{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         LC{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         LI{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         LT{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         LU{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         LV{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         ME{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         MG{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         MK{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         MO{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         MS{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         MT{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         MU{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         MX{
             consumption-vehicle-fuel{"liter-per-kilometer"}
-            length-person-informal{"meter centimeter"}
-            length-vehicle{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
+            length-vehicle{"meter-and-centimeter"}
             pressure-baromtrc{"millimeter-of-mercury"}
         }
         MY{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
             consumption-vehicle-fuel{"liter-per-kilometer"}
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         MZ{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         NA{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         NL{
-            concentr-blood-glucose{"millimole-per-liter"}
-            consumption-vehicle-fuel-informal{"liter-per-kilometer"}
-            length-person-informal{"meter centimeter"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            consumption-vehicle-fuel{"liter-per-kilometer"}
+            length-person-height{"meter-and-centimeter"}
             length-visiblty{"meter"}
         }
         NO{
-            concentr-blood-glucose{"millimole-per-liter"}
-            length-person-informal{"meter centimeter"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            length-person-height{"meter-and-centimeter"}
             speed-wind{"meter-per-second"}
         }
         NZ{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         OM{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         PG{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         PL{
-            length-person-informal{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
             speed-wind{"meter-per-second"}
         }
         PR{
             temperature-weather{"fahrenheit"}
         }
         PT{
-            length-person-informal{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         PW{
             temperature-weather{"fahrenheit"}
         }
         RS{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         RU{
-            concentr-blood-glucose{"millimole-per-liter"}
-            length-person-informal{"meter centimeter"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            length-person-height{"meter-and-centimeter"}
             pressure-baromtrc{"millimeter-of-mercury"}
             speed-wind{"meter-per-second"}
         }
         SA{
-            length-person{"meter centimeter"}
-            mass-person-small{"kilogram gram"}
+            length-person-height{"meter-and-centimeter"}
+            mass-person{"kilogram-and-gram"}
         }
         SE{
-            concentr-blood-glucose{"millimole-per-liter"}
-            length-person{"meter centimeter"}
-            length-road-informal{"mile-scandinavian"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            length-person-height{"meter-and-centimeter"}
             speed-wind{"meter-per-second"}
         }
         SG{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         SI{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         SK{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         TC{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         TH{
             consumption-vehicle-fuel{"liter-per-kilometer"}
             pressure-baromtrc{"millibar"}
         }
         TO{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         TR{
             consumption-vehicle-fuel{"liter-per-kilometer"}
-            length-person{"meter centimeter"}
+            length-person-height{"meter-and-centimeter"}
         }
         UA{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         UG{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         US{
-            area-land-agricult{"acre"}
-            area-land-commercl{"acre"}
-            area-land-residntl{"acre"}
-            consumption-vehicle-fuel{"mile-per-gallon"}
+            area-default{
+                "square-mile",
+                "acre",
+                "square-foot",
+                "square-inch",
+            }
+            area-geograph{"square-mile"}
+            area-land{"acre"}
+            consumption-inverse-vehicle-fuel{"mile-per-gallon"}
+            energy-food{"foodcalorie"}
+            length-default{
+                "mile",
+                "foot",
+                "inch",
+            }
             length-person{"inch"}
-            length-person-informal{"foot inch"}
-            length-person-small{"inch"}
             length-rainfall{"inch"}
-            length-road{"mile"}
-            length-road-small{"foot"}
             length-snowfall{"inch"}
-            length-vehicle{"foot inch"}
-            length-visiblty{"mile"}
-            length-visiblty-small{"foot"}
-            mass-person{"pound"}
-            mass-person-small{"pound ounce"}
+            length-vehicle{"foot-and-inch"}
+            length-visiblty{
+                "mile",
+                "foot",
+            }
+            mass-default{
+                "ton",
+                "pound",
+                "ounce",
+            }
+            mass-person{
+                "pound",
+                "pound-and-ounce",
+            }
+            power-engine{"horsepower"}
             pressure-baromtrc{"inch-hg"}
-            speed-road-travel{"mile-per-hour"}
+            pressure-default{"pound-force-per-square-inch"}
+            speed-default{"mile-per-hour"}
             speed-wind{"mile-per-hour"}
-            temperature-person{"fahrenheit"}
+            temperature-default{"fahrenheit"}
             temperature-weather{"fahrenheit"}
-            volume-vehicle-fuel{"gallon"}
+            volume-default{
+                "cubic-foot",
+                "cubic-inch",
+            }
+            volume-fluid{
+                "gallon",
+                "quart",
+                "pint",
+                "cup",
+                "fluid-ounce",
+                "tablespoon",
+                "teaspoon",
+            }
+            volume-vehicle{"gallon"}
         }
         VC{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         VG{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         VN{
-            concentr-blood-glucose{"millimole-per-liter"}
-            length-person{"meter centimeter"}
+            concentration-blood-glucose{"millimole-per-liter"}
+            length-person-height{"meter-and-centimeter"}
         }
         VU{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
         ZA{
-            concentr-blood-glucose{"millimole-per-liter"}
+            concentration-blood-glucose{"millimole-per-liter"}
         }
     }
     weekData{

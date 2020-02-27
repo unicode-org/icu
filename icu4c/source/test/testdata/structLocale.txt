@@ -5869,6 +5869,7 @@ structLocale:table(nofallback){
         pap{""}
         pau{""}
         pcd{""}
+        pcm{""}
         pdc{""}
         pdt{""}
         peo{""}
@@ -24705,6 +24706,23 @@ structLocale:table(nofallback){
                     d{""}
                     y{""}
                 }
+                GyMMMM{
+                    G{""}
+                    M{""}
+                    y{""}
+                }
+                GyMMMMEd{
+                    G{""}
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                GyMMMMd{
+                    G{""}
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 GyMMMd{
                     G{""}
                     M{""}
@@ -25149,6 +25167,23 @@ structLocale:table(nofallback){
                     y{""}
                 }
                 GyMMMEd{
+                    G{""}
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                GyMMMM{
+                    G{""}
+                    M{""}
+                    y{""}
+                }
+                GyMMMMEd{
+                    G{""}
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                GyMMMMd{
                     G{""}
                     M{""}
                     d{""}

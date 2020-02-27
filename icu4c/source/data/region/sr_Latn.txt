@@ -310,8 +310,7 @@ sr_Latn{
         CI{"Obala Slonovače"}
         CZ{"Češka Republika"}
         FK{"Foklandska (Malvinska) ostrva"}
-        SZ{"Svazilend"}
         TL{"Istočni Timor"}
     }
-    Version{"36.1"}
+    Version{"37"}
 }

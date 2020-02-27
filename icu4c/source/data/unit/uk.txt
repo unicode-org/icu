@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 uk{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -331,6 +331,13 @@ uk{
                 other{"{0} дня"}
                 per{"{0} на день"}
             }
+            decade{
+                dnam{"декади"}
+                few{"{0} декади"}
+                many{"{0} декад"}
+                one{"{0} декада"}
+                other{"{0} декади"}
+            }
             hour{
                 dnam{"години"}
                 few{"{0} години"}
@@ -489,6 +496,7 @@ uk{
                 other{"{0} кіловат-години"}
             }
             therm-us{
+                dnam{"американський терм"}
                 few{"{0} американських терми"}
                 many{"{0} американських термів"}
                 one{"{0} американський терм"}
@@ -1731,6 +1739,7 @@ uk{
         }
         temperature{
             celsius{
+                dnam{"° Цельсія"}
                 few{"{0}°C"}
                 many{"{0}°C"}
                 one{"{0}°C"}
@@ -1817,6 +1826,10 @@ uk{
         acceleration{
             g-force{
                 dnam{"сили тяжіння"}
+                few{"{0} g"}
+                many{"{0} g"}
+                one{"{0} g"}
+                other{"{0} g"}
             }
             meter-per-second-squared{
                 dnam{"метри/с²"}
@@ -2130,6 +2143,13 @@ uk{
                 other{"{0} дн."}
                 per{"{0}/дн."}
             }
+            decade{
+                dnam{"10-річчя"}
+                few{"{0} 10-річчя"}
+                many{"{0} 10-річ"}
+                one{"{0} 10-річчя"}
+                other{"{0} 10-річчя"}
+            }
             hour{
                 dnam{"год"}
                 few{"{0} год"}
@@ -2287,6 +2307,13 @@ uk{
                 one{"{0} кВт год"}
                 other{"{0} кВт год"}
             }
+            therm-us{
+                dnam{"ам. терми"}
+                few{"{0} ам. терми"}
+                many{"{0} ам. термів"}
+                one{"{0} ам. терм"}
+                other{"{0} ам. терма"}
+            }
         }
         force{
             newton{
@@ -2335,12 +2362,54 @@ uk{
             }
         }
         graphics{
+            dot-per-centimeter{
+                dnam{"dpcm"}
+                few{"{0} dpcm"}
+                many{"{0} dpcm"}
+                one{"{0} dpcm"}
+                other{"{0} dpcm"}
+            }
+            dot-per-inch{
+                dnam{"dpi"}
+                few{"{0} dpi"}
+                many{"{0} dpi"}
+                one{"{0} dpi"}
+                other{"{0} dpi"}
+            }
+            em{
+                dnam{"em"}
+                few{"{0} em"}
+                many{"{0} em"}
+                one{"{0} em"}
+                other{"{0} em"}
+            }
             megapixel{
                 dnam{"Мп"}
                 few{"{0} Мп"}
                 many{"{0} Мп"}
                 one{"{0} Мп"}
                 other{"{0} Мп"}
+            }
+            pixel{
+                dnam{"px"}
+                few{"{0} px"}
+                many{"{0} px"}
+                one{"{0} px"}
+                other{"{0} px"}
+            }
+            pixel-per-centimeter{
+                dnam{"ppcm"}
+                few{"{0} ppcm"}
+                many{"{0} ppcm"}
+                one{"{0} ppcm"}
+                other{"{0} ppcm"}
+            }
+            pixel-per-inch{
+                dnam{"ppi"}
+                few{"{0} ppi"}
+                many{"{0} ppi"}
+                one{"{0} ppi"}
+                other{"{0} ppi"}
             }
         }
         length{
@@ -2633,6 +2702,7 @@ uk{
                 other{"{0} атм"}
             }
             bar{
+                dnam{"бар"}
                 few{"{0} бар"}
                 many{"{0} бар"}
                 one{"{0} бар"}

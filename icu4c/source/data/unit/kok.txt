@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 kok{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -82,6 +82,9 @@ kok{
                 dnam{"चौरस यार्ड"}
                 other{"{0} चौरस यार्ड"}
             }
+        }
+        compound{
+            per{"{1} क {0}"}
         }
         concentr{
             karat{
@@ -438,6 +441,10 @@ kok{
             }
         }
         power{
+            gigawatt{
+                dnam{"गिगावॉट्स"}
+                other{"{0} गिगावॉट्स"}
+            }
             horsepower{
                 dnam{"हॉर्सपावर"}
                 other{"{0} हॉर्सपावर"}

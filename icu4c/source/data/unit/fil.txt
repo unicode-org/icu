@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fil{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -243,6 +243,7 @@ fil{
                 per{"{0} kada araw"}
             }
             decade{
+                dnam{"dekada"}
                 one{"{0} dekada"}
                 other{"{0} dekada"}
             }
@@ -416,14 +417,17 @@ fil{
                 other{"{0} megapixels"}
             }
             pixel{
+                dnam{"mga pixel"}
                 one{"{0} pixel"}
                 other{"{0} pixel"}
             }
             pixel-per-centimeter{
+                dnam{"mga pixel bawat sentimetro"}
                 one{"{0} pixel bawat sentimetro"}
                 other{"{0} pixel bawat sentimetro"}
             }
             pixel-per-inch{
+                dnam{"mga pixel bawat pulgada"}
                 one{"{0} pixel bawat pulgada"}
                 other{"{0} pixel bawat pulgada"}
             }
@@ -848,6 +852,9 @@ fil{
             }
             gallon-imperial{
                 dnam{"Imp. gal"}
+                one{"{0} gal Imp."}
+                other{"{0} gal Imp."}
+                per{"{0} kada Imp. galon"}
             }
             hectoliter{
                 dnam{"hektolitro"}
@@ -1438,6 +1445,7 @@ fil{
                 other{"{0} na mpg"}
             }
             mile-per-gallon-imperial{
+                dnam{"milya/gal Imp."}
                 one{"{0} mpg Imp."}
                 other{"{0} mpg Imp."}
             }
@@ -1517,6 +1525,11 @@ fil{
                 one{"{0} araw"}
                 other{"{0} araw"}
                 per{"{0}/araw"}
+            }
+            decade{
+                dnam{"dec"}
+                one{"{0} dec"}
+                other{"{0} dec"}
             }
             hour{
                 dnam{"oras"}
@@ -1671,6 +1684,11 @@ fil{
                 dnam{"MHz"}
                 one{"{0} MHz"}
                 other{"{0} MHz"}
+            }
+        }
+        graphics{
+            pixel{
+                dnam{"mga pixel"}
             }
         }
         length{

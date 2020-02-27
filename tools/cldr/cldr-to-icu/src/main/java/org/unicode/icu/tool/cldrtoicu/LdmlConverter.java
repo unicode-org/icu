@@ -284,6 +284,11 @@ public final class LdmlConverter {
             if (!availableIds.contains(id)) {
                 continue;
             }
+            // TODO: Remove the following skip when ICU-20997 is fixed
+            if (id.contains("VALENCIA")) {
+                System.out.println("(skipping " + id + " until ICU-20997 is fixed)");
+                continue;
+            }
 
             IcuData icuData = new IcuData(id, true);
 
