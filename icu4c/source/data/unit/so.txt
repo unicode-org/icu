@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 so{
-    Version{"36.1"}
+    Version{"37"}
     units{
         acceleration{
             g-force{
@@ -721,6 +721,11 @@ so{
                 one{"{0} foosto"}
                 other{"{0} foosto"}
             }
+            bushel{
+                dnam{"cabirka bushels"}
+                one{"{0}cabirka bushel"}
+                other{"{0}cabirka bushels"}
+            }
             centiliter{
                 dnam{"sentilitar"}
                 one{"{0} sentilitar"}
@@ -849,6 +854,11 @@ so{
         }
     }
     unitsNarrow{
+        area{
+            square-yard{
+                dnam{"yd²"}
+            }
+        }
         concentr{
             percent{
                 dnam{"%"}
@@ -867,6 +877,11 @@ so{
                 one{"{0}m"}
                 other{"{0}m"}
                 per{"{0}M/K"}
+            }
+            decade{
+                dnam{"toban sano"}
+                one{"{0}diis"}
+                other{"{0}diis"}
             }
             hour{
                 dnam{"scd"}
@@ -947,6 +962,12 @@ so{
             }
         }
         volume{
+            bushel{
+                dnam{"cabirka bushel"}
+            }
+            cup-metric{
+                dnam{"mkoob"}
+            }
             liter{
                 dnam{"litar"}
                 one{"{0}L"}
@@ -1459,6 +1480,9 @@ so{
                 dnam{"foosto"}
                 one{"{0} fsto"}
                 other{"{0} fsto"}
+            }
+            bushel{
+                dnam{"cabirka bushels"}
             }
             centiliter{
                 dnam{"sL"}

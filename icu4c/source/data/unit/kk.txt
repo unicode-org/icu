@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 kk{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -366,6 +366,11 @@ kk{
                 dnam{"киловатт-сағат"}
                 one{"{0} киловатт-сағат"}
                 other{"{0} киловатт-сағат"}
+            }
+            therm-us{
+                dnam{"америка термі"}
+                one{"{0} америка термі"}
+                other{"{0} америка термі"}
             }
         }
         force{
@@ -1512,6 +1517,7 @@ kk{
                 other{"{0} кВт-сағ"}
             }
             therm-us{
+                dnam{"америка термі"}
                 one{"{0} амер. термі"}
                 other{"{0} амер. термі"}
             }

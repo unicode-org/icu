@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pl{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -1246,10 +1246,10 @@ pl{
         duration{
             day{
                 dnam{"dzień"}
-                few{"{0} dn."}
-                many{"{0} dn."}
+                few{"{0} d."}
+                many{"{0} d."}
                 one{"{0} d."}
-                other{"{0} dn."}
+                other{"{0} d."}
                 per{"{0}/d."}
             }
             hour{
@@ -1591,11 +1591,11 @@ pl{
                 other{"{0} eV"}
             }
             foodcalorie{
-                dnam{"cal"}
-                few{"{0} cal"}
-                many{"{0} cal"}
-                one{"{0} cal"}
-                other{"{0} cal"}
+                dnam{"kcal"}
+                few{"{0} kcal"}
+                many{"{0} kcal"}
+                one{"{0} kcal"}
+                other{"{0} kcal"}
             }
             joule{
                 dnam{"J"}

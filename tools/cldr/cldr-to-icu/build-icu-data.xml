@@ -129,7 +129,7 @@
                 ebu, ebu_KE, ee, el, en, en_NH, en_RH, eo, es, et, eu, ewo, ewo_CM
 
                 // F
-                fa, ff, ff_CM, ff_GN, ff_MR, ff_SN, fi, fil, fil_PH, fo, fr, fur, fur_IT, fy
+                fa, ff, ff_Adlm, ff_CM, ff_GN, ff_MR, ff_SN, fi, fil, fil_PH, fo, fr, fur, fur_IT, fy
 
                 // G
                 ga, gd, gl, gsw, gsw_CH, gsw_FR, gsw_LI, gu, guz, guz_KE, gv
@@ -145,7 +145,7 @@
 
                 // K
                 ka, kab, kab_DZ, kam, kam_KE, kde, kde_TZ, kea, kea_CV, khq, khq_ML, ki, kk, kkj, kkj_CM, kl
-                kln, kln_KE, km, kn, ko, kok, kok_IN, ks, ksb, ksb_TZ, ksf, ksf_CM, ksh, ksh_DE, ku, kw
+                kln, kln_KE, km, kn, ko, kok, kok_IN, ks, ks_IN, ksb, ksb_TZ, ksf, ksf_CM, ksh, ksh_DE, ku, kw
                 ky
 
                 // L
@@ -153,8 +153,8 @@
                 luy_KE, lv
 
                 // M
-                mas, mas_KE, mas_TZ, mer, mer_KE, mfe, mfe_MU, mg, mgh, mgh_MZ, mgo, mgo_CM, mi, mk, ml, mn
-                mo, mr, ms, mt, mua, mua_CM, my, mzn, mzn_IR
+                mai, mai_IN, mas, mas_KE, mas_TZ, mer, mer_KE, mfe, mfe_MU, mg, mgh, mgh_MZ, mgo, mgo_CM, mi
+                mk, ml, mn, mni, mni_Beng, mni_Beng_IN, mni_IN, mo, mr, ms, mt, mua, mua_CM, my, mzn, mzn_IR
 
                 // N
                 naq, naq_NA, nb, nd, nds, nds_DE, nds_NL, ne, nl, nmg, nmg_CM, nn, nnh, nnh_CM, no, no_NO
@@ -164,7 +164,7 @@
                 om, or, os
 
                 // P
-                pa, pa_Arab, pa_IN, pa_PK, pl, ps, pt
+                pa, pa_Arab, pa_IN, pa_PK, pcm, pcm_NG, pl, ps, pt
 
                 // Q
                 qu
@@ -173,9 +173,10 @@
                 rm, rn, ro, rof, rof_TZ, ru, rw, rwk, rwk_TZ
 
                 // S
-                sah, sah_RU, saq, saq_KE, sbp, sbp_TZ, sd, se, seh, seh_MZ, ses, ses_ML, sg, sh, sh_BA, sh_CS
-                sh_YU, shi, shi_Latn, shi_Latn_MA, shi_MA, shi_Tfng, shi_Tfng_MA, si, sk, sl, smn, smn_FI, sn, so, sq, sr
-                sr_BA, sr_CS, sr_Cyrl_CS, sr_Cyrl_YU, sr_Latn, sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, sv, sw
+                sah, sah_RU, saq, saq_KE, sat, sat_Olck, sat_Olck_IN, sat_IN, sbp, sbp_TZ, sd, sd_Deva, sd_PK
+                se, seh, seh_MZ, ses, ses_ML, sg, sh, sh_BA, sh_CS, sh_YU, shi, shi_Latn, shi_Latn_MA, shi_MA
+                shi_Tfng, shi_Tfng_MA, si, sk, sl, smn, smn_FI, sn, so, sq, sr, sr_BA, sr_CS, sr_Cyrl_CS
+                sr_Cyrl_YU, sr_Latn, sr_Latn_CS, sr_Latn_YU, sr_ME, sr_RS, sr_XK, sr_YU, su, su_ID, sv, sw
 
                 // T
                 ta, te, teo, teo_KE, teo_UG, tg, th, ti, tk, tl, tl_PH, to, tr, tt, twq, twq_NE
@@ -244,7 +245,7 @@
 
                     // C-F
                     ca, ceb, chr, cs, cy, da, de_AT, de, dsb, dz, ee, el, en,
-                    en_US_POSIX, en_US, eo, es, et, fa_AF, fa, fil, fi, fo, fr_CA, fr,
+                    en_US_POSIX, en_US, eo, es, et, fa_AF, fa, ff_Adlm, ff, fil, fi, fo, fr_CA, fr,
 
                     // G-J
                     ga, gl, gu, ha, haw, he, hi, hr, hsb, hu, hy,
@@ -288,7 +289,7 @@
                     lo, lrc, lt, lv, mk, ms, mt, my, nb, nl, nn, no, pl, pt_PT, pt,
 
                     // Q-Z
-                    qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, sv, sw, ta, th, tr,
+                    qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, su, sv, sw, ta, th, tr,
                     uk, vi, yue_Hans, yue, zh_Hant_HK, zh_Hant, zh_HK, zh_MO, zh_TW, zh
                 </localeIds>
             </directory>

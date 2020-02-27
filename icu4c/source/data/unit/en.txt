@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"36.1"}
+    Version{"37"}
     units{
         acceleration{
             g-force{
@@ -988,6 +988,18 @@ en{
                 one{"{0}in²"}
                 other{"{0}in²"}
             }
+            square-kilometer{
+                dnam{"km²"}
+                one{"{0}km²"}
+                other{"{0}km²"}
+                per{"{0}/km²"}
+            }
+            square-meter{
+                dnam{"meters²"}
+                one{"{0}m²"}
+                other{"{0}m²"}
+                per{"{0}/m²"}
+            }
             square-mile{
                 dnam{"mi²"}
                 one{"{0}mi²"}
@@ -1128,6 +1140,11 @@ en{
             }
         }
         duration{
+            century{
+                dnam{"c"}
+                one{"{0}c"}
+                other{"{0}c"}
+            }
             day{
                 dnam{"day"}
                 one{"{0}d"}
@@ -1145,8 +1162,8 @@ en{
             }
             microsecond{
                 dnam{"μsec"}
-                one{"{0}μs"}
-                other{"{0}μs"}
+                one{"{0}µs"}
+                other{"{0}µs"}
             }
             millisecond{
                 dnam{"msec"}
@@ -1556,7 +1573,7 @@ en{
             bar{
                 dnam{"bar"}
                 one{"{0}bar"}
-                other{"{0}bars"}
+                other{"{0}bar"}
             }
             hectopascal{
                 dnam{"hPa"}
@@ -2045,9 +2062,9 @@ en{
                 per{"{0}/h"}
             }
             microsecond{
-                dnam{"μsecs"}
-                one{"{0} μs"}
-                other{"{0} μs"}
+                dnam{"µsecs"}
+                one{"{0} µs"}
+                other{"{0} µs"}
             }
             millisecond{
                 dnam{"millisecs"}
@@ -2471,7 +2488,7 @@ en{
             bar{
                 dnam{"bar"}
                 one{"{0} bar"}
-                other{"{0} bars"}
+                other{"{0} bar"}
             }
             hectopascal{
                 dnam{"hPa"}

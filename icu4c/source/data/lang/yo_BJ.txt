@@ -32,6 +32,10 @@ yo_BJ{
     Languages%menu{
         zh{"Sháídà, Mandrínì"}
     }
+    Languages%short{
+        en_GB{"Èdè Gɛ̀ɛ́sì (GB)"}
+        en_US{"Èdè Gɛ̀ɛ́sì (US)"}
+    }
     Scripts{
         Cyrl{"èdè ilɛ̀ Rɔ́shíà"}
         Hans{"tí wɔ́n mú rɔrùn."}
@@ -52,7 +56,7 @@ yo_BJ{
             latn{"Díjíítì Ìwɔ̀ Oòrùn"}
         }
     }
-    Version{"36.1"}
+    Version{"37"}
     codePatterns{
         script{"Ìshɔwɔ́kɔ̀wé: {0}"}
     }
