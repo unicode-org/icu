@@ -537,7 +537,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
     const UnicodeString *id1, *id2;
     UnicodeString canonicalID;
     UBool isSystemID;
-    char region[4];
+    char region[4] = {0};
     int32_t zoneCount;
 
     any = canonical = canonicalLoc = any_US = canonical_US = canonicalLoc_US = any_W5 = any_CA_W5 = any_US_E14 = NULL;

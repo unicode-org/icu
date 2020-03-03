@@ -324,6 +324,7 @@ DateTimePatternGenerator::createEmptyInstance(UErrorCode& status) {
 DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
     skipMatcher(nullptr),
     fAvailableFormatKeyHash(nullptr),
+    fDefaultHourFormatChar(0),
     internalErrorCode(U_ZERO_ERROR)
 {
     fp = new FormatParser();
@@ -338,6 +339,7 @@ DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
 DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status) :
     skipMatcher(nullptr),
     fAvailableFormatKeyHash(nullptr),
+    fDefaultHourFormatChar(0),
     internalErrorCode(U_ZERO_ERROR)
 {
     fp = new FormatParser();
@@ -356,6 +358,7 @@ DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerato
     UObject(),
     skipMatcher(nullptr),
     fAvailableFormatKeyHash(nullptr),
+    fDefaultHourFormatChar(0),
     internalErrorCode(U_ZERO_ERROR)
 {
     fp = new FormatParser();
@@ -1639,7 +1642,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                             && (typeValue!= UDATPG_YEAR_FIELD || reqFieldChar==CAP_Y))
                             ? reqFieldChar
                             : field.charAt(0);
-                    if (typeValue == UDATPG_HOUR_FIELD) {
+                    if (typeValue == UDATPG_HOUR_FIELD && fDefaultHourFormatChar != 0) {
                         // The adjustment here is required to match spec (https://www.unicode.org/reports/tr35/tr35-dates.html#dfst-hour).
                         // It is necessary to match the hour-cycle preferred by the Locale.
                         // Given that, we need to do the following adjustments:
