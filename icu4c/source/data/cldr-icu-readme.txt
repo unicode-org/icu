@@ -97,9 +97,9 @@
 #
 #    $TOOLS_ROOT/cldr/cldr-to-icu/build-icu-data.xml
 #
-# The files used in previous versions are the following; unsure whether these
-# are still used at all in the ICU-67-and-later process. For now they should be
-# kept up to date to enable paralel use of the older build process for verification.
+# The files used in previous versions are the following. These are not used in
+# the ICU-67-and-later process, but for now they should be kept up to date to
+# enable parallel use of the older build process for verification.
 #
 #    $ICU4C_DIR/source/data/icu-config.xml - Update <locales> to add or remove
 #                CLDR locales for inclusion in ICU. Update <paths> to prefer
@@ -170,6 +170,7 @@ export TOOLS_ROOT=$HOME/icu-myfork/tools
 # 2. Build the CLDR Java tools and jar
 
 cd $CLDR_DIR/tools/java
+ant clean
 ant all
 ant jar
 
@@ -205,50 +206,55 @@ mvn dependency:purge-local-repository -DsnapshotsOnly=true
 
 cd $ICU4C_DIR/source
 ./runConfigureICU <platform>
-make all 2>&1 | tee /tmp/icu4c-oldData-makeAll.txt
+make clean
 make check 2>&1 | tee /tmp/icu4c-oldData-makeCheck.txt
 
-# 4a. Generate the CLDR production data, and clean out the existing ICU4C
-# data in preparation for the newly generated data (this is important when
-# the new data may  no longer generate a data file that is currently present).
-# This process uses ant with ICU's data/build.xml
+# 4a. Generate the CLDR production data. This process uses ant with ICU's
+# data/build.xml
 #
 # Running "ant cleanprod" is necessary to clean out the production data directory
 # (usually $CLDR_TMP_DIR/production ), required if any CLDR data has changed.
 #
 # Running "ant setup" is not required, but it will print useful errors to
 # debug issues with your path when it fails.
-#
-# Running "ant clean" cleans out the existing ICU4C data.
 
 cd $ICU4C_DIR/source/data
 ant cleanprod
 ant setup
-ant clean
 ant proddata 2>&1 | tee /tmp/cldr-newData-proddataLog.txt
 
 # 4b. Build the new ICU4C data files; these include .txt files and .py files.
 # These new files will replace whatever was already present in the ICU4C sources.
-# This process uses the LdmlConverter in $TOOLS_ROOT/cldr/cldr-to-icu/
+# This process uses the LdmlConverter in $TOOLS_ROOT/cldr/cldr-to-icu/;
+# see $TOOLS_ROOT/cldr/cldr-to-icu/README.txt
 #
-# This process will take several minutes,, during most of which there will be no log
+# This process will take several minutes, during most of which there will be no log
 # output (so do not assume nothing is happening). Keep a log so you can investigate
 # anything that looks suspicious.
 #
 # This also requires temporarily redefining CLDR_DIR.
+#
+# Note that "ant clean" should not be run before this. The build-icu-data.xml process
+# will automatically run its own "clean" step to delete files it cannot determine to
+# be ones that it would generate, except for pasts listed in <retain> elements such as
+# coll/de__PHONEBOOK.txt, coll/de_.txt, etc.
+#
+# Before this step, make any necessary changes to
+# build-icu-data.xml$TOOLS_ROOT/cldr/cldr-to-icu/ to add new locales, etc.
 
-export SAVE_CLDR_DIR= $CLDR_DIR
-export CLDR_DIR=$CLDR_TMP_DIR/production
 cd $TOOLS_ROOT/cldr/cldr-to-icu/
-ant -f build-icu-data.xml | tee /tmp/cldr-newData-builddataLog.txt
-
-# restore CLDR_DIR
-export CLDR_DIR=$SAVE_CLDR_DIR
+CLDR_DIR=$CLDR_TMP_DIR/production ant -f build-icu-data.xml | tee /tmp/cldr-newData-builddataLog.txt
 
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the
 # list seems reasonable.
 
+cd $ICU4C_DIR/source/data
+git status
+
+# 5a. You may also want to check which files were modified in CLDR production data:
+
+cd $CLDR_TMP_DIR
 git status
 
 # 6. Fix any errors, investigate any warnings.
@@ -279,7 +285,9 @@ make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 # may fail.
 # Repeat steps 4-7 until there are no errors.
 
-# 9. Now run the make check tests in exhaustive mode:
+# 9. You can also run the make check tests in exhaustive mode (these will also
+# be run automatically on the master branch after the merge resulting from this
+# integration):
 
 cd $ICU4C_DIR/source
 export INTLTEST_OPTS="-e"
@@ -306,8 +314,8 @@ ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU <platform>
 # 12b. Now build the jar files.
 cd $ICU4C_DIR/source/data
 # The following 2 lines are required to include the unicore data:
-  make clean
-  make -j6
+make clean
+make -j6
 make icu4j-data-install
 cd $ICU4C_DIR/source/test/testdata
 make icu4j-data-install
@@ -345,7 +353,7 @@ ant check 2>&1 | tee /tmp/icu4j-newData-antCheck.txt
 cd $HOME/icu/
 cd ..
 git status
-# add or remove as necessary
+# git add or remove as necessary
 # commit
 
 # 16. For an official CLDR data integration into ICU, now tag the CLDR and
@@ -359,5 +367,15 @@ git push --tags
 cd $HOME/icu
 git tag ...
 git push --tags
+
+# 17. You should also commit and tag the update production data in CLDR_TMP_DIR
+# using the same tag as for CLDR_DIR above:
+
+cd $CLDR_TMP_DIR
+# git add or remove as necessary
+# commit
+git tag ...
+git push --tags
+
 
 

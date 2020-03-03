@@ -27,9 +27,6 @@ de_CH{
         zh_Hans{"Chinesisch (vereinfacht)"}
         zh_Hant{"Chinesisch (traditionell)"}
     }
-    Languages%menu{
-        ars{"Arabisch (Nadschd)"}
-    }
     Types{
         colCaseFirst{
             upper{"Grossbuchstaben zuerst aufführen"}
