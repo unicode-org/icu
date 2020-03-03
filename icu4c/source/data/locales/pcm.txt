@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 pcm{
-    AuxExemplarCharacters{"[c q x à è {ẹ̀} ì ò {ọ̀} ù]"}
+    AuxExemplarCharacters{"[à c è {ẹ\u0300} ì ò {ọ\u0300} q ù x]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -11,8 +11,8 @@ pcm{
         word-medial{"{0} … {1}"}
     }
     ExemplarCharacters{
-        "[a á b {ch} d e é ẹ {ẹ́}f g {gb} h i í j k {kp} l m n o ó ọ {ọ́} p r s {sh} "
-        "t u ú v w y z {zh}]"
+        "[a á b {ch} d e é ẹ {ẹ\u0301} f g {gb} h i í j k {kp} l m n o ó ọ {ọ\u0301} "
+        "p r s {sh} t u ú v w y z {zh}]"
     }
     ExemplarCharactersIndex{"[A B {CH} D E F G H I J K L M N O P R S T U V W Y Z]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ceb{
-    AuxExemplarCharacters{"[c f j q v x z ñ]"}
+    AuxExemplarCharacters{"[c f j ñ q v x z]"}
     ExemplarCharacters{"[a b d e g h i k l m n o p r s t u w y]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\\- ‑ , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] @ * / \\& # ′ ″]"}

@@ -1175,6 +1175,7 @@ en{
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
             saur{"Saurashtra Digits"}
+            segment{"Segmented Digits"}
             shrd{"Sharada Digits"}
             sind{"Khudawadi Digits"}
             sinh{"Sinhala Lith Digits"}

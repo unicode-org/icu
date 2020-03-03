@@ -84,6 +84,7 @@ sr_Latn{
         cad{"kado"}
         car{"karipski"}
         cch{"atsam"}
+        ccp{"čakma"}
         ce{"čečenski"}
         ceb{"sebuanski"}
         cgg{"čiga"}
@@ -146,6 +147,7 @@ sr_Latn{
         eu{"baskijski"}
         ewo{"evondo"}
         fa{"persijski"}
+        fa_AF{"dari"}
         fan{"fang"}
         fat{"fanti"}
         ff{"fula"}
