@@ -2,38 +2,41 @@
 
 ICU builds and installs as relatively standard libraries. For details about
 building, installing and porting see the [ICU4C
-readme](http://source.icu-project.org/repos/icu/icu/trunk/readme.html) and the
-[ICU4J readme](http://source.icu-project.org/repos/icu/icu4j/trunk/readme.html).
+readme](/unicode-org/icu/blob/master/icu4c/readme.html) and the
+[ICU4J readme](/unicode-org/icu/blob/master/icu4j/readme.html).
 In addition, ICU4C installs several scripts and makefile fragments that help
 build other code using ICU.
 
 For C++, note that there are [Recommended Build
-Options](http://source.icu-project.org/repos/icu/trunk/icu4c/readme.html#RecBuild)
+Options](/unicode-org/icu/blob/master/icu4c/readme.html#RecBuild)
 (both for normal use and for ICU as system-level libraries) which are not
 default simply for compatibility with older ICU-using code.
 
 Starting with ICU 49, the ICU4C readme has a short section about
 [User-Configurable
-Settings](http://source.icu-project.org/repos/icu/trunk/icu4c/readme.html#UserConfig).
+Settings](/unicode-org/icu/blob/master/icu4c/readme.html#UserConfig).
 
 ## C++ Makefiles
 
 The recommended way to use ICU in Makefiles is to use the
 [pkg-config](http://pkg-config.freedesktop.org/) files which are installed by
-ICU upon "`make install`". There are files for various libraries and components.
+ICU upon `make install`. There are files for various libraries and components.
 This is preferred over the deprecated icu-config script. Below are the package
 names used within pkg-config.
 
-**Package** **Contents** icu-uc Common (uc) and Data (dt/data) libraries
-icu-i18n Internationalization (in/i18n) library icu-le [Layout Engine
-](layoutengine/index.md) icu-lx Paragraph Layout icu-io
-[Ustdio](io/ustdio.md)/[iostream](io/ustream.md) library (icuio)
+| Package | Contents |
+|----------|------------------------------------------|
+| icu-uc | Common (uc) and Data (dt/data) libraries |
+| icu-i18n | Internationalization (in/i18n) library |
+| icu-le | [Layout Engine](layoutengine/index.md) |
+| icu-lx | Paragraph Layout |
+| icu-io | [Ustdio](io/ustdio.md)/[iostream](io/ustream.md) library (icuio) |
 
 For example, to compile a simple application, you could run the following
 command. See the [pkg-config](http://pkg-config.freedesktop.org/) manpage for
 more details.
 
-`c++ -o test test.c \`pkg-config --libs --cflags icu-uc icu-io\``
+    c++ -o test test.c `pkg-config --libs --cflags icu-uc icu-io`
 
 ICU installs the pkg-config (.pc) files in `$(prefix)/lib/pkgconfig` (where
 `$(prefix)` is the installation prefix for ICU). It may be necessary to add
@@ -62,7 +65,7 @@ If you use ICU in a **large project**, you probably have your own build system
 and will just use ICU's public header files, .so files, etc. See the next
 section, "C++ With Your Own Build System"
 
-**Note**: **icu-config is deprecated, and no longer recommended for production
+:point_right: **Note**:**icu-config is deprecated, and no longer recommended for production
 use. Please use pkg-config files or other options. **
 
 As of ICU 63.1, [icu-config has been deprecated
@@ -151,7 +154,7 @@ samples. Their paths are given in the installed `Makefile.inc` ( see above).
 ### Data Packaging Settings
 
 The `pkgdata` tool (see [Packaging ICU4C](packaging/index.md) ) makes use of the
-installed file `**$(prefix)/lib/icu/pkgdata.inc**` to set parameters for data
+installed file `$(prefix)/lib/icu/pkgdata.inc` to set parameters for data
 packaging operations that require use of platform compilers and linkers ( in
 `static` or `dll` mode). pkgdata uses the icu-config script in order to locate
 **pkgdata.inc**. If you are not building ICU using the supplied tools, you may
