@@ -1,6 +1,6 @@
 # This file is a copy of common/testData/units/unitsTest.txt from CLDR.
-# TODO(hugovdm): determine a good update procedure and document it.
-#
+# WIP/TODO(hugovdm): determine a good update procedure and document it.
+
 # Test data for unit conversions
 # Format:
 #   Quantity    ;   x   ;   y   ;   conversion to y (rational)  ;   test: 1000 x ⟹ y
@@ -114,7 +114,7 @@ mass    ;   metric-ton  ;   kilogram    ;   1000 * x    ;   1000000.0
 mass    ;   earth-mass  ;   kilogram    ;   5972200000000000000000000 * x   ;   5.9722E27
 mass    ;   solar-mass  ;   kilogram    ;   1988470000000000000000000000000 * x ;   1.98847E33
 mass-density    ;   milligram-per-deciliter ;   kilogram-per-cubic-meter    ;   1 / 100 * x ;   10.0
-portion ;   part-per-million    ;   portion ;   1 / 1000000 * x ;   0.001
+portion ;   permillion  ;   portion ;   1 / 1000000 * x ;   0.001
 portion ;   permyriad   ;   portion ;   1 / 10000 * x   ;   0.1
 portion ;   permille    ;   portion ;   1 / 1000 * x    ;   1.0
 portion ;   percent ;   portion ;   1 / 100 * x ;   10.0
@@ -127,11 +127,11 @@ power   ;   megawatt    ;   kilogram-square-meter-per-cubic-second  ;   1000000 
 power   ;   gigawatt    ;   kilogram-square-meter-per-cubic-second  ;   1000000000 * x  ;   1.0E12
 power   ;   solar-luminosity    ;   kilogram-square-meter-per-cubic-second  ;   382800000000000000000000000 * x ;   3.828E29
 pressure    ;   pascal  ;   kilogram-per-meter-square-second    ;   1 * x   ;   1000.0
-pressure    ;   millimeter-of-mercury   ;   kilogram-per-meter-square-second    ;   4053 / 304 * x  ;   13332.24
+pressure    ;   millimeter-ofhg   ;   kilogram-per-meter-square-second    ;   4053 / 304 * x  ;   13332.24
 pressure    ;   hectopascal ;   kilogram-per-meter-square-second    ;   100 * x ;   100000.0
 pressure    ;   millibar    ;   kilogram-per-meter-square-second    ;   100 * x ;   100000.0
 pressure    ;   kilopascal  ;   kilogram-per-meter-square-second    ;   1000 * x    ;   1000000.0
-pressure    ;   inch-hg ;   kilogram-per-meter-square-second    ;   3386389 / 1000 * x  ;   3386389.0
+pressure    ;   inch-ofhg   ;   kilogram-per-meter-square-second    ;   3386389 / 1000 * x  ;   338638.8
 pressure    ;   pound-force-per-square-inch ;   kilogram-meter-per-square-meter-square-second   ;   8896443230521 / 1290320000 * x  ;   6894757.0
 pressure    ;   bar ;   kilogram-per-meter-square-second    ;   100000 * x  ;   1.0E8
 pressure    ;   atmosphere  ;   kilogram-per-meter-square-second    ;   101325 * x  ;   1.01325E8

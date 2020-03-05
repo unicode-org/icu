@@ -1,7 +1,6 @@
-# This file is a copy of common/testData/units/unitPreferencesTest.txt from
-# CLDR.
-# TODO(hugovdm): determine a good update procedure and document it.
-#
+# This file is a copy of common/testData/units/unitPreferencesTest.txt from CLDR.
+# WIP/TODO(hugovdm): determine a good update procedure and document it.
+
 # Test data for unit preferences
 # Format:
 #   Quantity;   Usage;  Region; Input (r);  Input (d);  Input Unit; Output (r); Output (d); Output Unit
@@ -312,17 +311,17 @@ pressure;   baromtrc;   001;    110;    110.0;  kilogram-per-meter-square-second
 pressure;   baromtrc;   001;    100;    100.0;  kilogram-per-meter-square-second;   1;  1.0;    hectopascal
 pressure;   baromtrc;   001;    90; 90.0;   kilogram-per-meter-square-second;   9 / 10; 0.9;    hectopascal
 
-pressure;   baromtrc;   IN; 37250279 / 10000;   3725.0279;  kilogram-per-meter-square-second;   11 / 10;    1.1;    inch-hg
-pressure;   baromtrc;   IN; 3386389 / 1000; 3386.389;   kilogram-per-meter-square-second;   1;  1.0;    inch-hg
-pressure;   baromtrc;   IN; 30477501 / 10000;   3047.7501;  kilogram-per-meter-square-second;   9 / 10; 0.9;    inch-hg
+pressure;   baromtrc;   IN; 37250279 / 10000;   3725.0279;  kilogram-per-meter-square-second;   11 / 10;    1.1;    inch-ofhg
+pressure;   baromtrc;   IN; 3386389 / 1000; 3386.389;   kilogram-per-meter-square-second;   1;  1.0;    inch-ofhg
+pressure;   baromtrc;   IN; 30477501 / 10000;   3047.7501;  kilogram-per-meter-square-second;   9 / 10; 0.9;    inch-ofhg
 
 pressure;   baromtrc;   BR; 110;    110.0;  kilogram-per-meter-square-second;   11 / 10;    1.1;    millibar
 pressure;   baromtrc;   BR; 100;    100.0;  kilogram-per-meter-square-second;   1;  1.0;    millibar
 pressure;   baromtrc;   BR; 90; 90.0;   kilogram-per-meter-square-second;   9 / 10; 0.9;    millibar
 
-pressure;   baromtrc;   MX; 44583 / 3040;   14.66546052631579;  kilogram-per-meter-square-second;   11 / 10;    1.1;    millimeter-of-mercury
-pressure;   baromtrc;   MX; 4053 / 304; 13.33223684210526;  kilogram-per-meter-square-second;   1;  1.0;    millimeter-of-mercury
-pressure;   baromtrc;   MX; 36477 / 3040;   11.99901315789474;  kilogram-per-meter-square-second;   9 / 10; 0.9;    millimeter-of-mercury
+pressure;   baromtrc;   MX; 44583 / 3040;   14.66546052631579;  kilogram-per-meter-square-second;   11 / 10;    1.1;    millimeter-ofhg
+pressure;   baromtrc;   MX; 4053 / 304; 13.33223684210526;  kilogram-per-meter-square-second;   1;  1.0;    millimeter-ofhg
+pressure;   baromtrc;   MX; 36477 / 3040;   11.99901315789474;  kilogram-per-meter-square-second;   9 / 10; 0.9;    millimeter-ofhg
 
 pressure;   default;    001;    1100000;    1100000.0;  kilogram-per-meter-square-second;   11 / 10;    1.1;    megapascal
 pressure;   default;    001;    1000000;    1000000.0;  kilogram-per-meter-square-second;   1;  1.0;    megapascal
