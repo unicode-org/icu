@@ -35,6 +35,7 @@ private:
     void testJjMapping();
     void test20640_HourCyclArsEnNH();
     void testFallbackWithDefaultRootLocale();
+    void testGetDefaultHourCycle_OnEmptyInstance();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
