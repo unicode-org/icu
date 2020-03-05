@@ -713,19 +713,28 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
 }
 
 UDateFormatHourCycle
-DateTimePatternGenerator::getDefaultHourCycle(UErrorCode& /*status*/) const {
-  switch(fDefaultHourFormatChar) {
-    case CAP_K:
-      return UDAT_HOUR_CYCLE_11;
-    case LOW_H:
-      return UDAT_HOUR_CYCLE_12;
-    case CAP_H:
-      return UDAT_HOUR_CYCLE_23;
-    case LOW_K:
-      return UDAT_HOUR_CYCLE_24;
-    default:
-      UPRV_UNREACHABLE;
-  }
+DateTimePatternGenerator::getDefaultHourCycle(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return UDAT_HOUR_CYCLE_23;
+    }
+    if (fDefaultHourFormatChar == 0) {
+        // We need to return something, but the caller should ignore it
+        // anyways since the returned status is a failure.
+        status = U_UNSUPPORTED_ERROR;
+        return UDAT_HOUR_CYCLE_23;
+    }
+    switch (fDefaultHourFormatChar) {
+        case CAP_K:
+            return UDAT_HOUR_CYCLE_11;
+        case LOW_H:
+            return UDAT_HOUR_CYCLE_12;
+        case CAP_H:
+            return UDAT_HOUR_CYCLE_23;
+        case LOW_K:
+            return UDAT_HOUR_CYCLE_24;
+        default:
+            UPRV_UNREACHABLE;
+    }
 }
 
 UnicodeString

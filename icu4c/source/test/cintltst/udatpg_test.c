@@ -44,6 +44,7 @@ static void TestBuilder(void);
 static void TestOptions(void);
 static void TestGetFieldDisplayNames(void);
 static void TestGetDefaultHourCycle(void);
+static void TestGetDefaultHourCycleOnEmptyInstance(void);
 
 void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestOpenClose);
@@ -52,6 +53,7 @@ void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestOptions);
     TESTCASE(TestGetFieldDisplayNames);
     TESTCASE(TestGetDefaultHourCycle);
+    TESTCASE(TestGetDefaultHourCycleOnEmptyInstance);
 }
 
 /*
@@ -552,6 +554,30 @@ static void TestGetDefaultHourCycle() {
             udatpg_close(dtpgen);
         }
     }
+}
+
+// Ensure that calling udatpg_getDefaultHourCycle on an empty instance doesn't call UPRV_UNREACHABLE/abort.
+static void TestGetDefaultHourCycleOnEmptyInstance() {
+    UErrorCode status = U_ZERO_ERROR;
+    UDateTimePatternGenerator * dtpgen = udatpg_openEmpty(&status);
+
+    if (U_FAILURE(status)) {
+        log_data_err("ERROR udatpg_openEmpty failed, status: %s \n", myErrorName(status));
+        return;
+    }
+
+    (void)udatpg_getDefaultHourCycle(dtpgen, &status);
+    if (!U_FAILURE(status)) {
+        log_data_err("ERROR expected udatpg_getDefaultHourCycle on an empty instance to fail, status: %s", myErrorName(status));
+    }
+
+    status = U_USELESS_COLLATOR_ERROR;
+    (void)udatpg_getDefaultHourCycle(dtpgen, &status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        log_data_err("ERROR udatpg_getDefaultHourCycle shouldn't modify status if it is already failed, status: %s", myErrorName(status));
+    }
+
+    udatpg_close(dtpgen);
 }
 
 #endif
