@@ -574,6 +574,8 @@ private:
     LocaleMatcher(const LocaleMatcher &other) = delete;
     LocaleMatcher &operator=(const LocaleMatcher &other) = delete;
 
+    int32_t putIfAbsent(const LSR &lsr, int32_t i, int32_t suppLength, UErrorCode &errorCode);
+
     int32_t getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remainingIter, UErrorCode &errorCode) const;
 
     const XLikelySubtags &likelySubtags;
@@ -595,7 +597,6 @@ private:
     int32_t supportedLSRsLength;
     Locale *ownedDefaultLocale;
     const Locale *defaultLocale;
-    int32_t defaultLocaleIndex;
 };
 
 U_NAMESPACE_END

@@ -10,8 +10,8 @@ package com.ibm.icu.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -329,9 +329,9 @@ public final class LocaleMatcher {
     // The distance lookup loops over the supportedLSRs and returns the index of the best match.
     private final LSR[] supportedLSRs;
     private final int[] supportedIndexes;
+    private final int supportedLSRsLength;
     private final ULocale defaultULocale;
     private final Locale defaultLocale;
-    private final int defaultLocaleIndex;
 
     /**
      * LocaleMatcher Builder.
@@ -578,103 +578,85 @@ public final class LocaleMatcher {
     private LocaleMatcher(Builder builder) {
         thresholdDistance = builder.thresholdDistance < 0 ?
                 LocaleDistance.INSTANCE.getDefaultScriptDistance() : builder.thresholdDistance;
-        int supportedLocalesLength = builder.supportedLocales != null ?
-                builder.supportedLocales.size() : 0;
         ULocale udef = builder.defaultLocale;
         Locale def = null;
-        int idef = -1;
-        // Store the supported locales in input order,
-        // so that when different types are used (e.g., java.util.Locale)
-        // we can return those by parallel index.
-        supportedULocales = new ULocale[supportedLocalesLength];
-        supportedLocales = new Locale[supportedLocalesLength];
-        // Supported LRSs in input order.
-        LSR lsrs[] = new LSR[supportedLocalesLength];
-        // Also find the first supported locale whose LSR is
-        // the same as that for the default locale.
         LSR defLSR = null;
         if (udef != null) {
             def = udef.toLocale();
             defLSR = getMaximalLsrOrUnd(udef);
         }
+        // Store the supported locales in input order,
+        // so that when different types are used (e.g., java.util.Locale)
+        // we can return those by parallel index.
+        int supportedLocalesLength = builder.supportedLocales != null ?
+                builder.supportedLocales.size() : 0;
+        supportedULocales = new ULocale[supportedLocalesLength];
+        supportedLocales = new Locale[supportedLocalesLength];
+        // Supported LRSs in input order.
+        LSR lsrs[] = new LSR[supportedLocalesLength];
         int i = 0;
         if (supportedLocalesLength > 0) {
             for (ULocale locale : builder.supportedLocales) {
                 supportedULocales[i] = locale;
                 supportedLocales[i] = locale.toLocale();
-                LSR lsr = lsrs[i] = getMaximalLsrOrUnd(locale);
-                if (idef < 0 && defLSR != null && lsr.equals(defLSR)) {
-                    idef = i;
-                }
+                lsrs[i] = getMaximalLsrOrUnd(locale);
                 ++i;
             }
         }
 
         // We need an unordered map from LSR to first supported locale with that LSR,
-        // and an ordered list of (LSR, supported index).
-        // We use a LinkedHashMap for both,
-        // and insert the supported locales in the following order:
+        // and an ordered list of (LSR, supported index) for
+        // the supported locales in the following order:
         // 1. Default locale, if it is supported.
         // 2. Priority locales (aka "paradigm locales") in builder order.
         // 3. Remaining locales in builder order.
-        supportedLsrToIndex = new LinkedHashMap<>(supportedLocalesLength);
-        // Note: We could work with a single LinkedHashMap by storing ~i (the binary-not index)
-        // for the default and paradigm locales, counting the number of those locales,
-        // and keeping two indexes to fill the LSR and index arrays with
-        // priority vs. normal locales. In that loop we would need to entry.setValue(~i)
-        // to restore non-negative indexes in the map.
-        // Probably saves little but less readable.
-        Map<LSR, Integer> otherLsrToIndex = null;
-        if (idef >= 0) {
-            supportedLsrToIndex.put(defLSR, idef);
-        }
+        supportedLsrToIndex = new HashMap<>(supportedLocalesLength);
+        supportedLSRs = new LSR[supportedLocalesLength];
+        supportedIndexes = new int[supportedLocalesLength];
+        int suppLength = 0;
+        // Determine insertion order.
+        // Add locales immediately that are equivalent to the default.
+        byte[] order = new byte[supportedLocalesLength];
+        int numParadigms = 0;
         i = 0;
         for (ULocale locale : supportedULocales) {
-            if (i == idef) {
-                ++i;
-                continue;
-            }
             LSR lsr = lsrs[i];
             if (defLSR == null) {
                 assert i == 0;
                 udef = locale;
                 def = supportedLocales[0];
                 defLSR = lsr;
-                idef = 0;
-                supportedLsrToIndex.put(lsr, 0);
-            } else if (idef >= 0 && lsr.equals(defLSR)) {
-                // lsr.equals(defLSR) means that this supported locale is
-                // a duplicate of the default locale.
-                // Either an explicit default locale is supported, and we added it before the loop,
-                // or there is no explicit default locale, and this is
-                // a duplicate of the first supported locale.
-                // In both cases, idef >= 0 now, so otherwise we can skip the comparison.
-                // For a duplicate, putIfAbsent() is a no-op, so nothing to do.
+                suppLength = putIfAbsent(lsr, 0, suppLength);
+            } else if (lsr.isEquivalentTo(defLSR)) {
+                suppLength = putIfAbsent(lsr, i, suppLength);
             } else if (LocaleDistance.INSTANCE.isParadigmLSR(lsr)) {
-                putIfAbsent(supportedLsrToIndex, lsr, i);
+                order[i] = 2;
+                ++numParadigms;
             } else {
-                if (otherLsrToIndex == null) {
-                    otherLsrToIndex = new LinkedHashMap<>(supportedLocalesLength);
-                }
-                putIfAbsent(otherLsrToIndex, lsr, i);
+                order[i] = 3;
             }
             ++i;
         }
-        if (otherLsrToIndex != null) {
-            supportedLsrToIndex.putAll(otherLsrToIndex);
+        // Add supported paradigm locales.
+        int paradigmLimit = suppLength + numParadigms;
+        for (i = 0; i < supportedLocalesLength && suppLength < paradigmLimit; ++i) {
+            if (order[i] == 2) {
+                suppLength = putIfAbsent(lsrs[i], i, suppLength);
+            }
         }
-        int supportedLSRsLength = supportedLsrToIndex.size();
-        supportedLSRs = new LSR[supportedLSRsLength];
-        supportedIndexes = new int[supportedLSRsLength];
-        i = 0;
-        for (Map.Entry<LSR, Integer> entry : supportedLsrToIndex.entrySet()) {
-            supportedLSRs[i] = entry.getKey();  // = lsrs[entry.getValue()]
-            supportedIndexes[i++] = entry.getValue();
+        // Add remaining supported locales.
+        for (i = 0; i < supportedLocalesLength; ++i) {
+            if (order[i] == 3) {
+                suppLength = putIfAbsent(lsrs[i], i, suppLength);
+            }
         }
+        supportedLSRsLength = suppLength;
+        // If supportedLSRsLength < supportedLocalesLength then
+        // we waste as many array slots as there are duplicate supported LSRs,
+        // but the amount of wasted space is small as long as there are few duplicates.
 
         defaultULocale = udef;
         defaultLocale = def;
-        defaultLocaleIndex = idef;
         demotionPerDesiredLocale =
                 builder.demotion == Demotion.NONE ? 0 :
                     LocaleDistance.INSTANCE.getDefaultDemotionPerDesiredLocale();  // null or REGION
@@ -684,11 +666,13 @@ public final class LocaleMatcher {
         }
     }
 
-    private static final void putIfAbsent(Map<LSR, Integer> lsrToIndex, LSR lsr, int i) {
-        Integer index = lsrToIndex.get(lsr);
-        if (index == null) {
-            lsrToIndex.put(lsr, i);
+    private final int putIfAbsent(LSR lsr, int i, int suppLength) {
+        if (!supportedLsrToIndex.containsKey(lsr)) {
+            supportedLsrToIndex.put(lsr, i);
+            supportedLSRs[suppLength] = lsr;
+            supportedIndexes[suppLength++] = i;
         }
+        return suppLength;
     }
 
     private static final LSR getMaximalLsrOrUnd(ULocale locale) {
@@ -838,7 +822,7 @@ public final class LocaleMatcher {
     }
 
     private Result defaultResult() {
-        return new Result(null, defaultULocale, null, defaultLocale, -1, defaultLocaleIndex);
+        return new Result(null, defaultULocale, null, defaultLocale, -1, -1);
     }
 
     private Result makeResult(ULocale desiredLocale, ULocaleLsrIterator lsrIter, int suppIndex) {
@@ -960,7 +944,8 @@ public final class LocaleMatcher {
                 return suppIndex;
             }
             int bestIndexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                    desiredLSR, supportedLSRs, bestShiftedDistance, favorSubtag);
+                    desiredLSR, supportedLSRs, supportedLSRsLength,
+                    bestShiftedDistance, favorSubtag);
             if (bestIndexAndDistance >= 0) {
                 bestShiftedDistance = LocaleDistance.getShiftedDistance(bestIndexAndDistance);
                 if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
@@ -1012,7 +997,7 @@ public final class LocaleMatcher {
         // Returns the inverse of the distance: That is, 1-distance(desired, supported).
         int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
                 getMaximalLsrOrUnd(desired),
-                new LSR[] { getMaximalLsrOrUnd(supported) },
+                new LSR[] { getMaximalLsrOrUnd(supported) }, 1,
                 LocaleDistance.shiftDistance(thresholdDistance), favorSubtag);
         double distance = LocaleDistance.getDistanceDouble(indexAndDistance);
         if (TRACE_MATCHER) {
@@ -1048,9 +1033,9 @@ public final class LocaleMatcher {
     public String toString() {
         StringBuilder s = new StringBuilder().append("{LocaleMatcher");
         // Supported languages in the order that we try to match them.
-        if (supportedLSRs.length > 0) {
+        if (supportedLSRsLength > 0) {
             s.append(" supportedLSRs={").append(supportedLSRs[0]);
-            for (int i = 1; i < supportedLSRs.length; ++i) {
+            for (int i = 1; i < supportedLSRsLength; ++i) {
                 s.append(", ").append(supportedLSRs[i]);
             }
             s.append('}');
