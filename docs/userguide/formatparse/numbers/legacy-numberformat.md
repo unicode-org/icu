@@ -113,7 +113,7 @@ and display name, but also the correct number of fraction digits and the correct
 the API references for more details.
 
 There is ICU4C sample code at
-[icu/source/samples/numfmt/main.cpp](http://source.icu-project.org/repos/icu/trunk/icu4c/source/samples/numfmt/main.cpp)
+[icu4c/source/samples/numfmt/main.cpp]](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/numfmt/main.cpp)
 which illustrates the use of NumberFormat.setCurrency().
 
 #### Displaying Numbers
@@ -191,6 +191,6 @@ DecimalFormat and then modify it.
 ## Additional Sample Code
 
 C/C++: See
-[icu/source/samples/numfmt/](http://source.icu-project.org/repos/icu/trunk/icu4c/source/samples/numfmt/)
+[icu4c/source/samples/numfmt/](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/numfmt/)
 in the ICU source distribution for code samples showing the use of ICU number
 formatting.
