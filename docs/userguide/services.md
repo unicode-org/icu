@@ -2,7 +2,7 @@
 
 ## Overview of the ICU Services
 
-ICU enables you to write language-independent C and C++ code that is used on
+ICU enables you to write language-independent C/C++ and Java code that is used on
 separate, localized resources to get language-specific results. ICU supports
 many features, including language-sensitive text, dates, time, numbers,
 currency, message sorting, and searching. ICU provides language-specific results
@@ -12,16 +12,19 @@ for a broad range of languages.
 
 ICU provides basic Unicode support for the following:
 
-*   [Unicode string](strings/index.md)
+*   [Unicode strings](strings/index.md)
+
     ICU includes type definitions for UTF-16 strings and code points. It also
     contains many C u_string functions and the C++ UnicodeString class with many
     additional string functions.
 
 *   [Unicode properties](strings/properties.md)
+
     ICU includes the C definitions and functions found in uchar.h as well as
     some macros found in utf.h. It also includes the C++ Unicode class.
 
 *   [Unicode string iteration](strings/characteriterator.md)
+
     In C, ICU uses the macros in utf.h for the iteration of strings. In C++, ICU
     uses the characterIterator and its subclasses.
 
@@ -68,8 +71,7 @@ separate file instead of being embedded in the lines of the program.*
 ### Locales and Services
 
 The interaction between locales and services is fundamental to ICU. Please refer
-to the Locales and Services (§) section of the [Locale](locale/index.md)
-chapter.
+to [Locales and Services](./locale/index.md#Locales_and_Services).
 
 ### Transliteration
 
@@ -95,17 +97,17 @@ are represented as negative numbers.
 ICU provides the following [classes](datetime/index.md) to support calendars and
 time zones:
 
-*   [Calendar](datetime/calendar/index.md) (§)
+*   [Calendar](datetime/calendar/index.md#Calendar)
     The abstract superclass for extracting calendar-related attributes from a
-    Date value. (§)
+    Date value.
 
-*   [Gregorian Calendar](datetime/calendar/index.md) (§)
+*   [Gregorian Calendar](datetime/calendar/index.md#Gregorian_Calendar)
     A concrete class for representing a Gregorian calendar.
 
-*   [TimeZone](datetime/timezone/index.md) (§)
+*   [TimeZone](datetime/timezone/index.md)
     An abstract superclass for representing a time zone.
 
-*   [SimpleTimeZone](datetime/timezone/index.md) (§)
+*   [SimpleTimeZone](datetime/timezone/index.md)
     A concrete class for representing a time zone for use with a Gregorian
     calendar.
 
@@ -130,26 +132,12 @@ numbers, formatting dates and times, and formatting messages:
 
 #### General Formatting
 
-*   [Format](index.md)
-    Format is the abstract superclass of all format classes. It provides the
-    basic methods for formatting and parsing numbers, dates, strings, and other
-    objects.
+See [Formatting and Parsing Classes](formatparse/index.md#Formatting_and_Parsing_Classes) for an introduction to the following:
 
-*   [FieldPosition](index.md) (§)
-    FieldPosition is a concrete class for holding the field constant and the
-    beginning and ending indices for the number and date fields.
-
-*   [ParsePosition](index.md) (§)
-    ParsePosition is a concrete class for holding the parse position in a string
-    during parsing.
-
-*   [Formattable](index.md) (§)
-    Objects that must be formatted can be passed to the Format class or its
-    subclasses for formatting. The class encapsulates a polymorphic piece of
-    data to be formatted and uses the MessageFormat class. Some formatting
-    operations use the Formattable class to produce a single "type" that
-    encompasses all formattable values such as a number, date, string, and so
-    on.
+- Format
+- FieldPosition
+- ParsePosition
+- Formattable
 
 #### Formatting Numbers
 
@@ -230,22 +218,19 @@ associated with base characters (such as 'a' and 'b'), accent marks (such as
 ICU provides the following collation classes for sorting and searching natural
 language text according to locale-specific rules:
 
-*   [Collator](collation/architecture.md)
-    Collator is the abstract base class of all classes that compare strings.
+*   [Collator](collation/architecture.md) is the abstract base class of all classes that compare strings.
 
-*   [CollationElementIterator](collation/architecture.md)
-    CollationElementIterator is a concrete iterator class that provides an
+*   [CollationElementIterator](collation/architecture.md) is a concrete iterator class that provides an
     iterator for stepping through each character of a locale-specific string
     according to the rules of a specific collator object.
 
-*   [RuleBasedCollator](collation/architecture.md)
-    RuleBasedCollator is the only built-in implementation of the collator. It
+*   [RuleBasedCollator](collation/architecture.md) is the only built-in 
+    implementation of the collator. It
     provides a sophisticated mechanism for comparing strings in a
     language-specific manner, and an interface that allows the user to
     specifically customize the sorting order.
 
-*   [CollationKey](collation/architecture.md)
-    CollationKey is an object that enables the fast sorting of strings by
+*   [CollationKey](collation/architecture.md)  is an object that enables the fast sorting of strings by
     representing a string as a sort key under the rules of a specific collator
     object.
 
@@ -306,26 +291,9 @@ ICU provides the following classes for iterating over locale-specific text:
     A concrete class for forward and backward iteration over a string of Unicode
     characters. StringCharacterIterator inherits from CharacterIterator.
 
-### Text Layout
+### Paragraph Layout
 
-Some scripts require rendering behavior that is more complicated than the Latin
-script. These scripts are called as "complex scripts" and while their text is
-called "complex text." Examples of complex scripts are the Indic scripts
-(Devanagari, Tamil, Telugu, and Gujarati), Thai scripts, and Arabic scripts.
-
-Complex text has the following main characteristics:
-
-In most cases, the contextual and ligature forms of characters have not been
-assigned Unicode codepoints and thus cannot be displayed directly using
-codepoints.
-
-The ICU LayoutEngine provides a uniform interface for preparing complex text for
-display. The LayoutEngine code is independent of the font and rendering
-architecture of the underlying platform. All access to the LayoutEngine code is
-through an abstract base class. A concrete instance of this base class must be
-implemented for each platform.
-
-The ICU LayoutEngine prepares complex text using the following procedures:
+See [Paragraph Layout](./layoutengine/paragraph.md) for more details.
 
 ## Locale-Dependent Operations
 
