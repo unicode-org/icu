@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Case Mappings
 
 ## Overview
@@ -22,14 +27,14 @@ of title case words is language dependent. For example, in English, "Taming of
 the Shrew" would be the appropriate capitalization and not "Taming Of The
 Shrew".
 
-* As of Unicode 11, Georgian now has Mkhedruli (lowercase) and Mtavruli
-(uppercase) which form case pairs, but are not used in title case. *
+:point_right: **Note**: *As of Unicode 11, Georgian now has Mkhedruli (lowercase) and Mtavruli
+(uppercase) which form case pairs, but are not used in title case.*
 
 Sample code is available in the ICU source code library at
-[icu/source/samples/ustring/ustring.cpp](http://source.icu-project.org/repos/icu/icu/trunk/source/samples/ustring/ustring.cpp)
+[icu/source/samples/ustring/ustring.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ustring/ustring.cpp)
 .
 
-Please refer to [The Unicode Standard](http://www.unicode.org/versions/latest/)
+Please refer to the following sections in the [The Unicode Standard](http://www.unicode.org/versions/latest/)
 for more information about case mapping:
 
 *   3.13 Default Case Algorithms
@@ -43,13 +48,13 @@ character map.
 
 A character is considered to have a lowercase, uppercase, or title case
 equivalent if there is a respective "simple" case mapping specified for the
-character in the Unicode Character Database (UnicodeData.txt). If a character
-has no mapping equivalent, the result is the character itself.
+character in the [Unicode Character Database](http://unicode.org/ucd/) (UnicodeData.txt).
+If a character has no mapping equivalent, the result is the character itself.
 
-The APIs provided for the general case mapping, located in uchar.h file, handles
-only single characters of type UChar32 and returns only single characters. To
+The APIs provided for the general case mapping, located in `uchar.h` file, handles
+only single characters of type `UChar32` and returns only single characters. To
 convert a string to a non-language based specific case, use the APIs in either
-the unistr.h or ustring.h files with a NULL argument locale.
+the `unistr.h` or `ustring.h` files with a `NULL` argument locale.
 
 ## Full (Language-Specific) Case Mapping
 
@@ -63,10 +68,12 @@ specified for the character in the Unicode Character database (UnicodeData.txt).
 In the case where a character has no mapping equivalent, the result is the
 character itself.
 
-To convert a string to a language based specific case, use the APIs in ustring.h
-and unistr.h with an intended argument locale.
+To convert a string to a language based specific case, use the APIs in `ustring.h`
+and `unistr.h` with an intended argument locale.
 
-ICU implements full Unicode string case mappings. **In general,**
+ICU implements full Unicode string case mappings.
+
+**In general:**
 
 *   **case mapping can change the number of code points and/or code units of a
     string,**
@@ -95,6 +102,6 @@ mappings for use with Turkic (Turkish/Azerbaijani) text data.
 
 Character case folding APIs implementations are located in:
 
-1.  uchar.h for single character folding
+1.  `uchar.h` for single character folding
 
-2.  ustring.h and unistr.h for character string folding.
+2.  `ustring.h` and `unistr.h` for character string folding.
