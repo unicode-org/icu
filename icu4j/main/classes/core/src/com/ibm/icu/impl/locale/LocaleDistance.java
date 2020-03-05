@@ -5,7 +5,7 @@ package com.ibm.icu.impl.locale;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -152,7 +152,8 @@ public class LocaleDistance {
             Set<LSR> paradigmLSRs;
             if (matchTable.findValue("paradigms", value)) {
                 String[] paradigms = value.getStringArray();
-                paradigmLSRs = new HashSet<>(paradigms.length / 3);
+                // LinkedHashSet for stable order; otherwise a unit test is flaky.
+                paradigmLSRs = new LinkedHashSet<>(paradigms.length / 3);
                 for (int i = 0; i < paradigms.length; i += 3) {
                     paradigmLSRs.add(new LSR(paradigms[i], paradigms[i + 1], paradigms[i + 2],
                             LSR.DONT_CARE_FLAGS));
@@ -209,7 +210,7 @@ public class LocaleDistance {
         // As of CLDR 36, we have <languageMatch desired="en_*_*" supported="en_*_*" distance="5"/>.
         LSR en = new LSR("en", "Latn", "US", LSR.EXPLICIT_LSR);
         LSR enGB = new LSR("en", "Latn", "GB", LSR.EXPLICIT_LSR);
-        int indexAndDistance = getBestIndexAndDistance(en, new LSR[] { enGB },
+        int indexAndDistance = getBestIndexAndDistance(en, new LSR[] { enGB }, 1,
                 shiftDistance(50), FavorSubtag.LANGUAGE);
         defaultDemotionPerDesiredLocale  = getDistanceFloor(indexAndDistance);
 
@@ -227,7 +228,7 @@ public class LocaleDistance {
             int threshold, FavorSubtag favorSubtag) {
         LSR supportedLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported);
         LSR desiredLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired);
-        int indexAndDistance = getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR },
+        int indexAndDistance = getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR }, 1,
                 shiftDistance(threshold), favorSubtag);
         return getDistanceFloor(indexAndDistance);
     }
@@ -240,7 +241,7 @@ public class LocaleDistance {
      * (negative if none has a distance below the threshold),
      * and its distance (0..ABOVE_THRESHOLD) in the low bits.
      */
-    public int getBestIndexAndDistance(LSR desired, LSR[] supportedLSRs,
+    public int getBestIndexAndDistance(LSR desired, LSR[] supportedLSRs, int supportedLSRsLength,
             int shiftedThreshold, FavorSubtag favorSubtag) {
         // Round up the shifted threshold (if fraction bits are not 0)
         // for comparison with un-shifted distances until we need fraction bits.
@@ -252,12 +253,12 @@ public class LocaleDistance {
         // Its "distance" is either a match point value of 0, or a non-match negative value.
         // Note: The data builder verifies that there are no <*, supported> or <desired, *> rules.
         int desLangDistance = trieNext(iter, desired.language, false);
-        long desLangState = desLangDistance >= 0 && supportedLSRs.length > 1 ? iter.getState64() : 0;
+        long desLangState = desLangDistance >= 0 && supportedLSRsLength > 1 ? iter.getState64() : 0;
         // Index of the supported LSR with the lowest distance.
         int bestIndex = -1;
         // Cached lookup info from XLikelySubtags.compareLikely().
         int bestLikelyInfo = -1;
-        for (int slIndex = 0; slIndex < supportedLSRs.length; ++slIndex) {
+        for (int slIndex = 0; slIndex < supportedLSRsLength; ++slIndex) {
             LSR supported = supportedLSRs[slIndex];
             boolean star = false;
             int distance = desLangDistance;
