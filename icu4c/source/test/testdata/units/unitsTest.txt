@@ -1,3 +1,6 @@
+# This file is a copy of common/testData/units/unitsTest.txt from CLDR.
+# TODO(hugovdm): determine a good update procedure and document it.
+#
 # Test data for unit conversions
 # Format:
 #   Quantity    ;   x   ;   y   ;   conversion to y (rational)  ;   test: 1000 x ⟹ y

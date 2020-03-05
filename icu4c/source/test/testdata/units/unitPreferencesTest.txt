@@ -1,3 +1,7 @@
+# This file is a copy of common/testData/units/unitPreferencesTest.txt from
+# CLDR.
+# TODO(hugovdm): determine a good update procedure and document it.
+#
 # Test data for unit preferences
 # Format:
 #   Quantity;   Usage;  Region; Input (r);  Input (d);  Input Unit; Output (r); Output (d); Output Unit
