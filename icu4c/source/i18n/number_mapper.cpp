@@ -13,7 +13,6 @@
 #include "number_patternstring.h"
 #include "unicode/errorcode.h"
 #include "number_utils.h"
-#include "number_currencysymbols.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -81,8 +80,6 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         // NOTE: Slicing is OK.
         macros.unit = currency; // NOLINT
     }
-    warehouse.currencySymbols = {currency, locale, symbols, status};
-    macros.currencySymbols = &warehouse.currencySymbols;
 
     ///////////////////////
     // ROUNDING STRATEGY //

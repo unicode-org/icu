@@ -155,7 +155,7 @@ class AutoAffixPatternProvider {
  */
 struct DecimalFormatWarehouse {
     AutoAffixPatternProvider affixProvider;
-    CurrencySymbols currencySymbols;
+
 };
 
 

@@ -885,10 +885,6 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         status = U_UNSUPPORTED_ERROR;
         return;
     }
-    if (macros.currencySymbols != nullptr) {
-        status = U_UNSUPPORTED_ERROR;
-        return;
-    }
 
     // Remove the trailing space
     if (sb.length() > 0) {
