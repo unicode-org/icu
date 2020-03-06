@@ -87,6 +87,18 @@ public:
     void TestDebug();
     void TestProperties();
 
+#if U_ENABLE_TRACING
+    void TestTraceCreateCharacter();
+    void TestTraceCreateWord();
+    void TestTraceCreateSentence();
+    void TestTraceCreateTitle();
+    void TestTraceCreateLine();
+    void TestTraceCreateLineNormal();
+    void TestTraceCreateLineStrict();
+    void TestTraceCreateLineLoose();
+    void TestTraceCreateBreakEngine();
+#endif
+
 /***********************/
 private:
     /**
@@ -120,6 +132,11 @@ private:
 
     // Test parameters, from the test framework and test invocation.
     const char* fTestParams;
+
+#if U_ENABLE_TRACING
+    void assertTestTraceResult(int32_t fnNumber, const char* expectedData);
+#endif
+
 };
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
