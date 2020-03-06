@@ -7,7 +7,7 @@ appreciated.
 
 ## Off by default
 
-As per ticket [ICU-11763](http://bugs.icu-project.org/trac/ticket/11763), the plugin
+As per ticket [ICU-11763](https://unicode-org.atlassian.net/browse/ICU-11763), the plugin
 mechanism discussed here is disabled by default as of ICU 56. Use
 **--enable-plugins** and/or define **UCONFIG_ENABLE_PLUGINS=1** to enable the
 mechanism.
@@ -36,28 +36,33 @@ Some sample plugins are available at:
 [testplug.c](../../../icu4c/source/tools/icuinfo/testplug.c)
 Here is a simple, trivial plugin:
 
-       U_CAPI
-     **UPlugTokenReturn** U_EXPORT2 **myPlugin** (UPlugData *data, UPlugReason reason, UErrorCode *status) {
-         if(reason==UPLUG_REASON_QUERY) {
-             uplug_setPlugName(data, "Simple Plugin"); /* optional */
-             uplug_setPlugLevel(data, UPLUG_LEVEL_HIGH); /* Mandatory */
-         } else if(reason==UPLUG_REASON_LOAD) {
-             /* ... load ... */
-             /* Set up some ICU things here. */
-         } else if(reason==UPLUG_REASON_UNLOAD) {
-             /* ... unload ... */
-         }
-         return UPLUG_TOKEN; /* Mandatory. */
-     }
+```c
+  U_CAPI
+**UPlugTokenReturn** U_EXPORT2 **myPlugin** (UPlugData *data, UPlugReason reason, UErrorCode *status) {
+    if(reason==UPLUG_REASON_QUERY) {
+        uplug_setPlugName(data, "Simple Plugin"); /* optional */
+        uplug_setPlugLevel(data, UPLUG_LEVEL_HIGH); /* Mandatory */
+    } else if(reason==UPLUG_REASON_LOAD) {
+        /* ... load ... */
+        /* Set up some ICU things here. */
+    } else if(reason==UPLUG_REASON_UNLOAD) {
+        /* ... unload ... */
+    }
+    return UPLUG_TOKEN; /* Mandatory. */
+}
+```
 
 The UPlugData* is an opaque pointer to the plugin-specific data, and is used in
 all other API calls.
 The API contract is:
+
 1. the plugin MUST always return UPLUG_TOKEN as a return value- to
 indicate that it is a valid plugin.
+
 2. when the 'reason' parameter is set to UPLUG_REASON_QUERY, the
 plugin MUST call uplug_setPlugLevel() to indicate whether it is a high
 level or low level plugin.
+
 3. when the 'reason' parameter is UPLUG_REASON_QUERY, the plugin
 SHOULD call uplug_setPlugName to indicate a human readable plugin name.
 
