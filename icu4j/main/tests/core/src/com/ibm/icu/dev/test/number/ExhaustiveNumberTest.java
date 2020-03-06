@@ -123,8 +123,6 @@ public class ExhaustiveNumberTest extends TestFmwk {
         // based on https://github.com/google/double-conversion/issues/28
         double[] hardDoubles = {
                 1651087494906221570.0,
-                -5074790912492772E-327,
-                83602530019752571E-327,
                 2.207817077636718750000000000000,
                 1.818351745605468750000000000000,
                 3.941719055175781250000000000000,
@@ -149,9 +147,11 @@ public class ExhaustiveNumberTest extends TestFmwk {
                 1.305290222167968750000000000000,
                 3.834922790527343750000000000000, };
 
-        double[] integerDoubles = {
+        double[] exactDoubles = {
                 51423,
                 51423e10,
+                -5074790912492772E-327,
+                83602530019752571E-327,
                 4.503599627370496E15,
                 6.789512076111555E15,
                 9.007199254740991E15,
@@ -161,7 +161,7 @@ public class ExhaustiveNumberTest extends TestFmwk {
             checkDoubleBehavior(d, true, "");
         }
 
-        for (double d : integerDoubles) {
+        for (double d : exactDoubles) {
             checkDoubleBehavior(d, false, "");
         }
 
