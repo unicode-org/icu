@@ -294,6 +294,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test13840_ParseLongStringCrash();
     void Test13850_EmptyStringCurrency();
     void Test20348_CurrencyPrefixOverride();
+    void Test20956_MonetarySymbolGetters();
     void Test20358_GroupingInPattern();
     void Test13731_DefaultCurrency();
     void Test20499_CurrencyVisibleDigitsPlural();

@@ -1416,9 +1416,6 @@ struct U_I18N_API MacroProps : public UMemory {
     const PluralRules* rules = nullptr;  // no ownership
 
     /** @internal */
-    const CurrencySymbols* currencySymbols = nullptr;  // no ownership
-
-    /** @internal */
     int32_t threshold = kInternalDefaultThreshold;
 
     /** @internal */
