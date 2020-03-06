@@ -181,7 +181,7 @@ format (QQQQ), whereas "2nd quarter 2007" would use the regular format (qqqq
 yyyy).
 
 The pattern characters used in the Date Field Symbol Table are defined by CLDR;
-for more information see [CLDR Date Field Symbol Table](http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
+for more information see [CLDR Date Field Symbol Table](https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
 Note that the examples may not reflect current CLDR data.
 
 #### Date Field Symbol Table

@@ -14,8 +14,7 @@ manner to localize the user interface (UI) strings.
 
 ```cpp
 
-/* The strings below can be isolated into a resource
-bundle
+/* The strings below can be isolated into a resource bundle
 * and retrieved dynamically
 */
 #define LANGUAGE_NAMES "{0}<{1}languages {2}>\n"
