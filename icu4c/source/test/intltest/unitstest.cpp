@@ -258,9 +258,9 @@ void UnitsTest::testConversions() {
 
   u_parseDelimitedFile(path.data(), ';', fields, kNumFields,
                        unitsTestDataLineFn, this, errorCode);
-  if (U_FAILURE(errorCode)) {
-    log_err_status(errorCode, "error parsing %s: %s\n", filename,
-                   u_errorName(errorCode));
+  if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", filename,
+                                     u_errorName(errorCode))) {
+    return;
   }
 }
 
