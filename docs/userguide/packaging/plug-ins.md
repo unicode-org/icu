@@ -7,7 +7,7 @@ appreciated.
 
 ## Off by default
 
-As per ticket [11763](http://bugs.icu-project.org/trac/ticket/11763), the plugin
+As per ticket [ICU-11763](http://bugs.icu-project.org/trac/ticket/11763), the plugin
 mechanism discussed here is disabled by default as of ICU 56. Use
 **--enable-plugins** and/or define **UCONFIG_ENABLE_PLUGINS=1** to enable the
 mechanism.
@@ -33,7 +33,7 @@ uninstall themselves before they are removed from memory and unloaded.
 The current plugin API is documented as
 [icuplug.h](http://icu-project.org/apiref/icu4c434/icuplug_8h.html)
 Some sample plugins are available at:
-[testplug.c](http://bugs.icu-project.org/trac/browser/icu/trunk/source/tools/icuinfo/testplug.c)
+[testplug.c](../../../icu4c/source/tools/icuinfo/testplug.c)
 Here is a simple, trivial plugin:
 
        U_CAPI
@@ -50,7 +50,7 @@ Here is a simple, trivial plugin:
          return UPLUG_TOKEN; /* Mandatory. */
      }
 
-The UPlugData\* is an opaque pointer to the plugin-specific data, and is used in
+The UPlugData* is an opaque pointer to the plugin-specific data, and is used in
 all other API calls.
 The API contract is:
 1. the plugin MUST always return UPLUG_TOKEN as a return value- to
@@ -64,35 +64,38 @@ SHOULD call uplug_setPlugName to indicate a human readable plugin name.
 ## Configuration
 
 You can see a sample configuration file here:
-[icuplugins_windows_sample.txt](http://bugs.icu-project.org/trac/browser/icu/trunk/source/tools/icuinfo/icuplugins_windows_sample.txt)
+[icuplugins_windows_sample.txt](../../../icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt)
 At ICU startup time, the environment variable "ICU_PLUGINS" will be
 queried for a directory name. If it is not set, the #define
-DEFAULT_ICU_PLUGINS will be checked for a default value.
-DEFAULT_ICU_PLUGINS will be set, on autoconf'ed and installed ICU
+`DEFAULT_ICU_PLUGINS` will be checked for a default value.
+`DEFAULT_ICU_PLUGINS` will be set, on autoconf'ed and installed ICU
 versions, to "$(prefix)/lib/icu" if not set otherwise by the build
 environment.
 Within the above-named directory, the file "icuplugins##.txt" will be
-opened, if present, where ## is the major+minor number of the currently
+opened, if present, where _##_ is the major+minor number of the currently
 running ICU (such as, 44 for ICU 4.4).
 So, for example, by default, ICU 4.4 would attempt to open
-$(prefix)/lib/icu/icuplugins44.txt
+`$(prefix)/lib/icu/icuplugins44.txt`
 The configuration file has the following format:
 1. Hash (#) begins a comment line
 2. Non-comment lines have two or three components:
-LIBRARYNAME ENTRYPOINT \[ CONFIGURATION .. \]
+   > `LIBRARYNAME ENTRYPOINT [ CONFIGURATION .. ]`
 3. Tabs or spaces separate the three items.
-4. LIBRARYNAME is the name of a shared library, either a short name if
+4. _LIBRARYNAME_ is the name of a shared library, either a short name if
 it is on the loader path, or a full pathname.
-5. ENTRYPOINT is the short (undecorated) symbol name of the plugin's
+5. _ENTRYPOINT_ is the short (undecorated) symbol name of the plugin's
 entrypoint, as above.
-6. CONFIGURATION is the entire rest of the line . It's passed as-is to
+6. _CONFIGURATION_ is the entire rest of the line . It's passed as-is to
 the plugin.
 An example configuration file is, in its entirety:
+
+```
 # this is icuplugins44.txt
 testplug.dll myPlugin hello=world
 The DLL testplug.dll is opened, and searched for the entrypoint
 "myPlugin", which must meet the API contract above.
 The string "hello=world" is passed to the plugin verbatim.
+```
 
 ## Load Order
 
@@ -107,7 +110,7 @@ Plugins are otherwise loaded in the order listed in the configuration file.
 
 ## User interface and troubleshooting
 
-The new command line utility, 'icuinfo', will not only print out ICU
+The new command line utility, `icuinfo`, will not only print out ICU
 version information, but will also give information on the load status
 of plugins, with the "-L" option. It will list all loaded or
 possibly-loaded plugins, give their level, and list any errors
@@ -118,7 +121,7 @@ For example the following run shows that the plugin named
 "myPluginFailQuery" did not call uplug_setPlugLevel() and thus failed to
 load.
 
-      $ icuinfo -v -L
+     $ icuinfo -v -L
      Compiled against ICU 4.3.4, currently running ICU 4.3.4
      ICUDATA is icudt43l
      plugin file is: /lib/plugins/icuplugins43.txt
