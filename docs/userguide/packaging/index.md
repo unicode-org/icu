@@ -25,7 +25,7 @@ with -DU_STATIC_IMPLEMENTATION. Also see [How To Use ICU](../howtouseicu.md).
 ### Reduce the number of libraries used
 
 ICU consists of a number of different libraries. The library dependency chart
-(§) in the [Design](../design.md) chapter can be used to understand and
+(§) in the [Design](../design.md#Library_Dependencies_C) chapter can be used to understand and
 determine the exact set of libraries needed.
 
 ### Disable ICU features
@@ -59,8 +59,10 @@ This method involves setting an environment variable when ICU is built. For
 example, on a POSIX-like platform, settings may be chosen at the point
 runConfigureICU is run:
 
-    env CPPFLAGS="-DUCONFIG_NO_COLLATION=1 -DUCONFIGU_NO_FORMATTING=1" \\
-runConfigureICU SOLARISCC ...
+```shell
+env CPPFLAGS="-DUCONFIG_NO_COLLATION=1 -DUCONFIGU_NO_FORMATTING=1" \
+  runConfigureICU SOLARISCC ...
+```
 
 Note that when end-user code is compiled, it must also have the same CPPFLAGS
 set, or else calling some functions may result in a link failure.
@@ -76,12 +78,14 @@ next version of ICU is installed.
 Modify 'uconfig.h' to add the following lines before the first #ifndef
 UCONFIG_... section
 
+```c
     #ifndef UCONFIG_NO_COLLATION
     #define UCONFIG_NO_COLLATION 1
     #enddif
     #ifndef UCONFIG_NO_FORMATTING
     #define UCONFIG_NO_FORMATTING 1
     #endif
+```
 
 ### Reduce ICU Data used
 
@@ -96,7 +100,7 @@ data to be installed and removed without rebuilding ICU. For details, see the
 (This section assumes the reader is familiar with ICU version numbers (§) as
 covered in the [Design](../design.md) chapter, and filename conventions for
 libraries in the    
-[ReadMe](http://source.icu-project.org/repos/icu/icu/trunk//readme.html#HowToPackage)
+[ReadMe](../../../icu4c/readme.html#HowToPackage)
 .)
 
 ### POSIX Library Names
@@ -107,15 +111,15 @@ Linux
 
 | File | Links to | Purpose |
 |------------------|------------------|------------------------------------------------------------------------------------|
-| libicuuc.so | libicuuc.so.54.3 | Required for link: Applications compiled with ' -licuuc' will follow this symlink. |
-| libicuuc.so.54 | libicuuc.so.54.3 | Required for runtime: This name is what applications actually link against. |
-| libicuuc.so.54.3 | Actual library | Required for runtime and link. Contains the name 'libicuuc.so.54'. |
+| `libicuuc.so` | libicuuc.so.54.3 | Required for link: Applications compiled with ' -licuuc' will follow this symlink. |
+| `libicuuc.so.54` | libicuuc.so.54.3 | Required for runtime: This name is what applications actually link against. |
+| `libicuuc.so.54.3` | Actual library | Required for runtime and link. Contains the name 'libicuuc.so.54'. |
 
 *This discussion gives
 Linux as an example, but it is typical for most platforms, of which AIX and 390
 (zOS) are exceptions.*
 
-An application compiled with '-licuuc' will follow the symlink from libicuuc.so
+An application compiled with '-licuuc' will follow the symlink from `libicuuc.so`
 to libicuuc.so.54.3, and will actually read the file libicuuc.so.54.3. (fully
 qualified). This library file has an embedded name (SONAME) of libicuuc.so.54,
 that is, with only the major and minor number. The linker will write **this**
@@ -127,14 +131,14 @@ updated.
 
 | File | Links to | Purpose |
 |------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| libicuuc.so | libicuuc.so.54.7 | Required for link: Newly linked applications will follow this link, which should not cause any functional difference at link time. |
+| `libicuuc.so` | libicuuc.so.54.7 | Required for link: Newly linked applications will follow this link, which should not cause any functional difference at link time. |
 | libicuuc.so.54 | libicuuc.so.54.7 | Required for runtime: Because it now links to version .7, existing applications linked to version 5.4.3 will follow this link and use the 5.4.7 code. |
 | libicuuc.so.54.7 | Actual library | Required for runtime and link. Contains the name 'libicuuc.so.54'. |
 
 If ICU version 5.6.3 or 3.2.9 were installed, they would not affect
 already-linked applications, because the major+minor numbers are different - 56
 and 32, respectively, as opposed to 54. They would, however, replace the link
-'libicuuc.so', which controls which version of ICU newly-linked applications
+'`libicuuc.so`', which controls which version of ICU newly-linked applications
 use.
 
 In summary, what files should an application distribute in order to include a
@@ -182,6 +186,6 @@ DLLs will be copied with names such as 'icuuc55.dll'.
 
 The services which are now known as ICU were written to provide operating
 system-level and application environment-level services. Several operating
-systems include ICU as a standard or optional package. See ICU Binary
-Compatibility: Using ICU as an Operating System Level Library (§) in the [ICU
-Architectural Design](../design.md) chapter for more details.
+systems include ICU as a standard or optional package.
+See [ICU Binary Compatibility](../design.md#ICU_Binary_Compatibility) for
+more details.
