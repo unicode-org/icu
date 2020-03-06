@@ -26,8 +26,7 @@ for (int32_t i = 0; i < 3; ++i) {
 ### C
 
 ```c
-/* 1st example: format the dates in millis 100000000 and
-2000000000 */
+/* 1st example: format the dates in millis 100000000 and 2000000000 */
 UErrorCode status=U_ZERO_ERROR;
 int32_t i, myStrlen=0;
 UChar* myString;
@@ -61,8 +60,7 @@ DateFormat* df = DateFormat::createDateInstance
 ### C
 
 ```c
-/* 2nd example: parse a date with short French date/time
-formatter */
+/* 2nd example: parse a date with short French date/time formatter */
 UDateFormat* df = udat_open(UDAT_SHORT, UDAT_SHORT, "fr_FR", "GMT", &status);
 UErrorCode status = U_ZERO_ERROR;
 int32_t parsepos=0;     
