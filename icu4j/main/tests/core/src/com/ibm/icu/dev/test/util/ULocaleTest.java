@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -34,7 +33,6 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DisplayContext;
@@ -46,6 +44,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.IllformedLocaleException;
 import com.ibm.icu.util.LocaleData;
+import com.ibm.icu.util.LocalePriorityList;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Builder;
 import com.ibm.icu.util.ULocale.Category;
@@ -1590,15 +1589,15 @@ public class ULocaleTest extends TestFmwk {
         /*3*/ { null, "true" },
         /*4*/ { "es", "false" },
         /*5*/ { "de", "false" },
-        /*6*/ { "zh_Hant_TW", "false" },
-        /*7*/ { "zh", "true" },
+        /*6*/ { "zh_Hant_TW", "true" },
+        /*7*/ { "zh_Hant", "true" },
     };
 
     private static final String ACCEPT_LANGUAGE_HTTP[] = {
         /*0*/ "mt-mt, ja;q=0.76, en-us;q=0.95, en;q=0.92, en-gb;q=0.89, fr;q=0.87, iu-ca;q=0.84, iu;q=0.82, ja-jp;q=0.79, mt;q=0.97, de-de;q=0.74, de;q=0.71, es;q=0.68, it-it;q=0.66, it;q=0.63, vi-vn;q=0.61, vi;q=0.58, nl-nl;q=0.55, nl;q=0.53, th-th-traditional;q=.01",
         /*1*/ "ja;q=0.5, en;q=0.8, tlh",
         /*2*/ "en-zzz, de-lx;q=0.8",
-        /*3*/ "mga-ie;q=0.9, tlh",
+        /*3*/ "mga-ie;q=0.9, sux",
         /*4*/ "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
                 "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
                 "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
@@ -1610,16 +1609,16 @@ public class ULocaleTest extends TestFmwk {
                 "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
                 "xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, xxx-yyy;q=.01, "+
                 "es",
-                /*5*/ "de;q=.9, fr;q=.9, xxx-yyy, sr;q=.8",
-                /*6*/ "zh-tw",
-                /*7*/ "zh-hant-cn",
+        /*5*/ "de;q=.9, fr;q=.9, xxx-yyy, sr;q=.8",
+        /*6*/ "zh-tw",
+        /*7*/ "zh-hant-cn",
     };
 
 
     @Test
     public void TestAcceptLanguage() {
         for(int i = 0 ; i < (ACCEPT_LANGUAGE_HTTP.length); i++) {
-            Boolean expectBoolean = new Boolean(ACCEPT_LANGUAGE_TESTS[i][1]);
+            Boolean expectBoolean = Boolean.valueOf(ACCEPT_LANGUAGE_TESTS[i][1]);
             String expectLocale=ACCEPT_LANGUAGE_TESTS[i][0];
 
             logln("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
@@ -1627,128 +1626,50 @@ public class ULocaleTest extends TestFmwk {
             boolean r[] = { false };
             ULocale n = ULocale.acceptLanguage(ACCEPT_LANGUAGE_HTTP[i], r);
             if((n==null)&&(expectLocale!=null)) {
-                errln("result was null! line #" + i);
+                errln("#" + i + ": result was null!");
                 continue;
             }
             if(((n==null)&&(expectLocale==null)) || (n.toString().equals(expectLocale))) {
-                logln(" locale: OK." );
+                logln("#" + i + ": locale: OK." );
             } else {
-                errln("expected " + expectLocale + " but got " + n.toString());
+                errln("#" + i + ": locale: expected " + expectLocale + " but got " + n);
             }
-            if(expectBoolean.equals(new Boolean(r[0]))) {
-                logln(" bool: OK.");
+            Boolean actualBoolean = Boolean.valueOf(r[0]);
+            if(expectBoolean.equals(actualBoolean)) {
+                logln("#" + i + ": fallback: OK.");
             } else {
-                errln("bool: not OK, was " + new Boolean(r[0]).toString() + " expected " + expectBoolean.toString());
+                errln("#" + i + ": fallback: was " + actualBoolean + " expected " + expectBoolean);
             }
         }
-    }
-
-    private ULocale[] StringToULocaleArray(String acceptLanguageList){
-        //following code is copied from
-        //ULocale.acceptLanguage(String acceptLanguageList, ULocale[] availableLocales, boolean[] fallback)
-        class ULocaleAcceptLanguageQ implements Comparable {
-            private double q;
-            private double serial;
-            public ULocaleAcceptLanguageQ(double theq, int theserial) {
-                q = theq;
-                serial = theserial;
-            }
-            @Override
-            public int compareTo(Object o) {
-                ULocaleAcceptLanguageQ other = (ULocaleAcceptLanguageQ) o;
-                if(q > other.q) { // reverse - to sort in descending order
-                    return -1;
-                } else if(q < other.q) {
-                    return 1;
-                }
-                if(serial < other.serial) {
-                    return -1;
-                } else if(serial > other.serial) {
-                    return 1;
-                } else {
-                    return 0; // same object
-                }
-            }
-        }
-
-        // 1st: parse out the acceptLanguageList into an array
-
-        TreeMap map = new TreeMap();
-
-        final int l = acceptLanguageList.length();
-        int n;
-        for(n=0;n<l;n++) {
-            int itemEnd = acceptLanguageList.indexOf(',',n);
-            if(itemEnd == -1) {
-                itemEnd = l;
-            }
-            int paramEnd = acceptLanguageList.indexOf(';',n);
-            double q = 1.0;
-
-            if((paramEnd != -1) && (paramEnd < itemEnd)) {
-                /* semicolon (;) is closer than end (,) */
-                int t = paramEnd + 1;
-                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
-                    t++;
-                }
-                if(acceptLanguageList.charAt(t)=='q') {
-                    t++;
-                }
-                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
-                    t++;
-                }
-                if(acceptLanguageList.charAt(t)=='=') {
-                    t++;
-                }
-                while(UCharacter.isWhitespace(acceptLanguageList.charAt(t))) {
-                    t++;
-                }
-                try {
-                    String val = acceptLanguageList.substring(t,itemEnd).trim();
-                    q = Double.parseDouble(val);
-                } catch (NumberFormatException nfe) {
-                    q = 1.0;
-                }
-            } else {
-                q = 1.0; //default
-                paramEnd = itemEnd;
-            }
-
-            String loc = acceptLanguageList.substring(n,paramEnd).trim();
-            int serial = map.size();
-            ULocaleAcceptLanguageQ entry = new ULocaleAcceptLanguageQ(q,serial);
-            map.put(entry, new ULocale(ULocale.canonicalize(loc))); // sort in reverse order..   1.0, 0.9, 0.8 .. etc
-            n = itemEnd; // get next item. (n++ will skip over delimiter)
-        }
-
-        // 2. pull out the map
-        ULocale acceptList[] = (ULocale[])map.values().toArray(new ULocale[map.size()]);
-        return acceptList;
     }
 
     @Test
     public void TestAcceptLanguage2() {
         for(int i = 0 ; i < (ACCEPT_LANGUAGE_HTTP.length); i++) {
-            Boolean expectBoolean = new Boolean(ACCEPT_LANGUAGE_TESTS[i][1]);
+            Boolean expectBoolean = Boolean.valueOf(ACCEPT_LANGUAGE_TESTS[i][1]);
             String expectLocale=ACCEPT_LANGUAGE_TESTS[i][0];
 
             logln("#" + i + ": expecting: " + expectLocale + " (" + expectBoolean + ")");
 
             boolean r[] = { false };
-            ULocale n = ULocale.acceptLanguage(StringToULocaleArray(ACCEPT_LANGUAGE_HTTP[i]), r);
+            Set<ULocale> desiredSet =
+                    LocalePriorityList.add(ACCEPT_LANGUAGE_HTTP[i]).build().getULocales();
+            ULocale[] desiredArray = desiredSet.toArray(new ULocale[desiredSet.size()]);
+            ULocale n = ULocale.acceptLanguage(desiredArray, r);
             if((n==null)&&(expectLocale!=null)) {
-                errln("result was null! line #" + i);
+                errln("#" + i + ": result was null!");
                 continue;
             }
             if(((n==null)&&(expectLocale==null)) || (n.toString().equals(expectLocale))) {
-                logln(" locale: OK." );
+                logln("#" + i + ": locale: OK.");
             } else {
-                errln("expected " + expectLocale + " but got " + n.toString());
+                errln("#" + i + ": expected " + expectLocale + " but got " + n.toString());
             }
-            if(expectBoolean.equals(new Boolean(r[0]))) {
-                logln(" bool: OK.");
+            Boolean actualBoolean = Boolean.valueOf(r[0]);
+            if(expectBoolean.equals(actualBoolean)) {
+                logln("#" + i + ": fallback: OK.");
             } else {
-                errln("bool: not OK, was " + new Boolean(r[0]).toString() + " expected " + expectBoolean.toString());
+                errln("#" + i + ": fallback: was " + actualBoolean + " expected " + expectBoolean);
             }
         }
     }

@@ -12,6 +12,7 @@
 #include "unicode/localematcher.h"
 #include "unicode/locid.h"
 #include "unicode/stringpiece.h"
+#include "unicode/uloc.h"
 #include "unicode/uobject.h"
 #include "cstring.h"
 #include "localeprioritylist.h"
@@ -20,6 +21,7 @@
 #include "lsr.h"
 #include "uassert.h"
 #include "uhash.h"
+#include "ustr_imp.h"
 #include "uvector.h"
 
 #define UND_LSR LSR("und", "", "", LSR::EXPLICIT_LSR)
@@ -730,5 +732,98 @@ double LocaleMatcher::internalMatch(const Locale &desired, const Locale &support
 }
 
 U_NAMESPACE_END
+
+// uloc_acceptLanguage() --------------------------------------------------- ***
+
+U_NAMESPACE_USE
+
+namespace {
+
+class LocaleFromTag {
+public:
+    LocaleFromTag() : locale(Locale::getRoot()) {}
+    const Locale &operator()(const char *tag) { return locale = Locale(tag); }
+
+private:
+    // Store the locale in the converter, rather than return a reference to a temporary,
+    // or a value which could go out of scope with the caller's reference to it.
+    Locale locale;
+};
+
+int32_t acceptLanguage(UEnumeration &supportedLocales, Locale::Iterator &desiredLocales,
+                       char *dest, int32_t capacity, UAcceptResult *acceptResult,
+                       UErrorCode &errorCode) {
+    if (U_FAILURE(errorCode)) { return 0; }
+    LocaleMatcher::Builder builder;
+    const char *locString;
+    while ((locString = uenum_next(&supportedLocales, nullptr, &errorCode)) != nullptr) {
+        Locale loc(locString);
+        if (loc.isBogus()) {
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        builder.addSupportedLocale(loc);
+    }
+    LocaleMatcher matcher = builder.build(errorCode);
+    LocaleMatcher::Result result = matcher.getBestMatchResult(desiredLocales, errorCode);
+    if (U_FAILURE(errorCode)) { return 0; }
+    if (result.getDesiredIndex() >= 0) {
+        if (acceptResult != nullptr) {
+            *acceptResult = *result.getDesiredLocale() == *result.getSupportedLocale() ?
+                ULOC_ACCEPT_VALID : ULOC_ACCEPT_FALLBACK;
+        }
+        const char *bestStr = result.getSupportedLocale()->getName();
+        int32_t bestLength = (int32_t)uprv_strlen(bestStr);
+        if (bestLength <= capacity) {
+            uprv_memcpy(dest, bestStr, bestLength);
+        }
+        return u_terminateChars(dest, capacity, bestLength, &errorCode);
+    } else {
+        if (acceptResult != nullptr) {
+            *acceptResult = ULOC_ACCEPT_FAILED;
+        }
+        return u_terminateChars(dest, capacity, 0, &errorCode);
+    }
+}
+
+}  // namespace
+
+U_CAPI int32_t U_EXPORT2
+uloc_acceptLanguage(char *result, int32_t resultAvailable,
+                    UAcceptResult *outResult,
+                    const char **acceptList, int32_t acceptListCount,
+                    UEnumeration *availableLocales,
+                    UErrorCode *status) {
+    if (U_FAILURE(*status)) { return 0; }
+    if ((result == nullptr ? resultAvailable != 0 : resultAvailable < 0) ||
+            (acceptList == nullptr ? acceptListCount != 0 : acceptListCount < 0) ||
+            availableLocales == nullptr) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    LocaleFromTag converter;
+    Locale::ConvertingIterator<const char **, LocaleFromTag> desiredLocales(
+        acceptList, acceptList + acceptListCount, converter);
+    return acceptLanguage(*availableLocales, desiredLocales,
+                          result, resultAvailable, outResult, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
+                            UAcceptResult *outResult,
+                            const char *httpAcceptLanguage,
+                            UEnumeration *availableLocales,
+                            UErrorCode *status) {
+    if (U_FAILURE(*status)) { return 0; }
+    if ((result == nullptr ? resultAvailable != 0 : resultAvailable < 0) ||
+            httpAcceptLanguage == nullptr || availableLocales == nullptr) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    LocalePriorityList list(httpAcceptLanguage, *status);
+    LocalePriorityList::Iterator desiredLocales = list.iterator();
+    return acceptLanguage(*availableLocales, desiredLocales,
+                          result, resultAvailable, outResult, *status);
+}
 
 #endif  // __LOCMATCHER_H__
