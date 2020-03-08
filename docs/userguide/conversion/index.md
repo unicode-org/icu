@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Conversion
 
 ## Conversion Overview
@@ -39,7 +44,7 @@ Unicode character. Fallbacks can partially fix this problem by mapping both
 Unicode characters to the same codepage byte sequence. Even though some
 character information is lost, the text is still readable.
 
-ICU's converter API has the following main features:
+ICU’s converter API has the following main features:
 
 1.  Unicode surrogate support
 
@@ -70,8 +75,8 @@ Unicode.
     avoids the many problems with non-algorithmic conversions. (For a discussion
     of such problems, see for example ["Character Conversions and Mapping
     Tables"](http://icu-project.org/docs/papers/conversions_and_mappings_iuc19.ppt)
-    on <http://icu-project.org/docs/> and the [XML Japanese
-    Profile](http://www.w3.org/TR/japanese-xml/) .)
+    on [http://icu-project.org/docs/](http://icu-project.org/docs/) and the
+    [XML Japanese Profile](http://www.w3.org/TR/japanese-xml/).)
 
     1.  Use UTF-8 and UTF-16.
 
@@ -102,7 +107,7 @@ Unicode.
     3.  ICU's conversion table repository contains hundreds of Unicode
         conversion tables from a number of common vendors and platforms as well
         as comparisons between these conversion tables:
-        <http://icu-project.org/charts/charset/> .
+        [http://icu-project.org/charts/charset/](http://icu-project.org/charts/charset/).
 
     4.  Do not trust codepage documentation that is not machine-readable, for
         example nice-looking charts: They are usually incomplete and out of
@@ -117,20 +122,19 @@ Unicode.
         converters for the same ambiguous charset name (like "Shift-JIS"),
         depending on the standard or platform specified. See the
         [convrtrs.txt](http://source.icu-project.org/repos/icu/icu/trunk/source/data/mappings/convrtrs.txt)
-        alias table, the [Using Converters](converters.md) chapter and [API
-        references](http://icu-project.org/apiref/icu4c/ucnv_8h.html) .
+        alias table, the [Using Converters](converters.md) chapter and
+        [API references](http://icu-project.org/apiref/icu4c/ucnv_8h.html).
 
     7.  For data exchange (rather than pure display), turn off fallback
-        mappings: ucnv_setFallback(cnv, FALSE);
+        mappings: `ucnv_setFallback(cnv, FALSE);`
 
     8.  For some text formats, especially XML and HTML, it is possible to set an
-        "escape callback" function that turns unmappable Unicode code points
+        “escape callback” function that turns unmappable Unicode code points
         into corresponding escape sequences, preventing data loss. See the API
         references and the [ucnv sample
-        code](http://source.icu-project.org/repos/icu/icu/trunk/source/samples/ucnv/)
-        .
+        code](http://source.icu-project.org/repos/icu/icu/trunk/source/samples/ucnv/).
 
     9.  **Never modify a conversion table.** Instead, use existing ones that
-        match precisely those in systems with which you communicate. "Modifying"
+        match precisely those in systems with which you communicate. “Modifying”
         a conversion table in reality just creates a new one, which makes the
         whole situation even less manageable.
