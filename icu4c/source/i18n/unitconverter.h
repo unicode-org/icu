@@ -179,7 +179,7 @@ class U_I18N_API UnitConverter {
      * @param target represents the target unit.
      * @param status
      */
-    UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode status);
+    UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode& status);
 
     /**
      * Convert a value in the source unit to another value in the target unit.
@@ -188,7 +188,7 @@ class U_I18N_API UnitConverter {
      * @param output_value the value that holds the result of the conversion.
      * @param status
      */
-    double convert(double inputValue, UErrorCode status);
+    double convert(double inputValue, UErrorCode& status);
 
   private:
     ConversionRate conversionRate_;

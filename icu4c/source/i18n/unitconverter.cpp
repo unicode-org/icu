@@ -359,13 +359,31 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     //  ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
 }
 
+StringPiece getTarget(StringPiece source, UErrorCode& status) {
+    for(const auto& entry: temporarily::dataEntries){
+        if(entry.source == entry.target)
+            return entry.target;
+    }
+
+    status = U_INTERNAL_PROGRAM_ERROR;
+    return StringPiece("");
+}
+
+enum UnitsCase {
+        RECIPROCAL,
+        CONVERTIBLE,
+        UNCONVERTIBLE,
+};
+
+UnitsCase checkUnitsCase()
+
 } // namespace
 
-UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode status) {
+UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode& status) {
     loadConversionRate(conversionRate_, source.getIdentifier(), target.getIdentifier(), status);
 }
 
-double UnitConverter::convert(double inputValue, UErrorCode status) {
+double UnitConverter::convert(double inputValue, UErrorCode& status) {
     double result = inputValue + conversionRate_.sourceOffset;
     result *= conversionRate_.factorNum / conversionRate_.factorDen;
     result -= conversionRate_.targetOffset;
