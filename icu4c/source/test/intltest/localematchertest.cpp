@@ -58,6 +58,7 @@ public:
     void testSupportedDefault();
     void testUnsupportedDefault();
     void testDemotion();
+    void testDirection();
     void testMatch();
     void testResolvedLocale();
     void testDataDriven();
@@ -81,6 +82,7 @@ void LocaleMatcherTest::runIndexedTest(int32_t index, UBool exec, const char *&n
     TESTCASE_AUTO(testSupportedDefault);
     TESTCASE_AUTO(testUnsupportedDefault);
     TESTCASE_AUTO(testDemotion);
+    TESTCASE_AUTO(testDirection);
     TESTCASE_AUTO(testMatch);
     TESTCASE_AUTO(testResolvedLocale);
     TESTCASE_AUTO(testDataDriven);
@@ -319,6 +321,31 @@ void LocaleMatcherTest::testDemotion() {
         Locale::RangeIterator<Locale *> desiredIter(ARRAY_RANGE(desired));
         assertEquals("region demotion",
                      "fr", locString(regionDemotion.getBestMatch(desiredIter, errorCode)));
+    }
+}
+
+void LocaleMatcherTest::testDirection() {
+    IcuTestErrorCode errorCode(*this, "testDirection");
+    Locale supported[] = { "ar", "nn" };
+    Locale desired[] = { "arz-EG", "nb-DK" };
+    LocaleMatcher::Builder builder;
+    builder.setSupportedLocales(ARRAY_RANGE(supported));
+    {
+        // arz is a close one-way match to ar, and the region matches.
+        // (Egyptian Arabic vs. Arabic)
+        LocaleMatcher withOneWay = builder.build(errorCode);
+        Locale::RangeIterator<Locale *> desiredIter(ARRAY_RANGE(desired));
+        assertEquals("with one-way", "ar",
+                     locString(withOneWay.getBestMatch(desiredIter, errorCode)));
+    }
+    {
+        // nb is a less close two-way match to nn, and the regions differ.
+        // (Norwegian Bokmal vs. Nynorsk)
+        LocaleMatcher onlyTwoWay =
+            builder.setDirection(ULOCMATCH_DIRECTION_ONLY_TWO_WAY).build(errorCode);
+        Locale::RangeIterator<Locale *> desiredIter(ARRAY_RANGE(desired));
+        assertEquals("only two-way", "nn",
+                     locString(onlyTwoWay.getBestMatch(desiredIter, errorCode)));
     }
 }
 

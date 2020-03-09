@@ -131,7 +131,8 @@ LocaleMatcher::Builder::Builder(LocaleMatcher::Builder &&src) U_NOEXCEPT :
         thresholdDistance_(src.thresholdDistance_),
         demotion_(src.demotion_),
         defaultLocale_(src.defaultLocale_),
-        favor_(src.favor_) {
+        favor_(src.favor_),
+        direction_(src.direction_) {
     src.supportedLocales_ = nullptr;
     src.defaultLocale_ = nullptr;
 }
@@ -150,6 +151,7 @@ LocaleMatcher::Builder &LocaleMatcher::Builder::operator=(LocaleMatcher::Builder
     demotion_ = src.demotion_;
     defaultLocale_ = src.defaultLocale_;
     favor_ = src.favor_;
+    direction_ = src.direction_;
 
     src.supportedLocales_ = nullptr;
     src.defaultLocale_ = nullptr;
@@ -332,6 +334,7 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
         thresholdDistance(builder.thresholdDistance_),
         demotionPerDesiredLocale(0),
         favorSubtag(builder.favor_),
+        direction(builder.direction_),
         supportedLocales(nullptr), lsrs(nullptr), supportedLocalesLength(0),
         supportedLsrToIndex(nullptr),
         supportedLSRs(nullptr), supportedIndexes(nullptr), supportedLSRsLength(0),
@@ -649,7 +652,8 @@ int32_t LocaleMatcher::getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remai
             }
         }
         int32_t bestIndexAndDistance = localeDistance.getBestIndexAndDistance(
-                desiredLSR, supportedLSRs, supportedLSRsLength, bestShiftedDistance, favorSubtag);
+                desiredLSR, supportedLSRs, supportedLSRsLength,
+                bestShiftedDistance, favorSubtag, direction);
         if (bestIndexAndDistance >= 0) {
             bestShiftedDistance = LocaleDistance::getShiftedDistance(bestIndexAndDistance);
             if (remainingIter != nullptr) {
@@ -683,7 +687,7 @@ double LocaleMatcher::internalMatch(const Locale &desired, const Locale &support
     int32_t indexAndDistance = localeDistance.getBestIndexAndDistance(
             getMaximalLsrOrUnd(likelySubtags, desired, errorCode),
             &pSuppLSR, 1,
-            LocaleDistance::shiftDistance(thresholdDistance), favorSubtag);
+            LocaleDistance::shiftDistance(thresholdDistance), favorSubtag, direction);
     double distance = LocaleDistance::getDistanceDouble(indexAndDistance);
     return (100.0 - distance) / 100.0;
 }
