@@ -29,8 +29,6 @@ trigger:
     - KEYS
     - README.md
 
-pr: none
-
 jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Valgrind_Ubuntu_1604
