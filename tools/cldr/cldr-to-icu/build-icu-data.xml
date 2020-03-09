@@ -7,9 +7,6 @@
     2: Determine the flags required (see the list of properties below).
     3: Run: ant -f build-icu-data.xml -D<flag-name>=<flag-value>...
     ================================================================================-->
-<!-- TODO: Add things like copying of a template directory and deleting previous files
-     (perhaps always generate into a temporary directory and copy back to avoid having
-      inconsistent state when the conversion is cancelled). -->
 <project name="Convert" default="all" basedir=".">
 
     <target name="all" depends="init-args, prepare-jar, clean, convert"/>
