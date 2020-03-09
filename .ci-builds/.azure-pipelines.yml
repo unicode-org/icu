@@ -237,44 +237,6 @@ jobs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x86 Debug'
 #-------------------------------------------------------------------------
-# Using a manual install of Python 3, until the vs2015 image has it 
-# by default.
-#
-- job: ICU4C_MSVC_x64_Release_VS2015
-  displayName: 'C: MSVC 64-bit Release (VS 2015)'
-  timeoutInMinutes: 30
-  pool:
-    vmImage: 'vs2015-win2012r2'
-    demands: 
-      - msbuild
-      - visualstudio
-      - Cmd
-  steps:
-    - checkout: self
-      lfs: true
-      fetchDepth: 1
-    - powershell: 'Invoke-WebRequest https://www.python.org/ftp/python/3.7.2/python-3.7.2-amd64-webinstall.exe -OutFile c:\py3-setup.exe'
-    - script: |
-        c:\py3-setup.exe /quiet PrependPath=1 InstallAllUsers=1 Include_launcher=1 InstallLauncherAllUsers=1 Include_test=0 Include_doc=0 Include_dev=0 Include_debug=0 Include_tcltk=0 TargetDir=c:\py3
-    - script: |
-        @echo ##vso[task.prependpath]C:\py3
-        @echo ##vso[task.prependpath]C:\py3\Scripts
-    - script: |
-        python --version
-        py -3 --version
-    - task: VSBuild@1
-      displayName: 'Build Solution'
-      inputs:
-        solution: icu4c/source/allinone/allinone.sln
-        platform: x64
-        configuration: Release
-        msbuildArgs: '/p:SkipUWP=true'
-    - task: BatchScript@1
-      displayName: 'Run Tests (icucheck.bat)'
-      inputs:
-        filename: icu4c/source/allinone/icucheck.bat
-        arguments: 'x64 Release'
-#-------------------------------------------------------------------------
 - job: ICU4C_MSYS2_GCC_x86_64_Release
   displayName: 'C: MSYS2 GCC x86_64 Release'
   timeoutInMinutes: 45
