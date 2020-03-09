@@ -375,7 +375,9 @@ enum UnitsCase {
         UNCONVERTIBLE,
 };
 
-UnitsCase checkUnitsCase()
+UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode& status) {
+    
+}
 
 } // namespace
 

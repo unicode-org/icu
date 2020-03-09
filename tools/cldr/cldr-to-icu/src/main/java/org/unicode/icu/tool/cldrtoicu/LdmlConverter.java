@@ -106,13 +106,13 @@ public final class LdmlConverter {
             "territoryContainment",
             "territoryInfo",
             "timeData",
-            "unitPreferenceData",
             "weekData",
             "weekOfPreference");
     private static final PathMatcher UNITS_DATA_PATHS =
         supplementalMatcher(
             "convertUnits",
-            "unitConstants");
+            "unitConstants",
+            "unitPreferenceData");
     private static final PathMatcher CURRENCY_DATA_PATHS =
         supplementalMatcher("currencyData");
     private static final PathMatcher NUMBERING_SYSTEMS_PATHS =
