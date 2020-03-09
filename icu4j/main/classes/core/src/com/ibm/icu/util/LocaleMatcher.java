@@ -156,6 +156,42 @@ public final class LocaleMatcher {
     }
 
     /**
+     * Builder option for whether to include or ignore one-way (fallback) match data.
+     * The LocaleMatcher uses CLDR languageMatch data which includes fallback (oneway=true) entries.
+     * Sometimes it is desirable to ignore those.
+     *
+     * <p>For example, consider a web application with the UI in a given language,
+     * with a link to another, related web app.
+     * The link should include the UI language, and the target server may also use
+     * the client’s Accept-Language header data.
+     * The target server has its own list of supported languages.
+     * One may want to favor UI language consistency, that is,
+     * if there is a decent match for the original UI language, we want to use it,
+     * but not if it is merely a fallback.
+     *
+     * @see LocaleMatcher.Builder#setDirection(Direction)
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum Direction {
+        /**
+         * Locale matching includes one-way matches such as Breton→French. (default)
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        WITH_ONE_WAY,
+        /**
+         * Locale matching limited to two-way matches including e.g. Danish↔Norwegian
+         * but ignoring one-way matches.
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        ONLY_TWO_WAY
+    }
+
+    /**
      * Data for the best-matching pair of a desired and a supported locale.
      *
      * @draft ICU 65
@@ -319,6 +355,7 @@ public final class LocaleMatcher {
     private final int thresholdDistance;
     private final int demotionPerDesiredLocale;
     private final FavorSubtag favorSubtag;
+    private final Direction direction;
 
     // These are in input order.
     private final ULocale[] supportedULocales;
@@ -346,6 +383,7 @@ public final class LocaleMatcher {
         private Demotion demotion;
         private ULocale defaultLocale;
         private FavorSubtag favor;
+        private Direction direction;
 
         private Builder() {}
 
@@ -480,6 +518,20 @@ public final class LocaleMatcher {
          */
         public Builder setDemotionPerDesiredLocale(Demotion demotion) {
             this.demotion = demotion;
+            return this;
+        }
+
+        /**
+         * Option for whether to include or ignore one-way (fallback) match data.
+         * By default, they are included.
+         *
+         * @param direction the match direction to set.
+         * @return this Builder object
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setDirection(Direction direction) {
+            this.direction = direction;
             return this;
         }
 
@@ -661,6 +713,7 @@ public final class LocaleMatcher {
                 builder.demotion == Demotion.NONE ? 0 :
                     LocaleDistance.INSTANCE.getDefaultDemotionPerDesiredLocale();  // null or REGION
         favorSubtag = builder.favor;
+        direction = builder.direction;
         if (TRACE_MATCHER) {
             System.err.printf("new LocaleMatcher: %s\n", toString());
         }
@@ -945,7 +998,7 @@ public final class LocaleMatcher {
             }
             int bestIndexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
                     desiredLSR, supportedLSRs, supportedLSRsLength,
-                    bestShiftedDistance, favorSubtag);
+                    bestShiftedDistance, favorSubtag, direction);
             if (bestIndexAndDistance >= 0) {
                 bestShiftedDistance = LocaleDistance.getShiftedDistance(bestIndexAndDistance);
                 if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
@@ -998,7 +1051,7 @@ public final class LocaleMatcher {
         int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
                 getMaximalLsrOrUnd(desired),
                 new LSR[] { getMaximalLsrOrUnd(supported) }, 1,
-                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag);
+                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag, direction);
         double distance = LocaleDistance.getDistanceDouble(indexAndDistance);
         if (TRACE_MATCHER) {
             System.err.printf("LocaleMatcher distance(desired=%s, supported=%s)=%g\n",
@@ -1043,6 +1096,9 @@ public final class LocaleMatcher {
         s.append(" default=").append(defaultULocale);
         if (favorSubtag != null) {
             s.append(" favor=").append(favorSubtag);
+        }
+        if (direction != null) {
+            s.append(" direction=").append(direction);
         }
         if (thresholdDistance >= 0) {
             s.append(String.format(" threshold=%d", thresholdDistance));

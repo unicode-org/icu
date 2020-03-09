@@ -15,6 +15,7 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.LocaleMatcher;
 import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.ULocale;
 
@@ -211,7 +212,7 @@ public class LocaleDistance {
         LSR en = new LSR("en", "Latn", "US", LSR.EXPLICIT_LSR);
         LSR enGB = new LSR("en", "Latn", "GB", LSR.EXPLICIT_LSR);
         int indexAndDistance = getBestIndexAndDistance(en, new LSR[] { enGB }, 1,
-                shiftDistance(50), FavorSubtag.LANGUAGE);
+                shiftDistance(50), FavorSubtag.LANGUAGE, LocaleMatcher.Direction.WITH_ONE_WAY);
         defaultDemotionPerDesiredLocale  = getDistanceFloor(indexAndDistance);
 
         if (DEBUG_OUTPUT) {
@@ -229,7 +230,7 @@ public class LocaleDistance {
         LSR supportedLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported);
         LSR desiredLSR = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired);
         int indexAndDistance = getBestIndexAndDistance(desiredLSR, new LSR[] { supportedLSR }, 1,
-                shiftDistance(threshold), favorSubtag);
+                shiftDistance(threshold), favorSubtag, LocaleMatcher.Direction.WITH_ONE_WAY);
         return getDistanceFloor(indexAndDistance);
     }
 
@@ -242,7 +243,7 @@ public class LocaleDistance {
      * and its distance (0..ABOVE_THRESHOLD) in the low bits.
      */
     public int getBestIndexAndDistance(LSR desired, LSR[] supportedLSRs, int supportedLSRsLength,
-            int shiftedThreshold, FavorSubtag favorSubtag) {
+            int shiftedThreshold, FavorSubtag favorSubtag, LocaleMatcher.Direction direction) {
         // Round up the shifted threshold (if fraction bits are not 0)
         // for comparison with un-shifted distances until we need fraction bits.
         // (If we simply shifted non-zero fraction bits away, then we might ignore a language
@@ -344,26 +345,38 @@ public class LocaleDistance {
                 // additional micro distance.
                 shiftedDistance |= (desired.flags ^ supported.flags);
                 if (shiftedDistance < shiftedThreshold) {
-                    if (shiftedDistance == 0) {
-                        return slIndex << INDEX_SHIFT;
+                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY ||
+                            // Is there also a match when we swap desired/supported?
+                            isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
+                        if (shiftedDistance == 0) {
+                            return slIndex << INDEX_SHIFT;
+                        }
+                        bestIndex = slIndex;
+                        shiftedThreshold = shiftedDistance;
+                        bestLikelyInfo = -1;
                     }
-                    bestIndex = slIndex;
-                    shiftedThreshold = shiftedDistance;
-                    bestLikelyInfo = -1;
                 }
             } else {
                 if (shiftedDistance < shiftedThreshold) {
-                    bestIndex = slIndex;
-                    shiftedThreshold = shiftedDistance;
-                    bestLikelyInfo = -1;
-                } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
-                    bestLikelyInfo = XLikelySubtags.INSTANCE.compareLikely(
-                            supported, supportedLSRs[bestIndex], bestLikelyInfo);
-                    if ((bestLikelyInfo & 1) != 0) {
-                        // This supported locale matches as well as the previous best match,
-                        // and neither matches perfectly,
-                        // but this one is "more likely" (has more-default subtags).
+                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY ||
+                            // Is there also a match when we swap desired/supported?
+                            isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
                         bestIndex = slIndex;
+                        shiftedThreshold = shiftedDistance;
+                        bestLikelyInfo = -1;
+                    }
+                } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
+                    if (direction != LocaleMatcher.Direction.ONLY_TWO_WAY ||
+                            // Is there also a match when we swap desired/supported?
+                            isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
+                        bestLikelyInfo = XLikelySubtags.INSTANCE.compareLikely(
+                                supported, supportedLSRs[bestIndex], bestLikelyInfo);
+                        if ((bestLikelyInfo & 1) != 0) {
+                            // This supported locale matches as well as the previous best match,
+                            // and neither matches perfectly,
+                            // but this one is "more likely" (has more-default subtags).
+                            bestIndex = slIndex;
+                        }
                     }
                 }
             }
@@ -371,6 +384,13 @@ public class LocaleDistance {
         return bestIndex >= 0 ?
                 (bestIndex << INDEX_SHIFT) | shiftedThreshold :
                 INDEX_NEG_1 | shiftDistance(ABOVE_THRESHOLD);
+    }
+
+    private boolean isMatch(LSR desired, LSR supported,
+            int shiftedThreshold, FavorSubtag favorSubtag) {
+        return getBestIndexAndDistance(
+                desired, new LSR[] { supported }, 1,
+                shiftedThreshold, favorSubtag, null) >= 0;
     }
 
     private static final int getDesSuppScriptDistance(BytesTrie iter, long startState,

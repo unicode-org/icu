@@ -639,6 +639,21 @@ public class LocaleMatcherTest extends TestFmwk {
     }
 
     @Test
+    public void testDirection() {
+        List<ULocale> desired = Arrays.asList(new ULocale("arz-EG"), new ULocale("nb-DK"));
+        LocaleMatcher.Builder builder =
+                LocaleMatcher.builder().setSupportedLocales("ar, nn");
+        // arz is a close one-way match to ar, and the region matches.
+        // (Egyptian Arabic vs. Arabic)
+        LocaleMatcher withOneWay = builder.build();
+        assertEquals("with one-way", "ar", withOneWay.getBestMatch(desired).toString());
+        // nb is a less close two-way match to nn, and the regions differ.
+        // (Norwegian Bokmal vs. Nynorsk)
+        LocaleMatcher onlyTwoWay = builder.setDirection(LocaleMatcher.Direction.ONLY_TWO_WAY).build();
+        assertEquals("only two-way", "nn", onlyTwoWay.getBestMatch(desired).toString());
+    }
+
+    @Test
     public void testCanonicalize() {
         LocaleMatcher matcher = LocaleMatcher.builder().build();
         assertEquals("bh --> bho", new ULocale("bho"), matcher.canonicalize(new ULocale("bh")));
