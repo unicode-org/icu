@@ -1,7 +1,12 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # C: ustdio
 
 This API provides a `<stdio.h>`-like API wrapper around ICU's other [formatting
-and parsing](../index.md) APIs. It is meant to ease the transition of adding
+and parsing](../formatparse/index.md) APIs. It is meant to ease the transition of adding
 Unicode support to a preexisting applications using stdio. The following is a
 small list of noticable differences between stdio and ICU I/O's ustdio
 implementation.
