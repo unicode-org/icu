@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # ICU Services
 
 ## Overview of the ICU Services
@@ -97,11 +102,11 @@ are represented as negative numbers.
 ICU provides the following [classes](datetime/index.md) to support calendars and
 time zones:
 
-*   [Calendar](datetime/calendar/index.md#Calendar)
+*   [Calendar](datetime/calendar/index.md#calendar)
     The abstract superclass for extracting calendar-related attributes from a
     Date value.
 
-*   [Gregorian Calendar](datetime/calendar/index.md#Gregorian_Calendar)
+*   [Gregorian Calendar](datetime/calendar/index.md#gregorian-calendar)
     A concrete class for representing a Gregorian calendar.
 
 *   [TimeZone](datetime/timezone/index.md)
@@ -132,26 +137,26 @@ numbers, formatting dates and times, and formatting messages:
 
 #### General Formatting
 
-See [Formatting and Parsing Classes](formatparse/index.md#Formatting_and_Parsing_Classes) for an introduction to the following:
+See [Formatting and Parsing Classes](formatparse/index.md#formatting-and-parsing-classes) for an introduction to the following:
 
-- Format
-- FieldPosition
-- ParsePosition
-- Formattable
+* Format
+* FieldPosition
+* ParsePosition
+* Formattable
 
 #### Formatting Numbers
 
-*   [NumberFormat](formatparse/numbers/index.md) (§)
+*   [NumberFormat](formatparse/numbers/index.md#numberformat)
     NumberFormat provides the basic fields and methods to format number objects
     and number primitives into localized strings and parse localized strings to
     number objects.
 
-*   [DecimalFormat](formatparse/numbers/index.md) (§)
+*   [DecimalFormat](formatparse/numbers/index.md#decimalformat)
     DecimalFormat provides the methods used to format number objects and number
     primitives into localized strings and parse localized strings into number
     objects in base 10.
 
-*   [DecimalFormatSymbols](formatparse/numbers/index.md) (§)
+*   [DecimalFormatSymbols](formatparse/numbers/index.md#decimalformatsymbols)
     DecimalFormatSymbols is a concrete class used by DecimalFormat to access
     localized number strings such as the grouping separators, the decimal
     separator, and the percent sign.

@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Packaging ICU4C
 
 ## Overview
@@ -24,8 +29,8 @@ with -DU_STATIC_IMPLEMENTATION. Also see [How To Use ICU](../howtouseicu.md).
 
 ### Reduce the number of libraries used
 
-ICU consists of a number of different libraries. The library dependency chart
-(§) in the [Design](../design.md#Library_Dependencies_C) chapter can be used to understand and
+ICU consists of a number of different libraries. The library dependency chart in the [Design](../design.md#Library_Dependencies_C)
+chapter can be used to understand and
 determine the exact set of libraries needed.
 
 ### Disable ICU features
@@ -64,8 +69,9 @@ env CPPFLAGS="-DUCONFIG_NO_COLLATION=1 -DUCONFIGU_NO_FORMATTING=1" \
   runConfigureICU SOLARISCC ...
 ```
 
-Note that when end-user code is compiled, it must also have the same CPPFLAGS
-set, or else calling some functions may result in a link failure.
+> :point_right: **Note**: When end-user code is compiled,
+> it must also have the same CPPFLAGS
+> set, or else calling some functions may result in a link failure.
 
 #### Using UCONFIG switches by changing uconfig.h
 
@@ -79,12 +85,12 @@ Modify 'uconfig.h' to add the following lines before the first #ifndef
 UCONFIG_... section
 
 ```c
-    #ifndef UCONFIG_NO_COLLATION
-    #define UCONFIG_NO_COLLATION 1
-    #enddif
-    #ifndef UCONFIG_NO_FORMATTING
-    #define UCONFIG_NO_FORMATTING 1
-    #endif
+#ifndef UCONFIG_NO_COLLATION
+#define UCONFIG_NO_COLLATION 1
+#enddif
+#ifndef UCONFIG_NO_FORMATTING
+#define UCONFIG_NO_FORMATTING 1
+#endif
 ```
 
 ### Reduce ICU Data used
@@ -110,17 +116,17 @@ Linux
 
 | File | Links to | Purpose |
 |------------------|------------------|------------------------------------------------------------------------------------|
-| `libicuuc.so` | libicuuc.so.54.3 | Required for link: Applications compiled with ' -licuuc' will follow this symlink. |
-| `libicuuc.so.54` | libicuuc.so.54.3 | Required for runtime: This name is what applications actually link against. |
-| `libicuuc.so.54.3` | Actual library | Required for runtime and link. Contains the name 'libicuuc.so.54'. |
+| `libicuuc.so` | `libicuuc.so.54.3` | Required for link: Applications compiled with ' -licuuc' will follow this symlink. |
+| `libicuuc.so.54` | `libicuuc.so.54.3` | Required for runtime: This name is what applications actually link against. |
+| `libicuuc.so.54.3` | Actual library | Required for runtime and link. Contains the name `libicuuc.so.54`. |
 
-*This discussion gives
-Linux as an example, but it is typical for most platforms, of which AIX and 390
-(zOS) are exceptions.*
+> :point_right: **Note**: This discussion gives
+> Linux as an example, but it is typical for most platforms,
+> of which AIX and 390 (zOS) are exceptions.
 
 An application compiled with '-licuuc' will follow the symlink from `libicuuc.so`
-to libicuuc.so.54.3, and will actually read the file libicuuc.so.54.3. (fully
-qualified). This library file has an embedded name (SONAME) of libicuuc.so.54,
+to `libicuuc.so.54.3`, and will actually read the file `libicuuc.so.54.3`. (fully
+qualified). This library file has an embedded name (SONAME) of `libicuuc.so.54`,
 that is, with only the major and minor number. The linker will write **this**
 name into the client application, because Binary compatibility is for versions
 that share the same major+minor number.
@@ -130,21 +136,21 @@ updated.
 
 | File | Links to | Purpose |
 |------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `libicuuc.so` | libicuuc.so.54.7 | Required for link: Newly linked applications will follow this link, which should not cause any functional difference at link time. |
-| libicuuc.so.54 | libicuuc.so.54.7 | Required for runtime: Because it now links to version .7, existing applications linked to version 5.4.3 will follow this link and use the 5.4.7 code. |
-| libicuuc.so.54.7 | Actual library | Required for runtime and link. Contains the name 'libicuuc.so.54'. |
+| `libicuuc.so` | `libicuuc.so.54.7` | Required for link: Newly linked applications will follow this link, which should not cause any functional difference at link time. |
+| libicuuc.so.54` | `libicuuc.so.54.7` | Required for runtime: Because it now links to version .7, existing applications linked to version 5.4.3 will follow this link and use the 5.4.7 code. |
+| `libicuuc.so.54.7` | Actual library | Required for runtime and link. Contains the name `libicuuc.so.54`. |
 
 If ICU version 5.6.3 or 3.2.9 were installed, they would not affect
 already-linked applications, because the major+minor numbers are different - 56
 and 32, respectively, as opposed to 54. They would, however, replace the link
-'`libicuuc.so`', which controls which version of ICU newly-linked applications
+`libicuuc.so`, which controls which version of ICU newly-linked applications
 use.
 
 In summary, what files should an application distribute in order to include a
 functional runtime copy of ICU 5.4.3? The above application should distribute
-libicuuc.so.54.3 and the symbolic link libicuuc.so.54. (If symbolic links pose
-difficulty, libicuuc.so.54.3 may be renamed to libicuuc.so.54, and only
-libicuuc.so.54 distributed. This is less informative, but functional.)
+`libicuuc.so.54.3` and the symbolic link `libicuuc.so.54`. (If symbolic links pose
+difficulty, `libicuuc.so.54.3` may be renamed to `libicuuc.so.54`, and only
+`libicuuc.so.54` distributed. This is less informative, but functional.)
 
 ### POSIX Library suffix
 
@@ -166,10 +172,10 @@ Assuming ICU version 5.4.3, Windows library names will follow this pattern:
 
 | File | Purpose |
 |---------------|--------------------------------------------------------------------------------------------|
-| icu uc.lib | Release Link-time library. Needed for development. Contains 'icuuc54.dll' name internally. |
-| icuuc54.dll | Release runtime library. Needed for runtime. |
-| icuuc d.lib | Debug link-time library  (The 'd' suffix indicates debug) |
-| icuuc54 d.dll | Debug runtime library. |
+| `icu`**uc**`.lib` | Release Link-time library. Needed for development. Contains `icuuc54.dll` name internally. |
+| `icuuc54.dll` | Release runtime library. Needed for runtime. |
+| `icuuc`**d**`.lib` | Debug link-time library  (The `d` suffix indicates debug) |
+| `icuuc54`**d**`.dll` | Debug runtime library. |
 
 Debug applications must be linked with debug libraries, and release applications
 with release libraries.
