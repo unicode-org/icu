@@ -6,6 +6,8 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <cmath>
+#include <memory>
+#include <vector>
 
 #include "charstr.h"
 #include "measunit_impl.h"
@@ -26,7 +28,14 @@ typedef enum Signal {
     POSITIVE = 1,
 } Signal;
 
+enum UnitsCase {
+    RECIPROCAL,
+    CONVERTIBLE,
+    UNCONVERTIBLE,
+};
+
 double strToDouble(StringPiece strNum) {
+    // TODO(younies): Add converting from fractional numbers (i.e. "2/4")
     char charNum[strNum.length()];
     for (int i = 0; i < strNum.length(); i++) {
         charNum[i] = strNum.data()[i];
@@ -116,9 +125,7 @@ class UnitConversionRatesSink : public ResourceSink {
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
              UErrorCode &status) U_OVERRIDE {
         ResourceTable conversionRateTable = value.getTable(status);
-        if (U_FAILURE(status)) {
-            return;
-        }
+        if (U_FAILURE(status)) { return; }
 
         for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
             StringPiece keySP(key);
@@ -137,9 +144,7 @@ class UnitConversionRatesSink : public ResourceSink {
                 // conversionRate->target.set(value.getUnicodeString(status));
             }
 
-            if (U_FAILURE(status)) {
-                return;
-            }
+            if (U_FAILURE(status)) { return; }
         }
     }
 
@@ -319,7 +324,7 @@ UBool checkSingularUnits(StringPiece source, UErrorCode &status) {
  *  Extract conversion rate from `source` to `target`
  */
 void loadConversionRate(ConversionRate &conversionRate, StringPiece source, StringPiece target,
-                        UErrorCode &status) {
+                        UnitsCase unitsCase, UErrorCode &status) {
 
     // LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "units", &status));
     // CharString key;
@@ -336,7 +341,14 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
 
     // Merger Factors
     finalFactor.multiplyBy(SourcetoMiddle, status);
-    finalFactor.divideBy(TargettoMiddle, status);
+    if (unitsCase == UnitsCase::CONVERTIBLE) {
+        finalFactor.divideBy(TargettoMiddle, status);
+    } else if (unitsCase == UnitsCase::RECIPROCAL) {
+        finalFactor.multiplyBy(TargettoMiddle, status);
+    } else {
+        status = UErrorCode::U_ARGUMENT_TYPE_MISMATCH;
+        return;
+    }
 
     // Substitute constants
     substituteConstants(finalFactor, status);
@@ -354,42 +366,110 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
             TargettoMiddle.offset * TargettoMiddle.factorDen / TargettoMiddle.factorNum;
     }
 
+    conversionRate.reciprocal == unitsCase == UnitsCase::RECIPROCAL;
+
     // TODO(younies): use the database.
     // UnitConversionRatesSink sink(&conversionFactor);
     //  ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
 }
 
-StringPiece getTarget(StringPiece source, UErrorCode& status) {
-    for(const auto& entry: temporarily::dataEntries){
-        if(entry.source == entry.target)
-            return entry.target;
+StringPiece getTarget(StringPiece source, UErrorCode &status) {
+    for (const auto &entry : temporarily::dataEntries) {
+        if (entry.source == entry.target) return entry.target;
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;
     return StringPiece("");
 }
 
-enum UnitsCase {
-        RECIPROCAL,
-        CONVERTIBLE,
-        UNCONVERTIBLE,
-};
+// Remove this once we moved to c++14
+template <typename T, typename... Args> std::unique_ptr<T> make_unique(Args &&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
-UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode& status) {
-    
+std::vector<std::unique_ptr<MeasureUnit>> extractTargets(MeasureUnit source, UErrorCode &status) {
+    std::vector<std::unique_ptr<MeasureUnit>> result;
+    auto singleUnits = source.splitToSingleUnits(status);
+    for (int i = 0; i < singleUnits.length(); i++) {
+        Factor singleFactor;
+        const auto &singleUnit = singleUnits[i];
+        StringPiece target = getTarget(singleUnit.getIdentifier(), status);
+
+        // TODO(younies): check status
+
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(target, status);
+        auto tempTargetUnit = TempSingleUnit::forMeasureUnit(targetUnit, status);
+        tempTargetUnit.siPrefix = singleUnit.getSIPrefix(status);
+        tempTargetUnit.dimensionality = singleUnit.getDimensionality(status);
+
+        // TODO(younies): check status again
+
+        auto targetUnits = tempTargetUnit.build(status).splitToSingleUnits(status);
+
+        // TODO(younies): check status again
+
+        for (int j = 0; j < targetUnits.length(); j++) {
+            result.push_back(make_unique<MeasureUnit>(targetUnits[j]));
+            // TODO(younies): check status again
+        }
+    }
+
+    return result;
+}
+
+UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode &status) {
+    std::vector<std::unique_ptr<MeasureUnit>> sourceTargetUnits = extractTargets(source, status);
+    std::vector<std::unique_ptr<MeasureUnit>> targetTargetUnits = extractTargets(target, status);
+
+    const int32_t sourceUnitsSize = sourceTargetUnits.size();
+    const int32_t targetUnitsSize = targetTargetUnits.size();
+
+    if (sourceUnitsSize != targetUnitsSize || sourceUnitsSize == 0) return UnitsCase::UNCONVERTIBLE;
+    std::vector<bool> targetCheckersMatch(targetUnitsSize, false);
+    std::vector<bool> targetCheckersReciprocal(targetUnitsSize, false);
+
+    for (const auto &singleSourceTarget : sourceTargetUnits) {
+        // Check for Match
+        for (int i = 0; i < targetUnitsSize; i++) {
+            if (!targetCheckersMatch[i] && *singleSourceTarget == *targetTargetUnits[i]) {
+                targetCheckersMatch[i] = true;
+                break;
+            }
+        }
+
+        // Check for Reciprocal
+        for (int i = 0; i < targetUnitsSize; i++) {
+            if (!targetCheckersReciprocal[i] &&
+                singleSourceTarget->reciprocal(status) == *targetTargetUnits[i]) {
+                targetCheckersReciprocal[i] = true;
+                break;
+            }
+        }
+    }
+
+    if (targetCheckersMatch == std::vector<bool>(targetUnitsSize, true)) return UnitsCase::CONVERTIBLE;
+    if (targetCheckersReciprocal == std::vector<bool>(targetUnitsSize, true))
+        return UnitsCase::RECIPROCAL;
+
+    return UnitsCase::UNCONVERTIBLE;
 }
 
 } // namespace
 
-UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode& status) {
-    loadConversionRate(conversionRate_, source.getIdentifier(), target.getIdentifier(), status);
+UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode &status) {
+    UnitsCase unitsCase = checkUnitsCase(source, target, status);
+    // TODO(youneis): check status here.
+    loadConversionRate(conversionRate_, source.getIdentifier(), target.getIdentifier(), unitsCase,
+                       status);
 }
 
-double UnitConverter::convert(double inputValue, UErrorCode& status) {
+double UnitConverter::convert(double inputValue, UErrorCode &status) {
     double result = inputValue + conversionRate_.sourceOffset;
     result *= conversionRate_.factorNum / conversionRate_.factorDen;
     result -= conversionRate_.targetOffset;
 
+    if (conversionRate_.reciprocal && result != 0 /* TODO(younies): address zero issue*/)
+        result = 1 / result;
     return result;
 }
 
