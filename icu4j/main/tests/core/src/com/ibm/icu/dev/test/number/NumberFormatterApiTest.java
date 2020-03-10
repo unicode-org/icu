@@ -1737,7 +1737,7 @@ public class NumberFormatterApiTest {
                 ".8765",
                 ".08765",
                 ".008765",
-                ""); // TODO: Avoid the empty string here?
+                "0"); // see ICU-20844
 
         assertFormatDescending(
                 "Integer Width Zero Fill 3",
