@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Introduction to ICU
 
 As companies integrate e-commerce on a global scale into their fundamental
@@ -7,8 +12,6 @@ through software internationalization. They also can improve customer
 communications and increase savings.
 
 ## Meeting the Challenge of Globalization
-
-Internationalized software results in an increase in:
 
 In today's business climate of globalization, companies must compete in a new
 Internet-enabled business climate of constant change and compressed time frames.
@@ -84,10 +87,10 @@ open components, and look forward to your questions, comments and suggestions.
 
 Download ICU in one of the following ways:
 
-1.  From the down load page, <http://www.icu-project.org/download/> , for
+1.  From the download page, <http://www.icu-project.org/download/>, for
     packaged stable releases of ICU.
 
-2.  From the source code repository, <http://www.icu-project.org/repository/> ,
+2.  From the source code repository, <http://www.icu-project.org/repository/>,
     for the latest development versions.
 
 After downloading, see the included README file for information on what is
@@ -95,6 +98,6 @@ included, building, installing, etc.
 
 ## ICU License
 
-Current license: <http://source.icu-project.org/repos/icu/trunk/icu4c/LICENSE>
+Current license: <https://github.com/unicode-org/icu/blob/master/icu4c/LICENSE>
 
 See also <https://github.com/unicode-org/icu/blob/userguide-migration/docs/userguide/icufaq/index.md#how-is-the-icu-licensed>

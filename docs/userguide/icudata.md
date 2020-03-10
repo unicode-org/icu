@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # ICU Data
 
 ## Overview
@@ -22,7 +27,7 @@ introduced a new tool, the [ICU Data Build
 Tool](https://github.com/unicode-org/icu/blob/master/docs/userguide/icu_data/buildtool.md),
 to give you more control over what goes into your ICU locale data file.
 
-***Note**** that ICU for C by default comes with pre-built data. The source data
+> :point_right: **Note**: ICU for C by default comes with pre-built data. The source data
 files are included as an "icu\*data.zip" file starting in ICU4C 49. Previously,
 they were not included unless ICU is downloaded from the [source
 repository](http://site.icu-project.org/repository).*
@@ -53,21 +58,21 @@ to files located in the ICU data directory.
 
 The ICU data directory is determined as follows:
 
-1.  If the application has called the function u_setDataDirectory(), use the
+1.  If the application has called the function `u_setDataDirectory()`, use the
     directory specified there, otherwise:
 
-2.  If the environment variable ICU_DATA is set, use that, otherwise:
+2.  If the environment variable `ICU_DATA` is set, use that, otherwise:
 
-3.  If the C preprocessor variable ICU_DATA_DIR was set at the time ICU was
+3.  If the C preprocessor variable `ICU_DATA_DIR` was set at the time ICU was
     built, use its compiled-in value.
 
 4.  Otherwise, the ICU data directory is an empty string. This is the default
     behavior for ICU using a shared library for its data and provides the
     highest data loading performance.
 
-*u_setDataDirectory() is not thread-safe. Call it before calling ICU APIs from
-multiple threads. If you use both u_setDataDirectory() and u_init(), then use
-u_setDataDirectory() first.*
+:point_right: **Note**: #`u_setDataDirectory()` is not thread-safe. Call it
+before calling ICU APIs from multiple threads. If you use both
+`u_setDataDirectory()` and `u_init()`, then use `u_setDataDirectory()` first.*
 *Earlier versions of ICU supported two additional schemes: setting a data
 directory relative to the location of the ICU shared libraries, and on Windows,
 taking a location from the registry. These have both been removed to make the
@@ -100,7 +105,7 @@ if more flexibility is required.
 Here are the steps followed by ICU to locate its default data. This procedure
 happens only once per process, at the time an ICU data item is first requested.
 
-1.  If the application has called the function udata_setCommonData(), use the
+1.  If the application has called the function `udata_setCommonData()`, use the
     data that was provided. The application specifies the address in memory of
     an image of an ICU common format data file (either in shared-library format
     or .dat package file format).
@@ -112,40 +117,43 @@ happens only once per process, at the time an ICU data item is first requested.
     actual ICU common data is to be provided from another source).
 
 3.  Dynamically load (memory map, typically) a common format (.dat) file
-    containing the default ICU data. Loading is described in the section How
-    Data Loading Works (§). The path to the data is of the form
-    "icudt<version><flag>", where <version> is the two-digit ICU version number,
-    and <flag> is a letter indicating the internal format of the file (see the
-    Sharing ICU Data Between Platforms section (§)).
+    containing the default ICU data. Loading is described in the section
+    [How Data Loading Works](icudata.md#how-data-loading-works). The path to
+    the data is of the form  "icudt\<version\>\<flag\>", where \<version\> is
+    the two-digit ICU version number, and \<flag\> is a letter indicating the
+    internal format of the file (see the
+    [Sharing ICU Data Between Platforms](icudata.md#sharing-icu-data-between-platforms)
+    section).
 
 Once the default ICU data has been located, loading of individual data items
-proceeds as described in the section How Data Loading Works (§).
+proceeds as described in the section
+[How Data Loading Works](icudata.md#how-data-loading-works).
 
 ## Building and Linking against ICU data
 
 When using ICU's configure or runConfigureICU tool to build, several different
 methods of packging are available.
 
-Note that in all cases, you **must** link all ICU tools and applications against
-a "data library": either a data library containing the ICU data, or against the
-"stubdata" library located in icu/source/stubdata. For example, even if ICU is
-built in "files" mode, you must still link against the "stubdata" library or an
-undefined symbol error occurs.
+> :point_right: Note that in all cases, you **must** link all ICU tools and
+applications against a "data library": either a data library containing the ICU
+data, or against the "stubdata" library located in icu/source/stubdata. For
+example, even if ICU is built in "files" mode, you must still link against the
+"stubdata" library or an undefined symbol error occurs.
 
-*   `--with-data-packaging=``library`
+*   `--with-data-packaging=library`
     This mode builds a shared library (DLL or .so). This is the simplest mode to
     use, and is the default.
-    To use: link your application against the common and data librariews.
+    To use: link your application against the common and data libraries.
     This is the only directly supported behavior on Windows builds.
-*   `--with-data-packaging=``static`
+*   `--with-data-packaging=static`
     This option builds ICU data as a single (large) static library. This mode is
     more complex to use. If you encounter errors, you may need to build ICU
     multiple times.
-*   `--with-data-packaging=``files`
+*   `--with-data-packaging=files`
     With this option, ICU outputs separate individual files (.res, .cnv, etc)
     which will be loaded at runtime. Read the rest of this document, especially
     the sections that discuss the ICU directory path.
-*   `--with-data-packaging=``archive`
+*   `--with-data-packaging=archive`
     With this option, ICU outputs a single "icudt__.dat" file containing ICU
     data. Read the rest of this document, especially the sections that discuss
     the ICU directory path.
@@ -164,8 +172,8 @@ ICU-based applications can ship and use their own data for localized strings,
 custom conversion tables, etc. Each data item file must have a package name as a
 prefix, and this package name must match the basename of a .dat package file, if
 one is used. The package name must be used in ICU APIs, for example in
-udata_setAppData() (instead of udata_setCommonData() which is only used for
-ICU's own data) and in the pathname argument of ures_open().
+`udata_setAppData()` (instead of `udata_setCommonData()` which is only used for
+ICU's own data) and in the pathname argument of `ures_open()`.
 
 The only real difference to ICU's own data is that application data cannot be
 simply loaded by specifying a NULL value for the path arguments of ICU APIs, and
@@ -174,18 +182,20 @@ arguments at all.
 
 The most important APIs that allow application data to be used are for Resource
 Bundles, which are most often used for localized strings and other data. There
-are also functions like ucnv_openPackage() that allow to specify application
-data, and the udata.h API can be used to load any data with minimum requirements
-on the binary format, and without ICU interpreting the contents of the data.
+are also functions like `ucnv_openPackage()` that allow to specify application
+data, and the `udata.h` API can be used to load any data with minimum
+requirements on the binary format, and without ICU interpreting the contents of
+the data.
 
-The pkgdata tool, which is used to package the data into various formats (e.g.
-shared library), has an option (--without-assembly or -w) to not use assembly
-code when building and packaging the application specific data into a shared
-library. Building the data with assembly code, which is enabled by default, is
-faster and more efficient; however, there are some platform specific issues that
-may arise. The --without-assembly option may be necessary on certain platforms
-(e.g. Linux) which have trouble properly loading application data when it was
-built with assembly code and is packaged as a shared library.
+The `pkgdata` tool, which is used to package the data into various formats (e.g.
+shared library), has an option (`--without-assembly` or `-w`) to not use
+assembly code when building and packaging the application specific data into a
+shared library. Building the data with assembly code, which is enabled by
+default, is faster and more efficient; however, there are some platform
+specific issues that may arise. The `--without-assembly` option may be
+necessary on certain platforms (e.g. Linux) which have trouble properly loading
+application data when it was built with assembly code and is packaged as a
+shared library.
 
 ## Alignment
 
@@ -200,13 +210,13 @@ aligned properly.
 
 Some of the ICU code explicitly checks for proper alignment.
 
-The icupkg tool places data items into the .dat file at start offsets that are
+The `icupkg` tool places data items into the .dat file at start offsets that are
 multiples of 16 bytes.
 
-When using genccode to directly write a .o/.obj file, or to write assembler
-code, it specifies at least 16-alignment. When using genccode to write C code,
+When using `genccode` to directly write a .o/.obj file, or to write assembler
+code, it specifies at least 16-alignment. When using `genccode` to write C code,
 it prepends the data with a double value which should yield at least 8-alignment
-on most platforms (usually sizeof(double)=8).
+on most platforms (usually `sizeof(double)=8`).
 
 ## Flexibility vs. Installation vs. Performance
 
@@ -224,34 +234,34 @@ are not portable.
 
 Packaging data into .dat files (`--with-data-packaging=archive`) allows them to
 be shared across platforms, but they must either be loaded by the application
-and set with udata_setCommonData() or udata_setAppData(), or they must be in a
-known location that is included in the ICU data directory string. This requires
-the application installer, or the application itself at runtime, to locate the
-ICU and/or application data by setting the ICU data directory (see the ICU Data
-Directory (§) section above) or by loading the data and providing it to one of
-the udata_setXYZData() functions.
+and set with `udata_setCommonData()` or `udata_setAppData()`, or they must be
+in a known location that is included in the ICU data directory string. This
+requires the application installer, or the application itself at runtime, to
+locate the ICU and/or application data by setting the ICU data directory (see
+the [ICU Data Directory](icudata.md#icu-data-directory) section above) or by
+loading the data and providing it to one of the `udata_setXYZData()` functions.
 
 Unlike shared libraries, .dat package files can be taken apart into separate
 data item files with the decmn ICU tool. This allows post-installation
-modification of a package file. The gencmn and pkgdata ICU tools can then be
+modification of a package file. The `gencmn` and `pkgdata` ICU tools can then be
 used to reassemble the .dat package file.
 
-For more information about .dat package files see the section Sharing ICU Data
-Between Platforms (§) below.
+For more information about .dat package files see the section [Sharing ICU Data
+Between Platforms](icudata.md#sharing-icu-data-between-platforms) below.
 
 ### Data Overriding vs. Loading Performance
 
 If the ICU data directory string is empty, then ICU will not attempt to load
 data from the file system. It is then only possible to load data from the
-linked-in shared library or via udata_setCommonData() and udata_setAppData().
-This is inflexible but provides the highest performance.
+linked-in shared library or via `udata_setCommonData()` and
+`udata_setAppData()`. This is inflexible but provides the highest performance.
 
 If the ICU data directory string is not empty, then data items are searched in
 all directories and matching .dat files mentioned before checking in
 already-loaded package files. This allows overriding of packaged data items with
 single files after installation but costs some time for filesystem accesses.
-This is usually done only once per data item; see [User Data
-Caching](http://icu-project.org/userguide/icudata.html#data_caching) below.
+This is usually done only once per data item; see
+[User Data Caching](icudata.md#user-data-caching) below.
 
 ### Single Data Files vs. Packages
 
@@ -265,11 +275,13 @@ than many small files.
 ICU data items are referenced by three names - a path, a name and a type. The
 following are some examples:
 
-path name type
-cnvalias icu
-cp1252 cnv
-en res
-uprops icu c:\\some\\path\\dataLibName test dat
+path                         |   name   | type
+-----------------------------|----------|-----
+                             | cnvalias | icu
+                             | cp1252   | cnv
+                             | en       | res
+                             | uprops   | icu
+ c:\\some\\path\\dataLibName | test     | dat
 
 Items with no path specified are loaded from the default ICU data.
 
@@ -282,16 +294,18 @@ prepended to the ICU data directory string and searched first for data. The path
 argument can contain at most one directory. (Path separators like semicolon (;)
 are not handled here.)
 
-*The ICU data directory string itself may contain multiple directories and
-path/filenames to .dat package files. See the ICU Data Directory (§) section.*
+> :point_right: *The ICU data directory string itself may contain multiple
+directories and path/filenames to .dat package files. See the
+[ICU Data Directory](icudata.md#icu-data-directory) section.*
 
 It is recommended to not include the directory in the path argument but to make
 sure via setting the application data or the ICU data directory string that the
 data can be located. This simplifies program maintenance and improves
 robustness.
 
-See the API descriptions for the functions udata_open() and udata_openChoice()
-for additional information on opening ICU data from within an application.
+See the API descriptions for the functions `udata_open()` and
+`udata_openChoice()` for additional information on opening ICU data from within
+an application.
 
 Data items can exist as individual files, or a number of them can be packaged
 together in a single file for greater efficiency in loading and convenience of
@@ -301,9 +315,11 @@ Based on the supplied path and name, ICU searches several possible locations
 when opening data. To make things more concrete in the following descriptions,
 the following values of path, name and type are used:
 
+```
 path = "c:\\some\\path\\dataLibName"
 name = "test"
 type = "res"
+```
 
 In this case, "dataLibName" is the "package name" part of the path argument, and
 "c:\\some\\path\\" is the directory part of it.
@@ -334,10 +350,10 @@ by their package name. Whenever a data item is requested from a package and that
 package has been loaded before, then the cached package is used immediately
 instead of searching through the filesystem.
 
-*ICU versions before 2.2 always searched data packages before looking for
-individual files, which made it impossible to override packaged data items. See
-the ICU 2.2 download page and the readme for more information about the
-changes.*
+> :point_right: *ICU versions before 2.2 always searched data packages before
+looking for individual files, which made it impossible to override packaged
+data items. See the ICU 2.2 download page and the readme for more information
+about the changes.*
 
 ## User Data Caching
 
@@ -353,8 +369,8 @@ example, for the path name "c:\\some\\path\\dataLibName", the cache key is
 matter what directory path is specified, will resolve to the cached data.
 
 Data can be explicitly added to the cache of common format data by means of the
-udata_setAppData() function. This function takes as input the path (name) and a
-pointer to a memory image of a .dat file. The data is added to the cache,
+`udata_setAppData()` function. This function takes as input the path (name) and
+a pointer to a memory image of a .dat file. The data is added to the cache,
 causing any subsequent requests for data items from that file name to be routed
 to the cache.
 
@@ -365,7 +381,7 @@ underlying file.
 
 However, most ICU services (Resource Bundles, conversion, etc.) themselves cache
 loaded data, so that data is usually loaded only once until the end of the
-process (or until u_cleanup() or ucnv_flushCache() or similar are called.)
+process (or until `u_cleanup()` or `ucnv_flushCache()` or similar are called.)
 
 There is no mechanism for removing or updating cached data files.
 
@@ -375,9 +391,9 @@ If a directory separator (generally '/' or '\\') is needed in a path parameter,
 use the form that is native to the platform. The ICU header "putil.h" defines
 U_FILE_SEP_CHAR appropriately for the platform.
 
-*On Windows, the directory separator must be '\\' for any paths passed to ICU
-APIs. This is different from native Windows APIs, which generally allow either
-'/' or '\\'.*
+> :point_right: *On Windows, the directory separator must be '\\' for any paths
+passed to ICU APIs. This is different from native Windows APIs, which generally
+allow either '/' or '\\'.*
 
 ## Sharing ICU Data Between Platforms
 
@@ -407,9 +423,11 @@ and Solaris on X86 (different byte ordering).
 The single letter following the version number in the file name of the default
 ICU data file encodes the properties of the file as follows:
 
+```
 icudt19l.dat Little Endian, ASCII
 icudt19b.dat Big Endian, ASCII
 icudt19e.dat Big Endian, EBCDIC
+```
 
 (There are no little endian EBCDIC systems. All non-EBCDIC encodings include an
 invariant subset of ASCII that is sufficient to enable these files to
@@ -420,11 +438,11 @@ library is requested by using an option in the configure script at build time.
 Nothing is required at run time; ICU finds and uses whatever form of the data is
 available.
 
-*When the ICU data is built in the form of shared libraries, the library names
-have platform-specific prefixes and suffixes. On Unix-style platforms, all the
-libraries have the "lib" prefix and one of the usual (".dll", ".so", ".sl",
-etc.) suffixes. Other than these prefixes and suffixes, the library names are
-the same as the above .dat files.*
+> :point_right: *When the ICU data is built in the form of shared libraries, the
+library names have platform-specific prefixes and suffixes. On Unix-style
+platforms, all the libraries have the "lib" prefix and one of the usual
+(".dll", ".so", ".sl", etc.) suffixes. Other than these prefixes and suffixes,
+the library names are the same as the above .dat files.*
 
 ## Customizing ICU's Data Library
 
@@ -433,61 +451,9 @@ this consists of conversion tables and locale information. The data itself is
 normally placed into a single shared library.
 
 Update: as of ICU 64, the standard data library is over 20 MB in size. We have
-introduced a new tool, the [ICU Data Build
-Tool](https://github.com/unicode-org/icu/blob/master/docs/userguide/icu_data/buildtool.md),
+introduced a new tool, the [ICU Data Build Tool](icu_data/buildtool.md),
 to replace the makefiles explained below and give you more control over what
 goes into your ICU locale data file.
-
-~~ The ICU data library can be easily customized, either by adding additional converters or locales, or by removing some of the standard ones for the purpose of saving space.~~
-
-~~ ***Note**** that ICU for C by default comes with pre-built data. The source data files are included as an "icu\*data.zip" file starting in ICU4C 49. Previously, they were not included unless ICU is downloaded from the [source repository](http://site.icu-project.org/repository). Alternatively, the [Data Customizer](http://apps.icu-project.org/datacustom/) may be used to customize the pre-built data.*~~
-
-~~ ICU can load data from individual data files as well as from its default library, so building a customized library when adding additional data is not strictly necessary. Adding to ICU's library can simplify application installation by eliminating the need to include separate files with an application distribution, and the need to tell ICU where they are installed.~~
-
-~~ Reducing the size of ICU's data by eliminating unneeded resources can make sense on small systems with limited or no disk, but for desktop or server systems there is no real advantage to trimming. ICU's data is memory mapped into an application's address space, and only those portions of the data actually being used are ever paged in, so there are no significant RAM savings. As for disk space, with the large size of today's hard drives, saving a few MB is not worth the bother.~~
-
-~~ By default, ICU builds with a large set of converters and with all available locales. This means that any extra items added must be provided by the application developer. There is no extra ICU-supplied data that could be specified.~~
-
-### Details
-
-~~ The converters and resources that ICU builds are in the following configuration files. They are only available when building from ICU's source code repository. Normally, the standard ICU distribution do not include these files.~~
-
-~~ source/data/locales/resfiles.mk The standard set of locale data resource bundles source/data/locales/reslocal.mk User-provided file with additional resource bundles source/data/coll/colfiles.mk The standard set of collation data resource bundles source/data/coll/collocal.mk User-provided file with additional collation resource bundles source/data/brkitr/brkfiles.mk The standard set of break iterator data resource bundles source/data/brkitr/brklocal.mk User-provided file with additional break iterator resource bundles source/data/translit/trnsfiles.mk The standard set of transliterator resource files source/data/translit/trnslocal.mk User-provided file with a set of additional transliterator resource files source/data/mappings/ucmcore.mk Core set of conversion tables for MIME/Unix/Windows source/data/mappings/ucmfiles.mk Additional, large set of conversion tables for a wide range of uses source/data/mappings/ucmebcdic.mk Large set of EBCDIC conversion tables source/data/mappings/ucmlocal.mk User-provided file with additional conversion tables source/data/misc/miscfiles.mk Miscellaneous data, like timezone information ~~
-
-~~These files function identically for both Windows and UNIX builds of ICU. ICU will automatically update the list of installed locales returned by uloc_getAvailable() whenever resfiles.mk or reslocal.mk are updated and the ICU data library is rebuilt. These files are only needed while building ICU. If any of these files are removed or renamed, the size of the ICU data library will be reduced.~~
-
-~~ The optional files reslocal.mk and ucmlocal.mk are not included as part of a standard ICU distribution. Thus these customization files do not need to be merged or updated when updating versions of ICU.~~
-
-~~ Both reslocal.mk and ucmlocal.mk are makefile includes. So the usual rules for makefiles apply. Lines may be continued by preceding the end of the line to be continued with a back slash. Lines beginning with a # are comments. See ucmfiles.mk and resfiles.mk for additional information.~~
-
-### Reducing the Size of ICU's Data: Conversion Tables
-
-~~ The size of the ICU data file in the standard build configuration is about 8 MB. The majority of this is used for conversion tables. ICU comes with so many conversion tables because many ICU users need to support many encodings from many platforms. There are conversion tables for EBCDIC and DOS codepages, for ISO 2022 variants, and for small variations of popular encodings.~~
-
-~~ **Important:** ICU provides full internationalization functionality without **any** conversion table data. The common library contains code to handle several important encodings algorithmically: US-ASCII, ISO-8859-1, UTF-7/8/16/32, SCSU, BOCU-1, CESU-8, and IMAP-mailbox-name (i.e., US-ASCII, ISO-8859-1, and all Unicode charsets; see source/data/mappings/convrtrs.txt for the current list).~~
-
-~~ Therefore, the easiest way to reduce the size of ICU's data by a lot (without limitation of I18N support) is to reduce the number of conversion tables that are built into the data file.~~
-
-~~ The conversion tables are listed for the build process in several makefiles source/data/mappings/ucm\*.mk, roughly grouped by how commonly they are used. If you remove or rename any of these files, then the ICU build will exclude the conversion tables that are listed in that file. Beginning with ICU 2.0, all of these makefiles including the main one are optional. If you remove all of them, then ICU will include only very few conversion tables for "fallback" encodings (see note below).~~
-
-~~ If you remove or rename all ucm\*.mk files, then ICU's data is reduced to about 3.6 MB. If you remove all these files except for ucmcore.mk, then ICU's data is reduced to about 4.7 MB, while keeping support for a core set of common MIME/Unix/Windows encodings.~~
-
-~~ *If you remove the conversion table for an encoding that could be a default encoding on one of your platforms, then ICU will not be able to instantiate a default converter. In this case, ICU 2.0 and up will automatically fall back to a "lowest common denominator" and load a converter for US-ASCII (or, on EBCDIC platforms, for codepages 37 or 1047). This will be good enough for converting strings that contain only "ASCII" characters (see the comment about "invariant characters" in utypes.h).* ~~
-~~ *When ICU is built with a reduced set of conversion tables, then some tests will fail that test the behavior of the converters based on known features of some encodings. Also, building the testdata will fail if you remove some conversion tables that are necessary for that (to test non-ASCII/Unicode resource bundle source files, for example). You can ignore these failures. Build with the standard set of conversion tables, if you want to run the tests.* ~~
-
-### Reducing the Size of ICU's Data: Locale Data
-
-~~ If you need to reduce the size of ICU's data even further, then you need to remove other files or parts of files from the build as well.~~
-
-~~ There are a number of different subdirectories of 'data' containing locale data split out by section. Each subdirectory has its own **.mk** file listing the locales which will be built. Subdirectories include **lang** for language names and **curr** for currency names.~~
-
-~~ You can remove data for entire locales by removing their files from source/data/locales/resfiles.mk or the appropriate other .mk file. ICU will then use the data of the parent locale instead, which is root.txt. If you remove all resource bundles for a given language and its country/region/variant sublocales, **do not remove root.txt!** Also, do not remove a parent locale if child locales exist. For example, do not remove "en" while retaining "en_US".~~
-
-### Reducing the Size of ICU's Data: Collation Data
-
-~~ Collation data (for sorting, searching and alphabetic indexes) is also large, especially the collation data for East Asian languages because they define multiple orderings of tens of thousands of Han characters. You can remove the collation data for those languages by removing references to those locales from source/data/coll/colfiles.mk files. When you do that, the collation for those languages will fall back to the root collator, that is, you lose language-specific behavior.~~
-
-~~ A much less radical approach is to keep the collation data tables but remove the tailoring rule strings from which they were built. Those rule strings are rarely used at runtime. For documentation about their use and how to remove them see the section "Building on Existing Locales" in the [Collation Customization chapter](collation/customization/index.md).~~
 
 ### Adding Converters to ICU
 
@@ -495,7 +461,7 @@ The first step is to obtain or create a .ucm (source) mapping data file for the
 desired converter. A large archive of converter data is maintained by the ICU
 team at <http://source.icu-project.org/repos/icu/data/trunk/charset/data/ucm/>
 
-We will use solaris-eucJP-2.7.ucm, available from the repository mentioned
+We will use `solaris-eucJP-2.7.ucm`, available from the repository mentioned
 above, as an example.
 
 #### Build the Converter
@@ -503,49 +469,56 @@ above, as an example.
 Converter source files are compiled into binary converter files (.cnv files) by
 using the icu tool makeconv. For the example, you can use this command
 
+```
 makeconv -v solaris-eucJP-2.7.ucm
+```
 
 Some of the .ucm files from the repository will need additional header
 information before they can be built. Use the error messages from the makeconv
 tool, .ucm files for similar converters, and the ICU user guide documentation of
-.ucm files as a guide when making changes. For the solaris-eucJP-2.7.ucm
+.ucm files as a guide when making changes. For the `solaris-eucJP-2.7.ucm`
 example, we will borrow the missing header fields from
-source/data/mappings/ibm-33722_P12A-2000.ucm, which is the standard ICU eucJP
+`source/data/mappings/ibm-33722_P12A-2000.ucm`, which is the standard ICU eucJP
 converter data.
 
-The ucm file format is described in the ["Conversion Data"
-chapter](conversion/data.md) of this user guide.
+The ucm file format is described in the
+["Conversion Data" chapter](conversion/data.md) of this user guide.
 
-After adjustment, the header of the solaris-eucJP-2.7.ucm file contains these
+After adjustment, the header of the `solaris-eucJP-2.7.ucm` file contains these
 items:
 
-<code_set_name> "solaris-eucJP-2.7"
-<subchar> \\x3F
-<uconv_class> "MBCS"
-<mb_cur_max> 3
-<mb_cur_min> 1
-<icu:state> 0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1
-<icu:state> a1-fe
-<icu:state> a1-e4
-<icu:state> a1-fe:1, a1:4, a3-af:4, b6:4, d6:4, da-db:4, ed-f2:4
-<icu:state> a1-fe
+```
+<code_set_name>   "solaris-eucJP-2.7"
+<subchar>         \\x3F
+<uconv_class>     "MBCS"
 
-The binary converter file produced by the makeconv tool is solaris-eucJP-2.7.cnv
+<mb_cur_max>      3
+<mb_cur_min>      1
+
+<icu:state>       0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1
+<icu:state>       a1-fe
+<icu:state>       a1-e4
+<icu:state>       a1-fe:1, a1:4, a3-af:4, b6:4, d6:4, da-db:4, ed-f2:4
+<icu:state>       a1-fe
+```
+
+The binary converter file produced by the `makeconv` tool is
+`solaris-eucJP-2.7.cnv`.
 
 #### Installation
 
 Copy the new .cnv file to the desired location for use. Set the environment
-variable ICU_DATA to the directory containing the data, or, alternatively, from
-within an application, tell ICU the location of the new data with the function
-u_setDataDirectory() before using the new converter.
+variable `ICU_DATA` to the directory containing the data, or, alternatively,
+from within an application, tell ICU the location of the new data with the
+function `u_setDataDirectory()` before using the new converter.
 
 If ICU is already obtaining data from files rather than a shared library,
 install the new file in the same location as the existing ICU data file(s), and
 don't change/set the environment variable or data directory.
 
 If you do not want to add a converter to ICU's base data, you can also generate
-a conversion table with makeconv, use pkgdata to generate your own package and
-use the ucnv_openPackage() to open up a converter with that conversion table
+a conversion table with `makeconv`, use pkgdata to generate your own package and
+use the `ucnv_openPackage()` to open up a converter with that conversion table
 from the generated package.
 
 #### Building the new converter into ICU
@@ -555,29 +528,33 @@ avoided by building the new converter into ICU's standard data library. Here is
 the procedure for doing so:
 
 1.  Move the .ucm file(s) for the converter(s) to be added (
-    solaris-eucJP-2.7.ucm for our example) into the directory
-    source/data/mappings/
+    `solaris-eucJP-2.7.ucm` for our example) into the directory
+    `source/data/mappings/`
 
 2.  Create, or edit, if it already exists, the file
-    source/data/mappings/ucmlocal.mk Add this line:
+    `source/data/mappings/ucmlocal.mk`. Add this line:
+    
+    ```
     UCM_SOURCE_LOCAL = solaris-eucJP-2.7.ucm
+    ```
+    
     Any number of converters can be listed. Extend the list to new lines with a
-    back slash at the end of the line. The ucmlocal.mk file is described in more
-    detail in source/data/mappings/ucmfiles.mk (Even though they use very
-    different build systems, ucmlocal.mk is used for both the Windows and UNIX
+    back slash at the end of the line. The `ucmlocal.mk` file is described in
+    more detail in `source/data/mappings/ucmfiles.mk` (Even though they use very
+    different build systems, `ucmlocal.mk` is used for both the Windows and UNIX
     builds.)
 
-3.  Add the converter name and aliases to source/data/mappings/convrtrs.txt.
+3.  Add the converter name and aliases to `source/data/mappings/convrtrs.txt`.
     This will allow your converter to be shown in the list of available
-    converters when you call the ucnv_getAvailableName() function. The file
+    converters when you call the `ucnv_getAvailableName(`) function. The file
     syntax is described within the file.
 
 4.  Rebuild the ICU data.
     For Windows, from MSVC choose the makedata project from the GUI, then build
     the project.
-    For UNIX, "cd icu/source/data; gmake"
+    For UNIX, `cd icu/source/data; gmake`
 
-When opening an ICU converter (ucnv_open()), the converter name can not be
+When opening an ICU converter (`ucnv_open()`), the converter name can not be
 qualified with a path that indicates the directory or common data file
 containing the corresponding converter data. The required data must be present
 either in the main ICU data library or as a separate .cnv file located in the
@@ -594,19 +571,174 @@ repository](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/loc
 on the web. Most of this locale data is derived from the CLDR ([Common Locale
 Data Repository](http://www.unicode.org/cldr/) ) project.
 
-As of ICU 64, dropping the txt file into the correct place in the source tree is
-sufficient to add it to your ICU build. You will need to re-configure in order
-to pick it up.
+**As of ICU 64**, dropping the txt file into the correct place in the source
+tree is sufficient to add it to your ICU build. You will need to re-configure in
+order to pick it up.
 
-~~ You need to write a resource bundle file for it with a structure like the existing locale resource bundles (e.g. source/data/locales/ja.txt, ru_RU.txt, kok_IN.txt) and add it by writing a file source/data/locales/reslocal.mk just like above. In this file, define the list of additional resource bundles as ~~
-~~ GENRB_SOURCE_LOCAL=myLocale.txt other.txt ... ~~
+**As of ICU 63 or earlier**,You need to write a resource bundle file for it
+with a structure like the existing locale resource bundles (e.g.
+`source/data/locales/ja.txt, ru_RU.txt`, `kok_IN.txt`) and add it by writing a
+file `source/data/locales/reslocal.mk` just like above. In this file, define
+the list of additional resource bundles as
 
-~~ Starting in ICU 2.2, these added locales are automatically listed by uloc_getAvailable().~~
+```
+GENRB_SOURCE_LOCAL=myLocale.txt other.txt ...
+```
+
+Starting in ICU 2.2, these added locales are automatically listed by
+`uloc_getAvailable()`.
+
+## Customizing ICU's Data Library for ICU 63 or earlier
+The ICU data library can be easily customized, either by adding additional converters or locales, or by removing some of the standard ones for the purpose of saving space.
+
+> :point_right: ***Note**** that ICU for C by default comes with pre-built data.
+The source data files are included as an "icu\*data.zip" file starting in ICU4C
+49. Previously, they were not included unless ICU is downloaded from the
+[source repository](https://github.com/unicode-org/icu). Alternatively, the
+[Data Customizer](http://apps.icu-project.org/datacustom/) may be used to
+customize the pre-built data.*
+
+ICU can load data from individual data files as well as from its default
+library, so building a customized library when adding additional data is not
+strictly necessary. Adding to ICU's library can simplify application
+installation by eliminating the need to include separate files with an
+application distribution, and the need to tell ICU where they are installed.
+
+Reducing the size of ICU's data by eliminating unneeded resources can make
+sense on small systems with limited or no disk, but for desktop or server
+systems there is no real advantage to trimming. ICU's data is memory mapped
+into an application's address space, and only those portions of the data
+actually being used are ever paged in, so there are no significant RAM savings.
+As for disk space, with the large size of today's hard drives, saving a few MB
+is not worth the bother.
+
+By default, ICU builds with a large set of converters and with all available
+locales. This means that any extra items added must be provided by the
+application developer. There is no extra ICU-supplied data that could be
+specified.
+
+### Details
+
+The converters and resources that ICU builds are in the following configuration
+files. They are only available when building from ICU's source code repository.
+Normally, the standard ICU distribution do not include these files.
+
+File                              | Description
+----------------------------------|--------------
+source/data/locales/resfiles.mk   | The standard set of locale data resource bundles
+source/data/locales/reslocal.mk   | User-provided file with additional resource bundles
+source/data/coll/colfiles.mk      | The standard set of collation data resource bundles
+source/data/coll/collocal.mk      | User-provided file with additional collation resource bundles
+source/data/brkitr/brkfiles.mk    | The standard set of break iterator data resource bundles
+source/data/brkitr/brklocal.mk    | User-provided file with additional break iterator resource bundles
+source/data/translit/trnsfiles.mk | The standard set of transliterator resource files
+source/data/translit/trnslocal.mk | User-provided file with a set of additional transliterator resource files
+source/data/mappings/ucmcore.mk   | Core set of conversion tables for MIME/Unix/Windows
+source/data/mappings/ucmfiles.mk  | Additional, large set of conversion tables for a wide range of uses
+source/data/mappings/ucmebcdic.mk | Large set of EBCDIC conversion tables
+source/data/mappings/ucmlocal.mk  | User-provided file with additional conversion tables
+source/data/misc/miscfiles.mk     | Miscellaneous data, like timezone information 
+
+These files function identically for both Windows and UNIX builds of ICU. ICU
+will automatically update the list of installed locales returned by
+`uloc_getAvailable()` whenever `resfiles.mk` or `reslocal.mk` are updated and
+the ICU data library is rebuilt. These files are only needed while building ICU.
+If any of these files are removed or renamed, the size of the ICU data library
+will be reduced.
+
+The optional files `reslocal.mk` and `ucmlocal.mk` are not included as part of
+a standard ICU distribution. Thus these customization files do not need to be
+merged or updated when updating versions of ICU.
+
+Both `reslocal.mk` and `ucmlocal.mk` are makefile includes. So the usual rules
+for makefiles apply. Lines may be continued by preceding the end of the line to
+be continued with a back slash. Lines beginning with a # are comments. See
+`ucmfiles.mk` and `resfiles.mk` for additional information.
+
+### Reducing the Size of ICU's Data: Conversion Tables
+
+The size of the ICU data file in the standard build configuration is about 8 MB.
+The majority of this is used for conversion tables. ICU comes with so many
+conversion tables because many ICU users need to support many encodings from
+many platforms. There are conversion tables for EBCDIC and DOS codepages, for
+ISO 2022 variants, and for small variations of popular encodings.
+
+> :point_right: **Important:** ICU provides full internationalization
+functionality without **any** conversion table data. The common library
+contains code to handle several important encodings algorithmically: US-ASCII,
+ISO-8859-1, UTF-7/8/16/32, SCSU, BOCU-1, CESU-8, and IMAP-mailbox-name (i.e.,
+US-ASCII, ISO-8859-1, and all Unicode charsets; see
+source/data/mappings/convrtrs.txt for the current list).
+
+Therefore, the easiest way to reduce the size of ICU's data by a lot (without
+limitation of I18N support) is to reduce the number of conversion tables that
+are built into the data file.
+
+The conversion tables are listed for the build process in several makefiles
+`source/data/mappings/ucm\*.mk`, roughly grouped by how commonly they are used.
+If you remove or rename any of these files, then the ICU build will exclude the
+conversion tables that are listed in that file. Beginning with ICU 2.0, all of
+these makefiles including the main one are optional. If you remove all of them,
+then ICU will include only very few conversion tables for "fallback" encodings
+(see note below).
+
+If you remove or rename all `ucm\*.mk` files, then ICU's data is reduced to
+about 3.6 MB. If you remove all these files except for `ucmcore.mk`, then ICU's
+data is reduced to about 4.7 MB, while keeping support for a core set of common
+MIME/Unix/Windows encodings.
+
+> :point_right: *If you remove the conversion table for an encoding that could be
+a default encoding on one of your platforms, then ICU will not be able to
+instantiate a default converter. In this case, ICU 2.0 and up will automatically
+fall back to a "lowest common denominator" and load a converter for US-ASCII
+(or, on EBCDIC platforms, for codepages 37 or 1047). This will be good enough
+for converting strings that contain only "ASCII" characters (see the comment
+about "invariant characters" in `utypes.h`).* 
+*When ICU is built with a reduced set of conversion tables, then some tests will
+fail that test the behavior of the converters based on known features of some
+encodings. Also, building the testdata will fail if you remove some conversion
+tables that are necessary for that (to test non-ASCII/Unicode resource bundle
+source files, for example). You can ignore these failures. Build with the
+standard set of conversion tables, if you want to run the tests.* 
+
+### Reducing the Size of ICU's Data: Locale Data
+
+If you need to reduce the size of ICU's data even further, then you need to
+remove other files or parts of files from the build as well.
+
+There are a number of different subdirectories of 'data' containing locale data
+split out by section. Each subdirectory has its own **.mk** file listing the
+locales which will be built. Subdirectories include **lang** for language names
+and **curr** for currency names.
+
+You can remove data for entire locales by removing their files from
+`source/data/locales/resfiles.mk` or the appropriate other .mk file. ICU will
+then use the data of the parent locale instead, which is root.txt. If you
+remove all resource bundles for a given language and its country/region/variant
+sublocales, **do not remove root.txt!** Also, do not remove a parent locale if
+child locales exist. For example, do not remove "en" while retaining "en_US".
+
+### Reducing the Size of ICU's Data: Collation Data
+
+Collation data (for sorting, searching and alphabetic indexes) is also large,
+especially the collation data for East Asian languages because they define
+multiple orderings of tens of thousands of Han characters. You can remove the
+collation data for those languages by removing references to those locales from
+`source/data/coll/colfiles.mk` files. When you do that, the collation for those
+languages will fall back to the root collator, that is, you lose
+language-specific behavior.
+
+A much less radical approach is to keep the collation data tables but remove the
+tailoring rule strings from which they were built. Those rule strings are
+rarely used at runtime. For documentation about their use and how to remove
+them see the section "Building on Existing Locales" in the
+[Collation Customization chapter](collation/customization/index.md).
+
 
 ## ICU Data File Formats
 
 ICU uses several kinds of data files with specific source (plain text) and
-binary data formats. The following table provides links to descriptions of those
+binary data formats. The following lists provides links to descriptions of those
 formats.
 
 Each ICU data object begins with a header before the actual, specific data. The
@@ -618,188 +750,192 @@ data version, etc.
 (This is not the case for the trie structures, which are not stand-alone,
 loadable data objects.)
 
-Files Source format Binary format Generator tool **Public Data Files** ICU .dat
-package files (list of files provided as input to the icupkg tool, or on the
-gencmn tool command line) .dat:
-[source/tools/toolutil/pkg_gencmn.c](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/toolutil/pkg_gencmn.c)
-[icupkg](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/icupkg/)
-or
-[gencmn](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gencmn/)
-Resource bundles .txt:
-[icuhtml/design/bnf_rb.txt](http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt)
-.res:
-[source/common/uresdata.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/uresdata.h)
-[genrb](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genrb/)
-Unicode conversion mapping tables .ucm: [Conversion Data
-chapter](conversion/data.md) .cnv:
-[source/common/ucnvmbcs.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucnvmbcs.h)
-[makeconv](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/makeconv/)
-Conversion (charset) aliases
-[source/data/mappings/convrtrs.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/mappings/convrtrs.txt)
-: contains format description
-The command "uconv -l --canon" will also generate the alias table from the
-currently used copy of ICU. cnvalias.icu:
-[source/common/ucnv_io.c](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucnv_io.c)
-[gencnval](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gencnval/)
-Unicode Character Data
-(Properties; for Java only: hardcoded in C common library)
-[source/data/unidata/ppucd.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/ppucd.txt)
-: [Preparsed UCD](http://site.icu-project.org/design/props/ppucd) uprops.icu:
-[tools/unicode/c/genprops/corepropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/corepropsbuilder.cpp)
-[genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
-Unicode Character Data
-(Case mappings; for Java only: hardcoded in C common library)
-[source/data/unidata/\*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/)
-: [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-ucase.icu:
-[tools/unicode/c/genprops/casepropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/casepropsbuilder.cpp)
-[genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
-Unicode Character Data
-(BiDi, and Arabic shaping; for Java only: hardcoded in C common library)
-[source/data/unidata/\*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/)
-: [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-ubidi.icu:
-[tools/unicode/c/genprops/bidipropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/bidipropsbuilder.cpp)
-[genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
-Unicode Character Data
-(Normalization since ICU 4.4) & custom normalization data
-[source/data/unidata/norm2/\*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/norm2/)
-: Files derived from the [Unicode Character
-Database](http://www.unicode.org/onlinedat/online.html), or custom data .nrm:
-[source/common/normalizer2impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/normalizer2impl.h)
-[gennorm2](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gennorm2/)
-Unicode Character Data
-(Character names)
-[source/data/unidata/UnicodeData.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/UnicodeData.txt)
-: [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-unames.icu:
-[tools/unicode/c/genprops/namespropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/namespropsbuilder.cpp)
-[genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
-Unicode Character Data
-(Property \[value\] aliases since ICU 4.8; for Java only: hardcoded in C common
-library since ICU 4.8) [UCD
-Property\*Aliases.txt](http://www.unicode.org/Public/UNIDATA/) : [Unicode
-Character Database](http://www.unicode.org/onlinedat/online.html) pnames.icu:
-[source/common/propname.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/propname.h)
-[genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
-Unicode Character Data
-(Text layout properties since ICU 64)
-[source/data/unidata/ppucd.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/ppucd.txt)
-: [Preparsed UCD](http://site.icu-project.org/design/props/ppucd) ulayout.icu:
-[tools/unicode/c/genprops/layoutpropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/layoutpropsbuilder.cpp)
-[genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
-Collation data
-(root collation & tailorings; ICU 53 & later) Original data from
-allkeys_CLDR.txt in [CLDR Root Collation Data
-Files](http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files)
-processed into
-[source/data/unidata/FractionalUCA.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/FractionalUCA.txt)
-by [tool at unicode.org maintained by Mark
-Davis](https://sites.google.com/site/unicodetools/#TOC-UCA) (call the Main class
-with option writeFractionalUCA);
-source tailorings (text rules) in
-[source/data/coll/\*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/coll/)
-resource bundles: [Collation Customization
-chapter](collation/customization/index.md) ucadata.icu & binary tailorings in
-resource bundles:
-[source/i18n/collationdatareader.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/i18n/collationdatareader.h)
-[genuca](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genuca/),
-[genrb](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genrb/)
-Rule-based break iterator data .txt: [Boundary Analysis
-chapter](http://icu-project.org/userguide/boundaryAnalysis.html) .brk:
-[source/common/rbbidata.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/rbbidata.h)
-[genbrk](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genbrk/)
-Dictionary-based break iterator data (ICU 50 & later) .txt: [gendict.cpp
-comments](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gendict/gendict.cpp)
-.dict: see
-[source/common/dictionarydata.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/dictionarydata.h)
-[gendict](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gendict/)
-Rule-based transform (transliterator) data .txt (in resource bundles):
-[Transform Rule Tutorial chapter](transforms/general/rules.md) Uses genrb to
-make binary format Does not apply Time zone data (ICU 4.4 & later)
-[source/data/misc/zoneinfo64.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/misc/zoneinfo64.txt)
-: [ftp://elsie.nci.nih.gov/pub/](ftp://elsie.nci.nih.gov/pub/)
-tzdata<year><rev>.tar.gz zoneinfo64.res (generated by genrb and [tzcode
-tools](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/tzcode/readme.txt))
-Does not apply
-StringPrep profile data
-[source/data/misc/NamePrepProfile.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/misc/NamePrepProfile.txt)
-.spp:
-[source/tools/gensprep/store.c](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gensprep/store.c)
-[gensprep](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gensprep/)
-Confusables data
-[source/data/unidata/confusables.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/confusables.txt),
-[source/data/unidata/confusablesWholeScript.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/confusablesWholeScript.txt)
-confusables.cfu:
-[source/i18n/uspoof_impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/i18n/uspoof_impl.h)
-[gencfu](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gencfu/)
-**Public Data Files (old versions)** Unicode Character Data
-(Normalization before ICU 4.4; for Java only: was hardcoded in C common library)
-[source/data/unidata/\*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/)
-: [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-unorm.icu:
-[source/common/unormimp.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unormimp.h)
-gennorm Unicode Character Data
-(Property \[value\] aliases before ICU 4.8)
-source/data/unidata/Property\*Aliases.txt : [Unicode Character
-Database](http://www.unicode.org/onlinedat/online.html) pnames.icu:
-[source/common/propname.h (ICU
-4.6)](http://bugs.icu-project.org/trac/browser/icu/tags/release-4-6/source/common/propname.h)
-genpname Collation data
-(UCA, code points to weights; ICU 52 & earlier) Same as in ICU 53 ucadata.icu &
-binary tailorings in resource bundles: [source/i18n/ucol_imp.h (ICU
-52)](http://bugs.icu-project.org/trac/browser/icu/tags/release-52-1/source/i18n/ucol_imp.h)
-[genuca](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genuca/),
-[genrb](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genrb/)
-Collation data
-(Inverse UCA, weights->code points; ICU 52 & earlier) Processed from
-FractionalUCA.txt like ICU 52 ucadata.icu invuca.icu: [source/i18n/ucol_imp.h
-(ICU
-52)](http://bugs.icu-project.org/trac/browser/icu/tags/release-52-1/source/i18n/ucol_imp.h)
-[genuca](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genuca/)
-Dictionary-based break iterator data (ICU 49 & earlier) .txt: [genctd.cpp
-comments](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genctd/genctd.cpp?rev=26466)
-.ctd: see CompactTrieHeader in
-[source/common/triedict.cpp](http://bugs.icu-project.org/trac/log/trunk/icu4c/source/common/triedict.cpp?rev=32183)
-[genctd](http://bugs.icu-project.org/trac/log/trunk/icu4c/source/tools/genctd?rev=32183)
-Time zone data (Before ICU 4.4)
-[source/data/misc/zoneinfo.txt](http://bugs.icu-project.org/trac/browser/icu/branches/maint/maint-4-2/source/data/misc/zoneinfo.txt)
-: [ftp://elsie.nci.nih.gov/pub/](ftp://elsie.nci.nih.gov/pub/)
-tzdata<year><rev>.tar.gz
-zoneinfo.res (generated by genrb and [tzcode
-tools](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/tzcode/readme.txt))
-Does not apply **Non-File API Binary Data** Converter selector data
-none
-[source/common/ucnvsel.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucnvsel.cpp)
-[ucnvsel_open()](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/ucnvsel.h)
-**Test-Only Data Files** test.icu (for udata API testing)
-none (fixed output from gentest when not using -r or -j options)
-test.icu: see createData() in
-[source/tools/gentest/gentest.c](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gentest/gentest.c)
-[gentest](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gentest/)
-**Other Data Structures** UCPTrie (C)/CodePointTrie (Java) (maps code points to
-integers)
-(public builder API)
-[ICU Code Point Tries design
-doc](http://site.icu-project.org/design/struct/utrie),
-[icu4c/source/common/ucptrie_impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucptrie_impl.h)
-(builder class) UTrie2 (C)/Trie2 (Java) (maps code points to integers)
-(internal builder API)
-[ICU Code Point Tries design
-doc](http://site.icu-project.org/design/struct/utrie),
-[icu4c/source/common/utrie2_impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/utrie2_impl.h)
-(builder class) BytesTrie (maps byte sequences to 32-bit integers)
-(public builder API)
-[BytesTrie design
-doc](http://site.icu-project.org/design/struct/tries/bytestrie),
-[icu4c/source/common/bytestrie.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/bytestrie.h)
-(builder class) UCharsTrie (C++)/CharsTrie (Java) (maps 16-bit-Unicode strings
-to 32-bit integers)
-(public builder API)
-[UCharsTrie design
-doc](http://site.icu-project.org/design/struct/tries/ucharstrie),
-[icu4c/source/tools/toolutil/ucharstrie.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/toolutil/ucharstrie.h)
-(builder class)
+### Public Data Files
+
+#### ICU.dat package files
+*   Source format: (list of files provided as input to the icupkg tool, or
+         on the gencmn tool command line)
+*    Binary format: .dat: [source/tools/toolutil/pkg_gencmn.c](../../icu4c/source/tools/toolutil/pkg_gencmn.cpp)
+*    Generator tool: [icupkg](../../icu4c/source/tools/icupkg) or
+         [gencmn](../../icu4c/source/tools/gencmn)
+         
+#### Resource bundles
+*   Source format: .txt: [icuhtml/design/bnf_rb.txt](https://github.com/unicode-org/icu-docs/blob/master/design/bnf_rb.txt)
+*   Binary format: .res: [source/common/uresdata.h](../../icu4c/source/common/uresdata.h)
+*   Generator tool: [genrb](../../icu4c/source/tools/genrb)
+
+#### Unicode conversion mapping tables
+*   Source format: .ucm: [Conversion Data chapter](conversion/data.md)
+*   Binary format: .cnv: [source/common/ucnvmbcs.h](../../icu4c/source/common/ucnvmbcs.h)
+*   Generator tool: [makeconv](../../icu4c/source/tools/makeconv)
+
+#### Conversion (charset) aliases
+*   Source format: [source/data/mappings/convrtrs.txt](../../icu4c/source/data/mappings/convrtrs.txt):
+                   contains format description. The command "uconv -l --canon"
+                   will also generate the alias table from the currently used
+                   copy of ICU.
+*   Binary format: cnvalias.icu: [source/common/ucnv_io.cpp](../../icu4c/source/common/ucnv_io.cpp)
+*   Generator tool: [gencnval](../../icu4c/source/tools/gencnval)
+
+#### Unicode Character Data (Properties; for Java only: hardcoded in C common library)
+*   Source format: [source/data/unidata/ppucd.txt](../../icu4c/source/data/unidata/ppucd.txt):
+                   [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
+*   Binary format: uprops.icu: [tools/unicode/c/genprops/corepropsbuilder.cpp](../../tools/unicode/c/genprops/corepropsbuilder.cpp)
+*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+
+#### Unicode Character Data (Case mappings; for Java only: hardcoded in C common library)
+*   Source format: [source/data/unidata/*.txt](../../icu4c/source/data/unidata):
+                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: ucase.icu: [tools/unicode/c/genprops/casepropsbuilder.cpp](../../tools/unicode/c/genprops/casepropsbuilder.cpp)
+*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+
+#### Unicode Character Data (BiDi, and Arabic shaping; for Java only: hardcoded in C common library)
+*   Source format: [source/data/unidata/*.txt](../../icu4c/source/data/unidata):
+                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: ubidi.icu: [tools/unicode/c/genprops/bidipropsbuilder.cpp](../../tools/unicode/c/genprops/bidipropsbuilder.cpp)
+*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+
+#### Unicode Character Data (Normalization since ICU 4.4) & custom normalization data
+*   Source format: [source/data/unidata/norm2/*.tx](../../icu4c/source/data/unidata/norm2):
+                   Files derived from the [Unicode Character Database](http://www.unicode.org/onlinedat/online.html),
+                   or custom data.
+*   Binary format: .nrm: [source/common/normalizer2impl.h](../../icu4c/source/common/normalizer2impl.h)
+*   Generator tool: [gennorm2](../../icu4c/source/tools/gennorm2)
+
+#### Unicode Character Data (Character names)
+*   Source format: [source/data/unidata/UnicodeData.txt](../../icu4c/source/data/unidata/UnicodeData.txt):
+                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: unames.icu: [tools/unicode/c/genprops/namespropsbuilder.cpp](../../tools/unicode/c/genprops/namespropsbuilder.cpp)
+*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+
+#### Unicode Character Data (Property [value] aliases since ICU 4.8; for Java only: hardcoded in C common library since ICU 4.8)
+*   Source format: [UCD Property*Aliases.txt](http://www.unicode.org/Public/UNIDATA/):
+                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: pnames.icu: [source/common/propname.h](../../icu4c/source/common/propname.h)
+*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+
+#### Unicode Character Data (Text layout properties since ICU 64)
+*   Source format: [source/data/unidata/ppucd.txt](../../icu4c/source/data/unidata/ppucd.txt):
+                   [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
+*   Binary format: ulayout.icu: [tools/unicode/c/genprops/layoutpropsbuilder.cpp](../../tools/unicode/c/genprops/layoutpropsbuilder.cpp)
+*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+
+#### Collation data (root collation & tailorings; ICU 53 & later)
+*   Source format: Original data from allkeys_CLDR.txt in [CLDR Root Collation Data Files](http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files)
+                   processed into [source/data/unidata/FractionalUCA.txt](../../icu4c/source/data/unidata/FractionalUCA.txt) by
+                   [tool at unicode.org maintained by Mark Davis](https://sites.google.com/site/unicodetools/#TOC-UCA)
+                   (call the Main class with option writeFractionalUCA);
+                   source tailorings (text rules) in [source/data/coll/*.txt](../../icu4c/source/data/coll) resource bundles:
+                   [Collation Customization chapter](collation/customization/index.md).
+*   Binary format: ucadata.icu & binary tailorings in resource bundles:
+                   [source/i18n/collationdatareader.h](../../icu4c/source/i18n/collationdatareader.h)
+*   Generator tool: [genuca](../../tools/unicode/c/genuca), [genrb](../../icu4c/source/tools/genrb)
+
+#### Rule-based break iterator data
+*   Source format: .txt: [Boundary Analysis chapter](boundaryanalysis/index.md)
+*   Binary format: .brk: [source/common/rbbidata.h](../../icu4c/source/common/rbbidata.h)
+*   Generator tool: [genbrk](../../icu4c/source/tools/genbrk)
+
+#### Dictionary-based break iterator data (ICU 50 & later)
+*   Source format: txt: [gendict.cpp comments](../../icu4c/source/tools/gendict/gendict.cpp)
+*   Binary format: .dict: see [source/common/dictionarydata.h](../../icu4c/source/common/dictionarydata.h
+*   Generator tool: [gendict](../../icu4c/source/tools/gendict)
+
+#### Rule-based transform (transliterator) data
+*   Source format: .txt (in resource bundles): [Transform Rule Tutorial chapter](transforms/general/rules.md)
+*   Binary format: Uses genrb to make binary format
+*   Generator tool: Does not apply
+
+#### Time zone data (ICU 4.4 & later)
+*   Source format: [source/data/misc/zoneinfo64.txt](../../icu4c/source/data/misc/zoneinfo64.txt):
+    ftp://elsie.nci.nih.gov/pub/ tzdata<year><rev>.tar.gz
+*   Binary format: zoneinfo64.res (generated by genrb and [tzcode tools](../../icu4c/source/tools/tzcode/readme.txt)).
+*   Generator tool: Does not apply
+
+#### StringPrep profile data
+*   Source format: [source/data/sprep/rfc3491.txt](../../icu4c/source/data/sprep/rfc3491.txt):
+*   Binary format: .spp: [source/tools/gensprep/store.c](../../icu4c/source/tools/gensprep/store.c)
+*   Generator tool: [gensprep](../../icu4c/source/tools/gensprep)
+
+#### Confusables data
+*   Source format: [source/data/unidata/confusables.txt](../../icu4c/source/data/unidata/confusables.txt),
+                   [source/data/unidata/confusablesWholeScript.txt](../../icu4c/source/data/unidata/confusablesWholeScript.txt)
+*   Binary format: .spp: [confusables.cfu: source/i18n/uspoof_impl.h](../../icu4c/source/i18n/uspoof_impl.h)
+*   Generator tool: [gencfu](../../icu4c/source/tools/gencfu)
+
+### Public Data Files (old versions)
+
+#### Unicode Character Data (Normalization before ICU 4.4; for Java only: was hardcoded in C common library)
+*   Source format: [source/data/unidata/*.txt]((../../icu4c/source/data/unidata):
+                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: unorm.icu: [source/common/unormimp.h](../../icu4c/source/common/unormimp.h)
+*   Generator tool: gennorm
+
+#### Unicode Character Data (Property [value] aliases before ICU 4.8)
+*   Source format: source/data/unidata/Property*Aliases.txt: [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: pnames.icu: source/common/propname.h (ICU 4.6)
+*   Generator tool: genpname
+
+#### Collation data (UCA, code points to weights; ICU 52 & earlier)
+*   Source format: Same as in ICU 53
+*   Binary format: ucadata.icu & binary tailorings in resource bundles: source/i18n/ucol_imp.h (ICU 52)
+*   Generator tool: [genuca](../../tools/unicode/c/genuca), [genrb](../../icu4c/source/tools/genrb)
+
+#### Collation data (Inverse UCA, weights->code points; ICU 52 & earlier)
+*   Source format: Processed from FractionalUCA.txt like ICU 52 ucadata.icu
+*   Binary format: invuca.icu: source/i18n/ucol_imp.h (ICU 52)
+*   Generator tool: [genuca](../../tools/unicode/c/genuca)
+
+#### Dictionary-based break iterator data (ICU 49 & earlier)
+*   Source format: .txt: genctd.cpp comments
+*   Binary format: ctd: see CompactTrieHeader in source/common/triedict.cpp
+*   Generator tool: genctd
+
+#### Time zone data (Before ICU 4.4)
+*   Source format: .source/data/misc/zoneinfo.txt (ICU 4.2): ftp://elsie.nci.nih.gov/pub/ tzdata<year><rev>.tar.gz 
+*   Binary format: zoneinfo64.res (generated by genrb and [tzcode tools](../../icu4c/source/tools/tzcode/readme.txt)).
+*   Generator tool: Does not apply
+
+### Non-File API Binary Data
+
+#### Converter selector data
+*   Source format: none
+*   Binary format: [source/common/ucnvsel.cpp](../../icu4c/source/common/ucnvsel.cpp)
+*   Generator tool: [ucnvsel_open()](../../icu4c/source/common/ucnvsel.cpp)
+
+### Test-Only Data Files
+
+#### test.icu (for udata API testing)
+*   Source format: none (fixed output from gentest when not using -r or -j options)
+*   Binary format: test.icu: see `createData()`
+                   in [source/tools/gentest/gentest.c](../../icu4c/source/tools/gentest/gentest.c)
+*   Generator tool: [gentest](../../icu4c/source/tools/gentest/gentest.c)
+
+### Other Data Structures
+
+#### UCPTrie (C)/CodePointTrie (Java) (maps code points to integers)
+*   Source format: (public builder API)
+*   Binary format: [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
+                   [icu4c/source/common/ucptrie_impl.h](../../icu4c/source/common/ucptrie_impl.h)
+*   Generator tool: (builder class)
+
+#### UTrie2 (C)/Trie2 (Java) (maps code points to integers)
+*   Source format: (internal builder API)
+*   Binary format: [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
+                   [icu4c/source/common/utrie2_impl.h](../../icu4c/source/common/utrie2_impl.h)
+*   Generator tool: (builder class)
+
+#### BytesTrie (maps byte sequences to 32-bit integers)
+*   Source format: (public builder API)
+*   Binary format: [BytesTrie design doc](http://site.icu-project.org/design/struct/tries/bytestrie),
+                   [icu4c/source/common/unicode/bytestrie.h](../../icu4c/source/common/unicode/bytestrie.h)
+*   Generator tool: (builder class)
+
+#### UCharsTrie (C++)/CharsTrie (Java) (maps 16-bit-Unicode strings to 32-bit integers)
+*   Source format: (public builder API)
+*   Binary format: [UCharsTrie design doc](http://site.icu-project.org/design/struct/tries/ucharstrie),
+                   [icu4c/source/common/unicode/ucharstrie.h](../../icu4c/source/common/unicode/ucharstrie.h)
+*   Generator tool: (builder class)
 
 ## ICU4J Resource Information
 
@@ -810,25 +946,26 @@ is equivalent to the information in ICU4C and many resources are, in fact, the
 same binary files that ICU4C uses.
 
 By default the ICU4J distribution includes all of the standard resource
-information. It is located under the directory com/ibm/icu/impl/data. Depending
-on the service, the data is in different locations and in different formats.
-Note: This will continue to change from release to release, so clients should
-not depend on the exact organization of the data in ICU4J.
+information. It is located under the directory `com/ibm/icu/impl/data`.
+Depending on the service, the data is in different locations and in different
+formats. Note: This will continue to change from release to release, so clients
+should not depend on the exact organization of the data in ICU4J.
 
 1.  The primary **locale data** is under the directory icudt38b, as a set of
     ".res" files whose names are the locale identifiers. Locale naming is
-    documented the com.ibm.icu.util.ULocale class, and the use of these names in
-    searching for resources is documented in com.ibm.icu.util.UResourceBundle.
+    documented in the `com.ibm.icu.util.ULocale` class, and the use of these
+    names in     searching for resources is documented in
+    `com.ibm.icu.util.UResourceBundle`.
 
-2.  The **collation data** is under the directory icudt38b/coll, as a set of
+2.  The **collation data** is under the directory `icudt38b/coll`, as a set of
     ".res" files.
 
 3.  The **rule-based transliterator data** is under the directory
-    icudt38b/translit as a set of ".res" files. (**Note:** the Han
+    `icudt38b/translit` as a set of ".res" files. (**Note:** the Han
     transliterator test data is no longer included in the core icu4j.jar file by
     default.)
 
-4.  The **rule-based number format data** is under the directory icudt38b/rbnf
+4.  The **rule-based number format data** is under the directory `icudt38b/rbnf`
     as a set of ".res" files.
 
 5.  The **break iterator data** is directly under the data directory, as a set
@@ -842,11 +979,12 @@ not depend on the exact organization of the data in ICU4J.
     and default **unicode collation algorithm (UCA) data** is found under the
     data directory as a set of ".icu" files.
 
-8.  The **character set converter data** is under the directory icudt38b, as a
-    set of ".cnv" files. These files are currently included only in
+8.  The **character set converter data** is under the directory `icudt38b/`, as
+    a set of ".cnv" files. These files are currently included only in
     icu-charset.jar.
 
-9.  The **time zone data** is named zoneinfo.res under the directory icudt38b.
+9.  The **time zone data** is named `zoneinfo.res` under the directory
+    `icudt38b`.
 
 Some of the data files alias or otherwise reference data from other data files.
 One reason for this is because some locale names have changed. For example,
@@ -855,18 +993,19 @@ data, one of the resource files refers to the other file's data. In other cases,
 a file may alias a portion of another file's data in order to save space.
 Currently ICU4J provides no tool for revealing these dependencies.
 
-*Java's Locale class silently converts the language code "he" to "iw" when you
-construct the Locale (for versions of Java through Java 5). Thus Java cannot be
-used to locate resources that use the "he" language code. ICU, on the other
-hand, does not perform this conversion in ULocale, and instead uses aliasing in
-the locale data to represent the same set of data under different locale ids.*
+> :point_right: *Java's Locale class silently converts the language code "he" to
+"iw" when you construct the Locale (for versions of Java through Java 5). Thus
+Java cannot be used to locate resources that use the "he" language code. ICU,
+on the other hand, does not perform this conversion in ULocale, and instead uses
+aliasing in the locale data to represent the same set of data under different
+locale ids.*
 
 Resource files that use locale ids form a hierarchy, with up to four levels: a
 root, language, region (country), and variant. Searches for locale data attempt
 to match as far down the hierarchy as possible, for example, "he_IL" will match
 he_IL, but "he_US" will match he (since there is no US variant for he, and
 "xx_YY will match root (the default fallback locale) since there is no xx
-language code in the locale hierarchy. Again, see java.util.ResourceBundle for
+language code in the locale hierarchy. Again, see `java.util.ResourceBundle` for
 more information.
 
 Currently ICU4J provides no tool for revealing these dependencies between data
@@ -879,14 +1018,14 @@ also references he_IL.res).
 
 Unfortunately, the jar tool in the JDK provides no way to remove items from a
 jar file. Thus you have to extract the resources, remove the ones you don't
-want, and then create a new jar file with the remining resources. See the jar
+want, and then create a new jar file with the remaining resources. See the jar
 tool information for how to do this. Before 'rejaring' the files, be sure to
 thoroughly test your application with the remaining resources, making sure each
 required resource is present.
 
 #### Using additional resource files with ICU4J
 
-*Resource file formats can change across releases of ICU4J!*
+> :point_right: *Resource file formats can change across releases of ICU4J!*
 *The format of ICU4J resources is not part of the API. Clients who develop their
 own resources for use with ICU4J should be prepared to regenerate them when they
 move to new releases of ICU4J.*

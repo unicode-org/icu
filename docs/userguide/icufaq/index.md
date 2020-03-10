@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # ICU FAQs
 
 ## Introduction to ICU
@@ -28,7 +33,7 @@ MSVC compiler. See the ICU4C Readme.
 
 *   **Windows**:
     *   The DLLs you may need for your application are located in
-        **bin\\icu*XX##.*dll**, where "XX" are two letters (such as "uc" for the
+        **bin\\icuXX##.dll**, where "XX" are two letters (such as "uc" for the
         "common" library, "in" for the "i18n" library, etc.) and ## is the major
         and the minor version number (such as **42** for **4.2** / **4.2**.0.1
         or **4.2**.4 ).
@@ -47,9 +52,9 @@ MSVC compiler. See the ICU4C Readme.
         Makefile include fragment **/usr/local/lib/icu/current/Makefile.inc**
         can be used in building applications.
 
-#### Can you help me build ICU4C for...
+#### Can you help me build ICU4C for ...
 
-We can try.. make sure you read the latest "readme" and also the [ICU
+We can try ... make sure you read the latest "readme" and also the [ICU
 Data](../icudata.md) section. You might also [searching the icu-support
 archives](http://site.icu-project.org/contacts), and then posting a question
 there. Additionally, sites such as
@@ -67,16 +72,17 @@ your topic.
 
 #### What is the ICU binary compatibility policy?
 
-Please see the section on binary compatibility (§) in the [design
-chapter](../design.md) .
+Please see the section on
+[binary compatibility](../design.md#icu-binary-compatibility-using-icu-as-an-operating-system-level-library)
+in the [design chapter](../design.md).
 
-#### How is the ICU licensed?
+#### How is ICU licensed?
 
 The ICU license is intended to allow ICU to be included both in free software
 projects and in proprietary or commercial products.
 
-Since ICU 58, ICU is covered by the [Unicode
-license](http://www.unicode.org/copyright.html#License) which is very similar to
+Since ICU 58, ICU is covered by the
+[Unicode license](http://www.unicode.org/copyright.html#License) which is very similar to
 the previous ICU license.
 
 ICU 1.8.1–ICU 57 and ICU4J 1.3.1–ICU4J 57 are covered by the [ICU
@@ -88,8 +94,8 @@ longer exists, but can still be retrieved through internet archive services)
 
 #### Can I use ICU from other languages besides C/C++ and Java?
 
-There are a number of wrappers available, please see the [Related
-Projects](http://site.icu-project.org/related) page.
+There are a number of wrappers available, please see the
+[Related Projects](http://site.icu-project.org/related) page.
 
 #### How do I upgrade to a new version of ICU? Should I be concerned about API changes, a new Unicode version or a new CLDR version)?
 
@@ -98,9 +104,10 @@ prepare for an upgrade, or to make sure that your usage of ICU is
 upgrade-friendly.
 
 *   **API:** ensure that you are not using draft APIs which may have changed in
-    a future release. See the section on API compatibility (§) in the [design
-    chapter](../design.md) .
-*   **Unicode: S**ee the release notes for particular versions of Unicode to
+    a future release. See the section on
+    [API compatibility](../design.md#icu-api-compatibility) in the
+    [design chapter](../design.md).
+*   **Unicode:** See the release notes for particular versions of Unicode to
     ensure that your code is not affected by property changes or other
     specification changes.
 *   **CLDR:** If your application has test cases which depend on specific
@@ -110,13 +117,15 @@ upgrade-friendly.
     cases. Also, a newer version may support additional translations,
     currencies, types of calenders
 *   **Building/Deploying your Application (ICU4C):** ICU4C usually builds with
-    symbol renaming ( See: binary compatibility (§) in the [design
-    chapter](../design.md) ). Be sure that you build your application with the
-    updated ICU header files, so that it will link against the current ICU.
-    Also, don't hard-code the names of ICU libraries in your build scripts and
-    projects. Where possible, link against just the 'base name' such as
-    `libicuuc.so `or `icuuc.lib `rather than a name containing the version
-    number such as `libicuuc.so.`**`46`** or `icuuc`**`46`**`.dll`.
+    symbol renaming (See:
+    [binary compatibility](../design.md#icu-binary-compatibility-using-icu-as-an-operating-system-level-library)
+    in the [design chapter](../design.md)). Be sure that you build your
+    application with the updated ICU header files, so that it will link against
+    the current ICU. Also, don't hard-code the names of ICU libraries in your
+    build scripts and projects. Where possible, link against just the
+    'base name' such as `libicuuc.so` or `icuuc.lib` rather than a name
+    containing the version number such as `libicuuc.so.**46**` or
+    `icuuc**46**.dll`.
 
 ## Building and Testing ICU
 
@@ -128,8 +137,9 @@ See the readme.html that is included with ICU.
 
 From ICU version 4.2 on, the configure script will build with the default bit
 width of your platform. You can request 64 or 32 bits with the
-**--with-library-bits=** option, (e.g. runConfigureICU Linux**
---with-library-bits=64** or runConfigureICU MacOSX **--with-library-bits=32**).
+**--with-library-bits=** option, (e.g. `runConfigureICU Linux
+**--with-library-bits=64**` or `runConfigureICU MacOSX
+**--with-library-bits=32**`).
 (For the behavior of attempting 64 bits if possible, use
 **--with-library-bits=64else32**).
 
@@ -148,8 +158,8 @@ to build and test ICU, and it usually answers most problems.
 
 If you are using a compiler that hasn't been tested with ICU before, you may
 have encountered an optimization bug with the compiler. On Unix platforms you
-can specify --disable-release when you are using runConfigureICU (e.g.
-runConfigureICU --disable-release LinuxRedHat). If this fixes your problem, it
+can specify **--disable-release** when you are using runConfigureICU (e.g.
+`runConfigureICU --disable-release LinuxRedHat`). If this fixes your problem, it
 is recommended that you report the optimization bug to the compiler
 manufacturer.
 
@@ -158,9 +168,10 @@ Support List](http://icu-project.org/contacts.html) .
 
 #### How can I reduce the size of the ICU data library?
 
-Use the [Data Customizer](http://apps.icu-project.org/datacustom) or see
-"Customizing ICU's Data Library" (§) in the [ICU Data Management](../icudata.md)
-chapter of this User's Guide.
+Use the [Data Customizer](https://unicode-org.atlassian.net/browse/ICU-12835)
+or see
+[Customizing ICU's Data Library](../icudata.md#customizing-icus-data-library)
+in the [ICU Data Management](../icudata.md) chapter of this User's Guide.
 
 #### Why am I seeing a small ( only a few K ) instead of a large ( several megabytes ) data shared library (icudt)?
 #### Opening ICU services fails with U_MISSING_RESOURCE_ERROR and u_init() returns failure.
@@ -177,18 +188,19 @@ Studio.
 
 #### Can I add or remove a converter from ICU?
 
-Yes. Please see "Customizing ICU's Data Library" (§) in the [ICU Data
-Management](../icudata.md) chapter of this User's Guide. You can also get extra
-converters from <http://www.icu-project.org/charts/charset/> or use the [ICU
-Data Customizer](http://apps.icu-project.org/datacustom/) tool.
+Yes. Please see [Customizing ICU's Data Library](../icudata.md#customizing-icus-data-library)
+in the [ICU Data Management](../icudata.md) of this User's Guide. You can also
+get extra converters from <http://www.icu-project.org/charts/charset/> or use
+the [ICU Data Customizer](https://unicode-org.atlassian.net/browse/ICU-12835)
+tool.
 
 #### Why don't the makefiles work?
 
 You need GNU's make program version 3.8 or later, and you need to run the
-runConfigureICU script, which is located in the icu/source directory. You may be
-using a platform that ICU does not support. If the first two answers do not
-apply to you, then you should send an e-mail to the [ICU4C Support
-List](http://www.icu-project.org/contacts.html) .
+runConfigureICU script, which is located in the `icu/source directory`. You may
+be using a platform that ICU does not support. If the first two answers do not
+apply to you, then you should send an e-mail to the
+[ICU4C Support List](http://www.icu-project.org/contacts.html).
 
 Here are some places you can find gmake:
 
@@ -222,18 +234,16 @@ closer to Java, which is important for porting between ICU4C and ICU4J. We use
 functions and type-safe constants instead of #define, etc. However, we do not
 use exceptions, and we do not use the Standard Template Library (STL), so
 ICU4C's dependencies on the C++ library are minimal. See the new
-[dependencies.txt](http://bugs.icu-project.org/trac/browser/icu/trunk/source/test/depstest/dependencies.txt)
+[dependencies.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/depstest/dependencies.txt)
 and search for "group: cplusplus".
 
 As ICU does not use exceptions, the GCC option `-fno-exceptions` will reduce or
 remove the dependencies on the standard C++ library. In
 [GCC](http://gcc.gnu.org) 4.5 there is an option `-static-libstdc++` which will
-remove C++ library dependencies. (Also see [this
-article](http://www.trilithium.com/johan/2005/06/static-libstdc/).) Visual
-Studio has the [/MT
-option](http://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.100).aspx), and
-other compilers may have similar options. See the [How To Use
-ICU](../howtouseicu.md) page for related information on this topic.
+remove C++ library dependencies. Visual Studio has the
+[/MT option](http://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.100).aspx),
+and other compilers may have similar options. See the
+[How To Use ICU](../howtouseicu.md) page for related information on this topic.
 
 ## Features of ICU
 
@@ -243,11 +253,12 @@ ICU4C (ICU) is written in C and C++, and ICU4J is written in Java™.
 
 #### How are the APIs documented for deprecation?
 
-Please read the API lifecycle section in the [ICU Design](../design.md) chapter.
+Please read the [ICU API compatibility](../design.md#icu-api-compatibility)
+section in the [ICU Design](../design.md) chapter.
 
 #### What version of Unicode standard does ICU support?
 
-ICU versions 4.0 supports Unicode version 5.1.
+ICU versions 65 supports Unicode version 12.
 
 The Unicode versions for older versions of ICU are listed on the ICU download
 page, <http://www.icu-project.org/download/>
@@ -263,7 +274,7 @@ earlier do not directly support them.
 
 #### How does ICU relate to Java's java.text.\* package?
 
-The International Components for Unicode is available both as a C/C++ library
+The International Components for Unicode are available both as a C/C++ library
 and a Java class library. ICU provides internationalization utilities for
 writing global applications in C, C++ or Java programming languages. ICU was
 originally developed by the Unicode group at the IBM Globalization Center of
@@ -290,16 +301,17 @@ your native codepage, you can use the conversion API.
 
 #### How do I declare a Unicode string in ICU?
 
-Use the U_STRING_DECL and U_STRING_INIT macros or use the UnicodeString class
-for C++. Strings are represented as UChar \* as the base string type.
+Use the `U_STRING_DECL` and `U_STRING_INIT` macros or use the UnicodeString
+class for C++. Strings are represented as `UChar \*` as the base string type.
 
-Even though most platforms declare wide strings as wchar_t \* or L"" as the base
-string type, that declaration is not portable because the sizeof(wchar_t) can be
-1, 2 or 4, and the encoding may not even be Unicode. On the platforms where
-sizeof(wchar_t) is 2 bytes, UChar is defined as wchar_t. In that case you can
-use ICU's strings with 3rd party legacy functions; however, we do not suggest
-using Unicode strings without the U_STRING_DECL and U_STRING_INIT macros or
-UnicodeString class because they are platform independent implementations.
+Even though most platforms declare wide strings as `wchar_t \*` or `L""` as the
+base string type, that declaration is not portable because the `sizeof(wchar_t)`
+can be 1, 2 or 4, and the encoding may not even be Unicode. On the platforms
+where `sizeof(wchar_t)` is 2 bytes, `UChar` is defined as `wchar_t`. In that
+case you can  use ICU's strings with 3rd party legacy functions; however, we do
+not suggest using Unicode strings without the `U_STRING_DECL` and
+`U_STRING_INIT` macros or UnicodeString class because they are platform
+independent implementations.
 
 #### How is a Unicode string represented in ICU4C?
 
@@ -314,20 +326,24 @@ supports UTF-16's Base Multilingual Plane (BMP). The notion of UCS-2 is
 deprecated and dead. Unicode 2.0 in 1996 changed its default encoding to UTF-16.
 
 If you need to do a quick and easy conversion between UTF-16 and UTF-8, UTF-32
-or an encoding in wchar_t, you should take a look at unicode/ustring.h. In that
-header file you will find u_strToWCS, u_strFromWCS, u_strToUTF8, u_strFromUTF8,
-u_strToUTF32 and u_strFromUTF32 functions. These functions are provided for your
-convenience instead of using the ucnv_\* API.
+or an encoding in `wchar_t`, you should take a look at unicode/ustring.h. In
+that header file you will find `u_strToWCS`, `u_strFromWCS`, `u_strToUTF8`,
+`u_strFromUTF8`, `u_strToUTF32` and `u_strFromUTF32` functions. These
+functions are provided for your convenience instead of using the `ucnv_\*` API.
 
-You can also take a look at the UTF_\*, UTF8_\*, UTF16_\* and UTF32_\* macros,
-which are defined in unicode/utf.h, unicode/utf8.h, unicode/utf16.h and
-unicode/utf32.h. These macros are helpful for programmers that need to
-manipulate and process Unicode strings.
+You can also take a look at the `UTF_\*`, `UTF8_\*`, `UTF16_\*` and `UTF32_\*`
+macros, which are defined in
+[unicode/utf.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf.h),
+[unicode/utf8.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf8.h),
+[unicode/utf16.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf16.h)
+and [unicode/utf32.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf32.h).
+These macros are helpful for programmers that need to manipulate and process
+Unicode strings.
 
 #### How do I index into a UTF-16 string?
 
 Typically, indexes and offsets in strings count string units, not characters
-(although in c and java they have a char type).
+(although in C and Java they have a char type).
 
 For example, in old-fashioned MBCS strings, you would count indexes and offsets
 by bytes, not by the variable-width character count. In UTF-16, you do the same,
@@ -346,16 +362,16 @@ UTF-16 also does not have illegal 16-bit unit values, while you might want to
 check for illegal bytes in UTF-8. Incomplete character sequences in UTF-16 are
 less important and more benign. If you want to quickly convert small strings
 between the different UTF encodings or get a UChar32 value, you can use the
-macros provided in utf.h and its siblings utf8.h and utf16.h. For larger or
-partial strings, please use the conversion API.
+macros provided in `utf.h` and its siblings `utf8.h` and `utf16.h`. For larger
+or partial strings, please use the conversion API.
 
 #### How do the converters work?
 
 The converters act like a data stream. This means that the state of the last
-character is saved in the converter after each call to the ucnv_fromUnicode()
-and ucnv_toUnicode() functions. So if the source buffer ends with part of a
-surrogate Unicode character pair, the next call to ucnv_toUnicode() will write
-out the equivalent character to the destination buffer. Please see the
+character is saved in the converter after each call to the `ucnv_fromUnicode()`
+and `ucnv_toUnicode()` functions. So if the source buffer ends with part of a
+surrogate Unicode character pair, the next call to `ucnv_toUnicode()` will
+write out the equivalent character to the destination buffer. Please see the
 [Conversion](../conversion/index.md) chapter of the User's Guide for details.
 
 #### What does a locale look like in ICU?
@@ -385,29 +401,34 @@ Please read the [ICU Design](../design.md) chapter of the User's Guide.
 There is no relationship. ICU is not dependent on the operating system for the
 locale data.
 
-This also means that uloc_setDefault() does not affect the operating system. The
-function uloc_setDefault() only sets ICU's default locale. Normally the default
-locale for ICU is whatever the operating system says is the default locale.
+This also means that `uloc_setDefault()` does not affect the operating system.
+The function `uloc_setDefault()` only sets ICU's default locale. Normally the
+default locale for ICU is whatever the operating system says is the default
+locale.
 
 #### How are errors handled in ICU?
 
 Since not all compilers can handle exceptions, we return an error from functions
-with a UErrorCode parameter. The UErrorCode parameter of a function will return
-any errors that occurred while it was executing. It's usually a good idea to
-check for errors after calling a function by using the U_SUCCESS and U_FAILURE
-macros. U_SUCCESS returns true when the function did run properly, and U_FAILURE
-returns true when the function did NOT run properly. You may handle specific
-errors from a function by checking the exact value of error. The possible values
-of UErrorCode are located in utypes.h of the common project. Before any function
-is called with a UErrorCode, it must be initialized to U_ZERO_ERROR.
+with a `UErrorCode` parameter. The `UErrorCode` parameter of a function will
+return any errors that occurred while it was executing. It's usually a good idea
+to check for errors after calling a function by using the `U_SUCCESS` and
+`U_FAILURE` macros. `U_SUCCESS` returns true when the function did run properly,
+and `U_FAILURE` returns true when the function did NOT run properly. You may
+handle specific errors from a function by checking the exact value of error. The
+possible values of `UErrorCode` are located in
+[utypes.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utypes.h)
+of the common project. Before any function is called with a `UErrorCode`, it
+must be initialized to `U_ZERO_ERROR`.
 
-Here is an example of UErrorCode being used.
+Here is an example of `UErrorCode` being used.
 
+```c++
 UErrorCode err = U_ZERO_ERROR;
 callMyFunction(&err);
 if (U_FAILURE(err)) {
 puts("callMyFunction() Failed!");
 }
+```
 
 Please see the [ICU Design](../design.md) chapter for details.
 
