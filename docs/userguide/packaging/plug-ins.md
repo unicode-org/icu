@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Plug-ins
 
 This page documents the ICU4C DLL Plug-in capability.
@@ -31,14 +36,15 @@ uninstall themselves before they are removed from memory and unloaded.
 ## Plugin API
 
 The current plugin API is documented as
-[icuplug.h](http://icu-project.org/apiref/icu4c434/icuplug_8h.html)
+[icuplug.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/icuplug_8h.html)
 Some sample plugins are available at:
 [testplug.c](../../../icu4c/source/tools/icuinfo/testplug.c)
 Here is a simple, trivial plugin:
 
 ```c
-  U_CAPI
-**UPlugTokenReturn** U_EXPORT2 **myPlugin** (UPlugData *data, UPlugReason reason, UErrorCode *status) {
+U_CAPI
+UPlugTokenReturn U_EXPORT2
+myPlugin(UPlugData *data, UPlugReason reason, UErrorCode *status) {
     if(reason==UPLUG_REASON_QUERY) {
         uplug_setPlugName(data, "Simple Plugin"); /* optional */
         uplug_setPlugLevel(data, UPLUG_LEVEL_HIGH); /* Mandatory */
@@ -52,8 +58,9 @@ Here is a simple, trivial plugin:
 }
 ```
 
-The UPlugData* is an opaque pointer to the plugin-specific data, and is used in
-all other API calls.
+The `UPlugData*` is an opaque pointer to the plugin-specific data,
+and is used in all other API calls.
+
 The API contract is:
 
 1. the plugin MUST always return UPLUG_TOKEN as a return value- to
