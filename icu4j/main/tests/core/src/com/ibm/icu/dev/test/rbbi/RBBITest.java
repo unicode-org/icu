@@ -562,7 +562,7 @@ public class RBBITest extends TestFmwk {
 
         RuleBasedBreakIterator bi  = new RuleBasedBreakIterator(rules);
         String rtRules = bi.toString();        // getRules() in C++
-        assertEquals("Break Iterator rule stripping test", "!!forward; $x = [ab#]; '#' '?'; ",  rtRules);
+        assertEquals("Break Iterator rule stripping test", "!!forward;$x=[ab#];'#''?';",  rtRules);
     }
 
     @Test
@@ -582,7 +582,9 @@ public class RBBITest extends TestFmwk {
             StringBuilder s = new StringBuilder();
             for (int r = 1; r < fwtbl.fNumStates; r++) {
                 int row = dw.getRowIndex(r);
-                short tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
+                short tableVal = (fwtbl.fTable8 != null) ?
+                    fwtbl.fTable8[row + RBBIDataWrapper.NEXTSTATES + column] :
+                    fwtbl.fTable16[row + RBBIDataWrapper.NEXTSTATES + column];
                 s.append((char)tableVal);
             }
             columns.add(s.toString());
@@ -602,13 +604,24 @@ public class RBBITest extends TestFmwk {
         for (int r=0; r<fwtbl.fNumStates; r++) {
             StringBuilder s = new StringBuilder();
             int row = dw.getRowIndex(r);
-            assertTrue("Accepting < -1", fwtbl.fTable[row + RBBIDataWrapper.ACCEPTING] >= -1);
-            s.append(fwtbl.fTable[row + RBBIDataWrapper.ACCEPTING]);
-            s.append(fwtbl.fTable[row + RBBIDataWrapper.LOOKAHEAD]);
-            s.append(fwtbl.fTable[row + RBBIDataWrapper.TAGIDX]);
-            for (int column=0; column<numCharClasses; column++) {
-                short tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
-                s.append((char)tableVal);
+            if (fwtbl.fTable8 != null) {
+                assertTrue("Accepting < -1", fwtbl.fTable8[row + RBBIDataWrapper.ACCEPTING] >= -1);
+                s.append(fwtbl.fTable8[row + RBBIDataWrapper.ACCEPTING]);
+                s.append(fwtbl.fTable8[row + RBBIDataWrapper.LOOKAHEAD]);
+                s.append(fwtbl.fTable8[row + RBBIDataWrapper.TAGIDX]);
+                for (int column=0; column<numCharClasses; column++) {
+                    short tableVal = fwtbl.fTable8[row + RBBIDataWrapper.NEXTSTATES + column];
+                    s.append((char)tableVal);
+                }
+            } else {
+                assertTrue("Accepting < -1", fwtbl.fTable16[row + RBBIDataWrapper.ACCEPTING] >= -1);
+                s.append(fwtbl.fTable16[row + RBBIDataWrapper.ACCEPTING]);
+                s.append(fwtbl.fTable16[row + RBBIDataWrapper.LOOKAHEAD]);
+                s.append(fwtbl.fTable16[row + RBBIDataWrapper.TAGIDX]);
+                for (int column=0; column<numCharClasses; column++) {
+                    short tableVal = fwtbl.fTable16[row + RBBIDataWrapper.NEXTSTATES + column];
+                    s.append((char)tableVal);
+                }
             }
             rows.add(s.toString());
         }

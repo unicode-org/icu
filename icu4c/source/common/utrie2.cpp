@@ -59,9 +59,11 @@ get32(const UNewTrie2 *trie, UChar32 c, UBool fromLSCP) {
 
 U_CAPI uint32_t U_EXPORT2
 utrie2_get32(const UTrie2 *trie, UChar32 c) {
-    if(trie->data16!=NULL) {
+    if(trie->data8!=nullptr) {
+        return UTRIE2_GET8(trie, c);
+    } else if(trie->data16!=nullptr) {
         return UTRIE2_GET16(trie, c);
-    } else if(trie->data32!=NULL) {
+    } else if(trie->data32!=nullptr) {
         return UTRIE2_GET32(trie, c);
     } else if((uint32_t)c>0x10ffff) {
         return trie->errorValue;
@@ -75,9 +77,11 @@ utrie2_get32FromLeadSurrogateCodeUnit(const UTrie2 *trie, UChar32 c) {
     if(!U_IS_LEAD(c)) {
         return trie->errorValue;
     }
-    if(trie->data16!=NULL) {
+    if(trie->data8!=nullptr) {
+        return UTRIE2_GET8_FROM_U16_SINGLE_LEAD(trie, c);
+    } else if(trie->data16!=nullptr) {
         return UTRIE2_GET16_FROM_U16_SINGLE_LEAD(trie, c);
-    } else if(trie->data32!=NULL) {
+    } else if(trie->data32!=nullptr) {
         return UTRIE2_GET32_FROM_U16_SINGLE_LEAD(trie, c);
     } else {
         return get32(trie->newTrie, c, FALSE);
@@ -89,7 +93,7 @@ u8Index(const UTrie2 *trie, UChar32 c, int32_t i) {
     int32_t idx=
         _UTRIE2_INDEX_FROM_CP(
             trie,
-            trie->data32==NULL ? trie->indexLength : 0,
+            trie->data16!=nullptr ? trie->indexLength : 0,
             c);
     return (idx<<3)|i;
 }
@@ -181,7 +185,9 @@ utrie2_openFromSerialized(UTrie2ValueBits valueBits,
 
     /* calculate the actual length */
     actualLength=(int32_t)sizeof(UTrie2Header)+tempTrie.indexLength*2;
-    if(valueBits==UTRIE2_16_VALUE_BITS) {
+    if(valueBits==UTRIE2_8_VALUE_BITS) {
+        actualLength+=tempTrie.dataLength;
+    } else if(valueBits==UTRIE2_16_VALUE_BITS) {
         actualLength+=tempTrie.dataLength*2;
     } else {
         actualLength+=tempTrie.dataLength*4;
@@ -212,14 +218,23 @@ utrie2_openFromSerialized(UTrie2ValueBits valueBits,
 
     /* get the data */
     switch(valueBits) {
+    case UTRIE2_8_VALUE_BITS:
+        trie->data8=(const uint8_t *)p16;
+        trie->data16=nullptr;
+        trie->data32=nullptr;
+        trie->initialValue=trie->data8[trie->dataNullOffset];
+        trie->errorValue=trie->data8[UTRIE2_BAD_UTF8_DATA_OFFSET];
+        break;
     case UTRIE2_16_VALUE_BITS:
+        trie->data8=nullptr;
         trie->data16=p16;
-        trie->data32=NULL;
+        trie->data32=nullptr;
         trie->initialValue=trie->index[trie->dataNullOffset];
         trie->errorValue=trie->data16[UTRIE2_BAD_UTF8_DATA_OFFSET];
         break;
     case UTRIE2_32_VALUE_BITS:
-        trie->data16=NULL;
+        trie->data8=nullptr;
+        trie->data16=nullptr;
         trie->data32=(const uint32_t *)p16;
         trie->initialValue=trie->data32[trie->dataNullOffset];
         trie->errorValue=trie->data32[UTRIE2_BAD_UTF8_DATA_OFFSET];
@@ -241,7 +256,8 @@ utrie2_openDummy(UTrie2ValueBits valueBits,
                  UErrorCode *pErrorCode) {
     UTrie2 *trie;
     UTrie2Header *header;
-    uint32_t *p;
+    uint32_t *p32;
+    uint8_t *p8;
     uint16_t *dest16;
     int32_t indexLength, dataLength, length, i;
     int32_t dataMove;  /* >0 if the data is moved to the end of the index array */
@@ -259,7 +275,9 @@ utrie2_openDummy(UTrie2ValueBits valueBits,
     indexLength=UTRIE2_INDEX_1_OFFSET;
     dataLength=UTRIE2_DATA_START_OFFSET+UTRIE2_DATA_GRANULARITY;
     length=(int32_t)sizeof(UTrie2Header)+indexLength*2;
-    if(valueBits==UTRIE2_16_VALUE_BITS) {
+    if(valueBits==UTRIE2_8_VALUE_BITS) {
+        length+=dataLength;
+    } else if(valueBits==UTRIE2_16_VALUE_BITS) {
         length+=dataLength*2;
     } else {
         length+=dataLength*4;
@@ -304,6 +322,7 @@ utrie2_openDummy(UTrie2ValueBits valueBits,
     header=(UTrie2Header *)trie->memory;
 
     header->signature=UTRIE2_SIG; /* "Tri2" */
+
     header->options=(uint16_t)valueBits;
 
     header->indexLength=(uint16_t)indexLength;
@@ -329,12 +348,29 @@ utrie2_openDummy(UTrie2ValueBits valueBits,
         *dest16++=(uint16_t)dataMove;
     }
 
-    /* write the 16/32-bit data array */
+    /* write the 8/16/32-bit data array */
     switch(valueBits) {
+    case UTRIE2_8_VALUE_BITS:
+        /* write 16-bit data values */
+        p8=(uint8_t *)dest16;
+        trie->data16=nullptr;
+        trie->data32=nullptr;
+        for(i=0; i<0x80; ++i) {
+            *p8++=(uint8_t)initialValue;
+        }
+        for(; i<0xc0; ++i) {
+            *p8++=(uint8_t)errorValue;
+        }
+        /* highValue and reserved values */
+        for(i=0; i<UTRIE2_DATA_GRANULARITY; ++i) {
+            *p8++=(uint8_t)initialValue;
+        }
+        break;
     case UTRIE2_16_VALUE_BITS:
         /* write 16-bit data values */
+        trie->data8=nullptr;
         trie->data16=dest16;
-        trie->data32=NULL;
+        trie->data32=nullptr;
         for(i=0; i<0x80; ++i) {
             *dest16++=(uint16_t)initialValue;
         }
@@ -348,18 +384,19 @@ utrie2_openDummy(UTrie2ValueBits valueBits,
         break;
     case UTRIE2_32_VALUE_BITS:
         /* write 32-bit data values */
-        p=(uint32_t *)dest16;
-        trie->data16=NULL;
-        trie->data32=p;
+        p32=(uint32_t *)dest16;
+        trie->data8=nullptr;
+        trie->data16=nullptr;
+        trie->data32=p32;
         for(i=0; i<0x80; ++i) {
-            *p++=initialValue;
+            *p32++=initialValue;
         }
         for(; i<0xc0; ++i) {
-            *p++=errorValue;
+            *p32++=errorValue;
         }
         /* highValue and reserved values */
         for(i=0; i<UTRIE2_DATA_GRANULARITY; ++i) {
-            *p++=initialValue;
+            *p32++=initialValue;
         }
         break;
     default:
@@ -444,6 +481,7 @@ enumEitherTrie(const UTrie2 *trie,
                UChar32 start, UChar32 limit,
                UTrie2EnumValue *enumValue, UTrie2EnumRange *enumRange, const void *context) {
     const uint32_t *data32;
+    const uint8_t *data8;
     const uint16_t *idx;
 
     uint32_t value, prevValue, initialValue;
@@ -462,6 +500,7 @@ enumEitherTrie(const UTrie2 *trie,
         idx=trie->index;
         U_ASSERT(idx!=NULL); /* the following code assumes trie->newTrie is not NULL when idx is NULL */
         data32=trie->data32;
+        data8=trie->data8;
 
         index2NullOffset=trie->index2NullOffset;
         nullBlock=trie->dataNullOffset;
@@ -469,7 +508,8 @@ enumEitherTrie(const UTrie2 *trie,
         /* unfrozen, mutable trie */
         idx=NULL;
         data32=trie->newTrie->data;
-        U_ASSERT(data32!=NULL); /* the following code assumes idx is not NULL when data32 is NULL */
+        data8=nullptr;
+        U_ASSERT(data32!=nullptr); /* the following code assumes idx is not NULL when data32 is NULL */
 
         index2NullOffset=trie->newTrie->index2NullOffset;
         nullBlock=trie->newTrie->dataNullOffset;
@@ -574,7 +614,7 @@ enumEitherTrie(const UTrie2 *trie,
                     c+=UTRIE2_DATA_BLOCK_LENGTH;
                 } else {
                     for(j=0; j<UTRIE2_DATA_BLOCK_LENGTH; ++j) {
-                        value=enumValue(context, data32!=NULL ? data32[block+j] : idx[block+j]);
+                        value=enumValue(context, data32!=nullptr ? data32[block+j] : data8!=nullptr ? data8[block+j] : idx[block+j]);
                         if(value!=prevValue) {
                             if(prev<c && !enumRange(context, prev, c-1, prevValue)) {
                                 return;
@@ -596,8 +636,10 @@ enumEitherTrie(const UTrie2 *trie,
         uint32_t highValue;
         if(idx!=NULL) {
             highValue=
-                data32!=NULL ?
+                data32!=nullptr ?
                     data32[trie->highValueIndex] :
+                    data8!=nullptr ?
+                    data8[trie->highValueIndex] :
                     idx[trie->highValueIndex];
         } else {
             highValue=trie->newTrie->data[trie->newTrie->dataLength-UTRIE2_DATA_GRANULARITY];

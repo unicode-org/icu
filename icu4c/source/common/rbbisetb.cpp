@@ -252,7 +252,8 @@ void RBBISetBuilder::buildRanges() {
 // Build the Trie table for mapping UChar32 values to the corresponding
 // range group number.
 //
-void RBBISetBuilder::buildTrie() {
+void RBBISetBuilder::buildTrie(UBool use8Bits) {
+    fUse8Bits = use8Bits;
     RangeDescriptor *rlRange;
 
     fTrie = utrie2_open(0,       //  Initial value for all code points.
@@ -260,10 +261,15 @@ void RBBISetBuilder::buildTrie() {
                         fStatus);
 
     for (rlRange = fRangeList; rlRange!=0 && U_SUCCESS(*fStatus); rlRange=rlRange->fNext) {
+        uint32_t value = rlRange->fNum;
+        if (use8Bits && ((value & DICT_BIT) != 0)) {
+            U_ASSERT((value & DICT_BIT_FOR_8BITS_TRIE) == 0);
+            value = DICT_BIT_FOR_8BITS_TRIE | (value & ~DICT_BIT);
+        }
         utrie2_setRange32(fTrie,
                           rlRange->fStartChar,     // Range start
                           rlRange->fEndChar,       // Range end (inclusive)
-                          rlRange->fNum,           // value for range
+                          value,           // value for range
                           TRUE,                    // Overwrite previously written values
                           fStatus);
     }
@@ -295,7 +301,7 @@ int32_t RBBISetBuilder::getTrieSize()  {
     if (U_FAILURE(*fStatus)) {
         return 0;
     }
-    utrie2_freeze(fTrie, UTRIE2_16_VALUE_BITS, fStatus);
+    utrie2_freeze(fTrie, fUse8Bits ? UTRIE2_8_VALUE_BITS : UTRIE2_16_VALUE_BITS, fStatus);
     fTrieSize  = utrie2_serialize(fTrie,
                                   NULL,                // Buffer
                                   0,                   // Capacity

@@ -322,10 +322,13 @@ utrie2_clone(const UTrie2 *other, UErrorCode *pErrorCode) {
 
             /* make the clone's pointers point to its own memory */
             trie->index=(uint16_t *)trie->memory+(other->index-(uint16_t *)other->memory);
-            if(other->data16!=NULL) {
+            if(other->data8!=nullptr) {
+                trie->data8=(uint8_t *)trie->memory+(other->data8-(uint8_t *)other->memory);
+            }
+            if(other->data16!=nullptr) {
                 trie->data16=(uint16_t *)trie->memory+(other->data16-(uint16_t *)other->memory);
             }
-            if(other->data32!=NULL) {
+            if(other->data32!=nullptr) {
                 trie->data32=(uint32_t *)trie->memory+(other->data32-(uint32_t *)other->memory);
             }
         }
@@ -370,7 +373,11 @@ static long countInitial(const UTrie2 *trie) {
     uint32_t initialValue=trie->initialValue;
     int32_t length=trie->dataLength;
     long count=0;
-    if(trie->data16!=nullptr) {
+    if(trie->data8!=nullptr) {
+        for(int32_t i=0; i<length; ++i) {
+            if(trie->data8[i]==initialValue) { ++count; }
+        }
+    } else if(trie->data16!=nullptr) {
         for(int32_t i=0; i<length; ++i) {
             if(trie->data16[i]==initialValue) { ++count; }
         }
@@ -395,7 +402,7 @@ static void
 utrie2_printLengths(const UTrie2 *trie, const char *which) {
     long indexLength=trie->indexLength;
     long dataLength=(long)trie->dataLength;
-    long totalLength=(long)sizeof(UTrie2Header)+indexLength*2+dataLength*(trie->data32!=NULL ? 4 : 2);
+    long totalLength=(long)sizeof(UTrie2Header)+indexLength*2+dataLength*(trie->data32!=nullptr ? 4 : trie->data16!=nullptr ? 2 : 1);
     printf("**UTrie2Lengths(%s %s)** index:%6ld  data:%6ld  countInitial:%6ld  serialized:%6ld\n",
            which, trie->name, indexLength, dataLength, countInitial(trie), totalLength);
 }
@@ -428,10 +435,12 @@ utrie2_cloneAsThawed(const UTrie2 *other, UErrorCode *pErrorCode) {
     *pErrorCode=context.errorCode;
     for(lead=0xd800; lead<0xdc00; ++lead) {
         uint32_t value;
-        if(other->data32==NULL) {
+        if(other->data32!=nullptr) {
+            value=UTRIE2_GET32_FROM_U16_SINGLE_LEAD(other, lead);
+        } else if(other->data16!=nullptr) {
             value=UTRIE2_GET16_FROM_U16_SINGLE_LEAD(other, lead);
         } else {
-            value=UTRIE2_GET32_FROM_U16_SINGLE_LEAD(other, lead);
+            value=UTRIE2_GET8_FROM_U16_SINGLE_LEAD(other, lead);
         }
         if(value!=other->initialValue) {
             utrie2_set32ForLeadSurrogateCodeUnit(context.trie, lead, value, pErrorCode);
@@ -478,7 +487,7 @@ utrie2_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
     }
     if(U_SUCCESS(*pErrorCode)) {
         utrie2_freeze(context.trie,
-                      trie1->data32!=NULL ? UTRIE2_32_VALUE_BITS : UTRIE2_16_VALUE_BITS,
+                      trie1->data32!=nullptr ? UTRIE2_32_VALUE_BITS : UTRIE2_16_VALUE_BITS,
                       pErrorCode);
     }
 #ifdef UTRIE2_DEBUG
@@ -1306,7 +1315,8 @@ U_CAPI void U_EXPORT2
 utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     UNewTrie2 *newTrie;
     UTrie2Header *header;
-    uint32_t *p;
+    uint32_t *p32;
+    uint8_t *p8;
     uint16_t *dest16;
     int32_t i, length;
     int32_t allIndexesLength;
@@ -1327,7 +1337,8 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     if(newTrie==NULL) {
         /* already frozen */
         UTrie2ValueBits frozenValueBits=
-            trie->data16!=NULL ? UTRIE2_16_VALUE_BITS : UTRIE2_32_VALUE_BITS;
+            trie->data16!=nullptr ? UTRIE2_16_VALUE_BITS : (
+                trie->data32!=nullptr ? UTRIE2_32_VALUE_BITS : UTRIE2_8_VALUE_BITS);
         if(valueBits!=frozenValueBits) {
             *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         }
@@ -1370,7 +1381,9 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
 
     /* calculate the total serialized length */
     length=sizeof(UTrie2Header)+allIndexesLength*2;
-    if(valueBits==UTRIE2_16_VALUE_BITS) {
+    if(valueBits==UTRIE2_8_VALUE_BITS) {
+        length+=newTrie->dataLength;
+    } else if(valueBits==UTRIE2_16_VALUE_BITS) {
         length+=newTrie->dataLength*2;
     } else {
         length+=newTrie->dataLength*4;
@@ -1411,9 +1424,9 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     trie->index=dest16;
 
     /* write the index-2 array values shifted right by UTRIE2_INDEX_SHIFT, after adding dataMove */
-    p=(uint32_t *)newTrie->index2;
+    p32=(uint32_t *)newTrie->index2;
     for(i=UTRIE2_INDEX_2_BMP_LENGTH; i>0; --i) {
-        *dest16++=(uint16_t)((dataMove + *p++)>>UTRIE2_INDEX_SHIFT);
+        *dest16++=(uint16_t)((dataMove + *p32++)>>UTRIE2_INDEX_SHIFT);
     }
 
     /* write UTF-8 2-byte index-2 values, not right-shifted */
@@ -1429,35 +1442,48 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
         int32_t index2Offset=UTRIE2_INDEX_2_BMP_LENGTH+UTRIE2_UTF8_2B_INDEX_2_LENGTH+index1Length;
 
         /* write 16-bit index-1 values for supplementary code points */
-        p=(uint32_t *)newTrie->index1+UTRIE2_OMITTED_BMP_INDEX_1_LENGTH;
+        p32=(uint32_t *)newTrie->index1+UTRIE2_OMITTED_BMP_INDEX_1_LENGTH;
         for(i=index1Length; i>0; --i) {
-            *dest16++=(uint16_t)(UTRIE2_INDEX_2_OFFSET + *p++);
+            *dest16++=(uint16_t)(UTRIE2_INDEX_2_OFFSET + *p32++);
         }
 
         /*
          * write the index-2 array values for supplementary code points,
          * shifted right by UTRIE2_INDEX_SHIFT, after adding dataMove
          */
-        p=(uint32_t *)newTrie->index2+index2Offset;
+        p32=(uint32_t *)newTrie->index2+index2Offset;
         for(i=newTrie->index2Length-index2Offset; i>0; --i) {
-            *dest16++=(uint16_t)((dataMove + *p++)>>UTRIE2_INDEX_SHIFT);
+            *dest16++=(uint16_t)((dataMove + *p32++)>>UTRIE2_INDEX_SHIFT);
         }
     }
 
-    /* write the 16/32-bit data array */
+    /* write the 8/16/32-bit data array */
     switch(valueBits) {
+    case UTRIE2_8_VALUE_BITS:
+        /* write 8-bit data values */
+        trie->data8=(uint8_t *)dest16;
+        trie->data16=nullptr;
+        trie->data32=nullptr;
+        p32=newTrie->data;
+        p8=(uint8_t *)dest16;
+        for(i=newTrie->dataLength; i>0; --i) {
+            *p8++=(uint8_t)*p32++;
+        }
+        break;
     case UTRIE2_16_VALUE_BITS:
         /* write 16-bit data values */
+        trie->data8=nullptr;
         trie->data16=dest16;
-        trie->data32=NULL;
-        p=newTrie->data;
+        trie->data32=nullptr;
+        p32=newTrie->data;
         for(i=newTrie->dataLength; i>0; --i) {
-            *dest16++=(uint16_t)*p++;
+            *dest16++=(uint16_t)*p32++;
         }
         break;
     case UTRIE2_32_VALUE_BITS:
         /* write 32-bit data values */
-        trie->data16=NULL;
+        trie->data8=nullptr;
+        trie->data16=nullptr;
         trie->data32=(uint32_t *)dest16;
         uprv_memcpy(dest16, newTrie->data, (size_t)newTrie->dataLength*4);
         break;

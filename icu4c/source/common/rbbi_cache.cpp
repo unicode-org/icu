@@ -21,6 +21,9 @@
 
 U_NAMESPACE_BEGIN
 
+constexpr int32_t DICT_BIT = 0x4000;
+constexpr int32_t DICT_BIT_FOR_8BITS_TRIE  = 0x0080;
+
 /*
  * DictionaryCache implementation
  */
@@ -136,19 +139,22 @@ void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPo
     int32_t     foundBreakCount = 0;
     UText      *text = &fBI->fText;
 
+    UBool use8Bits = fBI->fData->fHeader->fCatCount < 127;
+    uint16_t dict_mask = use8Bits ? DICT_BIT_FOR_8BITS_TRIE : DICT_BIT;
+
     // Loop through the text, looking for ranges of dictionary characters.
     // For each span, find the appropriate break engine, and ask it to find
     // any breaks within the span.
 
     utext_setNativeIndex(text, rangeStart);
     UChar32     c = utext_current32(text);
-    category = UTRIE2_GET16(fBI->fData->fTrie, c);
+    category = use8Bits ? UTRIE2_GET8(fBI->fData->fTrie, c) : UTRIE2_GET16(fBI->fData->fTrie, c);
 
     while(U_SUCCESS(status)) {
-        while((current = (int32_t)UTEXT_GETNATIVEINDEX(text)) < rangeEnd && (category & 0x4000) == 0) {
+        while((current = (int32_t)UTEXT_GETNATIVEINDEX(text)) < rangeEnd && (category & dict_mask) == 0) {
             utext_next32(text);           // TODO: cleaner loop structure.
             c = utext_current32(text);
-            category = UTRIE2_GET16(fBI->fData->fTrie, c);
+            category = use8Bits ? UTRIE2_GET8(fBI->fData->fTrie, c) : UTRIE2_GET16(fBI->fData->fTrie, c);
         }
         if (current >= rangeEnd) {
             break;
@@ -166,7 +172,7 @@ void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPo
 
         // Reload the loop variables for the next go-round
         c = utext_current32(text);
-        category = UTRIE2_GET16(fBI->fData->fTrie, c);
+        category = use8Bits ? UTRIE2_GET8(fBI->fData->fTrie, c) : UTRIE2_GET16(fBI->fData->fTrie, c);
     }
 
     // If we found breaks, ensure that the first and last entries are

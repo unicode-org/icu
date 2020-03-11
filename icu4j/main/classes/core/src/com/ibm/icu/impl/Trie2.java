@@ -121,7 +121,8 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
 
             // Trie2 data width - 0: 16 bits
             //                    1: 32 bits
-            if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) > 1) {
+            //                    2:  8 bits
+            if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) > 2) {
                 throw new IllegalArgumentException("UTrie2 serialized format error.");
             }
             ValueWidth width;
@@ -129,9 +130,12 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) == 0) {
                 width = ValueWidth.BITS_16;
                 This = new Trie2_16();
-            } else {
+            } else if ((header.options & UTRIE2_OPTIONS_VALUE_BITS_MASK) == 1) {
                 width = ValueWidth.BITS_32;
                 This = new Trie2_32();
+            } else {
+                width = ValueWidth.BITS_8;
+                This = new Trie2_8();
             }
             This.header = header;
 
@@ -160,22 +164,28 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
             /* Read in the data. 16 bit data goes in the same array as the index.
              * 32 bit data goes in its own separate data array.
              */
-            if (width == ValueWidth.BITS_16) {
-                This.data16 = This.indexLength;
-            } else {
-                This.data32 = ICUBinary.getInts(bytes, This.dataLength, 0);
-            }
 
             switch(width) {
             case BITS_16:
+                This.data8 = null;
+                This.data16 = This.indexLength;
                 This.data32 = null;
                 This.initialValue = This.index[This.dataNullOffset];
                 This.errorValue   = This.index[This.data16+UTRIE2_BAD_UTF8_DATA_OFFSET];
                 break;
             case BITS_32:
+                This.data8 = null;
                 This.data16=0;
+                This.data32 = ICUBinary.getInts(bytes, This.dataLength, 0);
                 This.initialValue = This.data32[This.dataNullOffset];
                 This.errorValue   = This.data32[UTRIE2_BAD_UTF8_DATA_OFFSET];
+                break;
+            case BITS_8:
+                This.data8 = ICUBinary.getBytes(bytes, This.dataLength, 0);
+                This.data16=0;
+                This.data32 = null;
+                This.initialValue = This.data8[This.dataNullOffset];
+                This.errorValue   = This.data8[UTRIE2_BAD_UTF8_DATA_OFFSET];
                 break;
             default:
                 throw new IllegalArgumentException("UTrie2 serialized format error.");
@@ -618,7 +628,8 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
      */
      enum ValueWidth {
          BITS_16,
-         BITS_32
+         BITS_32,
+         BITS_8
      }
 
      /**
@@ -668,6 +679,7 @@ public abstract class Trie2 implements Iterable<Trie2.Range> {
     int           data16;            // Offset to data portion of the index array, if 16 bit data.
                                      //    zero if 32 bit data.
     int           data32[];          // NULL if 16b data is used via index
+    byte          data8[];           // NULL if 16b data is used via index
 
     int           indexLength;
     int           dataLength;

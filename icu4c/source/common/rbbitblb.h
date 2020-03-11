@@ -47,11 +47,11 @@ public:
     void     buildForwardTable();
 
     /** Return the runtime size in bytes of the built state table.  */
-    int32_t  getTableSize() const;
+    int32_t  getTableSize(UBool use8Bits) const;
 
     /** Fill in the runtime state table. Sufficient memory must exist at the specified location.
      */
-    void     exportTable(void *where);
+    void     exportTable(void *where, UBool use8Bits);
 
     /**
      *  Find duplicate (redundant) character classes. Begin looking with categories.first.
@@ -79,11 +79,11 @@ public:
     void     buildSafeReverseTable(UErrorCode &status);
 
     /** Return the runtime size in bytes of the built safe reverse state table. */
-    int32_t  getSafeTableSize() const;
+    int32_t  getSafeTableSize(UBool use8Bits) const;
 
     /** Fill in the runtime safe state table. Sufficient memory must exist at the specified location.
      */
-    void     exportSafeTable(void *where);
+    void     exportSafeTable(void *where, UBool use8Bits);
 
 
 private:

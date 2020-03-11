@@ -136,6 +136,9 @@ utrie2_swap(const UDataSwapper *ds,
 
     size=sizeof(UTrie2Header)+trie.indexLength*2;
     switch(valueBits) {
+    case UTRIE2_8_VALUE_BITS:
+        size+=dataLength;
+        break;
     case UTRIE2_16_VALUE_BITS:
         size+=dataLength*2;
         break;
@@ -163,6 +166,11 @@ utrie2_swap(const UDataSwapper *ds,
 
         /* swap the index and the data */
         switch(valueBits) {
+        case UTRIE2_8_VALUE_BITS:
+            ds->swapArray16(ds, inTrie+1, trie.indexLength*2, outTrie+1, pErrorCode);
+            uprv_memmove((uint8_t *)(outTrie+1)+trie.indexLength*2,
+                         (uint8_t *)(inTrie+1)+trie.indexLength*2, dataLength);
+            break;
         case UTRIE2_16_VALUE_BITS:
             ds->swapArray16(ds, inTrie+1, (trie.indexLength+dataLength)*2, outTrie+1, pErrorCode);
             break;

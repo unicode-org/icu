@@ -823,7 +823,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
         CharacterIterator text = fText;
         Trie2 trie = fRData.fTrie;
 
-        short[] stateTable  = fRData.fFTable.fTable;
+        short[] stateTable16  = fRData.fFTable.fTable16;
+        byte[] stateTable8  = fRData.fFTable.fTable8;
         int initialPosition = fPosition;
         text.setIndex(initialPosition);
         int result          = initialPosition;
@@ -844,6 +845,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
         short category      = 3;
         int flagsState      = fRData.fFTable.fFlags;
         int mode            = RBBI_RUN;
+        int dict_mask       = ((flagsState & RBBIDataWrapper.RBBI_8BITS_ROW) != 0) ?
+            RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE :
+            RBBIDataWrapper.DICT_BIT;
         if ((flagsState & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
             mode     = RBBI_START;
@@ -885,10 +889,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 //    Chars that need to be handled by a dictionary have a flag bit set
                 //    in their category values.
                 //
-                if ((category & 0x4000) != 0)  {
+                if ((category & dict_mask) != 0)  {
                     fDictionaryCharCount++;
                     //  And off the dictionary flag bit.
-                    category &= ~0x4000;
+                    category &= ~dict_mask;
                 }
 
                 if (TRACE) {
@@ -910,32 +914,61 @@ public class RuleBasedBreakIterator extends BreakIterator {
             }
 
             // look up a state transition in the state table
-            state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row   = fRData.getRowIndex(state);
+            if (stateTable8 != null) {
+                state = stateTable8[row + RBBIDataWrapper.NEXTSTATES + category];
+                row   = fRData.getRowIndex(state);
+                if (stateTable8[row + RBBIDataWrapper.ACCEPTING] == -1) {
+                    // Match found, common case
+                    result = text.getIndex();
+                    if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
+                        // The iterator has been left in the middle of a surrogate pair.
+                        // We want the start of it.
+                        result--;
+                    }
 
-            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
-                // Match found, common case
-                result = text.getIndex();
-                if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
-                    // The iterator has been left in the middle of a surrogate pair.
-                    // We want the start of it.
-                    result--;
+                    //  Remember the break status (tag) values.
+                    fRuleStatusIndex = stateTable8[row + RBBIDataWrapper.TAGIDX];
                 }
 
-                //  Remember the break status (tag) values.
-                fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
-            }
+                int completedRule = stateTable8[row + RBBIDataWrapper.ACCEPTING];
+                if (completedRule > 0) {
+                    // Lookahead match is completed
+                    int lookaheadResult = fLookAheadMatches.getPosition(completedRule);
+                    if (lookaheadResult >= 0) {
+                        fRuleStatusIndex = stateTable8[row + RBBIDataWrapper.TAGIDX];
+                        fPosition = lookaheadResult;
+                        return lookaheadResult;
+                    }
+                }
 
-            int completedRule = stateTable[row + RBBIDataWrapper.ACCEPTING];
-            if (completedRule > 0) {
-                // Lookahead match is completed
-                int lookaheadResult = fLookAheadMatches.getPosition(completedRule);
-                if (lookaheadResult >= 0) {
-                    fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
-                    fPosition = lookaheadResult;
-                    return lookaheadResult;
+            } else {
+                state = stateTable16[row + RBBIDataWrapper.NEXTSTATES + category];
+                row   = fRData.getRowIndex(state);
+                if (stateTable16[row + RBBIDataWrapper.ACCEPTING] == -1) {
+                    // Match found, common case
+                    result = text.getIndex();
+                    if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
+                        // The iterator has been left in the middle of a surrogate pair.
+                        // We want the start of it.
+                        result--;
+                    }
+
+                    //  Remember the break status (tag) values.
+                    fRuleStatusIndex = stateTable16[row + RBBIDataWrapper.TAGIDX];
+                }
+
+                int completedRule = stateTable16[row + RBBIDataWrapper.ACCEPTING];
+                if (completedRule > 0) {
+                    // Lookahead match is completed
+                    int lookaheadResult = fLookAheadMatches.getPosition(completedRule);
+                    if (lookaheadResult >= 0) {
+                        fRuleStatusIndex = stateTable16[row + RBBIDataWrapper.TAGIDX];
+                        fPosition = lookaheadResult;
+                        return lookaheadResult;
+                    }
                 }
             }
+
 
             // If we are at the position of the '/' in a look-ahead (hard break) rule;
             // record the current position, to be returned later, if the full rule matches.
@@ -943,7 +976,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
             //       This would enable hard-break rules with no following context.
             //       But there are line break test failures when trying this. Investigate.
             //       Issue ICU-20837
-            int rule =  stateTable[row + RBBIDataWrapper.LOOKAHEAD];
+            int rule =  (stateTable8 != null) ?
+                stateTable8[row + RBBIDataWrapper.LOOKAHEAD] :
+                stateTable16[row + RBBIDataWrapper.LOOKAHEAD];
             if (rule != 0) {
                 int  pos = text.getIndex();
                 if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
@@ -1003,7 +1038,12 @@ public class RuleBasedBreakIterator extends BreakIterator {
         // caches for quicker access
         CharacterIterator text = fText;
         Trie2 trie = fRData.fTrie;
-        short[] stateTable  = fRData.fRTable.fTable;
+        short[] stateTable16  = fRData.fRTable.fTable16;
+        byte[] stateTable8  = fRData.fRTable.fTable8;
+        int flagsState      = fRData.fRTable.fFlags;
+        int dict_mask       = ((flagsState & RBBIDataWrapper.RBBI_8BITS_ROW) != 0) ?
+            RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE :
+            RBBIDataWrapper.DICT_BIT;
 
         CISetIndex32(text, fromPosition);
         if (TRACE) {
@@ -1029,7 +1069,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             //
             //  And off the dictionary flag bit. For reverse iteration it is not used.
             category = (short) trie.get(c);
-            category &= ~0x4000;
+            category &= ~dict_mask;
             if (TRACE) {
                 System.out.print("            " +  RBBIDataWrapper.intToString(text.getIndex(), 5));
                 System.out.print(RBBIDataWrapper.intToHexString(c, 10));
@@ -1039,7 +1079,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
             // State Transition - move machine to its next state
             //
             assert(category < fRData.fHeader.fCatCount);
-            state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
+            state = (stateTable8 != null) ?
+                stateTable8[row + RBBIDataWrapper.NEXTSTATES + category] :
+                stateTable16[row + RBBIDataWrapper.NEXTSTATES + category];
             row   = fRData.getRowIndex(state);
 
             if (state == STOP_STATE) {
@@ -1209,6 +1251,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
             int         category;
             int         current;
             int         foundBreakCount = 0;
+            int dict_mask = fRData.fHeader.fCatCount < 127 ?
+                RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE : RBBIDataWrapper.DICT_BIT;
 
             // Loop through the text, looking for ranges of dictionary characters.
             // For each span, find the appropriate break engine, and ask it to find
@@ -1219,7 +1263,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             category = (short)fRData.fTrie.get(c);
 
             while(true) {
-                while((current = fText.getIndex()) < rangeEnd && (category & 0x4000) == 0) {
+                while((current = fText.getIndex()) < rangeEnd && (category & dict_mask) == 0) {
                     c = CharacterIteration.next32(fText);    // pre-increment
                     category = (short)fRData.fTrie.get(c);
                 }

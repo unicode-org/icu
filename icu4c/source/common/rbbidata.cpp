@@ -110,7 +110,8 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
         fReverseTable = (RBBIStateTable *)((char *)data + fHeader->fRTable);
     }
 
-    fTrie = utrie2_openFromSerialized(UTRIE2_16_VALUE_BITS,
+    UTrie2ValueBits valueBits = (fHeader->fCatCount < 127) ? UTRIE2_8_VALUE_BITS : UTRIE2_16_VALUE_BITS;
+    fTrie = utrie2_openFromSerialized(valueBits,
                                       (uint8_t *)data + fHeader->fTrie,
                                       fHeader->fTrieLen,
                                       NULL,           // *actual length
@@ -119,8 +120,8 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
         return;
     }
 
-    fRuleSource   = (UChar *)((char *)data + fHeader->fRuleSource);
-    fRuleString.setTo(TRUE, fRuleSource, -1);
+    fRuleSource   = ((char *)data + fHeader->fRuleSource);
+    fRuleString = UnicodeString::fromUTF8(fRuleSource);
     U_ASSERT(data->fRuleSourceLen > 0);
 
     fRuleStatusTable = (int32_t *)((char *)data + fHeader->fStatusTable);
@@ -225,6 +226,11 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
 
     RBBIDebugPrintf("   %s\n", heading);
 
+    RBBIDebugPrintf("Flags: %4x RBBI_LOOKAHEAD_HARD_BREAK=%s RBBI_BOF_REQUIRED=%s  RBBI_8BITS_ROWS=%s\n",
+                    table->fFlags,
+                    table->fFlags & RBBI_LOOKAHEAD_HARD_BREAK ? "T" : "F",
+                    table->fFlags & RBBI_BOF_REQUIRED ? "T" : "F",
+                    table->fFlags & RBBI_8BITS_ROWS ? "T" : "F");
     RBBIDebugPrintf("State |  Acc  LA TagIx");
     for (c=0; c<fHeader->fCatCount; c++) {RBBIDebugPrintf("%3d ", c);}
     RBBIDebugPrintf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {
@@ -236,12 +242,20 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
         RBBIDebugPrintf("         N U L L   T A B L E\n\n");
         return;
     }
+    UBool use8Bits = table->fFlags & RBBI_8BITS_ROWS;
     for (s=0; s<table->fNumStates; s++) {
         RBBIStateTableRow *row = (RBBIStateTableRow *)
                                   (table->fTableData + (table->fRowLen * s));
-        RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->fAccepting, row->fLookAhead, row->fTagIdx);
-        for (c=0; c<fHeader->fCatCount; c++)  {
-            RBBIDebugPrintf("%3d ", row->fNextState[c]);
+        if (use8Bits) {
+            RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->s8.fAccepting, row->s8.fLookAhead, row->s8.fTagIdx);
+            for (c=0; c<fHeader->fCatCount; c++)  {
+                RBBIDebugPrintf("%3d ", row->s8.fNextState[c]);
+            }
+        } else {
+            RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->s16.fAccepting, row->s16.fLookAhead, row->s16.fTagIdx);
+            for (c=0; c<fHeader->fCatCount; c++)  {
+                RBBIDebugPrintf("%3d ", row->s16.fNextState[c]);
+            }
         }
         RBBIDebugPrintf("\n");
     }
@@ -377,35 +391,58 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     //
     int32_t         topSize = offsetof(RBBIStateTable, fTableData);
 
-    // Forward state table.  
+    // Forward state table.
     tableStartOffset = ds->readUInt32(rbbiDH->fFTable);
     tableLength      = ds->readUInt32(rbbiDH->fFTableLen);
 
     if (tableLength > 0) {
-        ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
+        RBBIStateTable *rbbiST = (RBBIStateTable *)(inBytes+tableStartOffset);
+        UBool use8Bits = ds->readUInt32(rbbiST->fFlags) & RBBI_8BITS_ROWS;
+
+        ds->swapArray32(ds, inBytes+tableStartOffset, topSize,
                             outBytes+tableStartOffset, status);
-        ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
-                            outBytes+tableStartOffset+topSize, status);
+
+        // Swap the state table if the table is in 16 bits.
+        if (use8Bits) {
+            uprv_memmove(outBytes+tableStartOffset+topSize,
+                         inBytes+tableStartOffset+topSize,
+                         tableLength-topSize);
+        } else {
+            ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
+                                outBytes+tableStartOffset+topSize, status);
+        }
     }
-    
+
     // Reverse state table.  Same layout as forward table, above.
     tableStartOffset = ds->readUInt32(rbbiDH->fRTable);
     tableLength      = ds->readUInt32(rbbiDH->fRTableLen);
 
     if (tableLength > 0) {
-        ds->swapArray32(ds, inBytes+tableStartOffset, topSize, 
+        RBBIStateTable *rbbiST = (RBBIStateTable *)(inBytes+tableStartOffset);
+        UBool use8Bits = ds->readUInt32(rbbiST->fFlags) & RBBI_8BITS_ROWS;
+
+        ds->swapArray32(ds, inBytes+tableStartOffset, topSize,
                             outBytes+tableStartOffset, status);
-        ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
-                            outBytes+tableStartOffset+topSize, status);
+
+        // Swap the state table if the table is in 16 bits.
+        if (use8Bits) {
+            uprv_memmove(outBytes+tableStartOffset+topSize,
+                         inBytes+tableStartOffset+topSize,
+                         tableLength-topSize);
+        } else {
+            ds->swapArray16(ds, inBytes+tableStartOffset+topSize, tableLength-topSize,
+                                outBytes+tableStartOffset+topSize, status);
+        }
     }
 
     // Trie table for character categories
     utrie2_swap(ds, inBytes+ds->readUInt32(rbbiDH->fTrie), ds->readUInt32(rbbiDH->fTrieLen),
                     outBytes+ds->readUInt32(rbbiDH->fTrie), status);
 
-    // Source Rules Text.  It's UChar data
-    ds->swapArray16(ds, inBytes+ds->readUInt32(rbbiDH->fRuleSource), ds->readUInt32(rbbiDH->fRuleSourceLen),
-                        outBytes+ds->readUInt32(rbbiDH->fRuleSource), status);
+    // Source Rules Text.  It's UTF8 data
+    uprv_memmove(outBytes+ds->readUInt32(rbbiDH->fRuleSource),
+                 inBytes+ds->readUInt32(rbbiDH->fRuleSource),
+                 ds->readUInt32(rbbiDH->fRuleSourceLen));
 
     // Table of rule status values.  It's all int_32 values
     ds->swapArray32(ds, inBytes+ds->readUInt32(rbbiDH->fStatusTable), ds->readUInt32(rbbiDH->fStatusTableLen),

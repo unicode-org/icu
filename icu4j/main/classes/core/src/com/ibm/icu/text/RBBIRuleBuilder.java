@@ -164,7 +164,7 @@ class RBBIRuleBuilder {
         return (i + 7) & 0xfffffff8;
     }
 
-    void flattenData(OutputStream os) throws IOException {
+    void flattenData(OutputStream os, boolean use8Bits) throws IOException {
         DataOutputStream dos = new DataOutputStream(os);
         int i;
 
@@ -178,11 +178,13 @@ class RBBIRuleBuilder {
         //     without the padding.
         //
         int headerSize       = RBBIDataWrapper.DH_SIZE * 4;     // align8(sizeof(RBBIDataHeader));
-        int forwardTableSize = align8(fForwardTable.getTableSize());
-        int reverseTableSize = align8(fForwardTable.getSafeTableSize());
+        int forwardTableSize = align8(fForwardTable.getTableSize(use8Bits));
+        int reverseTableSize = align8(fForwardTable.getSafeTableSize(use8Bits));
         int trieSize         = align8(fSetBuilder.getTrieSize());
         int statusTableSize  = align8(fRuleStatusVals.size() * 4);
-        int rulesSize        = align8((strippedRules.length()) * 2);
+
+        byte[] strippedRulesUTF8 = strippedRules.getBytes("UTF8");
+        int rulesSize        = align8(strippedRulesUTF8.length + 1);
 
         int totalSize = headerSize
                 + forwardTableSize
@@ -202,7 +204,7 @@ class RBBIRuleBuilder {
         header[RBBIDataWrapper.DH_MAGIC]         = 0xb1a0;
         header[RBBIDataWrapper.DH_FORMATVERSION] = RBBIDataWrapper.FORMAT_VERSION;
         header[RBBIDataWrapper.DH_LENGTH]        = totalSize;            // fLength, the total size of all rule sections.
-        header[RBBIDataWrapper.DH_CATCOUNT]      = fSetBuilder.getNumCharCategories(); // fCatCount.
+        header[RBBIDataWrapper.DH_CATCOUNT]      = fSetBuilder.getNumCharCategories();
 
         header[RBBIDataWrapper.DH_FTABLE]        = headerSize;           // fFTable
         header[RBBIDataWrapper.DH_FTABLELEN]     = forwardTableSize;     // fTableLen
@@ -214,22 +216,22 @@ class RBBIRuleBuilder {
                                                      + header[RBBIDataWrapper.DH_RTABLELEN]; // fTrie
         header[RBBIDataWrapper.DH_TRIELEN]       = fSetBuilder.getTrieSize(); // fTrieLen
         header[RBBIDataWrapper.DH_STATUSTABLE]   = header[RBBIDataWrapper.DH_TRIE]
-                                                     + header[RBBIDataWrapper.DH_TRIELEN];
+                                                     + trieSize;
         header[RBBIDataWrapper.DH_STATUSTABLELEN] = statusTableSize; // fStatusTableLen
         header[RBBIDataWrapper.DH_RULESOURCE]    = header[RBBIDataWrapper.DH_STATUSTABLE]
                                                      + statusTableSize;
-        header[RBBIDataWrapper.DH_RULESOURCELEN] = strippedRules.length() * 2;
+        header[RBBIDataWrapper.DH_RULESOURCELEN] = strippedRulesUTF8.length;
         for (i = 0; i < header.length; i++) {
             dos.writeInt(header[i]);
             outputPos += 4;
         }
 
         // Write out the actual state tables.
-        RBBIDataWrapper.RBBIStateTable table = fForwardTable.exportTable();
+        RBBIDataWrapper.RBBIStateTable table = fForwardTable.exportTable(use8Bits);
         assert(outputPos == header[RBBIDataWrapper.DH_FTABLE]);
         outputPos += table.put(dos);
 
-        table = fForwardTable.exportSafeTable();
+        table = fForwardTable.exportSafeTable(use8Bits);
         Assert.assrt(outputPos == header[RBBIDataWrapper.DH_RTABLE]);
         outputPos += table.put(dos);
 
@@ -257,8 +259,9 @@ class RBBIRuleBuilder {
         // Write out the stripped rules (rules with extra spaces removed
         //   These go last in the data area, even though they are not last in the header.
         Assert.assrt(outputPos == header[RBBIDataWrapper.DH_RULESOURCE]);
-        dos.writeChars(strippedRules);
-        outputPos += strippedRules.length() * 2;
+        dos.write(strippedRulesUTF8, 0, strippedRulesUTF8.length);
+        dos.write(0);  // Null termination
+        outputPos += strippedRulesUTF8.length + 1;
         while (outputPos % 8 != 0) { // pad to an 8 byte boundary
             dos.write(0);
             outputPos += 1;
@@ -312,12 +315,13 @@ class RBBIRuleBuilder {
             fForwardTable.printReverseTable();
         }
 
-        fSetBuilder.buildTrie();
+        boolean use8Bits     = fSetBuilder.getNumCharCategories() < 127;
+        fSetBuilder.buildTrie(use8Bits);
         //
         //   Package up the compiled data, writing it to an output stream
         //      in the serialization format.  This is the same as the ICU4C runtime format.
         //
-        flattenData(os);
+        flattenData(os, use8Bits);
     }
 
     static class IntPair {

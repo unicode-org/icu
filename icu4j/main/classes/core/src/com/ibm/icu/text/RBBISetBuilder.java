@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.Trie2Writable;
+import com.ibm.icu.impl.Trie2_8;
 import com.ibm.icu.impl.Trie2_16;
 import com.ibm.icu.text.RBBIRuleBuilder.IntPair;
 
@@ -127,7 +128,8 @@ class RBBISetBuilder {
 
     Trie2Writable         fTrie;           // The mapping TRIE that is the end result of processing
                                            //  the Unicode Sets.
-    Trie2_16              fFrozenTrie;
+    Trie2_8               fFrozenTrie8;
+    Trie2_16              fFrozenTrie16;
 
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.
@@ -138,8 +140,10 @@ class RBBISetBuilder {
     int                fGroupCount;
 
     boolean             fSawBOF;
+    boolean             fUse8Bits;
 
     static final int    DICT_BIT = 0x4000;
+    static final int    DICT_BIT_FOR_8BITS_TRIE  = 0x0080;
 
 
     //------------------------------------------------------------------------
@@ -290,17 +294,24 @@ class RBBISetBuilder {
      * Build the Trie table for mapping UChar32 values to the corresponding
      * range group number.
      */
-    void buildTrie() {
+    void buildTrie(boolean use8Bits) {
+        fUse8Bits = use8Bits;
         RangeDescriptor rlRange;
 
         fTrie = new Trie2Writable(0,       //   Initial value for all code points.
                                   0);      //   Error value for out-of-range input.
 
         for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
+            int value = rlRange.fNum;
+            if (fUse8Bits && ((value & DICT_BIT) != 0)) {
+                assert((value & DICT_BIT_FOR_8BITS_TRIE) == 0);
+                // switch to the bit from DICT_BIT to DICT_BIT_FOR_8BITS_TRIE
+                value = DICT_BIT_FOR_8BITS_TRIE | (value & ~DICT_BIT);
+            }
             fTrie.setRange(
                     rlRange.fStartChar,     // Range start
                     rlRange.fEndChar,       // Range end (inclusive)
-                    rlRange.fNum,           // value for range
+                    value,                  // value for range
                     true                    // Overwrite previously written values
                     );
         }
@@ -332,11 +343,19 @@ class RBBISetBuilder {
     //
     //-----------------------------------------------------------------------------------
     int getTrieSize()  {
-        if (fFrozenTrie == null) {
-            fFrozenTrie = fTrie.toTrie2_16();
-            fTrie = null;
+        if (fUse8Bits) {
+            if (fFrozenTrie8 == null) {
+                fFrozenTrie8 = fTrie.toTrie2_8();
+                fTrie = null;
+            }
+            return fFrozenTrie8.getSerializedLength();
+        } else {
+            if (fFrozenTrie16 == null) {
+                fFrozenTrie16 = fTrie.toTrie2_16();
+                fTrie = null;
+            }
+            return fFrozenTrie16.getSerializedLength();
         }
-        return fFrozenTrie.getSerializedLength();
     }
 
 
@@ -346,11 +365,19 @@ class RBBISetBuilder {
     //
     //-----------------------------------------------------------------------------------
     void serializeTrie(OutputStream os) throws IOException {
-        if (fFrozenTrie == null) {
-            fFrozenTrie = fTrie.toTrie2_16();
-            fTrie = null;
+        if (fUse8Bits) {
+            if (fFrozenTrie8 == null) {
+                fFrozenTrie8 = fTrie.toTrie2_8();
+                fTrie = null;
+            }
+            fFrozenTrie8.serialize(os);
+        } else {
+            if (fFrozenTrie16 == null) {
+                fFrozenTrie16 = fTrie.toTrie2_16();
+                fTrie = null;
+            }
+            fFrozenTrie16.serialize(os);
         }
-        fFrozenTrie.serialize(os);
    }
 
     //------------------------------------------------------------------------

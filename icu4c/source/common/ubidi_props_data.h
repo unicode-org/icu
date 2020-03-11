@@ -906,6 +906,7 @@ static const UBiDiProps ubidi_props_singleton={
     ubidi_props_trieIndex,
     ubidi_props_trieIndex+3568,
     NULL,
+    NULL,
     3568,
     8968,
     0x1a0,

@@ -697,16 +697,14 @@ class RBBIRuleScanner {
     static String stripRules(String rules) {
         StringBuilder strippedRules = new StringBuilder();
         int rulesLength = rules.length();
-        boolean skippingSpaces = false;
 
         for (int idx = 0; idx < rulesLength; idx = rules.offsetByCodePoints(idx, 1)) {
             int cp = rules.codePointAt(idx);
             boolean whiteSpace = UCharacter.hasBinaryProperty(cp, UProperty.PATTERN_WHITE_SPACE);
-            if (skippingSpaces && whiteSpace) {
+            if (whiteSpace) {
                 continue;
             }
             strippedRules.appendCodePoint(cp);
-            skippingSpaces = whiteSpace;
         }
         return strippedRules.toString();
     }

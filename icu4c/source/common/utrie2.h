@@ -34,7 +34,7 @@ typedef struct UTrie UTrie;
  * \file
  *
  * This is a common implementation of a Unicode trie.
- * It is a kind of compressed, serializable table of 16- or 32-bit values associated with
+ * It is a kind of compressed, serializable table of 8-, 16- or 32-bit values associated with
  * Unicode code points (0..0x10ffff). (A map from code points to integers.)
  *
  * This is the second common version of a Unicode trie (hence the name UTrie2).
@@ -75,6 +75,8 @@ enum UTrie2ValueBits {
     UTRIE2_16_VALUE_BITS,
     /** 32 bits per UTrie2 data value. */
     UTRIE2_32_VALUE_BITS,
+    /** 8 bits per UTrie2 data value. */
+    UTRIE2_8_VALUE_BITS,
     /** Number of selectors for the width of UTrie2 data values. */
     UTRIE2_COUNT_VALUE_BITS
 };
@@ -134,7 +136,7 @@ utrie2_openDummy(UTrie2ValueBits valueBits,
  * Get a value from a code point as stored in the trie.
  * Easier to use than UTRIE2_GET16() and UTRIE2_GET32() but slower.
  * Easier to use because, unlike the macros, this function works on all UTrie2
- * objects, frozen or not, holding 16-bit or 32-bit data values.
+ * objects, frozen or not, holding 8-bit, 16-bit or 32-bit data values.
  *
  * @param trie the trie
  * @param c the code point
@@ -350,6 +352,16 @@ utrie2_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
  */
 
 /**
+ * Return a 8-bit trie value from a code point, with range checking.
+ * Returns trie->errorValue if c is not in the range 0..U+10ffff.
+ *
+ * @param trie (const UTrie2 *, in) a frozen trie
+ * @param c (UChar32, in) the input code point
+ * @return (uint8_t) The code point's trie value.
+ */
+#define UTRIE2_GET8(trie, c) _UTRIE2_GET((trie), data8, 0, (c))
+
+/**
  * Return a 16-bit trie value from a code point, with range checking.
  * Returns trie->errorValue if c is not in the range 0..U+10ffff.
  *
@@ -545,6 +557,18 @@ utrie2_set32ForLeadSurrogateCodeUnit(UTrie2 *trie,
                                      UChar32 lead, uint32_t value,
                                      UErrorCode *pErrorCode);
 
+
+/**
+ * Return a 8-bit trie value from a UTF-16 single/lead code unit (<=U+ffff).
+ * Same as UTRIE2_GET8() if c is a BMP code point except for lead surrogates,
+ * but smaller and faster.
+ *
+ * @param trie (const UTrie2 *, in) a frozen trie
+ * @param c (UChar32, in) the input code unit, must be 0<=c<=U+ffff
+ * @return (uint8_t) The code unit's trie value.
+ */
+#define UTRIE2_GET8_FROM_U16_SINGLE_LEAD(trie, c) _UTRIE2_GET_FROM_U16_SINGLE_LEAD((trie), data8, c)
+
 /**
  * Return a 16-bit trie value from a UTF-16 single/lead code unit (<=U+ffff).
  * Same as UTRIE2_GET16() if c is a BMP code point except for lead surrogates,
@@ -655,6 +679,7 @@ struct UTrie2 {
     const uint16_t *index;
     const uint16_t *data16;     /* for fast UTF-8 ASCII access, if 16b data */
     const uint32_t *data32;     /* NULL if 16b data is used via index */
+    const uint8_t *data8;      /* if 8b data */
 
     int32_t indexLength, dataLength;
     uint16_t index2NullOffset;  /* 0xffff if there is no dedicated index-2 null block */

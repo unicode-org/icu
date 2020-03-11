@@ -935,6 +935,7 @@ static const UCaseProps ucase_props_singleton={
     ucase_props_trieIndex,
     ucase_props_trieIndex+3288,
     NULL,
+    NULL,
     3288,
     9068,
     0x188,

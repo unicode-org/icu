@@ -83,7 +83,7 @@ public:
     ~RBBISetBuilder();
 
     void     buildRanges();
-    void     buildTrie();
+    void     buildTrie(UBool use8Bits);
     void     addValToSets(UVector *sets,      uint32_t val);
     void     addValToSet (RBBINode *usetNode, uint32_t val);
     int32_t  getNumCharCategories() const;   // CharCategories are the same as input symbol set to the
@@ -102,6 +102,7 @@ public:
     void     mergeCategories(IntPair categories);
 
     static constexpr int32_t DICT_BIT = 0x4000;
+    static constexpr int32_t DICT_BIT_FOR_8BITS_TRIE  = 0x0080;
 
 #ifdef RBBI_DEBUG
     void     printSets();
@@ -133,6 +134,7 @@ private:
     int32_t               fGroupCount;
 
     UBool                 fSawBOF;
+    UBool                 fUse8Bits;
 
     RBBISetBuilder(const RBBISetBuilder &other); // forbid copying of this class
     RBBISetBuilder &operator=(const RBBISetBuilder &other); // forbid copying of this class

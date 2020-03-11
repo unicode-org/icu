@@ -998,6 +998,16 @@ public class Trie2Writable extends Trie2 {
         return frozenTrie;
     }
 
+    /**
+     * Produce an optimized, read-only Trie2_8 from this writable Trie.
+     * 
+     */
+    public Trie2_8 toTrie2_8() {
+        Trie2_8 frozenTrie = new Trie2_8();
+        freeze(frozenTrie, ValueWidth.BITS_8);
+        return frozenTrie;
+    }
+
   
     /**
      * Maximum length of the runtime index array.
@@ -1053,8 +1063,10 @@ public class Trie2Writable extends Trie2 {
         int indexLength = allIndexesLength;
         if (valueBits==ValueWidth.BITS_16) {
             indexLength += dataLength;
-        } else {
+        } else if (valueBits==ValueWidth.BITS_32) {
             dest.data32 = new int[dataLength];
+        } else {
+            dest.data8 = new byte[dataLength];
         }
         dest.index = new char[indexLength];
         
@@ -1076,7 +1088,7 @@ public class Trie2Writable extends Trie2 {
         //    convenient to do here.)
         dest.header = new Trie2.UTrie2Header();
         dest.header.signature         = 0x54726932; /* "Tri2" */
-        dest.header.options           = valueBits==ValueWidth.BITS_16 ? 0 : 1;
+        dest.header.options           = valueBits==ValueWidth.BITS_16 ? 0 : valueBits==ValueWidth.BITS_32 ? 1 : 2;
         dest.header.indexLength       = dest.indexLength;
         dest.header.shiftedDataLength = dest.dataLength>>UTRIE2_INDEX_SHIFT;
         dest.header.index2NullOffset  = dest.index2NullOffset;
@@ -1145,6 +1157,12 @@ public class Trie2Writable extends Trie2 {
             /* write 32-bit data values */
             for (i=0; i<dataLength; i++) {
                 dest.data32[i] = this.data[i];
+            }
+            break;
+        case BITS_8:
+            /* write 8-bit data values */
+            for (i=0; i<dataLength; i++) {
+                dest.data8[i] = (byte)this.data[i];
             }
             break;
         }        

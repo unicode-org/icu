@@ -174,8 +174,8 @@ public:
     UVector                       *fRuleStatusVals;  // The values that can be returned
                                                      //   from getRuleStatus().
 
-    RBBIDataHeader                *flattenData();    // Create the flattened (runtime format)
-                                                     // data tables..
+    RBBIDataHeader                *flattenData(UBool use8Bits);    // Create the flattened (runtime format)
+                                                                   // data tables..
 private:
     RBBIRuleBuilder(const RBBIRuleBuilder &other); // forbid copying of this class
     RBBIRuleBuilder &operator=(const RBBIRuleBuilder &other); // forbid copying of this class
