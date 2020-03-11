@@ -39,7 +39,7 @@ class UnitsTest : public IntlTest {
     void testCLDRUnitsTests();
     void testCLDRUnitsTests2();
 
-    // TODO(younies): fix this.
+    // TODO(younies): remove after using CLDR test cases.
     void verifyTestCase(const UnitConversionTestCase &testCase);
 };
 
@@ -68,7 +68,7 @@ void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
 
     UnitConverter converter(sourceUnit, targetUnit, status);
 
-    double actual = converter.convert(testCase.inputValue, status);
+    double actual = converter.convert(testCase.inputValue);
 
     assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
 }
@@ -88,7 +88,7 @@ void UnitsTest::testBasic() {
 
         UnitConverter converter(sourceUnit, targetUnit, status);
 
-        double actual = converter.convert(testCase.inputValue, status);
+        double actual = converter.convert(testCase.inputValue);
 
         assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
     }
@@ -189,15 +189,15 @@ void UnitsTest::testComplicatedUnits() {
     }
 }
 
-// TODO(younies): remove this after fixing the test cases.
+// TODO(younies): remove after using CLDR test cases.
 double strToDouble(StringPiece strNum) {
-    char charNum[strNum.length()];
+    std::string charNum;
     for (int i = 0; i < strNum.length(); i++) {
-        charNum[i] = strNum.data()[i];
+        charNum += strNum.data()[i];
     }
 
     char *end;
-    return std::strtod(charNum, &end);
+    return std::strtod(charNum.c_str(), &end);
 }
 
 void UnitsTest::testCLDRUnitsTests() {
@@ -396,7 +396,7 @@ void UnitsTest::testCLDRUnitsTests() {
 
         UnitConverter converter(sourceUnit, targetUnit, status);
 
-        double actual = converter.convert(strToDouble(testCase.inputValue), status);
+        double actual = converter.convert(strToDouble(testCase.inputValue));
 
         assertEqualsNear(testCase.category.data(), strToDouble(testCase.expectedValue), actual, 0.0001);
     }
@@ -420,7 +420,7 @@ void UnitsTest::testCLDRUnitsTests2() {
 
         UnitConverter converter(sourceUnit, targetUnit, status);
 
-        double actual = converter.convert(strToDouble(testCase.inputValue), status);
+        double actual = converter.convert(strToDouble(testCase.inputValue));
 
         assertEqualsNear(testCase.category.data(), strToDouble(testCase.expectedValue), actual, 0.0001);
     }
