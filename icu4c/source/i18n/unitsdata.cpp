@@ -5,6 +5,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "number_decimalquantity.h"
 #include "cstring.h"
 #include "number_decimalquantity.h"
 #include "resource.h"
@@ -16,7 +17,7 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
-using number::impl::DecimalQuantity;
+using icu::number::impl::DecimalQuantity;
 
 void trimSpaces(CharString& factor, UErrorCode& status){
    CharString trimmed;
@@ -399,7 +400,7 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
 
 // TODO: make outPreferences const?
 //
-// TODO: consider replacing `UnitPreference **&outPrefrences` with slice class
+// TODO: consider replacing `UnitPreference **&outPreferences` with slice class
 // of some kind.
 void U_I18N_API UnitPreferences::getPreferencesFor(StringPiece category, StringPiece usage,
                                                    StringPiece region,

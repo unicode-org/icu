@@ -434,7 +434,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * For example, if the receiver is "kilowatt" and the argument is "hour-per-day", then the
      * unit "kilowatt-hour-per-day" is returned.
      *
-     * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
+     * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receiver and argument) is a
      * MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
      *
      * @param other The MeasureUnit to multiply with the target.
