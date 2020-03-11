@@ -1512,6 +1512,11 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
+     * <P>
+     * If the `usage` is correctly set, the output unit **will be changed**
+     * according to the `usage`, `locale` and `unit` values.
+     * </p>
+     * 
      * <pre>
      * NumberFormatter::with().unit(MeasureUnit::getMeter())
      * </pre>
@@ -2040,6 +2045,52 @@ class U_I18N_API NumberFormatterSettings {
      * @stable ICU 62
      */
     Derived scale(const Scale &scale) &&;
+
+    /**
+     * Specifies the usage of the unit ("length-person", "length-road",  
+     * "mass-person" ...etc.)
+     *
+     * <p>
+     * NOTE: `usage` will change the output unit depending on the `Locale`  
+     * and the unit value.
+     *    For Example:
+     *        Locale: en_US
+     *        Usage : length-person
+     *        Unit  : Meter
+     *
+     *        If the unit value is 0.25, the output will be "10 inches."
+     *        If the unit value is 1.50, the output will be 
+     *                                           "4 feet and 11 inches"
+     *</p>
+     *
+     * <P>
+     * If the input usage is not exist (e.g. length-dinosaur) or is
+     * misspelled, the output unit **will not change**.
+     * </p>
+     *
+     * Pass this method a `StringPiece` that represents the usage of 
+     * the unit. For example:
+     *
+     * <pre>
+     * NumberFormatter::with().usage("length-person")
+     * </pre>
+     *
+     * @param usage
+     *            The unit `usage`.
+     * @return The fluent chain.
+     * @draft ICU 67
+     */
+    Derived usage(StringPiece usage) const &;
+
+    /**
+     * Overload of usage() for use on an rvalue reference.
+     *
+     * @param usage
+     *            The unit `usage`.
+     * @return The fluent chain.
+     * @draft ICU 67
+     */
+    Derived usage(StringPiece usage) &&;
 
 #ifndef U_HIDE_INTERNAL_API
 
