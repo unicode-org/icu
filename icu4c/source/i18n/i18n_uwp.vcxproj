@@ -482,6 +482,8 @@
     <ClCompile Include="ulocdata.cpp" />
     <ClCompile Include="umsg.cpp" />
     <ClCompile Include="unitconverter.cpp" />
+    <ClCompile Include="complexunitsconverter.cpp" />
+    <ClCompile Include="unitsrouter.cpp" />
     <ClCompile Include="unitsdata.cpp" />
     <ClCompile Include="unum.cpp" />
     <ClCompile Include="unumsys.cpp" />
@@ -718,6 +720,8 @@
     <ClInclude Include="numrange_impl.h" />
     <ClInclude Include="formattedval_impl.h" />
     <ClInclude Include="unitconverter.h" />
+    <ClInclude Include="complexunitsconverter.h" />
+    <ClInclude Include="unitsrouter.h" />
     <ClInclude Include="unitsdata.h" />
   </ItemGroup>
   <ItemGroup>
