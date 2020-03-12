@@ -7,11 +7,14 @@
 
 #include "charstr.h"
 #include "intltest.h"
+#include "number_decimalquantity.h"
 #include "unicode/ctest.h"
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "uparse.h"
+
+using icu::number::impl::DecimalQuantity;
 
 class UnitsTest : public IntlTest {
   public:
@@ -20,6 +23,7 @@ class UnitsTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
     void testConversions();
+    void testPreferences();
     void testBasic();
     void testSiPrefixes();
     void testMass();
@@ -30,9 +34,12 @@ class UnitsTest : public IntlTest {
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) { logln("TestSuite UnitsTest: "); }
+    if (exec) {
+        logln("TestSuite UnitsTest: ");
+    }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
+    TESTCASE_AUTO(testPreferences);
     TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testSiPrefixes);
     TESTCASE_AUTO(testMass);
@@ -184,8 +191,7 @@ StringPiece trimField(char *(&field)[2]) {
  * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
  * This is a UParseLineFn as required by u_parseDelimitedFile.
  */
-static void U_CALLCONV unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount,
-                                           UErrorCode *pErrorCode) {
+void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*(UnitsTest *)context, "unitsTestDatalineFn");
 
@@ -211,7 +217,8 @@ static void U_CALLCONV unitsTestDataLineFn(void *context, char *fields[][2], int
     // Possible after merging in younies/tryingdouble:
     // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
     // double got = converter.convert(1000, *pErrorCode);
-    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
+    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got,
+    // 0.0001);
     //
     // In the meantime, printing to stderr.
     fprintf(stderr,
@@ -242,10 +249,94 @@ void UnitsTest::testConversions() {
 
     CharString path(sourceTestDataPath, errorCode);
     path.appendPathPart("units", errorCode);
-    path.appendPathPart("unitsTest.txt", errorCode);
+    path.appendPathPart(filename, errorCode);
 
     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
-    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", filename, u_errorName(errorCode))) {
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
+        return;
+    }
+}
+
+/**
+ * WIP(hugovdm): deals with a single data-driven unit test for unit preferences.
+ * This is a UParseLineFn as required by u_parseDelimitedFile.
+ */
+void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount,
+                                   UErrorCode *pErrorCode) {
+    (void)fieldCount; // unused UParseLineFn variable
+    IcuTestErrorCode status(*(UnitsTest *)context, "unitPreferencesTestDatalineFn");
+
+    StringPiece quantity = trimField(fields[0]);
+    StringPiece usage = trimField(fields[1]);
+    StringPiece region = trimField(fields[2]);
+    StringPiece inputR = trimField(fields[3]);
+    StringPiece inputD = trimField(fields[4]);
+    StringPiece inputUnit = trimField(fields[5]);
+    StringPiece outputR = trimField(fields[6]);
+    StringPiece outputD = trimField(fields[7]);
+    StringPiece outputUnit = trimField(fields[8]);
+
+    DecimalQuantity dqOutputD;
+    dqOutputD.setToDecNumber(outputD, status);
+    if (status.errIfFailureAndReset("parsing decimal quantity: \"%.*s\"", outputD.length(),
+                                    outputD.data())) {
+        return;
+    }
+    double expectedOutput = dqOutputD.toDouble();
+
+    MeasureUnit input = MeasureUnit::forIdentifier(inputUnit, status);
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", inputUnit.length(), inputUnit.data())) {
+        return;
+    }
+
+    MeasureUnit output = MeasureUnit::forIdentifier(outputUnit, status);
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", outputUnit.length(), outputUnit.data())) {
+        return;
+    }
+
+    // WIP(hugovdm): hook this up to actual tests.
+    //
+    // Possible after merging in younies/tryingdouble:
+    // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
+    // double got = converter.convert(1000, *pErrorCode);
+    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got,
+    // 0.0001);
+    //
+    // In the meantime, printing to stderr.
+    fprintf(stderr,
+            "Quantity (Category): \"%.*s\", Usage: \"%.*s\", Region: \"%.*s\", "
+            "Input: %.*s %.*s (%.*s), Output: %.*s %.*s (%.*s) - Expected: %f\n",
+            quantity.length(), quantity.data(), usage.length(), usage.data(), region.length(),
+            region.data(), inputD.length(), inputD.data(), inputUnit.length(), inputUnit.data(),
+            inputR.length(), inputR.data(), outputD.length(), outputD.data(), outputUnit.length(),
+            outputUnit.data(), outputR.length(), outputR.data(), expectedOutput);
+}
+
+/**
+ * Runs data-driven unit tests for unit preferences.
+ */
+void UnitsTest::testPreferences() {
+    const char *filename = "unitPreferencesTest.txt";
+    const int32_t kNumFields = 9;
+    char *fields[kNumFields][2];
+
+    IcuTestErrorCode errorCode(*this, "UnitsTest::testPreferences");
+    const char *sourceTestDataPath = getSourceTestData(errorCode);
+    if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
+                                       "folder (getSourceTestData())")) {
+        return;
+    }
+
+    CharString path(sourceTestDataPath, errorCode);
+    path.appendPathPart("units", errorCode);
+    path.appendPathPart(filename, errorCode);
+
+    // WIP(hugovdm): we need to replace u_parseDelimitedFile with something
+    // custom, because not all lines in unitPreferencesTest.txt have the same
+    // number of fields.
+    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitPreferencesTestDataLineFn, this,
+                         errorCode);
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
     }
 }
