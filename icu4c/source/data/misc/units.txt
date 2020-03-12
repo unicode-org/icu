@@ -419,6 +419,8 @@ units:table(nofallback){
         }
     }
     unitConstants{
+        G{"6.67408E-11"}
+        PI{"411557987 / 131002976"}
         ft2_to_m2{"ft_to_m*ft_to_m"}
         ft3_to_m3{"ft_to_m*ft_to_m*ft_to_m"}
         ft_to_m{"0.3048"}
