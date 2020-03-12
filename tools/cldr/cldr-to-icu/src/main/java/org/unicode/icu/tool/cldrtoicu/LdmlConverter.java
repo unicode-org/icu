@@ -112,6 +112,7 @@ public final class LdmlConverter {
         supplementalMatcher(
             "convertUnits",
             "unitConstants",
+            "unitQuantities",
             "unitPreferenceData");
     private static final PathMatcher CURRENCY_DATA_PATHS =
         supplementalMatcher("currencyData");
