@@ -5,8 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "intltest.h"
 #include "charstr.h"
+#include "intltest.h"
 #include "unicode/ctest.h"
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
@@ -30,9 +30,7 @@ class UnitsTest : public IntlTest {
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) {
-        logln("TestSuite UnitsTest: ");
-    }
+    if (exec) { logln("TestSuite UnitsTest: "); }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testBasic);
@@ -171,69 +169,59 @@ void UnitsTest::testArea() {
  * postfixes trimmed off.
  */
 StringPiece trimField(char *(&field)[2]) {
-  char *start = field[0];
-  while (start < field[1] && (start[0]) == ' ') {
-    start++;
-  }
-  int32_t length = (int32_t)(field[1] - start);
-  while (length > 0 && (start[length - 1]) == ' ') {
-    length--;
-  }
-  return StringPiece(start, length);
+    char *start = field[0];
+    while (start < field[1] && (start[0]) == ' ') {
+        start++;
+    }
+    int32_t length = (int32_t)(field[1] - start);
+    while (length > 0 && (start[length - 1]) == ' ') {
+        length--;
+    }
+    return StringPiece(start, length);
 }
 
 /**
  * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
  * This is a UParseLineFn as required by u_parseDelimitedFile.
  */
-static void U_CALLCONV unitsTestDataLineFn(void *context, char *fields[][2],
-                                           int32_t fieldCount,
+static void U_CALLCONV unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount,
                                            UErrorCode *pErrorCode) {
-  (void)fieldCount; // unused UParseLineFn variable
-  IcuTestErrorCode status(*(UnitsTest *)context, "unitsTestDatalineFn");
+    (void)fieldCount; // unused UParseLineFn variable
+    IcuTestErrorCode status(*(UnitsTest *)context, "unitsTestDatalineFn");
 
-  StringPiece quantity = trimField(fields[0]);
-  StringPiece x = trimField(fields[1]);
-  StringPiece y = trimField(fields[2]);
-  StringPiece commentConversionFormula = trimField(fields[3]);
-  StringPiece utf8Expected = trimField(fields[4]);
+    StringPiece quantity = trimField(fields[0]);
+    StringPiece x = trimField(fields[1]);
+    StringPiece y = trimField(fields[2]);
+    StringPiece commentConversionFormula = trimField(fields[3]);
+    StringPiece utf8Expected = trimField(fields[4]);
 
-  UNumberFormat *nf =
-      unum_open(UNUM_DEFAULT, NULL, -1, "en_US", NULL, pErrorCode);
-  UnicodeString uExpected = UnicodeString::fromUTF8(utf8Expected);
-  double expected = unum_parseDouble(nf, uExpected.getBuffer(),
-                                     uExpected.length(), 0, pErrorCode);
-  unum_close(nf);
+    UNumberFormat *nf = unum_open(UNUM_DEFAULT, NULL, -1, "en_US", NULL, pErrorCode);
+    UnicodeString uExpected = UnicodeString::fromUTF8(utf8Expected);
+    double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), 0, pErrorCode);
+    unum_close(nf);
 
-  MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
-  if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(),
-                                  x.data())) {
-    return;
-  }
+    MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) { return; }
 
-  MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
-  if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(),
-                                  y.data())) {
-    return;
-  }
+    MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) { return; }
 
-  // WIP(hugovdm): hook this up to actual tests.
-  //
-  // Possible after merging in younies/tryingdouble:
-  // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
-  // double got = converter.convert(1000, *pErrorCode);
-  // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
-  //
-  // In the meantime, printing to stderr.
-  fprintf(stderr,
-          "Quantity (Category): \"%.*s\", "
-          "Expected value of \"1000 %.*s in %.*s\": %f, "
-          "commentConversionFormula: \"%.*s\", "
-          "expected field: \"%.*s\"\n",
-          quantity.length(), quantity.data(),
-          x.length(), x.data(), y.length(), y.data(), expected,
-          commentConversionFormula.length(), commentConversionFormula.data(),
-          utf8Expected.length(), utf8Expected.data());
+    // WIP(hugovdm): hook this up to actual tests.
+    //
+    // Possible after merging in younies/tryingdouble:
+    // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
+    // double got = converter.convert(1000, *pErrorCode);
+    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
+    //
+    // In the meantime, printing to stderr.
+    fprintf(stderr,
+            "Quantity (Category): \"%.*s\", "
+            "Expected value of \"1000 %.*s in %.*s\": %f, "
+            "commentConversionFormula: \"%.*s\", "
+            "expected field: \"%.*s\"\n",
+            quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
+            commentConversionFormula.length(), commentConversionFormula.data(), utf8Expected.length(),
+            utf8Expected.data());
 }
 
 /**
@@ -241,27 +229,25 @@ static void U_CALLCONV unitsTestDataLineFn(void *context, char *fields[][2],
  * in source/test/testdata/units/unitsTest.txt, which originates in CLDR.
  */
 void UnitsTest::testConversions() {
-  const char *filename = "unitsTest.txt";
-  const int32_t kNumFields = 5;
-  char *fields[kNumFields][2];
+    const char *filename = "unitsTest.txt";
+    const int32_t kNumFields = 5;
+    char *fields[kNumFields][2];
 
-  IcuTestErrorCode errorCode(*this, "UnitsTest::testConversions");
-  const char *sourceTestDataPath = getSourceTestData(errorCode);
-  if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
-                                     "folder (getSourceTestData())")) {
-    return;
-  }
+    IcuTestErrorCode errorCode(*this, "UnitsTest::testConversions");
+    const char *sourceTestDataPath = getSourceTestData(errorCode);
+    if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
+                                       "folder (getSourceTestData())")) {
+        return;
+    }
 
-  CharString path(sourceTestDataPath, errorCode);
-  path.appendPathPart("units", errorCode);
-  path.appendPathPart("unitsTest.txt", errorCode);
+    CharString path(sourceTestDataPath, errorCode);
+    path.appendPathPart("units", errorCode);
+    path.appendPathPart("unitsTest.txt", errorCode);
 
-  u_parseDelimitedFile(path.data(), ';', fields, kNumFields,
-                       unitsTestDataLineFn, this, errorCode);
-  if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", filename,
-                                     u_errorName(errorCode))) {
-    return;
-  }
+    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", filename, u_errorName(errorCode))) {
+        return;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
