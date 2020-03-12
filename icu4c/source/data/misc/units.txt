@@ -44,7 +44,7 @@ units:table(nofallback){
             target{"bit"}
         }
         british-thermal-unit{
-            factor{"1055.06"}
+            factor{"4.184*2267.96185/9"}
             target{"kilogram-square-meter-per-square-second"}
         }
         bushel{
@@ -197,10 +197,6 @@ units:table(nofallback){
             factor{"ft_to_m/12"}
             target{"meter"}
         }
-        inch-hg{
-            factor{"3386.389"}
-            target{"kilogram-per-meter-square-second"}
-        }
         item{
             factor{"1"}
             target{"item"}
@@ -253,10 +249,6 @@ units:table(nofallback){
             factor{"10000"}
             target{"meter"}
         }
-        millimeter-of-mercury{
-            factor{"10132500/760000"}
-            target{"kilogram-per-meter-square-second"}
-        }
         minute{
             factor{"60"}
             target{"second"}
@@ -281,6 +273,10 @@ units:table(nofallback){
             factor{"1"}
             target{"kilogram-meter-per-square-second"}
         }
+        ofhg{
+            factor{"13595.1*gravity"}
+            target{"kilogram-per-square-meter-square-second"}
+        }
         ohm{
             factor{"1"}
             target{"kilogram-square-meter-per-cubic-second-square-ampere"}
@@ -297,10 +293,6 @@ units:table(nofallback){
             factor{"30856780000000000"}
             target{"meter"}
         }
-        part-per-million{
-            factor{"1/1000000"}
-            target{"portion"}
-        }
         pascal{
             factor{"1"}
             target{"kilogram-per-meter-square-second"}
@@ -311,6 +303,10 @@ units:table(nofallback){
         }
         permille{
             factor{"1/1000"}
+            target{"portion"}
+        }
+        permillion{
+            factor{"1/1000000"}
             target{"portion"}
         }
         permyriad{
@@ -386,7 +382,7 @@ units:table(nofallback){
             target{"cubic-meter"}
         }
         therm-us{
-            factor{"105506000"}
+            factor{"105480400"}
             target{"kilogram-square-meter-per-square-second"}
         }
         ton{
@@ -1564,17 +1560,17 @@ units:table(nofallback){
                 }
                 IN{
                     {
-                        unit{"inch-hg"}
+                        unit{"inch-ofhg"}
                     }
                 }
                 MX{
                     {
-                        unit{"millimeter-of-mercury"}
+                        unit{"millimeter-ofhg"}
                     }
                 }
                 RU{
                     {
-                        unit{"millimeter-of-mercury"}
+                        unit{"millimeter-ofhg"}
                     }
                 }
                 TH{
@@ -1584,7 +1580,7 @@ units:table(nofallback){
                 }
                 US{
                     {
-                        unit{"inch-hg"}
+                        unit{"inch-ofhg"}
                     }
                 }
             }
