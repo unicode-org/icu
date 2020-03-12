@@ -173,8 +173,9 @@ void UnitsTest::testArea() {
 }
 
 /**
- * Returns a StringPiece pointing at the given field with space prefixes and
- * postfixes trimmed off.
+ * Trims whitespace (spaces only) off of the specified string.
+ * @param field is two pointers pointing at the start and end of the string.
+ * @return A StringPiece with initial and final space characters trimmed off.
  */
 StringPiece trimField(char *(&field)[2]) {
     char *start = field[0];
@@ -258,13 +259,108 @@ void UnitsTest::testConversions() {
 }
 
 /**
+ * This class represents the output fields from unitPreferencesTest.txt. Please
+ * see the documentation at the top of that file for details.
+ *
+ * For "mixed units" output, there are more (repeated) output fields. The last
+ * output unit has the expected output specified as both a rational fraction and
+ * a decimal fraction. This class ignores rational fractions, and expects to
+ * find a decimal fraction for each output unit.
+ */
+class ExpectedOutput {
+  private:
+    // Counts number of units in the output. When this is more than one, we have
+    // "mixed units" in the expected output.
+    int _compoundCount = 0;
+
+    // Counts how many fields were skipped: we expect to skip only one per
+    // output unit type (the rational fraction).
+    int _skippedFields = 0;
+
+    // The expected output units: more than one for "mixed units".
+    MeasureUnit _measureUnits[3];
+
+    // The amounts of each of the output units.
+    double _amounts[3];
+
+  public:
+    /**
+     * Parse an expected output field from the test data file.
+     * @param output may be a string representation of an integer, a rational
+     * fraction, a decimal fraction, or it may be a unit identifier. Whitespace
+     * should already be trimmed. This function ignores rational fractions,
+     * saving only decimal fractions and their unit identifiers.
+     * @return true if the field was successfully parsed, false if parsing
+     * failed.
+     */
+    UBool parseOutputField(StringPiece output) {
+        DecimalQuantity dqOutputD;
+        UErrorCode errorCode = U_ZERO_ERROR;
+
+        dqOutputD.setToDecNumber(output, errorCode);
+        if (U_SUCCESS(errorCode)) {
+            _amounts[_compoundCount] = dqOutputD.toDouble();
+            return true;
+        } else if (errorCode == U_DECIMAL_NUMBER_SYNTAX_ERROR) {
+            errorCode = U_ZERO_ERROR;
+        } else {
+            return false;
+        }
+
+        _measureUnits[_compoundCount] = MeasureUnit::forIdentifier(output, errorCode);
+        if (U_SUCCESS(errorCode)) {
+            _compoundCount++;
+            _skippedFields = 0;
+            return true;
+        }
+        _skippedFields++;
+        if (_skippedFields < 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Produces an output string for debug purposes.
+     * @param dbgOutput the buffer to which to write the output string.
+     * @param dbgOutputSize the size of the buffer. 
+     * @returns a null-terminated string containing each amount and unit.
+     */
+    void toDebugStringN(char *dbgOutput, int dbgOutputSize) {
+        char *next = dbgOutput;
+        char *end = dbgOutput + dbgOutputSize;
+        for (int i = 0; i < _compoundCount; i++) {
+            int printlen =
+                snprintf(next, dbgOutputSize, "%f %s ", _amounts[i], _measureUnits[i].getIdentifier());
+            next += printlen;
+            dbgOutputSize -= printlen;
+            if (dbgOutputSize <= 0) { break; }
+        }
+        // Terminate string with a null.
+        if (next >= end) {
+            dbgOutput[dbgOutputSize - 1] = 0;
+        } else {
+            *next = 0;
+        }
+    }
+};
+
+/**
  * WIP(hugovdm): deals with a single data-driven unit test for unit preferences.
  * This is a UParseLineFn as required by u_parseDelimitedFile.
  */
 void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount,
                                    UErrorCode *pErrorCode) {
-    (void)fieldCount; // unused UParseLineFn variable
+    if (U_FAILURE(*pErrorCode)) return;
+    UnitsTest *intltest = (UnitsTest *)context;
     IcuTestErrorCode status(*(UnitsTest *)context, "unitPreferencesTestDatalineFn");
+
+    if (!intltest->assertTrue(u"unitPreferencesTestDataLineFn expects 9 fields for simple and 11 "
+                              u"fields for compound. Other field counts not yet supported. ",
+                              fieldCount == 9 || fieldCount == 11)) {
+        return;
+    }
 
     StringPiece quantity = trimField(fields[0]);
     StringPiece usage = trimField(fields[1]);
@@ -272,27 +368,28 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     StringPiece inputR = trimField(fields[3]);
     StringPiece inputD = trimField(fields[4]);
     StringPiece inputUnit = trimField(fields[5]);
-    StringPiece outputR = trimField(fields[6]);
-    StringPiece outputD = trimField(fields[7]);
-    StringPiece outputUnit = trimField(fields[8]);
+    ExpectedOutput output;
+    for (int i = 6; i < fieldCount; i++) {
+        output.parseOutputField(trimField(fields[i]));
+    }
 
-    DecimalQuantity dqOutputD;
-    dqOutputD.setToDecNumber(outputD, status);
-    if (status.errIfFailureAndReset("parsing decimal quantity: \"%.*s\"", outputD.length(),
-                                    outputD.data())) {
+    DecimalQuantity dqInputD;
+    dqInputD.setToDecNumber(inputD, status);
+    if (status.errIfFailureAndReset("parsing decimal quantity: \"%.*s\"", inputD.length(),
+                                    inputD.data())) {
+        *pErrorCode = U_PARSE_ERROR;
         return;
     }
-    double expectedOutput = dqOutputD.toDouble();
+    double inputAmount = dqInputD.toDouble();
 
-    MeasureUnit input = MeasureUnit::forIdentifier(inputUnit, status);
+    MeasureUnit inputMeasureUnit = MeasureUnit::forIdentifier(inputUnit, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", inputUnit.length(), inputUnit.data())) {
+        *pErrorCode = U_PARSE_ERROR;
         return;
     }
 
-    MeasureUnit output = MeasureUnit::forIdentifier(outputUnit, status);
-    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", outputUnit.length(), outputUnit.data())) {
-        return;
-    }
+    char debugCompoundOutput[100] = "TEST";
+    output.toDebugStringN(debugCompoundOutput, sizeof(debugCompoundOutput));
 
     // WIP(hugovdm): hook this up to actual tests.
     //
@@ -304,18 +401,22 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     // In the meantime, printing to stderr.
     fprintf(stderr,
             "Quantity (Category): \"%.*s\", Usage: \"%.*s\", Region: \"%.*s\", "
-            "Input: %.*s %.*s (%.*s), Output: %.*s %.*s (%.*s) - Expected: %f\n",
+            "Input: \"%f %s\", Expected Output: %s\n",
             quantity.length(), quantity.data(), usage.length(), usage.data(), region.length(),
-            region.data(), inputD.length(), inputD.data(), inputUnit.length(), inputUnit.data(),
-            inputR.length(), inputR.data(), outputD.length(), outputD.data(), outputUnit.length(),
-            outputUnit.data(), outputR.length(), outputR.data(), expectedOutput);
+            region.data(), inputAmount, inputMeasureUnit.getIdentifier(), debugCompoundOutput);
 }
 
-// WIP(hugovdm): we need to replace u_parseDelimitedFile with something
-// custom, because not all lines in unitPreferencesTest.txt have the same
-// number of fields.
-void parsePreferencesTests(const char *filename, char delimiter, char *fields[][2], int32_t fieldCount,
-                           UParseLineFn *lineFn, void *context, UErrorCode *pErrorCode) {
+/**
+ * Parses the format used by unitPreferencesTest.txt, calling lineFn for each
+ * line.
+ *
+ * This is a modified version of u_parseDelimitedFile, customised for
+ * unitPreferencesTest.txt, due to it having a variable number of fields per
+ * line.
+ */
+void parsePreferencesTests(const char *filename, char delimiter, char *fields[][2],
+                           int32_t maxFieldCount, UParseLineFn *lineFn, void *context,
+                           UErrorCode *pErrorCode) {
     FileStream *file;
     char line[10000];
     char *start, *limit;
@@ -323,7 +424,7 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
 
     if (U_FAILURE(*pErrorCode)) { return; }
 
-    if (fields == NULL || lineFn == NULL || fieldCount <= 0) {
+    if (fields == NULL || lineFn == NULL || maxFieldCount <= 0) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -343,18 +444,6 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
         /* remove trailing newline characters */
         length = (int32_t)(u_rtrim(line) - line);
 
-        // FYI: uparse.cpp had this code, which we're skipping here:
-        // /*
-        //  * detect a line with # @missing:
-        //  * start parsing after that, or else from the beginning of the line
-        //  * set the default warning for @missing lines
-        //  */
-        // start = (char *)getMissingLimit(line);
-        // if (start == line) {
-        //   *pErrorCode = U_ZERO_ERROR;
-        // } else {
-        //   *pErrorCode = U_USING_DEFAULT_WARNING;
-        // }
         start = line;
         *pErrorCode = U_ZERO_ERROR;
 
@@ -377,7 +466,7 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
         if (u_skipWhitespace(start)[0] == 0) { continue; }
 
         /* for each field, call the corresponding field function */
-        for (i = 0; i < fieldCount; ++i) {
+        for (i = 0; i < maxFieldCount; ++i) {
             /* set the limit pointer of this field */
             limit = start;
             while (*limit != delimiter && *limit != 0) {
@@ -392,16 +481,12 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
             start = limit;
             if (*start != 0) {
                 ++start;
-            } else if (i + 1 < fieldCount) {
-                *pErrorCode = U_PARSE_ERROR;
-                limit = line + length;
-                i = fieldCount;
+            } else {
                 break;
             }
         }
-
-        /* too few fields? */
-        if (U_FAILURE(*pErrorCode)) { break; }
+        if (i == maxFieldCount) { *pErrorCode = U_PARSE_ERROR; }
+        int fieldCount = i + 1;
 
         /* call the field function */
         lineFn(context, fields, fieldCount, pErrorCode);
@@ -416,8 +501,8 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
  */
 void UnitsTest::testPreferences() {
     const char *filename = "unitPreferencesTest.txt";
-    const int32_t kNumFields = 9;
-    char *fields[kNumFields][2];
+    const int32_t maxFields = 11;
+    char *fields[maxFields][2];
 
     IcuTestErrorCode errorCode(*this, "UnitsTest::testPreferences");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
@@ -430,7 +515,7 @@ void UnitsTest::testPreferences() {
     path.appendPathPart("units", errorCode);
     path.appendPathPart(filename, errorCode);
 
-    parsePreferencesTests(path.data(), ';', fields, kNumFields, unitPreferencesTestDataLineFn, this,
+    parsePreferencesTests(path.data(), ';', fields, maxFields, unitPreferencesTestDataLineFn, this,
                           errorCode);
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
