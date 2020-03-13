@@ -458,7 +458,9 @@ StringPiece trimField(char *(&field)[2]) {
  * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
  * This is a UParseLineFn as required by u_parseDelimitedFile.
  */
-void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
+void runDataDrivenConversionTest(void *context, char *fields[][2], int32_t fieldCount,
+                                 UErrorCode *pErrorCode) {
+    if (U_FAILURE(*pErrorCode)) { return; }
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*(UnitsTest *)context, "unitsTestDatalineFn");
 
@@ -468,10 +470,15 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     StringPiece commentConversionFormula = trimField(fields[3]);
     StringPiece utf8Expected = trimField(fields[4]);
 
-    UNumberFormat *nf = unum_open(UNUM_DEFAULT, NULL, -1, "en_US", NULL, pErrorCode);
+    UNumberFormat *nf = unum_open(UNUM_DEFAULT, NULL, -1, "en_US", NULL, status);
+    if (status.errIfFailureAndReset("unum_open failed")) { return; }
     UnicodeString uExpected = UnicodeString::fromUTF8(utf8Expected);
-    double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), 0, pErrorCode);
+    double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), 0, status);
     unum_close(nf);
+    if (status.errIfFailureAndReset("unum_parseDouble(\"%.*s\") failed", uExpected.length(),
+                                    uExpected.getBuffer())) {
+        return;
+    }
 
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) { return; }
@@ -479,22 +486,29 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) { return; }
 
-    // WIP(hugovdm): hook this up to actual tests.
-    //
-    // Possible after merging in younies/tryingdouble:
-    // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
-    // double got = converter.convert(1000, *pErrorCode);
-    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
-    //
-    // In the meantime, printing to stderr.
-    fprintf(stderr,
-            "Quantity (Category): \"%.*s\", "
-            "Expected value of \"1000 %.*s in %.*s\": %f, "
-            "commentConversionFormula: \"%.*s\", "
-            "expected field: \"%.*s\"\n",
-            quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
-            commentConversionFormula.length(), commentConversionFormula.data(), utf8Expected.length(),
-            utf8Expected.data());
+    // WIP(hugovdm): Debug branch is for useful output while UnitConverter is still segfaulting.
+    UBool FIXME_skip_UnitConverter = FALSE;
+    if (FIXME_skip_UnitConverter) {
+        fprintf(stderr,
+                "FIXME: skipping constructing UnitConverter(«%s», «%s», status) because it is "
+                "segfaulting.\n",
+                sourceUnit.getIdentifier(), targetUnit.getIdentifier());
+
+        fprintf(stderr,
+                "Quantity/Category: \"%.*s\", "
+                "Converting: \"1000 %.*s\" to \"%.*s\", Expecting: %f, "
+                "commentConversionFormula: \"%.*s\"\n",
+                quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
+                commentConversionFormula.length(), commentConversionFormula.data());
+    } else {
+        UnitConverter converter(sourceUnit, targetUnit, status);
+        if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
+                                        sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+            return;
+        }
+        double got = converter.convert(1000);
+        ((UnitsTest*)context)->assertEqualsNear(fields[0][0], expected, got, 0.0001);
+    }
 }
 
 /**
@@ -516,8 +530,8 @@ void UnitsTest::testConversions() {
     CharString path(sourceTestDataPath, errorCode);
     path.appendPathPart("units", errorCode);
     path.appendPathPart(filename, errorCode);
-
-    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
+    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, runDataDrivenConversionTest, this,
+                         errorCode);
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
     }
