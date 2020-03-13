@@ -840,7 +840,7 @@ likelySubtags:table(nofallback){
     mro{"mro_Mroo_BD"}
     ms{"ms_Latn_MY"}
     ms_CC{"ms_Arab_CC"}
-    ms_ID{"ms_Arab_ID"}
+    ms_ID{"ms_Latn_ID"}
     mt{"mt_Latn_MT"}
     mtc{"mtc_Latn_ZZ"}
     mtf{"mtf_Latn_ZZ"}

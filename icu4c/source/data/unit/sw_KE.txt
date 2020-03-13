@@ -126,7 +126,7 @@ sw_KE{
                 one{"baa {0}"}
                 other{"baa {0}"}
             }
-            inch-hg{
+            inch-ofhg{
                 one{"inHg {0}"}
                 other{"inHg {0}"}
             }

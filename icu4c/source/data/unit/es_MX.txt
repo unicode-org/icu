@@ -12,7 +12,7 @@ es_MX{
             millimole-per-liter{
                 dnam{"mmol/L"}
             }
-            part-per-million{
+            permillion{
                 dnam{"ppm"}
             }
         }
