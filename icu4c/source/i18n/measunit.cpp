@@ -120,7 +120,7 @@ static const char * const gTypes[] = {
 // Must be grouped by type and sorted alphabetically within each type.
 static const char * const gSubTypes[] = {
     "g-force",
-    "meter-per-second-squared",
+    "meter-per-square-second",
     "arc-minute",
     "arc-second",
     "degree",
@@ -140,11 +140,11 @@ static const char * const gSubTypes[] = {
     "milligram-per-deciliter",
     "millimole-per-liter",
     "mole",
-    "part-per-million",
     "percent",
     "permille",
+    "permillion",
     "permyriad",
-    "liter-per-100kilometers",
+    "liter-per-100-kilometer",
     "liter-per-kilometer",
     "mile-per-gallon",
     "mile-per-gallon-imperial",
@@ -549,13 +549,13 @@ static const char * const gSubTypes[] = {
     "atmosphere",
     "bar",
     "hectopascal",
-    "inch-hg",
+    "inch-ofhg",
     "kilopascal",
     "megapascal",
     "millibar",
-    "millimeter-of-mercury",
+    "millimeter-ofhg",
     "pascal",
-    "pound-per-square-inch",
+    "pound-force-per-square-inch",
     "kilometer-per-hour",
     "knot",
     "meter-per-second",
@@ -565,7 +565,7 @@ static const char * const gSubTypes[] = {
     "generic",
     "kelvin",
     "newton-meter",
-    "pound-foot",
+    "pound-force-foot",
     "acre-foot",
     "barrel",
     "bushel",
@@ -782,27 +782,27 @@ MeasureUnit MeasureUnit::getMole() {
 }
 
 MeasureUnit *MeasureUnit::createPartPerMillion(UErrorCode &status) {
-    return MeasureUnit::create(3, 4, status);
-}
-
-MeasureUnit MeasureUnit::getPartPerMillion() {
-    return MeasureUnit(3, 4);
-}
-
-MeasureUnit *MeasureUnit::createPercent(UErrorCode &status) {
-    return MeasureUnit::create(3, 5, status);
-}
-
-MeasureUnit MeasureUnit::getPercent() {
-    return MeasureUnit(3, 5);
-}
-
-MeasureUnit *MeasureUnit::createPermille(UErrorCode &status) {
     return MeasureUnit::create(3, 6, status);
 }
 
-MeasureUnit MeasureUnit::getPermille() {
+MeasureUnit MeasureUnit::getPartPerMillion() {
     return MeasureUnit(3, 6);
+}
+
+MeasureUnit *MeasureUnit::createPercent(UErrorCode &status) {
+    return MeasureUnit::create(3, 4, status);
+}
+
+MeasureUnit MeasureUnit::getPercent() {
+    return MeasureUnit(3, 4);
+}
+
+MeasureUnit *MeasureUnit::createPermille(UErrorCode &status) {
+    return MeasureUnit::create(3, 5, status);
+}
+
+MeasureUnit MeasureUnit::getPermille() {
+    return MeasureUnit(3, 5);
 }
 
 MeasureUnit *MeasureUnit::createPermyriad(UErrorCode &status) {

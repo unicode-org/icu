@@ -24,7 +24,7 @@ es_US{
             millimole-per-liter{
                 dnam{"mmol/L"}
             }
-            part-per-million{
+            permillion{
                 dnam{"ppm"}
             }
         }

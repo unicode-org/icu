@@ -578,7 +578,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of acceleration: meter-per-second-squared.
+     * Returns by pointer, unit of acceleration: meter-per-square-second.
      * Caller owns returned value and must free it.
      * Also see {@link #getMeterPerSecondSquared()}.
      * @param status ICU error code.
@@ -588,7 +588,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of acceleration: meter-per-second-squared.
+     * Returns by value, unit of acceleration: meter-per-square-second.
      * Also see {@link #createMeterPerSecondSquared()}.
      * @draft ICU 64
      */
@@ -938,7 +938,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of concentr: part-per-million.
+     * Returns by pointer, unit of concentr: permillion.
      * Caller owns returned value and must free it.
      * Also see {@link #getPartPerMillion()}.
      * @param status ICU error code.
@@ -948,7 +948,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of concentr: part-per-million.
+     * Returns by value, unit of concentr: permillion.
      * Also see {@link #createPartPerMillion()}.
      * @draft ICU 64
      */
@@ -1010,7 +1010,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of consumption: liter-per-100kilometers.
+     * Returns by pointer, unit of consumption: liter-per-100-kilometer.
      * Caller owns returned value and must free it.
      * Also see {@link #getLiterPer100Kilometers()}.
      * @param status ICU error code.
@@ -1020,7 +1020,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of consumption: liter-per-100kilometers.
+     * Returns by value, unit of consumption: liter-per-100-kilometer.
      * Also see {@link #createLiterPer100Kilometers()}.
      * @draft ICU 64
      */
@@ -2864,7 +2864,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of pressure: inch-hg.
+     * Returns by pointer, unit of pressure: inch-ofhg.
      * Caller owns returned value and must free it.
      * Also see {@link #getInchHg()}.
      * @param status ICU error code.
@@ -2874,7 +2874,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of pressure: inch-hg.
+     * Returns by value, unit of pressure: inch-ofhg.
      * Also see {@link #createInchHg()}.
      * @draft ICU 64
      */
@@ -2936,7 +2936,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of pressure: millimeter-of-mercury.
+     * Returns by pointer, unit of pressure: millimeter-ofhg.
      * Caller owns returned value and must free it.
      * Also see {@link #getMillimeterOfMercury()}.
      * @param status ICU error code.
@@ -2946,7 +2946,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of pressure: millimeter-of-mercury.
+     * Returns by value, unit of pressure: millimeter-ofhg.
      * Also see {@link #createMillimeterOfMercury()}.
      * @draft ICU 64
      */
@@ -2972,7 +2972,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of pressure: pound-per-square-inch.
+     * Returns by pointer, unit of pressure: pound-force-per-square-inch.
      * Caller owns returned value and must free it.
      * Also see {@link #getPoundPerSquareInch()}.
      * @param status ICU error code.
@@ -2982,7 +2982,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of pressure: pound-per-square-inch.
+     * Returns by value, unit of pressure: pound-force-per-square-inch.
      * Also see {@link #createPoundPerSquareInch()}.
      * @draft ICU 64
      */
@@ -3153,7 +3153,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by pointer, unit of torque: pound-foot.
+     * Returns by pointer, unit of torque: pound-force-foot.
      * Caller owns returned value and must free it.
      * Also see {@link #getPoundFoot()}.
      * @param status ICU error code.
@@ -3162,7 +3162,7 @@ class U_I18N_API MeasureUnit: public UObject {
     static MeasureUnit *createPoundFoot(UErrorCode &status);
 
     /**
-     * Returns by value, unit of torque: pound-foot.
+     * Returns by value, unit of torque: pound-force-foot.
      * Also see {@link #createPoundFoot()}.
      * @draft ICU 64
      */

@@ -1951,10 +1951,6 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"cz72"}
             }
-            escn{
-                reason{"overlong"}
-                replacement{"IC"}
-            }
             fi01{
                 reason{"overlong"}
                 replacement{"AX"}

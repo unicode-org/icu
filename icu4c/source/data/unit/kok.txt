@@ -9,7 +9,7 @@ kok{
     }
     units{
         acceleration{
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"मी/से²"}
                 other{"{0} मी/से²"}
             }
@@ -113,7 +113,7 @@ kok{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"लिटर/100किलोमीटर"}
                 other{"{0} लिटर/100किलोमीटर"}
             }
@@ -692,7 +692,7 @@ kok{
                 dnam{"g-force"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"मी/से²"}
                 other{"{0} मी/से²"}
             }
@@ -787,10 +787,6 @@ kok{
                 dnam{"मोल"}
                 other{"{0} मोल"}
             }
-            part-per-million{
-                dnam{"ppm"}
-                other{"{0} ppm"}
-            }
             percent{
                 dnam{"%"}
                 other{"{0}%"}
@@ -799,13 +795,17 @@ kok{
                 dnam{"‰"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"ppm"}
+                other{"{0} ppm"}
+            }
             permyriad{
                 dnam{"‱"}
                 other{"{0}‱"}
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"लि/100किमी"}
                 other{"{0} लि/100किमी"}
             }
@@ -1236,7 +1236,7 @@ kok{
                 dnam{"hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inHg"}
                 other{"{0} inHg"}
             }
@@ -1252,7 +1252,7 @@ kok{
                 dnam{"mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 other{"{0} mm Hg"}
             }
@@ -1260,7 +1260,7 @@ kok{
                 dnam{"Pa"}
                 other{"{0} Pa"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 other{"{0} psi"}
             }
@@ -1306,7 +1306,7 @@ kok{
                 dnam{"N⋅m"}
                 other{"{0} N⋅m"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"lbf⋅ft"}
                 other{"{0} lbf⋅ft"}
             }
