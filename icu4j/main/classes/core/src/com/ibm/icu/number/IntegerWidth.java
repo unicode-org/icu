@@ -35,6 +35,7 @@ public class IntegerWidth {
      * @param minInt
      *            The minimum number of places before the decimal separator.
      * @return An IntegerWidth for chaining or passing to the NumberFormatter integerWidth() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -59,6 +60,7 @@ public class IntegerWidth {
      *            The maximum number of places before the decimal separator. maxInt == -1 means no
      *            truncation.
      * @return An IntegerWidth for passing to the NumberFormatter integerWidth() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than -1.
      * @stable ICU 60
      * @see NumberFormatter
      */
