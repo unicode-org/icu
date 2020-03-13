@@ -4915,6 +4915,7 @@ void DateFormatTest::TestPatternFromSkeleton() {
         {Locale::getGerman(), "jjmm", "HH:mm"},
         {Locale::getGerman(), "JJmm", "HH:mm"},
         // Ticket #20739
+        // minutes+milliseconds, seconds missing, should be repaired
         {Locale::getEnglish(), "SSSSm", "mm:ss.SSSS"},
         {Locale::getEnglish(), "mSSSS", "mm:ss.SSSS"},
         {Locale::getEnglish(), "SSSm", "mm:ss.SSS"},
@@ -4923,12 +4924,26 @@ void DateFormatTest::TestPatternFromSkeleton() {
         {Locale::getEnglish(), "mSS", "mm:ss.SS"},
         {Locale::getEnglish(), "Sm", "mm:ss.S"},
         {Locale::getEnglish(), "mS", "mm:ss.S"},
+        // only milliseconds, untouched, no repairs
         {Locale::getEnglish(), "S", "S"},
         {Locale::getEnglish(), "SS", "SS"},
         {Locale::getEnglish(), "SSS", "SSS"},
         {Locale::getEnglish(), "SSSS", "SSSS"},
+        // hour:minute+seconds+milliseconds, correct, no repairs, proper pattern
         {Locale::getEnglish(), "jmsSSS", "h:mm:ss.SSS a"},
-        {Locale::getEnglish(), "jmSSS", "h:mm:ss.SSS a"}
+        {Locale::getEnglish(), "jmSSS", "h:mm:ss.SSS a"},
+        // Ticket #20738
+        // seconds+milliseconds, correct, no repairs, proper pattern
+        {Locale::getEnglish(), "sS", "s.S"},
+        {Locale::getEnglish(), "sSS", "s.SS"},
+        {Locale::getEnglish(), "sSSS", "s.SSS"},
+        {Locale::getEnglish(), "sSSSS", "s.SSSS"},
+        {Locale::getEnglish(), "sS", "s.S"},
+        // minutes+seconds+milliseconds, correct, no repairs, proper pattern
+        {Locale::getEnglish(), "msS", "mm:ss.S"},
+        {Locale::getEnglish(), "msSS", "mm:ss.SS"},
+        {Locale::getEnglish(), "msSSS", "mm:ss.SSS"},
+        {Locale::getEnglish(), "msSSSS", "mm:ss.SSSS"}
     };
 
     for (size_t i = 0; i < UPRV_LENGTHOF(TESTDATA); i++) {

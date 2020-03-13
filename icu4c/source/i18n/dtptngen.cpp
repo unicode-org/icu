@@ -324,6 +324,7 @@ DateTimePatternGenerator::createEmptyInstance(UErrorCode& status) {
 DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
     skipMatcher(nullptr),
     fAvailableFormatKeyHash(nullptr),
+    fDefaultHourFormatChar(0),
     internalErrorCode(U_ZERO_ERROR)
 {
     fp = new FormatParser();
@@ -338,6 +339,7 @@ DateTimePatternGenerator::DateTimePatternGenerator(UErrorCode &status) :
 DateTimePatternGenerator::DateTimePatternGenerator(const Locale& locale, UErrorCode &status) :
     skipMatcher(nullptr),
     fAvailableFormatKeyHash(nullptr),
+    fDefaultHourFormatChar(0),
     internalErrorCode(U_ZERO_ERROR)
 {
     fp = new FormatParser();
@@ -356,6 +358,7 @@ DateTimePatternGenerator::DateTimePatternGenerator(const DateTimePatternGenerato
     UObject(),
     skipMatcher(nullptr),
     fAvailableFormatKeyHash(nullptr),
+    fDefaultHourFormatChar(0),
     internalErrorCode(U_ZERO_ERROR)
 {
     fp = new FormatParser();
@@ -710,19 +713,28 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
 }
 
 UDateFormatHourCycle
-DateTimePatternGenerator::getDefaultHourCycle(UErrorCode& /*status*/) const {
-  switch(fDefaultHourFormatChar) {
-    case CAP_K:
-      return UDAT_HOUR_CYCLE_11;
-    case LOW_H:
-      return UDAT_HOUR_CYCLE_12;
-    case CAP_H:
-      return UDAT_HOUR_CYCLE_23;
-    case LOW_K:
-      return UDAT_HOUR_CYCLE_24;
-    default:
-      UPRV_UNREACHABLE;
-  }
+DateTimePatternGenerator::getDefaultHourCycle(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return UDAT_HOUR_CYCLE_23;
+    }
+    if (fDefaultHourFormatChar == 0) {
+        // We need to return something, but the caller should ignore it
+        // anyways since the returned status is a failure.
+        status = U_UNSUPPORTED_ERROR;
+        return UDAT_HOUR_CYCLE_23;
+    }
+    switch (fDefaultHourFormatChar) {
+        case CAP_K:
+            return UDAT_HOUR_CYCLE_11;
+        case LOW_H:
+            return UDAT_HOUR_CYCLE_12;
+        case CAP_H:
+            return UDAT_HOUR_CYCLE_23;
+        case LOW_K:
+            return UDAT_HOUR_CYCLE_24;
+        default:
+            UPRV_UNREACHABLE;
+    }
 }
 
 UnicodeString
@@ -1517,6 +1529,7 @@ DateTimePatternGenerator::getBestRaw(DateTimeMatcher& source,
                                      UErrorCode &status,
                                      const PtnSkeleton** specifiedSkeletonPtr) {
     int32_t bestDistance = 0x7fffffff;
+    int32_t bestMissingFieldMask = -1;
     DistanceInfo tempInfo;
     const UnicodeString *bestPattern=nullptr;
     const PtnSkeleton* specifiedSkeleton=nullptr;
@@ -1530,8 +1543,15 @@ DateTimePatternGenerator::getBestRaw(DateTimeMatcher& source,
             continue;
         }
         int32_t distance=source.getDistance(trial, includeMask, tempInfo);
-        if (distance<bestDistance) {
+        // Because we iterate over a map the order is undefined. Can change between implementations,
+        // versions, and will very likely be different between Java and C/C++.
+        // So if we have patterns with the same distance we also look at the missingFieldMask,
+        // and we favour the smallest one. Because the field is a bitmask this technically means we
+        // favour differences in the "least significant fields". For example we prefer the one with differences
+        // in seconds field vs one with difference in the hours field.
+        if (distance<bestDistance || (distance==bestDistance && bestMissingFieldMask<tempInfo.missingFieldMask)) {
             bestDistance=distance;
+            bestMissingFieldMask=tempInfo.missingFieldMask;
             bestPattern=patternMap->getPatternFromSkeleton(*trial.getSkeletonPtr(), &specifiedSkeleton);
             missingFields->setTo(tempInfo);
             if (distance==0) {
@@ -1631,7 +1651,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                             && (typeValue!= UDATPG_YEAR_FIELD || reqFieldChar==CAP_Y))
                             ? reqFieldChar
                             : field.charAt(0);
-                    if (typeValue == UDATPG_HOUR_FIELD) {
+                    if (typeValue == UDATPG_HOUR_FIELD && fDefaultHourFormatChar != 0) {
                         // The adjustment here is required to match spec (https://www.unicode.org/reports/tr35/tr35-dates.html#dfst-hour).
                         // It is necessary to match the hour-cycle preferred by the Locale.
                         // Given that, we need to do the following adjustments:
@@ -2222,8 +2242,16 @@ DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp, PtnSkeleton
         skeletonResult.type[field] = subField;
     }
 
-    // #20739, we have a skeleton with milliseconde, but no seconds
-    if (!skeletonResult.original.isFieldEmpty(UDATPG_FRACTIONAL_SECOND_FIELD)
+    // #20739, we have a skeleton with minutes and milliseconds, but no seconds
+    //
+    // Theoretically we would need to check and fix all fields with "gaps":
+    // for example year-day (no month), month-hour (no day), and so on, All the possible field combinations.
+    // Plus some smartness: year + hour => should we add month, or add day-of-year?
+    // What about month + day-of-week, or month + am/pm indicator.
+    // I think beyond a certain point we should not try to fix bad developer input and try guessing what they mean.
+    // Garbage in, garbage out.
+    if (!skeletonResult.original.isFieldEmpty(UDATPG_MINUTE_FIELD)
+        && !skeletonResult.original.isFieldEmpty(UDATPG_FRACTIONAL_SECOND_FIELD)
         && skeletonResult.original.isFieldEmpty(UDATPG_SECOND_FIELD)) {
         // Force the use of seconds
         for (i = 0; dtTypes[i].patternChar != 0; i++) {

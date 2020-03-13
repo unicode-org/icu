@@ -775,7 +775,8 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                         (optMatchArch[0] == 0 ? NULL : optMatchArch),
                         NULL,
                         gencFilePath,
-                        sizeof(gencFilePath));
+                        sizeof(gencFilePath),
+                        TRUE);
                     pkg_destroyOptMatchArch(optMatchArch);
 #if U_PLATFORM_IS_LINUX_BASED
                     result = pkg_generateLibraryFile(targetDir, mode, gencFilePath);

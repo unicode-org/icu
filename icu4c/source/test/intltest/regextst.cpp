@@ -3500,11 +3500,15 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //    positions.
     //
     parsePat = RegexPattern::compile("<(/?)(r|[0-9]+)>", 0, pe, status);
-    REGEX_CHECK_STATUS_L(line);
+    if (!assertSuccess(WHERE, status) ) {
+        goto cleanupAndReturn;
+    }
 
     unEscapedInput = inputString.unescape();
     parseMatcher = parsePat->matcher(unEscapedInput, status);
-    REGEX_CHECK_STATUS_L(line);
+    if (!assertSuccess(WHERE, status) ) {
+        goto cleanupAndReturn;
+    }
     while(parseMatcher->find()) {
         parseMatcher->appendReplacement(deTaggedInput, "", status);
         REGEX_CHECK_STATUS;
@@ -4203,6 +4207,8 @@ void RegexTest::PerlTests() {
         if (expected != found) {
             errln("line %d: Expected %smatch, got %smatch",
                 lineNum, expected?"":"no ", found?"":"no " );
+            delete testMat;
+            delete testPat;
             continue;
         }
 
@@ -4598,6 +4604,8 @@ void RegexTest::PerlTestsUTF8() {
         if (expected != found) {
             errln("line %d: Expected %smatch, got %smatch",
                 lineNum, expected?"":"no ", found?"":"no " );
+            delete testMat;
+            delete testPat;
             continue;
         }
 
@@ -5830,9 +5838,9 @@ void RegexTest::TestBug12884() {
     REGEX_ASSERT(status == U_REGEX_TIME_OUT);
 
     // UText, wrapping non-UTF-16 text, also takes a different execution path.
-    const char *text8 = u8"¿Qué es Unicode?  Unicode proporciona un número único para cada"
+    const char *text8 = reinterpret_cast<const char*>(u8"¿Qué es Unicode?  Unicode proporciona un número único para cada"
                           "carácter, sin importar la plataforma, sin importar el programa,"
-                          "sin importar el idioma.";
+                          "sin importar el idioma.");
     status = U_ZERO_ERROR;
     LocalUTextPointer ut(utext_openUTF8(NULL, text8, -1, &status));
     REGEX_CHECK_STATUS;

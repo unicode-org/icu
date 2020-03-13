@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 eu{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -101,6 +101,7 @@ eu{
         }
         compound{
             per{"{0}/{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
             karat{
@@ -345,6 +346,11 @@ eu{
                 dnam{"kilowatt-ordu"}
                 one{"{0} kilowatt-ordu"}
                 other{"{0} kilowatt-ordu"}
+            }
+            therm-us{
+                dnam{"AEBko termiak"}
+                one{"{0} AEBko termia"}
+                other{"{0} AEBko termia"}
             }
         }
         force{
@@ -672,6 +678,7 @@ eu{
                 other{"{0} merkurio-milimetro"}
             }
             pascal{
+                dnam{"pascal"}
                 one{"{0} pascal"}
                 other{"{0} pascal"}
             }
@@ -922,6 +929,7 @@ eu{
         }
         compound{
             per{"{0}/{1}"}
+            times{"{0}{1}"}
         }
         concentr{
             percent{
@@ -1216,6 +1224,7 @@ eu{
         }
         compound{
             per{"{0}/{1}"}
+            times{"{0}{1}"}
         }
         concentr{
             karat{
@@ -1461,6 +1470,11 @@ eu{
                 one{"{0} kWh"}
                 other{"{0} kWh"}
             }
+            therm-us{
+                dnam{"AEBko termia"}
+                one{"{0} AEBko termia"}
+                other{"{0} AEBko termia"}
+            }
         }
         force{
             newton{
@@ -1510,9 +1524,13 @@ eu{
             }
             megapixel{
                 dnam{"megapixel"}
+                one{"{0} Mp"}
+                other{"{0} Mp"}
             }
             pixel{
                 dnam{"pixel"}
+                one{"{0} p"}
+                other{"{0} p"}
             }
             pixel-per-centimeter{
                 dnam{"ppcm"}

@@ -5436,6 +5436,8 @@ public class DateFormatTest extends TestFmwk {
     @Test
     public void test20739_MillisecondsWithoutSeconds() {
         String[][] cases = new String[][]{
+            // Ticket #20739
+            // minutes+milliseconds, seconds missing, should be repaired
             {"SSSSm", "mm:ss.SSSS"},
             {"mSSSS", "mm:ss.SSSS"},
             {"SSSm", "mm:ss.SSS"},
@@ -5444,12 +5446,25 @@ public class DateFormatTest extends TestFmwk {
             {"mSS", "mm:ss.SS"},
             {"Sm", "mm:ss.S"},
             {"mS", "mm:ss.S"},
+            // only milliseconds, untouched, no repairs
             {"S", "S"},
             {"SS", "SS"},
             {"SSS", "SSS"},
             {"SSSS", "SSSS"},
+            // hour:minute+seconds+milliseconds, correct, no repairs, proper pattern
             {"jmsSSS", "h:mm:ss.SSS a"},
-            {"jmSSS", "h:mm:ss.SSS a"}
+            {"jmSSS", "h:mm:ss.SSS a"},
+            // Ticket #20738
+            // seconds+milliseconds, correct, no repairs, proper pattern
+            {"sS", "s.S"},
+            {"sSS", "s.SS"},
+            {"sSSS", "s.SSS"},
+            {"sSSSS", "s.SSSS"},
+            // minutes+seconds+milliseconds, correct, no repairs, proper pattern
+            {"msS", "mm:ss.S"},
+            {"msSS", "mm:ss.SS"},
+            {"msSSS", "mm:ss.SSS"},
+            {"msSSSS", "mm:ss.SSSS"}
         };
 
         ULocale locale = ULocale.ENGLISH;

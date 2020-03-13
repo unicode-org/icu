@@ -347,10 +347,19 @@ public class GlobalizationPreferencesTest extends TestFmwk {
             gp.reset();
             gp.setLocales(acceptLanguage);
 
-            List resultLocales = gp.getLocales();
+            List<ULocale> resultLocales = gp.getLocales();
+            List<ULocale> expectedLocales = new ArrayList<>(RESULTS_LOCALEIDS[i].length);
+            for (String exp : RESULTS_LOCALEIDS[i]) {
+                expectedLocales.add(new ULocale(exp));
+            }
+            assertEquals("#" + i, expectedLocales.toString(), resultLocales.toString());
             if (resultLocales.size() != RESULTS_LOCALEIDS[i].length) {
+                StringBuilder res = new StringBuilder();
+                for (ULocale l : resultLocales) {
+                  res.append(l.toString()).append(",");
+                }
                 errln("FAIL: Number of locales mismatch - GP:" + resultLocales.size()
-                        + " Expected:" + RESULTS_LOCALEIDS[i].length);
+                        + " Expected:" + RESULTS_LOCALEIDS[i].length + " index: " + i + " " + res.toString());
             } else {
 
                 for (int j = 0; j < RESULTS_LOCALEIDS[i].length; j++) {
@@ -373,22 +382,23 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         }
 
         // Invalid accept-language
-        logln("Set locale - ko_KR");
-        gp.setLocale(new ULocale("ko_KR"));
-        boolean bException = false;
-        try {
-            logln("Set invlaid accept-language - ko=100");
-            gp.setLocales("ko=100");
-        } catch (IllegalArgumentException iae) {
-            logln("IllegalArgumentException was thrown");
-            bException = true;
-        }
-        if (!bException) {
-            errln("FAIL: IllegalArgumentException was not thrown for illegal accept-language - ko=100");
-        }
-        if (!gp.getLocale(0).toString().equals("ko_KR")) {
-            errln("FAIL: Previous valid locale list had gone");
-        }
+        // ICU-20700 changed the parser to using LocalePriorityList which is more lenient.
+//        logln("Set locale - ko_KR");
+//        gp.setLocale(new ULocale("ko_KR"));
+//        boolean bException = false;
+//        try {
+//            logln("Set invlaid accept-language - ko=100");
+//            gp.setLocales("ko=100");
+//        } catch (IllegalArgumentException iae) {
+//            logln("IllegalArgumentException was thrown");
+//            bException = true;
+//        }
+//        if (!bException) {
+//            errln("FAIL: IllegalArgumentException was not thrown for illegal accept-language - ko=100");
+//        }
+//        if (!gp.getLocale(0).toString().equals("ko_KR")) {
+//            errln("FAIL: Previous valid locale list had gone");
+//        }
     }
 
     @Test

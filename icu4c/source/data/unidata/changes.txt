@@ -62,7 +62,7 @@ https://unicode-org.atlassian.net/browse/ICU-20893
 
 * Command-line environment setup
 
-UNICODE_DATA=~/unidata/uni13/20191106
+UNICODE_DATA=~/unidata/uni13/20200212
 CLDR_SRC=~/cldr/uni/src
 ICU_ROOT=~/icu/uni
 ICU_SRC=$ICU_ROOT/src
@@ -89,9 +89,12 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
 - download Unicode files into $UNICODE_DATA
   + subfolders: emoji, idna, security, ucd, uca
   + inside ucd: extract Unihan.zip to "here" (.../ucd/Unihan/*.txt), delete Unihan.zip
+  + split Unihan into single-property files
+    ~/unitools/trunk/src$ py/splitunihan.py $UNICODE_DATA/ucd/Unihan
   + get GraphemeBreakTest-cldr.txt from $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
     or from the ucd/cldr/ output folder of the Unicode Tools:
     Since Unicode 12/CLDR 35/ICU 64 CLDR uses modified break rules.
+  cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt icu4c/source/test/testdata
 
 * for manual diffs and for Unicode Tools input data updates:
   remove version suffixes from the file names
@@ -155,7 +158,7 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
   $ICU_ROOT/dbg/icu4c$ echo;echo; date; make -j7 install &> out.txt ; tail -n 30 out.txt ; date
 
 * update spoof checker UnicodeSet initializers:
-    inclusionPat & recommendedPat in uspoof.cpp
+    inclusionPat & recommendedPat in i18n/uspoof.cpp
     INCLUSION & RECOMMENDED in SpoofChecker.java
 - make sure that the Unicode Tools tree contains the latest security data files
 - go to Unicode Tools org.unicode.text.tools.RecommendedSetGenerator

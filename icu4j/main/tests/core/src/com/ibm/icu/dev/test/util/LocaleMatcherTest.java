@@ -194,7 +194,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("getBestMatchResult(ja_JP).supp",
                      "en_GB", locString(result.getSupportedULocale()));
         assertEquals("getBestMatchResult(ja_JP).suppIndex",
-                     1, result.getSupportedIndex());
+                     -1, result.getSupportedIndex());
     }
 
     @Test
@@ -636,6 +636,21 @@ public class LocaleMatcherTest extends TestFmwk {
                 setSupportedULocales(supported.getULocales()).
                 setDemotionPerDesiredLocale(LocaleMatcher.Demotion.REGION).build();
         assertEquals("region demotion", ULocale.FRENCH, regionDemotion.getBestMatch(desired));
+    }
+
+    @Test
+    public void testDirection() {
+        List<ULocale> desired = Arrays.asList(new ULocale("arz-EG"), new ULocale("nb-DK"));
+        LocaleMatcher.Builder builder =
+                LocaleMatcher.builder().setSupportedLocales("ar, nn");
+        // arz is a close one-way match to ar, and the region matches.
+        // (Egyptian Arabic vs. Arabic)
+        LocaleMatcher withOneWay = builder.build();
+        assertEquals("with one-way", "ar", withOneWay.getBestMatch(desired).toString());
+        // nb is a less close two-way match to nn, and the regions differ.
+        // (Norwegian Bokmal vs. Nynorsk)
+        LocaleMatcher onlyTwoWay = builder.setDirection(LocaleMatcher.Direction.ONLY_TWO_WAY).build();
+        assertEquals("only two-way", "nn", onlyTwoWay.getBestMatch(desired).toString());
     }
 
     @Test

@@ -464,7 +464,7 @@ public class MeasureFormat extends UFormat {
                 results[i] = formatMeasureInteger(measures[i]).toString();
             }
         }
-        FormattedListBuilder builder = listFormatter.format(Arrays.asList(results), -1);
+        FormattedListBuilder builder = listFormatter.formatImpl(Arrays.asList(results), false);
         builder.appendTo(appendTo);
     }
 
@@ -811,13 +811,13 @@ public class MeasureFormat extends UFormat {
             }
             results[i] = result.toString();
         }
-        ListFormatter.FormattedListBuilder builder = listFormatter.format(Arrays.asList(results),
-                fieldPositionFoundIndex);
+        ListFormatter.FormattedListBuilder builder = listFormatter.formatImpl(Arrays.asList(results), true);
 
         // Fix up FieldPosition indexes if our field is found.
-        if (builder.getOffset() != -1) {
-            fieldPosition.setBeginIndex(fpos.getBeginIndex() + builder.getOffset());
-            fieldPosition.setEndIndex(fpos.getEndIndex() + builder.getOffset());
+        int offset = builder.getOffset(fieldPositionFoundIndex);
+        if (offset != -1) {
+            fieldPosition.setBeginIndex(fpos.getBeginIndex() + offset);
+            fieldPosition.setEndIndex(fpos.getEndIndex() + offset);
         }
         builder.appendTo(appendTo);
     }

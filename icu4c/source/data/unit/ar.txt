@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ar{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -2223,6 +2223,12 @@ ar{
             }
             permille{
                 dnam{"في الألف"}
+                few{"{0}؉"}
+                many{"{0}؉"}
+                one{"{0}؉"}
+                other{"{0}؉"}
+                two{"{0}؉"}
+                zero{"{0}؉"}
             }
         }
         consumption{
