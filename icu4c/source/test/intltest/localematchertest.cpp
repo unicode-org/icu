@@ -272,7 +272,7 @@ void LocaleMatcherTest::testSupportedDefault() {
     assertEquals("getBestMatchResult(ja_JP).supp",
                  "en_GB", locString(result.getSupportedLocale()));
     assertEquals("getBestMatchResult(ja_JP).suppIndex",
-                 1, result.getSupportedIndex());
+                 -1, result.getSupportedIndex());
 }
 
 void LocaleMatcherTest::testUnsupportedDefault() {

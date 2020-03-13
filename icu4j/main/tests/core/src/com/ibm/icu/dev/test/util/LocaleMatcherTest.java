@@ -194,7 +194,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("getBestMatchResult(ja_JP).supp",
                      "en_GB", locString(result.getSupportedULocale()));
         assertEquals("getBestMatchResult(ja_JP).suppIndex",
-                     1, result.getSupportedIndex());
+                     -1, result.getSupportedIndex());
     }
 
     @Test

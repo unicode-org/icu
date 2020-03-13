@@ -1,6 +1,6 @@
 # DerivedCoreProperties-13.0.0.txt
-# Date: 2019-10-21, 14:30:30 GMT
-# © 2019 Unicode®, Inc.
+# Date: 2020-01-22, 00:07:19 GMT
+# © 2020 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 #
@@ -2873,6 +2873,7 @@ FF41..FF5A    ; Cased
 0483..0487    ; Case_Ignorable
 0488..0489    ; Case_Ignorable
 0559          ; Case_Ignorable
+055F          ; Case_Ignorable
 0591..05BD    ; Case_Ignorable
 05BF          ; Case_Ignorable
 05C1..05C2    ; Case_Ignorable
@@ -3303,7 +3304,7 @@ E0001         ; Case_Ignorable
 E0020..E007F  ; Case_Ignorable
 E0100..E01EF  ; Case_Ignorable
 
-# Total code points: 2412
+# Total code points: 2413
 
 # ================================================
 

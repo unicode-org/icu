@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 tk{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"hh:mm:ss"}
@@ -409,10 +409,12 @@ tk{
         }
         graphics{
             dot-per-centimeter{
+                dnam{"santimetr başyna nokat"}
                 one{"{0} santimetr başyna nokat"}
                 other{"{0} santimetr başyna nokat"}
             }
             dot-per-inch{
+                dnam{"dýuým başyna nokat"}
                 one{"{0} dýuým başyna nokat"}
                 other{"{0} dýuým başyna nokat"}
             }
@@ -432,10 +434,12 @@ tk{
                 other{"{0} piksel"}
             }
             pixel-per-centimeter{
+                dnam{"santimetr başyna piksel"}
                 one{"{0} santimetr başyna piksel"}
                 other{"{0} santimetr başyna piksel"}
             }
             pixel-per-inch{
+                dnam{"dýuým başyna piksel"}
                 one{"{0} dýuým başyna piksel"}
                 other{"{0} dýuým başyna piksel"}
             }

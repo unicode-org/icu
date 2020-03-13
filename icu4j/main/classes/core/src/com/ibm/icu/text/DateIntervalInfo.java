@@ -143,7 +143,7 @@ import com.ibm.icu.util.UResourceBundle;
  * the interval patterns using setIntervalPattern function as so desired.
  * Currently, users can only set interval patterns when the following
  * calendar fields are different: ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH,
- * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE and SECOND.
+ * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE, SECOND, and MILLISECOND.
  * Interval patterns when other calendar fields are different is not supported.
  * <P>
  * DateIntervalInfo objects are cloneable.
@@ -298,7 +298,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
 
     private static final long serialVersionUID = 1;
     private static final int MINIMUM_SUPPORTED_CALENDAR_FIELD =
-                                                          Calendar.SECOND;
+                                                          Calendar.MILLISECOND;
     //private static boolean DEBUG = true;
 
     private static String CALENDAR_KEY = "calendar";
@@ -425,8 +425,9 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          * Calendar.HOUR_OF_DAY
          * Calendar.MINUTE
          * Calendar.SECOND
+         * Calendar.MILLISECOND
          */
-        private static final String ACCEPTED_PATTERN_LETTERS = "GyMdahHms";
+        private static final String ACCEPTED_PATTERN_LETTERS = "GyMdahHmsS";
 
         // Output data
         DateIntervalInfo dateIntervalInfo;
@@ -705,7 +706,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * Restriction:
      * Currently, users can only set interval patterns when the following
      * calendar fields are different: ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH,
-     * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE, and SECOND.
+     * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE, SECOND, and MILLISECOND.
      * Interval patterns when other calendar fields are different are
      * not supported.
      *
@@ -850,7 +851,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     public PatternInfo getIntervalPattern(String skeleton, int field)
     {
         if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD ) {
-            throw new IllegalArgumentException("no support for field less than SECOND");
+            throw new IllegalArgumentException("no support for field less than MILLISECOND");
         }
         Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
         if ( patternsOfOneSkeleton != null ) {

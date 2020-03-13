@@ -580,7 +580,7 @@ public class NumberFormatterApiTest {
                 NumberFormatter.with().unit(MeasureUnit.SQUARE_METER).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("en-GB"),
                 5.43,
-                "5.43 m²");
+                "5.43m²");
 
         // Try accessing a narrow unit directly from root.
         assertFormatSingle(
@@ -1350,6 +1350,24 @@ public class NumberFormatterApiTest {
                 "1",
                 "1",
                 "0");
+
+        assertFormatSingle(
+                "ICU-20974 Double.MIN_NORMAL",
+                "scientific",
+                "E0",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.MIN_NORMAL,
+                "2.225074E-308");
+
+        assertFormatSingle(
+                "ICU-20974 Double.MIN_VALUE",
+                "scientific",
+                "E0",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.MIN_VALUE,
+                "4.9E-324");
     }
 
     @Test

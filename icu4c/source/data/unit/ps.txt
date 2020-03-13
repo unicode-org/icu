@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ps{
-    Version{"36.1"}
+    Version{"37"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -465,6 +465,9 @@ ps{
                 dnam{"بحري ميلونه"}
                 one{"{0} بحري ميل"}
                 other{"{0} بحري ميلونه"}
+            }
+            parsec{
+                dnam{"پارسيکس"}
             }
             picometer{
                 dnam{"پيکو متره"}
@@ -1531,6 +1534,11 @@ ps{
                 dnam{"atm"}
                 one{"{0} atm"}
                 other{"{0} atm"}
+            }
+            bar{
+                dnam{"bar"}
+                one{"{0} bar"}
+                other{"{0} bar"}
             }
             hectopascal{
                 dnam{"hPa"}

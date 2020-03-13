@@ -43,6 +43,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(7, testJjMapping);
         TESTCASE(8, test20640_HourCyclArsEnNH);
         TESTCASE(9, testFallbackWithDefaultRootLocale);
+        TESTCASE(10, testGetDefaultHourCycle_OnEmptyInstance);
         default: name = ""; break;
     }
 }
@@ -1480,6 +1481,29 @@ void IntlTestDateTimePatternGeneratorAPI::testFallbackWithDefaultRootLocale() {
     uloc_setDefault(original, &status);
     if (U_FAILURE(status)) {
         errln("ERROR: Failed to change the default locale back to %s\n", original);
+    }
+}
+
+// ICU-21000 Ensure that calling getDefaultHourCycle on an empty instance doesn't call UPRV_UNREACHABLE/abort.
+void IntlTestDateTimePatternGeneratorAPI::testGetDefaultHourCycle_OnEmptyInstance() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createEmptyInstance(status), status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: createEmptyInstance failed, status: %s", u_errorName(status));
+        return;
+    }
+    (void)dtpg->getDefaultHourCycle(status);
+    if (!U_FAILURE(status)) {
+        errln("ERROR: expected getDefaultHourCycle on an empty instance to fail, status: %s", u_errorName(status));
+        return;
+    }
+
+    status = U_USELESS_COLLATOR_ERROR;
+    (void)dtpg->getDefaultHourCycle(status);
+    if (status != U_USELESS_COLLATOR_ERROR) {
+        errln("ERROR: getDefaultHourCycle shouldn't modify status if it is already failed, status: %s", u_errorName(status));
+        return;
     }
 }
 

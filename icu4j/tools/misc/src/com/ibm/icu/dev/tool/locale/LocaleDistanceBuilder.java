@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -484,7 +485,8 @@ public final class LocaleDistanceBuilder {
         ICUResourceBundle supplementalData = getSupplementalDataBundle("supplementalData");
         String[] paradigms = supplementalData.getValueWithFallback(
                 "languageMatchingInfo/written/paradigmLocales").getStringArray();
-        Set<LSR> paradigmLSRs = new HashSet<>();  // could be TreeSet if LSR were Comparable
+        // LinkedHashSet for stable order; otherwise a unit test is flaky.
+        Set<LSR> paradigmLSRs = new LinkedHashSet<>();  // could be TreeSet if LSR were Comparable
         for (String paradigm : paradigms) {
             ULocale pl = new ULocale(paradigm);
             LSR max = XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(pl);
