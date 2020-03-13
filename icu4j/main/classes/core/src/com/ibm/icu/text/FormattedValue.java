@@ -35,6 +35,7 @@ public interface FormattedValue extends CharSequence {
      *
      * @param appendable The Appendable to which to append the string output.
      * @return The same Appendable, for chaining.
+     * @throws ICUUncheckedIOException if the Appendable throws IOException
      * @draft ICU 64
      * @provisional This API might change or be removed in a future release.
      */
