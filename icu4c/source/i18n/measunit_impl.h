@@ -64,7 +64,7 @@ struct TempSingleUnit : public UMemory {
     /** SI prefix. **/
     UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
     
-    /** Dimentionality. **/
+    /** Dimensionality. **/
     int32_t dimensionality = 1;
 };
 
