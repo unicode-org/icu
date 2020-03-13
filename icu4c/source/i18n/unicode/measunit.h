@@ -40,8 +40,8 @@ struct MeasureUnitImpl;
  *           square-kilometer, kilojoule, one-per-second.
  * - COMPOUND: A unit composed of the product of multiple single units. Examples:
  *             meter-per-second, kilowatt-hour, kilogram-meter-per-square-second.
- * - SEQUENCE: A unit composed of the sum of multiple compound units. Examples: foot+inch,
- *             hour+minute+second, hectare+square-meter.
+ * - SEQUENCE: A unit composed of the sum of multiple single units. Examples: foot+inch,
+ *             hour+minute+second, degree+arcminute+arcsecond.
  *
  * The complexity determines which operations are available. For example, you cannot set the power
  * or SI prefix of a compound unit.
@@ -135,91 +135,91 @@ typedef enum UMeasureSIPrefix {
     UMEASURE_SI_PREFIX_KILO = 3,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: hecto, 10^2.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_HECTO = 2,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: deka, 10^1.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_DEKA = 1,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * The absence of an SI prefix.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_ONE = 0,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: deci, 10^-1.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_DECI = -1,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: centi, 10^-2.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_CENTI = -2,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: milli, 10^-3.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_MILLI = -3,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: micro, 10^-6.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_MICRO = -6,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: nano, 10^-9.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_NANO = -9,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: pico, 10^-12.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_PICO = -12,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: femto, 10^-15.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_FEMTO = -15,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: atto, 10^-18.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_ATTO = -18,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: zepto, 10^-21.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_ZEPTO = -21,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: yocto, 10^-24.
      *
      * @draft ICU 67
      */
