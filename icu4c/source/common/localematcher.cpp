@@ -421,8 +421,10 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
                 U_ASSERT(i == 0);
                 def = &locale;
                 defLSR = &lsr;
+                order[i] = 1;
                 suppLength = putIfAbsent(lsr, 0, suppLength, errorCode);
             } else if (lsr.isEquivalentTo(*defLSR)) {
+                order[i] = 1;
                 suppLength = putIfAbsent(lsr, i, suppLength, errorCode);
             } else if (localeDistance.isParadigmLSR(lsr)) {
                 order[i] = 2;
