@@ -248,9 +248,11 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
 #ifdef U_HAVE_STRING_VIEW
     TESTCASE_AUTO(TestStringPieceStringView);
 #endif
+    TESTCASE_AUTO(TestStringPieceU8);
     TESTCASE_AUTO(TestByteSink);
     TESTCASE_AUTO(TestCheckedArrayByteSink);
     TESTCASE_AUTO(TestStringByteSink);
+    TESTCASE_AUTO(TestStringByteSinkAppendU8);
     TESTCASE_AUTO(TestCharString);
     TESTCASE_AUTO(TestCStr);
     TESTCASE_AUTO(Testctou);
@@ -265,7 +267,7 @@ StringTest::TestStringPiece() {
         errln("StringPiece() failed");
     }
     // Construct from NULL const char * pointer.
-    StringPiece null(NULL);
+    StringPiece null((const char *)nullptr);
     if(!null.empty() || null.data()!=NULL || null.length()!=0 || null.size()!=0) {
         errln("StringPiece(NULL) failed");
     }
@@ -395,7 +397,7 @@ StringTest::TestStringPiece() {
 void
 StringTest::TestStringPieceComparisons() {
     StringPiece empty;
-    StringPiece null(NULL);
+    StringPiece null(nullptr);
     StringPiece abc("abc");
     StringPiece abcd("abcdefg", 4);
     StringPiece abx("abx");
@@ -520,6 +522,52 @@ StringTest::TestStringPieceStringView() {
     assertEquals("data()", piece.data(), view.data());
 }
 #endif
+
+void
+StringTest::TestStringPieceU8() {
+    // ICU-20984 "mitigate some C++20 char8_t breakages"
+    // For the following APIs there are overloads for both
+    // const char * and const char8_t *.
+    // A u8"string literal" has one type or the other
+    // depending on C++ version and compiler settings.
+    StringPiece abc(u8"abc");
+    assertEquals("abc.length", 3, abc.length());
+    assertEquals("abc", "\x61\x62\x63", abc.data());
+
+    StringPiece abc3(u8"abcdef", 3);
+    assertEquals("abc3.length", 3, abc3.length());
+    assertEquals("abc3[0]", 0x61, abc3.data()[0]);
+    assertEquals("abc3[1]", 0x62, abc3.data()[1]);
+    assertEquals("abc3[2]", 0x63, abc3.data()[2]);
+
+    StringPiece uvw("q");
+    uvw.set(u8"uvw");
+    assertEquals("uvw.length", 3, uvw.length());
+    assertEquals("uvw", "\x75\x76\x77", uvw.data());
+
+    StringPiece xyz("r");
+    xyz.set(u8"xyzXYZ", 3);
+    assertEquals("xyz.length", 3, xyz.length());
+    assertEquals("xyz[0]", 0x78, xyz.data()[0]);
+    assertEquals("xyz[1]", 0x79, xyz.data()[1]);
+    assertEquals("xyz[2]", 0x7a, xyz.data()[2]);
+
+    StringPiece null(nullptr);
+    assertTrue("null is empty", null.empty());
+    assertTrue("null is null", null.data() == nullptr);
+
+#ifdef __cpp_lib_char8_t
+    std::u8string_view u8sv(u8"sv");  // C++20
+    StringPiece u8svsp(u8sv);
+    assertEquals("u8svsp.length", 2, u8svsp.length());
+    assertEquals("u8svsp", "\x73\x76", u8svsp.data());
+
+    std::u8string u8str(u8"str");  // C++20
+    StringPiece u8strsp(u8str);
+    assertEquals("u8strsp.length", 3, u8strsp.length());
+    assertEquals("u8strsp", "\x73\x74\x72", u8strsp.data());
+#endif  // __cpp_lib_char8_t
+}
 
 // Verify that ByteSink is subclassable and Flush() overridable.
 class SimpleByteSink : public ByteSink {
@@ -651,6 +699,20 @@ StringTest::TestStringByteSink() {
     if(result != "abcdefghi") {
         errln("StringByteSink did not Append() as expected");
     }
+}
+
+void
+StringTest::TestStringByteSinkAppendU8() {
+    // ICU-20984 "mitigate some C++20 char8_t breakages"
+    // For the following APIs there are overloads for both
+    // const char * and const char8_t *.
+    // A u8"string literal" has one type or the other
+    // depending on C++ version and compiler settings.
+    std::string result("abc");
+    StringByteSink<std::string> sink(&result);
+    sink.AppendU8("def", 3);
+    sink.AppendU8(u8"ghijkl", 4);
+    assertEquals("abcdefghij", "abcdef\x67\x68\x69\x6a", result.c_str());
 }
 
 #if defined(_MSC_VER)
