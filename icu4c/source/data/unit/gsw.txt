@@ -65,7 +65,7 @@ gsw{
             }
         }
         pressure{
-            inch-hg{
+            inch-ofhg{
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }
@@ -109,7 +109,7 @@ gsw{
             }
         }
         pressure{
-            inch-hg{
+            inch-ofhg{
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }

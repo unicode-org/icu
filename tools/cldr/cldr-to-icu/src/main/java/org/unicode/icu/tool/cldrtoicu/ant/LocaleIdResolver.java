@@ -38,7 +38,7 @@ final class LocaleIdResolver {
 
     // ---- Code below here is to expand the incoming set of locale IDs ----
 
-    private static final Pattern WILDCARD_LOCALE = Pattern.compile("[a-z]{2}(?:_[A-Z][a-z]{3})?");
+    private static final Pattern WILDCARD_LOCALE = Pattern.compile("[a-z]{2,3}(?:_[A-Z][a-z]{3})?");
 
     private ImmutableSet<String> resolve(Set<String> idSpecs) {
         ImmutableSet<String> allAvailableIds = supplementalData.getAvailableLocaleIds();
@@ -91,7 +91,7 @@ final class LocaleIdResolver {
     // E.g. "xx_Fooo" --> "xx" --> "xx_Fooo_YY" ==> "xx"
     private String removeDefaultScript(String id) {
         if (id.contains("_")) {
-            String lang = id.substring(0, 2);
+            String lang = id.substring(0, id.indexOf("_"));
             String maxId = supplementalData.maximize(lang)
                 .orElseThrow(
                     () -> new IllegalStateException("cannot maximize language subtag: " + lang));
