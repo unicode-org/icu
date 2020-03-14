@@ -79,6 +79,8 @@ matrix:
         - CFLAGS="-Wimplicit-fallthrough"
         - CXXFLAGS="-Wimplicit-fallthrough"
       compiler: clang
+      before_install:
+        - sudo apt-get -y install doxygen  # for make dist
       before_script:
         - cd icu4c/source
         - ./runConfigureICU Linux
@@ -87,6 +89,7 @@ matrix:
         - make -j2 check
         - ( cd test/depstest && python3 depstest.py ../../../source/ )
         - ( cd .. && source/test/hdrtst/testtagsguards.sh )
+        - make dist # not sure if this is -j safe everywhere.
 
     - name: "c: osx clang"
       language: cpp
