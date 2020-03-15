@@ -8,9 +8,10 @@
 #include <cmath>
 
 #include "charstr.h"
-#include "uassert.h"
+#include "double-conversion.h"
 #include "measunit_impl.h"
 #include "resource.h"
+#include "uassert.h"
 #include "unicode/stringpiece.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
@@ -20,6 +21,9 @@
 U_NAMESPACE_BEGIN
 
 namespace {
+
+using icu::double_conversion::StringToDoubleConverter;
+
 /* Internal Structure */
 
 // Represents a raw convert unit.
@@ -60,8 +64,12 @@ double strToDouble(StringPiece strNum) {
         charNum += strNum.data()[i];
     }
 
-    char *end;
-    return std::strtod(charNum.c_str(), &end);
+    // We are processing well-formed input, so we don't need any special options to
+    // StringToDoubleConverter.
+    StringToDoubleConverter converter(0, 0, 0, "", "");
+    int32_t count;
+    return converter.StringToDouble(reinterpret_cast<const uint16_t *>(strNum.length()), strNum.length(),
+                                    &count);
 }
 
 // Returns `double` from a scientific number that could has a division sign (i.e. "1", "2.01", "3.09E+4"
