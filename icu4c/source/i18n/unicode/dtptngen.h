@@ -485,9 +485,14 @@ public:
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Get the default hour cycle.
-     * @param status  Output param set to success/failure code on exit,
-     *               which must not indicate a failure before the function call.
+     * Get the default hour cycle for a locale. Uses the locale that the
+     * DateTimePatternGenerator was initially created with.
+     * 
+     * Cannot be used on an empty DateTimePatternGenerator instance.
+     * 
+     * @param status  Output param set to success/failure code on exit, which
+     *                which must not indicate a failure before the function call.
+     *                Set to U_UNSUPPORTED_ERROR if used on an empty instance.
      * @return the default hour cycle.
      * @draft ICU 67
      */

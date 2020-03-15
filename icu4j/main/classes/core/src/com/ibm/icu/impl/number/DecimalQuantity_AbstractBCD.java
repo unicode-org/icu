@@ -488,8 +488,14 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             return;
         }
 
+        if (exponent == -1023 || exponent == 1024) {
+            // The extreme values of exponent are special; use slow path.
+            convertToAccurateDouble();
+            return;
+        }
+
         // 3.3219... is log2(10)
-        int fracLength = (int) ((52 - exponent) / 3.32192809489);
+        int fracLength = (int) ((52 - exponent) / 3.32192809488736234787031942948939017586);
         if (fracLength >= 0) {
             int i = fracLength;
             // 1e22 is the largest exact double.
@@ -1040,10 +1046,15 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
 
         int p = upper;
+        if (p < 0) {
+            result.append('0');
+        }
         for (; p >= 0; p--) {
             result.append((char) ('0' + getDigitPos(p - scale - exponent)));
         }
-        result.append('.');
+        if (lower < 0) {
+            result.append('.');
+        }
         for(; p >= lower; p--) {
             result.append((char) ('0' + getDigitPos(p - scale - exponent)));
         }

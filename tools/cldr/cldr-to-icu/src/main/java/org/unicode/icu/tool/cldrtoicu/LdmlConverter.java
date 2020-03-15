@@ -112,6 +112,7 @@ public final class LdmlConverter {
         supplementalMatcher(
             "convertUnits",
             "unitConstants",
+            "unitQuantities",
             "unitPreferenceData");
     private static final PathMatcher CURRENCY_DATA_PATHS =
         supplementalMatcher("currencyData");
@@ -291,6 +292,11 @@ public final class LdmlConverter {
         for (String id : config.getAllLocaleIds()) {
             // Skip "target" IDs that are aliases (they are handled later).
             if (!availableIds.contains(id)) {
+                continue;
+            }
+            // TODO: Remove the following skip when ICU-20997 is fixed
+            if (id.contains("VALENCIA")) {
+                System.out.println("(skipping " + id + " until ICU-20997 is fixed)");
                 continue;
             }
 

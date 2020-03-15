@@ -84,3 +84,7 @@ configure text !eol
 
 # Enable syntax highlighting on GitHub.com
 .cpyskip.txt linguist-language=Ignore-List
+
+# Use JSONC for syntax highlighting on GitHub.com
+*.json linguist-language=jsonc
+

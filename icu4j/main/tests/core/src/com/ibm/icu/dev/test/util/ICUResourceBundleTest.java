@@ -701,14 +701,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         Set<String> localCountryExceptions = new HashSet<String>();
         if (logKnownIssue("cldrbug:8903",
-                "No localized region name for lrc_IQ, lrc_IR, nus_SS, nds_DE, ti_ER, ti_ET")) {
+                "No localized region name for lrc_IQ, lrc_IR, nus_SS, nds_DE, su_Latn_ID")) {
             localCountryExceptions.add("lrc_IQ");
             localCountryExceptions.add("lrc_IR");
             localCountryExceptions.add("nus_SS");
             localCountryExceptions.add("nds_DE");
             localCountryExceptions.add("nds_NL");
-            localCountryExceptions.add("ti_ER");
-            localCountryExceptions.add("ti_ET");
+            localCountryExceptions.add("su_Latn_ID");
         }
 
         Set<String> localLangExceptions = new HashSet<String>();

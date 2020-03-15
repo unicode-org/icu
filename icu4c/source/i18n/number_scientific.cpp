@@ -149,6 +149,11 @@ void ScientificHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     mod.set(exponent, this);
     micros.modInner = &mod;
 
+    // Change the exponent only after we select appropriate plural form
+    // for formatting purposes so that we preserve expected formatted
+    // string behavior.
+    quantity.adjustExponent(exponent);
+
     // We already performed rounding. Do not perform it again.
     micros.rounder = RoundingImpl::passThrough();
 }

@@ -1,0 +1,73 @@
+# Azure Pipelines configuration for Valgrind for ICU4C.
+# 
+# Note: The valgrind test configuration is in a separate file
+# so that it can be run independently from the regular builds.
+#
+# The Ubuntu images don't have valgrind installed by default, so we need
+# install it first.
+#
+# Only run valgrind on the master and maint branches, and
+# batch up any pending changes so that we will only have at most
+# one build running at a given time (since it takes time).
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - maint/maint-*
+  paths:
+    include:
+    - '*'
+    exclude:
+    - docs/*
+    - icu4j/*
+    - tools/*
+    - vendor/*
+    - .appveyor.xml
+    - .cpyskip.txt
+    - .travis.yml
+    - KEYS
+    - README.md
+
+jobs:
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang_Valgrind_Ubuntu_1604
+  displayName: 'C: Linux Clang Valgrind (Ubuntu 16.04)'
+  timeoutInMinutes: 60
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 1
+    - script: |
+        set -ex
+        sudo apt -y update
+        sudo apt install -y valgrind
+      displayName: 'Install valgrind'
+      timeoutInMinutes: 5
+    - script: |
+        cd icu4c/source && ./runConfigureICU --enable-debug Linux --disable-renaming --disable-layout --disable-layoutex && make -j2 tests
+      displayName: 'Build'
+      timeoutInMinutes: 10
+      env:
+        CC: clang
+        CXX: clang++
+    - script: |
+        cd icu4c/source/test/intltest && LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH valgrind --tool=memcheck --error-exitcode=1 --leak-check=full --show-reachable=yes ./intltest
+      displayName: 'Valgrind intltest'
+      timeoutInMinutes: 45
+    - script: |
+        cd icu4c/source/test/cintltst && LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH valgrind --tool=memcheck --error-exitcode=1 --leak-check=full --show-reachable=yes ./cintltst
+      displayName: 'Valgrind cintltst'
+      timeoutInMinutes: 15
+    - script: |
+        cd icu4c/source/test/iotest && LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH valgrind --tool=memcheck --error-exitcode=1 --leak-check=full --show-reachable=yes ./iotest
+      displayName: 'Valgrind iotest'
+      timeoutInMinutes: 5
+    - script: |
+        cd icu4c/source/tools/icuinfo && LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH valgrind --tool=memcheck --error-exitcode=1 --leak-check=full --show-reachable=yes ./icuinfo
+      displayName: 'Valgrind icuinfo'
+      timeoutInMinutes: 5
+
+#-------------------------------------------------------------------------

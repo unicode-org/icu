@@ -37,10 +37,10 @@ void TestGregorianChange(void);
 void TestFieldDifference(void);
 void TestAddRollEra0AndEraBounds(void);
 void TestGetTZTransition(void);
-
 void TestGetWindowsTimeZoneID(void);
 void TestGetTimeZoneIDByWindowsID(void);
 void TestJpnCalAddSetNextEra(void);
+void TestUcalOpenBufferRead(void);
 
 void addCalTest(TestNode** root);
 
@@ -64,6 +64,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestGetWindowsTimeZoneID, "tsformat/ccaltst/TestGetWindowsTimeZoneID");
     addTest(root, &TestGetTimeZoneIDByWindowsID, "tsformat/ccaltst/TestGetTimeZoneIDByWindowsID");
     addTest(root, &TestJpnCalAddSetNextEra, "tsformat/ccaltst/TestJpnCalAddSetNextEra");
+    addTest(root, &TestUcalOpenBufferRead, "tsformat/ccaltst/TestUcalOpenBufferRead");
 }
 
 /* "GMT" */
@@ -2541,6 +2542,15 @@ void TestJpnCalAddSetNextEra() {
         }
         ucal_close(jCal);
     }
+}
+
+void TestUcalOpenBufferRead() {
+    // ICU-21004: The issue shows under valgrind or as an Address Sanitizer failure.
+    UErrorCode status = U_ZERO_ERROR;
+    // string length: 157 + 1 + 100 = 258
+    const char *localeID = "x-privatebutreallylongtagfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar-foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoorbarfoobarfoo";
+    UCalendar *cal = ucal_open(NULL, 0, localeID, UCAL_GREGORIAN, &status);
+    ucal_close(cal);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

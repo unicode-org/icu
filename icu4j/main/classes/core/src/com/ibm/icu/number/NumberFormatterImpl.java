@@ -444,6 +444,19 @@ class NumberFormatterImpl {
 
             // Add the fraction digits
             length += writeFractionDigits(micros, quantity, string, length + index);
+
+            if (length == 0) {
+                // Force output of the digit for value 0
+                if (micros.symbols.getCodePointZero() != -1) {
+                    length += string.insertCodePoint(index,
+                            micros.symbols.getCodePointZero(),
+                            NumberFormat.Field.INTEGER);
+                } else {
+                    length += string.insert(index,
+                            micros.symbols.getDigitStringsLocal()[0],
+                            NumberFormat.Field.INTEGER);
+                }
+            }
         }
 
         return length;

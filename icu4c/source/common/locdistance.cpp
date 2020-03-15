@@ -102,14 +102,15 @@ LocaleDistance::LocaleDistance(const LocaleDistanceData &data, const XLikelySubt
     LSR enGB("en", "Latn", "GB", LSR::EXPLICIT_LSR);
     const LSR *p_enGB = &enGB;
     int32_t indexAndDistance = getBestIndexAndDistance(en, &p_enGB, 1,
-            shiftDistance(50), ULOCMATCH_FAVOR_LANGUAGE);
+            shiftDistance(50), ULOCMATCH_FAVOR_LANGUAGE, ULOCMATCH_DIRECTION_WITH_ONE_WAY);
     defaultDemotionPerDesiredLocale  = getDistanceFloor(indexAndDistance);
 }
 
 int32_t LocaleDistance::getBestIndexAndDistance(
         const LSR &desired,
         const LSR **supportedLSRs, int32_t supportedLSRsLength,
-        int32_t shiftedThreshold, ULocMatchFavorSubtag favorSubtag) const {
+        int32_t shiftedThreshold,
+        ULocMatchFavorSubtag favorSubtag, ULocMatchDirection direction) const {
     // Round up the shifted threshold (if fraction bits are not 0)
     // for comparison with un-shifted distances until we need fraction bits.
     // (If we simply shifted non-zero fraction bits away, then we might ignore a language
@@ -211,26 +212,38 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             // additional micro distance.
             shiftedDistance |= (desired.flags ^ supported.flags);
             if (shiftedDistance < shiftedThreshold) {
-                if (shiftedDistance == 0) {
-                    return slIndex << INDEX_SHIFT;
+                if (direction != ULOCMATCH_DIRECTION_ONLY_TWO_WAY ||
+                        // Is there also a match when we swap desired/supported?
+                        isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
+                    if (shiftedDistance == 0) {
+                        return slIndex << INDEX_SHIFT;
+                    }
+                    bestIndex = slIndex;
+                    shiftedThreshold = shiftedDistance;
+                    bestLikelyInfo = -1;
                 }
-                bestIndex = slIndex;
-                shiftedThreshold = shiftedDistance;
-                bestLikelyInfo = -1;
             }
         } else {
             if (shiftedDistance < shiftedThreshold) {
-                bestIndex = slIndex;
-                shiftedThreshold = shiftedDistance;
-                bestLikelyInfo = -1;
-            } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
-                bestLikelyInfo = likelySubtags.compareLikely(
-                        supported, *supportedLSRs[bestIndex], bestLikelyInfo);
-                if ((bestLikelyInfo & 1) != 0) {
-                    // This supported locale matches as well as the previous best match,
-                    // and neither matches perfectly,
-                    // but this one is "more likely" (has more-default subtags).
+                if (direction != ULOCMATCH_DIRECTION_ONLY_TWO_WAY ||
+                        // Is there also a match when we swap desired/supported?
+                        isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
                     bestIndex = slIndex;
+                    shiftedThreshold = shiftedDistance;
+                    bestLikelyInfo = -1;
+                }
+            } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
+                if (direction != ULOCMATCH_DIRECTION_ONLY_TWO_WAY ||
+                        // Is there also a match when we swap desired/supported?
+                        isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
+                    bestLikelyInfo = likelySubtags.compareLikely(
+                            supported, *supportedLSRs[bestIndex], bestLikelyInfo);
+                    if ((bestLikelyInfo & 1) != 0) {
+                        // This supported locale matches as well as the previous best match,
+                        // and neither matches perfectly,
+                        // but this one is "more likely" (has more-default subtags).
+                        bestIndex = slIndex;
+                    }
                 }
             }
         }

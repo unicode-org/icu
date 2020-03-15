@@ -7,7 +7,6 @@
 
 #include "charstr.h"
 #include "intltest.h"
-#include "number_decnum.h"
 #include "unicode/ctest.h"
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
@@ -47,7 +46,6 @@ extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if (exec) { logln("TestSuite UnitsTest: "); }
-
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testBasic);

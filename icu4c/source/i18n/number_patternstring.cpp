@@ -686,10 +686,10 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     int32_t exponentDigits = uprv_min(properties.minimumExponentDigits, dosMax);
     bool exponentShowPlusSign = properties.exponentSignAlwaysShown;
 
-    PropertiesAffixPatternProvider affixes(properties, status);
+    AutoAffixPatternProvider affixProvider(properties, status);
 
     // Prefixes
-    sb.append(affixes.getString(AffixPatternProvider::AFFIX_POS_PREFIX));
+    sb.append(affixProvider.get().getString(AffixPatternProvider::AFFIX_POS_PREFIX));
     int32_t afterPrefixPos = sb.length();
 
     // Figure out the grouping sizes.
@@ -778,7 +778,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
 
     // Suffixes
     int32_t beforeSuffixPos = sb.length();
-    sb.append(affixes.getString(AffixPatternProvider::AFFIX_POS_SUFFIX));
+    sb.append(affixProvider.get().getString(AffixPatternProvider::AFFIX_POS_SUFFIX));
 
     // Resolve Padding
     if (paddingWidth > 0 && !paddingLocation.isNull()) {
@@ -814,16 +814,16 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
 
     // Negative affixes
     // Ignore if the negative prefix pattern is "-" and the negative suffix is empty
-    if (affixes.hasNegativeSubpattern()) {
+    if (affixProvider.get().hasNegativeSubpattern()) {
         sb.append(u';');
-        sb.append(affixes.getString(AffixPatternProvider::AFFIX_NEG_PREFIX));
+        sb.append(affixProvider.get().getString(AffixPatternProvider::AFFIX_NEG_PREFIX));
         // Copy the positive digit format into the negative.
         // This is optional; the pattern is the same as if '#' were appended here instead.
         // NOTE: It is not safe to append the UnicodeString to itself, so we need to copy.
         // See http://bugs.icu-project.org/trac/ticket/13707
         UnicodeString copy(sb);
         sb.append(copy, afterPrefixPos, beforeSuffixPos - afterPrefixPos);
-        sb.append(affixes.getString(AffixPatternProvider::AFFIX_NEG_SUFFIX));
+        sb.append(affixProvider.get().getString(AffixPatternProvider::AFFIX_NEG_SUFFIX));
     }
 
     return sb;

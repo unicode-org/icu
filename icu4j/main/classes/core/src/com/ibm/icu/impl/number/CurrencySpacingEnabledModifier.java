@@ -54,7 +54,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
             afterPrefixInsert = null;
         }
         if (suffix.length() > 0 && suffix.fieldAt(0) == NumberFormat.Field.CURRENCY) {
-            int suffixCp = suffix.getLastCodePoint();
+            int suffixCp = suffix.getFirstCodePoint();
             UnicodeSet suffixUnicodeSet = getUnicodeSet(symbols, IN_CURRENCY, SUFFIX);
             if (suffixUnicodeSet.contains(suffixCp)) {
                 beforeSuffixUnicodeSet = getUnicodeSet(symbols, IN_NUMBER, SUFFIX);

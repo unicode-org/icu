@@ -59,6 +59,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(10, testFormattedDateInterval);
         TESTCASE(11, testCreateInstanceForAllLocales);
         TESTCASE(12, testTicket20707);
+        TESTCASE(13, testFormatMillisecond);
         default: name = ""; break;
     }
 }
@@ -1802,6 +1803,115 @@ void DateIntervalFormatTest::testCreateInstanceForAllLocales() {
                 DateIntervalFormat::createInstance(u"dMMMMy", locale, status),
                 status);
             status.errIfFailureAndReset(locales[i].getName());
+        }
+    }
+}
+
+void DateIntervalFormatTest::testFormatMillisecond() {
+    struct
+    {
+        int year;
+        int month;
+        int day;
+        int from_hour;
+        int from_miniute;
+        int from_second;
+        int from_millisecond;
+        int to_hour;
+        int to_miniute;
+        int to_second;
+        int to_millisecond;
+        const char* skeleton;
+        const char16_t* expected;
+    }
+    kTestCases [] =
+    {
+        //           From            To
+        //   y  m  d   h  m   s   ms   h  m   s   ms   skeleton  expected
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "ms",     u"23:45"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "msS",    u"23:45.3"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "msSS",   u"23:45.32"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "msSSS",  u"23:45.321"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "ms",     u"23:45"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "msS",    u"23:45.3 \u2013 23:45.9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "msSS",   u"23:45.32 \u2013 23:45.98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "msSSS",  u"23:45.321 \u2013 23:45.987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "ms",     u"23:45 \u2013 23:46"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "msS",    u"23:45.3 \u2013 23:46.9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "msSS",   u"23:45.32 \u2013 23:46.98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "msSSS",  u"23:45.321 \u2013 23:46.987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "ms",     u"23:45 \u2013 24:45"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "msS",    u"23:45.3 \u2013 24:45.9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "msSS",   u"23:45.32 \u2013 24:45.98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "msSSS",  u"23:45.321 \u2013 24:45.987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "s",      u"45"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "sS",     u"45.3"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "sSS",    u"45.32"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "sSSS",   u"45.321"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "s",      u"45"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "sS",     u"45.3 \u2013 45.9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "sSS",    u"45.32 \u2013 45.98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "sSSS",   u"45.321 \u2013 45.987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "s",      u"45 \u2013 46"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "sS",     u"45.3 \u2013 46.9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "sSS",    u"45.32 \u2013 46.98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "sSSS",   u"45.321 \u2013 46.987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "s",      u"45 \u2013 45"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "sS",     u"45.3 \u2013 45.9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "sSS",    u"45.32 \u2013 45.98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "sSSS",   u"45.321 \u2013 45.987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "S",      u"3"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "SS",     u"32"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 321, "SSS",    u"321"},
+
+        // Same millisecond but in different second.
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 321, "S",      u"3 \u2013 3"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 321, "SS",     u"32 \u2013 32"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 321, "SSS",    u"321 \u2013 321"},
+
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "S",      u"3 \u2013 9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "SS",     u"32 \u2013 98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 45, 987, "SSS",    u"321 \u2013 987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "S",      u"3 \u2013 9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "SS",     u"32 \u2013 98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 1, 23, 46, 987, "SSS",    u"321 \u2013 987"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "S",      u"3 \u2013 9"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "SS",     u"32 \u2013 98"},
+        { 2019, 2, 10, 1, 23, 45, 321, 2, 24, 45, 987, "SSS",    u"321 \u2013 987"},
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, nullptr, nullptr},
+    };
+
+    const Locale &enLocale = Locale::getEnglish();
+    IcuTestErrorCode status(*this, "testFormatMillisecond");
+    LocalPointer<Calendar> calendar(Calendar::createInstance(enLocale, status));
+    if (status.errIfFailureAndReset()) { return; }
+
+    for (int32_t i = 0; kTestCases[i].year > 0; i++) {
+        LocalPointer<DateIntervalFormat> fmt(DateIntervalFormat::createInstance(
+            kTestCases[i].skeleton, enLocale, status));
+        if (status.errIfFailureAndReset()) { continue; }
+
+        calendar->clear();
+        calendar->set(kTestCases[i].year, kTestCases[i].month, kTestCases[i].day,
+                      kTestCases[i].from_hour, kTestCases[i].from_miniute, kTestCases[i].from_second);
+        UDate from = calendar->getTime(status) + kTestCases[i].from_millisecond;
+        if (status.errIfFailureAndReset()) { continue; }
+
+        calendar->clear();
+        calendar->set(kTestCases[i].year, kTestCases[i].month, kTestCases[i].day,
+                      kTestCases[i].to_hour, kTestCases[i].to_miniute, kTestCases[i].to_second);
+        UDate to = calendar->getTime(status) + kTestCases[i].to_millisecond;
+        FormattedDateInterval  res = fmt->formatToValue(DateInterval(from, to), status);
+        if (status.errIfFailureAndReset()) { continue; }
+
+        UnicodeString formatted = res.toString(status);
+        if (status.errIfFailureAndReset()) { continue; }
+        if (formatted != kTestCases[i].expected) {
+            std::string tmp1;
+            std::string tmp2;
+            errln("Case %d for skeleton %s : Got %s but expect %s",
+                  i, kTestCases[i].skeleton, formatted.toUTF8String<std::string>(tmp1).c_str(),
+                  UnicodeString(kTestCases[i].expected).toUTF8String<std::string>(tmp2).c_str());
         }
     }
 }

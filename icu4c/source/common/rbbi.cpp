@@ -1117,7 +1117,7 @@ static icu::UInitOnce gRBBIInitOnce = U_INITONCE_INITIALIZER;
  * Release all static memory held by breakiterator.
  */
 U_CDECL_BEGIN
-static UBool U_CALLCONV rbbi_cleanup(void) {
+UBool U_CALLCONV rbbi_cleanup(void) {
     delete gLanguageBreakFactories;
     gLanguageBreakFactories = nullptr;
     delete gEmptyString;

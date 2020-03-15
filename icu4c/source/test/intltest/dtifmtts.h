@@ -34,6 +34,8 @@ public:
      */
     void testFormat();
 
+    void testFormatMillisecond();
+
     /**
      * Test formatting using user defined DateIntervalInfo
      */

@@ -1254,10 +1254,13 @@ UBool RegexCompile::doParseActions(int32_t action)
         break;
 
     case doBackslashX:
+        #if  UCONFIG_NO_BREAK_ITERATION==1
+        // Grapheme Cluster Boundary requires ICU break iteration.
+        error(U_UNSUPPORTED_ERROR);
+        #endif
         fixLiterals(FALSE);
         appendOp(URX_BACKSLASH_X, 0);
         break;
-
 
     case doBackslashZ:
         fixLiterals(FALSE);

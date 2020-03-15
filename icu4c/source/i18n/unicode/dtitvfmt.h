@@ -174,11 +174,12 @@ class U_I18N_API FormattedDateInterval : public UMemory, public FormattedValue {
  *
  * <P>
  * The calendar fields we support for interval formatting are:
- * year, month, date, day-of-week, am-pm, hour, hour-of-day, minute, and second
+ * year, month, date, day-of-week, am-pm, hour, hour-of-day, minute, second,
+ * and millisecond.
  * (though we do not currently have specific intervalFormat date for skeletons
- * with seconds).
+ * with seconds and millisecond).
  * Those calendar fields can be defined in the following order:
- * year >  month > date > hour (in day) >  minute > second
+ * year >  month > date > hour (in day) >  minute > second > millisecond
  *
  * The largest different calendar fields between 2 calendars is the
  * first different calendar field in above order.
