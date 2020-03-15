@@ -765,7 +765,7 @@ LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(UErrorCode& status) cons
     for (int32_t i = 0; i < length; i++) {
         arr[i] = impl.units[i]->build(status);
     }
-    return LocalArray<MeasureUnit>::withLength(arr, length);
+    return LocalArray<MeasureUnit>::withLengthAndCheckErrorCode(arr, length, status);
 }
 
 
