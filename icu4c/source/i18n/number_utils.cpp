@@ -9,19 +9,18 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include <stdlib.h>
+#include <cmath>
+#include "number_decnum.h"
+#include "number_types.h"
+#include "number_utils.h"
 #include "charstr.h"
 #include "decContext.h"
 #include "decNumber.h"
 #include "double-conversion.h"
 #include "fphdlimp.h"
-#include "number_decnum.h"
-#include "number_types.h"
-#include "number_utils.h"
-#include "strings.h"
 #include "uresimp.h"
 #include "ureslocs.h"
-#include <cmath>
-#include <stdlib.h>
 
 using namespace icu;
 using namespace icu::number;
@@ -29,10 +28,12 @@ using namespace icu::number::impl;
 
 using icu::double_conversion::DoubleToStringConverter;
 
+
 namespace {
 
-const char16_t *doGetPattern(UResourceBundle *res, const char *nsName, const char *patternKey,
-                             UErrorCode &publicStatus, UErrorCode &localStatus) {
+const char16_t*
+doGetPattern(UResourceBundle* res, const char* nsName, const char* patternKey, UErrorCode& publicStatus,
+             UErrorCode& localStatus) {
     // Construct the path into the resource bundle
     CharString key;
     key.append("NumberElements/", publicStatus);
@@ -45,55 +46,51 @@ const char16_t *doGetPattern(UResourceBundle *res, const char *nsName, const cha
     return ures_getStringByKeyWithFallback(res, key.data(), nullptr, &localStatus);
 }
 
-} // namespace
+}
 
-const char16_t *utils::getPatternForStyle(const Locale &locale, const char *nsName,
-                                          CldrPatternStyle style, UErrorCode &status) {
-    const char *patternKey;
+
+const char16_t* utils::getPatternForStyle(const Locale& locale, const char* nsName, CldrPatternStyle style,
+                                          UErrorCode& status) {
+    const char* patternKey;
     switch (style) {
-    case CLDR_PATTERN_STYLE_DECIMAL:
-        patternKey = "decimalFormat";
-        break;
-    case CLDR_PATTERN_STYLE_CURRENCY:
-        patternKey = "currencyFormat";
-        break;
-    case CLDR_PATTERN_STYLE_ACCOUNTING:
-        patternKey = "accountingFormat";
-        break;
-    case CLDR_PATTERN_STYLE_PERCENT:
-        patternKey = "percentFormat";
-        break;
-    case CLDR_PATTERN_STYLE_SCIENTIFIC:
-        patternKey = "scientificFormat";
-        break;
-    default:
-        patternKey = "decimalFormat"; // silence compiler error
-        UPRV_UNREACHABLE;
+        case CLDR_PATTERN_STYLE_DECIMAL:
+            patternKey = "decimalFormat";
+            break;
+        case CLDR_PATTERN_STYLE_CURRENCY:
+            patternKey = "currencyFormat";
+            break;
+        case CLDR_PATTERN_STYLE_ACCOUNTING:
+            patternKey = "accountingFormat";
+            break;
+        case CLDR_PATTERN_STYLE_PERCENT:
+            patternKey = "percentFormat";
+            break;
+        case CLDR_PATTERN_STYLE_SCIENTIFIC:
+            patternKey = "scientificFormat";
+            break;
+        default:
+            patternKey = "decimalFormat"; // silence compiler error
+            UPRV_UNREACHABLE;
     }
     LocalUResourceBundlePointer res(ures_open(nullptr, locale.getName(), &status));
-    if (U_FAILURE(status)) {
-        return u"";
-    }
+    if (U_FAILURE(status)) { return u""; }
 
     // Attempt to get the pattern with the native numbering system.
     UErrorCode localStatus = U_ZERO_ERROR;
-    const char16_t *pattern;
+    const char16_t* pattern;
     pattern = doGetPattern(res.getAlias(), nsName, patternKey, status, localStatus);
-    if (U_FAILURE(status)) {
-        return u"";
-    }
+    if (U_FAILURE(status)) { return u""; }
 
     // Fall back to latn if native numbering system does not have the right pattern
     if (U_FAILURE(localStatus) && uprv_strcmp("latn", nsName) != 0) {
         localStatus = U_ZERO_ERROR;
         pattern = doGetPattern(res.getAlias(), "latn", patternKey, status, localStatus);
-        if (U_FAILURE(status)) {
-            return u"";
-        }
+        if (U_FAILURE(status)) { return u""; }
     }
 
     return pattern;
 }
+
 
 DecNum::DecNum() {
     uprv_decContextDefault(&fContext, DEC_INIT_BASE);
@@ -101,11 +98,12 @@ DecNum::DecNum() {
     fContext.traps = 0; // no traps, thank you (what does this even mean?)
 }
 
-DecNum::DecNum(const DecNum &other, UErrorCode &status) : fContext(other.fContext) {
+DecNum::DecNum(const DecNum& other, UErrorCode& status)
+        : fContext(other.fContext) {
     // Allocate memory for the new DecNum.
     U_ASSERT(fContext.digits == other.fData.getCapacity());
     if (fContext.digits > kDefaultDigits) {
-        void *p = fData.resize(fContext.digits, 0);
+        void* p = fData.resize(fContext.digits, 0);
         if (p == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -114,43 +112,23 @@ DecNum::DecNum(const DecNum &other, UErrorCode &status) : fContext(other.fContex
 
     // Copy the data from the old DecNum to the new one.
     uprv_memcpy(fData.getAlias(), other.fData.getAlias(), sizeof(decNumber));
-    uprv_memcpy(fData.getArrayStart(), other.fData.getArrayStart(),
-                other.fData.getArrayLimit() - other.fData.getArrayStart());
+    uprv_memcpy(fData.getArrayStart(),
+            other.fData.getArrayStart(),
+            other.fData.getArrayLimit() - other.fData.getArrayStart());
 }
 
-void DecNum::setTo(const DecNum &other, UErrorCode &status) {
-    fContext = other.fContext;
-
-    // Allocate memory for the new DecNum.
-    U_ASSERT(fContext.digits == other.fData.getCapacity());
-    if (fContext.digits > kDefaultDigits) {
-        void *p = fData.resize(fContext.digits, 0);
-        if (p == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-    }
-
-    // Copy the data from the old DecNum to the new one.
-    uprv_memcpy(fData.getAlias(), other.fData.getAlias(), sizeof(decNumber));
-    uprv_memcpy(fData.getArrayStart(), other.fData.getArrayStart(),
-                other.fData.getArrayLimit() - other.fData.getArrayStart());
-}
-
-void DecNum::setTo(StringPiece str, UErrorCode &status) {
+void DecNum::setTo(StringPiece str, UErrorCode& status) {
     // We need NUL-terminated for decNumber; CharString guarantees this, but not StringPiece.
     CharString cstr(str, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
+    if (U_FAILURE(status)) { return; }
     _setTo(cstr.data(), str.length(), status);
 }
 
-void DecNum::setTo(const char *str, UErrorCode &status) {
+void DecNum::setTo(const char* str, UErrorCode& status) {
     _setTo(str, static_cast<int32_t>(uprv_strlen(str)), status);
 }
 
-void DecNum::setTo(double d, UErrorCode &status) {
+void DecNum::setTo(double d, UErrorCode& status) {
     // Need to check for NaN and Infinity before going into DoubleToStringConverter
     if (std::isnan(d) != 0 || std::isfinite(d) == 0) {
         status = U_UNSUPPORTED_ERROR;
@@ -163,8 +141,16 @@ void DecNum::setTo(double d, UErrorCode &status) {
     bool sign; // unused; always positive
     int32_t length;
     int32_t point;
-    DoubleToStringConverter::DoubleToAscii(d, DoubleToStringConverter::DtoaMode::SHORTEST, 0, buffer,
-                                           sizeof(buffer), &sign, &length, &point);
+    DoubleToStringConverter::DoubleToAscii(
+            d,
+            DoubleToStringConverter::DtoaMode::SHORTEST,
+            0,
+            buffer,
+            sizeof(buffer),
+            &sign,
+            &length,
+            &point
+    );
 
     // Read initial result as a string.
     _setTo(buffer, length, status);
@@ -174,7 +160,7 @@ void DecNum::setTo(double d, UErrorCode &status) {
     fData.getAlias()->bits |= static_cast<uint8_t>(std::signbit(d) ? DECNEG : 0);
 }
 
-void DecNum::_setTo(const char *str, int32_t maxDigits, UErrorCode &status) {
+void DecNum::_setTo(const char* str, int32_t maxDigits, UErrorCode& status) {
     if (maxDigits > kDefaultDigits) {
         fData.resize(maxDigits, 0);
         fContext.digits = maxDigits;
@@ -202,8 +188,8 @@ void DecNum::_setTo(const char *str, int32_t maxDigits, UErrorCode &status) {
     }
 }
 
-void DecNum::setTo(const uint8_t *bcd, int32_t length, int32_t scale, bool isNegative,
-                   UErrorCode &status) {
+void
+DecNum::setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative, UErrorCode& status) {
     if (length > kDefaultDigits) {
         fData.resize(length, 0);
         fContext.digits = length;
@@ -220,8 +206,8 @@ void DecNum::setTo(const uint8_t *bcd, int32_t length, int32_t scale, bool isNeg
     // "The exponent field holds the exponent of the number. Its range is limited by the requirement that
     // "the range of the adjusted exponent of the number be balanced and fit within a whole number of
     // "decimal digits (in this implementation, be –999,999,999 through +999,999,999). The adjusted
-    // "exponent is the exponent that would result if the number were expressed with a single digit
-    // before "the decimal point, and is therefore given by exponent+digits-1."
+    // "exponent is the exponent that would result if the number were expressed with a single digit before
+    // "the decimal point, and is therefore given by exponent+digits-1."
     if (scale > 999999999 - length + 1 || scale < -999999999 - length + 1) {
         // Too large for decNumber
         status = U_UNSUPPORTED_ERROR;
@@ -238,154 +224,35 @@ void DecNum::setTo(const uint8_t *bcd, int32_t length, int32_t scale, bool isNeg
     }
 }
 
-int32_t DecNum::toInt32() const {
-    decContext fContext;
-    return uprv_decNumberToInt32(fData, &fContext);
+void DecNum::normalize() {
+    uprv_decNumberReduce(fData, fData, &fContext);
 }
 
-double DecNum::toDouble() const {
-    UErrorCode status = U_ZERO_ERROR;
-    StringPiece strNumber = toString(status);
-    if (U_FAILURE(status)) {
-        return std::numeric_limits<double>::quiet_NaN();
-    }
-
-    return std::atof(strNumber.data());
-}
-
-void DecNum::normalize() { uprv_decNumberReduce(fData, fData, &fContext); }
-
-void DecNum::multiplyBy(double rhs, UErrorCode &status) {
-    DecNum rhsDecNum;
-    rhsDecNum.setTo(rhs, status);
-    multiplyBy(rhsDecNum, status);
-}
-
-void DecNum::multiplyBy(const DecNum &rhs, UErrorCode &status) {
-    // TODO(younies): this division temporary until we fix it
-    double dLhs = toDouble();
-    double dRhs = rhs.toDouble();
-    double result = dLhs * dRhs;
-    setTo(result, status);
-    return;
-
-    // uprv_decNumberMultiply(fData, fData, rhs.fData, &fContext);
-    // if (fContext.status != 0) {
-    //     status = U_INTERNAL_PROGRAM_ERROR;
-    // }
-}
-
-void DecNum::divideBy(double rhs, UErrorCode &status) {
-    DecNum rhsDecNum;
-    rhsDecNum.setTo(rhs, status);
-    divideBy(rhsDecNum, status);
-}
-
-void DecNum::divideBy(const DecNum &rhs, UErrorCode &status) {
-    if (rhs.isZero()) {
-        status = U_INTERNAL_PROGRAM_ERROR; // TODO(younies): add better status (divide by zero error)
-        return;
-    }
-
-    // TODO(younies): this division temporary until we fix it
-    double dLhs = toDouble();
-    double dRhs = rhs.toDouble();
-
-    setTo(dLhs / dRhs, status);
-    return;
-
-    // uprv_decNumberDivide(fData, fData, rhs.fData, &fContext);
-    // if ((fContext.status & DEC_Inexact) != 0) { // TODO(younies): write clarifications.
-    //     // Ignore.
-    // } else if (fContext.status != 0) {
-    //     status = U_INTERNAL_PROGRAM_ERROR;
-    // }
-}
-
-void DecNum::add(double rhs, UErrorCode &status) {
-    DecNum rhsDecNum;
-    rhsDecNum.setTo(rhs, status);
-    add(rhsDecNum, status);
-}
-
-void DecNum::add(const DecNum &rhs, UErrorCode &status) {
-    uprv_decNumberAdd(fData, fData, rhs.fData, &fContext);
+void DecNum::multiplyBy(const DecNum& rhs, UErrorCode& status) {
+    uprv_decNumberMultiply(fData, fData, rhs.fData, &fContext);
     if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
 }
 
-void DecNum::subtract(double rhs, UErrorCode &status) {
-    DecNum rhsDecNum;
-    rhsDecNum.setTo(rhs, status);
-    subtract(rhsDecNum, status);
-}
-
-void DecNum::subtract(const DecNum &rhs, UErrorCode &status) {
-    uprv_decNumberSubtract(fData, fData, rhs.fData, &fContext);
-    if (fContext.status != 0) {
+void DecNum::divideBy(const DecNum& rhs, UErrorCode& status) {
+    uprv_decNumberDivide(fData, fData, rhs.fData, &fContext);
+    if ((fContext.status & DEC_Inexact) != 0) {
+        // Ignore.
+    } else if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
 }
 
-void DecNum::power(int32_t p, UErrorCode &status) {
-    DecNum rhs;
-    rhs.setTo(p, status);
-    power(rhs, status);
+bool DecNum::isNegative() const {
+    return decNumberIsNegative(fData.getAlias());
 }
 
-void DecNum::power(const DecNum &rhs, UErrorCode &status) {
-    uprv_decNumberPower(fData, fData, rhs.fData, &fContext);
-
-    if (fContext.status != 0) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-    }
+bool DecNum::isZero() const {
+    return decNumberIsZero(fData.getAlias());
 }
 
-bool DecNum::isNegative() const { return decNumberIsNegative(fData.getAlias()); }
-
-bool DecNum::isZero() const { return decNumberIsZero(fData.getAlias()); }
-
-bool DecNum::lessThan(const DecNum &rhs, UErrorCode &status) const {
-    // lhs < rhs --> lhs - rhs < 0 ==> lhs - rhs (is negative).
-    DecNum temp;
-    temp.setTo(*this, status);
-    temp.subtract(rhs, status);
-    return temp.isNegative();
-}
-
-bool DecNum::greaterThan(const DecNum &rhs, UErrorCode &status) const {
-    // lhs > rhs --> 0 > rhs - lhs ==> rhs - lhs (is negative).
-    DecNum temp;
-    temp.setTo(rhs, status);
-    temp.subtract(*this, status);
-
-    return temp.isNegative();
-}
-
-bool DecNum::equalTo(const DecNum &rhs, UErrorCode &status) const {
-    // lhs == rhs --> lhs - rhs == 0 ==> lhs - rhs (is zero).
-    DecNum temp;
-    temp.setTo(*this, status);
-    temp.subtract(rhs, status);
-
-    return temp.isZero();
-}
-
-StringPiece DecNum::toString(UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return StringPiece();
-    }
-
-    // "string must be at least dn->digits+14 characters long"
-    int32_t minCapacity = fData.getAlias()->digits + 14;
-    MaybeStackArray<char, 30> buffer(minCapacity);
-    uprv_decNumberToString(fData, buffer.getAlias());
-
-    return StringPiece(buffer.getAlias());
-}
-
-void DecNum::toString(ByteSink &output, UErrorCode &status) const {
+void DecNum::toString(ByteSink& output, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }

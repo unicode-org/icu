@@ -6,10 +6,9 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <cmath>
-#include <memory>
-#include <vector>
 
 #include "charstr.h"
+#include "uassert.h"
 #include "measunit_impl.h"
 #include "resource.h"
 #include "unicode/stringpiece.h"
@@ -313,12 +312,11 @@ void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
 
 // Load Factor for compound source
 void loadCompoundFactor(Factor &factor, StringPiece source, UErrorCode &status) {
-    icu::MeasureUnit compoundSourceUnit = icu::MeasureUnit::forIdentifier(source, status);
-    auto singleUnits = compoundSourceUnit.splitToSingleUnits(status);
-    for (int i = 0; i < singleUnits.length(); i++) {
-        Factor singleFactor;
-        auto singleUnit = TempSingleUnit::forMeasureUnit(singleUnits[i], status);
+    auto compoundSourceUnit = MeasureUnitImpl::forIdentifier(source, status);
+    for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
+        auto singleUnit = *compoundSourceUnit.units[i]; // a TempSingleUnit
 
+        Factor singleFactor;
         loadSingleFactor(singleFactor, singleUnit.identifier, status);
 
         // You must apply SiPrefix before the power, because the power may be will flip the factor.
@@ -362,17 +360,17 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
  * Checks if the source unit and the target unit are singular. For example celsius or fahrenheit. But not
  * square-celsius or square-fahrenheit.
  */
-UBool checkSingularUnits(StringPiece source, UErrorCode &status) {
-    icu::MeasureUnit compoundSourceUnit = icu::MeasureUnit::forIdentifier(source, status);
+UBool checkSimpleUnit(StringPiece unitIdentifier, UErrorCode &status) {
+    auto compoundSourceUnit = MeasureUnitImpl::forIdentifier(unitIdentifier, status);
+    if (compoundSourceUnit.complexity != UMEASURE_UNIT_SINGLE) { return false; }
 
-    auto singleUnits = compoundSourceUnit.splitToSingleUnits(status);
-    if (singleUnits.length() > 1) return false; // Singular unit contains only a single unit.
+    U_ASSERT(compoundSourceUnit.units.length() == 1);
+    auto singleUnit = *(compoundSourceUnit.units[0]);
 
-    auto singleUnit = TempSingleUnit::forMeasureUnit(singleUnits[0], status);
-
-    if (singleUnit.dimensionality != 1) return false;
-    if (singleUnit.siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return true;
-    return false;
+    if (singleUnit.dimensionality != 1 || singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
+        return false;
+    }
+    return true;
 }
 
 /**
@@ -414,7 +412,7 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     conversionRate.factorNum = finalFactor.factorNum;
     conversionRate.factorDen = finalFactor.factorDen;
 
-    if (checkSingularUnits(source, status) && checkSingularUnits(target, status)) {
+    if (checkSimpleUnit(source, status) && checkSimpleUnit(target, status)) {
         conversionRate.sourceOffset =
             SourceToRoot.offset * SourceToRoot.factorDen / SourceToRoot.factorNum;
         conversionRate.targetOffset =
@@ -430,14 +428,11 @@ StringPiece getTarget(StringPiece source, UErrorCode &status) {
     return convertUnit.target;
 }
 
-// Remove this once we moved to c++14
-template <typename T, typename... Args> std::unique_ptr<T> make_unique(Args &&... args) {
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-
-std::vector<std::unique_ptr<MeasureUnit>> extractTargets(MeasureUnit source, UErrorCode &status) {
-    std::vector<std::unique_ptr<MeasureUnit>> result;
+// Returns the target of a source unit.
+MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
+    MeasureUnit result; // Empty unit.
     auto singleUnits = source.splitToSingleUnits(status);
+
     for (int i = 0; i < singleUnits.length(); i++) {
         const auto &singleUnit = singleUnits[i];
         StringPiece target = getTarget(singleUnit.getIdentifier(), status);
@@ -450,51 +445,22 @@ std::vector<std::unique_ptr<MeasureUnit>> extractTargets(MeasureUnit source, UEr
         tempTargetUnit.dimensionality = singleUnit.getDimensionality(status);
         if (U_FAILURE(status)) return result;
 
-        auto targetUnits = tempTargetUnit.build(status).splitToSingleUnits(status);
+        auto targetUnits = tempTargetUnit.build(status);
         if (U_FAILURE(status)) return result;
 
-        for (int j = 0; j < targetUnits.length(); j++) {
-            result.push_back(make_unique<MeasureUnit>(targetUnits[j]));
-            if (U_FAILURE(status)) return result;
-        }
+        result = result.product(targetUnits, status);
+        if (U_FAILURE(status)) return result;
     }
 
     return result;
 }
 
 UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode &status) {
-    std::vector<std::unique_ptr<MeasureUnit>> sourceTargetUnits = extractTargets(source, status);
-    std::vector<std::unique_ptr<MeasureUnit>> targetTargetUnits = extractTargets(target, status);
+    MeasureUnit sourceTargetUnit = extractTarget(source, status);
+    MeasureUnit targetTargetUnit = extractTarget(target, status);
 
-    const int32_t sourceUnitsSize = sourceTargetUnits.size();
-    const int32_t targetUnitsSize = targetTargetUnits.size();
-
-    if (sourceUnitsSize != targetUnitsSize || sourceUnitsSize == 0) return UnitsCase::UNCONVERTIBLE;
-    std::vector<bool> targetCheckersMatch(targetUnitsSize, false);
-    std::vector<bool> targetCheckersReciprocal(targetUnitsSize, false);
-
-    for (const auto &singleSourceTarget : sourceTargetUnits) {
-        // Check for Match
-        for (int i = 0; i < targetUnitsSize; i++) {
-            if (!targetCheckersMatch[i] && *singleSourceTarget == *targetTargetUnits[i]) {
-                targetCheckersMatch[i] = true;
-                break;
-            }
-        }
-
-        // Check for Reciprocal
-        for (int i = 0; i < targetUnitsSize; i++) {
-            if (!targetCheckersReciprocal[i] &&
-                singleSourceTarget->reciprocal(status) == *targetTargetUnits[i]) {
-                targetCheckersReciprocal[i] = true;
-                break;
-            }
-        }
-    }
-
-    if (targetCheckersMatch == std::vector<bool>(targetUnitsSize, true)) return UnitsCase::CONVERTIBLE;
-    if (targetCheckersReciprocal == std::vector<bool>(targetUnitsSize, true))
-        return UnitsCase::RECIPROCAL;
+    if (sourceTargetUnit == targetTargetUnit) return UnitsCase::CONVERTIBLE;
+    if (sourceTargetUnit == targetTargetUnit.reciprocal(status)) return UnitsCase::RECIPROCAL;
 
     return UnitsCase::UNCONVERTIBLE;
 }

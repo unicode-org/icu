@@ -33,9 +33,6 @@ class U_I18N_API DecNum : public UMemory {
     // Copy-like constructor; use the default move operators.
     DecNum(const DecNum& other, UErrorCode& status);
 
-    /** Sets the `DecNum` to have the value of another `DecNum`. */
-    void setTo(const DecNum& other, UErrorCode& status);
-
     /** Sets the decNumber to the StringPiece. */
     void setTo(StringPiece str, UErrorCode& status);
 
@@ -48,40 +45,15 @@ class U_I18N_API DecNum : public UMemory {
     /** Sets the decNumber to the BCD representation. */
     void setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative, UErrorCode& status);
 
-    /** Returns integral value of the `DecNum` */
-    int32_t toInt32() const;
-
-    /** Returns double value of the `DecNum` */
-    double toDouble() const;
-
     void normalize();
 
-    void multiplyBy(double rhs, UErrorCode& status);
     void multiplyBy(const DecNum& rhs, UErrorCode& status);
 
-    void divideBy(double rhs, UErrorCode& status);
     void divideBy(const DecNum& rhs, UErrorCode& status);
-
-    void add(double rhs, UErrorCode& status);
-    void add(const DecNum& rhs, UErrorCode& status);
-
-    void subtract(double rhs, UErrorCode& status);
-    void subtract(const DecNum& rhs, UErrorCode& status);
-
-    void power(int32_t p, UErrorCode& status);
-    void power(const DecNum& rhs, UErrorCode& status);
 
     bool isNegative() const;
 
     bool isZero() const;
-
-    bool lessThan(const DecNum& rhs, UErrorCode& status) const;
-
-    bool greaterThan(const DecNum& rhs, UErrorCode& status) const;
-
-    bool equalTo(const DecNum& rhs, UErrorCode& status) const;
-
-    StringPiece toString(UErrorCode& status) const;
 
     void toString(ByteSink& output, UErrorCode& status) const;
 
