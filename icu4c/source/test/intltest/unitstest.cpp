@@ -331,26 +331,16 @@ class ExpectedOutput {
 
     /**
      * Produces an output string for debug purposes.
-     * @param dbgOutput the buffer to which to write the output string.
-     * @param dbgOutputSize the size of the buffer. 
-     * @returns a null-terminated string containing each amount and unit.
      */
-    void toDebugStringN(char *dbgOutput, int dbgOutputSize) {
-        char *next = dbgOutput;
-        char *end = dbgOutput + dbgOutputSize;
+    std::string toDebugString() {
+        std::string result;
         for (int i = 0; i < _compoundCount; i++) {
-            int printlen =
-                snprintf(next, dbgOutputSize, "%f %s ", _amounts[i], _measureUnits[i].getIdentifier());
-            next += printlen;
-            dbgOutputSize -= printlen;
-            if (dbgOutputSize <= 0) { break; }
+            result += std::to_string(_amounts[i]);
+            result += " ";
+            result += _measureUnits[i].getIdentifier();
+            result += " ";
         }
-        // Terminate string with a null.
-        if (next >= end) {
-            dbgOutput[dbgOutputSize - 1] = 0;
-        } else {
-            *next = 0;
-        }
+        return result;
     }
 };
 
@@ -399,9 +389,6 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
         return;
     }
 
-    char debugCompoundOutput[100] = "TEST";
-    output.toDebugStringN(debugCompoundOutput, sizeof(debugCompoundOutput));
-
     // WIP(hugovdm): hook this up to actual tests.
     //
     // Possible after merging in younies/tryingdouble:
@@ -414,7 +401,8 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
             "Quantity (Category): \"%.*s\", Usage: \"%.*s\", Region: \"%.*s\", "
             "Input: \"%f %s\", Expected Output: %s\n",
             quantity.length(), quantity.data(), usage.length(), usage.data(), region.length(),
-            region.data(), inputAmount, inputMeasureUnit.getIdentifier(), debugCompoundOutput);
+            region.data(), inputAmount, inputMeasureUnit.getIdentifier(),
+            output.toDebugString().c_str());
 }
 
 /**
