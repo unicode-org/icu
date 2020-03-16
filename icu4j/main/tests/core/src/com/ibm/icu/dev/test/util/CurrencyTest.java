@@ -541,7 +541,7 @@ public class CurrencyTest extends TestFmwk {
         assertTrue("More than one currency for switzerland", currencies.size() > 1);
         assertEquals(
                 "With tender",
-                Arrays.asList(new String[] {"CHF", "CHE", "CHW"}),
+                Arrays.asList(new String[] {"CHF"}), // no longer include currencies with tender=false
                 metainfo.currencies(filter.withTender()));
     }
 
@@ -649,8 +649,8 @@ public class CurrencyTest extends TestFmwk {
             { "eo_AO", "1969-12-31" },
             { "eo_DE@currency=DEM", "2000-12-23", "EUR", "DEM" },
             { "eo-DE-u-cu-dem", "2000-12-23", "EUR", "DEM" },
-            { "en_US", null, "USD", "USN" },
-            { "en_US_Q", null, "USD", "USN" },
+            { "en_US", null, "USD" }, // no longer include currencies with tender=false
+            { "en_US_Q", null, "USD" }, // no longer include currencies with tender=false
         };
 
         DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -738,20 +738,20 @@ public class CurrencyTest extends TestFmwk {
         final String[][] PREFERRED = {
             {"root",                 },
             {"und",                  },
-            {"und_ZZ",          "XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XPD", "XPT", "XSU", "XTS", "XUA", "XXX"},
-            {"en_US",           "USD", "USN"},
+            {"und_ZZ",               }, // no longer include currencies with tender=false
+            {"en_US",           "USD"}, // no longer include currencies with tender=false
             {"en_029",               },
             {"en_TH",           "THB"},
             {"de",              "EUR"},
             {"de_DE",           "EUR"},
-            {"de_ZZ",           "XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XPD", "XPT", "XSU", "XTS", "XUA", "XXX"},
+            {"de_ZZ",                }, // no longer include currencies with tender=false
             {"ar",              "EGP"},
             {"ar_PS",           "ILS", "JOD"},
-            {"en@currency=CAD",     "USD", "USN"},
+            {"en@currency=CAD",     "USD"}, // no longer include currencies with tender=false
             {"fr@currency=ZZZ",     "EUR"},
             {"de_DE@currency=DEM",  "EUR"},
             {"en_US@rg=THZZZZ",     "THB"},
-            {"de@rg=USZZZZ",        "USD", "USN"},
+            {"de@rg=USZZZZ",        "USD"}, // no longer include currencies with tender=false
             {"en_US@currency=CAD;rg=THZZZZ",  "THB"},
         };
 

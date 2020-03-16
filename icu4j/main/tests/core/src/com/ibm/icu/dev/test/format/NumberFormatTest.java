@@ -4167,6 +4167,62 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestMinIntMinFracZero() {
+        class TestMinIntMinFracItem {
+            double value;;
+            String expDecFmt;
+            String expCurFmt;
+             // Simple constructor
+            public TestMinIntMinFracItem(double valueIn, String expDecFmtIn, String expCurFmtIn) {
+                value = valueIn;
+                expDecFmt = expDecFmtIn;
+                expCurFmt = expCurFmtIn;
+            }
+        };
+
+        final TestMinIntMinFracItem[] items = {
+            //                              decFmt curFmt
+            new TestMinIntMinFracItem( 10.0, "10", "$10" ),
+            new TestMinIntMinFracItem(  0.9, ".9", "$.9" ),
+            new TestMinIntMinFracItem(  0.0, "0",  "$0"  ),
+        };
+        int minInt, minFrac;
+
+        NumberFormat decFormat = NumberFormat.getInstance(ULocale.US, NumberFormat.NUMBERSTYLE);
+        decFormat.setMinimumIntegerDigits(0);
+        decFormat.setMinimumFractionDigits(0);
+        minInt = decFormat.getMinimumIntegerDigits();
+        minFrac = decFormat.getMinimumFractionDigits();
+        if (minInt != 0 || minFrac != 0) {
+            errln("after setting DECIMAL  minInt=minFrac=0, get minInt " + minInt + ", minFrac " + minFrac);
+        }
+        String decPattern = ((DecimalFormat)decFormat).toPattern();
+        if (decPattern.length() < 3 || decPattern.indexOf("#.#")< 0) {
+            errln("after setting DECIMAL  minInt=minFrac=0, expect pattern to contain \"#.#\", but get " + decPattern);
+        }
+
+        NumberFormat curFormat = NumberFormat.getInstance(ULocale.US, NumberFormat.CURRENCYSTYLE);
+        curFormat.setMinimumIntegerDigits(0);
+        curFormat.setMinimumFractionDigits(0);
+        minInt = curFormat.getMinimumIntegerDigits();
+        minFrac = curFormat.getMinimumFractionDigits();
+        if (minInt != 0 || minFrac != 0) {
+            errln("after setting CURRENCY minInt=minFrac=0, get minInt " + minInt + ", minFrac " + minFrac);
+        }
+
+        for (TestMinIntMinFracItem item: items) {
+            String decString = decFormat.format(item.value);
+            if (!decString.equals(item.expDecFmt)) {
+                errln("format DECIMAL  value " + item.value + ", expected \"" + item.expDecFmt + "\", got \"" + decString + "\"");
+            }
+            String curString = curFormat.format(item.value);
+            if (!curString.equals(item.expCurFmt)) {
+                errln("format CURRENCY value " + item.value + ", expected \"" + item.expCurFmt + "\", got \"" + curString + "\"");
+            }
+        }
+    }
+
+    @Test
     public void TestBug9936() {
         DecimalFormat numberFormat =
                 (DecimalFormat) NumberFormat.getInstance(ULocale.US);
@@ -6710,5 +6766,11 @@ public class NumberFormatTest extends TestFmwk {
           assertEquals("ppos: ", 0, ppos.getIndex());
           assertEquals("result: ", null, result);
         }
+    }
+
+    @Test
+    public void test20961_CurrencyPluralPattern() {
+        DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
+        assertEquals("Currency pattern", "#,##0.00 ¤¤¤", decimalFormat.toPattern());
     }
 }

@@ -107,6 +107,8 @@ public:
 
     void TestCanonicalization(void);
 
+    void TestCanonicalize(void);
+
 #if !UCONFIG_NO_FORMATTING
     static UDate date(int32_t y, int32_t m, int32_t d, int32_t hr = 0, int32_t min = 0, int32_t sec = 0);
 #endif

@@ -444,6 +444,9 @@ DateIntervalFormat::formatImpl(Calendar& fromCalendar,
     } else if ( fromCalendar.get(UCAL_SECOND, status) !=
                 toCalendar.get(UCAL_SECOND, status) ) {
         field = UCAL_SECOND;
+    } else if ( fromCalendar.get(UCAL_MILLISECOND, status) !=
+                toCalendar.get(UCAL_MILLISECOND, status) ) {
+        field = UCAL_MILLISECOND;
     }
 
     if ( U_FAILURE(status) ) {
@@ -455,7 +458,7 @@ DateIntervalFormat::formatImpl(Calendar& fromCalendar,
          */
         return fDateFormat->_format(fromCalendar, appendTo, fphandler, status);
     }
-    UBool fromToOnSameDay = (field==UCAL_AM_PM || field==UCAL_HOUR || field==UCAL_MINUTE || field==UCAL_SECOND);
+    UBool fromToOnSameDay = (field==UCAL_AM_PM || field==UCAL_HOUR || field==UCAL_MINUTE || field==UCAL_SECOND || field==UCAL_MILLISECOND);
 
     // following call should not set wrong status,
     // all the pass-in fields are valid till here

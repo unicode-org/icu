@@ -193,7 +193,7 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-    i = (int)time(NULL) % numFortunes;    /*  Use time to pick a somewhat-random fortune.  */
+    i = time(NULL) % numFortunes;    /*  Use time to pick a somewhat-random fortune.  */
     resString = ures_getStringByIndex(fortunes_r, i, &len, &err);
     if (U_FAILURE(err)) {
         fprintf(stderr, "%s: ures_getStringByIndex(%d) failed, %s\n", programName, i, u_errorName(err));

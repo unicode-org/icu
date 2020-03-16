@@ -8,13 +8,14 @@ The ICU project is under the stewardship of [The Unicode Consortium](https://www
 
 ![ICU Logo](./tools/images/iculogo_64.png)
 
-### Build Status (master branch)
+### Build Status (`master` branch)
 
 Build | Status
 ------|-------
 TravisCI | [![Build Status](https://travis-ci.org/unicode-org/icu.svg?branch=master)](https://travis-ci.org/unicode-org/icu)
-Azure Pipelines | [![Build Status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/Azure%20CI?branchName=master)](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=21&branchName=master)
-Azure Pipelines (Exhaustive Tests) | [![Build Status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/Azure%20CI%20%5BExhaustive%20Tests%5D?branchName=master)](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=24&branchName=master)
+Azure Pipelines | [![Build Status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/CI?branchName=master)](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=21&branchName=master)
+Azure Pipelines (Exhaustive Tests) | [![Build Status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/CI-Exhaustive-Master?branchName=master)](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=24&branchName=master)
+Azure Pipelines (Valgrind ICU4C) | [![Build Status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/CI-Valgrind-Master?branchName=master)](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=30&branchName=master)
 AppVeyor | [![Build status](https://ci.appveyor.com/api/projects/status/6ev1ssb6efahsvs2?svg=true)](https://ci.appveyor.com/project/unicode-org/icu)
 Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/icu.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:icu)
 

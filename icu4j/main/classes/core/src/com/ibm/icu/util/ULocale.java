@@ -12,7 +12,6 @@ package com.ibm.icu.util;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,7 +33,6 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceTableAccess;
 import com.ibm.icu.impl.LocaleIDParser;
 import com.ibm.icu.impl.LocaleIDs;
-import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.impl.locale.BaseLocale;
@@ -418,15 +416,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * Construct a ULocale object from a {@link java.util.Locale}.
-     * @param loc a {@link java.util.Locale}
-     */
-    private ULocale(Locale loc) {
-        this.localeID = getName(forLocale(loc).toString());
-        this.locale = loc;
-    }
-
-    /**
      * {@icu} Returns a ULocale object for a {@link java.util.Locale}.
      * The ULocale is canonicalized.
      * @param loc a {@link java.util.Locale}
@@ -498,13 +487,23 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Creates a ULocale from the id by first canonicalizing the id.
+     * {@icu} Creates a ULocale from the id by first canonicalizing the id according to CLDR.
      * @param nonCanonicalID the locale id to canonicalize
      * @return the locale created from the canonical version of the ID.
      * @stable ICU 3.0
      */
     public static ULocale createCanonical(String nonCanonicalID) {
         return new ULocale(canonicalize(nonCanonicalID), (Locale)null);
+    }
+
+    /**
+     * Creates a ULocale from the locale by first canonicalizing the locale according to CLDR.
+     * @param locale the ULocale to canonicalize
+     * @return the ULocale created from the canonical version of the ULocale.
+     * @draft ICU 67
+     */
+    public static ULocale createCanonical(ULocale locale) {
+        return createCanonical(locale.getName());
     }
 
     private static String lscvToID(String lang, String script, String country, String variant) {
@@ -1204,8 +1203,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     }
 
     /**
-     * {@icu} Returns the canonical name for the specified locale ID.  This is used to
-     * convert POSIX and other grandfathered IDs to standard ICU form.
+     * {@icu} Returns the canonical name according to CLDR for the specified locale ID.
+     * This is used to convert POSIX and other grandfathered IDs to standard ICU form.
      * @param localeID the locale id
      * @return the canonicalized id
      * @stable ICU 3.0
@@ -1236,6 +1235,144 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         if (!foundVariant) {
             if (parser.getLanguage().equals("nb") && parser.getVariant().equals("NY")) {
                 parser.setBaseName(lscvToID("nn", parser.getScript(), parser.getCountry(), null));
+            }
+        }
+
+        // If the BCP 47 primary language subtag matches the type attribute of a languageAlias
+        // element in Supplemental Data, replace the language subtag with the replacement value.
+        // If there are additional subtags in the replacement value, add them to the result, but
+        // only if there is no corresponding subtag already in the tag.
+        // Five special deprecated grandfathered codes (such as i-default) are in type attributes, and are also replaced.
+        try {
+            UResourceBundle languageAlias = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
+                "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER)
+                .get("alias")
+                .get("language");
+            // language _ variant
+            if (!parser.getVariant().isEmpty()) {
+                String [] variants = parser.getVariant().split("_");
+                for (String variant : variants) {
+                    try {
+                        // Note the key in the metadata.txt is formatted as language_variant
+                        // instead of language__variant but lscvToID will generate
+                        // language__variant so we have to build the string ourselves.
+                        ULocale replaceLocale = new ULocale(languageAlias.get(
+                            (new StringBuilder(parser.getLanguage().length() + 1 + parser.getVariant().length()))
+                                .append(parser.getLanguage())
+                                .append("_")
+                                .append(variant)
+                                .toString())
+                            .get("replacement")
+                            .getString());
+                        StringBuilder replacedVariant = new StringBuilder(parser.getVariant().length());
+                        for (String current : variants) {
+                            if (current.equals(variant)) continue;
+                            if (replacedVariant.length() > 0) replacedVariant.append("_");
+                            replacedVariant.append(current);
+                        }
+                        parser = new LocaleIDParser(
+                            (new StringBuilder(localeID.length()))
+                                .append(lscvToID(replaceLocale.getLanguage(),
+                                    !parser.getScript().isEmpty() ? parser.getScript() : replaceLocale.getScript(),
+                                    !parser.getCountry().isEmpty() ? parser.getCountry() : replaceLocale.getCountry(),
+                                    replacedVariant.toString()))
+                                .append(parser.getName().substring(parser.getBaseName().length()))
+                                .toString());
+                    } catch (MissingResourceException e) {
+                    }
+                }
+            }
+
+            // language _ script _ country
+            // ug_Arab_CN -> ug_CN
+            if (!parser.getScript().isEmpty() && !parser.getCountry().isEmpty()) {
+                try {
+                    ULocale replaceLocale = new ULocale(languageAlias.get(
+                        lscvToID(parser.getLanguage(), parser.getScript(), parser.getCountry(), null))
+                        .get("replacement")
+                        .getString());
+                    parser = new LocaleIDParser((new StringBuilder(localeID.length()))
+                        .append(lscvToID(replaceLocale.getLanguage(),
+                            replaceLocale.getScript(),
+                            replaceLocale.getCountry(),
+                            parser.getVariant()))
+                        .append(parser.getName().substring(parser.getBaseName().length()))
+                        .toString());
+                } catch (MissingResourceException e) {
+                }
+            }
+            // language _ country
+            // eg. az_AZ -> az_Latn_AZ
+            if (!parser.getCountry().isEmpty()) {
+                try {
+                    ULocale replaceLocale = new ULocale(languageAlias.get(
+                        lscvToID(parser.getLanguage(), null, parser.getCountry(), null))
+                        .get("replacement")
+                        .getString());
+                    parser = new LocaleIDParser((new StringBuilder(localeID.length()))
+                        .append(lscvToID(replaceLocale.getLanguage(),
+                            parser.getScript().isEmpty() ? replaceLocale.getScript() : parser.getScript(),
+                            replaceLocale.getCountry(),
+                            parser.getVariant()))
+                        .append(parser.getName().substring(parser.getBaseName().length()))
+                        .toString());
+                } catch (MissingResourceException e) {
+                }
+            }
+            // only language
+            // e.g. twi -> ak
+            try {
+                ULocale replaceLocale = new ULocale(languageAlias.get(parser.getLanguage())
+                    .get("replacement")
+                    .getString());
+                parser = new LocaleIDParser((new StringBuilder(localeID.length()))
+                    .append(lscvToID(replaceLocale.getLanguage(),
+                        parser.getScript().isEmpty() ? replaceLocale.getScript() : parser.getScript() ,
+                        parser.getCountry().isEmpty() ? replaceLocale.getCountry() : parser.getCountry() ,
+                        parser.getVariant()))
+                    .append(parser.getName().substring(parser.getBaseName().length()))
+                    .toString());
+            } catch (MissingResourceException e) {
+            }
+        } catch (MissingResourceException e) {
+        }
+
+        // If the BCP 47 region subtag matches the type attribute of a
+        // territoryAlias element in Supplemental Data, replace the language
+        // subtag with the replacement value, as follows:
+        if (!parser.getCountry().isEmpty()) {
+            try {
+                String replacements[] = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
+                    "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER)
+                    .get("alias")
+                    .get("territory")
+                    .get(parser.getCountry())
+                    .get("replacement")
+                    .getString()
+                    .split(" ");
+                String replacement = replacements[0];
+                // If there is a single territory in the replacement, use it.
+                // If there are multiple territories:
+                // Look up the most likely territory for the base language code (and script, if there is one).
+                // If that likely territory is in the list, use it.
+                // Otherwise, use the first territory in the list.
+                if (replacements.length > 1) {
+                    String likelyCountry = ULocale.addLikelySubtags(
+                        new ULocale(lscvToID(parser.getLanguage(), parser.getScript(), null, parser.getVariant())))
+                        .getCountry();
+                    for (String country : replacements) {
+                        if (country.equals(likelyCountry)) {
+                            replacement = likelyCountry;
+                            break;
+                        }
+                    }
+                }
+                parser = new LocaleIDParser(
+                    (new StringBuilder(localeID.length()))
+                    .append(lscvToID(parser.getLanguage(), parser.getScript(), replacement, parser.getVariant()))
+                    .append(parser.getName().substring(parser.getBaseName().length()))
+                    .toString());
+            } catch (MissingResourceException e) {
             }
         }
 
@@ -1982,28 +2119,42 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * ROOT ULocale if if a ROOT locale was used as a fallback (because nothing else in
      * availableLocales matched).  No ULocale array element should be null; behavior is
      * undefined if this is the case.
+     *
+     * <p>This is a thin wrapper over {@link LocalePriorityList} + {@link LocaleMatcher}.
+     *
      * @param acceptLanguageList list in HTTP "Accept-Language:" format of acceptable locales
      * @param availableLocales list of available locales. One of these will be returned.
      * @param fallback if non-null, a 1-element array containing a boolean to be set with
      * the fallback status
      * @return one of the locales from the availableLocales list, or null if none match
      * @stable ICU 3.4
+     * @see LocaleMatcher
+     * @see LocalePriorityList
      */
     public static ULocale acceptLanguage(String acceptLanguageList, ULocale[] availableLocales,
             boolean[] fallback) {
-        if (acceptLanguageList == null) {
-            throw new NullPointerException();
+        if (fallback != null) {
+            fallback[0] = true;
         }
-        ULocale acceptList[] = null;
+        LocalePriorityList desired;
         try {
-            acceptList = parseAcceptLanguage(acceptLanguageList, true);
-        } catch (ParseException pe) {
-            acceptList = null;
-        }
-        if (acceptList == null) {
+            desired = LocalePriorityList.add(acceptLanguageList).build();
+        } catch (IllegalArgumentException e) {
             return null;
         }
-        return acceptLanguage(acceptList, availableLocales, fallback);
+        LocaleMatcher.Builder builder = LocaleMatcher.builder();
+        for (ULocale locale : availableLocales) {
+            builder.addSupportedULocale(locale);
+        }
+        LocaleMatcher matcher = builder.build();
+        LocaleMatcher.Result result = matcher.getBestMatchResult(desired);
+        if (result.getDesiredIndex() >= 0) {
+            if (fallback != null && result.getDesiredULocale().equals(result.getSupportedULocale())) {
+                fallback[0] = false;
+            }
+            return result.getSupportedULocale();
+        }
+        return null;
     }
 
     /**
@@ -2014,57 +2165,39 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * will be one of the locales in availableLocales, or the ROOT ULocale if if a ROOT
      * locale was used as a fallback (because nothing else in availableLocales matched).
      * No ULocale array element should be null; behavior is undefined if this is the case.
+     *
+     * <p>This is a thin wrapper over {@link LocaleMatcher}.
+     *
      * @param acceptLanguageList list of acceptable locales
      * @param availableLocales list of available locales. One of these will be returned.
      * @param fallback if non-null, a 1-element array containing a boolean to be set with
      * the fallback status
      * @return one of the locales from the availableLocales list, or null if none match
      * @stable ICU 3.4
+     * @see LocaleMatcher
      */
 
-    public static ULocale acceptLanguage(ULocale[] acceptLanguageList, ULocale[]
-            availableLocales, boolean[] fallback) {
-        // fallbacklist
-        int i,j;
-        if(fallback != null) {
-            fallback[0]=true;
+    public static ULocale acceptLanguage(ULocale[] acceptLanguageList, ULocale[] availableLocales,
+            boolean[] fallback) {
+        if (fallback != null) {
+            fallback[0] = true;
         }
-        for(i=0;i<acceptLanguageList.length;i++) {
-            ULocale aLocale = acceptLanguageList[i];
-            boolean[] setFallback = fallback;
-            do {
-                for(j=0;j<availableLocales.length;j++) {
-                    if(availableLocales[j].equals(aLocale)) {
-                        if(setFallback != null) {
-                            setFallback[0]=false; // first time with this locale - not a fallback.
-                        }
-                        return availableLocales[j];
-                    }
-                    // compare to scriptless alias, so locales such as
-                    // zh_TW, zh_CN are considered as available locales - see #7190
-                    if (aLocale.getScript().length() == 0
-                            && availableLocales[j].getScript().length() > 0
-                            && availableLocales[j].getLanguage().equals(aLocale.getLanguage())
-                            && availableLocales[j].getCountry().equals(aLocale.getCountry())
-                            && availableLocales[j].getVariant().equals(aLocale.getVariant())) {
-                        ULocale minAvail = ULocale.minimizeSubtags(availableLocales[j]);
-                        if (minAvail.getScript().length() == 0) {
-                            if(setFallback != null) {
-                                setFallback[0] = false; // not a fallback.
-                            }
-                            return aLocale;
-                        }
-                    }
-                }
-                Locale loc = aLocale.toLocale();
-                Locale parent = LocaleUtility.fallback(loc);
-                if(parent != null) {
-                    aLocale = new ULocale(parent);
-                } else {
-                    aLocale = null;
-                }
-                setFallback = null; // Do not set fallback in later iterations
-            } while (aLocale != null);
+        LocaleMatcher.Builder builder = LocaleMatcher.builder();
+        for (ULocale locale : availableLocales) {
+            builder.addSupportedULocale(locale);
+        }
+        LocaleMatcher matcher = builder.build();
+        LocaleMatcher.Result result;
+        if (acceptLanguageList.length == 1) {
+            result = matcher.getBestMatchResult(acceptLanguageList[0]);
+        } else {
+            result = matcher.getBestMatchResult(Arrays.asList(acceptLanguageList));
+        }
+        if (result.getDesiredIndex() >= 0) {
+            if (fallback != null && result.getDesiredULocale().equals(result.getSupportedULocale())) {
+                fallback[0] = false;
+            }
+            return result.getSupportedULocale();
         }
         return null;
     }
@@ -2079,12 +2212,17 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * availableLocales matched).  No ULocale array element should be null; behavior is
      * undefined if this is the case.  This function will choose a locale from the
      * ULocale.getAvailableLocales() list as available.
+     *
+     * <p>This is a thin wrapper over {@link LocalePriorityList} + {@link LocaleMatcher}.
+     *
      * @param acceptLanguageList list in HTTP "Accept-Language:" format of acceptable locales
      * @param fallback if non-null, a 1-element array containing a boolean to be set with
      * the fallback status
      * @return one of the locales from the ULocale.getAvailableLocales() list, or null if
      * none match
      * @stable ICU 3.4
+     * @see LocaleMatcher
+     * @see LocalePriorityList
      */
     public static ULocale acceptLanguage(String acceptLanguageList, boolean[] fallback) {
         return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(),
@@ -2101,273 +2239,19 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * availableLocales matched).  No ULocale array element should be null; behavior is
      * undefined if this is the case.  This function will choose a locale from the
      * ULocale.getAvailableLocales() list as available.
+     *
+     * <p>This is a thin wrapper over {@link LocaleMatcher}.
+     *
      * @param acceptLanguageList ordered array of acceptable locales (preferred are listed first)
      * @param fallback if non-null, a 1-element array containing a boolean to be set with
      * the fallback status
      * @return one of the locales from the ULocale.getAvailableLocales() list, or null if none match
      * @stable ICU 3.4
+     * @see LocaleMatcher
      */
     public static ULocale acceptLanguage(ULocale[] acceptLanguageList, boolean[] fallback) {
         return acceptLanguage(acceptLanguageList, ULocale.getAvailableLocales(),
                 fallback);
-    }
-
-    /**
-     * Package local method used for parsing Accept-Language string
-     */
-    static ULocale[] parseAcceptLanguage(String acceptLanguage, boolean isLenient)
-            throws ParseException {
-        class ULocaleAcceptLanguageQ implements Comparable<ULocaleAcceptLanguageQ> {
-            private double q;
-            private double serial;
-            public ULocaleAcceptLanguageQ(double theq, int theserial) {
-                q = theq;
-                serial = theserial;
-            }
-            @Override
-            public int compareTo(ULocaleAcceptLanguageQ other) {
-                if (q > other.q) { // reverse - to sort in descending order
-                    return -1;
-                } else if (q < other.q) {
-                    return 1;
-                }
-                if (serial < other.serial) {
-                    return -1;
-                } else if (serial > other.serial) {
-                    return 1;
-                } else {
-                    return 0; // same object
-                }
-            }
-        }
-
-        // parse out the acceptLanguage into an array
-        TreeMap<ULocaleAcceptLanguageQ, ULocale> map =
-                new TreeMap<>();
-        StringBuilder languageRangeBuf = new StringBuilder();
-        StringBuilder qvalBuf = new StringBuilder();
-        int state = 0;
-        acceptLanguage += ","; // append comma to simplify the parsing code
-        int n;
-        boolean subTag = false;
-        boolean q1 = false;
-        for (n = 0; n < acceptLanguage.length(); n++) {
-            boolean gotLanguageQ = false;
-            char c = acceptLanguage.charAt(n);
-            switch (state) {
-            case 0: // before language-range start
-                if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')) {
-                    // in language-range
-                    languageRangeBuf.append(c);
-                    state = 1;
-                    subTag = false;
-                } else if (c == '*') {
-                    languageRangeBuf.append(c);
-                    state = 2;
-                } else if (c != ' ' && c != '\t') {
-                    // invalid character
-                    state = -1;
-                }
-                break;
-            case 1: // in language-range
-                if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z')) {
-                    languageRangeBuf.append(c);
-                } else if (c == '-') {
-                    subTag = true;
-                    languageRangeBuf.append(c);
-                } else if (c == '_') {
-                    if (isLenient) {
-                        subTag = true;
-                        languageRangeBuf.append(c);
-                    } else {
-                        state = -1;
-                    }
-                } else if ('0' <= c && c <= '9') {
-                    if (subTag) {
-                        languageRangeBuf.append(c);
-                    } else {
-                        // DIGIT is allowed only in language sub tag
-                        state = -1;
-                    }
-                } else if (c == ',') {
-                    // language-q end
-                    gotLanguageQ = true;
-                } else if (c == ' ' || c == '\t') {
-                    // language-range end
-                    state = 3;
-                } else if (c == ';') {
-                    // before q
-                    state = 4;
-                } else {
-                    // invalid character for language-range
-                    state = -1;
-                }
-                break;
-            case 2: // saw wild card range
-                if (c == ',') {
-                    // language-q end
-                    gotLanguageQ = true;
-                } else if (c == ' ' || c == '\t') {
-                    // language-range end
-                    state = 3;
-                } else if (c == ';') {
-                    // before q
-                    state = 4;
-                } else {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 3: // language-range end
-                if (c == ',') {
-                    // language-q end
-                    gotLanguageQ = true;
-                } else if (c == ';') {
-                    // before q
-                    state =4;
-                } else if (c != ' ' && c != '\t') {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 4: // before q
-                if (c == 'q') {
-                    // before equal
-                    state = 5;
-                } else if (c != ' ' && c != '\t') {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 5: // before equal
-                if (c == '=') {
-                    // before q value
-                    state = 6;
-                } else if (c != ' ' && c != '\t') {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 6: // before q value
-                if (c == '0') {
-                    // q value start with 0
-                    q1 = false;
-                    qvalBuf.append(c);
-                    state = 7;
-                } else if (c == '1') {
-                    // q value start with 1
-                    qvalBuf.append(c);
-                    state = 7;
-                } else if (c == '.') {
-                    if (isLenient) {
-                        qvalBuf.append(c);
-                        state = 8;
-                    } else {
-                        state = -1;
-                    }
-                } else if (c != ' ' && c != '\t') {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 7: // q value start
-                if (c == '.') {
-                    // before q value fraction part
-                    qvalBuf.append(c);
-                    state = 8;
-                } else if (c == ',') {
-                    // language-q end
-                    gotLanguageQ = true;
-                } else if (c == ' ' || c == '\t') {
-                    // after q value
-                    state = 10;
-                } else {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 8: // before q value fraction part
-                if ('0' <= c && c <= '9') {
-                    if (q1 && c != '0' && !isLenient) {
-                        // if q value starts with 1, the fraction part must be 0
-                        state = -1;
-                    } else {
-                        // in q value fraction part
-                        qvalBuf.append(c);
-                        state = 9;
-                    }
-                } else {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 9: // in q value fraction part
-                if ('0' <= c && c <= '9') {
-                    if (q1 && c != '0') {
-                        // if q value starts with 1, the fraction part must be 0
-                        state = -1;
-                    } else {
-                        qvalBuf.append(c);
-                    }
-                } else if (c == ',') {
-                    // language-q end
-                    gotLanguageQ = true;
-                } else if (c == ' ' || c == '\t') {
-                    // after q value
-                    state = 10;
-                } else {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            case 10: // after q value
-                if (c == ',') {
-                    // language-q end
-                    gotLanguageQ = true;
-                } else if (c != ' ' && c != '\t') {
-                    // invalid
-                    state = -1;
-                }
-                break;
-            }
-            if (state == -1) {
-                // error state
-                throw new ParseException("Invalid Accept-Language", n);
-            }
-            if (gotLanguageQ) {
-                double q = 1.0;
-                if (qvalBuf.length() != 0) {
-                    try {
-                        q = Double.parseDouble(qvalBuf.toString());
-                    } catch (NumberFormatException nfe) {
-                        // Already validated, so it should never happen
-                        q = 1.0;
-                    }
-                    if (q > 1.0) {
-                        q = 1.0;
-                    }
-                }
-                if (languageRangeBuf.charAt(0) != '*') {
-                    int serial = map.size();
-                    ULocaleAcceptLanguageQ entry = new ULocaleAcceptLanguageQ(q, serial);
-                    // sort in reverse order..   1.0, 0.9, 0.8 .. etc
-                    map.put(entry, new ULocale(canonicalize(languageRangeBuf.toString())));
-                }
-
-                // reset buffer and parse state
-                languageRangeBuf.setLength(0);
-                qvalBuf.setLength(0);
-                state = 0;
-            }
-        }
-        if (state != 0) {
-            // Well, the parser should handle all cases.  So just in case.
-            throw new ParseException("Invalid AcceptlLanguage", n);
-        }
-
-        // pull out the map
-        ULocale acceptList[] = map.values().toArray(new ULocale[map.size()]);
-        return acceptList;
     }
 
     private static final String UNDEFINED_LANGUAGE = "und";
@@ -3248,7 +3132,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
         List<String>subtags = tag.getVariants();
         // ICU-20478: Sort variants per UTS35.
-        ArrayList<String> variants = new ArrayList<String>(subtags);
+        ArrayList<String> variants = new ArrayList<>(subtags);
         Collections.sort(variants);
         for (String s : variants) {
             buf.append(LanguageTag.SEP);

@@ -40,8 +40,8 @@ struct MeasureUnitImpl;
  *           square-kilometer, kilojoule, one-per-second.
  * - COMPOUND: A unit composed of the product of multiple single units. Examples:
  *             meter-per-second, kilowatt-hour, kilogram-meter-per-square-second.
- * - SEQUENCE: A unit composed of the sum of multiple compound units. Examples: foot+inch,
- *             hour+minute+second, hectare+square-meter.
+ * - SEQUENCE: A unit composed of the sum of multiple single units. Examples: foot+inch,
+ *             hour+minute+second, degree+arcminute+arcsecond.
  *
  * The complexity determines which operations are available. For example, you cannot set the power
  * or SI prefix of a compound unit.
@@ -135,91 +135,91 @@ typedef enum UMeasureSIPrefix {
     UMEASURE_SI_PREFIX_KILO = 3,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: hecto, 10^2.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_HECTO = 2,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: deka, 10^1.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_DEKA = 1,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * The absence of an SI prefix.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_ONE = 0,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: deci, 10^-1.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_DECI = -1,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: centi, 10^-2.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_CENTI = -2,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: milli, 10^-3.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_MILLI = -3,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: micro, 10^-6.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_MICRO = -6,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: nano, 10^-9.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_NANO = -9,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: pico, 10^-12.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_PICO = -12,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: femto, 10^-15.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_FEMTO = -15,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: atto, 10^-18.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_ATTO = -18,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: zepto, 10^-21.
      *
      * @draft ICU 67
      */
     UMEASURE_SI_PREFIX_ZEPTO = -21,
 
     /**
-     * SI prefix: FIXME, 10^FIXME.
+     * SI prefix: yocto, 10^-24.
      *
      * @draft ICU 67
      */
@@ -578,7 +578,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of acceleration: meter-per-second-squared.
+     * Returns by pointer, unit of acceleration: meter-per-square-second.
      * Caller owns returned value and must free it.
      * Also see {@link #getMeterPerSecondSquared()}.
      * @param status ICU error code.
@@ -588,7 +588,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of acceleration: meter-per-second-squared.
+     * Returns by value, unit of acceleration: meter-per-square-second.
      * Also see {@link #createMeterPerSecondSquared()}.
      * @draft ICU 64
      */
@@ -938,7 +938,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of concentr: part-per-million.
+     * Returns by pointer, unit of concentr: permillion.
      * Caller owns returned value and must free it.
      * Also see {@link #getPartPerMillion()}.
      * @param status ICU error code.
@@ -948,7 +948,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of concentr: part-per-million.
+     * Returns by value, unit of concentr: permillion.
      * Also see {@link #createPartPerMillion()}.
      * @draft ICU 64
      */
@@ -1010,7 +1010,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of consumption: liter-per-100kilometers.
+     * Returns by pointer, unit of consumption: liter-per-100-kilometer.
      * Caller owns returned value and must free it.
      * Also see {@link #getLiterPer100Kilometers()}.
      * @param status ICU error code.
@@ -1020,7 +1020,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of consumption: liter-per-100kilometers.
+     * Returns by value, unit of consumption: liter-per-100-kilometer.
      * Also see {@link #createLiterPer100Kilometers()}.
      * @draft ICU 64
      */
@@ -2864,7 +2864,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of pressure: inch-hg.
+     * Returns by pointer, unit of pressure: inch-ofhg.
      * Caller owns returned value and must free it.
      * Also see {@link #getInchHg()}.
      * @param status ICU error code.
@@ -2874,7 +2874,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of pressure: inch-hg.
+     * Returns by value, unit of pressure: inch-ofhg.
      * Also see {@link #createInchHg()}.
      * @draft ICU 64
      */
@@ -2936,7 +2936,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of pressure: millimeter-of-mercury.
+     * Returns by pointer, unit of pressure: millimeter-ofhg.
      * Caller owns returned value and must free it.
      * Also see {@link #getMillimeterOfMercury()}.
      * @param status ICU error code.
@@ -2946,7 +2946,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of pressure: millimeter-of-mercury.
+     * Returns by value, unit of pressure: millimeter-ofhg.
      * Also see {@link #createMillimeterOfMercury()}.
      * @draft ICU 64
      */
@@ -2972,7 +2972,7 @@ class U_I18N_API MeasureUnit: public UObject {
 #endif /* U_HIDE_DRAFT_API */
 
     /**
-     * Returns by pointer, unit of pressure: pound-per-square-inch.
+     * Returns by pointer, unit of pressure: pound-force-per-square-inch.
      * Caller owns returned value and must free it.
      * Also see {@link #getPoundPerSquareInch()}.
      * @param status ICU error code.
@@ -2982,7 +2982,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by value, unit of pressure: pound-per-square-inch.
+     * Returns by value, unit of pressure: pound-force-per-square-inch.
      * Also see {@link #createPoundPerSquareInch()}.
      * @draft ICU 64
      */
@@ -3153,7 +3153,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Returns by pointer, unit of torque: pound-foot.
+     * Returns by pointer, unit of torque: pound-force-foot.
      * Caller owns returned value and must free it.
      * Also see {@link #getPoundFoot()}.
      * @param status ICU error code.
@@ -3162,7 +3162,7 @@ class U_I18N_API MeasureUnit: public UObject {
     static MeasureUnit *createPoundFoot(UErrorCode &status);
 
     /**
-     * Returns by value, unit of torque: pound-foot.
+     * Returns by value, unit of torque: pound-force-foot.
      * Also see {@link #createPoundFoot()}.
      * @draft ICU 64
      */

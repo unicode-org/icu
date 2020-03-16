@@ -243,6 +243,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test20499_CurrencyVisibleDigitsPlural);
   TESTCASE_AUTO(Test13735_GroupingSizeGetter);
   TESTCASE_AUTO(Test13734_StrictFlexibleWhitespace);
+  TESTCASE_AUTO(Test20961_CurrencyPluralPattern);
   TESTCASE_AUTO_END;
 }
 
@@ -9759,6 +9760,17 @@ void NumberFormatTest::Test13734_StrictFlexibleWhitespace() {
         df.parse("+  33", result, ppos);
         assertEquals("ppos : ", 0, ppos.getIndex());
         assertEquals("result : ", "0", result.getDecimalNumber(status).data());
+    }
+}
+
+void NumberFormatTest::Test20961_CurrencyPluralPattern() {
+    IcuTestErrorCode status(*this, "Test20961_CurrencyPluralPattern");
+    {
+        LocalPointer<DecimalFormat> decimalFormat(static_cast<DecimalFormat*>(
+            NumberFormat::createInstance("en-US", UNUM_CURRENCY_PLURAL, status)));
+        UnicodeString result;
+        decimalFormat->toPattern(result);
+        assertEquals("Currency pattern", u"#,##0.00 ¤¤¤", result);
     }
 }
 

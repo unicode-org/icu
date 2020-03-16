@@ -421,10 +421,10 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit G_FORCE = MeasureUnit.internalGetInstance("acceleration", "g-force");
 
     /**
-     * Constant for unit of acceleration: meter-per-second-squared
+     * Constant for unit of acceleration: meter-per-square-second
      * @stable ICU 54
      */
-    public static final MeasureUnit METER_PER_SECOND_SQUARED = MeasureUnit.internalGetInstance("acceleration", "meter-per-second-squared");
+    public static final MeasureUnit METER_PER_SECOND_SQUARED = MeasureUnit.internalGetInstance("acceleration", "meter-per-square-second");
 
     /**
      * Constant for unit of angle: arc-minute
@@ -543,10 +543,10 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit MOLE = MeasureUnit.internalGetInstance("concentr", "mole");
 
     /**
-     * Constant for unit of concentr: part-per-million
+     * Constant for unit of concentr: permillion
      * @stable ICU 57
      */
-    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "part-per-million");
+    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "permillion");
 
     /**
      * Constant for unit of concentr: percent
@@ -568,10 +568,10 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit PERMYRIAD = MeasureUnit.internalGetInstance("concentr", "permyriad");
 
     /**
-     * Constant for unit of consumption: liter-per-100kilometers
+     * Constant for unit of consumption: liter-per-100-kilometer
      * @stable ICU 56
      */
-    public static final MeasureUnit LITER_PER_100KILOMETERS = MeasureUnit.internalGetInstance("consumption", "liter-per-100kilometers");
+    public static final MeasureUnit LITER_PER_100KILOMETERS = MeasureUnit.internalGetInstance("consumption", "liter-per-100-kilometer");
 
     /**
      * Constant for unit of consumption: liter-per-kilometer
@@ -1209,10 +1209,10 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit HECTOPASCAL = MeasureUnit.internalGetInstance("pressure", "hectopascal");
 
     /**
-     * Constant for unit of pressure: inch-hg
+     * Constant for unit of pressure: inch-ofhg
      * @stable ICU 53
      */
-    public static final MeasureUnit INCH_HG = MeasureUnit.internalGetInstance("pressure", "inch-hg");
+    public static final MeasureUnit INCH_HG = MeasureUnit.internalGetInstance("pressure", "inch-ofhg");
 
     /**
      * Constant for unit of pressure: kilopascal
@@ -1235,10 +1235,10 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit MILLIBAR = MeasureUnit.internalGetInstance("pressure", "millibar");
 
     /**
-     * Constant for unit of pressure: millimeter-of-mercury
+     * Constant for unit of pressure: millimeter-ofhg
      * @stable ICU 54
      */
-    public static final MeasureUnit MILLIMETER_OF_MERCURY = MeasureUnit.internalGetInstance("pressure", "millimeter-of-mercury");
+    public static final MeasureUnit MILLIMETER_OF_MERCURY = MeasureUnit.internalGetInstance("pressure", "millimeter-ofhg");
 
     /**
      * Constant for unit of pressure: pascal
@@ -1248,10 +1248,10 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit PASCAL = MeasureUnit.internalGetInstance("pressure", "pascal");
 
     /**
-     * Constant for unit of pressure: pound-per-square-inch
+     * Constant for unit of pressure: pound-force-per-square-inch
      * @stable ICU 54
      */
-    public static final MeasureUnit POUND_PER_SQUARE_INCH = MeasureUnit.internalGetInstance("pressure", "pound-per-square-inch");
+    public static final MeasureUnit POUND_PER_SQUARE_INCH = MeasureUnit.internalGetInstance("pressure", "pound-force-per-square-inch");
 
     /**
      * Constant for unit of speed: kilometer-per-hour
@@ -1309,11 +1309,11 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit NEWTON_METER = MeasureUnit.internalGetInstance("torque", "newton-meter");
 
     /**
-     * Constant for unit of torque: pound-foot
+     * Constant for unit of torque: pound-force-foot
      * @draft ICU 64
      * @provisional This API might change or be removed in a future release.
      */
-    public static final MeasureUnit POUND_FOOT = MeasureUnit.internalGetInstance("torque", "pound-foot");
+    public static final MeasureUnit POUND_FOOT = MeasureUnit.internalGetInstance("torque", "pound-force-foot");
 
     /**
      * Constant for unit of volume: acre-foot

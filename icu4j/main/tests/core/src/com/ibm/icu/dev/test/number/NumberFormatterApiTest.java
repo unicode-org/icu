@@ -66,6 +66,7 @@ public class NumberFormatterApiTest {
     private static final Currency ESP = Currency.getInstance("ESP");
     private static final Currency PTE = Currency.getInstance("PTE");
     private static final Currency RON = Currency.getInstance("RON");
+    private static final Currency CNY = Currency.getInstance("CNY");
 
     @Test
     public void notationSimple() {
@@ -350,6 +351,15 @@ public class NumberFormatterApiTest {
                 "1 millón");
 
         assertFormatSingle(
+                "Compact Plural One with rounding",
+                "compact-long precision-integer",
+                "KK precision-integer",
+                NumberFormatter.with().notation(Notation.compactLong()).precision(Precision.integer()),
+                ULocale.forLanguageTag("es"),
+                1222222,
+                "1 millón");
+
+        assertFormatSingle(
                 "Compact Plural Other",
                 "compact-long",
                 "KK",
@@ -570,7 +580,7 @@ public class NumberFormatterApiTest {
                 NumberFormatter.with().unit(MeasureUnit.SQUARE_METER).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("en-GB"),
                 5.43,
-                "5.43 m²");
+                "5.43m²");
 
         // Try accessing a narrow unit directly from root.
         assertFormatSingle(
@@ -855,6 +865,15 @@ public class NumberFormatterApiTest {
                 ULocale.forLanguageTag("ro-RO"),
                 24,
                 "24,00 lei românești");
+
+        assertFormatSingle(
+                "Currency spacing in suffix (ICU-20954)",
+                "currency/CNY",
+                "currency/CNY",
+                NumberFormatter.with().unit(CNY),
+                ULocale.forLanguageTag("lu"),
+                123.12,
+                "123,12 CN¥");
     }
 
     @Test
@@ -1331,6 +1350,24 @@ public class NumberFormatterApiTest {
                 "1",
                 "1",
                 "0");
+
+        assertFormatSingle(
+                "ICU-20974 Double.MIN_NORMAL",
+                "scientific",
+                "E0",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.MIN_NORMAL,
+                "2.225074E-308");
+
+        assertFormatSingle(
+                "ICU-20974 Double.MIN_VALUE",
+                "scientific",
+                "E0",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.MIN_VALUE,
+                "4.9E-324");
     }
 
     @Test
@@ -1700,7 +1737,7 @@ public class NumberFormatterApiTest {
                 ".8765",
                 ".08765",
                 ".008765",
-                ""); // TODO: Avoid the empty string here?
+                "0"); // see ICU-20844
 
         assertFormatDescending(
                 "Integer Width Zero Fill 3",

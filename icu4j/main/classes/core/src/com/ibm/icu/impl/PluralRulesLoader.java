@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -47,12 +48,11 @@ public class PluralRulesLoader extends PluralRules.Factory {
      */
     public ULocale[] getAvailableULocales() {
         Set<String> keys = getLocaleIdToRulesIdMap(PluralType.CARDINAL).keySet();
-        ULocale[] locales = new ULocale[keys.size()];
-        int n = 0;
+        Set<ULocale> locales = new LinkedHashSet<ULocale>(keys.size());
         for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
-            locales[n++] = ULocale.createCanonical(iter.next());
+            locales.add(ULocale.createCanonical(iter.next()));
         }
-        return locales;
+        return locales.toArray(new ULocale[0]);
     }
 
     /**

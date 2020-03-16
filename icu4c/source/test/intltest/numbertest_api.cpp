@@ -33,6 +33,7 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
           ESP(u"ESP", status),
           PTE(u"PTE", status),
           RON(u"RON", status),
+          CNY(u"CNY", status),
           FRENCH_SYMBOLS(Locale::getFrench(), status),
           SWISS_SYMBOLS(Locale("de-CH"), status),
           MYANMAR_SYMBOLS(Locale("my"), status) {
@@ -607,7 +608,7 @@ void NumberFormatterApiTest::unitMeasure() {
             NumberFormatter::with().unit(SQUARE_METER).unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW),
             Locale::createFromName("en-GB"),
             5.43,
-            u"5.43 m²");
+            u"5.43m²");
 
     // Try accessing a narrow unit directly from root.
     assertFormatSingle(
@@ -910,6 +911,15 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("ro-RO"),
             24,
             u"24,00 lei românești");
+
+    assertFormatSingle(
+            u"Currency spacing in suffix (ICU-20954)",
+            u"currency/CNY",
+            u"currency/CNY",
+            NumberFormatter::with().unit(CNY),
+            Locale("lu"),
+            123.12,
+            u"123,12 CN¥");
 }
 
 void NumberFormatterApiTest::unitPercent() {
@@ -1398,6 +1408,30 @@ void NumberFormatterApiTest::roundingOther() {
             u"1",
             u"1",
             u"0");
+
+    assertFormatSingle(
+            u"ICU-20974 Double.MIN_NORMAL",
+            u"scientific",
+            u"E0",
+            NumberFormatter::with().notation(Notation::scientific()),
+            Locale::getEnglish(),
+            DBL_MIN,
+            u"2.225074E-308");
+
+#ifndef DBL_TRUE_MIN
+#define DBL_TRUE_MIN 4.9E-324
+#endif
+
+    // Note: this behavior is intentionally different from Java; see
+    // https://github.com/google/double-conversion/issues/126
+    assertFormatSingle(
+            u"ICU-20974 Double.MIN_VALUE",
+            u"scientific",
+            u"E0",
+            NumberFormatter::with().notation(Notation::scientific()),
+            Locale::getEnglish(),
+            DBL_TRUE_MIN,
+            u"5E-324");
 }
 
 void NumberFormatterApiTest::grouping() {

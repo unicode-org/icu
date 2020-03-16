@@ -76,6 +76,12 @@ public interface LdmlConverterConfig {
      */
     Path getOutputDir();
 
+    /**
+     * Returns a CLDR version String (e.g. {@code "36.1"}) according to either the specified option
+     * or (as a fallback) the version specified by the CLDR library against which this code is run.
+     */
+    String getCldrVersion();
+
     /** Returns the minimal draft status for CLDR data to be converted. */
     CldrDraftStatus getMinimumDraftStatus();
 
