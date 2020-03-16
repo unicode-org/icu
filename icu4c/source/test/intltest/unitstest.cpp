@@ -363,7 +363,7 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     StringPiece quantity = trimField(fields[0]);
     StringPiece usage = trimField(fields[1]);
     StringPiece region = trimField(fields[2]);
-    StringPiece inputR = trimField(fields[3]);
+    // Unused // StringPiece inputR = trimField(fields[3]);
     StringPiece inputD = trimField(fields[4]);
     StringPiece inputUnit = trimField(fields[5]);
     ExpectedOutput output;
@@ -419,7 +419,7 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
     FileStream *file;
     char line[10000];
     char *start, *limit;
-    int32_t i, length;
+    int32_t i;
 
     if (U_FAILURE(*pErrorCode)) { return; }
 
@@ -441,7 +441,7 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
 
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
         /* remove trailing newline characters */
-        length = (int32_t)(u_rtrim(line) - line);
+        u_rtrim(line);
 
         start = line;
         *pErrorCode = U_ZERO_ERROR;
