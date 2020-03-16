@@ -286,6 +286,7 @@ class ExpectedOutput {
   public:
     /**
      * Parse an expected output field from the test data file.
+     *
      * @param output may be a string representation of an integer, a rational
      * fraction, a decimal fraction, or it may be a unit identifier. Whitespace
      * should already be trimmed. This function ignores rational fractions,
@@ -293,31 +294,38 @@ class ExpectedOutput {
      * @return true if the field was successfully parsed, false if parsing
      * failed.
      */
-    UBool parseOutputField(StringPiece output) {
+    void parseOutputField(StringPiece output, UErrorCode &errorCode) {
+        if (U_FAILURE(errorCode)) return;
         DecimalQuantity dqOutputD;
-        UErrorCode errorCode = U_ZERO_ERROR;
 
         dqOutputD.setToDecNumber(output, errorCode);
         if (U_SUCCESS(errorCode)) {
             _amounts[_compoundCount] = dqOutputD.toDouble();
-            return true;
+            return;
         } else if (errorCode == U_DECIMAL_NUMBER_SYNTAX_ERROR) {
+            // Not a decimal fraction, it might be a rational fraction or a unit
+            // identifier: continue.
             errorCode = U_ZERO_ERROR;
         } else {
-            return false;
+            // Unexpected error, so we propagate it.
+            return;
         }
 
         _measureUnits[_compoundCount] = MeasureUnit::forIdentifier(output, errorCode);
         if (U_SUCCESS(errorCode)) {
             _compoundCount++;
             _skippedFields = 0;
-            return true;
+            return;
         }
         _skippedFields++;
         if (_skippedFields < 2) {
-            return true;
+            // We are happy skipping one field per output unit: we want to skip
+            // rational fraction fiels like "11 / 10".
+            errorCode = U_ZERO_ERROR;
+            return;
         } else {
-            return false;
+            // Propagate the error.
+            return;
         }
     }
 
@@ -370,7 +378,10 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     StringPiece inputUnit = trimField(fields[5]);
     ExpectedOutput output;
     for (int i = 6; i < fieldCount; i++) {
-        output.parseOutputField(trimField(fields[i]));
+        output.parseOutputField(trimField(fields[i]), status);
+    }
+    if (status.errIfFailureAndReset("parsing unitPreferencesTestData.txt test case: %s", fields[0][0])) {
+        return;
     }
 
     DecimalQuantity dqInputD;
