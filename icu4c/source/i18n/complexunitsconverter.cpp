@@ -39,7 +39,7 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
     units_.appendAll(outputUnits, status);
 }
 
-UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) {
+UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const{
     U_ASSERT(unitConverters_.length() ?> 0);
 
     // first quantity is the biggest one.
@@ -48,7 +48,7 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) {
     return newQuantity >= limit;
 }
 
-MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UErrorCode &status) {
+MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UErrorCode &status) const{
     MaybeStackVector<Measure> result;
 
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {

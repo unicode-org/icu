@@ -35,14 +35,14 @@ class U_I18N_API ComplexUnitsConverter {
 
     // Returns true if the `quantity` in the `inputUnit` is greater than or equal than the `limit` in the
     // biggest `outputUnits`
-    UBool greaterThanOrEqual(double quantity, double limit);
+    UBool greaterThanOrEqual(double quantity, double limit) const;
 
     // Returns outputMeasures which is an array with the correspinding values.
     //    - E.g. converting meters to feet and inches.
     //                  1 meter --> 3 feet, 3.3701 inches
     //         NOTE:
-    //           the smallest element is the only element that could has fraction values.
-    MaybeStackVector<Measure> convert(double quantity, UErrorCode &status);
+    //           the smallest element is the only element that has fractional values.
+    MaybeStackVector<Measure> convert(double quantity, UErrorCode &status) const;
 
   private:
     MaybeStackVector<UnitConverter> unitConverters_;
