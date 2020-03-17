@@ -244,11 +244,6 @@ public class LocaleDistance {
      */
     public int getBestIndexAndDistance(LSR desired, LSR[] supportedLSRs, int supportedLSRsLength,
             int shiftedThreshold, FavorSubtag favorSubtag, LocaleMatcher.Direction direction) {
-        // Round up the shifted threshold (if fraction bits are not 0)
-        // for comparison with un-shifted distances until we need fraction bits.
-        // (If we simply shifted non-zero fraction bits away, then we might ignore a language
-        // when it's really still a micro distance below the threshold.)
-        int roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
         BytesTrie iter = new BytesTrie(trie);
         // Look up the desired language only once for all supported LSRs.
         // Its "distance" is either a match point value of 0, or a non-match negative value.
@@ -288,6 +283,11 @@ public class LocaleDistance {
                 star = true;
             }
             assert 0 <= distance && distance <= 100;
+            // Round up the shifted threshold (if fraction bits are not 0)
+            // for comparison with un-shifted distances until we need fraction bits.
+            // (If we simply shifted non-zero fraction bits away, then we might ignore a language
+            // when it's really still a micro distance below the threshold.)
+            int roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
             // We implement "favor subtag" by reducing the language subtag distance
             // (unscientifically reducing it to a quarter of the normal value),
             // so that the script distance is relatively more important.
@@ -296,7 +296,9 @@ public class LocaleDistance {
             if (favorSubtag == FavorSubtag.SCRIPT) {
                 distance >>= 2;
             }
-            if (distance >= roundedThreshold) {
+            // Let distance == roundedThreshold pass until the tie-breaker logic
+            // at the end of the loop.
+            if (distance > roundedThreshold) {
                 continue;
             }
 
@@ -314,7 +316,7 @@ public class LocaleDistance {
                 scriptDistance &= ~DISTANCE_IS_FINAL;
             }
             distance += scriptDistance;
-            if (distance >= roundedThreshold) {
+            if (distance > roundedThreshold) {
                 continue;
             }
 
@@ -324,7 +326,7 @@ public class LocaleDistance {
                 distance += defaultRegionDistance;
             } else {
                 int remainingThreshold = roundedThreshold - distance;
-                if (minRegionDistance >= remainingThreshold) {
+                if (minRegionDistance > remainingThreshold) {
                     continue;
                 }
 
@@ -452,7 +454,7 @@ public class LocaleDistance {
                         d = getFallbackRegionDistance(iter, startState);
                         star = true;
                     }
-                    if (d >= threshold) {
+                    if (d > threshold) {
                         return d;
                     } else if (regionDistance < d) {
                         regionDistance = d;
@@ -465,7 +467,7 @@ public class LocaleDistance {
                 }
             } else if (!star) {
                 int d = getFallbackRegionDistance(iter, startState);
-                if (d >= threshold) {
+                if (d > threshold) {
                     return d;
                 } else if (regionDistance < d) {
                     regionDistance = d;
