@@ -17,6 +17,8 @@
 
 using icu::number::impl::DecimalQuantity;
 
+#include "wip_units_resources.h"
+
 class UnitsTest : public IntlTest {
   public:
     UnitsTest() {}
@@ -30,6 +32,8 @@ class UnitsTest : public IntlTest {
     void testMass();
     void testTemperature();
     void testArea();
+    void testUSVolumeResourceLoading();
+    void testSIMassResourceLoading();
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -46,6 +50,8 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testMass);
     TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO(testArea);
+    TESTCASE_AUTO(testUSVolumeResourceLoading);
+    TESTCASE_AUTO(testSIMassResourceLoading);
     TESTCASE_AUTO_END;
 }
 
@@ -519,6 +525,70 @@ void UnitsTest::testPreferences() {
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
     }
+}
+
+void UnitsTest::testUSVolumeResourceLoading() {
+    const char *category = "volume";
+    const char *usage = "fluid";
+    const char *inputUnit = "centiliter";
+    const char *outputRegion = "US";
+    const char *expectedOutputUnits[] = {
+        "gallon",
+        "quart",
+        "pint",
+        "cup",
+        "fluid-ounce",
+        "tablespoon",
+        "teaspoon",
+    };
+
+    // UErrorCode status = U_ZERO_ERROR;
+    IcuTestErrorCode status(*this, "testUSVolumeResourceLoading");
+    UnitConversionResourceBundle resources;
+    loadResources(usage, inputUnit, outputRegion, &resources, status);
+    if (status.errIfFailureAndReset("loadResources(\"%s\", \"%s\", \"%s\", \"%s\", status)",
+                                    resources.category.data(), usage, inputUnit, outputRegion)) {
+        return;
+    }
+
+    fprintf(stderr, "category: %s\n", resources.category.data());
+    fprintf(stderr, "usage: %s\n", resources.usage);
+    fprintf(stderr, "outputRegion: %s\n", resources.outputRegion);
+
+    fprintf(stderr, "inputUnit: %s\n", resources.inputUnit);
+    fprintf(stderr, "baseUnit: %s\n", resources.baseUnit);
+}
+
+void UnitsTest::testSIMassResourceLoading() {
+    const char *category = "mass";
+    const char *usage = "zz_nonexistant"; // expecting default usage.
+    // WIP(fails) // const char *inputUnit = "centigram";
+    // WIP(fails) // const char *inputUnit = "milligram";
+    const char *inputUnit = "centigram";
+    const char *outputRegion = "XZ"; // non-existant, expecting 001 results.
+    const char *expectedOutputUnits[] = {
+        "metric-ton",
+        "kilogram",
+        "gram",
+        "milligram",
+        "microgram",
+    };
+
+    // UErrorCode status = U_ZERO_ERROR;
+    IcuTestErrorCode status(*this, "testSIMassResourceLoading");
+    UnitConversionResourceBundle resources;
+    loadResources(usage, inputUnit, outputRegion, &resources, status);
+    if (status.errIfFailureAndReset("loadResources(\"%s\", \"%s\", \"%s\", \"%s\", status)", category,
+                                    usage, inputUnit, outputRegion)) {
+        return;
+    }
+
+    fprintf(stderr, "category: %s\n", resources.category.data());
+    fprintf(stderr, "usage: %s\n", resources.usage);
+    fprintf(stderr, "outputRegion: %s\n", resources.outputRegion);
+
+    fprintf(stderr, "inputUnit: %s\n", resources.inputUnit);
+    fprintf(stderr, "baseUnit: %s\n", resources.baseUnit);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
