@@ -37,6 +37,7 @@ class UnitsTest : public IntlTest {
     void testComplicatedUnits();
     void testCLDRUnitsTests();
     void testCLDRUnitsTests2();
+    void testStatus();
 
     // TODO(younies): remove after using CLDR test cases.
     void verifyTestCase(const UnitConversionTestCase &testCase);
@@ -56,6 +57,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testComplicatedUnits);
     TESTCASE_AUTO(testCLDRUnitsTests);
     TESTCASE_AUTO(testCLDRUnitsTests2);
+    TESTCASE_AUTO(testStatus);
     TESTCASE_AUTO_END;
 }
 
@@ -508,6 +510,13 @@ void UnitsTest::testConversions() {
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", filename, u_errorName(errorCode))) {
         return;
     }
+}
+
+/**
+ * Tests different return statuses depending on the input.
+ */
+void UnitsTest::testStatus() {
+
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

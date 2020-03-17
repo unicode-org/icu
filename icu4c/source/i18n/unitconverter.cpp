@@ -68,8 +68,7 @@ double strToDouble(StringPiece strNum) {
     // StringToDoubleConverter.
     StringToDoubleConverter converter(0, 0, 0, "", "");
     int32_t count;
-    return converter.StringToDouble(reinterpret_cast<const uint16_t *>(strNum.length()), strNum.length(),
-                                    &count);
+    return converter.StringToDouble(strNum.data(), strNum.length(), &count);
 }
 
 // Returns `double` from a scientific number that could has a division sign (i.e. "1", "2.01", "3.09E+4"
@@ -448,16 +447,20 @@ MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
         if (U_FAILURE(status)) return result;
 
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(target, status);
-        auto tempTargetUnit = TempSingleUnit::forMeasureUnit(targetUnit, status);
-        tempTargetUnit.siPrefix = singleUnit.getSIPrefix(status);
-        tempTargetUnit.dimensionality = singleUnit.getDimensionality(status);
+        auto targetSingleUnits = targetUnit.splitToSingleUnits(status);
         if (U_FAILURE(status)) return result;
 
-        auto targetUnits = tempTargetUnit.build(status);
-        if (U_FAILURE(status)) return result;
+        for (int i = 0, n = targetSingleUnits.length(); i < n; ++i) {
+            auto tempTargetUnit = TempSingleUnit::forMeasureUnit(targetSingleUnits[i], status);
+            tempTargetUnit.dimensionality = singleUnit.getDimensionality(status);
+            if (U_FAILURE(status)) return result;
 
-        result = result.product(targetUnits, status);
-        if (U_FAILURE(status)) return result;
+            auto targetUnits = tempTargetUnit.build(status);
+            if (U_FAILURE(status)) return result;
+
+            result = result.product(targetUnits, status);
+            if (U_FAILURE(status)) return result;
+        }
     }
 
     return result;
