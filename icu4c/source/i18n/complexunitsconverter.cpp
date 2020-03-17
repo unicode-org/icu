@@ -4,6 +4,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+#include <utility>
 
 #include "cmemory.h"
 #include "complexunitsconverter.h"
@@ -12,6 +13,18 @@
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
+
+ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
+                                             UErrorCode &status) {
+    auto singleUnits = outputUnits.splitToSingleUnits(status);
+    MaybeStackVector<MeasureUnit> singleUnitsInOrder;
+    for (int i = 0, n = singleUnits.length(); i < n; ++i) {
+        // TODO(younies): ensure units being in order in phase 2. Now, the units in order by default.
+        singleUnitsInOrder.emplaceBack(singleUnits[i]);
+    }
+
+    ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder), status);
+}
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
                                              const MaybeStackVector<MeasureUnit> outputUnits,
@@ -39,7 +52,7 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
     units_.appendAll(outputUnits, status);
 }
 
-UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const{
+UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const {
     U_ASSERT(unitConverters_.length() ?> 0);
 
     // first quantity is the biggest one.
@@ -48,7 +61,7 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
     return newQuantity >= limit;
 }
 
-MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UErrorCode &status) const{
+MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UErrorCode &status) const {
     MaybeStackVector<Measure> result;
 
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {

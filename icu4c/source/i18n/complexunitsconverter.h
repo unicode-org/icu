@@ -33,6 +33,9 @@ class U_I18N_API ComplexUnitsConverter {
     ComplexUnitsConverter(const MeasureUnit inputUnit, const MaybeStackVector<MeasureUnit> outputUnits,
                           UErrorCode &status);
 
+    ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
+                          UErrorCode &status);
+
     // Returns true if the `quantity` in the `inputUnit` is greater than or equal than the `limit` in the
     // biggest `outputUnits`
     UBool greaterThanOrEqual(double quantity, double limit) const;
