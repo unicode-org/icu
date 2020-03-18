@@ -1512,10 +1512,8 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
-     * <P>
-     * If the `usage` is correctly set, the output unit **will be changed**
-     * according to the `usage`, `locale` and `unit` values.
-     * </p>
+     * NOTE:    If the `usage` is set, the output unit **will be changed**
+     *          according to the `usage`, `locale` and `unit` values.
      * 
      * <pre>
      * NumberFormatter::with().unit(MeasureUnit::getMeter())
@@ -2049,23 +2047,19 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Specifies the usage of the unit ("person", "road", "person" ...etc.)
      *
-     * <p>
-     * NOTE: `usage` will change the output unit depending on the `Locale`  
-     * and the unit value.
-     *    For Example:
-     *        Locale: en_US
-     *        Usage : length-person
-     *        Unit  : Meter
+     * NOTE:    `usage` will change the output unit depending on the `Locale`  
+     *          and the unit value.
+     *          For Example:
+     *              Locale: en_US
+     *              Usage : length-person
+     *              Unit  : Meter
      *
-     *        If the unit value is 0.25, the output will be "10 inches."
-     *        If the unit value is 1.50, the output will be 
+     *          If the unit value is 0.25, the output will be "10 inches."
+     *          If the unit value is 1.50, the output will be 
      *                                           "4 feet and 11 inches"
-     *</p>
      *
-     * <P>
-     * If the input usage is not exist (e.g. "dance") or is misspelled,
-     * the usage will be **fall backed** to the "default" usage.
-     * </p>
+     * NOTE:    If the input usage is not exist (e.g. "dance") or is misspelled,
+     *          the usage will be **fall backed** to the "default" usage.
      *
      * Pass this method a `StringPiece` that represents the usage of 
      * the unit. For example:
