@@ -2541,6 +2541,14 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
+    /**
+     * Gets the resolved output unit.
+     *
+     * @return `MeasureUnit`.
+     * @draft ICU 67
+     */
+    MeasureUnit getOutputUnit(UErrorCode& status) const;
+
 #ifndef U_HIDE_DRAFT_API
     /**
      * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
