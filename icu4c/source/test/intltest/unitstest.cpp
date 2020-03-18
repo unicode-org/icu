@@ -14,6 +14,7 @@
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "unitconverter.h"
+#include "unitsrouter.h"
 #include "uparse.h"
 #include <iostream>
 
@@ -25,6 +26,7 @@ struct UnitConversionTestCase {
 };
 
 using icu::number::impl::DecimalQuantity;
+using namespace ::hugovdm_wip;
 
 class UnitsTest : public IntlTest {
   public:
@@ -806,8 +808,8 @@ void UnitsTest::testGetUnitsData() {
         MeasureUnit baseUnit;
         MaybeStackVector<ConversionRateInfo> conversionInfo;
         MaybeStackVector<UnitPreference> unitPreferences;
-        getUnitsData(t.outputRegion, t.usage, inputUnit, category, baseUnit, conversionInfo,
-                     unitPreferences, status);
+        hugovdm_wip::getUnitsData(t.outputRegion, t.usage, inputUnit, category, baseUnit, conversionInfo,
+                                  unitPreferences, status);
         if (status.errIfFailureAndReset("getUnitsData(\"%s\", \"%s\", \"%s\", ...)", t.outputRegion, t.usage, t.inputUnit)) {
             continue;
         }
