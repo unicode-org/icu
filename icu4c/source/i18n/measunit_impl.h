@@ -15,6 +15,9 @@
 U_NAMESPACE_BEGIN
 
 
+/**
+ * A struct representing a single unit (optional SI prefix and dimensionality).
+ */
 struct SingleUnitImpl : public UMemory {
     /**
      * Gets a single unit from the MeasureUnit. If there are multiple single units, sets an error
