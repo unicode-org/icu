@@ -13,7 +13,16 @@
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
+#include "unitconverter.h"
 #include "uparse.h"
+#include <iostream>
+
+struct UnitConversionTestCase {
+    const StringPiece source;
+    const StringPiece target;
+    const double inputValue;
+    const double expectedValue;
+};
 
 using icu::number::impl::DecimalQuantity;
 
@@ -28,14 +37,21 @@ class UnitsTest : public IntlTest {
 
     void testConversions();
     void testPreferences();
+    void testUSVolumeResourceLoading();
+    void testSIMassResourceLoading();
+    void testGetUnitsData();
+
     void testBasic();
     void testSiPrefixes();
     void testMass();
     void testTemperature();
     void testArea();
-    void testUSVolumeResourceLoading();
-    void testSIMassResourceLoading();
-    void testGetUnitsData();
+    void testComplicatedUnits();
+    void testCLDRUnitsTests();
+    void testCLDRUnitsTests2();
+
+    // TODO(younies): remove after using CLDR test cases.
+    void verifyTestCase(const UnitConversionTestCase &testCase);
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -47,137 +63,383 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
+    TESTCASE_AUTO(testUSVolumeResourceLoading);
+    TESTCASE_AUTO(testSIMassResourceLoading);
+    TESTCASE_AUTO(testGetUnitsData);
+
     TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testSiPrefixes);
     TESTCASE_AUTO(testMass);
     TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO(testArea);
-    TESTCASE_AUTO(testUSVolumeResourceLoading);
-    TESTCASE_AUTO(testSIMassResourceLoading);
-    TESTCASE_AUTO(testGetUnitsData);
+    TESTCASE_AUTO(testComplicatedUnits);
+    TESTCASE_AUTO(testCLDRUnitsTests);
+    TESTCASE_AUTO(testCLDRUnitsTests2);
     TESTCASE_AUTO_END;
 }
 
-// Just for testing quick conversion ability.
-double testConvert(UnicodeString source, UnicodeString target, double input) {
-    if (source == u"meter" && target == u"foot" && input == 1.0)
-        return 3.28084;
+void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
+    UErrorCode status = U_ZERO_ERROR;
+    MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+    MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
 
-    if ( source == u"kilometer" && target == u"foot" && input == 1.0)
-        return 328.084;
+    UnitConverter converter(sourceUnit, targetUnit, status);
 
-    return -1;
+    double actual = converter.convert(testCase.inputValue);
+
+    assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
 }
 
 void UnitsTest::testBasic() {
     IcuTestErrorCode status(*this, "Units testBasic");
 
-    // Test Cases
-    struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{{u"meter", u"foot", 1.0, 3.28084}, {u"kilometer", u"foot", 1.0, 328.084}};
+    UnitConversionTestCase testCases[]{
+        {"meter", "foot", 1.0, 3.28084},    //
+        {"kilometer", "foot", 1.0, 3280.84} //
+    };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        UErrorCode status = U_ZERO_ERROR;
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        double actual = converter.convert(testCase.inputValue);
+
+        assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
     }
 }
 
 void UnitsTest::testSiPrefixes() {
     IcuTestErrorCode status(*this, "Units testSiPrefixes");
-    // Test Cases
-    struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {u"gram", u"kilogram", 1.0, 0.001},            //
-        {u"milligram", u"kilogram", 1.0, 0.000001},    //
-        {u"microgram", u"kilogram", 1.0, 0.000000001}, //
-        {u"megawatt", u"watt", 1, 1000000},            //
-        {u"megawatt", u"kilowatt", 1.0, 1000},         //
-        {u"gigabyte", u"byte", 1, 1000000000}          //
+
+    UnitConversionTestCase testCases[]{
+        {"gram", "kilogram", 1.0, 0.001},            //
+        {"milligram", "kilogram", 1.0, 0.000001},    //
+        {"microgram", "kilogram", 1.0, 0.000000001}, //
+        {"megawatt", "watt", 1, 1000000},            //
+        {"megawatt", "kilowatt", 1.0, 1000},         //
+        {"gigabyte", "byte", 1, 1000000000}          //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        verifyTestCase(testCase);
     }
 }
 
 void UnitsTest::testMass() {
     IcuTestErrorCode status(*this, "Units testMass");
 
-    // Test Cases
-    struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {u"gram", u"kilogram", 1.0, 0.001},      //
-        {u"pound", u"kilogram", 1.0, 0.453592},  //
-        {u"pound", u"kilogram", 2.0, 0.907185},  //
-        {u"ounce", u"pound", 16.0, 1.0},         //
-        {u"ounce", u"kilogram", 16.0, 0.453592}, //
-        {u"ton", u"pound", 1.0, 2000},           //
-        {u"stone", u"pound", 1.0, 14},           //
-        {u"stone", u"kilogram", 1.0, 6.35029}    //
+    UnitConversionTestCase testCases[]{
+        {"gram", "kilogram", 1.0, 0.001},      //
+        {"pound", "kilogram", 1.0, 0.453592},  //
+        {"pound", "kilogram", 2.0, 0.907185},  //
+        {"ounce", "pound", 16.0, 1.0},         //
+        {"ounce", "kilogram", 16.0, 0.453592}, //
+        {"ton", "pound", 1.0, 2000},           //
+        {"stone", "pound", 1.0, 14},           //
+        {"stone", "kilogram", 1.0, 6.35029}    //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        verifyTestCase(testCase);
     }
 }
 
 void UnitsTest::testTemperature() {
     IcuTestErrorCode status(*this, "Units testTemperature");
-    // Test Cases
-    struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {u"celsius", u"fahrenheit", 0.0, 32.0},   //
-        {u"celsius", u"fahrenheit", 10.0, 50.0},  //
-        {u"fahrenheit", u"celsius", 32.0, 0.0},   //
-        {u"fahrenheit", u"celsius", 89.6, 32},    //
-        {u"kelvin", u"fahrenheit", 0.0, -459.67}, //
-        {u"kelvin", u"fahrenheit", 300, 80.33},   //
-        {u"kelvin", u"celsius", 0.0, -273.15},    //
-        {u"kelvin", u"celsius", 300.0, 26.85}     //
+
+    UnitConversionTestCase testCases[]{
+        {"celsius", "fahrenheit", 0.0, 32.0},   //
+        {"celsius", "fahrenheit", 10.0, 50.0},  //
+        {"fahrenheit", "celsius", 32.0, 0.0},   //
+        {"fahrenheit", "celsius", 89.6, 32},    //
+        {"kelvin", "fahrenheit", 0.0, -459.67}, //
+        {"kelvin", "fahrenheit", 300, 80.33},   //
+        {"kelvin", "celsius", 0.0, -273.15},    //
+        {"kelvin", "celsius", 300.0, 26.85}     //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        verifyTestCase(testCase);
     }
 }
 
 void UnitsTest::testArea() {
     IcuTestErrorCode status(*this, "Units Area");
 
-    // Test Cases
-    struct TestCase {
-        const char16_t *source;
-        const char16_t *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {u"square-meter", u"square-yard", 10.0, 11.9599}, //
-        {u"hectare", u"square-yard", 1.0, 11959.9},       //
-        {u"square-mile", u"square-foot", 0.0001, 2787.84} //
+    UnitConversionTestCase testCases[]{
+        {"square-meter", "square-yard", 10.0, 11.9599} //
+        ,
+        {"hectare", "square-yard", 1.0, 11959.9} //
+        ,
+        {"hectare", "square-meter", 1.0, 10000} //
+        ,
+        {"hectare", "square-meter", 0.0, 0.0} //
+        ,
+        {"square-mile", "square-foot", 0.0001, 2787.84} //
+        ,
+        {"square-yard", "square-foot", 10, 90} //
+        ,
+        {"square-yard", "square-foot", 0, 0} //
+        ,
+        {"square-yard", "square-foot", 0.000001, 0.000009} //
+        ,
+        {"square-mile", "square-foot", 0.0, 0.0} //
     };
 
     for (const auto &testCase : testCases) {
-        assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
-                     testCase.expectedValue);
+        verifyTestCase(testCase);
+    }
+}
+
+void UnitsTest::testComplicatedUnits() {
+    IcuTestErrorCode status(*this, "Units Area");
+
+    UnitConversionTestCase testCases[]{
+        {"meter-per-second", "meter-per-square-millisecond", 1000000.0, 1.0} //
+    };
+
+    for (const auto &testCase : testCases) {
+        verifyTestCase(testCase);
+    }
+}
+
+// TODO(younies): remove after using CLDR test cases.
+double strToDouble(StringPiece strNum) {
+    std::string charNum;
+    for (int i = 0; i < strNum.length(); i++) {
+        charNum += strNum.data()[i];
+    }
+
+    char *end;
+    return std::strtod(charNum.c_str(), &end);
+}
+
+void UnitsTest::testCLDRUnitsTests() {
+    struct {
+        const StringPiece category;
+        const StringPiece source;
+        const StringPiece target;
+        const StringPiece inputValue;
+        const StringPiece expectedValue;
+    } testCases[]{
+        {"acceleration", "meter-per-square-second", "meter-per-square-second", "1000", "1000.0"},
+        {"acceleration", "g-force", "meter-per-square-second", "1000", "9806.65"},
+        {"angle", "arc-second", "revolution", "1000", "0.0007716049"},
+        {"angle", "arc-minute", "revolution", "1000", "0.0462963"},
+        {"angle", "degree", "revolution", "1000", "2.777778"},
+        {"angle", "radian", "revolution", "1000", "159.1549"},
+        {"angle", "revolution", "revolution", "1000", "1000.0"},
+        {"area", "square-centimeter", "square-meter", "1000", "0.1"},
+        {"area", "square-inch", "square-meter", "1000", "0.64516"},
+        {"area", "square-foot", "square-meter", "1000", "92.90304"},
+        {"area", "square-yard", "square-meter", "1000", "836.1274"},
+        {"area", "square-meter", "square-meter", "1000", "1000.0"},
+        {"area", "dunam", "square-meter", "1000", "1000000.0"},
+        {"area", "acre", "square-meter", "1000", "4046856.0"},
+        {"area", "hectare", "square-meter", "1000", "10000000.0"},
+        {"area", "square-kilometer", "square-meter", "1000", "1000000000.0"},
+        {"area", "square-mile", "square-meter", "1000", "2589988000.0"},
+        //   {"concentration", "millimole-per-liter", "item-per-cubic-meter", "1000", "6.022141e+26"},
+        //  {"consumption", "liter-per-100-kilometer", "cubic-meter-per-meter", "1000", "1e-05"},
+        //  {"consumption", "liter-per-kilometer", "cubic-meter-per-meter", "1000", "0.001"},
+        //  {"consumption-inverse", "mile-per-gallon-imperial", "meter-per-cubic-meter", "1000",
+        //  "354006200.0"},
+        //   {"consumption-inverse", "mile-per-gallon", "meter-per-cubic-meter", "1000", "425143700.0"},
+        {"digital", "bit", "bit", "1000", "1000.0"},
+        {"digital", "byte", "bit", "1000", "8000.0"},
+        {"digital", "kilobit", "bit", "1000", "1000000.0"},
+        {"digital", "kilobyte", "bit", "1000", "8000000.0"},
+        {"digital", "megabit", "bit", "1000", "1000000000.0"},
+        {"digital", "megabyte", "bit", "1000", "8000000000.0"},
+        {"digital", "gigabit", "bit", "1000", "1e+12"},
+        {"digital", "gigabyte", "bit", "1000", "8e+12"},
+        {"digital", "terabit", "bit", "1000", "1e+15"},
+        {"digital", "terabyte", "bit", "1000", "8e+15"},
+        {"digital", "petabyte", "bit", "1000", "8e+18"},
+        {"duration", "nanosecond", "second", "1000", "1e-06"},
+        {"duration", "microsecond", "second", "1000", "0.001"},
+        {"duration", "millisecond", "second", "1000", "1.0"},
+        {"duration", "second", "second", "1000", "1000.0"},
+        {"duration", "minute", "second", "1000", "60000.0"},
+        {"duration", "hour", "second", "1000", "3600000.0"},
+        {"duration", "day", "second", "1000", "86400000.0"},
+        {"duration", "day-person", "second", "1000", "86400000.0"},
+        {"duration", "week", "second", "1000", "604800000.0"},
+        {"duration", "week-person", "second", "1000", "604800000.0"},
+        {"electric-current", "milliampere", "ampere", "1000", "1.0"},
+        {"electric-current", "ampere", "ampere", "1000", "1000.0"},
+        {"electric-resistance", "ohm", "kilogram-square-meter-per-cubic-second-square-ampere", "1000",
+         "1000.0"},
+        {"energy", "electronvolt", "kilogram-square-meter-per-square-second", "1000", "1.602177e-16"},
+        {"energy", "dalton", "kilogram-square-meter-per-square-second", "1000", "1.492418e-07"},
+        {"energy", "joule", "kilogram-square-meter-per-square-second", "1000", "1000.0"},
+        {"energy", "newton-meter", "kilogram-square-meter-per-square-second", "1000", "1000.0"},
+        {"energy", "pound-force-foot", "kilogram-square-meter-per-square-second", "1000", "1355.818"},
+        {"energy", "calorie", "kilogram-square-meter-per-square-second", "1000", "4184.0"},
+        {"energy", "kilojoule", "kilogram-square-meter-per-square-second", "1000", "1000000.0"},
+        {"energy", "british-thermal-unit", "kilogram-square-meter-per-square-second", "1000",
+         "1055060.0"},
+        {"energy", "foodcalorie", "kilogram-square-meter-per-square-second", "1000", "4184000.0"},
+        {"energy", "kilocalorie", "kilogram-square-meter-per-square-second", "1000", "4184000.0"},
+        {"energy", "kilowatt-hour", "kilogram-square-meter-second-per-cubic-second", "1000",
+         "3600000000.0"},
+        {"energy", "therm-us", "kilogram-square-meter-per-square-second", "1000", "1.05506e+11"},
+        {"force", "newton", "kilogram-meter-per-square-second", "1000", "1000.0"},
+        {"force", "pound-force", "kilogram-meter-per-square-second", "1000", "4448.222"},
+        {"frequency", "hertz", "revolution-per-second", "1000", "1000.0"},
+        {"frequency", "kilohertz", "revolution-per-second", "1000", "1000000.0"},
+        {"frequency", "megahertz", "revolution-per-second", "1000", "1000000000.0"},
+        {"frequency", "gigahertz", "revolution-per-second", "1000", "1e+12"},
+        {"graphics", "pixel", "pixel", "1000", "1000.0"},
+        {"graphics", "megapixel", "pixel", "1000", "1000000000.0"},
+        {"length", "picometer", "meter", "1000", "1e-09"},
+        {"length", "nanometer", "meter", "1000", "1e-06"},
+        {"length", "micrometer", "meter", "1000", "0.001"},
+        {"length", "point", "meter", "1000", "0.3527778"},
+        {"length", "millimeter", "meter", "1000", "1.0"},
+        {"length", "centimeter", "meter", "1000", "10.0"},
+        {"length", "inch", "meter", "1000", "25.4"},
+        {"length", "decimeter", "meter", "1000", "100.0"},
+        {"length", "foot", "meter", "1000", "304.8"},
+        {"length", "yard", "meter", "1000", "914.4"},
+        {"length", "meter", "meter", "1000", "1000.0"},
+        {"length", "fathom", "meter", "1000", "1828.8"},
+        {"length", "furlong", "meter", "1000", "201168.0"},
+        {"length", "kilometer", "meter", "1000", "1000000.0"},
+        {"length", "mile", "meter", "1000", "1609344.0"},
+        {"length", "nautical-mile", "meter", "1000", "1852000.0"},
+        {"length", "mile-scandinavian", "meter", "1000", "10000000.0"},
+        {"length", "solar-radius", "meter", "1000", "6.957e+11"},
+        {"length", "astronomical-unit", "meter", "1000", "1.495979e+14"},
+        {"length", "light-year", "meter", "1000", "9.46073e+18"},
+        {"length", "parsec", "meter", "1000", "3.085678e+19"},
+        // {"luminous-flux", "lux", "candela-square-meter-per-square-meter", "1000", "1000.0"},
+        {"mass", "microgram", "kilogram", "1000", "1e-06"},
+        {"mass", "milligram", "kilogram", "1000", "0.001"},
+        {"mass", "carat", "kilogram", "1000", "0.2"},
+        {"mass", "gram", "kilogram", "1000", "1.0"},
+        {"mass", "ounce", "kilogram", "1000", "28.34952"},
+        {"mass", "ounce-troy", "kilogram", "1000", "31.10348"},
+        {"mass", "pound", "kilogram", "1000", "453.5924"},
+        {"mass", "kilogram", "kilogram", "1000", "1000.0"},
+        {"mass", "stone", "kilogram", "1000", "6350.293"},
+        {"mass", "ton", "kilogram", "1000", "907184.7"},
+        {"mass", "metric-ton", "kilogram", "1000", "1000000.0"},
+        {"mass", "earth-mass", "kilogram", "1000", "5.9722e+27"},
+        {"mass", "solar-mass", "kilogram", "1000", "1.98847e+33"},
+        {"mass-density", "milligram-per-deciliter", "kilogram-per-cubic-meter", "1000", "10.0"},
+        //{"portion", "part-per-million", "portion", "1000", "0.001"},
+        // {"portion", "permyriad", "portion", "1000", "0.1"},
+        // {"portion", "permille", "portion", "1000", "1.0"},
+        // {"portion", "percent", "portion", "1000", "10.0"},
+        // {"portion", "karat", "portion", "1000", "41.66667"},
+        {"power", "milliwatt", "kilogram-square-meter-per-cubic-second", "1000", "1.0"},
+        {"power", "watt", "kilogram-square-meter-per-cubic-second", "1000", "1000.0"},
+        {"power", "horsepower", "kilogram-square-meter-per-cubic-second", "1000", "745699.9"},
+        {"power", "kilowatt", "kilogram-square-meter-per-cubic-second", "1000", "1000000.0"},
+        {"power", "megawatt", "kilogram-square-meter-per-cubic-second", "1000", "1000000000.0"},
+        {"power", "gigawatt", "kilogram-square-meter-per-cubic-second", "1000", "1e+12"},
+        {"power", "solar-luminosity", "kilogram-square-meter-per-cubic-second", "1000", "3.828e+29"},
+        {"pressure", "pascal", "kilogram-per-meter-square-second", "1000", "1000.0"},
+        // TODO(problem in MeasureUnit) //{"pressure", "millimeter-of-mercury",
+        // "kilogram-per-meter-square-second", "1000", "13332.24"},
+        {"pressure", "hectopascal", "kilogram-per-meter-square-second", "1000", "100000.0"},
+        {"pressure", "millibar", "kilogram-per-meter-square-second", "1000", "100000.0"},
+        {"pressure", "kilopascal", "kilogram-per-meter-square-second", "1000", "1000000.0"},
+        {"pressure", "inch-hg", "kilogram-per-meter-square-second", "1000", "3386389.0"},
+        {"pressure", "pound-force-per-square-inch", "kilogram-meter-per-square-meter-square-second",
+         "1000", "6894757.0"},
+        {"pressure", "bar", "kilogram-per-meter-square-second", "1000", "100000000.0"},
+        {"pressure", "atmosphere", "kilogram-per-meter-square-second", "1000", "101325000.0"},
+        {"pressure", "megapascal", "kilogram-per-meter-square-second", "1000", "1000000000.0"},
+        {"resolution", "dot-per-inch", "pixel-per-meter", "1000", "39370.08"},
+        {"resolution", "pixel-per-inch", "pixel-per-meter", "1000", "39370.08"},
+        {"resolution", "dot-per-centimeter", "pixel-per-meter", "1000", "100000.0"},
+        {"resolution", "pixel-per-centimeter", "pixel-per-meter", "1000", "100000.0"},
+        {"speed", "kilometer-per-hour", "meter-per-second", "1000", "277.7778"},
+        {"speed", "mile-per-hour", "meter-per-second", "1000", "447.04"},
+        {"speed", "knot", "meter-per-second", "1000", "514.4444"},
+        {"speed", "meter-per-second", "meter-per-second", "1000", "1000.0"},
+        //    {"substance-amount", "mole", "item", "1000", "6.022141e+26"},
+        {"temperature", "fahrenheit", "kelvin", "1000", "810.9278"},
+        {"temperature", "kelvin", "kelvin", "1000", "1000.0"},
+        {"temperature", "celsius", "kelvin", "1000", "1273.15"},
+        {"typewidth", "em", "em", "1000", "1000.0"},
+        {"voltage", "volt", "kilogram-square-meter-per-cubic-second-ampere", "1000", "1000.0"},
+        {"volume", "cubic-centimeter", "cubic-meter", "1000", "0.001"},
+        {"volume", "milliliter", "cubic-meter", "1000", "0.001"},
+        {"volume", "teaspoon", "cubic-meter", "1000", "0.004928922"},
+        {"volume", "centiliter", "cubic-meter", "1000", "0.01"},
+        {"volume", "tablespoon", "cubic-meter", "1000", "0.01478676"},
+        {"volume", "cubic-inch", "cubic-meter", "1000", "0.01638706"},
+        {"volume", "fluid-ounce-imperial", "cubic-meter", "1000", "0.02841306"},
+        {"volume", "fluid-ounce", "cubic-meter", "1000", "0.02957353"},
+        {"volume", "deciliter", "cubic-meter", "1000", "0.1"},
+        {"volume", "cup", "cubic-meter", "1000", "0.2365882"},
+        {"volume", "cup-metric", "cubic-meter", "1000", "0.25"},
+        {"volume", "pint", "cubic-meter", "1000", "0.4731765"},
+        {"volume", "pint-metric", "cubic-meter", "1000", "0.5"},
+        {"volume", "quart", "cubic-meter", "1000", "0.9463529"},
+        {"volume", "liter", "cubic-meter", "1000", "1.0"},
+        {"volume", "gallon", "cubic-meter", "1000", "3.785412"},
+        {"volume", "gallon-imperial", "cubic-meter", "1000", "4.54609"},
+        {"volume", "cubic-foot", "cubic-meter", "1000", "28.31685"},
+        {"volume", "bushel", "cubic-meter", "1000", "35.23907"},
+        {"volume", "hectoliter", "cubic-meter", "1000", "100.0"},
+        {"volume", "barrel", "cubic-meter", "1000", "158.9873"},
+        {"volume", "cubic-yard", "cubic-meter", "1000", "764.5549"},
+        {"volume", "cubic-meter", "cubic-meter", "1000", "1000.0"},
+        {"volume", "megaliter", "cubic-meter", "1000", "1000000.0"},
+        {"volume", "acre-foot", "cubic-meter", "1000", "1233482.0"},
+        {"volume", "cubic-kilometer", "cubic-meter", "1000", "1e+12"},
+        {"volume", "cubic-mile", "cubic-meter", "1000", "4.168182e+12"},
+        {"year-duration", "month", "year", "1000", "83.33333"},
+        {"year-duration", "month-person", "year", "1000", "83.33333"},
+        {"year-duration", "year", "year", "1000", "1000.0"},
+        {"year-duration", "year-person", "year", "1000", "1000.0"},
+        {"year-duration", "decade", "year", "1000", "10000.0"},
+        {"year-duration", "century", "year", "1000", "100000.0"},
+    };
+
+    for (const auto &testCase : testCases) {
+        // std::cerr << testCase.source.data() << " " << testCase.target.data() << std::endl;
+
+        UErrorCode status = U_ZERO_ERROR;
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        double actual = converter.convert(strToDouble(testCase.inputValue));
+
+        assertEqualsNear(testCase.category.data(), strToDouble(testCase.expectedValue), actual, 0.0001);
+    }
+}
+
+void UnitsTest::testCLDRUnitsTests2() {
+    struct {
+        const StringPiece category;
+        const StringPiece source;
+        const StringPiece target;
+        const StringPiece inputValue;
+        const StringPiece expectedValue;
+    } testCases[]{
+        {"resolution", "dot-per-centimeter", "pixel-per-meter", "1000", "100000.0"},
+    };
+
+    for (const auto &testCase : testCases) {
+        UErrorCode status = U_ZERO_ERROR;
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        UnitConverter converter(sourceUnit, targetUnit, status);
+
+        double actual = converter.convert(strToDouble(testCase.inputValue));
+
+        assertEqualsNear(testCase.category.data(), strToDouble(testCase.expectedValue), actual, 0.0001);
     }
 }
 
