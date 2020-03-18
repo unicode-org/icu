@@ -2047,8 +2047,7 @@ class U_I18N_API NumberFormatterSettings {
     Derived scale(const Scale &scale) &&;
 
     /**
-     * Specifies the usage of the unit ("length-person", "length-road",  
-     * "mass-person" ...etc.)
+     * Specifies the usage of the unit ("person", "road", "person" ...etc.)
      *
      * <p>
      * NOTE: `usage` will change the output unit depending on the `Locale`  
@@ -2064,19 +2063,18 @@ class U_I18N_API NumberFormatterSettings {
      *</p>
      *
      * <P>
-     * If the input usage is not exist (e.g. length-dinosaur) or is
-     * misspelled, the output unit **will not change**.
+     * If the input usage is not exist (e.g. "dance") or is misspelled,
+     * the usage will be **fall backed** to the "default" usage.
      * </p>
      *
      * Pass this method a `StringPiece` that represents the usage of 
      * the unit. For example:
      *
      * <pre>
-     * NumberFormatter::with().usage("length-person")
+     * NumberFormatter::with().usage("person")
      * </pre>
      *
-     * @param usage
-     *            The unit `usage`.
+     * @param usage The unit `usage`.
      * @return The fluent chain.
      * @draft ICU 67
      */
@@ -2085,8 +2083,7 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Overload of usage() for use on an rvalue reference.
      *
-     * @param usage
-     *            The unit `usage`.
+     * @param usage The unit `usage`.
      * @return The fluent chain.
      * @draft ICU 67
      */
