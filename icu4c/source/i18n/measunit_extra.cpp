@@ -757,15 +757,15 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     return std::move(impl).build(status);
 }
 
-LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(UErrorCode& status) const {
+LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(int32_t& outCount, UErrorCode& status) const {
     MeasureUnitImpl temp;
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(*this, temp, status);
-    const int32_t length = impl.units.length();
-    MeasureUnit* arr = new MeasureUnit[length];
-    for (int32_t i = 0; i < length; i++) {
+    outCount = impl.units.length();
+    MeasureUnit* arr = new MeasureUnit[outCount];
+    for (int32_t i = 0; i < outCount; i++) {
         arr[i] = impl.units[i]->build(status);
     }
-    return LocalArray<MeasureUnit>::withLengthAndCheckErrorCode(arr, length, status);
+    return LocalArray<MeasureUnit>(arr, status);
 }
 
 

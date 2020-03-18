@@ -3560,10 +3560,11 @@ void MeasureFormatTest::verifyCompoundUnit(
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(status);
-    assertEquals(uid + ": Length", subIdentifierCount, subUnits.length());
+    int32_t length;
+    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(length, status);
+    assertEquals(uid + ": Length", subIdentifierCount, length);
     for (int32_t i = 0;; i++) {
-        if (i >= subIdentifierCount || i >= subUnits.length()) break;
+        if (i >= subIdentifierCount || i >= length) break;
         assertEquals(uid + ": Sub-unit #" + Int64ToUnicodeString(i),
             subIdentifiers[i],
             subUnits[i].getIdentifier());
@@ -3592,10 +3593,11 @@ void MeasureFormatTest::verifySequenceUnit(
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(status);
-    assertEquals(uid + ": Length", subIdentifierCount, subUnits.length());
+    int32_t length;
+    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(length, status);
+    assertEquals(uid + ": Length", subIdentifierCount, length);
     for (int32_t i = 0;; i++) {
-        if (i >= subIdentifierCount || i >= subUnits.length()) break;
+        if (i >= subIdentifierCount || i >= length) break;
         assertEquals(uid + ": Sub-unit #" + Int64ToUnicodeString(i),
             subIdentifiers[i],
             subUnits[i].getIdentifier());
