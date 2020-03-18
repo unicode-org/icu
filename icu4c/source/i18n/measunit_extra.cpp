@@ -223,7 +223,7 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     // Add syntax parts (compound, power prefixes)
     b.add(u"-per-", COMPOUND_PART_PER, status);
     b.add(u"-", COMPOUND_PART_TIMES, status);
-    b.add(u"+", COMPOUND_PART_PLUS, status);
+    b.add(u"-and-", COMPOUND_PART_PLUS, status);
     b.add(u"square-", POWER_PART_P2, status);
     b.add(u"cubic-", POWER_PART_P3, status);
     b.add(u"p2-", POWER_PART_P2, status);
@@ -604,7 +604,7 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
         const SingleUnitImpl& prev = *impl.units[i-1];
         const SingleUnitImpl& curr = *impl.units[i];
         if (impl.complexity == UMEASURE_UNIT_SEQUENCE) {
-            impl.identifier.append('+', status);
+            impl.identifier.append("-and-", status);
             serializeSingle(curr, true, impl.identifier, status);
         } else {
             if (prev.dimensionality > 0 && curr.dimensionality < 0) {
