@@ -377,7 +377,7 @@ private:
         return Token(match);
     }
 
-    void nextSingleUnit(TempSingleUnit& result, bool& sawPlus, UErrorCode& status) {
+    void nextSingleUnit(SingleUnitImpl& result, bool& sawPlus, UErrorCode& status) {
         sawPlus = false;
         if (U_FAILURE(status)) {
             return;
@@ -477,7 +477,7 @@ private:
         int32_t unitNum = 0;
         while (hasNext()) {
             bool sawPlus;
-            TempSingleUnit singleUnit;
+            SingleUnitImpl singleUnit;
             nextSingleUnit(singleUnit, sawPlus, status);
             if (U_FAILURE(status)) {
                 return;
@@ -510,15 +510,15 @@ private:
 
 int32_t U_CALLCONV
 compareSingleUnits(const void* /*context*/, const void* left, const void* right) {
-    auto realLeft = static_cast<const TempSingleUnit* const*>(left);
-    auto realRight = static_cast<const TempSingleUnit* const*>(right);
+    auto realLeft = static_cast<const SingleUnitImpl* const*>(left);
+    auto realRight = static_cast<const SingleUnitImpl* const*>(right);
     return (*realLeft)->compareTo(**realRight);
 }
 
 /**
  * Generate the identifier string for a single unit in place.
  */
-void serializeSingle(const TempSingleUnit& singleUnit, bool first, CharString& output, UErrorCode& status) {
+void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& output, UErrorCode& status) {
     if (first && singleUnit.dimensionality < 0) {
         output.append("one-per-", status);
     }
@@ -598,8 +598,8 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
         return;
     }
     for (int32_t i = 1; i < impl.units.length(); i++) {
-        const TempSingleUnit& prev = *impl.units[i-1];
-        const TempSingleUnit& curr = *impl.units[i];
+        const SingleUnitImpl& prev = *impl.units[i-1];
+        const SingleUnitImpl& curr = *impl.units[i];
         if (impl.complexity == UMEASURE_UNIT_SEQUENCE) {
             impl.identifier.append('+', status);
             serializeSingle(curr, true, impl.identifier, status);
@@ -616,9 +616,9 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
 }
 
 /** @return true if a new item was added */
-bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& status) {
+bool appendImpl(MeasureUnitImpl& impl, const SingleUnitImpl& unit, UErrorCode& status) {
     // Find a similar unit that already exists, to attempt to coalesce
-    TempSingleUnit* oldUnit = nullptr;
+    SingleUnitImpl* oldUnit = nullptr;
     for (int32_t i = 0; i < impl.units.length(); i++) {
         auto* candidate = impl.units[i];
         if (candidate->isCompatibleWith(unit)) {
@@ -628,7 +628,7 @@ bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& s
     if (oldUnit) {
         oldUnit->dimensionality += unit.dimensionality;
     } else {
-        TempSingleUnit* destination = impl.units.emplaceBack();
+        SingleUnitImpl* destination = impl.units.emplaceBack();
         if (!destination) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return false;
@@ -641,7 +641,7 @@ bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& s
 } // namespace
 
 
-TempSingleUnit TempSingleUnit::forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status) {
+SingleUnitImpl SingleUnitImpl::forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status) {
     MeasureUnitImpl temp;
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(measureUnit, temp, status);
     if (U_FAILURE(status)) {
@@ -657,7 +657,7 @@ TempSingleUnit TempSingleUnit::forMeasureUnit(const MeasureUnit& measureUnit, UE
     }
 }
 
-MeasureUnit TempSingleUnit::build(UErrorCode& status) {
+MeasureUnit SingleUnitImpl::build(UErrorCode& status) {
     MeasureUnitImpl temp;
     temp.append(*this, status);
     return std::move(temp).build(status);
@@ -694,7 +694,7 @@ void MeasureUnitImpl::takeReciprocal(UErrorCode& /*status*/) {
     }
 }
 
-bool MeasureUnitImpl::append(const TempSingleUnit& singleUnit, UErrorCode& status) {
+bool MeasureUnitImpl::append(const SingleUnitImpl& singleUnit, UErrorCode& status) {
     identifier.clear();
     return appendImpl(*this, singleUnit, status);
 }
@@ -715,21 +715,21 @@ UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
 }
 
 UMeasureSIPrefix MeasureUnit::getSIPrefix(UErrorCode& status) const {
-    return TempSingleUnit::forMeasureUnit(*this, status).siPrefix;
+    return SingleUnitImpl::forMeasureUnit(*this, status).siPrefix;
 }
 
 MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const {
-    TempSingleUnit singleUnit = TempSingleUnit::forMeasureUnit(*this, status);
+    SingleUnitImpl singleUnit = SingleUnitImpl::forMeasureUnit(*this, status);
     singleUnit.siPrefix = prefix;
     return singleUnit.build(status);
 }
 
 int32_t MeasureUnit::getDimensionality(UErrorCode& status) const {
-    return TempSingleUnit::forMeasureUnit(*this, status).dimensionality;
+    return SingleUnitImpl::forMeasureUnit(*this, status).dimensionality;
 }
 
 MeasureUnit MeasureUnit::withDimensionality(int32_t dimensionality, UErrorCode& status) const {
-    TempSingleUnit singleUnit = TempSingleUnit::forMeasureUnit(*this, status);
+    SingleUnitImpl singleUnit = SingleUnitImpl::forMeasureUnit(*this, status);
     singleUnit.dimensionality = dimensionality;
     return singleUnit.build(status);
 }

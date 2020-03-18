@@ -15,18 +15,18 @@
 U_NAMESPACE_BEGIN
 
 
-struct TempSingleUnit : public UMemory {
+struct SingleUnitImpl : public UMemory {
     /**
      * Gets a single unit from the MeasureUnit. If there are multiple single units, sets an error
      * code and return the base dimensionless unit. Parses if necessary.
      */
-    static TempSingleUnit forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status);
+    static SingleUnitImpl forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status);
 
-    /** Transform this TemplSingleUnit into a MeasureUnit, simplifying if possible. */
+    /** Transform this SingleUnitImpl into a MeasureUnit, simplifying if possible. */
     MeasureUnit build(UErrorCode& status);
 
-    /** Compare this TempSingleUnit to another TempSingleUnit. */
-    int32_t compareTo(const TempSingleUnit& other) const {
+    /** Compare this SingleUnitImpl to another SingleUnitImpl. */
+    int32_t compareTo(const SingleUnitImpl& other) const {
         if (dimensionality < 0 && other.dimensionality > 0) {
             // Positive dimensions first
             return 1;
@@ -46,12 +46,12 @@ struct TempSingleUnit : public UMemory {
     }
 
     /**
-     * Return whether this TempSingleUnit is compatible with another for the purpose of coalescing.
+     * Return whether this SingleUnitImpl is compatible with another for the purpose of coalescing.
      *
      * Units with the same base unit and SI prefix should match, except that they must also have
      * the same dimensionality sign, such that we don't merge numerator and denominator.
      */
-    bool isCompatibleWith(const TempSingleUnit& other) const {
+    bool isCompatibleWith(const SingleUnitImpl& other) const {
         return (compareTo(other) == 0);
     }
 
@@ -138,7 +138,7 @@ struct MeasureUnitImpl : public UMemory {
     void takeReciprocal(UErrorCode& status);
 
     /** Mutates this MeasureUnitImpl to append a single unit. */
-    bool append(const TempSingleUnit& singleUnit, UErrorCode& status);
+    bool append(const SingleUnitImpl& singleUnit, UErrorCode& status);
 
     /** The complexity, either SINGLE, COMPOUND, or SEQUENCE. */
     UMeasureUnitComplexity complexity = UMEASURE_UNIT_SINGLE;
@@ -147,7 +147,7 @@ struct MeasureUnitImpl : public UMemory {
      * The list of simple units. These may be summed or multiplied, based on the value of the
      * complexity field.
      */
-    MaybeStackVector<TempSingleUnit> units;
+    MaybeStackVector<SingleUnitImpl> units;
 
     /**
      * The full unit identifier.  Owned by the MeasureUnitImpl.  Empty if not computed.
