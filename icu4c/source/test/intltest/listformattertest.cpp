@@ -47,6 +47,7 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestDifferentStyles);
     TESTCASE_AUTO(TestBadStylesFail);
     TESTCASE_AUTO(TestCreateStyled);
+    TESTCASE_AUTO(TestContextual);
     TESTCASE_AUTO_END;
 }
 
@@ -473,8 +474,9 @@ void ListFormatterTest::TestOutOfOrderPatterns() {
     };
 
     IcuTestErrorCode errorCode(*this, "TestOutOfOrderPatterns()");
+    Locale locale("en");
     ListFormatData data("{1} after {0}", "{1} after the first {0}",
-                        "{1} after {0}", "{1} in the last after {0}");
+                        "{1} after {0}", "{1} in the last after {0}", locale);
     ListFormatter formatter(data, errorCode);
 
     UnicodeString input1[] = {one};
@@ -619,6 +621,82 @@ void ListFormatterTest::TestCreateStyled() {
         };
         result = fmt->formatStringsToValue(inputs1, UPRV_LENGTHOF(inputs1), status);
         assertEquals(message, cas.expected1, result.toTempString(status));
+    }
+}
+
+void ListFormatterTest::TestContextual() {
+    IcuTestErrorCode status(*this, "TestContextual");
+    std::vector<std::string> es = { "es", "es_419" , "es_PY", "es_DO" };
+    std::vector<std::string> he = { "he", "he_IL", "iw", "iw_IL" };
+    UListFormatterWidth widths [] = {
+        ULISTFMT_WIDTH_WIDE, ULISTFMT_WIDTH_SHORT, ULISTFMT_WIDTH_NARROW
+    };
+    struct TestCase {
+        std::vector<std::string> locales;
+        UListFormatterType type;
+        const char16_t* expected;
+        const char16_t* data1;
+        const char16_t* data2;
+        const char16_t* data3;
+    } cases[] = {
+        { es, ULISTFMT_TYPE_AND, u"fascinante e increíblemente",
+          u"fascinante",                     u"increíblemente",       nullptr },
+        { es, ULISTFMT_TYPE_AND, u"Comunicaciones Industriales e IIoT",
+          u"Comunicaciones Industriales",    u"IIoT",                 nullptr },
+        { es, ULISTFMT_TYPE_AND, u"España e Italia",         u"España",   u"Italia",      nullptr },
+        { es, ULISTFMT_TYPE_AND, u"hijas intrépidas e hijos solidarios",
+          u"hijas intrépidas",               u"hijos solidarios",     nullptr },
+        { es, ULISTFMT_TYPE_AND, u"a un hombre e hirieron a otro",
+          u"a un hombre",                    u"hirieron a otro",      nullptr },
+        { es, ULISTFMT_TYPE_AND, u"hija e hijo",             u"hija",     u"hijo",        nullptr },
+        { es, ULISTFMT_TYPE_AND, u"esposa, hija e hijo",     u"esposa",   u"hija",        u"hijo" },
+        // For 'y' exception
+        { es, ULISTFMT_TYPE_AND, u"oro y hierro",            u"oro",      u"hierro",      nullptr },
+        { es, ULISTFMT_TYPE_AND, u"agua y hielo",            u"agua",     u"hielo",       nullptr },
+        { es, ULISTFMT_TYPE_AND, u"colágeno y hialurónico",  u"colágeno", u"hialurónico", nullptr },
+
+        { es, ULISTFMT_TYPE_OR, u"desierto u oasis",         u"desierto", u"oasis",       nullptr },
+        { es, ULISTFMT_TYPE_OR, u"oasis, desierto u océano", u"oasis",    u"desierto",    u"océano" },
+        { es, ULISTFMT_TYPE_OR, u"7 u 8",                    u"7",        u"8",           nullptr },
+        { es, ULISTFMT_TYPE_OR, u"7 u 80",                   u"7",        u"80",          nullptr },
+        { es, ULISTFMT_TYPE_OR, u"7 u 800",                  u"7",        u"800",         nullptr },
+        { es, ULISTFMT_TYPE_OR, u"6, 7 u 8",                 u"6",        u"7",           u"8" },
+        { es, ULISTFMT_TYPE_OR, u"10 u 11",                  u"10",       u"11",          nullptr },
+        { es, ULISTFMT_TYPE_OR, u"10 o 111",                 u"10",       u"111",         nullptr },
+        { es, ULISTFMT_TYPE_OR, u"10 o 11.2",                u"10",       u"11.2",        nullptr },
+        { es, ULISTFMT_TYPE_OR, u"9, 10 u 11",               u"9",        u"10",          u"11" },
+
+        { he, ULISTFMT_TYPE_AND, u"a, b ו-c",               u"a",      u"b",      u"c" },
+        { he, ULISTFMT_TYPE_AND, u"a ו-b",                  u"a",      u"b",      nullptr },
+        { he, ULISTFMT_TYPE_AND, u"1, 2 ו-3",               u"1",      u"2",      u"3" },
+        { he, ULISTFMT_TYPE_AND, u"1 ו-2",                  u"1",      u"2",      nullptr },
+        { he, ULISTFMT_TYPE_AND, u"אהבה ומקווה",            u"אהבה",   u"מקווה",  nullptr },
+        { he, ULISTFMT_TYPE_AND, u"אהבה, מקווה ואמונה",     u"אהבה",   u"מקווה",  u"אמונה" },
+    };
+    for (auto width : widths) {
+        for (auto cas : cases) {
+            for (auto locale : cas.locales) {
+                LocalPointer<ListFormatter> fmt(
+                    ListFormatter::createInstance(locale.c_str(), cas.type, width, status),
+                    status);
+                if (status.errIfFailureAndReset()) {
+                    continue;
+                }
+                UnicodeString message = UnicodeString(u"TestContextual loc=")
+                    + locale.c_str() + u" type="
+                    + Int64ToUnicodeString(cas.type) + u" width="
+                    + Int64ToUnicodeString(width);
+                if (cas.data3 == nullptr) {
+                    const UnicodeString inputs2[] = { cas.data1, cas.data2 };
+                    FormattedList result = fmt->formatStringsToValue(inputs2, UPRV_LENGTHOF(inputs2), status);
+                    assertEquals(message, cas.expected, result.toTempString(status));
+                } else {
+                    const UnicodeString inputs3[] = { cas.data1, cas.data2, cas.data3 };
+                    FormattedList result = fmt->formatStringsToValue(inputs3, UPRV_LENGTHOF(inputs3), status);
+                    assertEquals(message, cas.expected, result.toTempString(status));
+                }
+            }
+        }
     }
 }
 
