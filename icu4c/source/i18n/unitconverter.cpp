@@ -59,11 +59,6 @@ enum UnitsCase {
 
 // Returns `double` from a scientific number(i.e. "1", "2.01" or "3.09E+4")
 double strToDouble(StringPiece strNum) {
-    std::string charNum;
-    for (int i = 0; i < strNum.length(); i++) {
-        charNum += strNum.data()[i];
-    }
-
     // We are processing well-formed input, so we don't need any special options to
     // StringToDoubleConverter.
     StringToDoubleConverter converter(0, 0, 0, "", "");
@@ -435,6 +430,7 @@ StringPiece getTarget(StringPiece source, UErrorCode &status) {
     return convertUnit.target;
 }
 
+// TODO(ICU-20568): Add more test coverage for this function.
 // Returns the target of a source unit.
 MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
     MeasureUnit result; // Empty unit.
