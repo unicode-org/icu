@@ -53,7 +53,7 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
 }
 
 UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const {
-    U_ASSERT(unitConverters_.length() ?> 0);
+    U_ASSERT(unitConverters_.length() > 0);
 
     // first quantity is the biggest one.
     double newQuantity = (*unitConverters_[0]).convert(quantity);
