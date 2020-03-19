@@ -76,17 +76,14 @@ class ConvertUnitsSink : public ResourceSink {
                 int32_t length;
                 const UChar *f = value.getString(length, status);
                 cr->factor.appendInvariantChars(f, length, status);
-                cr->factorUChar = f;
             } else if (uprv_strcmp(key, "offset") == 0) {
                 int32_t length;
                 const UChar *o = value.getString(length, status);
                 cr->offset.appendInvariantChars(o, length, status);
-                cr->offsetUChar = o;
             } else if (uprv_strcmp(key, "target") == 0) {
                 int32_t length;
                 const UChar *t = value.getString(length, status);
                 cr->target.appendInvariantChars(t, length, status);
-                cr->targetUChar = t;
             }
         }
     }

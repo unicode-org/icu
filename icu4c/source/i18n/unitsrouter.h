@@ -50,15 +50,6 @@ struct ConversionRateInfo {
     CharString target;
     CharString factor;
     CharString offset;
-
-    const UChar *factorUChar;
-    const UChar *offsetUChar;
-    // WIP: This is a UChar* so that it can point at the resource. We could
-    // convert it to a CharString and own it ourselves, or if we can trust
-    // another owner's lifetime management we can make it a char*.
-    const UChar *targetUChar;
-
-    bool reciprocal = false;
 };
 
 struct UnitPreference {
