@@ -53,7 +53,7 @@ struct ConversionRateInfo {
 };
 
 struct UnitPreference {
-    UnitPreference() : geq(0) {}
+    UnitPreference() : geq(1) {}
     CharString unit;
     double geq;
     CharString skeleton;
