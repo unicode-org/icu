@@ -14,6 +14,7 @@
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "unitconverter.h"
+#include "unitsrouter.h"
 #include "uparse.h"
 #include <iostream>
 
@@ -34,6 +35,8 @@ class UnitsTest : public IntlTest {
 
     void testConversions();
     void testPreferences();
+    void testGetUnitsData();
+
     void testBasic();
     void testSiPrefixes();
     void testMass();
@@ -56,6 +59,8 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
+    TESTCASE_AUTO(testGetUnitsData);
+
     TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testSiPrefixes);
     TESTCASE_AUTO(testMass);
@@ -778,6 +783,48 @@ void UnitsTest::testPreferences() {
                           errorCode);
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
+    }
+}
+
+void UnitsTest::testGetUnitsData() {
+    struct {
+        const char *outputRegion;
+        const char *usage;
+        const char *inputUnit;
+    } testCases[]{
+        {"US", "fluid", "centiliter"},
+        {"BZ", "weather", "celsius"},
+        {"ZA", "road", "yard"},
+        {"XZ", "zz_nonexistant", "dekagram"},
+    };
+    for (const auto &t : testCases) {
+        logln("test case: %s %s %s\n", t.outputRegion, t.usage, t.inputUnit);
+        // UErrorCode status = U_ZERO_ERROR;
+        IcuTestErrorCode status(*this, "testGetUnitsData");
+        MeasureUnit inputUnit = MeasureUnit::forIdentifier(t.inputUnit, status);
+
+        CharString category;
+        MeasureUnit baseUnit;
+        MaybeStackVector<ConversionRateInfo> conversionInfo;
+        MaybeStackVector<UnitPreference> unitPreferences;
+        getUnitsData(t.outputRegion, t.usage, inputUnit, category, baseUnit, conversionInfo,
+                     unitPreferences, status);
+        if (status.errIfFailureAndReset("getUnitsData(\"%s\", \"%s\", \"%s\", ...)", t.outputRegion, t.usage, t.inputUnit)) {
+            continue;
+        }
+        logln("category: \"%s\", baseUnit: \"%s\"", category.data(), baseUnit.getIdentifier());
+        for (int i=0; i < conversionInfo.length(); i++) {
+            ConversionRateInfo *cri;
+            cri = conversionInfo[i];
+            logln("conversionInfo %d: source=\"%s\", target=\"%s\", factor=\"%s\", offset=\"%s\"", i,
+                  cri->source.data(), cri->target.data(), cri->factor.data(), cri->offset.data());
+        }
+        for (int i=0; i < unitPreferences.length(); i++) {
+            UnitPreference *up;
+            up = unitPreferences[i];
+            logln("unitPreference %d: \"%s\", geq=%f, skeleton=\"%s\"", i, up->unit.data(),
+                  up->geq, up->skeleton.data());
+        }
     }
 }
 

@@ -7,6 +7,7 @@
 #ifndef __UNITSROUTER_H__
 #define __UNITSROUTER_H__
 
+#include "charstr.h" // CharString
 #include "cmemory.h"
 #include "complexunitsconverter.h"
 #include "unicode/errorcode.h"
@@ -15,6 +16,24 @@
 #include "unicode/stringpiece.h"
 
 U_NAMESPACE_BEGIN
+
+using icu::CharString;
+using icu::MaybeStackVector;
+using icu::MeasureUnit;
+
+struct ConversionRateInfo {
+    CharString source;
+    CharString target;
+    CharString factor;
+    CharString offset;
+};
+
+struct UnitPreference {
+    UnitPreference() : geq(1) {}
+    CharString unit;
+    double geq;
+    CharString skeleton;
+};
 
 struct ConverterPreference {
     ComplexUnitsConverter converter;
@@ -33,6 +52,11 @@ class U_I18N_API UnitsRouter {
   private:
     MaybeStackVector<ConverterPreference> converterPreferences_;
 };
+
+void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit &inputUnit,
+                  CharString &category, MeasureUnit &baseUnit,
+                  MaybeStackVector<ConversionRateInfo> &conversionInfo,
+                  MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status);
 
 U_NAMESPACE_END
 
