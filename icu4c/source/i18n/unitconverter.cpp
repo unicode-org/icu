@@ -59,17 +59,11 @@ enum UnitsCase {
 
 // Returns `double` from a scientific number(i.e. "1", "2.01" or "3.09E+4")
 double strToDouble(StringPiece strNum) {
-    std::string charNum;
-    for (int i = 0; i < strNum.length(); i++) {
-        charNum += strNum.data()[i];
-    }
-
     // We are processing well-formed input, so we don't need any special options to
     // StringToDoubleConverter.
     StringToDoubleConverter converter(0, 0, 0, "", "");
     int32_t count;
-    return converter.StringToDouble(reinterpret_cast<const uint16_t *>(strNum.length()), strNum.length(),
-                                    &count);
+    return converter.StringToDouble(strNum.data(), strNum.length(), &count);
 }
 
 // Returns `double` from a scientific number that could has a division sign (i.e. "1", "2.01", "3.09E+4"
@@ -436,6 +430,7 @@ StringPiece getTarget(StringPiece source, UErrorCode &status) {
     return convertUnit.target;
 }
 
+// TODO(ICU-20568): Add more test coverage for this function.
 // Returns the target of a source unit.
 MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
     MeasureUnit result; // Empty unit.
@@ -448,16 +443,20 @@ MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
         if (U_FAILURE(status)) return result;
 
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(target, status);
-        auto tempTargetUnit = TempSingleUnit::forMeasureUnit(targetUnit, status);
-        tempTargetUnit.siPrefix = singleUnit.getSIPrefix(status);
-        tempTargetUnit.dimensionality = singleUnit.getDimensionality(status);
+        auto targetSingleUnits = targetUnit.splitToSingleUnits(status);
         if (U_FAILURE(status)) return result;
 
-        auto targetUnits = tempTargetUnit.build(status);
-        if (U_FAILURE(status)) return result;
+        for (int i = 0, n = targetSingleUnits.length(); i < n; ++i) {
+            auto tempTargetUnit = TempSingleUnit::forMeasureUnit(targetSingleUnits[i], status);
+            tempTargetUnit.dimensionality = singleUnit.getDimensionality(status);
+            if (U_FAILURE(status)) return result;
 
-        result = result.product(targetUnits, status);
-        if (U_FAILURE(status)) return result;
+            auto targetUnits = tempTargetUnit.build(status);
+            if (U_FAILURE(status)) return result;
+
+            result = result.product(targetUnits, status);
+            if (U_FAILURE(status)) return result;
+        }
     }
 
     return result;
