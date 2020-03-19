@@ -46,7 +46,6 @@ namespace {
 //     return result;
 // }
 
-using namespace ::hugovdm_wip;
 using icu::number::impl::DecimalQuantity;
 
 class ConvertUnitsSink : public ResourceSink {
@@ -199,8 +198,6 @@ void putUnitPref(UResourceBundle *usageData, MaybeStackVector<UnitPreference> &o
 
 } // namespace
 
-namespace hugovdm_wip {
-
 /**
  * Fetches required data FIXME.
  *
@@ -293,8 +290,6 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
         ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), prefUnitBase.getIdentifier(), convertSink, status);
     }
 }
-
-} // namespace hugovdm_wip
 
 UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage,
                          UErrorCode &status) {

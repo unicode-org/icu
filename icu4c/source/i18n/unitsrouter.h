@@ -17,30 +17,6 @@
 
 U_NAMESPACE_BEGIN
 
-struct ConverterPreference {
-    ComplexUnitsConverter converter;
-    double limit;
-
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit, UErrorCode &status)
-        : converter(source, complexTarget, status), limit(limit) {}
-};
-
-class U_I18N_API UnitsRouter {
-  public:
-    UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
-
-    MaybeStackVector<Measure> route(double quantity, UErrorCode &status);
-
-  private:
-    MaybeStackVector<ConverterPreference> converterPreferences_;
-};
-
-U_NAMESPACE_END
-
-namespace hugovdm_wip {
-// This namespace contains code from hugovdm that hasn't been reviewed by sffc
-// yet. It still needs thorough review and a "final resting place".
-
 using icu::CharString;
 using icu::MaybeStackVector;
 using icu::MeasureUnit;
@@ -59,12 +35,30 @@ struct UnitPreference {
     CharString skeleton;
 };
 
+struct ConverterPreference {
+    ComplexUnitsConverter converter;
+    double limit;
+
+    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit, UErrorCode &status)
+        : converter(source, complexTarget, status), limit(limit) {}
+};
+
+class U_I18N_API UnitsRouter {
+  public:
+    UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
+
+    MaybeStackVector<Measure> route(double quantity, UErrorCode &status);
+
+  private:
+    MaybeStackVector<ConverterPreference> converterPreferences_;
+};
+
 void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit &inputUnit,
                   CharString &category, MeasureUnit &baseUnit,
                   MaybeStackVector<ConversionRateInfo> &conversionInfo,
                   MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status);
 
-} // namespace hugo_wip
+U_NAMESPACE_END
 
 #endif //__UNITSROUTER_H__
 
