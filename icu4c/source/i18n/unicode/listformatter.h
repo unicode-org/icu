@@ -51,9 +51,11 @@ struct ListFormatData : public UMemory {
     UnicodeString startPattern;
     UnicodeString middlePattern;
     UnicodeString endPattern;
+    Locale locale;
 
-  ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end) :
-      twoPattern(two), startPattern(start), middlePattern(middle), endPattern(end) {}
+  ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end,
+                 const Locale& loc) :
+      twoPattern(two), startPattern(start), middlePattern(middle), endPattern(end), locale(loc) {}
 };
 /** \endcond */
 
