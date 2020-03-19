@@ -276,12 +276,13 @@ ICU data items are referenced by three names - a path, a name and a type. The
 following are some examples:
 
 path                         |   name   | type
------------------------------|----------|-----
+-----------------------------|----------|-------
+ c:\\some\\path\\dataLibName | test     | dat
                              | cnvalias | icu
                              | cp1252   | cnv
                              | en       | res
                              | uprops   | icu
- c:\\some\\path\\dataLibName | test     | dat
+
 
 Items with no path specified are loaded from the default ICU data.
 
