@@ -223,7 +223,7 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
     if (uprv_strcmp(inputBase.getIdentifier(), "gram") == 0) { inputBase = MeasureUnit::getKilogram(); }
     // if (U_FAILURE(status)) fprintf(stderr, "failed getting inputBase: %s\n", u_errorName(status));
 
-    StackUResourceBundle stackBundle;
+    StackUResourceBundle convertUnitsBundle;
     // CharString has initial capacity 40. Key appending only gets slow when we
     // go beyond. TODO(hugovdm): look at how often this might happen though?
     // Each append could be a re-allocation.
@@ -231,8 +231,8 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
     // key.append("convertUnits/", status);
     key.append(inputBase.getIdentifier(), status);
     ConvertUnitsSink convertSink(conversionInfo);
-    ures_getByKey(unitsBundle.getAlias(), "convertUnits", stackBundle.getAlias(), &status);
-    ures_getAllItemsWithFallback(stackBundle.getAlias(), key.data(), convertSink, status);
+    ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
+    ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), key.data(), convertSink, status);
     const CharString &baseIdentifier = conversionInfo[0]->target;
     baseUnit = MeasureUnit::forIdentifier(baseIdentifier.data(), status);
 
@@ -250,6 +250,7 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
 
     // We load the region-specific unit preferences into stackBundle, reusing it
     // for fill-in every step of the way:
+    StackUResourceBundle stackBundle;
     ures_getByKey(unitsBundle.getAlias(), "unitPreferenceData", stackBundle.getAlias(), &status);
     ures_getByKey(stackBundle.getAlias(), category.data(), stackBundle.getAlias(), &status);
     if (U_FAILURE(status)) { return; }
@@ -280,6 +281,18 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
     // key.append(outputRegion, status); // FIXME: fall back to "001"
     // UnitPreferencesSink prefsSink(unitPreferences);
     // ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), prefsSink, status);
+
+    // Load ConversionRateInfo for each of the units in unitPreferences.
+    //
+    // WIP/FIXME: this currently adds plenty of duplicates. hugovdm will soon
+    // adapt the code to skip dupes (or add conversion info for units with SI
+    // prefixes?)
+    for (int32_t i = 0; i < unitPreferences.length(); i++) {
+        UnitPreference *up = unitPreferences[i];
+        MeasureUnit prefUnitBase = MeasureUnit::forIdentifier(up->unit.data(), status)
+                                       .withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
+        ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), prefUnitBase.getIdentifier(), convertSink, status);
+    }
 }
 
 } // namespace hugovdm_wip
