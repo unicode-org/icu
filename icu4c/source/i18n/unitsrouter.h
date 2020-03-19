@@ -27,7 +27,7 @@ struct ConverterPreference {
 
 class U_I18N_API UnitsRouter {
   public:
-    UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode& status);
+    UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
 
     MaybeStackVector<Measure> route(double quantity, UErrorCode &status);
 

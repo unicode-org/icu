@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <utility>
+
 #include "cmemory.h"
 #include "cstring.h"
 #include "number_decimalquantity.h"
@@ -309,26 +311,24 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece 
     for (int i = 0, n = unitPreferences.length(); i < n; ++i) {
         const auto &preference = *unitPreferences[i];
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
-        // This fails to compile - it tries to copy a ConverterPreference
-        // instance but converter member has no copy-constructor:
+        // TODO(younies): Find a way to emplaceBack `ConverterPreference`
         // converterPreferences_.emplaceBack(
-        //     ConverterPreference(inputUnit, complexTargetUnit, preference.geq, status));
+        //     std::move(ConverterPreference(inputUnit, complexTargetUnit, preference.geq, status)));
     }
 }
 
 MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) {
-    for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
+    for (int i = 0, n = converterPreferences_.length() - 1; i < n; i++) {
         const auto &converterPreference = *converterPreferences_[i];
-
-        if (i == n - 1) { // last unit preference
-            return converterPreference.converter.convert(quantity, status);
-        }
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
             return converterPreference.converter.convert(quantity, status);
         }
     }
-    // FIXME: return <...>;
+
+    const auto &converterPreference =
+        *converterPreferences_[converterPreferences_.length() - 1]; // Last Element
+    return converterPreference.converter.convert(quantity, status);
 }
 
 U_NAMESPACE_END
