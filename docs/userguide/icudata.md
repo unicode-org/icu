@@ -278,10 +278,10 @@ following are some examples:
 path                         |   name   | type
 -----------------------------|----------|-------
  c:\\some\\path\\dataLibName | test     | dat
-                             | cnvalias | icu
-                             | cp1252   | cnv
-                             | en       | res
-                             | uprops   | icu
+ no path                     | cnvalias | icu
+ no path                     | cp1252   | cnv
+ no path                     | en       | res
+ no path                     | uprops   | icu
 
 
 Items with no path specified are loaded from the default ICU data.
