@@ -284,7 +284,7 @@ path                         |   name   | type
  no path                     | uprops   | icu
 
 
-Items with no path specified are loaded from the default ICU data.
+Items with 'no path' specified are loaded from the default ICU data.
 
 Application data items include a path, and will be loaded from user data files,
 not from the ICU default data. For application data, the path argument need not
