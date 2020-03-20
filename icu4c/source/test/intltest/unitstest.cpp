@@ -533,7 +533,7 @@ void UnitsTest::testConversions() {
     path.appendPathPart(filename, errorCode);
     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, runDataDrivenConversionTest, this,
                          errorCode);
-    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s", path.data(), u_errorName(errorCode))) {
         return;
     }
 }
@@ -801,8 +801,13 @@ void UnitsTest::testPreferences() {
     }
 }
 
+// We test "successfully loading some data", not specific output values, since
+// this would duplicate some of the input data. We leave end-to-end testing to
+// take care of that. Running `intltest` with `-v` will print out the loaded
+// output for easy visual inspection.
 void UnitsTest::testGetUnitsData() {
     struct {
+        // Input parameters
         const char *outputRegion;
         const char *usage;
         const char *inputUnit;
@@ -813,10 +818,13 @@ void UnitsTest::testGetUnitsData() {
         {"XZ", "zz_nonexistant", "dekagram"},
     };
     for (const auto &t : testCases) {
-        logln("test case: %s %s %s\n", t.outputRegion, t.usage, t.inputUnit);
-        // UErrorCode status = U_ZERO_ERROR;
+        logln("---testing: region=\"%s\", usage=\"%s\", inputUnit=\"%s\"", t.outputRegion, t.usage,
+              t.inputUnit);
         IcuTestErrorCode status(*this, "testGetUnitsData");
         MeasureUnit inputUnit = MeasureUnit::forIdentifier(t.inputUnit, status);
+        if (status.errIfFailureAndReset("MeasureUnit::forIdentifier(\"%s\", ...)", t.inputUnit)) {
+            continue;
+        }
 
         CharString category;
         MeasureUnit baseUnit;
@@ -828,18 +836,26 @@ void UnitsTest::testGetUnitsData() {
                                         t.usage, t.inputUnit)) {
             continue;
         }
-        logln("category: \"%s\", baseUnit: \"%s\"", category.data(), baseUnit.getIdentifier());
+
+        logln("* category: \"%s\", baseUnit: \"%s\"", category.data(), baseUnit.getIdentifier());
+        assertTrue("category filled in", category.length() > 0);
+        assertTrue("baseUnit filled in", uprv_strlen(baseUnit.getIdentifier()) > 0);
+        assertTrue("at least one conversion rate obtained", conversionInfo.length() > 0);
         for (int i = 0; i < conversionInfo.length(); i++) {
             ConversionRateInfo *cri;
             cri = conversionInfo[i];
-            logln("conversionInfo %d: source=\"%s\", target=\"%s\", factor=\"%s\", offset=\"%s\"", i,
+            logln("* conversionInfo %d: source=\"%s\", target=\"%s\", factor=\"%s\", offset=\"%s\"", i,
                   cri->source.data(), cri->target.data(), cri->factor.data(), cri->offset.data());
+            assertTrue("ConversionRateInfo has source, target, and factor",
+                       cri->source.length() > 0 && cri->target.length() > 0 && cri->factor.length() > 0);
         }
+        assertTrue("at least one unit preference obtained", unitPreferences.length() > 0);
         for (int i = 0; i < unitPreferences.length(); i++) {
             UnitPreference *up;
             up = unitPreferences[i];
-            logln("unitPreference %d: \"%s\", geq=%f, skeleton=\"%s\"", i, up->unit.data(), up->geq,
+            logln("* unitPreference %d: \"%s\", geq=%f, skeleton=\"%s\"", i, up->unit.data(), up->geq,
                   up->skeleton.data());
+            assertTrue("unitPreference has unit", up->unit.length() > 0);
         }
     }
 }
