@@ -69,12 +69,11 @@ double strToDouble(StringPiece strNum) {
 // Returns `double` from a scientific number that could has a division sign (i.e. "1", "2.01", "3.09E+4"
 // or "2E+2/3")
 double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
-    CharString charNum(strWithDivide, status);
     if (U_FAILURE(status)) return 0.0;
 
     int divisionSignInd = -1;
-    for (int i = 0, n = charNum[i]; i < n; ++i) {
-        if (charNum[i] == '/') {
+    for (int i = 0; i < strWithDivide.length(); ++i) {
+        if (strWithDivide.data()[i] == '/') {
             divisionSignInd = i;
             break;
         }
@@ -462,7 +461,11 @@ MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
     return result;
 }
 
-UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode &status) {
+// Checks whether conversion from source to target is possible by checking
+// whether their conversion information pivots on the same base unit. If
+// UnitsCase::RECIPROCAL is returned, it means one's base unit is the inverse of
+// the other's.
+UnitsCase checkUnitsCase(const MeasureUnit &source, const MeasureUnit &target, UErrorCode &status) {
     MeasureUnit sourceTargetUnit = extractTarget(source, status);
     MeasureUnit targetTargetUnit = extractTarget(target, status);
 

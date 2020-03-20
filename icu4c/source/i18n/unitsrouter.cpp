@@ -48,44 +48,89 @@ namespace {
 
 using icu::number::impl::DecimalQuantity;
 
-class ConvertUnitsSink : public ResourceSink {
+/**
+ * A ResourceSink that collects conversion rate information.
+ *
+ * Calls to put() collects ConversionRateInfo instances for  into the vector
+ * passed to the constructor, but only if an identical instance isn't already
+ * present.
+ *
+ * This class is for use by ures_getAllItemsWithFallback. Example code for
+ * collecting conversion info for "mile" and "foot" into conversionInfoOutput:
+ *
+ *     UErrorCode status = U_ZERO_ERROR;
+ *     MaybeStackVector<ConversionRateInfo> conversionInfoOutput;
+ *     ConversionRateDataSink convertSink(conversionInfoOutput);
+ *     ures_getByKey(unitsBundle, "convertUnits", &fillIn, &status);
+ *     ures_getAllItemsWithFallback(fillIn, "mile", convertSink, status);
+ *     ures_getAllItemsWithFallback(fillIn, "foot", convertSink, status);
+ */
+class ConversionRateDataSink : public ResourceSink {
   public:
-    explicit ConvertUnitsSink(MaybeStackVector<ConversionRateInfo> &out) : outVector(out) {}
+    explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> &out) : outVector(out) {}
 
-    // WIP: look into noFallback
-    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
+    /**
+     * Adds the conversion rate information found in value to the output vector.
+     * @param key The source unit identifier.
+     * @param value A resource containing conversion rate info (a target and
+     * factor, and possibly an offset).
+     * @param noFallback Ignored.
+     * @param status The standard ICU error code output parameter.
+     */
+    void put(const char *source, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         ResourceTable conversionRateTable = value.getTable(status);
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "%s: getTable failed\n", u_errorName(status));
+        if (U_FAILURE(status)) return;
+
+        // Collect target, factor and offset from the resource.
+        int32_t lenSource = uprv_strlen(source);
+        const UChar *target = NULL, *factor = NULL, *offset = NULL;
+        int32_t lenTarget, lenFactor, lenOffset;
+        const char *key;
+        for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
+            if (uprv_strcmp(key, "target") == 0) {
+                target = value.getString(lenTarget, status);
+            } else if (uprv_strcmp(key, "factor") == 0) {
+                factor = value.getString(lenFactor, status);
+            } else if (uprv_strcmp(key, "offset") == 0) {
+                offset = value.getString(lenOffset, status);
+            }
+        }
+        if (target == NULL || factor == NULL) {
+            status = U_MISSING_RESOURCE_ERROR;
             return;
         }
 
+        // Check if we already have the conversion rate in question.
+        //
+        // TODO(revieW): We could do this skip-check *before* we fetch
+        // target/factor/offset based only on the source unit, but only if we're
+        // certain we'll never get two different targets for a given source.
+        // This should be the case, since convertUnit entries in CLDR's
+        // units.xml should all point at a defined base unit for the unit
+        // category. I should make this code more efficient after
+        // double-checking we're fine with relying on such a detail from the
+        // CLDR spec?
+        CharString tmpTarget;
+        tmpTarget.appendInvariantChars(target, lenTarget, status);
+        if (U_FAILURE(status)) return;
+        for (int32_t i = 0, len = outVector.length(); i < len; i++) {
+            if (strcmp(outVector[i]->source.data(), source) == 0 &&
+                strcmp(outVector[i]->target.data(), tmpTarget.data()) == 0) {
+                return;
+            }
+        }
+        if (U_FAILURE(status)) return;
+
+        // We don't have this ConversionRateInfo yet: add it.
         ConversionRateInfo *cr = outVector.emplaceBack();
         if (!cr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
-        }
-
-        int32_t length = uprv_strlen(key);
-        cr->source.append(key, length, status);
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "%s: source.append failed\n", u_errorName(status));
-            return;
-        }
-        for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
-            if (uprv_strcmp(key, "factor") == 0) {
-                int32_t length;
-                const UChar *f = value.getString(length, status);
-                cr->factor.appendInvariantChars(f, length, status);
-            } else if (uprv_strcmp(key, "offset") == 0) {
-                int32_t length;
-                const UChar *o = value.getString(length, status);
-                cr->offset.appendInvariantChars(o, length, status);
-            } else if (uprv_strcmp(key, "target") == 0) {
-                int32_t length;
-                const UChar *t = value.getString(length, status);
-                cr->target.appendInvariantChars(t, length, status);
-            }
+        } else {
+            cr->source.append(source, lenSource, status);
+            cr->target.append(tmpTarget.data(), tmpTarget.length(), status);
+            cr->factor.appendInvariantChars(factor, lenFactor, status);
+            if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
         }
     }
 
@@ -93,11 +138,14 @@ class ConvertUnitsSink : public ResourceSink {
     MaybeStackVector<ConversionRateInfo> &outVector;
 };
 
+// WIP/FIXME: this class is currently unused code (dead?) - putUnitPref() has
+// all the features we need whereas this doesn't handle fallback to
+// usage="default" and region="001" yet. If we want to fix that here, this code
+// will get quite a bit more complicated.
 class UnitPreferencesSink : public ResourceSink {
   public:
     explicit UnitPreferencesSink(MaybeStackVector<UnitPreference> &out) : outVector(out) {}
 
-    // WIP: look into noFallback
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         if (U_FAILURE(status)) { return; }
         int32_t prefLen;
@@ -138,156 +186,143 @@ class UnitPreferencesSink : public ResourceSink {
     MaybeStackVector<UnitPreference> &outVector;
 };
 
+/**
+ * Collects unit preference information from a set of preferences.
+ * @param usageData This should be a resource bundle containing a vector of
+ * preferences - i.e. the unitPreferenceData tree resources already narrowed
+ * down to a particular usage and region (example:
+ * "unitPreferenceData/length/road/GB").
+ */
 void putUnitPref(UResourceBundle *usageData, MaybeStackVector<UnitPreference> &outVector,
                  UErrorCode &status) {
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) return;
+    StackUResourceBundle prefBundle;
 
-    UResourceBundle *prefBundle = NULL;
     int32_t numPrefs = ures_getSize(usageData);
     for (int32_t i = 0; i < numPrefs; i++) {
-        prefBundle = ures_getByIndex(usageData, i, prefBundle, &status);
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "failed getting index %d/%d: %s\n", i, numPrefs, u_errorName(status));
-            status = U_ZERO_ERROR;
-            break;
-        }
-        int32_t len;
-        const UChar *unitIdent = ures_getStringByKey(prefBundle, "unit", &len, &status);
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "open unit failed: %s\n", u_errorName(status));
-            break;
-        }
+        ures_getByIndex(usageData, i, prefBundle.getAlias(), &status);
 
+        // Add and populate a new UnitPreference
+        int32_t strLen;
+
+        // unit
+        const UChar *unitIdent = ures_getStringByKey(prefBundle.getAlias(), "unit", &strLen, &status);
+        if (U_FAILURE(status)) return;
         UnitPreference *up = outVector.emplaceBack();
         if (!up) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        up->unit.appendInvariantChars(unitIdent, len, status);
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "failed appending unitIdent: %s\n", u_errorName(status));
-            status = U_ZERO_ERROR;
-            break;
-        }
-        const UChar *geq = ures_getStringByKey(prefBundle, "geq", &len, &status);
+        up->unit.appendInvariantChars(unitIdent, strLen, status);
+
+        // geq
+        const UChar *geq = ures_getStringByKey(prefBundle.getAlias(), "geq", &strLen, &status);
         if (U_SUCCESS(status)) {
+            // If we don't mind up->geq having a bad value when
+            // U_FAILURE(status), we could extract a function and do a one-liner:
+            // up->geq = UCharsToDouble(geq, status);
             CharString cGeq;
-            cGeq.appendInvariantChars(geq, len, status);
+            cGeq.appendInvariantChars(geq, strLen, status);
             DecimalQuantity dq;
             dq.setToDecNumber(StringPiece(cGeq.data()), status);
-            // fprintf(stderr, "status: %s, geq: %s, dq.toDouble(): %f\n", u_errorName(status),
-            // cGeq.data(),
-            //         dq.toDouble());
+            if (U_FAILURE(status)) return;
             up->geq = dq.toDouble();
         } else if (status == U_MISSING_RESOURCE_ERROR) {
+            // We don't mind if geq is missing
             status = U_ZERO_ERROR;
+        } else {
+            return;
         }
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "failed appending geq: %s\n", u_errorName(status));
-            break;
-        }
-        const UChar *skel = ures_getStringByKey(prefBundle, "skeleton", &len, &status);
+
+        // skeleton
+        const UChar *skel = ures_getStringByKey(prefBundle.getAlias(), "skeleton", &strLen, &status);
         if (U_SUCCESS(status)) {
-            up->skeleton.appendInvariantChars(skel, len, status);
+            up->skeleton.appendInvariantChars(skel, strLen, status);
         } else if (status == U_MISSING_RESOURCE_ERROR) {
+            // We don't mind if geq is missing
             status = U_ZERO_ERROR;
+        } else {
+            return;
         }
     }
-    ures_close(prefBundle);
 }
 
 } // namespace
 
 /**
- * Fetches required data FIXME.
+ * Fetches the units data that would be needed for the given usage.
  *
  * @param inputUnit the unit for which input is expected. (NOTE/WIP: If this is
  * known to be a base unit already, we could strip some logic here.)
  */
 void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit &inputUnit,
                   CharString &category, MeasureUnit &baseUnit,
-                  MaybeStackVector<ConversionRateInfo> &conversionInfo,
+                  MaybeStackVector<ConversionRateInfo> &conversionRates,
                   MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status) {
-    // One can also use a StackUResourceBundle as a fill-in.
+    // This first fetches conversion info for the inputUnit, to find out the
+    // base unit. Next it fetches the category and unit preferences for the
+    // given usage and region. Finally it fetches conversion rates again, for
+    // each of the units in the regional preferences for the given usage.
+
+    // In this function we use LocalUResourceBundlePointers for resource bundles
+    // that don't change, and StackUResourceBundles for structures we use as
+    // fillin.
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    if (U_FAILURE(status)) {
-        // fprintf(stderr, "%s: ures_openDirect %s\n", u_errorName(status), "units");
+    StackUResourceBundle convertUnitsBundle;
+    ConversionRateDataSink convertSink(conversionRates);
+
+    // baseUnit
+    MeasureUnit inputBase = inputUnit.withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
+    ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
+    ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), inputBase.getIdentifier(), convertSink,
+                                 status);
+    if (U_FAILURE(status)) return;
+    if (conversionRates.length() < 1) {
+        // This is defensive programming, because this shouldn't happen: if
+        // convertSink succeeds, there should be at least one item in
+        // conversionRates.
+        status = U_MISSING_RESOURCE_ERROR;
         return;
     }
+    const char *baseIdentifier = conversionRates[0]->target.data();
+    baseUnit = MeasureUnit::forIdentifier(baseIdentifier, status);
 
-    MeasureUnit inputBase = inputUnit.withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
-    if (uprv_strcmp(inputBase.getIdentifier(), "gram") == 0) { inputBase = MeasureUnit::getKilogram(); }
-    // if (U_FAILURE(status)) fprintf(stderr, "failed getting inputBase: %s\n", u_errorName(status));
-
-    StackUResourceBundle convertUnitsBundle;
-    // CharString has initial capacity 40. Key appending only gets slow when we
-    // go beyond. TODO(hugovdm): look at how often this might happen though?
-    // Each append could be a re-allocation.
-    CharString key;
-    // key.append("convertUnits/", status);
-    key.append(inputBase.getIdentifier(), status);
-    ConvertUnitsSink convertSink(conversionInfo);
-    ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
-    ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), key.data(), convertSink, status);
-    const CharString &baseIdentifier = conversionInfo[0]->target;
-    baseUnit = MeasureUnit::forIdentifier(baseIdentifier.data(), status);
-
-    // key.clear();
-    // key.append("unitQuantities/", status);
-    // key.append(baseIdentifier, status);
-    // ures_findSubResource(unitsBundle.getAlias(), key.data(), fillIn, &status);
-    // Now we still need to convert to string.
+    // category
     LocalUResourceBundlePointer unitQuantities(
         ures_getByKey(unitsBundle.getAlias(), "unitQuantities", NULL, &status));
     int32_t categoryLength;
     const UChar *uCategory =
-        ures_getStringByKey(unitQuantities.getAlias(), baseIdentifier.data(), &categoryLength, &status);
+        ures_getStringByKey(unitQuantities.getAlias(), baseIdentifier, &categoryLength, &status);
     category.appendInvariantChars(uCategory, categoryLength, status);
 
-    // We load the region-specific unit preferences into stackBundle, reusing it
-    // for fill-in every step of the way:
-    StackUResourceBundle stackBundle;
+    // Find the right unit preference bundle
+    StackUResourceBundle stackBundle; // Reused as we climb the tree
     ures_getByKey(unitsBundle.getAlias(), "unitPreferenceData", stackBundle.getAlias(), &status);
     ures_getByKey(stackBundle.getAlias(), category.data(), stackBundle.getAlias(), &status);
     if (U_FAILURE(status)) { return; }
     ures_getByKey(stackBundle.getAlias(), usage, stackBundle.getAlias(), &status);
     if (status == U_MISSING_RESOURCE_ERROR) {
-        // Requested usage does not exist, use "default".
+        // Requested usage does not exist, so we use "default".
         status = U_ZERO_ERROR;
         ures_getByKey(stackBundle.getAlias(), "default", stackBundle.getAlias(), &status);
     }
-    // if (U_FAILURE(status)) fprintf(stderr, "failed getting usage %s: %s\n", usage,
-    // u_errorName(status));
     ures_getByKey(stackBundle.getAlias(), outputRegion, stackBundle.getAlias(), &status);
     if (status == U_MISSING_RESOURCE_ERROR) {
-        // Requested region does not exist, use "001".
+        // Requested region does not exist, so we use "001".
         status = U_ZERO_ERROR;
         ures_getByKey(stackBundle.getAlias(), "001", stackBundle.getAlias(), &status);
     }
-    // if (U_FAILURE(status)) fprintf(stderr, "failed getting region %s: %s\n", outputRegion,
-    // u_errorName(status));
+
+    // Collect all the preferences into unitPreferences
     putUnitPref(stackBundle.getAlias(), unitPreferences, status);
-    // if (U_FAILURE(status)) fprintf(stderr, "putUnitPref failed: %s\n", u_errorName(status));
 
-    // An alterantive for the above "We load ..." block, I don't think this is neater:
-    // key.clear();
-    // key.append("unitPreferenceData/", status);
-    // key.append(category, status).append("/", status);
-    // key.append(usage, status).append("/", status); // FIXME: fall back to "default"
-    // key.append(outputRegion, status); // FIXME: fall back to "001"
-    // UnitPreferencesSink prefsSink(unitPreferences);
-    // ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), prefsSink, status);
-
-    // Load ConversionRateInfo for each of the units in unitPreferences.
-    //
-    // WIP/FIXME: this currently adds plenty of duplicates. hugovdm will soon
-    // adapt the code to skip dupes (or add conversion info for units with SI
-    // prefixes?)
+    // Load ConversionRateInfo for each of the units in unitPreferences
     for (int32_t i = 0; i < unitPreferences.length(); i++) {
-        UnitPreference *up = unitPreferences[i];
-        MeasureUnit prefUnitBase = MeasureUnit::forIdentifier(up->unit.data(), status)
+        MeasureUnit prefUnitBase = MeasureUnit::forIdentifier(unitPreferences[i]->unit.data(), status)
                                        .withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
-        ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), prefUnitBase.getIdentifier(), convertSink, status);
+        // convertSink will skip conversion rates we already have
+        ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), prefUnitBase.getIdentifier(),
+                                     convertSink, status);
     }
 }
 
@@ -298,9 +333,9 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece 
     const char *region = "001"; // FIXME extract from locale.
     CharString category;
     MeasureUnit baseUnit;
-    MaybeStackVector<ConversionRateInfo> conversionInfo;
+    MaybeStackVector<ConversionRateInfo> conversionRates;
     MaybeStackVector<UnitPreference> unitPreferences;
-    getUnitsData(region, usage.data(), inputUnit, category, baseUnit, conversionInfo, unitPreferences,
+    getUnitsData(region, usage.data(), inputUnit, category, baseUnit, conversionRates, unitPreferences,
                  status);
 
     for (int i = 0, n = unitPreferences.length(); i < n; ++i) {
