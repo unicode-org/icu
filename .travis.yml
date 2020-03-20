@@ -39,6 +39,24 @@ matrix:
       after_failure:
           -  cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
 
+    - name: "c: linux gcc 8 Wextra"
+      dist:     bionic
+      language: cpp
+      addons:
+         apt:
+           packages:
+             - g++-8
+      env: PREFIX=/tmp/icu-prefix CC=gcc-8 CXX=g++-8 CXXFLAGS="-Wextra"
+      before_script:
+        - mkdir build
+        - cd build
+        - ../icu4c/source/runConfigureICU Linux --disable-debug --enable-release --disable-layoutex --prefix="${PREFIX}" || (tail -100 config.log ; false)
+        - make -j2
+      script:
+        - make -j2 check
+        - make install
+        - PATH="${PREFIX}/bin:$PATH" make -C test/hdrtst check
+
     # gcc debug build.
     # Includes dependency checker.
     # Note - the dependency checker needs to be run on both a debug and an optimized build.
