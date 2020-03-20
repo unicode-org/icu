@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <iostream>
+
 #include "charstr.h"
 #include "filestrm.h"
 #include "intltest.h"
@@ -16,7 +18,6 @@
 #include "unitconverter.h"
 #include "unitsrouter.h"
 #include "uparse.h"
-#include <iostream>
 
 struct UnitConversionTestCase {
     const StringPiece source;
@@ -54,9 +55,7 @@ class UnitsTest : public IntlTest {
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) {
-        logln("TestSuite UnitsTest: ");
-    }
+    if (exec) { logln("TestSuite UnitsTest: "); }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
@@ -811,28 +810,29 @@ void UnitsTest::testGetUnitsData() {
         MaybeStackVector<UnitPreference> unitPreferences;
         getUnitsData(t.outputRegion, t.usage, inputUnit, category, baseUnit, conversionInfo,
                      unitPreferences, status);
-        if (status.errIfFailureAndReset("getUnitsData(\"%s\", \"%s\", \"%s\", ...)", t.outputRegion, t.usage, t.inputUnit)) {
+        if (status.errIfFailureAndReset("getUnitsData(\"%s\", \"%s\", \"%s\", ...)", t.outputRegion,
+                                        t.usage, t.inputUnit)) {
             continue;
         }
         logln("category: \"%s\", baseUnit: \"%s\"", category.data(), baseUnit.getIdentifier());
-        for (int i=0; i < conversionInfo.length(); i++) {
+        for (int i = 0; i < conversionInfo.length(); i++) {
             ConversionRateInfo *cri;
             cri = conversionInfo[i];
             logln("conversionInfo %d: source=\"%s\", target=\"%s\", factor=\"%s\", offset=\"%s\"", i,
                   cri->source.data(), cri->target.data(), cri->factor.data(), cri->offset.data());
         }
-        for (int i=0; i < unitPreferences.length(); i++) {
+        for (int i = 0; i < unitPreferences.length(); i++) {
             UnitPreference *up;
             up = unitPreferences[i];
-            logln("unitPreference %d: \"%s\", geq=%f, skeleton=\"%s\"", i, up->unit.data(),
-                  up->geq, up->skeleton.data());
+            logln("unitPreference %d: \"%s\", geq=%f, skeleton=\"%s\"", i, up->unit.data(), up->geq,
+                  up->skeleton.data());
         }
     }
+}
+
 /**
  * Tests different return statuses depending on the input.
  */
-void UnitsTest::testStatus() {
-
-}
+void UnitsTest::testStatus() {}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

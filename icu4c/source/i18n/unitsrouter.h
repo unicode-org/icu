@@ -53,10 +53,10 @@ class U_I18N_API UnitsRouter {
     MaybeStackVector<ConverterPreference> converterPreferences_;
 };
 
-void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit &inputUnit,
-                  CharString &category, MeasureUnit &baseUnit,
-                  MaybeStackVector<ConversionRateInfo> &conversionInfo,
-                  MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status);
+void U_I18N_API getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit &inputUnit,
+                CharString &category, MeasureUnit &baseUnit,
+                MaybeStackVector<ConversionRateInfo> &conversionInfo,
+                MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status);
 
 U_NAMESPACE_END
 
