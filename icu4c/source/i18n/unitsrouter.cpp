@@ -48,44 +48,63 @@ namespace {
 
 using icu::number::impl::DecimalQuantity;
 
-class ConvertUnitsSink : public ResourceSink {
+class ConversionRateDataSink : public ResourceSink {
   public:
-    explicit ConvertUnitsSink(MaybeStackVector<ConversionRateInfo> &out) : outVector(out) {}
+    explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> &out) : outVector(out) {}
 
-    // WIP: look into noFallback
-    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
+    /**
+     * Adds the conversion rate information found in value to the output vector.
+     * @param key The source unit identifier.
+     * @param value A resource containing conversion rate info (a target and
+     * factor, and possibly an offset).
+     * @param noFallback Ignored.
+     * @param status The standard ICU error code output parameter.
+     */
+    void put(const char *source, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         ResourceTable conversionRateTable = value.getTable(status);
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "%s: getTable failed\n", u_errorName(status));
+        if (U_FAILURE(status)) return;
+
+        // Collect target, factor and offset from the resource.
+        int32_t lenSource = uprv_strlen(source);
+        const UChar *target = NULL, *factor = NULL, *offset = NULL;
+        int32_t lenTarget, lenFactor, lenOffset;
+        const char *key;
+        for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
+            if (uprv_strcmp(key, "target") == 0) {
+                target = value.getString(lenTarget, status);
+            } else if (uprv_strcmp(key, "factor") == 0) {
+                factor = value.getString(lenFactor, status);
+            } else if (uprv_strcmp(key, "offset") == 0) {
+                offset = value.getString(lenOffset, status);
+            }
+        }
+        if (target == NULL || factor == NULL) {
+            status = U_MISSING_RESOURCE_ERROR;
             return;
         }
 
+        // Check if we already have the conversion rate in question.
+        CharString tmpTarget;
+        tmpTarget.appendInvariantChars(target, lenTarget, status);
+        if (U_FAILURE(status)) return;
+        for (int32_t i = 0, len = outVector.length(); i < len; i++) {
+            if (strcmp(outVector[i]->source.data(), source) == 0 &&
+                strcmp(outVector[i]->target.data(), tmpTarget.data()) == 0) {
+                return;
+            }
+        }
+        if (U_FAILURE(status)) return;
+
+        // We don't have it yet: add it.
         ConversionRateInfo *cr = outVector.emplaceBack();
         if (!cr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
-        }
-
-        int32_t length = uprv_strlen(key);
-        cr->source.append(key, length, status);
-        if (U_FAILURE(status)) {
-            // fprintf(stderr, "%s: source.append failed\n", u_errorName(status));
-            return;
-        }
-        for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
-            if (uprv_strcmp(key, "factor") == 0) {
-                int32_t length;
-                const UChar *f = value.getString(length, status);
-                cr->factor.appendInvariantChars(f, length, status);
-            } else if (uprv_strcmp(key, "offset") == 0) {
-                int32_t length;
-                const UChar *o = value.getString(length, status);
-                cr->offset.appendInvariantChars(o, length, status);
-            } else if (uprv_strcmp(key, "target") == 0) {
-                int32_t length;
-                const UChar *t = value.getString(length, status);
-                cr->target.appendInvariantChars(t, length, status);
-            }
+        } else {
+            cr->source.append(source, lenSource, status);
+            cr->target.append(tmpTarget.data(), tmpTarget.length(), status);
+            cr->factor.appendInvariantChars(factor, lenFactor, status);
+            if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
         }
     }
 
@@ -226,11 +245,16 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
     CharString key;
     // key.append("convertUnits/", status);
     key.append(inputBase.getIdentifier(), status);
-    ConvertUnitsSink convertSink(conversionInfo);
+    ConversionRateDataSink convertSink(conversionInfo);
     ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
     ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), key.data(), convertSink, status);
-    const CharString &baseIdentifier = conversionInfo[0]->target;
-    baseUnit = MeasureUnit::forIdentifier(baseIdentifier.data(), status);
+    if (U_FAILURE(status)) return;
+    if (conversionInfo.length() < 1) {
+        status = U_MISSING_RESOURCE_ERROR;
+        return;
+    }
+    const char *baseIdentifier = conversionInfo[0]->target.data();
+    baseUnit = MeasureUnit::forIdentifier(baseIdentifier, status);
 
     // key.clear();
     // key.append("unitQuantities/", status);
@@ -241,7 +265,7 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
         ures_getByKey(unitsBundle.getAlias(), "unitQuantities", NULL, &status));
     int32_t categoryLength;
     const UChar *uCategory =
-        ures_getStringByKey(unitQuantities.getAlias(), baseIdentifier.data(), &categoryLength, &status);
+        ures_getStringByKey(unitQuantities.getAlias(), baseIdentifier, &categoryLength, &status);
     category.appendInvariantChars(uCategory, categoryLength, status);
 
     // We load the region-specific unit preferences into stackBundle, reusing it
@@ -288,6 +312,7 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
         MeasureUnit prefUnitBase = MeasureUnit::forIdentifier(up->unit.data(), status)
                                        .withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
         ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), prefUnitBase.getIdentifier(), convertSink, status);
+        if (U_FAILURE(status)) fprintf(stderr, "found failure %s\n", u_errorName(status));
     }
 }
 
