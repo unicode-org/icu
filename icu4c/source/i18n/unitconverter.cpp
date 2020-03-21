@@ -26,6 +26,19 @@ using icu::double_conversion::StringToDoubleConverter;
 
 /* Internal Structure */
 
+enum Constants {
+    CONSTANT_FT2M,    // ft2m stands for foot to meter.
+    CONSTANT_PI,      // PI
+    CONSTANT_GRAVITY, // Gravity
+    CONSTANT_G,
+    CONSTANT_GAL2M3,     // Gallon to m3
+    CONSTANT_GAL_IMP2M3, // Gallon imp to m3
+    CONSTANT_LB2KG,      // Pound to Kilogram
+
+    // Must be the last element.
+    CONSTANTS_COUNT
+};
+
 // Represents a raw convert unit.
 struct ConvertUnit {
     StringPiece source;
@@ -44,10 +57,10 @@ struct ConvertUnit {
     bool reciprocal = false;
 };
 
-typedef enum Signal {
+typedef enum SigNum {
     NEGATIVE = -1,
     POSITIVE = 1,
-} Signal;
+} SigNum;
 
 enum UnitsCase {
     RECIPROCAL,
@@ -68,13 +81,10 @@ double strToDouble(StringPiece strNum) {
 
 // Returns `double` from a scientific number that could has a division sign (i.e. "1", "2.01", "3.09E+4"
 // or "2E+2/3")
-double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
-    CharString charNum(strWithDivide, status);
-    if (U_FAILURE(status)) return 0.0;
-
+double strHasDivideSignToDouble(StringPiece strWithDivide) {
     int divisionSignInd = -1;
-    for (int i = 0, n = charNum[i]; i < n; ++i) {
-        if (charNum[i] == '/') {
+    for (int i = 0, n = strWithDivide.length(); i < n; ++i) {
+        if (strWithDivide.data()[i] == '/') {
             divisionSignInd = i;
             break;
         }
@@ -212,30 +222,30 @@ ConvertUnit extractConvertUnit(StringPiece source, UErrorCode &status) {
 /*/
  * Add single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
  */
-void addSingleFactorConstant(Factor &factor, StringPiece baseStr, int32_t power, Signal signal) {
+void addSingleFactorConstant(Factor &factor, StringPiece baseStr, int32_t power, SigNum sigNum) {
     if (baseStr == "ft_to_m") {
-        factor.constants[CONSTANT_FT2M] += power * signal;
+        factor.constants[CONSTANT_FT2M] += power * sigNum;
     } else if (baseStr == "ft2_to_m2") {
-        factor.constants[CONSTANT_FT2M] += 2 * power * signal;
+        factor.constants[CONSTANT_FT2M] += 2 * power * sigNum;
     } else if (baseStr == "ft3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * signal;
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
     } else if (baseStr == "in3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * signal;
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "gal_to_m3") {
         factor.factorNum *= 231;
-        factor.constants[CONSTANT_FT2M] += 3 * power * signal;
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "G") {
-        factor.constants[CONSTANT_G] += power * signal;
+        factor.constants[CONSTANT_G] += power * sigNum;
     } else if (baseStr == "gravity") {
-        factor.constants[CONSTANT_GRAVITY] += power * signal;
+        factor.constants[CONSTANT_GRAVITY] += power * sigNum;
     } else if (baseStr == "lb_to_kg") {
-        factor.constants[CONSTANT_LB2KG] += power * signal;
+        factor.constants[CONSTANT_LB2KG] += power * sigNum;
     } else if (baseStr == "PI") {
-        factor.constants[CONSTANT_PI] += power * signal;
+        factor.constants[CONSTANT_PI] += power * sigNum;
     } else {
-        if (signal == Signal::NEGATIVE) {
+        if (sigNum == SigNum::NEGATIVE) {
             factor.factorDen *= std::pow(strToDouble(baseStr), power);
         } else {
             factor.factorNum *= std::pow(strToDouble(baseStr), power);
@@ -247,7 +257,7 @@ void addSingleFactorConstant(Factor &factor, StringPiece baseStr, int32_t power,
   Adds single factor for a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
   However, complext factor are not included, such as "ft2m^3*200/3"
 */
-void addFactorElement(Factor &factor, StringPiece elementStr, Signal signal, UErrorCode &status) {
+void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum, UErrorCode &status) {
     StringPiece baseStr;
     StringPiece powerStr;
     int32_t power =
@@ -255,9 +265,8 @@ void addFactorElement(Factor &factor, StringPiece elementStr, Signal signal, UEr
 
     // Search for the power part
     int32_t powerInd = -1;
-    CharString charStr(elementStr, status);
-    for (int32_t i = 0, n = charStr.length(); i < n; ++i) {
-        if (charStr[i] == '^') {
+    for (int32_t i = 0, n = elementStr.length(); i < n; ++i) {
+        if (elementStr.data()[i] == '^') {
             powerInd = i;
             break;
         }
@@ -273,7 +282,7 @@ void addFactorElement(Factor &factor, StringPiece elementStr, Signal signal, UEr
         baseStr = elementStr;
     }
 
-    addSingleFactorConstant(factor, baseStr, power, signal);
+    addSingleFactorConstant(factor, baseStr, power, sigNum);
 }
 
 /*
@@ -284,21 +293,21 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
     factor.factorNum = 1;
     factor.factorDen = 1;
 
-    Signal signal = Signal::POSITIVE;
+    SigNum sigNum = SigNum::POSITIVE;
     auto factorData = stringFactor.data();
     for (int32_t i = 0, start = 0, n = stringFactor.length(); i < n; i++) {
         if (factorData[i] == '*' || factorData[i] == '/') {
             StringPiece factorElement = stringFactor.substr(start, i - start);
-            addFactorElement(factor, factorElement, signal, status);
+            addFactorElement(factor, factorElement, sigNum, status);
 
             start = i + 1; // Set `start` to point to the start of the new element.
         } else if (i == n - 1) {
             // Last element
-            addFactorElement(factor, stringFactor.substr(start, i + 1), signal, status);
+            addFactorElement(factor, stringFactor.substr(start, i + 1), sigNum, status);
         }
 
         if (factorData[i] == '/')
-            signal = Signal::NEGATIVE; // Change the signal because we reached the Denominator.
+            sigNum = SigNum::NEGATIVE; // Change the sigNum because we reached the Denominator.
     }
 }
 
@@ -308,7 +317,7 @@ void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
     if (U_FAILURE(status)) return;
 
     extractFactor(factor, conversionUnit.factor, status);
-    factor.offset = strHasDivideSignToDouble(conversionUnit.offset, status);
+    factor.offset = strHasDivideSignToDouble(conversionUnit.offset);
     factor.reciprocal = factor.reciprocal;
 }
 
