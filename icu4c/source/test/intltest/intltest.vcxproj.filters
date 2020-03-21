@@ -553,6 +553,9 @@
     <ClCompile Include="unitstest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="unitsroutertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
