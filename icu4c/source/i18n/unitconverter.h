@@ -7,6 +7,7 @@
 #ifndef __UNITCONVERTER_H__
 #define __UNITCONVERTER_H__
 
+#include "cmemory.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
@@ -15,12 +16,30 @@
 U_NAMESPACE_BEGIN
 // Data Skeleton.
 
+// Represents a raw convert unit.
+struct ConvertUnit {
+    StringPiece source;
+    StringPiece target;
+
+    // NOTE
+    //  If the source and target are equal, the factor will be "1"
+    StringPiece factor = "1";
+
+    // NOTE
+    //  If the offset is not exist, its value will be "0"
+    StringPiece offset = "0";
+
+    // NOTE
+    //  If reciprocal is not exits, its value will be `false`
+    bool reciprocal = false;
+};
+
 /**
  * Represents the conversion rate between `source` and `target`.
  */
 struct ConversionRate {
-    CharString source;
-    CharString target;
+    MeasureUnit source;
+    MeasureUnit target;
     double factorNum = 1;
     double factorDen = 1;
     double sourceOffset = 0;
@@ -43,7 +62,8 @@ class U_I18N_API UnitConverter {
      * @param target represents the target unit.
      * @param status
      */
-    UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode &status);
+    UnitConverter(MeasureUnit source, MeasureUnit target, const MaybeStackVector<ConvertUnit>& convertUnits,
+                  UErrorCode &status);
 
     /**
      * Convert a value in the source unit to another value in the target unit.
