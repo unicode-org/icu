@@ -73,7 +73,7 @@ U_NAMESPACE_BEGIN
  * @author Alan Liu
  */
 class U_COMMON_API UVector : public UObject {
-    // NOTE: UVector uses the UHashKey (union of void* and int32_t) as
+    // NOTE: UVector uses UElement (union of void* and int32_t) as
     // its basic storage type.  It uses UElementsAreEqual as its
     // comparison function.  It uses UObjectDeleter as its deleter
     // function.  These are named for hashtables, but used here as-is
