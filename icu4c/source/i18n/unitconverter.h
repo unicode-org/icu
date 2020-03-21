@@ -19,8 +19,8 @@ U_NAMESPACE_BEGIN
  * Represents the conversion rate between `source` and `target`.
  */
 struct ConversionRate {
-    StringPiece source;
-    StringPiece target;
+    CharString source;
+    CharString target;
     double factorNum = 1;
     double factorDen = 1;
     double sourceOffset = 0;
