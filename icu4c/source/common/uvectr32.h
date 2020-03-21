@@ -26,7 +26,7 @@ U_NAMESPACE_BEGIN
 
 
 /**
- * <p>Ultralightweight C++ implementation of a <tt>void*</tt> vector
+ * <p>Ultralightweight C++ implementation of an <tt>int32_t</tt> vector
  * that is (mostly) compatible with java.util.Vector.
  *
  * <p>This is a very simple implementation, written to satisfy an
