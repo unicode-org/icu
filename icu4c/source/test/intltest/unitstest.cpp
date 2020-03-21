@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <iostream>
+
 #include "charstr.h"
 #include "filestrm.h"
 #include "intltest.h"
@@ -14,8 +16,8 @@
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "unitconverter.h"
+#include "unitsrouter.h"
 #include "uparse.h"
-#include <iostream>
 
 struct UnitConversionTestCase {
     const StringPiece source;
@@ -34,6 +36,8 @@ class UnitsTest : public IntlTest {
 
     void testConversions();
     void testPreferences();
+    void testGetUnitsData();
+
     void testBasic();
     void testSiPrefixes();
     void testMass();
@@ -51,12 +55,12 @@ class UnitsTest : public IntlTest {
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) {
-        logln("TestSuite UnitsTest: ");
-    }
+    if (exec) { logln("TestSuite UnitsTest: "); }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
+    TESTCASE_AUTO(testGetUnitsData);
+
     TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testSiPrefixes);
     TESTCASE_AUTO(testMass);
@@ -455,7 +459,9 @@ StringPiece trimField(char *(&field)[2]) {
  * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
  * This is a UParseLineFn as required by u_parseDelimitedFile.
  */
-void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
+void runDataDrivenConversionTest(void *context, char *fields[][2], int32_t fieldCount,
+                                 UErrorCode *pErrorCode) {
+    if (U_FAILURE(*pErrorCode)) { return; }
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*(UnitsTest *)context, "unitsTestDatalineFn");
 
@@ -465,10 +471,15 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     StringPiece commentConversionFormula = trimField(fields[3]);
     StringPiece utf8Expected = trimField(fields[4]);
 
-    UNumberFormat *nf = unum_open(UNUM_DEFAULT, NULL, -1, "en_US", NULL, pErrorCode);
+    UNumberFormat *nf = unum_open(UNUM_DEFAULT, NULL, -1, "en_US", NULL, status);
+    if (status.errIfFailureAndReset("unum_open failed")) { return; }
     UnicodeString uExpected = UnicodeString::fromUTF8(utf8Expected);
-    double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), 0, pErrorCode);
+    double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), 0, status);
     unum_close(nf);
+    if (status.errIfFailureAndReset("unum_parseDouble(\"%.*s\") failed", uExpected.length(),
+                                    uExpected.getBuffer())) {
+        return;
+    }
 
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) { return; }
@@ -476,22 +487,29 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) { return; }
 
-    // WIP(hugovdm): hook this up to actual tests.
-    //
-    // Possible after merging in younies/tryingdouble:
-    // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
-    // double got = converter.convert(1000, *pErrorCode);
-    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
-    //
-    // In the meantime, printing to stderr.
-    fprintf(stderr,
-            "Quantity (Category): \"%.*s\", "
-            "Expected value of \"1000 %.*s in %.*s\": %f, "
-            "commentConversionFormula: \"%.*s\", "
-            "expected field: \"%.*s\"\n",
-            quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
-            commentConversionFormula.length(), commentConversionFormula.data(), utf8Expected.length(),
-            utf8Expected.data());
+    // WIP(hugovdm): Debug branch is for useful output while UnitConverter is still segfaulting.
+    UBool FIXME_skip_UnitConverter = FALSE;
+    if (FIXME_skip_UnitConverter) {
+        fprintf(stderr,
+                "FIXME: skipping constructing UnitConverter(«%s», «%s», status) because it is "
+                "segfaulting.\n",
+                sourceUnit.getIdentifier(), targetUnit.getIdentifier());
+
+        fprintf(stderr,
+                "Quantity/Category: \"%.*s\", "
+                "Converting: \"1000 %.*s\" to \"%.*s\", Expecting: %f, "
+                "commentConversionFormula: \"%.*s\"\n",
+                quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
+                commentConversionFormula.length(), commentConversionFormula.data());
+    } else {
+        UnitConverter converter(sourceUnit, targetUnit, status);
+        if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
+                                        sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+            return;
+        }
+        double got = converter.convert(1000);
+        ((UnitsTest*)context)->assertEqualsNear(fields[0][0], expected, got, 0.0001);
+    }
 }
 
 /**
@@ -513,9 +531,9 @@ void UnitsTest::testConversions() {
     CharString path(sourceTestDataPath, errorCode);
     path.appendPathPart("units", errorCode);
     path.appendPathPart(filename, errorCode);
-
-    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
-    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
+    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, runDataDrivenConversionTest, this,
+                         errorCode);
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s", path.data(), u_errorName(errorCode))) {
         return;
     }
 }
@@ -783,11 +801,68 @@ void UnitsTest::testPreferences() {
     }
 }
 
+// We test "successfully loading some data", not specific output values, since
+// this would duplicate some of the input data. We leave end-to-end testing to
+// take care of that. Running `intltest` with `-v` will print out the loaded
+// output for easy visual inspection.
+void UnitsTest::testGetUnitsData() {
+    struct {
+        // Input parameters
+        const char *outputRegion;
+        const char *usage;
+        const char *inputUnit;
+    } testCases[]{
+        {"US", "fluid", "centiliter"},
+        {"BZ", "weather", "celsius"},
+        {"ZA", "road", "yard"},
+        {"XZ", "zz_nonexistant", "dekagram"},
+    };
+    for (const auto &t : testCases) {
+        logln("---testing: region=\"%s\", usage=\"%s\", inputUnit=\"%s\"", t.outputRegion, t.usage,
+              t.inputUnit);
+        IcuTestErrorCode status(*this, "testGetUnitsData");
+        MeasureUnit inputUnit = MeasureUnit::forIdentifier(t.inputUnit, status);
+        if (status.errIfFailureAndReset("MeasureUnit::forIdentifier(\"%s\", ...)", t.inputUnit)) {
+            continue;
+        }
+
+        CharString category;
+        MeasureUnit baseUnit;
+        MaybeStackVector<ConversionRateInfo> conversionInfo;
+        MaybeStackVector<UnitPreference> unitPreferences;
+        getUnitsData(t.outputRegion, t.usage, inputUnit, category, baseUnit, conversionInfo,
+                     unitPreferences, status);
+        if (status.errIfFailureAndReset("getUnitsData(\"%s\", \"%s\", \"%s\", ...)", t.outputRegion,
+                                        t.usage, t.inputUnit)) {
+            continue;
+        }
+
+        logln("* category: \"%s\", baseUnit: \"%s\"", category.data(), baseUnit.getIdentifier());
+        assertTrue("category filled in", category.length() > 0);
+        assertTrue("baseUnit filled in", uprv_strlen(baseUnit.getIdentifier()) > 0);
+        assertTrue("at least one conversion rate obtained", conversionInfo.length() > 0);
+        for (int i = 0; i < conversionInfo.length(); i++) {
+            ConversionRateInfo *cri;
+            cri = conversionInfo[i];
+            logln("* conversionInfo %d: source=\"%s\", target=\"%s\", factor=\"%s\", offset=\"%s\"", i,
+                  cri->source.data(), cri->target.data(), cri->factor.data(), cri->offset.data());
+            assertTrue("ConversionRateInfo has source, target, and factor",
+                       cri->source.length() > 0 && cri->target.length() > 0 && cri->factor.length() > 0);
+        }
+        assertTrue("at least one unit preference obtained", unitPreferences.length() > 0);
+        for (int i = 0; i < unitPreferences.length(); i++) {
+            UnitPreference *up;
+            up = unitPreferences[i];
+            logln("* unitPreference %d: \"%s\", geq=%f, skeleton=\"%s\"", i, up->unit.data(), up->geq,
+                  up->skeleton.data());
+            assertTrue("unitPreference has unit", up->unit.length() > 0);
+        }
+    }
+}
+
 /**
  * Tests different return statuses depending on the input.
  */
-void UnitsTest::testStatus() {
-
-}
+void UnitsTest::testStatus() {}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

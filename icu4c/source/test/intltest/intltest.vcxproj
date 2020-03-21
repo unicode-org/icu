@@ -302,6 +302,7 @@
     <ClCompile Include="localebuildertest.cpp" />
     <ClCompile Include="localematchertest.cpp" />
     <ClCompile Include="unitstest.cpp" />
+    <ClCompile Include="unitsroutertest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colldata.h" />

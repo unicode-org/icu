@@ -471,7 +471,11 @@ MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
     return result;
 }
 
-UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode &status) {
+// Checks whether conversion from source to target is possible by checking
+// whether their conversion information pivots on the same base unit. If
+// UnitsCase::RECIPROCAL is returned, it means one's base unit is the inverse of
+// the other's.
+UnitsCase checkUnitsCase(const MeasureUnit &source, const MeasureUnit &target, UErrorCode &status) {
     MeasureUnit sourceTargetUnit = extractTarget(source, status);
     MeasureUnit targetTargetUnit = extractTarget(target, status);
 
