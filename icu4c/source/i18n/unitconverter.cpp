@@ -31,30 +31,11 @@ enum Constants {
     CONSTANT_PI,      // PI
     CONSTANT_GRAVITY, // Gravity
     CONSTANT_G,
-    CONSTANT_GAL2M3,     // Gallon to m3
     CONSTANT_GAL_IMP2M3, // Gallon imp to m3
     CONSTANT_LB2KG,      // Pound to Kilogram
 
     // Must be the last element.
     CONSTANTS_COUNT
-};
-
-// Represents a raw convert unit.
-struct ConvertUnit {
-    StringPiece source;
-    StringPiece target;
-
-    // NOTE
-    //  If the source and target are equal, the factor will be "1"
-    StringPiece factor = "1";
-
-    // NOTE
-    //  If the offset is not exist, its value will be "0"
-    StringPiece offset = "0";
-
-    // NOTE
-    //  If reciprocal is not exits, its value will be `false`
-    bool reciprocal = false;
 };
 
 typedef enum SigNum {
@@ -204,25 +185,21 @@ class UnitConversionRatesSink : public ResourceSink {
     Factor *conversionFactor;
 };
 
-ConvertUnit extractConvertUnit(StringPiece source, UErrorCode &status) {
-    ConvertUnit result;
-    // TODO(hugovdm): implement.
-    //   NOTE: use the database.
-    //         UnitConversionRatesSink sink(&conversionFactor);
-    //         ures_getAllItemsWithFallback(rb.getAlias(), key.data(), sink, status);
-    //
-    //   NOTE:
-    //     LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "units", &status));
-    //     CharString key;
-    //     key.append("convertUnit/", status);
-    //     key.append(source, status);
-    return result;
+ConvertUnit extractConvertUnit(StringPiece source, const MaybeStackVector<ConvertUnit> &convertUnits,
+                               UErrorCode &status) {
+    for (int i = 0, n = convertUnits.length(); i < n; ++i) {
+        if (convertUnits[i]->source == source) return *convertUnits[i];
+    }
+
+    status = U_INTERNAL_PROGRAM_ERROR;
+    return ConvertUnit();
 }
 
 /*/
  * Add single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
  */
 void addSingleFactorConstant(Factor &factor, StringPiece baseStr, int32_t power, SigNum sigNum) {
+
     if (baseStr == "ft_to_m") {
         factor.constants[CONSTANT_FT2M] += power * sigNum;
     } else if (baseStr == "ft2_to_m2") {
@@ -236,6 +213,8 @@ void addSingleFactorConstant(Factor &factor, StringPiece baseStr, int32_t power,
         factor.factorNum *= 231;
         factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
         factor.factorDen *= 12 * 12 * 12;
+    } else if (baseStr == "gal_imp_to_m3") {
+        factor.constants[CONSTANT_GAL_IMP2M3] += power * sigNum;
     } else if (baseStr == "G") {
         factor.constants[CONSTANT_G] += power * sigNum;
     } else if (baseStr == "gravity") {
@@ -257,7 +236,7 @@ void addSingleFactorConstant(Factor &factor, StringPiece baseStr, int32_t power,
   Adds single factor for a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
   However, complext factor are not included, such as "ft2m^3*200/3"
 */
-void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum, UErrorCode &status) {
+void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum) {
     StringPiece baseStr;
     StringPiece powerStr;
     int32_t power =
@@ -298,12 +277,12 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
     for (int32_t i = 0, start = 0, n = stringFactor.length(); i < n; i++) {
         if (factorData[i] == '*' || factorData[i] == '/') {
             StringPiece factorElement = stringFactor.substr(start, i - start);
-            addFactorElement(factor, factorElement, sigNum, status);
+            addFactorElement(factor, factorElement, sigNum);
 
             start = i + 1; // Set `start` to point to the start of the new element.
         } else if (i == n - 1) {
             // Last element
-            addFactorElement(factor, stringFactor.substr(start, i + 1), sigNum, status);
+            addFactorElement(factor, stringFactor.substr(start, i + 1), sigNum);
         }
 
         if (factorData[i] == '/')
@@ -312,8 +291,9 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
 }
 
 // Load factor for a single source
-void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
-    auto conversionUnit = extractConvertUnit(source, status);
+void loadSingleFactor(Factor &factor, StringPiece source,
+                      const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
+    auto conversionUnit = extractConvertUnit(source, convertUnits, status);
     if (U_FAILURE(status)) return;
 
     extractFactor(factor, conversionUnit.factor, status);
@@ -322,13 +302,14 @@ void loadSingleFactor(Factor &factor, StringPiece source, UErrorCode &status) {
 }
 
 // Load Factor for compound source
-void loadCompoundFactor(Factor &factor, StringPiece source, UErrorCode &status) {
+void loadCompoundFactor(Factor &factor, StringPiece source,
+                        const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
     auto compoundSourceUnit = MeasureUnitImpl::forIdentifier(source, status);
     for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
         auto singleUnit = *compoundSourceUnit.units[i]; // a TempSingleUnit
 
         Factor singleFactor;
-        loadSingleFactor(singleFactor, singleUnit.identifier, status);
+        loadSingleFactor(singleFactor, singleUnit.identifier, convertUnits, status);
 
         // You must apply SiPrefix before the power, because the power may be will flip the factor.
         singleFactor.applySiPrefix(singleUnit.siPrefix);
@@ -354,10 +335,11 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
     double constantsValues[CONSTANTS_COUNT];
 
     constantsValues[CONSTANT_FT2M] = 0.3048;
-    constantsValues[CONSTANT_PI] = 3.14159265359;
+    constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
     constantsValues[CONSTANT_GRAVITY] = 9.80665;
     constantsValues[CONSTANT_G] = 6.67408E-11;
     constantsValues[CONSTANT_LB2KG] = 0.45359237;
+    constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
 
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         if (factor.constants[i] == 0) continue;
@@ -388,7 +370,8 @@ UBool checkSimpleUnit(StringPiece unitIdentifier, UErrorCode &status) {
  *  Extract conversion rate from `source` to `target`
  */
 void loadConversionRate(ConversionRate &conversionRate, StringPiece source, StringPiece target,
-                        UnitsCase unitsCase, UErrorCode &status) {
+                        UnitsCase unitsCase, const MaybeStackVector<ConvertUnit> &convertUnits,
+                        UErrorCode &status) {
     // Represents the conversion factor from the source to the target.
     Factor finalFactor;
 
@@ -400,8 +383,8 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     /* Load needed factors. */
     // Load the conversion factor from the source to the target in the  which is considered as the Root
     // between
-    loadCompoundFactor(SourceToRoot, source, status);
-    loadCompoundFactor(TargetToRoot, target, status);
+    loadCompoundFactor(SourceToRoot, source, convertUnits, status);
+    loadCompoundFactor(TargetToRoot, target, convertUnits, status);
 
     // Merger Factors
     finalFactor.multiplyBy(SourceToRoot);
@@ -417,9 +400,6 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     // Substitute constants
     substituteConstants(finalFactor, status);
 
-    conversionRate.source = CharString(source, status);
-    conversionRate.target = CharString(target, status);
-
     conversionRate.factorNum = finalFactor.factorNum;
     conversionRate.factorDen = finalFactor.factorDen;
 
@@ -433,21 +413,23 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     conversionRate.reciprocal = unitsCase == UnitsCase::RECIPROCAL;
 }
 
-StringPiece getTarget(StringPiece source, UErrorCode &status) {
-    auto convertUnit = extractConvertUnit(source, status);
+StringPiece getTarget(StringPiece source, const MaybeStackVector<ConvertUnit> &convertUnits,
+                      UErrorCode &status) {
+    auto convertUnit = extractConvertUnit(source, convertUnits, status);
     if (U_FAILURE(status)) return StringPiece("");
     return convertUnit.target;
 }
 
 // TODO(ICU-20568): Add more test coverage for this function.
 // Returns the target of a source unit.
-MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
+MeasureUnit extractTarget(MeasureUnit source, const MaybeStackVector<ConvertUnit> &convertUnits,
+                          UErrorCode &status) {
     MeasureUnit result; // Empty unit.
     auto singleUnits = source.splitToSingleUnits(status);
 
     for (int i = 0; i < singleUnits.length(); i++) {
         const auto &singleUnit = singleUnits[i];
-        StringPiece target = getTarget(singleUnit.getIdentifier(), status);
+        StringPiece target = getTarget(singleUnit.getIdentifier(), convertUnits, status);
 
         if (U_FAILURE(status)) return result;
 
@@ -471,9 +453,14 @@ MeasureUnit extractTarget(MeasureUnit source, UErrorCode &status) {
     return result;
 }
 
-UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode &status) {
-    MeasureUnit sourceTargetUnit = extractTarget(source, status);
-    MeasureUnit targetTargetUnit = extractTarget(target, status);
+// Checks whether conversion from source to target is possible by checking
+// whether their conversion information pivots on the same base unit. If
+// UnitsCase::RECIPROCAL is returned, it means one's base unit is the inverse of
+// the other's.
+UnitsCase checkUnitsCase(const MeasureUnit &source, const MeasureUnit &target,
+                         const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
+    MeasureUnit sourceTargetUnit = extractTarget(source, convertUnits, status);
+    MeasureUnit targetTargetUnit = extractTarget(target, convertUnits, status);
 
     if (sourceTargetUnit == targetTargetUnit) return UnitsCase::CONVERTIBLE;
     if (sourceTargetUnit == targetTargetUnit.reciprocal(status)) return UnitsCase::RECIPROCAL;
@@ -483,11 +470,16 @@ UnitsCase checkUnitsCase(MeasureUnit source, MeasureUnit target, UErrorCode &sta
 
 } // namespace
 
-UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, UErrorCode &status) {
-    UnitsCase unitsCase = checkUnitsCase(source, target, status);
+UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target,
+                             const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
+    UnitsCase unitsCase = checkUnitsCase(source, target, convertUnits, status);
     if (U_FAILURE(status)) return;
+
+    conversionRate_.source = source;
+    conversionRate_.target = target;
+
     loadConversionRate(conversionRate_, source.getIdentifier(), target.getIdentifier(), unitsCase,
-                       status);
+                       convertUnits, status);
 }
 
 double UnitConverter::convert(double inputValue) {
