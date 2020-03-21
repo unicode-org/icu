@@ -417,8 +417,8 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     // Substitute constants
     substituteConstants(finalFactor, status);
 
-    conversionRate.source = source;
-    conversionRate.target = target;
+    conversionRate.source = CharString(source, status);
+    conversionRate.target = CharString(target, status);
 
     conversionRate.factorNum = finalFactor.factorNum;
     conversionRate.factorDen = finalFactor.factorDen;
