@@ -27,10 +27,10 @@ introduced a new tool, the [ICU Data Build
 Tool](https://github.com/unicode-org/icu/blob/master/docs/userguide/icu_data/buildtool.md),
 to give you more control over what goes into your ICU locale data file.
 
-> :point_right: **Note**: ICU for C by default comes with pre-built data. The source data
-files are included as an "icu\*data.zip" file starting in ICU4C 49. Previously,
-they were not included unless ICU is downloaded from the [source
-repository](http://site.icu-project.org/repository).*
+> :point_right: **Note**: ICU for C by default comes with pre-built data. The
+source data files are included as an "icu\*data.zip" file starting in ICU4C 49.
+Previously, they were not included unless ICU is downloaded from the [source
+repository](http://site.icu-project.org/repository).
 
 ## ICU and CLDR Data
 
@@ -70,7 +70,7 @@ The ICU data directory is determined as follows:
     behavior for ICU using a shared library for its data and provides the
     highest data loading performance.
 
-:point_right: **Note**: #`u_setDataDirectory()` is not thread-safe. Call it
+:point_right: **Note**: `u_setDataDirectory()` is not thread-safe. Call it
 before calling ICU APIs from multiple threads. If you use both
 `u_setDataDirectory()` and `u_init()`, then use `u_setDataDirectory()` first.*
 *Earlier versions of ICU supported two additional schemes: setting a data
@@ -134,7 +134,7 @@ proceeds as described in the section
 When using ICU's configure or runConfigureICU tool to build, several different
 methods of packging are available.
 
-> :point_right: Note that in all cases, you **must** link all ICU tools and
+> :point_right: **Note**: in all cases, you **must** link all ICU tools and
 applications against a "data library": either a data library containing the ICU
 data, or against the "stubdata" library located in icu/source/stubdata. For
 example, even if ICU is built in "files" mode, you must still link against the
@@ -295,9 +295,9 @@ prepended to the ICU data directory string and searched first for data. The path
 argument can contain at most one directory. (Path separators like semicolon (;)
 are not handled here.)
 
-> :point_right: *The ICU data directory string itself may contain multiple
-directories and path/filenames to .dat package files. See the
-[ICU Data Directory](icudata.md#icu-data-directory) section.*
+> :point_right: **Note**: The ICU data directory string itself may
+contain multiple directories and path/filenames to .dat package files. See the
+[ICU Data Directory](icudata.md#icu-data-directory) section.
 
 It is recommended to not include the directory in the path argument but to make
 sure via setting the application data or the ICU data directory string that the
@@ -351,10 +351,10 @@ by their package name. Whenever a data item is requested from a package and that
 package has been loaded before, then the cached package is used immediately
 instead of searching through the filesystem.
 
-> :point_right: *ICU versions before 2.2 always searched data packages before
-looking for individual files, which made it impossible to override packaged
-data items. See the ICU 2.2 download page and the readme for more information
-about the changes.*
+> :point_right: **Note**: ICU versions before 2.2 always searched data packages
+before looking for individual files, which made it impossible to override
+packaged data items. See the ICU 2.2 download page and the readme for more
+information about the changes.
 
 ## User Data Caching
 
@@ -392,9 +392,9 @@ If a directory separator (generally '/' or '\\') is needed in a path parameter,
 use the form that is native to the platform. The ICU header "putil.h" defines
 U_FILE_SEP_CHAR appropriately for the platform.
 
-> :point_right: *On Windows, the directory separator must be '\\' for any paths
-passed to ICU APIs. This is different from native Windows APIs, which generally
-allow either '/' or '\\'.*
+> :point_right: **Note**: On Windows, the directory separator must be '\\' for
+any paths passed to ICU APIs. This is different from native Windows APIs, which
+generally allow either '/' or '\\'.
 
 ## Sharing ICU Data Between Platforms
 
@@ -439,11 +439,11 @@ library is requested by using an option in the configure script at build time.
 Nothing is required at run time; ICU finds and uses whatever form of the data is
 available.
 
-> :point_right: *When the ICU data is built in the form of shared libraries, the
-library names have platform-specific prefixes and suffixes. On Unix-style
-platforms, all the libraries have the "lib" prefix and one of the usual
-(".dll", ".so", ".sl", etc.) suffixes. Other than these prefixes and suffixes,
-the library names are the same as the above .dat files.*
+> :point_right: **Note**: When the ICU data is built in the form of shared
+libraries, the library names have platform-specific prefixes and suffixes. On
+Unix-style platforms, all the libraries have the "lib" prefix and one of the
+usual (".dll", ".so", ".sl", etc.) suffixes. Other than these prefixes and
+suffixes, the library names are the same as the above .dat files.
 
 ## Customizing ICU's Data Library
 
@@ -572,32 +572,18 @@ repository](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/loc
 on the web. Most of this locale data is derived from the CLDR ([Common Locale
 Data Repository](http://www.unicode.org/cldr/) ) project.
 
-**As of ICU 64**, dropping the txt file into the correct place in the source
-tree is sufficient to add it to your ICU build. You will need to re-configure in
-order to pick it up.
-
-**As of ICU 63 or earlier**,You need to write a resource bundle file for it
-with a structure like the existing locale resource bundles (e.g.
-`source/data/locales/ja.txt, ru_RU.txt`, `kok_IN.txt`) and add it by writing a
-file `source/data/locales/reslocal.mk` just like above. In this file, define
-the list of additional resource bundles as
-
-```
-GENRB_SOURCE_LOCAL=myLocale.txt other.txt ...
-```
-
-Starting in ICU 2.2, these added locales are automatically listed by
-`uloc_getAvailable()`.
+Dropping the txt file into the correct place in the source tree is sufficient to
+add it to your ICU build. You will need to re-configure in order to pick it up.
 
 ## Customizing ICU's Data Library for ICU 63 or earlier
 The ICU data library can be easily customized, either by adding additional converters or locales, or by removing some of the standard ones for the purpose of saving space.
 
-> :point_right: ***Note**** that ICU for C by default comes with pre-built data.
+> :point_right: **Note**: ICU for C by default comes with pre-built data.
 The source data files are included as an "icu\*data.zip" file starting in ICU4C
 49. Previously, they were not included unless ICU is downloaded from the
 [source repository](https://github.com/unicode-org/icu). Alternatively, the
 [Data Customizer](http://apps.icu-project.org/datacustom/) may be used to
-customize the pre-built data.*
+customize the pre-built data.
 
 ICU can load data from individual data files as well as from its default
 library, so building a customized library when adding additional data is not
@@ -664,7 +650,7 @@ conversion tables because many ICU users need to support many encodings from
 many platforms. There are conversion tables for EBCDIC and DOS codepages, for
 ISO 2022 variants, and for small variations of popular encodings.
 
-> :point_right: **Important:** ICU provides full internationalization
+> :point_right: **Important**: ICU provides full internationalization
 functionality without **any** conversion table data. The common library
 contains code to handle several important encodings algorithmically: US-ASCII,
 ISO-8859-1, UTF-7/8/16/32, SCSU, BOCU-1, CESU-8, and IMAP-mailbox-name (i.e.,
@@ -688,13 +674,13 @@ about 3.6 MB. If you remove all these files except for `ucmcore.mk`, then ICU's
 data is reduced to about 4.7 MB, while keeping support for a core set of common
 MIME/Unix/Windows encodings.
 
-> :point_right: *If you remove the conversion table for an encoding that could be
-a default encoding on one of your platforms, then ICU will not be able to
-instantiate a default converter. In this case, ICU 2.0 and up will automatically
-fall back to a "lowest common denominator" and load a converter for US-ASCII
-(or, on EBCDIC platforms, for codepages 37 or 1047). This will be good enough
-for converting strings that contain only "ASCII" characters (see the comment
-about "invariant characters" in `utypes.h`).* 
+> :point_right: **Note**: If you remove the conversion table for an encoding
+that could be a default encoding on one of your platforms, then ICU will not be
+able to instantiate a default converter. In this case, ICU 2.0 and up will
+automatically fall back to a "lowest common denominator" and load a converter
+for US-ASCII (or, on EBCDIC platforms, for codepages 37 or 1047). This will be
+good enough for converting strings that contain only "ASCII" characters (see the
+comment about "invariant characters" in `utypes.h`).
 *When ICU is built with a reduced set of conversion tables, then some tests will
 fail that test the behavior of the converters based on known features of some
 encodings. Also, building the testdata will fail if you remove some conversion
@@ -735,6 +721,18 @@ rarely used at runtime. For documentation about their use and how to remove
 them see the section "Building on Existing Locales" in the
 [Collation Customization chapter](collation/customization/index.md).
 
+### Adding Locale Data to ICU's Data
+You need to write a resource bundle file for it with a structure like the
+existing locale resource bundles (e.g. `source/data/locales/ja.txt, ru_RU.txt`,
+`kok_IN.txt`) and add it by writing a file `source/data/locales/reslocal.mk`
+just like above. In this file, define the list of additional resource bundles as
+
+```
+GENRB_SOURCE_LOCAL=myLocale.txt other.txt ...
+```
+
+Starting in ICU 2.2, these added locales are automatically listed by
+`uloc_getAvailable()`.
 
 ## ICU Data File Formats
 
@@ -994,12 +992,12 @@ data, one of the resource files refers to the other file's data. In other cases,
 a file may alias a portion of another file's data in order to save space.
 Currently ICU4J provides no tool for revealing these dependencies.
 
-> :point_right: *Java's Locale class silently converts the language code "he" to
-"iw" when you construct the Locale (for versions of Java through Java 5). Thus
-Java cannot be used to locate resources that use the "he" language code. ICU,
-on the other hand, does not perform this conversion in ULocale, and instead uses
-aliasing in the locale data to represent the same set of data under different
-locale ids.*
+> :point_right: **Note**: Java's Locale class silently converts the language
+code "he" to "iw" when you construct the Locale (for versions of Java through
+Java 5). Thus Java cannot be used to locate resources that use the "he" language
+code. ICU, on the other hand, does not perform this conversion in ULocale, and
+instead uses aliasing in the locale data to represent the same set of data under
+different locale ids.
 
 Resource files that use locale ids form a hierarchy, with up to four levels: a
 root, language, region (country), and variant. Searches for locale data attempt
@@ -1026,7 +1024,8 @@ required resource is present.
 
 #### Using additional resource files with ICU4J
 
-> :point_right: *Resource file formats can change across releases of ICU4J!*
+> :point_right: **Note**: Resource file formats can change across releases of
+ICU4J!
 *The format of ICU4J resources is not part of the API. Clients who develop their
 own resources for use with ICU4J should be prepared to regenerate them when they
 move to new releases of ICU4J.*
