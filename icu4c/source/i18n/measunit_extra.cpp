@@ -31,6 +31,9 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
+// TODO: Propose a new error code for this?
+constexpr UErrorCode kUnitIdentifierSyntaxError = U_ILLEGAL_ARGUMENT_ERROR;
+
 // This is to ensure we only insert positive integers into the trie
 constexpr int32_t kSIPrefixOffset = 64;
 
@@ -356,27 +359,25 @@ private:
         int32_t match = -1;
         int32_t previ = -1;
         do {
-            fTrie.next(fSource.data()[fIndex++]);
-            if (fTrie.current() == USTRINGTRIE_NO_MATCH) {
+            auto result = fTrie.next(fSource.data()[fIndex++]);
+            if (result == USTRINGTRIE_NO_MATCH) {
                 break;
-            } else if (fTrie.current() == USTRINGTRIE_NO_VALUE) {
+            } else if (result == USTRINGTRIE_NO_VALUE) {
                 continue;
-            } else if (fTrie.current() == USTRINGTRIE_FINAL_VALUE) {
-                match = fTrie.getValue();
-                previ = fIndex;
-                break;
-            } else if (fTrie.current() == USTRINGTRIE_INTERMEDIATE_VALUE) {
-                match = fTrie.getValue();
-                previ = fIndex;
-                continue;
-            } else {
-                UPRV_UNREACHABLE;
             }
+            U_ASSERT(USTRINGTRIE_HAS_VALUE(result));
+            match = fTrie.getValue();
+            previ = fIndex;
+            if (result == USTRINGTRIE_FINAL_VALUE) {
+                break;
+            } else if (result == USTRINGTRIE_INTERMEDIATE_VALUE) {
+                continue;
+            }
+            UPRV_UNREACHABLE;
         } while (fIndex < fSource.length());
 
         if (match < 0) {
-            // TODO: Make a new status code?
-            status = U_ILLEGAL_ARGUMENT_ERROR;
+            status = kUnitIdentifierSyntaxError;
         } else {
             fIndex = previ;
         }
@@ -408,12 +409,14 @@ private:
                 return;
             }
             if (token.getType() != Token::TYPE_COMPOUND_PART) {
-                goto fail;
+                status = kUnitIdentifierSyntaxError;
+                return;
             }
             switch (token.getMatch()) {
                 case COMPOUND_PART_PER:
                     if (fAfterPer) {
-                        goto fail;
+                        status = kUnitIdentifierSyntaxError;
+                        return;
                     }
                     fAfterPer = true;
                     result.dimensionality = -1;
@@ -440,7 +443,8 @@ private:
             switch (token.getType()) {
                 case Token::TYPE_POWER_PART:
                     if (state > 0) {
-                        goto fail;
+                        status = kUnitIdentifierSyntaxError;
+                        return;
                     }
                     result.dimensionality *= token.getPower();
                     previ = fIndex;
@@ -449,7 +453,8 @@ private:
 
                 case Token::TYPE_SI_PREFIX:
                     if (state > 1) {
-                        goto fail;
+                        status = kUnitIdentifierSyntaxError;
+                        return;
                     }
                     result.siPrefix = token.getSIPrefix();
                     previ = fIndex;
@@ -466,14 +471,13 @@ private:
                     return;
 
                 default:
-                    goto fail;
+                    status = kUnitIdentifierSyntaxError;
+                    return;
             }
         }
 
-        fail:
-            // TODO: Make a new status code?
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
+        // We ran out of tokens before finding a complete single unit.
+        status = kUnitIdentifierSyntaxError;
     }
 
     void parseImpl(MeasureUnitImpl& result, UErrorCode& status) {
@@ -494,7 +498,7 @@ private:
             bool added = result.append(singleUnit, status);
             if (sawPlus && !added) {
                 // Two similar units are not allowed in a sequence unit
-                status = U_ILLEGAL_ARGUMENT_ERROR;
+                status = kUnitIdentifierSyntaxError;
                 return;
             }
             if ((++unitNum) >= 2) {
@@ -506,7 +510,7 @@ private:
                     result.complexity = complexity;
                 } else if (result.complexity != complexity) {
                     // Mixed sequence and compound units
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    status = kUnitIdentifierSyntaxError;
                     return;
                 }
             }
@@ -552,7 +556,7 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
         output.append('0' + (posPower % 10), status);
         output.append('-', status);
     } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+        status = kUnitIdentifierSyntaxError;
     }
     if (U_FAILURE(status)) {
         return;

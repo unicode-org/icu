@@ -3260,6 +3260,7 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
     };
 
     for (const auto& input : inputs) {
+        status.setScope(input);
         MeasureUnit::forIdentifier(input, status);
         status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     }

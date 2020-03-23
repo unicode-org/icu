@@ -2038,7 +2038,7 @@ MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     if (this == &other) {
         return *this;
     }
-    uprv_free(fImpl);
+    delete fImpl;
     if (other.fImpl) {
         ErrorCode localStatus;
         fImpl = new MeasureUnitImpl(other.fImpl->copy(localStatus));
@@ -2059,7 +2059,7 @@ MeasureUnit &MeasureUnit::operator=(MeasureUnit &&other) noexcept {
     if (this == &other) {
         return *this;
     }
-    uprv_free(fImpl);
+    delete fImpl;
     fImpl = other.fImpl;
     other.fImpl = nullptr;
     fTypeId = other.fTypeId;
@@ -2291,7 +2291,7 @@ void MeasureUnit::initNoUnit(const char *subtype) {
 void MeasureUnit::setTo(int32_t typeId, int32_t subTypeId) {
     fTypeId = typeId;
     fSubTypeId = subTypeId;
-    uprv_free(fImpl);
+    delete fImpl;
     fImpl = nullptr;
 }
 

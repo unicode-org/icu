@@ -249,14 +249,14 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 3.0
      */
     MeasureUnit(const MeasureUnit &other);
-    
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move constructor.
-     * @stable ICU 3.0
+     * @draft ICU 67
      */
     MeasureUnit(MeasureUnit &&other) noexcept;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
      * Validates and canonicalizes the identifier.
@@ -278,11 +278,13 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit &operator=(const MeasureUnit &other);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move assignment operator.
-     * @stable ICU 3.0
+     * @draft ICU 67
      */
     MeasureUnit &operator=(MeasureUnit &&other) noexcept;
+#endif // U_HIDE_DRAFT_API
 
     /**
      * Returns a polymorphic clone of this object.  The result will
