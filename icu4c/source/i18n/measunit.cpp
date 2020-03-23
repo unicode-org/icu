@@ -2273,7 +2273,7 @@ void MeasureUnit::initCurrency(StringPiece isoCurrency) {
         }
         // malloc error: fall back to the undefined currency
         result = binarySearch(
-            gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], "XXX");
+            gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], kDefaultCurrency8);
         U_ASSERT(result != -1);
     }
     fSubTypeId = result - gOffsets[fTypeId];

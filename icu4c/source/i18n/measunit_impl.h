@@ -15,6 +15,10 @@
 U_NAMESPACE_BEGIN
 
 
+static const char16_t kDefaultCurrency[] = u"XXX";
+static const char kDefaultCurrency8[] = "XXX";
+
+
 /**
  * A struct representing a single unit (optional SI prefix and dimensionality).
  */
@@ -26,26 +30,30 @@ struct SingleUnitImpl : public UMemory {
     static SingleUnitImpl forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status);
 
     /** Transform this SingleUnitImpl into a MeasureUnit, simplifying if possible. */
-    MeasureUnit build(UErrorCode& status);
+    MeasureUnit build(UErrorCode& status) const;
 
     /** Compare this SingleUnitImpl to another SingleUnitImpl. */
     int32_t compareTo(const SingleUnitImpl& other) const {
         if (dimensionality < 0 && other.dimensionality > 0) {
             // Positive dimensions first
             return 1;
-        } else if (dimensionality > 0 && other.dimensionality < 0) {
-            return -1;
-        } else if (index < other.index) {
-            return -1;
-        } else if (index > other.index) {
-            return 1;
-        } else if (siPrefix < other.siPrefix) {
-            return -1;
-        } else if (siPrefix > other.siPrefix) {
-            return 1;
-        } else {
-            return 0;
         }
+        if (dimensionality > 0 && other.dimensionality < 0) {
+            return -1;
+        }
+        if (index < other.index) {
+            return -1;
+        }
+        if (index > other.index) {
+            return 1;
+        }
+        if (siPrefix < other.siPrefix) {
+            return -1;
+        }
+        if (siPrefix > other.siPrefix) {
+            return 1;
+        }
+        return 0;
     }
 
     /**

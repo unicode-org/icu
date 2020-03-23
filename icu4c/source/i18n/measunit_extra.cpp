@@ -276,17 +276,20 @@ public:
     Type getType() const {
         if (fMatch <= 0) {
             UPRV_UNREACHABLE;
-        } else if (fMatch < kCompoundPartOffset) {
-            return TYPE_SI_PREFIX;
-        } else if (fMatch < kPowerPartOffset) {
-            return TYPE_COMPOUND_PART;
-        } else if (fMatch < kSimpleUnitOffset) {
-            return TYPE_POWER_PART;
-        } else if (fMatch == kSimpleUnitOffset) {
-            return TYPE_ONE;
-        } else {
-            return TYPE_SIMPLE_UNIT;
         }
+        if (fMatch < kCompoundPartOffset) {
+            return TYPE_SI_PREFIX;
+        }
+        if (fMatch < kPowerPartOffset) {
+            return TYPE_COMPOUND_PART;
+        }
+        if (fMatch < kSimpleUnitOffset) {
+            return TYPE_POWER_PART;
+        }
+        if (fMatch == kSimpleUnitOffset) {
+            return TYPE_ONE;
+        }
+        return TYPE_SIMPLE_UNIT;
     }
 
     UMeasureSIPrefix getSIPrefix() const {
@@ -652,15 +655,15 @@ SingleUnitImpl SingleUnitImpl::forMeasureUnit(const MeasureUnit& measureUnit, UE
     }
     if (impl.units.length() == 0) {
         return {};
-    } else if (impl.units.length() == 1) {
-        return *impl.units[0];
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
     }
+    if (impl.units.length() == 1) {
+        return *impl.units[0];
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    return {};
 }
 
-MeasureUnit SingleUnitImpl::build(UErrorCode& status) {
+MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
     MeasureUnitImpl temp;
     temp.append(*this, status);
     return std::move(temp).build(status);

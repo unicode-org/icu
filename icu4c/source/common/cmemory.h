@@ -274,7 +274,10 @@ inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t le
  *
  * WARNING: MaybeStackArray only works with primitive (plain-old data) types.
  * It does NOT know how to call a destructor! If you work with classes with
- * destructors, consider LocalArray in localpointer.h or MemoryPool.
+ * destructors, consider:
+ *
+ * - LocalArray in localpointer.h if you know the length ahead of time
+ * - MaybeStackVector if you know the length at runtime
  */
 template<typename T, int32_t stackCapacity>
 class MaybeStackArray {
@@ -740,6 +743,8 @@ protected:
 /**
  * An internal Vector-like implementation based on MemoryPool.
  *
+ * Heap-allocates each element and stores pointers.
+ *
  * To append an item to the vector, use emplaceBack.
  *
  *     MaybeStackVector<MyType> vector;
@@ -775,12 +780,22 @@ public:
     }
 
     /**
+     * Array item access (read-only).
+     * No index bounds check.
+     * @param i array index
+     * @return reference to the array item
+     */
+    const T* operator[](ptrdiff_t i) const {
+        return this->fPool[i];
+    }
+
+    /**
      * Array item access (writable).
      * No index bounds check.
      * @param i array index
      * @return reference to the array item
      */
-    T* operator[](ptrdiff_t i) const {
+    T* operator[](ptrdiff_t i) {
         return this->fPool[i];
     }
 
