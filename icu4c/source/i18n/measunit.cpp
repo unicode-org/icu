@@ -17,9 +17,11 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/uenum.h"
+#include "unicode/errorcode.h"
 #include "ustrenum.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "measunit_impl.h"
 
 U_NAMESPACE_BEGIN
 
@@ -535,7 +537,7 @@ static const char * const gSubTypes[] = {
     "solar-mass",
     "stone",
     "ton",
-    "base",
+    "one",
     "percent",
     "permille",
     "gigawatt",
@@ -2006,24 +2008,62 @@ static int32_t binarySearch(
     return -1;
 }
 
-MeasureUnit::MeasureUnit() {
-    fCurrency[0] = 0;
-    fTypeId = kBaseTypeIdx;
-    fSubTypeId = kBaseSubTypeIdx;
+MeasureUnit::MeasureUnit() : MeasureUnit(kBaseTypeIdx, kBaseSubTypeIdx) {
+}
+
+MeasureUnit::MeasureUnit(int32_t typeId, int32_t subTypeId)
+        : fImpl(nullptr), fSubTypeId(subTypeId), fTypeId(typeId) {
 }
 
 MeasureUnit::MeasureUnit(const MeasureUnit &other)
-        : fTypeId(other.fTypeId), fSubTypeId(other.fSubTypeId) {
-    uprv_strcpy(fCurrency, other.fCurrency);
+        : fImpl(nullptr) {
+    *this = other;
+}
+
+MeasureUnit::MeasureUnit(MeasureUnit &&other) noexcept
+        : fImpl(other.fImpl),
+        fSubTypeId(other.fSubTypeId),
+        fTypeId(other.fTypeId) {
+    other.fImpl = nullptr;
+}
+
+MeasureUnit::MeasureUnit(MeasureUnitImpl&& impl)
+        : fImpl(nullptr), fSubTypeId(-1), fTypeId(-1) {
+    if (!findBySubType(impl.identifier.toStringPiece(), this)) {
+        fImpl = new MeasureUnitImpl(std::move(impl));
+    }
 }
 
 MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     if (this == &other) {
         return *this;
     }
+    delete fImpl;
+    if (other.fImpl) {
+        ErrorCode localStatus;
+        fImpl = new MeasureUnitImpl(other.fImpl->copy(localStatus));
+        if (!fImpl || localStatus.isFailure()) {
+            // Unrecoverable allocation error; set to the default unit
+            *this = MeasureUnit();
+            return *this;
+        }
+    } else {
+        fImpl = nullptr;
+    }
     fTypeId = other.fTypeId;
     fSubTypeId = other.fSubTypeId;
-    uprv_strcpy(fCurrency, other.fCurrency);
+    return *this;
+}
+
+MeasureUnit &MeasureUnit::operator=(MeasureUnit &&other) noexcept {
+    if (this == &other) {
+        return *this;
+    }
+    delete fImpl;
+    fImpl = other.fImpl;
+    other.fImpl = nullptr;
+    fTypeId = other.fTypeId;
+    fSubTypeId = other.fSubTypeId;
     return *this;
 }
 
@@ -2032,14 +2072,28 @@ MeasureUnit *MeasureUnit::clone() const {
 }
 
 MeasureUnit::~MeasureUnit() {
+    delete fImpl;
+    fImpl = nullptr;
 }
 
 const char *MeasureUnit::getType() const {
+    // We have a type & subtype only if fTypeId is present.
+    if (fTypeId == -1) {
+        return "";
+    }
     return gTypes[fTypeId];
 }
 
 const char *MeasureUnit::getSubtype() const {
-    return fCurrency[0] == 0 ? gSubTypes[getOffset()] : fCurrency;
+    // We have a type & subtype only if fTypeId is present.
+    if (fTypeId == -1) {
+        return "";
+    }
+    return getIdentifier();
+}
+
+const char *MeasureUnit::getIdentifier() const {
+    return fImpl ? fImpl->identifier.data() : gSubTypes[getOffset()];
 }
 
 UBool MeasureUnit::operator==(const UObject& other) const {
@@ -2050,10 +2104,7 @@ UBool MeasureUnit::operator==(const UObject& other) const {
         return FALSE;
     }
     const MeasureUnit &rhs = static_cast<const MeasureUnit&>(other);
-    return (
-            fTypeId == rhs.fTypeId
-            && fSubTypeId == rhs.fSubTypeId
-            && uprv_strcmp(fCurrency, rhs.fCurrency) == 0);
+    return uprv_strcmp(getIdentifier(), rhs.getIdentifier()) == 0;
 }
 
 int32_t MeasureUnit::getIndex() const {
@@ -2153,42 +2204,14 @@ bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
     return false;
 }
 
-bool MeasureUnit::parseCoreUnitIdentifier(
-        StringPiece coreUnitIdentifier,
-        MeasureUnit* numerator,
-        MeasureUnit* denominator,
-        UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return false;
-    }
-
-    // First search for the whole code unit identifier as a subType
-    if (findBySubType(coreUnitIdentifier, numerator)) {
-        return false; // found a numerator but not denominator
-    }
-
-    // If not found, try breaking apart numerator and denominator
-    int32_t perIdx = coreUnitIdentifier.find("-per-", 0);
-    if (perIdx == -1) {
-        // String does not contain "-per-"
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return false;
-    }
-    StringPiece numeratorStr(coreUnitIdentifier, 0, perIdx);
-    StringPiece denominatorStr(coreUnitIdentifier, perIdx + 5);
-    if (findBySubType(numeratorStr, numerator) && findBySubType(denominatorStr, denominator)) {
-        return true; // found both a numerator and denominator
-    }
-
-    // The numerator or denominator were invalid
-    status = U_ILLEGAL_ARGUMENT_ERROR;
-    return false;
-}
-
 MeasureUnit MeasureUnit::resolveUnitPerUnit(
         const MeasureUnit &unit, const MeasureUnit &perUnit, bool* isResolved) {
     int32_t unitOffset = unit.getOffset();
     int32_t perUnitOffset = perUnit.getOffset();
+    if (unitOffset == -1 || perUnitOffset == -1) {
+        *isResolved = false;
+        return MeasureUnit();
+    }
 
     // binary search for (unitOffset, perUnitOffset)
     int32_t start = 0;
@@ -2236,18 +2259,24 @@ void MeasureUnit::initTime(const char *timeId) {
     fSubTypeId = result - gOffsets[fTypeId]; 
 }
 
-void MeasureUnit::initCurrency(const char *isoCurrency) {
+void MeasureUnit::initCurrency(StringPiece isoCurrency) {
     int32_t result = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), "currency");
     U_ASSERT(result != -1);
     fTypeId = result;
     result = binarySearch(
             gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], isoCurrency);
-    if (result != -1) {
-        fSubTypeId = result - gOffsets[fTypeId];
-    } else {
-        uprv_strncpy(fCurrency, isoCurrency, UPRV_LENGTHOF(fCurrency));
-        fCurrency[3] = 0;
+    if (result == -1) {
+        fImpl = new MeasureUnitImpl(MeasureUnitImpl::forCurrencyCode(isoCurrency));
+        if (fImpl) {
+            fSubTypeId = -1;
+            return;
+        }
+        // malloc error: fall back to the undefined currency
+        result = binarySearch(
+            gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], kDefaultCurrency8);
+        U_ASSERT(result != -1);
     }
+    fSubTypeId = result - gOffsets[fTypeId];
 }
 
 void MeasureUnit::initNoUnit(const char *subtype) {
@@ -2262,10 +2291,14 @@ void MeasureUnit::initNoUnit(const char *subtype) {
 void MeasureUnit::setTo(int32_t typeId, int32_t subTypeId) {
     fTypeId = typeId;
     fSubTypeId = subTypeId;
-    fCurrency[0] = 0;
+    delete fImpl;
+    fImpl = nullptr;
 }
 
 int32_t MeasureUnit::getOffset() const {
+    if (fTypeId < 0 || fSubTypeId < 0) {
+        return -1;
+    }
     return gOffsets[fTypeId] + fSubTypeId;
 }
 
