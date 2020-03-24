@@ -16,6 +16,9 @@
 #include "number_utils.h"
 #include "numbertest.h"
 #include "unicode/utypes.h"
+#include "number_utypes.h"
+
+using number::impl::UFormattedNumberData;
 
 // Horrible workaround for the lack of a status code in the constructor...
 // (Also affects numbertest_range.cpp)
@@ -2713,9 +2716,10 @@ void NumberFormatterApiTest::fieldPositionLogic() {
             UPRV_LENGTHOF(expectedFieldPositions));
 
     // Test the iteration functionality of nextFieldPosition
-    FieldPosition actual = {UNUM_GROUPING_SEPARATOR_FIELD};
+    ConstrainedFieldPosition actual;
+    actual.constrainField(UFIELD_CATEGORY_NUMBER, UNUM_GROUPING_SEPARATOR_FIELD);
     int32_t i = 1;
-    while (fmtd.nextFieldPosition(actual, status)) {
+    while (fmtd.nextPosition(actual, status)) {
         UFieldPosition expected = expectedFieldPositions[i++];
         assertEquals(
                 UnicodeString(u"Next for grouping, field, case #") + Int64ToUnicodeString(i),
@@ -2724,18 +2728,19 @@ void NumberFormatterApiTest::fieldPositionLogic() {
         assertEquals(
                 UnicodeString(u"Next for grouping, begin index, case #") + Int64ToUnicodeString(i),
                 expected.beginIndex,
-                actual.getBeginIndex());
+                actual.getStart());
         assertEquals(
                 UnicodeString(u"Next for grouping, end index, case #") + Int64ToUnicodeString(i),
                 expected.endIndex,
-                actual.getEndIndex());
+                actual.getLimit());
     }
     assertEquals(u"Should have seen all grouping separators", 4, i);
 
     // Make sure strings without fraction do not contain fraction field
-    actual = {UNUM_FRACTION_FIELD};
+    actual.reset();
+    actual.constrainField(UFIELD_CATEGORY_NUMBER, UNUM_FRACTION_FIELD);
     fmtd = NumberFormatter::withLocale("en").formatInt(5, status);
-    assertFalse(u"No fraction part in an integer", fmtd.nextFieldPosition(actual, status));
+    assertFalse(u"No fraction part in an integer", fmtd.nextPosition(actual, status));
 }
 
 void NumberFormatterApiTest::fieldPositionCoverage() {
@@ -3047,10 +3052,18 @@ void NumberFormatterApiTest::toFormat() {
             dynamic_cast<LocalizedNumberFormatterAsFormat*>(format.getAlias())->getNumberFormatter()
                     .toSkeleton(status));
 
+    UFormattedNumberData result;
+    result.quantity.setToDouble(514.23);
+    lnf.formatImpl(&result, status);
     FieldPositionIterator fpi1;
-    lnf.formatDouble(514.23, status).getAllFieldPositions(fpi1, status);
+    {
+        FieldPositionIteratorHandler fpih(&fpi1, status);
+        result.getAllFieldPositions(fpih, status);
+    }
+
     FieldPositionIterator fpi2;
     format->format(514.23, sb.remove(), &fpi2, status);
+
     assertTrue("Should produce same field position iterator", fpi1 == fpi2);
 }
 
@@ -3102,19 +3115,20 @@ void NumberFormatterApiTest::errors() {
             "Terminal toSkeleton on error object should be bogus",
             output.isBogus());
 
-    // FieldPosition
+    // FieldPosition (constrained category)
     status = U_ZERO_ERROR;
-    FieldPosition fp;
-    fn.nextFieldPosition(fp, status);
+    ConstrainedFieldPosition fp;
+    fp.constrainCategory(UFIELD_CATEGORY_NUMBER);
+    fn.nextPosition(fp, status);
     assertEquals(
             "Should fail on FieldPosition terminal method with correct error code",
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
             status);
 
-    // FieldPositionIterator
+    // FieldPositionIterator (no constraints)
     status = U_ZERO_ERROR;
-    FieldPositionIterator fpi;
-    fn.getAllFieldPositions(fpi, status);
+    fp.reset();
+    fn.nextPosition(fp, status);
     assertEquals(
             "Should fail on FieldPositoinIterator terminal method with correct error code",
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
@@ -3575,64 +3589,6 @@ void NumberFormatterApiTest::assertNumberFieldPositions(
         UFIELD_CATEGORY_NUMBER,
         expectedFieldPositions,
         length);
-
-    // Check FormattedNumber-specific functions
-    UnicodeString baseMessage = UnicodeString(message) + u": " + formattedNumber.toString(status) + u": ";
-    FieldPositionIterator fpi;
-    formattedNumber.getAllFieldPositions(fpi, status);
-    int32_t i = 0;
-    FieldPosition actual;
-    while (fpi.next(actual)) {
-        UFieldPosition expected = expectedFieldPositions[i++];
-        assertEquals(
-                baseMessage + UnicodeString(u"Field, case #") + Int64ToUnicodeString(i),
-                expected.field,
-                actual.getField());
-        assertEquals(
-                baseMessage + UnicodeString(u"Iterator, begin, case #") + Int64ToUnicodeString(i),
-                expected.beginIndex,
-                actual.getBeginIndex());
-        assertEquals(
-                baseMessage + UnicodeString(u"Iterator, end, case #") + Int64ToUnicodeString(i),
-                expected.endIndex,
-                actual.getEndIndex());
-
-        // Check for the first location of the field
-        FieldPosition actual2(expected.field);
-        // Fast-forward the field to skip previous occurrences of the field:
-        actual2.setBeginIndex(expected.beginIndex);
-        actual2.setEndIndex(expected.beginIndex);
-        UBool found = formattedNumber.nextFieldPosition(actual2, status);
-        assertEquals(
-                baseMessage + UnicodeString(u"Next, found first, case #") + Int64ToUnicodeString(i),
-                (UBool) TRUE,
-                found);
-        assertEquals(
-                baseMessage + UnicodeString(u"Next, begin, case #") + Int64ToUnicodeString(i),
-                expected.beginIndex,
-                actual2.getBeginIndex());
-        assertEquals(
-                baseMessage + UnicodeString(u"Next, end, case #") + Int64ToUnicodeString(i),
-                expected.endIndex,
-                actual2.getEndIndex());
-
-        // The next position should be empty unless the field occurs again
-        UBool occursAgain = false;
-        for (int32_t j=i; j<length; j++) {
-            if (expectedFieldPositions[j].field == expected.field) {
-                occursAgain = true;
-                break;
-            }
-        }
-        if (!occursAgain) {
-            found = formattedNumber.nextFieldPosition(actual2, status);
-            assertEquals(
-                    baseMessage + UnicodeString(u"Next, found second, case #") + Int64ToUnicodeString(i),
-                    (UBool) FALSE,
-                    found);
-        }
-    }
-    assertEquals(baseMessage + u"Should have seen every field position", length, i);
 }
 
 

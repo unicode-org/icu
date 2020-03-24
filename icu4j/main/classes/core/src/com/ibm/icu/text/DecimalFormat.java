@@ -12,9 +12,14 @@ import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
@@ -708,9 +713,11 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
-    FormattedNumber output = formatter.format(number);
-    fieldPositionHelper(output, fieldPosition, result.length());
-    output.appendTo(result);
+    DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(number);
+    FormattedStringBuilder string = new FormattedStringBuilder();
+    formatter.formatImpl(dq, string);
+    fieldPositionHelper(dq, string, fieldPosition, result.length());
+    Utility.appendTo(string, result);
     return result;
   }
 
@@ -721,9 +728,11 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition) {
-    FormattedNumber output = formatter.format(number);
-    fieldPositionHelper(output, fieldPosition, result.length());
-    output.appendTo(result);
+    DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(number);
+    FormattedStringBuilder string = new FormattedStringBuilder();
+    formatter.formatImpl(dq, string);
+    fieldPositionHelper(dq, string, fieldPosition, result.length());
+    Utility.appendTo(string, result);
     return result;
   }
 
@@ -734,9 +743,11 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition) {
-    FormattedNumber output = formatter.format(number);
-    fieldPositionHelper(output, fieldPosition, result.length());
-    output.appendTo(result);
+    DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(number);
+    FormattedStringBuilder string = new FormattedStringBuilder();
+    formatter.formatImpl(dq, string);
+    fieldPositionHelper(dq, string, fieldPosition, result.length());
+    Utility.appendTo(string, result);
     return result;
   }
 
@@ -748,9 +759,11 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(
       java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    FormattedNumber output = formatter.format(number);
-    fieldPositionHelper(output, fieldPosition, result.length());
-    output.appendTo(result);
+    DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(number);
+    FormattedStringBuilder string = new FormattedStringBuilder();
+    formatter.formatImpl(dq, string);
+    fieldPositionHelper(dq, string, fieldPosition, result.length());
+    Utility.appendTo(string, result);
     return result;
   }
 
@@ -761,9 +774,11 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
-    FormattedNumber output = formatter.format(number);
-    fieldPositionHelper(output, fieldPosition, result.length());
-    output.appendTo(result);
+    DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(number);
+    FormattedStringBuilder string = new FormattedStringBuilder();
+    formatter.formatImpl(dq, string);
+    fieldPositionHelper(dq, string, fieldPosition, result.length());
+    Utility.appendTo(string, result);
     return result;
   }
 
@@ -792,12 +807,14 @@ public class DecimalFormat extends NumberFormat {
     // because its caching mechanism will not provide any benefit here.
     DecimalFormatSymbols localSymbols = (DecimalFormatSymbols) symbols.clone();
     localSymbols.setCurrency(currAmt.getCurrency());
-    FormattedNumber output = formatter
-            .symbols(localSymbols)
+
+    DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(currAmt.getNumber());
+    FormattedStringBuilder string = new FormattedStringBuilder();
+    formatter.symbols(localSymbols)
             .unit(currAmt.getCurrency())
-            .format(currAmt.getNumber());
-    fieldPositionHelper(output, fieldPosition, result.length());
-    output.appendTo(result);
+            .formatImpl(dq, string);
+    fieldPositionHelper(dq, string, fieldPosition, result.length());
+    Utility.appendTo(string, result);
     return result;
   }
 
@@ -2585,11 +2602,13 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
     PatternStringParser.parseToExistingProperties(pattern, properties, ignoreRounding);
   }
 
-  static void fieldPositionHelper(FormattedNumber formatted, FieldPosition fieldPosition, int offset) {
+  static void fieldPositionHelper(
+          DecimalQuantity dq, FormattedStringBuilder string, FieldPosition fieldPosition, int offset) {
       // always return first occurrence:
       fieldPosition.setBeginIndex(0);
       fieldPosition.setEndIndex(0);
-      boolean found = formatted.nextFieldPosition(fieldPosition);
+      dq.populateUFieldPosition(fieldPosition);
+      boolean found = FormattedValueStringBuilderImpl.nextFieldPosition(string, fieldPosition);;
       if (found && offset != 0) {
           fieldPosition.setBeginIndex(fieldPosition.getBeginIndex() + offset);
           fieldPosition.setEndIndex(fieldPosition.getEndIndex() + offset);

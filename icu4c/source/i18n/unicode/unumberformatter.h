@@ -427,7 +427,7 @@ typedef struct UFormattedNumber UFormattedNumber;
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @param skeleton The skeleton string, like u"percent precision-integer"
- * @param skeletonLen The number of UChars in the skeleton string, or -1 it it is NUL-terminated.
+ * @param skeletonLen The number of UChars in the skeleton string, or -1 if it is NUL-terminated.
  * @param locale The NUL-terminated locale ID.
  * @param ec Set if an error occurs.
  * @stable ICU 62
@@ -443,7 +443,7 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
  * location of a skeleton syntax error if such a syntax error exists.
  *
  * @param skeleton The skeleton string, like u"percent precision-integer"
- * @param skeletonLen The number of UChars in the skeleton string, or -1 it it is NUL-terminated.
+ * @param skeletonLen The number of UChars in the skeleton string, or -1 if it is NUL-terminated.
  * @param locale The NUL-terminated locale ID.
  * @param perror A parse error struct populated if an error occurs when parsing. Can be NULL.
  *               If no error occurs, perror->offset will be set to -1.
