@@ -660,6 +660,9 @@
     <ClCompile Include="unitsrouter.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="getunitsdata.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bocsu.cpp">
@@ -1011,6 +1014,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="unitsrouter.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="getunitsdata.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="vzone.h">
