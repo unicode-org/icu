@@ -370,10 +370,9 @@ private:
             previ = fIndex;
             if (result == USTRINGTRIE_FINAL_VALUE) {
                 break;
-            } else if (result == USTRINGTRIE_INTERMEDIATE_VALUE) {
-                continue;
             }
-            UPRV_UNREACHABLE;
+            U_ASSERT(result == USTRINGTRIE_INTERMEDIATE_VALUE);
+            // continue;
         } while (fIndex < fSource.length());
 
         if (match < 0) {
