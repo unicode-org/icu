@@ -66,8 +66,6 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO(testArea);
     TESTCASE_AUTO(testComplicatedUnits);
-    TESTCASE_AUTO(testCLDRUnitsTests);
-    TESTCASE_AUTO(testCLDRUnitsTests2);
     TESTCASE_AUTO(testStatus);
     TESTCASE_AUTO_END;
 }
@@ -77,11 +75,11 @@ void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
 
-    UnitConverter converter(sourceUnit, targetUnit, status);
+    // UnitConverter converter(sourceUnit, targetUnit, status);
 
-    double actual = converter.convert(testCase.inputValue);
+    // double actual = converter.convert(testCase.inputValue);
 
-    assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
+    // assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
 }
 
 void UnitsTest::testBasic() {
@@ -97,11 +95,11 @@ void UnitsTest::testBasic() {
         MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
 
-        UnitConverter converter(sourceUnit, targetUnit, status);
+        // UnitConverter converter(sourceUnit, targetUnit, status);
 
-        double actual = converter.convert(testCase.inputValue);
+        // double actual = converter.convert(testCase.inputValue);
 
-        assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
+        // assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
     }
 }
 
@@ -275,13 +273,13 @@ void runDataDrivenConversionTest(void *context, char *fields[][2], int32_t field
                 quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
                 commentConversionFormula.length(), commentConversionFormula.data());
     } else {
-        UnitConverter converter(sourceUnit, targetUnit, status);
-        if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-                                        sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
-            return;
-        }
-        double got = converter.convert(1000);
-        ((UnitsTest *)context)->assertEqualsNear(fields[0][0], expected, got, 0.0001);
+        // UnitConverter converter(sourceUnit, targetUnit, status);
+        // if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
+        //                                 sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+        //     return;
+        // }
+        // double got = converter.convert(1000);
+        // ((UnitsTest *)context)->assertEqualsNear(fields[0][0], expected, got, 0.0001);
     }
 }
 
