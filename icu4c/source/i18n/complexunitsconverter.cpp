@@ -11,10 +11,12 @@
 #include "uassert.h"
 #include "unicode/fmtable.h"
 #include "unitconverter.h"
+#include "getunitsdata.h"
 
 U_NAMESPACE_BEGIN
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
+                                             const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                                              UErrorCode &status) {
     auto singleUnits = outputUnits.splitToSingleUnits(status);
     MaybeStackVector<MeasureUnit> singleUnitsInOrder;
@@ -23,11 +25,12 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
         singleUnitsInOrder.emplaceBack(singleUnits[i]);
     }
 
-    ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder), status);
+    ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder), ratesInfo, status);
 }
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
                                              const MaybeStackVector<MeasureUnit> outputUnits,
+                                             const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                                              UErrorCode &status) {
     if (outputUnits.length() == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -37,10 +40,10 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
     MaybeStackVector<UnitConverter> converters;
     for (int i = 0, n = outputUnits.length(); i < n; i++) {
         if (i == 0) { // first element
-            converters.emplaceBack(UnitConverter(inputUnit, *outputUnits[i], status));
+            converters.emplaceBack(inputUnit, *outputUnits[i], ratesInfo, status);
 
         } else {
-            converters.emplaceBack(UnitConverter(*outputUnits[i - 1], *outputUnits[i], status));
+            converters.emplaceBack(*outputUnits[i - 1], *outputUnits[i], ratesInfo, status);
         }
 
         if (U_FAILURE(status)) break;

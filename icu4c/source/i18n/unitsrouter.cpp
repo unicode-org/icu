@@ -33,9 +33,9 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece 
     for (int i = 0, n = unitPreferences.length(); i < n; ++i) {
         const auto &preference = *unitPreferences[i];
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
-        // TODO(younies): Find a way to emplaceBack `ConverterPreference`
-        // converterPreferences_.emplaceBack(
-        //     std::move(ConverterPreference(inputUnit, complexTargetUnit, preference.geq, status)));
+
+        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
+                                          status);
     }
 }
 

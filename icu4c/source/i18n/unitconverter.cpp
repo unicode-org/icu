@@ -9,6 +9,7 @@
 
 #include "charstr.h"
 #include "double-conversion.h"
+#include "getunitsdata.h"
 #include "measunit_impl.h"
 #include "resource.h"
 #include "uassert.h"
@@ -185,14 +186,15 @@ class UnitConversionRatesSink : public ResourceSink {
     Factor *conversionFactor;
 };
 
-ConvertUnit extractConvertUnit(StringPiece source, const MaybeStackVector<ConvertUnit> &convertUnits,
-                               UErrorCode &status) {
-    for (int i = 0, n = convertUnits.length(); i < n; ++i) {
-        if (convertUnits[i]->source == source) return *convertUnits[i];
+const ConversionRateInfo& extractConversionRateInfo(StringPiece source,
+                                             const MaybeStackVector<ConversionRateInfo> &ratesInfo,
+                                             UErrorCode &status) {
+    for (int i = 0, n = ratesInfo.length(); i < n; ++i) {
+        if (ratesInfo[i]->source == source) return *ratesInfo[i];
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;
-    return ConvertUnit();
+    return ConversionRateInfo();
 }
 
 /*/
@@ -292,24 +294,24 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
 
 // Load factor for a single source
 void loadSingleFactor(Factor &factor, StringPiece source,
-                      const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
-    auto conversionUnit = extractConvertUnit(source, convertUnits, status);
+                      const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
+    const auto& conversionUnit = extractConversionRateInfo(source, ratesInfo, status);
     if (U_FAILURE(status)) return;
 
-    extractFactor(factor, conversionUnit.factor, status);
-    factor.offset = strHasDivideSignToDouble(conversionUnit.offset);
+    extractFactor(factor, conversionUnit.factor.toStringPiece(), status);
+    factor.offset = strHasDivideSignToDouble(conversionUnit.offset.toStringPiece());
     factor.reciprocal = factor.reciprocal;
 }
 
 // Load Factor for compound source
 void loadCompoundFactor(Factor &factor, StringPiece source,
-                        const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
+                        const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
     auto compoundSourceUnit = MeasureUnitImpl::forIdentifier(source, status);
     for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
         auto singleUnit = *compoundSourceUnit.units[i]; // a TempSingleUnit
 
         Factor singleFactor;
-        loadSingleFactor(singleFactor, singleUnit.identifier, convertUnits, status);
+        loadSingleFactor(singleFactor, singleUnit.identifier, ratesInfo, status);
 
         // You must apply SiPrefix before the power, because the power may be will flip the factor.
         singleFactor.applySiPrefix(singleUnit.siPrefix);
@@ -370,7 +372,7 @@ UBool checkSimpleUnit(StringPiece unitIdentifier, UErrorCode &status) {
  *  Extract conversion rate from `source` to `target`
  */
 void loadConversionRate(ConversionRate &conversionRate, StringPiece source, StringPiece target,
-                        UnitsCase unitsCase, const MaybeStackVector<ConvertUnit> &convertUnits,
+                        UnitsCase unitsCase, const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                         UErrorCode &status) {
     // Represents the conversion factor from the source to the target.
     Factor finalFactor;
@@ -383,8 +385,8 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     /* Load needed factors. */
     // Load the conversion factor from the source to the target in the  which is considered as the Root
     // between
-    loadCompoundFactor(SourceToRoot, source, convertUnits, status);
-    loadCompoundFactor(TargetToRoot, target, convertUnits, status);
+    loadCompoundFactor(SourceToRoot, source, ratesInfo, status);
+    loadCompoundFactor(TargetToRoot, target, ratesInfo, status);
 
     // Merger Factors
     finalFactor.multiplyBy(SourceToRoot);
@@ -413,23 +415,23 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
     conversionRate.reciprocal = unitsCase == UnitsCase::RECIPROCAL;
 }
 
-StringPiece getTarget(StringPiece source, const MaybeStackVector<ConvertUnit> &convertUnits,
+StringPiece getTarget(StringPiece source, const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                       UErrorCode &status) {
-    auto convertUnit = extractConvertUnit(source, convertUnits, status);
+    const auto& convertUnit = extractConversionRateInfo(source, ratesInfo, status);
     if (U_FAILURE(status)) return StringPiece("");
-    return convertUnit.target;
+    return convertUnit.target.toStringPiece();
 }
 
 // TODO(ICU-20568): Add more test coverage for this function.
 // Returns the target of a source unit.
-MeasureUnit extractTarget(MeasureUnit source, const MaybeStackVector<ConvertUnit> &convertUnits,
+MeasureUnit extractTarget(MeasureUnit source, const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                           UErrorCode &status) {
     MeasureUnit result; // Empty unit.
     auto singleUnits = source.splitToSingleUnits(status);
 
     for (int i = 0; i < singleUnits.length(); i++) {
         const auto &singleUnit = singleUnits[i];
-        StringPiece target = getTarget(singleUnit.getIdentifier(), convertUnits, status);
+        StringPiece target = getTarget(singleUnit.getIdentifier(), ratesInfo, status);
 
         if (U_FAILURE(status)) return result;
 
@@ -458,9 +460,9 @@ MeasureUnit extractTarget(MeasureUnit source, const MaybeStackVector<ConvertUnit
 // UnitsCase::RECIPROCAL is returned, it means one's base unit is the inverse of
 // the other's.
 UnitsCase checkUnitsCase(const MeasureUnit &source, const MeasureUnit &target,
-                         const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
-    MeasureUnit sourceTargetUnit = extractTarget(source, convertUnits, status);
-    MeasureUnit targetTargetUnit = extractTarget(target, convertUnits, status);
+                         const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
+    MeasureUnit sourceTargetUnit = extractTarget(source, ratesInfo, status);
+    MeasureUnit targetTargetUnit = extractTarget(target, ratesInfo, status);
 
     if (sourceTargetUnit == targetTargetUnit) return UnitsCase::CONVERTIBLE;
     if (sourceTargetUnit == targetTargetUnit.reciprocal(status)) return UnitsCase::RECIPROCAL;
@@ -471,15 +473,15 @@ UnitsCase checkUnitsCase(const MeasureUnit &source, const MeasureUnit &target,
 } // namespace
 
 UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target,
-                             const MaybeStackVector<ConvertUnit> &convertUnits, UErrorCode &status) {
-    UnitsCase unitsCase = checkUnitsCase(source, target, convertUnits, status);
+                             const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
+    UnitsCase unitsCase = checkUnitsCase(source, target, ratesInfo, status);
     if (U_FAILURE(status)) return;
 
     conversionRate_.source = source;
     conversionRate_.target = target;
 
     loadConversionRate(conversionRate_, source.getIdentifier(), target.getIdentifier(), unitsCase,
-                       convertUnits, status);
+                       ratesInfo, status);
 }
 
 double UnitConverter::convert(double inputValue) {

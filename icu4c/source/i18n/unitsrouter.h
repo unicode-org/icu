@@ -10,6 +10,7 @@
 #include "charstr.h" // CharString
 #include "cmemory.h"
 #include "complexunitsconverter.h"
+#include "getunitsdata.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
@@ -21,8 +22,9 @@ struct ConverterPreference {
     ComplexUnitsConverter converter;
     double limit;
 
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit, UErrorCode &status)
-        : converter(source, complexTarget, status), limit(limit) {}
+    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit,
+                        const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status)
+        : converter(source, complexTarget, ratesInfo, status), limit(limit) {}
 };
 
 class U_I18N_API UnitsRouter {
