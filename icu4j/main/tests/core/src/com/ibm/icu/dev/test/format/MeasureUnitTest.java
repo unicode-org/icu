@@ -84,7 +84,7 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
 
-    private static final String[] DRAFT_VERSIONS = {"64", "65"};
+    private static final String[] DRAFT_VERSIONS = {"64", "65", "66", "67"};
 
     private static final HashSet<String> DRAFT_VERSION_SET = new HashSet<>();
 
@@ -267,6 +267,10 @@ public class MeasureUnitTest extends TestFmwk {
 
     private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<>();
 
+    // modify certain CLDR unit names before generating functions
+    // that create/get the corresponding MeasureUnit objects
+    private static final Map<String,String> CLDR_NAME_REMAP = new HashMap();
+
     static {
         TIME_CODES.add("year");
         TIME_CODES.add("month");
@@ -281,6 +285,20 @@ public class MeasureUnitTest extends TestFmwk {
         for (String[] funcNameAndVersion : JAVA_VERSIONS) {
             JAVA_VERSION_MAP.put(funcNameAndVersion[0], funcNameAndVersion[1]);
         }
+
+        // CLDR_NAME_REMAP entries
+        // The first two fix overly-generic CLDR unit names
+        CLDR_NAME_REMAP.put("revolution", "revolution-angle");
+        CLDR_NAME_REMAP.put("generic",    "generic-temperature");
+        // The next seven map updated CLDR 37 names back to their
+        // old form in order to preserve the old function names
+        CLDR_NAME_REMAP.put("meter-per-square-second",     "meter-per-second-squared");
+        CLDR_NAME_REMAP.put("permillion",                  "part-per-million");
+        CLDR_NAME_REMAP.put("liter-per-100-kilometer",     "liter-per-100kilometers");
+        CLDR_NAME_REMAP.put("inch-ofhg",                   "inch-hg");
+        CLDR_NAME_REMAP.put("millimeter-ofhg",             "millimeter-of-mercury");
+        CLDR_NAME_REMAP.put("pound-force-per-square-inch", "pound-per-square-inch");
+        CLDR_NAME_REMAP.put("pound-force-foot",            "pound-foot");
     }
 
     @Test
@@ -288,12 +306,12 @@ public class MeasureUnitTest extends TestFmwk {
         // various generateXXX calls go here, see
         // http://site.icu-project.org/design/formatting/measureformat/updating-measure-unit
         // use this test to run each of the ollowing in succession
-        //generateConstants("65"); // for MeasureUnit.java, update generated MeasureUnit constants
-        //generateBackwardCompatibilityTest("65"); // for MeasureUnitTest.java, create TestCompatible65
-        //generateCXXHConstants("65"); // for measunit.h, update generated createXXX methods
+        //generateConstants("67"); // for MeasureUnit.java, update generated MeasureUnit constants
+        //generateBackwardCompatibilityTest("67"); // for MeasureUnitTest.java, create TestCompatible65
+        //generateCXXHConstants("67"); // for measunit.h, update generated createXXX methods
         //generateCXXConstants(); // for measunit.cpp, update generated code
-        //generateCXXBackwardCompatibilityTest("65"); // for measfmttest.cpp, create TestCompatible65
-        //updateJAVAVersions("65"); // for MeasureUnitTest.java, JAVA_VERSIONS
+        //generateCXXBackwardCompatibilityTest("67"); // for measfmttest.cpp, create TestCompatible65
+        //updateJAVAVersions("67"); // for MeasureUnitTest.java, JAVA_VERSIONS
     }
 
     @Test
@@ -2923,12 +2941,12 @@ public class MeasureUnitTest extends TestFmwk {
         StringBuilder result = new StringBuilder();
         boolean caps = true;
         String code = unit.getSubtype();
-        if (code.equals("revolution")) {
-            code = code + "-angle";
+
+        String replacement = CLDR_NAME_REMAP.get(code);
+        if (replacement != null) {
+            code = replacement;
         }
-        if (code.equals("generic")) {
-             code = code + "-temperature";
-        }
+
         int len = code.length();
         for (int i = 0; i < len; i++) {
             char ch = code.charAt(i);
@@ -3004,18 +3022,16 @@ public class MeasureUnitTest extends TestFmwk {
     static String toJAVAName(MeasureUnit unit) {
         String code = unit.getSubtype();
         String type = unit.getType();
+
+        String replacement = CLDR_NAME_REMAP.get(code);
+         if (replacement != null) {
+            code = replacement;
+        }
+
         String name = code.toUpperCase(Locale.ENGLISH).replace("-", "_");
         if (type.equals("angle")) {
             if (code.equals("minute") || code.equals("second")) {
                 name = "ARC_" + name;
-            }
-            if (code.equals("revolution")) {
-                name = name + "_ANGLE";
-            }
-        }
-        if (type.equals("temperature")) {
-            if (code.equals("generic")) {
-                name = name + "_TEMPERATURE";
             }
         }
         return name;

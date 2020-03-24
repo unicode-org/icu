@@ -787,7 +787,15 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public StringBuffer format(CurrencyAmount currAmt, StringBuffer result, FieldPosition fieldPosition) {
-    FormattedNumber output = formatter.format(currAmt);
+    // We need to make localSymbols in order for monetary symbols to be initialized.
+    // Also, bypass the CurrencyAmount override of LocalizedNumberFormatter#format,
+    // because its caching mechanism will not provide any benefit here.
+    DecimalFormatSymbols localSymbols = (DecimalFormatSymbols) symbols.clone();
+    localSymbols.setCurrency(currAmt.getCurrency());
+    FormattedNumber output = formatter
+            .symbols(localSymbols)
+            .unit(currAmt.getCurrency())
+            .format(currAmt.getNumber());
     fieldPositionHelper(output, fieldPosition, result.length());
     output.appendTo(result);
     return result;
@@ -2043,11 +2051,8 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public synchronized void setCurrency(Currency currency) {
     properties.setCurrency(currency);
-    // Backwards compatibility: also set the currency in the DecimalFormatSymbols
     if (currency != null) {
       symbols.setCurrency(currency);
-      String symbol = currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, null);
-      symbols.setCurrencySymbol(symbol);
     }
     refreshFormatter();
   }

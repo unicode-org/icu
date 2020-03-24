@@ -238,6 +238,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13840_ParseLongStringCrash);
   TESTCASE_AUTO(Test13850_EmptyStringCurrency);
   TESTCASE_AUTO(Test20348_CurrencyPrefixOverride);
+  TESTCASE_AUTO(Test20956_MonetarySymbolGetters);
   TESTCASE_AUTO(Test20358_GroupingInPattern);
   TESTCASE_AUTO(Test13731_DefaultCurrency);
   TESTCASE_AUTO(Test20499_CurrencyVisibleDigitsPlural);
@@ -9581,12 +9582,12 @@ void NumberFormatTest::Test13850_EmptyStringCurrency() {
         const char16_t* currencyArg;
         UErrorCode expectedError;
     } cases[] = {
-        {u"", U_ZERO_ERROR},
+        {u"", U_USING_FALLBACK_WARNING},
         {u"U", U_ILLEGAL_ARGUMENT_ERROR},
         {u"Us", U_ILLEGAL_ARGUMENT_ERROR},
-        {nullptr, U_ZERO_ERROR},
+        {nullptr, U_USING_FALLBACK_WARNING},
         {u"U$D", U_INVARIANT_CONVERSION_ERROR},
-        {u"Xxx", U_ZERO_ERROR}
+        {u"Xxx", U_USING_FALLBACK_WARNING}
     };
     for (const auto& cas : cases) {
         UnicodeString message(u"with currency arg: ");
@@ -9647,6 +9648,35 @@ void NumberFormatTest::Test20348_CurrencyPrefixOverride() {
         u"-$", fmt->getNegativePrefix(result.remove()));
     assertEquals("Set negative prefix format",
         u"$100.00", fmt->format(100, result.remove(), NULL, status));
+}
+
+void NumberFormatTest::Test20956_MonetarySymbolGetters() {
+    IcuTestErrorCode status(*this, "Test20956_MonetarySymbolGetters");
+    LocalPointer<DecimalFormat> decimalFormat(static_cast<DecimalFormat*>(
+        NumberFormat::createCurrencyInstance("et", status)));
+
+    decimalFormat->setCurrency(u"EEK");
+
+    const DecimalFormatSymbols* decimalFormatSymbols = decimalFormat->getDecimalFormatSymbols();
+    assertEquals("MONETARY DECIMAL SEPARATOR",
+        u".",
+        decimalFormatSymbols->getSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol));
+    assertEquals("DECIMAL SEPARATOR",
+        u",",
+        decimalFormatSymbols->getSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
+    assertEquals("MONETARY GROUPING SEPARATOR",
+        u" ",
+        decimalFormatSymbols->getSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol));
+    assertEquals("GROUPING SEPARATOR",
+        u" ",
+        decimalFormatSymbols->getSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
+    assertEquals("CURRENCY SYMBOL",
+        u"kr",
+        decimalFormatSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol));
+
+    UnicodeString sb;
+    decimalFormat->format(12345.12, sb, status);
+    assertEquals("OUTPUT", u"12 345.12 kr", sb);
 }
 
 void NumberFormatTest::Test20358_GroupingInPattern() {

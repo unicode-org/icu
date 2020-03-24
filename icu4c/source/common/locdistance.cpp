@@ -102,19 +102,15 @@ LocaleDistance::LocaleDistance(const LocaleDistanceData &data, const XLikelySubt
     LSR enGB("en", "Latn", "GB", LSR::EXPLICIT_LSR);
     const LSR *p_enGB = &enGB;
     int32_t indexAndDistance = getBestIndexAndDistance(en, &p_enGB, 1,
-            shiftDistance(50), ULOCMATCH_FAVOR_LANGUAGE);
+            shiftDistance(50), ULOCMATCH_FAVOR_LANGUAGE, ULOCMATCH_DIRECTION_WITH_ONE_WAY);
     defaultDemotionPerDesiredLocale  = getDistanceFloor(indexAndDistance);
 }
 
 int32_t LocaleDistance::getBestIndexAndDistance(
         const LSR &desired,
         const LSR **supportedLSRs, int32_t supportedLSRsLength,
-        int32_t shiftedThreshold, ULocMatchFavorSubtag favorSubtag) const {
-    // Round up the shifted threshold (if fraction bits are not 0)
-    // for comparison with un-shifted distances until we need fraction bits.
-    // (If we simply shifted non-zero fraction bits away, then we might ignore a language
-    // when it's really still a micro distance below the threshold.)
-    int32_t roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
+        int32_t shiftedThreshold,
+        ULocMatchFavorSubtag favorSubtag, ULocMatchDirection direction) const {
     BytesTrie iter(trie);
     // Look up the desired language only once for all supported LSRs.
     // Its "distance" is either a match point value of 0, or a non-match negative value.
@@ -154,6 +150,11 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             star = true;
         }
         U_ASSERT(0 <= distance && distance <= 100);
+        // Round up the shifted threshold (if fraction bits are not 0)
+        // for comparison with un-shifted distances until we need fraction bits.
+        // (If we simply shifted non-zero fraction bits away, then we might ignore a language
+        // when it's really still a micro distance below the threshold.)
+        int32_t roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
         // We implement "favor subtag" by reducing the language subtag distance
         // (unscientifically reducing it to a quarter of the normal value),
         // so that the script distance is relatively more important.
@@ -162,7 +163,9 @@ int32_t LocaleDistance::getBestIndexAndDistance(
         if (favorSubtag == ULOCMATCH_FAVOR_SCRIPT) {
             distance >>= 2;
         }
-        if (distance >= roundedThreshold) {
+        // Let distance == roundedThreshold pass until the tie-breaker logic
+        // at the end of the loop.
+        if (distance > roundedThreshold) {
             continue;
         }
 
@@ -180,7 +183,7 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             scriptDistance &= ~DISTANCE_IS_FINAL;
         }
         distance += scriptDistance;
-        if (distance >= roundedThreshold) {
+        if (distance > roundedThreshold) {
             continue;
         }
 
@@ -190,7 +193,7 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             distance += defaultRegionDistance;
         } else {
             int32_t remainingThreshold = roundedThreshold - distance;
-            if (minRegionDistance >= remainingThreshold) {
+            if (minRegionDistance > remainingThreshold) {
                 continue;
             }
 
@@ -211,26 +214,38 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             // additional micro distance.
             shiftedDistance |= (desired.flags ^ supported.flags);
             if (shiftedDistance < shiftedThreshold) {
-                if (shiftedDistance == 0) {
-                    return slIndex << INDEX_SHIFT;
+                if (direction != ULOCMATCH_DIRECTION_ONLY_TWO_WAY ||
+                        // Is there also a match when we swap desired/supported?
+                        isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
+                    if (shiftedDistance == 0) {
+                        return slIndex << INDEX_SHIFT;
+                    }
+                    bestIndex = slIndex;
+                    shiftedThreshold = shiftedDistance;
+                    bestLikelyInfo = -1;
                 }
-                bestIndex = slIndex;
-                shiftedThreshold = shiftedDistance;
-                bestLikelyInfo = -1;
             }
         } else {
             if (shiftedDistance < shiftedThreshold) {
-                bestIndex = slIndex;
-                shiftedThreshold = shiftedDistance;
-                bestLikelyInfo = -1;
-            } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
-                bestLikelyInfo = likelySubtags.compareLikely(
-                        supported, *supportedLSRs[bestIndex], bestLikelyInfo);
-                if ((bestLikelyInfo & 1) != 0) {
-                    // This supported locale matches as well as the previous best match,
-                    // and neither matches perfectly,
-                    // but this one is "more likely" (has more-default subtags).
+                if (direction != ULOCMATCH_DIRECTION_ONLY_TWO_WAY ||
+                        // Is there also a match when we swap desired/supported?
+                        isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
                     bestIndex = slIndex;
+                    shiftedThreshold = shiftedDistance;
+                    bestLikelyInfo = -1;
+                }
+            } else if (shiftedDistance == shiftedThreshold && bestIndex >= 0) {
+                if (direction != ULOCMATCH_DIRECTION_ONLY_TWO_WAY ||
+                        // Is there also a match when we swap desired/supported?
+                        isMatch(supported, desired, shiftedThreshold, favorSubtag)) {
+                    bestLikelyInfo = likelySubtags.compareLikely(
+                            supported, *supportedLSRs[bestIndex], bestLikelyInfo);
+                    if ((bestLikelyInfo & 1) != 0) {
+                        // This supported locale matches as well as the previous best match,
+                        // and neither matches perfectly,
+                        // but this one is "more likely" (has more-default subtags).
+                        bestIndex = slIndex;
+                    }
                 }
             }
         }
@@ -306,7 +321,7 @@ int32_t LocaleDistance::getRegionPartitionsDistance(
                     d = getFallbackRegionDistance(iter, startState);
                     star = true;
                 }
-                if (d >= threshold) {
+                if (d > threshold) {
                     return d;
                 } else if (regionDistance < d) {
                     regionDistance = d;
@@ -319,7 +334,7 @@ int32_t LocaleDistance::getRegionPartitionsDistance(
             }
         } else if (!star) {
             int32_t d = getFallbackRegionDistance(iter, startState);
-            if (d >= threshold) {
+            if (d > threshold) {
                 return d;
             } else if (regionDistance < d) {
                 regionDistance = d;

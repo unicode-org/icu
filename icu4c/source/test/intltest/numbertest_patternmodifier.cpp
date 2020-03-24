@@ -29,11 +29,10 @@ void PatternModifierTest::testBasic() {
     mod.setPatternInfo(&patternInfo, kUndefinedField);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
-    CurrencySymbols currencySymbols({u"USD", status}, "en", status);
+    mod.setSymbols(&symbols, {u"USD", status}, UNUM_UNIT_WIDTH_SHORT, nullptr, status);
     if (!assertSuccess("Spot 2", status, true)) {
         return;
     }
-    mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
 
     mod.setNumberProperties(SIGNUM_POS, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b", u"a", getPrefix(mod, status));
@@ -96,11 +95,10 @@ void PatternModifierTest::testPatternWithNoPlaceholder() {
     mod.setPatternInfo(&patternInfo, kUndefinedField);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
-    CurrencySymbols currencySymbols({u"USD", status}, "en", status);
+    mod.setSymbols(&symbols, {u"USD", status}, UNUM_UNIT_WIDTH_SHORT, nullptr, status);
     if (!assertSuccess("Spot 2", status, true)) {
         return;
     }
-    mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
     mod.setNumberProperties(SIGNUM_POS, StandardPlural::Form::COUNT);
 
     // Unsafe Code Path
@@ -139,10 +137,9 @@ void PatternModifierTest::testMutableEqualsImmutable() {
     mod.setPatternInfo(&patternInfo, kUndefinedField);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
-    CurrencySymbols currencySymbols({u"USD", status}, "en", status);
+    mod.setSymbols(&symbols, {u"USD", status}, UNUM_UNIT_WIDTH_SHORT, nullptr, status);
     assertSuccess("Spot 2", status);
     if (U_FAILURE(status)) { return; }
-    mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
     DecimalQuantity fq;
     fq.setToInt(1);
 

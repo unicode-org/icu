@@ -2327,7 +2327,7 @@ void CalendarTest::TestTimeStamp() {
     Calendar *cal;
 
     // Create a new Gregorian Calendar.
-    cal = Calendar::createInstance("en_US@calender=gregorian", status);
+    cal = Calendar::createInstance("en_US@calendar=gregorian", status);
     if (U_FAILURE(status)) {
         dataerrln("Error creating Gregorian calendar.");
         return;
