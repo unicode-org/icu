@@ -269,6 +269,7 @@
     <ClCompile Include="unitconverter.cpp" />
     <ClCompile Include="complexunitsconverter.cpp" />
     <ClCompile Include="unitsrouter.cpp" />
+    <ClCompile Include="getunitsdata.cpp" />
     <ClCompile Include="unum.cpp" />
     <ClCompile Include="unumsys.cpp" />
     <ClCompile Include="upluralrules.cpp" />
@@ -506,6 +507,7 @@
     <ClInclude Include="unitconverter.h" />
     <ClInclude Include="complexunitsconverter.h" />
     <ClInclude Include="unitsrouter.h" />
+    <ClInclude Include="getunitsdata.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc" />

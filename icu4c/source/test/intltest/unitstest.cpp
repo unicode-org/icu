@@ -9,6 +9,7 @@
 
 #include "charstr.h"
 #include "filestrm.h"
+#include "getunitsdata.h"
 #include "intltest.h"
 #include "number_decimalquantity.h"
 #include "unicode/ctest.h"
@@ -508,7 +509,7 @@ void runDataDrivenConversionTest(void *context, char *fields[][2], int32_t field
             return;
         }
         double got = converter.convert(1000);
-        ((UnitsTest*)context)->assertEqualsNear(fields[0][0], expected, got, 0.0001);
+        ((UnitsTest *)context)->assertEqualsNear(fields[0][0], expected, got, 0.0001);
     }
 }
 
