@@ -46,6 +46,7 @@ import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.ScientificNotation;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
+import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
@@ -2585,9 +2586,10 @@ public class NumberFormatterApiTest {
         assertNumberFieldPositions(message, fmtd, expectedFieldPositions);
 
         // Test the iteration functionality of nextFieldPosition
-        FieldPosition actual = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
+        ConstrainedFieldPosition actual = new ConstrainedFieldPosition();
+        actual.constrainField(NumberFormat.Field.GROUPING_SEPARATOR);
         int i = 1;
-        while (fmtd.nextFieldPosition(actual)) {
+        while (fmtd.nextPosition(actual)) {
             Object[] cas = expectedFieldPositions[i++];
             NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
             int expectedBeginIndex = (Integer) cas[1];
@@ -2596,22 +2598,23 @@ public class NumberFormatterApiTest {
             assertEquals(
                     "Next for grouping, field, case #" + i,
                     expectedField,
-                    actual.getFieldAttribute());
+                    actual.getField());
             assertEquals(
                     "Next for grouping, begin index, case #" + i,
                     expectedBeginIndex,
-                    actual.getBeginIndex());
+                    actual.getStart());
             assertEquals(
                     "Next for grouping, end index, case #" + i,
                     expectedEndIndex,
-                    actual.getEndIndex());
+                    actual.getLimit());
         }
         assertEquals("Should have seen all grouping separators", 4, i);
 
         // Make sure strings without fraction do not contain fraction field
-        actual = new FieldPosition(NumberFormat.Field.FRACTION);
+        actual.reset();
+        actual.constrainField(NumberFormat.Field.FRACTION);
         fmtd = NumberFormatter.withLocale(ULocale.ENGLISH).format(5);
-        assertFalse("No fraction part in an integer", fmtd.nextFieldPosition(actual));
+        assertFalse("No fraction part in an integer", fmtd.nextPosition(actual));
     }
 
     @Test

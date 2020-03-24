@@ -53,10 +53,10 @@ class CompactDecimalFormat;
 
 namespace number {
 class LocalizedNumberFormatter;
-class FormattedNumber;
 namespace impl {
 class DecimalQuantity;
 struct DecimalFormatFields;
+class UFormattedNumberData;
 }
 }
 
@@ -2168,11 +2168,17 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
     const numparse::impl::NumberParserImpl* getCurrencyParser(UErrorCode& status) const;
 
-    static void fieldPositionHelper(const number::FormattedNumber& formatted, FieldPosition& fieldPosition,
-                                    int32_t offset, UErrorCode& status);
+    static void fieldPositionHelper(
+        const number::impl::UFormattedNumberData& formatted,
+        FieldPosition& fieldPosition,
+        int32_t offset,
+        UErrorCode& status);
 
-    static void fieldPositionIteratorHelper(const number::FormattedNumber& formatted,
-                                            FieldPositionIterator* fpi, int32_t offset, UErrorCode& status);
+    static void fieldPositionIteratorHelper(
+        const number::impl::UFormattedNumberData& formatted,
+        FieldPositionIterator* fpi,
+        int32_t offset,
+        UErrorCode& status);
 
     void setupFastFormat();
 

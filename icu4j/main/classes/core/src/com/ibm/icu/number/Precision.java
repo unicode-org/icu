@@ -346,25 +346,13 @@ public abstract class Precision implements Cloneable {
         if (this.mathContext.equals(mathContext)) {
             return this;
         }
-        Precision other = (Precision) this.clone();
+        Precision other = createCopy();
         other.mathContext = mathContext;
         return other;
     }
 
-    /**
-     * {@inheritDoc}
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public Object clone() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            // Should not happen since parent is Object
-            throw new AssertionError(e);
-        }
-    }
+    /** Package-private clone method */
+    abstract Precision createCopy();
 
     /**
      * @internal
@@ -566,6 +554,13 @@ public abstract class Precision implements Cloneable {
             value.roundToInfinity();
             value.setMinFraction(0);
         }
+
+        @Override
+        InfiniteRounderImpl createCopy() {
+            InfiniteRounderImpl copy = new InfiniteRounderImpl();
+            copy.mathContext = mathContext;
+            return copy;
+        }
     }
 
     static class FractionRounderImpl extends FractionPrecision {
@@ -581,6 +576,13 @@ public abstract class Precision implements Cloneable {
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeFraction(maxFrac), mathContext);
             value.setMinFraction(Math.max(0, -getDisplayMagnitudeFraction(minFrac)));
+        }
+
+        @Override
+        FractionRounderImpl createCopy() {
+            FractionRounderImpl copy = new FractionRounderImpl(minFrac, maxFrac);
+            copy.mathContext = mathContext;
+            return copy;
         }
     }
 
@@ -610,6 +612,13 @@ public abstract class Precision implements Cloneable {
         public void apply(DecimalQuantity quantity, int minInt) {
             assert quantity.isZeroish();
             quantity.setMinFraction(minSig - minInt);
+        }
+
+        @Override
+        SignificantRounderImpl createCopy() {
+            SignificantRounderImpl copy = new SignificantRounderImpl(minSig, maxSig);
+            copy.mathContext = mathContext;
+            return copy;
         }
     }
 
@@ -642,6 +651,13 @@ public abstract class Precision implements Cloneable {
             value.roundToMagnitude(roundingMag, mathContext);
             value.setMinFraction(Math.max(0, -displayMag));
         }
+
+        @Override
+        FracSigRounderImpl createCopy() {
+            FracSigRounderImpl copy = new FracSigRounderImpl(minFrac, maxFrac, minSig, maxSig);
+            copy.mathContext = mathContext;
+            return copy;
+        }
     }
 
     /**
@@ -658,6 +674,13 @@ public abstract class Precision implements Cloneable {
         public void apply(DecimalQuantity value) {
             value.roundToIncrement(increment, mathContext);
             value.setMinFraction(increment.scale());
+        }
+
+        @Override
+        IncrementRounderImpl createCopy() {
+            IncrementRounderImpl copy = new IncrementRounderImpl(increment);
+            copy.mathContext = mathContext;
+            return copy;
         }
     }
 
@@ -681,6 +704,13 @@ public abstract class Precision implements Cloneable {
             value.roundToMagnitude(-maxFrac, mathContext);
             value.setMinFraction(minFrac);
         }
+
+        @Override
+        IncrementOneRounderImpl createCopy() {
+            IncrementOneRounderImpl copy = new IncrementOneRounderImpl(increment, minFrac, maxFrac);
+            copy.mathContext = mathContext;
+            return copy;
+        }
     }
 
     /**
@@ -701,6 +731,13 @@ public abstract class Precision implements Cloneable {
             value.roundToNickel(-maxFrac, mathContext);
             value.setMinFraction(minFrac);
         }
+
+        @Override
+        IncrementFiveRounderImpl createCopy() {
+            IncrementFiveRounderImpl copy = new IncrementFiveRounderImpl(increment, minFrac, maxFrac);
+            copy.mathContext = mathContext;
+            return copy;
+        }
     }
 
     static class CurrencyRounderImpl extends CurrencyPrecision {
@@ -714,6 +751,13 @@ public abstract class Precision implements Cloneable {
         public void apply(DecimalQuantity value) {
             // Call .withCurrency() before .apply()!
             throw new AssertionError();
+        }
+
+        @Override
+        CurrencyRounderImpl createCopy() {
+            CurrencyRounderImpl copy = new CurrencyRounderImpl(usage);
+            copy.mathContext = mathContext;
+            return copy;
         }
     }
 

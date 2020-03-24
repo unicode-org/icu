@@ -27,7 +27,7 @@ import com.ibm.icu.text.NumberFormat;
  * @stable ICU 60
  * @see NumberFormatter
  */
-public class ScientificNotation extends Notation implements Cloneable {
+public class ScientificNotation extends Notation {
 
     int engineeringInterval;
     boolean requireMinInt;
@@ -62,7 +62,7 @@ public class ScientificNotation extends Notation implements Cloneable {
      */
     public ScientificNotation withMinExponentDigits(int minExponentDigits) {
         if (minExponentDigits >= 1 && minExponentDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
-            ScientificNotation other = (ScientificNotation) this.clone();
+            ScientificNotation other = createCopy();
             other.minExponentDigits = minExponentDigits;
             return other;
         } else {
@@ -87,23 +87,19 @@ public class ScientificNotation extends Notation implements Cloneable {
      * @see NumberFormatter
      */
     public ScientificNotation withExponentSignDisplay(SignDisplay exponentSignDisplay) {
-        ScientificNotation other = (ScientificNotation) this.clone();
+        ScientificNotation other = createCopy();
         other.exponentSignDisplay = exponentSignDisplay;
         return other;
     }
 
-    /**
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public Object clone() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            // Should not happen since parent is Object
-            throw new AssertionError(e);
-        }
+    /** Package-private clone method */
+    ScientificNotation createCopy() {
+        return new ScientificNotation(
+            engineeringInterval,
+            requireMinInt,
+            minExponentDigits,
+            exponentSignDisplay
+        );
     }
 
     /* package-private */ MicroPropsGenerator withLocaleData(
