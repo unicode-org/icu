@@ -266,7 +266,8 @@
             <delete dir="${junit.out.dir}/checkTest"/>
             <mkdir dir="${junit.out.dir}/checkTest"/>
 
-            <junit printsummary="yes">
+            <junit printsummary="yes" fork="yes">
+                <jvmarg value="-DICU.exhaustive=10"/>
                 <classpath>
                     <path refid="junit.jars"/>
                     <path refid="junit.icu.jars"/>

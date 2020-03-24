@@ -88,6 +88,7 @@ public abstract class Precision implements Cloneable {
      *            The minimum and maximum number of numerals to display after the decimal separator
      *            (rounding if too long or padding with zeros if too short).
      * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -113,6 +114,7 @@ public abstract class Precision implements Cloneable {
      *            The minimum number of numerals to display after the decimal separator (padding with
      *            zeros if necessary).
      * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -135,6 +137,7 @@ public abstract class Precision implements Cloneable {
      *            The maximum number of numerals to display after the decimal mark (rounding if
      *            necessary).
      * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -160,6 +163,7 @@ public abstract class Precision implements Cloneable {
      *            The maximum number of numerals to display after the decimal separator (rounding if
      *            necessary).
      * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 0.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -187,6 +191,7 @@ public abstract class Precision implements Cloneable {
      *            The minimum and maximum number of significant digits to display (rounding if too long
      *            or padding with zeros if too short).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
      * @see NumberFormatter
      */
@@ -211,6 +216,7 @@ public abstract class Precision implements Cloneable {
      * @param minSignificantDigits
      *            The minimum number of significant digits to display (padding with zeros if too short).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
      * @see NumberFormatter
      */
@@ -230,6 +236,7 @@ public abstract class Precision implements Cloneable {
      * @param maxSignificantDigits
      *            The maximum number of significant digits to display (rounding if too long).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
      * @see NumberFormatter
      */
@@ -252,6 +259,7 @@ public abstract class Precision implements Cloneable {
      * @param maxSignificantDigits
      *            The maximum number of significant digits to display (rounding if necessary).
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 62
      * @see NumberFormatter
      */
@@ -287,6 +295,7 @@ public abstract class Precision implements Cloneable {
      * @param roundingIncrement
      *            The increment to which to round numbers.
      * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if the rounding increment is null or non-positive.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -314,6 +323,7 @@ public abstract class Precision implements Cloneable {
      *            Either STANDARD (for digital transactions) or CASH (for transactions where the rounding
      *            increment may be limited by the available denominations of cash or coins).
      * @return A CurrencyPrecision for chaining or passing to the NumberFormatter precision() setter.
+     * @throws IllegalArgumentException if currencyUsage is null.
      * @stable ICU 60
      * @see NumberFormatter
      */

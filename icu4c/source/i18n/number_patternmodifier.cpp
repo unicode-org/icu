@@ -34,11 +34,13 @@ void MutablePatternModifier::setPatternAttributes(UNumberSignDisplay signDisplay
 }
 
 void MutablePatternModifier::setSymbols(const DecimalFormatSymbols* symbols,
-                                        const CurrencySymbols* currencySymbols,
-                                        const UNumberUnitWidth unitWidth, const PluralRules* rules) {
+                                        const CurrencyUnit& currency,
+                                        const UNumberUnitWidth unitWidth,
+                                        const PluralRules* rules,
+                                        UErrorCode& status) {
     U_ASSERT((rules != nullptr) == needsPlurals());
     fSymbols = symbols;
-    fCurrencySymbols = currencySymbols;
+    fCurrencySymbols = {currency, symbols->getLocale(), *symbols, status};
     fUnitWidth = unitWidth;
     fRules = rules;
 }
@@ -294,23 +296,23 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
         case AffixPatternType::TYPE_CURRENCY_SINGLE: {
             // UnitWidth ISO and HIDDEN overrides the singular currency symbol.
             if (fUnitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_ISO_CODE) {
-                return fCurrencySymbols->getIntlCurrencySymbol(localStatus);
+                return fCurrencySymbols.getIntlCurrencySymbol(localStatus);
             } else if (fUnitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_HIDDEN) {
                 return UnicodeString();
             } else if (fUnitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW) {
-                return fCurrencySymbols->getNarrowCurrencySymbol(localStatus);
+                return fCurrencySymbols.getNarrowCurrencySymbol(localStatus);
             } else {
-                return fCurrencySymbols->getCurrencySymbol(localStatus);
+                return fCurrencySymbols.getCurrencySymbol(localStatus);
             }
         }
         case AffixPatternType::TYPE_CURRENCY_DOUBLE:
-            return fCurrencySymbols->getIntlCurrencySymbol(localStatus);
+            return fCurrencySymbols.getIntlCurrencySymbol(localStatus);
         case AffixPatternType::TYPE_CURRENCY_TRIPLE:
             // NOTE: This is the code path only for patterns containing "¤¤¤".
             // Plural currencies set via the API are formatted in LongNameHandler.
             // This code path is used by DecimalFormat via CurrencyPluralInfo.
             U_ASSERT(fPlural != StandardPlural::Form::COUNT);
-            return fCurrencySymbols->getPluralName(fPlural, localStatus);
+            return fCurrencySymbols.getPluralName(fPlural, localStatus);
         case AffixPatternType::TYPE_CURRENCY_QUAD:
             return UnicodeString(u"\uFFFD");
         case AffixPatternType::TYPE_CURRENCY_QUINT:

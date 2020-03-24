@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
@@ -39,11 +40,15 @@ import com.ibm.icu.util.UResourceBundle;
  */
 final public class ListFormatter {
     // Compiled SimpleFormatter patterns.
-    private final String two;
     private final String start;
     private final String middle;
-    private final String end;
     private final ULocale locale;
+
+    private interface PatternHandler {
+        public String getTwoPattern(String text);
+        public String getEndPattern(String text);
+    }
+    private final PatternHandler patternHandler;
 
     /**
      * Indicates the style of Listformatter
@@ -371,11 +376,10 @@ final public class ListFormatter {
     }
 
     private ListFormatter(String two, String start, String middle, String end, ULocale locale) {
-        this.two = two;
         this.start = start;
         this.middle = middle;
-        this.end = end;
         this.locale = locale;
+        this.patternHandler = createPatternHandler(two, end);
     }
 
     private static String compilePattern(String pattern, StringBuilder sb) {
@@ -526,14 +530,131 @@ final public class ListFormatter {
         case 1:
             return new FormattedListBuilder(it.next(), needsFields);
         case 2:
-            return new FormattedListBuilder(it.next(), needsFields).append(two, it.next(), 1);
+            Object first = it.next();
+            Object second = it.next();
+            return new FormattedListBuilder(first, needsFields)
+                .append(patternHandler.getTwoPattern(String.valueOf(second)), second, 1);
         }
         FormattedListBuilder builder = new FormattedListBuilder(it.next(), needsFields);
         builder.append(start, it.next(), 1);
         for (int idx = 2; idx < count - 1; ++idx) {
             builder.append(middle, it.next(), idx);
         }
-        return builder.append(end, it.next(), count - 1);
+        Object last = it.next();
+        return builder.append(patternHandler.getEndPattern(String.valueOf(last)), last, count - 1);
+    }
+
+    // A static handler just returns the pattern without considering the input text.
+    private class StaticHandler implements PatternHandler {
+        StaticHandler(String two, String end) {
+            twoPattern = two;
+            endPattern = end;
+        }
+
+        @Override
+        public String getTwoPattern(String text) { return twoPattern; }
+
+        @Override
+        public String getEndPattern(String text) { return endPattern; }
+
+        private final String twoPattern;
+        private final String endPattern;
+    }
+
+    // A contextual handler returns one of the two patterns depending on whether the text matched the regexp.
+    private class ContextualHandler implements PatternHandler {
+        ContextualHandler(Pattern regexp, String thenTwo, String elseTwo, String thenEnd, String elseEnd) {
+            this.regexp = regexp;
+            thenTwoPattern = thenTwo;
+            elseTwoPattern = elseTwo;
+            thenEndPattern = thenEnd;
+            elseEndPattern = elseEnd;
+        }
+
+        @Override
+        public String getTwoPattern(String text) {
+            if(regexp.matcher(text).matches()) {
+                return thenTwoPattern;
+            } else {
+                return elseTwoPattern;
+            }
+        }
+
+        @Override
+        public String getEndPattern(String text) {
+            if(regexp.matcher(text).matches()) {
+                return thenEndPattern;
+            } else {
+                return elseEndPattern;
+            }
+        }
+
+        private final Pattern regexp;
+        private final String thenTwoPattern;
+        private final String elseTwoPattern;
+        private final String thenEndPattern;
+        private final String elseEndPattern;
+
+    }
+
+    // Pattern in the ICU Data which might be replaced y by e.
+    private static final String compiledY = compilePattern("{0} y {1}", new StringBuilder());
+
+    // The new pattern to replace y to e
+    private static final String compiledE = compilePattern("{0} e {1}", new StringBuilder());
+
+    // Pattern in the ICU Data which might be replaced o by u.
+    private static final String compiledO = compilePattern("{0} o {1}", new StringBuilder());
+
+    // The new pattern to replace u to o
+    private static final String compiledU = compilePattern("{0} u {1}", new StringBuilder());
+
+    // Condition to change to e.
+    // Starts with "hi" or "i" but not with "hie" nor "hia"a
+    private static final Pattern changeToE = Pattern.compile("(i.*|hi|hi[^ae].*)", Pattern.CASE_INSENSITIVE);
+
+    // Condition to change to u.
+    // Starts with "o", "ho", and "8". Also "11" by itself.
+    private static final Pattern changeToU = Pattern.compile("((o|ho|8).*|11)", Pattern.CASE_INSENSITIVE);
+
+    // Pattern in the ICU Data which might need to add a DASH after VAV.
+    private static final String compiledVav = compilePattern("{0} \u05D5{1}", new StringBuilder());
+
+    // Pattern to add a DASH after VAV.
+    private static final String compiledVavDash = compilePattern("{0} \u05D5-{1}", new StringBuilder());
+
+    // Condition to change to VAV follow by a dash.
+    // Starts with non Hebrew letter.
+    private static final Pattern changeToVavDash = Pattern.compile("^[\\P{InHebrew}].*$");
+
+    // A factory function to create function based on locale
+    // Handle specal case of Spanish and Hebrew
+    private PatternHandler createPatternHandler(String two, String end) {
+        if (this.locale != null) {
+            String language = this.locale.getLanguage();
+            if (language.equals("es")) {
+                boolean twoIsY = two.equals(compiledY);
+                boolean endIsY = end.equals(compiledY);
+                if (twoIsY || endIsY) {
+                    return new ContextualHandler(
+                        changeToE, twoIsY ? compiledE : two, two, endIsY ? compiledE : end, end);
+                }
+                boolean twoIsO = two.equals(compiledO);
+                boolean endIsO = end.equals(compiledO);
+                if (twoIsO || endIsO) {
+                    return new ContextualHandler(
+                        changeToU, twoIsO ? compiledU : two, two, endIsO ? compiledU : end, end);
+                }
+            } else if (language.equals("he") || language.equals("iw")) {
+                boolean twoIsVav = two.equals(compiledVav);
+                boolean endIsVav = end.equals(compiledVav);
+                if (twoIsVav || endIsVav) {
+                    return new ContextualHandler(changeToVavDash,
+                        twoIsVav ? compiledVavDash : two, two, endIsVav ? compiledVavDash : end, end);
+                }
+            }
+        }
+        return new StaticHandler(two, end);
     }
 
     /**

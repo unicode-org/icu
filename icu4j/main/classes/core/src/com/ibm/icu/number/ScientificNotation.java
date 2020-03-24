@@ -56,6 +56,7 @@ public class ScientificNotation extends Notation implements Cloneable {
      * @param minExponentDigits
      *            The minimum number of digits to show in the exponent.
      * @return A ScientificNotation, for chaining.
+     * @throws IllegalArgumentException if minExponentDigits is too big or smaller than 1
      * @stable ICU 60
      * @see NumberFormatter
      */
