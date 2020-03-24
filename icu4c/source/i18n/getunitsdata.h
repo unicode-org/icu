@@ -9,7 +9,6 @@
 
 #include "charstr.h" // CharString
 #include "cmemory.h"
-#include "complexunitsconverter.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
@@ -17,14 +16,15 @@
 
 U_NAMESPACE_BEGIN
 
-struct ConversionRateInfo {
+struct U_I18N_API ConversionRateInfo {
     CharString source;
     CharString target;
     CharString factor;
     CharString offset;
+    bool reciprocal = false;
 };
 
-struct UnitPreference {
+struct U_I18N_API UnitPreference {
     UnitPreference() : geq(1) {}
     CharString unit;
     double geq;
@@ -36,6 +36,10 @@ void U_I18N_API getUnitsData(const char *outputRegion, const char *usage, const 
                              CharString &category, MeasureUnit &baseUnit,
                              MaybeStackVector<ConversionRateInfo> &conversionInfo,
                              MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status);
+
+// TODO(hugo): Implement
+MaybeStackVector<ConversionRateInfo>
+    U_I18N_API getConversionRatesInfo(MeasureUnit source, MeasureUnit target, UErrorCode &status);
 
 U_NAMESPACE_END
 

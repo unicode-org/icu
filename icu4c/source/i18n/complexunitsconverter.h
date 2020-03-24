@@ -9,7 +9,7 @@
 
 #include "cmemory.h"
 #include "unitconverter.h"
-
+#include "getunitsdata.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
@@ -31,10 +31,10 @@ class U_I18N_API ComplexUnitsConverter {
      * @param status
      */
     ComplexUnitsConverter(const MeasureUnit inputUnit, const MaybeStackVector<MeasureUnit> outputUnits,
-                          UErrorCode &status);
+                          const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status);
 
     ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
-                          UErrorCode &status);
+                          const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status);
 
     // Returns true if the `quantity` in the `inputUnit` is greater than or equal than the `limit` in the
     // biggest `outputUnits`
