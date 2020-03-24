@@ -2166,6 +2166,8 @@ void NumberFormatTest::TestCurrencyUnit(void){
     static const UChar BAD2[] = u"??A";
     static const UChar XXX[]  = u"XXX";
     static const char XXX8[]  =  "XXX";
+    static const UChar XYZ[]  = u"XYZ";
+    static const char XYZ8[]  =  "XYZ";
     static const UChar INV[]  = u"{$%";
     static const char INV8[]  =  "{$%";
     static const UChar ZZZ[]  = u"zz";
@@ -2182,9 +2184,15 @@ void NumberFormatTest::TestCurrencyUnit(void){
 
     CurrencyUnit cu(USD, ec);
     assertSuccess("CurrencyUnit", ec);
-
     assertEquals("getISOCurrency()", USD, cu.getISOCurrency());
     assertEquals("getSubtype()", USD8, cu.getSubtype());
+
+    // Test XYZ, a valid but non-standard currency.
+    // Note: Country code XY is private-use, so XYZ should remain unallocated.
+    CurrencyUnit extended(XYZ, ec);
+    assertSuccess("non-standard", ec);
+    assertEquals("non-standard", XYZ, extended.getISOCurrency());
+    assertEquals("non-standard", XYZ8, extended.getSubtype());
 
     CurrencyUnit inv(INV, ec);
     assertEquals("non-invariant", U_INVARIANT_CONVERSION_ERROR, ec);
@@ -2259,15 +2267,20 @@ void NumberFormatTest::TestCurrencyUnit(void){
     // Test slicing
     MeasureUnit sliced1 = cu;
     MeasureUnit sliced2 = cu;
+    MeasureUnit sliced3 = extended;
     assertEquals("Subtype after slicing 1", USD8, sliced1.getSubtype());
     assertEquals("Subtype after slicing 2", USD8, sliced2.getSubtype());
+    assertEquals("Subtype after slicing 3", XYZ8, sliced3.getSubtype());
     CurrencyUnit restored1(sliced1, ec);
     CurrencyUnit restored2(sliced2, ec);
+    CurrencyUnit restored3(sliced3, ec);
     assertSuccess("Restoring from MeasureUnit", ec);
     assertEquals("Subtype after restoring 1", USD8, restored1.getSubtype());
     assertEquals("Subtype after restoring 2", USD8, restored2.getSubtype());
+    assertEquals("Subtype after restoring 3", XYZ8, restored3.getSubtype());
     assertEquals("ISO Code after restoring 1", USD, restored1.getISOCurrency());
     assertEquals("ISO Code after restoring 2", USD, restored2.getISOCurrency());
+    assertEquals("ISO Code after restoring 3", XYZ, restored3.getISOCurrency());
 
     // Test copy constructor failure
     LocalPointer<MeasureUnit> meter(MeasureUnit::createMeter(ec));

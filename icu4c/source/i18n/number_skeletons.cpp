@@ -22,6 +22,8 @@
 #include "charstr.h"
 #include "string_segment.h"
 #include "unicode/errorcode.h"
+#include "util.h"
+#include "measunit_impl.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -1036,11 +1038,22 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     ErrorCode internalStatus;
-    MeasureUnit::parseCoreUnitIdentifier(buffer.toStringPiece(), &macros.unit, &macros.perUnit, internalStatus);
+    auto fullUnit = MeasureUnitImpl::forIdentifier(buffer.toStringPiece(), internalStatus);
     if (internalStatus.isFailure()) {
         // throw new SkeletonSyntaxException("Invalid core unit identifier", segment, e);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
+    }
+
+    // TODO(ICU-20941): Clean this up.
+    for (int32_t i = 0; i < fullUnit.units.length(); i++) {
+        SingleUnitImpl* subUnit = fullUnit.units[i];
+        if (subUnit->dimensionality > 0) {
+            macros.unit = macros.unit.product(subUnit->build(status), status);
+        } else {
+            subUnit->dimensionality *= -1;
+            macros.perUnit = macros.perUnit.product(subUnit->build(status), status);
+        }
     }
 }
 
@@ -1669,5 +1682,50 @@ bool GeneratorHelpers::scale(const MacroProps& macros, UnicodeString& sb, UError
     return true;
 }
 
+
+// Definitions of public API methods (put here for dependency disentanglement)
+
+#if (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(_MSC_VER)
+// Ignore MSVC warning 4661. This is generated for NumberFormatterSettings<>::toSkeleton() as this method
+// is defined elsewhere (in number_skeletons.cpp). The compiler is warning that the explicit template instantiation
+// inside this single translation unit (CPP file) is incomplete, and thus it isn't sure if the template class is
+// fully defined. However, since each translation unit explicitly instantiates all the necessary template classes,
+// they will all be passed to the linker, and the linker will still find and export all the class members.
+#pragma warning(push)
+#pragma warning(disable: 4661)
+#endif
+
+template<typename Derived>
+UnicodeString NumberFormatterSettings<Derived>::toSkeleton(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    if (fMacros.copyErrorTo(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    return skeleton::generate(fMacros, status);
+}
+
+// Declare all classes that implement NumberFormatterSettings
+// See https://stackoverflow.com/a/495056/1407170
+template
+class icu::number::NumberFormatterSettings<icu::number::UnlocalizedNumberFormatter>;
+template
+class icu::number::NumberFormatterSettings<icu::number::LocalizedNumberFormatter>;
+
+UnlocalizedNumberFormatter
+NumberFormatter::forSkeleton(const UnicodeString& skeleton, UErrorCode& status) {
+    return skeleton::create(skeleton, nullptr, status);
+}
+
+UnlocalizedNumberFormatter
+NumberFormatter::forSkeleton(const UnicodeString& skeleton, UParseError& perror, UErrorCode& status) {
+    return skeleton::create(skeleton, &perror, status);
+}
+
+#if (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(_MSC_VER)
+// Warning 4661.
+#pragma warning(pop)
+#endif
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
