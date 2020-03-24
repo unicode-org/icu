@@ -18394,12 +18394,6 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "et",
-                "fi",
-                "30",
-                "1",
-            }
-            {
                 "eu",
                 "es",
                 "20",
@@ -35917,6 +35911,7 @@ supplementalData:table(nofallback){
             concentration-blood-glucose{"millimole-per-liter"}
             consumption-inverse-vehicle-fuel{"mile-per-gallon-imperial"}
             length-person{"inch"}
+            length-person-height{"inch"}
         }
         CH{
             concentration-blood-glucose{"millimole-per-liter"}
@@ -35985,6 +35980,7 @@ supplementalData:table(nofallback){
                 "inch",
             }
             length-person{"inch"}
+            length-person-height{"inch"}
             length-road{"yard"}
             length-vehicle{"foot-and-inch"}
             length-visiblty{
@@ -36042,6 +36038,7 @@ supplementalData:table(nofallback){
         }
         IN{
             length-person{"inch"}
+            length-person-height{"inch"}
             pressure-baromtrc{"inch-ofhg"}
         }
         IS{
@@ -36179,6 +36176,10 @@ supplementalData:table(nofallback){
         SE{
             concentration-blood-glucose{"millimole-per-liter"}
             length-person-height{"meter-and-centimeter"}
+            length-road{
+                "mile-scandinavian",
+                "kilometer",
+            }
             speed-wind{"meter-per-second"}
         }
         SG{
@@ -36227,6 +36228,7 @@ supplementalData:table(nofallback){
                 "inch",
             }
             length-person{"inch"}
+            length-person-height{"inch"}
             length-rainfall{"inch"}
             length-snowfall{"inch"}
             length-vehicle{"foot-and-inch"}
