@@ -190,7 +190,7 @@ const ConversionRateInfo& extractConversionRateInfo(StringPiece source,
                                              const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                                              UErrorCode &status) {
     for (int i = 0, n = ratesInfo.length(); i < n; ++i) {
-        if (ratesInfo[i]->source == source) return *ratesInfo[i];
+        if (ratesInfo[i]->sourceUnit == source) return *ratesInfo[i];
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;

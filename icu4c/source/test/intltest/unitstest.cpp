@@ -611,9 +611,10 @@ void UnitsTest::testGetConversionRateInfo() {
             ConversionRateInfo *cri;
             cri = conversionInfo[i];
             logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", offset=\"%s\"", i,
-                  cri->source.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
+                  cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
             assertTrue("ConversionRateInfo has source, baseUnit, and factor",
-                       cri->source.length() > 0 && cri->baseUnit.length() > 0 && cri->factor.length() > 0);
+                       cri->sourceUnit.length() > 0 && cri->baseUnit.length() > 0 &&
+                           cri->factor.length() > 0);
         }
     }
 }
@@ -662,9 +663,10 @@ void UnitsTest::testGetUnitsData() {
             ConversionRateInfo *cri;
             cri = conversionInfo[i];
             logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", offset=\"%s\"", i,
-                  cri->source.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
+                  cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
             assertTrue("ConversionRateInfo has source, baseUnit, and factor",
-                       cri->source.length() > 0 && cri->baseUnit.length() > 0 && cri->factor.length() > 0);
+                       cri->sourceUnit.length() > 0 && cri->baseUnit.length() > 0 &&
+                           cri->factor.length() > 0);
         }
         assertTrue("at least one unit preference obtained", unitPreferences.length() > 0);
         for (int i = 0; i < unitPreferences.length(); i++) {

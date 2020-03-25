@@ -21,15 +21,15 @@ U_NAMESPACE_BEGIN
 class U_I18N_API ConversionRateInfo {
   public:
     ConversionRateInfo() {};
-    ConversionRateInfo(StringPiece source, StringPiece baseUnit, StringPiece factor, StringPiece offset,
-                       UErrorCode &status)
-        : source(), baseUnit(), factor(), offset() {
-        this->source.append(source, status);
+    ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
+                       StringPiece offset, UErrorCode &status)
+        : sourceUnit(), baseUnit(), factor(), offset() {
+        this->sourceUnit.append(sourceUnit, status);
         this->baseUnit.append(baseUnit, status);
         this->factor.append(factor, status);
         this->offset.append(offset, status);
     };
-    CharString source;
+    CharString sourceUnit;
     CharString baseUnit; // FIXME/WIP: baseUnit
     CharString factor;
     CharString offset;

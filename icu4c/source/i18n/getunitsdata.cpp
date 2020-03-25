@@ -92,7 +92,7 @@ class ConversionRateDataSink : public ResourceSink {
         fLastBaseUnit.appendInvariantChars(baseUnit, lenBaseUnit, status);
         if (U_FAILURE(status)) return;
         for (int32_t i = 0, len = outVector.length(); i < len; i++) {
-            if (strcmp(outVector[i]->source.data(), source) == 0 &&
+            if (strcmp(outVector[i]->sourceUnit.data(), source) == 0 &&
                 strcmp(outVector[i]->baseUnit.data(), fLastBaseUnit.data()) == 0) {
                 return;
             }
@@ -105,7 +105,7 @@ class ConversionRateDataSink : public ResourceSink {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         } else {
-            cr->source.append(source, lenSource, status);
+            cr->sourceUnit.append(source, lenSource, status);
             cr->baseUnit.append(fLastBaseUnit.data(), fLastBaseUnit.length(), status);
             cr->factor.appendInvariantChars(factor, lenFactor, status);
             if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
