@@ -50,8 +50,8 @@ class ConversionRateDataSink : public ResourceSink {
      * constructor, but only if an identical instance isn't already present.
      *
      * @param source The source unit identifier.
-     * @param value A resource containing conversion rate info (a target and
-     * factor, and possibly an offset).
+     * @param value A resource containing conversion rate info (the base unit
+     * and factor, and possibly an offset).
      * @param noFallback Ignored.
      * @param status The standard ICU error code output parameter.
      */
@@ -59,21 +59,21 @@ class ConversionRateDataSink : public ResourceSink {
         ResourceTable conversionRateTable = value.getTable(status);
         if (U_FAILURE(status)) return;
 
-        // Collect target, factor and offset from the resource.
+        // Collect base unit, factor and offset from the resource.
         int32_t lenSource = uprv_strlen(source);
-        const UChar *target = NULL, *factor = NULL, *offset = NULL;
-        int32_t lenTarget, lenFactor, lenOffset;
+        const UChar *baseUnit = NULL, *factor = NULL, *offset = NULL;
+        int32_t lenBaseUnit, lenFactor, lenOffset;
         const char *key;
         for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
             if (uprv_strcmp(key, "target") == 0) {
-                target = value.getString(lenTarget, status);
+                baseUnit = value.getString(lenBaseUnit, status);
             } else if (uprv_strcmp(key, "factor") == 0) {
                 factor = value.getString(lenFactor, status);
             } else if (uprv_strcmp(key, "offset") == 0) {
                 offset = value.getString(lenOffset, status);
             }
         }
-        if (target == NULL || factor == NULL) {
+        if (baseUnit == NULL || factor == NULL) {
             status = U_MISSING_RESOURCE_ERROR;
             return;
         }
@@ -81,19 +81,19 @@ class ConversionRateDataSink : public ResourceSink {
         // Check if we already have the conversion rate in question.
         //
         // TODO(revieW): We could do this skip-check *before* we fetch
-        // target/factor/offset based only on the source unit, but only if we're
-        // certain we'll never get two different targets for a given source.
-        // This should be the case, since convertUnit entries in CLDR's
+        // baseUnit/factor/offset based only on the source unit, but only if
+        // we're certain we'll never get two different baseUnits for a given
+        // source. This should be the case, since convertUnit entries in CLDR's
         // units.xml should all point at a defined base unit for the unit
         // category. I should make this code more efficient after
         // double-checking we're fine with relying on such a detail from the
         // CLDR spec?
-        fLastTarget.clear();
-        fLastTarget.appendInvariantChars(target, lenTarget, status);
+        fLastBaseUnit.clear();
+        fLastBaseUnit.appendInvariantChars(baseUnit, lenBaseUnit, status);
         if (U_FAILURE(status)) return;
         for (int32_t i = 0, len = outVector.length(); i < len; i++) {
             if (strcmp(outVector[i]->source.data(), source) == 0 &&
-                strcmp(outVector[i]->target.data(), fLastTarget.data()) == 0) {
+                strcmp(outVector[i]->baseUnit.data(), fLastBaseUnit.data()) == 0) {
                 return;
             }
         }
@@ -106,30 +106,30 @@ class ConversionRateDataSink : public ResourceSink {
             return;
         } else {
             cr->source.append(source, lenSource, status);
-            cr->target.append(fLastTarget.data(), fLastTarget.length(), status);
+            cr->baseUnit.append(fLastBaseUnit.data(), fLastBaseUnit.length(), status);
             cr->factor.appendInvariantChars(factor, lenFactor, status);
             if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
         }
     }
 
     /**
-     * Returns the MeasureUnit that was the conversion target of the most recent
-     * call to put() - typically meaning the most recent call to
+     * Returns the MeasureUnit that was the conversion base unit of the most
+     * recent call to put() - typically meaning the most recent call to
      * ures_getAllItemsWithFallback().
      */
-    MeasureUnit getLastTarget(UErrorCode &status) {
-        return MeasureUnit::forIdentifier(fLastTarget.data(), status);
+    MeasureUnit getLastBaseUnit(UErrorCode &status) {
+        return MeasureUnit::forIdentifier(fLastBaseUnit.data(), status);
     }
 
   private:
     MaybeStackVector<ConversionRateInfo> &outVector;
 
     // TODO(review): felt like a hack: provides easy access to the most recent
-    // target. This hack is another point making me wonder if doing this
+    // baseUnit. This hack is another point making me wonder if doing this
     // ResourceSink thing is worthwhile. Functional style is not more verbose,
     // and IMHO more readable than this object-based approach where the output
     // seems/feels like a side-effect.
-    CharString fLastTarget;
+    CharString fLastBaseUnit;
 };
 
 // WIP/FIXME: partially due to my skepticism of using the ResourceSink design
@@ -254,7 +254,7 @@ void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUn
     ures_getAllItemsWithFallback(convertUnitsBundle, simple.getIdentifier(), convertSink, status);
 
     if (baseSingleUnit != NULL) {
-        *baseSingleUnit = convertSink.getLastTarget(status).withDimensionality(dimensionality, status);
+        *baseSingleUnit = convertSink.getLastBaseUnit(status).withDimensionality(dimensionality, status);
     }
 }
 
@@ -343,7 +343,7 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
         status = U_MISSING_RESOURCE_ERROR;
         return;
     }
-    const char *baseIdentifier = conversionRates[0]->target.data();
+    const char *baseIdentifier = conversionRates[0]->baseUnit.data();
     baseUnit = MeasureUnit::forIdentifier(baseIdentifier, status);
 
     // category

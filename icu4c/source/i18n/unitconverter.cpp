@@ -423,7 +423,7 @@ StringPiece getTarget(StringPiece source, const MaybeStackVector<ConversionRateI
                       UErrorCode &status) {
     const auto& convertUnit = extractConversionRateInfo(source, ratesInfo, status);
     if (U_FAILURE(status)) return StringPiece("");
-    return convertUnit.target.toStringPiece();
+    return convertUnit.baseUnit.toStringPiece();
 }
 
 // TODO(ICU-20568): Add more test coverage for this function.

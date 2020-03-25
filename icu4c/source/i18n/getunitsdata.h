@@ -21,16 +21,16 @@ U_NAMESPACE_BEGIN
 class U_I18N_API ConversionRateInfo {
   public:
     ConversionRateInfo() {};
-    ConversionRateInfo(StringPiece source, StringPiece target, StringPiece factor, StringPiece offset,
+    ConversionRateInfo(StringPiece source, StringPiece baseUnit, StringPiece factor, StringPiece offset,
                        UErrorCode &status)
-        : source(), target(), factor(), offset() {
+        : source(), baseUnit(), factor(), offset() {
         this->source.append(source, status);
-        this->target.append(target, status);
+        this->baseUnit.append(baseUnit, status);
         this->factor.append(factor, status);
         this->offset.append(offset, status);
     };
     CharString source;
-    CharString target; // FIXME/WIP: baseUnit
+    CharString baseUnit; // FIXME/WIP: baseUnit
     CharString factor;
     CharString offset;
     bool reciprocal = false;
@@ -47,7 +47,7 @@ struct U_I18N_API UnitPreference {
 
 /**
  * Collects and returns ConversionRateInfo needed to convert from source to
- * target.
+ * baseUnit.
  * 
  * @param source The source unit (the unit type converted from).
  * @param target The target unit (the unit type converted to).
