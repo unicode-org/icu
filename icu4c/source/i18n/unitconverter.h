@@ -55,7 +55,7 @@ class U_I18N_API UnitConverter {
      * @param output_value the value that holds the result of the conversion.
      * @param status
      */
-    double convert(double inputValue);
+    double convert(double inputValue) const;
 
   private:
     ConversionRate conversionRate_;
