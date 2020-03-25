@@ -122,6 +122,17 @@ class NumberSkeletonImpl {
         STEM_SCALE,
     };
 
+    /** Default wildcard char, accepted on input and printed in output */
+    static final char WILDCARD_CHAR = '*';
+
+    /** Alternative wildcard char, accept on input but not printed in output */
+    static final char ALT_WILDCARD_CHAR = '+';
+
+    /** Checks whether the char is a wildcard on input */
+    static boolean isWildcardChar(char c) {
+        return c == WILDCARD_CHAR || c == ALT_WILDCARD_CHAR;
+    }
+
     /** For mapping from ordinal back to StemEnum in Java. */
     static final StemEnum[] STEM_ENUM_VALUES = StemEnum.values();
 
@@ -924,7 +935,7 @@ class NumberSkeletonImpl {
 
         /** @return Whether we successfully found and parsed an exponent width option. */
         private static boolean parseExponentWidthOption(StringSegment segment, MacroProps macros) {
-            if (segment.charAt(0) != '+') {
+            if (!isWildcardChar(segment.charAt(0))) {
                 return false;
             }
             int offset = 1;
@@ -945,7 +956,7 @@ class NumberSkeletonImpl {
         }
 
         private static void generateExponentWidthOption(int minExponentDigits, StringBuilder sb) {
-            sb.append('+');
+            sb.append(WILDCARD_CHAR);
             appendMultiple(sb, 'e', minExponentDigits);
         }
 
@@ -1044,7 +1055,7 @@ class NumberSkeletonImpl {
                 }
             }
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxFrac = -1;
                     offset++;
                 } else {
@@ -1083,7 +1094,7 @@ class NumberSkeletonImpl {
             sb.append('.');
             appendMultiple(sb, '0', minFrac);
             if (maxFrac == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxFrac - minFrac);
             }
@@ -1102,7 +1113,7 @@ class NumberSkeletonImpl {
                 }
             }
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxSig = -1;
                     offset++;
                 } else {
@@ -1132,7 +1143,7 @@ class NumberSkeletonImpl {
         private static void generateDigitsStem(int minSig, int maxSig, StringBuilder sb) {
             appendMultiple(sb, '@', minSig);
             if (maxSig == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxSig - minSig);
             }
@@ -1224,7 +1235,7 @@ class NumberSkeletonImpl {
             // Invalid: @, @@, @@@
             // Invalid: @@#, @@##, @@@#
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxSig = -1;
                     offset++;
                 } else if (minSig > 1) {
@@ -1278,7 +1289,7 @@ class NumberSkeletonImpl {
             int offset = 0;
             int minInt = 0;
             int maxInt;
-            if (segment.charAt(0) == '+') {
+            if (isWildcardChar(segment.charAt(0))) {
                 maxInt = -1;
                 offset++;
             } else {
@@ -1316,7 +1327,7 @@ class NumberSkeletonImpl {
 
         private static void generateIntegerWidthOption(int minInt, int maxInt, StringBuilder sb) {
             if (maxInt == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxInt - minInt);
             }

@@ -95,14 +95,15 @@ Start with the stem `scientific` or `engineering`.  Those stems take the
 following optional options:
 
 - `/sign-xxx` sets the sign display option for the exponent; see [Sign](#sign).
-- `/+ee` sets exponent digits to "at least 2"; use `/+eee` for at least 3 digits, etc.
+- `/*ee` sets exponent digits to "at least 2"; use `/*eee` for at least 3 digits, etc.
+    - ***Prior to ICU 67***, use `/+ee` instead of `/*ee`.
 
 For example, all of the following skeletons are valid:
 
 - `scientific`
 - `scientific/sign-always`
-- `scientific/+ee`
-- `scientific/+ee/sign-always`
+- `scientific/*ee`
+- `scientific/*ee/sign-always`
 
 #### Scientific and Engineering Notation: Concise Form
 
@@ -111,14 +112,14 @@ The following are examples of concise form:
 | Concise Skeleton | Equivalent Long-Form Skeleton |
 |---|---|
 | `E0` | `scientific` |
-| `E00` | `scientific/+ee` |
-| `EE+0` | `engineering/sign-always` |
+| `E00` | `scientific/*ee` |
+| `EE+!0` | `engineering/sign-always` |
 | `E+?00` | `scientific/sign-except-zero/+ee` |
 
 More precisely:
 
 1. Start with `E` for scientific or `EE` for engineering.
-2. Allow either `+` or `+?` as a concise sign display option.
+2. Allow either `+!` or `+?` as a concise sign display option.
 3. Expect one or more `0`s.  If more than one, set minimum integer digits.
 
 ### Unit
@@ -192,13 +193,13 @@ The following are examples of fraction-precision stems:
 | Stem | Explanation | Equivalent C++ Code |
 |---|---|---|
 | `.00` | Exactly 2 fraction digits | `Precision::fixedFraction(2) ` |
-| `.00+` | At least 2 fraction digits | `Precision::minFraction(2)` |
+| `.00*` | At least 2 fraction digits | `Precision::minFraction(2)` |
 | `.##` | At most 2 fraction digits | `Precision::maxFraction(2) ` |
 | `.0#` | Between 1 and 2 fraction digits | `Precision::minMaxFraction(1, 2)` |
 
 More precisely, the fraction precision stem starts with `.`, then contains
 zero or more `0` symbols, which implies the minimum fraction digits.  Then it
-contains either a `+`, for unlimited maximum fraction digits, or zero or more
+contains either a `*`, for unlimited maximum fraction digits, or zero or more
 `#` symbols, which implies the minimum fraction digits when added to the `0`
 symbols.
 
@@ -211,11 +212,11 @@ examples:
 
 | Skeleton | Explanation | Equivalent C++ Code |
 |---|---|---|
-| `.##/@@@+` | At most 2 fraction digits, but guarantee <br/> at least 3 significant digits | `Precision::maxFraction(2)` <br/> `.withMinDigits(3)` |
+| `.##/@@@*` | At most 2 fraction digits, but guarantee <br/> at least 3 significant digits | `Precision::maxFraction(2)` <br/> `.withMinDigits(3)` |
 | `.00/@##` | Exactly 2 fraction digits, but do not <br/> display more than 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withMaxDigits(3)` |
 
 Precisely, the option starts with one or more `@` symbols.  Then it contains
-either a `+`, for `::withMinDigits`, or one or more `#` symbols, for
+either a `*`, for `::withMinDigits`, or one or more `#` symbols, for
 `::withMaxDigits`.  If a `#` symbol is present, there must be only one `@`
 symbol.
 
@@ -226,15 +227,21 @@ The following are examples of stems for significant figures:
 | Stem | Explanation | Equivalent C++ Code|
 |---|---|---|
 | `@@@` | Exactly 3 significant digits | `Precision::fixedSignificantDigits(3)` |
-| `@@@+` | At least 3 significant digits | `Precision::minSignificantDigits(3)` |
+| `@@@*` | At least 3 significant digits | `Precision::minSignificantDigits(3)` |
 | `@##` | At most 3 significant digits | `Precision::maxSignificantDigits(3)` |
 | `@@#` | Between 2 and 3 significant digits | `...::minMaxSignificantDigits(2, 3)` |
 
 The precise syntax is very similar to fraction precision.  The blueprint stem
 starts with one or more `@` symbols, which implies the minimum significant
-digits.  Then it contains either a `+`, for unlimited maximum significant
+digits.  Then it contains either a `*`, for unlimited maximum significant
 digits, or zero or more `#` symbols, which implies the minimum significant
 digits when added to the `@` symbols.
+
+#### Wildcard Character
+
+***Prior to ICU 67***, the symbol `+` was used for unlimited precision, instead
+of `*` (for example, `.00+`). For backwards compatibility, either `+` or `*` is
+accepted. This applies for both fraction digits and significant digits.
 
 ### Rounding Mode
 
@@ -259,20 +266,22 @@ integer digits):
 
 | Long Form | Concise Form | Explanation | Equivalent C++ Code |
 |---|---|---|---|
-| `integer-width/+000` | `000` | At least 3 <br/> integer digits | `IntegerWidth::zeroFillTo(3)` |
+| `integer-width/*000` | `000` | At least 3 <br/> integer digits | `IntegerWidth::zeroFillTo(3)` |
 | `integer-width/##0` | - | Between 1 and 3 <br/> integer digits | `IntegerWidth::zeroFillTo(1)` <br/> `.truncateAt(3)`
 | `integer-width/00` | - | Exactly 2 <br/> integer digits | `IntegerWidth::zeroFillTo(2)` <br/> `.truncateAt(2)` |
-| `integer-width/+` | - | Zero or more <br/> integer digits | `IntegerWidth::zeroFillTo(0) `
+| `integer-width/*` | - | Zero or more <br/> integer digits | `IntegerWidth::zeroFillTo(0) `
 
-The long-form option starts with either a single `+` symbol, signaling no limit
+The long-form option starts with either a single `*` symbol, signaling no limit
 on the number of integer digits (no *truncateAt*), or zero or more `#` symbols.
 It should then be followed by zero or more `0` symbols, indicating the minimum
-integer digits (the argument to *zeroFillTo*).  If there is no `+` symbol, the
+integer digits (the argument to *zeroFillTo*).  If there is no `*` symbol, the
 maximum integer digits (the argument to *truncateAt*) is the number of `#`
 symbols plus the number of `0` symbols.
 
 The concise skeleton is simply one or more `0` characters. This supports
 minimum integer digits but not maximum integer digits.
+
+***Prior to ICU 67***, use the symbol `+` instead of `*`.
 
 ### Scale
 
@@ -303,7 +312,7 @@ The grouping strategy can be specified by the following stems:
 - `group-min2` or `,?` (concise)
 - `group-auto` (or omit since this is the default)
 - `group-on-aligned` or `,!` (concise)
-- `group-thousands` or `,=` (concise)
+- `group-thousands` (no concise equivalent)
 
 For more details, see
 [UNumberGroupingStrategy](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).

@@ -209,7 +209,7 @@ void NumberFormatterApiTest::notationScientific() {
 
     assertFormatDescending(
             u"Scientific min exponent digits",
-            u"scientific/+ee",
+            u"scientific/*ee",
             u"E00",
             NumberFormatter::with().notation(Notation::scientific().withMinExponentDigits(2)),
             Locale::getEnglish(),
@@ -1039,7 +1039,7 @@ void NumberFormatterApiTest::roundingFraction() {
 
     assertFormatDescending(
             u"Min Fraction",
-            u".0+",
+            u".0*",
             u".0+",
             NumberFormatter::with().precision(Precision::minFraction(1)),
             Locale::getEnglish(),
@@ -1116,7 +1116,7 @@ void NumberFormatterApiTest::roundingFigures() {
 
     assertFormatSingle(
             u"Min Significant",
-            u"@@+",
+            u"@@*",
             u"@@+",
             NumberFormatter::with().precision(Precision::minSignificantDigits(2)),
             Locale::getEnglish(),
@@ -1153,7 +1153,7 @@ void NumberFormatterApiTest::roundingFigures() {
 
     assertFormatSingle(
             u"Fixed Significant on zero with zero integer width",
-            u"@ integer-width/+",
+            u"@ integer-width/*",
             u"@ integer-width/+",
             NumberFormatter::with().precision(Precision::fixedSignificantDigits(1))
                     .integerWidth(IntegerWidth::zeroFillTo(0)),
@@ -1181,7 +1181,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
 
     assertFormatDescending(
             u"FracSig minMaxFrac minSig",
-            u".0#/@@@+",
+            u".0#/@@@*",
             u".0#/@@@+",
             NumberFormatter::with().precision(Precision::minMaxFraction(1, 2).withMinDigits(3)),
             Locale::getEnglish(),
@@ -1229,7 +1229,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
 
     assertFormatSingle(
             u"FracSig with trailing zeros A",
-            u".00/@@@+",
+            u".00/@@@*",
             u".00/@@@+",
             NumberFormatter::with().precision(Precision::fixedFraction(2).withMinDigits(3)),
             Locale::getEnglish(),
@@ -1238,7 +1238,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
 
     assertFormatSingle(
             u"FracSig with trailing zeros B",
-            u".00/@@@+",
+            u".00/@@@*",
             u".00/@@@+",
             NumberFormatter::with().precision(Precision::fixedFraction(2).withMinDigits(3)),
             Locale::getEnglish(),
@@ -1807,7 +1807,7 @@ void NumberFormatterApiTest::integerWidth() {
 
     assertFormatDescending(
             u"Integer Width Zero Fill 0",
-            u"integer-width/+",
+            u"integer-width/*",
             u"integer-width/+",
             NumberFormatter::with().integerWidth(IntegerWidth::zeroFillTo(0)),
             Locale::getEnglish(),

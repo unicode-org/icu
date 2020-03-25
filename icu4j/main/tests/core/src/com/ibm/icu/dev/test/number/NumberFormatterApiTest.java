@@ -165,7 +165,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Scientific min exponent digits",
-                "scientific/+ee",
+                "scientific/*ee",
                 "E00",
                 NumberFormatter.with().notation(Notation.scientific().withMinExponentDigits(2)),
                 ULocale.ENGLISH,
@@ -966,7 +966,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Min Fraction",
-                ".0+",
+                ".0*",
                 ".0+",
                 NumberFormatter.with().precision(Precision.minFraction(1)),
                 ULocale.ENGLISH,
@@ -1044,7 +1044,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Min Significant",
-                "@@+",
+                "@@*",
                 "@@+",
                 NumberFormatter.with().precision(Precision.minSignificantDigits(2)),
                 ULocale.ENGLISH,
@@ -1071,7 +1071,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Fixed Significant on zero with zero integer width",
-                "@ integer-width/+",
+                "@ integer-width/*",
                 "@ integer-width/+",
                 NumberFormatter.with().precision(Precision.fixedSignificantDigits(1)).integerWidth(IntegerWidth.zeroFillTo(0)),
                 ULocale.ENGLISH,
@@ -1108,7 +1108,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "FracSig minMaxFrac minSig",
-                ".0#/@@@+",
+                ".0#/@@@*",
                 ".0#/@@@+",
                 NumberFormatter.with().precision(Precision.minMaxFraction(1, 2).withMinDigits(3)),
                 ULocale.ENGLISH,
@@ -1172,7 +1172,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "FracSig with trailing zeros A",
-                ".00/@@@+",
+                ".00/@@@*",
                 ".00/@@@+",
                 NumberFormatter.with().precision(Precision.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
@@ -1181,7 +1181,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "FracSig with trailing zeros B",
-                ".00/@@@+",
+                ".00/@@@*",
                 ".00/@@@+",
                 NumberFormatter.with().precision(Precision.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
@@ -1726,7 +1726,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Integer Width Zero Fill 0",
-                "integer-width/+",
+                "integer-width/*",
                 "integer-width/+",
                 NumberFormatter.with().integerWidth(IntegerWidth.zeroFillTo(0)),
                 ULocale.ENGLISH,
