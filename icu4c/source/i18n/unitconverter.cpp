@@ -427,27 +427,26 @@ StringPiece getTarget(StringPiece source, const MaybeStackVector<ConversionRateI
 MeasureUnit extractTarget(MeasureUnit source, const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                           UErrorCode &status) {
     MeasureUnit result; // Empty unit.
-    auto singleUnits = source.splitToSingleUnits(status);
+    int32_t singleUnitsLength;
+    auto singleUnits = source.splitToSingleUnits(singleUnitsLength, status);
 
-    for (int i = 0; i < singleUnits.length(); i++) {
+    for (int i = 0; i < singleUnitsLength; i++) {
         const auto &singleUnit = singleUnits[i];
         StringPiece target = getTarget(singleUnit.getIdentifier(), ratesInfo, status);
 
         if (U_FAILURE(status)) return result;
 
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(target, status);
-        auto targetSingleUnits = targetUnit.splitToSingleUnits(status);
+        int32_t targetSingleUnitsLength;
+        auto targetSingleUnits = targetUnit.splitToSingleUnits(targetSingleUnitsLength, status);
         if (U_FAILURE(status)) return result;
 
-        for (int i = 0, n = targetSingleUnits.length(); i < n; ++i) {
-            auto tempTargetUnit = TempSingleUnit::forMeasureUnit(targetSingleUnits[i], status);
-            tempTargetUnit.dimensionality = singleUnit.getDimensionality(status);
+        for (int i = 0; i < targetSingleUnitsLength; ++i) {
+            auto targetUnit =
+                targetSingleUnits[i].withDimensionality(singleUnit.getDimensionality(status), status);
             if (U_FAILURE(status)) return result;
 
-            auto targetUnits = tempTargetUnit.build(status);
-            if (U_FAILURE(status)) return result;
-
-            result = result.product(targetUnits, status);
+            result = result.product(targetUnit, status);
             if (U_FAILURE(status)) return result;
         }
     }
@@ -484,7 +483,7 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target,
                        ratesInfo, status);
 }
 
-double UnitConverter::convert(double inputValue) {
+double UnitConverter::convert(double inputValue) const {
     double result =
         inputValue + conversionRate_.sourceOffset; // Reset the input to the target zero index.
     // Convert the quantity to from the source scale to the target scale.

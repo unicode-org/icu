@@ -18,9 +18,10 @@ U_NAMESPACE_BEGIN
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
                                              const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                                              UErrorCode &status) {
-    auto singleUnits = outputUnits.splitToSingleUnits(status);
+    int32_t length;
+    auto singleUnits = outputUnits.splitToSingleUnits(length, status);
     MaybeStackVector<MeasureUnit> singleUnitsInOrder;
-    for (int i = 0, n = singleUnits.length(); i < n; ++i) {
+    for (int i = 0; i < length; ++i) {
         // TODO(younies): ensure units being in order in phase 2. Now, the units in order by default.
         singleUnitsInOrder.emplaceBack(singleUnits[i]);
     }
@@ -59,7 +60,7 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
     U_ASSERT(unitConverters_.length() > 0);
 
     // first quantity is the biggest one.
-    double newQuantity = (*unitConverters_[0]).convert(quantity);
+    double newQuantity = unitConverters_[0]->convert(quantity);
 
     return newQuantity >= limit;
 }
@@ -72,12 +73,18 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
         if (i < n - 1) { // not last element
             int64_t newQuantity = quantity;
             Formattable formattableNewQuantity(newQuantity);
-            result.emplaceBack(Measure(formattableNewQuantity, units_[i], status));
+            // Measure wants to own its MeasureUnit. For now, this copies it.
+            // TODO(younies): consider whether ownership transfer would be
+            // reasonable? (If not, just delete this comment?)
+            result.emplaceBack(formattableNewQuantity, new MeasureUnit(*units_[i]), status);
 
             quantity -= newQuantity;
         } else { // Last element
             Formattable formattableQuantity(quantity);
-            result.emplaceBack(Measure(formattableQuantity, units_[i], status));
+            // Measure wants to own its MeasureUnit. For now, this copies it.
+            //  TODO(younies): consider whether ownership transfer would be
+            //  reasonable? (If not, just delete this comment?)
+           result.emplaceBack(formattableQuantity, new MeasureUnit(*units_[i]), status);
         }
     }
 
