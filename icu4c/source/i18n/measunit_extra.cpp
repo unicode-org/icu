@@ -496,19 +496,19 @@ private:
             }
             bool added = result.append(singleUnit, status);
             if (sawPlus && !added) {
-                // Two similar units are not allowed in a sequence unit
+                // Two similar units are not allowed in a mixed unit
                 status = kUnitIdentifierSyntaxError;
                 return;
             }
             if ((++unitNum) >= 2) {
                 UMeasureUnitComplexity complexity = sawPlus
-                    ? UMEASURE_UNIT_SEQUENCE
+                    ? UMEASURE_UNIT_MIXED
                     : UMEASURE_UNIT_COMPOUND;
                 if (unitNum == 2) {
                     U_ASSERT(result.complexity == UMEASURE_UNIT_SINGLE);
                     result.complexity = complexity;
                 } else if (result.complexity != complexity) {
-                    // Mixed sequence and compound units
+                    // Can't have mixed compound units
                     status = kUnitIdentifierSyntaxError;
                     return;
                 }
@@ -589,7 +589,7 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
         return;
     }
     if (impl.complexity == UMEASURE_UNIT_COMPOUND) {
-        // Note: don't sort a SEQUENCE unit
+        // Note: don't sort a MIXED unit
         uprv_sortArray(
             impl.units.getAlias(),
             impl.units.length(),
@@ -609,7 +609,7 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
     for (int32_t i = 1; i < impl.units.length(); i++) {
         const SingleUnitImpl& prev = *impl.units[i-1];
         const SingleUnitImpl& curr = *impl.units[i];
-        if (impl.complexity == UMEASURE_UNIT_SEQUENCE) {
+        if (impl.complexity == UMEASURE_UNIT_MIXED) {
             impl.identifier.append("-and-", status);
             serializeSingle(curr, true, impl.identifier, status);
         } else {
@@ -753,7 +753,7 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     MeasureUnitImpl impl = MeasureUnitImpl::forMeasureUnitMaybeCopy(*this, status);
     MeasureUnitImpl temp;
     const MeasureUnitImpl& otherImpl = MeasureUnitImpl::forMeasureUnit(other, temp, status);
-    if (impl.complexity == UMEASURE_UNIT_SEQUENCE || otherImpl.complexity == UMEASURE_UNIT_SEQUENCE) {
+    if (impl.complexity == UMEASURE_UNIT_MIXED || otherImpl.complexity == UMEASURE_UNIT_MIXED) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return {};
     }

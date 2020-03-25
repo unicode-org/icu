@@ -40,8 +40,8 @@ struct MeasureUnitImpl;
  *           square-kilometer, kilojoule, one-per-second.
  * - COMPOUND: A unit composed of the product of multiple single units. Examples:
  *             meter-per-second, kilowatt-hour, kilogram-meter-per-square-second.
- * - SEQUENCE: A unit composed of the sum of multiple single units. Examples: foot+inch,
- *             hour+minute+second, degree+arcminute+arcsecond.
+ * - MIXED: A unit composed of the sum of multiple single units. Examples: foot+inch,
+ *          hour+minute+second, degree+arcminute+arcsecond.
  *
  * The complexity determines which operations are available. For example, you cannot set the power
  * or SI prefix of a compound unit.
@@ -64,11 +64,11 @@ enum UMeasureUnitComplexity {
     UMEASURE_UNIT_COMPOUND,
 
     /**
-     * A sequence unit, like hour+minute.
+     * A mixed unit, like hour+minute.
      *
      * @draft ICU 67
      */
-    UMEASURE_UNIT_SEQUENCE
+    UMEASURE_UNIT_MIXED
 };
 
 /**
@@ -258,14 +258,14 @@ class U_I18N_API MeasureUnit: public UObject {
     MeasureUnit(MeasureUnit &&other) noexcept;
 
     /**
-     * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
+     * Construct a MeasureUnit from a CLDR Unit Identifier, defined in UTS 35.
      * Validates and canonicalizes the identifier.
      *
      * <pre>
      * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
      * </pre>
      *
-     * @param identifier The CLDR Sequence Unit Identifier
+     * @param identifier The CLDR Unit Identifier
      * @param status Set if the identifier is invalid.
      * @draft ICU 67
      */
@@ -335,7 +335,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Get the CLDR Sequence Unit Identifier for this MeasureUnit, as defined in UTS 35.
+     * Get the CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
      * @return The string form of this unit, owned by this MeasureUnit.
      * @draft ICU 67
@@ -357,7 +357,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * There is sufficient locale data to format all standard SI prefixes.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param prefix The SI prefix, from UMeasureSIPrefix.
@@ -371,7 +371,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Gets the current SI prefix of this SINGLE unit. For example, if the unit has the SI prefix
      * "kilo", then UMEASURE_SI_PREFIX_KILO is returned.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
@@ -384,7 +384,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
      * (power). For example, if dimensionality is 2, the unit will be squared.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param dimensionality The dimensionality (power).
@@ -398,7 +398,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Gets the dimensionality (power) of this MeasureUnit. For example, if the unit is square,
      * then 2 is returned.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
@@ -412,10 +412,10 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * For example, if the receiver is "meter-per-second", the unit "second-per-meter" is returned.
      *
-     * NOTE: Only works on SINGLE and COMPOUND units. If this is a SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE and COMPOUND units. If this is a MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param status Set if this is a SEQUENCE unit or if another error occurs.
+     * @param status Set if this is a MIXED unit or if another error occurs.
      * @return The reciprocal of the target unit.
      * @draft ICU 67
      */
@@ -431,10 +431,10 @@ class U_I18N_API MeasureUnit: public UObject {
      * unit "kilowatt-hour-per-day" is returned.
      *
      * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
-     * SEQUENCE unit, an error will occur. For more information, see UMeasureUnitComplexity.
+     * MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
      *
      * @param other The MeasureUnit to multiply with the target.
-     * @param status Set if this or other is a SEQUENCE unit or if another error occurs.
+     * @param status Set if this or other is a MIXED unit or if another error occurs.
      * @return The product of the target unit with the provided unit.
      * @draft ICU 67
      */
@@ -443,7 +443,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_INTERNAL_API
     /**
-     * Gets the list of SINGLE units contained within a SEQUENCE of COMPOUND unit.
+     * Gets the list of SINGLE units contained within a MIXED of COMPOUND unit.
      *
      * Examples:
      * - Given "meter-kilogram-per-second", three units will be returned: "meter",
