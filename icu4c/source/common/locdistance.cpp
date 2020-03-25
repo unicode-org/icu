@@ -111,11 +111,6 @@ int32_t LocaleDistance::getBestIndexAndDistance(
         const LSR **supportedLSRs, int32_t supportedLSRsLength,
         int32_t shiftedThreshold,
         ULocMatchFavorSubtag favorSubtag, ULocMatchDirection direction) const {
-    // Round up the shifted threshold (if fraction bits are not 0)
-    // for comparison with un-shifted distances until we need fraction bits.
-    // (If we simply shifted non-zero fraction bits away, then we might ignore a language
-    // when it's really still a micro distance below the threshold.)
-    int32_t roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
     BytesTrie iter(trie);
     // Look up the desired language only once for all supported LSRs.
     // Its "distance" is either a match point value of 0, or a non-match negative value.
@@ -155,6 +150,11 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             star = true;
         }
         U_ASSERT(0 <= distance && distance <= 100);
+        // Round up the shifted threshold (if fraction bits are not 0)
+        // for comparison with un-shifted distances until we need fraction bits.
+        // (If we simply shifted non-zero fraction bits away, then we might ignore a language
+        // when it's really still a micro distance below the threshold.)
+        int32_t roundedThreshold = (shiftedThreshold + DISTANCE_FRACTION_MASK) >> DISTANCE_SHIFT;
         // We implement "favor subtag" by reducing the language subtag distance
         // (unscientifically reducing it to a quarter of the normal value),
         // so that the script distance is relatively more important.
@@ -163,7 +163,9 @@ int32_t LocaleDistance::getBestIndexAndDistance(
         if (favorSubtag == ULOCMATCH_FAVOR_SCRIPT) {
             distance >>= 2;
         }
-        if (distance >= roundedThreshold) {
+        // Let distance == roundedThreshold pass until the tie-breaker logic
+        // at the end of the loop.
+        if (distance > roundedThreshold) {
             continue;
         }
 
@@ -181,7 +183,7 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             scriptDistance &= ~DISTANCE_IS_FINAL;
         }
         distance += scriptDistance;
-        if (distance >= roundedThreshold) {
+        if (distance > roundedThreshold) {
             continue;
         }
 
@@ -191,7 +193,7 @@ int32_t LocaleDistance::getBestIndexAndDistance(
             distance += defaultRegionDistance;
         } else {
             int32_t remainingThreshold = roundedThreshold - distance;
-            if (minRegionDistance >= remainingThreshold) {
+            if (minRegionDistance > remainingThreshold) {
                 continue;
             }
 
@@ -319,7 +321,7 @@ int32_t LocaleDistance::getRegionPartitionsDistance(
                     d = getFallbackRegionDistance(iter, startState);
                     star = true;
                 }
-                if (d >= threshold) {
+                if (d > threshold) {
                     return d;
                 } else if (regionDistance < d) {
                     regionDistance = d;
@@ -332,7 +334,7 @@ int32_t LocaleDistance::getRegionPartitionsDistance(
             }
         } else if (!star) {
             int32_t d = getFallbackRegionDistance(iter, startState);
-            if (d >= threshold) {
+            if (d > threshold) {
                 return d;
             } else if (regionDistance < d) {
                 regionDistance = d;

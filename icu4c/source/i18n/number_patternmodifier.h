@@ -124,16 +124,18 @@ class U_I18N_API MutablePatternModifier
      *
      * @param symbols
      *            The desired instance of DecimalFormatSymbols.
-     * @param currencySymbols
-     *            The currency symbols to be used when substituting currency values into the affixes.
+     * @param currency
+     *            The currency to be used when substituting currency values into the affixes.
      * @param unitWidth
      *            The width used to render currencies.
      * @param rules
      *            Required if the triple currency sign, "¤¤¤", appears in the pattern, which can be determined from the
      *            convenience method {@link #needsPlurals()}.
+     * @param status
+     *            Set if an error occurs while loading currency data.
      */
-    void setSymbols(const DecimalFormatSymbols* symbols, const CurrencySymbols* currencySymbols,
-                    UNumberUnitWidth unitWidth, const PluralRules* rules);
+    void setSymbols(const DecimalFormatSymbols* symbols, const CurrencyUnit& currency,
+                    UNumberUnitWidth unitWidth, const PluralRules* rules, UErrorCode& status);
 
     /**
      * Sets attributes of the current number being processed.
@@ -206,7 +208,7 @@ class U_I18N_API MutablePatternModifier
     // Symbol details (initialized in setSymbols)
     const DecimalFormatSymbols *fSymbols;
     UNumberUnitWidth fUnitWidth;
-    const CurrencySymbols *fCurrencySymbols;
+    CurrencySymbols fCurrencySymbols;
     const PluralRules *fRules;
 
     // Number details (initialized in setNumberProperties)

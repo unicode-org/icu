@@ -887,10 +887,6 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         status = U_UNSUPPORTED_ERROR;
         return;
     }
-    if (macros.currencySymbols != nullptr) {
-        status = U_UNSUPPORTED_ERROR;
-        return;
-    }
 
     // Remove the trailing space
     if (sb.length() > 0) {
@@ -1051,7 +1047,7 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
 
     // TODO(ICU-20941): Clean this up.
     for (int32_t i = 0; i < fullUnit.units.length(); i++) {
-        TempSingleUnit* subUnit = fullUnit.units[i];
+        SingleUnitImpl* subUnit = fullUnit.units[i];
         if (subUnit->dimensionality > 0) {
             macros.unit = macros.unit.product(subUnit->build(status), status);
         } else {

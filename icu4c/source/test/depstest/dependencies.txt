@@ -946,7 +946,7 @@ group: dayperiodrules
 group: listformatter
     listformatter.o ulistformatter.o
   deps
-    resourcebundle simpleformatter format uclean_i18n formatted_value_iterimpl
+    uchar resourcebundle simpleformatter format uclean_i18n formatted_value_iterimpl
 
 group: double_conversion
     double-conversion-bignum.o double-conversion-double-to-string.o

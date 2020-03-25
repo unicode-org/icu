@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.format;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -290,6 +291,67 @@ public class ListFormatterTest extends TestFmwk {
             // Coverage for the other factory method overload:
             result = fmt2.format(Arrays.asList(inputs));
             assertEquals(message, expected, result);
+        }
+    }
+
+    @Test
+    public void TestContextual() {
+        String [] es = { "es", "es_419", "es_PY", "es_DO" };
+        String [] he = { "he", "he_IL", "iw", "iw_IL" };
+        Width[] widths = {Width.WIDE, Width.SHORT, Width.NARROW};
+        Object[][] cases = {
+            { es, Type.AND, "fascinante e incre\u00EDblemente", "fascinante", "incre\u00EDblemente"},
+            { es, Type.AND, "Comunicaciones Industriales e IIoT", "Comunicaciones Industriales", "IIoT"},
+            { es, Type.AND, "Espa\u00F1a e Italia", "Espa\u00F1a", "Italia"},
+            { es, Type.AND, "hijas intr\u00E9pidas e hijos solidarios", "hijas intr\u00E9pidas", "hijos solidarios"},
+            { es, Type.AND, "a un hombre e hirieron a otro", "a un hombre", "hirieron a otro"},
+            { es, Type.AND, "hija e hijo", "hija", "hijo"},
+            { es, Type.AND, "esposa, hija e hijo", "esposa", "hija", "hijo"},
+            // For 'y' exception
+            { es, Type.AND, "oro y hierro", "oro", "hierro"},
+            { es, Type.AND, "agua y hielo", "agua", "hielo"},
+            { es, Type.AND, "col\u00E1geno y hialur\u00F3nico", "col\u00E1geno", "hialur\u00F3nico"},
+
+            { es, Type.OR, "desierto u oasis", "desierto", "oasis"},
+            { es, Type.OR, "oasis, desierto u océano", "oasis", "desierto", "océano"},
+            { es, Type.OR, "7 u 8", "7", "8"},
+            { es, Type.OR, "7 u 80", "7", "80"},
+            { es, Type.OR, "7 u 800", "7", "800"},
+            { es, Type.OR, "6, 7 u 8", "6", "7", "8"},
+            { es, Type.OR, "10 u 11", "10", "11"},
+            { es, Type.OR, "10 o 111", "10", "111"},
+            { es, Type.OR, "10 o 11.2", "10", "11.2"},
+            { es, Type.OR, "9, 10 u 11", "9", "10", "11"},
+
+            { he, Type.AND, "a, b \u05D5-c", "a", "b", "c" },
+            { he, Type.AND, "a \u05D5-b", "a", "b" },
+            { he, Type.AND, "1, 2 \u05D5-3", "1", "2", "3" },
+            { he, Type.AND, "1 \u05D5-2", "1", "2" },
+            { he, Type.AND, "\u05D0\u05D4\u05D1\u05D4 \u05D5\u05DE\u05E7\u05D5\u05D5\u05D4",
+              "\u05D0\u05D4\u05D1\u05D4", "\u05DE\u05E7\u05D5\u05D5\u05D4" },
+            { he, Type.AND, "\u05D0\u05D4\u05D1\u05D4, \u05DE\u05E7\u05D5\u05D5\u05D4 \u05D5\u05D0\u05DE\u05D5\u05E0\u05D4",
+              "\u05D0\u05D4\u05D1\u05D4", "\u05DE\u05E7\u05D5\u05D5\u05D4", "\u05D0\u05DE\u05D5\u05E0\u05D4" },
+        };
+        for (Width width : widths) {
+            for (Object[] cas : cases) {
+                String [] locales = (String[]) cas[0];
+                Type type = (Type) cas[1];
+                String expected = (String) cas[2];
+                for (String locale : locales) {
+                    ULocale uloc = new ULocale(locale);
+                    List inputs = Arrays.asList(cas).subList(3, cas.length);
+                    ListFormatter fmt = ListFormatter.getInstance(uloc, type, width);
+                    String message = "TestContextual uloc="
+                        + uloc + " type="
+                        + type + " width="
+                        + width + "data=";
+                    for (Object i : inputs) {
+                        message += i + ",";
+                    }
+                    String result = fmt.format(inputs);
+                    assertEquals(message, expected, result);
+                }
+            }
         }
     }
 }
