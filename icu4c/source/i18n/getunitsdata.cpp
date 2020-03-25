@@ -23,27 +23,33 @@ using icu::number::impl::DecimalQuantity;
 /**
  * A ResourceSink that collects conversion rate information.
  *
- * Calls to put() collects ConversionRateInfo instances for  into the vector
- * passed to the constructor, but only if an identical instance isn't already
- * present.
- *
  * This class is for use by ures_getAllItemsWithFallback. Example code for
  * collecting conversion info for "mile" and "foot" into conversionInfoOutput:
  *
  *     UErrorCode status = U_ZERO_ERROR;
+ *     ures_getByKey(unitsBundle, "convertUnits", &fillIn, &status);
  *     MaybeStackVector<ConversionRateInfo> conversionInfoOutput;
  *     ConversionRateDataSink convertSink(conversionInfoOutput);
- *     ures_getByKey(unitsBundle, "convertUnits", &fillIn, &status);
  *     ures_getAllItemsWithFallback(fillIn, "mile", convertSink, status);
  *     ures_getAllItemsWithFallback(fillIn, "foot", convertSink, status);
  */
 class ConversionRateDataSink : public ResourceSink {
   public:
+    /**
+     * Constructor.
+     * @param out The vector to which ConversionRateInfo instances are to be
+     * added.
+     */
     explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> &out) : outVector(out) {}
 
     /**
      * Adds the conversion rate information found in value to the output vector.
-     * @param key The source unit identifier.
+     *
+     * Each call to put() collects a ConversionRateInfo instance for the
+     * specified source unit identifier into the vector passed to the
+     * constructor, but only if an identical instance isn't already present.
+     *
+     * @param source The source unit identifier.
      * @param value A resource containing conversion rate info (a target and
      * factor, and possibly an offset).
      * @param noFallback Ignored.
@@ -82,12 +88,12 @@ class ConversionRateDataSink : public ResourceSink {
         // category. I should make this code more efficient after
         // double-checking we're fine with relying on such a detail from the
         // CLDR spec?
-        CharString tmpTarget;
-        tmpTarget.appendInvariantChars(target, lenTarget, status);
+        fLastTarget.clear();
+        fLastTarget.appendInvariantChars(target, lenTarget, status);
         if (U_FAILURE(status)) return;
         for (int32_t i = 0, len = outVector.length(); i < len; i++) {
             if (strcmp(outVector[i]->source.data(), source) == 0 &&
-                strcmp(outVector[i]->target.data(), tmpTarget.data()) == 0) {
+                strcmp(outVector[i]->target.data(), fLastTarget.data()) == 0) {
                 return;
             }
         }
@@ -100,20 +106,37 @@ class ConversionRateDataSink : public ResourceSink {
             return;
         } else {
             cr->source.append(source, lenSource, status);
-            cr->target.append(tmpTarget.data(), tmpTarget.length(), status);
+            cr->target.append(fLastTarget.data(), fLastTarget.length(), status);
             cr->factor.appendInvariantChars(factor, lenFactor, status);
             if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
         }
     }
 
+    /**
+     * Returns the MeasureUnit that was the conversion target of the most recent
+     * call to put() - typically meaning the most recent call to
+     * ures_getAllItemsWithFallback().
+     */
+    MeasureUnit getLastTarget(UErrorCode &status) {
+        return MeasureUnit::forIdentifier(fLastTarget.data(), status);
+    }
+
   private:
     MaybeStackVector<ConversionRateInfo> &outVector;
+
+    // TODO(review): felt like a hack: provides easy access to the most recent
+    // target. This hack is another point making me wonder if doing this
+    // ResourceSink thing is worthwhile. Functional style is not more verbose,
+    // and IMHO more readable than this object-based approach where the output
+    // seems/feels like a side-effect.
+    CharString fLastTarget;
 };
 
-// WIP/FIXME: this class is currently unused code (dead?) - putUnitPref() has
-// all the features we need whereas this doesn't handle fallback to
-// usage="default" and region="001" yet. If we want to fix that here, this code
-// will get quite a bit more complicated.
+// WIP/FIXME: partially due to my skepticism of using the ResourceSink design
+// for units resources, this class is currently unused code (dead?) -
+// collectUnitPrefs() has all the features we need whereas this doesn't handle
+// fallback to usage="default" and region="001" yet. If we want to fix that
+// here, this code will get quite a bit more complicated.
 class UnitPreferencesSink : public ResourceSink {
   public:
     explicit UnitPreferencesSink(MaybeStackVector<UnitPreference> &out) : outVector(out) {}
@@ -165,8 +188,8 @@ class UnitPreferencesSink : public ResourceSink {
  * down to a particular usage and region (example:
  * "unitPreferenceData/length/road/GB").
  */
-void putUnitPref(UResourceBundle *usageData, MaybeStackVector<UnitPreference> &outVector,
-                 UErrorCode &status) {
+void collectUnitPrefs(UResourceBundle *usageData, MaybeStackVector<UnitPreference> &outVector,
+                      UErrorCode &status) {
     if (U_FAILURE(status)) return;
     StackUResourceBundle prefBundle;
 
@@ -219,7 +242,71 @@ void putUnitPref(UResourceBundle *usageData, MaybeStackVector<UnitPreference> &o
     }
 }
 
+void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUnitsBundle,
+                       ConversionRateDataSink &convertSink, MeasureUnit *baseSingleUnit,
+                       UErrorCode &status) {
+    int32_t dimensionality = unit.getDimensionality(status);
+
+    MeasureUnit simple = unit;
+    if (dimensionality != 1 || simple.getSIPrefix(status) != UMEASURE_SI_PREFIX_ONE) {
+        simple = unit.withDimensionality(1, status).withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
+    }
+    ures_getAllItemsWithFallback(convertUnitsBundle, simple.getIdentifier(), convertSink, status);
+
+    if (baseSingleUnit != NULL) {
+        *baseSingleUnit = convertSink.getLastTarget(status).withDimensionality(dimensionality, status);
+    }
+}
+
 } // namespace
+
+MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit source, const MeasureUnit target,
+                                                            MeasureUnit *baseCompoundUnit,
+                                                            UErrorCode &status) {
+    MaybeStackVector<ConversionRateInfo> result;
+
+    int32_t sourceUnitsLength, targetUnitsLength;
+    LocalArray<MeasureUnit> sourceUnits = source.splitToSingleUnits(sourceUnitsLength, status);
+    LocalArray<MeasureUnit> targetUnits = target.splitToSingleUnits(targetUnitsLength, status);
+
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+    StackUResourceBundle convertUnitsBundle;
+    ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
+
+    ConversionRateDataSink convertSink(result);
+    if (baseCompoundUnit != NULL) {
+        *baseCompoundUnit = MeasureUnit();
+    }
+    for (int i = 0; i < sourceUnitsLength; i++) {
+        MeasureUnit baseUnit;
+        processSingleUnit(sourceUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
+        if (baseCompoundUnit != NULL) {
+            if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
+                // TODO(hugovdm): add consistency checks.
+                *baseCompoundUnit = baseUnit;
+            } else {
+                *baseCompoundUnit = baseCompoundUnit->product(baseUnit, status);
+            }
+        }
+    }
+    if (baseCompoundUnit != NULL) {
+        fprintf(stderr, "source base: %s\n", baseCompoundUnit->getIdentifier());
+        *baseCompoundUnit = MeasureUnit();
+    }
+    for (int i = 0; i < targetUnitsLength; i++) {
+        MeasureUnit baseUnit;
+        processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
+        if (baseCompoundUnit != NULL) {
+            if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
+                // TODO(hugovdm): add consistency checks.
+                *baseCompoundUnit = baseUnit;
+            } else {
+                *baseCompoundUnit = baseCompoundUnit->product(baseUnit, status);
+            }
+        }
+    }
+    return result;
+}
 
 /**
  * Fetches the units data that would be needed for the given usage.
@@ -286,7 +373,7 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
     }
 
     // Collect all the preferences into unitPreferences
-    putUnitPref(stackBundle.getAlias(), unitPreferences, status);
+    collectUnitPrefs(stackBundle.getAlias(), unitPreferences, status);
 
     // Load ConversionRateInfo for each of the units in unitPreferences
     for (int32_t i = 0; i < unitPreferences.length(); i++) {

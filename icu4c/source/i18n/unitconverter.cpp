@@ -194,7 +194,11 @@ const ConversionRateInfo& extractConversionRateInfo(StringPiece source,
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;
-    return ConversionRateInfo();
+    // WIP/TODO(review): cargo-culting or magic-incantation, this fixes the warning:
+    // unitconverter.cpp:197:12: warning: returning reference to local temporary object [-Wreturn-stack-address]
+    // But I'm not confident in what I'm doing, having only done some casual
+    // reading about the possible negative consequencies of returning std::move.
+    return std::move(ConversionRateInfo("pound", "kilogram", "0.453592", "0", status));
 }
 
 /*/
