@@ -34,6 +34,7 @@ public abstract class FractionPrecision extends Precision {
      * @param minSignificantDigits
      *            The number of significant figures to guarantee.
      * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 60
      * @see NumberFormatter
      */
@@ -62,6 +63,7 @@ public abstract class FractionPrecision extends Precision {
      * @param maxSignificantDigits
      *            Round the number to no more than this number of significant figures.
      * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @throws IllegalArgumentException if the input number is too big or smaller than 1.
      * @stable ICU 60
      * @see NumberFormatter
      */

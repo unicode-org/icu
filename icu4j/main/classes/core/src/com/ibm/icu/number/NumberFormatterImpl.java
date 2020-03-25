@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.number;
 
-import com.ibm.icu.impl.CurrencyData;
-import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData.CompactType;
@@ -213,21 +211,16 @@ class NumberFormatterImpl {
             micros.symbols = (DecimalFormatSymbols) macros.symbols;
         } else {
             micros.symbols = DecimalFormatSymbols.forNumberingSystem(macros.loc, ns);
+            if (isCurrency) {
+                micros.symbols.setCurrency(currency);
+            }
         }
 
         // Load and parse the pattern string. It is used for grouping sizes and affixes only.
         // If we are formatting currency, check for a currency-specific pattern.
         String pattern = null;
-        if (isCurrency) {
-            CurrencyFormatInfo info = CurrencyData.provider.getInstance(macros.loc, true)
-                    .getFormatInfo(currency.getCurrencyCode());
-            if (info != null) {
-                pattern = info.currencyPattern;
-                // It's clunky to clone an object here, but this code is not frequently executed.
-                micros.symbols = (DecimalFormatSymbols) micros.symbols.clone();
-                micros.symbols.setMonetaryDecimalSeparatorString(info.monetaryDecimalSeparator);
-                micros.symbols.setMonetaryGroupingSeparatorString(info.monetaryGroupingSeparator);
-            }
+        if (isCurrency && micros.symbols.getCurrencyPattern() != null) {
+            pattern = micros.symbols.getCurrencyPattern();
         }
         if (pattern == null) {
             int patternStyle;

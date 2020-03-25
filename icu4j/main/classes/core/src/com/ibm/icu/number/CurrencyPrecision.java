@@ -34,6 +34,7 @@ public abstract class CurrencyPrecision extends Precision {
      * @param currency
      *            The currency to associate with this rounding strategy.
      * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @throws IllegalArgumentException for null Currency
      * @stable ICU 60
      * @see NumberFormatter
      */

@@ -131,6 +131,9 @@ static const struct AssemblyType {
     {"gcc",
         ".globl %s\n"
         "\t.section .note.GNU-stack,\"\",%%progbits\n"
+        "#ifdef __CET__\n"
+        "# include <cet.h>\n"
+        "#endif\n"
         "\t.section .rodata\n"
         "\t.balign 16\n"
         "#ifdef U_HIDE_DATA_SYMBOL\n"

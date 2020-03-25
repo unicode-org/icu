@@ -1502,8 +1502,11 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
     }
     NumberFormat::setCurrency(theCurrency, ec); // to set field for compatibility
     fields->properties.currency = currencyUnit;
-    // TODO: Set values in fields->symbols, too?
-    touchNoError();
+    // In Java, the DecimalFormatSymbols is mutable. Why not in C++?
+    LocalPointer<DecimalFormatSymbols> newSymbols(new DecimalFormatSymbols(*fields->symbols), ec);
+    newSymbols->setCurrency(currencyUnit.getISOCurrency(), ec);
+    fields->symbols.adoptInsteadAndCheckErrorCode(newSymbols.orphan(), ec);
+    touch(ec);
 }
 
 void DecimalFormat::setCurrency(const char16_t* theCurrency) {

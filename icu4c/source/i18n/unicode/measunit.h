@@ -249,14 +249,14 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 3.0
      */
     MeasureUnit(const MeasureUnit &other);
-    
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move constructor.
-     * @stable ICU 3.0
+     * @draft ICU 67
      */
     MeasureUnit(MeasureUnit &&other) noexcept;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
      * Validates and canonicalizes the identifier.
@@ -278,11 +278,13 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit &operator=(const MeasureUnit &other);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move assignment operator.
-     * @stable ICU 3.0
+     * @draft ICU 67
      */
     MeasureUnit &operator=(MeasureUnit &&other) noexcept;
+#endif // U_HIDE_DRAFT_API
 
     /**
      * Returns a polymorphic clone of this object.  The result will
@@ -361,6 +363,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param prefix The SI prefix, from UMeasureSIPrefix.
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
+     * @draft ICU 67
      */
     MeasureUnit withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const;
 
@@ -373,6 +376,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return The SI prefix of this SINGLE unit, from UMeasureSIPrefix.
+     * @draft ICU 67
      */
     UMeasureSIPrefix getSIPrefix(UErrorCode& status) const;
 
@@ -386,6 +390,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param dimensionality The dimensionality (power).
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
+     * @draft ICU 67
      */
     MeasureUnit withDimensionality(int32_t dimensionality, UErrorCode& status) const;
 
@@ -398,6 +403,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return The dimensionality (power) of this simple unit.
+     * @draft ICU 67
      */
     int32_t getDimensionality(UErrorCode& status) const;
 
@@ -411,6 +417,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if this is a SEQUENCE unit or if another error occurs.
      * @return The reciprocal of the target unit.
+     * @draft ICU 67
      */
     MeasureUnit reciprocal(UErrorCode& status) const;
 
@@ -429,9 +436,12 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param other The MeasureUnit to multiply with the target.
      * @param status Set if this or other is a SEQUENCE unit or if another error occurs.
      * @return The product of the target unit with the provided unit.
+     * @draft ICU 67
      */
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
+#endif // U_HIDE_DRAFT_API
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Gets the list of SINGLE units contained within a SEQUENCE of COMPOUND unit.
      *
@@ -443,11 +453,15 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * If this is a SINGLE unit, an array of length 1 will be returned.
      *
+     * TODO(ICU-21021): Finalize this API and propose it as draft.
+     *
+     * @param outCount The number of elements in the return array.
      * @param status Set if an error occurs.
      * @return An array of single units, owned by the caller.
+     * @internal ICU 67 Technical Preview
      */
-    LocalArray<MeasureUnit> splitToSingleUnits(UErrorCode& status) const;
-#endif // U_HIDE_DRAFT_API
+    LocalArray<MeasureUnit> splitToSingleUnits(int32_t& outCount, UErrorCode& status) const;
+#endif // U_HIDE_INTERNAL_API
 
     /**
      * getAvailable gets all of the available units.

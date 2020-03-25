@@ -814,12 +814,12 @@ class RBBITableBuilder {
                fRB.fRuleStatusVals.add(Integer.valueOf(1));    // Num of statuses in group
                fRB.fRuleStatusVals.add(Integer.valueOf(0));    //   and our single status of zero
 
-               SortedSet<Integer> s0 = new TreeSet<>();
-               Integer izero = Integer.valueOf(0);
-               fRB.fStatusSets.put(s0, izero);
-               SortedSet<Integer> s1 = new TreeSet<>();
-               s1.add(izero);
-               fRB.fStatusSets.put(s0, izero);
+               SortedSet<Integer> s0 = new TreeSet<>();        // mapping for rules with no explicit tagging
+               fRB.fStatusSets.put(s0, Integer.valueOf(0));    //   (key is an empty set).
+
+               SortedSet<Integer> s1 = new TreeSet<>();        // mapping for rules with explicit tagging of {0}
+               s1.add(Integer.valueOf(0));
+               fRB.fStatusSets.put(s1, Integer.valueOf(0));
            }
 
            //    For each state, check whether the state's status tag values are

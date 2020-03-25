@@ -160,7 +160,7 @@ void UTS46Test::TestAPI() {
     char buffer[100];
     TestCheckedArrayByteSink sink(buffer, UPRV_LENGTHOF(buffer));
     errorCode=U_ZERO_ERROR;
-    nontrans->labelToUnicodeUTF8(StringPiece(NULL, 5), sink, info, errorCode);
+    nontrans->labelToUnicodeUTF8(StringPiece((const char *)NULL, 5), sink, info, errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || sink.NumberOfBytesWritten()!=0) {
         errln("N.labelToUnicodeUTF8(StringPiece(NULL, 5)) did not set illegal-argument-error ",
               "or did output something - %s",

@@ -19,9 +19,7 @@
 #include "cstring.h"
 #include "uinvchar.h"
 #include "charstr.h"
-
-static constexpr char16_t kDefaultCurrency[] = u"XXX";
-static constexpr char kDefaultCurrency8[] = "XXX";
+#include "measunit_impl.h"
 
 U_NAMESPACE_BEGIN
 

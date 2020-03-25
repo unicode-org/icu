@@ -378,9 +378,9 @@ public:
      * @param p simple pointer to an array of T objects that is adopted
      * @stable ICU 4.4
      */
-    explicit LocalArray(T *p=nullptr) : LocalPointerBase<T>(p), fLength(0) {}
+    explicit LocalArray(T *p=NULL) : LocalPointerBase<T>(p) {}
     /**
-     * Constructor takes ownership and reports an error if nullptr.
+     * Constructor takes ownership and reports an error if NULL.
      *
      * This constructor is intended to be used with other-class constructors
      * that may report a failure UErrorCode,
@@ -389,50 +389,22 @@ public:
      *
      * @param p simple pointer to an array of T objects that is adopted
      * @param errorCode in/out UErrorCode, set to U_MEMORY_ALLOCATION_ERROR
-     *     if p==nullptr and no other failure code had been set
+     *     if p==NULL and no other failure code had been set
      * @stable ICU 56
      */
-    LocalArray(T *p, UErrorCode &errorCode) : LocalArray<T>(p) {
-        if(p==nullptr && U_SUCCESS(errorCode)) {
+    LocalArray(T *p, UErrorCode &errorCode) : LocalPointerBase<T>(p) {
+        if(p==NULL && U_SUCCESS(errorCode)) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     }
-
-private:
-    /** Constructor for withLengthAndCheckErrorCode() */
-    LocalArray(T *p, int32_t length, UErrorCode &errorCode) : LocalArray<T>(p) {
-        if (p != nullptr) {
-            fLength = length;
-        } else if (U_SUCCESS(errorCode)) {
-            errorCode=U_MEMORY_ALLOCATION_ERROR;
-        }
-    }
-
-public:
     /**
      * Move constructor, leaves src with isNull().
      * @param src source smart pointer
      * @stable ICU 56
      */
-    LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalArray<T>(src.ptr) {
-        src.ptr=nullptr;
+    LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
+        src.ptr=NULL;
     }
-
-#ifndef U_HIDE_DRAFT_API
-    /**
-     * Construct a LocalArray with a specified length.
-     *
-     * @param p simple pointer to an array of T objects that is adopted
-     * @param length number of valid objects in the array, accesible via length()
-     * @param errorCode in/out UErrorCode, set to U_MEMORY_ALLOCATION_ERROR
-     *     if p==nullptr and no other failure code had been set
-     *
-     * @draft ICU 67
-     */
-    static LocalArray<T> withLengthAndCheckErrorCode(T *p, int32_t length, UErrorCode& status) {
-        return LocalArray(p, length, status);
-    }
-#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -446,7 +418,7 @@ public:
      * @draft ICU 64
      */
     explicit LocalArray(std::unique_ptr<T[]> &&p)
-        : LocalArray<T>(p.release()) {}
+        : LocalPointerBase<T>(p.release()) {}
 #endif  /* U_HIDE_DRAFT_API */
 
     /**
@@ -466,9 +438,7 @@ public:
     LocalArray<T> &operator=(LocalArray<T> &&src) U_NOEXCEPT {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=src.ptr;
-        src.ptr=nullptr;
-        fLength=src.fLength;
-        src.fLength=0;
+        src.ptr=NULL;
         return *this;
     }
 
@@ -483,7 +453,6 @@ public:
      */
     LocalArray<T> &operator=(std::unique_ptr<T[]> &&p) U_NOEXCEPT {
         adoptInstead(p.release());
-        fLength=0;
         return *this;
     }
 #endif  /* U_HIDE_DRAFT_API */
@@ -497,9 +466,6 @@ public:
         T *temp=LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
-        int32_t tempLength=fLength;
-        fLength=other.fLength;
-        other.fLength=tempLength;
     }
     /**
      * Non-member LocalArray swap function.
@@ -519,7 +485,6 @@ public:
     void adoptInstead(T *p) {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=p;
-        fLength=0;
     }
     /**
      * Deletes the array it owns,
@@ -546,7 +511,6 @@ public:
         } else {
             delete[] p;
         }
-        fLength=0;
     }
     /**
      * Array item access (writable).
@@ -573,24 +537,6 @@ public:
         return std::unique_ptr<T[]>(LocalPointerBase<T>::orphan());
     }
 #endif  /* U_HIDE_DRAFT_API */
-
-#ifndef U_HIDE_DRAFT_API
-    /**
-     * The length of the array contained in the LocalArray. The size must be
-     * provided when the LocalArray is constructed.
-     *
-     * @return The length of the array, or 0 if unknown.
-     * @draft ICU 67
-     */
-    int32_t length() const { return fLength; }
-#endif // U_HIDE_DRAFT_API
-
-private:
-    int32_t fLength = 0;
-
-    LocalArray(T *p, int32_t length) : LocalArray(p) {
-        fLength = length;
-    }
 };
 
 /**

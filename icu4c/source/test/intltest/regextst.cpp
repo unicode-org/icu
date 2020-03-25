@@ -31,6 +31,7 @@
 
 #include "unicode/localpointer.h"
 #include "unicode/regex.h"
+#include "unicode/stringpiece.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
 #include "unicode/uniset.h"
@@ -5838,11 +5839,11 @@ void RegexTest::TestBug12884() {
     REGEX_ASSERT(status == U_REGEX_TIME_OUT);
 
     // UText, wrapping non-UTF-16 text, also takes a different execution path.
-    const char *text8 = reinterpret_cast<const char*>(u8"¿Qué es Unicode?  Unicode proporciona un número único para cada"
+    StringPiece text8(u8"¿Qué es Unicode?  Unicode proporciona un número único para cada"
                           "carácter, sin importar la plataforma, sin importar el programa,"
                           "sin importar el idioma.");
     status = U_ZERO_ERROR;
-    LocalUTextPointer ut(utext_openUTF8(NULL, text8, -1, &status));
+    LocalUTextPointer ut(utext_openUTF8(NULL, text8.data(), text8.length(), &status));
     REGEX_CHECK_STATUS;
     m.reset(ut.getAlias());
     m.find(status);
