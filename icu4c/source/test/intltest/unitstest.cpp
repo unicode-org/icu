@@ -590,10 +590,16 @@ void UnitsTest::testGetConversionRateInfo() {
         {"centimeter-per-square-milligram",
          "inch-per-square-ounce",
          {"pound", "stone", "ton"},
-         "kilogram"},
+         "meter-per-square-kilogram"},
         {"liter", "gallon", {"liter", "gallon", NULL}, "cubic-meter"},
         {"stone-and-pound", "ton", {"pound", "stone", "ton"}, "kilogram"},
         {"mile-per-hour", "dekameter-per-hour", {"mile", "hour", "meter"}, "meter-per-second"},
+        {"kilovolt-ampere",
+         "horsepower",
+         {"volt", "ampere", "horsepower"},
+         "kilogram-square-meter-per-cubic-second"}, // watt
+        // TODO: include capacitance test case with base unit:
+        // pow4-second-square-ampere-per-kilogram-square-meter;
     };
     for (const auto &t : testCases) {
         logln("---testing: source=\"%s\", target=\"%s\", expectedBaseUnit=\"%s\"", t.sourceUnit,
@@ -605,8 +611,13 @@ void UnitsTest::testGetConversionRateInfo() {
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(t.targetUnit, status);
         MaybeStackVector<ConversionRateInfo> conversionInfo =
             getConversionRatesInfo(sourceUnit, targetUnit, &baseCompoundUnit, status);
+        if (status.errIfFailureAndReset("getConversionRatesInfo(<%s>, <%s>, ...)",
+                                        sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+            continue;
+        }
 
-        logln("---found BaseUnit=\"%s\"", baseCompoundUnit.getIdentifier());
+        assertEquals("baseCompoundUnit returned by getConversionRatesInfo", t.baseUnit,
+                     baseCompoundUnit.getIdentifier());
         for (int i = 0; i < conversionInfo.length(); i++) {
             ConversionRateInfo *cri;
             cri = conversionInfo[i];

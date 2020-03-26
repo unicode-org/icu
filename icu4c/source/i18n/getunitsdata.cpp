@@ -242,6 +242,7 @@ void collectUnitPrefs(UResourceBundle *usageData, MaybeStackVector<UnitPreferenc
     }
 }
 
+// The input unit needs to be simple, but can have dimensionality != 1.
 void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUnitsBundle,
                        ConversionRateDataSink &convertSink, MeasureUnit *baseSingleUnit,
                        UErrorCode &status) {
@@ -254,7 +255,32 @@ void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUn
     ures_getAllItemsWithFallback(convertUnitsBundle, simple.getIdentifier(), convertSink, status);
 
     if (baseSingleUnit != NULL) {
-        *baseSingleUnit = convertSink.getLastBaseUnit(status).withDimensionality(dimensionality, status);
+        MeasureUnit baseUnit = convertSink.getLastBaseUnit(status);
+
+        if (dimensionality == 1) {
+            *baseSingleUnit = baseUnit;
+        } else if (baseUnit.getComplexity(status) == UMEASURE_UNIT_SINGLE) {
+            // TODO(hugovdm): find examples where we're converting a *-per-* to
+            // a square-*? Does one ever square frequency? What about
+            // squared-speed in the case of mv^2? Or F=ma^2?
+            //
+            // baseUnit might also have dimensionality, e.g. cubic-meter -
+            // retain this instead of overriding with input unit dimensionality:
+            dimensionality *= baseUnit.getDimensionality(status);
+            *baseSingleUnit = baseUnit.withDimensionality(dimensionality, status);
+        } else {
+            // We only support higher dimensionality input units if they map to
+            // simple base units, such that that base unit can have the
+            // dimensionality easily applied.
+            //
+            // TODO(hugovdm): produce succeeding examples of simple input unit
+            // mapped to a different simple target/base unit.
+            //
+            // TODO(hugovdm): produce failing examples of higher-dimensionality
+            // or inverted input units that map to compound output units.
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
     }
 }
 
@@ -290,7 +316,6 @@ MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit so
         }
     }
     if (baseCompoundUnit != NULL) {
-        fprintf(stderr, "source base: %s\n", baseCompoundUnit->getIdentifier());
         *baseCompoundUnit = MeasureUnit();
     }
     for (int i = 0; i < targetUnitsLength; i++) {
