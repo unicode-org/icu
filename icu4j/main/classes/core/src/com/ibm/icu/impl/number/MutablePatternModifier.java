@@ -7,6 +7,7 @@ import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
+import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat.Field;
 import com.ibm.icu.text.PluralRules;
@@ -401,8 +402,23 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             } else if (unitWidth == UnitWidth.HIDDEN) {
                 return "";
             } else {
-                int selector = unitWidth == UnitWidth.NARROW ? Currency.NARROW_SYMBOL_NAME
-                        : Currency.SYMBOL_NAME;
+                int selector;
+                switch (unitWidth) {
+                    case SHORT:
+                        selector = Currency.SYMBOL_NAME;
+                        break;
+                    case NARROW:
+                        selector = Currency.NARROW_SYMBOL_NAME;
+                        break;
+                    case FORMAL:
+                        selector = Currency.FORMAL_SYMBOL_NAME;
+                        break;
+                    case VARIANT:
+                        selector = Currency.VARIANT_SYMBOL_NAME;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
                 return currency.getName(symbols.getULocale(), selector, null);
             }
         case AffixUtils.TYPE_CURRENCY_DOUBLE:
