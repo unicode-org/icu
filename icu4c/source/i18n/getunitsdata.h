@@ -20,7 +20,7 @@ U_NAMESPACE_BEGIN
 // to convert from one unit to another.
 class U_I18N_API ConversionRateInfo {
   public:
-    ConversionRateInfo() {};
+    ConversionRateInfo(){};
     ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
                        StringPiece offset, UErrorCode &status)
         : sourceUnit(), baseUnit(), factor(), offset() {
@@ -48,7 +48,7 @@ struct U_I18N_API UnitPreference {
 /**
  * Collects and returns ConversionRateInfo needed to convert from source to
  * baseUnit.
- * 
+ *
  * @param source The source unit (the unit type converted from).
  * @param target The target unit (the unit type converted to).
  * @param baseCompoundUnit Output parameter: if not NULL, it will be set to the
@@ -92,11 +92,6 @@ void U_I18N_API getUnitsData(const char *outputRegion, const char *usage, const 
                              CharString &category, MeasureUnit &baseUnit,
                              MaybeStackVector<ConversionRateInfo> &conversionInfo,
                              MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status);
-
-// // TODO(hugo): Implement
-// // Compound units as source and target, conversion rates for each piece.
-// MaybeStackVector<ConversionRateInfo>
-//     U_I18N_API getConversionRatesInfo(MeasureUnit source, MeasureUnit target, UErrorCode &status);
 
 U_NAMESPACE_END
 
