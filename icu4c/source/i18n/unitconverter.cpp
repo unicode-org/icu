@@ -190,11 +190,15 @@ const ConversionRateInfo& extractConversionRateInfo(StringPiece source,
                                              const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                                              UErrorCode &status) {
     for (int i = 0, n = ratesInfo.length(); i < n; ++i) {
-        if (ratesInfo[i]->source == source) return *ratesInfo[i];
+        if (ratesInfo[i]->sourceUnit == source) return *ratesInfo[i];
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;
-    return ConversionRateInfo();
+    // WIP/TODO(review): cargo-culting or magic-incantation, this fixes the warning:
+    // unitconverter.cpp:197:12: warning: returning reference to local temporary object [-Wreturn-stack-address]
+    // But I'm not confident in what I'm doing, having only done some casual
+    // reading about the possible negative consequencies of returning std::move.
+    return std::move(ConversionRateInfo("pound", "kilogram", "0.453592", "0", status));
 }
 
 /*/
@@ -419,7 +423,7 @@ StringPiece getTarget(StringPiece source, const MaybeStackVector<ConversionRateI
                       UErrorCode &status) {
     const auto& convertUnit = extractConversionRateInfo(source, ratesInfo, status);
     if (U_FAILURE(status)) return StringPiece("");
-    return convertUnit.target.toStringPiece();
+    return convertUnit.baseUnit.toStringPiece();
 }
 
 // TODO(ICU-20568): Add more test coverage for this function.

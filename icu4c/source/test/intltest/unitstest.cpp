@@ -37,6 +37,7 @@ class UnitsTest : public IntlTest {
 
     void testConversions();
     void testPreferences();
+    void testGetConversionRateInfo();
     void testGetUnitsData();
 
     void testBasic();
@@ -58,6 +59,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
+    TESTCASE_AUTO(testGetConversionRateInfo);
     TESTCASE_AUTO(testGetUnitsData);
 
     TESTCASE_AUTO(testBasic);
@@ -74,6 +76,8 @@ void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
     UErrorCode status = U_ZERO_ERROR;
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+    // TODO(younies): enable this again
 
     // UnitConverter converter(sourceUnit, targetUnit, status);
 
@@ -94,6 +98,8 @@ void UnitsTest::testBasic() {
         UErrorCode status = U_ZERO_ERROR;
         MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
+
+        // TODO(younies): enable this again
 
         // UnitConverter converter(sourceUnit, targetUnit, status);
 
@@ -273,6 +279,8 @@ void runDataDrivenConversionTest(void *context, char *fields[][2], int32_t field
                 quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
                 commentConversionFormula.length(), commentConversionFormula.data());
     } else {
+        // TODO(younies): enable this again
+        //
         // UnitConverter converter(sourceUnit, targetUnit, status);
         // if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
         //                                 sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
@@ -572,6 +580,45 @@ void UnitsTest::testPreferences() {
     }
 }
 
+void UnitsTest::testGetConversionRateInfo() {
+    struct {
+        const char *sourceUnit;
+        const char *targetUnit;
+        const char *threeExpectedOutputs[3];
+        const char *baseUnit;
+    } testCases[]{
+        {"centimeter-per-square-milligram",
+         "inch-per-square-ounce",
+         {"pound", "stone", "ton"},
+         "kilogram"},
+        {"liter", "gallon", {"liter", "gallon", NULL}, "cubic-meter"},
+        {"stone-and-pound", "ton", {"pound", "stone", "ton"}, "kilogram"},
+        {"mile-per-hour", "dekameter-per-hour", {"mile", "hour", "meter"}, "meter-per-second"},
+    };
+    for (const auto &t : testCases) {
+        logln("---testing: source=\"%s\", target=\"%s\", expectedBaseUnit=\"%s\"", t.sourceUnit,
+              t.targetUnit, t.baseUnit);
+        IcuTestErrorCode status(*this, "testGetConversionRateInfo");
+
+        MeasureUnit baseCompoundUnit;
+        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(t.sourceUnit, status);
+        MeasureUnit targetUnit = MeasureUnit::forIdentifier(t.targetUnit, status);
+        MaybeStackVector<ConversionRateInfo> conversionInfo =
+            getConversionRatesInfo(sourceUnit, targetUnit, &baseCompoundUnit, status);
+
+        logln("---found BaseUnit=\"%s\"", baseCompoundUnit.getIdentifier());
+        for (int i = 0; i < conversionInfo.length(); i++) {
+            ConversionRateInfo *cri;
+            cri = conversionInfo[i];
+            logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", offset=\"%s\"", i,
+                  cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
+            assertTrue("ConversionRateInfo has source, baseUnit, and factor",
+                       cri->sourceUnit.length() > 0 && cri->baseUnit.length() > 0 &&
+                           cri->factor.length() > 0);
+        }
+    }
+}
+
 // We test "successfully loading some data", not specific output values, since
 // this would duplicate some of the input data. We leave end-to-end testing to
 // take care of that. Running `intltest` with `-v` will print out the loaded
@@ -615,10 +662,11 @@ void UnitsTest::testGetUnitsData() {
         for (int i = 0; i < conversionInfo.length(); i++) {
             ConversionRateInfo *cri;
             cri = conversionInfo[i];
-            logln("* conversionInfo %d: source=\"%s\", target=\"%s\", factor=\"%s\", offset=\"%s\"", i,
-                  cri->source.data(), cri->target.data(), cri->factor.data(), cri->offset.data());
-            assertTrue("ConversionRateInfo has source, target, and factor",
-                       cri->source.length() > 0 && cri->target.length() > 0 && cri->factor.length() > 0);
+            logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", offset=\"%s\"", i,
+                  cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
+            assertTrue("ConversionRateInfo has source, baseUnit, and factor",
+                       cri->sourceUnit.length() > 0 && cri->baseUnit.length() > 0 &&
+                           cri->factor.length() > 0);
         }
         assertTrue("at least one unit preference obtained", unitPreferences.length() > 0);
         for (int i = 0; i < unitPreferences.length(); i++) {
