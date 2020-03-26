@@ -40,7 +40,7 @@ su{
         }
         XXX{
             "¤",
-            "-",
+            "XXX",
         }
     }
     Currencies%narrow{
@@ -83,7 +83,7 @@ su{
             other{"dolar A.S."}
         }
         XXX{
-            other{"-"}
+            other{"XXX"}
         }
     }
     CurrencyUnitPatterns{
