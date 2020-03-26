@@ -155,6 +155,16 @@ public class CurrencyData {
         }
 
         @Override
+        public String getFormalSymbol(String isoCode) {
+            return fallback ? isoCode : null;
+        }
+
+        @Override
+        public String getVariantSymbol(String isoCode) {
+            return fallback ? isoCode : null;
+        }
+
+        @Override
         public Map<String, String> symbolMap() {
             return Collections.emptyMap();
         }

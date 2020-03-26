@@ -67,6 +67,8 @@ public class NumberFormatterApiTest {
     private static final Currency ESP = Currency.getInstance("ESP");
     private static final Currency PTE = Currency.getInstance("PTE");
     private static final Currency RON = Currency.getInstance("RON");
+    private static final Currency TWD = Currency.getInstance("TWD");
+    private static final Currency TRY = Currency.getInstance("TRY");
     private static final Currency CNY = Currency.getInstance("CNY");
 
     @Test
@@ -801,6 +803,42 @@ public class NumberFormatterApiTest {
                 ULocale.forLanguageTag("en-CA"),
                 5.43,
                 "US$5.43");
+
+        assertFormatSingle(
+                "Currency Difference between Formal and Short (Formal Version)",
+                "currency/TWD unit-width-formal",
+                "currency/TWD unit-width-formal",
+                NumberFormatter.with().unit(TWD).unitWidth(UnitWidth.FORMAL),
+                ULocale.forLanguageTag("zh-TW"),
+                5.43,
+                "NT$5.43");
+
+        assertFormatSingle(
+                "Currency Difference between Formal and Short (Short Version)",
+                "currency/TWD unit-width-short",
+                "currency/TWD unit-width-short",
+                NumberFormatter.with().unit(TWD).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("zh-TW"),
+                5.43,
+                "$5.43");
+
+        assertFormatSingle(
+                "Currency Difference between Variant and Short (Formal Version)",
+                "currency/TRY unit-width-variant",
+                "currency/TRY unit-width-variant",
+                NumberFormatter.with().unit(TRY).unitWidth(UnitWidth.VARIANT),
+                ULocale.forLanguageTag("tr-TR"),
+                5.43,
+                "TL\u00A05,43");
+
+        assertFormatSingle(
+                "Currency Difference between Variant and Short (Short Version)",
+                "currency/TRY unit-width-short",
+                "currency/TRY unit-width-short",
+                NumberFormatter.with().unit(TRY).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("tr-TR"),
+                5.43,
+                "₺5,43");
 
         assertFormatSingle(
                 "Currency-dependent format (Control)",

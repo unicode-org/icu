@@ -100,6 +100,8 @@ class NumberSkeletonImpl {
         STEM_UNIT_WIDTH_SHORT,
         STEM_UNIT_WIDTH_FULL_NAME,
         STEM_UNIT_WIDTH_ISO_CODE,
+        STEM_UNIT_WIDTH_FORMAL,
+        STEM_UNIT_WIDTH_VARIANT,
         STEM_UNIT_WIDTH_HIDDEN,
         STEM_SIGN_AUTO,
         STEM_SIGN_ALWAYS,
@@ -173,6 +175,8 @@ class NumberSkeletonImpl {
         b.add("unit-width-short", StemEnum.STEM_UNIT_WIDTH_SHORT.ordinal());
         b.add("unit-width-full-name", StemEnum.STEM_UNIT_WIDTH_FULL_NAME.ordinal());
         b.add("unit-width-iso-code", StemEnum.STEM_UNIT_WIDTH_ISO_CODE.ordinal());
+        b.add("unit-width-formal", StemEnum.STEM_UNIT_WIDTH_FORMAL.ordinal());
+        b.add("unit-width-variant", StemEnum.STEM_UNIT_WIDTH_VARIANT.ordinal());
         b.add("unit-width-hidden", StemEnum.STEM_UNIT_WIDTH_HIDDEN.ordinal());
         b.add("sign-auto", StemEnum.STEM_SIGN_AUTO.ordinal());
         b.add("sign-always", StemEnum.STEM_SIGN_ALWAYS.ordinal());
@@ -315,6 +319,10 @@ class NumberSkeletonImpl {
                 return UnitWidth.FULL_NAME;
             case STEM_UNIT_WIDTH_ISO_CODE:
                 return UnitWidth.ISO_CODE;
+            case STEM_UNIT_WIDTH_FORMAL:
+                return UnitWidth.FORMAL;
+            case STEM_UNIT_WIDTH_VARIANT:
+                return UnitWidth.VARIANT;
             case STEM_UNIT_WIDTH_HIDDEN:
                 return UnitWidth.HIDDEN;
             default:
@@ -427,6 +435,12 @@ class NumberSkeletonImpl {
                 break;
             case ISO_CODE:
                 sb.append("unit-width-iso-code");
+                break;
+            case FORMAL:
+                sb.append("unit-width-formal");
+                break;
+            case VARIANT:
+                sb.append("unit-width-variant");
                 break;
             case HIDDEN:
                 sb.append("unit-width-hidden");
@@ -729,6 +743,8 @@ class NumberSkeletonImpl {
         case STEM_UNIT_WIDTH_SHORT:
         case STEM_UNIT_WIDTH_FULL_NAME:
         case STEM_UNIT_WIDTH_ISO_CODE:
+        case STEM_UNIT_WIDTH_FORMAL:
+        case STEM_UNIT_WIDTH_VARIANT:
         case STEM_UNIT_WIDTH_HIDDEN:
             checkNull(macros.unitWidth, segment);
             macros.unitWidth = StemToObject.unitWidth(stem);
