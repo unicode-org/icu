@@ -1,0 +1,38 @@
+{
+  "localeFilter": {
+    "filterType": "language",
+    "whitelist": [
+      "en",
+      "de",
+      "zh"
+    ]
+  },
+// Test mixed feature filter and resource filter
+// Exlude translit data so we can run test for ICU-20673
+  "featureFilters": {
+    "misc": {
+      "whitelist": ["supplementalData"]
+    },
+    "translit": "exclude"
+  },
+  "resourceFilters": [
+    {
+      "categories": ["misc"],
+      "files": {
+        "whitelist": ["supplementalData"]
+      },
+      "rules": ["+/*"]
+    }
+  ],
+// Test fileReplacements (relative path)
+  "fileReplacements": {
+    "directory": "$SRC",
+    "replacements": [
+      {
+        "src": "brkitr/rules/line.txt",
+        "dest": "brkitr/rules/line_normal.txt"
+      },
+      "misc/dayPeriods.txt"
+    ]
+  }
+}
