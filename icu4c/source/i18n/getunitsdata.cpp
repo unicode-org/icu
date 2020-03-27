@@ -300,36 +300,50 @@ MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit so
     ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
 
     ConversionRateDataSink convertSink(result);
-    if (baseCompoundUnit != NULL) {
-        *baseCompoundUnit = MeasureUnit();
-    }
+    MeasureUnit sourceBaseUnit;
     for (int i = 0; i < sourceUnitsLength; i++) {
         MeasureUnit baseUnit;
         processSingleUnit(sourceUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
-        if (baseCompoundUnit != NULL) {
-            if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
-                // TODO(hugovdm): add consistency checks.
-                *baseCompoundUnit = baseUnit;
+        if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
+            if (i == 0) {
+                sourceBaseUnit = baseUnit;
             } else {
-                *baseCompoundUnit = baseCompoundUnit->product(baseUnit, status);
+                if (baseUnit != sourceBaseUnit) {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return result;
+                }
             }
+        } else {
+            sourceBaseUnit = sourceBaseUnit.product(baseUnit, status);
         }
     }
-    if (baseCompoundUnit != NULL) {
-        *baseCompoundUnit = MeasureUnit();
-    }
+    MeasureUnit targetBaseUnit;
     for (int i = 0; i < targetUnitsLength; i++) {
         MeasureUnit baseUnit;
         processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
-        if (baseCompoundUnit != NULL) {
-            if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
-                // TODO(hugovdm): add consistency checks.
-                *baseCompoundUnit = baseUnit;
-            } else {
-                *baseCompoundUnit = baseCompoundUnit->product(baseUnit, status);
+        if (target.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
+            // WIP/TODO(hugovdm): add consistency checks.
+            if (baseUnit != sourceBaseUnit) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return result;
             }
+            targetBaseUnit = baseUnit;
+        } else {
+            // WIP/FIXME(hugovdm): I think I found a bug in targetBaseUnit.product():
+            // Target Base: <kilogram-square-meter-per-square-second> x <one-per-meter> => <meter>
+            //
+            // fprintf(stderr, "Target Base: <%s> x <%s> => ", targetBaseUnit.getIdentifier(),
+            //         baseUnit.getIdentifier());
+            targetBaseUnit = targetBaseUnit.product(baseUnit, status);
+            // fprintf(stderr, "<%s>\n", targetBaseUnit.getIdentifier());
+            // fprintf(stderr, "Status: %s\n", u_errorName(status));
         }
     }
+    if (targetBaseUnit != sourceBaseUnit) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return result;
+    }
+    if (baseCompoundUnit != NULL) { *baseCompoundUnit = sourceBaseUnit; }
     return result;
 }
 
