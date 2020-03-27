@@ -607,10 +607,10 @@ void UnitsTest::testGetConversionRateInfo() {
          {"mile", "hour", "meter", NULL, NULL},
          "meter-per-second"},
 
-        // Power: watt = kilogram-square-meter-per-cubic-second
-        {"kilovolt-dekaampere",
+        // Power: watt
+        {"watt",
          "horsepower",
-         {"volt", "ampere", "horsepower", NULL, NULL},
+         {"watt", "horsepower", NULL, NULL, NULL},
          "kilogram-square-meter-per-cubic-second"},
 
         // Energy: joule
