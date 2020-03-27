@@ -322,7 +322,7 @@ MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit so
         MeasureUnit baseUnit;
         processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
         if (baseCompoundUnit != NULL) {
-            if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
+            if (target.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
                 // TODO(hugovdm): add consistency checks.
                 *baseCompoundUnit = baseUnit;
             } else {
