@@ -329,7 +329,14 @@ MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit so
             }
             targetBaseUnit = baseUnit;
         } else {
+            // WIP/FIXME(hugovdm): I think I found a bug in targetBaseUnit.product():
+            // Target Base: <kilogram-square-meter-per-square-second> x <one-per-meter> => <meter>
+            //
+            // fprintf(stderr, "Target Base: <%s> x <%s> => ", targetBaseUnit.getIdentifier(),
+            //         baseUnit.getIdentifier());
             targetBaseUnit = targetBaseUnit.product(baseUnit, status);
+            // fprintf(stderr, "<%s>\n", targetBaseUnit.getIdentifier());
+            // fprintf(stderr, "Status: %s\n", u_errorName(status));
         }
     }
     if (targetBaseUnit != sourceBaseUnit) {
