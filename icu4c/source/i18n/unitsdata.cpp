@@ -193,8 +193,7 @@ void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUn
 
 MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit source,
                                                             const MeasureUnit target,
-                                                            MeasureUnit *baseUnit,
-                                                            UErrorCode &status) {
+                                                            MeasureUnit *baseUnit, UErrorCode &status) {
     MaybeStackVector<ConversionRateInfo> result;
     if (U_FAILURE(status)) return result;
 

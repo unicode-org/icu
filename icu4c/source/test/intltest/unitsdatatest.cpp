@@ -3,11 +3,11 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "intltest.h"
 #include "unitsdata.h"
+#include "intltest.h"
 
 class UnitsDataTest : public IntlTest {
-    public:
+  public:
     UnitsDataTest() {}
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
