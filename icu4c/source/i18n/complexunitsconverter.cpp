@@ -11,7 +11,6 @@
 #include "uassert.h"
 #include "unicode/fmtable.h"
 #include "unitconverter.h"
-#include "getunitsdata.h"
 
 U_NAMESPACE_BEGIN
 

@@ -8,11 +8,11 @@
 #define __COMPLEXUNITSCONVERTER_H__
 
 #include "cmemory.h"
-#include "unitconverter.h"
-#include "getunitsdata.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
+#include "unitconverter.h"
+#include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
 

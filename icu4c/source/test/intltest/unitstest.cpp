@@ -9,7 +9,6 @@
 
 #include "charstr.h"
 #include "filestrm.h"
-#include "getunitsdata.h"
 #include "intltest.h"
 #include "number_decimalquantity.h"
 #include "unicode/ctest.h"
@@ -17,6 +16,7 @@
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "unitconverter.h"
+#include "unitsdata.h"
 #include "unitsrouter.h"
 #include "uparse.h"
 
