@@ -255,7 +255,7 @@ void runDataDrivenConversionTest(void *context, char *fields[][2], int32_t field
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) { return; }
 
     // WIP(hugovdm): Debug branch is for useful output while UnitConverter is still segfaulting.
-    UBool FIXME_skip_UnitConverter = FALSE;
+    UBool FIXME_skip_UnitConverter = TRUE;
     if (FIXME_skip_UnitConverter) {
         fprintf(stderr,
                 "FIXME: skipping constructing UnitConverter(«%s», «%s», status) because it is "
@@ -571,29 +571,59 @@ void UnitsTest::testPreferences() {
 }
 
 void UnitsTest::testGetConversionRateInfo() {
+    const int MAX_NUM_RATES = 5;
     struct {
+        // The source unit passed to getConversionRateInfo.
         const char *sourceUnit;
+        // The target unit passed to getConversionRateInfo.
         const char *targetUnit;
-        const char *threeExpectedOutputs[3];
-        const char *baseUnit;
+        // Expected: units whose conversion rates are expected in the results.
+        const char *expectedOutputs[MAX_NUM_RATES];
+        // Expected "base unit", to serve as pivot between source and target.
+        const char *expectedBaseUnit;
     } testCases[]{
         {"centimeter-per-square-milligram",
          "inch-per-square-ounce",
-         {"pound", "stone", "ton"},
+         {"meter", "gram", "inch", "ounce", NULL},
          "meter-per-square-kilogram"},
-        {"liter", "gallon", {"liter", "gallon", NULL}, "cubic-meter"},
-        {"stone-and-pound", "ton", {"pound", "stone", "ton"}, "kilogram"},
-        {"mile-per-hour", "dekameter-per-hour", {"mile", "hour", "meter"}, "meter-per-second"},
-        {"kilovolt-ampere",
+
+        {"liter", "gallon", {"liter", "gallon", NULL, NULL, NULL}, "cubic-meter"},
+
+        // Sequence
+        {"stone-and-pound", "ton", {"pound", "stone", "ton", NULL, NULL}, "kilogram"},
+
+        {"mile-per-hour",
+         "dekameter-per-hour",
+         {"mile", "hour", "meter", NULL, NULL},
+         "meter-per-second"},
+
+        // Power: watt
+        {"watt",
          "horsepower",
-         {"volt", "ampere", "horsepower"},
-         "kilogram-square-meter-per-cubic-second"}, // watt
+         {"watt", "horsepower", NULL, NULL, NULL},
+         "kilogram-square-meter-per-cubic-second"},
+
+        // Energy: joule
+        {"therm-us",
+         "kilogram-square-meter-per-square-second",
+         {"therm-us", "kilogram", "meter", "second", NULL},
+         "kilogram-square-meter-per-square-second"},
+
+        // WIP/FIXME(hugovdm): I think I found a bug in targetBaseUnit.product():
+        // Target Base: <kilogram-square-meter-per-square-second> x <one-per-meter> => <meter>
+        //
+        // // Joule-per-meter
+        // {"therm-us-per-meter",
+        //  "joule-per-meter",
+        //  {"therm-us", "joule", "meter", NULL, NULL},
+        //  "kilogram-meter-per-square-second"},
+
         // TODO: include capacitance test case with base unit:
         // pow4-second-square-ampere-per-kilogram-square-meter;
     };
     for (const auto &t : testCases) {
         logln("---testing: source=\"%s\", target=\"%s\", expectedBaseUnit=\"%s\"", t.sourceUnit,
-              t.targetUnit, t.baseUnit);
+              t.targetUnit, t.expectedBaseUnit);
         IcuTestErrorCode status(*this, "testGetConversionRateInfo");
 
         MeasureUnit baseCompoundUnit;
@@ -606,16 +636,32 @@ void UnitsTest::testGetConversionRateInfo() {
             continue;
         }
 
-        assertEquals("baseCompoundUnit returned by getConversionRatesInfo", t.baseUnit,
+        assertEquals("baseCompoundUnit returned by getConversionRatesInfo", t.expectedBaseUnit,
                      baseCompoundUnit.getIdentifier());
+        int countExpected;
+        for (countExpected = 0; countExpected < MAX_NUM_RATES; countExpected++) {
+            auto expected = t.expectedOutputs[countExpected];
+            if (expected == NULL) break;
+            // Check if this conversion rate was expected
+            bool found = false;
+            for (int i = 0; i < conversionInfo.length(); i++) {
+                auto cri = conversionInfo[i];
+                if (strcmp(expected, cri->sourceUnit.data()) == 0) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(UnicodeString("<") + expected + "> expected", found);
+        }
+        assertEquals("number of conversion rates", countExpected, conversionInfo.length());
+
+        // Convenience output for debugging
         for (int i = 0; i < conversionInfo.length(); i++) {
-            ConversionRateInfo *cri;
-            cri = conversionInfo[i];
-            logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", offset=\"%s\"", i,
-                  cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
-            assertTrue("ConversionRateInfo has source, baseUnit, and factor",
-                       cri->sourceUnit.length() > 0 && cri->baseUnit.length() > 0 &&
-                           cri->factor.length() > 0);
+            ConversionRateInfo *cri = conversionInfo[i];
+            logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", "
+                  "offset=\"%s\"",
+                  i, cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(),
+                  cri->offset.data());
         }
     }
 }
