@@ -186,17 +186,17 @@ class UnitConversionRatesSink : public ResourceSink {
     Factor *conversionFactor;
 };
 
-const ConversionRateInfo& extractConversionRateInfo(StringPiece source,
-                                             const MaybeStackVector<ConversionRateInfo> &ratesInfo,
-                                             UErrorCode &status) {
+const ConversionRateInfo &
+extractConversionRateInfo(StringPiece source, const MaybeStackVector<ConversionRateInfo> &ratesInfo,
+                          UErrorCode &status) {
     for (int i = 0, n = ratesInfo.length(); i < n; ++i) {
         if (ratesInfo[i]->sourceUnit == source) return *ratesInfo[i];
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;
     // WIP/TODO(review): cargo-culting or magic-incantation, this fixes the warning:
-    // unitconverter.cpp:197:12: warning: returning reference to local temporary object [-Wreturn-stack-address]
-    // But I'm not confident in what I'm doing, having only done some casual
+    // unitconverter.cpp:197:12: warning: returning reference to local temporary object
+    // [-Wreturn-stack-address] But I'm not confident in what I'm doing, having only done some casual
     // reading about the possible negative consequencies of returning std::move.
     return std::move(ConversionRateInfo("pound", "kilogram", "0.453592", "0", status));
 }
@@ -299,7 +299,7 @@ void extractFactor(Factor &factor, StringPiece stringFactor, UErrorCode &status)
 // Load factor for a single source
 void loadSingleFactor(Factor &factor, StringPiece source,
                       const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
-    const auto& conversionUnit = extractConversionRateInfo(source, ratesInfo, status);
+    const auto &conversionUnit = extractConversionRateInfo(source, ratesInfo, status);
     if (U_FAILURE(status)) return;
 
     extractFactor(factor, conversionUnit.factor.toStringPiece(), status);
@@ -421,7 +421,7 @@ void loadConversionRate(ConversionRate &conversionRate, StringPiece source, Stri
 
 StringPiece getTarget(StringPiece source, const MaybeStackVector<ConversionRateInfo> &ratesInfo,
                       UErrorCode &status) {
-    const auto& convertUnit = extractConversionRateInfo(source, ratesInfo, status);
+    const auto &convertUnit = extractConversionRateInfo(source, ratesInfo, status);
     if (U_FAILURE(status)) return StringPiece("");
     return convertUnit.baseUnit.toStringPiece();
 }
@@ -436,7 +436,8 @@ MeasureUnit extractTarget(MeasureUnit source, const MaybeStackVector<ConversionR
 
     for (int i = 0; i < singleUnitsLength; i++) {
         const auto &singleUnit = singleUnits[i];
-        StringPiece target = getTarget(singleUnit.getIdentifier(), ratesInfo, status);
+        const auto basicSigleIdentifier = SingleUnitImpl::forMeasureUnit(singleUnit, status).identifier;
+        StringPiece target = getTarget(basicSigleIdentifier, ratesInfo, status);
 
         if (U_FAILURE(status)) return result;
 
