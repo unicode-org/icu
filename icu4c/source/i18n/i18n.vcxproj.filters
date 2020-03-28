@@ -654,6 +654,9 @@
     <ClCompile Include="unitconverter.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="unitsdata.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bocsu.cpp">
@@ -999,6 +1002,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="unitconveter.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="unitsdata.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="vzone.h">
