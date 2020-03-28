@@ -10,11 +10,11 @@
 #include "charstr.h" // CharString
 #include "cmemory.h"
 #include "complexunitsconverter.h"
-#include "getunitsdata.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
 #include "unicode/stringpiece.h"
+#include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
 

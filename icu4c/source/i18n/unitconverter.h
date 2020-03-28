@@ -8,11 +8,11 @@
 #define __UNITCONVERTER_H__
 
 #include "cmemory.h"
-#include "getunitsdata.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
 #include "unicode/stringpiece.h"
+#include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
 // Data Skeleton.
