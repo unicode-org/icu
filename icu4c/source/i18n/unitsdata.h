@@ -38,16 +38,14 @@ class U_I18N_API ConversionRateInfo {
 };
 
 /**
- * Collects and returns ConversionRateInfo needed for conversions from source
- * and to target.
+ * Collects and returns ConversionRateInfo needed for conversions for a set of
+ * units.
  *
- * @param source The source unit (the unit type converted from).
- * @param target The target unit (the unit type converted to).
+ * @param units The units for which to load conversion data.
  * @param status Receives status.
  */
-MaybeStackVector<ConversionRateInfo> U_I18N_API getConversionRatesInfo(MeasureUnit source,
-                                                                       MeasureUnit target,
-                                                                       UErrorCode &status);
+MaybeStackVector<ConversionRateInfo>
+    U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status);
 
 U_NAMESPACE_END
 
