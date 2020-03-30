@@ -33,74 +33,42 @@ void UnitsDataTest::testGetConversionRateInfo() {
         const char *targetUnit;
         // Expected: units whose conversion rates are expected in the results.
         const char *expectedOutputs[MAX_NUM_RATES];
-        // Expected "base unit", to serve as pivot between source and target.
-        const char *expectedBaseUnit;
     } testCases[]{
         {"centimeter-per-square-milligram",
          "inch-per-square-ounce",
-         {"meter", "gram", "inch", "ounce", NULL},
-         "meter-per-square-kilogram"},
+         {"meter", "gram", "inch", "ounce", NULL}},
 
-        {"liter", "gallon", {"liter", "gallon", NULL, NULL, NULL}, "cubic-meter"},
+        {"liter", "gallon", {"liter", "gallon", NULL, NULL, NULL}},
 
         // Sequence
-        {"stone-and-pound", "ton", {"pound", "stone", "ton", NULL, NULL}, "kilogram"},
+        {"stone-and-pound", "ton", {"pound", "stone", "ton", NULL, NULL}},
 
-        {"mile-per-hour",
-         "dekameter-per-hour",
-         {"mile", "hour", "meter", NULL, NULL},
-         "meter-per-second"},
+        {"mile-per-hour", "dekameter-per-hour", {"mile", "hour", "meter", NULL, NULL}},
 
         // Power: watt
-        {"watt",
-         "horsepower",
-         {"watt", "horsepower", NULL, NULL, NULL},
-         "kilogram-square-meter-per-cubic-second"},
+        {"watt", "horsepower", {"watt", "horsepower", NULL, NULL, NULL}},
 
         // Energy: joule
         {"therm-us",
          "kilogram-square-meter-per-square-second",
-         {"therm-us", "kilogram", "meter", "second", NULL},
-         "kilogram-square-meter-per-square-second"},
+         {"therm-us", "kilogram", "meter", "second", NULL}},
 
         // Add "reciprocal" example: consumption and consumption-inverse
-        //
-        // WIP/FIXME: failing example which should pass. Thus we will remove the
-        // base unit calculation.
-        {"liter-per-100-kilometer",
-         "mile-per-gallon",
-         {"meter", "mile", "gallon", NULL, NULL},
-         "cubic-meter-per-meter"},
-
-        // WIP/FIXME(hugovdm): I think I found a bug in targetBaseUnit.product():
-        // Target Base: <kilogram-square-meter-per-square-second> x <one-per-meter> => <meter>
-        //
-        // // Joule-per-meter
-        // {"therm-us-per-meter",
-        //  "joule-per-meter",
-        //  {"therm-us", "joule", "meter", NULL, NULL},
-        //  "kilogram-square-meter-per-meter-square-second"},
-
-        // TODO: include capacitance test case with base unit:
-        // pow4-second-square-ampere-per-kilogram-square-meter;
+        {"liter-per-100-kilometer", "mile-per-gallon", {"liter", "100-kilometer", "mile", "gallon", NULL}},
     };
     for (const auto &t : testCases) {
-        logln("---testing: source=\"%s\", target=\"%s\", expectedBaseUnit=\"%s\"", t.sourceUnit,
-              t.targetUnit, t.expectedBaseUnit);
+        logln("---testing: source=\"%s\", target=\"%s\"", t.sourceUnit, t.targetUnit);
         IcuTestErrorCode status(*this, "testGetConversionRateInfo");
 
-        MeasureUnit baseCompoundUnit;
         MeasureUnit sourceUnit = MeasureUnit::forIdentifier(t.sourceUnit, status);
         MeasureUnit targetUnit = MeasureUnit::forIdentifier(t.targetUnit, status);
         MaybeStackVector<ConversionRateInfo> conversionInfo =
-            getConversionRatesInfo(sourceUnit, targetUnit, &baseCompoundUnit, status);
+            getConversionRatesInfo(sourceUnit, targetUnit, status);
         if (status.errIfFailureAndReset("getConversionRatesInfo(<%s>, <%s>, ...)",
                                         sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
             continue;
         }
 
-        assertEquals("baseCompoundUnit returned by getConversionRatesInfo", t.expectedBaseUnit,
-                     baseCompoundUnit.getIdentifier());
         int countExpected;
         for (countExpected = 0; countExpected < MAX_NUM_RATES; countExpected++) {
             auto expected = t.expectedOutputs[countExpected];

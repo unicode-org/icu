@@ -151,14 +151,10 @@ class ConversionRateDataSink : public ResourceSink {
  * resource.
  * @param convertSink The ConversionRateDataSink through which
  * ConversionRateInfo instances are to be collected.
- * @param baseSingleUnit Output parameter: if not NULL, the base unit through
- * which conversion rates pivot to other similar units will be returned through
- * this pointer.
  * @param status The standard ICU error code output parameter.
  */
 void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUnitsBundle,
-                       ConversionRateDataSink &convertSink, MeasureUnit *baseSingleUnit,
-                       UErrorCode &status) {
+                       ConversionRateDataSink &convertSink, UErrorCode &status) {
     if (U_FAILURE(status)) return;
     int32_t dimensionality = unit.getDimensionality(status);
 
@@ -168,32 +164,12 @@ void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUn
         simple = unit.withDimensionality(1, status).withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
     }
     ures_getAllItemsWithFallback(convertUnitsBundle, simple.getIdentifier(), convertSink, status);
-
-    if (baseSingleUnit != NULL) {
-        MeasureUnit baseUnit = convertSink.getLastBaseUnit(status);
-
-        if (dimensionality == 1) {
-            *baseSingleUnit = baseUnit;
-        } else if (baseUnit.getComplexity(status) == UMEASURE_UNIT_SINGLE) {
-            // The baseUnit is a single unit, so can be raised to the
-            // dimensionality of the input unit.
-            dimensionality *= baseUnit.getDimensionality(status);
-            *baseSingleUnit = baseUnit.withDimensionality(dimensionality, status);
-        } else {
-            // We only support higher dimensionality input units if they map to
-            // simple base units, such that that base unit can have the
-            // dimensionality easily applied.
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-    }
 }
 
 } // namespace
 
-MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit source,
-                                                            const MeasureUnit target,
-                                                            MeasureUnit *baseUnit, UErrorCode &status) {
+MaybeStackVector<ConversionRateInfo>
+getConversionRatesInfo(const MeasureUnit source, const MeasureUnit target, UErrorCode &status) {
     MaybeStackVector<ConversionRateInfo> result;
     if (U_FAILURE(status)) return result;
 
@@ -206,61 +182,13 @@ MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit so
     ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
     ConversionRateDataSink convertSink(result);
 
-    MeasureUnit sourceBaseUnit;
     for (int i = 0; i < sourceUnitsLength; i++) {
-        MeasureUnit baseUnit;
-        processSingleUnit(sourceUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
-        if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
-            if (i == 0) {
-                sourceBaseUnit = baseUnit;
-            } else {
-                if (baseUnit != sourceBaseUnit) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return result;
-                }
-            }
-        } else {
-            sourceBaseUnit = sourceBaseUnit.product(baseUnit, status);
-        }
+        processSingleUnit(sourceUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
     }
 
-    MeasureUnit targetBaseUnit;
     for (int i = 0; i < targetUnitsLength; i++) {
-        MeasureUnit baseUnit;
-        processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
-        if (target.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
-            if (baseUnit != sourceBaseUnit) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return result;
-            }
-            targetBaseUnit = baseUnit;
-        } else {
-            // WIP/FIXME(hugovdm): ensure this gets fixed, then remove this
-            // comment: I think I found a bug in targetBaseUnit.product(). First
-            // symptom was an unexpected product, further exploration resulted
-            // in AddressSanitizer errors.
-            //
-            // The product was:
-            //
-            // <kilogram-square-meter-per-square-second> * <one-per-meter> => <meter>
-            //
-            // as output by a printf:
-            //
-            // fprintf(stderr, "<%s> x <%s> => ",
-            //         targetBaseUnit.getIdentifier(),
-            //         baseUnit.getIdentifier());
-            //
-            // Expected: <kilogram-square-meter-per-meter-square-second>
-            targetBaseUnit = targetBaseUnit.product(baseUnit, status);
-            // fprintf(stderr, "<%s> - Status: %s\n",
-            //         targetBaseUnit.getIdentifier(), u_errorName(status));
-        }
+        processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
     }
-    if (targetBaseUnit != sourceBaseUnit) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return result;
-    }
-    if (baseUnit != NULL) { *baseUnit = sourceBaseUnit; }
     return result;
 }
 
