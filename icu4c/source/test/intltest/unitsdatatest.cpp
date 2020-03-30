@@ -34,27 +34,26 @@ void UnitsDataTest::testGetConversionRateInfo() {
         // Expected: units whose conversion rates are expected in the results.
         const char *expectedOutputs[MAX_NUM_RATES];
     } testCases[]{
-        {"centimeter-per-square-milligram",
-         "inch-per-square-ounce",
-         {"meter", "gram", "inch", "ounce", NULL}},
-
+        {"meter", "kilometer", {"meter", NULL, NULL, NULL, NULL}},
         {"liter", "gallon", {"liter", "gallon", NULL, NULL, NULL}},
+        {"watt", "horsepower", {"watt", "horsepower", NULL, NULL, NULL}},
+        {"mile-per-hour", "dekameter-per-hour", {"mile", "hour", "meter", NULL, NULL}},
 
         // Sequence
         {"stone-and-pound", "ton", {"pound", "stone", "ton", NULL, NULL}},
 
-        {"mile-per-hour", "dekameter-per-hour", {"mile", "hour", "meter", NULL, NULL}},
-
-        // Power: watt
-        {"watt", "horsepower", {"watt", "horsepower", NULL, NULL, NULL}},
-
-        // Energy: joule
+        // Compound
+        {"centimeter-per-square-milligram",
+         "inch-per-square-ounce",
+         {"meter", "gram", "inch", "ounce", NULL}},
         {"therm-us",
          "kilogram-square-meter-per-square-second",
          {"therm-us", "kilogram", "meter", "second", NULL}},
 
-        // Add "reciprocal" example: consumption and consumption-inverse
-        {"liter-per-100-kilometer", "mile-per-gallon", {"liter", "100-kilometer", "mile", "gallon", NULL}},
+        // "Reciprocal" example: consumption and consumption-inverse
+        {"liter-per-100-kilometer",
+         "mile-per-gallon",
+         {"liter", "100-kilometer", "mile", "gallon", NULL}},
     };
     for (const auto &t : testCases) {
         logln("---testing: source=\"%s\", target=\"%s\"", t.sourceUnit, t.targetUnit);
