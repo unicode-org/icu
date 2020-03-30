@@ -282,26 +282,23 @@ void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUn
 
 } // namespace
 
-MaybeStackVector<ConversionRateInfo>
-getConversionRatesInfo(const MeasureUnit source, const MeasureUnit target, UErrorCode &status) {
+MaybeStackVector<ConversionRateInfo> U_I18N_API
+getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status) {
     MaybeStackVector<ConversionRateInfo> result;
     if (U_FAILURE(status)) return result;
-
-    int32_t sourceUnitsLength, targetUnitsLength;
-    LocalArray<MeasureUnit> sourceUnits = source.splitToSingleUnits(sourceUnitsLength, status);
-    LocalArray<MeasureUnit> targetUnits = target.splitToSingleUnits(targetUnitsLength, status);
 
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
     StackUResourceBundle convertUnitsBundle;
     ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
     ConversionRateDataSink convertSink(result);
 
-    for (int i = 0; i < sourceUnitsLength; i++) {
-        processSingleUnit(sourceUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
-    }
+    for (int i = 0; i < units.length(); i++) {
+        int32_t numSingleUnits;
+        LocalArray<MeasureUnit> singleUnits = units[i]->splitToSingleUnits(numSingleUnits, status);
 
-    for (int i = 0; i < targetUnitsLength; i++) {
-        processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
+        for (int i = 0; i < numSingleUnits; i++) {
+            processSingleUnit(singleUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
+        }
     }
     return result;
 }

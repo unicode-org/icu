@@ -59,12 +59,21 @@ void UnitsDataTest::testGetConversionRateInfo() {
         logln("---testing: source=\"%s\", target=\"%s\"", t.sourceUnit, t.targetUnit);
         IcuTestErrorCode status(*this, "testGetConversionRateInfo");
 
-        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(t.sourceUnit, status);
-        MeasureUnit targetUnit = MeasureUnit::forIdentifier(t.targetUnit, status);
-        MaybeStackVector<ConversionRateInfo> conversionInfo =
-            getConversionRatesInfo(sourceUnit, targetUnit, status);
-        if (status.errIfFailureAndReset("getConversionRatesInfo(<%s>, <%s>, ...)",
-                                        sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+        MaybeStackVector<MeasureUnit> units;
+        MeasureUnit *item = units.emplaceBack(MeasureUnit::forIdentifier(t.sourceUnit, status));
+        if (!item) {
+            status.set(U_MEMORY_ALLOCATION_ERROR);
+            return;
+        }
+        item = units.emplaceBack(MeasureUnit::forIdentifier(t.targetUnit, status));
+        if (!item) {
+            status.set(U_MEMORY_ALLOCATION_ERROR);
+            return;
+        }
+
+        MaybeStackVector<ConversionRateInfo> conversionInfo = getConversionRatesInfo(units, status);
+        if (status.errIfFailureAndReset("getConversionRatesInfo({<%s>, <%s>}, ...)", t.sourceUnit,
+                                        t.targetUnit)) {
             continue;
         }
 
