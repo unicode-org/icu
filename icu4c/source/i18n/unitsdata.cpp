@@ -343,7 +343,6 @@ MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit so
         MeasureUnit baseUnit;
         processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
         if (target.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
-            // WIP/TODO(hugovdm): add consistency checks.
             if (baseUnit != sourceBaseUnit) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
                 return result;
@@ -364,6 +363,8 @@ MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit so
             // fprintf(stderr, "<%s> x <%s> => ",
             //         targetBaseUnit.getIdentifier(),
             //         baseUnit.getIdentifier());
+            //
+            // Expected: <kilogram-square-meter-per-meter-square-second>
             targetBaseUnit = targetBaseUnit.product(baseUnit, status);
             // fprintf(stderr, "<%s> - Status: %s\n",
             //         targetBaseUnit.getIdentifier(), u_errorName(status));
