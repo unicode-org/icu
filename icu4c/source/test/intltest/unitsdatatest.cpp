@@ -63,6 +63,15 @@ void UnitsDataTest::testGetConversionRateInfo() {
          {"therm-us", "kilogram", "meter", "second", NULL},
          "kilogram-square-meter-per-square-second"},
 
+        // Add "reciprocal" example: consumption and consumption-inverse
+        //
+        // WIP/FIXME: failing example which should pass. Thus we will remove the
+        // base unit calculation.
+        {"liter-per-100-kilometer",
+         "mile-per-gallon",
+         {"meter", "mile", "gallon", NULL, NULL},
+         "cubic-meter-per-meter"},
+
         // WIP/FIXME(hugovdm): I think I found a bug in targetBaseUnit.product():
         // Target Base: <kilogram-square-meter-per-square-second> x <one-per-meter> => <meter>
         //
