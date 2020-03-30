@@ -13,6 +13,8 @@
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
+#include "unitconverter.h"
+#include "unitsdata.h"
 #include "uparse.h"
 
 using icu::number::impl::DecimalQuantity;
@@ -23,6 +25,7 @@ class UnitsTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
+    void testConversionCapability();
     void testConversions();
     void testPreferences();
     void testBasic();
@@ -35,10 +38,9 @@ class UnitsTest : public IntlTest {
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) {
-        logln("TestSuite UnitsTest: ");
-    }
+    if (exec) { logln("TestSuite UnitsTest: "); }
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
     TESTCASE_AUTO(testBasic);
@@ -51,13 +53,35 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 
 // Just for testing quick conversion ability.
 double testConvert(UnicodeString source, UnicodeString target, double input) {
-    if (source == u"meter" && target == u"foot" && input == 1.0)
-        return 3.28084;
+    if (source == u"meter" && target == u"foot" && input == 1.0) return 3.28084;
 
-    if ( source == u"kilometer" && target == u"foot" && input == 1.0)
-        return 328.084;
+    if (source == u"kilometer" && target == u"foot" && input == 1.0) return 328.084;
 
     return -1;
+}
+
+void UnitsTest::testConversionCapability() {
+    struct TestCase {
+        const StringPiece source;
+        const StringPiece target;
+        const UnitsMatchingState expectedState;
+    } testCases[]{
+        {"meter", "foot", CONVERTIBLE},                           //
+        {"kilometer", "foot", CONVERTIBLE},                       //
+        {"hectare", "square-foot", CONVERTIBLE},                  //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL}, //
+    };
+
+    for (const auto &testCase : testCases) {
+        UErrorCode status = U_ZERO_ERROR;
+        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+        MeasureUnit baseUnit;
+        const auto &conversionRateInfoList = getConversionRatesInfo(source, target, &baseUnit, status);
+        auto actualSatate = checkUnitsState(source, target, conversionRateInfoList, status);
+
+        assertEquals("Conversion Capability", testCase.expectedState, actualSatate);
+    }
 }
 
 void UnitsTest::testBasic() {
