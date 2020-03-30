@@ -7,7 +7,6 @@ import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
-import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat.Field;
 import com.ibm.icu.text.PluralRules;
