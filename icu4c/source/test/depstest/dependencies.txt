@@ -1064,7 +1064,7 @@ group: sharedbreakiterator
     breakiterator
 
 group: units_extra
-    measunit_extra.o unitconverter.o
+    measunit_extra.o
   deps
     units bytestriebuilder bytestrie resourcebundle uclean_i18n
 
@@ -1074,9 +1074,9 @@ group: units
     stringenumeration errorcode
 
 group: unitsformatter
-    unitsdata.o
+    unitsdata.o unitconverter.o
   deps
-    resourcebundle
+    resourcebundle units_extra
 
 group: decnumber
     decContext.o decNumber.o

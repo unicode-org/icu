@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "charstr.h"
+#include "cmemory.h"
 #include "filestrm.h"
 #include "intltest.h"
 #include "number_decimalquantity.h"
@@ -13,6 +14,8 @@
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
+#include "unitconverter.h"
+#include "unitsdata.h"
 #include "uparse.h"
 
 using icu::number::impl::DecimalQuantity;
@@ -23,6 +26,7 @@ class UnitsTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
+    void testConversionCapability();
     void testConversions();
     void testPreferences();
     // void testBasic();
@@ -35,10 +39,9 @@ class UnitsTest : public IntlTest {
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) {
-        logln("TestSuite UnitsTest: ");
-    }
+    if (exec) { logln("TestSuite UnitsTest: "); }
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
     // TESTCASE_AUTO(testBasic);
@@ -51,13 +54,81 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 
 // Just for testing quick conversion ability.
 double testConvert(UnicodeString source, UnicodeString target, double input) {
-    if (source == u"meter" && target == u"foot" && input == 1.0)
-        return 3.28084;
+    if (source == u"meter" && target == u"foot" && input == 1.0) return 3.28084;
 
-    if ( source == u"kilometer" && target == u"foot" && input == 1.0)
-        return 328.084;
+    if (source == u"kilometer" && target == u"foot" && input == 1.0) return 328.084;
 
     return -1;
+}
+
+void UnitsTest::testConversionCapability() {
+    struct TestCase {
+        const StringPiece source;
+        const StringPiece target;
+        const UnitsConvertibilityState expectedState;
+    } testCases[]{
+        {"meter", "foot", CONVERTIBLE},                                                    //
+        {"kilometer", "foot", CONVERTIBLE},                                                //
+        {"hectare", "square-foot", CONVERTIBLE},                                           //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL},                          //
+        {"square-meter", "square-foot", CONVERTIBLE},                                      //
+        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                          //
+        {"square-hectare", "p4-foot", CONVERTIBLE},                                        //
+        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},            //
+        // TODO: Remove the following test cases after hocking up unitsTest.txt.
+        {"g-force", "meter-per-square-second", CONVERTIBLE},                               //
+        {"ohm", "kilogram-square-meter-per-cubic-second-square-ampere", CONVERTIBLE},      //
+        {"electronvolt", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
+        {"dalton", "kilogram-square-meter-per-square-second", CONVERTIBLE},                //
+        {"joule", "kilogram-square-meter-per-square-second", CONVERTIBLE},                 //
+        {"meter-newton", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
+        {"foot-pound-force", "kilogram-square-meter-per-square-second", CONVERTIBLE},      //
+        {"calorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},               //
+        {"kilojoule", "kilogram-square-meter-per-square-second", CONVERTIBLE},             //
+        {"british-thermal-unit", "kilogram-square-meter-per-square-second", CONVERTIBLE},  //
+        {"foodcalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
+        {"kilocalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
+        {"hour-kilowatt", "kilogram-square-meter-second-per-cubic-second", CONVERTIBLE},   //
+        {"therm-us", "kilogram-square-meter-per-square-second", CONVERTIBLE},              //
+        {"newton", "kilogram-meter-per-square-second", CONVERTIBLE},                       //
+        {"pound-force", "kilogram-meter-per-square-second", CONVERTIBLE},                  //
+        {"hertz", "revolution-per-second", CONVERTIBLE},                                   //
+        {"kilohertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"megahertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"gigahertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"lux", "candela-square-meter-per-square-meter", CONVERTIBLE},                     //
+        {"milliwatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},              //
+        {"watt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},                   //
+        {"horsepower", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},             //
+        {"kilowatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"megawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"gigawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"solar-luminosity", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},       //
+        {"pascal", "kilogram-per-meter-square-second", CONVERTIBLE},                       //
+        {"hectopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                  //
+        {"millibar", "kilogram-per-meter-square-second", CONVERTIBLE},                     //
+        {"millimeter-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE}, //
+        {"kilopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"inch-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE},       //
+        {"bar", "kilogram-per-meter-square-second", CONVERTIBLE},                          //
+        {"atmosphere", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"megapascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"ofhg", "kilogram-per-square-meter-square-second", CONVERTIBLE},                  //
+        {"knot", "meter-per-second", CONVERTIBLE},                                         //
+        {"volt", "kilogram-square-meter-per-cubic-second-ampere", CONVERTIBLE},            //
+    };
+
+    for (const auto &testCase : testCases) {
+        UErrorCode status = U_ZERO_ERROR;
+
+        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
+        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+
+        ConversionRates conversionRates(status);
+        auto convertibility = icu::checkConvertibility(source, target, conversionRates, status);
+
+        assertEquals("Conversion Capability", testCase.expectedState, convertibility);
+    }
 }
 
 // void UnitsTest::testBasic() {
@@ -72,7 +143,8 @@ double testConvert(UnicodeString source, UnicodeString target, double input) {
 //     } testCases[]{{u"meter", u"foot", 1.0, 3.28084}, {u"kilometer", u"foot", 1.0, 328.084}};
 
 //     for (const auto &testCase : testCases) {
-//         assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
+//         assertEquals("test convert", testConvert(testCase.source, testCase.target,
+//         testCase.inputValue),
 //                      testCase.expectedValue);
 //     }
 // }
@@ -95,7 +167,8 @@ double testConvert(UnicodeString source, UnicodeString target, double input) {
 //     };
 
 //     for (const auto &testCase : testCases) {
-//         assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
+//         assertEquals("test convert", testConvert(testCase.source, testCase.target,
+//         testCase.inputValue),
 //                      testCase.expectedValue);
 //     }
 // }
@@ -121,7 +194,8 @@ double testConvert(UnicodeString source, UnicodeString target, double input) {
 //     };
 
 //     for (const auto &testCase : testCases) {
-//         assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
+//         assertEquals("test convert", testConvert(testCase.source, testCase.target,
+//         testCase.inputValue),
 //                      testCase.expectedValue);
 //     }
 // }
@@ -146,7 +220,8 @@ double testConvert(UnicodeString source, UnicodeString target, double input) {
 //     };
 
 //     for (const auto &testCase : testCases) {
-//         assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
+//         assertEquals("test convert", testConvert(testCase.source, testCase.target,
+//         testCase.inputValue),
 //                      testCase.expectedValue);
 //     }
 // }
@@ -167,7 +242,8 @@ double testConvert(UnicodeString source, UnicodeString target, double input) {
 //     };
 
 //     for (const auto &testCase : testCases) {
-//         assertEquals("test convert", testConvert(testCase.source, testCase.target, testCase.inputValue),
+//         assertEquals("test convert", testConvert(testCase.source, testCase.target,
+//         testCase.inputValue),
 //                      testCase.expectedValue);
 //     }
 // }
@@ -190,8 +266,8 @@ StringPiece trimField(char *(&field)[2]) {
 }
 
 /**
- * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
- * This is a UParseLineFn as required by u_parseDelimitedFile.
+ * Deals with a single data-driven unit test for unit conversions. This
+ * UParseLineFn for use by u_parseDelimitedFile is intended for "unitsTest.txt".
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) return;
@@ -246,7 +322,8 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 
     // unitsTest->assertTrue(msg.data(), actualState != UNCONVERTIBLE);
 
-    // Unit conversion... untested:
+    // TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn:
+    //
     // UnitConverter converter(sourceUnit, targetUnit, status);
     // double got = converter.convert(1000, status);
     // unitsTest->assertEqualsNear(quantity.data(), expected, got, 0.0001);
