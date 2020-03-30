@@ -51,9 +51,6 @@ struct U_I18N_API UnitPreference {
  * Collects and returns ConversionRateInfo needed for conversions from source
  * and to target.
  *
- * If source and target are not compatible for conversion, status will be set to
- * U_ILLEGAL_ARGUMENT_ERROR.
- *
  * @param source The source unit (the unit type converted from).
  * @param target The target unit (the unit type converted to).
  * @param status Receives status.
