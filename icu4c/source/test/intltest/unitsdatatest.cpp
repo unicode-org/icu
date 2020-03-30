@@ -70,7 +70,7 @@ void UnitsDataTest::testGetConversionRateInfo() {
         // {"therm-us-per-meter",
         //  "joule-per-meter",
         //  {"therm-us", "joule", "meter", NULL, NULL},
-        //  "kilogram-meter-per-square-second"},
+        //  "kilogram-square-meter-per-square-second"},
 
         // TODO: include capacitance test case with base unit:
         // pow4-second-square-ampere-per-kilogram-square-meter;
