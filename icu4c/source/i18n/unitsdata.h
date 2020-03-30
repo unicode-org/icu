@@ -48,22 +48,18 @@ struct U_I18N_API UnitPreference {
 };
 
 /**
- * Collects and returns ConversionRateInfo needed to convert from source to
- * baseUnit and from target to baseUnit.
+ * Collects and returns ConversionRateInfo needed for conversions from source
+ * and to target.
  *
  * If source and target are not compatible for conversion, status will be set to
  * U_ILLEGAL_ARGUMENT_ERROR.
  *
  * @param source The source unit (the unit type converted from).
  * @param target The target unit (the unit type converted to).
- * @param baseUnit Output parameter: if not NULL, it will be set to the base
- * unit type used as pivot for converting from source to target. This may be a
- * compound unit (a combination of base units).
  * @param status Receives status.
  */
 MaybeStackVector<ConversionRateInfo> U_I18N_API getConversionRatesInfo(MeasureUnit source,
                                                                        MeasureUnit target,
-                                                                       MeasureUnit *baseUnit,
                                                                        UErrorCode &status);
 
 /**
