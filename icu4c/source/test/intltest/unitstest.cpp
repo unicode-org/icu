@@ -67,13 +67,13 @@ void UnitsTest::testConversionCapability() {
         const StringPiece target;
         const UnitsMatchingState expectedState;
     } testCases[]{
-        {"meter", "foot", CONVERTIBLE},                           //
-        {"kilometer", "foot", CONVERTIBLE},                       //
-        {"hectare", "square-foot", CONVERTIBLE},                  //
-        {"kilometer-per-second", "second-per-meter", RECIPROCAL}, //       
+        {"meter", "foot", CONVERTIBLE},                                         //
+        {"kilometer", "foot", CONVERTIBLE},                                     //
+        {"hectare", "square-foot", CONVERTIBLE},                                //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL},               //
         {"square-meter", "square-foot", CONVERTIBLE},                           //
-        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                       //
-        {"square-hectare", "p4-foot", CONVERTIBLE},                  //
+        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
+        {"square-hectare", "p4-foot", CONVERTIBLE},                             //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
     };
 
