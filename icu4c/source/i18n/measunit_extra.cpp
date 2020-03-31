@@ -322,6 +322,10 @@ private:
 class Parser {
 public:
     static Parser from(StringPiece source, UErrorCode& status) {
+        // WIP: our problem starts here: source is not owned by the parser, so
+        // the result could depend on data owned by a MeasureUnit that doesn't
+        // live long enough. This data somehow needs to be re-owned by the
+        // MeasureUnit produced by this Parser...
         if (U_FAILURE(status)) {
             return Parser();
         }
@@ -334,12 +338,31 @@ public:
 
     MeasureUnitImpl parse(UErrorCode& status) {
         MeasureUnitImpl result;
+        // WIP: since we construct the result here, we could try copying the
+        // identifier into the result, and then parse from that. However this
+        // results in an assertion failure for TestAddressSanitizerProblem:
+        //
+        // "Assertion `impl.identifier.isEmpty()' failed."
+        //
+        // And for TestCompoundUnitOperations it results in a
+        // stack-buffer-overflow in serialize, because serialize expects the
+        // result to not have an identifier yet.
+        //
+        // Copy fSource into result.
+        result.identifier = CharString(fSource, status);
+        // Have fSource point at this new copy.
+        fSource = result.identifier.toStringPiece();
+
+        // WIP: I think this implementation doesn't otherwise re-own:
         parseImpl(result, status);
         return result;
     }
 
 private:
     int32_t fIndex = 0;
+
+    // Longevity of the string fSource points at cannot be trusted if we're
+    // producing a new MeasureUnit from a shorter-lived one.
     StringPiece fSource;
     UCharsTrie fTrie;
 
@@ -466,6 +489,9 @@ private:
 
                 case Token::TYPE_SIMPLE_UNIT:
                     result.index = token.getSimpleUnitIndex();
+                    // SingleUnitImpl does not take ownership of the memory
+                    // here, so who's supposed to own it then? How long will
+                    // "result" live with the dangerous reference?
                     result.identifier = fSource.substr(previ, fIndex - previ);
                     return;
 
@@ -578,6 +604,12 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
 
 /**
  * Normalize a MeasureUnitImpl and generate the identifier string in place.
+ *
+ * Should only be called if impl doesn't have an identifier yet. WIP: our
+ * attempt to fix the identifier ownership problem above therefore collides with
+ * serialize calls. Make serialize support (ignore?) an existing identifier?
+ * Just commenting-out the assert isn't enough, it leads to a
+ * stack-buffer-overflow error.
  */
 void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
     if (U_FAILURE(status)) {
@@ -675,6 +707,19 @@ MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
 
 MeasureUnitImpl MeasureUnitImpl::forIdentifier(StringPiece identifier, UErrorCode& status) {
     return Parser::from(identifier, status).parse(status);
+
+    // // WIP: added a serialize call, not sure what this really does / whether this helps:
+    // MeasureUnitImpl result = Parser::from(identifier, status).parse(status);
+    // serialize(result, status);
+    // return result;
+
+    // // Looks like we can't copy this here:
+    // CharString identifierCopy(identifier, status);
+    // MeasureUnitImpl result =
+    //     Parser::from(StringPiece(identifierCopy.toStringPiece()), status).parse(status);
+    // // Because I don't think there's a way to move identifierCopy into result:
+    // result.identifier = std::move(identifierCopy);
+    // return result;
 }
 
 const MeasureUnitImpl& MeasureUnitImpl::forMeasureUnit(
@@ -682,7 +727,13 @@ const MeasureUnitImpl& MeasureUnitImpl::forMeasureUnit(
     if (measureUnit.fImpl) {
         return *measureUnit.fImpl;
     } else {
+        // This parses a MeasureUnit's identifier and *doesn't* seem to create a
+        // new copy of the identifier to be owned by "memory" - unless "parse"
+        // takes care of it. We can't call .build(status) on this, because we
+        // need to return a MeasureUnitImpl here, not a MeasureUnit:
         memory = Parser::from(measureUnit.getIdentifier(), status).parse(status);
+        // // WIP: so what does this do, does it help? Test still fails.
+        // serialize(memory, status);
         return memory;
     }
 }
@@ -693,6 +744,14 @@ MeasureUnitImpl MeasureUnitImpl::forMeasureUnitMaybeCopy(
         return measureUnit.fImpl->copy(status);
     } else {
         return Parser::from(measureUnit.getIdentifier(), status).parse(status);
+
+        // // The code above parses a MeasureUnit's identifier and *doesn't* seem
+        // // to create a new copy of the identifier to be owned by "memory". We
+        // // could try to make "parse" take care of it?
+        // MeasureUnitImpl result = Parser::from(measureUnit.getIdentifier(), status).parse(status);
+        // // WIP: or what does this do, does it help? Test still fails.
+        // serialize(result, status);
+        // return result;
     }
 }
 
@@ -715,6 +774,11 @@ MeasureUnit MeasureUnitImpl::build(UErrorCode& status) && {
 
 
 MeasureUnit MeasureUnit::forIdentifier(StringPiece identifier, UErrorCode& status) {
+    // Passing a StringPiece to Parser, expecting the result (returned by
+    // build()) to not hold references to its target.
+    //
+    // Build does call "serialize": "Normalize a MeasureUnitImpl and generate
+    // the identifier string in place." But the test still fails - WIP.
     return Parser::from(identifier, status).parse(status).build(status);
 }
 
