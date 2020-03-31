@@ -82,6 +82,7 @@ private:
     void TestInvalidIdentifiers();
     void TestCompoundUnitOperations();
     void TestIdentifiers();
+    void Test21060_AddressSanitizerProblem();
 
     void verifyFormat(
         const char *description,
@@ -204,6 +205,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestInvalidIdentifiers);
     TESTCASE_AUTO(TestCompoundUnitOperations);
     TESTCASE_AUTO(TestIdentifiers);
+    TESTCASE_AUTO(Test21060_AddressSanitizerProblem);
     TESTCASE_AUTO_END;
 }
 
@@ -3441,6 +3443,36 @@ void MeasureFormatTest::TestIdentifiers() {
         assertEquals(cas.id, cas.normalized, actual);
         status.errIfFailureAndReset();
     }
+}
+
+// ICU-21060
+void MeasureFormatTest::Test21060_AddressSanitizerProblem() {
+    UErrorCode status = U_ZERO_ERROR;
+    MeasureUnit first = MeasureUnit::forIdentifier("one", status);
+
+    // Experimentally, a compound unit like "kilogram-meter" failed. A single
+    // unit like "kilogram" or "meter" did not fail, did not trigger the
+    // problem.
+    MeasureUnit crux = MeasureUnit::forIdentifier("one-per-meter", status);
+
+    // Heap allocation of a new CharString for first.identifier happens here:
+    first = first.product(crux, status);
+
+    // Constructing second from first's identifier resulted in a failure later,
+    // as second held a reference to a substring of first's identifier:
+    MeasureUnit second = MeasureUnit::forIdentifier(first.getIdentifier(), status);
+
+    // Heap is freed here, as an old first.identifier CharString is deallocated
+    // and a new CharString is allocated:
+    first = first.product(crux, status);
+
+    // Proving we've had no failure yet:
+    if (U_FAILURE(status)) return;
+
+    // heap-use-after-free failure happened here, since a SingleUnitImpl had
+    // held onto a StringPiece pointing at a substring of an identifier that was
+    // freed above:
+    second = second.product(crux, status);
 }
 
 

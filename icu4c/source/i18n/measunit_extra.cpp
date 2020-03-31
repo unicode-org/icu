@@ -321,6 +321,14 @@ private:
 
 class Parser {
 public:
+    /**
+     * Factory function for parsing the given identifier.
+     *
+     * @param source The identifier to parse. This function does not make a copy
+     * of source: the underlying string that source points at, must outlive the
+     * parser.
+     * @param status ICU error code.
+     */
     static Parser from(StringPiece source, UErrorCode& status) {
         if (U_FAILURE(status)) {
             return Parser();
@@ -340,6 +348,10 @@ public:
 
 private:
     int32_t fIndex = 0;
+
+    // Since we're not owning this memory, whatever is passed to the constructor
+    // should live longer than this Parser - and the parser shouldn't return any
+    // references to that string.
     StringPiece fSource;
     UCharsTrie fTrie;
 
@@ -399,7 +411,6 @@ private:
         // 1 = power token seen (will not accept another power token)
         // 2 = SI prefix token seen (will not accept a power or SI prefix token)
         int32_t state = 0;
-        int32_t previ = fIndex;
 
         // Maybe read a compound part
         if (fIndex != 0) {
@@ -429,7 +440,6 @@ private:
                     fAfterPer = false;
                     break;
             }
-            previ = fIndex;
         }
 
         // Read a unit
@@ -446,7 +456,6 @@ private:
                         return;
                     }
                     result.dimensionality *= token.getPower();
-                    previ = fIndex;
                     state = 1;
                     break;
 
@@ -456,7 +465,6 @@ private:
                         return;
                     }
                     result.siPrefix = token.getSIPrefix();
-                    previ = fIndex;
                     state = 2;
                     break;
 
@@ -466,7 +474,6 @@ private:
 
                 case Token::TYPE_SIMPLE_UNIT:
                     result.index = token.getSimpleUnitIndex();
-                    result.identifier = fSource.substr(previ, fIndex - previ);
                     return;
 
                 default:
@@ -573,7 +580,7 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
         return;
     }
 
-    output.append(singleUnit.identifier, status);
+    output.appendInvariantChars(gSimpleUnits[singleUnit.index], status);
 }
 
 /**
