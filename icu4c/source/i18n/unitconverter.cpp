@@ -183,7 +183,7 @@ MeasureUnit extractBaseUnit(const MeasureUnit &source,
 /*
  * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
  */
-void addSingleFactorConstant(Factor &factor, StringPiece baseStr, int32_t power, SigNum sigNum) {
+void addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum, Factor &factor) {
 
     if (baseStr == "ft_to_m") {
         factor.constants[CONSTANT_FT2M] += power * sigNum;
@@ -246,7 +246,7 @@ void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum) {
         baseStr = elementStr;
     }
 
-    addSingleFactorConstant(factor, baseStr, power, sigNum);
+    addSingleFactorConstant(baseStr, power, sigNum, factor);
 }
 
 /*
@@ -314,8 +314,9 @@ Factor loadCompoundFactor(const MeasureUnit &source,
     return result;
 }
 
-void substituteSingleConstant(Factor &factor, int32_t constantPower,
-                              double constantValue /* constant actual value, e.g. G= 9.88888 */) {
+void substituteSingleConstant(int32_t constantPower,
+                              double constantValue /* constant actual value, e.g. G= 9.88888 */,
+                              Factor &factor) {
     constantValue = std::pow(constantValue, std::abs(constantPower));
 
     if (constantPower < 0) {
@@ -338,7 +339,7 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         if (factor.constants[i] == 0) continue;
 
-        substituteSingleConstant(factor, factor.constants[i], constantsValues[i]);
+        substituteSingleConstant(factor.constants[i], constantsValues[i], factor);
         factor.constants[i] = 0;
     }
 }
