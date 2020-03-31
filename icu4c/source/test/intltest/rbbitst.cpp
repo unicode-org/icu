@@ -1639,8 +1639,9 @@ std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
 unsigned int RBBIMonkeyKind::maxClassNameSize() {
     unsigned int maxSize = 0;
     for (int aClassNum = 0; aClassNum < charClasses()->size(); aClassNum++) {
-        if (classNames[aClassNum].size() > maxSize) {
-            maxSize = classNames[aClassNum].size();
+        auto aClassNumSize = static_cast<unsigned int>(classNames[aClassNum].size());
+        if (aClassNumSize > maxSize) {
+            maxSize = aClassNumSize;
         }
     }
     return maxSize;

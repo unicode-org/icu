@@ -166,7 +166,7 @@ void
 StringTest::TestUpperOrdinal() {
     for (int32_t i = 0;; ++i) {
         char ic = nativeInvChars[i];
-        uint8_t ac = asciiInvChars[i];
+        uint8_t ac = static_cast<uint8_t>(asciiInvChars[i]);
         int32_t expected = ac - 'A';
         int32_t actual = uprv_upperOrdinal(ic);
         if (0 <= expected && expected <= 25) {
@@ -188,7 +188,7 @@ void
 StringTest::TestLowerOrdinal() {
     for (int32_t i = 0;; ++i) {
         char ic = nativeInvChars[i];
-        uint8_t ac = asciiInvChars[i];
+        uint8_t ac = static_cast<uint8_t>(asciiInvChars[i]);
         int32_t expected = ac - 'a';
         int32_t actual = uprv_lowerOrdinal(ic);
         if (0 <= expected && expected <= 25) {
@@ -506,7 +506,7 @@ StringTest::TestStringPieceOther() {
     Other other;
     StringPiece piece(other);
 
-    assertEquals("size()", piece.size(), other.size());
+    assertEquals("size()", piece.size(), static_cast<int32_t>(other.size()));
     assertEquals("data()", piece.data(), other.data());
 }
 

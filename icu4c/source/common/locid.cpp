@@ -722,7 +722,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
                         if (U_SUCCESS(status)) {
                             CharString newVar;
                             if (begin != variants) {
-                                newVar.append(variants, begin - variants - 1, status);
+                                newVar.append(variants, static_cast<int32_t>(begin - variants - 1), status);
                             }
                             if (end != nullptr) {
                                 if (begin != variants) {
