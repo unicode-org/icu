@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
+#include <math.h>
 
 #include "unicode/ctest.h" // for str_timeDelta
 #include "unicode/curramt.h"
@@ -2150,6 +2151,22 @@ UBool IntlTest::assertEquals(const char* message,
 #ifdef VERBOSE_ASSERTIONS
     else {
         logln((UnicodeString)"Ok: " + message + "; got " + vectorToString(actual).c_str());
+    }
+#endif
+    return TRUE;
+}
+
+UBool IntlTest::assertEqualsNear(const char *message, double expected, double actual, double precision) {
+    double diff = std::abs(expected - actual);
+    double diffPercent = expected != 0? diff / expected : diff; // If the expected is equals zero, we 
+
+    if (diffPercent > precision) {
+        errln((UnicodeString) "FAIL: " + message + "; got " + actual + "; expected " + expected);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString) "Ok: " + message + "; got " + expected);
     }
 #endif
     return TRUE;
