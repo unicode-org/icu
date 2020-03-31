@@ -82,6 +82,7 @@ private:
     void TestInvalidIdentifiers();
     void TestCompoundUnitOperations();
     void TestIdentifiers();
+    void TestAddressSanitizerProblem();
 
     void verifyFormat(
         const char *description,
@@ -204,6 +205,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestInvalidIdentifiers);
     TESTCASE_AUTO(TestCompoundUnitOperations);
     TESTCASE_AUTO(TestIdentifiers);
+    TESTCASE_AUTO(TestAddressSanitizerProblem);
     TESTCASE_AUTO_END;
 }
 
@@ -3603,6 +3605,29 @@ void MeasureFormatTest::verifyMixedUnit(
             subIdentifiers[i],
             subUnits[i].getIdentifier());
     }
+}
+
+void MeasureFormatTest::TestAddressSanitizerProblem() {
+    UErrorCode status = U_ZERO_ERROR;
+    MeasureUnit first = MeasureUnit::forIdentifier("one", status);
+
+    // Compound "kilogram-meter" fails. Single "kilogram" or "meter" doesn't fail.
+    MeasureUnit crux = MeasureUnit::forIdentifier("one-per-meter", status);
+
+    // HEAP ALLOCATION HAPPENS HERE:
+    first = first.product(crux, status);
+
+    // Construct from first's identifier results in failure. Construct from string doesn't.
+    MeasureUnit second = MeasureUnit::forIdentifier(first.getIdentifier(), status);
+
+    // HEAP FREED HERE:
+    first = first.product(crux, status);
+
+    // Proving no failure yet:
+    if (U_FAILURE(status)) return;
+
+    // heap-use-after-free FAIURE HERE:
+    second = second.product(crux, status);
 }
 
 extern IntlTest *createMeasureFormatTest() {
