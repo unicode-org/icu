@@ -21,7 +21,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
  * @stable ICU 62
  * @see NumberFormatter
  */
-public abstract class Precision implements Cloneable {
+public abstract class Precision {
 
     /* package-private final */ MathContext mathContext;
 
