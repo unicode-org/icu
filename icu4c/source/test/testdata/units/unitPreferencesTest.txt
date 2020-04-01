@@ -15,7 +15,7 @@
 #      length; person-height; CA; 3429 / 12500; 0.27432; meter; 2; foot; 54 / 5; 10.8; inch
 #    The input and output units are unit identifers; they are neither localized nor adjusted for pluralization,#     nor formatted with the skeleton.
 #
-# Generation: Set SHOW_DATA in TestUnits.java, and look at TestUnitPreferences results.
+# Generation: Set GENERATE_TESTS in TestUnits.java, and look at TestUnitPreferences results.
 
 area;   default;    001;    1100000;    1100000.0;  square-meter;   11 / 10;    1.1;    square-kilometer
 area;   default;    001;    1000000;    1000000.0;  square-meter;   1;  1.0;    square-kilometer
@@ -153,7 +153,9 @@ length; person-height;  001;    9 / 1000;   0.009;  meter;  9 / 10; 0.9;    cent
 
 length; person-height;  CA; 381 / 12500;    0.03048;    meter;  3;  foot;   6 / 5;  1.2;    inch
 length; person-height;  CA; 0;  0.0;    meter;  3;  foot;   0;  0.0;    inch
-length; person-height;  CA; 3429 / 12500;   0.27432;    meter;  2;  foot;   54 / 5; 10.8;   inch
+length; person-height;  CA; 11049 / 12500;  0.88392;    meter;  174 / 5;    34.8;   inch
+length; person-height;  CA; 127 / 5000; 0.0254; meter;  1;  1.0;    inch
+length; person-height;  CA; 1143 / 50000;   0.02286;    meter;  9 / 10; 0.9;    inch
 
 length; person-height;  AT; 1 / 10; 0.1;    meter;  1;  meter;  10; 10.0;   centimeter
 length; person-height;  AT; 0;  0.0;    meter;  1;  meter;  0;  0.0;    centimeter
@@ -195,9 +197,15 @@ length; road;   GB; 1141857 / 12500;    91.34856;   meter;  999 / 10;   99.9;   
 length; road;   GB; 1143 / 1250;    0.9144; meter;  1;  1.0;    yard
 length; road;   GB; 10287 / 12500;  0.82296;    meter;  9 / 10; 0.9;    yard
 
-length; road;   SE; 2000;   2000.0; meter;  1 / 5;  0.2;    mile-scandinavian
-length; road;   SE; 1000;   1000.0; meter;  1 / 10; 0.1;    mile-scandinavian
-length; road;   SE; 0;  0.0;    meter;  0;  0.0;    mile-scandinavian
+length; road;   SE; 11000;  11000.0;    meter;  11 / 10;    1.1;    mile-scandinavian
+length; road;   SE; 10000;  10000.0;    meter;  1;  1.0;    mile-scandinavian
+length; road;   SE; 9000;   9000.0; meter;  9;  9.0;    kilometer
+length; road;   SE; 1000;   1000.0; meter;  1;  1.0;    kilometer
+length; road;   SE; 900;    900.0;  meter;  900;    900.0;  meter
+length; road;   SE; 300;    300.0;  meter;  300;    300.0;  meter
+length; road;   SE; 2999 / 10;  299.9;  meter;  2999 / 10;  299.9;  meter
+length; road;   SE; 1;  1.0;    meter;  1;  1.0;    meter
+length; road;   SE; 9 / 10; 0.9;    meter;  9 / 10; 0.9;    meter
 
 length; snowfall;   001;    11 / 1000;  0.011;  meter;  11 / 10;    1.1;    centimeter
 length; snowfall;   001;    1 / 100;    0.01;   meter;  1;  1.0;    centimeter
@@ -311,17 +319,17 @@ pressure;   baromtrc;   001;    110;    110.0;  kilogram-per-meter-square-second
 pressure;   baromtrc;   001;    100;    100.0;  kilogram-per-meter-square-second;   1;  1.0;    hectopascal
 pressure;   baromtrc;   001;    90; 90.0;   kilogram-per-meter-square-second;   9 / 10; 0.9;    hectopascal
 
-pressure;   baromtrc;   IN; 37250279 / 10000;   3725.0279;  kilogram-per-meter-square-second;   11 / 10;    1.1;    inch-ofhg
-pressure;   baromtrc;   IN; 3386389 / 1000; 3386.389;   kilogram-per-meter-square-second;   1;  1.0;    inch-ofhg
-pressure;   baromtrc;   IN; 30477501 / 10000;   3047.7501;  kilogram-per-meter-square-second;   9 / 10; 0.9;    inch-ofhg
+pressure;   baromtrc;   IN; 37250275043751 / 10000000000;   3725.0275043751;    kilogram-per-meter-square-second;   11 / 10;    1.1;    inch-ofhg
+pressure;   baromtrc;   IN; 3386388640341 / 1000000000; 3386.388640341; kilogram-per-meter-square-second;   1;  1.0;    inch-ofhg
+pressure;   baromtrc;   IN; 30477497763069 / 10000000000;   3047.7497763069;    kilogram-per-meter-square-second;   9 / 10; 0.9;    inch-ofhg
 
 pressure;   baromtrc;   BR; 110;    110.0;  kilogram-per-meter-square-second;   11 / 10;    1.1;    millibar
 pressure;   baromtrc;   BR; 100;    100.0;  kilogram-per-meter-square-second;   1;  1.0;    millibar
 pressure;   baromtrc;   BR; 90; 90.0;   kilogram-per-meter-square-second;   9 / 10; 0.9;    millibar
 
-pressure;   baromtrc;   MX; 44583 / 3040;   14.66546052631579;  kilogram-per-meter-square-second;   11 / 10;    1.1;    millimeter-ofhg
-pressure;   baromtrc;   MX; 4053 / 304; 13.33223684210526;  kilogram-per-meter-square-second;   1;  1.0;    millimeter-ofhg
-pressure;   baromtrc;   MX; 36477 / 3040;   11.99901315789474;  kilogram-per-meter-square-second;   9 / 10; 0.9;    millimeter-ofhg
+pressure;   baromtrc;   MX; 293309252313 / 2000000000;  146.6546261565; kilogram-per-meter-square-second;   11 / 10;    1.1;    millimeter-ofhg
+pressure;   baromtrc;   MX; 26664477483 / 200000000;    133.322387415;  kilogram-per-meter-square-second;   1;  1.0;    millimeter-ofhg
+pressure;   baromtrc;   MX; 239980297347 / 2000000000;  119.9901486735; kilogram-per-meter-square-second;   9 / 10; 0.9;    millimeter-ofhg
 
 pressure;   default;    001;    1100000;    1100000.0;  kilogram-per-meter-square-second;   11 / 10;    1.1;    megapascal
 pressure;   default;    001;    1000000;    1000000.0;  kilogram-per-meter-square-second;   1;  1.0;    megapascal
