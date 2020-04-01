@@ -471,7 +471,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                   maxSmatch = 3;
                   maxDmatch = 3;
               } else if (timeOnly && uprv_strcmp(origLocale.getName(),"ar_JO@calendar=islamic-civil")==0 &&
-                      logKnownIssue("21022", "ar_JO@calendar=islamic-civil timeOnly roundtrip converges too slowly")) {
+                      logKnownIssue("21049", "ar_JO@calendar=islamic-civil timeOnly roundtrip converges too slowly")) {
                   // For some reason, for time-only tests, ar_JO@calendar=islamic-civil is no
                   // longer converging to a match as fast as expected above. Investigate with
                   // ICU-21022, but meanwhile allow more cycles for convergence.
