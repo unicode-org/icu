@@ -44,8 +44,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public int length() {
@@ -55,8 +54,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public char charAt(int index) {
@@ -66,8 +64,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public CharSequence subSequence(int start, int end) {
@@ -87,8 +84,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public boolean nextPosition(ConstrainedFieldPosition cfpos) {
