@@ -437,7 +437,6 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
                                UErrorCode* ec);
 
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Like unumf_openForSkeletonAndLocale, but accepts a UParseError, which will be populated with the
  * location of a skeleton syntax error if such a syntax error exists.
@@ -448,12 +447,11 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
  * @param perror A parse error struct populated if an error occurs when parsing. Can be NULL.
  *               If no error occurs, perror->offset will be set to -1.
  * @param ec Set if an error occurs.
- * @draft ICU 64
+ * @stable ICU 64
  */
-U_DRAFT UNumberFormatter* U_EXPORT2
+U_STABLE UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocaleWithError(
        const UChar* skeleton, int32_t skeletonLen, const char* locale, UParseError* perror, UErrorCode* ec);
-#endif  // U_HIDE_DRAFT_API
 
 
 /**
@@ -531,7 +529,6 @@ U_STABLE void U_EXPORT2
 unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32_t valueLen,
                     UFormattedNumber* uresult, UErrorCode* ec);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Returns a representation of a UFormattedNumber as a UFormattedValue,
  * which can be subsequently passed to any API requiring that type.
@@ -544,11 +541,10 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
  * @param uresult The object containing the formatted string.
  * @param ec Set if an error occurs.
  * @return A UFormattedValue owned by the input object.
- * @draft ICU 64
+ * @stable ICU 64
  */
-U_DRAFT const UFormattedValue* U_EXPORT2
+U_STABLE const UFormattedValue* U_EXPORT2
 unumf_resultAsValue(const UFormattedNumber* uresult, UErrorCode* ec);
-#endif  /* U_HIDE_DRAFT_API */
 
 
 /**
