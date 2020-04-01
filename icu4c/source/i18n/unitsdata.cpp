@@ -56,6 +56,7 @@ class ConversionRateDataSink : public ResourceSink {
      * @param status The standard ICU error code output parameter.
      */
     void put(const char *source, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
+        if (U_FAILURE(status)) return;
         ResourceTable conversionRateTable = value.getTable(status);
         if (U_FAILURE(status)) return;
 
@@ -73,14 +74,16 @@ class ConversionRateDataSink : public ResourceSink {
                 offset = value.getString(lenOffset, status);
             }
         }
+        if (U_FAILURE(status)) return;
         if (baseUnit == NULL || factor == NULL) {
+            // We could not find a usable conversion rate.
             status = U_MISSING_RESOURCE_ERROR;
             return;
         }
 
         // Check if we already have the conversion rate in question.
         //
-        // TODO(revieW): We could do this skip-check *before* we fetch
+        // TODO(review): We could do this skip-check *before* we fetch
         // baseUnit/factor/offset based only on the source unit, but only if
         // we're certain we'll never get two different baseUnits for a given
         // source. This should be the case, since convertUnit entries in CLDR's
@@ -97,7 +100,6 @@ class ConversionRateDataSink : public ResourceSink {
                 return;
             }
         }
-        if (U_FAILURE(status)) return;
 
         // We don't have this ConversionRateInfo yet: add it.
         ConversionRateInfo *cr = outVector.emplaceBack();
@@ -242,108 +244,62 @@ void collectUnitPrefs(UResourceBundle *usageData, MaybeStackVector<UnitPreferenc
     }
 }
 
-// The input unit needs to be simple, but can have dimensionality != 1.
+/**
+ * Collects conversion information for a "single unit" (a unit whose complexity
+ * is UMEASURE_UNIT_SINGLE).
+ *
+ * This function currently only supports higher-dimensionality input units if
+ * they map to "single unit" output units. This means it don't support
+ * square-bar, one-per-bar, square-joule or one-per-joule. (Some unit types in
+ * this class: volume, consumption, torque, force, pressure, speed,
+ * acceleration, and more).
+ *
+ * TODO(hugovdm): maybe find and share (in documentation) a solid argument for
+ * why these kinds of input units won't be needed with higher dimensionality? Or
+ * start supporting them... Also: add unit tests demonstrating the
+ * U_ILLEGAL_ARGUMENT_ERROR returned for such units.
+ *
+ * @param unit The input unit. Its complexity must be UMEASURE_UNIT_SINGLE, but
+ * it may have a dimensionality != 1.
+ * @param converUnitsBundle A UResourceBundle instance for the convertUnits
+ * resource.
+ * @param convertSink The ConversionRateDataSink through which
+ * ConversionRateInfo instances are to be collected.
+ * @param status The standard ICU error code output parameter.
+ */
 void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUnitsBundle,
-                       ConversionRateDataSink &convertSink, MeasureUnit *baseSingleUnit,
-                       UErrorCode &status) {
+                       ConversionRateDataSink &convertSink, UErrorCode &status) {
+    if (U_FAILURE(status)) return;
     int32_t dimensionality = unit.getDimensionality(status);
 
+    // Fetch the relevant entry in convertUnits.
     MeasureUnit simple = unit;
     if (dimensionality != 1 || simple.getSIPrefix(status) != UMEASURE_SI_PREFIX_ONE) {
         simple = unit.withDimensionality(1, status).withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
     }
     ures_getAllItemsWithFallback(convertUnitsBundle, simple.getIdentifier(), convertSink, status);
-
-    if (baseSingleUnit != NULL) {
-        MeasureUnit baseUnit = convertSink.getLastBaseUnit(status);
-
-        if (dimensionality == 1) {
-            *baseSingleUnit = baseUnit;
-        } else if (baseUnit.getComplexity(status) == UMEASURE_UNIT_SINGLE) {
-            // TODO(hugovdm): find examples where we're converting a *-per-* to
-            // a square-*? Does one ever square frequency? What about
-            // squared-speed in the case of mv^2? Or F=ma^2?
-            //
-            // baseUnit might also have dimensionality, e.g. cubic-meter -
-            // retain this instead of overriding with input unit dimensionality:
-            dimensionality *= baseUnit.getDimensionality(status);
-            *baseSingleUnit = baseUnit.withDimensionality(dimensionality, status);
-        } else {
-            // We only support higher dimensionality input units if they map to
-            // simple base units, such that that base unit can have the
-            // dimensionality easily applied.
-            //
-            // TODO(hugovdm): produce succeeding examples of simple input unit
-            // mapped to a different simple target/base unit.
-            //
-            // TODO(hugovdm): produce failing examples of higher-dimensionality
-            // or inverted input units that map to compound output units.
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-    }
 }
 
 } // namespace
 
-MaybeStackVector<ConversionRateInfo> getConversionRatesInfo(const MeasureUnit source, const MeasureUnit target,
-                                                            MeasureUnit *baseCompoundUnit,
-                                                            UErrorCode &status) {
+MaybeStackVector<ConversionRateInfo> U_I18N_API
+getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status) {
     MaybeStackVector<ConversionRateInfo> result;
-
-    int32_t sourceUnitsLength, targetUnitsLength;
-    LocalArray<MeasureUnit> sourceUnits = source.splitToSingleUnits(sourceUnitsLength, status);
-    LocalArray<MeasureUnit> targetUnits = target.splitToSingleUnits(targetUnitsLength, status);
+    if (U_FAILURE(status)) return result;
 
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
     StackUResourceBundle convertUnitsBundle;
     ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
-
     ConversionRateDataSink convertSink(result);
-    MeasureUnit sourceBaseUnit;
-    for (int i = 0; i < sourceUnitsLength; i++) {
-        MeasureUnit baseUnit;
-        processSingleUnit(sourceUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
-        if (source.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
-            if (i == 0) {
-                sourceBaseUnit = baseUnit;
-            } else {
-                if (baseUnit != sourceBaseUnit) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return result;
-                }
-            }
-        } else {
-            sourceBaseUnit = sourceBaseUnit.product(baseUnit, status);
+
+    for (int i = 0; i < units.length(); i++) {
+        int32_t numSingleUnits;
+        LocalArray<MeasureUnit> singleUnits = units[i]->splitToSingleUnits(numSingleUnits, status);
+
+        for (int i = 0; i < numSingleUnits; i++) {
+            processSingleUnit(singleUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
         }
     }
-    MeasureUnit targetBaseUnit;
-    for (int i = 0; i < targetUnitsLength; i++) {
-        MeasureUnit baseUnit;
-        processSingleUnit(targetUnits[i], convertUnitsBundle.getAlias(), convertSink, &baseUnit, status);
-        if (target.getComplexity(status) == UMEASURE_UNIT_SEQUENCE) {
-            // WIP/TODO(hugovdm): add consistency checks.
-            if (baseUnit != sourceBaseUnit) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return result;
-            }
-            targetBaseUnit = baseUnit;
-        } else {
-            // WIP/FIXME(hugovdm): I think I found a bug in targetBaseUnit.product():
-            // Target Base: <kilogram-square-meter-per-square-second> x <one-per-meter> => <meter>
-            //
-            // fprintf(stderr, "Target Base: <%s> x <%s> => ", targetBaseUnit.getIdentifier(),
-            //         baseUnit.getIdentifier());
-            targetBaseUnit = targetBaseUnit.product(baseUnit, status);
-            // fprintf(stderr, "<%s>\n", targetBaseUnit.getIdentifier());
-            // fprintf(stderr, "Status: %s\n", u_errorName(status));
-        }
-    }
-    if (targetBaseUnit != sourceBaseUnit) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return result;
-    }
-    if (baseCompoundUnit != NULL) { *baseCompoundUnit = sourceBaseUnit; }
     return result;
 }
 

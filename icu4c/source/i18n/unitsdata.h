@@ -18,6 +18,9 @@ U_NAMESPACE_BEGIN
 
 // Encapsulates "convertUnits" information from units resources, specifying how
 // to convert from one unit to another.
+//
+// Information in this class is still in the form of strings: symbolic constants
+// need to be interpreted.
 class U_I18N_API ConversionRateInfo {
   public:
     ConversionRateInfo(){};
@@ -30,10 +33,9 @@ class U_I18N_API ConversionRateInfo {
         this->offset.append(offset, status);
     };
     CharString sourceUnit;
-    CharString baseUnit; // FIXME/WIP: baseUnit
+    CharString baseUnit;
     CharString factor;
     CharString offset;
-    bool reciprocal = false;
 };
 
 // Encapsulates unitPreferenceData information from units resources, specifying
@@ -46,22 +48,14 @@ struct U_I18N_API UnitPreference {
 };
 
 /**
- * Collects and returns ConversionRateInfo needed to convert from source to
- * baseUnit.
+ * Collects and returns ConversionRateInfo needed for conversions for a set of
+ * units.
  *
- * If source and target are not compatible for conversion, status will be set to
- * U_ILLEGAL_ARGUMENT_ERROR.
- *
- * @param source The source unit (the unit type converted from).
- * @param target The target unit (the unit type converted to).
- * @param baseCompoundUnit Output parameter: if not NULL, it will be set to the
- * compound base unit type used as pivot for converting from source to target.
+ * @param units The units for which to load conversion data.
  * @param status Receives status.
  */
-MaybeStackVector<ConversionRateInfo> U_I18N_API getConversionRatesInfo(MeasureUnit source,
-                                                                       MeasureUnit target,
-                                                                       MeasureUnit *baseCompoundUnit,
-                                                                       UErrorCode &status);
+MaybeStackVector<ConversionRateInfo>
+    U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status);
 
 /**
  * Collects the data needed for converting the inputUnit type to output units
