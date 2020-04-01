@@ -29,8 +29,8 @@ area    ;   acre    ;   square-meter    ;   316160658 / 78125 * x   ;   4046856.
 area    ;   hectare ;   square-meter    ;   10000 * x   ;   1.0E7
 area    ;   square-kilometer    ;   square-meter    ;   1000000 * x ;   1.0E9
 area    ;   square-mile ;   square-meter    ;   40468564224 / 15625 * x ;   2.589988E9
-#WIP(ILLEGAL_ARG)#concentration   ;   millimole-per-liter ;   item-per-cubic-meter    ;   602214076000000000000000 * x    ;   6.022141E26
-#WIP(ILLEGAL_ARG)#consumption ;   liter-per-100-kilometer ;   cubic-meter-per-meter   ;   1 / 100000000 * x   ;   1.0E-5
+concentration   ;   millimole-per-liter ;   item-per-cubic-meter    ;   602214076000000000000000 * x    ;   6.022141E26
+consumption ;   liter-per-100-kilometer ;   cubic-meter-per-meter   ;   1 / 100000000 * x   ;   1.0E-5
 consumption ;   liter-per-kilometer ;   cubic-meter-per-meter   ;   1 / 1000000 * x ;   0.001
 consumption-inverse ;   mile-per-gallon-imperial    ;   meter-per-cubic-meter   ;   160934400000 / 454609 * x   ;   3.540062E8
 consumption-inverse ;   mile-per-gallon ;   meter-per-cubic-meter   ;   48000000000 / 112903 * x    ;   4.251437E8
@@ -114,11 +114,11 @@ mass    ;   metric-ton  ;   kilogram    ;   1000 * x    ;   1000000.0
 mass    ;   earth-mass  ;   kilogram    ;   5972200000000000000000000 * x   ;   5.9722E27
 mass    ;   solar-mass  ;   kilogram    ;   1988470000000000000000000000000 * x ;   1.98847E33
 mass-density    ;   milligram-per-deciliter ;   kilogram-per-cubic-meter    ;   1 / 100 * x ;   10.0
-#WIP(ILLEGAL_ARG)#portion ;   permillion  ;   portion ;   1 / 1000000 * x ;   0.001
-#WIP(ILLEGAL_ARG)#portion ;   permyriad   ;   portion ;   1 / 10000 * x   ;   0.1
-#WIP(ILLEGAL_ARG)#portion ;   permille    ;   portion ;   1 / 1000 * x    ;   1.0
-#WIP(ILLEGAL_ARG)#portion ;   percent ;   portion ;   1 / 100 * x ;   10.0
-#WIP(ILLEGAL_ARG)#portion ;   karat   ;   portion ;   1 / 24 * x  ;   41.66667
+portion ;   permillion  ;   portion ;   1 / 1000000 * x ;   0.001
+portion ;   permyriad   ;   portion ;   1 / 10000 * x   ;   0.1
+portion ;   permille    ;   portion ;   1 / 1000 * x    ;   1.0
+portion ;   percent ;   portion ;   1 / 100 * x ;   10.0
+portion ;   karat   ;   portion ;   1 / 24 * x  ;   41.66667
 power   ;   milliwatt   ;   kilogram-square-meter-per-cubic-second  ;   1 / 1000 * x    ;   1.0
 power   ;   watt    ;   kilogram-square-meter-per-cubic-second  ;   1 * x   ;   1000.0
 power   ;   horsepower  ;   kilogram-square-meter-per-cubic-second  ;   37284993579113511 / 50000000000000 * x  ;   745699.9
@@ -127,11 +127,11 @@ power   ;   megawatt    ;   kilogram-square-meter-per-cubic-second  ;   1000000 
 power   ;   gigawatt    ;   kilogram-square-meter-per-cubic-second  ;   1000000000 * x  ;   1.0E12
 power   ;   solar-luminosity    ;   kilogram-square-meter-per-cubic-second  ;   382800000000000000000000000 * x ;   3.828E29
 pressure    ;   pascal  ;   kilogram-per-meter-square-second    ;   1 * x   ;   1000.0
-#WIP(ILLEGAL_ARG)#pressure    ;   millimeter-ofhg   ;   kilogram-per-meter-square-second    ;   4053 / 304 * x  ;   13332.24
+pressure    ;   millimeter-ofhg   ;   kilogram-per-meter-square-second    ;   4053 / 304 * x  ;   13332.24
 pressure    ;   hectopascal ;   kilogram-per-meter-square-second    ;   100 * x ;   100000.0
 pressure    ;   millibar    ;   kilogram-per-meter-square-second    ;   100 * x ;   100000.0
 pressure    ;   kilopascal  ;   kilogram-per-meter-square-second    ;   1000 * x    ;   1000000.0
-#WIP(ILLEGAL_ARG)#pressure    ;   inch-ofhg   ;   kilogram-per-meter-square-second    ;   3386389 / 1000 * x  ;   338638.8
+pressure    ;   inch-ofhg   ;   kilogram-per-meter-square-second    ;   3386389 / 1000 * x  ;   338638.8
 pressure    ;   pound-force-per-square-inch ;   kilogram-meter-per-square-meter-square-second   ;   8896443230521 / 1290320000 * x  ;   6894757.0
 pressure    ;   bar ;   kilogram-per-meter-square-second    ;   100000 * x  ;   1.0E8
 pressure    ;   atmosphere  ;   kilogram-per-meter-square-second    ;   101325 * x  ;   1.01325E8
@@ -144,7 +144,7 @@ speed   ;   kilometer-per-hour  ;   meter-per-second    ;   5 / 18 * x  ;   277.
 speed   ;   mile-per-hour   ;   meter-per-second    ;   1397 / 3125 * x ;   447.04
 speed   ;   knot    ;   meter-per-second    ;   463 / 900 * x   ;   514.4444
 speed   ;   meter-per-second    ;   meter-per-second    ;   1 * x   ;   1,000.00
-#WIP(ILLEGAL_ARG)#substance-amount    ;   mole    ;   item    ;   602214076000000000000000 * x    ;   6.022141E26
+substance-amount    ;   mole    ;   item    ;   602214076000000000000000 * x    ;   6.022141E26
 temperature ;   fahrenheit  ;   kelvin  ;   5 / 9 * x - 45967 / 180 ;   810.9278
 temperature ;   kelvin  ;   kelvin  ;   1 * x   ;   1,000.00
 temperature ;   celsius ;   kelvin  ;   1 * x - 5463 / 20   ;   1273.15
