@@ -38,10 +38,6 @@ su{
             "$",
             "Dolar A.S.",
         }
-        XXX{
-            "¤",
-            "XXX",
-        }
     }
     Currencies%narrow{
         BRL{"R$"}
@@ -81,9 +77,6 @@ su{
         }
         USD{
             other{"dolar A.S."}
-        }
-        XXX{
-            other{"XXX"}
         }
     }
     CurrencyUnitPatterns{
