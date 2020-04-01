@@ -57,8 +57,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * Does not copy the char array which will be shared.
      * Same as clone() but without the throws clause.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public CharsTrie(CharsTrie other) {
         chars_ = other.chars_;
@@ -95,8 +94,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      *
      * @return opaque state value
      * @see #resetToState64
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public long getState64() {
         return ((long)remainingMatchLength_ << 32) | pos_;
@@ -114,8 +112,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
      * @see #getState64
      * @see #resetToState
      * @see #reset
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public CharsTrie resetToState64(long state) {
         remainingMatchLength_ = (int)(state >> 32);

@@ -1083,8 +1083,7 @@ public class DecimalFormat extends NumberFormat {
    * @return Whether the sign is shown on positive numbers and zero.
    * @see #setSignAlwaysShown
    * @category Affixes
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized boolean isSignAlwaysShown() {
     // This is not in the exported properties
@@ -1113,8 +1112,7 @@ public class DecimalFormat extends NumberFormat {
    *
    * @param value true to always show a sign; false to hide the sign on positive numbers and zero.
    * @category Affixes
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized void setSignAlwaysShown(boolean value) {
     properties.setSignAlwaysShown(value);
@@ -1983,8 +1981,7 @@ public class DecimalFormat extends NumberFormat {
    *
    * @see #setMinimumGroupingDigits
    * @category Separators
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized int getMinimumGroupingDigits() {
     if (properties.getMinimumGroupingDigits() > 0) {
@@ -2000,8 +1997,7 @@ public class DecimalFormat extends NumberFormat {
    *
    * @param number The minimum number of digits before grouping is triggered.
    * @category Separators
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized void setMinimumGroupingDigits(int number) {
     properties.setMinimumGroupingDigits(number);
@@ -2312,8 +2308,7 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
    *
    * @see #setParseNoExponent
    * @category Parsing
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized boolean isParseNoExponent() {
     return properties.getParseNoExponent();
@@ -2326,8 +2321,7 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
    *
    * @param value true to prevent exponents from being parsed; false to allow them to be parsed.
    * @category Parsing
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized void setParseNoExponent(boolean value) {
     properties.setParseNoExponent(value);
@@ -2339,8 +2333,7 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
    *
    * @see #setParseNoExponent
    * @category Parsing
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized boolean isParseCaseSensitive() {
     return properties.getParseCaseSensitive();
@@ -2354,8 +2347,7 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
    * @param value true to force case (uppercase/lowercase) to match when parsing; false to ignore
    *     case and perform case folding.
    * @category Parsing
-   * @draft ICU 64
-   * @provisional This API might change or be removed in a future release.
+   * @stable ICU 64
    */
   public synchronized void setParseCaseSensitive(boolean value) {
     properties.setParseCaseSensitive(value);

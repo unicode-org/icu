@@ -178,8 +178,7 @@ final public class ListFormatter {
     /**
      * Class for span fields in FormattedDateInterval.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = 3563544214705634403L;
@@ -190,8 +189,7 @@ final public class ListFormatter {
          * Instances of LIST_SPAN should have an associated value, the index
          * within the input list that is represented by the span.
          *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         public static final SpanField LIST_SPAN = new SpanField("list-span");
 
@@ -200,7 +198,7 @@ final public class ListFormatter {
         }
 
         /**
-         * serizalization method resolve instances to the constant
+         * serialization method resolve instances to the constant
          * ListFormatter.SpanField values
          * @internal
          * @deprecated This API is ICU internal only.

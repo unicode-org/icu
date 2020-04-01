@@ -68,8 +68,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public char charAt(int index) {
@@ -79,8 +78,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public int length() {
@@ -90,8 +88,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public CharSequence subSequence(int start, int end) {
@@ -101,8 +98,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public boolean nextPosition(ConstrainedFieldPosition cfpos) {
@@ -162,8 +158,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public int hashCode() {
@@ -176,8 +171,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public boolean equals(Object other) {

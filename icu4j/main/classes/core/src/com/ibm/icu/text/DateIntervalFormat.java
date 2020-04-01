@@ -276,8 +276,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * Not intended for public subclassing.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final class FormattedDateInterval implements FormattedValue {
         private final String string;
@@ -290,8 +289,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public String toString() {
@@ -300,8 +298,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public int length() {
@@ -310,8 +307,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public char charAt(int index) {
@@ -320,8 +316,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public CharSequence subSequence(int start, int end) {
@@ -330,8 +325,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public <A extends Appendable> A appendTo(A appendable) {
@@ -340,8 +334,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public boolean nextPosition(ConstrainedFieldPosition cfpos) {
@@ -350,8 +343,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public AttributedCharacterIterator toCharacterIterator() {
@@ -362,8 +354,7 @@ public class DateIntervalFormat extends UFormat {
     /**
      * Class for span fields in FormattedDateInterval.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = -6330879259553618133L;
@@ -375,8 +366,7 @@ public class DateIntervalFormat extends UFormat {
          * 0, the date fields within the span are for the "from" date; if 1,
          * the date fields within the span are for the "to" date.
          *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         public static final SpanField DATE_INTERVAL_SPAN = new SpanField("date-interval-span");
 
@@ -385,7 +375,7 @@ public class DateIntervalFormat extends UFormat {
         }
 
         /**
-         * serizalization method resolve instances to the constant
+         * serialization method resolve instances to the constant
          * DateIntervalFormat.SpanField values
          * @draft ICU 64
          * @provisional This API might change or be removed in a future release.
@@ -795,8 +785,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param dtInterval        DateInterval to be formatted.
      * @return                  A FormattedDateInterval containing the format result.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(DateInterval dtInterval) {
         StringBuffer sb = new StringBuffer();
@@ -903,8 +892,7 @@ public class DateIntervalFormat extends UFormat {
      * @param toCalendar        calendar set to the to date in date interval
      *                          to be formatted into date interval string
      * @return                  A FormattedDateInterval containing the format result.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(Calendar fromCalendar, Calendar toCalendar) {
         StringBuffer sb = new StringBuffer();
