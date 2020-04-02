@@ -2426,7 +2426,6 @@ class U_I18N_API LocalizedNumberFormatter
 class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
   public:
 
-    // Default constructor cannot have #ifndef U_HIDE_DRAFT_API
     /**
      * Default constructor; makes an empty FormattedNumber.
      * @stable ICU 64
