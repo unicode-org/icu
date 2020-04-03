@@ -42,7 +42,7 @@ constexpr int32_t kCompoundPartOffset = 128;
 enum CompoundPart {
     COMPOUND_PART_PER = kCompoundPartOffset,
     COMPOUND_PART_TIMES,
-    COMPOUND_PART_PLUS,
+    COMPOUND_PART_AND,
 };
 
 constexpr int32_t kPowerPartOffset = 256;
@@ -226,7 +226,7 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     // Add syntax parts (compound, power prefixes)
     b.add(u"-per-", COMPOUND_PART_PER, status);
     b.add(u"-", COMPOUND_PART_TIMES, status);
-    b.add(u"-and-", COMPOUND_PART_PLUS, status);
+    b.add(u"-and-", COMPOUND_PART_AND, status);
     b.add(u"square-", POWER_PART_P2, status);
     b.add(u"cubic-", POWER_PART_P3, status);
     b.add(u"p2-", POWER_PART_P2, status);
@@ -383,8 +383,8 @@ private:
         return Token(match);
     }
 
-    void nextSingleUnit(SingleUnitImpl& result, bool& sawPlus, UErrorCode& status) {
-        sawPlus = false;
+    void nextSingleUnit(SingleUnitImpl& result, bool& sawAnd, UErrorCode& status) {
+        sawAnd = false;
         if (U_FAILURE(status)) {
             return;
         }
@@ -422,10 +422,13 @@ private:
                     break;
 
                 case COMPOUND_PART_TIMES:
+                    if (fAfterPer) {
+                        result.dimensionality = -1;
+                    }
                     break;
 
-                case COMPOUND_PART_PLUS:
-                    sawPlus = true;
+                case COMPOUND_PART_AND:
+                    sawAnd = true;
                     fAfterPer = false;
                     break;
             }
@@ -462,7 +465,7 @@ private:
 
                 case Token::TYPE_ONE:
                     // Skip "one" and go to the next unit
-                    return nextSingleUnit(result, sawPlus, status);
+                    return nextSingleUnit(result, sawAnd, status);
 
                 case Token::TYPE_SIMPLE_UNIT:
                     result.index = token.getSimpleUnitIndex();
@@ -485,9 +488,9 @@ private:
         }
         int32_t unitNum = 0;
         while (hasNext()) {
-            bool sawPlus;
+            bool sawAnd;
             SingleUnitImpl singleUnit;
-            nextSingleUnit(singleUnit, sawPlus, status);
+            nextSingleUnit(singleUnit, sawAnd, status);
             if (U_FAILURE(status)) {
                 return;
             }
@@ -495,13 +498,13 @@ private:
                 continue;
             }
             bool added = result.append(singleUnit, status);
-            if (sawPlus && !added) {
+            if (sawAnd && !added) {
                 // Two similar units are not allowed in a mixed unit
                 status = kUnitIdentifierSyntaxError;
                 return;
             }
             if ((++unitNum) >= 2) {
-                UMeasureUnitComplexity complexity = sawPlus
+                UMeasureUnitComplexity complexity = sawAnd
                     ? UMEASURE_UNIT_MIXED
                     : UMEASURE_UNIT_COMPOUND;
                 if (unitNum == 2) {
