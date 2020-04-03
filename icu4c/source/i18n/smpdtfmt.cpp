@@ -583,11 +583,14 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     fHasMinute = other.fHasMinute;
     fHasSecond = other.fHasSecond;
 
-    // TimeZoneFormat in ICU4C only depends on a locale for now
-    if (fLocale != other.fLocale) {
-        delete fTimeZoneFormat;
-        fTimeZoneFormat = NULL; // forces lazy instantiation with the other locale
-        fLocale = other.fLocale;
+    fLocale = other.fLocale;
+
+    // TimeZoneFormat can now be set independently via setter.
+    // If it is NULL, it will be lazily initialized from locale
+    delete fTimeZoneFormat;
+    fTimeZoneFormat = NULL;
+    if (other.fTimeZoneFormat) {
+        fTimeZoneFormat = new TimeZoneFormat(*other.fTimeZoneFormat);
     }
 
 #if !UCONFIG_NO_BREAK_ITERATION

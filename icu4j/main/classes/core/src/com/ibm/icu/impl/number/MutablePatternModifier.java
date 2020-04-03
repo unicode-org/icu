@@ -401,8 +401,23 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             } else if (unitWidth == UnitWidth.HIDDEN) {
                 return "";
             } else {
-                int selector = unitWidth == UnitWidth.NARROW ? Currency.NARROW_SYMBOL_NAME
-                        : Currency.SYMBOL_NAME;
+                int selector;
+                switch (unitWidth) {
+                    case SHORT:
+                        selector = Currency.SYMBOL_NAME;
+                        break;
+                    case NARROW:
+                        selector = Currency.NARROW_SYMBOL_NAME;
+                        break;
+                    case FORMAL:
+                        selector = Currency.FORMAL_SYMBOL_NAME;
+                        break;
+                    case VARIANT:
+                        selector = Currency.VARIANT_SYMBOL_NAME;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
                 return currency.getName(symbols.getULocale(), selector, null);
             }
         case AffixUtils.TYPE_CURRENCY_DOUBLE:

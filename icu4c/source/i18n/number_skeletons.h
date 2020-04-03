@@ -118,6 +118,17 @@ enum StemEnum {
     STEM_SCALE,
 };
 
+/** Default wildcard char, accepted on input and printed in output */
+constexpr char16_t kWildcardChar = u'*';
+
+/** Alternative wildcard char, accept on input but not printed in output */
+constexpr char16_t kAltWildcardChar = u'+';
+
+/** Checks whether the char is a wildcard on input */
+inline bool isWildcardChar(char16_t c) {
+    return c == kWildcardChar || c == kAltWildcardChar;
+}
+
 /**
  * Creates a NumberFormatter corresponding to the given skeleton string.
  *

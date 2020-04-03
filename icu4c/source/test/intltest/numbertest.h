@@ -257,6 +257,7 @@ class NumberSkeletonTest : public IntlTest {
     void stemsRequiringOption();
     void defaultTokens();
     void flexibleSeparators();
+    void wildcardCharacters();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

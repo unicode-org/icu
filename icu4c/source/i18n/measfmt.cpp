@@ -38,6 +38,7 @@
 #include "uassert.h"
 #include "unicode/numberformatter.h"
 #include "number_longnames.h"
+#include "number_utypes.h"
 
 #include "sharednumberformat.h"
 #include "sharedpluralrules.h"
@@ -46,6 +47,8 @@
 
 
 U_NAMESPACE_BEGIN
+
+using number::impl::UFormattedNumberData;
 
 static constexpr int32_t WIDTH_INDEX_COUNT = UMEASFMT_WIDTH_NARROW + 1;
 
@@ -504,12 +507,13 @@ UnicodeString &MeasureFormat::formatMeasurePerUnit(
         status = U_UNSUPPORTED_ERROR;
         return appendTo;
     }
-    number::FormattedNumber result;
+    UFormattedNumberData result;
     if (auto* lnf = df->toNumberFormatter(status)) {
-        result = lnf->unit(measure.getUnit())
+        result.quantity.setToDouble(measure.getNumber().getDouble(status));
+        lnf->unit(measure.getUnit())
             .perUnit(perUnit)
             .unitWidth(getUnitWidth(fWidth))
-            .formatDouble(measure.getNumber().getDouble(status), status);
+            .formatImpl(&result, status);
     }
     DecimalFormat::fieldPositionHelper(result, pos, appendTo.length(), status);
     appendTo.append(result.toTempString(status));
@@ -699,11 +703,12 @@ UnicodeString &MeasureFormat::formatMeasure(
         SimpleFormatter formatter(pattern, 0, 1, status);
         return QuantityFormatter::format(formatter, formattedNumber, appendTo, pos, status);
     }
-    number::FormattedNumber result;
+    UFormattedNumberData result;
     if (auto* lnf = df->toNumberFormatter(status)) {
-        result = lnf->unit(amtUnit)
+        result.quantity.setToDouble(amtNumber.getDouble(status));
+        lnf->unit(amtUnit)
             .unitWidth(getUnitWidth(fWidth))
-            .formatDouble(amtNumber.getDouble(status), status);
+            .formatImpl(&result, status);
     }
     DecimalFormat::fieldPositionHelper(result, pos, appendTo.length(), status);
     appendTo.append(result.toTempString(status));

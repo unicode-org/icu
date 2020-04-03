@@ -100,6 +100,8 @@ class NumberSkeletonImpl {
         STEM_UNIT_WIDTH_SHORT,
         STEM_UNIT_WIDTH_FULL_NAME,
         STEM_UNIT_WIDTH_ISO_CODE,
+        STEM_UNIT_WIDTH_FORMAL,
+        STEM_UNIT_WIDTH_VARIANT,
         STEM_UNIT_WIDTH_HIDDEN,
         STEM_SIGN_AUTO,
         STEM_SIGN_ALWAYS,
@@ -121,6 +123,17 @@ class NumberSkeletonImpl {
         STEM_NUMBERING_SYSTEM,
         STEM_SCALE,
     };
+
+    /** Default wildcard char, accepted on input and printed in output */
+    static final char WILDCARD_CHAR = '*';
+
+    /** Alternative wildcard char, accept on input but not printed in output */
+    static final char ALT_WILDCARD_CHAR = '+';
+
+    /** Checks whether the char is a wildcard on input */
+    static boolean isWildcardChar(char c) {
+        return c == WILDCARD_CHAR || c == ALT_WILDCARD_CHAR;
+    }
 
     /** For mapping from ordinal back to StemEnum in Java. */
     static final StemEnum[] STEM_ENUM_VALUES = StemEnum.values();
@@ -162,6 +175,8 @@ class NumberSkeletonImpl {
         b.add("unit-width-short", StemEnum.STEM_UNIT_WIDTH_SHORT.ordinal());
         b.add("unit-width-full-name", StemEnum.STEM_UNIT_WIDTH_FULL_NAME.ordinal());
         b.add("unit-width-iso-code", StemEnum.STEM_UNIT_WIDTH_ISO_CODE.ordinal());
+        b.add("unit-width-formal", StemEnum.STEM_UNIT_WIDTH_FORMAL.ordinal());
+        b.add("unit-width-variant", StemEnum.STEM_UNIT_WIDTH_VARIANT.ordinal());
         b.add("unit-width-hidden", StemEnum.STEM_UNIT_WIDTH_HIDDEN.ordinal());
         b.add("sign-auto", StemEnum.STEM_SIGN_AUTO.ordinal());
         b.add("sign-always", StemEnum.STEM_SIGN_ALWAYS.ordinal());
@@ -304,6 +319,10 @@ class NumberSkeletonImpl {
                 return UnitWidth.FULL_NAME;
             case STEM_UNIT_WIDTH_ISO_CODE:
                 return UnitWidth.ISO_CODE;
+            case STEM_UNIT_WIDTH_FORMAL:
+                return UnitWidth.FORMAL;
+            case STEM_UNIT_WIDTH_VARIANT:
+                return UnitWidth.VARIANT;
             case STEM_UNIT_WIDTH_HIDDEN:
                 return UnitWidth.HIDDEN;
             default:
@@ -416,6 +435,12 @@ class NumberSkeletonImpl {
                 break;
             case ISO_CODE:
                 sb.append("unit-width-iso-code");
+                break;
+            case FORMAL:
+                sb.append("unit-width-formal");
+                break;
+            case VARIANT:
+                sb.append("unit-width-variant");
                 break;
             case HIDDEN:
                 sb.append("unit-width-hidden");
@@ -718,6 +743,8 @@ class NumberSkeletonImpl {
         case STEM_UNIT_WIDTH_SHORT:
         case STEM_UNIT_WIDTH_FULL_NAME:
         case STEM_UNIT_WIDTH_ISO_CODE:
+        case STEM_UNIT_WIDTH_FORMAL:
+        case STEM_UNIT_WIDTH_VARIANT:
         case STEM_UNIT_WIDTH_HIDDEN:
             checkNull(macros.unitWidth, segment);
             macros.unitWidth = StemToObject.unitWidth(stem);
@@ -924,7 +951,7 @@ class NumberSkeletonImpl {
 
         /** @return Whether we successfully found and parsed an exponent width option. */
         private static boolean parseExponentWidthOption(StringSegment segment, MacroProps macros) {
-            if (segment.charAt(0) != '+') {
+            if (!isWildcardChar(segment.charAt(0))) {
                 return false;
             }
             int offset = 1;
@@ -945,7 +972,7 @@ class NumberSkeletonImpl {
         }
 
         private static void generateExponentWidthOption(int minExponentDigits, StringBuilder sb) {
-            sb.append('+');
+            sb.append(WILDCARD_CHAR);
             appendMultiple(sb, 'e', minExponentDigits);
         }
 
@@ -1044,7 +1071,7 @@ class NumberSkeletonImpl {
                 }
             }
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxFrac = -1;
                     offset++;
                 } else {
@@ -1083,7 +1110,7 @@ class NumberSkeletonImpl {
             sb.append('.');
             appendMultiple(sb, '0', minFrac);
             if (maxFrac == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxFrac - minFrac);
             }
@@ -1102,7 +1129,7 @@ class NumberSkeletonImpl {
                 }
             }
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxSig = -1;
                     offset++;
                 } else {
@@ -1132,7 +1159,7 @@ class NumberSkeletonImpl {
         private static void generateDigitsStem(int minSig, int maxSig, StringBuilder sb) {
             appendMultiple(sb, '@', minSig);
             if (maxSig == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxSig - minSig);
             }
@@ -1224,7 +1251,7 @@ class NumberSkeletonImpl {
             // Invalid: @, @@, @@@
             // Invalid: @@#, @@##, @@@#
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxSig = -1;
                     offset++;
                 } else if (minSig > 1) {
@@ -1278,7 +1305,7 @@ class NumberSkeletonImpl {
             int offset = 0;
             int minInt = 0;
             int maxInt;
-            if (segment.charAt(0) == '+') {
+            if (isWildcardChar(segment.charAt(0))) {
                 maxInt = -1;
                 offset++;
             } else {
@@ -1316,7 +1343,7 @@ class NumberSkeletonImpl {
 
         private static void generateIntegerWidthOption(int minInt, int maxInt, StringBuilder sb) {
             if (maxInt == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxInt - minInt);
             }

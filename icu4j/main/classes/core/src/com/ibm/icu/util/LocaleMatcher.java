@@ -169,7 +169,7 @@ public final class LocaleMatcher {
      * if there is a decent match for the original UI language, we want to use it,
      * but not if it is merely a fallback.
      *
-     * @see LocaleMatcher.Builder#setDirection(Direction)
+     * @see LocaleMatcher.Builder#setDirection(LocaleMatcher.Direction)
      * @draft ICU 67
      * @provisional This API might change or be removed in a future release.
      */

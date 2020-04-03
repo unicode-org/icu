@@ -20,7 +20,7 @@
  * \brief C++ API: Locale matcher: User's desired locales vs. application's supported locales.
  */
 
-#ifndef U_HIDE_DRAFT_API
+#ifndef U_FORCE_HIDE_DRAFT_API
 
 /**
  * Builder option for whether the language subtag or the script subtag is most important.
@@ -218,6 +218,7 @@ public:
          */
         Result &operator=(Result &&src) U_NOEXCEPT;
 
+#ifndef U_HIDE_DRAFT_API
         /**
          * Returns the best-matching desired locale.
          * nullptr if the list of desired locales is empty or if none matched well enough.
@@ -272,6 +273,7 @@ public:
          * @draft ICU 65
          */
         Locale makeResolvedLocale(UErrorCode &errorCode) const;
+#endif  // U_HIDE_DRAFT_API
 
     private:
         Result(const Locale *desired, const Locale *supported,
@@ -334,6 +336,7 @@ public:
          */
         Builder &operator=(Builder &&src) U_NOEXCEPT;
 
+#ifndef U_HIDE_DRAFT_API
         /**
          * Parses an Accept-Language string
          * (<a href="https://tools.ietf.org/html/rfc2616#section-14.4">RFC 2616 Section 14.4</a>),
@@ -486,6 +489,7 @@ public:
          * @draft ICU 65
          */
         LocaleMatcher build(UErrorCode &errorCode) const;
+#endif  // U_HIDE_DRAFT_API
 
     private:
         friend class LocaleMatcher;
@@ -531,6 +535,7 @@ public:
      */
     LocaleMatcher &operator=(LocaleMatcher &&src) U_NOEXCEPT;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the supported locale which best matches the desired locale.
      *
@@ -598,6 +603,7 @@ public:
      * @draft ICU 65
      */
     Result getBestMatchResult(Locale::Iterator &desiredLocales, UErrorCode &errorCode) const;
+#endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -654,6 +660,6 @@ private:
 
 U_NAMESPACE_END
 
-#endif  // U_HIDE_DRAFT_API
+#endif  // U_FORCE_HIDE_DRAFT_API
 #endif  // U_SHOW_CPLUSPLUS_API
 #endif  // __LOCALEMATCHER_H__

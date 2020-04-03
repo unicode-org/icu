@@ -1639,8 +1639,9 @@ std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
 unsigned int RBBIMonkeyKind::maxClassNameSize() {
     unsigned int maxSize = 0;
     for (int aClassNum = 0; aClassNum < charClasses()->size(); aClassNum++) {
-        if (classNames[aClassNum].size() > maxSize) {
-            maxSize = classNames[aClassNum].size();
+        auto aClassNumSize = static_cast<unsigned int>(classNames[aClassNum].size());
+        if (aClassNumSize > maxSize) {
+            maxSize = aClassNumSize;
         }
     }
     return maxSize;
@@ -4284,7 +4285,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                     u_charName(c, U_EXTENDED_CHAR_NAME, cName, sizeof(cName), &status);
 
                     char buffer[200];
-                    snprintf(buffer, 200,
+                    auto ret = snprintf(buffer, UPRV_LENGTHOF(buffer),
                              "%4s %3i :  %1s  %1s  %10s  %-*s  %-40s  %-40s",
                              currentLineFlag.c_str(),
                              ci,
@@ -4294,6 +4295,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                              classNameSize,
                              mk.classNameFromCodepoint(c).c_str(),
                              mk.getAppliedRule(ci).c_str(), cName);
+                    (void)ret;
+                    U_ASSERT(0 <= ret && ret < UPRV_LENGTHOF(buffer));
 
                     // Output the error
                     if (ci == i) {
