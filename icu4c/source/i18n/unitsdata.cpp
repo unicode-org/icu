@@ -131,19 +131,9 @@ class ConversionRateDataSink : public ResourceSink {
 };
 
 /**
- * Collects conversion information for a "single unit" (a unit whose complexity
- * is UMEASURE_UNIT_SINGLE).
- *
- * This function currently only supports higher-dimensionality input units if
- * they map to "single unit" output units. This means it don't support
- * square-bar, one-per-bar, square-joule or one-per-joule. (Some unit types in
- * this class: volume, consumption, torque, force, pressure, speed,
- * acceleration, and more).
- *
- * TODO(hugovdm): maybe find and share (in documentation) a solid argument for
- * why these kinds of input units won't be needed with higher dimensionality? Or
- * start supporting them... Also: add unit tests demonstrating the
- * U_ILLEGAL_ARGUMENT_ERROR returned for such units.
+ * Collects conversion information for a "SINGLE" unit (a unit whose complexity
+ * is UMEASURE_UNIT_SINGLE). For a COMPOUND or SEQUENCE unit an error will
+ * occur.
  *
  * @param unit The input unit. Its complexity must be UMEASURE_UNIT_SINGLE, but
  * it may have a dimensionality != 1.
