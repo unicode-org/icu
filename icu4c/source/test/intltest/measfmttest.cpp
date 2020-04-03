@@ -3427,7 +3427,9 @@ void MeasureFormatTest::TestIdentifiers() {
         const char* id;
         const char* normalized;
     } cases[] = {
-        { true, "square-meter-per-square-meter", "square-meter-per-square-meter" },
+        {true, "square-meter-per-square-meter", "square-meter-per-square-meter"},
+        {true, "kilogram-meter-per-square-meter-square-second",
+         "kilogram-meter-per-square-meter-square-second"},
         // TODO(ICU-20920): Add more test cases once the proper ranking is available.
     };
     for (const auto& cas : cases) {
