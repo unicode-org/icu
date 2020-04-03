@@ -92,7 +92,7 @@ const struct SIPrefixStrings {
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
 };
 
-// TODO(ICU-20920): Get this list from data
+// TODO(ICU-21059): Get this list from data
 const char16_t* const gSimpleUnits[] = {
     u"one", // note: expected to be index 0
     u"candela",
