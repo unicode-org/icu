@@ -77,6 +77,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(25, TestCompactDecimalFormatStyle);
         TESTCASE(26, TestParseFailure);
         TESTCASE(27, TestMinMaxIntegerDigitsIgnored);
+        TESTCASE(28, TestAvailableLocales);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2318,6 +2319,23 @@ void IntlTestRBNF::TestMinMaxIntegerDigitsIgnored() {
         assertEquals("Min integer digits are ignored", u"three", result);
         rbnf.format(1012, result.remove(), status);
         assertEquals("Max integer digits are ignored", u"one thousand twelve", result);
+    }
+}
+
+void IntlTestRBNF::TestAvailableLocales() {
+    int32_t i, locCount = 0;
+    const Locale* locList = RuleBasedNumberFormat::getAvailableLocales(locCount);
+
+    logln("Testing the no of available locales");
+    if(locCount == 0 || locList == NULL) {
+        errln("getAvailableLocales() returned an empty list!");
+    } else if (locCount < 0) {
+        errln("getAvailableLocales() returned a wrong value!= %d", locCount);
+    } else {
+        logln("Number of locales returned = %d", locCount);
+        for (i = 0; i < locCount; i++) {
+            logln(" %s", locList[i].getName());
+        }
     }
 }
 

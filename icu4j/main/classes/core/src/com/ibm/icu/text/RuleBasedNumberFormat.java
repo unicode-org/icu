@@ -1137,6 +1137,24 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
+     * Get the set of ULocales available for the RBNF bundle.
+     * @return the list of available locales
+     * @draft ICU 68
+     */
+    public static final ULocale[] getAvailableULocales() {
+        return ICUResourceBundle.getAvailableULocales(ICUData.ICU_RBNF_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+    }
+
+    /**
+     * Get the set of Locales available for the RBNF bundle.
+     * @return the list of available locales
+     * @draft ICU 68
+     */
+    public static final Locale[] getAvailableLocales() {
+        return ICUResourceBundle.getAvailableLocales(ICUData.ICU_RBNF_BASE_NAME, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+    }
+
+    /**
      * Formats the specified number according to the specified rule set.
      * @param number The number to format.
      * @param ruleSet The name of the rule set to format the number with.

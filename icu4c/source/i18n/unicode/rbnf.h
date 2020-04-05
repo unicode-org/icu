@@ -780,6 +780,12 @@ public:
   virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName,
                           const Locale& locale = Locale::getDefault());
 
+    /**
+     * Get the set of Locales for which RuleBasedNumberFormat are installed.
+     * @param count    Output param to receive the size of the locales
+     * @draft ICU 68
+     */
+  static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
   using NumberFormat::format;
 

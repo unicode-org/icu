@@ -1810,4 +1810,36 @@ public class RbnfTest extends TestFmwk {
         assertEquals("infinity", rbnf.format(Double.POSITIVE_INFINITY));
         assertEquals("not a number", rbnf.format(Double.NaN));
     }
+
+    private void doAvailableLocalesTesting(Object[] localeList) {
+
+        int locCount = localeList.length;
+
+        if (isVerbose()) {
+            logln("Testing the no of available locales");
+        }
+
+        if (locCount == 0) {
+            errln("getAvailableLocales() returned an empty list!\n");
+        } else if (locCount < 0) {
+            errln("getAvailableLocales() returned a wrong value! = " + locCount);
+        } else {
+            if (isVerbose()) {
+                logln("Number of locales returned = " + locCount);
+                for (int i = 0; i < locCount; i++) {
+                    logln(localeList[i].toString());
+                }
+            }
+        }
+    }
+
+    @Test
+    public void TestGetAvailableLocales() {
+        doAvailableLocalesTesting(RuleBasedNumberFormat.getAvailableLocales());
+    }
+
+    @Test
+    public void TestGetAvailableULocales() {
+        doAvailableLocalesTesting(RuleBasedNumberFormat.getAvailableULocales());
+    }
 }

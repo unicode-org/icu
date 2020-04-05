@@ -1116,6 +1116,30 @@ RuleBasedNumberFormat::findRuleSet(const UnicodeString& name, UErrorCode& status
     return NULL;
 }
 
+const Locale* U_EXPORT2
+RuleBasedNumberFormat::getAvailableLocales(int32_t& count)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UEnumeration* locs = ures_openAvailableLocales(U_ICUDATA_RBNF, &status);
+    count = 0;
+    if (U_SUCCESS(status)) {
+        status = U_ZERO_ERROR;
+        int32_t n = uenum_count(locs, &status);
+        if (U_FAILURE(status)) {
+            return NULL;
+        } else {
+            Locale* locales = new Locale[n];
+            for (int32_t i = 0; i < n; i++) {
+                const char* loc = uenum_next(locs, NULL, &status);
+                locales[i] = Locale::createCanonical(loc);
+            }
+            count = n;
+            return locales;
+        }
+    }
+    return NULL;
+}
+
 UnicodeString&
 RuleBasedNumberFormat::format(const DecimalQuantity &number,
                      UnicodeString& appendTo,
