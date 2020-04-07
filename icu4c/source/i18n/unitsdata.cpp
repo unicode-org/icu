@@ -87,12 +87,12 @@ class ConversionRateDataSink : public ResourceSink {
         // category. I should make this code more efficient after
         // double-checking we're fine with relying on such a detail from the
         // CLDR spec?
-        fLastBaseUnit.clear();
-        fLastBaseUnit.appendInvariantChars(baseUnit, lenBaseUnit, status);
+        CharString lastBaseUnit;
+        lastBaseUnit.appendInvariantChars(baseUnit, lenBaseUnit, status);
         if (U_FAILURE(status)) return;
         for (int32_t i = 0, len = outVector.length(); i < len; i++) {
             if (strcmp(outVector[i]->sourceUnit.data(), source) == 0 &&
-                strcmp(outVector[i]->baseUnit.data(), fLastBaseUnit.data()) == 0) {
+                strcmp(outVector[i]->baseUnit.data(), lastBaseUnit.data()) == 0) {
                 return;
             }
         }
@@ -104,30 +104,14 @@ class ConversionRateDataSink : public ResourceSink {
             return;
         } else {
             cr->sourceUnit.append(source, lenSource, status);
-            cr->baseUnit.append(fLastBaseUnit.data(), fLastBaseUnit.length(), status);
+            cr->baseUnit.append(lastBaseUnit.data(), lastBaseUnit.length(), status);
             cr->factor.appendInvariantChars(factor, lenFactor, status);
             if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
         }
     }
 
-    /**
-     * Returns the MeasureUnit that was the conversion base unit of the most
-     * recent call to put() - typically meaning the most recent call to
-     * ures_getAllItemsWithFallback().
-     */
-    MeasureUnit getLastBaseUnit(UErrorCode &status) {
-        return MeasureUnit::forIdentifier(fLastBaseUnit.data(), status);
-    }
-
   private:
     MaybeStackVector<ConversionRateInfo> &outVector;
-
-    // TODO(review): felt like a hack: provides easy access to the most recent
-    // baseUnit. This hack is another point making me wonder if doing this
-    // ResourceSink thing is worthwhile. Functional style is not more verbose,
-    // and IMHO more readable than this object-based approach where the output
-    // seems/feels like a side-effect.
-    CharString fLastBaseUnit;
 };
 
 /**
