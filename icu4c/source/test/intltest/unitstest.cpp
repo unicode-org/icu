@@ -75,6 +75,48 @@ void UnitsTest::testConversionCapability() {
         {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
         {"square-hectare", "p4-foot", CONVERTIBLE},                             //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
+        // BEGIN: a copy of tests from unitsTest.txt
+        {"g-force", "meter-per-square-second", CONVERTIBLE},                               //
+        {"ohm", "kilogram-square-meter-square-ampere-per-cubic-second", CONVERTIBLE},      //
+        {"electronvolt", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
+        {"dalton", "kilogram-square-meter-per-square-second", CONVERTIBLE},                //
+        {"joule", "kilogram-square-meter-per-square-second", CONVERTIBLE},                 //
+        {"meter-newton", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
+        {"foot-pound-force", "kilogram-square-meter-per-square-second", CONVERTIBLE},      //
+        {"calorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},               //
+        {"kilojoule", "kilogram-square-meter-per-square-second", CONVERTIBLE},             //
+        {"british-thermal-unit", "kilogram-square-meter-per-square-second", CONVERTIBLE},  //
+        {"foodcalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
+        {"kilocalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
+        {"hour-kilowatt", "kilogram-square-meter-second-per-cubic-second", CONVERTIBLE},   //
+        {"therm-us", "kilogram-square-meter-per-square-second", CONVERTIBLE},              //
+        {"newton", "kilogram-meter-per-square-second", CONVERTIBLE},                       //
+        {"pound-force", "kilogram-meter-per-square-second", CONVERTIBLE},                  //
+        {"hertz", "revolution-per-second", CONVERTIBLE},                                   //
+        {"kilohertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"megahertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"gigahertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"lux", "candela-square-meter-per-square-meter", CONVERTIBLE},                     //
+        {"milliwatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},              //
+        {"watt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},                   //
+        {"horsepower", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},             //
+        {"kilowatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"megawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"gigawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"solar-luminosity", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},       //
+        {"pascal", "kilogram-square-second-per-meter", CONVERTIBLE},                       //
+        {"hectopascal", "kilogram-square-second-per-meter", CONVERTIBLE},                  //
+        {"millibar", "kilogram-square-second-per-meter", CONVERTIBLE},                     //
+        {"millimeter-ofhg", "kilogram-meter-square-second-per-square-meter", CONVERTIBLE}, //
+        {"kilopascal", "kilogram-square-second-per-meter", CONVERTIBLE},                   //
+        {"inch-ofhg", "kilogram-meter-square-second-per-square-meter", CONVERTIBLE},       //
+        {"bar", "kilogram-square-second-per-meter", CONVERTIBLE},                          //
+        {"atmosphere", "kilogram-square-second-per-meter", CONVERTIBLE},                   //
+        {"megapascal", "kilogram-square-second-per-meter", CONVERTIBLE},                   //
+        {"ofhg", "kilogram-square-second-per-square-meter", CONVERTIBLE},                  //
+        {"knot", "meter-per-second", CONVERTIBLE},                                         //
+        {"volt", "kilogram-square-meter-ampere-per-cubic-second", CONVERTIBLE},            //
+        // END: a copy of tests from unitsTest.txt
     };
 
     for (const auto &testCase : testCases) {
