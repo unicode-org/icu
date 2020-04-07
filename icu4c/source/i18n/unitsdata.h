@@ -1,0 +1,54 @@
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+#ifndef __GETUNITSDATA_H__
+#define __GETUNITSDATA_H__
+
+#include "charstr.h"
+#include "cmemory.h"
+#include "unicode/measunit.h"
+#include "unicode/stringpiece.h"
+#include "unicode/utypes.h"
+
+U_NAMESPACE_BEGIN
+
+// Encapsulates "convertUnits" information from units resources, specifying how
+// to convert from one unit to another.
+//
+// Information in this class is still in the form of strings: symbolic constants
+// need to be interpreted.
+class U_I18N_API ConversionRateInfo {
+  public:
+    ConversionRateInfo(){};
+    ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
+                       StringPiece offset, UErrorCode &status)
+        : sourceUnit(), baseUnit(), factor(), offset() {
+        this->sourceUnit.append(sourceUnit, status);
+        this->baseUnit.append(baseUnit, status);
+        this->factor.append(factor, status);
+        this->offset.append(offset, status);
+    };
+    CharString sourceUnit;
+    CharString baseUnit;
+    CharString factor;
+    CharString offset;
+};
+
+/**
+ * Collects and returns ConversionRateInfo needed for conversions for a set of
+ * units.
+ *
+ * @param units The units for which to load conversion data.
+ * @param status Receives status.
+ */
+MaybeStackVector<ConversionRateInfo>
+    U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status);
+
+U_NAMESPACE_END
+
+#endif //__GETUNITSDATA_H__
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

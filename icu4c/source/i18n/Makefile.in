@@ -115,7 +115,7 @@ numparse_affixes.o numparse_compositions.o numparse_validators.o \
 numrange_fluent.o numrange_impl.o \
 erarules.o \
 formattedvalue.o formattedval_iterimpl.o formattedval_sbimpl.o formatted_string_builder.o \
-unitconverter.o
+unitconverter.o unitsdata.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h

@@ -7,15 +7,25 @@
 #ifndef __UNITCONVERTER_H__
 #define __UNITCONVERTER_H__
 
-
-#include <vector>
+#include "cmemory.h"
+#include "unicode/errorcode.h"
+#include "unicode/measunit.h"
+#include "unitconverter.h"
+#include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
 
+enum U_I18N_API UnitsMatchingState {
+    RECIPROCAL,
+    CONVERTIBLE,
+    UNCONVERTIBLE,
+};
 
+UnitsMatchingState U_I18N_API
+checkUnitsState(const MeasureUnit &source, const MeasureUnit &target,
+                const MaybeStackVector<ConversionRateInfo> &conversionRateInfo, UErrorCode &status);
 
 U_NAMESPACE_END
-
 
 #endif //__UNITCONVERTER_H__
 
