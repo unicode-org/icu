@@ -116,8 +116,9 @@ public class RbnfDemo extends DemoApplet {
                     textField.setText("PARSE ERROR");
                 }
                 else {
-                    theNumber = new BigDecimal(fieldText);
-                    textField.setText(spelloutFormatter.format(theNumber.doubleValue(), ruleSetName));
+                    theNumber = new BigDecimal(temp instanceof Long ? temp.longValue() : temp.doubleValue());
+                    textField.setText(spelloutFormatter.format(
+                            theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
                 }
             }
         } );
@@ -243,7 +244,8 @@ public class RbnfDemo extends DemoApplet {
 
         numberField.setText(numberFormatter.format(theNumber));
         numberField.selectAll();
-        textField.setText(spelloutFormatter.format(theNumber.doubleValue(), ruleSetName));
+        textField.setText(spelloutFormatter
+                .format(theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
 
         Panel leftPanel = new Panel();
         leftPanel.setLayout(new BorderLayout());
@@ -412,7 +414,8 @@ public class RbnfDemo extends DemoApplet {
 
     void redisplay() {
         numberField.setText(numberFormatter.format(theNumber));
-        textField.setText(spelloutFormatter.format(theNumber.doubleValue(), ruleSetName));
+        textField.setText(spelloutFormatter
+                .format(theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
     }
 
     void makeNewSpelloutFormatter() {
