@@ -23,7 +23,10 @@ perform a series of operations and each step of the process can use a UnicodeSet
 to restrict the characters that are affected.
 
 For example, to remove accents from characters, use the following transform:
-NFD; \[:Nonspacing Mark:\] Remove; NFC.
+
+```
+NFD; [:Nonspacing Mark:] Remove; NFC.
+```
 
 This transform separates accents from their base characters, removes the
 accents, and then puts the remaining text into an unaccented form.
@@ -33,10 +36,10 @@ used incrementally for typing or buffering input. In the latter case, the
 transform provides the correct time delay to process characters when there is an
 unambiguous mapping. Transliterators can also be used with more complex text,
 such as styled text, to maintain the style information where possible. For
-example, "Αλφaβητικός" will retain the two fonts in transliterating to
-"Alphabētikós".
+example, "~~Αλφaβ~~ητικός" will retain the strikethrough in transliterating to
+"~~Alphab~~ētikós".
 
-*The transliteration process not only retains font size, but also other
+:point_right: **Note**: *The transliteration process not only retains font size, but also other
 characteristics such as font type and color.*
 
 For an online demonstration of ICU transliteration, see
@@ -51,8 +54,13 @@ transliteration is not translation. Rather, script transliteration it is the
 conversion of letters from one script to another without translating the
 underlying words. The following shows a sample of script transliteration:
 
-Source Transliteration キャンパス kyanpasu Αλφαβητικός Κατάλογος Alphabētikós
-Katálogos биологическом biologichyeskom * Some of the characters may not be
+| Source | Transliteration |
+|---|---|
+| キャンパス | kyanpasu |
+| Αλφαβητικός Κατάλογος | Alphabētikós Katálogos |
+| биологическом | biologichyeskom |
+
+:point_right: **Note**: *Some of the characters may not be
 visible on the screen unless you have a Unicode font with all the Greek letters.
 If you have a licensed copy of Microsoft® Office, you can use the "Arial Unicode
 MS" font, or you can download the [CODE2000](http://www.code2000.net/) font for
@@ -73,10 +81,19 @@ can recognize the characters. Also, when the user performs searching and
 indexing tasks, transliteration can retrieve information in a different script.
 The following shows these retrieval capabilities:
 
-Source Transliteration 김, 국삼 Gim, Gugsam 김, 명희 Gim, Myeonghyi 정, 병호 Jeong,
-Byeongho ... ... たけだ, まさゆき Takeda, Masayuki ますだ, よしひこ Masuda, Yoshihiko やまもと,
-のぼる Yamamoto, Noboru ... ... Ρούτση, Άννα Roútsē, Ánna Καλούδης, Χρήστος
-Kaloúdēs, Chrḗstos Θεοδωράτου, Ελένη Theodōrátou, Elénē
+| Source | Transliteration |
+|---|---|
+| 김, 국삼 | Gim, Gugsam |
+| 김, 명희 | Gim, Myeonghyi |
+| 정, 병호 | Jeong, Byeongho |
+| ... | ... |
+| たけだ, まさゆき | Takeda, Masayuki |
+| ますだ, よしひこ | Masuda, Yoshihiko |
+| やまもと, のぼる | Yamamoto, Noboru |
+| ... | ... |
+| Ρούτση, Άννα | Roútsē, Ánna |
+| Καλούδης, Χρήστος | Kaloúdēs, Chrḗstos |
+| Θεοδωράτου, Ελένη | Theodōrátou, Elénē |
 
 Transliteration can also be used to convert unfamiliar letters within the same
 script, such as converting Icelandic THORN (þ) to th.
@@ -86,7 +103,7 @@ script, such as converting Icelandic THORN (þ) to th.
 Transliterators are not created directly using C++ or Java constructors.
 Instead, the are created by giving an **identifier**—a name string in a specific
 format—to one of the Transliterator factory methods, such as
-Transliterator.getInstance() (Java) or Transliterator::createInstance(). The
+`Transliterator.getInstance()` (Java) or `Transliterator::createInstance()`. The
 following are some examples of identifiers:
 
 1.  Latin-Cyrillic
@@ -108,7 +125,9 @@ method in an actual class is a different matter.
 
 The simplest identifier is a 'basic ID'.
 
+```
 basicID := (<source> "-")? <target> ("/" <variant>)?
+```
 
 A basic ID typically names a source and target. In "Katakana-Latin", "Katakana"
 is the source and "Latin" is the target. The source specifier describes the
@@ -131,7 +150,7 @@ the variant, and it further specifies the transform when several versions of a
 single transformation are possible. For example, ICU provides several transforms
 that convert from Unicode characters to escaped representations. These include
 standard Unicode syntax "U+4E01", Perl syntax "\\x{4E01}", XML syntax
-"&#x4E01;", and others. The transforms for these operations are named
+"\&#x4E01;", and others. The transforms for these operations are named
 "Any-Hex/Unicode", "Any-Hex/Perl", and "Any-Hex/XML", respectively. If no
 variant is specified, then the default variant is selected. In the example of
 "Any-Hex", this is the Java variant (for historical reasons), so "Any-Hex" is
@@ -142,7 +161,9 @@ equivalent to "Any-Hex/Java".
 A filtered IDs is a basic IDs constrained by a filter. For example, to specify a
 transform that converts only ASCII vowels to uppercase, use the ID:
 
-\[aeiou\] Upper
+```
+[aeiou] Upper
+```
 
 The filter is a valid UnicodeSet pattern prefixed to the basic ID. Only
 characters within the set will be modified by the transform. Some transforms are
@@ -150,7 +171,7 @@ only useful with filters, for example, the Remove transform, which deletes all
 input characters. Specifying "\[:Nonspacing Mark:\] Remove" gives a transform
 that removes non-spacing marks from input text.
 
-*As of ICU 2.0, the filter pattern must be enclosed in brackets. Perl-syntax
+:point_right: **Note**: *As of ICU 2.0, the filter pattern must be enclosed in brackets. Perl-syntax
 patterns of the form "\\p{Lu}" cannot be used directly; instead they must be
 enclosed, e.g. "\[\\p{Lu}\]".*
 
@@ -185,18 +206,18 @@ to Latin (via "SCRIPT-Latin") and back to SCRIPT (via "Latin-SCRIPT"). This is
 called **round-trip integrity**. They do not, however, support round-trip
 integrity from Latin to SCRIPT and back to Latin.
 
-*Do not assume that a transform's inverse will provide a complete or exact
+:point_right: **Note**: *Do not assume that a transform's inverse will provide a complete or exact
 reversal.*
 
 The second caveat with inverses has to do with existence. Although any ID can be
 inverted, this does not guarantee that the inverse ID actually exists. For
-example, if I create a custom translitertor Latin-Antarean and register it with
-the system, I can then pass the string "Latin-Antarean" to createInstance() or
-getInstance() to get that transform. If I then ask for its inverse, however, the
+example, if I create a custom translitertor `Latin-Antarean` and register it with
+the system, I can then pass the string "Latin-Antarean" to `createInstance()` or
+`getInstance()` to get that transform. If I then ask for its inverse, however, the
 request will fail, since I have not created and registered "Antarean-Latin" with
 the system.
 
-*Any transform ID can be inverted, but the inverse ID may not name an actual
+:point_right: **Note**: *Any transform ID can be inverted, but the inverse ID may not name an actual
 registered transform.*
 
 ### Custom Inverses
@@ -207,7 +228,7 @@ procedure for ID inversion on "Any-Lower" yields "Lower-Any", which is not what
 we want. To override the standard ID inversion, the inverse ID can be explicitly
 stated within the ID string as follows:
 
-"Any-Lower (Any-Upper)" or equivalently "Lower (Upper)"
+`"Any-Lower (Any-Upper)"` or equivalently `"Lower (Upper)"`
 
 When this ID is inverted, the result is "Any-Upper (Any-Lower)". Using this
 mechanism, the user can form arbitrary inverse relations when necessary.
@@ -219,13 +240,22 @@ null transform it inverts to has the ID "(A-B)", also written "Null (A-B)", and
 inverts back to "A-B ( )". Note that "A-B ( )" is very different from both "A-B"
 and "(A-B)":
 
-ID Inverse of ID A-B B-A A-B ( ) (A-B) (A-B) A-B ( )
+| ID | Inverse of ID |
+|---|---|
+| A-B | B-A |
+| A-B ( ) | (A-B) |
+| (A-B) | A-B ( ) |
 
 For some system transforms, special inverse mappings exists automatically. These
 mappings are symmetrical, that is, the right column is the inverse of the left
 column, and vice versa. The mappings are:
 
-Any-Null Any-Null Any-NFD Any-NFC Any-NFKD Any-NFKC Any-Lower Any-Upper
+| | |
+|---|---|
+| Any-Null | Any-Null |
+| Any-NFD | Any-NFC |
+| Any-NFKD | Any-NFKC |
+| Any-Lower | Any-Upper |
 
 In other words, writing "Any-NFD" is exactly equivalent to writing "Any-NFD
 (Any-NFC)" since the system maps the former to the latter internally. However,
@@ -243,7 +273,9 @@ is caseless, so it is best to write rules that operate only on the lowercase
 Latin base characters and produce corresponding Katakana.) To achieve this, a
 **compound transform** can be specified as follows:
 
+```
 NFKD; Lower; Latin-Katakana;
+```
 
 (In real life, we would probably use "NFD", but we use "NFKD" for explanatory
 purposes here.) It is also desirable to modify only Latin script characters. To
@@ -251,12 +283,16 @@ do so, a filter may be prefixed to the entire compound transform. This is called
 a **global filter** to distinguish it from filters on the individual transforms
 within the compound:
 
-\[:Latin:\]; NFKD; Lower; Latin-Katakana;
+```
+[:Latin:]; NFKD; Lower; Latin-Katakana;
+```
 
 The inverse of such a transform is formed by reversing the list and inverting
 each element. In this example, this would be:
 
-Katkana-Latin; Upper; NFKC; (\[:Latin:\]);
+```
+Katkana-Latin; Upper; NFKC; ([:Latin:]);
+```
 
 Note that two special mappings take effect: "Lower" to "Upper" and "NFKD" to
 "NFKC". Note also that the global filter is enclosed in parentheses, rendering
@@ -266,25 +302,33 @@ In this example we probably don't really want to map Latin characters to
 uppercase in the reverse direction, so we need to modify the original transform
 as follows:
 
-\[:Latin:\]; NFKD; Lower(); Latin-Katakana;
+```
+[:Latin:]; NFKD; Lower(); Latin-Katakana;
+```
 
 Recall that the empty parentheses in "Lower ( )" are shorthand for "Lower
 (Null)" where "Null" is the null transform, that is, the transform that leaves
 text unchanged. The inverse of this is "Null (Lower)", also written "(Lower)".
 Now the inverse of the entire compound is:
 
-Katakana-Latin; (Lower); NFKC; (\[:Latin:\]);
+```
+Katakana-Latin; (Lower); NFKC; ([:Latin:]);
+```
 
 This still isn't quite right, since we really want to recompose our output, in
 both directions. We also want to only touch Katakana characters in the reverse
 direction. Our final example, modified to address these two concerns, is as
 follows:
 
-\[:Latin:\]; NFKD; Lower(); Latin-Katakana; NFC; (\[:Katakana:\]);
+```
+[:Latin:]; NFKD; Lower(); Latin-Katakana; NFC; ([:Katakana:]);
+```
 
 This inverts to:
 
-\[:Katakana:\]; NFD; Katakana-Latin; (Lower); NFKC; (\[:Latin:\]);
+```
+[:Katakana:]; NFD; Katakana-Latin; (Lower); NFKC; ([:Latin:]);
+```
 
 (In real life, we would probably use only "NFD" and "NFC", but we use the
 compatibility normalizers in this example so they can be distinguished.)
@@ -297,13 +341,15 @@ generating a compound transform; system transforms use this approach as well.
 ### Formal ID Syntax
 
 Here is a formal description of the identifier syntax. The 'ID' entity can be
-passed to getInstance() or createInstance().
+passed to `getInstance()` or `createInstance()`.
 
-ID := Single_ID | Compound_ID Single_ID := filter? Basic_ID ( '(' Basic_ID? ')'
-)? | filter? '(' Basic_ID ')' Compound_ID := ( filter ';' )? ( Single_ID ';' )+
-( '(' filter ');' )? Basic_ID := Spec | Spec '-' Spec | Spec '/' Identifier |
-Spec '-' Spec '/' Identifier Spec := script-name | locale-name | Identifier
-Identifier := identifier-start identifier-part\*
+| ID | := Single_ID \| Compound_ID |
+|---|---|
+| Single_ID | := filter? Basic_ID ( '(' Basic_ID? ')' )? \| filter? '(' Basic_ID ')'
+| Compound_ID | := ( filter ';' )? ( Single_ID ';' )+ ( '(' filter ');' )?
+| Basic_ID | := Spec \| Spec '-' Spec \| Spec '/' Identifier \| Spec '-' Spec '/' Identifier
+| Spec | := script-name \| locale-name \| Identifier
+| Identifier | := identifier-start identifier-part\*
 
 Elements enclosed in single quotes are literals. Parentheses group elements.
 Vertical bars represent exclusive alternatives. The '?' suffix repeats the
@@ -317,7 +363,7 @@ such as "Latn". A 'locale-name' is a standard locale name such as "hi_IN". The
 UCharacter API to start and continue identifier names. Finally, 'filter' is a
 valid UnicodeSet pattern.
 
-*As of ICU 2.0, the filter must be enclosed in brackets. Top-level Perl-style
+:point_right: **Note**: *As of ICU 2.0, the filter must be enclosed in brackets. Top-level Perl-style
 patterns are unsupported in 2.0.*
 
 ## ICU Transliterators
@@ -327,35 +373,20 @@ following table shows these basic transforms:
 
 ### General
 
-→ Any-Null Has no effect; leaves input text unchanged. → Any-Remove Deletes
-input characters. This is useful when combined with a filter that restricts the
-characters to be deleted. → Any-Lower, Any-Upper, Any-Title Converts to the
-specified case. See [Case Mappings](../casemappings.md) for more information. →
-Any-NFD, Any-NFC, Any-NFKD, Any-NFKC, Any-FCD, Any-FCC Converts to the specified
-normalized form. See [Normalization](../normalization/index.md) for more
-information. Any-Name Converts between characters and their Unicode names in
-curly braces using Perl syntax. For example:
-., \\N{FULL STOP}\\N{COMMA} Any-Hex Converts between characters and their
-Unicode code point values. For example:
-., \\u002E\\u002C
-Any-Hex/XML uses the &#xXXXX; format. For example:
-., &#x2E;&#x2C;
-Variants include Any-Hex/C, Any-Hex/Java, Any-Hex/Perl, Any-Hex/XML, and
-Any-Hex/XML10. Any-Hex, with no variant, is equivalent to Any-Hex/Java, for
-historical reasons. → Any-Accents Lets you type e- for e-macron, etc. For
-example:
-o' ó Any-Publishing Converts between real punctuation and typewriter
-punctuation. For example:
-“a” — ‘b’ "a" -- 'b' → Latin-ASCII Converts non-ASCII-range punctuation,
-symbols, and Latin letters in an approximate ASCII-range equivalent. For
-example: « → '<<', © → '(C)', Æ → AE. Can be combined with Any-Latin to produce
-a transform that will convert as much as possible to an ASCII-range
-representation: “Any-Latin; Latin-ASCII”. IPA-XSampa Convert between IPA
-characters and the XSampa ASCII-range representation of IPA characters.
-Fullwidth-Halfwidth Converts between narrow or half-width characters and
-full-width. For example:
-﻿ｱﾙｱﾉﾘｳ tech アルアノリウ　ｔｅｃｈ Latin-NumericPinyin Converts between a Pinyin Latin
-representation using tone marks and one using numeric tone indicators.
+| | |
+|---|---|
+| → Any-Null | Has no effect; leaves input text unchanged. |
+| → Any-Remove | Deletes input characters. This is useful when combined with a filter that restricts the characters to be deleted. |
+| → Any-Lower, Any-Upper, Any-Title | Converts to the specified case. See [Case Mappings](../casemappings.md) for more information. |
+| → Any-NFD, Any-NFC, Any-NFKD, Any-NFKC, Any-FCD, Any-FCC | Converts to the specified normalized form. See [Normalization](../normalization/index.md) for more information. |
+| Any-Name | Converts between characters and their Unicode names in curly braces using Perl syntax. For example: ., \\N{FULL STOP}\\N{COMMA} |
+| Any-Hex | Converts between characters and their Unicode code point values. For example: ., \\u002E\\u002C Any-Hex/XML uses the &#xXXXX; format. For example: ., &#x2E;&#x2C; Variants include Any-Hex/C, Any-Hex/Java, Any-Hex/Perl, Any-Hex/XML, and Any-Hex/XML10. Any-Hex, with no variant, is equivalent to Any-Hex/Java, for historical reasons. |
+| → Any-Accents | Lets you type e- for e-macron, etc. For example: o' ó |
+| Any-Publishing | Converts between real punctuation and typewriter punctuation. For example: “a” — ‘b’ "a" -- 'b' |
+| → Latin-ASCII | Converts non-ASCII-range punctuation, symbols, and Latin letters in an approximate ASCII-range equivalent. For example: « → '<<', © → '(C)', Æ → AE. Can be combined with Any-Latin to produce a transform that will convert as much as possible to an ASCII-range representation: “Any-Latin; Latin-ASCII”. |
+| IPA-XSampa | Convert between IPA characters and the XSampa ASCII-range representation of IPA characters. |
+| Fullwidth-Halfwidth | Converts between narrow or half-width characters and full-width. For example: ﻿ｱﾙｱﾉﾘｳ tech アルアノリウ　ｔｅｃｈ |
+| Latin-NumericPinyin | Converts between a Pinyin Latin representation using tone marks and one using numeric tone indicators. |
 
 ### Script/Language
 
@@ -363,17 +394,18 @@ The ICU script/language transforms are based on common standards for the
 particular scripts, where possible. In some cases, the transforms are augmented
 to support reversibility.
 
-*Standard transliteration methods often do not follow the pronunciation rules of
+:point_right: **Note**: *Standard transliteration methods often do not follow the pronunciation rules of
 any particular language in the target script. For more information on the design
 of transliterations, see the following Guidelines (§) section. *
 
 The built-in script transforms are:
 
-Latin Arabic, Armenian, Bopomofo, Cyrillic, Georgian, Greek (with UNGEGN
-variant), Han (with Names variant → Latin), Hangul, Hebrew, Hiragana, Indic,
-Jamo, Katakana, Syriac, Thaana, Thai Indic Indic Hiragana Katakana Simplified
-(Hans) Traditional
-(Hant)
+| | |
+|---|---|
+| Latin | Arabic, Armenian, Bopomofo, Cyrillic, Georgian, Greek (with UNGEGN variant), Han (with Names variant → Latin), Hangul, Hebrew, Hiragana, Indic, Jamo, Katakana, Syriac, Thaana, Thai |
+| Indic | Indic |
+| Hiragana | Katakana |
+| Simplified (Hans) | Traditional (Hant) |
 
 Indic includes Devanagari, Gujarati, Gurmukhi, Kannada, Malayalam, Oriya, Tamil,
 and Telegu. ICU can transliterate from Latin to any of these dialects and back,
@@ -437,7 +469,7 @@ procedure to distinguish between man'ichi and manichi. Using this procedure, the
 Greek character PI SIGMA (πσ) maps to p's. This method is recommended for all
 script transliteration methods.
 
-*Some characters in a target script are not normally found outside of certain
+:point_right: **Note**: *Some characters in a target script are not normally found outside of certain
 contexts. For example, the small Japanese "ya" character, as in "kya" (キャ), is
 not normally found in isolation. To handle such characters, ICU uses a tilde.
 For example, to display an isolated small "ya", type "~ya". To represent a
@@ -449,26 +481,26 @@ use extra accents to distinguish between letters that may not be otherwise
 distinguished. For example, the following shows Greek text that is mapped to
 fully reversible Latin:
 
-Greek-Latin
-τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ
-ἕτερον. tí phḗis; graphḕn sé tis, hōs éoike, gégraptai: ou gàr ekeînó ge
-katagnṓsomai, hōs sỳ héteron.
+> **Greek-Latin**
+> | | |
+> |---|---|
+> | τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ ἕτερον. | tí phḗis; graphḕn sé tis, hōs éoike, gégraptai: ou gàr ekeînó ge katagnṓsomai, hōs sỳ héteron. |
 
 If the user wants a version without certain accents, then a transform can be
 used to remove the accents. For example, the following transliterates to Latin
 but removes the macron accents on the long vowels.
 
-Greek-Latin; nfd; \[\\u0304\] remove; nfc
-τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ
-ἕτερον. tí phéis; graphèn sé tis, hos éoike, gégraptai: ou gàr ekeînó ge
-katagnósomai, hos sỳ héteron.
+> **Greek-Latin; nfd; \[\\u0304\] remove; nfc**
+> | | |
+> |---|---|
+> | τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ ἕτερον. | tí phéis; graphèn sé tis, hos éoike, gégraptai: ou gàr ekeînó ge katagnósomai, hos sỳ héteron.
 
 The following transliterates to Latin but removes all accents:
 
-Greek-Latin; nfd; \[:nonspacing marks:\] remove; nfc
-τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ
-ἕτερον. ti pheis; graphen se tis, hos eoike, gegraptai: ou gar ekeino ge
-katagnosomai, hos sy heteron.
+> **Greek-Latin; nfd; \[:nonspacing marks:\] remove; nfc**
+> | | |
+> |---|---|
+> | τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ ἕτερον. | ti pheis; graphen se tis, hos eoike, gegraptai: ou gar ekeino ge katagnosomai, hos sy heteron. |
 
 ### Pronunciation
 
@@ -492,11 +524,11 @@ differently according to their context to make the pronunciation more
 predictable. For example, since the Greek sequence GAMMA GAMMA (γγ) is
 pronounced as "ng", the first GAMMA can be transcribed as an "n".
 
-*In general, predictability means that when transliterating Latin script to
+:point_right: **Note**: *In general, predictability means that when transliterating Latin script to
 other scripts, English text will not produce phonetic results. This is because
 the pronunciation of English cannot be predicted easily from the letters in a
 word: e.g. grove, move, and love all end with "ove", but are pronounced very
-differently. *
+differently.*
 
 ### Cautions
 
@@ -522,12 +554,12 @@ example, a Greek SIGMA is written in a final form (ς) at the end of words, and 
 non-final form (σ) in other locations. This requires the transform to map
 different characters based on the context.
 
-*It is useful for the reverse mapping to be complete so that arbitrary strings
+:point_right: **Note**: *It is useful for the reverse mapping to be complete so that arbitrary strings
 in the target script can be reasonably mapped back to the source script.
 Complete reverse mapping makes it much easier to do mechanical quality checks
 and so on. For example, even though the letter "q" might not be necessary in a
 transliteration of Greek, it can be mapped to a KAPPA (κ). Such reverse mappings
-will not, in general, be unambiguous. *
+will not, in general, be unambiguous.*
 
 ## Using Transliterators
 
@@ -537,33 +569,46 @@ docs.
 
 To list the available Transliterators, use code like the following:
 
+```
 count = Transliterator:: countAvailableIDs();
-myID =Transliterator::getAvailableID(n);
+myID = Transliterator::getAvailableID(n);
+```
 
 The ID should not be displayed to users as it is for internal use only. A
 separate string, one that can be localized to different languages, is obtained
 with a static method. (This method is static to allow the translated names to be
 augmented without changing the code.) To get a localized name for use in a GUI,
 use the following:
+
+```
 Transliterator::getDisplayName(myID, france, nameForUser);
+```
 
 To create a Transliterator, use the following:
 UErrorCode status = U_ZERO_ERROR;
-Transliterator \*myTrans = Transliterator::createInstance("Latin-Greek",
+Transliterator *myTrans = Transliterator::createInstance("Latin-Greek",
 UTRANS_FORWARD, status);
 
 To get a pre-made compound transform, use a series of IDs separated by ";". For
 example:
 
+```
 myTrans = Transliterator::createInstance(
-"any-NFD; \[:nonspacing mark:\] any-remove; any-NFC", UTRANS_FORWARD, status);
+    "any-NFD; [:nonspacing mark:] any-remove; any-NFC", UTRANS_FORWARD, status);
+```
 
 To convert an entire string, use the following:
+
+```
 myTrans.transliterate(myString);
+```
 
 For more complex cases, such a keyboard input, the following full method
 provides more control:
+
+```
 myTrans.transliterate(replaceable, positions, complete);
+```
 
 The Replaceable interface (or abstract class in C++) allows more complex text to
 be used with Transliterators, such as styled text. In ICU4J, a wrapper is
@@ -578,8 +623,8 @@ The positions parameter contains information about the range of text that should
 be transliterated, plus the possibly larger range of text that can serve as
 context.
 
-The complete parameter indicates whether or not you are to consider the text up
-to the limit to be complete or not. For keyboard input, the complete parameter
+The `complete` parameter indicates whether or not you are to consider the text up
+to the limit to be complete or not. For keyboard input, the `complete` parameter
 should normally be false. Only when the conversion is complete is that parameter
 set to true. For example, suppose that a transform converts "sh" to X, and "s"
 in other cases to Y. If the complete parameter is true, then a dangling "s"
@@ -590,23 +635,29 @@ In keyboard input, normally start/cursor and limit/end are set to the selection
 at the time the transform is chosen. The following shows how the selection is
 chosen:
 
+```
 positions.start = positions.cursor = selection.getStart();
 positions.limit = positions.end = selection.getEnd();
+```
 
-As the user types or insertsinputChars, call the following:
+As the user types or inserts `inputChars`, call the following:
 
+```
 replacable.replace(positions.limit, positions.limit, inputChars); // update the
 text
 positions.limit += inputChars.length(); // update the positions
 myTrans.transliterate(replaceable, positions, false);
+```
 
 If the user performs an action that indicates he or she is done with the text,
 then transliterate is called one last time using the following:
 
+```
 myTrans.transliterate(replaceable, positions, false);
+```
 
 Transliterator objects are stateless. They retain no information between calls
-to transliterate().
+to `transliterate()`.
 
 The statelessness might seem to limit the complexity of the operations that can
 be performed. In practice, complex transliterations happen by delaying the
@@ -632,21 +683,21 @@ specialized subclasses for the following:
 
 ### Subclassing Transliterators
 
-Subclassers must override handleTransliterate(Replaceable text, Positions
-positions, boolean complete). They can override some of the other methods for
-efficiency, but ensure that the results are identical. In handleTransliterate
-convert the text from positions.cursor up to positions.limit. The context from
-positions.start to positions.end may be taken into account as context when doing
+Subclassers must override `handleTransliterate(Replaceable text, Positions
+positions, boolean complete)`. They can override some of the other methods for
+efficiency, but ensure that the results are identical. In `handleTransliterate`
+convert the text from `positions.cursor` up to `positions.limit`. The context from
+`positions.start` to `positions.end` may be taken into account as context when doing
 this conversion, but should not be converted themselves. Never look at any
-characters before positions.start or after positions.end.
+characters before `positions.start` or after `positions.end`.
 
-The complete parameter indicates whether or not the text up to limit is
+The `complete` parameter indicates whether or not the text up to limit is
 complete. For example, suppose that you would convert "sh" to X, and "s" in
 other cases to Y. If the complete parameter is true, then a dangling "s"
 converts to Y; when the complete parameter is false, then the dangling "s"
-should not be converted. When you return from the method, positions.cursor
+should not be converted. When you return from the method, `positions.cursor`
 should be set to the furthest position you processed. Typically this will be up
-to limit; in case there was an incomplete sequence at the end, cursor should be
+to `limit`; in case there was an incomplete sequence at the end, `cursor` should be
 set to the position just before that sequence.
 
 ### Rule-Based Transliterators
@@ -662,12 +713,17 @@ transliterations.
 
 The simplest rule is a conversion rule, which replaces one string of characters
 with another. The conversion rule takes the following form:
+
+```
 xy > z ;
+```
 
 This converts any substring "xy" into "z". Rules are executed in order, so:
 
+```
 sch > sh ;
 ss > z ;
+```
 
 This conversion rule transforms "bass school" into "baz shool". The transform
 walks through the string from start to finish. Thus given the rules above
@@ -684,47 +740,76 @@ affects only the character immediately after it. For example, to convert from
 two less-than signs to the word "much less than", use one of the following
 rules:
 
-\\<\\< > much\\ less\\ than ;
+```
+\<\< > much\ less\ than ;
 '<<' > 'much less than' ;
-'<<' > much' 'less\\ than ;
-* Spaces may be inserted anywhere without any effect on the rules. Use extra space to separate items out for clarity without worrying about the effects. This feature is particularly useful with combining marks; it is handy to put some spaces around it to separate it from the surrounding text. The following is an example: *
-* ͅ> i ; # an iota-subscript diacritic turns into an i. *
-* For a real space in the rules, place quotes around it. For a real backslash,
-either double it \\\\, or quote it '\\'. For a real single quote, double it '',
-or place a backslash before it \\'. Each of the following means the same thing:
-* 'can''t go'
-'can\\'t go'
-can\\'t\\ go
+'<<' > much' 'less\ than ;
+```
+
+*Spaces may be inserted anywhere without any effect on the rules. Use extra space to separate items out for clarity without worrying about the effects. This feature is particularly useful with combining marks; it is handy to put some spaces around it to separate it from the surrounding text. The following is an example:*
+
+```
+ ͅ> i ; # an iota-subscript diacritic turns into an i.
+```
+
+*For a real space in the rules, place quotes around it. For a real backslash,
+either double it \, or quote it '\'. For a real single quote, double it '',
+or place a backslash before it \'. Each of the following means the same thing:*
+
+```
+'can''t go'
+'can\'t go'
+can\'t\ go
 can''t' 'go
-* Any text that starts with a hash mark and concludes a line is a comment. Comments help document how the rules work. The following shows a comment in a rule: *
-* x > ks ; # change every x into ks *
+```
+
+*Any text that starts with a hash mark and concludes a line is a comment. Comments help document how the rules work. The following shows a comment in a rule:*
+
+```
+x > ks ; # change every x into ks
+```
 
 We can use "\\u" notation instead of any letter. For instance, instead of using
 the Greek πp, we could write:
-\\u03C0 > p ;
+
+```
+\u03C0 > p ;
+```
 
 We can also define and use variables, such as:
-$pi = \\u03C0 ; $pi > p ;
+
+```
+$pi = \u03C0 ; $pi > p ;
+```
 
 #### Dual Rules
 
 Rules can also specify what happens when an inverse transform is formed. To do
 this, we reverse the direction of the "<" sign. Thus the above example becomes:
+
+```
 $pi < p ;
+```
 
 With the inverse transform, "p" will convert to the Greek p. These two
 directions can be combined together into a dual conversion rule by using the
 "<>" operator, yielding:
+
+```
 $pi <> p ;
+```
 
 #### Context
 
 Context can be used to have the results of a transformation be different
 depending on the characters before or after. The following means "Remove
 hyphens, but only when they follow lowercase letters":
-\[:lowercase letter:\] } '-' > '' ;
 
-*The context itself (\[:lowercase letter:\]) is unaffected by the replacement;
+```
+[:lowercase letter:] } '-' > '' ;
+```
+
+:point_right: **Note**: *The context itself (\[:lowercase letter:\]) is unaffected by the replacement;
 only the text between the curly braces is changed. *
 
 #### Revisiting
@@ -733,8 +818,10 @@ If the resulting text contains a vertical bar "|", then that means that
 processing will proceed from that point and that the transform will revisit part
 of the resulting text. For example, if we have:
 
+```
 x > y | z ;
 z a > w;
+```
 
 then the string "xa" will convert to "yw". First, "xa" is converted to "yza".
 Then the processing will continue from after the character "y", pick up the
@@ -749,29 +836,34 @@ conventions into text more suitable for desktop publishing (in English). It
 turns straight quotation marks or UNIX style quotation marks into curly
 quotation marks, fixes multiple spaces, and converts double-hyphens into a dash.
 
+```
 # Variables
-$single = \\' ;
+$single = \' ;
 $space = ' ' ;
-$double = \\" ;
-$back = \\\` ;
-$tab = '\\u0008' ;
-# the following is for spaces, line ends, (, \[, {, ...
-$makeRight = \[\[:separator:\]\[:start punctuation:\]\[:initial punctuation:\]\]
-;
+$double = \" ;
+$back = \` ;
+$tab = '\u0008' ;
+
+# the following is for spaces, line ends, (, [, {, ...
+$makeRight = [[:separator:][:start punctuation:][:initial punctuation:]] ;
+
 # fix UNIX quotes
 $back $back > “ ; # generate right d.q.m. (double quotation mark)
 $back > ‘ ;
+
 # fix typewriter quotes, by context
-$makeRight { $double <> “ ; # convert a double to right d.q.m. after certain
-chars
+$makeRight { $double <> “ ; # convert a double to right d.q.m. after certain chars
 ^ { $double > “ ; # convert a double at the start of the line.
 $double <> ” ; # otherwise convert to a left q.m.
+
 $makeRight {$single} <> ‘ ; # do the same for s.q.m.s
 ^ {$single} > ‘ ;
 $single <> ’;
+
 # fix multiple spaces and hyphens
 $space {$space} > ; # collapse multiple spaces
 '--' <> — ; # convert fake dash into real one
+```
 
 ### Rule Syntax
 
@@ -780,13 +872,9 @@ RuleBasedTransliterator. Each rule in the list is terminated by a semicolon. The
 list consists of the following:
 
 1.  an optional filter rule
-
 2.  zero or more transform rules
-
 3.  zero or more variable-definition rules
-
 4.  zero or more conversion rules
-
 5.  an optional inverse filter rule
 
 The filter rule, if present, must appear at the beginning of the list, before
@@ -797,21 +885,31 @@ order and be freely intermixed.
 The rule list can also generate the inverse of the transform. In that case, the
 inverse of each of the rules is used, as described below.
 
-**Transform Rules**
+#### Transform Rules
+
 Each transform rule consists of two colons followed by a transform name. For
 example:
+
+```
 :: NFD ;
+```
 
 The inverse of a transform rule follows the same conventions as when we create a
 transform by name. For example:
 
+```
 :: lower () ; # only executed for the normal
 :: (lower) ; # only executed for the inverse
 :: lower ; # executed for both the normal and the inverse
+```
 
-**Variable Definition Rules**
+#### Variable Definition Rules
+
 Each variable definition is of the following form:
+
+```
 $variableName = contents ;
+```
 
 The variable name can contain letters and digits, but must start with a letter.
 More precisely, the variable names use Unicode identifiers as defined by the
@@ -821,12 +919,16 @@ class for Java.
 
 The contents of a variable definition is any sequence of Unicode sets and
 characters or characters. For example:
-$mac = M \[aA\] \[cC\] ;
+
+```
+$mac = M [aA] [cC] ;
+```
 
 Variables are only replaced within other variable definition rules and within
 conversion rules. They have no effect on transliteration rules.
 
-**Filter Rules**
+#### Filter Rules
+
 A filter rule consists of two colons followed by a UnicodeSet. This filter is
 global in that only the characters matching the filter will be affected by any
 transform rules or conversion rules. The inverse filter rule consists of two
@@ -836,52 +938,70 @@ the inverse transform.
 For example, the Hiragana-Latin transform can be implemented by "pivoting"
 through the Katakana converter, as follows:
 
-:: \[:^Katakana:\] ; # don't touch any katakana that was in the text!
+```
+# don't touch any katakana that was in the text!
+:: [:^Katakana:] ;
+
 :: Hiragana-Katakana;
 :: Katakana-Latin;
-:: (\[:^Katakana:\]) ; # don't touchany katakana that was in the text
+
+# don't touch any katakana that was in the text
 # for the inverse either!
+:: ([:^Katakana:]) ;
+```
 
 The filters keep the transform from mistakenly converting any of the "pivot"
 characters. Note that this is a case where a rule list contains no conversion
 rules at all, just transform rules and filters.
 
-**Conversion Rules**
+#### Conversion Rules
+
 Conversion rules can be forward, backward, or double. The complete conversion
 rule syntax is described below:
 
-**Forward**
+##### Forward
+
 A forward conversion rule is of the following form:
-before_context { text_to_replace } after_context > completed_result |
-result_to_revisit ;
+
+```
+before_context { text_to_replace } after_context > completed_result | result_to_revisit ;
+```
 
 If there is no before_context, then the "{" can be omitted. If there is no
 after_context, then the "}" can be omitted. If there is no result_to_revisit,
 then the "|" can be omitted. A forward conversion rule is only executed for the
 normal transform and is ignored when generating the inverse transform.
 
-**Backward**
+##### Backward
+
 A backward conversion rule is of the following form:
-completed_result | result_to_revisit < before_context { text_to_replace }
-after_context ;
+
+```
+completed_result | result_to_revisit < before_context { text_to_replace } after_context ;
+```
 
 The same omission rules apply as in the case of forward conversion rules. A
 backward conversion rule is only executed for the inverse transform and is
 ignored when generating the normal transform.
 
-Dual
+##### Dual
 
 A dual conversion rule combines a forward conversion rule and a backward
 conversion rule into one, as discussed above. It is of the form:
+
+```
 a { b | c } d <> e { f | g } h ;
+```
 
 When generating the normal transform and the inverse, the revisit mark "|" and
 the before and after contexts are ignored on the sides where they don't belong.
 Thus, the above is exactly equivalent to the sequence of the following two
 rules:
 
+```
 a { b c } d > f | g ;
 b | c < e { f g } h ;
+```
 
 #### Intermixing Transform Rules and Conversion Rules
 
@@ -907,16 +1027,20 @@ the usual way, then the transform rule is applied to the whole string, and then
 the conversion rules after the transform rule are applied as a group to the
 whole string. For example, consider the following rules:
 
+```
 abc > xyz;
 xyz > def;
 ::Upper;
+```
 
 If you apply these rules to “abcxyz”, you get “XYZDEF”. If you move the
 “::Upper;” to the middle of the rule set and change the cases accordingly...
 
+```
 abc > xyz;
 ::Upper;
 XYZ > DEF;
+```
 
 ...applying this to “abcxyz” produces “DEFDEF”. This is because “::Upper;”
 causes the transliterator to reset to the beginning of the string: The first
@@ -926,10 +1050,12 @@ to “XYZXYZ”, and the third rule turns this into “DEFDEF”.
 This can be useful when a transform naturally occurs in multiple “passes.”
 Consider this rule set:
 
-\[:Separator:\]\* > ' ';
+```
+[:Separator:]* > ' ';
 'high school' > 'H.S.';
 'middle school' > 'M.S.';
 'elementary school' > 'E.S.';
+```
 
 If you apply this rule to “high school”, you get “H.S.”, but if you apply it to
 “high school” (with two spaces), you just get “high school” (with one space). To
@@ -939,18 +1065,22 @@ if you want all the rules to work), or you have to include the whole left-hand
 side of the first rule in the other rules, which can make them hard to read and
 maintain:
 
-$space = \[:Separator:\]\*;
+```
+$space = [:Separator:]*;
 high $space school > 'H.S.';
 middle $space school > 'M.S.';
 elementary $space school > 'E.S.';
+```
 
 Instead, you can simply insert “::Null;” in order to get things to work right:
 
-\[:Separator:\]\* > ' ';
+```
+[:Separator:]* > ' ';
 ::Null;
 'high school' > 'H.S.';
 'middle school' > 'M.S.';
 'elementary school' > 'E.S.';
+```
 
 The “::Null;” has no effect of its own (the null transliterator, by definition,
 doesn't do anything), but it splits the other rules into two “passes”: The first
@@ -962,23 +1092,29 @@ the phrases. “high school” (with four spaces) gets correctly converted to
 This can also sometimes be useful with rules that have overlapping domains.
 Consider this rule set from before:
 
+```
 sch > sh ;
 ss > z ;
+```
 
 Apply this rule to “bassch” results in “bazch” because “ss” matches earlier in
 the string than “sch”. If you really wanted “bassh”-- that is, if you wanted the
 first rule to win even when the second rule matches earlier in the string, you'd
 either have to add another rule for this special case...
 
+```
 sch > sh ;
 ssch > ssh;
 ss > z ;
+```
 
 ...or you could use a transform rule to apply the conversions in two passes:
 
+```
 sch > sh ;
 ::Null;
 ss > z ;
+```
 
 #### Masking
 
@@ -986,8 +1122,10 @@ When transforms are built, a warning is returned if rules are masked. This
 happens when a rule could not be executed because the earlier one would always
 match.
 
+```
 a > b ;
 ac > d ; # masked!
+```
 
 In this case, for example, every string that could have a match for "ac" will
 already match "a", because the rules are executed in order. However, the
@@ -995,8 +1133,10 @@ transform compiler will not currently catch cases that would be masked because
 of the use of UnicodeSets or regular expression operators, such as the
 following:
 
-a } \[:L:\] > b ;
+```
+a } [:L:] > b ;
 ac > d ; # masked, but not caught by the compiler
+```
 
 #### Inverse Summary
 
@@ -1004,7 +1144,10 @@ The following table shows how the same rule list generates two different
 transforms, where the inverse is restated in terms of forward rules (this is a
 contrived example, simply to show the reordering):
 
-Original Rules Forward Inverse :: \[:Uppercase Letter:\] ;
+##### Original Rules
+
+```
+:: [:Uppercase Letter:] ;
 :: latin-greek ;
 :: greek-japanese ;
 x <> y ;
@@ -1014,7 +1157,13 @@ r < m ;
 a > b ;
 c <> d ;
 :: any-publishing ;
-:: (\[:Number:\]) ; :: \[:Uppercase Letter:\] ;
+:: ([:Number:]) ;
+```
+
+##### Forward
+
+```
+:: [:Uppercase Letter:] ;
 :: latin-greek ;
 :: greek-japanese ;
 x > y ;
@@ -1023,7 +1172,12 @@ z > w ;
 a > b ;
 c > d ;
 :: any-publishing ;
-:: \[:Number:\] ;
+```
+
+##### Inverse
+
+```
+:: [:Number:] ;
 :: publishing-any ;
 d > c ;
 :: lower ;
@@ -1031,12 +1185,14 @@ y > x ;
 m > r ;
 :: japanese-greek ;
 :: greek-latin ;
-*Note how the irrelevant rules (the inverse filter rule and the rules containing
+```
+
+:point_right: **Note**: *Note how the irrelevant rules (the inverse filter rule and the rules containing
 <) are omitted (ignored, actually) in the forward direction, and notice how
 things are reversed: the transform rules are inverted and happen in the opposite
 order, and the groups of conversion rules are also executed in the opposite
 relative order (although the rules within each group are executed in the same
-order). *
+order).*
 
 #### Function Calls
 
@@ -1044,15 +1200,19 @@ As of ICU 2.1, rule-based transforms can invoke other transforms. The transform
 being invoked must be registered with the system before it can be used in a
 rule. The syntax for a function call resembles a Perl subroutine call:
 
-( \[a-zA-Z\] ) ( \[a-zA-Z\]\* ) > &Any-Upper($1) &Any-Lower($2) ;
+```
+( [a-zA-Z] ) ( [a-zA-Z]* ) > &Any-Upper($1) &Any-Lower($2) ;
+```
 
 This example transforms strings of ASCII letters to have an initial uppercase
-letter followed by lowercase letters. (In practice, you would use the Any-Title
+letter followed by lowercase letters. (In practice, you would use the `Any-Title`
 to do proper titlecasing.)
 
 The formal syntax is:
 
+```
 '&' Basic-id '(' Text-arg ')'
+```
 
 Elements in single quotes are literals. Basic-id is a basic ID, as described
 earlier. It specifies a source, target, and optional variant, but does not
@@ -1061,7 +1221,7 @@ that may appear on the output side of a rule. This means nested function calls
 are supported.
 
 For more information on the use of rules, and more examples of the syntax in
-use, see the [tutorial](http://icu-project.org/userguide/TransformRule.html) .
+use, see the [tutorial](http://icu-project.org/userguide/TransformRule.html).
 
 ### Regular Expression
 
@@ -1137,10 +1297,14 @@ The default transliteration uses a standard transcription for Greek. The
 transliterations is one that is aimed at preserving etymology. The ISO 843
 variant has the following differences:
 
-Greek Default ISO 843 β b v γ\* n g η ē ī ̔
-h (omitted) ̀
-̀
-(omitted) ~ ~ (omitted)
+| Greek | Default | ISO 843 |
+|---|---|---|
+| β  | b  | v |
+| γ\* | n | g |
+| η | ē | ī |
+| ̔ | h | (omitted) |
+| ̀ | ̀ | (omitted) |
+| ~ | ~ | (omitted) |
 
 \* before γ, κ, ξ, χ
 
@@ -1165,15 +1329,26 @@ application of diacritics for certain characters. These differences are shown in
 the following example (illustrated with Devanagari, although the same principles
 apply to the other Indic scripts):
 
-Devanagari ISCII 91 ISO 15919 ऋ ṛ r̥ ऌ ḻ l̥ ॠ ṝ r̥̄ ॡ ḻ̄ l̥̄ ढ़ d̂ha ṛha ड़
-d̂a ṛa *With some fonts the diacritics will not be correctly placed on the base
+| Devanagari | ISCII 91 | ISO 15919 |
+|---|---|---|
+| ऋ | ṛ | r̥ |
+| ऌ | ḻ | l̥ |
+| ॠ | ṝ | r̥̄ |
+| ॡ | ḻ̄ | l̥̄ |
+| ढ़ | d̂ha | ṛha |
+| ड़ |d̂a | ṛa |
+
+:point_right: **Note**: *With some fonts the diacritics will not be correctly placed on the base
 letters. The macron on a lowercase L may look particularly bad.*
 
 Transliteration rules in Indic are reversible with the exception of the ZWJ and
 ZWNJ used to request explicit rendering effects. For example:
 
-Devanagari Romanization Note क्ष kṣa normal क्‍ष kṣa explicit halant requested
-क्‌ष kṣa half-consonant requested
+| Devanagari | Romanization | Note |
+|---|---|---|
+| क्ष | kṣa | normal |
+| क्‍ष | kṣa | explicit halant requested |
+| क्‌ष | kṣa | half-consonant requested |
 
 There are two particular instances where transliterations may produce unexpected
 results: (1) where a halant after a consonant is implied by the romanization (in
@@ -1182,8 +1357,12 @@ transliteration of 'c'.
 
 For example:
 
-Devanagari Romanization सेन्गुप्त Sēngupta सेनगुप्त Sēnagupta मोनिच Monica मोनिक
-Monika
+| Devanagari | Romanization |
+|---|---|
+| सेन्गुप्त | Sēngupta |
+| सेनगुप्त | Sēnagupta |
+| मोनिच | Monica |
+| मोनिक | Monika |
 
 ### Modifications
 
@@ -1191,8 +1370,10 @@ It is easy using transforms to create variants of the defaults. For example, to
 create a variant of Korean that uses hyphens instead of apostrophes, use the
 following rules:
 
+```
 :: Latin-Hangul ;
 '' <> '-' ;
+```
 
 ### More Information
 
