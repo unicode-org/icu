@@ -14,7 +14,7 @@ transliteration to use as a model. There are dozens of different systems for
 each language and script.
 
 The International Organization for Standardization
-([ISO](http://www.elot.gr/tc46sc2/) ) uses a strict definition of
+([ISO](http://www.elot.gr/tc46sc2/)) uses a strict definition of
 transliteration, which requires it to be reversible. Although the goal for ICU
 script transforms is to be reversible, they do not have to adhere to this
 definition. In general, most transliteration systems in use are not reversible.
@@ -24,7 +24,7 @@ in building transforms, see "Guidelines for Designing Script Transliterations"
 (§) in the [General Transforms](index.md) chapter. For external sources for
 script transforms, see Script Transliterator Sources (§) in that same chapter)
 
-* See *[*Properties and ICU Rule Syntax*](../../strings/properties.md) *for
+:point_right: **Note**: See *[*Properties and ICU Rule Syntax*](../../strings/properties.md) *for
 information regarding syntax characters.*
 
 In this example, we start with a set of rules for Greek since they provide a
@@ -35,7 +35,7 @@ we will transliterate "Βιολογία-Φυσιολογία" as "Biología-Phys
 "Violohía-Fisiolohía". To illustrate some of the trickier cases, we will also
 transliterate the Greek accents that are no longer in use in modern Greek.
 
-*Some of the characters may not be visible on the screen unless you have a
+:point_right: **Note**: *Some of the characters may not be visible on the screen unless you have a
 Unicode font with all the Greek letters. If you have a licensed copy of
 Microsoft® Office, you can use the "Arial Unicode MS" font, or you can download
 the [CODE2000](http://www.code2000.net/) font for free. For more information,
@@ -46,11 +46,11 @@ We will also verify that every Latin letter maps to a Greek letter. This insures
 that when we reverse the transliteration that the process can handle all the
 Latin letters.
 
-*This direction is not reversible. The following table illustrates this
+:point_right: **Note**: *This direction is not reversible. The following table illustrates this
 situation:* 
 
 | Source→Target | Reversible | φ → ph → φ |
-|---------------|------------------------------|------------|
+|---------------|------------|------------|
 | Target→Source | Not (Necessarily) Reversible | f → φ → ph |
 
 
@@ -59,18 +59,23 @@ situation:*
 In non-complex cases, we have a one-to-one relationship between letters in both
 Greek and Latin. These rules map between a source string and a target string.
 The following shows this relationship:
+
+```
 π <> p;
+```
 
 This rule states that when you transliterate from Greek to Latin, convert π to p
 and when you transliterate from Latin to Greek, convert p to π. The syntax is
+
+```
 string1 <> string2 ;
+```
 
 We will start by adding a whole batch of simple mappings. These mappings will
 not work yet, but we will start with them. For now, we will not use the
 uppercase versions of characters.
 
-
-    One to One Mappings
+    # One to One Mappings
     α <> a;
     β <> b;
     γ <> g;
@@ -81,7 +86,7 @@ We will also add rules for completeness. These provide fallback mappings for
 Latin characters that do not normally result from transliterating Greek
 characters.
 
-    Completeness Mappings
+    # Completeness Mappings
     κ < c;
     κ < q;
 
@@ -110,8 +115,8 @@ features: context and range.
 ### Context
 
 First, we will consider the impact of context on a transform. We already have
-rules for converting γ, κ, ξ, and χ. We must consider how to convert the Î³
-character when it is followed by ³, Îº, Î¾, and Ï‡. Otherwise we must permit
+rules for converting γ, κ, ξ, and χ. We must consider how to convert the γ
+character when it is followed by γ, κ, ξ, and χ. Otherwise we must permit
 those characters to be converted using their specific rules. This is done with
 the following:
 
@@ -168,7 +173,7 @@ size, color, etc), then that style difference is preserved in the resulting two
 characters. That is, the "n" will have the style of the first gamma, while the
 "g" will have the style of the second gamma.
 
-*Contexts preserve the styles at a much finer granularity.*
+:point_right: **Note**: *Contexts preserve the styles at a much finer granularity.*
 
 ## Case
 
@@ -192,7 +197,7 @@ together:
 The example allows words like Θεολογικές‚ to map to Theologikés and not
 THeologikés
 
-*You either can specify properties with the POSIX-style syntax, such as
+:point_right: **Note**: *You either can specify properties with the POSIX-style syntax, such as
 [:LowercaseLetter:], or with the Perl-style syntax, such as
 \\p{LowercaseLetter}.*
 
@@ -216,7 +221,7 @@ These rules state that if an "s" is surrounded by non-letters, convert it to
 "σ". Otherwise, if the "s" is followed by a non-letter, convert it to "ς". If
 all else fails, convert it to "σ"
 
-*Negated ranges [^...] will match at the beginning and the end of a string.
+:point_right: **Note**: *Negated ranges [^...] will match at the beginning and the end of a string.
 This makes the rules much easier to write. *
 
 To make the rules clearer, you can use variables. Instead of the example above,
@@ -308,7 +313,7 @@ would change to the following (notice that the first a is not replaced):
 | Source | a xa a |
 | Results | a xa b |
 
-*Characters that are outside the context limits -- contextStart to contextEnd -- are also treated as
+:point_right: **Note**: *Characters that are outside the context limits -- contextStart to contextEnd -- are also treated as
 æther.*
 
 The property \[:any:\] can be used to match all code points, including æther.
@@ -336,7 +341,7 @@ used within a range: you can't have \[\[.\] - \\u000A\], for example. If you
 want to have different behavior you can define your own variables and use them
 instead of the period.
 
-*There are a few other special escapes, that can be used in ranges. These are
+:point_right: **Note**: *There are a few other special escapes, that can be used in ranges. These are
 listed in the table below. However, instead of the latter two it is safest to
 use the above $break definition since it works for line endings across different
 platforms.* 
@@ -376,13 +381,13 @@ so the (NFD) goes at the bottom and (NFC) at the top.
 A global filter can also be used with the transform rules. The following example
 shows a filter used in the rules:
 
-    :: \[\[:Greek:\]\[:Inherited:\]\];
+    :: [[:Greek:][:Inherited:]];
     :: NFD (NFC) ;
     α <> a;
     ...
     ω <> ō;
     :: NFC (NFD);
-    :: (\[\[:Latin:\]\[:Inherited:\]\]);
+    :: ([[:Latin:][:Inherited:]]);
 
 The global filter will cause any other characters to be unaffected. In
 particular, the NFD then only applies to Greek characters and accents, leaving
@@ -402,7 +407,7 @@ Korean transliteration standards by inserting an apostrophe or hyphen to
 disambiguate the results. We can add a rule like the following that inserts an
 apostrophe after an "n" if we need to reverse the transliteration process:
 
-    ν } \[ΓΚΞΧγκξχ\] > n\\';
+    ν } [ΓΚΞΧγκξχ] > n\';
 
 In ICU, there are several of these mechanisms for the Greek rules. The ICU rules
 undergo some fairly rigorous mechanical testing to ensure reversibility. Adding
@@ -425,7 +430,7 @@ bar means that the character will be revisited, so that the "S" or "K" in a
 Greek transform will be applied to the result and will eventually produce a
 sigma (Σ, σ, or ς) or kappa (Κ or κ).
 
-    $softener = \[eiyEIY\] ;
+    $softener = [eiyEIY] ;
     | S < C } $softener ;
     | K < C ;
     | s < c } $softener ;
@@ -478,7 +483,7 @@ transform will then backup to the position before the vowel and continue. In the
 next pass, the "ak" will match and be invoked. Thus, if the source text is "ax",
 the result will be "ack".
 
-*Although you can move the cursor forward or backward, it is limited in two
+:point_right: **Note**: *Although you can move the cursor forward or backward, it is limited in two
 ways: (a) to the text that is matched, (b) within the original substring that is
 to be converted. For example, if we have the rule "a b\* {x} > |@@@@@y" and it
 matches in the text "mabbx", the result will be "m|abby" (| represents the
@@ -493,13 +498,13 @@ indicate which group. For example, in Korean, any vowel that does not have a
 consonant before it gets the null consonant (?) inserted before it. The
 following example shows this rule:
 
-    (\[aeiouwy\]) > ?| $1 ;
+    ([aeiouwy]) > ?| $1 ;
 
 To revisit the vowel again, insert the null consonant, insert the vowel, and
 then backup before the vowel to reconsider it. Similarly, we have a following
 rule that inserts a null vowel (?), if no real vowel is found after a consonant:
 
-    (\[b-dg-hj-km-npr-t\]) > | $1 eu;
+    ([b-dg-hj-km-npr-t]) > | $1 eu;
 
 In this case, since we are going to reconsider the text again, we put in the
 Latin equivalent of the Korean null vowel, which is "eu".
@@ -511,7 +516,7 @@ start. For example, the first part of the following rule does not overlap, but
 the last two parts do overlap:
 
     β > b;
-    γ } \[ Γ Κ Ξ Χ γ κ ξ χ \] > n ;
+    γ } [ Γ Κ Ξ Χ γ κ ξ χ ] > n ;
     γ > g ;
 
 When rules do not overlap, they will produce the same result no matter what
@@ -543,7 +548,7 @@ vowel (with perhaps other accents following). So, we will start with the
 following variables and rule. The rule transforms a rough breathing mark into an
 "H", and moves it to before the vowels.
 
-    $gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
+    $gvowel = [ΑΕΗΙΟΥΩαεηιουω];
     ($gvowel + ) ̔ > H | $1;
 
 A word like ὍΤΑΝ" is transformed into "HOTAN". This transformation does not work
@@ -551,8 +556,8 @@ with a lowercase word like "ὅταν". To handle lowercase words, we insert ano
 rule that moves the "H" over lowercase vowels and changes it to lowercase. The
 following shows this rule:
 
-    $gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
-    $lcgvowel = \[αεηιουω\];
+    $gvowel = [ΑΕΗΙΟΥΩαεηιουω];
+    $lcgvowel = [αεηιουω];
     ($lcgvowel +) ̔ > h | $1; # fix lowercase
     ($gvowel + ) ̔ > H | $1;
 
@@ -565,11 +570,17 @@ that in two circumstances: (a) the breathing mark is on a capital letter
 followed by a lowercase, or (b) the breathing mark is on a lowercase vowel. The
 following shows how to write a rule for this situation:
 
-    $gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
-    $lcgvowel = \[αεηιουω\];
-    {Ο ̔ } \[:Nonspacing Mark:\]\* \[:Ll:\] > H | ο; # fix Titlecase
-    {Ο ( $lcgvowel \* ) ̔ } > H | ο $1; # fix Titlecase
-    ( $lcgvowel + ) ̔ > h | $1 ; # fix lowercase
+    $gvowel = [ΑΕΗΙΟΥΩαεηιουω];
+    $lcgvowel = [αεηιουω];
+
+    # fix Titlecase
+    {Ο ̔ } [:Nonspacing Mark:]* [:Ll:] > H | ο;
+
+    # fix Titlecase
+    {Ο ( $lcgvowel * ) ̔ } > H | ο $1;
+
+    # fix lowercase
+    ( $lcgvowel + ) ̔ > h | $1 ;
     ($gvowel + ) ̔ > H | $1 ;
 
 This rule gives the correct results for lowercase as "Ὅταν" is transformed into
@@ -589,59 +600,64 @@ punctuation and space (watch out for combining marks).
 1.  **Case** When executing script conversions, if the source script has
     uppercase and lowercase characters, and the target is lowercase, then
     lowercase everything before your first rule. For example:
-    :: \[:Latin:\] lower (); # lowercase target before applying forward rules
+    ```
+    # lowercase target before applying forward rules
+    :: [:Latin:] lower ();
+    ```
     This will allow the rules to work even when they are given a mixture of
     upper and lower case character. This procedure is done in the following ICU
     transforms:
+    -  Latin-Hangul
+    -  Latin-Greek
+    -  Latin-Cyrillic
+    -  Latin-Devanagari
+    -  Latin-Gujarati
+    -  etc
 
-1.  Latin-Hangul
-
-2.  Latin-Greek
-
-3.  Latin-Cyrillic
-
-4.  Latin-Devanagari
-
-5.  Latin-Gujarati
-
-6.  etc
-
-1.  **Punctuation. **When executing script conversions, remember that scripts
+1.  **Punctuation** When executing script conversions, remember that scripts
     have different punctuation conventions. For example, in the Greek language,
     the ";" means a question mark. Generally, these punctuation marks also
     should be converted when transliterating scripts.
 
-2.  **Normalization **Always design transform rules so that they work no matter
+2.  **Normalization** Always design transform rules so that they work no matter
     whether the source is normalized or not. (This is also true for the target,
     in the case of backwards rules.) Generally, the best way to do this is to
-    have :: NFD (NFC); as the first line of the rules, and :: NFC (NFD); as the
+    have `:: NFD (NFC);` as the first line of the rules, and `:: NFC (NFD);` as the
     last line. To supply filters, as described above, break each of these lines
     into two separate lines. Then, apply the filter to either the normal or
     inverse direction. Each of the accents then can be manipulated as separate
     items that are always in a canonical order. If we are not using any accent
-    manipulation, we could use :: NFC (NFC) ; at the top of the rules instead.
+    manipulation, we could use `:: NFC (NFC) ;` at the top of the rules instead.
 
-3.  **Ignorable Characters **Letters may have following accents such as the
+3.  **Ignorable Characters** Letters may have following accents such as the
     following example:
-    \[:lowercase letter:\] } z > s ; # convert z after letters into s
+    ```
+    # convert z after letters into s
+    [:lowercase letter:] } z > s ;
+    ```
     Normally, we want to ignore any accents that are on the z in performing the
     rule. To do that, restate the rule as:
-    \[:lowercase letter:\] \[:mark:\]\* } z > s ; # convert z after letters into
-    s
+    ```
+    # convert z after letters into s
+    [:lowercase letter:] [:mark:]* } z > s ;
+    ```
     Even if we are not using NFD, this is still a good idea since some languages
     use separate accents that cannot be combined.
     Moreover, some languages may have embedded format codes, such as a
     Left-Right Mark, or a Non-Joiner. Because of that, it is even safer to use
     the following:
-
-    TODO: this code should be part of the preceding list item #4.
-    $ignore = \[ \[:mark:\] \[:format:\] \] \* ; # define at the top of your file
+    ```
+    # define at the top of your file
+    $ignore = [ [:mark:] [:format:] ] * ;
     ...
-    \[:letter:\] $ignore } z > s ; # convert z after letters into sh
+    # convert z after letters into sh
+    [:letter:] $ignore } z > s ;
+    ```
 
 
-*Remember that the rules themselves must be in the same normalization format.
+:point_right: **Note**: *Remember that the rules themselves must be in the same normalization format.
 Otherwise, nothing will match. To do this, run NFD on the rules themselves. In
 some cases, we must rearrange the order of the rules because of masking. For
-example, consider the following rules: *
+example, consider the following rules:*
+
 *If these rules are put in normalized form, then the second rule will mask the first. To avoid this, exchange the order because the NFD representation has the accents separate from the base character. We will not be able to see this on the screen if accents are rendered correctly. The following shows the NFD representation:*
