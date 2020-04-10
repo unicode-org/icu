@@ -9679,6 +9679,9 @@ void NumberFormatTest::Test20956_MonetarySymbolGetters() {
     IcuTestErrorCode status(*this, "Test20956_MonetarySymbolGetters");
     LocalPointer<DecimalFormat> decimalFormat(static_cast<DecimalFormat*>(
         NumberFormat::createCurrencyInstance("et", status)));
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
 
     decimalFormat->setCurrency(u"EEK");
 
@@ -9823,6 +9826,9 @@ void NumberFormatTest::Test20961_CurrencyPluralPattern() {
     {
         LocalPointer<DecimalFormat> decimalFormat(static_cast<DecimalFormat*>(
             NumberFormat::createInstance("en-US", UNUM_CURRENCY_PLURAL, status)));
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
         UnicodeString result;
         decimalFormat->toPattern(result);
         assertEquals("Currency pattern", u"#,##0.00 ¤¤¤", result);
