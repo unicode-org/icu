@@ -6794,4 +6794,15 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
         assertEquals("Currency pattern", "#,##0.00 ¤¤¤", decimalFormat.toPattern());
     }
+
+    @Test
+    public void testBigDecimalTrailingZeros() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
+        df.setParseBigDecimal(true);
+        ParsePosition dontCare = new ParsePosition(0);
+        BigDecimal d = (BigDecimal) df.parse("10.00", dontCare);
+        assertEquals("", 2, d.scale());
+        assertEquals("", 10, d.intValueExact());
+        assertEquals("", "10.00", d.toString());
+    }
 }

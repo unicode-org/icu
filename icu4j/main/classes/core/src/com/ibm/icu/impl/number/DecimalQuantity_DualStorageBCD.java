@@ -255,11 +255,17 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
             }
             BigDecimal result = BigDecimal.valueOf(tempLong);
             // Test that the new scale fits inside the BigDecimal
-            long newScale = result.scale() + scale + exponent;
+            assert result.scale() == 0;
+            long newScale = scale + exponent;
             if (newScale <= Integer.MIN_VALUE) {
                 result = BigDecimal.ZERO;
             } else {
                 result = result.scaleByPowerOfTen(scale + exponent);
+                assert newScale == -result.scale();
+                // Restore trailing zeros
+                if (exponent + rReqPos < newScale) {
+                    result = result.setScale(-rReqPos - exponent);
+                }
             }
             if (isNegative()) {
                 result = result.negate();

@@ -209,8 +209,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (precision == 0) {
             throw new ArithmeticException("Magnitude is not well-defined for zero");
         } else {
-            return scale + precision - 1;
+            return scale + (precision - 1);
         }
+    }
+
+    private int getOutputMagnitude() throws ArithmeticException {
+        return getMagnitude() + exponent;
     }
 
     @Override
@@ -218,8 +222,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (precision != 0) {
             scale = Utility.addExact(scale, delta);
             origDelta = Utility.addExact(origDelta, delta);
-            // Make sure that precision + scale won't overflow, either
-            Utility.addExact(scale, precision);
+            // Make sure getMagnitude()/getOutputMagnitude() won't overflow
+            Utility.addExact(Utility.addExact(scale, precision - 1), exponent);
         }
     }
 
@@ -231,6 +235,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     @Override
     public void adjustExponent(int delta) {
         exponent = exponent + delta;
+        // Make sure getMagnitude()/getOutputMagnitude() won't overflow
+        Utility.addExact(Utility.addExact(scale, precision - 1), exponent);
     }
 
     @Override
@@ -671,7 +677,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (exponent + scale < 0) {
             return false;
         }
-        int magnitude = getMagnitude();
+        int magnitude = getOutputMagnitude();
         if (magnitude < 18) {
             return true;
         }

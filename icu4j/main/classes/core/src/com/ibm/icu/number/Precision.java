@@ -729,7 +729,9 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToNickel(-maxFrac, mathContext);
-            value.setMinFraction(minFrac);
+            if (minFrac > 0) {
+                value.setMinFraction(minFrac);
+            }
         }
 
         @Override
