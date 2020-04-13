@@ -241,19 +241,16 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
 
     @Override
     protected BigDecimal bcdToBigDecimal() {
+        BigDecimal result;
         if (usingBytes) {
             // Converting to a string here is faster than doing BigInteger/BigDecimal arithmetic.
-            BigDecimal result = new BigDecimal(toNumberString());
-            if (isNegative()) {
-                result = result.negate();
-            }
-            return result;
+            result = new BigDecimal(toNumberString());
         } else {
             long tempLong = 0L;
             for (int shift = (precision - 1); shift >= 0; shift--) {
                 tempLong = tempLong * 10 + getDigitPos(shift);
             }
-            BigDecimal result = BigDecimal.valueOf(tempLong);
+            result = BigDecimal.valueOf(tempLong);
             // Test that the new scale fits inside the BigDecimal
             assert result.scale() == 0;
             long newScale = scale + exponent;
@@ -261,17 +258,16 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
                 result = BigDecimal.ZERO;
             } else {
                 result = result.scaleByPowerOfTen(scale + exponent);
-                assert newScale == -result.scale();
-                // Restore trailing zeros
-                if (exponent + rReqPos < newScale) {
-                    result = result.setScale(-rReqPos - exponent);
-                }
             }
-            if (isNegative()) {
-                result = result.negate();
-            }
-            return result;
         }
+        // Restore trailing zeros
+        if (rReqPos != 0 && exponent + rReqPos < -result.scale()) {
+            result = result.setScale(-rReqPos - exponent);
+        }
+        if (isNegative()) {
+            result = result.negate();
+        }
+        return result;
     }
 
     @Override
@@ -466,7 +462,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
             sb.append(Long.toHexString(bcdLong));
         }
         sb.append("E");
-        sb.append(scale);
+        sb.append(scale + exponent);
         return sb.toString();
     }
 }
