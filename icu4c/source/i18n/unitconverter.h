@@ -15,14 +15,14 @@
 
 U_NAMESPACE_BEGIN
 
-enum U_I18N_API UnitsMatchingState {
+enum U_I18N_API UnitsConvertibilityState {
     RECIPROCAL,
     CONVERTIBLE,
     UNCONVERTIBLE,
 };
 
-UnitsMatchingState U_I18N_API
-checkUnitsState(const MeasureUnit &source, const MeasureUnit &target,
+UnitsConvertibilityState U_I18N_API
+checkConvertibility(const MeasureUnit &source, const MeasureUnit &target,
                 const MaybeStackVector<ConversionRateInfo> &conversionRateInfo, UErrorCode &status);
 
 U_NAMESPACE_END
