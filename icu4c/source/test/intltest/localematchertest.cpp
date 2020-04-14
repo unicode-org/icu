@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "unicode/utypes.h"
 #include "unicode/localematcher.h"
@@ -333,7 +334,9 @@ void LocaleMatcherTest::testDirection() {
     {
         // arz is a close one-way match to ar, and the region matches.
         // (Egyptian Arabic vs. Arabic)
-        LocaleMatcher withOneWay = builder.build(errorCode);
+        // Also explicitly exercise the move copy constructor.
+        LocaleMatcher built = builder.build(errorCode);
+        LocaleMatcher withOneWay(std::move(built));
         Locale::RangeIterator<Locale *> desiredIter(ARRAY_RANGE(desired));
         assertEquals("with one-way", "ar",
                      locString(withOneWay.getBestMatch(desiredIter, errorCode)));
@@ -341,8 +344,11 @@ void LocaleMatcherTest::testDirection() {
     {
         // nb is a less close two-way match to nn, and the regions differ.
         // (Norwegian Bokmal vs. Nynorsk)
-        LocaleMatcher onlyTwoWay =
+        // Also explicitly exercise the move assignment operator.
+        LocaleMatcher onlyTwoWay = builder.build(errorCode);
+        LocaleMatcher built =
             builder.setDirection(ULOCMATCH_DIRECTION_ONLY_TWO_WAY).build(errorCode);
+        onlyTwoWay = std::move(built);
         Locale::RangeIterator<Locale *> desiredIter(ARRAY_RANGE(desired));
         assertEquals("only two-way", "nn",
                      locString(onlyTwoWay.getBestMatch(desiredIter, errorCode)));
