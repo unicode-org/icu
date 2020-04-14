@@ -75,7 +75,6 @@ void UnitsTest::testConversionCapability() {
         {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
         {"square-hectare", "p4-foot", CONVERTIBLE},                             //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
-        // BEGIN: a copy of tests from unitsTest.txt
         {"g-force", "meter-per-square-second", CONVERTIBLE},                               //
         {"ohm", "kilogram-square-meter-square-ampere-per-cubic-second", CONVERTIBLE},      //
         {"electronvolt", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
@@ -116,7 +115,6 @@ void UnitsTest::testConversionCapability() {
         {"ofhg", "kilogram-square-second-per-square-meter", CONVERTIBLE},                  //
         {"knot", "meter-per-second", CONVERTIBLE},                                         //
         {"volt", "kilogram-square-meter-ampere-per-cubic-second", CONVERTIBLE},            //
-        // END: a copy of tests from unitsTest.txt
     };
 
     for (const auto &testCase : testCases) {

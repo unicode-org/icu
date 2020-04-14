@@ -30,11 +30,12 @@ extractConversionInfo(StringPiece source,
 }
 
 /**
- * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
+ * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
+ * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
  */
 MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
-                            const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList,
-                            UErrorCode &status) {
+                                    const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList,
+                                    UErrorCode &status) {
     MeasureUnit result;
     int32_t count;
     const auto singleUnits = source.splitToSingleUnits(count, status);
@@ -55,11 +56,15 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
 
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
         // must be p4-meter. (NOTE: hectare --> square-meter)
-        auto baseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
-        auto singleBaseUnit = SingleUnitImpl::forMeasureUnit(baseUnit, status);
-        singleBaseUnit.dimensionality *= singleUnit.getDimensionality(status);
+        auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
+        int32_t baseUnitsCounts;
+        const auto singleBaseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCounts, status);
+        for (int j = 0; j < baseUnitsCounts; j++) {
+            auto singleBaseUnit = SingleUnitImpl::forMeasureUnit(singleBaseUnits[j], status);
+            singleBaseUnit.dimensionality *= singleUnit.getDimensionality(status);
 
-        result = result.product(singleBaseUnit.build(status), status);
+            result = result.product(singleBaseUnit.build(status), status);
+        }
     }
 
     return result;
@@ -67,9 +72,9 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
 
 } // namespace
 
-UnitsConvertibilityState U_I18N_API
-checkConvertibility(const MeasureUnit &source, const MeasureUnit &target,
-                const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList, UErrorCode &status) {
+UnitsConvertibilityState U_I18N_API checkConvertibility(
+    const MeasureUnit &source, const MeasureUnit &target,
+    const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList, UErrorCode &status) {
     auto sourceBaseUnit = extractCompoundBaseUnit(source, conversionRateInfoList, status);
     auto targetBaseUnit = extractCompoundBaseUnit(target, conversionRateInfoList, status);
 
