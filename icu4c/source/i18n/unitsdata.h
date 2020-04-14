@@ -38,6 +38,13 @@ class U_I18N_API ConversionRateInfo {
 };
 
 /**
+ * Returns ConversionRateInfo for all supported conversions.
+ *
+ * @param status Receives status.
+ */
+MaybeStackVector<ConversionRateInfo> U_I18N_API getAllConversionRates(UErrorCode &status);
+
+/**
  * Collects and returns ConversionRateInfo needed for conversions for a set of
  * units.
  *

@@ -11,6 +11,7 @@
 #include "resource.h"
 #include "unitsdata.h"
 #include "uresimp.h"
+#include "util.h"
 
 U_NAMESPACE_BEGIN
 
@@ -53,114 +54,67 @@ class ConversionRateDataSink : public ResourceSink {
      */
     void put(const char *source, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         if (U_FAILURE(status)) return;
-        ResourceTable conversionRateTable = value.getTable(status);
-        if (U_FAILURE(status)) return;
-
-        // Collect base unit, factor and offset from the resource.
-        int32_t lenSource = uprv_strlen(source);
-        const UChar *baseUnit = NULL, *factor = NULL, *offset = NULL;
-        int32_t lenBaseUnit, lenFactor, lenOffset;
-        const char *key;
-        for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
-            if (uprv_strcmp(key, "target") == 0) {
-                baseUnit = value.getString(lenBaseUnit, status);
-            } else if (uprv_strcmp(key, "factor") == 0) {
-                factor = value.getString(lenFactor, status);
-            } else if (uprv_strcmp(key, "offset") == 0) {
-                offset = value.getString(lenOffset, status);
-            }
-        }
-        if (U_FAILURE(status)) return;
-        if (baseUnit == NULL || factor == NULL) {
-            // We could not find a usable conversion rate.
-            status = U_MISSING_RESOURCE_ERROR;
+        if (uprv_strcmp(source, "convertUnits") != 0) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-
-        // Check if we already have the conversion rate in question.
-        //
-        // TODO(review): We could do this skip-check *before* we fetch
-        // baseUnit/factor/offset based only on the source unit, but only if
-        // we're certain we'll never get two different baseUnits for a given
-        // source. This should be the case, since convertUnit entries in CLDR's
-        // units.xml should all point at a defined base unit for the unit
-        // category. I should make this code more efficient after
-        // double-checking we're fine with relying on such a detail from the
-        // CLDR spec?
-        CharString lastBaseUnit;
-        lastBaseUnit.appendInvariantChars(baseUnit, lenBaseUnit, status);
-        if (U_FAILURE(status)) return;
-        for (int32_t i = 0, len = outVector.length(); i < len; i++) {
-            if (strcmp(outVector[i]->sourceUnit.data(), source) == 0 &&
-                strcmp(outVector[i]->baseUnit.data(), lastBaseUnit.data()) == 0) {
+        ResourceTable conversionRateTable = value.getTable(status);
+        const char *srcUnit;
+        // We're reusing `value`, which seems to be a common pattern:
+        for (int32_t unit = 0; conversionRateTable.getKeyAndValue(unit, srcUnit, value); unit++) {
+            ResourceTable unitTable = value.getTable(status);
+            const char *key;
+            UnicodeString baseUnit = ICU_Utility::makeBogusString();
+            UnicodeString factor = ICU_Utility::makeBogusString();
+            UnicodeString offset = ICU_Utility::makeBogusString();
+            for (int32_t i = 0; unitTable.getKeyAndValue(i, key, value); i++) {
+                if (uprv_strcmp(key, "target") == 0) {
+                    baseUnit = value.getUnicodeString(status);
+                } else if (uprv_strcmp(key, "factor") == 0) {
+                    factor = value.getUnicodeString(status);
+                } else if (uprv_strcmp(key, "offset") == 0) {
+                    offset = value.getUnicodeString(status);
+                }
+            }
+            if (U_FAILURE(status)) return;
+            if (baseUnit.isBogus() || factor.isBogus()) {
+                // We could not find a usable conversion rate: bad resource.
+                status = U_MISSING_RESOURCE_ERROR;
                 return;
             }
-        }
 
-        // We don't have this ConversionRateInfo yet: add it.
-        ConversionRateInfo *cr = outVector.emplaceBack();
-        if (!cr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        } else {
-            cr->sourceUnit.append(source, lenSource, status);
-            cr->baseUnit.append(lastBaseUnit.data(), lastBaseUnit.length(), status);
-            cr->factor.appendInvariantChars(factor, lenFactor, status);
-            if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
+            // We don't have this ConversionRateInfo yet: add it.
+            ConversionRateInfo *cr = outVector.emplaceBack();
+            if (!cr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            } else {
+                cr->sourceUnit.append(srcUnit, status);
+                cr->baseUnit.appendInvariantChars(baseUnit, status);
+                cr->factor.appendInvariantChars(factor, status);
+                if (!offset.isBogus()) cr->offset.appendInvariantChars(offset, status);
+            }
         }
+        return;
     }
 
   private:
     MaybeStackVector<ConversionRateInfo> &outVector;
 };
 
-/**
- * Collects conversion information for a "SINGLE" unit (a unit whose complexity
- * is UMEASURE_UNIT_SINGLE). For a COMPOUND or SEQUENCE unit an error will
- * occur.
- *
- * @param unit The input unit. Its complexity must be UMEASURE_UNIT_SINGLE, but
- * it may have a dimensionality != 1.
- * @param converUnitsBundle A UResourceBundle instance for the convertUnits
- * resource.
- * @param convertSink The ConversionRateDataSink through which
- * ConversionRateInfo instances are to be collected.
- * @param status The standard ICU error code output parameter.
- */
-void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUnitsBundle,
-                       ConversionRateDataSink &convertSink, UErrorCode &status) {
-    if (U_FAILURE(status)) return;
-    int32_t dimensionality = unit.getDimensionality(status);
-
-    // Fetch the relevant entry in convertUnits.
-    MeasureUnit simple = unit;
-    if (dimensionality != 1 || simple.getSIPrefix(status) != UMEASURE_SI_PREFIX_ONE) {
-        simple = unit.withDimensionality(1, status).withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
-    }
-    ures_getAllItemsWithFallback(convertUnitsBundle, simple.getIdentifier(), convertSink, status);
-}
-
 } // namespace
 
-MaybeStackVector<ConversionRateInfo> U_I18N_API
-getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status) {
+MaybeStackVector<ConversionRateInfo> U_I18N_API getAllConversionRates(UErrorCode &status) {
     MaybeStackVector<ConversionRateInfo> result;
-    if (U_FAILURE(status)) return result;
-
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    StackUResourceBundle convertUnitsBundle;
-    ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
-    ConversionRateDataSink convertSink(result);
-
-    for (int i = 0; i < units.length(); i++) {
-        int32_t numSingleUnits;
-        LocalArray<MeasureUnit> singleUnits = units[i]->splitToSingleUnits(numSingleUnits, status);
-
-        for (int i = 0; i < numSingleUnits; i++) {
-            processSingleUnit(singleUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
-        }
-    }
+    ConversionRateDataSink sink(result);
+    ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", sink, status);
     return result;
+}
+
+MaybeStackVector<ConversionRateInfo>
+U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &, UErrorCode &status) {
+    return getAllConversionRates(status);
 }
 
 U_NAMESPACE_END

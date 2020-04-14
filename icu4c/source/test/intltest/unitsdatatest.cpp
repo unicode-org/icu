@@ -12,6 +12,7 @@ class UnitsDataTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
+    void testGetAllConversionRates();
     void testGetConversionRateInfo();
 };
 
@@ -20,10 +21,28 @@ extern IntlTest *createUnitsDataTest() { return new UnitsDataTest(); }
 void UnitsDataTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if (exec) { logln("TestSuite UnitsDataTest: "); }
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testGetAllConversionRates);
     TESTCASE_AUTO(testGetConversionRateInfo);
     TESTCASE_AUTO_END;
 }
 
+void UnitsDataTest::testGetAllConversionRates() {
+    IcuTestErrorCode status(*this, "testGetAllConversionRates");
+    MaybeStackVector<ConversionRateInfo> conversionInfo = getAllConversionRates(status);
+
+    // Convenience output for debugging
+    for (int i = 0; i < conversionInfo.length(); i++) {
+        ConversionRateInfo *cri = conversionInfo[i];
+        logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", offset=\"%s\"", i,
+              cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
+        assertTrue("sourceUnit", cri->sourceUnit.length() > 0);
+        assertTrue("baseUnit", cri->baseUnit.length() > 0);
+        assertTrue("factor", cri->factor.length() > 0);
+    }
+}
+
+// TODO(hugovdm): drop this test case, maybe even before ever merging it into
+// units-staging. Not immediately deleting it to prove backward compatibility:
 void UnitsDataTest::testGetConversionRateInfo() {
     const int MAX_NUM_RATES = 5;
     struct {
@@ -92,16 +111,18 @@ void UnitsDataTest::testGetConversionRateInfo() {
             }
             assertTrue(UnicodeString("<") + expected + "> expected", found);
         }
-        assertEquals("number of conversion rates", countExpected, conversionInfo.length());
+        // We're now fetching all units, not just the needed ones, so this is no
+        // longer a valid test:
+        // assertEquals("number of conversion rates", countExpected, conversionInfo.length());
 
-        // Convenience output for debugging
-        for (int i = 0; i < conversionInfo.length(); i++) {
-            ConversionRateInfo *cri = conversionInfo[i];
-            logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", "
-                  "offset=\"%s\"",
-                  i, cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(),
-                  cri->offset.data());
-        }
+        // // Convenience output for debugging
+        // for (int i = 0; i < conversionInfo.length(); i++) {
+        //     ConversionRateInfo *cri = conversionInfo[i];
+        //     logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", "
+        //           "offset=\"%s\"",
+        //           i, cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(),
+        //           cri->offset.data());
+        // }
     }
 }
 
