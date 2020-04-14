@@ -57,13 +57,15 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
         // must be p4-meter. (NOTE: hectare --> square-meter)
         auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
-        int32_t baseUnitsCounts;
-        const auto singleBaseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCounts, status);
-        for (int j = 0; j < baseUnitsCounts; j++) {
-            auto singleBaseUnit = SingleUnitImpl::forMeasureUnit(singleBaseUnits[j], status);
-            singleBaseUnit.dimensionality *= singleUnit.getDimensionality(status);
 
-            result = result.product(singleBaseUnit.build(status), status);
+        int32_t baseUnitsCount;
+        auto baseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCount, status);
+        for (int j = 0; j < baseUnitsCount; j++) {
+            result =
+                result.product(baseUnits[j].withDimensionality(baseUnits[j].getDimensionality(status) *
+                                                                   singleUnit.getDimensionality(status),
+                                                               status),
+                               status);
         }
     }
 

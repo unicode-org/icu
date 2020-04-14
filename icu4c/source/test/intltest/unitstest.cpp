@@ -27,7 +27,7 @@ class UnitsTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
     void testConversionCapability();
-   //  void testConversions(); // TODO(hugo): it doesnot pass.
+    //  void testConversions(); // TODO(hugo): it doesnot pass.
     void testPreferences();
     // void testBasic();
     // void testSiPrefixes();
@@ -42,7 +42,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     if (exec) { logln("TestSuite UnitsTest: "); }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversionCapability);
-   // TESTCASE_AUTO(testConversions);
+    // TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
     // TESTCASE_AUTO(testBasic);
     // TESTCASE_AUTO(testSiPrefixes);
@@ -67,16 +67,16 @@ void UnitsTest::testConversionCapability() {
         const StringPiece target;
         const UnitsConvertibilityState expectedState;
     } testCases[]{
-        {"meter", "foot", CONVERTIBLE},                                         //
-        {"kilometer", "foot", CONVERTIBLE},                                     //
-        {"hectare", "square-foot", CONVERTIBLE},                                //
-        {"kilometer-per-second", "second-per-meter", RECIPROCAL},               //
-        {"square-meter", "square-foot", CONVERTIBLE},                           //
-        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
-        {"square-hectare", "p4-foot", CONVERTIBLE},                             //
-        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
+        {"meter", "foot", CONVERTIBLE},                                                    //
+        {"kilometer", "foot", CONVERTIBLE},                                                //
+        {"hectare", "square-foot", CONVERTIBLE},                                           //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL},                          //
+        {"square-meter", "square-foot", CONVERTIBLE},                                      //
+        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                          //
+        {"square-hectare", "p4-foot", CONVERTIBLE},                                        //
+        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},            //
         {"g-force", "meter-per-square-second", CONVERTIBLE},                               //
-        {"ohm", "kilogram-square-meter-square-ampere-per-cubic-second", CONVERTIBLE},      //
+        {"ohm", "kilogram-square-meter-per-cubic-second-square-ampere", CONVERTIBLE},      //
         {"electronvolt", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
         {"dalton", "kilogram-square-meter-per-square-second", CONVERTIBLE},                //
         {"joule", "kilogram-square-meter-per-square-second", CONVERTIBLE},                 //
@@ -114,7 +114,7 @@ void UnitsTest::testConversionCapability() {
         {"megapascal", "kilogram-square-second-per-meter", CONVERTIBLE},                   //
         {"ofhg", "kilogram-square-second-per-square-meter", CONVERTIBLE},                  //
         {"knot", "meter-per-second", CONVERTIBLE},                                         //
-        {"volt", "kilogram-square-meter-ampere-per-cubic-second", CONVERTIBLE},            //
+        {"volt", "kilogram-square-meter-per-cubic-second-ampere", CONVERTIBLE},            //
     };
 
     for (const auto &testCase : testCases) {
@@ -274,7 +274,7 @@ StringPiece trimField(char *(&field)[2]) {
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) return;
-    UnitsTest* unitsTest = (UnitsTest*)context;
+    UnitsTest *unitsTest = (UnitsTest *)context;
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*unitsTest, "unitsTestDatalineFn");
 
@@ -300,7 +300,6 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
                      "commentConversionFormula: \"%.*s\", ",
                      quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(),
                      expected, commentConversionFormula.length(), commentConversionFormula.data());
-
 
     // Convertibility:
     MaybeStackVector<MeasureUnit> units;
@@ -351,7 +350,8 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 //     path.appendPathPart(filename, errorCode);
 
 //     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
-//     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
+//     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode)))
+//     {
 //         return;
 //     }
 // }
