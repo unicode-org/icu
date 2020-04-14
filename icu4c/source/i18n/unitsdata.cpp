@@ -20,15 +20,7 @@ namespace {
 /**
  * A ResourceSink that collects conversion rate information.
  *
- * This class is for use by ures_getAllItemsWithFallback. Example code for
- * collecting conversion info for "mile" and "foot" into conversionInfoOutput:
- *
- *     UErrorCode status = U_ZERO_ERROR;
- *     ures_getByKey(unitsBundle, "convertUnits", &fillIn, &status);
- *     MaybeStackVector<ConversionRateInfo> conversionInfoOutput;
- *     ConversionRateDataSink convertSink(conversionInfoOutput);
- *     ures_getAllItemsWithFallback(fillIn, "mile", convertSink, status);
- *     ures_getAllItemsWithFallback(fillIn, "foot", convertSink, status);
+ * This class is for use by ures_getAllItemsWithFallback.
  */
 class ConversionRateDataSink : public ResourceSink {
   public:
@@ -55,6 +47,8 @@ class ConversionRateDataSink : public ResourceSink {
     void put(const char *source, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         if (U_FAILURE(status)) return;
         if (uprv_strcmp(source, "convertUnits") != 0) {
+            // This is very strict, however it is the cheapest way to be sure
+            // that with `value`, we're looking at the convertUnits table.
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }

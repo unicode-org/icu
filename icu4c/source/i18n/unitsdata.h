@@ -15,11 +15,15 @@
 
 U_NAMESPACE_BEGIN
 
-// Encapsulates "convertUnits" information from units resources, specifying how
-// to convert from one unit to another.
-//
-// Information in this class is still in the form of strings: symbolic constants
-// need to be interpreted.
+/**
+ * Encapsulates "convertUnits" information from units resources, specifying how
+ * to convert from one unit to another.
+ *
+ * Information in this class is still in the form of strings: symbolic constants
+ * need to be interpreted. Rationale: symbols can cancel out for higher
+ * precision conversion - going from feet to inches should cancel out the
+ * `ft_to_m` constant.
+ */
 class U_I18N_API ConversionRateInfo {
   public:
     ConversionRateInfo(){};
@@ -45,11 +49,13 @@ class U_I18N_API ConversionRateInfo {
 MaybeStackVector<ConversionRateInfo> U_I18N_API getAllConversionRates(UErrorCode &status);
 
 /**
- * Collects and returns ConversionRateInfo needed for conversions for a set of
- * units.
+ * Temporary backward-compatibility function.
  *
- * @param units The units for which to load conversion data.
- * @param status Receives status.
+ * TODO(hugovdm): ensure this gets removed. Currently
+ * https://github.com/sffc/icu/pull/32 is making use of it.
+ *
+ * @param units Ignored.
+ * @return the result of getAllConversionRates.
  */
 MaybeStackVector<ConversionRateInfo>
     U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status);
