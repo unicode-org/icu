@@ -1,6 +1,6 @@
 {
   "localeFilter": {
-    "filterType": "language",
+    "filterType": "locale",
     "whitelist": [
       "en",
       "de",
