@@ -35,9 +35,9 @@ class ConversionRateDataSink : public ResourceSink {
     /**
      * Constructor.
      * @param out The vector to which ConversionRateInfo instances are to be
-     * added.
+     * added. This vector must outlive the use of the ResourceSink.
      */
-    explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> &out) : outVector(out) {}
+    explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> *out) : outVector(out) {}
 
     /**
      * Adds the conversion rate information found in value to the output vector.
@@ -84,7 +84,7 @@ class ConversionRateDataSink : public ResourceSink {
             }
 
             // We don't have this ConversionRateInfo yet: add it.
-            ConversionRateInfo *cr = outVector.emplaceBack();
+            ConversionRateInfo *cr = outVector->emplaceBack();
             if (!cr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
@@ -99,7 +99,7 @@ class ConversionRateDataSink : public ResourceSink {
     }
 
   private:
-    MaybeStackVector<ConversionRateInfo> &outVector;
+    MaybeStackVector<ConversionRateInfo> *outVector;
 };
 
 } // namespace
@@ -107,7 +107,7 @@ class ConversionRateDataSink : public ResourceSink {
 MaybeStackVector<ConversionRateInfo> U_I18N_API getAllConversionRates(UErrorCode &status) {
     MaybeStackVector<ConversionRateInfo> result;
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    ConversionRateDataSink sink(result);
+    ConversionRateDataSink sink(&result);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", sink, status);
     return result;
 }
