@@ -28,7 +28,8 @@ void UnitsDataTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
 
 void UnitsDataTest::testGetAllConversionRates() {
     IcuTestErrorCode status(*this, "testGetAllConversionRates");
-    MaybeStackVector<ConversionRateInfo> conversionInfo = getAllConversionRates(status);
+    MaybeStackVector<ConversionRateInfo> conversionInfo;
+    getAllConversionRates(&conversionInfo, status);
 
     // Convenience output for debugging
     for (int i = 0; i < conversionInfo.length(); i++) {

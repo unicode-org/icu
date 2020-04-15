@@ -98,17 +98,19 @@ class ConversionRateDataSink : public ResourceSink {
 
 } // namespace
 
-MaybeStackVector<ConversionRateInfo> U_I18N_API getAllConversionRates(UErrorCode &status) {
-    MaybeStackVector<ConversionRateInfo> result;
+void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> *result, UErrorCode &status) {
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    ConversionRateDataSink sink(&result);
+    ConversionRateDataSink sink(result);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", sink, status);
-    return result;
 }
 
-MaybeStackVector<ConversionRateInfo>
-U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &, UErrorCode &status) {
-    return getAllConversionRates(status);
+// TODO(hugovdm): ensure this gets removed. Currently
+// https://github.com/sffc/icu/pull/32 is making use of it.
+MaybeStackVector<ConversionRateInfo> U_I18N_API
+getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &, UErrorCode &status) {
+    MaybeStackVector<ConversionRateInfo> result;
+    getAllConversionRates(&result, status);
+    return result;
 }
 
 U_NAMESPACE_END
