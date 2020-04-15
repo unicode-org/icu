@@ -98,9 +98,9 @@ class ConversionRateDataSink : public ResourceSink {
 
 } // namespace
 
-void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> *result, UErrorCode &status) {
+void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status) {
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    ConversionRateDataSink sink(result);
+    ConversionRateDataSink sink(&result);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", sink, status);
 }
 
@@ -109,7 +109,7 @@ void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> *resu
 MaybeStackVector<ConversionRateInfo> U_I18N_API
 getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &, UErrorCode &status) {
     MaybeStackVector<ConversionRateInfo> result;
-    getAllConversionRates(&result, status);
+    getAllConversionRates(result, status);
     return result;
 }
 

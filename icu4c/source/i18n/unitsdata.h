@@ -47,7 +47,7 @@ class U_I18N_API ConversionRateInfo {
  * @param result Receives the set of conversion rates.
  * @param status Receives status.
  */
-void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> *result, UErrorCode &status);
+void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status);
 
 /**
  * Temporary backward-compatibility function.
