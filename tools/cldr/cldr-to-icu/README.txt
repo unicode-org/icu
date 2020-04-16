@@ -62,8 +62,8 @@ Generating all ICU data
 $ ant -f build-icu-data.xml
 
 
-Other Examples (assuming CLDR_DIR is set)
------------------------------------------
+Other Examples
+--------------
 
 * Outputting a subset of the supplemental data into a specified directory:
 
