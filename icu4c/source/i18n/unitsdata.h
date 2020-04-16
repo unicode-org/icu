@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
  * precision conversion - going from feet to inches should cancel out the
  * `ft_to_m` constant.
  */
-class U_I18N_API ConversionRateInfo {
+class U_I18N_API ConversionRateInfo : public UMemory {
   public:
     ConversionRateInfo(){};
     ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
