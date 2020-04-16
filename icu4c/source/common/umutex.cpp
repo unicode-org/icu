@@ -49,7 +49,10 @@ std::condition_variable *initCondition;
 
 // The ICU global mutex.
 // Used when ICU implementation code passes nullptr for the mutex pointer.
-UMutex globalMutex;
+static UMutex *globalMutex() {
+    static UMutex m;
+    return &m;
+}
 
 std::once_flag initFlag;
 std::once_flag *pInitFlag = &initFlag;
@@ -111,7 +114,7 @@ void UMutex::cleanup() {
 U_CAPI void  U_EXPORT2
 umtx_lock(UMutex *mutex) {
     if (mutex == nullptr) {
-        mutex = &globalMutex;
+        mutex = globalMutex();
     }
     mutex->lock();
 }
@@ -121,7 +124,7 @@ U_CAPI void  U_EXPORT2
 umtx_unlock(UMutex* mutex)
 {
     if (mutex == nullptr) {
-        mutex = &globalMutex;
+        mutex = globalMutex();
     }
     mutex->unlock();
 }

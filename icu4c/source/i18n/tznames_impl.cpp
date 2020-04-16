@@ -52,7 +52,10 @@ static const UChar NO_NAME[]            = { 0 };   // for empty no-fallback time
 static const char* TZDBNAMES_KEYS[]               = {"ss", "sd"};
 static const int32_t TZDBNAMES_KEYS_SIZE = UPRV_LENGTHOF(TZDBNAMES_KEYS);
 
-static UMutex gDataMutex;
+static UMutex *gDataMutex() {
+    static UMutex m;
+    return &m;
+}
 
 static UHashtable* gTZDBNamesMap = NULL;
 static icu::UInitOnce gTZDBNamesMapInitOnce = U_INITONCE_INITIALIZER;
@@ -1214,7 +1217,7 @@ TimeZoneNamesImpl::getMetaZoneDisplayName(const UnicodeString& mzID,
     TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl *>(this);
 
     {
-        Mutex lock(&gDataMutex);
+        Mutex lock(gDataMutex());
         UErrorCode status = U_ZERO_ERROR;
         znames = nonConstThis->loadMetaZoneNames(mzID, status);
         if (U_FAILURE(status)) { return name; }
@@ -1240,7 +1243,7 @@ TimeZoneNamesImpl::getTimeZoneDisplayName(const UnicodeString& tzID, UTimeZoneNa
     TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl *>(this);
 
     {
-        Mutex lock(&gDataMutex);
+        Mutex lock(gDataMutex());
         UErrorCode status = U_ZERO_ERROR;
         tznames = nonConstThis->loadTimeZoneNames(tzID, status);
         if (U_FAILURE(status)) { return name; }
@@ -1263,7 +1266,7 @@ TimeZoneNamesImpl::getExemplarLocationName(const UnicodeString& tzID, UnicodeStr
     TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl *>(this);
 
     {
-        Mutex lock(&gDataMutex);
+        Mutex lock(gDataMutex());
         UErrorCode status = U_ZERO_ERROR;
         tznames = nonConstThis->loadTimeZoneNames(tzID, status);
         if (U_FAILURE(status)) { return name; }
@@ -1358,7 +1361,7 @@ TimeZoneNamesImpl::find(const UnicodeString& text, int32_t start, uint32_t types
     // Synchronize so that data is not loaded multiple times.
     // TODO: Consider more fine-grained synchronization.
     {
-        Mutex lock(&gDataMutex);
+        Mutex lock(gDataMutex());
 
         // First try of lookup.
         matches = doFind(handler, text, start, status);
@@ -1585,7 +1588,7 @@ void TimeZoneNamesImpl::loadAllDisplayNames(UErrorCode& status) {
     if (U_FAILURE(status)) return;
 
     {
-        Mutex lock(&gDataMutex);
+        Mutex lock(gDataMutex());
         internalLoadAllDisplayNames(status);
     }
 }
@@ -1602,7 +1605,7 @@ void TimeZoneNamesImpl::getDisplayNames(const UnicodeString& tzID,
 
     // Load the time zone strings
     {
-        Mutex lock(&gDataMutex);
+        Mutex lock(gDataMutex());
         tznames = (void*) nonConstThis->loadTimeZoneNames(tzID, status);
         if (U_FAILURE(status)) { return; }
     }
@@ -1622,7 +1625,7 @@ void TimeZoneNamesImpl::getDisplayNames(const UnicodeString& tzID,
                 } else {
                     // Load the meta zone strings
                     // Mutex is scoped to the "else" statement
-                    Mutex lock(&gDataMutex);
+                    Mutex lock(gDataMutex());
                     mznames = (void*) nonConstThis->loadMetaZoneNames(mzID, status);
                     if (U_FAILURE(status)) { return; }
                     // Note: when the metazone doesn't exist, in Java, loadMetaZoneNames returns

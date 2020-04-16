@@ -51,7 +51,10 @@ TODO: This cache should probably be removed when the deprecated code is
 static UHashtable *cache = NULL;
 static icu::UInitOnce gCacheInitOnce = U_INITONCE_INITIALIZER;
 
-static UMutex resbMutex;
+static UMutex *resbMutex() {
+    static UMutex m;
+    return &m;
+}
 
 /* INTERNAL: hashes an entry  */
 static int32_t U_CALLCONV hashEntry(const UHashTok parm) {
@@ -95,7 +98,7 @@ static UBool chopLocale(char *name) {
  *  Internal function
  */
 static void entryIncrease(UResourceDataEntry *entry) {
-    Mutex lock(&resbMutex);
+    Mutex lock(resbMutex());
     entry->fCountExisting++;
     while(entry->fParent != NULL) {
       entry = entry->fParent;
@@ -182,7 +185,7 @@ static int32_t ures_flushCache()
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
     */
-    Mutex lock(&resbMutex);
+    Mutex lock(resbMutex());
     if (cache == NULL) {
         return 0;
     }
@@ -228,7 +231,7 @@ U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
   const UHashElement *e;
   UResourceDataEntry *resB;
   
-    Mutex lock(&resbMutex);
+    Mutex lock(resbMutex());
     if (cache == NULL) {
       fprintf(stderr,"%s:%d: RB Cache is NULL.\n", __FILE__, __LINE__);
       return FALSE;
@@ -660,7 +663,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         }
     }
  
-    Mutex lock(&resbMutex);    // Lock resbMutex until the end of this function.
+    Mutex lock(resbMutex());    // Lock resbMutex until the end of this function.
 
     /* We're going to skip all the locales that do not have any data */
     r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
@@ -782,7 +785,7 @@ entryOpenDirect(const char* path, const char* localeID, UErrorCode* status) {
         return NULL;
     }
 
-    Mutex lock(&resbMutex);
+    Mutex lock(resbMutex());
     // findFirstExisting() without fallbacks.
     UResourceDataEntry *r = init_entry(localeID, path, status);
     if(U_SUCCESS(*status)) {
@@ -862,7 +865,7 @@ static void entryCloseInt(UResourceDataEntry *resB) {
  */
 
 static void entryClose(UResourceDataEntry *resB) {
-  Mutex lock(&resbMutex);
+  Mutex lock(resbMutex());
   entryCloseInt(resB);
 }
 

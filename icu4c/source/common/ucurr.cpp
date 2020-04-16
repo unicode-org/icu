@@ -365,7 +365,10 @@ U_CDECL_END
 #if !UCONFIG_NO_SERVICE
 struct CReg;
 
-static UMutex gCRegLock;
+static UMutex *gCRegLock() {
+    static UMutex m;
+    return &m;
+}
 static CReg* gCRegHead = 0;
 
 struct CReg : public icu::UMemory {
@@ -391,14 +394,14 @@ struct CReg : public icu::UMemory {
         if (status && U_SUCCESS(*status) && _iso && _id) {
             CReg* n = new CReg(_iso, _id);
             if (n) {
-                umtx_lock(&gCRegLock);
+                umtx_lock(gCRegLock());
                 if (!gCRegHead) {
                     /* register for the first time */
                     ucln_common_registerCleanup(UCLN_COMMON_CURRENCY, currency_cleanup);
                 }
                 n->next = gCRegHead;
                 gCRegHead = n;
-                umtx_unlock(&gCRegLock);
+                umtx_unlock(gCRegLock());
                 return n;
             }
             *status = U_MEMORY_ALLOCATION_ERROR;
@@ -408,7 +411,7 @@ struct CReg : public icu::UMemory {
 
     static UBool unreg(UCurrRegistryKey key) {
         UBool found = FALSE;
-        umtx_lock(&gCRegLock);
+        umtx_lock(gCRegLock());
 
         CReg** p = &gCRegHead;
         while (*p) {
@@ -421,13 +424,13 @@ struct CReg : public icu::UMemory {
             p = &((*p)->next);
         }
 
-        umtx_unlock(&gCRegLock);
+        umtx_unlock(gCRegLock());
         return found;
     }
 
     static const UChar* get(const char* id) {
         const UChar* result = NULL;
-        umtx_lock(&gCRegLock);
+        umtx_lock(gCRegLock());
         CReg* p = gCRegHead;
 
         /* register cleanup of the mutex */
@@ -439,7 +442,7 @@ struct CReg : public icu::UMemory {
             }
             p = p->next;
         }
-        umtx_unlock(&gCRegLock);
+        umtx_unlock(gCRegLock());
         return result;
     }
 
@@ -1355,7 +1358,10 @@ static CurrencyNameCacheEntry* currCache[CURRENCY_NAME_CACHE_NUM] = {NULL};
 // It is a simple round-robin replacement strategy.
 static int8_t currentCacheEntryIndex = 0;
 
-static UMutex gCurrencyCacheMutex;
+static UMutex *gCurrencyCacheMutex() {
+    static UMutex m;
+    return &m;
+}
 
 // Cache deletion
 static void
@@ -1404,7 +1410,7 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
     CurrencyNameStruct* currencySymbols = NULL;
     CurrencyNameCacheEntry* cacheEntry = NULL;
 
-    umtx_lock(&gCurrencyCacheMutex);
+    umtx_lock(gCurrencyCacheMutex());
     // in order to handle racing correctly,
     // not putting 'search' in a separate function.
     int8_t found = -1;
@@ -1419,13 +1425,13 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
         cacheEntry = currCache[found];
         ++(cacheEntry->refCount);
     }
-    umtx_unlock(&gCurrencyCacheMutex);
+    umtx_unlock(gCurrencyCacheMutex());
     if (found == -1) {
         collectCurrencyNames(locale, &currencyNames, &total_currency_name_count, &currencySymbols, &total_currency_symbol_count, ec);
         if (U_FAILURE(ec)) {
             return NULL;
         }
-        umtx_lock(&gCurrencyCacheMutex);
+        umtx_lock(gCurrencyCacheMutex());
         // check again.
         for (int8_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
             if (currCache[i]!= NULL &&
@@ -1464,19 +1470,19 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
             cacheEntry = currCache[found];
             ++(cacheEntry->refCount);
         }
-        umtx_unlock(&gCurrencyCacheMutex);
+        umtx_unlock(gCurrencyCacheMutex());
     }
 
     return cacheEntry;
 }
 
 static void releaseCacheEntry(CurrencyNameCacheEntry* cacheEntry) {
-    umtx_lock(&gCurrencyCacheMutex);
+    umtx_lock(gCurrencyCacheMutex());
     --(cacheEntry->refCount);
     if (cacheEntry->refCount == 0) {  // remove
         deleteCacheEntry(cacheEntry);
     }
-    umtx_unlock(&gCurrencyCacheMutex);
+    umtx_unlock(gCurrencyCacheMutex());
 }
 
 U_CAPI void

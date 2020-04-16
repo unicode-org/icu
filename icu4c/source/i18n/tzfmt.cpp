@@ -150,7 +150,10 @@ static icu::UInitOnce gZoneIdTrieInitOnce = U_INITONCE_INITIALIZER;
 static TextTrieMap *gShortZoneIdTrie = NULL;
 static icu::UInitOnce gShortZoneIdTrieInitOnce = U_INITONCE_INITIALIZER;
 
-static UMutex gLock;
+static UMutex *gLock() {
+    static UMutex m;
+    return &m;
+}
 
 U_CDECL_BEGIN
 /**
@@ -1388,12 +1391,12 @@ TimeZoneFormat::getTimeZoneGenericNames(UErrorCode& status) const {
         return NULL;
     }
 
-    umtx_lock(&gLock);
+    umtx_lock(gLock());
     if (fTimeZoneGenericNames == NULL) {
         TimeZoneFormat *nonConstThis = const_cast<TimeZoneFormat *>(this);
         nonConstThis->fTimeZoneGenericNames = TimeZoneGenericNames::createInstance(fLocale, status);
     }
-    umtx_unlock(&gLock);
+    umtx_unlock(gLock());
 
     return fTimeZoneGenericNames;
 }
@@ -1404,7 +1407,7 @@ TimeZoneFormat::getTZDBTimeZoneNames(UErrorCode& status) const {
         return NULL;
     }
 
-    umtx_lock(&gLock);
+    umtx_lock(gLock());
     if (fTZDBTimeZoneNames == NULL) {
         TZDBTimeZoneNames *tzdbNames = new TZDBTimeZoneNames(fLocale);
         if (tzdbNames == NULL) {
@@ -1414,7 +1417,7 @@ TimeZoneFormat::getTZDBTimeZoneNames(UErrorCode& status) const {
             nonConstThis->fTZDBTimeZoneNames = tzdbNames;
         }
     }
-    umtx_unlock(&gLock);
+    umtx_unlock(gLock());
 
     return fTZDBTimeZoneNames;
 }
