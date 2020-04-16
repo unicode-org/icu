@@ -16,11 +16,23 @@ Requirements
 Important directories
 ---------------------
 
-<CLDR_DIR>  = The top-level directory for the CLDR production data (typically
-              the "production" directory in the staging repository).
+CLDR_ROOT = The top-level direcetory for the CLDR project, containing CLDR
+            code and non-production data. Usually obtained from:
+            https://github.com/unicode-org/cldr
+
+CLDR_DIR  = The top-level directory for the CLDR production data (typically
+            the "production" directory in the staging repository). Usually
+            obtained from:
+            https://github.com/unicode-org/cldr-staging/tree/master/production
+
+In Posix systems, it's best to set these as exported shell variables, and any
+following instructions assume they have been set accordingly:
+
+$ export CLDR_ROOT=/path/to/cldr
+$ export CLDR_DIR=/path/to/cldr-staging/production
 
 Note that you should not attempt to use data from the CLDR project directory
-(were the CLDR API code exists) for conversion into ICU data. The process now
+(where the CLDR API code exists) for conversion into ICU data. The process now
 relies on a pre-processing step, and the CLDR data must come from the separate
 "staging" repository (i.e. https://github.com/unicode-org/cldr-staging) or be
 pre-processed locally into a different directory.
@@ -30,24 +42,28 @@ Initial Setup
 -------------
 
 This project relies on the Maven build tool for managing dependencies and uses
-Ant for configuration purposes, so both will need to be installed. On a debian
+Ant for configuration purposes, so both will need to be installed. On a Debian
 based system, this should be as simple as:
 
 $ sudo apt-get install maven ant
 
-You also need to follow the instructions in lib/README.txt to install the CLDR
-JAR files, which contain the CLDR API used by these tools. This step will only
-need to be repeated if you update the code in the CLDR project you are using.
+You also need to install two additional CLDR JAR files in a local Maven
+repository, which can be achieved by either running:
+
+$ install-cldr-jars.sh "$CLDR_ROOT"
+
+from this directory, or following the instructions in lib/README.txt. This
+step must be repeated if you update the code in the CLDR project you are
+using, or are using multiple versions of the CLDR code during development.
 
 Generating all ICU data
 -----------------------
 
-$ export CLDR_DIR="<CLDR_DIR>"
 $ ant -f build-icu-data.xml
 
 
-Other Examples (assuming CLDR_DIR is set)
------------------------------------------
+Other Examples
+--------------
 
 * Outputting a subset of the supplemental data into a specified directory:
 
