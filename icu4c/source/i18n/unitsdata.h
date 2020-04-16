@@ -11,7 +11,6 @@
 #include "cmemory.h"
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
-#include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
 

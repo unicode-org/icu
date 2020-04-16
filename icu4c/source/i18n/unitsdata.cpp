@@ -5,8 +5,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <utility>
-
 #include "cstring.h"
 #include "resource.h"
 #include "unitsdata.h"
