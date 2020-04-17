@@ -103,16 +103,16 @@ void UnitsTest::testConversionCapability() {
         {"megawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
         {"gigawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
         {"solar-luminosity", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},       //
-        {"pascal", "kilogram-square-second-per-meter", CONVERTIBLE},                       //
-        {"hectopascal", "kilogram-square-second-per-meter", CONVERTIBLE},                  //
-        {"millibar", "kilogram-square-second-per-meter", CONVERTIBLE},                     //
-        {"millimeter-ofhg", "kilogram-meter-square-second-per-square-meter", CONVERTIBLE}, //
-        {"kilopascal", "kilogram-square-second-per-meter", CONVERTIBLE},                   //
-        {"inch-ofhg", "kilogram-meter-square-second-per-square-meter", CONVERTIBLE},       //
-        {"bar", "kilogram-square-second-per-meter", CONVERTIBLE},                          //
-        {"atmosphere", "kilogram-square-second-per-meter", CONVERTIBLE},                   //
-        {"megapascal", "kilogram-square-second-per-meter", CONVERTIBLE},                   //
-        {"ofhg", "kilogram-square-second-per-square-meter", CONVERTIBLE},                  //
+        {"pascal", "kilogram-per-meter-square-second", CONVERTIBLE},                       //
+        {"hectopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                  //
+        {"millibar", "kilogram-per-meter-square-second", CONVERTIBLE},                     //
+        {"millimeter-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE}, //
+        {"kilopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"inch-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE},       //
+        {"bar", "kilogram-per-meter-square-second", CONVERTIBLE},                          //
+        {"atmosphere", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"megapascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"ofhg", "kilogram-per-square-meter-square-second", CONVERTIBLE},                  //
         {"knot", "meter-per-second", CONVERTIBLE},                                         //
         {"volt", "kilogram-square-meter-per-cubic-second-ampere", CONVERTIBLE},            //
     };
