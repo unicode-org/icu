@@ -12,6 +12,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include <cstdlib>
 #include "cstring.h"
 #include "measunit_impl.h"
 #include "uarrsort.h"
