@@ -483,6 +483,8 @@ public:
      */
     const UnicodeString& getDecimal() const;
 
+#if !UCONFIG_NO_FORMATTING
+
 #ifndef U_HIDE_DRAFT_API
     /**
      * Get the default hour cycle for a locale. Uses the locale that the
@@ -499,6 +501,8 @@ public:
     UDateFormatHourCycle getDefaultHourCycle(UErrorCode& status) const;
 #endif  /* U_HIDE_DRAFT_API */
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
+    
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
