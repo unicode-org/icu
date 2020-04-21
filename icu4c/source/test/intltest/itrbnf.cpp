@@ -1889,16 +1889,19 @@ IntlTestRBNF::TestAllLocales()
             UErrorCode status = U_ZERO_ERROR;
             RuleBasedNumberFormat* f = new RuleBasedNumberFormat((URBNFRuleSetTag)j, *loc, status);
 
-            if (status == U_USING_DEFAULT_WARNING || status == U_USING_FALLBACK_WARNING) {
-                // Skip it.
-                delete f;
-                break;
-            }
             if (U_FAILURE(status)) {
                 errln(UnicodeString(loc->getName()) + names[j]
                     + "ERROR could not instantiate -> " + u_errorName(status));
                 continue;
             }
+
+            Locale actualLocale = f->getLocale(ULOC_ACTUAL_LOCALE, status);
+            if (actualLocale != *loc) {
+                // Skip the redundancy
+                delete f;
+                break;
+            }
+
 #if !UCONFIG_NO_COLLATION
             for (unsigned int numidx = 0; numidx < UPRV_LENGTHOF(numbers); numidx++) {
                 double n = numbers[numidx];
@@ -1936,28 +1939,26 @@ IntlTestRBNF::TestAllLocales()
                             + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getDouble());
                     }
                 }
-                if (!quick && !logKnownIssue("9503") ) {
-                    // lenient parse
-                    status = U_ZERO_ERROR;
-                    f->setLenient(TRUE);
-                    f->parse(str, num, status);
-                    if (U_FAILURE(status)) {
+                // lenient parse
+                status = U_ZERO_ERROR;
+                f->setLenient(TRUE);
+                f->parse(str, num, status);
+                if (U_FAILURE(status)) {
+                    errln(UnicodeString(loc->getName()) + names[j]
+                        + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+                }
+                // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
+                if (j == 0) {
+                    if (num.getType() == Formattable::kLong && num.getLong() != n) {
                         errln(UnicodeString(loc->getName()) + names[j]
-                            + "ERROR could not parse(lenient) '" + str + "' -> " + u_errorName(status));
+                            + UnicodeString("ERROR could not roundtrip ") + n
+                            + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
                     }
-                    // We only check the spellout. The behavior is undefined for numbers < 1 and fractional numbers.
-                    if (j == 0) {
-                        if (num.getType() == Formattable::kLong && num.getLong() != n) {
-                            errln(UnicodeString(loc->getName()) + names[j]
-                                + UnicodeString("ERROR could not roundtrip ") + n
-                                + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getLong());
-                        }
-                        else if (num.getType() == Formattable::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
-                            // The epsilon difference is too high.
-                            errln(UnicodeString(loc->getName()) + names[j]
-                                + UnicodeString("ERROR could not roundtrip ") + n
-                                + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getDouble());
-                        }
+                    else if (num.getType() == Formattable::kDouble && (int64_t)(num.getDouble() * 1000) != (int64_t)(n*1000)) {
+                        // The epsilon difference is too high.
+                        errln(UnicodeString(loc->getName()) + names[j]
+                            + UnicodeString("ERROR could not roundtrip ") + n
+                            + UnicodeString(" -> ") + str + UnicodeString(" -> ") + num.getDouble());
                     }
                 }
             }

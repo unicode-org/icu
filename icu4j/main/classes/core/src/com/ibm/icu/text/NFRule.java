@@ -1241,6 +1241,10 @@ final class NFRule {
 
         RbnfLenientScanner scanner = formatter.getLenientScanner();
         if (scanner != null) {
+            // Check if non-lenient rule finds the text before call lenient parsing
+            if (str.startsWith(prefix)) {
+                return prefix.length();
+            }
             return scanner.prefixLength(str, prefix);
         }
 
@@ -1290,9 +1294,14 @@ final class NFRule {
         }
 
         if (scanner != null) {
-            // if lenient parsing is turned ON, we've got some work
-            // ahead of us
-            return scanner.findText(str, key, startingAt);
+            // Check if non-lenient rule finds the text before call lenient parsing
+            int pos[] = new int[] { str.indexOf(key, startingAt), key.length() };
+            if (pos[0] >= 0) {
+                return pos;
+            } else {
+                // if lenient parsing is turned ON, we've got some work ahead of us
+                return scanner.findText(str, key, startingAt);
+            }
         }
         // if lenient parsing is turned off, this is easy. Just call
         // String.indexOf() and we're done
