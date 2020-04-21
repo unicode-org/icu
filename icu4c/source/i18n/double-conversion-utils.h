@@ -74,9 +74,12 @@ inline void abort_noreturn() { abort(); }
 #endif
 #endif
 
-#if defined(__clang__) && __has_attribute(uninitialized)
+#if defined(__clang__) && defined(__has_attribute)
+#if __has_attribute(uninitialized)
 #define DOUBLE_CONVERSION_STACK_UNINITIALIZED __attribute__((uninitialized))
-#else
+#endif
+#endif
+#if !defined(DOUBLE_CONVERSION_STACK_UNINITIALIZED)
 #define DOUBLE_CONVERSION_STACK_UNINITIALIZED
 #endif
 
