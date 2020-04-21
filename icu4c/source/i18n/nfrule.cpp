@@ -1297,6 +1297,10 @@ NFRule::prefixLength(const UnicodeString& str, const UnicodeString& prefix, UErr
 #if !UCONFIG_NO_COLLATION
     // go through all this grief if we're in lenient-parse mode
     if (formatter->isLenient()) {
+        // Check if non-lenient rule finds the text before call lenient parsing
+        if (str.startsWith(prefix)) {
+            return prefix.length();
+        }
         // get the formatter's collator and use it to create two
         // collation element iterators, one over the target string
         // and another over the prefix (right now, we'll throw an
@@ -1505,9 +1509,15 @@ NFRule::findText(const UnicodeString& str,
         return str.indexOf(key, startingAt);
     }
     else {
-        // but if lenient parsing is turned ON, we've got some work
-        // ahead of us
-        return findTextLenient(str, key, startingAt, length);
+        // Check if non-lenient rule finds the text before call lenient parsing
+        *length = key.length();
+        int32_t pos = str.indexOf(key, startingAt);
+        if(pos >= 0) {
+            return pos;
+        } else {
+            // but if lenient parsing is turned ON, we've got some work ahead of us
+            return findTextLenient(str, key, startingAt, length);
+        }
     }
 }
 
