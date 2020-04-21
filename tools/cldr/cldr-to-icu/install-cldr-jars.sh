@@ -1,4 +1,6 @@
 #!/bin/bash -u
+# © 2020 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
 #
 # This script will attempt to build and install the necessary CLDR JAR files
 # from a given CLDR installation root directory. The JAR files are installed
