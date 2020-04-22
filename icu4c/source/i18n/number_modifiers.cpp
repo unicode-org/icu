@@ -358,7 +358,7 @@ CurrencySpacingEnabledModifier::CurrencySpacingEnabledModifier(const FormattedSt
         fAfterPrefixInsert.setToBogus();
     }
     if (suffix.length() > 0 && suffix.fieldAt(0) == Field(UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD)) {
-        int suffixCp = suffix.getLastCodePoint();
+        int suffixCp = suffix.getFirstCodePoint();
         UnicodeSet suffixUnicodeSet = getUnicodeSet(symbols, IN_CURRENCY, SUFFIX, status);
         if (suffixUnicodeSet.contains(suffixCp)) {
             fBeforeSuffixUnicodeSet = getUnicodeSet(symbols, IN_NUMBER, SUFFIX, status);

@@ -55,7 +55,8 @@ public:
     int32_t getBestIndexAndDistance(const LSR &desired,
                                     const LSR **supportedLSRs, int32_t supportedLSRsLength,
                                     int32_t shiftedThreshold,
-                                    ULocMatchFavorSubtag favorSubtag) const;
+                                    ULocMatchFavorSubtag favorSubtag,
+                                    ULocMatchDirection direction) const;
 
     UBool isParadigmLSR(const LSR &lsr) const;
 
@@ -87,6 +88,14 @@ private:
     LocaleDistance &operator=(const LocaleDistance &other) = delete;
 
     static void initLocaleDistance(UErrorCode &errorCode);
+
+    UBool isMatch(const LSR &desired, const LSR &supported,
+                  int32_t shiftedThreshold, ULocMatchFavorSubtag favorSubtag) const {
+        const LSR *pSupp = &supported;
+        return getBestIndexAndDistance(
+            desired, &pSupp, 1,
+            shiftedThreshold, favorSubtag, ULOCMATCH_DIRECTION_WITH_ONE_WAY) >= 0;
+    }
 
     static int32_t getDesSuppScriptDistance(BytesTrie &iter, uint64_t startState,
                                             const char *desired, const char *supported);

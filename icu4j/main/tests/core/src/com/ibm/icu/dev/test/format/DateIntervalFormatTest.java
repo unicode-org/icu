@@ -1253,10 +1253,10 @@ public class DateIntervalFormatTest extends TestFmwk {
     @Test
     public void TestGetIntervalPattern(){
         // Tests when "if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD )" is true
-        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.SECOND;
+        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.MILLISECOND;
         DateIntervalInfo dii = new DateIntervalInfo();
         try{
-            dii.getIntervalPattern("", Calendar.SECOND+1);
+            dii.getIntervalPattern("", Calendar.MILLISECOND+1);
             errln("DateIntervalInfo.getIntervalPattern(String,int) was suppose " +
                     "to return an exception for the 'int field' parameter " +
                     "when it exceeds MINIMUM_SUPPORTED_CALENDAR_FIELD.");
@@ -1279,10 +1279,10 @@ public class DateIntervalFormatTest extends TestFmwk {
         } catch(Exception e){}
 
         // Tests when "if ( lrgDiffCalUnit > MINIMUM_SUPPORTED_CALENDAR_FIELD )" is true
-        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.SECOND;
+        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.MILLISECOND;
         try{
             dii = dii.cloneAsThawed();
-            dii.setIntervalPattern("", Calendar.SECOND+1, "");
+            dii.setIntervalPattern("", Calendar.MILLISECOND+1, "");
             errln("DateIntervalInfo.setIntervalPattern(String,int,String) " +
                     "was suppose to return an exception when the " +
                     "variable 'lrgDiffCalUnit' is greater than " +
@@ -2092,6 +2092,58 @@ public class DateIntervalFormatTest extends TestFmwk {
                 assertEquals("Formatted result for " + skeleton + " locale: " + locale.getDisplayName(), expected[i][j++], resultBuffer.toString());
             }
             i++;
+        }
+    }
+
+    @Test
+    public void testFormatMillisecond() {
+        Object[][] kTestCases = {
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "ms",     "23:45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "msS",    "23:45.3"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "msSS",   "23:45.32"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "msSSS",  "23:45.321"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "ms",     "23:45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "msS",    "23:45.3 – 23:45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "msSS",   "23:45.32 – 23:45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "msSSS",  "23:45.321 – 23:45.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "ms",     "23:45 – 23:46"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "msS",    "23:45.3 – 23:46.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "msSS",   "23:45.32 – 23:46.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "msSSS",  "23:45.321 – 23:46.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "ms",     "23:45 – 24:45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "msS",    "23:45.3 – 24:45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "msSS",   "23:45.32 – 24:45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "msSSS",  "23:45.321 – 24:45.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "s",      "45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "sS",     "45.3"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "sSS",    "45.32"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "sSSS",   "45.321"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "s",      "45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "sS",     "45.3 – 45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "sSS",    "45.32 – 45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "sSSS",   "45.321 – 45.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "s",      "45 – 46"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "sS",     "45.3 – 46.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "sSS",    "45.32 – 46.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "sSSS",   "45.321 – 46.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "s",      "45 – 45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "sS",     "45.3 – 45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "sSS",    "45.32 – 45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "sSSS",   "45.321 – 45.987"},
+        };
+
+        Locale enLocale = Locale.ENGLISH;
+
+        for (Object[] testCase : kTestCases) {
+            DateIntervalFormat fmt = DateIntervalFormat.getInstance((String)testCase[4], enLocale);
+
+            Date fromDate = (Date)testCase[0];
+            long from = fromDate.getTime() + (Integer)testCase[1];
+            Date toDate = (Date)testCase[2];
+            long to = toDate.getTime() + (Integer)testCase[3];
+
+            FormattedDateInterval res = fmt.formatToValue(new DateInterval(from, to));
+            assertEquals("Formate for " + testCase[4], testCase[5], res.toString());
         }
     }
 }

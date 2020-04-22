@@ -42,6 +42,7 @@ import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
@@ -927,6 +928,66 @@ public class PluralRulesTest extends TestFmwk {
                 assertNull("Invalid keyword " + keyword, uniqueValue.value);
             }
         }
+    }
+
+
+
+    @Test
+    public void testCompactDecimalPluralKeyword() {
+        PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: e = 0 and i % 1000000 = 0 and v = 0 or " +
+                "e != 0 .. 5;  other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000, @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …");
+        ULocale locale = new ULocale("fr-FR");
+
+        Object[][] casesData = {
+                // unlocalized formatter skeleton, input, string output, plural rule keyword
+                {"",             0, "0", "one"},
+                {"compact-long", 0, "0", "one"},
+
+                {"",             1, "1", "one"},
+                {"compact-long", 1, "1", "one"},
+
+                {"",             2, "2", "other"},
+                {"compact-long", 2, "2", "other"},
+
+                {"",             1000000, "1 000 000", "many"},
+                {"compact-long", 1000000, "1 million", "many"},
+
+                {"",             1000001, "1 000 001", "other"},
+                {"compact-long", 1000001, "1 million", "many"},
+
+                {"",             120000, "1 200 000", "other"},
+                {"compact-long", 1200000, "1,2 millions", "many"},
+
+                {"",             1200001, "1 200 001", "other"},
+                {"compact-long", 1200001, "1,2 millions", "many"},
+
+                {"",             2000000, "2 000 000", "many"},
+                {"compact-long", 2000000, "2 millions", "many"},
+        };
+
+        for (Object[] caseDatum : casesData) {
+            String skeleton = (String) caseDatum[0];
+            int input = (int) caseDatum[1];
+            String expectedString = (String) caseDatum[2];
+            String expectPluralRuleKeyword = (String) caseDatum[3];
+
+            String actualPluralRuleKeyword =
+                    getPluralKeyword(rules, locale, input, skeleton);
+
+            assertEquals(
+                    String.format("PluralRules select %s: %d", skeleton, input),
+                    expectPluralRuleKeyword,
+                    actualPluralRuleKeyword);
+        }
+    }
+
+    private String getPluralKeyword(PluralRules rules, ULocale locale, double number, String skeleton) {
+        LocalizedNumberFormatter formatter =
+                NumberFormatter.forSkeleton(skeleton)
+                    .locale(locale);
+        FormattedNumber fn = formatter.format(number);
+        String pluralKeyword = rules.select(fn);
+        return pluralKeyword;
     }
 
     enum StandardPluralCategories {

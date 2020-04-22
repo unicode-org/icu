@@ -93,7 +93,7 @@ public class PatternStringUtils {
         boolean alwaysShowDecimal = properties.getDecimalSeparatorAlwaysShown();
         int exponentDigits = Math.min(properties.getMinimumExponentDigits(), dosMax);
         boolean exponentShowPlusSign = properties.getExponentSignAlwaysShown();
-        PropertiesAffixPatternProvider affixes = new PropertiesAffixPatternProvider(properties);
+        AffixPatternProvider affixes = PropertiesAffixPatternProvider.forProperties(properties);
 
         // Prefixes
         sb.append(affixes.getString(AffixPatternProvider.FLAG_POS_PREFIX));

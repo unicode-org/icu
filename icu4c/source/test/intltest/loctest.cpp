@@ -6,6 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <algorithm>
 #include <functional>
 #include <iterator>
 #include <set>
@@ -275,6 +276,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestCapturingTagConvertingIterator);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueInLongLocale);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
+    TESTCASE_AUTO(TestCanonicalize);
     TESTCASE_AUTO_END;
 }
 
@@ -911,8 +913,8 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 596)
-        errln("Expected getISOLanguages() to return 596 languages; it returned %d", testCount);
+    if (testCount != 597)
+        errln("Expected getISOLanguages() to return 597 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -2595,13 +2597,13 @@ void LocaleTest::TestCanonicalization(void)
           "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE",
           "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
         { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
-        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
-        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
+        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_Hans_CN@collation=pinyin" },
+        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_Hans_CN_CA@collation=pinyin" },
         { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
         { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
-        { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
-        { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
-        { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
+        { "no_NO_NY", "no_NO_NY", "nb_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
+        { "no@ny", "no@ny", "nb__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
+        { "no-no.utf32@B", "no_NO.utf32@B", "nb_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
         { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ_EURO" }, /* qz-qz uses private use iso codes */
         // NOTE: uloc_getName() works on en-BOONT, but Locale() parser considers it BOGUS
         // TODO: unify this behavior
@@ -2615,7 +2617,7 @@ void LocaleTest::TestCanonicalization(void)
         { "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML" },
         { "i-cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US" },
         { "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA" },
-        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "no_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
+        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "nb_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
 
         /* fleshing out canonicalization */
         /* trim space and sort keywords, ';' is separator so not present at end in canonical form */
@@ -2623,7 +2625,7 @@ void LocaleTest::TestCanonicalization(void)
         /* already-canonical ids are not changed */
         { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
         /* norwegian is just too weird, if we handle things in their full generality */
-        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
+        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "nb_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
 
         /* test cases reflecting internal resource bundle usage */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
@@ -2662,13 +2664,13 @@ void LocaleTest::TestCanonicalization(void)
         { "hi__DIRECT", "hi__DIRECT", "hi__DIRECT" },
         { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL" },
         { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH_TRADITIONAL" },
-        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW_STROKE" },
+        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_Hant_TW_STROKE" },
         { "zh__PINYIN", "zh__PINYIN", "zh__PINYIN" },
         { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_SP_CYRL" }, /* .NET name */
         { "sr-SP-Latn", "sr_SP_LATN", "sr_SP_LATN" }, /* .NET name */
-        { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_YU_CYRILLIC" }, /* Linux name */
-        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_UZ_CYRL" }, /* .NET name */
-        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_UZ_LATN" }, /* .NET name */
+        { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_RS_CYRILLIC" }, /* Linux name */
+        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Latn_UZ_CYRL" }, /* .NET name */
+        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ_LATN" }, /* .NET name */
         { "zh-CHS", "zh_CHS", "zh_CHS" }, /* .NET name */
         { "zh-CHT", "zh_CHT", "zh_CHT" }, /* .NET name This may change back to zh_Hant */
         /* PRE_EURO and EURO conversions don't affect other keywords */
@@ -2695,6 +2697,91 @@ void LocaleTest::TestCanonicalization(void)
                 logln("Ok: %s(%s) => \"%s\"",
                       label[j], testCases[i].localeID, getName);
             }
+        }
+    }
+}
+
+void LocaleTest::TestCanonicalize(void)
+{
+    static const struct {
+        const char *localeID;    /* input */
+        const char *canonicalID; /* expected canonicalize() result */
+    } testCases[] = {
+        // language _ variant -> language
+        { "no-BOKMAL", "nb" },
+        // also test with script, country and extensions
+        { "no-Cyrl-ID-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-1901-xsistemo-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-1901-u-ca-japanese" },
+        { "no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-xsistemo-u-ca-japanese" },
+        { "no-NYNORSK", "nn" },
+        { "no-Cyrl-ID-NYNORSK-u-ca-japanese", "nn-Cyrl-ID-u-ca-japanese" },
+        { "aa-SAAHO", "ssy" },
+        // also test with script, country and extensions
+        { "aa-Deva-IN-SAAHO-u-ca-japanese", "ssy-Deva-IN-u-ca-japanese" },
+
+        // language -> language
+        { "aam", "aas" },
+        // also test with script, country, variants and extensions
+        { "aam-Cyrl-ID-3456-u-ca-japanese", "aas-Cyrl-ID-3456-u-ca-japanese" },
+
+        // language -> language _ Script
+        { "sh", "sr-Latn" },
+        // also test with script
+        { "sh-Cyrl", "sr-Cyrl" },
+        // also test with country, variants and extensions
+        { "sh-ID-3456-u-ca-roc", "sr-Latn-ID-3456-u-ca-roc" },
+
+        // language -> language _ country
+        { "prs", "fa-AF" },
+        // also test with country
+        { "prs-RU", "fa-RU" },
+        // also test with script, variants and extensions
+        { "prs-Cyrl-1009-u-ca-roc", "fa-Cyrl-AF-1009-u-ca-roc" },
+
+        //  language _ country -> language _ script _ country
+        { "pa-IN", "pa-Guru-IN" },
+        // also test with script
+        { "pa-Latn-IN", "pa-Latn-IN" },
+        // also test with variants and extensions
+        { "pa-IN-5678-u-ca-hindi", "pa-Guru-IN-5678-u-ca-hindi" },
+
+        //  language _ script _ country -> language _ country
+        { "ky-Cyrl-KG", "ky-KG" },
+        // also test with variants and extensions
+        { "ky-Cyrl-KG-3456-u-ca-roc", "ky-KG-3456-u-ca-roc" },
+
+        // Test replacement of territoryAlias
+        // 554 has one replacement
+        { "en-554", "en-NZ" },
+        { "en-554-u-nu-arab", "en-NZ-u-nu-arab" },
+        // 172 has multiple replacements
+        // also test with variants
+        { "ru-172-1234", "ru-RU-1234" },
+        // also test with extensions
+        { "ru-172-1234-u-nu-latn", "ru-RU-1234-u-nu-latn" },
+        // also test with scripts
+        { "uz-172", "uz-UZ" },
+        { "uz-Cyrl-172", "uz-Cyrl-UZ" },
+        { "uz-Bopo-172", "uz-Bopo-UZ" },
+        // also test with variants and scripts
+        { "uz-Cyrl-172-5678-u-nu-latn", "uz-Cyrl-UZ-5678-u-nu-latn" },
+        // a language not used in this region
+        { "fr-172", "fr-RU" },
+    };
+    int32_t i;
+    for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        std::string otag = testCases[i].localeID;
+        Locale loc = Locale::forLanguageTag(otag.c_str(), status);
+        loc.canonicalize(status);
+        std::string tag = loc.toLanguageTag<std::string>(status);
+        if (tag != testCases[i].canonicalID) {
+            errcheckln(status, "FAIL: %s should be canonicalized to %s but got %s - %s",
+                       otag.c_str(),
+                       testCases[i].canonicalID,
+                       tag.c_str(),
+                       u_errorName(status));
         }
     }
 }

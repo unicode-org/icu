@@ -230,7 +230,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  *     // a series of set interval patterns.
  *     // Only ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH, DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY,
- *     MINUTE and SECOND are supported.
+ *     MINUTE, SECOND and MILLISECOND are supported.
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.YEAR, "'y ~ y'");
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.MONTH, "yyyy 'diff' MMM d - MMM d");
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.DATE, "yyyy MMM d ~ d");
@@ -276,8 +276,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * Not intended for public subclassing.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final class FormattedDateInterval implements FormattedValue {
         private final String string;
@@ -290,8 +289,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public String toString() {
@@ -300,8 +298,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public int length() {
@@ -310,8 +307,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public char charAt(int index) {
@@ -320,8 +316,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public CharSequence subSequence(int start, int end) {
@@ -330,8 +325,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public <A extends Appendable> A appendTo(A appendable) {
@@ -340,8 +334,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public boolean nextPosition(ConstrainedFieldPosition cfpos) {
@@ -350,8 +343,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public AttributedCharacterIterator toCharacterIterator() {
@@ -362,8 +354,7 @@ public class DateIntervalFormat extends UFormat {
     /**
      * Class for span fields in FormattedDateInterval.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = -6330879259553618133L;
@@ -375,8 +366,7 @@ public class DateIntervalFormat extends UFormat {
          * 0, the date fields within the span are for the "from" date; if 1,
          * the date fields within the span are for the "to" date.
          *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         public static final SpanField DATE_INTERVAL_SPAN = new SpanField("date-interval-span");
 
@@ -385,7 +375,7 @@ public class DateIntervalFormat extends UFormat {
         }
 
         /**
-         * serizalization method resolve instances to the constant
+         * serialization method resolve instances to the constant
          * DateIntervalFormat.SpanField values
          * @draft ICU 64
          * @provisional This API might change or be removed in a future release.
@@ -795,8 +785,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param dtInterval        DateInterval to be formatted.
      * @return                  A FormattedDateInterval containing the format result.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(DateInterval dtInterval) {
         StringBuffer sb = new StringBuffer();
@@ -856,6 +845,9 @@ public class DateIntervalFormat extends UFormat {
         } else if ( fromCalendar.get(Calendar.SECOND) !=
                     toCalendar.get(Calendar.SECOND) ) {
             field = Calendar.SECOND;
+        } else if ( fromCalendar.get(Calendar.MILLISECOND) !=
+                    toCalendar.get(Calendar.MILLISECOND) ) {
+            field = Calendar.MILLISECOND;
         } else {
             return null;
         }
@@ -900,8 +892,7 @@ public class DateIntervalFormat extends UFormat {
      * @param toCalendar        calendar set to the to date in date interval
      *                          to be formatted into date interval string
      * @return                  A FormattedDateInterval containing the format result.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(Calendar fromCalendar, Calendar toCalendar) {
         StringBuffer sb = new StringBuffer();
@@ -952,16 +943,19 @@ public class DateIntervalFormat extends UFormat {
         } else if ( fromCalendar.get(Calendar.MINUTE) !=
                     toCalendar.get(Calendar.MINUTE) ) {
             field = Calendar.MINUTE;
-         } else if ( fromCalendar.get(Calendar.SECOND) !=
+        } else if ( fromCalendar.get(Calendar.SECOND) !=
                     toCalendar.get(Calendar.SECOND) ) {
             field = Calendar.SECOND;
-       } else {
+        } else if ( fromCalendar.get(Calendar.MILLISECOND) !=
+                    toCalendar.get(Calendar.MILLISECOND) ) {
+            field = Calendar.MILLISECOND;
+        } else {
             /* ignore the millisecond etc. small fields' difference.
              * use single date when all the above are the same.
              */
             return fDateFormat.format(fromCalendar, appendTo, pos, attributes);
         }
-        boolean fromToOnSameDay = (field==Calendar.AM_PM || field==Calendar.HOUR || field==Calendar.MINUTE || field==Calendar.SECOND);
+        boolean fromToOnSameDay = (field==Calendar.AM_PM || field==Calendar.HOUR || field==Calendar.MINUTE || field==Calendar.SECOND || field==Calendar.MILLISECOND);
 
         // get interval pattern
         PatternInfo intervalPattern = fIntervalPatterns.get(
@@ -1032,11 +1026,11 @@ public class DateIntervalFormat extends UFormat {
                 fInfo.getFallbackIntervalPattern(), patternSB, 2, 2);
         long state = 0;
         while (true) {
-            state = SimpleFormatterImpl.Int64Iterator.step(compiledPattern, state, appendTo);
-            if (state == SimpleFormatterImpl.Int64Iterator.DONE) {
+            state = SimpleFormatterImpl.IterInternal.step(state, compiledPattern, appendTo);
+            if (state == SimpleFormatterImpl.IterInternal.DONE) {
                 break;
             }
-            if (SimpleFormatterImpl.Int64Iterator.getArgIndex(state) == 0) {
+            if (SimpleFormatterImpl.IterInternal.getArgIndex(state) == 0) {
                 if (output != null) {
                     output.register(0);
                 }
@@ -1090,11 +1084,11 @@ public class DateIntervalFormat extends UFormat {
             // {1} is single date portion
             long state = 0;
             while (true) {
-                state = SimpleFormatterImpl.Int64Iterator.step(compiledPattern, state, appendTo);
-                if (state == SimpleFormatterImpl.Int64Iterator.DONE) {
+                state = SimpleFormatterImpl.IterInternal.step(state, compiledPattern, appendTo);
+                if (state == SimpleFormatterImpl.IterInternal.DONE) {
                     break;
                 }
-                if (SimpleFormatterImpl.Int64Iterator.getArgIndex(state) == 0) {
+                if (SimpleFormatterImpl.IterInternal.getArgIndex(state) == 0) {
                     fDateFormat.applyPattern(fTimePattern);
                     fallbackFormatRange(fromCalendar, toCalendar, appendTo, patternSB, pos, output, attributes);
                 } else {

@@ -22,6 +22,7 @@
 #include "unicode/sortkey.h"
 #include "unicode/std_string.h"
 #include "unicode/strenum.h"
+#include "unicode/stringpiece.h"
 #include "unicode/tblcoll.h"
 #include "unicode/uiter.h"
 #include "unicode/uniset.h"
@@ -293,13 +294,13 @@ void CollationTest::TestIllegalUTF8() {
     }
     coll->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, errorCode);
 
-    static const char *strings[] = {
+    static const StringPiece strings[] = {
         // string with U+FFFD == illegal byte sequence
-        u8"a\uFFFDz", "a\x80z",  // trail byte
-        u8"a\uFFFD\uFFFDz", "a\xc1\x81z",  // non-shortest form
-        u8"a\uFFFD\uFFFD\uFFFDz", "a\xe0\x82\x83z",  // non-shortest form
-        u8"a\uFFFD\uFFFD\uFFFDz", "a\xed\xa0\x80z",  // lead surrogate: would be U+D800
-        u8"a\uFFFD\uFFFD\uFFFDz", "a\xed\xbf\xbfz",  // trail surrogate: would be U+DFFF
+        u8"a\uFFFDz",                   "a\x80z",  // trail byte
+        u8"a\uFFFD\uFFFDz",             "a\xc1\x81z",  // non-shortest form
+        u8"a\uFFFD\uFFFD\uFFFDz",       "a\xe0\x82\x83z",  // non-shortest form
+        u8"a\uFFFD\uFFFD\uFFFDz",       "a\xed\xa0\x80z",  // lead surrogate: would be U+D800
+        u8"a\uFFFD\uFFFD\uFFFDz",       "a\xed\xbf\xbfz",  // trail surrogate: would be U+DFFF
         u8"a\uFFFD\uFFFD\uFFFD\uFFFDz", "a\xf0\x8f\xbf\xbfz",  // non-shortest form
         u8"a\uFFFD\uFFFD\uFFFD\uFFFDz", "a\xf4\x90\x80\x80z"  // out of range: would be U+110000
     };

@@ -1681,7 +1681,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                 const char *pKey = NULL;    /* LDML key */
                 const char *pType = NULL;   /* LDML type */
 
-                char bcpKeyBuf[9];          /* BCP key length is always 2 for now */
+                char bcpKeyBuf[3];          /* BCP key length is always 2 for now */
 
                 U_ASSERT(pBcpKey != NULL);
 
@@ -1690,6 +1690,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
+                U_ASSERT(bcpKeyLen <= 2);
 
                 uprv_strncpy(bcpKeyBuf, pBcpKey, bcpKeyLen);
                 bcpKeyBuf[bcpKeyLen] = 0;

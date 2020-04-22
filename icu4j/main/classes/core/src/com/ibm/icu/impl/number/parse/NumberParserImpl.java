@@ -10,7 +10,6 @@ import java.util.List;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
-import com.ibm.icu.impl.number.CurrencyPluralInfoAffixProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
@@ -138,12 +137,7 @@ public class NumberParserImpl {
             boolean parseCurrency) {
 
         ULocale locale = symbols.getULocale();
-        AffixPatternProvider affixProvider;
-        if (properties.getCurrencyPluralInfo() == null) {
-            affixProvider = new PropertiesAffixPatternProvider(properties);
-        } else {
-            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
-        }
+        AffixPatternProvider affixProvider = PropertiesAffixPatternProvider.forProperties(properties);
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         ParseMode parseMode = properties.getParseMode();
         if (parseMode == null) {

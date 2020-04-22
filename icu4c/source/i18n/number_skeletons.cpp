@@ -30,16 +30,6 @@ using namespace icu::number;
 using namespace icu::number::impl;
 using namespace icu::number::impl::skeleton;
 
-#if (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(_MSC_VER)
-// Ignore MSVC warning 4661. This is generated for NumberFormatterSettings<>::toSkeleton() as this method
-// is defined elsewhere (in number_skeletons.cpp). The compiler is warning that the explicit template instantiation
-// inside this single translation unit (CPP file) is incomplete, and thus it isn't sure if the template class is
-// fully defined. However, since each translation unit explicitly instantiates all the necessary template classes,
-// they will all be passed to the linker, and the linker will still find and export all the class members.
-#pragma warning(push)
-#pragma warning(disable: 4661)
-#endif
-
 namespace {
 
 icu::UInitOnce gNumberSkeletonsInitOnce = U_INITONCE_INITIALIZER;
@@ -897,10 +887,6 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         status = U_UNSUPPORTED_ERROR;
         return;
     }
-    if (macros.currencySymbols != nullptr) {
-        status = U_UNSUPPORTED_ERROR;
-        return;
-    }
 
     // Remove the trailing space
     if (sb.length() > 0) {
@@ -911,7 +897,7 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
 
 bool blueprint_helpers::parseExponentWidthOption(const StringSegment& segment, MacroProps& macros,
                                                  UErrorCode&) {
-    if (segment.charAt(0) != u'+') {
+    if (!isWildcardChar(segment.charAt(0))) {
         return false;
     }
     int32_t offset = 1;
@@ -933,7 +919,7 @@ bool blueprint_helpers::parseExponentWidthOption(const StringSegment& segment, M
 
 void
 blueprint_helpers::generateExponentWidthOption(int32_t minExponentDigits, UnicodeString& sb, UErrorCode&) {
-    sb.append(u'+');
+    sb.append(kWildcardChar);
     appendMultiple(sb, u'e', minExponentDigits);
 }
 
@@ -1061,7 +1047,7 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
 
     // TODO(ICU-20941): Clean this up.
     for (int32_t i = 0; i < fullUnit.units.length(); i++) {
-        TempSingleUnit* subUnit = fullUnit.units[i];
+        SingleUnitImpl* subUnit = fullUnit.units[i];
         if (subUnit->dimensionality > 0) {
             macros.unit = macros.unit.product(subUnit->build(status), status);
         } else {
@@ -1085,7 +1071,7 @@ void blueprint_helpers::parseFractionStem(const StringSegment& segment, MacroPro
         }
     }
     if (offset < segment.length()) {
-        if (segment.charAt(offset) == u'+') {
+        if (isWildcardChar(segment.charAt(offset))) {
             maxFrac = -1;
             offset++;
         } else {
@@ -1127,7 +1113,7 @@ blueprint_helpers::generateFractionStem(int32_t minFrac, int32_t maxFrac, Unicod
     sb.append(u'.');
     appendMultiple(sb, u'0', minFrac);
     if (maxFrac == -1) {
-        sb.append(u'+');
+        sb.append(kWildcardChar);
     } else {
         appendMultiple(sb, u'#', maxFrac - minFrac);
     }
@@ -1147,7 +1133,7 @@ blueprint_helpers::parseDigitsStem(const StringSegment& segment, MacroProps& mac
         }
     }
     if (offset < segment.length()) {
-        if (segment.charAt(offset) == u'+') {
+        if (isWildcardChar(segment.charAt(offset))) {
             maxSig = -1;
             offset++;
         } else {
@@ -1180,7 +1166,7 @@ void
 blueprint_helpers::generateDigitsStem(int32_t minSig, int32_t maxSig, UnicodeString& sb, UErrorCode&) {
     appendMultiple(sb, u'@', minSig);
     if (maxSig == -1) {
-        sb.append(u'+');
+        sb.append(kWildcardChar);
     } else {
         appendMultiple(sb, u'#', maxSig - minSig);
     }
@@ -1276,7 +1262,7 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     // Invalid: @, @@, @@@
     // Invalid: @@#, @@##, @@@#
     if (offset < segment.length()) {
-        if (segment.charAt(offset) == u'+') {
+        if (isWildcardChar(segment.charAt(offset))) {
             maxSig = -1;
             offset++;
         } else if (minSig > 1) {
@@ -1365,7 +1351,7 @@ void blueprint_helpers::parseIntegerWidthOption(const StringSegment& segment, Ma
     int32_t offset = 0;
     int32_t minInt = 0;
     int32_t maxInt;
-    if (segment.charAt(0) == u'+') {
+    if (isWildcardChar(segment.charAt(0))) {
         maxInt = -1;
         offset++;
     } else {
@@ -1406,7 +1392,7 @@ void blueprint_helpers::parseIntegerWidthOption(const StringSegment& segment, Ma
 void blueprint_helpers::generateIntegerWidthOption(int32_t minInt, int32_t maxInt, UnicodeString& sb,
                                                    UErrorCode&) {
     if (maxInt == -1) {
-        sb.append(u'+');
+        sb.append(kWildcardChar);
     } else {
         appendMultiple(sb, u'#', maxInt - minInt);
     }
@@ -1698,6 +1684,16 @@ bool GeneratorHelpers::scale(const MacroProps& macros, UnicodeString& sb, UError
 
 
 // Definitions of public API methods (put here for dependency disentanglement)
+
+#if (U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(_MSC_VER)
+// Ignore MSVC warning 4661. This is generated for NumberFormatterSettings<>::toSkeleton() as this method
+// is defined elsewhere (in number_skeletons.cpp). The compiler is warning that the explicit template instantiation
+// inside this single translation unit (CPP file) is incomplete, and thus it isn't sure if the template class is
+// fully defined. However, since each translation unit explicitly instantiates all the necessary template classes,
+// they will all be passed to the linker, and the linker will still find and export all the class members.
+#pragma warning(push)
+#pragma warning(disable: 4661)
+#endif
 
 template<typename Derived>
 UnicodeString NumberFormatterSettings<Derived>::toSkeleton(UErrorCode& status) const {

@@ -69,6 +69,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
+     * @throws IllegalArgumentException if first or second is null
      * @stable ICU 63
      * @see NumberRangeFormatter
      */

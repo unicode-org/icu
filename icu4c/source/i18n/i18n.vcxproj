@@ -76,7 +76,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>icuucd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\$(IcuBinOutputDir)\icuin66d.dll</OutputFile>
+      <OutputFile>..\..\$(IcuBinOutputDir)\icuin67d.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuind.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\$(IcuLibOutputDir)\icuind.lib</ImportLibrary>
     </Link>
@@ -89,7 +89,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\$(IcuBinOutputDir)\icuin66.dll</OutputFile>
+      <OutputFile>..\..\$(IcuBinOutputDir)\icuin67.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuin.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\$(IcuLibOutputDir)\icuin.lib</ImportLibrary>
     </Link>
@@ -267,6 +267,7 @@
     <ClCompile Include="ulocdata.cpp" />
     <ClCompile Include="umsg.cpp" />
     <ClCompile Include="unitconverter.cpp" />
+    <ClCompile Include="unitsdata.cpp" />
     <ClCompile Include="unum.cpp" />
     <ClCompile Include="unumsys.cpp" />
     <ClCompile Include="upluralrules.cpp" />
@@ -502,6 +503,7 @@
     <ClInclude Include="numrange_impl.h" />
     <ClInclude Include="formattedval_impl.h" />
     <ClInclude Include="unitconverter.h" />
+    <ClInclude Include="unitsdata.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc" />

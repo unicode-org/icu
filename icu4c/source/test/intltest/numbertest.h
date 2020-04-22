@@ -95,6 +95,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit ESP;
     CurrencyUnit PTE;
     CurrencyUnit RON;
+    CurrencyUnit CNY;
 
     MeasureUnit METER;
     MeasureUnit DAY;
@@ -168,6 +169,8 @@ class DecimalQuantityTest : public IntlTest {
     void testToDouble();
     void testMaxDigits();
     void testNickelRounding();
+    void testCompactDecimalSuppressedExponent();
+    void testSuppressedExponentUnchangedByInitialScaling();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -254,6 +257,7 @@ class NumberSkeletonTest : public IntlTest {
     void stemsRequiringOption();
     void defaultTokens();
     void flexibleSeparators();
+    void wildcardCharacters();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

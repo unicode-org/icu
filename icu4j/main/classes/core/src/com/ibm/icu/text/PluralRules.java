@@ -465,6 +465,16 @@ public class PluralRules implements Serializable {
         w,
 
         /**
+         * Suppressed exponent for compact notation (exponent needed in
+         * scientific notation with compact notation to approximate i).
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        e,
+
+        /**
          * THIS OPERAND IS DEPRECATED AND HAS BEEN REMOVED FROM THE SPEC.
          *
          * <p>Returns the integer value, but will fail if the number has fraction digits.
@@ -797,6 +807,7 @@ public class PluralRules implements Serializable {
             case t: return decimalDigitsWithoutTrailingZeros;
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
+            case e: return 0;
             default: return source;
             }
         }
@@ -2041,8 +2052,7 @@ public class PluralRules implements Serializable {
      *
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public String select(FormattedNumber number) {
         return rules.select(number.getFixedDecimal());

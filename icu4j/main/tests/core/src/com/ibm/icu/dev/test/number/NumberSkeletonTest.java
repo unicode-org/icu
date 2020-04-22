@@ -28,26 +28,35 @@ public class NumberSkeletonTest {
                 "precision-integer",
                 "precision-unlimited",
                 "@@@##",
+                "@@*",
                 "@@+",
                 ".000##",
+                ".00*",
                 ".00+",
                 ".",
+                ".*",
                 ".+",
                 ".######",
+                ".00/@@*",
                 ".00/@@+",
                 ".00/@##",
                 "precision-increment/3.14",
                 "precision-currency-standard",
                 "precision-integer rounding-mode-half-up",
                 ".00# rounding-mode-ceiling",
+                ".00/@@* rounding-mode-floor",
                 ".00/@@+ rounding-mode-floor",
                 "scientific",
+                "scientific/*ee",
                 "scientific/+ee",
                 "scientific/sign-always",
+                "scientific/*ee/sign-always",
                 "scientific/+ee/sign-always",
+                "scientific/sign-always/*ee",
                 "scientific/sign-always/+ee",
                 "scientific/sign-except-zero",
                 "engineering",
+                "engineering/*eee",
                 "engineering/+eee",
                 "compact-short",
                 "compact-long",
@@ -68,6 +77,7 @@ public class NumberSkeletonTest {
                 "group-thousands",
                 "integer-width/00",
                 "integer-width/#0",
+                "integer-width/*00",
                 "integer-width/+00",
                 "sign-always",
                 "sign-auto",
@@ -122,16 +132,22 @@ public class NumberSkeletonTest {
         String[] cases = {
                 ".00x",
                 ".00##0",
+                ".##*",
+                ".00##*",
+                ".0#*",
+                "@#*",
                 ".##+",
                 ".00##+",
                 ".0#+",
+                "@#+",
                 "@@x",
                 "@@##0",
-                "@#+",
                 ".00/@",
                 ".00/@@",
                 ".00/@@x",
                 ".00/@@#",
+                ".00/@@#*",
+                ".00/floor/@@*", // wrong order
                 ".00/@@#+",
                 ".00/floor/@@+", // wrong order
                 "precision-increment/français", // non-invariant characters for C++
@@ -147,6 +163,10 @@ public class NumberSkeletonTest {
                 "currency/ççç", // three characters but not ASCII
                 "measure-unit/foo",
                 "integer-width/xxx",
+                "integer-width/0*",
+                "integer-width/*0#",
+                "integer-width/*#",
+                "integer-width/*#0",
                 "integer-width/0+",
                 "integer-width/+0#",
                 "integer-width/+#",
@@ -163,6 +183,7 @@ public class NumberSkeletonTest {
                 "EEE",
                 "EEE0",
                 "001",
+                "00*",
                 "00+",
         };
 
@@ -293,6 +314,26 @@ public class NumberSkeletonTest {
             String actual = NumberFormatter.forSkeleton(skeleton).locale(ULocale.ENGLISH).format(5142.3)
                     .toString();
             assertEquals(skeleton, expected, actual);
+        }
+    }
+
+    @Test
+    public void wildcardCharacters() {
+        String[][] cases = {
+            { ".00*", ".00+" },
+            { "@@*", "@@+" },
+            { ".00/@@*", ".00/@@+" },
+            { "scientific/*ee", "scientific/+ee" },
+            { "integer-width/*00", "integer-width/+00" },
+        };
+    
+        for (String[] cas : cases) {
+            String star = cas[0];
+            String plus = cas[1];
+    
+            String normalized = NumberFormatter.forSkeleton(plus)
+                .toSkeleton();
+            assertEquals("Plus should normalize to star", star, normalized);
         }
     }
 

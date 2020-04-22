@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.joining;
 
 import java.io.PrintWriter;
@@ -9,16 +10,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.unicode.cldr.api.CldrDataSupplier;
-
 /**
  * Stores any explicit locale relationships for a single directory (e.g. "lang" or "coll").
  * This class just reflects a concise version of the "%%Parent and %%ALIAS" paths set in files and
  * allows them to be written to the dependency graph files in each ICU data directory.
  */
 final class DependencyGraph {
+    private final String cldrVersion;
     private final Map<String, String> parentMap = new TreeMap<>();
     private final Map<String, String> aliasMap = new TreeMap<>();
+
+    public DependencyGraph(String cldrVersion) {
+        this.cldrVersion = checkNotNull(cldrVersion);
+    }
 
     void addParent(String localeId, String parentId) {
         // Aliases take priority (since they can be forced and will replace empty files). Note
@@ -61,7 +65,7 @@ final class DependencyGraph {
     void writeJsonTo(PrintWriter out, List<String> fileHeader) {
         fileHeader.forEach(s -> out.println("// " + s));
         out.println();
-        out.format("{\n    \"cldrVersion\": \"%s\"", CldrDataSupplier.getCldrVersionString());
+        out.format("{\n    \"cldrVersion\": \"%s\"", cldrVersion);
         writeMap(out, "aliases", aliasMap);
         writeMap(out, "parents", parentMap);
         out.append("\n}\n");

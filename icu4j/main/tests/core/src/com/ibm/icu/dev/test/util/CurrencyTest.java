@@ -52,6 +52,7 @@ public class CurrencyTest extends TestFmwk {
         Currency usd = Currency.getInstance("USD");
         /*int hash = */usd.hashCode();
         Currency jpy = Currency.getInstance("JPY");
+        Currency jpy2 = Currency.getInstance("jpy");
         if (usd.equals(jpy)) {
             errln("FAIL: USD == JPY");
         }
@@ -63,6 +64,12 @@ public class CurrencyTest extends TestFmwk {
         }
         if (!usd.equals(usd)) {
             errln("FAIL: USD != USD");
+        }
+        if (!jpy.equals(jpy2)) {
+            errln("FAIL: JPY != jpy");
+        }
+        if (!jpy2.equals(jpy)) {
+            errln("FAIL: jpy != JPY");
         }
 
         try {
@@ -87,7 +94,7 @@ public class CurrencyTest extends TestFmwk {
         }
 
         try {
-            usd.getName(ULocale.US, 5, new boolean[1]);
+            usd.getName(ULocale.US, 6, new boolean[1]);
             errln("expected getName with invalid type parameter to throw exception");
         }
         catch (Exception e) {
@@ -170,7 +177,7 @@ public class CurrencyTest extends TestFmwk {
         Locale[] locs = Currency.getAvailableLocales();
         found = false;
         for (int i = 0; i < locs.length; ++i) {
-            if (locs[i].equals(fu_FU)) {
+            if (locs[i].equals(fu_FU.toLocale())) {
                 found = true;
                 break;
             }
@@ -239,26 +246,44 @@ public class CurrencyTest extends TestFmwk {
     }
 
     @Test
-    public void test20484_NarrowSymbolFallback() {
+    public void testCurrencyVariants() {
         Object[][] cases = new Object[][] {
-            {"en-US", "CAD", "CA$", "$"},
-            {"en-US", "CDF", "CDF", "CDF"},
-            {"sw-CD", "CDF", "FC", "FC"},
-            {"en-US", "GEL", "GEL", "₾"},
-            {"ka-GE", "GEL", "₾", "₾"},
-            {"ka", "GEL", "₾", "₾"},
+            {"en-US", "CAD", "CA$", "$", "CA$", "CA$"},
+            {"en-US", "CDF", "CDF", "CDF", "CDF", "CDF"},
+            {"sw-CD", "CDF", "FC", "FC", "FC", "FC"},
+            {"en-US", "GEL", "GEL", "₾", "GEL", "GEL"},
+            {"ka-GE", "GEL", "₾", "₾", "₾", "₾"},
+            {"ka", "GEL", "₾", "₾", "₾", "₾"},
+            {"zh-TW", "TWD", "$", "$", "NT$", "$"},
+            {"ccp", "TRY", "TRY", "₺", "TRY", "TL"}
         };
         for (Object[] cas : cases) {
             ULocale locale = new ULocale((String) cas[0]);
             String isoCode = (String) cas[1];
             String expectedShort = (String) cas[2];
             String expectedNarrow = (String) cas[3];
+            String expectedFormal = (String) cas[4];
+            String expectedVariant = (String) cas[5];
 
             CurrencyDisplayNames cdn = CurrencyDisplayNames.getInstance(locale);
             assertEquals("Short symbol: " + locale + ": " + isoCode,
                     expectedShort, cdn.getSymbol(isoCode));
             assertEquals("Narrow symbol: " + locale + ": " + isoCode,
                     expectedNarrow, cdn.getNarrowSymbol(isoCode));
+            assertEquals("Formal symbol: " + locale + ": " + isoCode,
+                    expectedFormal, cdn.getFormalSymbol(isoCode));
+            assertEquals("Variant symbol: " + locale + ": " + isoCode,
+                    expectedVariant, cdn.getVariantSymbol(isoCode));
+
+            Currency currency = Currency.getInstance(isoCode);
+            assertEquals("Old API, Short symbol: " + locale + ": " + isoCode,
+                    expectedShort, currency.getName(locale, Currency.SYMBOL_NAME, null));
+            assertEquals("Old API, Narrow symbol: " + locale + ": " + isoCode,
+                    expectedNarrow, currency.getName(locale, Currency.NARROW_SYMBOL_NAME, null));
+            assertEquals("Old API, Formal symbol: " + locale + ": " + isoCode,
+                    expectedFormal, currency.getName(locale, Currency.FORMAL_SYMBOL_NAME, null));
+            assertEquals("Old API, Variant symbol: " + locale + ": " + isoCode,
+                    expectedVariant, currency.getName(locale, Currency.VARIANT_SYMBOL_NAME, null));
         }
     }
 
@@ -541,7 +566,7 @@ public class CurrencyTest extends TestFmwk {
         assertTrue("More than one currency for switzerland", currencies.size() > 1);
         assertEquals(
                 "With tender",
-                Arrays.asList(new String[] {"CHF", "CHE", "CHW"}),
+                Arrays.asList(new String[] {"CHF"}), // no longer include currencies with tender=false
                 metainfo.currencies(filter.withTender()));
     }
 
@@ -649,8 +674,8 @@ public class CurrencyTest extends TestFmwk {
             { "eo_AO", "1969-12-31" },
             { "eo_DE@currency=DEM", "2000-12-23", "EUR", "DEM" },
             { "eo-DE-u-cu-dem", "2000-12-23", "EUR", "DEM" },
-            { "en_US", null, "USD", "USN" },
-            { "en_US_Q", null, "USD", "USN" },
+            { "en_US", null, "USD" }, // no longer include currencies with tender=false
+            { "en_US_Q", null, "USD" }, // no longer include currencies with tender=false
         };
 
         DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -738,20 +763,20 @@ public class CurrencyTest extends TestFmwk {
         final String[][] PREFERRED = {
             {"root",                 },
             {"und",                  },
-            {"und_ZZ",          "XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XPD", "XPT", "XSU", "XTS", "XUA", "XXX"},
-            {"en_US",           "USD", "USN"},
+            {"und_ZZ",               }, // no longer include currencies with tender=false
+            {"en_US",           "USD"}, // no longer include currencies with tender=false
             {"en_029",               },
             {"en_TH",           "THB"},
             {"de",              "EUR"},
             {"de_DE",           "EUR"},
-            {"de_ZZ",           "XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XPD", "XPT", "XSU", "XTS", "XUA", "XXX"},
+            {"de_ZZ",                }, // no longer include currencies with tender=false
             {"ar",              "EGP"},
             {"ar_PS",           "ILS", "JOD"},
-            {"en@currency=CAD",     "USD", "USN"},
+            {"en@currency=CAD",     "USD"}, // no longer include currencies with tender=false
             {"fr@currency=ZZZ",     "EUR"},
             {"de_DE@currency=DEM",  "EUR"},
             {"en_US@rg=THZZZZ",     "THB"},
-            {"de@rg=USZZZZ",        "USD", "USN"},
+            {"de@rg=USZZZZ",        "USD"}, // no longer include currencies with tender=false
             {"en_US@currency=CAD;rg=THZZZZ",  "THB"},
         };
 

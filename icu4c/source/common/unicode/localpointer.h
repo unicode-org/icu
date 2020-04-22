@@ -225,7 +225,6 @@ public:
         src.ptr=NULL;
     }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Constructs a LocalPointer from a C++11 std::unique_ptr.
      * The LocalPointer steals the object owned by the std::unique_ptr.
@@ -234,11 +233,10 @@ public:
      * in a local variable, you must use std::move.
      *
      * @param p The std::unique_ptr from which the pointer will be stolen.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     explicit LocalPointer(std::unique_ptr<T> &&p)
         : LocalPointerBase<T>(p.release()) {}
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Destructor deletes the object it owns.
@@ -261,20 +259,18 @@ public:
         return *this;
     }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Move-assign from an std::unique_ptr to this LocalPointer.
      * Steals the pointer from the std::unique_ptr.
      *
      * @param p The std::unique_ptr from which the pointer will be stolen.
      * @return *this
-     * @draft ICU 64
+     * @stable ICU 64
      */
     LocalPointer<T> &operator=(std::unique_ptr<T> &&p) U_NOEXCEPT {
         adoptInstead(p.release());
         return *this;
     }
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Swap pointers.
@@ -332,7 +328,6 @@ public:
         }
     }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Conversion operator to a C++11 std::unique_ptr.
      * Disowns the object and gives it to the returned std::unique_ptr.
@@ -342,12 +337,11 @@ public:
      *
      * @return An std::unique_ptr owning the pointer previously owned by this
      *         icu::LocalPointer.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     operator std::unique_ptr<T> () && {
         return std::unique_ptr<T>(LocalPointerBase<T>::orphan());
     }
-#endif  /* U_HIDE_DRAFT_API */
 };
 
 /**
@@ -378,9 +372,9 @@ public:
      * @param p simple pointer to an array of T objects that is adopted
      * @stable ICU 4.4
      */
-    explicit LocalArray(T *p=nullptr) : LocalPointerBase<T>(p), fLength(p==nullptr?0:-1) {}
+    explicit LocalArray(T *p=NULL) : LocalPointerBase<T>(p) {}
     /**
-     * Constructor takes ownership and reports an error if nullptr.
+     * Constructor takes ownership and reports an error if NULL.
      *
      * This constructor is intended to be used with other-class constructors
      * that may report a failure UErrorCode,
@@ -389,11 +383,11 @@ public:
      *
      * @param p simple pointer to an array of T objects that is adopted
      * @param errorCode in/out UErrorCode, set to U_MEMORY_ALLOCATION_ERROR
-     *     if p==nullptr and no other failure code had been set
+     *     if p==NULL and no other failure code had been set
      * @stable ICU 56
      */
-    LocalArray(T *p, UErrorCode &errorCode) : LocalArray<T>(p) {
-        if(p==nullptr && U_SUCCESS(errorCode)) {
+    LocalArray(T *p, UErrorCode &errorCode) : LocalPointerBase<T>(p) {
+        if(p==NULL && U_SUCCESS(errorCode)) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     }
@@ -402,25 +396,10 @@ public:
      * @param src source smart pointer
      * @stable ICU 56
      */
-    LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalArray<T>(src.ptr) {
-        src.ptr=nullptr;
+    LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
+        src.ptr=NULL;
     }
 
-#ifndef U_HIDE_DRAFT_API
-    /**
-     * Construct a LocalArray with a specified length.
-     *
-     * @param p Pointer to the array to adopt.
-     * @param length The length of the array.
-     * @return A LocalArray with a length field.
-     * @draft ICU 67
-     */
-    static LocalArray<T> withLength(T *p, int32_t length) {
-        return LocalArray(p, length);
-    }
-#endif // U_HIDE_DRAFT_API
-
-#ifndef U_HIDE_DRAFT_API
     /**
      * Constructs a LocalArray from a C++11 std::unique_ptr of an array type.
      * The LocalPointer steals the array owned by the std::unique_ptr.
@@ -429,11 +408,10 @@ public:
      * in a local variable, you must use std::move.
      *
      * @param p The std::unique_ptr from which the array will be stolen.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     explicit LocalArray(std::unique_ptr<T[]> &&p)
-        : LocalArray<T>(p.release()) {}
-#endif  /* U_HIDE_DRAFT_API */
+        : LocalPointerBase<T>(p.release()) {}
 
     /**
      * Destructor deletes the array it owns.
@@ -452,26 +430,22 @@ public:
     LocalArray<T> &operator=(LocalArray<T> &&src) U_NOEXCEPT {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=src.ptr;
-        src.ptr=nullptr;
-        fLength=src.fLength;
+        src.ptr=NULL;
         return *this;
     }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Move-assign from an std::unique_ptr to this LocalPointer.
      * Steals the array from the std::unique_ptr.
      *
      * @param p The std::unique_ptr from which the array will be stolen.
      * @return *this
-     * @draft ICU 64
+     * @stable ICU 64
      */
     LocalArray<T> &operator=(std::unique_ptr<T[]> &&p) U_NOEXCEPT {
         adoptInstead(p.release());
-        fLength=-1;
         return *this;
     }
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Swap pointers.
@@ -482,9 +456,6 @@ public:
         T *temp=LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=other.ptr;
         other.ptr=temp;
-        int32_t tempLength=fLength;
-        fLength=other.fLength;
-        other.fLength=tempLength;
     }
     /**
      * Non-member LocalArray swap function.
@@ -504,7 +475,6 @@ public:
     void adoptInstead(T *p) {
         delete[] LocalPointerBase<T>::ptr;
         LocalPointerBase<T>::ptr=p;
-        fLength=-1;
     }
     /**
      * Deletes the array it owns,
@@ -531,7 +501,6 @@ public:
         } else {
             delete[] p;
         }
-        fLength=-1;
     }
     /**
      * Array item access (writable).
@@ -542,7 +511,6 @@ public:
      */
     T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Conversion operator to a C++11 std::unique_ptr.
      * Disowns the object and gives it to the returned std::unique_ptr.
@@ -552,29 +520,10 @@ public:
      *
      * @return An std::unique_ptr owning the pointer previously owned by this
      *         icu::LocalPointer.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     operator std::unique_ptr<T[]> () && {
         return std::unique_ptr<T[]>(LocalPointerBase<T>::orphan());
-    }
-#endif  /* U_HIDE_DRAFT_API */
-
-#ifndef U_HIDE_DRAFT_API
-    /**
-     * The length of the array contained in the LocalArray. The size must be
-     * provided when the LocalArray is constructed.
-     *
-     * @return The length of the array, or -1 if unknown.
-     * @draft ICU 67
-     */
-    int32_t length() const { return fLength; }
-#endif // U_HIDE_DRAFT_API
-
-private:
-    int32_t fLength = -1;
-
-    LocalArray(T *p, int32_t length) : LocalArray(p) {
-        fLength = length;
     }
 };
 

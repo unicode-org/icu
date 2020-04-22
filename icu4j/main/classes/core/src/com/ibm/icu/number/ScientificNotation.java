@@ -27,7 +27,7 @@ import com.ibm.icu.text.NumberFormat;
  * @stable ICU 60
  * @see NumberFormatter
  */
-public class ScientificNotation extends Notation implements Cloneable {
+public class ScientificNotation extends Notation {
 
     int engineeringInterval;
     boolean requireMinInt;
@@ -56,12 +56,13 @@ public class ScientificNotation extends Notation implements Cloneable {
      * @param minExponentDigits
      *            The minimum number of digits to show in the exponent.
      * @return A ScientificNotation, for chaining.
+     * @throws IllegalArgumentException if minExponentDigits is too big or smaller than 1
      * @stable ICU 60
      * @see NumberFormatter
      */
     public ScientificNotation withMinExponentDigits(int minExponentDigits) {
         if (minExponentDigits >= 1 && minExponentDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
-            ScientificNotation other = (ScientificNotation) this.clone();
+            ScientificNotation other = createCopy();
             other.minExponentDigits = minExponentDigits;
             return other;
         } else {
@@ -86,23 +87,19 @@ public class ScientificNotation extends Notation implements Cloneable {
      * @see NumberFormatter
      */
     public ScientificNotation withExponentSignDisplay(SignDisplay exponentSignDisplay) {
-        ScientificNotation other = (ScientificNotation) this.clone();
+        ScientificNotation other = createCopy();
         other.exponentSignDisplay = exponentSignDisplay;
         return other;
     }
 
-    /**
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public Object clone() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            // Should not happen since parent is Object
-            throw new AssertionError(e);
-        }
+    /** Package-private clone method */
+    ScientificNotation createCopy() {
+        return new ScientificNotation(
+            engineeringInterval,
+            requireMinInt,
+            minExponentDigits,
+            exponentSignDisplay
+        );
     }
 
     /* package-private */ MicroPropsGenerator withLocaleData(
@@ -194,6 +191,11 @@ public class ScientificNotation extends Notation implements Cloneable {
                 this.exponent = exponent;
                 micros.modInner = this;
             }
+
+            // Change the exponent only after we select appropriate plural form
+            // for formatting purposes so that we preserve expected formatted
+            // string behavior.
+            quantity.adjustExponent(exponent);
 
             // We already performed rounding. Do not perform it again.
             micros.rounder = null;

@@ -14,6 +14,7 @@
 #include "unicode/errorcode.h"
 #include "unicode/normlzr.h"
 #include "unicode/stringoptions.h"
+#include "unicode/stringpiece.h"
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/schriter.h"
@@ -1573,15 +1574,15 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
     if(errorCode.errDataIfFailureAndReset("Normalizer2::getNFKCCasefoldInstance() call failed")) {
         return;
     }
-    static const char *const src =
+    static const StringPiece src =
         u8"  AÄA\u0308A\u0308\u00ad\u0323Ä\u0323,\u00ad\u1100\u1161가\u11A8가\u3133  ";
-    std::string expected = u8"  aääạ\u0308ạ\u0308,가각갃  ";
+    StringPiece expected = u8"  aääạ\u0308ạ\u0308,가각갃  ";
     std::string result;
     StringByteSink<std::string> sink(&result, static_cast<int32_t>(expected.length()));
     Edits edits;
     nfkc_cf->normalizeUTF8(0, src, sink, &edits, errorCode);
     assertSuccess("normalizeUTF8 with Edits", errorCode.get());
-    assertEquals("normalizeUTF8 with Edits", expected.c_str(), result.c_str());
+    assertEquals("normalizeUTF8 with Edits", expected.data(), result.c_str());
     static const EditChange expectedChanges[] = {
         { FALSE, 2, 2 },  // 2 spaces
         { TRUE, 1, 1 },  // A→a
@@ -1612,7 +1613,7 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
     edits.reset();
     nfkc_cf->normalizeUTF8(U_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
     assertSuccess("normalizeUTF8 omit unchanged", errorCode.get());
-    assertEquals("normalizeUTF8 omit unchanged", expected.c_str(), result.c_str());
+    assertEquals("normalizeUTF8 omit unchanged", expected.data(), result.c_str());
     assertTrue("normalizeUTF8 omit unchanged hasChanges", edits.hasChanges());
     assertEquals("normalizeUTF8 omit unchanged numberOfChanges", 9, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 omit unchanged",
@@ -1628,7 +1629,7 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
     edits.reset();
     fn2.normalizeUTF8(0, src, sink, &edits, errorCode);
     assertSuccess("filtered normalizeUTF8", errorCode.get());
-    assertEquals("filtered normalizeUTF8", expected.c_str(), result.c_str());
+    assertEquals("filtered normalizeUTF8", expected.data(), result.c_str());
     static const EditChange filteredChanges[] = {
         { FALSE, 3, 3 },  // 2 spaces + A
         { TRUE, 2, 2 },  // Ä→ä
@@ -1660,7 +1661,7 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
     edits.reset();
     fn2.normalizeUTF8(U_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
     assertSuccess("filtered normalizeUTF8 omit unchanged", errorCode.get());
-    assertEquals("filtered normalizeUTF8 omit unchanged", expected.c_str(), result.c_str());
+    assertEquals("filtered normalizeUTF8 omit unchanged", expected.data(), result.c_str());
     assertTrue("filtered normalizeUTF8 omit unchanged hasChanges", edits.hasChanges());
     assertEquals("filtered normalizeUTF8 omit unchanged numberOfChanges", 7, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"filtered normalizeUTF8 omit unchanged",
@@ -1743,16 +1744,16 @@ BasicNormalizerTest::TestNormalizeIllFormedText() {
     assertSuccess("normalize", errorCode.get());
     assertEquals("normalize", expected, result);
 
-    std::string src8(u8"  A");
-    src8.append("\x80").append(u8"ÄA\u0308").append("\xC0\x80").
-        append(u8"A\u0308\u00ad\u0323").append("\xED\xA0\x80").
-        append(u8"Ä\u0323,\u00ad").append("\xF4\x90\x80\x80").
-        append(u8"\u1100\u1161가\u11A8가\u3133  ").append("\xF0");
-    std::string expected8(u8"  a");
-    expected8.append("\x80").append(u8"ää").append("\xC0\x80").
-        append(u8"ạ\u0308").append("\xED\xA0\x80").
-        append(u8"ạ\u0308,").append("\xF4\x90\x80\x80").
-        append(u8"가각갃  ").append("\xF0");
+    std::string src8(reinterpret_cast<const char*>(u8"  A"));
+    src8.append("\x80").append(reinterpret_cast<const char*>(u8"ÄA\u0308")).append("\xC0\x80").
+        append(reinterpret_cast<const char*>(u8"A\u0308\u00ad\u0323")).append("\xED\xA0\x80").
+        append(reinterpret_cast<const char*>(u8"Ä\u0323,\u00ad")).append("\xF4\x90\x80\x80").
+        append(reinterpret_cast<const char*>(u8"\u1100\u1161가\u11A8가\u3133  ")).append("\xF0");
+    std::string expected8(reinterpret_cast<const char*>(u8"  a"));
+    expected8.append("\x80").append(reinterpret_cast<const char*>(u8"ää")).append("\xC0\x80").
+        append(reinterpret_cast<const char*>(u8"ạ\u0308")).append("\xED\xA0\x80").
+        append(reinterpret_cast<const char*>(u8"ạ\u0308,")).append("\xF4\x90\x80\x80").
+        append(reinterpret_cast<const char*>(u8"가각갃  ")).append("\xF0");
     std::string result8;
     StringByteSink<std::string> sink(&result8);
     nfkc_cf->normalizeUTF8(0, src8, sink, nullptr, errorCode);
@@ -1777,13 +1778,13 @@ BasicNormalizerTest::TestComposeJamoTBase() {
     assertFalse("isNormalized(LV+11A7)", nfkc->isNormalized(s, errorCode));
     assertTrue("isNormalized(normalized)", nfkc->isNormalized(result, errorCode));
 
-    std::string s8(u8"\u1100\u1161\u11A7\u1100\u314F\u11A7가\u11A7");
-    std::string expected8(u8"가\u11A7가\u11A7가\u11A7");
+    StringPiece s8(u8"\u1100\u1161\u11A7\u1100\u314F\u11A7가\u11A7");
+    StringPiece expected8(u8"가\u11A7가\u11A7가\u11A7");
     std::string result8;
-    StringByteSink<std::string> sink(&result8, static_cast<int32_t>(expected8.length()));
+    StringByteSink<std::string> sink(&result8, expected8.length());
     nfkc->normalizeUTF8(0, s8, sink, nullptr, errorCode);
     assertSuccess("normalizeUTF8(LV+11A7)", errorCode.get());
-    assertEquals("normalizeUTF8(LV+11A7)", expected8.c_str(), result8.c_str());
+    assertEquals("normalizeUTF8(LV+11A7)", expected8.data(), result8.c_str());
     assertFalse("isNormalizedUTF8(LV+11A7)", nfkc->isNormalizedUTF8(s8, errorCode));
     assertTrue("isNormalizedUTF8(normalized)", nfkc->isNormalizedUTF8(result8, errorCode));
 }

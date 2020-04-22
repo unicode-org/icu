@@ -145,6 +145,15 @@
 //supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%A)"]
     ; /unitConstants/$1 ; values="$2"
 
+//supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%A)"][@status="(%W)"]
+    ; /unitConstants/$1 ; values="$2"
+
+//supplementalData/unitQuantities/unitQuantity[@baseUnit="(%W)"][@quantity="(%W)"]
+    ; /unitQuantities/$1 ; values="$2"
+
+//supplementalData/unitQuantities/unitQuantity[@baseUnit="(%W)"][@quantity="(%W)"][@status="(%W)"]
+    ; /unitQuantities/$1 ; values="$2"
+
 //supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"]
     ; /convertUnits/$1/target ; values=$2
     ; /convertUnits/$1/factor ; values="$3"

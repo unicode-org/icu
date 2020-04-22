@@ -54,8 +54,23 @@ $ mvn install:install-file \
   -DlocalRepositoryPath=. \
   -Dfile=<CLDR_ROOT>/tools/java/libs/utilities.jar
 
-And if you have updated one of these libraries, run:
+And if you have updated one of these libraries then from the main project directory
+(i.e. the parent of this directory) run:
 
 $ mvn dependency:purge-local-repository -DsnapshotsOnly=true
 
-If you choose to update the version number, then remember to update the root pom.xml.
+After doing this, you should see something like the following list of files in this
+directory:
+
+README.txt   <-- this file
+org/unicode/cldr/cldr-api/maven-metadata-local.xml
+org/unicode/cldr/cldr-api/0.1-SNAPSHOT/maven-metadata-local.xml
+org/unicode/cldr/cldr-api/0.1-SNAPSHOT/cldr-api-0.1-SNAPSHOT.pom
+org/unicode/cldr/cldr-api/0.1-SNAPSHOT/cldr-api-0.1-SNAPSHOT.jar
+com/ibm/icu/icu-utilities/maven-metadata-local.xml
+com/ibm/icu/icu-utilities/0.1-SNAPSHOT/maven-metadata-local.xml
+com/ibm/icu/icu-utilities/0.1-SNAPSHOT/icu-utilities-0.1-SNAPSHOT.jar
+com/ibm/icu/icu-utilities/0.1-SNAPSHOT/icu-utilities-0.1-SNAPSHOT.pom
+
+Finally, if you choose to update the version number of the snapshot, then remember to
+update the root pom.xml, but this is unlikely to be necessary.

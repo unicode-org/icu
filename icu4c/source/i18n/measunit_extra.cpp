@@ -31,6 +31,9 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
+// TODO: Propose a new error code for this?
+constexpr UErrorCode kUnitIdentifierSyntaxError = U_ILLEGAL_ARGUMENT_ERROR;
+
 // This is to ensure we only insert positive integers into the trie
 constexpr int32_t kSIPrefixOffset = 64;
 
@@ -39,7 +42,7 @@ constexpr int32_t kCompoundPartOffset = 128;
 enum CompoundPart {
     COMPOUND_PART_PER = kCompoundPartOffset,
     COMPOUND_PART_TIMES,
-    COMPOUND_PART_PLUS,
+    COMPOUND_PART_AND,
 };
 
 constexpr int32_t kPowerPartOffset = 256;
@@ -89,108 +92,111 @@ const struct SIPrefixStrings {
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
 };
 
-// TODO(ICU-20920): Get this list from data
+// TODO(ICU-21059): Get this list from data
 const char16_t* const gSimpleUnits[] = {
     u"one", // note: expected to be index 0
-    u"100kilometer",
-    u"acre",
-    u"ampere",
-    u"arc-minute",
-    u"arc-second",
-    u"astronomical-unit",
-    u"atmosphere",
-    u"bar",
-    u"barrel",
-    u"bit",
-    u"british-thermal-unit",
-    u"bushel",
-    u"byte",
-    u"calorie",
+    u"candela",
     u"carat",
-    u"celsius",
-    u"century",
-    u"cup",
-    u"cup-metric",
-    u"dalton",
-    u"day",
-    u"day-person",
-    u"decade",
-    u"degree",
-    u"dot", // (as in "dot-per-inch")
-    u"dunam",
-    u"earth-mass",
-    u"electronvolt",
-    u"em",
-    u"fahrenheit",
-    u"fathom",
-    u"fluid-ounce",
-    u"fluid-ounce-imperial",
-    u"foodcalorie",
-    u"foot",
-    u"furlong",
-    u"g-force",
-    u"gallon",
-    u"gallon-imperial",
-    u"generic", // (i.e., "temperature-generic")
     u"gram",
-    u"hectare", // (note: other "are" derivatives are uncommon)
-    u"hertz",
-    u"horsepower",
-    u"hour",
-    u"inch",
-    u"inch-hg",
-    u"joule",
-    u"karat",
-    u"kelvin",
-    u"knot",
-    u"light-year",
-    u"liter",
-    u"lux",
-    u"meter",
-    u"meter-of-mercury", // (not "millimeter-of-mercury")
-    u"metric-ton",
-    u"mile",
-    u"mile-scandinavian",
-    u"minute",
-    u"mole",
-    u"month",
-    u"month-person",
-    u"nautical-mile",
-    u"newton",
-    u"ohm",
     u"ounce",
     u"ounce-troy",
-    u"parsec",
-    u"pascal",
-    u"percent",
-    u"permille",
-    u"permillion",
-    u"permyriad",
-    u"pint",
-    u"pint-metric",
-    u"pixel",
-    u"point",
     u"pound",
-    u"pound-force",
-    u"quart",
-    u"radian",
-    u"revolution",
-    u"second",
-    u"solar-luminosity",
-    u"solar-mass",
-    u"solar-radius",
+    u"kilogram",
     u"stone",
-    u"tablespoon",
-    u"teaspoon",
-    u"therm-us",
     u"ton",
-    u"volt",
-    u"watt",
+    u"metric-ton",
+    u"earth-mass",
+    u"solar-mass",
+    u"point",
+    u"inch",
+    u"foot",
+    u"yard",
+    u"meter",
+    u"fathom",
+    u"furlong",
+    u"mile",
+    u"nautical-mile",
+    u"mile-scandinavian",
+    u"100-kilometer",
+    u"earth-radius",
+    u"solar-radius",
+    u"astronomical-unit",
+    u"light-year",
+    u"parsec",
+    u"second",
+    u"minute",
+    u"hour",
+    u"day",
+    u"day-person",
     u"week",
     u"week-person",
-    u"yard",
+    u"month",
+    u"month-person",
     u"year",
     u"year-person",
+    u"decade",
+    u"century",
+    u"ampere",
+    u"fahrenheit",
+    u"kelvin",
+    u"celsius",
+    u"arc-second",
+    u"arc-minute",
+    u"degree",
+    u"radian",
+    u"revolution",
+    u"item",
+    u"mole",
+    u"permillion",
+    u"permyriad",
+    u"permille",
+    u"percent",
+    u"karat",
+    u"portion",
+    u"bit",
+    u"byte",
+    u"dot",
+    u"pixel",
+    u"em",
+    u"hertz",
+    u"newton",
+    u"pound-force",
+    u"pascal",
+    u"bar",
+    u"atmosphere",
+    u"ofhg",
+    u"electronvolt",
+    u"dalton",
+    u"joule",
+    u"calorie",
+    u"british-thermal-unit",
+    u"foodcalorie",
+    u"therm-us",
+    u"watt",
+    u"horsepower",
+    u"solar-luminosity",
+    u"volt",
+    u"ohm",
+    u"dunam",
+    u"acre",
+    u"hectare",
+    u"teaspoon",
+    u"tablespoon",
+    u"fluid-ounce-imperial",
+    u"fluid-ounce",
+    u"cup",
+    u"cup-metric",
+    u"pint",
+    u"pint-metric",
+    u"quart",
+    u"liter",
+    u"gallon",
+    u"gallon-imperial",
+    u"bushel",
+    u"barrel",
+    u"knot",
+    u"g-force",
+    u"lux",
 };
 
 icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
@@ -220,7 +226,7 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     // Add syntax parts (compound, power prefixes)
     b.add(u"-per-", COMPOUND_PART_PER, status);
     b.add(u"-", COMPOUND_PART_TIMES, status);
-    b.add(u"+", COMPOUND_PART_PLUS, status);
+    b.add(u"-and-", COMPOUND_PART_AND, status);
     b.add(u"square-", POWER_PART_P2, status);
     b.add(u"cubic-", POWER_PART_P3, status);
     b.add(u"p2-", POWER_PART_P2, status);
@@ -273,17 +279,20 @@ public:
     Type getType() const {
         if (fMatch <= 0) {
             UPRV_UNREACHABLE;
-        } else if (fMatch < kCompoundPartOffset) {
-            return TYPE_SI_PREFIX;
-        } else if (fMatch < kPowerPartOffset) {
-            return TYPE_COMPOUND_PART;
-        } else if (fMatch < kSimpleUnitOffset) {
-            return TYPE_POWER_PART;
-        } else if (fMatch == kSimpleUnitOffset) {
-            return TYPE_ONE;
-        } else {
-            return TYPE_SIMPLE_UNIT;
         }
+        if (fMatch < kCompoundPartOffset) {
+            return TYPE_SI_PREFIX;
+        }
+        if (fMatch < kPowerPartOffset) {
+            return TYPE_COMPOUND_PART;
+        }
+        if (fMatch < kSimpleUnitOffset) {
+            return TYPE_POWER_PART;
+        }
+        if (fMatch == kSimpleUnitOffset) {
+            return TYPE_ONE;
+        }
+        return TYPE_SIMPLE_UNIT;
     }
 
     UMeasureSIPrefix getSIPrefix() const {
@@ -350,35 +359,32 @@ private:
         int32_t match = -1;
         int32_t previ = -1;
         do {
-            fTrie.next(fSource.data()[fIndex++]);
-            if (fTrie.current() == USTRINGTRIE_NO_MATCH) {
+            auto result = fTrie.next(fSource.data()[fIndex++]);
+            if (result == USTRINGTRIE_NO_MATCH) {
                 break;
-            } else if (fTrie.current() == USTRINGTRIE_NO_VALUE) {
+            } else if (result == USTRINGTRIE_NO_VALUE) {
                 continue;
-            } else if (fTrie.current() == USTRINGTRIE_FINAL_VALUE) {
-                match = fTrie.getValue();
-                previ = fIndex;
-                break;
-            } else if (fTrie.current() == USTRINGTRIE_INTERMEDIATE_VALUE) {
-                match = fTrie.getValue();
-                previ = fIndex;
-                continue;
-            } else {
-                UPRV_UNREACHABLE;
             }
+            U_ASSERT(USTRINGTRIE_HAS_VALUE(result));
+            match = fTrie.getValue();
+            previ = fIndex;
+            if (result == USTRINGTRIE_FINAL_VALUE) {
+                break;
+            }
+            U_ASSERT(result == USTRINGTRIE_INTERMEDIATE_VALUE);
+            // continue;
         } while (fIndex < fSource.length());
 
         if (match < 0) {
-            // TODO: Make a new status code?
-            status = U_ILLEGAL_ARGUMENT_ERROR;
+            status = kUnitIdentifierSyntaxError;
         } else {
             fIndex = previ;
         }
         return Token(match);
     }
 
-    void nextSingleUnit(TempSingleUnit& result, bool& sawPlus, UErrorCode& status) {
-        sawPlus = false;
+    void nextSingleUnit(SingleUnitImpl& result, bool& sawAnd, UErrorCode& status) {
+        sawAnd = false;
         if (U_FAILURE(status)) {
             return;
         }
@@ -402,22 +408,27 @@ private:
                 return;
             }
             if (token.getType() != Token::TYPE_COMPOUND_PART) {
-                goto fail;
+                status = kUnitIdentifierSyntaxError;
+                return;
             }
             switch (token.getMatch()) {
                 case COMPOUND_PART_PER:
                     if (fAfterPer) {
-                        goto fail;
+                        status = kUnitIdentifierSyntaxError;
+                        return;
                     }
                     fAfterPer = true;
                     result.dimensionality = -1;
                     break;
 
                 case COMPOUND_PART_TIMES:
+                    if (fAfterPer) {
+                        result.dimensionality = -1;
+                    }
                     break;
 
-                case COMPOUND_PART_PLUS:
-                    sawPlus = true;
+                case COMPOUND_PART_AND:
+                    sawAnd = true;
                     fAfterPer = false;
                     break;
             }
@@ -434,7 +445,8 @@ private:
             switch (token.getType()) {
                 case Token::TYPE_POWER_PART:
                     if (state > 0) {
-                        goto fail;
+                        status = kUnitIdentifierSyntaxError;
+                        return;
                     }
                     result.dimensionality *= token.getPower();
                     previ = fIndex;
@@ -443,7 +455,8 @@ private:
 
                 case Token::TYPE_SI_PREFIX:
                     if (state > 1) {
-                        goto fail;
+                        status = kUnitIdentifierSyntaxError;
+                        return;
                     }
                     result.siPrefix = token.getSIPrefix();
                     previ = fIndex;
@@ -452,7 +465,7 @@ private:
 
                 case Token::TYPE_ONE:
                     // Skip "one" and go to the next unit
-                    return nextSingleUnit(result, sawPlus, status);
+                    return nextSingleUnit(result, sawAnd, status);
 
                 case Token::TYPE_SIMPLE_UNIT:
                     result.index = token.getSimpleUnitIndex();
@@ -460,14 +473,13 @@ private:
                     return;
 
                 default:
-                    goto fail;
+                    status = kUnitIdentifierSyntaxError;
+                    return;
             }
         }
 
-        fail:
-            // TODO: Make a new status code?
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
+        // We ran out of tokens before finding a complete single unit.
+        status = kUnitIdentifierSyntaxError;
     }
 
     void parseImpl(MeasureUnitImpl& result, UErrorCode& status) {
@@ -476,9 +488,9 @@ private:
         }
         int32_t unitNum = 0;
         while (hasNext()) {
-            bool sawPlus;
-            TempSingleUnit singleUnit;
-            nextSingleUnit(singleUnit, sawPlus, status);
+            bool sawAnd;
+            SingleUnitImpl singleUnit;
+            nextSingleUnit(singleUnit, sawAnd, status);
             if (U_FAILURE(status)) {
                 return;
             }
@@ -486,21 +498,21 @@ private:
                 continue;
             }
             bool added = result.append(singleUnit, status);
-            if (sawPlus && !added) {
-                // Two similar units are not allowed in a sequence unit
-                status = U_ILLEGAL_ARGUMENT_ERROR;
+            if (sawAnd && !added) {
+                // Two similar units are not allowed in a mixed unit
+                status = kUnitIdentifierSyntaxError;
                 return;
             }
             if ((++unitNum) >= 2) {
-                UMeasureUnitComplexity complexity = sawPlus
-                    ? UMEASURE_UNIT_SEQUENCE
+                UMeasureUnitComplexity complexity = sawAnd
+                    ? UMEASURE_UNIT_MIXED
                     : UMEASURE_UNIT_COMPOUND;
                 if (unitNum == 2) {
                     U_ASSERT(result.complexity == UMEASURE_UNIT_SINGLE);
                     result.complexity = complexity;
                 } else if (result.complexity != complexity) {
-                    // Mixed sequence and compound units
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    // Can't have mixed compound units
+                    status = kUnitIdentifierSyntaxError;
                     return;
                 }
             }
@@ -510,15 +522,15 @@ private:
 
 int32_t U_CALLCONV
 compareSingleUnits(const void* /*context*/, const void* left, const void* right) {
-    auto realLeft = static_cast<const TempSingleUnit* const*>(left);
-    auto realRight = static_cast<const TempSingleUnit* const*>(right);
+    auto realLeft = static_cast<const SingleUnitImpl* const*>(left);
+    auto realRight = static_cast<const SingleUnitImpl* const*>(right);
     return (*realLeft)->compareTo(**realRight);
 }
 
 /**
  * Generate the identifier string for a single unit in place.
  */
-void serializeSingle(const TempSingleUnit& singleUnit, bool first, CharString& output, UErrorCode& status) {
+void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& output, UErrorCode& status) {
     if (first && singleUnit.dimensionality < 0) {
         output.append("one-per-", status);
     }
@@ -546,7 +558,7 @@ void serializeSingle(const TempSingleUnit& singleUnit, bool first, CharString& o
         output.append('0' + (posPower % 10), status);
         output.append('-', status);
     } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+        status = kUnitIdentifierSyntaxError;
     }
     if (U_FAILURE(status)) {
         return;
@@ -580,7 +592,7 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
         return;
     }
     if (impl.complexity == UMEASURE_UNIT_COMPOUND) {
-        // Note: don't sort a SEQUENCE unit
+        // Note: don't sort a MIXED unit
         uprv_sortArray(
             impl.units.getAlias(),
             impl.units.length(),
@@ -598,10 +610,10 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
         return;
     }
     for (int32_t i = 1; i < impl.units.length(); i++) {
-        const TempSingleUnit& prev = *impl.units[i-1];
-        const TempSingleUnit& curr = *impl.units[i];
-        if (impl.complexity == UMEASURE_UNIT_SEQUENCE) {
-            impl.identifier.append('+', status);
+        const SingleUnitImpl& prev = *impl.units[i-1];
+        const SingleUnitImpl& curr = *impl.units[i];
+        if (impl.complexity == UMEASURE_UNIT_MIXED) {
+            impl.identifier.append("-and-", status);
             serializeSingle(curr, true, impl.identifier, status);
         } else {
             if (prev.dimensionality > 0 && curr.dimensionality < 0) {
@@ -616,9 +628,9 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
 }
 
 /** @return true if a new item was added */
-bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& status) {
+bool appendImpl(MeasureUnitImpl& impl, const SingleUnitImpl& unit, UErrorCode& status) {
     // Find a similar unit that already exists, to attempt to coalesce
-    TempSingleUnit* oldUnit = nullptr;
+    SingleUnitImpl* oldUnit = nullptr;
     for (int32_t i = 0; i < impl.units.length(); i++) {
         auto* candidate = impl.units[i];
         if (candidate->isCompatibleWith(unit)) {
@@ -628,7 +640,7 @@ bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& s
     if (oldUnit) {
         oldUnit->dimensionality += unit.dimensionality;
     } else {
-        TempSingleUnit* destination = impl.units.emplaceBack();
+        SingleUnitImpl* destination = impl.units.emplaceBack();
         if (!destination) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return false;
@@ -641,7 +653,7 @@ bool appendImpl(MeasureUnitImpl& impl, const TempSingleUnit& unit, UErrorCode& s
 } // namespace
 
 
-TempSingleUnit TempSingleUnit::forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status) {
+SingleUnitImpl SingleUnitImpl::forMeasureUnit(const MeasureUnit& measureUnit, UErrorCode& status) {
     MeasureUnitImpl temp;
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(measureUnit, temp, status);
     if (U_FAILURE(status)) {
@@ -649,15 +661,15 @@ TempSingleUnit TempSingleUnit::forMeasureUnit(const MeasureUnit& measureUnit, UE
     }
     if (impl.units.length() == 0) {
         return {};
-    } else if (impl.units.length() == 1) {
-        return *impl.units[0];
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return {};
     }
+    if (impl.units.length() == 1) {
+        return *impl.units[0];
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    return {};
 }
 
-MeasureUnit TempSingleUnit::build(UErrorCode& status) {
+MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
     MeasureUnitImpl temp;
     temp.append(*this, status);
     return std::move(temp).build(status);
@@ -694,7 +706,7 @@ void MeasureUnitImpl::takeReciprocal(UErrorCode& /*status*/) {
     }
 }
 
-bool MeasureUnitImpl::append(const TempSingleUnit& singleUnit, UErrorCode& status) {
+bool MeasureUnitImpl::append(const SingleUnitImpl& singleUnit, UErrorCode& status) {
     identifier.clear();
     return appendImpl(*this, singleUnit, status);
 }
@@ -715,21 +727,21 @@ UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
 }
 
 UMeasureSIPrefix MeasureUnit::getSIPrefix(UErrorCode& status) const {
-    return TempSingleUnit::forMeasureUnit(*this, status).siPrefix;
+    return SingleUnitImpl::forMeasureUnit(*this, status).siPrefix;
 }
 
 MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const {
-    TempSingleUnit singleUnit = TempSingleUnit::forMeasureUnit(*this, status);
+    SingleUnitImpl singleUnit = SingleUnitImpl::forMeasureUnit(*this, status);
     singleUnit.siPrefix = prefix;
     return singleUnit.build(status);
 }
 
 int32_t MeasureUnit::getDimensionality(UErrorCode& status) const {
-    return TempSingleUnit::forMeasureUnit(*this, status).dimensionality;
+    return SingleUnitImpl::forMeasureUnit(*this, status).dimensionality;
 }
 
 MeasureUnit MeasureUnit::withDimensionality(int32_t dimensionality, UErrorCode& status) const {
-    TempSingleUnit singleUnit = TempSingleUnit::forMeasureUnit(*this, status);
+    SingleUnitImpl singleUnit = SingleUnitImpl::forMeasureUnit(*this, status);
     singleUnit.dimensionality = dimensionality;
     return singleUnit.build(status);
 }
@@ -744,7 +756,7 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     MeasureUnitImpl impl = MeasureUnitImpl::forMeasureUnitMaybeCopy(*this, status);
     MeasureUnitImpl temp;
     const MeasureUnitImpl& otherImpl = MeasureUnitImpl::forMeasureUnit(other, temp, status);
-    if (impl.complexity == UMEASURE_UNIT_SEQUENCE || otherImpl.complexity == UMEASURE_UNIT_SEQUENCE) {
+    if (impl.complexity == UMEASURE_UNIT_MIXED || otherImpl.complexity == UMEASURE_UNIT_MIXED) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return {};
     }
@@ -757,15 +769,15 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     return std::move(impl).build(status);
 }
 
-LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(UErrorCode& status) const {
+LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(int32_t& outCount, UErrorCode& status) const {
     MeasureUnitImpl temp;
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(*this, temp, status);
-    const int32_t length = impl.units.length();
-    MeasureUnit* arr = new MeasureUnit[length];
-    for (int32_t i = 0; i < length; i++) {
+    outCount = impl.units.length();
+    MeasureUnit* arr = new MeasureUnit[outCount];
+    for (int32_t i = 0; i < outCount; i++) {
         arr[i] = impl.units[i]->build(status);
     }
-    return LocalArray<MeasureUnit>::withLength(arr, length);
+    return LocalArray<MeasureUnit>(arr, status);
 }
 
 

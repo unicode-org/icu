@@ -12,7 +12,6 @@ import java.util.Optional;
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrData.PrefixVisitor;
-import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
@@ -62,13 +61,14 @@ public final class CollationMapper {
      *
      * @param icuData the ICU data to be filled.
      * @param cldrData the unresolved CLDR data to process.
-     * @param icuSpecialData additional ICU data (in the "icu:" namespace)
+     * @param icuSpecialData additional ICU data (in the "icu:" namespace).
+     * @param cldrVersion version string to add to ICU data.
      * @return IcuData containing RBNF data for the given locale ID.
      */
     public static IcuData process(
-        IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData) {
+        IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData, String cldrVersion) {
 
-        CollationVisitor visitor = new CollationVisitor(icuData);
+        CollationVisitor visitor = new CollationVisitor(icuData, cldrVersion);
         icuSpecialData.ifPresent(s -> s.accept(DTD, visitor));
         cldrData.accept(DTD, visitor);
         return visitor.icuData;
@@ -76,9 +76,11 @@ public final class CollationMapper {
 
     final static class CollationVisitor implements PrefixVisitor {
         private final IcuData icuData;
+        private final String cldrVersion;
 
-        CollationVisitor(IcuData icuData) {
+        CollationVisitor(IcuData icuData, String cldrVersion) {
             this.icuData = checkNotNull(icuData);
+            this.cldrVersion = checkNotNull(cldrVersion);
             // Super special hack case because the XML data is a bit broken for the root collation
             // data (there's an empty <collation> element that's a non-leaf element and thus not
             // visited, but we should add an empty sequence to the output data.
@@ -86,7 +88,7 @@ public final class CollationMapper {
             if (icuData.getName().equals("root")) {
                 icuData.replace(RB_STANDARD_SEQUENCE, "");
                 // TODO: Collation versioning probably needs to be improved.
-                icuData.replace(RB_STANDARD_VERSION, CldrDataSupplier.getCldrVersionString());
+                icuData.replace(RB_STANDARD_VERSION, cldrVersion);
             }
         }
 
@@ -121,9 +123,7 @@ public final class CollationMapper {
                             .map(CollationMapper::removeComment)
                             .filter(s -> !s.isEmpty())::iterator);
                     icuData.replace(rbPath, rules);
-                    icuData.replace(
-                        RbPath.of("collations", type, "Version"),
-                        CldrDataSupplier.getCldrVersionString());
+                    icuData.replace(RbPath.of("collations", type, "Version"), cldrVersion);
                 }
             } else if (DEFAULT_COLLATION.matchesSuffixOf(p)) {
                 icuData.add(RB_COLLATIONS_DEFAULT, v.getValue());

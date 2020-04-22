@@ -46,6 +46,7 @@
 #include "flagparser.h"
 #include "filetools.h"
 #include "charstr.h"
+#include "uassert.h"
 
 #if U_HAVE_POPEN
 # include <unistd.h>
@@ -775,7 +776,8 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                         (optMatchArch[0] == 0 ? NULL : optMatchArch),
                         NULL,
                         gencFilePath,
-                        sizeof(gencFilePath));
+                        sizeof(gencFilePath),
+                        TRUE);
                     pkg_destroyOptMatchArch(optMatchArch);
 #if U_PLATFORM_IS_LINUX_BASED
                     result = pkg_generateLibraryFile(targetDir, mode, gencFilePath);
@@ -1131,12 +1133,15 @@ static int32_t pkg_installLibrary(const char *installDir, const char *targetDir,
     int32_t result = 0;
     char cmd[SMALL_BUFFER_MAX_SIZE];
 
-    sprintf(cmd, "cd %s && %s %s %s%s%s",
+    auto ret = snprintf(cmd,
+            SMALL_BUFFER_MAX_SIZE,
+            "cd %s && %s %s %s%s%s",
             targetDir,
             pkgDataFlags[INSTALL_CMD],
             libFileNames[LIB_FILE_VERSION],
-            installDir, PKGDATA_FILE_SEP_STRING, libFileNames[LIB_FILE_VERSION]
-            );
+            installDir, PKGDATA_FILE_SEP_STRING, libFileNames[LIB_FILE_VERSION]);
+    (void)ret;
+    U_ASSERT(0 <= ret && ret < SMALL_BUFFER_MAX_SIZE);
 
     result = runCommand(cmd);
 
@@ -1254,10 +1259,14 @@ static int32_t pkg_installFileMode(const char *installDir, const char *srcDir, c
                     buffer[bufferLength-1] = 0;
                 }
 
-                sprintf(cmd, "%s %s%s%s %s%s%s",
+                auto ret = snprintf(cmd,
+                        SMALL_BUFFER_MAX_SIZE,
+                        "%s %s%s%s %s%s%s",
                         pkgDataFlags[INSTALL_CMD],
                         srcDir, PKGDATA_FILE_SEP_STRING, buffer,
                         installDir, PKGDATA_FILE_SEP_STRING, buffer);
+                (void)ret;
+                U_ASSERT(0 <= ret && ret < SMALL_BUFFER_MAX_SIZE);
 
                 result = runCommand(cmd);
                 if (result != 0) {
@@ -1689,12 +1698,20 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
                             break;
                         }
                     }
-                    sprintf(newName, "%s_%s",
+                    auto ret = snprintf(newName,
+                            SMALL_BUFFER_MAX_SIZE,
+                            "%s_%s",
                             DATA_PREFIX[n],
                             newNameTmp);
-                    sprintf(dataName, "%s_%s",
+                    (void)ret;
+                    U_ASSERT(0 <= ret && ret < SMALL_BUFFER_MAX_SIZE);
+                    ret = snprintf(dataName,
+                            SMALL_BUFFER_MAX_SIZE,
+                            "%s_%s",
                             o->shortName,
                             DATA_PREFIX[n]);
+                    (void)ret;
+                    U_ASSERT(0 <= ret && ret < SMALL_BUFFER_MAX_SIZE);
                 }
                 if (newName[0] != 0) {
                     break;

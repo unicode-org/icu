@@ -152,7 +152,7 @@ private:
         const char* identifier,
         const char** subIdentifiers,
         int32_t subIdentifierCount);
-    void verifySequenceUnit(
+    void verifyMixedUnit(
         const MeasureUnit& unit,
         const char* identifier,
         const char** subIdentifiers,
@@ -3260,6 +3260,7 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
     };
 
     for (const auto& input : inputs) {
+        status.setScope(input);
         MeasureUnit::forIdentifier(input, status);
         status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     }
@@ -3363,14 +3364,14 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     verifySingleUnit(centimeter3, UMEASURE_SI_PREFIX_CENTI, 1, "centimeter");
     assertTrue("string piece equality", centimeter1 == centimeter3);
 
-    MeasureUnit footInch = MeasureUnit::forIdentifier("foot+inch", status);
-    MeasureUnit inchFoot = MeasureUnit::forIdentifier("inch+foot", status);
+    MeasureUnit footInch = MeasureUnit::forIdentifier("foot-and-inch", status);
+    MeasureUnit inchFoot = MeasureUnit::forIdentifier("inch-and-foot", status);
 
     const char* footInchSub[] = {"foot", "inch"};
-    verifySequenceUnit(footInch, "foot+inch",
+    verifyMixedUnit(footInch, "foot-and-inch",
         footInchSub, UPRV_LENGTHOF(footInchSub));
     const char* inchFootSub[] = {"inch", "foot"};
-    verifySequenceUnit(inchFoot, "inch+foot",
+    verifyMixedUnit(inchFoot, "inch-and-foot",
         inchFootSub, UPRV_LENGTHOF(inchFootSub));
 
     assertTrue("order matters inequality", footInch != inchFoot);
@@ -3383,7 +3384,7 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     MeasureUnit squareKiloOne = squareOne.withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
     MeasureUnit onePerSquareKiloOne = squareKiloOne.reciprocal(status);
     MeasureUnit oneOne = MeasureUnit::forIdentifier("one-one", status);
-    MeasureUnit onePlusOne = MeasureUnit::forIdentifier("one+one", status);
+    MeasureUnit onePlusOne = MeasureUnit::forIdentifier("one-and-one", status);
     MeasureUnit kilometer2 = one2.product(kilometer, status);
 
     verifySingleUnit(one1, UMEASURE_SI_PREFIX_ONE, 1, "one");
@@ -3401,6 +3402,22 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("one equality", one2 == one3);
     assertTrue("one-per-one equality", onePerOne == onePerSquareKiloOne);
     assertTrue("kilometer equality", kilometer == kilometer2);
+
+    // Test out-of-range powers
+    MeasureUnit power15 = MeasureUnit::forIdentifier("p15-kilometer", status);
+    verifySingleUnit(power15, UMEASURE_SI_PREFIX_KILO, 15, "p15-kilometer");
+    status.errIfFailureAndReset();
+    MeasureUnit power16a = MeasureUnit::forIdentifier("p16-kilometer", status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    MeasureUnit power16b = power15.product(kilometer, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    MeasureUnit powerN15 = MeasureUnit::forIdentifier("one-per-p15-kilometer", status);
+    verifySingleUnit(powerN15, UMEASURE_SI_PREFIX_KILO, -15, "one-per-p15-kilometer");
+    status.errIfFailureAndReset();
+    MeasureUnit powerN16a = MeasureUnit::forIdentifier("one-per-p16-kilometer", status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    MeasureUnit powerN16b = powerN15.product(overQuarticKilometer1, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 void MeasureFormatTest::TestIdentifiers() {
@@ -3410,7 +3427,9 @@ void MeasureFormatTest::TestIdentifiers() {
         const char* id;
         const char* normalized;
     } cases[] = {
-        { true, "square-meter-per-square-meter", "square-meter-per-square-meter" },
+        {true, "square-meter-per-square-meter", "square-meter-per-square-meter"},
+        {true, "kilogram-meter-per-square-meter-square-second",
+         "kilogram-meter-per-square-meter-square-second"},
         // TODO(ICU-20920): Add more test cases once the proper ranking is available.
     };
     for (const auto& cas : cases) {
@@ -3544,10 +3563,11 @@ void MeasureFormatTest::verifyCompoundUnit(
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(status);
-    assertEquals(uid + ": Length", subIdentifierCount, subUnits.length());
+    int32_t length;
+    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(length, status);
+    assertEquals(uid + ": Length", subIdentifierCount, length);
     for (int32_t i = 0;; i++) {
-        if (i >= subIdentifierCount || i >= subUnits.length()) break;
+        if (i >= subIdentifierCount || i >= length) break;
         assertEquals(uid + ": Sub-unit #" + Int64ToUnicodeString(i),
             subIdentifiers[i],
             subUnits[i].getIdentifier());
@@ -3557,12 +3577,12 @@ void MeasureFormatTest::verifyCompoundUnit(
     }
 }
 
-void MeasureFormatTest::verifySequenceUnit(
+void MeasureFormatTest::verifyMixedUnit(
         const MeasureUnit& unit,
         const char* identifier,
         const char** subIdentifiers,
         int32_t subIdentifierCount) {
-    IcuTestErrorCode status(*this, "verifySequenceUnit");
+    IcuTestErrorCode status(*this, "verifyMixedUnit");
     UnicodeString uid(identifier, -1, US_INV);
     assertEquals(uid + ": Identifier",
         identifier,
@@ -3572,14 +3592,15 @@ void MeasureFormatTest::verifySequenceUnit(
         unit == MeasureUnit::forIdentifier(identifier, status));
     status.errIfFailureAndReset("%s: Constructor", identifier);
     assertEquals(uid + ": Complexity",
-        UMEASURE_UNIT_SEQUENCE,
+        UMEASURE_UNIT_MIXED,
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(status);
-    assertEquals(uid + ": Length", subIdentifierCount, subUnits.length());
+    int32_t length;
+    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(length, status);
+    assertEquals(uid + ": Length", subIdentifierCount, length);
     for (int32_t i = 0;; i++) {
-        if (i >= subIdentifierCount || i >= subUnits.length()) break;
+        if (i >= subIdentifierCount || i >= length) break;
         assertEquals(uid + ": Sub-unit #" + Int64ToUnicodeString(i),
             subIdentifiers[i],
             subUnits[i].getIdentifier());

@@ -1314,7 +1314,8 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
     Edits edits;
 
     int32_t length = CaseMap::utf8ToLower("tr", U_OMIT_UNCHANGED_TEXT,
-                                          u8"IstanBul", 8, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
+                                          reinterpret_cast<const char*>(u8"IstanBul"), 8,
+                                          dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toLower(IstanBul)", UnicodeString(u"ıb"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
     static const EditChange lowerExpectedChanges[] = {
@@ -1330,7 +1331,8 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
 
     edits.reset();
     length = CaseMap::utf8ToUpper("el", U_OMIT_UNCHANGED_TEXT,
-                                  u8"Πατάτα", 6 * 2, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
+                                  reinterpret_cast<const char*>(u8"Πατάτα"), 6 * 2,
+                                  dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toUpper(Πατάτα)", UnicodeString(u"ΑΤΑΤΑ"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
     static const EditChange upperExpectedChanges[] = {
@@ -1352,7 +1354,7 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
                                   U_OMIT_UNCHANGED_TEXT |
                                   U_TITLECASE_NO_BREAK_ADJUSTMENT |
                                   U_TITLECASE_NO_LOWERCASE,
-                                  nullptr, u8"IjssEL IglOo", 12,
+                                  nullptr, reinterpret_cast<const char*>(u8"IjssEL IglOo"), 12,
                                   dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"toTitle(IjssEL IglOo)", UnicodeString(u"J"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
@@ -1370,7 +1372,8 @@ void StringCaseTest::TestCaseMapUTF8WithEdits() {
     // No explicit nor automatic edits.reset(). Edits should be appended.
     length = CaseMap::utf8Fold(U_OMIT_UNCHANGED_TEXT | U_EDITS_NO_RESET |
                                    U_FOLD_CASE_EXCLUDE_SPECIAL_I,
-                               u8"IßtanBul", 1 + 2 + 6, dest, UPRV_LENGTHOF(dest), &edits, errorCode);
+                               reinterpret_cast<const char*>(u8"IßtanBul"), 1 + 2 + 6,
+                               dest, UPRV_LENGTHOF(dest), &edits, errorCode);
     assertEquals(u"foldCase(IßtanBul)", UnicodeString(u"ıssb"),
                  UnicodeString::fromUTF8(StringPiece(dest, length)));
     static const EditChange foldExpectedChanges[] = {
