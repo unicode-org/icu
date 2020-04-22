@@ -246,7 +246,8 @@ LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit, con
         if (U_FAILURE(status)) { return result; }
         UnicodeString secondaryFormat = getWithPlural(secondaryData, StandardPlural::Form::ONE, status);
         if (U_FAILURE(status)) { return result; }
-        SimpleFormatter secondaryCompiled(secondaryFormat, 1, 1, status);
+        // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
+        SimpleFormatter secondaryCompiled(secondaryFormat, 0, 1, status);
         if (U_FAILURE(status)) { return result; }
         UnicodeString secondaryString = secondaryCompiled.getTextWithNoArguments().trim();
         // TODO: Why does UnicodeString need to be explicit in the following line?
