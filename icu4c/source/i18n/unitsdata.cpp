@@ -5,12 +5,11 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <utility>
-
 #include "cstring.h"
 #include "resource.h"
 #include "unitsdata.h"
 #include "uresimp.h"
+#include "util.h"
 
 U_NAMESPACE_BEGIN
 
@@ -19,24 +18,16 @@ namespace {
 /**
  * A ResourceSink that collects conversion rate information.
  *
- * This class is for use by ures_getAllItemsWithFallback. Example code for
- * collecting conversion info for "mile" and "foot" into conversionInfoOutput:
- *
- *     UErrorCode status = U_ZERO_ERROR;
- *     ures_getByKey(unitsBundle, "convertUnits", &fillIn, &status);
- *     MaybeStackVector<ConversionRateInfo> conversionInfoOutput;
- *     ConversionRateDataSink convertSink(conversionInfoOutput);
- *     ures_getAllItemsWithFallback(fillIn, "mile", convertSink, status);
- *     ures_getAllItemsWithFallback(fillIn, "foot", convertSink, status);
+ * This class is for use by ures_getAllItemsWithFallback.
  */
 class ConversionRateDataSink : public ResourceSink {
   public:
     /**
      * Constructor.
      * @param out The vector to which ConversionRateInfo instances are to be
-     * added.
+     * added. This vector must outlive the use of the ResourceSink.
      */
-    explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> &out) : outVector(out) {}
+    explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> *out) : outVector(out) {}
 
     /**
      * Adds the conversion rate information found in value to the output vector.
@@ -53,139 +44,70 @@ class ConversionRateDataSink : public ResourceSink {
      */
     void put(const char *source, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         if (U_FAILURE(status)) return;
-        ResourceTable conversionRateTable = value.getTable(status);
-        if (U_FAILURE(status)) return;
-
-        // Collect base unit, factor and offset from the resource.
-        int32_t lenSource = uprv_strlen(source);
-        const UChar *baseUnit = NULL, *factor = NULL, *offset = NULL;
-        int32_t lenBaseUnit, lenFactor, lenOffset;
-        const char *key;
-        for (int32_t i = 0; conversionRateTable.getKeyAndValue(i, key, value); ++i) {
-            if (uprv_strcmp(key, "target") == 0) {
-                baseUnit = value.getString(lenBaseUnit, status);
-            } else if (uprv_strcmp(key, "factor") == 0) {
-                factor = value.getString(lenFactor, status);
-            } else if (uprv_strcmp(key, "offset") == 0) {
-                offset = value.getString(lenOffset, status);
-            }
-        }
-        if (U_FAILURE(status)) return;
-        if (baseUnit == NULL || factor == NULL) {
-            // We could not find a usable conversion rate.
-            status = U_MISSING_RESOURCE_ERROR;
+        if (uprv_strcmp(source, "convertUnits") != 0) {
+            // This is very strict, however it is the cheapest way to be sure
+            // that with `value`, we're looking at the convertUnits table.
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-
-        // Check if we already have the conversion rate in question.
-        //
-        // TODO(review): We could do this skip-check *before* we fetch
-        // baseUnit/factor/offset based only on the source unit, but only if
-        // we're certain we'll never get two different baseUnits for a given
-        // source. This should be the case, since convertUnit entries in CLDR's
-        // units.xml should all point at a defined base unit for the unit
-        // category. I should make this code more efficient after
-        // double-checking we're fine with relying on such a detail from the
-        // CLDR spec?
-        fLastBaseUnit.clear();
-        fLastBaseUnit.appendInvariantChars(baseUnit, lenBaseUnit, status);
-        if (U_FAILURE(status)) return;
-        for (int32_t i = 0, len = outVector.length(); i < len; i++) {
-            if (strcmp(outVector[i]->sourceUnit.data(), source) == 0 &&
-                strcmp(outVector[i]->baseUnit.data(), fLastBaseUnit.data()) == 0) {
+        ResourceTable conversionRateTable = value.getTable(status);
+        const char *srcUnit;
+        // We're reusing `value`, which seems to be a common pattern:
+        for (int32_t unit = 0; conversionRateTable.getKeyAndValue(unit, srcUnit, value); unit++) {
+            ResourceTable unitTable = value.getTable(status);
+            const char *key;
+            UnicodeString baseUnit = ICU_Utility::makeBogusString();
+            UnicodeString factor = ICU_Utility::makeBogusString();
+            UnicodeString offset = ICU_Utility::makeBogusString();
+            for (int32_t i = 0; unitTable.getKeyAndValue(i, key, value); i++) {
+                if (uprv_strcmp(key, "target") == 0) {
+                    baseUnit = value.getUnicodeString(status);
+                } else if (uprv_strcmp(key, "factor") == 0) {
+                    factor = value.getUnicodeString(status);
+                } else if (uprv_strcmp(key, "offset") == 0) {
+                    offset = value.getUnicodeString(status);
+                }
+            }
+            if (U_FAILURE(status)) return;
+            if (baseUnit.isBogus() || factor.isBogus()) {
+                // We could not find a usable conversion rate: bad resource.
+                status = U_MISSING_RESOURCE_ERROR;
                 return;
             }
-        }
 
-        // We don't have this ConversionRateInfo yet: add it.
-        ConversionRateInfo *cr = outVector.emplaceBack();
-        if (!cr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        } else {
-            cr->sourceUnit.append(source, lenSource, status);
-            cr->baseUnit.append(fLastBaseUnit.data(), fLastBaseUnit.length(), status);
-            cr->factor.appendInvariantChars(factor, lenFactor, status);
-            if (offset != NULL) cr->offset.appendInvariantChars(offset, lenOffset, status);
+            // We don't have this ConversionRateInfo yet: add it.
+            ConversionRateInfo *cr = outVector->emplaceBack();
+            if (!cr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            } else {
+                cr->sourceUnit.append(srcUnit, status);
+                cr->baseUnit.appendInvariantChars(baseUnit, status);
+                cr->factor.appendInvariantChars(factor, status);
+                if (!offset.isBogus()) cr->offset.appendInvariantChars(offset, status);
+            }
         }
-    }
-
-    /**
-     * Returns the MeasureUnit that was the conversion base unit of the most
-     * recent call to put() - typically meaning the most recent call to
-     * ures_getAllItemsWithFallback().
-     */
-    MeasureUnit getLastBaseUnit(UErrorCode &status) {
-        return MeasureUnit::forIdentifier(fLastBaseUnit.data(), status);
+        return;
     }
 
   private:
-    MaybeStackVector<ConversionRateInfo> &outVector;
-
-    // TODO(review): felt like a hack: provides easy access to the most recent
-    // baseUnit. This hack is another point making me wonder if doing this
-    // ResourceSink thing is worthwhile. Functional style is not more verbose,
-    // and IMHO more readable than this object-based approach where the output
-    // seems/feels like a side-effect.
-    CharString fLastBaseUnit;
+    MaybeStackVector<ConversionRateInfo> *outVector;
 };
-
-/**
- * Collects conversion information for a "single unit" (a unit whose complexity
- * is UMEASURE_UNIT_SINGLE).
- *
- * This function currently only supports higher-dimensionality input units if
- * they map to "single unit" output units. This means it don't support
- * square-bar, one-per-bar, square-joule or one-per-joule. (Some unit types in
- * this class: volume, consumption, torque, force, pressure, speed,
- * acceleration, and more).
- *
- * TODO(hugovdm): maybe find and share (in documentation) a solid argument for
- * why these kinds of input units won't be needed with higher dimensionality? Or
- * start supporting them... Also: add unit tests demonstrating the
- * U_ILLEGAL_ARGUMENT_ERROR returned for such units.
- *
- * @param unit The input unit. Its complexity must be UMEASURE_UNIT_SINGLE, but
- * it may have a dimensionality != 1.
- * @param converUnitsBundle A UResourceBundle instance for the convertUnits
- * resource.
- * @param convertSink The ConversionRateDataSink through which
- * ConversionRateInfo instances are to be collected.
- * @param status The standard ICU error code output parameter.
- */
-void processSingleUnit(const MeasureUnit &unit, const UResourceBundle *convertUnitsBundle,
-                       ConversionRateDataSink &convertSink, UErrorCode &status) {
-    if (U_FAILURE(status)) return;
-    int32_t dimensionality = unit.getDimensionality(status);
-
-    // Fetch the relevant entry in convertUnits.
-    MeasureUnit simple = unit;
-    if (dimensionality != 1 || simple.getSIPrefix(status) != UMEASURE_SI_PREFIX_ONE) {
-        simple = unit.withDimensionality(1, status).withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
-    }
-    ures_getAllItemsWithFallback(convertUnitsBundle, simple.getIdentifier(), convertSink, status);
-}
 
 } // namespace
 
-MaybeStackVector<ConversionRateInfo> U_I18N_API
-getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status) {
-    MaybeStackVector<ConversionRateInfo> result;
-    if (U_FAILURE(status)) return result;
-
+void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status) {
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    StackUResourceBundle convertUnitsBundle;
-    ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
-    ConversionRateDataSink convertSink(result);
+    ConversionRateDataSink sink(&result);
+    ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", sink, status);
+}
 
-    for (int i = 0; i < units.length(); i++) {
-        int32_t numSingleUnits;
-        LocalArray<MeasureUnit> singleUnits = units[i]->splitToSingleUnits(numSingleUnits, status);
-
-        for (int i = 0; i < numSingleUnits; i++) {
-            processSingleUnit(singleUnits[i], convertUnitsBundle.getAlias(), convertSink, status);
-        }
-    }
+// TODO(hugovdm): ensure this gets removed. Currently
+// https://github.com/sffc/icu/pull/32 is making use of it.
+MaybeStackVector<ConversionRateInfo> U_I18N_API
+getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &, UErrorCode &status) {
+    MaybeStackVector<ConversionRateInfo> result;
+    getAllConversionRates(result, status);
     return result;
 }
 

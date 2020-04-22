@@ -1,3 +1,6 @@
+# Copyright (C) 2020 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
 # This file is a copy of common/testData/units/unitsTest.txt from CLDR.
 # WIP/TODO(hugovdm): determine a good update procedure and document it.
 
