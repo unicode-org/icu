@@ -4,6 +4,7 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static org.unicode.cldr.api.CldrDataType.LDML;
 
@@ -18,6 +19,7 @@ import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
@@ -104,7 +106,7 @@ public final class AlternateLocaleData {
         }
 
         private final class AltData extends FilteredData {
-            // Calculated per locale/data instance to make lokup as fast as possible.
+            // Calculated per locale/data instance to make lookup as fast as possible.
             private final ImmutableMap<CldrPath, CldrPath> altPaths;
             // Any source paths which are not also target paths are removed. This is legacy
             // behaviour inherited from the original build tools, the reason for which is not
@@ -126,6 +128,24 @@ public final class AlternateLocaleData {
                 this.toRemove = altPaths.values().stream()
                     .filter(p -> !this.altPaths.containsKey(p))
                     .collect(toImmutableSet());
+                // "Removed" paths are the alternate paths which we expect to replace existing
+                // paths, so we check that the paths-to-be-replaced actually exist (otherwise we
+                // would just remove the alt-path without adding a new path). CLDR data should be
+                // constructed so this never happens (i.e. alternate paths should never exist
+                // without an associated "default" path).
+                ImmutableSet<CldrPath> missingSourcePaths =
+                    altPaths.entrySet().stream()
+                        .filter(e -> toRemove.contains(e.getValue()))
+                        .filter(e -> getSourceData().get(e.getKey()) == null)
+                        .map(Map.Entry::getKey)
+                        .collect(toImmutableSet());
+                checkState(missingSourcePaths.isEmpty(),
+                    "\n**** INCONSISTENT CLDR DATA FOR LOCALE: %s ****\n"
+                        + "Alternate values were specified (via <altPath> mappings in the Ant build"
+                        + " file) for the following CLDR paths, but these paths do not exist.\n%s\n"
+                        + "***********************************************",
+                    localeId,
+                    Joiner.on('\n').join(missingSourcePaths));
             }
 
             @Override
