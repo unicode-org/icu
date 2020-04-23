@@ -348,6 +348,7 @@ const ListFormatInternal* ListFormatter::getListFormatInternal(
     return result;
 }
 
+#if !UCONFIG_NO_FORMATTING
 static const char* typeWidthToStyleString(UListFormatterType type, UListFormatterWidth width) {
     switch (type) {
         case ULISTFMT_TYPE_AND:
@@ -391,6 +392,7 @@ static const char* typeWidthToStyleString(UListFormatterType type, UListFormatte
 
     return nullptr;
 }
+#endif
 
 static const UChar solidus = 0x2F;
 static const UChar aliasPrefix[] = { 0x6C,0x69,0x73,0x74,0x50,0x61,0x74,0x74,0x65,0x72,0x6E,0x2F }; // "listPattern/"
@@ -511,9 +513,14 @@ ListFormatter* ListFormatter::createInstance(UErrorCode& errorCode) {
 }
 
 ListFormatter* ListFormatter::createInstance(const Locale& locale, UErrorCode& errorCode) {
+#if !UCONFIG_NO_FORMATTING
     return createInstance(locale, ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_WIDE, errorCode);
+#else
+    return createInstance(locale, "standard", errorCode);
+#endif
 }
 
+#if !UCONFIG_NO_FORMATTING
 ListFormatter* ListFormatter::createInstance(
         const Locale& locale, UListFormatterType type, UListFormatterWidth width, UErrorCode& errorCode) {
     const char* style = typeWidthToStyleString(type, width);
@@ -523,6 +530,7 @@ ListFormatter* ListFormatter::createInstance(
     }
     return createInstance(locale, style, errorCode);
 }
+#endif
 
 ListFormatter* ListFormatter::createInstance(const Locale& locale, const char *style, UErrorCode& errorCode) {
     const ListFormatInternal* listFormatInternal = getListFormatInternal(locale, style, errorCode);

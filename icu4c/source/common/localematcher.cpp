@@ -466,6 +466,7 @@ LocaleMatcher::LocaleMatcher(LocaleMatcher &&src) U_NOEXCEPT :
         thresholdDistance(src.thresholdDistance),
         demotionPerDesiredLocale(src.demotionPerDesiredLocale),
         favorSubtag(src.favorSubtag),
+        direction(src.direction),
         supportedLocales(src.supportedLocales), lsrs(src.lsrs),
         supportedLocalesLength(src.supportedLocalesLength),
         supportedLsrToIndex(src.supportedLsrToIndex),
@@ -502,6 +503,7 @@ LocaleMatcher &LocaleMatcher::operator=(LocaleMatcher &&src) U_NOEXCEPT {
     thresholdDistance = src.thresholdDistance;
     demotionPerDesiredLocale = src.demotionPerDesiredLocale;
     favorSubtag = src.favorSubtag;
+    direction = src.direction;
     supportedLocales = src.supportedLocales;
     lsrs = src.lsrs;
     supportedLocalesLength = src.supportedLocalesLength;
