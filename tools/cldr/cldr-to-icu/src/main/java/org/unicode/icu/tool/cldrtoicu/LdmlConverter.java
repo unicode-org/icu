@@ -567,6 +567,7 @@ public final class LdmlConverter {
     }
 
     private void writeDependencyGraph(Path dir, DependencyGraph depGraph) {
+        createDirectory(dir);
         try (BufferedWriter w = Files.newBufferedWriter(dir.resolve("LOCALE_DEPS.json"), UTF_8);
             PrintWriter out = new PrintWriter(w)) {
             depGraph.writeJsonTo(out, fileHeader);
