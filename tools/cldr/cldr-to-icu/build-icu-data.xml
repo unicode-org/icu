@@ -315,7 +315,7 @@
 
             <!-- The following elements configure alternate values for some special case paths.
                  The target path will only be replaced if both it, and the source path, exist in
-                 the CLDR data (new paths will not be added if only the source path exists).
+                 the CLDR data (paths will not be modified if only the source path exists).
 
                  Since the paths must represent the same semantic type of data, they must be in the
                  same "namespace" (same element names) and must not contain value attributes. Thus

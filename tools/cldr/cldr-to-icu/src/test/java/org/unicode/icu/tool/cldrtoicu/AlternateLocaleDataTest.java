@@ -96,9 +96,10 @@ public class AlternateLocaleDataTest {
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
 
-        // We still remove the source even if there was no target.
-        assertValuesUnordered(unresolved);
-        assertValuesUnordered(resolved);
+        // If there's no target the alt-path mapping is incomplete and we do nothing (this matches
+        // the old CLDR tool behaviour and reasonable but can hide inconsistencies in CLDR data).
+        assertValuesUnordered(unresolved, source);
+        assertValuesUnordered(resolved, source);
     }
 
     @Test
