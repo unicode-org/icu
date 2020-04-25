@@ -1554,6 +1554,11 @@ metaZones:table(nofallback){
             {
                 "America_Pacific",
                 "1973-10-28 09:00",
+                "2020-03-08 10:00",
+            }
+            {
+                "America_Mountain",
+                "2020-03-08 10:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2527,6 +2532,13 @@ metaZones:table(nofallback){
         "America:Whitehorse"{
             {
                 "America_Pacific",
+                "1970-01-01 00:00",
+                "2020-03-08 10:00",
+            }
+            {
+                "America_Mountain",
+                "2020-03-08 10:00",
+                "9999-12-31 23:59",
             }
         }
         "America:Winnipeg"{
