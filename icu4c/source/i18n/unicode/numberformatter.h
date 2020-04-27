@@ -1509,8 +1509,8 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
-     * NOTE:    If the `usage` is set, the output unit **will be changed**
-     *          according to the `usage`, `locale` and `unit` values.
+     * NOTE: If the `usage` is set, the output unit **will be changed**
+     *       according to the `usage`, `locale` and `unit` values.
      * 
      * <pre>
      * NumberFormatter::with().unit(MeasureUnit::getMeter())
