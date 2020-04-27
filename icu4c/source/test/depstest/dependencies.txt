@@ -1063,7 +1063,7 @@ group: sharedbreakiterator
     breakiterator
 
 group: units_extra
-    measunit_extra.o unitsdata.o unitconverter.o 
+    measunit_extra.o unitconverter.o 
   deps
     units ucharstriebuilder ucharstrie uclean_i18n
 
