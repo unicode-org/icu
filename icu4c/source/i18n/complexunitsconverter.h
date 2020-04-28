@@ -31,10 +31,10 @@ class U_I18N_API ComplexUnitsConverter {
      * @param status
      */
     ComplexUnitsConverter(const MeasureUnit inputUnit, const MaybeStackVector<MeasureUnit> outputUnits,
-                          const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status);
+                          const ConversionRates &ratesInfo, UErrorCode &status);
 
     ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
-                          const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status);
+                          const ConversionRates &ratesInfo, UErrorCode &status);
 
     // Returns true if the `quantity` in the `inputUnit` is greater than or equal than the `limit` in the
     // biggest `outputUnits`

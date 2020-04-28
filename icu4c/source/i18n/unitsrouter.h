@@ -18,12 +18,12 @@
 
 U_NAMESPACE_BEGIN
 
-struct ConverterPreference {
+struct ConverterPreference : UMemory {
     ComplexUnitsConverter converter;
     double limit;
 
     ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit,
-                        const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status)
+                        const ConversionRates &ratesInfo, UErrorCode &status)
         : converter(source, complexTarget, ratesInfo, status), limit(limit) {}
 };
 

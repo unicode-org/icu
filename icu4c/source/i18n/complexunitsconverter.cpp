@@ -15,8 +15,7 @@
 U_NAMESPACE_BEGIN
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
-                                             const MaybeStackVector<ConversionRateInfo> &ratesInfo,
-                                             UErrorCode &status) {
+                                             const ConversionRates &ratesInfo, UErrorCode &status) {
     int32_t length;
     auto singleUnits = outputUnits.splitToSingleUnits(length, status);
     MaybeStackVector<MeasureUnit> singleUnitsInOrder;
@@ -30,8 +29,7 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
                                              const MaybeStackVector<MeasureUnit> outputUnits,
-                                             const MaybeStackVector<ConversionRateInfo> &ratesInfo,
-                                             UErrorCode &status) {
+                                             const ConversionRates &ratesInfo, UErrorCode &status) {
     if (outputUnits.length() == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;

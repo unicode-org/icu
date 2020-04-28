@@ -268,7 +268,7 @@ void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum) {
 /*
  * Extracts `Factor` from a complete string factor. e.g. "ft2m^3*1007/cup2m3*3"
  *
- * TODO: unused parameter 'status' [-Wunused-parameter]
+ * TODO: warning: unused parameter 'status' [-Wunused-parameter]
  */
 Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
     Factor result;
@@ -343,7 +343,7 @@ void substituteSingleConstant(int32_t constantPower,
     }
 }
 
-// TODO: unused parameter 'status' [-Wunused-parameter]
+// TODO: warning: unused parameter 'status' [-Wunused-parameter]
 void substituteConstants(Factor &factor, UErrorCode &status) {
     double constantsValues[CONSTANTS_COUNT];
 

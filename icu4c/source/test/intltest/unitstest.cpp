@@ -157,10 +157,8 @@ void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
 
-    MaybeStackVector<ConversionRateInfo> unitsInfos;
-    getAllConversionRates(unitsInfos, status);
-
-    UnitConverter converter(sourceUnit, targetUnit, unitsInfos, status);
+    ConversionRates conversionRates(status);
+    UnitConverter converter(sourceUnit, targetUnit, conversionRates, status);
 
     double actual = converter.convert(testCase.inputValue);
 

@@ -42,7 +42,7 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
  */
-class U_I18N_API UnitConverter {
+class U_I18N_API UnitConverter : public UMemory {
   public:
     /**
      * Constructor of `UnitConverter`.

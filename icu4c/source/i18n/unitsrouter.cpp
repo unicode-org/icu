@@ -25,9 +25,12 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece 
     const char *region = "001"; // FIXME extract from locale.
     CharString category;
     MeasureUnit baseUnit;
-    MaybeStackVector<ConversionRateInfo> conversionRates;
+    ConversionRates conversionRates(status);
+
+    // WIP/TODO(hugovdm): drop tmpConversionRates, redo getUnitsData.
+    MaybeStackVector<ConversionRateInfo> tmpConversionRates;
     MaybeStackVector<UnitPreference> unitPreferences;
-    getUnitsData(region, usage.data(), inputUnit, category, baseUnit, conversionRates, unitPreferences,
+    getUnitsData(region, usage.data(), inputUnit, category, baseUnit, tmpConversionRates, unitPreferences,
                  status);
 
     for (int i = 0, n = unitPreferences.length(); i < n; ++i) {
