@@ -724,6 +724,9 @@ void UnitsTest::testPreferences() {
 // this would duplicate some of the input data. We leave end-to-end testing to
 // take care of that. Running `intltest` with `-v` will print out the loaded
 // output for easy visual inspection.
+//
+// WIP/TODO(hugovdm): getUnitsData is currently broken. Show it in the test an
+// fix it!
 void UnitsTest::testGetUnitsData() {
     struct {
         // Input parameters

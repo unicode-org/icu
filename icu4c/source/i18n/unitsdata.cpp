@@ -234,23 +234,14 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
                   CharString &category, MeasureUnit &baseUnit,
                   MaybeStackVector<ConversionRateInfo> &conversionRates,
                   MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status) {
-    // This first fetches conversion info for the inputUnit, to find out the
-    // base unit. Next it fetches the category and unit preferences for the
-    // given usage and region. Finally it fetches conversion rates again, for
-    // each of the units in the regional preferences for the given usage.
+    // This first fetches all conversion info. Next it fetches the category and
+    // unit preferences for the given usage and region.
 
     // In this function we use LocalUResourceBundlePointers for resource bundles
     // that don't change, and StackUResourceBundles for structures we use as
     // fillin.
-    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    StackUResourceBundle convertUnitsBundle;
-    ConversionRateDataSink convertSink(&conversionRates);
 
-    // baseUnit
-    MeasureUnit inputBase = inputUnit.withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
-    ures_getByKey(unitsBundle.getAlias(), "convertUnits", convertUnitsBundle.getAlias(), &status);
-    ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), inputBase.getIdentifier(), convertSink,
-                                 status);
+    getAllConversionRates(conversionRates, status);
     if (U_FAILURE(status)) return;
     if (conversionRates.length() < 1) {
         // This is defensive programming, because this shouldn't happen: if
@@ -259,10 +250,13 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
         status = U_MISSING_RESOURCE_ERROR;
         return;
     }
+    // TODO(hugovdm): this is broken. We fetch all conversion rates now, the
+    // first is nothing special.
     const char *baseIdentifier = conversionRates[0]->baseUnit.data();
     baseUnit = MeasureUnit::forIdentifier(baseIdentifier, status);
 
-    // category
+    // find category
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
     LocalUResourceBundlePointer unitQuantities(
         ures_getByKey(unitsBundle.getAlias(), "unitQuantities", NULL, &status));
     int32_t categoryLength;
@@ -290,15 +284,6 @@ void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit
 
     // Collect all the preferences into unitPreferences
     collectUnitPrefs(stackBundle.getAlias(), unitPreferences, status);
-
-    // Load ConversionRateInfo for each of the units in unitPreferences
-    for (int32_t i = 0; i < unitPreferences.length(); i++) {
-        MeasureUnit prefUnitBase = MeasureUnit::forIdentifier(unitPreferences[i]->unit.data(), status)
-                                       .withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
-        // convertSink will skip conversion rates we already have
-        ures_getAllItemsWithFallback(convertUnitsBundle.getAlias(), prefUnitBase.getIdentifier(),
-                                     convertSink, status);
-    }
 }
 
 U_NAMESPACE_END
