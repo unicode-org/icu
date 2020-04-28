@@ -21,9 +21,10 @@ enum U_I18N_API UnitsConvertibilityState {
     UNCONVERTIBLE,
 };
 
-UnitsConvertibilityState U_I18N_API
-checkConvertibility(const MeasureUnit &source, const MeasureUnit &target,
-                const MaybeStackVector<ConversionRateInfo> &conversionRateInfo, UErrorCode &status);
+UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
+                                                        const MeasureUnit &target,
+                                                        const ConversionRates &conversionRates,
+                                                        UErrorCode &status);
 
 U_NAMESPACE_END
 

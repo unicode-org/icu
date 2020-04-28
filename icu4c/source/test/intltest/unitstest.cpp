@@ -27,7 +27,6 @@ class UnitsTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
     void testConversionCapability();
-    // TODO(hugovdm,younies): add conversion testing (only convertability atm).
     void testConversions();
     void testPreferences();
     // void testBasic();
@@ -76,6 +75,7 @@ void UnitsTest::testConversionCapability() {
         {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                          //
         {"square-hectare", "p4-foot", CONVERTIBLE},                                        //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},            //
+        // TODO: Remove the following test cases after hocking up unitsTest.txt.
         {"g-force", "meter-per-square-second", CONVERTIBLE},                               //
         {"ohm", "kilogram-square-meter-per-cubic-second-square-ampere", CONVERTIBLE},      //
         {"electronvolt", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
@@ -124,12 +124,8 @@ void UnitsTest::testConversionCapability() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
-        const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-        auto convertibility = checkConvertibility(source, target, conversionRateInfoList, status);
+        ConversionRates conversionRates(status);
+        auto convertibility = checkConvertibility(source, target, conversionRates, status);
 
         assertEquals("Conversion Capability", testCase.expectedState, convertibility);
     }
@@ -275,7 +271,7 @@ StringPiece trimField(char *(&field)[2]) {
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) return;
-    UnitsTest *unitsTest = (UnitsTest *)context;
+    UnitsTest* unitsTest = (UnitsTest*)context;
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*unitsTest, "unitsTestDatalineFn");
 
@@ -302,27 +298,29 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
                      quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(),
                      expected, commentConversionFormula.length(), commentConversionFormula.data());
 
-    // Convertibility:
-    MaybeStackVector<MeasureUnit> units;
-    units.emplaceBack(sourceUnit);
-    units.emplaceBack(targetUnit);
-    const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-    if (status.errIfFailureAndReset("getConversionRatesInfo(...)")) return;
+    // WIP(hugovdm): hook this up to actual tests.
 
-    auto actualState = checkConvertibility(sourceUnit, targetUnit, conversionRateInfoList, status);
-    if (status.errIfFailureAndReset("checkConvertibility(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
-                                    targetUnit.getIdentifier())) {
-        return;
-    }
+    // // Convertibility:
+    // MaybeStackVector<MeasureUnit> units;
+    // units.emplaceBack(sourceUnit);
+    // units.emplaceBack(targetUnit);
+    // const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
+    // if (status.errIfFailureAndReset("getConversionRatesInfo(...)")) return;
 
-    CharString msg;
-    msg.append("convertible: ", status)
-        .append(sourceUnit.getIdentifier(), status)
-        .append(" -> ", status)
-        .append(targetUnit.getIdentifier(), status);
-    if (status.errIfFailureAndReset("msg construction")) return;
+    // auto actualState = checkUnitsState(sourceUnit, targetUnit, conversionRateInfoList, status);
+    // if (status.errIfFailureAndReset("checkUnitsState(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
+    //                                 targetUnit.getIdentifier())) {
+    //     return;
+    // }
 
-    unitsTest->assertTrue(msg.data(), actualState != UNCONVERTIBLE);
+    // CharString msg;
+    // msg.append("convertible: ", status)
+    //     .append(sourceUnit.getIdentifier(), status)
+    //     .append(" -> ", status)
+    //     .append(targetUnit.getIdentifier(), status);
+    // if (status.errIfFailureAndReset("msg construction")) return;
+
+    // unitsTest->assertTrue(msg.data(), actualState != UNCONVERTIBLE);
 
     // TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn:
     //
@@ -356,9 +354,7 @@ void UnitsTest::testConversions() {
 
     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode)))
-    {
         return;
-    }
 }
 
 /**

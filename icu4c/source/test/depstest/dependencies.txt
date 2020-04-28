@@ -1063,7 +1063,7 @@ group: sharedbreakiterator
     breakiterator
 
 group: units_extra
-    measunit_extra.o unitconverter.o 
+    measunit_extra.o
   deps
     units ucharstriebuilder ucharstrie uclean_i18n
 
@@ -1073,7 +1073,7 @@ group: units
     stringenumeration errorcode
 
 group: unitsformatter
-    unitsdata.o
+    unitsdata.o unitconverter.o
   deps
     resourcebundle
 
