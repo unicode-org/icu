@@ -265,13 +265,21 @@ StringPiece trimField(char *(&field)[2]) {
     return StringPiece(start, length);
 }
 
+struct UnitsTestContext {
+    UnitsTest *unitsTest;
+    ConversionRates *conversionRates;
+};
+
 /**
- * Deals with a single data-driven unit test for unit conversions. This
- * UParseLineFn for use by u_parseDelimitedFile is intended for "unitsTest.txt".
+ * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
+ * This is a UParseLineFn as required by u_parseDelimitedFile.
+ *
+ * context must point at a UnitsTestContext struct.
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
-    if (U_FAILURE(*pErrorCode)) return;
-    UnitsTest* unitsTest = (UnitsTest*)context;
+    if (U_FAILURE(*pErrorCode)) { return; }
+    UnitsTestContext *ctx = (UnitsTestContext *)context;
+    UnitsTest* unitsTest = ctx->unitsTest;
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*unitsTest, "unitsTestDatalineFn");
 
@@ -287,10 +295,10 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     unum_close(nf);
 
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
-    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) return;
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) { return; }
 
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
-    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) return;
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) { return; }
 
     unitsTest->logln("Quantity (Category): \"%.*s\", "
                      "Expected value of \"1000 %.*s in %.*s\": %f, "
@@ -298,35 +306,35 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
                      quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(),
                      expected, commentConversionFormula.length(), commentConversionFormula.data());
 
-    // WIP(hugovdm): hook this up to actual tests.
+    bool FIXME_skip_tests = false;
+    if (FIXME_skip_tests) {
+        unitsTest->logln("FIXME: skipping tests related to UnitConverter(«%s», «%s», status).",
+                         sourceUnit.getIdentifier(), targetUnit.getIdentifier());
+    } else {
+        // Convertibility:
+        auto convertibility = checkConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
+        if (status.errIfFailureAndReset("checkConvertibility(<%s>, <%s>, ...)",
+                                        sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+            return;
+        }
+        CharString msg;
+        msg.append("convertible: ", status)
+            .append(sourceUnit.getIdentifier(), status)
+            .append(" -> ", status)
+            .append(targetUnit.getIdentifier(), status);
+        if (status.errIfFailureAndReset("msg construction")) { return; }
+        unitsTest->assertTrue(msg.data(), convertibility != UNCONVERTIBLE);
 
-    // // Convertibility:
-    // MaybeStackVector<MeasureUnit> units;
-    // units.emplaceBack(sourceUnit);
-    // units.emplaceBack(targetUnit);
-    // const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-    // if (status.errIfFailureAndReset("getConversionRatesInfo(...)")) return;
-
-    // auto actualState = checkUnitsState(sourceUnit, targetUnit, conversionRateInfoList, status);
-    // if (status.errIfFailureAndReset("checkUnitsState(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
-    //                                 targetUnit.getIdentifier())) {
-    //     return;
-    // }
-
-    // CharString msg;
-    // msg.append("convertible: ", status)
-    //     .append(sourceUnit.getIdentifier(), status)
-    //     .append(" -> ", status)
-    //     .append(targetUnit.getIdentifier(), status);
-    // if (status.errIfFailureAndReset("msg construction")) return;
-
-    // unitsTest->assertTrue(msg.data(), actualState != UNCONVERTIBLE);
-
-    // TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn:
-    //
-    // UnitConverter converter(sourceUnit, targetUnit, status);
-    // double got = converter.convert(1000, status);
-    // unitsTest->assertEqualsNear(quantity.data(), expected, got, 0.0001);
+        // TODO(hugovdm,younies): the following code can be uncommented (and
+        // fixed) once merged with a UnitConverter branch:
+        // UnitConverter converter(sourceUnit, targetUnit, unitsTest->conversionRates_, status);
+        // if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
+        //                                 sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+        //     return;
+        // }
+        // double got = converter.convert(1000);
+        // unitsTest->assertEqualsNear(fields[0][0], expected, got, 0.0001);
+    }
 }
 
 /**
@@ -352,9 +360,12 @@ void UnitsTest::testConversions() {
     path.appendPathPart("units", errorCode);
     path.appendPathPart(filename, errorCode);
 
-    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
-    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode)))
+    ConversionRates rates(errorCode);
+    UnitsTestContext ctx = {this, &rates};
+    u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, &ctx, errorCode);
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
+    }
 }
 
 /**
