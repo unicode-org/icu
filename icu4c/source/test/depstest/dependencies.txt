@@ -1075,7 +1075,7 @@ group: units
 group: unitsformatter
     unitsdata.o unitconverter.o
   deps
-    resourcebundle
+    resourcebundle units_extra
 
 group: decnumber
     decContext.o decNumber.o
