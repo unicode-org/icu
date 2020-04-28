@@ -15,26 +15,11 @@
 U_NAMESPACE_BEGIN
 
 namespace {
-
-const ConversionRateInfo *
-extractConversionInfo(StringPiece source,
-                      const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList,
-                      UErrorCode &status) {
-    for (size_t i = 0, n = conversionRateInfoList.length(); i < n; ++i) {
-        if (conversionRateInfoList[i]->sourceUnit.toStringPiece() == source)
-            return conversionRateInfoList[i];
-    }
-
-    status = U_INTERNAL_PROGRAM_ERROR;
-    return nullptr;
-}
-
 /**
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
  * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
  */
-MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
-                                    const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList,
+MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionRates &conversionRates,
                                     UErrorCode &status) {
     MeasureUnit result;
     int32_t count;
@@ -46,8 +31,7 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
         // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
         // we will use `meter`
         const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
-        const auto rateInfo =
-            extractConversionInfo(singleUnitImpl.identifier, conversionRateInfoList, status);
+        const auto rateInfo = conversionRates.extractConversionInfo(singleUnitImpl.identifier, status);
         if (U_FAILURE(status)) return result;
         if (rateInfo == nullptr) {
             status = U_INTERNAL_PROGRAM_ERROR;
@@ -61,11 +45,11 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
         int32_t baseUnitsCount;
         auto baseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCount, status);
         for (int j = 0; j < baseUnitsCount; j++) {
-            result =
-                result.product(baseUnits[j].withDimensionality(baseUnits[j].getDimensionality(status) *
-                                                                   singleUnit.getDimensionality(status),
-                                                               status),
-                               status);
+            int8_t newDimensionality =
+                baseUnits[j].getDimensionality(status) * singleUnit.getDimensionality(status);
+            result = result.product(baseUnits[j].withDimensionality(newDimensionality, status), status);
+
+            if (U_FAILURE(status)) { return result; }
         }
     }
 
@@ -74,11 +58,12 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source,
 
 } // namespace
 
-UnitsConvertibilityState U_I18N_API checkConvertibility(
-    const MeasureUnit &source, const MeasureUnit &target,
-    const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList, UErrorCode &status) {
-    auto sourceBaseUnit = extractCompoundBaseUnit(source, conversionRateInfoList, status);
-    auto targetBaseUnit = extractCompoundBaseUnit(target, conversionRateInfoList, status);
+UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
+                                                        const MeasureUnit &target,
+                                                        const ConversionRates &conversionRates,
+                                                        UErrorCode &status) {
+    auto sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
+    auto targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
 
     if (U_FAILURE(status)) return UNCONVERTIBLE;
 
