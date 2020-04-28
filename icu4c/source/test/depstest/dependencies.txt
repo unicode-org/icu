@@ -1065,7 +1065,7 @@ group: sharedbreakiterator
 group: units_extra
     measunit_extra.o unitconverter.o
   deps
-    units ucharstriebuilder ucharstrie uclean_i18n
+    units ucharstriebuilder ucharstrie uclean_i18n double_conversion
 
 group: units
     measunit.o currunit.o nounit.o
