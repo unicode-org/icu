@@ -2197,6 +2197,11 @@ DateTimeMatcher::DateTimeMatcher(const DateTimeMatcher& other) {
     copyFrom(other.skeleton);
 }
 
+DateTimeMatcher& DateTimeMatcher::operator=(const DateTimeMatcher& other) {
+    copyFrom(other.skeleton);
+    return *this;
+}
+
 
 void
 DateTimeMatcher::set(const UnicodeString& pattern, FormatParser* fp) {

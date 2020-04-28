@@ -7,21 +7,23 @@
 #ifndef __GETUNITSDATA_H__
 #define __GETUNITSDATA_H__
 
-#include "charstr.h" // CharString
+#include "charstr.h"
 #include "cmemory.h"
-#include "unicode/errorcode.h"
 #include "unicode/measunit.h"
-#include "unicode/measure.h"
 #include "unicode/stringpiece.h"
 
 U_NAMESPACE_BEGIN
 
-// Encapsulates "convertUnits" information from units resources, specifying how
-// to convert from one unit to another.
-//
-// Information in this class is still in the form of strings: symbolic constants
-// need to be interpreted.
-class U_I18N_API ConversionRateInfo {
+/**
+ * Encapsulates "convertUnits" information from units resources, specifying how
+ * to convert from one unit to another.
+ *
+ * Information in this class is still in the form of strings: symbolic constants
+ * need to be interpreted. Rationale: symbols can cancel out for higher
+ * precision conversion - going from feet to inches should cancel out the
+ * `ft_to_m` constant.
+ */
+class U_I18N_API ConversionRateInfo : public UMemory {
   public:
     ConversionRateInfo(){};
     ConversionRateInfo(StringPiece sourceUnit, StringPiece baseUnit, StringPiece factor,
@@ -38,6 +40,26 @@ class U_I18N_API ConversionRateInfo {
     CharString offset;
 };
 
+/**
+ * Returns ConversionRateInfo for all supported conversions.
+ *
+ * @param result Receives the set of conversion rates.
+ * @param status Receives status.
+ */
+void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status);
+
+/**
+ * Temporary backward-compatibility function.
+ *
+ * TODO(hugovdm): ensure this gets removed. Currently
+ * https://github.com/sffc/icu/pull/32 is making use of it.
+ *
+ * @param units Ignored.
+ * @return the result of getAllConversionRates.
+ */
+MaybeStackVector<ConversionRateInfo>
+    U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status);
+
 // Encapsulates unitPreferenceData information from units resources, specifying
 // a sequence of output unit preferences.
 struct U_I18N_API UnitPreference {
@@ -46,16 +68,6 @@ struct U_I18N_API UnitPreference {
     double geq;
     CharString skeleton;
 };
-
-/**
- * Collects and returns ConversionRateInfo needed for conversions for a set of
- * units.
- *
- * @param units The units for which to load conversion data.
- * @param status Receives status.
- */
-MaybeStackVector<ConversionRateInfo>
-    U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status);
 
 /**
  * Collects the data needed for converting the inputUnit type to output units

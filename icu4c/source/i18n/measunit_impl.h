@@ -82,7 +82,7 @@ struct SingleUnitImpl : public UMemory {
 
 /**
  * Internal representation of measurement units. Capable of representing all complexities of units,
- * including sequence and compound units.
+ * including mixed and compound units.
  */
 struct MeasureUnitImpl : public UMemory {
     /** Extract the MeasureUnitImpl from a MeasureUnit. */
@@ -151,7 +151,7 @@ struct MeasureUnitImpl : public UMemory {
     /** Mutates this MeasureUnitImpl to append a single unit. */
     bool append(const SingleUnitImpl& singleUnit, UErrorCode& status);
 
-    /** The complexity, either SINGLE, COMPOUND, or SEQUENCE. */
+    /** The complexity, either SINGLE, COMPOUND, or MIXED. */
     UMeasureUnitComplexity complexity = UMEASURE_UNIT_SINGLE;
 
     /**

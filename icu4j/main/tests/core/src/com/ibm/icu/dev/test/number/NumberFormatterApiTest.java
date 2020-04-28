@@ -46,6 +46,7 @@ import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.ScientificNotation;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
+import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
@@ -66,6 +67,8 @@ public class NumberFormatterApiTest {
     private static final Currency ESP = Currency.getInstance("ESP");
     private static final Currency PTE = Currency.getInstance("PTE");
     private static final Currency RON = Currency.getInstance("RON");
+    private static final Currency TWD = Currency.getInstance("TWD");
+    private static final Currency TRY = Currency.getInstance("TRY");
     private static final Currency CNY = Currency.getInstance("CNY");
 
     @Test
@@ -164,7 +167,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Scientific min exponent digits",
-                "scientific/+ee",
+                "scientific/*ee",
                 "E00",
                 NumberFormatter.with().notation(Notation.scientific().withMinExponentDigits(2)),
                 ULocale.ENGLISH,
@@ -802,6 +805,42 @@ public class NumberFormatterApiTest {
                 "US$5.43");
 
         assertFormatSingle(
+                "Currency Difference between Formal and Short (Formal Version)",
+                "currency/TWD unit-width-formal",
+                "currency/TWD unit-width-formal",
+                NumberFormatter.with().unit(TWD).unitWidth(UnitWidth.FORMAL),
+                ULocale.forLanguageTag("zh-TW"),
+                5.43,
+                "NT$5.43");
+
+        assertFormatSingle(
+                "Currency Difference between Formal and Short (Short Version)",
+                "currency/TWD unit-width-short",
+                "currency/TWD unit-width-short",
+                NumberFormatter.with().unit(TWD).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("zh-TW"),
+                5.43,
+                "$5.43");
+
+        assertFormatSingle(
+                "Currency Difference between Variant and Short (Formal Version)",
+                "currency/TRY unit-width-variant",
+                "currency/TRY unit-width-variant",
+                NumberFormatter.with().unit(TRY).unitWidth(UnitWidth.VARIANT),
+                ULocale.forLanguageTag("tr-TR"),
+                5.43,
+                "TL\u00A05,43");
+
+        assertFormatSingle(
+                "Currency Difference between Variant and Short (Short Version)",
+                "currency/TRY unit-width-short",
+                "currency/TRY unit-width-short",
+                NumberFormatter.with().unit(TRY).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("tr-TR"),
+                5.43,
+                "₺5,43");
+
+        assertFormatSingle(
                 "Currency-dependent format (Control)",
                 "currency/USD unit-width-short",
                 "currency/USD unit-width-short",
@@ -965,7 +1004,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Min Fraction",
-                ".0+",
+                ".0*",
                 ".0+",
                 NumberFormatter.with().precision(Precision.minFraction(1)),
                 ULocale.ENGLISH,
@@ -1043,7 +1082,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Min Significant",
-                "@@+",
+                "@@*",
                 "@@+",
                 NumberFormatter.with().precision(Precision.minSignificantDigits(2)),
                 ULocale.ENGLISH,
@@ -1070,7 +1109,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Fixed Significant on zero with zero integer width",
-                "@ integer-width/+",
+                "@ integer-width/*",
                 "@ integer-width/+",
                 NumberFormatter.with().precision(Precision.fixedSignificantDigits(1)).integerWidth(IntegerWidth.zeroFillTo(0)),
                 ULocale.ENGLISH,
@@ -1107,7 +1146,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "FracSig minMaxFrac minSig",
-                ".0#/@@@+",
+                ".0#/@@@*",
                 ".0#/@@@+",
                 NumberFormatter.with().precision(Precision.minMaxFraction(1, 2).withMinDigits(3)),
                 ULocale.ENGLISH,
@@ -1171,7 +1210,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "FracSig with trailing zeros A",
-                ".00/@@@+",
+                ".00/@@@*",
                 ".00/@@@+",
                 NumberFormatter.with().precision(Precision.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
@@ -1180,7 +1219,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "FracSig with trailing zeros B",
-                ".00/@@@+",
+                ".00/@@@*",
                 ".00/@@@+",
                 NumberFormatter.with().precision(Precision.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
@@ -1725,7 +1764,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Integer Width Zero Fill 0",
-                "integer-width/+",
+                "integer-width/*",
                 "integer-width/+",
                 NumberFormatter.with().integerWidth(IntegerWidth.zeroFillTo(0)),
                 ULocale.ENGLISH,
@@ -2585,9 +2624,10 @@ public class NumberFormatterApiTest {
         assertNumberFieldPositions(message, fmtd, expectedFieldPositions);
 
         // Test the iteration functionality of nextFieldPosition
-        FieldPosition actual = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
+        ConstrainedFieldPosition actual = new ConstrainedFieldPosition();
+        actual.constrainField(NumberFormat.Field.GROUPING_SEPARATOR);
         int i = 1;
-        while (fmtd.nextFieldPosition(actual)) {
+        while (fmtd.nextPosition(actual)) {
             Object[] cas = expectedFieldPositions[i++];
             NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
             int expectedBeginIndex = (Integer) cas[1];
@@ -2596,22 +2636,23 @@ public class NumberFormatterApiTest {
             assertEquals(
                     "Next for grouping, field, case #" + i,
                     expectedField,
-                    actual.getFieldAttribute());
+                    actual.getField());
             assertEquals(
                     "Next for grouping, begin index, case #" + i,
                     expectedBeginIndex,
-                    actual.getBeginIndex());
+                    actual.getStart());
             assertEquals(
                     "Next for grouping, end index, case #" + i,
                     expectedEndIndex,
-                    actual.getEndIndex());
+                    actual.getLimit());
         }
         assertEquals("Should have seen all grouping separators", 4, i);
 
         // Make sure strings without fraction do not contain fraction field
-        actual = new FieldPosition(NumberFormat.Field.FRACTION);
+        actual.reset();
+        actual.constrainField(NumberFormat.Field.FRACTION);
         fmtd = NumberFormatter.withLocale(ULocale.ENGLISH).format(5);
-        assertFalse("No fraction part in an integer", fmtd.nextFieldPosition(actual));
+        assertFalse("No fraction part in an integer", fmtd.nextPosition(actual));
     }
 
     @Test

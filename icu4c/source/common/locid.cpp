@@ -105,7 +105,6 @@ typedef enum ELocalePos {
 U_CFUNC int32_t locale_getKeywords(const char *localeID,
             char prev,
             char *keywords, int32_t keywordCapacity,
-            char *values, int32_t valuesCapacity, int32_t *valLen,
             UBool valuesToo,
             UErrorCode *status);
 
@@ -185,17 +184,16 @@ Locale *locale_set_default_internal(const char *id, UErrorCode& status) {
         canonicalize = TRUE; // always canonicalize host ID
     }
 
-    char localeNameBuf[512];
-
-    if (canonicalize) {
-        uloc_canonicalize(id, localeNameBuf, sizeof(localeNameBuf)-1, &status);
-    } else {
-        uloc_getName(id, localeNameBuf, sizeof(localeNameBuf)-1, &status);
+    CharString localeNameBuf;
+    {
+        CharStringByteSink sink(&localeNameBuf);
+        if (canonicalize) {
+            ulocimp_canonicalize(id, sink, &status);
+        } else {
+            ulocimp_getName(id, sink, &status);
+        }
     }
-    localeNameBuf[sizeof(localeNameBuf)-1] = 0;  // Force null termination in event of
-                                                 //   a long name filling the buffer.
-                                                 //   (long names are truncated.)
-                                                 //
+
     if (U_FAILURE(status)) {
         return gDefaultLocale;
     }
@@ -209,14 +207,14 @@ Locale *locale_set_default_internal(const char *id, UErrorCode& status) {
         ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
     }
 
-    Locale *newDefault = (Locale *)uhash_get(gDefaultLocalesHashT, localeNameBuf);
+    Locale *newDefault = (Locale *)uhash_get(gDefaultLocalesHashT, localeNameBuf.data());
     if (newDefault == NULL) {
         newDefault = new Locale(Locale::eBOGUS);
         if (newDefault == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return gDefaultLocale;
         }
-        newDefault->init(localeNameBuf, FALSE);
+        newDefault->init(localeNameBuf.data(), FALSE);
         uhash_put(gDefaultLocalesHashT, (char*) newDefault->getName(), newDefault, &status);
         if (U_FAILURE(status)) {
             return gDefaultLocale;
@@ -724,7 +722,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
                         if (U_SUCCESS(status)) {
                             CharString newVar;
                             if (begin != variants) {
-                                newVar.append(variants, begin - variants - 1, status);
+                                newVar.append(variants, static_cast<int32_t>(begin - variants - 1), status);
                             }
                             if (end != nullptr) {
                                 if (begin != variants) {
@@ -1428,7 +1426,7 @@ Locale::createKeywords(UErrorCode &status) const
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
-            int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
+            int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, FALSE, &status);
             if(U_SUCCESS(status) && keyLen) {
                 result = new KeywordEnumeration(keywords, keyLen, 0, status);
                 if (!result) {
@@ -1457,7 +1455,7 @@ Locale::createUnicodeKeywords(UErrorCode &status) const
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
-            int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
+            int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, FALSE, &status);
             if(U_SUCCESS(status) && keyLen) {
                 result = new UnicodeKeywordEnumeration(keywords, keyLen, 0, status);
                 if (!result) {

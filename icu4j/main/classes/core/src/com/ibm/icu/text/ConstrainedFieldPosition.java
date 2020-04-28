@@ -15,8 +15,7 @@ import java.util.Objects;
  *   3. It is used for the newer FormattedValue APIs.
  *
  * @author sffc
- * @draft ICU 64
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 64
  */
 public class ConstrainedFieldPosition {
 
@@ -78,8 +77,7 @@ public class ConstrainedFieldPosition {
      *
      * By default, the CategoryFieldPosition has no iteration constraints.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public ConstrainedFieldPosition() {
         reset();
@@ -91,8 +89,7 @@ public class ConstrainedFieldPosition {
      * - Removes any constraints that may have been set on the instance.
      * - Resets the iteration position.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public void reset() {
         fConstraint = ConstraintType.NONE;
@@ -127,8 +124,7 @@ public class ConstrainedFieldPosition {
      *
      * @param field
      *            The field to fix when iterating.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public void constrainField(Field field) {
         if (field == null) {
@@ -160,8 +156,7 @@ public class ConstrainedFieldPosition {
      *
      * @param classConstraint
      *            The field class to fix when iterating.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public void constrainClass(Class<?> classConstraint) {
         if (classConstraint == null) {
@@ -211,8 +206,7 @@ public class ConstrainedFieldPosition {
      * FormattedValue#nextPosition returns TRUE.
      *
      * @return The field saved in the instance. See above for null conditions.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public Field getField() {
         return fField;
@@ -224,8 +218,7 @@ public class ConstrainedFieldPosition {
      * The return value is well-defined only after FormattedValue#nextPosition returns TRUE.
      *
      * @return The start index saved in the instance.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public int getStart() {
         return fStart;
@@ -237,8 +230,7 @@ public class ConstrainedFieldPosition {
      * The return value is well-defined only after FormattedValue#nextPosition returns TRUE.
      *
      * @return The end index saved in the instance.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public int getLimit() {
         return fLimit;
@@ -250,8 +242,7 @@ public class ConstrainedFieldPosition {
      * The return value is well-defined only after FormattedValue#nextPosition returns TRUE.
      *
      * @return The value for the current position. Might be null.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public Object getFieldValue() {
         return fValue;
@@ -265,8 +256,7 @@ public class ConstrainedFieldPosition {
      * Users of FormattedValue should not need to call this method.
      *
      * @return The current iteration context from {@link #setInt64IterationContext}.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public long getInt64IterationContext() {
         return fContext;
@@ -279,8 +269,7 @@ public class ConstrainedFieldPosition {
      *
      * @param context
      *            The new iteration context.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public void setInt64IterationContext(long context) {
         fContext = context;
@@ -302,8 +291,7 @@ public class ConstrainedFieldPosition {
      *            The new inclusive start index.
      * @param limit
      *            The new exclusive end index.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public void setState(Field field, Object value, int start, int limit) {
         // Check matchesField only as an assertion (debug build)
@@ -324,8 +312,7 @@ public class ConstrainedFieldPosition {
      * @param field The field to test.
      * @param fieldValue The field value to test. Should be null if there is no value.
      * @return Whether the field should be included given the constraints.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public boolean matchesField(Field field, Object fieldValue) {
         if (field == null) {
@@ -348,8 +335,7 @@ public class ConstrainedFieldPosition {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public String toString() {

@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
+#include <math.h>
 
 #include "unicode/ctest.h" // for str_timeDelta
 #include "unicode/curramt.h"

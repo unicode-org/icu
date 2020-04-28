@@ -66,7 +66,6 @@ struct ListFormatData : public UMemory {
 
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DRAFT_API
 /**
  * An immutable class containing the result of a list formatting operation.
  *
@@ -81,25 +80,25 @@ struct ListFormatData : public UMemory {
  *
  * Not intended for public subclassing.
  *
- * @draft ICU 64
+ * @stable ICU 64
  */
 class U_I18N_API FormattedList : public UMemory, public FormattedValue {
   public:
     /**
      * Default constructor; makes an empty FormattedList.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     FormattedList() : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
 
     /**
      * Move constructor: Leaves the source FormattedList in an undefined state.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     FormattedList(FormattedList&& src) U_NOEXCEPT;
 
     /**
      * Destruct an instance of FormattedList.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     virtual ~FormattedList() U_OVERRIDE;
 
@@ -111,7 +110,7 @@ class U_I18N_API FormattedList : public UMemory, public FormattedValue {
 
     /**
      * Move assignment: Leaves the source FormattedList in an undefined state.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     FormattedList& operator=(FormattedList&& src) U_NOEXCEPT;
 
@@ -136,7 +135,6 @@ class U_I18N_API FormattedList : public UMemory, public FormattedValue {
         : fData(nullptr), fErrorCode(errorCode) {}
     friend class ListFormatter;
 };
-#endif /* U_HIDE_DRAFT_API */
 #endif // !UCONFIG_NO_FORMATTING
 
 
@@ -240,7 +238,6 @@ class U_I18N_API ListFormatter : public UObject{
         UnicodeString& appendTo, UErrorCode& errorCode) const;
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_DRAFT_API
     /**
      * Formats a list of strings to a FormattedList, which exposes field
      * position information. The FormattedList contains more information than
@@ -250,13 +247,12 @@ class U_I18N_API ListFormatter : public UObject{
      * @param n_items   Length of the array items.
      * @param errorCode ICU error code returned here.
      * @return          A FormattedList containing field information.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     FormattedList formatStringsToValue(
         const UnicodeString items[],
         int32_t n_items,
         UErrorCode& errorCode) const;
-#endif  /* U_HIDE_DRAFT_API */
 #endif // !UCONFIG_NO_FORMATTING
 
 #ifndef U_HIDE_INTERNAL_API

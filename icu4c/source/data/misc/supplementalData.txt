@@ -18394,12 +18394,6 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
-                "et",
-                "fi",
-                "30",
-                "1",
-            }
-            {
                 "eu",
                 "es",
                 "20",

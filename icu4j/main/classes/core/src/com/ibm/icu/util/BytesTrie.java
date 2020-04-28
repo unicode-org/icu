@@ -54,8 +54,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * Does not copy the byte array which will be shared.
      * Same as clone() but without the throws clause.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public BytesTrie(BytesTrie other) {
         bytes_ = other.bytes_;
@@ -92,8 +91,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      *
      * @return opaque state value
      * @see #resetToState64
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public long getState64() {
         return ((long)remainingMatchLength_ << 32) | pos_;
@@ -111,8 +109,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * @see #getState64
      * @see #resetToState
      * @see #reset
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public BytesTrie resetToState64(long state) {
         remainingMatchLength_ = (int)(state >> 32);

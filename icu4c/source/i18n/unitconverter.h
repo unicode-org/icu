@@ -10,12 +10,16 @@
 #include "cmemory.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
-#include "unicode/measure.h"
-#include "unicode/stringpiece.h"
+#include "unitconverter.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
-// Data Skeleton.
+
+enum U_I18N_API UnitsMatchingState {
+    RECIPROCAL,
+    CONVERTIBLE,
+    UNCONVERTIBLE,
+};
 
 /**
  * Represents the conversion rate between `source` and `target`.
@@ -29,6 +33,10 @@ struct ConversionRate {
     double targetOffset = 0;
     bool reciprocal = false;
 };
+
+UnitsMatchingState U_I18N_API
+checkUnitsState(const MeasureUnit &source, const MeasureUnit &target,
+                const MaybeStackVector<ConversionRateInfo> &conversionRateInfo, UErrorCode &status);
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.

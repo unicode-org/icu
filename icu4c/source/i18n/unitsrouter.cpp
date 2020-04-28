@@ -16,6 +16,7 @@
 
 U_NAMESPACE_BEGIN
 
+// TODO: unused parameter 'locale' [-Wunused-parameter]
 UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage,
                          UErrorCode &status) {
     // StringPiece unitCategory = extractUnitCategory(inputUnit);

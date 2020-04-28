@@ -29,6 +29,7 @@ void NumberSkeletonTest::runIndexedTest(int32_t index, UBool exec, const char*& 
         TESTCASE_AUTO(stemsRequiringOption);
         TESTCASE_AUTO(defaultTokens);
         TESTCASE_AUTO(flexibleSeparators);
+        TESTCASE_AUTO(wildcardCharacters);
     TESTCASE_AUTO_END;
 }
 
@@ -41,26 +42,35 @@ void NumberSkeletonTest::validTokens() {
             u"precision-integer",
             u"precision-unlimited",
             u"@@@##",
+            u"@@*",
             u"@@+",
             u".000##",
+            u".00*",
             u".00+",
             u".",
+            u".*",
             u".+",
             u".######",
+            u".00/@@*",
             u".00/@@+",
             u".00/@##",
             u"precision-increment/3.14",
             u"precision-currency-standard",
             u"precision-integer rounding-mode-half-up",
             u".00# rounding-mode-ceiling",
+            u".00/@@* rounding-mode-floor",
             u".00/@@+ rounding-mode-floor",
             u"scientific",
+            u"scientific/*ee",
             u"scientific/+ee",
             u"scientific/sign-always",
+            u"scientific/*ee/sign-always",
             u"scientific/+ee/sign-always",
+            u"scientific/sign-always/*ee",
             u"scientific/sign-always/+ee",
             u"scientific/sign-except-zero",
             u"engineering",
+            u"engineering/*eee",
             u"engineering/+eee",
             u"compact-short",
             u"compact-long",
@@ -81,6 +91,7 @@ void NumberSkeletonTest::validTokens() {
             u"group-thousands",
             u"integer-width/00",
             u"integer-width/#0",
+            u"integer-width/*00",
             u"integer-width/+00",
             u"sign-always",
             u"sign-auto",
@@ -136,16 +147,22 @@ void NumberSkeletonTest::invalidTokens() {
     static const char16_t* cases[] = {
             u".00x",
             u".00##0",
+            u".##*",
+            u".00##*",
+            u".0#*",
+            u"@#*",
             u".##+",
             u".00##+",
             u".0#+",
+            u"@#+",
             u"@@x",
             u"@@##0",
-            u"@#+",
             u".00/@",
             u".00/@@",
             u".00/@@x",
             u".00/@@#",
+            u".00/@@#*",
+            u".00/floor/@@*", // wrong order
             u".00/@@#+",
             u".00/floor/@@+", // wrong order
             u"precision-increment/français", // non-invariant characters for C++
@@ -161,6 +178,10 @@ void NumberSkeletonTest::invalidTokens() {
             u"currency/ççç", // three characters but not ASCII
             u"measure-unit/foo",
             u"integer-width/xxx",
+            u"integer-width/0*",
+            u"integer-width/*0#",
+            u"integer-width/*#",
+            u"integer-width/*#0",
             u"integer-width/0+",
             u"integer-width/+0#",
             u"integer-width/+#",
@@ -177,6 +198,7 @@ void NumberSkeletonTest::invalidTokens() {
             u"EEE",
             u"EEE0",
             u"001",
+            u"00*",
             u"00+",
     };
 
@@ -300,6 +322,32 @@ void NumberSkeletonTest::flexibleSeparators() {
         if (!status.errDataIfFailureAndReset()) {
             assertEquals(skeletonString, expected, actual);
         }
+        status.errIfFailureAndReset();
+    }
+}
+
+void NumberSkeletonTest::wildcardCharacters() {
+    IcuTestErrorCode status(*this, "wildcardCharacters");
+
+    struct TestCase {
+        const char16_t* star;
+        const char16_t* plus;
+    } cases[] = {
+        { u".00*", u".00+" },
+        { u"@@*", u"@@+" },
+        { u".00/@@*", u".00/@@+" },
+        { u"scientific/*ee", u"scientific/+ee" },
+        { u"integer-width/*00", u"integer-width/+00" },
+    };
+
+    for (const auto& cas : cases) {
+        UnicodeString star(cas.star);
+        UnicodeString plus(cas.plus);
+        status.setScope(star);
+
+        UnicodeString normalized = NumberFormatter::forSkeleton(plus, status)
+            .toSkeleton(status);
+        assertEquals("Plus should normalize to star", star, normalized);
         status.errIfFailureAndReset();
     }
 }
