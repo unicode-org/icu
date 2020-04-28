@@ -30,8 +30,7 @@ public abstract class UFormat extends Format {
      * A field that represents a span of text that may be composed with other fields.
      * SpanField classes usually have an associated value.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static abstract class SpanField extends Format.Field {
         private static final long serialVersionUID = -4732719509273350606L;
@@ -39,8 +38,7 @@ public abstract class UFormat extends Format {
         /**
          * Construct a new instance.
          *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         protected SpanField(String name) {
             super(name);

@@ -42,7 +42,7 @@ constexpr int32_t kCompoundPartOffset = 128;
 enum CompoundPart {
     COMPOUND_PART_PER = kCompoundPartOffset,
     COMPOUND_PART_TIMES,
-    COMPOUND_PART_PLUS,
+    COMPOUND_PART_AND,
 };
 
 constexpr int32_t kPowerPartOffset = 256;
@@ -92,7 +92,7 @@ const struct SIPrefixStrings {
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
 };
 
-// TODO(ICU-20920): Get this list from data
+// TODO(ICU-21059): Get this list from data
 const char16_t* const gSimpleUnits[] = {
     u"one", // note: expected to be index 0
     u"candela",
@@ -226,7 +226,7 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     // Add syntax parts (compound, power prefixes)
     b.add(u"-per-", COMPOUND_PART_PER, status);
     b.add(u"-", COMPOUND_PART_TIMES, status);
-    b.add(u"-and-", COMPOUND_PART_PLUS, status);
+    b.add(u"-and-", COMPOUND_PART_AND, status);
     b.add(u"square-", POWER_PART_P2, status);
     b.add(u"cubic-", POWER_PART_P3, status);
     b.add(u"p2-", POWER_PART_P2, status);
@@ -383,8 +383,8 @@ private:
         return Token(match);
     }
 
-    void nextSingleUnit(SingleUnitImpl& result, bool& sawPlus, UErrorCode& status) {
-        sawPlus = false;
+    void nextSingleUnit(SingleUnitImpl& result, bool& sawAnd, UErrorCode& status) {
+        sawAnd = false;
         if (U_FAILURE(status)) {
             return;
         }
@@ -422,10 +422,13 @@ private:
                     break;
 
                 case COMPOUND_PART_TIMES:
+                    if (fAfterPer) {
+                        result.dimensionality = -1;
+                    }
                     break;
 
-                case COMPOUND_PART_PLUS:
-                    sawPlus = true;
+                case COMPOUND_PART_AND:
+                    sawAnd = true;
                     fAfterPer = false;
                     break;
             }
@@ -462,7 +465,7 @@ private:
 
                 case Token::TYPE_ONE:
                     // Skip "one" and go to the next unit
-                    return nextSingleUnit(result, sawPlus, status);
+                    return nextSingleUnit(result, sawAnd, status);
 
                 case Token::TYPE_SIMPLE_UNIT:
                     result.index = token.getSimpleUnitIndex();
@@ -485,9 +488,9 @@ private:
         }
         int32_t unitNum = 0;
         while (hasNext()) {
-            bool sawPlus;
+            bool sawAnd;
             SingleUnitImpl singleUnit;
-            nextSingleUnit(singleUnit, sawPlus, status);
+            nextSingleUnit(singleUnit, sawAnd, status);
             if (U_FAILURE(status)) {
                 return;
             }
@@ -495,20 +498,20 @@ private:
                 continue;
             }
             bool added = result.append(singleUnit, status);
-            if (sawPlus && !added) {
-                // Two similar units are not allowed in a sequence unit
+            if (sawAnd && !added) {
+                // Two similar units are not allowed in a mixed unit
                 status = kUnitIdentifierSyntaxError;
                 return;
             }
             if ((++unitNum) >= 2) {
-                UMeasureUnitComplexity complexity = sawPlus
-                    ? UMEASURE_UNIT_SEQUENCE
+                UMeasureUnitComplexity complexity = sawAnd
+                    ? UMEASURE_UNIT_MIXED
                     : UMEASURE_UNIT_COMPOUND;
                 if (unitNum == 2) {
                     U_ASSERT(result.complexity == UMEASURE_UNIT_SINGLE);
                     result.complexity = complexity;
                 } else if (result.complexity != complexity) {
-                    // Mixed sequence and compound units
+                    // Can't have mixed compound units
                     status = kUnitIdentifierSyntaxError;
                     return;
                 }
@@ -589,7 +592,7 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
         return;
     }
     if (impl.complexity == UMEASURE_UNIT_COMPOUND) {
-        // Note: don't sort a SEQUENCE unit
+        // Note: don't sort a MIXED unit
         uprv_sortArray(
             impl.units.getAlias(),
             impl.units.length(),
@@ -609,7 +612,7 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
     for (int32_t i = 1; i < impl.units.length(); i++) {
         const SingleUnitImpl& prev = *impl.units[i-1];
         const SingleUnitImpl& curr = *impl.units[i];
-        if (impl.complexity == UMEASURE_UNIT_SEQUENCE) {
+        if (impl.complexity == UMEASURE_UNIT_MIXED) {
             impl.identifier.append("-and-", status);
             serializeSingle(curr, true, impl.identifier, status);
         } else {
@@ -753,7 +756,7 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     MeasureUnitImpl impl = MeasureUnitImpl::forMeasureUnitMaybeCopy(*this, status);
     MeasureUnitImpl temp;
     const MeasureUnitImpl& otherImpl = MeasureUnitImpl::forMeasureUnit(other, temp, status);
-    if (impl.complexity == UMEASURE_UNIT_SEQUENCE || otherImpl.complexity == UMEASURE_UNIT_SEQUENCE) {
+    if (impl.complexity == UMEASURE_UNIT_MIXED || otherImpl.complexity == UMEASURE_UNIT_MIXED) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return {};
     }

@@ -1185,9 +1185,13 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
             cc.offsets=NULL;
         }
         else {
-            memset(resultOffsets, -1, UPRV_LENGTHOF(resultOffsets));
+            for (int32_t i = 0; i < UPRV_LENGTHOF(resultOffsets); i++) {
+                resultOffsets[i] = -1;
+            }
         }
-        memset(result, -1, UPRV_LENGTHOF(result));
+        for (int32_t i = 0; i < UPRV_LENGTHOF(result); i++) {
+            result[i] = -1;
+        }
         errorCode.reset();
         resultLength=stepToUnicode(cc, cnv.getAlias(),
                                 result, UPRV_LENGTHOF(result),
@@ -1615,8 +1619,12 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     ok=TRUE;
     for(i=0; i<UPRV_LENGTHOF(steps) && ok; ++i) {
         step=steps[i].step;
-        memset(resultOffsets, -1, UPRV_LENGTHOF(resultOffsets));
-        memset(result, -1, UPRV_LENGTHOF(result));
+        for (int32_t i = 0; i < UPRV_LENGTHOF(resultOffsets); i++) {
+            resultOffsets[i] = -1;
+        }
+        for (int32_t i = 0; i < UPRV_LENGTHOF(result); i++) {
+            result[i] = -1;
+        }
         errorCode=U_ZERO_ERROR;
         resultLength=stepFromUnicode(cc, cnv,
                                 result, UPRV_LENGTHOF(result),

@@ -464,8 +464,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of area: dunam
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit DUNAM = MeasureUnit.internalGetInstance("area", "dunam");
 
@@ -537,8 +536,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: mole
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit MOLE = MeasureUnit.internalGetInstance("concentr", "mole");
 
@@ -562,8 +560,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: permyriad
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit PERMYRIAD = MeasureUnit.internalGetInstance("concentr", "permyriad");
 
@@ -671,8 +668,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: day-person
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit DAY_PERSON = MeasureUnit.internalGetInstance("duration", "day-person");
 
@@ -715,8 +711,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: month-person
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit MONTH_PERSON = MeasureUnit.internalGetInstance("duration", "month-person");
 
@@ -740,8 +735,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: week-person
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit WEEK_PERSON = MeasureUnit.internalGetInstance("duration", "week-person");
 
@@ -753,8 +747,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of duration: year-person
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit YEAR_PERSON = MeasureUnit.internalGetInstance("duration", "year-person");
 
@@ -784,8 +777,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of energy: british-thermal-unit
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit BRITISH_THERMAL_UNIT = MeasureUnit.internalGetInstance("energy", "british-thermal-unit");
 
@@ -797,8 +789,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of energy: electronvolt
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit ELECTRONVOLT = MeasureUnit.internalGetInstance("energy", "electronvolt");
 
@@ -841,15 +832,13 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of force: newton
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit NEWTON = MeasureUnit.internalGetInstance("force", "newton");
 
     /**
      * Constant for unit of force: pound-force
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit POUND_FORCE = MeasureUnit.internalGetInstance("force", "pound-force");
 
@@ -1042,8 +1031,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of length: solar-radius
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit SOLAR_RADIUS = MeasureUnit.internalGetInstance("length", "solar-radius");
 
@@ -1061,8 +1049,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of light: solar-luminosity
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit SOLAR_LUMINOSITY = MeasureUnit.internalGetInstance("light", "solar-luminosity");
 
@@ -1074,15 +1061,13 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of mass: dalton
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit DALTON = MeasureUnit.internalGetInstance("mass", "dalton");
 
     /**
      * Constant for unit of mass: earth-mass
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit EARTH_MASS = MeasureUnit.internalGetInstance("mass", "earth-mass");
 
@@ -1136,8 +1121,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of mass: solar-mass
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit SOLAR_MASS = MeasureUnit.internalGetInstance("mass", "solar-mass");
 
@@ -1216,15 +1200,13 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of pressure: kilopascal
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit KILOPASCAL = MeasureUnit.internalGetInstance("pressure", "kilopascal");
 
     /**
      * Constant for unit of pressure: megapascal
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit MEGAPASCAL = MeasureUnit.internalGetInstance("pressure", "megapascal");
 
@@ -1303,15 +1285,13 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of torque: newton-meter
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit NEWTON_METER = MeasureUnit.internalGetInstance("torque", "newton-meter");
 
     /**
      * Constant for unit of torque: pound-force-foot
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit POUND_FOOT = MeasureUnit.internalGetInstance("torque", "pound-force-foot");
 
@@ -1323,8 +1303,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: barrel
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit BARREL = MeasureUnit.internalGetInstance("volume", "barrel");
 
@@ -1408,8 +1387,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: fluid-ounce-imperial
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final MeasureUnit FLUID_OUNCE_IMPERIAL = MeasureUnit.internalGetInstance("volume", "fluid-ounce-imperial");
 

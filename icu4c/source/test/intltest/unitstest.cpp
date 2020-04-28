@@ -290,8 +290,10 @@ StringPiece trimField(char *(&field)[2]) {
  * This is a UParseLineFn as required by u_parseDelimitedFile.
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
+    if (U_FAILURE(*pErrorCode)) return;
+    UnitsTest* unitsTest = (UnitsTest*)context;
     (void)fieldCount; // unused UParseLineFn variable
-    IcuTestErrorCode status(*(UnitsTest *)context, "unitsTestDatalineFn");
+    IcuTestErrorCode status(*unitsTest, "unitsTestDatalineFn");
 
     StringPiece quantity = trimField(fields[0]);
     StringPiece x = trimField(fields[1]);
@@ -305,27 +307,45 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     unum_close(nf);
 
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
-    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) { return; }
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) return;
 
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
-    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) { return; }
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) return;
+
+    unitsTest->logln("Quantity (Category): \"%.*s\", "
+                     "Expected value of \"1000 %.*s in %.*s\": %f, "
+                     "commentConversionFormula: \"%.*s\", ",
+                     quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(),
+                     expected, commentConversionFormula.length(), commentConversionFormula.data());
 
     // WIP(hugovdm): hook this up to actual tests.
-    //
-    // Possible after merging in younies/tryingdouble:
-    // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
-    // double got = converter.convert(1000, *pErrorCode);
-    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
-    //
-    // In the meantime, printing to stderr.
-    fprintf(stderr,
-            "Quantity (Category): \"%.*s\", "
-            "Expected value of \"1000 %.*s in %.*s\": %f, "
-            "commentConversionFormula: \"%.*s\", "
-            "expected field: \"%.*s\"\n",
-            quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(), expected,
-            commentConversionFormula.length(), commentConversionFormula.data(), utf8Expected.length(),
-            utf8Expected.data());
+
+    // // Convertibility:
+    // MaybeStackVector<MeasureUnit> units;
+    // units.emplaceBack(sourceUnit);
+    // units.emplaceBack(targetUnit);
+    // const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
+    // if (status.errIfFailureAndReset("getConversionRatesInfo(...)")) return;
+
+    // auto actualState = checkUnitsState(sourceUnit, targetUnit, conversionRateInfoList, status);
+    // if (status.errIfFailureAndReset("checkUnitsState(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
+    //                                 targetUnit.getIdentifier())) {
+    //     return;
+    // }
+
+    // CharString msg;
+    // msg.append("convertible: ", status)
+    //     .append(sourceUnit.getIdentifier(), status)
+    //     .append(" -> ", status)
+    //     .append(targetUnit.getIdentifier(), status);
+    // if (status.errIfFailureAndReset("msg construction")) return;
+
+    // unitsTest->assertTrue(msg.data(), actualState != UNCONVERTIBLE);
+
+    // Unit conversion... untested:
+    // UnitConverter converter(sourceUnit, targetUnit, status);
+    // double got = converter.convert(1000, status);
+    // unitsTest->assertEqualsNear(quantity.data(), expected, got, 0.0001);
 }
 
 /**
@@ -447,12 +467,12 @@ class ExpectedOutput {
 void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount,
                                    UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) return;
-    UnitsTest *intltest = (UnitsTest *)context;
-    IcuTestErrorCode status(*(UnitsTest *)context, "unitPreferencesTestDatalineFn");
+    UnitsTest *unitsTest = (UnitsTest *)context;
+    IcuTestErrorCode status(*unitsTest, "unitPreferencesTestDatalineFn");
 
-    if (!intltest->assertTrue(u"unitPreferencesTestDataLineFn expects 9 fields for simple and 11 "
-                              u"fields for compound. Other field counts not yet supported. ",
-                              fieldCount == 9 || fieldCount == 11)) {
+    if (!unitsTest->assertTrue(u"unitPreferencesTestDataLineFn expects 9 fields for simple and 11 "
+                               u"fields for compound. Other field counts not yet supported. ",
+                               fieldCount == 9 || fieldCount == 11)) {
         return;
     }
 
@@ -474,14 +494,12 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     dqInputD.setToDecNumber(inputD, status);
     if (status.errIfFailureAndReset("parsing decimal quantity: \"%.*s\"", inputD.length(),
                                     inputD.data())) {
-        *pErrorCode = U_PARSE_ERROR;
         return;
     }
     double inputAmount = dqInputD.toDouble();
 
     MeasureUnit inputMeasureUnit = MeasureUnit::forIdentifier(inputUnit, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", inputUnit.length(), inputUnit.data())) {
-        *pErrorCode = U_PARSE_ERROR;
         return;
     }
 
@@ -491,14 +509,12 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
     // double got = converter.convert(1000, *pErrorCode);
     // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
-    //
-    // In the meantime, printing to stderr.
-    fprintf(stderr,
-            "Quantity (Category): \"%.*s\", Usage: \"%.*s\", Region: \"%.*s\", "
-            "Input: \"%f %s\", Expected Output: %s\n",
-            quantity.length(), quantity.data(), usage.length(), usage.data(), region.length(),
-            region.data(), inputAmount, inputMeasureUnit.getIdentifier(),
-            output.toDebugString().c_str());
+
+    unitsTest->logln("Quantity (Category): \"%.*s\", Usage: \"%.*s\", Region: \"%.*s\", "
+                     "Input: \"%f %s\", Expected Output: %s",
+                     quantity.length(), quantity.data(), usage.length(), usage.data(), region.length(),
+                     region.data(), inputAmount, inputMeasureUnit.getIdentifier(),
+                     output.toDebugString().c_str());
 }
 
 /**

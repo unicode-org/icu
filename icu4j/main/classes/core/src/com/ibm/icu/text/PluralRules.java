@@ -2052,8 +2052,7 @@ public class PluralRules implements Serializable {
      *
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public String select(FormattedNumber number) {
         return rules.select(number.getFixedDecimal());

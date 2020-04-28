@@ -131,8 +131,10 @@ public final class NumberFormatter {
         FULL_NAME,
 
         /**
-         * Use the three-digit ISO XXX code in place of the symbol for displaying currencies. The
-         * behavior of this option is currently undefined for use with measure units.
+         * Use the three-digit ISO XXX code in place of the symbol for displaying currencies.
+         *
+         * <p>
+         * Behavior of this option with non-currency units is not defined at this time.
          *
          * <p>
          * In CLDR, this option corresponds to the "¤¤" placeholder for currencies.
@@ -141,6 +143,32 @@ public final class NumberFormatter {
          * @see NumberFormatter
          */
         ISO_CODE,
+
+        /**
+         * Use the formal variant of the currency symbol; for example, "NT$" for the New Taiwan
+         * dollar in zh-TW.
+         *
+         * <p>
+         * Behavior of this option with non-currency units is not defined at this time.
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        FORMAL,
+
+        /**
+         * Use the alternate variant of the currency symbol; for example, "TL" for the Turkish
+         * lira (TRY).
+         *
+         * <p>
+         * Behavior of this option with non-currency units is not defined at this time.
+         *
+         * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        VARIANT,
 
         /**
          * Format the number according to the specified unit, but do not display the unit. For

@@ -193,7 +193,7 @@ _processRFC3066Locale(CollatorSpec *spec, uint32_t, const char* string,
         *status = U_BUFFER_OVERFLOW_ERROR;
         return string;
     } else {
-        spec->locale.copyFrom(CharString(string, end-string, *status), *status);
+        spec->locale.copyFrom(CharString(string, static_cast<int32_t>(end-string), *status), *status);
         return end+1;
     }
 }

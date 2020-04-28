@@ -75,10 +75,10 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
         private volatile FormattingData formattingDataCache = null;
 
         /**
-         * Single-item cache for getNarrowSymbol().
+         * Single-item cache for variant symbols.
          * Holds data for only one currency. If another currency is requested, the old cache item is overwritten.
          */
-        private volatile NarrowSymbol narrowSymbolCache = null;
+        private volatile VariantSymbol variantSymbolCache = null;
 
         /**
          * Single-item cache for getPluralName().
@@ -116,11 +116,15 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             FormattingData(String isoCode) { this.isoCode = isoCode; }
         }
 
-        static class NarrowSymbol {
+        static class VariantSymbol {
             final String isoCode;
-            String narrowSymbol = null;
+            final String variant;
+            String symbol = null;
 
-            NarrowSymbol(String isoCode) { this.isoCode = isoCode; }
+            VariantSymbol(String isoCode, String variant) {
+                this.isoCode = isoCode;
+                this.variant = variant;
+            }
         }
 
         static class ParsingData {
@@ -167,13 +171,35 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
 
         @Override
         public String getNarrowSymbol(String isoCode) {
-            NarrowSymbol narrowSymbol = fetchNarrowSymbol(isoCode);
+            VariantSymbol variantSymbol = fetchVariantSymbol(isoCode, "narrow");
 
-            // Fall back to ISO Code
-            if (narrowSymbol.narrowSymbol == null && fallback) {
+            // Fall back to regular symbol
+            if (variantSymbol.symbol == null && fallback) {
                 return getSymbol(isoCode);
             }
-            return narrowSymbol.narrowSymbol;
+            return variantSymbol.symbol;
+        }
+
+        @Override
+        public String getFormalSymbol(String isoCode) {
+            VariantSymbol variantSymbol = fetchVariantSymbol(isoCode, "formal");
+
+            // Fall back to regular symbol
+            if (variantSymbol.symbol == null && fallback) {
+                return getSymbol(isoCode);
+            }
+            return variantSymbol.symbol;
+        }
+
+        @Override
+        public String getVariantSymbol(String isoCode) {
+            VariantSymbol variantSymbol = fetchVariantSymbol(isoCode, "variant");
+
+            // Fall back to regular symbol
+            if (variantSymbol.symbol == null && fallback) {
+                return getSymbol(isoCode);
+            }
+            return variantSymbol.symbol;
         }
 
         @Override
@@ -256,14 +282,14 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             return result;
         }
 
-        NarrowSymbol fetchNarrowSymbol(String isoCode) {
-            NarrowSymbol result = narrowSymbolCache;
-            if (result == null || !result.isoCode.equals(isoCode)) {
-                result = new NarrowSymbol(isoCode);
-                CurrencySink sink = new CurrencySink(!fallback, CurrencySink.EntrypointTable.CURRENCY_NARROW);
-                sink.narrowSymbol = result;
-                rb.getAllItemsWithFallbackNoFail("Currencies%narrow/" + isoCode, sink);
-                narrowSymbolCache = result;
+        VariantSymbol fetchVariantSymbol(String isoCode, String variant) {
+            VariantSymbol result = variantSymbolCache;
+            if (result == null || !result.isoCode.equals(isoCode) || !result.variant.equals(variant)) {
+                result = new VariantSymbol(isoCode, variant);
+                CurrencySink sink = new CurrencySink(!fallback, CurrencySink.EntrypointTable.CURRENCY_VARIANT);
+                sink.variantSymbol = result;
+                rb.getAllItemsWithFallbackNoFail("Currencies%" + variant + "/" + isoCode, sink);
+                variantSymbolCache = result;
             }
             return result;
         }
@@ -331,7 +357,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
             ParsingData parsingData = null;
             Map<String, String> unitPatterns = null;
             CurrencySpacingInfo spacingInfo = null;
-            NarrowSymbol narrowSymbol = null;
+            VariantSymbol variantSymbol = null;
 
             enum EntrypointTable {
                 // For Parsing:
@@ -340,7 +366,7 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                 // For Formatting:
                 CURRENCIES,
                 CURRENCY_PLURALS,
-                CURRENCY_NARROW,
+                CURRENCY_VARIANT,
                 CURRENCY_SPACING,
                 CURRENCY_UNIT_PATTERNS
             }
@@ -371,8 +397,8 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
                 case CURRENCY_PLURALS:
                     consumeCurrencyPluralsEntry(key, value);
                     break;
-                case CURRENCY_NARROW:
-                    consumeCurrenciesNarrowEntry(key, value);
+                case CURRENCY_VARIANT:
+                    consumeCurrenciesVariantEntry(key, value);
                     break;
                 case CURRENCY_SPACING:
                     consumeCurrencySpacingTable(key, value);
@@ -475,11 +501,11 @@ public class ICUCurrencyDisplayInfoProvider implements CurrencyDisplayInfoProvid
              *      ...
              *  }
              */
-            void consumeCurrenciesNarrowEntry(UResource.Key key, UResource.Value value) {
-                assert narrowSymbol != null;
+            void consumeCurrenciesVariantEntry(UResource.Key key, UResource.Value value) {
+                assert variantSymbol != null;
                 // No extra structure to traverse.
-                if (narrowSymbol.narrowSymbol == null) {
-                    narrowSymbol.narrowSymbol = value.getString();
+                if (variantSymbol.symbol == null) {
+                    variantSymbol.symbol = value.getString();
                 }
             }
 

@@ -152,7 +152,7 @@ private:
         const char* identifier,
         const char** subIdentifiers,
         int32_t subIdentifierCount);
-    void verifySequenceUnit(
+    void verifyMixedUnit(
         const MeasureUnit& unit,
         const char* identifier,
         const char** subIdentifiers,
@@ -3368,10 +3368,10 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     MeasureUnit inchFoot = MeasureUnit::forIdentifier("inch-and-foot", status);
 
     const char* footInchSub[] = {"foot", "inch"};
-    verifySequenceUnit(footInch, "foot-and-inch",
+    verifyMixedUnit(footInch, "foot-and-inch",
         footInchSub, UPRV_LENGTHOF(footInchSub));
     const char* inchFootSub[] = {"inch", "foot"};
-    verifySequenceUnit(inchFoot, "inch-and-foot",
+    verifyMixedUnit(inchFoot, "inch-and-foot",
         inchFootSub, UPRV_LENGTHOF(inchFootSub));
 
     assertTrue("order matters inequality", footInch != inchFoot);
@@ -3427,7 +3427,9 @@ void MeasureFormatTest::TestIdentifiers() {
         const char* id;
         const char* normalized;
     } cases[] = {
-        { true, "square-meter-per-square-meter", "square-meter-per-square-meter" },
+        {true, "square-meter-per-square-meter", "square-meter-per-square-meter"},
+        {true, "kilogram-meter-per-square-meter-square-second",
+         "kilogram-meter-per-square-meter-square-second"},
         // TODO(ICU-20920): Add more test cases once the proper ranking is available.
     };
     for (const auto& cas : cases) {
@@ -3575,12 +3577,12 @@ void MeasureFormatTest::verifyCompoundUnit(
     }
 }
 
-void MeasureFormatTest::verifySequenceUnit(
+void MeasureFormatTest::verifyMixedUnit(
         const MeasureUnit& unit,
         const char* identifier,
         const char** subIdentifiers,
         int32_t subIdentifierCount) {
-    IcuTestErrorCode status(*this, "verifySequenceUnit");
+    IcuTestErrorCode status(*this, "verifyMixedUnit");
     UnicodeString uid(identifier, -1, US_INV);
     assertEquals(uid + ": Identifier",
         identifier,
@@ -3590,7 +3592,7 @@ void MeasureFormatTest::verifySequenceUnit(
         unit == MeasureUnit::forIdentifier(identifier, status));
     status.errIfFailureAndReset("%s: Constructor", identifier);
     assertEquals(uid + ": Complexity",
-        UMEASURE_UNIT_SEQUENCE,
+        UMEASURE_UNIT_MIXED,
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 

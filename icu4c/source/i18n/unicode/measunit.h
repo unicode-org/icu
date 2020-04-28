@@ -40,8 +40,8 @@ struct MeasureUnitImpl;
  *           square-kilometer, kilojoule, one-per-second.
  * - COMPOUND: A unit composed of the product of multiple single units. Examples:
  *             meter-per-second, kilowatt-hour, kilogram-meter-per-square-second.
- * - SEQUENCE: A unit composed of the sum of multiple single units. Examples: foot+inch,
- *             hour+minute+second, degree+arcminute+arcsecond.
+ * - MIXED: A unit composed of the sum of multiple single units. Examples: foot+inch,
+ *          hour+minute+second, degree+arcminute+arcsecond.
  *
  * The complexity determines which operations are available. For example, you cannot set the power
  * or SI prefix of a compound unit.
@@ -64,11 +64,11 @@ enum UMeasureUnitComplexity {
     UMEASURE_UNIT_COMPOUND,
 
     /**
-     * A sequence unit, like hour+minute.
+     * A mixed unit, like hour+minute.
      *
      * @draft ICU 67
      */
-    UMEASURE_UNIT_SEQUENCE
+    UMEASURE_UNIT_MIXED
 };
 
 /**
@@ -258,14 +258,14 @@ class U_I18N_API MeasureUnit: public UObject {
     MeasureUnit(MeasureUnit &&other) noexcept;
 
     /**
-     * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
+     * Construct a MeasureUnit from a CLDR Unit Identifier, defined in UTS 35.
      * Validates and canonicalizes the identifier.
      *
      * <pre>
      * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
      * </pre>
      *
-     * @param identifier The CLDR Sequence Unit Identifier
+     * @param identifier The CLDR Unit Identifier
      * @param status Set if the identifier is invalid.
      * @draft ICU 67
      */
@@ -335,7 +335,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Get the CLDR Sequence Unit Identifier for this MeasureUnit, as defined in UTS 35.
+     * Get the CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
      * @return The string form of this unit, owned by this MeasureUnit.
      * @draft ICU 67
@@ -357,7 +357,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * There is sufficient locale data to format all standard SI prefixes.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param prefix The SI prefix, from UMeasureSIPrefix.
@@ -371,7 +371,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Gets the current SI prefix of this SINGLE unit. For example, if the unit has the SI prefix
      * "kilo", then UMEASURE_SI_PREFIX_KILO is returned.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
@@ -384,7 +384,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
      * (power). For example, if dimensionality is 2, the unit will be squared.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param dimensionality The dimensionality (power).
@@ -398,7 +398,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Gets the dimensionality (power) of this MeasureUnit. For example, if the unit is square,
      * then 2 is returned.
      *
-     * NOTE: Only works on SINGLE units. If this is a COMPOUND or SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
@@ -412,10 +412,10 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * For example, if the receiver is "meter-per-second", the unit "second-per-meter" is returned.
      *
-     * NOTE: Only works on SINGLE and COMPOUND units. If this is a SEQUENCE unit, an error will
+     * NOTE: Only works on SINGLE and COMPOUND units. If this is a MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param status Set if this is a SEQUENCE unit or if another error occurs.
+     * @param status Set if this is a MIXED unit or if another error occurs.
      * @return The reciprocal of the target unit.
      * @draft ICU 67
      */
@@ -431,10 +431,10 @@ class U_I18N_API MeasureUnit: public UObject {
      * unit "kilowatt-hour-per-day" is returned.
      *
      * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
-     * SEQUENCE unit, an error will occur. For more information, see UMeasureUnitComplexity.
+     * MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
      *
      * @param other The MeasureUnit to multiply with the target.
-     * @param status Set if this or other is a SEQUENCE unit or if another error occurs.
+     * @param status Set if this or other is a MIXED unit or if another error occurs.
      * @return The product of the target unit with the provided unit.
      * @draft ICU 67
      */
@@ -443,7 +443,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_INTERNAL_API
     /**
-     * Gets the list of SINGLE units contained within a SEQUENCE of COMPOUND unit.
+     * Gets the list of SINGLE units contained within a MIXED of COMPOUND unit.
      *
      * Examples:
      * - Given "meter-kilogram-per-second", three units will be returned: "meter",
@@ -582,14 +582,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGForce(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of acceleration: g-force.
      * Also see {@link #createGForce()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGForce();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of acceleration: meter-per-square-second.
@@ -600,14 +598,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMeterPerSecondSquared(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of acceleration: meter-per-square-second.
      * Also see {@link #createMeterPerSecondSquared()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMeterPerSecondSquared();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of angle: arc-minute.
@@ -618,14 +614,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createArcMinute(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of angle: arc-minute.
      * Also see {@link #createArcMinute()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getArcMinute();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of angle: arc-second.
@@ -636,14 +630,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createArcSecond(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of angle: arc-second.
      * Also see {@link #createArcSecond()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getArcSecond();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of angle: degree.
@@ -654,14 +646,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createDegree(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of angle: degree.
      * Also see {@link #createDegree()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getDegree();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of angle: radian.
@@ -672,14 +662,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createRadian(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of angle: radian.
      * Also see {@link #createRadian()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getRadian();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of angle: revolution.
@@ -690,14 +678,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createRevolutionAngle(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of angle: revolution.
      * Also see {@link #createRevolutionAngle()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getRevolutionAngle();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: acre.
@@ -708,32 +694,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createAcre(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: acre.
      * Also see {@link #createAcre()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getAcre();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of area: dunam.
      * Caller owns returned value and must free it.
      * Also see {@link #getDunam()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createDunam(UErrorCode &status);
 
     /**
      * Returns by value, unit of area: dunam.
      * Also see {@link #createDunam()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getDunam();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: hectare.
@@ -744,14 +726,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createHectare(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: hectare.
      * Also see {@link #createHectare()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getHectare();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: square-centimeter.
@@ -762,14 +742,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSquareCentimeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: square-centimeter.
      * Also see {@link #createSquareCentimeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSquareCentimeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: square-foot.
@@ -780,14 +758,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSquareFoot(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: square-foot.
      * Also see {@link #createSquareFoot()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSquareFoot();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: square-inch.
@@ -798,14 +774,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSquareInch(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: square-inch.
      * Also see {@link #createSquareInch()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSquareInch();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: square-kilometer.
@@ -816,14 +790,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSquareKilometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: square-kilometer.
      * Also see {@link #createSquareKilometer()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSquareKilometer();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: square-meter.
@@ -834,14 +806,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSquareMeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: square-meter.
      * Also see {@link #createSquareMeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSquareMeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: square-mile.
@@ -852,14 +822,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSquareMile(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: square-mile.
      * Also see {@link #createSquareMile()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSquareMile();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of area: square-yard.
@@ -870,14 +838,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSquareYard(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of area: square-yard.
      * Also see {@link #createSquareYard()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSquareYard();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: karat.
@@ -888,14 +854,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKarat(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of concentr: karat.
      * Also see {@link #createKarat()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKarat();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: milligram-per-deciliter.
@@ -906,14 +870,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilligramPerDeciliter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of concentr: milligram-per-deciliter.
      * Also see {@link #createMilligramPerDeciliter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilligramPerDeciliter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: millimole-per-liter.
@@ -924,32 +886,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMillimolePerLiter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of concentr: millimole-per-liter.
      * Also see {@link #createMillimolePerLiter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMillimolePerLiter();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of concentr: mole.
      * Caller owns returned value and must free it.
      * Also see {@link #getMole()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createMole(UErrorCode &status);
 
     /**
      * Returns by value, unit of concentr: mole.
      * Also see {@link #createMole()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMole();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: permillion.
@@ -960,14 +918,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPartPerMillion(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of concentr: permillion.
      * Also see {@link #createPartPerMillion()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPartPerMillion();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: percent.
@@ -978,14 +934,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPercent(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of concentr: percent.
      * Also see {@link #createPercent()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPercent();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: permille.
@@ -996,32 +950,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPermille(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of concentr: permille.
      * Also see {@link #createPermille()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPermille();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of concentr: permyriad.
      * Caller owns returned value and must free it.
      * Also see {@link #getPermyriad()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createPermyriad(UErrorCode &status);
 
     /**
      * Returns by value, unit of concentr: permyriad.
      * Also see {@link #createPermyriad()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPermyriad();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of consumption: liter-per-100-kilometer.
@@ -1032,14 +982,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createLiterPer100Kilometers(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of consumption: liter-per-100-kilometer.
      * Also see {@link #createLiterPer100Kilometers()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getLiterPer100Kilometers();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of consumption: liter-per-kilometer.
@@ -1050,14 +998,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createLiterPerKilometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of consumption: liter-per-kilometer.
      * Also see {@link #createLiterPerKilometer()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getLiterPerKilometer();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of consumption: mile-per-gallon.
@@ -1068,14 +1014,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilePerGallon(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of consumption: mile-per-gallon.
      * Also see {@link #createMilePerGallon()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilePerGallon();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of consumption: mile-per-gallon-imperial.
@@ -1086,14 +1030,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilePerGallonImperial(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of consumption: mile-per-gallon-imperial.
      * Also see {@link #createMilePerGallonImperial()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilePerGallonImperial();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: bit.
@@ -1104,14 +1046,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createBit(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: bit.
      * Also see {@link #createBit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getBit();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: byte.
@@ -1122,14 +1062,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createByte(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: byte.
      * Also see {@link #createByte()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getByte();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: gigabit.
@@ -1140,14 +1078,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGigabit(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: gigabit.
      * Also see {@link #createGigabit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGigabit();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: gigabyte.
@@ -1158,14 +1094,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGigabyte(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: gigabyte.
      * Also see {@link #createGigabyte()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGigabyte();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: kilobit.
@@ -1176,14 +1110,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilobit(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: kilobit.
      * Also see {@link #createKilobit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilobit();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: kilobyte.
@@ -1194,14 +1126,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilobyte(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: kilobyte.
      * Also see {@link #createKilobyte()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilobyte();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: megabit.
@@ -1212,14 +1142,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMegabit(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: megabit.
      * Also see {@link #createMegabit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMegabit();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: megabyte.
@@ -1230,14 +1158,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMegabyte(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: megabyte.
      * Also see {@link #createMegabyte()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMegabyte();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: petabyte.
@@ -1248,14 +1174,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPetabyte(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: petabyte.
      * Also see {@link #createPetabyte()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPetabyte();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: terabit.
@@ -1266,14 +1190,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createTerabit(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: terabit.
      * Also see {@link #createTerabit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getTerabit();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of digital: terabyte.
@@ -1284,14 +1206,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createTerabyte(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of digital: terabyte.
      * Also see {@link #createTerabyte()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getTerabyte();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: century.
@@ -1302,14 +1222,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCentury(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: century.
      * Also see {@link #createCentury()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCentury();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: day.
@@ -1320,32 +1238,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createDay(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: day.
      * Also see {@link #createDay()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getDay();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of duration: day-person.
      * Caller owns returned value and must free it.
      * Also see {@link #getDayPerson()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createDayPerson(UErrorCode &status);
 
     /**
      * Returns by value, unit of duration: day-person.
      * Also see {@link #createDayPerson()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getDayPerson();
-#endif /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -1374,14 +1288,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createHour(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: hour.
      * Also see {@link #createHour()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getHour();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: microsecond.
@@ -1392,14 +1304,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMicrosecond(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: microsecond.
      * Also see {@link #createMicrosecond()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMicrosecond();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: millisecond.
@@ -1410,14 +1320,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMillisecond(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: millisecond.
      * Also see {@link #createMillisecond()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMillisecond();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: minute.
@@ -1428,14 +1336,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMinute(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: minute.
      * Also see {@link #createMinute()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMinute();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: month.
@@ -1446,32 +1352,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMonth(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: month.
      * Also see {@link #createMonth()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMonth();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of duration: month-person.
      * Caller owns returned value and must free it.
      * Also see {@link #getMonthPerson()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createMonthPerson(UErrorCode &status);
 
     /**
      * Returns by value, unit of duration: month-person.
      * Also see {@link #createMonthPerson()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMonthPerson();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: nanosecond.
@@ -1482,14 +1384,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createNanosecond(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: nanosecond.
      * Also see {@link #createNanosecond()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getNanosecond();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: second.
@@ -1500,14 +1400,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createSecond(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: second.
      * Also see {@link #createSecond()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSecond();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: week.
@@ -1518,32 +1416,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createWeek(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: week.
      * Also see {@link #createWeek()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getWeek();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of duration: week-person.
      * Caller owns returned value and must free it.
      * Also see {@link #getWeekPerson()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createWeekPerson(UErrorCode &status);
 
     /**
      * Returns by value, unit of duration: week-person.
      * Also see {@link #createWeekPerson()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getWeekPerson();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of duration: year.
@@ -1554,32 +1448,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createYear(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of duration: year.
      * Also see {@link #createYear()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getYear();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of duration: year-person.
      * Caller owns returned value and must free it.
      * Also see {@link #getYearPerson()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createYearPerson(UErrorCode &status);
 
     /**
      * Returns by value, unit of duration: year-person.
      * Also see {@link #createYearPerson()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getYearPerson();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of electric: ampere.
@@ -1590,14 +1480,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createAmpere(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of electric: ampere.
      * Also see {@link #createAmpere()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getAmpere();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of electric: milliampere.
@@ -1608,14 +1496,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilliampere(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of electric: milliampere.
      * Also see {@link #createMilliampere()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilliampere();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of electric: ohm.
@@ -1626,14 +1512,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createOhm(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of electric: ohm.
      * Also see {@link #createOhm()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getOhm();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of electric: volt.
@@ -1644,32 +1528,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createVolt(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of electric: volt.
      * Also see {@link #createVolt()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getVolt();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of energy: british-thermal-unit.
      * Caller owns returned value and must free it.
      * Also see {@link #getBritishThermalUnit()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createBritishThermalUnit(UErrorCode &status);
 
     /**
      * Returns by value, unit of energy: british-thermal-unit.
      * Also see {@link #createBritishThermalUnit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getBritishThermalUnit();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of energy: calorie.
@@ -1680,32 +1560,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCalorie(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of energy: calorie.
      * Also see {@link #createCalorie()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCalorie();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of energy: electronvolt.
      * Caller owns returned value and must free it.
      * Also see {@link #getElectronvolt()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createElectronvolt(UErrorCode &status);
 
     /**
      * Returns by value, unit of energy: electronvolt.
      * Also see {@link #createElectronvolt()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getElectronvolt();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of energy: foodcalorie.
@@ -1716,14 +1592,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createFoodcalorie(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of energy: foodcalorie.
      * Also see {@link #createFoodcalorie()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getFoodcalorie();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of energy: joule.
@@ -1734,14 +1608,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createJoule(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of energy: joule.
      * Also see {@link #createJoule()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getJoule();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of energy: kilocalorie.
@@ -1752,14 +1624,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilocalorie(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of energy: kilocalorie.
      * Also see {@link #createKilocalorie()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilocalorie();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of energy: kilojoule.
@@ -1770,14 +1640,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilojoule(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of energy: kilojoule.
      * Also see {@link #createKilojoule()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilojoule();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of energy: kilowatt-hour.
@@ -1788,14 +1656,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilowattHour(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of energy: kilowatt-hour.
      * Also see {@link #createKilowattHour()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilowattHour();
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -1815,41 +1681,37 @@ class U_I18N_API MeasureUnit: public UObject {
     static MeasureUnit getThermUs();
 #endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of force: newton.
      * Caller owns returned value and must free it.
      * Also see {@link #getNewton()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createNewton(UErrorCode &status);
 
     /**
      * Returns by value, unit of force: newton.
      * Also see {@link #createNewton()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getNewton();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of force: pound-force.
      * Caller owns returned value and must free it.
      * Also see {@link #getPoundForce()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createPoundForce(UErrorCode &status);
 
     /**
      * Returns by value, unit of force: pound-force.
      * Also see {@link #createPoundForce()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPoundForce();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of frequency: gigahertz.
@@ -1860,14 +1722,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGigahertz(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of frequency: gigahertz.
      * Also see {@link #createGigahertz()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGigahertz();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of frequency: hertz.
@@ -1878,14 +1738,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createHertz(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of frequency: hertz.
      * Also see {@link #createHertz()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getHertz();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of frequency: kilohertz.
@@ -1896,14 +1754,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilohertz(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of frequency: kilohertz.
      * Also see {@link #createKilohertz()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilohertz();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of frequency: megahertz.
@@ -1914,14 +1770,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMegahertz(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of frequency: megahertz.
      * Also see {@link #createMegahertz()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMegahertz();
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -2058,14 +1912,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createAstronomicalUnit(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: astronomical-unit.
      * Also see {@link #createAstronomicalUnit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getAstronomicalUnit();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: centimeter.
@@ -2076,14 +1928,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCentimeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: centimeter.
      * Also see {@link #createCentimeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCentimeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: decimeter.
@@ -2094,14 +1944,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createDecimeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: decimeter.
      * Also see {@link #createDecimeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getDecimeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: fathom.
@@ -2112,14 +1960,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createFathom(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: fathom.
      * Also see {@link #createFathom()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getFathom();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: foot.
@@ -2130,14 +1976,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createFoot(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: foot.
      * Also see {@link #createFoot()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getFoot();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: furlong.
@@ -2148,14 +1992,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createFurlong(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: furlong.
      * Also see {@link #createFurlong()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getFurlong();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: inch.
@@ -2166,14 +2008,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createInch(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: inch.
      * Also see {@link #createInch()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getInch();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: kilometer.
@@ -2184,14 +2024,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: kilometer.
      * Also see {@link #createKilometer()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilometer();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: light-year.
@@ -2202,14 +2040,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createLightYear(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: light-year.
      * Also see {@link #createLightYear()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getLightYear();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: meter.
@@ -2220,14 +2056,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: meter.
      * Also see {@link #createMeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: micrometer.
@@ -2238,14 +2072,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMicrometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: micrometer.
      * Also see {@link #createMicrometer()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMicrometer();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: mile.
@@ -2256,14 +2088,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMile(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: mile.
      * Also see {@link #createMile()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMile();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: mile-scandinavian.
@@ -2274,14 +2104,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMileScandinavian(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: mile-scandinavian.
      * Also see {@link #createMileScandinavian()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMileScandinavian();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: millimeter.
@@ -2292,14 +2120,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMillimeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: millimeter.
      * Also see {@link #createMillimeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMillimeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: nanometer.
@@ -2310,14 +2136,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createNanometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: nanometer.
      * Also see {@link #createNanometer()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getNanometer();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: nautical-mile.
@@ -2328,14 +2152,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createNauticalMile(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: nautical-mile.
      * Also see {@link #createNauticalMile()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getNauticalMile();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: parsec.
@@ -2346,14 +2168,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createParsec(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: parsec.
      * Also see {@link #createParsec()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getParsec();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: picometer.
@@ -2364,14 +2184,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPicometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: picometer.
      * Also see {@link #createPicometer()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPicometer();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: point.
@@ -2382,32 +2200,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPoint(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: point.
      * Also see {@link #createPoint()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPoint();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of length: solar-radius.
      * Caller owns returned value and must free it.
      * Also see {@link #getSolarRadius()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createSolarRadius(UErrorCode &status);
 
     /**
      * Returns by value, unit of length: solar-radius.
      * Also see {@link #createSolarRadius()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSolarRadius();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: yard.
@@ -2418,14 +2232,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createYard(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of length: yard.
      * Also see {@link #createYard()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getYard();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of light: lux.
@@ -2436,32 +2248,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createLux(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of light: lux.
      * Also see {@link #createLux()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getLux();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of light: solar-luminosity.
      * Caller owns returned value and must free it.
      * Also see {@link #getSolarLuminosity()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createSolarLuminosity(UErrorCode &status);
 
     /**
      * Returns by value, unit of light: solar-luminosity.
      * Also see {@link #createSolarLuminosity()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSolarLuminosity();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: carat.
@@ -2472,50 +2280,44 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCarat(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: carat.
      * Also see {@link #createCarat()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCarat();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of mass: dalton.
      * Caller owns returned value and must free it.
      * Also see {@link #getDalton()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createDalton(UErrorCode &status);
 
     /**
      * Returns by value, unit of mass: dalton.
      * Also see {@link #createDalton()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getDalton();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of mass: earth-mass.
      * Caller owns returned value and must free it.
      * Also see {@link #getEarthMass()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createEarthMass(UErrorCode &status);
 
     /**
      * Returns by value, unit of mass: earth-mass.
      * Also see {@link #createEarthMass()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getEarthMass();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: gram.
@@ -2526,14 +2328,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGram(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: gram.
      * Also see {@link #createGram()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGram();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: kilogram.
@@ -2544,14 +2344,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilogram(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: kilogram.
      * Also see {@link #createKilogram()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilogram();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: metric-ton.
@@ -2562,14 +2360,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMetricTon(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: metric-ton.
      * Also see {@link #createMetricTon()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMetricTon();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: microgram.
@@ -2580,14 +2376,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMicrogram(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: microgram.
      * Also see {@link #createMicrogram()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMicrogram();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: milligram.
@@ -2598,14 +2392,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilligram(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: milligram.
      * Also see {@link #createMilligram()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilligram();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: ounce.
@@ -2616,14 +2408,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createOunce(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: ounce.
      * Also see {@link #createOunce()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getOunce();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: ounce-troy.
@@ -2634,14 +2424,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createOunceTroy(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: ounce-troy.
      * Also see {@link #createOunceTroy()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getOunceTroy();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: pound.
@@ -2652,32 +2440,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPound(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: pound.
      * Also see {@link #createPound()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPound();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of mass: solar-mass.
      * Caller owns returned value and must free it.
      * Also see {@link #getSolarMass()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createSolarMass(UErrorCode &status);
 
     /**
      * Returns by value, unit of mass: solar-mass.
      * Also see {@link #createSolarMass()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getSolarMass();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: stone.
@@ -2688,14 +2472,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createStone(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: stone.
      * Also see {@link #createStone()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getStone();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: ton.
@@ -2706,14 +2488,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createTon(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of mass: ton.
      * Also see {@link #createTon()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getTon();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of power: gigawatt.
@@ -2724,14 +2504,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGigawatt(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of power: gigawatt.
      * Also see {@link #createGigawatt()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGigawatt();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of power: horsepower.
@@ -2742,14 +2520,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createHorsepower(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of power: horsepower.
      * Also see {@link #createHorsepower()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getHorsepower();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of power: kilowatt.
@@ -2760,14 +2536,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilowatt(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of power: kilowatt.
      * Also see {@link #createKilowatt()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilowatt();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of power: megawatt.
@@ -2778,14 +2552,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMegawatt(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of power: megawatt.
      * Also see {@link #createMegawatt()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMegawatt();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of power: milliwatt.
@@ -2796,14 +2568,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilliwatt(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of power: milliwatt.
      * Also see {@link #createMilliwatt()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilliwatt();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of power: watt.
@@ -2814,14 +2584,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createWatt(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of power: watt.
      * Also see {@link #createWatt()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getWatt();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of pressure: atmosphere.
@@ -2832,14 +2600,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createAtmosphere(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of pressure: atmosphere.
      * Also see {@link #createAtmosphere()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getAtmosphere();
-#endif /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -2868,14 +2634,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createHectopascal(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of pressure: hectopascal.
      * Also see {@link #createHectopascal()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getHectopascal();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of pressure: inch-ofhg.
@@ -2886,50 +2650,44 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createInchHg(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of pressure: inch-ofhg.
      * Also see {@link #createInchHg()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getInchHg();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of pressure: kilopascal.
      * Caller owns returned value and must free it.
      * Also see {@link #getKilopascal()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createKilopascal(UErrorCode &status);
 
     /**
      * Returns by value, unit of pressure: kilopascal.
      * Also see {@link #createKilopascal()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilopascal();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of pressure: megapascal.
      * Caller owns returned value and must free it.
      * Also see {@link #getMegapascal()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createMegapascal(UErrorCode &status);
 
     /**
      * Returns by value, unit of pressure: megapascal.
      * Also see {@link #createMegapascal()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMegapascal();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of pressure: millibar.
@@ -2940,14 +2698,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMillibar(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of pressure: millibar.
      * Also see {@link #createMillibar()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMillibar();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of pressure: millimeter-ofhg.
@@ -2958,14 +2714,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMillimeterOfMercury(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of pressure: millimeter-ofhg.
      * Also see {@link #createMillimeterOfMercury()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMillimeterOfMercury();
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -2994,14 +2748,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPoundPerSquareInch(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of pressure: pound-force-per-square-inch.
      * Also see {@link #createPoundPerSquareInch()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPoundPerSquareInch();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of speed: kilometer-per-hour.
@@ -3012,14 +2764,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKilometerPerHour(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of speed: kilometer-per-hour.
      * Also see {@link #createKilometerPerHour()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKilometerPerHour();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of speed: knot.
@@ -3030,14 +2780,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKnot(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of speed: knot.
      * Also see {@link #createKnot()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKnot();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of speed: meter-per-second.
@@ -3048,14 +2796,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMeterPerSecond(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of speed: meter-per-second.
      * Also see {@link #createMeterPerSecond()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMeterPerSecond();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of speed: mile-per-hour.
@@ -3066,14 +2812,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilePerHour(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of speed: mile-per-hour.
      * Also see {@link #createMilePerHour()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilePerHour();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of temperature: celsius.
@@ -3084,14 +2828,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCelsius(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of temperature: celsius.
      * Also see {@link #createCelsius()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCelsius();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of temperature: fahrenheit.
@@ -3102,14 +2844,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createFahrenheit(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of temperature: fahrenheit.
      * Also see {@link #createFahrenheit()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getFahrenheit();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of temperature: generic.
@@ -3120,14 +2860,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGenericTemperature(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of temperature: generic.
      * Also see {@link #createGenericTemperature()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGenericTemperature();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of temperature: kelvin.
@@ -3138,50 +2876,44 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createKelvin(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of temperature: kelvin.
      * Also see {@link #createKelvin()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getKelvin();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of torque: newton-meter.
      * Caller owns returned value and must free it.
      * Also see {@link #getNewtonMeter()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createNewtonMeter(UErrorCode &status);
 
     /**
      * Returns by value, unit of torque: newton-meter.
      * Also see {@link #createNewtonMeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getNewtonMeter();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of torque: pound-force-foot.
      * Caller owns returned value and must free it.
      * Also see {@link #getPoundFoot()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createPoundFoot(UErrorCode &status);
 
     /**
      * Returns by value, unit of torque: pound-force-foot.
      * Also see {@link #createPoundFoot()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPoundFoot();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: acre-foot.
@@ -3192,32 +2924,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createAcreFoot(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: acre-foot.
      * Also see {@link #createAcreFoot()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getAcreFoot();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: barrel.
      * Caller owns returned value and must free it.
      * Also see {@link #getBarrel()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createBarrel(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: barrel.
      * Also see {@link #createBarrel()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getBarrel();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: bushel.
@@ -3228,14 +2956,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createBushel(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: bushel.
      * Also see {@link #createBushel()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getBushel();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: centiliter.
@@ -3246,14 +2972,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCentiliter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: centiliter.
      * Also see {@link #createCentiliter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCentiliter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cubic-centimeter.
@@ -3264,14 +2988,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCubicCentimeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cubic-centimeter.
      * Also see {@link #createCubicCentimeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCubicCentimeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cubic-foot.
@@ -3282,14 +3004,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCubicFoot(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cubic-foot.
      * Also see {@link #createCubicFoot()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCubicFoot();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cubic-inch.
@@ -3300,14 +3020,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCubicInch(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cubic-inch.
      * Also see {@link #createCubicInch()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCubicInch();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cubic-kilometer.
@@ -3318,14 +3036,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCubicKilometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cubic-kilometer.
      * Also see {@link #createCubicKilometer()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCubicKilometer();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cubic-meter.
@@ -3336,14 +3052,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCubicMeter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cubic-meter.
      * Also see {@link #createCubicMeter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCubicMeter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cubic-mile.
@@ -3354,14 +3068,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCubicMile(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cubic-mile.
      * Also see {@link #createCubicMile()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCubicMile();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cubic-yard.
@@ -3372,14 +3084,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCubicYard(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cubic-yard.
      * Also see {@link #createCubicYard()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCubicYard();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cup.
@@ -3390,14 +3100,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCup(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cup.
      * Also see {@link #createCup()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCup();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: cup-metric.
@@ -3408,14 +3116,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createCupMetric(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: cup-metric.
      * Also see {@link #createCupMetric()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getCupMetric();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: deciliter.
@@ -3426,14 +3132,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createDeciliter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: deciliter.
      * Also see {@link #createDeciliter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getDeciliter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: fluid-ounce.
@@ -3444,32 +3148,28 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createFluidOunce(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: fluid-ounce.
      * Also see {@link #createFluidOunce()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getFluidOunce();
-#endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: fluid-ounce-imperial.
      * Caller owns returned value and must free it.
      * Also see {@link #getFluidOunceImperial()}.
      * @param status ICU error code.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit *createFluidOunceImperial(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: fluid-ounce-imperial.
      * Also see {@link #createFluidOunceImperial()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getFluidOunceImperial();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: gallon.
@@ -3480,14 +3180,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGallon(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: gallon.
      * Also see {@link #createGallon()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGallon();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: gallon-imperial.
@@ -3498,14 +3196,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createGallonImperial(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: gallon-imperial.
      * Also see {@link #createGallonImperial()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getGallonImperial();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: hectoliter.
@@ -3516,14 +3212,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createHectoliter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: hectoliter.
      * Also see {@link #createHectoliter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getHectoliter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: liter.
@@ -3534,14 +3228,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createLiter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: liter.
      * Also see {@link #createLiter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getLiter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: megaliter.
@@ -3552,14 +3244,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMegaliter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: megaliter.
      * Also see {@link #createMegaliter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMegaliter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: milliliter.
@@ -3570,14 +3260,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createMilliliter(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: milliliter.
      * Also see {@link #createMilliliter()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getMilliliter();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: pint.
@@ -3588,14 +3276,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPint(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: pint.
      * Also see {@link #createPint()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPint();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: pint-metric.
@@ -3606,14 +3292,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPintMetric(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: pint-metric.
      * Also see {@link #createPintMetric()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getPintMetric();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: quart.
@@ -3624,14 +3308,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createQuart(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: quart.
      * Also see {@link #createQuart()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getQuart();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: tablespoon.
@@ -3642,14 +3324,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createTablespoon(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: tablespoon.
      * Also see {@link #createTablespoon()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getTablespoon();
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: teaspoon.
@@ -3660,14 +3340,12 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createTeaspoon(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by value, unit of volume: teaspoon.
      * Also see {@link #createTeaspoon()}.
-     * @draft ICU 64
+     * @stable ICU 64
      */
     static MeasureUnit getTeaspoon();
-#endif  /* U_HIDE_DRAFT_API */
 
 
 // End generated createXXX methods
