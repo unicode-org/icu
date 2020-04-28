@@ -42,7 +42,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     if (exec) { logln("TestSuite UnitsTest: "); }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversionCapability);
-    // TESTCASE_AUTO(testConversions);
+    TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
     // TESTCASE_AUTO(testBasic);
     // TESTCASE_AUTO(testSiPrefixes);
@@ -266,8 +266,8 @@ StringPiece trimField(char *(&field)[2]) {
 }
 
 /**
- * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
- * This is a UParseLineFn as required by u_parseDelimitedFile.
+ * Deals with a single data-driven unit test for unit conversions. This
+ * UParseLineFn for use by u_parseDelimitedFile is intended for "unitsTest.txt".
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) return;
@@ -322,7 +322,8 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 
     // unitsTest->assertTrue(msg.data(), actualState != UNCONVERTIBLE);
 
-    // Unit conversion... untested:
+    // TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn:
+    //
     // UnitConverter converter(sourceUnit, targetUnit, status);
     // double got = converter.convert(1000, status);
     // unitsTest->assertEqualsNear(quantity.data(), expected, got, 0.0001);
@@ -331,6 +332,9 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 /**
  * Runs data-driven unit tests for unit conversion. It looks for the test cases
  * in source/test/testdata/units/unitsTest.txt, which originates in CLDR.
+ *
+ * TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn (it only
+ * tests convertability at the moment).
  */
 void UnitsTest::testConversions() {
     const char *filename = "unitsTest.txt";
@@ -349,9 +353,8 @@ void UnitsTest::testConversions() {
     path.appendPathPart(filename, errorCode);
 
     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
-    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode)))
         return;
-    }
 }
 
 /**
