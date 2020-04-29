@@ -15,12 +15,6 @@
 
 U_NAMESPACE_BEGIN
 
-enum U_I18N_API UnitsMatchingState {
-    RECIPROCAL,
-    CONVERTIBLE,
-    UNCONVERTIBLE,
-};
-
 /**
  * Represents the conversion rate between `source` and `target`.
  */
@@ -34,9 +28,16 @@ struct ConversionRate {
     bool reciprocal = false;
 };
 
-UnitsMatchingState U_I18N_API
-checkUnitsState(const MeasureUnit &source, const MeasureUnit &target,
-                const MaybeStackVector<ConversionRateInfo> &conversionRateInfo, UErrorCode &status);
+enum U_I18N_API UnitsConvertibilityState {
+    RECIPROCAL,
+    CONVERTIBLE,
+    UNCONVERTIBLE,
+};
+
+UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
+                                                        const MeasureUnit &target,
+                                                        const ConversionRates &conversionRates,
+                                                        UErrorCode &status);
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
@@ -54,7 +55,7 @@ class U_I18N_API UnitConverter {
      * @param status
      */
     UnitConverter(MeasureUnit source, MeasureUnit target,
-                  const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status);
+                  const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
      * Convert a value in the source unit to another value in the target unit.

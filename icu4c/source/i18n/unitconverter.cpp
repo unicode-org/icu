@@ -138,13 +138,16 @@ double strHasDivideSignToDouble(StringPiece strWithDivide) {
     return strToDouble(strWithDivide);
 }
 
-const ConversionRateInfo &
-extractConversionInfo(StringPiece source,
-                      const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList,
-                      UErrorCode &status) {
-    for (size_t i = 0, n = conversionRateInfoList.length(); i < n; ++i) {
-        if (conversionRateInfoList[i]->sourceUnit.toStringPiece() == source)
-            return *(conversionRateInfoList[i]);
+const ConversionRateInfo &extractConversionInfo(StringPiece source,
+                                                const ConversionRates &conversionRates,
+                                                UErrorCode &status) {
+    // TODO(younies): hugovdm added this hacky getInternalList call to resolve
+    // "git merge" issues. This needs to be improved.
+    const MaybeStackVector<ConversionRateInfo> *conversionRateInfoList =
+        conversionRates.getInternalList();
+    for (size_t i = 0, n = conversionRateInfoList->length(); i < n; ++i) {
+        if ((*conversionRateInfoList)[i]->sourceUnit.toStringPiece() == source)
+            return *((*conversionRateInfoList)[i]);
     }
 
     status = U_INTERNAL_PROGRAM_ERROR;
@@ -152,9 +155,12 @@ extractConversionInfo(StringPiece source,
     return ConversionRateInfo();
 }
 
-MeasureUnit extractBaseUnit(const MeasureUnit &source,
-                            const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList,
-                            UErrorCode &status) {
+/**
+ * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
+ * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
+ */
+MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionRates &conversionRates,
+                                    UErrorCode &status) {
     MeasureUnit result;
     int32_t count;
     const auto singleUnits = source.splitToSingleUnits(count, status);
@@ -165,17 +171,26 @@ MeasureUnit extractBaseUnit(const MeasureUnit &source,
         // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
         // we will use `meter`
         const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
-        const auto &rateInfo =
-            extractConversionInfo(singleUnitImpl.identifier, conversionRateInfoList, status);
+        const auto rateInfo = conversionRates.extractConversionInfo(singleUnitImpl.identifier, status);
         if (U_FAILURE(status)) return result;
+        if (rateInfo == nullptr) {
+            status = U_INTERNAL_PROGRAM_ERROR;
+            return result;
+        }
 
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
         // must be p4-meter. (NOTE: hectare --> square-meter)
-        auto baseUnit = MeasureUnit::forIdentifier(rateInfo.baseUnit.toStringPiece(), status);
-        auto singleBaseUnit = SingleUnitImpl::forMeasureUnit(baseUnit, status);
-        singleBaseUnit.dimensionality *= singleUnit.getDimensionality(status);
+        auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
 
-        result = result.product(singleBaseUnit.build(status), status);
+        int32_t baseUnitsCount;
+        auto baseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCount, status);
+        for (int j = 0; j < baseUnitsCount; j++) {
+            int8_t newDimensionality =
+                baseUnits[j].getDimensionality(status) * singleUnit.getDimensionality(status);
+            result = result.product(baseUnits[j].withDimensionality(newDimensionality, status), status);
+
+            if (U_FAILURE(status)) { return result; }
+        }
     }
 
     return result;
@@ -278,8 +293,7 @@ Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
 }
 
 // Load factor for a single source
-Factor loadSingleFactor(StringPiece source, const MaybeStackVector<ConversionRateInfo> &ratesInfo,
-                        UErrorCode &status) {
+Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UErrorCode &status) {
     const auto &conversionUnit = extractConversionInfo(source, ratesInfo, status);
     if (U_FAILURE(status)) return Factor();
 
@@ -293,8 +307,8 @@ Factor loadSingleFactor(StringPiece source, const MaybeStackVector<ConversionRat
 }
 
 // Load Factor for compound source
-Factor loadCompoundFactor(const MeasureUnit &source,
-                          const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
+Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &ratesInfo,
+                          UErrorCode &status) {
 
     Factor result;
     auto compoundSourceUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(source, status);
@@ -372,8 +386,8 @@ UBool checkSimpleUnit(const MeasureUnit &unit, UErrorCode &status) {
  *  Extract conversion rate from `source` to `target`
  */
 void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &source,
-                        const MeasureUnit &target, UnitsMatchingState unitsState,
-                        const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
+                        const MeasureUnit &target, UnitsConvertibilityState unitsState,
+                        const ConversionRates &ratesInfo, UErrorCode &status) {
     // Represents the conversion factor from the source to the target.
     Factor finalFactor;
 
@@ -384,9 +398,9 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 
     // Merger Factors
     finalFactor.multiplyBy(sourceToBase);
-    if (unitsState == UnitsMatchingState::CONVERTIBLE) {
+    if (unitsState == UnitsConvertibilityState::CONVERTIBLE) {
         finalFactor.divideBy(targetToBase);
-    } else if (unitsState == UnitsMatchingState::RECIPROCAL) {
+    } else if (unitsState == UnitsConvertibilityState::RECIPROCAL) {
         finalFactor.multiplyBy(targetToBase);
     } else {
         status = UErrorCode::U_ARGUMENT_TYPE_MISMATCH;
@@ -407,16 +421,17 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
             targetToBase.offset * targetToBase.factorDen / targetToBase.factorNum;
     }
 
-    conversionRate.reciprocal = unitsState == UnitsMatchingState::RECIPROCAL;
+    conversionRate.reciprocal = unitsState == UnitsConvertibilityState::RECIPROCAL;
 }
 
 } // namespace
 
-UnitsMatchingState U_I18N_API
-checkUnitsState(const MeasureUnit &source, const MeasureUnit &target,
-                const MaybeStackVector<ConversionRateInfo> &conversionRateInfoList, UErrorCode &status) {
-    auto sourceBaseUnit = extractBaseUnit(source, conversionRateInfoList, status);
-    auto targetBaseUnit = extractBaseUnit(target, conversionRateInfoList, status);
+UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
+                                                        const MeasureUnit &target,
+                                                        const ConversionRates &conversionRates,
+                                                        UErrorCode &status) {
+    auto sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
+    auto targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
 
     if (U_FAILURE(status)) return UNCONVERTIBLE;
 
@@ -427,10 +442,10 @@ checkUnitsState(const MeasureUnit &source, const MeasureUnit &target,
 }
 
 UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target,
-                             const MaybeStackVector<ConversionRateInfo> &ratesInfo, UErrorCode &status) {
-    UnitsMatchingState unitsState = checkUnitsState(source, target, ratesInfo, status);
+                             const ConversionRates &ratesInfo, UErrorCode &status) {
+    UnitsConvertibilityState unitsState = checkConvertibility(source, target, ratesInfo, status);
     if (U_FAILURE(status)) return;
-    if (unitsState == UnitsMatchingState::UNCONVERTIBLE) {
+    if (unitsState == UnitsConvertibilityState::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }

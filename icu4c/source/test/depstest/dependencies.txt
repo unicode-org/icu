@@ -1063,9 +1063,9 @@ group: sharedbreakiterator
     breakiterator
 
 group: units_extra
-    measunit_extra.o unitconverter.o
+    measunit_extra.o
   deps
-    units ucharstriebuilder ucharstrie uclean_i18n
+    units ucharstriebuilder ucharstrie uclean_i18n double_conversion
 
 group: units
     measunit.o currunit.o nounit.o
@@ -1073,9 +1073,9 @@ group: units
     stringenumeration errorcode
 
 group: unitsformatter
-    unitsdata.o
+    unitsdata.o unitconverter.o
   deps
-    resourcebundle
+    resourcebundle units_extra
 
 group: decnumber
     decContext.o decNumber.o

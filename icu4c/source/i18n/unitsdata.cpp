@@ -215,13 +215,14 @@ void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &resu
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", sink, status);
 }
 
-// TODO(hugovdm): ensure this gets removed. Currently
-// https://github.com/sffc/icu/pull/32 is making use of it.
-MaybeStackVector<ConversionRateInfo> U_I18N_API
-getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &, UErrorCode &status) {
-    MaybeStackVector<ConversionRateInfo> result;
-    getAllConversionRates(result, status);
-    return result;
+const ConversionRateInfo *ConversionRates::extractConversionInfo(StringPiece source,
+                                                                 UErrorCode &status) const {
+    for (size_t i = 0, n = conversionInfo_.length(); i < n; ++i) {
+        if (conversionInfo_[i]->sourceUnit.toStringPiece() == source) return conversionInfo_[i];
+    }
+
+    status = U_INTERNAL_PROGRAM_ERROR;
+    return nullptr;
 }
 
 /**

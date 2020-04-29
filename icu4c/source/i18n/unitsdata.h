@@ -49,16 +49,32 @@ class U_I18N_API ConversionRateInfo : public UMemory {
 void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status);
 
 /**
- * Temporary backward-compatibility function.
- *
- * TODO(hugovdm): ensure this gets removed. Currently
- * https://github.com/sffc/icu/pull/32 is making use of it.
- *
- * @param units Ignored.
- * @return the result of getAllConversionRates.
+ * Contains all the supported conversion rates.
  */
-MaybeStackVector<ConversionRateInfo>
-    U_I18N_API getConversionRatesInfo(const MaybeStackVector<MeasureUnit> &units, UErrorCode &status);
+class U_I18N_API ConversionRates {
+  public:
+    /**
+     * Constructor
+     *
+     * @param status Receives status.
+     */
+    ConversionRates(UErrorCode &status) { getAllConversionRates(conversionInfo_, status); }
+
+    /**
+     * Returns a pointer to the conversion rate info that match the `source`.
+     *
+     * @param source Contains the source.
+     * @param status Receives status.
+     */
+    const ConversionRateInfo *extractConversionInfo(StringPiece source, UErrorCode &status) const;
+
+    // TODO(younies): hugovdm added this to resolve "git merge" issues. The API
+    // should be improved to make this unnecessary.
+    const MaybeStackVector<ConversionRateInfo> *getInternalList() const { return &conversionInfo_; };
+
+  private:
+    MaybeStackVector<ConversionRateInfo> conversionInfo_;
+};
 
 // Encapsulates unitPreferenceData information from units resources, specifying
 // a sequence of output unit preferences.
