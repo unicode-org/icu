@@ -67,55 +67,14 @@ void UnitsTest::testConversionCapability() {
         const StringPiece target;
         const UnitsConvertibilityState expectedState;
     } testCases[]{
-        {"meter", "foot", CONVERTIBLE},                                                    //
-        {"kilometer", "foot", CONVERTIBLE},                                                //
-        {"hectare", "square-foot", CONVERTIBLE},                                           //
-        {"kilometer-per-second", "second-per-meter", RECIPROCAL},                          //
-        {"square-meter", "square-foot", CONVERTIBLE},                                      //
-        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                          //
-        {"square-hectare", "p4-foot", CONVERTIBLE},                                        //
-        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},            //
-        // TODO: Remove the following test cases after hocking up unitsTest.txt.
-        {"g-force", "meter-per-square-second", CONVERTIBLE},                               //
-        {"ohm", "kilogram-square-meter-per-cubic-second-square-ampere", CONVERTIBLE},      //
-        {"electronvolt", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
-        {"dalton", "kilogram-square-meter-per-square-second", CONVERTIBLE},                //
-        {"joule", "kilogram-square-meter-per-square-second", CONVERTIBLE},                 //
-        {"meter-newton", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
-        {"foot-pound-force", "kilogram-square-meter-per-square-second", CONVERTIBLE},      //
-        {"calorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},               //
-        {"kilojoule", "kilogram-square-meter-per-square-second", CONVERTIBLE},             //
-        {"british-thermal-unit", "kilogram-square-meter-per-square-second", CONVERTIBLE},  //
-        {"foodcalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
-        {"kilocalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
-        {"hour-kilowatt", "kilogram-square-meter-second-per-cubic-second", CONVERTIBLE},   //
-        {"therm-us", "kilogram-square-meter-per-square-second", CONVERTIBLE},              //
-        {"newton", "kilogram-meter-per-square-second", CONVERTIBLE},                       //
-        {"pound-force", "kilogram-meter-per-square-second", CONVERTIBLE},                  //
-        {"hertz", "revolution-per-second", CONVERTIBLE},                                   //
-        {"kilohertz", "revolution-per-second", CONVERTIBLE},                               //
-        {"megahertz", "revolution-per-second", CONVERTIBLE},                               //
-        {"gigahertz", "revolution-per-second", CONVERTIBLE},                               //
-        {"lux", "candela-square-meter-per-square-meter", CONVERTIBLE},                     //
-        {"milliwatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},              //
-        {"watt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},                   //
-        {"horsepower", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},             //
-        {"kilowatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
-        {"megawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
-        {"gigawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
-        {"solar-luminosity", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},       //
-        {"pascal", "kilogram-per-meter-square-second", CONVERTIBLE},                       //
-        {"hectopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                  //
-        {"millibar", "kilogram-per-meter-square-second", CONVERTIBLE},                     //
-        {"millimeter-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE}, //
-        {"kilopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
-        {"inch-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE},       //
-        {"bar", "kilogram-per-meter-square-second", CONVERTIBLE},                          //
-        {"atmosphere", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
-        {"megapascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
-        {"ofhg", "kilogram-per-square-meter-square-second", CONVERTIBLE},                  //
-        {"knot", "meter-per-second", CONVERTIBLE},                                         //
-        {"volt", "kilogram-square-meter-per-cubic-second-ampere", CONVERTIBLE},            //
+        {"meter", "foot", CONVERTIBLE},                                         //
+        {"kilometer", "foot", CONVERTIBLE},                                     //
+        {"hectare", "square-foot", CONVERTIBLE},                                //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL},               //
+        {"square-meter", "square-foot", CONVERTIBLE},                           //
+        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
+        {"square-hectare", "p4-foot", CONVERTIBLE},                             //
+        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
     };
 
     for (const auto &testCase : testCases) {
