@@ -265,8 +265,11 @@ StringPiece trimField(char *(&field)[2]) {
     return StringPiece(start, length);
 }
 
+// Used for passing context to unitsTestDataLineFn via u_parseDelimitedFile.
 struct UnitsTestContext {
+    // Provides access to UnitsTest methods like logln.
     UnitsTest *unitsTest;
+    // Conversion rates: does not take ownership.
     ConversionRates *conversionRates;
 };
 
