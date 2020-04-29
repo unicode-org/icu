@@ -72,6 +72,59 @@ class U_I18N_API ConversionRates {
     MaybeStackVector<ConversionRateInfo> conversionInfo_;
 };
 
+// Encapsulates unitPreferenceData information from units resources, specifying
+// a sequence of output unit preferences.
+struct U_I18N_API UnitPreference {
+    UnitPreference() : geq(1) {}
+    CharString unit;
+    double geq;
+    CharString skeleton;
+};
+
+namespace {
+
+// UnitPreferenceMetadata lives in the anonymous namespace, because it should
+// only be useful to internal code and unit testing code.
+struct U_I18N_API UnitPreferenceMetadata {
+    CharString category;
+    CharString usage;
+    CharString region;
+    int32_t prefsOffset;
+    int32_t prefsCount;
+};
+
+} // namespace
+
+/**
+ * Unit Preferences information for various locales and usages.
+ */
+class U_I18N_API UnitPreferences {
+  public:
+    /**
+     * Constructor that loads data.
+     *
+     * @param status Receives status.
+     */
+    UnitPreferences(UErrorCode &status);
+
+    /**
+     * FIXME/WIP document me!
+     *
+     * If region can't be found, falls back to global (001). If usage can't be found, falls back to
+     * "default".
+     *
+     * Copies the preferences structures. Consider returning pointers (references) instead?
+     */
+    void getPreferencesFor(const char *category, const char *usage, const char *region,
+                           MaybeStackVector<UnitPreference> *outPreferences, UErrorCode &status);
+
+  protected:
+    int32_t binarySearch(const char *category, const char *usage, const char *region);
+
+    MaybeStackVector<UnitPreferenceMetadata> metadata_;
+    MaybeStackVector<UnitPreference> unitPrefs_;
+};
+
 U_NAMESPACE_END
 
 #endif //__GETUNITSDATA_H__
