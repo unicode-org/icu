@@ -280,7 +280,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
         .append(" -> ", status)
         .append(targetUnit.getIdentifier(), status);
     if (status.errIfFailureAndReset("msg construction")) { return; }
-    unitsTest->assertTrue(msg.data(), convertibility != UNCONVERTIBLE);
+    unitsTest->assertNotEquals(msg.data(), UNCONVERTIBLE, convertibility);
 
     // TODO(hugovdm,younies): the following code can be uncommented (and
     // fixed) once merged with a UnitConverter branch:
