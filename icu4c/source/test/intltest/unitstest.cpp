@@ -52,20 +52,70 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
+// Just for testing quick conversion ability.
+double testConvert(UnicodeString source, UnicodeString target, double input) {
+    if (source == u"meter" && target == u"foot" && input == 1.0) return 3.28084;
+
+    if (source == u"kilometer" && target == u"foot" && input == 1.0) return 328.084;
+
+    return -1;
+}
+
 void UnitsTest::testConversionCapability() {
     struct TestCase {
         const StringPiece source;
         const StringPiece target;
-        const UnitsMatchingState expectedState;
+        const UnitsConvertibilityState expectedState;
     } testCases[]{
-        {"meter", "foot", CONVERTIBLE},                                         //
-        {"kilometer", "foot", CONVERTIBLE},                                     //
-        {"hectare", "square-foot", CONVERTIBLE},                                //
-        {"kilometer-per-second", "second-per-meter", RECIPROCAL},               //
-        {"square-meter", "square-foot", CONVERTIBLE},                           //
-        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
-        {"square-hectare", "p4-foot", CONVERTIBLE},                             //
-        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
+        {"meter", "foot", CONVERTIBLE},                                                    //
+        {"kilometer", "foot", CONVERTIBLE},                                                //
+        {"hectare", "square-foot", CONVERTIBLE},                                           //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL},                          //
+        {"square-meter", "square-foot", CONVERTIBLE},                                      //
+        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                          //
+        {"square-hectare", "p4-foot", CONVERTIBLE},                                        //
+        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},            //
+        // TODO: Remove the following test cases after hocking up unitsTest.txt.
+        {"g-force", "meter-per-square-second", CONVERTIBLE},                               //
+        {"ohm", "kilogram-square-meter-per-cubic-second-square-ampere", CONVERTIBLE},      //
+        {"electronvolt", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
+        {"dalton", "kilogram-square-meter-per-square-second", CONVERTIBLE},                //
+        {"joule", "kilogram-square-meter-per-square-second", CONVERTIBLE},                 //
+        {"meter-newton", "kilogram-square-meter-per-square-second", CONVERTIBLE},          //
+        {"foot-pound-force", "kilogram-square-meter-per-square-second", CONVERTIBLE},      //
+        {"calorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},               //
+        {"kilojoule", "kilogram-square-meter-per-square-second", CONVERTIBLE},             //
+        {"british-thermal-unit", "kilogram-square-meter-per-square-second", CONVERTIBLE},  //
+        {"foodcalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
+        {"kilocalorie", "kilogram-square-meter-per-square-second", CONVERTIBLE},           //
+        {"hour-kilowatt", "kilogram-square-meter-second-per-cubic-second", CONVERTIBLE},   //
+        {"therm-us", "kilogram-square-meter-per-square-second", CONVERTIBLE},              //
+        {"newton", "kilogram-meter-per-square-second", CONVERTIBLE},                       //
+        {"pound-force", "kilogram-meter-per-square-second", CONVERTIBLE},                  //
+        {"hertz", "revolution-per-second", CONVERTIBLE},                                   //
+        {"kilohertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"megahertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"gigahertz", "revolution-per-second", CONVERTIBLE},                               //
+        {"lux", "candela-square-meter-per-square-meter", CONVERTIBLE},                     //
+        {"milliwatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},              //
+        {"watt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},                   //
+        {"horsepower", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},             //
+        {"kilowatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"megawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"gigawatt", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},               //
+        {"solar-luminosity", "kilogram-square-meter-per-cubic-second", CONVERTIBLE},       //
+        {"pascal", "kilogram-per-meter-square-second", CONVERTIBLE},                       //
+        {"hectopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                  //
+        {"millibar", "kilogram-per-meter-square-second", CONVERTIBLE},                     //
+        {"millimeter-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE}, //
+        {"kilopascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"inch-ofhg", "kilogram-meter-per-square-meter-square-second", CONVERTIBLE},       //
+        {"bar", "kilogram-per-meter-square-second", CONVERTIBLE},                          //
+        {"atmosphere", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"megapascal", "kilogram-per-meter-square-second", CONVERTIBLE},                   //
+        {"ofhg", "kilogram-per-square-meter-square-second", CONVERTIBLE},                  //
+        {"knot", "meter-per-second", CONVERTIBLE},                                         //
+        {"volt", "kilogram-square-meter-per-cubic-second-ampere", CONVERTIBLE},            //
     };
 
     for (const auto &testCase : testCases) {
@@ -74,14 +124,10 @@ void UnitsTest::testConversionCapability() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
+        ConversionRates conversionRates(status);
+        auto convertibility = checkConvertibility(source, target, conversionRates, status);
 
-        const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-        auto actualSatate = checkUnitsState(source, target, conversionRateInfoList, status);
-
-        assertEquals("Conversion Capability", testCase.expectedState, actualSatate);
+        assertEquals("Conversion Capability", testCase.expectedState, convertibility);
     }
 }
 
@@ -105,13 +151,8 @@ void UnitsTest::testBasic() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
-        const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-
-        UnitConverter converter(source, target, conversionRateInfoList, status);
+        ConversionRates conversionRates(status);
+        UnitConverter converter(source, target, conversionRates, status);
 
         assertEqualsNear("test conversion", testCase.expectedValue,
                          converter.convert(testCase.inputValue), 0.001);
@@ -144,13 +185,8 @@ void UnitsTest::testSiPrefixes() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
-        const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-
-        UnitConverter converter(source, target, conversionRateInfoList, status);
+        ConversionRates conversionRates(status);
+        UnitConverter converter(source, target, conversionRates, status);
 
         assertEqualsNear("test conversion", testCase.expectedValue,
                          converter.convert(testCase.inputValue), 0.001);
@@ -183,13 +219,8 @@ void UnitsTest::testMass() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
-        const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-
-        UnitConverter converter(source, target, conversionRateInfoList, status);
+        ConversionRates conversionRates(status);
+        UnitConverter converter(source, target, conversionRates, status);
 
         assertEqualsNear("test conversion", testCase.expectedValue,
                          converter.convert(testCase.inputValue), 0.001);
@@ -221,13 +252,8 @@ void UnitsTest::testTemperature() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
-        const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-
-        UnitConverter converter(source, target, conversionRateInfoList, status);
+        ConversionRates conversionRates(status);
+        UnitConverter converter(source, target, conversionRates, status);
 
         assertEqualsNear("test conversion", testCase.expectedValue,
                          converter.convert(testCase.inputValue), 0.001);
@@ -255,13 +281,8 @@ void UnitsTest::testArea() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
-        const auto &conversionRateInfoList = getConversionRatesInfo(units, status);
-
-        UnitConverter converter(source, target, conversionRateInfoList, status);
+        ConversionRates conversionRates(status);
+        UnitConverter converter(source, target, conversionRates, status);
 
         assertEqualsNear("test conversion", testCase.expectedValue,
                          converter.convert(testCase.inputValue), 0.001);
@@ -286,8 +307,8 @@ StringPiece trimField(char *(&field)[2]) {
 }
 
 /**
- * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
- * This is a UParseLineFn as required by u_parseDelimitedFile.
+ * Deals with a single data-driven unit test for unit conversions. This
+ * UParseLineFn for use by u_parseDelimitedFile is intended for "unitsTest.txt".
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) return;
@@ -342,7 +363,8 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 
     // unitsTest->assertTrue(msg.data(), actualState != UNCONVERTIBLE);
 
-    // Unit conversion... untested:
+    // TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn:
+    //
     // UnitConverter converter(sourceUnit, targetUnit, status);
     // double got = converter.convert(1000, status);
     // unitsTest->assertEqualsNear(quantity.data(), expected, got, 0.0001);
@@ -351,6 +373,9 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 /**
  * Runs data-driven unit tests for unit conversion. It looks for the test cases
  * in source/test/testdata/units/unitsTest.txt, which originates in CLDR.
+ *
+ * TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn (it only
+ * tests convertability at the moment).
  */
 void UnitsTest::testConversions() {
     const char *filename = "unitsTest.txt";
@@ -369,9 +394,8 @@ void UnitsTest::testConversions() {
     path.appendPathPart(filename, errorCode);
 
     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, unitsTestDataLineFn, this, errorCode);
-    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
+    if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode)))
         return;
-    }
 }
 
 /**
