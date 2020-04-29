@@ -2155,6 +2155,23 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+UBool IntlTest::assertNotEquals(const char* message,
+                                int32_t expectedNot,
+                                int32_t actual) {
+    if (expectedNot == actual) {
+        errln((UnicodeString)("FAIL: ") + message + "; got " + actual + "=0x" + toHex(actual) +
+              "; expected != " + expectedNot);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)("Ok: ") + message + "; got " + actual + "=0x" + toHex(actual) +
+              " != " + expectedNot);
+    }
+#endif
+    return TRUE;
+}
+
 static char ASSERT_BUF[256];
 
 static const char* extractToAssertBuf(const UnicodeString& message) {
@@ -2223,6 +2240,11 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
                              const std::vector<std::string>& expected,
                              const std::vector<std::string>& actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertNotEquals(const UnicodeString &message,
+                                int32_t expectedNot,
+                                int32_t actual) {
+    return assertNotEquals(extractToAssertBuf(message), expectedNot, actual);
 }
 
 #if !UCONFIG_NO_FORMATTING
