@@ -306,35 +306,29 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
                      quantity.length(), quantity.data(), x.length(), x.data(), y.length(), y.data(),
                      expected, commentConversionFormula.length(), commentConversionFormula.data());
 
-    bool FIXME_skip_tests = false;
-    if (FIXME_skip_tests) {
-        unitsTest->logln("FIXME: skipping tests related to UnitConverter(«%s», «%s», status).",
-                         sourceUnit.getIdentifier(), targetUnit.getIdentifier());
-    } else {
-        // Convertibility:
-        auto convertibility = checkConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
-        if (status.errIfFailureAndReset("checkConvertibility(<%s>, <%s>, ...)",
-                                        sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
-            return;
-        }
-        CharString msg;
-        msg.append("convertible: ", status)
-            .append(sourceUnit.getIdentifier(), status)
-            .append(" -> ", status)
-            .append(targetUnit.getIdentifier(), status);
-        if (status.errIfFailureAndReset("msg construction")) { return; }
-        unitsTest->assertTrue(msg.data(), convertibility != UNCONVERTIBLE);
-
-        // TODO(hugovdm,younies): the following code can be uncommented (and
-        // fixed) once merged with a UnitConverter branch:
-        // UnitConverter converter(sourceUnit, targetUnit, unitsTest->conversionRates_, status);
-        // if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-        //                                 sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
-        //     return;
-        // }
-        // double got = converter.convert(1000);
-        // unitsTest->assertEqualsNear(fields[0][0], expected, got, 0.0001);
+    // Convertibility:
+    auto convertibility = checkConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
+    if (status.errIfFailureAndReset("checkConvertibility(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
+                                    targetUnit.getIdentifier())) {
+        return;
     }
+    CharString msg;
+    msg.append("convertible: ", status)
+        .append(sourceUnit.getIdentifier(), status)
+        .append(" -> ", status)
+        .append(targetUnit.getIdentifier(), status);
+    if (status.errIfFailureAndReset("msg construction")) { return; }
+    unitsTest->assertTrue(msg.data(), convertibility != UNCONVERTIBLE);
+
+    // TODO(hugovdm,younies): the following code can be uncommented (and
+    // fixed) once merged with a UnitConverter branch:
+    // UnitConverter converter(sourceUnit, targetUnit, unitsTest->conversionRates_, status);
+    // if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
+    //                                 sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+    //     return;
+    // }
+    // double got = converter.convert(1000);
+    // unitsTest->assertEqualsNear(fields[0][0], expected, got, 0.0001);
 }
 
 /**
