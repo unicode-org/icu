@@ -9,10 +9,11 @@
 
 #include "charstr.h"
 #include "cmemory.h"
-#include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 /**
  * Looks up the unit category of a base unit identifier.
@@ -97,8 +98,6 @@ struct U_I18N_API UnitPreference : public UMemory {
     CharString skeleton;
 };
 
-namespace {
-
 /**
  * Metadata about the preferences in UnitPreferences::unitPrefs_.
  *
@@ -133,8 +132,6 @@ class U_I18N_API UnitPreferenceMetadata : public UMemory {
     int32_t compareTo(const UnitPreferenceMetadata &other, bool *foundCategory, bool *foundUsage,
                       bool *foundRegion) const;
 };
-
-} // namespace
 
 /**
  * Unit Preferences information for various locales and usages.
@@ -186,6 +183,7 @@ class U_I18N_API UnitPreferences {
     MaybeStackVector<UnitPreference> unitPrefs_;
 };
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__GETUNITSDATA_H__

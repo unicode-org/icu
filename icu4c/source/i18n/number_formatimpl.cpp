@@ -32,13 +32,16 @@ NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& s
     : NumberFormatterImpl(macros, true, status) {
 }
 
-int32_t NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuantity& inValue,
-                                       FormattedStringBuilder& outString, UErrorCode& status) {
+int32_t NumberFormatterImpl::formatStatic(const MacroProps &macros, UFormattedNumberData *results,
+                                          UErrorCode &status) {
+    DecimalQuantity &inValue = results->quantity;
+    FormattedStringBuilder &outString = results->getStringRef();
     NumberFormatterImpl impl(macros, false, status);
     MicroProps& micros = impl.preProcessUnsafe(inValue, status);
     if (U_FAILURE(status)) { return 0; }
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
+    results->outputUnit = std::move(micros.outputUnit);
     return length;
 }
 
@@ -54,13 +57,15 @@ int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, Sig
 // The "unsafe" method simply re-uses fMicros, eliminating the extra copy operation.
 // See MicroProps::processQuantity() for details.
 
-int32_t NumberFormatterImpl::format(DecimalQuantity& inValue, FormattedStringBuilder& outString,
-                                UErrorCode& status) const {
+int32_t NumberFormatterImpl::format(UFormattedNumberData *results, UErrorCode &status) const {
+    DecimalQuantity &inValue = results->quantity;
+    FormattedStringBuilder &outString = results->getStringRef();
     MicroProps micros;
     preProcess(inValue, micros, status);
     if (U_FAILURE(status)) { return 0; }
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
+    results->outputUnit = std::move(micros.outputUnit);
     return length;
 }
 
@@ -233,6 +238,19 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
     /////////////////////////////////////////////////////////////////////////////////////
 
+    // Unit Preferences and Conversions as our first step
+    if (macros.usage.isSet()) {
+        if (!isCldrUnit) {
+            // We only support "usage" when the input unit is a CLDR Unit.
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return nullptr;
+        }
+        auto usagePrefsHandler =
+            new UsagePrefsHandler(macros.locale, macros.unit, macros.usage.fUsage, chain, status);
+        fUsagePrefsHandler.adoptInsteadAndCheckErrorCode(usagePrefsHandler, status);
+        chain = fUsagePrefsHandler.getAlias();
+    }
+
     // Multiplier
     if (macros.scale.isValid()) {
         fMicros.helpers.multiplier.setAndChain(macros.scale, chain);
@@ -341,7 +359,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         patternModifier->setSymbols(fMicros.symbols, currency, unitWidth, nullptr, status);
     }
     if (safe) {
-        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutable(status));
+        fImmutablePatternModifier.adoptInsteadAndCheckErrorCode(patternModifier->createImmutable(status),
+                                                                status);
     }
     if (U_FAILURE(status)) {
         return nullptr;
@@ -349,24 +368,26 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
-        fLongNameHandler.adoptInstead(
-                LongNameHandler::forMeasureUnit(
-                        macros.locale,
-                        macros.unit,
-                        macros.perUnit,
-                        unitWidth,
-                        resolvePluralRules(macros.rules, macros.locale, status),
-                        chain,
-                        status));
-        chain = fLongNameHandler.getAlias();
+        if (macros.usage.isSet()) {
+            fLongNameMultiplexer.adoptInsteadAndCheckErrorCode(
+                LongNameMultiplexer::forMeasureUnits(
+                    macros.locale, *fUsagePrefsHandler->getOutputUnits(), unitWidth,
+                    resolvePluralRules(macros.rules, macros.locale, status), chain, status),
+                status);
+            chain = fLongNameMultiplexer.getAlias();
+        } else {
+            fLongNameHandler.adoptInsteadAndCheckErrorCode(new LongNameHandler(), status);
+            LongNameHandler::forMeasureUnit(macros.locale, macros.unit, macros.perUnit, unitWidth,
+                                            resolvePluralRules(macros.rules, macros.locale, status),
+                                            chain, fLongNameHandler.getAlias(), status);
+            chain = fLongNameHandler.getAlias();
+        }
     } else if (isCurrency && unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {
-        fLongNameHandler.adoptInstead(
-                LongNameHandler::forCurrencyLongNames(
-                        macros.locale,
-                        currency,
-                        resolvePluralRules(macros.rules, macros.locale, status),
-                        chain,
-                        status));
+        fLongNameHandler.adoptInsteadAndCheckErrorCode(
+            LongNameHandler::forCurrencyLongNames(
+                macros.locale, currency, resolvePluralRules(macros.rules, macros.locale, status), chain,
+                status),
+            status);
         chain = fLongNameHandler.getAlias();
     } else {
         // No outer modifier required
@@ -390,6 +411,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             safe,
             chain,
             status);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
         if (newCompactHandler == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;

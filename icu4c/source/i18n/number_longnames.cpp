@@ -22,7 +22,21 @@ using namespace icu::number::impl;
 
 namespace {
 
+/**
+ * Display Name (this format has no placeholder).
+ *
+ * Used as an index into the LongNameHandler::simpleFormats array. Units
+ * resources cover the normal set of PluralRules keys, as well as `dnam` and
+ * `per` forms.
+ */
 constexpr int32_t DNAM_INDEX = StandardPlural::Form::COUNT;
+/**
+ * "per" form (e.g. "{0} per day" is day's "per" form).
+ *
+ * Used as an index into the LongNameHandler::simpleFormats array. Units
+ * resources cover the normal set of PluralRules keys, as well as `dnam` and
+ * `per` forms.
+ */
 constexpr int32_t PER_INDEX = StandardPlural::Form::COUNT + 1;
 constexpr int32_t ARRAY_LENGTH = StandardPlural::Form::COUNT + 2;
 
@@ -87,6 +101,12 @@ class PluralTableSink : public ResourceSink {
 
 // NOTE: outArray MUST have room for all StandardPlural values.  No bounds checking is performed.
 
+// Populates outArray with `locale`-specific values for `unit` through use of
+// PluralTableSink, reading from resources *unitsNarrow* and *unitsShort* (for
+// width UNUM_UNIT_WIDTH_NARROW), or just *unitsShort* (for width
+// UNUM_UNIT_WIDTH_SHORT). For other widths, it would read just "units".
+//
+// outArray must be of fixed length ARRAY_LENGTH.
 void getMeasureData(const Locale &locale, const MeasureUnit &unit, const UNumberUnitWidth &width,
                     UnicodeString *outArray, UErrorCode &status) {
     PluralTableSink sink(outArray);
@@ -184,14 +204,19 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
 
 } // namespace
 
-LongNameHandler*
-LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef, const MeasureUnit &perUnit,
-                                const UNumberUnitWidth &width, const PluralRules *rules,
-                                const MicroPropsGenerator *parent, UErrorCode &status) {
+// TODO(units,hugovdm): deal properly with "perUnit" parameter here:
+void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
+                                     const MeasureUnit &perUnit, const UNumberUnitWidth &width,
+                                     const PluralRules *rules, const MicroPropsGenerator *parent,
+                                     LongNameHandler *fillIn, UErrorCode &status) {
+    if (fillIn == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
     if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
         // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
         status = U_UNSUPPORTED_ERROR;
-        return nullptr;
+        return;
     }
 
     MeasureUnit unit = unitRef;
@@ -203,59 +228,75 @@ LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef, c
             unit = resolved;
         } else {
             // No simplified form is available.
-            return forCompoundUnit(loc, unit, perUnit, width, rules, parent, status);
+            forCompoundUnit(loc, unit, perUnit, width, rules, parent, fillIn, status);
+            return;
         }
     }
 
-    auto* result = new LongNameHandler(rules, parent);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
     UnicodeString simpleFormats[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, simpleFormats, status);
-    if (U_FAILURE(status)) { return result; }
-    result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
-    return result;
+    if (U_FAILURE(status)) {
+        return;
+    }
+    fillIn->rules = rules;
+    fillIn->parent = parent;
+    fillIn->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD},
+                                     status);
 }
 
-LongNameHandler*
-LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit, const MeasureUnit &perUnit,
-                                 const UNumberUnitWidth &width, const PluralRules *rules,
-                                 const MicroPropsGenerator *parent, UErrorCode &status) {
-    auto* result = new LongNameHandler(rules, parent);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
+// TODO(units,hugovdm): deal properly with "perUnit" parameter here:
+void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit,
+                                      const MeasureUnit &perUnit, const UNumberUnitWidth &width,
+                                      const PluralRules *rules, const MicroPropsGenerator *parent,
+                                      LongNameHandler *fillIn, UErrorCode &status) {
+    if (fillIn == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
     }
     UnicodeString primaryData[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, primaryData, status);
-    if (U_FAILURE(status)) { return result; }
+    if (U_FAILURE(status)) {
+        return;
+    }
     UnicodeString secondaryData[ARRAY_LENGTH];
     getMeasureData(loc, perUnit, width, secondaryData, status);
-    if (U_FAILURE(status)) { return result; }
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     UnicodeString perUnitFormat;
     if (!secondaryData[PER_INDEX].isBogus()) {
         perUnitFormat = secondaryData[PER_INDEX];
     } else {
         UnicodeString rawPerUnitFormat = getPerUnitFormat(loc, width, status);
-        if (U_FAILURE(status)) { return result; }
+        if (U_FAILURE(status)) {
+            return;
+        }
         // rawPerUnitFormat is something like "{0}/{1}"; we need to substitute in the secondary unit.
         SimpleFormatter compiled(rawPerUnitFormat, 2, 2, status);
-        if (U_FAILURE(status)) { return result; }
+        if (U_FAILURE(status)) {
+            return;
+        }
         UnicodeString secondaryFormat = getWithPlural(secondaryData, StandardPlural::Form::ONE, status);
-        if (U_FAILURE(status)) { return result; }
+        if (U_FAILURE(status)) {
+            return;
+        }
         // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
         SimpleFormatter secondaryCompiled(secondaryFormat, 0, 1, status);
-        if (U_FAILURE(status)) { return result; }
+        if (U_FAILURE(status)) {
+            return;
+        }
         UnicodeString secondaryString = secondaryCompiled.getTextWithNoArguments().trim();
         // TODO: Why does UnicodeString need to be explicit in the following line?
         compiled.format(UnicodeString(u"{0}"), secondaryString, perUnitFormat, status);
-        if (U_FAILURE(status)) { return result; }
+        if (U_FAILURE(status)) {
+            return;
+        }
     }
-    result->multiSimpleFormatsToModifiers(primaryData, perUnitFormat, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
-    return result;
+    fillIn->rules = rules;
+    fillIn->parent = parent;
+    fillIn->multiSimpleFormatsToModifiers(primaryData, perUnitFormat,
+                                          {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
 }
 
 UnicodeString LongNameHandler::getUnitDisplayName(
@@ -338,13 +379,60 @@ void LongNameHandler::multiSimpleFormatsToModifiers(const UnicodeString *leadFor
 
 void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                       UErrorCode &status) const {
-    parent->processQuantity(quantity, micros, status);
+    if (parent != NULL) {
+        parent->processQuantity(quantity, micros, status);
+    }
     StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
     micros.modOuter = &fModifiers[pluralForm];
 }
 
 const Modifier* LongNameHandler::getModifier(Signum /*signum*/, StandardPlural::Form plural) const {
     return &fModifiers[plural];
+}
+
+LongNameMultiplexer *
+LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<MeasureUnit> &units,
+                                     const UNumberUnitWidth &width, const PluralRules *rules,
+                                     const MicroPropsGenerator *parent, UErrorCode &status) {
+    LocalPointer<LongNameMultiplexer> result(new LongNameMultiplexer(parent), status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    U_ASSERT(units.length() > 0);
+    result->fMeasureUnits.adoptInstead(new MeasureUnit[units.length()]);
+    for (int32_t i = 0, length = units.length(); i < length; i++) {
+        // Create empty new LongNameHandler:
+        LongNameHandler *lnh =
+            result->fLongNameHandlers.emplaceBackAndCheckErrorCode(status);
+        result->fMeasureUnits[i] = *units[i];
+        // Fill in LongNameHandler:
+        LongNameHandler::forMeasureUnit(loc, *units[i],
+                                        MeasureUnit(), // TODO(units): deal with COMPOUND and MIXED units
+                                        width, rules, NULL, lnh, status);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
+    }
+    return result.orphan();
+}
+
+void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
+                                          UErrorCode &status) const {
+    // We call parent->processQuantity() from the Multiplexer, instead of
+    // letting LongNameHandler handle it: we don't know which LongNameHandler to
+    // call until we've called the parent!
+    fParent->processQuantity(quantity, micros, status);
+
+    // Call the correct LongNameHandler based on outputUnit
+    for (int i = 0; i < fLongNameHandlers.length(); i++) {
+        if (fMeasureUnits[i] == micros.outputUnit) {
+            fLongNameHandlers[i]->processQuantity(quantity, micros, status);
+            return;
+        }
+    }
+    // We shouldn't receive any outputUnit for which we haven't already got a
+    // LongNameHandler:
+    status = U_INTERNAL_PROGRAM_ERROR;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

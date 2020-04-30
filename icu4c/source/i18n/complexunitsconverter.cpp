@@ -6,15 +6,17 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <math.h>
-#include <utility>
 
 #include "cmemory.h"
 #include "complexunitsconverter.h"
 #include "uassert.h"
 #include "unicode/fmtable.h"
+#include "unicode/localpointer.h"
+#include "unicode/measure.h"
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
                                              const MeasureUnit &outputUnits,
@@ -123,6 +125,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
     return result;
 }
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

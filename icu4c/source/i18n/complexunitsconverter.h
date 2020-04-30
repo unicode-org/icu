@@ -8,13 +8,16 @@
 #define __COMPLEXUNITSCONVERTER_H__
 
 #include "cmemory.h"
-#include "unicode/errorcode.h"
 #include "unicode/measunit.h"
-#include "unicode/measure.h"
 #include "unitconverter.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+
+// Forward declarations
+class Measure;
+
+namespace units {
 
 /**
  *  Converts from single or compound unit to single, compound or mixed units.
@@ -60,6 +63,7 @@ class U_I18N_API ComplexUnitsConverter {
     MaybeStackVector<MeasureUnit> units_;
 };
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__COMPLEXUNITSCONVERTER_H__

@@ -99,6 +99,7 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"measure-unit", STEM_MEASURE_UNIT, status);
     b.add(u"per-measure-unit", STEM_PER_MEASURE_UNIT, status);
     b.add(u"unit", STEM_UNIT, status);
+    b.add(u"usage", STEM_UNIT_USAGE, status);
     b.add(u"currency", STEM_CURRENCY, status);
     b.add(u"integer-width", STEM_INTEGER_WIDTH, status);
     b.add(u"numbering-system", STEM_NUMBERING_SYSTEM, status);
@@ -559,6 +560,7 @@ MacroProps skeleton::parseSkeleton(
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
                 case STATE_IDENTIFIER_UNIT:
+                case STATE_UNIT_USAGE:
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
@@ -716,7 +718,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
             macros.decimal = stem_to_object::decimalSeparatorDisplay(stem);
             return STATE_NULL;
 
-            // Stems requiring an option:
+        // Stems requiring an option:
 
         case STEM_PRECISION_INCREMENT:
             CHECK_NULL(seen, precision, status);
@@ -734,6 +736,10 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
             CHECK_NULL(seen, unit, status);
             CHECK_NULL(seen, perUnit, status);
             return STATE_IDENTIFIER_UNIT;
+
+        case STEM_UNIT_USAGE:
+            CHECK_NULL(seen, usage, status);
+            return STATE_UNIT_USAGE;
 
         case STEM_CURRENCY:
             CHECK_NULL(seen, unit, status);
@@ -773,6 +779,9 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
             return STATE_NULL;
         case STATE_IDENTIFIER_UNIT:
             blueprint_helpers::parseIdentifierUnitOption(segment, macros, status);
+            return STATE_NULL;
+        case STATE_UNIT_USAGE:
+            blueprint_helpers::parseUnitUsageOption(segment, macros, status);
             return STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             blueprint_helpers::parseIncrementOption(segment, macros, status);
@@ -845,6 +854,10 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
     }
     if (U_FAILURE(status)) { return; }
     if (GeneratorHelpers::perUnit(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::usage(macros, sb, status)) {
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
@@ -1066,6 +1079,17 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
             macros.perUnit = macros.perUnit.product(subUnit->build(status), status);
         }
     }
+}
+
+void blueprint_helpers::parseUnitUsageOption(const StringSegment &segment, MacroProps &macros,
+                                             UErrorCode &status) {
+    // Need to do char <-> UChar conversion...
+    U_ASSERT(U_SUCCESS(status));
+    CharString buffer;
+    SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
+    macros.usage.set(buffer.toStringPiece());
+    // We do not do any validation of the usage string: it depends on the
+    // unitPreferenceData in the units resources.
 }
 
 void blueprint_helpers::parseFractionStem(const StringSegment& segment, MacroProps& macros,
@@ -1547,6 +1571,15 @@ bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErr
         blueprint_helpers::generateMeasureUnitOption(macros.perUnit, sb, status);
         return true;
     }
+}
+
+bool GeneratorHelpers::usage(const MacroProps& macros, UnicodeString& sb, UErrorCode&) {
+    if (macros.usage.fLength > 0) {
+        sb.append(u"usage/", -1);
+        sb.append(UnicodeString(macros.usage.fUsage, -1, US_INV));
+        return true;
+    }
+    return false;
 }
 
 bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
