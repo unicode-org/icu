@@ -2026,7 +2026,8 @@ UBool IntlTest::assertEquals(const char* message,
                              double expected,
                              double actual) {
     bool bothNaN = std::isnan(expected) && std::isnan(actual);
-    if (expected != actual && !bothNaN) {
+    bool bothInf = std::isinf(expected) && std::isinf(actual);
+    if (expected != actual && !bothNaN && !bothInf) {
         errln((UnicodeString)"FAIL: " + message + "; got " +
               actual + 
               "; expected " + expected);
@@ -2040,6 +2041,24 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+UBool IntlTest::assertEquals(const char* message,
+                             double expected,
+                             double actual,
+                             double delta) {
+    bool bothNaN = std::isnan(expected) && std::isnan(actual);
+    bool bothInf = std::isinf(expected) && std::isinf(actual);
+    if (abs(expected - actual) > delta && !bothNaN && !bothInf) {
+        errln((UnicodeString)("FAIL: ") + message + "; got " + actual + "; expected " + expected +
+              "; acceptable delta " + delta);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)("Ok: ") + message + "; got " + actual);
+    }
+#endif
+    return TRUE;
+}
 
 UBool IntlTest::assertEquals(const char* message,
                              UBool expected,
@@ -2248,6 +2267,12 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
                              double expected,
                              double actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             double expected,
+                             double actual,
+                             double delta) {
+    return assertEquals(extractToAssertBuf(message), expected, actual, delta);
 }
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              UErrorCode expected,
