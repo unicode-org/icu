@@ -303,8 +303,8 @@ public:
      * Asserts that two doubles are equal to within a positive delta. Returns
      * false if they are not.
      *
-     * If the expected value is infinity then the delta value is ignored. NaNs
-     * are considered equal: assertEquals(msg, NaN, NaN, *) passes.
+     * NaNs are considered equal: assertEquals(msg, NaN, NaN, *) passes.
+     * Infs are considered equal: assertEquals(msg, inf, inf, *) passes.
      *
      * @param message - the identifying message for the AssertionError.
      * @param expected - expected value.
@@ -339,8 +339,8 @@ public:
      * Asserts that two doubles are equal to within a positive delta. Returns
      * false if they are not.
      *
-     * If the expected value is infinity then the delta value is ignored. NaNs
-     * are considered equal: assertEquals(msg, NaN, NaN, *) passes.
+     * NaNs are considered equal: assertEquals(msg, NaN, NaN, *) passes.
+     * Infs are considered equal: assertEquals(msg, inf, inf, *) passes.
      *
      * @param message - the identifying message for the AssertionError.
      * @param expected - expected value.

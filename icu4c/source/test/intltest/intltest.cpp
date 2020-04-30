@@ -2026,8 +2026,7 @@ UBool IntlTest::assertEquals(const char* message,
                              double expected,
                              double actual) {
     bool bothNaN = std::isnan(expected) && std::isnan(actual);
-    bool bothInf = std::isinf(expected) && std::isinf(actual);
-    if (expected != actual && !bothNaN && !bothInf) {
+    if (expected != actual && !bothNaN) {
         errln((UnicodeString)"FAIL: " + message + "; got " +
               actual + 
               "; expected " + expected);
@@ -2045,9 +2044,14 @@ UBool IntlTest::assertEquals(const char* message,
                              double expected,
                              double actual,
                              double delta) {
+    if (std::isnan(delta) || std::isinf(delta)) {
+        errln((UnicodeString)("FAIL: ") + message + "; nonsensical delta " + delta +
+              " - delta may not be NaN or Inf");
+        return FALSE;
+    }
     bool bothNaN = std::isnan(expected) && std::isnan(actual);
-    bool bothInf = std::isinf(expected) && std::isinf(actual);
-    if (abs(expected - actual) > delta && !bothNaN && !bothInf) {
+    double difference = abs(expected - actual);
+    if (expected != actual && (difference > delta || std::isnan(difference)) && !bothNaN) {
         errln((UnicodeString)("FAIL: ") + message + "; got " + actual + "; expected " + expected +
               "; acceptable delta " + delta);
         return FALSE;
