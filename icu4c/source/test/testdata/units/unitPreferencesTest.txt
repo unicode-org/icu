@@ -1,10 +1,12 @@
-# Copyright (C) 2020 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html
-#
 # This file is a copy of common/testData/units/unitPreferencesTest.txt from CLDR.
 # WIP/TODO(hugovdm): determine a good update procedure and document it.
-
+#
 # Test data for unit preferences
+#  Copyright © 1991-2020 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
 # Format:
 #   Quantity;   Usage;  Region; Input (r);  Input (d);  Input Unit; Output (r); Output (d); Output Unit
 #
@@ -16,7 +18,11 @@
 #    The Output amount and Unit are repeated for mixed units. In such a case, only the smallest unit will have
 #    both a rational and decimal amount; the others will have a single integer value, such as:
 #      length; person-height; CA; 3429 / 12500; 0.27432; meter; 2; foot; 54 / 5; 10.8; inch
-#    The input and output units are unit identifers; they are neither localized nor adjusted for pluralization,#     nor formatted with the skeleton.
+#    The input and output units are unit identifers; in particular, the output does not have further processing:
+#        • no localization
+#        • no adjustment for pluralization
+#        • no formatted with the skeleton
+#        • no suppression of zero values (for secondary -and- units such as pound in stone-and-pound)
 #
 # Generation: Set GENERATE_TESTS in TestUnits.java, and look at TestUnitPreferences results.
 
@@ -108,8 +114,8 @@ duration;   default;    001;    9 / 10000000;   9.0E-7; second; 900;    900.0;  
 duration;   default;    001;    1 / 1000000000; 1.0E-9; second; 1;  1.0;    nanosecond
 duration;   default;    001;    9 / 10000000000;    9.0E-10;    second; 9 / 10; 0.9;    nanosecond
 
-duration;   media;  001;    6;  6.0;    second; 1;  minute; 6;  6.0;    second
-duration;   media;  001;    0;  0.0;    second; 1;  minute; 0;  0.0;    second
+duration;   media;  001;    66; 66.0;   second; 1;  minute; 6;  6.0;    second
+duration;   media;  001;    60; 60.0;   second; 1;  minute; 0;  0.0;    second
 duration;   media;  001;    54; 54.0;   second; 54; 54.0;   second
 duration;   media;  001;    1;  1.0;    second; 1;  1.0;    second
 duration;   media;  001;    9 / 10; 0.9;    second; 9 / 10; 0.9;    second
@@ -154,14 +160,14 @@ length; person-height;  001;    11 / 1000;  0.011;  meter;  11 / 10;    1.1;    
 length; person-height;  001;    1 / 100;    0.01;   meter;  1;  1.0;    centimeter
 length; person-height;  001;    9 / 1000;   0.009;  meter;  9 / 10; 0.9;    centimeter
 
-length; person-height;  CA; 381 / 12500;    0.03048;    meter;  3;  foot;   6 / 5;  1.2;    inch
-length; person-height;  CA; 0;  0.0;    meter;  3;  foot;   0;  0.0;    inch
+length; person-height;  CA; 11811 / 12500;  0.94488;    meter;  3;  foot;   6 / 5;  1.2;    inch
+length; person-height;  CA; 1143 / 1250;    0.9144; meter;  3;  foot;   0;  0.0;    inch
 length; person-height;  CA; 11049 / 12500;  0.88392;    meter;  174 / 5;    34.8;   inch
 length; person-height;  CA; 127 / 5000; 0.0254; meter;  1;  1.0;    inch
 length; person-height;  CA; 1143 / 50000;   0.02286;    meter;  9 / 10; 0.9;    inch
 
-length; person-height;  AT; 1 / 10; 0.1;    meter;  1;  meter;  10; 10.0;   centimeter
-length; person-height;  AT; 0;  0.0;    meter;  1;  meter;  0;  0.0;    centimeter
+length; person-height;  AT; 11 / 10;    1.1;    meter;  1;  meter;  10; 10.0;   centimeter
+length; person-height;  AT; 1;  1.0;    meter;  1;  meter;  0;  0.0;    centimeter
 length; person-height;  AT; 9 / 10; 0.9;    meter;  0;  meter;  90; 90.0;   centimeter
 
 length; rainfall;   BR; 11 / 1000;  0.011;  meter;  11 / 10;    1.1;    centimeter
@@ -218,16 +224,16 @@ length; snowfall;   US; 1397 / 50000;   0.02794;    meter;  11 / 10;    1.1;    
 length; snowfall;   US; 127 / 5000; 0.0254; meter;  1;  1.0;    inch
 length; snowfall;   US; 1143 / 50000;   0.02286;    meter;  9 / 10; 0.9;    inch
 
-length; vehicle;    GB; 381 / 12500;    0.03048;    meter;  1;  foot;   6 / 5;  1.2;    inch
-length; vehicle;    GB; 0;  0.0;    meter;  1;  foot;   0;  0.0;    inch
+length; vehicle;    GB; 4191 / 12500;   0.33528;    meter;  1;  foot;   6 / 5;  1.2;    inch
+length; vehicle;    GB; 381 / 1250; 0.3048; meter;  1;  foot;   0;  0.0;    inch
 length; vehicle;    GB; 3429 / 12500;   0.27432;    meter;  0;  foot;   54 / 5; 10.8;   inch
 
 length; vehicle;    001;    11 / 10;    1.1;    meter;  11 / 10;    1.1;    meter
 length; vehicle;    001;    1;  1.0;    meter;  1;  1.0;    meter
 length; vehicle;    001;    9 / 10; 0.9;    meter;  9 / 10; 0.9;    meter
 
-length; vehicle;    MX; 1 / 10; 0.1;    meter;  1;  meter;  10; 10.0;   centimeter
-length; vehicle;    MX; 0;  0.0;    meter;  1;  meter;  0;  0.0;    centimeter
+length; vehicle;    MX; 11 / 10;    1.1;    meter;  1;  meter;  10; 10.0;   centimeter
+length; vehicle;    MX; 1;  1.0;    meter;  1;  meter;  0;  0.0;    centimeter
 length; vehicle;    MX; 9 / 10; 0.9;    meter;  0;  meter;  90; 90.0;   centimeter
 
 length; visiblty;   001;    200;    200.0;  meter;  1 / 5;  0.2;    kilometer
@@ -272,22 +278,22 @@ mass;   person; 001;    9 / 10; 0.9;    kilogram;   900;    900.0;  gram
 mass;   person; 001;    1 / 1000;   0.001;  kilogram;   1;  1.0;    gram
 mass;   person; 001;    9 / 10000;  9.0E-4; kilogram;   9 / 10; 0.9;    gram
 
-mass;   person; DZ; 1 / 10; 0.1;    kilogram;   1;  kilogram;   100;    100.0;  gram
-mass;   person; DZ; 0;  0.0;    kilogram;   1;  kilogram;   0;  0.0;    gram
+mass;   person; DZ; 11 / 10;    1.1;    kilogram;   1;  kilogram;   100;    100.0;  gram
+mass;   person; DZ; 1;  1.0;    kilogram;   1;  kilogram;   0;  0.0;    gram
 mass;   person; DZ; 9 / 10; 0.9;    kilogram;   0;  kilogram;   900;    900.0;  gram
 
 mass;   person; US; 498951607 / 1000000000; 0.498951607;    kilogram;   11 / 10;    1.1;    pound
 mass;   person; US; 45359237 / 100000000;   0.45359237; kilogram;   1;  1.0;    pound
 mass;   person; US; 408233133 / 1000000000; 0.408233133;    kilogram;   0;  pound;  72 / 5; 14.4;   ounce
 
-mass;   person; GB; 317514659 / 500000000;  0.635029318;    kilogram;   1;  stone;  7 / 5;  1.4;    pound
-mass;   person; GB; 0;  0.0;    kilogram;   1;  stone;  0;  0.0;    pound
-mass;   person; GB; 136077711 / 500000000;  0.272155422;    kilogram;   12; pound;  48 / 5; 9.6;    ounce
-mass;   person; GB; 0;  0.0;    kilogram;   1;  pound;  0;  0.0;    ounce
+mass;   person; GB; 3492661249 / 500000000; 6.985322498;    kilogram;   1;  stone;  7 / 5;  1.4;    pound
+mass;   person; GB; 317514659 / 50000000;   6.35029318; kilogram;   1;  stone;  0;  0.0;    pound
+mass;   person; GB; 2857631931 / 500000000; 5.715263862;    kilogram;   12; pound;  48 / 5; 9.6;    ounce
+mass;   person; GB; 45359237 / 100000000;   0.45359237; kilogram;   1;  pound;  0;  0.0;    ounce
 mass;   person; GB; 408233133 / 1000000000; 0.408233133;    kilogram;   0;  pound;  72 / 5; 14.4;   ounce
 
-mass;   person; HK; 45359237 / 1000000000;  0.045359237;    kilogram;   1;  pound;  8 / 5;  1.6;    ounce
-mass;   person; HK; 0;  0.0;    kilogram;   1;  pound;  0;  0.0;    ounce
+mass;   person; HK; 498951607 / 1000000000; 0.498951607;    kilogram;   1;  pound;  8 / 5;  1.6;    ounce
+mass;   person; HK; 45359237 / 100000000;   0.45359237; kilogram;   1;  pound;  0;  0.0;    ounce
 mass;   person; HK; 408233133 / 1000000000; 0.408233133;    kilogram;   0;  pound;  72 / 5; 14.4;   ounce
 
 mass-density;   blood-glucose;  001;    11 / 1000;  0.011;  kilogram-per-cubic-meter;   11 / 10;    1.1;    milligram-per-deciliter
@@ -440,8 +446,8 @@ year-duration;  default;    001;    3 / 40; 0.075;  year;   9 / 10; 0.9;    mont
 
 year-duration;  person-age; 001;    13 / 5; 2.6;    year;   13 / 5; 2.6;    year-person
 year-duration;  person-age; 001;    5 / 2;  2.5;    year;   5 / 2;  2.5;    year-person
-year-duration;  person-age; 001;    2 / 5;  0.4;    year;   2;  year-person;    24 / 5; 4.8;    month-person
-year-duration;  person-age; 001;    0;  0.0;    year;   1;  year-person;    0;  0.0;    month-person
+year-duration;  person-age; 001;    12 / 5; 2.4;    year;   2;  year-person;    24 / 5; 4.8;    month-person
+year-duration;  person-age; 001;    1;  1.0;    year;   1;  year-person;    0;  0.0;    month-person
 year-duration;  person-age; 001;    9 / 10; 0.9;    year;   54 / 5; 10.8;   month-person
 year-duration;  person-age; 001;    1 / 12; 0.08333333333333333;    year;   1;  1.0;    month-person
 year-duration;  person-age; 001;    3 / 40; 0.075;  year;   9 / 10; 0.9;    month-person
