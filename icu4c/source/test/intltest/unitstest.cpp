@@ -13,14 +13,17 @@
 #include "filestrm.h"
 #include "intltest.h"
 #include "number_decimalquantity.h"
+#include "putilimp.h"
 #include "unicode/ctest.h"
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
+#include "unicode/ures.h"
 #include "unitconverter.h"
 #include "unitsdata.h"
 #include "unitsrouter.h"
 #include "uparse.h"
+#include "uresimp.h"
 
 struct UnitConversionTestCase {
     const StringPiece source;
@@ -29,7 +32,8 @@ struct UnitConversionTestCase {
     const double expectedValue;
 };
 
-using icu::number::impl::DecimalQuantity;
+using ::icu::number::impl::DecimalQuantity;
+using namespace ::icu::units;
 
 class UnitsTest : public IntlTest {
   public:
@@ -37,6 +41,7 @@ class UnitsTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
+    void testUnitConstantFreshness();
     void testConversionCapability();
     void testConversions();
     void testPreferences();
@@ -53,6 +58,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
         logln("TestSuite UnitsTest: ");
     }
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testUnitConstantFreshness);
     TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
@@ -63,10 +69,58 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
+// Tests the hard-coded constants in the code against constants that appear in
+// units.txt.
+void UnitsTest::testUnitConstantFreshness() {
+    IcuTestErrorCode status(*this, "testUnitConstantFreshness");
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", status));
+    LocalUResourceBundlePointer unitConstants(
+        ures_getByKey(unitsBundle.getAlias(), "unitConstants", NULL, status));
+
+    while (ures_hasNext(unitConstants.getAlias())) {
+        int32_t len;
+        const char *constant = NULL;
+        ures_getNextString(unitConstants.getAlias(), &len, &constant, status);
+
+        Factor factor;
+        addSingleFactorConstant(constant, 1, POSITIVE, factor, status);
+        if (status.errDataIfFailureAndReset(
+                "addSingleFactorConstant(<%s>, ...).\n\n"
+                "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/unitconverter.cpp\" "
+                "has all constants? Is \"%s\" a new constant?\n",
+                constant, constant)) {
+            continue;
+        }
+
+        // Check the values of constants that have a simple numeric value
+        factor.substituteConstants();
+        int32_t uLen;
+        UnicodeString uVal = ures_getStringByKey(unitConstants.getAlias(), constant, &uLen, status);
+        CharString val;
+        val.appendInvariantChars(uVal, status);
+        if (status.errDataIfFailureAndReset("Failed to get constant value for %s.", constant)) {
+            continue;
+        }
+        DecimalQuantity dqVal;
+        UErrorCode parseStatus = U_ZERO_ERROR;
+        // TODO(units): unify with strToDouble() in unitconverter.cpp
+        dqVal.setToDecNumber(val.toStringPiece(), parseStatus);
+        if (!U_SUCCESS(parseStatus)) {
+            // Not simple to parse, skip validating this constant's value. (We
+            // leave catching mistakes to the data-driven integration tests.)
+            continue;
+        }
+        double expectedNumerator = dqVal.toDouble();
+        assertEquals(UnicodeString("Constant ") + constant + u" numerator", expectedNumerator,
+                     factor.factorNum);
+        assertEquals(UnicodeString("Constant ") + constant + u" denominator", 1.0, factor.factorDen);
+    }
+}
+
 void UnitsTest::testConversionCapability() {
     struct TestCase {
-        const StringPiece source;
-        const StringPiece target;
+        const char *const source;
+        const char *const target;
         const UnitsConvertibilityState expectedState;
     } testCases[]{
         {"meter", "foot", CONVERTIBLE},                                         //
@@ -75,7 +129,7 @@ void UnitsTest::testConversionCapability() {
         {"kilometer-per-second", "second-per-meter", RECIPROCAL},               //
         {"square-meter", "square-foot", CONVERTIBLE},                           //
         {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
-        {"square-hectare", "p4-foot", CONVERTIBLE},                             //
+        {"square-hectare", "pow4-foot", CONVERTIBLE},                           //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
     };
 
@@ -86,9 +140,11 @@ void UnitsTest::testConversionCapability() {
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
-        auto convertibility = icu::checkConvertibility(source, target, conversionRates, status);
+        auto convertibility = checkConvertibility(source, target, conversionRates, status);
 
-        assertEquals("Conversion Capability", testCase.expectedState, convertibility);
+        assertEquals(UnicodeString("Conversion Capability: ") + testCase.source + " to " +
+                         testCase.target,
+                     testCase.expectedState, convertibility);
     }
 }
 
@@ -96,8 +152,8 @@ void UnitsTest::testSiPrefixes() {
     IcuTestErrorCode status(*this, "Units testSiPrefixes");
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -118,15 +174,12 @@ void UnitsTest::testSiPrefixes() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEqualsNear(UnicodeString("testSiPrefixes: ") + testCase.source + " to " + testCase.target,
+                         testCase.expectedValue, converter.convert(testCase.inputValue),
+                         0.0001 * testCase.expectedValue);
     }
 }
 
@@ -135,8 +188,8 @@ void UnitsTest::testMass() {
 
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -156,15 +209,12 @@ void UnitsTest::testMass() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEqualsNear(UnicodeString("testMass: ") + testCase.source + " to " + testCase.target,
+                         testCase.expectedValue, converter.convert(testCase.inputValue),
+                         0.0001 * testCase.expectedValue);
     }
 }
 
@@ -172,8 +222,8 @@ void UnitsTest::testTemperature() {
     IcuTestErrorCode status(*this, "Units testTemperature");
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -193,15 +243,12 @@ void UnitsTest::testTemperature() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEqualsNear(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
+                         testCase.expectedValue, converter.convert(testCase.inputValue),
+                         0.0001 * uprv_fabs(testCase.expectedValue));
     }
 }
 
@@ -210,8 +257,8 @@ void UnitsTest::testArea() {
 
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -234,15 +281,12 @@ void UnitsTest::testArea() {
         MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
-        MaybeStackVector<MeasureUnit> units;
-        units.emplaceBack(source);
-        units.emplaceBack(target);
-
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEqualsNear(UnicodeString("testArea: ") + testCase.source + " to " + testCase.target,
+                         testCase.expectedValue, converter.convert(testCase.inputValue),
+                         0.0001 * testCase.expectedValue);
     }
 }
 
@@ -353,7 +397,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     double got = converter.convert(1000);
     msg.clear();
     msg.append("Converting 1000 ", status).append(x, status).append(" to ", status).append(y, status);
-    unitsTest->assertEqualsNear(msg.data(), expected, got, 0.0001);
+    unitsTest->assertEqualsNear(msg.data(), expected, got, 0.0001 * expected);
 }
 
 /**
@@ -469,38 +513,14 @@ class ExpectedOutput {
     }
 };
 
-// TODO(Hugo): Add a comment and Use AssertEqualsNear.
+// Checks a vector of Measure instances against ExpectedOutput.
 void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
                  const MaybeStackVector<Measure> &actual, double precision) {
     IcuTestErrorCode status(*unitsTest, "checkOutput");
-    bool success = true;
-    if (expected._compoundCount != actual.length()) {
-        success = false;
-    }
-    for (int i = 0; i < actual.length(); i++) {
-        if (i >= expected._compoundCount) {
-            break;
-        }
 
-        // assertEqualsNear("test conversion", expected._amounts[i],
-        //                 actual[i]->getNumber().getDouble(status), 0.0001);
-
-        double diff = std::abs(expected._amounts[i] - actual[i]->getNumber().getDouble(status));
-        double diffPercent = expected._amounts[i] != 0 ? diff / expected._amounts[i] : diff;
-        if (diffPercent > precision) {
-            success = false;
-            break;
-        }
-
-        if (expected._measureUnits[i] != actual[i]->getUnit()) {
-            success = false;
-            break;
-        }
-    }
-
-    CharString testMessage("test case: ", status);
+    CharString testMessage("Test case \"", status);
     testMessage.append(msg, status);
-    testMessage.append(", expected output: ", status);
+    testMessage.append("\": expected output: ", status);
     testMessage.append(expected.toDebugString().c_str(), status);
     testMessage.append(", obtained output:", status);
     for (int i = 0; i < actual.length(); i++) {
@@ -509,8 +529,19 @@ void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
         testMessage.append(" ", status);
         testMessage.appendInvariantChars(actual[i]->getUnit().getIdentifier(), status);
     }
-
-    unitsTest->assertTrue(testMessage.data(), success);
+    if (!unitsTest->assertEquals(testMessage.data(), expected._compoundCount, actual.length())) {
+        return;
+    };
+    for (int i = 0; i < actual.length(); i++) {
+        double permittedDiff = precision * expected._amounts[i];
+        if (permittedDiff == 0) {
+            // If 0 is expected, still permit a small delta.
+            // TODO: revisit this experimentally chosen value:
+            permittedDiff = 0.00000001;
+        }
+        unitsTest->assertEqualsNear(testMessage.data(), expected._amounts[i],
+                                    actual[i]->getNumber().getDouble(status), permittedDiff);
+    }
 }
 
 /**
@@ -590,7 +621,8 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) {
         return;
     }
-    checkOutput(unitsTest, msg.data(), expected, result, 0.0001);
+    // TODO: revisit this experimentally chosen precision:
+    checkOutput(unitsTest, msg.data(), expected, result, 0.0000000001);
 }
 
 /**

@@ -196,6 +196,7 @@
     <ClCompile Include="number_rounding.cpp" />
     <ClCompile Include="number_scientific.cpp" />
     <ClCompile Include="formatted_string_builder.cpp" />
+    <ClCompile Include="number_usageprefs.cpp" />
     <ClCompile Include="number_utils.cpp" />
     <ClCompile Include="number_mapper.cpp" />
     <ClCompile Include="number_multiplier.cpp" />
@@ -469,6 +470,7 @@
     <ClInclude Include="number_scientific.h" />
     <ClInclude Include="formatted_string_builder.h" />
     <ClInclude Include="number_types.h" />
+    <ClCompile Include="number_usageprefs.h" />
     <ClInclude Include="number_utypes.h" />
     <ClInclude Include="number_utils.h" />
     <ClInclude Include="number_mapper.h" />

@@ -7,13 +7,60 @@
 #ifndef __UNITCONVERTER_H__
 #define __UNITCONVERTER_H__
 
-#include "cmemory.h"
-#include "unicode/errorcode.h"
 #include "unicode/measunit.h"
-#include "unitconverter.h"
+#include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+
+/* Internal Structure */
+
+enum Constants {
+    CONSTANT_FT2M,    // ft2m stands for foot to meter.
+    CONSTANT_PI,      // PI
+    CONSTANT_GRAVITY, // Gravity
+    CONSTANT_G,
+    CONSTANT_GAL_IMP2M3, // Gallon imp to m3
+    CONSTANT_LB2KG,      // Pound to Kilogram
+
+    // Must be the last element.
+    CONSTANTS_COUNT
+};
+
+typedef enum Signum {
+    NEGATIVE = -1,
+    POSITIVE = 1,
+} Signum;
+
+/* Represents a conversion factor */
+struct U_I18N_API Factor {
+    double factorNum = 1;
+    double factorDen = 1;
+    double offset = 0;
+    bool reciprocal = false;
+    int32_t constants[CONSTANTS_COUNT] = {};
+
+    void multiplyBy(const Factor &rhs);
+    void divideBy(const Factor &rhs);
+
+    // Apply the power to the factor.
+    void power(int32_t power);
+
+    // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
+    void flip();
+
+    // Apply SI prefix to the `Factor`
+    void applySiPrefix(UMeasureSIPrefix siPrefix);
+    void substituteConstants();
+};
+
+/*
+ * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
+ */
+void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Signum sigNum,
+                                        Factor &factor, UErrorCode &status);
 
 /**
  * Represents the conversion rate between `source` and `target`.
@@ -90,6 +137,7 @@ class U_I18N_API UnitConverter : public UMemory {
     ConversionRate conversionRate_;
 };
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__UNITCONVERTER_H__

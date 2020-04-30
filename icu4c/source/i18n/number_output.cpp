@@ -5,6 +5,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/measunit.h"
 #include "unicode/numberformatter.h"
 #include "number_utypes.h"
 #include "util.h"
@@ -30,6 +31,11 @@ void FormattedNumber::getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpi
                                                UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
     fData->getAllFieldPositions(fpih, status);
+}
+
+MeasureUnit FormattedNumber::getOutputUnit(UErrorCode& status) const {
+    UPRV_FORMATTED_VALUE_METHOD_GUARD(MeasureUnit())
+    return fData->outputUnit;
 }
 
 void FormattedNumber::getDecimalQuantity(impl::DecimalQuantity& output, UErrorCode& status) const {

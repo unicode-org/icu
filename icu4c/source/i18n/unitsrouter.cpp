@@ -5,19 +5,15 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <stdio.h>
-#include <utility>
-
+#include "charstr.h"
 #include "cmemory.h"
-#include "cstring.h"
-#include "number_decimalquantity.h"
-#include "resource.h"
-#include "unitconverter.h" // for extractCompoundBaseUnit
-#include "unitsdata.h"     // for getUnitCategory
+#include "unicode/measure.h"
+#include "unitconverter.h"
+#include "unitsdata.h"
 #include "unitsrouter.h"
-#include "uresimp.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
                          UErrorCode &status) {
@@ -41,6 +37,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
             return;
         }
 
+        outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnit);
         converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
                                                            preference.geq, conversionRates, status);
         if (U_FAILURE(status)) {
@@ -49,7 +46,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     }
 }
 
-MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) {
+MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) const {
     for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
         const auto &converterPreference = *converterPreferences_[i];
 
@@ -63,6 +60,11 @@ MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status
     return lastConverter.convert(quantity, status);
 }
 
+const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
+    return &outputUnits_;
+}
+
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

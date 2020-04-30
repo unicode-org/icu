@@ -25,7 +25,7 @@ class FormattedValueStringBuilderImpl;
  *
  * <ol>
  * <li>Efficient prepend as well as append.
- * <li>Keeps tracks of Fields in an efficient manner.
+ * <li>Keeps track of Fields in an efficient manner.
  * </ol>
  *
  * See also FormattedValueStringBuilderImpl.
