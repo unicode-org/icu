@@ -3653,7 +3653,7 @@ const char* const basic_minimize_data[][2] = {
     "de_Latn_DE_POSIX_1901",
     "de__POSIX_1901"
   }, {
-    "",
+    "zzz",
     ""
   }, {
     "en_Latn_US@calendar=gregorian",
