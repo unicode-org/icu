@@ -1,10 +1,12 @@
-# Copyright (C) 2020 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html
-#
 # This file is a copy of common/testData/units/unitsTest.txt from CLDR.
 # WIP/TODO(hugovdm): determine a good update procedure and document it.
-
+#
 # Test data for unit conversions
+#  Copyright © 1991-2020 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
 # Format:
 #   Quantity    ;   x   ;   y   ;   conversion to y (rational)  ;   test: 1000 x ⟹ y
 #
