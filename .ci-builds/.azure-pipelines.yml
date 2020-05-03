@@ -298,8 +298,8 @@ jobs:
       lfs: true
       fetchDepth: 1
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 tests
-      displayName: 'Build only (WarningsAsErrors)'
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 check
+      displayName: 'Build and Test (WarningsAsErrors)'
       env:
         CC: clang
         CXX: clang++
