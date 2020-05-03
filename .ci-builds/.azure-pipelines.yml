@@ -6,7 +6,7 @@ jobs:
   displayName: 'J: Linux OpenJDK (Ubuntu 16.04)'
   timeoutInMinutes: 20
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-16.04'
     demands: ant
   steps:
     - checkout: self
@@ -26,7 +26,7 @@ jobs:
   displayName: 'C: Linux Clang (Ubuntu 16.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-16.04'
   steps:
     - checkout: self
       lfs: true
@@ -42,7 +42,7 @@ jobs:
   displayName: 'C: Linux Clang WarningsAsErrors (Ubuntu 16.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-16.04'
   steps:
     - checkout: self
       lfs: true
@@ -58,7 +58,7 @@ jobs:
   displayName: 'C: Linux Clang DataFilter (Ubuntu 16.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-16.04'
   steps:
     - checkout: self
       lfs: true
@@ -70,6 +70,22 @@ jobs:
         \[ ! -d data/out/build/icudt66l/translit \] && \
         (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData)
       displayName: 'Build with Data Filter'
+      env:
+        CC: clang
+        CXX: clang++
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang_Cpp14_Debug_Ubuntu_1804
+  displayName: 'C: Linux Clang C++14 Debug (Ubuntu 18.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-18.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 1
+    - script: |
+        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux --disable-layout --disable-layoutex && make -j2 check
+      displayName: 'Build and Test C++14'
       env:
         CC: clang
         CXX: clang++
