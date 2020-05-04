@@ -274,18 +274,18 @@ Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
 }
 
 // Load factor for a single source
-Factor* loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UErrorCode &status) {
+Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UErrorCode &status) {
     const auto conversionUnit = ratesInfo.extractConversionInfo(source, status);
-    if (U_FAILURE(status)) return nullptr;
+    if (U_FAILURE(status)) return Factor();
     if(conversionUnit == nullptr) {
         status = U_INTERNAL_PROGRAM_ERROR;
-        return nullptr;
+        return Factor();
     }
 
     Factor result = extractFactorConversions(conversionUnit->factor.toStringPiece(), status);
     result.offset = strHasDivideSignToDouble(conversionUnit->offset.toStringPiece());
 
-    return &result;
+    return result;
 }
 
 // Load Factor of a compound source unit.
@@ -299,20 +299,16 @@ Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &rate
     for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
         auto singleUnit = *compoundSourceUnit.units[i]; // a TempSingleUnit
 
-        Factor *singleFactor = loadSingleFactor(singleUnit.identifier, ratesInfo, status);
+        Factor singleFactor = loadSingleFactor(singleUnit.identifier, ratesInfo, status);
         if(U_FAILURE(status)) return result;
-        if (singleFactor == nullptr) {
-            status = U_INTERNAL_PROGRAM_ERROR;
-            return result;
-        }
 
         // Apply SiPrefix before the power, because the power may be will flip the factor.
-        singleFactor->applySiPrefix(singleUnit.siPrefix);
+        singleFactor.applySiPrefix(singleUnit.siPrefix);
 
         // Apply the power of the `dimensionality`
-        singleFactor->power(singleUnit.dimensionality);
+        singleFactor.power(singleUnit.dimensionality);
 
-        result.multiplyBy(*singleFactor);
+        result.multiplyBy(singleFactor);
     }
 
     return result;
