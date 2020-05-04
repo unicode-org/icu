@@ -138,22 +138,6 @@ double strHasDivideSignToDouble(StringPiece strWithDivide) {
     return strToDouble(strWithDivide);
 }
 
-const ConversionRateInfo &extractConversionInfo(StringPiece source,
-                                                const ConversionRates &conversionRates,
-                                                UErrorCode &status) {
-    // TODO(younies): hugovdm added this hacky getInternalList call to resolve
-    // "git merge" issues. This needs to be improved.
-    const MaybeStackVector<ConversionRateInfo> *conversionRateInfoList =
-        conversionRates.getInternalList();
-    for (size_t i = 0, n = conversionRateInfoList->length(); i < n; ++i) {
-        if ((*conversionRateInfoList)[i]->sourceUnit.toStringPiece() == source)
-            return *((*conversionRateInfoList)[i]);
-    }
-
-    status = U_INTERNAL_PROGRAM_ERROR;
-    return ConversionRateInfo();
-}
-
 /**
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
  * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
@@ -290,20 +274,21 @@ Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
 }
 
 // Load factor for a single source
-Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UErrorCode &status) {
-    const auto &conversionUnit = extractConversionInfo(source, ratesInfo, status);
-    if (U_FAILURE(status)) return Factor();
+Factor* loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UErrorCode &status) {
+    const auto conversionUnit = ratesInfo.extractConversionInfo(source, status);
+    if (U_FAILURE(status)) return nullptr;
+    if(conversionUnit == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return nullptr;
+    }
 
-    auto result = extractFactorConversions(conversionUnit.factor.toStringPiece(), status);
-    result.offset = strHasDivideSignToDouble(conversionUnit.offset.toStringPiece());
+    Factor result = extractFactorConversions(conversionUnit->factor.toStringPiece(), status);
+    result.offset = strHasDivideSignToDouble(conversionUnit->offset.toStringPiece());
 
-    // TODO: `reciprocal` should be added to the `ConversionRateInfo`.
-    // result.reciprocal = conversionUnit.reciprocal
-
-    return result;
+    return &result;
 }
 
-// Load Factor for compound source
+// Load Factor of a compound source unit.
 Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &ratesInfo,
                           UErrorCode &status) {
 
@@ -314,15 +299,20 @@ Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &rate
     for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
         auto singleUnit = *compoundSourceUnit.units[i]; // a TempSingleUnit
 
-        Factor singleFactor = loadSingleFactor(singleUnit.identifier, ratesInfo, status);
+        Factor *singleFactor = loadSingleFactor(singleUnit.identifier, ratesInfo, status);
+        if(U_FAILURE(status)) return result;
+        if (singleFactor == nullptr) {
+            status = U_INTERNAL_PROGRAM_ERROR;
+            return result;
+        }
 
         // Apply SiPrefix before the power, because the power may be will flip the factor.
-        singleFactor.applySiPrefix(singleUnit.siPrefix);
+        singleFactor->applySiPrefix(singleUnit.siPrefix);
 
         // Apply the power of the `dimensionality`
-        singleFactor.power(singleUnit.dimensionality);
+        singleFactor->power(singleUnit.dimensionality);
 
-        result.multiplyBy(singleFactor);
+        result.multiplyBy(*singleFactor);
     }
 
     return result;
