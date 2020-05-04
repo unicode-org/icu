@@ -4,6 +4,7 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static java.lang.Character.DIRECTIONALITY_LEFT_TO_RIGHT;
 import static java.util.function.Function.identity;
@@ -26,8 +27,11 @@ import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
+import org.unicode.cldr.api.FilteredData;
+import org.unicode.cldr.api.PathMatcher;
 
 import com.google.common.base.CharMatcher;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -147,43 +151,52 @@ public final class PseudoLocales {
     }
 
     private static final class PseudoLocaleData extends FilteredData {
+        private static final PathMatcher LDML = PathMatcher.of("//ldml");
+
         private static final PathMatcher AUX_EXEMPLARS =
-            PathMatcher.of("ldml/characters/exemplarCharacters[@type=\"auxiliary\"]");
+            ldml("characters/exemplarCharacters[@type=\"auxiliary\"]");
 
         private static final PathMatcher NUMBERING_SYSTEM =
-            PathMatcher.of("ldml/numbers/defaultNumberingSystem");
+            ldml("numbers/defaultNumberingSystem");
 
         // These paths were mostly derived from looking at the previous implementation's behaviour
         // and can be modified as needed. Notably there are no "units" here (but they were also
         // excluded in the original code).
-        private static final PathMatcher PSEUDO_PATHS = PathMatcher.anyOf(
-            ldml("localeDisplayNames"),
-            ldml("delimiters"),
-            ldml("dates/calendars/calendar"),
-            ldml("dates/fields"),
-            ldml("dates/timeZoneNames"),
-            ldml("listPatterns"),
-            ldml("posix/messages"),
-            ldml("characterLabels"),
-            ldml("typographicNames"));
-
-        // Paths which contain non-localizable data. It is important that these paths catch all the
-        // non-localizable sub-paths of the list above. This list must be accurate.
-        private static final PathMatcher EXCLUDE_PATHS = PathMatcher.anyOf(
-            ldml("localeDisplayNames/localeDisplayPattern"),
-            ldml("dates/timeZoneNames/fallbackFormat"));
+        private static final Predicate<CldrPath> IS_PSEUDO_PATH =
+            matchAnyLdmlPrefix(
+                "localeDisplayNames",
+                "delimiters",
+                "dates/calendars/calendar",
+                "dates/fields",
+                "dates/timeZoneNames",
+                "listPatterns",
+                "posix/messages",
+                "characterLabels",
+                "typographicNames")
+                .and(matchAnyLdmlPrefix(
+                    "localeDisplayNames/localeDisplayPattern",
+                    "dates/timeZoneNames/fallbackFormat")
+                    .negate());
 
         // The expectation is that all non-alias paths with values under these roots are "date/time
         // pattern like" (such as "E h:mm:ss B") in which care must be taken to not pseudo localize
         // the patterns in such as way as to break them. This list must be accurate.
-        private static final PathMatcher PATTERN_PATHS = PathMatcher.anyOf(
-            ldml("dates/calendars/calendar/timeFormats"),
-            ldml("dates/calendars/calendar/dateFormats"),
-            ldml("dates/calendars/calendar/dateTimeFormats"),
-            ldml("dates/timeZoneNames/hourFormat"));
+        private static final Predicate<CldrPath> IS_PATTERN_PATH = matchAnyLdmlPrefix(
+            "dates/calendars/calendar/timeFormats",
+            "dates/calendars/calendar/dateFormats",
+            "dates/calendars/calendar/dateTimeFormats",
+            "dates/timeZoneNames/hourFormat");
 
-        private static PathMatcher ldml(String matcherSuffix) {
-            return PathMatcher.of("ldml/" + matcherSuffix);
+        private static PathMatcher ldml(String paths) {
+            return LDML.withSuffix(paths);
+        }
+
+        private static Predicate<CldrPath> matchAnyLdmlPrefix(String... paths) {
+            ImmutableList<Predicate<CldrPath>> collect =
+                Arrays.stream(paths)
+                    .map(s -> (Predicate<CldrPath>) ldml(s)::matchesPrefixOf)
+                    .collect(toImmutableList());
+            return p -> collect.stream().anyMatch(e -> e.test(p));
         }
 
         // Look for any attribute in the path with "narrow" in its value. Since "narrow" values
@@ -223,7 +236,7 @@ public final class PseudoLocales {
 
             CldrValue defaultReturnValue = isResolved ? value : null;
             // This makes it look like we have explicit values only for the included paths.
-            if (!PSEUDO_PATHS.matchesPrefixOf(path) || EXCLUDE_PATHS.matchesPrefixOf(path)) {
+            if (!IS_PSEUDO_PATH.test(path)) {
                 return defaultReturnValue;
             }
             String fullPath = value.getFullPath();
@@ -232,7 +245,7 @@ public final class PseudoLocales {
             if (IS_NARROW.test(fullPath)) {
                 return defaultReturnValue;
             }
-            String text = createMessage(value.getValue(), PATTERN_PATHS.matchesPrefixOf(path));
+            String text = createMessage(value.getValue(), IS_PATTERN_PATH.test(path));
             return CldrValue.parseValue(fullPath, text);
         }
 
@@ -357,7 +370,7 @@ public final class PseudoLocales {
             public void addFragment(String text, boolean isLocalizable) {
                 if (isLocalizable) {
                     boolean wrapping = false;
-                    for (int index = 0; index < text.length();) {
+                    for (int index = 0; index < text.length(); ) {
                         int codePoint = text.codePointAt(index);
                         index += Character.charCount(codePoint);
                         byte directionality = Character.getDirectionality(codePoint);
@@ -383,5 +396,6 @@ public final class PseudoLocales {
         };
     }
 
-    private PseudoLocales() {}
+    private PseudoLocales() {
+    }
 }
