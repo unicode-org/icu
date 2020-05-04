@@ -1,10 +1,12 @@
-# Copyright (C) 2020 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html
-#
 # This file is a copy of common/testData/units/unitsTest.txt from CLDR.
 # WIP/TODO(hugovdm): determine a good update procedure and document it.
-
+#
 # Test data for unit conversions
+#  Copyright © 1991-2020 Unicode, Inc.
+#  For terms of use, see http://www.unicode.org/copyright.html
+#  Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+#  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+#
 # Format:
 #   Quantity    ;   x   ;   y   ;   conversion to y (rational)  ;   test: 1000 x ⟹ y
 #
@@ -140,7 +142,7 @@ pressure    ;   millibar    ;   kilogram-per-meter-square-second    ;   100 * x 
 pressure    ;   millimeter-ofhg ;   kilogram-meter-per-square-meter-square-second   ;   133.322387415 * x   ;   133322.4
 pressure    ;   kilopascal  ;   kilogram-per-meter-square-second    ;   1,000 * x   ;   1000000.0
 pressure    ;   inch-ofhg   ;   kilogram-meter-per-square-meter-square-second   ;   3,386.388640341 * x ;   3386389.0
-#WIP(MeasureUnit parsing bug)#pressure    ;   pound-force-per-square-inch ;   kilogram-meter-per-square-meter-square-second   ;   111,205,540.3815125/16,129 * x  ;   6894757.0
+pressure    ;   pound-force-per-square-inch ;   kilogram-meter-per-square-meter-square-second   ;   111,205,540.3815125/16,129 * x  ;   6894757.0
 pressure    ;   bar ;   kilogram-per-meter-square-second    ;   100,000 * x ;   1.0E8
 pressure    ;   atmosphere  ;   kilogram-per-meter-square-second    ;   101,325 * x ;   1.01325E8
 pressure    ;   megapascal  ;   kilogram-per-meter-square-second    ;   1,000,000 * x   ;   1.0E9

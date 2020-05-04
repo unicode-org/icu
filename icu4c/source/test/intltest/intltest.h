@@ -310,6 +310,7 @@ public:
     UBool assertEquals(const UnicodeString& message, const Formattable& expected,
                        const Formattable& actual);
 #endif
+    UBool assertNotEquals(const char* message, int32_t expectedNot, int32_t actual);
     UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
     UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
     UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
@@ -324,6 +325,7 @@ public:
     UBool assertEquals(const UnicodeString& message, const UnicodeSet& expected, const UnicodeSet& actual);
     UBool assertEquals(const UnicodeString& message,
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
+    UBool assertNotEquals(const UnicodeString& message, int32_t expectedNot, int32_t actual);
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 
