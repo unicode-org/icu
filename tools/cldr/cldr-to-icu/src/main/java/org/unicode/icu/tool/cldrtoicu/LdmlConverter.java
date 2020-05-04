@@ -37,12 +37,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
+import org.unicode.cldr.api.CldrPath;
+import org.unicode.cldr.api.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir;
 import org.unicode.icu.tool.cldrtoicu.mapper.Bcp47Mapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.BreakIteratorMapper;
@@ -83,15 +86,15 @@ import com.google.common.io.CharStreams;
  */
 public final class LdmlConverter {
     // TODO: Do all supplemental data in one go and split similarly to locale data (using RbPath).
-    private static final PathMatcher GENDER_LIST_PATHS =
+    private static final Predicate<CldrPath> GENDER_LIST_PATHS =
         supplementalMatcher("gender");
-    private static final PathMatcher LIKELY_SUBTAGS_PATHS =
+    private static final Predicate<CldrPath> LIKELY_SUBTAGS_PATHS =
         supplementalMatcher("likelySubtags");
-    private static final PathMatcher METAZONE_PATHS =
+    private static final Predicate<CldrPath> METAZONE_PATHS =
         supplementalMatcher("metaZones", "primaryZones");
-    private static final PathMatcher METADATA_PATHS =
+    private static final Predicate<CldrPath> METADATA_PATHS =
         supplementalMatcher("metadata");
-    private static final PathMatcher SUPPLEMENTAL_DATA_PATHS =
+    private static final Predicate<CldrPath> SUPPLEMENTAL_DATA_PATHS =
         supplementalMatcher(
             "calendarData",
             "calendarPreferenceData",
@@ -109,22 +112,23 @@ public final class LdmlConverter {
             "unitPreferenceData",
             "weekData",
             "weekOfPreference");
-    private static final PathMatcher CURRENCY_DATA_PATHS =
+    private static final Predicate<CldrPath> CURRENCY_DATA_PATHS =
         supplementalMatcher("currencyData");
-    private static final PathMatcher NUMBERING_SYSTEMS_PATHS =
+    private static final Predicate<CldrPath> NUMBERING_SYSTEMS_PATHS =
         supplementalMatcher("numberingSystems");
-    private static final PathMatcher WINDOWS_ZONES_PATHS =
+    private static final Predicate<CldrPath> WINDOWS_ZONES_PATHS =
         supplementalMatcher("windowsZones");
 
-    private static PathMatcher supplementalMatcher(String... spec) {
+    private static Predicate<CldrPath> supplementalMatcher(String... spec) {
         checkArgument(spec.length > 0, "must supply at least one matcher spec");
         if (spec.length == 1) {
-            return PathMatcher.of("supplementalData/" + spec[0]);
+            return PathMatcher.of("//supplementalData/" + spec[0])::matchesPrefixOf;
         }
-        return PathMatcher.anyOf(
+        return
             Arrays.stream(spec)
-                .map(s -> PathMatcher.of("supplementalData/" + s))
-                .toArray(PathMatcher[]::new));
+                .map(s -> PathMatcher.of("//supplementalData/" + s))
+                .map(m -> ((Predicate<CldrPath>) m::matchesPrefixOf))
+                .reduce(p -> false, Predicate::or);
     }
 
     private static RbPath RB_PARENT = RbPath.of("%%Parent");
@@ -514,7 +518,7 @@ public final class LdmlConverter {
     private static final RbPath RB_CLDR_VERSION = RbPath.of("cldrVersion");
 
     private void processSupplemental(
-        String label, PathMatcher paths, String dir, boolean addCldrVersion) {
+        String label, Predicate<CldrPath> paths, String dir, boolean addCldrVersion) {
         IcuData icuData =
             SupplementalMapper.process(src, supplementalTransformer, label, paths);
         // A hack for "supplementalData.txt" since the "cldrVersion" value doesn't come from the

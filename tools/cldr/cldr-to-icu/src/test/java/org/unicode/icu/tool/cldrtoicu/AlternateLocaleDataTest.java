@@ -46,14 +46,14 @@ public class AlternateLocaleDataTest {
         FakeDataSupplier src = new FakeDataSupplier()
             .addLocaleData("xx", target, source, other)
             .addInheritedData("xx", inherited);
-        CldrDataSupplier transformed = AlternateLocaleData.transform(
-            src,
-            ImmutableMap.of(target.getPath(), source.getPath()),
-            ImmutableTable.of());
+        CldrDataSupplier transformed =
+            AlternateLocaleData.transform(
+                src, ImmutableMap.of(target.getPath(), source.getPath()), ImmutableTable.of());
 
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
 
+        // Note that the source is always removed (unless it's also a target).
         assertValuesUnordered(unresolved, altValue, other);
         assertValuesUnordered(resolved, altValue, other, inherited);
     }
@@ -67,10 +67,9 @@ public class AlternateLocaleDataTest {
             ldml("numbers/currencies/currency[@type=\"USD\"][@alt=\"short\"]/displayName", "Name");
 
         FakeDataSupplier src = new FakeDataSupplier().addLocaleData("xx", target);
-        CldrDataSupplier transformed = AlternateLocaleData.transform(
-            src,
-            ImmutableMap.of(target.getPath(), source.getPath()),
-            ImmutableTable.of());
+        CldrDataSupplier transformed =
+            AlternateLocaleData.transform(
+                src, ImmutableMap.of(target.getPath(), source.getPath()), ImmutableTable.of());
 
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
@@ -87,19 +86,21 @@ public class AlternateLocaleDataTest {
             ldml("numbers/currencies/currency[@type=\"USD\"]/displayName", "Full Display Name");
         CldrValue source =
             ldml("numbers/currencies/currency[@type=\"USD\"][@alt=\"short\"]/displayName", "Name");
+        CldrValue other =
+            ldml("numbers/currencies/currency[@type=\"EUR\"]/displayName", "Euro");
 
-        FakeDataSupplier src = new FakeDataSupplier().addLocaleData("xx", source);
+        FakeDataSupplier src = new FakeDataSupplier().addLocaleData("xx", source, other);
         CldrDataSupplier transformed =
-            AlternateLocaleData.transform(src, ImmutableMap.of(target.getPath(), source.getPath()),
-            ImmutableTable.of());
+            AlternateLocaleData.transform(
+                src, ImmutableMap.of(target.getPath(), source.getPath()), ImmutableTable.of());
 
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
 
-        // If there's no target the alt-path mapping is incomplete and we do nothing (this matches
-        // the old CLDR tool behaviour and reasonable but can hide inconsistencies in CLDR data).
-        assertValuesUnordered(unresolved, source);
-        assertValuesUnordered(resolved, source);
+        // Even though the missing target is not matched (so no change there) the source is always
+        // removed from the transformed data.
+        assertValuesUnordered(unresolved, other);
+        assertValuesUnordered(resolved, other);
     }
 
     @Test
