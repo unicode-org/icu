@@ -2173,8 +2173,6 @@ UBool IntlTest::assertNotEquals(const char* message,
     return TRUE;
 }
 
-// TODO: how about we adjust this function to align with JUnit? I see it simply has "assertEquals" for
-// doulbes with a "delta" parameter:
 // http://junit.sourceforge.net/javadoc/org/junit/Assert.html#assertEquals(java.lang.String,%20double,%20double,%20double)
 UBool IntlTest::assertEqualsNear(const char *message, double expected, double actual, double precision) {
     double diff = std::abs(expected - actual);

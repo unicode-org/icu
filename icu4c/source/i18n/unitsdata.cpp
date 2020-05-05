@@ -23,8 +23,7 @@ void trimSpaces(CharString& factor, UErrorCode& status){
        trimmed.append(factor[i], status);
    }
 
-   factor.clear();
-   factor.append(trimmed, status);
+   factor = std::move(trimmed);
 }
 
 /**
