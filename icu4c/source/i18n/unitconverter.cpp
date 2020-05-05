@@ -49,35 +49,38 @@ struct Factor {
     void multiplyBy(const Factor &rhs) {
         factorNum *= rhs.factorNum;
         factorDen *= rhs.factorDen;
-        for (int i = 0; i < CONSTANTS_COUNT; i++)
+        for (int i = 0; i < CONSTANTS_COUNT; i++) {
             constants[i] += rhs.constants[i];
+        }
 
-        offset += rhs.offset;
+        offset = std::max(rhs.offset, offset);
     }
 
     void divideBy(const Factor &rhs) {
         factorNum *= rhs.factorDen;
         factorDen *= rhs.factorNum;
-        for (int i = 0; i < CONSTANTS_COUNT; i++)
+        for (int i = 0; i < CONSTANTS_COUNT; i++) {
             constants[i] -= rhs.constants[i];
+        }
 
-        offset += rhs.offset;
+        offset = std::max(rhs.offset, offset);
     }
 
     // Apply the power to the factor.
     void power(int32_t power) {
         // multiply all the constant by the power.
-        for (int i = 0; i < CONSTANTS_COUNT; i++)
+        for (int i = 0; i < CONSTANTS_COUNT; i++) {
             constants[i] *= power;
+        }
 
         bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
-                                     // the Numerator and Denomerator.
+                                     // the Numerator and Denominator.
 
         factorNum = std::pow(factorNum, std::abs(power));
         factorDen = std::pow(factorDen, std::abs(power));
 
         if (shouldFlip) {
-            // Flip Numerator and Denomirator.
+            // Flip Numerator and Denominator.
             std::swap(factorNum, factorDen);
         }
     }
@@ -110,18 +113,22 @@ struct Factor {
 
 using icu::double_conversion::StringToDoubleConverter;
 
+// TODO: Make this a shared-utility function.
 // Returns `double` from a scientific number(i.e. "1", "2.01" or "3.09E+4")
-double strToDouble(StringPiece strNum) {
+double strToDouble(StringPiece strNum, UErrorCode &status) {
     // We are processing well-formed input, so we don't need any special options to
     // StringToDoubleConverter.
     StringToDoubleConverter converter(0, 0, 0, "", "");
     int32_t count;
-    return converter.StringToDouble(strNum.data(), strNum.length(), &count);
+    double result = converter.StringToDouble(strNum.data(), strNum.length(), &count);
+    if (count != strNum.length()) { status = U_INVALID_FORMAT_ERROR; }
+
+    return result;
 }
 
 // Returns `double` from a scientific number that could has a division sign (i.e. "1", "2.01", "3.09E+4"
 // or "2E+2/3")
-double strHasDivideSignToDouble(StringPiece strWithDivide) {
+double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
     int divisionSignInd = -1;
     for (int i = 0, n = strWithDivide.length(); i < n; ++i) {
         if (strWithDivide.data()[i] == '/') {
@@ -131,11 +138,11 @@ double strHasDivideSignToDouble(StringPiece strWithDivide) {
     }
 
     if (divisionSignInd >= 0) {
-        return strToDouble(strWithDivide.substr(0, divisionSignInd)) /
-               strToDouble(strWithDivide.substr(divisionSignInd + 1));
+        return strToDouble(strWithDivide.substr(0, divisionSignInd), status) /
+               strToDouble(strWithDivide.substr(divisionSignInd + 1), status);
     }
 
-    return strToDouble(strWithDivide);
+    return strToDouble(strWithDivide, status);
 }
 
 /**
@@ -155,7 +162,7 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionR
         // we will use `meter`
         const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
         const auto rateInfo = conversionRates.extractConversionInfo(singleUnitImpl.identifier, status);
-        if (U_FAILURE(status)) return result;
+        if (U_FAILURE(status)) { return result; }
         if (rateInfo == nullptr) {
             status = U_INTERNAL_PROGRAM_ERROR;
             return result;
@@ -182,7 +189,8 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionR
 /*
  * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
  */
-void addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum, Factor &factor) {
+void addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum, Factor &factor,
+                             UErrorCode &status) {
 
     if (baseStr == "ft_to_m") {
         factor.constants[CONSTANT_FT2M] += power * sigNum;
@@ -209,9 +217,9 @@ void addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum, 
         factor.constants[CONSTANT_PI] += power * sigNum;
     } else {
         if (sigNum == SigNum::NEGATIVE) {
-            factor.factorDen *= std::pow(strToDouble(baseStr), power);
+            factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
         } else {
-            factor.factorNum *= std::pow(strToDouble(baseStr), power);
+            factor.factorNum *= std::pow(strToDouble(baseStr, status), power);
         }
     }
 }
@@ -220,7 +228,7 @@ void addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum, 
   Adds single factor to a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
   However, complex factor are not included, such as "ft2m^3*200/3"
 */
-void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum) {
+void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum, UErrorCode &status) {
     StringPiece baseStr;
     StringPiece powerStr;
     int32_t power =
@@ -240,12 +248,12 @@ void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum) {
         baseStr = elementStr.substr(0, powerInd);
         powerStr = elementStr.substr(powerInd + 1);
 
-        power = static_cast<int32_t>(strToDouble(powerStr));
+        power = static_cast<int32_t>(strToDouble(powerStr, status));
     } else {
         baseStr = elementStr;
     }
 
-    addSingleFactorConstant(baseStr, power, sigNum, factor);
+    addSingleFactorConstant(baseStr, power, sigNum, factor, status);
 }
 
 /*
@@ -258,16 +266,17 @@ Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
     for (int32_t i = 0, start = 0, n = stringFactor.length(); i < n; i++) {
         if (factorData[i] == '*' || factorData[i] == '/') {
             StringPiece factorElement = stringFactor.substr(start, i - start);
-            addFactorElement(result, factorElement, sigNum);
+            addFactorElement(result, factorElement, sigNum, status);
 
             start = i + 1; // Set `start` to point to the start of the new element.
         } else if (i == n - 1) {
             // Last element
-            addFactorElement(result, stringFactor.substr(start, i + 1), sigNum);
+            addFactorElement(result, stringFactor.substr(start, i + 1), sigNum, status);
         }
 
-        if (factorData[i] == '/')
+        if (factorData[i] == '/') {
             sigNum = SigNum::NEGATIVE; // Change the sigNum because we reached the Denominator.
+        }
     }
 
     return result;
@@ -277,13 +286,13 @@ Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
 Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UErrorCode &status) {
     const auto conversionUnit = ratesInfo.extractConversionInfo(source, status);
     if (U_FAILURE(status)) return Factor();
-    if(conversionUnit == nullptr) {
+    if (conversionUnit == nullptr) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return Factor();
     }
 
     Factor result = extractFactorConversions(conversionUnit->factor.toStringPiece(), status);
-    result.offset = strHasDivideSignToDouble(conversionUnit->offset.toStringPiece());
+    result.offset = strHasDivideSignToDouble(conversionUnit->offset.toStringPiece(), status);
 
     return result;
 }
@@ -293,14 +302,15 @@ Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &rate
                           UErrorCode &status) {
 
     Factor result;
-    auto compoundSourceUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(source, status);
+    MeasureUnitImpl memory;
+    const auto &compoundSourceUnit = MeasureUnitImpl::forMeasureUnit(source, memory, status);
     if (U_FAILURE(status)) return result;
 
     for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
-        auto singleUnit = *compoundSourceUnit.units[i]; // a TempSingleUnit
+        auto singleUnit = *compoundSourceUnit.units[i]; // a SingleUnitImpl
 
         Factor singleFactor = loadSingleFactor(singleUnit.identifier, ratesInfo, status);
-        if(U_FAILURE(status)) return result;
+        if (U_FAILURE(status)) return result;
 
         // Apply SiPrefix before the power, because the power may be will flip the factor.
         singleFactor.applySiPrefix(singleUnit.siPrefix);
@@ -326,7 +336,7 @@ void substituteSingleConstant(int32_t constantPower,
     }
 }
 
-void substituteConstants(Factor &factor, UErrorCode &status) {
+void substituteConstants(Factor &factor) {
     double constantsValues[CONSTANTS_COUNT];
 
     constantsValues[CONSTANT_FT2M] = 0.3048;
@@ -349,8 +359,8 @@ void substituteConstants(Factor &factor, UErrorCode &status) {
  * square-celsius or square-fahrenheit.
  */
 UBool checkSimpleUnit(const MeasureUnit &unit, UErrorCode &status) {
-    auto compoundSourceUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(unit, status);
-
+    MeasureUnitImpl memory;
+    const auto &compoundSourceUnit = MeasureUnitImpl::forMeasureUnit(unit, memory, status);
     if (U_FAILURE(status)) return false;
 
     if (compoundSourceUnit.complexity != UMEASURE_UNIT_SINGLE) { return false; }
@@ -390,7 +400,7 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
     }
 
     // Substitute constants
-    substituteConstants(finalFactor, status);
+    substituteConstants(finalFactor);
 
     conversionRate.factorNum = finalFactor.factorNum;
     conversionRate.factorDen = finalFactor.factorDen;
@@ -423,8 +433,8 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
     return UNCONVERTIBLE;
 }
 
-UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target,
-                             const ConversionRates &ratesInfo, UErrorCode &status) {
+UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
+                             UErrorCode &status) {
     UnitsConvertibilityState unitsState = checkConvertibility(source, target, ratesInfo, status);
     if (U_FAILURE(status)) return;
     if (unitsState == UnitsConvertibilityState::UNCONVERTIBLE) {
