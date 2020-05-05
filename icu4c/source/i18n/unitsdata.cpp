@@ -116,6 +116,23 @@ bool operator<(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b)
     return compareUnitPreferenceMetadata(a, b) < 0;
 }
 
+int32_t compareUnitPreferenceMetadata(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b,
+                                      bool *foundCategory, bool *foundUsage, bool *foundRegion) {
+    int32_t cmp = uprv_strcmp(a.category.data(), b.category.data());
+    if (cmp == 0) {
+        *foundCategory = true;
+        cmp = uprv_strcmp(a.usage.data(), b.usage.data());
+    }
+    if (cmp == 0) {
+        *foundUsage = true;
+        cmp = uprv_strcmp(a.region.data(), b.region.data());
+    }
+    if (cmp == 0) {
+        *foundRegion = true;
+    }
+    return cmp;
+}
+
 /**
  * A ResourceSink that collects unit preferences information.
  *
@@ -221,14 +238,19 @@ class UnitPreferencesSink : public ResourceSink {
 };
 
 int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata, const char *category,
-                     const char *usage, const char *region, UErrorCode &status) {
+                     const char *usage, const char *region, bool *foundCategory, bool *foundUsage,
+                     bool *foundRegion, UErrorCode &status) {
     UnitPreferenceMetadata desired(category, usage, region, -1, -1, status);
     if (U_FAILURE(status)) { return -1; }
     int32_t start = 0;
     int32_t end = metadata->length();
+    *foundCategory = false;
+    *foundUsage = false;
+    *foundRegion = false;
     while (start < end) {
         int32_t mid = (start + end) / 2;
-        int32_t cmp = compareUnitPreferenceMetadata(*(*metadata)[mid], desired);
+        int32_t cmp = compareUnitPreferenceMetadata(*(*metadata)[mid], desired, foundCategory,
+                                                    foundUsage, foundRegion);
         if (cmp < 0) {
             start = mid + 1;
         } else if (cmp > 0) {
@@ -260,8 +282,9 @@ int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata, c
  * @param region The region for which preferences are needed. If there are no
  * region-specific preferences, this function automatically falls back to the
  * "001" region (global).
- * @param status The standard ICU error code output parameter. If an appropriate
- * set of preferences aren't found, status will be U_MISSING_RESOURCE.
+ * @param status The standard ICU error code output parameter. If an invalid
+ * category is given, status will be U_ILLEGAL_ARGUMENT_ERROR. If fallback to
+ * "default" or "001" didn't resolve, status will be U_MISSING_RESOURCE.
  * @return The index into the metadata vector which represents the appropriate
  * preferences. If appropriate preferences are not found, -1 is returned.
  */
@@ -269,18 +292,44 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
                                    const char *category, const char *usage, const char *region,
                                    UErrorCode &status) {
     if (U_FAILURE(status)) { return -1; }
-    int32_t idx = binarySearch(metadata, category, usage, region, status);
+    bool foundCategory, foundUsage, foundRegion;
+    int32_t idx = binarySearch(metadata, category, usage, region, &foundCategory, &foundUsage,
+                               &foundRegion, status);
     if (U_FAILURE(status)) { return -1; }
-    if (idx < 0 && uprv_strcmp(region, "001") != 0) {
-        idx = binarySearch(metadata, category, usage, "001", status);
+    if (idx >= 0) { return idx; }
+    if (!foundCategory) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return idx;
     }
-    if (idx < 0 && uprv_strcmp(usage, "default") != 0) {
-        idx = binarySearch(metadata, category, "default", region, status);
+    U_ASSERT(foundCategory);
+    if (!foundUsage) {
+        if (uprv_strcmp(usage, "default") != 0) {
+            usage = "default";
+            idx = binarySearch(metadata, category, usage, region, &foundCategory, &foundUsage,
+                                       &foundRegion, status);
+        }
+        if (!foundUsage) {
+            status = U_MISSING_RESOURCE_ERROR;
+            return idx;
+        }
     }
-    if (idx < 0 && uprv_strcmp(usage, "default") != 0 && uprv_strcmp(region, "001") != 0) {
-        idx = binarySearch(metadata, category, "default", "001", status);
+    U_ASSERT(foundCategory);
+    U_ASSERT(foundUsage);
+    if (!foundRegion) {
+        if (uprv_strcmp(region, "001") != 0) {
+            region = "001";
+            idx = binarySearch(metadata, category, usage, region, &foundCategory, &foundUsage,
+                                       &foundRegion, status);
+        }
+        if (!foundRegion) {
+            status = U_MISSING_RESOURCE_ERROR;
+            return idx;
+        }
     }
-    if (idx < 0) { status = U_MISSING_RESOURCE_ERROR; }
+    U_ASSERT(foundCategory);
+    U_ASSERT(foundUsage);
+    U_ASSERT(foundRegion);
+    U_ASSERT(idx >= 0);
     return idx;
 }
 
