@@ -33,20 +33,18 @@ class ConversionRateDataSink : public ResourceSink {
     explicit ConversionRateDataSink(MaybeStackVector<ConversionRateInfo> *out) : outVector(out) {}
 
     /**
-     * Adds the conversion rate information found in value to the output vector.
+     * Method for use by `ures_getAllItemsWithFallback`. Adds the unit
+     * conversion rates that are found in `value` to the output vector.
      *
-     * Each call to put() collects a ConversionRateInfo instance for the
-     * specified source unit identifier into the vector passed to the
-     * constructor, but only if an identical instance isn't already present.
-     *
-     * @param source The source unit identifier.
-     * @param value A resource containing conversion rate info (the base unit
-     * and factor, and possibly an offset).
+     * @param source This string must be "convertUnits": the resource that this
+     * class supports reading.
+     * @param value The "convertUnits" resource, containing unit conversion rate
+     * information.
      * @param noFallback Ignored.
      * @param status The standard ICU error code output parameter.
      */
     void put(const char *source, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
-        if (U_FAILURE(status)) return;
+        if (U_FAILURE(status)) { return; }
         if (uprv_strcmp(source, "convertUnits") != 0) {
             // This is very strict, however it is the cheapest way to be sure
             // that with `value`, we're looking at the convertUnits table.
@@ -71,7 +69,7 @@ class ConversionRateDataSink : public ResourceSink {
                     offset = value.getUnicodeString(status);
                 }
             }
-            if (U_FAILURE(status)) return;
+            if (U_FAILURE(status)) { return; }
             if (baseUnit.isBogus() || factor.isBogus()) {
                 // We could not find a usable conversion rate: bad resource.
                 status = U_MISSING_RESOURCE_ERROR;
@@ -97,6 +95,28 @@ class ConversionRateDataSink : public ResourceSink {
     MaybeStackVector<ConversionRateInfo> *outVector;
 };
 
+UnitPreferenceMetadata::UnitPreferenceMetadata(const char *category, const char *usage,
+                                               const char *region, int32_t prefsOffset,
+                                               int32_t prefsCount, UErrorCode &status) {
+    this->category.append(category, status);
+    this->usage.append(usage, status);
+    this->region.append(region, status);
+    this->prefsOffset = prefsOffset;
+    this->prefsCount = prefsCount;
+}
+
+bool operator<(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b) {
+    int32_t cmp = uprv_strcmp(a.category.data(), b.category.data());
+    if (cmp < 0) { return true; }
+    if (cmp > 0) { return false; }
+    cmp = uprv_strcmp(a.usage.data(), b.usage.data());
+    if (cmp < 0) { return true; }
+    if (cmp > 0) { return false; }
+    cmp = uprv_strcmp(a.region.data(), b.region.data());
+    if (cmp < 0) { return true; }
+    return false;
+}
+
 /**
  * A ResourceSink that collects unit preferences information.
  *
@@ -115,10 +135,20 @@ class UnitPreferencesSink : public ResourceSink {
                                  MaybeStackVector<UnitPreferenceMetadata> *outMetadata)
         : preferences(outPrefs), metadata(outMetadata) {}
 
-    // WIP/FIXME: document me!
+    /**
+     * Method for use by `ures_getAllItemsWithFallback`. Adds the unit
+     * preferences info that are found in `value` to the output vector.
+     *
+     * @param source This string must be "unitPreferenceData": the resource that
+     * this class supports reading.
+     * @param value The "unitPreferenceData" resource, containing unit
+     * preferences data.
+     * @param noFallback Ignored.
+     * @param status The standard ICU error code output parameter.
+     */
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         if (U_FAILURE(status)) { return; }
-                if (uprv_strcmp(key, "unitPreferenceData") != 0) {
+        if (uprv_strcmp(key, "unitPreferenceData") != 0) {
             // This is very strict, however it is the cheapest way to be sure
             // that with `value`, we're looking at the convertUnits table.
             status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -133,32 +163,26 @@ class UnitPreferencesSink : public ResourceSink {
                 ResourceTable regionTable = value.getTable(status);
                 const char *region;
                 for (int32_t k = 0; regionTable.getKeyAndValue(k, region, value); k++) {
-                    // Asserting that unit preferences are sorted (and there are
-                    // no duplicates: region check is "strictly ascending", when
-                    // category and usage match):
-                    U_ASSERT(
-                        metadata->length() == 0 ||
-                        0 < uprv_strcmp(category,
-                                        (*metadata)[metadata->length() - 1]->category.data()) ||
-                        (0 == uprv_strcmp(category,
-                                          (*metadata)[metadata->length() - 1]->category.data()) &&
-                         (0 < uprv_strcmp(usage, (*metadata)[metadata->length() - 1]->usage.data()) ||
-                          (0 == uprv_strcmp(usage, (*metadata)[metadata->length() - 1]->usage.data()) &&
-                           0 < uprv_strcmp(region,
-                                           (*metadata)[metadata->length() - 1]->region.data())))));
                     ResourceArray unitPrefs = value.getArray(status);
                     if (U_FAILURE(status)) { return; }
                     int32_t prefLen = unitPrefs.getSize();
-                    UnitPreferenceMetadata *meta = metadata->emplaceBack();
+                    UnitPreferenceMetadata *meta = metadata->emplaceBack(
+                        category, usage, region, preferences->length(), prefLen, status);
                     if (!meta) {
                         status = U_MEMORY_ALLOCATION_ERROR;
                         return;
                     }
-                    meta->category.append(category, status);
-                    meta->usage.append(usage, status);
-                    meta->region.append(region, status);
-                    meta->prefsOffset = preferences->length();
-                    meta->prefsCount = prefLen;
+                    if (U_FAILURE(status)) { return; }
+                    if (metadata->length() > 1) {
+                        // Verify that unit preferences are sorted and
+                        // without duplicates.
+                        if (!(*(*metadata)[metadata->length() - 2] <
+                              *(*metadata)[metadata->length() - 1])) {
+                            status = U_INVALID_FORMAT_ERROR;
+                            return;
+                        }
+                    }
+
                     for (int32_t i = 0; unitPrefs.getValue(i, value); i++) {
                         UnitPreference *up = preferences->emplaceBack();
                         if (!up) {
@@ -223,7 +247,7 @@ class UnitPreferencesSink : public ResourceSink {
  * @return The index into the metadata vector which represents the appropriate
  * preferences. If appropriate preferences are not found, -1 is returned.
  */
-int32_t getPreferenceIndex(const MaybeStackVector<UnitPreferenceMetadata> *metadata,
+int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata> *metadata,
                            const char *category, const char *usage, const char *region,
                            UErrorCode &status) {
     if (U_FAILURE(status)) { return -1; }
@@ -253,7 +277,7 @@ int32_t getPreferenceIndex(const MaybeStackVector<UnitPreferenceMetadata> *metad
                 }
                 cmp = uprv_strcmp((*metadata)[mid]->region.data(), region);
                 if (cmp == 0) {
-                    // We found a full metch.
+                    // We found a full match.
                     return mid;
                 }
             }
@@ -326,18 +350,14 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "unitPreferenceData", sink, status);
 }
 
-void U_I18N_API
-UnitPreferences::getPreferencesFor(const char *category, const char *usage, const char *region,
-                                   MaybeStackVector<UnitPreference> *outPreferences,
-                                   UErrorCode &status) {
+void U_I18N_API UnitPreferences::getPreferencesFor(const char *category, const char *usage,
+                                                   const char *region,
+                                                   MaybeStackVector<UnitPreference> *outPreferences,
+                                                   UErrorCode &status) {
     // UnitPreferenceMetadata *m = getMetadata(category, usage, region);
-    int32_t idx = getPreferenceIndex(&metadata_, category, usage, region, status);
+    int32_t idx = getPreferenceMetadataIndex(&metadata_, category, usage, region, status);
     if (U_FAILURE(status)) { return; }
-    if (idx < 0) { // Unnecessary if "status" was set correctly. TODO(review): should I delete this?
-                   // (Excessively "defensive"?)
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
+    U_ASSERT(idx >= 0); // Failures should have been taken care of by `status`.
     UnitPreferenceMetadata *m = metadata_[idx];
     for (int32_t pref = m->prefsOffset; pref < m->prefsOffset + m->prefsCount; pref++) {
         UnitPreference *p = unitPrefs_[pref];

@@ -90,6 +90,10 @@ namespace {
  * only be useful to internal code and unit testing code.
  */
 struct U_I18N_API UnitPreferenceMetadata : public UMemory {
+    UnitPreferenceMetadata(){};
+    UnitPreferenceMetadata(const char *category, const char *usage, const char *region,
+                           int32_t prefsOffset, int32_t prefsCount, UErrorCode &status);
+
     // Unit category (e.g. "length", "mass", "electric-capacitance").
     CharString category;
     // Usage (e.g. "road", "vehicle-fuel", "blood-glucose"). Every category
@@ -136,10 +140,10 @@ class U_I18N_API UnitPreferences {
      * function is added.)
      * @param usage The usage parameter. (TODO(hugovdm): improve this
      * documentation. Add reference to some list of usages we support.) If the
-     * given usage is not found, the function automatically falls back to
+     * given usage is not found, the method automatically falls back to
      * "default".
      * @param region The region whose preferences are desired. If there are no
-     * specific preferences for the requested region, the function automatically
+     * specific preferences for the requested region, the method automatically
      * falls back to region "001" ("world").
      * @param outPreferences The vector to which preferences will be added.
      * @param status Receives status.
