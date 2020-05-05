@@ -114,6 +114,7 @@ void UnitsDataTest::testGetPreferences() {
         } else {
             errln(UnicodeString(t.name) + ": failed to find preferences");
         }
+        status.errIfFailureAndReset("testCase '%s'", t.name);
     }
 }
 
