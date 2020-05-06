@@ -147,9 +147,15 @@ class U_I18N_API UnitPreferences {
      * falls back to region "001" ("world").
      * @param outPreferences The vector to which preferences will be added.
      * @param status Receives status.
+     *
+     * - TODO/WIP: make outPrefernces const, make function const, propagate
+     *   const as needed.
+     * - TODO/WIP: create a simpler class to replace `UnitPreference
+     *   **&outPrefrences`.
      */
     void getPreferencesFor(const char *category, const char *usage, const char *region,
-                           MaybeStackVector<UnitPreference> *outPreferences, UErrorCode &status);
+                           UnitPreference **&outPreferences, int32_t &preferenceCount,
+                           UErrorCode &status);
 
   protected:
     // Metadata about the sets of preferences, this is the index for looking up

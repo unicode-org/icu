@@ -358,32 +358,17 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "unitPreferenceData", sink, status);
 }
 
+// TODO/WIP: make outPrefernces const, make function const, propagate const as needed.
+// TODO/WIP: create a simpler class to replace `UnitPreference **&outPrefrences`.
 void U_I18N_API UnitPreferences::getPreferencesFor(const char *category, const char *usage,
-                                                   const char *region,
-                                                   MaybeStackVector<UnitPreference> *outPreferences,
-                                                   UErrorCode &status) {
-    // UnitPreferenceMetadata *m = getMetadata(category, usage, region);
+                                                   const char *region, UnitPreference **&outPreferences,
+                                                   int32_t &preferenceCount, UErrorCode &status) {
     int32_t idx = getPreferenceMetadataIndex(&metadata_, category, usage, region, status);
     if (U_FAILURE(status)) { return; }
     U_ASSERT(idx >= 0); // Failures should have been taken care of by `status`.
-    UnitPreferenceMetadata *m = metadata_[idx];
-    for (int32_t pref = m->prefsOffset; pref < m->prefsOffset + m->prefsCount; pref++) {
-        UnitPreference *p = unitPrefs_[pref];
-        // TODO(review): we're making a full copy of the preferences here.
-        // Considering UnitPreferences instances should simply stick around, we
-        // could also simply return pointers at these instances. What is the
-        // appropriate data structure (array/vector) for variable set of
-        // pointers? MaybeStackVector<UnitPreference*> could probably work, but
-        // ugly as a double-dereference?)
-        UnitPreference *outP = outPreferences->emplaceBack();
-        if (!outP) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        outP->unit.copyFrom(p->unit, status);
-        outP->geq = p->geq;
-        outP->skeleton.copyFrom(p->skeleton, status);
-    }
+    const UnitPreferenceMetadata *m = metadata_[idx];
+    outPreferences = unitPrefs_.getAlias() + m->prefsOffset;
+    preferenceCount = m->prefsCount;
 }
 
 U_NAMESPACE_END
