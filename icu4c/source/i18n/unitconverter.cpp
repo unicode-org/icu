@@ -53,6 +53,9 @@ struct Factor {
             constants[i] += rhs.constants[i];
         }
 
+        // NOTE
+        //  We need the offset when the source and the target are simple units. e.g. the source is
+        //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
         offset = std::max(rhs.offset, offset);
     }
 
@@ -63,6 +66,9 @@ struct Factor {
             constants[i] -= rhs.constants[i];
         }
 
+        // NOTE
+        //  We need the offset when the source and the target are simple units. e.g. the source is
+        //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
         offset = std::max(rhs.offset, offset);
     }
 
@@ -106,6 +112,36 @@ struct Factor {
         }
 
         factorNum *= siApplied;
+    }
+
+    void substituteConstants() {
+        double constantsValues[CONSTANTS_COUNT];
+
+        constantsValues[CONSTANT_FT2M] = 0.3048;
+        constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
+        constantsValues[CONSTANT_GRAVITY] = 9.80665;
+        constantsValues[CONSTANT_G] = 6.67408E-11;
+        constantsValues[CONSTANT_LB2KG] = 0.45359237;
+        constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
+
+        for (int i = 0; i < CONSTANTS_COUNT; i++) {
+            if (this->constants[i] == 0) continue;
+
+            substituteSingleConstant(this->constants[i], constantsValues[i]);
+            this->constants[i] = 0;
+        }
+    }
+
+    void substituteSingleConstant(int32_t constantPower,
+                                  double constantValue /* the constant actual value,
+                                                                     e.g. G= 9.88888 */) {
+        constantValue = std::pow(constantValue, std::abs(constantPower));
+
+        if (constantPower < 0) {
+            this->factorDen *= constantValue;
+        } else {
+            this->factorNum *= constantValue;
+        }
     }
 };
 
@@ -324,36 +360,6 @@ Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &rate
     return result;
 }
 
-void substituteSingleConstant(int32_t constantPower,
-                              double constantValue /* constant actual value, e.g. G= 9.88888 */,
-                              Factor &factor) {
-    constantValue = std::pow(constantValue, std::abs(constantPower));
-
-    if (constantPower < 0) {
-        factor.factorDen *= constantValue;
-    } else {
-        factor.factorNum *= constantValue;
-    }
-}
-
-void substituteConstants(Factor &factor) {
-    double constantsValues[CONSTANTS_COUNT];
-
-    constantsValues[CONSTANT_FT2M] = 0.3048;
-    constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
-    constantsValues[CONSTANT_GRAVITY] = 9.80665;
-    constantsValues[CONSTANT_G] = 6.67408E-11;
-    constantsValues[CONSTANT_LB2KG] = 0.45359237;
-    constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
-
-    for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        if (factor.constants[i] == 0) continue;
-
-        substituteSingleConstant(factor.constants[i], constantsValues[i], factor);
-        factor.constants[i] = 0;
-    }
-}
-
 /**
  * Checks if the source unit and the target unit are simple. For example celsius or fahrenheit. But not
  * square-celsius or square-fahrenheit.
@@ -399,8 +405,7 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
         return;
     }
 
-    // Substitute constants
-    substituteConstants(finalFactor);
+    finalFactor.substituteConstants();
 
     conversionRate.factorNum = finalFactor.factorNum;
     conversionRate.factorDen = finalFactor.factorDen;
