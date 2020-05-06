@@ -362,7 +362,7 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
 // TODO/WIP: create a simpler class to replace `UnitPreference **&outPrefrences`.
 void U_I18N_API UnitPreferences::getPreferencesFor(const char *category, const char *usage,
                                                    const char *region, UnitPreference **&outPreferences,
-                                                   int32_t &preferenceCount, UErrorCode &status) {
+                                                   int32_t &preferenceCount, UErrorCode &status) const {
     int32_t idx = getPreferenceMetadataIndex(&metadata_, category, usage, region, status);
     if (U_FAILURE(status)) { return; }
     U_ASSERT(idx >= 0); // Failures should have been taken care of by `status`.

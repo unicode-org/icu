@@ -775,7 +775,7 @@ public:
         return this->fCount;
     }
 
-    T** getAlias() {
+    T** getAlias() const {
         return this->fPool.getAlias();
     }
 

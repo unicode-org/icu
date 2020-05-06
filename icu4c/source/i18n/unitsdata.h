@@ -155,7 +155,7 @@ class U_I18N_API UnitPreferences {
      */
     void getPreferencesFor(const char *category, const char *usage, const char *region,
                            UnitPreference **&outPreferences, int32_t &preferenceCount,
-                           UErrorCode &status);
+                           UErrorCode &status) const;
 
   protected:
     // Metadata about the sets of preferences, this is the index for looking up
