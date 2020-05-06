@@ -117,6 +117,7 @@ struct Factor {
     void substituteConstants() {
         double constantsValues[CONSTANTS_COUNT];
 
+        // TODO: Load those constant values from units data.
         constantsValues[CONSTANT_FT2M] = 0.3048;
         constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
         constantsValues[CONSTANT_GRAVITY] = 9.80665;
