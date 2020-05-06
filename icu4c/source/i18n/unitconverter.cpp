@@ -125,22 +125,16 @@ struct Factor {
         constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
 
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            if (this->constants[i] == 0) continue;
+            if (this->constants[i] == 0) { continue;}
 
-            substituteSingleConstant(this->constants[i], constantsValues[i]);
+            auto absPower = std::abs(this->constants[i]);
+            SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
+            double absConstantValue = std::pow(constantsValues[i], absPower);
+
+            if (powerSig ==  SigNum::NEGATIVE) { this->factorDen *= absConstantValue;} 
+            else { this->factorNum *= absConstantValue;}
+
             this->constants[i] = 0;
-        }
-    }
-
-    void substituteSingleConstant(int32_t constantPower,
-                                  double constantValue /* the constant actual value,
-                                                                     e.g. G= 9.88888 */) {
-        constantValue = std::pow(constantValue, std::abs(constantPower));
-
-        if (constantPower < 0) {
-            this->factorDen *= constantValue;
-        } else {
-            this->factorNum *= constantValue;
         }
     }
 };
@@ -222,6 +216,7 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionR
     return result;
 }
 
+// TODO: Load those constant from units data.
 /*
  * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
  */
