@@ -18,6 +18,17 @@ namespace {
 
 using number::impl::DecimalQuantity;
 
+void trimSpaces(CharString& factor, UErrorCode& status){
+   CharString trimmed;
+   for (int i = 0 ; i < factor.length(); i++) {
+       if (factor[i] == ' ') continue;
+
+       trimmed.append(factor[i], status);
+   }
+
+   factor = std::move(trimmed);
+}
+
 /**
  * A ResourceSink that collects conversion rate information.
  *
@@ -85,6 +96,7 @@ class ConversionRateDataSink : public ResourceSink {
                 cr->sourceUnit.append(srcUnit, status);
                 cr->baseUnit.appendInvariantChars(baseUnit, status);
                 cr->factor.appendInvariantChars(factor, status);
+                trimSpaces(cr->factor, status);
                 if (!offset.isBogus()) cr->offset.appendInvariantChars(offset, status);
             }
         }
