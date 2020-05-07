@@ -68,6 +68,10 @@ class U_I18N_API ConversionRates {
      */
     const ConversionRateInfo *extractConversionInfo(StringPiece source, UErrorCode &status) const;
 
+    // TODO(younies): hugovdm added this to resolve "git merge" issues. The API
+    // should be improved to make this unnecessary.
+    const MaybeStackVector<ConversionRateInfo> *getInternalList() const { return &conversionInfo_; };
+
   private:
     MaybeStackVector<ConversionRateInfo> conversionInfo_;
 };
