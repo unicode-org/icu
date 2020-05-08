@@ -16,9 +16,6 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
-<<<<<<< HEAD
-using icu::number::impl::DecimalQuantity;
-=======
 void trimSpaces(CharString& factor, UErrorCode& status){
    CharString trimmed;
    for (int i = 0 ; i < factor.length(); i++) {
@@ -29,7 +26,6 @@ void trimSpaces(CharString& factor, UErrorCode& status){
 
    factor = std::move(trimmed);
 }
->>>>>>> 9bcc4b698ff4b2afbf321188bceff809a27342f2
 
 /**
  * A ResourceSink that collects conversion rate information.
