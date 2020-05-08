@@ -340,10 +340,19 @@ struct UnitsTestContext {
 };
 
 /**
- * WIP(hugovdm): deals with a single data-driven unit test for unit conversions.
- * This is a UParseLineFn as required by u_parseDelimitedFile.
+ * Deals with a single data-driven unit test for unit conversions.
  *
- * context must point at a UnitsTestContext struct.
+ * This is a UParseLineFn as required by u_parseDelimitedFile, intended for
+ * parsing unitsTest.txt.
+ *
+ * @param context Must point at a UnitsTestContext struct.
+ * @param fields A list of pointer-pairs, each pair pointing at the start and
+ * end of each field. End pointers are important because these are *not*
+ * null-terminated strings. (Interpreted as a null-terminated string,
+ * fields[0][0] points at the whole line.)
+ * @param fieldCount The number of fields (pointer pairs) passed to the fields
+ * parameter.
+ * @param pErrorCode Receives status.
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) { return; }
@@ -394,23 +403,21 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     if (status.errIfFailureAndReset("msg construction")) { return; }
     unitsTest->assertNotEquals(msg.data(), UNCONVERTIBLE, convertibility);
 
-    // TODO(hugovdm,younies): the following code can be uncommented (and
-    // fixed) once merged with a UnitConverter branch:
-    // UnitConverter converter(sourceUnit, targetUnit, unitsTest->conversionRates_, status);
-    // if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-    //                                 sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
-    //     return;
-    // }
-    // double got = converter.convert(1000);
-    // unitsTest->assertEqualsNear(fields[0][0], expected, got, 0.0001);
+    // Conversion:
+    UnitConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
+    if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
+                                    sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+        return;
+    }
+    double got = converter.convert(1000);
+    msg.clear();
+    msg.append("Converting 1000 ", status).append(x, status).append(" to ", status).append(y, status);
+    unitsTest->assertEqualsNear(msg.data(), expected, got, 0.0001);
 }
 
 /**
  * Runs data-driven unit tests for unit conversion. It looks for the test cases
  * in source/test/testdata/units/unitsTest.txt, which originates in CLDR.
- *
- * TODO(hugovdm,younies): add conversion testing in unitsTestDataLineFn (it only
- * tests convertability at the moment).
  */
 void UnitsTest::testConversions() {
     const char *filename = "unitsTest.txt";
