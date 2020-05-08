@@ -16,6 +16,8 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
+using icu::number::impl::DecimalQuantity;
+
 void trimSpaces(CharString& factor, UErrorCode& status){
    CharString trimmed;
    for (int i = 0 ; i < factor.length(); i++) {
