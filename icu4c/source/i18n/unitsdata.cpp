@@ -16,7 +16,20 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
+<<<<<<< HEAD
 using icu::number::impl::DecimalQuantity;
+=======
+void trimSpaces(CharString& factor, UErrorCode& status){
+   CharString trimmed;
+   for (int i = 0 ; i < factor.length(); i++) {
+       if (factor[i] == ' ') continue;
+
+       trimmed.append(factor[i], status);
+   }
+
+   factor = std::move(trimmed);
+}
+>>>>>>> 9bcc4b698ff4b2afbf321188bceff809a27342f2
 
 /**
  * A ResourceSink that collects conversion rate information.
@@ -87,6 +100,7 @@ class ConversionRateDataSink : public ResourceSink {
                 cr->sourceUnit.append(srcUnit, status);
                 cr->baseUnit.appendInvariantChars(baseUnit, status);
                 cr->factor.appendInvariantChars(factor, status);
+                trimSpaces(cr->factor, status);
                 if (!offset.isBogus()) cr->offset.appendInvariantChars(offset, status);
             }
         }
