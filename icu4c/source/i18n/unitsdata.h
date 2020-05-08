@@ -93,7 +93,8 @@ namespace {
  * UnitPreferenceMetadata lives in the anonymous namespace, because it should
  * only be useful to internal code and unit testing code.
  */
-struct U_I18N_API UnitPreferenceMetadata : public UMemory {
+class U_I18N_API UnitPreferenceMetadata : public UMemory {
+  public:
     UnitPreferenceMetadata(){};
     UnitPreferenceMetadata(const char *category, const char *usage, const char *region,
                            int32_t prefsOffset, int32_t prefsCount, UErrorCode &status);
@@ -112,6 +113,10 @@ struct U_I18N_API UnitPreferenceMetadata : public UMemory {
     int32_t prefsOffset;
     // The number of preferences that form this set.
     int32_t prefsCount;
+
+    int32_t compareTo(const UnitPreferenceMetadata &other) const;
+    int32_t compareTo(const UnitPreferenceMetadata &other, bool *foundCategory, bool *foundUsage,
+                      bool *foundRegion) const;
 };
 
 } // namespace
@@ -152,13 +157,10 @@ class U_I18N_API UnitPreferences {
      * @param outPreferences The vector to which preferences will be added.
      * @param status Receives status.
      *
-     * - TODO/WIP: make outPrefernces const, make function const, propagate
-     *   const as needed.
-     * - TODO/WIP: create a simpler class to replace `UnitPreference
-     *   **&outPrefrences`.
+     * TODO: maybe replace `UnitPreference **&outPrefrences` with a slice class?
      */
     void getPreferencesFor(const char *category, const char *usage, const char *region,
-                           UnitPreference **&outPreferences, int32_t &preferenceCount,
+                           const UnitPreference **&outPreferences, int32_t &preferenceCount,
                            UErrorCode &status) const;
 
   protected:

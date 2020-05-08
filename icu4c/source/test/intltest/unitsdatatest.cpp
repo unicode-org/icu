@@ -89,25 +89,9 @@ void UnitsDataTest::testGetPreferences() {
     assertTrue(UnicodeString("Preferences count: ") + unitPrefs->length() + " > 250",
                unitPrefs->length() > 250);
 
-    // Dump all preferences... TODO/WIP: remove whole block? This was just
-    // debugging/development output.
-    logln("Unit Preferences:");
-    for (int32_t i = 0; i < metadata->length(); i++) {
-        logln("%d: category %s, usage %s, region %s, offset %d, count %d", i,
-              (*metadata)[i]->category.data(), (*metadata)[i]->usage.data(),
-              (*metadata)[i]->region.data(), (*metadata)[i]->prefsOffset, (*metadata)[i]->prefsCount);
-        int32_t offset = (*metadata)[i]->prefsOffset;
-        int32_t count = (*metadata)[i]->prefsCount;
-        for (int32_t j = offset; j < offset + count; j++) {
-            auto p = (*unitPrefs)[j];
-            logln("  %d: 0x%x unit %s, geq %f, skeleton \"%s\"", j, p, p->unit.data(), p->geq,
-                  p->skeleton.data());
-        }
-    }
-
     for (const auto &t : testCases) {
         logln(t.name);
-        UnitPreference **prefs;
+        const UnitPreference **prefs;
         int32_t prefsCount;
         preferences.getPreferencesFor(t.category, t.usage, t.region, prefs, prefsCount, status);
         if (status.errIfFailureAndReset("getPreferencesFor(\"%s\", \"%s\", \"%s\", ...", t.category,

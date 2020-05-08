@@ -117,32 +117,32 @@ UnitPreferenceMetadata::UnitPreferenceMetadata(const char *category, const char 
     this->prefsCount = prefsCount;
 }
 
-int32_t compareUnitPreferenceMetadata(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b) {
-    int32_t cmp = uprv_strcmp(a.category.data(), b.category.data());
-    if (cmp == 0) { cmp = uprv_strcmp(a.usage.data(), b.usage.data()); }
-    if (cmp == 0) { cmp = uprv_strcmp(a.region.data(), b.region.data()); }
+int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other) const {
+    int32_t cmp = uprv_strcmp(category.data(), other.category.data());
+    if (cmp == 0) { cmp = uprv_strcmp(usage.data(), other.usage.data()); }
+    if (cmp == 0) { cmp = uprv_strcmp(region.data(), other.region.data()); }
     return cmp;
 }
 
-bool operator<(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b) {
-    return compareUnitPreferenceMetadata(a, b) < 0;
-}
-
-int32_t compareUnitPreferenceMetadata(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b,
-                                      bool *foundCategory, bool *foundUsage, bool *foundRegion) {
-    int32_t cmp = uprv_strcmp(a.category.data(), b.category.data());
+int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other, bool *foundCategory,
+                                          bool *foundUsage, bool *foundRegion) const {
+    int32_t cmp = uprv_strcmp(category.data(), other.category.data());
     if (cmp == 0) {
         *foundCategory = true;
-        cmp = uprv_strcmp(a.usage.data(), b.usage.data());
+        cmp = uprv_strcmp(usage.data(), other.usage.data());
     }
     if (cmp == 0) {
         *foundUsage = true;
-        cmp = uprv_strcmp(a.region.data(), b.region.data());
+        cmp = uprv_strcmp(region.data(), other.region.data());
     }
     if (cmp == 0) {
         *foundRegion = true;
     }
     return cmp;
+}
+
+bool operator<(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b) {
+    return a.compareTo(b) < 0;
 }
 
 /**
@@ -172,7 +172,8 @@ class UnitPreferencesSink : public ResourceSink {
      * @param value The "unitPreferenceData" resource, containing unit
      * preferences data.
      * @param noFallback Ignored.
-     * @param status The standard ICU error code output parameter.
+     * @param status The standard ICU error code output parameter. Note: if an
+     * error is returned, outPrefs and outMetadata may be inconsistent.
      */
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
         if (U_FAILURE(status)) { return; }
@@ -182,6 +183,10 @@ class UnitPreferencesSink : public ResourceSink {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
+        // The unitPreferenceData structure (see data/misc/units.txt) contains a
+        // hierarchy of category/usage/region, within which are a set of
+        // preferences. Hence three for-loops and another loop for the
+        // preferences themselves:
         ResourceTable unitPreferenceDataTable = value.getTable(status);
         const char *category;
         for (int32_t i = 0; unitPreferenceDataTable.getKeyAndValue(i, category, value); i++) {
@@ -191,9 +196,13 @@ class UnitPreferencesSink : public ResourceSink {
                 ResourceTable regionTable = value.getTable(status);
                 const char *region;
                 for (int32_t k = 0; regionTable.getKeyAndValue(k, region, value); k++) {
+                    // `value` now contains the set of preferences for
+                    // category/usage/region.
                     ResourceArray unitPrefs = value.getArray(status);
                     if (U_FAILURE(status)) { return; }
                     int32_t prefLen = unitPrefs.getSize();
+
+                    // Update metadata for this set of preferences.
                     UnitPreferenceMetadata *meta = metadata->emplaceBack(
                         category, usage, region, preferences->length(), prefLen, status);
                     if (!meta) {
@@ -211,6 +220,7 @@ class UnitPreferencesSink : public ResourceSink {
                         }
                     }
 
+                    // Collect the individual preferences.
                     for (int32_t i = 0; unitPrefs.getValue(i, value); i++) {
                         UnitPreference *up = preferences->emplaceBack();
                         if (!up) {
@@ -261,8 +271,7 @@ int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata, c
     *foundRegion = false;
     while (start < end) {
         int32_t mid = (start + end) / 2;
-        int32_t cmp = compareUnitPreferenceMetadata(*(*metadata)[mid], desired, foundCategory,
-                                                    foundUsage, foundRegion);
+        int32_t cmp = (*metadata)[mid]->compareTo(desired, foundCategory, foundUsage, foundRegion);
         if (cmp < 0) {
             start = mid + 1;
         } else if (cmp > 0) {
@@ -294,9 +303,10 @@ int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata, c
  * @param region The region for which preferences are needed. If there are no
  * region-specific preferences, this function automatically falls back to the
  * "001" region (global).
- * @param status The standard ICU error code output parameter. If an invalid
- * category is given, status will be U_ILLEGAL_ARGUMENT_ERROR. If fallback to
- * "default" or "001" didn't resolve, status will be U_MISSING_RESOURCE.
+ * @param status The standard ICU error code output parameter.
+ *   * If an invalid category is given, status will be U_ILLEGAL_ARGUMENT_ERROR.
+ *   * If fallback to "default" or "001" didn't resolve, status will be
+ *     U_MISSING_RESOURCE.
  * @return The index into the metadata vector which represents the appropriate
  * preferences. If appropriate preferences are not found, -1 is returned.
  */
@@ -370,16 +380,19 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "unitPreferenceData", sink, status);
 }
 
-// TODO/WIP: make outPrefernces const, make function const, propagate const as needed.
-// TODO/WIP: create a simpler class to replace `UnitPreference **&outPrefrences`.
+// TODO: make outPreferences const?
+//
+// TODO: consider replacing `UnitPreference **&outPrefrences` with slice class
+// of some kind.
 void U_I18N_API UnitPreferences::getPreferencesFor(const char *category, const char *usage,
-                                                   const char *region, UnitPreference **&outPreferences,
+                                                   const char *region,
+                                                   const UnitPreference **&outPreferences,
                                                    int32_t &preferenceCount, UErrorCode &status) const {
     int32_t idx = getPreferenceMetadataIndex(&metadata_, category, usage, region, status);
     if (U_FAILURE(status)) { return; }
     U_ASSERT(idx >= 0); // Failures should have been taken care of by `status`.
     const UnitPreferenceMetadata *m = metadata_[idx];
-    outPreferences = unitPrefs_.getAlias() + m->prefsOffset;
+    outPreferences = const_cast<const UnitPreference **>(unitPrefs_.getAlias()) + m->prefsOffset;
     preferenceCount = m->prefsCount;
 }
 
