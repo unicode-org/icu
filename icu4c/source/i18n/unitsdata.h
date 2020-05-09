@@ -160,7 +160,7 @@ class U_I18N_API UnitPreferences {
      * TODO: maybe replace `UnitPreference **&outPrefrences` with a slice class?
      */
     void getPreferencesFor(const char *category, const char *usage, const char *region,
-                           const UnitPreference **&outPreferences, int32_t &preferenceCount,
+                           const UnitPreference *const *&outPreferences, int32_t &preferenceCount,
                            UErrorCode &status) const;
 
   protected:

@@ -324,6 +324,11 @@ public:
      */
     T *getAlias() const { return ptr; }
     /**
+     * Access without ownership change.
+     * @return the array pointer
+     */
+    const T *getConstAlias() const { return ptr; }
+    /**
      * Returns the array limit. Simple convenience method.
      * @return getAlias()+getCapacity()
      */
@@ -777,6 +782,10 @@ public:
 
     T** getAlias() const {
         return this->fPool.getAlias();
+    }
+
+    const T *const *getConstAlias() const {
+        return this->fPool.getConstAlias();
     }
 
     /**

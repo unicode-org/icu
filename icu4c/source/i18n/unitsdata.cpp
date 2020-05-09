@@ -386,13 +386,13 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
 // of some kind.
 void U_I18N_API UnitPreferences::getPreferencesFor(const char *category, const char *usage,
                                                    const char *region,
-                                                   const UnitPreference **&outPreferences,
+                                                   const UnitPreference *const *&outPreferences,
                                                    int32_t &preferenceCount, UErrorCode &status) const {
     int32_t idx = getPreferenceMetadataIndex(&metadata_, category, usage, region, status);
     if (U_FAILURE(status)) { return; }
     U_ASSERT(idx >= 0); // Failures should have been taken care of by `status`.
     const UnitPreferenceMetadata *m = metadata_[idx];
-    outPreferences = const_cast<const UnitPreference **>(unitPrefs_.getAlias()) + m->prefsOffset;
+    outPreferences = unitPrefs_.getConstAlias() + m->prefsOffset;
     preferenceCount = m->prefsCount;
 }
 

@@ -91,7 +91,7 @@ void UnitsDataTest::testGetPreferences() {
 
     for (const auto &t : testCases) {
         logln(t.name);
-        const UnitPreference **prefs;
+        const UnitPreference *const *prefs;
         int32_t prefsCount;
         preferences.getPreferencesFor(t.category, t.usage, t.region, prefs, prefsCount, status);
         if (status.errIfFailureAndReset("getPreferencesFor(\"%s\", \"%s\", \"%s\", ...", t.category,
