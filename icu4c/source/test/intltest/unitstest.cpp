@@ -13,6 +13,7 @@
 #include "filestrm.h"
 #include "intltest.h"
 #include "number_decimalquantity.h"
+#include "putilimp.h"
 #include "unicode/ctest.h"
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
@@ -194,7 +195,7 @@ void UnitsTest::testTemperature() {
 
         assertEquals(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
                      testCase.expectedValue, converter.convert(testCase.inputValue),
-                     0.0001 * abs((double)testCase.expectedValue));
+                     0.0001 * uprv_fabs(testCase.expectedValue));
     }
 }
 
