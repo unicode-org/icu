@@ -108,6 +108,30 @@ class ConversionRateDataSink : public ResourceSink {
 
 } // namespace
 
+// TODO/FIXME: baseUnitIdentifier seems onerous? If this function could access
+// extractCompoundBaseUnit directly, we could support any input unit identifier.
+// Shall we move extractCompoundBaseUnit to unitsdata.cpp?
+CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status) {
+    CharString result;
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+    LocalUResourceBundlePointer unitQuantities(
+        ures_getByKey(unitsBundle.getAlias(), "unitQuantities", NULL, &status));
+    int32_t categoryLength;
+    if (U_FAILURE(status)) { return result; }
+    const UChar *uCategory =
+        ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier, &categoryLength, &status);
+    if (U_FAILURE(status)) {
+        // TODO: manually dealing with consumption-inverse
+        if (uprv_strcmp(baseUnitIdentifier, "meter-per-cubic-meter") == 0) {
+            status = U_ZERO_ERROR;
+            uCategory = ures_getStringByKey(unitQuantities.getAlias(), "cubic-meter-per-meter",
+                                            &categoryLength, &status);
+        }
+    }
+    result.appendInvariantChars(uCategory, categoryLength, status);
+    return result;
+}
+
 void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status) {
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
     ConversionRateDataSink sink(&result);

@@ -14,6 +14,8 @@
 
 U_NAMESPACE_BEGIN
 
+CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status);
+
 /**
  * Encapsulates "convertUnits" information from units resources, specifying how
  * to convert from one unit to another.
