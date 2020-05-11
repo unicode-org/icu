@@ -39,7 +39,6 @@ class UnitsTest : public IntlTest {
     void testConversionCapability();
     void testConversions();
     void testPreferences();
-    void testGetUnitsData();
 
     void testBasic();
     void testSiPrefixes();
@@ -61,7 +60,6 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
-    TESTCASE_AUTO(testGetUnitsData);
 
     TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testSiPrefixes);
@@ -699,69 +697,6 @@ void UnitsTest::testPreferences() {
                           errorCode);
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
-    }
-}
-
-// We test "successfully loading some data", not specific output values, since
-// this would duplicate some of the input data. We leave end-to-end testing to
-// take care of that. Running `intltest` with `-v` will print out the loaded
-// output for easy visual inspection.
-//
-// WIP/TODO(hugovdm): getUnitsData is currently broken. Show it in the test an
-// fix it!
-void UnitsTest::testGetUnitsData() {
-    struct {
-        // Input parameters
-        const char *outputRegion;
-        const char *usage;
-        const char *inputUnit;
-    } testCases[]{
-        {"US", "fluid", "centiliter"},
-        {"BZ", "weather", "celsius"},
-        {"ZA", "road", "yard"},
-        {"XZ", "zz_nonexistant", "dekagram"},
-    };
-    for (const auto &t : testCases) {
-        logln("---testing: region=\"%s\", usage=\"%s\", inputUnit=\"%s\"", t.outputRegion, t.usage,
-              t.inputUnit);
-        IcuTestErrorCode status(*this, "testGetUnitsData");
-        MeasureUnit inputUnit = MeasureUnit::forIdentifier(t.inputUnit, status);
-        if (status.errIfFailureAndReset("MeasureUnit::forIdentifier(\"%s\", ...)", t.inputUnit)) {
-            continue;
-        }
-
-        CharString category;
-        MeasureUnit baseUnit;
-        MaybeStackVector<ConversionRateInfo> conversionInfo;
-        MaybeStackVector<UnitPreference> unitPreferences;
-        getUnitsData(t.outputRegion, t.usage, inputUnit, category, baseUnit, conversionInfo,
-                     unitPreferences, status);
-        if (status.errIfFailureAndReset("getUnitsData(\"%s\", \"%s\", \"%s\", ...)", t.outputRegion,
-                                        t.usage, t.inputUnit)) {
-            continue;
-        }
-
-        logln("* category: \"%s\", baseUnit: \"%s\"", category.data(), baseUnit.getIdentifier());
-        assertTrue("category filled in", category.length() > 0);
-        assertTrue("baseUnit filled in", uprv_strlen(baseUnit.getIdentifier()) > 0);
-        assertTrue("at least one conversion rate obtained", conversionInfo.length() > 0);
-        for (int i = 0; i < conversionInfo.length(); i++) {
-            ConversionRateInfo *cri;
-            cri = conversionInfo[i];
-            logln("* conversionInfo %d: source=\"%s\", baseUnit=\"%s\", factor=\"%s\", offset=\"%s\"", i,
-                  cri->sourceUnit.data(), cri->baseUnit.data(), cri->factor.data(), cri->offset.data());
-            assertTrue("ConversionRateInfo has source, baseUnit, and factor",
-                       cri->sourceUnit.length() > 0 && cri->baseUnit.length() > 0 &&
-                           cri->factor.length() > 0);
-        }
-        assertTrue("at least one unit preference obtained", unitPreferences.length() > 0);
-        for (int i = 0; i < unitPreferences.length(); i++) {
-            UnitPreference *up;
-            up = unitPreferences[i];
-            logln("* unitPreference %d: \"%s\", geq=%f, skeleton=\"%s\"", i, up->unit.data(), up->geq,
-                  up->skeleton.data());
-            assertTrue("unitPreference has unit", up->unit.length() > 0);
-        }
     }
 }
 

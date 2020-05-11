@@ -108,67 +108,6 @@ class ConversionRateDataSink : public ResourceSink {
     MaybeStackVector<ConversionRateInfo> *outVector;
 };
 
-/**
- * Collects unit preference information from a set of preferences.
- * @param usageData This should be a resource bundle containing a vector of
- * preferences - i.e. the unitPreferenceData tree resources already narrowed
- * down to a particular usage and region (example:
- * "unitPreferenceData/length/road/GB").
- */
-void collectUnitPrefs(UResourceBundle *usageData, MaybeStackVector<UnitPreference> &outVector,
-                      UErrorCode &status) {
-    if (U_FAILURE(status)) return;
-    StackUResourceBundle prefBundle;
-
-    int32_t numPrefs = ures_getSize(usageData);
-    for (int32_t i = 0; i < numPrefs; i++) {
-        ures_getByIndex(usageData, i, prefBundle.getAlias(), &status);
-
-        // Add and populate a new UnitPreference
-        int32_t strLen;
-
-        // unit
-        const UChar *unitIdent = ures_getStringByKey(prefBundle.getAlias(), "unit", &strLen, &status);
-        if (U_FAILURE(status)) return;
-        UnitPreference *up = outVector.emplaceBack();
-        if (!up) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        up->unit.appendInvariantChars(unitIdent, strLen, status);
-
-        // geq
-        const UChar *geq = ures_getStringByKey(prefBundle.getAlias(), "geq", &strLen, &status);
-        if (U_SUCCESS(status)) {
-            // If we don't mind up->geq having a bad value when
-            // U_FAILURE(status), we could extract a function and do a one-liner:
-            // up->geq = UCharsToDouble(geq, status);
-            CharString cGeq;
-            cGeq.appendInvariantChars(geq, strLen, status);
-            DecimalQuantity dq;
-            dq.setToDecNumber(StringPiece(cGeq.data()), status);
-            if (U_FAILURE(status)) return;
-            up->geq = dq.toDouble();
-        } else if (status == U_MISSING_RESOURCE_ERROR) {
-            // We don't mind if geq is missing
-            status = U_ZERO_ERROR;
-        } else {
-            return;
-        }
-
-        // skeleton
-        const UChar *skel = ures_getStringByKey(prefBundle.getAlias(), "skeleton", &strLen, &status);
-        if (U_SUCCESS(status)) {
-            up->skeleton.appendInvariantChars(skel, strLen, status);
-        } else if (status == U_MISSING_RESOURCE_ERROR) {
-            // We don't mind if geq is missing
-            status = U_ZERO_ERROR;
-        } else {
-            return;
-        }
-    }
-}
-
 UnitPreferenceMetadata::UnitPreferenceMetadata(const char *category, const char *usage,
                                                const char *region, int32_t prefsOffset,
                                                int32_t prefsCount, UErrorCode &status) {
@@ -434,68 +373,6 @@ const ConversionRateInfo *ConversionRates::extractConversionInfo(StringPiece sou
 
     status = U_INTERNAL_PROGRAM_ERROR;
     return nullptr;
-}
-
-/**
- * Fetches the units data that would be needed for the given usage.
- *
- * @param inputUnit the unit for which input is expected. (NOTE/WIP: If this is
- * known to be a base unit already, we could strip some logic here.)
- */
-void getUnitsData(const char *outputRegion, const char *usage, const MeasureUnit &inputUnit,
-                  CharString &category, MeasureUnit &baseUnit,
-                  MaybeStackVector<ConversionRateInfo> &conversionRates,
-                  MaybeStackVector<UnitPreference> &unitPreferences, UErrorCode &status) {
-    // This first fetches all conversion info. Next it fetches the category and
-    // unit preferences for the given usage and region.
-
-    // In this function we use LocalUResourceBundlePointers for resource bundles
-    // that don't change, and StackUResourceBundles for structures we use as
-    // fillin.
-
-    getAllConversionRates(conversionRates, status);
-    if (U_FAILURE(status)) return;
-    if (conversionRates.length() < 1) {
-        // This is defensive programming, because this shouldn't happen: if
-        // convertSink succeeds, there should be at least one item in
-        // conversionRates.
-        status = U_MISSING_RESOURCE_ERROR;
-        return;
-    }
-    // TODO(hugovdm): this is broken. We fetch all conversion rates now, the
-    // first is nothing special.
-    const char *baseIdentifier = conversionRates[0]->baseUnit.data();
-    baseUnit = MeasureUnit::forIdentifier(baseIdentifier, status);
-
-    // find category
-    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    LocalUResourceBundlePointer unitQuantities(
-        ures_getByKey(unitsBundle.getAlias(), "unitQuantities", NULL, &status));
-    int32_t categoryLength;
-    const UChar *uCategory =
-        ures_getStringByKey(unitQuantities.getAlias(), baseIdentifier, &categoryLength, &status);
-    category.appendInvariantChars(uCategory, categoryLength, status);
-
-    // Find the right unit preference bundle
-    StackUResourceBundle stackBundle; // Reused as we climb the tree
-    ures_getByKey(unitsBundle.getAlias(), "unitPreferenceData", stackBundle.getAlias(), &status);
-    ures_getByKey(stackBundle.getAlias(), category.data(), stackBundle.getAlias(), &status);
-    if (U_FAILURE(status)) { return; }
-    ures_getByKey(stackBundle.getAlias(), usage, stackBundle.getAlias(), &status);
-    if (status == U_MISSING_RESOURCE_ERROR) {
-        // Requested usage does not exist, so we use "default".
-        status = U_ZERO_ERROR;
-        ures_getByKey(stackBundle.getAlias(), "default", stackBundle.getAlias(), &status);
-    }
-    ures_getByKey(stackBundle.getAlias(), outputRegion, stackBundle.getAlias(), &status);
-    if (status == U_MISSING_RESOURCE_ERROR) {
-        // Requested region does not exist, so we use "001".
-        status = U_ZERO_ERROR;
-        ures_getByKey(stackBundle.getAlias(), "001", stackBundle.getAlias(), &status);
-    }
-
-    // Collect all the preferences into unitPreferences
-    collectUnitPrefs(stackBundle.getAlias(), unitPreferences, status);
 }
 
 U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {

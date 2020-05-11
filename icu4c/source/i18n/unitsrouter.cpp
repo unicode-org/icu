@@ -23,17 +23,16 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece 
     // MaybeStackVector<UnitPreference> preferences = extractUnitPreferences(locale, usage,
     // unitCategory);
     const char *region = "001"; // FIXME extract from locale.
-    CharString category;
+    const char *category = "length"; // FIXME(hugovdm) extract from inputUnit.
     MeasureUnit baseUnit;
     ConversionRates conversionRates(status);
+    UnitPreferences prefs(status);
 
-    // WIP/TODO(hugovdm): drop tmpConversionRates, redo getUnitsData.
-    MaybeStackVector<ConversionRateInfo> tmpConversionRates;
-    MaybeStackVector<UnitPreference> unitPreferences;
-    getUnitsData(region, usage.data(), inputUnit, category, baseUnit, tmpConversionRates, unitPreferences,
-                 status);
+    const UnitPreference *const *unitPreferences;
+    int32_t preferencesCount;
+    prefs.getPreferencesFor(category, usage.data(), region, unitPreferences, preferencesCount, status);
 
-    for (int i = 0, n = unitPreferences.length(); i < n; ++i) {
+    for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
 
