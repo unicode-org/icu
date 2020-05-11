@@ -248,6 +248,13 @@ ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat" $(ARM_CROSSBUILD_
 
 !ENDIF
 
+# Verbose output when building the data for Debug builds.
+!IF "$(DEBUG)" == "true"
+ICU_DATA_BUILD_VERBOSE=--verbose
+!ELSE
+ICU_DATA_BUILD_VERBOSE=
+!ENDIF
+
 # Three main targets: tools, core data, and test data.
 # Keep track of whether they are built via timestamp files.
 
@@ -277,6 +284,7 @@ $(COREDATA_TS):
 		--out_dir "$(ICUBLD_PKG)" \
 		--tmp_dir "$(ICUTMP)" \
 		--filter_file "$(ICU_DATA_FILTER_FILE)" \
+		$(ICU_DATA_BUILD_VERBOSE) \
 		$(ICU_DATA_BUILDTOOL_OPTS)
 	@echo "timestamp" > $(COREDATA_TS)
 
