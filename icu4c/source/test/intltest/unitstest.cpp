@@ -65,8 +65,8 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 
 void UnitsTest::testConversionCapability() {
     struct TestCase {
-        const StringPiece source;
-        const StringPiece target;
+        const char *source;
+        const char *target;
         const UnitsConvertibilityState expectedState;
     } testCases[]{
         {"meter", "foot", CONVERTIBLE},                                         //
@@ -88,7 +88,9 @@ void UnitsTest::testConversionCapability() {
         ConversionRates conversionRates(status);
         auto convertibility = checkConvertibility(source, target, conversionRates, status);
 
-        assertEquals("Conversion Capability", testCase.expectedState, convertibility);
+        assertEquals(UnicodeString("Conversion Capability: ") + testCase.source + " to " +
+                         testCase.target,
+                     testCase.expectedState, convertibility);
     }
 }
 
@@ -96,8 +98,8 @@ void UnitsTest::testSiPrefixes() {
     IcuTestErrorCode status(*this, "Units testSiPrefixes");
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -121,8 +123,9 @@ void UnitsTest::testSiPrefixes() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEquals(UnicodeString("testSiPrefixes: ") + testCase.source + " to " + testCase.target,
+                     testCase.expectedValue, converter.convert(testCase.inputValue),
+                     0.0001 * testCase.expectedValue);
     }
 }
 
@@ -131,8 +134,8 @@ void UnitsTest::testMass() {
 
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -155,8 +158,9 @@ void UnitsTest::testMass() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEquals(UnicodeString("testMass: ") + testCase.source + " to " + testCase.target,
+                     testCase.expectedValue, converter.convert(testCase.inputValue),
+                     0.0001 * testCase.expectedValue);
     }
 }
 
@@ -164,8 +168,8 @@ void UnitsTest::testTemperature() {
     IcuTestErrorCode status(*this, "Units testTemperature");
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -188,8 +192,9 @@ void UnitsTest::testTemperature() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEquals(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
+                     testCase.expectedValue, converter.convert(testCase.inputValue),
+                     0.0001 * abs(testCase.expectedValue));
     }
 }
 
@@ -198,8 +203,8 @@ void UnitsTest::testArea() {
 
     // Test Cases
     struct TestCase {
-        StringPiece source;
-        StringPiece target;
+        const char *source;
+        const char *target;
         const double inputValue;
         const double expectedValue;
     } testCases[]{
@@ -225,8 +230,9 @@ void UnitsTest::testArea() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
+        assertEquals(UnicodeString("testArea: ") + testCase.source + " to " + testCase.target,
+                     testCase.expectedValue, converter.convert(testCase.inputValue),
+                     0.0001 * testCase.expectedValue);
     }
 }
 
@@ -337,7 +343,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     double got = converter.convert(1000);
     msg.clear();
     msg.append("Converting 1000 ", status).append(x, status).append(" to ", status).append(y, status);
-    unitsTest->assertEqualsNear(msg.data(), expected, got, 0.0001);
+    unitsTest->assertEquals(msg.data(), expected, got, 0.0001 * expected);
 }
 
 /**
