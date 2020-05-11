@@ -194,7 +194,7 @@ void UnitsTest::testTemperature() {
 
         assertEquals(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
                      testCase.expectedValue, converter.convert(testCase.inputValue),
-                     0.0001 * abs(testCase.expectedValue));
+                     0.0001 * abs((double)testCase.expectedValue));
     }
 }
 
