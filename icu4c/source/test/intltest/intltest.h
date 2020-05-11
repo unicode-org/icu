@@ -309,8 +309,8 @@ public:
      * @param message - the identifying message for the AssertionError.
      * @param expected - expected value.
      * @param actual - the value to check against expected.
-     * @param delta - the maximum delta between expected and actual for which
-     * both numbers are still considered equal.
+     * @param delta - the maximum delta for the absolute difference between
+     * expected and actual for which both numbers are still considered equal.
      */
     UBool assertEquals(const char* message, double expected, double actual, double delta);
     UBool assertEquals(const char* message, UErrorCode expected, UErrorCode actual);
