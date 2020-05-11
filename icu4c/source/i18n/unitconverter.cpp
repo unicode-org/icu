@@ -176,6 +176,11 @@ double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
     return strToDouble(strWithDivide, status);
 }
 
+} // namespace
+// FIXME/TODO: this namespace closing and reopening hack makes below
+// function "public" with easy-to-read diffs. But better to move it to other
+// public functions.
+
 /**
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
  * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
@@ -216,6 +221,9 @@ MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionR
 
     return result;
 }
+
+// FIXME/TODO: fix this before merging the PR!
+namespace {
 
 // TODO: Load those constant from units data.
 /*

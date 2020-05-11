@@ -34,6 +34,9 @@ enum U_I18N_API UnitsConvertibilityState {
     UNCONVERTIBLE,
 };
 
+MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionRates &conversionRates,
+                                    UErrorCode &status);
+
 UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
                                                         const MeasureUnit &target,
                                                         const ConversionRates &conversionRates,
