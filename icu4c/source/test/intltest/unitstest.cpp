@@ -570,18 +570,27 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
         return;
     }
 
-    // WIP(hugovdm): hook this up to actual tests.
-    //
-    // Possible after merging in younies/tryingdouble:
-    // UnitConverter converter(sourceUnit, targetUnit, *pErrorCode);
-    // double got = converter.convert(1000, *pErrorCode);
-    // ((UnitsTest*)context)->assertEqualsNear(quantity.data(), expected, got, 0.0001);
-
     unitsTest->logln("Quantity (Category): \"%.*s\", Usage: \"%.*s\", Region: \"%.*s\", "
                      "Input: \"%f %s\", Expected Output: %s",
                      quantity.length(), quantity.data(), usage.length(), usage.data(), region.length(),
                      region.data(), inputAmount, inputMeasureUnit.getIdentifier(),
                      output.toDebugString().c_str());
+
+    if (U_FAILURE(status)) { return; }
+    UnitsRouter router(inputMeasureUnit, region, usage, status);
+    if (status.errIfFailureAndReset("UnitsRouter(<%s>, \"%.*s\", \"%.*s\", status)",
+                                    inputMeasureUnit.getIdentifier(), region.length(), region.data(),
+                                    usage.length(), usage.data())) {
+        return;
+    }
+    // FIXME/TODO: actually test output. At this point, this causes an assertion
+    // failure in complexunitsconverter.cpp:
+    //
+    // MaybeStackVector<Measure> result = router.route(inputAmount, status);
+    // for (int i=0; i<result.length(); i++) {
+    //     unitsTest->logln("result[%d], number: %f, unit: %s", i, result[i]->getNumber().getDouble(status),
+    //                      result[i]->getUnit().getIdentifier());
+    // }
 }
 
 /**

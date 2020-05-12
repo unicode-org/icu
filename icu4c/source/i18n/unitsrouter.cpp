@@ -11,33 +11,43 @@
 #include "cstring.h"
 #include "number_decimalquantity.h"
 #include "resource.h"
+#include "unitconverter.h" // for extractCompoundBaseUnit
+#include "unitsdata.h"     // for getUnitCategory
 #include "unitsrouter.h"
 #include "uresimp.h"
 
 U_NAMESPACE_BEGIN
 
-// TODO: unused parameter 'locale' [-Wunused-parameter]
-UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage,
+UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
                          UErrorCode &status) {
-    // StringPiece unitCategory = extractUnitCategory(inputUnit);
-    // MaybeStackVector<UnitPreference> preferences = extractUnitPreferences(locale, usage,
-    // unitCategory);
-    const char *region = "001"; // FIXME extract from locale.
-    const char *category = "length"; // FIXME(hugovdm) extract from inputUnit.
-    MeasureUnit baseUnit;
+    // TODO: do we want to pass in ConversionRates and UnitPreferences instead
+    // of loading in each UnitsRouter instance? (Or make global?)
     ConversionRates conversionRates(status);
     UnitPreferences prefs(status);
 
+    MeasureUnit baseUnit = extractCompoundBaseUnit(inputUnit, conversionRates, status);
+    CharString category = getUnitCategory(baseUnit.getIdentifier(), status);
+
+    // TODO: deal correctly with StringPiece / null-terminated string incompatibility...
     const UnitPreference *const *unitPreferences;
     int32_t preferencesCount;
-    prefs.getPreferencesFor(category, usage.data(), region, unitPreferences, preferencesCount, status);
+    prefs.getPreferencesFor(category.data(), usage.data(), region.data(), unitPreferences,
+                            preferencesCount, status);
 
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
 
+        if (U_FAILURE(status)) { return; }
         converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
                                           status);
+        if (U_FAILURE(status)) {
+            fprintf(
+                stderr,
+                "FAILED: converterPreferences_.emplaceBack(<%s>, <%s>, %f, conversionRates, status)\n",
+                inputUnit.getIdentifier(), complexTargetUnit.getIdentifier(), preference.geq);
+            return;
+        }
     }
 }
 
