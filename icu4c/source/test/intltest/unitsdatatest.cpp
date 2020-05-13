@@ -12,6 +12,7 @@ class UnitsDataTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
+    void testGetUnitCategory();
     void testGetAllConversionRates();
 };
 
@@ -20,8 +21,30 @@ extern IntlTest *createUnitsDataTest() { return new UnitsDataTest(); }
 void UnitsDataTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if (exec) { logln("TestSuite UnitsDataTest: "); }
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testGetUnitCategory);
     TESTCASE_AUTO(testGetAllConversionRates);
     TESTCASE_AUTO_END;
+}
+
+void UnitsDataTest::testGetUnitCategory() {
+    struct TestCase {
+        const char *unit;
+        const char *expectedCategory;
+    } testCases[]{
+        {"kilogram-per-cubic-meter", "mass-density"},
+        {"cubic-meter-per-meter", "consumption"},
+        // FIXME/WIP: the desired behaviour here is unclear: we have two
+        // categories, consumption and consumption-inverse, and therefore seem
+        // uninterested in converting between them?
+        {"meter-per-cubic-meter", "consumption-inverse"},
+    };
+
+    IcuTestErrorCode status(*this, "testGetUnitCategory");
+    for (const auto &t : testCases) {
+        CharString category = getUnitCategory(t.unit, status);
+        status.errIfFailureAndReset("getUnitCategory(%s)", t.unit);
+        assertEquals("category", t.expectedCategory, category.data());
+    }
 }
 
 void UnitsDataTest::testGetAllConversionRates() {

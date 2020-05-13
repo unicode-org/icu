@@ -108,9 +108,6 @@ class ConversionRateDataSink : public ResourceSink {
 
 } // namespace
 
-// TODO/FIXME: baseUnitIdentifier seems onerous? If this function could access
-// extractCompoundBaseUnit directly, we could support any input unit identifier.
-// Shall we move extractCompoundBaseUnit to unitsdata.cpp?
 CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status) {
     CharString result;
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
@@ -121,11 +118,17 @@ CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode
     const UChar *uCategory =
         ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier, &categoryLength, &status);
     if (U_FAILURE(status)) {
-        // TODO: manually dealing with consumption-inverse
+        // TODO(hugovdm): special-casing the consumption-inverse case. If we
+        // want this more general, do we want to accept a MeasureUnit instance
+        // and implement MeasureUnit::inverse()? Or just do sign-flipping on
+        // units within MeasureUnitImpl?
         if (uprv_strcmp(baseUnitIdentifier, "meter-per-cubic-meter") == 0) {
             status = U_ZERO_ERROR;
-            uCategory = ures_getStringByKey(unitQuantities.getAlias(), "cubic-meter-per-meter",
-                                            &categoryLength, &status);
+            result.append("consumption-inverse", status);
+            return result;
+            // baseUnitIdentifier = somehowInvert(baseUnitIdentifier); // "cubic-meter-per-meter"
+            // uCategory = ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier,
+            //                                 &categoryLength, &status);
         }
     }
     result.appendInvariantChars(uCategory, categoryLength, status);
