@@ -33,9 +33,10 @@ void UnitsDataTest::testGetUnitCategory() {
     } testCases[]{
         {"kilogram-per-cubic-meter", "mass-density"},
         {"cubic-meter-per-meter", "consumption"},
-        // FIXME/WIP: the desired behaviour here is unclear: we have two
-        // categories, consumption and consumption-inverse, and therefore seem
-        // uninterested in converting between them?
+        // TODO(CLDR-13787,hugovdm): currently we're treating
+        // consumption-inverse as a separate category. Once consumption
+        // preference handling has been clarified by CLDR-13787, this function
+        // should be fixed.
         {"meter-per-cubic-meter", "consumption-inverse"},
     };
 

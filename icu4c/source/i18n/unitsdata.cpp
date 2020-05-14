@@ -118,17 +118,13 @@ CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode
     const UChar *uCategory =
         ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier, &categoryLength, &status);
     if (U_FAILURE(status)) {
-        // TODO(hugovdm): special-casing the consumption-inverse case. If we
-        // want this more general, do we want to accept a MeasureUnit instance
-        // and implement MeasureUnit::inverse()? Or just do sign-flipping on
-        // units within MeasureUnitImpl?
+        // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
+        // case. Once CLDR-13787 is clarified, this should be generalised (or
+        // possibly removed):
         if (uprv_strcmp(baseUnitIdentifier, "meter-per-cubic-meter") == 0) {
             status = U_ZERO_ERROR;
             result.append("consumption-inverse", status);
             return result;
-            // baseUnitIdentifier = somehowInvert(baseUnitIdentifier); // "cubic-meter-per-meter"
-            // uCategory = ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier,
-            //                                 &categoryLength, &status);
         }
     }
     result.appendInvariantChars(uCategory, categoryLength, status);
