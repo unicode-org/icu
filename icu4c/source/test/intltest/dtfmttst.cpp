@@ -5576,14 +5576,19 @@ void DateFormatTest::TestAdoptCalendarLeak() {
     UErrorCode status = U_ZERO_ERROR;
     // This test relies on the locale fullName exceeding ULOC_FULLNAME_CAPACITY
     // in order for setKeywordValue to fail.
+    Calendar* cal = Calendar::createInstance(status);
+    ASSERT_OK(status);
     SimpleDateFormat sdf(
         "d.M.y",
         Locale("de__POSIX@colstrength=primary;currency=eur;em=default;"
                "hours=h23;lb=strict;lw=normal;measure=metric;numbers=latn;"
                "rg=atzzzz;sd=atat1;ss=none;timezone=Europe/Vienna"),
         status);
-    ASSERT_OK(status);
-    sdf.adoptCalendar(Calendar::createInstance(status));
+    // ASSERT_OK(status); Please do NOT add ASSERT_OK here. The point of this
+    // test is to ensure sdf.adoptCalendar won't leak AFTER the above FAILED.
+    // If the following caused crash we should fix the implementation not change
+    // this test.
+    sdf.adoptCalendar(cal);
 }
 
 /**
