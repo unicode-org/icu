@@ -12,6 +12,7 @@ class UnitsDataTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
+    void testGetUnitCategory();
     void testGetAllConversionRates();
     void testGetPreferences();
 };
@@ -21,9 +22,32 @@ extern IntlTest *createUnitsDataTest() { return new UnitsDataTest(); }
 void UnitsDataTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if (exec) { logln("TestSuite UnitsDataTest: "); }
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testGetUnitCategory);
     TESTCASE_AUTO(testGetAllConversionRates);
     TESTCASE_AUTO(testGetPreferences);
     TESTCASE_AUTO_END;
+}
+
+void UnitsDataTest::testGetUnitCategory() {
+    struct TestCase {
+        const char *unit;
+        const char *expectedCategory;
+    } testCases[]{
+        {"kilogram-per-cubic-meter", "mass-density"},
+        {"cubic-meter-per-meter", "consumption"},
+        // TODO(CLDR-13787,hugovdm): currently we're treating
+        // consumption-inverse as a separate category. Once consumption
+        // preference handling has been clarified by CLDR-13787, this function
+        // should be fixed.
+        {"meter-per-cubic-meter", "consumption-inverse"},
+    };
+
+    IcuTestErrorCode status(*this, "testGetUnitCategory");
+    for (const auto &t : testCases) {
+        CharString category = getUnitCategory(t.unit, status);
+        status.errIfFailureAndReset("getUnitCategory(%s)", t.unit);
+        assertEquals("category", t.expectedCategory, category.data());
+    }
 }
 
 void UnitsDataTest::testGetAllConversionRates() {
