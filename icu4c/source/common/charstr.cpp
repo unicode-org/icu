@@ -197,7 +197,7 @@ CharString &CharString::appendPathPart(StringPiece s, UErrorCode &errorCode) {
     }
     char c;
     if(len>0 && (c=buffer[len-1])!=U_FILE_SEP_CHAR && c!=U_FILE_ALT_SEP_CHAR) {
-        append(U_FILE_SEP_CHAR, errorCode);
+        append(getDirSepChar(), errorCode);
     }
     append(s, errorCode);
     return *this;
@@ -207,9 +207,19 @@ CharString &CharString::ensureEndsWithFileSeparator(UErrorCode &errorCode) {
     char c;
     if(U_SUCCESS(errorCode) && len>0 &&
             (c=buffer[len-1])!=U_FILE_SEP_CHAR && c!=U_FILE_ALT_SEP_CHAR) {
-        append(U_FILE_SEP_CHAR, errorCode);
+        append(getDirSepChar(), errorCode);
     }
     return *this;
+}
+
+char CharString::getDirSepChar() const {
+    char dirSepChar = U_FILE_SEP_CHAR;
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+    // We may need to return a different directory separator when building for Cygwin or MSYS2.
+    if(len>0 && !uprv_strchr(data(), U_FILE_SEP_CHAR) && uprv_strchr(data(), U_FILE_ALT_SEP_CHAR))
+        dirSepChar = U_FILE_ALT_SEP_CHAR;
+#endif
+    return dirSepChar;
 }
 
 U_NAMESPACE_END
