@@ -2044,7 +2044,7 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Specifies the usage of the unit ("person", "road", "person" ...etc.)
      *
-     * NOTE:    `usage` will change the output unit depending on the `Locale`  
+     * NOTE:    `usage` will change the output unit depending on the `Locale`
      *          and the unit value.
      *          For Example:
      *              Locale: en_US
@@ -2052,14 +2052,16 @@ class U_I18N_API NumberFormatterSettings {
      *              Unit  : Meter
      *
      *          If the unit value is 0.25, the output will be "10 inches."
-     *          If the unit value is 1.50, the output will be 
+     *          If the unit value is 1.50, the output will be
      *                                           "4 feet and 11 inches"
      *
-     * NOTE:    If the input usage is not exist (e.g. "dance") or is misspelled,
-     *          the usage will be **fall backed** to the "default" usage.
-     *
-     * Pass this method a `StringPiece` that represents the usage of 
-     * the unit. For example:
+     * NOTE:    If the input usage is empty `StringPiece` (i.e. "") the usage
+     * will be resetted. Thus means the behaviour would not be effected by any
+     * `usage` values.
+     * 
+     * NOTE:    If the input usage is not exist (e.g. "dance")
+     * or is misspelled, the usage will be **fall backed** to the "default"
+     * usage.
      *
      * <pre>
      * NumberFormatter::with().usage("person")
