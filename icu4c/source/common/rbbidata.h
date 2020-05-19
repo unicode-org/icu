@@ -49,16 +49,17 @@ ubrk_swap(const UDataSwapper *ds,
 
 #ifdef __cplusplus
 
+#include "unicode/ucptrie.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/uversion.h"
 #include "umutex.h"
-#include "utrie2.h"
+
 
 U_NAMESPACE_BEGIN
 
 // The current RBBI data format version.
-static const uint8_t RBBI_DATA_FORMAT_VERSION[] = {5, 0, 0, 0};
+static const uint8_t RBBI_DATA_FORMAT_VERSION[] = {6, 0, 0, 0};
 
 /*  
  *   The following structs map exactly onto the raw data from ICU common data file. 
@@ -94,25 +95,25 @@ struct RBBIDataHeader {
 
 
 
-struct  RBBIStateTableRow {
-    int16_t          fAccepting;    /*  Non-zero if this row is for an accepting state.   */
+template <typename ST, typename UT>
+struct RBBIStateTableRowT {
+    ST               fAccepting;    /*  Non-zero if this row is for an accepting state.   */
                                     /*  Value 0: not an accepting state.                  */
                                     /*       -1: Unconditional Accepting state.           */
                                     /*    positive:  Look-ahead match has completed.      */
                                     /*           Actual boundary position happened earlier */
                                     /*           Value here == fLookAhead in earlier      */
                                     /*              state, at actual boundary pos.        */
-    int16_t          fLookAhead;    /*  Non-zero if this row is for a state that          */
+    ST               fLookAhead;    /*  Non-zero if this row is for a state that          */
                                     /*    corresponds to a '/' in the rule source.        */
                                     /*    Value is the same as the fAccepting             */
                                     /*      value for the rule (which will appear         */
                                     /*      in a different state.                         */
-    int16_t          fTagIdx;       /*  Non-zero if this row covers a {tagged} position   */
+    ST               fTagIdx;       /*  Non-zero if this row covers a {tagged} position   */
                                     /*     from a rule.  Value is the index in the        */
                                     /*     StatusTable of the set of matching             */
                                     /*     tags (rule status values)                      */
-    int16_t          fReserved;
-    uint16_t         fNextState[1]; /*  Next State, indexed by char category.             */
+    UT               fNextState[1]; /*  Next State, indexed by char category.             */
                                     /*    Variable-length array declared with length 1    */
                                     /*    to disable bounds checkers.                     */
                                     /*    Array Size is actually fData->fHeader->fCatCount*/
@@ -120,12 +121,18 @@ struct  RBBIStateTableRow {
                                     /*              before changing anything here.        */
 };
 
+typedef RBBIStateTableRowT<int8_t, uint8_t> RBBIStateTableRow8;
+typedef RBBIStateTableRowT<int16_t, uint16_t> RBBIStateTableRow16;
+
+union RBBIStateTableRow {
+  RBBIStateTableRow16 r16;
+  RBBIStateTableRow8 r8;
+};
 
 struct RBBIStateTable {
     uint32_t         fNumStates;    /*  Number of states.                                 */
     uint32_t         fRowLen;       /*  Length of a state table row, in bytes.            */
     uint32_t         fFlags;        /*  Option Flags for this state table                 */
-    uint32_t         fReserved;     /*  reserved                                          */
     char             fTableData[1]; /*  First RBBIStateTableRow begins here.              */
                                     /*    Variable-length array declared with length 1    */
                                     /*    to disable bounds checkers.                     */
@@ -133,10 +140,9 @@ struct RBBIStateTable {
                                     /*     arithmetic for indexing variable length rows.) */
 };
 
-typedef enum {
-    RBBI_LOOKAHEAD_HARD_BREAK = 1,
-    RBBI_BOF_REQUIRED = 2
-} RBBIStateTableFlags;
+constexpr uint32_t RBBI_LOOKAHEAD_HARD_BREAK = 1;
+constexpr uint32_t RBBI_BOF_REQUIRED = 2;
+constexpr uint32_t RBBI_8BITS_ROWS = 4;
 
 
 /*                                        */
@@ -170,13 +176,13 @@ public:
     const RBBIDataHeader     *fHeader;
     const RBBIStateTable     *fForwardTable;
     const RBBIStateTable     *fReverseTable;
-    const UChar              *fRuleSource;
+    const char               *fRuleSource;
     const int32_t            *fRuleStatusTable; 
 
     /* number of int32_t values in the rule status table.   Used to sanity check indexing */
     int32_t             fStatusMaxIdx;
 
-    UTrie2             *fTrie;
+    UCPTrie             *fTrie;
 
 private:
     u_atomic_int32_t    fRefCount;

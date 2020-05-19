@@ -26,10 +26,10 @@ import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.impl.RBBIDataWrapper;
-import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.util.CodePointTrie;
 
 /**
  * Rule Based Break Iterator
@@ -821,9 +821,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         // caches for quicker access
         CharacterIterator text = fText;
-        Trie2 trie = fRData.fTrie;
+        CodePointTrie trie = fRData.fTrie;
 
-        short[] stateTable  = fRData.fFTable.fTable;
+        char[] stateTable  = fRData.fFTable.fTable;
         int initialPosition = fPosition;
         text.setIndex(initialPosition);
         int result          = initialPosition;
@@ -844,6 +844,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
         short category      = 3;
         int flagsState      = fRData.fFTable.fFlags;
         int mode            = RBBI_RUN;
+        int dictMask = fRData.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8 ?
+            RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE : RBBIDataWrapper.DICT_BIT;
         if ((flagsState & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
             mode     = RBBI_START;
@@ -885,10 +887,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 //    Chars that need to be handled by a dictionary have a flag bit set
                 //    in their category values.
                 //
-                if ((category & 0x4000) != 0)  {
+                if ((category & dictMask) != 0)  {
                     fDictionaryCharCount++;
                     //  And off the dictionary flag bit.
-                    category &= ~0x4000;
+                    category &= ~dictMask;
                 }
 
                 if (TRACE) {
@@ -912,8 +914,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             // look up a state transition in the state table
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
             row   = fRData.getRowIndex(state);
-
-            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
+            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == 0xffff) {
                 // Match found, common case
                 result = text.getIndex();
                 if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
@@ -927,7 +928,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             }
 
             int completedRule = stateTable[row + RBBIDataWrapper.ACCEPTING];
-            if (completedRule > 0) {
+            if (completedRule > 0 && completedRule != 0xffff) {
                 // Lookahead match is completed
                 int lookaheadResult = fLookAheadMatches.getPosition(completedRule);
                 if (lookaheadResult >= 0) {
@@ -937,13 +938,14 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 }
             }
 
+
             // If we are at the position of the '/' in a look-ahead (hard break) rule;
             // record the current position, to be returned later, if the full rule matches.
             // TODO: Move this check before the previous check of fAccepting.
             //       This would enable hard-break rules with no following context.
             //       But there are line break test failures when trying this. Investigate.
             //       Issue ICU-20837
-            int rule =  stateTable[row + RBBIDataWrapper.LOOKAHEAD];
+            int rule = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
             if (rule != 0) {
                 int  pos = text.getIndex();
                 if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
@@ -996,14 +998,17 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @internal
      */
     private int handleSafePrevious(int fromPosition) {
-        int             state;
+        char            state;
         short           category = 0;
         int             result = 0;
 
         // caches for quicker access
         CharacterIterator text = fText;
-        Trie2 trie = fRData.fTrie;
-        short[] stateTable  = fRData.fRTable.fTable;
+        CodePointTrie trie = fRData.fTrie;
+        char[] stateTable  = fRData.fRTable.fTable;
+        int flagsState      = fRData.fRTable.fFlags;
+        int dictMask = fRData.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8 ?
+            RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE : RBBIDataWrapper.DICT_BIT;
 
         CISetIndex32(text, fromPosition);
         if (TRACE) {
@@ -1029,7 +1034,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             //
             //  And off the dictionary flag bit. For reverse iteration it is not used.
             category = (short) trie.get(c);
-            category &= ~0x4000;
+            category &= ~dictMask;
             if (TRACE) {
                 System.out.print("            " +  RBBIDataWrapper.intToString(text.getIndex(), 5));
                 System.out.print(RBBIDataWrapper.intToHexString(c, 10));
@@ -1209,6 +1214,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
             int         category;
             int         current;
             int         foundBreakCount = 0;
+            int dictMask = fRData.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8 ?
+                RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE : RBBIDataWrapper.DICT_BIT;
 
             // Loop through the text, looking for ranges of dictionary characters.
             // For each span, find the appropriate break engine, and ask it to find
@@ -1219,7 +1226,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             category = (short)fRData.fTrie.get(c);
 
             while(true) {
-                while((current = fText.getIndex()) < rangeEnd && (category & 0x4000) == 0) {
+                while((current = fText.getIndex()) < rangeEnd && (category & dictMask) == 0) {
                     c = CharacterIteration.next32(fText);    // pre-increment
                     category = (short)fRData.fTrie.get(c);
                 }

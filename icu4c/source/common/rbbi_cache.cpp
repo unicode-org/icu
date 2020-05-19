@@ -119,6 +119,8 @@ UBool RuleBasedBreakIterator::DictionaryCache::preceding(int32_t fromPos, int32_
 
 void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPos, int32_t endPos,
                                        int32_t firstRuleStatus, int32_t otherRuleStatus) {
+    uint32_t dictMask = ucptrie_getValueWidth(fBI->fData->fTrie) == UCPTRIE_VALUE_BITS_8 ?
+        kDictBitFor8BitsTrie : kDictBit;
     if ((endPos - startPos) <= 1) {
         return;
     }
@@ -142,13 +144,13 @@ void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPo
 
     utext_setNativeIndex(text, rangeStart);
     UChar32     c = utext_current32(text);
-    category = UTRIE2_GET16(fBI->fData->fTrie, c);
+    category = ucptrie_get(fBI->fData->fTrie, c);
 
     while(U_SUCCESS(status)) {
-        while((current = (int32_t)UTEXT_GETNATIVEINDEX(text)) < rangeEnd && (category & 0x4000) == 0) {
+        while((current = (int32_t)UTEXT_GETNATIVEINDEX(text)) < rangeEnd && (category & dictMask) == 0) {
             utext_next32(text);           // TODO: cleaner loop structure.
             c = utext_current32(text);
-            category = UTRIE2_GET16(fBI->fData->fTrie, c);
+            category = ucptrie_get(fBI->fData->fTrie, c);
         }
         if (current >= rangeEnd) {
             break;
@@ -166,7 +168,7 @@ void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPo
 
         // Reload the loop variables for the next go-round
         c = utext_current32(text);
-        category = UTRIE2_GET16(fBI->fData->fTrie, c);
+        category = ucptrie_get(fBI->fData->fTrie, c);
     }
 
     // If we found breaks, ensure that the first and last entries are

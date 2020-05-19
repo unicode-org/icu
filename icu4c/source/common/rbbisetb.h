@@ -16,9 +16,10 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include "unicode/ucptrie.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/uobject.h"
 #include "rbbirb.h"
-#include "utrie2.h"
 #include "uvector.h"
 
 U_NAMESPACE_BEGIN
@@ -101,8 +102,6 @@ public:
      */
     void     mergeCategories(IntPair categories);
 
-    static constexpr int32_t DICT_BIT = 0x4000;
-
 #ifdef RBBI_DEBUG
     void     printSets();
     void     printRanges();
@@ -121,8 +120,9 @@ private:
 
     RangeDescriptor       *fRangeList;      // Head of the linked list of RangeDescriptors
 
-    UTrie2                *fTrie;           // The mapping TRIE that is the end result of processing
-    uint32_t               fTrieSize;       //  the Unicode Sets.
+    UMutableCPTrie        *fMutableTrie;    // The mapping TRIE that is the end result of processing
+    UCPTrie               *fTrie;           //  the Unicode Sets.
+    uint32_t               fTrieSize;
 
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.
