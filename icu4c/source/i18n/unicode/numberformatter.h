@@ -2058,8 +2058,13 @@ class U_I18N_API NumberFormatterSettings {
      * NOTE:    If the input usage is empty `StringPiece` (i.e. "") the usage
      * will be resetted. Thus means the behaviour would not be effected by any
      * `usage` values.
-     * 
-     * NOTE:    If the input usage is not exist (e.g. "dance")
+     *
+     * NOTE:    If the input usage does not exist (e.g. "person-kid"), but the
+     * sub usage does exist (form the last example. "person"). The usage will be
+     * **fall backed** to the sub usage (which is in the last example.
+     * "person"). usage.
+     *
+     * NOTE:    If the input usage is not exist at all (e.g. "dance")
      * or is misspelled, the usage will be **fall backed** to the "default"
      * usage.
      *
