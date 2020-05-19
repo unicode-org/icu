@@ -8,15 +8,16 @@
 */
 package com.ibm.icu.text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.Trie2Writable;
-import com.ibm.icu.impl.Trie2_16;
 import com.ibm.icu.text.RBBIRuleBuilder.IntPair;
+import com.ibm.icu.util.CodePointTrie;
+import com.ibm.icu.util.MutableCodePointTrie;
 
 //
 //  RBBISetBuilder   Handles processing of Unicode Sets from RBBI rules
@@ -125,9 +126,9 @@ class RBBISetBuilder {
     RBBIRuleBuilder       fRB;             // The RBBI Rule Compiler that owns us.
     RangeDescriptor       fRangeList;      // Head of the linked list of RangeDescriptors
 
-    Trie2Writable         fTrie;           // The mapping TRIE that is the end result of processing
+    MutableCodePointTrie  fTrie;           // The mapping TRIE that is the end result of processing
                                            //  the Unicode Sets.
-    Trie2_16              fFrozenTrie;
+    CodePointTrie         fFrozenTrie;
 
     // Groups correspond to character categories -
     //       groups of ranges that are in the same original UnicodeSets.
@@ -140,6 +141,7 @@ class RBBISetBuilder {
     boolean             fSawBOF;
 
     static final int    DICT_BIT = 0x4000;
+    static final int    DICT_BIT_FOR_8BITS_TRIE  = 0x0080;
 
 
     //------------------------------------------------------------------------
@@ -286,22 +288,30 @@ class RBBISetBuilder {
     }
 
 
+    private static final int MAX_CHAR_CATEGORIES_FOR_8BITS_TRIE = 127;
+
     /**
      * Build the Trie table for mapping UChar32 values to the corresponding
      * range group number.
      */
     void buildTrie() {
+        boolean use8Bits = getNumCharCategories() <= MAX_CHAR_CATEGORIES_FOR_8BITS_TRIE;
         RangeDescriptor rlRange;
 
-        fTrie = new Trie2Writable(0,       //   Initial value for all code points.
-                                  0);      //   Error value for out-of-range input.
+        fTrie = new MutableCodePointTrie(0,       //   Initial value for all code points.
+                                         0);      //   Error value for out-of-range input.
 
         for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
+            int value = rlRange.fNum;
+            if (use8Bits && ((value & DICT_BIT) != 0)) {
+                assert((value & DICT_BIT_FOR_8BITS_TRIE) == 0);
+                // switch to the bit from DICT_BIT to DICT_BIT_FOR_8BITS_TRIE
+                value = DICT_BIT_FOR_8BITS_TRIE | (value & ~DICT_BIT);
+            }
             fTrie.setRange(
                     rlRange.fStartChar,     // Range start
                     rlRange.fEndChar,       // Range end (inclusive)
-                    rlRange.fNum,           // value for range
-                    true                    // Overwrite previously written values
+                    value                  // value for range
                     );
         }
     }
@@ -328,15 +338,29 @@ class RBBISetBuilder {
 
     //-----------------------------------------------------------------------------------
     //
+    //          freezeTrieIfNotYet()    Ensure the trie is frozen. Shared code by getTrieSize
+    //                                  and serializeTrie.
+    //
+    //-----------------------------------------------------------------------------------
+    void freezeTrieIfNotYet()  {
+        if (fFrozenTrie == null) {
+            boolean use8Bits = getNumCharCategories() <= MAX_CHAR_CATEGORIES_FOR_8BITS_TRIE;
+            fFrozenTrie = fTrie.buildImmutable(CodePointTrie.Type.FAST,
+                                               use8Bits ?
+                                               CodePointTrie.ValueWidth.BITS_8 :
+                                               CodePointTrie.ValueWidth.BITS_16);
+            fTrie = null;
+        }
+    }
+
+    //-----------------------------------------------------------------------------------
+    //
     //          getTrieSize()    Return the size that will be required to serialize the Trie.
     //
     //-----------------------------------------------------------------------------------
     int getTrieSize()  {
-        if (fFrozenTrie == null) {
-            fFrozenTrie = fTrie.toTrie2_16();
-            fTrie = null;
-        }
-        return fFrozenTrie.getSerializedLength();
+        freezeTrieIfNotYet();
+        return fFrozenTrie.toBinary(new ByteArrayOutputStream());
     }
 
 
@@ -346,11 +370,8 @@ class RBBISetBuilder {
     //
     //-----------------------------------------------------------------------------------
     void serializeTrie(OutputStream os) throws IOException {
-        if (fFrozenTrie == null) {
-            fFrozenTrie = fTrie.toTrie2_16();
-            fTrie = null;
-        }
-        fFrozenTrie.serialize(os);
+        freezeTrieIfNotYet();
+        fFrozenTrie.toBinary(os);
    }
 
     //------------------------------------------------------------------------

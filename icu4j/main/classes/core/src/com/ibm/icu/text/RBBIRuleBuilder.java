@@ -11,6 +11,7 @@ package com.ibm.icu.text;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -182,7 +183,9 @@ class RBBIRuleBuilder {
         int reverseTableSize = align8(fForwardTable.getSafeTableSize());
         int trieSize         = align8(fSetBuilder.getTrieSize());
         int statusTableSize  = align8(fRuleStatusVals.size() * 4);
-        int rulesSize        = align8((strippedRules.length()) * 2);
+
+        byte[] strippedRulesUTF8 = strippedRules.getBytes(StandardCharsets.UTF_8);
+        int rulesSize        = align8(strippedRulesUTF8.length + 1);
 
         int totalSize = headerSize
                 + forwardTableSize
@@ -202,7 +205,7 @@ class RBBIRuleBuilder {
         header[RBBIDataWrapper.DH_MAGIC]         = 0xb1a0;
         header[RBBIDataWrapper.DH_FORMATVERSION] = RBBIDataWrapper.FORMAT_VERSION;
         header[RBBIDataWrapper.DH_LENGTH]        = totalSize;            // fLength, the total size of all rule sections.
-        header[RBBIDataWrapper.DH_CATCOUNT]      = fSetBuilder.getNumCharCategories(); // fCatCount.
+        header[RBBIDataWrapper.DH_CATCOUNT]      = fSetBuilder.getNumCharCategories();
 
         header[RBBIDataWrapper.DH_FTABLE]        = headerSize;           // fFTable
         header[RBBIDataWrapper.DH_FTABLELEN]     = forwardTableSize;     // fTableLen
@@ -214,11 +217,11 @@ class RBBIRuleBuilder {
                                                      + header[RBBIDataWrapper.DH_RTABLELEN]; // fTrie
         header[RBBIDataWrapper.DH_TRIELEN]       = fSetBuilder.getTrieSize(); // fTrieLen
         header[RBBIDataWrapper.DH_STATUSTABLE]   = header[RBBIDataWrapper.DH_TRIE]
-                                                     + header[RBBIDataWrapper.DH_TRIELEN];
+                                                     + trieSize;
         header[RBBIDataWrapper.DH_STATUSTABLELEN] = statusTableSize; // fStatusTableLen
         header[RBBIDataWrapper.DH_RULESOURCE]    = header[RBBIDataWrapper.DH_STATUSTABLE]
                                                      + statusTableSize;
-        header[RBBIDataWrapper.DH_RULESOURCELEN] = strippedRules.length() * 2;
+        header[RBBIDataWrapper.DH_RULESOURCELEN] = strippedRulesUTF8.length;
         for (i = 0; i < header.length; i++) {
             dos.writeInt(header[i]);
             outputPos += 4;
@@ -257,8 +260,9 @@ class RBBIRuleBuilder {
         // Write out the stripped rules (rules with extra spaces removed
         //   These go last in the data area, even though they are not last in the header.
         Assert.assrt(outputPos == header[RBBIDataWrapper.DH_RULESOURCE]);
-        dos.writeChars(strippedRules);
-        outputPos += strippedRules.length() * 2;
+        dos.write(strippedRulesUTF8, 0, strippedRulesUTF8.length);
+        dos.write(0);  // Null termination
+        outputPos += strippedRulesUTF8.length + 1;
         while (outputPos % 8 != 0) { // pad to an 8 byte boundary
             dos.write(0);
             outputPos += 1;

@@ -35,7 +35,6 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/uniset.h"
-#include "utrie2.h"
 #include "uvector.h"
 #include "uassert.h"
 #include "cmemory.h"
@@ -46,6 +45,7 @@
 
 U_NAMESPACE_BEGIN
 
+const int32_t kMaxCharCategoriesFor8BitsTrie = 127;
 //------------------------------------------------------------------------
 //
 //   Constructor
@@ -56,7 +56,8 @@ RBBISetBuilder::RBBISetBuilder(RBBIRuleBuilder *rb)
     fRB             = rb;
     fStatus         = rb->fStatus;
     fRangeList      = 0;
-    fTrie           = 0;
+    fMutableTrie    = nullptr;
+    fTrie           = nullptr;
     fTrieSize       = 0;
     fGroupCount     = 0;
     fSawBOF         = FALSE;
@@ -79,7 +80,8 @@ RBBISetBuilder::~RBBISetBuilder()
         delete r;
     }
 
-    utrie2_close(fTrie);
+    ucptrie_close(fTrie);
+    umutablecptrie_close(fMutableTrie);
 }
 
 
@@ -255,17 +257,23 @@ void RBBISetBuilder::buildRanges() {
 void RBBISetBuilder::buildTrie() {
     RangeDescriptor *rlRange;
 
-    fTrie = utrie2_open(0,       //  Initial value for all code points.
+    fMutableTrie = umutablecptrie_open(
+                        0,       //  Initial value for all code points.
                         0,       //  Error value for out-of-range input.
                         fStatus);
 
+    bool use8Bits = getNumCharCategories() <= kMaxCharCategoriesFor8BitsTrie;
     for (rlRange = fRangeList; rlRange!=0 && U_SUCCESS(*fStatus); rlRange=rlRange->fNext) {
-        utrie2_setRange32(fTrie,
-                          rlRange->fStartChar,     // Range start
-                          rlRange->fEndChar,       // Range end (inclusive)
-                          rlRange->fNum,           // value for range
-                          TRUE,                    // Overwrite previously written values
-                          fStatus);
+        uint32_t value = rlRange->fNum;
+        if (use8Bits && ((value & RuleBasedBreakIterator::kDictBit) != 0)) {
+            U_ASSERT((value & RuleBasedBreakIterator::kDictBitFor8BitsTrie) == 0);
+            value = RuleBasedBreakIterator::kDictBitFor8BitsTrie | (value & ~RuleBasedBreakIterator::kDictBit);
+        }
+        umutablecptrie_setRange(fMutableTrie,
+                                rlRange->fStartChar,     // Range start
+                                rlRange->fEndChar,       // Range end (inclusive)
+                                value,           // value for range
+                                fStatus);
     }
 }
 
@@ -274,8 +282,8 @@ void RBBISetBuilder::mergeCategories(IntPair categories) {
     U_ASSERT(categories.first >= 1);
     U_ASSERT(categories.second > categories.first);
     for (RangeDescriptor *rd = fRangeList; rd != nullptr; rd = rd->fNext) {
-        int32_t rangeNum = rd->fNum & ~DICT_BIT;
-        int32_t rangeDict = rd->fNum & DICT_BIT;
+        int32_t rangeNum = rd->fNum & ~RuleBasedBreakIterator::kDictBit;
+        int32_t rangeDict = rd->fNum & RuleBasedBreakIterator::kDictBit;
         if (rangeNum == categories.second) {
             rd->fNum = categories.first | rangeDict;
         } else if (rangeNum > categories.second) {
@@ -295,15 +303,18 @@ int32_t RBBISetBuilder::getTrieSize()  {
     if (U_FAILURE(*fStatus)) {
         return 0;
     }
-    utrie2_freeze(fTrie, UTRIE2_16_VALUE_BITS, fStatus);
-    fTrieSize  = utrie2_serialize(fTrie,
-                                  NULL,                // Buffer
-                                  0,                   // Capacity
-                                  fStatus);
-    if (*fStatus == U_BUFFER_OVERFLOW_ERROR) {
-        *fStatus = U_ZERO_ERROR;
+    if (fTrie == nullptr) {
+        bool use8Bits = getNumCharCategories() <= kMaxCharCategoriesFor8BitsTrie;
+        fTrie = umutablecptrie_buildImmutable(
+            fMutableTrie,
+            UCPTRIE_TYPE_FAST,
+            use8Bits ? UCPTRIE_VALUE_BITS_8 : UCPTRIE_VALUE_BITS_16,
+            fStatus);
+        fTrieSize = ucptrie_toBinary(fTrie, nullptr, 0, fStatus);
+        if (*fStatus == U_BUFFER_OVERFLOW_ERROR) {
+            *fStatus = U_ZERO_ERROR;
+        }
     }
-    // RBBIDebugPrintf("Trie table size is %d\n", trieSize);
     return fTrieSize;
 }
 
@@ -316,9 +327,9 @@ int32_t RBBISetBuilder::getTrieSize()  {
 //
 //-----------------------------------------------------------------------------------
 void RBBISetBuilder::serializeTrie(uint8_t *where) {
-    utrie2_serialize(fTrie,
-                     where,                   // Buffer
-                     fTrieSize,               // Capacity
+    ucptrie_toBinary(fTrie,
+                     where,                // Buffer
+                     fTrieSize,            // Capacity
                      fStatus);
 }
 
@@ -467,7 +478,7 @@ void RBBISetBuilder::printRangeGroups() {
             lastPrintedGroupNum = groupNum;
             RBBIDebugPrintf("%2i  ", groupNum);
 
-            if (rlRange->fNum & DICT_BIT) { RBBIDebugPrintf(" <DICT> ");}
+            if (rlRange->fNum & RuleBasedBreakIterator::kDictBit) { RBBIDebugPrintf(" <DICT> ");}
 
             for (i=0; i<rlRange->fIncludesSets->size(); i++) {
                 RBBINode       *usetNode    = (RBBINode *)rlRange->fIncludesSets->elementAt(i);
@@ -669,7 +680,7 @@ void RangeDescriptor::setDictionaryFlag() {
             if (varRef && varRef->fType == RBBINode::varRef) {
                 const UnicodeString *setName = &varRef->fText;
                 if (setName->compare(dictionary, -1) == 0) {
-                    fNum |= RBBISetBuilder::DICT_BIT;
+                    fNum |= RuleBasedBreakIterator::kDictBit;
                     break;
                 }
             }
