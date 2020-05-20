@@ -131,6 +131,7 @@ LocaleMatcher::Builder::Builder(LocaleMatcher::Builder &&src) U_NOEXCEPT :
         thresholdDistance_(src.thresholdDistance_),
         demotion_(src.demotion_),
         defaultLocale_(src.defaultLocale_),
+        withDefault_(src.withDefault_),
         favor_(src.favor_),
         direction_(src.direction_) {
     src.supportedLocales_ = nullptr;
@@ -150,6 +151,7 @@ LocaleMatcher::Builder &LocaleMatcher::Builder::operator=(LocaleMatcher::Builder
     thresholdDistance_ = src.thresholdDistance_;
     demotion_ = src.demotion_;
     defaultLocale_ = src.defaultLocale_;
+    withDefault_ = src.withDefault_,
     favor_ = src.favor_;
     direction_ = src.direction_;
 
@@ -229,6 +231,14 @@ LocaleMatcher::Builder &LocaleMatcher::Builder::addSupportedLocale(const Locale 
     return *this;
 }
 
+LocaleMatcher::Builder &LocaleMatcher::Builder::setNoDefaultLocale() {
+    if (U_FAILURE(errorCode_)) { return *this; }
+    delete defaultLocale_;
+    defaultLocale_ = nullptr;
+    withDefault_ = false;
+    return *this;
+}
+
 LocaleMatcher::Builder &LocaleMatcher::Builder::setDefaultLocale(const Locale *defaultLocale) {
     if (U_FAILURE(errorCode_)) { return *this; }
     Locale *clone = nullptr;
@@ -241,6 +251,7 @@ LocaleMatcher::Builder &LocaleMatcher::Builder::setDefaultLocale(const Locale *d
     }
     delete defaultLocale_;
     defaultLocale_ = clone;
+    withDefault_ = true;
     return *this;
 }
 
@@ -417,13 +428,14 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
         for (int32_t i = 0; i < supportedLocalesLength; ++i) {
             const Locale &locale = *supportedLocales[i];
             const LSR &lsr = lsrs[i];
-            if (defLSR == nullptr) {
+            if (defLSR == nullptr && builder.withDefault_) {
+                // Implicit default locale = first supported locale, if not turned off.
                 U_ASSERT(i == 0);
                 def = &locale;
                 defLSR = &lsr;
                 order[i] = 1;
                 suppLength = putIfAbsent(lsr, 0, suppLength, errorCode);
-            } else if (lsr.isEquivalentTo(*defLSR)) {
+            } else if (defLSR != nullptr && lsr.isEquivalentTo(*defLSR)) {
                 order[i] = 1;
                 suppLength = putIfAbsent(lsr, i, suppLength, errorCode);
             } else if (localeDistance.isParadigmLSR(lsr)) {

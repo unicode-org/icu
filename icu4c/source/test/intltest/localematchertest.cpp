@@ -58,6 +58,7 @@ public:
     void testBasics();
     void testSupportedDefault();
     void testUnsupportedDefault();
+    void testNoDefault();
     void testDemotion();
     void testDirection();
     void testMatch();
@@ -82,6 +83,7 @@ void LocaleMatcherTest::runIndexedTest(int32_t index, UBool exec, const char *&n
     TESTCASE_AUTO(testBasics);
     TESTCASE_AUTO(testSupportedDefault);
     TESTCASE_AUTO(testUnsupportedDefault);
+    TESTCASE_AUTO(testNoDefault);
     TESTCASE_AUTO(testDemotion);
     TESTCASE_AUTO(testDirection);
     TESTCASE_AUTO(testMatch);
@@ -298,6 +300,29 @@ void LocaleMatcherTest::testUnsupportedDefault() {
     LocaleMatcher::Result result = matcher.getBestMatchResult("ja_JP", errorCode);
     assertEquals("getBestMatchResult(ja_JP).supp",
                  "de", locString(result.getSupportedLocale()));
+    assertEquals("getBestMatchResult(ja_JP).suppIndex",
+                 -1, result.getSupportedIndex());
+}
+
+void LocaleMatcherTest::testNoDefault() {
+    // We want nullptr instead of any default locale.
+    IcuTestErrorCode errorCode(*this, "testNoDefault");
+    Locale locales[] = { "fr", "en_GB", "en" };
+    LocaleMatcher matcher = LocaleMatcher::Builder().
+        setSupportedLocales(ARRAY_RANGE(locales)).
+        setNoDefaultLocale().
+        build(errorCode);
+    const Locale *best = matcher.getBestMatch("en_GB", errorCode);
+    assertEquals("getBestMatch(en_GB)", "en_GB", locString(best));
+    best = matcher.getBestMatch("en_US", errorCode);
+    assertEquals("getBestMatch(en_US)", "en", locString(best));
+    best = matcher.getBestMatch("fr_FR", errorCode);
+    assertEquals("getBestMatch(fr_FR)", "fr", locString(best));
+    best = matcher.getBestMatch("ja_JP", errorCode);
+    assertEquals("getBestMatch(ja_JP)", "(null)", locString(best));
+    LocaleMatcher::Result result = matcher.getBestMatchResult("ja_JP", errorCode);
+    assertEquals("getBestMatchResult(ja_JP).supp",
+                 "(null)", locString(result.getSupportedLocale()));
     assertEquals("getBestMatchResult(ja_JP).suppIndex",
                  -1, result.getSupportedIndex());
 }
