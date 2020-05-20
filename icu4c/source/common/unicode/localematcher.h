@@ -231,8 +231,8 @@ public:
         /**
          * Returns the best-matching supported locale.
          * If none matched well enough, this is the default locale.
-         * The default locale is nullptr if the list of supported locales is empty and
-         * no explicit default locale is set.
+         * The default locale is nullptr if Builder::setNoDefaultLocale() was called,
+         * or if the list of supported locales is empty and no explicit default locale is set.
          *
          * @return the best-matching supported locale, or nullptr.
          * @draft ICU 65
@@ -419,9 +419,23 @@ public:
          */
         Builder &addSupportedLocale(const Locale &locale);
 
+#ifndef U_HIDE_DRAFT_API
+        /**
+         * Sets no default locale.
+         * There will be no explicit or implicit default locale.
+         * If there is no good match, then the matcher will return nullptr for the
+         * best supported locale.
+         *
+         * @draft ICU 68
+         */
+        Builder &setNoDefaultLocale();
+#endif  // U_HIDE_DRAFT_API
+
         /**
          * Sets the default locale; if nullptr, or if it is not set explicitly,
          * then the first supported locale is used as the default locale.
+         * There is no default locale at all (nullptr will be returned instead)
+         * if setNoDefaultLocale() is called.
          *
          * @param defaultLocale the default locale (will be copied)
          * @return this Builder object
@@ -505,6 +519,7 @@ public:
         int32_t thresholdDistance_ = -1;
         ULocMatchDemotion demotion_ = ULOCMATCH_DEMOTION_REGION;
         Locale *defaultLocale_ = nullptr;
+        bool withDefault_ = true;
         ULocMatchFavorSubtag favor_ = ULOCMATCH_FAVOR_LANGUAGE;
         ULocMatchDirection direction_ = ULOCMATCH_DIRECTION_WITH_ONE_WAY;
     };
