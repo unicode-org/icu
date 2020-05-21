@@ -25,6 +25,13 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
     }
 
     ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder), ratesInfo, status);
+
+    // TODO(younies): question from Hugo: is this check appropriate? The
+    // U_ASSERT in greaterThanOrEqual suggests this should be an invariant for
+    // ComplexUnitConverter.
+    if (unitConverters_.length() == 0) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+    }
 }
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
@@ -54,6 +61,7 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
 }
 
 UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const {
+    // TODO(younies): this assert fails for the first constructor above:
     U_ASSERT(unitConverters_.length() > 0);
 
     // first quantity is the biggest one.

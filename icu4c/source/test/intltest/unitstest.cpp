@@ -583,14 +583,12 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
                                     usage.length(), usage.data())) {
         return;
     }
-    // FIXME/TODO: actually test output. At this point, this causes an assertion
-    // failure in complexunitsconverter.cpp:
-    //
-    // MaybeStackVector<Measure> result = router.route(inputAmount, status);
-    // for (int i=0; i<result.length(); i++) {
-    //     unitsTest->logln("result[%d], number: %f, unit: %s", i, result[i]->getNumber().getDouble(status),
-    //                      result[i]->getUnit().getIdentifier());
-    // }
+
+    MaybeStackVector<Measure> result = router.route(inputAmount, status);
+    for (int i = 0; i < result.length(); i++) {
+        unitsTest->logln("result[%d], number: %f, unit: %s", i, result[i]->getNumber().getDouble(status),
+                         result[i]->getUnit().getIdentifier());
+    }
 }
 
 /**
