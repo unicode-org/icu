@@ -451,7 +451,7 @@ void UnitsTest::testConversions() {
  * find a decimal fraction for each output unit.
  */
 class ExpectedOutput {
-  private:
+  public:
     // Counts number of units in the output. When this is more than one, we have
     // "mixed units" in the expected output.
     int _compoundCount = 0;
@@ -466,7 +466,6 @@ class ExpectedOutput {
     // The amounts of each of the output units.
     double _amounts[3];
 
-  public:
     /**
      * Parse an expected output field from the test data file.
      *
@@ -527,9 +526,47 @@ class ExpectedOutput {
     }
 };
 
+void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
+                  const MaybeStackVector<Measure> &actual) {
+    IcuTestErrorCode status(*unitsTest, "checkOutput");
+    bool success = true;
+    if (expected._compoundCount != actual.length()) {
+        success = false;
+    }
+    for (int i = 0; i < actual.length(); i++) {
+        if (i >= expected._compoundCount) {
+            break;
+        }
+        if (expected._amounts[i] != actual[i]->getNumber().getDouble(status)) {
+            success = false;
+            break;
+        }
+        if (expected._measureUnits[i] != actual[i]->getUnit()) {
+            success = false;
+            break;
+        }
+    }
+
+    CharString testMessage("test case: ", status);
+    testMessage.append(msg, status);
+    testMessage.append(", expected output: ", status);
+    testMessage.append(expected.toDebugString().c_str(), status);
+    testMessage.append(", obtained output:", status);
+    for (int i = 0; i < actual.length(); i++) {
+        testMessage.append(" ", status);
+        testMessage.append(std::to_string(actual[i]->getNumber().getDouble(status)), status);
+        testMessage.append(" ", status);
+        testMessage.appendInvariantChars(actual[i]->getUnit().getIdentifier(), status);
+    }
+
+    unitsTest->assertTrue(testMessage.data(), success);
+}
+
 /**
- * WIP(hugovdm): deals with a single data-driven unit test for unit preferences.
- * This is a UParseLineFn as required by u_parseDelimitedFile.
+ * Runs a single data-driven unit test for unit preferences.
+ *
+ * This is a UParseLineFn as required by u_parseDelimitedFile, intended for
+ * parsing unitPreferencesTest.txt.
  */
 void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount,
                                    UErrorCode *pErrorCode) {
@@ -549,9 +586,9 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     // Unused // StringPiece inputR = trimField(fields[3]);
     StringPiece inputD = trimField(fields[4]);
     StringPiece inputUnit = trimField(fields[5]);
-    ExpectedOutput output;
+    ExpectedOutput expected;
     for (int i = 6; i < fieldCount; i++) {
-        output.parseOutputField(trimField(fields[i]), status);
+        expected.parseOutputField(trimField(fields[i]), status);
     }
     if (status.errIfFailureAndReset("parsing unitPreferencesTestData.txt test case: %s", fields[0][0])) {
         return;
@@ -574,7 +611,7 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
                      "Input: \"%f %s\", Expected Output: %s",
                      quantity.length(), quantity.data(), usage.length(), usage.data(), region.length(),
                      region.data(), inputAmount, inputMeasureUnit.getIdentifier(),
-                     output.toDebugString().c_str());
+                     expected.toDebugString().c_str());
 
     if (U_FAILURE(status)) { return; }
     UnitsRouter router(inputMeasureUnit, region, usage, status);
@@ -584,11 +621,19 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
         return;
     }
 
+    CharString msg(quantity, status);
+    msg.append(" ", status);
+    msg.append(usage, status);
+    msg.append(" ", status);
+    msg.append(region, status);
+    msg.append(" ", status);
+    msg.append(inputD, status);
+    msg.append(" ", status);
+    msg.append(inputMeasureUnit.getIdentifier(), status);
+    if (status.errIfFailureAndReset("Failure before router.route")) { return; }
     MaybeStackVector<Measure> result = router.route(inputAmount, status);
-    for (int i = 0; i < result.length(); i++) {
-        unitsTest->logln("result[%d], number: %f, unit: %s", i, result[i]->getNumber().getDouble(status),
-                         result[i]->getUnit().getIdentifier());
-    }
+    if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) { return; }
+    checkOutput(unitsTest, msg.data(), expected, result);
 }
 
 /**
