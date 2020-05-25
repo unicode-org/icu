@@ -1507,11 +1507,12 @@ class U_I18N_API NumberFormatterSettings {
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
      * rounding precisions, and other number formatter settings.
      *
+     * \note If the usage() is set (draft API), the output unit **will be
+     *       changed** to produce localised units, according to usage(),
+     *       locale() and unit().
+     *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
-     * NOTE: If the `usage` is set, the output unit **will be changed**
-     *       according to the `usage`, `locale` and `unit` values.
-     * 
      * <pre>
      * NumberFormatter::with().unit(MeasureUnit::getMeter())
      * </pre>
@@ -2042,37 +2043,30 @@ class U_I18N_API NumberFormatterSettings {
     Derived scale(const Scale &scale) &&;
 
     /**
-     * Specifies the usage of the unit ("person", "road", "person" ...etc.)
+     * Specifies the usage for which numbers will be formatted ("person",
+     * "road", "person", etc.)
      *
-     * NOTE:    `usage` will change the output unit depending on the `Locale`
-     *          and the unit value.
-     *          For Example:
-     *              Locale: en_US
-     *              Usage : length-person
-     *              Unit  : Meter
+     * When a `usage` is specified, the output unit will change depending on the
+     * `Locale` and the unit quantity. For example, formatting length
+     * measurements specified in meters:
      *
-     *          If the unit value is 0.25, the output will be "10 inches."
-     *          If the unit value is 1.50, the output will be
-     *                                           "4 feet and 11 inches"
+     * `NumberFormatter::with().usage("person").unit(MeasureUnit::getMeter()).locale("en-US")`
+     *   * When formatting 0.25, the output will be "10 inches".
+     *   * When formatting 1.50, the output will be "4 feet and 11 inches".
      *
-     * NOTE:    If the input usage is empty `StringPiece` (i.e. "") the usage
-     * will be resetted. Thus means the behaviour would not be effected by any
-     * `usage` values.
+     * If the usage has multiple parts (e.g. land-agriculture-grain) and does
+     * not match a known usage preference, the last part will be dropped
+     * repeatedly until a match is found (trying "land-agriculture", then
+     * "land"). If a match is still not found, usage will fall back to
+     * "default".
      *
-     * NOTE:    If the input usage does not exist (e.g. "person-kid"), but the
-     * sub usage does exist (form the last example. "person"). The usage will be
-     * **fall backed** to the sub usage (which is in the last example.
-     * "person"). usage.
+     * Setting usage to an empty string clears the usage (disables usage-based
+     * localized formatting).
      *
-     * NOTE:    If the input usage is not exist at all (e.g. "dance")
-     * or is misspelled, the usage will be **fall backed** to the "default"
-     * usage.
-     *
-     * <pre>
-     * NumberFormatter::with().usage("person")
-     * </pre>
-     *
-     * @param usage The unit `usage`.
+     * @param usage A `usage` parameter from the units resource. See the
+     * unitPreferenceData in `source/data/misc/units.txt`, generated from
+     * `unitPreferenceData` in
+     * [CLDR's supplemental/units.xml](https://github.com/unicode-org/cldr/blob/master/common/supplemental/units.xml).
      * @return The fluent chain.
      * @draft ICU 67
      */
@@ -2560,6 +2554,11 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
 #ifndef U_HIDE_DRAFT_API
 	/**
      * Gets the resolved output unit.
+     *
+     * The output unit is dependent upon the localized preferences for the usage
+     * specified via usage(), and may be a UMEASURE_UNIT_MIXED unit complexity
+     * (MeasureUnit::getComplexity()), such as "foot+inch" or
+     * "hour+minute+second".
      *
      * @return `MeasureUnit`.
      * @draft ICU 67
