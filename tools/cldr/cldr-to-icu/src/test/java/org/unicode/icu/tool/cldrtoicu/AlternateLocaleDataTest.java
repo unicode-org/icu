@@ -45,7 +45,7 @@ public class AlternateLocaleDataTest {
 
         FakeDataSupplier src = new FakeDataSupplier()
             .addLocaleData("xx", target, source, other)
-            .addInheritedData("xx", inherited);
+            .addLocaleData("root", inherited);
         CldrDataSupplier transformed =
             AlternateLocaleData.transform(
                 src, ImmutableMap.of(target.getPath(), source.getPath()), ImmutableTable.of());
@@ -97,10 +97,10 @@ public class AlternateLocaleDataTest {
         CldrData unresolved = transformed.getDataForLocale("xx", UNRESOLVED);
         CldrData resolved = transformed.getDataForLocale("xx", RESOLVED);
 
-        // Even though the missing target is not matched (so no change there) the source is always
-        // removed from the transformed data.
-        assertValuesUnordered(unresolved, other);
-        assertValuesUnordered(resolved, other);
+        // If there's no target the alt-path mapping is incomplete and we do nothing (this matches
+        // the old CLDR tool behaviour and reasonable but can hide inconsistencies in CLDR data).
+        assertValuesUnordered(unresolved, source, other);
+        assertValuesUnordered(resolved, source, other);
     }
 
     @Test
