@@ -1507,14 +1507,16 @@ class U_I18N_API NumberFormatterSettings {
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
      * rounding precisions, and other number formatter settings.
      *
-     * \note If the usage() is set (draft API), the output unit **will be
-     *       changed** to produce localised units, according to usage(),
-     *       locale() and unit().
+     * \note If the usage() is set (available as a draft API from ICU 68), the
+     *       output unit **will be changed** to produce localised units,
+     *       according to usage, locale and unit. See
+     *       FormattedNumber::getOutputUnit().
      *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
      * <pre>
      * NumberFormatter::with().unit(MeasureUnit::getMeter())
+     * NumberFormatter::with().unit(MeasureUnit::forIdentifier("foot-per-second", status))
      * </pre>
      *
      * Currency:
@@ -2054,9 +2056,16 @@ class U_I18N_API NumberFormatterSettings {
      *   * When formatting 0.25, the output will be "10 inches".
      *   * When formatting 1.50, the output will be "4 feet and 11 inches".
      *
-     * If the usage has multiple parts (e.g. land-agriculture-grain) and does
+     * The input unit specified via unit() determines the type of measurement
+     * being formatted (e.g. "length" when the unit is "foot"). The usage
+     * requested will be looked for only within this category of measurement
+     * units.
+     *
+     * The output unit can be found via FormattedNumber::getOutputUnit().
+     *
+     * If the usage has multiple parts (e.g. "land-agriculture-grain") and does
      * not match a known usage preference, the last part will be dropped
-     * repeatedly until a match is found (trying "land-agriculture", then
+     * repeatedly until a match is found (e.g. trying "land-agriculture", then
      * "land"). If a match is still not found, usage will fall back to
      * "default".
      *
@@ -2064,9 +2073,9 @@ class U_I18N_API NumberFormatterSettings {
      * localized formatting).
      *
      * @param usage A `usage` parameter from the units resource. See the
-     * unitPreferenceData in `source/data/misc/units.txt`, generated from
-     * `unitPreferenceData` in
-     * [CLDR's supplemental/units.xml](https://github.com/unicode-org/cldr/blob/master/common/supplemental/units.xml).
+     * unitPreferenceData in *source/data/misc/units.txt*, generated from
+     * `unitPreferenceData` in [CLDR's
+     * supplemental/units.xml](https://github.com/unicode-org/cldr/blob/master/common/supplemental/units.xml).
      * @return The fluent chain.
      * @draft ICU 67
      */
@@ -2556,12 +2565,12 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * Gets the resolved output unit.
      *
      * The output unit is dependent upon the localized preferences for the usage
-     * specified via usage(), and may be a UMEASURE_UNIT_MIXED unit complexity
-     * (MeasureUnit::getComplexity()), such as "foot+inch" or
-     * "hour+minute+second".
+     * specified via NumberFormatterSettings::usage(), and may be a unit with
+     * UMEASURE_UNIT_MIXED unit complexity (MeasureUnit::getComplexity()), such
+     * as "foot+inch" or "hour+minute+second".
      *
      * @return `MeasureUnit`.
-     * @draft ICU 67
+     * @draft ICU 68
      */
     MeasureUnit getOutputUnit(UErrorCode& status) const;
 #endif // U_HIDE_DRAFT_API
