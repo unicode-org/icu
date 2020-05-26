@@ -262,7 +262,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Validates and canonicalizes the identifier.
      *
      * <pre>
-     * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
+     * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond", status)
      * </pre>
      *
      * @param identifier The CLDR Unit Identifier
