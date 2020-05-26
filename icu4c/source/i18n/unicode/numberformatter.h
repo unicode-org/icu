@@ -2044,6 +2044,7 @@ class U_I18N_API NumberFormatterSettings {
      */
     Derived scale(const Scale &scale) &&;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Specifies the usage for which numbers will be formatted ("person",
      * "road", "person", etc.)
@@ -2077,7 +2078,7 @@ class U_I18N_API NumberFormatterSettings {
      * `unitPreferenceData` in [CLDR's
      * supplemental/units.xml](https://github.com/unicode-org/cldr/blob/master/common/supplemental/units.xml).
      * @return The fluent chain.
-     * @draft ICU 67
+     * @draft ICU 68
      */
     Derived usage(StringPiece usage) const &;
 
@@ -2086,9 +2087,10 @@ class U_I18N_API NumberFormatterSettings {
      *
      * @param usage The unit `usage`.
      * @return The fluent chain.
-     * @draft ICU 67
+     * @draft ICU 68
      */
     Derived usage(StringPiece usage) &&;
+#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
 
