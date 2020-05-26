@@ -9,7 +9,9 @@ import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static java.lang.Character.DIRECTIONALITY_LEFT_TO_RIGHT;
 import static java.util.function.Function.identity;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
+import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -113,16 +115,32 @@ public final class PseudoLocales {
         private final CldrDataSupplier src;
         private final Set<String> srcIds;
         private final CldrData enData;
+        private final ImmutableSet<CldrPath> pathsToProcess;
 
         PseudoSupplier(CldrDataSupplier src) {
             this.src = checkNotNull(src);
             this.srcIds = src.getAvailableLocaleIds();
-            // Use resolved data to ensure we get all the values (e.g. values in "en_001").
+            // Start with resolved data so we can merge values from "en" and "en_001" for coverage
+            // and supply the unfiltered values if someone wants the resolved version of the pseudo
+            // locale data.
             this.enData = src.getDataForLocale("en", RESOLVED);
+            // But since we don't want to filter paths which come from the "root" locale (such as
+            // aliases) then we need to find the union of "English" paths we expect to filter.
+            this.pathsToProcess = getUnresolvedPaths(src, "en", "en_001");
             // Just check that we aren't wrapping an already wrapped supplier.
             PseudoType.getLocaleIds()
                 .forEach(id -> checkArgument(!srcIds.contains(id),
                     "pseudo locale %s already supported by given data supplier", id));
+        }
+
+        private static ImmutableSet<CldrPath> getUnresolvedPaths(
+            CldrDataSupplier src, String... ids) {
+
+            ImmutableSet.Builder<CldrPath> paths = ImmutableSet.builder();
+            for (String id : ids) {
+                src.getDataForLocale(id, UNRESOLVED).accept(ARBITRARY, v -> paths.add(v.getPath()));
+            }
+            return paths.build();
         }
 
         @Override public CldrDataSupplier withDraftStatusAtLeast(CldrDraftStatus draftStatus) {
@@ -131,7 +149,8 @@ public final class PseudoLocales {
 
         @Override public CldrData getDataForLocale(String localeId, CldrResolution resolution) {
             if (PseudoType.getLocaleIds().contains(localeId)) {
-                return new PseudoLocaleData(enData, resolution, PseudoType.fromId(localeId));
+                return new PseudoLocaleData(
+                    enData, pathsToProcess, resolution, PseudoType.fromId(localeId));
             } else {
                 return src.getDataForLocale(localeId, resolution);
             }
@@ -210,11 +229,18 @@ public final class PseudoLocales {
 
         private final PseudoType type;
         private final boolean isResolved;
+        private final ImmutableSet<CldrPath> pathsToProcess;
 
-        private PseudoLocaleData(CldrData srcData, CldrResolution resolution, PseudoType type) {
+        private PseudoLocaleData(
+            CldrData srcData,
+            ImmutableSet<CldrPath> pathsToProcess,
+            CldrResolution resolution,
+            PseudoType type) {
+
             super(srcData);
             this.isResolved = checkNotNull(resolution) == RESOLVED;
             this.type = checkNotNull(type);
+            this.pathsToProcess = pathsToProcess;
         }
 
         @Override
@@ -236,7 +262,7 @@ public final class PseudoLocales {
 
             CldrValue defaultReturnValue = isResolved ? value : null;
             // This makes it look like we have explicit values only for the included paths.
-            if (!IS_PSEUDO_PATH.test(path)) {
+            if (!pathsToProcess.contains(path) || !IS_PSEUDO_PATH.test(path)) {
                 return defaultReturnValue;
             }
             String fullPath = value.getFullPath();
