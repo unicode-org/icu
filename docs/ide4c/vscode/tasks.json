@@ -1,6 +1,5 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-
 {
     "version": "2.0.0",
     "tasks": [
@@ -20,8 +19,8 @@
             "args": [
                 "all",
                 "--debug", // Enable debug mode.
-                "-j", // Use more than one core in parallel
-                "-l90" // Use 90 percent of the CPU
+                "-j24", // Launch no more than 24 jobs in parallel
+                "-l20" // Stop launching jobs if system load average is too high
             ]
         },
         {
@@ -29,8 +28,8 @@
             "command": "make", // Could be any other shell command
             "args": [
                 "tests",
-                "-j", // Use more than one core in parallel
-                "-l90" // Use 90 percent of the CPU
+                "-j24", // Launch no more than 24 jobs in parallel
+                "-l20" // Stop launching jobs if system load average is too high
             ],
             "type": "shell"
         }
