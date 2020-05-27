@@ -253,12 +253,12 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
         RBBIStateTableRow *row = (RBBIStateTableRow *)
                                   (table->fTableData + (table->fRowLen * s));
         if (use8Bits) {
-            RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->r8.fAccepting, row->r8.fLookAhead, row->r8.fTagIdx);
+            RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->r8.fAccepting, row->r8.fLookAhead, row->r8.fTagsIdx);
             for (c=0; c<fHeader->fCatCount; c++)  {
                 RBBIDebugPrintf("%3d ", row->r8.fNextState[c]);
             }
         } else {
-            RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->r16.fAccepting, row->r16.fLookAhead, row->r16.fTagIdx);
+            RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->r16.fAccepting, row->r16.fLookAhead, row->r16.fTagsIdx);
             for (c=0; c<fHeader->fCatCount; c++)  {
                 RBBIDebugPrintf("%3d ", row->r16.fNextState[c]);
             }

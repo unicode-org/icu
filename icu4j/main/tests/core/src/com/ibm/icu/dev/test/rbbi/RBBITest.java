@@ -606,7 +606,7 @@ public class RBBITest extends TestFmwk {
             int row = dw.getRowIndex(r);
             s.append(fwtbl.fTable[row + RBBIDataWrapper.ACCEPTING]);
             s.append(fwtbl.fTable[row + RBBIDataWrapper.LOOKAHEAD]);
-            s.append(fwtbl.fTable[row + RBBIDataWrapper.TAGIDX]);
+            s.append(fwtbl.fTable[row + RBBIDataWrapper.TAGSIDX]);
             for (int column=0; column<numCharClasses; column++) {
                 char tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
                 s.append(tableVal);

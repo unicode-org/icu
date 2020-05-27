@@ -195,8 +195,8 @@ private:
 class RBBIStateDescriptor : public UMemory {
 public:
     UBool            fMarked;
-    int32_t          fAccepting;
-    int32_t          fLookAhead;
+    uint32_t         fAccepting;
+    uint32_t         fLookAhead;
     UVector          *fTagVals;
     int32_t          fTagsIdx;
     UVector          *fPositions;          // Set of parse tree positions associated

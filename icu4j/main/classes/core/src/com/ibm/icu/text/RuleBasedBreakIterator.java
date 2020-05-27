@@ -914,7 +914,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
             // look up a state transition in the state table
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
             row   = fRData.getRowIndex(state);
-            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == 0xffff) {
+            int accepting = stateTable[row + RBBIDataWrapper.ACCEPTING];
+            if (accepting == RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
                 // Match found, common case
                 result = text.getIndex();
                 if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
@@ -924,15 +925,12 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 }
 
                 //  Remember the break status (tag) values.
-                fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
-            }
-
-            int completedRule = stateTable[row + RBBIDataWrapper.ACCEPTING];
-            if (completedRule > 0 && completedRule != 0xffff) {
+                fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGSIDX];
+            } else if (accepting > RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
                 // Lookahead match is completed
-                int lookaheadResult = fLookAheadMatches.getPosition(completedRule);
+                int lookaheadResult = fLookAheadMatches.getPosition(accepting);
                 if (lookaheadResult >= 0) {
-                    fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
+                    fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGSIDX];
                     fPosition = lookaheadResult;
                     return lookaheadResult;
                 }
