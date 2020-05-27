@@ -70,11 +70,7 @@ public final class RBBIDataWrapper {
                 This.fTable = new char[lengthOfTable];
                 for (int i = 0; i < lengthOfTable; i++) {
                     byte b = bytes.get();
-                    if (i % This.fRowLen < NEXTSTATES) {
-                        This.fTable[i] = (char) b; // Treat b as signed.
-                    } else {
-                        This.fTable[i] = (char)(0xff & b); // Treat b as unsigned.
-                    }
+                    This.fTable[i] = (char)(0xff & b); // Treat b as unsigned.
                 }
                 ICUBinary.skipBytes(bytes, lengthOfTable & 1);
             } else {
@@ -202,11 +198,16 @@ public final class RBBIDataWrapper {
     /**
      * offset to the "tagIndex" field in a state table row.
      */
-    public final static int      TAGIDX     = 2;
+    public final static int      TAGSIDX    = 2;
     /**
      * offset to the start of the next states array in a state table row.
      */
     public final static int      NEXTSTATES = 3;
+
+    /**
+     *  value constant for the ACCEPTING field of a state table row.
+     */
+    public final static int      ACCEPTING_UNCONDITIONAL = 1;
 
     //  Bit selectors for the "FLAGS" field of the state table header
     //     enum RBBIStateTableFlags in the C version.
@@ -477,7 +478,7 @@ public final class RBBIDataWrapper {
         } else {
             dest.append("     ");
         }
-        dest.append(intToString(table.fTable[row+TAGIDX], 5));
+        dest.append(intToString(table.fTable[row+TAGSIDX], 5));
 
         for (int col=0; col<fHeader.fCatCount; col++) {
             dest.append(intToString(table.fTable[row+NEXTSTATES+col], 5));

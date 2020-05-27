@@ -616,7 +616,12 @@ class RBBITableBuilder {
        */
       void mapLookAheadRules() {
           fLookAheadRuleMap =  new int[fRB.fScanner.numRules() + 1];
-          int laSlotsInUse = 0;
+
+          // Counter used when assigning lookahead rule numbers.
+          // Contains the last look-ahead number already in use.
+          // The first look-ahead number is 2;
+          // Number 1 is reserved for non-lookahead accepting states.
+          int laSlotsInUse = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
 
           for (RBBIStateDescriptor sd: fDStates) {
               int laSlotForState = 0;
@@ -692,27 +697,26 @@ class RBBITableBuilder {
                endMarker = endMarkerNodes.get(i);
                for (n=0; n<fDStates.size(); n++) {
                    RBBIStateDescriptor sd = fDStates.get(n);
-                   //if (sd.fPositions.indexOf(endMarker) >= 0) {
                    if (sd.fPositions.contains(endMarker)) {
                        // Any non-zero value for fAccepting means this is an accepting node.
                        // The value is what will be returned to the user as the break status.
-                       // If no other value was specified, force it to -1.
+                       // If no other value was specified, force it to ACCEPTING_UNCONDITIONAL (1).
 
                        if (sd.fAccepting==0) {
                            // State hasn't been marked as accepting yet.  Do it now.
                            sd.fAccepting = fLookAheadRuleMap[endMarker.fVal];
                            if (sd.fAccepting == 0) {
-                               sd.fAccepting = -1;
+                               sd.fAccepting = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
                            }
                        }
-                       if (sd.fAccepting==-1 && endMarker.fVal != 0) {
+                       if (sd.fAccepting==RBBIDataWrapper.ACCEPTING_UNCONDITIONAL && endMarker.fVal != 0) {
                            // Both lookahead and non-lookahead accepting for this state.
                            // Favor the look-ahead, because a look-ahead match needs to
                            // immediately stop the run-time engine. First match, not longest.
                            sd.fAccepting = fLookAheadRuleMap[endMarker.fVal];
                        }
                        // implicit else:
-                       // if sd.fAccepting already had a value other than 0 or -1, leave it be.
+                       // if sd.fAccepting already had a value other than 0 or 1, leave it be.
                    }
                }
            }
@@ -1158,18 +1162,18 @@ class RBBITableBuilder {
                RBBIStateDescriptor sd = fDStates.get(state);
                int row = state*rowLen;
                if (use8Bits) {
-                   Assert.assrt (-128 < sd.fAccepting && sd.fAccepting <= MAX_STATE_FOR_8BITS_TABLE);
-                   Assert.assrt (-128 < sd.fLookAhead && sd.fLookAhead <= MAX_STATE_FOR_8BITS_TABLE);
+                   Assert.assrt (0 <= sd.fAccepting && sd.fAccepting <= 255);
+                   Assert.assrt (0 <= sd.fLookAhead && sd.fLookAhead <= 255);
                } else {
-                   Assert.assrt (-32768 < sd.fAccepting && sd.fAccepting <= 32767);
-                   Assert.assrt (-32768 < sd.fLookAhead && sd.fLookAhead <= 32767);
+                   Assert.assrt (0 <= sd.fAccepting && sd.fAccepting <= 0xffff);
+                   Assert.assrt (0 <= sd.fLookAhead && sd.fLookAhead <= 0xffff);
                }
                table.fTable[row + RBBIDataWrapper.ACCEPTING] = (char)sd.fAccepting;
                table.fTable[row + RBBIDataWrapper.LOOKAHEAD] = (char)sd.fLookAhead;
-               table.fTable[row + RBBIDataWrapper.TAGIDX]    = (char)sd.fTagsIdx;
+               table.fTable[row + RBBIDataWrapper.TAGSIDX]   = (char)sd.fTagsIdx;
                for (col=0; col<numCharCategories; col++) {
                    if (use8Bits) {
-                       Assert.assrt (sd.fDtran[col] <= MAX_STATE_FOR_8BITS_TABLE);
+                       Assert.assrt (0 <= sd.fDtran[col] && sd.fDtran[col] <= MAX_STATE_FOR_8BITS_TABLE);
                    }
                    table.fTable[row + RBBIDataWrapper.NEXTSTATES + col] = (char)sd.fDtran[col];
                }

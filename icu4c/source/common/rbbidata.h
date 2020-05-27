@@ -95,34 +95,36 @@ struct RBBIDataHeader {
 
 
 
-template <typename ST, typename UT>
+template <typename T>
 struct RBBIStateTableRowT {
-    ST               fAccepting;    /*  Non-zero if this row is for an accepting state.   */
-                                    /*  Value 0: not an accepting state.                  */
-                                    /*       -1: Unconditional Accepting state.           */
-                                    /*    positive:  Look-ahead match has completed.      */
-                                    /*           Actual boundary position happened earlier */
-                                    /*           Value here == fLookAhead in earlier      */
-                                    /*              state, at actual boundary pos.        */
-    ST               fLookAhead;    /*  Non-zero if this row is for a state that          */
-                                    /*    corresponds to a '/' in the rule source.        */
-                                    /*    Value is the same as the fAccepting             */
-                                    /*      value for the rule (which will appear         */
-                                    /*      in a different state.                         */
-    ST               fTagIdx;       /*  Non-zero if this row covers a {tagged} position   */
-                                    /*     from a rule.  Value is the index in the        */
-                                    /*     StatusTable of the set of matching             */
-                                    /*     tags (rule status values)                      */
-    UT               fNextState[1]; /*  Next State, indexed by char category.             */
-                                    /*    Variable-length array declared with length 1    */
-                                    /*    to disable bounds checkers.                     */
-                                    /*    Array Size is actually fData->fHeader->fCatCount*/
-                                    /*    CAUTION:  see RBBITableBuilder::getTableSize()  */
-                                    /*              before changing anything here.        */
+    T               fAccepting;    //  Non-zero if this row is for an accepting state.
+                                   //  Value 0: not an accepting state.
+                                   //        1: (ACCEPTING_UNCONDITIONAL) Unconditional Accepting state.
+                                   //       >1: Look-ahead match has completed.
+                                   //           Actual boundary position happened earlier
+                                   //           Value here == fLookAhead in earlier
+                                   //              state, at actual boundary pos.
+    T               fLookAhead;    //  Non-zero if this row is for a state that
+                                   //    corresponds to a '/' in the rule source.
+                                   //    Value is the same as the fAccepting
+                                   //      value for the rule (which will appear
+                                   //      in a different state.
+    T               fTagsIdx;      //  Non-zero if this row covers a {tagged} position
+                                   //     from a rule.  Value is the index in the
+                                   //     StatusTable of the set of matching
+                                   //     tags (rule status values)
+    T               fNextState[1]; //  Next State, indexed by char category.
+                                   //    Variable-length array declared with length 1
+                                   //    to disable bounds checkers.
+                                   //    Array Size is actually fData->fHeader->fCatCount
+                                   //    CAUTION:  see RBBITableBuilder::getTableSize()
+                                   //              before changing anything here.
 };
 
-typedef RBBIStateTableRowT<int8_t, uint8_t> RBBIStateTableRow8;
-typedef RBBIStateTableRowT<int16_t, uint16_t> RBBIStateTableRow16;
+typedef RBBIStateTableRowT<uint8_t> RBBIStateTableRow8;
+typedef RBBIStateTableRowT<uint16_t> RBBIStateTableRow16;
+
+constexpr uint16_t ACCEPTING_UNCONDITIONAL = 1;   // Value constant for RBBIStateTableRow::fAccepting
 
 union RBBIStateTableRow {
   RBBIStateTableRow16 r16;

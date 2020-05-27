@@ -4672,18 +4672,16 @@ void RBBITest::TestTableRedundancies() {
         UnicodeString s;
         RBBIStateTableRow  *row = (RBBIStateTableRow *) (fwtbl->fTableData + (fwtbl->fRowLen * r));
         if (in8Bits) {
-            assertTrue(WHERE, row->r8.fAccepting >= -1);
-            s.append(row->r8.fAccepting + 1);   // values of -1 are expected.
+            s.append(row->r8.fAccepting);
             s.append(row->r8.fLookAhead);
-            s.append(row->r8.fTagIdx);
+            s.append(row->r8.fTagsIdx);
             for (int32_t column = 0; column < numCharClasses; column++) {
                 s.append(row->r8.fNextState[column]);
             }
         } else {
-            assertTrue(WHERE, row->r16.fAccepting >= -1);
-            s.append(row->r16.fAccepting + 1);   // values of -1 are expected.
+            s.append(row->r16.fAccepting);
             s.append(row->r16.fLookAhead);
-            s.append(row->r16.fTagIdx);
+            s.append(row->r16.fTagsIdx);
             for (int32_t column = 0; column < numCharClasses; column++) {
                 s.append(row->r16.fNextState[column]);
             }

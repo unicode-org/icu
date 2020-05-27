@@ -714,11 +714,11 @@ static const int32_t kMaxLookaheads = 8;
 struct LookAheadResults {
     int32_t    fUsedSlotLimit;
     int32_t    fPositions[8];
-    int16_t    fKeys[8];
+    uint16_t   fKeys[8];
 
     LookAheadResults() : fUsedSlotLimit(0), fPositions(), fKeys() {}
 
-    int32_t getPosition(int16_t key) {
+    int32_t getPosition(uint16_t key) {
         for (int32_t i=0; i<fUsedSlotLimit; ++i) {
             if (fKeys[i] == key) {
                 return fPositions[i];
@@ -727,7 +727,7 @@ struct LookAheadResults {
         UPRV_UNREACHABLE;
     }
 
-    void setPosition(int16_t key, int32_t position) {
+    void setPosition(uint16_t key, int32_t position) {
         int32_t i;
         for (i=0; i<fUsedSlotLimit; ++i) {
             if (fKeys[i] == key) {
@@ -912,20 +912,18 @@ int32_t RuleBasedBreakIterator::handleNext() {
             (tableData + tableRowLen * state);
 
 
-        if (row->fAccepting == -1) {
+        uint16_t accepting = row->fAccepting;
+        if (accepting == ACCEPTING_UNCONDITIONAL) {
             // Match found, common case.
             if (mode != RBBI_START) {
                 result = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
             }
-            fRuleStatusIndex = row->fTagIdx;   // Remember the break status (tag) values.
-        }
-
-        int16_t completedRule = row->fAccepting;
-        if (completedRule > 0) {
+            fRuleStatusIndex = row->fTagsIdx;   // Remember the break status (tag) values.
+        } else if (accepting > ACCEPTING_UNCONDITIONAL) {
             // Lookahead match is completed.
-            int32_t lookaheadResult = lookAheadMatches.getPosition(completedRule);
+            int32_t lookaheadResult = lookAheadMatches.getPosition(accepting);
             if (lookaheadResult >= 0) {
-                fRuleStatusIndex = row->fTagIdx;
+                fRuleStatusIndex = row->fTagsIdx;
                 fPosition = lookaheadResult;
                 return lookaheadResult;
             }
@@ -937,7 +935,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
         //       This would enable hard-break rules with no following context.
         //       But there are line break test failures when trying this. Investigate.
         //       Issue ICU-20837
-        int16_t rule = row->fLookAhead;
+        uint16_t rule = row->fLookAhead;
         if (rule != 0) {
             int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
             lookAheadMatches.setPosition(rule, pos);
