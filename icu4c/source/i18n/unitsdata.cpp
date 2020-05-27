@@ -328,6 +328,7 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
             return -1;
         }
         idx = binarySearch(metadata, desired, &foundCategory, &foundUsage, &foundRegion, status);
+        if (U_FAILURE(status)) { return -1; }
     }
     U_ASSERT(foundCategory);
     U_ASSERT(foundUsage);
