@@ -1507,9 +1507,8 @@ class U_I18N_API NumberFormatterSettings {
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
      * rounding precisions, and other number formatter settings.
      *
-     * \note If the usage() is set (available as a draft API from ICU 68), the
-     *       output unit **will be changed** to produce localised units,
-     *       according to usage, locale and unit. See
+     * \note If the usage() is set, the output unit **will be changed** to
+     *       produce localised units, according to usage, locale and unit. See
      *       FormattedNumber::getOutputUnit().
      *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
