@@ -245,6 +245,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13735_GroupingSizeGetter);
   TESTCASE_AUTO(Test13734_StrictFlexibleWhitespace);
   TESTCASE_AUTO(Test20961_CurrencyPluralPattern);
+  TESTCASE_AUTO(Test21134_ToNumberFormatter);
   TESTCASE_AUTO_END;
 }
 
@@ -9833,6 +9834,63 @@ void NumberFormatTest::Test20961_CurrencyPluralPattern() {
         decimalFormat->toPattern(result);
         assertEquals("Currency pattern", u"#,##0.00 ¤¤¤", result);
     }
+}
+
+void NumberFormatTest::Test21134_ToNumberFormatter() {
+    IcuTestErrorCode status(*this, "Test21134_ToNumberFormatter");
+    LocalizedNumberFormatter outer1;
+    LocalizedNumberFormatter outer2;
+    LocalPointer<LocalizedNumberFormatter> outer3;
+    {
+        // Case 1: new formatter object
+        DecimalFormat inner(u"a0b", {"en", status}, status);
+        if (auto ptr = inner.toNumberFormatter(status)) {
+            // Copy assignment
+            outer1 = *ptr;
+        } else {
+            status.errIfFailureAndReset();
+            return;
+        }
+    }
+    {
+        // Case 2: compiled formatter object (used at least 3 times)
+        DecimalFormat inner(u"c0d", {"en", status}, status);
+        UnicodeString dummy;
+        inner.format(100, dummy);
+        inner.format(100, dummy);
+        inner.format(100, dummy);
+        if (auto ptr = inner.toNumberFormatter(status)) {
+            // Copy assignment
+            outer2 = *ptr;
+        } else {
+            status.errIfFailureAndReset();
+            return;
+        }
+    }
+    {
+        // Case 3: currency plural info (different code path)
+        LocalPointer<DecimalFormat> inner(static_cast<DecimalFormat*>(
+            DecimalFormat::createInstance("en-US", UNUM_CURRENCY_PLURAL, status)));
+        if (auto ptr = inner->toNumberFormatter(status)) {
+            // Copy constructor
+            outer3.adoptInsteadAndCheckErrorCode(new LocalizedNumberFormatter(*ptr), status);
+        } else {
+            status.errIfFailureAndReset();
+            return;
+        }
+    }
+    auto result1 = outer1.formatDouble(99, status);
+    assertEquals("Using NumberFormatter from DecimalFormat, new version",
+        u"a99b",
+        result1.toTempString(status));
+    auto result2 = outer2.formatDouble(99, status);
+    assertEquals("Using NumberFormatter from DecimalFormat, compiled version",
+        u"c99d",
+        result2.toTempString(status));
+    auto result3 = outer3->formatDouble(99, status);
+    assertEquals("Using NumberFormatter from DecimalFormat, compiled version",
+        u"99.00 US dollars",
+        result3.toTempString(status));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
