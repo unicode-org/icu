@@ -13,6 +13,7 @@
 #include "number_asformat.h"
 #include "number_utils.h"
 #include "number_utypes.h"
+#include "number_mapper.h"
 #include "util.h"
 #include "fphdlimp.h"
 
@@ -400,7 +401,8 @@ LocalizedNumberFormatter::LocalizedNumberFormatter(const LNF& other)
 
 LocalizedNumberFormatter::LocalizedNumberFormatter(const NFS<LNF>& other)
         : NFS<LNF>(other) {
-    // No additional fields to assign (let call count and compiled formatter reset to defaults)
+    UErrorCode localStatus = U_ZERO_ERROR; // Can't bubble up the error
+    lnfCopyHelper(static_cast<const LNF&>(other), localStatus);
 }
 
 LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&& src) U_NOEXCEPT
@@ -408,38 +410,25 @@ LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&& sr
 
 LocalizedNumberFormatter::LocalizedNumberFormatter(NFS<LNF>&& src) U_NOEXCEPT
         : NFS<LNF>(std::move(src)) {
-    // For the move operators, copy over the compiled formatter.
-    // Note: if the formatter is not compiled, call count information is lost.
-    if (static_cast<LNF&&>(src).fCompiled != nullptr) {
-        lnfMoveHelper(static_cast<LNF&&>(src));
-    }
+    lnfMoveHelper(std::move(static_cast<LNF&&>(src)));
 }
 
 LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(const LNF& other) {
     NFS<LNF>::operator=(static_cast<const NFS<LNF>&>(other));
-    // Reset to default values.
-    clear();
+    UErrorCode localStatus = U_ZERO_ERROR; // Can't bubble up the error
+    lnfCopyHelper(other, localStatus);
     return *this;
 }
 
 LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(LNF&& src) U_NOEXCEPT {
     NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
-    // For the move operators, copy over the compiled formatter.
-    // Note: if the formatter is not compiled, call count information is lost.
-    if (static_cast<LNF&&>(src).fCompiled != nullptr) {
-        // Formatter is compiled
-        lnfMoveHelper(static_cast<LNF&&>(src));
-    } else {
-        clear();
-    }
+    lnfMoveHelper(std::move(src));
     return *this;
 }
 
-void LocalizedNumberFormatter::clear() {
-    // Reset to default values.
+void LocalizedNumberFormatter::resetCompiled() {
     auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
     umtx_storeRelease(*callCount, 0);
-    delete fCompiled;
     fCompiled = nullptr;
 }
 
@@ -447,19 +436,56 @@ void LocalizedNumberFormatter::lnfMoveHelper(LNF&& src) {
     // Copy over the compiled formatter and set call count to INT32_MIN as in computeCompiled().
     // Don't copy the call count directly because doing so requires a loadAcquire/storeRelease.
     // The bits themselves appear to be platform-dependent, so copying them might not be safe.
-    auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
-    umtx_storeRelease(*callCount, INT32_MIN);
     delete fCompiled;
-    fCompiled = src.fCompiled;
-    // Reset the source object to leave it in a safe state.
-    auto* srcCallCount = reinterpret_cast<u_atomic_int32_t*>(src.fUnsafeCallCount);
-    umtx_storeRelease(*srcCallCount, 0);
-    src.fCompiled = nullptr;
+    if (src.fCompiled != nullptr) {
+        auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
+        umtx_storeRelease(*callCount, INT32_MIN);
+        fCompiled = src.fCompiled;
+        // Reset the source object to leave it in a safe state.
+        src.resetCompiled();
+    } else {
+        resetCompiled();
+    }
+
+    // Unconditionally move the warehouse
+    delete fWarehouse;
+    fWarehouse = src.fWarehouse;
+    src.fWarehouse = nullptr;
+}
+
+void LocalizedNumberFormatter::lnfCopyHelper(const LNF&, UErrorCode& status) {
+    // When copying, always reset the compiled formatter.
+    delete fCompiled;
+    resetCompiled();
+
+    // If MacroProps has a reference to AffixPatternProvider, we need to copy it.
+    // If MacroProps has a reference to PluralRules, copy that one, too.
+    delete fWarehouse;
+    if (fMacros.affixProvider || fMacros.rules) {
+        LocalPointer<DecimalFormatWarehouse> warehouse(new DecimalFormatWarehouse(), status);
+        if (U_FAILURE(status)) {
+            fWarehouse = nullptr;
+            return;
+        }
+        if (fMacros.affixProvider) {
+            warehouse->affixProvider.setTo(fMacros.affixProvider, status);
+            fMacros.affixProvider = &warehouse->affixProvider.get();
+        }
+        if (fMacros.rules) {
+            warehouse->rules.adoptInsteadAndCheckErrorCode(
+                new PluralRules(*fMacros.rules), status);
+            fMacros.rules = warehouse->rules.getAlias();
+        }
+        fWarehouse = warehouse.orphan();
+    } else {
+        fWarehouse = nullptr;
+    }
 }
 
 
 LocalizedNumberFormatter::~LocalizedNumberFormatter() {
     delete fCompiled;
+    delete fWarehouse;
 }
 
 LocalizedNumberFormatter::LocalizedNumberFormatter(const MacroProps& macros, const Locale& locale) {
