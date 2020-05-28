@@ -103,6 +103,10 @@ void UnitsDataTest::testGetPreferences() {
         {"XX default falls back to 001", "length", "default", "XX", WorldLenMax, WorldLenMin},
         {"Unknown usage US", "length", "foobar", "US", USLenMax, USLenMin},
         {"Unknown usage 001", "length", "foobar", "XX", WorldLenMax, WorldLenMin},
+        {"Fallback", "length", "person-height-xyzzy", "DE", "meter-and-centimeter",
+         "meter-and-centimeter"},
+        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "meter-and-centimeter",
+         "meter-and-centimeter"},
     };
     IcuTestErrorCode status(*this, "testGetPreferences");
     UnitPreferencesOpenedUp preferences(status);
