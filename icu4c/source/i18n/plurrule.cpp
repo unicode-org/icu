@@ -1661,7 +1661,9 @@ int64_t FixedDecimal::getFractionalDigits(double n, int32_t v) {
       case 3: return (int64_t)(fract*1000.0 + 0.5);
       default:
           double scaled = floor(fract * pow(10.0, (double)v) + 0.5);
-          if (scaled > U_INT64_MAX) {
+          if (scaled >= static_cast<double>(U_INT64_MAX)) {
+              // Note: a double cannot accurately represent U_INT64_MAX. Casting it to double
+              //       will round up to the next representable value, which is U_INT64_MAX + 1.
               return U_INT64_MAX;
           } else {
               return (int64_t)scaled;
