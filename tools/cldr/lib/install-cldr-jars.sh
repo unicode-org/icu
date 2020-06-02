@@ -48,21 +48,20 @@ function run_with_logging() {
 # First require that we are run from the same directory as the script.
 ROOT_DIR="$(realpath $(dirname $0))"
 if [[ "${ROOT_DIR}" != "$(realpath ${PWD})" ]] ; then
-  echo "WARNING: Shell script should be run from the project root directory"
+  echo "WARNING: Shell script should be run from the Maven lib/ directory"
   echo "Current directory:"
   echo "  ${PWD}"
-  echo "Project root direcory (where this script is):"
+  echo "Maven lib/ direcory (where this script is):"
   echo "  ${ROOT_DIR}"
-  read -p "Change to project root and continue? " -n 1 -r
+  read -p "Change to lib/ directory and continue? " -n 1 -r
   echo
-  [[ "${REPLY}" =~ ^[Yy]$ ]] || die "Script must be run from the project root directory"
+  [[ "${REPLY}" =~ ^[Yy]$ ]] || die "Script must be run from the Maven lib/ directory"
   cd "$ROOT_DIR"
 fi
 
 # Check for some expected environmental things early.
 which ant > /dev/null || die "Cannot find Ant executable 'ant' in the current path."
 which mvn > /dev/null || die "Cannot find Maven executable 'mvn' in the current path."
-[[ -d "lib" ]] || die "Cannot find expected 'lib' directory in: $PWD"
 
 # Check there's one argument that points at a directory (or a symbolic link to a directory).
 (( $# == 1 )) && [[ -d "$1" ]] || die "Usage: ./install-cldr-jars.sh <CLDR-root-directory>"
@@ -79,12 +78,8 @@ pushd "${CLDR_TOOLS_DIR}" > /dev/null || die "Cannot change directory to: ${CLDR
 echo "Building CLDR JAR file..."
 run_with_logging ant -f ./build.xml clean jar
 [[ -f "cldr.jar" ]] || die "Error creating cldr.jar file"
-[[ -f "libs/utilities.jar" ]] || die "Cannot find libs/utilities.jar"
 
 popd > /dev/null
-
-# Install both required CLDR jars in the lib/ directory.
-pushd "${ROOT_DIR}/lib" > /dev/null || die "Cannot change to lib directory"
 
 # The -B flag is "batch" mode and won't mess about with escape codes in the log file.
 echo "Installing CLDR JAR file..."
@@ -97,19 +92,6 @@ run_with_logging mvn -B install:install-file \
   -DlocalRepositoryPath=. \
   -Dfile="${CLDR_TOOLS_DIR}/cldr.jar"
 
-echo "Installing CLDR utilities JAR file..."
-run_with_logging mvn -B install:install-file \
-  -DgroupId=com.ibm.icu \
-  -DartifactId=icu-utilities \
-  -Dversion=0.1-SNAPSHOT \
-  -Dpackaging=jar \
-  -DgeneratePom=true \
-  -DlocalRepositoryPath=. \
-  -Dfile="${CLDR_TOOLS_DIR}/libs/utilities.jar"
-
-popd > /dev/null
-
-# We are back in the root directory now.
 echo "Syncing local Maven repository..."
 run_with_logging mvn -B dependency:purge-local-repository -DsnapshotsOnly=true
 
