@@ -708,7 +708,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
                     const char* end = begin;
                     // We may have multiple variants, need to look at each of
                     // them.
-                    do {
+                    for (;;) {
                         status = U_ZERO_ERROR;
                         end = uprv_strchr(begin, '_');
                         int32_t len = (end == nullptr) ? int32_t(uprv_strlen(begin)) : int32_t(end - begin);
@@ -739,8 +739,9 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
                                              uprv_strchr(fullName, '@'), status).data(), false);
                             break;
                         }
+                        if (end == nullptr) break;
                         begin = end + 1;
-                    } while (end != nullptr);
+                    }
                 }  // End of handle language _ variant
                 // Handle cases of key pattern "language _ Script _ REGION"
                 // ex: Map "ks_Arab_IN" to "ks_IN"
