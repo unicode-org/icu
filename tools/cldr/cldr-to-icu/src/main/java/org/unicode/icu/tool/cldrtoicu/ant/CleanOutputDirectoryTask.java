@@ -5,6 +5,7 @@ package org.unicode.icu.tool.cldrtoicu.ant;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.partitioningBy;
@@ -212,7 +213,7 @@ public final class CleanOutputDirectoryTask extends Task {
             // Directories, symbolic links, devices etc.
             return false;
         }
-        try (BufferedReader r = Files.newBufferedReader(path)) {
+        try (BufferedReader r = Files.newBufferedReader(path, UTF_8)) {
             // A byte-order-mark (BOM) is added to ICU data files, but not JSON deps files, so just
             // treat it as optional everywhere (it's not the important thing we check here).
             r.mark(1);
@@ -274,7 +275,7 @@ public final class CleanOutputDirectoryTask extends Task {
 
     private static ImmutableList<String> readLinesFromResource(String name) {
         try (InputStream in = CleanOutputDirectoryTask.class.getResourceAsStream(name)) {
-            return ImmutableList.copyOf(CharStreams.readLines(new InputStreamReader(in)));
+            return ImmutableList.copyOf(CharStreams.readLines(new InputStreamReader(in, UTF_8)));
         } catch (IOException e) {
             throw new RuntimeException("cannot read resource: " + name, e);
         }
