@@ -100,8 +100,9 @@ public final class CleanOutputDirectoryTask extends Task {
     }
 
     @SuppressWarnings("unused")
-    public void setRoot(Path root) {
-        this.root = root;
+    public void setRoot(String root) {
+        // Use String here since on some systems Ant doesn't support automatically converting Path instances.
+        this.root = Paths.get(root);
     }
 
     @SuppressWarnings("unused")

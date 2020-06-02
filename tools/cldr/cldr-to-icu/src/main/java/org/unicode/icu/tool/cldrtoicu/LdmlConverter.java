@@ -242,7 +242,7 @@ public final class LdmlConverter {
 
     private static ImmutableList<String> readLinesFromResource(String name) {
         try (InputStream in = LdmlConverter.class.getResourceAsStream(name)) {
-            return ImmutableList.copyOf(CharStreams.readLines(new InputStreamReader(in)));
+            return ImmutableList.copyOf(CharStreams.readLines(new InputStreamReader(in, UTF_8)));
         } catch (IOException e) {
             throw new RuntimeException("cannot read resource: " + name, e);
         }
