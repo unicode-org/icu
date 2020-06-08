@@ -24,7 +24,8 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
         singleUnitsInOrder.emplaceBack(singleUnits[i]);
     }
 
-    ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder), ratesInfo, status);
+    *this = ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder),
+                                  ratesInfo, status);
 
     // TODO(younies): question from Hugo: is this check appropriate? The
     // U_ASSERT in greaterThanOrEqual suggests this should be an invariant for
@@ -42,21 +43,21 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
         return;
     }
 
-    MaybeStackVector<UnitConverter> converters;
     for (int i = 0, n = outputUnits.length(); i < n; i++) {
-        if (i == 0) { // first element
-            converters.emplaceBack(inputUnit, *outputUnits[i], ratesInfo, status);
+      if (i == 0) { // first element
+        unitConverters_.emplaceBack(inputUnit, *outputUnits[i], ratesInfo,
+                                    status);
 
-        } else {
-            converters.emplaceBack(*outputUnits[i - 1], *outputUnits[i], ratesInfo, status);
-        }
+      } else {
+        unitConverters_.emplaceBack(*outputUnits[i - 1], *outputUnits[i],
+                                    ratesInfo, status);
+      }
 
         if (U_FAILURE(status)) break;
     }
 
     if (U_FAILURE(status)) return;
 
-    unitConverters_.appendAll(converters, status);
     units_.appendAll(outputUnits, status);
 }
 

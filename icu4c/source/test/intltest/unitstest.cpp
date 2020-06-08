@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <iostream>
+#include <cmath> 
 
 #include "charstr.h"
 #include "cmemory.h"
@@ -502,7 +503,7 @@ class ExpectedOutput {
         _skippedFields++;
         if (_skippedFields < 2) {
             // We are happy skipping one field per output unit: we want to skip
-            // rational fraction fiels like "11 / 10".
+            // rational fraction files like "11 / 10".
             errorCode = U_ZERO_ERROR;
             return;
         } else {
@@ -527,7 +528,7 @@ class ExpectedOutput {
 };
 
 void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
-                  const MaybeStackVector<Measure> &actual) {
+                  const MaybeStackVector<Measure> &actual, double precision) {
     IcuTestErrorCode status(*unitsTest, "checkOutput");
     bool success = true;
     if (expected._compoundCount != actual.length()) {
@@ -537,10 +538,16 @@ void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
         if (i >= expected._compoundCount) {
             break;
         }
-        if (expected._amounts[i] != actual[i]->getNumber().getDouble(status)) {
-            success = false;
-            break;
+
+        double diff = std::abs(expected._amounts[i] -
+                               actual[i]->getNumber().getDouble(status));
+        double diffPercent =
+            expected._amounts[i] != 0 ? diff / expected._amounts[i] : diff;
+        if (diffPercent > precision) {
+          success = false;
+          break;
         }
+
         if (expected._measureUnits[i] != actual[i]->getUnit()) {
             success = false;
             break;
@@ -633,7 +640,7 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     if (status.errIfFailureAndReset("Failure before router.route")) { return; }
     MaybeStackVector<Measure> result = router.route(inputAmount, status);
     if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) { return; }
-    checkOutput(unitsTest, msg.data(), expected, result);
+    checkOutput(unitsTest, msg.data(), expected, result, 0.0001);
 }
 
 /**
