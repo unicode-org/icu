@@ -38,8 +38,12 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
         const auto &preference = *unitPreferences[i];
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
 
-        if (U_FAILURE(status)) { return; }
-        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
+        if (U_FAILURE(status)) {
+          return;
+        }
+        
+        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit,
+                                          preference.geq, conversionRates,
                                           status);
         if (U_FAILURE(status)) {
             fprintf(
