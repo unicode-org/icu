@@ -260,10 +260,9 @@ class UnitPreferencesSink : public ResourceSink {
     MaybeStackVector<UnitPreferenceMetadata> *metadata;
 };
 
-int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata, const char *category,
-                     const char *usage, const char *region, bool *foundCategory, bool *foundUsage,
+int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata,
+                     const UnitPreferenceMetadata &desired, bool *foundCategory, bool *foundUsage,
                      bool *foundRegion, UErrorCode &status) {
-    UnitPreferenceMetadata desired(category, usage, region, -1, -1, status);
     if (U_FAILURE(status)) { return -1; }
     int32_t start = 0;
     int32_t end = metadata->length();
@@ -286,21 +285,15 @@ int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata, c
 
 /**
  * Finds the UnitPreferenceMetadata instance that matches the given category,
- * usage and region: if missing, region falls back to "001", and usage falls
- * back to "default".
- *
- * This is implemented as a binary search, with fallback restarting the search
- * from the search range at which the parent in the category/usage/region
- * hierarchy was found.
+ * usage and region: if missing, region falls back to "001", and usage
+ * repeatedly drops tailing components, eventually trying "default"
+ * ("land-agriculture-grain" -> "land-agriculture" -> "land" -> "default").
  *
  * @param metadata The full list of UnitPreferenceMetadata instances.
- * @param category The category to search for. If category is not known, it can
- * be resolved from the baseunit of the input (for supported unit categories).
- * TODO(hugovdm): implement the unit->category lookup (via "unitQuantities" in
- * the units resource bundle).
+ * @param category The category to search for. See getUnitCategory().
  * @param usage The usage for which formatting preferences is needed. If the
- * given usage is not known, this function automatically falls back to "default"
- * usage.
+ * given usage is not known, automatic fallback occurs, see function description
+ * above.
  * @param region The region for which preferences are needed. If there are no
  * region-specific preferences, this function automatically falls back to the
  * "001" region (global).
@@ -316,37 +309,38 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
                                    UErrorCode &status) {
     if (U_FAILURE(status)) { return -1; }
     bool foundCategory, foundUsage, foundRegion;
-    int32_t idx = binarySearch(metadata, category, usage, region, &foundCategory, &foundUsage,
-                               &foundRegion, status);
+    UnitPreferenceMetadata desired(category, usage, region, -1, -1, status);
+    int32_t idx = binarySearch(metadata, desired, &foundCategory, &foundUsage, &foundRegion, status);
     if (U_FAILURE(status)) { return -1; }
     if (idx >= 0) { return idx; }
     if (!foundCategory) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return idx;
+        return -1;
     }
     U_ASSERT(foundCategory);
-    if (!foundUsage) {
-        if (uprv_strcmp(usage, "default") != 0) {
-            usage = "default";
-            idx = binarySearch(metadata, category, usage, region, &foundCategory, &foundUsage,
-                                       &foundRegion, status);
-        }
-        if (!foundUsage) {
+    while (!foundUsage) {
+        int32_t lastDashIdx = desired.usage.lastIndexOf('-');
+        if (lastDashIdx > 0) {
+            desired.usage.truncate(lastDashIdx);
+        } else if (uprv_strcmp(desired.usage.data(), "default") != 0) {
+            desired.usage.truncate(0).append("default", status);
+        } else {
             status = U_MISSING_RESOURCE_ERROR;
-            return idx;
+            return -1;
         }
+        idx = binarySearch(metadata, desired, &foundCategory, &foundUsage, &foundRegion, status);
+        if (U_FAILURE(status)) { return -1; }
     }
     U_ASSERT(foundCategory);
     U_ASSERT(foundUsage);
     if (!foundRegion) {
-        if (uprv_strcmp(region, "001") != 0) {
-            region = "001";
-            idx = binarySearch(metadata, category, usage, region, &foundCategory, &foundUsage,
-                                       &foundRegion, status);
+        if (uprv_strcmp(desired.region.data(), "001") != 0) {
+            desired.region.truncate(0).append("001", status);
+            idx = binarySearch(metadata, desired, &foundCategory, &foundUsage, &foundRegion, status);
         }
         if (!foundRegion) {
             status = U_MISSING_RESOURCE_ERROR;
-            return idx;
+            return -1;
         }
     }
     U_ASSERT(foundCategory);
@@ -357,6 +351,29 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
 }
 
 } // namespace
+
+CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status) {
+    CharString result;
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+    LocalUResourceBundlePointer unitQuantities(
+        ures_getByKey(unitsBundle.getAlias(), "unitQuantities", NULL, &status));
+    int32_t categoryLength;
+    if (U_FAILURE(status)) { return result; }
+    const UChar *uCategory =
+        ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier, &categoryLength, &status);
+    if (U_FAILURE(status)) {
+        // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
+        // case. Once CLDR-13787 is clarified, this should be generalised (or
+        // possibly removed):
+        if (uprv_strcmp(baseUnitIdentifier, "meter-per-cubic-meter") == 0) {
+            status = U_ZERO_ERROR;
+            result.append("consumption-inverse", status);
+            return result;
+        }
+    }
+    result.appendInvariantChars(uCategory, categoryLength, status);
+    return result;
+}
 
 // TODO: this may be unnecessary. Fold into ConversionRates class? Or move to anonymous namespace?
 void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status) {
