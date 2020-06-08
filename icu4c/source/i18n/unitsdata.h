@@ -15,6 +15,22 @@
 U_NAMESPACE_BEGIN
 
 /**
+ * Looks up the unit category of a base unit identifier.
+ *
+ * Only supports base units, other units must be resolved to base units before
+ * passing to this function.
+ *
+ * Categories are found in `unitQuantities` in the `units` resource (see
+ * `units.txt`).
+ *
+ * TODO(hugovdm): if we give unitsdata.cpp access to the functionality of
+ * `extractCompoundBaseUnit` which is currently in unitconverter.cpp, we could
+ * support all units for which there is a category. Does it make sense to move
+ * that function to unitsdata.cpp?
+ */
+CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status);
+
+/**
  * Encapsulates "convertUnits" information from units resources, specifying how
  * to convert from one unit to another.
  *
@@ -92,12 +108,15 @@ namespace {
 /**
  * Metadata about the preferences in UnitPreferences::unitPrefs_.
  *
+ * This class owns all of its data.
+ *
  * UnitPreferenceMetadata lives in the anonymous namespace, because it should
  * only be useful to internal code and unit testing code.
  */
 class U_I18N_API UnitPreferenceMetadata : public UMemory {
   public:
     UnitPreferenceMetadata(){};
+    // Constructor, makes copies of the parameters passed to it.
     UnitPreferenceMetadata(const char *category, const char *usage, const char *region,
                            int32_t prefsOffset, int32_t prefsCount, UErrorCode &status);
 
@@ -125,9 +144,6 @@ class U_I18N_API UnitPreferenceMetadata : public UMemory {
 
 /**
  * Unit Preferences information for various locales and usages.
- *
- * TODO(hugovdm): add a function to look up the category based on the input
- * unit.
  */
 class U_I18N_API UnitPreferences {
   public:
@@ -139,12 +155,11 @@ class U_I18N_API UnitPreferences {
     UnitPreferences(UErrorCode &status);
 
     /**
-     * Returns the set of unit preferences in the particular cateogry that best
+     * Returns the set of unit preferences in the particular category that best
      * matches the specified usage and region.
      *
      * If region can't be found, falls back to global (001). If usage can't be
-     * found, falls back to "default". Copies the preferences structures.
-     * TODO(hugovdm/review): Consider returning pointers (references) instead?
+     * found, falls back to "default".
      *
      * @param category The category within which to look up usage and region.
      * (TODO(hugovdm): improve docs on how to find the category, once the lookup
@@ -156,10 +171,13 @@ class U_I18N_API UnitPreferences {
      * @param region The region whose preferences are desired. If there are no
      * specific preferences for the requested region, the method automatically
      * falls back to region "001" ("world").
-     * @param outPreferences The vector to which preferences will be added.
+     * @param outPreferences A pointer into an array of preferences: essentially
+     * an array slice in combination with preferenceCount.
+     * @param preferenceCount The number of unit preferences that belong to the
+     * result set.
      * @param status Receives status.
      *
-     * TODO: maybe replace `UnitPreference **&outPrefrences` with a slice class?
+     * TODO(hugovdm): maybe replace `UnitPreference **&outPrefrences` with a slice class?
      */
     void getPreferencesFor(const char *category, const char *usage, const char *region,
                            const UnitPreference *const *&outPreferences, int32_t &preferenceCount,
