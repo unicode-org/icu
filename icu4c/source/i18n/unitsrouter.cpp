@@ -38,7 +38,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
 
-        fprintf(stderr, "testtestt   %s,     %d  \n", preference.unit.data(), preference.geq);
+        fprintf(stderr, "testtestt   %s,     %f  \n", preference.unit.data(), preference.geq);
 
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
 
