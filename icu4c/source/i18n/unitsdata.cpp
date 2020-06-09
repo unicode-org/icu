@@ -400,7 +400,7 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
 
 // TODO: make outPreferences const?
 //
-// TODO: consider replacing `UnitPreference **&outPrefrences` with slice class
+// TODO: consider replacing `UnitPreference **&outPreferences` with slice class
 // of some kind.
 void U_I18N_API UnitPreferences::getPreferencesFor(const char *category, const char *usage,
                                                    const char *region,
