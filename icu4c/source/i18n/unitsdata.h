@@ -92,8 +92,6 @@ class U_I18N_API ConversionRates {
     MaybeStackVector<ConversionRateInfo> conversionInfo_;
 };
 
-CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status);
-
 // Encapsulates unitPreferenceData information from units resources, specifying
 // a sequence of output unit preferences.
 struct U_I18N_API UnitPreference : public UMemory {
