@@ -24,41 +24,25 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
         singleUnitsInOrder.emplaceBack(singleUnits[i]);
     }
 
-    *this = ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder),
-                                  ratesInfo, status);
-
-    // TODO(younies): question from Hugo: is this check appropriate? The
-    // U_ASSERT in greaterThanOrEqual suggests this should be an invariant for
-    // ComplexUnitConverter.
-    if (unitConverters_.length() == 0) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-    }
-}
-
-ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
-                                             const MaybeStackVector<MeasureUnit> outputUnits,
-                                             const ConversionRates &ratesInfo, UErrorCode &status) {
-    if (outputUnits.length() == 0) {
+    if (singleUnitsInOrder.length() == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    for (int i = 0, n = outputUnits.length(); i < n; i++) {
-      if (i == 0) { // first element
-        unitConverters_.emplaceBack(inputUnit, *outputUnits[i], ratesInfo,
-                                    status);
-
-      } else {
-        unitConverters_.emplaceBack(*outputUnits[i - 1], *outputUnits[i],
-                                    ratesInfo, status);
-      }
+    for (int i = 0, n = singleUnitsInOrder.length(); i < n; i++) {
+        if (i == 0) { // first element
+            unitConverters_.emplaceBack(inputUnit, *singleUnitsInOrder[i], ratesInfo, status);
+        } else {
+            unitConverters_.emplaceBack(*singleUnitsInOrder[i - 1], *singleUnitsInOrder[i], ratesInfo,
+                                        status);
+        }
 
         if (U_FAILURE(status)) break;
     }
 
     if (U_FAILURE(status)) return;
 
-    units_.appendAll(outputUnits, status);
+    units_.appendAll(singleUnitsInOrder, status);
 }
 
 UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const {
@@ -90,7 +74,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             // Measure wants to own its MeasureUnit. For now, this copies it.
             //  TODO(younies): consider whether ownership transfer would be
             //  reasonable? (If not, just delete this comment?)
-           result.emplaceBack(formattableQuantity, new MeasureUnit(*units_[i]), status);
+            result.emplaceBack(formattableQuantity, new MeasureUnit(*units_[i]), status);
         }
     }
 

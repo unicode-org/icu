@@ -5,6 +5,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdio.h>
 #include <utility>
 
 #include "cmemory.h"
@@ -36,14 +37,14 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
 
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
+
+        fprintf(stderr, "testtestt   %s,     %d  \n", preference.unit.data(), preference.geq);
+
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
 
-        if (U_FAILURE(status)) {
-          return;
-        }
-        
-        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit,
-                                          preference.geq, conversionRates,
+        if (U_FAILURE(status)) { return; }
+
+        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
                                           status);
         if (U_FAILURE(status)) {
             fprintf(
@@ -56,17 +57,18 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
 }
 
 MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) {
-    for (int i = 0, n = converterPreferences_.length() - 1; i < n; i++) {
+    for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
+
         const auto &converterPreference = *converterPreferences_[i];
+
+        if (i == n - 1) { // Last element
+            return converterPreference.converter.convert(quantity, status);
+        }
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
             return converterPreference.converter.convert(quantity, status);
         }
     }
-
-    const auto &converterPreference =
-        *converterPreferences_[converterPreferences_.length() - 1]; // Last Element
-    return converterPreference.converter.convert(quantity, status);
 }
 
 U_NAMESPACE_END

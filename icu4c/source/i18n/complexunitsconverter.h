@@ -32,16 +32,11 @@ class U_I18N_API ComplexUnitsConverter {
      * NOTE:
      *   - inputUnit and outputUnits must be under the same category
      *      - e.g. meter to feet and inches --> all of them are length units.
-     *   - outputUnits must be ordered in a descending order depending on their size.
-     *      - e.g. mile, feet , inches.
-     * @param inputUnit represents the source unit.
-     * @param outputUnits a pointer to an array or the target units.
+     * @param inputUnit represents the source unit. (should be single unit)
+     * @param outputUnits a single unit or multi units. For example (`inch` or `foot+inch`)
      * @param lengthOfOutputUnits represents the length of the output units.
      * @param status
      */
-    ComplexUnitsConverter(const MeasureUnit inputUnit, const MaybeStackVector<MeasureUnit> outputUnits,
-                          const ConversionRates &ratesInfo, UErrorCode &status);
-
     ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
                           const ConversionRates &ratesInfo, UErrorCode &status);
 
