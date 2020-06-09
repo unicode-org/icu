@@ -2040,10 +2040,12 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
-UBool IntlTest::assertEquals(const char* message,
-                             double expected,
-                             double actual,
-                             double delta) {
+// FIXME: rename to assertEqualsNear. It's temporarily "NewNear" just to ensure
+// we catch all callsites (to change last parameter from relative to absolute).
+UBool IntlTest::assertEqualsNewNear(const char* message,
+                                    double expected,
+                                    double actual,
+                                    double delta) {
     if (std::isnan(delta) || std::isinf(delta)) {
         errln((UnicodeString)("FAIL: ") + message + "; nonsensical delta " + delta +
               " - delta may not be NaN or Inf");
@@ -2197,30 +2199,6 @@ UBool IntlTest::assertNotEquals(const char* message,
     return TRUE;
 }
 
-// // TODO: the following link is misleading, since JUnit does absolute numbers and
-// // this code does relative, and this code doesn't support NaN whereas JUnit
-// // does. JUnit's function is also simply overloading "assertEquals".
-// // http://junit.sourceforge.net/javadoc/org/junit/Assert.html#assertEquals(java.lang.String,%20double,%20double,%20double)
-// UBool IntlTest::assertEqualsNear(const char *message, double expected, double actual, double precision) {
-//     double diff = std::abs(expected - actual);
-//     double diffPercent =
-//         expected != 0 ? diff / expected
-//                       : diff; // If the expected is equals zero, we assume that
-//                               // the `diffPercent` is equal to the difference
-//                               // between the actual and the expected
-
-//     if (diffPercent > precision) {
-//         errln((UnicodeString) "FAIL: " + message + "; got " + actual + "; expected " + expected);
-//         return FALSE;
-//     }
-// #ifdef VERBOSE_ASSERTIONS
-//     else {
-//         logln((UnicodeString) "Ok: " + message + "; got " + expected);
-//     }
-// #endif
-//     return TRUE;
-// }
-
 static char ASSERT_BUF[256];
 
 static const char* extractToAssertBuf(const UnicodeString& message) {
@@ -2275,11 +2253,13 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
                              double actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
-UBool IntlTest::assertEquals(const UnicodeString& message,
-                             double expected,
-                             double actual,
-                             double delta) {
-    return assertEquals(extractToAssertBuf(message), expected, actual, delta);
+// FIXME: rename to assertEqualsNear. It's temporarily "NewNear" just to ensure
+// we catch all callsites (to change last parameter from relative to absolute).
+UBool IntlTest::assertEqualsNewNear(const UnicodeString& message,
+                                    double expected,
+                                    double actual,
+                                    double delta) {
+    return assertEqualsNewNear(extractToAssertBuf(message), expected, actual, delta);
 }
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              UErrorCode expected,

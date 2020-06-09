@@ -124,7 +124,7 @@ void UnitsTest::testSiPrefixes() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEquals(UnicodeString("testSiPrefixes: ") + testCase.source + " to " + testCase.target,
+        assertEqualsNewNear(UnicodeString("testSiPrefixes: ") + testCase.source + " to " + testCase.target,
                      testCase.expectedValue, converter.convert(testCase.inputValue),
                      0.0001 * testCase.expectedValue);
     }
@@ -159,9 +159,9 @@ void UnitsTest::testMass() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEquals(UnicodeString("testMass: ") + testCase.source + " to " + testCase.target,
-                     testCase.expectedValue, converter.convert(testCase.inputValue),
-                     0.0001 * testCase.expectedValue);
+        assertEqualsNewNear(UnicodeString("testMass: ") + testCase.source + " to " + testCase.target,
+                            testCase.expectedValue, converter.convert(testCase.inputValue),
+                            0.0001 * testCase.expectedValue);
     }
 }
 
@@ -193,7 +193,7 @@ void UnitsTest::testTemperature() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEquals(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
+        assertEqualsNewNear(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
                      testCase.expectedValue, converter.convert(testCase.inputValue),
                      0.0001 * uprv_fabs(testCase.expectedValue));
     }
@@ -231,7 +231,7 @@ void UnitsTest::testArea() {
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
 
-        assertEquals(UnicodeString("testArea: ") + testCase.source + " to " + testCase.target,
+        assertEqualsNewNear(UnicodeString("testArea: ") + testCase.source + " to " + testCase.target,
                      testCase.expectedValue, converter.convert(testCase.inputValue),
                      0.0001 * testCase.expectedValue);
     }
@@ -344,7 +344,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     double got = converter.convert(1000);
     msg.clear();
     msg.append("Converting 1000 ", status).append(x, status).append(" to ", status).append(y, status);
-    unitsTest->assertEquals(msg.data(), expected, got, 0.0001 * expected);
+    unitsTest->assertEqualsNewNear(msg.data(), expected, got, 0.0001 * expected);
 }
 
 /**

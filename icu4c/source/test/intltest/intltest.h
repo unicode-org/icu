@@ -299,6 +299,9 @@ public:
     UBool assertEquals(const char* message, int32_t expected, int32_t actual);
     UBool assertEquals(const char* message, int64_t expected, int64_t actual);
     UBool assertEquals(const char* message, double expected, double actual);
+    // FIXME: rename to assertEqualsNear. It's temporarily "NewNear" just to
+    // ensure we catch all callsites (to change last parameter from relative to
+    // absolute).
     /**
      * Asserts that two doubles are equal to within a positive delta. Returns
      * false if they are not.
@@ -312,7 +315,7 @@ public:
      * @param delta - the maximum delta for the absolute difference between
      * expected and actual for which both numbers are still considered equal.
      */
-    UBool assertEquals(const char* message, double expected, double actual, double delta);
+    UBool assertEqualsNewNear(const char* message, double expected, double actual, double delta);
     UBool assertEquals(const char* message, UErrorCode expected, UErrorCode actual);
     UBool assertEquals(const char* message, const UnicodeSet& expected, const UnicodeSet& actual);
     UBool assertEquals(const char* message,
@@ -335,6 +338,9 @@ public:
     UBool assertEquals(const UnicodeString& message, int32_t expected, int32_t actual);
     UBool assertEquals(const UnicodeString& message, int64_t expected, int64_t actual);
     UBool assertEquals(const UnicodeString& message, double expected, double actual);
+    // FIXME: rename to assertEqualsNear. It's temporarily "NewNear" just to
+    // ensure we catch all callsites (to change last parameter from relative to
+    // absolute).
     /**
      * Asserts that two doubles are equal to within a positive delta. Returns
      * false if they are not.
@@ -348,7 +354,7 @@ public:
      * @param delta - the maximum delta between expected and actual for which
      * both numbers are still considered equal.
      */
-    UBool assertEquals(const UnicodeString& message, double expected, double actual, double delta);
+    UBool assertEqualsNewNear(const UnicodeString& message, double expected, double actual, double delta);
     UBool assertEquals(const UnicodeString& message, UErrorCode expected, UErrorCode actual);
     UBool assertEquals(const UnicodeString& message, const UnicodeSet& expected, const UnicodeSet& actual);
     UBool assertEquals(const UnicodeString& message,
