@@ -16,6 +16,15 @@
 
 U_NAMESPACE_BEGIN
 
+/**
+ *  Convert from single unit to multiple/complex unit. For example, from `meter` to `foot+inch`.
+ *  
+ *  
+ *  DESIGN:
+ *    This class uses `UnitConverter` in order to perform the single converter (i.e. converters from a
+ *    single unit to another single unit). Therefore, `ComplexUnitsConverter` class contains multiple
+ *    instances of the `UnitConverter` to perform the conversion.
+ */
 class U_I18N_API ComplexUnitsConverter {
   public:
     /**
@@ -38,6 +47,9 @@ class U_I18N_API ComplexUnitsConverter {
 
     // Returns true if the `quantity` in the `inputUnit` is greater than or equal than the `limit` in the
     // biggest `outputUnits`
+    //    For example, if the input unit is `meter` and the target unit is `foot+inch`. Therefore, this
+    //    function will convert the `quantity` from `meter` to `foot`, then, it will compare the value in
+    //    `foot` with the `limit`.
     UBool greaterThanOrEqual(double quantity, double limit) const;
 
     // Returns outputMeasures which is an array with the correspinding values.

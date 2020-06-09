@@ -44,6 +44,10 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
+ *
+ * NOTE:
+ *    the source and the target must be singular such as `meter` to `mile` or `mile-per-second` to
+ *    `kilometer-per-millisecond`. However, `foot+inch` is not permitted.
  */
 class U_I18N_API UnitConverter : public UMemory {
   public:
@@ -57,8 +61,8 @@ class U_I18N_API UnitConverter : public UMemory {
      * @param target represents the target unit.
      * @param status
      */
-    UnitConverter(MeasureUnit source, MeasureUnit target,
-                  const ConversionRates &ratesInfo, UErrorCode &status);
+    UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
+                  UErrorCode &status);
 
     /**
      * Convert a value in the source unit to another value in the target unit.
