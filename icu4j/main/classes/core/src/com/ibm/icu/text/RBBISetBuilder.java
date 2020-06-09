@@ -29,7 +29,7 @@ import com.ibm.icu.util.MutableCodePointTrie;
 //                      by the RBBI rules.
 //                   -  compute a set of non-overlapping character ranges
 //                      with all characters within a range belonging to the same
-//                      set of input uniocde sets.
+//                      set of input unicode sets.
 //                   -  Derive a set of non-overlapping UnicodeSet (like things)
 //                      that will correspond to columns in the state table for
 //                      the RBBI execution engine.  All characters within one
@@ -41,23 +41,27 @@ import com.ibm.icu.util.MutableCodePointTrie;
 //
 class RBBISetBuilder {
     static class RangeDescriptor  {
-           int                fStartChar;      // Start of range, unicode 32 bit value.
-           int                fEndChar;        // End of range, unicode 32 bit value.
-           int                fNum;            // runtime-mapped input value for this range.
-           List<RBBINode>     fIncludesSets;    // vector of the the original
-                                                 //   Unicode sets that include this range.
-                                                //    (Contains ptrs to uset nodes)
-            RangeDescriptor   fNext;           // Next RangeDescriptor in the linked list.
+           int                fStartChar = 0;         // Start of range, unicode 32 bit value.
+           int                fEndChar = 0;           // End of range, unicode 32 bit value.
+           int                fNum = 0;               // runtime-mapped input value for this range.
+           boolean            fIncludesDict = false;  // True if the range includes $dictionary.
+           boolean            fFirstInGroup = false;  // True if first range in a group with the same fNum.
+           List<RBBINode>     fIncludesSets;          // vector of the the original
+                                                      //   Unicode sets that include this range.
+                                                      //    (Contains ptrs to uset nodes)
+            RangeDescriptor   fNext;                  // Next RangeDescriptor in the linked list.
 
             RangeDescriptor() {
-                fIncludesSets = new ArrayList<RBBINode>();
+                fIncludesSets = new ArrayList<>();
             }
 
             RangeDescriptor(RangeDescriptor other) {
                 fStartChar = other.fStartChar;
                 fEndChar   = other.fEndChar;
                 fNum       = other.fNum;
-                fIncludesSets = new ArrayList<RBBINode>(other.fIncludesSets);
+                fIncludesDict = other.fIncludesDict;
+                fFirstInGroup = other.fFirstInGroup;
+                fIncludesSets = new ArrayList<>(other.fIncludesSets);
             }
 
             //-------------------------------------------------------------------------------------
@@ -82,28 +86,18 @@ class RBBISetBuilder {
             }
 
 
-            //-------------------------------------------------------------------------------------
-            //
-            //          RangeDescriptor::setDictionaryFlag
-            //
-            //          Character Category Numbers that include characters from
-            //          the original Unicode Set named "dictionary" have bit 14
-            //          set to 1.  The RBBI runtime engine uses this to trigger
-            //          use of the word dictionary.
-            //
-            //          This function looks through the Unicode Sets that it
-            //          (the range) includes, and sets the bit in fNum when
-            //          "dictionary" is among them.
-            //
+            /**
+             * Test whether this range includes characters from the original Unicode Set named "dictionary".
+             *
+             * This function looks through the Unicode Sets that
+             * the range includes, checking for one named "dictionary"
+             */
             //          TODO:  a faster way would be to find the set node for
             //          "dictionary" just once, rather than looking it
             //          up by name every time.
             //
-            // -------------------------------------------------------------------------------------
-            void setDictionaryFlag() {
-                int i;
-
-                for (i=0; i<this.fIncludesSets.size(); i++) {
+            boolean isDictionaryRange() {
+                for (int i=0; i<this.fIncludesSets.size(); i++) {
                     RBBINode        usetNode    = fIncludesSets.get(i);
                     String          setName = "";
                     RBBINode        setRef = usetNode.fParent;
@@ -114,11 +108,10 @@ class RBBISetBuilder {
                         }
                     }
                     if (setName.equals("dictionary")) {
-                        this.fNum |= DICT_BIT;
-                        break;
+                        return true;
                     }
                 }
-
+                return false;
         }
     }
 
@@ -130,18 +123,17 @@ class RBBISetBuilder {
                                            //  the Unicode Sets.
     CodePointTrie         fFrozenTrie;
 
-    // Groups correspond to character categories -
-    //       groups of ranges that are in the same original UnicodeSets.
-    //       fGroupCount is the index of the last used group.
-    //       fGroupCount+1 is also the number of columns in the RBBI state table being compiled.
-    //       State table column 0 is not used.  Column 1 is for end-of-input.
-    //       column 2 is for group 0.  Funny counting.
+    /**
+     * Number of range groups, which are groups of ranges that are in the same original UnicodeSets.
+     */
     int                fGroupCount;
+    /**
+     * The number of the first dictionary char category.
+     * If there are no Dictionary categories, set to the last category + 1.
+     */
+    int                fDictCategoriesStart;
 
     boolean             fSawBOF;
-
-    static final int    DICT_BIT = 0x4000;
-    static final int    DICT_BIT_FOR_8BITS_TRIE  = 0x0080;
 
 
     //------------------------------------------------------------------------
@@ -239,24 +231,48 @@ class RBBISetBuilder {
         //
         //    Numbering: # 0  (state table column 0) is unused.
         //               # 1  is reserved - table column 1 is for end-of-input
-        //               # 2  is reserved - table column 2 is for beginning-in-input
+        //               # 2  is reserved - table column 2 is for beginning-of-input
         //               # 3  is the first range list.
         //
         RangeDescriptor rlSearchRange;
+        int dictGroupCount = 0;
+
         for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
             for (rlSearchRange=fRangeList; rlSearchRange != rlRange; rlSearchRange=rlSearchRange.fNext) {
                 if (rlRange.fIncludesSets.equals(rlSearchRange.fIncludesSets)) {
                     rlRange.fNum = rlSearchRange.fNum;
+                    rlRange.fIncludesDict = rlSearchRange.fIncludesDict;
                     break;
                 }
             }
             if (rlRange.fNum == 0) {
-                fGroupCount ++;
-                rlRange.fNum = fGroupCount+2;
-                rlRange.setDictionaryFlag();
-                addValToSets(rlRange.fIncludesSets, fGroupCount+2);
+                rlRange.fFirstInGroup = true;
+                if (rlRange.isDictionaryRange()) {
+                    rlRange.fNum = ++dictGroupCount;
+                    rlRange.fIncludesDict = true;
+                } else {
+                    fGroupCount++;
+                    rlRange.fNum = fGroupCount + 2;
+                    addValToSets(rlRange.fIncludesSets, fGroupCount + 2);
+                }
             }
         }
+
+        // Move the character category numbers for any dictionary ranges up, so that they
+        // immediately follow the non-dictionary ranges.
+
+        fDictCategoriesStart = fGroupCount + 3;
+        for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
+            if (rlRange.fIncludesDict) {
+                rlRange.fNum += fDictCategoriesStart - 1;
+                if (rlRange.fFirstInGroup) {
+                    addValToSets(rlRange.fIncludesSets, rlRange.fNum);
+                }
+            }
+        }
+        fGroupCount += dictGroupCount;
+
+
 
         // Handle input sets that contain the special string {eof}.
         //   Column 1 of the state table is reserved for EOF on input.
@@ -288,31 +304,21 @@ class RBBISetBuilder {
     }
 
 
-    private static final int MAX_CHAR_CATEGORIES_FOR_8BITS_TRIE = 127;
+    private static final int MAX_CHAR_CATEGORIES_FOR_8BITS_TRIE = 255;
 
     /**
      * Build the Trie table for mapping UChar32 values to the corresponding
      * range group number.
      */
     void buildTrie() {
-        boolean use8Bits = getNumCharCategories() <= MAX_CHAR_CATEGORIES_FOR_8BITS_TRIE;
-        RangeDescriptor rlRange;
-
         fTrie = new MutableCodePointTrie(0,       //   Initial value for all code points.
                                          0);      //   Error value for out-of-range input.
 
-        for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
-            int value = rlRange.fNum;
-            if (use8Bits && ((value & DICT_BIT) != 0)) {
-                assert((value & DICT_BIT_FOR_8BITS_TRIE) == 0);
-                // switch to the bit from DICT_BIT to DICT_BIT_FOR_8BITS_TRIE
-                value = DICT_BIT_FOR_8BITS_TRIE | (value & ~DICT_BIT);
-            }
-            fTrie.setRange(
-                    rlRange.fStartChar,     // Range start
-                    rlRange.fEndChar,       // Range end (inclusive)
-                    value                  // value for range
-                    );
+        for (RangeDescriptor rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
+            fTrie.setRange(rlRange.fStartChar,     // Range start
+                           rlRange.fEndChar,       // Range end (inclusive)
+                           rlRange.fNum            // value for range
+                          );
         }
     }
 
@@ -324,16 +330,20 @@ class RBBISetBuilder {
     void mergeCategories(IntPair categories) {
         assert(categories.first >= 1);
         assert(categories.second > categories.first);
+        assert((categories.first <  fDictCategoriesStart && categories.second <  fDictCategoriesStart) ||
+                (categories.first >= fDictCategoriesStart && categories.second >= fDictCategoriesStart));
         for (RangeDescriptor rd = fRangeList; rd != null; rd = rd.fNext) {
-            int rangeNum = rd.fNum & ~DICT_BIT;
-            int rangeDict = rd.fNum & DICT_BIT;
+            int rangeNum = rd.fNum;
             if (rangeNum == categories.second) {
-                rd.fNum = categories.first | rangeDict;
+                rd.fNum = categories.first;
             } else if (rangeNum > categories.second) {
                 rd.fNum--;
             }
         }
         --fGroupCount;
+        if (categories.second <= fDictCategoriesStart) {
+            --fDictCategoriesStart;
+        }
     }
 
     //-----------------------------------------------------------------------------------
@@ -427,6 +437,16 @@ class RBBISetBuilder {
 
     //------------------------------------------------------------------------
     //
+    //   getDictCategoriesStart
+    //
+    //------------------------------------------------------------------------
+    int  getDictCategoriesStart() {
+        return fDictCategoriesStart;
+    }
+
+
+    //------------------------------------------------------------------------
+    //
     //           sawBOF
     //
     //------------------------------------------------------------------------
@@ -454,7 +474,6 @@ class RBBISetBuilder {
     }
 
 
-
     //------------------------------------------------------------------------
     //
     //           printRanges        A debugging function.
@@ -468,7 +487,7 @@ class RBBISetBuilder {
 
         System.out.print("\n\n Nonoverlapping Ranges ...\n");
         for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
-            System.out.print(" " + rlRange.fNum + "   " + rlRange.fStartChar + "-" + rlRange.fEndChar);
+            System.out.printf("%04x-%04x ", rlRange.fStartChar, rlRange.fEndChar);
 
             for (i=0; i<rlRange.fIncludesSets.size(); i++) {
                 RBBINode       usetNode    = rlRange.fIncludesSets.get(i);
@@ -496,20 +515,16 @@ class RBBISetBuilder {
     //------------------------------------------------------------------------
     ///CLOVER:OFF
     void printRangeGroups() {
-        RangeDescriptor       rlRange;
-        RangeDescriptor       tRange;
         int                    i;
-        int                    lastPrintedGroupNum = 0;
 
         System.out.print("\nRanges grouped by Unicode Set Membership...\n");
-        for (rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
-            int groupNum = rlRange.fNum & 0xbfff;
-            if (groupNum > lastPrintedGroupNum) {
-                lastPrintedGroupNum = groupNum;
+        for (RangeDescriptor rlRange = fRangeList; rlRange!=null; rlRange=rlRange.fNext) {
+            if (rlRange.fFirstInGroup) {
+                int groupNum = rlRange.fNum;
                 if (groupNum<10) {System.out.print(" ");}
                 System.out.print(groupNum + " ");
 
-                if ((rlRange.fNum & DICT_BIT) != 0) { System.out.print(" <DICT> ");}
+                if (groupNum >= fDictCategoriesStart) { System.out.print(" <DICT> ");}
 
                 for (i=0; i<rlRange.fIncludesSets.size(); i++) {
                     RBBINode       usetNode    = rlRange.fIncludesSets.get(i);
@@ -525,7 +540,7 @@ class RBBISetBuilder {
                 }
 
                 i = 0;
-                for (tRange = rlRange; tRange != null; tRange = tRange.fNext) {
+                for (RangeDescriptor tRange = rlRange; tRange != null; tRange = tRange.fNext) {
                     if (tRange.fNum == rlRange.fNum) {
                         if (i++ % 5 == 0) {
                             System.out.print("\n    ");

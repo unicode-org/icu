@@ -763,15 +763,15 @@ int32_t RuleBasedBreakIterator::handleNext() {
     bool use8BitsTrie = ucptrie_getValueWidth(fData->fTrie) == UCPTRIE_VALUE_BITS_8;
     if (statetable->fFlags & RBBI_8BITS_ROWS) {
         if (use8BitsTrie) {
-            return handleNext<RBBIStateTableRow8, TrieFunc8, kDictBitFor8BitsTrie>();
+            return handleNext<RBBIStateTableRow8, TrieFunc8>();
         } else {
-            return handleNext<RBBIStateTableRow8, TrieFunc16, kDictBit>();
+            return handleNext<RBBIStateTableRow8, TrieFunc16>();
         }
     } else {
         if (use8BitsTrie) {
-            return handleNext<RBBIStateTableRow16, TrieFunc8, kDictBitFor8BitsTrie>();
+            return handleNext<RBBIStateTableRow16, TrieFunc8>();
         } else {
-            return handleNext<RBBIStateTableRow16, TrieFunc16, kDictBit>();
+            return handleNext<RBBIStateTableRow16, TrieFunc16>();
         }
     }
 }
@@ -781,15 +781,15 @@ int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
     bool use8BitsTrie = ucptrie_getValueWidth(fData->fTrie) == UCPTRIE_VALUE_BITS_8;
     if (statetable->fFlags & RBBI_8BITS_ROWS) {
         if (use8BitsTrie) {
-            return handleSafePrevious<RBBIStateTableRow8, TrieFunc8, kDictBitFor8BitsTrie>(fromPosition);
+            return handleSafePrevious<RBBIStateTableRow8, TrieFunc8>(fromPosition);
         } else {
-            return handleSafePrevious<RBBIStateTableRow8, TrieFunc16, kDictBit>(fromPosition);
+            return handleSafePrevious<RBBIStateTableRow8, TrieFunc16>(fromPosition);
         }
     } else {
         if (use8BitsTrie) {
-            return handleSafePrevious<RBBIStateTableRow16, TrieFunc8, kDictBitFor8BitsTrie>(fromPosition);
+            return handleSafePrevious<RBBIStateTableRow16, TrieFunc8>(fromPosition);
         } else {
-            return handleSafePrevious<RBBIStateTableRow16, TrieFunc16, kDictBit>(fromPosition);
+            return handleSafePrevious<RBBIStateTableRow16, TrieFunc16>(fromPosition);
         }
     }
 }
@@ -801,7 +801,7 @@ int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
 //     Run the state machine to find a boundary
 //
 //-----------------------------------------------------------------------------------
-template <typename RowType, RuleBasedBreakIterator::PTrieFunc trieFunc, uint16_t dictMask>
+template <typename RowType, RuleBasedBreakIterator::PTrieFunc trieFunc>
 int32_t RuleBasedBreakIterator::handleNext() {
     int32_t             state;
     uint16_t            category        = 0;
@@ -815,6 +815,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
     const RBBIStateTable *statetable       = fData->fForwardTable;
     const char         *tableData          = statetable->fTableData;
     uint32_t            tableRowLen        = statetable->fRowLen;
+    uint32_t            dictStart          = statetable->fDictCategoriesStart;
     #ifdef RBBI_DEBUG
         if (gTrace) {
             RBBIDebugPuts("Handle Next   pos   char  state category");
@@ -876,17 +877,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
             // look up the current character's character category, which tells us
             // which column in the state table to look at.
             category = trieFunc(fData->fTrie, c);
-
-            // Check the dictionary bit in the character's category.
-            //    Counter is only used by dictionary based iteration.
-            //    Chars that need to be handled by a dictionary have a flag bit set
-            //    in their category values.
-            //
-            if ((category & dictMask) != 0)  {
-                fDictionaryCharCount++;
-                //  And off the dictionary flag bit.
-                category &= ~dictMask;
-            }
+            fDictionaryCharCount += (category >= dictStart);
         }
 
        #ifdef RBBI_DEBUG
@@ -993,7 +984,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
 //      because the safe table does not require as many options.
 //
 //-----------------------------------------------------------------------------------
-template <typename RowType, RuleBasedBreakIterator::PTrieFunc trieFunc, uint16_t dictMask>
+template <typename RowType, RuleBasedBreakIterator::PTrieFunc trieFunc>
 int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
 
     int32_t             state;
@@ -1030,7 +1021,6 @@ int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
         //
         //  Off the dictionary flag bit. For reverse iteration it is not used.
         category = trieFunc(fData->fTrie, c);
-        category &= ~dictMask;
 
         #ifdef RBBI_DEBUG
             if (gTrace) {

@@ -408,7 +408,7 @@ public class RBBITest extends TestFmwk {
             }
         }
 
-        List<Thread> threads = new ArrayList<Thread>();
+        List<Thread> threads = new ArrayList<>();
         for (int n = 0; n<4; ++n) {
             threads.add(new Thread(new WorkerThread()));
         }
@@ -513,7 +513,7 @@ public class RBBITest extends TestFmwk {
         }
         private static final BreakIterator BREAK_ITERATOR_CACHE = BreakIterator.getWordInstance(ULocale.ROOT);
         public static List<Integer> getBoundary(String toParse) {
-            List<Integer> retVal = new ArrayList<Integer>();
+            List<Integer> retVal = new ArrayList<>();
             BreakIterator bi = (BreakIterator) BREAK_ITERATOR_CACHE.clone();
             bi.setText(toParse);
             for (int boundary=bi.first(); boundary != BreakIterator.DONE; boundary = bi.next()) {
@@ -579,19 +579,20 @@ public class RBBITest extends TestFmwk {
         int numCharClasses = dw.fHeader.fCatCount;
 
         // Check for duplicate columns (character categories)
-        List<String> columns = new ArrayList<String>();
+        List<String> columns = new ArrayList<>();
         for (int column=0; column<numCharClasses; column++) {
             StringBuilder s = new StringBuilder();
             for (int r = 1; r < fwtbl.fNumStates; r++) {
                 int row = dw.getRowIndex(r);
                 char tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
-                s.append((char)tableVal);
+                s.append(tableVal);
             }
             columns.add(s.toString());
         }
         // Ignore column (char class) 0 while checking; it's special, and may have duplicates.
         for (int c1=1; c1<numCharClasses; c1++) {
-            for (int c2 = c1+1; c2 < numCharClasses; c2++) {
+            int limit = c1 < fwtbl.fDictCategoriesStart ? fwtbl.fDictCategoriesStart : numCharClasses;
+            for (int c2 = c1+1; c2 < limit; c2++) {
                 assertFalse(String.format("Duplicate columns (%d, %d)", c1, c2), columns.get(c1).equals(columns.get(c2)));
                 // if (columns.get(c1).equals(columns.get(c2))) {
                 //    System.out.printf("Duplicate columns (%d, %d)\n", c1, c2);
@@ -600,7 +601,7 @@ public class RBBITest extends TestFmwk {
         }
 
         // Check for duplicate states.
-        List<String> rows = new ArrayList<String>();
+        List<String> rows = new ArrayList<>();
         for (int r=0; r<fwtbl.fNumStates; r++) {
             StringBuilder s = new StringBuilder();
             int row = dw.getRowIndex(r);
@@ -643,7 +644,7 @@ public class RBBITest extends TestFmwk {
     public void TestTableRebuild() {
         // Test to verify that rebuilding the state tables from rule source for the standard
         // break iterator types yields the same tables as are imported from ICU4C as part of the default data.
-        List<RuleBasedBreakIterator> breakIterators = new ArrayList<RuleBasedBreakIterator>();
+        List<RuleBasedBreakIterator> breakIterators = new ArrayList<>();
         breakIterators.add((RuleBasedBreakIterator)BreakIterator.getCharacterInstance(Locale.ENGLISH));
         breakIterators.add((RuleBasedBreakIterator)BreakIterator.getWordInstance(Locale.ENGLISH));
         breakIterators.add((RuleBasedBreakIterator)BreakIterator.getSentenceInstance(Locale.ENGLISH));
@@ -723,17 +724,17 @@ public class RBBITest extends TestFmwk {
 
     @Test
     public void Test8BitsTrieWith8BitStateTable() {
-        testTrieStateTable(123,  true /* expectUCPTrieValueWidthIn8Bits */,  true /* expectStateRowIn8Bits */);
+        testTrieStateTable(251,  true /* expectUCPTrieValueWidthIn8Bits */,  true /* expectStateRowIn8Bits */);
     }
 
     @Test
     public void Test16BitsTrieWith8BitStateTable() {
-        testTrieStateTable(124, false /* expectUCPTrieValueWidthIn8Bits */,  true /* expectStateRowIn8Bits */);
+        testTrieStateTable(252, false /* expectUCPTrieValueWidthIn8Bits */,  true /* expectStateRowIn8Bits */);
     }
 
     @Test
     public void Test16BitsTrieWith16BitStateTable() {
-        testTrieStateTable(255, false /* expectUCPTrieValueWidthIn8Bits */, false /* expectStateRowIn8Bits */);
+        testTrieStateTable(253, false /* expectUCPTrieValueWidthIn8Bits */, false /* expectStateRowIn8Bits */);
     }
 
     @Test

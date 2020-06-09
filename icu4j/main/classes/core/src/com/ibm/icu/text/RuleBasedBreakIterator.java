@@ -843,9 +843,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
         int row             = fRData.getRowIndex(state);
         short category      = 3;
         int flagsState      = fRData.fFTable.fFlags;
+        int dictStart       = fRData.fFTable.fDictCategoriesStart;
         int mode            = RBBI_RUN;
-        int dictMask = fRData.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8 ?
-            RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE : RBBIDataWrapper.DICT_BIT;
         if ((flagsState & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
             mode     = RBBI_START;
@@ -882,15 +881,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 //
                 category = (short) trie.get(c);
 
-                // Check the dictionary bit in the character's category.
-                //    Counter is only used by dictionary based iterators (subclasses).
-                //    Chars that need to be handled by a dictionary have a flag bit set
-                //    in their category values.
-                //
-                if ((category & dictMask) != 0)  {
+                // Check for categories that require word dictionary handling.
+                if (category >= dictStart) {
                     fDictionaryCharCount++;
-                    //  And off the dictionary flag bit.
-                    category &= ~dictMask;
                 }
 
                 if (TRACE) {
@@ -1004,9 +997,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
         CharacterIterator text = fText;
         CodePointTrie trie = fRData.fTrie;
         char[] stateTable  = fRData.fRTable.fTable;
-        int flagsState      = fRData.fRTable.fFlags;
-        int dictMask = fRData.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8 ?
-            RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE : RBBIDataWrapper.DICT_BIT;
 
         CISetIndex32(text, fromPosition);
         if (TRACE) {
@@ -1032,7 +1022,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
             //
             //  And off the dictionary flag bit. For reverse iteration it is not used.
             category = (short) trie.get(c);
-            category &= ~dictMask;
             if (TRACE) {
                 System.out.print("            " +  RBBIDataWrapper.intToString(text.getIndex(), 5));
                 System.out.print(RBBIDataWrapper.intToHexString(c, 10));
@@ -1212,8 +1201,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
             int         category;
             int         current;
             int         foundBreakCount = 0;
-            int dictMask = fRData.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8 ?
-                RBBIDataWrapper.DICT_BIT_FOR_8BITS_TRIE : RBBIDataWrapper.DICT_BIT;
 
             // Loop through the text, looking for ranges of dictionary characters.
             // For each span, find the appropriate break engine, and ask it to find
@@ -1222,9 +1209,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
             fText.setIndex(rangeStart);
             int     c = CharacterIteration.current32(fText);
             category = (short)fRData.fTrie.get(c);
+            int dictStart = fRData.fFTable.fDictCategoriesStart;
 
             while(true) {
-                while((current = fText.getIndex()) < rangeEnd && (category & dictMask) == 0) {
+                while((current = fText.getIndex()) < rangeEnd && (category < dictStart)) {
                     c = CharacterIteration.next32(fText);    // pre-increment
                     category = (short)fRData.fTrie.get(c);
                 }

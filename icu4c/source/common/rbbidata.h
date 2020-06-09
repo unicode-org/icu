@@ -101,18 +101,18 @@ struct RBBIStateTableRowT {
                                    //  Value 0: not an accepting state.
                                    //        1: (ACCEPTING_UNCONDITIONAL) Unconditional Accepting state.
                                    //       >1: Look-ahead match has completed.
-                                   //           Actual boundary position happened earlier
+                                   //           Actual boundary position happened earlier.
                                    //           Value here == fLookAhead in earlier
-                                   //              state, at actual boundary pos.
+                                   //           state, at actual boundary pos.
     T               fLookAhead;    //  Non-zero if this row is for a state that
                                    //    corresponds to a '/' in the rule source.
                                    //    Value is the same as the fAccepting
-                                   //      value for the rule (which will appear
-                                   //      in a different state.
+                                   //    value for the rule (which will appear
+                                   //    in a different state.
     T               fTagsIdx;      //  Non-zero if this row covers a {tagged} position
-                                   //     from a rule.  Value is the index in the
-                                   //     StatusTable of the set of matching
-                                   //     tags (rule status values)
+                                   //    from a rule.  Value is the index in the
+                                   //    StatusTable of the set of matching
+                                   //    tags (rule status values)
     T               fNextState[1]; //  Next State, indexed by char category.
                                    //    Variable-length array declared with length 1
                                    //    to disable bounds checkers.
@@ -132,14 +132,17 @@ union RBBIStateTableRow {
 };
 
 struct RBBIStateTable {
-    uint32_t         fNumStates;    /*  Number of states.                                 */
-    uint32_t         fRowLen;       /*  Length of a state table row, in bytes.            */
-    uint32_t         fFlags;        /*  Option Flags for this state table                 */
-    char             fTableData[1]; /*  First RBBIStateTableRow begins here.              */
-                                    /*    Variable-length array declared with length 1    */
-                                    /*    to disable bounds checkers.                     */
-                                    /*    (making it char[] simplifies ugly address       */
-                                    /*     arithmetic for indexing variable length rows.) */
+    uint32_t         fNumStates;            // Number of states.
+    uint32_t         fRowLen;               // Length of a state table row, in bytes.
+    uint32_t         fDictCategoriesStart;  // Char category number of the first dictionary
+                                            //   char class, or the the largest category number + 1
+                                            //   if there are no dictionary categories.
+    uint32_t         fFlags;                // Option Flags for this state table.
+    char             fTableData[1];         // First RBBIStateTableRow begins here.
+                                            //   Variable-length array declared with length 1
+                                            //   to disable bounds checkers.
+                                            //   (making it char[] simplifies ugly address
+                                            //   arithmetic for indexing variable length rows.)
 };
 
 constexpr uint32_t RBBI_LOOKAHEAD_HARD_BREAK = 1;

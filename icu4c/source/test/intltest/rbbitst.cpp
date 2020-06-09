@@ -4657,7 +4657,8 @@ void RBBITest::TestTableRedundancies() {
     }
     // Ignore column (char class) 0 while checking; it's special, and may have duplicates.
     for (int c1=1; c1<numCharClasses; c1++) {
-        for (int c2 = c1+1; c2 < numCharClasses; c2++) {
+        int limit = c1 < (int)fwtbl->fDictCategoriesStart ? fwtbl->fDictCategoriesStart : numCharClasses;
+        for (int c2 = c1+1; c2 < limit; c2++) {
             if (columns.at(c1) == columns.at(c2)) {
                 errln("%s:%d Duplicate columns (%d, %d)\n", __FILE__, __LINE__, c1, c2);
                 goto out;
@@ -4952,15 +4953,15 @@ void RBBITest::testTrieStateTable(int32_t numChar, bool expectedTrieWidthIn8Bits
 }
 
 void RBBITest::Test8BitsTrieWith8BitStateTable() {
-    testTrieStateTable(123, true /* expectedTrieWidthIn8Bits */, true /* expectedStateRowIn8Bits */);
+    testTrieStateTable(251, true /* expectedTrieWidthIn8Bits */, true /* expectedStateRowIn8Bits */);
 }
 
 void RBBITest::Test16BitsTrieWith8BitStateTable() {
-    testTrieStateTable(124, false /* expectedTrieWidthIn8Bits */, true /* expectedStateRowIn8Bits */);
+    testTrieStateTable(252, false /* expectedTrieWidthIn8Bits */, true /* expectedStateRowIn8Bits */);
 }
 
 void RBBITest::Test16BitsTrieWith16BitStateTable() {
-    testTrieStateTable(255, false /* expectedTrieWidthIn8Bits */, false /* expectedStateRowIn8Bits */);
+    testTrieStateTable(253, false /* expectedTrieWidthIn8Bits */, false /* expectedStateRowIn8Bits */);
 }
 
 void RBBITest::Test8BitsTrieWith16BitStateTable() {

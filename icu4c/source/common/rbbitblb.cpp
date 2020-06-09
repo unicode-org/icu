@@ -1155,7 +1155,13 @@ bool RBBITableBuilder::findDuplCharClassFrom(IntPair *categories) {
     int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
 
     for (; categories->first < numCols-1; categories->first++) {
-        for (categories->second=categories->first+1; categories->second < numCols; categories->second++) {
+        // Note: dictionary & non-dictionary columns cannot be merged.
+        //       The limitSecond value prevents considering mixed pairs.
+        //       Dictionary categories are >= DictCategoriesStart.
+        //       Non dict categories are   <  DictCategoriesStart.
+        int limitSecond = categories->first < fRB->fSetBuilder->getDictCategoriesStart() ?
+            fRB->fSetBuilder->getDictCategoriesStart() : numCols;
+        for (categories->second=categories->first+1; categories->second < limitSecond; categories->second++) {
             // Initialized to different values to prevent returning true if numStates = 0 (implies no duplicates).
             uint16_t table_base = 0;
             uint16_t table_dupl = 1;
@@ -1379,6 +1385,7 @@ void RBBITableBuilder::exportTable(void *where) {
     }
 
     table->fNumStates = fDStates->size();
+    table->fDictCategoriesStart = fRB->fSetBuilder->getDictCategoriesStart();
     table->fFlags     = 0;
     if (use8BitsForTable()) {
         table->fRowLen    = offsetof(RBBIStateTableRow8, fNextState) + sizeof(uint8_t) * catCount;
@@ -1652,12 +1659,12 @@ void RBBITableBuilder::printStates() {
     RBBIDebugPrintf("state |           i n p u t     s y m b o l s \n");
     RBBIDebugPrintf("      | Acc  LA    Tag");
     for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
-        RBBIDebugPrintf(" %2d", c);
+        RBBIDebugPrintf(" %3d", c);
     }
     RBBIDebugPrintf("\n");
     RBBIDebugPrintf("      |---------------");
     for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
-        RBBIDebugPrintf("---");
+        RBBIDebugPrintf("----");
     }
     RBBIDebugPrintf("\n");
 
@@ -1666,7 +1673,7 @@ void RBBITableBuilder::printStates() {
         RBBIDebugPrintf("  %3d | " , n);
         RBBIDebugPrintf("%3d %3d %5d ", sd->fAccepting, sd->fLookAhead, sd->fTagsIdx);
         for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
-            RBBIDebugPrintf(" %2d", sd->fDtran->elementAti(c));
+            RBBIDebugPrintf(" %3d", sd->fDtran->elementAti(c));
         }
         RBBIDebugPrintf("\n");
     }

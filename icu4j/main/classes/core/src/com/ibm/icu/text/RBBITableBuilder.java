@@ -905,7 +905,13 @@ class RBBITableBuilder {
            int table_base = 0;
            int table_dupl = 0;
            for (; categories.first < numCols-1; ++categories.first) {
-               for (categories.second=categories.first+1; categories.second < numCols; ++categories.second) {
+               // Note: dictionary & non-dictionary columns cannot be merged.
+               //       The limitSecond value prevents considering mixed pairs.
+               //       Dictionary categories are >= DictCategoriesStart.
+               //       Non dict categories are   <  DictCategoriesStart.
+               int limitSecond = categories.first < fRB.fSetBuilder.getDictCategoriesStart() ?
+                   fRB.fSetBuilder.getDictCategoriesStart() : numCols;
+               for (categories.second=categories.first+1; categories.second < limitSecond; ++categories.second) {
                    for (int state=0; state<numStates; state++) {
                        RBBIStateDescriptor sd = fDStates.get(state);
                        table_base = sd.fDtran[categories.first];
@@ -1103,7 +1109,7 @@ class RBBITableBuilder {
            if (fRB.fTreeRoots[fRootIx] == null) {
                return 0;
            }
-           int size    = 12;    // The header of 4 ints, with no rows to the table.
+           int size    = RBBIDataWrapper.RBBIStateTable.fHeaderSize;    // The header, with no rows to the table.
            int numRows = fDStates.size();
            int numCols = fRB.fSetBuilder.getNumCharCategories();
            boolean use8Bits = numRows <= MAX_STATE_FOR_8BITS_TABLE;
@@ -1132,17 +1138,18 @@ class RBBITableBuilder {
            Assert.assrt(fRB.fSetBuilder.getNumCharCategories() < 0x7fff &&
                fDStates.size() < 0x7fff);
            table.fNumStates = fDStates.size();
+           table.fDictCategoriesStart = fRB.fSetBuilder.getDictCategoriesStart();
            boolean use8Bits = table.fNumStates <= MAX_STATE_FOR_8BITS_TABLE;
 
            // Size of table size in shorts.
            int rowLen = RBBIDataWrapper.NEXTSTATES + fRB.fSetBuilder.getNumCharCategories();   // Row Length in shorts.
            int tableSize;
            if (use8Bits) {
-               tableSize = (getTableSize() - 12);       // fTable length in bytes.
+               tableSize = (getTableSize() - RBBIDataWrapper.RBBIStateTable.fHeaderSize);       // fTable length in bytes.
                table.fTable = new char[tableSize];
                table.fRowLen = rowLen;                          // Row length in bytes.
            } else {
-               tableSize = (getTableSize() - 12) / 2;   // fTable length in shorts.
+               tableSize = (getTableSize() - RBBIDataWrapper.RBBIStateTable.fHeaderSize) / 2;   // fTable length in shorts.
                table.fTable = new char[tableSize];
                table.fRowLen = rowLen * 2;                      // Row length in bytes.
            }
@@ -1275,7 +1282,7 @@ class RBBITableBuilder {
            if (fSafeTable == null) {
                return 0;
            }
-           int size    = 12;    // The header of 4 ints, with no rows to the table.
+           int size    = RBBIDataWrapper.RBBIStateTable.fHeaderSize;    // The header, with no rows to the table.
            int numRows = fSafeTable.size();
            int numCols = fSafeTable.get(0).length;
            boolean use8Bits = numRows <= MAX_STATE_FOR_8BITS_TABLE;
@@ -1303,7 +1310,7 @@ class RBBITableBuilder {
            int rowLen = RBBIDataWrapper.NEXTSTATES + numCharCategories;
            // TODO: tableSize is basically numStates * numCharCategories,
            //       except for alignment padding. Clean up here, and in main exportTable().
-           int tableSize = (getSafeTableSize() - 12);           // fTable length in bytes.
+           int tableSize = (getSafeTableSize() - RBBIDataWrapper.RBBIStateTable.fHeaderSize);     // fTable length in bytes.
            if (use8Bits) {
                table.fFlags  |= RBBIDataWrapper.RBBI_8BITS_ROWS;
                table.fTable = new char[tableSize];
@@ -1357,12 +1364,12 @@ class RBBITableBuilder {
            System.out.print("state |           i n p u t     s y m b o l s \n");
            System.out.print("      | Acc  LA    Tag");
            for (c=0; c<fRB.fSetBuilder.getNumCharCategories(); c++) {
-               RBBINode.printInt(c, 3);
+               RBBINode.printInt(c, 4);
            }
            System.out.print("\n");
            System.out.print("      |---------------");
            for (c=0; c<fRB.fSetBuilder.getNumCharCategories(); c++) {
-               System.out.print("---");
+               System.out.print("----");
            }
            System.out.print("\n");
 
@@ -1376,7 +1383,7 @@ class RBBITableBuilder {
                RBBINode.printInt(sd.fTagsIdx, 6);
                System.out.print(" ");
                for (c=0; c<fRB.fSetBuilder.getNumCharCategories(); c++) {
-                   RBBINode.printInt(sd.fDtran[c], 3);
+                   RBBINode.printInt(sd.fDtran[c], 4);
                }
                System.out.print("\n");
            }
