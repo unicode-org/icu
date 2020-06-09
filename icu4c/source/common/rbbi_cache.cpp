@@ -119,8 +119,6 @@ UBool RuleBasedBreakIterator::DictionaryCache::preceding(int32_t fromPos, int32_
 
 void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPos, int32_t endPos,
                                        int32_t firstRuleStatus, int32_t otherRuleStatus) {
-    uint32_t dictMask = ucptrie_getValueWidth(fBI->fData->fTrie) == UCPTRIE_VALUE_BITS_8 ?
-        kDictBitFor8BitsTrie : kDictBit;
     if ((endPos - startPos) <= 1) {
         return;
     }
@@ -145,9 +143,11 @@ void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPo
     utext_setNativeIndex(text, rangeStart);
     UChar32     c = utext_current32(text);
     category = ucptrie_get(fBI->fData->fTrie, c);
+    uint32_t dictStart = fBI->fData->fForwardTable->fDictCategoriesStart;
 
     while(U_SUCCESS(status)) {
-        while((current = (int32_t)UTEXT_GETNATIVEINDEX(text)) < rangeEnd && (category & dictMask) == 0) {
+        while((current = (int32_t)UTEXT_GETNATIVEINDEX(text)) < rangeEnd
+                && (category < dictStart)) {
             utext_next32(text);           // TODO: cleaner loop structure.
             c = utext_current32(text);
             category = ucptrie_get(fBI->fData->fTrie, c);

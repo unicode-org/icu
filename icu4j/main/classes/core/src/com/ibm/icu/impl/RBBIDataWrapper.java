@@ -42,9 +42,19 @@ public final class RBBIDataWrapper {
          */
         public int     fRowLen;
         /**
+         * Char category number of the first dictionary char class,
+         * or the the largest category number + 1 if there are no dictionary categories.
+         */
+        public int     fDictCategoriesStart;
+        /**
          * Option Flags for this state table.
          */
         public int     fFlags;
+        /**
+         * Length in bytes of the state table header, of all the int32 fields
+         * preceding fTable in the serialized form.
+         */
+        public static int fHeaderSize = 16;
         /**
          * Linear array of next state values, accessed as short[state, char_class]
          */
@@ -57,14 +67,15 @@ public final class RBBIDataWrapper {
             if (length == 0) {
                 return null;
             }
-            if (length < 12) {
+            if (length < fHeaderSize) {
                 throw new IOException("Invalid RBBI state table length.");
             }
             RBBIStateTable This = new RBBIStateTable();
             This.fNumStates = bytes.getInt();
             This.fRowLen    = bytes.getInt();
+            This.fDictCategoriesStart = bytes.getInt();
             This.fFlags     = bytes.getInt();
-            int lengthOfTable = length - 12;   // length in bytes.
+            int lengthOfTable = length - fHeaderSize;   // length in bytes.
             boolean use8Bits = (This.fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) == RBBIDataWrapper.RBBI_8BITS_ROWS;
             if (use8Bits) {
                 This.fTable = new char[lengthOfTable];
@@ -82,6 +93,7 @@ public final class RBBIDataWrapper {
         public int put(DataOutputStream bytes) throws IOException {
             bytes.writeInt(fNumStates);
             bytes.writeInt(fRowLen);
+            bytes.writeInt(fDictCategoriesStart);
             bytes.writeInt(fFlags);
             if ((fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) == RBBIDataWrapper.RBBI_8BITS_ROWS) {
                 int tableLen = fRowLen * fNumStates;  // fRowLen is bytes.
@@ -95,8 +107,8 @@ public final class RBBIDataWrapper {
                     bytes.writeChar(fTable[i]);
                 }
             }
-            int bytesWritten = 12 + fRowLen * fNumStates;   // total bytes written,
-                                                            // including 12 for the header.
+            int bytesWritten = fHeaderSize + fRowLen * fNumStates;   // total bytes written,
+                                                                     // including the header.
             while (bytesWritten % 8 != 0) {
                 bytes.writeByte(0);
                 ++bytesWritten;
@@ -118,6 +130,7 @@ public final class RBBIDataWrapper {
             RBBIStateTable otherST = (RBBIStateTable)other;
             if (fNumStates != otherST.fNumStates) return false;
             if (fRowLen    != otherST.fRowLen)    return false;
+            if (fDictCategoriesStart != otherST.fDictCategoriesStart) return false;
             if (fFlags     != otherST.fFlags)     return false;
             return Arrays.equals(fTable, otherST.fTable);
         }
@@ -215,9 +228,6 @@ public final class RBBIDataWrapper {
     public final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
     public final static int      RBBI_BOF_REQUIRED         = 2;
     public final static int      RBBI_8BITS_ROWS           = 4;
-
-    public final static int      DICT_BIT                  = 0x4000;
-    public final static int      DICT_BIT_FOR_8BITS_TRIE   = 0x0080;
 
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
@@ -496,7 +506,6 @@ public final class RBBIDataWrapper {
         int      char32;
         int      category;
         int      lastNewline[] = new int[n+1];
-        int      dictMask = fTrie.getValueWidth() ==  CodePointTrie.ValueWidth.BITS_8 ? DICT_BIT_FOR_8BITS_TRIE : DICT_BIT;
 
         for (category = 0; category <= fHeader.fCatCount; category ++) {
             catStrings[category] = "";
@@ -505,7 +514,6 @@ public final class RBBIDataWrapper {
         out.println("--------------------");
         for (char32 = 0; char32<=0x10ffff; char32++) {
             category = fTrie.get(char32);
-            category &= ~dictMask;            // Mask off dictionary bit.
             if (category < 0 || category > fHeader.fCatCount) {
                 out.println("Error, bad category " + Integer.toHexString(category) +
                         " for char " + Integer.toHexString(char32));

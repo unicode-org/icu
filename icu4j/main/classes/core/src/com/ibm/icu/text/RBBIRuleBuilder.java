@@ -67,7 +67,7 @@ class RBBIRuleBuilder {
     //
     // Status {tag} values.   These structures are common to all of the rule sets (Forward, Reverse, etc.).
     //
-    Map<Set<Integer>, Integer> fStatusSets = new HashMap<Set<Integer>, Integer>(); // Status value sets encountered so far.
+    Map<Set<Integer>, Integer> fStatusSets = new HashMap<>(); // Status value sets encountered so far.
                                                                                    //  Map Key is the set of values.
                                                                                    //  Map Value is the runtime array index.
 
@@ -146,8 +146,8 @@ class RBBIRuleBuilder {
                             ICUDebug.value("rbbi") : null;
         fRules          = rules;
         fStrippedRules  = new StringBuilder(rules);
-        fUSetNodes      = new ArrayList<RBBINode>();
-        fRuleStatusVals = new ArrayList<Integer>();
+        fUSetNodes      = new ArrayList<>();
+        fRuleStatusVals = new ArrayList<>();
         fScanner        = new RBBIRuleScanner(this);
         fSetBuilder     = new RBBISetBuilder(this);
     }
@@ -294,9 +294,7 @@ class RBBIRuleBuilder {
 
         //
         // UnicodeSet processing.
-        //    Munge the Unicode Sets to create a set of character categories.
-        //    Generate the mapping tables (TRIE) from input code points to
-        //    the character categories.
+        //    Munge the Unicode Sets to create an initial set of character categories.
         //
         fSetBuilder.buildRanges();
 
@@ -305,6 +303,10 @@ class RBBIRuleBuilder {
         //
         fForwardTable = new RBBITableBuilder(this, fForwardTree);
         fForwardTable.buildForwardTable();
+        // State table and character category optimization.
+        // Merge equivalent rows and columns.
+        // Note that this process alters the the initial set of character categories,
+        // causing the representation of UnicodeSets in the parse tree to become invalid.
         optimizeTables();
         fForwardTable.buildSafeReverseTable();
 
@@ -315,7 +317,9 @@ class RBBIRuleBuilder {
             fForwardTable.printRuleStatusTable();
             fForwardTable.printReverseTable();
         }
-
+        //    Generate the mapping tables (TRIE) from input code points to
+        //    the character categories.
+        //
         fSetBuilder.buildTrie();
         //
         //   Package up the compiled data, writing it to an output stream

@@ -287,9 +287,7 @@ RBBIDataHeader *RBBIRuleBuilder::build(UErrorCode &status) {
 
     //
     // UnicodeSet processing.
-    //    Munge the Unicode Sets to create a set of character categories.
-    //    Generate the mapping tables (TRIE) from input code points to
-    //    the character categories.
+    //    Munge the Unicode Sets to create an initial set of character categories.
     //
     fSetBuilder->buildRanges();
 
@@ -303,6 +301,12 @@ RBBIDataHeader *RBBIRuleBuilder::build(UErrorCode &status) {
     }
 
     fForwardTable->buildForwardTable();
+
+    // State table and character category optimization.
+    // Merge equivalent rows and columns.
+    // Note that this process alters the initial set of character categories,
+    // causing the representation of UnicodeSets in the parse tree to become invalid.
+
     optimizeTables();
     fForwardTable->buildSafeReverseTable(status);
 
@@ -315,6 +319,9 @@ RBBIDataHeader *RBBIRuleBuilder::build(UErrorCode &status) {
     }
 #endif
 
+    //    Generate the mapping tables (TRIE) from input code points to
+    //    the character categories.
+    //
     fSetBuilder->buildTrie();
 
     //
