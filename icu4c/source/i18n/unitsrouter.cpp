@@ -32,8 +32,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     // TODO: deal correctly with StringPiece / null-terminated string incompatibility...
     const UnitPreference *const *unitPreferences;
     int32_t preferencesCount;
-    prefs.getPreferencesFor(category.data(), usage.data(), region.data(), unitPreferences,
-                            preferencesCount, status);
+    prefs.getPreferencesFor(category.data(), usage, region, unitPreferences, preferencesCount, status);
 
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
