@@ -115,7 +115,7 @@ class U_I18N_API UnitPreferenceMetadata : public UMemory {
   public:
     UnitPreferenceMetadata(){};
     // Constructor, makes copies of the parameters passed to it.
-    UnitPreferenceMetadata(const StringPiece category, const StringPiece usage, const StringPiece region,
+    UnitPreferenceMetadata(StringPiece category, StringPiece usage, StringPiece region,
                            int32_t prefsOffset, int32_t prefsCount, UErrorCode &status);
 
     // Unit category (e.g. "length", "mass", "electric-capacitance").
@@ -175,9 +175,9 @@ class U_I18N_API UnitPreferences {
      * result set.
      * @param status Receives status.
      *
-     * TODO(hugovdm): maybe replace `UnitPreference **&outPrefrences` with a slice class?
+     * TODO(hugovdm): maybe replace `UnitPreference **&outPreferences` with a slice class?
      */
-    void getPreferencesFor(const StringPiece category, const StringPiece usage, const StringPiece region,
+    void getPreferencesFor(StringPiece category, StringPiece usage, StringPiece region,
                            const UnitPreference *const *&outPreferences, int32_t &preferenceCount,
                            UErrorCode &status) const;
 

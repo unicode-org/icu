@@ -108,8 +108,8 @@ class ConversionRateDataSink : public ResourceSink {
     MaybeStackVector<ConversionRateInfo> *outVector;
 };
 
-UnitPreferenceMetadata::UnitPreferenceMetadata(const StringPiece category, const StringPiece usage,
-                                               const StringPiece region, int32_t prefsOffset,
+UnitPreferenceMetadata::UnitPreferenceMetadata(StringPiece category, StringPiece usage,
+                                               StringPiece region, int32_t prefsOffset,
                                                int32_t prefsCount, UErrorCode &status) {
     this->category.append(category, status);
     this->usage.append(usage, status);
@@ -305,8 +305,8 @@ int32_t binarySearch(const MaybeStackVector<UnitPreferenceMetadata> *metadata,
  * preferences. If appropriate preferences are not found, -1 is returned.
  */
 int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata> *metadata,
-                                   const StringPiece category, const StringPiece usage,
-                                   const StringPiece region, UErrorCode &status) {
+                                   StringPiece category, StringPiece usage, StringPiece region,
+                                   UErrorCode &status) {
     if (U_FAILURE(status)) { return -1; }
     bool foundCategory, foundUsage, foundRegion;
     UnitPreferenceMetadata desired(category, usage, region, -1, -1, status);
@@ -402,8 +402,8 @@ U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
 //
 // TODO: consider replacing `UnitPreference **&outPreferences` with slice class
 // of some kind.
-void U_I18N_API UnitPreferences::getPreferencesFor(const StringPiece category, const StringPiece usage,
-                                                   const StringPiece region,
+void U_I18N_API UnitPreferences::getPreferencesFor(StringPiece category, StringPiece usage,
+                                                   StringPiece region,
                                                    const UnitPreference *const *&outPreferences,
                                                    int32_t &preferenceCount, UErrorCode &status) const {
     int32_t idx = getPreferenceMetadataIndex(&metadata_, category, usage, region, status);
