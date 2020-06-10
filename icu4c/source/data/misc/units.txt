@@ -1101,6 +1101,9 @@ units:table(nofallback){
                         geq{"3.0"}
                         unit{"foot-and-inch"}
                     }
+                    {
+                        unit{"inch"}
+                    }
                 }
                 CN{
                     {
@@ -1142,6 +1145,9 @@ units:table(nofallback){
                         geq{"3.0"}
                         unit{"foot-and-inch"}
                     }
+                    {
+                        unit{"inch"}
+                    }
                 }
                 HK{
                     {
@@ -1162,6 +1168,9 @@ units:table(nofallback){
                     {
                         geq{"3.0"}
                         unit{"foot-and-inch"}
+                    }
+                    {
+                        unit{"inch"}
                     }
                 }
                 IT{
@@ -1228,6 +1237,9 @@ units:table(nofallback){
                     {
                         geq{"3.0"}
                         unit{"foot-and-inch"}
+                    }
+                    {
+                        unit{"inch"}
                     }
                 }
                 VN{
