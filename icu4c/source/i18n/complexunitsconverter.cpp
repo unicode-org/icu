@@ -4,6 +4,8 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+#include <math.h>
 #include <utility>
 
 #include "cmemory.h"
@@ -13,6 +15,8 @@
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
+
+#define EPSILON_DEN 1000000000000000000.0
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status) {
@@ -51,6 +55,7 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
 
     // first quantity is the biggest one.
     double newQuantity = unitConverters_[0]->convert(quantity);
+    newQuantity = roundl(newQuantity * EPSILON_DEN) / EPSILON_DEN; // ROUND
 
     return newQuantity >= limit;
 }
@@ -61,6 +66,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
         quantity = (*unitConverters_[i]).convert(quantity);
         if (i < n - 1) { // not last element
+            // round to the nearest EPSILON
+            quantity = roundl(quantity * EPSILON_DEN) / EPSILON_DEN;
             int64_t newQuantity = quantity;
             Formattable formattableNewQuantity(newQuantity);
             // Measure wants to own its MeasureUnit. For now, this copies it.
