@@ -14,7 +14,7 @@ class UnitsDataTest : public IntlTest {
 
     void testGetUnitCategory();
     void testGetAllConversionRates();
-    void testGetPreferences();
+    void testGetPreferencesFor();
 };
 
 extern IntlTest *createUnitsDataTest() { return new UnitsDataTest(); }
@@ -24,7 +24,7 @@ void UnitsDataTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testGetUnitCategory);
     TESTCASE_AUTO(testGetAllConversionRates);
-    TESTCASE_AUTO(testGetPreferences);
+    TESTCASE_AUTO(testGetPreferencesFor);
     TESTCASE_AUTO_END;
 }
 
@@ -78,7 +78,7 @@ class UnitPreferencesOpenedUp : public UnitPreferences {
  * may fail: see the constants for expected Max/Min unit identifiers, for US and
  * World, and for Roads and default lengths.
  */
-void UnitsDataTest::testGetPreferences() {
+void UnitsDataTest::testGetPreferencesFor() {
     const char* USRoadMax = "mile";
     const char* USRoadMin = "foot";
     const char* USLenMax = "mile";
@@ -107,8 +107,16 @@ void UnitsDataTest::testGetPreferences() {
          "meter-and-centimeter"},
         {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "meter-and-centimeter",
          "meter-and-centimeter"},
+        // Confirming results for some unitPreferencesTest.txt test cases
+        {"001 area", "area", "default", "001", "square-kilometer", "square-centimeter"},
+        {"GB area", "area", "default", "GB", "square-mile", "square-inch"},
+        {"001 area geograph", "area", "geograph", "001", "square-kilometer", "square-kilometer"},
+        {"GB area geograph", "area", "geograph", "GB", "square-mile", "square-mile"},
+        {"CA person-height", "length", "person-height", "CA", "foot-and-inch", "foot-and-inch"},
+        {"AT person-height", "length", "person-height", "AT", "meter-and-centimeter",
+         "meter-and-centimeter"},
     };
-    IcuTestErrorCode status(*this, "testGetPreferences");
+    IcuTestErrorCode status(*this, "testGetPreferencesFor");
     UnitPreferencesOpenedUp preferences(status);
     auto *metadata = preferences.getInternalMetadata();
     auto *unitPrefs = preferences.getInternalUnitPrefs();
