@@ -14,6 +14,8 @@
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+namespace impl {
 
 /**
  * Represents the conversion rate between `source` and `target`.
@@ -88,6 +90,12 @@ class U_I18N_API UnitConverter : public UMemory {
   private:
     ConversionRate conversionRate_;
 };
+
+} // namespace impl
+} // namespace units
+
+// TODO(hugovdm): move other units code into units::impl then remove this:
+using namespace units::impl; // Enable clients to not know about units::impl;
 
 U_NAMESPACE_END
 

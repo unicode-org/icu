@@ -16,8 +16,13 @@
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+namespace impl {
 
 namespace {
+
+// TODO(hugovdm): move other units code into units::impl then remove this:
+using namespace icu;
 
 /* Internal Structure */
 
@@ -503,6 +508,8 @@ double UnitConverter::convert(double inputValue) const {
     return result * 1.000000000001;
 }
 
+} // namespace impl
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
