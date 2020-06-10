@@ -318,9 +318,12 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 
 } // namespace
 
+// Conceptually, this modifies factor: factor *= baseStr^(signum*power).
+//
+// baseStr must be a known constant or a value that strToDouble() is able to
+// parse.
 void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum,
                                         Factor &factor, UErrorCode &status) {
-
     if (baseStr == "ft_to_m") {
         factor.constants[CONSTANT_FT2M] += power * sigNum;
     } else if (baseStr == "ft2_to_m2") {

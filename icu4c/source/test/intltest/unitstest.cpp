@@ -41,7 +41,7 @@ class UnitsTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
-    void testHardcodeFreshnessForConvertUnits();
+    void testUnitConstantFreshness();
     void testConversionCapability();
     void testConversions();
     void testPreferences();
@@ -58,7 +58,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
         logln("TestSuite UnitsTest: ");
     }
     TESTCASE_AUTO_BEGIN;
-    TESTCASE_AUTO(testHardcodeFreshnessForConvertUnits);
+    TESTCASE_AUTO(testUnitConstantFreshness);
     TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
@@ -69,74 +69,33 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_END;
 }
 
-// Tests the hard-coded constants in the code against constants and unit
-// identifiers that appear in units.txt, by simply parsing unit identifiers and
-// then loading each conversion rate from the convertUnits resource into
-// UnitConverter.
-//
-// MeasureUnit::forIdentifier() will fail for invalid unit identifiers.
-//
-// UnitConverter() returns an error if it fails to recognise a constant, which
-// would thereby alert us if the hard-coded constants are stale.
-void UnitsTest::testHardcodeFreshnessForConvertUnits() {
-    IcuTestErrorCode status(*this, "testConstantFreshness");
+// Tests the hard-coded constants in the code against constants that appear in
+// units.txt.
+void UnitsTest::testUnitConstantFreshness() {
+    IcuTestErrorCode status(*this, "testUnitConstantFreshness");
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", status));
     LocalUResourceBundlePointer unitConstants(
         ures_getByKey(unitsBundle.getAlias(), "unitConstants", NULL, status));
-    LocalUResourceBundlePointer convertUnits(
-        ures_getByKey(unitsBundle.getAlias(), "convertUnits", NULL, status));
 
-    CharString constants;
     while (ures_hasNext(unitConstants.getAlias())) {
         int32_t len;
         const char *constant = NULL;
         ures_getNextString(unitConstants.getAlias(), &len, &constant, status);
-        constants.append(" \"", status);
-        constants.append(constant, status);
-        constants.append("\"", status);
-    }
 
-    if (status.errDataIfFailureAndReset("ures_getByKey(unitsBundle, \"convertUnits\", ...)")) {
-        return;
-    }
-    ConversionRates conversionRates(status);
-    StackUResourceBundle stackBundle;
-    while (ures_hasNext(convertUnits.getAlias())) {
-        ures_getNextResource(convertUnits.getAlias(), stackBundle.getAlias(), status);
-        const char *sourceKey = ures_getKey(stackBundle.getAlias());
-
-        int32_t targetLen;
-        const UChar *uTarget = ures_getStringByKey(stackBundle.getAlias(), "target", &targetLen, status);
-        CharString target;
-        target.appendInvariantChars(uTarget, targetLen, status);
-
-        int32_t factorLen;
-        const UChar *uFactor = ures_getStringByKey(stackBundle.getAlias(), "factor", &factorLen, status);
-        CharString factor;
-        factor.appendInvariantChars(uFactor, factorLen, status);
-
-        if (status.errDataIfFailureAndReset("Resource loading failure")) { return; }
-        MeasureUnit sourceUnit = MeasureUnit::forIdentifier(sourceKey, status);
-        MeasureUnit targetUnit = MeasureUnit::forIdentifier(target.data(), status);
+        Factor factor;
+        addSingleFactorConstant(constant, 2, POSITIVE, factor, status);
         if (status.errDataIfFailureAndReset(
-                "MeasureUnit::forIdentifier(\"%s\", status); "
-                "MeasureUnit::forIdentifier(\"%s\", status);\n\n"
-                "If U_ILLEGAL_ARGUMENT_ERROR, please check that "
-                "\"icu4c/source/i18n/measunit_extra.cpp\" has the necessary unit identifiers in the "
-                "gSimpleUnits[] array. (Also check the gSubTypes[] array in measunit.cpp?)",
-                sourceKey, target.data())) {
-            continue;
-        }
-        UnitConverter(sourceUnit, targetUnit, conversionRates, status);
-        if (status.errDataIfFailureAndReset(
-                "UnitConverter(<%s>, <%s>, status).\n\n"
+                "addSingleFactorConstant(<%s>, ...).\n\n"
                 "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/unitconverter.cpp\" "
-                "has all constants?\n"
-                "Factor for \"%s\" is: \"%s\".\n"
-                "Full list of constants:%s",
-                sourceKey, target.data(), sourceKey, factor.data(), constants.data())) {
+                "has all constants? Is \"%s\" a new constant?\n",
+                constant, constant)) {
             continue;
         }
+        // TODO(units,hugovdm): implement some symbolic maths to evaluate the
+        // values of these constants? Counter-argument: constant values don't
+        // change, and the data-driven unit tests generally take care of
+        // validating the precision of conversions, if they have enough
+        // coverage.
     }
 }
 

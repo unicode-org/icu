@@ -425,6 +425,7 @@ units:table(nofallback){
         gravity{"9.80665"}
         in3_to_m3{"ft3_to_m3/12*12*12"}
         lb_to_kg{"0.45359237"}
+        foobar{"1.234"}
     }
     unitPreferenceData{
         "area"{
