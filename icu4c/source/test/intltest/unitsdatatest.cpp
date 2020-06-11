@@ -112,7 +112,7 @@ void UnitsDataTest::testGetPreferencesFor() {
         {"GB area", "area", "default", "GB", "square-mile", "square-inch"},
         {"001 area geograph", "area", "geograph", "001", "square-kilometer", "square-kilometer"},
         {"GB area geograph", "area", "geograph", "GB", "square-mile", "square-mile"},
-        {"CA person-height", "length", "person-height", "CA", "foot-and-inch", "foot-and-inch"},
+        {"CA person-height", "length", "person-height", "CA", "foot-and-inch", "inch"},
         {"AT person-height", "length", "person-height", "AT", "meter-and-centimeter",
          "meter-and-centimeter"},
     };
