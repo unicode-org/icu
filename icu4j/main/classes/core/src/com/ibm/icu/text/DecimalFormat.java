@@ -1995,6 +1995,16 @@ public class DecimalFormat extends NumberFormat {
    * order for the grouping separator to be printed. For example, if minimum grouping digits is set
    * to 2, in <em>en-US</em>, 1234 will be printed as "1234" and 12345 will be printed as "12,345".
    *
+    * Set the value to:
+   * <ul>
+   * <li>1 to turn off minimum grouping digits.</li>
+   * <li>MINIMUM_GROUPING_DIGITS_AUTO to display grouping using the default
+   * strategy for all locales.</li>
+   * <li>MINIMUM_GROUPING_DIGITS_MIN2 to display grouping using locale defaults,
+   * except do not show grouping on values smaller than 10000 (such that there is a minimum of
+   * two digits before the first separator).</li>
+   * </ul>
+   *
    * @param number The minimum number of digits before grouping is triggered.
    * @category Separators
    * @stable ICU 64
@@ -2003,6 +2013,31 @@ public class DecimalFormat extends NumberFormat {
     properties.setMinimumGroupingDigits(number);
     refreshFormatter();
   }
+
+  /**
+   * {@icu} Constant for {@link #setMinimumGroupingDigits()} to specify display
+   * grouping using the default strategy for all locales.
+   *
+   * @see #setMinimumGroupingDigits
+   * @see #MINIMUM_GROUPING_DIGITS_MIN2
+   * @category Separators
+   * @provisional This API might change or be removed in a future release.
+   * @draft ICU 68
+   */
+  public static final int MINIMUM_GROUPING_DIGITS_AUTO = -2;
+
+  /**
+   * {@icu} Constant for {@link #setMinimumGroupingDigits()} to specify display
+   * grouping using locale defaults, except do not show grouping on values smaller than
+   * 10000 (such that there is a minimum of two digits before the first separator).
+   *
+   * @see #setMinimumGroupingDigits
+   * @see #MINIMUM_GROUPING_DIGITS_AUTO
+   * @category Separators
+   * @provisional This API might change or be removed in a future release.
+   * @draft ICU 68
+   */
+  public static final int MINIMUM_GROUPING_DIGITS_MIN2 = -3;
 
   /**
    * Returns whether the decimal separator is shown on integers.
