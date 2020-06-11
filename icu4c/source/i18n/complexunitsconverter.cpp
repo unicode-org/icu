@@ -16,10 +16,28 @@
 
 U_NAMESPACE_BEGIN
 
-#define EPSILON_DEN 1000000000000000000.0
-
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status) {
+
+    if (outputUnits.getComplexity(status) != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        unitConverters_.emplaceBack(inputUnit, outputUnits, ratesInfo, status);
+        units_.emplaceBack(outputUnits);
+        return;
+    }
+
+    // In case the `outputUnits` are `UMEASURE_UNIT_MIXED` such as `foot+inch`. In this case we need more
+    // converters to convert from the `inputUnit` to the first unit in the `outputUnits`. Then, a
+    // converter from the first unit in the `outputUnits` to the second unit and so on.
+    //      For Example: 
+    //          - inputUnit is `meter`
+    //          - outputUnits is `foot+inch`
+    //              - Therefore, we need to have two converters:
+    //                      1. a converter from `meter` to `foot`
+    //                      2. a converter from `foot` to `inch`
+    //          - Therefore, if the input is `2 meter`:
+    //              1. convert `meter` to `foot` --> 2 meter to 6.56168 feet
+    //              2. convert the residual of 6.56168 feet (0.56168) to inches, which will be (6.74016 inches)
+    //              3. then, the final result will be (6 feet and 6.74016 inches)     
     int32_t length;
     auto singleUnits = outputUnits.splitToSingleUnits(length, status);
     MaybeStackVector<MeasureUnit> singleUnitsInOrder;
@@ -41,10 +59,8 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
                                         status);
         }
 
-        if (U_FAILURE(status)) break;
+        if (U_FAILURE(status)) return;
     }
-
-    if (U_FAILURE(status)) return;
 
     units_.appendAll(singleUnitsInOrder, status);
 }
@@ -55,7 +71,6 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
 
     // first quantity is the biggest one.
     double newQuantity = unitConverters_[0]->convert(quantity);
-    newQuantity = roundl(newQuantity * EPSILON_DEN) / EPSILON_DEN; // ROUND
 
     return newQuantity >= limit;
 }
@@ -66,8 +81,6 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
         quantity = (*unitConverters_[i]).convert(quantity);
         if (i < n - 1) { // not last element
-            // round to the nearest EPSILON
-            quantity = roundl(quantity * EPSILON_DEN) / EPSILON_DEN;
             int64_t newQuantity = quantity;
             Formattable formattableNewQuantity(newQuantity);
             // Measure wants to own its MeasureUnit. For now, this copies it.
