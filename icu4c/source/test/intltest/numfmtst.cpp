@@ -9078,6 +9078,43 @@ void NumberFormatTest::TestMinimumGroupingDigits() {
     df.format(12345, result.remove(), status);
     status.errIfFailureAndReset();
     assertEquals("Should have grouping", u"12,345", result);
+
+
+    // Test special values -1, UNUM_MINIMUM_GROUPING_DIGITS_AUTO and
+    // UNUM_MINIMUM_GROUPING_DIGITS_MIN2
+    struct TestCase {
+        const char* locale;
+        int32_t minGroup;
+        double input;
+        const char16_t* expected;
+    } cases[] = {
+        { "en-US", 1, 1000, u"1,000" },
+        { "en-US", 1, 10000, u"10,000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 1000, u"1,000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 10000, u"10,000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 1000, u"1000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 10000, u"10,000" },
+
+        { "es", 1, 1000, u"1.000" },
+        { "es", 1, 10000, u"10.000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 1000, u"1000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 10000, u"10.000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 1000, u"1000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 10000, u"10.000" },
+    };
+    for (const auto& cas : cases) {
+        UnicodeString message = UnicodeString(cas.locale)
+            + u" " + Int64ToUnicodeString(cas.minGroup)
+            + u" " + DoubleToUnicodeString(cas.input);
+        status.setScope(message);
+        DecimalFormat df(u"#,##0", {cas.locale, status}, status);
+        if (status.errIfFailureAndReset()) { continue; }
+        df.setMinimumGroupingDigits(cas.minGroup);
+        UnicodeString actual;
+        df.format(cas.input, actual, status);
+        if (status.errIfFailureAndReset()) { continue; }
+        assertEquals(message, cas.expected, actual);
+    }
 }
 
 void NumberFormatTest::Test11897_LocalizedPatternSeparator() {
