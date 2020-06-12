@@ -776,6 +776,12 @@ public:
         return this->create(args...);
     }
 
+    template <typename... Args>
+    void emplaceBackAndConfirm(UErrorCode &status, Args &&... args) {
+        T *pointer = this->create(args...);
+        if (pointer == nullptr) { status = U_MEMORY_ALLOCATION_ERROR; }
+    }
+
     int32_t length() const {
         return this->fCount;
     }
