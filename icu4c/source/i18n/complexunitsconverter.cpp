@@ -85,7 +85,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableNewQuantity(newQuantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBack(formattableNewQuantity, std::move(MeasureUnit(*units_[i])), status);
+            result.emplaceBack(formattableNewQuantity, new MeasureUnit(*units_[i]), status);
 
             // Keep the residual of the quantity.
             //   For example: `3.6 feet`, keep only `0.6 feet`
@@ -94,7 +94,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableQuantity(quantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBack(formattableQuantity, std::move(MeasureUnit(*units_[i])), status);
+            result.emplaceBack(formattableQuantity, new MeasureUnit(*units_[i]), status);
         }
     }
 
