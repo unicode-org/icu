@@ -34,16 +34,10 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     int32_t preferencesCount;
     prefs.getPreferencesFor(category.data(), usage, region, unitPreferences, preferencesCount, status);
 
-    fprintf(stderr, "\t ****NEW TEST CASE ***\n");
-
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
 
-        fprintf(stderr, "\t unit preference no. (%d)   %s,     %f  \n", i, preference.unit.data(),
-                preference.geq);
-
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
-
         if (U_FAILURE(status)) { return; }
 
         converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
