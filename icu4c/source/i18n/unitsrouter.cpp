@@ -40,8 +40,8 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
         if (U_FAILURE(status)) { return; }
 
-        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
-                                          status);
+        converterPreferences_.emplaceBackAndConfirm(status, inputUnit, complexTargetUnit, preference.geq,
+                                                    conversionRates, status);
         if (U_FAILURE(status)) { return; }
     }
 }

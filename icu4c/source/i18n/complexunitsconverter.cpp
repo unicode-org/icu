@@ -20,8 +20,8 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
                                              const ConversionRates &ratesInfo, UErrorCode &status) {
 
     if (outputUnits.getComplexity(status) != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
-        unitConverters_.emplaceBack(inputUnit, outputUnits, ratesInfo, status);
-        units_.emplaceBack(outputUnits);
+        unitConverters_.emplaceBackAndConfirm(status, inputUnit, outputUnits, ratesInfo, status);
+        units_.emplaceBackAndConfirm(status, outputUnits);
         return;
     }
 
@@ -44,7 +44,7 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
     MaybeStackVector<MeasureUnit> singleUnitsInOrder;
     for (int i = 0; i < length; ++i) {
         // TODO(younies): ensure units being in order in phase 2. Now, the units in order by default.
-        singleUnitsInOrder.emplaceBack(singleUnits[i]);
+        singleUnitsInOrder.emplaceBackAndConfirm(status, singleUnits[i]);
     }
 
     if (singleUnitsInOrder.length() == 0) {
@@ -54,10 +54,11 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
 
     for (int i = 0, n = singleUnitsInOrder.length(); i < n; i++) {
         if (i == 0) { // first element
-            unitConverters_.emplaceBack(inputUnit, *singleUnitsInOrder[i], ratesInfo, status);
+            unitConverters_.emplaceBackAndConfirm(status, inputUnit, *singleUnitsInOrder[i], ratesInfo,
+                                                status);
         } else {
-            unitConverters_.emplaceBack(*singleUnitsInOrder[i - 1], *singleUnitsInOrder[i], ratesInfo,
-                                        status);
+            unitConverters_.emplaceBackAndConfirm(status, *singleUnitsInOrder[i - 1],
+                                                *singleUnitsInOrder[i], ratesInfo, status);
         }
 
         if (U_FAILURE(status)) { return; }
@@ -85,7 +86,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableNewQuantity(newQuantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBack(formattableNewQuantity, new MeasureUnit(*units_[i]), status);
+            result.emplaceBackAndConfirm(status, formattableNewQuantity, new MeasureUnit(*units_[i]),
+                                       status);
 
             // Keep the residual of the quantity.
             //   For example: `3.6 feet`, keep only `0.6 feet`
@@ -94,7 +96,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableQuantity(quantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBack(formattableQuantity, new MeasureUnit(*units_[i]), status);
+            result.emplaceBackAndConfirm(status, formattableQuantity, new MeasureUnit(*units_[i]), status);
         }
     }
 
