@@ -175,7 +175,7 @@ class U_I18N_API UnitPreferences {
      * result set.
      * @param status Receives status.
      *
-     * TODO(hugovdm): maybe replace `UnitPreference **&outPrefrences` with a slice class?
+     * TODO(hugovdm): maybe replace `UnitPreference **&outPreferences` with a slice class?
      */
     void getPreferencesFor(StringPiece category, StringPiece usage, StringPiece region,
                            const UnitPreference *const *&outPreferences, int32_t &preferenceCount,

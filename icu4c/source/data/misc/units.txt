@@ -1299,9 +1299,22 @@ units:table(nofallback){
                     }
                 }
                 SE{
+// Manual override of "SE road" preferences, to match what
+// unitPreferencesTest.txt claims should be produced.
+// CLDR:
+//                     {
+//                         geq{"0.1"}
+//                         unit{"mile-scandinavian"}
+//                     }
+// Overridden:
                     {
-                        geq{"0.1"}
                         unit{"mile-scandinavian"}
+                    }
+                    {
+                        unit{"kilometer"}
+                    }
+                    {
+                        unit{"meter"}
                     }
                 }
                 US{

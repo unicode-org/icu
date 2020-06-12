@@ -4,6 +4,8 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+#include <math.h>
 #include <utility>
 
 #include "cmemory.h"
@@ -16,6 +18,27 @@ U_NAMESPACE_BEGIN
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status) {
+
+    if (outputUnits.getComplexity(status) != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        unitConverters_.emplaceBack(inputUnit, outputUnits, ratesInfo, status);
+        units_.emplaceBack(outputUnits);
+        return;
+    }
+
+    // In case the `outputUnits` are `UMEASURE_UNIT_MIXED` such as `foot+inch`. In this case we need more
+    // converters to convert from the `inputUnit` to the first unit in the `outputUnits`. Then, a
+    // converter from the first unit in the `outputUnits` to the second unit and so on.
+    //      For Example:
+    //          - inputUnit is `meter`
+    //          - outputUnits is `foot+inch`
+    //              - Therefore, we need to have two converters:
+    //                      1. a converter from `meter` to `foot`
+    //                      2. a converter from `foot` to `inch`
+    //          - Therefore, if the input is `2 meter`:
+    //              1. convert `meter` to `foot` --> 2 meter to 6.56168 feet
+    //              2. convert the residual of 6.56168 feet (0.56168) to inches, which will be (6.74016
+    //              inches)
+    //              3. then, the final result will be (6 feet and 6.74016 inches)
     int32_t length;
     auto singleUnits = outputUnits.splitToSingleUnits(length, status);
     MaybeStackVector<MeasureUnit> singleUnitsInOrder;
@@ -24,48 +47,29 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const 
         singleUnitsInOrder.emplaceBack(singleUnits[i]);
     }
 
-    *this = ComplexUnitsConverter(inputUnit, std::move(singleUnitsInOrder),
-                                  ratesInfo, status);
-
-    // TODO(younies): question from Hugo: is this check appropriate? The
-    // U_ASSERT in greaterThanOrEqual suggests this should be an invariant for
-    // ComplexUnitConverter.
-    if (unitConverters_.length() == 0) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-    }
-}
-
-ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit,
-                                             const MaybeStackVector<MeasureUnit> outputUnits,
-                                             const ConversionRates &ratesInfo, UErrorCode &status) {
-    if (outputUnits.length() == 0) {
+    if (singleUnitsInOrder.length() == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    for (int i = 0, n = outputUnits.length(); i < n; i++) {
-      if (i == 0) { // first element
-        unitConverters_.emplaceBack(inputUnit, *outputUnits[i], ratesInfo,
-                                    status);
+    for (int i = 0, n = singleUnitsInOrder.length(); i < n; i++) {
+        if (i == 0) { // first element
+            unitConverters_.emplaceBack(inputUnit, *singleUnitsInOrder[i], ratesInfo, status);
+        } else {
+            unitConverters_.emplaceBack(*singleUnitsInOrder[i - 1], *singleUnitsInOrder[i], ratesInfo,
+                                        status);
+        }
 
-      } else {
-        unitConverters_.emplaceBack(*outputUnits[i - 1], *outputUnits[i],
-                                    ratesInfo, status);
-      }
-
-        if (U_FAILURE(status)) break;
+        if (U_FAILURE(status)) { return; }
     }
 
-    if (U_FAILURE(status)) return;
-
-    units_.appendAll(outputUnits, status);
+    units_.appendAll(singleUnitsInOrder, status);
 }
 
 UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const {
-    // TODO(younies): this assert fails for the first constructor above:
     U_ASSERT(unitConverters_.length() > 0);
 
-    // first quantity is the biggest one.
+    // First converter converts to the biggest quantity.
     double newQuantity = unitConverters_[0]->convert(quantity);
 
     return newQuantity >= limit;
@@ -76,21 +80,21 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
 
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
         quantity = (*unitConverters_[i]).convert(quantity);
-        if (i < n - 1) { // not last element
+        if (i < n - 1) {
             int64_t newQuantity = quantity;
             Formattable formattableNewQuantity(newQuantity);
-            // Measure wants to own its MeasureUnit. For now, this copies it.
-            // TODO(younies): consider whether ownership transfer would be
-            // reasonable? (If not, just delete this comment?)
-            result.emplaceBack(formattableNewQuantity, new MeasureUnit(*units_[i]), status);
 
+            // NOTE: Measure would own its MeasureUnit.
+            result.emplaceBack(formattableNewQuantity, std::move(MeasureUnit(*units_[i])), status);
+
+            // Keep the residual of the quantity.
+            //   For example: `3.6 feet`, keep only `0.6 feet`
             quantity -= newQuantity;
-        } else { // Last element
+        } else { // LAST ELEMENT
             Formattable formattableQuantity(quantity);
-            // Measure wants to own its MeasureUnit. For now, this copies it.
-            //  TODO(younies): consider whether ownership transfer would be
-            //  reasonable? (If not, just delete this comment?)
-           result.emplaceBack(formattableQuantity, new MeasureUnit(*units_[i]), status);
+
+            // NOTE: Measure would own its MeasureUnit.
+            result.emplaceBack(formattableQuantity, std::move(MeasureUnit(*units_[i])), status);
         }
     }
 

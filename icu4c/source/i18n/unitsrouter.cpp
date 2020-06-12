@@ -5,6 +5,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdio.h>
 #include <utility>
 
 #include "cmemory.h"
@@ -31,42 +32,33 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     // TODO: deal correctly with StringPiece / null-terminated string incompatibility...
     const UnitPreference *const *unitPreferences;
     int32_t preferencesCount;
-    prefs.getPreferencesFor(category.data(), usage.data(), region.data(), unitPreferences,
-                            preferencesCount, status);
+    prefs.getPreferencesFor(category.data(), usage, region, unitPreferences, preferencesCount, status);
 
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
-        MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
 
-        if (U_FAILURE(status)) {
-          return;
-        }
-        
-        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit,
-                                          preference.geq, conversionRates,
+        MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
+        if (U_FAILURE(status)) { return; }
+
+        converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
                                           status);
-        if (U_FAILURE(status)) {
-            fprintf(
-                stderr,
-                "FAILED: converterPreferences_.emplaceBack(<%s>, <%s>, %f, conversionRates, status)\n",
-                inputUnit.getIdentifier(), complexTargetUnit.getIdentifier(), preference.geq);
-            return;
-        }
+        if (U_FAILURE(status)) { return; }
     }
 }
 
 MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) {
-    for (int i = 0, n = converterPreferences_.length() - 1; i < n; i++) {
+    for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
+
         const auto &converterPreference = *converterPreferences_[i];
+
+        // In case of the last converter, the conversion will performed even the value is less than the
+        // limit.
+        if (i == n - 1) { return converterPreference.converter.convert(quantity, status); }
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
             return converterPreference.converter.convert(quantity, status);
         }
     }
-
-    const auto &converterPreference =
-        *converterPreferences_[converterPreferences_.length() - 1]; // Last Element
-    return converterPreference.converter.convert(quantity, status);
 }
 
 U_NAMESPACE_END
