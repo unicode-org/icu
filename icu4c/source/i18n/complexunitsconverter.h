@@ -18,8 +18,7 @@ U_NAMESPACE_BEGIN
 
 /**
  *  Convert from single unit to multiple/complex unit. For example, from `meter` to `foot+inch`.
- *  
- *  
+ *
  *  DESIGN:
  *    This class uses `UnitConverter` in order to perform the single converter (i.e. converters from a
  *    single unit to another single unit). Therefore, `ComplexUnitsConverter` class contains multiple
@@ -51,7 +50,7 @@ class U_I18N_API ComplexUnitsConverter {
     //    - E.g. converting meters to feet and inches.
     //                  1 meter --> 3 feet, 3.3701 inches
     //         NOTE:
-    //           the smallest element is the only element that has fractional values.
+    //           the smallest element is the only element that could has fractional values.
     MaybeStackVector<Measure> convert(double quantity, UErrorCode &status) const;
 
   private:

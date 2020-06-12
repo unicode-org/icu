@@ -48,13 +48,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
 
         converterPreferences_.emplaceBack(inputUnit, complexTargetUnit, preference.geq, conversionRates,
                                           status);
-        if (U_FAILURE(status)) {
-            fprintf(
-                stderr,
-                "FAILED: converterPreferences_.emplaceBack(<%s>, <%s>, %f, conversionRates, status)\n",
-                inputUnit.getIdentifier(), complexTargetUnit.getIdentifier(), preference.geq);
-            return;
-        }
+        if (U_FAILURE(status)) { return; }
     }
 }
 
@@ -63,9 +57,9 @@ MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status
 
         const auto &converterPreference = *converterPreferences_[i];
 
-        if (i == n - 1) { // Last element
-            return converterPreference.converter.convert(quantity, status);
-        }
+        // In case of the last converter, the conversion will performed even the value is less than the
+        // limit.
+        if (i == n - 1) { return converterPreference.converter.convert(quantity, status); }
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
             return converterPreference.converter.convert(quantity, status);
