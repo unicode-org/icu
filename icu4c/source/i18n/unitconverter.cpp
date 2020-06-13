@@ -126,14 +126,17 @@ struct Factor {
         constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
 
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            if (this->constants[i] == 0) { continue;}
+            if (this->constants[i] == 0) { continue; }
 
             auto absPower = std::abs(this->constants[i]);
             SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
             double absConstantValue = std::pow(constantsValues[i], absPower);
 
-            if (powerSig ==  SigNum::NEGATIVE) { this->factorDen *= absConstantValue;} 
-            else { this->factorNum *= absConstantValue;}
+            if (powerSig == SigNum::NEGATIVE) {
+                this->factorDen *= absConstantValue;
+            } else {
+                this->factorNum *= absConstantValue;
+            }
 
             this->constants[i] = 0;
         }
@@ -443,7 +446,7 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
 
     auto sourceSimplified = sourceBaseUnit.simplify(status);
     auto targetSimplified = targetBaseUnit.simplify(status);
-    
+
     if (sourceSimplified == targetSimplified) return CONVERTIBLE;
     if (sourceSimplified == targetSimplified.reciprocal(status)) return RECIPROCAL;
 
@@ -476,7 +479,10 @@ double UnitConverter::convert(double inputValue) const {
     if (result == 0)
         return 0.0; // If the result is zero, it does not matter if the conversion are reciprocal or not.
     if (conversionRate_.reciprocal) { result = 1.0 / result; }
-    return result;
+
+    // Multiply the result by 1.000,000,001 to fix the deterioration from using `double`
+    // TODO: remove the multiplication by 1.000,000,001 after using `decNumber`
+    return result * 1.000000001;
 }
 
 U_NAMESPACE_END

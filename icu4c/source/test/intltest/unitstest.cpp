@@ -46,7 +46,6 @@ class UnitsTest : public IntlTest {
     void testMass();
     void testTemperature();
     void testArea();
-    void testComplicatedUnits();
     void testStatus();
 
     // TODO(younies): remove after using CLDR test cases.
@@ -67,7 +66,6 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testMass);
     TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO(testArea);
-    TESTCASE_AUTO(testComplicatedUnits);
     TESTCASE_AUTO(testStatus);
     TESTCASE_AUTO_END;
 }
@@ -287,30 +285,6 @@ void UnitsTest::testArea() {
         assertEqualsNear("test conversion", testCase.expectedValue,
                          converter.convert(testCase.inputValue), 0.001);
     }
-}
-
-void UnitsTest::testComplicatedUnits() {
-    IcuTestErrorCode status(*this, "Units Area");
-
-    UnitConversionTestCase testCases[]{
-        // TODO: Not convertible:
-        // {"meter-per-second", "meter-per-square-millisecond", 1000000.0, 1.0} //
-    };
-
-    for (const auto &testCase : testCases) {
-        verifyTestCase(testCase);
-    }
-}
-
-// TODO(younies): remove after using CLDR test cases.
-double strToDouble(StringPiece strNum) {
-    std::string charNum;
-    for (int i = 0; i < strNum.length(); i++) {
-        charNum += strNum.data()[i];
-    }
-
-    char *end;
-    return std::strtod(charNum.c_str(), &end);
 }
 
 /**
