@@ -769,19 +769,6 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     return std::move(impl).build(status);
 }
 
-
-/**
- * Returns the sign of the dimensionality.
- * 
- * NOTE:
- *      it returns `0` when the dimensionality is zero. 
- */ 
-int32_t dimensionSign(int32_t dimension) {
-    if (dimension == 0) return 0;
-    if (dimension > 0) return 1;
-    return -1;
-}
-
 /**
  * Searches the `simplifiedUnits` for a unit with the same base identifier in the `newUnit`, for example
  * `meter` and `meter` or `millimeter` and `centimeter`.
@@ -796,8 +783,8 @@ bool findAndSet(MaybeStackVector<MeasureUnit> &simplifiedUnits, const MeasureUni
         if (simplifiedUnitImpl.identifier == newUnitImpl.identifier) {
             int32_t newDimensionality = simplifiedUnitImpl.dimensionality + newUnitImpl.dimensionality;
             UMeasureSIPrefix newSIprefix = static_cast<UMeasureSIPrefix>(
-                simplifiedUnitImpl.siPrefix * dimensionSign(simplifiedUnitImpl.dimensionality) +
-                newUnitImpl.siPrefix * dimensionSign(newUnitImpl.dimensionality));
+                simplifiedUnitImpl.siPrefix * simplifiedUnitImpl.dimensionality +
+                newUnitImpl.siPrefix * newUnitImpl.dimensionality);
 
             auto &simplifiedUnit = *simplifiedUnits[i];
             simplifiedUnit = simplifiedUnit.withDimensionality(newDimensionality, status);
