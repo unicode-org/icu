@@ -441,6 +441,12 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
     if (sourceBaseUnit == targetBaseUnit) return CONVERTIBLE;
     if (sourceBaseUnit == targetBaseUnit.reciprocal(status)) return RECIPROCAL;
 
+    auto sourceSimplified = sourceBaseUnit.simplify(status);
+    auto targetSimplified = targetBaseUnit.simplify(status);
+    
+    if (sourceSimplified == targetSimplified) return CONVERTIBLE;
+    if (sourceSimplified == targetSimplified.reciprocal(status)) return RECIPROCAL;
+
     return UNCONVERTIBLE;
 }
 
