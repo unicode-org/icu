@@ -16,6 +16,10 @@
 
 U_NAMESPACE_BEGIN
 
+// The rounding factor
+// TODO: Remove the rounding factor after using decNumber
+#define EPSILON 1000000000.0
+
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit inputUnit, const MeasureUnit outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status) {
 
@@ -71,7 +75,7 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
     U_ASSERT(unitConverters_.length() > 0);
 
     // First converter converts to the biggest quantity.
-    double newQuantity = unitConverters_[0]->convert(quantity);
+    double newQuantity = roundl( unitConverters_[0]->convert(quantity) * EPSILON) / EPSILON;
 
     return newQuantity >= limit;
 }
@@ -80,9 +84,9 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
     MaybeStackVector<Measure> result;
 
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
-        quantity = (*unitConverters_[i]).convert(quantity);
+        quantity = roundl((*unitConverters_[i]).convert(quantity) * EPSILON) / EPSILON;
         if (i < n - 1) {
-            int64_t newQuantity = quantity;
+            int64_t newQuantity = floor(quantity);
             Formattable formattableNewQuantity(newQuantity);
 
             // NOTE: Measure would own its MeasureUnit.
