@@ -75,7 +75,7 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
     U_ASSERT(unitConverters_.length() > 0);
 
     // First converter converts to the biggest quantity.
-    double newQuantity = roundl( unitConverters_[0]->convert(quantity) * EPSILON) / EPSILON;
+    double newQuantity = roundl(unitConverters_[0]->convert(quantity) * EPSILON) / EPSILON;
 
     return newQuantity >= limit;
 }
