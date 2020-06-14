@@ -48,17 +48,16 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
 
 MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) {
     for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
-
         const auto &converterPreference = *converterPreferences_[i];
-
-        // In case of the last converter, the conversion will performed even the value is less than the
-        // limit.
-        if (i == n - 1) { return converterPreference.converter.convert(quantity, status); }
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
             return converterPreference.converter.convert(quantity, status);
         }
     }
+
+    // In case of the `quantity` does not fit in any converter limit, use the last converter.
+    const auto &lastConverter = (*converterPreferences_[converterPreferences_.length() - 1]).converter;
+    return lastConverter.convert(quantity, status);
 }
 
 U_NAMESPACE_END
