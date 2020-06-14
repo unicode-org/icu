@@ -1073,7 +1073,7 @@ group: units
     stringenumeration errorcode
 
 group: unitsformatter
-    unitsdata.o unitconverter.o
+    unitsdata.o unitconverter.o complexunitsconverter.o unitsrouter.o
   deps
     resourcebundle units_extra double_conversion number_representation
 
