@@ -55,12 +55,13 @@ $ICU_ROOT/tools/cldr/lib (see the README.txt in that directory for more
 information).
 
 $ cd "$ICU_ROOT/tools/cldr/lib"
-$ install-cldr-jars.sh "$CLDR_ROOT"
+$ ./install-cldr-jars.sh "$CLDR_ROOT"
 
 
 Generating all ICU data
 -----------------------
 
+$ cd "$ICU_ROOT/tools/cldr/cldr-to-icu"
 $ ant -f build-icu-data.xml
 
 
