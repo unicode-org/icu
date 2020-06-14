@@ -42,6 +42,7 @@ perf-*.xml
 test-*.xml
 
 # Directories
+.idea/
 .vs/
 .vscode/
 ARM/
@@ -56,6 +57,7 @@ bin/
 debug/
 doc/
 lib/
+!tools/cldr/lib
 out/
 release/
 tmp/

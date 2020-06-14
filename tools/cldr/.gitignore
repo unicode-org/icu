@@ -3,5 +3,5 @@
 !/lib/README.txt
 
 # Ignore the default Maven target directory.
-/target
+/cldr-to-icu/target
 
