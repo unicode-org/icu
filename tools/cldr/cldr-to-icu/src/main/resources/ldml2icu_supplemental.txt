@@ -98,11 +98,6 @@
 //supplementalData/measurementData/paperSize[@type="A4"][@territories="(%W)"] ; /measurementData/$1/PaperSize:intvector ; values=297 210
 //supplementalData/measurementData/paperSize[@type="US-Letter"][@territories="(%W)"] ; /measurementData/$1/PaperSize:intvector ; values=279 216
 
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"][@scope="small"]/unitPreference[@regions="(%A)"][@alt="informal"] ; /unitPreferenceData/$3/$1-$2-small-informal
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"][@scope="small"]/unitPreference[@regions="(%A)"] ; /unitPreferenceData/$3/$1-$2-small
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@alt="informal"] ; /unitPreferenceData/$3/$1-$2-informal
-//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"] ; /unitPreferenceData/$3/$1-$2
-
 //supplementalData/territoryInfo/territory[@type="(%W)"][@gdp="(%N)"][@literacyPercent="(%N)"][@population="(%N)"]/languagePopulation[@type="(%W)"][@writingPercent="(%N)"][@populationPercent="(%N)"][@officialStatus="(%W)"](?:[@references="%W"])?
     ; /territoryInfo/$1/territoryF:intvector ; values=&exp($2) &exp($3,-2) &exp($4) ; base_xpath=//supplementalData/territoryInfo/territory[@type="$1"]
     ; /territoryInfo/$1/$5/writingShareF:int ; values=&exp($6,-2)
@@ -144,6 +139,49 @@
     ; /calendarData/$1/eras/$2/named ; values=$5
 //supplementalData/calendarData/calendar[@type="(%W)"]/eras/era[@type="(%W)"][@(start|end)="(%A)"]
     ; /calendarData/$1/eras/$2/$3:intvector ; values=&ymd($4)
+
+# units.xml
+
+//supplementalData/unitConstants/unitConstant[@constant="(%W)"][@value="(%A)"](?:[@status="%W"])?
+    ; /unitConstants/$1 ; values="$2"
+
+//supplementalData/unitQuantities/unitQuantity[@baseUnit="(%W)"][@quantity="(%W)"](?:[@status="%W"])?
+    ; /unitQuantities/$1 ; values="$2"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"](?:[@systems="%W"])?
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"](?:[@systems="%W"])?
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@offset="(%A)"](?:[@systems="%W"])?
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values=1
+    ; /convertUnits/$1/offset ; values=$3
+
+//supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"][@factor="(%A)"][@offset="(%A)"](?:[@systems="%W"])?
+    ; /convertUnits/$1/target ; values=$2
+    ; /convertUnits/$1/factor ; values="$3"
+    ; /convertUnits/$1/offset ; values=$4
+
+# Quoting "$1" and "$2" in the output lets $3 expand space-separated regions: only the first unquoted output supports such expansion.
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@geq="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/geq ; values=$4
+
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@skeleton="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/skeleton ; values=$4
+
+//supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"][@geq="(%A)"][@skeleton="(%A)"]
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/geq ; values=$4
+    ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/skeleton ; values=$5
 
 # languageInfo.xml
 

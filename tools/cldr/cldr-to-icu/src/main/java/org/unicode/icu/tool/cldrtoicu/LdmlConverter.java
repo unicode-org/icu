@@ -109,11 +109,16 @@ public final class LdmlConverter {
             "territoryContainment",
             "territoryInfo",
             "timeData",
-            "unitPreferenceData",
             "weekData",
             "weekOfPreference");
     private static final Predicate<CldrPath> CURRENCY_DATA_PATHS =
         supplementalMatcher("currencyData");
+    private static final Predicate<CldrPath> UNITS_DATA_PATHS =
+        supplementalMatcher(
+            "convertUnits",
+            "unitConstants",
+            "unitQuantities",
+            "unitPreferenceData");
     private static final Predicate<CldrPath> NUMBERING_SYSTEMS_PATHS =
         supplementalMatcher("numberingSystems");
     private static final Predicate<CldrPath> WINDOWS_ZONES_PATHS =
@@ -153,6 +158,7 @@ public final class LdmlConverter {
         GENDER_LIST(SUPPLEMENTAL),
         LIKELY_SUBTAGS(SUPPLEMENTAL),
         SUPPLEMENTAL_DATA(SUPPLEMENTAL),
+        UNITS(SUPPLEMENTAL),
         CURRENCY_DATA(SUPPLEMENTAL),
         METADATA(SUPPLEMENTAL),
         META_ZONES(SUPPLEMENTAL),
@@ -470,6 +476,10 @@ public final class LdmlConverter {
 
             case SUPPLEMENTAL_DATA:
                 processSupplemental("supplementalData", SUPPLEMENTAL_DATA_PATHS, "misc", true);
+                break;
+
+            case UNITS:
+                processSupplemental("units", UNITS_DATA_PATHS, "misc", true);
                 break;
 
             case CURRENCY_DATA:
