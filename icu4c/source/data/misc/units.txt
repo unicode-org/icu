@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 units:table(nofallback){
-    cldrVersion{"37"}
+    cldrVersion{"38"}
     convertUnits{
         100-kilometer{
             factor{"100000"}
@@ -71,10 +71,6 @@ units:table(nofallback){
             factor{"1"}
             offset{"273.15"}
             target{"kelvin"}
-        }
-        centimeter{
-            factor{"1/100"}
-            target{"meter"}
         }
         century{
             factor{"100"}
@@ -1299,14 +1295,6 @@ units:table(nofallback){
                     }
                 }
                 SE{
-// Manual override of "SE road" preferences, to match what
-// unitPreferencesTest.txt claims should be produced.
-// CLDR:
-//                     {
-//                         geq{"0.1"}
-//                         unit{"mile-scandinavian"}
-//                     }
-// Overridden:
                     {
                         unit{"mile-scandinavian"}
                     }
@@ -1314,6 +1302,12 @@ units:table(nofallback){
                         unit{"kilometer"}
                     }
                     {
+                        geq{"300.0"}
+                        skeleton{"precision-increment/50"}
+                        unit{"meter"}
+                    }
+                    {
+                        skeleton{"precision-increment/10"}
                         unit{"meter"}
                     }
                 }
