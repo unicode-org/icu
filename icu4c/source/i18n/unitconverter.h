@@ -34,9 +34,21 @@ enum U_I18N_API UnitsConvertibilityState {
     UNCONVERTIBLE,
 };
 
-MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionRates &conversionRates,
-                                    UErrorCode &status);
+MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
+                                               const ConversionRates &conversionRates,
+                                               UErrorCode &status);
 
+/**
+ * Check if the convertibility between `source` and `target`.
+ * For example:
+ *    `meter` and `foot` are `CONVERTIBLE`.
+ *    `meter-per-second` and `second-per-meter` are `RECIPROCAL`.
+ *    `meter` and `pound` are `UNCONVERTIBLE`.
+ *
+ * NOTE:
+ *    Only works with SINGLE and COMPOUND units. If one of the units is a
+ *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
+ */
 UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
                                                         const MeasureUnit &target,
                                                         const ConversionRates &conversionRates,
@@ -46,8 +58,8 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
  *
  * NOTE:
- *    the source and the target must be singular such as `meter` to `mile` or `mile-per-second` to
- *    `kilometer-per-millisecond`. However, `foot+inch` is not permitted.
+ *    Only works with SINGLE and COMPOUND units. If one of the units is a
+ *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
 class U_I18N_API UnitConverter : public UMemory {
   public:

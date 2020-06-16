@@ -777,9 +777,13 @@ public:
     }
 
     template <typename... Args>
-    void emplaceBackAndConfirm(UErrorCode &status, Args &&... args) {
+    T *emplaceBackAndCheckErrorCode(UErrorCode &status, Args &&... args) {
         T *pointer = this->create(args...);
-        if (pointer == nullptr) { status = U_MEMORY_ALLOCATION_ERROR; }
+        if (U_SUCCESS(status) && pointer == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+
+        return pointer;
     }
 
     int32_t length() const {

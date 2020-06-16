@@ -126,7 +126,9 @@ struct Factor {
         constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
 
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            if (this->constants[i] == 0) { continue; }
+            if (this->constants[i] == 0) {
+                continue;
+            }
 
             auto absPower = std::abs(this->constants[i]);
             SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
@@ -155,7 +157,9 @@ double strToDouble(StringPiece strNum, UErrorCode &status) {
     StringToDoubleConverter converter(0, 0, 0, "", "");
     int32_t count;
     double result = converter.StringToDouble(strNum.data(), strNum.length(), &count);
-    if (count != strNum.length()) { status = U_INVALID_FORMAT_ERROR; }
+    if (count != strNum.length()) {
+        status = U_INVALID_FORMAT_ERROR;
+    }
 
     return result;
 }
@@ -179,56 +183,6 @@ double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
     return strToDouble(strWithDivide, status);
 }
 
-} // namespace
-// FIXME/TODO: this namespace closing and reopening hack makes below
-// function "public" with easy-to-read diffs. But better to move it to other
-// public functions.
-
-/**
- * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
- * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
- */
-MeasureUnit extractCompoundBaseUnit(const MeasureUnit &source, const ConversionRates &conversionRates,
-                                    UErrorCode &status) {
-    MeasureUnit result;
-    int32_t count;
-    const auto singleUnits = source.splitToSingleUnits(count, status);
-    if (U_FAILURE(status)) return result;
-
-    for (int i = 0; i < count; ++i) {
-        const auto &singleUnit = singleUnits[i];
-        // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
-        // we will use `meter`
-        const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
-        const auto rateInfo = conversionRates.extractConversionInfo(singleUnitImpl.identifier, status);
-        if (U_FAILURE(status)) { return result; }
-        if (rateInfo == nullptr) {
-            status = U_INTERNAL_PROGRAM_ERROR;
-            return result;
-        }
-
-        // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
-        // must be p4-meter. (NOTE: hectare --> square-meter)
-        auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
-
-        int32_t baseUnitsCount;
-        auto baseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCount, status);
-        for (int j = 0; j < baseUnitsCount; j++) {
-            int8_t newDimensionality =
-                baseUnits[j].getDimensionality(status) * singleUnit.getDimensionality(status);
-            result = result.product(baseUnits[j].withDimensionality(newDimensionality, status), status);
-
-            if (U_FAILURE(status)) { return result; }
-        }
-    }
-
-    return result;
-}
-
-// FIXME/TODO: fix this before merging the PR!
-namespace {
-
-// TODO: Load those constant from units data.
 /*
  * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
  */
@@ -301,8 +255,6 @@ void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum, UEr
 
 /*
  * Extracts `Factor` from a complete string factor. e.g. "ft2m^3*1007/cup2m3*3"
- *
- * TODO: warning: unused parameter 'status' [-Wunused-parameter]
  */
 Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
     Factor result;
@@ -378,7 +330,9 @@ UBool checkSimpleUnit(const MeasureUnit &unit, UErrorCode &status) {
     const auto &compoundSourceUnit = MeasureUnitImpl::forMeasureUnit(unit, memory, status);
     if (U_FAILURE(status)) return false;
 
-    if (compoundSourceUnit.complexity != UMEASURE_UNIT_SINGLE) { return false; }
+    if (compoundSourceUnit.complexity != UMEASURE_UNIT_SINGLE) {
+        return false;
+    }
 
     U_ASSERT(compoundSourceUnit.units.length() == 1);
     auto singleUnit = *(compoundSourceUnit.units[0]);
@@ -432,10 +386,62 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 
 } // namespace
 
+/**
+ * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
+ * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
+ */
+MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
+                                               const ConversionRates &conversionRates,
+                                               UErrorCode &status) {
+    MeasureUnit result;
+    int32_t count;
+    const auto singleUnits = source.splitToSingleUnits(count, status);
+    if (U_FAILURE(status)) return result;
+
+    for (int i = 0; i < count; ++i) {
+        const auto &singleUnit = singleUnits[i];
+        // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
+        // we will use `meter`
+        const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
+        const auto rateInfo = conversionRates.extractConversionInfo(singleUnitImpl.identifier, status);
+        if (U_FAILURE(status)) {
+            return result;
+        }
+        if (rateInfo == nullptr) {
+            status = U_INTERNAL_PROGRAM_ERROR;
+            return result;
+        }
+
+        // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
+        // must be p4-meter. (NOTE: hectare --> square-meter)
+        auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
+
+        int32_t baseUnitsCount;
+        auto baseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCount, status);
+        for (int j = 0; j < baseUnitsCount; j++) {
+            int8_t newDimensionality =
+                baseUnits[j].getDimensionality(status) * singleUnit.getDimensionality(status);
+            result = result.product(baseUnits[j].withDimensionality(newDimensionality, status), status);
+
+            if (U_FAILURE(status)) {
+                return result;
+            }
+        }
+    }
+
+    return result;
+}
+
 UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
                                                         const MeasureUnit &target,
                                                         const ConversionRates &conversionRates,
                                                         UErrorCode &status) {
+    if (source.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        target.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return UNCONVERTIBLE;
+    }
+
     auto sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
     auto targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
 
@@ -455,6 +461,13 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
 
 UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
                              UErrorCode &status) {
+
+    if (source.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        target.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+
     UnitsConvertibilityState unitsState = checkConvertibility(source, target, ratesInfo, status);
     if (U_FAILURE(status)) return;
     if (unitsState == UnitsConvertibilityState::UNCONVERTIBLE) {
@@ -478,11 +491,13 @@ double UnitConverter::convert(double inputValue) const {
 
     if (result == 0)
         return 0.0; // If the result is zero, it does not matter if the conversion are reciprocal or not.
-    if (conversionRate_.reciprocal) { result = 1.0 / result; }
+    if (conversionRate_.reciprocal) {
+        result = 1.0 / result;
+    }
 
     // Multiply the result by 1.000,000,001 to fix the deterioration from using `double`
     // TODO: remove the multiplication by 1.000,000,001 after using `decNumber`
-    return result * 1.000000001;
+    return result * 1.000000000001;
 }
 
 U_NAMESPACE_END

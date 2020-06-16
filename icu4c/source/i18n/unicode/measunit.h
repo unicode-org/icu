@@ -447,9 +447,12 @@ class U_I18N_API MeasureUnit: public UObject {
      * NOTE: Only works on SINGLE and COMPOUND units. If the current unit is a
      * MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
      *
+     * NOTE: Only merge units that are having the same identifier and the same SI prefix.
+     * For example, `square-meter` and `cubic-meter`, but not `meter` and `centimeter`.
+     *
      * @param status Set if this is a MIXED unit or if another error occurs.
      * @return a simplified version of the current unit.
-     * @draft ICU 67
+     * @draft ICU 68
      */
     MeasureUnit simplify( UErrorCode& status) const;
 

@@ -29,7 +29,6 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     MeasureUnit baseUnit = extractCompoundBaseUnit(inputUnit, conversionRates, status);
     CharString category = getUnitCategory(baseUnit.getIdentifier(), status);
 
-    // TODO: deal correctly with StringPiece / null-terminated string incompatibility...
     const UnitPreference *const *unitPreferences;
     int32_t preferencesCount;
     prefs.getPreferencesFor(category.data(), usage, region, unitPreferences, preferencesCount, status);
@@ -38,11 +37,15 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
         const auto &preference = *unitPreferences[i];
 
         MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
-        if (U_FAILURE(status)) { return; }
+        if (U_FAILURE(status)) {
+            return;
+        }
 
-        converterPreferences_.emplaceBackAndConfirm(status, inputUnit, complexTargetUnit, preference.geq,
-                                                    conversionRates, status);
-        if (U_FAILURE(status)) { return; }
+        converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
+                                                           preference.geq, conversionRates, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
     }
 }
 

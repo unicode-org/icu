@@ -5,8 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <cmath>
 #include <iostream>
-#include <cmath> 
 
 #include "charstr.h"
 #include "cmemory.h"
@@ -40,43 +40,27 @@ class UnitsTest : public IntlTest {
     void testConversionCapability();
     void testConversions();
     void testPreferences();
-
-    void testBasic();
     void testSiPrefixes();
     void testMass();
     void testTemperature();
     void testArea();
-    void testStatus();
-
-    // TODO(younies): remove after using CLDR test cases.
-    void verifyTestCase(const UnitConversionTestCase &testCase);
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
 
 void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
-    if (exec) { logln("TestSuite UnitsTest: "); }
+    if (exec) {
+        logln("TestSuite UnitsTest: ");
+    }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
-
-    TESTCASE_AUTO(testBasic);
     TESTCASE_AUTO(testSiPrefixes);
     TESTCASE_AUTO(testMass);
     TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO(testArea);
-    TESTCASE_AUTO(testStatus);
     TESTCASE_AUTO_END;
-}
-
-// Just for testing quick conversion ability.
-double testConvert(UnicodeString source, UnicodeString target, double input) {
-    if (source == u"meter" && target == u"foot" && input == 1.0) return 3.28084;
-
-    if (source == u"kilometer" && target == u"foot" && input == 1.0) return 328.084;
-
-    return -1;
 }
 
 void UnitsTest::testConversionCapability() {
@@ -105,47 +89,6 @@ void UnitsTest::testConversionCapability() {
         auto convertibility = checkConvertibility(source, target, conversionRates, status);
 
         assertEquals("Conversion Capability", testCase.expectedState, convertibility);
-    }
-}
-
-void UnitsTest::verifyTestCase(const UnitConversionTestCase &testCase) {
-    UErrorCode status = U_ZERO_ERROR;
-    MeasureUnit sourceUnit = MeasureUnit::forIdentifier(testCase.source, status);
-    MeasureUnit targetUnit = MeasureUnit::forIdentifier(testCase.target, status);
-
-    ConversionRates conversionRates(status);
-    UnitConverter converter(sourceUnit, targetUnit, conversionRates, status);
-
-    double actual = converter.convert(testCase.inputValue);
-
-    assertEqualsNear("test Conversion", testCase.expectedValue, actual, 0.0001);
-}
-
-void UnitsTest::testBasic() {
-    IcuTestErrorCode status(*this, "Units testBasic");
-
-    // Test Cases
-    struct TestCase {
-        StringPiece source;
-        StringPiece target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {"meter", "foot", 1.0, 3.28084},     //
-        {"kilometer", "foot", 1.0, 3280.84}, //
-    };
-
-    for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
-        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
-
-        ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
-
-        assertEqualsNear("test conversion", testCase.expectedValue,
-                         converter.convert(testCase.inputValue), 0.001);
     }
 }
 
@@ -328,9 +271,11 @@ struct UnitsTestContext {
  * @param pErrorCode Receives status.
  */
 void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, UErrorCode *pErrorCode) {
-    if (U_FAILURE(*pErrorCode)) { return; }
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
     UnitsTestContext *ctx = (UnitsTestContext *)context;
-    UnitsTest* unitsTest = ctx->unitsTest;
+    UnitsTest *unitsTest = ctx->unitsTest;
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*unitsTest, "unitsTestDatalineFn");
 
@@ -341,20 +286,25 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     StringPiece utf8Expected = trimField(fields[4]);
 
     UNumberFormat *nf = unum_open(UNUM_DEFAULT, NULL, -1, "en_US", NULL, status);
-    if (status.errIfFailureAndReset("unum_open failed")) { return; }
+    if (status.errIfFailureAndReset("unum_open failed")) {
+        return;
+    }
     UnicodeString uExpected = UnicodeString::fromUTF8(utf8Expected);
     double expected = unum_parseDouble(nf, uExpected.getBuffer(), uExpected.length(), 0, status);
     unum_close(nf);
-    if (status.errIfFailureAndReset("unum_parseDouble(\"%.*s\") failed", uExpected.length(),
-                                    uExpected.getBuffer())) {
+    if (status.errIfFailureAndReset("unum_parseDouble(\"%s\") failed", utf8Expected)) {
         return;
     }
 
     MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
-    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) { return; }
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) {
+        return;
+    }
 
     MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
-    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) { return; }
+    if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) {
+        return;
+    }
 
     unitsTest->logln("Quantity (Category): \"%.*s\", "
                      "Expected value of \"1000 %.*s in %.*s\": %f, "
@@ -373,7 +323,9 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
         .append(sourceUnit.getIdentifier(), status)
         .append(" -> ", status)
         .append(targetUnit.getIdentifier(), status);
-    if (status.errIfFailureAndReset("msg construction")) { return; }
+    if (status.errIfFailureAndReset("msg construction")) {
+        return;
+    }
     unitsTest->assertNotEquals(msg.data(), UNCONVERTIBLE, convertibility);
 
     // Conversion:
@@ -477,7 +429,7 @@ class ExpectedOutput {
         _skippedFields++;
         if (_skippedFields < 2) {
             // We are happy skipping one field per output unit: we want to skip
-            // rational fraction files like "11 / 10".
+            // rational fraction fields like "11 / 10".
             errorCode = U_ZERO_ERROR;
             return;
         } else {
@@ -501,8 +453,9 @@ class ExpectedOutput {
     }
 };
 
+// TODO(Hugo): Add a comment and Use AssertEqualsNear.
 void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
-                  const MaybeStackVector<Measure> &actual, double precision) {
+                 const MaybeStackVector<Measure> &actual, double precision) {
     IcuTestErrorCode status(*unitsTest, "checkOutput");
     bool success = true;
     if (expected._compoundCount != actual.length()) {
@@ -513,13 +466,14 @@ void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
             break;
         }
 
-        double diff = std::abs(expected._amounts[i] -
-                               actual[i]->getNumber().getDouble(status));
-        double diffPercent =
-            expected._amounts[i] != 0 ? diff / expected._amounts[i] : diff;
+        //assertEqualsNear("test conversion", expected._amounts[i],
+        //                 actual[i]->getNumber().getDouble(status), 0.0001);
+
+        double diff = std::abs(expected._amounts[i] - actual[i]->getNumber().getDouble(status));
+        double diffPercent = expected._amounts[i] != 0 ? diff / expected._amounts[i] : diff;
         if (diffPercent > precision) {
-          success = false;
-          break;
+            success = false;
+            break;
         }
 
         if (expected._measureUnits[i] != actual[i]->getUnit()) {
@@ -594,7 +548,9 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
                      region.data(), inputAmount, inputMeasureUnit.getIdentifier(),
                      expected.toDebugString().c_str());
 
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) {
+        return;
+    }
     UnitsRouter router(inputMeasureUnit, region, usage, status);
     if (status.errIfFailureAndReset("UnitsRouter(<%s>, \"%.*s\", \"%.*s\", status)",
                                     inputMeasureUnit.getIdentifier(), region.length(), region.data(),
@@ -611,9 +567,13 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     msg.append(inputD, status);
     msg.append(" ", status);
     msg.append(inputMeasureUnit.getIdentifier(), status);
-    if (status.errIfFailureAndReset("Failure before router.route")) { return; }
+    if (status.errIfFailureAndReset("Failure before router.route")) {
+        return;
+    }
     MaybeStackVector<Measure> result = router.route(inputAmount, status);
-    if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) { return; }
+    if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) {
+        return;
+    }
     checkOutput(unitsTest, msg.data(), expected, result, 0.0001);
 }
 
@@ -633,7 +593,9 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
     char *start, *limit;
     int32_t i;
 
-    if (U_FAILURE(*pErrorCode)) { return; }
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
 
     if (fields == NULL || lineFn == NULL || maxFieldCount <= 0) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -659,7 +621,9 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
         *pErrorCode = U_ZERO_ERROR;
 
         /* skip this line if it is empty or a comment */
-        if (*start == 0 || *start == '#') { continue; }
+        if (*start == 0 || *start == '#') {
+            continue;
+        }
 
         /* remove in-line comments */
         limit = uprv_strchr(start, '#');
@@ -674,7 +638,9 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
         }
 
         /* skip lines with only whitespace */
-        if (u_skipWhitespace(start)[0] == 0) { continue; }
+        if (u_skipWhitespace(start)[0] == 0) {
+            continue;
+        }
 
         /* for each field, call the corresponding field function */
         for (i = 0; i < maxFieldCount; ++i) {
@@ -696,15 +662,21 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
                 break;
             }
         }
-        if (i == maxFieldCount) { *pErrorCode = U_PARSE_ERROR; }
+        if (i == maxFieldCount) {
+            *pErrorCode = U_PARSE_ERROR;
+        }
         int fieldCount = i + 1;
 
         /* call the field function */
         lineFn(context, fields, fieldCount, pErrorCode);
-        if (U_FAILURE(*pErrorCode)) { break; }
+        if (U_FAILURE(*pErrorCode)) {
+            break;
+        }
     }
 
-    if (filename != NULL) { T_FileStream_close(file); }
+    if (filename != NULL) {
+        T_FileStream_close(file);
+    }
 }
 
 /**
@@ -732,10 +704,5 @@ void UnitsTest::testPreferences() {
         return;
     }
 }
-
-/**
- * Tests different return statuses depending on the input.
- */
-void UnitsTest::testStatus() {}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

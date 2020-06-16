@@ -770,55 +770,40 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
 }
 
 /**
- * Searches the `simplifiedUnits` for a unit with the same base identifier in the `newUnit`, for example
- * `meter` and `meter` or `millimeter` and `centimeter`.
- * After finding a match, the matched unit in simplified unit will be merged with the `newUnit` and
- * `true` will be returned. Otherwise, `false` will be returned.
+ * Searches the `simplifiedUnits` for a unit with the same base identifier and the same SI prefix.
+ * For example, `square-meter` and `cubic-meter` but not `meter` and `centimeter`.
+ * After that, the matched units will be merged.
  */
-bool findAndSet(MaybeStackVector<MeasureUnit> &simplifiedUnits, const MeasureUnit &newUnit,
-                UErrorCode &status) {
-    for (int i = 0, n = simplifiedUnits.length(); i < n; i++) {
-        auto simplifiedUnitImpl = SingleUnitImpl::forMeasureUnit(*simplifiedUnits[i], status);
-        auto newUnitImpl = SingleUnitImpl::forMeasureUnit(newUnit, status);
-        if (simplifiedUnitImpl.identifier == newUnitImpl.identifier) {
-            int32_t newDimensionality = simplifiedUnitImpl.dimensionality + newUnitImpl.dimensionality;
-            UMeasureSIPrefix newSIprefix = static_cast<UMeasureSIPrefix>(
-                simplifiedUnitImpl.siPrefix * simplifiedUnitImpl.dimensionality +
-                newUnitImpl.siPrefix * newUnitImpl.dimensionality);
+void findAndMerge(MeasureUnitImpl &simplifiedUnitsImpl, const SingleUnitImpl &newUnitImpl,
+                  UErrorCode &status) {
+    for (int i = 0, n = simplifiedUnitsImpl.units.length(); i < n; i++) {
+        auto& singleSimplifiedUnitImpl = *(simplifiedUnitsImpl.units[i]);
+        if (singleSimplifiedUnitImpl.identifier == newUnitImpl.identifier &&
+            singleSimplifiedUnitImpl.siPrefix == newUnitImpl.siPrefix) {
 
-            auto &simplifiedUnit = *simplifiedUnits[i];
-            simplifiedUnit = simplifiedUnit.withDimensionality(newDimensionality, status);
-            simplifiedUnit = simplifiedUnit.withSIPrefix(newSIprefix ,status);
-
-            return true;
+            singleSimplifiedUnitImpl.dimensionality += newUnitImpl.dimensionality;
+            return;
         }
     }
 
-    return false;
+    simplifiedUnitsImpl.units.emplaceBackAndCheckErrorCode(status, newUnitImpl);
 }
 
 MeasureUnit MeasureUnit::simplify(UErrorCode &status) const {
-    MeasureUnit result;
     if (this->getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
-        return result;
+        return MeasureUnit();
     }
+
+    MeasureUnitImpl resultImpl;
 
     int32_t outCount;
     auto singleUnits = this->splitToSingleUnits(outCount, status);
-
-    MaybeStackVector<MeasureUnit> simplifiedUnits;
-    for (int i = 0 ; i < outCount ; ++i) {
-        if (findAndSet(simplifiedUnits,singleUnits[i] , status )) { continue;}
-
-        simplifiedUnits.emplaceBackAndConfirm(status, singleUnits[i]);
+    for (int i = 0; i < outCount; ++i) {
+        findAndMerge(resultImpl, SingleUnitImpl::forMeasureUnit(singleUnits[i], status), status);
     }
 
-    for (int i = 0 , n = simplifiedUnits.length() ; i < n ; ++i) {
-        result = result.product(*simplifiedUnits[i] , status);
-    }
-
-    return result;
+    return std::move(resultImpl).build(status);
 }
 
 LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(int32_t& outCount, UErrorCode& status) const {
