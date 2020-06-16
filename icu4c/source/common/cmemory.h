@@ -728,6 +728,18 @@ public:
         return fPool[fCount++] = new T(std::forward<Args>(args)...);
     }
 
+    template <typename... Args>
+    T* createAndCheckErrorCode(UErrorCode &status, Args &&... args) {
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
+        T *pointer = this->create(args...);
+        if (U_SUCCESS(status) && pointer == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return pointer;
+    }
+
     /**
      * @return Number of elements that have been allocated.
      */
@@ -769,6 +781,11 @@ public:
     template<typename... Args>
     T* emplaceBack(Args&&... args) {
         return this->create(args...);
+    }
+
+    template <typename... Args>
+    T *emplaceBackAndCheckErrorCode(UErrorCode &status, Args &&... args) {
+        return this->createAndCheckErrorCode(status, args...);
     }
 
     int32_t length() const {
