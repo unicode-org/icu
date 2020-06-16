@@ -778,6 +778,9 @@ public:
 
     template <typename... Args>
     T *emplaceBackAndCheckErrorCode(UErrorCode &status, Args &&... args) {
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
         T *pointer = this->create(args...);
         if (U_SUCCESS(status) && pointer == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
