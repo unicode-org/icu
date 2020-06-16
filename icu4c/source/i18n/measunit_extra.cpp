@@ -769,15 +769,16 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     return std::move(impl).build(status);
 }
 
+namespace {
 /**
- * Searches the `simplifiedUnits` for a unit with the same base identifier and the same SI prefix.
- * For example, `square-meter` and `cubic-meter` but not `meter` and `centimeter`.
- * After that, the matched units will be merged.
+ * Searches the `simplifiedUnits` for a unit with the same base identifier and the same SI prefix
+ * (For example, `square-meter` and `cubic-meter` but not `meter` and `centimeter`). After that, the
+ * matched units will be merged. Otherwise, the `newUnitImpl` will be appended.
  */
 void findAndMerge(MeasureUnitImpl &simplifiedUnitsImpl, const SingleUnitImpl &newUnitImpl,
                   UErrorCode &status) {
     for (int i = 0, n = simplifiedUnitsImpl.units.length(); i < n; i++) {
-        auto& singleSimplifiedUnitImpl = *(simplifiedUnitsImpl.units[i]);
+        auto &singleSimplifiedUnitImpl = *(simplifiedUnitsImpl.units[i]);
         if (singleSimplifiedUnitImpl.identifier == newUnitImpl.identifier &&
             singleSimplifiedUnitImpl.siPrefix == newUnitImpl.siPrefix) {
 
@@ -785,9 +786,9 @@ void findAndMerge(MeasureUnitImpl &simplifiedUnitsImpl, const SingleUnitImpl &ne
             return;
         }
     }
-
-    simplifiedUnitsImpl.units.emplaceBackAndCheckErrorCode(status, newUnitImpl);
+    simplifiedUnitsImpl.append(newUnitImpl, status);
 }
+} // namespace
 
 MeasureUnit MeasureUnit::simplify(UErrorCode &status) const {
     if (this->getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
@@ -797,10 +798,9 @@ MeasureUnit MeasureUnit::simplify(UErrorCode &status) const {
 
     MeasureUnitImpl resultImpl;
 
-    int32_t outCount;
-    auto singleUnits = this->splitToSingleUnits(outCount, status);
-    for (int i = 0; i < outCount; ++i) {
-        findAndMerge(resultImpl, SingleUnitImpl::forMeasureUnit(singleUnits[i], status), status);
+    const auto &units = (*MeasureUnitImpl::get(*this)).units;
+    for (int i = 0, n = units.length(); i < n; ++i) {
+        findAndMerge(resultImpl, *units[i], status);
     }
 
     return std::move(resultImpl).build(status);
