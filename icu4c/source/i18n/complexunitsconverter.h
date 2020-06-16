@@ -52,7 +52,7 @@ class U_I18N_API ComplexUnitsConverter {
     //                  1 meter --> 3 feet, 3.3701 inches
     //         NOTE:
     //           the smallest element is the only element that could have fractional values. And all
-    //           other elements are rounded to the nearest integer
+    //           other elements are floored to the nearest integer
     MaybeStackVector<Measure> convert(double quantity, UErrorCode &status) const;
 
   private:
