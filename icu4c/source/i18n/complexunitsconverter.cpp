@@ -48,8 +48,20 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
     auto singleUnits = outputUnits.splitToSingleUnits(length, status);
     MaybeStackVector<MeasureUnit> singleUnitsInOrder;
     for (int i = 0; i < length; ++i) {
-        // TODO(younies): ensure units being in order by the biggest unit at first.
-        // This issue is part of phase 2.
+        /**
+         *  TODO(younies): ensure units being in order by the biggest unit at first.
+         * 
+         * HINT:
+         *  MaybeStackVector<SingleUnitImpl> singleUnitsInOrder =  MeasureUnitImpl::forMeasureUnitMaybeCopy(outputUnits, status).units;
+         *      uprv_sortArray(
+         *      singleUnitsInOrder.getAlias(),
+         *      singleUnitsInOrder.length(),
+         *      sizeof(singleUnitsInOrder[0]),
+         *      compareSingleUnits,
+         *      nullptr,
+         *      false,
+         *      &status);
+         */ 
         singleUnitsInOrder.emplaceBackAndCheckErrorCode(status, singleUnits[i]);
     }
 
