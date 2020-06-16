@@ -12,18 +12,18 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
-#include <cstdlib>
 #include "cstring.h"
 #include "measunit_impl.h"
 #include "uarrsort.h"
 #include "uassert.h"
 #include "ucln_in.h"
 #include "umutex.h"
+#include "unicode/bytestrie.h"
+#include "unicode/bytestriebuilder.h"
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/measunit.h"
-#include "unicode/ucharstrie.h"
-#include "unicode/ucharstriebuilder.h"
+#include <cstdlib>
 
 #include "cstr.h"
 
@@ -111,114 +111,117 @@ const struct SIPrefixStrings {
 };
 
 // TODO(ICU-21059): Get this list from data
-const char16_t* const gSimpleUnits[] = {
-    u"candela",
-    u"carat",
-    u"gram",
-    u"ounce",
-    u"ounce-troy",
-    u"pound",
-    u"kilogram",
-    u"stone",
-    u"ton",
-    u"metric-ton",
-    u"earth-mass",
-    u"solar-mass",
-    u"point",
-    u"inch",
-    u"foot",
-    u"yard",
-    u"meter",
-    u"fathom",
-    u"furlong",
-    u"mile",
-    u"nautical-mile",
-    u"mile-scandinavian",
-    u"100-kilometer",
-    u"earth-radius",
-    u"solar-radius",
-    u"astronomical-unit",
-    u"light-year",
-    u"parsec",
-    u"second",
-    u"minute",
-    u"hour",
-    u"day",
-    u"day-person",
-    u"week",
-    u"week-person",
-    u"month",
-    u"month-person",
-    u"year",
-    u"year-person",
-    u"decade",
-    u"century",
-    u"ampere",
-    u"fahrenheit",
-    u"kelvin",
-    u"celsius",
-    u"arc-second",
-    u"arc-minute",
-    u"degree",
-    u"radian",
-    u"revolution",
-    u"item",
-    u"mole",
-    u"permillion",
-    u"permyriad",
-    u"permille",
-    u"percent",
-    u"karat",
-    u"portion",
-    u"bit",
-    u"byte",
-    u"dot",
-    u"pixel",
-    u"em",
-    u"hertz",
-    u"newton",
-    u"pound-force",
-    u"pascal",
-    u"bar",
-    u"atmosphere",
-    u"ofhg",
-    u"electronvolt",
-    u"dalton",
-    u"joule",
-    u"calorie",
-    u"british-thermal-unit",
-    u"foodcalorie",
-    u"therm-us",
-    u"watt",
-    u"horsepower",
-    u"solar-luminosity",
-    u"volt",
-    u"ohm",
-    u"dunam",
-    u"acre",
-    u"hectare",
-    u"teaspoon",
-    u"tablespoon",
-    u"fluid-ounce-imperial",
-    u"fluid-ounce",
-    u"cup",
-    u"cup-metric",
-    u"pint",
-    u"pint-metric",
-    u"quart",
-    u"liter",
-    u"gallon",
-    u"gallon-imperial",
-    u"bushel",
-    u"barrel",
-    u"knot",
-    u"g-force",
-    u"lux",
+//
+// NB: SingleUnitImpl::getSimpleUnitID() returns char*'s pointing at these
+// strings, take appropriate care with refactoring and updating documentation.
+const char *const gSimpleUnits[] = {
+    "candela",
+    "carat",
+    "gram",
+    "ounce",
+    "ounce-troy",
+    "pound",
+    "kilogram",
+    "stone",
+    "ton",
+    "metric-ton",
+    "earth-mass",
+    "solar-mass",
+    "point",
+    "inch",
+    "foot",
+    "yard",
+    "meter",
+    "fathom",
+    "furlong",
+    "mile",
+    "nautical-mile",
+    "mile-scandinavian",
+    "100-kilometer",
+    "earth-radius",
+    "solar-radius",
+    "astronomical-unit",
+    "light-year",
+    "parsec",
+    "second",
+    "minute",
+    "hour",
+    "day",
+    "day-person",
+    "week",
+    "week-person",
+    "month",
+    "month-person",
+    "year",
+    "year-person",
+    "decade",
+    "century",
+    "ampere",
+    "fahrenheit",
+    "kelvin",
+    "celsius",
+    "arc-second",
+    "arc-minute",
+    "degree",
+    "radian",
+    "revolution",
+    "item",
+    "mole",
+    "permillion",
+    "permyriad",
+    "permille",
+    "percent",
+    "karat",
+    "portion",
+    "bit",
+    "byte",
+    "dot",
+    "pixel",
+    "em",
+    "hertz",
+    "newton",
+    "pound-force",
+    "pascal",
+    "bar",
+    "atmosphere",
+    "ofhg",
+    "electronvolt",
+    "dalton",
+    "joule",
+    "calorie",
+    "british-thermal-unit",
+    "foodcalorie",
+    "therm-us",
+    "watt",
+    "horsepower",
+    "solar-luminosity",
+    "volt",
+    "ohm",
+    "dunam",
+    "acre",
+    "hectare",
+    "teaspoon",
+    "tablespoon",
+    "fluid-ounce-imperial",
+    "fluid-ounce",
+    "cup",
+    "cup-metric",
+    "pint",
+    "pint-metric",
+    "quart",
+    "liter",
+    "gallon",
+    "gallon-imperial",
+    "bushel",
+    "barrel",
+    "knot",
+    "g-force",
+    "lux",
 };
 
 icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
 
-char16_t* kSerializedUnitExtrasStemTrie = nullptr;
+char *kSerializedUnitExtrasStemTrie = nullptr;
 
 UBool U_CALLCONV cleanupUnitExtras() {
     uprv_free(kSerializedUnitExtrasStemTrie);
@@ -230,37 +233,36 @@ UBool U_CALLCONV cleanupUnitExtras() {
 void U_CALLCONV initUnitExtras(UErrorCode& status) {
     ucln_i18n_registerCleanup(UCLN_I18N_UNIT_EXTRAS, cleanupUnitExtras);
 
-    UCharsTrieBuilder b(status);
+    BytesTrieBuilder b(status);
     if (U_FAILURE(status)) { return; }
 
     // Add SI prefixes
     for (const auto& siPrefixInfo : gSIPrefixStrings) {
-        UnicodeString uSIPrefix(siPrefixInfo.string, -1, US_INV);
-        b.add(uSIPrefix, siPrefixInfo.value + kSIPrefixOffset, status);
+        b.add(siPrefixInfo.string, siPrefixInfo.value + kSIPrefixOffset, status);
     }
     if (U_FAILURE(status)) { return; }
 
     // Add syntax parts (compound, power prefixes)
-    b.add(u"-per-", COMPOUND_PART_PER, status);
-    b.add(u"-", COMPOUND_PART_TIMES, status);
-    b.add(u"-and-", COMPOUND_PART_AND, status);
-    b.add(u"per-", INITIAL_COMPOUND_PART_PER, status);
-    b.add(u"square-", POWER_PART_P2, status);
-    b.add(u"cubic-", POWER_PART_P3, status);
-    b.add(u"p2-", POWER_PART_P2, status);
-    b.add(u"p3-", POWER_PART_P3, status);
-    b.add(u"p4-", POWER_PART_P4, status);
-    b.add(u"p5-", POWER_PART_P5, status);
-    b.add(u"p6-", POWER_PART_P6, status);
-    b.add(u"p7-", POWER_PART_P7, status);
-    b.add(u"p8-", POWER_PART_P8, status);
-    b.add(u"p9-", POWER_PART_P9, status);
-    b.add(u"p10-", POWER_PART_P10, status);
-    b.add(u"p11-", POWER_PART_P11, status);
-    b.add(u"p12-", POWER_PART_P12, status);
-    b.add(u"p13-", POWER_PART_P13, status);
-    b.add(u"p14-", POWER_PART_P14, status);
-    b.add(u"p15-", POWER_PART_P15, status);
+    b.add("-per-", COMPOUND_PART_PER, status);
+    b.add("-", COMPOUND_PART_TIMES, status);
+    b.add("-and-", COMPOUND_PART_AND, status);
+    b.add("per-", INITIAL_COMPOUND_PART_PER, status);
+    b.add("square-", POWER_PART_P2, status);
+    b.add("cubic-", POWER_PART_P3, status);
+    b.add("p2-", POWER_PART_P2, status);
+    b.add("p3-", POWER_PART_P3, status);
+    b.add("p4-", POWER_PART_P4, status);
+    b.add("p5-", POWER_PART_P5, status);
+    b.add("p6-", POWER_PART_P6, status);
+    b.add("p7-", POWER_PART_P7, status);
+    b.add("p8-", POWER_PART_P8, status);
+    b.add("p9-", POWER_PART_P9, status);
+    b.add("p10-", POWER_PART_P10, status);
+    b.add("p11-", POWER_PART_P11, status);
+    b.add("p12-", POWER_PART_P12, status);
+    b.add("p13-", POWER_PART_P13, status);
+    b.add("p14-", POWER_PART_P14, status);
+    b.add("p15-", POWER_PART_P15, status);
     if (U_FAILURE(status)) { return; }
 
     // Add sanctioned simple units by offset
@@ -271,14 +273,17 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
 
     // Build the CharsTrie
     // TODO: Use SLOW or FAST here?
-    UnicodeString result;
-    b.buildUnicodeString(USTRINGTRIE_BUILD_FAST, result, status);
+    StringPiece result = b.buildStringPiece(USTRINGTRIE_BUILD_FAST, status);
     if (U_FAILURE(status)) { return; }
 
     // Copy the result into the global constant pointer
-    size_t numBytes = result.length() * sizeof(char16_t);
-    kSerializedUnitExtrasStemTrie = static_cast<char16_t*>(uprv_malloc(numBytes));
-    uprv_memcpy(kSerializedUnitExtrasStemTrie, result.getBuffer(), numBytes);
+    size_t numBytes = result.length();
+    kSerializedUnitExtrasStemTrie = static_cast<char *>(uprv_malloc(numBytes));
+    if (kSerializedUnitExtrasStemTrie == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    uprv_memcpy(kSerializedUnitExtrasStemTrie, result.data(), numBytes);
 }
 
 class Token {
@@ -385,7 +390,7 @@ private:
     // should live longer than this Parser - and the parser shouldn't return any
     // references to that string.
     StringPiece fSource;
-    UCharsTrie fTrie;
+    BytesTrie fTrie;
 
     // Set to true when we've seen a "-per-" or a "per-", after which all units
     // are in the denominator. Until we find an "-and-", at which point the
@@ -666,7 +671,7 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
         return;
     }
 
-    output.appendInvariantChars(gSimpleUnits[singleUnit.index], status);
+    output.append(gSimpleUnits[singleUnit.index], status);
 }
 
 /**
@@ -777,6 +782,9 @@ MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
     return std::move(temp).build(status);
 }
 
+const char *SingleUnitImpl::getSimpleUnitID() const {
+    return gSimpleUnits[index];
+}
 
 MeasureUnitImpl MeasureUnitImpl::forIdentifier(StringPiece identifier, UErrorCode& status) {
     return Parser::from(identifier, status).parse(status);
