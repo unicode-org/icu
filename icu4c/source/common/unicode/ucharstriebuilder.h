@@ -101,9 +101,10 @@ public:
      * Multiple calls to buildUnicodeString() set the UnicodeStrings to the
      * builder's same char16_t array, without rebuilding.
      * If buildUnicodeString() is called after build(), the trie will be
-     * re-serialized into a new array.
-     * If build() is called after buildUnicodeString(), the trie object will become
-     * the owner of the previously returned array.
+     * re-serialized into a new array (because build() passes on ownership).
+     * If build() is called after buildUnicodeString(), the trie object returned
+     * by build() will become the owner of the underlying data for the
+     * previously returned UnicodeString.
      * After clear() has been called, a new array will be used as well.
      * @param buildOption Build option, see UStringTrieBuildOption.
      * @param result A UnicodeString which will be set to the char16_t-serialized

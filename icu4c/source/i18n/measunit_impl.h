@@ -33,6 +33,16 @@ struct SingleUnitImpl : public UMemory {
     MeasureUnit build(UErrorCode& status) const;
 
     /**
+     * Returns the "simple unit ID", without SI or dimensionality prefix: this
+     * instance may represent a square-kilometer, but only "meter" will be
+     * returned.
+     *
+     * The returned pointer points at static memory and does not need to be
+     * cleaned up.
+     */
+    const char *getSimpleUnitID() const;
+
+    /**
      * Compare this SingleUnitImpl to another SingleUnitImpl for the sake of
      * sorting and coalescing.
      *

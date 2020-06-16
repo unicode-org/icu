@@ -101,9 +101,10 @@ public:
      * Multiple calls to buildStringPiece() return StringPieces referring to the
      * builder's same byte array, without rebuilding.
      * If buildStringPiece() is called after build(), the trie will be
-     * re-serialized into a new array.
-     * If build() is called after buildStringPiece(), the trie object will become
-     * the owner of the previously returned array.
+     * re-serialized into a new array (because build() passes on ownership).
+     * If build() is called after buildStringPiece(), the trie object returned
+     * by build() will become the owner of the underlying string for the
+     * previously returned StringPiece.
      * After clear() has been called, a new array will be used as well.
      * @param buildOption Build option, see UStringTrieBuildOption.
      * @param errorCode Standard ICU error code. Its input value must
