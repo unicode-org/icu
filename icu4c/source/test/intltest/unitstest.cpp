@@ -466,7 +466,7 @@ void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
             break;
         }
 
-        //assertEqualsNear("test conversion", expected._amounts[i],
+        // assertEqualsNear("test conversion", expected._amounts[i],
         //                 actual[i]->getNumber().getDouble(status), 0.0001);
 
         double diff = std::abs(expected._amounts[i] - actual[i]->getNumber().getDouble(status));
