@@ -650,6 +650,23 @@ bool appendImpl(MeasureUnitImpl& impl, const SingleUnitImpl& unit, UErrorCode& s
     return (oldUnit == nullptr);
 }
 
+/**
+ * Searches the `impl` for an internal unit with the same base identifier and the same SI prefix as
+ * `unit`. (For example, `square-meter` and `cubic-meter` but not `meter` and `centimeter`). After that,
+ * the matched units will be merged. Otherwise, the `unit` will be appended.
+ */
+void appendAndMergeImpl(MeasureUnitImpl &impl, const SingleUnitImpl &unit, UErrorCode &status) {
+    for (int32_t i = 0, n = impl.units.length(); i < n; i++) {
+        auto *candidate = impl.units[i];
+        if (candidate->identifier == unit.identifier && candidate->siPrefix == unit.siPrefix) {
+            candidate->dimensionality += unit.dimensionality;
+            return;
+        }
+    }
+
+    impl.append(unit, status);
+}
+
 } // namespace
 
 
@@ -769,27 +786,6 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     return std::move(impl).build(status);
 }
 
-namespace {
-/**
- * Searches the `simplifiedUnits` for a unit with the same base identifier and the same SI prefix
- * (For example, `square-meter` and `cubic-meter` but not `meter` and `centimeter`). After that, the
- * matched units will be merged. Otherwise, the `newUnitImpl` will be appended.
- */
-void findAndMerge(MeasureUnitImpl &simplifiedUnitsImpl, const SingleUnitImpl &newUnitImpl,
-                  UErrorCode &status) {
-    for (int i = 0, n = simplifiedUnitsImpl.units.length(); i < n; i++) {
-        auto &singleSimplifiedUnitImpl = *(simplifiedUnitsImpl.units[i]);
-        if (singleSimplifiedUnitImpl.identifier == newUnitImpl.identifier &&
-            singleSimplifiedUnitImpl.siPrefix == newUnitImpl.siPrefix) {
-
-            singleSimplifiedUnitImpl.dimensionality += newUnitImpl.dimensionality;
-            return;
-        }
-    }
-    simplifiedUnitsImpl.append(newUnitImpl, status);
-}
-} // namespace
-
 MeasureUnit MeasureUnit::simplify(UErrorCode &status) const {
     if (this->getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
@@ -798,9 +794,10 @@ MeasureUnit MeasureUnit::simplify(UErrorCode &status) const {
 
     MeasureUnitImpl resultImpl;
 
-    const auto &units = (*MeasureUnitImpl::get(*this)).units;
+    MeasureUnitImpl temp;
+    const auto &units = MeasureUnitImpl::forMeasureUnit(*this, temp, status).units;
     for (int i = 0, n = units.length(); i < n; ++i) {
-        findAndMerge(resultImpl, *units[i], status);
+        appendAndMergeImpl(resultImpl, *units[i], status);
     }
 
     return std::move(resultImpl).build(status);
