@@ -66,8 +66,8 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 
 void UnitsTest::testConversionCapability() {
     struct TestCase {
-        const char *source;
-        const char *target;
+        const char *const source;
+        const char *const target;
         const UnitsConvertibilityState expectedState;
     } testCases[]{
         {"meter", "foot", CONVERTIBLE},                                         //
