@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 units:table(nofallback){
-    cldrVersion{"38"}
+    cldrVersion{"37"}
     convertUnits{
         100-kilometer{
             factor{"100000"}
