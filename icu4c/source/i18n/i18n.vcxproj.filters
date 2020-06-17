@@ -654,6 +654,12 @@
     <ClCompile Include="unitconverter.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="complexunitsconverter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="unitsrouter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="unitsdata.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -1002,6 +1008,12 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="unitconveter.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="complexunitsconverter.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="unitsrouter.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="unitsdata.h">

@@ -34,6 +34,21 @@ enum U_I18N_API UnitsConvertibilityState {
     UNCONVERTIBLE,
 };
 
+MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
+                                               const ConversionRates &conversionRates,
+                                               UErrorCode &status);
+
+/**
+ * Check if the convertibility between `source` and `target`.
+ * For example:
+ *    `meter` and `foot` are `CONVERTIBLE`.
+ *    `meter-per-second` and `second-per-meter` are `RECIPROCAL`.
+ *    `meter` and `pound` are `UNCONVERTIBLE`.
+ *
+ * NOTE:
+ *    Only works with SINGLE and COMPOUND units. If one of the units is a
+ *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
+ */
 UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
                                                         const MeasureUnit &target,
                                                         const ConversionRates &conversionRates,
@@ -41,8 +56,12 @@ UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &sourc
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
+ *
+ * NOTE:
+ *    Only works with SINGLE and COMPOUND units. If one of the units is a
+ *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
-class U_I18N_API UnitConverter {
+class U_I18N_API UnitConverter : public UMemory {
   public:
     /**
      * Constructor of `UnitConverter`.
@@ -54,8 +73,8 @@ class U_I18N_API UnitConverter {
      * @param target represents the target unit.
      * @param status
      */
-    UnitConverter(MeasureUnit source, MeasureUnit target,
-                  const ConversionRates &ratesInfo, UErrorCode &status);
+    UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
+                  UErrorCode &status);
 
     /**
      * Convert a value in the source unit to another value in the target unit.

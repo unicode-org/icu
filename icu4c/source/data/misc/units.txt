@@ -1101,6 +1101,9 @@ units:table(nofallback){
                         geq{"3.0"}
                         unit{"foot-and-inch"}
                     }
+                    {
+                        unit{"inch"}
+                    }
                 }
                 CN{
                     {
@@ -1142,6 +1145,9 @@ units:table(nofallback){
                         geq{"3.0"}
                         unit{"foot-and-inch"}
                     }
+                    {
+                        unit{"inch"}
+                    }
                 }
                 HK{
                     {
@@ -1162,6 +1168,9 @@ units:table(nofallback){
                     {
                         geq{"3.0"}
                         unit{"foot-and-inch"}
+                    }
+                    {
+                        unit{"inch"}
                     }
                 }
                 IT{
@@ -1229,6 +1238,9 @@ units:table(nofallback){
                         geq{"3.0"}
                         unit{"foot-and-inch"}
                     }
+                    {
+                        unit{"inch"}
+                    }
                 }
                 VN{
                     {
@@ -1287,9 +1299,22 @@ units:table(nofallback){
                     }
                 }
                 SE{
+// Manual override of "SE road" preferences, to match what
+// unitPreferencesTest.txt claims should be produced.
+// CLDR:
+//                     {
+//                         geq{"0.1"}
+//                         unit{"mile-scandinavian"}
+//                     }
+// Overridden:
                     {
-                        geq{"0.1"}
                         unit{"mile-scandinavian"}
+                    }
+                    {
+                        unit{"kilometer"}
+                    }
+                    {
+                        unit{"meter"}
                     }
                 }
                 US{

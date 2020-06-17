@@ -430,7 +430,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * For example, if the receiver is "kilowatt" and the argument is "hour-per-day", then the
      * unit "kilowatt-hour-per-day" is returned.
      *
-     * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receivee and argument) is a
+     * NOTE: Only works on SINGLE and COMPOUND units. If either unit (receiver and argument) is a
      * MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
      *
      * @param other The MeasureUnit to multiply with the target.
@@ -439,6 +439,23 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 67
      */
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
+
+    /**
+     * Extracts a simplified version of the unit (i.e. no repetition in the internal units). For example,
+     * "square-meter-per-meter" will be "meter".
+     *
+     * NOTE: Only works on SINGLE and COMPOUND units. If the current unit is a
+     * MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
+     *
+     * NOTE: Only merge units that are having the same identifier and the same SI prefix.
+     * For example, `square-meter` and `cubic-meter`, but not `meter` and `centimeter`.
+     *
+     * @param status Set if this is a MIXED unit or if another error occurs.
+     * @return a simplified version of the current unit.
+     * @draft ICU 68
+     */
+    MeasureUnit simplify( UErrorCode& status) const;
+
 #endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
