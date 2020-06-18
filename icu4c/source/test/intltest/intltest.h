@@ -166,30 +166,27 @@ public:
     virtual void logln( void );
 
     /**
-     * Replaces isICUVersionAtLeast and isICUVersionBefore
-     * log that an issue is known.
+     * Logs that an issue is known. Can be called multiple times.
      * Usually used this way:
-     * <code>if( ... && logKnownIssue("12345", "some bug")) continue; </code>
-     * @param ticket ticket string, "12345" or "cldrbug:1234"
+     * <code>if( ... && logKnownIssue("ICU-12345", "some bug")) continue; </code>
+     * @param ticket ticket string, "ICU-12345" or "CLDR-1234"
      * @param message optional message string
      * @return true if test should be skipped
      */
     UBool logKnownIssue( const char *ticket, const UnicodeString &message );
     /**
-     * Replaces isICUVersionAtLeast and isICUVersionBefore
-     * log that an issue is known.
+     * Logs that an issue is known. Can be called multiple times.
      * Usually used this way:
-     * <code>if( ... && logKnownIssue("12345", "some bug")) continue; </code>
-     * @param ticket ticket string, "12345" or "cldrbug:1234"
+     * <code>if( ... && logKnownIssue("ICU-12345", "some bug")) continue; </code>
+     * @param ticket ticket string, "ICU-12345" or "CLDR-1234"
      * @return true if test should be skipped
      */
     UBool logKnownIssue( const char *ticket );
     /**
-     * Replaces isICUVersionAtLeast and isICUVersionBefore
-     * log that an issue is known.
+     * Log that an issue is known. Can be called multiple times.
      * Usually used this way:
-     * <code>if( ... && logKnownIssue("12345", "some bug")) continue; </code>
-     * @param ticket ticket string, "12345" or "cldrbug:1234"
+     * <code>if( ... && logKnownIssue("ICU-12345", "some bug")) continue; </code>
+     * @param ticket ticket string, "ICU-12345" or "CLDR-1234"
      * @param message optional message string
      * @return true if test should be skipped
      */

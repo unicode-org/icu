@@ -3932,6 +3932,50 @@ public class ULocaleTest extends TestFmwk {
                     "art_Moon_AQ",
                     "",
                     ""
+                }, {
+                    "aae_Latn_IT",
+                    "aae_Latn_IT",
+                    "aae_Latn_IT"
+                }, {
+                    "aae_Thai_CO",
+                    "aae_Thai_CO",
+                    "aae_Thai_CO"
+                }, {
+                    "und_CW",
+                    "pap_Latn_CW",
+                    "pap_CW"
+                }, {
+                    "zh_Hant",
+                    "zh_Hant_TW",
+                    "zh_TW"
+                }, {
+                    "zh_Hani",
+                    "zh_Hani_CN",
+                    "zh_Hani"
+                }, {
+                    "und",
+                    "en_Latn_US",
+                    "en"
+                }, {
+                    "und_Thai",
+                    "th_Thai_TH",
+                    "th"
+                }, {
+                    "und_419",
+                    "es_Latn_419",
+                    "es_419"
+                }, {
+                    "und_150",
+                    "ru_Cyrl_RU",
+                    "ru"
+                }, {
+                    "und_AT",
+                    "de_Latn_AT",
+                    "de_AT"
+                }, {
+                    "und_US",
+                    "en_Latn_US",
+                    "en"
                 }
         };
 

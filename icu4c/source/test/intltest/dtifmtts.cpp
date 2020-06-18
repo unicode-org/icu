@@ -1943,6 +1943,9 @@ void DateIntervalFormatTest::testTicket20707() {
         int32_t j = 0;
         for (const UnicodeString skeleton : {u"hh", u"HH", u"kk", u"KK", u"jj", u"JJs", u"CC"}) {
             LocalPointer<DateIntervalFormat> dtifmt(DateIntervalFormat::createInstance(skeleton, locale, status));
+            if (status.errDataIfFailureAndReset()) {
+                continue;
+            }
             FieldPosition fposition;
             UnicodeString result;
             LocalPointer<Calendar> calendar(Calendar::createInstance(TimeZone::createTimeZone(timeZone), status));

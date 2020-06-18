@@ -1674,8 +1674,15 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     int32_t getMinimumGroupingDigits() const;
 
     /**
-     * Sets the minimum grouping digits. Setting to a value less than or
-     * equal to 1 turns off minimum grouping digits.
+     * Sets the minimum grouping digits. Setting the value to
+     *  - 1: Turns off minimum grouping digits.
+     *  - 0 or -1: The behavior is undefined.
+     *  - UNUM_MINIMUM_GROUPING_DIGITS_AUTO: Display grouping using the default
+     *      strategy for all locales.
+     *  - UNUM_MINIMUM_GROUPING_DIGITS_MIN2: Display grouping using locale
+     *      defaults, except do not show grouping on values smaller than 10000
+     *      (such that there is a minimum of two digits before the first
+     *      separator).
      *
      * For more control over grouping strategies, use NumberFormatter.
      *

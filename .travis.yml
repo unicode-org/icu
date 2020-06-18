@@ -67,7 +67,7 @@ matrix:
     #
     # Invokes test/hdrtst to check public headers compliance.
 
-    - name: "c: linux gcc"
+    - name: "c: linux gcc (debug)"
       dist:     xenial
       language: cpp
       compiler: gcc
@@ -118,10 +118,27 @@ matrix:
       # TODO(ICU-20301): Change this back to the default Python version 3.
       script:   cd icu4c/source && PYTHON=python2 ./runConfigureICU MacOSX && make -j2 check
 
+    # out of source gcc 8 build with c++14, runs icuinfo
+    - name: "c: linux gcc 8 c++14"
+      dist:     bionic
+      language: cpp
+      addons:
+         apt:
+           packages:
+             - g++-8
+      env: PREFIX=/tmp/icu-prefix CC=gcc-8 CXX=g++-8 CXXFLAGS="-std=c++14"
+      before_script:
+        - mkdir build && cd build
+        - ../icu4c/source/runConfigureICU Linux --disable-layout --disable-layoutex --prefix="${PREFIX}"
+        - make -j2
+      script:
+        - make -j2 check && make install
+        - cd "${PREFIX}/bin" && LD_LIBRARY_PATH=../lib ./icuinfo
+
     # Clang Linux with address sanitizer.
     # Note - the 'sudo: true' option forces Travis to use a Virtual machine on GCE instead of
     #        a Container on EC2 or Packet. Asan builds of ICU fail otherwise.
-    - name: "c: linux asan"
+    - name: "c: linux asan (debug)"
       language: cpp
       env:
         - CPPFLAGS="-fsanitize=address"
@@ -140,7 +157,7 @@ matrix:
 
     # Clang Linux with thread sanitizer.
     #
-    - name: "c: linux tsan"
+    - name: "c: linux tsan (debug)"
       language: cpp
       env:
           - INTLTEST_OPTS="utility/MultithreadTest"

@@ -6136,6 +6136,41 @@ public class NumberFormatTest extends TestFmwk {
             actual = df.format(l);
             assertEquals("Output is wrong for 2, "+i, allExpected[i][1], actual);
         }
+
+        String[] locales = {"en-US", "es"};
+        int[] groupingDigits = {
+          1,
+          DecimalFormat.MINIMUM_GROUPING_DIGITS_AUTO,
+          DecimalFormat.MINIMUM_GROUPING_DIGITS_MIN2
+        };
+        int[] values = {1000, 10000};
+        String[] allExpected2 = {
+          // locale: en-US
+          "1,000", "10,000",  // minimumGroupingDigits = 1
+          "1,000", "10,000",  // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_AUTO
+          "1000" , "10,000",  // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_MIN2
+          // locale: es
+          "1.000", "10.000",  // minimumGroupingDigits = 1
+          "1000",  "10.000",  // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_AUTO
+          "1000",  "10.000"   // minimumGroupingDigits = MINIMUM_GROUPING_DIGITS_MIN2
+        };
+
+        int i = 0;
+        for (String locale : locales) {
+          for (int minimumGroupingDigits : groupingDigits) {
+            for (int value : values) {
+              NumberFormat f = NumberFormat.getInstance(new ULocale(locale));
+              df = (DecimalFormat) f;
+              df.setMinimumGroupingDigits(minimumGroupingDigits);
+              String actual = df.format(value);
+              String expected = allExpected2[i++];
+              assertEquals("Output is wrong for " + value +
+                  " locale=" + locale + " minimumGroupingDigits=" + minimumGroupingDigits,
+                  expected, actual);
+            }
+          }
+        }
+
     }
 
     @Test

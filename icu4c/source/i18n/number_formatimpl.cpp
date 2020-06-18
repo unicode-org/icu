@@ -203,6 +203,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             patternStyle = CLDR_PATTERN_STYLE_CURRENCY;
         }
         pattern = utils::getPatternForStyle(macros.locale, nsName, patternStyle, status);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
     }
     auto patternInfo = new ParsedPatternInfo();
     if (patternInfo == nullptr) {
@@ -211,6 +214,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
     fPatternInfo.adoptInstead(patternInfo);
     PatternParser::parseToPatternInfo(UnicodeString(pattern), *patternInfo, status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////
     /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
@@ -241,6 +247,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         roundingMode = precision.fRoundingMode;
     }
     fMicros.rounder = {precision, roundingMode, currency, status};
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
 
     // Grouping strategy
     if (!macros.grouper.isBogus()) {
@@ -323,6 +332,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (safe) {
         fImmutablePatternModifier.adoptInstead(patternModifier->createImmutable(status));
     }
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
 
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
@@ -349,6 +361,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         // No outer modifier required
         fMicros.modOuter = &fMicros.helpers.emptyWeakModifier;
     }
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
 
     // Compact notation
     if (macros.notation.fType == Notation::NTN_COMPACT) {
@@ -370,6 +385,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         }
         fCompactHandler.adoptInstead(newCompactHandler);
         chain = fCompactHandler.getAlias();
+    }
+    if (U_FAILURE(status)) {
+        return nullptr;
     }
 
     // Always add the pattern modifier as the last element of the chain.

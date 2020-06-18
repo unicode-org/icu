@@ -832,10 +832,24 @@ typedef enum UDateFormatField {
 
 /**
  * Maps from a UDateFormatField to the corresponding UCalendarDateFields.
- * Note: since the mapping is many-to-one, there is no inverse mapping.
+ *
+ * Note 1: Since the mapping is many-to-one, there is no inverse mapping.
+ *
+ * Note 2: There is no UErrorCode parameter, so in case of error (UDateFormatField is
+ * unknown or has no corresponding UCalendarDateFields value), the function returns the
+ * current value of UCAL_FIELD_COUNT. However, that value may change from release to
+ * release and is consequently deprecated. For a future-proof runtime way of checking
+ * for errors:
+ * a) First save the value returned by the function when it is passed an invalid value
+ *    such as "(UDateFormatField)-1".
+ * b) Then, to test for errors when passing some other UDateFormatField value, check
+ *     whether the function returns that saved value.
+ *
  * @param field the UDateFormatField.
- * @return the UCalendarDateField.  This will be UCAL_FIELD_COUNT in case
- * of error (e.g., the input field is UDAT_FIELD_COUNT).
+ * @return the UCalendarDateField. In case of error (UDateFormatField is unknown or has
+ *   no corresponding UCalendarDateFields value) this will be the current value of
+ *   UCAL_FIELD_COUNT, but that value may change from release to release.
+ *   See Note 2 above.
  * @stable ICU 4.4
  */
 U_CAPI UCalendarDateFields U_EXPORT2

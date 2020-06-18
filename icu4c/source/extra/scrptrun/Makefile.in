@@ -35,7 +35,8 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUUC) @LIBS@ @LIB_M@
 
-OBJECTS = scrptrun.o srtest.o
+SOURCES = $(shell cat $(srcdir)/sources.txt)
+OBJECTS = $(SOURCES:.cpp=.o)
 
 DEPS = $(OBJECTS:.o=.d)
 

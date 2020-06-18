@@ -3,6 +3,7 @@
 package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
@@ -49,7 +50,7 @@ final class IcuTextWriter {
             Files.createDirectories(outDir);
             Path file = outDir.resolve(icuData.getName() + ".txt");
             OpenOption[] fileOptions = allowOverwrite ? OVERWRITE_FILES : ONLY_NEW_FILES;
-            try (Writer w = Files.newBufferedWriter(file, fileOptions);
+            try (Writer w = Files.newBufferedWriter(file, UTF_8, fileOptions);
                 PrintWriter out = new PrintWriter(w)) {
                 new IcuTextWriter(icuData).writeTo(out, header);
             }

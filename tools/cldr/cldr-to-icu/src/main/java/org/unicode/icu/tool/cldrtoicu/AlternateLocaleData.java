@@ -104,7 +104,7 @@ public final class AlternateLocaleData {
         }
 
         private final class AltData extends FilteredData {
-            // Calculated per locale/data instance to make lokup as fast as possible.
+            // Calculated per locale/data instance to make lookup as fast as possible.
             private final ImmutableMap<CldrPath, CldrPath> altPaths;
             // Any source paths which are not also target paths are removed. This is legacy
             // behaviour inherited from the original build tools, the reason for which is not
@@ -123,8 +123,13 @@ public final class AlternateLocaleData {
                     altPaths = ImmutableMap.copyOf(combinedPaths);
                 }
                 this.altPaths = altPaths;
-                this.toRemove = altPaths.values().stream()
-                    .filter(p -> !this.altPaths.containsKey(p))
+                this.toRemove = altPaths.entrySet().stream()
+                    // Only remove source paths that are not also target paths...
+                    .filter(e -> !this.altPaths.containsKey(e.getValue()))
+                    // ... and if the target path it will be transformed to actually exists.
+                    .filter(e -> getSourceData().get(e.getKey()) != null)
+                    // The value in the mapping is the source path (it's target->source for lookup).
+                    .map(Map.Entry::getValue)
                     .collect(toImmutableSet());
             }
 

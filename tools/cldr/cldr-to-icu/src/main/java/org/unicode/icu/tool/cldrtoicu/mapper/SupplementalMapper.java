@@ -5,11 +5,13 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.unicode.cldr.api.CldrData.PathOrder.NESTED_GROUPING;
 
+import java.util.function.Predicate;
+
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
+import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
@@ -36,18 +38,21 @@ public final class SupplementalMapper extends AbstractPathValueMapper {
      */
     // TODO: Improve external data splitting and remove need for a PathMatcher here.
     public static IcuData process(
-        CldrDataSupplier src, PathValueTransformer transformer, String icuName, PathMatcher paths) {
+        CldrDataSupplier src,
+        PathValueTransformer transformer,
+        String icuName,
+        Predicate<CldrPath> paths) {
 
         IcuData icuData = new IcuData(icuName, false);
         new SupplementalMapper(src, transformer, paths).addIcuData(icuData);
         return icuData;
     }
 
-    private final PathMatcher paths;
+    private final Predicate<CldrPath> paths;
     private int fifoCounter = 0;
 
     private SupplementalMapper(
-        CldrDataSupplier src, PathValueTransformer transformer, PathMatcher pathFilter) {
+        CldrDataSupplier src, PathValueTransformer transformer, Predicate<CldrPath> pathFilter) {
 
         super(src.getDataForType(CldrDataType.SUPPLEMENTAL), transformer);
         this.paths = checkNotNull(pathFilter);
@@ -63,7 +68,7 @@ public final class SupplementalMapper extends AbstractPathValueMapper {
     }
 
     private void visit(CldrValue value) {
-        if (paths.matchesPrefixOf(value.getPath())) {
+        if (paths.test(value.getPath())) {
             transformValue(value).forEach(this::collectResult);
             fifoCounter++;
         }

@@ -306,7 +306,7 @@ Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &rate
     for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
         auto singleUnit = *compoundSourceUnit.units[i]; // a SingleUnitImpl
 
-        Factor singleFactor = loadSingleFactor(singleUnit.identifier, ratesInfo, status);
+        Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
 
         // Apply SiPrefix before the power, because the power may be will flip the factor.
@@ -403,7 +403,8 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
         // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
         // we will use `meter`
         const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
-        const auto rateInfo = conversionRates.extractConversionInfo(singleUnitImpl.identifier, status);
+        const auto rateInfo =
+            conversionRates.extractConversionInfo(singleUnitImpl.getSimpleUnitID(), status);
         if (U_FAILURE(status)) {
             return result;
         }
