@@ -16,6 +16,7 @@ import static java.util.stream.Collectors.joining;
 import static org.unicode.cldr.api.CldrPath.parseDistinguishingPath;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,13 +77,15 @@ public final class ConvertIcuDataTask extends Task {
     private Predicate<String> idFilter = id -> true;
 
     @SuppressWarnings("unused")
-    public void setOutputDir(Path path) {
-        config.setOutputDir(path);
+    public void setOutputDir(String path) {
+        // Use String here since on some systems Ant doesn't support automatically converting Path instances.
+        config.setOutputDir(Paths.get(path));
     }
 
     @SuppressWarnings("unused")
-    public void setCldrDir(Path path) {
-        this.cldrPath = checkNotNull(path);
+    public void setCldrDir(String path) {
+        // Use String here since on some systems Ant doesn't support automatically converting Path instances.
+        this.cldrPath = checkNotNull(Paths.get(path));
     }
 
     @SuppressWarnings("unused")
@@ -108,8 +111,9 @@ public final class ConvertIcuDataTask extends Task {
     }
 
     @SuppressWarnings("unused")
-    public void setSpecialsDir(Path path) {
-        config.setSpecialsDir(path);
+    public void setSpecialsDir(String path) {
+        // Use String here since on some systems Ant doesn't support automatically converting Path instances.
+        config.setSpecialsDir(Paths.get(path));
     }
 
     @SuppressWarnings("unused")

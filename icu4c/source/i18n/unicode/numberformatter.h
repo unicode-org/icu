@@ -157,6 +157,7 @@ struct RangeMacroProps;
 struct UFormattedNumberImpl;
 class MutablePatternModifier;
 class ImmutablePatternModifier;
+struct DecimalFormatWarehouse;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -2438,6 +2439,10 @@ class U_I18N_API LocalizedNumberFormatter
     const impl::NumberFormatterImpl* fCompiled {nullptr};
     char fUnsafeCallCount[8] {};  // internally cast to u_atomic_int32_t
 
+    // Owned pointer to a DecimalFormatWarehouse, used when copying a LocalizedNumberFormatter
+    // from a DecimalFormat.
+    const impl::DecimalFormatWarehouse* fWarehouse {nullptr};
+
     explicit LocalizedNumberFormatter(const NumberFormatterSettings<LocalizedNumberFormatter>& other);
 
     explicit LocalizedNumberFormatter(NumberFormatterSettings<LocalizedNumberFormatter>&& src) U_NOEXCEPT;
@@ -2446,9 +2451,11 @@ class U_I18N_API LocalizedNumberFormatter
 
     LocalizedNumberFormatter(impl::MacroProps &&macros, const Locale &locale);
 
-    void clear();
+    void resetCompiled();
 
     void lnfMoveHelper(LocalizedNumberFormatter&& src);
+
+    void lnfCopyHelper(const LocalizedNumberFormatter& src, UErrorCode& status);
 
     /**
      * @return true if the compiled formatter is available.

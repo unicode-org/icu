@@ -53,6 +53,9 @@ public:
      */
     void     exportTable(void *where);
 
+    /** Use 8 bits to encode the forward table */
+    bool     use8BitsForTable() const;
+
     /**
      *  Find duplicate (redundant) character classes. Begin looking with categories.first.
      *  Duplicate, if found are returned in the categories parameter.
@@ -85,6 +88,8 @@ public:
      */
     void     exportSafeTable(void *where);
 
+    /** Use 8 bits to encode the safe reverse table */
+    bool     use8BitsForSafeTable() const;
 
 private:
     void     calcNullable(RBBINode *n);
@@ -190,8 +195,8 @@ private:
 class RBBIStateDescriptor : public UMemory {
 public:
     UBool            fMarked;
-    int32_t          fAccepting;
-    int32_t          fLookAhead;
+    uint32_t         fAccepting;
+    uint32_t         fLookAhead;
     UVector          *fTagVals;
     int32_t          fTagsIdx;
     UVector          *fPositions;          // Set of parse tree positions associated

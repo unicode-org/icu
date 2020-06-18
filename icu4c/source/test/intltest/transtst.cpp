@@ -1562,6 +1562,7 @@ void TransliteratorTest::TestBasicTransliteratorEvenWithoutData() {
             BASIC_TRANSLITERATOR_ID[i], UTRANS_FORWARD, parseError, status));
         if (translit.get() == nullptr || !U_SUCCESS(status)) {
             dataerrln("FAIL: createInstance %s failed", BASIC_TRANSLITERATOR_ID[i]);
+            continue;
         }
         UnicodeString data(TEST_DATA);
         UnicodeString expected(EXPECTED_RESULTS[i]);
@@ -1570,6 +1571,7 @@ void TransliteratorTest::TestBasicTransliteratorEvenWithoutData() {
             dataerrln(UnicodeString("FAIL: expected translit(") +
                       BASIC_TRANSLITERATOR_ID[i] + ") = '" +
                       EXPECTED_RESULTS[i] + "' but got '" + data);
+            continue;
         }
     }
     for (int32_t i=0; BASIC_TRANSLITERATOR_RULES[i]; i++) {
@@ -1580,6 +1582,7 @@ void TransliteratorTest::TestBasicTransliteratorEvenWithoutData() {
             BASIC_TRANSLITERATOR_RULES[i], UTRANS_FORWARD, parseError, status));
         if (translit.get() == nullptr || !U_SUCCESS(status)) {
             dataerrln("FAIL: createFromRules %s failed", BASIC_TRANSLITERATOR_RULES[i]);
+            continue;
         }
     }
 }

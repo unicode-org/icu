@@ -4,18 +4,17 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 
 import java.util.Optional;
 
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrDataType;
-import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
+import org.unicode.icu.tool.cldrtoicu.CldrDataProcessor;
+import org.unicode.icu.tool.cldrtoicu.CldrDataProcessor.SubProcessor;
 
 import com.google.common.escape.UnicodeEscaper;
 
@@ -29,20 +28,25 @@ import com.google.common.escape.UnicodeEscaper;
  */
 // TODO: This class can almost certainly be replace with a small RegexTransformer config.
 public final class BreakIteratorMapper {
-    // The "type" attribute in /suppressions/ is not required so cannot be in the matcher. And
-    // its default (and only) value is "standard".
-    // TODO: Understand and document why this is the case.
-    private static final PathMatcher SUPPRESSION = PathMatcher.of(
-        "ldml/segmentations/segmentation[@type=*]/suppressions/suppression");
+
+    private static final CldrDataProcessor<BreakIteratorMapper> CLDR_PROCESSOR;
+    static {
+        CldrDataProcessor.Builder<BreakIteratorMapper> processor = CldrDataProcessor.builder();
+        // The "type" attribute in /suppressions/ is not required so cannot be in the matcher. And
+        // its default (and only) value is "standard".
+        // TODO: Understand and document why this is the case.
+        processor.addValueAction(
+            "//ldml/segmentations/segmentation[@type=*]/suppressions/suppression",
+            BreakIteratorMapper::addSuppression);
+        SubProcessor<BreakIteratorMapper> specials =
+            processor.addSubprocessor("//ldml/special/icu:breakIteratorData");
+        specials.addValueAction("icu:boundaries/*", BreakIteratorMapper::addBoundary);
+        specials.addValueAction(
+            "icu:dictionaries/icu:dictionary", BreakIteratorMapper::addDictionary);
+        CLDR_PROCESSOR = processor.build();
+    }
+
     private static final AttributeKey SEGMENTATION_TYPE = keyOf("segmentation", "type");
-
-    // Note: This could be done with an intermediate matcher for
-    // "ldml/special/icu:breakIteratorData" but there are so few "special" values it's not worth it
-    private static final PathMatcher BOUNDARIES =
-        PathMatcher.of("ldml/special/icu:breakIteratorData/icu:boundaries/*");
-    private static final PathMatcher DICTIONARY =
-        PathMatcher.of("ldml/special/icu:breakIteratorData/icu:dictionaries/icu:dictionary");
-
     private static final AttributeKey DICTIONARY_DEP = keyOf("icu:dictionary", "icu:dependency");
     private static final AttributeKey DICTIONARY_TYPE = keyOf("icu:dictionary", "type");
 
@@ -59,8 +63,8 @@ public final class BreakIteratorMapper {
         IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData) {
 
         BreakIteratorMapper mapper = new BreakIteratorMapper(icuData);
-        icuSpecialData.ifPresent(s -> s.accept(DTD, mapper::addSpecials));
-        cldrData.accept(DTD, mapper::addSuppression);
+        icuSpecialData.ifPresent(d -> CLDR_PROCESSOR.process(d, mapper));
+        CLDR_PROCESSOR.process(cldrData, mapper);
         return mapper.icuData;
     }
 
@@ -72,28 +76,21 @@ public final class BreakIteratorMapper {
     }
 
     private void addSuppression(CldrValue v) {
-        if (SUPPRESSION.matches(v.getPath())) {
-            String type = SEGMENTATION_TYPE.valueFrom(v);
-            // TODO: Understand and document why we escape values here, but not for collation data.
-            icuData.add(
-                RbPath.of("exceptions", type + ":array"),
-                ESCAPE_NON_ASCII.escape(v.getValue()));
-        }
+        String type = SEGMENTATION_TYPE.valueFrom(v);
+        // TODO: Understand and document why we escape values here, but not for collation data.
+        icuData.add(
+            RbPath.of("exceptions", type + ":array"), ESCAPE_NON_ASCII.escape(v.getValue()));
     }
 
-    private void addSpecials(CldrValue v) {
-        CldrPath p = v.getPath();
-        if (BOUNDARIES.matches(p)) {
-            addDependency(
-                getDependencyName(v),
-                getBoundaryType(v),
-                getBoundaryDependency(v));
-        } else if (DICTIONARY.matches(p)) {
-            addDependency(
-                getDependencyName(v),
-                DICTIONARY_TYPE.valueFrom(v),
-                DICTIONARY_DEP.optionalValueFrom(v));
-        }
+    private void addBoundary(CldrValue v) {
+        addDependency(getDependencyName(v), getBoundaryType(v), getBoundaryDependency(v));
+    }
+
+    private void addDictionary(CldrValue v) {
+        addDependency(
+            getDependencyName(v),
+            DICTIONARY_TYPE.valueFrom(v),
+            DICTIONARY_DEP.optionalValueFrom(v));
     }
 
     private void addDependency(String name, String type, Optional<String> dependency) {

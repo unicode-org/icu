@@ -43,6 +43,7 @@ static void TestCalendarDateParse(void);
 static void TestParseErrorReturnValue(void);
 static void TestFormatForFields(void);
 static void TestForceGannenNumbering(void);
+static void TestMapDateToCalFields(void);
 
 void addDateForTest(TestNode** root);
 
@@ -63,6 +64,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestParseErrorReturnValue);
     TESTCASE(TestFormatForFields);
     TESTCASE(TestForceGannenNumbering);
+    TESTCASE(TestMapDateToCalFields);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -1905,4 +1907,35 @@ static void TestForceGannenNumbering(void) {
         udatpg_close(dtpgen);
     }
 }
+
+typedef struct {
+    UChar               patternChar; // for future use
+    UDateFormatField    dateField;
+    UCalendarDateFields calField;
+} PatternCharToFieldsItem;
+
+static const PatternCharToFieldsItem patCharToFieldsItems[] = {
+    { u'G', UDAT_ERA_FIELD,                 UCAL_ERA },
+    { u'y', UDAT_YEAR_FIELD,                UCAL_YEAR },
+    { u'Y', UDAT_YEAR_WOY_FIELD,            UCAL_YEAR_WOY },
+    { u'Q', UDAT_QUARTER_FIELD,             UCAL_MONTH },
+    { u'H', UDAT_HOUR_OF_DAY0_FIELD,        UCAL_HOUR_OF_DAY },
+    { u'r', UDAT_RELATED_YEAR_FIELD,        UCAL_EXTENDED_YEAR },
+    { u'B', UDAT_FLEXIBLE_DAY_PERIOD_FIELD, UCAL_FIELD_COUNT },
+    { u'$', UDAT_FIELD_COUNT,               UCAL_FIELD_COUNT },
+    { 0xFFFF, (UDateFormatField)-1,         UCAL_FIELD_COUNT }, // patternChar ignored here
+    { (UChar)0, (UDateFormatField)0, (UCalendarDateFields)0 } // terminator
+};
+
+static void TestMapDateToCalFields(void){
+    const PatternCharToFieldsItem* itemPtr;
+    for ( itemPtr=patCharToFieldsItems; itemPtr->patternChar!=(UChar)0; itemPtr++) {
+        UCalendarDateFields calField = udat_toCalendarDateField(itemPtr->dateField);
+        if (calField != itemPtr->calField) {
+            log_err("for pattern char 0x%04X, dateField %d, expect calField %d and got %d\n",
+                    itemPtr->patternChar, itemPtr->dateField, itemPtr->calField, calField);
+        }
+    }
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

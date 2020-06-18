@@ -244,8 +244,8 @@ public final class LocaleMatcher {
         /**
          * Returns the best-matching supported locale.
          * If none matched well enough, this is the default locale.
-         * The default locale is null if the list of supported locales is empty and
-         * no explicit default locale is set.
+         * The default locale is null if {@link Builder#setNoDefaultLocale()} was called,
+         * or if the list of supported locales is empty and no explicit default locale is set.
          *
          * @return the best-matching supported locale, or null.
          * @draft ICU 65
@@ -255,8 +255,8 @@ public final class LocaleMatcher {
         /**
          * Returns the best-matching supported locale.
          * If none matched well enough, this is the default locale.
-         * The default locale is null if the list of supported locales is empty and
-         * no explicit default locale is set.
+         * The default locale is null if {@link Builder#setNoDefaultLocale()} was called,
+         * or if the list of supported locales is empty and no explicit default locale is set.
          *
          * @return the best-matching supported locale, or null.
          * @draft ICU 65
@@ -382,6 +382,7 @@ public final class LocaleMatcher {
         private int thresholdDistance = -1;
         private Demotion demotion;
         private ULocale defaultLocale;
+        private boolean withDefault = true;
         private FavorSubtag favor;
         private Direction direction;
 
@@ -465,8 +466,25 @@ public final class LocaleMatcher {
         }
 
         /**
+         * Sets no default locale.
+         * There will be no explicit or implicit default locale.
+         * If there is no good match, then the matcher will return null for the
+         * best supported locale.
+         *
+         * @draft ICU 68
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setNoDefaultLocale() {
+            this.defaultLocale = null;
+            withDefault = false;
+            return this;
+        }
+
+        /**
          * Sets the default locale; if null, or if it is not set explicitly,
          * then the first supported locale is used as the default locale.
+         * There is no default locale at all (null will be returned instead)
+         * if {@link #setNoDefaultLocale()} is called.
          *
          * @param defaultLocale the default locale
          * @return this Builder object
@@ -475,12 +493,15 @@ public final class LocaleMatcher {
          */
         public Builder setDefaultULocale(ULocale defaultLocale) {
             this.defaultLocale = defaultLocale;
+            withDefault = true;
             return this;
         }
 
         /**
          * Sets the default locale; if null, or if it is not set explicitly,
          * then the first supported locale is used as the default locale.
+         * There is no default locale at all (null will be returned instead)
+         * if {@link #setNoDefaultLocale()} is called.
          *
          * @param defaultLocale the default locale
          * @return this Builder object
@@ -489,6 +510,7 @@ public final class LocaleMatcher {
          */
         public Builder setDefaultLocale(Locale defaultLocale) {
             this.defaultLocale = ULocale.forLocale(defaultLocale);
+            withDefault = true;
             return this;
         }
 
@@ -673,13 +695,14 @@ public final class LocaleMatcher {
         i = 0;
         for (ULocale locale : supportedULocales) {
             LSR lsr = lsrs[i];
-            if (defLSR == null) {
+            if (defLSR == null && builder.withDefault) {
+                // Implicit default locale = first supported locale, if not turned off.
                 assert i == 0;
                 udef = locale;
                 def = supportedLocales[0];
                 defLSR = lsr;
                 suppLength = putIfAbsent(lsr, 0, suppLength);
-            } else if (lsr.isEquivalentTo(defLSR)) {
+            } else if (defLSR != null && lsr.isEquivalentTo(defLSR)) {
                 suppLength = putIfAbsent(lsr, i, suppLength);
             } else if (LocaleDistance.INSTANCE.isParadigmLSR(lsr)) {
                 order[i] = 2;

@@ -18649,7 +18649,7 @@ supplementalData:table(nofallback){
                 "nn",
                 "no",
                 "20",
-                "1",
+                "0",
             }
             {
                 "nso",

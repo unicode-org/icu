@@ -186,6 +186,7 @@ class U_I18N_API ListFormatter : public UObject{
     static ListFormatter* createInstance(const Locale& locale, UErrorCode& errorCode);
 
 #ifndef U_HIDE_DRAFT_API
+#if !UCONFIG_NO_FORMATTING
     /**
      * Creates a ListFormatter for the given locale, list type, and style.
      *
@@ -198,8 +199,9 @@ class U_I18N_API ListFormatter : public UObject{
      */
     static ListFormatter* createInstance(
       const Locale& locale, UListFormatterType type, UListFormatterWidth width, UErrorCode& errorCode);
+#endif  /* !UCONFIG_NO_FORMATTING */
 #endif  /* U_HIDE_DRAFT_API */
-
+  
 #ifndef U_HIDE_INTERNAL_API
     /**
      * Creates a ListFormatter appropriate for a locale and style.

@@ -222,6 +222,30 @@ public class LocaleMatcherTest extends TestFmwk {
     }
 
     @Test
+    public void testNoDefault() {
+        // We want null instead of any default locale.
+        List<ULocale> locales = Arrays.asList(
+                new ULocale("fr"), new ULocale("en_GB"), new ULocale("en"));
+        LocaleMatcher matcher = LocaleMatcher.builder().
+            setSupportedULocales(locales).
+            setNoDefaultLocale().
+            build();
+        ULocale best = matcher.getBestMatch("en_GB");
+        assertEquals("getBestMatch(en_GB)", "en_GB", locString(best));
+        best = matcher.getBestMatch("en_US");
+        assertEquals("getBestMatch(en_US)", "en", locString(best));
+        best = matcher.getBestMatch("fr_FR");
+        assertEquals("getBestMatch(fr_FR)", "fr", locString(best));
+        best = matcher.getBestMatch("ja_JP");
+        assertEquals("getBestMatch(ja_JP)", "(null)", locString(best));
+        LocaleMatcher.Result result = matcher.getBestMatchResult(new ULocale("ja_JP"));
+        assertEquals("getBestMatchResult(ja_JP).supp",
+                     "(null)", locString(result.getSupportedULocale()));
+        assertEquals("getBestMatchResult(ja_JP).suppIndex",
+                     -1, result.getSupportedIndex());
+    }
+
+    @Test
     public void testFallback() {
         // check that script fallbacks are handled right
         final LocaleMatcher matcher = newLocaleMatcher("zh_CN, zh_TW, iw");

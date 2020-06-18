@@ -245,6 +245,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13735_GroupingSizeGetter);
   TESTCASE_AUTO(Test13734_StrictFlexibleWhitespace);
   TESTCASE_AUTO(Test20961_CurrencyPluralPattern);
+  TESTCASE_AUTO(Test21134_ToNumberFormatter);
   TESTCASE_AUTO_END;
 }
 
@@ -9077,6 +9078,43 @@ void NumberFormatTest::TestMinimumGroupingDigits() {
     df.format(12345, result.remove(), status);
     status.errIfFailureAndReset();
     assertEquals("Should have grouping", u"12,345", result);
+
+
+    // Test special values -1, UNUM_MINIMUM_GROUPING_DIGITS_AUTO and
+    // UNUM_MINIMUM_GROUPING_DIGITS_MIN2
+    struct TestCase {
+        const char* locale;
+        int32_t minGroup;
+        double input;
+        const char16_t* expected;
+    } cases[] = {
+        { "en-US", 1, 1000, u"1,000" },
+        { "en-US", 1, 10000, u"10,000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 1000, u"1,000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 10000, u"10,000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 1000, u"1000" },
+        { "en-US", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 10000, u"10,000" },
+
+        { "es", 1, 1000, u"1.000" },
+        { "es", 1, 10000, u"10.000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 1000, u"1000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_AUTO, 10000, u"10.000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 1000, u"1000" },
+        { "es", UNUM_MINIMUM_GROUPING_DIGITS_MIN2, 10000, u"10.000" },
+    };
+    for (const auto& cas : cases) {
+        UnicodeString message = UnicodeString(cas.locale)
+            + u" " + Int64ToUnicodeString(cas.minGroup)
+            + u" " + DoubleToUnicodeString(cas.input);
+        status.setScope(message);
+        DecimalFormat df(u"#,##0", {cas.locale, status}, status);
+        if (status.errIfFailureAndReset()) { continue; }
+        df.setMinimumGroupingDigits(cas.minGroup);
+        UnicodeString actual;
+        df.format(cas.input, actual, status);
+        if (status.errIfFailureAndReset()) { continue; }
+        assertEquals(message, cas.expected, actual);
+    }
 }
 
 void NumberFormatTest::Test11897_LocalizedPatternSeparator() {
@@ -9679,6 +9717,9 @@ void NumberFormatTest::Test20956_MonetarySymbolGetters() {
     IcuTestErrorCode status(*this, "Test20956_MonetarySymbolGetters");
     LocalPointer<DecimalFormat> decimalFormat(static_cast<DecimalFormat*>(
         NumberFormat::createCurrencyInstance("et", status)));
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
 
     decimalFormat->setCurrency(u"EEK");
 
@@ -9823,10 +9864,70 @@ void NumberFormatTest::Test20961_CurrencyPluralPattern() {
     {
         LocalPointer<DecimalFormat> decimalFormat(static_cast<DecimalFormat*>(
             NumberFormat::createInstance("en-US", UNUM_CURRENCY_PLURAL, status)));
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
         UnicodeString result;
         decimalFormat->toPattern(result);
         assertEquals("Currency pattern", u"#,##0.00 ¤¤¤", result);
     }
+}
+
+void NumberFormatTest::Test21134_ToNumberFormatter() {
+    IcuTestErrorCode status(*this, "Test21134_ToNumberFormatter");
+    LocalizedNumberFormatter outer1;
+    LocalizedNumberFormatter outer2;
+    LocalPointer<LocalizedNumberFormatter> outer3;
+    {
+        // Case 1: new formatter object
+        DecimalFormat inner(u"a0b", {"en", status}, status);
+        if (auto ptr = inner.toNumberFormatter(status)) {
+            // Copy assignment
+            outer1 = *ptr;
+        } else {
+            status.errIfFailureAndReset();
+            return;
+        }
+    }
+    {
+        // Case 2: compiled formatter object (used at least 3 times)
+        DecimalFormat inner(u"c0d", {"en", status}, status);
+        UnicodeString dummy;
+        inner.format(100, dummy);
+        inner.format(100, dummy);
+        inner.format(100, dummy);
+        if (auto ptr = inner.toNumberFormatter(status)) {
+            // Copy assignment
+            outer2 = *ptr;
+        } else {
+            status.errIfFailureAndReset();
+            return;
+        }
+    }
+    {
+        // Case 3: currency plural info (different code path)
+        LocalPointer<DecimalFormat> inner(static_cast<DecimalFormat*>(
+            DecimalFormat::createInstance("en-US", UNUM_CURRENCY_PLURAL, status)));
+        if (auto ptr = inner->toNumberFormatter(status)) {
+            // Copy constructor
+            outer3.adoptInsteadAndCheckErrorCode(new LocalizedNumberFormatter(*ptr), status);
+        } else {
+            status.errIfFailureAndReset();
+            return;
+        }
+    }
+    auto result1 = outer1.formatDouble(99, status);
+    assertEquals("Using NumberFormatter from DecimalFormat, new version",
+        u"a99b",
+        result1.toTempString(status));
+    auto result2 = outer2.formatDouble(99, status);
+    assertEquals("Using NumberFormatter from DecimalFormat, compiled version",
+        u"c99d",
+        result2.toTempString(status));
+    auto result3 = outer3->formatDouble(99, status);
+    assertEquals("Using NumberFormatter from DecimalFormat, compiled version",
+        u"99.00 US dollars",
+        result3.toTempString(status));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

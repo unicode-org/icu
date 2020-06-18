@@ -3,8 +3,20 @@
 
 # Configuring VS Code for ICU4C
 
-  - create `.vscode` folder in icu4c/source
-  - Copy `tasks.json` and `launch.json` files into `.vscode` folder
+  - Create a `.vscode` folder in icu4c/source
+  - Copy the `tasks.json`, `launch.json` and `c_cpp_properties.json` files into
+    the `.vscode` folder.
+  - To test only specific test targets, specify them under `args` in
+    `launch.json`.
+  - To adjust the parallelism when building, adjust the `args` in `tasks.json`.
+    - `-l20` tells VSCode to not launch jobs if the system load average is above
+      20 (note that the [system load
+      average](https://en.wikipedia.org/wiki/Load_(computing)) is *not* a CPU
+      usage percentage).
+    - `-j24` limits the number of jobs launched in parallel to 24. The system
+      load average takes a while to respond, reducing this number helps the
+      initial bad system performance when a new build is launched.
 
-NOTE
- Before you build `icu4c` from vs code. run [`./runConfigureICU` command first](http://userguide.icu-project.org/icufaq).
+NOTE:
+Run the [`./runConfigureICU` command](http://userguide.icu-project.org/icufaq)
+before building `icu4c` from VSCode.

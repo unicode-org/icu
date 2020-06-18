@@ -545,7 +545,7 @@ final public class ListFormatter {
     }
 
     // A static handler just returns the pattern without considering the input text.
-    private class StaticHandler implements PatternHandler {
+    private static final class StaticHandler implements PatternHandler {
         StaticHandler(String two, String end) {
             twoPattern = two;
             endPattern = end;
@@ -562,7 +562,7 @@ final public class ListFormatter {
     }
 
     // A contextual handler returns one of the two patterns depending on whether the text matched the regexp.
-    private class ContextualHandler implements PatternHandler {
+    private static final class ContextualHandler implements PatternHandler {
         ContextualHandler(Pattern regexp, String thenTwo, String elseTwo, String thenEnd, String elseEnd) {
             this.regexp = regexp;
             thenTwoPattern = thenTwo;

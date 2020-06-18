@@ -241,8 +241,10 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
             String compiled = SimpleFormatterImpl
                     .compileToStringMinMaxArguments(rawPerUnitFormat, sb, 2, 2);
             String secondaryFormat = getWithPlural(secondaryData, StandardPlural.ONE);
+
+            // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
             String secondaryCompiled = SimpleFormatterImpl
-                    .compileToStringMinMaxArguments(secondaryFormat, sb, 1, 1);
+                    .compileToStringMinMaxArguments(secondaryFormat, sb, 0, 1);
             String secondaryString = SimpleFormatterImpl.getTextWithNoArguments(secondaryCompiled)
                     .trim();
             perUnitFormat = SimpleFormatterImpl.formatCompiledPattern(compiled, "{0}", secondaryString);

@@ -20,10 +20,12 @@
                 }
             ],
             "args": [ // Here you add which test cases you want to run, leaving it empty will run all the test cases.
-                "rbbi/RBBITest" // Just for example.
+                // Examples:
+                // "rbbi/RBBITest",
+                // "format/NumberFormatTest"
             ],
             "stopAtEntry": false, // If you want to add a break point in the beginning of the program (i.e. test cases).
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/test/intltest",
             "externalConsole": false, //set to true to see output in an external terminal instead
             "MIMode": "gdb", // Use "lldb" for mac osx.
             "logging": {
@@ -51,7 +53,7 @@
                 }
             ],
             "args": [ // Here you add which test cases you want to run, leaving it empty will run all the test cases.
-                "/tsutil/cstrcase" // Just for example.
+                // "/tsutil/cstrcase" // Just for example.
             ],
             "stopAtEntry": false, // If you want to add a break point in the beginning of the program (i.e. test cases).
             "cwd": "${workspaceFolder}",
@@ -82,7 +84,7 @@
                 }
             ],
             "args": [ // Here you add which test cases you want to run, leaving it empty will run all the test cases.
-                "/datadriv" // Just for example.
+                // "/datadriv" // Just for example.
             ],
             "stopAtEntry": false, // If you want to add a break point in the beginning of the program (i.e. test cases).
             "cwd": "${workspaceFolder}",
