@@ -765,9 +765,7 @@ bool appendImpl(MeasureUnitImpl& impl, const SingleUnitImpl& unit, UErrorCode& s
 void appendAndMergeImpl(MeasureUnitImpl &impl, const SingleUnitImpl &unit, UErrorCode &status) {
     for (int32_t i = 0, n = impl.units.length(); i < n; i++) {
         auto *candidate = impl.units[i];
-        if ((candidate->getSimpleUnitID() == unit.getSimpleUnitID() ||
-             uprv_strcmp(candidate->getSimpleUnitID(), unit.getSimpleUnitID()) == 0) &&
-            candidate->siPrefix == unit.siPrefix) {
+        if (candidate->index == unit.index && candidate->siPrefix == unit.siPrefix) {
             candidate->dimensionality += unit.dimensionality;
             return;
         }
