@@ -1079,7 +1079,6 @@
 #define uloc_getDisplayLanguage U_ICU_ENTRY_POINT_RENAME(uloc_getDisplayLanguage)
 #define uloc_getDisplayName U_ICU_ENTRY_POINT_RENAME(uloc_getDisplayName)
 #define uloc_getDisplayScript U_ICU_ENTRY_POINT_RENAME(uloc_getDisplayScript)
-#define uloc_getDisplayScriptInContext U_ICU_ENTRY_POINT_RENAME(uloc_getDisplayScriptInContext)
 #define uloc_getDisplayVariant U_ICU_ENTRY_POINT_RENAME(uloc_getDisplayVariant)
 #define uloc_getISO3Country U_ICU_ENTRY_POINT_RENAME(uloc_getISO3Country)
 #define uloc_getISO3Language U_ICU_ENTRY_POINT_RENAME(uloc_getISO3Language)

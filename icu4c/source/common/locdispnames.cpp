@@ -419,7 +419,7 @@ uloc_getDisplayScript(const char* locale,
 	}
 }
 
-U_INTERNAL int32_t U_EXPORT2
+static int32_t
 uloc_getDisplayScriptInContext(const char* locale,
                       const char* displayLocale,
                       UChar *dest, int32_t destCapacity,
