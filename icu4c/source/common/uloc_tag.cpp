@@ -148,29 +148,14 @@ static const char* const GRANDFATHERED[] = {
 
  In addition, ja-latn-hepburn-heploc is mapped to ja-latn-alalc97 because
  a variant tag 'hepburn-heploc' has the preferred subtag, 'alaic97'.
+
+ "sgn-*" are removed from REDUNDANT based on decision in
+ https://unicode-org.atlassian.net/browse/CLDR-13809
+
 */
 
 static const char* const REDUNDANT[] = {
 //  redundant       preferred
-    "sgn-br",       "bzs",
-    "sgn-co",       "csn",
-    "sgn-de",       "gsg",
-    "sgn-dk",       "dsl",
-    "sgn-es",       "ssp",
-    "sgn-fr",       "fsl",
-    "sgn-gb",       "bfi",
-    "sgn-gr",       "gss",
-    "sgn-ie",       "isg",
-    "sgn-it",       "ise",
-    "sgn-jp",       "jsl",
-    "sgn-mx",       "mfs",
-    "sgn-ni",       "ncs",
-    "sgn-nl",       "dse",
-    "sgn-no",       "nsl",
-    "sgn-pt",       "psr",
-    "sgn-se",       "swl",
-    "sgn-us",       "ase",
-    "sgn-za",       "sfs",
     "zh-cmn",       "cmn",
     "zh-cmn-hans",  "cmn-hans",
     "zh-cmn-hant",  "cmn-hant",
