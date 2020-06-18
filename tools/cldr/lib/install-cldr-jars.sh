@@ -84,6 +84,7 @@ popd > /dev/null
 # The -B flag is "batch" mode and won't mess about with escape codes in the log file.
 echo "Installing CLDR JAR file..."
 run_with_logging mvn -B install:install-file \
+  -Dproject.parent.relativePath="" \
   -DgroupId=org.unicode.cldr \
   -DartifactId=cldr-api \
   -Dversion=0.1-SNAPSHOT \
@@ -93,7 +94,9 @@ run_with_logging mvn -B install:install-file \
   -Dfile="${CLDR_TOOLS_DIR}/cldr.jar"
 
 echo "Syncing local Maven repository..."
-run_with_logging mvn -B dependency:purge-local-repository -DsnapshotsOnly=true
+run_with_logging mvn -B dependency:purge-local-repository \
+  -Dproject.parent.relativePath="" \
+  -DmanualIncludes=org.unicode.cldr:cldr-api:jar 
 
 mv -f "${LOG_FILE}" "last_log.txt"
 echo "All done! (log file: last_log.txt)"
