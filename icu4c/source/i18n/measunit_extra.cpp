@@ -60,7 +60,7 @@ enum InitialCompoundPart {
     INITIAL_COMPOUND_PART_PER = kInitialCompoundPartOffset,
 };
 
-// Trie value offset for powers like "square-", "cubic-", "p2-" etc.
+// Trie value offset for powers like "square-", "cubic-", "pow2-" etc.
 constexpr int32_t kPowerPartOffset = 256;
 
 enum PowerPart {
@@ -249,20 +249,20 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     b.add("per-", INITIAL_COMPOUND_PART_PER, status);
     b.add("square-", POWER_PART_P2, status);
     b.add("cubic-", POWER_PART_P3, status);
-    b.add("p2-", POWER_PART_P2, status);
-    b.add("p3-", POWER_PART_P3, status);
-    b.add("p4-", POWER_PART_P4, status);
-    b.add("p5-", POWER_PART_P5, status);
-    b.add("p6-", POWER_PART_P6, status);
-    b.add("p7-", POWER_PART_P7, status);
-    b.add("p8-", POWER_PART_P8, status);
-    b.add("p9-", POWER_PART_P9, status);
-    b.add("p10-", POWER_PART_P10, status);
-    b.add("p11-", POWER_PART_P11, status);
-    b.add("p12-", POWER_PART_P12, status);
-    b.add("p13-", POWER_PART_P13, status);
-    b.add("p14-", POWER_PART_P14, status);
-    b.add("p15-", POWER_PART_P15, status);
+    b.add("pow2-", POWER_PART_P2, status);
+    b.add("pow3-", POWER_PART_P3, status);
+    b.add("pow4-", POWER_PART_P4, status);
+    b.add("pow5-", POWER_PART_P5, status);
+    b.add("pow6-", POWER_PART_P6, status);
+    b.add("pow7-", POWER_PART_P7, status);
+    b.add("pow8-", POWER_PART_P8, status);
+    b.add("pow9-", POWER_PART_P9, status);
+    b.add("pow10-", POWER_PART_P10, status);
+    b.add("pow11-", POWER_PART_P11, status);
+    b.add("pow12-", POWER_PART_P12, status);
+    b.add("pow13-", POWER_PART_P13, status);
+    b.add("pow14-", POWER_PART_P14, status);
+    b.add("pow15-", POWER_PART_P15, status);
     if (U_FAILURE(status)) { return; }
 
     // Add sanctioned simple units by offset
@@ -645,11 +645,11 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
     } else if (posPower == 3) {
         output.append("cubic-", status);
     } else if (posPower < 10) {
-        output.append('p', status);
+        output.append("pow", status);
         output.append(posPower + '0', status);
         output.append('-', status);
     } else if (posPower <= 15) {
-        output.append("p1", status);
+        output.append("pow1", status);
         output.append('0' + (posPower % 10), status);
         output.append('-', status);
     } else {
