@@ -687,7 +687,9 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
  *
  *     // MemoryPool will take care of deleting the MyType objects.
  *
- * It doesn't do anything more than that, and is intentionally kept minimalist.
+ * It is also able to also adopt pointers to heap allocated objects. This is not
+ * the typical use-case, as it is more error prone. This class is kept
+ * minimalist as far as possible.
  */
 template<typename T, int32_t stackCapacity = 8>
 class MemoryPool : public UMemory {
@@ -731,6 +733,28 @@ public:
             return nullptr;
         }
         return fPool[fCount++] = new T(std::forward<Args>(args)...);
+    }
+
+    /**
+     * Takes ownership of ptr, adding it to the pool.
+     *
+     * @param ptr Pointer to take ownership of.
+     * @param status Is set to U_MEMORY_ALLOCATION_ERROR if allocation of the
+     * needed pool capacity fails.
+     */
+    template<typename... Args>
+    void adoptBack(T* ptr, UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            return;
+        }
+        int32_t capacity = fPool.getCapacity();
+        if (fCount == capacity &&
+            fPool.resize(capacity == stackCapacity ? 4 * capacity : 2 * capacity,
+                         capacity) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        fPool[fCount++] = ptr;
     }
 
     /**
@@ -787,6 +811,17 @@ public:
         }
 
         return pointer;
+    }
+
+    /**
+     * Takes ownership of ptr, adding it to the back of the vector.
+     *
+     * @param ptr Pointer to take ownership of.
+     * @param status Is set to U_MEMORY_ALLOCATION_ERROR if allocation of the
+     * needed pool capacity fails.
+     */
+    void adoptBack(T *ptr, UErrorCode &status) {
+        MemoryPool<T, stackCapacity>::adoptBack(ptr, status);
     }
 
     int32_t length() const {
