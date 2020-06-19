@@ -779,6 +779,10 @@ public:
         return this->fPool.getAlias();
     }
 
+    const T *const *getAlias() const {
+        return this->fPool.getAlias();
+    }
+
     /**
      * Array item access (read-only).
      * No index bounds check.
@@ -800,7 +804,7 @@ public:
     }
 
     /**
-     * Append all the items from another MaybeStackVector to this one.
+     * Append copies of all the items from another MaybeStackVector to this one.
      */
     void appendAll(const MaybeStackVector& other, UErrorCode& status) {
         for (int32_t i = 0; i < other.fCount; i++) {
