@@ -10,6 +10,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "cmemory.h"
 #include "unicode/appendable.h"
 #include "unicode/bytestream.h"
 #include "unicode/currunit.h"
@@ -1125,6 +1126,38 @@ class U_I18N_API Scale : public UMemory {
     friend class ::icu::numparse::impl::MultiplierParseHandler;
 };
 
+class U_I18N_API Usage : public UMemory {
+  public:
+    Usage(const Usage& other);
+
+    Usage& operator=(const Usage& other);
+
+    Usage(Usage &&src) U_NOEXCEPT;
+
+    Usage& operator=(Usage&& src) U_NOEXCEPT;
+
+    ~Usage();
+
+    int16_t length() const { return fLength; }
+
+    void set(StringPiece value);
+
+    bool isSet() const { return fLength > 0; }
+
+  private:
+    char *fUsage;
+    int16_t fLength;
+    UErrorCode fError;
+
+    Usage() : fUsage(nullptr), fLength(0), fError(U_ZERO_ERROR) {}
+
+    // To allow NumberFormatterImpl to access fUsage.
+    friend class impl::NumberFormatterImpl;
+
+    // To allow MacroProps/MicroProps to initialize empty instances:
+    friend struct impl::MacroProps;
+};
+
 namespace impl {
 
 // Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
@@ -1411,6 +1444,15 @@ struct U_I18N_API MacroProps : public UMemory {
     Scale scale;  // = Scale();  (benign value)
 
     /** @internal */
+    Usage usage;  // = Usage();  (no usage)
+    //
+    // WIP/FYI: I tried `LocalArray<char>`, but it's lacking a copy assignment operator:
+    //
+    // error: object of type 'icu_67::number::impl::MacroProps' cannot be assigned because its copy assignment operator is implicitly deleted
+    // ./unicode/numberformatter.h:1413:22: note: copy assignment operator of 'MacroProps' is implicitly deleted because field 'usage' has a deleted copy assignment operator
+    // ../common/unicode/localpointer.h:399:5: note: copy assignment operator is implicitly deleted because 'LocalArray<char>' has a user-declared move constructor
+
+    /** @internal */
     const AffixPatternProvider* affixProvider = nullptr;  // no ownership
 
     /** @internal */
@@ -1599,6 +1641,9 @@ class U_I18N_API NumberFormatterSettings {
      *
      * If a per-unit is specified without a primary unit via {@link #unit}, the behavior is undefined.
      *
+     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
+     * Specify and test!
+     *
      * @param perUnit
      *            The unit to render in the denominator.
      * @return The fluent chain
@@ -1609,6 +1654,9 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Overload of perUnit() for use on an rvalue reference.
+     *
+     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
+     * Specify and test!
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -1624,6 +1672,9 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Note: consider using the MeasureFormat factory methods that return by value.
      *
+     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
+     * Specify and test!
+     *
      * @param perUnit
      *            The unit to render in the denominator.
      * @return The fluent chain.
@@ -1635,6 +1686,9 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Overload of adoptPerUnit() for use on an rvalue reference.
+     *
+     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
+     * Specify and test!
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -2073,6 +2127,9 @@ class U_I18N_API NumberFormatterSettings {
      * Setting usage to an empty string clears the usage (disables usage-based
      * localized formatting).
      *
+     * Setting a usage string but not a correct input unit will result in an
+     * U_ILLEGAL_ARGUMENT_ERROR.
+     *
      * @param usage A `usage` parameter from the units resource. See the
      * unitPreferenceData in *source/data/misc/units.txt*, generated from
      * `unitPreferenceData` in [CLDR's
@@ -2080,7 +2137,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 68
      */
-    Derived usage(StringPiece usage) const &;
+    Derived usage(const StringPiece usage) const &;
 
     /**
      * Overload of usage() for use on an rvalue reference.
@@ -2089,7 +2146,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 68
      */
-    Derived usage(StringPiece usage) &&;
+    Derived usage(const StringPiece usage) &&;
 #endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API

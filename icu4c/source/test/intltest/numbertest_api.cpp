@@ -73,6 +73,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(notationCompact);
         TESTCASE_AUTO(unitMeasure);
         TESTCASE_AUTO(unitCompoundMeasure);
+        TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
@@ -672,6 +673,27 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("es-MX"),
             5,
             u"5 a\u00F1os");
+}
+
+void NumberFormatterApiTest::unitUsage() {
+    UnlocalizedNumberFormatter unloc_formatter =
+        NumberFormatter::with().usage("road").unit(MeasureUnit::getMeter());
+
+    IcuTestErrorCode status(*this, "unitUsage()");
+
+    LocalizedNumberFormatter formatter = unloc_formatter.locale("en-ZA");
+    FormattedNumber formattedNum = formatter.formatDouble(300, status);
+    assertEquals("unitUsage() road", "300 m", formattedNum.toString(status));
+
+    formatter = unloc_formatter.locale("en-GB");
+    formattedNum = formatter.formatDouble(300, status);
+    assertEquals("unitUsage() road", "328 yd", formattedNum.toString(status));
+
+    formatter = unloc_formatter.locale("en-US");
+    formattedNum = formatter.formatDouble(300, status);
+    assertEquals("unitUsage() road", "984 ft", formattedNum.toString(status));
+
+    // TODO(hugovdm): consider fixing TODO(ICU-20941) too?
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {

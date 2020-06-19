@@ -218,9 +218,43 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         return nullptr;
     }
 
+    MeasureUnit resolvedUnit;
+    // WIP/FIXME: UnitRouter preparation/calculations here?
+    // if (macros.usage.length() > 0) {
+    //     fUnitsRouter.adoptInstead(
+    //         new StubUnitsRouter(macros.unit, macros.locale, macros.usage.fUsage, status));
+    //     if (U_FAILURE(status)) { return nullptr; }
+    //     // FIXME/WIP/TODO(hugovdm): unit depends on quantity, so we can't really
+    //     // grab this now - we need to grab it at formatDouble time.
+    //     resolvedUnit = fUnitsRouter->getOutputUnit();
+    // } else {
+    //     resolvedUnit = macros.unit;
+    // }
+
     /////////////////////////////////////////////////////////////////////////////////////
     /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
     /////////////////////////////////////////////////////////////////////////////////////
+
+    // Unit Preferences and Conversions as our first step
+    if (macros.usage.isSet()) {
+        if (!isCldrUnit) {
+            // We only support "usage" when the input unit is a CLDR Unit.
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return nullptr;
+        }
+        auto usagePrefsHandler =
+            new UsagePrefsHandler(macros.locale, macros.unit, macros.usage.fUsage, chain, status);
+        if (usagePrefsHandler == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
+        fUsagePrefsHandler.adoptInstead(usagePrefsHandler);
+        chain = fUsagePrefsHandler.getAlias();
+        // FIXME:
+        resolvedUnit = *usagePrefsHandler->getOutputUnits()[0];
+    } else {
+        resolvedUnit = macros.unit;
+    }
 
     // Multiplier
     if (macros.scale.isValid()) {
@@ -338,16 +372,24 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
-        fLongNameHandler.adoptInstead(
-                LongNameHandler::forMeasureUnit(
-                        macros.locale,
-                        macros.unit,
-                        macros.perUnit,
-                        unitWidth,
-                        resolvePluralRules(macros.rules, macros.locale, status),
-                        chain,
-                        status));
-        chain = fLongNameHandler.getAlias();
+        if (macros.usage.isSet()) {
+            fLongNameMultiplexer.adoptInstead(
+                LongNameMultiplexer::forMeasureUnits(
+                    macros.locale,
+                    fUsagePrefsHandler->getOutputUnits(),
+                    unitWidth,
+                    resolvePluralRules(macros.rules, macros.locale, status),
+                    chain,
+                    status));
+            chain = fLongNameMultiplexer.getAlias();
+        } else {
+            fLongNameHandler.adoptInstead(LongNameHandler::forMeasureUnit(
+                macros.locale,
+                resolvedUnit,   // WIP/FIXME: not known at this time for usage()!
+                macros.perUnit, // WIP/FIXME: deal with COMPOUND and MIXED units?
+                unitWidth, resolvePluralRules(macros.rules, macros.locale, status), chain, status));
+            chain = fLongNameHandler.getAlias();
+        }
     } else if (isCurrency && unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {
         fLongNameHandler.adoptInstead(
                 LongNameHandler::forCurrencyLongNames(
@@ -379,6 +421,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             safe,
             chain,
             status);
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
         if (newCompactHandler == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;

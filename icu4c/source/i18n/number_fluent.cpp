@@ -274,6 +274,158 @@ Derived NumberFormatterSettings<Derived>::scale(const Scale& scale)&& {
     return move;
 }
 
+/////////////////////////////////////////////////////////
+
+// WIP/TODO(hugovdm): which file does the Usage class implementation belong in?
+// (The Scale class' code lives in number_multiplier.cpp)
+
+// Copy constructor
+Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
+    if (other.fUsage != nullptr) {
+        fUsage = new char[fLength + 1];
+        uprv_strncpy(fUsage, other.fUsage, fLength+1);
+    }
+}
+
+// Copy assignment operator
+Usage& Usage::operator=(const Usage& other) {
+    fLength = other.fLength;
+    if (other.fUsage != nullptr) {
+        fUsage = new char[fLength + 1];
+        uprv_strncpy(fUsage, other.fUsage, fLength+1);
+    }
+    fError = other.fError;
+    return *this;
+}
+
+// Move constructor
+Usage::Usage(Usage &&src) U_NOEXCEPT : fUsage(src.fUsage), fLength(src.fLength), fError(src.fError) {
+    // Take ownership away from src if necessary
+    src.fUsage = nullptr;
+}
+
+// Move assignment operator
+Usage& Usage::operator=(Usage&& src) U_NOEXCEPT {
+    if (fUsage != nullptr) {
+        delete[] fUsage;
+    }
+    fUsage = src.fUsage;
+    fLength = src.fLength;
+    fError = src.fError;
+    // Take ownership away from src if necessary
+    src.fUsage = nullptr;
+    return *this;
+}
+
+Usage::~Usage() {
+    if (fUsage != nullptr) {
+        delete[] fUsage;
+        fUsage = nullptr;
+    }
+}
+
+void Usage::set(StringPiece value) {
+    if (fUsage != nullptr) {
+        // TODO: reuse if possible, rather than always delete?
+        delete[] fUsage;
+        fUsage = nullptr;
+    }
+    fLength = value.length();
+    fUsage = new char[fLength+1];
+    uprv_strncpy(fUsage, value.data(), fLength);
+    fUsage[fLength] = 0;
+}
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& {
+    Derived copy(*this);
+    copy.fMacros.usage.set(usage);
+    return copy;
+}
+
+/////////////////////////////////////////////////////////
+
+StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, Locale locale, StringPiece usage,
+                                 UErrorCode &status)
+    : fStubLocale(locale) {
+    if (usage.compare("road") != 0) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    if (inputUnit != MeasureUnit::getMeter()) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+}
+
+MaybeStackVector<Measure> StubUnitsRouter::route(double quantity, UErrorCode &status) const {
+    MeasureUnit unit;
+    MaybeStackVector<Measure> result;
+    if (uprv_strcmp(fStubLocale.getCountry(), "GB") == 0) {
+        unit = MeasureUnit::getYard();
+        quantity *= 1.09361;
+    } else if (uprv_strcmp(fStubLocale.getCountry(), "US") == 0) {
+        unit = MeasureUnit::getFoot();
+        quantity *= 3.28084;
+    } else {
+        unit = MeasureUnit::getMeter();
+    }
+    Formattable num(quantity);
+    result.emplaceBack(num, new MeasureUnit(unit), status);
+    return result;
+}
+
+MaybeStackVector<MeasureUnit> StubUnitsRouter::getOutputUnits() const {
+    // fprintf(stderr, "======\nLocale: %s\n-------", fStubLocale.getName());
+    MaybeStackVector<MeasureUnit> result;
+    // fprintf(stderr, "======\n%s\n%s\n-------", fStubLocale.getCountry(), "GB");
+    // fprintf(stderr, "======\n%d\n%d\n-------", fStubLocale.getCountry()[2], "GB"[2]);
+    if (uprv_strcmp(fStubLocale.getCountry(), "GB") == 0) {
+        result.emplaceBack(MeasureUnit::getMile());
+        result.emplaceBack(MeasureUnit::getYard());
+    } else if (uprv_strcmp(fStubLocale.getCountry(), "US") == 0) {
+        result.emplaceBack(MeasureUnit::getMile());
+        result.emplaceBack(MeasureUnit::getFoot());
+    } else {
+        result.emplaceBack(MeasureUnit::getKilometer());
+        result.emplaceBack(MeasureUnit::getMeter());
+    }
+    return result;
+}
+
+/////////////////////////////////////////////////////////
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
+    Derived move(std::move(*this));
+    move.fMacros.usage.set(usage);
+    return move;
+}
+
+// WIP/FIXME/CLEANUP: My attempt at `LocalArray<char> usage;` looked like this
+// (but to have a LocalArray field in MacroProps, LocalArray would need a copy
+// assignment operator):
+
+// template<typename Derived>
+// Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& {
+//     Derived copy(*this);
+//     int32_t usageLen = usage.length();
+//     char* newUsage = new char[usageLen+1];  // Do we need error handling for allocation failures?
+//     uprv_strncpy(newUsage, usage.data(), usageLen);
+//     newUsage[usageLen] = 0;
+//     copy.fMacros.usage.adoptInstead(newUsage);
+//     return copy;
+// }
+
+// template<typename Derived>
+// Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
+//     Derived move(std::move(*this));
+//     int32_t usageLen = usage.length();
+//     char* newUsage = new char[usageLen+1];  // Do we need error handling for allocation failures?
+//     uprv_strncpy(newUsage, usage.data(), usageLen);
+//     newUsage[usageLen] = 0;
+//     move.fMacros.usage.adoptInstead(newUsage);
+//     return move;
+// }
+
 template<typename Derived>
 Derived NumberFormatterSettings<Derived>::padding(const Padder& padder) const& {
     Derived copy(*this);

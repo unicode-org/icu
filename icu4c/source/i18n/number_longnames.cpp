@@ -22,7 +22,17 @@ using namespace icu::number::impl;
 
 namespace {
 
+/**
+ * Display Name (this format has no placeholder).
+ *
+ * Used as an index into the LongNameHandler::simpleFormats array. Units
+ * resources cover the normal set of PluralRules keys, as well as `dnam` and
+ * `per` forms.
+ */
 constexpr int32_t DNAM_INDEX = StandardPlural::Form::COUNT;
+/**
+ * @copydoc DNAM_INDEX
+ */
 constexpr int32_t PER_INDEX = StandardPlural::Form::COUNT + 1;
 constexpr int32_t ARRAY_LENGTH = StandardPlural::Form::COUNT + 2;
 
@@ -87,6 +97,10 @@ class PluralTableSink : public ResourceSink {
 
 // NOTE: outArray MUST have room for all StandardPlural values.  No bounds checking is performed.
 
+// Populates outArray with `locale`-specific values for `unit` through use of
+// PluralTableSink, reading from resources *unitsNarrow* and *unitsShort* (for
+// width UNUM_UNIT_WIDTH_NARROW), or just *unitsShort* (for width
+// UNUM_UNIT_WIDTH_SHORT). For other widths, it would read just "units".
 void getMeasureData(const Locale &locale, const MeasureUnit &unit, const UNumberUnitWidth &width,
                     UnicodeString *outArray, UErrorCode &status) {
     PluralTableSink sink(outArray);
@@ -184,6 +198,7 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
 
 } // namespace
 
+// FIXME: remove "perUnit" parameter here, have the caller do the composing?
 LongNameHandler*
 LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef, const MeasureUnit &perUnit,
                                 const UNumberUnitWidth &width, const PluralRules *rules,
@@ -338,13 +353,64 @@ void LongNameHandler::multiSimpleFormatsToModifiers(const UnicodeString *leadFor
 
 void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                       UErrorCode &status) const {
-    parent->processQuantity(quantity, micros, status);
+    if (parent != NULL) {
+        parent->processQuantity(quantity, micros, status);
+    }
     StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
     micros.modOuter = &fModifiers[pluralForm];
 }
 
 const Modifier* LongNameHandler::getModifier(Signum /*signum*/, StandardPlural::Form plural) const {
     return &fModifiers[plural];
+}
+
+LongNameMultiplexer *
+LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<MeasureUnit> &units,
+                                     const UNumberUnitWidth &width, const PluralRules *rules,
+                                     const MicroPropsGenerator *parent, UErrorCode &status) {
+    auto *result = new LongNameMultiplexer(parent);
+    if (result == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    U_ASSERT(units.length() > 0);
+    // result->fLongNameHandlers.adoptInstead(new LongNameHandler *[units.length()]);
+    result->fMeasureUnits.adoptInstead(new MeasureUnit[units.length()]);
+    // result->fParent = parent;
+    for (int32_t i = 0, length = units.length(); i < length; i++) {
+        // U_ASSERT(i < MAX_PREFS_COUNT); // FIXME: enforce by unit tests on preferences!
+        // FIXME: stop using fixed-size fLongNameHandlers array. But how to do
+        // that best? MaybeStackVector doesn't let us insert pointers created.
+        result->fLongNameHandlers.adoptBack(
+            LongNameHandler::forMeasureUnit(
+                loc, *units[i],
+                MeasureUnit(), // WIP/FIXME: deal with COMPOUND and MIXED units?
+                width, rules, NULL, status),
+            status);
+        result->fMeasureUnits[i] = *units[i];
+    }
+    return result;
+}
+
+void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
+                                          UErrorCode &status) const {
+    // We call parent->processQuantity() from the Multiplexer, instead of
+    // letting LongNameHandler handle it: we don't know which LongNameHandler to
+    // call until we've called the parent!
+    fParent->processQuantity(quantity, micros, status);
+    // fprintf(stderr, "Looking for %s\n", micros.helpers.outputUnit.getIdentifier());
+
+    // FIXME: pick the correct one based on unit:
+    for (int i = 0; i < fLongNameHandlers.length(); i++) {
+        if (fMeasureUnits[i] == micros.helpers.outputUnit) {
+            // fprintf(stderr, "%s == %s\n", fMeasureUnits[i].getIdentifier(), micros.helpers.outputUnit.getIdentifier());
+            fLongNameHandlers[i]->processQuantity(quantity, micros, status);
+            return;
+        // } else {
+        //     fprintf(stderr, "%s != %s\n", fMeasureUnits[i].getIdentifier(), micros.helpers.outputUnit.getIdentifier());
+        }
+    }
+    status = U_RESOURCE_TYPE_MISMATCH;  // FIXME: failure type? Assert failure even.
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

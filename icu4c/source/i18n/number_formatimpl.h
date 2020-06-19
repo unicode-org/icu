@@ -10,11 +10,13 @@
 #include "number_types.h"
 #include "formatted_string_builder.h"
 #include "number_patternstring.h"
+#include "number_usageprefs.h"
 #include "number_utils.h"
 #include "number_patternmodifier.h"
 #include "number_longnames.h"
 #include "number_compact.h"
 #include "number_microprops.h"
+#include "unitsrouter_stub.h"  // WIP/TODO(hugovdm)
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -83,6 +85,10 @@ class NumberFormatterImpl : public UMemory {
 
   private:
     // Head of the MicroPropsGenerator linked list:
+    // WIP/TODO(hugovdm): comprehend/document how this linked list functions
+    // (and how it related to fMicros).
+    // This points at the *end* of a chain of fMicroPropsGenerator. Subclasses' processQuantity methods
+    // typically do a depth-first traversal of the linked list.
     const MicroPropsGenerator *fMicroPropsGenerator = nullptr;
 
     // Tail of the list:
@@ -90,6 +96,8 @@ class NumberFormatterImpl : public UMemory {
 
     // Other fields possibly used by the number formatting pipeline:
     // TODO: Convert more of these LocalPointers to value objects to reduce the number of news?
+    // vs MicroProps::helpers::usageprefs?
+    LocalPointer<const UsagePrefsHandler> fUsagePrefsHandler;
     LocalPointer<const DecimalFormatSymbols> fSymbols;
     LocalPointer<const PluralRules> fRules;
     LocalPointer<const ParsedPatternInfo> fPatternInfo;
@@ -97,6 +105,10 @@ class NumberFormatterImpl : public UMemory {
     LocalPointer<MutablePatternModifier> fPatternModifier;
     LocalPointer<ImmutablePatternModifier> fImmutablePatternModifier;
     LocalPointer<const LongNameHandler> fLongNameHandler;
+    LocalPointer<const LongNameMultiplexer> fLongNameMultiplexer;
+    LocalArray<const MeasureUnit> fMeasureUnitArray;  // WIP/TODO(hugovdm): list of possible units?
+    LocalArray<const LongNameHandler> fLongNameHandlerArray;  // WIP/TODO(hugovdm): corresponding list of long name handlers?
+    // LocalPointer<const StubUnitsRouter> fUnitsRouter;  // WIP/TODO(hugovdm): the eventual units router instance.
     LocalPointer<const CompactHandler> fCompactHandler;
 
     // Value objects possibly used by the number formatting pipeline:
