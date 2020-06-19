@@ -242,6 +242,13 @@ class U_I18N_API ModifierStore {
 
 
 /**
+ * WIP/FIXME("used when all number formatting settings are known"): sounds not
+ * appropriate for UnitPreferences: we don't know the units until we also know
+ * the number.
+ *
+ * macrosToMicroGenerator produces MicroPropsGenerator, which produces
+ * MicroProps. Chain of MicroProps, which inherit from MicroPropsGenerators.
+ *
  * This interface is used when all number formatting settings, including the locale, are known, except for the quantity
  * itself. The {@link #processQuantity} method performs the final step in the number processing pipeline: it uses the
  * quantity to generate a finalized {@link MicroProps}, which can be used to render the number to output.
@@ -264,13 +271,12 @@ class U_I18N_API MicroPropsGenerator {
     virtual ~MicroPropsGenerator();
 
     /**
-     * Considers the given {@link DecimalQuantity}, optionally mutates it, and returns a {@link MicroProps}.
+     * Considers the given {@link DecimalQuantity}, optionally mutates it, and
+     * returns a {@link MicroProps}.
      *
-     * @param quantity
-     *            The quantity for consideration and optional mutation.
-     * @param micros
-     *            The MicroProps instance to populate.
-     * @return A MicroProps instance resolved for the quantity.
+     * @param quantity The quantity for consideration and optional mutation.
+     * @param micros The MicroProps instance to populate. It will be modified as
+     *            needed for the given quantity.
      */
     virtual void processQuantity(DecimalQuantity& quantity, MicroProps& micros,
                                  UErrorCode& status) const = 0;
