@@ -687,9 +687,9 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
  *
  *     // MemoryPool will take care of deleting the MyType objects.
  *
- * It is also able to also adopt pointers to heap allocated objects. This is not
- * the typical use-case, as it is more error prone. This class is kept
- * minimalist as far as possible.
+ * It is also able to adopt pointers to heap allocated objects. This is not the
+ * typical use-case, as it is more error prone: this class is kept minimalist as
+ * far as possible.
  */
 template<typename T, int32_t stackCapacity = 8>
 class MemoryPool : public UMemory {
@@ -857,7 +857,8 @@ public:
     }
 
     /**
-     * Append all the items from another MaybeStackVector to this one.
+     * Append all the items from another MaybeStackVector to this one via
+     * copy-construction.
      */
     void appendAll(const MaybeStackVector& other, UErrorCode& status) {
         for (int32_t i = 0; i < other.fCount; i++) {
