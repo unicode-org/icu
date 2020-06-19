@@ -742,8 +742,8 @@ public:
      * @param status Is set to U_MEMORY_ALLOCATION_ERROR if allocation of the
      * needed pool capacity fails.
      */
-    template<typename... Args>
-    void adoptBack(T* ptr, UErrorCode& status) {
+    template <typename... Args>
+    void adopt(T *ptr, UErrorCode &status) {
         if (U_FAILURE(status)) {
             return;
         }
@@ -821,7 +821,7 @@ public:
      * needed pool capacity fails.
      */
     void adoptBack(T *ptr, UErrorCode &status) {
-        MemoryPool<T, stackCapacity>::adoptBack(ptr, status);
+        this->adopt(ptr, status);
     }
 
     int32_t length() const {
