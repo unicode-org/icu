@@ -9,10 +9,16 @@
 
 using namespace icu::number::impl;
 
-UsagePrefsHandler::UsagePrefsHandler(const Locale &locale, const MeasureUnit inputUnit,
-                                     const StringPiece usage, const MicroPropsGenerator *parent,
+UsagePrefsHandler::UsagePrefsHandler(const Locale &locale,
+                                     const MeasureUnit inputUnit,
+                                     const StringPiece usage,
+                                     const MicroPropsGenerator *parent,
                                      UErrorCode &status)
-    : fUnitsRouter(inputUnit, locale, usage, status), fParent(parent) {}
+    : fUnitsRouter(inputUnit, StringPiece(locale.getCountry()), usage, status),
+      fParent(parent) {
+}
+// Is this not better? :
+// : fUnitsRouter(inputUnit, locale, usage, status), fParent(parent) {}
 
 void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                         UErrorCode &status) const {

@@ -345,9 +345,20 @@ Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& 
 
 /////////////////////////////////////////////////////////
 
-StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, Locale locale, StringPiece usage,
-                                 UErrorCode &status)
-    : fStubLocale(locale) {
+StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, StringPiece region,
+                                 StringPiece usage, UErrorCode &status)
+    : fRegion(region, status) {
+    if (usage.compare("road") != 0) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    if (inputUnit != MeasureUnit::getMeter()) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+}
+
+StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, Locale locale,
+                                 StringPiece usage, UErrorCode &status)
+    : fRegion(locale.getCountry(), status) {
     if (usage.compare("road") != 0) {
         status = U_UNSUPPORTED_ERROR;
     }
@@ -359,10 +370,10 @@ StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, Locale locale, StringPie
 MaybeStackVector<Measure> StubUnitsRouter::route(double quantity, UErrorCode &status) const {
     MeasureUnit unit;
     MaybeStackVector<Measure> result;
-    if (uprv_strcmp(fStubLocale.getCountry(), "GB") == 0) {
+    if (uprv_strcmp(fRegion.data(), "GB") == 0) {
         unit = MeasureUnit::getYard();
         quantity *= 1.09361;
-    } else if (uprv_strcmp(fStubLocale.getCountry(), "US") == 0) {
+    } else if (uprv_strcmp(fRegion.data(), "US") == 0) {
         unit = MeasureUnit::getFoot();
         quantity *= 3.28084;
     } else {
@@ -378,10 +389,10 @@ MaybeStackVector<MeasureUnit> StubUnitsRouter::getOutputUnits() const {
     MaybeStackVector<MeasureUnit> result;
     // fprintf(stderr, "======\n%s\n%s\n-------", fStubLocale.getCountry(), "GB");
     // fprintf(stderr, "======\n%d\n%d\n-------", fStubLocale.getCountry()[2], "GB"[2]);
-    if (uprv_strcmp(fStubLocale.getCountry(), "GB") == 0) {
+    if (uprv_strcmp(fRegion.data(), "GB") == 0) {
         result.emplaceBack(MeasureUnit::getMile());
         result.emplaceBack(MeasureUnit::getYard());
-    } else if (uprv_strcmp(fStubLocale.getCountry(), "US") == 0) {
+    } else if (uprv_strcmp(fRegion.data(), "US") == 0) {
         result.emplaceBack(MeasureUnit::getMile());
         result.emplaceBack(MeasureUnit::getFoot());
     } else {

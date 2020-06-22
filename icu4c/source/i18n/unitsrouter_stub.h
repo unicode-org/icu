@@ -77,7 +77,11 @@ U_NAMESPACE_BEGIN
  */
 class U_I18N_API StubUnitsRouter {
   public:
-    // WIP/FIXME: Stub change: going with "Locale" here instead of "StringPiece":
+    // As found in UnitsRouter
+    StubUnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
+                    UErrorCode &status);
+
+    // WIP/FIXME: Possible improvement: with "Locale" instead of "StringPiece":
     StubUnitsRouter(MeasureUnit inputUnit, Locale locale, StringPiece usage, UErrorCode &status);
 
     // WIP/FIXME: going via Measure is excessive when we specifically need a double.
@@ -89,7 +93,8 @@ class U_I18N_API StubUnitsRouter {
     // Stubbed out:
     // MaybeStackVector<ConverterPreference> converterPreferences_;
 
-    Locale fStubLocale;
+    // Locale fStubLocale;
+    CharString fRegion;
 };
 
 U_NAMESPACE_END
