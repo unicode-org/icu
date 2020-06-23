@@ -7,6 +7,8 @@
 #ifndef __GETUNITSDATA_H__
 #define __GETUNITSDATA_H__
 
+#include <limits>
+
 #include "charstr.h"
 #include "cmemory.h"
 #include "unicode/measunit.h"
@@ -95,7 +97,7 @@ class U_I18N_API ConversionRates {
 // Encapsulates unitPreferenceData information from units resources, specifying
 // a sequence of output unit preferences.
 struct U_I18N_API UnitPreference : public UMemory {
-    UnitPreference() : geq(1) {}
+    UnitPreference() : geq(std::numeric_limits<double>::lowest()) {} // geq equals to -inf by default.
     CharString unit;
     double geq;
     CharString skeleton;
