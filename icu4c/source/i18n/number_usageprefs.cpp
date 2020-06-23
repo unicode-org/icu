@@ -6,6 +6,7 @@
 #include "number_usageprefs.h"
 #include "number_decimalquantity.h"
 #include "number_microprops.h"
+#include "unicode/numberformatter.h"
 
 using namespace icu::number::impl;
 
@@ -23,15 +24,29 @@ UsagePrefsHandler::UsagePrefsHandler(const Locale &locale,
 void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                         UErrorCode &status) const {
     fParent->processQuantity(quantity, micros, status);
-    // if (U_FAILURE(status)) { return; }
-    // FIXME: DO COOL STUFF!
+    if (U_FAILURE(status)) {
+        return;
+    }
 
-    quantity.roundToInfinity();
-    auto fixme = fUnitsRouter.route(quantity.toDouble(), status);
-    // fprintf(stderr, "setting outputUnit to %s\n", fixme[0]->getUnit().getIdentifier());
-    micros.helpers.outputUnit = fixme[0]->getUnit();
-    quantity.setToDouble(fixme[0]->getNumber().getDouble());
-    // micros.SOMETHING = fixme[0]->getUnit();
+    quantity.roundToInfinity(); // Enables toDouble
+    auto routed = fUnitsRouter.route(quantity.toDouble(), status);
+    micros.helpers.outputUnit = routed[0]->getUnit();
+    quantity.setToDouble(routed[0]->getNumber().getDouble());
+
+    // TODO(units): here we are always overriding Precision. (1) get precision
+    // from fUnitsRouter, (2) ensure we use the UnitPreference skeleton's
+    // precision only when there isn't an explicit override we prefer to use.
+    // This needs to be handled within
+    // NumberFormatterImpl::macrosToMicroGenerator in number_formatimpl.cpp
+    Precision precision = Precision::integer().withMinDigits(2);
+    UNumberFormatRoundingMode roundingMode;
+    // Temporary until ICU 64?
+    roundingMode = precision.fRoundingMode;
+    CurrencyUnit currency(u"", status);
+    micros.rounder = {precision, roundingMode, currency, status};
+    if (U_FAILURE(status)) {
+        return;
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -159,6 +159,7 @@ struct UFormattedNumberImpl;
 class MutablePatternModifier;
 class ImmutablePatternModifier;
 struct DecimalFormatWarehouse;
+class UsagePrefsHandler;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -768,6 +769,12 @@ class U_I18N_API Precision : public UMemory {
 
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
+
+    // TODO(units): revisit when improving StubUnitsRouter. Do we still need
+    // this once Precision is returned by UnitsRouter? For now, while
+    // UnitsRouter and StubUnitsRouter don't return Precision, we allow access
+    // to Precision constructor from UsagePrefsHandler:
+    friend class impl::UsagePrefsHandler;
 };
 
 /**
@@ -2129,6 +2136,12 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Setting a usage string but not a correct input unit will result in an
      * U_ILLEGAL_ARGUMENT_ERROR.
+     *
+     * TODO(units): When setting both usage and rounding/precision behaviour via
+     * NumberFormatterSetter, we think we want the latter to override any
+     * skeleton in the UnitPreferences. Add unit tests to demontrate desired
+     * behaviour, fix macrosToMicroGenerator to handle this correctly, and
+     * update this documentation.
      *
      * @param usage A `usage` parameter from the units resource. See the
      * unitPreferenceData in *source/data/misc/units.txt*, generated from
