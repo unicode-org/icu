@@ -214,9 +214,7 @@ class UnitPreferencesSink : public ResourceSink {
                                 dq.setToDecNumber(geq.data(), status);
                                 up->geq = dq.toDouble();
                             } else if (uprv_strcmp(key, "skeleton") == 0) {
-                                int32_t length;
-                                const UChar *s = value.getString(length, status);
-                                up->skeleton.appendInvariantChars(s, length, status);
+                                up->skeleton = value.getUnicodeString(status);
                             }
                         }
                     }

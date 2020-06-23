@@ -101,15 +101,17 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     }
 
     quantity.roundToInfinity(); // Enables toDouble
-    auto routed = fUnitsRouter.route(quantity.toDouble(), status);
-    micros.outputUnit = routed[0]->getUnit();
-    quantity.setToDouble(routed[0]->getNumber().getDouble());
+    const auto routed = fUnitsRouter.route(quantity.toDouble(), status);
+    const auto& routedUnits = routed.measures;
+    micros.outputUnit = routedUnits[0]->getUnit();
+    quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
 
     // TODO(units): here we are always overriding Precision. (1) get precision
     // from fUnitsRouter, (2) ensure we use the UnitPreference skeleton's
     // precision only when there isn't an explicit override we prefer to use.
     // This needs to be handled within
     // NumberFormatterImpl::macrosToMicroGenerator in number_formatimpl.cpp
+    // TODO: Use precision from `routed` result.
     Precision precision = Precision::integer().withMinDigits(2);
     UNumberFormatRoundingMode roundingMode;
     // Temporary until ICU 64?

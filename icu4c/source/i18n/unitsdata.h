@@ -7,6 +7,8 @@
 #ifndef __GETUNITSDATA_H__
 #define __GETUNITSDATA_H__
 
+#include <limits>
+
 #include "charstr.h"
 #include "cmemory.h"
 #include "unicode/stringpiece.h"
@@ -92,10 +94,11 @@ class U_I18N_API ConversionRates {
 // Encapsulates unitPreferenceData information from units resources, specifying
 // a sequence of output unit preferences.
 struct U_I18N_API UnitPreference : public UMemory {
-    UnitPreference() : geq(1) {}
+    // Set geq to 1.0 by default
+    UnitPreference() : geq(1.0) {}
     CharString unit;
     double geq;
-    CharString skeleton;
+    UnicodeString skeleton;
 };
 
 /**
