@@ -6829,4 +6829,81 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
         assertEquals("Currency pattern", "#,##0.00 ¤¤¤", decimalFormat.toPattern());
     }
+
+    @Test
+    public void test13733_StrictAndLenient() {
+        Object[][] cases = { {"CA$ 12", "¤ 0", 12, 12},
+                {"CA$12", "¤0", 12, 12},
+                {"CAD 12", "¤¤ 0", 12, 12},
+                {"12 CAD", "0 ¤¤", 12, 12},
+                {"12 Canadian dollars", "0 ¤¤¤", 12, 12},
+                {"$12 ", "¤¤¤¤0", 12, 12},
+                {"12$", "0¤¤¤¤", 12, 12},
+                {"CA$ 12", "¤0", 0, 12},
+                {"CA$ 12", "0 ¤¤", 0, 12},
+                {"CA$ 12", "0 ¤¤¤", 0, 12},
+                {"CA$ 12", "¤¤¤¤0", 0, 12},
+                {"CA$ 12", "0¤¤¤¤", 0, 12},
+                {"CA$12", "¤ 0", 0, 12},
+                {"CA$12", "¤¤ 0", 0, 12},
+                {"CA$12", "0 ¤¤", 0, 12},
+                {"CA$12", "0 ¤¤¤", 0, 12},
+                {"CA$12", "0¤¤¤¤", 0, 12},
+                {"CAD 12", "¤0", 0, 12},
+                {"CAD 12", "0 ¤¤", 0, 12},
+                {"CAD 12", "0 ¤¤¤", 0, 12},
+                {"CAD 12", "¤¤¤¤0", 0, 12},
+                {"CAD 12", "0¤¤¤¤", 0, 12},
+                {"12 CAD", "¤ 0", 0, 12},
+                {"12 CAD", "¤0", 0, 12},
+                {"12 CAD", "¤¤ 0", 0, 12},
+                {"12 CAD", "¤¤¤¤0", 0, 12},
+                {"12 CAD", "0¤¤¤¤", 0, 12},
+                {"12 Canadian dollars", "¤ 0", 0, 12},
+                {"12 Canadian dollars", "¤0", 0, 12},
+                {"12 Canadian dollars", "¤¤ 0", 0, 12},
+                {"12 Canadian dollars", "¤¤¤¤0", 0, 12},
+                {"12 Canadian dollars", "0¤¤¤¤", 0, 12},
+                {"$12 ", "¤ 0", 0, 12},
+                {"$12 ", "¤¤ 0", 0, 12},
+                {"$12 ", "0 ¤¤", 0, 12},
+                {"$12 ", "0 ¤¤¤", 0, 12},
+                {"$12 ", "0¤¤¤¤", 0, 12},
+                {"12$", "¤ 0", 0, 12},
+                {"12$", "¤0", 0, 12},
+                {"12$", "¤¤ 0", 0, 12},
+                {"12$", "0 ¤¤", 0, 12},
+                {"12$", "0 ¤¤¤", 0, 12},
+                {"12$", "¤¤¤¤0", 0, 12} };
+
+        for (Object[] cas : cases) {
+            String inputString = (String) cas[0];
+            String patternString = (String) cas[1];
+            int expectedStrictParse = (int) cas[2];
+            int expectedLenientParse = (int) cas[3];
+
+            int parsedStrictValue = 0;
+            int parsedLenientValue = 0;
+            ParsePosition ppos = new ParsePosition(0);
+            DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+            DecimalFormat df = new DecimalFormat(patternString, dfs);
+
+            df.setParseStrict(true);
+            CurrencyAmount ca_strict = df.parseCurrency(inputString, ppos);
+            if (null != ca_strict) {
+                parsedStrictValue = ca_strict.getNumber().intValue();
+            }
+            assertEquals("Strict parse of " + inputString + " using " + patternString,
+                    parsedStrictValue, expectedStrictParse);
+
+            ppos.setIndex(0);
+            df.setParseStrict(false);
+            CurrencyAmount ca_lenient = df.parseCurrency(inputString, ppos);
+            if (null != ca_lenient) {
+                parsedLenientValue = ca_lenient.getNumber().intValue();
+            }
+            assertEquals("Strict parse of " + inputString + " using " + patternString,
+                    parsedLenientValue, expectedLenientParse);
+        }
+    }
 }
