@@ -374,17 +374,12 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
         return nullptr;
     }
     U_ASSERT(units.length() > 0);
-    // result->fLongNameHandlers.adoptInstead(new LongNameHandler *[units.length()]);
     result->fMeasureUnits.adoptInstead(new MeasureUnit[units.length()]);
-    // result->fParent = parent;
     for (int32_t i = 0, length = units.length(); i < length; i++) {
-        // U_ASSERT(i < MAX_PREFS_COUNT); // FIXME: enforce by unit tests on preferences!
-        // FIXME: stop using fixed-size fLongNameHandlers array. But how to do
-        // that best? MaybeStackVector doesn't let us insert pointers created.
         result->fLongNameHandlers.adoptBack(
             LongNameHandler::forMeasureUnit(
                 loc, *units[i],
-                MeasureUnit(), // WIP/FIXME: deal with COMPOUND and MIXED units?
+                MeasureUnit(), // TODO(units): deal with COMPOUND and MIXED units
                 width, rules, NULL, status),
             status);
         result->fMeasureUnits[i] = *units[i];
@@ -398,19 +393,16 @@ void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps 
     // letting LongNameHandler handle it: we don't know which LongNameHandler to
     // call until we've called the parent!
     fParent->processQuantity(quantity, micros, status);
-    // fprintf(stderr, "Looking for %s\n", micros.helpers.outputUnit.getIdentifier());
 
-    // FIXME: pick the correct one based on unit:
+    // Call the correct LongNameHandler based on outputUnit
     for (int i = 0; i < fLongNameHandlers.length(); i++) {
         if (fMeasureUnits[i] == micros.helpers.outputUnit) {
-            // fprintf(stderr, "%s == %s\n", fMeasureUnits[i].getIdentifier(), micros.helpers.outputUnit.getIdentifier());
             fLongNameHandlers[i]->processQuantity(quantity, micros, status);
             return;
-        // } else {
-        //     fprintf(stderr, "%s != %s\n", fMeasureUnits[i].getIdentifier(), micros.helpers.outputUnit.getIdentifier());
         }
     }
-    status = U_RESOURCE_TYPE_MISMATCH;  // FIXME: failure type? Assert failure even.
+    status = U_RESOURCE_TYPE_MISMATCH; // TODO(units): do we want new failure types? Or maybe an assert
+                                       // failure even?
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

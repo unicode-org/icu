@@ -38,6 +38,7 @@ class U_I18N_API UsagePrefsHandler : public MicroPropsGenerator, public UMemory 
     }
 
   private:
+    // TODO(units): use UnitsRouter, throw away StubUnitsRouter.
     StubUnitsRouter fUnitsRouter;
     const MicroPropsGenerator *fParent;
 };

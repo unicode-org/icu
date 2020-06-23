@@ -1,8 +1,9 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// As a temporary stubbed out version, I've not given it its own .cpp file: I
-// let the code tresspass in number_fluent.cpp.
+// TODO(units): delete this file! Use the proper UnitsRouter instead. Since this
+// is a temporary stubbed out version, I've not given it its own .cpp file: the
+// actual code is tresspassing in number_fluent.cpp.
 
 // #include "unicode/utypes.h"
 
@@ -24,67 +25,21 @@
 
 U_NAMESPACE_BEGIN
 
-/**
- * Contains the complex unit converter and the limit which representing the smallest value that the
- * converter should accept. For example, if the converter is converting to `foot+inch` and the limit
- * equals 3.0, thus means the converter should not convert to a value less than `3.0 feet`.
- *
- * NOTE:
- *    if the limit doest not has a value `i.e. (std::numeric_limits<double>::lowest())`, this mean there
- *    is no limit for the converter.
- */
-/* struct ConverterPreference : UMemory { */
-/*     ComplexUnitsConverter converter; */
-/*     double limit; */
-
-/*     ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit, */
-/*                         const ConversionRates &ratesInfo, UErrorCode &status) */
-/*         : converter(source, complexTarget, ratesInfo, status), limit(limit) {} */
-
-/*     ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, const ConversionRates &ratesInfo, */
-/*                         UErrorCode &status) */
-/*         : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), ratesInfo, */
-/*                               status) {} */
-/* }; */
-
-/**
- * `UnitsRouter` responsible for converting from a single unit (such as `meter` or `meter-per-second`) to
- * one of the complex units based on the limits.
- * For example:
- *    if the input is `meter` and the output as following
- *    {`foot+inch`, limit: 3.0}
- *    {`inch`     , limit: no value (-inf)}
- *    Thus means if the input in `meter` is greater than or equal to `3.0 feet`, the output will be in
- *    `foot+inch`, otherwise, the output will be in `inch`.
- *
- * NOTE:
- *    the output units and the their limits MUST BE in order, for example, if the output units, from the
- *    previous example, are the following:
- *        {`inch`     , limit: no value (-inf)}
- *        {`foot+inch`, limit: 3.0}
- *     IN THIS CASE THE OUTPUT WILL BE ALWAYS IN `inch`.
- *
- * NOTE:
- *    the output units  and their limits will be extracted from the units preferences database by knowing
- *    the followings:
- *        - input unit
- *        - locale
- *        - usage
- *
- * DESIGN:
- *    `UnitRouter` uses internally `ComplexUnitConverter` in order to convert the input units to the
- *    desired complex units and to check the limit too.
- */
 class U_I18N_API StubUnitsRouter {
   public:
     // As found in UnitsRouter
     StubUnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
                     UErrorCode &status);
 
-    // WIP/FIXME: Possible improvement: with "Locale" instead of "StringPiece":
+    // TODO(units): consider this possible improvement for the constructor:
+    // passing "Locale" instead of "StringPiece region"? :
     StubUnitsRouter(MeasureUnit inputUnit, Locale locale, StringPiece usage, UErrorCode &status);
 
-    // WIP/FIXME: going via Measure is excessive when we specifically need a double.
+    // TODO(units): API under reconsideration: going via Measure may be
+    // excessive when we need a double; MaybeStackVector<Measure> might also not
+    // be what we want for dealing with Mixed, given that a MeasureUnit can, on
+    // its own, represent mixed units. (i.e. do we want to have Measure support
+    // multi-valued mixed-units?)
     MaybeStackVector<Measure> route(double quantity, UErrorCode &status) const;
 
     MaybeStackVector<MeasureUnit> getOutputUnits() const;

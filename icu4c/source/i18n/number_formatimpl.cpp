@@ -218,24 +218,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         return nullptr;
     }
 
-    MeasureUnit resolvedUnit;
-    // WIP/FIXME: UnitRouter preparation/calculations here?
-    // if (macros.usage.length() > 0) {
-    //     fUnitsRouter.adoptInstead(
-    //         new StubUnitsRouter(macros.unit, macros.locale, macros.usage.fUsage, status));
-    //     if (U_FAILURE(status)) { return nullptr; }
-    //     // FIXME/WIP/TODO(hugovdm): unit depends on quantity, so we can't really
-    //     // grab this now - we need to grab it at formatDouble time.
-    //     resolvedUnit = fUnitsRouter->getOutputUnit();
-    // } else {
-    //     resolvedUnit = macros.unit;
-    // }
-
     /////////////////////////////////////////////////////////////////////////////////////
     /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
     /////////////////////////////////////////////////////////////////////////////////////
 
     // Unit Preferences and Conversions as our first step
+    MeasureUnit resolvedUnit;
     if (macros.usage.isSet()) {
         if (!isCldrUnit) {
             // We only support "usage" when the input unit is a CLDR Unit.
@@ -250,7 +238,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         }
         fUsagePrefsHandler.adoptInstead(usagePrefsHandler);
         chain = fUsagePrefsHandler.getAlias();
-        // FIXME:
+        // TODO(units): this doesn't handle mixed units yet, caring only about
+        // the first output unit:
         resolvedUnit = *usagePrefsHandler->getOutputUnits()[0];
     } else {
         resolvedUnit = macros.unit;

@@ -15,7 +15,6 @@
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
-// FIXME: describe me?
 class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public UMemory {
   public:
     static UnicodeString getUnitDisplayName(
@@ -58,7 +57,6 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
                     const UNumberUnitWidth &width, const PluralRules *rules,
                     const MicroPropsGenerator *parent, UErrorCode &status);
 
-    // FIXME: describe me?
     void simpleFormatsToModifiers(const UnicodeString *simpleFormats, Field field, UErrorCode &status);
     void multiSimpleFormatsToModifiers(const UnicodeString *leadFormats, UnicodeString trailFormat,
                                        Field field, UErrorCode &status);
@@ -66,8 +64,11 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
 
 const int MAX_PREFS_COUNT = 10;
 
-/// FIXME
-/// And check if ModifierStore is the right pattern here.
+/**
+ * A MicroPropsGenerator that multiplexes between different LongNameHandlers,
+ * depending on the outputUnit (micros.helpers.outputUnit should be set earlier
+ * in the chain).
+ */
 class LongNameMultiplexer : public MicroPropsGenerator, public UMemory {
   public:
     static LongNameMultiplexer *forMeasureUnits(const Locale &loc,
@@ -79,15 +80,16 @@ class LongNameMultiplexer : public MicroPropsGenerator, public UMemory {
                          UErrorCode &status) const U_OVERRIDE;
 
   private:
-    // LocalPointer<const LongNameHandler> fLongNameHandlers[MAX_PREFS_COUNT];
+    /**
+     * Because we only know which LongNameHandler we wish to call after calling
+     * earlier MicroPropsGenerators in the chain, LongNameMultiplexer keeps the
+     * parent link, while the LongNameHandlers are given no parents.
+     */
     MaybeStackVector<const LongNameHandler> fLongNameHandlers;
     LocalArray<MeasureUnit> fMeasureUnits;
     const MicroPropsGenerator *fParent;
 
     LongNameMultiplexer(const MicroPropsGenerator *parent) : fParent(parent) {
-    //   // LocalPointer related:
-    //   // U_ASSERT(fLongNameHandlers[0] == NULL);
-    //   // U_ASSERT(fLongNameHandlers[MAX_PREFS_COUNT-1] == NULL);
     }
 };
 

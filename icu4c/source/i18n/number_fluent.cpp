@@ -345,6 +345,9 @@ Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& 
 
 /////////////////////////////////////////////////////////
 
+// TODO(units): the StubUnitsRouter should be deleted soon, as we switch to
+// using the proper UnitsRouter - so it's just temporarily hanging out in
+// number_fluent.cpp
 StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, StringPiece region,
                                  StringPiece usage, UErrorCode &status)
     : fRegion(region, status) {
@@ -385,10 +388,7 @@ MaybeStackVector<Measure> StubUnitsRouter::route(double quantity, UErrorCode &st
 }
 
 MaybeStackVector<MeasureUnit> StubUnitsRouter::getOutputUnits() const {
-    // fprintf(stderr, "======\nLocale: %s\n-------", fStubLocale.getName());
     MaybeStackVector<MeasureUnit> result;
-    // fprintf(stderr, "======\n%s\n%s\n-------", fStubLocale.getCountry(), "GB");
-    // fprintf(stderr, "======\n%d\n%d\n-------", fStubLocale.getCountry()[2], "GB"[2]);
     if (uprv_strcmp(fRegion.data(), "GB") == 0) {
         result.emplaceBack(MeasureUnit::getMile());
         result.emplaceBack(MeasureUnit::getYard());
@@ -411,9 +411,12 @@ Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
     return move;
 }
 
-// WIP/FIXME/CLEANUP: My attempt at `LocalArray<char> usage;` looked like this
-// (but to have a LocalArray field in MacroProps, LocalArray would need a copy
-// assignment operator):
+// WIP/FIXME/CLEANUP: I've implemented a "Units" class, for the fMacros.usage
+// member. Delete this comment block if that's good - initially I tried
+// `LocalArray<char> usage;`, which is what this comment contains.
+//
+// It turned out that to have a LocalArray field in MacroProps, LocalArray would
+// need a copy assignment operator), so I abandoned it:
 
 // template<typename Derived>
 // Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& {

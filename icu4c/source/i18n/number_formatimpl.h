@@ -96,7 +96,8 @@ class NumberFormatterImpl : public UMemory {
 
     // Other fields possibly used by the number formatting pipeline:
     // TODO: Convert more of these LocalPointers to value objects to reduce the number of news?
-    // vs MicroProps::helpers::usageprefs?
+    // TODO(units): what belongs in MicroProps::helpers? (e.g.
+    // considering MicroProps::helpers::usageprefs.)
     LocalPointer<const UsagePrefsHandler> fUsagePrefsHandler;
     LocalPointer<const DecimalFormatSymbols> fSymbols;
     LocalPointer<const PluralRules> fRules;
@@ -106,9 +107,6 @@ class NumberFormatterImpl : public UMemory {
     LocalPointer<ImmutablePatternModifier> fImmutablePatternModifier;
     LocalPointer<const LongNameHandler> fLongNameHandler;
     LocalPointer<const LongNameMultiplexer> fLongNameMultiplexer;
-    LocalArray<const MeasureUnit> fMeasureUnitArray;  // WIP/TODO(hugovdm): list of possible units?
-    LocalArray<const LongNameHandler> fLongNameHandlerArray;  // WIP/TODO(hugovdm): corresponding list of long name handlers?
-    // LocalPointer<const StubUnitsRouter> fUnitsRouter;  // WIP/TODO(hugovdm): the eventual units router instance.
     LocalPointer<const CompactHandler> fCompactHandler;
 
     // Value objects possibly used by the number formatting pipeline:

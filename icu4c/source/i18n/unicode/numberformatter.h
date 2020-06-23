@@ -1453,7 +1453,8 @@ struct U_I18N_API MacroProps : public UMemory {
     /** @internal */
     Usage usage;  // = Usage();  (no usage)
     //
-    // WIP/FYI: I tried `LocalArray<char>`, but it's lacking a copy assignment operator:
+    // WIP/TODO(hugovdm,review): I tried `LocalArray<char>` instead of creating
+    // the Usage class, but it's lacking a copy assignment operator:
     //
     // error: object of type 'icu_67::number::impl::MacroProps' cannot be assigned because its copy assignment operator is implicitly deleted
     // ./unicode/numberformatter.h:1413:22: note: copy assignment operator of 'MacroProps' is implicitly deleted because field 'usage' has a deleted copy assignment operator
@@ -1648,8 +1649,8 @@ class U_I18N_API NumberFormatterSettings {
      *
      * If a per-unit is specified without a primary unit via {@link #unit}, the behavior is undefined.
      *
-     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
-     * Specify and test!
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -1662,8 +1663,8 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Overload of perUnit() for use on an rvalue reference.
      *
-     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
-     * Specify and test!
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -1679,8 +1680,8 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Note: consider using the MeasureFormat factory methods that return by value.
      *
-     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
-     * Specify and test!
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -1694,8 +1695,8 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Overload of adoptPerUnit() for use on an rvalue reference.
      *
-     * WIP/TODO(hugovdm): how does this deal with COMPOUND and MIXED units?
-     * Specify and test!
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
      *
      * @param perUnit
      *            The unit to render in the denominator.
