@@ -480,6 +480,31 @@ public:
             return *this;
         }
 
+#ifndef U_HIDE_DRAFT_API
+        /**
+         * Sets the maximum distance for an acceptable match.
+         * The matcher will return a match for a pair of locales only if
+         * they match at least as well as the pair given here.
+         *
+         * For example, setMaxDistance(en-US, en-GB) limits matches to ones where the
+         * (desired, support) locales have a distance no greater than a region subtag difference.
+         * This is much stricter than the CLDR default.
+         *
+         * The details of locale matching are subject to changes in
+         * CLDR data and in the algorithm.
+         * Specifying a maximum distance in relative terms via a sample pair of locales
+         * insulates from changes that affect all distance metrics similarly,
+         * but some changes will necessarily affect relative distances between
+         * different pairs of locales.
+         *
+         * @param desired the desired locale for distance comparison.
+         * @param supported the supported locale for distance comparison.
+         * @return this Builder object
+         * @draft ICU 68
+         */
+        Builder &setMaxDistance(const Locale &desired, const Locale &supported);
+#endif  // U_HIDE_DRAFT_API
+
         /**
          * Sets the UErrorCode if an error occurred while setting parameters.
          * Preserves older error codes in the outErrorCode.
@@ -522,6 +547,8 @@ public:
         bool withDefault_ = true;
         ULocMatchFavorSubtag favor_ = ULOCMATCH_FAVOR_LANGUAGE;
         ULocMatchDirection direction_ = ULOCMATCH_DIRECTION_WITH_ONE_WAY;
+        Locale *maxDistanceDesired_ = nullptr;
+        Locale *maxDistanceSupported_ = nullptr;
     };
 
     // FYI No public LocaleMatcher constructors in C++; use the Builder.
@@ -618,6 +645,23 @@ public:
      * @draft ICU 65
      */
     Result getBestMatchResult(Locale::Iterator &desiredLocales, UErrorCode &errorCode) const;
+#endif  // U_HIDE_DRAFT_API
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns true if the pair of locales matches acceptably.
+     * This is influenced by Builder options such as setDirection(), setFavorSubtag(),
+     * and setMaxDistance().
+     *
+     * @param desired The desired locale.
+     * @param supported The supported locale.
+     * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
+     *                  or else the function returns immediately. Check for U_FAILURE()
+     *                  on output or use with function chaining. (See User Guide for details.)
+     * @return true if the pair of locales matches acceptably.
+     * @draft ICU 68
+     */
+    UBool isMatch(const Locale &desired, const Locale &supported, UErrorCode &errorCode) const;
 #endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API

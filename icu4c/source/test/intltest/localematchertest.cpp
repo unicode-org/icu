@@ -61,6 +61,7 @@ public:
     void testNoDefault();
     void testDemotion();
     void testDirection();
+    void testMaxDistanceAndIsMatch();
     void testMatch();
     void testResolvedLocale();
     void testDataDriven();
@@ -86,6 +87,7 @@ void LocaleMatcherTest::runIndexedTest(int32_t index, UBool exec, const char *&n
     TESTCASE_AUTO(testNoDefault);
     TESTCASE_AUTO(testDemotion);
     TESTCASE_AUTO(testDirection);
+    TESTCASE_AUTO(testMaxDistanceAndIsMatch);
     TESTCASE_AUTO(testMatch);
     TESTCASE_AUTO(testResolvedLocale);
     TESTCASE_AUTO(testDataDriven);
@@ -379,6 +381,36 @@ void LocaleMatcherTest::testDirection() {
                      locString(onlyTwoWay.getBestMatch(desiredIter, errorCode)));
     }
 }
+
+void LocaleMatcherTest::testMaxDistanceAndIsMatch() {
+    IcuTestErrorCode errorCode(*this, "testMaxDistanceAndIsMatch");
+    LocaleMatcher::Builder builder;
+    LocaleMatcher standard = builder.build(errorCode);
+    Locale germanLux("de-LU");
+    Locale germanPhoenician("de-Phnx-AT");
+    Locale greek("el");
+    assertTrue("standard de-LU / de", standard.isMatch(germanLux, Locale::getGerman(), errorCode));
+    assertFalse("standard de-Phnx-AT / de",
+                standard.isMatch(germanPhoenician, Locale::getGerman(), errorCode));
+
+    // Allow a script difference to still match.
+    LocaleMatcher loose =
+        builder.setMaxDistance(germanPhoenician, Locale::getGerman()).build(errorCode);
+    assertTrue("loose de-LU / de", loose.isMatch(germanLux, Locale::getGerman(), errorCode));
+    assertTrue("loose de-Phnx-AT / de",
+               loose.isMatch(germanPhoenician, Locale::getGerman(), errorCode));
+    assertFalse("loose el / de", loose.isMatch(greek, Locale::getGerman(), errorCode));
+
+    // Allow at most a regional difference.
+    LocaleMatcher regional =
+        builder.setMaxDistance(Locale("de-AT"), Locale::getGerman()).build(errorCode);
+    assertTrue("regional de-LU / de",
+               regional.isMatch(Locale("de-LU"), Locale::getGerman(), errorCode));
+    assertFalse("regional da / no", regional.isMatch(Locale("da"), Locale("no"), errorCode));
+    assertFalse("regional zh-Hant / zh",
+                regional.isMatch(Locale::getChinese(), Locale::getTraditionalChinese(), errorCode));
+}
+
 
 void LocaleMatcherTest::testMatch() {
     IcuTestErrorCode errorCode(*this, "testMatch");

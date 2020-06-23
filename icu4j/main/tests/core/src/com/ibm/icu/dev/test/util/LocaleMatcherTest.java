@@ -678,6 +678,29 @@ public class LocaleMatcherTest extends TestFmwk {
     }
 
     @Test
+    public void testMaxDistanceAndIsMatch() {
+        LocaleMatcher.Builder builder = LocaleMatcher.builder();
+        LocaleMatcher standard = builder.build();
+        ULocale germanLux = new ULocale("de-LU");
+        ULocale germanPhoenician = new ULocale("de-Phnx-AT");
+        ULocale greek = new ULocale("el");
+        assertTrue("standard de-LU / de", standard.isMatch(germanLux, ULocale.GERMAN));
+        assertFalse("standard de-Phnx-AT / de", standard.isMatch(germanPhoenician, ULocale.GERMAN));
+
+        // Allow a script difference to still match.
+        LocaleMatcher loose = builder.setMaxDistance(germanPhoenician, ULocale.GERMAN).build();
+        assertTrue("loose de-LU / de", loose.isMatch(germanLux, ULocale.GERMAN));
+        assertTrue("loose de-Phnx-AT / de", loose.isMatch(germanPhoenician, ULocale.GERMAN));
+        assertFalse("loose el / de", loose.isMatch(greek, ULocale.GERMAN));
+
+        // Allow at most a regional difference.
+        LocaleMatcher regional = builder.setMaxDistance(new Locale("de", "AT"), Locale.GERMAN).build();
+        assertTrue("regional de-LU / de", regional.isMatch(new Locale("de", "LU"), Locale.GERMAN));
+        assertFalse("regional da / no", regional.isMatch(new Locale("da"), new Locale("no")));
+        assertFalse("regional zh-Hant / zh", regional.isMatch(Locale.CHINESE, Locale.TRADITIONAL_CHINESE));
+    }
+
+    @Test
     public void testCanonicalize() {
         LocaleMatcher matcher = LocaleMatcher.builder().build();
         assertEquals("bh --> bho", new ULocale("bho"), matcher.canonicalize(new ULocale("bh")));
