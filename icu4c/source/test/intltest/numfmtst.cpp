@@ -246,6 +246,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13734_StrictFlexibleWhitespace);
   TESTCASE_AUTO(Test20961_CurrencyPluralPattern);
   TESTCASE_AUTO(Test21134_ToNumberFormatter);
+  TESTCASE_AUTO(Test13733_StrictAndLenient);
   TESTCASE_AUTO_END;
 }
 
@@ -9891,6 +9892,86 @@ void NumberFormatTest::Test21134_ToNumberFormatter() {
     assertEquals("Using NumberFormatter from DecimalFormat, compiled version",
         u"99.00 US dollars",
         result3.toTempString(status));
+}
+
+void NumberFormatTest::Test13733_StrictAndLenient() {
+    IcuTestErrorCode status(*this, "Test13733_StrictAndLenient");
+
+    static const struct TestCase {
+        const char16_t* inputString;
+        const char16_t* patternString;
+        int64_t expectedStrictParse;
+        int64_t expectedLenientParse;
+    } cases[] = { {u"CA$ 12", u"¤ 0", 12, 12},
+                  {u"CA$12", u"¤0", 12, 12},
+                  {u"CAD 12", u"¤¤ 0", 12, 12},
+                  {u"12 CAD", u"0 ¤¤", 12, 12},
+                  {u"12 Canadian dollars", u"0 ¤¤¤", 12, 12},
+                  {u"$12 ", u"¤¤¤¤0", 12, 12},
+                  {u"12$", u"0¤¤¤¤", 12, 12},
+                  {u"CA$ 12", u"¤0", 0, 12},
+                  {u"CA$ 12", u"0 ¤¤", 0, 12},
+                  {u"CA$ 12", u"0 ¤¤¤", 0, 12},
+                  {u"CA$ 12", u"¤¤¤¤0", 0, 12},
+                  {u"CA$ 12", u"0¤¤¤¤", 0, 12},
+                  {u"CA$12", u"¤ 0", 0, 12},
+                  {u"CA$12", u"¤¤ 0", 0, 12},
+                  {u"CA$12", u"0 ¤¤", 0, 12},
+                  {u"CA$12", u"0 ¤¤¤", 0, 12},
+                  {u"CA$12", u"0¤¤¤¤", 0, 12},
+                  {u"CAD 12", u"¤0", 0, 12},
+                  {u"CAD 12", u"0 ¤¤", 0, 12},
+                  {u"CAD 12", u"0 ¤¤¤", 0, 12},
+                  {u"CAD 12", u"¤¤¤¤0", 0, 12},
+                  {u"CAD 12", u"0¤¤¤¤", 0, 12},
+                  {u"12 CAD", u"¤ 0", 0, 12},
+                  {u"12 CAD", u"¤0", 0, 12},
+                  {u"12 CAD", u"¤¤ 0", 0, 12},
+                  {u"12 CAD", u"¤¤¤¤0", 0, 12},
+                  {u"12 CAD", u"0¤¤¤¤", 0, 12},
+                  {u"12 Canadian dollars", u"¤ 0", 0, 12},
+                  {u"12 Canadian dollars", u"¤0", 0, 12},
+                  {u"12 Canadian dollars", u"¤¤ 0", 0, 12},
+                  {u"12 Canadian dollars", u"¤¤¤¤0", 0, 12},
+                  {u"12 Canadian dollars", u"0¤¤¤¤", 0, 12},
+                  {u"$12 ", u"¤ 0", 0, 12},
+                  {u"$12 ", u"¤¤ 0", 0, 12},
+                  {u"$12 ", u"0 ¤¤", 0, 12},
+                  {u"$12 ", u"0 ¤¤¤", 0, 12},
+                  {u"$12 ", u"0¤¤¤¤", 0, 12},
+                  {u"12$", u"¤ 0", 0, 12},
+                  {u"12$", u"¤0", 0, 12},
+                  {u"12$", u"¤¤ 0", 0, 12},
+                  {u"12$", u"0 ¤¤", 0, 12},
+                  {u"12$", u"0 ¤¤¤", 0, 12},
+                  {u"12$", u"¤¤¤¤0", 0, 12} };
+    for (auto& cas : cases) {
+        UnicodeString inputString(cas.inputString);
+        UnicodeString patternString(cas.patternString);
+        int64_t parsedStrictValue = 0;
+        int64_t parsedLenientValue = 0;
+        ParsePosition ppos;
+
+        DecimalFormatSymbols dfs(Locale::getEnglish(), status);
+        DecimalFormat df(patternString, dfs, status);
+        df.setLenient(FALSE);
+        LocalPointer<CurrencyAmount> ca_strict(df.parseCurrency(inputString, ppos));
+        if (ca_strict != nullptr) {
+            parsedStrictValue = ca_strict->getNumber().getInt64();
+        }
+        assertEquals("Strict parse of " + inputString + " using " + patternString,
+            parsedStrictValue, cas.expectedStrictParse);
+
+        ppos.setIndex(0);
+        df.setLenient(TRUE);
+        LocalPointer<CurrencyAmount> ca_lenient(df.parseCurrency(inputString, ppos));
+        Formattable parsedNumber_lenient = ca_lenient->getNumber();
+        if (ca_lenient != nullptr) {
+            parsedLenientValue = ca_lenient->getNumber().getInt64();
+        }
+        assertEquals("Lenient parse of " + inputString + " using " + patternString,
+            parsedLenientValue, cas.expectedLenientParse);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
