@@ -218,9 +218,11 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     DecimalQuantity &setToDouble(double n);
 
     /**
-     * Supports Exponents, e.g. "123.456621E+40".
+     * Produces a DecimalQuantity that was parsed from a string by the decNumber
+     * C Library.
      *
-     * decNumber is similar to BigDecimal in Java.  // FIXME: not helpful. What is "decNumber" here? n?
+     * decNumber is similar to BigDecimal in Java, and supports parsing strings
+     * such as "123.456621E+40".
      */
     DecimalQuantity &setToDecNumber(StringPiece n, UErrorCode& status);
 
