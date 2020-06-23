@@ -1078,7 +1078,7 @@ group: units
 group: unitsformatter
     unitsdata.o unitconverter.o complexunitsconverter.o unitsrouter.o
   deps
-    resourcebundle units_extra double_conversion number_representation formattable
+    resourcebundle units_extra double_conversion number_representation formattable sort
 
 group: decnumber
     decContext.o decNumber.o

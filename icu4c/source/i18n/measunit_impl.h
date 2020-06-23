@@ -134,6 +134,13 @@ template class U_I18N_API MaybeStackVector<SingleUnitImpl, 8>;
  * including mixed and compound units.
  */
 struct U_I18N_API MeasureUnitImpl : public UMemory {
+    MeasureUnitImpl() = default;
+    MeasureUnitImpl(MeasureUnitImpl &&other) = default;
+    MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status);
+    MeasureUnitImpl(const SingleUnitImpl &singleUnit, UErrorCode &status);
+
+    MeasureUnitImpl &operator=(MeasureUnitImpl &&other) noexcept = default;
+
     /** Extract the MeasureUnitImpl from a MeasureUnit. */
     static inline const MeasureUnitImpl* get(const MeasureUnit& measureUnit) {
         return measureUnit.fImpl;
@@ -188,6 +195,16 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      * Create a copy of this MeasureUnitImpl. Don't use copy constructor to make this explicit.
      */
     MeasureUnitImpl copy(UErrorCode& status) const;
+
+    /**
+     * Extracts the list of all the individual units inside the `MeasureUnitImpl`.
+     *      For example:    
+     *          -   if the `MeasureUnitImpl` is `foot-per-hour`
+     *                  it will return a list of 1 {`foot-per-hour`} 
+     *          -   if the `MeasureUnitImpl` is `foot-and-inch` 
+     *                  it will return a list of 2 { `foot`, `inch`}
+     */
+    MaybeStackVector<MeasureUnitImpl> extractIndividualUnits(UErrorCode &status) const;
 
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);

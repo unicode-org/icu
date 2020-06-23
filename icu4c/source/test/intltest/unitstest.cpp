@@ -44,6 +44,7 @@ class UnitsTest : public IntlTest {
     void testUnitConstantFreshness();
     void testConversionCapability();
     void testConversions();
+    void testComplexUnitConverterSorting();
     void testPreferences();
     void testSiPrefixes();
     void testMass();
@@ -61,6 +62,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testUnitConstantFreshness);
     TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
+    TESTCASE_AUTO(testComplexUnitConverterSorting);
     TESTCASE_AUTO(testPreferences);
     TESTCASE_AUTO(testSiPrefixes);
     TESTCASE_AUTO(testMass);
@@ -121,26 +123,27 @@ void UnitsTest::testConversionCapability() {
     struct TestCase {
         const char *const source;
         const char *const target;
-        const UnitsConvertibilityState expectedState;
+        const Convertibility expectedState;
     } testCases[]{
-        {"meter", "foot", CONVERTIBLE},                                         //
-        {"kilometer", "foot", CONVERTIBLE},                                     //
-        {"hectare", "square-foot", CONVERTIBLE},                                //
-        {"kilometer-per-second", "second-per-meter", RECIPROCAL},               //
-        {"square-meter", "square-foot", CONVERTIBLE},                           //
-        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
-        {"square-hectare", "pow4-foot", CONVERTIBLE},                           //
-        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
+        {"meter", "foot", CONVERTIBLE},                                              //
+        {"kilometer", "foot", CONVERTIBLE},                                          //
+        {"hectare", "square-foot", CONVERTIBLE},                                     //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL},                    //
+        {"square-meter", "square-foot", CONVERTIBLE},                                //
+        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                    //
+        {"square-hectare", "pow4-foot", CONVERTIBLE},                                //
+        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},      //
+        {"cubic-kilometer-per-second-meter", "second-per-square-meter", RECIPROCAL}, //
     };
 
     for (const auto &testCase : testCases) {
         UErrorCode status = U_ZERO_ERROR;
 
-        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
-        auto convertibility = checkConvertibility(source, target, conversionRates, status);
+        auto convertibility = extractConvertibility(source, target, conversionRates, status);
 
         assertEquals(UnicodeString("Conversion Capability: ") + testCase.source + " to " +
                          testCase.target,
@@ -171,8 +174,8 @@ void UnitsTest::testSiPrefixes() {
     for (const auto &testCase : testCases) {
         UErrorCode status = U_ZERO_ERROR;
 
-        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
@@ -206,8 +209,8 @@ void UnitsTest::testMass() {
     for (const auto &testCase : testCases) {
         UErrorCode status = U_ZERO_ERROR;
 
-        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
@@ -240,8 +243,8 @@ void UnitsTest::testTemperature() {
     for (const auto &testCase : testCases) {
         UErrorCode status = U_ZERO_ERROR;
 
-        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
@@ -278,8 +281,8 @@ void UnitsTest::testArea() {
     for (const auto &testCase : testCases) {
         UErrorCode status = U_ZERO_ERROR;
 
-        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
         UnitConverter converter(source, target, conversionRates, status);
@@ -356,12 +359,12 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
         return;
     }
 
-    MeasureUnit sourceUnit = MeasureUnit::forIdentifier(x, status);
+    MeasureUnitImpl sourceUnit = MeasureUnitImpl::forIdentifier(x, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) {
         return;
     }
 
-    MeasureUnit targetUnit = MeasureUnit::forIdentifier(y, status);
+    MeasureUnitImpl targetUnit = MeasureUnitImpl::forIdentifier(y, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) {
         return;
     }
@@ -373,16 +376,16 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
                      expected, commentConversionFormula.length(), commentConversionFormula.data());
 
     // Convertibility:
-    auto convertibility = checkConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
-    if (status.errIfFailureAndReset("checkConvertibility(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
-                                    targetUnit.getIdentifier())) {
+    auto convertibility = extractConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
+    if (status.errIfFailureAndReset("extractConvertibility(<%s>, <%s>, ...)",
+                                    sourceUnit.identifier.data(), targetUnit.identifier.data())) {
         return;
     }
     CharString msg;
     msg.append("convertible: ", status)
-        .append(sourceUnit.getIdentifier(), status)
+        .append(sourceUnit.identifier.data(), status)
         .append(" -> ", status)
-        .append(targetUnit.getIdentifier(), status);
+        .append(targetUnit.identifier.data(), status);
     if (status.errIfFailureAndReset("msg construction")) {
         return;
     }
@@ -391,7 +394,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     // Conversion:
     UnitConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
     if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-                                    sourceUnit.getIdentifier(), targetUnit.getIdentifier())) {
+                                    sourceUnit.identifier.data(), targetUnit.identifier.data())) {
         return;
     }
     double got = converter.convert(1000);
@@ -426,6 +429,24 @@ void UnitsTest::testConversions() {
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
     }
+}
+
+void UnitsTest::testComplexUnitConverterSorting() {
+    IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitConverterSorting");
+
+    MeasureUnitImpl source = MeasureUnitImpl::forIdentifier("meter", status);
+    MeasureUnitImpl target = MeasureUnitImpl::forIdentifier("inch-and-foot", status);
+    ConversionRates conversionRates(status);
+
+    ComplexUnitsConverter complexConverter(source, target, conversionRates, status);
+    auto measures = complexConverter.convert(10.0, status);
+
+    U_ASSERT(measures.length() == 2);
+    assertEquals("Sorted Data", "foot", measures[0]->getUnit().getIdentifier());
+    assertEquals("Sorted Data", "inch", measures[1]->getUnit().getIdentifier());
+
+    assertEqualsNear("Sorted Data", 32, measures[0]->getNumber().getInt64(), 0.00001);
+    assertEqualsNear("Sorted Data", 9.7008, measures[1]->getNumber().getDouble(), 0.0001);
 }
 
 /**
@@ -598,6 +619,7 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     if (U_FAILURE(status)) {
         return;
     }
+
     UnitsRouter router(inputMeasureUnit, region, usage, status);
     if (status.errIfFailureAndReset("UnitsRouter(<%s>, \"%.*s\", \"%.*s\", status)",
                                     inputMeasureUnit.getIdentifier(), region.length(), region.data(),
@@ -617,12 +639,12 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     if (status.errIfFailureAndReset("Failure before router.route")) {
         return;
     }
-    MaybeStackVector<Measure> result = router.route(inputAmount, status);
+    auto routeResult = router.route(inputAmount, status);
     if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) {
         return;
     }
     // TODO: revisit this experimentally chosen precision:
-    checkOutput(unitsTest, msg.data(), expected, result, 0.0000000001);
+    checkOutput(unitsTest, msg.data(), expected, routeResult.measures, 0.0000000001);
 }
 
 /**
