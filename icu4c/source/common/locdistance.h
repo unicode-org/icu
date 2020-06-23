@@ -39,6 +39,10 @@ public:
         return shiftedDistance / (1 << DISTANCE_SHIFT);
     }
 
+    static int32_t getDistanceFloor(int32_t indexAndDistance) {
+        return (indexAndDistance & DISTANCE_MASK) >> DISTANCE_SHIFT;
+    }
+
     static int32_t getIndex(int32_t indexAndDistance) {
         // assert indexAndDistance >= 0;
         return indexAndDistance >> INDEX_SHIFT;
@@ -78,10 +82,6 @@ private:
     static constexpr int32_t DISTANCE_MASK = 0x3ff;
     // tic constexpr int32_t MAX_INDEX = 0x1fffff;  // avoids sign bit
     static constexpr int32_t INDEX_NEG_1 = 0xfffffc00;
-
-    static int32_t getDistanceFloor(int32_t indexAndDistance) {
-        return (indexAndDistance & DISTANCE_MASK) >> DISTANCE_SHIFT;
-    }
 
     LocaleDistance(const LocaleDistanceData &data, const XLikelySubtags &likely);
     LocaleDistance(const LocaleDistance &other) = delete;

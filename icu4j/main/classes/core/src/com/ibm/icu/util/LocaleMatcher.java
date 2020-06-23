@@ -385,6 +385,8 @@ public final class LocaleMatcher {
         private boolean withDefault = true;
         private FavorSubtag favor;
         private Direction direction;
+        private ULocale maxDistanceDesired;
+        private ULocale maxDistanceSupported;
 
         private Builder() {}
 
@@ -558,6 +560,66 @@ public final class LocaleMatcher {
         }
 
         /**
+         * Sets the maximum distance for an acceptable match.
+         * The matcher will return a match for a pair of locales only if
+         * they match at least as well as the pair given here.
+         *
+         * <p>For example, setMaxDistance(en-US, en-GB) limits matches to ones where the
+         * (desired, support) locales have a distance no greater than a region subtag difference.
+         * This is much stricter than the CLDR default.
+         *
+         * <p>The details of locale matching are subject to changes in
+         * CLDR data and in the algorithm.
+         * Specifying a maximum distance in relative terms via a sample pair of locales
+         * insulates from changes that affect all distance metrics similarly,
+         * but some changes will necessarily affect relative distances between
+         * different pairs of locales.
+         *
+         * @param desired the desired locale for distance comparison.
+         * @param supported the supported locale for distance comparison.
+         * @return this Builder object
+         * @draft ICU 68
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setMaxDistance(Locale desired, Locale supported) {
+            if (desired == null || supported == null) {
+                throw new IllegalArgumentException("desired/supported locales must not be null");
+            }
+            return setMaxDistance(ULocale.forLocale(desired), ULocale.forLocale(supported));
+        }
+
+        /**
+         * Sets the maximum distance for an acceptable match.
+         * The matcher will return a match for a pair of locales only if
+         * they match at least as well as the pair given here.
+         *
+         * <p>For example, setMaxDistance(en-US, en-GB) limits matches to ones where the
+         * (desired, support) locales have a distance no greater than a region subtag difference.
+         * This is much stricter than the CLDR default.
+         *
+         * <p>The details of locale matching are subject to changes in
+         * CLDR data and in the algorithm.
+         * Specifying a maximum distance in relative terms via a sample pair of locales
+         * insulates from changes that affect all distance metrics similarly,
+         * but some changes will necessarily affect relative distances between
+         * different pairs of locales.
+         *
+         * @param desired the desired locale for distance comparison.
+         * @param supported the supported locale for distance comparison.
+         * @return this Builder object
+         * @draft ICU 68
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setMaxDistance(ULocale desired, ULocale supported) {
+            if (desired == null || supported == null) {
+                throw new IllegalArgumentException("desired/supported locales must not be null");
+            }
+            maxDistanceDesired = desired;
+            maxDistanceSupported = supported;
+            return this;
+        }
+
+        /**
          * <i>Internal only!</i>
          *
          * @param thresholdDistance the thresholdDistance to set, with -1 = default
@@ -650,8 +712,6 @@ public final class LocaleMatcher {
     }
 
     private LocaleMatcher(Builder builder) {
-        thresholdDistance = builder.thresholdDistance < 0 ?
-                LocaleDistance.INSTANCE.getDefaultScriptDistance() : builder.thresholdDistance;
         ULocale udef = builder.defaultLocale;
         Locale def = null;
         LSR defLSR = null;
@@ -737,6 +797,22 @@ public final class LocaleMatcher {
                     LocaleDistance.INSTANCE.getDefaultDemotionPerDesiredLocale();  // null or REGION
         favorSubtag = builder.favor;
         direction = builder.direction;
+
+        int threshold;
+        if (builder.thresholdDistance >= 0) {
+            threshold = builder.thresholdDistance;
+        } else if (builder.maxDistanceDesired != null) {
+            int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                    getMaximalLsrOrUnd(builder.maxDistanceDesired),
+                    new LSR[] { getMaximalLsrOrUnd(builder.maxDistanceSupported) }, 1,
+                    LocaleDistance.shiftDistance(100), favorSubtag, direction);
+            // +1 for an exclusive threshold from an inclusive max.
+            threshold = LocaleDistance.getDistanceFloor(indexAndDistance) + 1;
+        } else {
+            threshold = LocaleDistance.INSTANCE.getDefaultScriptDistance();
+        }
+        thresholdDistance = threshold;
+
         if (TRACE_MATCHER) {
             System.err.printf("new LocaleMatcher: %s\n", toString());
         }
@@ -1049,6 +1125,44 @@ public final class LocaleMatcher {
                     sb, supportedULocales[suppIndex]);
         }
         return suppIndex;
+    }
+
+    /**
+     * Returns true if the pair of locales matches acceptably.
+     * This is influenced by Builder options such as setDirection(), setFavorSubtag(),
+     * and setMaxDistance().
+     *
+     * @param desired The desired locale.
+     * @param supported The supported locale.
+     * @return true if the pair of locales matches acceptably.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public boolean isMatch(Locale desired, Locale supported) {
+        int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                getMaximalLsrOrUnd(desired),
+                new LSR[] { getMaximalLsrOrUnd(supported) }, 1,
+                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag, direction);
+        return indexAndDistance >= 0;
+    }
+
+    /**
+     * Returns true if the pair of locales matches acceptably.
+     * This is influenced by Builder options such as setDirection(), setFavorSubtag(),
+     * and setMaxDistance().
+     *
+     * @param desired The desired locale.
+     * @param supported The supported locale.
+     * @return true if the pair of locales matches acceptably.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public boolean isMatch(ULocale desired, ULocale supported) {
+        int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                getMaximalLsrOrUnd(desired),
+                new LSR[] { getMaximalLsrOrUnd(supported) }, 1,
+                LocaleDistance.shiftDistance(thresholdDistance), favorSubtag, direction);
+        return indexAndDistance >= 0;
     }
 
     /**
