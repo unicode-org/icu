@@ -46,7 +46,9 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
 
   private:
     SimpleModifier fModifiers[StandardPlural::Form::COUNT];
+    // Not owned
     const PluralRules *rules;
+    // Not owned
     const MicroPropsGenerator *parent;
 
     LongNameHandler(const PluralRules *rules, const MicroPropsGenerator *parent)

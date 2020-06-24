@@ -362,21 +362,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
         if (macros.usage.isSet()) {
-            fLongNameMultiplexer.adoptInstead(
-                LongNameMultiplexer::forMeasureUnits(
-                    macros.locale,
-                    fUsagePrefsHandler->getOutputUnits(),
-                    unitWidth,
-                    resolvePluralRules(macros.rules, macros.locale, status),
-                    chain,
-                    status));
+            fLongNameMultiplexer.adoptInstead(LongNameMultiplexer::forMeasureUnits(
+                macros.locale, fUsagePrefsHandler->getOutputUnits(), unitWidth,
+                resolvePluralRules(macros.rules, macros.locale, status), chain, status));
             chain = fLongNameMultiplexer.getAlias();
         } else {
             fLongNameHandler.adoptInstead(LongNameHandler::forMeasureUnit(
-                macros.locale,
-                resolvedUnit,   // WIP/FIXME: not known at this time for usage()!
-                macros.perUnit, // WIP/FIXME: deal with COMPOUND and MIXED units?
-                unitWidth, resolvePluralRules(macros.rules, macros.locale, status), chain, status));
+                macros.locale, resolvedUnit, macros.perUnit, unitWidth,
+                resolvePluralRules(macros.rules, macros.locale, status), chain, status));
             chain = fLongNameHandler.getAlias();
         }
     } else if (isCurrency && unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {

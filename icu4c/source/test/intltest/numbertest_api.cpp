@@ -683,15 +683,21 @@ void NumberFormatterApiTest::unitUsage() {
 
     LocalizedNumberFormatter formatter = unloc_formatter.locale("en-ZA");
     FormattedNumber formattedNum = formatter.formatDouble(300, status);
-    assertEquals("unitUsage() road", "300 m", formattedNum.toString(status));
+    assertTrue("unitUsage() en-ZA road outputUnit",
+               MeasureUnit::getMeter() == formattedNum.getOutputUnit(status));
+    assertEquals("unitUsage() en-ZA road", "300 m", formattedNum.toString(status));
 
     formatter = unloc_formatter.locale("en-GB");
     formattedNum = formatter.formatDouble(300, status);
-    assertEquals("unitUsage() road", "328 yd", formattedNum.toString(status));
+    assertTrue("unitUsage() en-GB road outputUnit",
+               MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
+    assertEquals("unitUsage() en-GB road", "328 yd", formattedNum.toString(status));
 
     formatter = unloc_formatter.locale("en-US");
     formattedNum = formatter.formatDouble(300, status);
-    assertEquals("unitUsage() road", "984 ft", formattedNum.toString(status));
+    assertTrue("unitUsage() en-US road outputUnit",
+               MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
+    assertEquals("unitUsage() en-US road", "984 ft", formattedNum.toString(status));
 
     // TODO(hugovdm): consider fixing TODO(ICU-20941) too?
 }

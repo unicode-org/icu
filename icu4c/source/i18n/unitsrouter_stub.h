@@ -25,15 +25,11 @@
 
 U_NAMESPACE_BEGIN
 
-class U_I18N_API StubUnitsRouter {
+class U_I18N_API StubUnitsRouter : public UMemory {
   public:
     // As found in UnitsRouter
     StubUnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
                     UErrorCode &status);
-
-    // TODO(units): consider this possible improvement for the constructor:
-    // passing "Locale" instead of "StringPiece region"? :
-    StubUnitsRouter(MeasureUnit inputUnit, Locale locale, StringPiece usage, UErrorCode &status);
 
     // TODO(units): API under reconsideration: going via Measure may be
     // excessive when we need a double; MaybeStackVector<Measure> might also not

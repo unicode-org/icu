@@ -282,7 +282,7 @@ Derived NumberFormatterSettings<Derived>::scale(const Scale& scale)&& {
 // Copy constructor
 Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
     if (other.fUsage != nullptr) {
-        fUsage = new char[fLength + 1];
+        fUsage = (char*)uprv_malloc(fLength + 1);
         uprv_strncpy(fUsage, other.fUsage, fLength+1);
     }
 }
@@ -291,14 +291,17 @@ Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fErr
 Usage& Usage::operator=(const Usage& other) {
     fLength = other.fLength;
     if (other.fUsage != nullptr) {
-        fUsage = new char[fLength + 1];
+        fUsage = (char*)uprv_malloc(fLength + 1);
         uprv_strncpy(fUsage, other.fUsage, fLength+1);
     }
     fError = other.fError;
     return *this;
 }
 
-// Move constructor
+// Move constructor - can it be improved by taking over src's "this" instead of
+// copying contents? Swapping pointers makes sense for heap objects but not for
+// stack objects.
+// *this = std::move(src);
 Usage::Usage(Usage &&src) U_NOEXCEPT : fUsage(src.fUsage), fLength(src.fLength), fError(src.fError) {
     // Take ownership away from src if necessary
     src.fUsage = nullptr;
@@ -306,8 +309,11 @@ Usage::Usage(Usage &&src) U_NOEXCEPT : fUsage(src.fUsage), fLength(src.fLength),
 
 // Move assignment operator
 Usage& Usage::operator=(Usage&& src) U_NOEXCEPT {
+    if (this == &src) {
+        return *this;
+    }
     if (fUsage != nullptr) {
-        delete[] fUsage;
+        uprv_free(fUsage);
     }
     fUsage = src.fUsage;
     fLength = src.fLength;
@@ -319,7 +325,7 @@ Usage& Usage::operator=(Usage&& src) U_NOEXCEPT {
 
 Usage::~Usage() {
     if (fUsage != nullptr) {
-        delete[] fUsage;
+        uprv_free(fUsage);
         fUsage = nullptr;
     }
 }
@@ -327,11 +333,11 @@ Usage::~Usage() {
 void Usage::set(StringPiece value) {
     if (fUsage != nullptr) {
         // TODO: reuse if possible, rather than always delete?
-        delete[] fUsage;
+        uprv_free(fUsage);
         fUsage = nullptr;
     }
     fLength = value.length();
-    fUsage = new char[fLength+1];
+    fUsage = (char*)uprv_malloc(fLength+1);
     uprv_strncpy(fUsage, value.data(), fLength);
     fUsage[fLength] = 0;
 }
@@ -351,17 +357,6 @@ Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& 
 StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, StringPiece region,
                                  StringPiece usage, UErrorCode &status)
     : fRegion(region, status) {
-    if (usage.compare("road") != 0) {
-        status = U_UNSUPPORTED_ERROR;
-    }
-    if (inputUnit != MeasureUnit::getMeter()) {
-        status = U_UNSUPPORTED_ERROR;
-    }
-}
-
-StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, Locale locale,
-                                 StringPiece usage, UErrorCode &status)
-    : fRegion(locale.getCountry(), status) {
     if (usage.compare("road") != 0) {
         status = U_UNSUPPORTED_ERROR;
     }
@@ -410,35 +405,6 @@ Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
     move.fMacros.usage.set(usage);
     return move;
 }
-
-// WIP/FIXME/CLEANUP: I've implemented a "Units" class, for the fMacros.usage
-// member. Delete this comment block if that's good - initially I tried
-// `LocalArray<char> usage;`, which is what this comment contains.
-//
-// It turned out that to have a LocalArray field in MacroProps, LocalArray would
-// need a copy assignment operator), so I abandoned it:
-
-// template<typename Derived>
-// Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& {
-//     Derived copy(*this);
-//     int32_t usageLen = usage.length();
-//     char* newUsage = new char[usageLen+1];  // Do we need error handling for allocation failures?
-//     uprv_strncpy(newUsage, usage.data(), usageLen);
-//     newUsage[usageLen] = 0;
-//     copy.fMacros.usage.adoptInstead(newUsage);
-//     return copy;
-// }
-
-// template<typename Derived>
-// Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
-//     Derived move(std::move(*this));
-//     int32_t usageLen = usage.length();
-//     char* newUsage = new char[usageLen+1];  // Do we need error handling for allocation failures?
-//     uprv_strncpy(newUsage, usage.data(), usageLen);
-//     newUsage[usageLen] = 0;
-//     move.fMacros.usage.adoptInstead(newUsage);
-//     return move;
-// }
 
 template<typename Derived>
 Derived NumberFormatterSettings<Derived>::padding(const Padder& padder) const& {
@@ -868,8 +834,14 @@ LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErro
 
 void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const {
     if (computeCompiled(status)) {
+        // FIXME: results needs outputUnit too, consider how to add that - pass
+        // `results` to formatStatic() instead of just results->quantity and
+        // ->getStringRef()? :
         fCompiled->format(results->quantity, results->getStringRef(), status);
     } else {
+        // FIXME: results needs outputUnit too, consider how to add that - pass
+        // `results` to formatStatic() instead of just results->quantity and
+        // ->getStringRef()? :
         NumberFormatterImpl::formatStatic(fMacros, results->quantity, results->getStringRef(), status);
     }
     if (U_FAILURE(status)) {

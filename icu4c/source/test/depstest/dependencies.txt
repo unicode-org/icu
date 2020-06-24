@@ -979,6 +979,8 @@ group: number_output
     number_representation format formatted_value_sbimpl
     # PluralRules internals:
     unifiedcache
+    # Unit Formatting
+    units
 
 group: numberformatter
     # ICU 60+ NumberFormatter API

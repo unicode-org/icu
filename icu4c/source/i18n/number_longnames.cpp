@@ -376,12 +376,15 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
     U_ASSERT(units.length() > 0);
     result->fMeasureUnits.adoptInstead(new MeasureUnit[units.length()]);
     for (int32_t i = 0, length = units.length(); i < length; i++) {
-        result->fLongNameHandlers.adoptBack(
-            LongNameHandler::forMeasureUnit(
-                loc, *units[i],
-                MeasureUnit(), // TODO(units): deal with COMPOUND and MIXED units
-                width, rules, NULL, status),
-            status);
+        auto *lnh = LongNameHandler::forMeasureUnit(
+            loc, *units[i],
+            MeasureUnit(), // TODO(units): deal with COMPOUND and MIXED units
+            width, rules, NULL, status);
+        if (U_FAILURE(status)) {
+            delete result;
+            return nullptr;
+        }
+        result->fLongNameHandlers.emplaceBack(std::move(*lnh));
         result->fMeasureUnits[i] = *units[i];
     }
     return result;
