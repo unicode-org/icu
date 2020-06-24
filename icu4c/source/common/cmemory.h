@@ -324,11 +324,6 @@ public:
      */
     T *getAlias() const { return ptr; }
     /**
-     * Access without ownership change.
-     * @return the array pointer
-     */
-    const T *getConstAlias() const { return ptr; }
-    /**
      * Returns the array limit. Simple convenience method.
      * @return getAlias()+getCapacity()
      */
@@ -687,9 +682,7 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
  *
  *     // MemoryPool will take care of deleting the MyType objects.
  *
- * It is also able to adopt pointers to heap allocated objects. This is not the
- * typical use-case, as it is more error prone: this class is kept minimalist as
- * far as possible.
+ * It doesn't do anything more than that, and is intentionally kept minimalist.
  */
 template<typename T, int32_t stackCapacity = 8>
 class MemoryPool : public UMemory {
@@ -733,28 +726,6 @@ public:
             return nullptr;
         }
         return fPool[fCount++] = new T(std::forward<Args>(args)...);
-    }
-
-    /**
-     * Takes ownership of ptr, adding it to the pool.
-     *
-     * @param ptr Pointer to take ownership of.
-     * @param status Is set to U_MEMORY_ALLOCATION_ERROR if allocation of the
-     * needed pool capacity fails.
-     */
-    template <typename... Args>
-    void adopt(T *ptr, UErrorCode &status) {
-        if (U_FAILURE(status)) {
-            return;
-        }
-        int32_t capacity = fPool.getCapacity();
-        if (fCount == capacity &&
-            fPool.resize(capacity == stackCapacity ? 4 * capacity : 2 * capacity,
-                         capacity) == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        fPool[fCount++] = ptr;
     }
 
     /**
@@ -813,27 +784,16 @@ public:
         return pointer;
     }
 
-    /**
-     * Takes ownership of ptr, adding it to the back of the vector.
-     *
-     * @param ptr Pointer to take ownership of.
-     * @param status Is set to U_MEMORY_ALLOCATION_ERROR if allocation of the
-     * needed pool capacity fails.
-     */
-    void adoptBack(T *ptr, UErrorCode &status) {
-        this->adopt(ptr, status);
-    }
-
     int32_t length() const {
         return this->fCount;
     }
 
-    T** getAlias() const {
+    T** getAlias() {
         return this->fPool.getAlias();
     }
 
-    const T *const *getConstAlias() const {
-        return this->fPool.getConstAlias();
+    const T *const *getAlias() const {
+        return this->fPool.getAlias();
     }
 
     /**
@@ -857,8 +817,7 @@ public:
     }
 
     /**
-     * Append all the items from another MaybeStackVector to this one via
-     * copy-construction.
+     * Append copies of all the items from another MaybeStackVector to this one.
      */
     void appendAll(const MaybeStackVector& other, UErrorCode& status) {
         for (int32_t i = 0; i < other.fCount; i++) {
