@@ -368,7 +368,7 @@ U_INTERNAL UBool U_EXPORT2 uprv_mul32_overflow(int32_t a, int32_t b, int32_t* re
  * Return the default codepage for this platform and locale.
  * This function can call setlocale() on Unix platforms. Please read the
  * platform documentation on setlocale() before calling this function.
- * @return the default codepage for this platform 
+ * @return the default codepage for this platform
  * @internal
  */
 U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
@@ -377,7 +377,7 @@ U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
 /**
  * Please use uloc_getDefault() instead.
  * Return the default locale ID string by querying the system, or
- *     zero if one cannot be found. 
+ *     zero if one cannot be found.
  * This function can call setlocale() on Unix platforms. Please read the
  * platform documentation on setlocale() before calling this function.
  * @return the default locale ID string
@@ -441,7 +441,7 @@ U_INTERNAL const char* U_EXPORT2 uprv_tzname(int n);
  * Reset the global tzname cache.
  * @internal
  */
-U_INTERNAL void uprv_tzname_clear_cache();
+U_INTERNAL void uprv_tzname_clear_cache(void);
 
 /**
  * Get UTC (GMT) time measured in milliseconds since 0:00 on 1/1/1970.
