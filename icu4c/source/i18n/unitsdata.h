@@ -97,7 +97,8 @@ class U_I18N_API ConversionRates {
 // Encapsulates unitPreferenceData information from units resources, specifying
 // a sequence of output unit preferences.
 struct U_I18N_API UnitPreference : public UMemory {
-    UnitPreference() : geq(std::numeric_limits<double>::lowest()) {} // geq equals to -inf by default.
+    // `geq` equals to 1.0 by default.
+    UnitPreference() : geq(1.0) {}
     CharString unit;
     double geq;
     CharString skeleton;

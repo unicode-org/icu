@@ -41,26 +41,50 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
             return;
         }
 
+        number::impl::MacroProps macroProps;
+        int32_t errOffset;
+        if (preference.skeleton.length() == 0) {
+            UnicodeString skeletonUniStr("precision-increment/1");
+            macroProps = number::impl::skeleton::parseSkeleton(skeletonUniStr, errOffset, status);
+            if (U_FAILURE(status)) {
+                return;
+            }
+        } else {
+            UnicodeString skeletonUniStr(preference.skeleton.data());
+            macroProps = number::impl::skeleton::parseSkeleton(skeletonUniStr, errOffset, status);
+            if (U_FAILURE(status)) {
+                return;
+            }
+        }
+
         converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
-                                                           preference.geq, conversionRates, status);
+                                                           preference.geq, macroProps.precision,
+                                                           conversionRates, status);
+
         if (U_FAILURE(status)) {
             return;
         }
     }
 }
 
-MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) {
+RouteResult UnitsRouter::route(double quantity, UErrorCode &status) {
     for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
         const auto &converterPreference = *converterPreferences_[i];
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-            return converterPreference.converter.convert(quantity, status);
+            return RouteResult{
+                converterPreference.converter.convert(quantity, status), //
+                converterPreference.precision                            //
+            };
         }
     }
 
     // In case of the `quantity` does not fit in any converter limit, use the last converter.
-    const auto &lastConverter = (*converterPreferences_[converterPreferences_.length() - 1]).converter;
-    return lastConverter.convert(quantity, status);
+    const auto &lastConverterPrefence = (*converterPreferences_[converterPreferences_.length() - 1]);
+    return RouteResult{
+        lastConverterPrefence.converter.convert(quantity, status), //
+        lastConverterPrefence.precision                            //
+    };
 }
 
 U_NAMESPACE_END

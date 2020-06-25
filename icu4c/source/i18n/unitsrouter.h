@@ -12,13 +12,25 @@
 #include "charstr.h" // CharString
 #include "cmemory.h"
 #include "complexunitsconverter.h"
+#include "number_skeletons.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
+#include "unicode/numberformatter.h"
 #include "unicode/stringpiece.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+
+using number::Precision;
+
+struct RouteResult : UMemory {
+    MaybeStackVector<Measure> measures;
+    Precision precision;
+
+    RouteResult(MaybeStackVector<Measure> measures, Precision precision)
+        : measures(std::move(measures)), precision(precision) {}
+};
 
 /**
  * Contains the complex unit converter and the limit which representing the smallest value that the
@@ -32,15 +44,18 @@ U_NAMESPACE_BEGIN
 struct ConverterPreference : UMemory {
     ComplexUnitsConverter converter;
     double limit;
+    Precision precision;
+
+    // In case there is no limit, the limit will be -inf.
+    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, number::Precision precision,
+                        const ConversionRates &ratesInfo, UErrorCode &status)
+        : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), precision,
+                              ratesInfo, status) {}
 
     ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit,
-                        const ConversionRates &ratesInfo, UErrorCode &status)
-        : converter(source, complexTarget, ratesInfo, status), limit(limit) {}
-
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, const ConversionRates &ratesInfo,
+                        number::Precision precision, const ConversionRates &ratesInfo,
                         UErrorCode &status)
-        : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), ratesInfo,
-                              status) {}
+        : converter(source, complexTarget, ratesInfo, status), limit(limit), precision(precision) {}
 };
 
 /**
@@ -75,7 +90,7 @@ class U_I18N_API UnitsRouter {
   public:
     UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
 
-    MaybeStackVector<Measure> route(double quantity, UErrorCode &status);
+    RouteResult route(double quantity, UErrorCode &status);
 
   private:
     MaybeStackVector<ConverterPreference> converterPreferences_;
