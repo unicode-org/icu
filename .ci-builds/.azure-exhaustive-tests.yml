@@ -12,6 +12,18 @@ trigger:
     include:
     - master
     - maint/maint-*
+  paths:
+    include:
+    - '*'
+    exclude:
+    - docs/*
+    - tools/*
+    - vendor/*
+    - .appveyor.xml
+    - .cpyskip.txt
+    - .travis.yml
+    - KEYS
+    - README.md
 
 jobs:
 #-------------------------------------------------------------------------
