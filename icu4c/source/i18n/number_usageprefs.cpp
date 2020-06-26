@@ -8,7 +8,59 @@
 #include "number_microprops.h"
 #include "unicode/numberformatter.h"
 
+using namespace icu::number;
 using namespace icu::number::impl;
+
+// Copy constructor
+Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
+    if (other.fUsage != nullptr) {
+        fUsage = (char *)uprv_malloc(fLength + 1);
+        uprv_strncpy(fUsage, other.fUsage, fLength + 1);
+    }
+}
+
+// Copy assignment operator
+Usage &Usage::operator=(const Usage &other) {
+    fLength = other.fLength;
+    if (other.fUsage != nullptr) {
+        fUsage = (char *)uprv_malloc(fLength + 1);
+        uprv_strncpy(fUsage, other.fUsage, fLength + 1);
+    }
+    fError = other.fError;
+    return *this;
+}
+
+// Move constructor - can it be improved by taking over src's "this" instead of
+// copying contents? Swapping pointers makes sense for heap objects but not for
+// stack objects.
+// *this = std::move(src);
+Usage::Usage(Usage &&src) U_NOEXCEPT : fUsage(src.fUsage), fLength(src.fLength), fError(src.fError) {
+    // Take ownership away from src if necessary
+    src.fUsage = nullptr;
+}
+
+// Move assignment operator
+Usage &Usage::operator=(Usage &&src) U_NOEXCEPT {
+    if (this == &src) {
+        return *this;
+    }
+    if (fUsage != nullptr) {
+        uprv_free(fUsage);
+    }
+    fUsage = src.fUsage;
+    fLength = src.fLength;
+    fError = src.fError;
+    // Take ownership away from src if necessary
+    src.fUsage = nullptr;
+    return *this;
+}
+
+Usage::~Usage() {
+    if (fUsage != nullptr) {
+        uprv_free(fUsage);
+        fUsage = nullptr;
+    }
+}
 
 UsagePrefsHandler::UsagePrefsHandler(const Locale &locale,
                                      const MeasureUnit inputUnit,
