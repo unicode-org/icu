@@ -133,7 +133,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestCases);
 
   TESTCASE_AUTO(TestCurrencyNames);
-  TESTCASE_AUTO(Test20484_NarrowSymbolFallback);
+  TESTCASE_AUTO(TestCurrencyVariants);
   TESTCASE_AUTO(TestCurrencyAmount);
   TESTCASE_AUTO(TestCurrencyUnit);
   TESTCASE_AUTO(TestCoverage);
@@ -2115,22 +2115,26 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // TODO add more tests later
 }
 
-void NumberFormatTest::Test20484_NarrowSymbolFallback(){
-    IcuTestErrorCode status(*this, "Test20484_NarrowSymbolFallback");
+void NumberFormatTest::TestCurrencyVariants(){
+    IcuTestErrorCode status(*this, "TestCurrencyVariants");
 
     struct TestCase {
         const char* locale;
         const char16_t* isoCode;
         const char16_t* expectedShort;
         const char16_t* expectedNarrow;
+        const char16_t* expectedFormal;
+        const char16_t* expectedVariant;
         UErrorCode expectedNarrowError;
     } cases[] = {
-        {"en-US", u"CAD", u"CA$", u"$", U_USING_DEFAULT_WARNING}, // narrow: fallback to root
-        {"en-US", u"CDF", u"CDF", u"CDF", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
-        {"sw-CD", u"CDF", u"FC", u"FC", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
-        {"en-US", u"GEL", u"GEL", u"₾", U_USING_DEFAULT_WARNING}, // narrow: fallback to root
-        {"ka-GE", u"GEL", u"₾", u"₾", U_USING_FALLBACK_WARNING}, // narrow: fallback to ka
-        {"ka", u"GEL", u"₾", u"₾", U_ZERO_ERROR}, // no fallback on narrow
+        {"en-US", u"CAD", u"CA$", u"$", u"CA$", u"CA$", U_USING_DEFAULT_WARNING}, // narrow: fallback to root
+        {"en-US", u"CDF", u"CDF", u"CDF", u"CDF", u"CDF", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
+        {"sw-CD", u"CDF", u"FC", u"FC", u"FC", u"FC", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
+        {"en-US", u"GEL", u"GEL", u"₾", u"GEL", u"GEL", U_USING_DEFAULT_WARNING}, // narrow: fallback to root
+        {"ka-GE", u"GEL", u"₾", u"₾", u"₾", u"₾", U_USING_FALLBACK_WARNING}, // narrow: fallback to ka
+        {"ka", u"GEL", u"₾", u"₾", u"₾", u"₾", U_ZERO_ERROR}, // no fallback on narrow
+        {"zh-TW", u"TWD", u"$", u"$", u"NT$", u"$", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
+        {"ccp", u"TRY", u"TRY", u"₺", u"TRY", u"TL", U_ZERO_ERROR}, // no fallback on variant
     };
     for (const auto& cas : cases) {
         status.setScope(cas.isoCode);
@@ -2140,6 +2144,20 @@ void NumberFormatTest::Test20484_NarrowSymbolFallback(){
             cas.isoCode,
             cas.locale,
             UCURR_SYMBOL_NAME,
+            &choiceFormatIgnored,
+            &lengthIgnored,
+            status);
+        const UChar* actualFormal = ucurr_getName(
+            cas.isoCode,
+            cas.locale,
+            UCURR_FORMAL_SYMBOL_NAME,
+            &choiceFormatIgnored,
+            &lengthIgnored,
+            status);
+        const UChar* actualVarant = ucurr_getName(
+            cas.isoCode,
+            cas.locale,
+            UCURR_VARIANT_SYMBOL_NAME,
             &choiceFormatIgnored,
             &lengthIgnored,
             status);
@@ -2154,8 +2172,12 @@ void NumberFormatTest::Test20484_NarrowSymbolFallback(){
         status.expectErrorAndReset(cas.expectedNarrowError);
         assertEquals(UnicodeString("Short symbol: ") + cas.locale + u": " + cas.isoCode,
                 cas.expectedShort, actualShort);
-        assertEquals(UnicodeString("Narrow symbol: ") + cas.locale + ": " + cas.isoCode,
+        assertEquals(UnicodeString("Narrow symbol: ") + cas.locale + u": " + cas.isoCode,
                 cas.expectedNarrow, actualNarrow);
+        assertEquals(UnicodeString("Formal symbol: ") + cas.locale + u": " + cas.isoCode,
+                cas.expectedFormal, actualFormal);
+        assertEquals(UnicodeString("Variant symbol: ") + cas.locale + u": " + cas.isoCode,
+                cas.expectedVariant, actualVarant);
     }
 }
 

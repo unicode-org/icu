@@ -80,6 +80,8 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"unit-width-short", STEM_UNIT_WIDTH_SHORT, status);
     b.add(u"unit-width-full-name", STEM_UNIT_WIDTH_FULL_NAME, status);
     b.add(u"unit-width-iso-code", STEM_UNIT_WIDTH_ISO_CODE, status);
+    b.add(u"unit-width-formal", STEM_UNIT_WIDTH_FORMAL, status);
+    b.add(u"unit-width-variant", STEM_UNIT_WIDTH_VARIANT, status);
     b.add(u"unit-width-hidden", STEM_UNIT_WIDTH_HIDDEN, status);
     b.add(u"sign-auto", STEM_SIGN_AUTO, status);
     b.add(u"sign-always", STEM_SIGN_ALWAYS, status);
@@ -265,6 +267,10 @@ UNumberUnitWidth stem_to_object::unitWidth(skeleton::StemEnum stem) {
             return UNUM_UNIT_WIDTH_FULL_NAME;
         case STEM_UNIT_WIDTH_ISO_CODE:
             return UNUM_UNIT_WIDTH_ISO_CODE;
+        case STEM_UNIT_WIDTH_FORMAL:
+            return UNUM_UNIT_WIDTH_FORMAL;
+        case STEM_UNIT_WIDTH_VARIANT:
+            return UNUM_UNIT_WIDTH_VARIANT;
         case STEM_UNIT_WIDTH_HIDDEN:
             return UNUM_UNIT_WIDTH_HIDDEN;
         default:
@@ -371,6 +377,12 @@ void enum_to_stem_string::unitWidth(UNumberUnitWidth value, UnicodeString& sb) {
             break;
         case UNUM_UNIT_WIDTH_ISO_CODE:
             sb.append(u"unit-width-iso-code", -1);
+            break;
+        case UNUM_UNIT_WIDTH_FORMAL:
+            sb.append(u"unit-width-formal", -1);
+            break;
+        case UNUM_UNIT_WIDTH_VARIANT:
+            sb.append(u"unit-width-variant", -1);
             break;
         case UNUM_UNIT_WIDTH_HIDDEN:
             sb.append(u"unit-width-hidden", -1);
@@ -683,6 +695,8 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_UNIT_WIDTH_SHORT:
         case STEM_UNIT_WIDTH_FULL_NAME:
         case STEM_UNIT_WIDTH_ISO_CODE:
+        case STEM_UNIT_WIDTH_FORMAL:
+        case STEM_UNIT_WIDTH_VARIANT:
         case STEM_UNIT_WIDTH_HIDDEN:
             CHECK_NULL(seen, unitWidth, status);
             macros.unitWidth = stem_to_object::unitWidth(stem);
