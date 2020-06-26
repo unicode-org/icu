@@ -52,17 +52,13 @@ struct MicroProps : public MicroPropsGenerator {
         EmptyModifier emptyWeakModifier{false};
         EmptyModifier emptyStrongModifier{true};
         MultiplierFormatHandler multiplier;
-        // TODO(units): In number_microprops.h there is a TODO(units) wondering
-        // about having something here, instead of
-        // NumberFormatterImpl::fUsagePrefs - e.g.:
-        // UsagePrefsHandler usageprefs;
-
-        // TODO(units/review): is this appropriate use of microprops? Changing this every
-        // time we format a number - consider thread-safety? Unique microprops instance per
-        // format() invocation?
-        MeasureUnit outputUnit;
     } helpers;
 
+    // TODO(units/review): move up / outside of the helpers struct.
+    // Consider thread-safety? Re-use of microprops instance?
+    //
+    // The MeasureUnit with which the output measurement is represented.
+    MeasureUnit outputUnit;
 
     MicroProps() = default;
 
@@ -80,7 +76,9 @@ struct MicroProps : public MicroPropsGenerator {
      * this function can be used only once, because the base MicroProps instance
      * will be modified and thus not be available for re-use.
      *
-     * FIXME: document how the quantity passed in can be mutated by the chain of microprops' processQuantity methods.
+     * TODO(units,hugovdm): deal with outputUnits: processQuantity may need to
+     * return a MeasurementUnit instance too, in some fashion. Or do we just
+     * keep it in micros.outputUnit?
      *
      * @param quantity The quantity for consideration and optional mutation.
      * @param micros The MicroProps instance to populate. If this parameter is

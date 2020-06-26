@@ -1451,13 +1451,6 @@ struct U_I18N_API MacroProps : public UMemory {
 
     /** @internal */
     Usage usage;  // = Usage();  (no usage)
-    //
-    // WIP/TODO(hugovdm,review): I tried `LocalArray<char>` instead of creating
-    // the Usage class, but it's lacking a copy assignment operator:
-    //
-    // error: object of type 'icu_67::number::impl::MacroProps' cannot be assigned because its copy assignment operator is implicitly deleted
-    // ./unicode/numberformatter.h:1413:22: note: copy assignment operator of 'MacroProps' is implicitly deleted because field 'usage' has a deleted copy assignment operator
-    // ../common/unicode/localpointer.h:399:5: note: copy assignment operator is implicitly deleted because 'LocalArray<char>' has a user-declared move constructor
 
     /** @internal */
     const AffixPatternProvider* affixProvider = nullptr;  // no ownership
@@ -2150,7 +2143,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 68
      */
-    Derived usage(const StringPiece usage) const &;
+    Derived usage(StringPiece usage) const &;
 
     /**
      * Overload of usage() for use on an rvalue reference.
@@ -2159,7 +2152,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 68
      */
-    Derived usage(const StringPiece usage) &&;
+    Derived usage(StringPiece usage) &&;
 #endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API

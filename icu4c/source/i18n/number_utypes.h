@@ -39,6 +39,8 @@ public:
     DecimalQuantity quantity;
 
     // The output unit for the formatted quantity.
+    // TODO(units,hugovdm): populate this correctly - it's not properly
+    // implemented yet.
     MeasureUnit outputUnit;
 };
 

@@ -20,8 +20,8 @@ UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedNumber)
 
 #define UPRV_NOARG
 
-// FIXME/TODO: see if there's Unit Usage Formatting consequences here? (Need to
-// place rounding etc in the right place.)
+// TODO(units,hugovdm): see if there's Unit Usage Formatting consequences here?
+// Ensure tests are thorough, check rounding etc.
 void FormattedNumber::toDecimalNumber(ByteSink& sink, UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
     impl::DecNum decnum;
@@ -35,7 +35,7 @@ void FormattedNumber::getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpi
     fData->getAllFieldPositions(fpih, status);
 }
 
-// WIP/TODO(hugovdm): official public API.
+// TODO(units,hugovdm): properly implement and test this official public API.
 MeasureUnit FormattedNumber::getOutputUnit(UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(MeasureUnit())
     return fData->outputUnit;

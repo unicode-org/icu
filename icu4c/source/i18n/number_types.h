@@ -242,9 +242,6 @@ class U_I18N_API ModifierStore {
 
 
 /**
- * macrosToMicroGenerator produces MicroPropsGenerator, which produces
- * MicroProps. Chain of MicroProps, which inherit from MicroPropsGenerators.
- *
  * This interface is used when all number formatting settings, including the locale, are known, except for the quantity
  * itself. The {@link #processQuantity} method performs the final step in the number processing pipeline: it uses the
  * quantity to generate a finalized {@link MicroProps}, which can be used to render the number to output.

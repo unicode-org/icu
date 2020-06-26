@@ -32,6 +32,9 @@ class U_I18N_API UsagePrefsHandler : public MicroPropsGenerator, public UMemory 
     /**
      * Returns the list of possible output units, i.e. the full set of
      * preferences, for the localized, usage-specific unit preferences.
+     *
+     * The returned pointer should be valid for the lifetime of the
+     * UsagePrefsHandler instance.
      */
     const MaybeStackVector<MeasureUnit> *getOutputUnits() const {
         return fUnitsRouter.getOutputUnits();

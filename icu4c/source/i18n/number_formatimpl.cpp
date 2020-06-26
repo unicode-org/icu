@@ -54,11 +54,14 @@ int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, Sig
 // The "unsafe" method simply re-uses fMicros, eliminating the extra copy operation.
 // See MicroProps::processQuantity() for details.
 
-int32_t NumberFormatterImpl::format(DecimalQuantity& inValue, FormattedStringBuilder& outString,
-                                UErrorCode& status) const {
+int32_t NumberFormatterImpl::format(DecimalQuantity &inValue, FormattedStringBuilder &outString,
+                                    UErrorCode &status) const {
     MicroProps micros;
     preProcess(inValue, micros, status);
     if (U_FAILURE(status)) { return 0; }
+    // TODO(units,hugovdm): micros.outputUnit contains the unit we wish to
+    // return via FormattedNumber::getOutputUnit(). Plumb it into the pipeline
+    // in a reasonable way.
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
     return length;
@@ -223,7 +226,6 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     /////////////////////////////////////////////////////////////////////////////////////
 
     // Unit Preferences and Conversions as our first step
-    MeasureUnit resolvedUnit;
     if (macros.usage.isSet()) {
         if (!isCldrUnit) {
             // We only support "usage" when the input unit is a CLDR Unit.
@@ -238,11 +240,6 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         }
         fUsagePrefsHandler.adoptInstead(usagePrefsHandler);
         chain = fUsagePrefsHandler.getAlias();
-        // TODO(units): this doesn't handle mixed units yet, caring only about
-        // the first output unit:
-        resolvedUnit = *(*usagePrefsHandler->getOutputUnits())[0];
-    } else {
-        resolvedUnit = macros.unit;
     }
 
     // Multiplier
@@ -368,7 +365,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             chain = fLongNameMultiplexer.getAlias();
         } else {
             fLongNameHandler.adoptInstead(LongNameHandler::forMeasureUnit(
-                macros.locale, resolvedUnit, macros.perUnit, unitWidth,
+                macros.locale, macros.unit, macros.perUnit, unitWidth,
                 resolvePluralRules(macros.rules, macros.locale, status), chain, status));
             chain = fLongNameHandler.getAlias();
         }

@@ -81,8 +81,6 @@ UsagePrefsHandler::UsagePrefsHandler(const Locale &locale,
     : fUnitsRouter(inputUnit, StringPiece(locale.getCountry()), usage, status),
       fParent(parent) {
 }
-// Is this not better? :
-// : fUnitsRouter(inputUnit, locale, usage, status), fParent(parent) {}
 
 void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                         UErrorCode &status) const {
@@ -93,7 +91,7 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
 
     quantity.roundToInfinity(); // Enables toDouble
     auto routed = fUnitsRouter.route(quantity.toDouble(), status);
-    micros.helpers.outputUnit = routed[0]->getUnit();
+    micros.outputUnit = routed[0]->getUnit();
     quantity.setToDouble(routed[0]->getNumber().getDouble());
 
     // TODO(units): here we are always overriding Precision. (1) get precision

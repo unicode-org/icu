@@ -399,7 +399,7 @@ void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps 
 
     // Call the correct LongNameHandler based on outputUnit
     for (int i = 0; i < fLongNameHandlers.length(); i++) {
-        if (fMeasureUnits[i] == micros.helpers.outputUnit) {
+        if (fMeasureUnits[i] == micros.outputUnit) {
             fLongNameHandlers[i]->processQuantity(quantity, micros, status);
             return;
         }

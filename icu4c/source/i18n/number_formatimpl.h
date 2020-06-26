@@ -83,11 +83,9 @@ class NumberFormatterImpl : public UMemory {
                                 int32_t end, UErrorCode& status);
 
   private:
-    // Head of the MicroPropsGenerator linked list:
-    // WIP/TODO(hugovdm): comprehend/document how this linked list functions
-    // (and how it related to fMicros).
-    // This points at the *end* of a chain of fMicroPropsGenerator. Subclasses' processQuantity methods
-    // typically do a depth-first traversal of the linked list.
+    // Head of the MicroPropsGenerator linked list. Subclasses' processQuantity
+    // methods process this list in a parent-first order, such that the last
+    // item added, which this points to, typically has its logic executed last.
     const MicroPropsGenerator *fMicroPropsGenerator = nullptr;
 
     // Tail of the list:
@@ -95,8 +93,6 @@ class NumberFormatterImpl : public UMemory {
 
     // Other fields possibly used by the number formatting pipeline:
     // TODO: Convert more of these LocalPointers to value objects to reduce the number of news?
-    // TODO(units): what belongs in MicroProps::helpers? (e.g.
-    // considering MicroProps::helpers::usageprefs.)
     LocalPointer<const UsagePrefsHandler> fUsagePrefsHandler;
     LocalPointer<const DecimalFormatSymbols> fSymbols;
     LocalPointer<const PluralRules> fRules;
