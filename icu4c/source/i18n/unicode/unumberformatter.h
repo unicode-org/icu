@@ -147,6 +147,30 @@ typedef enum UNumberUnitWidth {
      */
             UNUM_UNIT_WIDTH_ISO_CODE,
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Use the formal variant of the currency symbol; for example, "NT$" for the New Taiwan
+     * dollar in zh-TW.
+     *
+     * <p>
+     * Behavior of this option with non-currency units is not defined at this time.
+     *
+     * @draft ICU 68
+     */
+            UNUM_UNIT_WIDTH_FORMAL,
+
+    /**
+     * Use the alternate variant of the currency symbol; for example, "TL" for the Turkish
+     * lira (TRY).
+     *
+     * <p>
+     * Behavior of this option with non-currency units is not defined at this time.
+     *
+     * @draft ICU 68
+     */
+            UNUM_UNIT_WIDTH_VARIANT,
+#endif  // U_HIDE_DRAFT_API
+
     /**
      * Format the number according to the specified unit, but do not display the unit. For currencies, apply
      * monetary symbols and formats as with SHORT, but omit the currency symbol. For measure units, the behavior is
