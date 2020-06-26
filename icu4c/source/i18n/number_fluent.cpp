@@ -276,7 +276,6 @@ Derived NumberFormatterSettings<Derived>::scale(const Scale& scale)&& {
 
 void Usage::set(StringPiece value) {
     if (fUsage != nullptr) {
-        // TODO: reuse if possible, rather than always delete?
         uprv_free(fUsage);
         fUsage = nullptr;
     }

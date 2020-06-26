@@ -88,6 +88,7 @@ struct MicroProps : public MicroPropsGenerator {
      */
     void processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                          UErrorCode &status) const U_OVERRIDE {
+        (void) quantity;
         (void) status;
         if (this == &micros) {
             // Unsafe path: no need to perform a copy.
