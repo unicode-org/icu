@@ -293,56 +293,6 @@ Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& 
     return copy;
 }
 
-/////////////////////////////////////////////////////////
-
-// TODO(units): the StubUnitsRouter should be deleted soon, as we switch to
-// using the proper UnitsRouter - so it's just temporarily hanging out in
-// number_fluent.cpp
-StubUnitsRouter::StubUnitsRouter(MeasureUnit inputUnit, StringPiece region,
-                                 StringPiece usage, UErrorCode &status)
-    : fRegion(region, status) {
-    if (usage.compare("road") != 0) {
-        status = U_UNSUPPORTED_ERROR;
-    }
-    if (inputUnit != MeasureUnit::getMeter()) {
-        status = U_UNSUPPORTED_ERROR;
-    }
-}
-
-MaybeStackVector<Measure> StubUnitsRouter::route(double quantity, UErrorCode &status) const {
-    MeasureUnit unit;
-    MaybeStackVector<Measure> result;
-    if (uprv_strcmp(fRegion.data(), "GB") == 0) {
-        unit = MeasureUnit::getYard();
-        quantity *= 1.09361;
-    } else if (uprv_strcmp(fRegion.data(), "US") == 0) {
-        unit = MeasureUnit::getFoot();
-        quantity *= 3.28084;
-    } else {
-        unit = MeasureUnit::getMeter();
-    }
-    Formattable num(quantity);
-    result.emplaceBack(num, new MeasureUnit(unit), status);
-    return result;
-}
-
-MaybeStackVector<MeasureUnit> StubUnitsRouter::getOutputUnits() const {
-    MaybeStackVector<MeasureUnit> result;
-    if (uprv_strcmp(fRegion.data(), "GB") == 0) {
-        result.emplaceBack(MeasureUnit::getMile());
-        result.emplaceBack(MeasureUnit::getYard());
-    } else if (uprv_strcmp(fRegion.data(), "US") == 0) {
-        result.emplaceBack(MeasureUnit::getMile());
-        result.emplaceBack(MeasureUnit::getFoot());
-    } else {
-        result.emplaceBack(MeasureUnit::getKilometer());
-        result.emplaceBack(MeasureUnit::getMeter());
-    }
-    return result;
-}
-
-/////////////////////////////////////////////////////////
-
 template<typename Derived>
 Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
     Derived move(std::move(*this));

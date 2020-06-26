@@ -7,7 +7,7 @@
 
 #include "cmemory.h"
 #include "number_types.h"
-#include "unitsrouter_stub.h"
+#include "unitsrouter.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -33,13 +33,12 @@ class U_I18N_API UsagePrefsHandler : public MicroPropsGenerator, public UMemory 
      * Returns the list of possible output units, i.e. the full set of
      * preferences, for the localized, usage-specific unit preferences.
      */
-    MaybeStackVector<MeasureUnit> getOutputUnits() const {
+    const MaybeStackVector<MeasureUnit> *getOutputUnits() const {
         return fUnitsRouter.getOutputUnits();
     }
 
   private:
-    // TODO(units): use UnitsRouter, throw away StubUnitsRouter.
-    StubUnitsRouter fUnitsRouter;
+    UnitsRouter fUnitsRouter;
     const MicroPropsGenerator *fParent;
 };
 

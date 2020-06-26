@@ -75,9 +75,12 @@ class U_I18N_API UnitsRouter {
   public:
     UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
 
-    MaybeStackVector<Measure> route(double quantity, UErrorCode &status);
+    MaybeStackVector<Measure> route(double quantity, UErrorCode &status) const;
+
+    const MaybeStackVector<MeasureUnit> *getOutputUnits() const;
 
   private:
+    MaybeStackVector<MeasureUnit> outputUnits_;
     MaybeStackVector<ConverterPreference> converterPreferences_;
 };
 

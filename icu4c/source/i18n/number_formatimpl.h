@@ -16,7 +16,6 @@
 #include "number_longnames.h"
 #include "number_compact.h"
 #include "number_microprops.h"
-#include "unitsrouter_stub.h"  // WIP/TODO(hugovdm)
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {

@@ -240,7 +240,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         chain = fUsagePrefsHandler.getAlias();
         // TODO(units): this doesn't handle mixed units yet, caring only about
         // the first output unit:
-        resolvedUnit = *usagePrefsHandler->getOutputUnits()[0];
+        resolvedUnit = *(*usagePrefsHandler->getOutputUnits())[0];
     } else {
         resolvedUnit = macros.unit;
     }
@@ -363,7 +363,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (isCldrUnit) {
         if (macros.usage.isSet()) {
             fLongNameMultiplexer.adoptInstead(LongNameMultiplexer::forMeasureUnits(
-                macros.locale, fUsagePrefsHandler->getOutputUnits(), unitWidth,
+                macros.locale, *fUsagePrefsHandler->getOutputUnits(), unitWidth,
                 resolvePluralRules(macros.rules, macros.locale, status), chain, status));
             chain = fLongNameMultiplexer.getAlias();
         } else {

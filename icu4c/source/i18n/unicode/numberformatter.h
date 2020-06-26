@@ -770,10 +770,9 @@ class U_I18N_API Precision : public UMemory {
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
 
-    // TODO(units): revisit when improving StubUnitsRouter. Do we still need
-    // this once Precision is returned by UnitsRouter? For now, while
-    // UnitsRouter and StubUnitsRouter don't return Precision, we allow access
-    // to Precision constructor from UsagePrefsHandler:
+    // TODO(units): revisit when UnitsRouter is changed: do we still need this
+    // once Precision is returned by UnitsRouter? For now, we allow access to
+    // Precision constructor from UsagePrefsHandler:
     friend class impl::UsagePrefsHandler;
 };
 
