@@ -274,17 +274,6 @@ Derived NumberFormatterSettings<Derived>::scale(const Scale& scale)&& {
     return move;
 }
 
-void Usage::set(StringPiece value) {
-    if (fUsage != nullptr) {
-        uprv_free(fUsage);
-        fUsage = nullptr;
-    }
-    fLength = value.length();
-    fUsage = (char*)uprv_malloc(fLength+1);
-    uprv_strncpy(fUsage, value.data(), fLength);
-    fUsage[fLength] = 0;
-}
-
 template<typename Derived>
 Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& {
     Derived copy(*this);

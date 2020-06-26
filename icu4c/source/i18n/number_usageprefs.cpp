@@ -62,6 +62,17 @@ Usage::~Usage() {
     }
 }
 
+void Usage::set(StringPiece value) {
+    if (fUsage != nullptr) {
+        uprv_free(fUsage);
+        fUsage = nullptr;
+    }
+    fLength = value.length();
+    fUsage = (char *)uprv_malloc(fLength + 1);
+    uprv_strncpy(fUsage, value.data(), fLength);
+    fUsage[fLength] = 0;
+}
+
 UsagePrefsHandler::UsagePrefsHandler(const Locale &locale,
                                      const MeasureUnit inputUnit,
                                      const StringPiece usage,
