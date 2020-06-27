@@ -133,6 +133,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(Test16BitsTrieWith8BitStateTable);
     TESTCASE_AUTO(Test16BitsTrieWith16BitStateTable);
     TESTCASE_AUTO(TestTable_8_16_Bits);
+    TESTCASE_AUTO(TestBug13590);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5076,6 +5077,63 @@ void RBBITest::TestTable_8_16_Bits() {
             assertEquals(WHERE, false, has8BitsTrie);
         }
     }
+}
+
+/* Test handling of a large number of look-ahead rules.
+ * The number of rules in the test exceeds the implementation limits prior to the
+ * improvements introduced with #13590.
+ *
+ * The test look-ahead rules have the form "AB / CE"; "CD / EG"; ...
+ * The text being matched is sequential, "ABCDEFGHI..."
+ *
+ * The upshot is that the look-ahead rules all match on their preceding context,
+ * and consequently must save a potential result, but then fail to match on their
+ * trailing context, so that they don't actually cause a boundary.
+ *
+ * Additionally, add a ".*" rule, so there are no boundaries unless a
+ * look-ahead hard-break rule forces one.
+ */
+void RBBITest::TestBug13590() {
+    UnicodeString rules {u"!!quoted_literals_only; !!chain; .*;\n"};
+
+    const int NUM_LOOKAHEAD_RULES = 50;
+    const char16_t STARTING_CHAR = u'\u5000';
+    char16_t firstChar;
+    for (int ruleNum = 0; ruleNum < NUM_LOOKAHEAD_RULES; ++ruleNum) {
+        firstChar = STARTING_CHAR + ruleNum*2;
+        rules.append(u'\'') .append(firstChar) .append(firstChar+1) .append(u'\'')
+             .append(u' ') .append(u'/') .append(u' ')
+             .append(u'\'') .append(firstChar+2) .append(firstChar+4) .append(u'\'')
+             .append(u';') .append(u'\n');
+    }
+
+    // Change the last rule added from the form "UV / WY" to "UV / WX".
+    // Changes the rule so that it will match - all 4 chars are in ascending sequence.
+    rules.findAndReplace(UnicodeString(firstChar+4), UnicodeString(firstChar+3));
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError;
+    RuleBasedBreakIterator bi(rules, parseError, status);
+    if (!assertSuccess(WHERE, status)) {
+        errln(rules);
+        return;
+    }
+    // bi.dumpTables();
+
+    UnicodeString testString;
+    for (char16_t c = STARTING_CHAR-200; c < STARTING_CHAR + NUM_LOOKAHEAD_RULES*4; ++c) {
+        testString.append(c);
+    }
+    bi.setText(testString);
+
+    int breaksFound = 0;
+    while (bi.next() != UBRK_DONE) {
+        ++breaksFound;
+    }
+
+    // Two matches are expected, one from the last rule that was explicitly modified,
+    // and one at the end of the text.
+    assertEquals(WHERE, 2, breaksFound);
 }
 
 

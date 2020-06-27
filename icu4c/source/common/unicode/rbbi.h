@@ -142,6 +142,11 @@ private:
       */
     UBool           fDone;
 
+    /**
+     *  Array of look-ahead tentative results.
+     */
+    int32_t *fLookAheadMatches;
+
     //=======================================================================
     // constructors
     //=======================================================================
