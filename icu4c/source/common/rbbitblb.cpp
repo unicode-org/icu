@@ -715,12 +715,6 @@ void RBBITableBuilder::mapLookAheadRules() {
     }
     fLookAheadRuleMap->setSize(fRB->fScanner->numRules() + 1);
 
-    // Counter used when assigning lookahead rule numbers.
-    // Contains the last look-ahead number already in use.
-    // The first look-ahead number is 2; Number 1 (ACCEPTING_UNCONDITIONAL) is reserved
-    // for non-lookahead accepting states. See the declarations of RBBIStateTableRowT.
-    int32_t laSlotsInUse = ACCEPTING_UNCONDITIONAL;
-
     for (int32_t n=0; n<fDStates->size(); n++) {
         RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
         int32_t laSlotForState = 0;
@@ -756,7 +750,7 @@ void RBBITableBuilder::mapLookAheadRules() {
         }
 
         if (laSlotForState == 0) {
-            laSlotForState = ++laSlotsInUse;
+            laSlotForState = ++fLASlotsInUse;
         }
 
         // For each look ahead node covered by this state,
@@ -1386,6 +1380,7 @@ void RBBITableBuilder::exportTable(void *where) {
 
     table->fNumStates = fDStates->size();
     table->fDictCategoriesStart = fRB->fSetBuilder->getDictCategoriesStart();
+    table->fLookAheadResultsSize = fLASlotsInUse == ACCEPTING_UNCONDITIONAL ? 0 : fLASlotsInUse + 1;
     table->fFlags     = 0;
     if (use8BitsForTable()) {
         table->fRowLen    = offsetof(RBBIStateTableRow8, fNextState) + sizeof(uint8_t) * catCount;

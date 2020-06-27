@@ -47,6 +47,11 @@ public final class RBBIDataWrapper {
          */
         public int     fDictCategoriesStart;
         /**
+         * Size of run-time array required for holding
+         * look-ahead results. Indexed by row.fLookAhead.
+         */
+        public int     fLookAheadResultsSize;
+        /**
          * Option Flags for this state table.
          */
         public int     fFlags;
@@ -54,7 +59,7 @@ public final class RBBIDataWrapper {
          * Length in bytes of the state table header, of all the int32 fields
          * preceding fTable in the serialized form.
          */
-        public static int fHeaderSize = 16;
+        public static int fHeaderSize = 20;
         /**
          * Linear array of next state values, accessed as short[state, char_class]
          */
@@ -74,6 +79,7 @@ public final class RBBIDataWrapper {
             This.fNumStates = bytes.getInt();
             This.fRowLen    = bytes.getInt();
             This.fDictCategoriesStart = bytes.getInt();
+            This.fLookAheadResultsSize = bytes.getInt();
             This.fFlags     = bytes.getInt();
             int lengthOfTable = length - fHeaderSize;   // length in bytes.
             boolean use8Bits = (This.fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) == RBBIDataWrapper.RBBI_8BITS_ROWS;
@@ -94,6 +100,7 @@ public final class RBBIDataWrapper {
             bytes.writeInt(fNumStates);
             bytes.writeInt(fRowLen);
             bytes.writeInt(fDictCategoriesStart);
+            bytes.writeInt(fLookAheadResultsSize);
             bytes.writeInt(fFlags);
             if ((fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) == RBBIDataWrapper.RBBI_8BITS_ROWS) {
                 int tableLen = fRowLen * fNumStates;  // fRowLen is bytes.
@@ -131,6 +138,7 @@ public final class RBBIDataWrapper {
             if (fNumStates != otherST.fNumStates) return false;
             if (fRowLen    != otherST.fRowLen)    return false;
             if (fDictCategoriesStart != otherST.fDictCategoriesStart) return false;
+            if (fLookAheadResultsSize != otherST.fLookAheadResultsSize) return false;
             if (fFlags     != otherST.fFlags)     return false;
             return Arrays.equals(fTable, otherST.fTable);
         }
