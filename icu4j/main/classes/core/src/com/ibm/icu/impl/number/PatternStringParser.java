@@ -486,6 +486,9 @@ public class PatternStringParser {
                 break;
 
             default:
+                if (result.rounding != null) {
+                    result.rounding.setMinFraction(result.fractionNumerals);
+                }
                 return;
             }
             state.next(); // consume the symbol
@@ -598,8 +601,7 @@ public class PatternStringParser {
             if (!ignoreRounding) {
                 properties.setMinimumFractionDigits(minFrac);
                 properties.setMaximumFractionDigits(positive.fractionTotal);
-                properties.setRoundingIncrement(
-                        positive.rounding.toBigDecimal().setScale(positive.fractionNumerals));
+                properties.setRoundingIncrement(positive.rounding.toBigDecimal());
             } else {
                 properties.setMinimumFractionDigits(-1);
                 properties.setMaximumFractionDigits(-1);

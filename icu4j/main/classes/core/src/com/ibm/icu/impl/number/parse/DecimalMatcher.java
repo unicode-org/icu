@@ -373,6 +373,7 @@ public class DecimalMatcher implements NumberParseMatcher {
 
         // Adjust for fraction part.
         digitsConsumed.adjustMagnitude(-digitsAfterDecimalPlace);
+        digitsConsumed.setMinFraction(digitsAfterDecimalPlace);
 
         // Set the digits, either normal or exponent.
         if (exponentSign != 0 && segment.getOffset() != initialOffset) {
@@ -383,7 +384,7 @@ public class DecimalMatcher implements NumberParseMatcher {
                 if (exponentLong <= Integer.MAX_VALUE) {
                     int exponentInt = (int) exponentLong;
                     try {
-                        result.quantity.adjustMagnitude(exponentSign * exponentInt);
+                        result.quantity.adjustExponent(exponentSign * exponentInt);
                     } catch (ArithmeticException e) {
                         overflow = true;
                     }

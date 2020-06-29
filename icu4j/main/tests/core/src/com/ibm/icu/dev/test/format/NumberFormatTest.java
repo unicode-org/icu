@@ -6829,4 +6829,45 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
         assertEquals("Currency pattern", "#,##0.00 ¤¤¤", decimalFormat.toPattern());
     }
+
+    @Test
+    public void testBigDecimalTrailingZeros() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
+        df.setParseBigDecimal(true);
+        ParsePosition dontCare = new ParsePosition(0);
+        BigDecimal d = (BigDecimal) df.parse("10.00", dontCare);
+        assertEquals("", 2, d.scale());
+        assertEquals("", 10, d.intValueExact());
+        assertEquals("", "10.00", d.toString());
+        d = (BigDecimal) df.parse("10.0000", new ParsePosition(0));
+        assertEquals("", 4, d.scale());
+        assertEquals("", 10, d.intValueExact());
+        assertEquals("", "10.0000", d.toString());
+        d = (BigDecimal) df.parse("-10.0000", new ParsePosition(0));
+        assertEquals("", 4, d.scale());
+        assertEquals("", -10, d.intValueExact());
+        assertEquals("", "-10.0000", d.toString());
+        d = (BigDecimal) df.parse("10", new ParsePosition(0));
+        assertEquals("", 0, d.scale());
+        assertEquals("", 10, d.intValueExact());
+        assertEquals("", "10", d.toString());
+        d = (BigDecimal) df.parse("12345678901234567890.00", new ParsePosition(0));
+        assertEquals("", 2, d.scale());
+        assertEquals("", "12345678901234567890.00", d.toString());
+        d = (BigDecimal) df.parse("-12345678901234567890.00E4", new ParsePosition(0));
+        assertEquals("", -2, d.scale());
+        assertEquals("", "-1.234567890123456789000E+23", d.toString());
+        d = (BigDecimal) df.parse("-12345678901234567890.00E-10", new ParsePosition(0));
+        assertEquals("", 12, d.scale());
+        assertEquals("", "-1234567890.123456789000", d.toString());
+        df.setMultiplier(100);
+        d = (BigDecimal) df.parse("12345678901234567890.00", new ParsePosition(0));
+        assertEquals("", 4, d.scale());
+        assertEquals("", "123456789012345678.9000", d.toString());
+        df.setMultiplier(2);  // Spec for this is not perfectly clear to me.
+        d = (BigDecimal) df.parse("-32.00", new ParsePosition(0));
+        assertEquals("", 2, d.scale());
+        assertEquals("", -16, d.intValueExact());
+        assertEquals("", "-16.00", d.toString());
+    }
 }
