@@ -54,9 +54,6 @@ struct MicroProps : public MicroPropsGenerator {
         MultiplierFormatHandler multiplier;
     } helpers;
 
-    // TODO(units/review): move up / outside of the helpers struct.
-    // Consider thread-safety? Re-use of microprops instance?
-    //
     // The MeasureUnit with which the output measurement is represented.
     MeasureUnit outputUnit;
 

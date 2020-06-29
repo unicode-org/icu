@@ -1132,6 +1132,8 @@ class U_I18N_API Scale : public UMemory {
     friend class ::icu::numparse::impl::MultiplierParseHandler;
 };
 
+namespace impl {
+
 class U_I18N_API Usage : public UMemory {
   public:
     Usage(const Usage& other);
@@ -1163,8 +1165,6 @@ class U_I18N_API Usage : public UMemory {
     // To allow MacroProps/MicroProps to initialize empty instances:
     friend struct impl::MacroProps;
 };
-
-namespace impl {
 
 // Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */

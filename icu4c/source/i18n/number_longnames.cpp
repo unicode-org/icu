@@ -222,16 +222,17 @@ LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef, c
         }
     }
 
-    auto* result = new LongNameHandler(rules, parent);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    LocalPointer<LongNameHandler> result(new LongNameHandler(rules, parent), status);
+    if (U_FAILURE(status)) {
         return nullptr;
     }
     UnicodeString simpleFormats[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, simpleFormats, status);
-    if (U_FAILURE(status)) { return result; }
+    if (U_FAILURE(status)) {
+        return result.orphan();
+    }
     result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
-    return result;
+    return result.orphan();
 }
 
 LongNameHandler*
@@ -368,9 +369,8 @@ LongNameMultiplexer *
 LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<MeasureUnit> &units,
                                      const UNumberUnitWidth &width, const PluralRules *rules,
                                      const MicroPropsGenerator *parent, UErrorCode &status) {
-    auto *result = new LongNameMultiplexer(parent);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    LocalPointer<LongNameMultiplexer> result(new LongNameMultiplexer(parent), status);
+    if (U_FAILURE(status)) {
         return nullptr;
     }
     U_ASSERT(units.length() > 0);
@@ -381,13 +381,12 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
             MeasureUnit(), // TODO(units): deal with COMPOUND and MIXED units
             width, rules, NULL, status);
         if (U_FAILURE(status)) {
-            delete result;
             return nullptr;
         }
         result->fLongNameHandlers.emplaceBack(std::move(*lnh));
         result->fMeasureUnits[i] = *units[i];
     }
-    return result;
+    return result.orphan();
 }
 
 void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
@@ -404,8 +403,9 @@ void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps 
             return;
         }
     }
-    status = U_RESOURCE_TYPE_MISMATCH; // TODO(units): do we want new failure types? Or maybe an assert
-                                       // failure even?
+    // We shouldn't receive any outputUnit for which we haven't already got a
+    // LongNameHandler:
+    status = U_INTERNAL_PROGRAM_ERROR;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

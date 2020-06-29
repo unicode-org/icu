@@ -73,6 +73,7 @@ const int MAX_PREFS_COUNT = 10;
  */
 class LongNameMultiplexer : public MicroPropsGenerator, public UMemory {
   public:
+    // FIXME: docstring?
     static LongNameMultiplexer *forMeasureUnits(const Locale &loc,
                                                 const MaybeStackVector<MeasureUnit> &units,
                                                 const UNumberUnitWidth &width, const PluralRules *rules,

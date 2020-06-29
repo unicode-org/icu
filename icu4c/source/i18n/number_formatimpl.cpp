@@ -234,11 +234,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         }
         auto usagePrefsHandler =
             new UsagePrefsHandler(macros.locale, macros.unit, macros.usage.fUsage, chain, status);
-        if (usagePrefsHandler == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        fUsagePrefsHandler.adoptInstead(usagePrefsHandler);
+        fUsagePrefsHandler.adoptInsteadAndCheckErrorCode(usagePrefsHandler, status);
         chain = fUsagePrefsHandler.getAlias();
     }
 
