@@ -50,6 +50,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
                 return;
             }
         } else {
+            // TODO: check that the skeleton is in the following format "precision-increment/d*.d*"
             UnicodeString skeletonUniStr(preference.skeleton.data());
             macroProps = number::impl::skeleton::parseSkeleton(skeletonUniStr, errOffset, status);
             if (U_FAILURE(status)) {
@@ -80,10 +81,10 @@ RouteResult UnitsRouter::route(double quantity, UErrorCode &status) {
     }
 
     // In case of the `quantity` does not fit in any converter limit, use the last converter.
-    const auto &lastConverterPrefence = (*converterPreferences_[converterPreferences_.length() - 1]);
+    const auto &lastConverterPreference = (*converterPreferences_[converterPreferences_.length() - 1]);
     return RouteResult{
-        lastConverterPrefence.converter.convert(quantity, status), //
-        lastConverterPrefence.precision                            //
+        lastConverterPreference.converter.convert(quantity, status), //
+        lastConverterPreference.precision                            //
     };
 }
 

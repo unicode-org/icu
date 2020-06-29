@@ -29,7 +29,7 @@ struct RouteResult : UMemory {
     Precision precision;
 
     RouteResult(MaybeStackVector<Measure> measures, Precision precision)
-        : measures(std::move(measures)), precision(precision) {}
+        : measures(std::move(measures)), precision(std::move(precision)) {}
 };
 
 /**
