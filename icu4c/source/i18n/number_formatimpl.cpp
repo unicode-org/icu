@@ -39,9 +39,9 @@ int32_t NumberFormatterImpl::formatStatic(const MacroProps &macros, UFormattedNu
     NumberFormatterImpl impl(macros, false, status);
     MicroProps& micros = impl.preProcessUnsafe(inValue, status);
     if (U_FAILURE(status)) { return 0; }
-    results->outputUnit = micros.outputUnit;
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
+    results->outputUnit = std::move(micros.outputUnit);
     return length;
 }
 
@@ -63,9 +63,9 @@ int32_t NumberFormatterImpl::format(UFormattedNumberData *results, UErrorCode &s
     MicroProps micros;
     preProcess(inValue, micros, status);
     if (U_FAILURE(status)) { return 0; }
-    results->outputUnit = micros.outputUnit;
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
+    results->outputUnit = std::move(micros.outputUnit);
     return length;
 }
 
