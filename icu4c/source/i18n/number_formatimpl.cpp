@@ -366,9 +366,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             chain = fLongNameMultiplexer.getAlias();
         } else {
             fLongNameHandler.adoptInsteadAndCheckErrorCode(
-                new LongNameHandler(LongNameHandler::forMeasureUnit(
-                    macros.locale, macros.unit, macros.perUnit, unitWidth,
-                    resolvePluralRules(macros.rules, macros.locale, status), chain, status)),
+                LongNameHandler::forMeasureUnit(macros.locale, macros.unit, macros.perUnit, unitWidth,
+                                                resolvePluralRules(macros.rules, macros.locale, status),
+                                                chain, nullptr, status),
                 status);
             chain = fLongNameHandler.getAlias();
         }
