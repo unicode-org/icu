@@ -362,9 +362,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
                 resolvePluralRules(macros.rules, macros.locale, status), chain, status));
             chain = fLongNameMultiplexer.getAlias();
         } else {
-            fLongNameHandler.adoptInstead(LongNameHandler::forMeasureUnit(
+            fLongNameHandler.adoptInstead(new LongNameHandler(LongNameHandler::forMeasureUnit(
                 macros.locale, macros.unit, macros.perUnit, unitWidth,
-                resolvePluralRules(macros.rules, macros.locale, status), chain, status));
+                resolvePluralRules(macros.rules, macros.locale, status), chain, status)));
             chain = fLongNameHandler.getAlias();
         }
     } else if (isCurrency && unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {

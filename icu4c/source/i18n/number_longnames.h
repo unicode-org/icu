@@ -34,15 +34,10 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     forCurrencyLongNames(const Locale &loc, const CurrencyUnit &currency, const PluralRules *rules,
                          const MicroPropsGenerator *parent, UErrorCode &status);
 
-    static LongNameHandler*
-    forMeasureUnit(const Locale &loc, const MeasureUnit &unit, const MeasureUnit &perUnit,
-                   const UNumberUnitWidth &width, const PluralRules *rules,
-                   const MicroPropsGenerator *parent, UErrorCode &status);
-
-    static LongNameHandler forMeasureUnitByValue(const Locale &loc, const MeasureUnit &unit,
-                                                 const MeasureUnit &perUnit,
-                                                 const UNumberUnitWidth &width, const PluralRules *rules,
-                                                 const MicroPropsGenerator *parent, UErrorCode &status);
+    static LongNameHandler forMeasureUnit(const Locale &loc, const MeasureUnit &unit,
+                                          const MeasureUnit &perUnit, const UNumberUnitWidth &width,
+                                          const PluralRules *rules, const MicroPropsGenerator *parent,
+                                          UErrorCode &status);
 
     void
     processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
@@ -59,16 +54,10 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     LongNameHandler(const PluralRules *rules, const MicroPropsGenerator *parent)
             : rules(rules), parent(parent) {}
 
-    static LongNameHandler*
-    forCompoundUnit(const Locale &loc, const MeasureUnit &unit, const MeasureUnit &perUnit,
-                    const UNumberUnitWidth &width, const PluralRules *rules,
-                    const MicroPropsGenerator *parent, UErrorCode &status);
-
-    static LongNameHandler forCompoundUnitByValue(const Locale &loc, const MeasureUnit &unit,
-                                                  const MeasureUnit &perUnit,
-                                                  const UNumberUnitWidth &width,
-                                                  const PluralRules *rules,
-                                                  const MicroPropsGenerator *parent, UErrorCode &status);
+    static LongNameHandler forCompoundUnit(const Locale &loc, const MeasureUnit &unit,
+                                           const MeasureUnit &perUnit, const UNumberUnitWidth &width,
+                                           const PluralRules *rules, const MicroPropsGenerator *parent,
+                                           UErrorCode &status);
 
     void simpleFormatsToModifiers(const UnicodeString *simpleFormats, Field field, UErrorCode &status);
     void multiSimpleFormatsToModifiers(const UnicodeString *leadFormats, UnicodeString trailFormat,
