@@ -16,6 +16,7 @@
 #include "number_longnames.h"
 #include "number_compact.h"
 #include "number_microprops.h"
+#include "number_utypes.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -35,9 +36,8 @@ class NumberFormatterImpl : public UMemory {
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
-    static int32_t
-    formatStatic(const MacroProps &macros, DecimalQuantity &inValue, FormattedStringBuilder &outString,
-                 UErrorCode &status);
+    static int32_t formatStatic(const MacroProps &macros, UFormattedNumberData *results,
+                                UErrorCode &status);
 
     /**
      * Prints only the prefix and suffix; used for DecimalFormat getters.
@@ -52,7 +52,7 @@ class NumberFormatterImpl : public UMemory {
     /**
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
-    int32_t format(DecimalQuantity& inValue, FormattedStringBuilder& outString, UErrorCode& status) const;
+    int32_t format(UFormattedNumberData *results, UErrorCode &status) const;
 
     /**
      * Like format(), but saves the result into an output MicroProps without additional processing.

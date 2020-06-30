@@ -716,15 +716,9 @@ LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErro
 
 void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const {
     if (computeCompiled(status)) {
-        // TODO(units,hugovdm): results needs outputUnit too, consider how to
-        // add that - maybe pass `results` to formatStatic() instead of just
-        // results->quantity and ->getStringRef()? :
-        fCompiled->format(results->quantity, results->getStringRef(), status);
+        fCompiled->format(results, status);
     } else {
-        // TODO(units,hugovdm): results needs outputUnit too, consider how to
-        // add that - maybe pass `results` to formatStatic() instead of just
-        // results->quantity and ->getStringRef()? :
-        NumberFormatterImpl::formatStatic(fMacros, results->quantity, results->getStringRef(), status);
+        NumberFormatterImpl::formatStatic(fMacros, results, status);
     }
     if (U_FAILURE(status)) {
         return;

@@ -35,7 +35,6 @@ void FormattedNumber::getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpi
     fData->getAllFieldPositions(fpih, status);
 }
 
-// TODO(units,hugovdm): properly implement and test this official public API.
 MeasureUnit FormattedNumber::getOutputUnit(UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(MeasureUnit())
     return fData->outputUnit;

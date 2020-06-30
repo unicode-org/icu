@@ -32,11 +32,14 @@ NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& s
     : NumberFormatterImpl(macros, true, status) {
 }
 
-int32_t NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuantity& inValue,
-                                       FormattedStringBuilder& outString, UErrorCode& status) {
+int32_t NumberFormatterImpl::formatStatic(const MacroProps &macros, UFormattedNumberData *results,
+                                          UErrorCode &status) {
+    DecimalQuantity &inValue = results->quantity;
+    FormattedStringBuilder &outString = results->getStringRef();
     NumberFormatterImpl impl(macros, false, status);
     MicroProps& micros = impl.preProcessUnsafe(inValue, status);
     if (U_FAILURE(status)) { return 0; }
+    results->outputUnit = micros.outputUnit;
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
     return length;
@@ -54,14 +57,13 @@ int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, Sig
 // The "unsafe" method simply re-uses fMicros, eliminating the extra copy operation.
 // See MicroProps::processQuantity() for details.
 
-int32_t NumberFormatterImpl::format(DecimalQuantity &inValue, FormattedStringBuilder &outString,
-                                    UErrorCode &status) const {
+int32_t NumberFormatterImpl::format(UFormattedNumberData *results, UErrorCode &status) const {
+    DecimalQuantity &inValue = results->quantity;
+    FormattedStringBuilder &outString = results->getStringRef();
     MicroProps micros;
     preProcess(inValue, micros, status);
     if (U_FAILURE(status)) { return 0; }
-    // TODO(units,hugovdm): micros.outputUnit contains the unit we wish to
-    // return via FormattedNumber::getOutputUnit(). Plumb it into the pipeline
-    // in a reasonable way.
+    results->outputUnit = micros.outputUnit;
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
     return length;
