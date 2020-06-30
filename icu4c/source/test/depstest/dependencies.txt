@@ -996,7 +996,7 @@ group: numberformatter
     currpinf.o dcfmtsym.o numsys.o
     numrange_fluent.o numrange_impl.o
   deps
-    decnumber double_conversion formattable units
+    decnumber double_conversion formattable units unitsformatter
     number_representation number_output
     uclean_i18n common
 

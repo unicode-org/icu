@@ -10,7 +10,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "cmemory.h"
 #include "unicode/appendable.h"
 #include "unicode/bytestream.h"
 #include "unicode/currunit.h"
