@@ -365,11 +365,10 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
                 status);
             chain = fLongNameMultiplexer.getAlias();
         } else {
-            fLongNameHandler.adoptInsteadAndCheckErrorCode(
-                LongNameHandler::forMeasureUnit(macros.locale, macros.unit, macros.perUnit, unitWidth,
-                                                resolvePluralRules(macros.rules, macros.locale, status),
-                                                chain, nullptr, status),
-                status);
+            fLongNameHandler.adoptInsteadAndCheckErrorCode(new LongNameHandler(), status);
+            LongNameHandler::forMeasureUnit(macros.locale, macros.unit, macros.perUnit, unitWidth,
+                                            resolvePluralRules(macros.rules, macros.locale, status),
+                                            chain, fLongNameHandler.getAlias(), status);
             chain = fLongNameHandler.getAlias();
         }
     } else if (isCurrency && unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {

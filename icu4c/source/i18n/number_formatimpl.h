@@ -100,7 +100,7 @@ class NumberFormatterImpl : public UMemory {
     LocalPointer<const ScientificHandler> fScientificHandler;
     LocalPointer<MutablePatternModifier> fPatternModifier;
     LocalPointer<ImmutablePatternModifier> fImmutablePatternModifier;
-    LocalPointer<const LongNameHandler> fLongNameHandler;
+    LocalPointer<LongNameHandler> fLongNameHandler;
     LocalPointer<const LongNameMultiplexer> fLongNameMultiplexer;
     LocalPointer<const CompactHandler> fCompactHandler;
 

@@ -201,15 +201,18 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
 } // namespace
 
 // TODO(units,hugovdm): deal properly with "perUnit" parameter here:
-LongNameHandler*
-LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
-                                const MeasureUnit &perUnit, const UNumberUnitWidth &width,
-                                const PluralRules *rules, const MicroPropsGenerator *parent,
-                                LongNameHandler *fillIn, UErrorCode &status) {
+void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
+                                     const MeasureUnit &perUnit, const UNumberUnitWidth &width,
+                                     const PluralRules *rules, const MicroPropsGenerator *parent,
+                                     LongNameHandler *fillIn, UErrorCode &status) {
+    if (fillIn == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
     if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
         // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
         status = U_UNSUPPORTED_ERROR;
-        return fillIn;
+        return;
     }
 
     MeasureUnit unit = unitRef;
@@ -221,52 +224,40 @@ LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
             unit = resolved;
         } else {
             // No simplified form is available.
-            return forCompoundUnit(loc, unit, perUnit, width, rules, parent, fillIn, status);
+            forCompoundUnit(loc, unit, perUnit, width, rules, parent, fillIn, status);
+            return;
         }
     }
 
     UnicodeString simpleFormats[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, simpleFormats, status);
     if (U_FAILURE(status)) {
-        return fillIn;
+        return;
     }
-    LongNameHandler *result;
-    LocalPointer<LongNameHandler> newInstance;
-    if (fillIn != nullptr) {
-        result = fillIn;
-        result->rules = rules;
-        result->parent = parent;
-    } else {
-        // newInstance takes care of clean-up if we don't consciously orphan it:
-        newInstance.adoptInsteadAndCheckErrorCode(new LongNameHandler(rules, parent), status);
-        result = newInstance.getAlias();
-    }
-    result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD},
+    fillIn->rules = rules;
+    fillIn->parent = parent;
+    fillIn->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD},
                                      status);
-    if (U_SUCCESS(status)) {
-        // If we created a new instance, orphan it so it can be safely returned:
-        newInstance.orphan();
-        return result;
-    } else {
-        return fillIn;
-    }
 }
 
 // TODO(units,hugovdm): deal properly with "perUnit" parameter here:
-LongNameHandler*
-LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit, const MeasureUnit &perUnit,
-                                 const UNumberUnitWidth &width, const PluralRules *rules,
-                                 const MicroPropsGenerator *parent, LongNameHandler *fillIn,
-                                 UErrorCode &status) {
+void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit,
+                                      const MeasureUnit &perUnit, const UNumberUnitWidth &width,
+                                      const PluralRules *rules, const MicroPropsGenerator *parent,
+                                      LongNameHandler *fillIn, UErrorCode &status) {
+    if (fillIn == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
     UnicodeString primaryData[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, primaryData, status);
     if (U_FAILURE(status)) {
-        return fillIn;
+        return;
     }
     UnicodeString secondaryData[ARRAY_LENGTH];
     getMeasureData(loc, perUnit, width, secondaryData, status);
     if (U_FAILURE(status)) {
-        return fillIn;
+        return;
     }
 
     UnicodeString perUnitFormat;
@@ -275,47 +266,33 @@ LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit, con
     } else {
         UnicodeString rawPerUnitFormat = getPerUnitFormat(loc, width, status);
         if (U_FAILURE(status)) {
-            return fillIn;
+            return;
         }
         // rawPerUnitFormat is something like "{0}/{1}"; we need to substitute in the secondary unit.
         SimpleFormatter compiled(rawPerUnitFormat, 2, 2, status);
         if (U_FAILURE(status)) {
-            return fillIn;
+            return;
         }
         UnicodeString secondaryFormat = getWithPlural(secondaryData, StandardPlural::Form::ONE, status);
         if (U_FAILURE(status)) {
-            return fillIn;
+            return;
         }
         // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
         SimpleFormatter secondaryCompiled(secondaryFormat, 0, 1, status);
         if (U_FAILURE(status)) {
-            return fillIn;
+            return;
         }
         UnicodeString secondaryString = secondaryCompiled.getTextWithNoArguments().trim();
         // TODO: Why does UnicodeString need to be explicit in the following line?
         compiled.format(UnicodeString(u"{0}"), secondaryString, perUnitFormat, status);
         if (U_FAILURE(status)) {
-            return fillIn;
+            return;
         }
     }
-    LongNameHandler *result;
-    LocalPointer<LongNameHandler> newInstance;
-    if (fillIn != nullptr) {
-        result = fillIn;
-        result->rules = rules;
-        result->parent = parent;
-    } else {
-        newInstance.adoptInsteadAndCheckErrorCode(new LongNameHandler(rules, parent), status);
-        result = newInstance.getAlias();
-    }
-    result->multiSimpleFormatsToModifiers(primaryData, perUnitFormat,
+    fillIn->rules = rules;
+    fillIn->parent = parent;
+    fillIn->multiSimpleFormatsToModifiers(primaryData, perUnitFormat,
                                           {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
-    if (U_SUCCESS(status)) {
-        newInstance.orphan();
-        return result;
-    } else {
-        return fillIn;
-    }
 }
 
 UnicodeString LongNameHandler::getUnitDisplayName(
