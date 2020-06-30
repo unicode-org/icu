@@ -422,7 +422,7 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
     for (int32_t i = 0, length = units.length(); i < length; i++) {
         // Create empty new LongNameHandler:
         LongNameHandler *lnh =
-            result->fLongNameHandlers.emplaceBackAndCheckErrorCode(status, nullptr, nullptr);
+            result->fLongNameHandlers.emplaceBackAndCheckErrorCode(status);
         result->fMeasureUnits[i] = *units[i];
         // Fill in LongNameHandler:
         LongNameHandler::forMeasureUnit(loc, *units[i],

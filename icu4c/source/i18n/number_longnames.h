@@ -52,7 +52,11 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     const MicroPropsGenerator *parent;
 
     LongNameHandler(const PluralRules *rules, const MicroPropsGenerator *parent)
-            : rules(rules), parent(parent) {}
+        : rules(rules), parent(parent) {
+    }
+
+    LongNameHandler() : rules(nullptr), parent(nullptr) {
+    }
 
     friend class MemoryPool<LongNameHandler>; // To enable emplaceBack();
 
