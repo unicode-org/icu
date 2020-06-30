@@ -348,7 +348,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         patternModifier->setSymbols(fMicros.symbols, currency, unitWidth, nullptr, status);
     }
     if (safe) {
-        fImmutablePatternModifier.adoptInstead(patternModifier->createImmutable(status));
+        fImmutablePatternModifier.adoptInsteadAndCheckErrorCode(patternModifier->createImmutable(status),
+                                                                status);
     }
     if (U_FAILURE(status)) {
         return nullptr;
@@ -357,24 +358,26 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
         if (macros.usage.isSet()) {
-            fLongNameMultiplexer.adoptInstead(LongNameMultiplexer::forMeasureUnits(
-                macros.locale, *fUsagePrefsHandler->getOutputUnits(), unitWidth,
-                resolvePluralRules(macros.rules, macros.locale, status), chain, status));
+            fLongNameMultiplexer.adoptInsteadAndCheckErrorCode(
+                LongNameMultiplexer::forMeasureUnits(
+                    macros.locale, *fUsagePrefsHandler->getOutputUnits(), unitWidth,
+                    resolvePluralRules(macros.rules, macros.locale, status), chain, status),
+                status);
             chain = fLongNameMultiplexer.getAlias();
         } else {
-            fLongNameHandler.adoptInstead(new LongNameHandler(LongNameHandler::forMeasureUnit(
-                macros.locale, macros.unit, macros.perUnit, unitWidth,
-                resolvePluralRules(macros.rules, macros.locale, status), chain, status)));
+            fLongNameHandler.adoptInsteadAndCheckErrorCode(
+                new LongNameHandler(LongNameHandler::forMeasureUnit(
+                    macros.locale, macros.unit, macros.perUnit, unitWidth,
+                    resolvePluralRules(macros.rules, macros.locale, status), chain, status)),
+                status);
             chain = fLongNameHandler.getAlias();
         }
     } else if (isCurrency && unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {
-        fLongNameHandler.adoptInstead(
-                LongNameHandler::forCurrencyLongNames(
-                        macros.locale,
-                        currency,
-                        resolvePluralRules(macros.rules, macros.locale, status),
-                        chain,
-                        status));
+        fLongNameHandler.adoptInsteadAndCheckErrorCode(
+            LongNameHandler::forCurrencyLongNames(
+                macros.locale, currency, resolvePluralRules(macros.rules, macros.locale, status), chain,
+                status),
+            status);
         chain = fLongNameHandler.getAlias();
     } else {
         // No outer modifier required
