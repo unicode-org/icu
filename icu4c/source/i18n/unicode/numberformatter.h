@@ -1133,22 +1133,38 @@ class U_I18N_API Scale : public UMemory {
 
 namespace impl {
 
+// Do not enclose entire Usage with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
+/**
+ * Manages NumberFormatterSettings::usage()'s char* instance on the heap.
+ * @internal
+ */
 class U_I18N_API Usage : public UMemory {
+
+#ifndef U_HIDE_INTERNAL_API
+
   public:
+    /** @internal */
     Usage(const Usage& other);
 
+    /** @internal */
     Usage& operator=(const Usage& other);
 
+    /** @internal */
     Usage(Usage &&src) U_NOEXCEPT;
 
+    /** @internal */
     Usage& operator=(Usage&& src) U_NOEXCEPT;
 
+    /** @internal */
     ~Usage();
 
+    /** @internal */
     int16_t length() const { return fLength; }
 
+    /** @internal */
     void set(StringPiece value);
 
+    /** @internal */
     bool isSet() const { return fLength > 0; }
 
   private:
@@ -1158,11 +1174,13 @@ class U_I18N_API Usage : public UMemory {
 
     Usage() : fUsage(nullptr), fLength(0), fError(U_ZERO_ERROR) {}
 
-    // To allow NumberFormatterImpl to access fUsage.
+    // Allow NumberFormatterImpl to access fUsage.
     friend class impl::NumberFormatterImpl;
 
-    // To allow MacroProps/MicroProps to initialize empty instances:
+    // Allow MacroProps/MicroProps to initialize empty instances.
     friend struct impl::MacroProps;
+
+#endif // U_HIDE_INTERNAL_API
 };
 
 // Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
