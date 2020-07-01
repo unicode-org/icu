@@ -41,6 +41,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
             return;
         }
 
+        outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnit);
         converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
                                                            preference.geq, conversionRates, status);
         if (U_FAILURE(status)) {
@@ -49,7 +50,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     }
 }
 
-MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) {
+MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) const {
     for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
         const auto &converterPreference = *converterPreferences_[i];
 
@@ -61,6 +62,10 @@ MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status
     // In case of the `quantity` does not fit in any converter limit, use the last converter.
     const auto &lastConverter = (*converterPreferences_[converterPreferences_.length() - 1]).converter;
     return lastConverter.convert(quantity, status);
+}
+
+const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
+    return &outputUnits_;
 }
 
 U_NAMESPACE_END

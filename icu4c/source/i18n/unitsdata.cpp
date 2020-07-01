@@ -410,7 +410,7 @@ void U_I18N_API UnitPreferences::getPreferencesFor(StringPiece category, StringP
     if (U_FAILURE(status)) { return; }
     U_ASSERT(idx >= 0); // Failures should have been taken care of by `status`.
     const UnitPreferenceMetadata *m = metadata_[idx];
-    outPreferences = unitPrefs_.getConstAlias() + m->prefsOffset;
+    outPreferences = unitPrefs_.getAlias() + m->prefsOffset;
     preferenceCount = m->prefsCount;
 }
 
