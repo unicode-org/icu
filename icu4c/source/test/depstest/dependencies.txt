@@ -979,6 +979,8 @@ group: number_output
     number_representation format formatted_value_sbimpl
     # PluralRules internals:
     unifiedcache
+    # Unit Formatting
+    units
 
 group: numberformatter
     # ICU 60+ NumberFormatter API
@@ -990,11 +992,11 @@ group: numberformatter
     number_mapper.o number_modifiers.o number_multiplier.o
     number_notation.o number_padding.o
     number_patternmodifier.o number_patternstring.o number_rounding.o
-    number_scientific.o
+    number_scientific.o number_usageprefs.o
     currpinf.o dcfmtsym.o numsys.o
     numrange_fluent.o numrange_impl.o
   deps
-    decnumber double_conversion formattable units
+    decnumber double_conversion formattable units unitsformatter
     number_representation number_output
     uclean_i18n common
 

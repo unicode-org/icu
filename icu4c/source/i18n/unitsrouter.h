@@ -75,9 +75,21 @@ class U_I18N_API UnitsRouter {
   public:
     UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
 
-    MaybeStackVector<Measure> route(double quantity, UErrorCode &status);
+    MaybeStackVector<Measure> route(double quantity, UErrorCode &status) const;
+
+    /**
+     * Returns the list of possible output units, i.e. the full set of
+     * preferences, for the localized, usage-specific unit preferences.
+     *
+     * The returned pointer should be valid for the lifetime of the
+     * UnitsRouter instance.
+     */
+    const MaybeStackVector<MeasureUnit> *getOutputUnits() const;
 
   private:
+    // List of possible output units
+    MaybeStackVector<MeasureUnit> outputUnits_;
+
     MaybeStackVector<ConverterPreference> converterPreferences_;
 };
 

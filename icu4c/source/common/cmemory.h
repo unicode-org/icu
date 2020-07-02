@@ -324,11 +324,6 @@ public:
      */
     T *getAlias() const { return ptr; }
     /**
-     * Access without ownership change.
-     * @return the array pointer
-     */
-    const T *getConstAlias() const { return ptr; }
-    /**
      * Returns the array limit. Simple convenience method.
      * @return getAlias()+getCapacity()
      */
@@ -793,12 +788,12 @@ public:
         return this->fCount;
     }
 
-    T** getAlias() const {
+    T** getAlias() {
         return this->fPool.getAlias();
     }
 
-    const T *const *getConstAlias() const {
-        return this->fPool.getConstAlias();
+    const T *const *getAlias() const {
+        return this->fPool.getAlias();
     }
 
     /**
@@ -822,7 +817,7 @@ public:
     }
 
     /**
-     * Append all the items from another MaybeStackVector to this one.
+     * Append copies of all the items from another MaybeStackVector to this one.
      */
     void appendAll(const MaybeStackVector& other, UErrorCode& status) {
         for (int32_t i = 0; i < other.fCount; i++) {
