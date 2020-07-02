@@ -28,15 +28,15 @@ struct ConversionRate {
     bool reciprocal = false;
 };
 
-enum U_I18N_API UnitsConvertibilityState {
+enum U_I18N_API Convertibility {
     RECIPROCAL,
     CONVERTIBLE,
     UNCONVERTIBLE,
 };
 
-MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
-                                               const ConversionRates &conversionRates,
-                                               UErrorCode &status);
+MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source,
+                                                   const ConversionRates &conversionRates,
+                                                   UErrorCode &status);
 
 /**
  * Check if the convertibility between `source` and `target`.
@@ -49,10 +49,10 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
  *    Only works with SINGLE and COMPOUND units. If one of the units is a
  *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
-UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
-                                                        const MeasureUnit &target,
-                                                        const ConversionRates &conversionRates,
-                                                        UErrorCode &status);
+UnitsConvertibilityState U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
+                                                          const MeasureUnitImpl &target,
+                                                          const ConversionRates &conversionRates,
+                                                          UErrorCode &status);
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.

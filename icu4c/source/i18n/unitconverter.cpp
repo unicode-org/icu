@@ -347,7 +347,7 @@ UBool checkSimpleUnit(const MeasureUnit &unit, UErrorCode &status) {
  *  Extract conversion rate from `source` to `target`
  */
 void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &source,
-                        const MeasureUnit &target, UnitsConvertibilityState unitsState,
+                        const MeasureUnit &target, Convertibility unitsState,
                         const ConversionRates &ratesInfo, UErrorCode &status) {
     // Represents the conversion factor from the source to the target.
     Factor finalFactor;
@@ -359,9 +359,9 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 
     // Merger Factors
     finalFactor.multiplyBy(sourceToBase);
-    if (unitsState == UnitsConvertibilityState::CONVERTIBLE) {
+    if (unitsState == Convertibility::CONVERTIBLE) {
         finalFactor.divideBy(targetToBase);
-    } else if (unitsState == UnitsConvertibilityState::RECIPROCAL) {
+    } else if (unitsState == Convertibility::RECIPROCAL) {
         finalFactor.multiplyBy(targetToBase);
     } else {
         status = UErrorCode::U_ARGUMENT_TYPE_MISMATCH;
@@ -381,7 +381,24 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
             targetToBase.offset * targetToBase.factorDen / targetToBase.factorNum;
     }
 
-    conversionRate.reciprocal = unitsState == UnitsConvertibilityState::RECIPROCAL;
+    conversionRate.reciprocal = unitsState == Convertibility::RECIPROCAL;
+}
+
+/**
+ * Merge all the units in the `MeasureUnitImpl` with taking into consideration only the dimensionality.
+ * For example:
+ *      `square-meter-per-centimeter` will be `meter`
+ *      `cubic-millimeter-per-decameter` will be `square-meter`
+ *
+ * Because in some applications, such checking the convertibility, we only care about the dimensionality
+ * of the units, not their SI-Prefixes.
+ */
+MeasureUnitImpl simplifyWithNoSiPrefixes(const MeasureUnitImpl &sourceUnitImpl, UErrorCode &status) {
+    MeasureUnitImpl result;
+    const auto& singleUnits = sourceUnitImpl.units;
+    for (int32_t i = 0 , n = singleUnits.length() ; i < n ; ++i) {
+        
+    }
 }
 
 } // namespace
@@ -390,21 +407,20 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
  * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
  */
-MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
-                                               const ConversionRates &conversionRates,
-                                               UErrorCode &status) {
-    MeasureUnit result;
-    int32_t count;
-    const auto singleUnits = source.splitToSingleUnits(count, status);
+MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source,
+                                                   const ConversionRates &conversionRates,
+                                                   UErrorCode &status) {
+
+    MeasureUnitImpl result;
     if (U_FAILURE(status)) return result;
 
-    for (int i = 0; i < count; ++i) {
-        const auto &singleUnit = singleUnits[i];
+    const auto &singleUnits = source.units;
+    for (int i = 0, count = singleUnits.length(); i < count; ++i) {
+        const auto &singleUnit = *singleUnits[i];
         // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
         // we will use `meter`
-        const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
         const auto rateInfo =
-            conversionRates.extractConversionInfo(singleUnitImpl.getSimpleUnitID(), status);
+            conversionRates.extractConversionInfo(singleUnit.getSimpleUnitID(), status);
         if (U_FAILURE(status)) {
             return result;
         }
@@ -415,14 +431,13 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
 
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
         // must be p4-meter. (NOTE: hectare --> square-meter)
-        auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
-
-        int32_t baseUnitsCount;
-        auto baseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCount, status);
-        for (int j = 0; j < baseUnitsCount; j++) {
-            int8_t newDimensionality =
-                baseUnits[j].getDimensionality(status) * singleUnit.getDimensionality(status);
-            result = result.product(baseUnits[j].withDimensionality(newDimensionality, status), status);
+        auto baseUnits =
+            MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).units;
+        for (int32_t baseUnitIndex = 0, baseUnitsCount = baseUnits.length();
+             baseUnitIndex < baseUnitsCount; baseUnitIndex++) {
+            baseUnits[baseUnitIndex]->dimensionality *= singleUnit.dimensionality;
+            // TODO: Deal with SI-prefix
+            result.append(*baseUnits[baseUnitIndex], status);
 
             if (U_FAILURE(status)) {
                 return result;
@@ -433,23 +448,45 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
     return result;
 }
 
-UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
-                                                        const MeasureUnit &target,
-                                                        const ConversionRates &conversionRates,
-                                                        UErrorCode &status) {
-    if (source.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
-        target.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+/**
+ * Check if the convertibility between `source` and `target`.
+ * For example:
+ *    `meter` and `foot` are `CONVERTIBLE`.
+ *    `meter-per-second` and `second-per-meter` are `RECIPROCAL`.
+ *    `meter` and `pound` are `UNCONVERTIBLE`.
+ *
+ * NOTE:
+ *    Only works with SINGLE and COMPOUND units. If one of the units is a
+ *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
+ */
+
+Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
+                                                const MeasureUnitImpl &target,
+                                                const ConversionRates &conversionRates,
+                                                UErrorCode &status) {
+
+    if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return UNCONVERTIBLE;
     }
 
-    auto sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
-    auto targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
+    MeasureUnitImpl sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
+    MeasureUnitImpl targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
 
-    if (U_FAILURE(status)) return UNCONVERTIBLE;
+    if (U_FAILURE(status)) {
+        return UNCONVERTIBLE;
+    }
 
-    if (sourceBaseUnit == targetBaseUnit) return CONVERTIBLE;
-    if (sourceBaseUnit == targetBaseUnit.reciprocal(status)) return RECIPROCAL;
+    if (sourceBaseUnit.identifier == targetBaseUnit.identifier.toStringPiece()) return CONVERTIBLE;
+
+    // Check if the source and the target are reciprocal to each other.
+    MeasureUnitImpl targetReciprocal = targetBaseUnit.copy(status);
+    targetReciprocal.takeReciprocal(status);
+    if (U_FAILURE(status)) {
+        return UNCONVERTIBLE;
+    }
+    if (sourceBaseUnit.identifier == targetReciprocal.identifier.toStringPiece()) return RECIPROCAL;
 
     auto sourceSimplified = sourceBaseUnit.simplify(status);
     auto targetSimplified = targetBaseUnit.simplify(status);
@@ -469,9 +506,9 @@ UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, const Conve
         return;
     }
 
-    UnitsConvertibilityState unitsState = checkConvertibility(source, target, ratesInfo, status);
+    Convertibility unitsState = extractConvertibility(source, target, ratesInfo, status);
     if (U_FAILURE(status)) return;
-    if (unitsState == UnitsConvertibilityState::UNCONVERTIBLE) {
+    if (unitsState == Convertibility::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
