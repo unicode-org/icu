@@ -187,6 +187,11 @@ struct MeasureUnitImpl : public UMemory {
         return result;
     }
 
+    bool operator==(const MeasureUnitImpl& other);
+
+    /** Returns the reciprocal of this `MeasureUnitImpl`. */
+    MeasureUnitImpl reciprocal(UErrorCode& status);
+
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);
 
@@ -197,6 +202,13 @@ struct MeasureUnitImpl : public UMemory {
      * it is never added: the return value will always be false.
      */
     bool append(const SingleUnitImpl& singleUnit, UErrorCode& status);
+
+    /**
+     * Mutates this MeasureUnitImpl to append all the single units in `singleUnits`.
+     *
+     * @return true if at least one item has been added.
+     */
+    bool append(const MaybeStackVector<SingleUnitImpl> &singleUnits, UErrorCode &status);
 
     /** The complexity, either SINGLE, COMPOUND, or MIXED. */
     UMeasureUnitComplexity complexity = UMEASURE_UNIT_SINGLE;

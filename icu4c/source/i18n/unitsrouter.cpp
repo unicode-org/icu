@@ -10,6 +10,7 @@
 
 #include "cmemory.h"
 #include "cstring.h"
+#include "measunit_impl.h"
 #include "number_decimalquantity.h"
 #include "resource.h"
 #include "unitconverter.h" // for extractCompoundBaseUnit
@@ -26,7 +27,9 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     ConversionRates conversionRates(status);
     UnitPreferences prefs(status);
 
-    MeasureUnit baseUnit = extractCompoundBaseUnit(inputUnit, conversionRates, status);
+    MeasureUnitImpl inputUnitImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(inputUnit, status);
+    MeasureUnit baseUnit =
+        (extractCompoundBaseUnit(inputUnitImpl, conversionRates, status)).build(status);
     CharString category = getUnitCategory(baseUnit.getIdentifier(), status);
 
     const UnitPreference *const *unitPreferences;
@@ -64,9 +67,7 @@ MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status
     return lastConverter.convert(quantity, status);
 }
 
-const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
-    return &outputUnits_;
-}
+const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const { return &outputUnits_; }
 
 U_NAMESPACE_END
 

@@ -8,6 +8,7 @@
 #define __UNITCONVERTER_H__
 
 #include "cmemory.h"
+#include "measunit_impl.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unitconverter.h"
@@ -49,10 +50,16 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
  *    Only works with SINGLE and COMPOUND units. If one of the units is a
  *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
-UnitsConvertibilityState U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
-                                                          const MeasureUnitImpl &target,
-                                                          const ConversionRates &conversionRates,
-                                                          UErrorCode &status);
+Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
+                                                const MeasureUnitImpl &target,
+                                                const ConversionRates &conversionRates,
+                                                UErrorCode &status);
+
+// TODO: Remove this function after move to use `MeasureUnitImpl`.
+Convertibility U_I18N_API extractConvertibility(const MeasureUnit &source,              //
+                                                const MeasureUnit &target,              //
+                                                const ConversionRates &conversionRates, //
+                                                UErrorCode &status);
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.

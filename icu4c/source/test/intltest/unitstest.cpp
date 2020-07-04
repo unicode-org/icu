@@ -68,16 +68,17 @@ void UnitsTest::testConversionCapability() {
     struct TestCase {
         const char *const source;
         const char *const target;
-        const UnitsConvertibilityState expectedState;
+        const Convertibility expectedState;
     } testCases[]{
-        {"meter", "foot", CONVERTIBLE},                                         //
-        {"kilometer", "foot", CONVERTIBLE},                                     //
-        {"hectare", "square-foot", CONVERTIBLE},                                //
-        {"kilometer-per-second", "second-per-meter", RECIPROCAL},               //
-        {"square-meter", "square-foot", CONVERTIBLE},                           //
-        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},               //
-        {"square-hectare", "p4-foot", CONVERTIBLE},                             //
-        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL}, //
+        {"meter", "foot", CONVERTIBLE},                                              //
+        {"kilometer", "foot", CONVERTIBLE},                                          //
+        {"hectare", "square-foot", CONVERTIBLE},                                     //
+        {"kilometer-per-second", "second-per-meter", RECIPROCAL},                    //
+        {"square-meter", "square-foot", CONVERTIBLE},                                //
+        {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                    //
+        {"square-hectare", "p4-foot", CONVERTIBLE},                                  //
+        {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},      //
+        {"cubic-kilometer-per-second-meter", "second-per-square-meter", RECIPROCAL}, //
     };
 
     for (const auto &testCase : testCases) {
@@ -87,7 +88,7 @@ void UnitsTest::testConversionCapability() {
         MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
-        auto convertibility = checkConvertibility(source, target, conversionRates, status);
+        auto convertibility = extractConvertibility(source, target, conversionRates, status);
 
         assertEquals(UnicodeString("Conversion Capability: ") + testCase.source + " to " +
                          testCase.target,
@@ -320,8 +321,8 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
                      expected, commentConversionFormula.length(), commentConversionFormula.data());
 
     // Convertibility:
-    auto convertibility = checkConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
-    if (status.errIfFailureAndReset("checkConvertibility(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
+    auto convertibility = extractConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
+    if (status.errIfFailureAndReset("extractConvertibility(<%s>, <%s>, ...)", sourceUnit.getIdentifier(),
                                     targetUnit.getIdentifier())) {
         return;
     }

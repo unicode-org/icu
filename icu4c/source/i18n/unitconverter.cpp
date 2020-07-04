@@ -385,6 +385,27 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 }
 
 /**
+ * Merges the `shouldBeAdded` single unit into the `simplifiedSingleUnits` without its SI prefixes.
+ * Thus means if the simplified identifier of the `shouldBeAdded` unit is exit in the
+ * `simplifiedSingleUnits`, the dimensionality will be added to the match. Otherwise, the `shouldBeAdded`
+ * unit will be added to the `simplifiedSingleUnits` without its SI prefix.
+ */
+void mergeWithNoSiPrefix(MaybeStackVector<SingleUnitImpl> &simplifiedSingleUnits,
+                         const SingleUnitImpl &shouldBeAdded, UErrorCode &status) {
+    for (int32_t i = 0; i < simplifiedSingleUnits.length(); i++) {
+        auto &simplifiedUnit = *simplifiedSingleUnits[i];
+        if (simplifiedUnit.getSimpleUnitID() == shouldBeAdded.getSimpleUnitID()) {
+            simplifiedUnit.dimensionality += shouldBeAdded.dimensionality;
+            return;
+        }
+    }
+
+    SingleUnitImpl simplifiedUnit = shouldBeAdded;
+    simplifiedUnit.siPrefix = UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE;
+    simplifiedSingleUnits.emplaceBackAndCheckErrorCode(status, simplifiedUnit);
+}
+
+/**
  * Merge all the units in the `MeasureUnitImpl` with taking into consideration only the dimensionality.
  * For example:
  *      `square-meter-per-centimeter` will be `meter`
@@ -395,10 +416,15 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
  */
 MeasureUnitImpl simplifyWithNoSiPrefixes(const MeasureUnitImpl &sourceUnitImpl, UErrorCode &status) {
     MeasureUnitImpl result;
-    const auto& singleUnits = sourceUnitImpl.units;
-    for (int32_t i = 0 , n = singleUnits.length() ; i < n ; ++i) {
-        
+    const auto &singleUnits = sourceUnitImpl.units;
+    MaybeStackVector<SingleUnitImpl> simplifiedSingleUnits;
+    for (int32_t i = 0, n = singleUnits.length(); i < n; ++i) {
+        mergeWithNoSiPrefix(simplifiedSingleUnits, *singleUnits[i], status);
+        if (U_FAILURE(status)) return result;
     }
+
+    result.append(simplifiedSingleUnits, status);
+    return result;
 }
 
 } // namespace
@@ -433,11 +459,10 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
         // must be p4-meter. (NOTE: hectare --> square-meter)
         auto baseUnits =
             MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).units;
-        for (int32_t baseUnitIndex = 0, baseUnitsCount = baseUnits.length();
-             baseUnitIndex < baseUnitsCount; baseUnitIndex++) {
-            baseUnits[baseUnitIndex]->dimensionality *= singleUnit.dimensionality;
+        for (int32_t i = 0, baseUnitsCount = baseUnits.length(); i < baseUnitsCount; i++) {
+            baseUnits[i]->dimensionality *= singleUnit.dimensionality;
             // TODO: Deal with SI-prefix
-            result.append(*baseUnits[baseUnitIndex], status);
+            result.append(*baseUnits[i], status);
 
             if (U_FAILURE(status)) {
                 return result;
@@ -445,7 +470,7 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
         }
     }
 
-    return result;
+    return std::move(result);
 }
 
 /**
@@ -473,40 +498,44 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
 
     MeasureUnitImpl sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
     MeasureUnitImpl targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
+    if (U_FAILURE(status)) return UNCONVERTIBLE;
 
-    if (U_FAILURE(status)) {
-        return UNCONVERTIBLE;
-    }
+    if (sourceBaseUnit == targetBaseUnit) return CONVERTIBLE;
+    if (sourceBaseUnit == targetBaseUnit.reciprocal(status) && !U_FAILURE(status)) return RECIPROCAL;
 
-    if (sourceBaseUnit.identifier == targetBaseUnit.identifier.toStringPiece()) return CONVERTIBLE;
-
-    // Check if the source and the target are reciprocal to each other.
-    MeasureUnitImpl targetReciprocal = targetBaseUnit.copy(status);
-    targetReciprocal.takeReciprocal(status);
-    if (U_FAILURE(status)) {
-        return UNCONVERTIBLE;
-    }
-    if (sourceBaseUnit.identifier == targetReciprocal.identifier.toStringPiece()) return RECIPROCAL;
-
-    auto sourceSimplified = sourceBaseUnit.simplify(status);
-    auto targetSimplified = targetBaseUnit.simplify(status);
+    auto sourceSimplified = simplifyWithNoSiPrefixes(sourceBaseUnit, status);
+    auto targetSimplified = simplifyWithNoSiPrefixes(targetBaseUnit, status);
+    if (U_FAILURE(status)) return UNCONVERTIBLE;
 
     if (sourceSimplified == targetSimplified) return CONVERTIBLE;
-    if (sourceSimplified == targetSimplified.reciprocal(status)) return RECIPROCAL;
+    if (sourceSimplified == targetSimplified.reciprocal(status) && !U_FAILURE(status)) return RECIPROCAL;
 
     return UNCONVERTIBLE;
+}
+
+Convertibility U_I18N_API extractConvertibility(const MeasureUnit &source,              //
+                                                const MeasureUnit &target,              //
+                                                const ConversionRates &conversionRates, //
+                                                UErrorCode &status) {
+    MeasureUnitImpl sourceImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(source, status);
+    MeasureUnitImpl targetImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(target, status);
+    return extractConvertibility(sourceImpl, targetImpl, conversionRates, status);
 }
 
 UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
                              UErrorCode &status) {
 
-    if (source.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
-        target.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+    auto sourceImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(source, status);
+    auto targetImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(target, status);
+    if (U_FAILURE(status)) return;
+
+    if (sourceImpl.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        targetImpl.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    Convertibility unitsState = extractConvertibility(source, target, ratesInfo, status);
+    Convertibility unitsState = extractConvertibility(sourceImpl, targetImpl, ratesInfo, status);
     if (U_FAILURE(status)) return;
     if (unitsState == Convertibility::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;
