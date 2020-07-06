@@ -15,6 +15,8 @@
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+namespace impl {
 
 /**
  *  Converts from single or compound unit to single, compound or mixed units.
@@ -60,6 +62,8 @@ class U_I18N_API ComplexUnitsConverter {
     MaybeStackVector<MeasureUnit> units_;
 };
 
+} // namespace impl
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__COMPLEXUNITSCONVERTER_H__

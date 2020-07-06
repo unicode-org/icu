@@ -19,6 +19,8 @@
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+namespace impl {
 
 /**
  * Contains the complex unit converter and the limit which representing the smallest value that the
@@ -93,6 +95,8 @@ class U_I18N_API UnitsRouter {
     MaybeStackVector<ConverterPreference> converterPreferences_;
 };
 
+} // namespace impl
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__UNITSROUTER_H__

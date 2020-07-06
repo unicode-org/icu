@@ -21,9 +21,6 @@ namespace impl {
 
 namespace {
 
-// TODO(hugovdm): move other units code into units::impl then remove this:
-using namespace icu;
-
 /* Internal Structure */
 
 enum Constants {

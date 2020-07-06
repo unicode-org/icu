@@ -12,6 +12,8 @@
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
+using ::icu::units::impl::UnitsRouter;
+
 /**
  * A MicroPropsGenerator which uses UnitsRouter to produce output converted to a
  * MeasureUnit appropriate for a particular localized usage: see

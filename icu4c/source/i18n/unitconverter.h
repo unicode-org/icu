@@ -93,10 +93,6 @@ class U_I18N_API UnitConverter : public UMemory {
 
 } // namespace impl
 } // namespace units
-
-// TODO(hugovdm): move other units code into units::impl then remove this:
-using namespace units::impl; // Enable clients to not know about units::impl;
-
 U_NAMESPACE_END
 
 #endif //__UNITCONVERTER_H__

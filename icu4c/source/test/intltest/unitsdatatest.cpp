@@ -6,6 +6,8 @@
 #include "unitsdata.h"
 #include "intltest.h"
 
+using namespace ::icu::units::impl;
+
 class UnitsDataTest : public IntlTest {
   public:
     UnitsDataTest() {}

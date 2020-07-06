@@ -15,6 +15,8 @@
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+namespace impl {
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
                                              const MeasureUnit &outputUnits,
@@ -123,6 +125,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
     return result;
 }
 
+} // namespace impl
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -18,6 +18,8 @@
 #include "uresimp.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+namespace impl {
 
 UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
                          UErrorCode &status) {
@@ -68,6 +70,8 @@ const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
     return &outputUnits_;
 }
 
+} // namespace impl
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
