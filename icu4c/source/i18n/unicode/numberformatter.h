@@ -158,6 +158,7 @@ struct UFormattedNumberImpl;
 class MutablePatternModifier;
 class ImmutablePatternModifier;
 struct DecimalFormatWarehouse;
+class UsagePrefsHandler;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -767,6 +768,11 @@ class U_I18N_API Precision : public UMemory {
 
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
+
+    // TODO(units): revisit when UnitsRouter is changed: do we still need this
+    // once Precision is returned by UnitsRouter? For now, we allow access to
+    // Precision constructor from UsagePrefsHandler:
+    friend class impl::UsagePrefsHandler;
 };
 
 /**
@@ -1127,6 +1133,56 @@ class U_I18N_API Scale : public UMemory {
 
 namespace impl {
 
+// Do not enclose entire Usage with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
+/**
+ * Manages NumberFormatterSettings::usage()'s char* instance on the heap.
+ * @internal
+ */
+class U_I18N_API Usage : public UMemory {
+
+#ifndef U_HIDE_INTERNAL_API
+
+  public:
+    /** @internal */
+    Usage(const Usage& other);
+
+    /** @internal */
+    Usage& operator=(const Usage& other);
+
+    /** @internal */
+    Usage(Usage &&src) U_NOEXCEPT;
+
+    /** @internal */
+    Usage& operator=(Usage&& src) U_NOEXCEPT;
+
+    /** @internal */
+    ~Usage();
+
+    /** @internal */
+    int16_t length() const { return fLength; }
+
+    /** @internal */
+    void set(StringPiece value);
+
+    /** @internal */
+    bool isSet() const { return fLength > 0; }
+
+  private:
+    char *fUsage;
+    int16_t fLength;
+    UErrorCode fError;
+
+    Usage() : fUsage(nullptr), fLength(0), fError(U_ZERO_ERROR) {}
+
+    // Allow NumberFormatterImpl to access fUsage.
+    friend class impl::NumberFormatterImpl;
+
+    // Allow MacroProps/MicroProps to initialize empty instances.
+    friend struct impl::MacroProps;
+
+#endif // U_HIDE_INTERNAL_API
+};
+
 // Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API SymbolsWrapper : public UMemory {
@@ -1411,6 +1467,9 @@ struct U_I18N_API MacroProps : public UMemory {
     Scale scale;  // = Scale();  (benign value)
 
     /** @internal */
+    Usage usage;  // = Usage();  (no usage)
+
+    /** @internal */
     const AffixPatternProvider* affixProvider = nullptr;  // no ownership
 
     /** @internal */
@@ -1599,6 +1658,9 @@ class U_I18N_API NumberFormatterSettings {
      *
      * If a per-unit is specified without a primary unit via {@link #unit}, the behavior is undefined.
      *
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
+     *
      * @param perUnit
      *            The unit to render in the denominator.
      * @return The fluent chain
@@ -1609,6 +1671,9 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Overload of perUnit() for use on an rvalue reference.
+     *
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -1624,6 +1689,9 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Note: consider using the MeasureFormat factory methods that return by value.
      *
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
+     *
      * @param perUnit
      *            The unit to render in the denominator.
      * @return The fluent chain.
@@ -1635,6 +1703,9 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Overload of adoptPerUnit() for use on an rvalue reference.
+     *
+     * TODO(units): add proper support for COMPOUND and MIXED units.
+     * Specify behaviour here, test intended behaviour...
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -2072,6 +2143,15 @@ class U_I18N_API NumberFormatterSettings {
      *
      * Setting usage to an empty string clears the usage (disables usage-based
      * localized formatting).
+     *
+     * Setting a usage string but not a correct input unit will result in an
+     * U_ILLEGAL_ARGUMENT_ERROR.
+     *
+     * TODO(units): When setting both usage and rounding/precision behaviour via
+     * NumberFormatterSetter, we think we want the latter to override any
+     * skeleton in the UnitPreferences. Add unit tests to demontrate desired
+     * behaviour, fix macrosToMicroGenerator to handle this correctly, and
+     * update this documentation.
      *
      * @param usage A `usage` parameter from the units resource. See the
      * unitPreferenceData in *source/data/misc/units.txt*, generated from

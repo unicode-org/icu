@@ -88,6 +88,10 @@ RouteResult UnitsRouter::route(double quantity, UErrorCode &status) {
     };
 }
 
+const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
+    return &outputUnits_;
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
