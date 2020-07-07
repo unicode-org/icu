@@ -16,6 +16,47 @@
 U_NAMESPACE_BEGIN
 namespace units {
 
+/* Internal Structure */
+
+enum Constants {
+    CONSTANT_FT2M,    // ft2m stands for foot to meter.
+    CONSTANT_PI,      // PI
+    CONSTANT_GRAVITY, // Gravity
+    CONSTANT_G,
+    CONSTANT_GAL_IMP2M3, // Gallon imp to m3
+    CONSTANT_LB2KG,      // Pound to Kilogram
+
+    // Must be the last element.
+    CONSTANTS_COUNT
+};
+
+typedef enum SigNum {
+    NEGATIVE = -1,
+    POSITIVE = 1,
+} SigNum;
+
+/* Represents a conversion factor */
+struct Factor {
+    double factorNum = 1;
+    double factorDen = 1;
+    double offset = 0;
+    bool reciprocal = false;
+    int32_t constants[CONSTANTS_COUNT] = {};
+
+    void multiplyBy(const Factor &rhs);
+    void divideBy(const Factor &rhs);
+
+    // Apply the power to the factor.
+    void power(int32_t power);
+
+    // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
+    void flip();
+
+    // Apply SI prefix to the `Factor`
+    void applySiPrefix(UMeasureSIPrefix siPrefix);
+    void substituteConstants();
+};
+
 /**
  * Represents the conversion rate between `source` and `target`.
  */

@@ -18,36 +18,7 @@
 U_NAMESPACE_BEGIN
 namespace units {
 
-namespace {
-
-/* Internal Structure */
-
-enum Constants {
-    CONSTANT_FT2M,    // ft2m stands for foot to meter.
-    CONSTANT_PI,      // PI
-    CONSTANT_GRAVITY, // Gravity
-    CONSTANT_G,
-    CONSTANT_GAL_IMP2M3, // Gallon imp to m3
-    CONSTANT_LB2KG,      // Pound to Kilogram
-
-    // Must be the last element.
-    CONSTANTS_COUNT
-};
-
-typedef enum SigNum {
-    NEGATIVE = -1,
-    POSITIVE = 1,
-} SigNum;
-
-/* Represents a conversion factor */
-struct Factor {
-    double factorNum = 1;
-    double factorDen = 1;
-    double offset = 0;
-    bool reciprocal = false;
-    int32_t constants[CONSTANTS_COUNT] = {};
-
-    void multiplyBy(const Factor &rhs) {
+void Factor::multiplyBy(const Factor &rhs) {
         factorNum *= rhs.factorNum;
         factorDen *= rhs.factorDen;
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -60,7 +31,7 @@ struct Factor {
         offset = std::max(rhs.offset, offset);
     }
 
-    void divideBy(const Factor &rhs) {
+void Factor::divideBy(const Factor &rhs) {
         factorNum *= rhs.factorDen;
         factorDen *= rhs.factorNum;
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -73,8 +44,7 @@ struct Factor {
         offset = std::max(rhs.offset, offset);
     }
 
-    // Apply the power to the factor.
-    void power(int32_t power) {
+void Factor::power(int32_t power) {
         // multiply all the constant by the power.
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
             constants[i] *= power;
@@ -92,8 +62,7 @@ struct Factor {
         }
     }
 
-    // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
-    void flip() {
+void Factor::flip() {
         std::swap(factorNum, factorDen);
 
         for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -101,8 +70,7 @@ struct Factor {
         }
     }
 
-    // Apply SI prefix to the `Factor`
-    void applySiPrefix(UMeasureSIPrefix siPrefix) {
+void Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
         if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
 
         double siApplied = std::pow(10.0, std::abs(siPrefix));
@@ -115,7 +83,7 @@ struct Factor {
         factorNum *= siApplied;
     }
 
-    void substituteConstants() {
+void Factor::substituteConstants() {
         double constantsValues[CONSTANTS_COUNT];
 
         // TODO: Load those constant values from units data.
@@ -144,7 +112,8 @@ struct Factor {
             this->constants[i] = 0;
         }
     }
-};
+
+namespace {
 
 /* Helpers */
 
