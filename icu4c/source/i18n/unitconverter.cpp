@@ -154,44 +154,6 @@ double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
 }
 
 /*
- * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
- */
-void addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum, Factor &factor,
-                             UErrorCode &status) {
-
-    if (baseStr == "ft_to_m") {
-        factor.constants[CONSTANT_FT2M] += power * sigNum;
-    } else if (baseStr == "ft2_to_m2") {
-        factor.constants[CONSTANT_FT2M] += 2 * power * sigNum;
-    } else if (baseStr == "ft3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
-    } else if (baseStr == "in3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
-        factor.factorDen *= 12 * 12 * 12;
-    } else if (baseStr == "gal_to_m3") {
-        factor.factorNum *= 231;
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
-        factor.factorDen *= 12 * 12 * 12;
-    } else if (baseStr == "gal_imp_to_m3") {
-        factor.constants[CONSTANT_GAL_IMP2M3] += power * sigNum;
-    } else if (baseStr == "G") {
-        factor.constants[CONSTANT_G] += power * sigNum;
-    } else if (baseStr == "gravity") {
-        factor.constants[CONSTANT_GRAVITY] += power * sigNum;
-    } else if (baseStr == "lb_to_kg") {
-        factor.constants[CONSTANT_LB2KG] += power * sigNum;
-    } else if (baseStr == "PI") {
-        factor.constants[CONSTANT_PI] += power * sigNum;
-    } else {
-        if (sigNum == SigNum::NEGATIVE) {
-            factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
-        } else {
-            factor.factorNum *= std::pow(strToDouble(baseStr, status), power);
-        }
-    }
-}
-
-/*
   Adds single factor to a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
   However, complex factor are not included, such as "ft2m^3*200/3"
 */
@@ -355,6 +317,41 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 }
 
 } // namespace
+
+void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum,
+                                        Factor &factor, UErrorCode &status) {
+
+    if (baseStr == "ft_to_m") {
+        factor.constants[CONSTANT_FT2M] += power * sigNum;
+    } else if (baseStr == "ft2_to_m2") {
+        factor.constants[CONSTANT_FT2M] += 2 * power * sigNum;
+    } else if (baseStr == "ft3_to_m3") {
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+    } else if (baseStr == "in3_to_m3") {
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+        factor.factorDen *= 12 * 12 * 12;
+    } else if (baseStr == "gal_to_m3") {
+        factor.factorNum *= 231;
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+        factor.factorDen *= 12 * 12 * 12;
+    } else if (baseStr == "gal_imp_to_m3") {
+        factor.constants[CONSTANT_GAL_IMP2M3] += power * sigNum;
+    } else if (baseStr == "G") {
+        factor.constants[CONSTANT_G] += power * sigNum;
+    } else if (baseStr == "gravity") {
+        factor.constants[CONSTANT_GRAVITY] += power * sigNum;
+    } else if (baseStr == "lb_to_kg") {
+        factor.constants[CONSTANT_LB2KG] += power * sigNum;
+    } else if (baseStr == "PI") {
+        factor.constants[CONSTANT_PI] += power * sigNum;
+    } else {
+        if (sigNum == SigNum::NEGATIVE) {
+            factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
+        } else {
+            factor.factorNum *= std::pow(strToDouble(baseStr, status), power);
+        }
+    }
+}
 
 /**
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is

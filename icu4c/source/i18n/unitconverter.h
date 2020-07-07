@@ -57,6 +57,12 @@ struct Factor {
     void substituteConstants();
 };
 
+/*
+ * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
+ */
+void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum,
+                                        Factor &factor, UErrorCode &status);
+
 /**
  * Represents the conversion rate between `source` and `target`.
  */
