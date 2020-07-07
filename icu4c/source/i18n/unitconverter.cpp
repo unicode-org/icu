@@ -19,99 +19,99 @@ U_NAMESPACE_BEGIN
 namespace units {
 
 void Factor::multiplyBy(const Factor &rhs) {
-        factorNum *= rhs.factorNum;
-        factorDen *= rhs.factorDen;
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] += rhs.constants[i];
-        }
-
-        // NOTE
-        //  We need the offset when the source and the target are simple units. e.g. the source is
-        //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
-        offset = std::max(rhs.offset, offset);
+    factorNum *= rhs.factorNum;
+    factorDen *= rhs.factorDen;
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] += rhs.constants[i];
     }
+
+    // NOTE
+    //  We need the offset when the source and the target are simple units. e.g. the source is
+    //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
+    offset = std::max(rhs.offset, offset);
+}
 
 void Factor::divideBy(const Factor &rhs) {
-        factorNum *= rhs.factorDen;
-        factorDen *= rhs.factorNum;
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] -= rhs.constants[i];
-        }
-
-        // NOTE
-        //  We need the offset when the source and the target are simple units. e.g. the source is
-        //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
-        offset = std::max(rhs.offset, offset);
+    factorNum *= rhs.factorDen;
+    factorDen *= rhs.factorNum;
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] -= rhs.constants[i];
     }
+
+    // NOTE
+    //  We need the offset when the source and the target are simple units. e.g. the source is
+    //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
+    offset = std::max(rhs.offset, offset);
+}
 
 void Factor::power(int32_t power) {
-        // multiply all the constant by the power.
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] *= power;
-        }
-
-        bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
-                                     // the Numerator and Denominator.
-
-        factorNum = std::pow(factorNum, std::abs(power));
-        factorDen = std::pow(factorDen, std::abs(power));
-
-        if (shouldFlip) {
-            // Flip Numerator and Denominator.
-            std::swap(factorNum, factorDen);
-        }
+    // multiply all the constant by the power.
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] *= power;
     }
+
+    bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
+                                 // the Numerator and Denominator.
+
+    factorNum = std::pow(factorNum, std::abs(power));
+    factorDen = std::pow(factorDen, std::abs(power));
+
+    if (shouldFlip) {
+        // Flip Numerator and Denominator.
+        std::swap(factorNum, factorDen);
+    }
+}
 
 void Factor::flip() {
-        std::swap(factorNum, factorDen);
+    std::swap(factorNum, factorDen);
 
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] *= -1;
-        }
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] *= -1;
     }
+}
 
 void Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
-        if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
+    if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
 
-        double siApplied = std::pow(10.0, std::abs(siPrefix));
+    double siApplied = std::pow(10.0, std::abs(siPrefix));
 
-        if (siPrefix < 0) {
-            factorDen *= siApplied;
-            return;
-        }
-
-        factorNum *= siApplied;
+    if (siPrefix < 0) {
+        factorDen *= siApplied;
+        return;
     }
+
+    factorNum *= siApplied;
+}
 
 void Factor::substituteConstants() {
-        double constantsValues[CONSTANTS_COUNT];
+    double constantsValues[CONSTANTS_COUNT];
 
-        // TODO: Load those constant values from units data.
-        constantsValues[CONSTANT_FT2M] = 0.3048;
-        constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
-        constantsValues[CONSTANT_GRAVITY] = 9.80665;
-        constantsValues[CONSTANT_G] = 6.67408E-11;
-        constantsValues[CONSTANT_LB2KG] = 0.45359237;
-        constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
+    // TODO: Load those constant values from units data.
+    constantsValues[CONSTANT_FT2M] = 0.3048;
+    constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
+    constantsValues[CONSTANT_GRAVITY] = 9.80665;
+    constantsValues[CONSTANT_G] = 6.67408E-11;
+    constantsValues[CONSTANT_LB2KG] = 0.45359237;
+    constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
 
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            if (this->constants[i] == 0) {
-                continue;
-            }
-
-            auto absPower = std::abs(this->constants[i]);
-            SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
-            double absConstantValue = std::pow(constantsValues[i], absPower);
-
-            if (powerSig == SigNum::NEGATIVE) {
-                this->factorDen *= absConstantValue;
-            } else {
-                this->factorNum *= absConstantValue;
-            }
-
-            this->constants[i] = 0;
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        if (this->constants[i] == 0) {
+            continue;
         }
+
+        auto absPower = std::abs(this->constants[i]);
+        SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
+        double absConstantValue = std::pow(constantsValues[i], absPower);
+
+        if (powerSig == SigNum::NEGATIVE) {
+            this->factorDen *= absConstantValue;
+        } else {
+            this->factorNum *= absConstantValue;
+        }
+
+        this->constants[i] = 0;
     }
+}
 
 namespace {
 
