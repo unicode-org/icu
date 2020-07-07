@@ -14,6 +14,7 @@
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 /**
  * Represents the conversion rate between `source` and `target`.
@@ -89,6 +90,7 @@ class U_I18N_API UnitConverter : public UMemory {
     ConversionRate conversionRate_;
 };
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__UNITCONVERTER_H__

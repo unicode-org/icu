@@ -13,6 +13,7 @@
 #include "unicode/stringpiece.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 /**
  * Looks up the unit category of a base unit identifier.
@@ -190,6 +191,7 @@ class U_I18N_API UnitPreferences {
     MaybeStackVector<UnitPreference> unitPrefs_;
 };
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__GETUNITSDATA_H__
