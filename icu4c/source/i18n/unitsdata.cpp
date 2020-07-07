@@ -15,7 +15,6 @@
 
 U_NAMESPACE_BEGIN
 namespace units {
-namespace impl {
 
 namespace {
 
@@ -416,7 +415,6 @@ void U_I18N_API UnitPreferences::getPreferencesFor(StringPiece category, StringP
     preferenceCount = m->prefsCount;
 }
 
-} // namespace impl
 } // namespace units
 U_NAMESPACE_END
 

@@ -9,10 +9,11 @@
 #include "number_types.h"
 #include "unitsrouter.h"
 
-U_NAMESPACE_BEGIN namespace number {
+U_NAMESPACE_BEGIN
+namespace number {
 namespace impl {
 
-using ::icu::units::impl::UnitsRouter;
+using ::icu::units::UnitsRouter;
 
 /**
  * A MicroPropsGenerator which uses UnitsRouter to produce output converted to a

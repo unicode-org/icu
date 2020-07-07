@@ -31,7 +31,7 @@ struct UnitConversionTestCase {
 };
 
 using ::icu::number::impl::DecimalQuantity;
-using namespace ::icu::units::impl;
+using namespace ::icu::units;
 
 class UnitsTest : public IntlTest {
   public:

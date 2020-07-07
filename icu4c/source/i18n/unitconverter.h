@@ -15,7 +15,6 @@
 
 U_NAMESPACE_BEGIN
 namespace units {
-namespace impl {
 
 /**
  * Represents the conversion rate between `source` and `target`.
@@ -91,7 +90,6 @@ class U_I18N_API UnitConverter : public UMemory {
     ConversionRate conversionRate_;
 };
 
-} // namespace impl
 } // namespace units
 U_NAMESPACE_END
 
