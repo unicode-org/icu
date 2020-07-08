@@ -90,7 +90,7 @@ class U_I18N_API UnitsRouter {
   public:
     UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
 
-    RouteResult route(double quantity, UErrorCode &status);
+    RouteResult route(double quantity, UErrorCode &status) const;
 
     /**
      * Returns the list of possible output units, i.e. the full set of
