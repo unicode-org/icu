@@ -639,6 +639,9 @@
     <ClCompile Include="numparse_validators.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="numrange_capi.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="numrange_fluent.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

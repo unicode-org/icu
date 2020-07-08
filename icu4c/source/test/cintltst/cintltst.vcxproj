@@ -175,6 +175,7 @@
     <ClCompile Include="ulistfmttest.c" />
     <ClCompile Include="unumberformattertst.c" />
     <ClCompile Include="uformattedvaluetst.c" />
+    <ClCompile Include="unumberrangeformattertst.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cbiditst.h" />
