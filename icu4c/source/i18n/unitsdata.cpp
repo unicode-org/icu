@@ -14,6 +14,7 @@
 #include "util.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 namespace {
 
@@ -414,6 +415,7 @@ void U_I18N_API UnitPreferences::getPreferencesFor(StringPiece category, StringP
     preferenceCount = m->prefsCount;
 }
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

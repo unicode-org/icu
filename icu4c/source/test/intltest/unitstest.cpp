@@ -30,7 +30,8 @@ struct UnitConversionTestCase {
     const double expectedValue;
 };
 
-using icu::number::impl::DecimalQuantity;
+using ::icu::number::impl::DecimalQuantity;
+using namespace ::icu::units;
 
 class UnitsTest : public IntlTest {
   public:

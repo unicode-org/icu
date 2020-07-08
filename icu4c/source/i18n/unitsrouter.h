@@ -21,6 +21,7 @@
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 using number::Precision;
 
@@ -108,6 +109,7 @@ class U_I18N_API UnitsRouter {
     MaybeStackVector<ConverterPreference> converterPreferences_;
 };
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__UNITSROUTER_H__
