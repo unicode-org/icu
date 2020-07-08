@@ -905,6 +905,10 @@ void RBBITest::TestExtended() {
         case PARSE_DATA:
             if (c == u'•') {
                 int32_t  breakIdx = tp.dataToBreak.length();
+                if (tp.expectedBreaks->size() > breakIdx) {
+                    errln("rbbitst.txt:%d:%d adjacent expected breaks with no intervening test text",
+                          lineNum, column);
+                }
                 tp.expectedBreaks->setSize(breakIdx+1);
                 tp.expectedBreaks->setElementAt(-1, breakIdx);
                 tp.srcLine->setSize(breakIdx+1);
@@ -1069,6 +1073,10 @@ void RBBITest::TestExtended() {
                     tagValue = -1;
                 }
                 int32_t  breakIdx = tp.dataToBreak.length();
+                if (tp.expectedBreaks->size() > breakIdx) {
+                    errln("rbbitst.txt:%d:%d adjacent expected breaks with no intervening test text",
+                          lineNum, column);
+                }
                 tp.expectedBreaks->setSize(breakIdx+1);
                 tp.expectedBreaks->setElementAt(tagValue, breakIdx);
                 tp.srcLine->setSize(breakIdx+1);
