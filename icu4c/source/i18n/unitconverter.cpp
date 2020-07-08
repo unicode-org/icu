@@ -381,7 +381,7 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
         }
 
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
-        // must be p4-meter. (NOTE: hectare --> square-meter)
+        // must be pow4-meter. (NOTE: hectare --> square-meter)
         auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
 
         int32_t baseUnitsCount;
