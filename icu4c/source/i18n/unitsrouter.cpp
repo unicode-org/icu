@@ -59,6 +59,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
             }
         }
 
+        outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnit);
         converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
                                                            preference.geq, macroProps.precision,
                                                            conversionRates, status);
@@ -90,6 +91,8 @@ RouteResult UnitsRouter::route(double quantity, UErrorCode &status) const {
 }
 
 const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
+    // TODO: consider pulling this from converterPreferences_ and dropping
+    // outputUnits_?
     return &outputUnits_;
 }
 

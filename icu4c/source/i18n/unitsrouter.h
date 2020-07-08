@@ -103,7 +103,9 @@ class U_I18N_API UnitsRouter {
     const MaybeStackVector<MeasureUnit> *getOutputUnits() const;
 
   private:
-    // List of possible output units
+    // List of possible output units. TODO: converterPreferences_ now also has
+    // this data available. Maybe drop outputUnits_ and have getOutputUnits
+    // construct a the list from data in converterPreferences_ instead?
     MaybeStackVector<MeasureUnit> outputUnits_;
 
     MaybeStackVector<ConverterPreference> converterPreferences_;
