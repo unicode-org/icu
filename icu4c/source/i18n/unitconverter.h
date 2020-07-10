@@ -7,11 +7,11 @@
 #ifndef __UNITCONVERTER_H__
 #define __UNITCONVERTER_H__
 
-#include "cmemory.h"
-#include "unicode/errorcode.h"
 #include "unicode/measunit.h"
-#include "unitconverter.h"
+#include "unicode/stringpiece.h" // for StringPiece
+#include "unicode/uobject.h"     // for UMemory
 #include "unitsdata.h"
+#include <stdint.h> // for int32_t
 
 U_NAMESPACE_BEGIN
 namespace units {

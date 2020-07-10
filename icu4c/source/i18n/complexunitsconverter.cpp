@@ -6,13 +6,15 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <math.h>
-#include <utility>
 
 #include "cmemory.h"
 #include "complexunitsconverter.h"
 #include "uassert.h"
 #include "unicode/fmtable.h"
+#include "unicode/localpointer.h" // for LocalArray
+#include "unicode/measure.h"      // for Measure
 #include "unitconverter.h"
+#include <stdint.h> // for int32_t, int64_t
 
 U_NAMESPACE_BEGIN
 namespace units {

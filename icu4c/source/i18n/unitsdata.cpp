@@ -5,13 +5,16 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "number_decimalquantity.h"
 #include "cstring.h"
 #include "number_decimalquantity.h"
 #include "resource.h"
+#include "uassert.h"        // for U_ASSERT
+#include "unicode/unistr.h" // for UnicodeString
+#include "unicode/ures.h"   // for LocalUResourceBundlePointer, ure...
 #include "unitsdata.h"
 #include "uresimp.h"
 #include "util.h"
+#include <utility> // for move
 
 U_NAMESPACE_BEGIN
 namespace units {

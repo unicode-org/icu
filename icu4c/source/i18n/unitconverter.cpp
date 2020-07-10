@@ -5,15 +5,20 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <cmath>
-
 #include "charstr.h"
-#include "double-conversion.h"
+#include "cmemory.h"                            // for MaybeStackVector
+#include "double-conversion-string-to-double.h" // for StringToDoubleConverter
 #include "measunit_impl.h"
-#include "unicode/errorcode.h"
+#include "uassert.h"              // for U_ASSERT
+#include "unicode/localpointer.h" // for LocalArray
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
 #include "unitconverter.h"
+#include <algorithm> // for max
+#include <cmath>
+#include <cstdint>  // for int32_t, int8_t
+#include <stdlib.h> // for abs
+#include <utility>  // for swap
 
 U_NAMESPACE_BEGIN
 namespace units {
