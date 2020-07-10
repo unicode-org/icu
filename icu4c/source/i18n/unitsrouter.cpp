@@ -19,6 +19,7 @@
 #include "uresimp.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
                          UErrorCode &status) {
@@ -69,6 +70,7 @@ MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status
 
 const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const { return &outputUnits_; }
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

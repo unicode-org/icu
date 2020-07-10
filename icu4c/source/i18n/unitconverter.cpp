@@ -16,134 +16,104 @@
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
+
+void Factor::multiplyBy(const Factor &rhs) {
+    factorNum *= rhs.factorNum;
+    factorDen *= rhs.factorDen;
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] += rhs.constants[i];
+    }
+
+    // NOTE
+    //  We need the offset when the source and the target are simple units. e.g. the source is
+    //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
+    offset = std::max(rhs.offset, offset);
+}
+
+void Factor::divideBy(const Factor &rhs) {
+    factorNum *= rhs.factorDen;
+    factorDen *= rhs.factorNum;
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] -= rhs.constants[i];
+    }
+
+    // NOTE
+    //  We need the offset when the source and the target are simple units. e.g. the source is
+    //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
+    offset = std::max(rhs.offset, offset);
+}
+
+void Factor::power(int32_t power) {
+    // multiply all the constant by the power.
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] *= power;
+    }
+
+    bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
+                                 // the Numerator and Denominator.
+
+    factorNum = std::pow(factorNum, std::abs(power));
+    factorDen = std::pow(factorDen, std::abs(power));
+
+    if (shouldFlip) {
+        // Flip Numerator and Denominator.
+        std::swap(factorNum, factorDen);
+    }
+}
+
+void Factor::flip() {
+    std::swap(factorNum, factorDen);
+
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        constants[i] *= -1;
+    }
+}
+
+void Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
+    if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
+
+    double siApplied = std::pow(10.0, std::abs(siPrefix));
+
+    if (siPrefix < 0) {
+        factorDen *= siApplied;
+        return;
+    }
+
+    factorNum *= siApplied;
+}
+
+void Factor::substituteConstants() {
+    double constantsValues[CONSTANTS_COUNT];
+
+    // TODO: Load those constant values from units data.
+    constantsValues[CONSTANT_FT2M] = 0.3048;
+    constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
+    constantsValues[CONSTANT_GRAVITY] = 9.80665;
+    constantsValues[CONSTANT_G] = 6.67408E-11;
+    constantsValues[CONSTANT_LB2KG] = 0.45359237;
+    constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
+
+    for (int i = 0; i < CONSTANTS_COUNT; i++) {
+        if (this->constants[i] == 0) {
+            continue;
+        }
+
+        auto absPower = std::abs(this->constants[i]);
+        SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
+        double absConstantValue = std::pow(constantsValues[i], absPower);
+
+        if (powerSig == SigNum::NEGATIVE) {
+            this->factorDen *= absConstantValue;
+        } else {
+            this->factorNum *= absConstantValue;
+        }
+
+        this->constants[i] = 0;
+    }
+}
 
 namespace {
-
-/* Internal Structure */
-
-enum Constants {
-    CONSTANT_FT2M,    // ft2m stands for foot to meter.
-    CONSTANT_PI,      // PI
-    CONSTANT_GRAVITY, // Gravity
-    CONSTANT_G,
-    CONSTANT_GAL_IMP2M3, // Gallon imp to m3
-    CONSTANT_LB2KG,      // Pound to Kilogram
-
-    // Must be the last element.
-    CONSTANTS_COUNT
-};
-
-typedef enum SigNum {
-    NEGATIVE = -1,
-    POSITIVE = 1,
-} SigNum;
-
-/* Represents a conversion factor */
-struct Factor {
-    double factorNum = 1;
-    double factorDen = 1;
-    double offset = 0;
-    bool reciprocal = false;
-    int32_t constants[CONSTANTS_COUNT] = {};
-
-    void multiplyBy(const Factor &rhs) {
-        factorNum *= rhs.factorNum;
-        factorDen *= rhs.factorDen;
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] += rhs.constants[i];
-        }
-
-        // NOTE
-        //  We need the offset when the source and the target are simple units. e.g. the source is
-        //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
-        offset = std::max(rhs.offset, offset);
-    }
-
-    void divideBy(const Factor &rhs) {
-        factorNum *= rhs.factorDen;
-        factorDen *= rhs.factorNum;
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] -= rhs.constants[i];
-        }
-
-        // NOTE
-        //  We need the offset when the source and the target are simple units. e.g. the source is
-        //  celsius and the target is Fahrenheit. Therefore, we just keep the value using `std::max`.
-        offset = std::max(rhs.offset, offset);
-    }
-
-    // Apply the power to the factor.
-    void power(int32_t power) {
-        // multiply all the constant by the power.
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] *= power;
-        }
-
-        bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
-                                     // the Numerator and Denominator.
-
-        factorNum = std::pow(factorNum, std::abs(power));
-        factorDen = std::pow(factorDen, std::abs(power));
-
-        if (shouldFlip) {
-            // Flip Numerator and Denominator.
-            std::swap(factorNum, factorDen);
-        }
-    }
-
-    // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
-    void flip() {
-        std::swap(factorNum, factorDen);
-
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            constants[i] *= -1;
-        }
-    }
-
-    // Apply SI prefix to the `Factor`
-    void applySiPrefix(UMeasureSIPrefix siPrefix) {
-        if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
-
-        double siApplied = std::pow(10.0, std::abs(siPrefix));
-
-        if (siPrefix < 0) {
-            factorDen *= siApplied;
-            return;
-        }
-
-        factorNum *= siApplied;
-    }
-
-    void substituteConstants() {
-        double constantsValues[CONSTANTS_COUNT];
-
-        // TODO: Load those constant values from units data.
-        constantsValues[CONSTANT_FT2M] = 0.3048;
-        constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
-        constantsValues[CONSTANT_GRAVITY] = 9.80665;
-        constantsValues[CONSTANT_G] = 6.67408E-11;
-        constantsValues[CONSTANT_LB2KG] = 0.45359237;
-        constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
-
-        for (int i = 0; i < CONSTANTS_COUNT; i++) {
-            if (this->constants[i] == 0) {
-                continue;
-            }
-
-            auto absPower = std::abs(this->constants[i]);
-            SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
-            double absConstantValue = std::pow(constantsValues[i], absPower);
-
-            if (powerSig == SigNum::NEGATIVE) {
-                this->factorDen *= absConstantValue;
-            } else {
-                this->factorNum *= absConstantValue;
-            }
-
-            this->constants[i] = 0;
-        }
-    }
-};
 
 /* Helpers */
 
@@ -181,44 +151,6 @@ double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
     }
 
     return strToDouble(strWithDivide, status);
-}
-
-/*
- * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
- */
-void addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum, Factor &factor,
-                             UErrorCode &status) {
-
-    if (baseStr == "ft_to_m") {
-        factor.constants[CONSTANT_FT2M] += power * sigNum;
-    } else if (baseStr == "ft2_to_m2") {
-        factor.constants[CONSTANT_FT2M] += 2 * power * sigNum;
-    } else if (baseStr == "ft3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
-    } else if (baseStr == "in3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
-        factor.factorDen *= 12 * 12 * 12;
-    } else if (baseStr == "gal_to_m3") {
-        factor.factorNum *= 231;
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
-        factor.factorDen *= 12 * 12 * 12;
-    } else if (baseStr == "gal_imp_to_m3") {
-        factor.constants[CONSTANT_GAL_IMP2M3] += power * sigNum;
-    } else if (baseStr == "G") {
-        factor.constants[CONSTANT_G] += power * sigNum;
-    } else if (baseStr == "gravity") {
-        factor.constants[CONSTANT_GRAVITY] += power * sigNum;
-    } else if (baseStr == "lb_to_kg") {
-        factor.constants[CONSTANT_LB2KG] += power * sigNum;
-    } else if (baseStr == "PI") {
-        factor.constants[CONSTANT_PI] += power * sigNum;
-    } else {
-        if (sigNum == SigNum::NEGATIVE) {
-            factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
-        } else {
-            factor.factorNum *= std::pow(strToDouble(baseStr, status), power);
-        }
-    }
 }
 
 /*
@@ -429,6 +361,41 @@ MeasureUnitImpl simplifyWithNoSiPrefixes(const MeasureUnitImpl &sourceUnitImpl, 
 
 } // namespace
 
+void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum,
+                                        Factor &factor, UErrorCode &status) {
+
+    if (baseStr == "ft_to_m") {
+        factor.constants[CONSTANT_FT2M] += power * sigNum;
+    } else if (baseStr == "ft2_to_m2") {
+        factor.constants[CONSTANT_FT2M] += 2 * power * sigNum;
+    } else if (baseStr == "ft3_to_m3") {
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+    } else if (baseStr == "in3_to_m3") {
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+        factor.factorDen *= 12 * 12 * 12;
+    } else if (baseStr == "gal_to_m3") {
+        factor.factorNum *= 231;
+        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+        factor.factorDen *= 12 * 12 * 12;
+    } else if (baseStr == "gal_imp_to_m3") {
+        factor.constants[CONSTANT_GAL_IMP2M3] += power * sigNum;
+    } else if (baseStr == "G") {
+        factor.constants[CONSTANT_G] += power * sigNum;
+    } else if (baseStr == "gravity") {
+        factor.constants[CONSTANT_GRAVITY] += power * sigNum;
+    } else if (baseStr == "lb_to_kg") {
+        factor.constants[CONSTANT_LB2KG] += power * sigNum;
+    } else if (baseStr == "PI") {
+        factor.constants[CONSTANT_PI] += power * sigNum;
+    } else {
+        if (sigNum == SigNum::NEGATIVE) {
+            factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
+        } else {
+            factor.factorNum *= std::pow(strToDouble(baseStr, status), power);
+        }
+    }
+}
+
 /**
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
  * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
@@ -456,7 +423,7 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
         }
 
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
-        // must be p4-meter. (NOTE: hectare --> square-meter)
+        // must be pow4-meter. (NOTE: hectare --> square-meter)
         auto baseUnits =
             MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).units;
         for (int32_t i = 0, baseUnitsCount = baseUnits.length(); i < baseUnitsCount; i++) {
@@ -569,6 +536,7 @@ double UnitConverter::convert(double inputValue) const {
     return result * 1.000000000001;
 }
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

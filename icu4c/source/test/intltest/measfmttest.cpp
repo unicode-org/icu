@@ -3258,7 +3258,7 @@ void MeasureFormatTest::TestIdentifiers() {
         {"per-kilometer", "per-kilometer"},
 
         // Normalization of power and per
-        {"p2-foot-and-p2-mile", "square-foot-and-square-mile"},
+        {"pow2-foot-and-pow2-mile", "square-foot-and-square-mile"},
         {"gram-square-gram-per-dekagram", "cubic-gram-per-dekagram"},
         {"kilogram-per-meter-per-second", "kilogram-per-meter-second"},
 
@@ -3290,8 +3290,10 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
         "+meter",
         "-kilometer",
         "+kilometer",
-        "-p2-meter",
-        "+p2-meter",
+        "-pow2-meter",
+        "+pow2-meter",
+        "p2-meter",
+        "p4-meter",
         "+",
         "-",
         "-mile",
@@ -3347,8 +3349,8 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
 
     verifySingleUnit(squareMeter, UMEASURE_SI_PREFIX_ONE, 2, "square-meter");
     verifySingleUnit(overCubicCentimeter, UMEASURE_SI_PREFIX_CENTI, -3, "per-cubic-centimeter");
-    verifySingleUnit(quarticKilometer, UMEASURE_SI_PREFIX_KILO, 4, "p4-kilometer");
-    verifySingleUnit(overQuarticKilometer1, UMEASURE_SI_PREFIX_KILO, -4, "per-p4-kilometer");
+    verifySingleUnit(quarticKilometer, UMEASURE_SI_PREFIX_KILO, 4, "pow4-kilometer");
+    verifySingleUnit(overQuarticKilometer1, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
 
     assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
 
@@ -3361,9 +3363,9 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
         .reciprocal(status)
         .withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
 
-    verifySingleUnit(overQuarticKilometer2, UMEASURE_SI_PREFIX_KILO, -4, "per-p4-kilometer");
-    verifySingleUnit(overQuarticKilometer3, UMEASURE_SI_PREFIX_KILO, -4, "per-p4-kilometer");
-    verifySingleUnit(overQuarticKilometer4, UMEASURE_SI_PREFIX_KILO, -4, "per-p4-kilometer");
+    verifySingleUnit(overQuarticKilometer2, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
+    verifySingleUnit(overQuarticKilometer3, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
+    verifySingleUnit(overQuarticKilometer4, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
 
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer2);
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer3);
@@ -3442,17 +3444,17 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("kilometer equality", kilometer == kilometer2);
 
     // Test out-of-range powers
-    MeasureUnit power15 = MeasureUnit::forIdentifier("p15-kilometer", status);
-    verifySingleUnit(power15, UMEASURE_SI_PREFIX_KILO, 15, "p15-kilometer");
+    MeasureUnit power15 = MeasureUnit::forIdentifier("pow15-kilometer", status);
+    verifySingleUnit(power15, UMEASURE_SI_PREFIX_KILO, 15, "pow15-kilometer");
     status.errIfFailureAndReset();
-    MeasureUnit power16a = MeasureUnit::forIdentifier("p16-kilometer", status);
+    MeasureUnit power16a = MeasureUnit::forIdentifier("pow16-kilometer", status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     MeasureUnit power16b = power15.product(kilometer, status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
-    MeasureUnit powerN15 = MeasureUnit::forIdentifier("per-p15-kilometer", status);
-    verifySingleUnit(powerN15, UMEASURE_SI_PREFIX_KILO, -15, "per-p15-kilometer");
+    MeasureUnit powerN15 = MeasureUnit::forIdentifier("per-pow15-kilometer", status);
+    verifySingleUnit(powerN15, UMEASURE_SI_PREFIX_KILO, -15, "per-pow15-kilometer");
     status.errIfFailureAndReset();
-    MeasureUnit powerN16a = MeasureUnit::forIdentifier("per-p16-kilometer", status);
+    MeasureUnit powerN16a = MeasureUnit::forIdentifier("per-pow16-kilometer", status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     MeasureUnit powerN16b = powerN15.product(overQuarticKilometer1, status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
