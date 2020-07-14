@@ -97,34 +97,6 @@
 #
 #    $TOOLS_ROOT/cldr/cldr-to-icu/build-icu-data.xml
 #
-# The files used in previous versions are the following. These are not used in
-# the ICU-67-and-later process, but for now they should be kept up to date to
-# enable parallel use of the older build process for verification.
-#
-#    $ICU4C_DIR/source/data/icu-config.xml - Update <locales> to add or remove
-#                CLDR locales for inclusion in ICU. Update <paths> to prefer
-#                alt forms for certain paths, or to exclude certain paths; note
-#                that <paths> items can only have draft or alt attributes.
-#
-#                Note that if a language-only locale (e.g. "de") is included in
-#                <locales>, then all region sublocales for that language that
-#                are present in CLDR data (e.g. "de_AT", "de_BE", "de_CH", etc.)
-#                should also be included in <locales>, per PMC policy decision
-#                2012-05-02 (see http://bugs.icu-project.org/trac/ticket/9298).
-#
-#    $ICU4C_DIR/source/data/build.xml - If you are adding or removing break
-#                iterators, you need to update  <fileset id="brkitr" ...> under
-#                <target name="clean" ...> to clean the correct set of files.
-#
-#                If there are new CLDR resource bundle types, you may need to
-#                updated the <remapper> sections to put these in the correct
-#                data subfolder for ICU.
-#
-#    $ICU4C_DIR/source/data/xml/      - If you are adding a new locale, break
-#                iterator, collation tailoring, or rule-based number formatter,
-#                you may need to add a corresponding xml file in (respectively)
-#                the main/, brkitr/, collation/, or rbnf/ subdirectory here.
-#
 #----
 #
 # For an official CLDR data integration into ICU, there are some additional
@@ -166,39 +138,12 @@ export ICU4C_DIR=$HOME/icu-myfork/icu4c
 export ICU4J_ROOT=$HOME/icu-myfork/icu4j
 export TOOLS_ROOT=$HOME/icu-myfork/tools
 
+# 2. Build and install the CLDR jar
 
-# 2. Build the CLDR Java tools and jar
+cd $TOOLS_ROOT/cldr/lib
+./install-cldr-jars.sh "$CLDR_DIR"
 
-cd $CLDR_DIR/tools/java
-ant clean
-ant all
-ant jar
-
-# 2a. Copy the CLDR jars into $TOOLS_ROOT/cldr/cldr-to-icu/lib/ maven repository;
-# see $TOOLS_ROOT/cldr/cldr-to-icu/lib/README.txt
-
-cd $TOOLS_ROOT/cldr/cldr-to-icu/lib/
-mvn install:install-file \
-  -DgroupId=org.unicode.cldr \
-  -DartifactId=cldr-api \
-  -Dversion=0.1-SNAPSHOT \
-  -Dpackaging=jar \
-  -DgeneratePom=true \
-  -DlocalRepositoryPath=. \
-  -Dfile=$CLDR_DIR/tools/java/cldr.jar
-
-cd $TOOLS_ROOT/cldr/cldr-to-icu/lib/
-mvn install:install-file \
-  -DgroupId=com.ibm.icu \
-  -DartifactId=icu-utilities \
-  -Dversion=0.1-SNAPSHOT \
-  -Dpackaging=jar \
-  -DgeneratePom=true \
-  -DlocalRepositoryPath=. \
-  -Dfile=$CLDR_DIR/tools/java/libs/utilities.jar
-
-cd $TOOLS_ROOT/cldr/cldr-to-icu/
-mvn dependency:purge-local-repository -DsnapshotsOnly=true
+See the README.txt file in this directory for more information.
 
 # 3. Configure ICU4C, build and test without new data first, to verify that
 # there are no pre-existing errors. Here <platform> is the runConfigureICU
@@ -239,10 +184,10 @@ ant proddata 2>&1 | tee /tmp/cldr-newData-proddataLog.txt
 # be ones that it would generate, except for pasts listed in <retain> elements such as
 # coll/de__PHONEBOOK.txt, coll/de_.txt, etc.
 #
-# Before this step, make any necessary changes to
-# build-icu-data.xml$TOOLS_ROOT/cldr/cldr-to-icu/ to add new locales, etc.
+# Before running Ant to regenerate the data, make any necessary changes to the
+# build-icu-data.xml file, such as adding new locales etc.
 
-cd $TOOLS_ROOT/cldr/cldr-to-icu/
+cd $TOOLS_ROOT/cldr/cldr-to-icu
 CLDR_DIR=$CLDR_TMP_DIR/production ant -f build-icu-data.xml | tee /tmp/cldr-newData-builddataLog.txt
 
 # 5. Check which data files have modifications, which have been added or removed
