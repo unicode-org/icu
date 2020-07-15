@@ -14,7 +14,6 @@
 #include "unicode/localpointer.h" // for LocalArray
 #include "unicode/measure.h"      // for Measure
 #include "unitconverter.h"
-#include <stdint.h> // for int32_t, int64_t
 
 U_NAMESPACE_BEGIN
 namespace units {

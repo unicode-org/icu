@@ -16,7 +16,6 @@
 #include "unitconverter.h"
 #include <algorithm> // for max
 #include <cmath>
-#include <cstdint>  // for int32_t, int8_t
 #include <stdlib.h> // for abs
 #include <utility>  // for swap
 

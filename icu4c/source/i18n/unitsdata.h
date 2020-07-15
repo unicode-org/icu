@@ -11,7 +11,6 @@
 #include "cmemory.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h" // for UMemory
-#include <stdint.h>          // for int32_t
 
 U_NAMESPACE_BEGIN
 namespace units {

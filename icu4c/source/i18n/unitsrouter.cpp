@@ -11,7 +11,6 @@
 #include "unitconverter.h" // for extractCompoundBaseUnit
 #include "unitsdata.h"     // for getUnitCategory
 #include "unitsrouter.h"
-#include <stdint.h> // for int32_t
 
 U_NAMESPACE_BEGIN
 namespace units {
