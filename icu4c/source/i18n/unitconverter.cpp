@@ -6,18 +6,18 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "charstr.h"
-#include "cmemory.h"                            // for MaybeStackVector
-#include "double-conversion-string-to-double.h" // for StringToDoubleConverter
+#include "cmemory.h"
+#include "double-conversion-string-to-double.h"
 #include "measunit_impl.h"
-#include "uassert.h"              // for U_ASSERT
-#include "unicode/localpointer.h" // for LocalArray
+#include "uassert.h"
+#include "unicode/localpointer.h"
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
 #include "unitconverter.h"
-#include <algorithm> // for max
+#include <algorithm>
 #include <cmath>
-#include <stdlib.h> // for abs
-#include <utility>  // for swap
+#include <stdlib.h>
+#include <utility>
 
 U_NAMESPACE_BEGIN
 namespace units {

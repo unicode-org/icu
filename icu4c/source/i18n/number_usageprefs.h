@@ -1,7 +1,7 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include "unicode/utypes.h" // for UErrorCode, U_I18N_API
+#include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 #ifndef __NUMBER_USAGEPREFS_H__
@@ -9,10 +9,10 @@
 
 #include "cmemory.h"
 #include "number_types.h"
-#include "unicode/locid.h"       // for Locale
-#include "unicode/measunit.h"    // for MeasureUnit
-#include "unicode/stringpiece.h" // for StringPiece
-#include "unicode/uobject.h"     // for UMemory
+#include "unicode/locid.h"
+#include "unicode/measunit.h"
+#include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
 #include "unitsrouter.h"
 
 U_NAMESPACE_BEGIN

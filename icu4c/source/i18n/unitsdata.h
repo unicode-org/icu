@@ -10,7 +10,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "unicode/stringpiece.h"
-#include "unicode/uobject.h" // for UMemory
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 namespace units {

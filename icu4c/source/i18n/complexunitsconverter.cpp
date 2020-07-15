@@ -11,8 +11,8 @@
 #include "complexunitsconverter.h"
 #include "uassert.h"
 #include "unicode/fmtable.h"
-#include "unicode/localpointer.h" // for LocalArray
-#include "unicode/measure.h"      // for Measure
+#include "unicode/localpointer.h"
+#include "unicode/measure.h"
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN

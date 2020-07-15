@@ -8,8 +8,8 @@
 #define __UNITCONVERTER_H__
 
 #include "unicode/measunit.h"
-#include "unicode/stringpiece.h" // for StringPiece
-#include "unicode/uobject.h"     // for UMemory
+#include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN

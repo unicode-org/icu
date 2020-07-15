@@ -13,7 +13,7 @@
 #include "complexunitsconverter.h"
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
-#include "unicode/uobject.h" // for UMemory
+#include "unicode/uobject.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN

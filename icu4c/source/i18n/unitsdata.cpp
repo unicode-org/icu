@@ -8,13 +8,13 @@
 #include "cstring.h"
 #include "number_decimalquantity.h"
 #include "resource.h"
-#include "uassert.h"        // for U_ASSERT
-#include "unicode/unistr.h" // for UnicodeString
-#include "unicode/ures.h"   // for LocalUResourceBundlePointer, ure...
+#include "uassert.h"
+#include "unicode/unistr.h"
+#include "unicode/ures.h"
 #include "unitsdata.h"
 #include "uresimp.h"
 #include "util.h"
-#include <utility> // for move
+#include <utility>
 
 U_NAMESPACE_BEGIN
 namespace units {

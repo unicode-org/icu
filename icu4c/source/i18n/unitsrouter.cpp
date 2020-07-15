@@ -5,11 +5,11 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "charstr.h" // for CharString
+#include "charstr.h"
 #include "cmemory.h"
-#include "unicode/measure.h" // for Measure
-#include "unitconverter.h" // for extractCompoundBaseUnit
-#include "unitsdata.h"     // for getUnitCategory
+#include "unicode/measure.h"
+#include "unitconverter.h"
+#include "unitsdata.h"
 #include "unitsrouter.h"
 
 U_NAMESPACE_BEGIN

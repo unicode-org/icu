@@ -4,18 +4,18 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "number_usageprefs.h"
-#include "cstring.h" // for uprv_strncpy
+#include "cstring.h"
 #include "number_decimalquantity.h"
 #include "number_microprops.h"
-#include "number_roundingutils.h" // for RoundingImpl
-#include "unicode/char16ptr.h"    // for ConstChar16Ptr
-#include "unicode/currunit.h"     // for CurrencyUnit
-#include "unicode/fmtable.h"      // for Formattable, impl, number
-#include "unicode/measure.h"      // for Measure
+#include "number_roundingutils.h"
+#include "unicode/char16ptr.h"
+#include "unicode/currunit.h"
+#include "unicode/fmtable.h"
+#include "unicode/measure.h"
 #include "unicode/numberformatter.h"
-#include "unicode/platform.h" // for U_NOEXCEPT
-#include "unicode/unum.h"     // for UNumberFormatRoundingMode
-#include "unicode/urename.h"  // for uprv_free, uprv_malloc
+#include "unicode/platform.h"
+#include "unicode/unum.h"
+#include "unicode/urename.h"
 
 using namespace icu::number;
 using namespace icu::number::impl;
