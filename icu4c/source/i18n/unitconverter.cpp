@@ -18,7 +18,7 @@
 U_NAMESPACE_BEGIN
 namespace units {
 
-void Factor::multiplyBy(const Factor &rhs) {
+void U_I18N_API Factor::multiplyBy(const Factor &rhs) {
     factorNum *= rhs.factorNum;
     factorDen *= rhs.factorDen;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -31,7 +31,7 @@ void Factor::multiplyBy(const Factor &rhs) {
     offset = std::max(rhs.offset, offset);
 }
 
-void Factor::divideBy(const Factor &rhs) {
+void U_I18N_API Factor::divideBy(const Factor &rhs) {
     factorNum *= rhs.factorDen;
     factorDen *= rhs.factorNum;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -44,7 +44,7 @@ void Factor::divideBy(const Factor &rhs) {
     offset = std::max(rhs.offset, offset);
 }
 
-void Factor::power(int32_t power) {
+void U_I18N_API Factor::power(int32_t power) {
     // multiply all the constant by the power.
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         constants[i] *= power;
@@ -62,7 +62,7 @@ void Factor::power(int32_t power) {
     }
 }
 
-void Factor::flip() {
+void U_I18N_API Factor::flip() {
     std::swap(factorNum, factorDen);
 
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -70,7 +70,7 @@ void Factor::flip() {
     }
 }
 
-void Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
+void U_I18N_API Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
     if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
 
     double siApplied = std::pow(10.0, std::abs(siPrefix));
@@ -83,7 +83,7 @@ void Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
     factorNum *= siApplied;
 }
 
-void Factor::substituteConstants() {
+void U_I18N_API Factor::substituteConstants() {
     // These values are a hard-coded subset of unitConstants in the units
     // resources file. A unit test checks that all constants in the resource
     // file are at least recognised by the code. Derived constants' values or
