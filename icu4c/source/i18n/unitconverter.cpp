@@ -22,7 +22,7 @@
 U_NAMESPACE_BEGIN
 namespace units {
 
-void Factor::multiplyBy(const Factor &rhs) {
+void U_I18N_API Factor::multiplyBy(const Factor &rhs) {
     factorNum *= rhs.factorNum;
     factorDen *= rhs.factorDen;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -35,7 +35,7 @@ void Factor::multiplyBy(const Factor &rhs) {
     offset = std::max(rhs.offset, offset);
 }
 
-void Factor::divideBy(const Factor &rhs) {
+void U_I18N_API Factor::divideBy(const Factor &rhs) {
     factorNum *= rhs.factorDen;
     factorDen *= rhs.factorNum;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -48,7 +48,7 @@ void Factor::divideBy(const Factor &rhs) {
     offset = std::max(rhs.offset, offset);
 }
 
-void Factor::power(int32_t power) {
+void U_I18N_API Factor::power(int32_t power) {
     // multiply all the constant by the power.
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         constants[i] *= power;
@@ -66,7 +66,7 @@ void Factor::power(int32_t power) {
     }
 }
 
-void Factor::flip() {
+void U_I18N_API Factor::flip() {
     std::swap(factorNum, factorDen);
 
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
@@ -74,7 +74,7 @@ void Factor::flip() {
     }
 }
 
-void Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
+void U_I18N_API Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
     if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
 
     double siApplied = std::pow(10.0, std::abs(siPrefix));
@@ -87,16 +87,20 @@ void Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
     factorNum *= siApplied;
 }
 
-void Factor::substituteConstants() {
-    double constantsValues[CONSTANTS_COUNT];
-
-    // TODO: Load those constant values from units data.
-    constantsValues[CONSTANT_FT2M] = 0.3048;
-    constantsValues[CONSTANT_PI] = 411557987.0 / 131002976.0;
-    constantsValues[CONSTANT_GRAVITY] = 9.80665;
-    constantsValues[CONSTANT_G] = 6.67408E-11;
-    constantsValues[CONSTANT_LB2KG] = 0.45359237;
-    constantsValues[CONSTANT_GAL_IMP2M3] = 0.00454609;
+void U_I18N_API Factor::substituteConstants() {
+    // These values are a hard-coded subset of unitConstants in the units
+    // resources file. A unit test checks that all constants in the resource
+    // file are at least recognised by the code. Derived constants' values or
+    // hard-coded derivations are not checked.
+    // double constantsValues[CONSTANTS_COUNT];
+    static const double constantsValues[CONSTANTS_COUNT] = {
+        [CONSTANT_FT2M] = 0.3048,                  //
+        [CONSTANT_PI] = 411557987.0 / 131002976.0, //
+        [CONSTANT_GRAVITY] = 9.80665,              //
+        [CONSTANT_G] = 6.67408E-11,                //
+        [CONSTANT_GAL_IMP2M3] = 0.00454609,        //
+        [CONSTANT_LB2KG] = 0.45359237,             //
+    };
 
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         if (this->constants[i] == 0) {
@@ -322,9 +326,12 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 
 } // namespace
 
+// Conceptually, this modifies factor: factor *= baseStr^(signum*power).
+//
+// baseStr must be a known constant or a value that strToDouble() is able to
+// parse.
 void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Signum signum,
                                         Factor &factor, UErrorCode &status) {
-
     if (baseStr == "ft_to_m") {
         factor.constants[CONSTANT_FT2M] += power * signum;
     } else if (baseStr == "ft2_to_m2") {

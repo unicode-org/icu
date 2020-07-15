@@ -35,7 +35,7 @@ typedef enum Signum {
 } Signum;
 
 /* Represents a conversion factor */
-struct Factor {
+struct U_I18N_API Factor {
     double factorNum = 1;
     double factorDen = 1;
     double offset = 0;
