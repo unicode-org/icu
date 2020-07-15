@@ -83,7 +83,7 @@ void UnitsTest::testUnitConstantFreshness() {
         ures_getNextString(unitConstants.getAlias(), &len, &constant, status);
 
         Factor factor;
-        addSingleFactorConstant(constant, 2, POSITIVE, factor, status);
+        addSingleFactorConstant(constant, 1, POSITIVE, factor, status);
         if (status.errDataIfFailureAndReset(
                 "addSingleFactorConstant(<%s>, ...).\n\n"
                 "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/unitconverter.cpp\" "
@@ -91,11 +91,29 @@ void UnitsTest::testUnitConstantFreshness() {
                 constant, constant)) {
             continue;
         }
-        // TODO(units,hugovdm): implement some symbolic maths to evaluate the
-        // values of these constants? Counter-argument: constant values don't
-        // change, and the data-driven unit tests generally take care of
-        // validating the precision of conversions, if they have enough
-        // coverage.
+
+        // Check the values of constants that have a simple numeric value
+        factor.substituteConstants();
+        int32_t uLen;
+        UnicodeString uVal = ures_getStringByKey(unitConstants.getAlias(), constant, &uLen, status);
+        CharString val;
+        val.appendInvariantChars(uVal, status);
+        if (status.errDataIfFailureAndReset("Failed to get constant value for %s.", constant)) {
+            continue;
+        }
+        DecimalQuantity dqVal;
+        UErrorCode parseStatus = U_ZERO_ERROR;
+        // TODO(units): unify with strToDouble() in unitconverter.cpp
+        dqVal.setToDecNumber(val.toStringPiece(), parseStatus);
+        if (!U_SUCCESS(parseStatus)) {
+            // Not simple to parse, skip validating this constant's value. (We
+            // leave catching mistakes to the data-driven integration tests.)
+            continue;
+        }
+        double expectedNumerator = dqVal.toDouble();
+        assertEquals(UnicodeString("Constant ") + constant + u" numerator", expectedNumerator,
+                     factor.factorNum);
+        assertEquals(UnicodeString("Constant ") + constant + u" denominator", 1.0, factor.factorDen);
     }
 }
 
