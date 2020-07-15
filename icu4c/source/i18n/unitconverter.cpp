@@ -5,15 +5,19 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <cmath>
-
 #include "charstr.h"
-#include "double-conversion.h"
+#include "cmemory.h"
+#include "double-conversion-string-to-double.h"
 #include "measunit_impl.h"
-#include "unicode/errorcode.h"
+#include "uassert.h"
+#include "unicode/localpointer.h"
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
 #include "unitconverter.h"
+#include <algorithm>
+#include <cmath>
+#include <stdlib.h>
+#include <utility>
 
 U_NAMESPACE_BEGIN
 namespace units {
@@ -100,10 +104,10 @@ void Factor::substituteConstants() {
         }
 
         auto absPower = std::abs(this->constants[i]);
-        SigNum powerSig = this->constants[i] < 0 ? SigNum::NEGATIVE : SigNum::POSITIVE;
+        Signum powerSig = this->constants[i] < 0 ? Signum::NEGATIVE : Signum::POSITIVE;
         double absConstantValue = std::pow(constantsValues[i], absPower);
 
-        if (powerSig == SigNum::NEGATIVE) {
+        if (powerSig == Signum::NEGATIVE) {
             this->factorDen *= absConstantValue;
         } else {
             this->factorNum *= absConstantValue;
@@ -157,7 +161,7 @@ double strHasDivideSignToDouble(StringPiece strWithDivide, UErrorCode &status) {
   Adds single factor to a `Factor` object. Single factor means "23^2", "23.3333", "ft2m^3" ...etc.
   However, complex factor are not included, such as "ft2m^3*200/3"
 */
-void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum, UErrorCode &status) {
+void addFactorElement(Factor &factor, StringPiece elementStr, Signum signum, UErrorCode &status) {
     StringPiece baseStr;
     StringPiece powerStr;
     int32_t power =
@@ -182,7 +186,7 @@ void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum, UEr
         baseStr = elementStr;
     }
 
-    addSingleFactorConstant(baseStr, power, sigNum, factor, status);
+    addSingleFactorConstant(baseStr, power, signum, factor, status);
 }
 
 /*
@@ -190,21 +194,21 @@ void addFactorElement(Factor &factor, StringPiece elementStr, SigNum sigNum, UEr
  */
 Factor extractFactorConversions(StringPiece stringFactor, UErrorCode &status) {
     Factor result;
-    SigNum sigNum = SigNum::POSITIVE;
+    Signum signum = Signum::POSITIVE;
     auto factorData = stringFactor.data();
     for (int32_t i = 0, start = 0, n = stringFactor.length(); i < n; i++) {
         if (factorData[i] == '*' || factorData[i] == '/') {
             StringPiece factorElement = stringFactor.substr(start, i - start);
-            addFactorElement(result, factorElement, sigNum, status);
+            addFactorElement(result, factorElement, signum, status);
 
             start = i + 1; // Set `start` to point to the start of the new element.
         } else if (i == n - 1) {
             // Last element
-            addFactorElement(result, stringFactor.substr(start, i + 1), sigNum, status);
+            addFactorElement(result, stringFactor.substr(start, i + 1), signum, status);
         }
 
         if (factorData[i] == '/') {
-            sigNum = SigNum::NEGATIVE; // Change the sigNum because we reached the Denominator.
+            signum = Signum::NEGATIVE; // Change the signum because we reached the Denominator.
         }
     }
 
@@ -318,34 +322,34 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 
 } // namespace
 
-void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, SigNum sigNum,
+void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Signum signum,
                                         Factor &factor, UErrorCode &status) {
 
     if (baseStr == "ft_to_m") {
-        factor.constants[CONSTANT_FT2M] += power * sigNum;
+        factor.constants[CONSTANT_FT2M] += power * signum;
     } else if (baseStr == "ft2_to_m2") {
-        factor.constants[CONSTANT_FT2M] += 2 * power * sigNum;
+        factor.constants[CONSTANT_FT2M] += 2 * power * signum;
     } else if (baseStr == "ft3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
     } else if (baseStr == "in3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "gal_to_m3") {
         factor.factorNum *= 231;
-        factor.constants[CONSTANT_FT2M] += 3 * power * sigNum;
+        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "gal_imp_to_m3") {
-        factor.constants[CONSTANT_GAL_IMP2M3] += power * sigNum;
+        factor.constants[CONSTANT_GAL_IMP2M3] += power * signum;
     } else if (baseStr == "G") {
-        factor.constants[CONSTANT_G] += power * sigNum;
+        factor.constants[CONSTANT_G] += power * signum;
     } else if (baseStr == "gravity") {
-        factor.constants[CONSTANT_GRAVITY] += power * sigNum;
+        factor.constants[CONSTANT_GRAVITY] += power * signum;
     } else if (baseStr == "lb_to_kg") {
-        factor.constants[CONSTANT_LB2KG] += power * sigNum;
+        factor.constants[CONSTANT_LB2KG] += power * signum;
     } else if (baseStr == "PI") {
-        factor.constants[CONSTANT_PI] += power * sigNum;
+        factor.constants[CONSTANT_PI] += power * signum;
     } else {
-        if (sigNum == SigNum::NEGATIVE) {
+        if (signum == Signum::NEGATIVE) {
             factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
         } else {
             factor.factorNum *= std::pow(strToDouble(baseStr, status), power);
