@@ -9,16 +9,18 @@
 
 #include <limits>
 
-#include "charstr.h" // CharString
 #include "cmemory.h"
 #include "complexunitsconverter.h"
-#include "unicode/errorcode.h"
 #include "unicode/measunit.h"
-#include "unicode/measure.h"
 #include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+
+// Forward declarations
+class Measure;
+
 namespace units {
 
 /**

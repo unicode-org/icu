@@ -5,17 +5,12 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <stdio.h>
-#include <utility>
-
+#include "charstr.h"
 #include "cmemory.h"
-#include "cstring.h"
-#include "number_decimalquantity.h"
-#include "resource.h"
-#include "unitconverter.h" // for extractCompoundBaseUnit
-#include "unitsdata.h"     // for getUnitCategory
+#include "unicode/measure.h"
+#include "unitconverter.h"
+#include "unitsdata.h"
 #include "unitsrouter.h"
-#include "uresimp.h"
 
 U_NAMESPACE_BEGIN
 namespace units {
