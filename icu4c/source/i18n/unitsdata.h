@@ -102,7 +102,7 @@ struct U_I18N_API UnitPreference : public UMemory {
     UnitPreference() : geq(1.0) {}
     CharString unit;
     double geq;
-    CharString skeleton;
+    UnicodeString skeleton;
 };
 
 namespace {

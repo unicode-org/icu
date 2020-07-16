@@ -44,16 +44,9 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
 
         number::impl::MacroProps macroProps;
         int32_t errOffset;
-        if (preference.skeleton.length() == 0) {
-            UnicodeString skeletonUniStr("precision-increment/1");
-            macroProps = number::impl::skeleton::parseSkeleton(skeletonUniStr, errOffset, status);
-            if (U_FAILURE(status)) {
-                return;
-            }
-        } else {
-            // TODO: check that the skeleton is in the following format "precision-increment/d*.d*"
-            UnicodeString skeletonUniStr(preference.skeleton.data());
-            macroProps = number::impl::skeleton::parseSkeleton(skeletonUniStr, errOffset, status);
+        if (preference.skeleton.length() !=
+            0) { // TODO: check that the skeleton is in the following format "precision-increment/d*.d*"
+            macroProps = number::impl::skeleton::parseSkeleton(preference.skeleton, errOffset, status);
             if (U_FAILURE(status)) {
                 return;
             }
