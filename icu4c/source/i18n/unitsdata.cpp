@@ -329,10 +329,9 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
         } else if (uprv_strcmp(desired.usage.data(), "default") != 0) {
             desired.usage.truncate(0).append("default", status);
         } else {
-            // TODO(units): we fail with U_MISSING_RESOURCE_ERROR for an invalid
-            // usage. For an unrecognised measure-unit, skeleton parsing would
-            // result in U_NUMBER_SKELETON_SYNTAX_ERROR instead. Do we want to
-            // be smarter about recognised usages? (Build a trie? :-)
+            // TODO(icu-units/icu#36): reconsider consistency of errors.
+            // Currently this U_MISSING_RESOURCE_ERROR propagates when a
+            // U_NUMBER_SKELETON_SYNTAX_ERROR might be much more intuitive.
             status = U_MISSING_RESOURCE_ERROR;
             return -1;
         }

@@ -1006,8 +1006,6 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     static constexpr int32_t CAPACITY = 30;
     MeasureUnit units[CAPACITY];
     UErrorCode localStatus = U_ZERO_ERROR;
-    // TODO(units): revisit this: deals with hard-coded set of measure units?
-    // Can it handle complex units correctly?
     int32_t numUnits = MeasureUnit::getAvailable(type.data(), units, CAPACITY, localStatus);
     if (U_FAILURE(localStatus)) {
         // More than 30 units in this type?
@@ -1574,7 +1572,7 @@ bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErr
 bool GeneratorHelpers::usage(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     if (macros.usage.fLength > 0) {
         sb.append(u"usage/", -1);
-        sb.append(UnicodeString(macros.usage.fUsage));
+        sb.append(UnicodeString(macros.usage.fUsage, -1, US_INV));
         return true;
     }
     return false;

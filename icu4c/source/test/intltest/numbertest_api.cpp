@@ -689,7 +689,7 @@ void NumberFormatterApiTest::unitUsage() {
     assertEquals("unitUsage() en-ZA road", "300 m", formattedNum.toString(status));
     assertFormatDescendingBig(
             u"unitUsage() en-ZA road",
-            u"measure-unit/length-meter usage/road", // Alternatives: usage/length-road, unit-usage/road? FIXME
+            u"measure-unit/length-meter usage/road",
             u"unit/meter usage/road",
             unloc_formatter,
             Locale("en-ZA"),
@@ -711,7 +711,7 @@ void NumberFormatterApiTest::unitUsage() {
     assertEquals("unitUsage() en-GB road", "328 yd", formattedNum.toString(status));
     assertFormatDescendingBig(
             u"unitUsage() en-GB road",
-            u"measure-unit/length-meter usage/road", // Alternatives: usage/length-road, unit-usage/road? FIXME
+            u"measure-unit/length-meter usage/road",
             u"unit/meter usage/road",
             unloc_formatter,
             Locale("en-GB"),
@@ -733,7 +733,7 @@ void NumberFormatterApiTest::unitUsage() {
     assertEquals("unitUsage() en-US road", "984 ft", formattedNum.toString(status));
     assertFormatDescendingBig(
             u"unitUsage() en-US road",
-            u"measure-unit/length-meter usage/road", // Alternatives: usage/length-road, unit-usage/road? FIXME
+            u"measure-unit/length-meter usage/road",
             u"unit/meter usage/road",
             unloc_formatter,
             Locale("en-US"),
