@@ -687,23 +687,21 @@ void NumberFormatterApiTest::unitUsage() {
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getMeter() == formattedNum.getOutputUnit(status));
     assertEquals("unitUsage() en-ZA road", "300 m", formattedNum.toString(status));
-    // TODO(units,hugovdm): this works with "assertUndefinedSkeleton(f);"
-    // commented out. Design skeletons ("measure-unit/length-meter usage/road"?)
-    // then use this:
-//     assertFormatDescendingBig(u"unitUsage() en-ZA road",
-//                               nullptr,
-//                               nullptr,
-//                               unloc_formatter,
-//                               Locale("en-ZA"),
-//                               u"87\u00A0650 km",
-//                               u"8\u00A0765 km",
-//                               u"877 km",
-//                               u"88 km",
-//                               u"8,8 km",
-//                               u"877 m",
-//                               u"88 m",
-//                               u"8,8 m",
-//                               u"0 m");
+    assertFormatDescendingBig(
+            u"unitUsage() en-ZA road",
+            u"measure-unit/length-meter usage/road",
+            u"unit/meter usage/road",
+            unloc_formatter,
+            Locale("en-ZA"),
+            u"87\u00A0650 km",
+            u"8\u00A0765 km",
+            u"877 km",
+            u"88 km",
+            u"8,8 km",
+            u"877 m",
+            u"88 m",
+            u"8,8 m",
+            u"0 m");
 
     formatter = unloc_formatter.locale("en-GB");
     formattedNum = formatter.formatDouble(300, status);
@@ -711,23 +709,21 @@ void NumberFormatterApiTest::unitUsage() {
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
     assertEquals("unitUsage() en-GB road", "328 yd", formattedNum.toString(status));
-    // TODO(units,hugovdm): this works with "assertUndefinedSkeleton(f);"
-    // commented out. Design skeletons ("measure-unit/length-meter usage/road"?)
-    // then use this:
-//     assertFormatDescendingBig(u"unitUsage() en-GB road",
-//                               nullptr,
-//                               nullptr,
-//                               unloc_formatter,
-//                               Locale("en-GB"),
-//                               u"54,463 mi",
-//                               u"5,446 mi",
-//                               u"545 mi",
-//                               u"54 mi",
-//                               u"5.4 mi",
-//                               u"0.54 mi",
-//                               u"96 yd",
-//                               u"9.6 yd",
-//                               u"0 yd");
+    assertFormatDescendingBig(
+            u"unitUsage() en-GB road",
+            u"measure-unit/length-meter usage/road",
+            u"unit/meter usage/road",
+            unloc_formatter,
+            Locale("en-GB"),
+            u"54,463 mi",
+            u"5,446 mi",
+            u"545 mi",
+            u"54 mi",
+            u"5.4 mi",
+            u"0.54 mi",
+            u"96 yd",
+            u"9.6 yd",
+            u"0 yd");
 
     formatter = unloc_formatter.locale("en-US");
     formattedNum = formatter.formatDouble(300, status);
@@ -735,25 +731,21 @@ void NumberFormatterApiTest::unitUsage() {
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
     assertEquals("unitUsage() en-US road", "984 ft", formattedNum.toString(status));
-    // TODO(units,hugovdm): this works with "assertUndefinedSkeleton(f);"
-    // commented out. Design skeletons ("measure-unit/length-meter usage/road"?)
-    // then use this:
-//     assertFormatDescendingBig(u"unitUsage() en-US road",
-//                               nullptr,
-//                               nullptr,
-//                               unloc_formatter,
-//                               Locale("en-US"),
-//                               u"54,463 mi",
-//                               u"5,446 mi",
-//                               u"545 mi",
-//                               u"54 mi",
-//                               u"5.4 mi",
-//                               u"0.54 mi",
-//                               u"288 ft",
-//                               u"29 ft",
-//                               u"0 ft");
-
-    // TODO(hugovdm): consider fixing TODO(ICU-20941) too?
+    assertFormatDescendingBig(
+            u"unitUsage() en-US road",
+            u"measure-unit/length-meter usage/road",
+            u"unit/meter usage/road",
+            unloc_formatter,
+            Locale("en-US"),
+            u"54,463 mi",
+            u"5,446 mi",
+            u"545 mi",
+            u"54 mi",
+            u"5.4 mi",
+            u"0.54 mi",
+            u"288 ft",
+            u"29 ft",
+            u"0 ft");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {

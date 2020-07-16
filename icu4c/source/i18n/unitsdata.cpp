@@ -329,6 +329,9 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
         } else if (uprv_strcmp(desired.usage.data(), "default") != 0) {
             desired.usage.truncate(0).append("default", status);
         } else {
+            // TODO(icu-units/icu#36): reconsider consistency of errors.
+            // Currently this U_MISSING_RESOURCE_ERROR propagates when a
+            // U_NUMBER_SKELETON_SYNTAX_ERROR might be much more intuitive.
             status = U_MISSING_RESOURCE_ERROR;
             return -1;
         }

@@ -1161,7 +1161,9 @@ class U_I18N_API Usage : public UMemory {
     /** @internal */
     int16_t length() const { return fLength; }
 
-    /** @internal */
+    /** @internal
+     * Makes a copy of value.
+     */
     void set(StringPiece value);
 
     /** @internal */
@@ -1176,6 +1178,9 @@ class U_I18N_API Usage : public UMemory {
 
     // Allow NumberFormatterImpl to access fUsage.
     friend class impl::NumberFormatterImpl;
+
+    // Allow skeleton generation code to access private members.
+    friend class impl::GeneratorHelpers;
 
     // Allow MacroProps/MicroProps to initialize empty instances.
     friend struct impl::MacroProps;
