@@ -12,24 +12,20 @@
 #include "charstr.h" // CharString
 #include "cmemory.h"
 #include "complexunitsconverter.h"
-#include "number_skeletons.h"
 #include "unicode/errorcode.h"
 #include "unicode/measunit.h"
 #include "unicode/measure.h"
-#include "unicode/numberformatter.h"
 #include "unicode/stringpiece.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
 namespace units {
 
-using number::Precision;
-
 struct RouteResult : UMemory {
     MaybeStackVector<Measure> measures;
-    Precision precision;
+    UnicodeString precision;
 
-    RouteResult(MaybeStackVector<Measure> measures, Precision precision)
+    RouteResult(MaybeStackVector<Measure> measures, UnicodeString precision)
         : measures(std::move(measures)), precision(std::move(precision)) {}
 };
 
@@ -45,17 +41,16 @@ struct RouteResult : UMemory {
 struct ConverterPreference : UMemory {
     ComplexUnitsConverter converter;
     double limit;
-    Precision precision;
+    UnicodeString precision;
 
     // In case there is no limit, the limit will be -inf.
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, number::Precision precision,
+    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, UnicodeString precision,
                         const ConversionRates &ratesInfo, UErrorCode &status)
         : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), precision,
                               ratesInfo, status) {}
 
     ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit,
-                        number::Precision precision, const ConversionRates &ratesInfo,
-                        UErrorCode &status)
+                        UnicodeString precision, const ConversionRates &ratesInfo, UErrorCode &status)
         : converter(source, complexTarget, ratesInfo, status), limit(limit), precision(precision) {}
 };
 

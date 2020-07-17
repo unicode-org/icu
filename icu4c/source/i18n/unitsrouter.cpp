@@ -42,19 +42,23 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
             return;
         }
 
-        number::impl::MacroProps macroProps;
-        int32_t errOffset;
-        if (preference.skeleton.length() !=
-            0) { // TODO: check that the skeleton is in the following format "precision-increment/d*.d*"
-            macroProps = number::impl::skeleton::parseSkeleton(preference.skeleton, errOffset, status);
-            if (U_FAILURE(status)) {
-                return;
-            }
+        UnicodeString precision = preference.skeleton;
+
+        // For now, we only have "precision-increment" in Units Preferences skeleton.
+        // Therefore, we check if the skeleton starts with "precision-increment" and force the program to
+        // fail otherwise.
+        // NOTE:
+        //  It is allowed to have an empty precision.
+        if (precision.length() != 0) {
+            if (precision.startsWith(u"precision-increment", 0, 19)) break;
+
+            status = U_INTERNAL_PROGRAM_ERROR;
+            return;
         }
 
         outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnit);
         converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
-                                                           preference.geq, macroProps.precision,
+                                                           preference.geq, preference.skeleton,
                                                            conversionRates, status);
 
         if (U_FAILURE(status)) {
