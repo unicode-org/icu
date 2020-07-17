@@ -11,8 +11,8 @@
 
 #include "charstr.h"
 #include "cmemory.h"
-#include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 namespace units {

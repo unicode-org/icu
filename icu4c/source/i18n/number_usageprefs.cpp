@@ -4,9 +4,18 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "number_usageprefs.h"
+#include "cstring.h"
 #include "number_decimalquantity.h"
 #include "number_microprops.h"
+#include "number_roundingutils.h"
+#include "unicode/char16ptr.h"
+#include "unicode/currunit.h"
+#include "unicode/fmtable.h"
+#include "unicode/measure.h"
 #include "unicode/numberformatter.h"
+#include "unicode/platform.h"
+#include "unicode/unum.h"
+#include "unicode/urename.h"
 
 using namespace icu::number;
 using namespace icu::number::impl;
