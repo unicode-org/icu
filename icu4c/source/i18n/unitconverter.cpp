@@ -478,7 +478,7 @@ double UnitConverter::convert(double inputValue) const {
 
     // Multiply the result by 1.000,000,000,001 to fix the deterioration from using `double` (the
     // deterioration is around 15 to 17 decimal digit).
-    return result * 1.00000000000001;
+    return result * 1.000000000001;
 }
 
 } // namespace units
