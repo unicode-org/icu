@@ -44,17 +44,14 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
         // fail otherwise.
         // NOTE:
         //  It is allowed to have an empty precision.
-        if (precision.length() != 0) {
-            if (precision.startsWith(u"precision-increment", 0, 19)) break;
-
+        if (!precision.isEmpty() && !precision.startsWith(u"precision-increment", 19)) {
             status = U_INTERNAL_PROGRAM_ERROR;
             return;
         }
 
         outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnit);
-        converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
-                                                           preference.geq, preference.skeleton,
-                                                           conversionRates, status);
+        converterPreferences_.emplaceBackAndCheckErrorCode(
+            status, inputUnit, complexTargetUnit, preference.geq, precision, conversionRates, status);
 
         if (U_FAILURE(status)) {
             return;
@@ -67,19 +64,17 @@ RouteResult UnitsRouter::route(double quantity, UErrorCode &status) const {
         const auto &converterPreference = *converterPreferences_[i];
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-            return RouteResult{
-                converterPreference.converter.convert(quantity, status), //
-                converterPreference.precision                            //
-            };
+            return RouteResult(converterPreference.converter.convert(quantity, status), //
+                               converterPreference.precision                            //
+            );
         }
     }
 
     // In case of the `quantity` does not fit in any converter limit, use the last converter.
     const auto &lastConverterPreference = (*converterPreferences_[converterPreferences_.length() - 1]);
-    return RouteResult{
-        lastConverterPreference.converter.convert(quantity, status), //
-        lastConverterPreference.precision                            //
-    };
+    return RouteResult(lastConverterPreference.converter.convert(quantity, status), //
+                       lastConverterPreference.precision                            //
+    );
 }
 
 const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
