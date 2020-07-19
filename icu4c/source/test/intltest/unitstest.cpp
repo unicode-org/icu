@@ -30,7 +30,8 @@ struct UnitConversionTestCase {
     const double expectedValue;
 };
 
-using icu::number::impl::DecimalQuantity;
+using ::icu::number::impl::DecimalQuantity;
+using namespace ::icu::units;
 
 class UnitsTest : public IntlTest {
   public:
@@ -76,7 +77,7 @@ void UnitsTest::testConversionCapability() {
         {"kilometer-per-second", "second-per-meter", RECIPROCAL},                    //
         {"square-meter", "square-foot", CONVERTIBLE},                                //
         {"kilometer-per-second", "foot-per-second", CONVERTIBLE},                    //
-        {"square-hectare", "p4-foot", CONVERTIBLE},                                  //
+        {"square-hectare", "pow4-foot", CONVERTIBLE},                                //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},      //
         {"cubic-kilometer-per-second-meter", "second-per-square-meter", RECIPROCAL}, //
     };

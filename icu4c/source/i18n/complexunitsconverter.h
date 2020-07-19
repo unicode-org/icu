@@ -18,6 +18,7 @@
 #include "unicode/measure.h"
 
 U_NAMESPACE_BEGIN
+namespace units {
 
 /**
  *  Converts from single or compound unit to single, compound or mixed units.
@@ -63,6 +64,7 @@ class U_I18N_API ComplexUnitsConverter : UMemory {
     MaybeStackVector<MeasureUnitImpl> units_;
 };
 
+} // namespace units
 U_NAMESPACE_END
 
 #endif //__COMPLEXUNITSCONVERTER_H__
