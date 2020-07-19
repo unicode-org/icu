@@ -33,11 +33,11 @@ struct ConverterPreference : UMemory {
     ComplexUnitsConverter converter;
     double limit;
 
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit,
+    ConverterPreference(const MeasureUnitImpl& source,const  MeasureUnitImpl& complexTarget, double limit,
                         const ConversionRates &ratesInfo, UErrorCode &status)
         : converter(source, complexTarget, ratesInfo, status), limit(limit) {}
 
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, const ConversionRates &ratesInfo,
+    ConverterPreference(const MeasureUnitImpl& source, const MeasureUnitImpl& complexTarget, const ConversionRates &ratesInfo,
                         UErrorCode &status)
         : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), ratesInfo,
                               status) {}

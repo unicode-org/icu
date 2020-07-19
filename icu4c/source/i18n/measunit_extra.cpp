@@ -864,6 +864,10 @@ void mergeUnitsAndDimentions(MaybeStackVector<unitIndexAndDimension> &unitIndice
 
 } // namespace
 
+MeasureUnitImpl::MeasureUnitImpl(const MeasureUnitImpl& other, UErrorCode& status) {
+   *this  = other.copy(status);
+}
+
 bool MeasureUnitImpl::operator==(const MeasureUnitImpl &other) {
     if (this->units.length() != other.units.length()) return false;
     if (this->units.length() == 0) return true; // Empty `MeasureUnitImpl`s are equal.

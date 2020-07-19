@@ -16,17 +16,17 @@
 
 U_NAMESPACE_BEGIN
 
-ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
-                                             const MeasureUnit &outputUnits,
+ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
+                                             const MeasureUnitImpl &outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status) {
 
-    if (outputUnits.getComplexity(status) != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+    if (outputUnits.complexity != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, outputUnits, ratesInfo, status);
         if (U_FAILURE(status)) {
             return;
         }
 
-        units_.emplaceBackAndCheckErrorCode(status, outputUnits);
+        units_.emplaceBackAndCheckErrorCode(status, outputUnits, status);
         return;
     }
 
@@ -44,16 +44,14 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
     //              2. convert the residual of 6.56168 feet (0.56168) to inches, which will be (6.74016
     //              inches)
     //              3. then, the final result will be (6 feet and 6.74016 inches)
-    int32_t length;
-    auto singleUnits = outputUnits.splitToSingleUnits(length, status);
-    MaybeStackVector<MeasureUnit> singleUnitsInOrder;
-    for (int i = 0; i < length; ++i) {
+    MaybeStackVector<SingleUnitImpl> singleUnitsInOrder;
+    for (int i = 0, n = outputUnits.units.length(); i < n; ++i) {
         /**
          *  TODO(younies): ensure units being in order by the biggest unit at first.
-         * 
+         *
          * HINT:
-         *  MaybeStackVector<SingleUnitImpl> singleUnitsInOrder =  MeasureUnitImpl::forMeasureUnitMaybeCopy(outputUnits, status).units;
-         *      uprv_sortArray(
+         *  MaybeStackVector<SingleUnitImpl> singleUnitsInOrder =
+         * MeasureUnitImpl::forMeasureUnitMaybeCopy(outputUnits, status).units; uprv_sortArray(
          *      singleUnitsInOrder.getAlias(),
          *      singleUnitsInOrder.length(),
          *      sizeof(singleUnitsInOrder[0]),
@@ -61,8 +59,8 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
          *      nullptr,
          *      false,
          *      &status);
-         */ 
-        singleUnitsInOrder.emplaceBackAndCheckErrorCode(status, singleUnits[i]);
+         */
+        singleUnitsInOrder.emplaceBackAndCheckErrorCode(status, *outputUnits.units[i]);
     }
 
     if (singleUnitsInOrder.length() == 0) {
@@ -70,21 +68,25 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
         return;
     }
 
-    for (int i = 0, n = singleUnitsInOrder.length(); i < n; i++) {
+    for (int i = 0; i < singleUnitsInOrder.length(); i++) {
+        MeasureUnitImpl unit;
+        unit.append(*singleUnitsInOrder[i], status);
+        units_.emplaceBackAndCheckErrorCode(status, unit, status);
+    }
+
+    for (int i = 0, n = units_.length(); i < n; i++) {
         if (i == 0) { // first element
-            unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, *singleUnitsInOrder[i],
-                                                         ratesInfo, status);
+            unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, *units_[i], ratesInfo,
+                                                         status);
         } else {
-            unitConverters_.emplaceBackAndCheckErrorCode(status, *singleUnitsInOrder[i - 1],
-                                                         *singleUnitsInOrder[i], ratesInfo, status);
+            unitConverters_.emplaceBackAndCheckErrorCode(status, *units_[i - 1], *units_[i], ratesInfo,
+                                                         status);
         }
 
         if (U_FAILURE(status)) {
             return;
         }
     }
-
-    units_.appendAll(singleUnitsInOrder, status);
 }
 
 UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const {
@@ -105,8 +107,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableNewQuantity(newQuantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBackAndCheckErrorCode(status, formattableNewQuantity,
-                                                new MeasureUnit(*units_[i]), status);
+            MeasureUnit *type = units_[i]->copy(status).build(status).clone();
+            result.emplaceBackAndCheckErrorCode(status, formattableNewQuantity, type, status);
 
             // Keep the residual of the quantity.
             //   For example: `3.6 feet`, keep only `0.6 feet`
@@ -115,8 +117,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableQuantity(quantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBackAndCheckErrorCode(status, formattableQuantity, new MeasureUnit(*units_[i]),
-                                                status);
+            MeasureUnit *type = units_[i]->copy(status).build(status).clone();
+            result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status);
         }
     }
 

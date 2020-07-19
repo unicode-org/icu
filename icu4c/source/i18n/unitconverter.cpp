@@ -11,7 +11,6 @@
 #include "double-conversion.h"
 #include "measunit_impl.h"
 #include "unicode/errorcode.h"
-#include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
 #include "unitconverter.h"
 
@@ -295,16 +294,12 @@ Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UE
 }
 
 // Load Factor of a compound source unit.
-Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &ratesInfo,
+Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &ratesInfo,
                           UErrorCode &status) {
 
     Factor result;
-    MeasureUnitImpl memory;
-    const auto &compoundSourceUnit = MeasureUnitImpl::forMeasureUnit(source, memory, status);
-    if (U_FAILURE(status)) return result;
-
-    for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
-        auto singleUnit = *compoundSourceUnit.units[i]; // a SingleUnitImpl
+    for (int32_t i = 0, n = source.units.length(); i < n; i++) {
+        auto singleUnit = *source.units[i]; // a SingleUnitImpl
 
         Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
@@ -324,30 +319,35 @@ Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &rate
 /**
  * Checks if the source unit and the target unit are simple. For example celsius or fahrenheit. But not
  * square-celsius or square-fahrenheit.
+ *
+ * NOTE:
+ *  Empty unit means simple unit.
  */
-UBool checkSimpleUnit(const MeasureUnit &unit, UErrorCode &status) {
-    MeasureUnitImpl memory;
-    const auto &compoundSourceUnit = MeasureUnitImpl::forMeasureUnit(unit, memory, status);
+UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
     if (U_FAILURE(status)) return false;
 
-    if (compoundSourceUnit.complexity != UMEASURE_UNIT_SINGLE) {
+    if (unit.complexity != UMEASURE_UNIT_SINGLE) {
         return false;
     }
+    if (unit.units.length() == 0) {
+        // Empty units means simple unit.
+        return true;
+    }
 
-    U_ASSERT(compoundSourceUnit.units.length() == 1);
-    auto singleUnit = *(compoundSourceUnit.units[0]);
+    auto singleUnit = *(unit.units[0]);
 
     if (singleUnit.dimensionality != 1 || singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
         return false;
     }
+
     return true;
 }
 
 /**
  *  Extract conversion rate from `source` to `target`
  */
-void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &source,
-                        const MeasureUnit &target, Convertibility unitsState,
+void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &source,
+                        const MeasureUnitImpl &target, Convertibility unitsState,
                         const ConversionRates &ratesInfo, UErrorCode &status) {
     // Represents the conversion factor from the source to the target.
     Factor finalFactor;
@@ -470,7 +470,7 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
         }
     }
 
-    return std::move(result);
+    return result;
 }
 
 /**
@@ -522,30 +522,23 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnit &source,      
     return extractConvertibility(sourceImpl, targetImpl, conversionRates, status);
 }
 
-UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
-                             UErrorCode &status) {
-
-    auto sourceImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(source, status);
-    auto targetImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(target, status);
-    if (U_FAILURE(status)) return;
-
-    if (sourceImpl.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
-        targetImpl.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+                             const ConversionRates &ratesInfo, UErrorCode &status): conversionRate_(source, target, status) {
+    if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    Convertibility unitsState = extractConvertibility(sourceImpl, targetImpl, ratesInfo, status);
+    Convertibility unitsState = extractConvertibility(source, source, ratesInfo, status);
     if (U_FAILURE(status)) return;
     if (unitsState == Convertibility::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    conversionRate_.source = source;
-    conversionRate_.target = target;
-
-    loadConversionRate(conversionRate_, source, target, unitsState, ratesInfo, status);
+    loadConversionRate(conversionRate_, conversionRate_.source, conversionRate_.target, unitsState,
+                       ratesInfo, status);
 }
 
 double UnitConverter::convert(double inputValue) const {

@@ -39,13 +39,14 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
 
-        MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
+        MeasureUnitImpl complexTargetUnitImpl =
+            MeasureUnitImpl::forIdentifier(preference.unit.data(), status);
         if (U_FAILURE(status)) {
             return;
         }
 
-        outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnit);
-        converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnit, complexTargetUnit,
+        outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnitImpl.copy(status).build(status));
+        converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnitImpl, complexTargetUnitImpl,
                                                            preference.geq, conversionRates, status);
         if (U_FAILURE(status)) {
             return;

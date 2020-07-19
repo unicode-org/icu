@@ -19,14 +19,17 @@ U_NAMESPACE_BEGIN
 /**
  * Represents the conversion rate between `source` and `target`.
  */
-struct ConversionRate {
-    MeasureUnit source;
-    MeasureUnit target;
+struct ConversionRate : public UMemory {
+    MeasureUnitImpl source;
+    MeasureUnitImpl target;
     double factorNum = 1;
     double factorDen = 1;
     double sourceOffset = 0;
     double targetOffset = 0;
     bool reciprocal = false;
+
+    ConversionRate(const MeasureUnitImpl &source, const MeasureUnitImpl &target, UErrorCode &status)
+        : source(source.copy(status)), target(target.copy(status)) {}
 };
 
 enum U_I18N_API Convertibility {
@@ -80,8 +83,8 @@ class U_I18N_API UnitConverter : public UMemory {
      * @param target represents the target unit.
      * @param status
      */
-    UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
-                  UErrorCode &status);
+    UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+                  const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
      * Convert a value in the source unit to another value in the target unit.

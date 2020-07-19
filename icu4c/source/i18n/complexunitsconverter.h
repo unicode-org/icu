@@ -8,11 +8,14 @@
 #define __COMPLEXUNITSCONVERTER_H__
 
 #include "cmemory.h"
+#include "measunit_impl.h"
 #include "unicode/errorcode.h"
-#include "unicode/measunit.h"
-#include "unicode/measure.h"
 #include "unitconverter.h"
 #include "unitsdata.h"
+
+// TODO: remove after fully swap to `impl`.
+#include "unicode/measunit.h"
+#include "unicode/measure.h"
 
 U_NAMESPACE_BEGIN
 
@@ -25,7 +28,7 @@ U_NAMESPACE_BEGIN
  *    single unit to another single unit). Therefore, `ComplexUnitsConverter` class contains multiple
  *    instances of the `UnitConverter` to perform the conversion.
  */
-class U_I18N_API ComplexUnitsConverter {
+class U_I18N_API ComplexUnitsConverter : UMemory {
   public:
     /**
      * Constructor of `ComplexUnitsConverter`.
@@ -37,7 +40,7 @@ class U_I18N_API ComplexUnitsConverter {
      * @param outputUnits represents the output unit. could be any type. (single, compound or mixed).
      * @param status
      */
-    ComplexUnitsConverter(const MeasureUnit &inputUnit, const MeasureUnit &outputUnits,
+    ComplexUnitsConverter(const MeasureUnitImpl &inputUnit, const MeasureUnitImpl &outputUnits,
                           const ConversionRates &ratesInfo, UErrorCode &status);
 
     // Returns true if the specified `quantity` of the `inputUnit`, expressed in terms of the biggest
@@ -57,7 +60,7 @@ class U_I18N_API ComplexUnitsConverter {
 
   private:
     MaybeStackVector<UnitConverter> unitConverters_;
-    MaybeStackVector<MeasureUnit> units_;
+    MaybeStackVector<MeasureUnitImpl> units_;
 };
 
 U_NAMESPACE_END
