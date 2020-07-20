@@ -190,7 +190,7 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
         return result;
     }
 
-    bool operator==(const MeasureUnitImpl& other);
+    bool operator==(const MeasureUnitImpl& other) const;
 
     /** Returns the reciprocal of this `MeasureUnitImpl`. */
     MeasureUnitImpl reciprocal(UErrorCode& status);

@@ -827,12 +827,12 @@ MeasureUnitImpl MeasureUnitImpl::forMeasureUnitMaybeCopy(
 }
 
 namespace {
-struct unitIndexAndDimension {
+struct UnitIndexAndDimension : UMemory {
     int32_t index = 0;
     int32_t siPrefix = 0;
     int32_t dimensionality = 0;
 
-    unitIndexAndDimension(const SingleUnitImpl &singleUnit, int32_t multiplier) {
+    UnitIndexAndDimension(const SingleUnitImpl &singleUnit, int32_t multiplier) {
         index = singleUnit.index;
         siPrefix = singleUnit.siPrefix;
 
@@ -840,8 +840,8 @@ struct unitIndexAndDimension {
     }
 };
 
-void mergeSignleUnit(MaybeStackVector<unitIndexAndDimension> &unitIndicesWithDiemention,
-                     const SingleUnitImpl &shouldBeMerged, int32_t multiplier) {
+void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
+                                  const SingleUnitImpl &shouldBeMerged, int32_t multiplier) {
     for (int32_t i = 0; i < unitIndicesWithDiemention.length(); i++) {
         auto &unitWithIndex = *unitIndicesWithDiemention[i];
         if (unitWithIndex.index == shouldBeMerged.index &&
@@ -854,11 +854,11 @@ void mergeSignleUnit(MaybeStackVector<unitIndexAndDimension> &unitIndicesWithDie
     unitIndicesWithDiemention.emplaceBack(shouldBeMerged, multiplier);
 }
 
-void mergeUnitsAndDimentions(MaybeStackVector<unitIndexAndDimension> &unitIndicesWithDiemention,
+void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
                              const MeasureUnitImpl &shouldBeMerged, int32_t multiplier) {
     for (int32_t unit_i = 0; unit_i < shouldBeMerged.units.length(); unit_i++) {
         auto singleUnit = *shouldBeMerged.units[unit_i];
-        mergeSignleUnit(unitIndicesWithDiemention, singleUnit, multiplier);
+        mergeSingleUnitWithDimension(unitIndicesWithDiemention, singleUnit, multiplier);
     }
 }
 
@@ -868,13 +868,13 @@ MeasureUnitImpl::MeasureUnitImpl(const MeasureUnitImpl& other, UErrorCode& statu
    *this  = other.copy(status);
 }
 
-bool MeasureUnitImpl::operator==(const MeasureUnitImpl &other) {
+bool MeasureUnitImpl::operator==(const MeasureUnitImpl &other) const {
     if (this->units.length() != other.units.length()) return false;
     if (this->units.length() == 0) return true; // Empty `MeasureUnitImpl`s are equal.
 
-    MaybeStackVector<unitIndexAndDimension> unitIndicesDimension;
-    mergeUnitsAndDimentions(unitIndicesDimension, *this, 1);
-    mergeUnitsAndDimentions(unitIndicesDimension, other, -1);
+    MaybeStackVector<UnitIndexAndDimension> unitIndicesDimension;
+    mergeUnitsAndDimensions(unitIndicesDimension, *this, 1);
+    mergeUnitsAndDimensions(unitIndicesDimension, other, -1);
 
     for (int32_t i = 0; i < unitIndicesDimension.length(); i++) {
         if (unitIndicesDimension[i]->dimensionality != 0) return false;
@@ -885,7 +885,9 @@ bool MeasureUnitImpl::operator==(const MeasureUnitImpl &other) {
 
 MeasureUnitImpl MeasureUnitImpl::reciprocal(UErrorCode &status) {
     MeasureUnitImpl result = this->copy(status);
-    if (U_FAILURE(status)) return result;
+    if (U_FAILURE(status)) {
+        return result;
+    }
 
     result.takeReciprocal(status);
     return result;
