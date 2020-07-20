@@ -33,6 +33,8 @@ static void TestSimpleResourceInfo(void);
  * Use Locale to access Resource file display names and compare against expected values
  **/
 static  void TestDisplayNames(void);
+static  void TestGetDisplayScriptPreFlighting21160(void);
+
 /**
  * Test getAvailableLocales
  **/

@@ -217,6 +217,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestPrefixes);
     TESTCASE(TestSimpleResourceInfo);
     TESTCASE(TestDisplayNames);
+    TESTCASE(TestGetDisplayScriptPreFlighting21160);
     TESTCASE(TestGetAvailableLocales);
     TESTCASE(TestGetAvailableLocalesByType);
     TESTCASE(TestDataDirectory);
@@ -808,6 +809,26 @@ static void TestDisplayNames()
     }
 }
 
+/**
+ * ICU-21160 test the pre-flighting call to uloc_getDisplayScript returns the actual length needed
+ * for the result buffer.
+ */
+static void TestGetDisplayScriptPreFlighting21160()
+{
+    const char* locale = "und-Latn";
+    const char* inlocale = "de";
+
+    UErrorCode ec = U_ZERO_ERROR;
+    UChar* result = NULL;
+    int32_t length = uloc_getDisplayScript(locale, inlocale, NULL, 0, &ec) + 1;
+    ec = U_ZERO_ERROR;
+    result=(UChar*)malloc(sizeof(UChar) * length);
+    length = uloc_getDisplayScript(locale, inlocale, result, length, &ec);
+    if (U_FAILURE(ec)) {
+        log_err("uloc_getDisplayScript length %d returned error %s", length, u_errorName(ec));
+    }
+    free(result);
+}
 
 /* test for uloc_getAvialable()  and uloc_countAvilable()*/
 static void TestGetAvailableLocales()
