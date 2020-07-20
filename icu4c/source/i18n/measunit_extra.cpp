@@ -23,6 +23,7 @@
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/measunit.h"
+#include "uresimp.h"
 #include <cstdlib>
 
 #include "cstr.h"
@@ -110,114 +111,13 @@ const struct SIPrefixStrings {
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
 };
 
-// TODO(ICU-21059): Get this list from data
+// Array of simple unit IDs.
 //
-// NB: SingleUnitImpl::getSimpleUnitID() returns char*'s pointing at these
-// strings, take appropriate care with refactoring and updating documentation.
-const char *const gSimpleUnits[] = {
-    "candela",
-    "carat",
-    "gram",
-    "ounce",
-    "ounce-troy",
-    "pound",
-    "kilogram",
-    "stone",
-    "ton",
-    "metric-ton",
-    "earth-mass",
-    "solar-mass",
-    "point",
-    "inch",
-    "foot",
-    "yard",
-    "meter",
-    "fathom",
-    "furlong",
-    "mile",
-    "nautical-mile",
-    "mile-scandinavian",
-    "100-kilometer",
-    "earth-radius",
-    "solar-radius",
-    "astronomical-unit",
-    "light-year",
-    "parsec",
-    "second",
-    "minute",
-    "hour",
-    "day",
-    "day-person",
-    "week",
-    "week-person",
-    "month",
-    "month-person",
-    "year",
-    "year-person",
-    "decade",
-    "century",
-    "ampere",
-    "fahrenheit",
-    "kelvin",
-    "celsius",
-    "arc-second",
-    "arc-minute",
-    "degree",
-    "radian",
-    "revolution",
-    "item",
-    "mole",
-    "permillion",
-    "permyriad",
-    "permille",
-    "percent",
-    "karat",
-    "portion",
-    "bit",
-    "byte",
-    "dot",
-    "pixel",
-    "em",
-    "hertz",
-    "newton",
-    "pound-force",
-    "pascal",
-    "bar",
-    "atmosphere",
-    "ofhg",
-    "electronvolt",
-    "dalton",
-    "joule",
-    "calorie",
-    "british-thermal-unit",
-    "foodcalorie",
-    "therm-us",
-    "watt",
-    "horsepower",
-    "solar-luminosity",
-    "volt",
-    "ohm",
-    "dunam",
-    "acre",
-    "hectare",
-    "teaspoon",
-    "tablespoon",
-    "fluid-ounce-imperial",
-    "fluid-ounce",
-    "cup",
-    "cup-metric",
-    "pint",
-    "pint-metric",
-    "quart",
-    "liter",
-    "gallon",
-    "gallon-imperial",
-    "bushel",
-    "barrel",
-    "knot",
-    "g-force",
-    "lux",
-};
+// Array memory is owned, but individual char* in that array point at static
+// memory.
+//
+// Note that these char* are also returned by SingleUnitImpl::getSimpleUnitID().
+const char **gSimpleUnits = nullptr;
 
 icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
 
@@ -226,6 +126,8 @@ char *kSerializedUnitExtrasStemTrie = nullptr;
 UBool U_CALLCONV cleanupUnitExtras() {
     uprv_free(kSerializedUnitExtrasStemTrie);
     kSerializedUnitExtrasStemTrie = nullptr;
+    uprv_free(gSimpleUnits);
+    gSimpleUnits = nullptr;
     gUnitExtrasInitOnce.reset();
     return TRUE;
 }
@@ -265,10 +167,26 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     b.add("pow15-", POWER_PART_P15, status);
     if (U_FAILURE(status)) { return; }
 
-    // Add sanctioned simple units by offset
-    int32_t simpleUnitOffset = kSimpleUnitOffset;
-    for (auto simpleUnit : gSimpleUnits) {
-        b.add(simpleUnit, simpleUnitOffset++, status);
+    // Add sanctioned simple units by offset: simple units all have entries in
+    // units/convertUnits resources.
+    // TODO(ICU-21059): confirm whether this is clean enough, or whether we need to
+    // filter units' validity list instead.
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+    LocalUResourceBundlePointer convertUnits(
+        ures_getByKey(unitsBundle.getAlias(), "convertUnits", NULL, &status));
+    int32_t simpleUnitsCount = convertUnits.getAlias()->fSize;
+    gSimpleUnits = static_cast<const char **>(uprv_malloc(sizeof(char *) * simpleUnitsCount));
+    if (gSimpleUnits == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    if (U_FAILURE(status)) { return; }
+    StackUResourceBundle fillIn;
+    for (int i = 0; i < simpleUnitsCount; i++) {
+        ures_getByIndex(convertUnits.getAlias(), i, fillIn.getAlias(), &status);
+        const char *key = ures_getKey(fillIn.getAlias());
+        gSimpleUnits[i] = key;
+        b.add(key, kSimpleUnitOffset + i, status);
     }
 
     // Build the CharsTrie
@@ -671,7 +589,7 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
         return;
     }
 
-    output.append(gSimpleUnits[singleUnit.index], status);
+    output.append(singleUnit.getSimpleUnitID(), status);
 }
 
 /**
@@ -800,6 +718,8 @@ MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
 }
 
 const char *SingleUnitImpl::getSimpleUnitID() const {
+    // gSimpleUnits will already have been populated if singleUnit even has an
+    // index... FIXME delete comment after reviewing overview docs.
     return gSimpleUnits[index];
 }
 
