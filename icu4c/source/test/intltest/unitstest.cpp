@@ -617,12 +617,12 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     if (status.errIfFailureAndReset("Failure before router.route")) {
         return;
     }
-    MaybeStackVector<Measure> result = router.route(inputAmount, status);
+    auto routeResult = router.route(inputAmount, status);
     if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) {
         return;
     }
     // TODO: revisit this experimentally chosen precision:
-    checkOutput(unitsTest, msg.data(), expected, result, 0.0000000001);
+    checkOutput(unitsTest, msg.data(), expected, routeResult.measures, 0.0000000001);
 }
 
 /**
