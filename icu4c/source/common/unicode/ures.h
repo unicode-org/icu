@@ -702,7 +702,7 @@ ures_getUTF8StringByIndex(const UResourceBundle *resB,
  * resources. Features a fill-in parameter.
  *
  * @param resourceBundle    a resource
- * @param key               a key associated with the wanted resource
+ * @param key               a key associated with the wanted resource, can be a path FIXME:CONFIRM
  * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be closed by the caller.
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code.

@@ -246,7 +246,7 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
  * on the sub-resources because the table is defined in the current resource bundle, but this
  * function can perform fallback on the sub-resources of the table.
  * @param resB              a resource
- * @param inKey             a key associated with the requested resource
+ * @param inKey             a key associated with the requested resource, can be a path FIXME:CONFIRM
  * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status: fills in the outgoing error code
