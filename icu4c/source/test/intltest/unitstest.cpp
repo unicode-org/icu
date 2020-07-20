@@ -324,15 +324,14 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     // Convertibility:
     auto convertibility = extractConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
     if (status.errIfFailureAndReset("extractConvertibility(<%s>, <%s>, ...)",
-                                    sourceUnit.identifier.cloneData(status),
-                                    targetUnit.identifier.cloneData(status))) {
+                                    sourceUnit.identifier.data(), targetUnit.identifier.data())) {
         return;
     }
     CharString msg;
     msg.append("convertible: ", status)
-        .append(sourceUnit.identifier.cloneData(status), status)
+        .append(sourceUnit.identifier.data(), status)
         .append(" -> ", status)
-        .append(targetUnit.identifier.cloneData(status), status);
+        .append(targetUnit.identifier.data(), status);
     if (status.errIfFailureAndReset("msg construction")) {
         return;
     }
@@ -341,8 +340,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     // Conversion:
     UnitConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
     if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-                                    sourceUnit.identifier.cloneData(status),
-                                    targetUnit.identifier.cloneData(status))) {
+                                    sourceUnit.identifier.data(), targetUnit.identifier.data())) {
         return;
     }
     double got = converter.convert(1000);
