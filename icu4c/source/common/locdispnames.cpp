@@ -406,17 +406,23 @@ uloc_getDisplayScript(const char* locale,
                       UChar *dest, int32_t destCapacity,
                       UErrorCode *pErrorCode)
 {
-	UErrorCode err = U_ZERO_ERROR;
-	int32_t res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+    UErrorCode err = U_ZERO_ERROR;
+    int32_t res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
                 uloc_getScript, _kScriptsStandAlone, &err);
-	
-	if ( err == U_USING_DEFAULT_WARNING ) {
+
+    if (destCapacity == 0 && err == U_BUFFER_OVERFLOW_ERROR) {
+        // For preflight, return the max of the value and the fallback.
+        int32_t fallback_res = _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
+                                                           uloc_getScript, _kScripts, pErrorCode);
+        return (fallback_res > res) ? fallback_res : res;
+    }
+    if ( err == U_USING_DEFAULT_WARNING ) {
         return _getDisplayNameForComponent(locale, displayLocale, dest, destCapacity,
-                    uloc_getScript, _kScripts, pErrorCode);
-	} else {
-		*pErrorCode = err;
-		return res;
-	}
+                                           uloc_getScript, _kScripts, pErrorCode);
+    } else {
+        *pErrorCode = err;
+        return res;
+    }
 }
 
 static int32_t
