@@ -85,8 +85,8 @@ void UnitsTest::testConversionCapability() {
     for (const auto &testCase : testCases) {
         UErrorCode status = U_ZERO_ERROR;
 
-        MeasureUnit source = MeasureUnit::forIdentifier(testCase.source, status);
-        MeasureUnit target = MeasureUnit::forIdentifier(testCase.target, status);
+        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
 
         ConversionRates conversionRates(status);
         auto convertibility = extractConvertibility(source, target, conversionRates, status);

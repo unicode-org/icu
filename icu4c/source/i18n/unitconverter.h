@@ -10,7 +10,6 @@
 #include "cmemory.h"
 #include "measunit_impl.h"
 #include "unicode/errorcode.h"
-#include "unicode/measunit.h"
 #include "unitconverter.h"
 #include "unitsdata.h"
 
@@ -104,12 +103,6 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
 Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
                                                 const MeasureUnitImpl &target,
                                                 const ConversionRates &conversionRates,
-                                                UErrorCode &status);
-
-// TODO: Remove this function after move to use `MeasureUnitImpl`.
-Convertibility U_I18N_API extractConvertibility(const MeasureUnit &source,              //
-                                                const MeasureUnit &target,              //
-                                                const ConversionRates &conversionRates, //
                                                 UErrorCode &status);
 
 /**

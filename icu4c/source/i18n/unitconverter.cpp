@@ -480,15 +480,6 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
     return UNCONVERTIBLE;
 }
 
-Convertibility U_I18N_API extractConvertibility(const MeasureUnit &source,              //
-                                                const MeasureUnit &target,              //
-                                                const ConversionRates &conversionRates, //
-                                                UErrorCode &status) {
-    MeasureUnitImpl sourceImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(source, status);
-    MeasureUnitImpl targetImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(target, status);
-    return extractConvertibility(sourceImpl, targetImpl, conversionRates, status);
-}
-
 UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
                              const ConversionRates &ratesInfo, UErrorCode &status): conversionRate_(source, target, status) {
     if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
