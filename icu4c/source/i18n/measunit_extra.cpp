@@ -162,15 +162,14 @@ class TableKeysSink : public icu::ResourceSink {
     int32_t outIndex;
 };
 
+icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
+
 // Array of simple unit IDs.
 //
-// Array memory is owned, but individual char* in that array point at static
-// memory.
-//
-// Note that these char* are also returned by SingleUnitImpl::getSimpleUnitID().
+// The array memory itself is owned by this pointer, but the individual char* in
+// that array point at static memory. (Note that these char* are also returned
+// by SingleUnitImpl::getSimpleUnitID().)
 const char **gSimpleUnits = nullptr;
-
-icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
 
 char *kSerializedUnitExtrasStemTrie = nullptr;
 
@@ -771,8 +770,6 @@ MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
 }
 
 const char *SingleUnitImpl::getSimpleUnitID() const {
-    // gSimpleUnits will already have been populated if singleUnit even has an
-    // index... FIXME delete comment after reviewing overview docs.
     return gSimpleUnits[index];
 }
 
