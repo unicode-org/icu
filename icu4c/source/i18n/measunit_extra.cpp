@@ -111,6 +111,57 @@ const struct SIPrefixStrings {
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
 };
 
+/**
+ * A ResourceSink that collects table keys from a resource.
+ *
+ * This class is for use by ures_getAllItemsWithFallback. Example code:
+ *
+ *     UErrorCode status = U_ZERO_ERROR;
+ *     const char* unitIdentifiers[200];
+ *     TableKeysSink identifierSink(unitIdentifiers, 200);
+ *     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+ *     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
+ */
+class TableKeysSink : public icu::ResourceSink {
+  public:
+    explicit TableKeysSink(const char **out, int32_t outSize)
+        : outArray(out), outSize(outSize), outIndex(0) {
+    }
+
+    /**
+     * Adds the table keys found in value to the output vector.
+     * @param key The key of the resource passed to `value`: the second
+     *     parameter of the ures_getAllItemsWithFallback() call.
+     * @param value Should be a ResourceTable value, if
+     *     ures_getAllItemsWithFallback() was called correctly for this sink.
+     * @param noFallback Ignored.
+     * @param status The standard ICU error code output parameter.
+     */
+    void put(const char * /*key*/, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
+        ResourceTable table = value.getTable(status);
+        if (U_FAILURE(status)) return;
+
+        if (outIndex + table.getSize() >= outSize) {
+            // TODO(review): not the best error? Can't find a really good one...
+            status = U_INDEX_OUTOFBOUNDS_ERROR;
+            return;
+        }
+
+        // Collect keys from the table resource.
+        const char *key;
+        for (int32_t i = 0; table.getKeyAndValue(i, key, value); ++i) {
+            U_ASSERT(i < table.getSize());
+            U_ASSERT(outIndex < outSize);
+            outArray[outIndex++] = key;
+        }
+    }
+
+  private:
+    const char **outArray;
+    int32_t outSize;
+    int32_t outIndex;
+};
+
 // Array of simple unit IDs.
 //
 // Array memory is owned, but individual char* in that array point at static
@@ -174,13 +225,15 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
     LocalUResourceBundlePointer convertUnits(
         ures_getByKey(unitsBundle.getAlias(), "convertUnits", NULL, &status));
+    if (U_FAILURE(status)) { return; }
+
     int32_t simpleUnitsCount = convertUnits.getAlias()->fSize;
     gSimpleUnits = static_cast<const char **>(uprv_malloc(sizeof(char *) * simpleUnitsCount));
     if (gSimpleUnits == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    if (U_FAILURE(status)) { return; }
+
     StackUResourceBundle fillIn;
     for (int i = 0; i < simpleUnitsCount; i++) {
         ures_getByIndex(convertUnits.getAlias(), i, fillIn.getAlias(), &status);
