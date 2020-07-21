@@ -684,8 +684,12 @@ void NumberFormatterApiTest::unitUsage() {
 
     IcuTestErrorCode status(*this, "unitUsage()");
 
-    LocalizedNumberFormatter formatter = unloc_formatter.locale("en-ZA");
-    FormattedNumber formattedNum = formatter.formatDouble(300, status);
+    LocalizedNumberFormatter formatter;
+    FormattedNumber formattedNum;
+
+    formatter = unloc_formatter.locale("en-ZA");
+    formattedNum = formatter.formatDouble(304, status);
+    status.errIfFailureAndReset("unitUsage() en-ZA road, formatDouble(...)");
     assertTrue(UnicodeString("unitUsage() en-ZA road, got outputUnit: \"") +
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getMeter() == formattedNum.getOutputUnit(status));
@@ -701,17 +705,23 @@ void NumberFormatterApiTest::unitUsage() {
             u"877 km",
             u"88 km",
             u"8,8 km",
-            u"877 m",
-            u"88 m",
-            u"8,8 m",
+            u"900 m",
+            u"90 m",
+            u"10 m",
             u"0 m");
 
     formatter = unloc_formatter.locale("en-GB");
-    formattedNum = formatter.formatDouble(300, status);
+    formattedNum = formatter.formatDouble(304, status);
+    status.errIfFailureAndReset("unitUsage() en-GB road, formatDouble(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertTrue(UnicodeString("unitUsage() en-GB road, got outputUnit: \"") +
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
-    assertEquals("unitUsage() en-GB road", "328 yd", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-GB road, getOutputUnit(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertEquals("unitUsage() en-GB road", "350 yd", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-GB road, toString(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertFormatDescendingBig(
             u"unitUsage() en-GB road",
             u"measure-unit/length-meter usage/road",
@@ -729,11 +739,17 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 yd");
 
     formatter = unloc_formatter.locale("en-US");
-    formattedNum = formatter.formatDouble(300, status);
+    formattedNum = formatter.formatDouble(304, status);
+    status.errIfFailureAndReset("unitUsage() en-US road, formatDouble(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertTrue(UnicodeString("unitUsage() en-US road, got outputUnit: \"") +
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
-    assertEquals("unitUsage() en-US road", "984 ft", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-US road, getOutputUnit(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertEquals("unitUsage() en-US road", "1,000 ft", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-US road, toString(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertFormatDescendingBig(
             u"unitUsage() en-US road",
             u"measure-unit/length-meter usage/road",
@@ -746,9 +762,10 @@ void NumberFormatterApiTest::unitUsage() {
             u"54 mi",
             u"5.4 mi",
             u"0.54 mi",
-            u"288 ft",
-            u"29 ft",
+            u"300 ft",
+            u"30 ft",
             u"0 ft");
+
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {

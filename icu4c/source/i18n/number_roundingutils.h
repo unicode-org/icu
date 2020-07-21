@@ -44,6 +44,9 @@ enum Section {
 inline bool
 getRoundingDirection(bool isEven, bool isNegative, Section section, RoundingMode roundingMode,
                      UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return false;
+    }
     switch (roundingMode) {
         case RoundingMode::UNUM_ROUND_UP:
             // round away from zero

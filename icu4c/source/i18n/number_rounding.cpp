@@ -341,6 +341,9 @@ RoundingImpl::chooseMultiplierAndApply(impl::DecimalQuantity &input, const impl:
 
 /** This is the method that contains the actual rounding logic. */
 void RoundingImpl::apply(impl::DecimalQuantity &value, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (fPassThrough) {
         return;
     }

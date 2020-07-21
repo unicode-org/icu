@@ -484,6 +484,15 @@ MacroProps skeleton::parseSkeleton(
         const UnicodeString& skeletonString, int32_t& errOffset, UErrorCode& status) {
     U_ASSERT(U_SUCCESS(status));
 
+    // FIXME (DO NOT SUBMIT): In this PR, we consider calling parseSkeleton
+    // directly rather than going through create(). With the first call, we've
+    // missed initNumberSkeletons though. Do we want to go through create, which
+    // is just a little bit wasteful, or do we want to find an alternative way
+    // to ensure initNumberSkeletons has been called?
+    umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
+
+    U_ASSERT(kSerializedStemTrie != nullptr);
+
     // Add a trailing whitespace to the end of the skeleton string to make code cleaner.
     UnicodeString tempSkeletonString(skeletonString);
     tempSkeletonString.append(u' ');
@@ -1583,7 +1592,7 @@ bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErr
     }
 }
 
-bool GeneratorHelpers::usage(const MacroProps& macros, UnicodeString& sb, UErrorCode&) {
+bool GeneratorHelpers::usage(const MacroProps& macros, UnicodeString& sb, UErrorCode& /* status */) {
     if (macros.usage.fLength > 0) {
         sb.append(u"usage/", -1);
         sb.append(UnicodeString(macros.usage.fUsage, -1, US_INV));

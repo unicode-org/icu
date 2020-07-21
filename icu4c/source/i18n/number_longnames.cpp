@@ -426,6 +426,9 @@ void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps 
             return;
         }
     }
+    if (U_FAILURE(status)) {
+        return;
+    }
     // We shouldn't receive any outputUnit for which we haven't already got a
     // LongNameHandler:
     status = U_INTERNAL_PROGRAM_ERROR;

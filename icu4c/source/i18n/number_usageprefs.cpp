@@ -8,6 +8,7 @@
 #include "number_decimalquantity.h"
 #include "number_microprops.h"
 #include "number_roundingutils.h"
+#include "number_skeletons.h"
 #include "unicode/char16ptr.h"
 #include "unicode/currunit.h"
 #include "unicode/fmtable.h"
@@ -19,6 +20,7 @@
 
 using namespace icu::number;
 using namespace icu::number::impl;
+using icu::number::impl::skeleton::parseSkeleton;
 
 // Copy constructor
 Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
@@ -100,24 +102,47 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
 
     quantity.roundToInfinity(); // Enables toDouble
     const auto routed = fUnitsRouter.route(quantity.toDouble(), status);
+    if (U_FAILURE(status)) {
+        return;
+    }
     const auto& routedUnits = routed.measures;
     micros.outputUnit = routedUnits[0]->getUnit();
     quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
 
-    // TODO(units): here we are always overriding Precision. (1) get precision
-    // from fUnitsRouter, (2) ensure we use the UnitPreference skeleton's
-    // precision only when there isn't an explicit override we prefer to use.
-    // This needs to be handled within
-    // NumberFormatterImpl::macrosToMicroGenerator in number_formatimpl.cpp
-    // TODO: Use precision from `routed` result.
-    Precision precision = Precision::integer().withMinDigits(2);
-    UNumberFormatRoundingMode roundingMode;
-    // Temporary until ICU 64?
-    roundingMode = precision.fRoundingMode;
-    CurrencyUnit currency(u"", status);
-    micros.rounder = {precision, roundingMode, currency, status};
-    if (U_FAILURE(status)) {
-        return;
+    UnicodeString precisionSkeleton = routed.precision;
+    // TODO(icu-units/icu#13): If the programmer specified a precision, use
+    // that.
+    if (precisionSkeleton.length() > 0) {
+        CharString csPrecisionSkeleton;
+        UErrorCode csErrCode = U_ZERO_ERROR;
+        csPrecisionSkeleton.appendInvariantChars(precisionSkeleton, csErrCode);
+
+        // Parse skeleton, collect results
+        int32_t errOffset;
+        // int32_t errOffset = 0;
+        U_ASSERT(U_SUCCESS(status));
+        MacroProps unitPrefMacros = parseSkeleton(precisionSkeleton, errOffset, status);
+        Precision precision;
+        UNumberFormatRoundingMode roundingMode;
+        if (U_FAILURE(status)) {
+            return;
+        }
+        precision = unitPrefMacros.precision;
+        if (unitPrefMacros.roundingMode != kDefaultMode) {
+            roundingMode = unitPrefMacros.roundingMode;
+        } else {
+            // TODO: "Temporary until ICU 64" in number_formatimpl.cpp? Clarify!
+            roundingMode = precision.fRoundingMode;
+        }
+        CurrencyUnit currency(u"", status);
+        micros.rounder = {precision, roundingMode, currency, status};
+    } else {
+        Precision precision = Precision::integer().withMinDigits(2);
+        UNumberFormatRoundingMode roundingMode;
+        // Temporary until ICU 64?
+        roundingMode = precision.fRoundingMode;
+        CurrencyUnit currency(u"", status);
+        micros.rounder = {precision, roundingMode, currency, status};
     }
 }
 
