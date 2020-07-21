@@ -69,16 +69,16 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
  * Represents the conversion rate between `source` and `target`.
  */
 struct ConversionRate : public UMemory {
-    MeasureUnitImpl source;
-    MeasureUnitImpl target;
+    const MeasureUnitImpl source;
+    const MeasureUnitImpl target;
     double factorNum = 1;
     double factorDen = 1;
     double sourceOffset = 0;
     double targetOffset = 0;
     bool reciprocal = false;
 
-    ConversionRate(const MeasureUnitImpl &source, const MeasureUnitImpl &target, UErrorCode &status)
-        : source(source, status), target(target, status) {}
+    ConversionRate(MeasureUnitImpl &&source, MeasureUnitImpl &&target)
+        : source(std::move(source)), target(std::move(target)) {}
 };
 
 enum U_I18N_API Convertibility {

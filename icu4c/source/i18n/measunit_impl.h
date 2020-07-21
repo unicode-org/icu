@@ -127,8 +127,11 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
  */
 struct U_I18N_API MeasureUnitImpl : public UMemory {
     MeasureUnitImpl() = default;
+    MeasureUnitImpl(MeasureUnitImpl &&other) = default;
     MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status);
     MeasureUnitImpl(const SingleUnitImpl &singleUnit, UErrorCode &status);
+
+    MeasureUnitImpl &operator=(MeasureUnitImpl &&other) noexcept = default;
 
     /** Extract the MeasureUnitImpl from a MeasureUnit. */
     static inline const MeasureUnitImpl* get(const MeasureUnit& measureUnit) {
@@ -236,7 +239,6 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      */
     CharString identifier;
 };
-
 
 U_NAMESPACE_END
 

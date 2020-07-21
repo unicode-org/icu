@@ -498,7 +498,7 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
 
 UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
                              const ConversionRates &ratesInfo, UErrorCode &status)
-    : conversionRate_(source, target, status) {
+    : conversionRate_(source.copy(status), target.copy(status)) {
     if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
         target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
