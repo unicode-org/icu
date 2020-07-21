@@ -2183,7 +2183,7 @@ UBool IntlTest::assertEqualsNear(const char* message,
         return FALSE;
     }
     bool bothNaN = std::isnan(expected) && std::isnan(actual);
-    double difference = abs(expected - actual);
+    double difference = std::abs(expected - actual);
     if (expected != actual && (difference > delta || std::isnan(difference)) && !bothNaN) {
         errln((UnicodeString)("FAIL: ") + message + "; got " + actual + "; expected " + expected +
               "; acceptable delta " + delta);
