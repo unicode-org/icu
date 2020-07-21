@@ -76,7 +76,7 @@ struct ConversionRate : public UMemory {
     bool reciprocal = false;
 
     ConversionRate(const MeasureUnitImpl &source, const MeasureUnitImpl &target, UErrorCode &status)
-        : source(source.copy(status)), target(target.copy(status)) {}
+        : source(source, status), target(target, status) {}
 };
 
 enum U_I18N_API Convertibility {
