@@ -192,14 +192,14 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
     }
 
     /**
-     * Creates a list of all the singleton units inside the `MeasureUnitImpl`.
+     * Extracts the list of all the individual units inside the `MeasureUnitImpl`.
      *      For example:    
      *          -   if the `MeasureUnitImpl` is `foot-per-hour`
      *                  it will return a list of 1 {`foot-per-hour`} 
      *          -   if the `MeasureUnitImpl` is `foot-and-inch` 
      *                  it will return a list of 2 { `foot`, `inch`}
      */
-    MaybeStackVector<MeasureUnitImpl> getAllSingletonUnits(UErrorCode &status) const;
+    MaybeStackVector<MeasureUnitImpl> extractIndividualUnits(UErrorCode &status) const;
 
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);

@@ -855,7 +855,7 @@ bool MeasureUnitImpl::append(const MaybeStackVector<SingleUnitImpl> &singleUnits
     return result;
 }
 
-MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::getAllSingletonUnits(UErrorCode &status) const {
+MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::extractIndividualUnits(UErrorCode &status) const {
     MaybeStackVector<MeasureUnitImpl> result;
 
     if (this->complexity != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {

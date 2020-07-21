@@ -12,9 +12,6 @@
 #include "number_decimalquantity.h"
 #include "resource.h"
 #include "unicode/measure.h"
-#include "unitconverter.h" // for extractCompoundBaseUnit
-#include "unitconverter.h"
-#include "unitsdata.h" // for getUnitCategory
 #include "unitsdata.h"
 #include "unitsrouter.h"
 

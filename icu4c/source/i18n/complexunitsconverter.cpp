@@ -22,7 +22,7 @@ namespace units {
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
                                              const MeasureUnitImpl &outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status)
-    : units_(outputUnits.getAllSingletonUnits(status)) {
+    : units_(outputUnits.extractIndividualUnits(status)) {
     if (units_.length() == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -75,7 +75,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableNewQuantity(newQuantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            MeasureUnit *type = units_[i]->copy(status).build(status).clone();
+            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
             result.emplaceBackAndCheckErrorCode(status, formattableNewQuantity, type, status);
 
             // Keep the residual of the quantity.
@@ -85,7 +85,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableQuantity(quantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            MeasureUnit *type = units_[i]->copy(status).build(status).clone();
+            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
             result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status);
         }
     }

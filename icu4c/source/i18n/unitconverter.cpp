@@ -240,7 +240,7 @@ Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &
 
     Factor result;
     for (int32_t i = 0, n = source.units.length(); i < n; i++) {
-        auto singleUnit = *source.units[i]; // a SingleUnitImpl
+        SingleUnitImpl singleUnit = *source.units[i];
 
         Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
@@ -324,6 +324,7 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &s
 
     conversionRate.reciprocal = unitsState == Convertibility::RECIPROCAL;
 }
+
 struct UnitIndexAndDimension : UMemory {
     int32_t index = 0;
     int32_t dimensionality = 0;
@@ -334,24 +335,24 @@ struct UnitIndexAndDimension : UMemory {
     }
 };
 
-void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
+void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDimension,
                                   const SingleUnitImpl &shouldBeMerged, int32_t multiplier) {
-    for (int32_t i = 0; i < unitIndicesWithDiemention.length(); i++) {
-        auto &unitWithIndex = *unitIndicesWithDiemention[i];
+    for (int32_t i = 0; i < unitIndicesWithDimension.length(); i++) {
+        auto &unitWithIndex = *unitIndicesWithDimension[i];
         if (unitWithIndex.index == shouldBeMerged.index) {
             unitWithIndex.dimensionality += shouldBeMerged.dimensionality * multiplier;
             return;
         }
     }
 
-    unitIndicesWithDiemention.emplaceBack(shouldBeMerged, multiplier);
+    unitIndicesWithDimension.emplaceBack(shouldBeMerged, multiplier);
 }
 
-void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
+void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDimension,
                              const MeasureUnitImpl &shouldBeMerged, int32_t multiplier) {
     for (int32_t unit_i = 0; unit_i < shouldBeMerged.units.length(); unit_i++) {
         auto singleUnit = *shouldBeMerged.units[unit_i];
-        mergeSingleUnitWithDimension(unitIndicesWithDiemention, singleUnit, multiplier);
+        mergeSingleUnitWithDimension(unitIndicesWithDimension, singleUnit, multiplier);
     }
 }
 
@@ -450,7 +451,7 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
 }
 
 /**
- * Check if the convertibility between `source` and `target`.
+ * Determine the convertibility between `source` and `target`.
  * For example:
  *    `meter` and `foot` are `CONVERTIBLE`.
  *    `meter-per-second` and `second-per-meter` are `RECIPROCAL`.
@@ -460,7 +461,6 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
  *    Only works with SINGLE and COMPOUND units. If one of the units is a
  *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
-
 Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
                                                 const MeasureUnitImpl &target,
                                                 const ConversionRates &conversionRates,
