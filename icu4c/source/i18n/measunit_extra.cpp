@@ -12,21 +12,24 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
-#include "cstring.h"
+#include "charstr.h"
+#include "cmemory.h"
 #include "measunit_impl.h"
+#include "resource.h"
 #include "uarrsort.h"
 #include "uassert.h"
 #include "ucln_in.h"
 #include "umutex.h"
 #include "unicode/bytestrie.h"
 #include "unicode/bytestriebuilder.h"
-#include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/measunit.h"
+#include "unicode/stringpiece.h"
+#include "unicode/stringtriebuilder.h"
+#include "unicode/ures.h"
+#include "unicode/ustringtrie.h"
 #include "uresimp.h"
 #include <cstdlib>
-
-#include "cstr.h"
 
 U_NAMESPACE_BEGIN
 
