@@ -315,48 +315,45 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &s
 
     conversionRate.reciprocal = unitsState == Convertibility::RECIPROCAL;
 }
+struct UnitIndexAndDimension : UMemory {
+    int32_t index = 0;
+    int32_t dimensionality = 0;
 
-/**
- * Merges the `shouldBeAdded` single unit into the `simplifiedSingleUnits` without its SI prefixes.
- * Thus means if the simplified identifier of the `shouldBeAdded` unit is exit in the
- * `simplifiedSingleUnits`, the dimensionality will be added to the match. Otherwise, the `shouldBeAdded`
- * unit will be added to the `simplifiedSingleUnits` without its SI prefix.
- */
-void mergeWithNoSiPrefix(MaybeStackVector<SingleUnitImpl> &simplifiedSingleUnits,
-                         const SingleUnitImpl &shouldBeAdded, UErrorCode &status) {
-    for (int32_t i = 0; i < simplifiedSingleUnits.length(); i++) {
-        auto &simplifiedUnit = *simplifiedSingleUnits[i];
-        if (simplifiedUnit.getSimpleUnitID() == shouldBeAdded.getSimpleUnitID()) {
-            simplifiedUnit.dimensionality += shouldBeAdded.dimensionality;
+    UnitIndexAndDimension(const SingleUnitImpl &singleUnit, int32_t multiplier) {
+        index = singleUnit.index;
+        dimensionality = singleUnit.dimensionality * multiplier;
+    }
+};
+
+void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
+                                  const SingleUnitImpl &shouldBeMerged, int32_t multiplier) {
+    for (int32_t i = 0; i < unitIndicesWithDiemention.length(); i++) {
+        auto &unitWithIndex = *unitIndicesWithDiemention[i];
+        if (unitWithIndex.index == shouldBeMerged.index) {
+            unitWithIndex.dimensionality += shouldBeMerged.dimensionality * multiplier;
             return;
         }
     }
 
-    SingleUnitImpl simplifiedUnit = shouldBeAdded;
-    simplifiedUnit.siPrefix = UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE;
-    simplifiedSingleUnits.emplaceBackAndCheckErrorCode(status, simplifiedUnit);
+    unitIndicesWithDiemention.emplaceBack(shouldBeMerged, multiplier);
 }
 
-/**
- * Merge all the units in the `MeasureUnitImpl` with taking into consideration only the dimensionality.
- * For example:
- *      `square-meter-per-centimeter` will be `meter`
- *      `cubic-millimeter-per-decameter` will be `square-meter`
- *
- * Because in some applications, such checking the convertibility, we only care about the dimensionality
- * of the units, not their SI-Prefixes.
- */
-MeasureUnitImpl simplifyWithNoSiPrefixes(const MeasureUnitImpl &sourceUnitImpl, UErrorCode &status) {
-    MeasureUnitImpl result;
-    const auto &singleUnits = sourceUnitImpl.units;
-    MaybeStackVector<SingleUnitImpl> simplifiedSingleUnits;
-    for (int32_t i = 0, n = singleUnits.length(); i < n; ++i) {
-        mergeWithNoSiPrefix(simplifiedSingleUnits, *singleUnits[i], status);
-        if (U_FAILURE(status)) return result;
+void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
+                             const MeasureUnitImpl &shouldBeMerged, int32_t multiplier) {
+    for (int32_t unit_i = 0; unit_i < shouldBeMerged.units.length(); unit_i++) {
+        auto singleUnit = *shouldBeMerged.units[unit_i];
+        mergeSingleUnitWithDimension(unitIndicesWithDiemention, singleUnit, multiplier);
+    }
+}
+
+UBool checkAllDimensionsAreZeros(const MaybeStackVector<UnitIndexAndDimension> &dimensionVector) {
+    for (int32_t i = 0; i < dimensionVector.length(); i++) {
+        if (dimensionVector[i]->dimensionality != 0) {
+            return false;
+        }
     }
 
-    result.append(simplifiedSingleUnits, status);
-    return result;
+    return true;
 }
 
 } // namespace
@@ -467,28 +464,36 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
     MeasureUnitImpl targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
     if (U_FAILURE(status)) return UNCONVERTIBLE;
 
-    if (sourceBaseUnit == targetBaseUnit) return CONVERTIBLE;
-    if (sourceBaseUnit == targetBaseUnit.reciprocal(status) && !U_FAILURE(status)) return RECIPROCAL;
+    MaybeStackVector<UnitIndexAndDimension> convertible;
+    MaybeStackVector<UnitIndexAndDimension> reciprocal;
 
-    auto sourceSimplified = simplifyWithNoSiPrefixes(sourceBaseUnit, status);
-    auto targetSimplified = simplifyWithNoSiPrefixes(targetBaseUnit, status);
-    if (U_FAILURE(status)) return UNCONVERTIBLE;
+    mergeUnitsAndDimensions(convertible, sourceBaseUnit, 1);
+    mergeUnitsAndDimensions(reciprocal, sourceBaseUnit, 1);
 
-    if (sourceSimplified == targetSimplified) return CONVERTIBLE;
-    if (sourceSimplified == targetSimplified.reciprocal(status) && !U_FAILURE(status)) return RECIPROCAL;
+    mergeUnitsAndDimensions(convertible, targetBaseUnit, -1);
+    mergeUnitsAndDimensions(reciprocal, targetBaseUnit, 1);
+
+    if (checkAllDimensionsAreZeros(convertible)) {
+        return CONVERTIBLE;
+    }
+
+    if (checkAllDimensionsAreZeros(reciprocal)) {
+        return RECIPROCAL;
+    }
 
     return UNCONVERTIBLE;
 }
 
 UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
-                             const ConversionRates &ratesInfo, UErrorCode &status): conversionRate_(source, target, status) {
+                             const ConversionRates &ratesInfo, UErrorCode &status)
+    : conversionRate_(source, target, status) {
     if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
         target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    Convertibility unitsState = extractConvertibility(source, source, ratesInfo, status);
+    Convertibility unitsState = extractConvertibility(source, target, ratesInfo, status);
     if (U_FAILURE(status)) return;
     if (unitsState == Convertibility::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;

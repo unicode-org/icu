@@ -126,13 +126,14 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
  * including mixed and compound units.
  */
 struct U_I18N_API MeasureUnitImpl : public UMemory {
+    MeasureUnitImpl() = default;
+    MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status);
+    MeasureUnitImpl(const SingleUnitImpl &singleUnit, UErrorCode &status);
+
     /** Extract the MeasureUnitImpl from a MeasureUnit. */
     static inline const MeasureUnitImpl* get(const MeasureUnit& measureUnit) {
         return measureUnit.fImpl;
     }
-
-    MeasureUnitImpl(const MeasureUnitImpl& other, UErrorCode& status);
-    MeasureUnitImpl() = default;
 
     /**
      * Parse a unit identifier into a MeasureUnitImpl.
@@ -190,10 +191,15 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
         return result;
     }
 
-    bool operator==(const MeasureUnitImpl& other) const;
-
-    /** Returns the reciprocal of this `MeasureUnitImpl`. */
-    MeasureUnitImpl reciprocal(UErrorCode& status);
+    /**
+     * Creates a list of all the singleton units inside the `MeasureUnitImpl`.
+     *      For example:    
+     *          -   if the `MeasureUnitImpl` is `foot-per-hour`
+     *                  it will return a list of 1 {`foot-per-hour`} 
+     *          -   if the `MeasureUnitImpl` is `foot-and-inch` 
+     *                  it will return a list of 2 { `foot`, `inch`}
+     */
+    MaybeStackVector<MeasureUnitImpl> getAllSingletonUnits(UErrorCode &status) const;
 
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);

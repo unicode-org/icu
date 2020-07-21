@@ -803,6 +803,14 @@ const char *SingleUnitImpl::getSimpleUnitID() const {
     return gSimpleUnits[index];
 }
 
+MeasureUnitImpl::MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status) {
+    *this = other.copy(status);
+}
+
+MeasureUnitImpl::MeasureUnitImpl(const SingleUnitImpl &singleUnit, UErrorCode &status) {
+    this->append(singleUnit, status);
+}
+
 MeasureUnitImpl MeasureUnitImpl::forIdentifier(StringPiece identifier, UErrorCode& status) {
     return Parser::from(identifier, status).parse(status);
 }
@@ -826,73 +834,6 @@ MeasureUnitImpl MeasureUnitImpl::forMeasureUnitMaybeCopy(
     }
 }
 
-namespace {
-struct UnitIndexAndDimension : UMemory {
-    int32_t index = 0;
-    int32_t siPrefix = 0;
-    int32_t dimensionality = 0;
-
-    UnitIndexAndDimension(const SingleUnitImpl &singleUnit, int32_t multiplier) {
-        index = singleUnit.index;
-        siPrefix = singleUnit.siPrefix;
-
-        dimensionality = singleUnit.dimensionality * multiplier;
-    }
-};
-
-void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
-                                  const SingleUnitImpl &shouldBeMerged, int32_t multiplier) {
-    for (int32_t i = 0; i < unitIndicesWithDiemention.length(); i++) {
-        auto &unitWithIndex = *unitIndicesWithDiemention[i];
-        if (unitWithIndex.index == shouldBeMerged.index &&
-            unitWithIndex.siPrefix == shouldBeMerged.siPrefix) {
-            unitWithIndex.dimensionality += shouldBeMerged.dimensionality * multiplier;
-            return;
-        }
-    }
-
-    unitIndicesWithDiemention.emplaceBack(shouldBeMerged, multiplier);
-}
-
-void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDiemention,
-                             const MeasureUnitImpl &shouldBeMerged, int32_t multiplier) {
-    for (int32_t unit_i = 0; unit_i < shouldBeMerged.units.length(); unit_i++) {
-        auto singleUnit = *shouldBeMerged.units[unit_i];
-        mergeSingleUnitWithDimension(unitIndicesWithDiemention, singleUnit, multiplier);
-    }
-}
-
-} // namespace
-
-MeasureUnitImpl::MeasureUnitImpl(const MeasureUnitImpl& other, UErrorCode& status) {
-   *this  = other.copy(status);
-}
-
-bool MeasureUnitImpl::operator==(const MeasureUnitImpl &other) const {
-    if (this->units.length() != other.units.length()) return false;
-    if (this->units.length() == 0) return true; // Empty `MeasureUnitImpl`s are equal.
-
-    MaybeStackVector<UnitIndexAndDimension> unitIndicesDimension;
-    mergeUnitsAndDimensions(unitIndicesDimension, *this, 1);
-    mergeUnitsAndDimensions(unitIndicesDimension, other, -1);
-
-    for (int32_t i = 0; i < unitIndicesDimension.length(); i++) {
-        if (unitIndicesDimension[i]->dimensionality != 0) return false;
-    }
-
-    return true;
-}
-
-MeasureUnitImpl MeasureUnitImpl::reciprocal(UErrorCode &status) {
-    MeasureUnitImpl result = this->copy(status);
-    if (U_FAILURE(status)) {
-        return result;
-    }
-
-    result.takeReciprocal(status);
-    return result;
-}
-
 void MeasureUnitImpl::takeReciprocal(UErrorCode& /*status*/) {
     identifier.clear();
     for (int32_t i = 0; i < units.length(); i++) {
@@ -909,6 +850,21 @@ bool MeasureUnitImpl::append(const MaybeStackVector<SingleUnitImpl> &singleUnits
     bool result = false;
     for (int32_t i = 0, n = singleUnits.length(); i < n; i++) {
         result = this->append(*singleUnits[i], status) || result;
+    }
+
+    return result;
+}
+
+MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::getAllSingletonUnits(UErrorCode &status) const {
+    MaybeStackVector<MeasureUnitImpl> result;
+
+    if (this->complexity != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        result.emplaceBackAndCheckErrorCode(status, *this, status);
+        return result;
+    }
+
+    for (int32_t i = 0; i < units.length(); i++) {
+        result.emplaceBackAndCheckErrorCode(status, *units[i], status);
     }
 
     return result;
