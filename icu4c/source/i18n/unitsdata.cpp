@@ -112,40 +112,6 @@ class ConversionRateDataSink : public ResourceSink {
     MaybeStackVector<ConversionRateInfo> *outVector;
 };
 
-UnitPreferenceMetadata::UnitPreferenceMetadata(StringPiece category, StringPiece usage,
-                                               StringPiece region, int32_t prefsOffset,
-                                               int32_t prefsCount, UErrorCode &status) {
-    this->category.append(category, status);
-    this->usage.append(usage, status);
-    this->region.append(region, status);
-    this->prefsOffset = prefsOffset;
-    this->prefsCount = prefsCount;
-}
-
-int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other) const {
-    int32_t cmp = uprv_strcmp(category.data(), other.category.data());
-    if (cmp == 0) { cmp = uprv_strcmp(usage.data(), other.usage.data()); }
-    if (cmp == 0) { cmp = uprv_strcmp(region.data(), other.region.data()); }
-    return cmp;
-}
-
-int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other, bool *foundCategory,
-                                          bool *foundUsage, bool *foundRegion) const {
-    int32_t cmp = uprv_strcmp(category.data(), other.category.data());
-    if (cmp == 0) {
-        *foundCategory = true;
-        cmp = uprv_strcmp(usage.data(), other.usage.data());
-    }
-    if (cmp == 0) {
-        *foundUsage = true;
-        cmp = uprv_strcmp(region.data(), other.region.data());
-    }
-    if (cmp == 0) {
-        *foundRegion = true;
-    }
-    return cmp;
-}
-
 bool operator<(const UnitPreferenceMetadata &a, const UnitPreferenceMetadata &b) {
     return a.compareTo(b) < 0;
 }
@@ -356,6 +322,44 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
 }
 
 } // namespace
+
+UnitPreferenceMetadata::UnitPreferenceMetadata(StringPiece category, StringPiece usage,
+                                               StringPiece region, int32_t prefsOffset,
+                                               int32_t prefsCount, UErrorCode &status) {
+    this->category.append(category, status);
+    this->usage.append(usage, status);
+    this->region.append(region, status);
+    this->prefsOffset = prefsOffset;
+    this->prefsCount = prefsCount;
+}
+
+int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other) const {
+    int32_t cmp = uprv_strcmp(category.data(), other.category.data());
+    if (cmp == 0) {
+        cmp = uprv_strcmp(usage.data(), other.usage.data());
+    }
+    if (cmp == 0) {
+        cmp = uprv_strcmp(region.data(), other.region.data());
+    }
+    return cmp;
+}
+
+int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other, bool *foundCategory,
+                                          bool *foundUsage, bool *foundRegion) const {
+    int32_t cmp = uprv_strcmp(category.data(), other.category.data());
+    if (cmp == 0) {
+        *foundCategory = true;
+        cmp = uprv_strcmp(usage.data(), other.usage.data());
+    }
+    if (cmp == 0) {
+        *foundUsage = true;
+        cmp = uprv_strcmp(region.data(), other.region.data());
+    }
+    if (cmp == 0) {
+        *foundRegion = true;
+    }
+    return cmp;
+}
 
 CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status) {
     CharString result;
