@@ -141,7 +141,7 @@ class TableKeysSink : public icu::ResourceSink {
         ResourceTable table = value.getTable(status);
         if (U_FAILURE(status)) return;
 
-        if (outIndex + table.getSize() >= outSize) {
+        if (outIndex + table.getSize() > outSize) {
             // TODO(review): not the best error? Can't find a really good one...
             status = U_INDEX_OUTOFBOUNDS_ERROR;
             return;
@@ -228,18 +228,18 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
 
     int32_t simpleUnitsCount = convertUnits.getAlias()->fSize;
-    gSimpleUnits = static_cast<const char **>(uprv_malloc(sizeof(char *) * simpleUnitsCount));
+    int32_t arrayMallocSize = sizeof(char *) * simpleUnitsCount;
+    gSimpleUnits = static_cast<const char **>(uprv_malloc(arrayMallocSize));
     if (gSimpleUnits == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
+    uprv_memset(gSimpleUnits, 0, arrayMallocSize);
 
-    StackUResourceBundle fillIn;
+    TableKeysSink identifierSink(gSimpleUnits, simpleUnitsCount);
+    ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
     for (int i = 0; i < simpleUnitsCount; i++) {
-        ures_getByIndex(convertUnits.getAlias(), i, fillIn.getAlias(), &status);
-        const char *key = ures_getKey(fillIn.getAlias());
-        gSimpleUnits[i] = key;
-        b.add(key, kSimpleUnitOffset + i, status);
+        b.add(gSimpleUnits[i], kSimpleUnitOffset + i, status);
     }
 
     // Build the CharsTrie
