@@ -9,17 +9,28 @@
 
 #include <limits>
 
-#include "charstr.h" // CharString
 #include "cmemory.h"
 #include "complexunitsconverter.h"
-#include "unicode/errorcode.h"
+#include "measunit_impl.h"
 #include "unicode/measunit.h"
-#include "unicode/measure.h"
 #include "unicode/stringpiece.h"
+#include "unicode/uobject.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
+
+// Forward declarations
+class Measure;
+
 namespace units {
+
+struct RouteResult : UMemory {
+    MaybeStackVector<Measure> measures;
+    UnicodeString precision;
+
+    RouteResult(MaybeStackVector<Measure> measures, UnicodeString precision)
+        : measures(std::move(measures)), precision(std::move(precision)) {}
+};
 
 /**
  * Contains the complex unit converter and the limit which representing the smallest value that the
@@ -33,15 +44,19 @@ namespace units {
 struct ConverterPreference : UMemory {
     ComplexUnitsConverter converter;
     double limit;
+    UnicodeString precision;
 
-    ConverterPreference(const MeasureUnitImpl& source,const  MeasureUnitImpl& complexTarget, double limit,
-                        const ConversionRates &ratesInfo, UErrorCode &status)
-        : converter(source, complexTarget, ratesInfo, status), limit(limit) {}
+    // In case there is no limit, the limit will be -inf.
+    ConverterPreference(const MeasureUnitImpl &source, const MeasureUnitImpl &complexTarget,
+                        UnicodeString precision, const ConversionRates &ratesInfo, UErrorCode &status)
+        : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), precision,
+                              ratesInfo, status) {}
 
-    ConverterPreference(const MeasureUnitImpl& source, const MeasureUnitImpl& complexTarget, const ConversionRates &ratesInfo,
+    ConverterPreference(const MeasureUnitImpl &source, const MeasureUnitImpl &complexTarget,
+                        double limit, UnicodeString precision, const ConversionRates &ratesInfo,
                         UErrorCode &status)
-        : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), ratesInfo,
-                              status) {}
+        : converter(source, complexTarget, ratesInfo, status), limit(limit),
+          precision(std::move(precision)) {}
 };
 
 /**
@@ -76,7 +91,7 @@ class U_I18N_API UnitsRouter {
   public:
     UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
 
-    MaybeStackVector<Measure> route(double quantity, UErrorCode &status) const;
+    RouteResult route(double quantity, UErrorCode &status) const;
 
     /**
      * Returns the list of possible output units, i.e. the full set of
@@ -88,7 +103,9 @@ class U_I18N_API UnitsRouter {
     const MaybeStackVector<MeasureUnit> *getOutputUnits() const;
 
   private:
-    // List of possible output units
+    // List of possible output units. TODO: converterPreferences_ now also has
+    // this data available. Maybe drop outputUnits_ and have getOutputUnits
+    // construct a the list from data in converterPreferences_ instead?
     MaybeStackVector<MeasureUnit> outputUnits_;
 
     MaybeStackVector<ConverterPreference> converterPreferences_;

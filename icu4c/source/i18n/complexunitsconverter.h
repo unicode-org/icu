@@ -10,14 +10,12 @@
 #include "cmemory.h"
 #include "measunit_impl.h"
 #include "unicode/errorcode.h"
+#include "unicode/measure.h"
 #include "unitconverter.h"
 #include "unitsdata.h"
 
-// TODO: remove after fully swap to `impl`.
-#include "unicode/measunit.h"
-#include "unicode/measure.h"
-
 U_NAMESPACE_BEGIN
+
 namespace units {
 
 /**

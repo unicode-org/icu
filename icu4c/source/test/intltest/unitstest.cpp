@@ -18,10 +18,12 @@
 #include "unicode/measunit.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
+#include "unicode/ures.h"
 #include "unitconverter.h"
 #include "unitsdata.h"
 #include "unitsrouter.h"
 #include "uparse.h"
+#include "uresimp.h"
 
 struct UnitConversionTestCase {
     const StringPiece source;
@@ -39,6 +41,7 @@ class UnitsTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
+    void testUnitConstantFreshness();
     void testConversionCapability();
     void testConversions();
     void testPreferences();
@@ -55,6 +58,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
         logln("TestSuite UnitsTest: ");
     }
     TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testUnitConstantFreshness);
     TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
     TESTCASE_AUTO(testPreferences);
@@ -63,6 +67,54 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testTemperature);
     TESTCASE_AUTO(testArea);
     TESTCASE_AUTO_END;
+}
+
+// Tests the hard-coded constants in the code against constants that appear in
+// units.txt.
+void UnitsTest::testUnitConstantFreshness() {
+    IcuTestErrorCode status(*this, "testUnitConstantFreshness");
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", status));
+    LocalUResourceBundlePointer unitConstants(
+        ures_getByKey(unitsBundle.getAlias(), "unitConstants", NULL, status));
+
+    while (ures_hasNext(unitConstants.getAlias())) {
+        int32_t len;
+        const char *constant = NULL;
+        ures_getNextString(unitConstants.getAlias(), &len, &constant, status);
+
+        Factor factor;
+        addSingleFactorConstant(constant, 1, POSITIVE, factor, status);
+        if (status.errDataIfFailureAndReset(
+                "addSingleFactorConstant(<%s>, ...).\n\n"
+                "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/unitconverter.cpp\" "
+                "has all constants? Is \"%s\" a new constant?\n",
+                constant, constant)) {
+            continue;
+        }
+
+        // Check the values of constants that have a simple numeric value
+        factor.substituteConstants();
+        int32_t uLen;
+        UnicodeString uVal = ures_getStringByKey(unitConstants.getAlias(), constant, &uLen, status);
+        CharString val;
+        val.appendInvariantChars(uVal, status);
+        if (status.errDataIfFailureAndReset("Failed to get constant value for %s.", constant)) {
+            continue;
+        }
+        DecimalQuantity dqVal;
+        UErrorCode parseStatus = U_ZERO_ERROR;
+        // TODO(units): unify with strToDouble() in unitconverter.cpp
+        dqVal.setToDecNumber(val.toStringPiece(), parseStatus);
+        if (!U_SUCCESS(parseStatus)) {
+            // Not simple to parse, skip validating this constant's value. (We
+            // leave catching mistakes to the data-driven integration tests.)
+            continue;
+        }
+        double expectedNumerator = dqVal.toDouble();
+        assertEquals(UnicodeString("Constant ") + constant + u" numerator", expectedNumerator,
+                     factor.factorNum);
+        assertEquals(UnicodeString("Constant ") + constant + u" denominator", 1.0, factor.factorDen);
+    }
 }
 
 void UnitsTest::testConversionCapability() {
@@ -567,12 +619,12 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     if (status.errIfFailureAndReset("Failure before router.route")) {
         return;
     }
-    MaybeStackVector<Measure> result = router.route(inputAmount, status);
+    auto routeResult = router.route(inputAmount, status);
     if (status.errIfFailureAndReset("router.route(inputAmount, ...)")) {
         return;
     }
     // TODO: revisit this experimentally chosen precision:
-    checkOutput(unitsTest, msg.data(), expected, result, 0.0000000001);
+    checkOutput(unitsTest, msg.data(), expected, routeResult.measures, 0.0000000001);
 }
 
 /**

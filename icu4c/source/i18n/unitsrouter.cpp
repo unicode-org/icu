@@ -5,18 +5,18 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <stdio.h>
-#include <utility>
-
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "measunit_impl.h"
 #include "number_decimalquantity.h"
 #include "resource.h"
+#include "unicode/measure.h"
 #include "unitconverter.h" // for extractCompoundBaseUnit
-#include "unitsdata.h"     // for getUnitCategory
+#include "unitconverter.h"
+#include "unitsdata.h" // for getUnitCategory
+#include "unitsdata.h"
 #include "unitsrouter.h"
-#include "uresimp.h"
 
 U_NAMESPACE_BEGIN
 namespace units {
@@ -46,30 +46,53 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
             return;
         }
 
-        outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnitImpl.copy(status).build(status));
+        UnicodeString precision = preference.skeleton;
+
+        // For now, we only have "precision-increment" in Units Preferences skeleton.
+        // Therefore, we check if the skeleton starts with "precision-increment" and force the program to
+        // fail otherwise.
+        // NOTE:
+        //  It is allowed to have an empty precision.
+        if (!precision.isEmpty() && !precision.startsWith(u"precision-increment", 19)) {
+            status = U_INTERNAL_PROGRAM_ERROR;
+            return;
+        }
+
+        outputUnits_.emplaceBackAndCheckErrorCode(status,
+                                                  complexTargetUnitImpl.copy(status).build(status));
         converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnitImpl, complexTargetUnitImpl,
-                                                           preference.geq, conversionRates, status);
+                                                           preference.geq, std::move(precision),
+                                                           conversionRates, status);
+
         if (U_FAILURE(status)) {
             return;
         }
     }
 }
 
-MaybeStackVector<Measure> UnitsRouter::route(double quantity, UErrorCode &status) const {
+RouteResult UnitsRouter::route(double quantity, UErrorCode &status) const {
     for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
         const auto &converterPreference = *converterPreferences_[i];
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-            return converterPreference.converter.convert(quantity, status);
+            return RouteResult(converterPreference.converter.convert(quantity, status), //
+                               converterPreference.precision                            //
+            );
         }
     }
 
     // In case of the `quantity` does not fit in any converter limit, use the last converter.
-    const auto &lastConverter = (*converterPreferences_[converterPreferences_.length() - 1]).converter;
-    return lastConverter.convert(quantity, status);
+    const auto &lastConverterPreference = (*converterPreferences_[converterPreferences_.length() - 1]);
+    return RouteResult(lastConverterPreference.converter.convert(quantity, status), //
+                       lastConverterPreference.precision                            //
+    );
 }
 
-const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const { return &outputUnits_; }
+const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {
+    // TODO: consider pulling this from converterPreferences_ and dropping
+    // outputUnits_?
+    return &outputUnits_;
+}
 
 } // namespace units
 U_NAMESPACE_END

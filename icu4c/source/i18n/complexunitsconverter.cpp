@@ -6,12 +6,14 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <math.h>
-#include <utility>
 
 #include "cmemory.h"
 #include "complexunitsconverter.h"
 #include "uassert.h"
 #include "unicode/fmtable.h"
+#include "unicode/localpointer.h"
+#include "unicode/measunit.h"
+#include "unicode/measure.h"
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
