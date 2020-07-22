@@ -105,8 +105,6 @@ struct U_I18N_API UnitPreference : public UMemory {
     UnicodeString skeleton;
 };
 
-namespace {
-
 /**
  * Metadata about the preferences in UnitPreferences::unitPrefs_.
  *
@@ -141,8 +139,6 @@ class U_I18N_API UnitPreferenceMetadata : public UMemory {
     int32_t compareTo(const UnitPreferenceMetadata &other, bool *foundCategory, bool *foundUsage,
                       bool *foundRegion) const;
 };
-
-} // namespace
 
 /**
  * Unit Preferences information for various locales and usages.
