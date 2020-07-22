@@ -1065,7 +1065,7 @@ group: sharedbreakiterator
 group: units_extra
     measunit_extra.o
   deps
-    units bytestriebuilder bytestrie uclean_i18n
+    units bytestriebuilder bytestrie resourcebundle uclean_i18n
 
 group: units
     measunit.o currunit.o nounit.o

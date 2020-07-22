@@ -37,8 +37,8 @@ struct SingleUnitImpl : public UMemory {
      * instance may represent a square-kilometer, but only "meter" will be
      * returned.
      *
-     * The returned pointer points at static memory and does not need to be
-     * cleaned up.
+     * The returned pointer points at memory that exists for the duration of the
+     * program's running.
      */
     const char *getSimpleUnitID() const;
 
