@@ -186,13 +186,7 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
     /**
      * Create a copy of this MeasureUnitImpl. Don't use copy constructor to make this explicit.
      */
-    inline MeasureUnitImpl copy(UErrorCode& status) const {
-        MeasureUnitImpl result;
-        result.complexity = complexity;
-        result.appendAll(units, status);
-        result.identifier.append(identifier, status);
-        return result;
-    }
+    MeasureUnitImpl copy(UErrorCode& status) const;
 
     /**
      * Extracts the list of all the individual units inside the `MeasureUnitImpl`.

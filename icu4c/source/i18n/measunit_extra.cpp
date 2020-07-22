@@ -875,6 +875,13 @@ MeasureUnit MeasureUnitImpl::build(UErrorCode& status) && {
     return MeasureUnit(std::move(*this));
 }
 
+MeasureUnitImpl MeasureUnitImpl::copy(UErrorCode &status) const {
+    MeasureUnitImpl result;
+    result.complexity = complexity;
+    result.appendAll(units, status);
+    result.identifier.append(identifier, status);
+    return result;
+}
 
 MeasureUnit MeasureUnit::forIdentifier(StringPiece identifier, UErrorCode& status) {
     return Parser::from(identifier, status).parse(status).build(status);
