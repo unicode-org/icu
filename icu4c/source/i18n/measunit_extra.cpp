@@ -145,7 +145,6 @@ class TableKeysSink : public icu::ResourceSink {
         if (U_FAILURE(status)) return;
 
         if (outIndex + table.getSize() > outSize) {
-            // TODO(review): not the best error? Can't find a really good one...
             status = U_INDEX_OUTOFBOUNDS_ERROR;
             return;
         }
