@@ -23,6 +23,10 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
                                              const MeasureUnitImpl &outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status)
     : units_(outputUnits.extractIndividualUnits(status)) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    
     if (units_.length() == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;

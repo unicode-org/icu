@@ -189,7 +189,7 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
     inline MeasureUnitImpl copy(UErrorCode& status) const {
         MeasureUnitImpl result;
         result.complexity = complexity;
-        result.units.appendAll(units, status);
+        result.appendAll(units, status);
         result.identifier.append(identifier, status);
         return result;
     }
@@ -220,7 +220,7 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      *
      * @return true if at least one item has been added.
      */
-    bool append(const MaybeStackVector<SingleUnitImpl> &singleUnits, UErrorCode &status);
+    bool appendAll(const MaybeStackVector<SingleUnitImpl> &singleUnits, UErrorCode &status);
 
     /** The complexity, either SINGLE, COMPOUND, or MIXED. */
     UMeasureUnitComplexity complexity = UMEASURE_UNIT_SINGLE;
