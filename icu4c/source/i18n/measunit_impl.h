@@ -209,13 +209,6 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      */
     bool append(const SingleUnitImpl& singleUnit, UErrorCode& status);
 
-    /**
-     * Mutates this MeasureUnitImpl to append all the single units in `singleUnits`.
-     *
-     * @return true if at least one item has been added.
-     */
-    bool appendAll(const MaybeStackVector<SingleUnitImpl> &singleUnits, UErrorCode &status);
-
     /** The complexity, either SINGLE, COMPOUND, or MIXED. */
     UMeasureUnitComplexity complexity = UMEASURE_UNIT_SINGLE;
 

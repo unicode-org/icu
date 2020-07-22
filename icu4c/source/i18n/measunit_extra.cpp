@@ -846,15 +846,6 @@ bool MeasureUnitImpl::append(const SingleUnitImpl& singleUnit, UErrorCode& statu
     return appendImpl(*this, singleUnit, status);
 }
 
-bool MeasureUnitImpl::appendAll(const MaybeStackVector<SingleUnitImpl> &singleUnits, UErrorCode &status) {
-    bool result = false;
-    for (int32_t i = 0, n = singleUnits.length(); i < n; i++) {
-        result = this->append(*singleUnits[i], status) || result;
-    }
-
-    return result;
-}
-
 MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::extractIndividualUnits(UErrorCode &status) const {
     MaybeStackVector<MeasureUnitImpl> result;
 
@@ -878,7 +869,7 @@ MeasureUnit MeasureUnitImpl::build(UErrorCode& status) && {
 MeasureUnitImpl MeasureUnitImpl::copy(UErrorCode &status) const {
     MeasureUnitImpl result;
     result.complexity = complexity;
-    result.appendAll(units, status);
+    result.units.appendAll(units, status);
     result.identifier.append(identifier, status);
     return result;
 }
