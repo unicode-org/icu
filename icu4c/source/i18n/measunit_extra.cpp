@@ -726,8 +726,9 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
 /**
  * Appends a SingleUnitImpl to a MeasureUnitImpl.
  *
- * @return true if a new item was added. If unit is the dimensionless unit, it
- * is never added: the return value will always be false.
+ * @return true if a new unit was added, false if the dimensionality of an
+ * existing unit is changed. If unit is the dimensionless unit, it is never
+ * added: the return value will always be false.
  */
 bool appendImpl(MeasureUnitImpl& impl, const SingleUnitImpl& unit, UErrorCode& status) {
     if (unit.isDimensionless()) {
