@@ -12,20 +12,24 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
-#include "cstring.h"
+#include "charstr.h"
+#include "cmemory.h"
 #include "measunit_impl.h"
+#include "resource.h"
 #include "uarrsort.h"
 #include "uassert.h"
 #include "ucln_in.h"
 #include "umutex.h"
 #include "unicode/bytestrie.h"
 #include "unicode/bytestriebuilder.h"
-#include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/measunit.h"
+#include "unicode/stringpiece.h"
+#include "unicode/stringtriebuilder.h"
+#include "unicode/ures.h"
+#include "unicode/ustringtrie.h"
+#include "uresimp.h"
 #include <cstdlib>
-
-#include "cstr.h"
 
 U_NAMESPACE_BEGIN
 
@@ -110,122 +114,72 @@ const struct SIPrefixStrings {
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
 };
 
-// TODO(ICU-21059): Get this list from data
-//
-// NB: SingleUnitImpl::getSimpleUnitID() returns char*'s pointing at these
-// strings, take appropriate care with refactoring and updating documentation.
-const char *const gSimpleUnits[] = {
-    "candela",
-    "carat",
-    "gram",
-    "ounce",
-    "ounce-troy",
-    "pound",
-    "kilogram",
-    "stone",
-    "ton",
-    "metric-ton",
-    "earth-mass",
-    "solar-mass",
-    "point",
-    "inch",
-    "foot",
-    "yard",
-    "meter",
-    "fathom",
-    "furlong",
-    "mile",
-    "nautical-mile",
-    "mile-scandinavian",
-    "100-kilometer",
-    "earth-radius",
-    "solar-radius",
-    "astronomical-unit",
-    "light-year",
-    "parsec",
-    "second",
-    "minute",
-    "hour",
-    "day",
-    "day-person",
-    "week",
-    "week-person",
-    "month",
-    "month-person",
-    "year",
-    "year-person",
-    "decade",
-    "century",
-    "ampere",
-    "fahrenheit",
-    "kelvin",
-    "celsius",
-    "arc-second",
-    "arc-minute",
-    "degree",
-    "radian",
-    "revolution",
-    "item",
-    "mole",
-    "permillion",
-    "permyriad",
-    "permille",
-    "percent",
-    "karat",
-    "portion",
-    "bit",
-    "byte",
-    "dot",
-    "pixel",
-    "em",
-    "hertz",
-    "newton",
-    "pound-force",
-    "pascal",
-    "bar",
-    "atmosphere",
-    "ofhg",
-    "electronvolt",
-    "dalton",
-    "joule",
-    "calorie",
-    "british-thermal-unit",
-    "foodcalorie",
-    "therm-us",
-    "watt",
-    "horsepower",
-    "solar-luminosity",
-    "volt",
-    "ohm",
-    "dunam",
-    "acre",
-    "hectare",
-    "teaspoon",
-    "tablespoon",
-    "fluid-ounce-imperial",
-    "fluid-ounce",
-    "cup",
-    "cup-metric",
-    "pint",
-    "pint-metric",
-    "quart",
-    "liter",
-    "gallon",
-    "gallon-imperial",
-    "bushel",
-    "barrel",
-    "knot",
-    "g-force",
-    "lux",
+/**
+ * A ResourceSink that collects table keys from a resource.
+ *
+ * This class is for use by ures_getAllItemsWithFallback. Example code:
+ *
+ *     UErrorCode status = U_ZERO_ERROR;
+ *     const char* unitIdentifiers[200];
+ *     TableKeysSink identifierSink(unitIdentifiers, 200);
+ *     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+ *     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
+ */
+class TableKeysSink : public icu::ResourceSink {
+  public:
+    explicit TableKeysSink(const char **out, int32_t outSize)
+        : outArray(out), outSize(outSize), outIndex(0) {
+    }
+
+    /**
+     * Adds the table keys found in value to the output vector.
+     * @param key The key of the resource passed to `value`: the second
+     *     parameter of the ures_getAllItemsWithFallback() call.
+     * @param value Should be a ResourceTable value, if
+     *     ures_getAllItemsWithFallback() was called correctly for this sink.
+     * @param noFallback Ignored.
+     * @param status The standard ICU error code output parameter.
+     */
+    void put(const char * /*key*/, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
+        ResourceTable table = value.getTable(status);
+        if (U_FAILURE(status)) return;
+
+        if (outIndex + table.getSize() > outSize) {
+            status = U_INDEX_OUTOFBOUNDS_ERROR;
+            return;
+        }
+
+        // Collect keys from the table resource.
+        const char *key;
+        for (int32_t i = 0; table.getKeyAndValue(i, key, value); ++i) {
+            U_ASSERT(i < table.getSize());
+            U_ASSERT(outIndex < outSize);
+            outArray[outIndex++] = key;
+        }
+    }
+
+  private:
+    const char **outArray;
+    int32_t outSize;
+    int32_t outIndex;
 };
 
 icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
+
+// Array of simple unit IDs.
+//
+// The array memory itself is owned by this pointer, but the individual char* in
+// that array point at static memory. (Note that these char* are also returned
+// by SingleUnitImpl::getSimpleUnitID().)
+const char **gSimpleUnits = nullptr;
 
 char *kSerializedUnitExtrasStemTrie = nullptr;
 
 UBool U_CALLCONV cleanupUnitExtras() {
     uprv_free(kSerializedUnitExtrasStemTrie);
     kSerializedUnitExtrasStemTrie = nullptr;
+    uprv_free(gSimpleUnits);
+    gSimpleUnits = nullptr;
     gUnitExtrasInitOnce.reset();
     return TRUE;
 }
@@ -265,10 +219,28 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     b.add("pow15-", POWER_PART_P15, status);
     if (U_FAILURE(status)) { return; }
 
-    // Add sanctioned simple units by offset
-    int32_t simpleUnitOffset = kSimpleUnitOffset;
-    for (auto simpleUnit : gSimpleUnits) {
-        b.add(simpleUnit, simpleUnitOffset++, status);
+    // Add sanctioned simple units by offset: simple units all have entries in
+    // units/convertUnits resources.
+    // TODO(ICU-21059): confirm whether this is clean enough, or whether we need to
+    // filter units' validity list instead.
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+    LocalUResourceBundlePointer convertUnits(
+        ures_getByKey(unitsBundle.getAlias(), "convertUnits", NULL, &status));
+    if (U_FAILURE(status)) { return; }
+
+    int32_t simpleUnitsCount = convertUnits.getAlias()->fSize;
+    int32_t arrayMallocSize = sizeof(char *) * simpleUnitsCount;
+    gSimpleUnits = static_cast<const char **>(uprv_malloc(arrayMallocSize));
+    if (gSimpleUnits == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    uprv_memset(gSimpleUnits, 0, arrayMallocSize);
+
+    TableKeysSink identifierSink(gSimpleUnits, simpleUnitsCount);
+    ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
+    for (int i = 0; i < simpleUnitsCount; i++) {
+        b.add(gSimpleUnits[i], kSimpleUnitOffset + i, status);
     }
 
     // Build the CharsTrie
@@ -671,7 +643,7 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
         return;
     }
 
-    output.append(gSimpleUnits[singleUnit.index], status);
+    output.append(singleUnit.getSimpleUnitID(), status);
 }
 
 /**
