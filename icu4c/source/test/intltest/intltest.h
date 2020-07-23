@@ -296,11 +296,25 @@ public:
     UBool assertEquals(const char* message, int32_t expected, int32_t actual);
     UBool assertEquals(const char* message, int64_t expected, int64_t actual);
     UBool assertEquals(const char* message, double expected, double actual);
+    /**
+     * Asserts that two doubles are equal to within a positive delta. Returns
+     * false if they are not.
+     *
+     * NaNs are considered equal: assertEquals(msg, NaN, NaN, *) passes.
+     * Infs are considered equal: assertEquals(msg, inf, inf, *) passes.
+     *
+     * @param message - the identifying message for the AssertionError.
+     * @param expected - expected value.
+     * @param actual - the value to check against expected.
+     * @param delta - the maximum delta for the absolute difference between
+     * expected and actual for which both numbers are still considered equal.
+     */
+    UBool assertEqualsNear(const char* message, double expected, double actual, double delta);
     UBool assertEquals(const char* message, UErrorCode expected, UErrorCode actual);
     UBool assertEquals(const char* message, const UnicodeSet& expected, const UnicodeSet& actual);
     UBool assertEquals(const char* message,
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
-    UBool assertEqualsNear(const char* message, double expected, double actual, double precision);     
+
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual, UBool possibleDataError=FALSE);
@@ -318,6 +332,20 @@ public:
     UBool assertEquals(const UnicodeString& message, int32_t expected, int32_t actual);
     UBool assertEquals(const UnicodeString& message, int64_t expected, int64_t actual);
     UBool assertEquals(const UnicodeString& message, double expected, double actual);
+    /**
+     * Asserts that two doubles are equal to within a positive delta. Returns
+     * false if they are not.
+     *
+     * NaNs are considered equal: assertEquals(msg, NaN, NaN, *) passes.
+     * Infs are considered equal: assertEquals(msg, inf, inf, *) passes.
+     *
+     * @param message - the identifying message for the AssertionError.
+     * @param expected - expected value.
+     * @param actual - the value to check against expected.
+     * @param delta - the maximum delta between expected and actual for which
+     * both numbers are still considered equal.
+     */
+    UBool assertEqualsNear(const UnicodeString& message, double expected, double actual, double delta);
     UBool assertEquals(const UnicodeString& message, UErrorCode expected, UErrorCode actual);
     UBool assertEquals(const UnicodeString& message, const UnicodeSet& expected, const UnicodeSet& actual);
     UBool assertEquals(const UnicodeString& message,
