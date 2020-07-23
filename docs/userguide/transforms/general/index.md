@@ -23,7 +23,8 @@ perform a series of operations and each step of the process can use a UnicodeSet
 to restrict the characters that are affected.
 
 For example, to remove accents from characters, use the following transform:
-NFD; \[:Nonspacing Mark:\] Remove; NFC.
+
+    NFD; \[:Nonspacing Mark:\] Remove; NFC.
 
 This transform separates accents from their base characters, removes the
 accents, and then puts the remaining text into an unaccented form.
@@ -36,7 +37,7 @@ such as styled text, to maintain the style information where possible. For
 example, "Αλφaβητικός" will retain the two fonts in transliterating to
 "Alphabētikós".
 
-*The transliteration process not only retains font size, but also other
+> :point_right: *The transliteration process not only retains font size, but also other
 characteristics such as font type and color.*
 
 For an online demonstration of ICU transliteration, see
@@ -327,7 +328,7 @@ following table shows these basic transforms:
 
 ### General
 
-→ Any-Null Has no effect; leaves input text unchanged. → Any-Remove Deletes
+Any-Null Has no effect; leaves input text unchanged. → Any-Remove Deletes
 input characters. This is useful when combined with a filter that restricts the
 characters to be deleted. → Any-Lower, Any-Upper, Any-Title Converts to the
 specified case. See [Case Mappings](../casemappings.md) for more information. →
@@ -363,7 +364,7 @@ The ICU script/language transforms are based on common standards for the
 particular scripts, where possible. In some cases, the transforms are augmented
 to support reversibility.
 
-*Standard transliteration methods often do not follow the pronunciation rules of
+> :point_right: *Standard transliteration methods often do not follow the pronunciation rules of
 any particular language in the target script. For more information on the design
 of transliterations, see the following Guidelines (§) section. *
 
@@ -437,7 +438,7 @@ procedure to distinguish between man'ichi and manichi. Using this procedure, the
 Greek character PI SIGMA (πσ) maps to p's. This method is recommended for all
 script transliteration methods.
 
-*Some characters in a target script are not normally found outside of certain
+> :point_right: *Some characters in a target script are not normally found outside of certain
 contexts. For example, the small Japanese "ya" character, as in "kya" (キャ), is
 not normally found in isolation. To handle such characters, ICU uses a tilde.
 For example, to display an isolated small "ya", type "~ya". To represent a
@@ -472,7 +473,7 @@ katagnosomai, hos sy heteron.
 
 ### Pronunciation
 
-Standard transliteration methods often do not follow the pronunciation rules of
+> :point_right: Standard transliteration methods often do not follow the pronunciation rules of
 any particular language in the target script. For example, the Japanese Hepburn
 system uses a "j" that has the English phonetic value (as opposed to French,
 German, or Spanish), but uses vowels that do not have the standard English
@@ -492,7 +493,7 @@ differently according to their context to make the pronunciation more
 predictable. For example, since the Greek sequence GAMMA GAMMA (γγ) is
 pronounced as "ng", the first GAMMA can be transcribed as an "n".
 
-*In general, predictability means that when transliterating Latin script to
+> :point_right: *In general, predictability means that when transliterating Latin script to
 other scripts, English text will not produce phonetic results. This is because
 the pronunciation of English cannot be predicted easily from the letters in a
 word: e.g. grove, move, and love all end with "ove", but are pronounced very
@@ -522,7 +523,7 @@ example, a Greek SIGMA is written in a final form (ς) at the end of words, and 
 non-final form (σ) in other locations. This requires the transform to map
 different characters based on the context.
 
-*It is useful for the reverse mapping to be complete so that arbitrary strings
+> :point_right: *It is useful for the reverse mapping to be complete so that arbitrary strings
 in the target script can be reasonably mapped back to the source script.
 Complete reverse mapping makes it much easier to do mechanical quality checks
 and so on. For example, even though the letter "q" might not be necessary in a
