@@ -162,11 +162,11 @@ WHITESPACE
 Whitespace (as defined by our API) is ignored unless it is quoted or
 backslashed.
 
-> :point_right: *The rules for quoting and white space handling are common to most ICU APIs that
+> :point_right: **Note**: *The rules for quoting and white space handling are common to most ICU APIs that
 process rule or expression strings, including UnicodeSet, Transliteration and
 Break Iterators.*
 
-> :point_right: *ICU Regular Expression set expressions have a different (but similar) syntax,
+> :point_right: **Note**:*ICU Regular Expression set expressions have a different (but similar) syntax,
 and a different set of recognized backslash escapes. \[Sets\] in ICU Regular
 Expressions follow the conventions from Perl and Java regular expressions rather
 than the pattern syntax from ICU UnicodeSet.*
