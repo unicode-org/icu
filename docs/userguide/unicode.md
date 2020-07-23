@@ -152,7 +152,7 @@ sets, and makes it feasible to process non-Unicode text by first converting into
 Unicode, process the text, and convert it back to the original encoding without
 loss of data.
 
-*The first 128 Unicode code point values are assigned to the same characters as
+> :point_right: *The first 128 Unicode code point values are assigned to the same characters as
 in US-ASCII. For example, the same number is assigned to the same character. The
 same is true for the first 256 code point values of Unicode compared to ISO
 8859-1 (Latin-1) which itself is a direct superset of US-ASCII. This makes it
@@ -165,7 +165,7 @@ Unicode assigns characters a number from 0 to 10FFFF16, giving enough elbow room
 to allow for unambiguous encoding of every character in common use. Such a
 character number is called a "code point".
 
-*Unicode code points are just non-negative integer numbers in a certain range.
+> :point_right: *Unicode code points are just non-negative integer numbers in a certain range.
 They do not have an implicit binary representation or a width of 21 or 32 bits.
 Binary representation and unit widths are defined for encoding forms.*
 
@@ -205,7 +205,7 @@ first), and one that serializes the code units in little-endian byte order
 (least significant byte first). The corresponding encoding schemes are called
 UTF-16BE, UTF-16LE, UTF-32BE, and UTF-32LE.
 
-*The names "UTF-16" and "UTF-32" are ambiguous. Depending on context, they refer
+> :point_right: *The names "UTF-16" and "UTF-32" are ambiguous. Depending on context, they refer
 either to character encoding forms where 16/32-bit words are processed and are
 naturally stored in the platform endianness, or they refer to the
 IANA-registered charset names, i.e., to character encoding schemes or byte
