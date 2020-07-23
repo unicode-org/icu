@@ -321,7 +321,7 @@ There are 3 major extensibility elements in ICU:
 
 1. **Data Extensibility**:
    The user installs new locales or conversion data to enhance the existing ICU
-   support. For more details, refer to the package tool (TODO: need link)
+   support. For more details, refer to the package tool (:construction: **TODO**: need link)
    chapter for more information.
 2. **Code Extensibility**:
    The classes, data, and design are fully extensible. Examples of this
@@ -548,7 +548,7 @@ It is sometimes useful to see a dependency chart between the public ICU APIs and
 ICU libraries. This chart can be useful to people that are new to ICU or to
 people that want only certain ICU libraries.
 
-**TODO**: The dependency chart is currently not available.
+> :construction: **TODO**: The dependency chart is currently not available.
 
 Here are some things to realize about the chart.
 
