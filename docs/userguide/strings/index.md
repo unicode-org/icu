@@ -135,7 +135,7 @@ units. This is supported in ICU by the definition of the UChar to be an unsigned
 16-bit integer type. This is the base type for character arrays for strings in
 ICU.
 
-*Endianness is not an issue on this level because the interpretation of an
+> :point_right: *Endianness is not an issue on this level because the interpretation of an
 integer is fixed within any given platform.*
 
 With the UTF-16 encoding form, a single Unicode code point is encoded with
@@ -328,7 +328,7 @@ C/C++, the initial output buffer can be a stack buffer. In case of a
 reallocation, it may be possible and useful to cache and reuse the new, larger
 buffer.
 
-*The exception to these rules are the ANSI-C-style functions like u_strcpy(),
+> :point_right: *The exception to these rules are the ANSI-C-style functions like u_strcpy(),
 which generally require NUL-terminated strings, forbid embedded NULs, and do not
 take capacity arguments for buffer overflow checking.*
 
@@ -598,7 +598,7 @@ output strings can be faster by appending their results to a UnicodeString that
 is passed in by reference, compared with returning a UnicodeString object or
 just setting the local results alone into a string reference.
 
-*UnicodeStrings can be copied in a thread-safe manner by just using their
+> :point_right: *UnicodeStrings can be copied in a thread-safe manner by just using their
 standard copy constructors and assignment operators. fastCopyFrom() is also
 thread-safe, but if the original string is a readonly alias, then the copy
 shares the same aliased buffer.*
