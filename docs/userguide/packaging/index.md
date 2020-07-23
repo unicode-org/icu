@@ -52,7 +52,7 @@ build environment, or by modifying uconfig.h itself.
 | UCONFIG_NO_TRANSLITERATION | i18n | Turn off script-to-script transliteration |
 | UCONFIG_NO_REGULAR_EXPRESSIONS | i18n | Turn off the regular expression functionality |
 
-*These switches do not necessarily disable data generation. For example, disabling formatting does not prevent formatting data from being built into the resource bundles. See the section on ICU data, for information on changing data packaging.*
+> :point_right: **NOTE**: *These switches do not necessarily disable data generation. For example, disabling formatting does not prevent formatting data from being built into the resource bundles. See the section on ICU data, for information on changing data packaging.*
 *However, some ICU data builders will not function with these switches set, such
 as UCONFIG_NO_FILE_IO or UCONFIG_NO_REGULAR_EXPRESSIONS. If using these
 switches, it is best to use pre-built ICU data, such as is the default for ICU
