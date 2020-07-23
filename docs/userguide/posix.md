@@ -10,13 +10,13 @@ are also problematic for other internationalization aspects.
 This chapter discusses C/POSIX APIs with their problems, and shows which ICU
 APIs to use instead.
 
-> :point_right: *We use the term "POSIX" to mean the POSIX.1 standard (IEEE Std 1003.1) which
+> :point_right:  **Note**: *We use the term "POSIX" to mean the POSIX.1 standard (IEEE Std 1003.1) which
 defines system interfaces and headers with relevance for string handling and
 internationalization. The XPG3, XPG4, Single Unix Specification (SUS) and other
 standards include POSIX.1 as a subset, adding other specifications that are
 irrelevant for this topic.*
 
-This chapter is not complete yet – more POSIX APIs are expected to be discussed
+> :construction: This chapter is not complete yet – more POSIX APIs are expected to be discussed
 in the future.
 
 ## Strings and Characters
