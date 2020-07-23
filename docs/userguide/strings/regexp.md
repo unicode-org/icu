@@ -462,7 +462,7 @@ number of other flaws. For common tasks like this there are libraries of freely
 available regular expressions that have been well debugged. It's worth making a
 quick search before writing a new expression.
 
-*TODO: add more examples.*
+> :construction: **TODO**: add more examples.*
 
 ### Heap and Stack Usage
 
