@@ -70,7 +70,7 @@ typically also need to use resource bundles of their own to store
 locale-dependent application data. ICU provides the generic resource bundle APIs
 to access these bundles and also provides the tools to build them.
 
-> :point_right: *Display strings, which are displayed to a user of a program, are bundled in a
+> :point_right: **Note**: *Display strings, which are displayed to a user of a program, are bundled in a
 separate file instead of being embedded in the lines of the program.*
 
 ### Locales and Services
@@ -116,7 +116,7 @@ time zones:
     A concrete class for representing a time zone for use with a Gregorian
     calendar.
 
-> :point_right: *C classes provide the same functionality as the C++ classes with the exception
+> :point_right: **Note**: *C classes provide the same functionality as the C++ classes with the exception
 of subclassing.*
 
 ### Format and Parse
@@ -188,7 +188,7 @@ See [Formatting and Parsing Classes](formatparse/index.md#formatting-and-parsing
     ChoiceFormat is a concrete class used to map strings to ranges of numbers
     and to handle plural words and name series in user messages.
 
-> :point_right: *C classes provide the same functionality as the C++ classes with the exception
+> :point_right: **Note**: *C classes provide the same functionality as the C++ classes with the exception
 of subclassing.*
 
 ### Searching and Sorting
@@ -239,7 +239,7 @@ language text according to locale-specific rules:
     representing a string as a sort key under the rules of a specific collator
     object.
 
-> :point_right: *C classes provide the same functionality as the C++ classes with the exception
+> :point_right: **Note**: *C classes provide the same functionality as the C++ classes with the exception
 of subclassing.*
 
 ### Text Analysis
