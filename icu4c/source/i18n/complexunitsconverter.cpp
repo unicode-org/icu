@@ -12,22 +12,23 @@
 #include "uassert.h"
 #include "unicode/fmtable.h"
 #include "unicode/localpointer.h"
+#include "unicode/measunit.h"
+#include "unicode/measure.h"
 #include "unitconverter.h"
 
 U_NAMESPACE_BEGIN
 namespace units {
 
-ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
-                                             const MeasureUnit &outputUnits,
-                                             const ConversionRates &ratesInfo, UErrorCode &status) {
-
-    if (outputUnits.getComplexity(status) != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
-        unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, outputUnits, ratesInfo, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
-
-        units_.emplaceBackAndCheckErrorCode(status, outputUnits);
+ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
+                                             const MeasureUnitImpl &outputUnits,
+                                             const ConversionRates &ratesInfo, UErrorCode &status)
+    : units_(outputUnits.extractIndividualUnits(status)) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    
+    if (units_.length() == 0) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
@@ -45,47 +46,19 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnit &inputUnit,
     //              2. convert the residual of 6.56168 feet (0.56168) to inches, which will be (6.74016
     //              inches)
     //              3. then, the final result will be (6 feet and 6.74016 inches)
-    int32_t length;
-    auto singleUnits = outputUnits.splitToSingleUnits(length, status);
-    MaybeStackVector<MeasureUnit> singleUnitsInOrder;
-    for (int i = 0; i < length; ++i) {
-        /**
-         *  TODO(younies): ensure units being in order by the biggest unit at first.
-         * 
-         * HINT:
-         *  MaybeStackVector<SingleUnitImpl> singleUnitsInOrder =  MeasureUnitImpl::forMeasureUnitMaybeCopy(outputUnits, status).units;
-         *      uprv_sortArray(
-         *      singleUnitsInOrder.getAlias(),
-         *      singleUnitsInOrder.length(),
-         *      sizeof(singleUnitsInOrder[0]),
-         *      compareSingleUnits,
-         *      nullptr,
-         *      false,
-         *      &status);
-         */ 
-        singleUnitsInOrder.emplaceBackAndCheckErrorCode(status, singleUnits[i]);
-    }
-
-    if (singleUnitsInOrder.length() == 0) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    for (int i = 0, n = singleUnitsInOrder.length(); i < n; i++) {
+    for (int i = 0, n = units_.length(); i < n; i++) {
         if (i == 0) { // first element
-            unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, *singleUnitsInOrder[i],
-                                                         ratesInfo, status);
+            unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, *units_[i], ratesInfo,
+                                                         status);
         } else {
-            unitConverters_.emplaceBackAndCheckErrorCode(status, *singleUnitsInOrder[i - 1],
-                                                         *singleUnitsInOrder[i], ratesInfo, status);
+            unitConverters_.emplaceBackAndCheckErrorCode(status, *units_[i - 1], *units_[i], ratesInfo,
+                                                         status);
         }
 
         if (U_FAILURE(status)) {
             return;
         }
     }
-
-    units_.appendAll(singleUnitsInOrder, status);
 }
 
 UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) const {
@@ -106,8 +79,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableNewQuantity(newQuantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBackAndCheckErrorCode(status, formattableNewQuantity,
-                                                new MeasureUnit(*units_[i]), status);
+            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
+            result.emplaceBackAndCheckErrorCode(status, formattableNewQuantity, type, status);
 
             // Keep the residual of the quantity.
             //   For example: `3.6 feet`, keep only `0.6 feet`
@@ -116,8 +89,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             Formattable formattableQuantity(quantity);
 
             // NOTE: Measure would own its MeasureUnit.
-            result.emplaceBackAndCheckErrorCode(status, formattableQuantity, new MeasureUnit(*units_[i]),
-                                                status);
+            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
+            result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status);
         }
     }
 

@@ -10,8 +10,8 @@
 #include "double-conversion-string-to-double.h"
 #include "measunit_impl.h"
 #include "uassert.h"
+#include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
-#include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
 #include "unitconverter.h"
 #include <algorithm>
@@ -235,16 +235,12 @@ Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UE
 }
 
 // Load Factor of a compound source unit.
-Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &ratesInfo,
+Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &ratesInfo,
                           UErrorCode &status) {
 
     Factor result;
-    MeasureUnitImpl memory;
-    const auto &compoundSourceUnit = MeasureUnitImpl::forMeasureUnit(source, memory, status);
-    if (U_FAILURE(status)) return result;
-
-    for (int32_t i = 0, n = compoundSourceUnit.units.length(); i < n; i++) {
-        auto singleUnit = *compoundSourceUnit.units[i]; // a SingleUnitImpl
+    for (int32_t i = 0, n = source.units.length(); i < n; i++) {
+        SingleUnitImpl singleUnit = *source.units[i];
 
         Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
@@ -264,30 +260,35 @@ Factor loadCompoundFactor(const MeasureUnit &source, const ConversionRates &rate
 /**
  * Checks if the source unit and the target unit are simple. For example celsius or fahrenheit. But not
  * square-celsius or square-fahrenheit.
+ *
+ * NOTE:
+ *  Empty unit means simple unit.
  */
-UBool checkSimpleUnit(const MeasureUnit &unit, UErrorCode &status) {
-    MeasureUnitImpl memory;
-    const auto &compoundSourceUnit = MeasureUnitImpl::forMeasureUnit(unit, memory, status);
+UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
     if (U_FAILURE(status)) return false;
 
-    if (compoundSourceUnit.complexity != UMEASURE_UNIT_SINGLE) {
+    if (unit.complexity != UMEASURE_UNIT_SINGLE) {
         return false;
     }
+    if (unit.units.length() == 0) {
+        // Empty units means simple unit.
+        return true;
+    }
 
-    U_ASSERT(compoundSourceUnit.units.length() == 1);
-    auto singleUnit = *(compoundSourceUnit.units[0]);
+    auto singleUnit = *(unit.units[0]);
 
     if (singleUnit.dimensionality != 1 || singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
         return false;
     }
+
     return true;
 }
 
 /**
  *  Extract conversion rate from `source` to `target`
  */
-void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &source,
-                        const MeasureUnit &target, UnitsConvertibilityState unitsState,
+void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &source,
+                        const MeasureUnitImpl &target, Convertibility unitsState,
                         const ConversionRates &ratesInfo, UErrorCode &status) {
     // Represents the conversion factor from the source to the target.
     Factor finalFactor;
@@ -299,9 +300,9 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
 
     // Merger Factors
     finalFactor.multiplyBy(sourceToBase);
-    if (unitsState == UnitsConvertibilityState::CONVERTIBLE) {
+    if (unitsState == Convertibility::CONVERTIBLE) {
         finalFactor.divideBy(targetToBase);
-    } else if (unitsState == UnitsConvertibilityState::RECIPROCAL) {
+    } else if (unitsState == Convertibility::RECIPROCAL) {
         finalFactor.multiplyBy(targetToBase);
     } else {
         status = UErrorCode::U_ARGUMENT_TYPE_MISMATCH;
@@ -321,7 +322,48 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnit &sourc
             targetToBase.offset * targetToBase.factorDen / targetToBase.factorNum;
     }
 
-    conversionRate.reciprocal = unitsState == UnitsConvertibilityState::RECIPROCAL;
+    conversionRate.reciprocal = unitsState == Convertibility::RECIPROCAL;
+}
+
+struct UnitIndexAndDimension : UMemory {
+    int32_t index = 0;
+    int32_t dimensionality = 0;
+
+    UnitIndexAndDimension(const SingleUnitImpl &singleUnit, int32_t multiplier) {
+        index = singleUnit.index;
+        dimensionality = singleUnit.dimensionality * multiplier;
+    }
+};
+
+void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDimension,
+                                  const SingleUnitImpl &shouldBeMerged, int32_t multiplier) {
+    for (int32_t i = 0; i < unitIndicesWithDimension.length(); i++) {
+        auto &unitWithIndex = *unitIndicesWithDimension[i];
+        if (unitWithIndex.index == shouldBeMerged.index) {
+            unitWithIndex.dimensionality += shouldBeMerged.dimensionality * multiplier;
+            return;
+        }
+    }
+
+    unitIndicesWithDimension.emplaceBack(shouldBeMerged, multiplier);
+}
+
+void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDimension,
+                             const MeasureUnitImpl &shouldBeMerged, int32_t multiplier) {
+    for (int32_t unit_i = 0; unit_i < shouldBeMerged.units.length(); unit_i++) {
+        auto singleUnit = *shouldBeMerged.units[unit_i];
+        mergeSingleUnitWithDimension(unitIndicesWithDimension, singleUnit, multiplier);
+    }
+}
+
+UBool checkAllDimensionsAreZeros(const MaybeStackVector<UnitIndexAndDimension> &dimensionVector) {
+    for (int32_t i = 0; i < dimensionVector.length(); i++) {
+        if (dimensionVector[i]->dimensionality != 0) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 } // namespace
@@ -368,21 +410,20 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
  * Extracts the compound base unit of a compound unit (`source`). For example, if the source unit is
  * `square-mile-per-hour`, the compound base unit will be `square-meter-per-second`
  */
-MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
-                                               const ConversionRates &conversionRates,
-                                               UErrorCode &status) {
-    MeasureUnit result;
-    int32_t count;
-    const auto singleUnits = source.splitToSingleUnits(count, status);
+MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source,
+                                                   const ConversionRates &conversionRates,
+                                                   UErrorCode &status) {
+
+    MeasureUnitImpl result;
     if (U_FAILURE(status)) return result;
 
-    for (int i = 0; i < count; ++i) {
-        const auto &singleUnit = singleUnits[i];
+    const auto &singleUnits = source.units;
+    for (int i = 0, count = singleUnits.length(); i < count; ++i) {
+        const auto &singleUnit = *singleUnits[i];
         // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
         // we will use `meter`
-        const auto singleUnitImpl = SingleUnitImpl::forMeasureUnit(singleUnit, status);
         const auto rateInfo =
-            conversionRates.extractConversionInfo(singleUnitImpl.getSimpleUnitID(), status);
+            conversionRates.extractConversionInfo(singleUnit.getSimpleUnitID(), status);
         if (U_FAILURE(status)) {
             return result;
         }
@@ -393,14 +434,12 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
 
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
         // must be pow4-meter. (NOTE: hectare --> square-meter)
-        auto compoundBaseUnit = MeasureUnit::forIdentifier(rateInfo->baseUnit.toStringPiece(), status);
-
-        int32_t baseUnitsCount;
-        auto baseUnits = compoundBaseUnit.splitToSingleUnits(baseUnitsCount, status);
-        for (int j = 0; j < baseUnitsCount; j++) {
-            int8_t newDimensionality =
-                baseUnits[j].getDimensionality(status) * singleUnit.getDimensionality(status);
-            result = result.product(baseUnits[j].withDimensionality(newDimensionality, status), status);
+        auto baseUnits =
+            MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).units;
+        for (int32_t i = 0, baseUnitsCount = baseUnits.length(); i < baseUnitsCount; i++) {
+            baseUnits[i]->dimensionality *= singleUnit.dimensionality;
+            // TODO: Deal with SI-prefix
+            result.append(*baseUnits[i], status);
 
             if (U_FAILURE(status)) {
                 return result;
@@ -411,53 +450,70 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
     return result;
 }
 
-UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
-                                                        const MeasureUnit &target,
-                                                        const ConversionRates &conversionRates,
-                                                        UErrorCode &status) {
-    if (source.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
-        target.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+/**
+ * Determine the convertibility between `source` and `target`.
+ * For example:
+ *    `meter` and `foot` are `CONVERTIBLE`.
+ *    `meter-per-second` and `second-per-meter` are `RECIPROCAL`.
+ *    `meter` and `pound` are `UNCONVERTIBLE`.
+ *
+ * NOTE:
+ *    Only works with SINGLE and COMPOUND units. If one of the units is a
+ *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
+ */
+Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
+                                                const MeasureUnitImpl &target,
+                                                const ConversionRates &conversionRates,
+                                                UErrorCode &status) {
+
+    if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return UNCONVERTIBLE;
     }
 
-    auto sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
-    auto targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
-
+    MeasureUnitImpl sourceBaseUnit = extractCompoundBaseUnit(source, conversionRates, status);
+    MeasureUnitImpl targetBaseUnit = extractCompoundBaseUnit(target, conversionRates, status);
     if (U_FAILURE(status)) return UNCONVERTIBLE;
 
-    if (sourceBaseUnit == targetBaseUnit) return CONVERTIBLE;
-    if (sourceBaseUnit == targetBaseUnit.reciprocal(status)) return RECIPROCAL;
+    MaybeStackVector<UnitIndexAndDimension> convertible;
+    MaybeStackVector<UnitIndexAndDimension> reciprocal;
 
-    auto sourceSimplified = sourceBaseUnit.simplify(status);
-    auto targetSimplified = targetBaseUnit.simplify(status);
+    mergeUnitsAndDimensions(convertible, sourceBaseUnit, 1);
+    mergeUnitsAndDimensions(reciprocal, sourceBaseUnit, 1);
 
-    if (sourceSimplified == targetSimplified) return CONVERTIBLE;
-    if (sourceSimplified == targetSimplified.reciprocal(status)) return RECIPROCAL;
+    mergeUnitsAndDimensions(convertible, targetBaseUnit, -1);
+    mergeUnitsAndDimensions(reciprocal, targetBaseUnit, 1);
+
+    if (checkAllDimensionsAreZeros(convertible)) {
+        return CONVERTIBLE;
+    }
+
+    if (checkAllDimensionsAreZeros(reciprocal)) {
+        return RECIPROCAL;
+    }
 
     return UNCONVERTIBLE;
 }
 
-UnitConverter::UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
-                             UErrorCode &status) {
-
-    if (source.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
-        target.getComplexity(status) == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+                             const ConversionRates &ratesInfo, UErrorCode &status)
+    : conversionRate_(source.copy(status), target.copy(status)) {
+    if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    UnitsConvertibilityState unitsState = checkConvertibility(source, target, ratesInfo, status);
+    Convertibility unitsState = extractConvertibility(source, target, ratesInfo, status);
     if (U_FAILURE(status)) return;
-    if (unitsState == UnitsConvertibilityState::UNCONVERTIBLE) {
+    if (unitsState == Convertibility::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    conversionRate_.source = source;
-    conversionRate_.target = target;
-
-    loadConversionRate(conversionRate_, source, target, unitsState, ratesInfo, status);
+    loadConversionRate(conversionRate_, conversionRate_.source, conversionRate_.target, unitsState,
+                       ratesInfo, status);
 }
 
 double UnitConverter::convert(double inputValue) const {

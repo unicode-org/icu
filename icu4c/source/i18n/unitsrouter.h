@@ -11,6 +11,7 @@
 
 #include "cmemory.h"
 #include "complexunitsconverter.h"
+#include "measunit_impl.h"
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
@@ -46,14 +47,16 @@ struct ConverterPreference : UMemory {
     UnicodeString precision;
 
     // In case there is no limit, the limit will be -inf.
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, UnicodeString precision,
-                        const ConversionRates &ratesInfo, UErrorCode &status)
+    ConverterPreference(const MeasureUnitImpl &source, const MeasureUnitImpl &complexTarget,
+                        UnicodeString precision, const ConversionRates &ratesInfo, UErrorCode &status)
         : ConverterPreference(source, complexTarget, std::numeric_limits<double>::lowest(), precision,
                               ratesInfo, status) {}
 
-    ConverterPreference(MeasureUnit source, MeasureUnit complexTarget, double limit,
-                        UnicodeString precision, const ConversionRates &ratesInfo, UErrorCode &status)
-        : converter(source, complexTarget, ratesInfo, status), limit(limit), precision(precision) {}
+    ConverterPreference(const MeasureUnitImpl &source, const MeasureUnitImpl &complexTarget,
+                        double limit, UnicodeString precision, const ConversionRates &ratesInfo,
+                        UErrorCode &status)
+        : converter(source, complexTarget, ratesInfo, status), limit(limit),
+          precision(std::move(precision)) {}
 };
 
 /**

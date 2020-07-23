@@ -7,8 +7,11 @@
 
 #include "charstr.h"
 #include "cmemory.h"
+#include "cstring.h"
+#include "measunit_impl.h"
+#include "number_decimalquantity.h"
+#include "resource.h"
 #include "unicode/measure.h"
-#include "unitconverter.h"
 #include "unitsdata.h"
 #include "unitsrouter.h"
 
@@ -22,7 +25,9 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     ConversionRates conversionRates(status);
     UnitPreferences prefs(status);
 
-    MeasureUnit baseUnit = extractCompoundBaseUnit(inputUnit, conversionRates, status);
+    MeasureUnitImpl inputUnitImpl = MeasureUnitImpl::forMeasureUnitMaybeCopy(inputUnit, status);
+    MeasureUnit baseUnit =
+        (extractCompoundBaseUnit(inputUnitImpl, conversionRates, status)).build(status);
     CharString category = getUnitCategory(baseUnit.getIdentifier(), status);
 
     const UnitPreference *const *unitPreferences;
@@ -32,7 +37,8 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     for (int i = 0; i < preferencesCount; ++i) {
         const auto &preference = *unitPreferences[i];
 
-        MeasureUnit complexTargetUnit = MeasureUnit::forIdentifier(preference.unit.data(), status);
+        MeasureUnitImpl complexTargetUnitImpl =
+            MeasureUnitImpl::forIdentifier(preference.unit.data(), status);
         if (U_FAILURE(status)) {
             return;
         }
@@ -49,9 +55,11 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
             return;
         }
 
-        outputUnits_.emplaceBackAndCheckErrorCode(status, complexTargetUnit);
-        converterPreferences_.emplaceBackAndCheckErrorCode(
-            status, inputUnit, complexTargetUnit, preference.geq, precision, conversionRates, status);
+        outputUnits_.emplaceBackAndCheckErrorCode(status,
+                                                  complexTargetUnitImpl.copy(status).build(status));
+        converterPreferences_.emplaceBackAndCheckErrorCode(status, inputUnitImpl, complexTargetUnitImpl,
+                                                           preference.geq, std::move(precision),
+                                                           conversionRates, status);
 
         if (U_FAILURE(status)) {
             return;

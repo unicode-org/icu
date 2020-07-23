@@ -7,9 +7,12 @@
 #ifndef __UNITCONVERTER_H__
 #define __UNITCONVERTER_H__
 
-#include "unicode/measunit.h"
+#include "cmemory.h"
+#include "measunit_impl.h"
+#include "unicode/errorcode.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
+#include "unitconverter.h"
 #include "unitsdata.h"
 
 U_NAMESPACE_BEGIN
@@ -65,25 +68,28 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
 /**
  * Represents the conversion rate between `source` and `target`.
  */
-struct ConversionRate {
-    MeasureUnit source;
-    MeasureUnit target;
+struct ConversionRate : public UMemory {
+    const MeasureUnitImpl source;
+    const MeasureUnitImpl target;
     double factorNum = 1;
     double factorDen = 1;
     double sourceOffset = 0;
     double targetOffset = 0;
     bool reciprocal = false;
+
+    ConversionRate(MeasureUnitImpl &&source, MeasureUnitImpl &&target)
+        : source(std::move(source)), target(std::move(target)) {}
 };
 
-enum U_I18N_API UnitsConvertibilityState {
+enum U_I18N_API Convertibility {
     RECIPROCAL,
     CONVERTIBLE,
     UNCONVERTIBLE,
 };
 
-MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
-                                               const ConversionRates &conversionRates,
-                                               UErrorCode &status);
+MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source,
+                                                   const ConversionRates &conversionRates,
+                                                   UErrorCode &status);
 
 /**
  * Check if the convertibility between `source` and `target`.
@@ -96,10 +102,10 @@ MeasureUnit U_I18N_API extractCompoundBaseUnit(const MeasureUnit &source,
  *    Only works with SINGLE and COMPOUND units. If one of the units is a
  *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
-UnitsConvertibilityState U_I18N_API checkConvertibility(const MeasureUnit &source,
-                                                        const MeasureUnit &target,
-                                                        const ConversionRates &conversionRates,
-                                                        UErrorCode &status);
+Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
+                                                const MeasureUnitImpl &target,
+                                                const ConversionRates &conversionRates,
+                                                UErrorCode &status);
 
 /**
  * Converts from a source `MeasureUnit` to a target `MeasureUnit`.
@@ -120,8 +126,8 @@ class U_I18N_API UnitConverter : public UMemory {
      * @param target represents the target unit.
      * @param status
      */
-    UnitConverter(MeasureUnit source, MeasureUnit target, const ConversionRates &ratesInfo,
-                  UErrorCode &status);
+    UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+                  const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
      * Convert a value in the source unit to another value in the target unit.
