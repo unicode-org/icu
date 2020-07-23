@@ -97,17 +97,18 @@ The configuration file has the following format:
 it is on the loader path, or a full pathname.
 5. _ENTRYPOINT_ is the short (undecorated) symbol name of the plugin's
 entrypoint, as above.
-6. _CONFIGURATION_ is the entire rest of the line . It's passed as-is to
+6. _CONFIGURATION_ is the entire rest of the line. It's passed as-is to
 the plugin.
+
 An example configuration file is, in its entirety:
 
 ```
 # this is icuplugins44.txt
 testplug.dll myPlugin hello=world
+```
 The DLL testplug.dll is opened, and searched for the entrypoint
 "myPlugin", which must meet the API contract above.
 The string "hello=world" is passed to the plugin verbatim.
-```
 
 ## Load Order
 
