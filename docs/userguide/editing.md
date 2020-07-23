@@ -2,6 +2,8 @@
 
 ## Overview
 
+> :construction: **Note**: This information is obsolete and must be changed.
+
 This version of the ICU User Guide is maintained via Google Sites. The Site
 address is <http://sites.google.com/site/icuprojectuserguide/>
 
