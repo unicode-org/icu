@@ -285,6 +285,7 @@ This is done as follows:
         Perform error handling. . .
 
 Return value: DLL Handle, defined as `PIC S9(9) BINARY`
+
 Input Value: DLL Name (null-terminated string)
 
 Errors may happen if the DLL name is not correct, or the string is not
@@ -299,7 +300,7 @@ This is done as follows:
         by reference API-Name
         Returning API-Pointer.
     IF API-Pointer = NULL
-        Perform error handling. . .
+        Perform error handling...
 
 Return value: API address, defined as PROCEDURE-POINTER
 Input Value: DLL Handle (returned by call to LoadLibraryA)
@@ -446,4 +447,5 @@ The ucnv_xxx APIs are documented in file "UCNV.H".
     * ucnv_close
 
 The unorm_xxx APIs are documented in file "UNORM.H".
+
 The ucnv_xxx APIs are documented in file "UCNV.H".
