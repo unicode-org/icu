@@ -24,7 +24,7 @@ in building transforms, see "Guidelines for Designing Script Transliterations"
 (§) in the [General Transforms](index.md) chapter. For external sources for
 script transforms, see Script Transliterator Sources (§) in that same chapter)
 
-* See *[*Properties and ICU Rule Syntax*](../../strings/properties.md) *for
+> :point_right: * See *[*Properties and ICU Rule Syntax*](../../strings/properties.md) *for
 information regarding syntax characters.*
 
 In this example, we start with a set of rules for Greek since they provide a
@@ -35,7 +35,7 @@ we will transliterate "Βιολογία-Φυσιολογία" as "Biología-Phys
 "Violohía-Fisiolohía". To illustrate some of the trickier cases, we will also
 transliterate the Greek accents that are no longer in use in modern Greek.
 
-*Some of the characters may not be visible on the screen unless you have a
+> :point_right: *Some of the characters may not be visible on the screen unless you have a
 Unicode font with all the Greek letters. If you have a licensed copy of
 Microsoft® Office, you can use the "Arial Unicode MS" font, or you can download
 the [CODE2000](http://www.code2000.net/) font for free. For more information,
@@ -46,7 +46,7 @@ We will also verify that every Latin letter maps to a Greek letter. This insures
 that when we reverse the transliteration that the process can handle all the
 Latin letters.
 
-*This direction is not reversible. The following table illustrates this
+> :point_right: *This direction is not reversible. The following table illustrates this
 situation:* 
 
 | Source→Target | Reversible | φ → ph → φ |
@@ -192,7 +192,7 @@ together:
 The example allows words like Θεολογικές‚ to map to Theologikés and not
 THeologikés
 
-*You either can specify properties with the POSIX-style syntax, such as
+> :point_right: *You either can specify properties with the POSIX-style syntax, such as
 [:LowercaseLetter:], or with the Perl-style syntax, such as
 \\p{LowercaseLetter}.*
 
@@ -410,9 +410,9 @@ these disambiguation rules ensure that the rules can pass these tests and handle
 all possible sequences of characters correctly.
 
 There are some character forms that never occur in normal context. By
-convention, we use tilde (~) for such cases to allow for reverse
+convention, we use tilde (\~) for such cases to allow for reverse
 transliteration. Thus, if you had the text "Θεολογικές (ς)", it would
-transliterate to "Theologikés (~s)". Using the tilde allows the reverse
+transliterate to "Theologikés (\~s)". Using the tilde allows the reverse
 transliteration to detect the character and convert correctly back to the
 original: "Θεολογικές (ς)". Similarly, if we had the phrase "Θεολογικέσ", it
 would transliterate to "Theologiké~s". These are called anomalous characters.
@@ -594,24 +594,24 @@ punctuation and space (watch out for combining marks).
     upper and lower case character. This procedure is done in the following ICU
     transforms:
 
-1.  Latin-Hangul
+    a.  Latin-Hangul
 
-2.  Latin-Greek
+    b.  Latin-Greek
 
-3.  Latin-Cyrillic
+    c.  Latin-Cyrillic
 
-4.  Latin-Devanagari
+    d.  Latin-Devanagari
 
-5.  Latin-Gujarati
+    e.  Latin-Gujarati
 
-6.  etc
+    f.  etc
 
-1.  **Punctuation. **When executing script conversions, remember that scripts
+2.  **Punctuation. **When executing script conversions, remember that scripts
     have different punctuation conventions. For example, in the Greek language,
     the ";" means a question mark. Generally, these punctuation marks also
     should be converted when transliterating scripts.
 
-2.  **Normalization **Always design transform rules so that they work no matter
+3.  **Normalization **Always design transform rules so that they work no matter
     whether the source is normalized or not. (This is also true for the target,
     in the case of backwards rules.) Generally, the best way to do this is to
     have :: NFD (NFC); as the first line of the rules, and :: NFC (NFD); as the
@@ -621,7 +621,7 @@ punctuation and space (watch out for combining marks).
     items that are always in a canonical order. If we are not using any accent
     manipulation, we could use :: NFC (NFC) ; at the top of the rules instead.
 
-3.  **Ignorable Characters **Letters may have following accents such as the
+4.  **Ignorable Characters **Letters may have following accents such as the
     following example:
     \[:lowercase letter:\] } z > s ; # convert z after letters into s
     Normally, we want to ignore any accents that are on the z in performing the
@@ -634,14 +634,19 @@ punctuation and space (watch out for combining marks).
     Left-Right Mark, or a Non-Joiner. Because of that, it is even safer to use
     the following:
 
-    TODO: this code should be part of the preceding list item #4.
-    $ignore = \[ \[:mark:\] \[:format:\] \] \* ; # define at the top of your file
-    ...
-    \[:letter:\] $ignore } z > s ; # convert z after letters into sh
+        $ignore = \[ \[:mark:\] \[:format:\] \] \* ; # define at the top of your file
+        ...
+        \[:letter:\] $ignore } z > s ; # convert z after letters into sh
 
 
-*Remember that the rules themselves must be in the same normalization format.
+> :point_right: *Remember that the rules themselves must be in the same normalization format.
 Otherwise, nothing will match. To do this, run NFD on the rules themselves. In
 some cases, we must rearrange the order of the rules because of masking. For
 example, consider the following rules: *
-*If these rules are put in normalized form, then the second rule will mask the first. To avoid this, exchange the order because the NFD representation has the accents separate from the base character. We will not be able to see this on the screen if accents are rendered correctly. The following shows the NFD representation:*
+
+TODO: MISSING INFORMATION.
+
+*If these rules are put in normalized form, then the second rule will mask the first. To avoid this, exchange the order because the NFD representation has the accents separate from the base character. We will not be able to see this on the screen if accents are rendered correctly.
+
+The following shows the NFD representation:
+TODO: Complete this sentence.
