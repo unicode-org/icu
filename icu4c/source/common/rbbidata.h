@@ -137,6 +137,8 @@ struct RBBIStateTable {
     uint32_t         fDictCategoriesStart;  // Char category number of the first dictionary
                                             //   char class, or the the largest category number + 1
                                             //   if there are no dictionary categories.
+    uint32_t         fLookAheadResultsSize; // Size of run-time array required for holding
+                                            //   look-ahead results. Indexed by row.fLookAhead.
     uint32_t         fFlags;                // Option Flags for this state table.
     char             fTableData[1];         // First RBBIStateTableRow begins here.
                                             //   Variable-length array declared with length 1

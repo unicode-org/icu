@@ -83,7 +83,7 @@
     <!-- Build a standalone JAR which is called by Ant (and which avoids needing to mess
          about making Ant know the Maven class-path). -->
     <target name="prepare-jar" depends="init-args">
-        <exec executable="mvn" searchpath="true">
+        <exec executable="mvn" searchpath="true" failonerror="true">
             <arg value="compile"/>
         </exec>
     </target>

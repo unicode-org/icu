@@ -79,6 +79,12 @@ class RBBITableBuilder {
     /** Map from rule number (fVal in look ahead nodes) to sequential lookahead index. */
     int[] fLookAheadRuleMap;
 
+    /** Counter used when assigning lookahead rule numbers.
+     * Contains the last look-ahead number already in use.
+     * The first look-ahead number is 2; Number 1 (ACCEPTING_UNCONDITIONAL) is reserved
+     * for non-lookahead accepting states. See the declarations of RBBIStateTableRowT.   */
+    int  fLASlotsInUse = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
+
     //-----------------------------------------------------------------------------
     //
     //  Constructor    for RBBITableBuilder.
@@ -617,12 +623,6 @@ class RBBITableBuilder {
       void mapLookAheadRules() {
           fLookAheadRuleMap =  new int[fRB.fScanner.numRules() + 1];
 
-          // Counter used when assigning lookahead rule numbers.
-          // Contains the last look-ahead number already in use.
-          // The first look-ahead number is 2;
-          // Number 1 is reserved for non-lookahead accepting states.
-          int laSlotsInUse = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
-
           for (RBBIStateDescriptor sd: fDStates) {
               int laSlotForState = 0;
 
@@ -656,7 +656,7 @@ class RBBITableBuilder {
               }
 
               if (laSlotForState == 0) {
-                  laSlotForState = ++laSlotsInUse;
+                  laSlotForState = ++fLASlotsInUse;
               }
 
               // For each look ahead node covered by this state,
@@ -1139,6 +1139,8 @@ class RBBITableBuilder {
                fDStates.size() < 0x7fff);
            table.fNumStates = fDStates.size();
            table.fDictCategoriesStart = fRB.fSetBuilder.getDictCategoriesStart();
+           table.fLookAheadResultsSize =
+                   fLASlotsInUse == RBBIDataWrapper.ACCEPTING_UNCONDITIONAL ? 0 : fLASlotsInUse + 1;
            boolean use8Bits = table.fNumStates <= MAX_STATE_FOR_8BITS_TABLE;
 
            // Size of table size in shorts.

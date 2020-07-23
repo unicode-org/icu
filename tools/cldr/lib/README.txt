@@ -41,7 +41,7 @@ doesn't work on your system.
 To regenerate the CLDR API jar you need to build the "jar" target manually
 using the Ant build.xml file in the "tools/java" directory of the CLDR project:
 
-$ cd <CLDR_ROOT>/tools/java
+$ cd "$CLDR_ROOT/tools/java"
 $ ant clean jar
 
 This should result in the cldr.jar file being built into that directory, which
@@ -55,18 +55,20 @@ To update the local Maven repository (e.g. to install the CLDR jar) then from
 this directory (lib/) you should run:
 
 $ mvn install:install-file \
+  -Dproject.parent.relativePath="" \
   -DgroupId=org.unicode.cldr \
   -DartifactId=cldr-api \
   -Dversion=0.1-SNAPSHOT \
   -Dpackaging=jar \
   -DgeneratePom=true \
   -DlocalRepositoryPath=. \
-  -Dfile=<CLDR_ROOT>/tools/java/cldr.jar
+  -Dfile="$CLDR_ROOT/tools/java/cldr.jar"
 
-And if you have updated one of these libraries then from the main project
-directory (i.e. the directory the Maven pom.xml file(s) are in) run:
+And if you have updated one of these libraries then from this directory run:
 
-$ mvn dependency:purge-local-repository -DsnapshotsOnly=true
+$ mvn dependency:purge-local-repository \
+  -Dproject.parent.relativePath="" \
+  -DmanualIncludes=org.unicode.cldr:cldr-api:jar
 
 After doing this, you should see something like the following list of files in
 this directory:
@@ -80,3 +82,20 @@ org/unicode/cldr/cldr-api/0.1-SNAPSHOT/cldr-api-0.1-SNAPSHOT.jar
 Finally, if you choose to update the version number of the snapshot, then also
 update all the the pom.xml files which reference it (but this is unlikely to be
 necessary).
+
+Troubleshooting
+---------------
+
+While the Maven system should keep the CLDR JAR up to date, there is a chance
+that you may have an out of date JAR installed elsewhere. If you have any
+issues with the JAR not being the expected version (e.g. after making changes)
+then run the above "purge" step again, from this directory.
+
+This should re-resolve the current JAR snapshot from the repository in this
+directory. Having purged the Maven cache, next time you build a project, you
+should see something like:
+
+[exec] Downloading from <xxx>: <url>/org/unicode/cldr/cldr-api/0.1-SNAPSHOT/maven-metadata.xml
+[exec] [INFO] Building jar: <path-to-icu-root>/tools/cldr/cldr-to-icu/target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+This shows that it has had to re-fetch the JAR file.

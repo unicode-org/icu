@@ -852,4 +852,57 @@ public class RBBITest extends TestFmwk {
             }
         }
     }
+
+    /* Test handling of a large number of look-ahead rules.
+     * The number of rules in the test exceeds the implementation limits prior to the
+     * improvements introduced with #13590.
+     *
+     * The test look-ahead rules have the form "AB / CE"; "CD / EG"; ...
+     * The text being matched is sequential, "ABCDEFGHI..."
+     *
+     * The upshot is that the look-ahead rules all match on their preceding context,
+     * and consequently must save a potential result, but then fail to match on their
+     * trailing context, so that they don't actually cause a boundary.
+     *
+     * Additionally, add a ".*" rule, so there are no boundaries unless a
+     * look-ahead hard-break rule forces one.
+     */
+    @Test
+    public void TestBug13590() {
+        StringBuilder rules = new StringBuilder("!!quoted_literals_only; !!chain; .*;\n");
+
+        int NUM_LOOKAHEAD_RULES = 50;
+        char STARTING_CHAR = '\u5000';
+        char firstChar = 0;
+        for (int ruleNum = 0; ruleNum < NUM_LOOKAHEAD_RULES; ++ruleNum) {
+            firstChar = (char) (STARTING_CHAR + ruleNum*2);
+            rules.append('\'') .append(firstChar) .append((char)(firstChar+1)) .append('\'')
+                 .append(' ') .append('/') .append(' ')
+                 .append('\'') .append((char)(firstChar+2)) .append((char)(firstChar+4)) .append('\'')
+                 .append(';') .append('\n');
+        }
+
+        // Change the last rule added from the form "UV / WY" to "UV / WX".
+        // Changes the rule so that it will match - all 4 chars are in ascending sequence.
+        String rulesStr = rules.toString().replace((char)(firstChar+4), (char)(firstChar+3));
+
+        RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rulesStr);
+        // bi.dump(System.out);
+
+        StringBuilder testString = new StringBuilder();
+        for (char c = (char) (STARTING_CHAR-200); c < STARTING_CHAR + NUM_LOOKAHEAD_RULES*4; ++c) {
+            testString.append(c);
+        }
+        bi.setText(testString);
+
+        int breaksFound = 0;
+        while (bi.next() != BreakIterator.DONE) {
+            ++breaksFound;
+        }
+
+        // Two matches are expected, one from the last rule that was explicitly modified,
+        // and one at the end of the text.
+        assertEquals("Wrong number of breaks found", 2, breaksFound);
+    }
+
 }

@@ -141,6 +141,8 @@ LocaleMatcher::Builder::Builder(LocaleMatcher::Builder &&src) U_NOEXCEPT :
 LocaleMatcher::Builder::~Builder() {
     delete supportedLocales_;
     delete defaultLocale_;
+    delete maxDistanceDesired_;
+    delete maxDistanceSupported_;
 }
 
 LocaleMatcher::Builder &LocaleMatcher::Builder::operator=(LocaleMatcher::Builder &&src) U_NOEXCEPT {
@@ -267,6 +269,24 @@ LocaleMatcher::Builder &LocaleMatcher::Builder::setDemotionPerDesiredLocale(ULoc
     return *this;
 }
 
+LocaleMatcher::Builder &LocaleMatcher::Builder::setMaxDistance(const Locale &desired,
+                                                               const Locale &supported) {
+    if (U_FAILURE(errorCode_)) { return *this; }
+    Locale *desiredClone = desired.clone();
+    Locale *supportedClone = supported.clone();
+    if (desiredClone == nullptr || supportedClone == nullptr) {
+        delete desiredClone;  // in case only one could not be allocated
+        delete supportedClone;
+        errorCode_ = U_MEMORY_ALLOCATION_ERROR;
+        return *this;
+    }
+    delete maxDistanceDesired_;
+    delete maxDistanceSupported_;
+    maxDistanceDesired_ = desiredClone;
+    maxDistanceSupported_ = supportedClone;
+    return *this;
+}
+
 #if 0
 /**
  * <i>Internal only!</i>
@@ -351,9 +371,6 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
         supportedLSRs(nullptr), supportedIndexes(nullptr), supportedLSRsLength(0),
         ownedDefaultLocale(nullptr), defaultLocale(nullptr) {
     if (U_FAILURE(errorCode)) { return; }
-    if (thresholdDistance < 0) {
-        thresholdDistance = localeDistance.getDefaultScriptDistance();
-    }
     const Locale *def = builder.defaultLocale_;
     LSR builderDefaultLSR;
     const LSR *defLSR = nullptr;
@@ -469,6 +486,25 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
 
     if (builder.demotion_ == ULOCMATCH_DEMOTION_REGION) {
         demotionPerDesiredLocale = localeDistance.getDefaultDemotionPerDesiredLocale();
+    }
+
+    if (thresholdDistance >= 0) {
+        // already copied
+    } else if (builder.maxDistanceDesired_ != nullptr) {
+        LSR suppLSR = getMaximalLsrOrUnd(likelySubtags, *builder.maxDistanceSupported_, errorCode);
+        const LSR *pSuppLSR = &suppLSR;
+        int32_t indexAndDistance = localeDistance.getBestIndexAndDistance(
+                getMaximalLsrOrUnd(likelySubtags, *builder.maxDistanceDesired_, errorCode),
+                &pSuppLSR, 1,
+                LocaleDistance::shiftDistance(100), favorSubtag, direction);
+        if (U_SUCCESS(errorCode)) {
+            // +1 for an exclusive threshold from an inclusive max.
+            thresholdDistance = LocaleDistance::getDistanceFloor(indexAndDistance) + 1;
+        } else {
+            thresholdDistance = 0;
+        }
+    } else {
+        thresholdDistance = localeDistance.getDefaultScriptDistance();
     }
 }
 
@@ -693,6 +729,18 @@ int32_t LocaleMatcher::getBestSuppIndex(LSR desiredLSR, LocaleLsrIterator *remai
         return -1;
     }
     return supportedIndexes[bestSupportedLsrIndex];
+}
+
+UBool LocaleMatcher::isMatch(const Locale &desired, const Locale &supported,
+                             UErrorCode &errorCode) const {
+    LSR suppLSR = getMaximalLsrOrUnd(likelySubtags, supported, errorCode);
+    if (U_FAILURE(errorCode)) { return 0; }
+    const LSR *pSuppLSR = &suppLSR;
+    int32_t indexAndDistance = localeDistance.getBestIndexAndDistance(
+            getMaximalLsrOrUnd(likelySubtags, desired, errorCode),
+            &pSuppLSR, 1,
+            LocaleDistance::shiftDistance(thresholdDistance), favorSubtag, direction);
+    return indexAndDistance >= 0;
 }
 
 double LocaleMatcher::internalMatch(const Locale &desired, const Locale &supported, UErrorCode &errorCode) const {

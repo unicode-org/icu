@@ -141,13 +141,13 @@ public:
 
     /**
      * Appends a filename/path part, e.g., a directory name.
-     * First appends a U_FILE_SEP_CHAR if necessary.
+     * First appends a U_FILE_SEP_CHAR or U_FILE_ALT_SEP_CHAR if necessary.
      * Does nothing if s is empty.
      */
     CharString &appendPathPart(StringPiece s, UErrorCode &errorCode);
 
     /**
-     * Appends a U_FILE_SEP_CHAR if this string is not empty
+     * Appends a U_FILE_SEP_CHAR or U_FILE_ALT_SEP_CHAR if this string is not empty
      * and does not already end with a U_FILE_SEP_CHAR or U_FILE_ALT_SEP_CHAR.
      */
     CharString &ensureEndsWithFileSeparator(UErrorCode &errorCode);
@@ -160,6 +160,12 @@ private:
 
     CharString(const CharString &other); // forbid copying of this class
     CharString &operator=(const CharString &other); // forbid copying of this class
+
+    /**
+     * Returns U_FILE_ALT_SEP_CHAR if found in string, and U_FILE_SEP_CHAR is not found.
+     * Otherwise returns U_FILE_SEP_CHAR.
+     */
+    char getDirSepChar() const;
 };
 
 U_NAMESPACE_END

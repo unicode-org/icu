@@ -68,9 +68,17 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
     init(status);
     fData = new RBBIDataWrapper(data, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
-    if(fData == 0) {
+    if(fData == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
+    }
+    if (fData->fForwardTable->fLookAheadResultsSize > 0) {
+        fLookAheadMatches = static_cast<int32_t *>(
+            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+        if (fLookAheadMatches == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 }
 
@@ -98,9 +106,17 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
     }
     fData = new RBBIDataWrapper(data, RBBIDataWrapper::kDontAdopt, status);
     if (U_FAILURE(status)) {return;}
-    if(fData == 0) {
+    if(fData == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
+    }
+    if (fData->fForwardTable->fLookAheadResultsSize > 0) {
+        fLookAheadMatches = static_cast<int32_t *>(
+            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+        if (fLookAheadMatches == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 }
 
@@ -117,9 +133,17 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
     init(status);
     fData = new RBBIDataWrapper(udm, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
-    if(fData == 0) {
+    if(fData == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
+    }
+    if (fData->fForwardTable->fLookAheadResultsSize > 0) {
+        fLookAheadMatches = static_cast<int32_t *>(
+            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+        if (fLookAheadMatches == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
 }
 
@@ -188,30 +212,34 @@ RuleBasedBreakIterator::~RuleBasedBreakIterator() {
         // fCharIter was adopted from the outside.
         delete fCharIter;
     }
-    fCharIter = NULL;
+    fCharIter = nullptr;
 
     utext_close(&fText);
 
-    if (fData != NULL) {
+    if (fData != nullptr) {
         fData->removeReference();
-        fData = NULL;
+        fData = nullptr;
     }
     delete fBreakCache;
-    fBreakCache = NULL;
+    fBreakCache = nullptr;
 
     delete fDictionaryCache;
-    fDictionaryCache = NULL;
+    fDictionaryCache = nullptr;
 
     delete fLanguageBreakEngines;
-    fLanguageBreakEngines = NULL;
+    fLanguageBreakEngines = nullptr;
 
     delete fUnhandledBreakEngine;
-    fUnhandledBreakEngine = NULL;
+    fUnhandledBreakEngine = nullptr;
+
+    uprv_free(fLookAheadMatches);
+    fLookAheadMatches = nullptr;
 }
 
 /**
  * Assignment operator.  Sets this iterator to have the same behavior,
  * and iterate over the same text, as the one passed in.
+ * TODO: needs better handling of memory allocation errors.
  */
 RuleBasedBreakIterator&
 RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
@@ -252,6 +280,14 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
         fData = that.fData->addReference();
     }
 
+    uprv_free(fLookAheadMatches);
+    fLookAheadMatches = nullptr;
+    if (fData && fData->fForwardTable->fLookAheadResultsSize > 0) {
+        fLookAheadMatches = static_cast<int32_t *>(
+            uprv_malloc(fData->fForwardTable->fLookAheadResultsSize * sizeof(int32_t)));
+    }
+
+
     fPosition = that.fPosition;
     fRuleStatusIndex = that.fRuleStatusIndex;
     fDone = that.fDone;
@@ -275,16 +311,17 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //
 //-----------------------------------------------------------------------------
 void RuleBasedBreakIterator::init(UErrorCode &status) {
-    fCharIter             = NULL;
-    fData                 = NULL;
+    fCharIter             = nullptr;
+    fData                 = nullptr;
     fPosition             = 0;
     fRuleStatusIndex      = 0;
     fDone                 = false;
     fDictionaryCharCount  = 0;
-    fLanguageBreakEngines = NULL;
-    fUnhandledBreakEngine = NULL;
-    fBreakCache           = NULL;
-    fDictionaryCache      = NULL;
+    fLanguageBreakEngines = nullptr;
+    fUnhandledBreakEngine = nullptr;
+    fBreakCache           = nullptr;
+    fDictionaryCache      = nullptr;
+    fLookAheadMatches     = nullptr;
 
     // Note: IBM xlC is unable to assign or initialize member fText from UTEXT_INITIALIZER.
     // fText                 = UTEXT_INITIALIZER;
@@ -700,52 +737,6 @@ enum RBBIRunMode {
 };
 
 
-// Map from look-ahead break states (corresponds to rules) to boundary positions.
-// Allows multiple lookahead break rules to be in flight at the same time.
-//
-// This is a temporary approach for ICU 57. A better fix is to make the look-ahead numbers
-// in the state table be sequential, then we can just index an array. And the
-// table could also tell us in advance how big that array needs to be.
-//
-// Before ICU 57 there was just a single simple variable for a look-ahead match that
-// was in progress. Two rules at once did not work.
-
-static const int32_t kMaxLookaheads = 8;
-struct LookAheadResults {
-    int32_t    fUsedSlotLimit;
-    int32_t    fPositions[8];
-    uint16_t   fKeys[8];
-
-    LookAheadResults() : fUsedSlotLimit(0), fPositions(), fKeys() {}
-
-    int32_t getPosition(uint16_t key) {
-        for (int32_t i=0; i<fUsedSlotLimit; ++i) {
-            if (fKeys[i] == key) {
-                return fPositions[i];
-            }
-        }
-        UPRV_UNREACHABLE;
-    }
-
-    void setPosition(uint16_t key, int32_t position) {
-        int32_t i;
-        for (i=0; i<fUsedSlotLimit; ++i) {
-            if (fKeys[i] == key) {
-                fPositions[i] = position;
-                return;
-            }
-        }
-        if (i >= kMaxLookaheads) {
-            UPRV_UNREACHABLE;
-        }
-        fKeys[i] = key;
-        fPositions[i] = position;
-        U_ASSERT(fUsedSlotLimit == i);
-        fUsedSlotLimit = i + 1;
-    }
-};
-
-
 // Wrapper functions to select the appropriate handleNext() or handleSafePrevious()
 // instantiation, based on whether an 8 or 16 bit table is required.
 //
@@ -809,7 +800,6 @@ int32_t RuleBasedBreakIterator::handleNext() {
 
     RowType             *row;
     UChar32             c;
-    LookAheadResults    lookAheadMatches;
     int32_t             result             = 0;
     int32_t             initialPosition    = 0;
     const RBBIStateTable *statetable       = fData->fForwardTable;
@@ -912,7 +902,8 @@ int32_t RuleBasedBreakIterator::handleNext() {
             fRuleStatusIndex = row->fTagsIdx;   // Remember the break status (tag) values.
         } else if (accepting > ACCEPTING_UNCONDITIONAL) {
             // Lookahead match is completed.
-            int32_t lookaheadResult = lookAheadMatches.getPosition(accepting);
+            U_ASSERT(accepting < fData->fForwardTable->fLookAheadResultsSize);
+            int32_t lookaheadResult = fLookAheadMatches[accepting];
             if (lookaheadResult >= 0) {
                 fRuleStatusIndex = row->fTagsIdx;
                 fPosition = lookaheadResult;
@@ -927,9 +918,11 @@ int32_t RuleBasedBreakIterator::handleNext() {
         //       But there are line break test failures when trying this. Investigate.
         //       Issue ICU-20837
         uint16_t rule = row->fLookAhead;
-        if (rule != 0) {
+        U_ASSERT(rule == 0 || rule > ACCEPTING_UNCONDITIONAL);
+        U_ASSERT(rule == 0 || rule < fData->fForwardTable->fLookAheadResultsSize);
+        if (rule > ACCEPTING_UNCONDITIONAL) {
             int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
-            lookAheadMatches.setPosition(rule, pos);
+            fLookAheadMatches[rule] = pos;
         }
 
         if (state == STOP_STATE) {

@@ -91,6 +91,7 @@ public:
     void Test16BitsTrieWith8BitStateTable();
     void Test16BitsTrieWith16BitStateTable();
     void TestTable_8_16_Bits();
+    void TestBug13590();
 
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();

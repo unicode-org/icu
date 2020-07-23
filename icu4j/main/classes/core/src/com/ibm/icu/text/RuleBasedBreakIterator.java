@@ -70,6 +70,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
         RuleBasedBreakIterator  This = new RuleBasedBreakIterator();
         This.fRData = RBBIDataWrapper.get(ICUBinary.getByteBufferFromInputStreamAndCloseStream(is));
+        This.fLookAheadMatches = new int[This.fRData.fFTable.fLookAheadResultsSize];
         return This;
     }
 
@@ -93,6 +94,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(ByteBuffer bytes) throws IOException {
         RuleBasedBreakIterator  This = new RuleBasedBreakIterator();
         This.fRData = RBBIDataWrapper.get(bytes);
+        This.fLookAheadMatches = new int[This.fRData.fFTable.fLookAheadResultsSize];
         return This;
     }
 
@@ -107,6 +109,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             ByteArrayOutputStream ruleOS = new ByteArrayOutputStream();
             compileRules(rules, ruleOS);
             fRData = RBBIDataWrapper.get(ByteBuffer.wrap(ruleOS.toByteArray()));
+            fLookAheadMatches = new int[fRData.fFTable.fLookAheadResultsSize];
         } catch (IOException e) {
             ///CLOVER:OFF
             // An IO exception can only arrive here if there is a bug in the RBBI Rule compiler,
@@ -138,7 +141,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         synchronized (gAllBreakEngines)  {
             result.fBreakEngines = new ArrayList<>(gAllBreakEngines);
         }
-        result.fLookAheadMatches = new LookAheadResults();
+        result.fLookAheadMatches = new int[fRData.fFTable.fLookAheadResultsSize];
         result.fBreakCache = result.new BreakCache(fBreakCache);
         result.fDictionaryCache = result.new DictionaryCache(fDictionaryCache);
         return result;
@@ -250,6 +253,11 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * True when iteration has run off the end, and iterator functions should return UBRK_DONE.
      */
     private boolean            fDone;
+
+    /**
+     *  Array of look-ahead tentative results.
+     */
+    private int[]              fLookAheadMatches;
 
     /**
      *   Cache of previously determined boundary positions.
@@ -740,53 +748,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
         }   // end synchronized(gAllBreakEngines)
     }
 
-    private static final int kMaxLookaheads = 8;
-    private static class LookAheadResults {
-        int      fUsedSlotLimit;
-        int[]    fPositions;
-        int[]    fKeys;
-
-        LookAheadResults() {
-            fUsedSlotLimit= 0;
-            fPositions = new int[kMaxLookaheads];
-            fKeys = new int[kMaxLookaheads];
-        }
-
-        int getPosition(int key) {
-            for (int i=0; i<fUsedSlotLimit; ++i) {
-                if (fKeys[i] == key) {
-                    return fPositions[i];
-                }
-            }
-            assert(false);
-            return -1;
-        }
-
-        void setPosition(int key, int position) {
-            int i;
-            for (i=0; i<fUsedSlotLimit; ++i) {
-                if (fKeys[i] == key) {
-                    fPositions[i] = position;
-                    return;
-                }
-            }
-            if (i >= kMaxLookaheads) {
-                assert(false);
-                i = kMaxLookaheads - 1;
-            }
-            fKeys[i] = key;
-            fPositions[i] = position;
-            assert(fUsedSlotLimit == i);
-            fUsedSlotLimit = i + 1;
-        }
-
-        void reset() {
-            fUsedSlotLimit = 0;
-        }
-    };
-    private LookAheadResults fLookAheadMatches = new LookAheadResults();
-
-
     /**
      * The State Machine Engine for moving forward is here.
      * This function is the heart of the RBBI run time engine.
@@ -854,7 +815,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 System.out.println(RBBIDataWrapper.intToString(state,7) + RBBIDataWrapper.intToString(category,6));
             }
         }
-        fLookAheadMatches.reset();
 
         // loop until we reach the end of the text or transition to state 0
         while (state != STOP_STATE) {
@@ -921,7 +881,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGSIDX];
             } else if (accepting > RBBIDataWrapper.ACCEPTING_UNCONDITIONAL) {
                 // Lookahead match is completed
-                int lookaheadResult = fLookAheadMatches.getPosition(accepting);
+                int lookaheadResult = fLookAheadMatches[accepting];
                 if (lookaheadResult >= 0) {
                     fRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGSIDX];
                     fPosition = lookaheadResult;
@@ -944,7 +904,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                     // We want the beginning  of it.
                     pos--;
                 }
-                fLookAheadMatches.setPosition(rule, pos);
+                fLookAheadMatches[rule] = pos;
             }
 
 

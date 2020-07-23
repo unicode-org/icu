@@ -26,7 +26,13 @@
          to identify the absolute path of a parent POM file). However since
          child POM files should have a <parent> declaration with the relative
          path in it, we can use that. Note however that this is a bit fragile
-         and relies on <relativePath> being a directory, not a POM file. -->
+         and relies on <relativePath> being a directory, not a POM file.
+         
+         In order to allow the local repository to work either when it is used
+         by a child POM file or when it's used directly (e.g. for installing
+         or purging the cache) when it is invoked from this directory, the
+           -Dproject.parent.relativePath=""
+         argument must be given. -->
     <repositories>
         <repository>
             <id>local-maven-repo</id>

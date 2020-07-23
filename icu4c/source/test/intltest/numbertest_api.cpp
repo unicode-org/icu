@@ -36,6 +36,8 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
           ESP(u"ESP", status),
           PTE(u"PTE", status),
           RON(u"RON", status),
+          TWD(u"TWD", status),
+          TRY(u"TRY", status),
           CNY(u"CNY", status),
           FRENCH_SYMBOLS(Locale::getFrench(), status),
           SWISS_SYMBOLS(Locale("de-CH"), status),
@@ -923,6 +925,42 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("en-CA"),
             5.43,
             u"US$5.43");
+
+    assertFormatSingle(
+            u"Currency Difference between Formal and Short (Formal Version)",
+            u"currency/TWD unit-width-formal",
+            u"currency/TWD unit-width-formal",
+            NumberFormatter::with().unit(TWD).unitWidth(UNUM_UNIT_WIDTH_FORMAL),
+            Locale("zh-TW"),
+            5.43,
+            u"NT$5.43");
+
+    assertFormatSingle(
+            u"Currency Difference between Formal and Short (Short Version)",
+            u"currency/TWD unit-width-short",
+            u"currency/TWD unit-width-short",
+            NumberFormatter::with().unit(TWD).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("zh-TW"),
+            5.43,
+            u"$5.43");
+
+    assertFormatSingle(
+            u"Currency Difference between Variant and Short (Formal Version)",
+            u"currency/TRY unit-width-variant",
+            u"currency/TRY unit-width-variant",
+            NumberFormatter::with().unit(TRY).unitWidth(UNUM_UNIT_WIDTH_VARIANT),
+            Locale("tr-TR"),
+            5.43,
+            u"TL\u00A05,43");
+
+    assertFormatSingle(
+            u"Currency Difference between Variant and Short (Short Version)",
+            u"currency/TRY unit-width-short",
+            u"currency/TRY unit-width-short",
+            NumberFormatter::with().unit(TRY).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("tr-TR"),
+            5.43,
+            u"₺5,43");
 
     assertFormatSingle(
             u"Currency-dependent format (Control)",
