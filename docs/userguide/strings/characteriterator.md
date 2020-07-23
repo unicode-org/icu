@@ -27,7 +27,7 @@ The information can be restricted to a sub-range of characters, can contain a
 large block of text that can be iterated as a whole, or can be broken into
 smaller blocks for the purpose of iteration.
 
-*CharacterIterator is different from
+> :point_right: *CharacterIterator is different from
 [Normalizer](../transforms/normalization/index.md) in that CharacterIterator
 walks through the Unicode characters without interpretation.*
 
