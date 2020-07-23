@@ -83,7 +83,7 @@ delivering single values (for per-code point lookup) and the other delivering
 sets of values (for use with value aliases and UnicodeSet).
 
 | UCD Name(see PropertyAliases.txt) | Type |  | ICU4C uchar.hICU4J UCharacter | UCD File (.txt) |
-|------------------------------------|-----------------------------------------------|-----|------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
+|--------------|--------|-----|------------------------------|------------|
 | Age | Unicode version | (U) | C: u_charAge fills in UVersionInfoJava: getAge returns a VersionInfo reference | DerivedAge |
 | Alphabetic | binary | (U) | u_isUAlphabetic, UCHAR_ALPHABETIC | DerivedCoreProperties |
 | ASCII_Hex_Digit | binary | (U) | UCHAR_ASCII_HEX_DIGIT | PropList |
