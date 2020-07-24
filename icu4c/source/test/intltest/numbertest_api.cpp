@@ -75,6 +75,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(notationCompact);
         TESTCASE_AUTO(unitMeasure);
         TESTCASE_AUTO(unitCompoundMeasure);
+        TESTCASE_AUTO(unitMixedMeasure);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
@@ -677,20 +678,28 @@ void NumberFormatterApiTest::unitMeasure() {
             u"5 a\u00F1os");
 }
 
+// TODO(hugovdm): move down for consistent method order.
 void NumberFormatterApiTest::unitUsage() {
-    UnlocalizedNumberFormatter unloc_formatter =
-        NumberFormatter::with().usage("road").unit(MeasureUnit::getMeter());
-
     IcuTestErrorCode status(*this, "unitUsage()");
+    UnlocalizedNumberFormatter unloc_formatter;
+    LocalizedNumberFormatter formatter;
+    FormattedNumber formattedNum;
+    StringPiece testCase;
+    UnicodeString uTestCase;
 
-    LocalizedNumberFormatter formatter = unloc_formatter.locale("en-ZA");
-    FormattedNumber formattedNum = formatter.formatDouble(300, status);
-    assertTrue(UnicodeString("unitUsage() en-ZA road, got outputUnit: \"") +
-                   formattedNum.getOutputUnit(status).getIdentifier() + "\"",
-               MeasureUnit::getMeter() == formattedNum.getOutputUnit(status));
-    assertEquals("unitUsage() en-ZA road", "300 m", formattedNum.toString(status));
+    unloc_formatter = NumberFormatter::with().usage("road").unit(MeasureUnit::getMeter());
+
+    testCase = "unitUsage() en-ZA road";
+    uTestCase = testCase.data();
+    formatter = unloc_formatter.locale("en-ZA");
+    formattedNum = formatter.formatDouble(300, status);
+    status.errIfFailureAndReset("unitUsage() en-ZA road formatDouble");
+    assertTrue(
+        uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+        MeasureUnit::getMeter() == formattedNum.getOutputUnit(status));
+    assertEquals(uTestCase, "300 m", formattedNum.toString(status));
     assertFormatDescendingBig(
-            u"unitUsage() en-ZA road",
+            uTestCase.getTerminatedBuffer(),
             u"measure-unit/length-meter usage/road",
             u"unit/meter usage/road",
             unloc_formatter,
@@ -705,14 +714,17 @@ void NumberFormatterApiTest::unitUsage() {
             u"8,8 m",
             u"0 m");
 
+    testCase = "unitUsage() en-GB road";
+    uTestCase = testCase.data();
     formatter = unloc_formatter.locale("en-GB");
     formattedNum = formatter.formatDouble(300, status);
-    assertTrue(UnicodeString("unitUsage() en-GB road, got outputUnit: \"") +
-                   formattedNum.getOutputUnit(status).getIdentifier() + "\"",
-               MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
-    assertEquals("unitUsage() en-GB road", "328 yd", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-GB road formatDouble");
+    assertTrue(
+        uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+        MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
+    assertEquals(uTestCase, "328 yd", formattedNum.toString(status));
     assertFormatDescendingBig(
-            u"unitUsage() en-GB road",
+            uTestCase.getTerminatedBuffer(),
             u"measure-unit/length-meter usage/road",
             u"unit/meter usage/road",
             unloc_formatter,
@@ -727,14 +739,21 @@ void NumberFormatterApiTest::unitUsage() {
             u"9.6 yd",
             u"0 yd");
 
+    testCase = "unitUsage() en-US road";
+    uTestCase = testCase.data();
     formatter = unloc_formatter.locale("en-US");
     formattedNum = formatter.formatDouble(300, status);
-    assertTrue(UnicodeString("unitUsage() en-US road, got outputUnit: \"") +
-                   formattedNum.getOutputUnit(status).getIdentifier() + "\"",
-               MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
-    assertEquals("unitUsage() en-US road", "984 ft", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-US road formatDouble");
+//     assertTrue(
+//         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+//         MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
+    MeasureUnit outpUnit = formattedNum.getOutputUnit(status);
+    assertTrue(uTestCase + ", expected \"" + MeasureUnit::getFoot().getIdentifier() +
+                   "\", got outputUnit: \"" + outpUnit.getIdentifier() + "\"",
+               MeasureUnit::getFoot() == outpUnit);
+    assertEquals(uTestCase, "984 ft", formattedNum.toString(status));
     assertFormatDescendingBig(
-            u"unitUsage() en-US road",
+            uTestCase.getTerminatedBuffer(),
             u"measure-unit/length-meter usage/road",
             u"unit/meter usage/road",
             unloc_formatter,
@@ -748,6 +767,41 @@ void NumberFormatterApiTest::unitUsage() {
             u"288 ft",
             u"29 ft",
             u"0 ft");
+
+    unloc_formatter = NumberFormatter::with().usage("person").unit(MeasureUnit::getKilogram());
+
+    testCase = "unitUsage() en-GB person";
+    uTestCase = testCase.data();
+    formatter = unloc_formatter.locale("en-GB");
+    formattedNum = formatter.formatDouble(80, status);
+    status.errIfFailureAndReset("unitUsage() en-GB person formatDouble");
+//     assertTrue(
+//         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+//         MeasureUnit::forIdentifier("stone-and-pound", status) == formattedNum.getOutputUnit(status));
+    outpUnit = formattedNum.getOutputUnit(status);
+    status.errIfFailureAndReset("unitUsage() en-GB person - formattedNum.getOutputUnit(status)");
+    MeasureUnit expcUnit = MeasureUnit::forIdentifier("stone-and-pound", status);
+    status.errIfFailureAndReset("unitUsage() en-GB person - expcUnit");
+    assertTrue(uTestCase + ", expected \"" + expcUnit.getIdentifier() + "\", got outputUnit: \"" +
+                   outpUnit.getIdentifier() + "\"",
+               expcUnit == outpUnit);
+    assertEquals(uTestCase, "12 st and 8.4 lb", formattedNum.toString(status));
+    assertFormatDescending(
+            uTestCase.getTerminatedBuffer(),
+            u"measure-unit/mass-kilogram usage/person",
+            u"unit/kilogram usage/person",
+            unloc_formatter,
+            Locale("en-GB"),
+            // FIXME: spaces, proper localised names
+            u"13,802 st and 7.2 lb",
+            u"1,380 st and 3.5 lb",
+            u"138 st and 0.35 lb",
+            u"13 st and 11 lb",
+            u"1 st and 5.3 lb",
+            u"1 lb and 15 oz",
+            u"0 lb and 3.1 oz",
+            u"0 lb and 0.31 oz",
+            u"0 lb and 0 oz");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
@@ -815,6 +869,28 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
     //         u"0.08765 J/fur",
     //         u"0.008765 J/fur",
     //         u"0 J/fur");
+}
+
+void NumberFormatterApiTest::unitMixedMeasure() {
+    IcuTestErrorCode status(*this, "unitMixedMeasure()");
+
+    UnlocalizedNumberFormatter unloc_formatter;
+    FormattedNumber formattedNum;
+
+    U_ASSERT(U_SUCCESS(status));
+    unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch", status);
+    status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch\", status)");
+    formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
+    status.errIfFailureAndReset("Mixed unit formatDouble(...)");
+    assertEquals("FIXME", "3 yards, 1 foot, and 11.5 inches", formattedNum.toString(status));
+    status.errIfFailureAndReset("Mixed unit formattedNum.toString(...)");
+
+    unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch E0", status);
+    status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch E0\", status)");
+    formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
+    status.errIfFailureAndReset("Mixed unit E0 formatDouble(...)");
+    assertEquals("FIXME", "3 yards, 1 foot, and 1.15E1 inches", formattedNum.toString(status));
+    status.errIfFailureAndReset("Mixed unit E0 formattedNum.toString(...)");
 }
 
 void NumberFormatterApiTest::unitCurrency() {
