@@ -82,11 +82,12 @@ words, there are two ICU properties for the same Unicode property, one
 delivering single values (for per-code point lookup) and the other delivering
 sets of values (for use with value aliases and UnicodeSet).
 
-> :construction: **TODO**: Revise table to series of short sections so all columns will be displayed.
+> :construction: **TODO**: Revise table to remove last column. Consider omitting 3rd column
+to shorten each line of the table.
 
 | UCD Name(see PropertyAliases.txt) | Type |  | ICU4C uchar.hICU4J UCharacter | UCD File (.txt) |
 |--------------|--------|-----|------------------------------|------------|
-| Age | Unicode version | (U) | C: u_charAge fills in UVersionInfoJava: getAge returns a VersionInfo reference | DerivedAge |
+| Age | Unicode version | (U) | C: u_charAge fills in UVersionInfo <br/> Java: getAge returns a VersionInfo reference | DerivedAge |
 | Alphabetic | binary | (U) | u_isUAlphabetic, UCHAR_ALPHABETIC | DerivedCoreProperties |
 | ASCII_Hex_Digit | binary | (U) | UCHAR_ASCII_HEX_DIGIT | PropList |
 | Bidi_Class | enum UCharDirection | (U) | u_charDirection, UCHAR_BIDI_CLASS | UnicodeData |
@@ -145,7 +146,7 @@ sets of values (for use with value aliases and UnicodeSet).
 | Name_Alias | ASCII string |  | u_charName(U_CHAR_NAME_ALIAS) | NameAliases |
 | NF*_QuickCheck | enum UNormalizationCheckResult (no/maybe/yes) | (U) | UCHAR_NF*_QUICK_CHECK and available via quickCheck (normalizer2.h) | DerivedNormal­izationProps |
 | NFKC_Casefold | Unicode string |  | available via normalization API (normalizer2.h "nfkc_cf") | DerivedNormalizationProps |
-| Noncharacter_Code_Point | binary | (U) | UCHAR_NONCHARACTER​_CODE_POINT, U_IS_UNICODE_NONCHAR (utf.h) | PropList |
+| Noncharacter_Code_Point | binary | (U) | UCHAR_NONCHARACTER​_CODE_POINT, <br /> U_IS_UNICODE_NONCHAR (utf.h) | PropList |
 | Numeric_Type | enum UNumericType | (U) | UCHAR_NUMERIC_TYPE | UnicodeData |
 | Numeric_Value | double | (U) | u_getNumericValueJava/UnicodeSet: only non-negative integers, no fractions | UnicodeData |
 | Other_Alphabetic | binary | (c) | contributes to Alphabetic | PropList |
@@ -189,6 +190,36 @@ Notes:
     property available in UnicodeSet is also available in regular expressions.
     Properties which are not available in UnicodeSet are generally those that
     are not available through a UProperty selector.
+
+#### Unicode Character Database files and properties
+
+This table shows the UCD Property Names associated with each of the UCD .txt files:
+
+| UCD File (.txt) | UCD propery names |
+|----------------------|----------------------------------------------------------|
+| ArabicShaping | Joining_Group <br/> Joining_Type |
+| BidiMirroring | Bidi_Mirroring_Glyph |
+| Blocks | Block |
+| CaseFolding | Case_Folding <br/> Simple_Case_Folding |
+| DerivedAge | Age |
+| DerivedCoreProperties | Alphabetic Case_Ignorable <br/> Cased Changes_When_Casefolded <br/> Changes_When_Casemapped <br/> Changes_When_NFKC_Casefolded <br/> Changes_When_Lowercased <br/> Changes_When_Titlecased <br/> Changes_When_Uppercased <br/> Default_Ignorable_Code_Point <br/> Expands_On_NF <br/> Grapheme_Base <br/> Grapheme_Extend <br/> Grapheme_Link <br/> ID_Continue <br/> ID_Start <br/> Lowercase <br/> Math <br/> Uppercase <br/> XID_Continue <br/> XID_Start |
+| DerivedNormalizationProps | Expands_On_NF* <br/> FC_NFKC_Closure <br/> Full_Composition_Exclusion <br/> NF_QuickCheck |
+| EastAsianWidth | East_Asian_Width |
+| GraphemeBreakProperty | Grapheme_Cluster_Break |
+| HangulSyllableType | Hangul_Syllable_Type |
+| IndicMatraCategory | Indic_Matra_Category | 
+| IndicSyllabicCategory | Indic_Syllabic_Category |
+| LineBreak | Line_Break |
+| Jamo | Jamo_Short_Name |
+| NameAliases | NF_QuickCheck |
+| PropList | ASCII_Hex_Digit <br/> Bidi_Control <br/> Dash <br/> Deprecated <br/> Diacritic <br/> Extended <br/> Hex_digit <br/> Hyphen <br/> Ideographic <br/> IDS_Binary_Operator <br/> IDS_Triary_Operator <br/> Join_Control <br/> Logical_Order_Exception <br/> Noncharacter_Code_Point <br/> Other_Alphabetic <br/> Other_Default_Ignorable_Code_Point <br/> Other_Grapheme_Extend <br/> Other_Lowercase <br/> Other_Math <br/> Other_Uppercase <br/> Pattern_Syntax <br/> Pattern_White_Space <br/> Quotation_Mark <br/> Radical <br/> Soft_Dotted <br/> STerm <br/> Terminal_Punctuation \\ Unified_Ideograph <br/> White_Space |
+| Scripts | Script |
+| ScriptExtensions | Script_Extensions (provisional) |
+| SpecialCasing | Lowercase_Mapping*<br/> Special_Case_Condition <br/> Titlecase_Mapping* <br/>  Uppercase_Mapping* </br> White_Space | 
+| UnicodeData | Bidi_Class <br/> Canonical_Combining_Class <br/> Decomposition_Mapping <br/> Decomposition_Type <br/> General_Category <br/> ISO_Comment <br/> Lowercase_Mapping* <br/> Name <br/> Numeric_Type <br/> Numeric_Value <br/> Simple_Case_Folding <br/> Simple_Lowercase_Mapping	 <br/> Simple_Titlecase_Mapping	<br/> Simple_Uppercase_Mapping <br/> Titlecase_Mapping* <br/> Unicode_1_Name <br/> Uppercase_Mapping* |
+| WordBreakProperty | Word_Break |
+
+\* UCD Property Name defined in more than one UCD file.
 
 ## Customization
 
