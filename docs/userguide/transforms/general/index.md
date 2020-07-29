@@ -39,7 +39,7 @@ such as styled text, to maintain the style information where possible. For
 example, "~~Αλφaβ~~ητικός" will retain the strikethrough in transliterating to
 "~~Alphab~~ētikós".
 
-:point_right: **Note**: *The transliteration process not only retains font size, but also other
+> :point_right: **Note**: *The transliteration process not only retains font size, but also other
 characteristics such as font type and color.*
 
 For an online demonstration of ICU transliteration, see
@@ -60,7 +60,7 @@ underlying words. The following shows a sample of script transliteration:
 | Αλφαβητικός Κατάλογος | Alphabētikós Katálogos |
 | биологическом | biologichyeskom |
 
-:point_right: **Note**: *Some of the characters may not be
+> :point_right: **Note**: *Some of the characters may not be
 visible on the screen unless you have a Unicode font with all the Greek letters.
 If you have a licensed copy of Microsoft® Office, you can use the "Arial Unicode
 MS" font, or you can download the [CODE2000](http://www.code2000.net/) font for
@@ -171,7 +171,7 @@ only useful with filters, for example, the Remove transform, which deletes all
 input characters. Specifying "\[:Nonspacing Mark:\] Remove" gives a transform
 that removes non-spacing marks from input text.
 
-:point_right: **Note**: *As of ICU 2.0, the filter pattern must be enclosed in brackets. Perl-syntax
+> :point_right: **Note**: *As of ICU 2.0, the filter pattern must be enclosed in brackets. Perl-syntax
 patterns of the form "\\p{Lu}" cannot be used directly; instead they must be
 enclosed, e.g. "\[\\p{Lu}\]".*
 
@@ -206,7 +206,7 @@ to Latin (via "SCRIPT-Latin") and back to SCRIPT (via "Latin-SCRIPT"). This is
 called **round-trip integrity**. They do not, however, support round-trip
 integrity from Latin to SCRIPT and back to Latin.
 
-:point_right: **Note**: *Do not assume that a transform's inverse will provide a complete or exact
+> :point_right: **Note**: *Do not assume that a transform's inverse will provide a complete or exact
 reversal.*
 
 The second caveat with inverses has to do with existence. Although any ID can be
@@ -217,7 +217,7 @@ the system, I can then pass the string "Latin-Antarean" to `createInstance()` or
 request will fail, since I have not created and registered "Antarean-Latin" with
 the system.
 
-:point_right: **Note**: *Any transform ID can be inverted, but the inverse ID may not name an actual
+> :point_right: **Note**: *Any transform ID can be inverted, but the inverse ID may not name an actual
 registered transform.*
 
 ### Custom Inverses
@@ -363,7 +363,7 @@ such as "Latn". A 'locale-name' is a standard locale name such as "hi_IN". The
 UCharacter API to start and continue identifier names. Finally, 'filter' is a
 valid UnicodeSet pattern.
 
-:point_right: **Note**: *As of ICU 2.0, the filter must be enclosed in brackets. Top-level Perl-style
+> :point_right: **Note**: *As of ICU 2.0, the filter must be enclosed in brackets. Top-level Perl-style
 patterns are unsupported in 2.0.*
 
 ## ICU Transliterators
@@ -394,7 +394,7 @@ The ICU script/language transforms are based on common standards for the
 particular scripts, where possible. In some cases, the transforms are augmented
 to support reversibility.
 
-:point_right: **Note**: *Standard transliteration methods often do not follow the pronunciation rules of
+> :point_right: **Note**: *Standard transliteration methods often do not follow the pronunciation rules of
 any particular language in the target script. For more information on the design
 of transliterations, see the following Guidelines (§) section. *
 
@@ -469,7 +469,7 @@ procedure to distinguish between man'ichi and manichi. Using this procedure, the
 Greek character PI SIGMA (πσ) maps to p's. This method is recommended for all
 script transliteration methods.
 
-:point_right: **Note**: *Some characters in a target script are not normally found outside of certain
+> :point_right: **Note**: *Some characters in a target script are not normally found outside of certain
 contexts. For example, the small Japanese "ya" character, as in "kya" (キャ), is
 not normally found in isolation. To handle such characters, ICU uses a tilde.
 For example, to display an isolated small "ya", type "~ya". To represent a
@@ -524,7 +524,7 @@ differently according to their context to make the pronunciation more
 predictable. For example, since the Greek sequence GAMMA GAMMA (γγ) is
 pronounced as "ng", the first GAMMA can be transcribed as an "n".
 
-:point_right: **Note**: *In general, predictability means that when transliterating Latin script to
+> :point_right: **Note**: *In general, predictability means that when transliterating Latin script to
 other scripts, English text will not produce phonetic results. This is because
 the pronunciation of English cannot be predicted easily from the letters in a
 word: e.g. grove, move, and love all end with "ove", but are pronounced very
@@ -554,7 +554,7 @@ example, a Greek SIGMA is written in a final form (ς) at the end of words, and 
 non-final form (σ) in other locations. This requires the transform to map
 different characters based on the context.
 
-:point_right: **Note**: *It is useful for the reverse mapping to be complete so that arbitrary strings
+> :point_right: **Note**: *It is useful for the reverse mapping to be complete so that arbitrary strings
 in the target script can be reasonably mapped back to the source script.
 Complete reverse mapping makes it much easier to do mechanical quality checks
 and so on. For example, even though the letter "q" might not be necessary in a
@@ -585,9 +585,12 @@ Transliterator::getDisplayName(myID, france, nameForUser);
 ```
 
 To create a Transliterator, use the following:
+
+```
 UErrorCode status = U_ZERO_ERROR;
 Transliterator *myTrans = Transliterator::createInstance("Latin-Greek",
 UTRANS_FORWARD, status);
+```
 
 To get a pre-made compound transform, use a series of IDs separated by ";". For
 example:
@@ -809,7 +812,7 @@ hyphens, but only when they follow lowercase letters":
 [:lowercase letter:] } '-' > '' ;
 ```
 
-:point_right: **Note**: *The context itself (\[:lowercase letter:\]) is unaffected by the replacement;
+> :point_right: **Note**: *The context itself (\[:lowercase letter:\]) is unaffected by the replacement;
 only the text between the curly braces is changed. *
 
 #### Revisiting
@@ -1187,7 +1190,7 @@ m > r ;
 :: greek-latin ;
 ```
 
-:point_right: **Note**: *Note how the irrelevant rules (the inverse filter rule and the rules containing
+> :point_right: **Note**: *Note how the irrelevant rules (the inverse filter rule and the rules containing
 <) are omitted (ignored, actually) in the forward direction, and notice how
 things are reversed: the transform rules are inverted and happen in the opposite
 order, and the groups of conversion rules are also executed in the opposite
@@ -1221,7 +1224,7 @@ that may appear on the output side of a rule. This means nested function calls
 are supported.
 
 For more information on the use of rules, and more examples of the syntax in
-use, see the [tutorial](http://icu-project.org/userguide/TransformRule.html).
+use, see the [tutorial](./rules.md).
 
 ### Regular Expression
 
@@ -1338,7 +1341,7 @@ apply to the other Indic scripts):
 | ढ़ | d̂ha | ṛha |
 | ड़ |d̂a | ṛa |
 
-:point_right: **Note**: *With some fonts the diacritics will not be correctly placed on the base
+> :point_right: **Note**: *With some fonts the diacritics will not be correctly placed on the base
 letters. The macron on a lowercase L may look particularly bad.*
 
 Transliteration rules in Indic are reversible with the exception of the ZWJ and
