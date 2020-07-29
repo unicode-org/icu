@@ -962,6 +962,16 @@ TestSurrogateSearching() {
     ) {
         log_err("error: one of the u_str[str etc](\"aba\") incorrectly finds something\n");
     }
+    /* Regression test for ICU-20684 Use-of-uninitialized-value in isMatchAtCPBoundary
+     * Condition: search the same string while the first char is not an
+     * surrogate and the last char is the leading surragte.
+     */
+    {
+        static const UChar s[]={ 0x0020, 0xD9C1 };
+        if (u_strFindFirst(s, 2, s, 2) != s) {
+            log_err("error: ending with a partial supplementary code point should match\n");
+        }
+    }
 }
 
 static void TestStringCopy()
