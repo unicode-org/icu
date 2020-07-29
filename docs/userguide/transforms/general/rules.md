@@ -24,7 +24,7 @@ in building transforms, see "Guidelines for Designing Script Transliterations"
 (§) in the [General Transforms](index.md) chapter. For external sources for
 script transforms, see Script Transliterator Sources (§) in that same chapter)
 
-:point_right: **Note**: See *[*Properties and ICU Rule Syntax*](../../strings/properties.md) *for
+> :point_right: **Note**: See *[*Properties and ICU Rule Syntax*](../../strings/properties.md) *for
 information regarding syntax characters.*
 
 In this example, we start with a set of rules for Greek since they provide a
@@ -35,7 +35,7 @@ we will transliterate "Βιολογία-Φυσιολογία" as "Biología-Phys
 "Violohía-Fisiolohía". To illustrate some of the trickier cases, we will also
 transliterate the Greek accents that are no longer in use in modern Greek.
 
-:point_right: **Note**: *Some of the characters may not be visible on the screen unless you have a
+> :point_right: **Note**: *Some of the characters may not be visible on the screen unless you have a
 Unicode font with all the Greek letters. If you have a licensed copy of
 Microsoft® Office, you can use the "Arial Unicode MS" font, or you can download
 the [CODE2000](http://www.code2000.net/) font for free. For more information,
@@ -46,7 +46,7 @@ We will also verify that every Latin letter maps to a Greek letter. This insures
 that when we reverse the transliteration that the process can handle all the
 Latin letters.
 
-:point_right: **Note**: *This direction is not reversible. The following table illustrates this
+> :point_right: **Note**: *This direction is not reversible. The following table illustrates this
 situation:* 
 
 | Source→Target | Reversible | φ → ph → φ |
@@ -173,7 +173,7 @@ size, color, etc), then that style difference is preserved in the resulting two
 characters. That is, the "n" will have the style of the first gamma, while the
 "g" will have the style of the second gamma.
 
-:point_right: **Note**: *Contexts preserve the styles at a much finer granularity.*
+> :point_right: **Note**: *Contexts preserve the styles at a much finer granularity.*
 
 ## Case
 
@@ -197,7 +197,7 @@ together:
 The example allows words like Θεολογικές‚ to map to Theologikés and not
 THeologikés
 
-:point_right: **Note**: *You either can specify properties with the POSIX-style syntax, such as
+> :point_right: **Note**: *You either can specify properties with the POSIX-style syntax, such as
 [:LowercaseLetter:], or with the Perl-style syntax, such as
 \\p{LowercaseLetter}.*
 
@@ -221,7 +221,7 @@ These rules state that if an "s" is surrounded by non-letters, convert it to
 "σ". Otherwise, if the "s" is followed by a non-letter, convert it to "ς". If
 all else fails, convert it to "σ"
 
-:point_right: **Note**: *Negated ranges [^...] will match at the beginning and the end of a string.
+> :point_right: **Note**: *Negated ranges [^...] will match at the beginning and the end of a string.
 This makes the rules much easier to write. *
 
 To make the rules clearer, you can use variables. Instead of the example above,
@@ -313,7 +313,7 @@ would change to the following (notice that the first a is not replaced):
 | Source | a xa a |
 | Results | a xa b |
 
-:point_right: **Note**: *Characters that are outside the context limits -- contextStart to contextEnd -- are also treated as
+> :point_right: **Note**: *Characters that are outside the context limits -- contextStart to contextEnd -- are also treated as
 æther.*
 
 The property \[:any:\] can be used to match all code points, including æther.
@@ -341,7 +341,7 @@ used within a range: you can't have \[\[.\] - \\u000A\], for example. If you
 want to have different behavior you can define your own variables and use them
 instead of the period.
 
-:point_right: **Note**: *There are a few other special escapes, that can be used in ranges. These are
+> :point_right: **Note**: *There are a few other special escapes, that can be used in ranges. These are
 listed in the table below. However, instead of the latter two it is safest to
 use the above $break definition since it works for line endings across different
 platforms.* 
@@ -415,9 +415,9 @@ these disambiguation rules ensure that the rules can pass these tests and handle
 all possible sequences of characters correctly.
 
 There are some character forms that never occur in normal context. By
-convention, we use tilde (~) for such cases to allow for reverse
+convention, we use tilde (\~) for such cases to allow for reverse
 transliteration. Thus, if you had the text "Θεολογικές (ς)", it would
-transliterate to "Theologikés (~s)". Using the tilde allows the reverse
+transliterate to "Theologikés (\~s)". Using the tilde allows the reverse
 transliteration to detect the character and convert correctly back to the
 original: "Θεολογικές (ς)". Similarly, if we had the phrase "Θεολογικέσ", it
 would transliterate to "Theologiké~s". These are called anomalous characters.
@@ -483,7 +483,7 @@ transform will then backup to the position before the vowel and continue. In the
 next pass, the "ak" will match and be invoked. Thus, if the source text is "ax",
 the result will be "ack".
 
-:point_right: **Note**: *Although you can move the cursor forward or backward, it is limited in two
+> :point_right: **Note**: *Although you can move the cursor forward or backward, it is limited in two
 ways: (a) to the text that is matched, (b) within the original substring that is
 to be converted. For example, if we have the rule "a b\* {x} > |@@@@@y" and it
 matches in the text "mabbx", the result will be "m|abby" (| represents the
@@ -655,7 +655,7 @@ punctuation and space (watch out for combining marks).
     ```
 
 
-:point_right: **Note**: *Remember that the rules themselves must be in the same normalization format.
+> :point_right: **Note**: *Remember that the rules themselves must be in the same normalization format.
 Otherwise, nothing will match. To do this, run NFD on the rules themselves. In
 some cases, we must rearrange the order of the rules because of masking. For
 example, consider the following rules:*
