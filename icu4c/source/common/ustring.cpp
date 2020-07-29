@@ -45,7 +45,7 @@ isMatchAtCPBoundary(const UChar *start, const UChar *match, const UChar *matchLi
         /* the leading edge of the match is in the middle of a surrogate pair */
         return FALSE;
     }
-    if(U16_IS_LEAD(*(matchLimit-1)) && match!=limit && U16_IS_TRAIL(*matchLimit)) {
+    if(U16_IS_LEAD(*(matchLimit-1)) && matchLimit!=limit && U16_IS_TRAIL(*matchLimit)) {
         /* the trailing edge of the match is in the middle of a surrogate pair */
         return FALSE;
     }
