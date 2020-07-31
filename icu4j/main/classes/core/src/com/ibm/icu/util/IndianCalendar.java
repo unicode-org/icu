@@ -185,7 +185,7 @@ public class IndianCalendar extends Calendar {
      * @stable ICU 3.8
      */
     public IndianCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -196,7 +196,7 @@ public class IndianCalendar extends Calendar {
      * @stable ICU 3.8
      */
     public IndianCalendar(ULocale locale) {
-       this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**

@@ -232,7 +232,7 @@ IslamicCalendar* IslamicCalendar::clone() const {
 }
 
 IslamicCalendar::IslamicCalendar(const Locale& aLocale, UErrorCode& success, ECalculationType type)
-:   Calendar(TimeZone::createDefault(), aLocale, success),
+:   Calendar(TimeZone::forLocaleOrDefault(aLocale), aLocale, success),
 cType(type)
 {
     setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
