@@ -190,7 +190,7 @@ class NumberRangeFormatterImpl;
  * Export an explicit template instantiation. See datefmt.h
  * (When building DLLs for Windows this is required.)
  */
-#if U_PLATFORM == U_PF_WINDOWS && !defined(U_IN_DOXYGEN)
+#if U_PLATFORM == U_PF_WINDOWS && !defined(U_IN_DOXYGEN) && !defined(U_STATIC_IMPLEMENTATION)
 } // namespace icu::number
 U_NAMESPACE_END
 
