@@ -779,6 +779,93 @@ public class DateFormatTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestTimeZoneInLocale() {
+        String TESTS[][] = {
+            { "en-u-tz-usden",                     "America/Denver",             "gregorian" },
+            { "es-u-tz-usden",                     "America/Denver",             "gregorian" },
+            { "ms-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+            { "zh-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+            { "fr-u-ca-buddhist-tz-phmnl",         "Asia/Manila",                "buddhist" },
+            { "th-u-ca-chinese-tz-gblon",          "Europe/London",              "chinese" },
+            { "de-u-ca-coptic-tz-ciabj",           "Africa/Abidjan",             "coptic" },
+            { "ja-u-ca-dangi-tz-hkhkg",            "Asia/Hong_Kong",             "dangi" },
+            { "da-u-ca-ethioaa-tz-ruunera",        "Asia/Ust-Nera",              "ethiopic-amete-alem" },
+            { "ko-u-ca-ethiopic-tz-cvrai",         "Atlantic/Cape_Verde",        "ethiopic" },
+            { "fil-u-ca-gregory-tz-aubne",         "Australia/Brisbane",         "gregorian" },
+            { "fa-u-ca-hebrew-tz-brrbr",           "America/Rio_Branco",         "hebrew" },
+            { "gr-u-ca-indian-tz-lccas",           "America/St_Lucia",           "indian" },
+            { "or-u-ca-islamic-tz-cayyn",          "America/Swift_Current",      "islamic" },
+            { "my-u-ca-islamic-umalqura-tz-kzala", "Asia/Almaty",                "islamic-umalqura" },
+            { "lo-u-ca-islamic-tbla-tz-bmbda",     "Atlantic/Bermuda",           "islamic-tbla" },
+            { "km-u-ca-islamic-civil-tz-aqplm",    "Antarctica/Palmer",          "islamic-civil" },
+            { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic" },
+            { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "gregorian" },
+            { "he-u-ca-japanese-tz-tzdar",         "Africa/Dar_es_Salaam",       "japanese" },
+            { "bs-u-ca-persian-tz-etadd",          "Africa/Addis_Ababa",         "persian" },
+            { "it-u-ca-roc-tz-aruaq",              "America/Argentina/San_Juan", "roc" },
+        };
+        for (int i = 0; i < TESTS.length; ++i) {
+            ULocale ulocale = new ULocale(TESTS[i][0]);
+            Locale locale = new Locale(TESTS[i][0]);
+            SimpleDateFormat smptfmt = new SimpleDateFormat("Z", locale);
+            assertEquals(
+                "TimeZone from SimpleDateFormat(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], smptfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from SimpleDateFormat(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], smptfmt.getCalendar().getType());
+
+            smptfmt = new SimpleDateFormat("Z", "", ulocale);
+            assertEquals(
+                "TimeZone from SimpleDateFormat(\"Z\", \"\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], smptfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from SimpleDateFormat(\"Z\", \"\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], smptfmt.getCalendar().getType());
+
+            smptfmt = new SimpleDateFormat("Z", ulocale);
+            assertEquals(
+                "TimeZone from SimpleDateFormat(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], smptfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from SimpleDateFormat(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], smptfmt.getCalendar().getType());
+
+            DateFormat dfmt = DateFormat.getInstanceForSkeleton("Z", locale);
+            assertEquals(
+                "TimeZone from DateFormat.getInstanceForSkeleton(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getInstanceForSkeleton(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+
+            dfmt = DateFormat.getInstanceForSkeleton("Z", ulocale);
+            assertEquals(
+                "TimeZone from DateFormat.getInstanceForSkeleton(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getInstanceForSkeleton(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+
+            dfmt = DateFormat.getPatternInstance("Z", locale);
+            assertEquals(
+                "TimeZone from DateFormat.getPatternInstance(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getPatternInstance(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+
+            dfmt = DateFormat.getPatternInstance("Z", ulocale);
+            assertEquals(
+                "TimeZone from DateFormat.getPatternInstance(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getPatternInstance(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+        }
+    }
+
     private static final String GMT_BG = "\u0413\u0440\u0438\u043D\u0443\u0438\u0447";
     private static final String GMT_ZH = "GMT";
     //private static final String GMT_ZH = "\u683C\u6797\u5C3C\u6CBB\u6807\u51C6\u65F6\u95F4";

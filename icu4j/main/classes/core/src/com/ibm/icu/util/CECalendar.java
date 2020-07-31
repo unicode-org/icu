@@ -76,7 +76,7 @@ abstract class CECalendar extends Calendar {
      * @param aLocale The locale for the new calendar.
      */
     protected CECalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -86,7 +86,7 @@ abstract class CECalendar extends Calendar {
      * @param locale The locale for the new calendar.
      */
     protected CECalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**
