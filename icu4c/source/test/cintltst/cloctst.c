@@ -47,6 +47,7 @@ static void TestLocDataErrorCodeChaining(void);
 static void TestLocDataWithRgTag(void);
 static void TestLanguageExemplarsFallbacks(void);
 static void TestDisplayNameBrackets(void);
+static void TestIllegalArgumentWhenNoDataWithNoSubstitute(void);
 
 static void TestUnicodeDefines(void);
 
@@ -263,6 +264,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestUnicodeDefines);
     TESTCASE(TestEnglishExemplarCharacters);
     TESTCASE(TestDisplayNameBrackets);
+    TESTCASE(TestIllegalArgumentWhenNoDataWithNoSubstitute);
     TESTCASE(TestIsRightToLeft);
     TESTCASE(TestToUnicodeLocaleKey);
     TESTCASE(TestToLegacyKey);
@@ -1192,6 +1194,70 @@ static void TestDisplayNameBrackets()
 #endif
     (void)ulen;   /* Suppress variable not used warning */
     }
+}
+
+/*------------------------------
+ * TestIllegalArgumentWhenNoDataWithNoSubstitute
+ */
+
+static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UChar getName[kDisplayNameBracketsMax];
+    UDisplayContext contexts[] = {
+        UDISPCTX_NO_SUBSTITUTE,
+    };
+    ULocaleDisplayNames* ldn = uldn_openForContext("en", contexts, 1, &status);
+
+    uldn_localeDisplayName(ldn, "efg", getName, kDisplayNameBracketsMax, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL uldn_localeDisplayName should return U_ILLEGAL_ARGUMENT_ERROR "
+                "while no resource under UDISPCTX_NO_SUBSTITUTE");
+    }
+
+    status = U_ZERO_ERROR;
+    uldn_languageDisplayName(ldn, "zz", getName, kDisplayNameBracketsMax, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL uldn_languageDisplayName should return U_ILLEGAL_ARGUMENT_ERROR "
+                "while no resource under UDISPCTX_NO_SUBSTITUTE");
+    }
+
+    status = U_ZERO_ERROR;
+    uldn_scriptDisplayName(ldn, "Aaaa", getName, kDisplayNameBracketsMax, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL uldn_scriptDisplayName should return U_ILLEGAL_ARGUMENT_ERROR "
+                "while no resource under UDISPCTX_NO_SUBSTITUTE");
+    }
+
+    status = U_ZERO_ERROR;
+    uldn_regionDisplayName(ldn, "KK", getName, kDisplayNameBracketsMax, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL uldn_regionDisplayName should return U_ILLEGAL_ARGUMENT_ERROR "
+                "while no resource under UDISPCTX_NO_SUBSTITUTE");
+    }
+
+    status = U_ZERO_ERROR;
+    uldn_variantDisplayName(ldn, "ZZ", getName, kDisplayNameBracketsMax, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL uldn_variantDisplayName should return U_ILLEGAL_ARGUMENT_ERROR "
+                "while no resource under UDISPCTX_NO_SUBSTITUTE");
+    }
+
+    status = U_ZERO_ERROR;
+    uldn_keyDisplayName(ldn, "zz", getName, kDisplayNameBracketsMax, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL uldn_keyDisplayName should return U_ILLEGAL_ARGUMENT_ERROR "
+                "while no resource under UDISPCTX_NO_SUBSTITUTE");
+    }
+
+    status = U_ZERO_ERROR;
+    uldn_keyValueDisplayName(ldn, "ca", "zz", getName, kDisplayNameBracketsMax, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL uldn_keyValueDisplayName should return U_ILLEGAL_ARGUMENT_ERROR "
+                "while no resource under UDISPCTX_NO_SUBSTITUTE");
+    }
+
+    uldn_close(ldn);
 }
 
 /*------------------------------
