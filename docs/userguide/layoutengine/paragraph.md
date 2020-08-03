@@ -36,13 +36,12 @@ The following steps must be completed in order:
     `--disable-layoutex`** switches passed to configure
 2.  Build and install HarfBuzz - ​http://harfbuzz.org (HarfBuzz's use of ICU may
     be enabled or disabled at your choice)
-3.  Build and install the \[icu-le-hb\] (​http://harfbuzz.org) library.
+3.  Build and install the [icu-le-hb](​http://harfbuzz.org) library.
 4.  Now, rerun "configure" on the exact **same** ICU workspace used above:
-    \* with "icu-le-hb" AND the above-mentioned installed ICU available via
-    pkg-config ( `pkg-config --modversion icu-le-hb` should return a version,
-    such as "0.0.0" )
-    \* with the --disable-layout **`--enable-layoutex`** switches passed to
-    configure
+    *   with "icu-le-hb" AND the above-mentioned installed ICU available via
+        pkg-config ( `pkg-config --modversion icu-le-hb` should return a version,
+        such as "0.0.0" )
+    *   with the --disable-layout **`--enable-layoutex`** switches passed to configure
 5.  next, run `make install` JUST in the **`source/layoutex`** directory, to install
     libiculx and `icu-lx.pc`
 

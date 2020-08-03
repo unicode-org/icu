@@ -188,17 +188,17 @@ profile each time.*
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     /* open the StringPrep profile */
-    UStringPrepProfile\* nameprep = usprep_open(“/usr/joe/mydata”,
-                                                “nfscsi”, &status);
-    if(U_FAILURE(status)){
-      /* handle the error */
+    UStringPrepProfile* nameprep = usprep_open("/usr/joe/mydata",
+                                               "nfscsi", &status);
+    if(U_FAILURE(status)) {
+        /* handle the error */
     }
     /* prepare the string for use according
      * to the rules specified in the profile
      */
     int32_t retLen = usprep_prepare(src, srcLength, dest,
                                     destCapacity, USPREP_ALLOW_UNASSIGNED,
-                                    nameprep, &parseError,&status);
+                                    nameprep, &parseError, &status);
     /* close the profile */
     usprep_close(nameprep);
 
@@ -207,18 +207,17 @@ profile each time.*
     private static final StringPrep nfscsi = null;
     //singleton instance
     private static final NFSCSIStringPrep prep=new NFSCSIStringPrep();
-    private NFSCSIStringPrep (){
-        try{
+    private NFSCSIStringPrep() {
+        try {
             InputStream nfscsiFile = TestUtil.getDataStream("nfscsi.spp");
             nfscsi = new StringPrep(nfscsiFile);
             nfscsiFile.close();
-        }catch(IOException e){
+        } catch(IOException e) {
             throw new RuntimeException(e.toString());
         }
     }
-    private static byte\[\] prepare(byte\[\] src, StringPrep prep)
-        throws StringPrepParseException,
-                UnsupportedEncodingException{
+    private static byte[] prepare(byte[] src, StringPrep prep)
+            throws StringPrepParseException, UnsupportedEncodingException {
         String s = new String(src, "UTF-8");
         UCharacterIterator iter = UCharacterIterator.getInstance(s);
         StringBuffer out = prep.prepare(iter,StringPrep.DEFAULT);
@@ -245,24 +244,24 @@ profile each time.*
     UChar* dest = (UChar*) malloc(destCapacity * U_SIZEOF_UCHAR);
     destLen = uidna_toASCII(src, srcLen, dest, destCapacity,
                             UIDNA_DEFAULT, &parseError, &status);
-    if(status == U_BUFFER_OVERFLOW_ERROR){
+    if(status == U_BUFFER_OVERFLOW_ERROR) {
         status = U_ZERO_ERROR;
         destCapacity= destLen + 1; /* for the terminating Null */
         free(dest); /* free the memory */
-        dest = (UChar\*) malloc(destLen * U_SIZEOF_UCHAR);
+        dest = (UChar*) malloc(destLen * U_SIZEOF_UCHAR);
         destLen = uidna_toASCII(src, srcLen, dest, destCapacity,
                                 UIDNA_DEFAULT, &parseError, &status);
     }
-    if(U_FAILURE(status)){
+    if(U_FAILURE(status)) {
         /* handle the error */
     }
     /* do interesting stuff with output*/
 
 ***Java***
 
-    try{
+    try {
         StringBuffer out= IDNA.convertToASCII(inBuf,IDNA.DEFAULT);
-    }catch(StringPrepParseException ex){
+    } catch(StringPrepParseException ex) {
         /*handle the exception*/
     }
 
@@ -274,25 +273,25 @@ profile each time.*
     destLen = uidna_toUnicode(src, srcLen, dest, destCapacity,
                               UIDNA_DEFAULT
                               &parseError, &status);
-    if(status == U_BUFFER_OVERFLOW_ERROR){
+    if(status == U_BUFFER_OVERFLOW_ERROR) {
         status = U_ZERO_ERROR;
         destCapacity= destLen + 1; /* for the terminating Null */
         /* free the memory */
         free(dest);
-        dest = (UChar\*) malloc( destLen * U_SIZEOF_UCHAR);
+        dest = (UChar*) malloc(destLen * U_SIZEOF_UCHAR);
         destLen = uidna_toUnicode(src, srcLen, dest, destCapacity,
                                   UIDNA_DEFAULT, &parseError, &status);
     }
-    if(U_FAILURE(status)){
+    if(U_FAILURE(status)) {
         /* handle the error */
     }
     /* do interesting stuff with output*/
 
 ***Java***
 
-    try{
+    try {
         StringBuffer out= IDNA.convertToUnicode(inBuf,IDNA.DEFAULT);
-    }catch(StringPrepParseException ex){
+    } catch(StringPrepParseException ex) {
         // handle the exception
     }
 
@@ -304,18 +303,18 @@ profile each time.*
                                source2, length2,
                                UIDNA_DEFAULT,
                                &status);
-    if(rc==0){
+    if(rc==0) {
         /* the IDNs are same ... do something interesting */
-    }else{
+    } else {
         /* the IDNs are different ... do something */
     }
 
 ***Java***
 
-    try{
+    try {
         int retVal = IDNA.compare(s1,s2,IDNA.DEFAULT);
         // do something interesting with retVal
-    }catch(StringPrepParseException e){
+    } catch(StringPrepParseException e) {
        // handle the exception
     }
 
@@ -347,8 +346,7 @@ in binary form with data structures optimized for runtime use.
 
 A web application at <http://demo.icu-project.org/icu-bin/idnbrowser>
 illustrates the use of IDNA API. The source code for the application is
-available at <http://source.icu-project.org/repos/icu/icuapps/trunk/idnbrowser/>
-.
+available at <http://source.icu-project.org/repos/icu/icuapps/trunk/idnbrowser/>.
 
 ## Appendix
 

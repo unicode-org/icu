@@ -63,7 +63,7 @@ Here is a summary of the differences:
 *   Filtered: The new FilteredNormalizer2 class combines a Normalizer2 instance
     with a UnicodeSet to limit normalization to certain characters. For example,
     The old API's UNICODE_3_2 option is implemented via a FilteredNormalizer2
-    using a UnicodeSet with the pattern \[:age=3.2:\]. (In other words, Unicode
+    using a UnicodeSet with the pattern `[:age=3.2:]`. (In other words, Unicode
     3.2 normalization now requires the uprops.icu data.)
 *   Ease of use: In general, the switch to a factory method, otherwise
     non-static functions, and multiple data files, simplifies all of the

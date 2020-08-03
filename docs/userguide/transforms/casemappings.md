@@ -27,7 +27,7 @@ of title case words is language dependent. For example, in English, "Taming of
 the Shrew" would be the appropriate capitalization and not "Taming Of The
 Shrew".
 
-:point_right: **Note**: *As of Unicode 11, Georgian now has Mkhedruli (lowercase) and Mtavruli
+> :point_right: **Note**: *As of Unicode 11, Georgian now has Mkhedruli (lowercase) and Mtavruli
 (uppercase) which form case pairs, but are not used in title case.*
 
 Sample code is available in the ICU source code library at

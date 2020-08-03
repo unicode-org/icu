@@ -63,11 +63,11 @@ function.](http://icu-project.org/apiref/icu4c/ucnv_8h.html)
 ICU provides the following concrete subclasses of the CharacterIteratorclass:
 
 1.  [UCharCharacterIterator](http://icu-project.org/apiref/icu4c/classUCharCharacterIterator.html)
-    subclass iterates over a UChar\[\] array.
+    subclass iterates over a `UChar[]` array.
 
 2.  [StringCharacterIterator](http://icu-project.org/apiref/icu4c/classStringCharacterIterator.html)
-    subclass extends from UCharCharacterIterator and iterates over the contents
-    of a UnicodeString.
+    subclass extends from `UCharCharacterIterator` and iterates over the contents
+    of a `UnicodeString`.
 
 ## Usage
 

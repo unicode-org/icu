@@ -386,7 +386,7 @@ ICU provides two basic data type definitions for Unicode. UChar32 is a 32-bit
 type for code points, and used for single Unicode characters. It may be signed
 or unsigned. It is the same as wchar_t if it is 32 bits wide. UChar is an
 unsigned 16-bit integer for UTF-16 code units. It is the base type for strings
-(UChar \*), and it is the same as wchar_t if it is 16 bits wide.
+(`UChar *`), and it is the same as wchar_t if it is 16 bits wide.
 
 Some higher-level APIs, used especially for formatting, use characters closer to
 a representation for a glyph. Such "user characters" are also called "graphemes"
