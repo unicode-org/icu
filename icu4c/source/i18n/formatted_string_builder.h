@@ -52,10 +52,12 @@ class U_I18N_API FormattedStringBuilder : public UMemory {
 
     FormattedStringBuilder(const FormattedStringBuilder &other);
 
+    // FIXME: describe usefully.
+    //
     // Convention: bottom 4 bits for field, top 4 bits for field category.
     // Field category 0 implies the number category so that the number field
     // literals can be directly passed as a Field type.
-    // See the helper functions in "StringBuilderFieldUtils" below.
+    // See the helper functions in "StringBuilderFieldUtils" below. // FIXME: StringBuilderFieldUtils does not exist.
     // Exported as U_I18N_API so it can be used by other exports on Windows.
     struct U_I18N_API Field {
         uint8_t bits;
