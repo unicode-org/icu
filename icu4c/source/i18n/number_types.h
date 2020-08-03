@@ -45,8 +45,8 @@ static constexpr char16_t kFallbackPaddingString[] = u" ";
 
 // Forward declarations:
 
-class Modifier;
-class MutablePatternModifier;
+// class Modifier;
+// class MutablePatternModifier;
 class DecimalQuantity;
 class ModifierStore;
 struct MicroProps;
@@ -160,10 +160,10 @@ class U_I18N_API Modifier {
      * @param output
      *            The string builder to which to apply this modifier.
      * @param leftIndex
-     *            The left index of the string within the builder. Equal to 0 when only one number is being formatted.
+     *            The left index of the string within the builder [unclear]. Equal to 0 when only one number is being formatted [huh?].
      * @param rightIndex
-     *            The right index of the string within the string builder. Equal to length when only one number is being
-     *            formatted.
+     *            The right index of the string within the string builder [unclear]. Equal to length when only one number is being
+     *            formatted [huh?].
      * @return The number of characters (UTF-16 code units) that were added to the string builder.
      */
     virtual int32_t apply(FormattedStringBuilder& output, int leftIndex, int rightIndex,
