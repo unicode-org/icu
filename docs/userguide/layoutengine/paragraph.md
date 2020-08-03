@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Paragraph Layout
 
 This page is about the Paragraph Layout library that is available in ICU4C/C++.

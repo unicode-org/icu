@@ -1,8 +1,16 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Editing the ICU User Guide
 
 ## Overview
 
-> :construction: **Note**: This information is obsolete and must be changed.
+> :construction: **TODO**: Adjust this page for use of GitHub Markdown (since 2020)
+rather than Google Sites.
+See the [migration page](https://docs.google.com/document/d/1uK91cxv1amCrt75TBw1PlCC5wZhJH_w3dW_8unWL9EQ/edit)
+for details and tips.
 
 This version of the ICU User Guide is maintained via Google Sites. The Site
 address is <http://sites.google.com/site/icuprojectuserguide/>
