@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # UTF-8
 
 *Note: This page is only relevant for C/C++. In Java, all strings are encoded in
