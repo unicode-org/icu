@@ -143,6 +143,7 @@ class U_I18N_API FormattedStringBuilder : public UMemory {
      * @param unistr The string to insert at the deletion position.
      * @param startOther Start index of the substring of unistr to be inserted.
      * @param endOther End index of the substring of unistr to be inserted (exclusive).
+     * @param field FIXME.
      */
     int32_t splice(int32_t startThis, int32_t endThis,  const UnicodeString &unistr,
                    int32_t startOther, int32_t endOther, Field field, UErrorCode& status);
@@ -185,6 +186,7 @@ class U_I18N_API FormattedStringBuilder : public UMemory {
   private:
     bool fUsingHeap = false;
     ValueOrHeapArray<char16_t> fChars;
+    // FIXME
     ValueOrHeapArray<Field> fFields;
     int32_t fZero = DEFAULT_CAPACITY / 2;
     int32_t fLength = 0;
