@@ -1,3 +1,8 @@
+<!--
+© 2020 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+
 # Properties
 
 ## Overview
@@ -18,12 +23,12 @@ It is one of the strengths of Unicode that it not only defines a very large
 character set, but also assigns a comprehensive set of properties and usage
 notes to all characters. It defines standard algorithms for critical text
 processing, and the data is publicly provided and kept up-to-date. See
-<http://www.unicode.org/> for more information.
+https://www.unicode.org/ and https://www.unicode.org/main.html for more information.
 
 Sample code is available in the ICU source code library at
-[icu4c/source/samples/props/props.cpp](http://source.icu-project.org/repos/icu/trunk/icu4c/source/samples/props/props.cpp)
-. See also the source code for the [Unicode
-browser](http://source.icu-project.org/repos/icu/icuapps/trunk/ubrowse/) demo
+[icu4c/source/samples/props/props.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/props/props.cpp).
+See also the source code for the [Unicode
+browser](https://github.com/unicode-org/icu-demos/tree/master/ubrowse) demo
 application, which can be used
 [online](http://demo.icu-project.org/icu-bin/ubrowse) to browse Unicode
 characters with their properties.
@@ -51,13 +56,16 @@ mappings. In particular, -1 (=U_SENTINEL in ICU4C) is mapped to -1.
 Most properties are also available via UnicodeSet APIs and patterns. See the
 Lookup section below.
 
-See the [Unicode Character
-Database](http://www.unicode.org/reports/tr44/#Properties) itself for
+See [UAX #44, Unicode Character
+Database](https://www.unicode.org/reports/tr44/#Properties) itself for
 comparison. The UCD files
-[PropertyAliases.txt](http://www.unicode.org/Public/UCD/latest/ucd/PropertyAliases.txt)
+[PropertyAliases.txt](https://www.unicode.org/Public/UCD/latest/ucd/PropertyAliases.txt)
 and
-[PropertyValueAliases.txt](http://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt)
+[PropertyValueAliases.txt](https://www.unicode.org/Public/UCD/latest/ucd/PropertyValueAliases.txt)
 list all properties and their values by name and type.
+
+UAX #44 also shows which UCD files have data for which properties,
+and many other useful details.
 
 Most properties that use binary, integer, or enumerated values are available via
 functions u_hasBinaryProperty and u_getIntPropertyValue which take UProperty
@@ -82,103 +90,100 @@ words, there are two ICU properties for the same Unicode property, one
 delivering single values (for per-code point lookup) and the other delivering
 sets of values (for use with value aliases and UnicodeSet).
 
-> :construction: **TODO**: Revise table to remove last column. Consider omitting 3rd column
-to shorten each line of the table.
-
-| UCD Name(see PropertyAliases.txt) | Type |  | ICU4C uchar.hICU4J UCharacter | UCD File (.txt) |
-|--------------|--------|-----|------------------------------|------------|
-| Age | Unicode version | (U) | C: u_charAge fills in UVersionInfo <br/> Java: getAge returns a VersionInfo reference | DerivedAge |
-| Alphabetic | binary | (U) | u_isUAlphabetic, UCHAR_ALPHABETIC | DerivedCoreProperties |
-| ASCII_Hex_Digit | binary | (U) | UCHAR_ASCII_HEX_DIGIT | PropList |
-| Bidi_Class | enum UCharDirection | (U) | u_charDirection, UCHAR_BIDI_CLASS | UnicodeData |
-| Bidi_Control | binary | (U) | UCHAR_BIDI_CONTROL | PropList |
-| Bidi_Mirrored | binary | (U) | u_isMirrored, UCHAR_BIDI_MIRRORED | UnicodeData |
-| Bidi_Mirroring_Glyph | code point |  | u_charMirror | BidiMirroring |
-| Block | enum UBlockCode (growing) | (U) | ublock_getCode, UCHAR_BLOCK | Blocks |
-| Canonical_Combining_Class | 0..255 | (U) | u_getCombiningClass, UCHAR_CANONICAL_COMBINING_CLASS | UnicodeData |
-| Case_Folding | Unicode string |  | u_strFoldCase (ustring.h) | CaseFolding |
-| Case_Ignorable | binary | (U) | UCHAR_CASE_IGNORABLE | DerivedCoreProperties |
-| Cased | binary | (U) | UCHAR_CASED | DerivedCoreProperties |
-| Changes_When_Casefolded | binary | (U) | UCHAR_CHANGES_WHEN_CASEFOLDED | DerivedCoreProperties |
-| Changes_When_Casemapped | binary | (U) | UCHAR_CHANGES_WHEN_CASEMAPPED | DerivedCoreProperties |
-| Changes_When_NFKC_Casefolded | binary | (U) | UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED | DerivedNormalizationProps |
-| Changes_When_Lowercased | binary | (U) | UCHAR_CHANGES_WHEN_LOWERCASED | DerivedCoreProperties |
-| Changes_When_Titlecased | binary | (U) | UCHAR_CHANGES_WHEN_TITLECASED | DerivedCoreProperties |
-| Changes_When_Uppercased | binary | (U) | UCHAR_CHANGES_WHEN_UPPERCASED | DerivedCoreProperties |
-| Composition_Exclusion | binary | (c) | contributes to Full_Composition_Exclusion | CompositionExclusions |
-| Dash | binary | (U) | UCHAR_DASH | PropList |
-| Decomposition_Mapping | Unicode string |  | NFKC Normalizer2::getRawDecomposition() | UnicodeData |
-| Decomposition_Type | enum UDecompositionType | (U) | UCHAR_DECOMPOSITION_TYPE | UnicodeData |
-| Default_Ignorable_Code_Point | binary | (U) | UCHAR_DEFAULT​_IGNORABLE_CODE_POINT | DerivedCoreProperties |
-| Deprecated | binary | (U) | UCHAR_DEPRECATED | PropList |
-| Diacritic | binary | (U) | UCHAR_DIACRITIC | PropList |
-| East_Asian_Width | enum UEastAsianWidth | (U) | UCHAR_EAST_ASIAN_WIDTH | EastAsianWidth |
-| Expands_On_NF* | binary |  | available via normalization API (normalizer2.h) | DerivedNormal­izationProps |
-| Extender | binary | (U) | UCHAR_EXTENDER | PropList |
-| FC_NFKC_Closure | Unicode string |  | u_getFC_NFKC_Closure | DerivedNormal­izationProps |
-| Full_Composition_Exclusion | binary | (U) | UCHAR_FULL​_COMPOSITION_EXCLUSION | DerivedNormal­izationProps |
-| General_Category | enum (<= 32 values) | (U) | u_charType, UCHAR_GENERAL_CATEGORY, UCHAR_GENERAL_CATEGORY_MASK, UCharCategory | UnicodeData |
-| Grapheme_Base | binary | (U) | UCHAR_GRAPHEME_BASE | DerivedCoreProperties |
-| Grapheme_Cluster_Break | enum UGraphemeClusterBreak | (U) | UCHAR_GRAPHEME_CLUSTER_BREAK | GraphemeBreakProperty |
-| Grapheme_Extend | binary | (U) | UCHAR_GRAPHEME_EXTEND | DerivedCoreProperties |
-| Grapheme_Link | binary | (U) | UCHAR_GRAPHEME_LINK | DerivedCoreProperties |
-| Hangul_Syllable_Type | enum UHangulSyllableType | (U) | UCHAR_HANGUL_SYLLABLE_TYPE | HangulSyllableType |
-| Hex_Digit | binary | (U) | UCHAR_HEX_DIGIT | PropList |
-| Hyphen | binary | (U) | UCHAR_HYPHEN | PropList |
-| ID_Continue | binary | (U) | UCHAR_ID_CONTINUE | DerivedCoreProperties |
-| ID_Start | binary | (U) | UCHAR_ID_START | DerivedCoreProperties |
-| Ideographic | binary | (U) | UCHAR_IDEOGRAPHIC | PropList |
-| IDS_Binary_Operator | binary | (U) | UCHAR_IDS_BINARY_OPERATOR | PropList |
-| IDS_Triary_Operator | binary | (U) | UCHAR_IDS_TRINARY_OPERATOR | PropList |
-| Indic_Matra_Category | (enum) |  | provisional, not yet supported | IndicMatraCategory |
-| Indic_Syllabic_Category | (enum) |  | provisional, not yet supported | IndicSyllabicCategory |
-| ISO_Comment | ASCII string |  | u_getISOComment | UnicodeData |
-| Jamo_Short_Name | ASCII string | (c) | contributes to Name | Jamo |
-| Join_Control | binary | (U) | UCHAR_JOIN_CONTROL | PropList |
-| Joining_Group | enum UJoiningGroup | (U) | UCHAR_JOINING_GROUP | ArabicShaping |
-| Joining_Type | enum UJoiningType | (U) | UCHAR_JOINING_TYPE | ArabicShaping |
-| Line_Break | enum ULineBreak | (U) | UCHAR_LINE_BREAK | LineBreak |
-| Logical_Order_Exception | binary | (U) | UCHAR_LOGICAL_ORDER_EXCEPTION | PropList |
-| Lowercase | binary | (U) | u_isULowercase, UCHAR_LOWERCASE | DerivedCoreProperties |
-| Lowercase_Mapping | Unicode string + conditions |  | available via u_strToLower (ustring.h) | UnicodeData + SpecialCasing |
-| Math | binary | (U) | UCHAR_MATH | DerivedCoreProperties |
-| Name | ASCII string | (U) | u_charName(U_UNICODE_CHAR_NAME or U_EXTENDED_CHAR_NAME) | UnicodeData |
-| Name_Alias | ASCII string |  | u_charName(U_CHAR_NAME_ALIAS) | NameAliases |
-| NF*_QuickCheck | enum UNormalizationCheckResult (no/maybe/yes) | (U) | UCHAR_NF*_QUICK_CHECK and available via quickCheck (normalizer2.h) | DerivedNormal­izationProps |
-| NFKC_Casefold | Unicode string |  | available via normalization API (normalizer2.h "nfkc_cf") | DerivedNormalizationProps |
-| Noncharacter_Code_Point | binary | (U) | UCHAR_NONCHARACTER​_CODE_POINT, <br /> U_IS_UNICODE_NONCHAR (utf.h) | PropList |
-| Numeric_Type | enum UNumericType | (U) | UCHAR_NUMERIC_TYPE | UnicodeData |
-| Numeric_Value | double | (U) | u_getNumericValueJava/UnicodeSet: only non-negative integers, no fractions | UnicodeData |
-| Other_Alphabetic | binary | (c) | contributes to Alphabetic | PropList |
-| Other_Default_Ignorable​_Code_Point | binary | (c) | contributes to Default_Ignorable​_Code_Point | PropList |
-| Other_Grapheme_Extend | binary | (c) | contributes to Grapheme_Extend | PropList |
-| Other_Lowercase | binary | (c) | contributes to Lowercase | PropList |
-| Other_Math | binary | (c) | contributes to Math | PropList |
-| Other_Uppercase | binary | (c) | contributes to Uppercase | PropList |
-| Pattern_Syntax | binary | (U) | UCHAR_PATTERN_SYNTAX | PropList |
-| Pattern_White_Space | binary | (U) | UCHAR_PATTERN_WHITE_SPACE | PropList |
-| Quotation_Mark | binary | (U) | UCHAR_QUOTATION_MARK | PropList |
-| Radical | binary | (U) | UCHAR_RADICAL | PropList |
-| Script | enum UScriptCode (growing) | (U) | uscript_getCode (uscript.h), UCHAR_SCRIPT | Scripts |
-| Script_Extensions (provisional) | list of enum UScriptCode (growing) | (U) | uscript_getScriptExtensions & uscript_hasScript (uscript.h), UCHAR_SCRIPT_EXTENSIONSUnicodeSet [:scx=Arab:] is a superset of [:sc=Arab:] | ScriptExtensions |
-| Sentence_Break | enum USentenceBreak | (U) | UCHAR_SENTENCE_BREAK | SentenceBreakProperty |
-| Simple_Case_Folding | code point |  | u_foldCase | CaseFolding |
-| Simple_Lowercase_ Mapping | code point |  | u_tolower | UnicodeData |
-| Simple_Titlecase_ Mapping | code point |  | u_totitle | UnicodeData |
-| Simple_Uppercase_ Mapping | code point |  | u_toupper | UnicodeData |
-| Soft_Dotted | binary | (U) | UCHAR_SOFT_DOTTED | PropList |
-| Special_Case_Condition | conditions |  | available via u_strToLower etc. (ustring.h) | SpecialCasing |
-| STerm | binary | (U) | UCHAR_S_TERM | PropList |
-| Terminal_Punctuation | binary | (U) | UCHAR_TERMINAL_PUNCTUATION | PropList |
-| Titlecase_Mapping | Unicode string + conditions |  | u_strToTitle (ustring.h) | UnicodeData + SpecialCasing |
-| Unicode_1_Name | ASCII string | (U) | u_charName(U_UNICODE_10_CHAR_NAME or U_EXTENDED_CHAR_NAME) | UnicodeData |
-| Unified_Ideograph | binary | (U) | UCHAR_UNIFIED_IDEOGRAPH | PropList |
-| Uppercase | binary | (U) | u_isUUppercase, UCHAR_UPPERCASE | DerivedCoreProperties |
-| Uppercase_Mapping | Unicode string + conditions |  | u_strToUpper (ustring.h) | UnicodeData + SpecialCasing |
-| White_Space | binary | (U) | u_isUWhiteSpace, UCHAR_WHITE_SPACE | PropList |
-| Word_Break | enum UWordBreakValues | (U) | UCHAR_WORD_BREAK | WordBreakProperty |
-| XID_Continue | binary | (U) | UCHAR_XID_CONTINUE | DerivedCoreProperties |
-| XID_Start | binary | (U) | UCHAR_XID_START | DerivedCoreProperties |
+| UCD Name | Type |  | ICU4C uchar.h / ICU4J UCharacter |
+|--------------|--------|-----|------------------------------|
+| Age | Unicode version | (U) | C: u_charAge fills in UVersionInfo<br>Java: getAge returns a VersionInfo reference |
+| Alphabetic | binary | (U) | u_isUAlphabetic, UCHAR_ALPHABETIC |
+| ASCII_Hex_Digit | binary | (U) | UCHAR_ASCII_HEX_DIGIT |
+| Bidi_Class | enum | (U) | u_charDirection, UCHAR_BIDI_CLASS<br>returns enum UCharDirection |
+| Bidi_Control | binary | (U) | UCHAR_BIDI_CONTROL |
+| Bidi_Mirrored | binary | (U) | u_isMirrored, UCHAR_BIDI_MIRRORED |
+| Bidi_Mirroring_Glyph | code point |  | u_charMirror |
+| Block | enum | (U) | ublock_getCode, UCHAR_BLOCK<br>returns enum UBlockCode |
+| Canonical_Combining_Class | 0..255 | (U) | u_getCombiningClass, UCHAR_CANONICAL_COMBINING_CLASS |
+| Case_Folding | Unicode string |  | u_strFoldCase (ustring.h) |
+| Case_Ignorable | binary | (U) | UCHAR_CASE_IGNORABLE |
+| Cased | binary | (U) | UCHAR_CASED |
+| Changes_When_Casefolded | binary | (U) | UCHAR_CHANGES_WHEN_CASEFOLDED |
+| Changes_When_Casemapped | binary | (U) | UCHAR_CHANGES_WHEN_CASEMAPPED |
+| Changes_When_NFKC_Casefolded | binary | (U) | UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED |
+| Changes_When_Lowercased | binary | (U) | UCHAR_CHANGES_WHEN_LOWERCASED |
+| Changes_When_Titlecased | binary | (U) | UCHAR_CHANGES_WHEN_TITLECASED |
+| Changes_When_Uppercased | binary | (U) | UCHAR_CHANGES_WHEN_UPPERCASED |
+| Composition_Exclusion | binary | (c) | contributes to Full_Composition_Exclusion |
+| Dash | binary | (U) | UCHAR_DASH |
+| Decomposition_Mapping | Unicode string |  | NFKC Normalizer2::getRawDecomposition() |
+| Decomposition_Type | enum | (U) | UCHAR_DECOMPOSITION_TYPE<br>returns enum UDecompositionType |
+| Default_Ignorable_Code_Point | binary | (U) | UCHAR_DEFAULT​_IGNORABLE_CODE_POINT |
+| Deprecated | binary | (U) | UCHAR_DEPRECATED |
+| Diacritic | binary | (U) | UCHAR_DIACRITIC |
+| East_Asian_Width | enum | (U) | UCHAR_EAST_ASIAN_WIDTH<br>returns enum UEastAsianWidth |
+| Expands_On_NF* | binary |  | available via normalization API (normalizer2.h) |
+| Extender | binary | (U) | UCHAR_EXTENDER |
+| FC_NFKC_Closure | Unicode string |  | u_getFC_NFKC_Closure |
+| Full_Composition_Exclusion | binary | (U) | UCHAR_FULL​_COMPOSITION_EXCLUSION |
+| General_Category | enum | (U) | u_charType, UCHAR_GENERAL_CATEGORY, UCHAR_GENERAL_CATEGORY_MASK<br>returns enum UCharCategory |
+| Grapheme_Base | binary | (U) | UCHAR_GRAPHEME_BASE |
+| Grapheme_Cluster_Break | enum | (U) | UCHAR_GRAPHEME_CLUSTER_BREAK<br>returns enum UGraphemeClusterBreak |
+| Grapheme_Extend | binary | (U) | UCHAR_GRAPHEME_EXTEND |
+| Grapheme_Link | binary | (U) | UCHAR_GRAPHEME_LINK |
+| Hangul_Syllable_Type | enum | (U) | UCHAR_HANGUL_SYLLABLE_TYPE<br>returns enum UHangulSyllableType |
+| Hex_Digit | binary | (U) | UCHAR_HEX_DIGIT |
+| Hyphen | binary | (U) | UCHAR_HYPHEN |
+| ID_Continue | binary | (U) | UCHAR_ID_CONTINUE |
+| ID_Start | binary | (U) | UCHAR_ID_START |
+| Ideographic | binary | (U) | UCHAR_IDEOGRAPHIC |
+| IDS_Binary_Operator | binary | (U) | UCHAR_IDS_BINARY_OPERATOR |
+| IDS_Triary_Operator | binary | (U) | UCHAR_IDS_TRINARY_OPERATOR |
+| Indic_Positional_Category | enum | (U) | UCHAR_INDIC_POSITIONAL_CATEGORY<br>returns enum UIndicPositionalCategory |
+| Indic_Syllabic_Category | enum | (U) | UCHAR_INDIC_SYLLABIC_CATEGORY<br>returns enum UIndicSyllabicCategory |
+| ISO_Comment | ASCII string |  | u_getISOComment |
+| Jamo_Short_Name | ASCII string | (c) | contributes to Name |
+| Join_Control | binary | (U) | UCHAR_JOIN_CONTROL |
+| Joining_Group | enum | (U) | UCHAR_JOINING_GROUP<br>returns enum UJoiningGroup |
+| Joining_Type | enum | (U) | UCHAR_JOINING_TYPE<br>returns enum UJoiningType |
+| Line_Break | enum | (U) | UCHAR_LINE_BREAK<br>returns enum ULineBreak |
+| Logical_Order_Exception | binary | (U) | UCHAR_LOGICAL_ORDER_EXCEPTION |
+| Lowercase | binary | (U) | u_isULowercase, UCHAR_LOWERCASE |
+| Lowercase_Mapping | Unicode string |  | available via u_strToLower (ustring.h) |
+| Math | binary | (U) | UCHAR_MATH |
+| Name | ASCII string | (U) | u_charName(U_UNICODE_CHAR_NAME or U_EXTENDED_CHAR_NAME) |
+| Name_Alias | ASCII string |  | u_charName(U_CHAR_NAME_ALIAS) |
+| NF*_QuickCheck | enum | (U) | UCHAR_NF*_QUICK_CHECK and available via quickCheck (normalizer2.h)<br>returns UNormalizationCheckResult (no/maybe/yes) |
+| NFKC_Casefold | Unicode string |  | available via normalization API (normalizer2.h "nfkc_cf") |
+| Noncharacter_Code_Point | binary | (U) | UCHAR_NONCHARACTER​_CODE_POINT, <br /> U_IS_UNICODE_NONCHAR (utf.h) |
+| Numeric_Type | enum | (U) | UCHAR_NUMERIC_TYPE<br>returns enum UNumericType |
+| Numeric_Value | double | (U) | u_getNumericValueJava/UnicodeSet: only non-negative integers, no fractions |
+| Other_Alphabetic | binary | (c) | contributes to Alphabetic |
+| Other_Default_Ignorable​_Code_Point | binary | (c) | contributes to Default_Ignorable​_Code_Point |
+| Other_Grapheme_Extend | binary | (c) | contributes to Grapheme_Extend |
+| Other_Lowercase | binary | (c) | contributes to Lowercase |
+| Other_Math | binary | (c) | contributes to Math |
+| Other_Uppercase | binary | (c) | contributes to Uppercase |
+| Pattern_Syntax | binary | (U) | UCHAR_PATTERN_SYNTAX |
+| Pattern_White_Space | binary | (U) | UCHAR_PATTERN_WHITE_SPACE |
+| Quotation_Mark | binary | (U) | UCHAR_QUOTATION_MARK |
+| Radical | binary | (U) | UCHAR_RADICAL |
+| Script | enum | (U) | uscript_getCode (uscript.h), UCHAR_SCRIPT<br>returns enum UScriptCode |
+| Script_Extensions | list | (U) | uscript_getScriptExtensions & uscript_hasScript (uscript.h), UCHAR_SCRIPT_EXTENSIONS<br>returns a list of enum UScriptCode values |
+| Sentence_Break | enum | (U) | UCHAR_SENTENCE_BREAK<br>returns enum USentenceBreak |
+| Simple_Case_Folding | code point |  | u_foldCase |
+| Simple_Lowercase_ Mapping | code point |  | u_tolower |
+| Simple_Titlecase_ Mapping | code point |  | u_totitle |
+| Simple_Uppercase_ Mapping | code point |  | u_toupper |
+| Soft_Dotted | binary | (U) | UCHAR_SOFT_DOTTED |
+| STerm | binary | (U) | UCHAR_S_TERM |
+| Terminal_Punctuation | binary | (U) | UCHAR_TERMINAL_PUNCTUATION |
+| Titlecase_Mapping | Unicode string |  | u_strToTitle (ustring.h) |
+| Unicode_1_Name | ASCII string | (U) | u_charName(U_UNICODE_10_CHAR_NAME or U_EXTENDED_CHAR_NAME) |
+| Unified_Ideograph | binary | (U) | UCHAR_UNIFIED_IDEOGRAPH |
+| Uppercase | binary | (U) | u_isUUppercase, UCHAR_UPPERCASE |
+| Uppercase_Mapping | Unicode string |  | u_strToUpper (ustring.h) |
+| Vertical_Orientation | enum | (U) | UCHAR_VERTICAL_ORIENTATION<br>returns enum UVerticalOrientation |
+| White_Space | binary | (U) | u_isUWhiteSpace, UCHAR_WHITE_SPACE |
+| Word_Break | enum | (U) | UCHAR_WORD_BREAK<br>returns enum UWordBreakValues |
+| XID_Continue | binary | (U) | UCHAR_XID_CONTINUE |
+| XID_Start | binary | (U) | UCHAR_XID_START |
 
 Notes:
 
@@ -191,35 +196,13 @@ Notes:
     Properties which are not available in UnicodeSet are generally those that
     are not available through a UProperty selector.
 
-#### Unicode Character Database files and properties
+3.  UnicodeSet `[:scx=Arab:]` is a superset of `[:sc=Arab:]`;
+    see https://www.unicode.org/reports/tr18/#Script_Property
 
-This table shows the UCD Property Names associated with each of the UCD .txt files:
-
-| UCD File (.txt) | UCD propery names |
-|----------------------|----------------------------------------------------------|
-| ArabicShaping | Joining_Group <br/> Joining_Type |
-| BidiMirroring | Bidi_Mirroring_Glyph |
-| Blocks | Block |
-| CaseFolding | Case_Folding <br/> Simple_Case_Folding |
-| DerivedAge | Age |
-| DerivedCoreProperties | Alphabetic Case_Ignorable <br/> Cased Changes_When_Casefolded <br/> Changes_When_Casemapped <br/> Changes_When_NFKC_Casefolded <br/> Changes_When_Lowercased <br/> Changes_When_Titlecased <br/> Changes_When_Uppercased <br/> Default_Ignorable_Code_Point <br/> Expands_On_NF <br/> Grapheme_Base <br/> Grapheme_Extend <br/> Grapheme_Link <br/> ID_Continue <br/> ID_Start <br/> Lowercase <br/> Math <br/> Uppercase <br/> XID_Continue <br/> XID_Start |
-| DerivedNormalizationProps | Expands_On_NF* <br/> FC_NFKC_Closure <br/> Full_Composition_Exclusion <br/> NF_QuickCheck |
-| EastAsianWidth | East_Asian_Width |
-| GraphemeBreakProperty | Grapheme_Cluster_Break |
-| HangulSyllableType | Hangul_Syllable_Type |
-| IndicMatraCategory | Indic_Matra_Category | 
-| IndicSyllabicCategory | Indic_Syllabic_Category |
-| LineBreak | Line_Break |
-| Jamo | Jamo_Short_Name |
-| NameAliases | NF_QuickCheck |
-| PropList | ASCII_Hex_Digit <br/> Bidi_Control <br/> Dash <br/> Deprecated <br/> Diacritic <br/> Extended <br/> Hex_digit <br/> Hyphen <br/> Ideographic <br/> IDS_Binary_Operator <br/> IDS_Triary_Operator <br/> Join_Control <br/> Logical_Order_Exception <br/> Noncharacter_Code_Point <br/> Other_Alphabetic <br/> Other_Default_Ignorable_Code_Point <br/> Other_Grapheme_Extend <br/> Other_Lowercase <br/> Other_Math <br/> Other_Uppercase <br/> Pattern_Syntax <br/> Pattern_White_Space <br/> Quotation_Mark <br/> Radical <br/> Soft_Dotted <br/> STerm <br/> Terminal_Punctuation \\ Unified_Ideograph <br/> White_Space |
-| Scripts | Script |
-| ScriptExtensions | Script_Extensions (provisional) |
-| SpecialCasing | Lowercase_Mapping*<br/> Special_Case_Condition <br/> Titlecase_Mapping* <br/>  Uppercase_Mapping* </br> White_Space | 
-| UnicodeData | Bidi_Class <br/> Canonical_Combining_Class <br/> Decomposition_Mapping <br/> Decomposition_Type <br/> General_Category <br/> ISO_Comment <br/> Lowercase_Mapping* <br/> Name <br/> Numeric_Type <br/> Numeric_Value <br/> Simple_Case_Folding <br/> Simple_Lowercase_Mapping	 <br/> Simple_Titlecase_Mapping	<br/> Simple_Uppercase_Mapping <br/> Titlecase_Mapping* <br/> Unicode_1_Name <br/> Uppercase_Mapping* |
-| WordBreakProperty | Word_Break |
-
-\* UCD Property Name defined in more than one UCD file.
+4.  Full case mapping properties (e.g., Lowercase_Mapping) are complex.
+    The string case mapping functions that implement them handle language-specific
+    and/or context-sensitive mappings.
+    The output may have more code points or fewer code points than the input.
 
 ## Customization
 
@@ -253,7 +236,8 @@ processed by special ICU tools outside of the normal ICU build. The
 file documents the process that has been used for the last several Unicode
 version updates; skip the file preparation and API update steps.
 
-Any available Unicode code point (0 to 10FFFF16) can be used. Code point values
+Any available Unicode code point (0 to 10FFFF<sub>16</sub>) can be used.
+Code point values
 should be written with either 4, 5, or 6 hex digits. The minimum number of
 digits possible should be used (but no fewer than 4). Note that the Unicode
 Standard specifies that the 32 code points U+FDD0..U+FDEF and the 34 code points
@@ -345,4 +329,4 @@ any mappings are simply copied as is.
 ICU rule syntaxes should use the Unicode Pattern_White_Space set as syntactic
 "spaces" to allow for the usage of white space characters outside of the normal
 ASCII range while still maintaining backward compatibility. See
-<http://www.unicode.org/reports/tr31/#Pattern_Syntax> for more information.
+<https://www.unicode.org/reports/tr31/#Pattern_Syntax> for more information.
