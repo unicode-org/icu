@@ -1323,11 +1323,11 @@ included in C files.
 
 | Declared type | encoding | example | Used with |
 | --- | --- | --- | --- |
-| char \* | varies with platform| "Hello" | Most ICU API functions taking char \* parameters. Unless otherwise noted, characters are restricted to the "Invariant" set, described below |
-| char \* | UTF-8 |  u8"¡Hola!" | Only functions that are explicitly documented as expecting UTF-8. No restrictions on the characters used. |
-| UChar \* | UTF-16 | u"¡Hola!" | All ICU functions with UChar \* parameters |
-| UChar32 | Code Point value | U'😁' | UChar32 single code point constant. |
-| wchar_t | unknown | L"Hello" | Not used with ICU. Unknown encoding, unknown size, not portable. |
+| `char *` | varies with platform | `"Hello"` | Most ICU API functions taking `char *` parameters. Unless otherwise noted, characters are restricted to the "Invariant" set, described below |
+| `char *` | UTF-8 |  `u8"¡Hola!"` | Only functions that are explicitly documented as expecting UTF-8. No restrictions on the characters used. |
+| `UChar *` | UTF-16 | `u"¡Hola!"` | All ICU functions with `UChar *` parameters |
+| `UChar32` | Code Point value | `U'😁'` | UChar32 single code point constant. |
+| `wchar_t` | unknown | `L"Hello"` | Not used with ICU. Unknown encoding, unknown size, not portable. |
 
 ICU source files are UTF-8 encoded, allowing any Unicode character to appear in
 Unicode string or character literals, without the need for escaping. But, for

@@ -252,7 +252,7 @@ flag values may be specified at the time that an expression is compiled into a
 RegexPattern object, or they may be specified within the pattern itself using
 the `(?ismx-ismx)` pattern options.
 
-:point_right: **Note**: The UREGEX_CANON_EQ option is not yet available.
+> :point_right: **Note**: The UREGEX_CANON_EQ option is not yet available.
 
 | Flag (pattern) | Flag (API Constant) | Description
 |:---------------|:--------------------|:-----------------|

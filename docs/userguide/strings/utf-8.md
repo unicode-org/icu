@@ -68,23 +68,26 @@ macros in `unicode/utf16.h`. The macros handle many cases inline, but call
 internal functions for complicated parts of the UTF-8 encoding form. For
 example, the following code snippet counts white space characters in a string:
 
-    #include "unicode/utypes.h"
-    #include "unicode/stringpiece.h"
-    #include "unicode/utf8.h"
-    #include "unicode/uchar.h"
-    int32_t countWhiteSpace(StringPiece sp) {
-     const char *s=sp.data();
-     int32_t length=sp.length();
-     int32_t count=0;
-     for(int32_t i=0; i<length;) {
-     UChar32 c;
-     U8_NEXT(s, i, length, c);
-     if(u_isUWhiteSpace(c)) {
-     ++count;
-     }
-     }
-     return count;
+```C
+#include "unicode/utypes.h"
+#include "unicode/stringpiece.h"
+#include "unicode/utf8.h"
+#include "unicode/uchar.h"
+
+int32_t countWhiteSpace(StringPiece sp) {
+    const char *s=sp.data();
+    int32_t length=sp.length();
+    int32_t count=0;
+    for(int32_t i=0; i<length;) {
+        UChar32 c;
+        U8_NEXT(s, i, length, c);
+        if(u_isUWhiteSpace(c)) {
+            ++count;
+        }
     }
+    return count;
+}
+```
 
 ## Dedicated UTF-8 APIs
 
@@ -123,14 +126,14 @@ ICU offers UTF-8 implementations out of the box.
 segmentation). `utext_openUTF8()` creates a read-only `UText` for a UTF-8
 string.
 
-*   *Note: In ICU 4.4 and before, BreakIterator only works with UTF-8 \[or any
-    other charset with non-1:1 index conversion to UTF-16\] if no dictionary is
+*   *Note: In ICU 4.4 and before, BreakIterator only works with UTF-8 (or any
+    other charset with non-1:1 index conversion to UTF-16) if no dictionary is
     supported. This excludes Thai word break. See [ticket
     #5532](http://bugs.icu-project.org/trac/ticket/5532). No fix is currently
     scheduled.*
 *   *As a workaround for Thai word breaking, you can convert the string to
     UTF-16 and convert indexes to UTF-8 string indexes via
-    u_strToUTF8(dest=NULL, destCapacity=0, \*destLength gets UTF-8 index).*
+    `u_strToUTF8(dest=NULL, destCapacity=0, *destLength gets UTF-8 index).`*
 *   *ICU 4.4 has a technology preview for UText in the regular expression API,
     but some of the UText regex API and semantics are likely to change for ICU
     4.6. (Especially indexing semantics.)*

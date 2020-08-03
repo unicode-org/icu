@@ -111,9 +111,9 @@ format—to one of the Transliterator factory methods, such as
 `Transliterator.getInstance()` (Java) or `Transliterator::createInstance()`. The
 following are some examples of identifiers:
 
-1.  Latin-Cyrillic
-2.  \[:Lu:\] Latin-Greek (Greek-Latin/UNGEGN)
-3.  \[A-Za-z\]; Lower(); Latin-Katakana; Katakana-Hiragana; (\[:Hiragana:\])
+1.  `Latin-Cyrillic`
+2.  `[:Lu:] Latin-Greek (Greek-Latin/UNGEGN)`
+3.  `[A-Za-z]; Lower(); Latin-Katakana; Katakana-Hiragana; ([:Hiragana:])`
 
 It is important to understand identifiers and their syntax, since it is through
 the use of identifiers that one creates transforms, restricts their effective
@@ -173,12 +173,12 @@ transform that converts only ASCII vowels to uppercase, use the ID:
 The filter is a valid UnicodeSet pattern prefixed to the basic ID. Only
 characters within the set will be modified by the transform. Some transforms are
 only useful with filters, for example, the Remove transform, which deletes all
-input characters. Specifying "\[:Nonspacing Mark:\] Remove" gives a transform
+input characters. Specifying `"[:Nonspacing Mark:] Remove"` gives a transform
 that removes non-spacing marks from input text.
 
 > :point_right: **Note**: *As of ICU 2.0, the filter pattern must be enclosed in brackets. Perl-syntax
-patterns of the form "\\p{Lu}" cannot be used directly; instead they must be
-enclosed, e.g. "\[\\p{Lu}\]".*
+patterns of the form `"\p{Lu}"` cannot be used directly; instead they must be
+enclosed, e.g. `"[\p{Lu}]"`.*
 
 ### Inverses
 
@@ -486,7 +486,7 @@ use extra accents to distinguish between letters that may not be otherwise
 distinguished. For example, the following shows Greek text that is mapped to
 fully reversible Latin:
 
-> **Greek-Latin**
+> **`Greek-Latin`**
 > | | |
 > |---|---|
 > | τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ ἕτερον. | tí phḗis; graphḕn sé tis, hōs éoike, gégraptai: ou gàr ekeînó ge katagnṓsomai, hōs sỳ héteron. |
@@ -495,14 +495,14 @@ If the user wants a version without certain accents, then a transform can be
 used to remove the accents. For example, the following transliterates to Latin
 but removes the macron accents on the long vowels.
 
-> **Greek-Latin; nfd; \[\\u0304\] remove; nfc**
+> **`Greek-Latin; nfd; [\u0304] remove; nfc`**
 > | | |
 > |---|---|
 > | τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ ἕτερον. | tí phéis; graphèn sé tis, hos éoike, gégraptai: ou gàr ekeînó ge katagnósomai, hos sỳ héteron.
 
 The following transliterates to Latin but removes all accents:
 
-> **Greek-Latin; nfd; \[:nonspacing marks:\] remove; nfc**
+> **`Greek-Latin; nfd; [:nonspacing marks:] remove; nfc`**
 > | | |
 > |---|---|
 > | τί φῄς; γραφὴν σέ τις, ὡς ἔοικε, γέγραπται: οὐ γὰρ ἐκεῖνό γε καταγνώσομαι, ὡς σὺ ἕτερον. | ti pheis; graphen se tis, hos eoike, gegraptai: ou gar ekeino ge katagnosomai, hos sy heteron. |
@@ -817,7 +817,7 @@ hyphens, but only when they follow lowercase letters":
 [:lowercase letter:] } '-' > '' ;
 ```
 
-> :point_right: **Note**: *The context itself (\[:lowercase letter:\]) is unaffected by the replacement;
+> :point_right: **Note**: *The context itself (`[:lowercase letter:]`) is unaffected by the replacement;
 only the text between the curly braces is changed. *
 
 #### Revisiting

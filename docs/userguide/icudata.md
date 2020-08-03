@@ -70,7 +70,7 @@ The ICU data directory is determined as follows:
     behavior for ICU using a shared library for its data and provides the
     highest data loading performance.
 
-:point_right: **Note**: `u_setDataDirectory()` is not thread-safe. Call it
+> :point_right: **Note**: `u_setDataDirectory()` is not thread-safe. Call it
 before calling ICU APIs from multiple threads. If you use both
 `u_setDataDirectory()` and `u_init()`, then use `u_setDataDirectory()` first.*
 *Earlier versions of ICU supported two additional schemes: setting a data

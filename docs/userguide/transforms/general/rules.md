@@ -160,8 +160,8 @@ following:
     γ > g ;
 
 If a range of characters happens to have adjacent code numbers, we can just use
-a hyphen to abbreviate it. For example, instead of writing \[a b c d e f g m n
-o\], we can simplify the range by writing \[a-g m-o\].
+a hyphen to abbreviate it. For example, instead of writing `[a b c d e f g m n o]`,
+we can simplify the range by writing `[a-g m-o]`.
 
 ## Styled Text
 
@@ -213,9 +213,9 @@ completely separate) and as "σ" otherwise. When we convert characters from Gree
 to Latin, this is not a problem. However, it is a problem when we convert the
 character back to Greek from Latin. We need to convert an s depending on the
 context. While we could list all the possible letters in a range, we can also
-use a character property. Although the range \[:Letter:\] stands for all
+use a character property. Although the range `[:Letter:]` stands for all
 letters, we really want all the characters that aren't letters. To accomplish
-this, we can use a negated range: \[:^Letter:\]. The following shows a negated
+this, we can use a negated range: `[:^Letter:]`. The following shows a negated
 range:
 
     σ < [:^Letter:] { s } [:^Letter:] ;
@@ -279,7 +279,7 @@ We can also use these operators as sequences with parentheses for grouping. For
 example, "a ( b c ) \* d" will match against "ad" or "abcd" or "abcbcd".
 
 *Currently, any repetition will cause the sequence to match as many times as allowed even if that causes the rest of the rule to fail. For example, suppose we have the following (contrived) rules:*
-*The intent was to transform a sequence like "able blue" into "ablæ blué". The rule does not work as it produces "ablé blué". The problem is that when the left side is matched against the text in the first rule, the \[:Letter:\]\* matches all the way back through the "al" characters. Then there is no "a" left to match. To have it match properly, we must subtract the 'a' as in the following example:*
+*The intent was to transform a sequence like "able blue" into "ablæ blué". The rule does not work as it produces "ablé blué". The problem is that when the left side is matched against the text in the first rule, the `[:Letter:]*` matches all the way back through the "al" characters. Then there is no "a" left to match. To have it match properly, we must subtract the 'a' as in the following example:*
 
 ## Æther
 
@@ -296,7 +296,7 @@ a non-letter.
 | Source | a xa a |
 | Results | b xa b |
 
-This is because \\uFFFF is an element of \[:^L:\], which includes all codepoints
+This is because \\uFFFF is an element of `[:^L:]`, which includes all codepoints
 that do not represent letters. To refer explicitly to æther, you can use a **$**
 at the end of a range, such as in the following rules:
 
@@ -321,7 +321,7 @@ would change to the following (notice that the first a is not replaced):
 > :point_right: **Note**: *Characters that are outside the context limits -- contextStart to contextEnd -- are also treated as
 æther.*
 
-The property \[:any:\] can be used to match all code points, including æther.
+The property `[:any:]` can be used to match all code points, including æther.
 Thus the following are equivalent:
 
 | Rule1 | [\u0000-\U0010FFFF] { a > A ; |
@@ -342,7 +342,7 @@ context of your rules. For example:
 There is also a special character, the period (.), that is equivalent to the
 **negation** of the $break variable we defined above. It can be used to match
 any characters excluding those for linebreaks or æther. However, it cannot be
-used within a range: you can't have \[\[.\] - \\u000A\], for example. If you
+used within a range: you can't have `[[.] - \u000A]`, for example. If you
 want to have different behavior you can define your own variables and use them
 instead of the period.
 
@@ -480,7 +480,7 @@ replacement text. You can even set the revisit point before or after the target
 text. The at-sign, as in the following example, is used as a filler to indicate
 the position, for those cases:
 
-    \[aeiou\] { x > | @ ks ;
+    [aeiou] { x > | @ ks ;
     ak > ack ;
 
 The first rule will convert "x", when preceded by a vowel, into "ks". The
@@ -536,8 +536,8 @@ order they are in. It does not matter whether we have either of the following:
 When rules do overlap, order is important. In fact, a rule could be rendered
 completely useless. Suppose we have:
 
-    β } \[aeiou\] > b;
-    β } \[^aeiou\] > v;
+    β } [aeiou] > b;
+    β } [^aeiou] > v;
     β > p;
 
 In this case, the last rule is masked as none of the text that will match the

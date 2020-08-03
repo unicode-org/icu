@@ -24,7 +24,7 @@ rule definitions, when available: SPELLOUT, ORDINAL, and DURATION. Users can
 request formatters either by providing a locale and one of these predefined rule
 selectors, or by specifying the rule definitions directly.
 
-:point_right: **Note**: ICU provides number spellout rules for several locales, but not for all of the
+> :point_right: **Note**: ICU provides number spellout rules for several locales, but not for all of the
 locales that ICU supports, and not all of the predefined rule types. Also, as of
 release 2.6, some of the provided rules are known to be incomplete.
 
@@ -80,7 +80,7 @@ You can also format a number specifying the ruleset directly, using an
 additional overload of format provided by RuleBasedNumberFormat. For example, in
 Java:
 
-:point_right: **Note**: There is no standardization of rule set names, so you must either query the
+> :point_right: **Note**: There is no standardization of rule set names, so you must either query the
 names, as in the first example above, or know the names that are defined in the
 rules for that formatter.
 

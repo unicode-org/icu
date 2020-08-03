@@ -139,11 +139,11 @@ here:
 
 "Apple" | "Apple" Collation Elements
 ------- | --------------------------
-a       | \[1900.05.05\]
-p       | \[3700.05.05\]
-p       | \[3700.05.05\]
-l       | \[2F00.05.05\]
-e       | \[2100.05.05\]
+a       | `[1900.05.05]`
+p       | `[3700.05.05]`
+p       | `[3700.05.05]`
+l       | `[2F00.05.05]`
+e       | `[2100.05.05]`
 
 In this example, the letter "a" has a 16-bit primary weight of 1900 (hex), an
 8-bit secondary weight of 05 (hex), and a combined 8-bit case-tertiary weight of
@@ -274,20 +274,20 @@ elements:
 
 String 1 | String 1 Collation Elements
 -------- | ---------------------------
-a        | \[1900.05.05\]
-p        | \[3700.05.05\]
-p        | \[3700.05.05\]
-l        | \[2F00.05.05\]
-e        | \[2100.05.05\]
+a        | `[1900.05.05]`
+p        | `[3700.05.05]`
+p        | `[3700.05.05]`
+l        | `[2F00.05.05]`
+e        | `[2100.05.05]`
 
 String 2 | String 2 Collation Elements
 -------- | ---------------------------
-a        | \[1900.05.05\]
-\\u0308  | \[0000.9D.05\]
-p        | \[3700.05.05\]
-p        | \[3700.05.05\]
-l        | \[2F00.05.05\]
-e        | \[2100.05.05\]
+a        | `[1900.05.05]`
+\\u0308  | `[0000.9D.05]`
+p        | `[3700.05.05]`
+p        | `[3700.05.05]`
+l        | `[2F00.05.05]`
+e        | `[2100.05.05]`
 
 The resulting CEs are typically masked according to the desired strength, and
 zero CEs are discarded. In the above example, masking with 0xFFFF0000 (for primary strength)

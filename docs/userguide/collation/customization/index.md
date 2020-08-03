@@ -458,20 +458,20 @@ tailoring relative to significant sections of the UCA table. You can use the
 
 Name                      | Example CE value  | Note
 ------------------------- | ----------------- | ------------
-first tertiary ignorable  | \[,,\]            | Start of the UCA table. This value will never change unless CEs are extended with higher level values.
-last tertiary ignorable   | \[,,\]            | This value will never change unless CEs are extended with higher level values.
-first secondary ignorable | \[,, 05\]         | Currently there are no secondary ignorables in the UCA table.
-last secondary ignorable  | \[,, 05\]         | Currently there are no secondary ignorables in the UCA table.
-first primary ignorable   | \[, 87, 05\]      | Mostly for non-spacing combining marks.
-last primary ignorable    | \[, E1 B1, 05\]   | Currently this value points to a non-existing code point, used to facilitate sorting of compatibility characters.
-first variable            | \[05 07, 05, 05\] | The lowest CE that is not primary-ignorable. (see below)
-last variable             | \[17 9B, 05, 05\] | End of variable section.
-first regular             | \[1A 20, 05, 05\] | This is the first regular CE (not primary ignorable and not variable). The majority of code points have regular CEs.
-last regular              | \[78 AA B2, 05, 05\] | Use `&[last regular]` instead of `&[top]`. (see below)
-first implicit            | \[E0 03 03, 05, 05\] | Section of implicitly generated collation elements. (see below)
-last implicit             | \[E3 DC 70 C0, 05, 05\] | End of implicit section. This is the CE of the last unassigned code point (U+10FFFD). (see below)
-first trailing            | \[E5, 05, 05\]    | Start of trailing section. (see below)
-last trailing             | \[FF FF, 05, 05\] | End of trailing collation elements section. This is the highest possible CE, and is the CE for U+FFFF. Not available for tailoring, see `[first trailing]`.
+first tertiary ignorable  | `[,,]`            | Start of the UCA table. This value will never change unless CEs are extended with higher level values.
+last tertiary ignorable   | `[,,]`            | This value will never change unless CEs are extended with higher level values.
+first secondary ignorable | `[,, 05]`         | Currently there are no secondary ignorables in the UCA table.
+last secondary ignorable  | `[,, 05]`         | Currently there are no secondary ignorables in the UCA table.
+first primary ignorable   | `[, 87, 05]`      | Mostly for non-spacing combining marks.
+last primary ignorable    | `[, E1 B1, 05]`   | Currently this value points to a non-existing code point, used to facilitate sorting of compatibility characters.
+first variable            | `[05 07, 05, 05]` | The lowest CE that is not primary-ignorable. (see below)
+last variable             | `[17 9B, 05, 05]` | End of variable section.
+first regular             | `[1A 20, 05, 05]` | This is the first regular CE (not primary ignorable and not variable). The majority of code points have regular CEs.
+last regular              | `[78 AA B2, 05, 05]` | Use `&[last regular]` instead of `&[top]`. (see below)
+first implicit            | `[E0 03 03, 05, 05]` | Section of implicitly generated collation elements. (see below)
+last implicit             | `[E3 DC 70 C0, 05, 05]` | End of implicit section. This is the CE of the last unassigned code point (U+10FFFD). (see below)
+first trailing            | `[E5, 05, 05]`    | Start of trailing section. (see below)
+last trailing             | `[FF FF, 05, 05]` | End of trailing collation elements section. This is the highest possible CE, and is the CE for U+FFFF. Not available for tailoring, see `[first trailing]`.
 
 "first variable": The current code point is TAB=U+0009. This is the start of the variable section. "Variable" characters will be ignored on primary/secondary/tertiary levels when the "shifted" option is on.
 
@@ -608,12 +608,12 @@ from the specified rules:
 
 Strings | Collation Elements | &nbsp;         | &nbsp;
 ------- | ------------------ | -------------- | ------
-"JA"    | \[005C.00.01\]     | \[0052.00.01\] |
-"MA"    | \[005C.00.03\]     | \[0052.00.01\] |
-"KA"    | \[005C.00.02\]     | \[0053.00.01\] | \[0052.00.01\]
-"KC"    | \[005C.00.02\]     | \[0053.00.01\] | \[0054.00.01\]
-"JC"    | \[005C.00.01\]     | \[0054.00.01\] |
-"MC"    | \[005C.00.03\]     | \[0054.00.01\] |
+"JA"    | `[005C.00.01]`     | `[0052.00.01]` |
+"MA"    | `[005C.00.03]`     | `[0052.00.01]` |
+"KA"    | `[005C.00.02]`     | `[0053.00.01]` | `[0052.00.01]`
+"KC"    | `[005C.00.02]`     | `[0053.00.01]` | `[0054.00.01]`
+"JC"    | `[005C.00.01]`     | `[0054.00.01]` |
+"MC"    | `[005C.00.03]`     | `[0054.00.01]` |
 
 ## Tailoring Issues
 
@@ -806,7 +806,7 @@ pre-processed so that there is no need to perform normalization on strings that
 are in [FCD](http://unicode.org/notes/tn5/#FCD) and do not contain any composite
 combining marks. Composite combining marks are: { U+0344, U+0F73, U+0F75, U+0F81
 }
-[\[\[:^lccc=0:\]&\[:toNFD=/../:\]\]](http://unicode.org/cldr/utility/list-unicodeset.jsp?a=%5B%3A%5Elccc%3D0%3A%5D%26%5B%3AtoNFD%3D%2F..%2F%3A%5D&abb=on&g=)
+[`[[:^lccc=0:]&[:toNFD=/../:]]`](http://unicode.org/cldr/utility/list-unicodeset.jsp?a=%5B%3A%5Elccc%3D0%3A%5D%26%5B%3AtoNFD%3D%2F..%2F%3A%5D&abb=on&g=)
 (These characters must be decomposed for discontiguous contractions to work
 properly. Use of these characters is discouraged by the Unicode Standard.). The
 vast majority of strings are in this form.
@@ -880,7 +880,7 @@ Rules              | Desired Order SHIFTED = ON | Current Order
 
 > :point_right: **Note**: With ICU 1.8.1, the
 > user is advised not to tailor the variable top to customize more than two
-> primary relations (for example, "& x < y < \[variable top\]). Starting in ICU
+> primary relations (for example, `"& x < y < [variable top]"`). Starting in ICU
 > 2.0, setVariableTop() allows the user to set the variable top programmatically
 > to a legal single character or a valid contracting sequence. In addition, the
 > string that variable top is set to should not be treated as either inclusive or

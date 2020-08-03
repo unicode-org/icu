@@ -109,7 +109,7 @@ UText chaper.
 
 ### Strings in Java
 
-In Java, ICU uses the standard String and StringBuffer classes, char\[\], etc.
+In Java, ICU uses the standard String and StringBuffer classes, `char[]`, etc.
 See the Java documentation for details.
 
 ### Strings in C/C++
@@ -117,7 +117,7 @@ See the Java documentation for details.
 Strings in C and C++ are, at the lowest level, arrays of some particular base
 type. In most cases, the base type is a char, which is an 8-bit byte in modern
 compilers. Some APIs use a "wide character" type wchar_t that is typically 8,
-16, or 32 bits wide and upwards compatible with char. C code passes char \* or
+16, or 32 bits wide and upwards compatible with char. C code passes `char *` or
 wchar_t pointers to the first element of an array. C++ enables you to create a
 class for encapsulating these kinds of character arrays in handy and safe
 objects.
@@ -218,19 +218,19 @@ For details, see
 use efficient ICU constructs to write a C/C++ string literal and use it to
 initialize Unicode strings.
 
-In some APIs, ICU uses char \* strings. This is either for file system paths or
+In some APIs, ICU uses `char *` strings. This is either for file system paths or
 for strings that contain invariant characters only (such as locale identifiers).
 These strings are in the platform-specific encoding of either ASCII or EBCDIC.
 All other codepage differences do not matter for invariant characters and are
 manipulated by the C stdlib functions like strcpy().
 
-In some APIs where identifiers are used, ICU uses char \* strings with invariant
+In some APIs where identifiers are used, ICU uses `char *` strings with invariant
 characters. Such strings do not require the full Unicode repertoire and are
-easier to handle in C and C++ with char \* string literals and standard C
+easier to handle in C and C++ with `char *` string literals and standard C
 library functions. Their useful character repertoire is actually smaller than
 the set of graphic ASCII characters; for details, see
 [utypes.h](http://icu-project.org/apiref/icu4c/utypes_8h.html) . Examples of
-char \* identifier uses are converter names, locale IDs, and resource bundle
+`char *` identifier uses are converter names, locale IDs, and resource bundle
 table keys.
 
 There is another, less efficient way to have human-readable Unicode string
@@ -249,13 +249,13 @@ sequence itself.
 
 The length of a string and all indexes and offsets related to the string are
 always counted in terms of UChar code units, not in terms of UChar32 code
-points. (This is the same as in common C library functions that use char \*
+points. (This is the same as in common C library functions that use `char *`
 strings with multi-byte encodings.)
 
 Often, a user thinks of a "character" as a complete unit in a language, like an
 'Ä', while it may be represented with multiple Unicode code points including a
 base character and combining marks. (See the Unicode standard for details.) This
-often requires users to index and pass strings (UnicodeString or UChar \*) with
+often requires users to index and pass strings (UnicodeString or `UChar *`) with
 multiple code units or code points. It cannot be done with single-integer
 character types. Indexing of such "characters" is done with the BreakIterator
 class (in C: ubrk_ functions).
@@ -275,15 +275,15 @@ their length is specified. In the latter case, it is possible to have one or
 more NUL characters inside the string.
 
 **Input string **arguments are typically passed with two parameters: The (const)
-UChar \* pointer and an int32_t length argument. If the length is -1 then the
+`UChar *` pointer and an int32_t length argument. If the length is -1 then the
 string must be NUL-terminated and the ICU function will call the u_strlen()
 method or treat it equivalently. If the input string contains embedded NUL
 characters, then the length must be specified.
 
-**Output string **arguments are typically passed with a destination UChar \*
+**Output string **arguments are typically passed with a destination `UChar *`
 pointer and an int32_t capacity argument and the function returns the length of
 the output as an int32_t. There is also almost always a UErrorCode argument.
-Essentially, a UChar\[\] array is passed in with its start and the number of
+Essentially, a `UChar[]` array is passed in with its start and the number of
 available UChars. The array is filled with the output and if space permits the
 output will be NUL-terminated. The length of the output string is returned. In
 all cases the length of the output string does not include the terminating NUL.
@@ -339,8 +339,8 @@ take capacity arguments for buffer overflow checking.*
 
 ## Using Unicode Strings in C
 
-In C, Unicode strings are similar to standard char \* strings. Unicode strings
-are arrays of UChar and most APIs take a UChar \* pointer to the first element
+In C, Unicode strings are similar to standard `char *` strings. Unicode strings
+are arrays of UChar and most APIs take a `UChar *` pointer to the first element
 and an input length and/or output capacity, see above. ICU has a number of
 functions that provide the Unicode equivalent of the stdlib functions such as
 strcpy(), strstr(), etc. Compared with their C standard counterparts, their
@@ -381,7 +381,7 @@ page](http://site.icu-project.org/download)).
 C Unicode String Literals
 
 There is a pair of macros that together enable users to instantiate a Unicode
-string in C — a UChar \[\] array — from a C string literal:
+string in C — a `UChar []` array — from a C string literal:
 
     /*
     * In C, we need two macros: one to declare the UChar[] array, and
@@ -394,7 +394,7 @@ string in C — a UChar \[\] array — from a C string literal:
     /* populate it with the characters */
     U_STRING_INIT(invString, "such characters are safe 123 %-.", 32);
 
-With invariant characters, it is also possible to efficiently convert char \*
+With invariant characters, it is also possible to efficiently convert `char *`
 strings to and from UChar \ strings:
 
     static const char *cs1="such characters are safe 123 %-.";
@@ -431,15 +431,15 @@ names of most of these functions contain "32" to indicate the use of a UChar32.
 Code point and code unit iteration is provided by the
 [CharacterIterator](characteriterator.md) abstract class and its subclasses.
 There are concrete iterator implementations for UnicodeString objects and plain
-UChar \[\] arrays.
+`UChar []` arrays.
 
 Most UnicodeString constructors and functions do not have a UErrorCode
 parameter. Instead, if the construction of a UnicodeString fails, for example
-when it is constructed from a NULL UChar \* pointer, then the UnicodeString
+when it is constructed from a NULL `UChar *` pointer, then the UnicodeString
 object becomes "bogus". This can be tested with the isBogus() function. A
 UnicodeString can be put into the "bogus" state explicitly with the setToBogus()
 function. This is different from an empty string (although a "bogus" string also
-returns TRUE from isEmpty()) and may be used equivalently to NULL in UChar \* C
+returns TRUE from isEmpty()) and may be used equivalently to NULL in `UChar *` C
 APIs (or null references in Java, or NULL values in SQL). A string remains
 "bogus" until a non-bogus string value is assigned to it. For complete details
 of the behavior of "bogus" strings see the description of the setToBogus()
@@ -463,47 +463,47 @@ macros, the other one implies a strlen().
 
 It is possible to efficiently convert between invariant-character strings and
 UnicodeStrings by using constructor, setTo() or extract() overloads that take
-codepage data (const char \*) and specifying an empty string ("") as the
+codepage data (`const char *`) and specifying an empty string ("") as the
 codepage name.
 
 ## Using C++ Strings in C APIs
 
 The internal buffer of UnicodeString objects is available for direct handling in
-C (or C-style) APIs that take UChar \* arguments. It is possible but usually not
+C (or C-style) APIs that take `UChar *` arguments. It is possible but usually not
 necessary to copy the string contents with one of the extract functions. The
 following describes several direct buffer access methods.
 
-The UnicodeString function getBuffer() const returns a readonly const UChar \*.
+The UnicodeString function getBuffer() const returns a readonly const `UChar *`.
 The length of the string is indicated by UnicodeString's length() function.
 Generally, UnicodeString does not NUL-terminate the contents of its internal
 buffer. However, it is possible to check for a NUL character if the length of
 the string is less than the capacity of the buffer. The following code is an
-example of how to check the capacity of the buffer: (s.length()<s.getCapacity()
-&& buffer\[s.length()\]==0)
+example of how to check the capacity of the buffer:
+`(s.length()<s.getCapacity() && buffer[s.length()]==0)`
 
-An easier way to NUL-terminate the buffer and get a const UChar \* pointer to it
+An easier way to NUL-terminate the buffer and get a `const UChar *` pointer to it
 is the getTerminatedBuffer() function. Unlike getBuffer() const,
 getTerminatedBuffer() is not a const function because it may have to (reallocate
 and) modify the buffer to append a terminating NUL. Therefore, use getBuffer()
 const if you do not need a NUL-terminated buffer.
 
 There is also a pair of functions that allow controlled write access to the
-buffer of a UnicodeString: UChar \*getBuffer(int32_t minCapacity) and
-releaseBuffer(int32_t newLength). UChar \*getBuffer(int32_t minCapacity)
+buffer of a UnicodeString: `UChar *getBuffer(int32_t minCapacity)` and
+`releaseBuffer(int32_t newLength)`. `UChar *getBuffer(int32_t minCapacity)`
 provides a writeable buffer of at least the requested capacity and returns a
 pointer to it. The actual capacity of the buffer after the
-getBuffer(minCapacity) call may be larger than the requested capacity and can be
-determined with getCapacity().
+`getBuffer(minCapacity)` call may be larger than the requested capacity and can be
+determined with `getCapacity()`.
 
 Once the buffer contents are modified, the buffer must be released with the
-releaseBuffer(int32_t newLength) function, which sets the new length of the
+`releaseBuffer(int32_t newLength)` function, which sets the new length of the
 UnicodeString (newLength=-1 can be passed to determine the length of
-NUL-terminated contents like u_strlen()).
+NUL-terminated contents like `u_strlen()`).
 
-Between the getBuffer(minCapacity) and releaseBuffer(newLength) function calls,
+Between the `getBuffer(minCapacity)` and `releaseBuffer(newLength)` function calls,
 the contents of the UnicodeString is unknown and the object behaves like it
-contains an empty string. A nested getBuffer(minCapacity), getBuffer() const or
-getTerminatedBuffer() will fail (return NULL) and modifications of the string
+contains an empty string. A nested `getBuffer(minCapacity)`, `getBuffer() const` or
+`getTerminatedBuffer()` will fail (return NULL) and modifications of the string
 via UnicodeString member functions will have no effect. Copying a string with an
 "open buffer" yields an empty copy. The move constructor, move assignment
 operator and Return Value Optimization (RVO) transfer the state, including the
@@ -515,15 +515,15 @@ See the UnicodeString API documentation for more information.
 
 There are efficient ways to wrap C-style strings in C++ UnicodeString objects
 without copying the string contents. In order to use C strings in C++ APIs, the
-UChar \* pointer and length need to be wrapped into a UnicodeString. This can be
+`UChar *` pointer and length need to be wrapped into a UnicodeString. This can be
 done efficiently in two ways: With a readonly alias and a writable alias. The
-UnicodeString object that is constructed actually uses the UChar \* pointer as
+UnicodeString object that is constructed actually uses the `UChar *` pointer as
 its internal buffer pointer instead of allocating a new buffer and copying the
 string contents.
 
-If the original string is a readonly const UChar \*, then the UnicodeString must
+If the original string is a readonly `const UChar *`, then the UnicodeString must
 be constructed with a read only alias. If the original string is a writable
-(non-const) UChar \* and is to be modified (e.g., if the UChar \* buffer is an
+(non-const) `UChar *` and is to be modified (e.g., if the `UChar *` buffer is an
 output buffer) then the UnicodeString should be constructed with a writeable
 alias. For more details see the section "Maximizing Performance with the
 UnicodeString Storage Model" and search the unistr.h header file for "alias".
@@ -581,8 +581,8 @@ memory consumption:
     aliased buffer for write operations. A new buffer is allocated and the
     contents are copied only when the capacity of the buffer is not sufficient.
     An efficient way to get the string contents into the original buffer is to
-    use the extract(..., UChar \*dst, ...) function. The extract(..., UChar
-    \*dst, ...) function copies the string contents only if the dst buffer is
+    use the `extract(..., UChar *dst, ...)` function.
+    The `extract(..., UChar *dst, ...)` function copies the string contents only if the dst buffer is
     different from the buffer of the string object itself. If a string grows and
     shrinks during a sequence of operations, then it will not use the same
     buffer, even if the string would fit. When a UnicodeString with a writeable
@@ -660,7 +660,7 @@ convenience functions.
     sequence of 32-bit code units (UTF-32 Character Encoding *Form*). The
     correct converter must be used: UTF-32BE or UTF-32LE according to the
     platform endianness (U_IS_BIG_ENDIAN). Treating the string like a byte
-    stream also makes a difference in data types (char \*), lengths and indexes
+    stream also makes a difference in data types (`char *`), lengths and indexes
     (counting bytes), and NUL-termination handling (input NUL-termination not
     possible, output writes only a NUL byte, not a NUL 32-bit code unit). For
     the difference between internal encoding forms and external encoding schemes

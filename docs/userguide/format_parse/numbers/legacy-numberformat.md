@@ -39,7 +39,7 @@ locale "th" uses the western digits 0-9. To create a number format that uses the
 native Thai digits instead, first create a locale with "@numbers=thai" defined.
 See [the description on Locales](../../locale/index.md) for details.
 
-:point_right: **Note**: If you are formatting multiple numbers, save processing time by constructing the formatter once and then using it several times.
+> :point_right: **Note**: If you are formatting multiple numbers, save processing time by constructing the formatter once and then using it several times.
 
 #### Instantiating a NumberFormat
 

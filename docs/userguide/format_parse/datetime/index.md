@@ -114,7 +114,7 @@ You can set the time zone on the format. If you want more control over the
 format or parsing, cast the DateFormat you get from the factory methods to a
 SimpleDateFormat. This works for the majority of countries.
 
-:point_right: **Note**: *Remember to check getDynamicClassID() before carrying out the cast.*
+> :point_right: **Note**: *Remember to check getDynamicClassID() before carrying out the cast.*
 
 ### Working with Positions
 
@@ -226,14 +226,14 @@ Note that the examples may not reflect current CLDR data.
 | ' | escape for text | ' | (nothing) |
 | ' ' | two single quotes produce one | ' ' | ' |
 
-:point_right: **Note**: *Any characters in the pattern that are not in the ranges of
-\['a'..'z'\] and \['A'..'Z'\] will be treated as quoted text. For instance,
+> :point_right: **Note**: *Any characters in the pattern that are not in the ranges of
+['a'..'z'] and ['A'..'Z'] will be treated as quoted text. For instance,
 characters like ':', '.', ' ', '#' and '@' will appear in the resulting time
 text even they are not enclosed within single quotes.The single quote is used to
 'escape' letters. Two single quotes in a row, whether inside or outside a quoted
 sequence, represent a 'real' single quote.*
 
-:point_right: **Note**: *A pattern containing any invalid pattern letter results in a failing UErrorCode
+> :point_right: **Note**: *A pattern containing any invalid pattern letter results in a failing UErrorCode
 result during formatting or parsing.*
 
 | Format Pattern | Result |
@@ -263,7 +263,7 @@ until April 2, 2006, but it changes to *metazone* “America_Central” after th
 date. So the display name used for “America/Indiana/Tell_City” before the date
 (e.g. “Eastern Time”) differs from the one after the date (e.g. “Central Time).
 
-:point_right: **Note**: *Prior to ICU 3.8, a localized time zone name (except GMT format) and a time
+> :point_right: **Note**: *Prior to ICU 3.8, a localized time zone name (except GMT format) and a time
 zone ID was in 1-to-1 relationship always. Therefore, a time zone name produced
 by DateFormat can be parsed back to the original time zone. This assumption no
 longer applies to ICU 3.8 and later releases for all time zone format types. If
