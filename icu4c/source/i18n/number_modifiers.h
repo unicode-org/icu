@@ -51,17 +51,19 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
 };
 
 /**
- * The second primary implementation of {@link Modifier}, this one consuming a {@link SimpleFormatter}
- * pattern.
+ * An implementation of {@link Modifier} which consumes a
+ * {@link SimpleFormatter} pattern.
+ *
  */
 class U_I18N_API SimpleModifier : public Modifier, public UMemory {
   public:
+    // Does not save the SimpleFormatter, only keeps the pattern in it!
     SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong);
 
     SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong,
                    const Modifier::Parameters parameters);
 
-    // Default constructor for LongNameHandler.h
+    // Default constructor for SimpleModifier ?
     SimpleModifier();
 
     int32_t apply(FormattedStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
@@ -120,6 +122,7 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
                         Field field, UErrorCode& status);
 
   private:
+    // Pattern in the SimpleFormatter
     UnicodeString fCompiledPattern;
     Field fField;
     bool fStrong = false;

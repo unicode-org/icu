@@ -210,6 +210,8 @@ SimpleModifier::formatAsPrefixSuffix(FormattedStringBuilder &result, int32_t sta
         return result.splice(startIndex, endIndex, fCompiledPattern, 2, 2 + fPrefixLength, fField, status);
     } else {
         if (fPrefixLength > 0) {
+            // [FIXME] Why 2? - comes from constructor already, with:
+            // U_ASSERT(2 + fPrefixLength == fCompiledPattern.length());
             result.insert(startIndex, fCompiledPattern, 2, 2 + fPrefixLength, fField, status);
         }
         if (fSuffixLength > 0) {
