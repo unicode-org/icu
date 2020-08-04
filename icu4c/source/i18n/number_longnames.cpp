@@ -34,6 +34,7 @@ constexpr int32_t DNAM_INDEX = StandardPlural::Form::COUNT;
  * @copydoc DNAM_INDEX
  */
 constexpr int32_t PER_INDEX = StandardPlural::Form::COUNT + 1;
+// Number of keys in the array populated by PluralTableSink.
 constexpr int32_t ARRAY_LENGTH = StandardPlural::Form::COUNT + 2;
 
 static int32_t getIndex(const char* pluralKeyword, UErrorCode& status) {
@@ -48,6 +49,11 @@ static int32_t getIndex(const char* pluralKeyword, UErrorCode& status) {
     }
 }
 
+// Selects a string out of the `strings` array which corresponds to the
+// specified plural form, with fallback to the OTHER form.
+//
+// The `strings` array must have ARRAY_LENGTH items: one corresponding to each
+// of the plural forms, plus a display name ("dnam") and a "per" form.
 static UnicodeString getWithPlural(
         const UnicodeString* strings,
         StandardPlural::Form plural,
@@ -97,12 +103,18 @@ class PluralTableSink : public ResourceSink {
 
 // NOTE: outArray MUST have room for all StandardPlural values.  No bounds checking is performed.
 
-// Populates outArray with `locale`-specific values for `unit` through use of
-// PluralTableSink, reading from resources *unitsNarrow* and *unitsShort* (for
-// width UNUM_UNIT_WIDTH_NARROW), or just *unitsShort* (for width
-// UNUM_UNIT_WIDTH_SHORT). For other widths, it would read just "units".
-//
-// outArray must be of fixed length ARRAY_LENGTH.
+/**
+ * Populates outArray with `locale`-specific values for `unit` through use of
+ * PluralTableSink. Only the set of basic units are supported!
+ *
+ * Reading from resources *unitsNarrow* and *unitsShort* (for width
+ * UNUM_UNIT_WIDTH_NARROW), or just *unitsShort* (for width
+ * UNUM_UNIT_WIDTH_SHORT). For other widths, it reads just "units".
+ *
+ * @param unit must have a type and subtype (i.e. it must be a unit listed in
+ *     gTypes and gSubTypes in measunit.cpp).
+ * @param outArray must be of fixed length ARRAY_LENGTH.
+ */
 void getMeasureData(const Locale &locale, const MeasureUnit &unit, const UNumberUnitWidth &width,
                     UnicodeString *outArray, UErrorCode &status) {
     PluralTableSink sink(outArray);
@@ -200,24 +212,39 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
 
 } // namespace
 
-// TODO(units,hugovdm): deal properly with "perUnit" parameter here:
 void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
                                      const MeasureUnit &perUnit, const UNumberUnitWidth &width,
                                      const PluralRules *rules, const MicroPropsGenerator *parent,
                                      LongNameHandler *fillIn, UErrorCode &status) {
-    if (fillIn == nullptr) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-        return;
-    }
+    // TODO(units): check if it's possible to create (and pass in) a COMPOUND
+    // `unitRef`, with `getType()` returning a zero-length string, which does
+    // actually have a "basic unit" representation.
+    U_ASSERT(fillIn != nullptr);
     if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
-        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
-        status = U_UNSUPPORTED_ERROR;
-        return;
+        // TODO(ICU-20941): also deal with compound units (not just mixed units).
+        if (unitRef.getComplexity(status) == UMEASURE_UNIT_MIXED) {
+            // TODO(review): can we simply U_ASSERT this? Passing a `perUnit`
+            // while also passing a not-built-in `unitRef` is an error, and is
+            // documented as such.
+            if (uprv_strcmp(perUnit.getType(), "none") != 0) {
+                if (U_SUCCESS(status)) {
+                    status = U_INTERNAL_PROGRAM_ERROR;
+                }
+                return;
+            }
+            forMixedUnit(loc, unitRef, width, rules, parent, fillIn, status);
+            return;
+        } else {
+            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
+            status = U_UNSUPPORTED_ERROR;
+            return;
+        }
     }
 
     MeasureUnit unit = unitRef;
     if (uprv_strcmp(perUnit.getType(), "none") != 0) {
-        // Compound unit: first try to simplify (e.g., meters per second is its own unit).
+        // Compound unit: first try to simplify (e.g. "meter per second" is a
+        // built-in unit).
         bool isResolved = false;
         MeasureUnit resolved = MeasureUnit::resolveUnitPerUnit(unit, perUnit, &isResolved);
         if (isResolved) {
@@ -240,7 +267,6 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
                                      status);
 }
 
-// TODO(units,hugovdm): deal properly with "perUnit" parameter here:
 void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit,
                                       const MeasureUnit &perUnit, const UNumberUnitWidth &width,
                                       const PluralRules *rules, const MicroPropsGenerator *parent,
@@ -293,6 +319,35 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
     fillIn->parent = parent;
     fillIn->multiSimpleFormatsToModifiers(primaryData, perUnitFormat,
                                           {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
+}
+
+void LongNameHandler::forMixedUnit(const Locale &loc, const MeasureUnit &unit,
+                                   const UNumberUnitWidth &width, const PluralRules *rules,
+                                   const MicroPropsGenerator *parent, LongNameHandler *fillIn,
+                                   UErrorCode &status) {
+    if (fillIn == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+
+    // TODO/FIXME: obscure "AddressSanitizer: heap-buffer-overflow" if I swap
+    // the order of these two lines:
+    LocalArray<MeasureUnit> individualUnits = unit.splitToSingleUnits(fillIn->mixedUnitCount, status);
+    fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->mixedUnitCount * ARRAY_LENGTH]);
+    for (int32_t i = 0; i < fillIn->mixedUnitCount; i++) {
+        // Grab data for each of the components.
+        UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
+        getMeasureData(loc, individualUnits[i], width, unitData, status);
+    }
+
+    fillIn->fListFormatter.adoptInsteadAndCheckErrorCode(ListFormatter::createInstance(loc, status),
+                                                         status);
+    fillIn->rules = rules;
+    fillIn->parent = parent;
+
+    // We need a localised NumberFormatter for the integers of the bigger units
+    // (providing Arabic numerals, for example).
+    fillIn->fNumberFormatter = NumberFormatter::withLocale(loc);
 }
 
 UnicodeString LongNameHandler::getUnitDisplayName(
@@ -378,12 +433,93 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     if (parent != NULL) {
         parent->processQuantity(quantity, micros, status);
     }
+    if (mixedUnitCount > 1) {
+        micros.modOuter = getMixedUnitModifier(quantity, micros, status);
+        return;
+    }
     StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
     micros.modOuter = &fModifiers[pluralForm];
 }
 
 const Modifier* LongNameHandler::getModifier(Signum /*signum*/, StandardPlural::Form plural) const {
     return &fModifiers[plural];
+}
+
+const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity, MicroProps &micros,
+                                                      UErrorCode &status) const {
+    // TODO(icu-units#21): mixed units without usage() is not yet supported.
+    // That should be the only reason why this happens, so delete this whole if
+    // once fixed:
+    if (micros.mixedMeasuresCount == 0) {
+        status = U_UNSUPPORTED_ERROR;
+        return &micros.helpers.emptyWeakModifier;
+    }
+    U_ASSERT(micros.mixedMeasuresCount > 0);
+    // mixedMeasures does not contain the last value:
+    U_ASSERT(mixedUnitCount == micros.mixedMeasuresCount + 1);
+    U_ASSERT(fListFormatter.isValid());
+
+    // Algorithm:
+    //
+    // For the mixed-units measurement of: "3 yard, 1 foot, 2.6 inch", we should
+    // find "3 yard" and "1 foot" in micros.mixedMeasures.
+    //
+    // Obtain long-names with plural forms corresponding to measure values:
+    //   * {0} yards, {0} foot, {0} inches
+    //
+    // Format the integer values appropriately and modify with the format
+    // strings:
+    //   - 3 yards, 1 foot
+    //
+    // Use ListFormatter to combine, with one placeholder:
+    //   - 3 yards, 1 foot and {0} inches
+    //
+    // Return a SimpleModifier for this pattern, letting the rest of the
+    // pipeline take care of the remaining inches.
+
+    LocalArray<UnicodeString> outputMeasuresList(new UnicodeString[mixedUnitCount], status);
+    if (U_FAILURE(status)) {
+        return &micros.helpers.emptyWeakModifier;
+    }
+
+    for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
+        DecimalQuantity fdec;
+        fdec.setToLong(micros.mixedMeasures[i].getNumber().getInt64());
+        StandardPlural::Form pluralForm = utils::getStandardPlural(rules, fdec);
+
+        UnicodeString simpleFormat =
+            getWithPlural(&fMixedUnitData[i * ARRAY_LENGTH], pluralForm, status);
+        SimpleFormatter compiledFormatter(simpleFormat, 0, 1, status);
+
+        UnicodeString num;
+        auto appendable = UnicodeStringAppendable(num);
+        fNumberFormatter.formatDecimalQuantity(fdec, status).appendTo(appendable, status);
+        compiledFormatter.format(num, outputMeasuresList[i], status);
+    }
+
+    UnicodeString *finalSimpleFormats = &fMixedUnitData[(mixedUnitCount - 1) * ARRAY_LENGTH];
+    StandardPlural::Form finalPlural = utils::getPluralSafe(micros.rounder, rules, quantity, status);
+    UnicodeString finalSimpleFormat = getWithPlural(finalSimpleFormats, finalPlural, status);
+    if (U_FAILURE(status)) {
+        return &micros.helpers.emptyWeakModifier;
+    }
+    SimpleFormatter finalFormatter(finalSimpleFormat, 0, 1, status);
+    if (U_FAILURE(status)) {
+        return &micros.helpers.emptyWeakModifier;
+    }
+    finalFormatter.format(UnicodeString(u"{0}"), outputMeasuresList[mixedUnitCount - 1], status);
+
+    // Combine list into a "premixed" Modifier
+    UnicodeString premixedFormatPattern;
+    fListFormatter->format(outputMeasuresList.getAlias(), mixedUnitCount, premixedFormatPattern, status);
+    SimpleFormatter premixedCompiled(premixedFormatPattern, 0, 1, status);
+    if (U_FAILURE(status)) {
+        return &micros.helpers.emptyWeakModifier;
+    }
+    micros.helpers.mixedUnitModifier =
+        SimpleModifier(premixedCompiled, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, false,
+                       {this, SIGNUM_POS_ZERO, finalPlural});
+    return &micros.helpers.mixedUnitModifier;
 }
 
 LongNameMultiplexer *
@@ -397,14 +533,11 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
     U_ASSERT(units.length() > 0);
     result->fMeasureUnits.adoptInstead(new MeasureUnit[units.length()]);
     for (int32_t i = 0, length = units.length(); i < length; i++) {
+        const MeasureUnit& unit = *units[i];
+        result->fMeasureUnits[i] = unit;
         // Create empty new LongNameHandler:
-        LongNameHandler *lnh =
-            result->fLongNameHandlers.emplaceBackAndCheckErrorCode(status);
-        result->fMeasureUnits[i] = *units[i];
-        // Fill in LongNameHandler:
-        LongNameHandler::forMeasureUnit(loc, *units[i],
-                                        MeasureUnit(), // TODO(units): deal with COMPOUND and MIXED units
-                                        width, rules, NULL, lnh, status);
+        LongNameHandler *lnh = result->fLongNameHandlers.emplaceBackAndCheckErrorCode(status);
+        LongNameHandler::forMeasureUnit(loc, unit, MeasureUnit(), width, rules, NULL, lnh, status);
         if (U_FAILURE(status)) {
             return nullptr;
         }
