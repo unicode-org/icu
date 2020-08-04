@@ -193,6 +193,8 @@ class U_I18N_API MeasureFormat : public Format {
      * @return appendTo reference
      *
      * @stable ICU 53
+     *
+     * TODO(units): add support for mixed units.
      */
     UnicodeString &formatMeasures(
             const Measure *measures,
