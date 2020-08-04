@@ -245,7 +245,7 @@ valid for the C++ APIs.
 
 > :point_right: **Note**: All the data accessing examples in the following
 > sections use ICU's 
-> [root](http://source.icu-project.org/repos/icu/icu/trunk/source/data/locales/root.txt)
+> [root](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/locales/root.txt)
 > resource bundle.
 
 ```c

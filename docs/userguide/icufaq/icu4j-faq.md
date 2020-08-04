@@ -67,7 +67,7 @@ with the pattern in a new version.
 #### How can I see all API changes between two different ICU versions?
 
 For every ICU4J release, we publish
-[APIChangeReport.html](https://github.com/unicode-org/icu/blob/master/icu4j/APIChangeReport.html)
+[APIChangeReport.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4j/APIChangeReport.html)
 which captures all API changes since previous reference release.
 However, someone may want to see the changes between the
 current release and much older ICU4J version. For example, you're currently
@@ -78,10 +78,10 @@ generate a change report page by following steps.
     archive](http://site.icu-project.org/download/64#TOC-ICU4J-Download)
     from the ICU 64 download page and extract files to your local system.
 2.  Set up ICU4J build environment as explained in
-    [readme.html](https://github.com/unicode-org/icu/blob/release-64-2/icu4j/readme.html)
+    [readme.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4j/readme.html)
     included in the root directory of the ICU4J source package archive.
 3.  Edit
-    [build.properties](https://github.com/unicode-org/icu/blob/release-64-2/icu4j/build.properties)
+    [build.properties](https://github.com/unicode-org/icu/blob/master/icu4j/build.properties)
     in the root directory and change the property value api.report.prev.version
     from 63 to 60.
 4.  Invoke ant target "apireport".
@@ -150,7 +150,7 @@ quick updates to users. ICU project team usually release the latest time zone
 rule data patch as soon as the new tz database release is published (usually
 within 1 to 3 days). Having our own rule data also allows the ICU4J library to
 provide some advanced TimeZone features (see [com.ibm.icu.util.BasicTimeZone API
-documentation](http://icu-project.org/apiref/icu4j/com/ibm/icu/util/BasicTimeZone.html)).
+documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/util/BasicTimeZone.html)).
 
 #### How can I get the latest time zone rule data patch?
 
@@ -164,7 +164,7 @@ If you do not use the advanced TimeZone features, then you can configure ICU4J
 to use JRE's time zone support by editing ICUConfig.properties (included in
 ICU4J library jar file) or simply setting a system property. See
 [com.ibm.icu.util.TimeZone API
-documentation](http://icu-project.org/apiref/icu4j/com/ibm/icu/util/TimeZone.html)
+documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/util/TimeZone.html)
 for the details.
 
 ### StringSearch

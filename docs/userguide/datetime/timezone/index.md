@@ -147,8 +147,7 @@ For ICU configurations that load data from a .dat package file, replace the time
 zone resources in that file.
 
 1. Download the new .res files from
-   `http://source.icu-project.org/repos/icu/data/trunk/tzdata/icunew/`
-   `<IANA tz version>/44/<platform directory>`.
+   `https://github.com/unicode-org/icu-data/tree/master/tzdata/icunew/<IANA tz version>/44/<platform directory>`.
    * `<IANA tz version>` is a combination of year and letter, such as "2019c".
    * *"44"* is the directory for updates to ICU version 4.4 and newer.
    * `<platform directory>` is "le" for little endian processors, including
@@ -214,8 +213,7 @@ the ICU data path.
 1. Set up the environment necessary to rebuild your specific configuration of
    ICU.
 2. Download the .txt file sources for the updated resources from
-   `http://source.icu-project.org/repos/icu/data/trunk/tzdata/icunew/<IANA tz
-   version>/44`
+   `https://github.com/unicode-org/icu-data/tree/master/tzdata/icunew/<IANA tz version>/44`
 3. Copy the downloaded .txt files into the ICU sources for your installation,
    in the subdirectory source/data/misc/
 4. Rebuid ICU.

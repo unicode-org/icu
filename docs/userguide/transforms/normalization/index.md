@@ -23,9 +23,9 @@ additional operations. Some of them are described in [Unicode Technical Note #5
 ## New API
 
 ICU 4.4 adds the Normalizer2 API (in
-[Java](http://icu-project.org/apiref/icu4j/com/ibm/icu/text/Normalizer2.html),
-[C++](http://icu-project.org/apiref/icu4c/classNormalizer2.html) and
-[C](http://icu-project.org/apiref/icu4c/unorm2_8h.html)), replacing almost all
+[Java](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/Normalizer2.html),
+[C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classNormalizer2.html) and
+[C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unorm2_8h.html)), replacing almost all
 of the old Normalizer API. There is a [design
 doc](http://site.icu-project.org/design/normalization/custom) with many details.
 All of the replaced old API is now implemented as a thin wrapper around the new

@@ -9,7 +9,7 @@ Since ICU 60, the recommended way to format numbers is NumberFormatter; see [ind
 
 ## NumberFormat
 
-[NumberFormat](http://icu-project.org/apiref/icu4c/classNumberFormat.html) is
+[NumberFormat](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classNumberFormat.html) is
 the abstract base class for all number formats. It provides an interface for
 formatting and parsing numbers. It also provides methods to determine which
 locales have number formats, and what their names are. NumberFormat helps format
@@ -170,13 +170,13 @@ hinder proper localization.
 
 For a complete description of DecimalFormat, including the pattern syntax,
 formatting and parsing behavior, and available API, see the [ICU4J DecimalFormat
-API](http://icu-project.org/apiref/icu4j/com/ibm/icu/text/DecimalFormat.html) or
+API](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/DecimalFormat.html) or
 [ICU4C DecimalFormat
-API](http://icu-project.org/apiref/icu4c/classDecimalFormat.html) documentation.
+API](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classDecimalFormat.html) documentation.
 
 ## DecimalFormatSymbols
 
-[DecimalFormatSymbols](http://icu-project.org/apiref/icu4c/classDecimalFormatSymbols.html)
+[DecimalFormatSymbols](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classDecimalFormatSymbols.html)
 specifies the exact characters a DecimalFormat uses for various parts of a
 number (such as the characters to use for the digits, the character to use as
 the decimal point, or the character to use as the minus sign).

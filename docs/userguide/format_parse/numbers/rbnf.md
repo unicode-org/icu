@@ -5,7 +5,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 # RuleBasedNumberFormat
 
-[RuleBasedNumberFormat](http://icu-project.org/apiref/icu4c/classRuleBasedNumberFormat.html)
+[RuleBasedNumberFormat](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html)
 can format and parse numbers in spelled-out format, e.g. "one hundred and
 thirty-four". For example:
 
@@ -117,4 +117,4 @@ inherently recursive.
 A full explanation of this example can be found in the [RuleBasedNumberFormat
 examples](rbnf-examples.md) . A complete description of the rule syntax can be
 found in the [RuleBasedNumberFormat API
-Documentation](http://icu-project.org/apiref/icu4c/classRuleBasedNumberFormat.html).
+Documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html).

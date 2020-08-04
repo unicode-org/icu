@@ -86,11 +86,11 @@ Since ICU 58, ICU is covered by the
 the previous ICU license.
 
 ICU 1.8.1–ICU 57 and ICU4J 1.3.1–ICU4J 57 are covered by the [ICU
-license](http://source.icu-project.org/repos/icu/icu/tags/release-57-1/LICENSE),
+license](https://github.com/unicode-org/icu/blob/release-57-1/icu4c/LICENSE),
 a simple, permissive non-copyleft free software license, compatible with the GNU
 GPL. The ICU license is identical to the version of the X license that was
 formerly available at <http://www.x.org/Downloads_terms.html> . (This site no
-longer exists, but can still be retrieved through internet archive services)
+longer exists, but can still be retrieved through internet archive services.)
 
 #### Can I use ICU from other languages besides C/C++ and Java?
 

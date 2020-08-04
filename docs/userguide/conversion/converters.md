@@ -102,7 +102,7 @@ character set names. Many of these names are aliases to converters within ICU.
 In order to help identify which names are recognized by certain platforms, ICU
 provides several converter alias functions. The complete description of these
 functions can be found in the [ICU API
-Reference](http://icu-project.org/apiref/icu4c/ucnv_8h.html) .
+Reference](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
 | Function Names | Short Description |
 | -------------- | ----------------- |
@@ -736,7 +736,7 @@ The flush parameter on each conversion call should be set to FALSE, until the
 conversion call is called for the last time for the buffer. This is because the
 conversion is stateful. On the last conversion call, the flush parameter should
 be set to TRUE. More details are mentioned in the API reference in
-[ucnv.h](http://icu-project.org/apiref/icu4c/ucnv_8h.html) .
+[ucnv.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
 ### 4. Pre-flighting
 
@@ -782,5 +782,5 @@ target[targetsize] = 0; /* NULL termination */
 ## Conversion Examples
 
 See the [ICU Conversion
-Examples](http://source.icu-project.org/repos/icu/icu/trunk/source/samples/ucnv/convsamp.cpp)
+Examples](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ucnv/convsamp.cpp)
 for more information.

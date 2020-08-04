@@ -1094,7 +1094,7 @@ First, if you can stack-allocate an object (for example, a `UnicodeString` or
 `UnicodeSet`), do so. It is the easiest way to manage object lifetime.
 
 Inside functions, avoid raw pointers to owned objects. Instead, use
-[LocalPointer](http://icu-project.org/apiref/icu4c/localpointer_8h.html)`<UnicodeString>`
+[LocalPointer](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/localpointer_8h.html)`<UnicodeString>`
 or `LocalUResouceBundlePointer` etc., which is ICU's "smart pointer"
 implementation. This is the "[Resource Acquisition Is Initialization(RAII)](http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization)"
 idiom. The "smart pointer" auto-deletes the object when it goes out of scope,
@@ -1232,7 +1232,7 @@ be released by the user/owner by calling the matching `umod_close()`.
 #### C "Service Object" Types and LocalPointer Equivalents
 
 For every C "service object" type (equivalent to C++ class), we want to have a
-[LocalPointer](http://icu-project.org/apiref/icu4c/localpointer_8h.html)
+[LocalPointer](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/localpointer_8h.html)
 equivalent, so that C++ code calling the C API can use the specific "smart
 pointer" to implement the "[Resource Acquisition Is Initialization
 (RAII)](http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization)"

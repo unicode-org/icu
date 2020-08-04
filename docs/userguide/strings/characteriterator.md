@@ -49,23 +49,23 @@ returns a code point.
 ## Base class inherited by CharacterIterator
 
 The class,
-[ForwardCharacterIterator,](http://icu-project.org/apiref/icu4c/classForwardCharacterIterator.html)
+[ForwardCharacterIterator,](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classForwardCharacterIterator.html)
 is a superclass of the CharacterIterator class. This superclass provides methods
 for forward iteration only for both UTF16 and UTF32 access, and is and based on
 a efficient forward iteration mechanism. In some situations, where you need to
 iterate over text that does not allow random-access, the
 ForwardCharacterIterator superclass is the most efficient method. For example,
 iterate a UChar string using a character converter with the [ucnv_getNextUChar()
-function.](http://icu-project.org/apiref/icu4c/ucnv_8h.html)
+function.](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html)
 
 ## Subclasses of CharacterIterator provided by ICU
 
 ICU provides the following concrete subclasses of the CharacterIteratorclass:
 
-1.  [UCharCharacterIterator](http://icu-project.org/apiref/icu4c/classUCharCharacterIterator.html)
+1.  [UCharCharacterIterator](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classUCharCharacterIterator.html)
     subclass iterates over a `UChar[]` array.
 
-2.  [StringCharacterIterator](http://icu-project.org/apiref/icu4c/classStringCharacterIterator.html)
+2.  [StringCharacterIterator](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classStringCharacterIterator.html)
     subclass extends from `UCharCharacterIterator` and iterates over the contents
     of a `UnicodeString`.
 
@@ -165,5 +165,5 @@ text. The text and the iteration range are set in the implementing subclasses.
 ## Additional Sample Code
 
 C/C++: See
-[icu4c/source/samples/citer/](http://source.icu-project.org/repos/icu/trunk/icu4c/source/samples/citer/)
+[icu4c/source/samples/citer/](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/citer/)
 in the ICU source distribution for code samples.

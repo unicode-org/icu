@@ -26,9 +26,9 @@ variable-element placeholders (called "arguments" in the API docs) enclosed in
 {curly braces}. The argument syntax can include formatting details, otherwise a
 default format is used. For details about the pattern syntax and the formatting
 behavior see the MessageFormat API docs
-([Java](http://icu-project.org/apiref/icu4j/com/ibm/icu/text/MessageFormat.html),
-[C++](http://icu-project.org/apiref/icu4c/classMessageFormat.html#_details),
-[C](http://icu-project.org/apiref/icu4c/umsg_8h.html#_details)).
+([Java](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/MessageFormat.html),
+[C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html#_details),
+[C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/umsg_8h.html#_details)).
 
 ### Complex Argument Types
 
@@ -134,16 +134,16 @@ appropriate.
 Date skeletons:
 
 - **ICU4J:**
-<http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/SimpleDateFormat.html>
+<https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/SimpleDateFormat.html>
 
-- **ICU4C:** <http://icu-project.org/apiref/icu4c/classSimpleDateFormat.html>
+- **ICU4C:** <https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html>
 
 Number formatter skeletons:
 
 - **ICU4J:**
-<http://icu-project.org/apiref/icu4j/com/ibm/icu/number/NumberFormatter.html>
+<https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/number/NumberFormatter.html>
 
-- **ICU4C:** <http://icu-project.org/apiref/icu4c/classicu_1_1NumberFormat.html>
+- **ICU4C:** <https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1NumberFormat.html>
 
 #### Format the parameters separately (recommended)
 
