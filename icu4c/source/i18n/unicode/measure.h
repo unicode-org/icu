@@ -28,7 +28,11 @@
 
 U_NAMESPACE_BEGIN
 
+// Forward declarations:
 class MeasureUnit;
+
+// TODO(units): this may become unnecessary depending on MicroProps::mixedMeasures changes.
+namespace number { namespace impl { struct MicroProps; } }
 
 /**
  * An amount of a specified unit, consisting of a number and a Unit.
@@ -135,6 +139,9 @@ class U_I18N_API Measure: public UObject {
      * @stable ICU 3.0
      */
     Measure();
+    // MicroProps' mixedMeasures field needs access to the default constructor.
+    // TODO(units): this may become unnecessary depending on MicroProps::mixedMeasures changes.
+    friend struct number::impl::MicroProps;
 
  private:
     /**

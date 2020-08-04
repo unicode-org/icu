@@ -41,21 +41,54 @@ struct MicroProps : public MicroPropsGenerator {
 
     // Note: This struct has no direct ownership of the following pointers.
     const DecimalFormatSymbols* symbols;
+
+    // Pointers to Modifiers provided by the number formatting pipeline (when
+    // the value is known):
+
+    // A Modifier provided by LongNameHandler, used for currency long names and
+    // units. If there is no LongNameHandler needed, this should be an
+    // EmptyModifier. (This is typically the third modifier applied.)
     const Modifier* modOuter;
+    // A Modifier for short currencies and compact notation. (This is typically
+    // the second modifier applied.)
     const Modifier* modMiddle = nullptr;
+    // A Modifier provided by ScientificHandler, used for scientific notation.
+    // This is typically the first modifier applied.
     const Modifier* modInner;
 
     // The following "helper" fields may optionally be used during the MicroPropsGenerator.
     // They live here to retain memory.
     struct {
+        // The ScientificModifier for which ScientificHandler is responsible.
+        // ScientificHandler::processQuantity() modifies this Modifier.
         ScientificModifier scientificModifier;
+        // EmptyModifier used for modOuter
         EmptyModifier emptyWeakModifier{false};
+        // EmptyModifier used for modInner
         EmptyModifier emptyStrongModifier{true};
         MultiplierFormatHandler multiplier;
+        // A Modifier used for Mixed Units. When formatting mixed units,
+        // LongNameHandler assigns this Modifier.
+        SimpleModifier mixedUnitModifier;
     } helpers;
 
-    // The MeasureUnit with which the output measurement is represented.
+    // The MeasureUnit with which the output is represented. May also have
+    // UMEASURE_UNIT_MIXED complexity, in which case mixedMeasures comes into
+    // play.
     MeasureUnit outputUnit;
+
+    // Constant for the size of the mixedMeasures array.
+    static const int MIXED_MEASURES_LENGTH = 8;
+    // In the case of mixed units, this is the set of integer-only units
+    // *preceding* the final unit. (Simple array because it must be
+    // copy-constructable - thus can't simply use MaybeStackVector<Measure> and
+    // LocalArray<Measure>.)
+    // * TODO(units): consider dropping full "Measure" here. Use int maybe? One
+    //   problem is MicroProps' copy and move construction.
+    Measure mixedMeasures[MIXED_MEASURES_LENGTH] = {Measure(), Measure(), Measure(), Measure(),
+                                                    Measure(), Measure(), Measure(), Measure()};
+    // Number of mixedMeasures that have been populated
+    int32_t mixedMeasuresCount = 0;
 
     MicroProps() = default;
 
