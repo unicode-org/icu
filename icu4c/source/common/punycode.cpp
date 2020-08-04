@@ -455,7 +455,8 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
                 return 0;
             }
 
-            digit=basicToDigit[(uint8_t)src[in++]];
+            const UChar ch = src[in++];
+            digit=ch<256 ? basicToDigit[(uint8_t)ch] : -1;
             if(digit<0) {
                 *pErrorCode=U_INVALID_CHAR_FOUND;
                 return 0;

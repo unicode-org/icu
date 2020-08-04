@@ -300,6 +300,8 @@ static const TestCase testCases[]={
       "xn--a\\uFFFD.pt", UIDNA_ERROR_INVALID_ACE_LABEL },
     { "xn--a-\\u00C4.pt", "B",  // invalid Punycode
       "xn--a-\\u00E4.pt", UIDNA_ERROR_PUNYCODE },
+    { "xn--ple\\u0450", "B",  // invalid Punycode
+      "xn--ple\\u0450", UIDNA_ERROR_PUNYCODE },
     { "\\u65E5\\u672C\\u8A9E\\u3002\\uFF2A\\uFF30", "B",  // Japanese with fullwidth ".jp"
       "\\u65E5\\u672C\\u8A9E.jp", 0 },
     { "\\u2615", "B", "\\u2615", 0 },  // Unicode 4.0 HOT BEVERAGE
