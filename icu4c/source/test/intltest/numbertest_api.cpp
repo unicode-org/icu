@@ -874,23 +874,25 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
 void NumberFormatterApiTest::unitMixedMeasure() {
     IcuTestErrorCode status(*this, "unitMixedMeasure()");
 
-    UnlocalizedNumberFormatter unloc_formatter;
-    FormattedNumber formattedNum;
+    // TODO(icu-units#21): also support mixed units without usage()!
 
-    U_ASSERT(U_SUCCESS(status));
-    unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch", status);
-    status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch\", status)");
-    formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
-    status.errIfFailureAndReset("Mixed unit formatDouble(...)");
-    assertEquals("FIXME", "3 yards, 1 foot, and 11.5 inches", formattedNum.toString(status));
-    status.errIfFailureAndReset("Mixed unit formattedNum.toString(...)");
+//     UnlocalizedNumberFormatter unloc_formatter;
+//     FormattedNumber formattedNum;
 
-    unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch E0", status);
-    status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch E0\", status)");
-    formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
-    status.errIfFailureAndReset("Mixed unit E0 formatDouble(...)");
-    assertEquals("FIXME", "3 yards, 1 foot, and 1.15E1 inches", formattedNum.toString(status));
-    status.errIfFailureAndReset("Mixed unit E0 formattedNum.toString(...)");
+//     U_ASSERT(U_SUCCESS(status));
+//     unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch", status);
+//     status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch\", status)");
+//     formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
+//     status.errIfFailureAndReset("Mixed unit formatDouble(...)");
+//     assertEquals("FIXME", "3 yards, 1 foot, and 11.5 inches", formattedNum.toString(status));
+//     status.errIfFailureAndReset("Mixed unit formattedNum.toString(...)");
+
+//     unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch E0", status);
+//     status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch E0\", status)");
+//     formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
+//     status.errIfFailureAndReset("Mixed unit E0 formatDouble(...)");
+//     assertEquals("FIXME", "3 yards, 1 foot, and 1.15E1 inches", formattedNum.toString(status));
+//     status.errIfFailureAndReset("Mixed unit E0 formattedNum.toString(...)");
 }
 
 void NumberFormatterApiTest::unitCurrency() {
