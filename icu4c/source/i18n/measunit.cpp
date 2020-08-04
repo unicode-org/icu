@@ -34,8 +34,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureUnit)
 // http://site.icu-project.org/design/formatting/measureformat/updating-measure-unit
 //
 // Start generated code
+// TODO(ICU-21076): improve how this generated code is produced.
 
-
+// Maps from Type ID to offset in gSubTypes.
 static const int32_t gOffsets[] = {
     0,
     2,
@@ -63,32 +64,36 @@ static const int32_t gOffsets[] = {
     474
 };
 
-static const int32_t gIndexes[] = {
-    0,
-    2,
-    7,
-    17,
-    25,
-    29,
-    29,
-    40,
-    56,
-    60,
-    69,
-    71,
-    75,
-    82,
-    103,
-    105,
-    119,
-    122,
-    128,
-    138,
-    142,
-    146,
-    148,
-    175
-};
+// TODO: FIX CODE GENERATION - leaving this here but commented-out to make it
+// clear that we no longer want this array. We needed it for only one thing: efficient checking of "currency".
+//
+// static const int32_t gIndexes[] = {
+//     0,
+//     2,
+//     7,
+//     17,
+//     25,
+//     29,
+//     29,
+//     40,
+//     56,
+//     60,
+//     69,
+//     71,
+//     75,
+//     82,
+//     103,
+//     105,
+//     119,
+//     122,
+//     128,
+//     138,
+//     142,
+//     146,
+//     148,
+//     175
+// };
+static const int32_t kCurrencyOffset = 5;
 
 // Must be sorted alphabetically.
 static const char * const gTypes[] = {
@@ -2107,10 +2112,6 @@ UBool MeasureUnit::operator==(const UObject& other) const {
     return uprv_strcmp(getIdentifier(), rhs.getIdentifier()) == 0;
 }
 
-int32_t MeasureUnit::getIndex() const {
-    return gIndexes[fTypeId] + fSubTypeId;
-}
-
 int32_t MeasureUnit::getAvailable(
         MeasureUnit *dest,
         int32_t destCapacity,
@@ -2173,26 +2174,12 @@ StringEnumeration* MeasureUnit::getAvailableTypes(UErrorCode &errorCode) {
     return result;
 }
 
-int32_t MeasureUnit::getIndexCount() {
-    return gIndexes[UPRV_LENGTHOF(gIndexes) - 1];
-}
-
-int32_t MeasureUnit::internalGetIndexForTypeAndSubtype(const char *type, const char *subtype) {
-    int32_t t = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), type);
-    if (t < 0) {
-        return t;
-    }
-    int32_t st = binarySearch(gSubTypes, gOffsets[t], gOffsets[t + 1], subtype);
-    if (st < 0) {
-        return st;
-    }
-    return gIndexes[t] + st - gOffsets[t];
-}
-
 bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
     for (int32_t t = 0; t < UPRV_LENGTHOF(gOffsets) - 1; t++) {
+        // Ensure kCurrencyOffset is set correctly
+        U_ASSERT(uprv_strcmp(gTypes[kCurrencyOffset], "currency") == 0);
         // Skip currency units
-        if (gIndexes[t] == gIndexes[t + 1]) {
+        if (t == kCurrencyOffset) {
             continue;
         }
         int32_t st = binarySearch(gSubTypes, gOffsets[t], gOffsets[t + 1], subType);
