@@ -10,7 +10,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 This section explains how to handle Unicode strings with ICU in C and C++.
 
 Sample code is available in the ICU source code library at
-[icu/source/samples/ustring/ustring.cpp](http://source.icu-project.org/repos/icu/trunk/icu4c/source/samples/ustring/ustring.cpp)
+[icu/source/samples/ustring/ustring.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ustring/ustring.cpp)
 .
 
 ## Text Access Overview
@@ -213,7 +213,7 @@ letters, the basic digits, the space, and some punctuation. Most of the ASCII
 graphic characters are invariant characters. The same set, with different but
 again consistent numeric values, is invariant among almost all EBCDIC codepages.
 For details, see
-[icu4c/source/common/unicode/utypes.h](http://icu-project.org/apiref/icu4c/utypes_8h.html)
+[icu4c/source/common/unicode/utypes.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/utypes_8h.html)
 . With strings that contain only these invariant characters, it is possible to
 use efficient ICU constructs to write a C/C++ string literal and use it to
 initialize Unicode strings.
@@ -229,7 +229,7 @@ characters. Such strings do not require the full Unicode repertoire and are
 easier to handle in C and C++ with `char *` string literals and standard C
 library functions. Their useful character repertoire is actually smaller than
 the set of graphic ASCII characters; for details, see
-[utypes.h](http://icu-project.org/apiref/icu4c/utypes_8h.html) . Examples of
+[utypes.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/utypes_8h.html) . Examples of
 `char *` identifier uses are converter names, locale IDs, and resource bundle
 table keys.
 
@@ -415,7 +415,7 @@ U_IS_SURROGATE().
 
 ## Using Unicode Strings in C++
 
-[UnicodeString](http://icu-project.org/apiref/icu4c/classUnicodeString.html) is
+[UnicodeString](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classUnicodeString.html) is
 a C++ string class that wraps a UChar array and associated bookkeeping. It
 provides a rich set of string handling functions.
 
@@ -446,7 +446,7 @@ of the behavior of "bogus" strings see the description of the setToBogus()
 function.
 
 Some APIs work with the
-[Replaceable](http://icu-project.org/apiref/icu4c/classReplaceable.html)
+[Replaceable](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classReplaceable.html)
 abstract class. It defines a simple interface for random access and text
 modification and is useful for operations on text that may have associated
 meta-data (e.g., styled text), especially in the Transliterator API.

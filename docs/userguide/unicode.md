@@ -307,7 +307,7 @@ See also <http://www.unicode.org/unicode/reports/tr6/> .
 
 Other Unicode encodings have been developed over time for various purposes. Most
 of them are implemented in ICU, see
-[source/data/mappings/convrtrs.txt](http://source.icu-project.org/repos/icu/trunk/icu4c/source/data/mappings/convrtrs.txt)
+[source/data/mappings/convrtrs.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/mappings/convrtrs.txt)
 
 1.  BOCU-1: Binary-Ordered Compression of Unicode
     An encoding of Unicode that is about as compact as SCSU but has a much

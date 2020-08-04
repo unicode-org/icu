@@ -121,9 +121,9 @@ Unicode.
         together with a standard/platform name. This allows you to get different
         converters for the same ambiguous charset name (like "Shift-JIS"),
         depending on the standard or platform specified. See the
-        [convrtrs.txt](http://source.icu-project.org/repos/icu/icu/trunk/source/data/mappings/convrtrs.txt)
+        [convrtrs.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/mappings/convrtrs.txt)
         alias table, the [Using Converters](converters.md) chapter and [API
-        references](http://icu-project.org/apiref/icu4c/ucnv_8h.html) .
+        references](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
     7.  For data exchange (rather than pure display), turn off fallback
         mappings: ucnv_setFallback(cnv, FALSE);
@@ -132,7 +132,7 @@ Unicode.
         "escape callback" function that turns unmappable Unicode code points
         into corresponding escape sequences, preventing data loss. See the API
         references and the [ucnv sample
-        code](http://source.icu-project.org/repos/icu/icu/trunk/source/samples/ucnv/)
+        code](https://github.com/unicode-org/icu/tree/master/icu4c/source/samples/ucnv/)
         .
 
     9.  **Never modify a conversion table.** Instead, use existing ones that

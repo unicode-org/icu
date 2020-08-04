@@ -116,6 +116,6 @@ error if the value cannot be represented exactly without rounding.
 *   Wikipedia article on Rounding:
     <http://en.wikipedia.org/wiki/Rounding#Tie-breaking>
 *   Live rounding mode chart: [Rounding Mode
-    Chart](http://source.icu-project.org/repos/icu/icuapps/trunk/roundmode/round.html)
+    Chart](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-demos/blob/master/roundmode/round.html)
     and [Source
-    Code](http://source.icu-project.org/repos/icu/icuapps/trunk/roundmode/)
+    Code](https://github.com/unicode-org/icu-demos/tree/master/roundmode)

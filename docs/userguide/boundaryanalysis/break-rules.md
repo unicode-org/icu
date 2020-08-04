@@ -368,7 +368,7 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 ## Additional Sample Code
 
 **C/C++**: See
-[icu/source/samples/break/](http://source.icu-project.org/repos/icu/icu/trunk/source/samples/break/)
+[icu/source/samples/break/](https://github.com/unicode-org/icu/tree/master/icu4c/source/samples/break/)
 in the ICU source distribution for code samples showing the use of ICU boundary
 analysis.
 

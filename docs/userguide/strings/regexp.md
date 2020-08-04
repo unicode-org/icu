@@ -97,7 +97,7 @@ matcher is holding a reference to the string.
 After finding a match, additional information is available about the range of
 the input matched, and the contents of any capture groups. Note that, for
 simplicity, any error parameters have been omitted. See the [API
-reference](http://icu-project.org/apiref/icu4c/classRegexMatcher.html) for
+reference](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRegexMatcher.html) for
 complete a complete description of the API.
 
 | Function        | Description                                                    |

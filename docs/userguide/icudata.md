@@ -48,7 +48,7 @@ Data which is NOT sourced from CLDR includes:
     with the CLDR datasets)
 
 For information on building ICU data from CLDR, see the
-[cldr-icu-readme](http://source.icu-project.org/repos/icu/trunk/icu4c/source/data/cldr-icu-readme.txt).
+[cldr-icu-readme](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/cldr-icu-readme.txt).
 
 ## ICU Data Directory
 
@@ -460,7 +460,7 @@ goes into your ICU locale data file.
 
 The first step is to obtain or create a .ucm (source) mapping data file for the
 desired converter. A large archive of converter data is maintained by the ICU
-team at <http://source.icu-project.org/repos/icu/data/trunk/charset/data/ucm/>
+team at <https://github.com/unicode-org/icu-data/tree/master/charset/data/ucm>
 
 We will use `solaris-eucJP-2.7.ucm`, available from the repository mentioned
 above, as an example.
@@ -742,7 +742,7 @@ formats.
 
 Each ICU data object begins with a header before the actual, specific data. The
 header consists of a 16-bit header length value, the two "magic" bytes DA 27 and
-a [UDataInfo](http://icu-project.org/apiref/icu4c/structUDataInfo.html#_details)
+a [UDataInfo](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/structUDataInfo.html#_details)
 structure which specifies the data object's endianness, charset family, format,
 data version, etc.
 
@@ -1054,7 +1054,7 @@ corresponding resource files already in that directory.
 1.  [ICU4C](http://icu-project.org/download/)
 
 2.  Compilers and tools required for [building
-    ICU4C](https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild)
+    ICU4C](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild)
     .
 
 3.  J2SE SDK version 5 or above
@@ -1063,7 +1063,7 @@ corresponding resource files already in that directory.
 
 1.  Download and build ICU4C on a Windows or Linux machine. For instructions on
     downloading and building ICU4C, please click
-    [here](https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild)
+    [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild)
     .
 
 2.  Follow the remaining instructions in

@@ -105,12 +105,12 @@ ICU provides an implementation of the Unicode BiDi algorithm, as well as simple
 functions to write a reordered version of the string using the generated
 meta-data. An "inverse" flag can be set to **approximate** visual-to-logical
 reordering. See the ubidi.h header file and the [BiDi API
-References](http://icu-project.org/apiref/icu4c/ubidi_8h.html) .
+References](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ubidi_8h.html) .
 
 See [Unicode Standard Annex #9: The Bidirectional
 Algorithm](http://www.unicode.org/unicode/reports/tr9/) .
 
 ## Programming Examples in C and C++
 
-See the [BiDi API reference](http://icu-project.org/apiref/icu4c/ubidi_8h.html)
+See the [BiDi API reference](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ubidi_8h.html)
 for more information.

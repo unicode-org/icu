@@ -9,7 +9,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 The following example provides a quick idea of how the rules work. The
 [RuleBasedNumberFormat API
-documentation](http://icu-project.org/apiref/icu4c/classRuleBasedNumberFormat.html)
+documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html)
 describes the rule syntax in more detail.
 
 This ruleset formats a number using standard decimal place-value notation, but
@@ -87,9 +87,9 @@ Rulesets are invoked by first applying negative and fractional rules, then by
 finding the rule whose range includes the current value and applying that rule,
 recursing as directed by the rule. Again, a complete description of the rule
 syntax can be found in the [API
-Documentation](http://icu-project.org/apiref/icu4c/classRuleBasedNumberFormat.html)
+Documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html)
 .
 
 More rule examples can be found in the RuleBasedNumberFormat [demo
-source](http://source.icu-project.org/repos/icu/trunk/icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java)
+source](https://github.com/unicode-org/icu/blob/master/icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java)
 .
