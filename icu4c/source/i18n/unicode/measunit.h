@@ -540,26 +540,10 @@ class U_I18N_API MeasureUnit: public UObject {
 #ifndef U_HIDE_INTERNAL_API
     /**
      * ICU use only.
-     * Returns associated array index for this measure unit. Only valid for
-     * non-currency measure units.
+     * Returns associated array index for this measure unit.
      * @internal
      */
-    int32_t getIndex() const;
-
-    /**
-     * ICU use only.
-     * Returns maximum value from getIndex plus 1.
-     * @internal
-     */
-    static int32_t getIndexCount();
-
-    /**
-     * ICU use only.
-     * @return the unit.getIndex() of the unit which has this unit.getType() and unit.getSubtype(),
-     *         or a negative value if there is no such unit
-     * @internal
-     */
-    static int32_t internalGetIndexForTypeAndSubtype(const char *type, const char *subtype);
+    int32_t getOffset() const;
 
     /**
      * ICU use only.
@@ -3393,7 +3377,6 @@ private:
     MeasureUnit(int32_t typeId, int32_t subTypeId);
     MeasureUnit(MeasureUnitImpl&& impl);
     void setTo(int32_t typeId, int32_t subTypeId);
-    int32_t getOffset() const;
     static MeasureUnit *create(int typeId, int subTypeId, UErrorCode &status);
 
     /**
