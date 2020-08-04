@@ -44,7 +44,7 @@ non-gregorian calendars including:
 The Calendar class is designed to support additional calendar systems in the
 future.
 
-*Calendar classes are related to UDate, the TimeZone classes, and the DateFormat
+> :point_right: **Note**: *Calendar classes are related to UDate, the TimeZone classes, and the DateFormat
 classes.*
 
 ### Calendar locale and keyword handling
@@ -63,7 +63,7 @@ Buddhist calendar.
 It is an error to use an invalid calendar type. It will produce a missing
 resource error.
 
-*As of ICU 2.8, the above description applies to ICU4J only. ICU4J will have
+> :point_right: **Note**: *As of ICU 2.8, the above description applies to ICU4J only. ICU4J will have
 this behavior in 3.0*
 
 ## Usage
@@ -108,7 +108,7 @@ and portable way to store and transmit a date and time. Integer field values, on
 the other hand, depend on the calendar system (that is, the concrete subclass of
 Calendar) and the calendar object's context state.
 
-*Integer field values are needed when implementing a human interface that must
+> :point_right: **Note**: *Integer field values are needed when implementing a human interface that must
 display or input a date and/or time.*
 
 At any given time, a calendar object uses (when DateFormat is not sufficient)
@@ -148,6 +148,7 @@ field by field.
 
 This is demonstrated in the following example:
 
+````C
 Calendar cal = Calendar.getInstance();
 cal.set(2000, Calendar.MARCH, 15);
 Date date = new Date(2000-1900, Calendar.JULY, 4);
@@ -156,6 +157,7 @@ int monthDiff = cal.fieldDifference(date, Calendar.MONTH); // monthDiff ;<= 3
 // At this point cal has been advanced 3 months to June 15, 2000.
 int dayDiff = cal.fieldDifference(date, Calendar.DAY_OF_MONTH); // dayDiff ;<=19
 // At this point cal has been advanced 19 days to July 4, 2000.
+````
 
 #### Context Management
 
@@ -187,7 +189,7 @@ having to know specific details. The factory methods on Calendar are named
 createInstance().
 
 ***MONTH field***
-* Calendar numbers months starting from zero, so calling cal.set(1998, 3, 5)
+> :point_right: **Note**: * Calendar numbers months starting from zero, so calling cal.set(1998, 3, 5)
 sets cal to April 15, 1998, not March 15, 1998. This follows the Java
 convention. To avoid mistakes, use the constants defined in the Calendar class
 for the months and days of the week. For example, cal.set(1998, Calendar::APRIL,
@@ -239,14 +241,17 @@ directly access the GregorianCalendar-specific methods not present in Calendar.
 The correct way to handle this is to perform a dynamic cast, after testing the
 type of the object using getDynamicClassID(). For example:
 
+````C
 void setCutover(Calendar \*cal, UDate myCutover) {
-if (cal->getDynamicClassID() ==
-GregorianCalendar::getStaticClassID()) {
-GregorianCalendar \*gc = (GregorianCalendar\*)cal;
-gc->setGregorianChange(myCutover, status);
+    if (cal->getDynamicClassID() ==
+        GregorianCalendar::getStaticClassID()) {
+      GregorianCalendar \*gc = (GregorianCalendar\*)cal;
+      gc->setGregorianChange(myCutover, status);
+    }
 }
-}
-*This is a general technique that should be used throughout ICU in conjunction
+````
+
+> :point_right: **Note**: *This is a general technique that should be used throughout ICU in conjunction
 with the factory methods.*
 
 ### Disambiguation
@@ -293,16 +298,16 @@ time might be ambiguous because of time zone transition.
     1:30 AM standard time.
 
 ***Options for Ambiguous Time Resolution***
-*Ambiguous wall clock time resolution behaviors can be customized by Calendar APIs setRepeatedTimeOption() and setSkippedTimeOption(). These methods are available in ICU 49 or later versions.*
+> :point_right: **Note**: *Ambiguous wall clock time resolution behaviors can be customized by Calendar APIs setRepeatedTimeOption() and setSkippedTimeOption(). These methods are available in ICU 49 or later versions.*
 
 ***WEEK_OF_YEAR field***
-*Values calculated for the WEEK_OF_YEAR field range from 1 to 53. Week 1 for a year is the first week that contains at least getMinimalDaysInFirstWeek() days from that year. It depends on the values of getMinimalDaysInFirstWeek(), getFirstDayOfWeek(), and the day of the week of January 1. Weeks between week 1 of one year and week 1 of the following year are numbered sequentially from 2 to 52 or 53 (if needed).*
-*For example, January 1, 1998 was a Thursday. If getFirstDayOfWeek() is MONDAY
+> :point_right: **Note**: *Values calculated for the WEEK_OF_YEAR field range from 1 to 53. Week 1 for a year is the first week that contains at least getMinimalDaysInFirstWeek() days from that year. It depends on the values of getMinimalDaysInFirstWeek(), getFirstDayOfWeek(), and the day of the week of January 1. Weeks between week 1 of one year and week 1 of the following year are numbered sequentially from 2 to 52 or 53 (if needed).
+For example, January 1, 1998 was a Thursday. If getFirstDayOfWeek() is MONDAY
 and getMinimalDaysInFirstWeek() is 4 (these are the values reflecting ISO 8601
 and many national standards), then week 1 of 1998 starts on December 29, 1997,
 and ends on January 4, 1998. However, if getFirstDayOfWeek() is SUNDAY, then
 week 1 of 1998 starts on January 4, 1998, and ends on January 10, 1998. The
-first three days of 1998 are then part of week 53 of 1997. *
+first three days of 1998 are then part of week 53 of 1997.*
 
 ## Programming Examples
 
