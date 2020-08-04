@@ -9,6 +9,8 @@
 
 #include "cmemory.h"
 #include "number_types.h"
+#include "unicode/listformatter.h"
+#include "unicode/localpointer.h"
 #include "unicode/locid.h"
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
@@ -34,6 +36,12 @@ class U_I18N_API UsagePrefsHandler : public MicroPropsGenerator, public UMemory 
     /**
      * Obtains the appropriate output value, MeasurementUnit and
      * rounding/precision behaviour from the UnitsRouter.
+     *
+     * The output unit is passed on to the LongNameHandler via
+     * micros.outputUnit.
+     *
+     * FIXME: For Mixed units, if we had LongNameHandler logic here, we would
+     * need to override modOuter? But we want to leave that to a LongNameHandler-related step?
      */
     void processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                          UErrorCode &status) const U_OVERRIDE;
@@ -52,6 +60,7 @@ class U_I18N_API UsagePrefsHandler : public MicroPropsGenerator, public UMemory 
   private:
     UnitsRouter fUnitsRouter;
     const MicroPropsGenerator *fParent;
+    // LocalPointer<ListFormatter> listFormatter;
 };
 
 } // namespace impl

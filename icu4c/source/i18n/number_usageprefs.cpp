@@ -100,9 +100,30 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
 
     quantity.roundToInfinity(); // Enables toDouble
     const auto routed = fUnitsRouter.route(quantity.toDouble(), status);
-    const auto& routedUnits = routed.measures;
-    micros.outputUnit = routedUnits[0]->getUnit();
-    quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
+    const MaybeStackVector<Measure>& routedUnits = routed.measures;
+    micros.outputUnit = routed.outputUnit.copy(status).build(status);
+
+    if (routedUnits.length() > 1) {
+        U_ASSERT(micros.outputUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
+#ifdef U_DEBUG
+        int32_t singleUnitsCount;
+        LocalArray<MeasureUnit> singleUnits =
+            micros.outputUnit.splitToSingleUnits(singleUnitsCount, status);
+        U_ASSERT(routedUnits.length() == singleUnitsCount);
+        for (int32_t i = 0; i < routedUnits.length(); i++) {
+            U_ASSERT(routedUnits[i]->getUnit() == singleUnits[i]);
+        }
+#endif
+        // Mixed units: we pass all values except the last one on to the
+        // LongNameHandler via micros.mixedMeasures.
+        micros.mixedMeasuresCount = routedUnits.length() - 1;
+        U_ASSERT(micros.mixedMeasuresCount <= micros.MIXED_MEASURES_LENGTH);
+        for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
+            micros.mixedMeasures[i] = std::move(*routedUnits[i]);
+        }
+    }
+    // The last value, or the only value, gets passed on via quantity.
+    quantity.setToDouble(routedUnits[routedUnits.length() - 1]->getNumber().getDouble());
 
     // TODO(units): here we are always overriding Precision. (1) get precision
     // from fUnitsRouter, (2) ensure we use the UnitPreference skeleton's
