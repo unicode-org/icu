@@ -134,7 +134,7 @@ following parameters:
 5.  Simple stateful encodings are also handled using only Shift-In and Shift-Out
     (SI/SO) codes and one single-byte and one double-byte state.
 
-*In the context of conversion tables, "unassigned" code points or codepage byte
+> :point_right: **Note**: *In the context of conversion tables, "unassigned" code points or codepage byte
 sequences are valid but do not have a **mapping**. This is different from
 "unassigned" code points in a character set like Unicode or Shift-JIS which are
 codes that do not have assigned **characters**.*
@@ -185,13 +185,14 @@ A .ucm file contains two sections:
 
 For example:
 
+````
 <code_set_name> "IBM-943"
 <char_name_mask> "AXXXX"
 <mb_cur_min> 1
 <mb_cur_max> 2
 <uconv_class> "MBCS"
-<subchar> \\xFC\\xFC
-<subchar1> \\x7F
+<subchar> \xFC\xFC
+<subchar1> \x7F
 <icu:state> 0-7f, 81-9f:1, a0-df, e0-fc:1
 <icu:state> 40-7e, 80-fc
 #
@@ -200,15 +201,16 @@ CHARMAP
 #
 #ISO 10646 IBM-943
 #_________ _________
-<U0000> \\x00 |0
-<U0001> \\x01 |0
-<U0002> \\x02 |0
-<U0003> \\x03 |0
+<U0000> \x00 |0
+<U0001> \x01 |0
+<U0002> \x02 |0
+<U0003> \x03 |0
 ...
-<UFFE4> \\xFA\\x55 |1
-<UFFE5> \\x81\\x8F |0
-<UFFFD> \\xFC\\xFC |2
+<UFFE4> \xFA\x55 |1
+<UFFE5> \x81\x8F |0
+<UFFFD> \xFC\xFC |2
 END CHARMAP
+````
 
 The header fields are:
 
@@ -235,30 +237,23 @@ The header fields are:
     tables for these other converters when their structure is not explicitly
     specified. The following describes how the converter types are interpreted:
 
-    1.  MBCS: Generic ICU converter type, requires a state table
+    a.  MBCS: Generic ICU converter type, requires a state table
 
-    2.  SBCS: Single-byte, 8-bit codepages
+    b.  SBCS: Single-byte, 8-bit codepages
 
-    3.  DBCS: Double-byte EBCDIC codepages
+    c.  DBCS: Double-byte EBCDIC codepages
 
-    4.  EBCDIC_STATEFUL: Mixed Single-Byte or Double-Byte EBCDIC codepages
-        (stateful, using SI/SO)
+    d.  EBCDIC_STATEFUL: Mixed Single-Byte or Double-Byte EBCDIC codepages (stateful, using SI/SO)
 
 The following shows the exact implied state tables for non-MBCS types. A state
 table may need to be overwritten in order to allow supplementary characters
 (U+10000 and up).
 
-1.  subchar - The substitution character byte sequence for this codepage. This
-    sequence must be a valid byte sequence according to the codepage structure.
+1.  subchar - The substitution character byte sequence for this codepage. This sequence must be a valid byte sequence according to the codepage structure.
 
-2.  subchar1 - This is the single byte substitution character when subchar is
-    defined. Some IBM converter libraries use different substitution characters
-    for "narrow" and "wide" characters (single-byte and double-byte). ICU uses
-    only one substitution character per codepage because it is common industry
-    practice.
+2.  subchar1 - This is the single byte substitution character when subchar is defined. Some IBM converter libraries use different substitution characters for "narrow" and "wide" characters (single-byte and double-byte). ICU uses only one substitution character per codepage because it is common industry  practice.
 
-3.  icu:state - See the "State Table Syntax in .ucm Files" section for a
-    detailed description of how to specify a codepage structure.
+3.  icu:state - See the "State Table Syntax in .ucm Files" section for a  detailed description of how to specify a codepage structure.
 
 4.  icu:charsetFamily - This specifies if the codepage is ASCII or EBCDIC based.
 
@@ -268,21 +263,19 @@ following conditions outline when each are used:
 1.  Conversion from Unicode to a codepage occurs and an unassigned code point is
     found
 
-    1.  If a subchar1 byte is defined and a subchar1 mapping is defined for the
-        code point (with a |2 precision indicator), output the subchar1
+    a.  If a subchar1 byte is defined and a subchar1 mapping is defined for the code point (with a |2 precision indicator),
+        output the subchar1
 
-    2.  Otherwise output the regular subchar
+    b.  Otherwise output the regular subchar
 
-2.  Conversion from a codepage to Unicode occurs and an unassigned codepoint is
-    found
+2.  Conversion from a codepage to Unicode occurs and an unassigned codepoint is found
 
-    1.  If the input sequence is of length 1 and a subchar1 byte is specified
-        for the codepage, output U+001A
+    a.  If the input sequence is of length 1 and a subchar1 byte is specified for the codepage, output U+001A
 
-    2.  Otherwise output U+FFFD
+    b.  Otherwise output U+FFFD
 
 In the CHARMAP section of a .ucm file, each line contains a Unicode code point
-(like <U*(1-6 hexadecimal digits for the code point)*> ), a codepage character
+(like <U(*1-6 hexadecimal digits for the code point*)> ), a codepage character
 byte sequence (each byte like \\x*hh* (2 hexadecimal digits} ), and an optional
 "precision" or "fallback" indicator.
 
@@ -354,9 +347,11 @@ Each row has 256 entries; one for each possible byte value.
 The state table lines in the .ucm header conform to the following Extended
 Backus-Naur Form (EBNF)-like grammar (whitespace is allowed between all tokens):
 
+````
 row=\[\[firstentry ','\] entry (',' entry)\*\]
 firstentry="initial" | "surrogates"
-(initial state (default for state 0), output is all surrogate pairs)
+           (initial state (default for state 0), output is all surrogate pairs)
+````
 
 Each state table row description (that follows the <icu:state>) begins with an
 optional initial or surrogates keyword and is followed by one or more column
@@ -369,12 +364,14 @@ A row may be empty (nothing following the <icu:state>) — that is equivalent to
 "all illegal" or 0-ff.i and is useful for trail byte states for all-illegal byte
 sequences.
 
+````
 entry=range \[':' nextstate\] \['.' \[action\]\]
 range = number \['-' number\]
 nextstate = number (0..7f)
 action = 'u' | 's' | 'p' | 'i'
-(unassigned, state change only, surrogate pair, illegal)
+             (unassigned, state change only, surrogate pair, illegal)
 number = (1- or 2-digit hexadecimal number)
+````
 
 Each column entry contains at least one hexadecimal byte value or value range
 and is separated by a comma. The column entry specifies how to interpret an
@@ -395,30 +392,13 @@ If the byte value(s) terminate(s) a byte sequence, then the byte sequence
 results in the following depending on the action that is announced with a period
 ( . ) followed by a letter:
 
-letter meaning u
-
-Unassigned. The byte sequence is valid but does not encode a character.
-
-none
-
-(no letter) - Valid. If no action letter is specified, then the byte sequence is
-valid and encodes a Unicode character up to U+ffff
-
-p
-
-Surrogate Pair. The byte sequence is valid and the result may map to a UTF-16
-encoded surrogate pair
-
-i
-
-Illegal. The byte sequence is illegal. This is the default for all byte values
-in a row that are not otherwise specified with column entries
-
-s
-
-State change only. The byte sequence does not encode any character but may
-change the state number. This may be used with simple, stateful encodings (for
-example, SI/SO codes), but currently it is not used by ICU.
+| letter | meaning |
+|--|---------|
+| u | Unassigned. The byte sequence is valid but does not encode a character. |
+| none | (no letter) - Valid. If no action letter is specified, then the byte sequence is valid and encodes a Unicode character up to U+ffff |
+| p | Surrogate Pair. The byte sequence is valid and the result may map to a UTF-16 encoded surrogate pair |
+| i | Illegal. The byte sequence is illegal. This is the default for all byte values in a row that are not otherwise specified with column entries|
+| s | State change only. The byte sequence does not encode any character but may change the state number. This may be used with simple, stateful encodings (for example, SI/SO codes), but currently it is not used by ICU.|
 
 If an action is specified without a next state, then the next state number
 defaults to 0. In other words, a byte value (range) terminates a sequence if
@@ -435,21 +415,10 @@ especially if many of them have the same properties.
 
 The optional keyword at the beginning of a state line has the following effect:
 
-keyword effect initial The state machine can start reading byte sequences in
-this state. State 0 is always an initial state. Only initial states can be next
-states for final byte values. In an initial state, the Unicode mappings for all
-final bytes are also stored directly in the state table. surrogates All Unicode
-mappings for final bytes in non-initial states are stored in a separate table of
-16-bit Unicode (UTF-16) code units. Since most legacy codepages map only to
-Unicode code points up to U+ffff (the Basic Multilingual Plane, BMP), the
-default allocation per mapping result is one 16-bit unit. Individual byte values
-can be specified to map to surrogate pairs (= two 16-bit units) with action
-letter p. The surrogates keyword specifies the values for the entire state
-(row). Surrogate pair mapping entries can still hold single units depending on
-the actual mapping data, but single-unit mapping entries cannot hold a pair of
-units. Mapping to single-unit entries is the default because the mapping is
-faster, uses half as much memory in the code units table, and is sufficient for
-most legacy codepages.
+| keyword | effect |
+|---------|--------|
+| initial | The state machine can start reading byte sequences in this state. State 0 is always an initial state. Only initial states can be next states for final byte values. In an initial state, the Unicode mappings for all final bytes are also stored directly in the state table.
+| surrogates | All Unicode mappings for final bytes in non-initial states are stored in a separate table of 16-bit Unicode (UTF-16) code units. Since most legacy codepages map only to Unicode code points up to U+ffff (the Basic Multilingual Plane, BMP), the default allocation per mapping result is one 16-bit unit. Individual byte values can be specified to map to surrogate pairs (= two 16-bit units) with action letter p. The surrogates keyword specifies the values for the entire state (row). Surrogate pair mapping entries can still hold single units depending on the actual mapping data, but single-unit mapping entries cannot hold a pair of units. Mapping to single-unit entries is the default because the mapping is faster, uses half as much memory in the code units table, and is sufficient for most legacy codepages.|
 
 When converting to Unicode, the state machine starts in state number 0. In each
 iteration, the state machine reads one input (codepage) byte and either proceeds
@@ -481,11 +450,11 @@ more than one complete codepage byte sequence. Plus signs (+) are optional
 between code points and between bytes. For example,
 ibm-1390_P110-2003.ucm contains
 
-<U304B><U309A> \\xEC\\xB5 |0
+    <U304B><U309A> \xEC\xB5 |0
 
 and test3.ucm contains
 
-<U101234>+<U50005>+<U60006> \\x07+\\x00+\\x01\\x02\\x0f+\\x09 |0
+    <U101234>+<U50005>+<U60006> \x07+\x00+\x01\x02\x0f+\x09 |0
 
 For more examples see the ICU conversion data and the
 icu/source/test/testdata/test\*.ucm test data files.
@@ -527,7 +496,7 @@ The delta (extension-only) file uses only a single CHARMAP section. In addition,
 it nees a line in the header that both causes building just a delta file and
 specifies the name of the base file. For example, windows-936-2000.ucm contains
 
-<icu:base> “ibm-1386_P100-2002”
+    <icu:base> “ibm-1386_P100-2002”
 
 makeconv ignores all mappings for the delta file that are also in the base
 file's base table. If the two conversion tables are sufficiently similar, then
@@ -551,14 +520,17 @@ For example, the following illustrates how to use ucmkbase to make a base .ucm
 file for three Shift-JIS conversion table variants. (ibm-943_P15A-2003.ucm
 becomes the base.)
 
-C:\\tmp\\icu\\ucm>ren ibm-943_P15A-2003.ucm ibm-943_P15A-2003.orig
-C:\\tmp\\icu\\ucm>ucmkbase ibm-943_P15A-2003.orig ibm-943_P130-1999.ucm
-ibm-942_P12A-1999.ucm > ibm-943_P15A-2003.ucm
+````
+C:\tmp\icu\ucm>ren ibm-943_P15A-2003.ucm ibm-943_P15A-2003.orig
+C:\tmp\icu\ucm>ucmkbase ibm-943_P15A-2003.orig ibm-943_P130-1999.ucm ibm-942_P12A-1999.ucm > ibm-943_P15A-2003.ucm
+````
 
 After this, the two delta .ucm files only need to get the following line added
 before the start of their CHARMAPs:
 
+````
 <icu:base> "ibm-943_P15A-2003"
+````
 
 The ICU tools and runtime code handle DBCS-only conversion tables specially,
 allowing them to be built into delta files with MBCS or EBCDIC_STATEFUL base
@@ -584,17 +556,19 @@ table may need to be overwritten in order to allow supplementary characters
 (U+10000 and up).
 
 US-ASCII
-
+````
 0-7f
+````
 
 This single-row state table describes US-ASCII. Byte values from 0 to 0x7f are
 valid and map to Unicode characters up to U+ffff. Byte values from 0x80 to 0xff
 are illegal.
 
 Shift-JIS
-
+````
 0-7f, 81-9f:1, a0-df, e0-fc:1
 40-7e, 80-fc
+````
 
 This two-row state table describes the Shift-JIS structure which encodes some
 characters with one byte each and others with two bytes each. Bytes 0 to 0x7f
@@ -605,12 +579,13 @@ single byte of 0x80 or 0xff is illegal. Similarly, a byte sequence of 0x85 0x31
 is illegal.
 
 EUC-JP
-
+````
 0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1
 a1-fe
 a1-e4
 a1-fe:1, a1:4, a3-af:4, b6:4, d6:4, da-db:4, ed-f2:4
 a1-fe.u
+````
 
 This fairly complicated state table describes EUC-JP. Valid byte sequences are
 one, two, or three bytes long. Two-byte sequences have a lead byte of 0x8e and
@@ -622,19 +597,20 @@ units table. Assigned three-byte sequences end in state 1 like most two-byte
 sequences.
 
 SBCS default state table:
-
+````
 0-ff
-
+````
 SBCS by default implies the structure for single-byte, 8-bit codepages.
 
 DBCS default state table:
-
+````
 0-3f:3, 40:2, 41-fe:1, ff:3
 41-fe
 40
 
-Important:
+````
 
+**Important**:
 These are four states — the fourth has an empty line (equivalent to 0-ff.i)!
 DBCS codepages, by default, are defined with the EBCDIC double-byte structure.
 Valid sequences are pairs of bytes from 0x41 to 0xfe and the one pair 0x40/0x40
@@ -643,12 +619,13 @@ sequences are always two in length. Therefore, every byte in the initial state
 is a lead byte.
 
 EBCDIC_STATEFUL default state table:
-
+````
 0-ff, e:1.s, f:0.s
 initial, 0-3f:4, e:1.s, f:0.s, 40:3, 41-fe:2, ff:4
 0-40:1.i, 41-fe:1., ff:1.i
 0-ff:1.i, 40:1.
 0-ff:1.i
+````
 
 This is the structure of Mixed Single-byte and Double-byte EBCDIC codepages,
 which are stateful and use the Shift-In/Shift-Out (SI/SO) bytes 0x0f/0x0e. The
@@ -657,11 +634,10 @@ also an initial state and is the basis for a state-shifted version of the DBCS
 structure above. All double-byte sequences return to state 1 and SI switches
 back to state 0. SI and SO are also allowed in their own states with no effect.
 
-*If a DBCS or EBCDIC_STATEFUL codepage maps supplementary (non-BMP) Unicode
+> :point_right:  **Note**: *If a DBCS or EBCDIC_STATEFUL codepage maps supplementary (non-BMP) Unicode
 characters, then a modified state table needs to be specified in the .ucm file.
 The state table needs to use the surrogates designation for a table row or .p
-for some entries.*
-*The reuse of a final or intermediate state (shown for EUC-JP) is valid for as
+for some entries.<br/> The reuse of a final or intermediate state (shown for EUC-JP) is valid for as
 long as there is no circle in the state chain. The mappings will be unique
 because of the different path to the shared state (sharing a state saves some
 memory; each state table row occupies 1kB in the .cnv file). This table also
