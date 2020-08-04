@@ -417,6 +417,7 @@ NumberFormatterImpl::resolvePluralRules(const PluralRules* rulesPtr, const Local
 
 int32_t NumberFormatterImpl::writeAffixes(const MicroProps& micros, FormattedStringBuilder& string,
                                           int32_t start, int32_t end, UErrorCode& status) {
+    U_ASSERT(micros.modOuter != nullptr);
     // Always apply the inner modifier (which is "strong").
     int32_t length = micros.modInner->apply(string, start, end, status);
     if (micros.padding.isValid()) {
