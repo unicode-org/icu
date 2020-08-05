@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <utility>
 
+#pragma clang diagnostic ignored "-Wc99-extensions"
+
 U_NAMESPACE_BEGIN
 namespace units {
 
