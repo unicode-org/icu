@@ -241,6 +241,7 @@ ifeq ($(ENABLE_SO_VERSION_DATA),1)
 ifeq ($(PKGDATA_MODE),dll)
 SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
 $(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
+	mkdir -p $(@D)
 ifeq ($(MSYS_RC_MODE),1)
 	rc.exe -i$(srcdir)/../common -i$(top_builddir)/common -fo$@ $(CPPFLAGS) $<
 else
