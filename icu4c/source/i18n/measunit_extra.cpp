@@ -173,11 +173,11 @@ icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
 // by SingleUnitImpl::getSimpleUnitID().)
 const char **gSimpleUnits = nullptr;
 
-char *kSerializedUnitExtrasStemTrie = nullptr;
+char *gSerializedUnitExtrasStemTrie = nullptr;
 
 UBool U_CALLCONV cleanupUnitExtras() {
-    uprv_free(kSerializedUnitExtrasStemTrie);
-    kSerializedUnitExtrasStemTrie = nullptr;
+    uprv_free(gSerializedUnitExtrasStemTrie);
+    gSerializedUnitExtrasStemTrie = nullptr;
     uprv_free(gSimpleUnits);
     gSimpleUnits = nullptr;
     gUnitExtrasInitOnce.reset();
@@ -250,12 +250,12 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
 
     // Copy the result into the global constant pointer
     size_t numBytes = result.length();
-    kSerializedUnitExtrasStemTrie = static_cast<char *>(uprv_malloc(numBytes));
-    if (kSerializedUnitExtrasStemTrie == nullptr) {
+    gSerializedUnitExtrasStemTrie = static_cast<char *>(uprv_malloc(numBytes));
+    if (gSerializedUnitExtrasStemTrie == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    uprv_memcpy(kSerializedUnitExtrasStemTrie, result.data(), numBytes);
+    uprv_memcpy(gSerializedUnitExtrasStemTrie, result.data(), numBytes);
 }
 
 class Token {
@@ -372,7 +372,7 @@ private:
     Parser() : fSource(""), fTrie(u"") {}
 
     Parser(StringPiece source)
-        : fSource(source), fTrie(kSerializedUnitExtrasStemTrie) {}
+        : fSource(source), fTrie(gSerializedUnitExtrasStemTrie) {}
 
     inline bool hasNext() const {
         return fIndex < fSource.length();
