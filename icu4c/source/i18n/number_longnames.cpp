@@ -226,9 +226,9 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
             // TODO(review): can we simply U_ASSERT this? Passing a `perUnit`
             // while also passing a not-built-in `unitRef` is an error, and is
             // documented as such.
-            if (uprv_strcmp(perUnit.getType(), "none") != 0) {
+            if (perUnit != MeasureUnit()) {
                 if (U_SUCCESS(status)) {
-                    status = U_INTERNAL_PROGRAM_ERROR;
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
                 }
                 return;
             }
@@ -332,9 +332,9 @@ void LongNameHandler::forMixedUnit(const Locale &loc, const MeasureUnit &unit,
 
     // TODO/FIXME: obscure "AddressSanitizer: heap-buffer-overflow" if I swap
     // the order of these two lines:
-    LocalArray<MeasureUnit> individualUnits = unit.splitToSingleUnits(fillIn->mixedUnitCount, status);
-    fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->mixedUnitCount * ARRAY_LENGTH]);
-    for (int32_t i = 0; i < fillIn->mixedUnitCount; i++) {
+    LocalArray<MeasureUnit> individualUnits = unit.splitToSingleUnits(fillIn->fMixedUnitCount, status);
+    fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
+    for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
         // Grab data for each of the components.
         UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
         getMeasureData(loc, individualUnits[i], width, unitData, status);
@@ -347,7 +347,7 @@ void LongNameHandler::forMixedUnit(const Locale &loc, const MeasureUnit &unit,
 
     // We need a localised NumberFormatter for the integers of the bigger units
     // (providing Arabic numerals, for example).
-    fillIn->fNumberFormatter = NumberFormatter::withLocale(loc);
+    fillIn->fIntegerFormatter = NumberFormatter::withLocale(loc);
 }
 
 UnicodeString LongNameHandler::getUnitDisplayName(
@@ -433,7 +433,7 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     if (parent != NULL) {
         parent->processQuantity(quantity, micros, status);
     }
-    if (mixedUnitCount > 1) {
+    if (fMixedUnitCount > 1) {
         micros.modOuter = getMixedUnitModifier(quantity, micros, status);
         return;
     }
@@ -456,7 +456,7 @@ const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
     }
     U_ASSERT(micros.mixedMeasuresCount > 0);
     // mixedMeasures does not contain the last value:
-    U_ASSERT(mixedUnitCount == micros.mixedMeasuresCount + 1);
+    U_ASSERT(fMixedUnitCount == micros.mixedMeasuresCount + 1);
     U_ASSERT(fListFormatter.isValid());
 
     // Algorithm:
@@ -477,7 +477,7 @@ const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
     // Return a SimpleModifier for this pattern, letting the rest of the
     // pipeline take care of the remaining inches.
 
-    LocalArray<UnicodeString> outputMeasuresList(new UnicodeString[mixedUnitCount], status);
+    LocalArray<UnicodeString> outputMeasuresList(new UnicodeString[fMixedUnitCount], status);
     if (U_FAILURE(status)) {
         return &micros.helpers.emptyWeakModifier;
     }
@@ -493,11 +493,11 @@ const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
 
         UnicodeString num;
         auto appendable = UnicodeStringAppendable(num);
-        fNumberFormatter.formatDecimalQuantity(fdec, status).appendTo(appendable, status);
+        fIntegerFormatter.formatDecimalQuantity(fdec, status).appendTo(appendable, status);
         compiledFormatter.format(num, outputMeasuresList[i], status);
     }
 
-    UnicodeString *finalSimpleFormats = &fMixedUnitData[(mixedUnitCount - 1) * ARRAY_LENGTH];
+    UnicodeString *finalSimpleFormats = &fMixedUnitData[(fMixedUnitCount - 1) * ARRAY_LENGTH];
     StandardPlural::Form finalPlural = utils::getPluralSafe(micros.rounder, rules, quantity, status);
     UnicodeString finalSimpleFormat = getWithPlural(finalSimpleFormats, finalPlural, status);
     if (U_FAILURE(status)) {
@@ -507,11 +507,12 @@ const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
     if (U_FAILURE(status)) {
         return &micros.helpers.emptyWeakModifier;
     }
-    finalFormatter.format(UnicodeString(u"{0}"), outputMeasuresList[mixedUnitCount - 1], status);
+    finalFormatter.format(UnicodeString(u"{0}"), outputMeasuresList[fMixedUnitCount - 1], status);
 
     // Combine list into a "premixed" Modifier
     UnicodeString premixedFormatPattern;
-    fListFormatter->format(outputMeasuresList.getAlias(), mixedUnitCount, premixedFormatPattern, status);
+    fListFormatter->format(outputMeasuresList.getAlias(), fMixedUnitCount, premixedFormatPattern,
+                           status);
     SimpleFormatter premixedCompiled(premixedFormatPattern, 0, 1, status);
     if (U_FAILURE(status)) {
         return &micros.helpers.emptyWeakModifier;

@@ -31,7 +31,7 @@ U_NAMESPACE_BEGIN
 // Forward declarations:
 class MeasureUnit;
 
-// TODO(units): this may become unnecessary depending on MicroProps::mixedMeasures changes.
+// TODO(units): this may become unnecessary depending on MicroProps::mixedMeasures changes. FIXME(PR#52)!
 namespace number { namespace impl { struct MicroProps; } }
 
 /**
@@ -140,7 +140,7 @@ class U_I18N_API Measure: public UObject {
      */
     Measure();
     // MicroProps' mixedMeasures field needs access to the default constructor.
-    // TODO(units): this may become unnecessary depending on MicroProps::mixedMeasures changes.
+    // TODO(units): this may become unnecessary depending on MicroProps::mixedMeasures changes. FIXME(PR#52)!
     friend struct number::impl::MicroProps;
 
  private:

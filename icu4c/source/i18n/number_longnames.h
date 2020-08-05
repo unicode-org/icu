@@ -75,7 +75,8 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
 
     // TODO(units): investigate whether we might run into Mixed Unit trouble
     // with this. This override for ModifierStore::getModifier does not support
-    // mixed units: investigate under which circumstances it gets called.
+    // mixed units: investigate under which circumstances it gets called (check
+    // both ImmutablePatternModifier and in NumberRangeFormatterImpl).
     const Modifier* getModifier(Signum signum, StandardPlural::Form plural) const U_OVERRIDE;
 
   private:
@@ -89,7 +90,7 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     // Total number of units in the MeasureUnit this LongNameHandler was
     // configured for: for "foot-and-inch", this will be 2. (If not a mixed unit,
     // this will be 1.)
-    int32_t mixedUnitCount = 1;
+    int32_t fMixedUnitCount = 1;
     // If this LongNameHandler is for a mixed unit, this stores unit data for
     // each of the individual units. For each unit, it stores ARRAY_LENGTH
     // strings, as returned by getMeasureData. (Each unit with index `i` has
@@ -97,7 +98,7 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     LocalArray<UnicodeString> fMixedUnitData;
     // A localized NumberFormatter used to format the integer-valued bigger
     // units of Mixed Unit measurements.
-    LocalizedNumberFormatter fNumberFormatter;
+    LocalizedNumberFormatter fIntegerFormatter;
     // A localised list formatter for joining mixed units together.
     LocalPointer<ListFormatter> fListFormatter;
     // For a mixed unit, returns a Modifier that takes only one parameter: the
