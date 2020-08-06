@@ -307,36 +307,6 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
                                           {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
 }
 
-// FIXME: fold into MixedUnitLongNameHandler::forMeasureUnit in a separate commit.
-void MixedUnitLongNameHandler::forMixedUnit(const Locale &loc, const MeasureUnit &unit,
-                                            const UNumberUnitWidth &width, const PluralRules *rules,
-                                            const MicroPropsGenerator *parent,
-                                            MixedUnitLongNameHandler *fillIn, UErrorCode &status) {
-    if (fillIn == nullptr) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-        return;
-    }
-
-    // TODO/FIXME: obscure "AddressSanitizer: heap-buffer-overflow" if I swap
-    // the order of these two lines:
-    LocalArray<MeasureUnit> individualUnits = unit.splitToSingleUnits(fillIn->fMixedUnitCount, status);
-    fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
-    for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
-        // Grab data for each of the components.
-        UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
-        getMeasureData(loc, individualUnits[i], width, unitData, status);
-    }
-
-    fillIn->fListFormatter.adoptInsteadAndCheckErrorCode(ListFormatter::createInstance(loc, status),
-                                                         status);
-    fillIn->rules = rules;
-    fillIn->parent = parent;
-
-    // We need a localised NumberFormatter for the integers of the bigger units
-    // (providing Arabic numerals, for example).
-    fillIn->fIntegerFormatter = NumberFormatter::withLocale(loc);
-}
-
 UnicodeString LongNameHandler::getUnitDisplayName(
         const Locale& loc,
         const MeasureUnit& unit,
@@ -437,7 +407,26 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
     // TODO(review): can we simply U_ASSERT this? Passing a `perUnit`
     // while also passing a not-built-in `unitRef` is an error, and is
     // documented as such.
-    forMixedUnit(loc, mixedUnit, width, rules, parent, fillIn, status);
+
+    // TODO(units): try to understand why swapping these next two lines causes
+    // an "AddressSanitizer: heap-buffer-overflow":
+    LocalArray<MeasureUnit> individualUnits =
+        mixedUnit.splitToSingleUnits(fillIn->fMixedUnitCount, status);
+    fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
+    for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
+        // Grab data for each of the components.
+        UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
+        getMeasureData(loc, individualUnits[i], width, unitData, status);
+    }
+
+    fillIn->fListFormatter.adoptInsteadAndCheckErrorCode(ListFormatter::createInstance(loc, status),
+                                                         status);
+    fillIn->rules = rules;
+    fillIn->parent = parent;
+
+    // We need a localised NumberFormatter for the integers of the bigger units
+    // (providing Arabic numerals, for example).
+    fillIn->fIntegerFormatter = NumberFormatter::withLocale(loc);
 }
 
 void MixedUnitLongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
