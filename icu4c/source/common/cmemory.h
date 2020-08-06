@@ -297,6 +297,9 @@ public:
      * Automatically allocates the heap array if the argument is larger than the stack capacity.
      * Intended for use when an approximate capacity is known at compile time but the true
      * capacity is not known until runtime.
+     *
+     * WARNING: does not report errors upon memory allocation failure, after
+     * which capacity will be less than expected!
      */
     MaybeStackArray(int32_t newCapacity) : MaybeStackArray() {
         if (capacity < newCapacity) { resize(newCapacity); }
@@ -380,9 +383,12 @@ public:
      *         caller becomes responsible for deleting the array
      */
     inline T *orphanOrClone(int32_t length, int32_t &resultCapacity);
-private:
+
+  protected:
     T *ptr;
     int32_t capacity;
+
+  private:
     UBool needToRelease;
     T stackArray[stackCapacity];
     void releaseArray() {
@@ -399,8 +405,49 @@ private:
     bool operator==(const MaybeStackArray & /*other*/) {return FALSE;}
     bool operator!=(const MaybeStackArray & /*other*/) {return TRUE;}
     /* No ownership transfer: No copy constructor, no assignment operator. */
-    MaybeStackArray(const MaybeStackArray & /*other*/) {}
-    void operator=(const MaybeStackArray & /*other*/) {}
+    MaybeStackArray(const MaybeStackArray & /*other*/) = delete;
+    void operator=(const MaybeStackArray & /*other*/) = delete;
+};
+
+/**
+ * A copyable MaybeStackArray. If memory allocation succeeds, the copy will have
+ * the same capacity as the original, with all values copied (including
+ * uninitialized ones).
+ *
+ * WARNING: does not report errors upon memory allocation failure, after which
+ * capacity will be less than expected!
+ */
+template <typename T, int32_t stackCapacity>
+class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
+  public:
+    /**
+     * Default constructor initializes with internal T[stackCapacity] buffer.
+     */
+    CopyableMaybeStackArray() : MaybeStackArray<T, stackCapacity>() {
+    }
+
+    /**
+     * Copy constructor.  If memory allocation succeeds, the copy will have
+     * the same capacity as the original, with all values copied (including
+     * uninitialized ones).
+     *
+     * WARNING: does not report errors upon memory allocation failure, after which
+     * capacity will be less than expected!
+     */
+    CopyableMaybeStackArray(const CopyableMaybeStackArray &other) {
+        this->operator=(other);
+    };
+
+    // Assignment operator
+    void operator=(const CopyableMaybeStackArray &rhs) {
+        int32_t length = rhs.capacity;
+        this->resize(length, length);
+        // If memory allocation failed, capacity will be at least stackCapacity.
+        if (length > this->capacity) {
+            length = this->capacity;
+        }
+        uprv_memcpy(rhs.ptr, this->ptr, (size_t)length * sizeof(T));
+    };
 };
 
 template<typename T, int32_t stackCapacity>
@@ -435,7 +482,7 @@ template<typename T, int32_t stackCapacity>
 inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t length) {
     if(newCapacity>0) {
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
-      ::fprintf(::stderr,"MaybeStacArray (resize) alloc %d * %lu\n", newCapacity,sizeof(T));
+        ::fprintf(::stderr, "MaybeStackArray (resize) alloc %d * %lu\n", newCapacity, sizeof(T));
 #endif
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
         if(p!=NULL) {
