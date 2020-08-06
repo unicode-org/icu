@@ -137,6 +137,7 @@ class U_I18N_API UnitConverter : public UMemory {
      *
      * @param source represents the source unit.
      * @param target represents the target unit.
+     * @param ratesInfo Contains all the needed conversion rates.
      * @param status
      */
     UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
