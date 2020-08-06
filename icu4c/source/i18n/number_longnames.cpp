@@ -484,7 +484,7 @@ const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
 
     for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
         DecimalQuantity fdec;
-        fdec.setToLong(micros.mixedMeasures[i].getNumber().getInt64());
+        fdec.setToLong(micros.mixedMeasures[i]);
         StandardPlural::Form pluralForm = utils::getStandardPlural(rules, fdec);
 
         UnicodeString simpleFormat =

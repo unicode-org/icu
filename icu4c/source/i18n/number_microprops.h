@@ -77,16 +77,9 @@ struct MicroProps : public MicroPropsGenerator {
     // play.
     MeasureUnit outputUnit;
 
-    // Constant for the size of the mixedMeasures array.
-    static const int MIXED_MEASURES_LENGTH = 8;
     // In the case of mixed units, this is the set of integer-only units
-    // *preceding* the final unit. (Simple array because it must be
-    // copy-constructable - thus can't simply use MaybeStackVector<Measure> and
-    // LocalArray<Measure>.)
-    // * TODO(units): try to drop full "Measure" here: build an array, or helper
-    //   struct, of int64s. problem is MicroProps' copy and move construction. FIXME(PR#52)!
-    Measure mixedMeasures[MIXED_MEASURES_LENGTH] = {Measure(), Measure(), Measure(), Measure(),
-                                                    Measure(), Measure(), Measure(), Measure()};
+    // *preceding* the final unit.
+    CopyableMaybeStackArray<int64_t, 2> mixedMeasures;
     // Number of mixedMeasures that have been populated
     int32_t mixedMeasuresCount = 0;
 

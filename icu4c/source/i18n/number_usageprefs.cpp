@@ -106,6 +106,7 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     if (routedUnits.length() > 1) {
         U_ASSERT(micros.outputUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
 #ifdef U_DEBUG
+        // Check that we received measurements with the expected MeasureUnits:
         int32_t singleUnitsCount;
         LocalArray<MeasureUnit> singleUnits =
             micros.outputUnit.splitToSingleUnits(singleUnitsCount, status);
@@ -114,12 +115,13 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
             U_ASSERT(routedUnits[i]->getUnit() == singleUnits[i]);
         }
 #endif
+
         // Mixed units: we pass all values except the last one on to the
         // LongNameHandler via micros.mixedMeasures.
+        micros.mixedMeasures.resize(routedUnits.length());
         micros.mixedMeasuresCount = routedUnits.length() - 1;
-        U_ASSERT(micros.mixedMeasuresCount <= micros.MIXED_MEASURES_LENGTH);
         for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
-            micros.mixedMeasures[i] = std::move(*routedUnits[i]);
+            micros.mixedMeasures[i] = routedUnits[i]->getNumber().getInt64();
         }
     }
     // The last value, or the only value, gets passed on via quantity.
