@@ -39,10 +39,7 @@ Usage &Usage::operator=(const Usage &other) {
     return *this;
 }
 
-// Move constructor - can it be improved by taking over src's "this" instead of
-// copying contents? Swapping pointers makes sense for heap objects but not for
-// stack objects.
-// *this = std::move(src);
+// Move constructor
 Usage::Usage(Usage &&src) U_NOEXCEPT : fUsage(src.fUsage), fLength(src.fLength), fError(src.fError) {
     // Take ownership away from src if necessary
     src.fUsage = nullptr;

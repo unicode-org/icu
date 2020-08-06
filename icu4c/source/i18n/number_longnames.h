@@ -95,7 +95,7 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
 
     friend class NumberFormatterImpl;
 
-    // Fills in LongNamesHandler fields for formatting compound units identified
+    // Fills in LongNameHandler fields for formatting compound units identified
     // via `unit` and `perUnit`. Both `unit` and `perUnit` need to be built-in
     // units (for which data exists).
     static void forCompoundUnit(const Locale &loc, const MeasureUnit &unit, const MeasureUnit &perUnit,
@@ -184,7 +184,7 @@ class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStor
     // the private constructors.
     friend class MemoryPool<MixedUnitLongNameHandler>;
 
-    // Fills in LongNamesHandler fields for formatting mixed units. Each unit in
+    // Fills in LongNameHandler fields for formatting mixed units. Each unit in
     // a mixed unit must be a built-in unit.
     static void forMixedUnit(const Locale &loc, const MeasureUnit &unit, const UNumberUnitWidth &width,
                              const PluralRules *rules, const MicroPropsGenerator *parent,

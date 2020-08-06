@@ -535,7 +535,7 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
         return nullptr;
     }
     U_ASSERT(units.length() > 0);
-    if (result->fHandlers.resize(units.length()) == NULL) {
+    if (result->fHandlers.resize(units.length()) == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
