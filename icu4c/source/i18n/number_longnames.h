@@ -41,8 +41,7 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
      * Compound units can be constructed via `unit` and `perUnit`. Both of these
      * must then be built-in units.
      *
-     * Mixed units are supported via `unit` (`perUnit` must then be "none").
-     * Each individual unit in the mix must be a built-in unit.
+     * Mixed units are not supported, use MixedUnitLongNameHandler::forMeasureUnit.
      *
      * This function uses a fillIn intead of returning a pointer, because we
      * want to fill in instances in a MemoryPool (which cannot adopt pointers it
@@ -65,10 +64,6 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     /**
      * Selects the plural-appropriate Modifier from the set of fModifiers based
      * on the plural form.
-     *
-     * If formatting a mixed unit, `quantity` is taken as the final smallest
-     * unit, while the larger unit values must be provided via
-     * `micros.mixedMeasures`.
      */
     void
     processQuantity(DecimalQuantity &quantity, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
@@ -86,27 +81,6 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     const PluralRules *rules;
     // Not owned
     const MicroPropsGenerator *parent;
-
-    // Total number of units in the MeasureUnit this LongNameHandler was
-    // configured for: for "foot-and-inch", this will be 2. (If not a mixed unit,
-    // this will be 1.)
-    int32_t fMixedUnitCount = 1;
-    // If this LongNameHandler is for a mixed unit, this stores unit data for
-    // each of the individual units. For each unit, it stores ARRAY_LENGTH
-    // strings, as returned by getMeasureData. (Each unit with index `i` has
-    // ARRAY_LENGTH strings starting at index `i*ARRAY_LENGTH` in this array.)
-    LocalArray<UnicodeString> fMixedUnitData;
-    // A localized NumberFormatter used to format the integer-valued bigger
-    // units of Mixed Unit measurements.
-    LocalizedNumberFormatter fIntegerFormatter;
-    // A localised list formatter for joining mixed units together.
-    LocalPointer<ListFormatter> fListFormatter;
-    // For a mixed unit, returns a Modifier that takes only one parameter: the
-    // smallest and final unit of the set. The bigger units' values and labels
-    // get baked into this Modifier, together with the unit label of the final
-    // unit.
-    const Modifier *getMixedUnitModifier(DecimalQuantity &quantity, MicroProps &micros,
-                                         UErrorCode &status) const;
 
     LongNameHandler(const PluralRules *rules, const MicroPropsGenerator *parent)
         : rules(rules), parent(parent) {
@@ -129,12 +103,6 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
                                 const MicroPropsGenerator *parent, LongNameHandler *fillIn,
                                 UErrorCode &status);
 
-    // Fills in LongNamesHandler fields for formatting mixed units. Each unit in
-    // a mixed unit must be a built-in unit.
-    static void forMixedUnit(const Locale &loc, const MeasureUnit &unit, const UNumberUnitWidth &width,
-                             const PluralRules *rules, const MicroPropsGenerator *parent,
-                             LongNameHandler *fillIn, UErrorCode &status);
-
     // Sets fModifiers to use the patterns from `simpleFormats`.
     void simpleFormatsToModifiers(const UnicodeString *simpleFormats, Field field, UErrorCode &status);
 
@@ -145,6 +113,89 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     // pattern of "{0}m/s" by inserting the leadFormat pattern into trailFormat.
     void multiSimpleFormatsToModifiers(const UnicodeString *leadFormats, UnicodeString trailFormat,
                                        Field field, UErrorCode &status);
+};
+
+// Similar to LongNameHandler, but only for MIXED units.
+class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStore, public UMemory {
+  public:
+    /**
+     * Construct a localized MixedUnitLongNameHandler for the specified
+     * MeasureUnit. It must be a MIXED unit.
+     *
+     * This function uses a fillIn intead of returning a pointer, because we
+     * want to fill in instances in a MemoryPool (which cannot adopt pointers it
+     * didn't create itself).
+     *
+     * @param loc The desired locale.
+     * @param mixedUnit The mixed measure unit to construct a
+     *     MixedUnitLongNameHandler for.
+     * @param width Specifies the desired unit rendering.
+     * @param rules Does not take ownership.
+     * @param parent Does not take ownership.
+     * @param fillIn Required.
+     */
+    static void forMeasureUnit(const Locale &loc, const MeasureUnit &mixedUnit,
+                               const UNumberUnitWidth &width, const PluralRules *rules,
+                               const MicroPropsGenerator *parent, MixedUnitLongNameHandler *fillIn,
+                               UErrorCode &status);
+
+    /**
+     * Produces a plural-appropriate Modifier for a mixed unit: `quantity` is
+     * taken as the final smallest unit, while the larger unit values must be
+     * provided via `micros.mixedMeasures`.
+     */
+    void processQuantity(DecimalQuantity &quantity, MicroProps &micros,
+                         UErrorCode &status) const U_OVERRIDE;
+
+    // Required for ModifierStore. And ModifierStore is required by
+    // SimpleModifier constructor's last parameter. We assert his will never get
+    // called though.
+    const Modifier *getModifier(Signum signum, StandardPlural::Form plural) const U_OVERRIDE;
+
+  private:
+    // Not owned
+    const PluralRules *rules;
+    // Not owned
+    const MicroPropsGenerator *parent;
+
+    // Total number of units in the MeasureUnit this LongNameHandler was
+    // configured for: for "foot-and-inch", this will be 2. (If not a mixed unit,
+    // this will be 1.)
+    int32_t fMixedUnitCount = 1;
+    // If this LongNameHandler is for a mixed unit, this stores unit data for
+    // each of the individual units. For each unit, it stores ARRAY_LENGTH
+    // strings, as returned by getMeasureData. (Each unit with index `i` has
+    // ARRAY_LENGTH strings starting at index `i*ARRAY_LENGTH` in this array.)
+    LocalArray<UnicodeString> fMixedUnitData;
+    // A localized NumberFormatter used to format the integer-valued bigger
+    // units of Mixed Unit measurements.
+    LocalizedNumberFormatter fIntegerFormatter;
+    // A localised list formatter for joining mixed units together.
+    LocalPointer<ListFormatter> fListFormatter;
+
+    MixedUnitLongNameHandler(const PluralRules *rules, const MicroPropsGenerator *parent)
+        : rules(rules), parent(parent) {
+    }
+
+    MixedUnitLongNameHandler() : rules(nullptr), parent(nullptr) {
+    }
+
+    // Enables MemoryPool<LongNameHandler>::emplaceBack(): requires access to
+    // the private constructors.
+    friend class MemoryPool<MixedUnitLongNameHandler>;
+
+    // Fills in LongNamesHandler fields for formatting mixed units. Each unit in
+    // a mixed unit must be a built-in unit.
+    static void forMixedUnit(const Locale &loc, const MeasureUnit &unit, const UNumberUnitWidth &width,
+                             const PluralRules *rules, const MicroPropsGenerator *parent,
+                             MixedUnitLongNameHandler *fillIn, UErrorCode &status);
+
+    // For a mixed unit, returns a Modifier that takes only one parameter: the
+    // smallest and final unit of the set. The bigger units' values and labels
+    // get baked into this Modifier, together with the unit label of the final
+    // unit.
+    const Modifier *getMixedUnitModifier(DecimalQuantity &quantity, MicroProps &micros,
+                                         UErrorCode &status) const;
 };
 
 /**
@@ -173,10 +224,14 @@ class LongNameMultiplexer : public MicroPropsGenerator, public UMemory {
      * earlier MicroPropsGenerators in the chain, LongNameMultiplexer keeps the
      * parent link, while the LongNameHandlers are given no parents.
      */
-    MaybeStackVector<LongNameHandler> fLongNameHandlers;
-    // Each MeasureUnit corresponds to the same-index LongNameHandler in
-    // `fLongNameHandlers`.
+    MemoryPool<LongNameHandler> fLongNameHandlers;
+    MemoryPool<MixedUnitLongNameHandler> fMixedUnitHandlers;
+    // Unowned pointers to instances owned by MaybeStackVectors.
+    MaybeStackArray<MicroPropsGenerator *, 8> fHandlers;
+    // Each MeasureUnit corresponds to the same-index MicroPropsGenerator
+    // pointed to in fHandlers.
     LocalArray<MeasureUnit> fMeasureUnits;
+
     const MicroPropsGenerator *fParent;
 
     LongNameMultiplexer(const MicroPropsGenerator *parent) : fParent(parent) {

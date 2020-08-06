@@ -219,26 +219,12 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
     // TODO(units): check if it's possible to create (and pass in) a COMPOUND
     // `unitRef`, with `getType()` returning a zero-length string, which does
     // actually have a "basic unit" representation.
+    U_ASSERT(unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
     if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
-        // TODO(ICU-20941): also deal with compound units (not just mixed units).
-        if (unitRef.getComplexity(status) == UMEASURE_UNIT_MIXED) {
-            // TODO(review): can we simply U_ASSERT this? Passing a `perUnit`
-            // while also passing a not-built-in `unitRef` is an error, and is
-            // documented as such.
-            if (perUnit != MeasureUnit()) {
-                if (U_SUCCESS(status)) {
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
-                }
-                return;
-            }
-            forMixedUnit(loc, unitRef, width, rules, parent, fillIn, status);
-            return;
-        } else {
-            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
-            status = U_UNSUPPORTED_ERROR;
-            return;
-        }
+        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
+        status = U_UNSUPPORTED_ERROR;
+        return;
     }
 
     MeasureUnit unit = unitRef;
@@ -321,10 +307,11 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
                                           {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
 }
 
-void LongNameHandler::forMixedUnit(const Locale &loc, const MeasureUnit &unit,
-                                   const UNumberUnitWidth &width, const PluralRules *rules,
-                                   const MicroPropsGenerator *parent, LongNameHandler *fillIn,
-                                   UErrorCode &status) {
+// FIXME: fold into MixedUnitLongNameHandler::forMeasureUnit in a separate commit.
+void MixedUnitLongNameHandler::forMixedUnit(const Locale &loc, const MeasureUnit &unit,
+                                            const UNumberUnitWidth &width, const PluralRules *rules,
+                                            const MicroPropsGenerator *parent,
+                                            MixedUnitLongNameHandler *fillIn, UErrorCode &status) {
     if (fillIn == nullptr) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
@@ -433,10 +420,6 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     if (parent != NULL) {
         parent->processQuantity(quantity, micros, status);
     }
-    if (fMixedUnitCount > 1) {
-        micros.modOuter = getMixedUnitModifier(quantity, micros, status);
-        return;
-    }
     StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
     micros.modOuter = &fModifiers[pluralForm];
 }
@@ -445,8 +428,30 @@ const Modifier* LongNameHandler::getModifier(Signum /*signum*/, StandardPlural::
     return &fModifiers[plural];
 }
 
-const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity, MicroProps &micros,
-                                                      UErrorCode &status) const {
+void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &mixedUnit,
+                                              const UNumberUnitWidth &width, const PluralRules *rules,
+                                              const MicroPropsGenerator *parent,
+                                              MixedUnitLongNameHandler *fillIn, UErrorCode &status) {
+    U_ASSERT(mixedUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
+    U_ASSERT(fillIn != nullptr);
+    // TODO(review): can we simply U_ASSERT this? Passing a `perUnit`
+    // while also passing a not-built-in `unitRef` is an error, and is
+    // documented as such.
+    forMixedUnit(loc, mixedUnit, width, rules, parent, fillIn, status);
+}
+
+void MixedUnitLongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
+                                               UErrorCode &status) const {
+    U_ASSERT(fMixedUnitCount > 1);
+    if (parent != NULL) {
+        parent->processQuantity(quantity, micros, status);
+    }
+    micros.modOuter = getMixedUnitModifier(quantity, micros, status);
+}
+
+const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
+                                                               MicroProps &micros,
+                                                               UErrorCode &status) const {
     // TODO(icu-units#21): mixed units without usage() is not yet supported.
     // That should be the only reason why this happens, so delete this whole if
     // once fixed:
@@ -523,6 +528,15 @@ const Modifier *LongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
     return &micros.helpers.mixedUnitModifier;
 }
 
+const Modifier *MixedUnitLongNameHandler::getModifier(Signum /*signum*/,
+                                                      StandardPlural::Form /*plural*/) const {
+    // TODO(units): investigate this method when investigating where
+    // LongNameHandler::getModifier() gets used. To be sure it remains
+    // unreachable:
+    UPRV_UNREACHABLE;
+    return nullptr;
+}
+
 LongNameMultiplexer *
 LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<MeasureUnit> &units,
                                      const UNumberUnitWidth &width, const PluralRules *rules,
@@ -532,13 +546,38 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
         return nullptr;
     }
     U_ASSERT(units.length() > 0);
+    if (result->fHandlers.resize(units.length()) == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     result->fMeasureUnits.adoptInstead(new MeasureUnit[units.length()]);
     for (int32_t i = 0, length = units.length(); i < length; i++) {
         const MeasureUnit& unit = *units[i];
         result->fMeasureUnits[i] = unit;
-        // Create empty new LongNameHandler:
-        LongNameHandler *lnh = result->fLongNameHandlers.emplaceBackAndCheckErrorCode(status);
-        LongNameHandler::forMeasureUnit(loc, unit, MeasureUnit(), width, rules, NULL, lnh, status);
+        if (unit.getComplexity(status) == UMEASURE_UNIT_MIXED) {
+            // TODO(review): do we want a createAndCheckStatusCode? It would be
+            // the MemoryPool equivalent of
+            // MaybeStackVector::emplaceBackAndCheckErrorCode
+            MixedUnitLongNameHandler *mlnh = result->fMixedUnitHandlers.create();
+            if (mlnh == nullptr) {
+                if (U_SUCCESS(status)) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                }
+                return nullptr;
+            }
+            MixedUnitLongNameHandler::forMeasureUnit(loc, unit, width, rules, NULL, mlnh, status);
+            result->fHandlers[i] = mlnh;
+        } else {
+            LongNameHandler *lnh = result->fLongNameHandlers.create();
+            if (lnh == nullptr) {
+                if (U_SUCCESS(status)) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                }
+                return nullptr;
+            }
+            LongNameHandler::forMeasureUnit(loc, unit, MeasureUnit(), width, rules, NULL, lnh, status);
+            result->fHandlers[i] = lnh;
+        }
         if (U_FAILURE(status)) {
             return nullptr;
         }
@@ -554,9 +593,9 @@ void LongNameMultiplexer::processQuantity(DecimalQuantity &quantity, MicroProps 
     fParent->processQuantity(quantity, micros, status);
 
     // Call the correct LongNameHandler based on outputUnit
-    for (int i = 0; i < fLongNameHandlers.length(); i++) {
+    for (int i = 0; i < fHandlers.getCapacity(); i++) {
         if (fMeasureUnits[i] == micros.outputUnit) {
-            fLongNameHandlers[i]->processQuantity(quantity, micros, status);
+            fHandlers[i]->processQuantity(quantity, micros, status);
             return;
         }
     }
