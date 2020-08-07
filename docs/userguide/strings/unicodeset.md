@@ -1,3 +1,10 @@
+---
+layout: default
+title: UnicodeSet
+permalink: /unicodeset
+nav_order: 5
+parent: Chars and Strings
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

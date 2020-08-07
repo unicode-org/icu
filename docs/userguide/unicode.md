@@ -1,3 +1,10 @@
+---
+layout: default
+title: Unicode Basics
+permalink: /unicode
+nav_order: 3
+parent: Introduction
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

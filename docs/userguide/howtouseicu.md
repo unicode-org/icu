@@ -1,3 +1,10 @@
+---
+layout: default
+title: How To Use ICU
+permalink: /howtouseicu
+nav_order: 2
+parent: Introduction
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

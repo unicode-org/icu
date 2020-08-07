@@ -1,3 +1,10 @@
+---
+layout: default
+title: Conversion Data
+permalink: /conversion/data
+nav_order: 4
+parent: Conversion
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

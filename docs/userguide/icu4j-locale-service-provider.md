@@ -1,3 +1,10 @@
+---
+layout: default
+title: ICU4J Locale Service Provider
+permalink: /icu4j-locale-service-provider
+nav_order: 7
+parent: Introduction
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
