@@ -297,9 +297,6 @@ public:
      * Automatically allocates the heap array if the argument is larger than the stack capacity.
      * Intended for use when an approximate capacity is known at compile time but the true
      * capacity is not known until runtime.
-     *
-     * WARNING: does not report errors upon memory allocation failure, after
-     * which capacity will be less than expected!
      */
     MaybeStackArray(int32_t newCapacity) : MaybeStackArray() {
         if (capacity < newCapacity) { resize(newCapacity); }
@@ -402,11 +399,11 @@ public:
 
   private:
     /* No comparison operators with other MaybeStackArray's. */
-    bool operator==(const MaybeStackArray & /*other*/) = delete;
-    bool operator!=(const MaybeStackArray & /*other*/) = delete;
+    bool operator==(const MaybeStackArray & /*other*/) {return FALSE;}
+    bool operator!=(const MaybeStackArray & /*other*/) {return TRUE;}
     /* No ownership transfer: No copy constructor, no assignment operator. */
-    MaybeStackArray(const MaybeStackArray & /*other*/) = delete;
-    void operator=(const MaybeStackArray & /*other*/) = delete;
+    MaybeStackArray(const MaybeStackArray & /*other*/) {}
+    void operator=(const MaybeStackArray & /*other*/) {}
 };
 
 /**
@@ -522,7 +519,7 @@ template<typename T, int32_t stackCapacity>
 inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t length) {
     if(newCapacity>0) {
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
-        ::fprintf(::stderr, "MaybeStackArray (resize) alloc %d * %lu\n", newCapacity, sizeof(T));
+      ::fprintf(::stderr,"MaybeStacArray (resize) alloc %d * %lu\n", newCapacity,sizeof(T));
 #endif
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
         if(p!=NULL) {
