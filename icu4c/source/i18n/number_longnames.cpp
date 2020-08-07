@@ -544,26 +544,11 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
         const MeasureUnit& unit = *units[i];
         result->fMeasureUnits[i] = unit;
         if (unit.getComplexity(status) == UMEASURE_UNIT_MIXED) {
-            // TODO(review): do we want a createAndCheckStatusCode? It would be
-            // the MemoryPool equivalent of
-            // MaybeStackVector::emplaceBackAndCheckErrorCode
-            MixedUnitLongNameHandler *mlnh = result->fMixedUnitHandlers.create();
-            if (mlnh == nullptr) {
-                if (U_SUCCESS(status)) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                }
-                return nullptr;
-            }
+            MixedUnitLongNameHandler *mlnh = result->fMixedUnitHandlers.createAndCheckErrorCode(status);
             MixedUnitLongNameHandler::forMeasureUnit(loc, unit, width, rules, NULL, mlnh, status);
             result->fHandlers[i] = mlnh;
         } else {
-            LongNameHandler *lnh = result->fLongNameHandlers.create();
-            if (lnh == nullptr) {
-                if (U_SUCCESS(status)) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                }
-                return nullptr;
-            }
+            LongNameHandler *lnh = result->fLongNameHandlers.createAndCheckErrorCode(status);
             LongNameHandler::forMeasureUnit(loc, unit, MeasureUnit(), width, rules, NULL, lnh, status);
             result->fHandlers[i] = lnh;
         }
