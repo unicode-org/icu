@@ -3130,11 +3130,23 @@ void MeasureFormatTest::TestIndividualPluralFallback() {
     // and falls back to fr for the "other" form.
     IcuTestErrorCode errorCode(*this, "TestIndividualPluralFallback");
     MeasureFormat mf("fr_CA", UMEASFMT_WIDTH_SHORT, errorCode);
+    if (errorCode.errIfFailureAndReset("MeasureFormat mf(...) failed.")) {
+        return;
+    }
     LocalPointer<Measure> twoDeg(
         new Measure(2.0, MeasureUnit::createGenericTemperature(errorCode), errorCode), errorCode);
+    if (errorCode.errIfFailureAndReset("Creating twoDeg failed.")) {
+        return;
+    }
     UnicodeString expected = UNICODE_STRING_SIMPLE("2\\u00B0").unescape();
     UnicodeString actual;
-    assertEquals("2 deg temp in fr_CA", expected, mf.format(twoDeg.orphan(), actual, errorCode), TRUE);
+    // Formattable adopts the pointer
+    mf.format(Formattable(twoDeg.orphan()), actual, errorCode);
+    if (errorCode.errIfFailureAndReset("mf.format(...) failed.")) {
+        return;
+    }
+    assertEquals("2 deg temp in fr_CA", expected, actual, TRUE);
+    errorCode.errIfFailureAndReset("mf.format failed");
 }
 
 void MeasureFormatTest::Test20332_PersonUnits() {
