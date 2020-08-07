@@ -433,7 +433,7 @@ class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
      */
     CopyableMaybeStackArray(const CopyableMaybeStackArray &other) {
         this->operator=(other);
-    };
+    }
 
     /**
      * Copy assignment operator.
@@ -469,7 +469,7 @@ class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
         }
         // capacity is now no bigger than rhs.capacity. Copy what fits.
         uprv_memcpy(this->ptr, rhs.ptr, (size_t)this->capacity * sizeof(T));
-    };
+    }
 
     /**
      * Move constructor: transfers ownership or copies the stack array.
