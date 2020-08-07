@@ -387,8 +387,6 @@ public:
   protected:
     T *ptr;
     int32_t capacity;
-
-  private:
     UBool needToRelease;
     T stackArray[stackCapacity];
     void releaseArray() {
@@ -401,9 +399,11 @@ public:
         capacity=stackCapacity;
         needToRelease=FALSE;
     }
+
+  private:
     /* No comparison operators with other MaybeStackArray's. */
-    bool operator==(const MaybeStackArray & /*other*/) {return FALSE;}
-    bool operator!=(const MaybeStackArray & /*other*/) {return TRUE;}
+    bool operator==(const MaybeStackArray & /*other*/) = delete;
+    bool operator!=(const MaybeStackArray & /*other*/) = delete;
     /* No ownership transfer: No copy constructor, no assignment operator. */
     MaybeStackArray(const MaybeStackArray & /*other*/) = delete;
     void operator=(const MaybeStackArray & /*other*/) = delete;
@@ -438,16 +438,46 @@ class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
         this->operator=(other);
     };
 
-    // Assignment operator
+    // Copy assignment operator.
+    //
+    // Only deals with memory allocation if the capacity does not already match
+    // rhs. If resizing to stackCapacity, it simply uses the stackArray.
+    //
+    // If memory allocation fails, only the number of elements that fit the
+    // existing capacity is copied. (Calling code that wants to know about the
+    // failure can compare the outputs of getCapacity().)
     void operator=(const CopyableMaybeStackArray &rhs) {
-        int32_t length = rhs.capacity;
-        this->resize(length, length);
-        // If memory allocation failed, capacity will be at least stackCapacity.
-        if (length > this->capacity) {
-            length = this->capacity;
+        if (this->capacity != rhs.capacity) {
+            if (stackCapacity == rhs.capacity) {
+                this->releaseArray();
+                this->resetToStackArray();
+            } else {
+                T *p = (T *)uprv_malloc(rhs.capacity * sizeof(T));
+                if (p != NULL) {
+                    this->releaseArray();
+                    this->ptr = p;
+                    this->capacity = rhs.capacity;
+                    this->needToRelease = TRUE;
+                } else if (this->capacity > rhs.capacity) {
+                    // We have more capacity than we need. Let's pretend we
+                    // don't, since there isn't enough data to initialize with
+                    this->capacity = rhs.capacity;
+                }
+            }
         }
-        uprv_memcpy(rhs.ptr, this->ptr, (size_t)length * sizeof(T));
+        // capacity is now no bigger than rhs.capacity. Copy what fits.
+        uprv_memcpy(this->ptr, rhs.ptr, (size_t)this->capacity * sizeof(T));
     };
+
+    // TODO:
+    // /**
+    //  * Move constructor: transfers ownership or copies the stack array.
+    //  */
+    // CopyableMaybeStackArray(CopyableMaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT;
+    // /**
+    //  * Move assignment: transfers ownership or copies the stack array.
+    //  */
+    // CopyableMaybeStackArray<T, stackCapacity> &operator=(CopyableMaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT;
 };
 
 template<typename T, int32_t stackCapacity>
