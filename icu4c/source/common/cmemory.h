@@ -438,15 +438,20 @@ class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
         this->operator=(other);
     };
 
-    // Copy assignment operator.
-    //
-    // Only deals with memory allocation if the capacity does not already match
-    // rhs. If resizing to stackCapacity, it simply uses the stackArray.
-    //
-    // If memory allocation fails, only the number of elements that fit the
-    // existing capacity is copied. (Calling code that wants to know about the
-    // failure can compare the outputs of getCapacity().)
+    /**
+     * Copy assignment operator.
+     *
+     * Only deals with memory allocation if the capacity does not already match
+     * rhs. If resizing to stackCapacity, it simply uses the stackArray.
+     *
+     * If memory allocation fails, only the number of elements that fit the
+     * existing capacity is copied. (Calling code that wants to know about the
+     * failure can compare the outputs of getCapacity().)
+     */
     void operator=(const CopyableMaybeStackArray &rhs) {
+        if (this == &rhs) {
+            return;
+        }
         if (this->capacity != rhs.capacity) {
             if (stackCapacity == rhs.capacity) {
                 this->releaseArray();
@@ -469,15 +474,20 @@ class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
         uprv_memcpy(this->ptr, rhs.ptr, (size_t)this->capacity * sizeof(T));
     };
 
-    // TODO:
-    // /**
-    //  * Move constructor: transfers ownership or copies the stack array.
-    //  */
-    // CopyableMaybeStackArray(CopyableMaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT;
-    // /**
-    //  * Move assignment: transfers ownership or copies the stack array.
-    //  */
-    // CopyableMaybeStackArray<T, stackCapacity> &operator=(CopyableMaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT;
+    /**
+     * Move constructor: transfers ownership or copies the stack array.
+     */
+    CopyableMaybeStackArray(CopyableMaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT
+        : MaybeStackArray<T, stackCapacity>(std::move(src)) {
+    }
+
+    /**
+     * Move assignment: transfers ownership or copies the stack array.
+     */
+    CopyableMaybeStackArray<T, stackCapacity> &
+    operator=(CopyableMaybeStackArray<T, stackCapacity> &&src) U_NOEXCEPT {
+        MaybeStackArray<T, stackCapacity>::operator=(std::move(src));
+    }
 };
 
 template<typename T, int32_t stackCapacity>
