@@ -1,9 +1,24 @@
+---
+layout: default
+title: ICU FAQ
+nav_order: 6
+parent: Misc
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # ICU FAQs
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Introduction to ICU
 

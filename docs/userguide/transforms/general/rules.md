@@ -1,9 +1,26 @@
+---
+layout: default
+title: Transform Rule Tutorial
+nav_order: 5
+parent: Transforms
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Transform Rule Tutorial
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 This tutorial describes the process of building a custom transform based on a
 set of rules. The tutorial does not describe, in detail, the features of

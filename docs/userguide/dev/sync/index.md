@@ -1,9 +1,24 @@
+---
+layout: default
+title: Synchronization
+nav_order: 2
+parent: Misc
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Synchronization Issues
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

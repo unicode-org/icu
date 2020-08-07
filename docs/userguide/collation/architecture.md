@@ -1,9 +1,26 @@
+---
+layout: default
+title: Architecture
+nav_order: 2
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation Service Architecture
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 This section describes the design principles, architecture and coding
 conventions of the ICU Collation Service.

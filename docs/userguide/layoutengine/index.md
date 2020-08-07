@@ -1,33 +1,49 @@
+---
+layout: default
+title: Layout Engine
+nav_order: 12
+has_children: true
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Layout Engine
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Line Layout Deprecation
 
-> :warning: ***The ICU Line LayoutEngine has been removed in ICU 58.*** It had not had active
-> development for some time, had many open abugs,
+> :warning: ***The ICU Line LayoutEngine has been removed in ICU 58.***
+> It had not had active development for some time, had many open bugs,
 > and had been deprecated in ICU 54.
-
+>
 > Users of ICU Layout are **strongly** encouraged to consider the HarfBuzz project
 > as a replacement for the ICU Layout Engine. An ICU team member responsible for
 > the Layout Engine is contributing fixes and features to HarfBuzz, and a drop in
 > wrapper is available to allow use of HarfBuzz as a direct replacement for the
 > ICU layout engine.
-
+>
 > HarfBuzz has its own active mailing lists, please use those for discussion of
-HarfBuzz and its use as a replacement for the ICU layout engine.
-See:
-[​http://www.freedesktop.org/wiki/Software/HarfBuzz](http://www.freedesktop.org/wiki/Software/HarfBuzz)
+> HarfBuzz and its use as a replacement for the ICU layout engine.
+> See: [http://www.freedesktop.org/wiki/Software/HarfBuzz](http://www.freedesktop.org/wiki/Software/HarfBuzz)
+
 
 > :point_right: **Users of the "layoutex" ParagraphLayout library**: Please see information
 about how to build "layoutex" on the [Paragraph Layout](paragraph.md) page.
 
+
 ## Overview
 
-:warning: **See deletion/deprecation notice, above.**
+> :warning: **See the deletion/deprecation notice, above.**
 
 The Latin script, which is the most commonly used script among software
 developers, is also the least complex script to display especially when it is

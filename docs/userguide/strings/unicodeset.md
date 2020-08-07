@@ -1,7 +1,6 @@
 ---
 layout: default
 title: UnicodeSet
-permalink: /unicodeset
 nav_order: 5
 parent: Chars and Strings
 ---

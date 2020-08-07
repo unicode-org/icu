@@ -1,7 +1,6 @@
 ---
 layout: default
 title: UTF-8
-permalink: /utf-8
 nav_order: 1
 parent: Chars and Strings
 ---
@@ -75,7 +74,7 @@ macros in `unicode/utf16.h`. The macros handle many cases inline, but call
 internal functions for complicated parts of the UTF-8 encoding form. For
 example, the following code snippet counts white space characters in a string:
 
-```C
+```c
 #include "unicode/utypes.h"
 #include "unicode/stringpiece.h"
 #include "unicode/utf8.h"
@@ -135,9 +134,7 @@ string.
 
 *   *Note: In ICU 4.4 and before, BreakIterator only works with UTF-8 (or any
     other charset with non-1:1 index conversion to UTF-16) if no dictionary is
-    supported. This excludes Thai word break. See [ticket
-    #5532](http://bugs.icu-project.org/trac/ticket/5532). No fix is currently
-    scheduled.*
+    supported. This excludes Thai word break. See [ticket #5532](https://unicode-org.atlassian.net/browse/ICU-5532).*
 *   *As a workaround for Thai word breaking, you can convert the string to
     UTF-16 and convert indexes to UTF-8 string indexes via
     `u_strToUTF8(dest=NULL, destCapacity=0, *destLength gets UTF-8 index).`*

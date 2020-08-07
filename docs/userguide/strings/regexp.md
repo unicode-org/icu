@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Regular Expressions
-permalink: /regexp
 nav_order: 6
 parent: Chars and Strings
 ---

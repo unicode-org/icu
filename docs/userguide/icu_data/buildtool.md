@@ -1,10 +1,26 @@
+---
+layout: default
+title: ICU Data Build Tool
+nav_order: 1
+parent: ICU Data
+---
 <!--
 © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-ICU Data Build Tool
-===================
+# ICU Data Build Tool
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 ICU 64 provides a tool for configuring your ICU locale data file with finer
 granularity.  This page explains how to use this tool to customize and reduce

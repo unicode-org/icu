@@ -1,7 +1,6 @@
 ---
 layout: default
 title: UText
-permalink: /utext
 nav_order: 4
 parent: Chars and Strings
 ---

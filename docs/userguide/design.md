@@ -1,9 +1,8 @@
 ---
 layout: default
 title: ICU Design
-permalink: /design
 nav_order: 5
-parent: Introduction
+parent: ICU
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -11,6 +10,17 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # ICU Architectural Design
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+# Overview
 
 This chapter discusses the ICU design structure, the ICU versioning support, and
 the introduction of namespace in C++.
@@ -471,7 +481,7 @@ The data stored in resource bundles is tagged with version numbers. A resource
 bundle can contain a tagged string named "Version" that declares the version
 number in dotted-integer format. For example,
 
-```Text
+```text
 en {
 Version { "1.0.3.5" }
 ...
@@ -487,7 +497,7 @@ version number 0.
 
 Elements within a resource bundle may also contain version numbers. For example:
 
-```Text
+```text
 be {
     CollationElements {
         Version { "1.0.0.0" }
@@ -718,7 +728,7 @@ For example, here is how an API might be tagged in various versions:
 
 * **In ICU 0.2**: The API is newly introduced as a draft in this release.
 
-  ```Text
+  ```text
   @draft ICU 0.2
   f(x)
   ```
@@ -726,7 +736,7 @@ For example, here is how an API might be tagged in various versions:
 * **In ICU 0.4**: The draft version number is updated, because the signature
   changed.
 
-  ```Text
+  ```text
   @draft ICU 0.4
   f(x, y)
   ```
@@ -734,7 +744,7 @@ For example, here is how an API might be tagged in various versions:
 * **In ICU 0.6**: The API is promoted from draft to stable, but the version
   number does not change, as the signature is the same.
 
-  ```Text
+  ```text
   @stable ICU 0.4
   f(x, y)
   ```
@@ -745,21 +755,21 @@ For example, here is how an API might be tagged in various versions:
   calling code continues to work unchanged (so we retain @stable if that's what
   it was.)
 
-  ```Text
+  ```text
   @stable ICU 1.0
   f(xbase, y)
   ```
 
 * **In ICU 1.2**: The API is demoted to deprecated (or obsolete) status.
 
-  ```Text
+  ```text
   @deprecated ICU 1.2 Use g(x,y,z) instead.
   f(xbase, y)
   ```
 
   or, when this API is planned to be removed in ICU 1.4:
 
-  ```Text
+  ```text
   @obsolete ICU 1.4. Use g(x,y,z) instead.
   f(xbase, y)
   ```
@@ -816,7 +826,7 @@ Function renaming is enabled by default, and must be disabled at ICU build time
 to enable release to release binary compatibility. To disable renaming, use the
 configure option
 
-```Shell
+```shell
 configure -–disable-renaming [other configure options]
 ```
 

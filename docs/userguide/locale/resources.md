@@ -1,15 +1,30 @@
+---
+layout: default
+title: Resources
+nav_order: 2
+parent: Locales and Resources
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Resource Management
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 > :point_right: **Note**: This page describes the use of ICU4C Resource
 > Management techniques and APIs. For an overview of the message localization
 > process using ICU, see the related page [Localizing with ICU](localizing.md).
-
-## Overview
 
 A software product that needs to be localized wins or loses depending on how
 easy is to change the data or "resources" which affect users. From the simplest

@@ -5,6 +5,8 @@ The ICU project is under the stewardship of [The Unicode Consortium](https://www
 
 - Source: https://github.com/unicode-org/icu
 - Bugs: https://unicode-org.atlassian.net/projects/ICU
+- API Docs: https://unicode-org.github.io/icu-docs/
+- User Guide: https://unicode-org.github.io/icu/
 
 ![ICU Logo](./tools/images/iculogo_64.png)
 

@@ -1,3 +1,9 @@
+---
+layout: default
+title: Collation
+nav_order: 9
+has_children: true
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
@@ -131,7 +137,7 @@ The basic ICU Collation Service is provided by two main categories of APIs:
 ICU provides an AlphabeticIndex API for generating language-appropriate
 sorted-section labels like in dictionaries and phone books.
 
-ICU also provides a higher-level [string search](icu-string-search-service.md)
+ICU also provides a higher-level [string search](string-search.md)
 API which can be used, for example, for case-insensitive or accent-insensitive
 search in an editor or in a web page. ICU string search is based on the
 low-level [collation element iteration](architecture.md).

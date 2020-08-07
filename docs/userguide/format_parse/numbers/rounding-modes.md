@@ -1,9 +1,25 @@
+---
+layout: default
+title: Rounding Modes
+nav_order: 2
+grand_parent: Formatting
+parent: Formatting Numbers
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Rounding Modes
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 The following rounding modes are used with ICU's Decimal Formatter. Note that
 ICU's use of the terms "Down" and "Up" here are somewhat at odds with other

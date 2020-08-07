@@ -1,7 +1,6 @@
 ---
 layout: default
 title: StringPrep
-permalink: /stringprep
 nav_order: 7
 parent: Chars and Strings
 ---

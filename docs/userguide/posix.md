@@ -1,9 +1,8 @@
 ---
 layout: default
 title: C/POSIX Migration
-permalink: /posix
 nav_order: 6
-parent: Introduction
+parent: ICU
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -11,6 +10,15 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # C/POSIX Migration
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Migration from Standard C and POSIX APIs
 

@@ -1,9 +1,24 @@
+---
+layout: default
+title: String Search
+nav_order: 4
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # String Search Service
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -159,7 +174,7 @@ the user searches for the pattern "´" (\\u00b4) in the string "A´´B",
 
 **In C:**
 
-```C
+```c
     char *tgtstr = "The quick brown fox jumps over the lazy dog.";
     char *patstr = "fox";
     UChar target[64];
@@ -196,7 +211,7 @@ the user searches for the pattern "´" (\\u00b4) in the string "A´´B",
 
 **In C++:**
 
-```C++
+```c++
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString target("Jackdaws love my big sphinx of quartz.");
     UnicodeString pattern("sphinx");
@@ -222,7 +237,7 @@ the user searches for the pattern "´" (\\u00b4) in the string "A´´B",
 
 **In Java:**
 
-```Java
+```java
     StringCharacterIterator target = new StringCharacterIterator(
                                          "Pack my box with five dozen liquor jugs.");
     String pattern = "box";

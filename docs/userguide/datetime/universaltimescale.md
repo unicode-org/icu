@@ -1,9 +1,24 @@
+---
+layout: default
+title: Universal Time Scale
+nav_order: 5
+parent: Date/Time
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Universal Time Scale
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

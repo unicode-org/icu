@@ -1,9 +1,25 @@
+---
+layout: default
+title: RuleBasedNumberFormat Examples
+nav_order: 6
+grand_parent: Formatting
+parent: Formatting Numbers
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # RuleBasedNumberFormat Examples
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Annotated RuleBasedNumberFormat Example
 

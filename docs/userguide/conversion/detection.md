@@ -1,8 +1,7 @@
 ---
 layout: default
-title: CharSet Detection
-permalink: /conversion/detection
-nav_order: 4
+title: Charset Detection
+nav_order: 3
 parent: Conversion
 ---
 <!--
@@ -11,6 +10,15 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Character Set Detection
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -41,15 +49,16 @@ error rate, particularly when working with short samples of text.
 
 ## CharsetMatch
 
-The CharsetMatch class holds the result of comparing the input data to a
+The `CharsetMatch` class holds the result of comparing the input data to a
 particular encoding. You can use an instance of this class to get the name of
 the character set, the language, and how good the match is. You can also use
 this class to decode the input data.
 
-To find out how good the match is, you use the getConfidence() method to get a
+To find out how good the match is, you use the `getConfidence()` method to get a
 *confidence value*. This is an integer from 0 to 100. The higher the value, the
 more confidence there is in the match For example:
 
+```java
 CharsetMatch match = ...;
 int confidence;
 confidence = match.getConfidence();
@@ -58,12 +67,12 @@ if (confidence < 50 ) {
 } else {
 // handle a good match...
 }
+```
 
-In C, you can use the
-`ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status)`
-method to get a confidence value
+In C, you can use the `ucsdet_getConfidence(const UCharsetMatch *ucsm, UErrorCode *status)`
+method to get a confidence value.
 
-```C
+```c
 const UCharsetMatch *ucm;
 UErrorCode status = U_ZERO_ERROR;
 int32_t confidence = ucsdet_getConfidence(ucm, &status);
@@ -75,9 +84,9 @@ if (confidence <50) {
 ```
 
 To get the name of the character set, which can be used as an encoding name in
-Java, you use the getName() method:
+Java, you use the `getName()` method:
 
-```Java
+```java
 CharsetMatch match = ...;
 byte characterData[] = ...;
 String charsetName;
@@ -86,21 +95,21 @@ charsetName = match.getName();
 unicodeData = new String(characterData, charsetName);
 ```
 
-To get the name of the character set in C :
+To get the name of the character set in C:
 
-```C
+```c
 const UCharsetMatch *ucm;
 UErrorCode status = U_ZERO_ERROR;
 const char *name = ucsdet_getName(ucm, &status);
 ```
 
 To get the three letter ISO code for the detected language, you use the
-getLanguage() method. If the language could not be determined, getLanguage()
-will return null. Note that language detection does not work with all charsets,
+`getLanguage()` method. If the language could not be determined, `getLanguage()`
+will return `null`. Note that language detection does not work with all charsets,
 and includes only a very small set of possible languages. It should not used if
 robust, reliable language detection is required.
 
-```Java
+```java
 CharsetMatch match = ...;
 String languageCode;
 languageCode = match.getLanguage();
@@ -113,33 +122,33 @@ The `ucsdet_getLanguage(const UCharsetMatch *ucsm, UErrorCode *status)` method
 can be used in C to get the language code. If the language could not be
 determined, the method will return an empty string.
 
-```C
+```c
 const UCharsetMatch *ucm;
 UErrorCode status = U_ZERO_ERROR;
 const char *language = ucsdet_getLanguage(ucm, &status);
 ```
 
 If you want to get a Java String containing the converted data you can use the
-getString() method:
+`getString()` method:
 
-```Java
+```java
 CharsetMatch match = ...;
 String unicodeData;
 unicodeData = match.getString();
 ```
 
 If you want to limit the number of characters in the string, pass the maximum
-number of characters you want to the getString() method:
+number of characters you want to the `getString()` method:
 
-```Java
+```java
 CharsetMatch match = ...;
 String unicodeData;
 unicodeData = match.getString(1024);
 ```
 
-To get a java.io.Reader to read the converted data, use the getReader() method:
+To get a `java.io.Reader` to read the converted data, use the `getReader()` method:
 
-```Java
+```java
 CharsetMatch match = ...;
 Reader reader;
 StringBuffer sb = new StringBuffer();
@@ -154,16 +163,16 @@ reader.close();
 
 ## CharsetDetector
 
-The CharsetDetector class does the actual detection. It matches the input data
-against all character sets, and computes a list of CharsetMatch objects to hold
+The `CharsetDetector` class does the actual detection. It matches the input data
+against all character sets, and computes a list of `CharsetMatch` objects to hold
 the results. The input data can be supplied as an array of bytes, or as a
-java.io.InputStream.
+`java.io.InputStream`.
 
-To use a CharsetDetector object, first you construct it, and then you set the
-input data, using the setText() method. Because setting the input data is
-separate from the construction, it is easy to reuse a CharsetDetector object:
+To use a `CharsetDetector` object, first you construct it, and then you set the
+input data, using the `setText()` method. Because setting the input data is
+separate from the construction, it is easy to reuse a `CharsetDetector` object:
 
-```Java
+```java
 CharsetDetector detector;
 byte[] byteData = ...;
 InputStream streamData = ...;
@@ -175,10 +184,10 @@ detector.setText(streamData);
 ```
 
 If you want to know which character set matches your input data with the highest
-confidence, you can use the detect() method, which will return a CharsetMatch
+confidence, you can use the `detect()` method, which will return a `CharsetMatch`
 object for the match with the highest confidence:
 
-```Java
+```java
 CharsetDetector detector;
 CharsetMatch match;
 byte[] byteData = ...;
@@ -190,7 +199,7 @@ match = detector.detect();
 If you want to know which character set matches your input data in C, you can
 use the `ucsdet_detect(UCharsetDetector *csd , UErrorCode *status)` method.
 
-```C
+```c
 UCharsetDetector *csd;
 const UCharsetMatch *ucm;
 static char buffer[BUFFER_SIZE] = {....};
@@ -201,11 +210,11 @@ ucm = ucsdet_detect(csd, &status);
 ```
 
 If you want to know all of the character sets that could match your input data
-with a non-zero confidence, you can use the detectAll() method, which will
-return an array of CharsetMatch objects sorted by confidence, from highest to
+with a non-zero confidence, you can use the `detectAll()` method, which will
+return an array of `CharsetMatch` objects sorted by confidence, from highest to
 lowest.:
 
-```Java
+```java
 CharsetDetector detector;
 CharsetMatch matches[];
 byte[] byteData = ...;
@@ -217,19 +226,17 @@ for (int m = 0; m < matches.length; m += 1) {
 }
 ```
 
-> :point_right: **Note**: The
-`ucsdet_detectALL(UCharsetDetector *csd , int32_t *matchesFound, UErrorCode *status)`
-method can be used in C in order to detect all of the
-character sets where matchesFound is a pointer to a variable that will be set to
-the number of charsets identified that are consistent with the input data.
+> :point_right: **Note**: The `ucsdet_detectALL(UCharsetDetector *csd , int32_t *matchesFound, UErrorCode *status)` 
+> method can be used in C in order to detect all of the character sets where `matchesFound` is a pointer
+> to a variable that will be set to the number of charsets identified that are consistent with the input data.
 
-The CharsetDetector class also implements a crude *input filter* that can strip
+The `CharsetDetector` class also implements a crude *input filter* that can strip
 out html and xml style tags. If you want to enable the input filter, which is
-disabled when you construct a CharsetDetector, you use the enableInputFilter()
+disabled when you construct a `CharsetDetector`, you use the `enableInputFilter()`
 method, which takes a boolean. Pass in true if you want to enable the input
 filter, and false if you want to disable it:
 
-```Java
+```java
 CharsetDetector detector;
 CharsetMatch match;
 byte[] byteDataWithTags = ...;
@@ -242,7 +249,7 @@ match = detector.detect();
 To enable an input filter in C, you can use
 `ucsdet_enableInputFilter(UCharsetDetector *csd, UBool filter)` function.
 
-```C
+```c
 UCharsetDetector *csd;
 const UCharsetMatch *ucm;
 static char buffer[BUFFER_SIZE] = {....};
@@ -258,10 +265,10 @@ better to filter the data yourself before you pass it to CharsetDetector. For
 example, you might know that the data is from an html page that contains CSS
 styles, which will not be stripped by the input filter.
 
-You can use the inputFilterEnabled() method to see if the input filter is
+You can use the `inputFilterEnabled()` method to see if the input filter is
 enabled:
 
-```Java
+```java
 CharsetDetector detector;
 detector = new CharsetDetector();
 // do a bunch of stuff with detector
@@ -273,13 +280,13 @@ if (detector.inputFilterEnabled()) {
 }
 ```
 
-> :point_right: **Note**: The ICU4C API provide uscdet_isInputFilterEnabled(const UCharsetDetector\*
-csd) function to check whether the input filter is enabled.
+> :point_right: **Note**: The ICU4C API provide `uscdet_isInputFilterEnabled(const UCharsetDetector* csd)` function
+> to check whether the input filter is enabled.
 
-The CharsetDetector class also has two convenience methods that let you detect
-and convert the input data in one step: the getReader() and getString() methods:
+The `CharsetDetector` class also has two convenience methods that let you detect
+and convert the input data in one step: the `getReader()` and `getString()` methods:
 
-```Java
+```java
 CharsetDetector detector;
 byte[] byteData = ...;
 InputStream streamData = ...;
@@ -290,13 +297,13 @@ unicodeData = detector.getString(byteData, null);
 unicodeReader = detector.getReader(streamData, null);
 ```
 
-> :point_right: **Note**: The second argument to the getReader() and getString() methods is a
-String called declaredEncoding, which is not currently used. There is also a
-setDeclaredEncoding() method, which is also not currently used.
+> :point_right: **Note**: The second argument to the `getReader()` and `getString()` methods
+> is a String called `declaredEncoding`, which is not currently used. There is also a
+> `setDeclaredEncoding()` method, which is also not currently used.
 
 The following code is equivalent to using the convenience methods:
 
-```Java
+```java
 CharsetDetector detector;
 CharsetMatch match;
 byte[] byteData = ...;
@@ -315,7 +322,7 @@ unicodeReader = match.getReader();CharsetDetector
 ## Detected Encodings
 
 The following table shows all the encodings that can be detected. You can get
-this list (without the languages) by calling the getAllDetectableCharsets()
+this list (without the languages) by calling the `getAllDetectableCharsets()`
 method:
 
 | **Character Set** | **Languages** |

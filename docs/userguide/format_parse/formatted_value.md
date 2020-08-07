@@ -1,10 +1,27 @@
+---
+layout: default
+title: FormattedValue
+nav_order: 4
+grand_parent: Formatting
+parent: Formatting Numbers
+---
 <!--
 © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-FormattedValue
-==============
+# FormattedValue
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 FormattedValue is an abstraction for localized strings with attributes
 returned by a number of ICU formatters.  APIs for FormattedValue are available

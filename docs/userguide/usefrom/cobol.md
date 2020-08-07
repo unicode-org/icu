@@ -1,9 +1,24 @@
+---
+layout: default
+title: Cobol
+nav_order: 1
+parent: Use From...
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # How To Use ICU4C From COBOL
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

@@ -1,9 +1,8 @@
 ---
 layout: default
 title: ICU Services
-permalink: /services
 nav_order: 4
-parent: Introduction
+parent: ICU
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -11,6 +10,15 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # ICU Services
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview of the ICU Services
 

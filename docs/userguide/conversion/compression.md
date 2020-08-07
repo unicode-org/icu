@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Compression
-permalink: /conversion/compression
 nav_order: 4
 parent: Conversion
 ---
@@ -11,6 +10,15 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Compression
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview of SCSU
 

@@ -1,9 +1,24 @@
+---
+layout: default
+title: Calendar Services
+nav_order: 1
+parent: Date/Time
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Calendar Classes
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -148,7 +163,7 @@ field by field.
 
 This is demonstrated in the following example:
 
-```C++
+```c++
 Calendar cal = Calendar.getInstance();
 cal.set(2000, Calendar.MARCH, 15);
 Date date = new Date(2000-1900, Calendar.JULY, 4);
@@ -241,7 +256,7 @@ directly access the GregorianCalendar-specific methods not present in Calendar.
 The correct way to handle this is to perform a dynamic cast, after testing the
 type of the object using getDynamicClassID(). For example:
 
-```C++
+```c++
 void setCutover(Calendar *cal, UDate myCutover) {
     if (cal->getDynamicClassID() == GregorianCalendar::getStaticClassID()) {
         GregorianCalendar *gc = (GregorianCalendar*)cal;

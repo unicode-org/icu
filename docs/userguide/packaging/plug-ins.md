@@ -1,9 +1,26 @@
+---
+layout: default
+title: Plug-ins
+nav_order: 4
+parent: ICU Data
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Plug-ins
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 This page documents the ICU4C DLL Plug-in capability.
 This feature is a Technology Preview which first appeared in ICU4C version
@@ -43,18 +60,17 @@ Here is a simple, trivial plugin:
 
 ```c
 U_CAPI
-UPlugTokenReturn U_EXPORT2
-myPlugin(UPlugData *data, UPlugReason reason, UErrorCode *status) {
-    if(reason==UPLUG_REASON_QUERY) {
-        uplug_setPlugName(data, "Simple Plugin"); /* optional */
-        uplug_setPlugLevel(data, UPLUG_LEVEL_HIGH); /* Mandatory */
-    } else if(reason==UPLUG_REASON_LOAD) {
-        /* ... load ... */
-        /* Set up some ICU things here. */
-    } else if(reason==UPLUG_REASON_UNLOAD) {
-        /* ... unload ... */
-    }
-    return UPLUG_TOKEN; /* Mandatory. */
+UPlugTokenReturn U_EXPORT2 myPlugin (UPlugData *data, UPlugReason reason, UErrorCode *status) {
+    if(reason==UPLUG_REASON_QUERY) {
+        uplug_setPlugName(data, "Simple Plugin"); /* optional */
+        uplug_setPlugLevel(data, UPLUG_LEVEL_HIGH); /* Mandatory */
+    } else if(reason==UPLUG_REASON_LOAD) {
+        /* ... load ... */
+        /* Set up some ICU things here. */
+    } else if(reason==UPLUG_REASON_UNLOAD) {
+        /* ... unload ... */
+    }
+    return UPLUG_TOKEN; /* Mandatory. */
 }
 ```
 
@@ -67,11 +83,11 @@ The API contract is:
 indicate that it is a valid plugin.
 
 2. when the 'reason' parameter is set to UPLUG_REASON_QUERY, the
-plugin MUST call uplug_setPlugLevel() to indicate whether it is a high
+plugin MUST call `uplug_setPlugLevel()` to indicate whether it is a high
 level or low level plugin.
 
 3. when the 'reason' parameter is UPLUG_REASON_QUERY, the plugin
-SHOULD call uplug_setPlugName to indicate a human readable plugin name.
+SHOULD call `uplug_setPlugName` to indicate a human readable plugin name.
 
 ## Configuration
 
@@ -106,6 +122,7 @@ An example configuration file is, in its entirety:
 # this is icuplugins44.txt
 testplug.dll myPlugin hello=world
 ```
+
 The DLL testplug.dll is opened, and searched for the entrypoint
 "myPlugin", which must meet the API contract above.
 The string "hello=world" is passed to the plugin verbatim.
@@ -131,36 +148,38 @@ encountered which prevented them from loading. Thus, the end user can
 validate their plugin configuration file to determine if plugins are
 missing, unloadable, or loaded in the wrong order.
 For example the following run shows that the plugin named
-"myPluginFailQuery" did not call uplug_setPlugLevel() and thus failed to
+"myPluginFailQuery" did not call `uplug_setPlugLevel()` and thus failed to
 load.
 
-     $ icuinfo -v -L
-     Compiled against ICU 4.3.4, currently running ICU 4.3.4
-     ICUDATA is icudt43l
-     plugin file is: /lib/plugins/icuplugins43.txt
-     Plugins:
-     # Level Name
-     Library:Symbol 
-     config| (configuration string)
-     >>> Error | Explanation
-     -----------------------------------
-     
-     #1 HIGH Just a Test High-Level Plugin
-     plugin| /lib/plugins/libplugin.dylib:myPlugin 
-     config| x=4
-     
-     #2 HIGH High Plugin
-     plugin| /lib/plugins/libplugin.dylib:myPluginHigh
-     config| x=4
-     
-     #3 INVALID this plugin did not call uplug_setPlugName()
-     plugin| /lib/plugins/libplugin.dylib:myPluginFailQuery
-     config| uery
-     \\\ status| U_PLUGIN_DIDNT_SET_LEVEL
-     /// Error: This plugin did not call uplug_setPlugLevel during QUERY.
-     
-     #4 LOW Low Plugin
-     plugin| /lib/plugins/libplugin.dylib:myPluginLow
-     config| x=4
-     Default locale is en_US
-     Default converter is UTF-8.
+```
+$ icuinfo -v -L
+Compiled against ICU 4.3.4, currently running ICU 4.3.4
+ICUDATA is icudt43l
+plugin file is: /lib/plugins/icuplugins43.txt
+Plugins:
+# Level Name
+Library:Symbol 
+config| (configuration string)
+>>> Error | Explanation
+-----------------------------------
+
+#1 HIGH Just a Test High-Level Plugin
+plugin| /lib/plugins/libplugin.dylib:myPlugin 
+config| x=4
+
+#2 HIGH High Plugin
+plugin| /lib/plugins/libplugin.dylib:myPluginHigh
+config| x=4
+
+#3 INVALID this plugin did not call uplug_setPlugName()
+plugin| /lib/plugins/libplugin.dylib:myPluginFailQuery
+config| uery
+\\\ status| U_PLUGIN_DIDNT_SET_LEVEL
+/// Error: This plugin did not call uplug_setPlugLevel during QUERY.
+
+#4 LOW Low Plugin
+plugin| /lib/plugins/libplugin.dylib:myPluginLow
+config| x=4
+Default locale is en_US
+Default converter is UTF-8.
+```

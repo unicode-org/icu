@@ -1,7 +1,6 @@
 ---
 layout: default
 title: CharacterIterator
-permalink: /characteriterator
 nav_order: 3
 parent: Chars and Strings
 ---

@@ -1,9 +1,24 @@
+---
+layout: default
+title: Calendar Examples
+nav_order: 2
+parent: Date/Time
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Calendar Examples
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Calendar for Default Time Zone
 
@@ -11,7 +26,8 @@ These C++, C , and Java examples get a Calendar based on the default time zone
 and add days to a date.
 
 **C++**
-```C++
+
+```c++
 UErrorCode status = U_ZERO_ERROR;
 GregorianCalendar* gc = new GregorianCalendar(status);
 if (U_FAILURE(status)) {
@@ -48,7 +64,8 @@ delete gc;
 ```
 
 **C**
-```C
+
+```c
 UErrorCode status = U_ZERO_ERROR;
 int32_t i;
 UCalendar* cal = ucal_open(NULL, -1, NULL, UCAL_GREGORIAN, &status);
@@ -88,7 +105,8 @@ ucal_close(cal);
 ```
 
 **Java**
-```Java
+
+```java
 Calendar cal = new GregorianCalendar();
 if (cal == null) {
     System.out.println("Couldn't create GregorianCalendar");
@@ -113,12 +131,14 @@ for (int i = 0; i < 30; i++) {
 }
 ```
 
+## Converting dates between calendars
+
 These C++, C , and Java examples demonstrates converting dates from one calendar
 (Gregorian) to another calendar (Japanese).
 
 **C++**
 
-```C++
+```c++
 UErrorCode status = U_ZERO_ERROR;
 UDate time;
 Calendar *cal1, *cal2;
@@ -172,7 +192,8 @@ delete cal2;
 ```
 
 **C**
-```C
+
+```c
 UErrorCode status = U_ZERO_ERROR;
 UDate time;
 UCalendar *cal1, *cal2;
@@ -230,7 +251,7 @@ ucal_close(cal2);
 
 **Java**
 
-```Java
+```java
 Calendar cal1, cal2;
 // Create a new Gregorian Calendar.
 cal1 = new GregorianCalendar();
