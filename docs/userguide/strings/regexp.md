@@ -1,3 +1,10 @@
+---
+layout: default
+title: Regular Expressions
+permalink: /regexp
+nav_order: 6
+parent: Chars and Strings
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

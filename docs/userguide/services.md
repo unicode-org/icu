@@ -1,3 +1,10 @@
+---
+layout: default
+title: ICU Services
+permalink: /services
+nav_order: 4
+parent: Introduction
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

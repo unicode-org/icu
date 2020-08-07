@@ -1,0 +1,53 @@
+
+remote_theme: pmarsceill/just-the-docs
+
+# GitHub uses it's own markdown renderer.
+# We use this in order to try and have the docs pages match ones in the repo.
+markdown: CommonMarkGhPages
+
+# Plugins:
+#  jekyll-commonmark-ghpages -- This is needed in order to use CommonMarkGhPages
+#  jemoji                    -- For rendering emoji like :point_right:
+plugins:
+  - jekyll-commonmark-ghpages
+  - jekyll-remote-theme
+  - jemoji
+
+commonmark:
+  options: ["SMART", "FOOTNOTES"]
+  extensions: ["strikethrough", "autolink", "table", "tagfilter"]
+
+title: ICU Documentation
+description: ICU Documentation
+
+baseurl: "/icu" # the subpath for the site
+url: "https://jefgen.github.io" # the base hostname & protocol for your site
+
+search_enabled: true
+
+# Color scheme currently only supports "dark" or nil (default)
+color_scheme: nil
+
+# Aux links for the upper right navigation
+aux_links:
+  "ICU on GitHub":
+    - "//github.com/jefgen/icu"
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Enable heading anchors
+heading_anchors: true
+
+# Footer content 
+# appears at the bottom of every page's main content
+footer_content: "Copyright &copy; 2016 and later Unicode, Inc. and others. All Rights Reserved. <a href=\"http://www.unicode.org/copyright.html\">Terms of use and License</a>."
+
+# TODO: I think this would be better at the top of the page, but I'm not sure how to do that.
+# Footer "Edit this page on GitHub" link text
+gh_edit_link: true # show or hide edit this page link
+gh_edit_link_text: "Edit this page on GitHub."
+gh_edit_repository: "https://github.com/jefgen/icu" # the github URL for your repo
+gh_edit_branch: "master" # the branch that your docs is served from
+gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
