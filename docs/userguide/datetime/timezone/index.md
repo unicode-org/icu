@@ -1,9 +1,24 @@
+---
+layout: default
+title: TimeZone Classes
+nav_order: 3
+parent: Date/Time
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # ICU TimeZone Classes
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -164,7 +179,7 @@ zone resources in that file.
 3. Locate the .dat file to be updated, and do the update. The commands below
    are for a .dat file named icudt55l.dat.
 
-```Shell
+```shell
 icupkg -a zoneinfo64.res icudt55l.dat
 icupkg -a windowsZones.res icudt55l.dat
 icupkg -a timezoneTypes.res icudt55l.dat
@@ -220,9 +235,9 @@ the ICU data path.
 5. Copy the freshly built ICU data shared library to the desired destination.
 
 > :point_right: **Note**: The standard ICU download package contains pre-built
-ICU data. To rebuild ICU data from .txt files, you will need to replace  the
-contents of `icu4c/source/data` with the contents of ICU4C data.zip. See
-[ICU Data Build Tool](../../icu_data/buildtool.md) for more details.
+> ICU data. To rebuild ICU data from .txt files, you will need to replace the
+> contents of `icu4c/source/data` with the contents of ICU4C data.zip. See
+> [ICU Data Build Tool](../../icu_data/buildtool.md) for more details.
 
 There are too many possible platform variations to be more specific about how to
 rebuild ICU4C in these instructions. See the ReadMe file included with the ICU
@@ -237,6 +252,6 @@ are [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-dat
 
 The updater will work with ICU version 3.4.2 and newer.
 
-Sample Code
+## Sample Code
 
 See the [Date and Time Zone Examples](examples.md) subpage.

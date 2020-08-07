@@ -1,17 +1,32 @@
+---
+layout: default
+title: Break Rules
+nav_order: 1
+parent: Boundary Analysis
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Break Rules
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Introduction
 
 ICU locates boundary positions within text by means of rules, which are a form
 of regular expressions. The form of the rules is similar, but not identical,
 to the boundary rules from the Unicode specifications
-[[UAX-14](https://unicode.org/reports/tr14/),
-[UAX-29](https://unicode.org/reports/tr29/)], and there is a reasonably close
+[ [UAX-14](https://unicode.org/reports/tr14/), 
+[UAX-29](https://unicode.org/reports/tr29/) ], and there is a reasonably close
 correspondence between the two.
 
 Taken as a set, the ICU rules describe how to move forward to the next boundary,
@@ -29,12 +44,13 @@ customizations.
 Rules most commonly describe a range of text that should remain together,
 unbroken. For example, this rule
 
+```
     [\p{Letter}]+;
+```
 
 matches a run of one or more letters, and would cause them to remain unbroken.
 
-The part within `[`brackets`]` follows normal ICU [UnicodeSet pattern
-syntax](../strings/unicodeset.md).
+The part within `[`brackets`]` follows normal ICU [UnicodeSet pattern syntax](../strings/unicodeset.md).
 
 The qualifier, '`+`' in this case, can be one of
 
@@ -56,10 +72,12 @@ of a constant expression.
 
 They start with a '`$`', both in the definition and use.
 
+```
     # Variable Definition
     $ASCIILetNum = [A-Za-z0-9];
     # Variable Use
     $ASCIILetNum+;
+```
 
 #### Comments and Semicolons
 
@@ -81,11 +99,13 @@ would be difficult to implement without it.
 
 Starting with an example,
 
+```
     !!chain;
     word_char = [\p{Letter}];
     word_joiner = [_-];
     $word_char+;
     $word_char $word_joiner $word_char;
+```
 
 These rules will match "`abc`", "`hello_world`", `"hi-there"`,
 "`a-bunch_of-joiners-here`".
@@ -101,9 +121,11 @@ In the example below, matching "`hello_world`",
 
 * '`2`' shows matches of the second rule, `$word_char $word_joiner $word_char`
 
+```
       hello_world
-      11111 11111
-          222
+      11111 11111
+          222
+```
 
 There is an overlap of the matched regions, which causes the chaining mechanism
 to join them into a single overall match.
@@ -125,14 +147,18 @@ behavior.
 
 For example, the following would match a simplified identifier:
 
+```
     $Letter ($Letter | $Digit)*;
+```
 
 #### String and Character Literals
 
 Similarly to common regular expressions, literal characters that do not have
 other special meaning represent themselves. So the rule
 
+```
     Hello;
+```
 
 would match the literal input "`Hello`".
 
@@ -142,7 +168,9 @@ character properties; literal characters in rules are very rare.
 To prevent random typos in rules from being treated as literals, use this
 option:
 
+```
     !!quoted_literals_only;
+```
 
 With the option, the naked `Hello` becomes a rule syntax error while a quoted
 `"hello"` still matches a literal hello.
@@ -156,7 +184,9 @@ A rule containing a slash (`/`) will force a boundary when it matches, even when
 other rules or chaining would otherwise lead to a longer match. Also called Hard
 Break Rules, these have the form
 
+```
     pre-context / post-context;
+```
 
 where the pre and post-context look like normal break rules. Both the pre and
 post context are required, and must not allow a zero-length match. There should
@@ -182,8 +212,8 @@ property is Combining Mark. This option is subject to change or removal, and
 should not be used in general. Within ICU, it is used only with the line break
 rules. We hope to replace it with something more general.~~
 
-> :point_right: **Note**: `!!LBCMNoChain` is deprecated, and will be removed completely from a future
-version of ICU.
+> :point_right: **Note**: `!!LBCMNoChain` is deprecated, and will be removed
+> completely from a future version of ICU.
 
 ## Rule Status Values
 
@@ -218,7 +248,9 @@ and are enclosed in `{`braces`}`.
 Hard break rules that also have a status value place the status at the end, for
 example
 
+```
     pre-context / post-context {1234};
+```
 
 ### Word Dictionaries
 
@@ -239,12 +271,13 @@ The dictionary implementation, on receiving a range of text, will map it to a
 specific dictionary based on script, and then delegate to that dictionary for
 subdividing the range into words.
 
-See, for example, this snippet from the [line break
-rules](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/brkitr/rules/line.txt):
+See, for example, this snippet from the [line break rules](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/brkitr/rules/line.txt):
 
-    #   Dictionary character set, for triggering language-based break engines. Currently
-    #   limited to LineBreak=Complex_Context (SA).
+```
+    #  Dictionary character set, for triggering language-based break engines. Currently
+    #  limited to LineBreak=Complex_Context (SA).
     $dictionary = [$SA];
+```
 
 ## Rule Options
 
@@ -367,15 +400,14 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 
 ## Additional Sample Code
 
-**C/C++**: See
-[icu/source/samples/break/](https://github.com/unicode-org/icu/tree/master/icu4c/source/samples/break/)
-in the ICU source distribution for code samples showing the use of ICU boundary
-analysis.
+**C/C++**
+See [icu/source/samples/break/](https://github.com/unicode-org/icu/tree/master/icu4c/source/samples/break/)
+in the ICU source distribution for code samples showing the use of ICU boundary analysis.
 
 ## Details about Dictionary-Based Break Iteration
 
-> :point_right: **Note**: This section originally from August 2012.
-> It is probably out of date, for example `brkfiles.mk` does not exist anyore.
+> :point_right: **Note**: This section below is originally from August 2012.
+> It is probably out of date, for example `brkfiles.mk` does not exist anymore.
 
 Certain Unicode characters have a "dictionary" bit set in the break iteration
 rules, and text made up of these characters cannot be handled by the rules-based
@@ -428,10 +460,14 @@ add a similar set of lines for your script. Lastly, in
 `source/data/brkitr/root.txt`, add a line to the dictionaries `{}` section of the
 form:
 
+```
     shortscriptname:process(dependency){"dictionaryname.dict"}
+```
 
 For example, for Katakana:
 
+```
     Kata:process(dependency){"cjdict.dict"}
+```
 
 Make sure to add appropriate tests for the new implementation.

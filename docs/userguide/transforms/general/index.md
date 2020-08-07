@@ -1,9 +1,24 @@
+---
+layout: default
+title: Transforms
+nav_order: 4
+parent: Transforms
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # General Transforms
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

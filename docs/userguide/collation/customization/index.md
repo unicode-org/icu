@@ -1,9 +1,26 @@
+---
+layout: default
+title: Customization
+nav_order: 3
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation Customization
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 ICU uses the [CLDR root collation
 order](http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Collation)
@@ -918,7 +935,7 @@ given locales. Here is an example of this, which fetches the rules for a
 particular locale (Danish), then overrides some part (sorting '%' after 'm').
 The syntax is Java, but C/C++ has similar features.
 
-```Java
+```java
 ULocale myLocale = new ULocale("da");
 try {
 

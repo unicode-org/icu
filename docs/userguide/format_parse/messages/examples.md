@@ -1,9 +1,25 @@
+---
+layout: default
+title: Message Formatting Examples
+nav_order: 1
+parent: Formatting Messages
+grand_parent: Formatting
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Message Formatting Examples
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## MessageFormat Class
 

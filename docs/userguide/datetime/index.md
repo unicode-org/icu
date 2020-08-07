@@ -1,9 +1,24 @@
+---
+layout: default
+title: Date/Time
+nav_order: 6
+has_children: true
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Date/Time Services
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview of ICU System Time Zones
 

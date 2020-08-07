@@ -1,7 +1,6 @@
 ---
 layout: default
-title: Introduction
-permalink: /userguideintro
+title: ICU
 nav_order: 2
 has_children: true
 ---

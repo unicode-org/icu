@@ -1,9 +1,28 @@
+---
+layout: default
+title: Custom ICU4C Synchronization
+nav_order: 3
+parent: Misc
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Custom ICU4C Synchronization
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+> :warning: ***Support for including an alternate implementation of atomic and mutex
+> operations has been withdrawn and removed from ICU4C.***
+> See issue [ICU-20185](https://unicode-org.atlassian.net/browse/ICU-20185).
 
 ### Build Time User Provided Synchronization
 

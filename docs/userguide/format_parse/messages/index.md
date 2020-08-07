@@ -1,11 +1,25 @@
+---
+layout: default
+title: Formatting Messages
+nav_order: 3
+parent: Formatting
+has_children: true
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-{% raw  %}
-
 # Formatting Messages
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -62,25 +76,31 @@ arguments (hopefully at most one) inside.
 
 For example:
 
-    "{gender_of_host, **select**, "
-      "**female** {"
-        "{num_guests, **plural**, offset:1 "
-          "=0 {{host} does not give a party.}"
-          "=1 {{host} invites {guest} to **her** party.}"
-          "=2 {{host} invites {guest} and one other person to her party.}"
-          "other {{host} invites {guest} and # other people to her party.}}}"
-      "**male** {"
-        "{num_guests, **plural**, offset:1 "
-          "=0 {{host} does not give a party.}"
-          "=1 {{host} invites {guest} to **his** party.}"
-          "=2 {{host} invites {guest} and one other person to his party.}"
-          "other {{host} invites {guest} and # other people to his party.}}}"
-      "**other** {"
-        "{num_guests, **plural**, offset:1 "
-          "=0 {{host} does not give a party.}"
-          "=1 {{host} invites {guest} to **their** party.}"
-          "=2 {{host} invites {guest} and one other person to their party.}"
-          "other {{host} invites {guest} and # other people to their party.}}}}"
+{% raw  %}
+
+```text
+"{gender_of_host, select, "
+  "female {"
+    "{num_guests, plural, offset:1 "
+      "=0 {{host} does not give a party.}"
+      "=1 {{host} invites {guest} to her party.}"
+      "=2 {{host} invites {guest} and one other person to her party.}"
+      "other {{host} invites {guest} and # other people to her party.}}}"
+  "male {"
+    "{num_guests, plural, offset:1 "
+      "=0 {{host} does not give a party.}"
+      "=1 {{host} invites {guest} to his party.}"
+      "=2 {{host} invites {guest} and one other person to his party.}"
+      "other {{host} invites {guest} and # other people to his party.}}}"
+  "other {"
+    "{num_guests, plural, offset:1 "
+      "=0 {{host} does not give a party.}"
+      "=1 {{host} invites {guest} to their party.}"
+      "=2 {{host} invites {guest} and one other person to their party.}"
+      "other {{host} invites {guest} and # other people to their party.}}}}"
+```
+
+{% endraw %}
 
 **Note:** In a plural argument like in the example above, if the English message
 has both `=0` and `=1` (up to `=offset`+1) then it does not need a "`one`"
@@ -95,9 +115,8 @@ language](http://cldr.unicode.org/index/cldr-spec/plural-rules).*
 
 If syntax characters occur in the text portions, then they need to be quoted by
 enclosing the syntax in pairs of ASCII apostrophes. A pair of ASCII apostrophes
-always represents one ASCII apostrophe, similar to %% in printf representing one
-%, although this rule still applies inside quoted text. ("This '{isn''t}'
-obvious" → "This {isn't} obvious")
+always represents one ASCII apostrophe, similar to %% in printf representing one %,
+although this rule still applies inside quoted text. ("`This '{isn''t}' obvious`" → "`This {isn't} obvious`")
 
 *   Before ICU 4.8, ASCII apostrophes always started quoted text and had
     inconsistent behavior in nested sub-messages, which was a source of problems
@@ -107,8 +126,8 @@ obvious" → "This {isn't} obvious")
     needed"), and works the same in nested messages as on the top level of the
     pattern. The new behavior is otherwise compatible; for details see the
     MessageFormat and MessagePattern (new in ICU 4.8) API docs.
-*   Recommendation: Use the real apostrophe (single quote) character ’ (U+2019)
-    for human-readable text, and use the ASCII apostrophe ' (U+0027) only in
+*   Recommendation: Use the real apostrophe (single quote) character `’` (U+2019)
+    for human-readable text, and use the ASCII apostrophe `'` (U+0027) only in
     program syntax, like quoting in MessageFormat. See the annotations for
     U+0027 Apostrophe in The Unicode Standard.
 
@@ -133,14 +152,14 @@ distinguish them from patterns. These are locale-independent ways to specify the
 format, and this is the recommended mechanism if the predefined styles are not
 appropriate.
 
-Date skeletons:
+##### Date skeletons:
 
 - **ICU4J:**
 <https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/SimpleDateFormat.html>
 
 - **ICU4C:** <https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classSimpleDateFormat.html>
 
-Number formatter skeletons:
+##### Number formatter skeletons:
 
 - **ICU4J:**
 <https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/number/NumberFormatter.html>
@@ -171,7 +190,7 @@ that you don't benefit from that CLDR data and the results will likely be
 inconsistent with the rest of the patterns that ICU uses.
 
 It is also a bad internationalization practice, because most companies only
-translate into “generic” versions of the languages (French, or Spanish, or
+translate into "generic" versions of the languages (French, or Spanish, or
 Arabic). So the translated patterns get used in tens of countries. On the other
 hand, skeletons are localized according to the MessageFormat locale, which
 should include regional variants (e.g., “fr-CA”).
@@ -181,11 +200,11 @@ should include regional variants (e.g., “fr-CA”).
 The MessageFormat class allows setting custom Format objects to format
 arguments, overriding the arguments' pattern specification. This is discouraged:
 For custom formatting of some values it should normally suffice to format them
-externally and to provide the formatted strings to the MessageFormat.format()
+externally and to provide the formatted strings to the `MessageFormat.format()`
 methods.
 
 Only the top-level arguments are accessible and settable via setFormat(),
-getFormat() etc. Arguments inside nested sub-messages, inside
+`getFormat()` etc. Arguments inside nested sub-messages, inside
 choice/plural/select arguments, are "invisible" via these API methods.
 
 Some of these methods (the ones corresponding to the original JDK MessageFormat
@@ -217,5 +236,3 @@ was a disturbance in the Force on planet 7."
 
 There are several more usage examples for the MessageFormat and ChoiceFormat
 classes in [C , C++ and Java](examples.md).
-
-{% endraw %}

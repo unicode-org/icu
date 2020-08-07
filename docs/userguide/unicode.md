@@ -1,9 +1,8 @@
 ---
 layout: default
 title: Unicode Basics
-permalink: /unicode
 nav_order: 3
-parent: Introduction
+parent: ICU
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -11,6 +10,15 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Unicode Basics
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Introduction to Unicode
 

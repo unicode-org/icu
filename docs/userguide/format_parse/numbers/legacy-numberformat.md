@@ -1,11 +1,31 @@
+---
+layout: default
+title: Legacy NumberFormat
+nav_order: 1
+grand_parent: Formatting
+parent: Formatting Numbers
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Legacy NumberFormat
+{: .no_toc }
 
-Since ICU 60, the recommended way to format numbers is NumberFormatter; see [index.md](index.md).  This page is here for reference for the older NumberFormat heirarchy in ICU4C and ICU4J.
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Note
+
+> :warning: Since ICU 60, the recommended way to format numbers is NumberFormatter; see [index.md](index.md).
+> 
+> This page is here for reference for the older NumberFormat hierarchy in ICU4C and ICU4J.
 
 ## NumberFormat
 
@@ -39,7 +59,8 @@ locale "th" uses the western digits 0-9. To create a number format that uses the
 native Thai digits instead, first create a locale with "@numbers=thai" defined.
 See [the description on Locales](../../locale/index.md) for details.
 
-> :point_right: **Note**: If you are formatting multiple numbers, save processing time by constructing the formatter once and then using it several times.
+> :point_right: **Note**: If you are formatting multiple numbers, save processing time
+> by constructing the formatter once and then using it several times.
 
 #### Instantiating a NumberFormat
 
@@ -113,7 +134,7 @@ and display name, but also the correct number of fraction digits and the correct
 the API references for more details.
 
 There is ICU4C sample code at
-[icu4c/source/samples/numfmt/main.cpp]](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/numfmt/main.cpp)
+[icu4c/source/samples/numfmt/main.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/numfmt/main.cpp)
 which illustrates the use of NumberFormat.setCurrency().
 
 #### Displaying Numbers

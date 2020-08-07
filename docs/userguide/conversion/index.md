@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Conversion
-permalink: /conversion
 nav_order: 4
 has_children: true
 ---
@@ -11,6 +10,15 @@ License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Conversion
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Conversion Overview
 

@@ -1,9 +1,24 @@
+---
+layout: default
+title: Case Mappings
+nav_order: 1
+parent: Transforms
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Case Mappings
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 

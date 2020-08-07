@@ -1,9 +1,26 @@
+---
+layout: default
+title: Ignore Punctuation Options
+nav_order: 8
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # “Ignore Punctuation” Options
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 By default, spaces and punctuation characters add primary (base character)
 differences. Such characters sort less-than digits and letters. For example, the

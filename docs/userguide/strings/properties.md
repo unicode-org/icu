@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Properties
-permalink: /properties
 nav_order: 2
 parent: Chars and Strings
 ---

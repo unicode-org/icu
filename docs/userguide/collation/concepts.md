@@ -1,9 +1,26 @@
+---
+layout: default
+title: Concepts
+nav_order: 1
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation Concepts
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 The previous section demonstrated many of the requirements imposed on string
 comparison routines that try to correctly collate strings according to
@@ -568,10 +585,10 @@ padding spaces are removed, as in 1" and 2"
 
 ## Collator naming scheme
 
-***Starting with ICU 54, the following naming scheme and its API functions are
-deprecated.*** Use ucol_open() with language tag collation keywords instead (see
-[Collation API Details](api.md)). For example,
-ucol_open("de-u-co-phonebk-ka-shifted", &errorCode) for German Phonebook order
+***Starting with ICU 54, the following naming scheme and its API functions are deprecated.***
+Use `ucol_open()` with language tag collation keywords instead
+(see [Collation API Details](api.md)). For example,
+`ucol_open("de-u-co-phonebk-ka-shifted", &errorCode)` for German Phonebook order
 with "ignore punctuation" mode.
 
 When collating or matching text, a number of attributes can be used to affect
