@@ -1294,7 +1294,15 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
             int32_t ahead = *offset + 1;
             c = charAt(*offset, context);
             if (c == 0x5C /*'\\'*/ && ahead < length) {
-                c = (UChar) u_unescapeAt(charAt, &ahead, length, context);
+                // Calling u_unescapeAt recursively may cause a stack overflow if
+                // we have repeated surrogate lead after that. Limit the
+                // length to 5 ('u' and 4 hex) after ahead.
+                int32_t tailLimit = ahead + 5;
+                if (tailLimit > length) {
+                    tailLimit = length;
+                }
+                c = (UChar) u_unescapeAt(charAt, &ahead, tailLimit,
+                                         context);
             }
             if (U16_IS_TRAIL(c)) {
                 *offset = ahead;
