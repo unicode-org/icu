@@ -308,6 +308,7 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
             idx = binarySearch(metadata, desired, &foundCategory, &foundUsage, &foundRegion, status);
         }
         if (!foundRegion) {
+            // "001" is not supposed to be missing for any valid usage.
             status = U_MISSING_RESOURCE_ERROR;
             return -1;
         }
