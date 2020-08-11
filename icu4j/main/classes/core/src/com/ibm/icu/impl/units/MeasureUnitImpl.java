@@ -30,9 +30,9 @@ public class MeasureUnitImpl {
      * For example: `square-meter-per-second`, when we apply dimensionality -2, it will be `square-second-per-p4-meter`
      */
     public void applyDimensionality(int dimensionality) {
-        for (SingleUnitImpl singelUnit :
+        for (SingleUnitImpl singleUnit :
                 singleUnits) {
-            singelUnit.setDimensionality(singelUnit.getDimensionality() * dimensionality);
+            singleUnit.setDimensionality(singleUnit.getDimensionality() * dimensionality);
         }
     }
 
