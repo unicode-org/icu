@@ -12,7 +12,7 @@ import com.ibm.icu.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class UnitConverter {
+public class UnitConverter {
     /**
      * Constructor of `UnitConverter`.
      * NOTE:

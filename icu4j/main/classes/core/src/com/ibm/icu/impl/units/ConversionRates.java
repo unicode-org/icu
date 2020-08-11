@@ -43,6 +43,14 @@ public class ConversionRates {
     public ArrayList<SingleUnitImpl> getBasicUnits(SingleUnitImpl singleUnit) {
         String target = mapToBasicUnits.get(singleUnit.getSimpleUnit()).getTarget();
         MeasureUnitImpl targetImpl = UnitsParser.parseForIdentifier(target);
+
+        // Each unit must be powered by the same dimension
+        targetImpl.applyDimensionality(singleUnit.getDimensionality());
+
+
+        // Each unit must apply the same SI prefix
+        // TODO: discuss it.
+
         return targetImpl.getSingleUnits();
     }
 
@@ -405,6 +413,7 @@ public class ConversionRates {
             "1",
             "1",
             "2298.35/9",
+            "1",
             "1",
             "1",
             "1",
