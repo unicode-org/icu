@@ -55,6 +55,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void unitMeasure();
     void unitCompoundMeasure();
     void unitUsage();
+    void unitUsageErrorCodes();
     void unitCurrency();
     void unitPercent();
     void percentParity();
