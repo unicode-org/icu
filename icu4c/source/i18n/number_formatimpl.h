@@ -94,6 +94,7 @@ class NumberFormatterImpl : public UMemory {
     // Other fields possibly used by the number formatting pipeline:
     // TODO: Convert more of these LocalPointers to value objects to reduce the number of news?
     LocalPointer<const UsagePrefsHandler> fUsagePrefsHandler;
+    LocalPointer<const UnitConversionHandler> fUnitConversionHandler;
     LocalPointer<const DecimalFormatSymbols> fSymbols;
     LocalPointer<const PluralRules> fRules;
     LocalPointer<const ParsedPatternInfo> fPatternInfo;
@@ -101,6 +102,10 @@ class NumberFormatterImpl : public UMemory {
     LocalPointer<MutablePatternModifier> fPatternModifier;
     LocalPointer<ImmutablePatternModifier> fImmutablePatternModifier;
     LocalPointer<LongNameHandler> fLongNameHandler;
+    // TODO: use a common base class that enables fLongNameHandler,
+    // fLongNameMultiplexer, and fMixedUnitLongNameHandler to be merged into one
+    // member?
+    LocalPointer<MixedUnitLongNameHandler> fMixedUnitLongNameHandler;
     LocalPointer<const LongNameMultiplexer> fLongNameMultiplexer;
     LocalPointer<const CompactHandler> fCompactHandler;
 

@@ -550,13 +550,13 @@
     <ClCompile Include="localematchertest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
-    <ClCompile Include="unitsdatatest.cpp">
+    <ClCompile Include="units_data_test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="unitstest.cpp">
+    <ClCompile Include="units_router_test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="unitsroutertest.cpp">
+    <ClCompile Include="units_test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
   </ItemGroup>

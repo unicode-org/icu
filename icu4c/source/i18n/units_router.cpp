@@ -12,8 +12,8 @@
 #include "number_decimalquantity.h"
 #include "resource.h"
 #include "unicode/measure.h"
-#include "unitsdata.h"
-#include "unitsrouter.h"
+#include "units_data.h"
+#include "units_router.h"
 
 U_NAMESPACE_BEGIN
 namespace units {
@@ -70,19 +70,19 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
 RouteResult UnitsRouter::route(double quantity, UErrorCode &status) const {
     for (int i = 0, n = converterPreferences_.length(); i < n; i++) {
         const auto &converterPreference = *converterPreferences_[i];
-
-        if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-            return RouteResult(converterPreference.converter.convert(quantity, status), //
-                               converterPreference.precision                            //
-            );
+        if (converterPreference.converter.greaterThanOrEqual(quantity * (1 + DBL_EPSILON),
+                                                             converterPreference.limit)) {
+            return RouteResult(converterPreference.converter.convert(quantity, status),
+                               converterPreference.precision,
+                               converterPreference.targetUnit.copy(status));
         }
     }
 
     // In case of the `quantity` does not fit in any converter limit, use the last converter.
     const auto &lastConverterPreference = (*converterPreferences_[converterPreferences_.length() - 1]);
-    return RouteResult(lastConverterPreference.converter.convert(quantity, status), //
-                       lastConverterPreference.precision                            //
-    );
+    return RouteResult(lastConverterPreference.converter.convert(quantity, status),
+                       lastConverterPreference.precision,
+                       lastConverterPreference.targetUnit.copy(status));
 }
 
 const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {

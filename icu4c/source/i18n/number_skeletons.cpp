@@ -152,21 +152,6 @@ UPRV_BLOCK_MACRO_BEGIN { \
 } UPRV_BLOCK_MACRO_END
 
 
-#define SKELETON_UCHAR_TO_CHAR(dest, src, start, end, status) (void)(dest); \
-UPRV_BLOCK_MACRO_BEGIN { \
-    UErrorCode conversionStatus = U_ZERO_ERROR; \
-    (dest).appendInvariantChars({FALSE, (src).getBuffer() + (start), (end) - (start)}, conversionStatus); \
-    if (conversionStatus == U_INVARIANT_CONVERSION_ERROR) { \
-        /* Don't propagate the invariant conversion error; it is a skeleton syntax error */ \
-        (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
-        return; \
-    } else if (U_FAILURE(conversionStatus)) { \
-        (status) = conversionStatus; \
-        return; \
-    } \
-} UPRV_BLOCK_MACRO_END
-
-
 } // anonymous namespace
 
 
@@ -480,6 +465,7 @@ UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
 MacroProps skeleton::parseSkeleton(
         const UnicodeString& skeletonString, int32_t& errOffset, UErrorCode& status) {
     U_ASSERT(U_SUCCESS(status));
+    U_ASSERT(kSerializedStemTrie != nullptr);
 
     // Add a trailing whitespace to the end of the skeleton string to make code cleaner.
     UnicodeString tempSkeletonString(skeletonString);
@@ -586,6 +572,8 @@ MacroProps skeleton::parseSkeleton(
 ParseState
 skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, SeenMacroProps& seen,
                     MacroProps& macros, UErrorCode& status) {
+    U_ASSERT(U_SUCCESS(status));
+
     // First check for "blueprint" stems, which start with a "signal char"
     switch (segment.charAt(0)) {
         case u'.':
@@ -764,6 +752,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
 
 ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, MacroProps& macros,
                                  UErrorCode& status) {
+    U_ASSERT(U_SUCCESS(status));
 
     ///// Required options: /////
 
@@ -992,6 +981,7 @@ blueprint_helpers::generateCurrencyOption(const CurrencyUnit& currency, UnicodeS
 
 void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, MacroProps& macros,
                                                UErrorCode& status) {
+    U_ASSERT(U_SUCCESS(status));
     const UnicodeString stemString = segment.toTempUnicodeString();
 
     // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
@@ -1007,7 +997,6 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     }
 
     // Need to do char <-> UChar conversion...
-    U_ASSERT(U_SUCCESS(status));
     CharString type;
     SKELETON_UCHAR_TO_CHAR(type, stemString, 0, firstHyphen, status);
     CharString subType;
@@ -1069,7 +1058,15 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
         return;
     }
 
-    // TODO(ICU-20941): Clean this up.
+    // Mixed units can only be represented by a full MeasureUnit instances, so
+    // we ignore macros.perUnit.
+    if (fullUnit.complexity == UMEASURE_UNIT_MIXED) {
+        macros.unit = std::move(fullUnit).build(status);
+        return;
+    }
+
+    // TODO(ICU-20941): Clean this up (see also
+    // https://github.com/icu-units/icu/issues/35).
     for (int32_t i = 0; i < fullUnit.units.length(); i++) {
         SingleUnitImpl* subUnit = fullUnit.units[i];
         if (subUnit->dimensionality > 0) {
@@ -1336,36 +1333,8 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     return true;
 }
 
-void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
-                                             UErrorCode& status) {
-    // Need to do char <-> UChar conversion...
-    U_ASSERT(U_SUCCESS(status));
-    CharString buffer;
-    SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
-
-    // Utilize DecimalQuantity/decNumber to parse this for us.
-    DecimalQuantity dq;
-    UErrorCode localStatus = U_ZERO_ERROR;
-    dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
-    if (U_FAILURE(localStatus)) {
-        // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
-        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-        return;
-    }
-    double increment = dq.toDouble();
-
-    // We also need to figure out how many digits. Do a brute force string operation.
-    int decimalOffset = 0;
-    while (decimalOffset < segment.length() && segment.charAt(decimalOffset) != '.') {
-        decimalOffset++;
-    }
-    if (decimalOffset == segment.length()) {
-        macros.precision = Precision::increment(increment);
-    } else {
-        int32_t fractionLength = segment.length() - decimalOffset - 1;
-        macros.precision = Precision::increment(increment).withMinFraction(fractionLength);
-    }
-}
+// blueprint_helpers::parseIncrementOption lives in number_rounding.cpp for
+// dependencies reasons.
 
 void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
                                                 UErrorCode&) {
@@ -1551,10 +1520,14 @@ bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorC
     } else if (utils::unitIsPermille(macros.unit)) {
         sb.append(u"permille", -1);
         return true;
-    } else {
+    } else if (uprv_strcmp(macros.unit.getType(), "") != 0) {
         sb.append(u"measure-unit/", -1);
         blueprint_helpers::generateMeasureUnitOption(macros.unit, sb, status);
         return true;
+    } else {
+        // TODO(icu-units#35): add support for not-built-in units.
+        status = U_UNSUPPORTED_ERROR;
+        return false;
     }
 }
 
@@ -1573,7 +1546,7 @@ bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErr
     }
 }
 
-bool GeneratorHelpers::usage(const MacroProps& macros, UnicodeString& sb, UErrorCode&) {
+bool GeneratorHelpers::usage(const MacroProps& macros, UnicodeString& sb, UErrorCode& /* status */) {
     if (macros.usage.fLength > 0) {
         sb.append(u"usage/", -1);
         sb.append(UnicodeString(macros.usage.fUsage, -1, US_INV));

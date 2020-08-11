@@ -13,7 +13,7 @@
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
 #include "unicode/stringpiece.h"
-#include "unitconverter.h"
+#include "units_converter.h"
 #include <algorithm>
 #include <cmath>
 #include <stdlib.h>
@@ -516,11 +516,7 @@ double UnitConverter::convert(double inputValue) const {
         result = 1.0 / result;
     }
 
-    // TODO: remove the multiplication by 1.000,000,000,001 after using `decNumber`
-
-    // Multiply the result by 1.000,000,000,001 to fix the deterioration from using `double` (the
-    // deterioration is around 15 to 17 decimal digit).
-    return result * 1.000000000001;
+    return result;
 }
 
 } // namespace units

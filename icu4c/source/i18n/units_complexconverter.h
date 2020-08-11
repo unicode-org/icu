@@ -4,17 +4,35 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef __COMPLEXUNITSCONVERTER_H__
-#define __COMPLEXUNITSCONVERTER_H__
+#ifndef __UNITS_COMPLEXCONVERTER_H__
+#define __UNITS_COMPLEXCONVERTER_H__
 
 #include "cmemory.h"
 #include "measunit_impl.h"
 #include "unicode/errorcode.h"
 #include "unicode/measure.h"
-#include "unitconverter.h"
-#include "unitsdata.h"
+#include "units_converter.h"
+#include "units_data.h"
 
 U_NAMESPACE_BEGIN
+
+// Export explicit template instantiations of MaybeStackArray, MemoryPool and
+// MaybeStackVector. This is required when building DLLs for Windows. (See
+// datefmt.h, collationiterator.h, erarules.h and others for similar examples.)
+//
+// Note: These need to be outside of the units namespace, or Clang will generate
+// a compile error.
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<units::UnitConverter*, 8>;
+template class U_I18N_API MemoryPool<units::UnitConverter, 8>;
+template class U_I18N_API MaybeStackVector<units::UnitConverter, 8>;
+template class U_I18N_API MaybeStackArray<MeasureUnitImpl*, 8>;
+template class U_I18N_API MemoryPool<MeasureUnitImpl, 8>;
+template class U_I18N_API MaybeStackVector<MeasureUnitImpl, 8>;
+template class U_I18N_API MaybeStackArray<MeasureUnit*, 8>;
+template class U_I18N_API MemoryPool<MeasureUnit, 8>;
+template class U_I18N_API MaybeStackVector<MeasureUnit, 8>;
+#endif
 
 namespace units {
 
@@ -27,7 +45,7 @@ namespace units {
  *    single unit to another single unit). Therefore, `ComplexUnitsConverter` class contains multiple
  *    instances of the `UnitConverter` to perform the conversion.
  */
-class U_I18N_API ComplexUnitsConverter : UMemory {
+class U_I18N_API ComplexUnitsConverter : public UMemory {
   public:
     /**
      * Constructor of `ComplexUnitsConverter`.
@@ -59,12 +77,15 @@ class U_I18N_API ComplexUnitsConverter : UMemory {
 
   private:
     MaybeStackVector<UnitConverter> unitConverters_;
+    // Individual units of mixed units, sorted big to small
     MaybeStackVector<MeasureUnitImpl> units_;
+    // Individual units of mixed units, sorted in desired output order
+    MaybeStackVector<MeasureUnit> outputUnits_;
 };
 
 } // namespace units
 U_NAMESPACE_END
 
-#endif //__COMPLEXUNITSCONVERTER_H__
+#endif //__UNITS_COMPLEXCONVERTER_H__
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

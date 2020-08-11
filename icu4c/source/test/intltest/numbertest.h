@@ -55,6 +55,8 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void unitMeasure();
     void unitCompoundMeasure();
     void unitUsage();
+    void unitUsageErrorCodes();
+    void unitUsageSkeletons();
     void unitCurrency();
     void unitPercent();
     void percentParity();
@@ -85,6 +87,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void localPointerCAPI();
     void toObject();
     void toDecimalNumber();
+    void microPropsInternals();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

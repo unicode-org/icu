@@ -285,9 +285,9 @@
     <ClCompile Include="formattedvaluetest.cpp" />
     <ClCompile Include="localebuildertest.cpp" />
     <ClCompile Include="localematchertest.cpp" />
-    <ClCompile Include="unitsdatatest.cpp" />
-    <ClCompile Include="unitstest.cpp" />
-    <ClCompile Include="unitsroutertest.cpp" />
+    <ClCompile Include="units_data_test.cpp" />
+    <ClCompile Include="units_router_test.cpp" />
+    <ClCompile Include="units_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colldata.h" />
