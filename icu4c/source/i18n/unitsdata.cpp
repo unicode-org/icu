@@ -282,8 +282,6 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
     if (U_FAILURE(status)) { return -1; }
     if (idx >= 0) { return idx; }
     if (!foundCategory) {
-        // TODO(units): maybe add a unit test to ensure all units have a
-        // category and all categories are present in the data?
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
@@ -296,8 +294,6 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
             desired.usage.truncate(0).append("default", status);
         } else {
             // "default" is not supposed to be missing for any valid category.
-            // TODO(units): maybe add a unit test to ensure every usage in the
-            // data file has a "default" entry?
             status = U_MISSING_RESOURCE_ERROR;
             return -1;
         }
@@ -312,8 +308,6 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
             idx = binarySearch(metadata, desired, &foundCategory, &foundUsage, &foundRegion, status);
         }
         if (!foundRegion) {
-            // TODO(units): maybe add a unit test to ensure every usage has a
-            // "001" region?
             status = U_MISSING_RESOURCE_ERROR;
             return -1;
         }
