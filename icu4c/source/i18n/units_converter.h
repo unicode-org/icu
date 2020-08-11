@@ -4,16 +4,16 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef __UNITCONVERTER_H__
-#define __UNITCONVERTER_H__
+#ifndef __UNITS_CONVERTER_H__
+#define __UNITS_CONVERTER_H__
 
 #include "cmemory.h"
 #include "measunit_impl.h"
 #include "unicode/errorcode.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
-#include "unitconverter.h"
-#include "unitsdata.h"
+#include "units_converter.h"
+#include "units_data.h"
 
 U_NAMESPACE_BEGIN
 namespace units {
@@ -81,7 +81,7 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
 /**
  * Represents the conversion rate between `source` and `target`.
  */
-struct ConversionRate : public UMemory {
+struct U_I18N_API ConversionRate : public UMemory {
     const MeasureUnitImpl source;
     const MeasureUnitImpl target;
     double factorNum = 1;
@@ -159,6 +159,6 @@ class U_I18N_API UnitConverter : public UMemory {
 } // namespace units
 U_NAMESPACE_END
 
-#endif //__UNITCONVERTER_H__
+#endif //__UNITS_CONVERTER_H__
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

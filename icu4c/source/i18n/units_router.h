@@ -4,18 +4,18 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef __UNITSROUTER_H__
-#define __UNITSROUTER_H__
+#ifndef __UNITS_ROUTER_H__
+#define __UNITS_ROUTER_H__
 
 #include <limits>
 
 #include "cmemory.h"
-#include "complexunitsconverter.h"
 #include "measunit_impl.h"
 #include "unicode/measunit.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
-#include "unitsdata.h"
+#include "units_complexconverter.h"
+#include "units_data.h"
 
 U_NAMESPACE_BEGIN
 
@@ -25,11 +25,25 @@ class Measure;
 namespace units {
 
 struct RouteResult : UMemory {
+    // A list of measures: a single measure for single units, multiple measures
+    // for mixed units.
+    //
+    // TODO(icu-units/icu#21): figure out the right mixed unit API.
     MaybeStackVector<Measure> measures;
+
+    // A skeleton string starting with a precision-increment.
+    //
+    // TODO(hugovdm): generalise? or narrow down to only a precision-increment?
+    // or document that other skeleton elements are ignored?
     UnicodeString precision;
 
-    RouteResult(MaybeStackVector<Measure> measures, UnicodeString precision)
-        : measures(std::move(measures)), precision(std::move(precision)) {}
+    // The output unit for this RouteResult. This may be a MIXED unit - for
+    // example: "yard-and-foot-and-inch", for which `measures` will have three
+    // elements.
+    MeasureUnitImpl outputUnit;
+
+    RouteResult(MaybeStackVector<Measure> measures, UnicodeString precision, MeasureUnitImpl outputUnit)
+        : measures(std::move(measures)), precision(std::move(precision)), outputUnit(std::move(outputUnit)) {}
 };
 
 /**
@@ -46,6 +60,10 @@ struct ConverterPreference : UMemory {
     double limit;
     UnicodeString precision;
 
+    // The output unit for this ConverterPreference. This may be a MIXED unit -
+    // for example: "yard-and-foot-and-inch".
+    MeasureUnitImpl targetUnit;
+
     // In case there is no limit, the limit will be -inf.
     ConverterPreference(const MeasureUnitImpl &source, const MeasureUnitImpl &complexTarget,
                         UnicodeString precision, const ConversionRates &ratesInfo, UErrorCode &status)
@@ -56,8 +74,24 @@ struct ConverterPreference : UMemory {
                         double limit, UnicodeString precision, const ConversionRates &ratesInfo,
                         UErrorCode &status)
         : converter(source, complexTarget, ratesInfo, status), limit(limit),
-          precision(std::move(precision)) {}
+          precision(std::move(precision)), targetUnit(complexTarget.copy(status)) {}
 };
+
+} // namespace units
+
+// Export explicit template instantiations of MaybeStackArray, MemoryPool and
+// MaybeStackVector. This is required when building DLLs for Windows. (See
+// datefmt.h, collationiterator.h, erarules.h and others for similar examples.)
+//
+// Note: These need to be outside of the units namespace, or Clang will generate
+// a compile error.
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<units::ConverterPreference*, 8>;
+template class U_I18N_API MemoryPool<units::ConverterPreference, 8>;
+template class U_I18N_API MaybeStackVector<units::ConverterPreference, 8>;
+#endif
+
+namespace units {
 
 /**
  * `UnitsRouter` responsible for converting from a single unit (such as `meter` or `meter-per-second`) to
@@ -114,6 +148,6 @@ class U_I18N_API UnitsRouter {
 } // namespace units
 U_NAMESPACE_END
 
-#endif //__UNITSROUTER_H__
+#endif //__UNITS_ROUTER_H__
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

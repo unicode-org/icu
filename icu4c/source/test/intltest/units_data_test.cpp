@@ -5,7 +5,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unitsdata.h"
+#include "units_data.h"
 #include "intltest.h"
 
 using namespace ::icu::units;

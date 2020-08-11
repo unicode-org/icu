@@ -19,9 +19,10 @@
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "unicode/ures.h"
-#include "unitconverter.h"
-#include "unitsdata.h"
-#include "unitsrouter.h"
+#include "units_complexconverter.h"
+#include "units_converter.h"
+#include "units_data.h"
+#include "units_router.h"
 #include "uparse.h"
 #include "uresimp.h"
 
@@ -44,6 +45,7 @@ class UnitsTest : public IntlTest {
     void testUnitConstantFreshness();
     void testConversionCapability();
     void testConversions();
+    void testComplexUnitsConverter();
     void testComplexUnitConverterSorting();
     void testPreferences();
     void testSiPrefixes();
@@ -62,6 +64,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testUnitConstantFreshness);
     TESTCASE_AUTO(testConversionCapability);
     TESTCASE_AUTO(testConversions);
+    TESTCASE_AUTO(testComplexUnitsConverter);
     TESTCASE_AUTO(testComplexUnitConverterSorting);
     TESTCASE_AUTO(testPreferences);
     TESTCASE_AUTO(testSiPrefixes);
@@ -88,7 +91,7 @@ void UnitsTest::testUnitConstantFreshness() {
         addSingleFactorConstant(constant, 1, POSITIVE, factor, status);
         if (status.errDataIfFailureAndReset(
                 "addSingleFactorConstant(<%s>, ...).\n\n"
-                "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/unitconverter.cpp\" "
+                "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/units_converter.cpp\" "
                 "has all constants? Is \"%s\" a new constant?\n",
                 constant, constant)) {
             continue;
@@ -105,7 +108,7 @@ void UnitsTest::testUnitConstantFreshness() {
         }
         DecimalQuantity dqVal;
         UErrorCode parseStatus = U_ZERO_ERROR;
-        // TODO(units): unify with strToDouble() in unitconverter.cpp
+        // TODO(units): unify with strToDouble() in units_converter.cpp
         dqVal.setToDecNumber(val.toStringPiece(), parseStatus);
         if (!U_SUCCESS(parseStatus)) {
             // Not simple to parse, skip validating this constant's value. (We
@@ -294,19 +297,21 @@ void UnitsTest::testArea() {
 }
 
 /**
- * Trims whitespace (spaces only) off of the specified string.
+ * Trims whitespace off of the specified string.
  * @param field is two pointers pointing at the start and end of the string.
  * @return A StringPiece with initial and final space characters trimmed off.
  */
 StringPiece trimField(char *(&field)[2]) {
-    char *start = field[0];
-    while (start < field[1] && (start[0]) == ' ') {
-        start++;
+    const char *start = field[0];
+    start = u_skipWhitespace(start);
+    if (start >= field[1]) {
+        start = field[1];
     }
-    int32_t length = (int32_t)(field[1] - start);
-    while (length > 0 && (start[length - 1]) == ' ') {
-        length--;
+    const char *end = field[1];
+    while ((start < end) && U_IS_INV_WHITESPACE(*(end - 1))) {
+        end--;
     }
+    int32_t length = (int32_t)(end - start);
     return StringPiece(start, length);
 }
 
@@ -359,11 +364,13 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
         return;
     }
 
+    CharString sourceIdent(x, status);
     MeasureUnitImpl sourceUnit = MeasureUnitImpl::forIdentifier(x, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", x.length(), x.data())) {
         return;
     }
 
+    CharString targetIdent(y, status);
     MeasureUnitImpl targetUnit = MeasureUnitImpl::forIdentifier(y, status);
     if (status.errIfFailureAndReset("forIdentifier(\"%.*s\")", y.length(), y.data())) {
         return;
@@ -378,14 +385,14 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     // Convertibility:
     auto convertibility = extractConvertibility(sourceUnit, targetUnit, *ctx->conversionRates, status);
     if (status.errIfFailureAndReset("extractConvertibility(<%s>, <%s>, ...)",
-                                    sourceUnit.identifier.data(), targetUnit.identifier.data())) {
+                                    sourceIdent.data(), targetIdent.data())) {
         return;
     }
     CharString msg;
     msg.append("convertible: ", status)
-        .append(sourceUnit.identifier.data(), status)
+        .append(sourceIdent.data(), status)
         .append(" -> ", status)
-        .append(targetUnit.identifier.data(), status);
+        .append(targetIdent.data(), status);
     if (status.errIfFailureAndReset("msg construction")) {
         return;
     }
@@ -394,7 +401,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     // Conversion:
     UnitConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
     if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-                                    sourceUnit.identifier.data(), targetUnit.identifier.data())) {
+                                    sourceIdent.data(), targetIdent.data())) {
         return;
     }
     double got = converter.convert(1000);
@@ -405,7 +412,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 
 /**
  * Runs data-driven unit tests for unit conversion. It looks for the test cases
- * in source/test/testdata/units/unitsTest.txt, which originates in CLDR.
+ * in source/test/testdata/cldr/units/unitsTest.txt, which originates in CLDR.
  */
 void UnitsTest::testConversions() {
     const char *filename = "unitsTest.txt";
@@ -420,7 +427,7 @@ void UnitsTest::testConversions() {
     }
 
     CharString path(sourceTestDataPath, errorCode);
-    path.appendPathPart("units", errorCode);
+    path.appendPathPart("cldr/units", errorCode);
     path.appendPathPart(filename, errorCode);
 
     ConversionRates rates(errorCode);
@@ -429,6 +436,92 @@ void UnitsTest::testConversions() {
     if (errorCode.errIfFailureAndReset("error parsing %s: %s\n", path.data(), u_errorName(errorCode))) {
         return;
     }
+}
+
+void UnitsTest::testComplexUnitsConverter() {
+    IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitConversions");
+    ConversionRates rates(status);
+    MeasureUnit input = MeasureUnit::getFoot();
+    MeasureUnit output = MeasureUnit::forIdentifier("foot-and-inch", status);
+    MeasureUnitImpl tempInput, tempOutput;
+    const MeasureUnitImpl &inputImpl = MeasureUnitImpl::forMeasureUnit(input, tempInput, status);
+    const MeasureUnitImpl &outputImpl = MeasureUnitImpl::forMeasureUnit(output, tempOutput, status);
+    auto converter = ComplexUnitsConverter(inputImpl, outputImpl, rates, status);
+
+    // Significantly less than 2.0.
+    MaybeStackVector<Measure> measures = converter.convert(1.9999, status);
+    assertEquals("measures length", 2, measures.length());
+    assertEquals("1.9999: measures[0] value", 1.0, measures[0]->getNumber().getDouble(status));
+    assertEquals("1.9999: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
+                 measures[0]->getUnit().getIdentifier());
+    assertEqualsNear("1.9999: measures[1] value", 11.9988, measures[1]->getNumber().getDouble(status), 0.0001);
+    assertEquals("1.9999: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
+                 measures[1]->getUnit().getIdentifier());
+
+    // TODO: consider factoring out the set of tests to make this function more
+    // data-driven, *after* dealing appropriately with the memory leaks that can
+    // be demonstrated by this code.
+
+    // TODO: reusing measures results in a leak.
+    // A minimal nudge under 2.0.
+    MaybeStackVector<Measure> measures2 = converter.convert((2.0 - DBL_EPSILON), status);
+    assertEquals("measures length", 2, measures2.length());
+    assertEquals("1 - eps: measures[0] value", 2.0, measures2[0]->getNumber().getDouble(status));
+    assertEquals("1 - eps: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
+                 measures2[0]->getUnit().getIdentifier());
+    assertEquals("1 - eps: measures[1] value", 0.0, measures2[1]->getNumber().getDouble(status));
+    assertEquals("1 - eps: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
+                 measures2[1]->getUnit().getIdentifier());
+
+    // Testing precision with meter and light-year. 1e-16 light years is
+    // 0.946073 meters, and double precision can provide only ~15 decimal
+    // digits, so we don't expect to get anything less than 1 meter.
+
+    // An epsilon's nudge under one light-year: should give 1 ly, 0 m.
+    input = MeasureUnit::getLightYear();
+    output = MeasureUnit::forIdentifier("light-year-and-meter", status);
+    // TODO: reusing tempInput and tempOutput results in a leak.
+    MeasureUnitImpl tempInput3, tempOutput3;
+    const MeasureUnitImpl &inputImpl3 = MeasureUnitImpl::forMeasureUnit(input, tempInput3, status);
+    const MeasureUnitImpl &outputImpl3 = MeasureUnitImpl::forMeasureUnit(output, tempOutput3, status);
+    // TODO: reusing converter results in a leak.
+    ComplexUnitsConverter converter3 = ComplexUnitsConverter(inputImpl3, outputImpl3, rates, status);
+    // TODO: reusing measures results in a leak.
+    MaybeStackVector<Measure> measures3 = converter3.convert((2.0 - DBL_EPSILON), status);
+    assertEquals("measures length", 2, measures3.length());
+    assertEquals("light-year test: measures[0] value", 2.0, measures3[0]->getNumber().getDouble(status));
+    assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
+                 measures3[0]->getUnit().getIdentifier());
+    assertEquals("light-year test: measures[1] value", 0.0, measures3[1]->getNumber().getDouble(status));
+    assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
+                 measures3[1]->getUnit().getIdentifier());
+
+    // 1e-15 light years is 9.46073 meters (calculated using "bc" and the CLDR
+    // conversion factor). With double-precision maths, we get 10.5. In this
+    // case, we're off by almost 1 meter.
+    MaybeStackVector<Measure> measures4 = converter3.convert((1.0 + 1e-15), status);
+    assertEquals("measures length", 2, measures4.length());
+    assertEquals("light-year test: measures[0] value", 1.0, measures4[0]->getNumber().getDouble(status));
+    assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
+                 measures4[0]->getUnit().getIdentifier());
+    assertEqualsNear("light-year test: measures[1] value", 10,
+                     measures4[1]->getNumber().getDouble(status), 1);
+    assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
+                 measures4[1]->getUnit().getIdentifier());
+
+    // 2e-16 light years is 1.892146 meters. We consider this in the noise, and
+    // thus expect a 0. (This test fails when 2e-16 is increased to 4e-16.)
+    MaybeStackVector<Measure> measures5 = converter3.convert((1.0 + 2e-16), status);
+    assertEquals("measures length", 2, measures5.length());
+    assertEquals("light-year test: measures[0] value", 1.0, measures5[0]->getNumber().getDouble(status));
+    assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
+                 measures5[0]->getUnit().getIdentifier());
+    assertEquals("light-year test: measures[1] value", 0.0,
+                     measures5[1]->getNumber().getDouble(status));
+    assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
+                 measures5[1]->getUnit().getIdentifier());
+
+    // TODO(icu-units#63): test negative numbers!
 }
 
 void UnitsTest::testComplexUnitConverterSorting() {
@@ -442,11 +535,11 @@ void UnitsTest::testComplexUnitConverterSorting() {
     auto measures = complexConverter.convert(10.0, status);
 
     U_ASSERT(measures.length() == 2);
-    assertEquals("Sorted Data", "foot", measures[0]->getUnit().getIdentifier());
-    assertEquals("Sorted Data", "inch", measures[1]->getUnit().getIdentifier());
+    assertEquals("inch-and-foot unit 0", "inch", measures[0]->getUnit().getIdentifier());
+    assertEquals("inch-and-foot unit 1", "foot", measures[1]->getUnit().getIdentifier());
 
-    assertEqualsNear("Sorted Data", 32, measures[0]->getNumber().getInt64(), 0.00001);
-    assertEqualsNear("Sorted Data", 9.7008, measures[1]->getNumber().getDouble(), 0.0001);
+    assertEqualsNear("inch-and-foot value 0", 9.7008, measures[0]->getNumber().getDouble(), 0.0001);
+    assertEqualsNear("inch-and-foot value 1", 32, measures[1]->getNumber().getInt64(), 0.00001);
 }
 
 /**
@@ -750,7 +843,9 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
 }
 
 /**
- * Runs data-driven unit tests for unit preferences.
+ * Runs data-driven unit tests for unit preferences. It looks for the test cases
+ * in source/test/testdata/cldr/units/unitPreferencesTest.txt, which originates
+ * in CLDR.
  */
 void UnitsTest::testPreferences() {
     const char *filename = "unitPreferencesTest.txt";
@@ -765,7 +860,7 @@ void UnitsTest::testPreferences() {
     }
 
     CharString path(sourceTestDataPath, errorCode);
-    path.appendPathPart("units", errorCode);
+    path.appendPathPart("cldr/units", errorCode);
     path.appendPathPart(filename, errorCode);
 
     parsePreferencesTests(path.data(), ';', fields, maxFields, unitPreferencesTestDataLineFn, this,

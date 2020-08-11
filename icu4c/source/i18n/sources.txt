@@ -32,7 +32,6 @@ collationsettings.cpp
 collationtailoring.cpp
 collationweights.cpp
 compactdecimalformat.cpp
-complexunitsconverter.cpp
 coptccal.cpp
 cpdtrans.cpp
 csdetect.cpp
@@ -122,6 +121,7 @@ number_patternstring.cpp
 number_rounding.cpp
 number_scientific.cpp
 number_skeletons.cpp
+number_symbolswrapper.cpp
 number_usageprefs.cpp
 number_utils.cpp
 numfmt.cpp
@@ -210,9 +210,10 @@ ulocdata.cpp
 umsg.cpp
 unesctrn.cpp
 uni2name.cpp
-unitconverter.cpp
-unitsdata.cpp
-unitsrouter.cpp
+units_data.cpp
+units_complexconverter.cpp
+units_converter.cpp
+units_router.cpp
 unum.cpp
 unumsys.cpp
 upluralrules.cpp

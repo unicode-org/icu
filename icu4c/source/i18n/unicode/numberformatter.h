@@ -707,12 +707,8 @@ class U_I18N_API Precision : public UMemory {
     typedef PrecisionUnion::FractionSignificantSettings FractionSignificantSettings;
     typedef PrecisionUnion::IncrementSettings IncrementSettings;
 
-    /** The Precision encapsulates the RoundingMode when used within the implementation. */
-    UNumberFormatRoundingMode fRoundingMode;
-
-    Precision(const PrecisionType& type, const PrecisionUnion& union_,
-              UNumberFormatRoundingMode roundingMode)
-            : fType(type), fUnion(union_), fRoundingMode(roundingMode) {}
+    Precision(const PrecisionType& type, const PrecisionUnion& union_)
+            : fType(type), fUnion(union_) {}
 
     Precision(UErrorCode errorCode) : fType(RND_ERROR) {
         fUnion.errorCode = errorCode;
@@ -746,8 +742,6 @@ class U_I18N_API Precision : public UMemory {
 
     static CurrencyPrecision constructCurrency(UCurrencyUsage usage);
 
-    static Precision constructPassThrough();
-
     // To allow MacroProps/MicroProps to initialize bogus instances:
     friend struct impl::MacroProps;
     friend struct impl::MicroProps;
@@ -769,9 +763,7 @@ class U_I18N_API Precision : public UMemory {
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
 
-    // TODO(units): revisit when UnitsRouter is changed: do we still need this
-    // once Precision is returned by UnitsRouter? For now, we allow access to
-    // Precision constructor from UsagePrefsHandler:
+    // To allow access to isBogus and the default (bogus) constructor:
     friend class impl::UsagePrefsHandler;
 };
 

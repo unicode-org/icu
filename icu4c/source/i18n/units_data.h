@@ -4,8 +4,8 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef __GETUNITSDATA_H__
-#define __GETUNITSDATA_H__
+#ifndef __UNITS_DATA_H__
+#define __UNITS_DATA_H__
 
 #include <limits>
 
@@ -26,10 +26,10 @@ namespace units {
  * Categories are found in `unitQuantities` in the `units` resource (see
  * `units.txt`).
  *
- * TODO(hugovdm): if we give unitsdata.cpp access to the functionality of
- * `extractCompoundBaseUnit` which is currently in unitconverter.cpp, we could
+ * TODO(hugovdm): if we give units_data.cpp access to the functionality of
+ * `extractCompoundBaseUnit` which is currently in units_converter.cpp, we could
  * support all units for which there is a category. Does it make sense to move
- * that function to unitsdata.cpp?
+ * that function to units_data.cpp?
  */
 CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status);
 
@@ -58,6 +58,22 @@ class U_I18N_API ConversionRateInfo : public UMemory {
     CharString factor;
     CharString offset;
 };
+
+} // namespace units
+
+// Export explicit template instantiations of MaybeStackArray, MemoryPool and
+// MaybeStackVector. This is required when building DLLs for Windows. (See
+// datefmt.h, collationiterator.h, erarules.h and others for similar examples.)
+//
+// Note: These need to be outside of the units namespace, or Clang will generate
+// a compile error.
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<units::ConversionRateInfo*, 8>;
+template class U_I18N_API MemoryPool<units::ConversionRateInfo, 8>;
+template class U_I18N_API MaybeStackVector<units::ConversionRateInfo, 8>;
+#endif
+
+namespace units {
 
 /**
  * Returns ConversionRateInfo for all supported conversions.
@@ -136,6 +152,25 @@ class U_I18N_API UnitPreferenceMetadata : public UMemory {
                       bool *foundRegion) const;
 };
 
+} // namespace units
+
+// Export explicit template instantiations of MaybeStackArray, MemoryPool and
+// MaybeStackVector. This is required when building DLLs for Windows. (See
+// datefmt.h, collationiterator.h, erarules.h and others for similar examples.)
+//
+// Note: These need to be outside of the units namespace, or Clang will generate
+// a compile error.
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<units::UnitPreferenceMetadata*, 8>;
+template class U_I18N_API MemoryPool<units::UnitPreferenceMetadata, 8>;
+template class U_I18N_API MaybeStackVector<units::UnitPreferenceMetadata, 8>;
+template class U_I18N_API MaybeStackArray<units::UnitPreference*, 8>;
+template class U_I18N_API MemoryPool<units::UnitPreference, 8>;
+template class U_I18N_API MaybeStackVector<units::UnitPreference, 8>;
+#endif
+
+namespace units {
+
 /**
  * Unit Preferences information for various locales and usages.
  */
@@ -189,6 +224,6 @@ class U_I18N_API UnitPreferences {
 } // namespace units
 U_NAMESPACE_END
 
-#endif //__GETUNITSDATA_H__
+#endif //__UNITS_DATA_H__
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

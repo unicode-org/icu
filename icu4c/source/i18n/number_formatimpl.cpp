@@ -25,9 +25,6 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
-MicroPropsGenerator::~MicroPropsGenerator() = default;
-
-
 NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& status)
     : NumberFormatterImpl(macros, true, status) {
 }
@@ -162,6 +159,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             || !(isPercent || isPermille)
             || isCompactNotation
         );
+    bool isMixedUnit = isCldrUnit && (uprv_strcmp(macros.unit.getType(), "") == 0) &&
+                       macros.unit.getComplexity(status) == UMEASURE_UNIT_MIXED;
 
     // Select the numbering system.
     LocalPointer<const NumberingSystem> nsLocal;
@@ -241,7 +240,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Unit Preferences and Conversions as our first step
     if (macros.usage.isSet()) {
         if (!isCldrUnit) {
-            // We only support "usage" when the input unit is a CLDR Unit.
+            // We only support "usage" when the input unit is specified, and is
+            // a CLDR Unit.
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return nullptr;
         }
@@ -249,6 +249,10 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             new UsagePrefsHandler(macros.locale, macros.unit, macros.usage.fUsage, chain, status);
         fUsagePrefsHandler.adoptInsteadAndCheckErrorCode(usagePrefsHandler, status);
         chain = fUsagePrefsHandler.getAlias();
+    } else if (isMixedUnit) {
+        auto unitConversionHandler = new UnitConversionHandler(macros.unit, chain, status);
+        fUnitConversionHandler.adoptInsteadAndCheckErrorCode(unitConversionHandler, status);
+        chain = fUnitConversionHandler.getAlias();
     }
 
     // Multiplier
@@ -265,16 +269,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         precision = Precision::integer().withMinDigits(2);
     } else if (isCurrency) {
         precision = Precision::currency(UCURR_USAGE_STANDARD);
+    } else if (macros.usage.isSet()) {
+        // Bogus Precision - it will get set in the UsagePrefsHandler instead
+        precision = Precision();
     } else {
         precision = Precision::maxFraction(6);
     }
     UNumberFormatRoundingMode roundingMode;
-    if (macros.roundingMode != kDefaultMode) {
-        roundingMode = macros.roundingMode;
-    } else {
-        // Temporary until ICU 64
-        roundingMode = precision.fRoundingMode;
-    }
+    roundingMode = macros.roundingMode;
     fMicros.rounder = {precision, roundingMode, currency, status};
     if (U_FAILURE(status)) {
         return nullptr;
@@ -375,6 +377,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
                     resolvePluralRules(macros.rules, macros.locale, status), chain, status),
                 status);
             chain = fLongNameMultiplexer.getAlias();
+        } else if (isMixedUnit) {
+            fMixedUnitLongNameHandler.adoptInsteadAndCheckErrorCode(new MixedUnitLongNameHandler(),
+                                                                    status);
+            MixedUnitLongNameHandler::forMeasureUnit(
+                macros.locale, macros.unit, unitWidth,
+                resolvePluralRules(macros.rules, macros.locale, status), chain,
+                fMixedUnitLongNameHandler.getAlias(), status);
+            chain = fMixedUnitLongNameHandler.getAlias();
         } else {
             fLongNameHandler.adoptInsteadAndCheckErrorCode(new LongNameHandler(), status);
             LongNameHandler::forMeasureUnit(macros.locale, macros.unit, macros.perUnit, unitWidth,

@@ -246,6 +246,10 @@ void generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb
 
 void parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
+/**
+ * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
+ * specified via a "unit/" concise skeleton.
+ */
 void parseIdentifierUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 void parseUnitUsageOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
@@ -354,6 +358,24 @@ struct SeenMacroProps {
     bool decimal = false;
     bool scale = false;
 };
+
+namespace {
+
+#define SKELETON_UCHAR_TO_CHAR(dest, src, start, end, status) (void)(dest); \
+UPRV_BLOCK_MACRO_BEGIN { \
+    UErrorCode conversionStatus = U_ZERO_ERROR; \
+    (dest).appendInvariantChars({false, (src).getBuffer() + (start), (end) - (start)}, conversionStatus); \
+    if (conversionStatus == U_INVARIANT_CONVERSION_ERROR) { \
+        /* Don't propagate the invariant conversion error; it is a skeleton syntax error */ \
+        (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
+        return; \
+    } else if (U_FAILURE(conversionStatus)) { \
+        (status) = conversionStatus; \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
+
+} // namespace
 
 } // namespace impl
 } // namespace number

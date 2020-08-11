@@ -7,7 +7,7 @@
 
 #include "intltest.h"
 #include "unicode/unistr.h"
-#include "unitsrouter.h"
+#include "units_router.h"
 
 
 class UnitsRouterTest : public IntlTest {

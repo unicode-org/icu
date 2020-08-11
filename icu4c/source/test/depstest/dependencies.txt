@@ -869,7 +869,8 @@ library: i18n
     dayperiodrules
     listformatter
     formatting formattable_cnv regex regex_cnv translit
-    double_conversion number_representation number_output numberformatter number_skeletons numberparser
+    double_conversion number_representation number_output numberformatter
+    number_skeletons number_usageprefs numberparser
     units_extra unitsformatter
     universal_time_scale
     uclean_i18n
@@ -976,11 +977,9 @@ group: number_output
     standardplural.o plurrule.o
   deps
     # FormattedNumber internals:
-    number_representation format formatted_value_sbimpl
+    number_representation format formatted_value_sbimpl units
     # PluralRules internals:
     unifiedcache
-    # Unit Formatting
-    units
 
 group: numberformatter
     # ICU 60+ NumberFormatter API
@@ -989,16 +988,42 @@ group: numberformatter
     number_decimfmtprops.o
     number_fluent.o number_formatimpl.o
     number_grouping.o number_integerwidth.o number_longnames.o
-    number_mapper.o number_modifiers.o number_multiplier.o
+    number_mapper.o number_modifiers.o
     number_notation.o number_padding.o
-    number_patternmodifier.o number_patternstring.o number_rounding.o
-    number_scientific.o number_usageprefs.o
-    currpinf.o dcfmtsym.o numsys.o
+    number_patternmodifier.o number_patternstring.o
+    number_scientific.o
+    currpinf.o
     numrange_fluent.o numrange_impl.o
   deps
     decnumber double_conversion formattable units unitsformatter
-    number_representation number_output
+    listformatter number_representation number_output
+    numsys
+    number_usageprefs
+    number_rounding
+    number_symbolswrapper
     uclean_i18n common
+
+group: numsys
+    dcfmtsym.o
+    numsys.o
+  deps
+    currency
+    resourcebundle
+    uclean_i18n
+
+group: number_usageprefs
+    number_multiplier.o
+    number_usageprefs.o
+  deps
+    number_rounding
+    number_symbolswrapper
+    unitsformatter
+
+group: number_rounding
+    number_rounding.o
+  deps
+    currency
+    number_representation
 
 group: number_skeletons
     # Number skeleton support; separated from numberformatter
@@ -1006,6 +1031,12 @@ group: number_skeletons
   deps
     numberformatter
     units_extra
+
+group: number_symbolswrapper
+    number_symbolswrapper.o
+  deps
+    platform
+    numsys
 
 group: numberparser
     numparse_affixes.o numparse_compositions.o numparse_currency.o
@@ -1076,7 +1107,7 @@ group: units
     stringenumeration errorcode
 
 group: unitsformatter
-    unitsdata.o unitconverter.o complexunitsconverter.o unitsrouter.o
+    units_data.o units_converter.o units_complexconverter.o units_router.o
   deps
     resourcebundle units_extra double_conversion number_representation formattable sort
 
