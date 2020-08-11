@@ -1,9 +1,6 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.UResource;
-import com.ibm.icu.math.BigDecimal;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -20,17 +17,36 @@ public class ConversionRates {
         }
     }
 
-    public String getBasicUnit(String identifier) {
-        /* TODO: implement */
-        return identifier;
+    /**
+     * Extracts the factor from a `SingleUnitImpl` to its Basic Unit.
+     *
+     * @param singleUnit
+     * @return
+     */
+    private Factor getFactorToBase(SingleUnitImpl singleUnit) {
+        int power = singleUnit.getDimensionality();
+        UMeasureSIPrefix siPrefix = singleUnit.getSiPrefix();
+        Factor result = Factor.precessFactor(mapToBasicUnits.get(singleUnit.getSimpleUnit()).getConversionRate());
+
+        return result.power(power).applySiPrefix(siPrefix);
     }
 
-    public ArrayList<SingleUnitImpl> getBasicUnits(MeasureUnitImpl measureUnitImpl) {
+    public Factor getFactorToBase(MeasureUnitImpl measureUnit) {
+        Factor result = new Factor();
+        for (SingleUnitImpl singleUnit :
+                measureUnit.getSingleUnits()) {
+            result = result.multiply(getFactorToBase(singleUnit));
+        }
+
+        return result;
+    }
+
+    public ArrayList<SingleUnitImpl> getBasicUnitsWithoutSIPrefix(MeasureUnitImpl measureUnitImpl) {
         ArrayList<SingleUnitImpl> result = new ArrayList<>();
         ArrayList<SingleUnitImpl> singleUnits = measureUnitImpl.getSingleUnits();
         for (SingleUnitImpl singleUnit :
                 singleUnits) {
-            result.addAll(getBasicUnits(singleUnit));
+            result.addAll(getBasicUnitsWithoutSIPrefix(singleUnit));
         }
 
         return result;
@@ -38,18 +54,19 @@ public class ConversionRates {
 
     /**
      * @param singleUnit
-     * @return The bese units in `SingleUnitImpl`.
+     * @return The bese units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
+     * <p>
+     * NOTE:
+     * This method is helpful when checking the convertibility because no need to check convertibility.
      */
-    public ArrayList<SingleUnitImpl> getBasicUnits(SingleUnitImpl singleUnit) {
+    public ArrayList<SingleUnitImpl> getBasicUnitsWithoutSIPrefix(SingleUnitImpl singleUnit) {
         String target = mapToBasicUnits.get(singleUnit.getSimpleUnit()).getTarget();
         MeasureUnitImpl targetImpl = UnitsParser.parseForIdentifier(target);
 
         // Each unit must be powered by the same dimension
         targetImpl.applyDimensionality(singleUnit.getDimensionality());
 
-
-        // Each unit must apply the same SI prefix
-        // TODO: discuss it.
+        // NOTE: we do not apply SI prefixes.
 
         return targetImpl.getSingleUnits();
     }
