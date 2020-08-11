@@ -26,6 +26,17 @@ public class MeasureUnitImpl {
     }
 
     /**
+     * Applies dimensionality to all the internal single units.
+     * For example: `square-meter-per-second`, when we apply dimensionality -2, it will be `square-second-per-p4-meter`
+     */
+    public void applyDimensionality(int dimensionality) {
+        for (SingleUnitImpl singelUnit :
+                singleUnits) {
+            singelUnit.setDimensionality(singelUnit.getDimensionality() * dimensionality);
+        }
+    }
+
+    /**
      * Mutates this MeasureUnitImpl to append a single unit.
      *
      * @return true if a new item was added. If unit is the dimensionless unit,
@@ -41,7 +52,7 @@ public class MeasureUnitImpl {
 
         // Find a similar unit that already exists, to attempt to coalesce
         SingleUnitImpl oldUnit = null;
-        for (int i = 0 , n = this.singleUnits.size(); i < n; i++) {
+        for (int i = 0, n = this.singleUnits.size(); i < n; i++) {
             SingleUnitImpl candidate = this.singleUnits.get(i);
             if (candidate.isCompatibleWith(singleUnit)) {
                 oldUnit = candidate;

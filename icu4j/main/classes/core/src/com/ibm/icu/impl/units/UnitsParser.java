@@ -315,7 +315,7 @@ public class UnitsParser {
     private boolean sawAnd = false;
 
 
-    private String[] simpleUnits = UnitsData.getSimpleUnits();
+    private final static String[] simpleUnits = ConversionRates.simpleUnits;
 
 }
 
