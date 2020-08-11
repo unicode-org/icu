@@ -76,7 +76,7 @@ languages:
     {
       "localeFilter": {
         "filterType": "language",
-        "whitelist": [
+        "includelist": [
           "en",
           "de",
           "zh"
@@ -86,6 +86,11 @@ languages:
 
 The *filterType* "language" only supports slicing by entire languages.
 
+##### Terminology: Includelist, Excludelist, Whitelist, Blacklist
+
+Prior to ICU 68, use `"whitelist"` and `"blacklist"` instead of `"includelist"`
+and `"excludelist"`, respectively. ICU 68 allows all four terms.
+
 #### Filtering by Locale
 
 For more control, use *filterType* "locale".  Here is a *filters.hjson* file that
@@ -94,12 +99,14 @@ only the default script (e.g., Simplified Han for Chinese):
 
     localeFilter: {
       filterType: locale
-      whitelist: [
+      includelist: [
         en
         de
         zh
       ]
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 #### Adding Script Variants (includeScripts = true)
 
@@ -112,13 +119,15 @@ Chinese are included:
       "localeFilter": {
         "filterType": "locale",
         "includeScripts": true,
-        "whitelist": [
+        "includelist": [
           "en",
           "de",
           "zh"
         ]
       }
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 If you wish to explicitly list the scripts, you may put the script code in the
 locale tag in the whitelist, and you do not need the *includeScripts* option
@@ -127,14 +136,16 @@ Simplified***:
 
     localeFilter: {
       filterType: locale
-      whitelist: [
+      includelist: [
         en
         de
         zh_Hant
       ]
     }
 
-Note: the option *includeScripts* is only supported at the language level;
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
+
+**Note:** the option *includeScripts* is only supported at the language level;
 i.e., in order to include all scripts for a particular language, you must
 specify the language alone, without a region tag.
 
@@ -150,13 +161,15 @@ German (Switzerland), or Chinese (Taiwan, Han Traditional):
     localeFilter: {
       filterType: locale
       includeChildren: false
-      whitelist: [
+      includelist: [
         en_US
         en_GB
         de_DE
         zh_CN
       ]
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 Including dependencies, the above filter would include the following data files:
 
@@ -285,7 +298,7 @@ dictionaries:
 
     featureFilters: {
       brkitr_dictionaries: {
-        whitelist: [
+        includelist: [
           burmesedict
         ]
       }
@@ -295,7 +308,8 @@ Do *not* include directories or file extensions.  They will be added
 automatically for you.  Note that all files in a particular category have the
 same directory and extension.
 
-You can use either a whitelist or a blacklist for the file name filter.
+You can use either `"includelist"` or `"excludelist"` for the file name filter.
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 ##### Regex Filter
 
@@ -305,7 +319,7 @@ To exclude filenames matching a certain regular expression, use *filterType*
     featureFilters: {
       brkitr_rules: {
         filterType: regex
-        blacklist: [
+        excludelist: [
           ^.*_cj$
         ]
       }
@@ -353,11 +367,13 @@ the common locales specified in *localeFilter*, you can do the following:
     featureFilters:
       curr_tree: {
         filterType: locale
-        whitelist: [
+        includelist: [
           it
         ]
       }
     }
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 You can exclude an entire `_tree` category without affecting other categories.
 For example, to exclude region display names:
@@ -446,13 +462,15 @@ following (this example removes calendar data):
       {
         categories: ["misc"]
         files: {
-          whitelist: ["supplementalData"]
+          includelist: ["supplementalData"]
         }
         rules: [
           -/calendarData
         ]
       }
     ]
+
+*If using ICU 67 or earlier, see note above regarding allowed keywords.*
 
 #### Combining Multiple Resource Filter Specs
 
@@ -474,7 +492,7 @@ en-CA; this also makes use of the *files* option:
         categories: ["unit_tree"]
         files: {
           filterType: locale
-          whitelist: ["en_US"]
+          includelist: ["en_US"]
         }
         rules: [
           +/*/length/mile
@@ -484,7 +502,7 @@ en-CA; this also makes use of the *files* option:
         categories: ["unit_tree"]
         files: {
           filterType: locale
-          whitelist: ["en_CA"]
+          includelist: ["en_CA"]
         }
         rules: [
           +/*/length/kilometer
