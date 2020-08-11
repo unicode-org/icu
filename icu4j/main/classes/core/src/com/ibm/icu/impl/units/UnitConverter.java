@@ -7,6 +7,7 @@
 
 package com.ibm.icu.impl.units;
 
+import com.ibm.icu.impl.Assert;
 import com.ibm.icu.math.BigDecimal;
 
 import java.util.ArrayList;
@@ -24,16 +25,29 @@ public class UnitConverter {
      * @param conversionRates contains all the needed conversion rates.
      */
     public UnitConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
-        // TODO: implement
+        // TODO: calculate offset
+        this.offset = BigDecimal.valueOf(0);
+
+        Convertibility convertibility = extractConvertibility(source, target, conversionRates);
+        Assert.assrt(convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
+
+        Factor sourceToBase = conversionRates.getFactorToBase(source);
+        Factor targetToBase = conversionRates.getFactorToBase(target);
+
+        if (convertibility == Convertibility.CONVERTIBLE) {
+            this.conversionRate = sourceToBase.divide(targetToBase).getConversionRate();
+        } else {
+            this.conversionRate = sourceToBase.multiply(targetToBase).getConversionRate();
+        }
     }
 
     public BigDecimal convert(BigDecimal inputValue) {
-        return inputValue.multiply(inputValue).add(offset);
+        return inputValue.multiply(this.conversionRate).add(offset);
     }
 
     static public Convertibility extractConvertibility(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
-        ArrayList<SingleUnitImpl> sourceSingleUnits = conversionRates.getBasicUnits(source);
-        ArrayList<SingleUnitImpl> targetSingleUnits = conversionRates.getBasicUnits(target);
+        ArrayList<SingleUnitImpl> sourceSingleUnits = conversionRates.getBasicUnitsWithoutSIPrefix(source);
+        ArrayList<SingleUnitImpl> targetSingleUnits = conversionRates.getBasicUnitsWithoutSIPrefix(target);
 
         HashMap dimensionMap = new HashMap<String, Integer>();
 

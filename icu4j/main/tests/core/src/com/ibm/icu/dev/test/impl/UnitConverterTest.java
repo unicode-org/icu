@@ -2,6 +2,7 @@ package com.ibm.icu.dev.test.impl;
 
 
 import com.ibm.icu.impl.units.*;
+import com.ibm.icu.math.BigDecimal;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -41,5 +42,46 @@ public class UnitConverterTest {
                 tests) {
             assertEquals(test.expected, UnitConverter.extractConvertibility(test.source, test.target, conversionRates));
         }
+    }
+
+    @Test
+    public void testConverter() {
+        class TestData {
+            TestData(String source, String target, double input, double expected) {
+                this.source = UnitsParser.parseForIdentifier(source);
+                this.target = UnitsParser.parseForIdentifier(target);
+                this.input = BigDecimal.valueOf(input);
+                this.expected = BigDecimal.valueOf(expected);
+            }
+
+            MeasureUnitImpl source;
+            MeasureUnitImpl target;
+            BigDecimal input;
+            BigDecimal expected;
+
+        }
+
+        TestData[] tests = {
+                new TestData("meter", "foot", 10, 32.8084),
+//                new TestData("square-meter-per-square-hour", "hectare-per-square-second", 10, 10),
+//                new TestData("hertz", "revolution-per-second", 10, 10),
+//                new TestData("millimeter", "meter", 10, 10),
+//                new TestData("yard", "meter", 10, 10),
+//                new TestData("ounce-troy", "kilogram", 10, 10),
+//                new TestData("percent", "portion", 10, 10),
+//                new TestData("ofhg", "kilogram-per-square-meter-square-second", 10, 10),
+//
+//                new TestData("second-per-meter", "meter-per-second", 11, 11),
+        };
+
+        ConversionRates conversionRates = new ConversionRates();
+
+        for (TestData test :
+                tests) {
+            UnitConverter converter = new UnitConverter(test.source, test.target, conversionRates);
+            assertEquals(test.expected.doubleValue(), converter.convert(test.input).doubleValue(), (0.00001));
+
+        }
+
     }
 }
