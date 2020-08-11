@@ -11,10 +11,35 @@ public class UnitConverterTest {
 
     @Test
     public void testExtractConvertibility() {
-        MeasureUnitImpl source = UnitsParser.parseForIdentifier("square-meter-per-square-hour");
-        MeasureUnitImpl target = UnitsParser.parseForIdentifier("hectare-per-square-second");
+        class TestData {
+            TestData(String source, String target, Convertibility convertibility) {
+                this.source = UnitsParser.parseForIdentifier(source);
+                this.target = UnitsParser.parseForIdentifier(target);
+                this.expected = convertibility;
+            }
+
+            MeasureUnitImpl source;
+            MeasureUnitImpl target;
+            Convertibility expected;
+        }
+
+        TestData[] tests = {
+                new TestData("meter", "foot", Convertibility.CONVERTIBLE),
+                new TestData("square-meter-per-square-hour", "hectare-per-square-second", Convertibility.CONVERTIBLE),
+                new TestData("hertz", "revolution-per-second", Convertibility.CONVERTIBLE),
+                new TestData("millimeter", "meter", Convertibility.CONVERTIBLE),
+                new TestData("yard", "meter", Convertibility.CONVERTIBLE),
+                new TestData("ounce-troy", "kilogram", Convertibility.CONVERTIBLE),
+                new TestData("percent", "portion", Convertibility.CONVERTIBLE),
+                new TestData("ofhg", "kilogram-per-square-meter-square-second", Convertibility.CONVERTIBLE),
+
+                new TestData("second-per-meter", "meter-per-second", Convertibility.RECIPROCAL),
+        };
         ConversionRates conversionRates = new ConversionRates();
 
-        assertEquals(UnitConverter.extractConvertibility(source, target, conversionRates), Convertibility.CONVERTIBLE);
+        for (TestData test :
+                tests) {
+            assertEquals(test.expected, UnitConverter.extractConvertibility(test.source, test.target, conversionRates));
+        }
     }
 }
