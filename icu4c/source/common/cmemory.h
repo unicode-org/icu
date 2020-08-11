@@ -464,10 +464,13 @@ class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
                     // We have more capacity than we need. Let's pretend we
                     // don't, since there isn't enough data to initialize with
                     this->capacity = rhs.capacity;
+                } else {
+                    // We failed to allocate the needed capacity, so we skip
+                    // copying any data.
+                    return;
                 }
             }
         }
-        // capacity is now no bigger than rhs.capacity. Copy what fits.
         uprv_memcpy(this->ptr, rhs.ptr, (size_t)this->capacity * sizeof(T));
     }
 
