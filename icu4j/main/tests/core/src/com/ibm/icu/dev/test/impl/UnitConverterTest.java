@@ -2,7 +2,7 @@ package com.ibm.icu.dev.test.impl;
 
 
 import com.ibm.icu.impl.units.*;
-import com.ibm.icu.math.BigDecimal;
+import java.math.BigDecimal;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -80,7 +80,6 @@ public class UnitConverterTest {
                 tests) {
             UnitConverter converter = new UnitConverter(test.source, test.target, conversionRates);
             assertEquals(test.expected.doubleValue(), converter.convert(test.input).doubleValue(), (0.00001));
-
         }
 
     }
