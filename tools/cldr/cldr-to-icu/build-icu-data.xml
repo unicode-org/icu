@@ -46,7 +46,14 @@
         <!-- The directory in which the additional ICU XML data is stored. -->
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
-        <!-- An override for the CLDR version string to be used in generated data. -->
+        <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
+        <property name="icuVersion" value="67.1.0.0"/>
+
+        <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
+        <property name="icuDataVersion" value="67.1.0.0"/>
+
+        <!-- An override for the CLDR version string (icuver.txt and others). This will be
+             extracted from the CLDR library used for building the data if not set here. -->
         <property name="cldrVersion" value=""/>
 
         <!-- The minimum draft status for CLDR data to be used in the conversion. See
@@ -110,6 +117,8 @@
             <arg value="-DoutDir=${outDir}"/>
             <arg value="-DspecialsDir=${specialsDir}"/>
             <arg value="-DoutputTypes=${outputTypes}"/>
+            <arg value="-DicuVersion=${icuVersion}"/>
+            <arg value="-DicuDataVersion=${icuDataVersion}"/>
             <arg value="-DcldrVersion=${cldrVersion}"/>
             <arg value="-DminDraftStatus=${minDraftStatus}"/>
             <arg value="-DlocaleIdFilter=${localeIdFilter}"/>
@@ -128,6 +137,7 @@
         </taskdef>
         <convert cldrDir="${cldrDir}" outputDir="${outDir}" specialsDir="${specialsDir}"
                  outputTypes="${outputTypes}" cldrVersion="${cldrVersion}"
+                 icuVersion="${icuVersion}" icuDataVersion="${icuDataVersion}"
                  minimalDraftStatus="${minDraftStatus}" localeIdFilter="${localeIdFilter}"
                  includePseudoLocales="${includePseudoLocales}" emitReport="${emitReport}">
 
@@ -387,7 +397,6 @@
                 <retain path="currencyNumericCodes.txt"/>
                 <retain path="icudata.rc"/>
                 <retain path="icustd.txt"/>
-                <retain path="icuver.txt"/>
                 <retain path="zoneinfo64.txt"/>
                 <!-- This file should be removed before the next release. -->
                 <retain path="miscfiles.mk"/>
