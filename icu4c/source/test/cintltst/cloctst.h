@@ -136,6 +136,8 @@ static void TestToLegacyKey(void);
 static void TestToUnicodeLocaleType(void);
 static void TestToLegacyType(void);
 static void TestBug20149(void);
+static void TestCDefaultLocale(void);
+
 
 /**
  * U_USING_DEFAULT_WARNING

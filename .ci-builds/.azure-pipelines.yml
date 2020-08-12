@@ -37,6 +37,12 @@ jobs:
       env:
         CC: clang
         CXX: clang++
+    - script: |
+        cd icu4c/source/test/cintltst && LANG=C LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
+      displayName: 'Test C Default locale'
+    - script: |
+        cd icu4c/source/test/cintltst && LANG=C.UTF-8 LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
+      displayName: 'Test C.UTF-8 Default locale'
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Ubuntu_1604_WarningsAsErrors
   displayName: 'C: Linux Clang WarningsAsErrors (Ubuntu 16.04)'
