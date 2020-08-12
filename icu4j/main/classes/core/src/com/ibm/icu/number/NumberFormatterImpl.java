@@ -193,6 +193,12 @@ class NumberFormatterImpl {
         if (macros.unitWidth != null) {
             unitWidth = macros.unitWidth;
         }
+        // Use CLDR unit data for all MeasureUnits (not currency and not
+        // no-unit), except use the dedicated percent pattern for percent and
+        // permille. However, use the CLDR unit data for percent/permille if a
+        // long name was requested OR if compact notation is being used, since
+        // compact notation overrides the middle modifier (micros.modMiddle)
+        // normally used for the percent pattern.
         boolean isCldrUnit = !isCurrency
             && !isNoUnit
             && (unitWidth == UnitWidth.FULL_NAME
