@@ -8,8 +8,8 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.math.BigDecimal;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 

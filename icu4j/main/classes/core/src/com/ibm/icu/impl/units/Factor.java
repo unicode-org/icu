@@ -1,9 +1,9 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.math.MathContext;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.regex.Pattern;
 
 class Factor {
@@ -32,30 +32,21 @@ class Factor {
      */
     public BigDecimal getConversionRate() {
         Factor resultCollector = new Factor();
-//        CONSTANT_FT2M = 0,    // ft2m stands for foot to meter.
-//                CONSTANT_PI = 0,      // PI
-//                CONSTANT_GRAVITY = 0, // Gravity
-//                CONSTANT_G = 0,
-//                CONSTANT_GAL_IMP2M3 = 0, // Gallon imp to m3
-//                CONSTANT_LB2KG = 0;      // Pound to Kilogram
+
         resultCollector.substitute(BigDecimal.valueOf(0.3048), this.CONSTANT_FT2M);
-        resultCollector.substitute(BigDecimal.valueOf(0.45359237).divide(BigDecimal.valueOf(131002976.0)), this.CONSTANT_PI);
+        resultCollector.substitute(BigDecimal.valueOf(0.45359237).divide(BigDecimal.valueOf(131002976.0), MathContext.DECIMAL32), this.CONSTANT_PI);
         resultCollector.substitute(BigDecimal.valueOf(9.80665), this.CONSTANT_GRAVITY);
         resultCollector.substitute(new BigDecimal("6.67408E-11"), this.CONSTANT_G);
         resultCollector.substitute(BigDecimal.valueOf(0.00454609), this.CONSTANT_GAL_IMP2M3);
         resultCollector.substitute(BigDecimal.valueOf(0.45359237), this.CONSTANT_LB2KG);
 
-
-        // TODO: solve division problem in BigDecimal
-        //return resultCollector.factorNum.divide(resultCollector.factorDen);
-        return BigDecimal.valueOf(resultCollector.factorNum.doubleValue()/resultCollector.factorDen.doubleValue());
-
+        return resultCollector.factorNum.divide(resultCollector.factorDen, MathContext.DECIMAL32);
     }
 
     private void substitute(BigDecimal value, int power) {
         if (power == 0) return;
 
-        BigDecimal absPoweredValue = value.pow(BigDecimal.valueOf(Math.abs(power)));
+        BigDecimal absPoweredValue = value.pow(Math.abs(power));
         if (power > 0) {
             this.factorNum = this.factorNum.multiply(absPoweredValue);
         } else {
@@ -85,11 +76,11 @@ class Factor {
         Factor result = new Factor();
         if (power == 0) return result;
         if (power > 0) {
-            result.factorNum = this.factorNum.pow(BigDecimal.valueOf(power));
-            result.factorDen = this.factorDen.pow(BigDecimal.valueOf(power));
+            result.factorNum = this.factorNum.pow(power);
+            result.factorDen = this.factorDen.pow(power);
         } else {
-            result.factorNum = this.factorDen.pow(BigDecimal.valueOf(power * -1));
-            result.factorDen = this.factorNum.pow(BigDecimal.valueOf(power * -1));
+            result.factorNum = this.factorDen.pow(power * -1);
+            result.factorDen = this.factorNum.pow(power * -1);
         }
 
         result.CONSTANT_FT2M = this.CONSTANT_FT2M * power;
@@ -220,7 +211,7 @@ class Factor {
         } else if (entity == "PI") {
             this.CONSTANT_PI += power;
         } else {
-            BigDecimal decimalEntity = new BigDecimal(entity).pow(BigDecimal.valueOf(power));
+            BigDecimal decimalEntity = new BigDecimal(entity).pow(power);
             this.factorNum = this.factorNum.multiply(decimalEntity);
         }
     }
