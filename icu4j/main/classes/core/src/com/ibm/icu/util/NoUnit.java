@@ -28,8 +28,7 @@ public class NoUnit extends MeasureUnit {
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      */
-    public static final NoUnit PERCENT =
-        (NoUnit) MeasureUnit.internalGetInstance("none", "percent");
+    public static final MeasureUnit PERCENT = MeasureUnit.PERCENT;
 
     /**
      * Constant for the permille unit, or 1/100 of a base unit.
@@ -37,8 +36,7 @@ public class NoUnit extends MeasureUnit {
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      */
-    public static final NoUnit PERMILLE =
-        (NoUnit) MeasureUnit.internalGetInstance("none", "permille");
+    public static final MeasureUnit PERMILLE = MeasureUnit.PERMILLE;
 
 
     /**
