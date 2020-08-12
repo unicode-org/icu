@@ -261,6 +261,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestToLanguageTag);
     TESTCASE(TestBug20132);
     TESTCASE(TestBug20149);
+    TESTCASE(TestCDefaultLocale);
     TESTCASE(TestForLanguageTag);
     TESTCASE(TestLangAndRegionCanonicalize);
     TESTCASE(TestTrailingNull);
@@ -408,6 +409,10 @@ static void TestNullDefault() {
             log_err("Failure returned from uloc_setDefault - \"%s\"\n", u_errorName(status));
         }
         
+    }
+    uloc_setDefault(original, &status);
+    if (U_FAILURE(status)) {
+        log_err("Failed to change the default locale back to %s\n", original);
     }
     
 }
@@ -6812,5 +6817,19 @@ static void TestUsingDefaultWarning() {
         u_UCharsToChars(buff, errorOutputBuff, length+1);
         log_err("ERROR: in uloc_getDisplayKeywordValue %s %s return len:%d %s with status %d %s\n",
                 keyword_value, keyword, length, errorOutputBuff, status, myErrorName(status));
+      }
+}      
+// Test case for ICU-20575
+// This test checks if the environment variable LANG is set, 
+// and if so ensures that both C and C.UTF-8 cause ICU's default locale to be en_US_POSIX.
+static void TestCDefaultLocale(){
+    const char *defaultLocale = uloc_getDefault();
+    char *env_var = getenv("LANG");
+    if (env_var == NULL) {
+      log_verbose("Skipping TestCDefaultLocale test, as the LANG variable is not set.");
+      return;
+    }
+    if ((strcmp(env_var, "C") == 0 || strcmp(env_var, "C.UTF-8") == 0) && strcmp(defaultLocale, "en_US_POSIX") != 0) {
+      log_err("The default locale for LANG=%s should be en_US_POSIX, not %s\n", env_var, defaultLocale);
     }
 }
