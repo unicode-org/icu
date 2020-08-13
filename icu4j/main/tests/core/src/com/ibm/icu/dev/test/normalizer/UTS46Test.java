@@ -105,9 +105,56 @@ public class UTS46Test extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestInvalidPunycodeDigits() {
+        IDNA idna=IDNA.getUTS46Instance(0);
+        StringBuilder result=new StringBuilder();
+        IDNA.Info info=new IDNA.Info();
+        idna.nameToUnicode("xn--pleP", result, info);  // P=U+0050
+        assertFalse("nameToUnicode() should succeed",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+        assertEquals("normal result", "ᔼᔴ", result.toString());
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--pleѐ", result, info);  // ends with non-ASCII U+0450
+        assertTrue("nameToUnicode() should detect non-ASCII",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        // Test with ASCII characters adjacent to LDH.
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--PLE/", result, info);
+        assertTrue("nameToUnicode() should detect '/'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple:", result, info);
+        assertTrue("nameToUnicode() should detect ':'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple@", result, info);
+        assertTrue("nameToUnicode() should detect '@'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple[", result, info);
+        assertTrue("nameToUnicode() should detect '['",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple`", result, info);
+        assertTrue("nameToUnicode() should detect '`'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple{", result, info);
+        assertTrue("nameToUnicode() should detect '{'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+    }
+
     private static final Map<String, IDNA.Error> errorNamesToErrors;
     static {
-        errorNamesToErrors=new TreeMap<String, IDNA.Error>();
+        errorNamesToErrors=new TreeMap<>();
         errorNamesToErrors.put("UIDNA_ERROR_EMPTY_LABEL", IDNA.Error.EMPTY_LABEL);
         errorNamesToErrors.put("UIDNA_ERROR_LABEL_TOO_LONG", IDNA.Error.LABEL_TOO_LONG);
         errorNamesToErrors.put("UIDNA_ERROR_DOMAIN_NAME_TOO_LONG", IDNA.Error.DOMAIN_NAME_TOO_LONG);
