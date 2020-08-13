@@ -39,6 +39,7 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
     void TestAPI();
     void TestNotSTD3();
+    void TestInvalidPunycodeDigits();
     void TestSomeCases();
     void IdnaTest();
 
@@ -82,6 +83,7 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestAPI);
     TESTCASE_AUTO(TestNotSTD3);
+    TESTCASE_AUTO(TestInvalidPunycodeDigits);
     TESTCASE_AUTO(TestSomeCases);
     TESTCASE_AUTO(IdnaTest);
     TESTCASE_AUTO_END;
@@ -242,6 +244,71 @@ void UTS46Test::TestNotSTD3() {
         prettify(result).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
         errln("notSTD3.nameToUnicode(equiv to non-LDH ASCII) unexpected errors %04lx string %s",
               (long)info.getErrors(), buffer);
+    }
+}
+
+void UTS46Test::TestInvalidPunycodeDigits() {
+    IcuTestErrorCode errorCode(*this, "TestInvalidPunycodeDigits()");
+    LocalPointer<IDNA> idna(IDNA::createUTS46Instance(0, errorCode));
+    if(errorCode.isFailure()) {
+        return;
+    }
+    UnicodeString result;
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--pleP", result, info, errorCode);  // P=U+0050
+        assertFalse("nameToUnicode() should succeed",
+                    (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+        assertEquals("normal result", u"ᔼᔴ", result);
+    }
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--pleѐ", result, info, errorCode);  // ends with non-ASCII U+0450
+        assertTrue("nameToUnicode() should detect non-ASCII",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    // Test with ASCII characters adjacent to LDH.
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple/", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '/'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple:", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect ':'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple@", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '@'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple[", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '['",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple`", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '`'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple{", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '{'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
     }
 }
 
