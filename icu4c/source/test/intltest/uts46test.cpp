@@ -40,6 +40,7 @@ public:
     void TestAPI();
     void TestNotSTD3();
     void TestInvalidPunycodeDigits();
+    void TestACELabelEdgeCases();
     void TestSomeCases();
     void IdnaTest();
 
@@ -84,6 +85,7 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestAPI);
     TESTCASE_AUTO(TestNotSTD3);
     TESTCASE_AUTO(TestInvalidPunycodeDigits);
+    TESTCASE_AUTO(TestACELabelEdgeCases);
     TESTCASE_AUTO(TestSomeCases);
     TESTCASE_AUTO(IdnaTest);
     TESTCASE_AUTO_END;
@@ -309,6 +311,35 @@ void UTS46Test::TestInvalidPunycodeDigits() {
         idna->nameToUnicode(u"xn--ple{", result, info, errorCode);
         assertTrue("nameToUnicode() should detect '{'",
                    (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+}
+
+void UTS46Test::TestACELabelEdgeCases() {
+    // In IDNA2008, these labels fail the round-trip validation from comparing
+    // the ToUnicode input with the back-to-ToASCII output.
+    IcuTestErrorCode errorCode(*this, "TestACELabelEdgeCases()");
+    LocalPointer<IDNA> idna(IDNA::createUTS46Instance(0, errorCode));
+    if(errorCode.isFailure()) {
+        return;
+    }
+    UnicodeString result;
+    {
+        IDNAInfo info;
+        idna->labelToUnicode(u"xn--", result, info, errorCode);
+        assertTrue("empty xn--", (info.getErrors()&UIDNA_ERROR_INVALID_ACE_LABEL)!=0);
+    }
+    {
+        IDNAInfo info;
+        idna->labelToUnicode(u"xN--ASCII-", result, info, errorCode);
+        assertTrue("nothing but ASCII", (info.getErrors()&UIDNA_ERROR_INVALID_ACE_LABEL)!=0);
+    }
+    {
+        // Different error: The Punycode decoding procedure does not consume the last delimiter
+        // if it is right after the xn-- so the main decoding loop fails because the hyphen
+        // is not a valid Punycode digit.
+        IDNAInfo info;
+        idna->labelToUnicode(u"Xn---", result, info, errorCode);
+        assertTrue("empty Xn---", (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
     }
 }
 
@@ -558,13 +589,13 @@ static const TestCase testCases[]={
       UIDNA_ERROR_EMPTY_LABEL|UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN|
       UIDNA_ERROR_HYPHEN_3_4 },
     { "a..c", "B", "a..c", UIDNA_ERROR_EMPTY_LABEL },
-    { "a.xn--.c", "B", "a..c", UIDNA_ERROR_EMPTY_LABEL },
+    { "a.xn--.c", "B", "a.xn--\\uFFFD.c", UIDNA_ERROR_INVALID_ACE_LABEL },
     { "a.-b.", "B", "a.-b.", UIDNA_ERROR_LEADING_HYPHEN },
     { "a.b-.c", "B", "a.b-.c", UIDNA_ERROR_TRAILING_HYPHEN },
     { "a.-.c", "B", "a.-.c", UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN },
     { "a.bc--de.f", "B", "a.bc--de.f", UIDNA_ERROR_HYPHEN_3_4 },
     { "\\u00E4.\\u00AD.c", "B", "\\u00E4..c", UIDNA_ERROR_EMPTY_LABEL },
-    { "\\u00E4.xn--.c", "B", "\\u00E4..c", UIDNA_ERROR_EMPTY_LABEL },
+    { "\\u00E4.xn--.c", "B", "\\u00E4.xn--\\uFFFD.c", UIDNA_ERROR_INVALID_ACE_LABEL },
     { "\\u00E4.-b.", "B", "\\u00E4.-b.", UIDNA_ERROR_LEADING_HYPHEN },
     { "\\u00E4.b-.c", "B", "\\u00E4.b-.c", UIDNA_ERROR_TRAILING_HYPHEN },
     { "\\u00E4.-.c", "B", "\\u00E4.-.c", UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN },
