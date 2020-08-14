@@ -133,6 +133,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     bool isBaseUnit = utils::unitIsBaseUnit(macros.unit);
     bool isPercent = utils::unitIsPercent(macros.unit);
     bool isPermille = utils::unitIsPermille(macros.unit);
+    bool isCompactNotation = macros.notation.fType == Notation::NTN_COMPACT;
     bool isAccounting =
             macros.sign == UNUM_SIGN_ACCOUNTING || macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS ||
             macros.sign == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO;
@@ -144,8 +145,18 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (macros.unitWidth != UNUM_UNIT_WIDTH_COUNT) {
         unitWidth = macros.unitWidth;
     }
-    bool isCldrUnit = !isCurrency && !isBaseUnit &&
-        (unitWidth == UNUM_UNIT_WIDTH_FULL_NAME || !(isPercent || isPermille));
+    // Use CLDR unit data for all MeasureUnits (not currency and not
+    // no-unit), except use the dedicated percent pattern for percent and
+    // permille. However, use the CLDR unit data for percent/permille if a
+    // long name was requested OR if compact notation is being used, since
+    // compact notation overrides the middle modifier (micros.modMiddle)
+    // normally used for the percent pattern.
+    bool isCldrUnit = !isCurrency
+        && !isBaseUnit
+        && (unitWidth == UNUM_UNIT_WIDTH_FULL_NAME
+            || !(isPercent || isPermille)
+            || isCompactNotation
+        );
 
     // Select the numbering system.
     LocalPointer<const NumberingSystem> nsLocal;
@@ -232,7 +243,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     Precision precision;
     if (!macros.precision.isBogus()) {
         precision = macros.precision;
-    } else if (macros.notation.fType == Notation::NTN_COMPACT) {
+    } else if (isCompactNotation) {
         precision = Precision::integer().withMinDigits(2);
     } else if (isCurrency) {
         precision = Precision::currency(UCURR_USAGE_STANDARD);
@@ -254,7 +265,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Grouping strategy
     if (!macros.grouper.isBogus()) {
         fMicros.grouping = macros.grouper;
-    } else if (macros.notation.fType == Notation::NTN_COMPACT) {
+    } else if (isCompactNotation) {
         // Compact notation uses minGrouping by default since ICU 59
         fMicros.grouping = Grouper::forStrategy(UNUM_GROUPING_MIN2);
     } else {
@@ -366,7 +377,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
 
     // Compact notation
-    if (macros.notation.fType == Notation::NTN_COMPACT) {
+    if (isCompactNotation) {
         CompactType compactType = (isCurrency && unitWidth != UNUM_UNIT_WIDTH_FULL_NAME)
                                   ? CompactType::TYPE_CURRENCY : CompactType::TYPE_DECIMAL;
         auto newCompactHandler = new CompactHandler(
