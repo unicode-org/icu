@@ -553,16 +553,21 @@ uloc_getLCID(const char* localeID);
  * Gets the language name suitable for display for the specified locale.
  *
  * @param locale the locale to get the ISO language code with
- * @param displayLocale Specifies the locale to be used to display the name.  In other words,
- *                 if the locale's language code is "en", passing Locale::getFrench() for
- *                 inLocale would result in "Anglais", while passing Locale::getGerman()
- *                 for inLocale would result in "Englisch".
+ * @param displayLocale Specifies the locale to be used to display the name. In
+ *                 other words, if the locale's language code is "en", passing
+ *                 Locale::getFrench() for inLocale would result in "Anglais",
+ *                 while passing Locale::getGerman() for inLocale would result
+ *                 in "Englisch".
  * @param language the displayable language code for localeID
- * @param languageCapacity the size of the language buffer to store the  
- * displayable language code with
- * @param status error information if retrieving the displayable language code failed
- * @return the actual buffer size needed for the displayable language code.  If it's greater 
- * than languageCapacity, the returned language code will be truncated.  
+ * @param languageCapacity the size of the language buffer to store the
+ *                 displayable language code with.
+ * @param status error information if retrieving the displayable language code
+ *                 failed. U_USING_DEFAULT_WARNING indicates that no data was
+ *                 found from the locale resources and a case canonicalized
+ *                 language code is placed into language as fallback.
+ * @return the actual buffer size needed for the displayable language code. If
+ *                 it's greater than languageCapacity, the returned language
+ *                 code will be truncated.
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
@@ -575,17 +580,23 @@ uloc_getDisplayLanguage(const char* locale,
 /**
  * Gets the script name suitable for display for the specified locale.
  *
- * @param locale the locale to get the displayable script code with. NULL may be used to specify the default.
- * @param displayLocale Specifies the locale to be used to display the name.  In other words,
- *                 if the locale's language code is "en", passing Locale::getFrench() for
- *                 inLocale would result in "", while passing Locale::getGerman()
- *                 for inLocale would result in "". NULL may be used to specify the default.
- * @param script the displayable script for the localeID
- * @param scriptCapacity the size of the script buffer to store the  
- * displayable script code with
- * @param status error information if retrieving the displayable script code failed
- * @return the actual buffer size needed for the displayable script code.  If it's greater 
- * than scriptCapacity, the returned displayable script code will be truncated.  
+ * @param locale the locale to get the displayable script code with. NULL may be
+ *                 used to specify the default.
+ * @param displayLocale Specifies the locale to be used to display the name. In
+ *                 other words, if the locale's language code is "en", passing
+ *                 Locale::getFrench() for inLocale would result in "", while
+ *                 passing Locale::getGerman() for inLocale would result in "".
+ *                 NULL may be used to specify the default.
+ * @param script the displayable script for the localeID.
+ * @param scriptCapacity the size of the script buffer to store the displayable
+ *                 script code with.
+ * @param status error information if retrieving the displayable script code
+ *                 failed. U_USING_DEFAULT_WARNING indicates that no data was
+ *                 found from the locale resources and a case canonicalized
+ *                 script code is placed into script as fallback.
+ * @return the actual buffer size needed for the displayable script code. If
+ *                 it's greater than scriptCapacity, the returned displayable
+ *                 script code will be truncated.
  * @stable ICU 2.8
  */
 U_STABLE int32_t U_EXPORT2
@@ -597,20 +608,27 @@ uloc_getDisplayScript(const char* locale,
 
 /**
  * Gets the country name suitable for display for the specified locale.
- * Warning: this is for the region part of a valid locale ID; it cannot just be the region code (like "FR").
- * To get the display name for a region alone, or for other options, use ULocaleDisplayNames instead.
+ * Warning: this is for the region part of a valid locale ID; it cannot just be
+ * the region code (like "FR"). To get the display name for a region alone, or
+ * for other options, use ULocaleDisplayNames instead.
  *
- * @param locale the locale to get the displayable country code with. NULL may be used to specify the default.
- * @param displayLocale Specifies the locale to be used to display the name.  In other words,
- *                 if the locale's language code is "en", passing Locale::getFrench() for
- *                 inLocale would result in "Anglais", while passing Locale::getGerman()
- *                 for inLocale would result in "Englisch". NULL may be used to specify the default.
- * @param country the displayable country code for localeID
- * @param countryCapacity the size of the country buffer to store the  
- * displayable country code with
- * @param status error information if retrieving the displayable country code failed
- * @return the actual buffer size needed for the displayable country code.  If it's greater 
- * than countryCapacity, the returned displayable country code will be truncated.  
+ * @param locale the locale to get the displayable country code with. NULL may
+ *                 be used to specify the default.
+ * @param displayLocale Specifies the locale to be used to display the name. In
+ *                 other words, if the locale's language code is "en", passing
+ *                 Locale::getFrench() for inLocale would result in "Anglais",
+ *                 while passing Locale::getGerman() for inLocale would result
+ *                 in "Englisch". NULL may be used to specify the default.
+ * @param country the displayable country code for localeID.
+ * @param countryCapacity the size of the country buffer to store the
+ *                 displayable country code with.
+ * @param status error information if retrieving the displayable country code
+ *                 failed. U_USING_DEFAULT_WARNING indicates that no data was
+ *                 found from the locale resources and a case canonicalized
+ *                 country code is placed into country as fallback.
+ * @return the actual buffer size needed for the displayable country code. If
+ *                 it's greater than countryCapacity, the returned displayable
+ *                 country code will be truncated.
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
@@ -624,17 +642,23 @@ uloc_getDisplayCountry(const char* locale,
 /**
  * Gets the variant name suitable for display for the specified locale.
  *
- * @param locale the locale to get the displayable variant code with. NULL may be used to specify the default.
- * @param displayLocale Specifies the locale to be used to display the name.  In other words,
- *                 if the locale's language code is "en", passing Locale::getFrench() for
- *                 inLocale would result in "Anglais", while passing Locale::getGerman()
- *                 for inLocale would result in "Englisch". NULL may be used to specify the default.
- * @param variant the displayable variant code for localeID
- * @param variantCapacity the size of the variant buffer to store the 
- * displayable variant code with
- * @param status error information if retrieving the displayable variant code failed
- * @return the actual buffer size needed for the displayable variant code.  If it's greater 
- * than variantCapacity, the returned displayable variant code will be truncated.  
+ * @param locale the locale to get the displayable variant code with. NULL may
+ *                 be used to specify the default.
+ * @param displayLocale Specifies the locale to be used to display the name. In
+ *                 other words, if the locale's language code is "en", passing
+ *                 Locale::getFrench() for inLocale would result in "Anglais",
+ *                 while passing Locale::getGerman() for inLocale would result
+ *                 in "Englisch". NULL may be used to specify the default.
+ * @param variant the displayable variant code for localeID.
+ * @param variantCapacity the size of the variant buffer to store the
+ *                 displayable variant code with.
+ * @param status error information if retrieving the displayable variant code
+ *                 failed. U_USING_DEFAULT_WARNING indicates that no data was
+ *                 found from the locale resources and a case canonicalized
+ *                 variant code is placed into variant as fallback.
+ * @return the actual buffer size needed for the displayable variant code. If
+ *                 it's greater than variantCapacity, the returned displayable
+ *                 variant code will be truncated.
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
@@ -645,9 +669,9 @@ uloc_getDisplayVariant(const char* locale,
                        UErrorCode* status);
 
 /**
- * Gets the keyword name suitable for display for the specified locale.
- * E.g: for the locale string de_DE\@collation=PHONEBOOK, this API gets the display 
- * string for the keyword collation. 
+ * Gets the keyword name suitable for display for the specified locale. E.g:
+ * for the locale string de_DE\@collation=PHONEBOOK, this API gets the display
+ * string for the keyword collation.
  * Usage:
  * <code>
  *    UErrorCode status = U_ZERO_ERROR;
@@ -676,11 +700,13 @@ uloc_getDisplayVariant(const char* locale,
  *                          for inLocale would result in "Englisch". NULL may be used to specify the default.
  * @param dest              the buffer to which the displayable keyword should be written.
  * @param destCapacity      The size of the buffer (number of UChars). If it is 0, then
- *                          dest may be NULL and the function will only return the length of the 
+ *                          dest may be NULL and the function will only return the length of the
  *                          result without writing any of the result string (pre-flighting).
- * @param status            error information if retrieving the displayable string failed. 
+ * @param status            error information if retrieving the displayable string failed.
  *                          Should not be NULL and should not indicate failure on entry.
- * @return the actual buffer size needed for the displayable variant code.  
+ *                          U_USING_DEFAULT_WARNING indicates that no data was found from the locale
+ *                          resources and the keyword is placed into dest as fallback.
+ * @return the actual buffer size needed for the displayable variant code.
  * @see #uloc_openKeywords
  * @stable ICU 2.8
  */
@@ -692,7 +718,7 @@ uloc_getDisplayKeyword(const char* keyword,
                        UErrorCode* status);
 /**
  * Gets the value of the keyword suitable for display for the specified locale.
- * E.g: for the locale string de_DE\@collation=PHONEBOOK, this API gets the display 
+ * E.g: for the locale string de_DE\@collation=PHONEBOOK, this API gets the display
  * string for PHONEBOOK, in the display locale, when "collation" is specified as the keyword.
  *
  * @param locale            The locale to get the displayable variant code with. NULL may be used to specify the default.
@@ -703,11 +729,13 @@ uloc_getDisplayKeyword(const char* keyword,
  *                          for inLocale would result in "Englisch". NULL may be used to specify the default.
  * @param dest              the buffer to which the displayable keyword should be written.
  * @param destCapacity      The size of the buffer (number of UChars). If it is 0, then
- *                          dest may be NULL and the function will only return the length of the 
+ *                          dest may be NULL and the function will only return the length of the
  *                          result without writing any of the result string (pre-flighting).
- * @param status            error information if retrieving the displayable string failed. 
+ * @param status            error information if retrieving the displayable string failed.
  *                          Should not be NULL and must not indicate failure on entry.
- * @return the actual buffer size needed for the displayable variant code.  
+ *                          U_USING_DEFAULT_WARNING indicates that no data was found from the locale
+ *                          resources and the value of the keyword is placed into dest as fallback.
+ * @return the actual buffer size needed for the displayable variant code.
  * @stable ICU 2.8
  */
 U_STABLE int32_t U_EXPORT2
