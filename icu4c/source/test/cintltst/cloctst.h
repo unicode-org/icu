@@ -138,6 +138,11 @@ static void TestToLegacyType(void);
 static void TestBug20149(void);
 
 /**
+ * U_USING_DEFAULT_WARNING
+ */
+static void TestUsingDefaultWarning(void);
+
+/**
  * locale data
  */
 static void TestEnglishExemplarCharacters(void);

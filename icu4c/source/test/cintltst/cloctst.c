@@ -56,6 +56,8 @@ static void TestBadLocaleIDs(void);
 static void TestBug20370(void);
 static void TestBug20321UnicodeLocaleKey(void);
 
+static void TestUsingDefaultWarning(void);
+
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -274,6 +276,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestBadLocaleIDs);
     TESTCASE(TestBug20370);
     TESTCASE(TestBug20321UnicodeLocaleKey);
+    TESTCASE(TestUsingDefaultWarning);
 }
 
 
@@ -6739,5 +6742,75 @@ static void TestBug20149() {
     if (U_FAILURE(status) ||
         0 !=strcmp("zh@attribute=foo;collation=pinyin", locale)) {
         log_err("ERROR: in uloc_forLanguageTag %s return %s\n", myErrorName(status), locale);
+    }
+}
+
+static void TestUsingDefaultWarning() {
+    UChar buff[256];
+    char cbuff[256];
+    UErrorCode status = U_ZERO_ERROR;
+    const char* language = "jJj";
+    int32_t length = uloc_getDisplayLanguage(language, "de", buff, 256, &status);
+    if (status != U_USING_DEFAULT_WARNING ||
+        u_strcmp(buff, CharsToUChars("jjj")) != 0 ||
+        length != 3) {
+        u_UCharsToChars(buff, cbuff, length+1);
+        log_err("ERROR: in uloc_getDisplayLanguage %s return len:%d %s with status %d %s\n",
+                language, length, cbuff, status, myErrorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    const char* script = "und-lALA";
+    length = uloc_getDisplayScript(script, "de", buff, 256, &status);
+    if (status != U_USING_DEFAULT_WARNING ||
+        u_strcmp(buff, CharsToUChars("Lala")) != 0 ||
+        length != 4) {
+        u_UCharsToChars(buff, cbuff, length+1);
+        log_err("ERROR: in uloc_getDisplayScript %s return len:%d %s with status %d %s\n",
+                script, length, cbuff, status, myErrorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    const char* region = "und-wt";
+    length = uloc_getDisplayCountry(region, "de", buff, 256, &status);
+    if (status != U_USING_DEFAULT_WARNING ||
+        u_strcmp(buff, CharsToUChars("WT")) != 0 ||
+        length != 2) {
+        u_UCharsToChars(buff, cbuff, length+1);
+        log_err("ERROR: in uloc_getDisplayCountry %s return len:%d %s with status %d %s\n",
+                region, length, cbuff, status, myErrorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    const char* variant = "und-abcde";
+    length = uloc_getDisplayVariant(variant, "de", buff, 256, &status);
+    if (status != U_USING_DEFAULT_WARNING ||
+        u_strcmp(buff, CharsToUChars("ABCDE")) != 0 ||
+        length != 5) {
+        u_UCharsToChars(buff, cbuff, length+1);
+        log_err("ERROR: in uloc_getDisplayVariant %s return len:%d %s with status %d %s\n",
+                variant, length, cbuff, status, myErrorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    const char* keyword = "postCODE";
+    length = uloc_getDisplayKeyword(keyword, "de", buff, 256, &status);
+    if (status != U_USING_DEFAULT_WARNING ||
+        u_strcmp(buff, CharsToUChars("postCODE")) != 0 ||
+        length != 8) {
+        u_UCharsToChars(buff, cbuff, length+1);
+        log_err("ERROR: in uloc_getDisplayKeyword %s return len:%d %s with status %d %s\n",
+                keyword, length, cbuff, status, myErrorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    const char* keyword_value = "de_DE@postCode=fOObAR";
+    length = uloc_getDisplayKeywordValue(keyword_value, keyword, "de", buff, 256, &status);
+    if (status != U_USING_DEFAULT_WARNING ||
+        u_strcmp(buff, CharsToUChars("fOObAR")) != 0 ||
+        length != 6) {
+        u_UCharsToChars(buff, cbuff, length+1);
+        log_err("ERROR: in uloc_getDisplayKeywordValue %s %s return len:%d %s with status %d %s\n",
+                keyword_value, keyword, length, cbuff, status, myErrorName(status));
     }
 }
