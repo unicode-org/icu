@@ -946,7 +946,7 @@ group: dayperiodrules
 group: listformatter
     listformatter.o ulistformatter.o
   deps
-    uchar resourcebundle simpleformatter format uclean_i18n formatted_value_iterimpl
+    uchar resourcebundle simpleformatter format uclean_i18n formatted_value_sbimpl
 
 group: double_conversion
     double-conversion-bignum.o double-conversion-double-to-string.o
@@ -1056,6 +1056,7 @@ group: formatting
     sharedbreakiterator # for reldatefmt.o
     uclean_i18n
     region
+    formatted_value_iterimpl  # NOTE (2020-08-27): Not currently used.
 
 group: sharedbreakiterator
     sharedbreakiterator.o
