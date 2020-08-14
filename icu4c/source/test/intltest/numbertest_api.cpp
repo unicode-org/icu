@@ -1014,6 +1014,65 @@ void NumberFormatterApiTest::unitPercent() {
             -98.7654321,
             u"-98.765432%");
 
+    // ICU-20923
+    assertFormatDescendingBig(
+            u"Compact Percent",
+            u"compact-short percent",
+            u"K %",
+            NumberFormatter::with()
+                    .notation(Notation::compactShort())
+                    .unit(NoUnit::percent()),
+            Locale::getEnglish(),
+            u"88M%",
+            u"8.8M%",
+            u"876K%",
+            u"88K%",
+            u"8.8K%",
+            u"876%",
+            u"88%",
+            u"8.8%",
+            u"0%");
+
+    // ICU-20923
+    assertFormatDescendingBig(
+            u"Compact Percent with Scale",
+            u"compact-short percent scale/100",
+            u"K %x100",
+            NumberFormatter::with()
+                    .notation(Notation::compactShort())
+                    .unit(NoUnit::percent())
+                    .scale(Scale::powerOfTen(2)),
+            Locale::getEnglish(),
+            u"8.8B%",
+            u"876M%",
+            u"88M%",
+            u"8.8M%",
+            u"876K%",
+            u"88K%",
+            u"8.8K%",
+            u"876%",
+            u"0%");
+
+    // ICU-20923
+    assertFormatDescendingBig(
+            u"Compact Percent Long Name",
+            u"compact-short percent unit-width-full-name",
+            u"K % unit-width-full-name",
+            NumberFormatter::with()
+                    .notation(Notation::compactShort())
+                    .unit(NoUnit::percent())
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale::getEnglish(),
+            u"88M percent",
+            u"8.8M percent",
+            u"876K percent",
+            u"88K percent",
+            u"8.8K percent",
+            u"876 percent",
+            u"88 percent",
+            u"8.8 percent",
+            u"0 percent");
+
     assertFormatSingle(
             u"Per Percent",
             u"measure-unit/length-meter per-measure-unit/concentr-percent unit-width-full-name",

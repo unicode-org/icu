@@ -967,6 +967,65 @@ public class NumberFormatterApiTest {
                 -98.7654321,
                 "-98.765432%");
 
+        // ICU-20923
+        assertFormatDescendingBig(
+                "Compact Percent",
+                "compact-short percent",
+                "K %",
+                NumberFormatter.with()
+                        .notation(Notation.compactShort())
+                        .unit(NoUnit.PERCENT),
+                ULocale.ENGLISH,
+                "88M%",
+                "8.8M%",
+                "876K%",
+                "88K%",
+                "8.8K%",
+                "876%",
+                "88%",
+                "8.8%",
+                "0%");
+
+        // ICU-20923
+        assertFormatDescendingBig(
+                "Compact Percent with Scale",
+                "compact-short percent scale/100",
+                "K %x100",
+                NumberFormatter.with()
+                        .notation(Notation.compactShort())
+                        .unit(NoUnit.PERCENT)
+                        .scale(Scale.powerOfTen(2)),
+                ULocale.ENGLISH,
+                "8.8B%",
+                "876M%",
+                "88M%",
+                "8.8M%",
+                "876K%",
+                "88K%",
+                "8.8K%",
+                "876%",
+                "0%");
+
+        // ICU-20923
+        assertFormatDescendingBig(
+                "Compact Percent Long Name",
+                "compact-short percent unit-width-full-name",
+                "K % unit-width-full-name",
+                NumberFormatter.with()
+                        .notation(Notation.compactShort())
+                        .unit(NoUnit.PERCENT)
+                        .unitWidth(UnitWidth.FULL_NAME),
+                ULocale.ENGLISH,
+                "88M percent",
+                "8.8M percent",
+                "876K percent",
+                "88K percent",
+                "8.8K percent",
+                "876 percent",
+                "88 percent",
+                "8.8 percent",
+                "0 percent");
+
         assertFormatSingle(
                 "Per Percent",
                 "measure-unit/length-meter per-measure-unit/concentr-percent unit-width-full-name",
