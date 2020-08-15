@@ -62,8 +62,8 @@ public class UnitConverterTest {
         }
 
         TestData[] tests = {
-                new TestData("meter", "foot", 10, 32.8084),
-//                new TestData("square-meter-per-square-hour", "hectare-per-square-second", 10, 10),
+//                new TestData("meter", "foot", 10, 32.8084),
+                new TestData("per-square-hour", "per-square-second", 10, 10),
 //                new TestData("hertz", "revolution-per-second", 10, 10),
 //                new TestData("millimeter", "meter", 10, 10),
 //                new TestData("yard", "meter", 10, 10),

@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.regex.Pattern;
 
+import static java.math.MathContext.DECIMAL128;
+
 class Factor {
     public static Factor precessFactor(String factor) {
         Assert.assrt(!factor.isEmpty());
@@ -31,22 +33,22 @@ class Factor {
      * @return
      */
     public BigDecimal getConversionRate() {
-        Factor resultCollector = new Factor();
+        Factor resultCollector = new Factor(this);
 
         resultCollector.substitute(BigDecimal.valueOf(0.3048), this.CONSTANT_FT2M);
-        resultCollector.substitute(BigDecimal.valueOf(0.45359237).divide(BigDecimal.valueOf(131002976.0), MathContext.DECIMAL32), this.CONSTANT_PI);
+        resultCollector.substitute(BigDecimal.valueOf(0.45359237).divide(BigDecimal.valueOf(131002976.0), DECIMAL128), this.CONSTANT_PI);
         resultCollector.substitute(BigDecimal.valueOf(9.80665), this.CONSTANT_GRAVITY);
         resultCollector.substitute(new BigDecimal("6.67408E-11"), this.CONSTANT_G);
         resultCollector.substitute(BigDecimal.valueOf(0.00454609), this.CONSTANT_GAL_IMP2M3);
         resultCollector.substitute(BigDecimal.valueOf(0.45359237), this.CONSTANT_LB2KG);
 
-        return resultCollector.factorNum.divide(resultCollector.factorDen, MathContext.DECIMAL32);
+        return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
     }
 
     private void substitute(BigDecimal value, int power) {
         if (power == 0) return;
 
-        BigDecimal absPoweredValue = value.pow(Math.abs(power));
+        BigDecimal absPoweredValue = value.pow(Math.abs(power), DECIMAL128);
         if (power > 0) {
             this.factorNum = this.factorNum.multiply(absPoweredValue);
         } else {
@@ -187,34 +189,32 @@ class Factor {
     }
 
     private void addEntity(String entity, int power) {
-        if (entity == "ft_to_m") {
+        if ("ft_to_m".equals(entity)) {
             this.CONSTANT_FT2M += power;
-        } else if (entity == "ft2_to_m2") {
+        } else if ("ft2_to_m2".equals(entity)) {
             this.CONSTANT_FT2M += 2 * power;
-        } else if (entity == "ft3_to_m3") {
+        } else if ("ft3_to_m3".equals(entity)) {
             this.CONSTANT_FT2M += 3 * power;
-        } else if (entity == "in3_to_m3") {
+        } else if ("in3_to_m3".equals(entity)) {
             this.CONSTANT_FT2M += 3 * power;
             this.factorDen = this.factorDen.multiply(BigDecimal.valueOf(Math.pow(12, 3)));
-        } else if (entity == "gal_to_m3") {
+        } else if ("gal_to_m3".equals(entity)) {
             this.factorNum = this.factorNum.multiply(BigDecimal.valueOf(231));
             this.CONSTANT_FT2M += 3 * power;
             this.factorDen = this.factorDen.multiply(BigDecimal.valueOf(12 * 12 * 12));
-        } else if (entity == "gal_imp_to_m3") {
+        } else if ("gal_imp_to_m3".equals(entity)) {
             this.CONSTANT_GAL_IMP2M3 += power;
-        } else if (entity == "G") {
+        } else if ("G".equals(entity)) {
             this.CONSTANT_G += power;
-        } else if (entity == "gravity") {
+        } else if ("gravity".equals(entity)) {
             this.CONSTANT_GRAVITY += power;
-        } else if (entity == "lb_to_kg") {
+        } else if ("lb_to_kg".equals(entity)) {
             this.CONSTANT_LB2KG += power;
-        } else if (entity == "PI") {
+        } else if ("PI".equals(entity)) {
             this.CONSTANT_PI += power;
         } else {
-            BigDecimal decimalEntity = new BigDecimal(entity).pow(power);
+            BigDecimal decimalEntity = new BigDecimal(entity).pow(power, DECIMAL128);
             this.factorNum = this.factorNum.multiply(decimalEntity);
         }
     }
-
-
 }
