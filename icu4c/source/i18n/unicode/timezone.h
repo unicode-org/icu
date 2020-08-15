@@ -318,6 +318,17 @@ public:
     static TimeZone* U_EXPORT2 createDefault(void);
 
     /**
+     * If the locale contains the timezone keyword, creates a copy of that TimeZone.
+     * Otherwise, create the default timezone.
+     *
+     * @param locale a locale which may contains 'timezone' keyword/value.
+     * @return   A TimeZone. Clients are responsible for deleting the time zone
+     *           object returned.
+     * @internal
+     */
+    static TimeZone* U_EXPORT2 forLocaleOrDefault(const Locale& locale);
+
+    /**
      * Sets the default time zone (i.e., what's returned by createDefault()) to be the
      * specified time zone.  If NULL is specified for the time zone, the default time
      * zone is set to the default host time zone.  This call adopts the TimeZone object

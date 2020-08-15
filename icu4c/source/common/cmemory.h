@@ -297,6 +297,9 @@ public:
      * Automatically allocates the heap array if the argument is larger than the stack capacity.
      * Intended for use when an approximate capacity is known at compile time but the true
      * capacity is not known until runtime.
+     *
+     * WARNING: does not report errors upon memory allocation failure, after
+     * which capacity will be stackCapacity, not the requested newCapacity.
      */
     MaybeStackArray(int32_t newCapacity) : MaybeStackArray() {
         if (capacity < newCapacity) { resize(newCapacity); }
@@ -396,11 +399,11 @@ private:
         needToRelease=FALSE;
     }
     /* No comparison operators with other MaybeStackArray's. */
-    bool operator==(const MaybeStackArray & /*other*/) {return FALSE;}
-    bool operator!=(const MaybeStackArray & /*other*/) {return TRUE;}
+    bool operator==(const MaybeStackArray & /*other*/) = delete;
+    bool operator!=(const MaybeStackArray & /*other*/) = delete;
     /* No ownership transfer: No copy constructor, no assignment operator. */
-    MaybeStackArray(const MaybeStackArray & /*other*/) {}
-    void operator=(const MaybeStackArray & /*other*/) {}
+    MaybeStackArray(const MaybeStackArray & /*other*/) = delete;
+    void operator=(const MaybeStackArray & /*other*/) = delete;
 };
 
 template<typename T, int32_t stackCapacity>
@@ -435,7 +438,7 @@ template<typename T, int32_t stackCapacity>
 inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t length) {
     if(newCapacity>0) {
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
-      ::fprintf(::stderr,"MaybeStacArray (resize) alloc %d * %lu\n", newCapacity,sizeof(T));
+        ::fprintf(::stderr, "MaybeStackArray (resize) alloc %d * %lu\n", newCapacity, sizeof(T));
 #endif
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
         if(p!=NULL) {
@@ -728,6 +731,18 @@ public:
         return fPool[fCount++] = new T(std::forward<Args>(args)...);
     }
 
+    template <typename... Args>
+    T* createAndCheckErrorCode(UErrorCode &status, Args &&... args) {
+        if (U_FAILURE(status)) {
+            return nullptr;
+        }
+        T *pointer = this->create(args...);
+        if (U_SUCCESS(status) && pointer == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return pointer;
+    }
+
     /**
      * @return Number of elements that have been allocated.
      */
@@ -773,15 +788,7 @@ public:
 
     template <typename... Args>
     T *emplaceBackAndCheckErrorCode(UErrorCode &status, Args &&... args) {
-        if (U_FAILURE(status)) {
-            return nullptr;
-        }
-        T *pointer = this->create(args...);
-        if (U_SUCCESS(status) && pointer == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-
-        return pointer;
+        return this->createAndCheckErrorCode(status, args...);
     }
 
     int32_t length() const {

@@ -917,6 +917,10 @@ LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(int32_t& outCount, UErro
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(*this, temp, status);
     outCount = impl.units.length();
     MeasureUnit* arr = new MeasureUnit[outCount];
+    if (arr == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return LocalArray<MeasureUnit>();
+    }
     for (int32_t i = 0; i < outCount; i++) {
         arr[i] = impl.units[i]->build(status);
     }

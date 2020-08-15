@@ -138,7 +138,7 @@ public class PersianCalendar extends Calendar {
     @Deprecated
     public PersianCalendar(Locale aLocale)
     {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -153,7 +153,7 @@ public class PersianCalendar extends Calendar {
     @Deprecated
     public PersianCalendar(ULocale locale)
     {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**
