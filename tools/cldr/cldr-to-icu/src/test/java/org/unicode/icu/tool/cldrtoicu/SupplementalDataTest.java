@@ -41,9 +41,7 @@ public class SupplementalDataTest {
     public static void loadRegressionData() {
         Path cldrRoot = Paths.get(System.getProperty("CLDR_DIR"));
         regressionData = SupplementalData.create(CldrDataSupplier.forCldrFilesIn(cldrRoot));
-        SupplementalDataInfo sdi =
-            SupplementalDataInfo.getInstance(cldrRoot.resolve("common/supplemental").toString());
-        likelySubtags = new LikelySubtags(sdi);
+        likelySubtags = new LikelySubtags();
     }
 
     @Test
