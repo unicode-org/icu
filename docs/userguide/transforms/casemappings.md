@@ -63,7 +63,7 @@ character map.
 
 A character is considered to have a lowercase, uppercase, or title case
 equivalent if there is a respective "simple" case mapping specified for the
-character in the [Unicode Character Database](http://unicode.org/ucd/) (UnicodeData.txt).
+character in the [Unicode Character Database](http://www.unicode.org/ucd/) (UnicodeData.txt).
 If a character has no mapping equivalent, the result is the character itself.
 
 The APIs provided for the general case mapping, located in `uchar.h` file, handles

@@ -112,7 +112,7 @@ try {
 
 If the ICU predefined collators are not appropriate for your intended usage, you
 can define your own set of rules and instantiate a collator that uses them. For more
-details, please see [the section on collation customization](customization/index.md).
+details, please see [the section on collation customization](customization/index).
 
 This example demonstrates the instantiation of a collator.
 
@@ -272,7 +272,7 @@ The Java API provides only the `Collator.getCollationKey` method, which produces
 
 Sort keys are generally only useful in databases or other circumstances where
 function calls are extremely expensive. See [Sortkeys vs
-Comparison](concepts.md#sortkeys-vs-comparison).
+Comparison](concepts#sortkeys-vs-comparison).
 
 ### Sort Key Features
 
@@ -354,7 +354,7 @@ of memory needed to store the resulting sort key. This mode is automatically
 activated if the output buffer size passed is set to zero. Should the sort key
 become longer than the buffer provided, function again slips into preflighting
 mode. The overall performance is poorer than if the function is called with a
-zero output buffer . If the size of the sort key returned is greater than the
+zero output buffer. If the size of the sort key returned is greater than the
 size of the buffer provided, the content of the result buffer is undefined. In
 that case, the result buffer could be reallocated to its proper size and the
 sort key generator function can be used again.
@@ -693,7 +693,7 @@ API is provided. Each attribute has its own setter API of the form
 ## References
 
 1.  Ken Whistler, Markus Scherer: "Unicode Technical Standard #10, Unicode Collation
-    Algorithm" (<http://www.unicode.org/unicode/reports/tr10/>)
+    Algorithm" (<http://www.unicode.org/reports/tr10/>)
 
 2.  ICU Design doc: "Collation v2" (<http://site.icu-project.org/design/collation/v2>)
 
@@ -701,11 +701,11 @@ API is provided. Each attribute has its own setter API of the form
     (<https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/collation/ICU_collation_design.htm>)
 
 3.  The Unicode Standard, chapter 5, "Implementation guidelines"
-    (<http://www.unicode.org/unicode/uni2book/ch05.pdf>)
+    (<http://www.unicode.org/uni2book/ch05.pdf>)
 
 4.  Laura Werner: "Efficient text searching in Java: Finding the right string in
     any language"
     (<http://icu-project.org/docs/papers/efficient_text_searching_in_java.html>)
 
 5.  Mark Davis, Martin Dürst: "Unicode Standard Annex #15: Unicode Normalization
-    Forms" (<http://www.unicode.org/unicode/reports/tr15/>).
+    Forms" (<http://www.unicode.org/reports/tr15/>).

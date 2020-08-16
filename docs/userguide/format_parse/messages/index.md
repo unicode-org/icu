@@ -35,13 +35,13 @@ and formatted elements, then translators would not be able to rearrange the
 pieces, and they would have a hard time translating each of the string
 fragments.
 
-## MessageFormat
+## `MessageFormat`
 
-The ICU **MessageFormat** class uses message "pattern" strings with
+The ICU **`MessageFormat`** class uses message `"pattern"` strings with
 variable-element placeholders (called "arguments" in the API docs) enclosed in
 {curly braces}. The argument syntax can include formatting details, otherwise a
 default format is used. For details about the pattern syntax and the formatting
-behavior see the MessageFormat API docs
+behavior see the `MessageFormat` API docs
 ([Java](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/MessageFormat.html),
 [C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classMessageFormat.html#_details),
 [C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/umsg_8h.html#_details)).
@@ -49,15 +49,15 @@ behavior see the MessageFormat API docs
 ### Complex Argument Types
 
 Certain types of arguments select among several choices which are nested
-MessageFormat pattern strings. Keeping these choices together in one message
+`MessageFormat` pattern strings. Keeping these choices together in one message
 pattern string facilitates translation in context, by one single translator.
 (Commercial translation systems often distribute different messages to different
 translators.)
 
-*   Use a "plural" argument to select sub-messages based on a numeric value,
+*   Use a `"plural"` argument to select sub-messages based on a numeric value,
     together with the plural rules for the specified language.
-*   Use a "select" argument to select sub-messages via a fixed set of keywords.
-*   Use of the old "choice" argument type is discouraged. It cannot handle
+*   Use a `"select"` argument to select sub-messages via a fixed set of keywords.
+*   Use of the old `"choice"` argument type is discouraged. It cannot handle
     plural rules for many languages, and is clumsy for simple selection.
 
 It is tempting to cover only a minimal part of a message string with a complex
@@ -115,7 +115,7 @@ language](http://cldr.unicode.org/index/cldr-spec/plural-rules).*
 
 If syntax characters occur in the text portions, then they need to be quoted by
 enclosing the syntax in pairs of ASCII apostrophes. A pair of ASCII apostrophes
-always represents one ASCII apostrophe, similar to %% in printf representing one %,
+always represents one ASCII apostrophe, similar to `%%` in `printf` representing one `%`,
 although this rule still applies inside quoted text. ("`This '{isn''t}' obvious`" → "`This {isn't} obvious`")
 
 *   Before ICU 4.8, ASCII apostrophes always started quoted text and had
@@ -197,17 +197,17 @@ should include regional variants (e.g., “fr-CA”).
 
 #### Custom Format Objects (discouraged)
 
-The MessageFormat class allows setting custom Format objects to format
+The `MessageFormat` class allows setting custom Format objects to format
 arguments, overriding the arguments' pattern specification. This is discouraged:
 For custom formatting of some values it should normally suffice to format them
 externally and to provide the formatted strings to the `MessageFormat.format()`
 methods.
 
-Only the top-level arguments are accessible and settable via setFormat(),
+Only the top-level arguments are accessible and settable via `setFormat()`,
 `getFormat()` etc. Arguments inside nested sub-messages, inside
 choice/plural/select arguments, are "invisible" via these API methods.
 
-Some of these methods (the ones corresponding to the original JDK MessageFormat
+Some of these methods (the ones corresponding to the original JDK `MessageFormat`
 API) address the top-level arguments in their order of appearance in the pattern
 string, which is usually not useful because it varies with translations. Newer
 methods address arguments by argument number ("index") or name.
@@ -234,5 +234,5 @@ was a disturbance in the Force on planet 7."
        err);
 ```
 
-There are several more usage examples for the MessageFormat and ChoiceFormat
+There are several more usage examples for the `MessageFormat` and `ChoiceFormat`
 classes in [C , C++ and Java](examples.md).

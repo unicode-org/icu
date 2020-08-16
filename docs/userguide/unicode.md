@@ -34,7 +34,7 @@ in particular. For further information, see:
 1.  [The Web site of the Unicode consortium](http://www.unicode.org/)
 
 2.  [What is
-    Unicode?](http://www.unicode.org/unicode/standard/WhatIsUnicode.html)
+    Unicode?](https://www.unicode.org/standard/WhatIsUnicode.html)
 
 3.  [IBM® Globalization](http://www.ibm.com/software/globalization/)
 
@@ -138,7 +138,7 @@ more complexity into the Unicode standard, but far less than managing a large
 number of different encodings.
 
 Starting with Unicode 2.0 (published in 1996), the Unicode standard began
-assigning numbers from 0 to 10ffff16, which requires 21 bits but does not use
+assigning numbers from 0 to 10ffff<sub>16</sub>,which requires 21 bits but does not use
 them completely. This gives more than enough room for all written languages in
 the world. The original repertoire covered all major languages commonly used in
 computing. Unicode continues to grow, and it includes more scripts.
@@ -181,7 +181,7 @@ syntactically important characters are the same.*
 
 ## Character Encoding Forms and Schemes for Unicode
 
-Unicode assigns characters a number from 0 to 10FFFF16, giving enough elbow room
+Unicode assigns characters a number from 0 to 10FFFF<sub>16</sub>, giving enough elbow room
 to allow for unambiguous encoding of every character in common use. Such a
 character number is called a "code point".
 
@@ -195,9 +195,9 @@ differ in their byte ordering. The difference between an encoding form and an
 encoding scheme is that an encoding form maps the character set codes to values
 that fit into internal data types (like a short in C), while an encoding scheme
 maps to bits and bytes. For traditional encodings, they are the same since the
-encoding forms already map to bytes
+encoding forms already map to bytes. 
 
-. The different Unicode encoding forms are optimized for a variety of different
+The different Unicode encoding forms are optimized for a variety of different
 uses:
 
 1.  UTF-16, the default encoding form, maps a character code point to either one
@@ -207,18 +207,18 @@ uses:
     ASCII-based, byte-oriented APIs and protocols. A character is stored with 1,
     2, 3, or 4 bytes.
 
-3.  UTF-32 is the simplest but most memory-intensive encoding form: It uses one
+3.  UTF-32 is the simplest, but most memory-intensive encoding form: It uses one
     32-bit integer per Unicode character.
 
 4.  SCSU is an encoding scheme that provides a simple compression of Unicode
     text. It is designed only for input and output, not for internal use.
 
 ICU uses UTF-16 internally. ICU 2.0 fully supports supplementary characters
-(with code points 1000016..10FFFF16. Older versions of ICU provided only partial
+(with code points 10000<sub>16</sub>..10FFFF<sub>16</sub>). Older versions of ICU provided only partial
 support for supplementary characters.
 
 For input/output, character encoding schemes define a byte serialization of
-text. UTF-8 is itself both an encoding form and an encoding scheme because it is
+text. UTF-8 is itself both an encoding form, and an encoding scheme because it is
 byte-based. For each of UTF-16 and UTF-32, there are two variants defined: one
 that serializes the code units in big-endian byte order (most significant byte
 first), and one that serializes the code units in little-endian byte order
@@ -230,24 +230,23 @@ either to character encoding forms where 16/32-bit words are processed and are
 naturally stored in the platform endianness, or they refer to the
 IANA-registered charset names, i.e., to character encoding schemes or byte
 serializations. In addition to simple byte serialization, the charsets with
-these names also use optional Byte Order Marks (see Serialized Formats (§)
-below).*
+these names also use optional Byte Order Marks (see [Serialized Formats](#serialized-formats) below).*
 
 ## Overview of UTF-16
 
 The default encoding form of the Unicode Standard uses 16-bit code units. Code
-point values for the most common characters are in the range of 0 to FFFF16 and
+point values for the most common characters are in the range of 0 to FFFF<sub>16</sub> and
 are encoded with just one 16-bit unit of the same value. Code points from
-1000016 to 10FFFF16 are encoded with two code units that are often called
+10000<sub>16</sub> to 10FFFF<sub>16</sub> are encoded with two code units that are often called
 "surrogates", and they are called a "surrogate pair" when, together, they
 correctly encode one Unicode character. The first surrogate in a pair must be in
-the range D80016 to DBFF16, and the second one must be in the range DC0016 to
-DFFF16. Every Unicode code point has only one possible UTF-16 encoding with
+the range D800<sub>16</sub> to DBFF<sub>16</sub>, and the second one must be in the range DC00<sub>16</sub> to
+DFFF<sub>16</sub>. Every Unicode code point has only one possible UTF-16 encoding with
 either one code unit that is not a surrogate or with a correct pair of
-surrogates. The code point values D80016 to DFFF16 are set aside just for this
+surrogates. The code point values D800<sub>16</sub> to DFFF<sub>16</sub> are set aside just for this
 mechanism and will never, by themselves, be assigned any characters.
 
-Most commonly used characters have code points below FFFF16, but Unicode 3.1
+Most commonly used characters have code points below FFFF<sub>16</sub>, but Unicode 3.1
 assigns more than 40,000 supplementary characters that make use of surrogate
 pairs in UTF-16.
 
@@ -265,26 +264,26 @@ To meet the requirements of byte-oriented, ASCII-based systems, the Unicode
 Standard defines UTF-8. UTF-8 is a variable-length, byte-based encoding that
 preserves ASCII transparency.
 
-UTF-8 maintains transparency for all of the ASCII code values (0..127). These
+UTF-8 maintains transparency for all the ASCII code values (0..127). These
 values do not appear in any byte of a transformed result except as the direct
 representation of the ASCII values. Thus, ASCII text is also UTF-8 text.
 
 Characteristics of UTF-8 include:
 
-1.  Unicode code points 0 to 7F16 are each encoded with a single byte of the
+1.  Unicode code points 0 to 7F<sub>16</sub> are each encoded with a single byte of the
     same value. Therefore, ASCII characters take up 50% less space with UTF-8
     encoding than with UTF-16.
 
 2.  All other code points are encoded with multibyte sequences, with the first
     byte (lead byte) indicating the number of bytes that follow (trail bytes).
-    This results in very efficient parsing. The lead bytes are in the range c016
-    to fd16, the trail bytes are in the range 8016 to bf16. The byte values fe16
-    and FF16 are never used.
+    This results in very efficient parsing. The lead bytes are in the range c0<sub>16</sub>
+    to fd<sub>16</sub>, the trail bytes are in the range 80<sub>16</sub> to bf<sub>16</sub>. The byte values fe<sub>16</sub>
+    and FF<sub>16</sub> are never used.
 
 3.  UTF-8 is relatively compact and resource conservative in its use of the
     bytes required for encoding text in European scripts, but uses 50% more
-    space than UTF-16 for East Asian text. Code points up to 7FF16 take up two
-    bytes, code points up to FFFF16 take up three (50% more memory than UTF-16),
+    space than UTF-16 for East Asian text. Code points up to 7FF<sub>16</sub> take up two
+    bytes, code points up to FFFF<sub>16</sub> take up three (50% more memory than UTF-16),
     and all others four.
 
 4.  Binary comparisons of UTF-8 strings based on their bytes result in the same
@@ -297,12 +296,12 @@ point. This results in a very simple encoding.
 
 The drawback is its memory consumption: Since code point values use only 21
 bits, one-third of the memory is always unused, and since most commonly used
-characters have code point values of up to FFFF16, they take up only one 16-bit
+characters have code point values of up to FFFF<sub>16</sub>, they take up only one 16-bit
 unit in UTF-16 (50% less) and up to three bytes in UTF-8 (25% less).
 
 UTF-32 is mainly used in APIs that are defined with the same data type for both
 code points and code units. Modern versions of the C standard library that
-support Unicode use a 32-bit wchar_t with UTF-32 semantics.
+support Unicode use a 32-bit `wchar_t` with UTF-32 semantics.
 
 ## Overview of SCSU
 
@@ -316,7 +315,7 @@ makes it unsuitable for internal processing. It also uses all possible byte
 values, which might require additional processing for protocols such as SMTP
 (email).
 
-See also <http://www.unicode.org/unicode/reports/tr6/> .
+See also <https://www.unicode.org/reports/tr6/> .
 
 ## Other Unicode Encodings
 
@@ -376,7 +375,7 @@ lists these implications:
     points for string searching. False matches never occurs since the end of one
     sequence is never the same as the start of another sequence. Overlap is one
     of the biggest problems with common multi-byte encodings like Shift-JIS. All
-    of the UTFs avoid this problem.
+    the UTFs avoid this problem.
 
 4.  Uses simple iteration. Getting the next or previous code point is
     straightforward, and only takes a small number of machine instructions.
@@ -397,11 +396,11 @@ Conversion between different UTFs is very fast. Unlike converting to and from
 legacy encodings like Latin-2, conversion between UTFs does not require table
 look-ups.
 
-ICU provides two basic data type definitions for Unicode. UChar32 is a 32-bit
+ICU provides two basic data type definitions for Unicode. `UChar32` is a 32-bit
 type for code points, and used for single Unicode characters. It may be signed
-or unsigned. It is the same as wchar_t if it is 32 bits wide. UChar is an
+or unsigned. It is the same as `wchar_t` if it is 32 bits wide. `UChar` is an
 unsigned 16-bit integer for UTF-16 code units. It is the base type for strings
-(`UChar *`), and it is the same as wchar_t if it is 16 bits wide.
+(`UChar *`), and it is the same as `wchar_t` if it is 16 bits wide.
 
 Some higher-level APIs, used especially for formatting, use characters closer to
 a representation for a glyph. Such "user characters" are also called "graphemes"
@@ -428,7 +427,7 @@ format-dependent way. However, the Unicode standard offers a mechanism for
 tagging text files with a "signature" for cases where protocols do not identify
 character encoding schemes.
 
-The character ZERO WIDTH NO-BREAK SPACE (FEFF16) can be used as a signature by
+The character ZERO WIDTH NO-BREAK SPACE (FEFF<sub>16</sub>) can be used as a signature by
 prepending it to a file or stream. The alternative function of U+FEFF as a
 format control character has been copied to U+2060 WORD JOINER, and U+FEFF
 should only be used for Unicode signatures.
@@ -454,7 +453,7 @@ sequences for U+FEFF:
 
 9.  UTF-EBCDIC: DD 73 66 73
 
-ICU provides the function ucnv_detectUnicodeSignature() for Unicode signature
+ICU provides the function `ucnv_detectUnicodeSignature()` for Unicode signature
 detection.
 
 *There is no signature for CESU-8 separate from the one for UTF-8. UTF-8 and
@@ -465,7 +464,7 @@ CESU-8 should only be used in limited, closed, specific environments.*
 In UTF-16 and UTF-32, where the signature also distinguishes between big-endian
 and little-endian byte orders, it is also called a byte order mark (BOM). The
 signature works for UTF-16 since the code point that has the byte-swapped
-encoding, FFFE16, will never be a valid Unicode character. (It is a
+encoding, FFFE<sub>16</sub>, will never be a valid Unicode character. (It is a
 "non-character" code point.) In Internet protocols, if an encoding specification
 of "UTF-16" or "UTF-32" is used, it is expected that there is a signature byte
 sequence (BOM) that identifies the byte ordering, which is not the case for the
@@ -510,9 +509,9 @@ standard. Both standards have the same character repertoire and the same
 encoding forms and schemes.
 
 One difference used to be that the ISO standard defined code point values to be
-from 0 to 7FFFFFFF16, not just up to 10FFFF16. The ISO work group decided to add
+from 0 to 7FFFFFFF<sub>16</sub>, not just up to 10FFFF<sub>16</sub>. The ISO work group decided to add
 an amendment to the standard. The amendment removes this difference by declaring
-that no characters will ever be assigned code points above 10FFFF16. The main
+that no characters will ever be assigned code points above 10FFFF<sub>16</sub>. The main
 reason for the ISO work group's decision is interoperability between the UTFs.
 UTF-16 can not encode any code points above this limit.
 
@@ -526,7 +525,7 @@ specifies sequences of five and six bytes to cover that whole range.
 
 Another difference is that the ISO standard defines encoding forms "UCS-4" and
 "UCS-2". UCS-4 is essentially UTF-32 with a theoretical upper limit of
-7FFFFFFF16, using 31 out of the 32 bits. However, in practice, the ISO committee
+7FFFFFFF<sub>16</sub>, using 31 out of the 32 bits. However, in practice, the ISO committee
 has accepted that the characters above 10FFFF will not be encoded, so there is
 essentially no difference between the forms. The "4" stands for "four-byte
 form".
@@ -542,5 +541,5 @@ The standards differ in what kind of information they provide: The Unicode
 standard provides more character properties and describes algorithms etc., while
 the ISO standard defines collections, subsets and similar.
 
-The standards are synchronized and the respective committees work together to
+The standards are synchronized, and the respective committees work together to
 add new characters and assign code point values.

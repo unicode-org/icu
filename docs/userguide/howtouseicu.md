@@ -220,5 +220,5 @@ Any additional arguments will be passed to the program.
 
 *   `icurun test1.cpp *args...*`
 
-*This feature is a work in progress. Please give feedback at [Ticket
-#8481](https://unicode-org.atlassian.net/browse/ICU-8481).*
+*Please give feedback to the [icu-support mailing list](http://site.icu-project.org/contacts),
+and refer to [Ticket #8481](https://unicode-org.atlassian.net/browse/ICU-8481).*

@@ -223,7 +223,7 @@ generated sort keys are longer than supplied buffers too often
 A good strategy
 for this problem would be to manually manage a large buffer for storing sortkeys
 and keep a list of indices to sort keys in this buffer (see the "large buffers"
-[Collation Example](examples.md#using-large-buffers-to-manage-sort-keys)
+[Collation Example](examples#using-large-buffers-to-manage-sort-keys)
 for more details).
 
 Here are some rules of a thumb, please do not rely on them. If you are looking

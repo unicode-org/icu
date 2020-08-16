@@ -607,7 +607,7 @@ character preceding a Variation Selector.
 Unicode has a character property to identify such characters, as well as
 currently-unassigned code points that are intended to be used for similar
 purposes: Default_Ignorable_Code_Point, or "DI" for short:
-http://unicode.org/cldr/utility/list-unicodeset.jsp?a=[:DI:]
+http://www.unicode.org/cldr/utility/list-unicodeset.jsp?a=[:DI:]
 
 Most charsets do not have most or any of these characters.
 

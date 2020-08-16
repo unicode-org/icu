@@ -215,7 +215,7 @@ Notes:
 ICU does not provide the means to modify properties at runtime. The properties
 are provided exactly as specified by a recent version of the Unicode Standard
 (as published in the [Character
-Database](http://www.unicode.org/unicode/onlinedat/online.html) ).
+Database](http://www.unicode.org/onlinedat/online.html)).
 
 For custom sets and maps, it is easiest to make UnicodeSet or
 UCPTrie/CodePointTrie objects with the desired values.

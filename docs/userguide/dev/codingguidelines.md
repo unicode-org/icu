@@ -113,7 +113,7 @@ If the API function is non-const, then it should have a `UErrorCode` parameter.
 Default C++ assignment operators and copy constructors should not be used (they
 should be declared private and not implemented). Instead, define an `assign(Class
 &other, UErrorCode &errorCode)` function. Normal constructors are fine, and
-should have a UErrorCode parameter.
+should have a `UErrorCode` parameter.
 
 ### Warning Codes
 
@@ -241,7 +241,7 @@ Example in `ucnv.h`:
  ucnv_open( ... ) ...
 ```
 
-This cites code in icu4c/source/samples/ucnv/convsamp.cpp as follows:
+This cites code in `icu4c/source/samples/ucnv/convsamp.cpp` as follows:
 
 ```c++
   //! [ucnv_open]
@@ -261,12 +261,12 @@ ICU C++ classes and methods as well as the ICU C methods.
 
 In C/C++, we enclose `@draft` and such APIs with `#ifndef U_HIDE_DRAFT_API` or
 similar as appropriate. When a draft API becomes stable, we need to remove the
-surrounding #ifndef.
+surrounding `#ifndef`.
 
 Note: The `@system` tag is *in addition to* the
 `@draft`/`@stable`/`@deprecated`/`@obsolete` status tag.
 
-Copy/paste the appropriate #ifndef..#endif pair from the following:
+Copy/paste the appropriate `#ifndef..#endif` pair from the following:
 
 ```c++
 #ifndef U_HIDE_DRAFT_API
@@ -289,7 +289,7 @@ We `#ifndef` `@draft`/`@deprecated`/... APIs as much as possible, including C
 functions, many C++ class methods (see exceptions below), enum constants (see
 exceptions below), whole enums, whole classes, etc.
 
-We do not #ifndef APIs where that would be problematic:
+We do not `#ifndef` APIs where that would be problematic:
 
 * struct/class members where that would modify the object layout (non-static
   struct/class fields, virtual methods)
@@ -478,19 +478,19 @@ Use Java doc-style in-file documentation created with
 
 #### Multiple Statements
 
-Place multiple statements in multiple lines. if() or loop heads must not be
+Place multiple statements in multiple lines. `if()` or loop heads must not be
 followed by their bodies on the same line.
 
-#### Placements of {} Curly Braces
+#### Placements of `{}` Curly Braces
 
-Place curly braces {} in reasonable and consistent locations. Each of us
+Place curly braces `{}` in reasonable and consistent locations. Each of us
 subscribes to different philosophies. It is recommended to use the style of a
 file, instead of mixing different styles. It is requested, however, to not have
-if() and loop bodies without curly braces.
+`if()` and loop bodies without curly braces.
 
-#### if() {...} and Loop Bodies
+#### `if() {...}` and Loop Bodies
 
-Use curly braces for if() and else as well as loop bodies, etc., even if there
+Use curly braces for `if()` and else as well as loop bodies, etc., even if there
 is only one statement.
 
 #### Function Declarations
@@ -563,7 +563,7 @@ U_CDECL_END
 
 Determine if two headers are needed. If the same functionality is provided with
 both a C and a C++ API, then there can be two headers, one for each language,
-even if one uses the other. For example, there can be umsg.h for C and `msgfmt.h`
+even if one uses the other. For example, there can be `umsg.h` for C and `msgfmt.h`
 for C++.
 
 Not all functionality has or needs both kinds of API. More and more
@@ -638,19 +638,19 @@ happened!)
 When casting an enum value to an integer type, make sure that the enum value's
 numeric value is within range of the integer type.
 
-#### Do not check for this!=NULL, do not check for NULL references
+#### Do not check for `this!=NULL`, do not check for `NULL` references
 
-In public APIs, assume this!=0 and assume that references are not 0. In C code,
-"this" is the "service object" pointer, such as `set` in
-`uset_add(USet* set, UChar32 c)` — don't check for set!=NULL.
+In public APIs, assume `this!=0` and assume that references are not 0. In C code,
+`"this"` is the "service object" pointer, such as `set` in
+`uset_add(USet* set, UChar32 c)` — don't check for `set!=NULL`.
 
-We do usually check all other (non-this) pointers for NULL, in those cases when
-NULL is not valid. (Many functions allow a NULL string or buffer pointer if the
+We do usually check all other (non-this) pointers for `NULL`, in those cases when
+`NULL` is not valid. (Many functions allow a `NULL` string or buffer pointer if the
 length or capacity is 0.)
 
-Rationale: "this" is not really an argument, and checking it costs a little bit
+Rationale: `"this"` is not really an argument, and checking it costs a little bit
 of code size and runtime. Other libraries also commonly do not check for valid
-"this", and resulting failures are fairly obvious.
+`"this"`, and resulting failures are fairly obvious.
 
 ### Memory Usage
 
@@ -666,7 +666,7 @@ details.
 
 Exception: Most C++ API functions that return a `StringEnumeration` (by pointer
 which the caller must delete) are named `getXyz()` rather than `createXyz()`
-because "get" is much more natural. (These are not factory methods in the sense
+because `"get"` is much more natural. (These are not factory methods in the sense
 of `NumberFormat::createScientificInstance()`.) For example,
 `static StringEnumeration *Collator::``get``Keywords(UErrorCode &)`. We should document
 clearly in the API comments that the caller must delete the returned
@@ -870,7 +870,7 @@ U_NAMESPACE_USE
 Locale loc("fi");
 ```
 
-U_NAMESPACE_USE (expands to using namespace icu_M_N; when available) is
+`U_NAMESPACE_USE` (expands to using namespace icu_M_N; when available) is
 automatically done when `utypes.h` is included, so that all ICU classes are
 immediately usable. However, we recommend that you turn this off via
 `CXXFLAGS="-DU_USING_ICU_NAMESPACE=0"`.
@@ -954,7 +954,7 @@ implementation.
     subclass as well (copy implementations from existing C++ APIs).
   * If a class is a new, immediate subclass of `UObject` (e.g.,
     `Normalizer2`), creating a whole new class hierarchy, then declare a
-    *private* `getDynamicClassID()` and define it to return NULL (to
+    *private* `getDynamicClassID()` and define it to return `NULL` (to
     override the pure virtual version in `UObject`); copy the relevant lines
     from `normalizer2.h` and `normalizer2.cpp`
     (`UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(className)`). Do not add any
@@ -1012,7 +1012,7 @@ adopt-on-success):
   must be set to `U_MEMORY_ALLOCATION_ERROR`.)
 
   **Pitfall**: If you allocate/construct via "`ClassName *p = new ClassName(adoptee);`"
-  and the memory allocation failed (p==NULL), then the
+  and the memory allocation failed (`p==NULL`), then the
   constructor has not been called, the adoptee has not been adopted, and you
   are still responsible for deleting it!
 
@@ -1183,7 +1183,7 @@ constructor relies on loading data), then either it must use and set a
 like `UnicodeString` and `UnicodeSet`, and the constructor needs to set the object
 to bogus if it fails.
 
-#### UVector, UVector32, or UVector64
+#### `UVector`, `UVector32`, or `UVector64`
 
 Use `UVector` to store arrays of `void *`; use `UVector32` to store arrays of
 `int32_t`; use `UVector64` to store arrays of `int64_t`. Historically, `UVector`
@@ -1438,8 +1438,8 @@ ICU Java classes and methods.
 
 The standard order for modifier keywords on APIs is:
 
-* public static final synchronized strictfp
-* public abstract
+* `public static final synchronized strictfp`
+* `public abstract`
 
 Do not use wild card import, such as "`import java.util.*`". The sort order of
 import statements is `java` / `javax` / `org` / `com`. Within each top level package
@@ -1493,7 +1493,7 @@ Avoid creating new interfaces unless you know you need to mix the interface into
 two or more classes that have separate inheritance. Interfaces are impossible to
 modify later in a backwards-compatible way. Abstract classes, on the other hand,
 can add new methods with default behavior. Use interfaces only if it is required
-by the arcitecture, not just for expediency.
+by the architecture, not just for expediency.
 
 Current releases of ICU4J (since ICU 63) are restricted to use Java SE 7 APIs
 and language features.
@@ -1842,7 +1842,7 @@ Type just `intltest -h` to see the usage:
 
 The "Fake Time" capability allows ICU4C to be tested as if the hardware clock is
 set to a specific time. This section documents how to use this facility.
-Note that this facility requires the POSIX 'gettimeofday' function to be
+Note that this facility requires the POSIX `'gettimeofday'` function to be
 operable.
 
 This facility affects all ICU 'current time' calculations, including date,
@@ -2013,10 +2013,10 @@ format).
   * Example: **`CINTLTST_OPTS=/tscoll`** in the cintltst directory provides
     arguments to the cintltest test upon make check, to only run collation
     tests.
-    * intltest: INTLTEST_OPTS
-    * cintltst: CINTLTST_OPTS
-    * iotest: IOTEST_OPTS
-    * icuinfo: ICUINFO_OPTS
+    * intltest: `INTLTEST_OPTS`
+    * cintltst: `CINTLTST_OPTS`
+    * iotest: `IOTEST_OPTS`
+    * icuinfo: `ICUINFO_OPTS`
     * (letest does not have an OPTS variable as of ICU 4.6.)
 
 ### Windows/Microsoft Visual Studio

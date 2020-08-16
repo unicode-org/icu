@@ -39,7 +39,7 @@ large block of text that can be iterated as a whole, or can be broken into
 smaller blocks for the purpose of iteration.
 
 > :point_right: **Note**: *CharacterIterator is different from
-[Normalizer](../transforms/normalization/index.md) in that CharacterIterator
+[Normalizer](../transforms/normalization/index) in that CharacterIterator
 walks through the Unicode characters without interpretation.*
 
 Prior to ICU release 1.6, the CharacterIterator class allowed access to a single

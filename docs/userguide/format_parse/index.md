@@ -105,24 +105,22 @@ is displayed as 75%.
 
 #### Customizing Number Formats
 
-If you need to customize a number format you can use the DecimalFormat (§) and
-the DecimalFormatSymbols (§) classes in the [Formatting
-Numbers](formatparse/numbers/index.md) chapter. This not usually necessary and
+If you need to customize a number format you can use the `DecimalFormat` and
+the `DecimalFormatSymbols` classes in the [Formatting
+Numbers](numbers/index#formatting-numbers) chapter. This not usually necessary and
 it makes your code much more complex, but it is available for those rare
 instances where you need it. In general, you would do this by explicitly
 specifying the number format pattern.
 
 If you need to format or parse spelled-out numbers, you can use the
-RuleBasedNumberFormat class (§) (see the [Formatting
-Numbers](formatparse/numbers/index.md) chapter). You can instantiate a default
-formatter for a locale, or by using the RuleBasedNumberFormat rule syntax,
-specify your own.
+`RuleBasedNumberFormat` class (see the [Formatting Numbers](numbers/index#formatting-numbers) chapter).
+You can instantiate a default formatter for a locale, or by using the 
+`RuleBasedNumberFormat` rule syntax, specify your own.
 
-Using NumberFormat (§) class methods (see the [Formatting
-Numbers](formatparse/numbers/index.md) chapter) with a predefined locale is the
-easiest and the most accurate way to format numbers, and currencies.
+Using `NumberFormat` class methods (see the [Formatting Numbers](numbers/index#formatting-numbers) chapter)
+with a predefined locale is the easiest and the most accurate way to format numbers, and currencies.
 
-> :point_right: **Note**: *See [Properties and ICU Rule Syntax](strings/properties.md) for
+> :point_right: **Note**: *See [Properties and ICU Rule Syntax](../strings/properties) for
 information regarding syntax characters.*
 
 ### Date and Times
@@ -134,8 +132,8 @@ recognize 20.4.98 as a valid date, and Americans recognize 4/20/98.
 > :point_right: **Note**: *The appropriate Calendar support is required for different locales. For
 example, the Buddhist calendar is the official calendar in Thailand so the
 typical assumption of Gregorian Calendar usage should not be used. ICU will pick
-the appropriate Calendar based on the locale you supply when opening a Calendar
-or DateFormat.*
+the appropriate Calendar based on the locale you supply when opening a `Calendar`
+or `DateFormat`.*
 
 ### Messages
 
@@ -154,72 +152,85 @@ and messages:
 ### General Formatting
 
 *   `Format`:
+    
     The abstract superclass of all format classes. It provides the basic methods
     for formatting and parsing numbers, dates, strings and other objects.
 
 *   `FieldPosition`:
+    
     A concrete class for holding the field constant and the begin and end
     indices for number and date fields.
 
 *   `ParsePosition`:
+    
     A concrete class for holding the parse position in a string during parsing.
 
 *   `Formattable`:
-    Formattable objects can be passed to the Format class or its subclasses for
+    
+    `Formattable` objects can be passed to the `Format` class or its subclasses for
     formatting. It encapsulates a polymorphic piece of data to be formatted and
-    is used with MessageFormat. Formattable is used by some formatting
+    is used with `MessageFormat`. `Formattable` is used by some formatting
     operations to provide a single "type" that encompasses all formattable
     values (e.g., it can hold a number, a date, or a string, and so on).
 
 *   `UParseError`:
-    UParseError is used to returned detailed information about parsing errors.
+    
+    `UParseError` is used to returned detailed information about parsing errors.
     It is used by the ICU parsing engines that parse long rules, patterns, or
     programs. This is helpful when the text being parsed is long enough that
-    more information than a UErrorCode is needed to localize the error.
+    more information than a `UErrorCode` is needed to localize the error.
 
 **Formatting Numbers**
 
-*   [NumberFormat](numbers/legacy-numberformat) (§)
+*   [`NumberFormat`](numbers/legacy-numberformat#numberformat)
+    
     The abstract superclass that provides the basic fields and methods for
-    formatting Number objects and number primitives to localized strings and
-    parsing localized strings to Number objects.
+    formatting `Number` objects and number primitives to localized strings and
+    parsing localized strings to `Number` objects.
 
-*   [DecimalFormat](numbers/legacy-numberformat#decimalformat) (§)
-    A concrete class for formatting Number objects and number primitives to
-    localized strings and parsing localized strings to Number objects, in base
-    10.
+*   [`DecimalFormat`](numbers/legacy-numberformat#decimalformat)
+    
+    A concrete class for formatting `Number` objects and number primitives to
+    localized strings and parsing localized strings to `Number` objects, in base 10.
 
-*   [RuleBasedNumberFormat](numbers/rbnf) (§)
-    A concrete class for formatting Number objects and number primitives to
+*   [`RuleBasedNumberFormat`](numbers/rbnf)
+    
+    A concrete class for formatting `Number` objects and number primitives to
     localized text, especially spelled-out format such as found in check writing
-    (e.g. "two hundred and thirty-four"), and parsing text into Number objects.
+    (e.g. "two hundred and thirty-four"), and parsing text into `Number` objects.
 
-*   [DecimalFormatSymbols](numbers/legacy-numberformat#decimalformatsymbols) (§)
+*   [`DecimalFormatSymbols`](numbers/legacy-numberformat#decimalformatsymbols)
+    
     A concrete class for accessing localized number strings, such as the
     grouping separators, decimal separator, and percent sign. Used by
-    DecimalFormat.
+    `DecimalFormat`.
 
 **Formatting Dates and Times**
 
-*   [DateFormat](datetime/index#dateformat) (§)
+*   [`DateFormat`](datetime/index#dateformat)
+    
     The abstract superclass that provides the basic fields and methods for
-    formatting Date objects to localized strings and parsing date and time
-    strings to Date objects.
+    formatting `Date` objects to localized strings and parsing date and time
+    strings to `Date` objects.
 
-*   [SimpleDateFormat](datetime/index#simpledateformat) (§)
-    A concrete class for formatting Date objects to localized strings and
-    parsing date and time strings to Date objects, using a GregorianCalendar.
+*   [`SimpleDateFormat`](datetime/index#simpledateformat)
+    
+    A concrete class for formatting `Date` objects to localized strings and
+    parsing date and time strings to `Date` objects, using a `GregorianCalendar`.
 
-*   [DateFormatSymbols](datetime/index#dateformatsymbols) (§)
+*   [`DateFormatSymbols`](datetime/index#dateformatsymbols)
+    
     A concrete class for accessing localized date-time formatting strings, such
     as names of the months, days of the week and the time zone.
 
 **Formatting Messages**
 
-*   [MessageFormat](messages/index#messageformat) (§)
+*   [`MessageFormat`](messages/index#messageformat)
+    
     A concrete class for producing a language-specific user message that
     contains numbers, currency, percentages, date, time and string variables.
 
-*   [ChoiceFormat](messages/index) (§)
+*   [`ChoiceFormat`](messages/examples#choiceformat-class)
+    
     A concrete class for mapping strings to ranges of numbers and for handling
     plurals and names series in user messages.

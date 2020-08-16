@@ -118,10 +118,10 @@ used in ICU. For related material, please see:
 
 1.  [ICU character set collection](http://icu-project.org/charts/charset/)
 
-2.  [Unicode Technical Report 22](http://www.unicode.org/unicode/reports/tr22/)
+2.  [Unicode Technical Report 22](http://www.unicode.org/reports/tr22/)
 
 3.  "Cross Mapping Tables" in [Unicode Online
-    Data](http://www.unicode.org/unicode/onlinedat/online.html)
+    Data](http://www.unicode.org/onlinedat/online.html)
 
 ## ICU Mapping Table Data Files
 

@@ -132,16 +132,16 @@ happens only once per process, at the time an ICU data item is first requested.
 
 3.  Dynamically load (memory map, typically) a common format (.dat) file
     containing the default ICU data. Loading is described in the section
-    [How Data Loading Works](icudata.md#how-data-loading-works). The path to
+    [How Data Loading Works](icudata#how-data-loading-works). The path to
     the data is of the form  "icudt\<version\>\<flag\>", where \<version\> is
     the two-digit ICU version number, and \<flag\> is a letter indicating the
     internal format of the file (see the
-    [Sharing ICU Data Between Platforms](icudata.md#sharing-icu-data-between-platforms)
+    [Sharing ICU Data Between Platforms](icudata#sharing-icu-data-between-platforms)
     section).
 
 Once the default ICU data has been located, loading of individual data items
 proceeds as described in the section
-[How Data Loading Works](icudata.md#how-data-loading-works).
+[How Data Loading Works](icudata#how-data-loading-works).
 
 ## Building and Linking against ICU data
 
@@ -252,7 +252,7 @@ and set with `udata_setCommonData()` or `udata_setAppData()`, or they must be
 in a known location that is included in the ICU data directory string. This
 requires the application installer, or the application itself at runtime, to
 locate the ICU and/or application data by setting the ICU data directory (see
-the [ICU Data Directory](icudata.md#icu-data-directory) section above) or by
+the [ICU Data Directory](icudata#icu-data-directory) section above) or by
 loading the data and providing it to one of the `udata_setXYZData()` functions.
 
 Unlike shared libraries, .dat package files can be taken apart into separate
@@ -261,7 +261,7 @@ modification of a package file. The `gencmn` and `pkgdata` ICU tools can then be
 used to reassemble the .dat package file.
 
 For more information about .dat package files see the section [Sharing ICU Data
-Between Platforms](icudata.md#sharing-icu-data-between-platforms) below.
+Between Platforms](icudata#sharing-icu-data-between-platforms) below.
 
 ### Data Overriding vs. Loading Performance
 
@@ -275,7 +275,7 @@ all directories and matching .dat files mentioned before checking in
 already-loaded package files. This allows overriding of packaged data items with
 single files after installation but costs some time for filesystem accesses.
 This is usually done only once per data item; see
-[User Data Caching](icudata.md#user-data-caching) below.
+[User Data Caching](icudata#user-data-caching) below.
 
 ### Single Data Files vs. Packages
 
@@ -311,7 +311,7 @@ are not handled here.)
 
 > :point_right: **Note**: The ICU data directory string itself may
 contain multiple directories and path/filenames to .dat package files. See the
-[ICU Data Directory](icudata.md#icu-data-directory) section.
+[ICU Data Directory](icudata#icu-data-directory) section.
 
 It is recommended to not include the directory in the path argument but to make
 sure via setting the application data or the ICU data directory string that the
@@ -403,8 +403,8 @@ There is no mechanism for removing or updating cached data files.
 ## Directory Separator Characters
 
 If a directory separator (generally '/' or '\\') is needed in a path parameter,
-use the form that is native to the platform. The ICU header "putil.h" defines
-U_FILE_SEP_CHAR appropriately for the platform.
+use the form that is native to the platform. The ICU header `"putil.h"` defines
+`U_FILE_SEP_CHAR` appropriately for the platform.
 
 > :point_right: **Note**: On Windows, the directory separator must be '\\' for
 any paths passed to ICU APIs. This is different from native Windows APIs, which
@@ -584,7 +584,7 @@ above. The ICU project provides a large number of additional locales in its
 [locale
 repository](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/locales/)
 on the web. Most of this locale data is derived from the CLDR ([Common Locale
-Data Repository](http://www.unicode.org/cldr/) ) project.
+Data Repository](http://www.unicode.org/cldr/)) project.
 
 Dropping the txt file into the correct place in the source tree is sufficient to
 add it to your ICU build. You will need to re-configure in order to pick it up.
@@ -768,7 +768,7 @@ loadable data objects.)
 #### ICU.dat package files
 *   Source format: (list of files provided as input to the icupkg tool, or
          on the gencmn tool command line)
-*    Binary format: .dat: [source/tools/toolutil/pkg_gencmn.c](../../icu4c/source/tools/toolutil/pkg_gencmn.cpp)
+*    Binary format: .dat: [source/tools/toolutil/pkg_gencmn.cpp](../../icu4c/source/tools/toolutil/pkg_gencmn.cpp)
 *    Generator tool: [icupkg](../../icu4c/source/tools/icupkg) or
          [gencmn](../../icu4c/source/tools/gencmn)
          
