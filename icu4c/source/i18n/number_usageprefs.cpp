@@ -99,29 +99,40 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     const auto routed = fUnitsRouter.route(quantity.toDouble(), status);
     const MaybeStackVector<Measure>& routedUnits = routed.measures;
     micros.outputUnit = routed.outputUnit.copy(status).build(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
-    if (routedUnits.length() > 1) {
-        U_ASSERT(micros.outputUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
+    micros.mixedMeasuresCount = routedUnits.length() - 1;
+    if (micros.mixedMeasuresCount > 0) {
 #ifdef U_DEBUG
+        U_ASSERT(micros.outputUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
+        U_ASSERT(U_SUCCESS(status));
         // Check that we received measurements with the expected MeasureUnits:
         int32_t singleUnitsCount;
         LocalArray<MeasureUnit> singleUnits =
             micros.outputUnit.splitToSingleUnits(singleUnitsCount, status);
+        U_ASSERT(U_SUCCESS(status));
         U_ASSERT(routedUnits.length() == singleUnitsCount);
         for (int32_t i = 0; i < routedUnits.length(); i++) {
             U_ASSERT(routedUnits[i]->getUnit() == singleUnits[i]);
         }
 #endif
-
-        // Mixed units: we pass all values except the last one on to the
+        // Mixed units: except for the last value, we pass all values to the
         // LongNameHandler via micros.mixedMeasures.
-        micros.mixedMeasures.resize(routedUnits.length());
-        micros.mixedMeasuresCount = routedUnits.length() - 1;
+        if (micros.mixedMeasures.getCapacity() < micros.mixedMeasuresCount) {
+            if (micros.mixedMeasures.resize(micros.mixedMeasuresCount) == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+        }
         for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
             micros.mixedMeasures[i] = routedUnits[i]->getNumber().getInt64();
         }
+    } else {
+        micros.mixedMeasuresCount = 0;
     }
-    // The last value, or the only value, gets passed on via quantity.
+    // The last value (potentially the only value) gets passed on via quantity.
     quantity.setToDouble(routedUnits[routedUnits.length() - 1]->getNumber().getDouble());
 
     // TODO(units): here we are always overriding Precision. (1) get precision

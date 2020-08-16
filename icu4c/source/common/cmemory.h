@@ -409,47 +409,6 @@ public:
     void operator=(const MaybeStackArray & /*other*/) = delete;
 };
 
-/**
- * A copyable MaybeStackArray. If memory allocation succeeds, the copy will have
- * the same capacity as the original, with all values copied (including
- * uninitialized ones).
- *
- * WARNING: does not report errors upon memory allocation failure, after which
- * capacity will be less than expected!
- */
-template <typename T, int32_t stackCapacity>
-class CopyableMaybeStackArray : public MaybeStackArray<T, stackCapacity> {
-  public:
-    /**
-     * Default constructor initializes with internal T[stackCapacity] buffer.
-     */
-    CopyableMaybeStackArray() : MaybeStackArray<T, stackCapacity>() {
-    }
-
-    /**
-     * Copy constructor.  If memory allocation succeeds, the copy will have
-     * the same capacity as the original, with all values copied (including
-     * uninitialized ones).
-     *
-     * WARNING: does not report errors upon memory allocation failure, after which
-     * capacity will be less than expected!
-     */
-    CopyableMaybeStackArray(const CopyableMaybeStackArray &other) {
-        this->operator=(other);
-    };
-
-    // Assignment operator
-    void operator=(const CopyableMaybeStackArray &rhs) {
-        int32_t length = rhs.capacity;
-        this->resize(length, length);
-        // If memory allocation failed, capacity will be at least stackCapacity.
-        if (length > this->capacity) {
-            length = this->capacity;
-        }
-        uprv_memcpy(rhs.ptr, this->ptr, (size_t)length * sizeof(T));
-    };
-};
-
 template<typename T, int32_t stackCapacity>
 icu::MaybeStackArray<T, stackCapacity>::MaybeStackArray(
         MaybeStackArray <T, stackCapacity>&& src) U_NOEXCEPT

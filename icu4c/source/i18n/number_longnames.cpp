@@ -404,9 +404,6 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
                                               MixedUnitLongNameHandler *fillIn, UErrorCode &status) {
     U_ASSERT(mixedUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
-    // TODO(review): can we simply U_ASSERT this? Passing a `perUnit`
-    // while also passing a not-built-in `unitRef` is an error, and is
-    // documented as such.
 
     // TODO(units): try to understand why swapping these next two lines causes
     // an "AddressSanitizer: heap-buffer-overflow":
