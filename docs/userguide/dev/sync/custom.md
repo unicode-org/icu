@@ -41,37 +41,37 @@ synchronization primitives.
 
 **Low Level Atomics**, a set of platform or compiler dependent typedefs and
 inlines. Provided in the internal header file
-[umutex.h](../../../../icu4c/source/common/umutex.h).
+[`umutex.h`](../../../../icu4c/source/common/umutex.h).
 
-| Type/Function                                         | Description                                                                 |
-|-------------------------------------------------------|-----------------------------------------------------------------------------|
-| typedef u_atomic_int32_t                              | A 32 bit integer that will work with low level atomic operations. (typedef) |
-| umtx_loadAcquire(u_atomic_int32_t &var)               |                                                                             |
-| umtx_storeRelease(u_atomic_int32_t &var, int32_t val) |                                                                             |
-| umtx_atomic_inc(u_atomic_int32_t &var)                |                                                                             |
-| umtx_atomic_dec(u_atomic_int32_t &var)                |                                                                             |
+| Type/Function                                           | Description                                                                   |
+|---------------------------------------------------------|-------------------------------------------------------------------------------|
+| `typedef u_atomic_int32_t`                              | A 32 bit integer that will work with low level atomic operations. (`typedef`) |
+| `umtx_loadAcquire(u_atomic_int32_t &var)`               |                                                                               |
+| `umtx_storeRelease(u_atomic_int32_t &var, int32_t val)` |                                                                               |
+| `umtx_atomic_inc(u_atomic_int32_t &var)`                |                                                                               |
+| `umtx_atomic_dec(u_atomic_int32_t &var)`                |                                                                               |
 
 **Mutexes**. Type declarations for ICU mutex wrappers. Provided in a header file.
 
-| Type                | Description                                                                                       |
-|---------------------|---------------------------------------------------------------------------------------------------|
-| struct UMutex       | An ICU mutex. All instances will be static. Typically just contains an underlying platform mutex. |
-| U_MUTEX_INITIALIZER | A C style initializer for a static instance of a UMutex.                                          |
+| Type                  | Description                                                                                       |
+|-----------------------|---------------------------------------------------------------------------------------------------|
+| `struct UMutex`       | An ICU mutex. All instances will be static. Typically just contains an underlying platform mutex. |
+| `U_MUTEX_INITIALIZER` | A C style initializer for a static instance of a `UMutex`.                                          |
 
 **Mutex and InitOnce implementations**. Out-of-line platform-specific code.
 Provided in a .cpp file.
 
-| Function                              | Description                              |
-|---------------------------------------|------------------------------------------|
-| umtx_lock(UMutex *mutex)              | Lock a mutex.                            |
-| umtx_unlock(UMutex* mutex)            | Unlock a mutex.                          |
-| umtx_initImplPreInit(UInitOnce &uio)  | umtx_initOnce() implementation function. |
-| umtx_initImplPostInit(UInitOnce &uio) | umtx_initOnce() implementation function. |
+| Function                                | Description                                |
+|-----------------------------------------|--------------------------------------------|
+| `umtx_lock(UMutex *mutex)`              | Lock a mutex.                              |
+| `umtx_unlock(UMutex* mutex)`            | Unlock a mutex.                            |
+| `umtx_initImplPreInit(UInitOnce &uio)`  | `umtx_initOnce()` implementation function. |
+| `umtx_initImplPostInit(UInitOnce &uio)` | `umtx_initOnce()` implementation function. |
 
 `UInitOnce` and `umtx_initOnce()` are used internally by ICU for thread-safe
 one-time initialization. Their implementation is split into a
 platform-independent part (contained in
-[umutex.h](../../../../icu4c/source/common/umutex.h)),
+[`umutex.h`](../../../../icu4c/source/common/umutex.h)),
 and the pair of platform-dependent implementation functions listed above.
 
 **Build Setup**
@@ -81,11 +81,11 @@ in the ICU build. If defined, the files are included at the top of the normal
 platform `#ifdef` chains in the ICU sources, and effectively define a new
 platform.
 
-| Macro            | Description                                           |
-|------------------|-------------------------------------------------------|
-| U_USER_ATOMICS_H | Set to the name of the low level atomics header file. |
-| U_USER_MUTEX_H   | Mutexes header file.                                  |
-| U_USER_MUTEX_CPP | Mutexes and InitOnce implementation file.             |
+| Macro              | Description                                             |
+|--------------------|---------------------------------------------------------|
+| `U_USER_ATOMICS_H` | Set to the name of the low level atomics header file.   |
+| `U_USER_MUTEX_H`   | Mutexes header file.                                    |
+| `U_USER_MUTEX_CPP` | Mutexes and `InitOnce` implementation file.             |
 
 It is possible (and reasonable) to supply only the two mutex files, while
 retaining the ICU default implementation for the low level atomics.
@@ -97,7 +97,7 @@ Example ICU configure with user mutexes specified:
 **Stability**
 
 This interface may change between ICU releases. The required set of functions
-may be be extended, or details of the behavior required may be altered.
+may be extended, or details of the behavior required may be altered.
 
 The types and functions defined by this interface reach deeply into the ICU
 implementation, and we need to retain the ability to make changes should the
@@ -111,7 +111,7 @@ This implementation uses C++11 language mutexes and atomics. These make for a
 convenient reference implementation because the C++11 constructs are well
 defined and straight forward to use.
 
-Similar implementations for POSIX and WIndows can be found in files
+Similar implementations for POSIX and Windows can be found in files
 `common/umutex.h` and `common/umutex.cpp`, in the platform `#ifdef` chains; these are
 part of the standard ICU distribution.
 

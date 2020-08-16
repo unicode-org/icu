@@ -123,7 +123,7 @@ reordering. See the ubidi.h header file and the [BiDi API
 References](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ubidi_8h.html) .
 
 See [Unicode Standard Annex #9: The Bidirectional
-Algorithm](http://www.unicode.org/unicode/reports/tr9/) .
+Algorithm](http://www.unicode.org/reports/tr9/) .
 
 ## Programming Examples in C and C++
 

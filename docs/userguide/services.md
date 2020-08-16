@@ -35,17 +35,17 @@ ICU provides basic Unicode support for the following:
 *   [Unicode strings](strings/index.md)
 
     ICU includes type definitions for UTF-16 strings and code points. It also
-    contains many C u_string functions and the C++ UnicodeString class with many
+    contains many C `u_string` functions and the C++ `UnicodeString` class with many
     additional string functions.
 
 *   [Unicode properties](strings/properties.md)
 
-    ICU includes the C definitions and functions found in uchar.h as well as
-    some macros found in utf.h. It also includes the C++ Unicode class.
+    ICU includes the C definitions and functions found in `uchar.h` as well as
+    some macros found in `utf.h`. It also includes the C++ Unicode class.
 
 *   [Unicode string iteration](strings/characteriterator.md)
 
-    In C, ICU uses the macros in utf.h for the iteration of strings. In C++, ICU
+    In C, ICU uses the macros in `utf.h` for the iteration of strings. In C++, ICU
     uses the characterIterator and its subclasses.
 
 ### Conversion Basics
@@ -70,15 +70,15 @@ is an abstract concept that is typically expressed by one of the following:
 A locale ID specifies a language and region enabling the software to support
 culturally and linguistically appropriate information for each user. A locale
 object represents a specific geographical, political, or cultural region. As a
-programmatic expression of locale IDs, ICU provides the C++ locale class. In C,
-Application Programming Interfaces (APIs) use simple C strings for locale IDs.
+programmatic expression of locale IDs, ICU provides the C++ `Locale` class. In C,
+Application Programming Interfaces (APIs) use simple C `string` for locale IDs.
 
 ICU stores locale-specific data in resource bundles, which provide a general
 mechanism to access strings and other objects for ICU services to perform
 according to locale conventions. ICU contains data for its services to support
 many locales. Resource bundles contain the locale data of applications that use
-ICU. In C++, the **ResourceBundle** implements the locale data. In C, this
-feature is provided by the **ures_** interface.
+ICU. In C++, the `**ResourceBundle**` implements the locale data. In C, this
+feature is provided by the `**ures_**` interface.
 
 In addition to storing system-level data in ICU's resource bundles, applications
 typically also need to use resource bundles of their own to store
@@ -91,7 +91,7 @@ separate file instead of being embedded in the lines of the program.*
 ### Locales and Services
 
 The interaction between locales and services is fundamental to ICU. Please refer
-to [Locales and Services](./locale/index.md#Locales_and_Services).
+to [Locales and Services](./locale/index#locales-and-services).
 
 ### Transliteration
 
@@ -105,10 +105,12 @@ each step of the process can use a UnicodeSet to restrict the characters that
 are affected. There are two basic types of transliterators:
 
 Most natural language transliterators (such as Greek-Latin) are written a
-rule-based transliterators. Transliterators can be written as text files using a
+rule-based transliterators.
+
+Transliterators can be written as text files using a
 simple language that is similar to regular expression syntax.
 
-### Date and Time Classes
+### `Date` and `Time` Classes
 
 Date and time routines manage independent date and time functions in
 milliseconds since January 1, 1970 (0:00:00.000 UTC). Points in time before then
@@ -117,19 +119,21 @@ are represented as negative numbers.
 ICU provides the following [classes](datetime/index.md) to support calendars and
 time zones:
 
-*   [Calendar](datetime/calendar/index.md#calendar)
-    The abstract superclass for extracting calendar-related attributes from a
-    Date value.
+*   [`Calendar`](datetime/calendar/index#calendar)
+    
+    The abstract superclass for extracting calendar-related attributes from a `Date` value.
 
-*   [Gregorian Calendar](datetime/calendar/index.md#gregorian-calendar)
+*   [`GregorianCalendar`](datetime/calendar/index#gregoriancalendar)
+    
     A concrete class for representing a Gregorian calendar.
 
-*   [TimeZone](datetime/timezone/index.md)
+*   [`TimeZone`](datetime/timezone/index.md)
+    
     An abstract superclass for representing a time zone.
 
-*   [SimpleTimeZone](datetime/timezone/index.md)
-    A concrete class for representing a time zone for use with a Gregorian
-    calendar.
+*   [`SimpleTimeZone`](datetime/timezone/index.md)
+    
+    A concrete class for representing a time zone for use with a Gregorian calendar.
 
 > :point_right: **Note**: *C classes provide the same functionality as the C++ classes with the exception
 of subclassing.*
@@ -152,55 +156,60 @@ numbers, formatting dates and times, and formatting messages:
 
 #### General Formatting
 
-See [Formatting and Parsing Classes](formatparse/index.md#formatting-and-parsing-classes) for an introduction to the following:
+See [Formatting and Parsing Classes](format_parse/index#formatting-and-parsing-classes) for an introduction to the following:
 
-* Format
-* FieldPosition
-* ParsePosition
-* Formattable
+* `Format`
+* `FieldPosition`
+* `ParsePosition`
+* `Formattable`
 
 #### Formatting Numbers
 
-*   [NumberFormat](formatparse/numbers/index.md#numberformat)
+*   [`NumberFormat`](format_parse/numbers/index#formatting-numbers)
     NumberFormat provides the basic fields and methods to format number objects
     and number primitives into localized strings and parse localized strings to
     number objects.
 
-*   [DecimalFormat](formatparse/numbers/index.md#decimalformat)
+*   [`DecimalFormat`](format_parse/numbers/index#decimalformat)
     DecimalFormat provides the methods used to format number objects and number
     primitives into localized strings and parse localized strings into number
     objects in base 10.
 
-*   [DecimalFormatSymbols](formatparse/numbers/index.md#decimalformatsymbols)
+*   [`DecimalFormatSymbols`](formatparse/numbers/index#decimalformatsymbols)
     DecimalFormatSymbols is a concrete class used by DecimalFormat to access
     localized number strings such as the grouping separators, the decimal
     separator, and the percent sign.
 
 #### Formatting Dates and Times
 
-*   [DateFormat](formatparse/datetime/index.md) (§)
-    DateFormat provides the basic fields and methods for formatting date objects
+*   [`DateFormat`](formatparse/datetime/index.md)
+    
+    `DateFormat` provides the basic fields and methods for formatting date objects
     to localized strings and parsing date and time strings to date objects.
 
-*   [SimpleDateFormat](formatparse/datetime/index.md) (§)
-    SimpleDateFormat is a concrete class used to format date objects to
+*   [`SimpleDateFormat`](formatparse/datetime/index.md)
+    
+    `SimpleDateFormat` is a concrete class used to format date objects to
     localized strings and to parse date and time strings to date objects using a
-    GregorianCalendar.
+    `GregorianCalendar`.
 
-*   [DateFormatSymbols](formatparse/datetime/index.md) (§)
-    DateFormatSymbols is a concrete class used to access localized date and time
+*   [`DateFormatSymbols`](formatparse/datetime/index.md)
+    
+    `DateFormatSymbols` is a concrete class used to access localized date and time
     formatting strings, such as names of the months, days of the week, and the
     time zone.
 
 #### Formatting Messages
 
-*   [MessageFormat](formatparse/messages/index.md) (§)
-    MessageFormat is a concrete class used to produce a language-specific user
+*   [`MessageFormat`](formatparse/messages/index.md)
+    
+    `MessageFormat` is a concrete class used to produce a language-specific user
     message that contains numbers, currency, percentages, date, time, and string
     variables.
 
-*   [ChoiceFormat](formatparse/messages/index.md) (§)
-    ChoiceFormat is a concrete class used to map strings to ranges of numbers
+*   [`ChoiceFormat`](formatparse/messages/index.md)
+    
+    `ChoiceFormat` is a concrete class used to map strings to ranges of numbers
     and to handle plural words and name series in user messages.
 
 > :point_right: **Note**: *C classes provide the same functionality as the C++ classes with the exception
@@ -223,34 +232,34 @@ within the same language:
 *   In some cases, an accented letter is treated as if it were two letters. In
     traditional German, for example, ä is compared as if it were ae.
 
-Searching and sorting is done through collation using the Collator class and its
-sub-classes RuleBasedCollator and CollationElementIterator as well as the
-CollationKey object. Collation determines the proper sort sequence for two or
+Searching and sorting is done through collation using the `Collator` class and its
+sub-classes `RuleBasedCollator` and `CollationElementIterator` as well as the
+`CollationKey` object. Collation determines the proper sort sequence for two or
 more natural language strings. It also can determine if two strings are
 equivalent for the purpose of searching.
 
-The Collator class and its sub-class RuleBasedCollator perform locale-sensitive
+The `Collator` class and its sub-class `RuleBasedCollator` perform locale-sensitive
 string comparisons to create sorting and searching routines for natural language
-text. Collator and RuleBasedCollator can distinguish between characters
+text. `Collator` and `RuleBasedCollator` can distinguish between characters
 associated with base characters (such as 'a' and 'b'), accent marks (such as
 'ò', 'ó'), and uppercase or lowercase properties (such as 'a' and 'A').
 
 ICU provides the following collation classes for sorting and searching natural
 language text according to locale-specific rules:
 
-*   [Collator](collation/architecture.md) is the abstract base class of all classes that compare strings.
+*   [`Collator`](collation/architecture.md) is the abstract base class of all classes that compare strings.
 
-*   [CollationElementIterator](collation/architecture.md) is a concrete iterator class that provides an
+*   [`CollationElementIterator`](collation/architecture.md) is a concrete iterator class that provides an
     iterator for stepping through each character of a locale-specific string
     according to the rules of a specific collator object.
 
-*   [RuleBasedCollator](collation/architecture.md) is the only built-in 
+*   [`RuleBasedCollator`](collation/architecture.md) is the only built-in 
     implementation of the collator. It
     provides a sophisticated mechanism for comparing strings in a
     language-specific manner, and an interface that allows the user to
     specifically customize the sorting order.
 
-*   [CollationKey](collation/architecture.md)  is an object that enables the fast sorting of strings by
+*   [`CollationKey`](collation/architecture.md)  is an object that enables the fast sorting of strings by
     representing a string as a sort key under the rules of a specific collator
     object.
 
@@ -288,28 +297,31 @@ The BreakIterator services were designed and developed around an "iterator" or
 text. You can move the pointer forward or backward to search the text for
 boundaries.
 
-The BreakIterator class makes it possible to iterate over user characters. A
-BreakIterator can find the location of a character, word, sentence or potential
+The `BreakIterator` class makes it possible to iterate over user characters. A
+`BreakIterator` can find the location of a character, word, sentence or potential
 line-break boundary. This makes it possible for a software program to properly
 select characters for text operations such as highlighting a character, cutting
 a word, moving to the next sentence, or wrapping words at a line ending.
-BreakIterator performs these operations in a locale-sensitive manner, meaning
+`BreakIterator` performs these operations in a locale-sensitive manner, meaning
 that it recognizes text boundaries according to the particular locale ID.
 
 ICU provides the following classes for iterating over locale-specific text:
 
-*   [BreakIterator](boundaryanalysis/index.md)
+*   [`BreakIterator`](boundaryanalysis/index.md)
+    
     The abstract base class that defines the operations for finding and getting
     the positions of logical breaks in a string of text: characters, words,
     sentences, and potential line breaks.
 
-*   [CharacterIterator](strings/characteriterator.md)
+*   [`CharacterIterator`](strings/characteriterator.md)
+    
     The abstract base class for forward and backward iteration over a string of
     Unicode characters.
 
-*   [StringCharacterIterator](strings/index.md)
+*   [`StringCharacterIterator`](strings/index.md)
+    
     A concrete class for forward and backward iteration over a string of Unicode
-    characters. StringCharacterIterator inherits from CharacterIterator.
+    characters. `StringCharacterIterator` inherits from `CharacterIterator`.
 
 ### Paragraph Layout
 
@@ -322,26 +334,26 @@ different one for each locale.
 
 | C API | C++ Class | Description |
 |----------|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ubrk_ | BreakIterator | The BreakIterator class implements methods to find the location of boundaries in the text. |
-| ucal_ | Calendar | The Calendar class is an abstract base class that converts between a UDate object and a set of integer fields such as YEAR, MONTH, DAY, HOUR, and so on. |
-| umsg.h | ChoiceFormat | A ChoiceFormat class enables you to attach a format to a range of numbers. |
-| ucol_ | CollationElementIterator | The CollationElementIterator class is used as an iterator to walk through each character of an international string. |
-| ucol_ | CollationKey | The Collator class generates the Collation keys. |
-| ucol_ | Collator | The Collator class performs locale-sensitive string comparison. |
-| udat_ | DateFormat | DateFormat is an abstract class for a family of classes. DateFormat converts dates and times from their internal representations to a textual form that is language-independent, and then back to their internal representations. |
-| udat_ | DateFormatSymbols | DateFormatSymbols is a public class that encapsulates localized date and time formatting data. This information includes time zone information. |
-| unum_ | DecimalFormatSymbols | This class represents the set of symbols needed by DecimalFormat to format numbers. |
-| umsg.h | Format | The Format class is the base class for all formats. |
-| ucal_ | GregorianCalendar | GregorianCalendar is a concrete class that provides the standard calendar used in many locations. |
-| uloc_ | Locale | A Locale object represents a specific geographical, political, or cultural region. |
-| umsg.h | MessageFormat | MessageFormat provides a means to produce concatenated messages in language-neutral way. |
-| unum_ | NumberFormat | NumberFormat is an abstract base class for all number formats. |
-| ures_ | ResourceBundle | ResourceBundle provides a means to access a collection of locale-specific information. |
-| ucol_ | RuleBasedCollator | The RuleBasedCollator provides the implementation of the Collator class using data-driven tables. |
-| udat_ | SimpleDateFormat | SimpleDateFormat is a concrete class used to format and parse dates in a language-independent way. |
-| ucal_ | SimpleTimeZone | SimpleTimeZone is a concrete subclass of TimeZone that represents a time zone for use with a Gregorian calendar. |
-| usearch_ | StringSearch | StringSearch provides a way to search text in a locale sensitive manner. |
-| ucal_ | TimeZone | TimeZone represents a time zone offset, and also determines daylight savings time settings. |
+| `ubrk_` | `BreakIterator` | The `BreakIterator` class implements methods to find the location of boundaries in the text. |
+| `ucal_` | `Calendar` | The `Calendar` class is an abstract base class that converts between a `UDate` object and a set of integer fields such as `YEAR`, `MONTH`, `DAY`, `HOUR`, and so on. |
+| `umsg.h` | `ChoiceFormat` | A `ChoiceFormat` class enables you to attach a format to a range of numbers. |
+| `ucol_` | `CollationElementIterator` | The `CollationElementIterator` class is used as an iterator to walk through each character of an international string. |
+| `ucol_` | `CollationKey` | The `Collator` class generates the Collation keys. |
+| `ucol_` | `Collator` | The `Collator` class performs locale-sensitive string comparison. |
+| `udat_` | `DateFormat` | `DateFormat` is an abstract class for a family of classes. `DateFormat` converts dates and times from their internal representations to a textual form that is language-independent, and then back to their internal representations. |
+| `udat_` | `DateFormatSymbols` | `DateFormatSymbols` is a public class that encapsulates localized date and time formatting data. This information includes time zone information. |
+| `unum_` | `DecimalFormatSymbols` | This class represents the set of symbols needed by `DecimalFormat` to format numbers. |
+| `umsg.h` | `Format` | The `Format` class is the base class for all formats. |
+| `ucal_` | `GregorianCalendar` | `GregorianCalendar` is a concrete class that provides the standard calendar used in many locations. |
+| `uloc_` | `Locale` | A `Locale` object represents a specific geographical, political, or cultural region. |
+| `umsg.h` | `MessageFormat` | `MessageFormat` provides a means to produce concatenated messages in language-neutral way. |
+| `unum_` | `NumberFormat` | `NumberFormat` is an abstract base class for all number formats. |
+| `ures_` | `ResourceBundle` | `ResourceBundle` provides a means to access a collection of locale-specific information. |
+| `ucol_` | `RuleBasedCollator` | The `RuleBasedCollator` provides the implementation of the `Collator` class using data-driven tables. |
+| `udat_` | `SimpleDateFormat` | `SimpleDateFormat` is a concrete class used to format and parse dates in a language-independent way. |
+| `ucal_` | `SimpleTimeZone` | `SimpleTimeZone` is a concrete subclass of `TimeZone` that represents a time zone for use with a Gregorian calendar. |
+| `usearch_` | `StringSearch` | `StringSearch` provides a way to search text in a locale sensitive manner. |
+| `ucal_` | `TimeZone` | `TimeZone` represents a time zone offset, and also determines daylight savings time settings. |
 
 ## Locale-Independent Operations
 
@@ -350,18 +362,18 @@ locale-independent services and users do not need to specify a locale ID:
 
 | C API | C++ Class | Description |
 |-----------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ubidi_ |  | UBiDi is used for implementing the Unicode BiDi algorithm. |
-| utf.h | CharacterIterator | CharacterIterator is an abstract class that defines an API for iteration on text objects. It is an interface for forward and backward iteration and for the random access of a text object. Also, it provides backward compatibility to the Java and older ICU CharacterIterator classes. |
-| n/a | Formattable | Formattable is a thin wrapper class that converts between the primitive numeric types (double, long, and so on) and the UDate and UnicodeString classes. Formattable objects can be passed to the Format class or its subclasses for formatting. |
-| unorm_ | Normalizer | Normalizer transforms Unicode text into an equivalent composed or decomposed form to allow for easier sorting and searching of text. |
-| n/a | ParsePosition | ParsePosition is a simple class used by the Format class and its subclasses to keep track of the current position during parsing. |
-| uidna_ |  | An implementation of the IDNA protocol as defined in RFC 3490. |
-| utf.h | StringCharacterIterator | A concrete subclass of CharacterIterator that iterates over the characters (code units or code points) in a UnicodeString. |
-| utf.h | UCharCharacterIterator | A concrete subclass of CharacterIterator that iterates over the characters (code units or code points) in a UChar array. |
-| uchar.h |  | The Unicode character properties API allows you to query the properties associated with individual Unicode character values. |
-| uregex_ | RegexMatcher | RegexMatcher is a regular expressions implementation. This allows you to perform string matching based upon a pattern. |
-| utrans_ | Transliterator | Transliterator is an abstract class that transliterates text from one format to another. The most common type of transliterator is a script, or an alphabet. |
-| uset_ | UnicodeSet | Objects of the UnicodeSet class represent character classes used in regular expressions. These classes specify a subset of the set of all Unicode characters. This is a mutable set of Unicode characters. |
-| ustring.h | UnicodeString | UnicodeString is a string class that stores Unicode characters directly. This class is a concrete implementation of the abstract class Replaceable. |
-| ushape.h |  | Provides operations to transform (shape) between Arabic characters and their presentation forms. |
-| ucnv_ |  | The Unicode conversion API allows you to convert data written in one codepage/encoding to and from UTF-16. |
+| `ubidi_` |  | `UBiDi` is used for implementing the Unicode BiDi algorithm. |
+| `utf.h` | `CharacterIterator` | `CharacterIterator` is an abstract class that defines an API for iteration on text objects. It is an interface for forward and backward iteration and for the random access of a text object. Also, it provides backward compatibility to the Java and older ICU `CharacterIterator` classes. |
+| n/a | `Formattable` | `Formattable` is a thin wrapper class that converts between the primitive numeric types (`double`, `long`, and so on) and the `UDate` and `UnicodeString` classes. `Formattable` objects can be passed to the `Format` class or its subclasses for formatting. |
+| `unorm_` | `Normalizer` | `Normalizer` transforms Unicode text into an equivalent composed or decomposed form to allow for easier sorting and searching of text. |
+| n/a | `ParsePosition` | `ParsePosition` is a simple class used by the `Format` class and its subclasses to keep track of the current position during parsing. |
+| `uidna_` |  | An implementation of the IDNA protocol as defined in RFC 3490. |
+| `utf.h` | `StringCharacterIterator` | A concrete subclass of `CharacterIterator` that iterates over the characters (code units or code points) in a `UnicodeString`. |
+| `utf.h` | `UCharCharacterIterator` | A concrete subclass of `CharacterIterator` that iterates over the characters (code units or code points) in a `UChar` array. |
+| `uchar.h` |  | The Unicode character properties API allows you to query the properties associated with individual Unicode character values. |
+| `uregex_` | `RegexMatcher` | `RegexMatcher` is a regular expressions implementation. This allows you to perform string matching based upon a pattern. |
+| `utrans_` | `Transliterator` | `Transliterator` is an abstract class that transliterates text from one format to another. The most common type of transliterator is a script, or an alphabet. |
+| `uset_` | `UnicodeSet` | Objects of the `UnicodeSet` class represent character classes used in regular expressions. These classes specify a subset of the set of all Unicode characters. This is a mutable set of Unicode characters. |
+| `ustring.h` | `UnicodeString` | `UnicodeString` is a string class that stores Unicode characters directly. This class is a concrete implementation of the abstract class `Replaceable`. |
+| `ushape.h` |  | Provides operations to transform (shape) between Arabic characters and their presentation forms. |
+| `ucnv_` |  | The Unicode conversion API allows you to convert data written in one codepage/encoding to and from UTF-16. |

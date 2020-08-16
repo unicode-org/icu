@@ -154,9 +154,9 @@ is the source and "Latin" is the target. The source specifier describes the
 characters or strings that the transform will modify. The target specifier
 describes the result of the modification. If the source is not given, then the
 source is "Any", the set of all characters. Source and Target specifiers can be
-[Script IDs](http://unicode.org/cldr/utility/properties.jsp#Script) (long like
+[Script IDs](http://www.unicode.org/cldr/utility/properties.jsp#Script) (long like
 "Latin" or short like "Latn"), [Unicode language
-Identifiers](http://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers)
+Identifiers](http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers)
 (like fr, en_US, or zh_Hant), or special tags (like Any or Hex). For example:
 
 1.  Katakana-Latin

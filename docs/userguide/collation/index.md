@@ -27,7 +27,7 @@ are also provided the facilities to customize orderings.
 
 Starting in release 1.8, the ICU Collation Service is compliant to the Unicode
 Collation Algorithm (UCA) ([Unicode Technical Standard
-#10](http://www.unicode.org/unicode/reports/tr10/)) and based on the Default
+#10](http://www.unicode.org/reports/tr10/)) and based on the Default
 Unicode Collation Element Table (DUCET) which defines the same sort order as ISO
 14651.
 
@@ -132,15 +132,15 @@ The basic ICU Collation Service is provided by two main categories of APIs:
     use index tables of sort keys to index strings quickly. Note, however, that
     this only improves performance for large numbers of strings because sorting
     via the comparison functions is very fast. For more information, see
-    [Sortkeys vs Comparison](concepts.md#sortkeys-vs-comparison).
+    [Sortkeys vs Comparison](concepts#sortkeys-vs-comparison).
 
 ICU provides an AlphabeticIndex API for generating language-appropriate
 sorted-section labels like in dictionaries and phone books.
 
-ICU also provides a higher-level [string search](string-search.md)
+ICU also provides a higher-level [string search](string-search)
 API which can be used, for example, for case-insensitive or accent-insensitive
 search in an editor or in a web page. ICU string search is based on the
-low-level [collation element iteration](architecture.md).
+low-level [collation element iteration](architecture).
 
 ## Programming Examples
 

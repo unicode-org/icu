@@ -25,8 +25,8 @@ License & terms of use: http://www.unicode.org/copyright.html
 ICU locates boundary positions within text by means of rules, which are a form
 of regular expressions. The form of the rules is similar, but not identical,
 to the boundary rules from the Unicode specifications
-[ [UAX-14](https://unicode.org/reports/tr14/), 
-[UAX-29](https://unicode.org/reports/tr29/) ], and there is a reasonably close
+[[UAX-14](https://www.unicode.org/reports/tr14/), 
+[UAX-29](https://www.unicode.org/reports/tr29/)], and there is a reasonably close
 correspondence between the two.
 
 Taken as a set, the ICU rules describe how to move forward to the next boundary,

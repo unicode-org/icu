@@ -10,7 +10,7 @@ parent: Formatting Numbers
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# RuleBasedNumberFormat Examples
+# `RuleBasedNumberFormat` Examples
 {: .no_toc }
 
 ## Contents
@@ -21,10 +21,10 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ---
 
-## Annotated RuleBasedNumberFormat Example
+## Annotated `RuleBasedNumberFormat` Example
 
 The following example provides a quick idea of how the rules work. The
-[RuleBasedNumberFormat API
+[`RuleBasedNumberFormat` API
 documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html)
 describes the rule syntax in more detail.
 
@@ -103,9 +103,7 @@ Rulesets are invoked by first applying negative and fractional rules, then by
 finding the rule whose range includes the current value and applying that rule,
 recursing as directed by the rule. Again, a complete description of the rule
 syntax can be found in the [API
-Documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html)
-.
+Documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html).
 
-More rule examples can be found in the RuleBasedNumberFormat [demo
-source](https://github.com/unicode-org/icu/blob/master/icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java)
-.
+More rule examples can be found in the `RuleBasedNumberFormat` [demo
+source](https://github.com/unicode-org/icu/blob/master/icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java).

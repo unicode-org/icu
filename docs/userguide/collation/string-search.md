@@ -155,7 +155,7 @@ match is returned. However, the behavior can be overwritten by supplying a word
 
 The minimum unit of match is aligned to an extended grapheme cluster in the ICU
 string search service implementation defined by [UAX #29 Unicode Text
-Segmentation](http://unicode.org/reports/tr29/). Therefore, all matches will
+Segmentation](http://www.unicode.org/reports/tr29/). Therefore, all matches will
 begin and end on extended grapheme cluster boundaries. If the given input search
 pattern starts with non-base character, no matches will be returned.
 When there are contractions in the collation sequence and the contraction
@@ -264,7 +264,7 @@ service. Therefore, all the performance implications that apply to a collator
 are also applicable to the string search service. To obtain the best
 performance, use the default collator attributes described in the Performance
 and Storage Implications on Attributes section in the [Collation Service
-Architecture](architecture.md#-performance-and-storage-implications-on-attributes)
+Architecture](architecture#performance-and-storage-implications-of-attributes)
 chapter. In addition, users need to be aware of
 the following `StringSearch` specific considerations:
 

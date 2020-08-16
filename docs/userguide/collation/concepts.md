@@ -131,7 +131,7 @@ Following is a list of the names for each level and an example usage:
 5.  Identical Level: When all other levels are equal, the identical level is
     used as a tiebreaker. The Unicode code point values of the NFD form of each
     string are compared at this level, just in case there is no difference at
-    levels 1-4 . For example, Hebrew cantillation marks are only distinguished
+    levels 1-4. For example, Hebrew cantillation marks are only distinguished
     at this level. This level should be used sparingly, as only code point
     value differences between two strings is an extremely rare occurrence.
     Using this level substantially decreases the performance for

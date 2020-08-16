@@ -30,13 +30,13 @@ the introduction of namespace in C++.
 The JDK internationalization components and ICU components both share the same
 common basic architectures with regard to the following:
 
-1. locales
-2. data-driven services
-3. ICU threading models and the open and close model
-4. cloning customization
-5. error handling
-6. extensibility
-7. resource bundle inheritance model
+1. [Locales](#locales)
+2. [Data-driven services](#data-driven-services)
+3. [ICU threading models and the open and close model](#icu-threading-model-and-open-and-close-model)
+4. [Cloning customization](#cloning-customization)
+5. [Error handling](#error-handling)
+6. [Extensibility](#extensibility)
+7. [Resource bundle inheritance model](#resource-bundle-inheritance-model)
 
 There are design features in ICU4C that are not in the Java Development Kit
 (JDK) due
@@ -46,10 +46,10 @@ to programming language restrictions. These features include the following:
 
 Locale IDs are composed of language, country, and variant information. The
 following links provide additional useful information regarding ISO standards:
-[ISO-639](http://lcweb.loc.gov/standards/iso639-2/englangn.html) , and an ISO
+[ISO-639](http://lcweb.loc.gov/standards/iso639-2/englangn.html), and an ISO
 Country Code,
-[ISO-3166](http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html)
-. For example, Italian, Italy, and Euro are designated as: it_IT_EURO.
+[ISO-3166](http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html).
+For example, Italian, Italy, and Euro are designated as: it_IT_EURO.
 
 ### Data-driven Services
 
@@ -150,7 +150,7 @@ Thus, the normal mode of operation is to:
 > :point_right: **Note**: These service instances may be closed in any sequence.
 The preceding steps are given as an example.
 
-#### Cloning Customization
+### Cloning Customization
 
 Typically, the services supplied with ICU cover the vast majority of usages.
 However, there are circumstances where the service needs to be customized for a
@@ -206,14 +206,14 @@ service objects, organized according to locale. Then, if a particular locale's
 formatter is in high demand, that formatter can be used, and then returned to
 the pool.
 
-### ICU Memory Usage
+#### ICU Memory Usage
 
 ICU4C APIs are designed to allow separate heaps for its libraries vs. the
 application. This is achieved by providing functions to allocate and release
 objects owned by ICU4C using only ICU4C library functions. For more details see
 the Memory Usage section in the [Coding Guidelines](dev/codingguidelines.md).
 
-### ICU Initialization and Termination
+#### ICU Initialization and Termination
 
 The ICU library does not normally require any explicit initialization prior to
 use. An application begins use simply by calling any ICU API in the usual way.
@@ -389,21 +389,21 @@ methods available:
 
 **Lookup chain** : Searching for a resource bundle.
 
-1. `en_US_<some-variant>`
-2. `en_US`
-3. `en`
-4. `<defaultLang>_<defaultCountry>`
-5. `<defaultLang>`
-6. `root`
+    en_US_<some-variant>
+    en_US
+    en
+    <defaultLang>_<defaultCountry>
+    <defaultLang>
+    root
 
 **Lookup chain** : Searching for a \<key, value> pair after
 `en_US_<some-variant>` has ben loaded. ICU does not use the default locale in
 this case.
 
-1. `en_US_<some-variant>`
-2. `en_US`
-3. `en`
-4. `root`
+    en_US_<some-variant>
+    en_US
+    en
+    root
 
 ## Other ICU Design Principles
 
@@ -413,7 +413,7 @@ usage.
 ### Version Numbers in ICU
 
 Version changes show clients when parts of ICU change. ICU; its components (such
-as Collator); each resource bundle, including all the locale data resource
+as `Collator`); each resource bundle, including all the locale data resource
 bundles; and individual tagged items within a resource bundle, have their own
 version numbers. Version numbers numerically and lexically increase as changes
 are made.
@@ -443,7 +443,7 @@ The interpretation of version numbers depends on what is being described.
 The first version number field contains the ICU release version number, for
 example 49. Each new version might contain new features, new locale data, and
 modified behavior. (See below for more information on
-[ICU Binary Compatibility](###icu-binary-compatibility).)
+[ICU Binary Compatibility](#icu-binary-compatibility)).
 
 The second field is 1 for the initial release (e.g., 49.1). The second and
 sometimes third fields are incremented for binary compatible maintenance
@@ -475,7 +475,7 @@ published semi-formal “enhancement” releases with odd second-field numbers
 Library filenames and some other internal uses already used a concatenation of
 the first two fields ("48" for 4.8).
 
-Resource Bundles and Elements
+#### Resource Bundles and Elements
 
 The data stored in resource bundles is tagged with version numbers. A resource
 bundle can contain a tagged string named "Version" that declares the version
@@ -483,8 +483,8 @@ number in dotted-integer format. For example,
 
 ```text
 en {
-Version { "1.0.3.5" }
-...
+    Version { "1.0.3.5" }
+    ...
 }
 ```
 
@@ -652,7 +652,7 @@ list members a chance to review upcoming changes, and to discuss them. A
 proposal often changes significantly as a result of discussion. Most proposals
 will eventually find consensus among list members; otherwise, the ICU-TC decides
 what to do. If the addition or change of APIs would affect you, please subscribe
-to the main [icu-design mailing list](http://icu-project.org/contacts.html) .
+to the main [icu-design mailing list](http://icu-project.org/contacts.html).
 
 When a **new API** is added to ICU, it **is marked as draft with a `@draft ICU
 x.y` label in the API documentation, **where x.y is the ICU version when the
