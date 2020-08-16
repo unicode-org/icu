@@ -219,7 +219,7 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
     // TODO(units): check if it's possible to create (and pass in) a COMPOUND
     // `unitRef`, with `getType()` returning a zero-length string, which does
     // actually have a "basic unit" representation.
-    U_ASSERT(unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
+    U_ASSERT(unitRef.getType() != "" || unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
     if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
         // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.

@@ -228,30 +228,19 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
         ures_getByKey(unitsBundle.getAlias(), "convertUnits", NULL, &status));
     if (U_FAILURE(status)) { return; }
 
-    // Simple units that don't appear in the convertUnits resource:
-    const int kExtraUnitsCount = 1;
-    static const char *extraUnits[kExtraUnitsCount] = {
-        "generic", // temperature-generic
-    };
-
-    // Allocate memory for gSimpleUnits
     int32_t simpleUnitsCount = convertUnits.getAlias()->fSize;
-    int32_t arrayMallocSize = sizeof(char *) * (simpleUnitsCount + kExtraUnitsCount);
+    int32_t arrayMallocSize = sizeof(char *) * simpleUnitsCount;
     gSimpleUnits = static_cast<const char **>(uprv_malloc(arrayMallocSize));
     if (gSimpleUnits == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    uprv_memset(gSimpleUnits, 0, arrayMallocSize); // TODO(review): rather defensive? Unnecessary?
+    uprv_memset(gSimpleUnits, 0, arrayMallocSize);
 
-    // Populate gSimpleUnits
     TableKeysSink identifierSink(gSimpleUnits, simpleUnitsCount);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
     for (int i = 0; i < simpleUnitsCount; i++) {
         b.add(gSimpleUnits[i], kSimpleUnitOffset + i, status);
-    }
-    for (int i = 0; i < kExtraUnitsCount; i++) {
-        b.add(extraUnits[i], kSimpleUnitOffset + simpleUnitsCount + i, status);
     }
 
     // Build the CharsTrie
