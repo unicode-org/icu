@@ -20,4 +20,11 @@ public class Constants {
     public static final int kSIPrefixOffset = 64;
 
 
+    /* Tables Names*/
+    public static final String conversionUnitTableName = "convertUnits";
+    public static final String unitPreferenceTableName = "unitPreferenceData";
+    public static final String defaultRegion = "001";
+    public static final String defaultUsage = "default";
+
+
 }

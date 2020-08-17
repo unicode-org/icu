@@ -8,6 +8,7 @@
 package com.ibm.icu.impl.units;
 
 
+import com.ibm.icu.util.MeasureUnit;
 import com.sun.deploy.si.SingleInstanceManager;
 
 import java.util.ArrayList;
@@ -15,7 +16,27 @@ import java.util.ArrayList;
 public class MeasureUnitImpl {
 
     public MeasureUnitImpl() {
-        singleUnits = new ArrayList<SingleUnitImpl>();
+        singleUnits = new ArrayList<>();
+    }
+
+    public MeasureUnitImpl(MeasureUnitImpl other) {
+        this.complexity = other.complexity;
+        this.identifier = other.identifier;
+
+        this.singleUnits = new ArrayList<>();
+        for (SingleUnitImpl singleUnit :
+                other.singleUnits) {
+            this.appendSingleUnit(singleUnit);
+        }
+
+    }
+
+    public MeasureUnitImpl(SingleUnitImpl singleUnit) {
+        this.appendSingleUnit(singleUnit);
+    }
+
+    public static MeasureUnitImpl forMeasureUnitMaybeCopy(MeasureUnit inputUnit) {
+        // TODO: implement
     }
 
     /**
@@ -24,6 +45,22 @@ public class MeasureUnitImpl {
     public ArrayList<SingleUnitImpl> getSingleUnits() {
         return singleUnits;
     }
+
+    public ArrayList<MeasureUnitImpl> getMeasureUnits() {
+        ArrayList<MeasureUnitImpl> result = new ArrayList<MeasureUnitImpl>();
+        if (this.getComplexity() == UMeasureUnitComplexity.UMEASURE_UNIT_MIXED) {
+            for (SingleUnitImpl singleUnit :
+                    this.getSingleUnits()) {
+                result.add(new MeasureUnitImpl(singleUnit));
+            }
+
+            return result;
+        }
+
+        result.add(new MeasureUnitImpl(this));
+        return result;
+    }
+
 
     /**
      * Applies dimensionality to all the internal single units.
@@ -67,9 +104,23 @@ public class MeasureUnitImpl {
             return false;
         }
 
-        this.singleUnits.add(singleUnit);
-        return true;
+        this.singleUnits.add(new SingleUnitImpl(singleUnit));
 
+        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending the units, the singleUnits are more
+        // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_SINGLE`
+        if (this.singleUnits.size() > 1 && this.complexity == UMeasureUnitComplexity.UMEASURE_UNIT_SINGLE) {
+            this.setComplexity(UMeasureUnitComplexity.UMEASURE_UNIT_COMPOUND);
+        }
+
+        return true;
+    }
+
+    /**
+     * Extracts a `MeasureUnitImpl` from this MeasureUnitImpl , simplifying if possible.
+     */
+    public MeasureUnit build() {
+        // TODO: implement
+        return new MeasureUnit();
     }
 
     public String getIdentifier() {
@@ -86,9 +137,9 @@ public class MeasureUnitImpl {
     }
 
     /**
-     * The full unit identifier.  Owned by the MeasureUnitImpl.  Empty if not computed.
+     * The full unit identifier.  Owned by the MeasureUnitImpl.  Null if not computed.
      */
-    private String identifier;
+    private String identifier = null;
 
 
     /**
@@ -107,6 +158,5 @@ public class MeasureUnitImpl {
      * The "dimensionless" `MeasureUnitImpl` has an empty `singleUnits`.
      */
     private ArrayList<SingleUnitImpl> singleUnits;
-
 
 }
