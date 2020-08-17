@@ -1,6 +1,12 @@
 package com.ibm.icu.impl.units;
 
 public class SingleUnitImpl {
+    public SingleUnitImpl(){}
+    public SingleUnitImpl(SingleUnitImpl other) {
+        this.dimensionality = other.dimensionality;
+        this.simpleUnit = other.getSimpleUnit();
+        this.siPrefix = other.siPrefix;
+    }
 
 
     /**

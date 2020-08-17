@@ -63,7 +63,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * @internal
-     * @deprecated This API is ICU internal only.
+     * @deprecated This API  internal only.
      */
     @Deprecated
     protected MeasureUnit(String type, String subType) {
