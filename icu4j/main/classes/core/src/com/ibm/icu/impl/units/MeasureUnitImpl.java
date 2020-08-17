@@ -120,7 +120,7 @@ public class MeasureUnitImpl {
      */
     public MeasureUnit build() {
         // TODO: implement
-        return new MeasureUnit();
+        return null;
     }
 
     public String getIdentifier() {
