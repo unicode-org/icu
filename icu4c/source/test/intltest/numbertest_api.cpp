@@ -79,7 +79,6 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(notationCompact);
         TESTCASE_AUTO(unitMeasure);
         TESTCASE_AUTO(unitCompoundMeasure);
-        TESTCASE_AUTO(unitMixedMeasure);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitUsageErrorCodes);
         TESTCASE_AUTO(unitCurrency);
@@ -983,30 +982,6 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
     //         u"0.08765 J/fur",
     //         u"0.008765 J/fur",
     //         u"0 J/fur");
-}
-
-void NumberFormatterApiTest::unitMixedMeasure() {
-    IcuTestErrorCode status(*this, "unitMixedMeasure()");
-
-    // TODO(icu-units#21): also support mixed units without usage()!
-
-//     UnlocalizedNumberFormatter unloc_formatter;
-//     FormattedNumber formattedNum;
-
-//     U_ASSERT(U_SUCCESS(status));
-//     unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch", status);
-//     status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch\", status)");
-//     formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
-//     status.errIfFailureAndReset("Mixed unit formatDouble(...)");
-//     assertEquals("FIXME", "3 yards, 1 foot, and 11.5 inches", formattedNum.toString(status));
-//     status.errIfFailureAndReset("Mixed unit formattedNum.toString(...)");
-
-//     unloc_formatter = NumberFormatter::forSkeleton("unit/yard-and-foot-and-inch E0", status);
-//     status.errIfFailureAndReset("forSkeleton(\"unit/yard-and-foot-and-inch E0\", status)");
-//     formattedNum = unloc_formatter.locale("en-US").formatDouble(3.65, status);
-//     status.errIfFailureAndReset("Mixed unit E0 formatDouble(...)");
-//     assertEquals("FIXME", "3 yards, 1 foot, and 1.15E1 inches", formattedNum.toString(status));
-//     status.errIfFailureAndReset("Mixed unit E0 formattedNum.toString(...)");
 }
 
 void NumberFormatterApiTest::unitCurrency() {
