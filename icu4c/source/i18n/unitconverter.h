@@ -32,6 +32,19 @@ enum Constants {
     CONSTANTS_COUNT
 };
 
+// These values are a hard-coded subset of unitConstants in the units
+// resources file. A unit test checks that all constants in the resource
+// file are at least recognised by the code. Derived constants' values or
+// hard-coded derivations are not checked.
+static const double constantsValues[CONSTANTS_COUNT] = {
+    0.3048,                    // CONSTANT_FT2M
+    411557987.0 / 131002976.0, // CONSTANT_PI
+    9.80665,                   // CONSTANT_GRAVITY
+    6.67408E-11,               // CONSTANT_G
+    0.00454609,                // CONSTANT_GAL_IMP2M3
+    0.45359237,                // CONSTANT_LB2KG
+};
+
 typedef enum Signum {
     NEGATIVE = -1,
     POSITIVE = 1,
@@ -124,6 +137,7 @@ class U_I18N_API UnitConverter : public UMemory {
      *
      * @param source represents the source unit.
      * @param target represents the target unit.
+     * @param ratesInfo Contains all the needed conversion rates.
      * @param status
      */
     UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,

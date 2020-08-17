@@ -1002,7 +1002,7 @@ group: numberformatter
 
 group: number_skeletons
     # Number skeleton support; separated from numberformatter
-    number_skeletons.o number_capi.o number_asformat.o
+    number_skeletons.o number_capi.o number_asformat.o numrange_capi.o
   deps
     numberformatter
     units_extra

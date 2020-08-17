@@ -77,6 +77,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitCompoundMeasure);
         TESTCASE_AUTO(unitMixedMeasure);
         TESTCASE_AUTO(unitUsage);
+        TESTCASE_AUTO(unitUsageErrorCodes);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
@@ -802,6 +803,27 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 lb and 3.1 oz",
             u"0 lb and 0.31 oz",
             u"0 lb and 0 oz");
+}
+
+void NumberFormatterApiTest::unitUsageErrorCodes() {
+    IcuTestErrorCode status(*this, "unitUsageErrorCodes()");
+    UnlocalizedNumberFormatter unloc_formatter;
+
+    unloc_formatter = NumberFormatter::forSkeleton(u"unit/foobar", status);
+    // This gives an error, because foobar is an invalid unit:
+    status.expectErrorAndReset(U_NUMBER_SKELETON_SYNTAX_ERROR);
+
+    unloc_formatter = NumberFormatter::forSkeleton(u"usage/foobar", status);
+    // This does not give an error, because usage is not looked up yet.
+    status.errIfFailureAndReset("Expected behaviour: no immediate error for invalid usage");
+    unloc_formatter.locale("en-GB").formatInt(1, status);
+    // Lacking a unit results in a failure. The skeleton is "incomplete", but we
+    // support adding the unit via the fluent API, so it is not an error until
+    // we build the formatting pipeline itself.
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    // Adding the unit as part of the fluent chain leads to success.
+    unloc_formatter.unit(MeasureUnit::getMeter()).locale("en-GB").formatInt(1, status);
+    status.assertSuccess();
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {

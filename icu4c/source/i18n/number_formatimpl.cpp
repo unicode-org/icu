@@ -230,7 +230,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Unit Preferences and Conversions as our first step
     if (macros.usage.isSet()) {
         if (!isCldrUnit) {
-            // We only support "usage" when the input unit is a CLDR Unit.
+            // We only support "usage" when the input unit is specified, and is
+            // a CLDR Unit.
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return nullptr;
         }

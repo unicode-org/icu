@@ -299,7 +299,7 @@ public:
      * capacity is not known until runtime.
      *
      * WARNING: does not report errors upon memory allocation failure, after
-     * which capacity will be less than expected!
+     * which capacity will be stackCapacity, not the requested newCapacity.
      */
     MaybeStackArray(int32_t newCapacity) : MaybeStackArray() {
         if (capacity < newCapacity) { resize(newCapacity); }
@@ -402,8 +402,8 @@ public:
         needToRelease=FALSE;
     }
     /* No comparison operators with other MaybeStackArray's. */
-    bool operator==(const MaybeStackArray & /*other*/) {return FALSE;}
-    bool operator!=(const MaybeStackArray & /*other*/) {return TRUE;}
+    bool operator==(const MaybeStackArray & /*other*/) = delete;
+    bool operator!=(const MaybeStackArray & /*other*/) = delete;
     /* No ownership transfer: No copy constructor, no assignment operator. */
     MaybeStackArray(const MaybeStackArray & /*other*/) = delete;
     void operator=(const MaybeStackArray & /*other*/) = delete;
@@ -791,15 +791,7 @@ public:
 
     template <typename... Args>
     T *emplaceBackAndCheckErrorCode(UErrorCode &status, Args &&... args) {
-        if (U_FAILURE(status)) {
-            return nullptr;
-        }
-        T *pointer = this->create(args...);
-        if (U_SUCCESS(status) && pointer == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        }
-
-        return pointer;
+        return this->createAndCheckErrorCode(status, args...);
     }
 
     int32_t length() const {

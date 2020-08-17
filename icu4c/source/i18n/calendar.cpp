@@ -870,7 +870,7 @@ Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
 Calendar* U_EXPORT2
 Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 {
-    return createInstance(TimeZone::createDefault(), aLocale, success);
+    return createInstance(TimeZone::forLocaleOrDefault(aLocale), aLocale, success);
 }
 
 // ------------------------------------- Adopting

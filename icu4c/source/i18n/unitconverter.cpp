@@ -88,20 +88,6 @@ void U_I18N_API Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
 }
 
 void U_I18N_API Factor::substituteConstants() {
-    // These values are a hard-coded subset of unitConstants in the units
-    // resources file. A unit test checks that all constants in the resource
-    // file are at least recognised by the code. Derived constants' values or
-    // hard-coded derivations are not checked.
-    // double constantsValues[CONSTANTS_COUNT];
-    static const double constantsValues[CONSTANTS_COUNT] = {
-        [CONSTANT_FT2M] = 0.3048,                  //
-        [CONSTANT_PI] = 411557987.0 / 131002976.0, //
-        [CONSTANT_GRAVITY] = 9.80665,              //
-        [CONSTANT_G] = 6.67408E-11,                //
-        [CONSTANT_GAL_IMP2M3] = 0.00454609,        //
-        [CONSTANT_LB2KG] = 0.45359237,             //
-    };
-
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
         if (this->constants[i] == 0) {
             continue;

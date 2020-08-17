@@ -168,7 +168,7 @@ The unit width can be specified by the following stems:
 - `unit-width-hidden`
 
 For more details, see
-[UNumberUnitWidth](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[UNumberUnitWidth](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).
 
 ### Precision
 
@@ -256,8 +256,7 @@ The rounding mode can be specified by the following stems:
 - `rounding-mode-half-up`
 - `rounding-mode-unnecessary`
 
-For more details, see [Rounding
-Modes](http://userguide.icu-project.org/formatparse/numbers/rounding-modes).
+For more details, see [Rounding Modes](rounding-modes.md).
 
 ### Integer Width
 
@@ -298,7 +297,7 @@ skeletons:
 
 The decimal number should conform to a standard decimal number syntax.  In
 C++, it is parsed using the decimal number library described in
-[LocalizedNumberFormatter::formatDecimal](http://icu-project.org/apiref/icu4c/classicu_1_1number_1_1LocalizedNumberFormatter.html).
+[LocalizedNumberFormatter::formatDecimal](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1number_1_1LocalizedNumberFormatter.html).
 In Java, it is parsed using
 [BigDecimal](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html#BigDecimal%28java.lang.String%29).
 For maximum compatibility, it is highly recommended that your decimal number
@@ -315,7 +314,7 @@ The grouping strategy can be specified by the following stems:
 - `group-thousands` (no concise equivalent)
 
 For more details, see
-[UNumberGroupingStrategy](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[UNumberGroupingStrategy](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).
 
 ### Symbols
 
@@ -339,7 +338,7 @@ The following stems specify sign display:
 - `sign-accounting-except-zero` or `()?` (concise)
 
 For more details, see
-[UNumberSignDisplay](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[UNumberSignDisplay](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).
 
 ### Decimal Separator Display
 
@@ -349,4 +348,4 @@ The following stems specify decimal separator display:
 - `decimal-always`
 
 For more details, see
-[UNumberDecimalSeparatorDisplay](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[UNumberDecimalSeparatorDisplay](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).

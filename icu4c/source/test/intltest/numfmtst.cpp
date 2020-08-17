@@ -2270,12 +2270,12 @@ void NumberFormatTest::TestCurrencyUnit(void){
     }
     CurrencyUnit bad(BAD, ec);
     assertSuccess("CurrencyUnit", ec);
-    if (cu.getIndex() == bad.getIndex()) {
+    if (cu.getOffset() == bad.getOffset()) {
         errln("Indexes of different currencies should differ.");
     }
     CurrencyUnit bad2(BAD2, ec);
     assertSuccess("CurrencyUnit", ec);
-    if (bad2.getIndex() != bad.getIndex()) {
+    if (bad2.getOffset() != bad.getOffset()) {
         errln("Indexes of unrecognized currencies should be the same.");
     }
     if (bad == bad2) {

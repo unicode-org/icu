@@ -215,7 +215,7 @@ public class IslamicCalendar extends Calendar {
      */
     public IslamicCalendar(Locale aLocale)
     {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -227,7 +227,7 @@ public class IslamicCalendar extends Calendar {
      */
     public IslamicCalendar(ULocale locale)
     {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**

@@ -16,6 +16,7 @@
 #include "unicode/formattedvalue.h"
 #include "unicode/fpositer.h"
 #include "unicode/numberformatter.h"
+#include "unicode/unumberrangeformatter.h"
 
 /**
  * \file
@@ -31,7 +32,7 @@
  *     .numberFormatterFirst(NumberFormatter::with().adoptUnit(MeasureUnit::createMeter()))
  *     .numberFormatterSecond(NumberFormatter::with().adoptUnit(MeasureUnit::createKilometer()))
  *     .locale("en-GB")
- *     .formatRange(750, 1.2, status)
+ *     .formatFormattableRange(750, 1.2, status)
  *     .toString(status);
  * // => "750 m - 1.2 km"
  * </pre>
@@ -43,128 +44,6 @@
  * @author Shane Carr
  */
 
-
-/**
- * Defines how to merge fields that are identical across the range sign.
- *
- * @stable ICU 63
- */
-typedef enum UNumberRangeCollapse {
-    /**
-     * Use locale data and heuristics to determine how much of the string to collapse. Could end up collapsing none,
-     * some, or all repeated pieces in a locale-sensitive way.
-     *
-     * The heuristics used for this option are subject to change over time.
-     *
-     * @stable ICU 63
-     */
-    UNUM_RANGE_COLLAPSE_AUTO,
-
-    /**
-     * Do not collapse any part of the number. Example: "3.2 thousand kilograms – 5.3 thousand kilograms"
-     *
-     * @stable ICU 63
-     */
-    UNUM_RANGE_COLLAPSE_NONE,
-
-    /**
-     * Collapse the unit part of the number, but not the notation, if present. Example: "3.2 thousand – 5.3 thousand
-     * kilograms"
-     *
-     * @stable ICU 63
-     */
-    UNUM_RANGE_COLLAPSE_UNIT,
-
-    /**
-     * Collapse any field that is equal across the range sign. May introduce ambiguity on the magnitude of the
-     * number. Example: "3.2 – 5.3 thousand kilograms"
-     *
-     * @stable ICU 63
-     */
-    UNUM_RANGE_COLLAPSE_ALL
-} UNumberRangeCollapse;
-
-/**
- * Defines the behavior when the two numbers in the range are identical after rounding. To programmatically detect
- * when the identity fallback is used, compare the lower and upper BigDecimals via FormattedNumber.
- *
- * @stable ICU 63
- * @see NumberRangeFormatter
- */
-typedef enum UNumberRangeIdentityFallback {
-    /**
-     * Show the number as a single value rather than a range. Example: "$5"
-     *
-     * @stable ICU 63
-     */
-    UNUM_IDENTITY_FALLBACK_SINGLE_VALUE,
-
-    /**
-     * Show the number using a locale-sensitive approximation pattern. If the numbers were the same before rounding,
-     * show the single value. Example: "~$5" or "$5"
-     *
-     * @stable ICU 63
-     */
-    UNUM_IDENTITY_FALLBACK_APPROXIMATELY_OR_SINGLE_VALUE,
-
-    /**
-     * Show the number using a locale-sensitive approximation pattern. Use the range pattern always, even if the
-     * inputs are the same. Example: "~$5"
-     *
-     * @stable ICU 63
-     */
-    UNUM_IDENTITY_FALLBACK_APPROXIMATELY,
-
-    /**
-     * Show the number as the range of two equal values. Use the range pattern always, even if the inputs are the
-     * same. Example (with RangeCollapse.NONE): "$5 – $5"
-     *
-     * @stable ICU 63
-     */
-    UNUM_IDENTITY_FALLBACK_RANGE
-} UNumberRangeIdentityFallback;
-
-/**
- * Used in the result class FormattedNumberRange to indicate to the user whether the numbers formatted in the range
- * were equal or not, and whether or not the identity fallback was applied.
- *
- * @stable ICU 63
- * @see NumberRangeFormatter
- */
-typedef enum UNumberRangeIdentityResult {
-    /**
-     * Used to indicate that the two numbers in the range were equal, even before any rounding rules were applied.
-     *
-     * @stable ICU 63
-     * @see NumberRangeFormatter
-     */
-    UNUM_IDENTITY_RESULT_EQUAL_BEFORE_ROUNDING,
-
-    /**
-     * Used to indicate that the two numbers in the range were equal, but only after rounding rules were applied.
-     *
-     * @stable ICU 63
-     * @see NumberRangeFormatter
-     */
-    UNUM_IDENTITY_RESULT_EQUAL_AFTER_ROUNDING,
-
-    /**
-     * Used to indicate that the two numbers in the range were not equal, even after rounding rules were applied.
-     *
-     * @stable ICU 63
-     * @see NumberRangeFormatter
-     */
-    UNUM_IDENTITY_RESULT_NOT_EQUAL,
-
-#ifndef U_HIDE_INTERNAL_API
-    /**
-     * The number of entries in this enum.
-     * @internal
-     */
-    UNUM_IDENTITY_RESULT_COUNT
-#endif
-
-} UNumberRangeIdentityResult;
 
 U_NAMESPACE_BEGIN
 
@@ -182,6 +61,7 @@ struct RangeMacroProps;
 class DecimalQuantity;
 class UFormattedNumberRangeData;
 class NumberRangeFormatterImpl;
+struct UFormattedNumberRangeImpl;
 
 } // namespace impl
 
@@ -418,8 +298,8 @@ class U_I18N_API NumberRangeFormatterSettings {
 
     /**
      * Sets the behavior when the two sides of the range are the same. This could happen if the same two numbers are
-     * passed to the formatRange function, or if different numbers are passed to the function but they become the same
-     * after rounding rules are applied. Possible values:
+     * passed to the formatFormattableRange function, or if different numbers are passed to the function but they
+     * become the same after rounding rules are applied. Possible values:
      * <p>
      * <ul>
      * <li>SINGLE_VALUE: "5 miles"</li>
@@ -820,6 +700,9 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
 
     // To give LocalizedNumberRangeFormatter format methods access to this class's constructor:
     friend class LocalizedNumberRangeFormatter;
+
+    // To give C API access to internals
+    friend struct impl::UFormattedNumberRangeImpl;
 };
 
 /**

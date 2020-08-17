@@ -105,9 +105,78 @@ public class UTS46Test extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestInvalidPunycodeDigits() {
+        IDNA idna=IDNA.getUTS46Instance(0);
+        StringBuilder result=new StringBuilder();
+        IDNA.Info info=new IDNA.Info();
+        idna.nameToUnicode("xn--pleP", result, info);  // P=U+0050
+        assertFalse("nameToUnicode() should succeed",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+        assertEquals("normal result", "ᔼᔴ", result.toString());
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--pleѐ", result, info);  // ends with non-ASCII U+0450
+        assertTrue("nameToUnicode() should detect non-ASCII",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        // Test with ASCII characters adjacent to LDH.
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--PLE/", result, info);
+        assertTrue("nameToUnicode() should detect '/'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple:", result, info);
+        assertTrue("nameToUnicode() should detect ':'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple@", result, info);
+        assertTrue("nameToUnicode() should detect '@'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple[", result, info);
+        assertTrue("nameToUnicode() should detect '['",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple`", result, info);
+        assertTrue("nameToUnicode() should detect '`'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+
+        info=new IDNA.Info();
+        idna.nameToUnicode("xn--ple{", result, info);
+        assertTrue("nameToUnicode() should detect '{'",
+                info.getErrors().contains(IDNA.Error.PUNYCODE));
+    }
+
+    @Test
+    public void TestACELabelEdgeCases() {
+        // In IDNA2008, these labels fail the round-trip validation from comparing
+        // the ToUnicode input with the back-to-ToASCII output.
+        IDNA idna=IDNA.getUTS46Instance(0);
+        StringBuilder result=new StringBuilder();
+        IDNA.Info info=new IDNA.Info();
+        idna.labelToUnicode("xn--", result, info);
+        assertTrue("empty xn--", info.getErrors().contains(IDNA.Error.INVALID_ACE_LABEL));
+
+        info=new IDNA.Info();
+        idna.labelToUnicode("xN--ASCII-", result, info);
+        assertTrue("nothing but ASCII", info.getErrors().contains(IDNA.Error.INVALID_ACE_LABEL));
+
+        // Different error: The Punycode decoding procedure does not consume the last delimiter
+        // if it is right after the xn-- so the main decoding loop fails because the hyphen
+        // is not a valid Punycode digit.
+        info=new IDNA.Info();
+        idna.labelToUnicode("Xn---", result, info);
+        assertTrue("empty Xn---", info.getErrors().contains(IDNA.Error.PUNYCODE));
+    }
+
     private static final Map<String, IDNA.Error> errorNamesToErrors;
     static {
-        errorNamesToErrors=new TreeMap<String, IDNA.Error>();
+        errorNamesToErrors=new TreeMap<>();
         errorNamesToErrors.put("UIDNA_ERROR_EMPTY_LABEL", IDNA.Error.EMPTY_LABEL);
         errorNamesToErrors.put("UIDNA_ERROR_LABEL_TOO_LONG", IDNA.Error.LABEL_TOO_LONG);
         errorNamesToErrors.put("UIDNA_ERROR_DOMAIN_NAME_TOO_LONG", IDNA.Error.DOMAIN_NAME_TOO_LONG);
@@ -385,13 +454,13 @@ public class UTS46Test extends TestFmwk {
           "UIDNA_ERROR_EMPTY_LABEL|UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN|"+
           "UIDNA_ERROR_HYPHEN_3_4" },
         { "a..c", "B", "a..c", "UIDNA_ERROR_EMPTY_LABEL" },
-        { "a.xn--.c", "B", "a..c", "UIDNA_ERROR_EMPTY_LABEL" },
+        { "a.xn--.c", "B", "a.xn--\uFFFD.c", "UIDNA_ERROR_INVALID_ACE_LABEL" },
         { "a.-b.", "B", "a.-b.", "UIDNA_ERROR_LEADING_HYPHEN" },
         { "a.b-.c", "B", "a.b-.c", "UIDNA_ERROR_TRAILING_HYPHEN" },
         { "a.-.c", "B", "a.-.c", "UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN" },
         { "a.bc--de.f", "B", "a.bc--de.f", "UIDNA_ERROR_HYPHEN_3_4" },
         { "\u00E4.\u00AD.c", "B", "\u00E4..c", "UIDNA_ERROR_EMPTY_LABEL" },
-        { "\u00E4.xn--.c", "B", "\u00E4..c", "UIDNA_ERROR_EMPTY_LABEL" },
+        { "\u00E4.xn--.c", "B", "\u00E4.xn--\uFFFD.c", "UIDNA_ERROR_INVALID_ACE_LABEL" },
         { "\u00E4.-b.", "B", "\u00E4.-b.", "UIDNA_ERROR_LEADING_HYPHEN" },
         { "\u00E4.b-.c", "B", "\u00E4.b-.c", "UIDNA_ERROR_TRAILING_HYPHEN" },
         { "\u00E4.-.c", "B", "\u00E4.-.c", "UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN" },

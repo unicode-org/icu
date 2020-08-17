@@ -1,11 +1,12 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#ifndef __UNUMBERFORMATTER_H__
+#define __UNUMBERFORMATTER_H__
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef __UNUMBERFORMATTER_H__
-#define __UNUMBERFORMATTER_H__
 
 #include "unicode/parseerr.h"
 #include "unicode/ufieldpositer.h"
@@ -725,5 +726,5 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedNumberPointer, UFormattedNumber, unum
 U_NAMESPACE_END
 #endif // U_SHOW_CPLUSPLUS_API
 
-#endif //__UNUMBERFORMATTER_H__
 #endif /* #if !UCONFIG_NO_FORMATTING */
+#endif //__UNUMBERFORMATTER_H__

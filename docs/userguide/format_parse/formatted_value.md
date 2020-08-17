@@ -11,9 +11,9 @@ returned by a number of ICU formatters.  APIs for FormattedValue are available
 in Java, C++, and C.  For more details and a list of all implementing classes,
 refer to the API docs:
 
-- [C++ FormattedValue](http://icu-project.org/apiref/icu4c/classicu_1_1FormattedValue.html)
-- [C UFormattedValue](http://icu-project.org/apiref/icu4c/globals_u.html) -- search for "resultAsValue"
-- [Java FormattedValue](http://www.icu-project.org/apiref/icu4j/com/ibm/icu/text/FormattedValue.html)
+- [C++ FormattedValue](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1FormattedValue.html)
+- [C UFormattedValue](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/globals_u.html) -- search for "resultAsValue"
+- [Java FormattedValue](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/text/FormattedValue.html)
 
 ## Nested Span Fields
 

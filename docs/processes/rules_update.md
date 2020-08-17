@@ -110,7 +110,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
     For this example, the rule file is `icu4c/source/data/brkitr/rules/char.txt`.
     (If the change is for word or line break, which have multiple rule files for tailorings, only update the root file at this time.)
 
-    Start by looking at how existing similar rules are being handled, and also refer to the ICU user guide section on [Break Rules](http://userguide.icu-project.org/boundaryanalysis/break-rules) for an explanation of rule syntax and behavior.
+    Start by looking at how existing similar rules are being handled, and also refer to the ICU user guide section on [Break Rules](../userguide/boundaryanalysis/break-rules.md) for an explanation of rule syntax and behavior.
 
     The transformation from UAX or CLDR style rules to ICU rules can be non-trivial. Sources of difficulties include:
 
