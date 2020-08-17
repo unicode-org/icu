@@ -604,9 +604,9 @@ static const char * const gSubTypes[] = {
 static int32_t unitPerUnitToSingleUnit[][4] = {
         {378, 382, 12, 5},
         {378, 387, 12, 6},
-        {388, 343, 19, 0},
-        {390, 350, 19, 2},
-        {392, 343, 19, 3},
+        {388, 343, 19, 0},  // kilometer per hour
+        {390, 350, 19, 2},  // meter per second
+        {392, 343, 19, 3},  // mile per hour
         {392, 463, 4, 2},
         {392, 464, 4, 3},
         {411, 460, 3, 1},

@@ -49,6 +49,9 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     NumberFormatterApiTest();
     NumberFormatterApiTest(UErrorCode &status);
 
+    void microPropsInternals(void);
+    void unitPipeline(void);
+
     void notationSimple();
     void notationScientific();
     void notationCompact();

@@ -11,12 +11,13 @@
 #include <memory>
 #include "unicode/unum.h"
 #include "unicode/numberformatter.h"
+#include "unicode/utypes.h"
 #include "number_asformat.h"
 #include "number_types.h"
 #include "number_utils.h"
-#include "numbertest.h"
-#include "unicode/utypes.h"
 #include "number_utypes.h"
+#include "number_microprops.h"
+#include "numbertest.h"
 
 using number::impl::UFormattedNumberData;
 
@@ -70,6 +71,9 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         logln("TestSuite NumberFormatterApiTest: ");
     }
     TESTCASE_AUTO_BEGIN;
+        TESTCASE_AUTO(microPropsInternals);
+        TESTCASE_AUTO(unitPipeline);
+
         TESTCASE_AUTO(notationSimple);
         TESTCASE_AUTO(notationScientific);
         TESTCASE_AUTO(notationCompact);
@@ -116,6 +120,95 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(toObject);
         TESTCASE_AUTO(toDecimalNumber);
     TESTCASE_AUTO_END;
+}
+
+void NumberFormatterApiTest::microPropsInternals(void) {
+    // Verify copy construction and assignment operators.
+    int64_t testValues[2] = {4, 61};
+
+    MicroProps mp;
+    assertEquals("capacity", 2, mp.mixedMeasures.getCapacity());
+    mp.mixedMeasures[0] = testValues[0];
+    mp.mixedMeasures[1] = testValues[1];
+    MicroProps copyConstructed(mp);
+    MicroProps copyAssigned;
+    int64_t *resizeResult = mp.mixedMeasures.resize(4, 4);
+    assertTrue("Resize success", resizeResult != NULL);
+    copyAssigned = mp;
+
+    assertTrue("MicroProps success status", U_SUCCESS(mp.mixedMeasures.status));
+    assertTrue("Copy Constructed success status", U_SUCCESS(copyConstructed.mixedMeasures.status));
+    assertTrue("Copy Assigned success status", U_SUCCESS(copyAssigned.mixedMeasures.status));
+    assertEquals("Original values[0]", testValues[0], mp.mixedMeasures[0]);
+    assertEquals("Original values[1]", testValues[1], mp.mixedMeasures[1]);
+    assertEquals("Copy Constructed[0]", testValues[0], copyConstructed.mixedMeasures[0]);
+    assertEquals("Copy Constructed[1]", testValues[1], copyConstructed.mixedMeasures[1]);
+    assertEquals("Copy Assigned[0]", testValues[0], copyAssigned.mixedMeasures[0]);
+    assertEquals("Copy Assigned[1]", testValues[1], copyAssigned.mixedMeasures[1]);
+    assertEquals("Original capacity", 4, mp.mixedMeasures.getCapacity());
+    assertEquals("Copy Constructed capacity", 2, copyConstructed.mixedMeasures.getCapacity());
+    assertEquals("Copy Assigned capacity", 4, copyAssigned.mixedMeasures.getCapacity());
+}
+
+void NumberFormatterApiTest::unitPipeline() {
+    IcuTestErrorCode status(*this, "unitPipeline()");
+    LocalizedNumberFormatter nf;
+    FormattedNumber num;
+
+    // Built-in unit, meter-per-second
+    nf = NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()).locale("en-GB");
+    assertEquals("meter per second builtin", "2.4 m/s", nf.formatDouble(2.4, status).toString(status));
+    status.assertSuccess();
+
+    // Built-in unit composed of built-in per built-in
+    nf = NumberFormatter::with().unit(METER).perUnit(SECOND).locale("en-GB");
+    assertEquals("meter per second composed", "2.4 m/s", nf.formatDouble(2.4, status).toString(status));
+    status.assertSuccess();
+
+    // "forIdentifier" tries to provide a built-in unit if there is one.
+    MeasureUnit builtIn = MeasureUnit::getMeterPerSecond();
+    MeasureUnit fromIdent = MeasureUnit::forIdentifier("meter-per-second", status);
+    assertEquals("forIdentifier returns a normal built-in unit when it exists", builtIn.getOffset(),
+                 fromIdent.getOffset());
+
+    // When specifying built-in types, one can give both a unit and a perUnit.
+    // Resolving to a built-in unit does not always work though.
+    nf = NumberFormatter::with()
+             .unit(MeasureUnit::getMeterPerSecond())
+             .perUnit(MeasureUnit::getSecond())
+             .locale("en-GB");
+    status.assertSuccess();
+    num = nf.formatDouble(2.4, status);
+    // TODO(icu-units#59): since this has succeeded, it needs to continue succeeding?
+    status.assertSuccess();
+    // TODO(icu-units#59): this is undesireable behaviour:
+    assertEquals("meter per second per second", "2.4 m/s/s", nf.formatDouble(2.4, status).toString(status));
+
+    // If unit is not a built-in type, perUnit is not allowed
+    nf = NumberFormatter::with()
+             .unit(MeasureUnit::forIdentifier("furlong-pascal", status))
+             .perUnit(METER)
+             .locale("en-GB");
+    status.assertSuccess(); // Error is only returned once we try to format.
+    num = nf.formatDouble(2.4, status);
+    if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
+        errln(UnicodeString("Expected failure, got: \"") +
+              nf.formatDouble(2.4, status).toString(status) + "\".");
+        status.assertSuccess();
+    }
+
+    // perUnit is only allowed to be a built-in type
+    nf = NumberFormatter::with()
+             .unit(MeasureUnit::getMeter())
+             .perUnit(MeasureUnit::forIdentifier("square-second", status))
+             .locale("en-GB");
+    status.assertSuccess(); // Error is only returned once we try to format.
+    num = nf.formatDouble(2.4, status);
+    if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
+        errln(UnicodeString("Expected failure, got: \"") +
+              nf.formatDouble(2.4, status).toString(status) + "\".");
+        status.assertSuccess();
+    }
 }
 
 void NumberFormatterApiTest::notationSimple() {
@@ -745,9 +838,9 @@ void NumberFormatterApiTest::unitUsage() {
     formatter = unloc_formatter.locale("en-US");
     formattedNum = formatter.formatDouble(300, status);
     status.errIfFailureAndReset("unitUsage() en-US road formatDouble");
-//     assertTrue(
-//         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
-//         MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
+    assertTrue(
+        uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+        MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
     MeasureUnit outpUnit = formattedNum.getOutputUnit(status);
     assertTrue(uTestCase + ", expected \"" + MeasureUnit::getFoot().getIdentifier() +
                    "\", got outputUnit: \"" + outpUnit.getIdentifier() + "\"",
@@ -776,9 +869,9 @@ void NumberFormatterApiTest::unitUsage() {
     formatter = unloc_formatter.locale("en-GB");
     formattedNum = formatter.formatDouble(80, status);
     status.errIfFailureAndReset("unitUsage() en-GB person formatDouble");
-//     assertTrue(
-//         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
-//         MeasureUnit::forIdentifier("stone-and-pound", status) == formattedNum.getOutputUnit(status));
+    assertTrue(
+        uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+        MeasureUnit::forIdentifier("stone-and-pound", status) == formattedNum.getOutputUnit(status));
     outpUnit = formattedNum.getOutputUnit(status);
     status.errIfFailureAndReset("unitUsage() en-GB person - formattedNum.getOutputUnit(status)");
     MeasureUnit expcUnit = MeasureUnit::forIdentifier("stone-and-pound", status);
@@ -793,7 +886,6 @@ void NumberFormatterApiTest::unitUsage() {
             u"unit/kilogram usage/person",
             unloc_formatter,
             Locale("en-GB"),
-            // FIXME: spaces, proper localised names
             u"13,802 st and 7.2 lb",
             u"1,380 st and 3.5 lb",
             u"138 st and 0.35 lb",

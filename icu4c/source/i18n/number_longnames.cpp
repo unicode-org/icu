@@ -216,13 +216,14 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
                                      const MeasureUnit &perUnit, const UNumberUnitWidth &width,
                                      const PluralRules *rules, const MicroPropsGenerator *parent,
                                      LongNameHandler *fillIn, UErrorCode &status) {
-    // TODO(units): check if it's possible to create (and pass in) a COMPOUND
-    // `unitRef`, with `getType()` returning a zero-length string, which does
-    // actually have a "basic unit" representation.
+    // Not valid for mixed units that aren't built-in units, and there should
+    // not be any built-in mixed units!
     U_ASSERT(unitRef.getType() != "" || unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
     if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
-        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an error code.
+        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
+        // error code. Once we support not-built-in units here, unitRef may be
+        // anything, but if not built-in, perUnit has to be "none".
         status = U_UNSUPPORTED_ERROR;
         return;
     }
@@ -405,8 +406,6 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
     U_ASSERT(mixedUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
 
-    // TODO(units): try to understand why swapping these next two lines causes
-    // an "AddressSanitizer: heap-buffer-overflow":
     LocalArray<MeasureUnit> individualUnits =
         mixedUnit.splitToSingleUnits(fillIn->fMixedUnitCount, status);
     fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
@@ -429,7 +428,7 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
 void MixedUnitLongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                                UErrorCode &status) const {
     U_ASSERT(fMixedUnitCount > 1);
-    if (parent != NULL) {
+    if (parent != nullptr) {
         parent->processQuantity(quantity, micros, status);
     }
     micros.modOuter = getMixedUnitModifier(quantity, micros, status);

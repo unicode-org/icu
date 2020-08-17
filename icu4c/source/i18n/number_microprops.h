@@ -32,6 +32,9 @@ class IntMeasures : public MaybeStackArray<int64_t, 2> {
   public:
     /**
      * Default constructor initializes with internal T[stackCapacity] buffer.
+     *
+     * Stack Capacity: most mixed units are expected to consist of two or three
+     * subunits, so one or two integer measures should be enough.
      */
     IntMeasures() : MaybeStackArray<int64_t, 2>() {
     }
