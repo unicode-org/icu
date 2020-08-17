@@ -179,47 +179,47 @@ and messages:
 
 **Formatting Numbers**
 
-*   [NumberFormat](formatparse/numbers/index.md) (§)
+*   [NumberFormat](numbers/legacy-numberformat) (§)
     The abstract superclass that provides the basic fields and methods for
     formatting Number objects and number primitives to localized strings and
     parsing localized strings to Number objects.
 
-*   [DecimalFormat](formatparse/numbers/index.md) (§)
+*   [DecimalFormat](numbers/legacy-numberformat#decimalformat) (§)
     A concrete class for formatting Number objects and number primitives to
     localized strings and parsing localized strings to Number objects, in base
     10.
 
-*   [RuleBasedNumberFormat](formatparse/numbers/index.md) (§)
+*   [RuleBasedNumberFormat](numbers/rbnf) (§)
     A concrete class for formatting Number objects and number primitives to
     localized text, especially spelled-out format such as found in check writing
     (e.g. "two hundred and thirty-four"), and parsing text into Number objects.
 
-*   [DecimalFormatSymbols](formatparse/numbers/index.md) (§)
+*   [DecimalFormatSymbols](numbers/legacy-numberformat#decimalformatsymbols) (§)
     A concrete class for accessing localized number strings, such as the
     grouping separators, decimal separator, and percent sign. Used by
     DecimalFormat.
 
 **Formatting Dates and Times**
 
-*   [DateFormat](formatparse/datetime/index.md) (§)
+*   [DateFormat](datetime/index#dateformat) (§)
     The abstract superclass that provides the basic fields and methods for
     formatting Date objects to localized strings and parsing date and time
     strings to Date objects.
 
-*   [SimpleDateFormat](formatparse/datetime/index.md) (§)
+*   [SimpleDateFormat](datetime/index#simpledateformat) (§)
     A concrete class for formatting Date objects to localized strings and
     parsing date and time strings to Date objects, using a GregorianCalendar.
 
-*   [DateFormatSymbols](formatparse/datetime/index.md) (§)
+*   [DateFormatSymbols](datetime/index#dateformatsymbols) (§)
     A concrete class for accessing localized date-time formatting strings, such
     as names of the months, days of the week and the time zone.
 
 **Formatting Messages**
 
-*   [MessageFormat](formatparse/messages/index.md) (§)
+*   [MessageFormat](messages/index#messageformat) (§)
     A concrete class for producing a language-specific user message that
     contains numbers, currency, percentages, date, time and string variables.
 
-*   [ChoiceFormat](formatparse/messages/index.md) (§)
+*   [ChoiceFormat](messages/index) (§)
     A concrete class for mapping strings to ranges of numbers and for handling
     plurals and names series in user messages.
