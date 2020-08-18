@@ -110,9 +110,10 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
 
     UnicodeString precisionSkeleton = routed.precision;
-    // TODO(icu-units/icu#13): If the programmer specified a precision, use
-    // that.
-    if (precisionSkeleton.length() > 0) {
+    if (!micros.rounder.isPassThrough()) {
+        // Do nothing: we already have a rounder, so we don't use
+        // precisionSkeleton or a default "usage-appropriate" rounder.
+    } else if (precisionSkeleton.length() > 0) {
         CharString csPrecisionSkeleton;
         UErrorCode csErrCode = U_ZERO_ERROR;
         csPrecisionSkeleton.appendInvariantChars(precisionSkeleton, csErrCode);

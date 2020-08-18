@@ -77,6 +77,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitCompoundMeasure);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitUsageErrorCodes);
+        TESTCASE_AUTO(unitUsageSkeletons);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
@@ -688,7 +689,7 @@ void NumberFormatterApiTest::unitUsage() {
     FormattedNumber formattedNum;
 
     formatter = unloc_formatter.locale("en-ZA");
-    formattedNum = formatter.formatDouble(304, status);
+    formattedNum = formatter.formatDouble(321, status);
     status.errIfFailureAndReset("unitUsage() en-ZA road, formatDouble(...)");
     assertTrue(UnicodeString("unitUsage() en-ZA road, got outputUnit: \"") +
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
@@ -711,7 +712,7 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 m");
 
     formatter = unloc_formatter.locale("en-GB");
-    formattedNum = formatter.formatDouble(304, status);
+    formattedNum = formatter.formatDouble(321, status);
     status.errIfFailureAndReset("unitUsage() en-GB road, formatDouble(...)");
     U_ASSERT(status == U_ZERO_ERROR);
     assertTrue(UnicodeString("unitUsage() en-GB road, got outputUnit: \"") +
@@ -739,7 +740,7 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 yd");
 
     formatter = unloc_formatter.locale("en-US");
-    formattedNum = formatter.formatDouble(304, status);
+    formattedNum = formatter.formatDouble(321, status);
     status.errIfFailureAndReset("unitUsage() en-US road, formatDouble(...)");
     U_ASSERT(status == U_ZERO_ERROR);
     assertTrue(UnicodeString("unitUsage() en-US road, got outputUnit: \"") +
@@ -747,7 +748,7 @@ void NumberFormatterApiTest::unitUsage() {
                MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
     status.errIfFailureAndReset("unitUsage() en-US road, getOutputUnit(...)");
     U_ASSERT(status == U_ZERO_ERROR);
-    assertEquals("unitUsage() en-US road", "1,000 ft", formattedNum.toString(status));
+    assertEquals("unitUsage() en-US road", "1,050 ft", formattedNum.toString(status));
     status.errIfFailureAndReset("unitUsage() en-US road, toString(...)");
     U_ASSERT(status == U_ZERO_ERROR);
     assertFormatDescendingBig(
@@ -787,6 +788,31 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
     // Adding the unit as part of the fluent chain leads to success.
     unloc_formatter.unit(MeasureUnit::getMeter()).locale("en-GB").formatInt(1, status);
     status.assertSuccess();
+}
+
+void NumberFormatterApiTest::unitUsageSkeletons() {
+    IcuTestErrorCode status(*this, "unitUsageSkeletons()");
+
+    auto formatter = NumberFormatter::forSkeleton("usage/road unit/meter", status).locale("en-ZA");
+    auto result = formatter.formatDouble(321, status).toString(status);
+    status.assertSuccess();
+    assertEquals("unitUsageSkeletons() usage/road unit/meter en-ZA", "300 m", result);
+
+    // FIXME: hey Shane, is modifying a LocalizedNumberFormatter safe? I see
+    // fUnsafeCallCount is counted on the LocalizedNumberFormatter, I'm
+    // wondering if a Localized formatter might get compiled, and then no longer
+    // respond to changes in fMarcos:
+    //
+    // Override the formatter's precision
+    formatter = formatter.precision(Precision::maxSignificantDigits(2));
+    result = formatter.formatDouble(321, status).toString(status);
+    status.assertSuccess();
+    assertEquals("unitUsageSkeletons() precision override (usage/road unit/meter en-ZA)", "320 m",
+                 result);
+
+    // TODO: ScientificHandler::processQuantity sets mciros.rounder to
+    // passThrough. Test whether we might have handlers flip-flopping this, if
+    // we are doing both usage & scientific.
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {

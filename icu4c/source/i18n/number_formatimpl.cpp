@@ -249,6 +249,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Rounding strategy
     Precision precision;
+    bool defaultRounding = false;
     if (!macros.precision.isBogus()) {
         precision = macros.precision;
     } else if (macros.notation.fType == Notation::NTN_COMPACT) {
@@ -256,6 +257,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     } else if (isCurrency) {
         precision = Precision::currency(UCURR_USAGE_STANDARD);
     } else {
+        defaultRounding = true;
         precision = Precision::maxFraction(6);
     }
     UNumberFormatRoundingMode roundingMode;
@@ -265,7 +267,13 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         // Temporary until ICU 64
         roundingMode = precision.fRoundingMode;
     }
-    fMicros.rounder = {precision, roundingMode, currency, status};
+    if (defaultRounding && macros.usage.isSet()) {
+        // If defaultRounding and usage is set, we lave the rounding up to
+        // UsagePrefsHandler.
+        U_ASSERT(fUsagePrefsHandler.getAlias() != nullptr);
+    } else {
+        fMicros.rounder = {precision, roundingMode, currency, status};
+    }
     if (U_FAILURE(status)) {
         return nullptr;
     }
