@@ -124,6 +124,11 @@ static void TestOrientation(void);
 static void TestLikelySubtags(void);
 
 /**
+ * test terminate correctly.
+ */
+static void Test21157CorrectTerminating(void);
+
+/**
  * language tag
  */
 static void TestForLanguageTag(void);
