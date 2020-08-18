@@ -42,7 +42,8 @@ public class UnitsParser {
                 UMeasureUnitComplexity complexity =
                         sawAnd ? UMeasureUnitComplexity.UMEASURE_UNIT_MIXED : UMeasureUnitComplexity.UMEASURE_UNIT_COMPOUND;
                 if (unitNum == 2) {
-                    Assert.assrt(result.getComplexity() == UMeasureUnitComplexity.UMEASURE_UNIT_SINGLE);
+                    // After appending two singleUnits, the complexity will be `UMEASURE_UNIT_COMPOUND`
+                    Assert.assrt(result.getComplexity() == UMeasureUnitComplexity.UMEASURE_UNIT_COMPOUND);
                     result.setComplexity(complexity);
                 } else if (result.getComplexity() != complexity) {
                     throw new java.lang.InternalError("Can't have mixed compound units");

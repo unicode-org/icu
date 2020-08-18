@@ -1,7 +1,8 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.math.BigDecimal;
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class ConversionRate {
 
@@ -51,7 +52,7 @@ public class ConversionRate {
             return new BigDecimal(numbers[0]);
         }
 
-        return new BigDecimal(numbers[0]).divide(new BigDecimal(numbers[1]));
+        return new BigDecimal(numbers[0]).divide(new BigDecimal(numbers[1]), MathContext.DECIMAL128);
     }
 
 

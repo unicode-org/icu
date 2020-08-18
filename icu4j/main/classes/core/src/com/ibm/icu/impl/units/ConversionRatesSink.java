@@ -27,12 +27,13 @@ public class ConversionRatesSink extends UResource.Sink {
 
 
                 String keyString = key.toString();
+                String valueString = value.toString().replaceAll(" ","");
                 if ("target".equals(keyString)) {
-                    target = value.toString();
+                    target = valueString;
                 } else if ("factor".equals(keyString)) {
-                    factor = value.toString();
+                    factor = valueString;
                 } else if ("offset".equals(keyString)) {
-                    offset = value.toString();
+                    offset = valueString;
                 } else {
                     Assert.fail("The key must be target, factor or offset");
                 }
