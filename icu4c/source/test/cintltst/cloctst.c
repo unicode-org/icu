@@ -48,6 +48,7 @@ static void TestLocDataWithRgTag(void);
 static void TestLanguageExemplarsFallbacks(void);
 static void TestDisplayNameBrackets(void);
 static void TestIllegalArgumentWhenNoDataWithNoSubstitute(void);
+static void Test21157CorrectTerminating(void);
 
 static void TestUnicodeDefines(void);
 
@@ -242,6 +243,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestGetLocale);
 #endif
     TESTCASE(TestDisplayNameWarning);
+    TESTCASE(Test21157CorrectTerminating);
     TESTCASE(TestNonexistentLanguageExemplars);
     TESTCASE(TestLocDataErrorCodeChaining);
     TESTCASE(TestLocDataWithRgTag);
@@ -6652,17 +6654,161 @@ static void TestToLegacyType(void)
 
 
 
-static void test_unicode_define(const char *namech, char ch, const char *nameu, UChar uch)
+static void test_unicode_define(const char *namech, char ch,
+                                const char *nameu, UChar uch)
 {
-  UChar asUch[1];
-  asUch[0]=0;
-  log_verbose("Testing whether %s[\\x%02x,'%c'] == %s[U+%04X]\n", namech, ch,(int)ch, nameu, (int) uch);
-  u_charsToUChars(&ch, asUch, 1);
-  if(asUch[0] != uch) {
-    log_err("FAIL:  %s[\\x%02x,'%c'] maps to U+%04X, but %s = U+%04X\n", namech, ch, (int)ch, (int)asUch[0], nameu, (int)uch);
-  } else {
-    log_verbose(" .. OK, == U+%04X\n", (int)asUch[0]);
-  }
+    UChar asUch[1];
+    asUch[0]=0;
+    log_verbose("Testing whether %s[\\x%02x,'%c'] == %s[U+%04X]\n",
+                namech, ch,(int)ch, nameu, (int) uch);
+    u_charsToUChars(&ch, asUch, 1);
+    if(asUch[0] != uch) {
+        log_err("FAIL:  %s[\\x%02x,'%c'] maps to U+%04X, but %s = U+%04X\n",
+                namech, ch, (int)ch, (int)asUch[0], nameu, (int)uch);
+    } else {
+        log_verbose(" .. OK, == U+%04X\n", (int)asUch[0]);
+    }
+}
+
+static void checkTerminating(const char* locale, const char* inLocale)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t preflight_length = uloc_getDisplayName(
+        locale, inLocale, NULL, 0, &status);
+    if (status != U_BUFFER_OVERFLOW_ERROR) {
+        log_err("uloc_getDisplayName(%s, %s) preflight failed",
+                locale, inLocale);
+    }
+    UChar buff[256];
+    const UChar sentinel1 = 0x6C38; // 永- a Han unicode as sentinel.
+    const UChar sentinel2 = 0x92D2; // 鋒- a Han unicode as sentinel.
+
+    // 1. Test when we set the maxResultSize to preflight_length + 1.
+    // Set sentinel1 in the buff[preflight_length-1] to check it will be
+    // replaced with display name.
+    buff[preflight_length-1] = sentinel1;
+    // Set sentinel2 in the buff[preflight_length] to check it will be
+    // replaced by null.
+    buff[preflight_length] = sentinel2;
+    // It should be properly null terminated at buff[preflight_length].
+    status = U_ZERO_ERROR;
+    int32_t length = uloc_getDisplayName(
+        locale, inLocale, buff, preflight_length + 1, &status);
+    char cbuff[256];
+    u_austrcpy(cbuff, buff);
+    if (length != preflight_length) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 returns "
+                "length %d different from preflight length %d. Returns '%s'\n",
+                locale, inLocale, length, preflight_length, cbuff);
+    }
+    if (U_ZERO_ERROR != status) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 should "
+                "set status to U_ZERO_ERROR but got %d %s. Returns %s\n",
+                locale, inLocale, status, myErrorName(status), cbuff);
+    }
+    if (buff[length-1] == sentinel1) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 does "
+                "not change memory in the end of buffer while it should. "
+                "Returns %s\n",
+                locale, inLocale, cbuff);
+    }
+    if (buff[length] != 0x0000) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 should "
+                "null terminate at buff[length] but does not %x. Returns %s\n",
+                locale, inLocale, buff[length], cbuff);
+    }
+
+    // 2. Test when we only set the maxResultSize to preflight_length.
+
+    // Set sentinel1 in the buff[preflight_length-1] to check it will be
+    // replaced with display name.
+    buff[preflight_length-1] = sentinel1;
+    // Set sentinel2 in the buff[preflight_length] to check it won't be replaced
+    // by null.
+    buff[preflight_length] = sentinel2;
+    status = U_ZERO_ERROR;
+    length = uloc_getDisplayName(
+        locale, inLocale, buff, preflight_length, &status);
+    u_austrcpy(cbuff, buff);
+
+    if (length != preflight_length) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length return "
+                "length %d different from preflight length %d. Returns '%s'\n",
+                locale, inLocale, length, preflight_length, cbuff);
+    }
+    if (U_STRING_NOT_TERMINATED_WARNING != status) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length should "
+                "set status to U_STRING_NOT_TERMINATED_WARNING but got %d %s. "
+                "Returns %s\n",
+                locale, inLocale, status, myErrorName(status), cbuff);
+    }
+    if (buff[length-1] == sentinel1) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length does not "
+                "change memory in the end of buffer while it should. Returns "
+                "'%s'\n",
+                locale, inLocale, cbuff);
+    }
+    if (buff[length] != sentinel2) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length change "
+                "memory beyond maxResultSize to %x. Returns '%s'\n",
+                locale, inLocale, buff[length], cbuff);
+    }
+    if (buff[preflight_length - 1] == 0x0000) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length null "
+                "terminated while it should not. Return '%s'\n",
+                locale, inLocale, cbuff);
+    }
+
+    // 3. Test when we only set the maxResultSize to preflight_length-1.
+    // Set sentinel1 in the buff[preflight_length-1] to check it will not be
+    // replaced with display name.
+    buff[preflight_length-1] = sentinel1;
+    // Set sentinel2 in the buff[preflight_length] to check it won't be replaced
+    // by null.
+    buff[preflight_length] = sentinel2;
+    status = U_ZERO_ERROR;
+    length = uloc_getDisplayName(
+        locale, inLocale, buff, preflight_length - 1, &status);
+    u_austrcpy(cbuff, buff);
+
+    if (length != preflight_length) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 return "
+                "length %d different from preflight length %d. Returns '%s'\n",
+                locale, inLocale, length, preflight_length, cbuff);
+    }
+    if (U_BUFFER_OVERFLOW_ERROR != status) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 should "
+                "set status to U_BUFFER_OVERFLOW_ERROR but got %d %s. "
+                "Returns %s\n",
+                locale, inLocale, status, myErrorName(status), cbuff);
+    }
+    if (buff[length-1] != sentinel1) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 should "
+                "not change memory in beyond the maxResultSize. Returns '%s'\n",
+                locale, inLocale, cbuff);
+    }
+    if (buff[length] != sentinel2) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 change "
+                "memory beyond maxResultSize to %x. Returns '%s'\n",
+                locale, inLocale, buff[length], cbuff);
+    }
+    if (buff[preflight_length - 2] == 0x0000) {
+        log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 null "
+                "terminated while it should not. Return '%s'\n",
+                locale, inLocale, cbuff);
+    }
+}
+
+static void Test21157CorrectTerminating(void) {
+    checkTerminating("fr", "fr");
+    checkTerminating("fr_BE", "fr");
+    checkTerminating("fr_Latn_BE", "fr");
+    checkTerminating("fr_Latn", "fr");
+    checkTerminating("fr", "fr");
+    checkTerminating("fr-CN", "fr");
+    checkTerminating("fr-Hant-CN", "fr");
+    checkTerminating("fr-Hant", "fr");
+    checkTerminating("zh-u-co-pinyin", "fr");
 }
 
 #define TEST_UNICODE_DEFINE(x,y) test_unicode_define(#x, (char)(x), #y, (UChar)(y))
