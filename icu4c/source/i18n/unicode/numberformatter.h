@@ -41,7 +41,7 @@
  * NumberFormatter::with()
  *     .notation(Notation::compactShort())
  *     .unit(CurrencyUnit("EUR", status))
- *     .precision(Precision::maxDigits(2))
+ *     .precision(Precision::maxSignificantDigits(2))
  *     .locale(...)
  *     .format(1234)
  *     .toString();  // €1.2K in en-US
