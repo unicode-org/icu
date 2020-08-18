@@ -36,7 +36,7 @@ class Factor {
         Factor resultCollector = new Factor(this);
 
         resultCollector.substitute(BigDecimal.valueOf(0.3048), this.CONSTANT_FT2M);
-        resultCollector.substitute(BigDecimal.valueOf(0.45359237).divide(BigDecimal.valueOf(131002976.0), DECIMAL128), this.CONSTANT_PI);
+        resultCollector.substitute(BigDecimal.valueOf(411557987.0).divide(BigDecimal.valueOf(131002976.0), DECIMAL128), this.CONSTANT_PI);
         resultCollector.substitute(BigDecimal.valueOf(9.80665), this.CONSTANT_GRAVITY);
         resultCollector.substitute(new BigDecimal("6.67408E-11"), this.CONSTANT_G);
         resultCollector.substitute(BigDecimal.valueOf(0.00454609), this.CONSTANT_GAL_IMP2M3);

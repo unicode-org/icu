@@ -1,7 +1,9 @@
 package com.ibm.icu.impl.units;
 
 public class SingleUnitImpl {
-    public SingleUnitImpl(){}
+    public SingleUnitImpl() {
+    }
+
     public SingleUnitImpl(SingleUnitImpl other) {
         this.dimensionality = other.dimensionality;
         this.simpleUnit = other.getSimpleUnit();
@@ -12,9 +14,9 @@ public class SingleUnitImpl {
     /**
      * Returns true if this unit is the "dimensionless base unit", as produced
      * by the MeasureUnit() default constructor.
-     *
+     * <p>
      * NOTE:
-     *  (This does not include the likes of concentrations or angles.)
+     * (This does not include the likes of concentrations or angles.)
      */
     public boolean isDimensionless() {
         return simpleUnit.isEmpty();
@@ -30,12 +32,19 @@ public class SingleUnitImpl {
 
     /**
      * Checks whether this SingleUnitImpl is compatible with another for the purpose of coalescing.
-     *
+     * <p>
      * Units with the same base unit and SI prefix should match, except that they must also have
      * the same dimensionality sign, such that we don't merge numerator and denominator.
      */
     boolean isCompatibleWith(SingleUnitImpl other) {
-        return (this.simpleUnit == other.simpleUnit && this.siPrefix == other.siPrefix);
+        if (this.simpleUnit == other.simpleUnit && this.siPrefix == other.siPrefix) {
+            if (this.getDimensionality() > 0 && other.getDimensionality() > 0
+                    || this.getDimensionality() < 0 && other.getDimensionality() < 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public int getDimensionality() {
@@ -55,10 +64,9 @@ public class SingleUnitImpl {
     }
 
 
-
     /**
      * SimpleUnit is the simplest form of a Unit. For example, for "square-millimeter", the simple unit would be "meter"Ò
-     *
+     * <p>
      * The default value is "", meaning the dimensionless unit:
      * isDimensionless() will return true, until index is changed.
      */
@@ -66,9 +74,9 @@ public class SingleUnitImpl {
 
     /**
      * Determine the power of the `SingleUnit`. For example, for "square-meter", the dimensionality will be `2`.
-     *
+     * <p>
      * NOTE:
-     *   Default dimensionality is 1.
+     * Default dimensionality is 1.
      */
     private int dimensionality = 1;
 

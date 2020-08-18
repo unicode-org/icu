@@ -9,7 +9,6 @@ package com.ibm.icu.impl.units;
 
 
 import com.ibm.icu.util.MeasureUnit;
-import com.sun.deploy.si.SingleInstanceManager;
 
 import java.util.ArrayList;
 
@@ -82,6 +81,7 @@ public class MeasureUnitImpl {
      */
     public boolean appendSingleUnit(SingleUnitImpl singleUnit) {
         identifier = "";
+        boolean hasUnits = !this.singleUnits.isEmpty();
 
         if (singleUnit.isDimensionless()) {
             // We don't append dimensionless units.
@@ -102,13 +102,14 @@ public class MeasureUnitImpl {
             // Both dimensionalities will be positive, or both will be negative, by
             // virtue of isCompatibleWith().
             oldUnit.setDimensionality(oldUnit.getDimensionality() + singleUnit.getDimensionality());
+
             return false;
         }
 
         this.singleUnits.add(new SingleUnitImpl(singleUnit));
 
-        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending the units, the singleUnits are more
-        // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_SINGLE`
+        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits are more
+        // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
         if (this.singleUnits.size() > 1 && this.complexity == UMeasureUnitComplexity.UMEASURE_UNIT_SINGLE) {
             this.setComplexity(UMeasureUnitComplexity.UMEASURE_UNIT_COMPOUND);
         }

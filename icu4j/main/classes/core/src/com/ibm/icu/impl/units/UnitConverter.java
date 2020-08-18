@@ -25,9 +25,6 @@ public class UnitConverter {
      * @param conversionRates contains all the needed conversion rates.
      */
     public UnitConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
-        // TODO: calculate offset
-        this.offset = BigDecimal.valueOf(0);
-
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
         Assert.assrt(convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
 
@@ -39,6 +36,9 @@ public class UnitConverter {
         } else {
             this.conversionRate = sourceToBase.multiply(targetToBase).getConversionRate();
         }
+
+        // calculate the offset
+        this.offset = conversionRates.getOffset(source, target, sourceToBase, targetToBase, convertibility);
     }
 
     public BigDecimal convert(BigDecimal inputValue) {
@@ -49,7 +49,7 @@ public class UnitConverter {
         ArrayList<SingleUnitImpl> sourceSingleUnits = conversionRates.getBasicUnitsWithoutSIPrefix(source);
         ArrayList<SingleUnitImpl> targetSingleUnits = conversionRates.getBasicUnitsWithoutSIPrefix(target);
 
-        HashMap dimensionMap = new HashMap<String, Integer>();
+        HashMap<String, Integer> dimensionMap = new HashMap<>();
 
         insertInMap(dimensionMap, sourceSingleUnits, 1);
         insertInMap(dimensionMap, targetSingleUnits, -1);

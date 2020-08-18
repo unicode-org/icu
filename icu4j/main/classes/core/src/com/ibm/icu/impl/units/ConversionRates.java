@@ -1,11 +1,11 @@
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.UResourceBundle;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -31,7 +31,7 @@ public class ConversionRates {
         UMeasureSIPrefix siPrefix = singleUnit.getSiPrefix();
         Factor result = Factor.precessFactor(mapToConversionRate.get(singleUnit.getSimpleUnit()).getConversionRate());
 
-        return result.power(power).applySiPrefix(siPrefix);
+        return result.applySiPrefix(siPrefix).power(power); // NOTE: you must apply the SI prefixes before the power.
     }
 
     public Factor getFactorToBase(MeasureUnitImpl measureUnit) {
@@ -42,6 +42,23 @@ public class ConversionRates {
         }
 
         return result;
+    }
+
+    protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, Factor
+            sourceToBase, Factor targetToBase, Convertibility convertibility) {
+        if (convertibility != Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
+        if (!(checkSimpleUnit(source) && checkSimpleUnit(target))) return BigDecimal.valueOf(0);
+
+        String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnit();
+        String targetSimpleIdentifier = target.getSingleUnits().get(0).getSimpleUnit();
+
+        BigDecimal sourceOffset = this.mapToConversionRate.get(sourceSimpleIdentifier).getOffset();
+        BigDecimal targetOffset = this.mapToConversionRate.get(targetSimpleIdentifier).getOffset();
+        return sourceOffset
+                .divide(sourceToBase.getConversionRate(), MathContext.DECIMAL128)
+                .multiply(targetToBase.getConversionRate(), MathContext.DECIMAL128)
+                .add(targetOffset);
+
     }
 
     public ArrayList<SingleUnitImpl> getBasicUnitsWithoutSIPrefix(MeasureUnitImpl measureUnitImpl) {
@@ -74,11 +91,24 @@ public class ConversionRates {
         return targetImpl.getSingleUnits();
     }
 
+    /**
+     * Checks if the `MeasureUnitImpl` is simple or not.
+     *
+     * @param measureUnitImpl
+     * @return true if the `MeasureUnitImpl` is simple, false otherwise.
+     */
+    private boolean checkSimpleUnit(MeasureUnitImpl measureUnitImpl) {
+        if (measureUnitImpl.getComplexity() != UMeasureUnitComplexity.UMEASURE_UNIT_SINGLE) return false;
+        SingleUnitImpl singleUnit = measureUnitImpl.getSingleUnits().get(0);
+
+        if (singleUnit.getSiPrefix() != UMeasureSIPrefix.UMEASURE_SI_PREFIX_ONE) return false;
+        if (singleUnit.getDimensionality() != 1) return false;
+
+        return true;
+    }
 
     /**
      * Map from any simple unit (i.e. "meter", "foot", "inch") to its basic/root conversion rate info.
      */
     private TreeMap<String, ConversionRate> mapToConversionRate;
-
-
 }

@@ -4,7 +4,6 @@ import com.ibm.icu.impl.Assert;
 import com.ibm.icu.util.Measure;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 
