@@ -1,8 +1,15 @@
 package com.ibm.icu.dev.test.impl;
 
 
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.units.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.StringJoiner;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -81,6 +88,40 @@ public class UnitConverterTest {
             UnitConverter converter = new UnitConverter(test.source, test.target, conversionRates);
             assertEquals(test.expected.doubleValue(), converter.convert(test.input).doubleValue(), (0.00001));
         }
+
+    }
+
+    @Test
+    public void testConverterFromUnitTests() throws IOException {
+        class TestData {
+            TestData(String line) {
+                String[] fields = line.split(";");
+
+                this.category = fields[0].replaceAll(" ","");
+                this.source = UnitsParser.parseForIdentifier(fields[1].replaceAll(" ",""));
+                this.target = UnitsParser.parseForIdentifier(fields[2].replaceAll(" ",""));
+                this.input = BigDecimal.valueOf(1000);
+                this.expected = new BigDecimal(fields[4].replaceAll(" ",""));
+            }
+
+            String category;
+            MeasureUnitImpl source;
+            MeasureUnitImpl target;
+            BigDecimal input;
+            BigDecimal expected;
+        }
+
+        String codePage = "UTF-8";
+        BufferedReader f = TestUtil.getDataReader("units/unitsTest.txt", codePage);
+        ArrayList<TestData> tests = new ArrayList<>();
+        while (true) {
+            String line = f.readLine();
+            if (line == null) break;
+            if (line.isEmpty() || line.startsWith("#")) continue;
+            tests.add(new TestData(line));
+        }
+
+
 
     }
 }

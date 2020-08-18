@@ -211,6 +211,7 @@ public class UnitsParser {
     }
 
     private UnitsParser(String identifier) {
+        this.simpleUnits = UnitsData.getSimpleUnits();
         this.fSource = identifier;
 
         if (trie != null) {
@@ -315,7 +316,6 @@ public class UnitsParser {
     private boolean sawAnd = false;
 
 
-    private final static String[] simpleUnits = ConversionRates.simpleUnits;
-
+    private final String[] simpleUnits;
 }
 
