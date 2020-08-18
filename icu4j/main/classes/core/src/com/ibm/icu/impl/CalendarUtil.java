@@ -46,7 +46,7 @@ public final class CalendarUtil {
             return calType.toLowerCase(Locale.ROOT);
         }
 
-        // Canonicalize, so grandfathered variant will be transformed to keywords
+        // Canonicalize, so that an old-style variant will be transformed to keywords.
         ULocale canonical = ULocale.createCanonical(loc.toString());
         calType = canonical.getKeywordValue(CALKEY);
         if (calType != null) {

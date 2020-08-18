@@ -1025,13 +1025,14 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
         return result;
     }
 
-    // If a BCP-47 language tag is passed as the language parameter to the
+    // If a BCP 47 language tag is passed as the language parameter to the
     // normal Locale constructor, it will actually fall back to invoking
     // uloc_forLanguageTag() to parse it if it somehow is able to detect that
-    // the string actually is BCP-47. This works well for things like strings
-    // using BCP-47 extensions, but it does not at all work for things like
-    // BCP-47 grandfathered tags (eg. "en-GB-oed") which are possible to also
-    // interpret as ICU locale IDs and because of that won't trigger the BCP-47
+    // the string actually is BCP 47. This works well for things like strings
+    // using BCP 47 extensions, but it does not at all work for things like
+    // legacy language tags (marked as “Type: grandfathered” in BCP 47,
+    // e.g., "en-GB-oed") which are possible to also
+    // interpret as ICU locale IDs and because of that won't trigger the BCP 47
     // parsing. Therefore the code here explicitly calls uloc_forLanguageTag()
     // and then Locale::init(), instead of just calling the normal constructor.
 

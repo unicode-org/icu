@@ -393,13 +393,17 @@ public:
      * If the specified language tag contains any ill-formed subtags,
      * the first such subtag and all following subtags are ignored.
      * <p>
-     * This implements the 'Language-Tag' production of BCP47, and so
-     * supports grandfathered (regular and irregular) as well as private
-     * use language tags.  Private use tags are represented as 'x-whatever',
-     * and grandfathered tags are converted to their canonical replacements
-     * where they exist.  Note that a few grandfathered tags have no modern
-     * replacement, these will be converted using the fallback described in
+     * This implements the 'Language-Tag' production of BCP 47, and so
+     * supports legacy language tags (marked as “Type: grandfathered” in BCP 47)
+     * (regular and irregular) as well as private use language tags.
+     *
+     * Private use tags are represented as 'x-whatever',
+     * and legacy tags are converted to their canonical replacements where they exist.
+     *
+     * Note that a few legacy tags have no modern replacement;
+     * these will be converted using the fallback described in
      * the first paragraph, so some information might be lost.
+     *
      * @param tag     the input BCP47 language tag.
      * @param status  error information if creating the Locale failed.
      * @return        the Locale for the specified BCP47 language tag.
