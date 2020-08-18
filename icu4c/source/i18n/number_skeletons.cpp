@@ -478,6 +478,9 @@ UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
 MacroProps skeleton::parseSkeleton(
         const UnicodeString& skeletonString, int32_t& errOffset, UErrorCode& status) {
     umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
+
+    // parseStem and parseOption expect U_SUCCESS(status). We check status here
+    // and we return as soon as U_FAILURE(status) becomes true.
     if (U_FAILURE(status)) {
         return MacroProps();
     }
@@ -589,6 +592,8 @@ MacroProps skeleton::parseSkeleton(
 ParseState
 skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, SeenMacroProps& seen,
                     MacroProps& macros, UErrorCode& status) {
+    U_ASSERT(U_SUCCESS(status));
+
     // First check for "blueprint" stems, which start with a "signal char"
     switch (segment.charAt(0)) {
         case u'.':
@@ -767,6 +772,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
 
 ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, MacroProps& macros,
                                  UErrorCode& status) {
+    U_ASSERT(U_SUCCESS(status));
 
     ///// Required options: /////
 
@@ -995,6 +1001,7 @@ blueprint_helpers::generateCurrencyOption(const CurrencyUnit& currency, UnicodeS
 
 void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, MacroProps& macros,
                                                UErrorCode& status) {
+    U_ASSERT(U_SUCCESS(status));
     const UnicodeString stemString = segment.toTempUnicodeString();
 
     // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
@@ -1010,7 +1017,6 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     }
 
     // Need to do char <-> UChar conversion...
-    U_ASSERT(U_SUCCESS(status));
     CharString type;
     SKELETON_UCHAR_TO_CHAR(type, stemString, 0, firstHyphen, status);
     CharString subType;
