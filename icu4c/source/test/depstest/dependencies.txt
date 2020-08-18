@@ -869,7 +869,7 @@ library: i18n
     dayperiodrules
     listformatter
     formatting formattable_cnv regex regex_cnv translit
-    double_conversion number_representation number_output numberformatter numberparser
+    double_conversion number_representation number_output numberformatter number_skeletons numberparser
     units_extra unitsformatter
     universal_time_scale
     uclean_i18n
@@ -995,13 +995,16 @@ group: numberformatter
     number_scientific.o number_usageprefs.o
     currpinf.o dcfmtsym.o numsys.o
     numrange_fluent.o numrange_impl.o
-    # Number skeleton support:
-    number_skeletons.o number_capi.o number_asformat.o numrange_capi.o
   deps
     decnumber double_conversion formattable units unitsformatter
     number_representation number_output
     uclean_i18n common
-    # Used in number skeletons:
+
+group: number_skeletons
+    # Number skeleton support; separated from numberformatter
+    number_skeletons.o number_capi.o number_asformat.o numrange_capi.o
+  deps
+    numberformatter
     units_extra
 
 group: numberparser
@@ -1044,7 +1047,7 @@ group: formatting
     # messageformat
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
-    decnumber formattable format units numberformatter numberparser
+    decnumber formattable format units numberformatter number_skeletons numberparser
     formatted_value_sbimpl
     listformatter
     dayperiodrules
