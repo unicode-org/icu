@@ -793,26 +793,18 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
 void NumberFormatterApiTest::unitUsageSkeletons() {
     IcuTestErrorCode status(*this, "unitUsageSkeletons()");
 
-    auto formatter = NumberFormatter::forSkeleton("usage/road unit/meter", status).locale("en-ZA");
-    auto result = formatter.formatDouble(321, status).toString(status);
+    // Default >300m road preference skeletons round to 50m
+    auto roadFormatter = NumberFormatter::forSkeleton("usage/road unit/meter", status).locale("en-ZA");
+    auto result = roadFormatter.formatDouble(321, status).toString(status);
     status.assertSuccess();
     assertEquals("unitUsageSkeletons() usage/road unit/meter en-ZA", "300 m", result);
 
-    // FIXME: hey Shane, is modifying a LocalizedNumberFormatter safe? I see
-    // fUnsafeCallCount is counted on the LocalizedNumberFormatter, I'm
-    // wondering if a Localized formatter might get compiled, and then no longer
-    // respond to changes in fMarcos:
-    //
-    // Override the formatter's precision
-    formatter = formatter.precision(Precision::maxSignificantDigits(2));
-    result = formatter.formatDouble(321, status).toString(status);
+    // Override the roadFormatter's precision
+    roadFormatter = roadFormatter.precision(Precision::maxSignificantDigits(2));
+    result = roadFormatter.formatDouble(321, status).toString(status);
     status.assertSuccess();
     assertEquals("unitUsageSkeletons() precision override (usage/road unit/meter en-ZA)", "320 m",
                  result);
-
-    // TODO: ScientificHandler::processQuantity sets mciros.rounder to
-    // passThrough. Test whether we might have handlers flip-flopping this, if
-    // we are doing both usage & scientific.
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
