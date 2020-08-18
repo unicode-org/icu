@@ -37,6 +37,7 @@ public class MeasureUnitImpl {
 
     public static MeasureUnitImpl forMeasureUnitMaybeCopy(MeasureUnit inputUnit) {
         // TODO: implement
+        return null;
     }
 
     /**
