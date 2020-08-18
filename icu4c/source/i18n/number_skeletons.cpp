@@ -447,11 +447,6 @@ UnlocalizedNumberFormatter skeleton::create(
         perror->postContext[0] = 0;
     }
 
-    umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
-    if (U_FAILURE(status)) {
-        return {};
-    }
-
     int32_t errOffset;
     MacroProps macros = parseSkeleton(skeletonString, errOffset, status);
     if (U_SUCCESS(status)) {
@@ -482,14 +477,10 @@ UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
 
 MacroProps skeleton::parseSkeleton(
         const UnicodeString& skeletonString, int32_t& errOffset, UErrorCode& status) {
-    U_ASSERT(U_SUCCESS(status));
-
-    // FIXME (DO NOT SUBMIT): In this PR, we consider calling parseSkeleton
-    // directly rather than going through create(). With the first call, we've
-    // missed initNumberSkeletons though. Do we want to go through create, which
-    // is just a little bit wasteful, or do we want to find an alternative way
-    // to ensure initNumberSkeletons has been called?
     umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
+    if (U_FAILURE(status)) {
+        return MacroProps();
+    }
 
     U_ASSERT(kSerializedStemTrie != nullptr);
 
