@@ -62,8 +62,8 @@ abstract class AbstractPathValueMapper {
     final void addIcuData(IcuData icuData) {
         // This subclass mostly exists to control the fact that results need to be added in one go
         // to the IcuData because of how referenced paths are handled. If results could be added in
-        // multiple passes, you could have confusing situations in which values has path references
-        // in them but the referenced paths have not been transformed yet. Forcing the subclass to
+        // multiple passes, you could have confusing situations in which values have path references
+        // in them, but the referenced paths have not been transformed yet. Forcing the subclass to
         // implement a single method to generate all results at once ensures that we control the
         // lifecycle of the data and how results are processed as they are added to the IcuData.
         checkState(resultsByRbPath.isEmpty(),

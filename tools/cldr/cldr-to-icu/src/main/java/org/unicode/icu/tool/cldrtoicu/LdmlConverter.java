@@ -47,6 +47,7 @@ import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir;
+import org.unicode.icu.tool.cldrtoicu.localedistance.LocaleDistanceMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.Bcp47Mapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.BreakIteratorMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.CollationMapper;
@@ -167,6 +168,7 @@ public final class LdmlConverter {
         PLURAL_RANGES(SUPPLEMENTAL),
         WINDOWS_ZONES(SUPPLEMENTAL),
         TRANSFORMS(SUPPLEMENTAL),
+        LOCALE_DISTANCE(SUPPLEMENTAL),
         KEY_TYPE_DATA(BCP47);
 
         public static final ImmutableSet<OutputType> ALL = ImmutableSet.copyOf(OutputType.values());
@@ -504,6 +506,10 @@ public final class LdmlConverter {
 
             case PLURAL_RANGES:
                 write(PluralRangesMapper.process(src), "misc");
+                break;
+
+            case LOCALE_DISTANCE:
+                write(LocaleDistanceMapper.process(src), "misc");
                 break;
 
             case WINDOWS_ZONES:

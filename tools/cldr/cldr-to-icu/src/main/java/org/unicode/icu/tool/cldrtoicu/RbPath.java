@@ -191,13 +191,26 @@ public final class RbPath implements Comparable<RbPath> {
     }
 
     // TODO: Remove this and isAlias() in favour of having properly typed paths.
-    boolean isIntPath() {
-        String lastElement = segments.get(segments.size() - 1);
-        return lastElement.endsWith(":int") || lastElement.endsWith(":intvector");
+    public boolean isIntPath() {
+        return typeSuffixIsAnyOf(":int", ":intvector");
+    }
+
+    public boolean isBinPath() {
+        return typeSuffixIsAnyOf(":bin");
     }
 
     public boolean isAlias() {
-        return getSegment(length() - 1).endsWith(":alias");
+        return typeSuffixIsAnyOf(":alias");
+    }
+
+    private boolean typeSuffixIsAnyOf(String... types) {
+        String lastElement = getSegment(length() - 1);
+        for (String type : types) {
+            if (lastElement.endsWith(type)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override public int compareTo(RbPath other) {
