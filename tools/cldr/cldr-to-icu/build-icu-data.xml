@@ -358,7 +358,6 @@
                 <retain path="icudata.rc"/>
                 <retain path="icustd.txt"/>
                 <retain path="icuver.txt"/>
-                <retain path="langInfo.txt"/>
                 <retain path="zoneinfo64.txt"/>
                 <!-- This file should be removed before the next release. -->
                 <retain path="miscfiles.mk"/>
