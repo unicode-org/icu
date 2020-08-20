@@ -1148,7 +1148,7 @@ uloc_getCurrentLanguageID(const char* oldID){
  *
  * TODO try to use this in Locale
  */
-static CharString
+CharString U_EXPORT2
 ulocimp_getLanguage(const char *localeID,
                     const char **pEnd,
                     UErrorCode &status) {
@@ -1191,20 +1191,6 @@ ulocimp_getLanguage(const char *localeID,
     }
 
     return result;
-}
-
-U_CFUNC int32_t
-ulocimp_getLanguage(const char *localeID,
-                    char *language, int32_t languageCapacity,
-                    const char **pEnd) {
-    ErrorCode status;
-    CharString result = ulocimp_getLanguage(localeID, pEnd, status);
-    if (status.isFailure()) {
-        return 0;
-    }
-    int32_t reslen = result.length();
-    uprv_memcpy(language, result.data(), std::min(reslen, languageCapacity));
-    return reslen;
 }
 
 static CharString
@@ -1486,7 +1472,11 @@ uloc_openKeywords(const char* localeID,
     }
 
     /* Skip the language */
-    ulocimp_getLanguage(tmpLocaleID, NULL, 0, &tmpLocaleID);
+    ulocimp_getLanguage(tmpLocaleID, &tmpLocaleID, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+
     if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
         /* Skip the script if available */
@@ -1745,7 +1735,6 @@ uloc_getLanguage(const char*    localeID,
          UErrorCode* err)
 {
     /* uloc_getLanguage will return a 2 character iso-639 code if one exists. *CWB*/
-    int32_t i=0;
 
     if (err==NULL || U_FAILURE(*err)) {
         return 0;
@@ -1755,8 +1744,16 @@ uloc_getLanguage(const char*    localeID,
         localeID=uloc_getDefault();
     }
 
-    i=ulocimp_getLanguage(localeID, language, languageCapacity, NULL);
-    return u_terminateChars(language, languageCapacity, i, err);
+    CharString result = ulocimp_getLanguage(localeID, NULL, *err);
+    if (U_FAILURE(*err)) {
+        return 0;
+    }
+
+    int32_t reslen = result.length();
+    if (reslen <= languageCapacity) {
+        uprv_memcpy(language, result.data(), reslen);
+    }
+    return u_terminateChars(language, languageCapacity, reslen, err);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1776,7 +1773,11 @@ uloc_getScript(const char*    localeID,
     }
 
     /* skip the language */
-    ulocimp_getLanguage(localeID, NULL, 0, &localeID);
+    ulocimp_getLanguage(localeID, &localeID, *err);
+    if (U_FAILURE(*err)) {
+        return 0;
+    }
+
     if(_isIDSeparator(*localeID)) {
         i=ulocimp_getScript(localeID+1, script, scriptCapacity, NULL);
     }
@@ -1800,7 +1801,11 @@ uloc_getCountry(const char* localeID,
     }
 
     /* Skip the language */
-    ulocimp_getLanguage(localeID, NULL, 0, &localeID);
+    ulocimp_getLanguage(localeID, &localeID, *err);
+    if (U_FAILURE(*err)) {
+        return 0;
+    }
+
     if(_isIDSeparator(*localeID)) {
         const char *scriptID;
         /* Skip the script if available */
@@ -1840,7 +1845,11 @@ uloc_getVariant(const char* localeID,
     }
 
     /* Skip the language */
-    ulocimp_getLanguage(tmpLocaleID, NULL, 0, &tmpLocaleID);
+    ulocimp_getLanguage(tmpLocaleID, &tmpLocaleID, *err);
+    if (U_FAILURE(*err)) {
+        return 0;
+    }
+
     if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
         /* Skip the script if available */

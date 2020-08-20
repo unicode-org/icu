@@ -13,6 +13,8 @@
 #include "unicode/bytestream.h"
 #include "unicode/uloc.h"
 
+#include "charstr.h"
+
 /**
  * Create an iterator over the specified keywords list
  * @param keywordList double-null terminated list. Will be copied.
@@ -47,10 +49,10 @@ uloc_getCurrentCountryID(const char* oldID);
 U_CFUNC const char* 
 uloc_getCurrentLanguageID(const char* oldID);
 
-U_CFUNC int32_t
+icu::CharString U_EXPORT2
 ulocimp_getLanguage(const char *localeID,
-                    char *language, int32_t languageCapacity,
-                    const char **pEnd);
+                    const char **pEnd,
+                    UErrorCode &status);
 
 U_CFUNC int32_t
 ulocimp_getScript(const char *localeID,
