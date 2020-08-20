@@ -14,8 +14,12 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/localpointer.h"
 #include "unicode/uenum.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
+
 #ifndef U_HIDE_INTERNAL_API
 #include "unicode/unum.h"
 #endif  /* U_HIDE_INTERNAL_API */

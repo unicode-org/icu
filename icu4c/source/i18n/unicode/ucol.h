@@ -15,11 +15,14 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/unorm.h"
-#include "unicode/localpointer.h"
 #include "unicode/parseerr.h"
 #include "unicode/uloc.h"
 #include "unicode/uset.h"
 #include "unicode/uscript.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
 
 /**
  * \file

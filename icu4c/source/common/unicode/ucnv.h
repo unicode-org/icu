@@ -51,7 +51,10 @@
 
 #include "unicode/ucnv_err.h"
 #include "unicode/uenum.h"
+
+#if U_SHOW_CPLUSPLUS_API
 #include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
 
 #if !defined(USET_DEFINED) && !defined(U_IN_DOXYGEN)
 
