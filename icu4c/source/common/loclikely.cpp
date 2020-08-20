@@ -509,8 +509,7 @@ parseTagString(
         }    
     }
 
-    subtagLength = ulocimp_getCountry(position, region, *regionLength, &position);
-    u_terminateChars(region, *regionLength, subtagLength, err);
+    subtagLength = ulocimp_getCountry(position, &position, *err).extract(region, *regionLength, *err);
 
     if(U_FAILURE(*err)) {
         goto error;
