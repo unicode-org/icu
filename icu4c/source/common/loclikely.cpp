@@ -485,8 +485,7 @@ parseTagString(
         ++position;
     }
 
-    subtagLength = ulocimp_getScript(position, script, *scriptLength, &position);
-    u_terminateChars(script, *scriptLength, subtagLength, err);
+    subtagLength = ulocimp_getScript(position, &position, *err).extract(script, *scriptLength, *err);
 
     if(U_FAILURE(*err)) {
         goto error;

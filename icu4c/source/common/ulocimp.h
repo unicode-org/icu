@@ -54,10 +54,10 @@ ulocimp_getLanguage(const char *localeID,
                     const char **pEnd,
                     UErrorCode &status);
 
-U_CFUNC int32_t
+icu::CharString U_EXPORT2
 ulocimp_getScript(const char *localeID,
-                   char *script, int32_t scriptCapacity,
-                   const char **pEnd);
+                  const char **pEnd,
+                  UErrorCode &status);
 
 U_CFUNC int32_t
 ulocimp_getCountry(const char *localeID,
