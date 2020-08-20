@@ -1215,7 +1215,7 @@ ulocimp_getScript(const char *localeID,
     return result;
 }
 
-static CharString
+CharString U_EXPORT2
 ulocimp_getCountry(const char *localeID,
                    const char **pEnd,
                    UErrorCode &status) {
@@ -1248,14 +1248,6 @@ ulocimp_getCountry(const char *localeID,
     }
 
     return result;
-}
-
-U_CFUNC int32_t
-ulocimp_getCountry(const char *localeID,
-                   char *country, int32_t countryCapacity,
-                   const char **pEnd) {
-    ErrorCode status;
-    return ulocimp_getCountry(localeID, pEnd, status).extract(country, countryCapacity, status);
 }
 
 /**
@@ -1458,7 +1450,10 @@ uloc_openKeywords(const char* localeID,
         }
         /* Skip the Country */
         if (_isIDSeparator(*tmpLocaleID)) {
-            ulocimp_getCountry(tmpLocaleID+1, NULL, 0, &tmpLocaleID);
+            ulocimp_getCountry(tmpLocaleID+1, &tmpLocaleID, *status);
+            if (U_FAILURE(*status)) {
+                return 0;
+            }
             if(_isIDSeparator(*tmpLocaleID)) {
                 _getVariant(tmpLocaleID+1, *tmpLocaleID, NULL, 0);
             }
@@ -1750,8 +1745,6 @@ uloc_getCountry(const char* localeID,
             int32_t countryCapacity,
             UErrorCode* err)
 {
-    int32_t i=0;
-
     if(err==NULL || U_FAILURE(*err)) {
         return 0;
     }
@@ -1778,10 +1771,10 @@ uloc_getCountry(const char* localeID,
             localeID = scriptID;
         }
         if(_isIDSeparator(*localeID)) {
-            i=ulocimp_getCountry(localeID+1, country, countryCapacity, NULL);
+            return ulocimp_getCountry(localeID+1, NULL, *err).extract(country, countryCapacity, *err);
         }
     }
-    return u_terminateChars(country, countryCapacity, i, err);
+    return u_terminateChars(country, countryCapacity, 0, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -1827,7 +1820,10 @@ uloc_getVariant(const char* localeID,
         /* Skip the Country */
         if (_isIDSeparator(*tmpLocaleID)) {
             const char *cntryID;
-            ulocimp_getCountry(tmpLocaleID+1, NULL, 0, &cntryID);
+            ulocimp_getCountry(tmpLocaleID+1, &cntryID, *err);
+            if (U_FAILURE(*err)) {
+                return 0;
+            }
             if (cntryID != tmpLocaleID+1) {
                 /* Found optional country */
                 tmpLocaleID = cntryID;
