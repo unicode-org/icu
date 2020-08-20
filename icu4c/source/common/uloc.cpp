@@ -1181,7 +1181,7 @@ ulocimp_getLanguage(const char *localeID,
     return result;
 }
 
-static CharString
+CharString U_EXPORT2
 ulocimp_getScript(const char *localeID,
                   const char **pEnd,
                   UErrorCode &status) {
@@ -1213,14 +1213,6 @@ ulocimp_getScript(const char *localeID,
     }
 
     return result;
-}
-
-U_CFUNC int32_t
-ulocimp_getScript(const char *localeID,
-                  char *script, int32_t scriptCapacity,
-                  const char **pEnd) {
-    ErrorCode status;
-    return ulocimp_getScript(localeID, pEnd, status).extract(script, scriptCapacity, status);
 }
 
 static CharString
@@ -1456,7 +1448,10 @@ uloc_openKeywords(const char* localeID,
     if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
         /* Skip the script if available */
-        ulocimp_getScript(tmpLocaleID+1, NULL, 0, &scriptID);
+        ulocimp_getScript(tmpLocaleID+1, &scriptID, *status);
+        if (U_FAILURE(*status)) {
+            return 0;
+        }
         if(scriptID != tmpLocaleID+1) {
             /* Found optional script */
             tmpLocaleID = scriptID;
@@ -1729,8 +1724,6 @@ uloc_getScript(const char*    localeID,
          int32_t scriptCapacity,
          UErrorCode* err)
 {
-    int32_t i=0;
-
     if(err==NULL || U_FAILURE(*err)) {
         return 0;
     }
@@ -1746,9 +1739,9 @@ uloc_getScript(const char*    localeID,
     }
 
     if(_isIDSeparator(*localeID)) {
-        i=ulocimp_getScript(localeID+1, script, scriptCapacity, NULL);
+        return ulocimp_getScript(localeID+1, NULL, *err).extract(script, scriptCapacity, *err);
     }
-    return u_terminateChars(script, scriptCapacity, i, err);
+    return u_terminateChars(script, scriptCapacity, 0, err);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -1776,7 +1769,10 @@ uloc_getCountry(const char* localeID,
     if(_isIDSeparator(*localeID)) {
         const char *scriptID;
         /* Skip the script if available */
-        ulocimp_getScript(localeID+1, NULL, 0, &scriptID);
+        ulocimp_getScript(localeID+1, &scriptID, *err);
+        if (U_FAILURE(*err)) {
+            return 0;
+        }
         if(scriptID != localeID+1) {
             /* Found optional script */
             localeID = scriptID;
@@ -1820,7 +1816,10 @@ uloc_getVariant(const char* localeID,
     if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
         /* Skip the script if available */
-        ulocimp_getScript(tmpLocaleID+1, NULL, 0, &scriptID);
+        ulocimp_getScript(tmpLocaleID+1, &scriptID, *err);
+        if (U_FAILURE(*err)) {
+            return 0;
+        }
         if(scriptID != tmpLocaleID+1) {
             /* Found optional script */
             tmpLocaleID = scriptID;
