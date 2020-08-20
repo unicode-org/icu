@@ -20,6 +20,7 @@
 #include "charstr.h"
 #include "number_utils.h"
 #include "uassert.h"
+#include "util.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -634,7 +635,10 @@ void DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
 
     // Use the BCD constructor. We need to do a little bit of work to convert, though.
     // The decNumber constructor expects most-significant first, but we store least-significant first.
-    MaybeStackArray<uint8_t, 20> ubcd(precision);
+    MaybeStackArray<uint8_t, 20> ubcd(precision, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
     for (int32_t m = 0; m < precision; m++) {
         ubcd[precision - m - 1] = static_cast<uint8_t>(getDigitPos(m));
     }
@@ -1324,7 +1328,11 @@ bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
 }
 
 UnicodeString DecimalQuantity::toString() const {
-    MaybeStackArray<char, 30> digits(precision + 1);
+    UErrorCode localStatus = U_ZERO_ERROR;
+    MaybeStackArray<char, 30> digits(precision + 1, localStatus);
+    if (U_FAILURE(localStatus)) {
+        return ICU_Utility::makeBogusString();
+    }
     for (int32_t i = 0; i < precision; i++) {
         digits[i] = getDigitPos(precision - i - 1) + '0';
     }

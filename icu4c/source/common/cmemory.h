@@ -297,12 +297,16 @@ public:
      * Automatically allocates the heap array if the argument is larger than the stack capacity.
      * Intended for use when an approximate capacity is known at compile time but the true
      * capacity is not known until runtime.
-     *
-     * WARNING: does not report errors upon memory allocation failure, after
-     * which capacity will be stackCapacity, not the requested newCapacity.
      */
-    MaybeStackArray(int32_t newCapacity) : MaybeStackArray() {
-        if (capacity < newCapacity) { resize(newCapacity); }
+    MaybeStackArray(int32_t newCapacity, UErrorCode status) : MaybeStackArray() {
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (capacity < newCapacity) {
+            if (resize(newCapacity) == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+        }
     }
     /**
      * Destructor deletes the array (if owned).
