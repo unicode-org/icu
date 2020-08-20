@@ -20,13 +20,14 @@
 #define __UENUM_H
 
 #include "unicode/utypes.h"
-#include "unicode/localpointer.h"
 
 #if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+
 U_NAMESPACE_BEGIN
 class StringEnumeration;
 U_NAMESPACE_END
-#endif
+#endif   // U_SHOW_CPLUSPLUS_API
 
 /**
  * \file

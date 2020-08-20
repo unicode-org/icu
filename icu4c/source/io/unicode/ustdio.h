@@ -30,8 +30,11 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/utrans.h"
-#include "unicode/localpointer.h"
 #include "unicode/unum.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
 
 #if !UCONFIG_NO_CONVERSION
 

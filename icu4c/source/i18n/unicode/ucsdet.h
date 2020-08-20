@@ -25,8 +25,11 @@
 
 #if !UCONFIG_NO_CONVERSION
 
-#include "unicode/localpointer.h"
 #include "unicode/uenum.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
 
 /**
  * \file 

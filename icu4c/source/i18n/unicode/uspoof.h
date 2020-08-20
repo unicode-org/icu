@@ -22,12 +22,12 @@
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
 #include "unicode/parseerr.h"
-#include "unicode/localpointer.h"
 
 #if !UCONFIG_NO_NORMALIZATION
 
 
 #if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 #endif

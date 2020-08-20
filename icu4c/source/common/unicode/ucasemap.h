@@ -22,9 +22,12 @@
 #define __UCASEMAP_H__
 
 #include "unicode/utypes.h"
-#include "unicode/localpointer.h"
 #include "unicode/stringoptions.h"
 #include "unicode/ustring.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
 
 /**
  * \file
