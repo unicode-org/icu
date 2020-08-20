@@ -1,3 +1,5 @@
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu.ant;
 
 import com.google.common.collect.ImmutableList;
