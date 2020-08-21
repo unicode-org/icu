@@ -1396,32 +1396,18 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                     no known mapping. This implementation normalizes the
                     value to lower case
                     */
-                    icu::CharString* extBuf = extBufPool.create();
+                    icu::CharString* extBuf = extBufPool.create(buf, tmpStatus);
+
                     if (extBuf == nullptr) {
                         *status = U_MEMORY_ALLOCATION_ERROR;
                         break;
                     }
-                    int32_t bcpValueLen = static_cast<int32_t>(uprv_strlen(bcpValue));
-                    int32_t resultCapacity;
-                    char* pExtBuf = extBuf->getAppendBuffer(
-                            /*minCapacity=*/bcpValueLen,
-                            /*desiredCapacityHint=*/bcpValueLen,
-                            resultCapacity,
-                            tmpStatus);
                     if (U_FAILURE(tmpStatus)) {
                         *status = tmpStatus;
                         break;
                     }
 
-                    buf.extract(pExtBuf, resultCapacity, tmpStatus);
-                    T_CString_toLowerCase(pExtBuf);
-
-                    extBuf->append(pExtBuf, bcpValueLen, tmpStatus);
-                    if (U_FAILURE(tmpStatus)) {
-                        *status = tmpStatus;
-                        break;
-                    }
-
+                    T_CString_toLowerCase(extBuf->data());
                     bcpValue = extBuf->data();
                 }
             } else {
