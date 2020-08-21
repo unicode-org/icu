@@ -1001,12 +1001,14 @@ group: numberformatter
     number_representation number_output
     numberformatter_microprops
     uclean_i18n common
+    number_symbolswrapper
 
 group: numberformatter_microprops
     number_multiplier.o 
     number_usageprefs.o
   deps
     number_rounding
+    number_symbolswrapper
     unitsformatter
 
 group: number_rounding
@@ -1021,6 +1023,11 @@ group: number_skeletons
   deps
     numberformatter
     units_extra
+
+group: number_symbolswrapper
+    number_symbolswrapper.o
+  deps
+    platform
 
 group: numberparser
     numparse_affixes.o numparse_compositions.o numparse_currency.o
