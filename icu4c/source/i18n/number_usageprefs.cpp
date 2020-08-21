@@ -129,25 +129,22 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     UnicodeString precisionSkeleton = routed.precision;
     // TODO: Is it okay if this is kDefaultMode?
     // Otherwise it was: unitPrefMacros.roundingMode or precision.fRoundingMode;
-    UNumberFormatRoundingMode roundingMode = kDefaultMode;
-    CurrencyUnit currency(u"", status);
-    if (!micros.rounder.isPassThrough()) {
-        // Do nothing: we already have a rounder, so we don't use
-        // precisionSkeleton or a default "usage-appropriate" rounder.
-    } else if (precisionSkeleton.length() > 0) {
-        CharString csPrecisionSkeleton;
-        UErrorCode csErrCode = U_ZERO_ERROR;
-        csPrecisionSkeleton.appendInvariantChars(precisionSkeleton, csErrCode);
-
-        // Parse skeleton, collect results
-        // int32_t errOffset;
-        // int32_t errOffset = 0;
-        U_ASSERT(U_SUCCESS(status));
-        Precision precision = parseSkeletonToPrecision(precisionSkeleton, status);
-        micros.rounder = {precision, roundingMode, currency, status};
-    } else {
-        Precision precision = Precision::integer().withMinDigits(2);
-        micros.rounder = {precision, roundingMode, currency, status};
+    if (micros.rounder.isDefault()) {
+        UNumberFormatRoundingMode roundingMode = kDefaultMode; // TODO: appropriate?
+        CurrencyUnit currency(u"", status);
+        if (precisionSkeleton.length() > 0) {
+            // Parse skeleton, collect results
+            Precision precision = parseSkeletonToPrecision(precisionSkeleton, status);
+            micros.rounder = {precision, roundingMode, currency, status};
+        } else {
+            // TODO: some disgreement as to whether to do this override. The default
+            // is maxFraction(6), which I find inappropriate for human-friendly
+            // usage-based unit formatting? We should probably specify a "default
+            // expectation when skeleton isn't given in unitPreferences", primarily
+            // so we don't have to add that to every preference.
+            Precision precision = Precision::integer().withMinDigits(2);
+            micros.rounder = {precision, roundingMode, currency, status};
+        }
     }
 }
 

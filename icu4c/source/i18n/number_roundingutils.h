@@ -189,6 +189,12 @@ class RoundingImpl {
     /** Version of {@link #apply} that obeys minInt constraints. Used for scientific notation compatibility mode. */
     void apply(impl::DecimalQuantity &value, int32_t minInt, UErrorCode status);
 
+    /**
+     * If true, this RoundingImpl can be considered a default. Presently this
+     * just depends on whether fPrecision represents a default.
+     */
+    bool isDefault() { return fPrecision.isDefault(); }
+
   private:
     Precision fPrecision;
     UNumberFormatRoundingMode fRoundingMode;

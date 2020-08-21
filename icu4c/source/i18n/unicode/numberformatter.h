@@ -654,6 +654,20 @@ class U_I18N_API Precision : public UMemory {
      */
     static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
 
+    /**
+     * If true, this Precision instance represents a default, so client code may
+     * more freely override it.
+     */
+    bool isDefault() const { return fPrecisionIsDefault; }
+
+    /**
+     * Sets the default flag: client code may freely override this Precision
+     * instance.
+     */
+    void setDefault() {
+        fPrecisionIsDefault = true;
+    }
+
 #ifndef U_HIDE_INTERNAL_API
     /** Returns a bogus Precision instance. */
     static Precision bogus() {
@@ -716,6 +730,12 @@ class U_I18N_API Precision : public UMemory {
 
     /** The Precision encapsulates the RoundingMode when used within the implementation. */
     UNumberFormatRoundingMode fRoundingMode;
+
+    /**
+     * If true, this Precision instance is just a default, so client code can
+     * more freely override it.
+     */
+    bool fPrecisionIsDefault = false;
 
     Precision(const PrecisionType& type, const PrecisionUnion& union_,
               UNumberFormatRoundingMode roundingMode)
