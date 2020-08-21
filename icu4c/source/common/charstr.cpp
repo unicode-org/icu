@@ -20,6 +20,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "uinvchar.h"
+#include "ustr_imp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -44,6 +45,19 @@ char *CharString::cloneData(UErrorCode &errorCode) const {
     }
     uprv_memcpy(p, buffer.getAlias(), len + 1);
     return p;
+}
+
+int32_t CharString::extract(char *dest, int32_t capacity, UErrorCode &errorCode) const {
+    if (U_FAILURE(errorCode)) { return len; }
+    if (capacity < 0 || (capacity > 0 && dest == nullptr)) {
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return len;
+    }
+    const char *src = buffer.getAlias();
+    if (0 < len && len <= capacity && src != dest) {
+        uprv_memcpy(dest, src, len);
+    }
+    return u_terminateChars(dest, capacity, len, &errorCode);
 }
 
 CharString &CharString::copyFrom(const CharString &s, UErrorCode &errorCode) {

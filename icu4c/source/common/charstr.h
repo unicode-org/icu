@@ -87,6 +87,22 @@ public:
      * The caller must uprv_free() the result.
      */
     char *cloneData(UErrorCode &errorCode) const;
+    /**
+     * Copies the contents of the string into dest.
+     * Checks if there is enough space in dest, extracts the entire string if possible,
+     * and NUL-terminates dest if possible.
+     *
+     * If the string fits into dest but cannot be NUL-terminated (length()==capacity),
+     * then the error code is set to U_STRING_NOT_TERMINATED_WARNING.
+     * If the string itself does not fit into dest (length()>capacity),
+     * then the error code is set to U_BUFFER_OVERFLOW_ERROR.
+     *
+     * @param dest Destination string buffer.
+     * @param capacity Size of the dest buffer (number of chars).
+     * @param errorCode ICU error code.
+     * @return length()
+     */
+    int32_t extract(char *dest, int32_t capacity, UErrorCode &errorCode) const;
 
     bool operator==(StringPiece other) const {
         return len == other.length() && (len == 0 || uprv_memcmp(data(), other.data(), len) == 0);

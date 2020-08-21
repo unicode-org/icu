@@ -464,18 +464,7 @@ parseTagString(
         goto error;
     }
 
-    {
-        icu::CharString result = ulocimp_getLanguage(position, &position, *err);
-        if (U_FAILURE(*err)) {
-            goto error;
-        }
-
-        subtagLength = result.length();
-        if (subtagLength <= *langLength) {
-            uprv_memcpy(lang, result.data(), subtagLength);
-        }
-        u_terminateChars(lang, *langLength, subtagLength, err);
-    }
+    subtagLength = ulocimp_getLanguage(position, &position, *err).extract(lang, *langLength, *err);
 
     /*
      * Note that we explicit consider U_STRING_NOT_TERMINATED_WARNING

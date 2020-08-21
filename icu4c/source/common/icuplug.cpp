@@ -782,8 +782,8 @@ uplug_init(UErrorCode *status) {
     /* plugin_file is not used for processing - it is only used 
        so that uplug_getPluginFile() works (i.e. icuinfo)
     */
-    uprv_strncpy(plugin_file, pluginFile.data(), sizeof(plugin_file));
-        
+    pluginFile.extract(plugin_file, sizeof(plugin_file), *status);
+
 #if UPLUG_TRACE
     DBG((stderr, "pluginfile= %s len %d/%d\n", plugin_file, (int)strlen(plugin_file), (int)sizeof(plugin_file)));
 #endif
