@@ -994,14 +994,23 @@ group: numberformatter
     number_notation.o number_padding.o
     number_patternmodifier.o number_patternstring.o
     number_scientific.o
-    currpinf.o dcfmtsym.o numsys.o
+    currpinf.o
     numrange_fluent.o numrange_impl.o
   deps
     decnumber double_conversion formattable units unitsformatter
     number_representation number_output
+    numsys
     numberformatter_microprops
     uclean_i18n common
     number_symbolswrapper
+
+group: numsys
+    dcfmtsym.o
+    numsys.o
+  deps
+    currency
+    resourcebundle
+    uclean_i18n
 
 group: numberformatter_microprops
     number_multiplier.o 
@@ -1028,6 +1037,7 @@ group: number_symbolswrapper
     number_symbolswrapper.o
   deps
     platform
+    numsys
 
 group: numberparser
     numparse_affixes.o numparse_compositions.o numparse_currency.o
