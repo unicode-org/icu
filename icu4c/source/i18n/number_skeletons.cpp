@@ -152,21 +152,6 @@ UPRV_BLOCK_MACRO_BEGIN { \
 } UPRV_BLOCK_MACRO_END
 
 
-#define SKELETON_UCHAR_TO_CHAR(dest, src, start, end, status) (void)(dest); \
-UPRV_BLOCK_MACRO_BEGIN { \
-    UErrorCode conversionStatus = U_ZERO_ERROR; \
-    (dest).appendInvariantChars({FALSE, (src).getBuffer() + (start), (end) - (start)}, conversionStatus); \
-    if (conversionStatus == U_INVARIANT_CONVERSION_ERROR) { \
-        /* Don't propagate the invariant conversion error; it is a skeleton syntax error */ \
-        (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
-        return; \
-    } else if (U_FAILURE(conversionStatus)) { \
-        (status) = conversionStatus; \
-        return; \
-    } \
-} UPRV_BLOCK_MACRO_END
-
-
 } // anonymous namespace
 
 
@@ -1345,36 +1330,36 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     return true;
 }
 
-void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
-                                             UErrorCode& status) {
-    // Need to do char <-> UChar conversion...
-    U_ASSERT(U_SUCCESS(status));
-    CharString buffer;
-    SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
+// void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
+//                                              UErrorCode& status) {
+//     // Need to do char <-> UChar conversion...
+//     U_ASSERT(U_SUCCESS(status));
+//     CharString buffer;
+//     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
-    // Utilize DecimalQuantity/decNumber to parse this for us.
-    DecimalQuantity dq;
-    UErrorCode localStatus = U_ZERO_ERROR;
-    dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
-    if (U_FAILURE(localStatus)) {
-        // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
-        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-        return;
-    }
-    double increment = dq.toDouble();
+//     // Utilize DecimalQuantity/decNumber to parse this for us.
+//     DecimalQuantity dq;
+//     UErrorCode localStatus = U_ZERO_ERROR;
+//     dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
+//     if (U_FAILURE(localStatus)) {
+//         // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
+//         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+//         return;
+//     }
+//     double increment = dq.toDouble();
 
-    // We also need to figure out how many digits. Do a brute force string operation.
-    int decimalOffset = 0;
-    while (decimalOffset < segment.length() && segment.charAt(decimalOffset) != '.') {
-        decimalOffset++;
-    }
-    if (decimalOffset == segment.length()) {
-        macros.precision = Precision::increment(increment);
-    } else {
-        int32_t fractionLength = segment.length() - decimalOffset - 1;
-        macros.precision = Precision::increment(increment).withMinFraction(fractionLength);
-    }
-}
+//     // We also need to figure out how many digits. Do a brute force string operation.
+//     int decimalOffset = 0;
+//     while (decimalOffset < segment.length() && segment.charAt(decimalOffset) != '.') {
+//         decimalOffset++;
+//     }
+//     if (decimalOffset == segment.length()) {
+//         macros.precision = Precision::increment(increment);
+//     } else {
+//         int32_t fractionLength = segment.length() - decimalOffset - 1;
+//         macros.precision = Precision::increment(increment).withMinFraction(fractionLength);
+//     }
+// }
 
 void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
                                                 UErrorCode&) {

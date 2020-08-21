@@ -5,13 +5,16 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "charstr.h"
 #include "uassert.h"
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
 #include "double-conversion.h"
 #include "number_roundingutils.h"
+#include "number_skeletons.h"
 #include "putilimp.h"
+#include "string_segment.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -19,6 +22,38 @@ using namespace icu::number::impl;
 
 
 using double_conversion::DoubleToStringConverter;
+using icu::StringSegment;
+
+void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
+                                             UErrorCode& status) {
+    // Need to do char <-> UChar conversion...
+    U_ASSERT(U_SUCCESS(status));
+    CharString buffer;
+    SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
+
+    // Utilize DecimalQuantity/decNumber to parse this for us.
+    DecimalQuantity dq;
+    UErrorCode localStatus = U_ZERO_ERROR;
+    dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
+    if (U_FAILURE(localStatus)) {
+        // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    double increment = dq.toDouble();
+
+    // We also need to figure out how many digits. Do a brute force string operation.
+    int decimalOffset = 0;
+    while (decimalOffset < segment.length() && segment.charAt(decimalOffset) != '.') {
+        decimalOffset++;
+    }
+    if (decimalOffset == segment.length()) {
+        macros.precision = Precision::increment(increment);
+    } else {
+        int32_t fractionLength = segment.length() - decimalOffset - 1;
+        macros.precision = Precision::increment(increment).withMinFraction(fractionLength);
+    }
+}
 
 namespace {
 

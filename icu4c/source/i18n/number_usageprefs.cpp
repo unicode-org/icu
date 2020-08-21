@@ -20,7 +20,132 @@
 
 using namespace icu::number;
 using namespace icu::number::impl;
-using icu::number::impl::skeleton::parseSkeleton;
+using icu::StringSegment;
+
+MicroPropsGenerator::~MicroPropsGenerator() = default;
+
+// SymbolsWrapper::SymbolsWrapper(const SymbolsWrapper& other) {
+//     doCopyFrom(other);
+// }
+
+// SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&& src) U_NOEXCEPT {
+//     doMoveFrom(std::move(src));
+// }
+
+// SymbolsWrapper& SymbolsWrapper::operator=(const SymbolsWrapper& other) {
+//     if (this == &other) {
+//         return *this;
+//     }
+//     doCleanup();
+//     doCopyFrom(other);
+//     return *this;
+// }
+
+// SymbolsWrapper& SymbolsWrapper::operator=(SymbolsWrapper&& src) U_NOEXCEPT {
+//     if (this == &src) {
+//         return *this;
+//     }
+//     doCleanup();
+//     doMoveFrom(std::move(src));
+//     return *this;
+// }
+
+SymbolsWrapper::~SymbolsWrapper() {
+    doCleanup();
+}
+
+// void SymbolsWrapper::setTo(const DecimalFormatSymbols& dfs) {
+//     doCleanup();
+//     fType = SYMPTR_DFS;
+//     fPtr.dfs = new DecimalFormatSymbols(dfs);
+// }
+
+// void SymbolsWrapper::setTo(const NumberingSystem* ns) {
+//     doCleanup();
+//     fType = SYMPTR_NS;
+//     fPtr.ns = ns;
+// }
+
+// void SymbolsWrapper::doCopyFrom(const SymbolsWrapper& other) {
+//     fType = other.fType;
+//     switch (fType) {
+//         case SYMPTR_NONE:
+//             // No action necessary
+//             break;
+//         case SYMPTR_DFS:
+//             // Memory allocation failures are exposed in copyErrorTo()
+//             if (other.fPtr.dfs != nullptr) {
+//                 fPtr.dfs = new DecimalFormatSymbols(*other.fPtr.dfs);
+//             } else {
+//                 fPtr.dfs = nullptr;
+//             }
+//             break;
+//         case SYMPTR_NS:
+//             // Memory allocation failures are exposed in copyErrorTo()
+//             if (other.fPtr.ns != nullptr) {
+//                 fPtr.ns = new NumberingSystem(*other.fPtr.ns);
+//             } else {
+//                 fPtr.ns = nullptr;
+//             }
+//             break;
+//     }
+// }
+
+// void SymbolsWrapper::doMoveFrom(SymbolsWrapper&& src) {
+//     fType = src.fType;
+//     switch (fType) {
+//         case SYMPTR_NONE:
+//             // No action necessary
+//             break;
+//         case SYMPTR_DFS:
+//             fPtr.dfs = src.fPtr.dfs;
+//             src.fPtr.dfs = nullptr;
+//             break;
+//         case SYMPTR_NS:
+//             fPtr.ns = src.fPtr.ns;
+//             src.fPtr.ns = nullptr;
+//             break;
+//     }
+// }
+
+void SymbolsWrapper::doCleanup() {
+    switch (fType) {
+        case SYMPTR_NONE:
+            // No action necessary
+            break;
+        case SYMPTR_DFS:
+            delete fPtr.dfs;
+            break;
+        case SYMPTR_NS:
+            delete fPtr.ns;
+            break;
+    }
+}
+
+// bool SymbolsWrapper::isDecimalFormatSymbols() const {
+//     return fType == SYMPTR_DFS;
+// }
+
+// bool SymbolsWrapper::isNumberingSystem() const {
+//     return fType == SYMPTR_NS;
+// }
+
+Precision parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton, UErrorCode status) {
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    constexpr int32_t kSkelPrefixLen = 20;
+    if (!precisionSkeleton.startsWith(UNICODE_STRING_SIMPLE("precision-increment/"))) {
+        status = U_INVALID_FORMAT_ERROR;
+        return {};
+    }
+    U_ASSERT(precisionSkeleton[kSkelPrefixLen-1] == u'/');
+    StringSegment segment(precisionSkeleton, false);
+    segment.adjustOffset(kSkelPrefixLen);
+    MacroProps macros;
+    blueprint_helpers::parseIncrementOption(segment, macros, status);
+    return macros.precision;
+}
 
 // Copy constructor
 Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
@@ -110,6 +235,10 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
 
     UnicodeString precisionSkeleton = routed.precision;
+    // TODO: Is it okay if this is kDefaultMode?
+    // Otherwise it was: unitPrefMacros.roundingMode or precision.fRoundingMode;
+    UNumberFormatRoundingMode roundingMode = kDefaultMode;
+    CurrencyUnit currency(u"", status);
     if (!micros.rounder.isPassThrough()) {
         // Do nothing: we already have a rounder, so we don't use
         // precisionSkeleton or a default "usage-appropriate" rounder.
@@ -119,30 +248,13 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
         csPrecisionSkeleton.appendInvariantChars(precisionSkeleton, csErrCode);
 
         // Parse skeleton, collect results
-        int32_t errOffset;
+        // int32_t errOffset;
         // int32_t errOffset = 0;
         U_ASSERT(U_SUCCESS(status));
-        MacroProps unitPrefMacros = parseSkeleton(precisionSkeleton, errOffset, status);
-        Precision precision;
-        UNumberFormatRoundingMode roundingMode;
-        if (U_FAILURE(status)) {
-            return;
-        }
-        precision = unitPrefMacros.precision;
-        if (unitPrefMacros.roundingMode != kDefaultMode) {
-            roundingMode = unitPrefMacros.roundingMode;
-        } else {
-            // TODO: "Temporary until ICU 64" in number_formatimpl.cpp? Clarify!
-            roundingMode = precision.fRoundingMode;
-        }
-        CurrencyUnit currency(u"", status);
+        Precision precision = parseSkeletonToPrecision(precisionSkeleton, status);
         micros.rounder = {precision, roundingMode, currency, status};
     } else {
         Precision precision = Precision::integer().withMinDigits(2);
-        UNumberFormatRoundingMode roundingMode;
-        // Temporary until ICU 64?
-        roundingMode = precision.fRoundingMode;
-        CurrencyUnit currency(u"", status);
         micros.rounder = {precision, roundingMode, currency, status};
     }
 }

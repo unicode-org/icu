@@ -717,9 +717,9 @@ class U_I18N_API Precision : public UMemory {
     Precision(UErrorCode errorCode) : fType(RND_ERROR) {
         fUnion.errorCode = errorCode;
     }
-
+public: // Constructor needed by parseSkeletonToPrecision:
     Precision() : fType(RND_BOGUS) {}
-
+private:
     bool isBogus() const {
         return fType == RND_BOGUS;
     }
@@ -769,10 +769,7 @@ class U_I18N_API Precision : public UMemory {
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
 
-    // TODO(units): revisit when UnitsRouter is changed: do we still need this
-    // once Precision is returned by UnitsRouter? For now, we allow access to
-    // Precision constructor from UsagePrefsHandler:
-    friend class impl::UsagePrefsHandler;
+    // friend class impl::UsagePrefsHandler;
 };
 
 /**

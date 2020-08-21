@@ -546,9 +546,9 @@ SymbolsWrapper& SymbolsWrapper::operator=(SymbolsWrapper&& src) U_NOEXCEPT {
     return *this;
 }
 
-SymbolsWrapper::~SymbolsWrapper() {
-    doCleanup();
-}
+// SymbolsWrapper::~SymbolsWrapper() {
+//     doCleanup();
+// }
 
 void SymbolsWrapper::setTo(const DecimalFormatSymbols& dfs) {
     doCleanup();
@@ -604,19 +604,19 @@ void SymbolsWrapper::doMoveFrom(SymbolsWrapper&& src) {
     }
 }
 
-void SymbolsWrapper::doCleanup() {
-    switch (fType) {
-        case SYMPTR_NONE:
-            // No action necessary
-            break;
-        case SYMPTR_DFS:
-            delete fPtr.dfs;
-            break;
-        case SYMPTR_NS:
-            delete fPtr.ns;
-            break;
-    }
-}
+// void SymbolsWrapper::doCleanup() {
+//     switch (fType) {
+//         case SYMPTR_NONE:
+//             // No action necessary
+//             break;
+//         case SYMPTR_DFS:
+//             delete fPtr.dfs;
+//             break;
+//         case SYMPTR_NS:
+//             delete fPtr.ns;
+//             break;
+//     }
+// }
 
 bool SymbolsWrapper::isDecimalFormatSymbols() const {
     return fType == SYMPTR_DFS;

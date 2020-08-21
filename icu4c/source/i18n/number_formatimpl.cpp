@@ -25,9 +25,6 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
-MicroPropsGenerator::~MicroPropsGenerator() = default;
-
-
 NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& status)
     : NumberFormatterImpl(macros, true, status) {
 }
