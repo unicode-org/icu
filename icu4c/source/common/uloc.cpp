@@ -50,9 +50,6 @@
 #include "uassert.h"
 #include "charstr.h"
 
-#include <algorithm>
-#include <stdio.h> /* for sprintf */
-
 U_NAMESPACE_USE
 
 /* ### Declarations **************************************************/
@@ -892,7 +889,6 @@ uloc_setKeywordValue(const char* keywordName,
     char* startSearchHere = NULL;
     char* keywordStart = NULL;
     CharString updatedKeysAndValues;
-    int32_t updatedKeysAndValuesLen;
     UBool handledInputKeyAndValue = FALSE;
     char keyValuePrefix = '@';
 
@@ -1072,18 +1068,10 @@ uloc_setKeywordValue(const char* keywordName,
         return bufLen;
     }
 
-    updatedKeysAndValuesLen = updatedKeysAndValues.length();
-    /* needLen = length of the part before '@' + length of updated key-value part including '@' */
-    needLen = (int32_t)(startSearchHere - buffer) + updatedKeysAndValuesLen;
-    if(needLen >= bufferCapacity) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-        return needLen; /* no change */
-    }
-    if (updatedKeysAndValuesLen > 0) {
-        uprv_strncpy(startSearchHere, updatedKeysAndValues.data(), updatedKeysAndValuesLen);
-    }
-    buffer[needLen]=0;
-    return needLen;
+    // needLen = length of the part before '@'
+    needLen = (int32_t)(startSearchHere - buffer);
+    return needLen + updatedKeysAndValues.extract(
+                         startSearchHere, bufferCapacity - needLen, *status);
 }
 
 /* ### ID parsing implementation **************************************************/
@@ -1232,13 +1220,7 @@ ulocimp_getScript(const char *localeID,
                   char *script, int32_t scriptCapacity,
                   const char **pEnd) {
     ErrorCode status;
-    CharString result = ulocimp_getScript(localeID, pEnd, status);
-    if (status.isFailure()) {
-        return 0;
-    }
-    int32_t reslen = result.length();
-    uprv_memcpy(script, result.data(), std::min(reslen, scriptCapacity));
-    return reslen;
+    return ulocimp_getScript(localeID, pEnd, status).extract(script, scriptCapacity, status);
 }
 
 static CharString
@@ -1281,13 +1263,7 @@ ulocimp_getCountry(const char *localeID,
                    char *country, int32_t countryCapacity,
                    const char **pEnd) {
     ErrorCode status;
-    CharString result = ulocimp_getCountry(localeID, pEnd, status);
-    if (status.isFailure()) {
-        return 0;
-    }
-    int32_t reslen = result.length();
-    uprv_memcpy(country, result.data(), std::min(reslen, countryCapacity));
-    return reslen;
+    return ulocimp_getCountry(localeID, pEnd, status).extract(country, countryCapacity, status);
 }
 
 /**
@@ -1744,16 +1720,7 @@ uloc_getLanguage(const char*    localeID,
         localeID=uloc_getDefault();
     }
 
-    CharString result = ulocimp_getLanguage(localeID, NULL, *err);
-    if (U_FAILURE(*err)) {
-        return 0;
-    }
-
-    int32_t reslen = result.length();
-    if (reslen <= languageCapacity) {
-        uprv_memcpy(language, result.data(), reslen);
-    }
-    return u_terminateChars(language, languageCapacity, reslen, err);
+    return ulocimp_getLanguage(localeID, NULL, *err).extract(language, languageCapacity, *err);
 }
 
 U_CAPI int32_t U_EXPORT2

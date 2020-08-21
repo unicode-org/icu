@@ -1413,7 +1413,7 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                         break;
                     }
 
-                    uprv_strcpy(pExtBuf, bcpValue);
+                    buf.extract(pExtBuf, resultCapacity, tmpStatus);
                     T_CString_toLowerCase(pExtBuf);
 
                     extBuf->append(pExtBuf, bcpValueLen, tmpStatus);
