@@ -24,12 +24,12 @@ using icu::StringSegment;
 
 Precision parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton, UErrorCode status) {
     if (U_FAILURE(status)) {
-        return {};
+        return Precision::bogus();
     }
     constexpr int32_t kSkelPrefixLen = 20;
     if (!precisionSkeleton.startsWith(UNICODE_STRING_SIMPLE("precision-increment/"))) {
         status = U_INVALID_FORMAT_ERROR;
-        return {};
+        return Precision::bogus();
     }
     U_ASSERT(precisionSkeleton[kSkelPrefixLen - 1] == u'/');
     StringSegment segment(precisionSkeleton, false);

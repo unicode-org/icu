@@ -654,6 +654,13 @@ class U_I18N_API Precision : public UMemory {
      */
     static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
 
+#ifndef U_HIDE_INTERNAL_API
+    /** Returns a bogus Precision instance. */
+    static Precision bogus() {
+        return {};
+    }
+#endif /* U_HIDE_INTERNAL_API */
+
   private:
     enum PrecisionType {
         RND_BOGUS,
@@ -718,11 +725,9 @@ class U_I18N_API Precision : public UMemory {
         fUnion.errorCode = errorCode;
     }
 
-  public: // Constructor needed by parseSkeletonToPrecision:
     Precision() : fType(RND_BOGUS) {
     }
 
-  private:
     bool isBogus() const {
         return fType == RND_BOGUS;
     }
