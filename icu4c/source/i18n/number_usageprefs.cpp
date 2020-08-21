@@ -31,7 +31,7 @@ Precision parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton, UErrorC
         status = U_INVALID_FORMAT_ERROR;
         return {};
     }
-    U_ASSERT(precisionSkeleton[kSkelPrefixLen-1] == u'/');
+    U_ASSERT(precisionSkeleton[kSkelPrefixLen - 1] == u'/');
     StringSegment segment(precisionSkeleton, false);
     segment.adjustOffset(kSkelPrefixLen);
     MacroProps macros;

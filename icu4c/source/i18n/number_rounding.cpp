@@ -24,8 +24,8 @@ using namespace icu::number::impl;
 using double_conversion::DoubleToStringConverter;
 using icu::StringSegment;
 
-void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
-                                             UErrorCode& status) {
+void blueprint_helpers::parseIncrementOption(const StringSegment &segment, MacroProps &macros,
+                                             UErrorCode &status) {
     // Need to do char <-> UChar conversion...
     U_ASSERT(U_SUCCESS(status));
     CharString buffer;
