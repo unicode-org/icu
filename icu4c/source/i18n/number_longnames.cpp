@@ -218,7 +218,7 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
                                      LongNameHandler *fillIn, UErrorCode &status) {
     // Not valid for mixed units that aren't built-in units, and there should
     // not be any built-in mixed units!
-    U_ASSERT(unitRef.getType() != "" || unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
+    U_ASSERT(uprv_strlen(unitRef.getType()) > 0 || unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
     if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
         // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an

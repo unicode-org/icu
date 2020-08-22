@@ -121,7 +121,7 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
         // Mixed units: except for the last value, we pass all values to the
         // LongNameHandler via micros.mixedMeasures.
         if (micros.mixedMeasures.getCapacity() < micros.mixedMeasuresCount) {
-            if (micros.mixedMeasures.resize(micros.mixedMeasuresCount) == NULL) {
+            if (micros.mixedMeasures.resize(micros.mixedMeasuresCount) == nullptr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }

@@ -50,17 +50,25 @@ class IntMeasures : public MaybeStackArray<int64_t, 2> {
     };
 
     // Assignment operator
-    void operator=(const IntMeasures &rhs) {
+    IntMeasures &operator=(const IntMeasures &rhs) {
+        if (this == &rhs) {
+            return *this;
+        }
         int32_t length = rhs.capacity;
         if (this->resize(length, 0) != NULL) {
             U_ASSERT(this->capacity == rhs.capacity);
-            // FIXME: test what happens if this is swapped - have tests that would
-            // catch it?
             uprv_memcpy(this->ptr, rhs.ptr, (size_t)length * sizeof(int64_t));
         } else {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
+        return *this;
     };
+
+    /** Move constructor */
+    IntMeasures(IntMeasures &&src) = default;
+
+    /** Move assignment */
+    IntMeasures &operator=(IntMeasures &&src) = default;
 
     UErrorCode status = U_ZERO_ERROR;
 };
