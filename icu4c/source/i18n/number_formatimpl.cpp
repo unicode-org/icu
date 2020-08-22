@@ -252,9 +252,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         precision = Precision::integer().withMinDigits(2);
     } else if (isCurrency) {
         precision = Precision::currency(UCURR_USAGE_STANDARD);
+    } else if (macros.usage.isSet()) {
+        // Precision will get chosen in the UsagePrefsHandler
+        precision = Precision::bogus();
+        precision.setDefault();
     } else {
         precision = Precision::maxFraction(6);
-        precision.setDefault();
     }
     UNumberFormatRoundingMode roundingMode;
     if (macros.roundingMode != kDefaultMode) {

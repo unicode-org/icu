@@ -127,23 +127,16 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
 
     UnicodeString precisionSkeleton = routed.precision;
-    // TODO: Is it okay if this is kDefaultMode?
-    // Otherwise it was: unitPrefMacros.roundingMode or precision.fRoundingMode;
-    if (micros.rounder.isDefault()) {
-        UNumberFormatRoundingMode roundingMode = kDefaultMode; // TODO: appropriate?
-        CurrencyUnit currency(u"", status);
+    if (micros.rounder.fPrecision.isDefault()) {
         if (precisionSkeleton.length() > 0) {
-            // Parse skeleton, collect results
-            Precision precision = parseSkeletonToPrecision(precisionSkeleton, status);
-            micros.rounder = {precision, roundingMode, currency, status};
+            micros.rounder.fPrecision = parseSkeletonToPrecision(precisionSkeleton, status);
         } else {
             // TODO: some disgreement as to whether to do this override. The default
             // is maxFraction(6), which I find inappropriate for human-friendly
             // usage-based unit formatting? We should probably specify a "default
             // expectation when skeleton isn't given in unitPreferences", primarily
             // so we don't have to add that to every preference.
-            Precision precision = Precision::integer().withMinDigits(2);
-            micros.rounder = {precision, roundingMode, currency, status};
+            micros.rounder.fPrecision = Precision::integer().withMinDigits(2);
         }
     }
 }

@@ -774,8 +774,6 @@ class U_I18N_API Precision : public UMemory {
 
     static CurrencyPrecision constructCurrency(UCurrencyUsage usage);
 
-    static Precision constructPassThrough();
-
     // To allow MacroProps/MicroProps to initialize bogus instances:
     friend struct impl::MacroProps;
     friend struct impl::MicroProps;
