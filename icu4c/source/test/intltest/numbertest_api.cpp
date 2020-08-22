@@ -688,13 +688,11 @@ void NumberFormatterApiTest::unitUsage() {
     UnlocalizedNumberFormatter unloc_formatter;
     LocalizedNumberFormatter formatter;
     FormattedNumber formattedNum;
-    StringPiece testCase;
     UnicodeString uTestCase;
 
     unloc_formatter = NumberFormatter::with().usage("road").unit(MeasureUnit::getMeter());
 
-    testCase = "unitUsage() en-ZA road";
-    uTestCase = testCase.data();
+    uTestCase = u"unitUsage() en-ZA road";
     formatter = unloc_formatter.locale("en-ZA");
     formattedNum = formatter.formatDouble(300, status);
     status.errIfFailureAndReset("unitUsage() en-ZA road formatDouble");
@@ -718,8 +716,7 @@ void NumberFormatterApiTest::unitUsage() {
             u"8,8 m",
             u"0 m");
 
-    testCase = "unitUsage() en-GB road";
-    uTestCase = testCase.data();
+    uTestCase = u"unitUsage() en-GB road";
     formatter = unloc_formatter.locale("en-GB");
     formattedNum = formatter.formatDouble(300, status);
     status.errIfFailureAndReset("unitUsage() en-GB road formatDouble");
@@ -743,8 +740,7 @@ void NumberFormatterApiTest::unitUsage() {
             u"9.6 yd",
             u"0 yd");
 
-    testCase = "unitUsage() en-US road";
-    uTestCase = testCase.data();
+    uTestCase = u"unitUsage() en-US road";
     formatter = unloc_formatter.locale("en-US");
     formattedNum = formatter.formatDouble(300, status);
     status.errIfFailureAndReset("unitUsage() en-US road formatDouble");
@@ -774,8 +770,7 @@ void NumberFormatterApiTest::unitUsage() {
 
     unloc_formatter = NumberFormatter::with().usage("person").unit(MeasureUnit::getKilogram());
 
-    testCase = "unitUsage() en-GB person";
-    uTestCase = testCase.data();
+    uTestCase = u"unitUsage() en-GB person";
     formatter = unloc_formatter.locale("en-GB");
     formattedNum = formatter.formatDouble(80, status);
     status.errIfFailureAndReset("unitUsage() en-GB person formatDouble");
