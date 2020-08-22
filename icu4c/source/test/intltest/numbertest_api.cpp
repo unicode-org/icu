@@ -793,18 +793,16 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
 void NumberFormatterApiTest::unitUsageSkeletons() {
     IcuTestErrorCode status(*this, "unitUsageSkeletons()");
 
-    // Default >300m road preference skeletons round to 50m
-    auto roadFormatter = NumberFormatter::forSkeleton("usage/road unit/meter", status).locale("en-ZA");
-    auto result = roadFormatter.formatDouble(321, status).toString(status);
-    status.assertSuccess();
-    assertEquals("unitUsageSkeletons() usage/road unit/meter en-ZA", "300 m", result);
+    assertFormatSingle(u"Default >300m road preference skeletons round to 50m",           //
+                       u"usage/road measure-unit/length-meter", u"usage/road unit/meter", //
+                       NumberFormatter::with().unit(METER).usage("road"),                 //
+                       Locale("en-ZA"), 321, u"300 m");
 
-    // Override the roadFormatter's precision
-    roadFormatter = roadFormatter.precision(Precision::maxSignificantDigits(2));
-    result = roadFormatter.formatDouble(321, status).toString(status);
-    status.assertSuccess();
-    assertEquals("unitUsageSkeletons() precision override (usage/road unit/meter en-ZA)", "320 m",
-                 result);
+    assertFormatSingle(
+        u"Precision can be overridden: override takes precedence", //
+        u"usage/road measure-unit/length-meter @#", u"usage/road unit/meter @#",
+        NumberFormatter::with().unit(METER).usage("road").precision(Precision::maxSignificantDigits(2)),
+        Locale("en-ZA"), 321, u"320 m");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
