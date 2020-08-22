@@ -767,6 +767,26 @@ void NumberFormatterApiTest::unitUsage() {
             u"30 ft",
             u"0 ft");
 
+    assertFormatDescendingBig(
+        u"Scientific notation with Usage: possible when using a reasonable Precision",
+        u"scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
+        u"scientific @### usage/default unit/square-meter unit-width-full-name",
+        NumberFormatter::with()
+            .unit(SQUARE_METER)
+            .usage("default")
+            .notation(Notation::scientific())
+            .precision(Precision::minMaxSignificantDigits(1, 4))
+            .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+        Locale("en-ZA"),
+        u"8,765E1 square kilometres",
+        u"8,765E0 square kilometres",
+        u"8,765E1 hectares",
+        u"8,765E0 hectares",
+        u"8,765E3 square metres",
+        u"8,765E2 square metres",
+        u"8,765E1 square metres",
+        u"8,765E0 square metres",
+        u"0E0 square centimetres");
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {
@@ -790,6 +810,8 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
     status.assertSuccess();
 }
 
+// Tests for the "skeletons" field in unitPreferenceData, as well as precision
+// and notation overrides.
 void NumberFormatterApiTest::unitUsageSkeletons() {
     IcuTestErrorCode status(*this, "unitUsageSkeletons()");
 
