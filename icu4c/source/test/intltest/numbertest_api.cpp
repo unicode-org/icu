@@ -803,6 +803,65 @@ void NumberFormatterApiTest::unitUsageSkeletons() {
         u"usage/road measure-unit/length-meter @#", u"usage/road unit/meter @#",
         NumberFormatter::with().unit(METER).usage("road").precision(Precision::maxSignificantDigits(2)),
         Locale("en-ZA"), 321, u"320 m");
+
+    assertFormatSingle(u"Compact notation with Usage: bizarre, but possible (short)",
+                       u"compact-short usage/road measure-unit/length-meter",
+                       u"compact-short usage/road unit/meter",
+                       NumberFormatter::with()
+                           .unit(METER)
+                           .usage("road")
+                           .notation(Notation::compactShort()),
+                       Locale("en-ZA"), 987654321, u"988K km");
+
+    assertFormatSingle(u"Compact notation with Usage: bizarre, but possible (short, precision override)",
+                       u"compact-short usage/road measure-unit/length-meter @#",
+                       u"compact-short usage/road unit/meter @#",
+                       NumberFormatter::with()
+                           .unit(METER)
+                           .usage("road")
+                           .notation(Notation::compactShort())
+                           .precision(Precision::maxSignificantDigits(2)),
+                       Locale("en-ZA"), 987654321, u"990K km");
+
+    assertFormatSingle(u"Compact notation with Usage: unusual but possible (long)",
+                       u"compact-long usage/road measure-unit/length-meter @#",
+                       u"compact-long usage/road unit/meter @#",
+                       NumberFormatter::with()
+                           .unit(METER)
+                           .usage("road")
+                           .notation(Notation::compactLong())
+                           .precision(Precision::maxSignificantDigits(2)),
+                       Locale("en-ZA"), 987654321, u"990 thousand km");
+
+    assertFormatSingle(u"Compact notation with Usage: unusual but possible (long, precision override)",
+                       u"compact-long usage/road measure-unit/length-meter @#",
+                       u"compact-long usage/road unit/meter @#",
+                       NumberFormatter::with()
+                           .unit(METER)
+                           .usage("road")
+                           .notation(Notation::compactLong())
+                           .precision(Precision::maxSignificantDigits(2)),
+                       Locale("en-ZA"), 987654321, u"990 thousand km");
+
+//     // Bad test case: we don't want 0E2 as output
+//     assertFormatSingle(u"Scientific notation with Usage: unusual but possible", //
+//                        u"scientific usage/road measure-unit/length-meter",
+//                        u"scientific usage/road unit/meter",
+//                        NumberFormatter::with()
+//                            .unit(METER)
+//                            .usage("road")
+//                            .notation(Notation::scientific()),
+//                        Locale("en-ZA"), 321.45, u"0E2 m");
+
+    assertFormatSingle(u"Scientific notation with Usage: unusual but possible (precision override)",
+                       u"scientific usage/road measure-unit/length-meter @###",
+                       u"scientific usage/road unit/meter @###",
+                       NumberFormatter::with()
+                           .unit(METER)
+                           .usage("road")
+                           .notation(Notation::scientific())
+                           .precision(Precision::maxSignificantDigits(4)),
+                       Locale("en-ZA"), 321.45, u"3,215E2 m");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
