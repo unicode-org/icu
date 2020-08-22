@@ -490,16 +490,10 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
     UnicodeString *finalSimpleFormats = &fMixedUnitData[(fMixedUnitCount - 1) * ARRAY_LENGTH];
     StandardPlural::Form finalPlural = utils::getPluralSafe(micros.rounder, rules, quantity, status);
     UnicodeString finalSimpleFormat = getWithPlural(finalSimpleFormats, finalPlural, status);
-    if (U_FAILURE(status)) {
-        return &micros.helpers.emptyWeakModifier;
-    }
     SimpleFormatter finalFormatter(finalSimpleFormat, 0, 1, status);
-    if (U_FAILURE(status)) {
-        return &micros.helpers.emptyWeakModifier;
-    }
     finalFormatter.format(UnicodeString(u"{0}"), outputMeasuresList[fMixedUnitCount - 1], status);
 
-    // Combine list into a "premixed" Modifier
+    // Combine list into a "premixed" pattern
     UnicodeString premixedFormatPattern;
     fListFormatter->format(outputMeasuresList.getAlias(), fMixedUnitCount, premixedFormatPattern,
                            status);
@@ -507,6 +501,8 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
     if (U_FAILURE(status)) {
         return &micros.helpers.emptyWeakModifier;
     }
+
+    // Return a SimpleModifier for the "premixed" pattern
     micros.helpers.mixedUnitModifier =
         SimpleModifier(premixedCompiled, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, false,
                        {this, SIGNUM_POS_ZERO, finalPlural});
