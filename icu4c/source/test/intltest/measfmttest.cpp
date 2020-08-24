@@ -81,6 +81,7 @@ private:
     void TestNumericTimeSomeSpecialFormats();
     void TestIdentifiers();
     void TestInvalidIdentifiers();
+    void TestKilogramIdentifier();
     void TestCompoundUnitOperations();
     void TestDimensionlessBehaviour();
     void Test21060_AddressSanitizerProblem();
@@ -205,6 +206,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestNumericTimeSomeSpecialFormats);
     TESTCASE_AUTO(TestIdentifiers);
     TESTCASE_AUTO(TestInvalidIdentifiers);
+    TESTCASE_AUTO(TestKilogramIdentifier);
     TESTCASE_AUTO(TestCompoundUnitOperations);
     TESTCASE_AUTO(TestDimensionlessBehaviour);
     TESTCASE_AUTO(Test21060_AddressSanitizerProblem);
@@ -3319,6 +3321,45 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
         MeasureUnit::forIdentifier(input, status);
         status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     }
+}
+
+// Kilogram is a "base unit", although it's also "gram" with a kilo- prefix.
+// This tests that it is handled in the preferred manner.
+void MeasureFormatTest::TestKilogramIdentifier() {
+    IcuTestErrorCode status(*this, "TestKilogramIdentifier");
+
+    // SI unit of mass
+    MeasureUnit kilogram = MeasureUnit::forIdentifier("kilogram", status);
+    // Metric mass unit
+    MeasureUnit gram = MeasureUnit::forIdentifier("gram", status);
+    // Microgram: still a built-in type
+    MeasureUnit microgram = MeasureUnit::forIdentifier("microgram", status);
+    // Nanogram: not a built-in type at this time
+    MeasureUnit nanogram = MeasureUnit::forIdentifier("nanogram", status);
+    status.assertSuccess();
+
+    assertEquals("parsed kilogram equals built-in kilogram", MeasureUnit::getKilogram().getType(),
+                 kilogram.getType());
+    assertEquals("parsed kilogram equals built-in kilogram", MeasureUnit::getKilogram().getSubtype(),
+                 kilogram.getSubtype());
+    assertEquals("parsed gram equals built-in gram", MeasureUnit::getGram().getType(), gram.getType());
+    assertEquals("parsed gram equals built-in gram", MeasureUnit::getGram().getSubtype(),
+                 gram.getSubtype());
+    assertEquals("parsed microgram equals built-in microgram", MeasureUnit::getMicrogram().getType(),
+                 microgram.getType());
+    assertEquals("parsed microgram equals built-in microgram", MeasureUnit::getMicrogram().getSubtype(),
+                 microgram.getSubtype());
+    assertEquals("nanogram", "", nanogram.getType());
+    assertEquals("nanogram", "nanogram", nanogram.getIdentifier());
+
+    assertEquals("prefix of kilogram", UMEASURE_SI_PREFIX_KILO, kilogram.getSIPrefix(status));
+    assertEquals("prefix of gram", UMEASURE_SI_PREFIX_ONE, gram.getSIPrefix(status));
+    assertEquals("prefix of microgram", UMEASURE_SI_PREFIX_MICRO, microgram.getSIPrefix(status));
+    assertEquals("prefix of nanogram", UMEASURE_SI_PREFIX_NANO, nanogram.getSIPrefix(status));
+
+    MeasureUnit tmp = kilogram.withSIPrefix(UMEASURE_SI_PREFIX_MILLI, status);
+    assertEquals(UnicodeString("Kilogram + milli should be milligram, got: ") + tmp.getIdentifier(),
+                 MeasureUnit::getMilligram().getIdentifier(), tmp.getIdentifier());
 }
 
 void MeasureFormatTest::TestCompoundUnitOperations() {
