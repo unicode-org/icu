@@ -14,6 +14,7 @@
 
 #include "charstr.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "measunit_impl.h"
 #include "resource.h"
 #include "uarrsort.h"
@@ -115,20 +116,37 @@ const struct SIPrefixStrings {
 };
 
 /**
- * A ResourceSink that collects table keys from a resource.
+ * A ResourceSink that collects simple unit identifiers from the keys of the
+ * convertUnits table into an array, and adds these values to a TrieBuilder,
+ * with associated values being their index into this array plus a specified
+ * offset, to a trie.
  *
- * This class is for use by ures_getAllItemsWithFallback. Example code:
+ * Example code:
  *
  *     UErrorCode status = U_ZERO_ERROR;
- *     const char* unitIdentifiers[200];
- *     TableKeysSink identifierSink(unitIdentifiers, 200);
+ *     BytesTrieBuilder b(status);
+ *     const char *unitIdentifiers[200];
+ *     SimpleUnitIdentifiersSink identifierSink(unitIdentifiers, 200, b, kTrieValueOffset);
  *     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
  *     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
  */
-class TableKeysSink : public icu::ResourceSink {
+class SimpleUnitIdentifiersSink : public icu::ResourceSink {
   public:
-    explicit TableKeysSink(const char **out, int32_t outSize)
-        : outArray(out), outSize(outSize), outIndex(0) {
+    /**
+     * Constructor.
+     * @param out Array of char* to which the simple unit identifiers will be
+     *     saved.
+     * @param outSize The size of `out`.
+     * @param trieBuilder The trie builder to which the simple unit identifier
+     *     should be added. The trie builder must outlive this resource sink.
+     * @param trieValueOffset This is added to the index of the identifier in
+     *     the `out` array, before adding to `trieBuilder` as the value
+     *     associated with the identifier.
+     */
+    explicit SimpleUnitIdentifiersSink(const char **out, int32_t outSize, BytesTrieBuilder &trieBuilder,
+                                       int32_t trieValueOffset)
+        : outArray(out), outSize(outSize), trieBuilder(trieBuilder), trieValueOffset(trieValueOffset),
+          outIndex(0) {
     }
 
     /**
@@ -154,13 +172,25 @@ class TableKeysSink : public icu::ResourceSink {
         for (int32_t i = 0; table.getKeyAndValue(i, key, value); ++i) {
             U_ASSERT(i < table.getSize());
             U_ASSERT(outIndex < outSize);
-            outArray[outIndex++] = key;
+            if (uprv_strcmp(key, "kilogram") == 0) {
+                // For parsing, we use "gram", the prefixless metric mass unit. We
+                // thus ignore the SI Base Unit of Mass: it exists due to being the
+                // mass conversion target unit, but not needed for MeasureUnit
+                // parsing.
+                continue;
+            }
+            outArray[outIndex] = key;
+            trieBuilder.add(key, trieValueOffset + outIndex, status);
+            outIndex++;
         }
     }
 
   private:
     const char **outArray;
     int32_t outSize;
+    BytesTrieBuilder &trieBuilder;
+    int32_t trieValueOffset;
+
     int32_t outIndex;
 };
 
@@ -228,6 +258,8 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
         ures_getByKey(unitsBundle.getAlias(), "convertUnits", NULL, &status));
     if (U_FAILURE(status)) { return; }
 
+    // Allocate enough space: with identifierSink below skipping kilogram, we're
+    // probably allocating one more than needed.
     int32_t simpleUnitsCount = convertUnits.getAlias()->fSize;
     int32_t arrayMallocSize = sizeof(char *) * simpleUnitsCount;
     gSimpleUnits = static_cast<const char **>(uprv_malloc(arrayMallocSize));
@@ -237,11 +269,9 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     }
     uprv_memset(gSimpleUnits, 0, arrayMallocSize);
 
-    TableKeysSink identifierSink(gSimpleUnits, simpleUnitsCount);
+    // Populate gSimpleUnits and build the associated trie.
+    SimpleUnitIdentifiersSink identifierSink(gSimpleUnits, simpleUnitsCount, b, kSimpleUnitOffset);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
-    for (int i = 0; i < simpleUnitsCount; i++) {
-        b.add(gSimpleUnits[i], kSimpleUnitOffset + i, status);
-    }
 
     // Build the CharsTrie
     // TODO: Use SLOW or FAST here?
