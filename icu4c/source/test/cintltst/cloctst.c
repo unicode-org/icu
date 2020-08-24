@@ -6707,28 +6707,28 @@ static void checkTerminating(const char* locale, const char* inLocale)
     status = U_ZERO_ERROR;
     int32_t length = uloc_getDisplayName(
         locale, inLocale, buff, preflight_length + 1, &status);
-    char cbuff[256];
-    u_austrcpy(cbuff, buff);
+    const char* result = U_SUCCESS(status) ?
+        aescstrdup(buff, length) : "(undefined when failure)";
     if (length != preflight_length) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 returns "
                 "length %d different from preflight length %d. Returns '%s'\n",
-                locale, inLocale, length, preflight_length, cbuff);
+                locale, inLocale, length, preflight_length, result);
     }
     if (U_ZERO_ERROR != status) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 should "
                 "set status to U_ZERO_ERROR but got %d %s. Returns %s\n",
-                locale, inLocale, status, myErrorName(status), cbuff);
+                locale, inLocale, status, myErrorName(status), result);
     }
     if (buff[length-1] == sentinel1) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 does "
                 "not change memory in the end of buffer while it should. "
                 "Returns %s\n",
-                locale, inLocale, cbuff);
+                locale, inLocale, result);
     }
     if (buff[length] != 0x0000) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length+1 should "
                 "null terminate at buff[length] but does not %x. Returns %s\n",
-                locale, inLocale, buff[length], cbuff);
+                locale, inLocale, buff[length], result);
     }
 
     // 2. Test when we only set the maxResultSize to preflight_length.
@@ -6742,34 +6742,35 @@ static void checkTerminating(const char* locale, const char* inLocale)
     status = U_ZERO_ERROR;
     length = uloc_getDisplayName(
         locale, inLocale, buff, preflight_length, &status);
-    u_austrcpy(cbuff, buff);
+    result = U_SUCCESS(status) ?
+        aescstrdup(buff, length) : "(undefined when failure)";
 
     if (length != preflight_length) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length return "
                 "length %d different from preflight length %d. Returns '%s'\n",
-                locale, inLocale, length, preflight_length, cbuff);
+                locale, inLocale, length, preflight_length, result);
     }
     if (U_STRING_NOT_TERMINATED_WARNING != status) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length should "
                 "set status to U_STRING_NOT_TERMINATED_WARNING but got %d %s. "
                 "Returns %s\n",
-                locale, inLocale, status, myErrorName(status), cbuff);
+                locale, inLocale, status, myErrorName(status), result);
     }
     if (buff[length-1] == sentinel1) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length does not "
                 "change memory in the end of buffer while it should. Returns "
                 "'%s'\n",
-                locale, inLocale, cbuff);
+                locale, inLocale, result);
     }
     if (buff[length] != sentinel2) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length change "
                 "memory beyond maxResultSize to %x. Returns '%s'\n",
-                locale, inLocale, buff[length], cbuff);
+                locale, inLocale, buff[length], result);
     }
     if (buff[preflight_length - 1] == 0x0000) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length null "
                 "terminated while it should not. Return '%s'\n",
-                locale, inLocale, cbuff);
+                locale, inLocale, result);
     }
 
     // 3. Test when we only set the maxResultSize to preflight_length-1.
@@ -6782,33 +6783,34 @@ static void checkTerminating(const char* locale, const char* inLocale)
     status = U_ZERO_ERROR;
     length = uloc_getDisplayName(
         locale, inLocale, buff, preflight_length - 1, &status);
-    u_austrcpy(cbuff, buff);
+    result = U_SUCCESS(status) ?
+        aescstrdup(buff, length) : "(undefined when failure)";
 
     if (length != preflight_length) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 return "
                 "length %d different from preflight length %d. Returns '%s'\n",
-                locale, inLocale, length, preflight_length, cbuff);
+                locale, inLocale, length, preflight_length, result);
     }
     if (U_BUFFER_OVERFLOW_ERROR != status) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 should "
                 "set status to U_BUFFER_OVERFLOW_ERROR but got %d %s. "
                 "Returns %s\n",
-                locale, inLocale, status, myErrorName(status), cbuff);
+                locale, inLocale, status, myErrorName(status), result);
     }
     if (buff[length-1] != sentinel1) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 should "
                 "not change memory in beyond the maxResultSize. Returns '%s'\n",
-                locale, inLocale, cbuff);
+                locale, inLocale, result);
     }
     if (buff[length] != sentinel2) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 change "
                 "memory beyond maxResultSize to %x. Returns '%s'\n",
-                locale, inLocale, buff[length], cbuff);
+                locale, inLocale, buff[length], result);
     }
     if (buff[preflight_length - 2] == 0x0000) {
         log_err("uloc_getDisplayName(%s, %s) w/ maxResultSize=length-1 null "
                 "terminated while it should not. Return '%s'\n",
-                locale, inLocale, cbuff);
+                locale, inLocale, result);
     }
 }
 
