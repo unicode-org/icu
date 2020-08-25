@@ -5,12 +5,15 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.util.UResourceBundle;
 
+import java.util.Iterator;
+import java.util.Map;
+
 public class UnitsData {
 
     public UnitsData() {
         this.conversionRates = new ConversionRates();
-        this.unitPreferences = new UnitPreferences();
-        // TODO: read categories
+        this.unitPreferences = UnitPreferences.getUnitPreferences();
+        this.categories = new Categories();
     }
 
     public ConversionRates getConversionRates() {
@@ -21,16 +24,26 @@ public class UnitsData {
         return unitPreferences;
     }
 
+    /**
+     * TODO: add comment
+     *
+     * @param measureUnit
+     * @return
+     */
     public String getCategory(MeasureUnitImpl measureUnit) {
-        for (int i = 0; i < this.categories.length; i++) {
-            MeasureUnitImpl categoryMeasureUnit = UnitsParser.parseForIdentifier(this.categories[i].second);
-            if (UnitConverter.extractConvertibility(measureUnit, categoryMeasureUnit, this.conversionRates)
-                    == Convertibility.CONVERTIBLE) {
-                return this.categories[i].first;
-            }
+        MeasureUnitImpl baseMeasureUnit
+                = this.getConversionRates().getBasicMeasureUnitImplWithoutSIPrefix(measureUnit);
+       String baseUnitIdentifier = baseMeasureUnit.getIdentifier();
+
+       if (baseUnitIdentifier.equals("meter-per-cubic-meter")) {
+        // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
+        // case. Once CLDR-13787 is clarified, this should be generalised (or
+        // possibly removed):
+
+            return "consumption-inverse";
         }
 
-        return "";
+       return this.categories.mapFromUnitToCategory.get(baseUnitIdentifier);
     }
 
     public UnitPreference[] getPreferencesFor(String category, String usage, String region) {
@@ -59,6 +72,6 @@ public class UnitsData {
     /**
      * Pairs of categories and the corresponding base units.
      */
-    private Pair<String, String>[] categories;
+    private Categories categories;
     private static String[] simpleUnits = null;
 }

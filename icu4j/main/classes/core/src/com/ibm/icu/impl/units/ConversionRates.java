@@ -16,7 +16,7 @@ public class ConversionRates {
         ICUResourceBundle resource;
         resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
         ConversionRatesSink sink = new ConversionRatesSink();
-        resource.getAllItemsWithFallback(Constants.conversionUnitTableName, sink);
+        resource.getAllItemsWithFallback(Constants.CONVERSION_UNIT_TABLE_NAME, sink);
         this.mapToConversionRate = sink.getMapToConversionRate();
     }
 
@@ -28,7 +28,7 @@ public class ConversionRates {
      */
     private Factor getFactorToBase(SingleUnitImpl singleUnit) {
         int power = singleUnit.getDimensionality();
-        UMeasureSIPrefix siPrefix = singleUnit.getSiPrefix();
+        SIPrefix siPrefix = singleUnit.getSiPrefix();
         Factor result = Factor.precessFactor(mapToConversionRate.get(singleUnit.getSimpleUnit()).getConversionRate());
 
         return result.applySiPrefix(siPrefix).power(power); // NOTE: you must apply the SI prefixes before the power.
@@ -60,6 +60,19 @@ public class ConversionRates {
                 .add(targetOffset);
 
     }
+
+    public MeasureUnitImpl getBasicMeasureUnitImplWithoutSIPrefix(MeasureUnitImpl measureUnit) {
+        ArrayList<SingleUnitImpl> baseUnits =  this.getBasicUnitsWithoutSIPrefix(measureUnit);
+
+        MeasureUnitImpl result = new MeasureUnitImpl();
+        for (SingleUnitImpl baseUnit :
+                baseUnits) {
+            result.appendSingleUnit(baseUnit);
+        }
+
+        return result;
+    }
+
 
     public ArrayList<SingleUnitImpl> getBasicUnitsWithoutSIPrefix(MeasureUnitImpl measureUnitImpl) {
         ArrayList<SingleUnitImpl> result = new ArrayList<>();
@@ -98,10 +111,10 @@ public class ConversionRates {
      * @return true if the `MeasureUnitImpl` is simple, false otherwise.
      */
     private boolean checkSimpleUnit(MeasureUnitImpl measureUnitImpl) {
-        if (measureUnitImpl.getComplexity() != UMeasureUnitComplexity.UMEASURE_UNIT_SINGLE) return false;
+        if (measureUnitImpl.getComplexity() != Complexity.SINGLE) return false;
         SingleUnitImpl singleUnit = measureUnitImpl.getSingleUnits().get(0);
 
-        if (singleUnit.getSiPrefix() != UMeasureSIPrefix.UMEASURE_SI_PREFIX_ONE) return false;
+        if (singleUnit.getSiPrefix() != SIPrefix.SI_PREFIX_ONE) return false;
         if (singleUnit.getDimensionality() != 1) return false;
 
         return true;

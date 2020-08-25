@@ -21,10 +21,9 @@ public class Constants {
 
 
     /* Tables Names*/
-    public static final String conversionUnitTableName = "convertUnits";
-    public static final String unitPreferenceTableName = "unitPreferenceData";
-    public static final String defaultRegion = "001";
-    public static final String defaultUsage = "default";
-
-
+    public static final String CONVERSION_UNIT_TABLE_NAME = "convertUnits";
+    public static final String UNIT_PREFERENCE_TABLE_NAME = "unitPreferenceData";
+    public static final String CATEGORY_TABLE_NAME = "unitQuantities";
+    public static final String DEFAULT_REGION = "001";
+    public static final String DEFAULT_USAGE = "default";
 }

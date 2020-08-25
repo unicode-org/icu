@@ -2,6 +2,7 @@ package com.ibm.icu.impl.units;
 
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.Pair;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
@@ -38,23 +39,26 @@ import java.util.ArrayList;
  */
 public class UnitsRouter {
     public class RouteResult {
-        ArrayList<Measure> measures;
-        String precision;
+        public ArrayList<Measure> measures;
+        public String precision;
+        public ArrayList<Pair<MeasureUnitImpl, BigDecimal>> tempResults; // TODO: remove this after implementing build function.
 
-        RouteResult(ArrayList<Measure> measures, String precision) {
-            this.measures = measures;
+        RouteResult(Pair<ArrayList<Measure>, ArrayList<Pair<MeasureUnitImpl, BigDecimal>>> results, String precision) {
+            this.measures = results.first;
+            ;
             this.precision = precision;
+            this.tempResults = results.second;
         }
     }
 
-    public UnitsRouter(MeasureUnit inputUnit, String region, String usage) {
+    public UnitsRouter(MeasureUnitImpl inputUnitImpl, String region, String usage) {
         // TODO: do we want to pass in ConversionRates and UnitPreferences instead?
         // of loading in each UnitsRouter instance? (Or make global?)
         UnitsData data = new UnitsData();
 
-        MeasureUnitImpl inputUnitImpl = MeasureUnitImpl.forMeasureUnitMaybeCopy(inputUnit);
+        //MeasureUnitImpl inputUnitImpl = MeasureUnitImpl.forMeasureUnitMaybeCopy(inputUnit);
         String category = data.getCategory(inputUnitImpl);
-        UnitPreference[] unitPreferences = data.getPreferencesFor(category, region, usage);
+        UnitPreference[] unitPreferences = data.getPreferencesFor(category,  usage, region);
 
         for (int i = 0; i < unitPreferences.length; ++i) {
             UnitPreference preference = unitPreferences[i];
@@ -69,12 +73,12 @@ public class UnitsRouter {
             // fail otherwise.
             // NOTE:
             //  It is allowed to have an empty precision.
-            if (!precision.isEmpty() && !precision.startsWith("precision-increment", 19)) {
+            if (!precision.isEmpty() && !precision.startsWith("precision-increment")) {
                 Assert.fail("Only `precision-increment` is allowed");
             }
 
             outputUnits_.add(complexTargetUnitImpl.build());
-            converterPreferences_.add(new ConverterPreference( inputUnitImpl, complexTargetUnitImpl,
+            converterPreferences_.add(new ConverterPreference(inputUnitImpl, complexTargetUnitImpl,
                     preference.getGeq(), precision,
                     data.getConversionRates()));
         }

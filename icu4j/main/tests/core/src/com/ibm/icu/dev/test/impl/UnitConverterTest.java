@@ -155,10 +155,10 @@ public class UnitConverterTest {
 
 
 
-    static boolean compareTwoBigDecimal(BigDecimal expected, BigDecimal actual, BigDecimal delta) {
+    public static boolean compareTwoBigDecimal(BigDecimal expected, BigDecimal actual, BigDecimal delta) {
 
-        BigDecimal diff = expected.equals(BigDecimal.ZERO) ?
-                expected.subtract(actual).abs() : expected.subtract(actual).divide(actual, MathContext.DECIMAL128);
+        BigDecimal diff = expected.abs().compareTo(BigDecimal.ZERO) < 1 ?
+                expected.subtract(actual).abs() : expected.subtract(actual).divide(expected, MathContext.DECIMAL128);
 
         if (diff.compareTo(delta) == -1) return true;
 
