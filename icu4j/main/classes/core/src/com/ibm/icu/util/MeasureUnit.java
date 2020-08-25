@@ -25,6 +25,8 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.impl.units.SIPrefix;
+import com.ibm.icu.impl.units.Complexity;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -80,7 +82,6 @@ public class MeasureUnit implements Serializable {
         return type;
     }
 
-
     /**
      * Get the subType, such as “foot”.
      *
@@ -89,8 +90,6 @@ public class MeasureUnit implements Serializable {
     public String getSubtype() {
         return subType;
     }
-
-
 
     /**
      * {@inheritDoc}

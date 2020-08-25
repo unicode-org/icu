@@ -1,7 +1,6 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -10,7 +9,7 @@ import java.util.TreeMap;
 public class ConversionRatesSink extends UResource.Sink {
     @Override
     public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-        Assert.assrt(Constants.conversionUnitTableName.equals(key.toString()));
+        Assert.assrt(Constants.CONVERSION_UNIT_TABLE_NAME.equals(key.toString()));
 
         UResource.Table conversionRateTable = value.getTable();
         for (int i = 0; conversionRateTable.getKeyAndValue(i, key, value); i++) {

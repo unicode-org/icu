@@ -1,6 +1,7 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.Pair;
 import com.ibm.icu.util.Measure;
 
 import java.math.BigDecimal;
@@ -85,8 +86,9 @@ public class ComplexUnitsConverter {
      * the smallest element is the only element that could have fractional values. And all
      * other elements are floored to the nearest integer
      */
-    public ArrayList<Measure> convert(BigDecimal quantity) {
+    public Pair<ArrayList<Measure>, ArrayList<Pair<MeasureUnitImpl, BigDecimal>>> convert(BigDecimal quantity) {
         ArrayList<Measure> result = new ArrayList<>();
+        ArrayList<Pair<MeasureUnitImpl, BigDecimal>> tempResult = new ArrayList<>();
 
         for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
             quantity = (unitConverters_.get(i)).convert(quantity);
@@ -95,18 +97,20 @@ public class ComplexUnitsConverter {
                 Number newQuantity = Math.floor(quantity.doubleValue());
 
                 // NOTE: Measure would own its MeasureUnit. // TODO?
-                result.add(new Measure(newQuantity, units_.get(i).build()));
+              //  result.add(new Measure(newQuantity, units_.get(i).build()));
+                tempResult.add(Pair.of(units_.get(i), BigDecimal.valueOf(newQuantity.doubleValue())));
 
                 // Keep the residual of the quantity.
                 //   For example: `3.6 feet`, keep only `0.6 feet`
                 quantity = quantity.subtract(BigDecimal.valueOf(newQuantity.longValue()));
             } else { // LAST ELEMENT
                 // NOTE: Measure would own its MeasureUnit. // TODO?
-                result.add(new Measure(quantity, units_.get(i).build()));
+               // result.add(new Measure(quantity, units_.get(i).build()));
+                tempResult.add(Pair.of(units_.get(i), BigDecimal.valueOf(quantity.doubleValue())));
             }
         }
 
-        return result;
+        return Pair.of(result, tempResult);
     }
 
     private ArrayList<UnitConverter> unitConverters_;

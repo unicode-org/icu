@@ -39,11 +39,11 @@ public class UnitsParser {
                 // same identifier. It doesn't fail for other compound units
                 // (COMPOUND_PART_TIMES). Consequently we take care of that
                 // here.
-                UMeasureUnitComplexity complexity =
-                        sawAnd ? UMeasureUnitComplexity.UMEASURE_UNIT_MIXED : UMeasureUnitComplexity.UMEASURE_UNIT_COMPOUND;
+                Complexity complexity =
+                        sawAnd ? Complexity.MIXED : Complexity.COMPOUND;
                 if (unitNum == 2) {
                     // After appending two singleUnits, the complexity will be `UMEASURE_UNIT_COMPOUND`
-                    Assert.assrt(result.getComplexity() == UMeasureUnitComplexity.UMEASURE_UNIT_COMPOUND);
+                    Assert.assrt(result.getComplexity() == Complexity.COMPOUND);
                     result.setComplexity(complexity);
                 } else if (result.getComplexity() != complexity) {
                     throw new java.lang.InternalError("Can't have mixed compound units");
@@ -148,7 +148,7 @@ public class UnitsParser {
                     break;
 
                 case TYPE_SIMPLE_UNIT:
-                    result.setSimpleUnit(simpleUnits[token.getSimpleUnitIndex()]);
+                    result.setSimpleUnit(token.getSimpleUnitIndex(), simpleUnits);
                     return result;
 
                 default:
@@ -270,35 +270,35 @@ public class UnitsParser {
 
     private static class SIPrefixString {
         public final String siPrefixString;
-        public final UMeasureSIPrefix value;
+        public final SIPrefix value;
 
-        SIPrefixString(String siPrefixString, UMeasureSIPrefix value) {
+        SIPrefixString(String siPrefixString, SIPrefix value) {
             this.siPrefixString = siPrefixString;
             this.value = value;
         }
     }
 
     private static final SIPrefixString[] gSIPrefixStrings = {
-            new SIPrefixString("yotta", UMeasureSIPrefix.UMEASURE_SI_PREFIX_YOTTA),
-            new SIPrefixString("zetta", UMeasureSIPrefix.UMEASURE_SI_PREFIX_ZETTA),
-            new SIPrefixString("exa", UMeasureSIPrefix.UMEASURE_SI_PREFIX_EXA),
-            new SIPrefixString("peta", UMeasureSIPrefix.UMEASURE_SI_PREFIX_PETA),
-            new SIPrefixString("tera", UMeasureSIPrefix.UMEASURE_SI_PREFIX_TERA),
-            new SIPrefixString("giga", UMeasureSIPrefix.UMEASURE_SI_PREFIX_GIGA),
-            new SIPrefixString("mega", UMeasureSIPrefix.UMEASURE_SI_PREFIX_MEGA),
-            new SIPrefixString("kilo", UMeasureSIPrefix.UMEASURE_SI_PREFIX_KILO),
-            new SIPrefixString("hecto", UMeasureSIPrefix.UMEASURE_SI_PREFIX_HECTO),
-            new SIPrefixString("deka", UMeasureSIPrefix.UMEASURE_SI_PREFIX_DEKA),
-            new SIPrefixString("deci", UMeasureSIPrefix.UMEASURE_SI_PREFIX_DECI),
-            new SIPrefixString("centi", UMeasureSIPrefix.UMEASURE_SI_PREFIX_CENTI),
-            new SIPrefixString("milli", UMeasureSIPrefix.UMEASURE_SI_PREFIX_MILLI),
-            new SIPrefixString("micro", UMeasureSIPrefix.UMEASURE_SI_PREFIX_MICRO),
-            new SIPrefixString("nano", UMeasureSIPrefix.UMEASURE_SI_PREFIX_NANO),
-            new SIPrefixString("pico", UMeasureSIPrefix.UMEASURE_SI_PREFIX_PICO),
-            new SIPrefixString("femto", UMeasureSIPrefix.UMEASURE_SI_PREFIX_FEMTO),
-            new SIPrefixString("atto", UMeasureSIPrefix.UMEASURE_SI_PREFIX_ATTO),
-            new SIPrefixString("zepto", UMeasureSIPrefix.UMEASURE_SI_PREFIX_ZEPTO),
-            new SIPrefixString("yocto", UMeasureSIPrefix.UMEASURE_SI_PREFIX_YOCTO),
+            new SIPrefixString("yotta", SIPrefix.SI_PREFIX_YOTTA),
+            new SIPrefixString("zetta", SIPrefix.SI_PREFIX_ZETTA),
+            new SIPrefixString("exa", SIPrefix.SI_PREFIX_EXA),
+            new SIPrefixString("peta", SIPrefix.SI_PREFIX_PETA),
+            new SIPrefixString("tera", SIPrefix.SI_PREFIX_TERA),
+            new SIPrefixString("giga", SIPrefix.SI_PREFIX_GIGA),
+            new SIPrefixString("mega", SIPrefix.SI_PREFIX_MEGA),
+            new SIPrefixString("kilo", SIPrefix.SI_PREFIX_KILO),
+            new SIPrefixString("hecto", SIPrefix.SI_PREFIX_HECTO),
+            new SIPrefixString("deka", SIPrefix.SI_PREFIX_DEKA),
+            new SIPrefixString("deci", SIPrefix.SI_PREFIX_DECI),
+            new SIPrefixString("centi", SIPrefix.SI_PREFIX_CENTI),
+            new SIPrefixString("milli", SIPrefix.SI_PREFIX_MILLI),
+            new SIPrefixString("micro", SIPrefix.SI_PREFIX_MICRO),
+            new SIPrefixString("nano", SIPrefix.SI_PREFIX_NANO),
+            new SIPrefixString("pico", SIPrefix.SI_PREFIX_PICO),
+            new SIPrefixString("femto", SIPrefix.SI_PREFIX_FEMTO),
+            new SIPrefixString("atto", SIPrefix.SI_PREFIX_ATTO),
+            new SIPrefixString("zepto", SIPrefix.SI_PREFIX_ZEPTO),
+            new SIPrefixString("yocto", SIPrefix.SI_PREFIX_YOCTO),
     };
 
 

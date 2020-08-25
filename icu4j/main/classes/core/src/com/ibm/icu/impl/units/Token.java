@@ -24,9 +24,9 @@ class Token {
         return this.type;
     }
 
-    public UMeasureSIPrefix getSIPrefix() {
+    public SIPrefix getSIPrefix() {
         if (this.type == Type.TYPE_SI_PREFIX) {
-            return UMeasureSIPrefix.getSiPrefixFromTrieIndex(this.fMatch);
+            return SIPrefix.getSiPrefixFromTrieIndex(this.fMatch);
         }
 
         throw new java.lang.InternalError("type must be TYPE_SI_PREFIX");

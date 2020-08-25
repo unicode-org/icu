@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class SimpleUnitsSink extends UResource.Sink {
     @Override
     public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-        Assert.assrt(key.toString().equals(Constants.conversionUnitTableName));
+        Assert.assrt(key.toString().equals(Constants.CONVERSION_UNIT_TABLE_NAME));
         Assert.assrt(value.getType() == UResourceBundle.TABLE);
 
         UResource.Table simpleUnitsTable = value.getTable();

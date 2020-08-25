@@ -5,9 +5,12 @@ import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.UResourceBundle;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 public class UnitPreferencesSink extends UResource.Sink {
+
+    public UnitPreferencesSink(UnitPreferences unitPreferences) {
+        this.unitPreferences = unitPreferences;
+    }
 
     /**
      * The unitPreferenceData structure (see icu4c/source/data/misc/units.txt) contains a
@@ -17,7 +20,7 @@ public class UnitPreferencesSink extends UResource.Sink {
      */
     @Override
     public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-        Assert.assrt(Constants.unitPreferenceTableName.equals(key.toString()));
+        Assert.assrt(Constants.UNIT_PREFERENCE_TABLE_NAME.equals(key.toString()));
 
         UResource.Table categoryTable = value.getTable();
         for (int i = 0; categoryTable.getKeyAndValue(i, key, value); i++) {
@@ -31,12 +34,13 @@ public class UnitPreferencesSink extends UResource.Sink {
                 String usage = key.toString();
                 UResource.Table regionTable = value.getTable();
                 for (int k = 0; regionTable.getKeyAndValue(k, key, value); k++) {
-                    Assert.assrt(value.getType() == UResourceBundle.TABLE);
+                    int test = value.getType();
+                    Assert.assrt(value.getType() == UResourceBundle.ARRAY);
 
                     String region = key.toString();
-                    UResource.Table preferencesTable = value.getTable();
+                    UResource.Array preferencesTable = value.getArray();
                     ArrayList<UnitPreference> unitPreferences = new ArrayList<>();
-                    for (int l = 0; preferencesTable.getKeyAndValue(l, key, value); l++) {
+                    for (int l = 0; preferencesTable.getValue(l, value); l++) {
                         Assert.assrt(value.getType() == UResourceBundle.TABLE);
 
                         UResource.Table singlePrefTable = value.getTable();
@@ -62,8 +66,10 @@ public class UnitPreferencesSink extends UResource.Sink {
                     }
 
                     Assert.assrt(!unitPreferences.isEmpty());
-                    mapToUnitPreferences.put(
-                            UnitPreferences.formMapKey(category, usage, region),
+                    this.unitPreferences.insertUnitPreferences(
+                            category,
+                            usage,
+                            region,
                             unitPreferences.toArray(new UnitPreference[0])
                     );
                 }
@@ -72,9 +78,9 @@ public class UnitPreferencesSink extends UResource.Sink {
     }
 
 
-    public TreeMap<String, UnitPreference[]> getMapToUnitPreferences() {
-        return mapToUnitPreferences;
+    public UnitPreferences getUnitPreferences() {
+        return unitPreferences;
     }
 
-    private TreeMap<String, UnitPreference[]> mapToUnitPreferences = new TreeMap<>();
+    private UnitPreferences unitPreferences;
 }

@@ -8,9 +8,12 @@
 package com.ibm.icu.impl.units;
 
 
+import com.ibm.icu.impl.Assert;
 import com.ibm.icu.util.MeasureUnit;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MeasureUnitImpl {
 
@@ -18,11 +21,12 @@ public class MeasureUnitImpl {
         singleUnits = new ArrayList<>();
     }
 
+    // TODO: make this `clone`
     public MeasureUnitImpl(MeasureUnitImpl other) {
+        this();
         this.complexity = other.complexity;
         this.identifier = other.identifier;
 
-        this.singleUnits = new ArrayList<>();
         for (SingleUnitImpl singleUnit :
                 other.singleUnits) {
             this.appendSingleUnit(singleUnit);
@@ -31,6 +35,7 @@ public class MeasureUnitImpl {
     }
 
     public MeasureUnitImpl(SingleUnitImpl singleUnit) {
+        this();
         this.appendSingleUnit(singleUnit);
     }
 
@@ -48,7 +53,7 @@ public class MeasureUnitImpl {
 
     public ArrayList<MeasureUnitImpl> getMeasureUnits() {
         ArrayList<MeasureUnitImpl> result = new ArrayList<MeasureUnitImpl>();
-        if (this.getComplexity() == UMeasureUnitComplexity.UMEASURE_UNIT_MIXED) {
+        if (this.getComplexity() == Complexity.MIXED) {
             for (SingleUnitImpl singleUnit :
                     this.getSingleUnits()) {
                 result.add(new MeasureUnitImpl(singleUnit));
@@ -81,7 +86,6 @@ public class MeasureUnitImpl {
      */
     public boolean appendSingleUnit(SingleUnitImpl singleUnit) {
         identifier = "";
-        boolean hasUnits = !this.singleUnits.isEmpty();
 
         if (singleUnit.isDimensionless()) {
             // We don't append dimensionless units.
@@ -106,12 +110,13 @@ public class MeasureUnitImpl {
             return false;
         }
 
+        // TODO: shall we just add singleUnit instead of creating a copy ??
         this.singleUnits.add(new SingleUnitImpl(singleUnit));
 
         // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits are more
         // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
-        if (this.singleUnits.size() > 1 && this.complexity == UMeasureUnitComplexity.UMEASURE_UNIT_SINGLE) {
-            this.setComplexity(UMeasureUnitComplexity.UMEASURE_UNIT_COMPOUND);
+        if (this.singleUnits.size() > 1 && this.complexity == Complexity.SINGLE) {
+            this.setComplexity(Complexity.COMPOUND);
         }
 
         return true;
@@ -126,16 +131,77 @@ public class MeasureUnitImpl {
     }
 
     public String getIdentifier() {
-        // TODO: implement
+        this.serialize();
         return identifier;
     }
 
-    public UMeasureUnitComplexity getComplexity() {
+    public Complexity getComplexity() {
         return complexity;
     }
 
-    public void setComplexity(UMeasureUnitComplexity complexity) {
+    public void setComplexity(Complexity complexity) {
         this.complexity = complexity;
+    }
+
+
+    /**
+     * Normalizes the MeasureUnitImpl and generates the identifier string in place.
+     */
+    private void serialize() {
+        Assert.assrt(this.identifier.isEmpty());
+
+        if (this.getSingleUnits().size() == 0) {
+            // Dimensionless, constructed by the default constructor: no appending
+            // to this.result, we wish it to contain the zero-length string.
+            return;
+        }
+        if (this.complexity == Complexity.COMPOUND) {
+            // Note: don't sort a MIXED unit
+            Collections.sort(this.getSingleUnits(), new SingleUnitComparator());
+        }
+
+        StringBuilder result = new StringBuilder();
+        boolean beforePre = true;
+        boolean firstTimeNegativeDimension = false;
+        for (SingleUnitImpl singleUnit :
+                this.getSingleUnits()) {
+            if (beforePre && singleUnit.getDimensionality() < 0) {
+                beforePre = false;
+                firstTimeNegativeDimension = true;
+            } else if (singleUnit.getDimensionality() < 0) {
+                firstTimeNegativeDimension = false;
+            }
+
+            String singleUnitIdentifier = singleUnit.getNeutralIdentifier();
+            if (this.getComplexity() == Complexity.MIXED) {
+                if (result.length() != 0) {
+                    result.append("-and-");
+                }
+            } else {
+                if (firstTimeNegativeDimension) {
+                    if (result.length() == 0) {
+                        result.append("per-");
+                    } else {
+                        result.append("-per-");
+                    }
+                } else {
+                    if (result.length() != 0) {
+                        result.append("-");
+                    }
+                }
+            }
+
+            result.append(singleUnitIdentifier);
+        }
+
+        this.identifier = result.toString();
+    }
+
+    class SingleUnitComparator implements Comparator<SingleUnitImpl> {
+        @Override
+        public int compare(SingleUnitImpl o1, SingleUnitImpl o2) {
+            return o1.compareTo(o2);
+        }
     }
 
     /**
@@ -147,7 +213,7 @@ public class MeasureUnitImpl {
     /**
      * The complexity, either SINGLE, COMPOUND, or MIXED.
      */
-    private UMeasureUnitComplexity complexity = UMeasureUnitComplexity.UMEASURE_UNIT_SINGLE;
+    private Complexity complexity = Complexity.SINGLE;
 
 
     /**

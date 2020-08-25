@@ -3,7 +3,6 @@ package com.ibm.icu.impl.units;
 import com.ibm.icu.impl.Assert;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.regex.Pattern;
 
 import static java.math.MathContext.DECIMAL128;
@@ -57,15 +56,15 @@ class Factor {
     }
 
 
-    public Factor applySiPrefix(UMeasureSIPrefix siPrefix) {
+    public Factor applySiPrefix(SIPrefix siPrefix) {
         Factor result = new Factor(this);
-        if (siPrefix == UMeasureSIPrefix.UMEASURE_SI_PREFIX_ONE) {
+        if (siPrefix == SIPrefix.SI_PREFIX_ONE) {
             return result;
         }
 
-        BigDecimal siApplied = BigDecimal.valueOf(Math.pow(10.0, Math.abs(siPrefix.getSiPrefix())));
+        BigDecimal siApplied = BigDecimal.valueOf(Math.pow(10.0, Math.abs(siPrefix.getSiPrefixPower())));
 
-        if (siPrefix.getSiPrefix() < 0) {
+        if (siPrefix.getSiPrefixPower() < 0) {
             result.factorDen = this.factorDen.multiply(siApplied);
             return result;
         }

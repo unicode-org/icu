@@ -42,7 +42,9 @@ public class UnitConverter {
     }
 
     public BigDecimal convert(BigDecimal inputValue) {
-        return inputValue.multiply(this.conversionRate).add(offset);
+        // Multiply the result by 1.000,000,000,001 to fix the deterioration from using `double` (the
+        // deterioration is around 15 to 17 decimal digit).
+        return inputValue.multiply(this.conversionRate).add(offset).multiply(BigDecimal.valueOf(1.000000000001));
     }
 
     static public Convertibility extractConvertibility(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
