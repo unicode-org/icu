@@ -4,33 +4,41 @@ package com.ibm.icu.dev.test.impl;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.units.*;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.StringJoiner;
-
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class UnitConverterTest {
 
+    public static boolean compareTwoBigDecimal(BigDecimal expected, BigDecimal actual, BigDecimal delta) {
+
+        BigDecimal diff = expected.abs().compareTo(BigDecimal.ZERO) < 1 ?
+                expected.subtract(actual).abs() : (expected.subtract(actual).divide(expected, MathContext.DECIMAL128)).abs();
+
+        if (diff.compareTo(delta) == -1) return true;
+
+        return false;
+
+    }
+
     @Test
     public void testExtractConvertibility() {
         class TestData {
+            MeasureUnitImpl source;
+            MeasureUnitImpl target;
+            Convertibility expected;
             TestData(String source, String target, Convertibility convertibility) {
                 this.source = UnitsParser.parseForIdentifier(source);
                 this.target = UnitsParser.parseForIdentifier(target);
                 this.expected = convertibility;
             }
-
-            MeasureUnitImpl source;
-            MeasureUnitImpl target;
-            Convertibility expected;
         }
 
         TestData[] tests = {
@@ -56,6 +64,10 @@ public class UnitConverterTest {
     @Test
     public void testConverter() {
         class TestData {
+            MeasureUnitImpl source;
+            MeasureUnitImpl target;
+            BigDecimal input;
+            BigDecimal expected;
             TestData(String source, String target, double input, double expected) {
                 this.source = UnitsParser.parseForIdentifier(source);
                 this.target = UnitsParser.parseForIdentifier(target);
@@ -63,15 +75,12 @@ public class UnitConverterTest {
                 this.expected = BigDecimal.valueOf(expected);
             }
 
-            MeasureUnitImpl source;
-            MeasureUnitImpl target;
-            BigDecimal input;
-            BigDecimal expected;
-
         }
 
         TestData[] tests = {
                 new TestData("square-centimeter", "square-meter", 1000, 0.1),
+                new TestData("celsius", "fahrenheit", 1000, 1832),
+                new TestData("fahrenheit", "fahrenheit", 1000, 1000),
 //                new TestData("per-square-hour", "per-square-second", 10, 10),
 //                new TestData("hertz", "revolution-per-second", 10, 10),
 //                new TestData("millimeter", "meter", 10, 10),
@@ -96,6 +105,13 @@ public class UnitConverterTest {
     @Test
     public void testConverterFromUnitTests() throws IOException {
         class TestCase {
+            String category;
+            String sourceString;
+            String targetString;
+            MeasureUnitImpl source;
+            MeasureUnitImpl target;
+            BigDecimal input;
+            BigDecimal expected;
             TestCase(String line) {
                 String[] fields = line
                         .replaceAll(" ", "") // Remove all the spaces.
@@ -110,14 +126,6 @@ public class UnitConverterTest {
                 this.input = BigDecimal.valueOf(1000);
                 this.expected = new BigDecimal(fields[4]);
             }
-
-            String category;
-            String sourceString;
-            String targetString;
-            MeasureUnitImpl source;
-            MeasureUnitImpl target;
-            BigDecimal input;
-            BigDecimal expected;
         }
 
         String codePage = "UTF-8";
@@ -138,6 +146,11 @@ public class UnitConverterTest {
             if (compareTwoBigDecimal(testCase.expected, converter.convert(testCase.input), BigDecimal.valueOf(0.000001))) {
                 continue;
             } else {
+
+
+                UnitConverter converter2 = new UnitConverter(testCase.source, testCase.target, conversionRates);
+
+
                 Assert.fail(new StringBuilder()
                         .append(testCase.category)
                         .append(" ")
@@ -151,18 +164,5 @@ public class UnitConverterTest {
                         .toString());
             }
         }
-    }
-
-
-
-    public static boolean compareTwoBigDecimal(BigDecimal expected, BigDecimal actual, BigDecimal delta) {
-
-        BigDecimal diff = expected.abs().compareTo(BigDecimal.ZERO) < 1 ?
-                expected.subtract(actual).abs() : expected.subtract(actual).divide(expected, MathContext.DECIMAL128);
-
-        if (diff.compareTo(delta) == -1) return true;
-
-        return false;
-
     }
 }

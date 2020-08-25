@@ -3,8 +3,9 @@ package com.ibm.icu.dev.test.impl;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.Pair;
-import com.ibm.icu.impl.units.*;
-import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.impl.units.MeasureUnitImpl;
+import com.ibm.icu.impl.units.UnitsParser;
+import com.ibm.icu.impl.units.UnitsRouter;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -16,6 +17,17 @@ public class UnitRouterTest {
     @Test
     public void testUnitPreferencesFromUnitTests() throws IOException {
         class TestCase {
+
+            final ArrayList<Pair<String, MeasureUnitImpl>> outputUnitInOrder = new ArrayList<>();
+            final ArrayList<BigDecimal> expectedInOrder = new ArrayList<>();
+            /**
+             * Test Case Data
+             */
+            String category;
+            String usage;
+            String region;
+            Pair<String, MeasureUnitImpl> inputUnit;
+            BigDecimal input;
 
             TestCase(String line) {
                 String[] fields = line
@@ -53,18 +65,6 @@ public class UnitRouterTest {
                     expectedInOrder.add(new BigDecimal(output.second));
                 }
             }
-
-            /**
-             * Test Case Data
-             */
-            String category;
-            String usage;
-            String region;
-            Pair<String, MeasureUnitImpl> inputUnit;
-            BigDecimal input;
-
-            ArrayList<Pair<String, MeasureUnitImpl>> outputUnitInOrder = new ArrayList<>();
-            ArrayList<BigDecimal> expectedInOrder = new ArrayList<>();
         }
 
         // Read Test data from the unitPreferencesTest
@@ -83,10 +83,16 @@ public class UnitRouterTest {
             UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.region, testCase.usage);
             ArrayList<Pair<MeasureUnitImpl, BigDecimal>> outputs = router.route(testCase.input).tempResults;
 
-            Assert.assrt(outputs.size() == testCase.expectedInOrder.size() && outputs.size() == testCase.outputUnitInOrder.size());
+            Assert.assrt(outputs.size() == testCase.expectedInOrder.size()
+                    && outputs.size() == testCase.outputUnitInOrder.size());
 
             for (int i = 0; i < outputs.size(); i++) {
-                UnitConverterTest.compareTwoBigDecimal(testCase.expectedInOrder.get(i), outputs.get(i).second, BigDecimal.valueOf(0.0001));
+                if (!UnitConverterTest
+                        .compareTwoBigDecimal(testCase.expectedInOrder.get(i),
+                                outputs.get(i).second,
+                                BigDecimal.valueOf(0.0001))) {
+                    Assert.fail(testCase.toString() + outputs.toString());
+                }
             }
         }
     }

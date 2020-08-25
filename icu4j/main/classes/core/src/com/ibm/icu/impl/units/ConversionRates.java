@@ -55,9 +55,9 @@ public class ConversionRates {
         BigDecimal sourceOffset = this.mapToConversionRate.get(sourceSimpleIdentifier).getOffset();
         BigDecimal targetOffset = this.mapToConversionRate.get(targetSimpleIdentifier).getOffset();
         return sourceOffset
-                .divide(sourceToBase.getConversionRate(), MathContext.DECIMAL128)
-                .multiply(targetToBase.getConversionRate(), MathContext.DECIMAL128)
-                .add(targetOffset);
+                .subtract(targetOffset)
+                .divide(targetToBase.getConversionRate(), MathContext.DECIMAL128);
+
 
     }
 
