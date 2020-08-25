@@ -822,15 +822,6 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
 
 void NumberFormatterApiTest::unitPipeline() {
     IcuTestErrorCode status(*this, "unitPipeline()");
-    LocalizedNumberFormatter nf;
-    FormattedNumber num;
-
-    // "forIdentifier" must provide a built-in unit if there is one, even for
-    // compound units.
-    MeasureUnit builtIn = MeasureUnit::getMeterPerSecond();
-    MeasureUnit fromIdent = MeasureUnit::forIdentifier("meter-per-second", status);
-    assertEquals("forIdentifier returns a normal built-in unit when it exists", builtIn.getOffset(),
-                 fromIdent.getOffset());
 
     assertFormatSingle(
         u"Built-in unit, meter-per-second",
@@ -865,6 +856,9 @@ void NumberFormatterApiTest::unitPipeline() {
         Locale("en-GB"),
         2.4,
         "2.4 m/s/s");
+
+    LocalizedNumberFormatter nf;
+    FormattedNumber num;
 
     // If unit is not a built-in type, perUnit is not allowed
     nf = NumberFormatter::with()
