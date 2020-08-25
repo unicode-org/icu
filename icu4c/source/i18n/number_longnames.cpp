@@ -415,8 +415,15 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
         getMeasureData(loc, individualUnits[i], width, unitData, status);
     }
 
-    fillIn->fListFormatter.adoptInsteadAndCheckErrorCode(ListFormatter::createInstance(loc, status),
-                                                         status);
+    UListFormatterWidth listWidth = ULISTFMT_WIDTH_SHORT;
+    if (width == UNUM_UNIT_WIDTH_NARROW) {
+        listWidth = ULISTFMT_WIDTH_NARROW;
+    } else if (width == UNUM_UNIT_WIDTH_FULL_NAME) {
+        // This might be the same as SHORT in most languages:
+        listWidth = ULISTFMT_WIDTH_WIDE;
+    }
+    fillIn->fListFormatter.adoptInsteadAndCheckErrorCode(
+        ListFormatter::createInstance(loc, ULISTFMT_TYPE_UNITS, listWidth, status), status);
     fillIn->rules = rules;
     fillIn->parent = parent;
 
