@@ -825,35 +825,46 @@ void NumberFormatterApiTest::unitPipeline() {
     LocalizedNumberFormatter nf;
     FormattedNumber num;
 
-    // Built-in unit, meter-per-second
-    nf = NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()).locale("en-GB");
-    assertEquals("meter per second builtin", "2.4 m/s", nf.formatDouble(2.4, status).toString(status));
-    status.assertSuccess();
-
-    // Built-in unit composed of built-in per built-in
-    nf = NumberFormatter::with().unit(METER).perUnit(SECOND).locale("en-GB");
-    assertEquals("meter per second composed", "2.4 m/s", nf.formatDouble(2.4, status).toString(status));
-    status.assertSuccess();
-
-    // "forIdentifier" tries to provide a built-in unit if there is one.
+    // "forIdentifier" must provide a built-in unit if there is one, even for
+    // compound units.
     MeasureUnit builtIn = MeasureUnit::getMeterPerSecond();
     MeasureUnit fromIdent = MeasureUnit::forIdentifier("meter-per-second", status);
     assertEquals("forIdentifier returns a normal built-in unit when it exists", builtIn.getOffset(),
                  fromIdent.getOffset());
 
+    assertFormatSingle(
+        u"Built-in unit, meter-per-second",
+        u"measure-unit/speed-meter-per-second",
+        u"~unit/meter-per-second", // TODO(icu-units#35): does not normalize as expected
+        NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()),
+        Locale("en-GB"),
+        2.4,
+        u"2.4 m/s");
+
+    assertFormatSingle(
+        u"Built-in unit meter-per-second specified as .unit(built-in).perUnit(built-in)",
+        u"measure-unit/length-meter per-measure-unit/duration-second",
+        u"unit/meter-per-second", // TODO(icu-units#35): check whether desired behaviour?
+        NumberFormatter::with().unit(METER).perUnit(SECOND),
+        Locale("en-GB"),
+        2.4,
+        "2.4 m/s");
+
+    // TODO(icu-units#59): THIS UNIT TEST DEMONSTRATES UNDESIREABLE BEHAVIOUR!
     // When specifying built-in types, one can give both a unit and a perUnit.
-    // Resolving to a built-in unit does not always work though.
-    nf = NumberFormatter::with()
-             .unit(MeasureUnit::getMeterPerSecond())
-             .perUnit(MeasureUnit::getSecond())
-             .locale("en-GB");
-    status.assertSuccess();
-    num = nf.formatDouble(2.4, status);
-    // TODO(icu-units#59): since this has succeeded, it needs to continue succeeding?
-    status.assertSuccess();
-    // TODO(icu-units#59): this is undesireable behaviour:
-    assertEquals("meter per second per second", "2.4 m/s/s",
-                 nf.formatDouble(2.4, status).toString(status));
+    // Resolving to a built-in unit does not always work.
+    //
+    // (Unit-testing philosophy: leave enabled to demonstrate current behaviour
+    // and changing behaviour in the future? Comment out to not assert this is
+    // "correct"?)
+    assertFormatSingle(
+        u"DEMONSTRATING BAD BEHAVIOUR, TODO(icu-units#59)",
+        u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+        u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+        NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()).perUnit(MeasureUnit::getSecond()),
+        Locale("en-GB"),
+        2.4,
+        "2.4 m/s/s");
 
     // If unit is not a built-in type, perUnit is not allowed
     nf = NumberFormatter::with()
