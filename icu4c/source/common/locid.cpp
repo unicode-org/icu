@@ -102,12 +102,6 @@ typedef enum ELocalePos {
     eMAX_LOCALES
 } ELocalePos;
 
-U_CFUNC int32_t locale_getKeywords(const char *localeID,
-            char prev,
-            char *keywords, int32_t keywordCapacity,
-            UBool valuesToo,
-            UErrorCode *status);
-
 U_CDECL_BEGIN
 //
 // Deleter function for Locales owned by the default Locale hash table/
@@ -1416,8 +1410,6 @@ UnicodeKeywordEnumeration::~UnicodeKeywordEnumeration() = default;
 StringEnumeration *
 Locale::createKeywords(UErrorCode &status) const
 {
-    char keywords[256];
-    int32_t keywordCapacity = sizeof keywords;
     StringEnumeration *result = NULL;
 
     if (U_FAILURE(status)) {
@@ -1428,9 +1420,11 @@ Locale::createKeywords(UErrorCode &status) const
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
-            int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, FALSE, &status);
-            if(U_SUCCESS(status) && keyLen) {
-                result = new KeywordEnumeration(keywords, keyLen, 0, status);
+            CharString keywords;
+            CharStringByteSink sink(&keywords);
+            ulocimp_getKeywords(variantStart+1, '@', sink, FALSE, &status);
+            if (U_SUCCESS(status) && !keywords.isEmpty()) {
+                result = new KeywordEnumeration(keywords.data(), keywords.length(), 0, status);
                 if (!result) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                 }
@@ -1445,8 +1439,6 @@ Locale::createKeywords(UErrorCode &status) const
 StringEnumeration *
 Locale::createUnicodeKeywords(UErrorCode &status) const
 {
-    char keywords[256];
-    int32_t keywordCapacity = sizeof keywords;
     StringEnumeration *result = NULL;
 
     if (U_FAILURE(status)) {
@@ -1457,9 +1449,11 @@ Locale::createUnicodeKeywords(UErrorCode &status) const
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
-            int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, FALSE, &status);
-            if(U_SUCCESS(status) && keyLen) {
-                result = new UnicodeKeywordEnumeration(keywords, keyLen, 0, status);
+            CharString keywords;
+            CharStringByteSink sink(&keywords);
+            ulocimp_getKeywords(variantStart+1, '@', sink, FALSE, &status);
+            if (U_SUCCESS(status) && !keywords.isEmpty()) {
+                result = new UnicodeKeywordEnumeration(keywords.data(), keywords.length(), 0, status);
                 if (!result) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                 }

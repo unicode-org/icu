@@ -49,6 +49,13 @@ uloc_getCurrentCountryID(const char* oldID);
 U_CFUNC const char* 
 uloc_getCurrentLanguageID(const char* oldID);
 
+U_CFUNC void
+ulocimp_getKeywords(const char *localeID,
+             char prev,
+             icu::ByteSink& sink,
+             UBool valuesToo,
+             UErrorCode *status);
+
 icu::CharString U_EXPORT2
 ulocimp_getLanguage(const char *localeID,
                     const char **pEnd,
