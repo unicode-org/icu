@@ -57,12 +57,6 @@ U_NAMESPACE_USE
 /* Locale stuff from locid.cpp */
 U_CFUNC void locale_set_default(const char *id);
 U_CFUNC const char *locale_get_default(void);
-U_CFUNC int32_t
-locale_getKeywords(const char *localeID,
-            char prev,
-            char *keywords, int32_t keywordCapacity,
-            UBool valuesToo,
-            UErrorCode *status);
 
 /* ### Data tables **************************************************/
 
@@ -598,12 +592,12 @@ compareKeywordStructs(const void * /*context*/, const void *left, const void *ri
     return uprv_strcmp(leftString, rightString);
 }
 
-static void
-_getKeywords(const char *localeID,
-             char prev,
-             ByteSink& sink,
-             UBool valuesToo,
-             UErrorCode *status)
+U_CFUNC void
+ulocimp_getKeywords(const char *localeID,
+                    char prev,
+                    ByteSink& sink,
+                    UBool valuesToo,
+                    UErrorCode *status)
 {
     KeywordStruct keywordList[ULOC_MAX_NO_KEYWORDS];
 
@@ -717,34 +711,6 @@ _getKeywords(const char *localeID,
             }
         }
     }
-}
-
-U_CFUNC int32_t
-locale_getKeywords(const char *localeID,
-                   char prev,
-                   char *keywords, int32_t keywordCapacity,
-                   UBool valuesToo,
-                   UErrorCode *status) {
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(keywords, keywordCapacity);
-    _getKeywords(localeID, prev, sink, valuesToo, status);
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (U_FAILURE(*status)) {
-        return reslen;
-    }
-
-    if (sink.Overflowed()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    } else {
-        u_terminateChars(keywords, keywordCapacity, reslen, status);
-    }
-
-    return reslen;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1420,9 +1386,6 @@ U_CAPI UEnumeration* U_EXPORT2
 uloc_openKeywords(const char* localeID,
                         UErrorCode* status)
 {
-    int32_t i=0;
-    char keywords[256];
-    int32_t keywordsCapacity = 256;
     char tempBuffer[ULOC_FULLNAME_CAPACITY];
     const char* tmpLocaleID;
 
@@ -1467,14 +1430,15 @@ uloc_openKeywords(const char* localeID,
 
     /* keywords are located after '@' */
     if((tmpLocaleID = locale_getKeywordsStart(tmpLocaleID)) != NULL) {
-        i=locale_getKeywords(tmpLocaleID+1, '@', keywords, keywordsCapacity, FALSE, status);
+        CharString keywords;
+        CharStringByteSink sink(&keywords);
+        ulocimp_getKeywords(tmpLocaleID+1, '@', sink, FALSE, status);
+        if (U_FAILURE(*status)) {
+            return NULL;
+        }
+        return uloc_openKeywordList(keywords.data(), keywords.length(), status);
     }
-
-    if(i) {
-        return uloc_openKeywordList(keywords, i, status);
-    } else {
-        return NULL;
-    }
+    return NULL;
 }
 
 
@@ -1657,7 +1621,7 @@ _canonicalize(const char* localeID,
             (!separatorIndicator || separatorIndicator > keywordAssign)) {
             sink.Append("@", 1);
             ++fieldCount;
-            _getKeywords(tmpLocaleID+1, '@', sink, TRUE, err);
+            ulocimp_getKeywords(tmpLocaleID+1, '@', sink, TRUE, err);
         }
     }
 }
