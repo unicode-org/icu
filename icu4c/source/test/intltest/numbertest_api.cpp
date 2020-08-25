@@ -747,10 +747,6 @@ void NumberFormatterApiTest::unitUsage() {
     assertTrue(
         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
         MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
-    MeasureUnit outpUnit = formattedNum.getOutputUnit(status);
-    assertTrue(uTestCase + ", expected \"" + MeasureUnit::getFoot().getIdentifier() +
-                   "\", got outputUnit: \"" + outpUnit.getIdentifier() + "\"",
-               MeasureUnit::getFoot() == outpUnit);
     assertEquals(uTestCase, "984 ft", formattedNum.toString(status));
     assertFormatDescendingBig(
             uTestCase.getTerminatedBuffer(),
@@ -777,13 +773,7 @@ void NumberFormatterApiTest::unitUsage() {
     assertTrue(
         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
         MeasureUnit::forIdentifier("stone-and-pound", status) == formattedNum.getOutputUnit(status));
-    outpUnit = formattedNum.getOutputUnit(status);
     status.errIfFailureAndReset("unitUsage() en-GB person - formattedNum.getOutputUnit(status)");
-    MeasureUnit expcUnit = MeasureUnit::forIdentifier("stone-and-pound", status);
-    status.errIfFailureAndReset("unitUsage() en-GB person - expcUnit");
-    assertTrue(uTestCase + ", expected \"" + expcUnit.getIdentifier() + "\", got outputUnit: \"" +
-                   outpUnit.getIdentifier() + "\"",
-               expcUnit == outpUnit);
     assertEquals(uTestCase, "12 st and 8.4 lb", formattedNum.toString(status));
     assertFormatDescending(
             uTestCase.getTerminatedBuffer(),
@@ -800,6 +790,13 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 lb and 3.1 oz",
             u"0 lb and 0.31 oz",
             u"0 lb and 0 oz");
+
+    // TODO(icu-units#60): determine appropriate ListFormatter style output. Consider:
+    // * Unit Widths: narrow, short, full-name, iso-code, formal, variant,
+    //   hidden.
+    // * List Format widths: wide, short, narrow? (From ULISTFMT_WIDTH_*.) Or is
+    //   it "standard", "duration", or "duration-short"? (From an internal
+    //   ListFormatter::createInstance method.)
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {
