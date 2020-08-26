@@ -1008,13 +1008,8 @@ void DecimalQuantity::shiftLeft(int32_t numDigits) {
     }
     if (usingBytes) {
         ensureCapacity(precision + numDigits);
-        int i = precision + numDigits - 1;
-        for (; i >= numDigits; i--) {
-            fBCD.bcdBytes.ptr[i] = fBCD.bcdBytes.ptr[i - numDigits];
-        }
-        for (; i >= 0; i--) {
-            fBCD.bcdBytes.ptr[i] = 0;
-        }
+        uprv_memmove(fBCD.bcdBytes.ptr + numDigits, fBCD.bcdBytes.ptr, precision);
+        uprv_memset(fBCD.bcdBytes.ptr, 0, numDigits);
     } else {
         fBCD.bcdLong <<= (numDigits * 4);
     }
