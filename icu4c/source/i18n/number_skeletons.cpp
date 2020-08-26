@@ -1328,6 +1328,9 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     return true;
 }
 
+// blueprint_helpers::parseIncrementOption lives in number_rounding.cpp for
+// dependencies reasons.
+
 void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
                                                 UErrorCode&) {
     // Utilize DecimalQuantity/double_conversion to format this for us.
