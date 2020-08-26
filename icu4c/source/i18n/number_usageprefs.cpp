@@ -22,25 +22,6 @@ using namespace icu::number;
 using namespace icu::number::impl;
 using icu::StringSegment;
 
-// TODO: Move down.
-Precision UsagePrefsHandler::parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton,
-                                                      UErrorCode status) {
-    if (U_FAILURE(status)) {
-        return {};
-    }
-    constexpr int32_t kSkelPrefixLen = 20;
-    if (!precisionSkeleton.startsWith(UNICODE_STRING_SIMPLE("precision-increment/"))) {
-        status = U_INVALID_FORMAT_ERROR;
-        return {};
-    }
-    U_ASSERT(precisionSkeleton[kSkelPrefixLen - 1] == u'/');
-    StringSegment segment(precisionSkeleton, false);
-    segment.adjustOffset(kSkelPrefixLen);
-    MacroProps macros;
-    blueprint_helpers::parseIncrementOption(segment, macros, status);
-    return macros.precision;
-}
-
 // Copy constructor
 Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
     if (other.fUsage != nullptr) {
@@ -139,6 +120,26 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
             micros.rounder.fPrecision = Precision::integer().withMinDigits(2);
         }
     }
+}
+
+Precision UsagePrefsHandler::parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton,
+                                                      UErrorCode status) {
+    if (U_FAILURE(status)) {
+        // As a member of UsagePrefsHandler, which is a friend of Precision, we
+        // get access to the default constructor.
+        return {};
+    }
+    constexpr int32_t kSkelPrefixLen = 20;
+    if (!precisionSkeleton.startsWith(UNICODE_STRING_SIMPLE("precision-increment/"))) {
+        status = U_INVALID_FORMAT_ERROR;
+        return {};
+    }
+    U_ASSERT(precisionSkeleton[kSkelPrefixLen - 1] == u'/');
+    StringSegment segment(precisionSkeleton, false);
+    segment.adjustOffset(kSkelPrefixLen);
+    MacroProps macros;
+    blueprint_helpers::parseIncrementOption(segment, macros, status);
+    return macros.precision;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

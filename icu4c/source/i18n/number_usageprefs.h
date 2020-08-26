@@ -53,8 +53,6 @@ class U_I18N_API UsagePrefsHandler : public MicroPropsGenerator, public UMemory 
     UnitsRouter fUnitsRouter;
     const MicroPropsGenerator *fParent;
 
-    // As a friend class, parseSkeletonToPrecision has access to Precision's
-    // default constructor (producing bogus instances).
     static Precision parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton, UErrorCode status);
 };
 
