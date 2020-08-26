@@ -432,6 +432,11 @@ UnlocalizedNumberFormatter skeleton::create(
         perror->postContext[0] = 0;
     }
 
+    umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
+    if (U_FAILURE(status)) {
+        return {};
+    }
+
     int32_t errOffset;
     MacroProps macros = parseSkeleton(skeletonString, errOffset, status);
     if (U_SUCCESS(status)) {
@@ -462,14 +467,7 @@ UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
 
 MacroProps skeleton::parseSkeleton(
         const UnicodeString& skeletonString, int32_t& errOffset, UErrorCode& status) {
-    umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
-
-    // parseStem and parseOption expect U_SUCCESS(status). We check status here
-    // and we return as soon as U_FAILURE(status) becomes true.
-    if (U_FAILURE(status)) {
-        return MacroProps();
-    }
-
+    U_ASSERT(U_SUCCESS(status));
     U_ASSERT(kSerializedStemTrie != nullptr);
 
     // Add a trailing whitespace to the end of the skeleton string to make code cleaner.
@@ -1329,37 +1327,6 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     }
     return true;
 }
-
-// void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
-//                                              UErrorCode& status) {
-//     // Need to do char <-> UChar conversion...
-//     U_ASSERT(U_SUCCESS(status));
-//     CharString buffer;
-//     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
-
-//     // Utilize DecimalQuantity/decNumber to parse this for us.
-//     DecimalQuantity dq;
-//     UErrorCode localStatus = U_ZERO_ERROR;
-//     dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
-//     if (U_FAILURE(localStatus)) {
-//         // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
-//         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-//         return;
-//     }
-//     double increment = dq.toDouble();
-
-//     // We also need to figure out how many digits. Do a brute force string operation.
-//     int decimalOffset = 0;
-//     while (decimalOffset < segment.length() && segment.charAt(decimalOffset) != '.') {
-//         decimalOffset++;
-//     }
-//     if (decimalOffset == segment.length()) {
-//         macros.precision = Precision::increment(increment);
-//     } else {
-//         int32_t fractionLength = segment.length() - decimalOffset - 1;
-//         macros.precision = Precision::increment(increment).withMinFraction(fractionLength);
-//     }
-// }
 
 void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
                                                 UErrorCode&) {

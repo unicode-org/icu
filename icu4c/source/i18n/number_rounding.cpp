@@ -24,6 +24,8 @@ using namespace icu::number::impl;
 using double_conversion::DoubleToStringConverter;
 using icu::StringSegment;
 
+// Most blueprint_helpers live in number_skeletons.cpp. This one is in
+// number_rounding.cpp for dependency reasons.
 void blueprint_helpers::parseIncrementOption(const StringSegment &segment, MacroProps &macros,
                                              UErrorCode &status) {
     // Need to do char <-> UChar conversion...

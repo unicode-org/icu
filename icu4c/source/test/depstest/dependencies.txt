@@ -1013,7 +1013,7 @@ group: numsys
     uclean_i18n
 
 group: number_usageprefs
-    number_multiplier.o 
+    number_multiplier.o
     number_usageprefs.o
   deps
     number_rounding

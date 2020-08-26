@@ -22,14 +22,16 @@ using namespace icu::number;
 using namespace icu::number::impl;
 using icu::StringSegment;
 
-Precision parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton, UErrorCode status) {
+// TODO: Move down.
+Precision UsagePrefsHandler::parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton,
+                                                      UErrorCode status) {
     if (U_FAILURE(status)) {
-        return Precision::bogus();
+        return {};
     }
     constexpr int32_t kSkelPrefixLen = 20;
     if (!precisionSkeleton.startsWith(UNICODE_STRING_SIMPLE("precision-increment/"))) {
         status = U_INVALID_FORMAT_ERROR;
-        return Precision::bogus();
+        return {};
     }
     U_ASSERT(precisionSkeleton[kSkelPrefixLen - 1] == u'/');
     StringSegment segment(precisionSkeleton, false);
@@ -127,7 +129,7 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
 
     UnicodeString precisionSkeleton = routed.precision;
-    if (micros.rounder.fPrecision.isDefault()) {
+    if (micros.rounder.fPrecision.isBogus()) {
         if (precisionSkeleton.length() > 0) {
             micros.rounder.fPrecision = parseSkeletonToPrecision(precisionSkeleton, status);
         } else {

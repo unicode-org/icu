@@ -253,9 +253,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     } else if (isCurrency) {
         precision = Precision::currency(UCURR_USAGE_STANDARD);
     } else if (macros.usage.isSet()) {
-        // Precision will get chosen in the UsagePrefsHandler
-        precision = Precision::bogus();
-        precision.setDefault();
+        // Bogus Precision - it will get set in the UsagePrefsHandler instead
+        precision = Precision();
     } else {
         precision = Precision::maxFraction(6);
     }

@@ -163,9 +163,6 @@ class RoundingImpl {
     /** Required for ScientificFormatter */
     bool isSignificantDigits() const;
 
-    /** Returns true if this is a default do-nothing instance */
-    bool isPassThrough() const { return fPassThrough; }
-
     /**
      * Rounding endpoint used by Engineering and Compact notation. Chooses the most appropriate multiplier (magnitude
      * adjustment), applies the adjustment, rounds, and returns the chosen multiplier.

@@ -654,27 +654,6 @@ class U_I18N_API Precision : public UMemory {
      */
     static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
 
-    /**
-     * If true, this Precision instance represents a default, so client code may
-     * more freely override it.
-     */
-    bool isDefault() const { return fPrecisionIsDefault; }
-
-    /**
-     * Sets the default flag: client code may freely override this Precision
-     * instance.
-     */
-    void setDefault() {
-        fPrecisionIsDefault = true;
-    }
-
-#ifndef U_HIDE_INTERNAL_API
-    /** Returns a bogus Precision instance. */
-    static Precision bogus() {
-        return {};
-    }
-#endif /* U_HIDE_INTERNAL_API */
-
   private:
     enum PrecisionType {
         RND_BOGUS,
@@ -728,12 +707,6 @@ class U_I18N_API Precision : public UMemory {
     typedef PrecisionUnion::FractionSignificantSettings FractionSignificantSettings;
     typedef PrecisionUnion::IncrementSettings IncrementSettings;
 
-    /**
-     * If true, this Precision instance is just a default, so client code can
-     * more freely override it.
-     */
-    bool fPrecisionIsDefault = false;
-
     Precision(const PrecisionType& type, const PrecisionUnion& union_)
             : fType(type), fUnion(union_) {}
 
@@ -741,8 +714,7 @@ class U_I18N_API Precision : public UMemory {
         fUnion.errorCode = errorCode;
     }
 
-    Precision() : fType(RND_BOGUS) {
-    }
+    Precision() : fType(RND_BOGUS) {}
 
     bool isBogus() const {
         return fType == RND_BOGUS;
@@ -790,6 +762,9 @@ class U_I18N_API Precision : public UMemory {
 
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
+
+    // To allow access to isBogus and the default (bogus) constructor:
+    friend class impl::UsagePrefsHandler;
 };
 
 /**
