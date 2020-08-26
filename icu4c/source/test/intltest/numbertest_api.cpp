@@ -77,6 +77,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitCompoundMeasure);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitUsageErrorCodes);
+        TESTCASE_AUTO(unitUsageSkeletons);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
@@ -684,8 +685,12 @@ void NumberFormatterApiTest::unitUsage() {
 
     IcuTestErrorCode status(*this, "unitUsage()");
 
-    LocalizedNumberFormatter formatter = unloc_formatter.locale("en-ZA");
-    FormattedNumber formattedNum = formatter.formatDouble(300, status);
+    LocalizedNumberFormatter formatter;
+    FormattedNumber formattedNum;
+
+    formatter = unloc_formatter.locale("en-ZA");
+    formattedNum = formatter.formatDouble(321, status);
+    status.errIfFailureAndReset("unitUsage() en-ZA road, formatDouble(...)");
     assertTrue(UnicodeString("unitUsage() en-ZA road, got outputUnit: \"") +
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getMeter() == formattedNum.getOutputUnit(status));
@@ -701,17 +706,23 @@ void NumberFormatterApiTest::unitUsage() {
             u"877 km",
             u"88 km",
             u"8,8 km",
-            u"877 m",
-            u"88 m",
-            u"8,8 m",
+            u"900 m",
+            u"90 m",
+            u"10 m",
             u"0 m");
 
     formatter = unloc_formatter.locale("en-GB");
-    formattedNum = formatter.formatDouble(300, status);
+    formattedNum = formatter.formatDouble(321, status);
+    status.errIfFailureAndReset("unitUsage() en-GB road, formatDouble(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertTrue(UnicodeString("unitUsage() en-GB road, got outputUnit: \"") +
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
-    assertEquals("unitUsage() en-GB road", "328 yd", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-GB road, getOutputUnit(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertEquals("unitUsage() en-GB road", "350 yd", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-GB road, toString(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertFormatDescendingBig(
             u"unitUsage() en-GB road",
             u"measure-unit/length-meter usage/road",
@@ -729,11 +740,17 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 yd");
 
     formatter = unloc_formatter.locale("en-US");
-    formattedNum = formatter.formatDouble(300, status);
+    formattedNum = formatter.formatDouble(321, status);
+    status.errIfFailureAndReset("unitUsage() en-US road, formatDouble(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertTrue(UnicodeString("unitUsage() en-US road, got outputUnit: \"") +
                    formattedNum.getOutputUnit(status).getIdentifier() + "\"",
                MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
-    assertEquals("unitUsage() en-US road", "984 ft", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-US road, getOutputUnit(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertEquals("unitUsage() en-US road", "1,050 ft", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-US road, toString(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertFormatDescendingBig(
             u"unitUsage() en-US road",
             u"measure-unit/length-meter usage/road",
@@ -746,9 +763,30 @@ void NumberFormatterApiTest::unitUsage() {
             u"54 mi",
             u"5.4 mi",
             u"0.54 mi",
-            u"288 ft",
-            u"29 ft",
+            u"300 ft",
+            u"30 ft",
             u"0 ft");
+
+    assertFormatDescendingBig(
+        u"Scientific notation with Usage: possible when using a reasonable Precision",
+        u"scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
+        u"scientific @### usage/default unit/square-meter unit-width-full-name",
+        NumberFormatter::with()
+            .unit(SQUARE_METER)
+            .usage("default")
+            .notation(Notation::scientific())
+            .precision(Precision::minMaxSignificantDigits(1, 4))
+            .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+        Locale("en-ZA"),
+        u"8,765E1 square kilometres",
+        u"8,765E0 square kilometres",
+        u"8,765E1 hectares",
+        u"8,765E0 hectares",
+        u"8,765E3 square metres",
+        u"8,765E2 square metres",
+        u"8,765E1 square metres",
+        u"8,765E0 square metres",
+        u"0E0 square centimetres");
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {
@@ -769,6 +807,122 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     // Adding the unit as part of the fluent chain leads to success.
     unloc_formatter.unit(MeasureUnit::getMeter()).locale("en-GB").formatInt(1, status);
+    status.assertSuccess();
+}
+
+// Tests for the "skeletons" field in unitPreferenceData, as well as precision
+// and notation overrides.
+void NumberFormatterApiTest::unitUsageSkeletons() {
+    IcuTestErrorCode status(*this, "unitUsageSkeletons()");
+
+    assertFormatSingle(
+            u"Default >300m road preference skeletons round to 50m",
+            u"usage/road measure-unit/length-meter",
+            u"usage/road unit/meter",
+            NumberFormatter::with().unit(METER).usage("road"),
+            Locale("en-ZA"),
+            321,
+            u"300 m");
+
+    assertFormatSingle(
+            u"Precision can be overridden: override takes precedence",
+            u"usage/road measure-unit/length-meter @#",
+            u"usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            321,
+            u"320 m");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: bizarre, but possible (short)",
+            u"compact-short usage/road measure-unit/length-meter",
+            u"compact-short usage/road unit/meter",
+            NumberFormatter::with()
+               .unit(METER)
+               .usage("road")
+               .notation(Notation::compactShort()),
+            Locale("en-ZA"),
+            987654321,
+            u"988K km");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: bizarre, but possible (short, precision override)",
+            u"compact-short usage/road measure-unit/length-meter @#",
+            u"compact-short usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::compactShort())
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            987654321,
+            u"990K km");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: unusual but possible (long)",
+            u"compact-long usage/road measure-unit/length-meter @#",
+            u"compact-long usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::compactLong())
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            987654321,
+            u"990 thousand km");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: unusual but possible (long, precision override)",
+            u"compact-long usage/road measure-unit/length-meter @#",
+            u"compact-long usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::compactLong())
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            987654321,
+            u"990 thousand km");
+
+    assertFormatSingle(
+            u"Scientific notation, not recommended, requires precision override for road",
+            u"scientific usage/road measure-unit/length-meter",
+            u"scientific usage/road unit/meter",
+            NumberFormatter::with().unit(METER).usage("road").notation(Notation::scientific()),
+            Locale("en-ZA"),
+            321.45,
+            // Rounding to the nearest "50" is not exponent-adjusted in scientific notation:
+            u"0E2 m");
+
+    assertFormatSingle(
+            u"Scientific notation with Usage: possible when using a reasonable Precision",
+            u"scientific usage/road measure-unit/length-meter @###",
+            u"scientific usage/road unit/meter @###",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::scientific())
+                .precision(Precision::maxSignificantDigits(4)),
+            Locale("en-ZA"),
+            321.45,
+            u"3,215E2 m");
+
+    assertFormatSingle(
+            u"Scientific notation with Usage: possible when using a reasonable Precision",
+            u"scientific usage/default measure-unit/length-astronomical-unit unit-width-full-name",
+            u"scientific usage/default unit/astronomical-unit unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("astronomical-unit", status))
+                .usage("default")
+                .notation(Notation::scientific())
+                .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            1e20,
+            u"1,5E28 kilometres");
+
     status.assertSuccess();
 }
 
