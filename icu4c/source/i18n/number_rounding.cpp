@@ -119,7 +119,7 @@ digits_t roundingutils::doubleFractionLength(double input, int8_t* singleDigit) 
 
 
 Precision Precision::unlimited() {
-    return Precision(RND_NONE, {}, kDefaultMode);
+    return Precision(RND_NONE, {});
 }
 
 FractionPrecision Precision::integer() {
@@ -264,7 +264,7 @@ FractionPrecision Precision::constructFraction(int32_t minFrac, int32_t maxFrac)
     settings.fMaxSig = -1;
     PrecisionUnion union_;
     union_.fracSig = settings;
-    return {RND_FRACTION, union_, kDefaultMode};
+    return {RND_FRACTION, union_};
 }
 
 Precision Precision::constructSignificant(int32_t minSig, int32_t maxSig) {
@@ -275,7 +275,7 @@ Precision Precision::constructSignificant(int32_t minSig, int32_t maxSig) {
     settings.fMaxSig = static_cast<digits_t>(maxSig);
     PrecisionUnion union_;
     union_.fracSig = settings;
-    return {RND_SIGNIFICANT, union_, kDefaultMode};
+    return {RND_SIGNIFICANT, union_};
 }
 
 Precision
@@ -285,7 +285,7 @@ Precision::constructFractionSignificant(const FractionPrecision &base, int32_t m
     settings.fMaxSig = static_cast<digits_t>(maxSig);
     PrecisionUnion union_;
     union_.fracSig = settings;
-    return {RND_FRACTION_SIGNIFICANT, union_, kDefaultMode};
+    return {RND_FRACTION_SIGNIFICANT, union_};
 }
 
 IncrementPrecision Precision::constructIncrement(double increment, int32_t minFrac) {
@@ -305,18 +305,18 @@ IncrementPrecision Precision::constructIncrement(double increment, int32_t minFr
         // NOTE: In C++, we must return the correct value type with the correct union.
         // It would be invalid to return a RND_FRACTION here because the methods on the
         // IncrementPrecision type assume that the union is backed by increment data.
-        return {RND_INCREMENT_ONE, union_, kDefaultMode};
+        return {RND_INCREMENT_ONE, union_};
     } else if (singleDigit == 5) {
-        return {RND_INCREMENT_FIVE, union_, kDefaultMode};
+        return {RND_INCREMENT_FIVE, union_};
     } else {
-        return {RND_INCREMENT, union_, kDefaultMode};
+        return {RND_INCREMENT, union_};
     }
 }
 
 CurrencyPrecision Precision::constructCurrency(UCurrencyUsage usage) {
     PrecisionUnion union_;
     union_.currencyUsage = usage;
-    return {RND_CURRENCY, union_, kDefaultMode};
+    return {RND_CURRENCY, union_};
 }
 
 

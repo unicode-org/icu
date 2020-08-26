@@ -261,8 +261,16 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
     UNumberFormatRoundingMode roundingMode;
     if (macros.roundingMode != kDefaultMode) {
+        // FIXME: we use macros.roundingMode if available. So as long as this is
+        // always available when precision.fRoundingMode is defined,
+        // precision.fRoundingMode is unneeded.
         roundingMode = macros.roundingMode;
     } else {
+        // FIXME: makes use of fRoundingMode to pick a default. This is the only
+        // actual usage of this value, so if we drop it here, we don't need it
+        // anymore. What was supposed to change in ICU 64? :
+        printf("macros.roundingMode was kDefaultMode (%d). precision.fRoundingMode is %d\n",
+               kDefaultMode, precision.fRoundingMode);
         // Temporary until ICU 64
         roundingMode = precision.fRoundingMode;
     }

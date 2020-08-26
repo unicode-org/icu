@@ -10,6 +10,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unum.h" // FIXME: We don't want this here. Temporary access to kDefaultMode's value.
 #include "unicode/appendable.h"
 #include "unicode/bytestream.h"
 #include "unicode/currunit.h"
@@ -728,6 +729,10 @@ class U_I18N_API Precision : public UMemory {
     typedef PrecisionUnion::FractionSignificantSettings FractionSignificantSettings;
     typedef PrecisionUnion::IncrementSettings IncrementSettings;
 
+    // FIXME: this FIXME commit is for determining where fRoundingMode is used,
+    // so we can get rid of it. It could have been defaulted to kRoundingMode
+    // right here, but we're investigating constructors for now (and think it's
+    // entirely unneeded).
     /** The Precision encapsulates the RoundingMode when used within the implementation. */
     UNumberFormatRoundingMode fRoundingMode;
 
@@ -737,9 +742,13 @@ class U_I18N_API Precision : public UMemory {
      */
     bool fPrecisionIsDefault = false;
 
-    Precision(const PrecisionType& type, const PrecisionUnion& union_,
-              UNumberFormatRoundingMode roundingMode)
-            : fType(type), fUnion(union_), fRoundingMode(roundingMode) {}
+    // FIXME: Initializes fRoundingMode. At all call-sites for this constructor,
+    // this was simply set to kDefaultMode. In this FIXME commit, I'm
+    // de-parameterising this, until we decide we don't need it at all.
+    // kDefaultMode=UNUM_ROUND_HALFEVEN. (Had trouble referencing kDefaultMode
+    // for some reason.)
+    Precision(const PrecisionType& type, const PrecisionUnion& union_)
+            : fType(type), fUnion(union_), fRoundingMode(UNUM_ROUND_HALFEVEN) {}
 
     Precision(UErrorCode errorCode) : fType(RND_ERROR) {
         fUnion.errorCode = errorCode;

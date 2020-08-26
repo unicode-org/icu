@@ -145,6 +145,9 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         precision = Precision::constructCurrency(currencyUsage);
     }
     if (!precision.isBogus()) {
+        /* FIXME: setting precision fRoundingMode, we should also set
+         * macros.roundingMode for preferential use: */
+        // macros.roundingMode = roundingMode;
         precision.fRoundingMode = roundingMode;
         macros.precision = precision;
     }
@@ -239,6 +242,9 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
                 // TODO: Reset maxSig_ = 1 + minFrac_ to follow the spec.
                 macros.precision = Precision::constructSignificant(minSig_, maxSig_);
             }
+            /* FIXME: setting precision fRoundingMode, we should also set
+             * macros.roundingMode for preferential use: */
+            // macros.roundingMode = roundingMode;
             macros.precision.fRoundingMode = roundingMode;
         }
     }
