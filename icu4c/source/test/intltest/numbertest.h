@@ -49,13 +49,11 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     NumberFormatterApiTest();
     NumberFormatterApiTest(UErrorCode &status);
 
-    void microPropsInternals(void);
-    void unitPipeline(void);
-
     void notationSimple();
     void notationScientific();
     void notationCompact();
     void unitMeasure();
+    void unitPipeline();
     void unitCompoundMeasure();
     void unitUsage();
     void unitUsageErrorCodes();
@@ -90,6 +88,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void localPointerCAPI();
     void toObject();
     void toDecimalNumber();
+    void microPropsInternals();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
