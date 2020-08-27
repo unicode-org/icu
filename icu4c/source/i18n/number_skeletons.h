@@ -359,6 +359,24 @@ struct SeenMacroProps {
     bool scale = false;
 };
 
+namespace {
+
+#define SKELETON_UCHAR_TO_CHAR(dest, src, start, end, status) (void)(dest); \
+UPRV_BLOCK_MACRO_BEGIN { \
+    UErrorCode conversionStatus = U_ZERO_ERROR; \
+    (dest).appendInvariantChars({FALSE, (src).getBuffer() + (start), (end) - (start)}, conversionStatus); \
+    if (conversionStatus == U_INVARIANT_CONVERSION_ERROR) { \
+        /* Don't propagate the invariant conversion error; it is a skeleton syntax error */ \
+        (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
+        return; \
+    } else if (U_FAILURE(conversionStatus)) { \
+        (status) = conversionStatus; \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
+
+} // namespace
+
 } // namespace impl
 } // namespace number
 U_NAMESPACE_END

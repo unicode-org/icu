@@ -262,7 +262,7 @@ class U_I18N_API ModifierStore {
  */
 class U_I18N_API MicroPropsGenerator {
   public:
-    virtual ~MicroPropsGenerator();
+    virtual ~MicroPropsGenerator() = default;
 
     /**
      * Considers the given {@link DecimalQuantity}, optionally mutates it, and

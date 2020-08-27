@@ -25,9 +25,6 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
-MicroPropsGenerator::~MicroPropsGenerator() = default;
-
-
 NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& status)
     : NumberFormatterImpl(macros, true, status) {
 }
@@ -255,16 +252,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         precision = Precision::integer().withMinDigits(2);
     } else if (isCurrency) {
         precision = Precision::currency(UCURR_USAGE_STANDARD);
+    } else if (macros.usage.isSet()) {
+        // Bogus Precision - it will get set in the UsagePrefsHandler instead
+        precision = Precision();
     } else {
         precision = Precision::maxFraction(6);
     }
     UNumberFormatRoundingMode roundingMode;
-    if (macros.roundingMode != kDefaultMode) {
-        roundingMode = macros.roundingMode;
-    } else {
-        // Temporary until ICU 64
-        roundingMode = precision.fRoundingMode;
-    }
+    roundingMode = macros.roundingMode;
     fMicros.rounder = {precision, roundingMode, currency, status};
     if (U_FAILURE(status)) {
         return nullptr;
