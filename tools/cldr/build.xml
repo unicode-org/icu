@@ -14,16 +14,7 @@
      -->
 
 <!-- Using the directory of this build.xml file as ${basedir}. -->
-<project name="CLDR" default="install" basedir=".">
-
-    <!-- Installs prerequisite data from CLDR (test data and CLDR libraries).
-         This target will not rebuild the ICU data however (since that's a
-         lengthy process). -->
-    <target name="install" depends="clean, copy-cldr-testdata, install-cldr-libs"/>
-
-    <!-- Cleans CLDR dependencies (testdata, CLDR libraries). This target does
-         not delete any generated ICU data. -->
-    <target name="clean" depends="clean-cldr-testdata"/>
+<project name="CLDR" basedir=".">
 
     <!-- Initialize any properties not already set on the command line. -->
     <target name="init-args">
@@ -39,9 +30,32 @@
         </condition>
         <fail unless="cldrDir"
              message="Set the CLDR_DIR environment variable (or cldrDir property) to the top level CLDR source directory (containing 'common')."/>
+        <property name="testDataDir4C" value="${basedir}/../../icu4c/source/test/testdata/cldr"/>
+        <property name="testDataDir4J" value="${basedir}/../../icu4j/main/tests/core/src/com/ibm/icu/dev/data/cldr"/>
     </target>
 
-    <!-- TODO: Add properties and targets for copying test data. -->
+    <!-- Copies CLDR test data directories, after deleting previous
+         contents to prevent inconsistent state. -->
+    <target name="copy-cldr-testdata" depends="init-args, clean-cldr-testdata">
+        <!-- CLDR test data directories to be copied into ICU. -->
+        <fileset id="cldrTestData" dir="${cldrDir}/common/testData">
+            <!-- Add directories here to control which test data is installed. -->
+            <include name="units/**"/> <!-- Used in UnitsTest tests -->
+        </fileset>
+
+        <copy todir="${testDataDir4C}">
+            <fileset refid="cldrTestData"/>
+        </copy>
+        <copy todir="${testDataDir4J}">
+            <fileset refid="cldrTestData"/>
+        </copy>
+    </target>
+
+    <!-- Deletes CLDR test data -->
+    <target name="clean-cldr-testdata" depends="init-args">
+        <delete dir="${testDataDir4C}"/>
+        <delete dir="${testDataDir4J}"/>
+    </target>
 
     <!-- Builds the ICU data, using the Ant build file in the cldr-to-icu directory and passing.
          through any specified arguments for controlling the build. If you need more control when
