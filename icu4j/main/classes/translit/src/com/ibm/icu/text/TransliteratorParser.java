@@ -1493,7 +1493,7 @@ class TransliteratorParser {
                 throw new RuntimeException("Variable range exhausted");
             }
             c = variableNext++;
-            // Set a placeholder in the master variables vector that will be
+            // Set a placeholder in the primary variables vector that will be
             // filled in later by setSegmentObject().  We know that we will get
             // called first because setSegmentObject() will call us.
             variablesVector.add(null);

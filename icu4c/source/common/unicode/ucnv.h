@@ -476,7 +476,7 @@ ucnv_openCCSID(int32_t codepage,
  * <p>The name will NOT be looked up in the alias mechanism, nor will the converter be
  * stored in the converter cache or the alias table. The only way to open further converters
  * is call this function multiple times, or use the ucnv_safeClone() function to clone a
- * 'master' converter.</p>
+ * 'primary' converter.</p>
  *
  * <p>A future version of ICU may add alias table lookups and/or caching
  * to this function.</p>

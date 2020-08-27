@@ -90,7 +90,7 @@ abstract class NFSubstitution {
             }
             else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
                      || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
-                     || rule.getBaseValue() == NFRule.MASTER_RULE)
+                     || rule.getBaseValue() == NFRule.DEFAULT_RULE)
             {
                 // if the rule is a fraction rule, return an IntegralPartSubstitution
                 return new IntegralPartSubstitution(pos, ruleSet, description);
@@ -115,7 +115,7 @@ abstract class NFSubstitution {
             }
             else if (rule.getBaseValue() == NFRule.IMPROPER_FRACTION_RULE
                      || rule.getBaseValue() == NFRule.PROPER_FRACTION_RULE
-                     || rule.getBaseValue() == NFRule.MASTER_RULE)
+                     || rule.getBaseValue() == NFRule.DEFAULT_RULE)
             {
                 // if the rule is a fraction rule, return a
                 // FractionalPartSubstitution

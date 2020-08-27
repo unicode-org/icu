@@ -233,7 +233,7 @@ make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 # Repeat steps 4-7 until there are no errors.
 
 # 9. You can also run the make check tests in exhaustive mode (these will also
-# be run automatically on the master branch after the merge resulting from this
+# be run automatically on the default branch after the merge resulting from this
 # integration):
 
 cd $ICU4C_DIR/source
