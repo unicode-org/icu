@@ -1234,7 +1234,7 @@ public class DateIntervalFormat extends UFormat {
         if (fDateFormat != null) {
             fDateFormat.setTimeZone(zoneToSet);
         }
-        // fDateFormat has the master calendar for the DateIntervalFormat;
+        // fDateFormat has the primary calendar for the DateIntervalFormat;
         // fFromCalendar and fToCalendar are internal work clones of that calendar.
         if (fFromCalendar != null) {
             fFromCalendar.setTimeZone(zoneToSet);

@@ -34,13 +34,13 @@ class UnifiedCache;
  */
 class U_COMMON_API CacheKeyBase : public UObject {
  public:
-   CacheKeyBase() : fCreationStatus(U_ZERO_ERROR), fIsMaster(FALSE) {}
+   CacheKeyBase() : fCreationStatus(U_ZERO_ERROR), fIsPrimary(FALSE) {}
 
    /**
     * Copy constructor. Needed to support cloning.
     */
    CacheKeyBase(const CacheKeyBase &other) 
-           : UObject(other), fCreationStatus(other.fCreationStatus), fIsMaster(FALSE) { }
+           : UObject(other), fCreationStatus(other.fCreationStatus), fIsPrimary(FALSE) { }
    virtual ~CacheKeyBase();
 
    /**
@@ -88,7 +88,7 @@ class U_COMMON_API CacheKeyBase : public UObject {
    }
  private:
    mutable UErrorCode fCreationStatus;
-   mutable UBool fIsMaster;
+   mutable UBool fIsPrimary;
    friend class UnifiedCache;
 };
 
@@ -463,17 +463,17 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
    void _runEvictionSlice() const;
  
    /**
-    * Register a master cache entry. A master key is the first key to create
+    * Register a primary cache entry. A primary key is the first key to create
     * a given  SharedObject value. Subsequent keys whose create function
-    * produce referneces to an already existing SharedObject are not masters -
+    * produce referneces to an already existing SharedObject are not primary -
     * they can be evicted and subsequently recreated.
     * 
     * On entry, gCacheMutex must be held.
-    * On exit, items in use count incremented, entry is marked as a master
+    * On exit, items in use count incremented, entry is marked as a primary
     * entry, and value registered with cache so that subsequent calls to
     * addRef() and removeRef() on it correctly interact with the cache.
     */
-   void _registerMaster(const CacheKeyBase *theKey, const SharedObject *value) const;
+   void _registerPrimary(const CacheKeyBase *theKey, const SharedObject *value) const;
         
    /**
     * Store a value and creation error status in given hash entry.

@@ -193,7 +193,7 @@ that a single instance cannot operate in parallel on multiple texts.
 
 For concurrent break iteration, each thread must use its own break iterator.
 These can be obtained by creating separate break iterators of the desired type,
-or by initially creating a master break iterator and then creating a clone for
+or by initially creating a main break iterator and then creating a clone for
 each thread.
 
 ### Line Breaking Strictness, a CSS Property

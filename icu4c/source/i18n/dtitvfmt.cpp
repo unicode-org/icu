@@ -239,7 +239,7 @@ DateIntervalFormat::operator==(const Format& other) const {
         if (fDateFormat && fmt->fDateFormat && (*fDateFormat != *fmt->fDateFormat)) {return FALSE;}
     }
     // note: fFromCalendar and fToCalendar hold no persistent state, and therefore do not participate in operator ==.
-    //       fDateFormat has the master calendar for the DateIntervalFormat.
+    //       fDateFormat has the primary calendar for the DateIntervalFormat.
     if (fSkeleton != fmt->fSkeleton) {return FALSE;}
     if (fDatePattern != fmt->fDatePattern && (fDatePattern == nullptr || fmt->fDatePattern == nullptr)) {return FALSE;}
     if (fDatePattern && fmt->fDatePattern && (*fDatePattern != *fmt->fDatePattern)) {return FALSE;}
@@ -583,7 +583,7 @@ DateIntervalFormat::adoptTimeZone(TimeZone* zone)
     if (fDateFormat != nullptr) {
         fDateFormat->adoptTimeZone(zone);
     }
-    // The fDateFormat has the master calendar for the DateIntervalFormat and has
+    // The fDateFormat has the primary calendar for the DateIntervalFormat and has
     // ownership of any adopted TimeZone; fFromCalendar and fToCalendar are internal
     // work clones of that calendar (and should not also be given ownership of the
     // adopted TimeZone).
@@ -601,7 +601,7 @@ DateIntervalFormat::setTimeZone(const TimeZone& zone)
     if (fDateFormat != nullptr) {
         fDateFormat->setTimeZone(zone);
     }
-    // The fDateFormat has the master calendar for the DateIntervalFormat;
+    // The fDateFormat has the primary calendar for the DateIntervalFormat;
     // fFromCalendar and fToCalendar are internal work clones of that calendar.
     if (fFromCalendar) {
         fFromCalendar->setTimeZone(zone);

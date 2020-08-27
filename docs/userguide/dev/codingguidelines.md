@@ -1907,7 +1907,7 @@ stored in a format that is used directly during processing.
 
 Most of the data items are pre-built into binary files that are then installed
 on a user's machine. Some data can also be built at runtime but is not
-persistent. In the latter case, a master object should be built once and then
+persistent. In the latter case, a primary object should be built once and then
 cloned to avoid the multiple parsing, processing, and building of the same data.
 
 Binary data formats for ICU must be portable across platforms that share the
