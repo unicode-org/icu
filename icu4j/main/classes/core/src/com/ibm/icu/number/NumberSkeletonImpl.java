@@ -1436,18 +1436,12 @@ class NumberSkeletonImpl {
                 sb.append("currency/");
                 BlueprintHelpers.generateCurrencyOption((Currency) macros.unit, sb);
                 return true;
-            } else if (macros.unit instanceof NoUnit) {
-                if (macros.unit == NoUnit.PERCENT) {
-                    sb.append("percent");
-                    return true;
-                } else if (macros.unit == NoUnit.PERMILLE) {
-                    sb.append("permille");
-                    return true;
-                } else {
-                    assert macros.unit == NoUnit.BASE;
-                    // Default value is not shown in normalized form
-                    return false;
-                }
+            } else if (macros.unit == MeasureUnit.PERCENT) {
+                sb.append("percent");
+                return true;
+            } else if (macros.unit == MeasureUnit.PERMILLE) {
+                sb.append("permille");
+                return true;
             } else {
                 sb.append("measure-unit/");
                 BlueprintHelpers.generateMeasureUnitOption(macros.unit, sb);
@@ -1457,7 +1451,7 @@ class NumberSkeletonImpl {
 
         private static boolean perUnit(MacroProps macros, StringBuilder sb) {
             // Per-units are currently expected to be only MeasureUnits.
-            if (macros.perUnit instanceof Currency || macros.perUnit instanceof NoUnit) {
+            if (macros.perUnit instanceof Currency) {
                 throw new UnsupportedOperationException(
                         "Cannot generate number skeleton with per-unit that is not a standard measure unit");
             } else {

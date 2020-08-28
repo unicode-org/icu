@@ -531,9 +531,6 @@
     <ClCompile Include="uregion.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="nounit.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
     <ClCompile Include="number_affixutils.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

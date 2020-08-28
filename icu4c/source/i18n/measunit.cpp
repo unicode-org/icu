@@ -2266,15 +2266,6 @@ void MeasureUnit::initCurrency(StringPiece isoCurrency) {
     fSubTypeId = result - gOffsets[fTypeId];
 }
 
-void MeasureUnit::initNoUnit(const char *subtype) {
-    int32_t result = binarySearch(gTypes, 0, UPRV_LENGTHOF(gTypes), "none");
-    U_ASSERT(result != -1);
-    fTypeId = result;
-    result = binarySearch(gSubTypes, gOffsets[fTypeId], gOffsets[fTypeId + 1], subtype);
-    U_ASSERT(result != -1);
-    fSubTypeId = result - gOffsets[fTypeId];
-}
-
 void MeasureUnit::setTo(int32_t typeId, int32_t subTypeId) {
     fTypeId = typeId;
     fSubTypeId = subTypeId;

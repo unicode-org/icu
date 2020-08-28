@@ -130,7 +130,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Pre-compute a few values for efficiency.
     bool isCurrency = utils::unitIsCurrency(macros.unit);
-    bool isNoUnit = utils::unitIsNoUnit(macros.unit);
+    bool isBaseUnit = utils::unitIsBaseUnit(macros.unit);
     bool isPercent = utils::unitIsPercent(macros.unit);
     bool isPermille = utils::unitIsPermille(macros.unit);
     bool isAccounting =
@@ -144,7 +144,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (macros.unitWidth != UNUM_UNIT_WIDTH_COUNT) {
         unitWidth = macros.unitWidth;
     }
-    bool isCldrUnit = !isCurrency && !isNoUnit &&
+    bool isCldrUnit = !isCurrency && !isBaseUnit &&
         (unitWidth == UNUM_UNIT_WIDTH_FULL_NAME || !(isPercent || isPermille));
 
     // Select the numbering system.

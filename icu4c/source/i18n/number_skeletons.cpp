@@ -189,14 +189,11 @@ Notation stem_to_object::notation(skeleton::StemEnum stem) {
 MeasureUnit stem_to_object::unit(skeleton::StemEnum stem) {
     switch (stem) {
         case STEM_BASE_UNIT:
-            // Slicing is okay
-            return NoUnit::base(); // NOLINT
+            return MeasureUnit();
         case STEM_PERCENT:
-            // Slicing is okay
-            return NoUnit::percent(); // NOLINT
+            return MeasureUnit::getPercent();
         case STEM_PERMILLE:
-            // Slicing is okay
-            return NoUnit::permille(); // NOLINT
+            return MeasureUnit::getPermille();
         default:
             UPRV_UNREACHABLE;
     }
@@ -1521,17 +1518,15 @@ bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorC
         }
         blueprint_helpers::generateCurrencyOption(currency, sb, status);
         return true;
-    } else if (utils::unitIsNoUnit(macros.unit)) {
-        if (utils::unitIsPercent(macros.unit)) {
-            sb.append(u"percent", -1);
-            return true;
-        } else if (utils::unitIsPermille(macros.unit)) {
-            sb.append(u"permille", -1);
-            return true;
-        } else {
-            // Default value is not shown in normalized form
-            return false;
-        }
+    } else if (utils::unitIsBaseUnit(macros.unit)) {
+        // Default value is not shown in normalized form
+        return false;
+    } else if (utils::unitIsPercent(macros.unit)) {
+        sb.append(u"percent", -1);
+        return true;
+    } else if (utils::unitIsPermille(macros.unit)) {
+        sb.append(u"permille", -1);
+        return true;
     } else {
         sb.append(u"measure-unit/", -1);
         blueprint_helpers::generateMeasureUnitOption(macros.unit, sb, status);
@@ -1541,14 +1536,9 @@ bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorC
 
 bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     // Per-units are currently expected to be only MeasureUnits.
-    if (utils::unitIsNoUnit(macros.perUnit)) {
-        if (utils::unitIsPercent(macros.perUnit) || utils::unitIsPermille(macros.perUnit)) {
-            status = U_UNSUPPORTED_ERROR;
-            return false;
-        } else {
-            // Default value: ok to ignore
-            return false;
-        }
+    if (utils::unitIsBaseUnit(macros.perUnit)) {
+        // Default value: ok to ignore
+        return false;
     } else if (utils::unitIsCurrency(macros.perUnit)) {
         status = U_UNSUPPORTED_ERROR;
         return false;
