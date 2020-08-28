@@ -784,29 +784,70 @@ void NumberFormatterApiTest::unitUsage() {
         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
         MeasureUnit::forIdentifier("stone-and-pound", status) == formattedNum.getOutputUnit(status));
     status.errIfFailureAndReset("unitUsage() en-GB person - formattedNum.getOutputUnit(status)");
-    assertEquals(uTestCase, "12 st and 8.4 lb", formattedNum.toString(status));
+    assertEquals(uTestCase, "12 st, 8.4 lb", formattedNum.toString(status));
     assertFormatDescending(
             uTestCase.getTerminatedBuffer(),
             u"measure-unit/mass-kilogram usage/person",
             u"unit/kilogram usage/person",
             unloc_formatter,
             Locale("en-GB"),
-            u"13,802 st and 7.2 lb",
-            u"1,380 st and 3.5 lb",
-            u"138 st and 0.35 lb",
-            u"13 st and 11 lb",
-            u"1 st and 5.3 lb",
-            u"1 lb and 15 oz",
-            u"0 lb and 3.1 oz",
-            u"0 lb and 0.31 oz",
-            u"0 lb and 0 oz");
+            u"13,802 st, 7.2 lb",
+            u"1,380 st, 3.5 lb",
+            u"138 st, 0.35 lb",
+            u"13 st, 11 lb",
+            u"1 st, 5.3 lb",
+            u"1 lb, 15 oz",
+            u"0 lb, 3.1 oz",
+            u"0 lb, 0.31 oz",
+            u"0 lb, 0 oz");
 
-    // TODO(icu-units#60): determine appropriate ListFormatter style output. Consider:
-    // * Unit Widths: narrow, short, full-name, iso-code, formal, variant,
-    //   hidden.
-    // * List Format widths: wide, short, narrow? (From ULISTFMT_WIDTH_*.) Or is
-    //   it "standard", "duration", or "duration-short"? (From an internal
-    //   ListFormatter::createInstance method.)
+   assertFormatDescending(
+            uTestCase.getTerminatedBuffer(),
+            u"usage/person unit-width-narrow measure-unit/mass-kilogram",
+            u"usage/person unit-width-narrow unit/kilogram",
+            unloc_formatter.unitWidth(UNUM_UNIT_WIDTH_NARROW),
+            Locale("en-GB"),
+            u"13,802st 7.2lb",
+            u"1,380st 3.5lb",
+            u"138st 0.35lb",
+            u"13st 11lb",
+            u"1st 5.3lb",
+            u"1lb 15oz",
+            u"0lb 3.1oz",
+            u"0lb 0.31oz",
+            u"0lb 0oz");
+
+   assertFormatDescending(
+            uTestCase.getTerminatedBuffer(),
+            u"usage/person unit-width-short measure-unit/mass-kilogram",
+            u"usage/person unit-width-short unit/kilogram",
+            unloc_formatter.unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("en-GB"),
+            u"13,802 st, 7.2 lb",
+            u"1,380 st, 3.5 lb",
+            u"138 st, 0.35 lb",
+            u"13 st, 11 lb",
+            u"1 st, 5.3 lb",
+            u"1 lb, 15 oz",
+            u"0 lb, 3.1 oz",
+            u"0 lb, 0.31 oz",
+            u"0 lb, 0 oz");
+
+   assertFormatDescending(
+            uTestCase.getTerminatedBuffer(),
+            u"usage/person unit-width-full-name measure-unit/mass-kilogram",
+            u"usage/person unit-width-full-name unit/kilogram",
+            unloc_formatter.unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-GB"),
+            u"13,802 stone, 7.2 pounds",
+            u"1,380 stone, 3.5 pounds",
+            u"138 stone, 0.35 pounds",
+            u"13 stone, 11 pounds",
+            u"1 stone, 5.3 pounds",
+            u"1 pound, 15 ounces",
+            u"0 pounds, 3.1 ounces",
+            u"0 pounds, 0.31 ounces",
+            u"0 pounds, 0 ounces");
 
     assertFormatDescendingBig(
         u"Scientific notation with Usage: possible when using a reasonable Precision",
