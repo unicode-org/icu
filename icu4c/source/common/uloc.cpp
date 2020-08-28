@@ -1221,10 +1221,10 @@ ulocimp_getCountry(const char *localeID,
  * are added to 'variant'
  */
 static void
-_getVariantEx(const char *localeID,
-              char prev,
-              ByteSink& sink,
-              UBool needSeparator) {
+_getVariant(const char *localeID,
+            char prev,
+            ByteSink& sink,
+            UBool needSeparator) {
     UBool hasVariant = FALSE;
 
     /* get one or more variant tags and separate them with '_' */
@@ -1263,23 +1263,6 @@ _getVariantEx(const char *localeID,
             localeID++;
         }
     }
-}
-
-static int32_t
-_getVariantEx(const char *localeID,
-              char prev,
-              char *variant, int32_t variantCapacity,
-              UBool needSeparator) {
-    CheckedArrayByteSink sink(variant, variantCapacity);
-    _getVariantEx(localeID, prev, sink, needSeparator);
-    return sink.NumberOfBytesAppended();
-}
-
-static int32_t
-_getVariant(const char *localeID,
-            char prev,
-            char *variant, int32_t variantCapacity) {
-    return _getVariantEx(localeID, prev, variant, variantCapacity, FALSE);
 }
 
 /* Keyword enumeration */
@@ -1417,9 +1400,6 @@ uloc_openKeywords(const char* localeID,
             if (U_FAILURE(*status)) {
                 return 0;
             }
-            if(_isIDSeparator(*tmpLocaleID)) {
-                _getVariant(tmpLocaleID+1, *tmpLocaleID, NULL, 0);
-            }
         }
     }
 
@@ -1525,7 +1505,7 @@ _canonicalize(const char* localeID,
                 variantSize = -tag.length();
                 {
                     CharStringByteSink s(&tag);
-                    _getVariantEx(tmpLocaleID+1, *tmpLocaleID, s, FALSE);
+                    _getVariant(tmpLocaleID+1, *tmpLocaleID, s, FALSE);
                 }
                 variantSize += tag.length();
                 if (variantSize > 0) {
@@ -1587,7 +1567,7 @@ _canonicalize(const char* localeID,
             int32_t posixVariantSize = -tag.length();
             {
                 CharStringByteSink s(&tag);
-                _getVariantEx(tmpLocaleID+1, '@', s, (UBool)(variantSize > 0));
+                _getVariant(tmpLocaleID+1, '@', s, (UBool)(variantSize > 0));
             }
             posixVariantSize += tag.length();
             if (posixVariantSize > 0) {
@@ -1797,18 +1777,24 @@ uloc_getVariant(const char* localeID,
                 if (tmpLocaleID != cntryID && _isIDSeparator(tmpLocaleID[1])) {
                     tmpLocaleID++;
                 }
-                i=_getVariant(tmpLocaleID+1, *tmpLocaleID, variant, variantCapacity);
+
+                CheckedArrayByteSink sink(variant, variantCapacity);
+                _getVariant(tmpLocaleID+1, *tmpLocaleID, sink, FALSE);
+
+                i = sink.NumberOfBytesAppended();
+
+                if (U_FAILURE(*err)) {
+                    return i;
+                }
+
+                if (sink.Overflowed()) {
+                    *err = U_BUFFER_OVERFLOW_ERROR;
+                    return i;
+                }
             }
         }
     }
 
-    /* removed by weiv. We don't want to handle POSIX variants anymore. Use canonicalization function */
-    /* if we do not have a variant tag yet then try a POSIX variant after '@' */
-/*
-    if(!haveVariant && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
-        i=_getVariant(localeID+1, '@', variant, variantCapacity);
-    }
-*/
     return u_terminateChars(variant, variantCapacity, i, err);
 }
 
