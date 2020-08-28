@@ -29,9 +29,7 @@ public class ComplexUnitsConverter {
      */
     public ComplexUnitsConverter(MeasureUnitImpl inputUnit, MeasureUnitImpl outputUnits,
                                  ConversionRates conversionRates) {
-
-
-        units_ = outputUnits.getMeasureUnits();
+        units_ = outputUnits.extractIndividualUnits();
         Assert.assrt(!units_.isEmpty());
 
         // Sort the units in a descending order.

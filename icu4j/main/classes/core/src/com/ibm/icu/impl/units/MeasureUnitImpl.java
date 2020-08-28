@@ -7,8 +7,6 @@
 
 package com.ibm.icu.impl.units;
 
-
-import com.ibm.icu.impl.Assert;
 import com.ibm.icu.util.MeasureUnit;
 
 import java.util.ArrayList;
@@ -17,21 +15,27 @@ import java.util.Comparator;
 
 public class MeasureUnitImpl {
 
+    /**
+     * The full unit identifier. Owned by the MeasureUnitImpl.  Null if not computed.
+     */
+    private String identifier = null;
+    /**
+     * The complexity, either SINGLE, COMPOUND, or MIXED.
+     */
+    private MeasureUnit.Complexity complexity = MeasureUnit.Complexity.SINGLE;
+    /**
+     * the list of simple units.These may be summed or multiplied, based on the
+     * value of the complexity field.
+     * <p>
+     * The "dimensionless" unit (SingleUnitImpl default constructor) must not be
+     * added to this list.
+     * <p>
+     * The "dimensionless" <code>MeasureUnitImpl</code> has an empty <code>singleUnits</code>.
+     */
+    private ArrayList<SingleUnitImpl> singleUnits;
+
     public MeasureUnitImpl() {
         singleUnits = new ArrayList<>();
-    }
-
-    // TODO: make this `clone`
-    public MeasureUnitImpl(MeasureUnitImpl other) {
-        this();
-        this.complexity = other.complexity;
-        this.identifier = other.identifier;
-
-        for (SingleUnitImpl singleUnit :
-                other.singleUnits) {
-            this.appendSingleUnit(singleUnit);
-        }
-
     }
 
     public MeasureUnitImpl(SingleUnitImpl singleUnit) {
@@ -39,9 +43,32 @@ public class MeasureUnitImpl {
         this.appendSingleUnit(singleUnit);
     }
 
-    public static MeasureUnitImpl forMeasureUnitMaybeCopy(MeasureUnit inputUnit) {
-        // TODO: implement
-        return null;
+    /**
+     * Parse a unit identifier into a MeasureUnitImpl.
+     *
+     * @param identifier The unit identifier string.
+     * @return A newly parsed value object.
+     * @throws <code>InternalError</code> in case of incorrect/non-parsed identifier.
+     */
+    public static MeasureUnitImpl forIdentifier(String identifier) {
+        return UnitsParser.parseForIdentifier(identifier);
+    }
+
+    /**
+     * Used for currency units.
+     */
+    public static MeasureUnitImpl forCurrencyCode(String currencyCode) {
+        MeasureUnitImpl result = new MeasureUnitImpl();
+        result.identifier = currencyCode;
+        return result;
+    }
+
+    public MeasureUnitImpl clone() {
+        MeasureUnitImpl result = new MeasureUnitImpl();
+        result.complexity = this.complexity;
+        result.identifier = this.identifier;
+        result.singleUnits = (ArrayList<SingleUnitImpl>) this.singleUnits.clone();
+        return result;
     }
 
     /**
@@ -51,9 +78,31 @@ public class MeasureUnitImpl {
         return singleUnits;
     }
 
-    public ArrayList<MeasureUnitImpl> getMeasureUnits() {
+    /**
+     * Mutates this MeasureUnitImpl to take the reciprocal.
+     */
+    public void takeReciprocal() {
+        this.identifier = null;
+        for (SingleUnitImpl singleUnit :
+                this.singleUnits) {
+            singleUnit.setDimensionality(singleUnit.getDimensionality() * -1);
+        }
+    }
+
+    /**
+     * Extracts the list of all the individual units inside the `MeasureUnitImpl`.
+     * For example:
+     * -   if the <code>MeasureUnitImpl</code> is <code>foot-per-hour</code>
+     * it will return a list of 1 <code>{foot-per-hour}</code>
+     * -   if the <code>MeasureUnitImpl</code> is <code>foot-and-inch</code>
+     * it will return a list of 2 <code>{ foot, inch}</code>
+     *
+     * @return a list of <code>MeasureUnitImpl</code>
+     */
+    public ArrayList<MeasureUnitImpl> extractIndividualUnits() {
         ArrayList<MeasureUnitImpl> result = new ArrayList<MeasureUnitImpl>();
-        if (this.getComplexity() == Complexity.MIXED) {
+        if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
+            // In case of mixed units, each single unit can be considered as a stand alone MeasureUnitImpl.
             for (SingleUnitImpl singleUnit :
                     this.getSingleUnits()) {
                 result.add(new MeasureUnitImpl(singleUnit));
@@ -62,14 +111,13 @@ public class MeasureUnitImpl {
             return result;
         }
 
-        result.add(new MeasureUnitImpl(this));
+        result.add(this.clone());
         return result;
     }
 
-
     /**
      * Applies dimensionality to all the internal single units.
-     * For example: `square-meter-per-second`, when we apply dimensionality -2, it will be `square-second-per-p4-meter`
+     * For example: <b>square-meter-per-second</b>, when we apply dimensionality -2, it will be <b>square-second-per-p4-meter</b>
      */
     public void applyDimensionality(int dimensionality) {
         for (SingleUnitImpl singleUnit :
@@ -85,7 +133,7 @@ public class MeasureUnitImpl {
      * it is never added: the return value will always be false.
      */
     public boolean appendSingleUnit(SingleUnitImpl singleUnit) {
-        identifier = "";
+        identifier = null;
 
         if (singleUnit.isDimensionless()) {
             // We don't append dimensionless units.
@@ -111,51 +159,66 @@ public class MeasureUnitImpl {
         }
 
         // TODO: shall we just add singleUnit instead of creating a copy ??
-        this.singleUnits.add(new SingleUnitImpl(singleUnit));
+        this.singleUnits.add(singleUnit.clone());
 
         // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits are more
         // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
-        if (this.singleUnits.size() > 1 && this.complexity == Complexity.SINGLE) {
-            this.setComplexity(Complexity.COMPOUND);
+        if (this.singleUnits.size() > 1 && this.complexity == MeasureUnit.Complexity.SINGLE) {
+            this.setComplexity(MeasureUnit.Complexity.COMPOUND);
         }
 
         return true;
     }
 
     /**
-     * Extracts a `MeasureUnitImpl` from this MeasureUnitImpl , simplifying if possible.
+     * Transform this MeasureUnitImpl into a MeasureUnit, simplifying if possible.
      */
     public MeasureUnit build() {
-        // TODO: implement
-        return null;
+        return new MeasureUnit(this);
+    }
+
+    /**
+     * @return SingleUnitImpl
+     * @throws UnsupportedOperationException if the object could not be converted to SingleUnitImpl.
+     */
+    public SingleUnitImpl getSingleUnitImpl() {
+        if (this.singleUnits.size() == 0) {
+            return new SingleUnitImpl();
+        }
+        if (this.singleUnits.size() == 1) {
+            return this.singleUnits.get(0).clone();
+        }
+
+        throw new UnsupportedOperationException();
     }
 
     public String getIdentifier() {
+        if (this.identifier != null) {
+            return this.identifier;
+        }
+
         this.serialize();
         return identifier;
     }
 
-    public Complexity getComplexity() {
+    public MeasureUnit.Complexity getComplexity() {
         return complexity;
     }
 
-    public void setComplexity(Complexity complexity) {
+    public void setComplexity(MeasureUnit.Complexity complexity) {
         this.complexity = complexity;
     }
-
 
     /**
      * Normalizes the MeasureUnitImpl and generates the identifier string in place.
      */
     private void serialize() {
-        Assert.assrt(this.identifier.isEmpty());
-
         if (this.getSingleUnits().size() == 0) {
             // Dimensionless, constructed by the default constructor: no appending
             // to this.result, we wish it to contain the zero-length string.
             return;
         }
-        if (this.complexity == Complexity.COMPOUND) {
+        if (this.complexity == MeasureUnit.Complexity.COMPOUND) {
             // Note: don't sort a MIXED unit
             Collections.sort(this.getSingleUnits(), new SingleUnitComparator());
         }
@@ -173,7 +236,7 @@ public class MeasureUnitImpl {
             }
 
             String singleUnitIdentifier = singleUnit.getNeutralIdentifier();
-            if (this.getComplexity() == Complexity.MIXED) {
+            if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
                 if (result.length() != 0) {
                     result.append("-and-");
                 }
@@ -203,28 +266,4 @@ public class MeasureUnitImpl {
             return o1.compareTo(o2);
         }
     }
-
-    /**
-     * The full unit identifier.  Owned by the MeasureUnitImpl.  Null if not computed.
-     */
-    private String identifier = null;
-
-
-    /**
-     * The complexity, either SINGLE, COMPOUND, or MIXED.
-     */
-    private Complexity complexity = Complexity.SINGLE;
-
-
-    /**
-     * the list of simple units.These may be summed or multiplied, based on the
-     * value of the complexity field.
-     * <p>
-     * The "dimensionless" unit (SingleUnitImpl default constructor) must not be
-     * added to this list.
-     * <p>
-     * The "dimensionless" `MeasureUnitImpl` has an empty `singleUnits`.
-     */
-    private ArrayList<SingleUnitImpl> singleUnits;
-
 }

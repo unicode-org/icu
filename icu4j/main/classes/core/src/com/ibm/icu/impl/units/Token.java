@@ -1,5 +1,7 @@
 package com.ibm.icu.impl.units;
 
+import com.ibm.icu.util.MeasureUnit;
+
 class Token {
 
     public Token(int fMatch) {
@@ -24,9 +26,9 @@ class Token {
         return this.type;
     }
 
-    public SIPrefix getSIPrefix() {
+    public MeasureUnit.SIPrefix getSIPrefix() {
         if (this.type == Type.TYPE_SI_PREFIX) {
-            return SIPrefix.getSiPrefixFromTrieIndex(this.fMatch);
+            return MeasureUnit.SIPrefix.getSiPrefixFromTrieIndex(this.fMatch);
         }
 
         throw new java.lang.InternalError("type must be TYPE_SI_PREFIX");
