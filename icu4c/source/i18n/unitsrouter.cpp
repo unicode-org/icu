@@ -72,17 +72,17 @@ RouteResult UnitsRouter::route(double quantity, UErrorCode &status) const {
         const auto &converterPreference = *converterPreferences_[i];
 
         if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-            return RouteResult(converterPreference.converter.convert(quantity, status), //
-                               converterPreference.precision                            //
-            );
+            return RouteResult(converterPreference.converter.convert(quantity, status),
+                               converterPreference.precision,
+                               converterPreference.targetUnit.copy(status));
         }
     }
 
     // In case of the `quantity` does not fit in any converter limit, use the last converter.
     const auto &lastConverterPreference = (*converterPreferences_[converterPreferences_.length() - 1]);
-    return RouteResult(lastConverterPreference.converter.convert(quantity, status), //
-                       lastConverterPreference.precision                            //
-    );
+    return RouteResult(lastConverterPreference.converter.convert(quantity, status),
+                       lastConverterPreference.precision,
+                       lastConverterPreference.targetUnit.copy(status));
 }
 
 const MaybeStackVector<MeasureUnit> *UnitsRouter::getOutputUnits() const {

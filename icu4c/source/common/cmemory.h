@@ -383,9 +383,12 @@ public:
      *         caller becomes responsible for deleting the array
      */
     inline T *orphanOrClone(int32_t length, int32_t &resultCapacity);
-private:
+
+  protected: // TODO(icu-units#64): make these private again if possible?
     T *ptr;
     int32_t capacity;
+
+  private:
     UBool needToRelease;
     T stackArray[stackCapacity];
     void releaseArray() {

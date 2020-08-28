@@ -246,6 +246,10 @@ void generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb
 
 void parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
+/**
+ * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
+ * specified via a "unit/" concise skeleton.
+ */
 void parseIdentifierUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 void parseUnitUsageOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);

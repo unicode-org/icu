@@ -1061,7 +1061,15 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
         return;
     }
 
-    // TODO(ICU-20941): Clean this up.
+    // Mixed units can only be represented by a full MeasureUnit instances, so
+    // we ignore macros.perUnit.
+    if (fullUnit.complexity == UMEASURE_UNIT_MIXED) {
+        macros.unit = std::move(fullUnit).build(status);
+        return;
+    }
+
+    // TODO(ICU-20941): Clean this up (see also
+    // https://github.com/icu-units/icu/issues/35).
     for (int32_t i = 0; i < fullUnit.units.length(); i++) {
         SingleUnitImpl* subUnit = fullUnit.units[i];
         if (subUnit->dimensionality > 0) {

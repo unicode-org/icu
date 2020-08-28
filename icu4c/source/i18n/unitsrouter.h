@@ -37,8 +37,13 @@ struct RouteResult : UMemory {
     // or document that other skeleton elements are ignored?
     UnicodeString precision;
 
-    RouteResult(MaybeStackVector<Measure> measures, UnicodeString precision)
-        : measures(std::move(measures)), precision(std::move(precision)) {}
+    // The output unit for this RouteResult. This may be a MIXED unit - for
+    // example: "yard-and-foot-and-inch", for which `measures` will have three
+    // elements.
+    MeasureUnitImpl outputUnit;
+
+    RouteResult(MaybeStackVector<Measure> measures, UnicodeString precision, MeasureUnitImpl outputUnit)
+        : measures(std::move(measures)), precision(std::move(precision)), outputUnit(std::move(outputUnit)) {}
 };
 
 /**
@@ -55,6 +60,10 @@ struct ConverterPreference : UMemory {
     double limit;
     UnicodeString precision;
 
+    // The output unit for this ConverterPreference. This may be a MIXED unit -
+    // for example: "yard-and-foot-and-inch".
+    MeasureUnitImpl targetUnit;
+
     // In case there is no limit, the limit will be -inf.
     ConverterPreference(const MeasureUnitImpl &source, const MeasureUnitImpl &complexTarget,
                         UnicodeString precision, const ConversionRates &ratesInfo, UErrorCode &status)
@@ -65,7 +74,7 @@ struct ConverterPreference : UMemory {
                         double limit, UnicodeString precision, const ConversionRates &ratesInfo,
                         UErrorCode &status)
         : converter(source, complexTarget, ratesInfo, status), limit(limit),
-          precision(std::move(precision)) {}
+          precision(std::move(precision)), targetUnit(complexTarget.copy(status)) {}
 };
 
 /**
