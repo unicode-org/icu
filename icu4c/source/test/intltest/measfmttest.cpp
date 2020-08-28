@@ -81,6 +81,7 @@ private:
     void TestNumericTimeSomeSpecialFormats();
     void TestIdentifiers();
     void TestInvalidIdentifiers();
+    void TestParseToBuiltIn();
     void TestCompoundUnitOperations();
     void TestDimensionlessBehaviour();
     void Test21060_AddressSanitizerProblem();
@@ -205,6 +206,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestNumericTimeSomeSpecialFormats);
     TESTCASE_AUTO(TestIdentifiers);
     TESTCASE_AUTO(TestInvalidIdentifiers);
+    TESTCASE_AUTO(TestParseToBuiltIn);
     TESTCASE_AUTO(TestCompoundUnitOperations);
     TESTCASE_AUTO(TestDimensionlessBehaviour);
     TESTCASE_AUTO(Test21060_AddressSanitizerProblem);
@@ -3330,6 +3332,33 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
         status.setScope(input);
         MeasureUnit::forIdentifier(input, status);
         status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    }
+}
+
+void MeasureFormatTest::TestParseToBuiltIn() {
+    IcuTestErrorCode status(*this, "TestParseToBuiltIn()");
+    const struct TestCase {
+        const char *identifier;
+        MeasureUnit expectedBuiltIn;
+    } cases[] = {
+        {"meter-per-second-per-second", MeasureUnit::getMeterPerSecondSquared()},
+        {"meter-per-second-second", MeasureUnit::getMeterPerSecondSquared()},
+        {"centimeter-centimeter", MeasureUnit::getSquareCentimeter()},
+        {"square-foot", MeasureUnit::getSquareFoot()},
+        {"pow2-inch", MeasureUnit::getSquareInch()},
+        {"milligram-per-deciliter", MeasureUnit::getMilligramPerDeciliter()},
+        {"pound-force-per-pow2-inch", MeasureUnit::getPoundPerSquareInch()},
+        {"yard-pow2-yard", MeasureUnit::getCubicYard()},
+        {"square-yard-yard", MeasureUnit::getCubicYard()},
+    };
+
+    for (auto &cas : cases) {
+        MeasureUnit fromIdent = MeasureUnit::forIdentifier(cas.identifier, status);
+        status.assertSuccess();
+        assertEquals("forIdentifier returns a normal built-in unit when it exists",
+                     cas.expectedBuiltIn.getOffset(), fromIdent.getOffset());
+        assertEquals("type", cas.expectedBuiltIn.getType(), fromIdent.getType());
+        assertEquals("subType", cas.expectedBuiltIn.getSubtype(), fromIdent.getSubtype());
     }
 }
 

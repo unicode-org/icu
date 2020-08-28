@@ -201,7 +201,7 @@ class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStor
 /**
  * A MicroPropsGenerator that multiplexes between different LongNameHandlers,
  * depending on the outputUnit.
- * 
+ *
  * See processQuantity() for the input requirements.
  */
 class LongNameMultiplexer : public MicroPropsGenerator, public UMemory {

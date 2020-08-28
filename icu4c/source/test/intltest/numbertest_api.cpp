@@ -79,6 +79,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitCompoundMeasure);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitUsageErrorCodes);
+        TESTCASE_AUTO(unitUsageSkeletons);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
@@ -694,7 +695,7 @@ void NumberFormatterApiTest::unitUsage() {
 
     uTestCase = u"unitUsage() en-ZA road";
     formatter = unloc_formatter.locale("en-ZA");
-    formattedNum = formatter.formatDouble(300, status);
+    formattedNum = formatter.formatDouble(321, status);
     status.errIfFailureAndReset("unitUsage() en-ZA road formatDouble");
     assertTrue(
         uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
@@ -711,19 +712,24 @@ void NumberFormatterApiTest::unitUsage() {
             u"877 km",
             u"88 km",
             u"8,8 km",
-            u"877 m",
-            u"88 m",
-            u"8,8 m",
+            u"900 m",
+            u"90 m",
+            u"10 m",
             u"0 m");
 
     uTestCase = u"unitUsage() en-GB road";
     formatter = unloc_formatter.locale("en-GB");
-    formattedNum = formatter.formatDouble(300, status);
-    status.errIfFailureAndReset("unitUsage() en-GB road formatDouble");
-    assertTrue(
-        uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
-        MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
-    assertEquals(uTestCase, "328 yd", formattedNum.toString(status));
+    formattedNum = formatter.formatDouble(321, status);
+    status.errIfFailureAndReset("unitUsage() en-GB road, formatDouble(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertTrue(UnicodeString("unitUsage() en-GB road, got outputUnit: \"") +
+                   formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+               MeasureUnit::getYard() == formattedNum.getOutputUnit(status));
+    status.errIfFailureAndReset("unitUsage() en-GB road, getOutputUnit(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertEquals("unitUsage() en-GB road", "350 yd", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-GB road, toString(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertFormatDescendingBig(
             uTestCase.getTerminatedBuffer(),
             u"measure-unit/length-meter usage/road",
@@ -742,12 +748,17 @@ void NumberFormatterApiTest::unitUsage() {
 
     uTestCase = u"unitUsage() en-US road";
     formatter = unloc_formatter.locale("en-US");
-    formattedNum = formatter.formatDouble(300, status);
-    status.errIfFailureAndReset("unitUsage() en-US road formatDouble");
-    assertTrue(
-        uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit(status).getIdentifier() + "\"",
-        MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
-    assertEquals(uTestCase, "984 ft", formattedNum.toString(status));
+    formattedNum = formatter.formatDouble(321, status);
+    status.errIfFailureAndReset("unitUsage() en-US road, formatDouble(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertTrue(UnicodeString("unitUsage() en-US road, got outputUnit: \"") +
+                   formattedNum.getOutputUnit(status).getIdentifier() + "\"",
+               MeasureUnit::getFoot() == formattedNum.getOutputUnit(status));
+    status.errIfFailureAndReset("unitUsage() en-US road, getOutputUnit(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
+    assertEquals("unitUsage() en-US road", "1,050 ft", formattedNum.toString(status));
+    status.errIfFailureAndReset("unitUsage() en-US road, toString(...)");
+    U_ASSERT(status == U_ZERO_ERROR);
     assertFormatDescendingBig(
             uTestCase.getTerminatedBuffer(),
             u"measure-unit/length-meter usage/road",
@@ -760,12 +771,11 @@ void NumberFormatterApiTest::unitUsage() {
             u"54 mi",
             u"5.4 mi",
             u"0.54 mi",
-            u"288 ft",
-            u"29 ft",
+            u"300 ft",
+            u"30 ft",
             u"0 ft");
 
     unloc_formatter = NumberFormatter::with().usage("person").unit(MeasureUnit::getKilogram());
-
     uTestCase = u"unitUsage() en-GB person";
     formatter = unloc_formatter.locale("en-GB");
     formattedNum = formatter.formatDouble(80, status);
@@ -838,6 +848,27 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 pounds, 3.1 ounces",
             u"0 pounds, 0.31 ounces",
             u"0 pounds, 0 ounces");
+
+    assertFormatDescendingBig(
+        u"Scientific notation with Usage: possible when using a reasonable Precision",
+        u"scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
+        u"scientific @### usage/default unit/square-meter unit-width-full-name",
+        NumberFormatter::with()
+            .unit(SQUARE_METER)
+            .usage("default")
+            .notation(Notation::scientific())
+            .precision(Precision::minMaxSignificantDigits(1, 4))
+            .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+        Locale("en-ZA"),
+        u"8,765E1 square kilometres",
+        u"8,765E0 square kilometres",
+        u"8,765E1 hectares",
+        u"8,765E0 hectares",
+        u"8,765E3 square metres",
+        u"8,765E2 square metres",
+        u"8,765E1 square metres",
+        u"8,765E0 square metres",
+        u"0E0 square centimetres");
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {
@@ -861,40 +892,161 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
     status.assertSuccess();
 }
 
+// Tests for the "skeletons" field in unitPreferenceData, as well as precision
+// and notation overrides.
+void NumberFormatterApiTest::unitUsageSkeletons() {
+    IcuTestErrorCode status(*this, "unitUsageSkeletons()");
+
+    assertFormatSingle(
+            u"Default >300m road preference skeletons round to 50m",
+            u"usage/road measure-unit/length-meter",
+            u"usage/road unit/meter",
+            NumberFormatter::with().unit(METER).usage("road"),
+            Locale("en-ZA"),
+            321,
+            u"300 m");
+
+    assertFormatSingle(
+            u"Precision can be overridden: override takes precedence",
+            u"usage/road measure-unit/length-meter @#",
+            u"usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            321,
+            u"320 m");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: bizarre, but possible (short)",
+            u"compact-short usage/road measure-unit/length-meter",
+            u"compact-short usage/road unit/meter",
+            NumberFormatter::with()
+               .unit(METER)
+               .usage("road")
+               .notation(Notation::compactShort()),
+            Locale("en-ZA"),
+            987654321,
+            u"988K km");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: bizarre, but possible (short, precision override)",
+            u"compact-short usage/road measure-unit/length-meter @#",
+            u"compact-short usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::compactShort())
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            987654321,
+            u"990K km");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: unusual but possible (long)",
+            u"compact-long usage/road measure-unit/length-meter @#",
+            u"compact-long usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::compactLong())
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            987654321,
+            u"990 thousand km");
+
+    assertFormatSingle(
+            u"Compact notation with Usage: unusual but possible (long, precision override)",
+            u"compact-long usage/road measure-unit/length-meter @#",
+            u"compact-long usage/road unit/meter @#",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::compactLong())
+                .precision(Precision::maxSignificantDigits(2)),
+            Locale("en-ZA"),
+            987654321,
+            u"990 thousand km");
+
+    assertFormatSingle(
+            u"Scientific notation, not recommended, requires precision override for road",
+            u"scientific usage/road measure-unit/length-meter",
+            u"scientific usage/road unit/meter",
+            NumberFormatter::with().unit(METER).usage("road").notation(Notation::scientific()),
+            Locale("en-ZA"),
+            321.45,
+            // Rounding to the nearest "50" is not exponent-adjusted in scientific notation:
+            u"0E2 m");
+
+    assertFormatSingle(
+            u"Scientific notation with Usage: possible when using a reasonable Precision",
+            u"scientific usage/road measure-unit/length-meter @###",
+            u"scientific usage/road unit/meter @###",
+            NumberFormatter::with()
+                .unit(METER)
+                .usage("road")
+                .notation(Notation::scientific())
+                .precision(Precision::maxSignificantDigits(4)),
+            Locale("en-ZA"),
+            321.45,
+            u"3,215E2 m");
+
+    assertFormatSingle(
+            u"Scientific notation with Usage: possible when using a reasonable Precision",
+            u"scientific usage/default measure-unit/length-astronomical-unit unit-width-full-name",
+            u"scientific usage/default unit/astronomical-unit unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("astronomical-unit", status))
+                .usage("default")
+                .notation(Notation::scientific())
+                .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            1e20,
+            u"1,5E28 kilometres");
+
+    status.assertSuccess();
+}
+
 void NumberFormatterApiTest::unitPipeline() {
     IcuTestErrorCode status(*this, "unitPipeline()");
+
+    assertFormatSingle(
+        u"Built-in unit, meter-per-second",
+        u"measure-unit/speed-meter-per-second",
+        u"~unit/meter-per-second", // TODO(icu-units#35): does not normalize as expected
+        NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()),
+        Locale("en-GB"),
+        2.4,
+        u"2.4 m/s");
+
+    assertFormatSingle(
+        u"Built-in unit meter-per-second specified as .unit(built-in).perUnit(built-in)",
+        u"measure-unit/length-meter per-measure-unit/duration-second",
+        u"unit/meter-per-second", // TODO(icu-units#35): check whether desired behaviour?
+        NumberFormatter::with().unit(METER).perUnit(SECOND),
+        Locale("en-GB"),
+        2.4,
+        "2.4 m/s");
+
+    // TODO(icu-units#59): THIS UNIT TEST DEMONSTRATES UNDESIREABLE BEHAVIOUR!
+    // When specifying built-in types, one can give both a unit and a perUnit.
+    // Resolving to a built-in unit does not always work.
+    //
+    // (Unit-testing philosophy: leave enabled to demonstrate current behaviour
+    // and changing behaviour in the future? Comment out to not assert this is
+    // "correct"?)
+    assertFormatSingle(
+        u"DEMONSTRATING BAD BEHAVIOUR, TODO(icu-units#59)",
+        u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+        u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+        NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()).perUnit(MeasureUnit::getSecond()),
+        Locale("en-GB"),
+        2.4,
+        "2.4 m/s/s");
+
     LocalizedNumberFormatter nf;
     FormattedNumber num;
-
-    // Built-in unit, meter-per-second
-    nf = NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()).locale("en-GB");
-    assertEquals("meter per second builtin", "2.4 m/s", nf.formatDouble(2.4, status).toString(status));
-    status.assertSuccess();
-
-    // Built-in unit composed of built-in per built-in
-    nf = NumberFormatter::with().unit(METER).perUnit(SECOND).locale("en-GB");
-    assertEquals("meter per second composed", "2.4 m/s", nf.formatDouble(2.4, status).toString(status));
-    status.assertSuccess();
-
-    // "forIdentifier" tries to provide a built-in unit if there is one.
-    MeasureUnit builtIn = MeasureUnit::getMeterPerSecond();
-    MeasureUnit fromIdent = MeasureUnit::forIdentifier("meter-per-second", status);
-    assertEquals("forIdentifier returns a normal built-in unit when it exists", builtIn.getOffset(),
-                 fromIdent.getOffset());
-
-    // When specifying built-in types, one can give both a unit and a perUnit.
-    // Resolving to a built-in unit does not always work though.
-    nf = NumberFormatter::with()
-             .unit(MeasureUnit::getMeterPerSecond())
-             .perUnit(MeasureUnit::getSecond())
-             .locale("en-GB");
-    status.assertSuccess();
-    num = nf.formatDouble(2.4, status);
-    // TODO(icu-units#59): since this has succeeded, it needs to continue succeeding?
-    status.assertSuccess();
-    // TODO(icu-units#59): this is undesireable behaviour:
-    assertEquals("meter per second per second", "2.4 m/s/s",
-                 nf.formatDouble(2.4, status).toString(status));
 
     // If unit is not a built-in type, perUnit is not allowed
     nf = NumberFormatter::with()
