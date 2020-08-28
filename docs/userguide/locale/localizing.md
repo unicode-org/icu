@@ -1,9 +1,24 @@
+---
+layout: default
+title: Localizing with ICU
+nav_order: 3
+parent: Locales and Resources
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Localizing with ICU
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -111,7 +126,7 @@ Features:
 
 Defined at: [icu-docs/master/design/bnf_rb.txt](https://raw.githubusercontent.com/unicode-org/icu-docs/master/design/bnf_rb.txt)
 
-To use with ICU4C, see the [Resource Bundle APIs](resources.md#resource-bundle-apis) section of this userguide.
+To use with ICU4C, see the [Resource Bundle APIs](resources#resource-bundle-apis) section of this userguide.
 
 Example: (`de.txt`)
 
@@ -130,7 +145,7 @@ capabilities of the .txt and binary ICU4C resource bundles in XML form. However,
 we have decided to drop the format for lack of use and instead adopt standard
 XLIFF format for localization. For more information on XLIFF format, see the
 following section. For examples on using ICU tools to produce and read XLIFF
-format see the XLIFF Usage (§) section in the [resource management chapter](resources.md#using-xliff-for-localization).
+format see the XLIFF Usage section in the [resource management chapter](resources#using-xliff-for-localization).
 
 ## XLIFF
 
@@ -188,7 +203,7 @@ http://www.oasis-open.org/committees/xliff/documents/xliff-core-1.1.xsd'>
 ```
 
 For examples on using ICU tools to produce and read XLIFF format see the XLIFF
-Usage (§) section in the [resource management chapter](resources.md#using-xliff-for-localization).
+Usage (§) section in the [resource management chapter](resources#using-xliff-for-localization).
 
 ## DITA
 

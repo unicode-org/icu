@@ -92,11 +92,12 @@ public:
     /**
      * Resets the LocaleBuilder to match the provided
      * [Unicode Locale Identifier](http://www.unicode.org/reports/tr35/tr35.html#unicode_locale_id) .
-     * Discards the existing state. the empty string cause the builder to be
-     * reset, like {@link #clear}.  Grandfathered tags are converted to their
-     * canonical form before being processed.  Otherwise, the <code>language
-     * tag</code> must be well-formed, or else the build() method will later
-     * report an U_ILLEGAL_ARGUMENT_ERROR.
+     * Discards the existing state.
+     * The empty string causes the builder to be reset, like {@link #clear}.
+     * Legacy language tags (marked as “Type: grandfathered” in BCP 47)
+     * are converted to their canonical form before being processed.
+     * Otherwise, the <code>language tag</code> must be well-formed,
+     * or else the build() method will later report an U_ILLEGAL_ARGUMENT_ERROR.
      *
      * <p>This method clears the internal UErrorCode.
      *

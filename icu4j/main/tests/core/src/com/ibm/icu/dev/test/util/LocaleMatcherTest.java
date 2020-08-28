@@ -365,7 +365,7 @@ public class LocaleMatcherTest extends TestFmwk {
     }
 
     @Test
-    public void testMatchGrandfatheredCode() {
+    public void testMatchLegacyCode() {
         final LocaleMatcher matcher = newLocaleMatcher("fr, i_klingon, en_Latn_US");
         assertEquals("en_Latn_US", matcher.getBestMatch("en_GB_oed").toString());
         // assertEquals("tlh", matcher.getBestMatch("i_klingon").toString());

@@ -1,9 +1,26 @@
+---
+layout: default
+title: Architecture
+nav_order: 2
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation Service Architecture
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 This section describes the design principles, architecture and coding
 conventions of the ICU Collation Service.
@@ -206,7 +223,7 @@ generated sort keys are longer than supplied buffers too often
 A good strategy
 for this problem would be to manually manage a large buffer for storing sortkeys
 and keep a list of indices to sort keys in this buffer (see the "large buffers"
-[Collation Example](examples.md#using-large-buffers-to-manage-sort-keys)
+[Collation Example](examples#using-large-buffers-to-manage-sort-keys)
 for more details).
 
 Here are some rules of a thumb, please do not rely on them. If you are looking

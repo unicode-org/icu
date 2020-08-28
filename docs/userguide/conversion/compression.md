@@ -1,9 +1,24 @@
+---
+layout: default
+title: Compression
+nav_order: 4
+parent: Conversion
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Compression
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview of SCSU
 
@@ -23,7 +38,7 @@ Unicode (usually in the Basic Latin range).
 For additional detail about the compression algorithm, which has been approved
 by the Unicode Consortium, please refer to [Unicode Technical Report #6 (A
 Standard Compression Scheme for
-Unicode)](https://www.unicode.org/unicode/reports/tr6/).
+Unicode)](https://www.unicode.org/reports/tr6/).
 
 The Standard Compression Scheme for Unicode (SCSU) is used to:
 

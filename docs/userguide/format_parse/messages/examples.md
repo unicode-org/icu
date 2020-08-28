@@ -1,13 +1,29 @@
+---
+layout: default
+title: Message Formatting Examples
+nav_order: 1
+parent: Formatting Messages
+grand_parent: Formatting
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Message Formatting Examples
+{: .no_toc }
 
-## MessageFormat Class
+## Contents
+{: .no_toc .text-delta }
 
-ICU's MessageFormat class can be used to format messages in a locale-independent
+1. TOC
+{:toc}
+
+---
+
+## `MessageFormat` Class
+
+ICU's `MessageFormat` class can be used to format messages in a locale-independent
 manner to localize the user interface (UI) strings.
 
 ### C++
@@ -253,17 +269,19 @@ public class TestMessageFormat{
 }
 ```
 
-## ChoiceFormat Class
+## `ChoiceFormat` Class
 
-**Important:** The following documentation is outdated. *ChoiceFormat is
-probably not what you need. Please use MessageFormat with plural arguments for
+**Important:** The following documentation is outdated. *`ChoiceFormat` is
+probably not what you need. Please use `MessageFormat` with plural arguments for
 proper plural selection, and select arguments for simple selection among a fixed
 set of choices!*
 
-ICU's ChoiceFormat class provides more flexibility than the printf() and scanf()
+ICU's `ChoiceFormat` class provides more flexibility than the `printf()` and `scanf()`
 style functions for formatting UI strings. This interface can be useful if you
 would like a message to change according to the number of items you are
-displaying. Note: Some Asian languages do not have plural words or phrases.
+displaying. 
+
+Note: Some Asian languages do not have plural words or phrases.
 
 ### C++
 

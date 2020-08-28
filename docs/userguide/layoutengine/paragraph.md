@@ -1,9 +1,26 @@
+---
+layout: default
+title: Paragraph Layout
+nav_order: 1
+parent: Layout Engine
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Paragraph Layout
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+# Overview
 
 This page is about the Paragraph Layout library that is available in ICU4C/C++.
 
@@ -25,24 +42,24 @@ see: [Layout Engine](index.md).
 
 ### Building the Paragraph Layout library with HarfBuzz
 
-While the ICU LayoutEngine is deprecated as of ICU 54, the ICU *Paragraph
-*Layout library is not. The Paragraph Layout library must now be built using the HarfBuzz engine instead of the ICU LayoutEngine.
+While the ICU LayoutEngine is deprecated as of ICU 54, the ICU *Paragraph* Layout library is not.
+The Paragraph Layout library must now be built using the HarfBuzz engine instead of the ICU LayoutEngine.
 
 #### UNIX Makefile instructions / Cygwin / Msys / etc. (ICU 54+)
 
 The following steps must be completed in order:
 
-1.  Build and install a complete ICU with the **`--disable-layout`
-    `--disable-layoutex`** switches passed to configure
-2.  Build and install HarfBuzz - ​http://harfbuzz.org (HarfBuzz's use of ICU may
+1.  Build and install a complete ICU with the **`--disable-layout` `--disable-layoutex`**
+    switches passed to configure
+3.  Build and install HarfBuzz - http://harfbuzz.org (HarfBuzz's use of ICU may
     be enabled or disabled at your choice)
-3.  Build and install the [icu-le-hb](​http://harfbuzz.org) library.
-4.  Now, rerun "configure" on the exact **same** ICU workspace used above:
+4.  Build and install the [icu-le-hb](http://harfbuzz.org) library.
+5.  Now, rerun "configure" on the exact **same** ICU workspace used above:
     *   with "icu-le-hb" AND the above-mentioned installed ICU available via
         pkg-config ( `pkg-config --modversion icu-le-hb` should return a version,
         such as "0.0.0" )
     *   with the --disable-layout **`--enable-layoutex`** switches passed to configure
-5.  next, run `make install` JUST in the **`source/layoutex`** directory, to install
+6.  next, run `make install` JUST in the **`source/layoutex`** directory, to install
     libiculx and `icu-lx.pc`
 
 The above steps will produce a libiculx library that depends on HarfBuzz.

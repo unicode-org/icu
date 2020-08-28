@@ -1,9 +1,24 @@
+---
+layout: default
+title: Conversion
+nav_order: 4
+has_children: true
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Conversion
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Conversion Overview
 
@@ -76,7 +91,7 @@ Unicode.
     of such problems, see for example ["Character Conversions and Mapping
     Tables"](http://icu-project.org/docs/papers/conversions_and_mappings_iuc19.ppt)
     on <http://icu-project.org/docs/> and the [XML Japanese
-    Profile](http://www.w3.org/TR/japanese-xml/) .)
+    Profile](http://www.w3.org/TR/japanese-xml/)).
 
     1.  Use UTF-8 and UTF-16.
 
@@ -126,7 +141,7 @@ Unicode.
         references](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
     7.  For data exchange (rather than pure display), turn off fallback
-        mappings: ucnv_setFallback(cnv, FALSE);
+        mappings: `ucnv_setFallback(cnv, FALSE)`;
 
     8.  For some text formats, especially XML and HTML, it is possible to set an
         "escape callback" function that turns unmappable Unicode code points

@@ -1,9 +1,24 @@
+---
+layout: default
+title: Collation FAQ
+nav_order: 5
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation FAQ
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Q. Should I turn Full Normalization on all the time?
 

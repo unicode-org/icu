@@ -1,9 +1,24 @@
+---
+layout: default
+title: Conversion Data
+nav_order: 2
+parent: Conversion
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Conversion Data
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Introduction
 
@@ -103,10 +118,10 @@ used in ICU. For related material, please see:
 
 1.  [ICU character set collection](http://icu-project.org/charts/charset/)
 
-2.  [Unicode Technical Report 22](http://www.unicode.org/unicode/reports/tr22/)
+2.  [Unicode Technical Report 22](http://www.unicode.org/reports/tr22/)
 
 3.  "Cross Mapping Tables" in [Unicode Online
-    Data](http://www.unicode.org/unicode/onlinedat/online.html)
+    Data](http://www.unicode.org/onlinedat/online.html)
 
 ## ICU Mapping Table Data Files
 
@@ -134,10 +149,10 @@ following parameters:
 5.  Simple stateful encodings are also handled using only Shift-In and Shift-Out
     (SI/SO) codes and one single-byte and one double-byte state.
 
-> :point_right: **Note**: *In the context of conversion tables, "unassigned" code points or codepage byte
-sequences are valid but do not have a **mapping**. This is different from
-"unassigned" code points in a character set like Unicode or Shift-JIS which are
-codes that do not have assigned **characters**.*
+> :point_right: **Note**: *In the context of conversion tables, "unassigned" code
+> points or codepage byte sequences are valid but do not have a **mapping**. This
+> is different from "unassigned" code points in a character set like Unicode or
+> Shift-JIS which are codes that do not have assigned **characters**.*
 
 Prior to version 1.8, ICU used more specific, more limited, converter
 implementations for Single Byte Character Set (SBCS), Double Byte Character Set
@@ -159,23 +174,23 @@ between ICU versions even for the same .ucm files. The .ucm file format may be
 extended to include more features.
 
 The following sections concentrate on the .ucm file format. The .cnv file format
-is described in the source code in the icu/source/common/ucnvmbcs.c directory
+is described in the source code in the `icu/source/common/ucnvmbcs.c` directory
 and is updated using the MBCS converter implementation.
 
 These conversion tables can have more than one name. ICU allows multiple names
 ("aliases") for the same encoding. It matches a requested encoding name against
-a list of names in icu/source/data/mappings/convrtrs.txt and when it finds a
+a list of names in `icu/source/data/mappings/convrtrs.txt` and when it finds a
 match, ICU opens a converter with the name in the leftmost position in the
 matching line. The name matching is not case-sensitive and ICU ignores spaces,
 dashes, and underscores. At build time, the gencnval tool located in the
-icu/source/tools/gencnval directory, generates a binary form of the convrtrs.txt
+`icu/source/tools/gencnval` directory, generates a binary form of the convrtrs.txt
 file as a data file for runtime for the cnvalias.icu file ("Converter Aliases
 data file").
 
 ### .ucm File Format
 
 .ucm files are line-oriented text files. Empty lines and comments starting with
-'#' are ignored.
+'`#`' are ignored.
 
 A .ucm file contains two sections:
 
@@ -186,21 +201,21 @@ A .ucm file contains two sections:
 For example:
 
 ```
-<code_set_name> "IBM-943"
-<char_name_mask> "AXXXX"
-<mb_cur_min> 1
-<mb_cur_max> 2
-<uconv_class> "MBCS"
-<subchar> \xFC\xFC
-<subchar1> \x7F
-<icu:state> 0-7f, 81-9f:1, a0-df, e0-fc:1
-<icu:state> 40-7e, 80-fc
+<code_set_name>               "IBM-943"
+<char_name_mask>              "AXXXX"
+<mb_cur_min>                  1
+<mb_cur_max>                  2
+<uconv_class>                 "MBCS"
+<subchar>                     \xFC\xFC
+<subchar1>                    \x7F
+<icu:state>                   0-7f, 81-9f:1, a0-df, e0-fc:1
+<icu:state>                   40-7e, 80-fc
 #
 CHARMAP
 #
 #
-#ISO 10646 IBM-943
-#_________ _________
+#ISO 10646      IBM-943
+#_________      _________
 <U0000> \x00 |0
 <U0001> \x01 |0
 <U0002> \x02 |0
@@ -210,6 +225,7 @@ CHARMAP
 <UFFE5> \x81\x8F |0
 <UFFFD> \xFC\xFC |2
 END CHARMAP
+
 ```
 
 The header fields are:
@@ -276,21 +292,21 @@ following conditions outline when each are used:
 
 In the CHARMAP section of a .ucm file, each line contains a Unicode code point
 (like <U(*1-6 hexadecimal digits for the code point*)> ), a codepage character
-byte sequence (each byte like \\x*hh* (2 hexadecimal digits} ), and an optional
+byte sequence (each byte like `\xhh` (2 hexadecimal digits) ), and an optional
 "precision" or "fallback" indicator.
 
 The precision indicator either must be present in all mappings or in none of
-them. The indicator is a pipe symbol ‘|’ followed by a 0, 1, 2, 3, or 4 that has
+them. The indicator is a pipe symbol `|` followed by a 0, 1, 2, 3, or 4 that has
 the following meaning:
 
-*   |0 - A "normal", roundtrip mapping from a Unicode code point and back.
-*   |1 - A "fallback" mapping only from Unicode to the codepage, but not back.
-*   |2 – A subchar1 mapping. The code point is unmappable, and if a substitution
+*   `|0` - A "normal", roundtrip mapping from a Unicode code point and back.
+*   `|1` - A "fallback" mapping only from Unicode to the codepage, but not back.
+*   `|2` - A subchar1 mapping. The code point is unmappable, and if a substitution
     is performed, then the subchar1 should be used rather than the subchar.
     Otherwise, such mappings are ignored.
-*   |3 - A "reverse fallback" mapping only from the codepage to Unicode, but not
+*   `|3` - A "reverse fallback" mapping only from the codepage to Unicode, but not
     back to the codepage.
-*   |4 - A "good one-way" mapping only from Unicode to the codepage, but not
+*   `|4` - A "good one-way" mapping only from Unicode to the codepage, but not
     back.
 
 Fallback mappings from Unicode typically do not map codes for the same
@@ -299,7 +315,7 @@ exists in Unicode but not in the codepage. To replace it, ICU maps a codepage
 code to a similar-looking code for human-readable output. This mapping feature
 is not useful for text data transmission especially in markup languages where a
 Unicode code point can be escaped with its code point value. The ICU application
-programming interface (API) ucnv_setFallback() controls this fallback behavior.
+programming interface (API) `ucnv_setFallback()` controls this fallback behavior.
 
 "Reverse fallbacks" are technically similar, but the same Unicode character can
 be encoded twice in the codepage. ICU always uses reverse fallbacks at runtime.
@@ -322,11 +338,11 @@ PUA and reverse fallbacks are assumed to be for "the same character", just an
 older code for it.
 
 Something similar happens with from-Unicode Variation Selector sequences. It is
-possible to round-trip (|0) either the unadorned character or the sequence with
-a variation selector, and add a "good one-way" mapping (|4) from the other
+possible to round-trip (`|0`) either the unadorned character or the sequence with
+a variation selector, and add a "good one-way" mapping (`|4`) from the other
 version. That "good one-way" mapping does not lose much information, and it is
 used even if the "use fallback" API flag is false. Alternatively, both mappings
-could be fallbacks (|1) that should be controlled by the "use fallback"
+could be fallbacks (`|1`) that should be controlled by the "use fallback"
 attribute.
 
 ### State table syntax in .ucm files
@@ -339,9 +355,9 @@ not easily) be computed from the pure mapping data. Instead, the .ucm files for
 MBCS encodings have additional entries that are specific to the ICU makeconv
 tool. The state tables for SBCS, DBCS, and EBCDIC_STATEFUL are implied, but they
 can be overridden (see the examples below). These state tables are specified in
-the header section of the .ucm file that contains the <icu:state> element. Each
+the header section of the .ucm file that contains the `<icu:state>` element. Each
 line defines one aspect of the state machine. The state machine uses a table of
-as many rows as there are states (= as many as there are <icu:state> lines).
+as many rows as there are states (= as many as there are `<icu:state>` lines).
 Each row has 256 entries; one for each possible byte value.
 
 The state table lines in the .ucm header conform to the following Extended
@@ -353,24 +369,24 @@ firstentry="initial" | "surrogates"
            (initial state (default for state 0), output is all surrogate pairs)
 ```
 
-Each state table row description (that follows the <icu:state>) begins with an
+Each state table row description (that follows the `<icu:state>`) begins with an
 optional initial or surrogates keyword and is followed by one or more column
 entries. For the purpose of codepage state tables, the states=rows in the table
 are numbered beginning at 0 for the first line in the .ucm file header. The
-numbers are assigned implicitly by the makeconv tool in order of the <icu:state>
+numbers are assigned implicitly by the makeconv tool in order of the `<icu:state>`
 lines.
 
-A row may be empty (nothing following the <icu:state>) — that is equivalent to
+A row may be empty (nothing following the `<icu:state>`) - that is equivalent to
 "all illegal" or 0-ff.i and is useful for trail byte states for all-illegal byte
 sequences.
 
 ```
-entry=range ':' nextstate] ['.' [action]]
-range = number ['-' number]
+entry=range [':' nextstate] ['.' [action]]
+range     = number ['-' number]
 nextstate = number (0..7f)
-action = 'u' | 's' | 'p' | 'i'
-             (unassigned, state change only, surrogate pair, illegal)
-number = (1- or 2-digit hexadecimal number)
+action    = 'u' | 's' | 'p' | 'i'
+                (unassigned, state change only, surrogate pair, illegal)
+number    = (1- or 2-digit hexadecimal number)
 ```
 
 Each column entry contains at least one hexadecimal byte value or value range
@@ -378,7 +394,7 @@ and is separated by a comma. The column entry specifies how to interpret an
 input byte in the row's state. If neither a next state nor an action is
 explicitly specified (only the byte range is given) then the byte value
 terminates the byte sequence, results in a valid mapping to a Unicode BMP
-character, and resets the state number to 0. The first line with <icu:state> is
+character, and resets the state number to 0. The first line with `<icu:state>` is
 called state 0.
 
 The next state can be explicitly specified with a separating colon ( : )
@@ -457,7 +473,7 @@ and test3.ucm contains
     <U101234>+<U50005>+<U60006> \x07+\x00+\x01\x02\x0f+\x09 |0
 
 For more examples see the ICU conversion data and the
-icu/source/test/testdata/test*.ucm test data files.
+`icu/source/test/testdata/test*.ucm` test data files.
 
 ICU 2.8 supports up to 19 UChars on the Unicode side of a mapping and up to 31
 bytes on the codepage side.
@@ -635,15 +651,17 @@ structure above. All double-byte sequences return to state 1 and SI switches
 back to state 0. SI and SO are also allowed in their own states with no effect.
 
 > :point_right:  **Note**: *If a DBCS or EBCDIC_STATEFUL codepage maps supplementary (non-BMP) Unicode
-characters, then a modified state table needs to be specified in the .ucm file.
-The state table needs to use the surrogates designation for a table row or .p
-for some entries.<br/> The reuse of a final or intermediate state (shown for EUC-JP) is valid for as
-long as there is no circle in the state chain. The mappings will be unique
-because of the different path to the shared state (sharing a state saves some
-memory; each state table row occupies 1kB in the .cnv file). This table also
-shows the redefinition of byte value ranges within one state row (State number
-3)as shorthand. State 3 defines bytes a1-fe to go to state 1, but the following
-entries redefine and override certain bytes to go to state 4.*
+> characters, then a modified state table needs to be specified in the .ucm file.
+> The state table needs to use the surrogates designation for a table row or .p
+> for some entries.*
+> 
+> *The reuse of a final or intermediate state (shown for EUC-JP) is valid for as
+> long as there is no circle in the state chain. The mappings will be unique
+> because of the different path to the shared state (sharing a state saves some
+> memory; each state table row occupies 1kB in the .cnv file). This table also
+> shows the redefinition of byte value ranges within one state row (State number
+> 3) as shorthand. State 3 defines bytes a1-fe to go to state 1, but the following
+> entries redefine and override certain bytes to go to state 4.*
 
 An initial state never needs a surrogates designation or .p because Unicode
 mapping results in initial states that are stored directly in the state table,

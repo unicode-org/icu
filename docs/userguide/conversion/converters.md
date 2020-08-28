@@ -1,9 +1,24 @@
+---
+layout: default
+title: Converter
+nav_order: 1
+parent: Conversion
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Using Converters
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -101,8 +116,7 @@ character set names. Many of these names are aliases to converters within ICU.
 
 In order to help identify which names are recognized by certain platforms, ICU
 provides several converter alias functions. The complete description of these
-functions can be found in the [ICU API
-Reference](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
+functions can be found in the [ICU API Reference](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
 | Function Names | Short Description |
 | -------------- | ----------------- |
@@ -121,8 +135,8 @@ Even though IANA specifies a list of aliases, it usually does not specify the
 mappings or the actual character set for the aliases. Sometimes vendors will map
 similar glyph variants to different Unicode code points or sometimes they will
 assign completely different glyphs for the same codepage code point. Because of
-these ambiguities, you can sometimes get U_AMBIGUOUS_ALIAS_WARNING for the
-returned UErrorCode when more than one converter uses the requested alias. This
+these ambiguities, you can sometimes get `U_AMBIGUOUS_ALIAS_WARNING` for the
+returned `UErrorCode` when more than one converter uses the requested alias. This
 is only a warning, and the results can still be used. This UErrorCode value is
 just a reminder that you may not get what you expected. The above functions can
 help you to determine which converter you actually wanted.
@@ -152,16 +166,20 @@ There are four ways to create a converter:
     "ibm-949_P110-2000" (Shift-JIS with '\\' <-> '¥' mapping) or
     "ibm-949_P11A-2000" (Shift-JIS with '\\' <-> '\\' mapping) for data-file
     based conversions.
-    ```C
+    
+    ```c
     UConverter *conv = ucnv_open("shift_jis", &myError);
     ```
+
     As a convenience, converter names can be passed in as Unicode. (for example,
     if a user passed in the string from a Unicode-based user interface).
     However, the actual names are restricted to an invariant ASCII/EBCDIC
     subset.
-    ```C
+
+    ```c
     UChar *name = ...; UConverter *conv = ucnv_openU(name, &myError);
     ```
+
     Converter names are case-insensitive. In addition, beginning with ICU 3.6,
     leading zeroes are ignored in sequences of digits (if further digits
     follow), and all non-alphanumeric characters are ignored. Thus the strings
@@ -169,6 +187,7 @@ There are four ways to create a converter:
     leading zeroes were not ignored, and only spaces, dashes and underscores
     were ignored.) The `ucnv_compareNames()` function provides such string
     comparisons.
+
     Unlike the names of resources or other types of ICU data, converter names
     can **not** be qualified with a path that indicates the directory or common
     data file containing the corresponding converter data. The requested
@@ -176,7 +195,8 @@ There are four ways to create a converter:
     separate file located in the ICU data directory. However, you can always
     create a package of converters with pkgdata and open a converter from the
     package with `ucnv_openPackage()`
-    ```C
+
+    ```c
     UConverter *conv = ucnv_openPackage("./myPackage.dat", "customConverter", &myError);
     ```
 
@@ -187,7 +207,8 @@ There are four ways to create a converter:
     API for opening a codepage by number must be given a vendor along with the
     number. Currently, only IBM (`UCNV_IBM`) is supported. For example, the US
     EBCDIC codepage (IBM #37) can be opened with the following code:
-    ```C
+
+    ```c
     ucnv_openCCSID(37, UCNV_IBM, &myErr);
     ```
 
@@ -206,7 +227,8 @@ There are four ways to create a converter:
     is not sufficient information, once a converter is opened, it can be queried
     for its type, min and max char size, etc. This information is not available
     without actually opening the converter (a fairly lightweight process.)
-    ```C
+
+    ```c
     /* Returns count of the number of available names */
     int count = ucnv_countAvailable();
     /* get the canonical name of the 36th available converter */
@@ -226,59 +248,60 @@ There are four ways to create a converter:
 
 4.  **By using the default converter**: The default converter can be opened by
     passing a NULL as the name of the converter.
-    ```C
+
+    ```c
     ucnv_open(NULL, &myErr);
     ```
 
 > :point_right: **Note**: ICU chooses this converter based on the best information available to it.
-The purpose of this converter is to interface with the OS using a codepage (i.e. `char *`).
-Do not use it as a way of determining the best overall converter to use.
-Usually any Unicode encoding form is the best way to store and send text data,
-so that important data does not get lost in the conversion.\
-Also, if the OS supports Unicode-based API's (such as Win32),
-it is better to use only those Unicode API's.
-As an example, the new Windows 2000 locales (such as Hindi) do not
-define the default codepage to something that supports Hindi.
-The default converter is used in expressions such as: `UnicodeString text("abc");`
-to convert 'abc', and in the u_uastrcpy() C functions.\
-Code operating at the [OS level](../design.md) MAY choose to
-change the default converter with `ucnv_setDefaultName()`.
-However, be aware that this change has inconsistent results if it is done after
-ICU components are initialized.
+> The purpose of this converter is to interface with the OS using a codepage (i.e. `char *`).
+> Do not use it as a way of determining the best overall converter to use.
+> Usually any Unicode encoding form is the best way to store and send text data,
+> so that important data does not get lost in the conversion.
+> Also, if the OS supports Unicode-based API's (such as Win32),
+> it is better to use only those Unicode API's.
+> As an example, the new Windows 2000 locales (such as Hindi) do not
+> define the default codepage to something that supports Hindi.
+> The default converter is used in expressions such as: `UnicodeString text("abc");`
+> to convert 'abc', and in the `u_uastrcpy()` C functions.
+> Code operating at the [OS level](../design.md) MAY choose to
+> change the default converter with `ucnv_setDefaultName()`.
+> However, be aware that this change has inconsistent results if it is done after
+> ICU components are initialized.
 
 ### Closing a Converter
 
 Closing a converter frees memory occupied by that instance of the converter.
 However it does not release the larger shared data tables the converter might
 use. OS-level code may call `ucnv_flushCache()` to explicitly free memory occupied
-by [unused tables](../design.md) .
+by [unused tables](../design.md).
 
-```C
+```c
 ucnv_close(conv)
 ```
 
 ### Converter Life Cycle
 
 Note that a Converter is created with a certain type (for instance, ISO-8859-3)
-which does not change over the life of that [object](../design.md) . Converters
+which does not change over the life of that [object](../design.md). Converters
 should be allocated one per thread. They are cheap to create, as the shared data
 doesn't need to be reallocated.
 
 This is the typical life cycle of a converter, as shown step-by-step:
 
 1.  First, open up the converter with a specified name (or alias name).
-    ```C
+    ```c
     UConverter *conv = ucnv_open("shift_jis", &status);
     ```
 
 2.  Target here is the `char s[]` to write into, and targetSize is how big the
     target buffer is. Source is the UChars that are being converted.
-    ```C
+    ```c
     int32_t len = ucnv_fromUChars(conv, target, targetSize, source, u_strlen(source), &status);
     ```
 
 3.  Clean up the converter.
-    ```C
+    ```c
     ucnv_close(conv);
     ```
 
@@ -294,8 +317,8 @@ the same converter for converting data from ISO-8859-3 back into Unicode.
 If it is necessary to convert a large quantity of data in smaller buffers, use
 the same converter to convert each buffer. This will make sure any state is
 preserved from one chunk to the next. Doing this conversion is known as
-streaming or buffering, and is mentioned Buffered Conversion section (§) later
-in this chapter.
+streaming or buffering, and is mentioned [Buffered or Streamed](#3-buffered-or-streamed)
+section (§) later in this chapter.
 
 ### Cloning a Converter
 
@@ -308,7 +331,7 @@ produces incorrect results. Also note that the caller owns the cloned object and
 has to call `ucnv_close()` to dispose of the object. Calling `ucnv_reset()` before
 cloning will reset the converter to its original state.
 
-```C
+```c
 UConverter* newCnv = ucnv_safeClone(oldCnv, 0, &bufferSize, &err)
 ```
 
@@ -326,10 +349,10 @@ UConverter* newCnv = ucnv_safeClone(oldCnv, 0, &bufferSize, &err)
     conversion.
 
 3.  In conversions to Unicode from Multi-byte encodings or conversions from
-    Unicode involving surrogates, if a) only a partial byte sequence is
-    retrieved from the source buffer, b) the "flush" parameter is set to "TRUE"
-    and c) the end of source is reached, then the callback is called with
-    U_TRUNCATED_CHAR_FOUND.
+    Unicode involving surrogates, if (a) only a partial byte sequence is
+    retrieved from the source buffer, (b) the "flush" parameter is set to "TRUE"
+    and (c) the end of source is reached, then the callback is called with
+    `U_TRUNCATED_CHAR_FOUND`.
 
 ### Reset
 
@@ -403,20 +426,20 @@ In conversion to Unicode, errors are normally due to ill-formed byte sequences:
 Unused byte values, or lead bytes not followed by trail bytes according to the
 encoding scheme. Well-formed but unmappable sequences are unusual but possible.
 
-The ICU default behavior is to emit an U+FFFD REPLACEMENT CHARACTER per
+The ICU default behavior is to emit an `U+FFFD REPLACEMENT CHARACTER` per
 offending sequence.
 
-If the conversion table .ucm file contains a <subchar1> entry (such as in the
+If the conversion table .ucm file contains a `<subchar1>` entry (such as in the
 ibm-943 table), a U+001A C0 control ("SUB") is emitted for single-byte
-illegal/unmappable input rather than U+FFFD REPLACEMENT CHARACTER. For details
+illegal/unmappable input rather than `U+FFFD REPLACEMENT CHARACTER`. For details
 on this behavior look for "001A" in the [Conversion Data](data.md) chapter.
 
-*   This behavior originates from mainframes with dedicated
-    single-byte-to-single-byte and double-to-double conversions.
-*   Emitting U+001A for single-byte errors can be avoided by (a) removing the
-    <subchar1> mapping or (b) using a similar conversion table that does not
-    have this mapping (e.g., windows-932 instead of ibm-943) or (c) writing a
-    custom callback function.
+* This behavior originates from mainframes with dedicated single-byte-to-single-byte
+  and double-to-double conversions.
+* Emitting U+001A for single-byte errors can be avoided by (a) removing the
+  `<subchar1>` mapping or (b) using a similar conversion table that does not
+  have this mapping (e.g., windows-932 instead of ibm-943) or (c) writing a
+  custom callback function.
 
 ### Error Codes
 
@@ -494,7 +517,7 @@ new ones. The "callbacks" are either From Unicode (to codepage), or To Unicode
 4.  UCNV_FROM_U_CALLBACK_STOP, UCNV_TO_U_CALLBACK_STOP: Stop at the error.
     Return the error to the caller. (When using the 'BUFFER' mode of conversion,
     the source and target pointers returned can be examined to determine where
-    the error occurred. ucnv_getInvalidUChars() and ucnv_getInvalidChars()
+    the error occurred. `ucnv_getInvalidUChars()` and `ucnv_getInvalidChars()`
     return the actual text which failed).
 
 5.  UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_TO_U_CALLBACK_ESCAPE: This callback is
@@ -502,16 +525,19 @@ new ones. The "callbacks" are either From Unicode (to codepage), or To Unicode
     strings such as '%U094D' with the Unicode value, and missing Unicode chars
     are replaced with text of the form '%X0A' where the codepage had the
     unconvertible byte hex 0A.
+
     When a callback is set, a "context" pointer is also provided. How this
     pointer is created depends on the specific callback. There is usually a
-    createContext() function for that specific callback, where the caller can
+    `createContext()` function for that specific callback, where the caller can
     set certain options for the callback. Consult the documentation for the
     specific callback you are using. For ICU's canned callbacks, this pointer
     may be set to NULL. The functions for setting a different callback also
     return the old callback, and the old context pointer. These may be stored so
     that the old callback is re-installed when an operation is finished.
+    
     Additionally the following options can be passed as the context parameter to
     UCNV_FROM_U_CALLBACK_ESCAPE callback function to produce different outputs.
+
     | UCNV_ESCAPE_ICU     | %U12345 |
     | ------------------- | ------- |
     | UCNV_ESCAPE_JAVA    | \\u1234 |
@@ -521,16 +547,23 @@ new ones. The "callbacks" are either From Unicode (to codepage), or To Unicode
 
 Here are some examples of how to use callbacks.
 
-```C
-UConverter *u;
-void *oldContext, *newContext;
+```c
+UConverter              *u;
+void                    *oldContext, *newContext;
 UConverterFromUCallback oldAction, newAction;
 u = ucnv_open("shift_jis", &myError);
+
 ... /* do some conversion with u from unicode.. */
-ucnv_setFromUCallBack(u, MY_FROMU_CALLBACK, newContext, &oldAction, &oldContext, &myError);
+
+ucnv_setFromUCallBack(
+    u, MY_FROMU_CALLBACK, newContext, &oldAction, &oldContext, &myError);
+
 ... /* do some other conversion from unicode */
+
 /* Now, set the callback back */
-ucnv_setFromUCallBack(u, oldAction, oldContext, &newAction, &newContext, &myError);
+ucnv_setFromUCallBack(
+    u, oldAction, oldContext, &newAction, &newContext, &myError);
+
 ```
 
 ### Custom Callbacks
@@ -541,23 +574,23 @@ callbacks as a starting point, and address any further questions to the mailing
 list.
 
 Basically, callback, unlike other ICU functions which expect to be called with
-U_ZERO_ERROR as the input, is called in an exceptional error condition. The
+`U_ZERO_ERROR` as the input, is called in an exceptional error condition. The
 callback is a kind of 'last ditch effort' to rectify the error which occurred,
 before it is returned back to the caller. This is why the implementation of STOP
 is very simple:
 
-```C
+```c
 void UCNV_FROM_U_CALLBACK_STOP(...) { }
 ```
 
-The error code such as U_INVALID_CHAR_FOUND is returned to the user. If the
+The error code such as `U_INVALID_CHAR_FOUND` is returned to the user. If the
 callback determines that no error should be returned to the user, then the
-callback must set the error code to U_ZERO_ERROR. Note that this is a departure
+callback must set the error code to `U_ZERO_ERROR`. Note that this is a departure
 from most ICU functions, which are supposed to check the error code and return
 immediately if it is set.
 
 > :point_right: **Note**: See the functions `ucnv_cb_write...()` for
-functions which a callback may use to perform its task.
+> functions which a callback may use to perform its task.
 
 #### Ignore Default_Ignorable_Code_Point
 
@@ -574,12 +607,12 @@ character preceding a Variation Selector.
 Unicode has a character property to identify such characters, as well as
 currently-unassigned code points that are intended to be used for similar
 purposes: Default_Ignorable_Code_Point, or "DI" for short:
-<http://unicode.org/cldr/utility/list-unicodeset.jsp?a=[:DI:]>
+http://www.unicode.org/cldr/utility/list-unicodeset.jsp?a=[:DI:]
 
 Most charsets do not have most or any of these characters.
 
 **ICU 54 and above by default skip default-ignorable code points if they are
-unmappable**. (Ticket #[10551](http://bugs.icu-project.org/trac/ticket/10551))
+unmappable**. (Ticket #[10551](https://unicode-org.atlassian.net/browse/ICU-10551))
 
 **Older versions of ICU** replaced unmappable default-ignorable code points like
 any other unmappable code points, by a question mark or whatever substitution
@@ -591,21 +624,21 @@ are removed from the charset output rather than replaced by a visible character.
 
 This is a code snippet for use in a custom from-Unicode callback:
 
-```C
+```c
 #include "unicode/uchar.h"
-...
+// ...
 (from-Unicode callback)
-    switch(reason) {
-    case UCNV_UNASSIGNED:
-        if(u_hasBinaryProperty(codePoint, UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
-            // Ignore/drop default ignorable code points that cannot be converted,
-            // rather than treating them like errors/writing a substitution character etc.
-            // For example, U+200B Zero Width Space,
-            // U+200E Left-To-Right Mark, U+FE0F Variation Selector 16.
-            *pErrorCode = U_ZERO_ERROR;
-            return;
-        } else {
-            ...
+    switch(reason) {
+    case UCNV_UNASSIGNED:
+        if(u_hasBinaryProperty(codePoint, UCHAR_DEFAULT_IGNORABLE_CODE_POINT)) {
+            // Ignore/drop default ignorable code points that cannot be converted,
+            // rather than treating them like errors/writing a substitution character etc.
+            // For example, U+200B Zero Width Space,
+            // U+200E Left-To-Right Mark, U+FE0F Variation Selector 16.
+            *pErrorCode = U_ZERO_ERROR;
+            return;
+        } else {
+            // ...
 ```
 
 ## Modes of Conversion
@@ -631,11 +664,13 @@ not require the instantiation of a converter.
 
 Data must be contained entirely within a single string or buffer.
 
-```C
+```c
 conv = ucnv_open("shift_jis", &status);
+
 /* Convert from Unicode to Shift JIS */
 len = ucnv_fromUChars(conv, target, targetLen, source, sourceLen, &status);
 ucnv_close(conv);
+
 conv = ucnv_open("iso-8859-3", &status);
 /* Convert from ISO-8859-3 to Unicode */
 len = ucnv_toUChars(conv, target, targetSize, source, sourceLen, &status);
@@ -650,7 +685,7 @@ most efficient way to scan for a certain character, or other processing of a
 single character at a time, because converters are stateful. This works even for
 multibyte charsets, and for stateful ones such as iso-2022-jp.
 
-```C
+```c
 conv = ucnv_open("Big-5", &status);
 UChar32 target;
 while(source < sourceLimit) {
@@ -678,21 +713,30 @@ The basic loop that is used with the ICU buffer conversion routines is the same
 in the to and from Unicode directions. In the following pseudocode, either
 'source' (for fromUnicode) or 'target' (for toUnicode) are UTF-16 UChars.
 
-```C
+```c
 UErrorCode err = U_ZERO_ERROR;
+
 while (... /*input data available*/ ) {
     ... /* read input data into buffer */
+    
     source = ... /* beginning of read data */;
     sourceLimit = source + readLength; // end + 1
+
     UBool flush = (further input data still available) // (i.e. feof())
+
     /* loop until all source has been processed */
     do {
         /* set up target pointers */
         target = ... /* beginning of output buffer */;
         targetLimit = target + sizeOfOutput;
+
         err = U_ZERO_ERROR; /* so that the to/from does not fail */
-        ucnv_to/fromUnicode(converter, &target, targetLimit, &source, sourceLimit, NULL, flush, &err);
-        ... /* write (target-beginningOfOutputBuffer) items starting at beginning of output buffer */
+
+        ucnv_to/fromUnicode(converter, &target, targetLimit,
+                    &source, sourceLimit, NULL, flush, &err);
+
+        ... /* write (target-beginningOfOutputBuffer) items
+               starting at beginning of output buffer */
     } while (err == U_BUFFER_OVERFLOW_ERROR);
     if(U_FAILURE(error)) {
         ... /* process error */
@@ -708,7 +752,7 @@ if(U_FAILURE(error)) {
 The above code optimizes for processing entire chunks of input data. An
 efficient size for the output buffer can be calculated as follows. (in bytes):
 
-```C
+```c
 ucnv_getMinCharSize() * inputBufferSize * sizeof(UChar)
 ucnv_getMaxCharSize() * inputBufferSize
 ```
@@ -722,7 +766,7 @@ cases where the size of the output buffer is fixed. For instance, in network
 applications it is sometimes desirable to fill every output packet completely
 (not including the last packet in the sequence). The above loop does not ensure
 that every output buffer is completely full. For example, if a 4 UChar input
-buffer was used, and a 3 byte output buffer with fromUnicode(), the loop would
+buffer was used, and a 3 byte output buffer with `fromUnicode()`, the loop would
 typically write 3 bytes, then 1, then 3, and so on. If, instead of efficient use
 of the input data, the goal is filling output buffers, a slightly different loop
 can be used.
@@ -730,7 +774,7 @@ can be used.
 In such a scenario, the inner write does not occur unless a buffer overflow
 occurs OR 'flush' is true. So, the 'write' and resetting of the target and
 targetLimit pointers would only happen
-`if(err == U_BUFFER_OVERFLOW_ERROR || flush == TRUE)`
+`if (err == U_BUFFER_OVERFLOW_ERROR || flush == TRUE)`
 
 The flush parameter on each conversion call should be set to FALSE, until the
 conversion call is called for the last time for the buffer. This is because the
@@ -746,33 +790,40 @@ buffer required. (For a more general discussion, see the Preflighting section
 
 This is accomplished by calling the `ucnv_fromUChars` and `ucnv_toUChars` functions.
 
-```C
+```c
 UChar uchar2;
 char input_char_buffer = "This is some text";
-targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity, input_char_buffer, sizeof(input_char_buffer), &err);
+
+targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity,
+                           input_char_buffer, sizeof(input_char_buffer), &err);
+
 if(err==U_BUFFER_OVERFLOW_ERROR) {
     err=U_ZERO_ERROR;
     uchar2=(UChar*)malloc((targetsize) * sizeof(UChar));
     targetsize = ucnv_toUChars(myConverter, uchar2, targetsize,
-    input_char_buffer, sizeof(input_char_buffer), &err);
+                               input_char_buffer, sizeof(input_char_buffer), &err);
     if(U_FAILURE(err)) {
-        printf("ucnv_toUChars() FAILED %s\\n", myErrorName(err));
-    } else {
-        printf("ucnv_toUChars() o.k.\\n");
+        printf("ucnv_toUChars() FAILED %s\n", myErrorName(err));
+    }
+    else {
+        printf("ucnv_toUChars() o.k.\n");
     }
 }
 ```
 
-> :point_right: **Note**: This is inefficient since the conversion is performed twice, once for finding
-the size of target and once for writing to the target.
+> :point_right: **Note**: *This is inefficient since the conversion is performed
+> **twice**, once for finding the size of target and once for writing to the target*.
 
 ### 5. Convenience
 
 ICU provides some convenience functions for conversions:
 
-```C
-ucnv_toUChars(myConverter, target_uchars, targetsize, input_char_buffer, sizeof(input_char_buffer), &err);
-ucnv_fromUChars(cnv, cTarget, (cTargetLimit-cTarget), uSource, (uSourceLimit-uSource), &errorCode);
+```c
+ucnv_toUChars(myConverter, target_uchars, targetsize,
+              input_char_buffer, sizeof(input_char_buffer), &err);
+ucnv_fromUChars(cnv, cTarget, (cTargetLimit-cTarget),
+                uSource, (uSourceLimit-uSource), &errorCode);
+
 char target[100];
 UnicodeString str("ABCDEF", "iso-8859-1");
 int32_t targetsize = str.extract(0, str.length(), target, sizeof(target), "SJIS");
@@ -781,6 +832,4 @@ target[targetsize] = 0; /* NULL termination */
 
 ## Conversion Examples
 
-See the [ICU Conversion
-Examples](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ucnv/convsamp.cpp)
-for more information.
+See the [ICU Conversion Examples](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ucnv/convsamp.cpp) for more information.

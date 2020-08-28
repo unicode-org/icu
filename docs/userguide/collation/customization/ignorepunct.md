@@ -1,9 +1,26 @@
+---
+layout: default
+title: Ignore Punctuation Options
+nav_order: 8
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # “Ignore Punctuation” Options
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 By default, spaces and punctuation characters add primary (base character)
 differences. Such characters sort less-than digits and letters. For example, the
@@ -31,7 +48,7 @@ See also
 *   [UCA: Variable
     Weighting](http://www.unicode.org/reports/tr10/#Variable_Weighting)
 *   [LDML: Setting
-    Options](http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Setting_Options)
+    Options](https://htmlpreview.github.io/?https://github.com/unicode-org/cldr/blob/master/docs/ldml/tr35-collation.html#Setting_Options)
 
 Here is an overview of the sorting results with these options.
 

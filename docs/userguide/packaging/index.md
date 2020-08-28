@@ -1,9 +1,24 @@
+---
+layout: default
+title: Packaging ICU4C
+nav_order: 3
+parent: ICU Data
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Packaging ICU4C
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -29,7 +44,7 @@ with -DU_STATIC_IMPLEMENTATION. Also see [How To Use ICU](../howtouseicu.md).
 
 ### Reduce the number of libraries used
 
-ICU consists of a number of different libraries. The library dependency chart in the [Design](../design.md#Library_Dependencies_C)
+ICU consists of a number of different libraries. The library dependency chart in the [Design](../design#library-dependencies-c)
 chapter can be used to understand and
 determine the exact set of libraries needed.
 
@@ -192,5 +207,5 @@ DLLs will be copied with names such as 'icuuc55.dll'.
 The services which are now known as ICU were written to provide operating
 system-level and application environment-level services. Several operating
 systems include ICU as a standard or optional package.
-See [ICU Binary Compatibility](../design.md#ICU_Binary_Compatibility) for
+See [ICU Binary Compatibility](../design#icu-binary-compatibility) for
 more details.

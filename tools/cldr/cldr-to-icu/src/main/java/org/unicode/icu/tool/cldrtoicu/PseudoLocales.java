@@ -60,8 +60,20 @@ import com.google.common.collect.Sets;
  */
 // TODO(CLDR-13381): Move this all into the CLDR API once the dust has settled.
 public final class PseudoLocales {
+    // Right-to-left override character.
+    private static final String RLO = "\u202e";
+    // Arabic letter mark character.
+    private static final String ALM = "\u061C";
+    // Pop direction formatting character.
+    private static final String PDF = "\u202c";
+    // Prefix to add before each LTR word.
+    private static final String BIDI_PREFIX = ALM + RLO;
+    // Postfix to add after each LTR word.
+    private static final String BIDI_POSTFIX = PDF + ALM;
+
+    // See getExemplarValue() method for why we don't extract the exemplar list from "en".
     private enum PseudoType {
-        BIDI("ar_XB", PseudoLocales::bidi, "abcdefghijklmnopqrstuvwxyz"),
+        BIDI("ar_XB", PseudoLocales::bidi, "abcdefghijklmnopqrstuvwxyz" + ALM + RLO + PDF),
         EXPAND("en_XA", PseudoLocales::expanding,
             "a\u00e5b\u0180c\u00e7d\u00f0e\u00e9f\u0192g\u011dh\u0125i\u00eej\u0135k\u0137l\u013cm"
                 + "\u0271n\u00f1o\u00f6p\u00feq\u01ebr\u0155s\u0161t\u0163u\u00fbv\u1e7dw\u0175"
@@ -284,9 +296,23 @@ public final class PseudoLocales {
         private CldrValue getExemplarValue(CldrPath path) {
             StringBuilder exemplarList = new StringBuilder("[");
             type.getExemplars().codePoints()
-                .forEach(cp -> exemplarList.appendCodePoint(cp).append(' '));
+                .forEach(cp -> appendExemplarCodePoint(exemplarList, cp).append(' '));
             exemplarList.setCharAt(exemplarList.length() - 1, ']');
             return CldrValue.parseValue(path.toString(), exemplarList.toString());
+        }
+
+        // Append a (possibly escaped) representation of the exemaplar character.
+        private static StringBuilder appendExemplarCodePoint(StringBuilder out, int cp) {
+            // This could be fixed if needed, but for now it's safer to check.
+            checkArgument(
+                Character.isBmpCodePoint(cp),
+                "Only BMP code points are supported for exemplars: 0x%s", Integer.toHexString(cp));
+            if (Character.isAlphabetic(cp)) {
+                out.appendCodePoint(cp);
+            } else {
+                out.append(String.format("\\u%04X", cp));
+            }
+            return out;
         }
 
         private String createMessage(String text, boolean isPattern) {
@@ -371,17 +397,6 @@ public final class PseudoLocales {
     }
 
     // ---- Bidi Pseudo-localizer (e.g. "November" --> "rebmevoN" using BiDi tags)----
-
-    // Right-to-left override character.
-    private static final String RLO = "\u202e";
-    // Arabic letter mark character.
-    private static final String ALM = "\u061C";
-    // Pop direction formatting character.
-    private static final String PDF = "\u202c";
-    // Prefix to add before each LTR word.
-    private static final String BIDI_PREFIX = ALM + RLO;
-    // Postfix to add after each LTR word.
-    private static final String BIDI_POSTFIX = PDF + ALM;
 
     // Bidi localization doesn't care if the fragment is a pattern or not.
     @SuppressWarnings("unused")

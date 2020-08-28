@@ -1,9 +1,24 @@
+---
+layout: default
+title: C/POSIX Migration
+nav_order: 6
+parent: ICU
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # C/POSIX Migration
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Migration from Standard C and POSIX APIs
 
@@ -30,7 +45,7 @@ in the future.
 
 #### ISO C
 
-The ISO C standard provides two basic character types (char and wchar_t) and
+The ISO C standard provides two basic character types (`char` and `wchar_t`) and
 defines strings as arrays of units of these types. The standard allows nearly
 arbitrary character and string character sets and encodings, which was necessary
 when there was no single character set that worked everywhere.
@@ -65,7 +80,7 @@ character and string literals.
     few of the string encodings used with it are documented.
 
 5.  See also [What size wchar_t do I need for
-    Unicode?](http://icu-project.org/docs/papers/unicode_wchar_t.html) .
+    Unicode?](http://icu-project.org/docs/papers/unicode_wchar_t.html)
 
 6.  A program based on this model must be recompiled for each platform. Usually,
     it must be recompiled for each supported language or family of languages.
@@ -82,26 +97,24 @@ character and string literals.
 ICU always processes Unicode text. Unicode covers all languages and allows safe
 hard coding of character codes, in addition to providing many standard or
 recommended algorithms and a lot of useful character property data. See the
-chapters about [Unicode Basics](unicode.md) and [Strings](strings/index.md) and
-others.
+chapters about [Unicode Basics](unicode.md) and [Strings](strings/index.md) and others.
 
 ICU uses the 16-bit encoding form of Unicode (UTF-16) for processing, making it
-fully interoperable with most Unicode-aware software. (See [UTF-16 for
-Processing](http://www.unicode.org/notes/tn12/) .) In the case of ICU4J, this is
+fully interoperable with most Unicode-aware software. See [UTF-16 for
+Processing](http://www.unicode.org/notes/tn12/). In the case of ICU4J, this is
 naturally the case because the Java language and the JDK use UTF-16.
 
 ICU uses and/or provides direct access to all of the [Unicode
 properties](strings/properties.md) which provide a much finer-grained
 classification of characters than [C/POSIX character
-classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/posix_classes.html)
-.
+classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/posix_classes.html).
 
 In C/C++ source code character and string literals, ICU uses only "invariant"
 characters. They are the subset of graphic ASCII characters that are almost
 always encoded with the same byte values on all systems. (One set of byte values
 for ASCII-based systems, and another such set of byte values for EBCDIC
 systems.) See
-[utypes.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utypes.h)
+[`utypes.h`](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utypes.h)
 for the set of "invariant" characters.
 
 With the use of Unicode, the implementation of many of the Unicode standard
@@ -112,7 +125,7 @@ portable, and reliable text processing.
 
 #### ISO C
 
-The standard C functions tolower(), towupper(), etc. take and return one
+The standard C functions `tolower()`, `toupper()`, etc. take and return one
 character code each.
 
 #### Problems
@@ -186,9 +199,8 @@ locale's respective character class.
     this repertoire is not possible with such an implementation.
 
 7.  For more about the problems with POSIX character classes in a Unicode
-    context see [Annex C: Compatibility Properties in Unicode Technical Standard
-    #18: Unicode Regular
-    Expressions](http://www.unicode.org/reports/tr18/#Compatibility_Properties)
+    context see [Annex C: Compatibility Properties in Unicode
+    Technical Standard #18: Unicode Regular Expressions](http://www.unicode.org/reports/tr18/#Compatibility_Properties)
     and see the mailing list archives for the unicode list (on unicode.org). See
     also the ICU design document about [C/POSIX character
     classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/posix_classes.html).
@@ -197,8 +209,8 @@ locale's respective character class.
 
 ICU provides locale-independent access to all [Unicode
 properties](strings/properties.md) (except Unihan.txt properties), as well as to
-the POSIX character classes, via functions defined in uchar.h and in ICU4J's
-UCharacter class (see API references) as well as via UnicodeSet. The POSIX
+the POSIX character classes, via functions defined in `uchar.h` and in ICU4J's
+`UCharacter` class (see API references) as well as via `UnicodeSet`. The POSIX
 character classes are implemented according to the recommendations in UTS #18.
 
 The Unicode Character Database defines more than 70 character properties, their
@@ -213,10 +225,10 @@ of Unicode properties.
 
 #### POSIX
 
-The strfmon() function is used to format monetary values. The default format and
+The `strfmon()` function is used to format monetary values. The default format and
 the currency display symbol or display name are selected by the LC_MONETARY
 locale ID. The number formatting can also be controlled with a formatting string
-resembling what printf() uses.
+resembling what `printf()` uses.
 
 #### Problems
 
@@ -229,7 +241,7 @@ resembling what printf() uses.
 2.  Using a single locale ID for the whole format makes it very difficult to
     format values for multiple currencies with the same number format (for
     example, for an exchange rate list or for showing the price of an item
-    adjusted for several currencies). strfmon() allows to specify the number
+    adjusted for several currencies). `strfmon()` allows to specify the number
     format fully, but then the application cannot use a country's default number
     format.
 
@@ -243,4 +255,4 @@ resembling what printf() uses.
 ICU number formatting APIs have separate, orthogonal settings for the number
 format, which can be selected with a locale ID, and the currency, which is
 specified with an ISO code. See the [Formatting
-Numbers](formatparse/numbers/index.md) chapter for details.
+Numbers](format_parse/numbers/index.md) chapter for details.

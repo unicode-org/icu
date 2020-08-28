@@ -1,9 +1,24 @@
+---
+layout: default
+title: ICU Data
+nav_order: 13
+has_children: true
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # ICU Data
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -23,14 +38,12 @@ the rest of ICU. No specific action or setup is required of either the
 application program or the execution environment.
 
 Update: as of ICU 64, the standard data library is over 20 MB in size. We have
-introduced a new tool, the [ICU Data Build
-Tool](https://github.com/unicode-org/icu/blob/master/docs/userguide/icu_data/buildtool.md),
+introduced a new tool, the [ICU Data Build Tool](./icu_data/buildtool.md),
 to give you more control over what goes into your ICU locale data file.
 
-> :point_right: **Note**: ICU for C by default comes with pre-built data. The
-source data files are included as an "icu\*data.zip" file starting in ICU4C 49.
-Previously, they were not included unless ICU is downloaded from the [source
-repository](http://site.icu-project.org/repository).
+> :point_right: **Note**: ICU for C by default comes with pre-built data.
+> The source data files are included as an "icu\*data.zip" file starting in ICU4C 49.
+> Previously, they were not included unless ICU is downloaded from the [source repository](http://site.icu-project.org/repository).
 
 ## ICU and CLDR Data
 
@@ -71,12 +84,13 @@ The ICU data directory is determined as follows:
     highest data loading performance.
 
 > :point_right: **Note**: `u_setDataDirectory()` is not thread-safe. Call it
-before calling ICU APIs from multiple threads. If you use both
-`u_setDataDirectory()` and `u_init()`, then use `u_setDataDirectory()` first.*
-*Earlier versions of ICU supported two additional schemes: setting a data
-directory relative to the location of the ICU shared libraries, and on Windows,
-taking a location from the registry. These have both been removed to make the
-behavior more predictable and easier to understand.*
+> *before* calling ICU APIs from multiple threads. If you use both
+> `u_setDataDirectory()` and `u_init()`, then use `u_setDataDirectory()` first.
+> 
+> *Earlier versions of ICU supported two additional schemes: setting a data
+> directory relative to the location of the ICU shared libraries, and on Windows,
+> taking a location from the registry. These have both been removed to make the
+> behavior more predictable and easier to understand.*
 
 The ICU data directory does not need to be set in order to reference the
 standard built-in ICU data. Applications that just use standard ICU capabilities
@@ -87,7 +101,7 @@ data do not need to specify an ICU data directory.
 
 The ICU data directory string can contain multiple directories as well as .dat
 path/filenames. They must be separated by the path separator that is used on the
-platform, for example a semicolon (;) on Windows. Data files will be searched in
+platform, for example a semicolon (`;`) on Windows. Data files will be searched in
 all directories and .dat package files in the order of the directory string. For
 details, see the example below.
 
@@ -118,16 +132,16 @@ happens only once per process, at the time an ICU data item is first requested.
 
 3.  Dynamically load (memory map, typically) a common format (.dat) file
     containing the default ICU data. Loading is described in the section
-    [How Data Loading Works](icudata.md#how-data-loading-works). The path to
+    [How Data Loading Works](icudata#how-data-loading-works). The path to
     the data is of the form  "icudt\<version\>\<flag\>", where \<version\> is
     the two-digit ICU version number, and \<flag\> is a letter indicating the
     internal format of the file (see the
-    [Sharing ICU Data Between Platforms](icudata.md#sharing-icu-data-between-platforms)
+    [Sharing ICU Data Between Platforms](icudata#sharing-icu-data-between-platforms)
     section).
 
 Once the default ICU data has been located, loading of individual data items
 proceeds as described in the section
-[How Data Loading Works](icudata.md#how-data-loading-works).
+[How Data Loading Works](icudata#how-data-loading-works).
 
 ## Building and Linking against ICU data
 
@@ -238,7 +252,7 @@ and set with `udata_setCommonData()` or `udata_setAppData()`, or they must be
 in a known location that is included in the ICU data directory string. This
 requires the application installer, or the application itself at runtime, to
 locate the ICU and/or application data by setting the ICU data directory (see
-the [ICU Data Directory](icudata.md#icu-data-directory) section above) or by
+the [ICU Data Directory](icudata#icu-data-directory) section above) or by
 loading the data and providing it to one of the `udata_setXYZData()` functions.
 
 Unlike shared libraries, .dat package files can be taken apart into separate
@@ -247,7 +261,7 @@ modification of a package file. The `gencmn` and `pkgdata` ICU tools can then be
 used to reassemble the .dat package file.
 
 For more information about .dat package files see the section [Sharing ICU Data
-Between Platforms](icudata.md#sharing-icu-data-between-platforms) below.
+Between Platforms](icudata#sharing-icu-data-between-platforms) below.
 
 ### Data Overriding vs. Loading Performance
 
@@ -261,7 +275,7 @@ all directories and matching .dat files mentioned before checking in
 already-loaded package files. This allows overriding of packaged data items with
 single files after installation but costs some time for filesystem accesses.
 This is usually done only once per data item; see
-[User Data Caching](icudata.md#user-data-caching) below.
+[User Data Caching](icudata#user-data-caching) below.
 
 ### Single Data Files vs. Packages
 
@@ -297,7 +311,7 @@ are not handled here.)
 
 > :point_right: **Note**: The ICU data directory string itself may
 contain multiple directories and path/filenames to .dat package files. See the
-[ICU Data Directory](icudata.md#icu-data-directory) section.
+[ICU Data Directory](icudata#icu-data-directory) section.
 
 It is recommended to not include the directory in the path argument but to make
 sure via setting the application data or the ICU data directory string that the
@@ -389,8 +403,8 @@ There is no mechanism for removing or updating cached data files.
 ## Directory Separator Characters
 
 If a directory separator (generally '/' or '\\') is needed in a path parameter,
-use the form that is native to the platform. The ICU header "putil.h" defines
-U_FILE_SEP_CHAR appropriately for the platform.
+use the form that is native to the platform. The ICU header `"putil.h"` defines
+`U_FILE_SEP_CHAR` appropriately for the platform.
 
 > :point_right: **Note**: On Windows, the directory separator must be '\\' for
 any paths passed to ICU APIs. This is different from native Windows APIs, which
@@ -570,7 +584,7 @@ above. The ICU project provides a large number of additional locales in its
 [locale
 repository](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/locales/)
 on the web. Most of this locale data is derived from the CLDR ([Common Locale
-Data Repository](http://www.unicode.org/cldr/) ) project.
+Data Repository](http://www.unicode.org/cldr/)) project.
 
 Dropping the txt file into the correct place in the source tree is sufficient to
 add it to your ICU build. You will need to re-configure in order to pick it up.
@@ -754,7 +768,7 @@ loadable data objects.)
 #### ICU.dat package files
 *   Source format: (list of files provided as input to the icupkg tool, or
          on the gencmn tool command line)
-*    Binary format: .dat: [source/tools/toolutil/pkg_gencmn.c](../../icu4c/source/tools/toolutil/pkg_gencmn.cpp)
+*    Binary format: .dat: [source/tools/toolutil/pkg_gencmn.cpp](../../icu4c/source/tools/toolutil/pkg_gencmn.cpp)
 *    Generator tool: [icupkg](../../icu4c/source/tools/icupkg) or
          [gencmn](../../icu4c/source/tools/gencmn)
          
@@ -1024,11 +1038,11 @@ required resource is present.
 
 #### Using additional resource files with ICU4J
 
-> :point_right: **Note**: Resource file formats can change across releases of
-ICU4J!
-*The format of ICU4J resources is not part of the API. Clients who develop their
-own resources for use with ICU4J should be prepared to regenerate them when they
-move to new releases of ICU4J.*
+> :point_right: **Note**: Resource file formats can change across releases of ICU4J!
+> 
+> *The format of ICU4J resources is not part of the API. Clients who develop their
+> own resources for use with ICU4J should be prepared to regenerate them when they
+> move to new releases of ICU4J.*
 
 We are still developing ICU4J's resource mechanism. Currently it is not possible
 to mix icu's new binary .res resources with traditional java-style .class or
@@ -1053,19 +1067,15 @@ corresponding resource files already in that directory.
 
 1.  [ICU4C](http://icu-project.org/download/)
 
-2.  Compilers and tools required for [building
-    ICU4C](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild)
-    .
+2.  Compilers and tools required for [building ICU4C](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild).
 
 3.  J2SE SDK version 5 or above
 
 #### Procedure
 
-1.  Download and build ICU4C on a Windows or Linux machine. For instructions on
-    downloading and building ICU4C, please click
-    [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild)
-    .
+1.  Download and build ICU4C on a Windows or Linux machine. For instructions on downloading and building ICU4C, please click
+    [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild).
 
 2.  Follow the remaining instructions in
-    [*$icu4c_root*/source/data/icu4j-readme.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/icu4j-readme.txt)
-    . *$icu4c_root* is the root directory of ICU4C source package.
+    [*$icu4c_root*/source/data/icu4j-readme.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/icu4j-readme.txt).
+    *$icu4c_root* is the root directory of ICU4C source package.

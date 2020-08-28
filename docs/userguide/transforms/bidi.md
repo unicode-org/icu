@@ -1,9 +1,24 @@
+---
+layout: default
+title: BiDi Algorithm
+nav_order: 2
+parent: Transforms
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # BiDi Algorithm
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -108,7 +123,7 @@ reordering. See the ubidi.h header file and the [BiDi API
 References](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ubidi_8h.html) .
 
 See [Unicode Standard Annex #9: The Bidirectional
-Algorithm](http://www.unicode.org/unicode/reports/tr9/) .
+Algorithm](http://www.unicode.org/reports/tr9/) .
 
 ## Programming Examples in C and C++
 

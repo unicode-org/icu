@@ -1,9 +1,24 @@
+---
+layout: default
+title: Boundary Analysis
+nav_order: 10
+has_children: true
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Boundary Analysis
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview of Text Boundary Analysis
 
@@ -51,8 +66,8 @@ ICU `BreakIterator`s can be used to locate the following kinds of text boundarie
 
 Each type of boundary is found in accordance with the rules specified by Unicode
 Standard Annex #29, *Unicode Text Segmentation*
-(<https://unicode.org/reports/tr29/> ) or Unicode Standard Annex #14, *Unicode
-Line Breaking Algorithm* (<https://unicode.org/reports/tr14/>)
+(<https://www.unicode.org/reports/tr29/> ) or Unicode Standard Annex #14, *Unicode
+Line Breaking Algorithm* (<https://www.unicode.org/reports/tr14/>)
 
 ### Character Boundary
 
@@ -222,7 +237,7 @@ French, Italian and Portuguese.
 
 ICU's break iterators are based on the default boundary rules described in the
 Unicode Standard Annexes [14](https://www.unicode.org/reports/tr14/) and
-[29](https://www.unicode.org/unicode/reports/tr29/) . These are relatively
+[29](https://www.unicode.org/reports/tr29/). These are relatively
 simple boundary rules that can be implemented efficiently, and are sufficient
 for many purposes and languages. However, some languages and applications will
 require a more sophisticated linguistic analysis of the text in order to find

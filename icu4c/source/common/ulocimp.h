@@ -13,6 +13,8 @@
 #include "unicode/bytestream.h"
 #include "unicode/uloc.h"
 
+#include "charstr.h"
+
 /**
  * Create an iterator over the specified keywords list
  * @param keywordList double-null terminated list. Will be copied.
@@ -47,20 +49,27 @@ uloc_getCurrentCountryID(const char* oldID);
 U_CFUNC const char* 
 uloc_getCurrentLanguageID(const char* oldID);
 
-U_CFUNC int32_t
+U_CFUNC void
+ulocimp_getKeywords(const char *localeID,
+             char prev,
+             icu::ByteSink& sink,
+             UBool valuesToo,
+             UErrorCode *status);
+
+icu::CharString U_EXPORT2
 ulocimp_getLanguage(const char *localeID,
-                    char *language, int32_t languageCapacity,
-                    const char **pEnd);
+                    const char **pEnd,
+                    UErrorCode &status);
 
-U_CFUNC int32_t
+icu::CharString U_EXPORT2
 ulocimp_getScript(const char *localeID,
-                   char *script, int32_t scriptCapacity,
-                   const char **pEnd);
+                  const char **pEnd,
+                  UErrorCode &status);
 
-U_CFUNC int32_t
+icu::CharString U_EXPORT2
 ulocimp_getCountry(const char *localeID,
-                   char *country, int32_t countryCapacity,
-                   const char **pEnd);
+                   const char **pEnd,
+                   UErrorCode &status);
 
 U_STABLE void U_EXPORT2
 ulocimp_getName(const char* localeID,
@@ -107,13 +116,17 @@ ulocimp_toLanguageTag(const char* localeID,
  * If the specified language tag contains any ill-formed subtags,
  * the first such subtag and all following subtags are ignored.
  * <p>
- * This implements the 'Language-Tag' production of BCP47, and so
- * supports grandfathered (regular and irregular) as well as private
- * use language tags.  Private use tags are represented as 'x-whatever',
- * and grandfathered tags are converted to their canonical replacements
- * where they exist.  Note that a few grandfathered tags have no modern
- * replacement, these will be converted using the fallback described in
+ * This implements the 'Language-Tag' production of BCP 47, and so
+ * supports legacy language tags (marked as “Type: grandfathered” in BCP 47)
+ * (regular and irregular) as well as private use language tags.
+ *
+ * Private use tags are represented as 'x-whatever',
+ * and legacy tags are converted to their canonical replacements where they exist.
+ *
+ * Note that a few legacy tags have no modern replacement;
+ * these will be converted using the fallback described in
  * the first paragraph, so some information might be lost.
+ *
  * @param langtag   the input BCP47 language tag.
  * @param tagLen    the length of langtag, or -1 to call uprv_strlen().
  * @param sink      the output sink receiving a locale ID for the

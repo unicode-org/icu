@@ -122,7 +122,7 @@ public class PseudoLocalesTest {
         CldrDataSupplier pseudo = PseudoLocales.addPseudoLocalesTo(src);
 
         assertValuesUnordered(pseudo.getDataForLocale("ar_XB", UNRESOLVED),
-            value(exemplarsPath, "[a b c d e f g h i j k l m n o p q r s t u v w x y z]"));
+            value(exemplarsPath, "[a b c d e f g h i j k l m n o p q r s t u v w x y z \\u061C \\u202E \\u202C]"));
         assertValuesUnordered(pseudo.getDataForLocale("en_XA", UNRESOLVED),
             value(exemplarsPath,
                 "[a å b ƀ c ç d ð e é f ƒ g ĝ h ĥ i î j ĵ k ķ l ļ m ɱ"

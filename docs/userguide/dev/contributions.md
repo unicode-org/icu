@@ -1,9 +1,24 @@
+---
+layout: default
+title: Contributions
+nav_order: 4
+parent: Misc
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Contributions to the ICU library
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Why Contribute?
 

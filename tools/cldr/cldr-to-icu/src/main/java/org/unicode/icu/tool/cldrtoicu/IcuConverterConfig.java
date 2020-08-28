@@ -44,6 +44,8 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
         private Path specialsDir =
             DEFAULT_ICU_DIR.map(d -> d.resolve("icu4c/source/data/xml")).orElse(null);
         private ImmutableSet<OutputType> outputTypes = OutputType.ALL;
+        private Optional<String> icuVersion = Optional.empty();
+        private Optional<String> icuDataVersion = Optional.empty();
         private Optional<String> cldrVersion = Optional.empty();
         private CldrDraftStatus minimumDraftStatus = CldrDraftStatus.CONTRIBUTED;
         private boolean emitReport = false;
@@ -78,6 +80,20 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
          */
         public Builder setOutputTypes(Iterable<OutputType> types) {
             this.outputTypes = ImmutableSet.copyOf(types);
+            return this;
+        }
+
+        public Builder setIcuVersion(String version) {
+            if (!version.isEmpty()) {
+                this.icuVersion = Optional.of(version);
+            }
+            return this;
+        }
+
+        public Builder setIcuDataVersion(String version) {
+            if (!version.isEmpty()) {
+                this.icuDataVersion = Optional.of(version);
+            }
             return this;
         }
 
@@ -121,7 +137,7 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     private final Path outputDir;
     private final Path specialsDir;
     private final ImmutableSet<OutputType> outputTypes;
-    private final String cldrVersion;
+    private final IcuVersionInfo versionInfo;
     private final CldrDraftStatus minimumDraftStatus;
     private final boolean emitReport;
     private final ImmutableSet<String> allLocaleIds;
@@ -141,8 +157,10 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
         checkArgument(!this.outputTypes.isEmpty(),
             "must specify at least one output type to be generated (possible values are: %s)",
             Arrays.asList(OutputType.values()));
-        this.cldrVersion =
-            builder.cldrVersion.orElse(CldrDataSupplier.getCldrVersionString());
+        this.versionInfo = new IcuVersionInfo(
+            builder.icuVersion.orElseThrow(() -> new IllegalStateException("missing ICU version")),
+            builder.icuDataVersion.orElseThrow(() -> new IllegalStateException("missing ICU data version")),
+            builder.cldrVersion.orElse(CldrDataSupplier.getCldrVersionString()));
         this.minimumDraftStatus = checkNotNull(builder.minimumDraftStatus);
         this.emitReport = builder.emitReport;
         // getAllLocaleIds() returns the union of all the specified IDs in the map.
@@ -172,8 +190,8 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     }
 
     @Override
-    public String getCldrVersion() {
-        return cldrVersion;
+    public IcuVersionInfo getVersionInfo() {
+        return versionInfo;
     }
 
     @Override

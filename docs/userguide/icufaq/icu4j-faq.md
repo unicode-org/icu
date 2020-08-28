@@ -1,9 +1,26 @@
+---
+layout: default
+title: ICU4J FAQ
+nav_order: 7
+parent: Misc
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # ICU4J FAQ
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+# Overview
 
 This page contains frequently asked questions about the content provided with
 the International Components for Unicode for Java as well as basics on
@@ -45,7 +62,7 @@ Time Zone Data Version: 2011g
 #### I'm using ICU4J X, but planning to upgrade ICU4J version to X+1 soon. What should I do for the migration?
 
 See the user guide section
-[Version Numbers in ICU](../design.md#version-numbers-in-icu)
+[Version Numbers in ICU](../design#version-numbers-in-icu)
 for the details about the meaning of the version number parts and how the ICU
 version number changes.
 
@@ -53,7 +70,7 @@ In general, two different reference releases are not binary compatible (i.e.
 drop-in jar file replacement would not work). To use a new reference version of
 ICU4J, you should rebuild your application with the new ICU4J library. ICU
 project has the
-[API compatibility policy](../design.md#icu-api-compatibility)
+[API compatibility policy](../design#icu-api-compatibility)
 long as you're using ICU APIs marked as @stable in the API reference
 documentation, your application should successfully compile with the new
 reference version of ICU4J library without any source code modifications. (Note:

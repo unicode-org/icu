@@ -16,23 +16,23 @@ Requirements
 Important directories
 ---------------------
 
-ICU_ROOT = The top-level directory for this ICU project installation.
+TOOLS_ROOT: Path to root of ICU tools directory, below which are (e.g.) the
+            cldr/ and unicodetools/ directories.
 
-CLDR_ROOT = The top-level directory for the CLDR project, containing CLDR
-            code and non-production data. Usually obtained from:
-            https://github.com/unicode-org/cldr
+CLDR_DIR:   This is the path to the to root of standard CLDR sources, below
+            which are the common/ and tools/ directories.
 
-CLDR_DIR  = The top-level directory for the CLDR production data (typically
-            the "production" directory in the staging repository). Usually
-            obtained from:
-            https://github.com/unicode-org/cldr-staging/tree/master/production
+CLDR_DATA_DIR: The top-level directory for the CLDR production data (typically
+               the "production" directory in the staging repository). Usually
+               generated locally or obtained from:
+               https://github.com/unicode-org/cldr-staging/tree/master/production
 
 In Posix systems, it's best to set these as exported shell variables, and any
 following instructions assume they have been set accordingly:
 
-$ export ICU_ROOT=/path/to/icu
-$ export CLDR_ROOT=/path/to/cldr
-$ export CLDR_DIR=/path/to/cldr-staging/production
+$ export TOOLS_ROOT=/path/to/icu/tools
+$ export CLDR_DIR=/path/to/cldr
+$ export CLDR_DATA_DIR=/path/to/cldr-staging/production
 
 Note that you should not attempt to use data from the CLDR project directory
 (where the CLDR API code exists) for conversion into ICU data. The process now
@@ -51,17 +51,17 @@ based system, this should be as simple as:
 $ sudo apt-get install maven ant
 
 You must also install an additional CLDR JAR file the local Maven repository at
-$ICU_ROOT/tools/cldr/lib (see the README.txt in that directory for more
+$TOOLS_ROOT/cldr/lib (see the README.txt in that directory for more
 information).
 
-$ cd "$ICU_ROOT/tools/cldr/lib"
-$ ./install-cldr-jars.sh "$CLDR_ROOT"
+$ cd "$TOOLS_ROOT/cldr/lib"
+$ ./install-cldr-jars.sh "$CLDR_DIR"
 
 
 Generating all ICU data
 -----------------------
 
-$ cd "$ICU_ROOT/tools/cldr/cldr-to-icu"
+$ cd "$TOOLS_ROOT/cldr/cldr-to-icu"
 $ ant -f build-icu-data.xml
 
 
@@ -92,7 +92,7 @@ See build-icu-data.xml for documentation of all options and additional customiza
 Running unit tests
 ------------------
 
-$ mvn test -DCLDR_DIR="$CLDR_DIR"
+$ mvn test -DCLDR_DIR="$CLDR_DATA_DIR"
 
 
 Importing and running from an IDE

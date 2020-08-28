@@ -702,7 +702,7 @@ UnicodeString& ListFormatter::format_(
     int32_t prefixLength = 0;
     // for n items, there are 2 * (n + 1) boundary including 0 and the upper
     // edge.
-    MaybeStackArray<int32_t, 10> offsets((handler != nullptr) ? 2 * (nItems + 1): 0);
+    MaybeStackArray<int32_t, 10> offsets((handler != nullptr) ? 2 * (nItems + 1) : 0, errorCode);
     if (nItems == 2) {
         joinStringsAndReplace(
                 data->patternHandler->getTwoPattern(items[1]),

@@ -1,3 +1,9 @@
+---
+layout: default
+title: Regular Expressions
+nav_order: 6
+parent: Chars and Strings
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
@@ -145,7 +151,7 @@ complete a complete description of the API.
 | \\W       | ✓               | ✓               | Match a non-word character.
 | \\x{hhhh} | ✓               | ✓               | Match the character with hex value hhhh. From one to six hex digits may be supplied.
 | \\xhh     | ✓               | ✓               | Match the character with two digit hex value hh.
-| \\X       | ✓               |                 | Match a [Grapheme Cluster](http://www.unicode.org/unicode/reports/tr29/#Grapheme_Cluster_Boundaries).
+| \\X       | ✓               |                 | Match a [Grapheme Cluster](http://www.unicode.org/reports/tr29/#Grapheme_Cluster_Boundaries).
 | \\Z       | ✓               |                 | Match if the current position is at the end of input, but before the final line terminator, if one exists.
 | \\z       | ✓               |                 | Match if the current position is at the end of input.
 | \\*n*     | ✓               |                 | Back Reference. Match whatever the nth capturing group matched. n must be a number > 1 and < total number of capture groups in the pattern.
@@ -213,7 +219,7 @@ complete a complete description of the API.
 Case insensitive matching is specified by the UREGEX_CASE_INSENSITIVE flag
 during pattern compilation, or by the (?i) flag within a pattern itself. Unicode
 case insensitive matching is complicated by the fact that changing the case of a
-string may change its length. See <http://unicode.org/faq/casemap_charprop.html>
+string may change its length. See <http://www.unicode.org/faq/casemap_charprop.html>
 for more information on Unicode casing operations.
 
 Full case-insensitive matching handles situations where the number of characters
@@ -500,5 +506,5 @@ processes, can be a problem with some regular expression packages.
     matches any of ```!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~```. From that list,
     ICU omits ```$+<=>^\`|~``` &nbsp; &nbsp;
     ICU follows the recommendations from Unicode UTS-18,
-    <http://unicode.org/reports/tr18/#Compatibility_Properties>. See also
+    <http://www.unicode.org/reports/tr18/#Compatibility_Properties>. See also
     <https://unicode-org.atlassian.net/browse/ICU-20095>.

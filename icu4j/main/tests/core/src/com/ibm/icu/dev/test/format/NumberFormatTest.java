@@ -6906,4 +6906,17 @@ public class NumberFormatTest extends TestFmwk {
                     parsedLenientValue, expectedLenientParse);
         }
     }
+
+    @Test
+    public void Test21232_ParseTimeout() throws ParseException {
+        DecimalFormat df = new DecimalFormat();
+        StringBuilder input = new StringBuilder();
+        input.append("4444444444444444444444444444444444444444");
+        for (int i = 0; i < 8; i++) {
+            input.append(input);
+        }
+        assertEquals("Long input of digits", 10240, input.length());
+        df.parse(input.toString());
+        // Should not hang
+    }
 }

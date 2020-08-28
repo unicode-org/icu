@@ -1,9 +1,24 @@
+---
+layout: default
+title: Normalization
+nav_order: 3
+parent: Transforms
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Normalization
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -58,7 +73,7 @@ Here is a summary of the differences:
     composition](http://www.unicode.org/notes/tn5/#FCC) which is almost the same
     as NFC/NFKC except that the normalized form also passes the FCD test. This
     is also supported for any standard or custom data file.
-*   Quick check: There is a new spanQuickCheckYes() function for an optimized
+*   Quick check: There is a new `spanQuickCheckYes()` function for an optimized
     combination of quick check and normalization.
 *   Filtered: The new FilteredNormalizer2 class combines a Normalizer2 instance
     with a UnicodeSet to limit normalization to certain characters. For example,
@@ -88,12 +103,12 @@ The new API does not replace a few pieces of the old API:
 ## Data File Syntax
 
 The gennorm2 tool accepts one or more .txt files and generates a .nrm binary
-data file for Normalizer2.getInstance(). For gennorm2 command line options,
-invoke gennorm2 --help.
+data file for `Normalizer2.getInstance()`. For gennorm2 command line options,
+invoke `gennorm2 --help`.
 
 gennorm2 starts with no data. If you want to include standard Unicode
 Normalization data, use the files in
-[{ICU4C}/source/data/unidata/norm2/](http://bugs.icu-project.org/trac/browser/trunk/icu4c/source/data/unidata/norm2)
+[{ICU4C}/source/data/unidata/norm2/](https://github.com/unicode-org/icu/tree/master/icu4c/source/data/unidata/norm2)
 . You can modify one of them, or provide it together with one or more additional
 files that add or remove mappings.
 
@@ -124,19 +139,23 @@ mappings that are forbidden by the Unicode Normalization algorithms are reported
 as errors. For example, if a character has a two-way mapping, then neither of
 its mapping characters can have a one-way mapping.
 
-    * Unicode 6.1         # Optional Unicode version (since ICU 49; default: uchar.h U_UNICODE_VERSION)
-    00E1=0061 0301        # Two-way mapping
-    00AA>0061             # One-way mapping
-    0300..0314:230        # ccc for a code point range
-    0315:232              # ccc for a single code point
-    0132..0133>0069 006A  # Range, each code point mapping to "ij"
-    E0000..E0FFF>         # Range, each code point mapping to the empty string
+```
+* Unicode 6.1         # Optional Unicode version (since ICU 49; default: uchar.h U_UNICODE_VERSION)
+00E1=0061 0301        # Two-way mapping
+00AA>0061             # One-way mapping
+0300..0314:230        # ccc for a code point range
+0315:232              # ccc for a single code point
+0132..0133>0069 006A  # Range, each code point mapping to "ij"
+E0000..E0FFF>         # Range, each code point mapping to the empty string
+```
 
 It is possible to override mappings from previous source files, including
 removing a mapping:
 
+```
     00AA-
     E0000..E0FFF-
+```
 
 ## Data Generation Tool
 
@@ -145,7 +164,9 @@ processed, and a binary data file is written for use by the ICU library (same
 file for C++ and Java). The binary data file format changes occasionally in
 order to support additional functionality.
 
+```shell
     bin/gennorm2 -v -o $ICU4C_DATA_IN/nfkc_cf.nrm -s $ICU4C_UNIDATA/norm2 nfc.txt nfkc.txt nfkc_cf.txt
+```
 
 For the complete set of options, invoke `gennorm2 --help`.
 
@@ -153,13 +174,17 @@ Instead of the binary data file, the processed data can be written into a C
 file. This is closely tied to the needs of the ICU library. The format may
 change from one ICU version to the next.
 
+```shell
     bin/gennorm2 -v -o $ICU_SRC/icu4c/source/common/norm2_nfc_data.h -s $ICU4C_UNIDATA/norm2 nfc.txt **--csource**
+```
 
 With the --combined option, gennorm2 writes the combined data of the input
 files. The following example writes the combined NFKC_Casefold data. (New in ICU
 60.)
 
+```shell
     bin/gennorm2 -o /tmp/nfkc_cf.txt -s $ICU4C_UNIDATA/norm2 nfc.txt nfkc.txt nfkc_cf.txt **--combined**
+```
 
 With the "minus" operator, gennorm2 writes the diffs of the combined data from
 two sets of input files. (New in ICU 60.)
@@ -169,47 +194,53 @@ extracted from the UCD file DerivedNormalizationProps.txt. It is not minimal.
 The following command line generates the minimal differences of NFKC_Casefold
 compared with NFKC.
 
+```shell
     bin/gennorm2 -o /tmp/nfkc_cf-minus-nfkc.txt -s $ICU4C_UNIDATA/norm2 nfc.txt nfkc.txt nfkc_cf.txt **minus** nfc.txt nfkc.txt
+```
 
 ## Example
 
-    class NormSample {
-    public:
-      // ICU service objects should be cached and reused, as usual.
-      NormSample(UErrorCode &errorCode)
-          : nfkc(*Normalizer2::getNFKCInstance(errorCode),
-            fcd(*Normalizer2::getInstance(NULL, "nfc", UNORM2_FCD, errorCode) {}
-      // Normalize a string.
-      UnicodeString toNFKC(const UnicodeString &s, UErrorCode &errorCode) {
-        return nfkc.normalize(s, errorCode);
-      }
-      // Ensure FCD before processing (like in sort key generation).
-      // In practice, almost all strings pass the FCD test, so it might make sense to
-      // test for it and only normalize when necessary, rather than always normalizing.
-      void processText(const UnicodeString &s, UErrorCode &errorCode) {
-        UnicodeString fcdString;
-        const UnicodeString *ps;  // points to either s or fcdString
-        int32_t spanQCYes=fcd.spanQuickCheckYes(s, errorCode);
-        if(U_FAILURE(errorCode)) {
-          return;  // report error
-        }
-        if(spanQCYes==s.length()) {
-          ps=&s;  // s is already in FCD
-        } else {
-          // unnormalized suffix as a read-only alias (does not copy characters)
-          UnicodeString unnormalized=s.tempSubString(spanQCYes);
-          // set the fcdString to the FCD prefix as a read-only alias
-          fcdString.setTo(FALSE, s.getBuffer(), spanQCYes);
-          // automatic copy-on-write, and append the FCD'ed suffix
-          fcd.normalizeSecondAndAppend(fcdString, unnormalized, errorCode);
-          ps=&fcdString;
-          if(U_FAILURE(errorCode)) {
-            return;  // report error
-          }
-        }
-        // ... now process the string *ps which is in FCD ...
-      }
-    private:
-      const Normalizer2 &nfkc;
-      const Normalizer2 &fcd;
-    };
+```java
+class NormSample {
+public:
+    // ICU service objects should be cached and reused, as usual.
+    NormSample(UErrorCode &errorCode)
+        : nfkc(*Normalizer2::getNFKCInstance(errorCode),
+            fcd(*Normalizer2::getInstance(NULL, "nfc", UNORM2_FCD, errorCode) {}
+
+    // Normalize a string.
+    UnicodeString toNFKC(const UnicodeString &s, UErrorCode &errorCode) {
+        return nfkc.normalize(s, errorCode);
+    }
+
+    // Ensure FCD before processing (like in sort key generation).
+    // In practice, almost all strings pass the FCD test, so it might make sense to
+    // test for it and only normalize when necessary, rather than always normalizing.
+    void processText(const UnicodeString &s, UErrorCode &errorCode) {
+        UnicodeString fcdString;
+        const UnicodeString *ps;  // points to either s or fcdString
+        int32_t spanQCYes=fcd.spanQuickCheckYes(s, errorCode);
+        if(U_FAILURE(errorCode)) {
+            return;  // report error
+        }
+        if(spanQCYes==s.length()) {
+            ps=&s;  // s is already in FCD
+        } else {
+            // unnormalized suffix as a read-only alias (does not copy characters)
+            UnicodeString unnormalized=s.tempSubString(spanQCYes);
+            // set the fcdString to the FCD prefix as a read-only alias
+            fcdString.setTo(FALSE, s.getBuffer(), spanQCYes);
+            // automatic copy-on-write, and append the FCD'ed suffix
+            fcd.normalizeSecondAndAppend(fcdString, unnormalized, errorCode);
+            ps=&fcdString;
+            if(U_FAILURE(errorCode)) {
+                return;  // report error
+            }
+        }
+        // ... now process the string *ps which is in FCD ...
+    }
+private:
+    const Normalizer2 &nfkc;
+    const Normalizer2 &fcd;
+};
+```

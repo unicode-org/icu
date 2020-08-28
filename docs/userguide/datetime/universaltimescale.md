@@ -1,9 +1,24 @@
+---
+layout: default
+title: Universal Time Scale
+nav_order: 5
+parent: Date/Time
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Universal Time Scale
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -21,23 +36,23 @@ Binary datetimes differ in a number of ways: the data type, the unit, and the
 epoch (origin). We'll refer to these as time scales. For example: (Sorted by
 epoch and unit, descending. In Java, `int64_t`=`long` and `int32_t`=`int`.)
 
-| Source                                     | Data Type                                                                        | Epoch       | Unit                                                    |
-| ------------------------------------------ | -------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
-| MacOS X (CFDate/NSDate)                    | double (1.0=1s but fractional seconds are used as well; imprecise for 0.1s etc.) | 2001-Jan-01 | seconds (and fractions thereof)                         |
-| Unix time_t                                | int32_t or int64_t (signed int32_t limited to 1970..2038)                        | 1970-Jan-01 | seconds                                                 |
-| Java Date                                  | int64_t                                                                          | 1970-Jan-01 | milliseconds                                            |
-| Joda DateTime                              | int64_t                                                                          | 1970-Jan-01 | milliseconds                                            |
-| ICU4C UDate                                | double (does not use fractional milliseconds)                                    | 1970-Jan-01 | milliseconds                                            |
-| JavaScript Date                            | double (does not use fractional milliseconds; JavaScript Number stores a double) | 1970-Jan-01 | milliseconds                                            |
-| Unix struct timeval (as in gettimeofday)   | struct: time_t (seconds); suseconds_t (microseconds)                             | 1970-Jan-01 | microseconds                                            |
-| Gnome g_get_real_time()                    | gint64                                                                           | 1970-Jan-01 | microseconds                                            |
-| Unix struct timespec (as in clock_gettime) | struct: time_t (seconds); long (nanoseconds)                                     | 1970-Jan-01 | nanoseconds                                             |
-| MacOS (old)                                | uint32_t (1904..2040)                                                            | 1904-Jan-01 | seconds                                                 |
-| Excel                                      | ?                                                                                | 1899-Dec-31 | days                                                    |
-| DB2                                        | ?                                                                                | 1899-Dec-31 | days                                                    |
-| Windows FILETIME                           | int64_t                                                                          | 1601-Jan-01 | ticks (100 nanoseconds; finest granularity in industry) |
-| .NET DateTime                              | uint62 (only 0001-9999; only 62 bits; also 2-bit field for UTC/local)            | 0001-Jan-01 | ticks (100 nanoseconds; finest granularity in industry) |
-| ICU Universal Time Scale                   | int64_t                                                                          | 0001-Jan-01 | same as .Net but allows 29000BC..29000AD                |
+| Source                                         | Data Type                                                                          | Epoch       | Unit                                                    |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
+| MacOS X (`CFDate/NSDate`)                      | `double` (1.0=1s but fractional seconds are used as well; imprecise for 0.1s etc.) | 2001-Jan-01 | seconds (and fractions thereof)                         |
+| Unix `time_t`                                  | `int32_t` or `int64_t` (`signed int32_t` limited to 1970..2038)                    | 1970-Jan-01 | seconds                                                 |
+| Java `Date`                                    | `int64_t`                                                                          | 1970-Jan-01 | milliseconds                                            |
+| Joda `DateTime`                                | `int64_t`                                                                          | 1970-Jan-01 | milliseconds                                            |
+| ICU4C `UDate`                                  | `double` (does not use fractional milliseconds)                                    | 1970-Jan-01 | milliseconds                                            |
+| JavaScript `Date`                              | `double` (does not use fractional milliseconds; JavaScript Number stores a double) | 1970-Jan-01 | milliseconds                                            |
+| Unix `struct timeval (as in gettimeofday)`     | `struct: time_t` (seconds); suseconds_t (microseconds)                             | 1970-Jan-01 | microseconds                                            |
+| Gnome `g_get_real_time()`                      | `gint64`                                                                           | 1970-Jan-01 | microseconds                                            |
+| Unix `struct timespec` (as in `clock_gettime`) | `struct: time_t` (seconds); long (nanoseconds)                                     | 1970-Jan-01 | nanoseconds                                             |
+| MacOS (old)                                    | `uint32_t` (1904..2040)                                                            | 1904-Jan-01 | seconds                                                 |
+| Excel                                          | ?                                                                                  | 1899-Dec-31 | days                                                    |
+| DB2                                            | ?                                                                                  | 1899-Dec-31 | days                                                    |
+| Windows `FILETIME`                             | `int64_t`                                                                          | 1601-Jan-01 | ticks (100 nanoseconds; finest granularity in industry) |
+| .NET `DateTime`                                | `uint62` (only 0001-9999; only 62 bits; also 2-bit field for UTC/local)            | 0001-Jan-01 | ticks (100 nanoseconds; finest granularity in industry) |
+| ICU Universal Time Scale                       | `int64_t`                                                                          | 0001-Jan-01 | same as .Net but allows 29000BC..29000AD                |
 
 All of the epochs start at 00:00 am (the earliest possible time on the day in
 question), and are usually assumed to be UTC.
@@ -66,7 +81,7 @@ Gregorian calendar. That is, the Gregorian calendar's leap year rules are used
 for all times, even before 1582 when it was introduced. (This is different from
 the default ICU calendar which switches from the Julian to the Gregorian
 calendar in 1582. See `GregorianCalendar::setGregorianChange()` and
-`ucal_setGregorianChange()`.)
+`ucal_setGregorianChange()`).
 
 ICU provides conversion functions to and from all other major time scales,
 allowing datetimes in any time scale to be converted to the universal time
@@ -76,12 +91,12 @@ scale, safely manipulated, and converted back to any other datetime time scale.
 
 So how did we decide what to use for the universal time scale? Java time has
 plenty of range, but cannot represent a .NET `System.DateTime` value without
-severe loss of precision. ICU4C time addresses this by using a double that is
+severe loss of precision. ICU4C time addresses this by using a `double` that is
 otherwise equivalent to the Java time. However, there are disadvantages with
 doubles. They provide for much more graceful degradation in arithmetic
 operations. But they only have 53 bits of accuracy, which means that they will
 lose precision when converting back and forth to ticks. What would really be
-nice would be a long double (80 bits -- 64 bit mantissa), but that is not
+nice would be a `long double` (80 bits -- 64 bit mantissa), but that is not
 supported on most systems.
 
 The Unix extended time uses a structure with two components: time in seconds and
@@ -94,7 +109,7 @@ have a fixed size.
 Because of these issues, we concluded that the .NET `System.DateTime` is the best
 timescale to use. However, we use the full range allowed by the data type,
 allowing for datetimes back to 29,000 BC and up to 29,000 AD. (`System.DateTime`
-uses only 62 bits and only supports dates from 0001 AD to 9999 AD.) This time
+uses only 62 bits and only supports dates from 0001 AD to 9999 AD). This time
 scale is very fine grained, does not lose precision, and covers a range that
 will meet almost all requirements. It will not handle the range that Java times
 do, but frankly, being able to handle dates before 29,000 BC or after 29,000 AD
@@ -108,31 +123,31 @@ information about a particular timescale. In all of these routines, the
 timescales are referenced using an integer constant, according to the following
 table:
 
-| Source                 | ICU4C                       | ICU4J                  |
-| ---------------------- | --------------------------- | ---------------------- |
-| Java                   | UDTS_JAVA_TIME              | JAVA_TIME              |
-| Unix                   | UDTS_UNIX_TIME              | UNIX_TIME              |
-| ICU4C                  | UDTS_ICU4C_TIME             | ICU4C_TIME             |
-| Windows FILETIME       | UDTS_WINDOWS_FILE_TIME      | WINDOWS_FILE_TIME      |
-| .NET DateTime          | UDTS_DOTNET_DATE_TIME       | DOTNET_DATE_TIME       |
-| Macintosh (old)        | UDTS_MAC_OLD_TIME           | MAC_OLD_TIME           |
-| Macintosh              | UDTS_MAC_TIME               | MAC_TIME               |
-| Excel                  | UDTS_EXCEL_TIME             | EXCEL_TIME             |
-| DB2                    | UDTS_DB2_TIME               | DB2_TIME               |
-| Unix with microseconds | UDTS_UNIX_MICROSECONDS_TIME | UNIX_MICROSECONDS_TIME |
+| Source                 | ICU4C                         | ICU4J                    |
+| ---------------------- | ----------------------------- | ------------------------ |
+| Java                   | `UDTS_JAVA_TIME`              | `JAVA_TIME`              |
+| Unix                   | `UDTS_UNIX_TIME`              | `UNIX_TIME`              |
+| ICU4C                  | `UDTS_ICU4C_TIME`             | `ICU4C_TIME`             |
+| Windows FILETIME       | `UDTS_WINDOWS_FILE_TIME`      | `WINDOWS_FILE_TIME`      |
+| .NET DateTime          | `UDTS_DOTNET_DATE_TIME`       | `DOTNET_DATE_TIME`       |
+| Macintosh (old)        | `UDTS_MAC_OLD_TIME`           | `MAC_OLD_TIME`           |
+| Macintosh              | `UDTS_MAC_TIME`               | `MAC_TIME`               |
+| Excel                  | `UDTS_EXCEL_TIME`             | `EXCEL_TIME`             |
+| DB2                    | `UDTS_DB2_TIME`               | `DB2_TIME`               |
+| Unix with microseconds | `UDTS_UNIX_MICROSECONDS_TIME` | `UNIX_MICROSECONDS_TIME` |
 
 The routine that gets a particular piece of information about a timescale takes
 an integer constant that identifies the particular piece of information,
 according to the following table:
 
-| Value                | ICU4C                   | ICU4J              |
-| -------------------- | ----------------------- | ------------------ |
-| Precision            | UTSV_UNITS_VALUE        | UNITS_VALUE        |
-| Epoch offet          | UTSV_EPOCH_OFFSET_VALUE | EPOCH_OFFSET_VALUE |
-| Minimum "from" value | UTSV_FROM_MIN_VALUE     | FROM_MIN_VALUE     |
-| Maximum "from" value | UTSV_FROM_MAX_VALUE     | FROM_MAX_VALUE     |
-| Minimum "to" value   | UTSV_TO_MIN_VALUE       | TO_MIN_VALUE       |
-| Maximum "to" value   | UTSV_TO_MAX_VALUE       | TO_MAX_VALUE       |
+| Value                | ICU4C                      | ICU4J                |
+| -------------------- | -------------------------- | -------------------- |
+| Precision            | `UTSV_UNITS_VALUE`         | `UNITS_VALUE`        |
+| Epoch offset         | `UTSV_EPOCH_OFFSET_VALUE`  | `EPOCH_OFFSET_VALUE` |
+| Minimum "from" value | `UTSV_FROM_MIN_VALUE`      | `FROM_MIN_VALUE`     |
+| Maximum "from" value | `UTSV_FROM_MAX_VALUE`      | `FROM_MAX_VALUE`     |
+| Minimum "to" value   | `UTSV_TO_MIN_VALUE`        | `TO_MIN_VALUE`       |
+| Maximum "to" value   | `UTSV_TO_MAX_VALUE`        | `TO_MAX_VALUE`       |
 
 Here is what the values mean:
 

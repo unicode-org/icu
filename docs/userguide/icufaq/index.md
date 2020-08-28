@@ -1,9 +1,24 @@
+---
+layout: default
+title: ICU FAQ
+nav_order: 6
+parent: Misc
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # ICU FAQs
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Introduction to ICU
 
@@ -73,7 +88,7 @@ your topic.
 #### What is the ICU binary compatibility policy?
 
 Please see the section on
-[binary compatibility](../design.md#icu-binary-compatibility-using-icu-as-an-operating-system-level-library)
+[binary compatibility](../design#icu-binary-compatibility)
 in the [design chapter](../design.md).
 
 #### How is ICU licensed?
@@ -105,7 +120,7 @@ upgrade-friendly.
 
 *   **API:** ensure that you are not using draft APIs which may have changed in
     a future release. See the section on
-    [API compatibility](../design.md#icu-api-compatibility) in the
+    [API compatibility](../design#icu-api-compatibility) in the
     [design chapter](../design.md).
 *   **Unicode:** See the release notes for particular versions of Unicode to
     ensure that your code is not affected by property changes or other
@@ -118,7 +133,7 @@ upgrade-friendly.
     currencies, types of calenders
 *   **Building/Deploying your Application (ICU4C):** ICU4C usually builds with
     symbol renaming (See:
-    [binary compatibility](../design.md#icu-binary-compatibility-using-icu-as-an-operating-system-level-library)
+    [binary compatibility](../design#icu-binary-compatibility)
     in the [design chapter](../design.md)). Be sure that you build your
     application with the updated ICU header files, so that it will link against
     the current ICU. Also, don't hard-code the names of ICU libraries in your
@@ -170,7 +185,7 @@ Support List](http://icu-project.org/contacts.html) .
 
 Use the [Data Customizer](https://unicode-org.atlassian.net/browse/ICU-12835)
 or see
-[Customizing ICU's Data Library](../icudata.md#customizing-icus-data-library)
+[Customizing ICU's Data Library](../icudata#customizing-icus-data-library)
 in the [ICU Data Management](../icudata.md) chapter of this User's Guide.
 
 #### Why am I seeing a small ( only a few K ) instead of a large ( several megabytes ) data shared library (icudt)?
@@ -188,7 +203,7 @@ Studio.
 
 #### Can I add or remove a converter from ICU?
 
-Yes. Please see [Customizing ICU's Data Library](../icudata.md#customizing-icus-data-library)
+Yes. Please see [Customizing ICU's Data Library](../icudata#customizing-icus-data-library)
 in the [ICU Data Management](../icudata.md) of this User's Guide. You can also
 get extra converters from <http://www.icu-project.org/charts/charset/> or use
 the [ICU Data Customizer](https://unicode-org.atlassian.net/browse/ICU-12835)
@@ -253,7 +268,7 @@ ICU4C (ICU) is written in C and C++, and ICU4J is written in Java™.
 
 #### How are the APIs documented for deprecation?
 
-Please read the [ICU API compatibility](../design.md#icu-api-compatibility)
+Please read the [ICU API compatibility](../design#icu-api-compatibility)
 section in the [ICU Design](../design.md) chapter.
 
 #### What version of Unicode standard does ICU support?

@@ -1,9 +1,26 @@
+---
+layout: default
+title: Customization
+nav_order: 3
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation Customization
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 ICU uses the [CLDR root collation
 order](http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Collation)
@@ -803,10 +820,10 @@ These do not cause **c** to sort as if it were **ae**, nor should they.
 The Unicode Collation Algorithm specifies that all text sort as if it were first
 normalized into NFD. For performance reasons, ICU collation data is
 pre-processed so that there is no need to perform normalization on strings that
-are in [FCD](http://unicode.org/notes/tn5/#FCD) and do not contain any composite
+are in [FCD](http://www.unicode.org/notes/tn5/#FCD) and do not contain any composite
 combining marks. Composite combining marks are: { U+0344, U+0F73, U+0F75, U+0F81
 }
-[`[[:^lccc=0:]&[:toNFD=/../:]]`](http://unicode.org/cldr/utility/list-unicodeset.jsp?a=%5B%3A%5Elccc%3D0%3A%5D%26%5B%3AtoNFD%3D%2F..%2F%3A%5D&abb=on&g=)
+[`[[:^lccc=0:]&[:toNFD=/../:]]`](http://www.unicode.org/cldr/utility/list-unicodeset.jsp?a=%5B%3A%5Elccc%3D0%3A%5D%26%5B%3AtoNFD%3D%2F..%2F%3A%5D&abb=on&g=)
 (These characters must be decomposed for discontiguous contractions to work
 properly. Use of these characters is discouraged by the Unicode Standard.). The
 vast majority of strings are in this form.
@@ -918,7 +935,7 @@ given locales. Here is an example of this, which fetches the rules for a
 particular locale (Danish), then overrides some part (sorting '%' after 'm').
 The syntax is Java, but C/C++ has similar features.
 
-```Java
+```java
 ULocale myLocale = new ULocale("da");
 try {
 

@@ -1,9 +1,26 @@
+---
+layout: default
+title: API Details
+nav_order: 6
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation API Details
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 This section describes some of the usage conventions for the ICU Collation
 Service API.
@@ -59,7 +76,7 @@ This example demonstrates the instantiation of a collator.
 
 **C:**
 
-```C
+```c
 UErrorCode status = U_ZERO_ERROR;
 UCollator *coll = ucol_open("en_US", &status);
 if(U_SUCCESS(status)) {
@@ -70,7 +87,7 @@ if(U_SUCCESS(status)) {
 
 **C++:**
 
-```C++
+```c++
 UErrorCode status = U_ZERO_ERROR;
 Collator *coll = Collator::createInstance(Locale("en", "US"), status);
 if(U_SUCCESS(status)) {
@@ -81,7 +98,7 @@ if(U_SUCCESS(status)) {
 
 **Java:**
 
-```Java
+```java
 Collator col = null;
 try {
     col = Collator.getInstance(Locale.US);
@@ -94,16 +111,14 @@ try {
 ### Instantiating Collators Using Custom Rules
 
 If the ICU predefined collators are not appropriate for your intended usage, you
-can
-define your own set of rules and instantiate a collator that uses them. For more
-details, please see [the section on collation
-customization](customization/index.md).
+can define your own set of rules and instantiate a collator that uses them. For more
+details, please see [the section on collation customization](customization/index).
 
 This example demonstrates the instantiation of a collator.
 
 **C:**
 
-```C
+```c
 UErrorCode status = U_ZERO_ERROR;
 U_STRING_DECL(rules, "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E", 52);
 UCollator *coll;
@@ -118,7 +133,7 @@ if(U_SUCCESS(status)) {
 
 **C++:**
 
-```C++
+```c++
 UErrorCode status = U_ZERO_ERROR;
 UnicodeString rules(u"&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
 Collator *coll = new RuleBasedCollator(rules, status);
@@ -130,7 +145,7 @@ if(U_SUCCESS(status)) {
 
 **Java:**
 
-```Java
+```java
 RuleBasedCollator coll = null;
 String ruleset = "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E";
 try {
@@ -185,7 +200,7 @@ value, such as `ucol_greater`, `ucol_greaterOrEqual`, `ucol_equal` (in C)
 
 **C:**
 
-```C
+```c
 UChar *s [] = { /* list of Unicode strings */ };
 uint32_t listSize = sizeof(s)/sizeof(s[0]);
 UErrorCode status = U_ZERO_ERROR;
@@ -205,7 +220,7 @@ ucol_close(coll);
 
 **C++:**
 
-```C++
+```c++
 UnicodeString s [] = { /* list of Unicode strings */ };
 uint32_t listSize = sizeof(s)/sizeof(s[0]);
 UErrorCode status = U_ZERO_ERROR;
@@ -225,7 +240,7 @@ delete coll;
 
 **Java:**
 
-```Java
+```java
 String s [] = { /* list of Unicode strings */ };
 try {
     Collator coll = Collator.getInstance(Locale.US);
@@ -257,7 +272,7 @@ The Java API provides only the `Collator.getCollationKey` method, which produces
 
 Sort keys are generally only useful in databases or other circumstances where
 function calls are extremely expensive. See [Sortkeys vs
-Comparison](concepts.md#sortkeys-vs-comparison).
+Comparison](concepts#sortkeys-vs-comparison).
 
 ### Sort Key Features
 
@@ -339,7 +354,7 @@ of memory needed to store the resulting sort key. This mode is automatically
 activated if the output buffer size passed is set to zero. Should the sort key
 become longer than the buffer provided, function again slips into preflighting
 mode. The overall performance is poorer than if the function is called with a
-zero output buffer . If the size of the sort key returned is greater than the
+zero output buffer. If the size of the sort key returned is greater than the
 size of the buffer provided, the content of the result buffer is undefined. In
 that case, the result buffer could be reallocated to its proper size and the
 sort key generator function can be used again.
@@ -358,7 +373,7 @@ The best way to generate a series of sort keys is to do the following:
     Fill in the sort key values in the overflow buffer.
 
 4.  Allocate the sort key buffer with the size returned by `ucol_getSortKey()` and
-    call memcpy to copy the sort key content from the temp buffer to the sort
+    call `memcpy` to copy the sort key content from the temp buffer to the sort
     key buffer.
 
 5.  Loop back to step 1 until you are done.
@@ -367,7 +382,7 @@ The best way to generate a series of sort keys is to do the following:
 
 ### Example
 
-```C
+```c
 void GetSortKeys(const Ucollator* coll, const UChar*
 const *source, uint32_t arrayLength)
 {
@@ -413,7 +428,7 @@ first would probably be wasteful, since `strcoll` usually gives the result
 before whole strings are processed. This API is implemented only as a C function
 in ICU4C. There are no equivalent C++ or ICU4J functions.
 
-```C
+```c
 ...
 /* we are arriving with two char*: utf8Source and utf8Target, with their
 * lengths in utf8SourceLen and utf8TargetLen
@@ -435,7 +450,7 @@ uncompressed sort key. Between calls to the API you need to save a 64-bit state.
 Following is an example of simulating a string compare function using the partial
 sort key API. Your usage model is bound to look much different.
 
-```C
+```c
 static UCollationResult compareUsingPartials(UCollator *coll,
                                              const UChar source[], int32_t sLen,
                                              const UChar target[], int32_t tLen,
@@ -478,7 +493,7 @@ of the usage model.
 
 **C:**
 
-```C
+```c
 #define MAX_KEY_SIZE 100
 #define MAX_BUFFER_SIZE 10000
 #define MAX_LIST_LENGTH 5
@@ -514,7 +529,7 @@ if(U_SUCCESS(status)) {
     if (expectedLen > length) {
       if (temp2 == temp) {
         temp2 =(char*)malloc(expectedLen);
-      } else
+      } else {
         temp2 =(char*)realloc(temp2, expectedLen);
       }
         length =ucol_getSortKey(coll, s[i], -1, temp2, expectedLen);
@@ -531,7 +546,7 @@ ucol_close(coll);
 
 **C++:**
 
-```C++
+```c++
 #define MAX_LIST_LENGTH 5
 const UnicodeString s [] = {
   "Quick",
@@ -556,7 +571,7 @@ if(U_SUCCESS(status)) {
 
 **Java:**
 
-```Java
+```java
 String s [] = {
   "Quick",
   "fox",
@@ -605,7 +620,7 @@ which can be found in the samples section.
 
 **C:**
 
-```C
+```c
 UCollator         *coll = ucol_open("en_US",status);
 UErrorCode         status = U_ZERO_ERROR;
 UChar              text[20];
@@ -625,7 +640,7 @@ ucol_close(coll);
 
 **C++:**
 
-```C++
+```c++
 UErrorCode    status = U_ZERO_ERROR;
 Collator      *coll = Collator::createInstance(Locale::getUS(), status);
 UnicodeString text("text");
@@ -641,7 +656,7 @@ delete coll;
 
 **Java:**
 
-```Java
+```java
 try {
     RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(Locale.US);
     String text = "text";
@@ -675,10 +690,10 @@ error code. Similarly to the setter APIs for the Java version, no generic getter
 API is provided. Each attribute has its own setter API of the form
 `RuleBasedCollator.getATTRIBUTE_NAME()` in the Java version.
 
-## References:
+## References
 
 1.  Ken Whistler, Markus Scherer: "Unicode Technical Standard #10, Unicode Collation
-    Algorithm" (<http://www.unicode.org/unicode/reports/tr10/>)
+    Algorithm" (<http://www.unicode.org/reports/tr10/>)
 
 2.  ICU Design doc: "Collation v2" (<http://site.icu-project.org/design/collation/v2>)
 
@@ -686,11 +701,11 @@ API is provided. Each attribute has its own setter API of the form
     (<https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/collation/ICU_collation_design.htm>)
 
 3.  The Unicode Standard, chapter 5, "Implementation guidelines"
-    (<http://www.unicode.org/unicode/uni2book/ch05.pdf>)
+    (<http://www.unicode.org/uni2book/ch05.pdf>)
 
 4.  Laura Werner: "Efficient text searching in Java: Finding the right string in
     any language"
     (<http://icu-project.org/docs/papers/efficient_text_searching_in_java.html>)
 
 5.  Mark Davis, Martin Dürst: "Unicode Standard Annex #15: Unicode Normalization
-    Forms" (<http://www.unicode.org/unicode/reports/tr15/>).
+    Forms" (<http://www.unicode.org/reports/tr15/>).

@@ -1,9 +1,24 @@
+---
+layout: default
+title: Collation Examples
+nav_order: 7
+parent: Collation
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Collation Examples
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Simple Collation Sample Customization
 
@@ -12,7 +27,7 @@ default locale.
 
 In **C:**
 
-```C
+```c
 #include <stdio.h>
 #include <memory.h>
 #include <string.h>
@@ -20,8 +35,10 @@ In **C:**
 #include "unicode/utypes.h"
 #include "unicode/uloc.h"
 #include "unicode/ucol.h"
+
 #define MAXBUFFERSIZE 100
 #define BIGBUFFERSIZE 5000
+
 UBool collateWithLocaleInC(const char* locale, UErrorCode *status)
 {
     UChar         dispName    [MAXBUFFERSIZE]; 
@@ -85,7 +102,7 @@ UBool collateWithLocaleInC(const char* locale, UErrorCode *status)
 
 In **C++:**
 
-```C++
+```c++
 #include <stdio.h>
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
@@ -152,7 +169,7 @@ UBool collateWithLocaleInCPP(const Locale& locale, UErrorCode& status)
 
 ### Main Function
 
-```C++
+```c++
 extern "C" UBool collateWithLocaleInC(const char* locale, UErrorCode *status);
 int main()
 {
@@ -182,7 +199,7 @@ int main()
 
 In **Java:**
 
-```Java
+```java
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.CollationElementIterator;
 import com.ibm.icu.text.CollationKey;
@@ -254,7 +271,7 @@ However, implementing collation-based search with the Boyer-Moore method
 while getting correct results is very tricky,
 and ICU no longer uses this method.
 
-Please see the (String Search Service)[string-search.md] chapter.
+Please see the [String Search Service](./string-search) chapter.
 
 ## Using large buffers to manage sort keys
 
@@ -268,11 +285,10 @@ return the maximum size for a sort key. Once you have done this to your string,
 you just need to allocate a field of maximum size and copy your sortkeys from
 the buffer to fields.
 
-```C++
-uint32_t 
-
-fillBufferWithKeys(UCollator *coll, UChar **source, uint32_t *keys, uint32_t sourceSize, 
-                            uint8_t **buffer, uint32_t *maxSize, UErrorCode *status) 
+```c++
+uint32_t fillBufferWithKeys(UCollator *coll, UChar **source, uint32_t *keys,
+                            uint32_t sourceSize, uint8_t **buffer,
+                            uint32_t *maxSize, UErrorCode *status) 
 {
   if(status == NULL || U_FAILURE(*status)) {
     return 0;

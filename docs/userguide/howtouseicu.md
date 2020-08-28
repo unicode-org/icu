@@ -1,9 +1,26 @@
+---
+layout: default
+title: How To Use ICU
+nav_order: 2
+parent: ICU
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # How To Use ICU
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+# Overview
 
 ICU builds and installs as relatively standard libraries. For details about
 building, installing and porting see the [ICU4C
@@ -81,8 +98,8 @@ files, `.so` files, etc. See the next section, "C++ With Your Own Build System".
 
 ## Notes on `icu-config`
 
-> :point_right: **Note**: **icu-config is deprecated, and no longer recommended for production
-use. Please use pkg-config files or other options.**
+> :point_right: **Note**: **icu-config is deprecated, and no longer recommended for
+> production use. Please use pkg-config files or other options.**
 
 As of ICU 63.1, [icu-config has been deprecated
 (ICU-10464)](https://unicode-org.atlassian.net/browse/ICU-10464).
@@ -183,7 +200,7 @@ need to modify this file directly to allow `static` and `dll` modes to function.
 
 For building and running trivial (one-compilation-unit) programs with an
 installed ICU4C, the shell script
-[icurun](http://bugs.icu-project.org/trac/browser/trunk/tools/scripts/icurun)
+[icurun](https://github.com/unicode-org/icu/blob/master/tools/scripts/icurun)
 may be used. For detailed help, see the top of that script.
 As an example, if ICU is installed to the prefix **/opt/local** and the current
 directory contains two sample programs "test1.cpp" and "test2.c", they may be
@@ -203,5 +220,5 @@ Any additional arguments will be passed to the program.
 
 *   `icurun test1.cpp *args...*`
 
-*This feature is a work in progress. Please give feedback at [Ticket
-#8481](https://unicode-org.atlassian.net/browse/ICU-8481).*
+*Please give feedback to the [icu-support mailing list](http://site.icu-project.org/contacts),
+and refer to [Ticket #8481](https://unicode-org.atlassian.net/browse/ICU-8481).*

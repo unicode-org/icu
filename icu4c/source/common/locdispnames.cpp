@@ -733,7 +733,7 @@ uloc_getDisplayName(const char *locale,
                     int32_t padLen;
                     patPos+=subLen;
                     padLen=(subi==0 ? sub1Pos : patLen)-patPos;
-                    if(length+padLen < destCapacity) {
+                    if(length+padLen <= destCapacity) {
                         p=dest+length;
                         for(int32_t i=0;i<padLen;++i) {
                             *p++=pattern[patPos++];

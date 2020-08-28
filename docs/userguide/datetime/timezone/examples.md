@@ -1,15 +1,30 @@
+---
+layout: default
+title:  Date and Time Zone Examples
+nav_order: 4
+parent: Date/Time
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Date and Time Zone Examples
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## C++ TimeZone example code
 
 This example code illustrates some time zone operations.
 
-```C++
+```c++
  UErrorCode success = U_ZERO_ERROR;
  UnicodeString dateReturned, curTZNameEn, curTZNameFr;
  UDate curDate;

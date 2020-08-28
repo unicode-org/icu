@@ -1,9 +1,24 @@
+---
+layout: default
+title: Coding Guidelines
+nav_order: 1
+parent: Misc
+---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
 # Coding Guidelines
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
 
 ## Overview
 
@@ -24,17 +39,17 @@ for the following reasons:
 * It is useful in the same form for C also
 * Some C++ compilers do not support exceptions
 
-> :point_right: **Note**: This error code mechanism, in fact, works similar to
-exceptions. If users call several ICU functions in a sequence, as soon as one
-sets a failure code, the functions in the following example will not work. This
-procedure prevents the API function from processing data that is not valid in
-the sequence of function calls and relieves the caller from checking the error
-code after each call. It is somewhat similar to how an exception terminates a
-function block or try block early.*
+> :point_right: **Note**: *This error code mechanism, in fact, works similar to
+> exceptions. If users call several ICU functions in a sequence, as soon as one
+> sets a failure code, the functions in the following example will not work. This
+> procedure prevents the API function from processing data that is not valid in
+> the sequence of function calls and relieves the caller from checking the error
+> code after each call. It is somewhat similar to how an exception terminates a
+> function block or try block early.*
 
 The following code shows the inside of an ICU function implementation:
 
-```C++
+```c++
 U_CAPI const UBiDiLevel * U_EXPORT2
 ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     int32_t start, length;
@@ -66,27 +81,27 @@ method on that object, not even one with a `UErrorCode` parameter.
 
 ### Sample Function with Error Checking
 
-```C++
+```c++
     U_CAPI int32_t U_EXPORT2
     uplrules_select(const UPluralRules *uplrules,   // Do not check
                                                     // "this"/uplrules vs. NULL.
-                    double number,
-                    UChar *keyword, int32_t capacity,
-                    UErrorCode *status)             // Do not check status!=NULL.
+                    double number,
+                    UChar *keyword, int32_t capacity,
+                    UErrorCode *status)             // Do not check status!=NULL.
     {
-        if (U_FAILURE(*status)) {                   // Do check for U_FAILURE()
+        if (U_FAILURE(*status)) {                   // Do check for U_FAILURE()
                                                     // before setting *status
-            return 0;                               // or calling UErrorCode-less
+            return 0;                               // or calling UErrorCode-less
                                                     // select(number).
-        }
-        if (keyword == NULL ? capacity != 0 : capacity < 0) {
+        }
+        if (keyword == NULL ? capacity != 0 : capacity < 0) {
                                                     // Standard destination buffer
                                                     // checks.
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return 0;
-        }
-        UnicodeString result = ((PluralRules*)uplrules)->select(number);
-        return result.extract(keyword, capacity, *status);
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        UnicodeString result = ((PluralRules*)uplrules)->select(number);
+        return result.extract(keyword, capacity, *status);
     }
 ```
 
@@ -98,7 +113,7 @@ If the API function is non-const, then it should have a `UErrorCode` parameter.
 Default C++ assignment operators and copy constructors should not be used (they
 should be declared private and not implemented). Instead, define an `assign(Class
 &other, UErrorCode &errorCode)` function. Normal constructors are fine, and
-should have a UErrorCode parameter.
+should have a `UErrorCode` parameter.
 
 ### Warning Codes
 
@@ -219,19 +234,19 @@ which is new in Doxygen 1.7.5) can cite a fragment of existing sample or test co
 
 Example in `ucnv.h`:
 
-```C++
-     /**
-      * \snippet samples/ucnv/convsamp.cpp ucnv_open
-      */
-     ucnv_open( ... ) ...
+```c++
+ /**
+  * \snippet samples/ucnv/convsamp.cpp ucnv_open
+  */
+ ucnv_open( ... ) ...
 ```
 
-This cites code in icu4c/source/samples/ucnv/convsamp.cpp as follows:
+This cites code in `icu4c/source/samples/ucnv/convsamp.cpp` as follows:
 
-```C++
-      //! [ucnv_open]
-      conv = ucnv_open("koi8-r", &status);
-      //! [ucnv_open]
+```c++
+  //! [ucnv_open]
+  conv = ucnv_open("koi8-r", &status);
+  //! [ucnv_open]
 ```
 
 Notice the tag "`ucnv_open`" which must be the same in all three places (in
@@ -246,35 +261,35 @@ ICU C++ classes and methods as well as the ICU C methods.
 
 In C/C++, we enclose `@draft` and such APIs with `#ifndef U_HIDE_DRAFT_API` or
 similar as appropriate. When a draft API becomes stable, we need to remove the
-surrounding #ifndef.
+surrounding `#ifndef`.
 
 Note: The `@system` tag is *in addition to* the
 `@draft`/`@stable`/`@deprecated`/`@obsolete` status tag.
 
-Copy/paste the appropriate #ifndef..#endif pair from the following:
+Copy/paste the appropriate `#ifndef..#endif` pair from the following:
 
-```C++
+```c++
 #ifndef U_HIDE_DRAFT_API
-#endif  // U_HIDE_DRAFT_API
+#endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DEPRECATED_API
-#endif  // U_HIDE_DEPRECATED_API
+#endif  // U_HIDE_DEPRECATED_API
 
 #ifndef U_HIDE_OBSOLETE_API
-#endif  // U_HIDE_OBSOLETE_API
+#endif  // U_HIDE_OBSOLETE_API
 
 #ifndef U_HIDE_SYSTEM_API
-#endif  // U_HIDE_SYSTEM_API
+#endif  // U_HIDE_SYSTEM_API
 
 #ifndef U_HIDE_INTERNAL_API
-#endif  // U_HIDE_INTERNAL_API
+#endif  // U_HIDE_INTERNAL_API
 ```
 
 We `#ifndef` `@draft`/`@deprecated`/... APIs as much as possible, including C
 functions, many C++ class methods (see exceptions below), enum constants (see
 exceptions below), whole enums, whole classes, etc.
 
-We do not #ifndef APIs where that would be problematic:
+We do not `#ifndef` APIs where that would be problematic:
 
 * struct/class members where that would modify the object layout (non-static
   struct/class fields, virtual methods)
@@ -293,12 +308,12 @@ We do not #ifndef APIs where that would be problematic:
 
 More handy copy-paste text:
 
-```C++
-    // Do not enclose the protected default constructor with #ifndef U_HIDE_INTERNAL_API
-    // or else the compiler will create a public default constructor.
+```c++
+    // Do not enclose the protected default constructor with #ifndef U_HIDE_INTERNAL_API
+    // or else the compiler will create a public default constructor.
 
-    // Do not enclose protected default/copy constructors with #ifndef U_HIDE_INTERNAL_API
-    // or else the compiler will create public ones.
+    // Do not enclose protected default/copy constructors with #ifndef U_HIDE_INTERNAL_API
+    // or else the compiler will create public ones.
 ```
 
 ### C and C++ Type and Format Convention Guidelines
@@ -463,19 +478,19 @@ Use Java doc-style in-file documentation created with
 
 #### Multiple Statements
 
-Place multiple statements in multiple lines. if() or loop heads must not be
+Place multiple statements in multiple lines. `if()` or loop heads must not be
 followed by their bodies on the same line.
 
-#### Placements of {} Curly Braces
+#### Placements of `{}` Curly Braces
 
-Place curly braces {} in reasonable and consistent locations. Each of us
+Place curly braces `{}` in reasonable and consistent locations. Each of us
 subscribes to different philosophies. It is recommended to use the style of a
 file, instead of mixing different styles. It is requested, however, to not have
-if() and loop bodies without curly braces.
+`if()` and loop bodies without curly braces.
 
-#### if() {...} and Loop Bodies
+#### `if() {...}` and Loop Bodies
 
-Use curly braces for if() and else as well as loop bodies, etc., even if there
+Use curly braces for `if()` and else as well as loop bodies, etc., even if there
 is only one statement.
 
 #### Function Declarations
@@ -490,19 +505,21 @@ satisfy all the compilers' requirements.
 For example, use the following
 convention:
 
-```C++
+```c++
 U_CAPI int32_t U_EXPORT2
 u_formatMessage(...);
 ```
 
 > :point_right: **Note**: The `U_CAPI`/`U_DRAFT`/... and `U_EXPORT2` qualifiers
-are required for both the declaration and the definiton of *exported C and
-static C++ functions*. Use `U_CAPI` (or `U_DRAFT` etc.) before and `U_EXPORT2`
-after the return type of *exported C and static C++ functions*. Internal
-functions that are visible outside a compilation unit need a `U_CFUNC` before
-the return type. *Non-static C++ class member functions* do *not* get
-`U_CAPI`/`U_EXPORT2` because they are exported and declared together with their
-class exports.
+> are required for both the declaration and the definiton of *exported C and
+> static C++ functions*. Use `U_CAPI` (or `U_DRAFT` etc.) before and `U_EXPORT2`
+> after the return type of *exported C and static C++ functions*.
+> 
+> Internal functions that are visible outside a compilation unit need a `U_CFUNC`
+> before the return type.
+> 
+> *Non-static C++ class member functions* do *not* get `U_CAPI`/`U_EXPORT2`
+> because they are exported and declared together with their class exports.
 
 #### Use Anonymous Namesapces or Static For File Scope
 
@@ -517,7 +534,7 @@ z/OS and Windows COM wrappers around ICU need `__cdecl` for callback functions.
 The reason is that C++ can have a different function calling convention from C.
 These callback functions also usually need to be private. So the following code
 
-```C++
+```c++
 UBool
 isAcceptable(void * /* context */,
              const char * /* type */, const char * /* name */,
@@ -530,7 +547,7 @@ isAcceptable(void * /* context */,
 should be changed to look like the following by adding `U_CDECL_BEGIN`, `static`,
 `U_CALLCONV` and `U_CDECL_END`.
 
-```C++
+```c++
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 isAcceptable(void * /* context */,
@@ -546,7 +563,7 @@ U_CDECL_END
 
 Determine if two headers are needed. If the same functionality is provided with
 both a C and a C++ API, then there can be two headers, one for each language,
-even if one uses the other. For example, there can be umsg.h for C and `msgfmt.h`
+even if one uses the other. For example, there can be `umsg.h` for C and `msgfmt.h`
 for C++.
 
 Not all functionality has or needs both kinds of API. More and more
@@ -621,19 +638,19 @@ happened!)
 When casting an enum value to an integer type, make sure that the enum value's
 numeric value is within range of the integer type.
 
-#### Do not check for this!=NULL, do not check for NULL references
+#### Do not check for `this!=NULL`, do not check for `NULL` references
 
-In public APIs, assume this!=0 and assume that references are not 0. In C code,
-"this" is the "service object" pointer, such as `set` in
-`uset_add(USet* set, UChar32 c)` — don't check for set!=NULL.
+In public APIs, assume `this!=0` and assume that references are not 0. In C code,
+`"this"` is the "service object" pointer, such as `set` in
+`uset_add(USet* set, UChar32 c)` — don't check for `set!=NULL`.
 
-We do usually check all other (non-this) pointers for NULL, in those cases when
-NULL is not valid. (Many functions allow a NULL string or buffer pointer if the
+We do usually check all other (non-this) pointers for `NULL`, in those cases when
+`NULL` is not valid. (Many functions allow a `NULL` string or buffer pointer if the
 length or capacity is 0.)
 
-Rationale: "this" is not really an argument, and checking it costs a little bit
+Rationale: `"this"` is not really an argument, and checking it costs a little bit
 of code size and runtime. Other libraries also commonly do not check for valid
-"this", and resulting failures are fairly obvious.
+`"this"`, and resulting failures are fairly obvious.
 
 ### Memory Usage
 
@@ -649,7 +666,7 @@ details.
 
 Exception: Most C++ API functions that return a `StringEnumeration` (by pointer
 which the caller must delete) are named `getXyz()` rather than `createXyz()`
-because "get" is much more natural. (These are not factory methods in the sense
+because `"get"` is much more natural. (These are not factory methods in the sense
 of `NumberFormat::createScientificInstance()`.) For example,
 `static StringEnumeration *Collator::``get``Keywords(UErrorCode &)`. We should document
 clearly in the API comments that the caller must delete the returned
@@ -663,7 +680,7 @@ string as an array. This reduces the time to load the library and all its
 pointers. This should be done so that the same library data can be shared across
 processes automatically. Here is an example:
 
-```C++
+```c++
 #define MY_MACRO_DEFINED_STR "macro string"
 const char *myCString = "myCString";
 int16_t myNumbers[] = {1, 2, 3};
@@ -671,7 +688,7 @@ int16_t myNumbers[] = {1, 2, 3};
 
 This should be changed to the following:
 
-```C++
+```c++
 static const char MY_MACRO_DEFINED_STR[] = "macro string";
 static const char myCString[] = "myCString";
 static const int16_t myNumbers[] = {1, 2, 3};
@@ -682,14 +699,14 @@ static const int16_t myNumbers[] = {1, 2, 3};
 The most common reason to have static initialization is to declare a
 `static const UnicodeString`, for example (see `utypes.h` about invariant characters):
 
-```C++
+```c++
 static const UnicodeString myStr("myStr", "");
 ```
 
 The most portable and most efficient way to declare ASCII text as a Unicode
 string is to do the following instead:
 
-```C++
+```c++
 static const UChar myStr[] = { 0x6D, 0x79, 0x53, 0x74, 0x72, 0}; /* "myStr" */
 ```
 
@@ -821,7 +838,7 @@ function, i.e. the first non-pure virtual function that is not inline at the
 point of class definition. If there is no key function, it is emitted everywhere
 used."
 
-(This was first done in ICU 49; see [ticket #8454](http://bugs.icu-project.org/trac/ticket/8454.)
+(This was first done in ICU 49; see [ticket #8454](https://unicode-org.atlassian.net/browse/ICU-8454.)
 
 #### Namespaces
 
@@ -836,7 +853,7 @@ Starting with ICU 49, we require C++ namespace support.
 Class declarations, even forward declarations, must be scoped to the ICU
 namespace. For example:
 
-```C++
+```c++
 U_NAMESPACE_BEGIN
 
 class Locale;
@@ -853,7 +870,7 @@ U_NAMESPACE_USE
 Locale loc("fi");
 ```
 
-U_NAMESPACE_USE (expands to using namespace icu_M_N; when available) is
+`U_NAMESPACE_USE` (expands to using namespace icu_M_N; when available) is
 automatically done when `utypes.h` is included, so that all ICU classes are
 immediately usable. However, we recommend that you turn this off via
 `CXXFLAGS="-DU_USING_ICU_NAMESPACE=0"`.
@@ -873,17 +890,17 @@ Pretty much everyone agrees that inline implementations are ok if they fit on
 the same line as the function signature, even if that means bending the
 single-statement-per-line rule slightly:
 
-```C++
+```c++
 T *orphan() { T *p=ptr; ptr=NULL; return p; }
 ```
 
 Most people also agree that very short multi-line implementations are ok inline
 in the class declaration. Something like the following is probably the maximum:
 
-```C++
+```c++
 Value *getValue(int index) {
-    if(index>=0 && index<fLimit) {
-        return fArray[index];
+    if(index>=0 && index<fLimit) {
+        return fArray[index];
     }
     return NULL;
 }
@@ -937,7 +954,7 @@ implementation.
     subclass as well (copy implementations from existing C++ APIs).
   * If a class is a new, immediate subclass of `UObject` (e.g.,
     `Normalizer2`), creating a whole new class hierarchy, then declare a
-    *private* `getDynamicClassID()` and define it to return NULL (to
+    *private* `getDynamicClassID()` and define it to return `NULL` (to
     override the pure virtual version in `UObject`); copy the relevant lines
     from `normalizer2.h` and `normalizer2.cpp`
     (`UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(className)`). Do not add any
@@ -994,8 +1011,8 @@ adopt-on-success):
   it is 0 because the constructor was not called. (Typically, a `UErrorCode`
   must be set to `U_MEMORY_ALLOCATION_ERROR`.)
 
-  **Pitfall**: If you allocate/construct via "`ClassName *p = new
-  ClassName(adoptee);`" and the memory allocation failed (p==NULL), then the
+  **Pitfall**: If you allocate/construct via "`ClassName *p = new ClassName(adoptee);`"
+  and the memory allocation failed (`p==NULL`), then the
   constructor has not been called, the adoptee has not been adopted, and you
   are still responsible for deleting it!
 
@@ -1011,7 +1028,7 @@ adopt-on-success):
 Example: (This is a best-practice example. It does not reflect current `Calendar`
 code.)
 
-```C++
+```c++
 Calendar*
 Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode) {
     LocalPointer<TimeZone> adoptedZone(zone);
@@ -1071,7 +1088,7 @@ factory method must be deleted by the user/owner.
 #### Memory Allocation Failures
 
 All memory allocations and object creations should be checked for success. In
-the event of a failure (a NULL returned), a `U_MEMORY_ALLOCATION_ERROR` status
+the event of a failure (a `NULL` returned), a `U_MEMORY_ALLOCATION_ERROR` status
 should be returned by the ICU function in question. If the allocation failure
 leaves the ICU service in an invalid state, such that subsequent ICU operations
 could also fail, the situation should be flagged so that the subsequent
@@ -1126,16 +1143,16 @@ pointers to owned memory must always be either NULL or point to owned objects.
 
 Internally:
 
-[cmemory.h](http://bugs.icu-project.org/trac/browser/icu/trunk/source/common/cmemory.h)
+[cmemory.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/cmemory.h)
 defines the `LocalMemory` class for chunks of memory of primitive types which
 will be `uprv_free()`'ed.
 
-[cmemory.h](http://bugs.icu-project.org/trac/browser/icu/trunk/source/common/cmemory.h)
+[cmemory.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/cmemory.h)
 also defines `MaybeStackArray` and `MaybeStackHeaderAndArray` which automate
 management of arrays.
 
 Use `CharString`
-([charstr.h](http://bugs.icu-project.org/trac/browser/icu/trunk/source/common/charstr.h))
+([charstr.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/charstr.h))
 for `char *` strings that you build and modify.
 
 #### Global Inline Functions
@@ -1166,7 +1183,7 @@ constructor relies on loading data), then either it must use and set a
 like `UnicodeString` and `UnicodeSet`, and the constructor needs to set the object
 to bogus if it fails.
 
-#### UVector, UVector32, or UVector64
+#### `UVector`, `UVector32`, or `UVector64`
 
 Use `UVector` to store arrays of `void *`; use `UVector32` to store arrays of
 `int32_t`; use `UVector64` to store arrays of `int64_t`. Historically, `UVector`
@@ -1182,7 +1199,7 @@ This section describes the C-specific guidelines or conventions to use.
 All C APIs need to be **both declared and defined** using the `U_CAPI` and
 `U_EXPORT2` qualifiers.
 
-```C++
+```c++
 U_CAPI int32_t U_EXPORT2
 u_formatMessage(...);
 ```
@@ -1215,7 +1232,7 @@ sometimes 4-) letter module identifier. Very general names like
 Functions that roughly compare to constructors and destructors are called
 `umod_open()` and `umod_close()`. See the following example:
 
-```C++
+```c++
 CAPI UBiDi * U_EXPORT2
 ubidi_open();
 
@@ -1242,7 +1259,7 @@ For example, in `ubidi.h` we define the `UBiDi` "service object" type and also
 have the following "smart pointer" definition which will call `ubidi_close()` on
 destruction:
 
-```C++
+```c++
 // Use config switches like this only after including unicode/utypes.h
 // or another ICU header.
 #if U_SHOW_CPLUSPLUS_API
@@ -1304,7 +1321,7 @@ there must be a corresponding function (like a `ucnv_close()`) that deallocates
 that memory.
 
 All memory allocations in ICU should be checked for success. In the event of a
-failure (a NULL returned from `uprv_malloc()`), a `U_MEMORY_ALLOCATION_ERROR` status
+failure (a `NULL` returned from `uprv_malloc()`), a `U_MEMORY_ALLOCATION_ERROR` status
 should be returned by the ICU function in question. If the allocation failure
 leaves the ICU service in an invalid state, such that subsequent ICU operations
 could also fail, the situation should be flagged so that the subsequent
@@ -1421,8 +1438,8 @@ ICU Java classes and methods.
 
 The standard order for modifier keywords on APIs is:
 
-* public static final synchronized strictfp
-* public abstract
+* `public static final synchronized strictfp`
+* `public abstract`
 
 Do not use wild card import, such as "`import java.util.*`". The sort order of
 import statements is `java` / `javax` / `org` / `com`. Within each top level package
@@ -1476,7 +1493,7 @@ Avoid creating new interfaces unless you know you need to mix the interface into
 two or more classes that have separate inheritance. Interfaces are impossible to
 modify later in a backwards-compatible way. Abstract classes, on the other hand,
 can add new methods with default behavior. Use interfaces only if it is required
-by the arcitecture, not just for expediency.
+by the architecture, not just for expediency.
 
 Current releases of ICU4J (since ICU 63) are restricted to use Java SE 7 APIs
 and language features.
@@ -1614,7 +1631,7 @@ regarding C test services, please see the `icu4c/source/tools/ctestfw` directory
 
 The following shows the possible format of test functions:
 
-```C++
+```c++
 void some_test()
 {
 }
@@ -1622,7 +1639,7 @@ void some_test()
 
 Output from the test is accomplished with three printf-like functions:
 
-```C++
+```c++
 void log_err ( const char *fmt, ... );
 void log_info ( const char *fmt, ... );
 void log_verbose ( const char *fmt, ... );
@@ -1638,7 +1655,7 @@ void log_verbose ( const char *fmt, ... );
 To use the tests, link them into a hierarchical structure. The root of the
 structure will be allocated by default.
 
-```C++
+```c++
 TestNode *root = NULL; /* empty */
 addTest( &root, &some_test, "/test");
 ```
@@ -1655,14 +1672,14 @@ The calls to `addTest` must be placed in a function or a hierarchy of functions
 A subtree may be extracted from another tree of tests for the programmatic
 running of subtests.
 
-```C++
+```c++
 TestNode* sub;
 sub = getTest(root, "/mytests");
 ```
 
 And a tree of tests may be run simply by:
 
-```C++
+```c++
 runTests( root ); /* or 'sub' */
 ```
 
@@ -1694,7 +1711,7 @@ To run the test suite from the command line, change the directories to
 
 Type `cintltst -h` to view its command line parameters.
 
-```Text
+```text
 ### Syntax:
 ### Usage: [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n]
  [-no_err_msg] [ -h] [ /path/to/test ]
@@ -1802,7 +1819,7 @@ release build, the executable will reside in the
 
 Type just `intltest -h` to see the usage:
 
-```Text
+```text
 ### Syntax:
 ### IntlTest [-option1 -option2 ...] [testname1 testname2 ...]
 ### where options are: verbose (v), all (a), noerrormsg (n),
@@ -1825,7 +1842,7 @@ Type just `intltest -h` to see the usage:
 
 The "Fake Time" capability allows ICU4C to be tested as if the hardware clock is
 set to a specific time. This section documents how to use this facility.
-Note that this facility requires the POSIX 'gettimeofday' function to be
+Note that this facility requires the POSIX `'gettimeofday'` function to be
 operable.
 
 This facility affects all ICU 'current time' calculations, including date,
@@ -1836,7 +1853,7 @@ directly to the underlying operating system.
    be accomplished with the following line in a file
    **icu/source/icudefs.local** :
 
-   ```Shell
+   ```shell
    CPPFLAGS+=-DU_DEBUG_FAKETIME
    ```
 
@@ -1853,7 +1870,7 @@ directly to the underlying operating system.
    `/tsformat/ccaltst/TestCalendar` in verbose mode which will print out the
    current time:
 
-   ```Shell
+   ```shell
    $ make check ICUINFO_OPTS=-m U_FAKETIME_START=28800000 CINTLTST_OPTS=-v
    /tsformat/ccaltst/TestCalendar
    U_DEBUG_FAKETIME was set at compile time, so the ICU clock will start at a
@@ -1938,7 +1955,7 @@ It is possible to use struct types, but one must make sure that each field is
 naturally aligned, without possible implicit field padding by the compiler —
 assuming a reasonable compiler.
 
-```C++
+```c++
 // bad because i will be preceded by compiler-dependent padding
 // for proper alignment
 struct BadExample {
@@ -1996,10 +2013,10 @@ format).
   * Example: **`CINTLTST_OPTS=/tscoll`** in the cintltst directory provides
     arguments to the cintltest test upon make check, to only run collation
     tests.
-    * intltest: INTLTEST_OPTS
-    * cintltst: CINTLTST_OPTS
-    * iotest: IOTEST_OPTS
-    * icuinfo: ICUINFO_OPTS
+    * intltest: `INTLTEST_OPTS`
+    * cintltst: `CINTLTST_OPTS`
+    * iotest: `IOTEST_OPTS`
+    * icuinfo: `ICUINFO_OPTS`
     * (letest does not have an OPTS variable as of ICU 4.6.)
 
 ### Windows/Microsoft Visual Studio
@@ -2007,7 +2024,7 @@ format).
 The following addition to autoexp.dat will cause **`UnicodeString`**s to be
 visible as strings in the debugger without expanding sub-items:
 
-```Text
+```text
 ;; Copyright (C) 2010 IBM Corporation and Others. All Rights Reserved.
 ;; ICU Additions
 ;; Add to {VISUAL STUDIO} \Common7\Packages\Debugger\autoexp.dat
