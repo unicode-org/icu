@@ -966,6 +966,19 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 -98.7654321,
                 "-98.765432%");
+
+        assertFormatSingle(
+                "Per Percent",
+                "measure-unit/length-meter per-measure-unit/concentr-percent unit-width-full-name",
+                "measure-unit/length-meter per-measure-unit/concentr-percent unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .perUnit(MeasureUnit.PERCENT)
+                        .unitWidth(UnitWidth.FULL_NAME),
+                ULocale.ENGLISH,
+                50,
+                "50 meters per percent");
+
     }
 
     @Test

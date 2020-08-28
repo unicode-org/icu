@@ -146,10 +146,8 @@ class NumberFormatterImpl {
         return unit != null && "currency".equals(unit.getType());
     }
 
-    private static boolean unitIsNoUnit(MeasureUnit unit) {
-        // NOTE: In ICU4C, units cannot be null, and the default unit is a NoUnit.
-        // In ICU4J, return TRUE for a null unit from this method.
-        return unit == null || "none".equals(unit.getType());
+    private static boolean unitIsBaseUnit(MeasureUnit unit) {
+        return unit == null;
     }
 
     private static boolean unitIsPercent(MeasureUnit unit) {
@@ -181,7 +179,7 @@ class NumberFormatterImpl {
 
         // Pre-compute a few values for efficiency.
         boolean isCurrency = unitIsCurrency(macros.unit);
-        boolean isNoUnit = unitIsNoUnit(macros.unit);
+        boolean isBaseUnit = unitIsBaseUnit(macros.unit);
         boolean isPercent = unitIsPercent(macros.unit);
         boolean isPermille = unitIsPermille(macros.unit);
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
@@ -192,7 +190,7 @@ class NumberFormatterImpl {
         if (macros.unitWidth != null) {
             unitWidth = macros.unitWidth;
         }
-        boolean isCldrUnit = !isCurrency && !isNoUnit &&
+        boolean isCldrUnit = !isCurrency && !isBaseUnit &&
             (unitWidth == UnitWidth.FULL_NAME || !(isPercent || isPermille));
         PluralRules rules = macros.rules;
 

@@ -17,17 +17,17 @@ compact-short percent unit-width-narrow
 
 compact-short percent unit-width-full-name
   es-MX
-    0 %
-    92 k
-    -0.22 %
+    0 por ciento
+    92 k por ciento
+    -0.22 por ciento
   zh-TW
     0%
-    9.2萬
+    9.2萬%
     -0.22%
   bn-BD
-    ০%
-    ৯২ হা
-    -০.২২%
+    ০শতাংশ
+    ৯২ হাশতাংশ
+    -০.২২শতাংশ
 
 compact-short currency/EUR unit-width-narrow
   es-MX
@@ -101,17 +101,17 @@ scientific/+ee/sign-always percent unit-width-narrow
 
 scientific/+ee/sign-always percent unit-width-full-name
   es-MX
-    0E+00 %
-    9.182736E+04 %
-    -2.2222E-01 %
+    0E+00 por ciento
+    9.182736E+04 por ciento
+    -2.2222E-01 por ciento
   zh-TW
     0E+00%
     9.182736E+04%
     -2.2222E-01%
   bn-BD
-    ০E+০০%
-    ৯.১৮২৭৩৬E+০৪%
-    -২.২২২২E-০১%
+    ০E+০০শতাংশ
+    ৯.১৮২৭৩৬E+০৪শতাংশ
+    -২.২২২২E-০১শতাংশ
 
 scientific/+ee/sign-always currency/EUR unit-width-narrow
   es-MX
@@ -3139,59 +3139,59 @@ percent unit-width-narrow @@
 
 percent unit-width-full-name precision-integer
   es-MX
-    0 %
-    91,827 %
-    -0 %
+    0 por ciento
+    91,827 por ciento
+    -0 por ciento
   zh-TW
     0%
     91,827%
     -0%
   bn-BD
-    ০%
-    ৯১,৮২৭%
-    -০%
+    ০শতাংশ
+    ৯১,৮২৭শতাংশ
+    -০শতাংশ
 
 percent unit-width-full-name .000
   es-MX
-    0.000 %
-    91,827.364 %
-    -0.222 %
+    0.000 por ciento
+    91,827.364 por ciento
+    -0.222 por ciento
   zh-TW
     0.000%
     91,827.364%
     -0.222%
   bn-BD
-    ০.০০০%
-    ৯১,৮২৭.৩৬৪%
-    -০.২২২%
+    ০.০০০শতাংশ
+    ৯১,৮২৭.৩৬৪শতাংশ
+    -০.২২২শতাংশ
 
 percent unit-width-full-name .##/@@@+
   es-MX
-    0 %
-    91,827.36 %
-    -0.222 %
+    0 por ciento
+    91,827.36 por ciento
+    -0.222 por ciento
   zh-TW
     0%
     91,827.36%
     -0.222%
   bn-BD
-    ০%
-    ৯১,৮২৭.৩৬%
-    -০.২২২%
+    ০শতাংশ
+    ৯১,৮২৭.৩৬শতাংশ
+    -০.২২২শতাংশ
 
 percent unit-width-full-name @@
   es-MX
-    0.0 %
-    92,000 %
-    -0.22 %
+    0.0 por ciento
+    92,000 por ciento
+    -0.22 por ciento
   zh-TW
     0.0%
     92,000%
     -0.22%
   bn-BD
-    ০.০%
-    ৯২,০০০%
-    -০.২২%
+    ০.০শতাংশ
+    ৯২,০০০শতাংশ
+    -০.২২শতাংশ
 
 currency/EUR unit-width-narrow precision-integer
   es-MX
@@ -3433,17 +3433,17 @@ percent unit-width-narrow rounding-mode-floor
 
 percent unit-width-full-name rounding-mode-floor
   es-MX
-    0 %
-    91,827.3645 %
-    -0.22222 %
+    0 por ciento
+    91,827.3645 por ciento
+    -0.22222 por ciento
   zh-TW
     0%
     91,827.3645%
     -0.22222%
   bn-BD
-    ০%
-    ৯১,৮২৭.৩৬৪৫%
-    -০.২২২২২%
+    ০শতাংশ
+    ৯১,৮২৭.৩৬৪৫শতাংশ
+    -০.২২২২২শতাংশ
 
 currency/EUR unit-width-narrow rounding-mode-floor
   es-MX
@@ -3517,17 +3517,17 @@ percent unit-width-narrow integer-width/##00
 
 percent unit-width-full-name integer-width/##00
   es-MX
-    00 %
-    1827.3645 %
-    -00.22222 %
+    00 por ciento
+    1827.3645 por ciento
+    -00.22222 por ciento
   zh-TW
     00%
     1,827.3645%
     -00.22222%
   bn-BD
-    ০০%
-    ১,৮২৭.৩৬৪৫%
-    -০০.২২২২২%
+    ০০শতাংশ
+    ১,৮২৭.৩৬৪৫শতাংশ
+    -০০.২২২২২শতাংশ
 
 currency/EUR unit-width-narrow integer-width/##00
   es-MX
@@ -3601,17 +3601,17 @@ percent unit-width-narrow scale/0.5
 
 percent unit-width-full-name scale/0.5
   es-MX
-    0 %
-    45,913.68225 %
-    -0.11111 %
+    0 por ciento
+    45,913.68225 por ciento
+    -0.11111 por ciento
   zh-TW
     0%
     45,913.68225%
     -0.11111%
   bn-BD
-    ০%
-    ৪৫,৯১৩.৬৮২২৫%
-    -০.১১১১১%
+    ০শতাংশ
+    ৪৫,৯১৩.৬৮২২৫শতাংশ
+    -০.১১১১১শতাংশ
 
 currency/EUR unit-width-narrow scale/0.5
   es-MX
@@ -3685,17 +3685,17 @@ percent unit-width-narrow group-on-aligned
 
 percent unit-width-full-name group-on-aligned
   es-MX
-    0 %
-    91,827.3645 %
-    -0.22222 %
+    0 por ciento
+    91,827.3645 por ciento
+    -0.22222 por ciento
   zh-TW
     0%
     91,827.3645%
     -0.22222%
   bn-BD
-    ০%
-    ৯১,৮২৭.৩৬৪৫%
-    -০.২২২২২%
+    ০শতাংশ
+    ৯১,৮২৭.৩৬৪৫শতাংশ
+    -০.২২২২২শতাংশ
 
 currency/EUR unit-width-narrow group-on-aligned
   es-MX
@@ -3769,17 +3769,17 @@ percent unit-width-narrow latin
 
 percent unit-width-full-name latin
   es-MX
-    0 %
-    91,827.3645 %
-    -0.22222 %
+    0 por ciento
+    91,827.3645 por ciento
+    -0.22222 por ciento
   zh-TW
     0%
     91,827.3645%
     -0.22222%
   bn-BD
-    0%
-    91,827.3645%
-    -0.22222%
+    0শতাংশ
+    91,827.3645শতাংশ
+    -0.22222শতাংশ
 
 currency/EUR unit-width-narrow latin
   es-MX
@@ -3853,17 +3853,17 @@ percent unit-width-narrow sign-accounting-except-zero
 
 percent unit-width-full-name sign-accounting-except-zero
   es-MX
-    0 %
-    +91,827.3645 %
-    -0.22222 %
+    0 por ciento
+    +91,827.3645 por ciento
+    -0.22222 por ciento
   zh-TW
     0%
     +91,827.3645%
     -0.22222%
   bn-BD
-    ০%
-    +৯১,৮২৭.৩৬৪৫%
-    -০.২২২২২%
+    ০শতাংশ
+    +৯১,৮২৭.৩৬৪৫শতাংশ
+    -০.২২২২২শতাংশ
 
 currency/EUR unit-width-narrow sign-accounting-except-zero
   es-MX
@@ -3937,17 +3937,17 @@ percent unit-width-narrow decimal-always
 
 percent unit-width-full-name decimal-always
   es-MX
-    0. %
-    91,827.3645 %
-    -0.22222 %
+    0. por ciento
+    91,827.3645 por ciento
+    -0.22222 por ciento
   zh-TW
     0.%
     91,827.3645%
     -0.22222%
   bn-BD
-    ০.%
-    ৯১,৮২৭.৩৬৪৫%
-    -০.২২২২২%
+    ০.শতাংশ
+    ৯১,৮২৭.৩৬৪৫শতাংশ
+    -০.২২২২২শতাংশ
 
 currency/EUR unit-width-narrow decimal-always
   es-MX

@@ -1013,6 +1013,18 @@ void NumberFormatterApiTest::unitPercent() {
             Locale::getEnglish(),
             -98.7654321,
             u"-98.765432%");
+
+    assertFormatSingle(
+            u"Per Percent",
+            u"measure-unit/length-meter per-measure-unit/concentr-percent unit-width-full-name",
+            u"measure-unit/length-meter per-measure-unit/concentr-percent unit-width-full-name",
+            NumberFormatter::with()
+                    .unit(MeasureUnit::getMeter())
+                    .perUnit(MeasureUnit::getPercent())
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale::getEnglish(),
+            50,
+            u"50 meters per percent");
 }
 
 void NumberFormatterApiTest::percentParity() {

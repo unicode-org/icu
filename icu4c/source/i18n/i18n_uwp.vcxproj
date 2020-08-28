@@ -414,7 +414,6 @@
     <ClCompile Include="nfrs.cpp" />
     <ClCompile Include="nfrule.cpp" />
     <ClCompile Include="nfsubs.cpp" />
-    <ClCompile Include="nounit.cpp" />
     <ClCompile Include="number_affixutils.cpp" />
     <ClCompile Include="number_asformat.cpp" />
     <ClCompile Include="number_compact.cpp" />

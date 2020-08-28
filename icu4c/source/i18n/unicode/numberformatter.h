@@ -1373,10 +1373,10 @@ struct U_I18N_API MacroProps : public UMemory {
     Notation notation;
 
     /** @internal */
-    MeasureUnit unit; // = NoUnit::base();
+    MeasureUnit unit;  // = MeasureUnit();  (the base dimensionless unit)
 
     /** @internal */
-    MeasureUnit perUnit; // = NoUnit::base();
+    MeasureUnit perUnit;  // = MeasureUnit();  (the base dimensionless unit)
 
     /** @internal */
     Precision precision;  // = Precision();  (bogus)

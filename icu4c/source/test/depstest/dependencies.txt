@@ -1068,7 +1068,7 @@ group: units_extra
     units bytestriebuilder bytestrie resourcebundle uclean_i18n
 
 group: units
-    measunit.o currunit.o nounit.o
+    measunit.o currunit.o
   deps
     stringenumeration errorcode
 
