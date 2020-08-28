@@ -911,11 +911,10 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
     int32_t dCount = 0;
     int32_t MCount = 0;
     int32_t yCount = 0;
-    int32_t hCount = 0;
-    int32_t HCount = 0;
     int32_t mCount = 0;
     int32_t vCount = 0;
     int32_t zCount = 0;
+    UChar hourChar = u'\0';
     int32_t i;
 
     for (i = 0; i < skeleton.length(); ++i) {
@@ -961,12 +960,13 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
             timeSkeleton.append(ch);
             break;
           case LOW_H:
-            timeSkeleton.append(ch);
-            ++hCount;
-            break;
           case CAP_H:
+          case LOW_K:
+          case CAP_K:
             timeSkeleton.append(ch);
-            ++HCount;
+            if (hourChar == u'\0') {
+                hourChar = ch;
+            }
             break;
           case LOW_M:
             timeSkeleton.append(ch);
@@ -982,8 +982,6 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
             break;
           case CAP_V:
           case CAP_Z:
-          case LOW_K:
-          case CAP_K:
           case LOW_J:
           case LOW_S:
           case CAP_S:
@@ -1023,11 +1021,8 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
     }
 
     /* generate normalized form for time */
-    if ( HCount != 0 ) {
-        normalizedTimeSkeleton.append(CAP_H);
-    }
-    else if ( hCount != 0 ) {
-        normalizedTimeSkeleton.append(LOW_H);
+    if (hourChar != u'\0' ) {
+        normalizedTimeSkeleton.append(hourChar);
     }
     if ( mCount != 0 ) {
         normalizedTimeSkeleton.append(LOW_M);
@@ -1559,8 +1554,18 @@ DateIntervalFormat::adjustFieldWidth(const UnicodeString& inputSkeleton,
     DateIntervalInfo::parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
     DateIntervalInfo::parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
     if ( differenceInfo == 2 ) {
-        adjustedPtn.findAndReplace(UnicodeString((UChar)0x76 /* v */),
-                                   UnicodeString((UChar)0x7a /* z */));
+        if (inputSkeleton.indexOf(LOW_Z) != -1) {
+            adjustedPtn.findAndReplace(UnicodeString(LOW_V),
+                                       UnicodeString(LOW_Z));
+        }
+        if (inputSkeleton.indexOf(CAP_K) != -1) {
+            adjustedPtn.findAndReplace(UnicodeString(LOW_H),
+                                       UnicodeString(CAP_K));
+        }
+        if (inputSkeleton.indexOf(LOW_K) != -1) {
+            adjustedPtn.findAndReplace(UnicodeString(CAP_H),
+                                       UnicodeString(LOW_K));
+        }
     }
 
     UBool inQuote = false;

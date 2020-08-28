@@ -1081,20 +1081,22 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         final int STRING_NUMERIC_DIFFERENCE = 0x100;
         final int BASE = 0x41;
 
-        // TODO: this is a hack for 'v' and 'z'
-        // resource bundle only have time skeletons ending with 'v',
-        // but not for time skeletons ending with 'z'.
-        boolean replaceZWithV = false;
-        if ( inputSkeleton.indexOf('z') != -1 ) {
+        // TODO: this is a hack to handle certain alternate characters
+        // resource bundles only have time skeletons containing ‘v’, ‘h’, and ‘H’
+        // but not for time skeletons containing ‘z’, ‘K’, or ‘k’
+        boolean replacedAlternateChars = false;
+        if ( inputSkeleton.indexOf('z') != -1 || inputSkeleton.indexOf('k') != -1 || inputSkeleton.indexOf('K') != -1 ) {
             inputSkeleton = inputSkeleton.replace('z', 'v');
-            replaceZWithV = true;
+            inputSkeleton = inputSkeleton.replace('k', 'H');
+            inputSkeleton = inputSkeleton.replace('K', 'h');
+            replacedAlternateChars = true;
         }
 
         parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
         int bestDistance = Integer.MAX_VALUE;
         // 0 means exact the same skeletons;
         // 1 means having the same field, but with different length,
-        // 2 means only z/v differs
+        // 2 means only z/v, h/K, or H/k differs
         // -1 means having different field.
         int bestFieldDifference = 0;
         for (String skeleton : fIntervalPatterns.keySet()) {
@@ -1135,7 +1137,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 break;
             }
         }
-        if ( replaceZWithV && bestFieldDifference != -1 ) {
+        if ( replacedAlternateChars && bestFieldDifference != -1 ) {
             bestFieldDifference = 2;
         }
         return new DateIntervalFormat.BestMatchInfo(bestSkeleton, bestFieldDifference);

@@ -426,6 +426,11 @@ public class DateIntervalFormatTest extends TestFmwk {
                 "en", "CE 2007 01 10 10:10:10", "CE 2007 01 10 10:10:20", "hms", "10:10:10 AM \u2013 10:10:20 AM",
 
                 "en", "CE 2007 01 01 22:00:00", "CE 2007 01 01 23:00:00", "yMMMMdHm", "January 1, 2007, 22:00 \u2013 23:00",
+                
+                // https://unicode-org.atlassian.net/browse/ICU-21156 2010-Sep-27 0800
+                "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "12 \\u2013 1 AM",
+                "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "0 \\u2013 1 AM",
+
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2008 10 10 10:10:10", "EEEEdMMMMy", "2007\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f32008\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e94",
 

@@ -64,6 +64,11 @@ static const DateIntervalFormatTestItem testItems[] = {
     { "de", "Hm",       tzUSPacific, Date201009270800, Date201009270800 + 12.0*_HOUR, "08:00\\u201320:00 Uhr" },
     { "de", "Hm",       tzUSPacific, Date201009270800, Date201009270800 + 31.0*_DAY,  "27.9.2010, 08:00 \\u2013 28.10.2010, 08:00" },
     { "ja", "MMMd",     tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   "9\\u670827\\u65E5\\uFF5E28\\u65E5" },
+
+    // https://unicode-org.atlassian.net/browse/ICU-21156
+    { "en", "hh",  tzUSPacific, Date201009270800 - 8*_HOUR, Date201009270800 - 7*_HOUR, "12 \\u2013 1 AM" },
+    { "en", "KK",  tzUSPacific, Date201009270800 - 8*_HOUR, Date201009270800 - 7*_HOUR, "0 \\u2013 1 AM" },
+
     { NULL, NULL,       NULL,        0,                0,                             NULL }
 };
 

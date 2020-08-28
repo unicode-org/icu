@@ -1583,11 +1583,10 @@ public class DateIntervalFormat extends UFormat {
         int dCount = 0;
         int MCount = 0;
         int yCount = 0;
-        int hCount = 0;
-        int HCount = 0;
         int mCount = 0;
         int vCount = 0;
         int zCount = 0;
+        char hourChar = '\u0000';
 
         for (i = 0; i < skeleton.length(); ++i) {
             char ch = skeleton.charAt(i);
@@ -1632,12 +1631,13 @@ public class DateIntervalFormat extends UFormat {
                 timeSkeleton.append(ch);
                 break;
               case 'h':
-                timeSkeleton.append(ch);
-                ++hCount;
-                break;
               case 'H':
+              case 'k':
+              case 'K':
                 timeSkeleton.append(ch);
-                ++HCount;
+                if (hourChar == '\u0000') {
+                    hourChar = ch;
+                }
                 break;
               case 'm':
                 timeSkeleton.append(ch);
@@ -1653,8 +1653,6 @@ public class DateIntervalFormat extends UFormat {
                 break;
               case 'V':
               case 'Z':
-              case 'k':
-              case 'K':
               case 'j':
               case 's':
               case 'S':
@@ -1694,11 +1692,8 @@ public class DateIntervalFormat extends UFormat {
         }
 
         /* generate normalized form for time */
-        if ( HCount != 0 ) {
-            normalizedTimeSkeleton.append('H');
-        }
-        else if ( hCount != 0 ) {
-            normalizedTimeSkeleton.append('h');
+        if ( hourChar != '\u0000' ) {
+            normalizedTimeSkeleton.append(hourChar);
         }
         if ( mCount != 0 ) {
             normalizedTimeSkeleton.append('m');
@@ -1966,7 +1961,15 @@ public class DateIntervalFormat extends UFormat {
         DateIntervalInfo.parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
         DateIntervalInfo.parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
         if ( differenceInfo == 2 ) {
-            bestMatchIntervalPattern = bestMatchIntervalPattern.replace('v', 'z');
+            if (inputSkeleton.indexOf('z') != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('v', 'z');
+            }
+            if (inputSkeleton.indexOf('K') != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('h', 'K');
+            }
+            if (inputSkeleton.indexOf('k') != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('H', 'k');
+            }
         }
 
         StringBuilder adjustedPtn = new StringBuilder(bestMatchIntervalPattern);
