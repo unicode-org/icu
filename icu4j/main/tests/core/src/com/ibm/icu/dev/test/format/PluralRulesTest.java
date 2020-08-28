@@ -968,7 +968,7 @@ public class PluralRulesTest extends TestFmwk {
         for (Object[] caseDatum : casesData) {
             String skeleton = (String) caseDatum[0];
             int input = (int) caseDatum[1];
-            String expectedString = (String) caseDatum[2];
+            // String expectedString = (String) caseDatum[2];
             String expectPluralRuleKeyword = (String) caseDatum[3];
 
             String actualPluralRuleKeyword =
@@ -1243,7 +1243,7 @@ public class PluralRulesTest extends TestFmwk {
      * @return
      */
     private String showBytes(byte[] contents) {
-        StringBuilder b = new StringBuilder('[');
+        StringBuilder b = new StringBuilder("[");
         for (int i = 0; i < contents.length; ++i) {
             int item = contents[i] & 0xFF;
             if (item >= 0x20 && item <= 0x7F) {
