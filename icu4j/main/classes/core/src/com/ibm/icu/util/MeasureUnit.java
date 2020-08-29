@@ -262,20 +262,9 @@ public class MeasureUnit implements Serializable {
         private final int siPrefixPower;
         private final String identifier;
 
-
         SIPrefix(int siPrefixPower, String identifier) {
             this.siPrefixPower = siPrefixPower;
             this.identifier = identifier;
-        }
-
-        public static SIPrefix getSiPrefixFromTrieIndex(int trieIndex) {
-            for (SIPrefix element :
-                    SIPrefix.values()) {
-                if (element.getTrieIndex() == trieIndex)
-                    return element;
-            }
-
-            throw new InternalError("Incorrect trieIndex");
         }
 
         public String getIdentifier() {
@@ -286,8 +275,24 @@ public class MeasureUnit implements Serializable {
             return siPrefixPower;
         }
 
+        /**
+         * @internal
+         */
         public int getTrieIndex() {
             return siPrefixPower + UnitsData.Constants.kSIPrefixOffset;
+        }
+
+        /**
+         * @internal
+         */
+        public static SIPrefix getSiPrefixFromTrieIndex(int trieIndex) {
+            for (SIPrefix element :
+                    SIPrefix.values()) {
+                if (element.getTrieIndex() == trieIndex)
+                    return element;
+            }
+
+            throw new InternalError("Incorrect trieIndex");
         }
     }
 

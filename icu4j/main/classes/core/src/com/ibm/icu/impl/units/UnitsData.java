@@ -20,18 +20,6 @@ import java.util.ArrayList;
  */
 public class UnitsData {
     private static String[] simpleUnits = null;
-    private ConversionRates conversionRates;
-    private UnitPreferences unitPreferences;
-    /**
-     * Pairs of categories and the corresponding base units.
-     */
-    private Categories categories;
-
-    public UnitsData() {
-        this.conversionRates = new ConversionRates();
-        this.unitPreferences = UnitPreferences.getUnitPreferences();
-        this.categories = new Categories();
-    }
 
     public static String[] getSimpleUnits() {
         if (simpleUnits != null) {
@@ -46,40 +34,6 @@ public class UnitsData {
         simpleUnits = sink.simpleUnits;
 
         return simpleUnits;
-    }
-
-    public ConversionRates getConversionRates() {
-        return conversionRates;
-    }
-
-    public UnitPreferences getUnitPreferences() {
-        return unitPreferences;
-    }
-
-    /**
-     * TODO: add comment
-     *
-     * @param measureUnit
-     * @return
-     */
-    public String getCategory(MeasureUnitImpl measureUnit) {
-        MeasureUnitImpl baseMeasureUnit
-                = this.getConversionRates().getBasicMeasureUnitImplWithoutSIPrefix(measureUnit);
-        String baseUnitIdentifier = baseMeasureUnit.getIdentifier();
-
-        if (baseUnitIdentifier.equals("meter-per-cubic-meter")) {
-            // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
-            // case. Once CLDR-13787 is clarified, this should be generalised (or
-            // possibly removed):
-
-            return "consumption-inverse";
-        }
-
-        return this.categories.mapFromUnitToCategory.get(baseUnitIdentifier);
-    }
-
-    public UnitPreference[] getPreferencesFor(String category, String usage, String region) {
-        return this.unitPreferences.getPreferencesFor(category, usage, region);
     }
 
     public static class SimpleUnitsSink extends UResource.Sink {
