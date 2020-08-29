@@ -183,20 +183,20 @@ have other choices, as given below.
 
 Two single quotes represents a literal single quote, either inside or outside
 single quotes. Text within single quotes is not interpreted in any way (except
-for two adjacent single quotes). Otherwise all ASCII letter from a to z and A to
-Z are reserved as syntax characters, and require quoting if they are to
+for two adjacent single quotes). Otherwise all ASCII letter from **a** to **z** and **A** to
+**Z** are reserved as syntax characters, and require quoting if they are to
 represent literal characters. In addition, certain ASCII punctuation characters
 may become variable in the future (eg `":"` being interpreted as the time
 separator and `'/'` as a date separator, and replaced by respective
 locale-sensitive characters in display).
 
-"Stand Alone" values refer to those designed to stand on their own, as opposed
-to being with other formatted values. "2nd quarter" would use the standalone
-format `(QQQQ)`, whereas "2nd quarter 2007" would use the regular format `(qqqq
-yyyy)`.
+"Stand-alone" values refer to those designed to stand on their own independently, as opposed
+to being with other formatted values. "2nd quarter" would use the wide stand-alone
+format `(qqqq)`, whereas "2nd quarter 2007" would use the regular format `(QQQQ
+yyyy)`. For more information about format and stand-alone forms, see [CLDR Calendar Elements](https://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras).
 
-The pattern characters used in the Date Field Symbol Table are defined by CLDR;
-for more information see [CLDR Date Field Symbol Table](https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
+The pattern characters used in the Date Field Symbol Table are defined by CLDR; for more information see [CLDR Date Field Symbol Table](https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
+
 Note that the examples may not reflect current CLDR data.
 
 #### Date Field Symbol Table
@@ -210,9 +210,9 @@ Note that the examples may not reflect current CLDR data.
 | `U` | cyclic year name, as in Chinese lunar calendar | `U` | 甲子 |
 | `r` | related Gregorian year | `r` | 1996 |
 | `Q` | quarter | `Q`<br/>`QQ`<br/>`QQQ`<br/>`QQQQ`<br/>`QQQQQ` | 2<br/>02<br/>Q2<br/>2nd quarter<br/>2 |
-| `q` | Stand Alone quarter | `q`<br/>`qq`<br/>`qqq`<br/>`qqqq`<br/>`qqqqq` | 2<br/>02<br/>Q2<br/>2nd quarter<br/>2 |
+| `q` | stand-alone quarter | `q`<br/>`qq`<br/>`qqq`<br/>`qqqq`<br/>`qqqqq` | 2<br/>02<br/>Q2<br/>2nd quarter<br/>2 |
 | `M` | month in year | `M`<br/>`MM`<br/>`MMM`<br/>`MMMM`<br/>`MMMMM` | 9<br/>09<br/>Sep<br/>September<br/>S |
-| `L` | Stand Alone month in year | `L`<br/>`LL`<br/>`LLL`<br/>`LLLL`<br/>`LLLLL` | 9<br/>09<br/>Sep<br/>September<br/>S |
+| `L` | stand-alone month in year | `L`<br/>`LL`<br/>`LLL`<br/>`LLLL`<br/>`LLLLL` | 9<br/>09<br/>Sep<br/>September<br/>S |
 | `w` | week of year | `w`<br/>`ww` | 27<br/>27 |
 | `W` | week of month | `W` | 2 |
 | `d` | day in month | `d`<br/>`dd` | 2<br/>02 |
@@ -221,7 +221,7 @@ Note that the examples may not reflect current CLDR data.
 | `g` | modified julian day | `g` | 2451334 |
 | `E` | day of week | `E,` `EE`, or `EEE`<br/>`EEEE`<br/>`EEEEE`<br/>`EEEEEE` | Tue<br/>Tuesday<br/>T<br/>Tu |
 | `e` | local day of week<br/>example: if Monday is 1st day, Tuesday is 2nd ) | `e` or `ee`<br/>`eee`<br/>`eeee`<br/>`eeeee`<br/>`eeeeee` | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
-| `c` | Stand Alone local day of week | `c` or `cc`<br/>`ccc`<br/>`cccc`<br/>`ccccc`<br/>`cccccc` | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
+| `c` | stand-alone local day of week | `c` or `cc`<br/>`ccc`<br/>`cccc`<br/>`ccccc`<br/>`cccccc` | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
 | `a` | am/pm marker | `a` | pm |
 | `h` | hour in am/pm (1~12) | `h`<br/>`hh` | 7<br/>07 |
 | `H` | hour in day (0~23) | `H`<br/>`HH` | 0<br/>00 |
