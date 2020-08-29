@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
@@ -13,7 +20,7 @@ public class CategoriesSink  extends UResource.Sink{
 
     @Override
     public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-        Assert.assrt(key.toString() == Constants.CATEGORY_TABLE_NAME);
+        Assert.assrt(key.toString() == UnitsData.Constants.CATEGORY_TABLE_NAME);
         Assert.assrt(value.getType() == UResourceBundle.TABLE);
 
         UResource.Table categoryTable = value.getTable();

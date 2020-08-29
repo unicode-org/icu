@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.ICUData;
@@ -17,7 +24,7 @@ public class ConversionRates {
         ICUResourceBundle resource;
         resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
         ConversionRatesSink sink = new ConversionRatesSink();
-        resource.getAllItemsWithFallback(Constants.CONVERSION_UNIT_TABLE_NAME, sink);
+        resource.getAllItemsWithFallback(UnitsData.Constants.CONVERSION_UNIT_TABLE_NAME, sink);
         this.mapToConversionRate = sink.getMapToConversionRate();
     }
 
@@ -46,8 +53,8 @@ public class ConversionRates {
     }
 
     protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, Factor
-            sourceToBase, Factor targetToBase, Convertibility convertibility) {
-        if (convertibility != Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
+            sourceToBase, Factor targetToBase, UnitConverter.Convertibility convertibility) {
+        if (convertibility != UnitConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
         if (!(checkSimpleUnit(source) && checkSimpleUnit(target))) return BigDecimal.valueOf(0);
 
         String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnit();

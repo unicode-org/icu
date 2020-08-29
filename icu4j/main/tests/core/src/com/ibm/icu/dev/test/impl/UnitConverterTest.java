@@ -33,8 +33,8 @@ public class UnitConverterTest {
         class TestData {
             MeasureUnitImpl source;
             MeasureUnitImpl target;
-            Convertibility expected;
-            TestData(String source, String target, Convertibility convertibility) {
+            UnitConverter.Convertibility expected;
+            TestData(String source, String target, UnitConverter.Convertibility convertibility) {
                 this.source = MeasureUnitImpl.UnitsParser.parseForIdentifier(source);
                 this.target = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
                 this.expected = convertibility;
@@ -42,16 +42,16 @@ public class UnitConverterTest {
         }
 
         TestData[] tests = {
-                new TestData("meter", "foot", Convertibility.CONVERTIBLE),
-                new TestData("square-meter-per-square-hour", "hectare-per-square-second", Convertibility.CONVERTIBLE),
-                new TestData("hertz", "revolution-per-second", Convertibility.CONVERTIBLE),
-                new TestData("millimeter", "meter", Convertibility.CONVERTIBLE),
-                new TestData("yard", "meter", Convertibility.CONVERTIBLE),
-                new TestData("ounce-troy", "kilogram", Convertibility.CONVERTIBLE),
-                new TestData("percent", "portion", Convertibility.CONVERTIBLE),
-                new TestData("ofhg", "kilogram-per-square-meter-square-second", Convertibility.CONVERTIBLE),
+                new TestData("meter", "foot", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("square-meter-per-square-hour", "hectare-per-square-second", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("hertz", "revolution-per-second", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("millimeter", "meter", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("yard", "meter", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("ounce-troy", "kilogram", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("percent", "portion", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("ofhg", "kilogram-per-square-meter-square-second", UnitConverter.Convertibility.CONVERTIBLE),
 
-                new TestData("second-per-meter", "meter-per-second", Convertibility.RECIPROCAL),
+                new TestData("second-per-meter", "meter-per-second", UnitConverter.Convertibility.RECIPROCAL),
         };
         ConversionRates conversionRates = new ConversionRates();
 

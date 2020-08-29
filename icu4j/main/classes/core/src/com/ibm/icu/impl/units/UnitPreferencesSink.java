@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
@@ -20,7 +27,7 @@ public class UnitPreferencesSink extends UResource.Sink {
      */
     @Override
     public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-        Assert.assrt(Constants.UNIT_PREFERENCE_TABLE_NAME.equals(key.toString()));
+        Assert.assrt(UnitsData.Constants.UNIT_PREFERENCE_TABLE_NAME.equals(key.toString()));
 
         UResource.Table categoryTable = value.getTable();
         for (int i = 0; categoryTable.getKeyAndValue(i, key, value); i++) {

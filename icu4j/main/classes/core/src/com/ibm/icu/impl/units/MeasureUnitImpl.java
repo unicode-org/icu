@@ -10,6 +10,7 @@ package com.ibm.icu.impl.units;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.util.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -480,6 +481,8 @@ public class MeasureUnitImpl {
                 return;
             }
 
+
+
             // Building the trie.
             CharsTrieBuilder trieBuilder;
             trieBuilder = new CharsTrieBuilder();
@@ -508,14 +511,14 @@ public class MeasureUnitImpl {
             trieBuilder.add("pow15-", PowerPart.POWER_PART_P15.getTrieIndex());
 
             // Add SI prefixes
-            for (SIPrefixString siPrefixInfo :
-                    gSIPrefixStrings) {
-                trieBuilder.add(siPrefixInfo.siPrefixString, siPrefixInfo.value.getTrieIndex());
+            for (MeasureUnit.SIPrefix siPrefix :
+                    MeasureUnit.SIPrefix.values()) {
+                trieBuilder.add(siPrefix.getIdentifier(), siPrefix.getTrieIndex());
             }
 
             // Add simple units
             for (int i = 0; i < simpleUnits.length; i++) {
-                trieBuilder.add(simpleUnits[i], i + Constants.kSimpleUnitOffset);
+                trieBuilder.add(simpleUnits[i], i + UnitsData.Constants.kSimpleUnitOffset);
 
             }
 
@@ -524,43 +527,6 @@ public class MeasureUnitImpl {
         }
 
         private static CharsTrie trie = null;
-
-        /**
-         * Data
-         */
-
-        private static class SIPrefixString {
-            public final String siPrefixString;
-            public final MeasureUnit.SIPrefix value;
-
-            SIPrefixString(String siPrefixString, MeasureUnit.SIPrefix value) {
-                this.siPrefixString = siPrefixString;
-                this.value = value;
-            }
-        }
-
-        private static final SIPrefixString[] gSIPrefixStrings = {
-                new SIPrefixString("yotta", MeasureUnit.SIPrefix.YOTTA),
-                new SIPrefixString("zetta", MeasureUnit.SIPrefix.ZETTA),
-                new SIPrefixString("exa", MeasureUnit.SIPrefix.EXA),
-                new SIPrefixString("peta", MeasureUnit.SIPrefix.PETA),
-                new SIPrefixString("tera", MeasureUnit.SIPrefix.TERA),
-                new SIPrefixString("giga", MeasureUnit.SIPrefix.GIGA),
-                new SIPrefixString("mega", MeasureUnit.SIPrefix.MEGA),
-                new SIPrefixString("kilo", MeasureUnit.SIPrefix.KILO),
-                new SIPrefixString("hecto", MeasureUnit.SIPrefix.HECTO),
-                new SIPrefixString("deka", MeasureUnit.SIPrefix.DEKA),
-                new SIPrefixString("deci", MeasureUnit.SIPrefix.DECI),
-                new SIPrefixString("centi", MeasureUnit.SIPrefix.CENTI),
-                new SIPrefixString("milli", MeasureUnit.SIPrefix.MILLI),
-                new SIPrefixString("micro", MeasureUnit.SIPrefix.MICRO),
-                new SIPrefixString("nano", MeasureUnit.SIPrefix.NANO),
-                new SIPrefixString("pico", MeasureUnit.SIPrefix.PICO),
-                new SIPrefixString("femto", MeasureUnit.SIPrefix.FEMTO),
-                new SIPrefixString("atto", MeasureUnit.SIPrefix.ATTO),
-                new SIPrefixString("zepto", MeasureUnit.SIPrefix.ZEPTO),
-                new SIPrefixString("yocto", MeasureUnit.SIPrefix.YOCTO),
-        };
 
 
         // Set to true when we've seen a "-per-" or a "per-", after which all units
@@ -639,7 +605,7 @@ public class MeasureUnitImpl {
             }
 
             public int getSimpleUnitIndex() {
-                return this.fMatch - Constants.kSimpleUnitOffset;
+                return this.fMatch - UnitsData.Constants.kSimpleUnitOffset;
             }
 
             // Calling calculateType() is invalid, resulting in an assertion failure, if Token
@@ -649,16 +615,16 @@ public class MeasureUnitImpl {
                     throw new InternalError("fMatch must have a positive value");
                 }
 
-                if (fMatch < Constants.kCompoundPartOffset) {
+                if (fMatch < UnitsData.Constants.kCompoundPartOffset) {
                     return Type.TYPE_SI_PREFIX;
                 }
-                if (fMatch < Constants.kInitialCompoundPartOffset) {
+                if (fMatch < UnitsData.Constants.kInitialCompoundPartOffset) {
                     return Type.TYPE_COMPOUND_PART;
                 }
-                if (fMatch < Constants.kPowerPartOffset) {
+                if (fMatch < UnitsData.Constants.kPowerPartOffset) {
                     return Type.TYPE_INITIAL_COMPOUND_PART;
                 }
-                if (fMatch < Constants.kSimpleUnitOffset) {
+                if (fMatch < UnitsData.Constants.kSimpleUnitOffset) {
                     return Type.TYPE_POWER_PART;
                 }
 
@@ -668,5 +634,123 @@ public class MeasureUnitImpl {
             private final int fMatch;
             private final Type type;
         }
+    }
+
+    public enum CompoundPart {
+        // Represents "-per-"
+        COMPOUND_PART_PER(0),
+        // Represents "-"
+        COMPOUND_PART_TIMES(1),
+        // Represents "-and-"
+        COMPOUND_PART_AND(2);
+
+
+        private final int index;
+        CompoundPart(int index) {
+            this.index = index ;
+        }
+
+        public int getTrieIndex() {
+            return  this.index +  UnitsData.Constants.kCompoundPartOffset ;
+        }
+
+        public static CompoundPart getCompoundPartFromTrieIndex(int trieIndex) {
+            int index = trieIndex -  UnitsData.Constants.kCompoundPartOffset ;
+            switch (index) {
+                case 0:
+                    return CompoundPart.COMPOUND_PART_PER;
+                case 1:
+                    return CompoundPart.COMPOUND_PART_TIMES;
+                case 2:
+                    return CompoundPart.COMPOUND_PART_AND;
+                default:
+                   throw new InternalError("CompoundPart index must be 0, 1 or 2");
+            }
+        }
+
+        public int getValue() {
+            return index;
+        }
+    }
+
+    public enum PowerPart {
+        POWER_PART_P2 (2),
+        POWER_PART_P3(3),
+        POWER_PART_P4(4),
+        POWER_PART_P5(5),
+        POWER_PART_P6(6),
+        POWER_PART_P7(7),
+        POWER_PART_P8(8),
+        POWER_PART_P9(9),
+        POWER_PART_P10(10),
+        POWER_PART_P11(11),
+        POWER_PART_P12(12),
+        POWER_PART_P13(13),
+        POWER_PART_P14(14),
+        POWER_PART_P15(15);
+
+        private final int power;
+        PowerPart(int power) {
+            this.power = power;
+        }
+
+        public int getTrieIndex() {
+            return  this.power +  UnitsData.Constants.kPowerPartOffset ;
+        }
+
+        public static int getPowerFromTrieIndex(int trieIndex) {
+            return trieIndex -  UnitsData.Constants.kPowerPartOffset ;
+        }
+
+        public int getValue() {
+            return power;
+        }
+    }
+
+    public enum InitialCompoundPart {
+
+        // Represents "per-", the only compound part that can appear at the start of
+        // an identifier.
+        INITIAL_COMPOUND_PART_PER(0);
+
+        private final int index;
+
+        InitialCompoundPart(int powerIndex) {
+            this.index = powerIndex ;
+        }
+
+        public int getTrieIndex() {
+            return this.index + UnitsData.Constants.kInitialCompoundPartOffset;
+        }
+
+        public static InitialCompoundPart getInitialCompoundPartFromTrieIndex(int trieIndex) {
+            int index = trieIndex - UnitsData.Constants.kInitialCompoundPartOffset;
+            if (index == 0) {
+                return  INITIAL_COMPOUND_PART_PER;
+            }
+
+            throw new InternalError("Incorrect trieIndex");
+        }
+
+        public int getValue() {
+            return index;
+        }
+
+    }
+
+    static class MeasureUnitImplComparator implements Comparator<MeasureUnitImpl> {
+        @Override
+        public int compare(MeasureUnitImpl o1, MeasureUnitImpl o2) {
+            Assert.assrt(conversionRates != null);
+
+            UnitConverter fromO1toO2 = new UnitConverter(o1, o2, conversionRates);
+            return fromO1toO2.convert(BigDecimal.valueOf(1)).compareTo(BigDecimal.valueOf(1));
+        }
+
+        public static void setConversionRates(ConversionRates conversionRates) {
+            MeasureUnitImplComparator.conversionRates = conversionRates;
+        }
+
+        private static ConversionRates conversionRates = null;
     }
 }

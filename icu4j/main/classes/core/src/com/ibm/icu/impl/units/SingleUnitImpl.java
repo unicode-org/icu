@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.util.MeasureUnit;
@@ -79,7 +86,7 @@ public class SingleUnitImpl {
             throw new InternalException("Unit Identifier Syntax Error");
         }
 
-        result.append(this.getSiPrefix().getSiRepresentation());
+        result.append(this.getSiPrefix().getIdentifier());
         result.append(this.getSimpleUnit());
 
         return result.toString();
