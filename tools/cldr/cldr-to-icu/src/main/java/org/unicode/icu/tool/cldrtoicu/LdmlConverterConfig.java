@@ -6,10 +6,13 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Preconditions;
 import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverter.OutputType;
 
 import com.google.common.base.Ascii;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /** API for configuring the LDML converter. */
 public interface LdmlConverterConfig {
@@ -57,6 +60,30 @@ public interface LdmlConverterConfig {
         }
     }
 
+    final class IcuVersionInfo {
+        private final String icuVersion;
+        private final String icuDataVersion;
+        private final String cldrVersion;
+
+        public IcuVersionInfo(String icuVersion, String icuDataVersion, String cldrVersion) {
+            this.icuVersion = checkNotNull(icuVersion);
+            this.icuDataVersion = checkNotNull(icuDataVersion);
+            this.cldrVersion = checkNotNull(cldrVersion);
+        }
+
+        public String getIcuVersion() {
+            return icuVersion;
+        }
+
+        public String getIcuDataVersion() {
+            return icuDataVersion;
+        }
+
+        public String getCldrVersion() {
+            return cldrVersion;
+        }
+    }
+
     /**
      * Returns the set of output types to be converted. Use {@link OutputType#ALL} to convert
      * everything.
@@ -80,7 +107,7 @@ public interface LdmlConverterConfig {
      * Returns a CLDR version String (e.g. {@code "36.1"}) according to either the specified option
      * or (as a fallback) the version specified by the CLDR library against which this code is run.
      */
-    String getCldrVersion();
+    IcuVersionInfo getVersionInfo();
 
     /** Returns the minimal draft status for CLDR data to be converted. */
     CldrDraftStatus getMinimumDraftStatus();

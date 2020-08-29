@@ -130,7 +130,6 @@
 #define izrule_getStaticClassID U_ICU_ENTRY_POINT_RENAME(izrule_getStaticClassID)
 #define izrule_isEquivalentTo U_ICU_ENTRY_POINT_RENAME(izrule_isEquivalentTo)
 #define izrule_open U_ICU_ENTRY_POINT_RENAME(izrule_open)
-#define locale_getKeywords U_ICU_ENTRY_POINT_RENAME(locale_getKeywords)
 #define locale_getKeywordsStart U_ICU_ENTRY_POINT_RENAME(locale_getKeywordsStart)
 #define locale_get_default U_ICU_ENTRY_POINT_RENAME(locale_get_default)
 #define locale_set_default U_ICU_ENTRY_POINT_RENAME(locale_set_default)

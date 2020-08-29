@@ -219,6 +219,7 @@
     <ClCompile Include="number_multiplier.cpp" />
     <ClCompile Include="number_currencysymbols.cpp" />
     <ClCompile Include="number_skeletons.cpp" />
+    <ClCompile Include="number_symbolswrapper.cpp" />
     <ClCompile Include="number_capi.cpp" />
     <ClCompile Include="string_segment.cpp" />
     <ClCompile Include="numparse_parsednumber.cpp" />
@@ -230,6 +231,7 @@
     <ClCompile Include="numparse_affixes.cpp" />
     <ClCompile Include="numparse_compositions.cpp" />
     <ClCompile Include="numparse_validators.cpp" />
+    <ClCompile Include="numrange_capi.cpp" />
     <ClCompile Include="numrange_fluent.cpp" />
     <ClCompile Include="numrange_impl.cpp" />
     <ClCompile Include="numfmt.cpp" />
@@ -486,13 +488,14 @@
     <ClInclude Include="number_scientific.h" />
     <ClInclude Include="formatted_string_builder.h" />
     <ClInclude Include="number_types.h" />
-    <ClCompile Include="number_usageprefs.h" />
+    <ClInclude Include="number_usageprefs.h" />
     <ClInclude Include="number_utypes.h" />
     <ClInclude Include="number_utils.h" />
     <ClInclude Include="number_mapper.h" />
     <ClInclude Include="number_multiplier.h" />
     <ClInclude Include="number_currencysymbols.h" />
     <ClInclude Include="number_skeletons.h" />
+    <ClInclude Include="number_symbolswrapper.h" />
     <ClInclude Include="string_segment.h" />
     <ClInclude Include="numparse_impl.h" />
     <ClInclude Include="numparse_symbols.h" />

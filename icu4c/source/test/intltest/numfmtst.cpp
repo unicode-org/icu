@@ -247,6 +247,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test20961_CurrencyPluralPattern);
   TESTCASE_AUTO(Test21134_ToNumberFormatter);
   TESTCASE_AUTO(Test13733_StrictAndLenient);
+  TESTCASE_AUTO(Test21232_ParseTimeout);
   TESTCASE_AUTO_END;
 }
 
@@ -2270,12 +2271,12 @@ void NumberFormatTest::TestCurrencyUnit(void){
     }
     CurrencyUnit bad(BAD, ec);
     assertSuccess("CurrencyUnit", ec);
-    if (cu.getIndex() == bad.getIndex()) {
+    if (cu.getOffset() == bad.getOffset()) {
         errln("Indexes of different currencies should differ.");
     }
     CurrencyUnit bad2(BAD2, ec);
     assertSuccess("CurrencyUnit", ec);
-    if (bad2.getIndex() != bad.getIndex()) {
+    if (bad2.getOffset() != bad.getOffset()) {
         errln("Indexes of unrecognized currencies should be the same.");
     }
     if (bad == bad2) {
@@ -10031,6 +10032,31 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
         assertEquals("Lenient parse of " + inputString + " using " + patternString,
             parsedLenientValue, cas.expectedLenientParse);
     }
+}
+
+void NumberFormatTest::Test21232_ParseTimeout() {
+    IcuTestErrorCode status(*this, "Test21232_ParseTimeout");
+
+    DecimalFormat df(status);
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
+
+    UnicodeString input = u"4444444444444444444444444444444444444444";
+    if (quick) {
+        for (int32_t i = 0; i < 5; i++) {
+            input.append(input);
+        }
+        assertEquals("Somewhat long input of digits", 1280, input.length());
+    } else {
+        for (int32_t i = 0; i < 12; i++) {
+            input.append(input);
+        }
+        assertEquals("Very long input of digits", 163840, input.length());
+    }
+    Formattable result;
+    df.parse(input, result, status);
+    // Should not hang
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -107,36 +107,26 @@ digitToBasic(int32_t digit, UBool uppercase) {
 }
 
 /**
- * basicToDigit[] contains the numeric value of a basic code
- * point (for use in representing integers) in the range 0 to
- * BASE-1, or -1 if b is does not represent a value.
+ * @return the numeric value of a basic code point (for use in representing integers)
+ *         in the range 0 to BASE-1, or a negative value if cp is invalid.
  */
-static const int8_t
-basicToDigit[256]={
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1, -1,
-
-    -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-
-    -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-};
+static int32_t decodeDigit(int32_t cp) {
+    if(cp<=u'Z') {
+        if(cp<=u'9') {
+            if(cp<u'0') {
+                return -1;
+            } else {
+                return cp-u'0'+26;  // 0..9 -> 26..35
+            }
+        } else {
+            return cp-u'A';  // A-Z -> 0..25
+        }
+    } else if(cp<=u'z') {
+        return cp-'a';  // a..z -> 0..25
+    } else {
+        return -1;
+    }
+}
 
 static inline char
 asciiCaseMap(char b, UBool uppercase) {
@@ -455,7 +445,7 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
                 return 0;
             }
 
-            digit=basicToDigit[(uint8_t)src[in++]];
+            digit=decodeDigit(src[in++]);
             if(digit<0) {
                 *pErrorCode=U_INVALID_CHAR_FOUND;
                 return 0;

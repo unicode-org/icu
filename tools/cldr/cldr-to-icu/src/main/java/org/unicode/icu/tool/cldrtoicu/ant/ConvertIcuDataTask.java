@@ -89,6 +89,16 @@ public final class ConvertIcuDataTask extends Task {
     }
 
     @SuppressWarnings("unused")
+    public void setIcuVersion(String icuVersion) {
+        config.setIcuVersion(icuVersion);
+    }
+
+    @SuppressWarnings("unused")
+    public void setIcuDataVersion(String icuDataVersion) {
+        config.setIcuDataVersion(icuDataVersion);
+    }
+
+    @SuppressWarnings("unused")
     public void setCldrVersion(String cldrVersion) {
         config.setCldrVersion(cldrVersion);
     }

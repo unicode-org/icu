@@ -8,6 +8,7 @@
 #include "number_decimalquantity.h"
 #include "number_microprops.h"
 #include "number_roundingutils.h"
+#include "number_skeletons.h"
 #include "unicode/char16ptr.h"
 #include "unicode/currunit.h"
 #include "unicode/fmtable.h"
@@ -19,6 +20,7 @@
 
 using namespace icu::number;
 using namespace icu::number::impl;
+using icu::StringSegment;
 
 // Copy constructor
 Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
@@ -39,10 +41,7 @@ Usage &Usage::operator=(const Usage &other) {
     return *this;
 }
 
-// Move constructor - can it be improved by taking over src's "this" instead of
-// copying contents? Swapping pointers makes sense for heap objects but not for
-// stack objects.
-// *this = std::move(src);
+// Move constructor
 Usage::Usage(Usage &&src) U_NOEXCEPT : fUsage(src.fUsage), fLength(src.fLength), fError(src.fError) {
     // Take ownership away from src if necessary
     src.fUsage = nullptr;
@@ -100,25 +99,78 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
 
     quantity.roundToInfinity(); // Enables toDouble
     const auto routed = fUnitsRouter.route(quantity.toDouble(), status);
-    const auto& routedUnits = routed.measures;
-    micros.outputUnit = routedUnits[0]->getUnit();
-    quantity.setToDouble(routedUnits[0]->getNumber().getDouble());
-
-    // TODO(units): here we are always overriding Precision. (1) get precision
-    // from fUnitsRouter, (2) ensure we use the UnitPreference skeleton's
-    // precision only when there isn't an explicit override we prefer to use.
-    // This needs to be handled within
-    // NumberFormatterImpl::macrosToMicroGenerator in number_formatimpl.cpp
-    // TODO: Use precision from `routed` result.
-    Precision precision = Precision::integer().withMinDigits(2);
-    UNumberFormatRoundingMode roundingMode;
-    // Temporary until ICU 64?
-    roundingMode = precision.fRoundingMode;
-    CurrencyUnit currency(u"", status);
-    micros.rounder = {precision, roundingMode, currency, status};
     if (U_FAILURE(status)) {
         return;
     }
+    const MaybeStackVector<Measure>& routedUnits = routed.measures;
+    micros.outputUnit = routed.outputUnit.copy(status).build(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    micros.mixedMeasuresCount = routedUnits.length() - 1;
+    if (micros.mixedMeasuresCount > 0) {
+#ifdef U_DEBUG
+        U_ASSERT(micros.outputUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
+        U_ASSERT(U_SUCCESS(status));
+        // Check that we received measurements with the expected MeasureUnits:
+        int32_t singleUnitsCount;
+        LocalArray<MeasureUnit> singleUnits =
+            micros.outputUnit.splitToSingleUnits(singleUnitsCount, status);
+        U_ASSERT(U_SUCCESS(status));
+        U_ASSERT(routedUnits.length() == singleUnitsCount);
+        for (int32_t i = 0; i < routedUnits.length(); i++) {
+            U_ASSERT(routedUnits[i]->getUnit() == singleUnits[i]);
+        }
+#endif
+        // Mixed units: except for the last value, we pass all values to the
+        // LongNameHandler via micros.mixedMeasures.
+        if (micros.mixedMeasures.getCapacity() < micros.mixedMeasuresCount) {
+            if (micros.mixedMeasures.resize(micros.mixedMeasuresCount) == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+        }
+        for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
+            micros.mixedMeasures[i] = routedUnits[i]->getNumber().getInt64();
+        }
+    } else {
+        micros.mixedMeasuresCount = 0;
+    }
+    // The last value (potentially the only value) gets passed on via quantity.
+    quantity.setToDouble(routedUnits[routedUnits.length() - 1]->getNumber().getDouble());
+
+    UnicodeString precisionSkeleton = routed.precision;
+    if (micros.rounder.fPrecision.isBogus()) {
+        if (precisionSkeleton.length() > 0) {
+            micros.rounder.fPrecision = parseSkeletonToPrecision(precisionSkeleton, status);
+        } else {
+            // We use the same rounding mode as COMPACT notation: known to be a
+            // human-friendly rounding mode: integers, but add a decimal digit
+            // as needed to ensure we have at least 2 significant digits.
+            micros.rounder.fPrecision = Precision::integer().withMinDigits(2);
+        }
+    }
+}
+
+Precision UsagePrefsHandler::parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton,
+                                                      UErrorCode status) {
+    if (U_FAILURE(status)) {
+        // As a member of UsagePrefsHandler, which is a friend of Precision, we
+        // get access to the default constructor.
+        return {};
+    }
+    constexpr int32_t kSkelPrefixLen = 20;
+    if (!precisionSkeleton.startsWith(UNICODE_STRING_SIMPLE("precision-increment/"))) {
+        status = U_INVALID_FORMAT_ERROR;
+        return {};
+    }
+    U_ASSERT(precisionSkeleton[kSkelPrefixLen - 1] == u'/');
+    StringSegment segment(precisionSkeleton, false);
+    segment.adjustOffset(kSkelPrefixLen);
+    MacroProps macros;
+    blueprint_helpers::parseIncrementOption(segment, macros, status);
+    return macros.precision;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

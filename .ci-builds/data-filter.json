@@ -8,18 +8,29 @@
     ]
   },
 // Test mixed feature filter and resource filter
-// Exlude translit data so we can run test for ICU-20673
+// Exclude translit data so we can run test for ICU-20673
+// Also test for "whitelist" versus "includelist"
   "featureFilters": {
     "misc": {
       "whitelist": ["supplementalData"]
     },
-    "translit": "exclude"
+    "translit": "exclude",
+    "curr_tree": {
+      "filterType": "locale",
+      "includelist": ["my"]
+    },
+    "brkitr_rules": {
+      "excludelist": ["line"]
+    },
+    "brkitr_dictionaries": {
+      "blacklist": ["cjdict"]
+    }
   },
   "resourceFilters": [
     {
       "categories": ["misc"],
       "files": {
-        "whitelist": ["supplementalData"]
+        "includelist": ["supplementalData"]
       },
       "rules": ["+/*"]
     }

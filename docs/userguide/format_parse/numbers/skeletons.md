@@ -1,16 +1,33 @@
+---
+layout: default
+title: Number Skeletons
+nav_order: 3
+grand_parent: Formatting
+parent: Formatting Numbers
+---
 <!--
 © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-Number Skeletons
-================
+# Number Skeletons
+{: .no_toc }
 
-Number skeletons are a locale-agnostic way to configure a NumberFormatter in
-ICU.  Number skeletons work in MessageFormat.
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
+
+Number skeletons are a locale-agnostic way to configure a `NumberFormatter` in
+ICU. Number skeletons work in `MessageFormat`.
 
 Number skeletons consist of case-sensitive tokens that correspond to settings
-in ICU NumberFormatter.  For example, to format a currency in compact notation
+in ICU `NumberFormatter`. For example, to format a currency in compact notation
 with the sign always shown, you could use this skeleton:
 
     sign-always compact-short currency/GBP
@@ -19,7 +36,7 @@ with the sign always shown, you could use this skeleton:
 
     +! K currency/GBP
 
-To use a skeleton in MessageFormat, use the "number" type and prefix the
+To use a skeleton in `MessageFormat`, use the "number" type and prefix the
 skeleton with `::`
 
     {0, number, :: +! K currency/GBP}
@@ -31,9 +48,9 @@ concise skeletons.
 ## Syntax
 
 A token consists of a *stem* and zero or more *options*.  The stem is what
-occurs before the first "/" character in a token, and the options are each of
-the subsequent "/"-delimited strings.  For example, "compact-short" and
-"currency" are stems, and "GBP" is an option.
+occurs before the first `"/"` character in a token, and the options are each of
+the subsequent `"/"`-delimited strings.  For example, `"compact-short"` and
+"currency" are stems, and `"GBP"` is an option.
 
 Tokens are space-separated, with exceptions for concise skeletons listed at
 the end of this document.
@@ -44,7 +61,7 @@ digits, you could use the following stem:
 
     @@#
 
-A few examples of number skeletons are shown below.  The list of available
+A few examples of number skeletons are shown below. The list of available
 stems and options can be found below in [Skeleton Stems and
 Options](#skeleton-stems-and-options).
 
@@ -53,11 +70,11 @@ Options](#skeleton-stems-and-options).
 | Long Skeleton | Concise Skeleton | Input | en-US Output | Comments |
 |---|---|---|---|---|
 | `percent` | `%` | 25 | 25% |
-| `.00` | `.00` | 25 | 25.00 | Equivalent to Precision::fixedFraction(2) |
+| `.00` | `.00` | 25 | 25.00 | Equivalent to `Precision::fixedFraction(2)` |
 | `percent .00` | `% .00` | 25 | 25.00% |
 | `scale/100` | `scale/100` | 0.3 | 30 | Multiply by 100 before formatting |
 | `percent scale/100` | `%x100` | 0.3 | 30% |
-| `measure-unit/length-meter` | `unit/meter` | 5 | 5 m | UnitWidth defaults to Short |
+| `measure-unit/length-meter` | `unit/meter` | 5 | 5 m | `UnitWidth` defaults to `Short` |
 | `measure-unit/length-meter` <br/> `unit-width-full-name` | `unit/meter` <br/> `unit-width-full-name` | 5 | 5 meters |
 | `currency/CAD` | `currency/CAD` | 10 | CA$10.00 |
 | `currency/CAD` <br/> `unit-width-narrow` | `currency/CAD` <br/> `unit-width-narrow` | 10 | $10.00 | Use the narrow symbol variant |
@@ -75,8 +92,7 @@ Options](#skeleton-stems-and-options).
 
 ## Skeleton Stems and Options
 
-The full set of features supported by number skeletons is listed by category
-below.
+The full set of features supported by number skeletons is listed by category below.
 
 ### Notation
 
@@ -86,19 +102,17 @@ Use one of the following stems to select compact or simple notation:
 - `compact-long` or `KK` (concise)
 - `notation-simple` (or omit since this is default)
 
-There are two ways to select scientific or engineering notation: using long-form
-syntax or concise syntax.
+There are two ways to select scientific or engineering notation: using long-form syntax or concise syntax.
 
 #### Scientific and Engineering Notation: Long Form
 
-Start with the stem `scientific` or `engineering`.  Those stems take the
-following optional options:
+Start with the stem `scientific` or `engineering`.  Those stems take the following optional options:
 
 - `/sign-xxx` sets the sign display option for the exponent; see [Sign](#sign).
 - `/*ee` sets exponent digits to "at least 2"; use `/*eee` for at least 3 digits, etc.
     - ***Prior to ICU 67***, use `/+ee` instead of `/*ee`.
 
-For example, all of the following skeletons are valid:
+For example, all the following skeletons are valid:
 
 - `scientific`
 - `scientific/sign-always`
@@ -154,7 +168,7 @@ As with the `measure-unit` stem, pass the unit identifier as the option:
 
 - `per-measure-unit/aaaa-bbbb`
 
-Note that if the `unit` stem is used, the demonimator can be placed in the same
+Note that if the `unit` stem is used, the denominator can be placed in the same
 token as the numerator.
 
 ### Unit Width
@@ -168,17 +182,17 @@ The unit width can be specified by the following stems:
 - `unit-width-hidden`
 
 For more details, see
-[UNumberUnitWidth](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[`UNumberUnitWidth`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).
 
 ### Precision
 
 The precision category has more blueprint stems than most other categories;
-they are documented in detail below.  The following non-blueprint stems are
+they are documented in detail below. The following non-blueprint stems are
 accepted:
 
 - `precision-integer` (round to the nearest integer) --- accepts fraction-precision options
 - `precision-unlimited` (do not perform rounding; display all digits)
-- `precision-increment/dddd` (round to *dddd*, a decimal number) --- see below
+- `precision-increment/dddd` (round to *`dddd`*, a decimal number) --- see below
 - `precision-currency-standard`
 - `precision-currency-cash`
 
@@ -256,8 +270,7 @@ The rounding mode can be specified by the following stems:
 - `rounding-mode-half-up`
 - `rounding-mode-unnecessary`
 
-For more details, see [Rounding
-Modes](http://userguide.icu-project.org/formatparse/numbers/rounding-modes).
+For more details, see [Rounding Modes](rounding-modes.md).
 
 ### Integer Width
 
@@ -272,10 +285,10 @@ integer digits):
 | `integer-width/*` | - | Zero or more <br/> integer digits | `IntegerWidth::zeroFillTo(0) `
 
 The long-form option starts with either a single `*` symbol, signaling no limit
-on the number of integer digits (no *truncateAt*), or zero or more `#` symbols.
+on the number of integer digits (no *`truncateAt`*), or zero or more `#` symbols.
 It should then be followed by zero or more `0` symbols, indicating the minimum
-integer digits (the argument to *zeroFillTo*).  If there is no `*` symbol, the
-maximum integer digits (the argument to *truncateAt*) is the number of `#`
+integer digits (the argument to *`zeroFillTo`*).  If there is no `*` symbol, the
+maximum integer digits (the argument to *`truncateAt`*) is the number of `#`
 symbols plus the number of `0` symbols.
 
 The concise skeleton is simply one or more `0` characters. This supports
@@ -289,16 +302,15 @@ To specify the scale, use the following stem and option:
 
 - `scale/dddd`
 
-where *dddd* is a decimal number.  For example, the following are valid
-skeletons:
+where *`dddd`* is a decimal number. For example, the following are valid skeletons:
 
 - `scale/100` (multiply by 100)
 - `scale/1E2` (same as above)
 - `scale/0.5` (multiply by 0.5)
 
-The decimal number should conform to a standard decimal number syntax.  In
+The decimal number should conform to a standard decimal number syntax. In
 C++, it is parsed using the decimal number library described in
-[LocalizedNumberFormatter::formatDecimal](http://icu-project.org/apiref/icu4c/classicu_1_1number_1_1LocalizedNumberFormatter.html).
+[LocalizedNumberFormatter::formatDecimal](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1number_1_1LocalizedNumberFormatter.html).
 In Java, it is parsed using
 [BigDecimal](https://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html#BigDecimal%28java.lang.String%29).
 For maximum compatibility, it is highly recommended that your decimal number
@@ -315,7 +327,7 @@ The grouping strategy can be specified by the following stems:
 - `group-thousands` (no concise equivalent)
 
 For more details, see
-[UNumberGroupingStrategy](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[`UNumberGroupingStrategy`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).
 
 ### Symbols
 
@@ -324,7 +336,7 @@ The following stems are allowed for specifying the number symbols:
 - `latin` (use Latin-script digits)
 - `numbering-system/nnnn` (use the `nnnn` numbering system)
 
-A custom NDecimalFormatSymbols instance is not supported at this time.
+A custom `NDecimalFormatSymbols` instance is not supported at this time.
 
 ### Sign Display
 
@@ -339,7 +351,7 @@ The following stems specify sign display:
 - `sign-accounting-except-zero` or `()?` (concise)
 
 For more details, see
-[UNumberSignDisplay](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[`UNumberSignDisplay`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).
 
 ### Decimal Separator Display
 
@@ -349,4 +361,4 @@ The following stems specify decimal separator display:
 - `decimal-always`
 
 For more details, see
-[UNumberDecimalSeparatorDisplay](http://icu-project.org/apiref/icu4c/unumberformatter_8h.html).
+[`UNumberDecimalSeparatorDisplay`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).

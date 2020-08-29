@@ -527,7 +527,8 @@ public final class SupplementalData {
     // ...
     // Remove the script code 'Zzzz' and the region code 'ZZ' if they occur.
     //
-    // Note that this implementation does not need to handle "grandfathered" tags.
+    // Note that this implementation does not need to handle
+    // legacy language tags (marked as “Type: grandfathered” in BCP 47).
     private Optional<LocaleId> addLikelySubtags(String localeId) {
         if (localeId.equals("root")) {
             return Optional.empty();

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(double-conversion VERSION 3.1.5)
 
+if(BUILD_SHARED_LIBS AND MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 set(headers
     double-conversion/bignum.h
     double-conversion/cached-powers.h

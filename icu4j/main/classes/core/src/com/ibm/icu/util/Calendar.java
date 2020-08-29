@@ -1764,7 +1764,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             locale = ULocale.getDefault(Category.FORMAT);
         }
         if (tz == null) {
-            tz = TimeZone.getDefault();
+            tz = TimeZone.forULocaleOrDefault(locale);
         }
 
         Calendar cal = createInstance(locale);
@@ -1796,7 +1796,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     private static Calendar createInstance(ULocale locale) {
         Calendar cal = null;
-        TimeZone zone = TimeZone.getDefault();
+        TimeZone zone = TimeZone.forULocaleOrDefault(locale);
         CalType calType = getCalendarTypeForLocale(locale);
         if (calType == CalType.UNKNOWN) {
             // fallback to Gregorian

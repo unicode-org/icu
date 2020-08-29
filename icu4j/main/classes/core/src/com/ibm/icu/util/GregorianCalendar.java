@@ -358,7 +358,7 @@ public class GregorianCalendar extends Calendar {
      * @stable ICU 2.0
      */
     public GregorianCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -368,7 +368,7 @@ public class GregorianCalendar extends Calendar {
      * @stable ICU 3.2
      */
     public GregorianCalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**

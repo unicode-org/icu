@@ -436,11 +436,8 @@ LocaleMatcher::LocaleMatcher(const Builder &builder, UErrorCode &errorCode) :
         int32_t suppLength = 0;
         // Determine insertion order.
         // Add locales immediately that are equivalent to the default.
-        MaybeStackArray<int8_t, 100> order(supportedLocalesLength);
-        if (order.getAlias() == nullptr) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
+        MaybeStackArray<int8_t, 100> order(supportedLocalesLength, errorCode);
+        if (U_FAILURE(errorCode)) { return; }
         int32_t numParadigms = 0;
         for (int32_t i = 0; i < supportedLocalesLength; ++i) {
             const Locale &locale = *supportedLocales[i];

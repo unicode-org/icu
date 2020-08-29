@@ -101,6 +101,7 @@ icu4j/perf-tests/data/conversion/*
 # docs
 #
 docs/ide4c/vscode/*.json
+docs/Gemfile.lock
 #
 # tools
 #

@@ -245,6 +245,11 @@ public void TestExtended() {
         case PARSE_DATA:
             if (c == '•') {
                 int  breakIdx = tp.dataToBreak.length();
+                if (tp.expectedBreaks[breakIdx] != 0) {
+                    errln(String.format(
+                            "rbbitst.txt:%d:%d adjacent expected breaks with no intervening test text",
+                            lineNum, column));
+                }
                 tp.expectedBreaks[breakIdx] = -1;
                 tp.srcLine[breakIdx]        = lineNum;
                 tp.srcCol[breakIdx]         = column;
@@ -388,6 +393,11 @@ public void TestExtended() {
                     tagValue = -1;
                 }
                 int  breakIdx = tp.dataToBreak.length();
+                if (tp.expectedBreaks[breakIdx] != 0) {
+                    errln(String.format(
+                            "rbbitst.txt:%d:%d adjacent expected breaks with no intervening test text",
+                            lineNum, column));
+                }
                 tp.expectedBreaks[breakIdx] = tagValue;
                 tp.srcLine[breakIdx]        = lineNum;
                 tp.srcCol[breakIdx]         = column;

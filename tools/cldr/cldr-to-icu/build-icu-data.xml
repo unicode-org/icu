@@ -20,18 +20,23 @@
     <!-- Initialize the properties which were not already set on the command line. -->
     <target name="init-args">
         <property environment="env"/>
-        <condition property="hascldrdir" >
-            <isset property="env.CLDR_DIR" />
+        <!-- Inherit properties from environment variable unless specified. As usual
+             with Ant, this is messier than it should be. All we are saying here is:
+             "Use the property if explicitly set, otherwise use the environment variable."
+             We cannot just set the property to the environment variable, since expansion
+             fails for non existant properties, and you are left with a literal value of
+             "${env.CLDR_DATA_DIR}". -->
+        <condition property="cldrDataDir" value="${env.CLDR_DATA_DIR}">
+            <isset property="env.CLDR_DATA_DIR"/>
         </condition>
-        <fail unless="hascldrdir"
-              message="Please set the CLDR_DIR environment variable to the top level CLDR source dir (containing 'common')."/>
+        <fail unless="cldrDataDir"
+              message="Set the CLDR_DATA_DIR environment variable (or cldrDataDir property) to the CLDR data directory (typically ending in '/production')"/>
 
-        <!-- The base directory of the CLDR release from which CLDR data is obtained. For
-             legacy reasons, this must also match an environment variable called CLDR_DIR,
-             which is read here, so it is best to set this via the environment variable for
-             now. -->
-        <!-- TODO: Update this when the CLDR_DIR environment variable is no longer needed. -->
-        <property name="cldrDir" value="${env.CLDR_DIR}"/>
+        <!-- Ant does not inherit this from the user's environment (and it can matter).
+             This is only needed because we have to "exec" a new Ant task below. -->
+        <condition property="javaHome" value="${env.JAVA_HOME}">
+            <isset property="env.JAVA_HOME"/>
+        </condition>
 
         <!-- The output directory into which to write the converted ICU data. By default
              this will overwrite (without deletion) the ICU data files in this ICU release,
@@ -41,7 +46,14 @@
         <!-- The directory in which the additional ICU XML data is stored. -->
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
-        <!-- An override for the CLDR version string to be used in generated data. -->
+        <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
+        <property name="icuVersion" value="67.1.0.0"/>
+
+        <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
+        <property name="icuDataVersion" value="67.1.0.0"/>
+
+        <!-- An override for the CLDR version string (icuver.txt and others). This will be
+             extracted from the CLDR library used for building the data if not set here. -->
         <property name="cldrVersion" value=""/>
 
         <!-- The minimum draft status for CLDR data to be used in the conversion. See
@@ -88,9 +100,36 @@
         </exec>
     </target>
 
+    <!-- Somewhat hacky wrapper target which invokes the real conversion task.
+         This is done so we can set the environment variable of the new process and
+         effectively overwrite the CLDR_DIR value. If ever the CLDR library doesn't
+         need to use CLDR_DIR at runtime to find the production data, this can all be
+         removed. -->
+    <target name="convert" depends="init-args, prepare-jar">
+        <exec executable="ant" searchpath="true" failonerror="true">
+            <!-- The CLDR library wants CLDR_DIR set, to the data directory. -->
+            <env key="CLDR_DIR" value="${cldrDataDir}" />
+            <!-- Force inherit JAVA_HOME (this can be important). -->
+            <env key="JAVA_HOME" value="${javaHome}" />
+            <!-- Initial Ant command line with all the "interesting" bit in. -->
+            <arg line="-f build-icu-data.xml convert-impl -DcldrDir=${cldrDataDir}"/>
+            <!-- List all properties in the "convert-impl" task (except cldrDir). -->
+            <arg value="-DoutDir=${outDir}"/>
+            <arg value="-DspecialsDir=${specialsDir}"/>
+            <arg value="-DoutputTypes=${outputTypes}"/>
+            <arg value="-DicuVersion=${icuVersion}"/>
+            <arg value="-DicuDataVersion=${icuDataVersion}"/>
+            <arg value="-DcldrVersion=${cldrVersion}"/>
+            <arg value="-DminDraftStatus=${minDraftStatus}"/>
+            <arg value="-DlocaleIdFilter=${localeIdFilter}"/>
+            <arg value="-DincludePseudoLocales=${includePseudoLocales}"/>
+            <arg value="-DemitReport=${emitReport}"/>
+        </exec>
+    </target>
+
     <!-- Do the actual CLDR data conversion, based on the command line arguments, built in
          default properties and the configuration in the "<convert>" element below. -->
-    <target name="convert" depends="init-args, prepare-jar">
+    <target name="convert-impl">
         <taskdef name="convert" classname="org.unicode.icu.tool.cldrtoicu.ant.ConvertIcuDataTask">
             <classpath>
                 <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
@@ -98,6 +137,7 @@
         </taskdef>
         <convert cldrDir="${cldrDir}" outputDir="${outDir}" specialsDir="${specialsDir}"
                  outputTypes="${outputTypes}" cldrVersion="${cldrVersion}"
+                 icuVersion="${icuVersion}" icuDataVersion="${icuDataVersion}"
                  minimalDraftStatus="${minDraftStatus}" localeIdFilter="${localeIdFilter}"
                  includePseudoLocales="${includePseudoLocales}" emitReport="${emitReport}">
 
@@ -357,8 +397,6 @@
                 <retain path="currencyNumericCodes.txt"/>
                 <retain path="icudata.rc"/>
                 <retain path="icustd.txt"/>
-                <retain path="icuver.txt"/>
-                <retain path="langInfo.txt"/>
                 <retain path="zoneinfo64.txt"/>
                 <!-- This file should be removed before the next release. -->
                 <retain path="miscfiles.mk"/>

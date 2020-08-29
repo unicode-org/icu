@@ -55,12 +55,9 @@
 #
 # b) CLDR-related variables
 #
-# CLDR_DIR:      For most of the process, this is the path to the to root of
-#                standard CLDR sources, below which are the common and
-#                tools directories. For running LdmlConverter, this needs to be
-#                temporarily reset to the parallel root for the production data,
-#                corresponding to $CLDR_TMP_DIR/production (see description of
-#                CLDR_TMP_DIR below).
+# CLDR_DIR:      This is the path to the to root of standard CLDR sources, below
+#                which are the common and tools directories.
+#
 # CLDR_CLASSES:  Path to the CLDR Tools classes directory. If not set, defaults
 #                to $CLDR_DIR/tools/java/classes
 #
@@ -140,10 +137,11 @@ export TOOLS_ROOT=$HOME/icu-myfork/tools
 
 # 2. Build and install the CLDR jar
 
-cd $TOOLS_ROOT/cldr/lib
-./install-cldr-jars.sh "$CLDR_DIR"
+cd $TOOLS_ROOT/cldr
+ant install-cldr-libs
 
-See the README.txt file in this directory for more information.
+See the $TOOLS_ROOT/cldr/lib/README.txt file for more information on the CLDR
+jar and the install-cldr-jars.sh script.
 
 # 3. Configure ICU4C, build and test without new data first, to verify that
 # there are no pre-existing errors. Here <platform> is the runConfigureICU
@@ -177,8 +175,6 @@ ant proddata 2>&1 | tee /tmp/cldr-newData-proddataLog.txt
 # output (so do not assume nothing is happening). Keep a log so you can investigate
 # anything that looks suspicious.
 #
-# This also requires temporarily redefining CLDR_DIR.
-#
 # Note that "ant clean" should not be run before this. The build-icu-data.xml process
 # will automatically run its own "clean" step to delete files it cannot determine to
 # be ones that it would generate, except for pasts listed in <retain> elements such as
@@ -188,7 +184,13 @@ ant proddata 2>&1 | tee /tmp/cldr-newData-proddataLog.txt
 # build-icu-data.xml file, such as adding new locales etc.
 
 cd $TOOLS_ROOT/cldr/cldr-to-icu
-CLDR_DIR=$CLDR_TMP_DIR/production ant -f build-icu-data.xml | tee /tmp/cldr-newData-builddataLog.txt
+ant -f build-icu-data.xml -DcldrDataDir="$CLDR_TMP_DIR/production" | tee /tmp/cldr-newData-builddataLog.txt
+
+# 4c. Update the CLDR testData files needed by ICU4C and ICU4J tests, ensuring
+# they're representative of the newest CLDR data.
+
+cd $TOOLS_ROOT/cldr
+ant update-cldr-testdata
 
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the

@@ -242,6 +242,8 @@ public: // package
 
     void TestCloneLocale(void);
 
+    void TestTimeZoneInLocale(void);
+
     void TestHebrewMonthValidation(void);
 
     /*

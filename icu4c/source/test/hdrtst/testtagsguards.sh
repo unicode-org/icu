@@ -6,10 +6,11 @@
 
 # set -x # echo on
 
-DEF=-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
-INCL="-Isource/common -Isource/i18n -Isource/io"
-TMPDIR=`mktemp -d`
-DIFF="diff -u --minimal"
+DEF:=-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+INCL:="-Isource/common -Isource/i18n -Isource/io"
+TMPDIR:=`mktemp -d`
+DIFF:="diff -u --minimal"
+CXX:="clang++"
 
 echo "*** testtagsguards.sh TMPDIR=$TMPDIR"
 
@@ -18,13 +19,13 @@ for file in source/common/unicode/*.h source/i18n/unicode/*.h source/io/unicode/
     echo $file
     echo '#include "unicode/'$base'"' > $TMPDIR/ht-$base.cpp
     # Preprocess only.
-    clang++ $INCL -C -E $DEF -o $TMPDIR/ht-$base-normal.i $TMPDIR/ht-$base.cpp
+    $CXX $INCL -C -E $DEF -o $TMPDIR/ht-$base-normal.i $TMPDIR/ht-$base.cpp
 
     # When hiding @draft, none should be in the output.
     TAG=draft
     GUARD=DRAFT
     echo "    @$TAG"
-    clang++ $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
+    $CXX $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
     if grep "@$TAG" -C 5 $TMPDIR/ht-$base-$TAG.i; then
         echo "*** error: @$TAG not hidden in $TMPDIR/ht-$base-$TAG.i"
         exit 1
@@ -42,7 +43,7 @@ for file in source/common/unicode/*.h source/i18n/unicode/*.h source/io/unicode/
     TAG=deprecated
     GUARD=DEPRECATED
     echo "    @$TAG"
-    clang++ $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
+    $CXX $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
     if grep "@$TAG" -C 5 $TMPDIR/ht-$base-$TAG.i; then
         echo "*** error: @$TAG not hidden in $TMPDIR/ht-$base-$TAG.i"
         exit 1
@@ -63,7 +64,7 @@ for file in source/common/unicode/*.h source/i18n/unicode/*.h source/io/unicode/
     TAG=system
     GUARD=SYSTEM
     echo "    @$TAG"
-    clang++ $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
+    $CXX $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
     if grep "@$TAG" -C 5 $TMPDIR/ht-$base-$TAG.i; then
         echo "*** error: @$TAG not hidden in $TMPDIR/ht-$base-$TAG.i"
         exit 1
@@ -75,7 +76,7 @@ for file in source/common/unicode/*.h source/i18n/unicode/*.h source/io/unicode/
     TAG=obsolete
     GUARD=OBSOLETE
     echo "    @$TAG"
-    clang++ $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
+    $CXX $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
     if grep "@$TAG" -C 5 $TMPDIR/ht-$base-$TAG.i; then
         echo "*** error: @$TAG not hidden in $TMPDIR/ht-$base-$TAG.i"
         exit 1

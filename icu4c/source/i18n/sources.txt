@@ -123,6 +123,7 @@ number_patternstring.cpp
 number_rounding.cpp
 number_scientific.cpp
 number_skeletons.cpp
+number_symbolswrapper.cpp
 number_usageprefs.cpp
 number_utils.cpp
 numfmt.cpp
@@ -135,6 +136,7 @@ numparse_parsednumber.cpp
 numparse_scientific.cpp
 numparse_symbols.cpp
 numparse_validators.cpp
+numrange_capi.cpp
 numrange_fluent.cpp
 numrange_impl.cpp
 numsys.cpp
