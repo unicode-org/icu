@@ -4,7 +4,6 @@ import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
-import com.ibm.icu.impl.units.UnitsParser;
 import com.ibm.icu.impl.units.UnitsRouter;
 import org.junit.Test;
 
@@ -57,11 +56,11 @@ public class UnitRouterTest {
                 this.category = category;
                 this.usage = usage;
                 this.region = region;
-                this.inputUnit = Pair.of(inputUnitString, UnitsParser.parseForIdentifier(inputUnitString));
+                this.inputUnit = Pair.of(inputUnitString, MeasureUnitImpl.UnitsParser.parseForIdentifier(inputUnitString));
                 this.input = new BigDecimal(inputValue);
                 for (Pair<String, String> output :
                         outputs) {
-                    outputUnitInOrder.add(Pair.of(output.first, UnitsParser.parseForIdentifier(output.first)));
+                    outputUnitInOrder.add(Pair.of(output.first, MeasureUnitImpl.UnitsParser.parseForIdentifier(output.first)));
                     expectedInOrder.add(new BigDecimal(output.second));
                 }
             }

@@ -35,8 +35,8 @@ public class UnitConverterTest {
             MeasureUnitImpl target;
             Convertibility expected;
             TestData(String source, String target, Convertibility convertibility) {
-                this.source = UnitsParser.parseForIdentifier(source);
-                this.target = UnitsParser.parseForIdentifier(target);
+                this.source = MeasureUnitImpl.UnitsParser.parseForIdentifier(source);
+                this.target = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
                 this.expected = convertibility;
             }
         }
@@ -69,8 +69,8 @@ public class UnitConverterTest {
             BigDecimal input;
             BigDecimal expected;
             TestData(String source, String target, double input, double expected) {
-                this.source = UnitsParser.parseForIdentifier(source);
-                this.target = UnitsParser.parseForIdentifier(target);
+                this.source = MeasureUnitImpl.UnitsParser.parseForIdentifier(source);
+                this.target = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
                 this.input = BigDecimal.valueOf(input);
                 this.expected = BigDecimal.valueOf(expected);
             }
@@ -121,8 +121,8 @@ public class UnitConverterTest {
                 this.category = fields[0].replaceAll(" ", "");
                 this.sourceString = fields[1];
                 this.targetString = fields[2];
-                this.source = UnitsParser.parseForIdentifier(fields[1]);
-                this.target = UnitsParser.parseForIdentifier(fields[2]);
+                this.source = MeasureUnitImpl.UnitsParser.parseForIdentifier(fields[1]);
+                this.target = MeasureUnitImpl.UnitsParser.parseForIdentifier(fields[2]);
                 this.input = BigDecimal.valueOf(1000);
                 this.expected = new BigDecimal(fields[4]);
             }

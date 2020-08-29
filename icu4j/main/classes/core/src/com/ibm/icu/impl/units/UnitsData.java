@@ -2,11 +2,8 @@ package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Pair;
 import com.ibm.icu.util.UResourceBundle;
 
-import java.util.Iterator;
-import java.util.Map;
 
 public class UnitsData {
 

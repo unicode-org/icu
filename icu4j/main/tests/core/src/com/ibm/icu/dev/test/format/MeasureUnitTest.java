@@ -8,33 +8,6 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.FormatHandler;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
@@ -45,13 +18,17 @@ import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.CurrencyAmount;
-import com.ibm.icu.util.Measure;
-import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.NoUnit;
-import com.ibm.icu.util.TimeUnit;
-import com.ibm.icu.util.TimeUnitAmount;
-import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.*;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * See https://sites.google.com/site/icusite/processes/release/tasks/standards?pli=1
@@ -3282,4 +3259,198 @@ public class MeasureUnitTest extends TestFmwk {
         fmt = MeasureFormat.getInstance(ULocale.forLanguageTag("da"), FormatWidth.NUMERIC);
         Assert.assertEquals("2.03,877", fmt.formatMeasures(fhours, fminutes));
     }
+
+    @Test
+    public void TestIdentifiers() {
+        class TestCase {
+        final String id;
+        final String normalized;
+
+        TestCase(String id, String normalized) {
+            this.id = id;
+            this.normalized = normalized;
+        }
+        }
+
+        TestCase cases[] = {
+                // Correctly normalized identifiers should not change
+                new TestCase("", ""),
+                new TestCase("square-meter-per-square-meter", "square-meter-per-square-meter"),
+                new TestCase("kilogram-meter-per-square-meter-square-second",
+                        "kilogram-meter-per-square-meter-square-second"),
+                new TestCase("square-mile-and-square-foot", "square-mile-and-square-foot"),
+                new TestCase("square-foot-and-square-mile", "square-foot-and-square-mile"),
+                new TestCase("per-cubic-centimeter", "per-cubic-centimeter"),
+                new TestCase("per-kilometer", "per-kilometer"),
+
+                // Normalization of power and per
+                new TestCase(
+                        "pow2-foot-and-pow2-mile", "square-foot-and-square-mile"),
+                new TestCase(
+                        "gram-square-gram-per-dekagram", "cubic-gram-per-dekagram"),
+                new TestCase(
+                        "kilogram-per-meter-per-second", "kilogram-per-meter-second"),
+
+                // TODO(ICU-20920): Add more test cases once the proper ranking is available.
+        };
+
+
+        for (TestCase testCase :cases){
+            MeasureUnit unit = MeasureUnit.forIdentifier (testCase.id);
+
+        final String actual = unit.getIdentifier();
+            assertEquals(testCase.id, testCase.normalized, actual);
+        }
+    }
+
+    @Test(expected = InternalError.class)
+    public void TestInvalidIdentifiers() {
+        final String inputs[] = {
+                "kilo",
+                "kilokilo",
+                "onekilo",
+                "meterkilo",
+                "meter-kilo",
+                "k",
+                "meter-",
+                "meter+",
+                "-meter",
+                "+meter",
+                "-kilometer",
+                "+kilometer",
+                "-pow2-meter",
+                "+pow2-meter",
+                "p2-meter",
+                "p4-meter",
+                "+",
+                "-",
+                "-mile",
+                "-and-mile",
+                "-per-mile",
+                "one",
+                "one-one",
+                "one-per-mile",
+                "one-per-cubic-centimeter",
+                "square--per-meter",
+                "metersecond", // Must have compound part in between single units
+
+                // Negative powers not supported in mixed units yet. TODO(CLDR-13701).
+                "per-hour-and-hertz",
+                "hertz-and-per-hour",
+
+                // Compound units not supported in mixed units yet. TODO(CLDR-13700).
+                "kilonewton-meter-and-newton-meter",
+
+        };
+
+        for (String input : inputs) {
+            // TODO: test the failure for each input value.
+          MeasureUnit.forIdentifier(input);
+        }
+    }
+
+    @Test
+    public void TestCompoundUnitOperations() {
+        // TODO: implement
+    }
+
+    @Test
+    public void TestDimensionlessBehaviour() {
+    MeasureUnit dimensionless = MeasureUnit.forIdentifier("");
+    MeasureUnit modified;
+
+    // At the time of writing, each of the seven groups below caused
+    // Parser::from("") to be called:
+
+    // splitToSingleUnits
+    List<MeasureUnit> singles = dimensionless.splitToSingleUnits();
+    assertEquals("no singles in dimensionless", 0, singles.size());
+
+    // product(dimensionless)
+    MeasureUnit mile = MeasureUnit.MILE;
+    mile = mile.product(dimensionless);
+    // TODO: uncomment
+    // verifySingleUnit(mile, MeasureUnit.SIPrefix.ONE, 1, "mile");
+
+    // dimensionless.getSIPrefix()
+    MeasureUnit.SIPrefix siPrefix = dimensionless.getSIPrefix();
+    assertEquals("dimensionless SIPrefix", MeasureUnit.SIPrefix.ONE, siPrefix);
+
+    // dimensionless.withSIPrefix()
+    modified = dimensionless.withSIPrefix(MeasureUnit.SIPrefix.KILO);
+    singles = modified.splitToSingleUnits();
+    assertEquals("no singles in modified", 0, singles.size());
+    siPrefix = modified.getSIPrefix();
+    assertEquals("modified SIPrefix", MeasureUnit.SIPrefix.ONE, siPrefix);
+
+    // dimensionless.getComplexity()
+    MeasureUnit.Complexity complexity = dimensionless.getComplexity();
+    assertEquals("dimensionless complexity", MeasureUnit.Complexity.SINGLE, complexity);
+
+    // Dimensionality is mostly meaningless for dimensionless units, but it's
+    // still considered a SINGLE unit, so this code doesn't throw errors:
+
+    // dimensionless.getDimensionality()
+    int dimensionality = dimensionless.getDimensionality();
+    assertEquals("dimensionless dimensionality", 0, dimensionality);
+
+    // dimensionless.withDimensionality()
+    dimensionless.withDimensionality(-1);
+    dimensionality = dimensionless.getDimensionality();
+    assertEquals("dimensionless dimensionality", 0, dimensionality);
+}
+
+    // ICU-21060
+    @Test
+    public void Test21060_AddressSanitizerProblem() {
+        MeasureUnit first = MeasureUnit.forIdentifier("");
+
+        // Experimentally, a compound unit like "kilogram-meter" failed. A single
+        // unit like "kilogram" or "meter" did not fail, did not trigger the
+        // problem.
+        MeasureUnit crux = MeasureUnit.forIdentifier("per-meter");
+
+        // Heap allocation of a new CharString for first.identifier happens here:
+        first = first.product(crux);
+
+        // Constructing second from first's identifier resulted in a failure later,
+        // as second held a reference to a substring of first's identifier:
+        MeasureUnit second = MeasureUnit.forIdentifier(first.getIdentifier());
+
+        // Heap is freed here, as an old first.identifier CharString is deallocated
+        // and a new CharString is allocated:
+        first = first.product(crux);
+
+        // heap-use-after-free failure happened here, since a SingleUnitImpl had
+        // held onto a StringPiece pointing at a substring of an identifier that was
+        // freed above:
+        second = second.product(crux);
+    }
+
+// TODO: Implement
+//
+//    private void verifySingleUnit(MeasureUnit measureUnit, MeasureUnit.SIPrefix prefix, int power, String identifier) {
+//    UnicodeString uid(identifier, -1, US_INV);
+//    assertEquals(uid + ": SI prefix",
+//        siPrefix,
+//        unit.getSIPrefix(status));
+//    status.errIfFailureAndReset("%s: SI prefix", identifier);
+//    assertEquals(uid + ": Power",
+//        static_cast<int32_t>(power),
+//        static_cast<int32_t>(unit.getDimensionality(status)));
+//    status.errIfFailureAndReset("%s: Power", identifier);
+//    assertEquals(uid + ": Identifier",
+//        identifier,
+//        unit.getIdentifier());
+//    status.errIfFailureAndReset("%s: Identifier", identifier);
+//    assertTrue(uid + ": Constructor",
+//        unit == MeasureUnit::forIdentifier(identifier, status));
+//    status.errIfFailureAndReset("%s: Constructor", identifier);
+//    assertEquals(uid + ": Complexity",
+//        UMEASURE_UNIT_SINGLE,
+//        unit.getComplexity(status));
+//    status.errIfFailureAndReset("%s: Complexity", identifier);
+//    }
+
+
 }
