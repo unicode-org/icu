@@ -479,6 +479,14 @@ typedef enum UErrorCode {
     U_COLLATOR_VERSION_MISMATCH = 28,   /**< Collator version is not compatible with the base version */
     U_USELESS_COLLATOR_ERROR  = 29,     /**< Collator is options only and no base is specified */
     U_NO_WRITE_PERMISSION     = 30,     /**< Attempt to modify read-only or constant data. */
+    /**
+     * The input is impractically long for an operation.
+     * It is rejected because it may lead to problems such as excessive
+     * processing time, stack depth, or heap memory requirements.
+     *
+     * @draft ICU 68
+     */
+    U_INPUT_TOO_LONG_ERROR = 31,
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
