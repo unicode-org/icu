@@ -3757,4 +3757,3 @@ extern IntlTest *createMeasureFormatTest() {
 }
 
 #endif
-
