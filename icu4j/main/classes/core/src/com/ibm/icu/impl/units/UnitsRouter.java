@@ -64,7 +64,7 @@ public class UnitsRouter {
             UnitPreference preference = unitPreferences[i];
 
             MeasureUnitImpl complexTargetUnitImpl =
-                    UnitsParser.parseForIdentifier(preference.getUnit());
+                    MeasureUnitImpl.UnitsParser.parseForIdentifier(preference.getUnit());
 
             String precision = preference.getSkeleton();
 

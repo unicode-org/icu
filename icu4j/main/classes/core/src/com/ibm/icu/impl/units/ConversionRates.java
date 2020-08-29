@@ -95,7 +95,7 @@ public class ConversionRates {
      */
     public ArrayList<SingleUnitImpl> getBasicUnitsWithoutSIPrefix(SingleUnitImpl singleUnit) {
         String target = mapToConversionRate.get(singleUnit.getSimpleUnit()).getTarget();
-        MeasureUnitImpl targetImpl = UnitsParser.parseForIdentifier(target);
+        MeasureUnitImpl targetImpl = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
 
         // Each unit must be powered by the same dimension
         targetImpl.applyDimensionality(singleUnit.getDimensionality());

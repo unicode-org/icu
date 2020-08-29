@@ -494,6 +494,22 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
+     * Construct a MeasureUnit from a CLDR Sequence Unit Identifier, defined in UTS 35.
+     * Validates and canonicalizes the identifier.
+     *
+     * <pre>
+     * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
+     * </pre>
+     *
+     * @param identifier The CLDR Sequence Unit Identifier
+     * @throws IllegalArgumentException if the identifier is invalid.
+     * @draft ICU 68
+     */
+    public static MeasureUnit forIdentifier(String identifier) {
+        return MeasureUnitImpl.forIdentifier(identifier).build();
+    }
+
+    /**
      * @internal
      * @param measureUnitImpl
      */
@@ -531,7 +547,8 @@ public class MeasureUnit implements Serializable {
      * @draft ICU 68
      */
     public String getIdentifier() {
-        return measureUnitImpl == null ? getSubtype() : measureUnitImpl.getIdentifier();
+        String result = measureUnitImpl == null ? getSubtype() : measureUnitImpl.getIdentifier();
+        return result == null ? "" : result;
     }
 
     /**
