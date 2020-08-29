@@ -804,6 +804,26 @@ public final class UCharacterCaseTest extends TestFmwk
         assertGreekUpper("ή.", "Ή.");
     }
 
+    @Test
+    public void TestArmenian() {
+        Locale hy = new Locale("hy");  // Eastern Armenian
+        Locale hyw = new Locale("hyw");  // Western Armenian
+        Locale root = Locale.ROOT;
+        // See ICU-13416:
+        // և ligature ech-yiwn
+        // uppercases to ԵՒ=ech+yiwn by default and in Western Armenian,
+        // but to ԵՎ=ech+vew in Eastern Armenian.
+        String s = "և Երևանի";
+
+        assertEquals("upper root", "ԵՒ ԵՐԵՒԱՆԻ", CaseMap.toUpper().apply(root, s));
+        assertEquals("upper hy", "ԵՎ ԵՐԵՎԱՆԻ", CaseMap.toUpper().apply(hy, s));
+        assertEquals("upper hyw", "ԵՒ ԵՐԵՒԱՆԻ", CaseMap.toUpper().apply(hyw, s));
+
+        assertEquals("title root", "Եւ Երևանի", CaseMap.toTitle().apply(root, null, s));
+        assertEquals("title hy", "Եվ Երևանի", CaseMap.toTitle().apply(hy, null, s));
+        assertEquals("title hyw", "Եւ Երևանի", CaseMap.toTitle().apply(hyw, null, s));
+    }
+
     private static final class EditChange {
         private boolean change;
         private int oldLength, newLength;
