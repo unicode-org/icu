@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.ICUData;
@@ -13,7 +20,7 @@ public class Categories {
         ICUResourceBundle resource;
         resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
         CategoriesSink sink = new CategoriesSink();
-        resource.getAllItemsWithFallback(Constants.CATEGORY_TABLE_NAME, sink);
+        resource.getAllItemsWithFallback(UnitsData.Constants.CATEGORY_TABLE_NAME, sink);
         this.mapFromUnitToCategory = sink.getMapFromUnitToCategory();
     }
 

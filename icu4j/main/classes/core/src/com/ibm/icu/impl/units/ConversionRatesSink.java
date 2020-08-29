@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
@@ -9,7 +16,7 @@ import java.util.TreeMap;
 public class ConversionRatesSink extends UResource.Sink {
     @Override
     public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-        Assert.assrt(Constants.CONVERSION_UNIT_TABLE_NAME.equals(key.toString()));
+        Assert.assrt(UnitsData.Constants.CONVERSION_UNIT_TABLE_NAME.equals(key.toString()));
 
         UResource.Table conversionRateTable = value.getTable();
         for (int i = 0; conversionRateTable.getKeyAndValue(i, key, value); i++) {

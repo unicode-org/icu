@@ -90,6 +90,11 @@ public class UnitConverter {
         return true;
     }
 
+    public enum Convertibility {
+        CONVERTIBLE,
+        RECIPROCAL,
+        INCONVERTIBLE,
+    }
 }
 
 

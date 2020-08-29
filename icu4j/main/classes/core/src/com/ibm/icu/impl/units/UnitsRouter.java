@@ -1,5 +1,11 @@
-package com.ibm.icu.impl.units;
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
 
+package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.Pair;

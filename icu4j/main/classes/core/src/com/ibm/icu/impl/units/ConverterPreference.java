@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import java.math.BigDecimal;

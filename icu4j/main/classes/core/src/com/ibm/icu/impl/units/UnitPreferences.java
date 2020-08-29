@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
@@ -15,7 +22,7 @@ public class UnitPreferences {
         ICUResourceBundle resource;
         resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
         UnitPreferencesSink sink = new UnitPreferencesSink(new UnitPreferences());
-        resource.getAllItemsWithFallback(Constants.UNIT_PREFERENCE_TABLE_NAME, sink);
+        resource.getAllItemsWithFallback(UnitsData.Constants.UNIT_PREFERENCE_TABLE_NAME, sink);
         return sink.getUnitPreferences();
     }
 
@@ -75,8 +82,8 @@ public class UnitPreferences {
             }
         }
 
-        if (!usage.equals(Constants.DEFAULT_USAGE)) { // Do not add default usage twice.
-            result.add(Constants.DEFAULT_USAGE);
+        if (!usage.equals(UnitsData.Constants.DEFAULT_USAGE)) { // Do not add default usage twice.
+            result.add(UnitsData.Constants.DEFAULT_USAGE);
         }
         return result.toArray(new String[0]);
     }
@@ -95,7 +102,7 @@ public class UnitPreferences {
             UnitPreference[] result =
                     unitPreferencesMap.containsKey(region) ?
                             unitPreferencesMap.get(region) :
-                            unitPreferencesMap.get(Constants.DEFAULT_REGION);
+                            unitPreferencesMap.get(UnitsData.Constants.DEFAULT_REGION);
 
             Assert.assrt(result != null);
             return result;

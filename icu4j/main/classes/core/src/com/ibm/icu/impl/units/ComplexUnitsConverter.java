@@ -1,3 +1,10 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004-2020, Google Inc, International Business Machines
+ * Corporation and others. All Rights Reserved.
+ *******************************************************************************
+ */
+
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
@@ -33,8 +40,8 @@ public class ComplexUnitsConverter {
         Assert.assrt(!units_.isEmpty());
 
         // Sort the units in a descending order.
-        UnitsComparator.setConversionRates(conversionRates);
-        Collections.sort(this.units_, Collections.reverseOrder(new UnitsComparator()));
+        MeasureUnitImpl.MeasureUnitImplComparator.setConversionRates(conversionRates);
+        Collections.sort(this.units_, Collections.reverseOrder(new MeasureUnitImpl.MeasureUnitImplComparator()));
 
 
         // If the `outputUnits` is `UMEASURE_UNIT_MIXED` such as `foot+inch`. Thus means there is more than one unit

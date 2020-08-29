@@ -21,9 +21,9 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.UResource;
-import com.ibm.icu.impl.units.Constants;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.SingleUnitImpl;
+import com.ibm.icu.impl.units.UnitsData;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -260,12 +260,12 @@ public class MeasureUnit implements Serializable {
         YOCTO(-24, "yocto");
 
         private final int siPrefixPower;
-        private final String siRepresentation;
+        private final String identifier;
 
 
-        SIPrefix(int siPrefixPower, String siRepresentation) {
+        SIPrefix(int siPrefixPower, String identifier) {
             this.siPrefixPower = siPrefixPower;
-            this.siRepresentation = siRepresentation;
+            this.identifier = identifier;
         }
 
         public static SIPrefix getSiPrefixFromTrieIndex(int trieIndex) {
@@ -278,8 +278,8 @@ public class MeasureUnit implements Serializable {
             throw new InternalError("Incorrect trieIndex");
         }
 
-        public String getSiRepresentation() {
-            return siRepresentation;
+        public String getIdentifier() {
+            return identifier;
         }
 
         public int getSiPrefixPower() {
@@ -287,7 +287,7 @@ public class MeasureUnit implements Serializable {
         }
 
         public int getTrieIndex() {
-            return siPrefixPower + Constants.kSIPrefixOffset;
+            return siPrefixPower + UnitsData.Constants.kSIPrefixOffset;
         }
     }
 
