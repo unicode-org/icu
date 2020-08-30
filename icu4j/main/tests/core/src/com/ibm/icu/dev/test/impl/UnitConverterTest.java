@@ -146,11 +146,6 @@ public class UnitConverterTest {
             if (compareTwoBigDecimal(testCase.expected, converter.convert(testCase.input), BigDecimal.valueOf(0.000001))) {
                 continue;
             } else {
-
-
-                UnitConverter converter2 = new UnitConverter(testCase.source, testCase.target, conversionRates);
-
-
                 Assert.fail(new StringBuilder()
                         .append(testCase.category)
                         .append(" ")

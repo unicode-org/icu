@@ -2,6 +2,7 @@ package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.UResourceBundle;
 
 import java.math.BigDecimal;
@@ -28,7 +29,7 @@ public class ConversionRates {
      */
     private Factor getFactorToBase(SingleUnitImpl singleUnit) {
         int power = singleUnit.getDimensionality();
-        SIPrefix siPrefix = singleUnit.getSiPrefix();
+        MeasureUnit.SIPrefix siPrefix = singleUnit.getSiPrefix();
         Factor result = Factor.precessFactor(mapToConversionRate.get(singleUnit.getSimpleUnit()).getConversionRate());
 
         return result.applySiPrefix(siPrefix).power(power); // NOTE: you must apply the SI prefixes before the power.
@@ -111,10 +112,10 @@ public class ConversionRates {
      * @return true if the `MeasureUnitImpl` is simple, false otherwise.
      */
     private boolean checkSimpleUnit(MeasureUnitImpl measureUnitImpl) {
-        if (measureUnitImpl.getComplexity() != Complexity.SINGLE) return false;
+        if (measureUnitImpl.getComplexity() != MeasureUnit.Complexity.SINGLE) return false;
         SingleUnitImpl singleUnit = measureUnitImpl.getSingleUnits().get(0);
 
-        if (singleUnit.getSiPrefix() != SIPrefix.SI_PREFIX_ONE) return false;
+        if (singleUnit.getSiPrefix() != MeasureUnit.SIPrefix.ONE) return false;
         if (singleUnit.getDimensionality() != 1) return false;
 
         return true;

@@ -1,6 +1,7 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.util.MeasureUnit;
 
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
@@ -56,9 +57,9 @@ class Factor {
     }
 
 
-    public Factor applySiPrefix(SIPrefix siPrefix) {
+    public Factor applySiPrefix(MeasureUnit.SIPrefix siPrefix) {
         Factor result = new Factor(this);
-        if (siPrefix == SIPrefix.SI_PREFIX_ONE) {
+        if (siPrefix == MeasureUnit.SIPrefix.ONE) {
             return result;
         }
 
