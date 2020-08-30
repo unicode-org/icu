@@ -45,198 +45,7 @@ public class MeasureUnit implements Serializable {
     private static final Map<String, Map<String,MeasureUnit>> cache
         = new HashMap<>();
     private static boolean cacheIsPopulated = false;
-<<<<<<< HEAD
-    private static Factory UNIT_FACTORY = new Factory() {
-        @Override
-        public MeasureUnit create(String type, String subType) {
-            return new MeasureUnit(type, subType);
-        }
-    };
-    /**
-     * Constant for unit of acceleration: g-force
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit G_FORCE = MeasureUnit.internalGetInstance("acceleration", "g-force");
-    /**
-     * Constant for unit of acceleration: meter-per-square-second
-     *
-     * @stable ICU 54
-     */
-    public static final MeasureUnit METER_PER_SECOND_SQUARED = MeasureUnit.internalGetInstance("acceleration", "meter-per-square-second");
-    /**
-     * Constant for unit of angle: arc-minute
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit ARC_MINUTE = MeasureUnit.internalGetInstance("angle", "arc-minute");
-    /**
-     * Constant for unit of angle: arc-second
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit ARC_SECOND = MeasureUnit.internalGetInstance("angle", "arc-second");
-    /**
-     * Constant for unit of angle: degree
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit DEGREE = MeasureUnit.internalGetInstance("angle", "degree");
-    /**
-     * Constant for unit of angle: radian
-     *
-     * @stable ICU 54
-     */
-    public static final MeasureUnit RADIAN = MeasureUnit.internalGetInstance("angle", "radian");
-    /**
-     * Constant for unit of angle: revolution
-     *
-     * @stable ICU 56
-     */
-    public static final MeasureUnit REVOLUTION_ANGLE = MeasureUnit.internalGetInstance("angle", "revolution");
-    /**
-     * Constant for unit of area: acre
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit ACRE = MeasureUnit.internalGetInstance("area", "acre");
-    /**
-     * Constant for unit of area: dunam
-     *
-     * @stable ICU 64
-     */
-    public static final MeasureUnit DUNAM = MeasureUnit.internalGetInstance("area", "dunam");
-    /**
-     * Constant for unit of area: hectare
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit HECTARE = MeasureUnit.internalGetInstance("area", "hectare");
-    /**
-     * Constant for unit of area: square-centimeter
-     *
-     * @stable ICU 54
-     */
-    public static final MeasureUnit SQUARE_CENTIMETER = MeasureUnit.internalGetInstance("area", "square-centimeter");
-    /**
-     * Constant for unit of area: square-foot
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit SQUARE_FOOT = MeasureUnit.internalGetInstance("area", "square-foot");
-    /**
-     * Constant for unit of area: square-inch
-     *
-     * @stable ICU 54
-     */
-<<<<<<< HEAD
-    @Deprecated
-    public static MeasureUnit internalGetInstance(String type, String subType) {
-        if (type == null || subType == null) {
-            throw new NullPointerException("Type and subType must be non-null");
-        }
-        if (!"currency".equals(type)) {
-            if (!ASCII.containsAll(type) || !ASCII_HYPHEN_DIGITS.containsAll(subType)) {
-                throw new IllegalArgumentException("The type or subType are invalid.");
-            }
-        }
-        Factory factory;
-        if ("currency".equals(type)) {
-            factory = CURRENCY_FACTORY;
-        } else if ("duration".equals(type)) {
-            factory = TIMEUNIT_FACTORY;
-        } else {
-            factory = UNIT_FACTORY;
-        }
-        return MeasureUnit.addUnit(type, subType, factory);
-    }
 
-    private static MeasureUnit findBySubType(String subType) {
-        populateCache();
-        for (Map<String, MeasureUnit> unitsForType : cache.values()) {
-            if (unitsForType.containsKey(subType)) {
-                return unitsForType.get(subType);
-            }
-        }
-        return null;
-    }
-
-=======
-    public static final MeasureUnit SQUARE_INCH = MeasureUnit.internalGetInstance("area", "square-inch");
->>>>>>> 3371430a5a (implement the new API for MeasureUnit)
-    /**
-     * Constant for unit of area: square-kilometer
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit SQUARE_KILOMETER = MeasureUnit.internalGetInstance("area", "square-kilometer");
-    /**
-     * Constant for unit of area: square-meter
-     *
-     * @stable ICU 53
-     */
-    public static final MeasureUnit SQUARE_METER = MeasureUnit.internalGetInstance("area", "square-meter");
-    /**
-     * Constant for unit of area: square-mile
-     *
-     * @stable ICU 53
-     */
-<<<<<<< HEAD
-    @Deprecated
-    protected interface Factory {
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        MeasureUnit create(String type, String subType);
-    }
-
-    private static Factory UNIT_FACTORY = new Factory() {
-        @Override
-        public MeasureUnit create(String type, String subType) {
-            return new MeasureUnit(type, subType);
-        }
-    };
-
-    static Factory CURRENCY_FACTORY = new Factory() {
-        @Override
-        public MeasureUnit create(String unusedType, String subType) {
-            return new Currency(subType);
-        }
-    };
-
-    static Factory TIMEUNIT_FACTORY = new Factory() {
-        @Override
-        public MeasureUnit create(String type, String subType) {
-           return new TimeUnit(type, subType);
-        }
-    };
-
-=======
-    public static final MeasureUnit SQUARE_MILE = MeasureUnit.internalGetInstance("area", "square-mile");
->>>>>>> 3371430a5a (implement the new API for MeasureUnit)
-    /**
-     * Constant for unit of area: square-yard
-     *
-     * @stable ICU 54
-     */
-    public static final MeasureUnit SQUARE_YARD = MeasureUnit.internalGetInstance("area", "square-yard");
-    /**
-     * Constant for unit of concentr: karat
-     *
-     * @stable ICU 54
-     */
-    public static final MeasureUnit KARAT = MeasureUnit.internalGetInstance("concentr", "karat");
-    /**
-     * Constant for unit of concentr: milligram-per-deciliter
-     *
-     * @stable ICU 57
-     */
-    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-per-deciliter");
-=======
-
->>>>>>> 65b31e2988 (fix the format)
     /**
      * @internal
      * @deprecated This API is ICU internal only.
@@ -453,20 +262,9 @@ public class MeasureUnit implements Serializable {
         private final int siPrefixPower;
         private final String identifier;
 
-
         SIPrefix(int siPrefixPower, String identifier) {
             this.siPrefixPower = siPrefixPower;
             this.identifier = identifier;
-        }
-
-        public static SIPrefix getSiPrefixFromTrieIndex(int trieIndex) {
-            for (SIPrefix element :
-                    SIPrefix.values()) {
-                if (element.getTrieIndex() == trieIndex)
-                    return element;
-            }
-
-            throw new InternalError("Incorrect trieIndex");
         }
 
         public String getIdentifier() {
@@ -477,11 +275,26 @@ public class MeasureUnit implements Serializable {
             return siPrefixPower;
         }
 
+        /**
+         * @internal
+         */
         public int getTrieIndex() {
             return siPrefixPower + UnitsData.Constants.kSIPrefixOffset;
         }
-    }
 
+        /**
+         * @internal
+         */
+        public static SIPrefix getSiPrefixFromTrieIndex(int trieIndex) {
+            for (SIPrefix element :
+                    SIPrefix.values()) {
+                if (element.getTrieIndex() == trieIndex)
+                    return element;
+            }
+
+            throw new InternalError("Incorrect trieIndex");
+        }
+    }
 
     /**
      * @internal
@@ -530,6 +343,7 @@ public class MeasureUnit implements Serializable {
     public String getType() {
         return type;
     }
+
 
     /**
      * Get the subType, such as “foot”.
@@ -819,8 +633,6 @@ public class MeasureUnit implements Serializable {
             factory = CURRENCY_FACTORY;
         } else if ("duration".equals(type)) {
             factory = TIMEUNIT_FACTORY;
-        } else if ("none".equals(type)) {
-            factory = NOUNIT_FACTORY;
         } else {
             factory = UNIT_FACTORY;
         }
@@ -913,13 +725,6 @@ public class MeasureUnit implements Serializable {
         @Override
         public MeasureUnit create(String type, String subType) {
            return new TimeUnit(type, subType);
-        }
-    };
-
-    static Factory NOUNIT_FACTORY = new Factory() {
-        @Override
-        public MeasureUnit create(String type, String subType) {
-           return new NoUnit(subType);
         }
     };
 
