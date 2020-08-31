@@ -3659,12 +3659,14 @@ void MeasureFormatTest::Test21256_MeasureUnitAssertFailure() {
     assertEquals("MeasureUnitImpl identifier gets cleared when instance is modified", "",
                  tweakedImplCopy.identifier.data());
     // Repeat: for takeReciprocal instead of append().
-    tweakedImplCopy = MeasureUnitImpl::forMeasureUnit(speed, temp, status).copy(status);
+    // TODO(hugovdm): reusing tweakedImplCopy here results in
+    // "LeakSanitizer: detected memory leaks"
+    MeasureUnitImpl tweakedImplCopy2 = MeasureUnitImpl::forMeasureUnit(speed, temp, status).copy(status);
     assertEquals("Initial copy has matching identifier", "furlong-per-second",
-                 tweakedImplCopy.identifier.data());
-    tweakedImplCopy.takeReciprocal(status);
+                 tweakedImplCopy2.identifier.data());
+    tweakedImplCopy2.takeReciprocal(status);
     assertEquals("MeasureUnitImpl identifier gets cleared when instance is modified", "",
-                 tweakedImplCopy.identifier.data());
+                 tweakedImplCopy2.identifier.data());
 }
 
 void MeasureFormatTest::verifyFieldPosition(
