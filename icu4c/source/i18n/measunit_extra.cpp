@@ -688,7 +688,6 @@ void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
         // discarded it.
         return;
     }
-    U_ASSERT(impl.identifier.isEmpty());
     if (impl.units.length() == 0) {
         // Dimensionless, constructed by the default constructor: no appending
         // to impl.identifier, we wish it to contain the zero-length string.
