@@ -120,6 +120,7 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
 };
 
 // For Windows: enable DLL export of a struct that uses this template.
+template class U_I18N_API MemoryPool<SingleUnitImpl>;
 template class U_I18N_API MaybeStackVector<SingleUnitImpl>;
 
 /**
