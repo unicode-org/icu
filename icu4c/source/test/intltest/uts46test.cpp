@@ -29,6 +29,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "intltest.h"
+#include "punycode.h"
 #include "uparse.h"
 
 class UTS46Test : public IntlTest {
@@ -41,6 +42,7 @@ public:
     void TestNotSTD3();
     void TestInvalidPunycodeDigits();
     void TestACELabelEdgeCases();
+    void TestTooLong();
     void TestSomeCases();
     void IdnaTest();
 
@@ -86,6 +88,7 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestNotSTD3);
     TESTCASE_AUTO(TestInvalidPunycodeDigits);
     TESTCASE_AUTO(TestACELabelEdgeCases);
+    TESTCASE_AUTO(TestTooLong);
     TESTCASE_AUTO(TestSomeCases);
     TESTCASE_AUTO(IdnaTest);
     TESTCASE_AUTO_END;
@@ -341,6 +344,20 @@ void UTS46Test::TestACELabelEdgeCases() {
         idna->labelToUnicode(u"Xn---", result, info, errorCode);
         assertTrue("empty Xn---", (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
     }
+}
+
+void UTS46Test::TestTooLong() {
+    // ICU-13727: Limit input length for n^2 algorithm
+    // where well-formed strings are at most 59 characters long.
+    int32_t count = 50000;
+    UnicodeString s(count, u'a', count);  // capacity, code point, count
+    char16_t dest[60000];
+    UErrorCode errorCode = U_ZERO_ERROR;
+    u_strToPunycode(s.getBuffer(), s.length(), dest, UPRV_LENGTHOF(dest), nullptr, &errorCode);
+    assertEquals("encode: expected an error for too-long input", U_INPUT_TOO_LONG_ERROR, errorCode);
+    errorCode = U_ZERO_ERROR;
+    u_strFromPunycode(s.getBuffer(), s.length(), dest, UPRV_LENGTHOF(dest), nullptr, &errorCode);
+    assertEquals("decode: expected an error for too-long input", U_INPUT_TOO_LONG_ERROR, errorCode);
 }
 
 struct TestCase {

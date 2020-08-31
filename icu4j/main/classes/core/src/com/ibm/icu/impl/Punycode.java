@@ -11,6 +11,7 @@ package com.ibm.icu.impl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.ICUInputTooLongException;
 
 /**
  * Ported code from ICU punycode.c
@@ -111,6 +112,12 @@ public final class Punycode {
             return (char)((ZERO-26)+digit);
         }
     }
+
+    // ICU-13727: Limit input length for n^2 algorithm
+    // where well-formed strings are at most 59 characters long.
+    private static final int ENCODE_MAX_CODE_UNITS = 1000;
+    private static final int DECODE_MAX_CHARS = 2000;
+
     /**
      * Converts Unicode to Punycode.
      * The input string must not contain single, unpaired surrogates.
@@ -124,6 +131,10 @@ public final class Punycode {
         int n, delta, handledCPCount, basicLength, bias, j, m, q, k, t, srcCPCount;
         char c, c2;
         int srcLength = src.length();
+        if (srcLength > ENCODE_MAX_CODE_UNITS) {
+            throw new ICUInputTooLongException(
+                    "input too long: " + srcLength + " UTF-16 code units");
+        }
         int[] cpBuffer = new int[srcLength];
         StringBuilder dest = new StringBuilder(srcLength);
         /*
@@ -187,7 +198,7 @@ public final class Punycode {
              * Increase delta enough to advance the decoder's
              * <n,i> state to <m,0>, but guard against overflow:
              */
-            if(m-n>(0x7fffffff-delta)/(handledCPCount+1)) {
+            if(m-n>(0x7fffffff-handledCPCount-delta)/(handledCPCount+1)) {
                 throw new IllegalStateException("Internal program error");
             }
             delta+=(m-n)*(handledCPCount+1);
@@ -263,6 +274,9 @@ public final class Punycode {
     public static StringBuilder decode(CharSequence src, boolean[] caseFlags)
                                throws StringPrepParseException{
         int srcLength = src.length();
+        if (srcLength > DECODE_MAX_CHARS) {
+            throw new ICUInputTooLongException("input too long: " + srcLength + " characters");
+        }
         StringBuilder dest = new StringBuilder(src.length());
         int n, i, bias, basicLength, j, in, oldi, w, k, digit, t,
                 destCPCount, firstSupplementaryIndex, cpLength;
