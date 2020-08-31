@@ -18,6 +18,8 @@ U_NAMESPACE_BEGIN
 static const char16_t kDefaultCurrency[] = u"XXX";
 static const char kDefaultCurrency8[] = "XXX";
 
+// For Windows: enable DLL export of a struct that uses this template.
+template class U_I18N_API MaybeStackVector<SingleUnitImpl>;
 
 /**
  * A struct representing a single unit (optional SI prefix and dimensionality).
