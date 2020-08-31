@@ -175,25 +175,25 @@ See [Formatting and Parsing Classes](format_parse/index#formatting-and-parsing-c
     primitives into localized strings and parse localized strings into number
     objects in base 10.
 
-*   [`DecimalFormatSymbols`](formatparse/numbers/index#decimalformatsymbols)
+*   [`DecimalFormatSymbols`](format_parse/numbers/index#decimalformatsymbols)
     DecimalFormatSymbols is a concrete class used by DecimalFormat to access
     localized number strings such as the grouping separators, the decimal
     separator, and the percent sign.
 
 #### Formatting Dates and Times
 
-*   [`DateFormat`](formatparse/datetime/index.md)
+*   [`DateFormat`](format_parse/datetime/index.md)
     
     `DateFormat` provides the basic fields and methods for formatting date objects
     to localized strings and parsing date and time strings to date objects.
 
-*   [`SimpleDateFormat`](formatparse/datetime/index.md)
+*   [`SimpleDateFormat`](format_parse/datetime/index.md)
     
     `SimpleDateFormat` is a concrete class used to format date objects to
     localized strings and to parse date and time strings to date objects using a
     `GregorianCalendar`.
 
-*   [`DateFormatSymbols`](formatparse/datetime/index.md)
+*   [`DateFormatSymbols`](format_parse/datetime/index.md)
     
     `DateFormatSymbols` is a concrete class used to access localized date and time
     formatting strings, such as names of the months, days of the week, and the
@@ -201,13 +201,13 @@ See [Formatting and Parsing Classes](format_parse/index#formatting-and-parsing-c
 
 #### Formatting Messages
 
-*   [`MessageFormat`](formatparse/messages/index.md)
+*   [`MessageFormat`](format_parse/messages/index.md)
     
     `MessageFormat` is a concrete class used to produce a language-specific user
     message that contains numbers, currency, percentages, date, time, and string
     variables.
 
-*   [`ChoiceFormat`](formatparse/messages/index.md)
+*   [`ChoiceFormat`](format_parse/messages/index.md)
     
     `ChoiceFormat` is a concrete class used to map strings to ranges of numbers
     and to handle plural words and name series in user messages.
