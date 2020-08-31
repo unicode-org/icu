@@ -168,15 +168,23 @@ adaptBias(int32_t delta, int32_t length, UBool firstTime) {
     return count+(((BASE-TMIN+1)*delta)/(delta+SKEW));
 }
 
-#define MAX_CP_COUNT    200
+namespace {
 
-U_CFUNC int32_t
+// ICU-13727: Limit input length for n^2 algorithm
+// where well-formed strings are at most 59 characters long.
+constexpr int32_t ENCODE_MAX_CODE_UNITS=1000;
+constexpr int32_t DECODE_MAX_CHARS=2000;
+
+}  // namespace
+
+// encode
+U_CAPI int32_t
 u_strToPunycode(const UChar *src, int32_t srcLength,
                 UChar *dest, int32_t destCapacity,
                 const UBool *caseFlags,
                 UErrorCode *pErrorCode) {
 
-    int32_t cpBuffer[MAX_CP_COUNT];
+    int32_t cpBuffer[ENCODE_MAX_CODE_UNITS];
     int32_t n, delta, handledCPCount, basicLength, destLength, bias, j, m, q, k, t, srcCPCount;
     UChar c, c2;
 
@@ -187,6 +195,10 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
 
     if(src==NULL || srcLength<-1 || (dest==NULL && destCapacity!=0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if (srcLength>ENCODE_MAX_CODE_UNITS) {
+        *pErrorCode=U_INPUT_TOO_LONG_ERROR;
         return 0;
     }
 
@@ -201,9 +213,8 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
             if((c=src[j])==0) {
                 break;
             }
-            if(srcCPCount==MAX_CP_COUNT) {
-                /* too many input code points */
-                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            if(j>=ENCODE_MAX_CODE_UNITS) {
+                *pErrorCode=U_INPUT_TOO_LONG_ERROR;
                 return 0;
             }
             if(IS_BASIC(c)) {
@@ -233,11 +244,6 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
     } else {
         /* length-specified input */
         for(j=0; j<srcLength; ++j) {
-            if(srcCPCount==MAX_CP_COUNT) {
-                /* too many input code points */
-                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-                return 0;
-            }
             c=src[j];
             if(IS_BASIC(c)) {
                 cpBuffer[srcCPCount++]=0;
@@ -302,7 +308,7 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
          * Increase delta enough to advance the decoder's
          * <n,i> state to <m,0>, but guard against overflow:
          */
-        if(m-n>(0x7fffffff-MAX_CP_COUNT-delta)/(handledCPCount+1)) {
+        if(m-n>(0x7fffffff-handledCPCount-delta)/(handledCPCount+1)) {
             *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
             return 0;
         }
@@ -363,7 +369,8 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
     return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
 }
 
-U_CFUNC int32_t
+// decode
+U_CAPI int32_t
 u_strFromPunycode(const UChar *src, int32_t srcLength,
                   UChar *dest, int32_t destCapacity,
                   UBool *caseFlags,
@@ -384,6 +391,10 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
 
     if(srcLength==-1) {
         srcLength=u_strlen(src);
+    }
+    if (srcLength>DECODE_MAX_CHARS) {
+        *pErrorCode=U_INPUT_TOO_LONG_ERROR;
+        return 0;
     }
 
     /*

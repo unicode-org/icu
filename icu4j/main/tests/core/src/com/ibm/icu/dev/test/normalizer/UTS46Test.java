@@ -24,8 +24,11 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
+import com.ibm.icu.impl.Punycode;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.IDNA;
+import com.ibm.icu.text.StringPrepParseException;
+import com.ibm.icu.util.ICUInputTooLongException;
 
 /**
  * UTS #46 (IDNA2008) test.
@@ -172,6 +175,31 @@ public class UTS46Test extends TestFmwk {
         info=new IDNA.Info();
         idna.labelToUnicode("Xn---", result, info);
         assertTrue("empty Xn---", info.getErrors().contains(IDNA.Error.PUNYCODE));
+    }
+
+    @Test
+    public void TestTooLong() {
+        // ICU-13727: Limit input length for n^2 algorithm
+        // where well-formed strings are at most 59 characters long.
+        int count = 50000;
+        StringBuilder sb = new StringBuilder(count);
+        for (int i = 0; i < count; ++i) {
+            sb.append('a');
+        }
+        try {
+            Punycode.encode(sb, null);
+            fail("encode: expected an exception for too-long input");
+        } catch(ICUInputTooLongException expected) {
+        } catch(StringPrepParseException e) {
+            fail("encode: unexpected StringPrepParseException for too-long input: " + e);
+        }
+        try {
+            Punycode.decode(sb, null);
+            fail("decode: expected an exception for too-long input");
+        } catch(ICUInputTooLongException expected) {
+        } catch(StringPrepParseException e) {
+            fail("decode: unexpected StringPrepParseException for too-long input: " + e);
+        }
     }
 
     private static final Map<String, IDNA.Error> errorNamesToErrors;
