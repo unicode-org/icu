@@ -119,9 +119,18 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
     int32_t dimensionality = 1;
 };
 
-// For Windows: enable DLL export of a struct that uses this template.
+// Export explicit template instantiations of the MaybeStackVector that is used
+// as a data member of MeasureUnitImpl.
+//
+// This is required such that the unit tests can access MeasureUnitImpl via the
+// Windows DLL.
+//
+// See collationiterator.h, datefmt.h, and others for similar examples.
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<SingleUnitImpl *, stackCapacity>;
 template class U_I18N_API MemoryPool<SingleUnitImpl>;
 template class U_I18N_API MaybeStackVector<SingleUnitImpl>;
+#endif
 
 /**
  * Internal representation of measurement units. Capable of representing all complexities of units,
