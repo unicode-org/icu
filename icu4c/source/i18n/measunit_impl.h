@@ -22,7 +22,7 @@ static const char kDefaultCurrency8[] = "XXX";
 /**
  * A struct representing a single unit (optional SI prefix and dimensionality).
  */
-struct SingleUnitImpl : public UMemory {
+struct U_I18N_API SingleUnitImpl : public UMemory {
     /**
      * Gets a single unit from the MeasureUnit. If there are multiple single units, sets an error
      * code and returns the base dimensionless unit. Parses if necessary.
@@ -125,7 +125,7 @@ struct SingleUnitImpl : public UMemory {
  * Internal representation of measurement units. Capable of representing all complexities of units,
  * including mixed and compound units.
  */
-struct MeasureUnitImpl : public UMemory {
+struct U_I18N_API MeasureUnitImpl : public UMemory {
     /** Extract the MeasureUnitImpl from a MeasureUnit. */
     static inline const MeasureUnitImpl* get(const MeasureUnit& measureUnit) {
         return measureUnit.fImpl;
