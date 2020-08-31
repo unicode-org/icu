@@ -17,6 +17,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "charstr.h"
+#include "cstr.h"
+#include "measunit_impl.h"
 #include "unicode/decimfmt.h"
 #include "unicode/measfmt.h"
 #include "unicode/measure.h"
@@ -25,8 +28,6 @@
 #include "unicode/tmunit.h"
 #include "unicode/plurrule.h"
 #include "unicode/ustring.h"
-#include "charstr.h"
-#include "cstr.h"
 #include "unicode/reldatefmt.h"
 #include "unicode/rbnf.h"
 
@@ -86,6 +87,7 @@ private:
     void TestDimensionlessBehaviour();
     void Test21060_AddressSanitizerProblem();
     void Test21223_FrenchDuration();
+    void Test21256_MeasureUnitAssertFailure();
 
     void verifyFormat(
         const char *description,
@@ -212,6 +214,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestDimensionlessBehaviour);
     TESTCASE_AUTO(Test21060_AddressSanitizerProblem);
     TESTCASE_AUTO(Test21223_FrenchDuration);
+    TESTCASE_AUTO(Test21256_MeasureUnitAssertFailure);
     TESTCASE_AUTO_END;
 }
 
@@ -3615,6 +3618,54 @@ void MeasureFormatTest::Test21223_FrenchDuration() {
     // }
 }
 
+// ICU-21256
+void MeasureFormatTest::Test21256_MeasureUnitAssertFailure() {
+    IcuTestErrorCode status(*this, "Test21256_MeasureUnitAssertFailure");
+
+    MeasureUnitImpl unitFreshlyParsed = MeasureUnitImpl::forIdentifier("mile-and-yard", status);
+    // MeasureUnitImpl "from scratch" (from an identifier) doesn't allocate an
+    // identifier.
+    //
+    // (TODO(review): This behaviour is "internal" though, not a fundamental or
+    // documented feature of the API. It could conceivably change? So do we want
+    // to be testing it? I'm mostly demonstrating the consequence of the
+    // differences, to help think about the APIs and the ASSERTs in this PR.)
+    assertEquals("MeasureUnitImpl parsed from an identifier doesn't copy or store the identifier", "",
+                 unitFreshlyParsed.identifier.data());
+
+    MeasureUnit unit = MeasureUnit::forIdentifier("mile-and-yard", status);
+    MeasureUnitImpl temp;
+    // Const: MeasureUnitImpl constructed this way references the MeasureUnit's identifier.
+    const MeasureUnitImpl &unitImpl = MeasureUnitImpl::forMeasureUnit(unit, temp, status);
+    status.assertSuccess();
+    // Because unit has an identifier, so will unitImpl.
+    assertEquals(
+        "MeasureUnitImpl from MeasureUnit does have an identifier: by referencing the MeasureUnit",
+        "mile-and-yard", unitImpl.identifier.data());
+
+    MeasureUnit rebuiltFreshlyParsed = std::move(unitFreshlyParsed).build(status);
+    // We copy-and-move because build() cannot be called on a const instance.
+    MeasureUnit rebuiltFromMeasureUnit = std::move(unitImpl.copy(status)).build(status);
+    assertTrue("Rebuilt MeasureUnits match", rebuiltFreshlyParsed == rebuiltFromMeasureUnit);
+
+    // Test that modifying MeasureUnitImpl clears identifier. First: append().
+    MeasureUnit speed = MeasureUnit::forIdentifier("furlong-per-second", status);
+    MeasureUnitImpl tweakedImplCopy = MeasureUnitImpl::forMeasureUnit(speed, temp, status).copy(status);
+    assertEquals("Initial copy has matching identifier", "furlong-per-second",
+                 tweakedImplCopy.identifier.data());
+    tweakedImplCopy.append(
+        SingleUnitImpl::forMeasureUnit(MeasureUnit::forIdentifier("per-second", status), status),
+        status);
+    assertEquals("MeasureUnitImpl identifier gets cleared when instance is modified", "",
+                 tweakedImplCopy.identifier.data());
+    // Repeat: for takeReciprocal instead of append().
+    tweakedImplCopy = MeasureUnitImpl::forMeasureUnit(speed, temp, status).copy(status);
+    assertEquals("Initial copy has matching identifier", "furlong-per-second",
+                 tweakedImplCopy.identifier.data());
+    tweakedImplCopy.takeReciprocal(status);
+    assertEquals("MeasureUnitImpl identifier gets cleared when instance is modified", "",
+                 tweakedImplCopy.identifier.data());
+}
 
 void MeasureFormatTest::verifyFieldPosition(
         const char *description,

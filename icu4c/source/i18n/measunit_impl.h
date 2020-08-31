@@ -142,10 +142,15 @@ struct MeasureUnitImpl : public UMemory {
     static MeasureUnitImpl forIdentifier(StringPiece identifier, UErrorCode& status);
 
     /**
-     * Extract the MeasureUnitImpl from a MeasureUnit, or parse if it is not present.
-     * 
+     * Extract the MeasureUnitImpl from a MeasureUnit, or parse if it is not
+     * present.
+     *
+     * The MeasureUnit whose MeasureUnitImpl was extracted must outlive the
+     * returned reference.
+     *
      * @param measureUnit The source MeasureUnit.
-     * @param memory A place to write the new MeasureUnitImpl if parsing is required.
+     * @param memory A place to write the new MeasureUnitImpl if parsing is
+     * required.
      * @param status Set if an error occurs.
      * @return A reference to either measureUnit.fImpl or memory.
      */
