@@ -70,6 +70,7 @@ public:
     void testCreateInstanceForAllLocales();
 
     void testTicket20707();
+    void testTicket20710();
 
 private:
     /**
