@@ -29,6 +29,13 @@ using namespace icu::number::impl;
 using icu::double_conversion::DoubleToStringConverter;
 using icu::double_conversion::StringToDoubleConverter;
 
+U_NAMESPACE_BEGIN
+
+// This explicit template instantiation is used in class DecNum; see number_decnum.h.
+template class U_I18N_API MaybeStackHeaderAndArray<decNumber, char, DECNUM_INITIAL_CAPACITY>;
+
+U_NAMESPACE_END
+
 namespace {
 
 int8_t NEGATIVE_FLAG = 1;
