@@ -14,6 +14,7 @@ import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.UResourceBundle;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 /**
  * Responsible for all units data operations (retriever, analysis, extraction certain data ... etc.).
@@ -29,7 +30,7 @@ public class UnitsData {
 
     public UnitsData() {
         this.conversionRates = new ConversionRates();
-        this.unitPreferences = UnitPreferences.getUnitPreferences();
+        this.unitPreferences = new UnitPreferences();
         this.categories = new Categories();
     }
 
@@ -78,7 +79,7 @@ public class UnitsData {
         return this.categories.mapFromUnitToCategory.get(baseUnitIdentifier);
     }
 
-    public UnitPreference[] getPreferencesFor(String category, String usage, String region) {
+    public UnitPreferences.UnitPreference[] getPreferencesFor(String category, String usage, String region) {
         return this.unitPreferences.getPreferencesFor(category, usage, region);
     }
 
@@ -129,5 +130,52 @@ public class UnitsData {
         public static final String CATEGORY_TABLE_NAME = "unitQuantities";
         public static final String DEFAULT_REGION = "001";
         public static final String DEFAULT_USAGE = "default";
+    }
+
+    public static class Categories {
+
+        /**
+         * Contains the map between units in their base units into their category.
+         * For example:  meter-per-second --> "speed"
+         */
+        TreeMap<String, String> mapFromUnitToCategory;
+
+
+        public Categories() {
+            // Read unit Categories
+            ICUResourceBundle resource;
+            resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
+            CategoriesSink sink = new CategoriesSink();
+            resource.getAllItemsWithFallback(Constants.CATEGORY_TABLE_NAME, sink);
+            this.mapFromUnitToCategory = sink.getMapFromUnitToCategory();
+        }
+    }
+
+    public static class CategoriesSink extends UResource.Sink {
+        /**
+         * Contains the map between units in their base units into their category.
+         * For example:  meter-per-second --> "speed"
+         */
+        TreeMap<String, String> mapFromUnitToCategory;
+
+        public CategoriesSink() {
+            mapFromUnitToCategory = new TreeMap<>();
+        }
+
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            Assert.assrt(key.toString() == Constants.CATEGORY_TABLE_NAME);
+            Assert.assrt(value.getType() == UResourceBundle.TABLE);
+
+            UResource.Table categoryTable = value.getTable();
+            for (int i = 0; categoryTable.getKeyAndValue(i, key, value); i++) {
+                Assert.assrt(value.getType() == UResourceBundle.STRING);
+                mapFromUnitToCategory.put(key.toString(), value.toString());
+            }
+        }
+
+        public TreeMap<String, String> getMapFromUnitToCategory() {
+            return mapFromUnitToCategory;
+        }
     }
 }
