@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 uz_Cyrl{
     %%Parent{"root"}
     Countries{
@@ -307,5 +308,5 @@ uz_Cyrl{
         FK{"Фолкленд (Малвин) ороллари"}
         TL{"Шарқий Тимор"}
     }
-    Version{"37"}
+    Version{"38"}
 }

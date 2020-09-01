@@ -531,6 +531,9 @@ void DecimalQuantityTest::testCompactDecimalSuppressedExponent() {
     for (const auto& cas : cases) {
         // test the helper methods used to compute plural operand values
 
+        if (cas.input > 900.0 && logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
+            continue;
+        }
         LocalizedNumberFormatter formatter =
             NumberFormatter::forSkeleton(cas.skeleton, status)
               .locale(ulocale);
@@ -617,6 +620,9 @@ void DecimalQuantityTest::testSuppressedExponentUnchangedByInitialScaling() {
     };
 
     for (const auto& cas : cases) {
+        if (cas.input > 900 && logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
+            continue;
+        }
         FormattedNumber fnCompactScaled = compactScaled.formatInt(cas.input, status);
         DecimalQuantity dqCompactScaled;
         fnCompactScaled.getDecimalQuantity(dqCompactScaled, status);

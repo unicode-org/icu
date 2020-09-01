@@ -1,14 +1,15 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 el{
-    Version{"37"}
+    Version{"38"}
     collations{
         standard{
             Sequence{
                 "[normalization on]"
                 "[reorder Grek]"
             }
-            Version{"37"}
+            Version{"38"}
         }
     }
 }

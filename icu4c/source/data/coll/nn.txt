@@ -1,15 +1,16 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 nn{
-    Version{"37"}
+    Version{"38"}
     collations{
         search{
             Sequence{"[import nb-u-co-search]"}
-            Version{"37"}
+            Version{"38"}
         }
         standard{
             Sequence{"[import nb-u-co-standard]"}
-            Version{"37"}
+            Version{"38"}
         }
     }
 }

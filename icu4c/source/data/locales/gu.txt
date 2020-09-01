@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 gu{
     AuxExemplarCharacters{"[\u200C\u200D ૰]"}
     Ellipsis{
@@ -252,7 +253,7 @@ gu{
         minimumGroupingDigits{"1"}
         native{"gujr"}
     }
-    Version{"37"}
+    Version{"38"}
     calendar{
         buddhist{
             eras{
@@ -2585,12 +2586,6 @@ gu{
         metric{"મેટ્રિક"}
     }
     parse{
-        date{
-            lenient{
-                "[\\--/]",
-                "[\\:∶]",
-            }
-        }
         general{
             lenient{
                 "[.․。︒﹒．｡]",
@@ -2598,21 +2593,10 @@ gu{
                 "[%٪﹪％]",
                 "[؉‰]",
                 "[\$﹩＄$]",
-                "[£₤]",
+                "[£₤￡]",
                 "[¥￥]",
                 "[₩￦]",
                 "[₨₹{Rp}{Rs}]",
-            }
-        }
-        number{
-            lenient{
-                "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
-            }
-            stricter{
-                "[,٫︐﹐，]",
-                "[.․﹒．｡]",
             }
         }
     }

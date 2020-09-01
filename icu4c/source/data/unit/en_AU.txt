@@ -1,8 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_AU{
     %%Parent{"en_001"}
-    Version{"37"}
+    Version{"38"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -37,18 +38,32 @@ en_AU{
                 other{"{0} tonnes"}
             }
         }
+        pressure{
+            pound-force-per-square-inch{
+                dnam{"pounds per square inch"}
+                one{"{0} pound per square inch"}
+                other{"{0} pounds per square inch"}
+            }
+        }
         temperature{
             generic{
                 dnam{"degrees"}
-                one{"{0} degree"}
-                other{"{0} degrees"}
             }
         }
         volume{
+            dessert-spoon{
+                one{"{0} US dessertspoon"}
+                other{"{0} dessert spoons"}
+            }
             fluid-ounce{
                 dnam{"fluid ounces"}
                 one{"{0} fluid ounce"}
                 other{"{0} fluid ounces"}
+            }
+            quart{
+                dnam{"quarts"}
+                one{"{0} quart"}
+                other{"{0} quarts"}
             }
         }
     }
@@ -99,11 +114,6 @@ en_AU{
             kilometer-per-hour{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
-            }
-            mile-per-hour{
-                dnam{"m.p.h."}
-                one{"{0} m.p.h."}
-                other{"{0} m.p.h."}
             }
         }
         temperature{
@@ -207,9 +217,6 @@ en_AU{
                 one{"{0} C."}
                 other{"{0} C."}
             }
-            hour{
-                per{"{0} phr"}
-            }
             microsecond{
                 dnam{"μsec."}
             }
@@ -219,12 +226,8 @@ en_AU{
             minute{
                 dnam{"min."}
                 one{"{0} min."}
-                other{"{0} min."}
+                other{"{0} mins"}
                 per{"{0}/min."}
-            }
-            month{
-                one{"{0} m."}
-                other{"{0} m."}
             }
             nanosecond{
                 dnam{"nanosec."}
@@ -232,7 +235,7 @@ en_AU{
             second{
                 dnam{"sec."}
                 one{"{0} sec."}
-                other{"{0} sec."}
+                other{"{0} secs"}
                 per{"{0} ps."}
             }
         }
@@ -283,10 +286,6 @@ en_AU{
                 dnam{"metres/sec."}
                 one{"{0} m/s."}
                 other{"{0} m/s."}
-            }
-            mile-per-hour{
-                one{"{0} m.p.h."}
-                other{"{0} m.p.h."}
             }
         }
         temperature{
@@ -347,6 +346,11 @@ en_AU{
                 dnam{"mL"}
                 one{"{0} mL"}
                 other{"{0} mL"}
+            }
+            quart{
+                dnam{"qts"}
+                one{"{0} qt"}
+                other{"{0} qt"}
             }
         }
     }

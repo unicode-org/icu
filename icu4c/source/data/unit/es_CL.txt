@@ -1,8 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 es_CL{
     %%Parent{"es_419"}
-    Version{"37"}
+    Version{"38"}
     durationUnits{
         hms{"hh:mm:ss"}
         ms{"mm:ss"}
@@ -22,6 +23,18 @@ es_CL{
             ohm{
                 one{"{0} ohmio"}
                 other{"{0} ohmios"}
+            }
+        }
+    }
+    unitsShort{
+        electric{
+            volt{
+                dnam{"voltios"}
+            }
+        }
+        power{
+            watt{
+                dnam{"vatios"}
             }
         }
     }

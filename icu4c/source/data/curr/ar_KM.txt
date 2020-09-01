@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ar_KM{
     Currencies{
         KMF{
@@ -7,5 +8,5 @@ ar_KM{
             "فرنك جزر القمر",
         }
     }
-    Version{"37"}
+    Version{"38"}
 }

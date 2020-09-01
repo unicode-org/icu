@@ -127,10 +127,10 @@ public class ModifierTest {
         // If this test starts failing, please update the method #getUnicodeSet() in
         // BOTH CurrencySpacingEnabledModifier.java AND in C++.
         DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(new ULocale("en-US"));
-        assertEquals("[:^S:]",
+        assertEquals("[[:^S:]&[:^Z:]]",
                 dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH,
                         true));
-        assertEquals("[:^S:]",
+        assertEquals("[[:^S:]&[:^Z:]]",
                 dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH,
                         false));
         assertEquals("[:digit:]",

@@ -931,8 +931,8 @@ NumberFormatTest::TestCurrency(void)
 
     UnicodeString s; currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre ici a..........." + s);
-    if (!(s==CharsToUnicodeString("1,50\\u00A0$")))
-        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$ but got " + s);
+    if (!(s==CharsToUnicodeString("1,50\\u00A0$\\u00A0CA")))
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$<nbsp>CA but got " + s);
     delete currencyFmt;
     s.truncate(0);
     char loc[256]={0};

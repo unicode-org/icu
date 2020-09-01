@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fy{
     Countries{
         001{"Wrâld"}
@@ -303,5 +304,5 @@ fy{
         CG{"Congo (Republyk)"}
         FK{"Falklâneilannen (Islas Malvinas)"}
     }
-    Version{"37"}
+    Version{"38"}
 }

@@ -518,7 +518,7 @@ static const char *localeAndIndexCharactersLists[][2] = {
     /* Latvian*/    {"lv", "A:B:C:\\u010C:D:E:F:G:\\u0122:H:I:J:K:\\u0136:L:\\u013B:M:N:\\u0145:O:P:Q:R:S:\\u0160:T:U:V:W:X:Z:\\u017D"},
     /* Norwegian Bokm\\u00E5l*/  {"nb", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z:\\u00C6:\\u00D8:\\u00C5"},
     /* Dutch*/  {"nl", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
-    /* Polish*/ {"pl", "A:\\u0104:B:C:\\u0106:D:E:\\u0118:F:G:H:I:J:K:L:\\u0141:M:N:\\u0143:O:\\u00D3:P:Q:R:S:\\u015A:T:U:V:W:X:Y:Z:\\u0179:\\u017B"},
+    /* Polish*/ {"pl", "A:B:C:\\u0106:D:E:F:G:H:I:J:K:L:\\u0141:M:N:O:\\u00D3:P:Q:R:S:\\u015A:T:U:V:W:X:Y:Z:\\u0179:\\u017B"},
     /* Portuguese*/ {"pt", "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:T:U:V:W:X:Y:Z"},
     /* Romanian*/   {"ro", "A:\\u0102:\\u00C2:B:C:D:E:F:G:H:I:\\u00CE:J:K:L:M:N:O:P:Q:R:S:\\u0218:T:\\u021A:U:V:W:X:Y:Z"},
     /* Russian*/    {"ru", "\\u0410:\\u0411:\\u0412:\\u0413:\\u0414:\\u0415:\\u0416:\\u0417:\\u0418:\\u0419:\\u041A:\\u041B:\\u041C:\\u041D:\\u041E:\\u041F:\\u0420:\\u0421:\\u0422:\\u0423:\\u0424:\\u0425:\\u0426:\\u0427:\\u0428:\\u0429:\\u042B:\\u042D:\\u042E:\\u042F"},

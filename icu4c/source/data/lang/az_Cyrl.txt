@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 az_Cyrl{
     %%Parent{"root"}
     Languages{
@@ -398,7 +399,7 @@ az_Cyrl{
     Scripts{
         Cyrl{"Кирил"}
     }
-    Version{"37"}
+    Version{"38"}
     codePatterns{
         language{"Дил: {0}"}
         script{"Скрипт: {0}"}

@@ -196,16 +196,21 @@ static void TestDateFormat()
     }
     /*format using fr */
 
-    u_unescape("10 juil. 1996 \\u00E0 16:05:28 heure d\\u2019\\u00E9t\\u00E9 du Pacifique", temp, 50);
+    u_unescape("10 juil. 1996, 16:05:28 heure d\\u2019\\u00E9t\\u00E9 du Pacifique", temp, 50);
     if(result != NULL) {
         free(result);
         result = NULL;
     }
     result=myDateFormat(fr, d);
-    if(u_strcmp(result, temp)==0)
+    if(u_strcmp(result, temp)==0) {
         log_verbose("PASS: Date Format for french locale successful using udat_format()\n");
-    else
-        log_data_err("FAIL: Date Format for french locale failed using udat_format().\n" );
+    } else {
+        char xbuf[2048];
+        char gbuf[2048];
+        u_austrcpy(xbuf, temp);
+        u_austrcpy(gbuf, result);
+        log_data_err("FAIL: Date Format for french locale failed using udat_format() - expected %s got %s\n", xbuf, gbuf);
+    }
 
     /*format using it */
     u_uastrcpy(temp, "10 lug 1996, 16:05:28");
