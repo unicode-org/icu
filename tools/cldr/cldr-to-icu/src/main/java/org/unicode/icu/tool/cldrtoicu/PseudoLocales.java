@@ -191,8 +191,7 @@ public final class PseudoLocales {
             ldml("numbers/defaultNumberingSystem");
 
         // These paths were mostly derived from looking at the previous implementation's behaviour
-        // and can be modified as needed. Notably there are no "units" here (but they were also
-        // excluded in the original code).
+        // and can be modified as needed.
         private static final Predicate<CldrPath> IS_PSEUDO_PATH =
             matchAnyLdmlPrefix(
                 "localeDisplayNames",
@@ -203,7 +202,8 @@ public final class PseudoLocales {
                 "listPatterns",
                 "posix/messages",
                 "characterLabels",
-                "typographicNames")
+                "typographicNames",
+                "units")
                 .and(matchAnyLdmlPrefix(
                     "localeDisplayNames/localeDisplayPattern",
                     "dates/timeZoneNames/fallbackFormat")

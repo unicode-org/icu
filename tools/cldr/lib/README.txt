@@ -29,7 +29,7 @@ Installing the CLDR API jar
 
 From this directory:
 
-$ ./install-cldr-jars.sh "$CLDR_ROOT"
+$ ./install-cldr-jars.sh "$CLDR_DIR"
 
 
 Manually installing the CLDR API jar
