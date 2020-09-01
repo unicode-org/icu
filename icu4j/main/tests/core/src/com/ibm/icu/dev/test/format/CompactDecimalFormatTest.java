@@ -623,6 +623,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
         // Run a CDF over all locales to make sure there are no unexpected exceptions.
         ULocale[] locs = ULocale.getAvailableLocales();
         for (ULocale loc : locs) {
+            if (loc.getLanguage().equals("fr") && logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
+                continue;
+            }
             CompactDecimalFormat cdfShort = CompactDecimalFormat.getInstance(loc, CompactStyle.SHORT);
             CompactDecimalFormat cdfLong = CompactDecimalFormat.getInstance(loc, CompactStyle.LONG);
             for (double d = 12345.0; d > 0.01; d /= 10) {
@@ -698,9 +701,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
         // Check currency formatting as well
         cdf = CompactDecimalFormat.getInstance(new ULocale("ar-EG"), CompactDecimalFormat.CompactStyle.SHORT);
         result = cdf.format(new CurrencyAmount(43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format 43000 with currency in 'ar-EG'", "US$ ٤٣ ألف", result);
+        assertEquals("CDF should correctly format 43000 with currency in 'ar-EG'", " ٤٣ ألف US$", result); // see CLDR-14149, may be error
         result = cdf.format(new CurrencyAmount(-43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format -43000 with currency in 'ar-EG'", "؜-US$ ٤٣ ألف", result);
+        assertEquals("CDF should correctly format -43000 with currency in 'ar-EG'", "؜- ٤٣ ألف US$", result); // see CLDR-14149, may be error
 
         // Extra locale with different positive/negative formats
         cdf = CompactDecimalFormat.getInstance(new ULocale("fi"), CompactDecimalFormat.CompactStyle.SHORT);

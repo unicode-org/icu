@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fr_BE{
     Languages{
         frp{"franco-provençal"}
@@ -7,5 +8,5 @@ fr_BE{
         gu{"gujarati"}
         njo{"ao"}
     }
-    Version{"37"}
+    Version{"38"}
 }

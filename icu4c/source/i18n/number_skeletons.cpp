@@ -1000,8 +1000,8 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     CharString subType;
     SKELETON_UCHAR_TO_CHAR(subType, stemString, firstHyphen + 1, stemString.length(), status);
 
-    // Note: the largest type as of this writing (March 2018) is "volume", which has 24 units.
-    static constexpr int32_t CAPACITY = 30;
+    // Note: the largest type as of this writing (Aug 2020) is "volume", which has 33 units.
+    static constexpr int32_t CAPACITY = 40;
     MeasureUnit units[CAPACITY];
     UErrorCode localStatus = U_ZERO_ERROR;
     int32_t numUnits = MeasureUnit::getAvailable(type.data(), units, CAPACITY, localStatus);

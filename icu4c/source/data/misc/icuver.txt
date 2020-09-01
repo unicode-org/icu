@@ -1,5 +1,6 @@
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 // ***************************************************************************
 // *
 // * Copyright (C) 2010-2016 International Business Machines
@@ -8,6 +9,7 @@
 // ***************************************************************************
 
 icuver:table(nofallback){ 
+    CLDRVersion{"38"}
     DataVersion { "68.1.0.0" }
     ICUVersion  { "68.1.0.0" }
 }

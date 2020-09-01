@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 plurals:table(nofallback){
     locales{
         af{"set8"}
@@ -33,6 +34,7 @@ plurals:table(nofallback){
         cy{"set35"}
         da{"set9"}
         de{"set4"}
+        doi{"set1"}
         dsb{"set22"}
         dv{"set8"}
         dz{"set0"}

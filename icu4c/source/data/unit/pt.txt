@@ -1,7 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pt{
-    Version{"37"}
+    Version{"38"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -407,6 +408,11 @@ pt{
             }
         }
         graphics{
+            dot{
+                dnam{"ponto"}
+                one{"{0} ponto"}
+                other{"{0} pts"}
+            }
             dot-per-centimeter{
                 dnam{"pontos por centímetro"}
                 one{"{0} ponto por centímetro"}
@@ -457,6 +463,11 @@ pt{
                 dnam{"decímetros"}
                 one{"{0} decímetro"}
                 other{"{0} decímetros"}
+            }
+            earth-radius{
+                dnam{"raio terrestre"}
+                one{"{0} raio terrestre"}
+                other{"{0} raios terrestres"}
             }
             fathom{
                 dnam{"braças"}
@@ -539,7 +550,7 @@ pt{
             }
             point{
                 dnam{"pontos"}
-                one{"{0} ponto"}
+                one{"{0} ponto tipográfico"}
                 other{"{0} pontos"}
             }
             solar-radius{
@@ -554,6 +565,16 @@ pt{
             }
         }
         light{
+            candela{
+                dnam{"candela"}
+                one{"{0} candela"}
+                other{"{0} candelas"}
+            }
+            lumen{
+                dnam{"lúmen"}
+                one{"{0} lúmen"}
+                other{"{0} lúmens"}
+            }
             lux{
                 dnam{"lux"}
                 one{"{0} lux"}
@@ -580,6 +601,11 @@ pt{
                 dnam{"massa terrestre"}
                 one{"{0} massa terrestre"}
                 other{"{0} massas terrestres"}
+            }
+            grain{
+                dnam{"grão"}
+                one{"{0} grão"}
+                other{"{0} grãos"}
             }
             gram{
                 dnam{"gramas"}
@@ -636,9 +662,9 @@ pt{
                 other{"{0} stones"}
             }
             ton{
-                dnam{"toneladas"}
-                one{"{0} tonelada"}
-                other{"{0} toneladas"}
+                dnam{"toneladas americanas"}
+                one{"{0} tonelada americana"}
+                other{"{0} toneladas americanas"}
             }
         }
         power{
@@ -787,6 +813,11 @@ pt{
                 one{"{0} barril"}
                 other{"{0} barris"}
             }
+            bushel{
+                dnam{"bushels"}
+                one{"{0} bushel"}
+                other{"{0} bushels"}
+            }
             centiliter{
                 dnam{"centilitros"}
                 one{"{0} centilitro"}
@@ -844,6 +875,25 @@ pt{
                 one{"{0} decilitro"}
                 other{"{0} decilitros"}
             }
+            dessert-spoon{
+                dnam{"colher de sobremesa"}
+                one{"{0} colher de sobremesa"}
+                other{"{0} colheres de sobremesa"}
+            }
+            dessert-spoon-imperial{
+                one{"{0} colher de sobremesa imperial"}
+                other{"{0} colheres de sobremesa imperiais"}
+            }
+            dram{
+                dnam{"dracma"}
+                one{"{0} dracma líquido"}
+                other{"{0} dracmas líquidos"}
+            }
+            drop{
+                dnam{"gota"}
+                one{"{0} gota"}
+                other{"{0} gotas"}
+            }
             fluid-ounce{
                 dnam{"onças fluidas"}
                 one{"{0} onça fluida"}
@@ -871,6 +921,11 @@ pt{
                 one{"{0} hectolitro"}
                 other{"{0} hectolitros"}
             }
+            jigger{
+                dnam{"dosador"}
+                one{"{0} dosador"}
+                other{"{0} dosadores"}
+            }
             liter{
                 dnam{"litros"}
                 one{"{0} litro"}
@@ -887,6 +942,11 @@ pt{
                 one{"{0} mililitro"}
                 other{"{0} mililitros"}
             }
+            pinch{
+                dnam{"pitada"}
+                one{"{0} pitada"}
+                other{"{0} pitadas"}
+            }
             pint{
                 dnam{"pints"}
                 one{"{0} pint"}
@@ -901,6 +961,11 @@ pt{
                 dnam{"quartos"}
                 one{"{0} quarto"}
                 other{"{0} quartos"}
+            }
+            quart-imperial{
+                dnam{"quarto imperial"}
+                one{"{0} quarto imperial"}
+                other{"{0} quartos imperiais"}
             }
             tablespoon{
                 dnam{"colheres de sopa"}
@@ -1389,6 +1454,11 @@ pt{
             }
         }
         graphics{
+            dot{
+                dnam{"ponto"}
+                one{"{0} p"}
+                other{"{0} pts"}
+            }
             megapixel{
                 dnam{"megapixels"}
             }
@@ -1471,6 +1541,11 @@ pt{
             earth-mass{
                 dnam{"massas terrestres"}
             }
+            grain{
+                dnam{"grão"}
+                one{"{0} grão"}
+                other{"{0} grãos"}
+            }
             gram{
                 dnam{"gramas"}
             }
@@ -1492,7 +1567,7 @@ pt{
                 dnam{"stones"}
             }
             ton{
-                dnam{"toneladas"}
+                dnam{"toneladas americanas"}
                 one{"{0} tn"}
                 other{"{0} tn"}
             }
@@ -1559,6 +1634,9 @@ pt{
             barrel{
                 dnam{"barril"}
             }
+            bushel{
+                dnam{"bushels"}
+            }
             centiliter{
                 dnam{"cl"}
                 one{"{0} cl"}
@@ -1590,6 +1668,24 @@ pt{
                 one{"{0} dl"}
                 other{"{0} dl"}
             }
+            dessert-spoon{
+                dnam{"csb"}
+                one{"{0} csb"}
+                other{"{0} csb"}
+            }
+            dessert-spoon-imperial{
+                dnam{"csb imp"}
+                one{"{0} csb imp"}
+                other{"{0} csb imp"}
+            }
+            dram{
+                dnam{"dracma líquido"}
+            }
+            drop{
+                dnam{"gota"}
+                one{"{0} gota"}
+                other{"{0} gotas"}
+            }
             fluid-ounce{
                 dnam{"fl oz"}
                 one{"{0} fl oz"}
@@ -1612,6 +1708,11 @@ pt{
                 one{"{0} hl"}
                 other{"{0} hl"}
             }
+            jigger{
+                dnam{"dosador"}
+                one{"{0} dosador"}
+                other{"{0} dosadores"}
+            }
             liter{
                 dnam{"litros"}
             }
@@ -1625,6 +1726,11 @@ pt{
                 one{"{0} ml"}
                 other{"{0} ml"}
             }
+            pinch{
+                dnam{"pitada"}
+                one{"{0} pitada"}
+                other{"{0} pitadas"}
+            }
             pint{
                 dnam{"pints"}
             }
@@ -1635,6 +1741,11 @@ pt{
             }
             quart{
                 dnam{"qts"}
+            }
+            quart-imperial{
+                dnam{"impqt"}
+                one{"{0} impqt"}
+                other{"{0} impqt"}
             }
             tablespoon{
                 dnam{"c. sopa"}

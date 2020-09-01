@@ -73,9 +73,9 @@ compact-short measure-unit/length-furlong unit-width-narrow
 
 compact-short measure-unit/length-furlong unit-width-full-name
   es-MX
-    0 fur
-    92 k fur
-    -0.22 fur
+    0 furlongs
+    92 k furlongs
+    -0.22 furlongs
   zh-TW
     0 化朗
     9.2萬 化朗
@@ -157,9 +157,9 @@ scientific/+ee/sign-always measure-unit/length-furlong unit-width-narrow
 
 scientific/+ee/sign-always measure-unit/length-furlong unit-width-full-name
   es-MX
-    0E+00 fur
-    9.182736E+04 fur
-    -2.2222E-01 fur
+    0E+00 furlongs
+    9.182736E+04 furlongs
+    -2.2222E-01 furlongs
   zh-TW
     0E+00 化朗
     9.182736E+04 化朗
@@ -3363,9 +3363,9 @@ measure-unit/length-furlong unit-width-narrow @@
 
 measure-unit/length-furlong unit-width-full-name precision-integer
   es-MX
-    0 fur
-    91,827 fur
-    -0 fur
+    0 furlongs
+    91,827 furlongs
+    -0 furlongs
   zh-TW
     0 化朗
     91,827 化朗
@@ -3377,9 +3377,9 @@ measure-unit/length-furlong unit-width-full-name precision-integer
 
 measure-unit/length-furlong unit-width-full-name .000
   es-MX
-    0.000 fur
-    91,827.364 fur
-    -0.222 fur
+    0.000 furlongs
+    91,827.364 furlongs
+    -0.222 furlongs
   zh-TW
     0.000 化朗
     91,827.364 化朗
@@ -3391,9 +3391,9 @@ measure-unit/length-furlong unit-width-full-name .000
 
 measure-unit/length-furlong unit-width-full-name .##/@@@+
   es-MX
-    0 fur
-    91,827.36 fur
-    -0.222 fur
+    0 furlongs
+    91,827.36 furlongs
+    -0.222 furlongs
   zh-TW
     0 化朗
     91,827.36 化朗
@@ -3405,9 +3405,9 @@ measure-unit/length-furlong unit-width-full-name .##/@@@+
 
 measure-unit/length-furlong unit-width-full-name @@
   es-MX
-    0.0 fur
-    92,000 fur
-    -0.22 fur
+    0.0 furlongs
+    92,000 furlongs
+    -0.22 furlongs
   zh-TW
     0.0 化朗
     92,000 化朗
@@ -3489,9 +3489,9 @@ measure-unit/length-furlong unit-width-narrow rounding-mode-floor
 
 measure-unit/length-furlong unit-width-full-name rounding-mode-floor
   es-MX
-    0 fur
-    91,827.3645 fur
-    -0.22222 fur
+    0 furlongs
+    91,827.3645 furlongs
+    -0.22222 furlongs
   zh-TW
     0 化朗
     91,827.3645 化朗
@@ -3573,9 +3573,9 @@ measure-unit/length-furlong unit-width-narrow integer-width/##00
 
 measure-unit/length-furlong unit-width-full-name integer-width/##00
   es-MX
-    00 fur
-    1827.3645 fur
-    -00.22222 fur
+    00 furlongs
+    1827.3645 furlongs
+    -00.22222 furlongs
   zh-TW
     00 化朗
     1,827.3645 化朗
@@ -3657,9 +3657,9 @@ measure-unit/length-furlong unit-width-narrow scale/0.5
 
 measure-unit/length-furlong unit-width-full-name scale/0.5
   es-MX
-    0 fur
-    45,913.68225 fur
-    -0.11111 fur
+    0 furlongs
+    45,913.68225 furlongs
+    -0.11111 furlongs
   zh-TW
     0 化朗
     45,913.68225 化朗
@@ -3741,9 +3741,9 @@ measure-unit/length-furlong unit-width-narrow group-on-aligned
 
 measure-unit/length-furlong unit-width-full-name group-on-aligned
   es-MX
-    0 fur
-    91,827.3645 fur
-    -0.22222 fur
+    0 furlongs
+    91,827.3645 furlongs
+    -0.22222 furlongs
   zh-TW
     0 化朗
     91,827.3645 化朗
@@ -3825,9 +3825,9 @@ measure-unit/length-furlong unit-width-narrow latin
 
 measure-unit/length-furlong unit-width-full-name latin
   es-MX
-    0 fur
-    91,827.3645 fur
-    -0.22222 fur
+    0 furlongs
+    91,827.3645 furlongs
+    -0.22222 furlongs
   zh-TW
     0 化朗
     91,827.3645 化朗
@@ -3909,9 +3909,9 @@ measure-unit/length-furlong unit-width-narrow sign-accounting-except-zero
 
 measure-unit/length-furlong unit-width-full-name sign-accounting-except-zero
   es-MX
-    0 fur
-    +91,827.3645 fur
-    -0.22222 fur
+    0 furlongs
+    +91,827.3645 furlongs
+    -0.22222 furlongs
   zh-TW
     0 化朗
     +91,827.3645 化朗
@@ -3993,9 +3993,9 @@ measure-unit/length-furlong unit-width-narrow decimal-always
 
 measure-unit/length-furlong unit-width-full-name decimal-always
   es-MX
-    0. fur
-    91,827.3645 fur
-    -0.22222 fur
+    0. furlongs
+    91,827.3645 furlongs
+    -0.22222 furlongs
   zh-TW
     0. 化朗
     91,827.3645 化朗

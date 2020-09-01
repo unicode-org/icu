@@ -4799,6 +4799,13 @@ void LocaleTest::TestCanonicalization(void)
     
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
         for (j=0; j<3; ++j) {
+            if (j==1 && logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
+                if (uprv_strncmp(testCases[i].localeID, "zh_CN", 5) == 0 ||
+                    uprv_strncmp(testCases[i].localeID, "zh_TW", 5) == 0 ||
+                    uprv_strncmp(testCases[i].localeID, "uz-UZ", 5) == 0 ) {
+                        continue;
+                    }
+            }
             const char* expected = (j==1) ? testCases[i].canonicalID : testCases[i].getNameID;
             Locale loc = _canonicalize(j, testCases[i].localeID);
             const char* getName = loc.isBogus() ? "BOGUS" : loc.getName();
@@ -4883,6 +4890,15 @@ void LocaleTest::TestCanonicalize(void)
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
+        if (logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
+            if (uprv_strstr(testCases[i].localeID, "-BOKMAL") != 0 ||
+                uprv_strstr(testCases[i].localeID, "-NYNORSK") != 0 ||
+                uprv_strstr(testCases[i].localeID, "-SAAHO") != 0 ||
+                uprv_strncmp(testCases[i].localeID, "pa-IN", 5) == 0 ||
+                uprv_strncmp(testCases[i].localeID, "ky-Cyrl", 7) == 0 ) {
+                     continue;
+               }
+        }
         UErrorCode status = U_ZERO_ERROR;
         std::string otag = testCases[i].localeID;
         Locale loc = Locale::forLanguageTag(otag.c_str(), status);

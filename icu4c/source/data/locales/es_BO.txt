@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 es_BO{
     %%Parent{"es_419"}
     NumberElements{
@@ -10,17 +11,9 @@ es_BO{
             }
         }
     }
-    Version{"37"}
+    Version{"38"}
     calendar{
         gregorian{
-            AmPmMarkers{
-                "a. m.",
-                "p. m.",
-            }
-            AmPmMarkersAbbr{
-                "a. m.",
-                "p. m.",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -36,23 +29,6 @@ es_BO{
                 "{1} {0}",
                 "{1} {0}",
             }
-            dayPeriod{
-                stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                    wide{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
-                }
-            }
-        }
-    }
-    fields{
-        dayperiod{
-            dn{"a. m./p. m."}
         }
     }
 }

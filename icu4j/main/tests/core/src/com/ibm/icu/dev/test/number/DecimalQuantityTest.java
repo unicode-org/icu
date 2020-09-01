@@ -610,6 +610,9 @@ public class DecimalQuantityTest extends TestFmwk {
 
     @Test
     public void testCompactDecimalSuppressedExponent() {
+        if (logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
+            return;
+        }
         ULocale locale = new ULocale("fr-FR");
 
         Object[][] casesData = {
@@ -741,6 +744,9 @@ public class DecimalQuantityTest extends TestFmwk {
 
     @Test
     public void testCompactNotationFractionPluralOperands() {
+        if (logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
+            return;
+        }
         ULocale locale = new ULocale("fr-FR");
         LocalizedNumberFormatter formatter =
                 NumberFormatter.withLocale(locale)
@@ -806,6 +812,9 @@ public class DecimalQuantityTest extends TestFmwk {
 
     @Test
     public void testSuppressedExponentUnchangedByInitialScaling() {
+        if (logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
+            return;
+        }
         ULocale locale = new ULocale("fr-FR");
         LocalizedNumberFormatter withLocale = NumberFormatter.withLocale(locale);
         LocalizedNumberFormatter compactLong =

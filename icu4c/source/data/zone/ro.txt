@@ -1,7 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ro{
-    Version{"37"}
+    Version{"38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -898,7 +899,7 @@ ro{
             ec{"Capul Verde"}
         }
         "Atlantic:Faeroe"{
-            ec{"Faroe"}
+            ec{"Feroe"}
         }
         "Atlantic:Madeira"{
             ec{"Madeira"}
@@ -1065,7 +1066,7 @@ ro{
             ec{"Paris"}
         }
         "Europe:Podgorica"{
-            ec{"Podgorica"}
+            ec{"Podgorița"}
         }
         "Europe:Prague"{
             ec{"Praga"}
@@ -1316,6 +1317,11 @@ ro{
             lg{"Ora din Alaska"}
             ls{"Ora standard din Alaska"}
         }
+        "meta:Almaty"{
+            ld{"Ora de vară Almaty"}
+            lg{"Ora Almaty"}
+            ls{"Ora standard Almaty"}
+        }
         "meta:Amazon"{
             ld{"Ora de vară a Amazonului"}
             lg{"Ora Amazonului"}
@@ -1350,6 +1356,16 @@ ro{
             ld{"Ora de vară din Apia"}
             lg{"Ora din Apia"}
             ls{"Ora standard din Apia"}
+        }
+        "meta:Aqtau"{
+            ld{"Ora de vară a zonei Aqtau"}
+            lg{"Ora Aqtau"}
+            ls{"Ora standard Aqtau"}
+        }
+        "meta:Aqtobe"{
+            ld{"Ora de vară a zonei Aqtobe"}
+            lg{"Ora Aqtobe"}
+            ls{"Ora standard Aqtobe"}
         }
         "meta:Arabian"{
             ld{"Ora de vară arabă"}
@@ -1732,9 +1748,9 @@ ro{
             ls{"Ora din Niue"}
         }
         "meta:Norfolk"{
-            ld{"Ora de vară Insulelor Norfolk"}
-            lg{"Ora Insulelor Norfolk"}
-            ls{"Ora standard Insulelor Norfolk"}
+            ld{"Ora de vară a Insulei Norfolk"}
+            lg{"Ora Insulei Norfolk"}
+            ls{"Ora standard a Insulei Norfolk"}
         }
         "meta:Noronha"{
             ld{"Ora de vară din Fernando de Noronha"}

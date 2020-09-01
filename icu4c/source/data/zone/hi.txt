@@ -1,7 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hi{
-    Version{"37"}
+    Version{"38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिदजान"}
@@ -1219,6 +1220,8 @@ hi{
         }
         "Pacific:Honolulu"{
             ec{"होनोलुलु"}
+            sg{"एचएसटी"}
+            ss{"एचएसटी"}
         }
         "Pacific:Johnston"{
             ec{"जॉनस्टन"}

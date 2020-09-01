@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lg{
     Currencies{
         AED{
@@ -235,5 +236,5 @@ lg{
             "Doola ey’eZimbabwe",
         }
     }
-    Version{"37"}
+    Version{"38"}
 }

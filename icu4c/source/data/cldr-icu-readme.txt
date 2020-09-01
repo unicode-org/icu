@@ -190,7 +190,7 @@ ant -f build-icu-data.xml -DcldrDataDir="$CLDR_TMP_DIR/production" | tee /tmp/cl
 # they're representative of the newest CLDR data.
 
 cd $TOOLS_ROOT/cldr
-ant update-cldr-testdata
+ant copy-cldr-testdata
 
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the
