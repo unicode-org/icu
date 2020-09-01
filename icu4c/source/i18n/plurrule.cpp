@@ -56,6 +56,7 @@ static const UChar PK_VAR_N[]={LOW_N,0};
 static const UChar PK_VAR_I[]={LOW_I,0};
 static const UChar PK_VAR_F[]={LOW_F,0};
 static const UChar PK_VAR_T[]={LOW_T,0};
+static const UChar PK_VAR_E[]={LOW_E,0};
 static const UChar PK_VAR_V[]={LOW_V,0};
 static const UChar PK_WITHIN[]={LOW_W,LOW_I,LOW_T,LOW_H,LOW_I,LOW_N,0};
 static const UChar PK_DECIMAL[]={LOW_D,LOW_E,LOW_C,LOW_I,LOW_M,LOW_A,LOW_L,0};
@@ -600,6 +601,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
         case tVariableI:
         case tVariableF:
         case tVariableT:
+        case tVariableE:
         case tVariableV:
             U_ASSERT(curAndConstraint != nullptr);
             curAndConstraint->digitsType = type;
@@ -984,6 +986,8 @@ static UnicodeString tokenString(tokenType tok) {
         s.append(LOW_V); break;
       case tVariableT:
         s.append(LOW_T); break;
+      case tVariableE:
+        s.append(LOW_E); break;
       default:
         s.append(TILDE);
     }
@@ -1160,6 +1164,7 @@ PluralRuleParser::checkSyntax(UErrorCode &status)
     case tVariableI:
     case tVariableF:
     case tVariableT:
+    case tVariableE:
     case tVariableV:
         if (type != tIs && type != tMod && type != tIn &&
             type != tNot && type != tWithin && type != tEqual && type != tNotEqual) {
@@ -1176,6 +1181,7 @@ PluralRuleParser::checkSyntax(UErrorCode &status)
               type == tVariableI ||
               type == tVariableF ||
               type == tVariableT ||
+              type == tVariableE ||
               type == tVariableV ||
               type == tAt)) {
             status = U_UNEXPECTED_TOKEN;
@@ -1207,6 +1213,7 @@ PluralRuleParser::checkSyntax(UErrorCode &status)
              type != tVariableI &&
              type != tVariableF &&
              type != tVariableT &&
+             type != tVariableE &&
              type != tVariableV) {
             status = U_UNEXPECTED_TOKEN;
         }
@@ -1384,6 +1391,8 @@ PluralRuleParser::getKeyType(const UnicodeString &token, tokenType keyType)
         keyType = tVariableF;
     } else if (0 == token.compare(PK_VAR_T, 1)) {
         keyType = tVariableT;
+    } else if (0 == token.compare(PK_VAR_E, 1)) {
+        keyType = tVariableE;
     } else if (0 == token.compare(PK_VAR_V, 1)) {
         keyType = tVariableV;
     } else if (0 == token.compare(PK_IS, 2)) {
@@ -1481,6 +1490,8 @@ PluralOperand tokenTypeToPluralOperand(tokenType tt) {
         return PLURAL_OPERAND_V;
     case tVariableT:
         return PLURAL_OPERAND_T;
+    case tVariableE:
+        return PLURAL_OPERAND_E;
     default:
         UPRV_UNREACHABLE;  // unexpected.
     }

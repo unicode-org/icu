@@ -138,6 +138,7 @@ enum tokenType {
   tVariableF,
   tVariableV,
   tVariableT,
+  tVariableE,
   tDecimal,
   tInteger,
   tEOF
