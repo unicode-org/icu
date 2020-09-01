@@ -4,6 +4,22 @@
   <!-- This file is used to set default configuration options for all non-UWP Visual Studio projects. -->
   <!-- These are the default project configurations for building. -->
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugStatic|ARM">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugStatic|ARM64">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugStatic|Win32">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugStatic|x64">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -19,6 +35,22 @@
     <ProjectConfiguration Include="Debug|ARM64">
       <Configuration>Debug</Configuration>
       <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|ARM">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|ARM64">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|Win32">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|x64">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
@@ -109,8 +141,8 @@
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
     </Link>
   </ItemDefinitionGroup>
-  <!-- Options that are common to all 'Release' configurations for *all* projects. -->
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+  <!-- Options that are common to all 'Release' and 'ReleaseStatic' configurations for *all* projects. -->
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release' Or '$(Configuration)'=='ReleaseStatic'">
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </Midl>
@@ -128,8 +160,8 @@
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
-  <!-- Options that are common to all 'Debug' configurations for *all* projects. -->
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+  <!-- Options that are common to all 'Debug' or 'DebugStatic' configurations for *all* projects. -->
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='DebugStatic'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </Midl>

@@ -6,7 +6,7 @@
 #**********************************************************************
 # nmake file for creating data files on win32
 # invoke with
-# nmake /f makedata.mak icup=<path_to_icu_instalation> [Debug|Release]
+# nmake /f makedata.mak icup=<path_to_icu_instalation> [Debug|Release|DebugStatic|ReleaseStatic]
 #
 #   12/10/1999  weiv    Created
 
@@ -17,7 +17,7 @@ CFG=Debug
 !ENDIF
 
 #Here we test if a valid configuration is given
-!IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug" && "$(CFG)" != "x86\Release" && "$(CFG)" != "x86\Debug" && "$(CFG)" != "x64\Release" && "$(CFG)" != "x64\Debug" && "$(CFG)" != "ARM\Release" && "$(CFG)" != "ARM\Debug" && "$(CFG)" != "ARM64\Release" && "$(CFG)" != "ARM64\Debug"
+!IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug" && "$(CFG)" != "x86\Release" && "$(CFG)" != "x86\Debug" && "$(CFG)" != "x64\Release" && "$(CFG)" != "x64\Debug" && "$(CFG)" != "ARM\Release" && "$(CFG)" != "ARM\Debug" && "$(CFG)" != "ARM64\Release" && "$(CFG)" != "ARM64\Debug" && "$(CFG)" != "ReleaseStatic" && "$(CFG)" != "releasestatic" && "$(CFG)" != "DebugStatic" && "$(CFG)" != "debugstatic" && "$(CFG)" != "x86\ReleaseStatic" && "$(CFG)" != "x86\DebugStatic" && "$(CFG)" != "x64\ReleaseStatic" && "$(CFG)" != "x64\DebugStatic" && "$(CFG)" != "ARM\ReleaseStatic" && "$(CFG)" != "ARM\DebugStatic" && "$(CFG)" != "ARM64\ReleaseStatic" && "$(CFG)" != "ARM64\DebugStatic"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
@@ -28,6 +28,8 @@ CFG=Debug
 !MESSAGE
 !MESSAGE "Release"
 !MESSAGE "Debug"
+!MESSAGE "ReleaseStatic"
+!MESSAGE "DebugStatic"
 !MESSAGE
 !ERROR An invalid configuration is specified.
 !ENDIF
@@ -63,10 +65,10 @@ PATH = $(ICUP)\bin;$(PATH)
 
 # If building ARM/ARM, then we need to pass the arch as an argument.
 EXTRA_PKGDATA_ARGUMENTS=
-!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM\ReleaseStatic" || "$(CFG)" == "ARM\DebugStatic"
 EXTRA_PKGDATA_ARGUMENTS=-a ARM
 !ENDIF
-!IF "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+!IF "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug" || "$(CFG)" == "ARM64\ReleaseStatic" || "$(CFG)" == "ARM64\DebugStatic"
 EXTRA_PKGDATA_ARGUMENTS=-a ARM64
 !ENDIF
 
@@ -74,14 +76,14 @@ EXTRA_PKGDATA_ARGUMENTS=-a ARM64
 !IF !EXISTS($(ICUTOOLS)\pkgdata.exe)
 !MESSAGE Unable to find "$(ICUTOOLS)\pkgdata.exe"
 !ERROR The tool 'pkgdata.exe' does not exist! (Have you built all of ICU yet?).
-!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug" || "$(CFG)" == "ARM\ReleaseStatic" || "$(CFG)" == "ARM\DebugStatic" || "$(CFG)" == "ARM64\ReleaseStatic" || "$(CFG)" == "ARM64\DebugStatic"
 !ERROR Note that the ARM and ARM64 builds require building x64 first.
 !ENDIF
 !ENDIF
 !IF !EXISTS($(ICUTOOLS)\genrb.exe)
 !MESSAGE Unable to find "$(ICUTOOLS)\genrb.exe"
 !ERROR The tool 'genrb.exe' does not exist! (Have you built all of ICU yet?).
-!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug" || "$(CFG)" == "ARM\ReleaseStatic" || "$(CFG)" == "ARM\DebugStatic" || "$(CFG)" == "ARM64\ReleaseStatic" || "$(CFG)" == "ARM64\DebugStatic"
 !ERROR Note that the ARM and ARM64 builds require building x64 first.
 !ENDIF
 !ENDIF
