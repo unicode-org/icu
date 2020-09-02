@@ -1608,7 +1608,7 @@ void RBBITableBuilder::exportSafeTable(void *where) {
             row->r8.fTagsIdx    = 0;
             for (col=0; col<catCount; col++) {
                 U_ASSERT(rowString->charAt(col) <= kMaxStateFor8BitsTable);
-                row->r8.fNextState[col] = rowString->charAt(col);
+                row->r8.fNextState[col] = static_cast<uint8_t>(rowString->charAt(col));
             }
         } else {
             row->r16.fAccepting = 0;

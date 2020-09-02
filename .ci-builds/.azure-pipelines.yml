@@ -96,11 +96,13 @@ jobs:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
+# VS 2019 Builds
+#-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_Distrelease
-  displayName: 'C: MSVC 64-bit Release (VS 2017) + Distrelease'
+  displayName: 'C: MSVC 64-bit Release (VS 2019) + Distrelease'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -134,10 +136,10 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Release_Distrelease
-  displayName: 'C: MSVC 32-bit Release (VS 2017) + Distrelease'
+  displayName: 'C: MSVC 32-bit Release (VS 2019) + Distrelease'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -152,6 +154,11 @@ jobs:
         solution: icu4c/source/allinone/allinone.sln
         platform: Win32
         configuration: Release
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x86 Release'
     - task: PowerShell@2
       displayName: 'PowerShell: Distrelease script (x86)'
       inputs:
@@ -166,10 +173,10 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x86_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_ARM32_ARM64_Release_Distrelease
-  displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2017) + Distrelease ARM64'
+  displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2019) + Distrelease ARM64'
   timeoutInMinutes: 60
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -209,8 +216,35 @@ jobs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_ARM64_Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_Release_DataFilter
-  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2017)'
+- job: ICU4C_MSVC_x64_Debug
+  displayName: 'C: MSVC 64-bit Debug (VS 2019)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 1
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Debug'
+#-------------------------------------------------------------------------
+# VS 2017 Builds
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release
+  displayName: 'C: MSVC 64-bit Release (VS 2017)'
   timeoutInMinutes: 30
   pool:
     vmImage: 'vs2017-win2016'
@@ -222,17 +256,17 @@ jobs:
     - checkout: self
       lfs: true
       fetchDepth: 1
-    - powershell: |
-        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.ci-builds\data-filter.json"
-        $vstsCommandString = "vso[task.setvariable variable=ICU_DATA_FILTER_FILE]" + $filterPath
-        Write-Host "##$vstsCommandString"
     - task: VSBuild@1
-      displayName: 'Build Solution with Data Filter'
+      displayName: 'Build Solution'
       inputs:
         solution: icu4c/source/allinone/allinone.sln
         platform: x64
         configuration: Release
-        msbuildArgs: '/p:SkipUWP=true'
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Debug
   displayName: 'C: MSVC 32-bit Debug (VS 2017)'

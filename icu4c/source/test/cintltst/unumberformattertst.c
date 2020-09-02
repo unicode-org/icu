@@ -321,7 +321,7 @@ static void TestPerUnitInArabic() {
             sprintf(buffer, "measure-unit/%s per-measure-unit/%s",
                     simpleMeasureUnits[i], simpleMeasureUnits[j]);
             int32_t outputlen = 0;
-            u_strFromUTF8(ubuffer, BUFFER_LEN, &outputlen, buffer, strlen(buffer), &status);
+            u_strFromUTF8(ubuffer, BUFFER_LEN, &outputlen, buffer, (int32_t)strlen(buffer), &status);
             if (U_FAILURE(status)) {
                 log_err("FAIL u_strFromUTF8: %s = %s ( %s )\n", locale, buffer,
                         u_errorName(status));
