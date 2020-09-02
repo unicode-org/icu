@@ -34,6 +34,12 @@ public:
      */
     void testFormat();
 
+    
+    /**
+     * Test handling of hour and day period metacharacters
+     */
+    void testHourMetacharacters();
+
     void testFormatMillisecond();
 
     /**

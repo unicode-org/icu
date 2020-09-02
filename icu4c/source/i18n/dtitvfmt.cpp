@@ -751,7 +751,7 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
 
     /* the difference between time skeleton and normalizedTimeSkeleton are:
      * 1. (Formerly, normalized time skeleton folded 'H' to 'h'; no longer true)
-     * 2. 'a' is omitted in normalized time skeleton.
+     * 2. (Formerly, 'a' was omitted in normalized time skeleton; this is now handled elsewhere)
      * 3. there is only one appearance for 'h' or 'H', 'm','v', 'z' in normalized
      *    time skeleton
      *
@@ -760,7 +760,8 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
      * 2. 'E' and 'EE' are normalized into 'EEE'
      * 3. 'MM' is normalized into 'M'
      */
-    getDateTimeSkeleton(fSkeleton, dateSkeleton, normalizedDateSkeleton,
+    UnicodeString convertedSkeleton = normalizeHourMetacharacters(fSkeleton);
+    getDateTimeSkeleton(convertedSkeleton, dateSkeleton, normalizedDateSkeleton,
                         timeSkeleton, normalizedTimeSkeleton);
 
 #ifdef DTITVFMT_DEBUG
@@ -899,6 +900,91 @@ DateIntervalFormat::initializePattern(UErrorCode& status) {
 
 
 
+UnicodeString
+DateIntervalFormat::normalizeHourMetacharacters(const UnicodeString& skeleton) const {
+    UnicodeString result = skeleton;
+    
+    UChar hourMetachar = u'\0';
+    int32_t metacharStart = 0;
+    int32_t metacharCount = 0;
+    for (int32_t i = 0; i < result.length(); i++) {
+        UChar c = result[i];
+        if (c == LOW_J || c == CAP_J || c == CAP_C) {
+            if (hourMetachar == u'\0') {
+                hourMetachar = c;
+                metacharStart = i;
+            }
+            ++metacharCount;
+        } else {
+            if (hourMetachar != u'\0') {
+                break;
+            }
+        }
+    }
+    
+    if (hourMetachar != u'\0') {
+        UErrorCode err = U_ZERO_ERROR;
+        UChar hourChar = CAP_H;
+        UChar dayPeriodChar = LOW_A;
+        UnicodeString convertedPattern = DateFormat::getBestPattern(fLocale, UnicodeString(hourMetachar), err);
+
+        if (U_SUCCESS(err)) {
+            // strip literal text from the pattern (so literal characters don't get mistaken for pattern
+            // characters-- such as the 'h' in 'Uhr' in Germam)
+            int32_t firstQuotePos;
+            while ((firstQuotePos = convertedPattern.indexOf(u'\'')) != -1) {
+                int32_t secondQuotePos = convertedPattern.indexOf(u'\'', firstQuotePos + 1);
+                if (secondQuotePos == -1) {
+                    secondQuotePos = firstQuotePos;
+                }
+                convertedPattern.replace(firstQuotePos, (secondQuotePos - firstQuotePos) + 1, UnicodeString());
+            }
+        
+            if (convertedPattern.indexOf(LOW_H) != -1) {
+                hourChar = LOW_H;
+            } else if (convertedPattern.indexOf(CAP_K) != -1) {
+                hourChar = CAP_K;
+            } else if (convertedPattern.indexOf(LOW_K) != -1) {
+                hourChar = LOW_K;
+            }
+            
+            if (convertedPattern.indexOf(LOW_B) != -1) {
+                dayPeriodChar = LOW_B;
+            } else if (convertedPattern.indexOf(CAP_B) != -1) {
+                dayPeriodChar = CAP_B;
+            }
+        }
+        
+        if (hourChar == CAP_H || hourChar == LOW_K) {
+            result.replace(metacharStart, metacharCount, hourChar);
+        } else {
+            UnicodeString hourAndDayPeriod(hourChar);
+            switch (metacharCount) {
+                case 1:
+                case 2:
+                default:
+                    hourAndDayPeriod.append(UnicodeString(dayPeriodChar));
+                    break;
+                case 3:
+                case 4:
+                    for (int32_t i = 0; i < 4; i++) {
+                        hourAndDayPeriod.append(dayPeriodChar);
+                    }
+                    break;
+                case 5:
+                case 6:
+                    for (int32_t i = 0; i < 5; i++) {
+                        hourAndDayPeriod.append(dayPeriodChar);
+                    }
+                    break;
+            }
+            result.replace(metacharStart, metacharCount, hourAndDayPeriod);
+        }
+    }
+    return result;
+}
+
+
 void  U_EXPORT2
 DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
                                         UnicodeString& dateSkeleton,
@@ -911,11 +997,10 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
     int32_t dCount = 0;
     int32_t MCount = 0;
     int32_t yCount = 0;
-    int32_t hCount = 0;
-    int32_t HCount = 0;
     int32_t mCount = 0;
     int32_t vCount = 0;
     int32_t zCount = 0;
+    UChar hourChar = u'\0';
     int32_t i;
 
     for (i = 0; i < skeleton.length(); ++i) {
@@ -956,17 +1041,14 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
             normalizedDateSkeleton.append(ch);
             dateSkeleton.append(ch);
             break;
-          case LOW_A:
-            // 'a' is implicitly handled
-            timeSkeleton.append(ch);
-            break;
           case LOW_H:
-            timeSkeleton.append(ch);
-            ++hCount;
-            break;
           case CAP_H:
+          case LOW_K:
+          case CAP_K:
             timeSkeleton.append(ch);
-            ++HCount;
+            if (hourChar == u'\0') {
+                hourChar = ch;
+            }
             break;
           case LOW_M:
             timeSkeleton.append(ch);
@@ -980,14 +1062,15 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
             ++vCount;
             timeSkeleton.append(ch);
             break;
+          case LOW_A:
           case CAP_V:
           case CAP_Z:
-          case LOW_K:
-          case CAP_K:
           case LOW_J:
           case LOW_S:
           case CAP_S:
           case CAP_A:
+          case LOW_B:
+          case CAP_B:
             timeSkeleton.append(ch);
             normalizedTimeSkeleton.append(ch);
             break;
@@ -1023,11 +1106,8 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
     }
 
     /* generate normalized form for time */
-    if ( HCount != 0 ) {
-        normalizedTimeSkeleton.append(CAP_H);
-    }
-    else if ( hCount != 0 ) {
-        normalizedTimeSkeleton.append(LOW_H);
+    if ( hourChar != u'\0' ) {
+        normalizedTimeSkeleton.append(hourChar);
     }
     if ( mCount != 0 ) {
         normalizedTimeSkeleton.append(LOW_M);
@@ -1335,10 +1415,11 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
         }
     }
     if ( !pattern.isEmpty() ) {
-        if ( differenceInfo != 0 ) {
+        UBool suppressDayPeriodField = fSkeleton.indexOf(CAP_J) != -1;
+        if ( differenceInfo != 0 || suppressDayPeriodField) {
             UnicodeString adjustIntervalPattern;
             adjustFieldWidth(*skeleton, *bestSkeleton, pattern, differenceInfo,
-                              adjustIntervalPattern);
+                              suppressDayPeriodField, adjustIntervalPattern);
             setIntervalPattern(field, adjustIntervalPattern);
         } else {
             setIntervalPattern(field, pattern);
@@ -1530,6 +1611,7 @@ DateIntervalFormat::adjustFieldWidth(const UnicodeString& inputSkeleton,
                  const UnicodeString& bestMatchSkeleton,
                  const UnicodeString& bestIntervalPattern,
                  int8_t differenceInfo,
+                 UBool suppressDayPeriodField,
                  UnicodeString& adjustedPtn) {
     adjustedPtn = bestIntervalPattern;
     int32_t inputSkeletonFieldWidth[] =
@@ -1556,18 +1638,43 @@ DateIntervalFormat::adjustFieldWidth(const UnicodeString& inputSkeleton,
          0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
     };
 
+    const int8_t PATTERN_CHAR_BASE = 0x41;
+
     DateIntervalInfo::parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
     DateIntervalInfo::parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
-    if ( differenceInfo == 2 ) {
-        adjustedPtn.findAndReplace(UnicodeString((UChar)0x76 /* v */),
-                                   UnicodeString((UChar)0x7a /* z */));
+    if (suppressDayPeriodField) {
+        adjustedPtn.findAndReplace(UnicodeString(LOW_A), UnicodeString());
+        adjustedPtn.findAndReplace(UnicodeString("  "), UnicodeString(" "));
+        adjustedPtn.trim();
     }
+    if ( differenceInfo == 2 ) {
+        if (inputSkeleton.indexOf(LOW_Z) != -1) {
+            adjustedPtn.findAndReplace(UnicodeString(LOW_V),
+                                       UnicodeString(LOW_Z));
+        }
+        if (inputSkeleton.indexOf(CAP_K) != -1) {
+            adjustedPtn.findAndReplace(UnicodeString(LOW_H),
+                                       UnicodeString(CAP_K));
+        }
+        if (inputSkeleton.indexOf(LOW_K) != -1) {
+            adjustedPtn.findAndReplace(UnicodeString(CAP_H),
+                                       UnicodeString(LOW_K));
+        }
+        if (inputSkeleton.indexOf(LOW_B) != -1) {
+            adjustedPtn.findAndReplace(UnicodeString(LOW_A),
+                                       UnicodeString(LOW_B));
+        }
+    }
+    if (adjustedPtn.indexOf(LOW_A) != -1 && bestMatchSkeletonFieldWidth[LOW_A - PATTERN_CHAR_BASE] == 0) {
+        bestMatchSkeletonFieldWidth[LOW_A - PATTERN_CHAR_BASE] = 1;
+    }
+    if (adjustedPtn.indexOf(LOW_B) != -1 && bestMatchSkeletonFieldWidth[LOW_B - PATTERN_CHAR_BASE] == 0) {
+        bestMatchSkeletonFieldWidth[LOW_B - PATTERN_CHAR_BASE] = 1;
+     }
 
     UBool inQuote = false;
     UChar prevCh = 0;
     int32_t count = 0;
-
-    const int8_t PATTERN_CHAR_BASE = 0x41;
 
     // loop through the pattern string character by character
     int32_t adjustedPtnLength = adjustedPtn.length();
