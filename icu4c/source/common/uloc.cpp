@@ -1995,22 +1995,22 @@ uloc_getLCID(const char* localeID)
         // uprv_convertToLCID does not support keywords other than collation.
         // Remove all keywords except collation.
         int32_t len;
-        char collVal[ULOC_KEYWORDS_CAPACITY];
         char tmpLocaleID[ULOC_FULLNAME_CAPACITY];
 
-        len = uloc_getKeywordValue(localeID, "collation", collVal,
-            UPRV_LENGTHOF(collVal) - 1, &status);
+        CharString collVal;
+        {
+            CharStringByteSink sink(&collVal);
+            ulocimp_getKeywordValue(localeID, "collation", sink, &status);
+        }
 
-        if (U_SUCCESS(status) && len > 0) {
-            collVal[len] = 0;
-
+        if (U_SUCCESS(status) && !collVal.isEmpty()) {
             len = uloc_getBaseName(localeID, tmpLocaleID,
                 UPRV_LENGTHOF(tmpLocaleID) - 1, &status);
 
             if (U_SUCCESS(status) && len > 0) {
                 tmpLocaleID[len] = 0;
 
-                len = uloc_setKeywordValue("collation", collVal, tmpLocaleID,
+                len = uloc_setKeywordValue("collation", collVal.data(), tmpLocaleID,
                     UPRV_LENGTHOF(tmpLocaleID) - len - 1, &status);
 
                 if (U_SUCCESS(status) && len > 0) {
