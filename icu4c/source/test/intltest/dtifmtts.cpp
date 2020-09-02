@@ -60,6 +60,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(11, testCreateInstanceForAllLocales);
         TESTCASE(12, testTicket20707);
         TESTCASE(13, testFormatMillisecond);
+        TESTCASE(14, testHourMetacharacters);
         default: name = ""; break;
     }
 }
@@ -1071,6 +1072,93 @@ void DateIntervalFormatTest::testFormat() {
 
         "ja-u-ca-japanese", "H 31 04 15 09:00:00", JP_ERA_2019_NARROW " 1 05 15 09:00:00", "GGGGGyMd", "H31/04/15\\uFF5E" JP_ERA_2019_NARROW "1/05/15",
 
+    };
+    expect(DATA, UPRV_LENGTHOF(DATA));
+}
+
+
+/**
+ * Test handling of hour and day period metacharacters
+ */
+void DateIntervalFormatTest::testHourMetacharacters() {
+    // first item is date pattern
+    // followed by a group of locale/from_data/to_data/skeleton/interval_data
+    // Note that from_data/to_data are specified using era names from root, for the calendar specified by locale.
+    const char* DATA[] = {
+        "GGGGG y MM dd HH:mm:ss", // pattern for from_data/to_data
+        
+        // This test is for tickets ICU-21154, ICU-21155, and ICU-21156 and is intended to verify
+        // that all of the special skeleton characters for hours and day periods work as expected
+        // with date intervals:
+        // - If a, b, or B is included in the skeleton, it correctly sets the length of the day-period field
+        // - If k or K is included, it behaves the same as H or h, except for the difference in the actual
+        //   number used for the hour.
+        // - If j is included, it behaves the same as either h or H as appropriate, and multiple j's have the
+        //   intended effect on the length of the day period field (if there is one)
+        // - If J is included, it correctly suppresses the day period field if j would include it
+        // - If C is included, it behaves the same as j and brings up the correct day period field
+        // - In all cases, if the day period of both ends of the range is the same, you only see it once
+
+        // baseline (h and H)
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "12 \\u2013 1 AM",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "HH", "00\\u201301 Uhr",
+        
+        // k and K (ICU-21154 and ICU-21156)
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "0 \\u2013 1 AM",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "24\\u201301 Uhr",
+
+        // different lengths of the 'a' field
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "ha", "10 AM \\u2013 1 PM",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "ha", "12 \\u2013 1 AM",
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "haaaaa", "10 a \\u2013 12 p",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "haaaaa", "12 \\u2013 1 a",
+        
+        // j (ICU-21155)
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10 AM \\u2013 1 PM",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12 \\u2013 1 AM",
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jjjjj", "10 a \\u2013 1 p",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jjjjj", "12 \\u2013 1 a",
+        "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10\\u201313 Uhr",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "00\\u201301 Uhr",
+        "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jjjjj", "10\\u201313 Uhr",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jjjjj", "00\\u201301 Uhr",
+        
+        // b and B
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "hb", "10 AM \\u2013 12 noon",
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "hbbbbb", "10 a \\u2013 12 n",
+        "en", "CE 2010 09 27 13:00:00", "CE 2010 09 27 14:00:00", "hb", "1 \\u2013 2 PM",
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "10 in the morning \\u2013 1 in the afternoon",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "12 \\u2013 1 at night",
+        
+        // J
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "J", "10 \\u2013 1",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "J", "12 \\u2013 1",
+        "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "J", "10\\u201313 Uhr",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "J", "00\\u201301 Uhr",
+        
+        // C
+        // (for English and German, C should do the same thing as j)
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "10 AM \\u2013 1 PM",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "12 \\u2013 1 AM",
+        "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CCCCC", "10 a \\u2013 1 p",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CCCCC", "12 \\u2013 1 a",
+        "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "10\\u201313 Uhr",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "00\\u201301 Uhr",
+        "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CCCCC", "10\\u201313 Uhr",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CCCCC", "00\\u201301 Uhr",
+        // (for zh_HK and hi_IN, j maps to ha, but C maps to hB)
+        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "\\u4E0A\\u534810\\u6642\\u81F3\\u4E0B\\u53481\\u6642",
+        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "\\u4E0A\\u534812\\u6642\\u81F31\\u6642",
+        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "\\u4E0A\\u534810\\u6642 \\u2013 \\u4E0B\\u53481\\u6642",
+        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "\\u51CC\\u666812\\u20131\\u6642",
+        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u4E0A\\u534810\\u6642 \\u2013 \\u4E0B\\u53481\\u6642",
+        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u51CC\\u666812\\u20131\\u6642",
+        "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10 am \\u2013 1 pm",
+        "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12\\u20131 am",
+        "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "\\u0938\\u0941\\u092C\\u0939 10 \\u2013 \\u0926\\u094B\\u092A\\u0939\\u0930 1",
+        "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "\\u0930\\u093E\\u0924 12\\u20131",
+        "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u0938\\u0941\\u092C\\u0939 10 \\u2013 \\u0926\\u094B\\u092A\\u0939\\u0930 1",
+        "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u0930\\u093E\\u0924 12\\u20131",
     };
     expect(DATA, UPRV_LENGTHOF(DATA));
 }

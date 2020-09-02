@@ -864,6 +864,19 @@ private:
     void setFallbackPattern(UCalendarDateFields field,
                             const UnicodeString& skeleton,
                             UErrorCode& status);
+    
+
+
+    /**
+     * Converts special hour metacharacters (such as 'j') in the skeleton into locale-appropriate
+     * pattern characters.
+     *
+     *
+     *  @param skeleton               The skeleton to convert
+     *  @return A copy of the skeleton, which "j" and any other special hour metacharacters converted to the regular ones.
+     *
+     */
+    UnicodeString normalizeHourMetacharacters(const UnicodeString& skeleton) const;
 
 
 
@@ -984,6 +997,7 @@ private:
      * @param differenceInfo           the difference between 2 skeletons
      *                                 1 means only field width differs
      *                                 2 means v/z exchange
+     * @param suppressDayPeriodField if true, remove the day period field from the pattern, if there is one
      * @param adjustedIntervalPattern  adjusted interval pattern
      */
     static void U_EXPORT2 adjustFieldWidth(
@@ -991,6 +1005,7 @@ private:
                             const UnicodeString& bestMatchSkeleton,
                             const UnicodeString& bestMatchIntervalPattern,
                             int8_t differenceInfo,
+                            UBool suppressDayPeriodField,
                             UnicodeString& adjustedIntervalPattern);
 
     /**
