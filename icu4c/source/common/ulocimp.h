@@ -86,6 +86,12 @@ ulocimp_canonicalize(const char* localeID,
                      icu::ByteSink& sink,
                      UErrorCode* err);
 
+U_CAPI void U_EXPORT2
+ulocimp_getKeywordValue(const char* localeID,
+                        const char* keywordName,
+                        icu::ByteSink& sink,
+                        UErrorCode* status);
+
 /**
  * Writes a well-formed language tag for this locale ID.
  *
