@@ -20,6 +20,7 @@
 #include "unicode/usetiter.h"
 #include "unicode/utf16.h"
 #include "ustr_imp.h"
+#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -520,14 +521,18 @@ ucurr_forLocale(const char* locale,
         return 0;
     }
 
-    char currency[4];  // ISO currency codes are alpha3 codes.
     UErrorCode localStatus = U_ZERO_ERROR;
-    int32_t resLen = uloc_getKeywordValue(locale, "currency",
-                                          currency, UPRV_LENGTHOF(currency), &localStatus);
-    if (U_SUCCESS(localStatus) && resLen == 3 && uprv_isInvariantString(currency, resLen)) {
+    CharString currency;
+    {
+        CharStringByteSink sink(&currency);
+        ulocimp_getKeywordValue(locale, "currency", sink, &localStatus);
+    }
+    int32_t resLen = currency.length();
+
+    if (U_SUCCESS(localStatus) && resLen == 3 && uprv_isInvariantString(currency.data(), resLen)) {
         if (resLen < buffCapacity) {
-            T_CString_toUpperCase(currency);
-            u_charsToUChars(currency, buff, resLen);
+            T_CString_toUpperCase(currency.data());
+            u_charsToUChars(currency.data(), buff, resLen);
         }
         return u_terminateUChars(buff, buffCapacity, resLen, ec);
     }

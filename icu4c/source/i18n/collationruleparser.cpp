@@ -24,6 +24,7 @@
 #include "unicode/uloc.h"
 #include "unicode/unistr.h"
 #include "unicode/utf16.h"
+#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "collation.h"
@@ -34,6 +35,7 @@
 #include "cstring.h"
 #include "patternprops.h"
 #include "uassert.h"
+#include "ulocimp.h"
 #include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
@@ -629,11 +631,12 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
                 uprv_memcpy(baseID, "und", 3);
             }
             // @collation=type, or length=0 if not specified
-            char collationType[ULOC_KEYWORDS_CAPACITY];
-            length = uloc_getKeywordValue(localeID, "collation",
-                                          collationType, ULOC_KEYWORDS_CAPACITY,
-                                          &errorCode);
-            if(U_FAILURE(errorCode) || length >= ULOC_KEYWORDS_CAPACITY) {
+            CharString collationType;
+            {
+                CharStringByteSink sink(&collationType);
+                ulocimp_getKeywordValue(localeID, "collation", sink, &errorCode);
+            }
+            if(U_FAILURE(errorCode)) {
                 errorCode = U_ZERO_ERROR;
                 setParseError("expected language tag in [import langTag]", errorCode);
                 return;
@@ -642,7 +645,8 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
                 setParseError("[import langTag] is not supported", errorCode);
             } else {
                 UnicodeString importedRules;
-                importer->getRules(baseID, length > 0 ? collationType : "standard",
+                importer->getRules(baseID,
+                                   !collationType.isEmpty() ? collationType.data() : "standard",
                                    importedRules, errorReason, errorCode);
                 if(U_FAILURE(errorCode)) {
                     if(errorReason == nullptr) {

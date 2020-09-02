@@ -819,19 +819,25 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
     UErrorCode rgStatus = U_ZERO_ERROR;
 
     // First check for rg keyword value
-    int32_t rgLen = uloc_getKeywordValue(localeID, "rg", rgBuf, ULOC_RG_BUFLEN, &rgStatus);
+    icu::CharString rg;
+    {
+        icu::CharStringByteSink sink(&rg);
+        ulocimp_getKeywordValue(localeID, "rg", sink, &rgStatus);
+    }
+    int32_t rgLen = rg.length();
     if (U_FAILURE(rgStatus) || rgLen < 3 || rgLen > 7) {
         rgLen = 0;
     } else {
-        // rgBuf guaranteed to be zero terminated here, with text len 6
         // chop off the subdivision code (which will generally be "zzzz" anyway)
-        if (uprv_isASCIILetter(rgBuf[0])) {
+        const char* const data = rg.data();
+        if (uprv_isASCIILetter(data[0])) {
             rgLen = 2;
-            rgBuf[0] = uprv_toupper(rgBuf[0]);
-            rgBuf[1] = uprv_toupper(rgBuf[1]);
+            rgBuf[0] = uprv_toupper(data[0]);
+            rgBuf[1] = uprv_toupper(data[1]);
         } else {
             // assume three-digit region code
             rgLen = 3;
+            uprv_memcpy(rgBuf, data, rgLen);
         }
     }
 
