@@ -483,11 +483,11 @@ StringTest::TestStringPieceFind() {
         std::string stdhaystack(cas.haystack);
         std::string stdneedle(cas.needle);
         assertEquals(Int64ToUnicodeString(caseNumber) + u" (std)",
-            cas.expected, stdhaystack.find(stdneedle, 0));
+            cas.expected, static_cast<int32_t>(stdhaystack.find(stdneedle, 0)));
         // Test offsets against std::string::find
         for (int32_t offset = 0; offset < haystack.length(); offset++) {
             assertEquals(Int64ToUnicodeString(caseNumber) + "u @ " + Int64ToUnicodeString(offset),
-                stdhaystack.find(stdneedle, offset), haystack.find(needle, offset));
+                static_cast<int32_t>(stdhaystack.find(stdneedle, offset)), haystack.find(needle, offset));
         }
         caseNumber++;
     }
