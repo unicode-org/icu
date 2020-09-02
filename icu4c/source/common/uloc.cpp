@@ -719,14 +719,38 @@ uloc_getKeywordValue(const char* localeID,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
 {
-    if (buffer != nullptr) {
-        buffer[0] = '\0';
+    if (U_FAILURE(*status)) {
+        return 0;
     }
+
+    CheckedArrayByteSink sink(buffer, bufferCapacity);
+    ulocimp_getKeywordValue(localeID, keywordName, sink, status);
+
+    int32_t reslen = sink.NumberOfBytesAppended();
+
+    if (U_FAILURE(*status)) {
+        return reslen;
+    }
+
+    if (sink.Overflowed()) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+    } else {
+        u_terminateChars(buffer, bufferCapacity, reslen, status);
+    }
+
+    return reslen;
+}
+
+U_CAPI void U_EXPORT2
+ulocimp_getKeywordValue(const char* localeID,
+                        const char* keywordName,
+                        icu::ByteSink& sink,
+                        UErrorCode* status)
+{
     const char* startSearchHere = NULL;
     const char* nextSeparator = NULL;
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
-    int32_t result = 0;
 
     if(status && U_SUCCESS(*status) && localeID) {
       char tempBuffer[ULOC_FULLNAME_CAPACITY];
@@ -734,12 +758,12 @@ uloc_getKeywordValue(const char* localeID,
 
       if (keywordName == NULL || keywordName[0] == 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return;
       }
 
       locale_canonKeywordName(keywordNameBuffer, keywordName, status);
       if(U_FAILURE(*status)) {
-        return 0;
+        return;
       }
 
       if (_hasBCP47Extension(localeID)) {
@@ -751,7 +775,7 @@ uloc_getKeywordValue(const char* localeID,
       startSearchHere = locale_getKeywordsStart(tmpLocaleID);
       if(startSearchHere == NULL) {
           /* no keywords, return at once */
-          return 0;
+          return;
       }
 
       /* find the first keyword */
@@ -763,7 +787,7 @@ uloc_getKeywordValue(const char* localeID,
           nextSeparator = uprv_strchr(startSearchHere, '=');
           if(!nextSeparator) {
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* key must have =value */
-              return 0;
+              return;
           }
           /* strip leading & trailing spaces (TC decided to tolerate these) */
           while(*startSearchHere == ' ') {
@@ -777,20 +801,20 @@ uloc_getKeywordValue(const char* localeID,
           /* copy & normalize keyName from locale */
           if (startSearchHere == keyValueTail) {
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* empty keyword name in passed-in locale */
-              return 0;
+              return;
           }
           keyValueLen = 0;
           while (startSearchHere < keyValueTail) {
             if (!UPRV_ISALPHANUM(*startSearchHere)) {
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
-              return 0;
+              return;
             }
             if (keyValueLen < ULOC_KEYWORD_BUFFER_LEN - 1) {
               localeKeywordNameBuffer[keyValueLen++] = uprv_tolower(*startSearchHere++);
             } else {
               /* keyword name too long for internal buffer */
               *status = U_INTERNAL_PROGRAM_ERROR;
-              return 0;
+              return;
             }
           }
           localeKeywordNameBuffer[keyValueLen] = 0; /* terminate */
@@ -811,28 +835,20 @@ uloc_getKeywordValue(const char* localeID,
               /* Now copy the value, but check well-formedness */
               if (nextSeparator == keyValueTail) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR; /* empty key value name in passed-in locale */
-                return 0;
+                return;
               }
-              keyValueLen = 0;
               while (nextSeparator < keyValueTail) {
                 if (!UPRV_ISALPHANUM(*nextSeparator) && !UPRV_OK_VALUE_PUNCTUATION(*nextSeparator)) {
                   *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed key value */
-                  return 0;
+                  return;
                 }
-                if (keyValueLen < bufferCapacity) {
-                  /* Should we lowercase value to return here? Tests expect as-is. */
-                  buffer[keyValueLen++] = *nextSeparator++;
-                } else { /* keep advancing so we return correct length in case of overflow */
-                  keyValueLen++;
-                  nextSeparator++;
-                }
+                /* Should we lowercase value to return here? Tests expect as-is. */
+                sink.Append(nextSeparator++, 1);
               }
-              result = u_terminateChars(buffer, bufferCapacity, keyValueLen, status);
-              return result;
+              return;
           }
       }
     }
-    return 0;
 }
 
 U_CAPI int32_t U_EXPORT2
