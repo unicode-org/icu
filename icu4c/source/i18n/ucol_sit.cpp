@@ -20,6 +20,8 @@
 #include "unicode/utf16.h"
 #include "utracimp.h"
 #include "ucol_imp.h"
+#include "ulocimp.h"
+#include "bytesinkutil.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uresimp.h"
@@ -458,30 +460,27 @@ ucol_prepareShortStringOpen( const char *definition,
     /* we try to find stuff from keyword */
     UResourceBundle *collations = ures_getByKey(b, "collations", nullptr, status);
     UResourceBundle *collElem = nullptr;
-    char keyBuffer[256];
-    // if there is a keyword, we pick it up and try to get elements
-    int32_t keyLen = uloc_getKeywordValue(buffer, "collation", keyBuffer, sizeof(keyBuffer), status);
-    // Treat too long a value as no keyword.
-    if(keyLen >= (int32_t)sizeof(keyBuffer)) {
-      keyLen = 0;
-      *status = U_ZERO_ERROR;
+    CharString keyBuffer;
+    {
+        // if there is a keyword, we pick it up and try to get elements
+        CharStringByteSink sink(&keyBuffer);
+        ulocimp_getKeywordValue(buffer, "collation", sink, status);
     }
-    if(keyLen == 0) {
+    if(keyBuffer.isEmpty()) {
       // no keyword
       // we try to find the default setting, which will give us the keyword value
       UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", nullptr, status);
       if(U_SUCCESS(*status)) {
         int32_t defaultKeyLen = 0;
         const char16_t *defaultKey = ures_getString(defaultColl, &defaultKeyLen, status);
-        u_UCharsToChars(defaultKey, keyBuffer, defaultKeyLen);
-        keyBuffer[defaultKeyLen] = 0;
+        keyBuffer.appendInvariantChars(defaultKey, defaultKeyLen, *status);
       } else {
         *status = U_INTERNAL_PROGRAM_ERROR;
         return;
       }
       ures_close(defaultColl);
     }
-    collElem = ures_getByKeyWithFallback(collations, keyBuffer, collElem, status);
+    collElem = ures_getByKeyWithFallback(collations, keyBuffer.data(), collElem, status);
     ures_close(collElem);
     ures_close(collations);
     ures_close(b);

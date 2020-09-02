@@ -24,6 +24,7 @@
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
+#include "bytesinkutil.h"
 #include "charstr.h"
 #include "uresimp.h"
 #include "ustr_imp.h"
@@ -3063,7 +3064,6 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                              const char *path, const char *resName, const char *keyword, const char *locid,
                              UBool *isAvailable, UBool omitDefault, UErrorCode *status)
 {
-    char kwVal[1024] = ""; /* value of keyword 'keyword' */
     char defVal[1024] = ""; /* default value for given locale */
     char defLoc[1024] = ""; /* default value for given locale */
     char base[1024] = ""; /* base locale */
@@ -3075,14 +3075,18 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     UErrorCode subStatus = U_ZERO_ERROR;
     int32_t length = 0;
     if(U_FAILURE(*status)) return 0;
-    uloc_getKeywordValue(locid, keyword, kwVal, 1024-1,&subStatus);
-    if(!uprv_strcmp(kwVal, DEFAULT_TAG)) {
-        kwVal[0]=0;
+    CharString kwVal;
+    {
+        CharStringByteSink sink(&kwVal);
+        ulocimp_getKeywordValue(locid, keyword, sink, &subStatus);
+    }
+    if(kwVal == DEFAULT_TAG) {
+        kwVal.clear();
     }
     uloc_getBaseName(locid, base, 1024-1,&subStatus);
 #if defined(URES_TREE_DEBUG)
     fprintf(stderr, "getFunctionalEquivalent: \"%s\" [%s=%s] in %s - %s\n", 
-            locid, keyword, kwVal, base, u_errorName(subStatus));
+            locid, keyword, kwVal.data(), base, u_errorName(subStatus));
 #endif
     ures_initStackObject(&bund1);
     ures_initStackObject(&bund2);
@@ -3138,11 +3142,11 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                         path?path:"ICUDATA", parent, keyword, defVal, u_errorName(subStatus));
 #endif
                     uprv_strcpy(defLoc, parent);
-                    if(kwVal[0]==0) {
-                        uprv_strcpy(kwVal, defVal);
+                    if(kwVal.isEmpty()) {
+                        kwVal.append(defVal, defLen, subStatus);
 #if defined(URES_TREE_DEBUG)
                         fprintf(stderr, "%s;%s -> kwVal =  %s\n", 
-                            path?path:"ICUDATA", parent, keyword, kwVal);
+                            path?path:"ICUDATA", parent, keyword, kwVal.data());
 #endif
                     }
                 }
@@ -3177,7 +3181,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         
 #if defined(URES_TREE_DEBUG)
         fprintf(stderr, "%s;%s -> %s (looking for %s)\n", 
-            path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal);
+            path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal.data());
 #endif
         if(U_FAILURE(subStatus)) {
             *status = subStatus;
@@ -3187,14 +3191,14 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 /**/ fprintf(stderr,"@%d [%s] %s\n", __LINE__, resName, u_errorName(subStatus));
 #endif
             if(subStatus == U_ZERO_ERROR) {
-                ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
+                ures_getByKey(&bund1, kwVal.data(), &bund2, &subStatus);
 #if defined(URES_TREE_DEBUG)
-/**/ fprintf(stderr,"@%d [%s] %s\n", __LINE__, kwVal, u_errorName(subStatus));
+/**/ fprintf(stderr,"@%d [%s] %s\n", __LINE__, kwVal.data(), u_errorName(subStatus));
 #endif
                 if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "%s;%s -> full0 %s=%s,  %s\n", 
-                        path?path:"ICUDATA", parent, keyword, kwVal, u_errorName(subStatus));
+                        path?path:"ICUDATA", parent, keyword, kwVal.data(), u_errorName(subStatus));
 #endif
                     uprv_strcpy(full, parent);
                     if(*full == 0) {
@@ -3227,7 +3231,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                 } else {
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "err=%s in %s looking for %s\n", 
-                        u_errorName(subStatus), parent, kwVal);
+                        u_errorName(subStatus), parent, kwVal.data());
 #endif
                 }
             }
@@ -3262,12 +3266,12 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         getParentForFunctionalEquivalent(found,res,&bund1,parent,1023);
         ures_close(res);
     } while(!full[0] && *found && U_SUCCESS(*status));
-    
-    if((full[0]==0) && uprv_strcmp(kwVal, defVal)) {
+
+    if((full[0]==0) && kwVal != defVal) {
 #if defined(URES_TREE_DEBUG)
-        fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal, defVal);
+        fprintf(stderr, "Failed to locate kw %s - try default %s\n", kwVal.data(), defVal);
 #endif
-        uprv_strcpy(kwVal, defVal);
+        kwVal.clear().append(defVal, subStatus);
         uprv_strcpy(parent, base);
         uprv_strcpy(found, base);
         
@@ -3281,18 +3285,18 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             
 #if defined(URES_TREE_DEBUG)
             fprintf(stderr, "%s;%s -> %s (looking for default %s)\n",
-                path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal);
+                path?path:"ICUDATA", parent, u_errorName(subStatus), kwVal.data());
 #endif
             if(U_FAILURE(subStatus)) {
                 *status = subStatus;
             } else if(subStatus == U_ZERO_ERROR) {
                 ures_getByKey(res,resName,&bund1, &subStatus);
                 if(subStatus == U_ZERO_ERROR) {
-                    ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
+                    ures_getByKey(&bund1, kwVal.data(), &bund2, &subStatus);
                     if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
                         fprintf(stderr, "%s;%s -> full1 %s=%s,  %s\n", path?path:"ICUDATA",
-                            parent, keyword, kwVal, u_errorName(subStatus));
+                            parent, keyword, kwVal.data(), u_errorName(subStatus));
 #endif
                         uprv_strcpy(full, parent);
                         if(*full == 0) {
@@ -3336,7 +3340,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     if(U_SUCCESS(*status)) {
         if(!full[0]) {
 #if defined(URES_TREE_DEBUG)
-          fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal);
+          fprintf(stderr, "Still could not load keyword %s=%s\n", keyword, kwVal.data());
 #endif
           *status = U_MISSING_RESOURCE_ERROR;
         } else if(omitDefault) {
@@ -3345,21 +3349,21 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 #endif        
           if(uprv_strlen(defLoc) <= uprv_strlen(full)) {
             /* found the keyword in a *child* of where the default tag was present. */
-            if(!uprv_strcmp(kwVal, defVal)) { /* if the requested kw is default, */
+            if(kwVal == defVal) { /* if the requested kw is default, */
               /* and the default is in or in an ancestor of the current locale */
 #if defined(URES_TREE_DEBUG)
-              fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal);
+              fprintf(stderr, "Removing unneeded var %s=%s\n", keyword, kwVal.data());
 #endif
-              kwVal[0]=0;
+              kwVal.clear();
             }
           }
         }
         uprv_strcpy(found, full);
-        if(kwVal[0]) {
+        if(!kwVal.isEmpty()) {
             uprv_strcat(found, "@");
             uprv_strcat(found, keyword);
             uprv_strcat(found, "=");
-            uprv_strcat(found, kwVal);
+            uprv_strcat(found, kwVal.data());
         } else if(!omitDefault) {
             uprv_strcat(found, "@");
             uprv_strcat(found, keyword);

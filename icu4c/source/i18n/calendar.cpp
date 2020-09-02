@@ -63,6 +63,8 @@
 #include "sharedcalendar.h"
 #include "unifiedcache.h"
 #include "ulocimp.h"
+#include "bytesinkutil.h"
+#include "charstr.h"
 
 #if !UCONFIG_NO_SERVICE
 static icu::ICULocaleService* gService = nullptr;
@@ -266,13 +268,13 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     }
     canonicalName[canonicalLen] = 0;    // terminate
 
-    char calTypeBuf[32];
-    int32_t calTypeBufLen;
-
-    calTypeBufLen = uloc_getKeywordValue(canonicalName, "calendar", calTypeBuf, sizeof(calTypeBuf) - 1, &status);
+    CharString calTypeBuf;
+    {
+        CharStringByteSink sink(&calTypeBuf);
+        ulocimp_getKeywordValue(canonicalName, "calendar", sink, &status);
+    }
     if (U_SUCCESS(status)) {
-        calTypeBuf[calTypeBufLen] = 0;
-        calType = getCalendarType(calTypeBuf);
+        calType = getCalendarType(calTypeBuf.data());
         if (calType != CALTYPE_UNKNOWN) {
             return calType;
         }
@@ -296,16 +298,13 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
         order = ures_getByKey(rb, "001", nullptr, &status);
     }
 
-    calTypeBuf[0] = 0;
+    calTypeBuf.clear();
     if (U_SUCCESS(status) && order != nullptr) {
         // the first calendar type is the default for the region
         int32_t len = 0;
         const char16_t *uCalType = ures_getStringByIndex(order, 0, &len, &status);
-        if (len < (int32_t)sizeof(calTypeBuf)) {
-            u_UCharsToChars(uCalType, calTypeBuf, len);
-            *(calTypeBuf + len) = 0; // terminate;
-            calType = getCalendarType(calTypeBuf);
-        }
+        calTypeBuf.appendInvariantChars(uCalType, len, status);
+        calType = getCalendarType(calTypeBuf.data());
     }
 
     ures_close(order);
