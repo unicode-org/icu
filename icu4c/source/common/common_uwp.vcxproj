@@ -476,6 +476,8 @@
     <ClInclude Include="localeprioritylist.h" />
     <ClInclude Include="locbased.h" />
     <ClInclude Include="locdistance.h" />
+    <ClInclude Include="charstrmap.h" />
+    <ClInclude Include="uniquecharstr.h" />
     <ClInclude Include="loclikelysubtags.h" />
     <ClInclude Include="locutil.h" />
     <ClInclude Include="lsr.h" />
