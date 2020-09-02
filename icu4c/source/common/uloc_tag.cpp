@@ -15,6 +15,7 @@
 #include "unicode/uenum.h"
 #include "unicode/uloc.h"
 #include "ustr_imp.h"
+#include "bytesinkutil.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -1269,35 +1270,17 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         UBool isBcpUExt;
 
         while (TRUE) {
-            icu::CharString buf;
             key = uenum_next(keywordEnum.getAlias(), NULL, status);
             if (key == NULL) {
                 break;
             }
-            char* buffer;
-            int32_t resultCapacity = ULOC_KEYWORD_AND_VALUES_CAPACITY;
 
-            for (;;) {
-                buffer = buf.getAppendBuffer(
-                        /*minCapacity=*/resultCapacity,
-                        /*desiredCapacityHint=*/resultCapacity,
-                        resultCapacity,
-                        tmpStatus);
-
-                if (U_FAILURE(tmpStatus)) {
-                    break;
-                }
-
-                len = uloc_getKeywordValue(
-                        localeID, key, buffer, resultCapacity, &tmpStatus);
-
-                if (tmpStatus != U_BUFFER_OVERFLOW_ERROR) {
-                    break;
-                }
-
-                resultCapacity = len;
-                tmpStatus = U_ZERO_ERROR;
+            icu::CharString buf;
+            {
+                icu::CharStringByteSink sink(&buf);
+                ulocimp_getKeywordValue(localeID, key, sink, &tmpStatus);
             }
+            len = buf.length();
 
             if (U_FAILURE(tmpStatus)) {
                 if (tmpStatus == U_MEMORY_ALLOCATION_ERROR) {
@@ -1311,11 +1294,6 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                 /* ignore this keyword */
                 tmpStatus = U_ZERO_ERROR;
                 continue;
-            }
-
-            buf.append(buffer, len, tmpStatus);
-            if (tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
-                tmpStatus = U_ZERO_ERROR;  // Terminators provided by CharString.
             }
 
             keylen = (int32_t)uprv_strlen(key);
@@ -2707,14 +2685,17 @@ ulocimp_toLanguageTag(const char* localeID,
 
                 key = uenum_next(kwdEnum.getAlias(), &len, &tmpStatus);
                 if (len == 1 && *key == PRIVATEUSE) {
-                    char buf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
-                    buf[0] = PRIVATEUSE;
-                    buf[1] = SEP;
-                    len = uloc_getKeywordValue(localeID, key, &buf[2], sizeof(buf) - 2, &tmpStatus);
+                    icu::CharString buf;
+                    {
+                        icu::CharStringByteSink sink(&buf);
+                        ulocimp_getKeywordValue(localeID, key, sink, &tmpStatus);
+                    }
                     if (U_SUCCESS(tmpStatus)) {
-                        if (ultag_isPrivateuseValueSubtags(&buf[2], len)) {
+                        if (ultag_isPrivateuseValueSubtags(buf.data(), buf.length())) {
                             /* return private use only tag */
-                            sink.Append(buf, len + 2);
+                            static const char PREFIX[] = { PRIVATEUSE, SEP };
+                            sink.Append(PREFIX, sizeof(PREFIX));
+                            sink.Append(buf.data(), buf.length());
                             done = TRUE;
                         } else if (strict) {
                             *status = U_ILLEGAL_ARGUMENT_ERROR;
