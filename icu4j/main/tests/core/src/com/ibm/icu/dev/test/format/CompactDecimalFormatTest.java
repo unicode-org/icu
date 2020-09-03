@@ -623,9 +623,6 @@ public class CompactDecimalFormatTest extends TestFmwk {
         // Run a CDF over all locales to make sure there are no unexpected exceptions.
         ULocale[] locs = ULocale.getAvailableLocales();
         for (ULocale loc : locs) {
-            if (loc.getLanguage().equals("fr") && logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
-                continue;
-            }
             CompactDecimalFormat cdfShort = CompactDecimalFormat.getInstance(loc, CompactStyle.SHORT);
             CompactDecimalFormat cdfLong = CompactDecimalFormat.getInstance(loc, CompactStyle.LONG);
             for (double d = 12345.0; d > 0.01; d /= 10) {
