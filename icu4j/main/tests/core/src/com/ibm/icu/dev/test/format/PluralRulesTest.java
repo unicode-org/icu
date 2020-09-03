@@ -937,9 +937,6 @@ public class PluralRulesTest extends TestFmwk {
         PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: e = 0 and i % 1000000 = 0 and v = 0 or " +
                 "e != 0 .. 5;  other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000, @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …");
         ULocale locale = new ULocale("fr-FR");
-        if (logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
-            return;
-        }
 
         Object[][] casesData = {
                 // unlocalized formatter skeleton, input, string output, plural rule keyword

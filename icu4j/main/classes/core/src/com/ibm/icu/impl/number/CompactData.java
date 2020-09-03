@@ -177,6 +177,11 @@ public class CompactData implements MultiplierProducer {
                 UResource.Table pluralVariantsTable = value.getTable();
                 for (int i4 = 0; pluralVariantsTable.getKeyAndValue(i4, key, value); ++i4) {
 
+                    if ("0".equals(key.toString()) || "1".equals(key.toString())) {
+                        // TODO(ICU-21258): Handle this case. For now, skip.
+                        continue;
+                    }
+
                     // Skip this magnitude/plural if we already have it from a child locale.
                     // Note: This also skips USE_FALLBACK entries.
                     StandardPlural plural = StandardPlural.fromString(key.toString());

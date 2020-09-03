@@ -2,12 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.dev.test.number;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -20,9 +14,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.number.Grouper;
@@ -58,7 +54,7 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 
-public class NumberFormatterApiTest {
+public class NumberFormatterApiTest extends TestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency GBP = Currency.getInstance("GBP");
@@ -442,6 +438,17 @@ public class NumberFormatterApiTest {
                 new ULocale("zh-Hant"),
                 1e7,
                 "1000\u842C");
+
+        if (!logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
+            assertFormatSingle(
+                    "Compact with plural form =1 (ICU-21258)",
+                    "compact-long",
+                    "K",
+                    NumberFormatter.with().notation(Notation.compactLong()),
+                    ULocale.FRANCE,
+                    1e3,
+                    "mille");
+        }
 
         assertFormatSingle(
                 "Compact Infinity",
@@ -2642,10 +2649,10 @@ public class NumberFormatterApiTest {
     @Test
     public void locale() {
         // Coverage for the locale setters.
-        assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.ENGLISH));
-        assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(ULocale.ENGLISH));
-        assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(Locale.ENGLISH));
-        assertNotEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.FRENCH));
+        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.ENGLISH));
+        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(ULocale.ENGLISH));
+        Assert.assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(Locale.ENGLISH));
+        Assert.assertNotEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.FRENCH));
     }
 
     @Test
@@ -2653,19 +2660,19 @@ public class NumberFormatterApiTest {
         LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.ENGLISH);
 
         // Double
-        assertEquals("514.23", formatter.format(514.23).toString());
+        Assert.assertEquals("514.23", formatter.format(514.23).toString());
 
         // Int64
-        assertEquals("51,423", formatter.format(51423L).toString());
+        Assert.assertEquals("51,423", formatter.format(51423L).toString());
 
         // BigDecimal
-        assertEquals("987,654,321,234,567,890",
+        Assert.assertEquals("987,654,321,234,567,890",
                 formatter.format(new BigDecimal("98765432123456789E1")).toString());
 
         // Also test proper DecimalQuantity bytes storage when all digits are in the fraction.
         // The number needs to have exactly 40 digits, which is the size of the default buffer.
         // (issue discovered by the address sanitizer in C++)
-        assertEquals("0.009876543210987654321098765432109876543211",
+        Assert.assertEquals("0.009876543210987654321098765432109876543211",
                 formatter.precision(Precision.unlimited())
                         .format(new BigDecimal("0.009876543210987654321098765432109876543211"))
                         .toString());
