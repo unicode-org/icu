@@ -10013,7 +10013,13 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
         ParsePosition ppos;
 
         DecimalFormatSymbols dfs(Locale::getEnglish(), status);
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
         DecimalFormat df(patternString, dfs, status);
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
         df.setLenient(FALSE);
         LocalPointer<CurrencyAmount> ca_strict(df.parseCurrency(inputString, ppos));
         if (ca_strict != nullptr) {
