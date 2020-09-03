@@ -16,11 +16,12 @@
 #if U_PLATFORM_USES_ONLY_WIN32_API
 
 #include "wintz.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 
 #include "unicode/ures.h"
-#include "unicode/ustring.h"
+#include "unicode/unistr.h"
 #include "uresimp.h"
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -47,77 +48,60 @@ U_NAMESPACE_BEGIN
 U_INTERNAL const char* U_EXPORT2
 uprv_detectWindowsTimeZone()
 {
-    UErrorCode status = U_ZERO_ERROR;
-    char* icuid = nullptr;
-    char dynamicTZKeyName[MAX_TIMEZONE_ID_LENGTH];
-    char tmpid[MAX_TIMEZONE_ID_LENGTH];
-    int32_t len;
-    int id = GEOID_NOT_AVAILABLE;
-    int errorCode;
-    wchar_t ISOcodeW[3] = {}; /* 2 letter ISO code in UTF-16 */
-    char ISOcode[3] = {}; /* 2 letter ISO code in UTF-8 */
-
+    /* Obtain TIME_ZONE_INFORMATION from the API and get the non-localized time zone name. */
     DYNAMIC_TIME_ZONE_INFORMATION dynamicTZI;
     uprv_memset(&dynamicTZI, 0, sizeof(dynamicTZI));
-    uprv_memset(dynamicTZKeyName, 0, sizeof(dynamicTZKeyName));
-    uprv_memset(tmpid, 0, sizeof(tmpid));
 
-    /* Obtain TIME_ZONE_INFORMATION from the API and get the non-localized time zone name. */
-    if (TIME_ZONE_ID_INVALID == GetDynamicTimeZoneInformation(&dynamicTZI)) {
+    DWORD tzIDStatus = GetDynamicTimeZoneInformation(&dynamicTZI);
+    if (tzIDStatus == TIME_ZONE_ID_INVALID || dynamicTZI.TimeZoneKeyName[0] == 0)
         return nullptr;
-    }
 
-    id = GetUserGeoID(GEOCLASS_NATION);
-    errorCode = GetGeoInfoW(id, GEO_ISO2, ISOcodeW, 3, 0);
+    // Is this the correct way to detect cases where the user turns off DST
+    // in Control Panel for a timezone with DST?
+    if (tzIDStatus == TIME_ZONE_ID_UNKNOWN && dynamicTZI.DaylightBias != 0) {
+        LONG utcOffsetMins = dynamicTZI.Bias;
+        if (utcOffsetMins == 0)
+          return uprv_strdup("UTC");
 
-    // convert from wchar_t* (UTF-16 on Windows) to char* (UTF-8).
-    u_strToUTF8(ISOcode, UPRV_LENGTHOF(ISOcode), nullptr,
-        reinterpret_cast<const UChar*>(ISOcodeW), UPRV_LENGTHOF(ISOcodeW), &status);
-
-    LocalUResourceBundlePointer bundle(ures_openDirect(nullptr, "windowsZones", &status));
-    ures_getByKey(bundle.getAlias(), "mapTimezones", bundle.getAlias(), &status);
-
-    // convert from wchar_t* (UTF-16 on Windows) to char* (UTF-8).
-    u_strToUTF8(dynamicTZKeyName, UPRV_LENGTHOF(dynamicTZKeyName), nullptr,
-        reinterpret_cast<const UChar*>(dynamicTZI.TimeZoneKeyName), -1, &status);
-
-    if (U_FAILURE(status)) {
-        return nullptr;
-    }
-
-    if (dynamicTZI.TimeZoneKeyName[0] != 0) {
-        StackUResourceBundle winTZ;
-        ures_getByKey(bundle.getAlias(), dynamicTZKeyName, winTZ.getAlias(), &status);
-
-        if (U_SUCCESS(status)) {
-            const UChar* icuTZ = nullptr;
-            if (errorCode != 0) {
-                icuTZ = ures_getStringByKey(winTZ.getAlias(), ISOcode, &len, &status);
-            }
-            if (errorCode == 0 || icuTZ == nullptr) {
-                /* fallback to default "001" and reset status */
-                status = U_ZERO_ERROR;
-                icuTZ = ures_getStringByKey(winTZ.getAlias(), "001", &len, &status);
-            }
-
-            if (U_SUCCESS(status)) {
-                int index = 0;
-
-                while (!(*icuTZ == '\0' || *icuTZ == ' ')) {
-                    // time zone IDs only contain ASCII invariant characters.
-                    tmpid[index++] = (char)(*icuTZ++);
-                }
-                tmpid[index] = '\0';
-            }
+        if (utcOffsetMins % 60 == 0) {
+          char gmtOffsetTz[11]; // "Etc/GMT+dd" is 11-char long with a terminal null.
+          snprintf(gmtOffsetTz, 11, "Etc/GMT%+d", -utcOffsetMins / 60);
+          return uprv_strdup(gmtOffsetTz);
         }
     }
 
-    // Copy the timezone ID to icuid to be returned.
-    if (tmpid[0] != 0) {
-        icuid = uprv_strdup(tmpid);
+    // tzIDStatus == TIME_ZONE_ID_STANDARD || tzIDStatus == TIME_ZONE_ID_DAYLIGHT ||
+    //  dynamicTZI.DaylightBias == 0)
+
+    CharString winTZ;
+    UErrorCode status = U_ZERO_ERROR;
+    winTZ.appendInvariantChars(UnicodeString(TRUE, dynamicTZI.TimeZoneKeyName, -1), status)
+        .append('\0', status);
+
+    // Map Windows Timezone name (non-localized) to ICU timezone ID (Olson timezone id).
+    LocalUResourceBundlePointer winTZBundle(ures_openDirect(nullptr, "windowsZones", &status));
+    ures_getByKey(winTZBundle.getAlias(), "mapTimezones", winTZBundle.getAlias(), &status);
+    ures_getByKey(winTZBundle.getAlias(), winTZ.data(), winTZBundle.getAlias(), &status);
+
+    if (U_FAILURE(status))
+        return nullptr;
+
+    const UChar* icuTZ16 = nullptr;
+    char regionCode[3] = {}; // 2 letter ISO 3166 country code
+    int geoId = GetUserGeoID(GEOCLASS_NATION);
+    int regionCodeLen = GetGeoInfoA(geoId, GEO_ISO2, regionCode, 3, 0);
+    int32_t tzLen;
+    if (regionCodeLen != 0) {
+        icuTZ16 = ures_getStringByKey(winTZBundle.getAlias(), regionCode, &tzLen, &status);
+    }
+    if (regionCodeLen == 0 || U_FAILURE(status)) {
+        // fallback to default "001" (world)
+        status = U_ZERO_ERROR;
+        icuTZ16 = ures_getStringByKey(winTZBundle.getAlias(), "001", &tzLen, &status);
     }
 
-    return icuid;
+    CharString icuTZStr;
+    return icuTZStr.appendInvariantChars(icuTZ16, tzLen, status).cloneData(status);
 }
 
 U_NAMESPACE_END
