@@ -33,10 +33,12 @@ import com.ibm.icu.util.StringTrieBuilder;
  */
 class NumberSkeletonImpl {
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // NOTE: For an example of how to add a new stem to the number skeleton parser, see: //
-    // http://bugs.icu-project.org/trac/changeset/41193                                  //
-    ///////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // NOTE: For examples of how to add a new stem to the number skeleton parser, see:      //
+    // https://github.com/unicode-org/icu/commit/a2a7982216b2348070dc71093775ac7195793d73   //
+    // and                                                                                  //
+    // https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28   //
+    //////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * While parsing a skeleton, this enum records what type of option we expect to find next.
@@ -54,6 +56,7 @@ class NumberSkeletonImpl {
         STATE_MEASURE_UNIT,
         STATE_PER_MEASURE_UNIT,
         STATE_IDENTIFIER_UNIT,
+        STATE_UNIT_USAGE,
         STATE_CURRENCY_UNIT,
         STATE_INTEGER_WIDTH,
         STATE_NUMBERING_SYSTEM,
@@ -118,6 +121,7 @@ class NumberSkeletonImpl {
         STEM_MEASURE_UNIT,
         STEM_PER_MEASURE_UNIT,
         STEM_UNIT,
+        STEM_UNIT_USAGE,
         STEM_CURRENCY,
         STEM_INTEGER_WIDTH,
         STEM_NUMBERING_SYSTEM,
@@ -193,6 +197,7 @@ class NumberSkeletonImpl {
         b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
         b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
         b.add("unit", StemEnum.STEM_UNIT.ordinal());
+        b.add("usage", StemEnum.STEM_UNIT_USAGE.ordinal());
         b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
         b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
         b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
@@ -613,6 +618,7 @@ class NumberSkeletonImpl {
                 case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
+                case STATE_UNIT_USAGE:
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
@@ -786,6 +792,10 @@ class NumberSkeletonImpl {
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_IDENTIFIER_UNIT;
 
+        case STEM_UNIT_USAGE:
+            checkNull(macros.usage, segment);
+            return ParseState.STATE_UNIT_USAGE;
+
         case STEM_CURRENCY:
             checkNull(macros.unit, segment);
             return ParseState.STATE_CURRENCY_UNIT;
@@ -829,6 +839,9 @@ class NumberSkeletonImpl {
             return ParseState.STATE_NULL;
         case STATE_IDENTIFIER_UNIT:
             BlueprintHelpers.parseIdentifierUnitOption(segment, macros);
+            return ParseState.STATE_NULL;
+        case STATE_UNIT_USAGE:
+            BlueprintHelpers.parseUnitUsageOption(segment, macros);
             return ParseState.STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);
@@ -892,6 +905,9 @@ class NumberSkeletonImpl {
             sb.append(' ');
         }
         if (macros.perUnit != null && GeneratorHelpers.perUnit(macros, sb)) {
+            sb.append(' ');
+        }
+        if (macros.usage != null && GeneratorHelpers.usage(macros, sb)) {
             sb.append(' ');
         }
         if (macros.precision != null && GeneratorHelpers.precision(macros, sb)) {
@@ -1047,6 +1063,10 @@ class NumberSkeletonImpl {
             macros.unit = numerator;
         }
 
+        /**
+         * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
+         * specified via a "unit/" concise skeleton.
+         */
         private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
             MeasureUnit[] units = MeasureUnit.parseCoreUnitIdentifier(segment.asString());
             if (units == null) {
@@ -1056,6 +1076,12 @@ class NumberSkeletonImpl {
             if (units.length == 2) {
                 macros.perUnit = units[1];
             }
+        }
+
+        private static void parseUnitUsageOption(StringSegment segment, MacroProps macros) {
+            macros.usage = segment.asString();
+            // We do not do any validation of the usage string: it depends on the
+            // unitPreferenceData in the units resources.
         }
 
         private static void parseFractionStem(StringSegment segment, MacroProps macros) {
@@ -1459,6 +1485,16 @@ class NumberSkeletonImpl {
                 BlueprintHelpers.generateMeasureUnitOption(macros.perUnit, sb);
                 return true;
             }
+        }
+
+        private static boolean usage(MacroProps macros, StringBuilder sb) {
+            if (macros.usage != null  && macros.usage.length() > 0) {
+                sb.append("usage/");
+                sb.append(macros.usage);
+
+                return true;
+            }
+            return false;
         }
 
         private static boolean precision(MacroProps macros, StringBuilder sb) {

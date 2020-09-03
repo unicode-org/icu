@@ -83,13 +83,21 @@ public class UnitsRouter {
         for (ConverterPreference converterPreference :
                 converterPreferences_) {
             if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-                return new RouteResult(converterPreference.converter.convert(quantity), converterPreference.precision);
+                return new RouteResult(
+                        converterPreference.converter.convert(quantity),
+                        converterPreference.precision,
+                        converterPreference.targetUnit
+                );
             }
         }
 
         // In case of the `quantity` does not fit in any converter limit, use the last converter.
         ConverterPreference lastConverterPreference = converterPreferences_.get(converterPreferences_.size() - 1);
-        return new RouteResult(lastConverterPreference.converter.convert(quantity), lastConverterPreference.precision);
+        return new RouteResult(
+                lastConverterPreference.converter.convert(quantity),
+                lastConverterPreference.precision,
+                lastConverterPreference.targetUnit
+        );
     }
 
     /**
@@ -99,7 +107,7 @@ public class UnitsRouter {
      * The returned pointer should be valid for the lifetime of the
      * UnitsRouter instance.
      */
-    public ArrayList<MeasureUnit> getOutputUnits() {
+    public List<MeasureUnit> getOutputUnits() {
         return this.outputUnits_;
     }
 
@@ -113,32 +121,52 @@ public class UnitsRouter {
      * is no limit for the converter.
      */
     public static class ConverterPreference {
-        ComplexUnitsConverter converter;
-        BigDecimal limit;
-        String precision;
+        // The output unit for this ConverterPreference. This may be a MIXED unit -
+        // for example: "yard-and-foot-and-inch".
+        final MeasureUnitImpl targetUnit;
+        final ComplexUnitsConverter converter;
+        final BigDecimal limit;
+        final String precision;
 
         // In case there is no limit, the limit will be -inf.
-        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl outputUnits,
+        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl targetUnit,
                                    String precision, ConversionRates conversionRates) {
-            this(source, outputUnits, BigDecimal.valueOf(Double.MIN_VALUE), precision,
+            this(source, targetUnit, BigDecimal.valueOf(Double.MIN_VALUE), precision,
                     conversionRates);
         }
 
-        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl outputUnits,
+        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl targetUnit,
                                    BigDecimal limit, String precision, ConversionRates conversionRates) {
-            this.converter = new ComplexUnitsConverter(source, outputUnits, conversionRates);
+            this.converter = new ComplexUnitsConverter(source, targetUnit, conversionRates);
             this.limit = limit;
             this.precision = precision;
+            this.targetUnit = targetUnit;
+
         }
     }
 
     public class RouteResult {
-        public List<Measure> measures;
-        public String precision;
+        // A list of measures: a single measure for single units, multiple measures
+        // for mixed units.
+        //
+        // TODO(icu-units/icu#21): figure out the right mixed unit API.
+        public final List<Measure> measures;
 
-        RouteResult(List<Measure> measures, String precision) {
+        // A skeleton string starting with a precision-increment.
+        //
+        // TODO(hugovdm): generalise? or narrow down to only a precision-increment?
+        // or document that other skeleton elements are ignored?
+        public final String precision;
+
+        // The output unit for this RouteResult. This may be a MIXED unit - for
+        // example: "yard-and-foot-and-inch", for which `measures` will have three
+        // elements.
+        public final MeasureUnitImpl outputUnit;
+
+        RouteResult(List<Measure> measures, String precision, MeasureUnitImpl outputUnit) {
             this.measures = measures;
             this.precision = precision;
+            this.outputUnit = outputUnit;
         }
     }
 }

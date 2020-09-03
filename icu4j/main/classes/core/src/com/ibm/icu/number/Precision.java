@@ -20,6 +20,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
  *
  * @stable ICU 62
  * @see NumberFormatter
+ * @internal
  */
 public abstract class Precision {
 

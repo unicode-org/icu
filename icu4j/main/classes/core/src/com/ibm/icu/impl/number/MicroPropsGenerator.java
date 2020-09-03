@@ -19,6 +19,9 @@ package com.ibm.icu.impl.number;
  * {@link MicroProps} with properties that are not quantity-dependent. Each element in the linked list
  * calls {@link #processQuantity} on its "parent", then does its work, and then returns the result.
  *
+ * This chain of MicroPropsGenerators is typically constructed by NumberFormatterImpl::macrosToMicroGenerator() when
+ * constructing a NumberFormatter.
+ *
  * <p>
  * A class implementing MicroPropsGenerator looks something like this:
  *
