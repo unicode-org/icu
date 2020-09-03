@@ -8,6 +8,7 @@ import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
+
 public class MicroProps implements Cloneable, MicroPropsGenerator {
     // Populated globally:
     public SignDisplay sign;

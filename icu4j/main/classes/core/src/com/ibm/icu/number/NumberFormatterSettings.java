@@ -45,6 +45,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_THRESHOLD = 14;
     static final int KEY_PER_UNIT = 15;
     static final int KEY_MAX = 16;
+    static final int KEY_USAGE = 17;
 
     private final NumberFormatterSettings<?> parent;
     private final int key;
@@ -132,6 +133,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *
      * <p>
      * The default is to render without units (equivalent to {@link NoUnit#BASE}).
+     *
+     * <P>
+     * If the input usage is correctly set the output unit <b>will change</b>
+     * according to `usage`, `locale` and `unit` value.
+     * </p>
      *
      * @param unit
      *            The unit to render.
@@ -484,6 +490,44 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      */
     public T scale(Scale scale) {
         return create(KEY_SCALE, scale);
+    }
+
+     /**
+     * Sets the `usage` of the unit.
+     * <p>
+     * NOTE: `usage` will change the output unit depending on the `Locale`
+     * and the unit value.
+     *    For Example:
+     *        Locale: en_US
+     *        Usage : length-person
+     *        Unit  : Meter
+     *
+     *        If the unit value is 0.25, the output will be "10 inches."
+     *        If the unit value is 1.50, the output will be
+     *                                           "4 feet and 11 inches"
+     * </p>
+     *
+     * <P>
+     * If the input usage is not exist (e.g. length-dinosaur) or is
+     * misspelled, the output unit **will not change**.
+     * </p>
+     *
+     * <p>
+     * Pass an element of string to this setter.
+     * For example:
+     *
+     * <pre>
+     * NumberFormatter.with().usage("length-person")
+     * </pre>
+     *
+     * <p>
+     *
+     * @param usage the usage of the unit.
+     * @return The fluent chain
+     * @draft ICU 67
+     */
+    public T usage(String usage) {
+        return create(KEY_USAGE, usage);
     }
 
     /**
