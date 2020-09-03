@@ -3478,6 +3478,7 @@ void DateFormatTest::TestTimeZoneInLocale()
         UnicodeString actual;
 
         SimpleDateFormat smptfmt("Z", locale, status);
+        ASSERT_OK(status);
         assertEquals("TimeZone from SimpleDateFormat constructor",
                      expectedTimezone, smptfmt.getTimeZone().getID(actual));
         assertEquals("Calendar from SimpleDateFormat constructor",
@@ -3485,13 +3486,20 @@ void DateFormatTest::TestTimeZoneInLocale()
 
         LocalPointer<DateFormat> datefmt(
                 DateFormat::createDateInstance(DateFormat::kDefault, locale));
+        if (datefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createDateInstance()");
+            return;
+        }
         assertEquals("TimeZone from DateFormat::createDateInstance",
                      expectedTimezone, datefmt->getTimeZone().getID(actual));
         assertEquals("Calendar from DateFormat::createDateInstance",
                      testLine[2], datefmt->getCalendar()->getType());
-
         LocalPointer<DateFormat> timefmt(
                 DateFormat::createTimeInstance(DateFormat::kDefault, locale));
+        if (timefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createTimeInstance()");
+            return;
+        }
         assertEquals("TimeZone from TimeFormat::createTimeInstance",
                      expectedTimezone, timefmt->getTimeZone().getID(actual));
         assertEquals("Calendar from DateFormat::createTimeInstance",
@@ -3500,6 +3508,10 @@ void DateFormatTest::TestTimeZoneInLocale()
         LocalPointer<DateFormat> datetimefmt(
                 DateFormat::createDateTimeInstance(
                     DateFormat::kDefault, DateFormat::kDefault, locale));
+        if (datetimefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createDateTimeInstance()");
+            return;
+        }
         assertEquals("TimeZone from DateTimeFormat::createDateTimeInstance",
                      expectedTimezone, datetimefmt->getTimeZone().getID(actual));
         assertEquals("Calendar from DateFormat::createDateTimeInstance",
