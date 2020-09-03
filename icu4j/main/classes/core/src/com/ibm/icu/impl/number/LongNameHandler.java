@@ -26,7 +26,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
     private static final int DNAM_INDEX = StandardPlural.COUNT;
     private static final int PER_INDEX = StandardPlural.COUNT + 1;
-    private static final int ARRAY_LENGTH = StandardPlural.COUNT + 2;
+    protected static final int ARRAY_LENGTH = StandardPlural.COUNT + 2;
 
     private static int getIndex(String pluralKeyword) {
         // pluralKeyword can also be "dnam" or "per"
@@ -39,7 +39,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
         }
     }
 
-    private static String getWithPlural(String[] strings, StandardPlural plural) {
+    protected static String getWithPlural(String[] strings, StandardPlural plural) {
         String result = strings[plural.ordinal()];
         if (result == null) {
             result = strings[StandardPlural.OTHER.ordinal()];
@@ -79,7 +79,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
     // NOTE: outArray MUST have at least ARRAY_LENGTH entries. No bounds checking is performed.
 
-    private static void getMeasureData(
+    protected static void getMeasureData(
             ULocale locale,
             MeasureUnit unit,
             UnitWidth width,
@@ -101,7 +101,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
         // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
         // TODO(ICU-20400): Get duration-*-person data properly with aliases.
-        if (unit.getSubtype().endsWith("-person")) {
+        if (unit.getSubtype() != null && unit.getSubtype().endsWith("-person")) {
             key.append(unit.getSubtype(), 0, unit.getSubtype().length() - 7);
         } else {
             key.append(unit.getSubtype());
@@ -191,6 +191,22 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
         return result;
     }
 
+    /**
+     * Construct a localized LongNameHandler for the specified MeasureUnit.
+     * <p>
+     * Compound units can be constructed via `unit` and `perUnit`. Both of these
+     * must then be built-in units.
+     * <p>
+     * Mixed units are not supported, use MixedUnitLongNameHandler.forMeasureUnit.
+     *
+     * @param locale  The desired locale.
+     * @param unit    The measure unit to construct a LongNameHandler for. If
+     *                `perUnit` is also defined, `unit` must not be a mixed unit.
+     * @param perUnit If `unit` is a mixed unit, `perUnit` must be "none".
+     * @param width   Specifies the desired unit rendering.
+     * @param rules   Does not take ownership.
+     * @param parent  Does not take ownership.
+     */
     public static LongNameHandler forMeasureUnit(
             ULocale locale,
             MeasureUnit unit,

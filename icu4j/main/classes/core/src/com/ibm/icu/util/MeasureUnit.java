@@ -73,7 +73,7 @@ public class MeasureUnit implements Serializable {
      *
      * @internal
      */
-    private MeasureUnitImpl measureUnitImpl = null;
+    private MeasureUnitImpl measureUnitImpl;
 
     /**
      * Enumeration for unit complexity. There are three levels:
@@ -346,6 +346,7 @@ public class MeasureUnit implements Serializable {
     /**
      * @internal
      * @param measureUnitImpl
+     * @deprecated Internal API for ICU use only.
      */
     public static MeasureUnit fromMeasureUnitImpl(MeasureUnitImpl measureUnitImpl) {
         measureUnitImpl.serialize();

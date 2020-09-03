@@ -45,6 +45,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_THRESHOLD = 14;
     static final int KEY_PER_UNIT = 15;
     static final int KEY_MAX = 16;
+    static final int KEY_USAGE = 17;
 
     private final NumberFormatterSettings<?> parent;
     private final int key;
@@ -132,6 +133,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *
      * <p>
      * The default is to render without units (equivalent to {@link NoUnit#BASE}).
+     *
+     * <P>
+     * If the input usage is correctly set the output unit <b>will change</b>
+     * according to `usage`, `locale` and `unit` value.
+     * </p>
      *
      * @param unit
      *            The unit to render.
@@ -486,6 +492,50 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         return create(KEY_SCALE, scale);
     }
 
+   /**
+     * Specifies the usage for which numbers will be formatted ("person-height",
+     * "road", "rainfall", etc.)
+     *
+     * When a `usage` is specified, the output unit will change depending on the
+     * `Locale` and the unit quantity. For example, formatting length
+     * measurements specified in meters:
+     *
+     * `NumberFormatter.with().usage("person").unit(MeasureUnit.METER).locale(new ULocale("en-US"))`
+     *   * When formatting 0.25, the output will be "10 inches".
+     *   * When formatting 1.50, the output will be "4 feet and 11 inches".
+     *
+     * The input unit specified via unit() determines the type of measurement
+     * being formatted (e.g. "length" when the unit is "foot"). The usage
+     * requested will be looked for only within this category of measurement
+     * units.
+     *
+     * The output unit can be found via FormattedNumber.getOutputUnit().
+     *
+     * If the usage has multiple parts (e.g. "land-agriculture-grain") and does
+     * not match a known usage preference, the last part will be dropped
+     * repeatedly until a match is found (e.g. trying "land-agriculture", then
+     * "land"). If a match is still not found, usage will fall back to
+     * "default".
+     *
+     * Setting usage to an empty string clears the usage (disables usage-based
+     * localized formatting).
+     *
+     *
+     * When using usage, specifying rounding or precision is unnecessary.
+     * Specifying a precision in some manner will override the default
+     * formatting.
+     *
+     *
+     * @param usage A usage parameter from the units resource.
+     * @return The fluent chain
+     * @throws IllegalArgumentException in case of Setting a usage string but not a correct input unit.
+     * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
+     */
+    public T usage(String usage) {
+        return create(KEY_USAGE, usage);
+    }
+
     /**
      * Internal method to set a starting macros.
      *
@@ -630,6 +680,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
             case KEY_PER_UNIT:
                 if (macros.perUnit == null) {
                     macros.perUnit = (MeasureUnit) current.value;
+                }
+                break;
+            case KEY_USAGE:
+                if(macros.usage == null) {
+                    macros.usage = (String) current.value;
                 }
                 break;
             default:
