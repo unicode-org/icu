@@ -758,10 +758,12 @@ static void TestFwdBack() {
 }
 
 /**
-* Ticket #13636 - Visual Studio 2017 has problems optimizing this function.
-* As a workaround, we will turn off optimization just for this function on VS2017 and above.
-*/
-#if defined(_MSC_VER) && (_MSC_VER > 1900)
+ * Ticket #13636 - The optimizer in Visual Studio 2017 has problems optimizing this function.
+ * As a work-around, optimization is disabled for this function on VS2017.
+ * This work-around should be removed once the following versions of Visual Studio are no
+ * longer supported: All versions of VS2017, and versions of VS2019 below 16.4.
+ */
+#if defined(_MSC_VER) && (_MSC_VER > 1900) && (_MSC_VER < 1924)
 #pragma optimize( "", off )
 #endif
 
@@ -850,10 +852,8 @@ static void TestFwdBackUnsafe() {
     }
 }
 
-/**
-* Ticket #13636 - Turn optimization back on.
-*/
-#if defined(_MSC_VER) && (_MSC_VER > 1900)
+// Ticket #13636 - Turn optimization back on.
+#if defined(_MSC_VER) && (_MSC_VER > 1900) && (_MSC_VER < 1924)
 #pragma optimize( "", on )
 #endif
 
