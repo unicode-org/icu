@@ -83,6 +83,8 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(8,TestPersian);
     CASE(9,TestPersianFormat);
     CASE(10,TestTaiwan);
+    CASE(11,TestMyanmar);
+    CASE(12,TestMyanmarFormat);
     default: name = ""; break;
     }
 }
@@ -750,6 +752,129 @@ void IntlCalendarTest::TestForceGannenNumbering()
             }
         }
     }
+}
+
+/**
+ * Verify the Myanmar Calendar.
+ */
+void IntlCalendarTest::TestMyanmar() {
+    UDate timeA = Calendar::getNow();
+
+    Calendar *cal;
+    UErrorCode status = U_ZERO_ERROR;
+    cal = Calendar::createInstance("en_US@calendar=myanmar", status);
+    CHECK(status, UnicodeString("Creating en_US@calendar=myanmar calendar"));
+    // Sanity check the calendar
+    UDate timeB = Calendar::getNow();
+    UDate timeCal = cal->getTime(status);
+
+    if(!(timeA <= timeCal) || !(timeCal <= timeB)) {
+      errln((UnicodeString)"Error: Calendar time " + timeCal +
+            " is not within sampled times [" + timeA + " to " + timeB + "]!");
+    }
+    // end sanity check
+
+    // Test various dates to be sure of validity
+    int32_t data[] = {
+        2015, 6, 16, 1377, 3, 30, // extra nayon day, big watat
+        2015, 7, 17, 1377, 5, 1, // 2nd waso, big watat
+        1989, 4, 15, 1350, 1, 10,
+        1875, 7, 17, 1237, 4, 15,
+        1838, 7, 17, 1200, 4, 26,
+        // historic dates via https://github.com/yan9a/mcal/blob/master/javascript/ceMmDateTime.js
+        1609, 2, 17,  970, 13,16,
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+    };
+
+    // off by 29 days in Unix time
+    // 1377/3/30 <-> 1377/1/2
+    // 1377/5/1 but got 1377/5/3
+    // 1350/1/10 but got 1350/1/11
+    // 1237/4/15 but got 1237/5/17
+    // 1200/4/26 but got 1200/5/28
+    // 970/13/16 but got 970/13/17
+
+    Calendar *grego = Calendar::createInstance("en_US@calendar=gregorian", status);
+    for (int32_t i=0; data[i]!=-1; ) {
+        int32_t gregYear = data[i++];
+        int32_t gregMonth = data[i++]-1;
+        int32_t gregDay = data[i++];
+        int32_t myYear = data[i++];
+        int32_t myMonth = data[i++]-1;
+        int32_t myDay = data[i++];
+
+        // Test conversion from Myanmar dates
+        grego->clear();
+        grego->set(gregYear, gregMonth, gregDay);
+
+        cal->clear();
+        cal->set(myYear, myMonth, myDay);
+
+        UDate myTime = cal->getTime(status);
+        UDate gregTime = grego->getTime(status);
+
+        if (myTime != gregTime) {
+          errln(UnicodeString("Expected ") + gregTime + " but got " + myTime);
+        }
+
+        // Test conversion to Myanmar dates
+        cal->clear();
+        cal->setTime(gregTime, status);
+
+        int32_t computedYear = cal->get(UCAL_YEAR, status);
+        int32_t computedMonth = cal->get(UCAL_MONTH, status);
+        int32_t computedDay = cal->get(UCAL_DATE, status);
+
+        if ((myYear != computedYear) ||
+            (myMonth != computedMonth) ||
+            (myDay != computedDay)) {
+          errln(UnicodeString("Expected ") + myYear + "/" + (myMonth+1) + "/" + myDay +
+                " but got " +  computedYear + "/" + (computedMonth+1) + "/" + computedDay);
+        }
+
+    }
+
+    delete cal;
+    delete grego;
+}
+
+void IntlCalendarTest::TestMyanmarFormat() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    // Test simple parse/format with adopt
+    UDate aDate = 608603000000.0;
+    SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=myanmar"), status);
+    CHECK(status, "creating myanmar date format instance");
+    SimpleDateFormat *fmt2 = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US@calendar=gregorian"), status);
+    CHECK(status, "creating gregorian date format instance");
+    if(!fmt) {
+        errln("Couldn't create en_US instance");
+    } else {
+        UnicodeString str;
+        fmt2->format(aDate, str);
+        logln(UnicodeString() + "Test Date:" + str);
+        str.remove();
+        fmt->format(aDate, str);
+        logln(UnicodeString() + "as Myanmar Calendar: " + escape(str));
+        UnicodeString expected("Tagu 10, 1350 ME");
+        if(str != expected) {
+            errln("Expected " + escape(expected) + " but got " + escape(str));
+        }
+        UDate otherDate = fmt->parse(expected, status);
+        if(otherDate != aDate) {
+            UnicodeString str3;
+            fmt->format(otherDate, str3);
+            errln("Parse incorrect of " + escape(expected) + " - wanted " + aDate + " but got " +  otherDate + ", " + escape(str3));
+        } else {
+            logln("Parsed OK: " + expected);
+        }
+        delete fmt;
+    }
+    delete fmt2;
+
+    CHECK(status, "Error occurred testing Myanmar Calendar in English ");
+
+    // other languages follow
 }
 
 /**

@@ -170,9 +170,10 @@ TestCase TestCases[] = {
         {"indian",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"coptic",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"ethiopic",        FALSE,      DEFAULT_START, DEFAULT_END},
-        {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END}
+        {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END},
+        {"myanmar",         FALSE,      DEFAULT_START, DEFAULT_END}
 };
-    
+
 struct {
     int32_t fIndex;
     UBool next (int32_t &rIndex) {

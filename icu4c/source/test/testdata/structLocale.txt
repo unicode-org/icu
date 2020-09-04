@@ -21513,6 +21513,7 @@ structLocale:table(nofallback){
             japanese{""}
             persian{""}
             roc{""}
+            myanmar{""}
         }
         collation{
             big5han{""}

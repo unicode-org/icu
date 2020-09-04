@@ -213,6 +213,9 @@
     <ClCompile Include="msgfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="myancal.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="nfrs.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -837,6 +840,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="msgfmt_impl.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="myancal.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="nfrlist.h">
