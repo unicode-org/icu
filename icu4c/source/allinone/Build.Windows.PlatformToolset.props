@@ -37,7 +37,7 @@
   <PropertyGroup Condition="'$(WindowsTargetPlatformVersion)'=='' and '$(PlatformToolset)'=='v142'">
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(WindowsTargetPlatformVersion)'=='' and '$(PlatformToolset)'=='v141'">
+  <PropertyGroup Condition="'$(WindowsTargetPlatformVersion)'=='' and ('$(PlatformToolset)'=='v141' or '$(AutodetectWin10SDK)'=='true')">
     <!-- Detect the SDK version. -->
     <WindowsSdkInstallFolder_10 Condition="'$(WindowsSdkInstallFolder_10)' == ''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v10.0@InstallationFolder)</WindowsSdkInstallFolder_10>
     <WindowsSdkInstallFolder_10 Condition="'$(WindowsSdkInstallFolder_10)' == ''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v10.0@InstallationFolder)</WindowsSdkInstallFolder_10>
