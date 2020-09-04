@@ -1,5 +1,5 @@
 <!--- © 2020 and later: Unicode, Inc. and others. ---> 
-<!--- License & terms of use: http://www.unicode.org/copyright.html#License --->
+<!--- License & terms of use: http://www.unicode.org/copyright.html --->
 
 # Tools and build scripts for updating data originating from CLDR
 

@@ -97,7 +97,7 @@ The ICU license is intended to allow ICU to be included both in free software
 projects and in proprietary or commercial products.
 
 Since ICU 58, ICU is covered by the
-[Unicode license](http://www.unicode.org/copyright.html#License) which is very similar to
+[Unicode license](http://www.unicode.org/copyright.html) which is very similar to
 the previous ICU license.
 
 ICU 1.8.1–ICU 57 and ICU4J 1.3.1–ICU4J 57 are covered by the [ICU
