@@ -1988,11 +1988,12 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
 #define PRIV 0x0080
 
 /**
- * Ticket #12705 - Visual Studio 2015 Update 3 contains a new code optimizer which has problems optimizing
- * this function. (See https://blogs.msdn.microsoft.com/vcblog/2016/05/04/new-code-optimizer/ )
- * As a workaround, we will turn off optimization just for this function on VS2015 Update 3 and above.
+ * Ticket #12705 - The optimizer in Visual Studio 2015 Update 3 has problems optimizing this function.
+ * As a work-around, optimization is disabled for this function on VS2015 and VS2017.
+ * This work-around should be removed once the following versions of Visual Studio are no
+ * longer supported: All versions of VS2015/VS2017, and versions of VS2019 below 16.4.
  */
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 190024210))
+#if defined(_MSC_VER) && (_MSC_VER >= 1900) && (_MSC_VER < 1924)
 #pragma optimize( "", off )
 #endif
 
@@ -2405,10 +2406,8 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     return t.orphan();
 }
 
-/**
-* Ticket #12705 - Turn optimization back on.
-*/
-#if (defined(_MSC_VER) && (_MSC_VER >= 1900) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >= 190024210))
+// Ticket #12705 - Turn optimization back on.
+#if defined(_MSC_VER) && (_MSC_VER >= 1900) && (_MSC_VER < 1924)
 #pragma optimize( "", on )
 #endif
 
