@@ -7,9 +7,8 @@
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-
-icuver:table(nofallback){ 
+icuver:table(nofallback){
     CLDRVersion{"38"}
-    DataVersion { "68.1.0.0" }
-    ICUVersion  { "68.1.0.0" }
+    DataVersion{"68.1.0.0"}
+    ICUVersion{"68.1.0.0"}
 }

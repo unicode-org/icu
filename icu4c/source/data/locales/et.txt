@@ -316,7 +316,7 @@ et{
                 GyMMMd{"d. MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
-                Hms{"H:mm.ss"}
+                Hms{"H:mm:ss"}
                 M{"M"}
                 MEd{"E, d.M"}
                 MMM{"MMMM"}
@@ -328,9 +328,9 @@ et{
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
-                hms{"h:mm.ss a"}
-                mmss{"mm.ss"}
-                ms{"mm.ss"}
+                hms{"h:mm:ss a"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M.y G"}
@@ -1931,7 +1931,7 @@ et{
         number{
             lenient{
                 "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
+                "[,،٫⹁、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
             }
         }

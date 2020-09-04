@@ -8,9 +8,9 @@ sat{
         default{"olck"}
         latn{
             symbols{
-                decimal{"ᱹ"}
+                decimal{"."}
                 group{","}
-                minusSign{"ᱼ"}
+                minusSign{"-"}
                 percentSign{"%"}
                 plusSign{"+"}
             }

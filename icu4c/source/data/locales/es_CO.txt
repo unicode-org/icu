@@ -125,8 +125,6 @@ es_CO{
                 MMMd{"d 'de' MMM"}
                 MMMdd{"d 'de' MMM"}
                 yMEd{"EEE, d/M/y"}
-                yMMM{"MMM 'de' y"}
-                yMMMd{"d 'de' MMM 'de' y"}
             }
             dayNames{
                 format{

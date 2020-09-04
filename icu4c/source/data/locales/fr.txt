@@ -217,6 +217,7 @@ fr{
                 other{"Prenez la {0}e à droite."}
             }
             plural{
+                many{"{0} de jours"}
                 one{"{0} jour"}
                 other{"{0} jours"}
             }

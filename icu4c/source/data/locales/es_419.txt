@@ -269,9 +269,9 @@ es_419{
                 Hms{"HH:mm:ss"}
                 MMMdd{"dd-MMM"}
                 yMEd{"E d/M/y"}
-                yMMM{"MMMM 'de' y"}
+                yMMM{"MMM 'de' y"}
                 yMMMEd{"E, d 'de' MMM 'de' y"}
-                yMMMd{"d 'de' MMMM 'de' y"}
+                yMMMd{"d 'de' MMM 'de' y"}
                 yQQQ{"QQQ 'de' y"}
             }
             dayNames{
