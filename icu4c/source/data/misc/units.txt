@@ -1903,8 +1903,7 @@ units:table(nofallback){
         ampere-per-square-meter{"current-density"}
         bit{"digital"}
         candela{"luminous-intensity"}
-        candela-per-square-meter{"luminance"}
-        candela-square-meter{"luminence"}
+        candela-per-square-meter{"illuminance"}
         candela-square-meter-per-square-meter{"luminous-flux"}
         cubic-meter{"volume"}
         cubic-meter-per-kilogram{"specific-volume"}

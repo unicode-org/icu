@@ -172,7 +172,7 @@ es_MX{
                 MMdd{"dd/MM"}
                 yMEd{"E, d/M/y"}
                 yMM{"MM/y"}
-                yMMMEd{"EEE, d 'de' MMMM 'de' y"}
+                yMMMEd{"EEE, d 'de' MMM 'de' y"}
                 yQQQ{"QQQ y"}
             }
             dayNames{

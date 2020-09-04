@@ -49,6 +49,7 @@ pluralRanges:table(nofallback){
         kn{"set01"}
         ko{"set00"}
         ky{"set03"}
+        lij{"set03"}
         lo{"set00"}
         lt{"set15"}
         lv{"set09"}

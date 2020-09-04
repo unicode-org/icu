@@ -698,9 +698,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
         // Check currency formatting as well
         cdf = CompactDecimalFormat.getInstance(new ULocale("ar-EG"), CompactDecimalFormat.CompactStyle.SHORT);
         result = cdf.format(new CurrencyAmount(43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format 43000 with currency in 'ar-EG'", " ٤٣ ألف US$", result); // see CLDR-14149, may be error
+        assertEquals("CDF should correctly format 43000 with currency in 'ar-EG'", "٤٣ ألف US$", result);
         result = cdf.format(new CurrencyAmount(-43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format -43000 with currency in 'ar-EG'", "؜- ٤٣ ألف US$", result); // see CLDR-14149, may be error
+        assertEquals("CDF should correctly format -43000 with currency in 'ar-EG'", "؜-٤٣ ألف US$", result);
 
         // Extra locale with different positive/negative formats
         cdf = CompactDecimalFormat.getInstance(new ULocale("fi"), CompactDecimalFormat.CompactStyle.SHORT);

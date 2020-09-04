@@ -36,7 +36,6 @@ es_AR{
                 yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
-                yMMMd{"d 'de' MMM 'de' y"}
             }
             dayNames{
                 format{

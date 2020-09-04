@@ -60,6 +60,7 @@ public class TestLocaleValidity extends TestFmwk {
                 {"OK", "en-u-co-big5han"},
                 {"OK", "en-u-cu-adp"},
                 {"OK", "en-u-fw-fri"},
+                {"OK", "en-u-dx-thai"},
                 {"OK", "en-u-hc-h11"},
                 {"OK", "en-u-ka-noignore"},
                 {"OK", "en-u-kb-false"},

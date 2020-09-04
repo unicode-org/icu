@@ -362,7 +362,7 @@ metadata:table(nofallback){
             }
             drw{
                 reason{"deprecated"}
-                replacement{"fa_af"}
+                replacement{"fa_AF"}
             }
             dud{
                 reason{"deprecated"}
@@ -1642,7 +1642,7 @@ metadata:table(nofallback){
             }
             tnf{
                 reason{"deprecated"}
-                replacement{"fa_af"}
+                replacement{"fa_AF"}
             }
             ton{
                 reason{"overlong"}
@@ -1711,6 +1711,10 @@ metadata:table(nofallback){
             und_hakka{
                 reason{"deprecated"}
                 replacement{"und"}
+            }
+            und_hepburn_heploc{
+                reason{"deprecated"}
+                replacement{"und_alalc97"}
             }
             und_lojban{
                 reason{"deprecated"}
@@ -5230,9 +5234,11 @@ metadata:table(nofallback){
         "ku_TR",
         "kw_GB",
         "ky_KG",
+        "la_VA",
         "lag_TZ",
         "lb_LU",
         "lg_UG",
+        "lij_IT",
         "lkt_US",
         "ln_CD",
         "lo_LA",

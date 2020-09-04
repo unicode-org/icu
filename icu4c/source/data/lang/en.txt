@@ -16,6 +16,7 @@ en{
         collation{"Sort Order"}
         currency{"Currency"}
         d0{"Transform Destination"}
+        dx{"Dictionary Break Exclusions"}
         em{"Emoji Presentation Style"}
         fw{"First day of week"}
         h0{"Mixed-in"}
