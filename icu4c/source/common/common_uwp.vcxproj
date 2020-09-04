@@ -44,7 +44,7 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-<!-- The following import will include the UWP configuration options for VS projects. -->
+  <!-- The following import will include the UWP configuration options for VS projects. -->
   <Import Project="..\allinone\Build.Windows.UWP.ProjectConfiguration.props" />
   <!-- The following import will include the library configuration options for VS projects. -->
   <Import Project="..\allinone\Build.Windows.Library.ProjectConfiguration.props" />
@@ -209,6 +209,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="currencydisplaynames.cpp" />
     <ClCompile Include="edits.cpp" />
     <ClCompile Include="filteredbrk.cpp" />
     <ClCompile Include="ubidi.cpp" />
@@ -406,6 +407,7 @@
     <ClCompile Include="restrace.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="currencydisplaynames.h" />
     <ClInclude Include="localsvc.h" />
     <ClInclude Include="msvcres.h" />
     <ClInclude Include="pluralmap.h" />
