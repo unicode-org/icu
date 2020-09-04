@@ -1,6 +1,6 @@
 <!--
     © 2019 and later: Unicode, Inc. and others.
-    License & terms of use: http://www.unicode.org/copyright.html#License
+    License & terms of use: http://www.unicode.org/copyright.html
     This is the XSLT for the API Report, Markdown version
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">

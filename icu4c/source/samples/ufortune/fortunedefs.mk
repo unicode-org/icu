@@ -1,5 +1,5 @@
 # Copyright (C) 2016 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html#License
+# License & terms of use: http://www.unicode.org/copyright.html
 #
 # Copyright (c) 2001-2011 IBM, Inc. and others
 # common makefile between ufortune and ufortune/resources
