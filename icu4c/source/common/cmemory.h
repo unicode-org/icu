@@ -826,19 +826,6 @@ public:
     T* operator[](ptrdiff_t i) {
         return this->fPool[i];
     }
-
-    /**
-     * Append copies of all the items from another MaybeStackVector to this one.
-     */
-    void appendAll(const MaybeStackVector& other, UErrorCode& status) {
-        for (int32_t i = 0; i < other.fCount; i++) {
-            T* item = emplaceBack(*other[i]);
-            if (!item) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-        }
-    }
 };
 
 

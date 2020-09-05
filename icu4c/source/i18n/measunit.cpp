@@ -2280,6 +2280,20 @@ int32_t MeasureUnit::getOffset() const {
     return gOffsets[fTypeId] + fSubTypeId;
 }
 
+MeasureUnitImpl MeasureUnitImpl::copy(UErrorCode &status) const {
+    MeasureUnitImpl result;
+    result.complexity = complexity;
+    result.identifier.append(identifier, status);
+    for (int32_t i = 0; i < units.length(); i++) {
+        SingleUnitImpl *item = result.units.emplaceBack(*units[i]);
+        if (!item) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return result;
+        }
+    }
+    return result;
+}
+
 U_NAMESPACE_END
 
 #endif /* !UNCONFIG_NO_FORMATTING */
