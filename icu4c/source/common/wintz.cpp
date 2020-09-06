@@ -77,10 +77,6 @@ uprv_detectWindowsTimeZone()
     CharString winTZ;
     UErrorCode status = U_ZERO_ERROR;
     winTZ.appendInvariantChars(UnicodeString(TRUE, dynamicTZI.TimeZoneKeyName, -1), status);
-    // appendInvariantChars does not set status to indicate OOM.
-    if (winTZ.isEmpty()) {
-      return nullptr;
-    }
 
     // Map Windows Timezone name (non-localized) to ICU timezone ID (~ Olson timezone id).
     LocalUResourceBundlePointer winTZBundle(ures_openDirect(nullptr, "windowsZones", &status));
@@ -106,14 +102,7 @@ uprv_detectWindowsTimeZone()
     }
 
     CharString icuTZStr;
-    icuTZStr.appendInvariantChars(icuTZ16, tzLen, status);
-    // As of Sep 2020, all timezone IDs are < 40 (the internal stack buffer size of CharString).
-    // To be future-proof, add a check. This check wouldn't be necessary if
-    // appendInvariantChars() sets status to indicate OOM.
-    if (icuTZStr.isEmpty()) {
-      return nullptr;
-    }
-    return icuTZStr.cloneData(status);
+    return icuTZStr.appendInvariantChars(icuTZ16, tzLen, status).cloneData(status);
 }
 
 U_NAMESPACE_END
