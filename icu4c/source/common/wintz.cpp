@@ -56,38 +56,43 @@ uprv_detectWindowsTimeZone()
     if (tzIDStatus == TIME_ZONE_ID_INVALID || dynamicTZI.TimeZoneKeyName[0] == 0)
         return nullptr;
 
-    // Is this the correct way to detect cases where the user turns off DST
-    // in Control Panel for a timezone with DST?
-    if (tzIDStatus == TIME_ZONE_ID_UNKNOWN && dynamicTZI.DaylightBias != 0) {
+    // If DST is turned off in the control panel, return "Etc/GMT<offset>".
+    if (dynamicTZI.DynamicDaylightTimeDisabled) {
         LONG utcOffsetMins = dynamicTZI.Bias;
         if (utcOffsetMins == 0)
           return uprv_strdup("UTC");
 
+        // No way to support when DST is turned off and the offset in minutes is not
+        // a multiple of 60.
         if (utcOffsetMins % 60 == 0) {
           char gmtOffsetTz[11]; // "Etc/GMT+dd" is 11-char long with a terminal null.
+          // Note '-' before 'utcOffsetMin'. The timezone ID's sign convention
+          // is that a timezone ahead of UTC is Etc/GMT-<offset> and a timezone
+          // behind UTC is Etc/GMT+<offset>.
           snprintf(gmtOffsetTz, 11, "Etc/GMT%+d", -utcOffsetMins / 60);
           return uprv_strdup(gmtOffsetTz);
         }
     }
 
-    // tzIDStatus == TIME_ZONE_ID_STANDARD || tzIDStatus == TIME_ZONE_ID_DAYLIGHT ||
-    //  dynamicTZI.DaylightBias == 0)
-
     CharString winTZ;
     UErrorCode status = U_ZERO_ERROR;
-    winTZ.appendInvariantChars(UnicodeString(TRUE, dynamicTZI.TimeZoneKeyName, -1), status)
-        .append('\0', status);
+    winTZ.appendInvariantChars(UnicodeString(TRUE, dynamicTZI.TimeZoneKeyName, -1), status);
+    // appendInvariantChars does not set status to indicate OOM.
+    if (winTZ.isEmpty()) {
+      return nullptr;
+    }
 
-    // Map Windows Timezone name (non-localized) to ICU timezone ID (Olson timezone id).
+    // Map Windows Timezone name (non-localized) to ICU timezone ID (~ Olson timezone id).
     LocalUResourceBundlePointer winTZBundle(ures_openDirect(nullptr, "windowsZones", &status));
     ures_getByKey(winTZBundle.getAlias(), "mapTimezones", winTZBundle.getAlias(), &status);
     ures_getByKey(winTZBundle.getAlias(), winTZ.data(), winTZBundle.getAlias(), &status);
 
-    if (U_FAILURE(status))
+    if (U_FAILURE(status)) {
         return nullptr;
+    }
 
     const UChar* icuTZ16 = nullptr;
-    char regionCode[3] = {}; // 2 letter ISO 3166 country code
+    char regionCode[3] = {}; // 2 letter ISO 3166 country code made entirely of invariant chars.
     int geoId = GetUserGeoID(GEOCLASS_NATION);
     int regionCodeLen = GetGeoInfoA(geoId, GEO_ISO2, regionCode, 3, 0);
     int32_t tzLen;
@@ -101,7 +106,14 @@ uprv_detectWindowsTimeZone()
     }
 
     CharString icuTZStr;
-    return icuTZStr.appendInvariantChars(icuTZ16, tzLen, status).cloneData(status);
+    icuTZStr.appendInvariantChars(icuTZ16, tzLen, status);
+    // As of Sep 2020, all timezone IDs are < 40 (the internal stack buffer size of CharString).
+    // To be future-proof, add a check. This check wouldn't be necessary if
+    // appendInvariantChars() sets status to indicate OOM.
+    if (icuTZStr.isEmpty()) {
+      return nullptr;
+    }
+    return icuTZStr.cloneData(status);
 }
 
 U_NAMESPACE_END
