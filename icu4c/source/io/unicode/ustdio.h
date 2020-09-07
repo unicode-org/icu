@@ -231,7 +231,7 @@ typedef enum {
  * That is, data written to a UFILE will be formatted using the conventions
  * specified by that UFILE's Locale; this data will be in the character set
  * specified by that UFILE's codepage.
- * @param filename The name of the file to open.
+ * @param filename The name of the file to open. Must be 0-terminated.
  * @param perm The read/write permission for the UFILE; one of "r", "w", "rw"
  * @param locale The locale whose conventions will be used to format 
  * and parse output. If this parameter is NULL, the default locale will 
@@ -254,7 +254,7 @@ u_fopen(const char    *filename,
  * That is, data written to a UFILE will be formatted using the conventions
  * specified by that UFILE's Locale; this data will be in the character set
  * specified by that UFILE's codepage.
- * @param filename The name of the file to open.
+ * @param filename The name of the file to open. Must be 0-terminated.
  * @param perm The read/write permission for the UFILE; one of "r", "w", "rw"
  * @param locale The locale whose conventions will be used to format
  * and parse output. If this parameter is NULL, the default locale will
