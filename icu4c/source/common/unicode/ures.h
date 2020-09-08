@@ -386,10 +386,10 @@ ures_getString(const UResourceBundle* resourceBundle,
  * it may need to be copied, or transformed from UTF-16 using u_strToUTF8()
  * or equivalent.
  *
- * If forceCopy==TRUE, then the string is always written to the dest buffer
+ * If forceCopy==true, then the string is always written to the dest buffer
  * and dest is returned.
  *
- * If forceCopy==FALSE, then the string is returned as a pointer if possible,
+ * If forceCopy==false, then the string is returned as a pointer if possible,
  * without needing a dest buffer (it can be NULL). If the string needs to be
  * copied or transformed, then it may be placed into dest at an arbitrary offset.
  *
@@ -407,10 +407,10 @@ ures_getString(const UResourceBundle* resourceBundle,
  *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
  *               Can be NULL, meaning capacity=0 and the string length is not
  *               returned to the caller.
- * @param forceCopy If TRUE, then the output string will always be written to
+ * @param forceCopy If true, then the output string will always be written to
  *                  dest, with U_BUFFER_OVERFLOW_ERROR and
  *                  U_STRING_NOT_TERMINATED_WARNING set if appropriate.
- *                  If FALSE, then the dest buffer may or may not contain a
+ *                  If false, then the dest buffer may or may not contain a
  *                  copy of the string. dest may or may not be modified.
  *                  If a copy needs to be written, then the UErrorCode parameter
  *                  indicates overflow etc. as usual.
@@ -569,7 +569,7 @@ ures_resetIterator(UResourceBundle *resourceBundle);
  * Checks whether the given resource has another element to iterate over.
  *
  * @param resourceBundle a resource
- * @return TRUE if there are more elements, FALSE if there is no more elements
+ * @return true if there are more elements, false if there is no more elements
  * @stable ICU 2.0
  */
 U_STABLE UBool U_EXPORT2
@@ -651,10 +651,10 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
  * it may need to be copied, or transformed from UTF-16 using u_strToUTF8()
  * or equivalent.
  *
- * If forceCopy==TRUE, then the string is always written to the dest buffer
+ * If forceCopy==true, then the string is always written to the dest buffer
  * and dest is returned.
  *
- * If forceCopy==FALSE, then the string is returned as a pointer if possible,
+ * If forceCopy==false, then the string is returned as a pointer if possible,
  * without needing a dest buffer (it can be NULL). If the string needs to be
  * copied or transformed, then it may be placed into dest at an arbitrary offset.
  *
@@ -673,10 +673,10 @@ ures_getStringByIndex(const UResourceBundle *resourceBundle,
  *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
  *               Can be NULL, meaning capacity=0 and the string length is not
  *               returned to the caller.
- * @param forceCopy If TRUE, then the output string will always be written to
+ * @param forceCopy If true, then the output string will always be written to
  *                  dest, with U_BUFFER_OVERFLOW_ERROR and
  *                  U_STRING_NOT_TERMINATED_WARNING set if appropriate.
- *                  If FALSE, then the dest buffer may or may not contain a
+ *                  If false, then the dest buffer may or may not contain a
  *                  copy of the string. dest may or may not be modified.
  *                  If a copy needs to be written, then the UErrorCode parameter
  *                  indicates overflow etc. as usual.
@@ -744,10 +744,10 @@ ures_getStringByKey(const UResourceBundle *resB,
  * it may need to be copied, or transformed from UTF-16 using u_strToUTF8()
  * or equivalent.
  *
- * If forceCopy==TRUE, then the string is always written to the dest buffer
+ * If forceCopy==true, then the string is always written to the dest buffer
  * and dest is returned.
  *
- * If forceCopy==FALSE, then the string is returned as a pointer if possible,
+ * If forceCopy==false, then the string is returned as a pointer if possible,
  * without needing a dest buffer (it can be NULL). If the string needs to be
  * copied or transformed, then it may be placed into dest at an arbitrary offset.
  *
@@ -766,10 +766,10 @@ ures_getStringByKey(const UResourceBundle *resB,
  *               terminating NUL, even in case of U_BUFFER_OVERFLOW_ERROR.
  *               Can be NULL, meaning capacity=0 and the string length is not
  *               returned to the caller.
- * @param forceCopy If TRUE, then the output string will always be written to
+ * @param forceCopy If true, then the output string will always be written to
  *                  dest, with U_BUFFER_OVERFLOW_ERROR and
  *                  U_STRING_NOT_TERMINATED_WARNING set if appropriate.
- *                  If FALSE, then the dest buffer may or may not contain a
+ *                  If false, then the dest buffer may or may not contain a
  *                  copy of the string. dest may or may not be modified.
  *                  If a copy needs to be written, then the UErrorCode parameter
  *                  indicates overflow etc. as usual.
@@ -814,7 +814,7 @@ ures_getUnicodeString(const UResourceBundle *resB, UErrorCode* status) {
     int32_t len = 0;
     const UChar *r = ures_getString(resB, &len, status);
     if(U_SUCCESS(*status)) {
-        result.setTo(TRUE, r, len);
+        result.setTo(true, r, len);
     } else {
         result.setToBogus();
     }
@@ -839,7 +839,7 @@ ures_getNextUnicodeString(UResourceBundle *resB, const char ** key, UErrorCode* 
     int32_t len = 0;
     const UChar* r = ures_getNextString(resB, &len, key, status);
     if(U_SUCCESS(*status)) {
-        result.setTo(TRUE, r, len);
+        result.setTo(true, r, len);
     } else {
         result.setToBogus();
     }
@@ -861,7 +861,7 @@ ures_getUnicodeStringByIndex(const UResourceBundle *resB, int32_t indexS, UError
     int32_t len = 0;
     const UChar* r = ures_getStringByIndex(resB, indexS, &len, status);
     if(U_SUCCESS(*status)) {
-        result.setTo(TRUE, r, len);
+        result.setTo(true, r, len);
     } else {
         result.setToBogus();
     }
@@ -884,7 +884,7 @@ ures_getUnicodeStringByKey(const UResourceBundle *resB, const char* key, UErrorC
     int32_t len = 0;
     const UChar* r = ures_getStringByKey(resB, key, &len, status);
     if(U_SUCCESS(*status)) {
-        result.setTo(TRUE, r, len);
+        result.setTo(true, r, len);
     } else {
         result.setToBogus();
     }

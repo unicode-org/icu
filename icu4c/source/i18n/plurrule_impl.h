@@ -320,8 +320,8 @@ public:
     int32_t opNum = -1;             // for mod expressions, the right operand of the mod.
     int32_t value = -1;             // valid for 'is' rules only.
     UVector32 *rangeList = nullptr; // for 'in', 'within' rules. Null otherwise.
-    UBool negated = FALSE;          // TRUE for negated rules.
-    UBool integerOnly = FALSE;      // TRUE for 'within' rules.
+    UBool negated = false;          // true for negated rules.
+    UBool integerOnly = false;      // true for 'within' rules.
     tokenType digitsType = none;    // n | i | v | f constraint.
     AndConstraint *next = nullptr;
     // Internal error status, used for errors that occur during the copy constructor.
@@ -357,8 +357,8 @@ public:
     OrConstraint   *ruleHeader = nullptr;
     UnicodeString   fDecimalSamples;  // Samples strings from rule source
     UnicodeString   fIntegerSamples;  //   without @decimal or @integer, otherwise unprocessed.
-    UBool           fDecimalSamplesUnbounded = FALSE;
-    UBool           fIntegerSamplesUnbounded = FALSE;
+    UBool           fDecimalSamplesUnbounded = false;
+    UBool           fIntegerSamplesUnbounded = false;
     // Internal error status, used for errors that occur during the copy constructor.
     UErrorCode      fInternalStatus = U_ZERO_ERROR;
 

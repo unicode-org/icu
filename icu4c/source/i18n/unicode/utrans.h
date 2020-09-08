@@ -518,7 +518,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
  * transliterator.
  *
  * @param trans     The transliterator
- * @param escapeUnprintable if TRUE then convert unprintable characters to their
+ * @param escapeUnprintable if true then convert unprintable characters to their
  *                  hex escape representations, \\uxxxx or \\Uxxxxxxxx.
  *                  Unprintable characters are those other than
  *                  U+000A, U+0020..U+007E.
@@ -540,9 +540,9 @@ utrans_toRules(     const UTransliterator* trans,
  * Returns the set of all characters that may be modified in the input text by
  * this UTransliterator, optionally ignoring the transliterator's current filter.
  * @param trans     The transliterator.
- * @param ignoreFilter If FALSE, the returned set incorporates the
+ * @param ignoreFilter If false, the returned set incorporates the
  *                  UTransliterator's current filter; if the filter is changed,
- *                  the return value of this function will change. If TRUE, the
+ *                  the return value of this function will change. If true, the
  *                  returned set ignores the effect of the UTransliterator's
  *                  current filter.
  * @param fillIn    Pointer to a USet object to receive the modifiable characters

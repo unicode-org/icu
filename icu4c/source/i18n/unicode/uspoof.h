@@ -154,10 +154,10 @@
  *     UChar* skel = (UChar*) malloc(++len * sizeof(UChar));
  *     status = U_ZERO_ERROR;
  *     uspoof_getSkeleton(sc, 0, str, -1, skel, len, &status);
- *     UBool result = FALSE;
+ *     UBool result = false;
  *     for (size_t i=0; i<DICTIONARY_LENGTH; i++) {
  *         result = u_strcmp(skel, skeletons[i]) == 0;
- *         if (result == TRUE) { break; }
+ *         if (result == true) { break; }
  *     }
  *     // Has confusable in dictionary: 1 (status: U_ZERO_ERROR)
  *     printf("Has confusable in dictionary: %d (status: %s)\n", result, u_errorName(status));

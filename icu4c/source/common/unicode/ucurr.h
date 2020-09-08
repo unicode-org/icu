@@ -167,7 +167,7 @@ ucurr_register(const UChar* isoCode,
  * restored.
  * @param key the registry key returned by a previous call to ucurr_register
  * @param status the in/out status code, no special meanings are assigned
- * @return TRUE if the currency for this key was successfully unregistered
+ * @return true if the currency for this key was successfully unregistered
  * @stable ICU 2.6
  */
 U_STABLE UBool U_EXPORT2
@@ -181,7 +181,7 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
  * @param currency null-terminated 3-letter ISO 4217 code
  * @param locale locale in which to display currency
  * @param nameStyle selector for which kind of name to return
- * @param isChoiceFormat always set to FALSE, or can be NULL;
+ * @param isChoiceFormat always set to false, or can be NULL;
  *     display names are static strings;
  *     since ICU 4.4, ChoiceFormat patterns are no longer supported
  * @param len fill-in parameter to receive length of result
@@ -205,7 +205,7 @@ ucurr_getName(const UChar* currency,
  * currency object in the en_US locale is "US dollar" or "US dollars".
  * @param currency null-terminated 3-letter ISO 4217 code
  * @param locale locale in which to display currency
- * @param isChoiceFormat always set to FALSE, or can be NULL;
+ * @param isChoiceFormat always set to false, or can be NULL;
  *     display names are static strings;
  *     since ICU 4.4, ChoiceFormat patterns are no longer supported
  * @param pluralCount plural count
@@ -373,7 +373,7 @@ ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
   * @param errorCode 
   *            ICU error code 
    * 
-  * @return TRUE if the given ISO 4217 3-letter code is supported on the specified date range. 
+  * @return true if the given ISO 4217 3-letter code is supported on the specified date range. 
   * 
   * @stable ICU 4.8 
   */ 

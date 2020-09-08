@@ -84,7 +84,7 @@ public:
         // Handles all of Unicode 0..10FFFF.
         // c can be negative, e.g., U_SENTINEL.
         // U+0300 is the first character with lccc!=0.
-        if(c < 0x300) { return FALSE; }
+        if(c < 0x300) { return false; }
         if(c > 0xffff) { c = U16_LEAD(c); }
         int32_t i;
         return

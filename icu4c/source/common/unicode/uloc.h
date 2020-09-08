@@ -1010,15 +1010,15 @@ uloc_setKeywordValue(const char* keywordName,
 /**
  * Returns whether the locale's script is written right-to-left.
  * If there is no script subtag, then the likely script is used, see uloc_addLikelySubtags().
- * If no likely script is known, then FALSE is returned.
+ * If no likely script is known, then false is returned.
  *
  * A script is right-to-left according to the CLDR script metadata
  * which corresponds to whether the script's letters have Bidi_Class=R or AL.
  *
- * Returns TRUE for "ar" and "en-Hebr", FALSE for "zh" and "fa-Cyrl".
+ * Returns true for "ar" and "en-Hebr", false for "zh" and "fa-Cyrl".
  *
  * @param locale input locale ID
- * @return TRUE if the locale's script is written right-to-left
+ * @return true if the locale's script is written right-to-left
  * @stable ICU 54
  */
 U_STABLE UBool U_EXPORT2
@@ -1270,10 +1270,10 @@ uloc_forLanguageTag(const char* langtag,
 /**
  * Returns a well-formed language tag for this locale ID. 
  * <p> 
- * <b>Note</b>: When <code>strict</code> is FALSE, any locale
+ * <b>Note</b>: When <code>strict</code> is false, any locale
  * fields which do not satisfy the BCP47 syntax requirement will
  * be omitted from the result.  When <code>strict</code> is
- * TRUE, this function sets U_ILLEGAL_ARGUMENT_ERROR to the
+ * true, this function sets U_ILLEGAL_ARGUMENT_ERROR to the
  * <code>err</code> if any locale fields do not satisfy the
  * BCP47 syntax requirement.
  * @param localeID  the input locale ID

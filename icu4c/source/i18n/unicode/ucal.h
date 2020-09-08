@@ -871,7 +871,7 @@ ucal_getTimeZoneDisplayName(const UCalendar*          cal,
  * Daylight savings time is not used in all parts of the world.
  * @param cal The UCalendar to query.
  * @param status A pointer to an UErrorCode to receive any errors
- * @return TRUE if cal is currently in daylight savings time, FALSE otherwise
+ * @return true if cal is currently in daylight savings time, false otherwise
  * @stable ICU 2.0
  */
 U_STABLE UBool U_EXPORT2 
@@ -1125,12 +1125,12 @@ ucal_setDateTime(UCalendar*   cal,
                  UErrorCode*  status);
 
 /**
- * Returns TRUE if two UCalendars are equivalent.  Equivalent
+ * Returns true if two UCalendars are equivalent.  Equivalent
  * UCalendars will behave identically, but they may be set to
  * different times.
  * @param cal1 The first of the UCalendars to compare.
  * @param cal2 The second of the UCalendars to compare.
- * @return TRUE if cal1 and cal2 are equivalent, FALSE otherwise.
+ * @return true if cal1 and cal2 are equivalent, false otherwise.
  * @stable ICU 2.0
  */
 U_STABLE UBool U_EXPORT2 
@@ -1240,7 +1240,7 @@ ucal_set(UCalendar*           cal,
  * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
  * UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR_OF_DAY, UCAL_MINUTE, UCAL_SECOND,
  * UCAL_MILLISECOND, UCAL_ZONE_OFFSET, UCAL_DST_OFFSET.
- * @return TRUE if field is set, FALSE otherwise.
+ * @return true if field is set, false otherwise.
  * @see ucal_get
  * @see ucal_set
  * @see ucal_clearField
@@ -1467,13 +1467,13 @@ U_STABLE int32_t U_EXPORT2
 ucal_getWeekendTransition(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, UErrorCode *status);
 
 /**
- * Returns TRUE if the given UDate is in the weekend in
+ * Returns true if the given UDate is in the weekend in
  * this calendar system.
  * @param cal The UCalendar to query.
  * @param date The UDate in question.
  * @param status The error code for the operation.
- * @return TRUE if the given UDate is in the weekend in
- * this calendar system, FALSE otherwise.
+ * @return true if the given UDate is in the weekend in
+ * this calendar system, false otherwise.
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
@@ -1547,13 +1547,13 @@ typedef enum UTimeZoneTransitionType UTimeZoneTransitionType; /**< @stable ICU 5
 * the calendar's current date, in the time zone to which the calendar
 * is currently set. If there is no known time zone transition of the
 * requested type relative to the calendar's date, the function returns
-* FALSE.
+* false.
 * @param cal The UCalendar to query.
 * @param type The type of transition desired.
 * @param transition A pointer to a UDate to be set to the transition time.
-*         If the function returns FALSE, the value set is unspecified.
+*         If the function returns false, the value set is unspecified.
 * @param status A pointer to a UErrorCode to receive any errors.
-* @return TRUE if a valid transition time is set in *transition, FALSE
+* @return true if a valid transition time is set in *transition, false
 *         otherwise.
 * @stable ICU 50
 */

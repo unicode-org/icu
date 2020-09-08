@@ -436,7 +436,7 @@ unorm2_getCombiningClass(const UNormalizer2 *norm2, UChar32 c);
  *                   pass the U_SUCCESS() test, or else the function returns
  *                   immediately. Check for U_FAILURE() on output or use with
  *                   function chaining. (See User Guide for details.)
- * @return TRUE if s is normalized
+ * @return true if s is normalized
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
@@ -501,7 +501,7 @@ unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
  * For details see the Normalizer2 base class documentation.
  * @param norm2 UNormalizer2 instance
  * @param c character to test
- * @return TRUE if c has a normalization boundary before it
+ * @return true if c has a normalization boundary before it
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
@@ -513,7 +513,7 @@ unorm2_hasBoundaryBefore(const UNormalizer2 *norm2, UChar32 c);
  * For details see the Normalizer2 base class documentation.
  * @param norm2 UNormalizer2 instance
  * @param c character to test
- * @return TRUE if c has a normalization boundary after it
+ * @return true if c has a normalization boundary after it
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2
@@ -524,7 +524,7 @@ unorm2_hasBoundaryAfter(const UNormalizer2 *norm2, UChar32 c);
  * For details see the Normalizer2 base class documentation.
  * @param norm2 UNormalizer2 instance
  * @param c character to test
- * @return TRUE if c is normalization-inert
+ * @return true if c is normalization-inert
  * @stable ICU 4.4
  */
 U_STABLE UBool U_EXPORT2

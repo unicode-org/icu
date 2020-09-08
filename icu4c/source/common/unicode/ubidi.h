@@ -597,7 +597,7 @@ U_NAMESPACE_END
  * this "inverse Bidi" and that the current implementation provides only an
  * approximation of "inverse Bidi".</p>
  *
- * <p>With <code>isInverse</code> set to <code>TRUE</code>,
+ * <p>With <code>isInverse</code> set to <code>true</code>,
  * this function changes the behavior of some of the subsequent functions
  * in a way that they can be used for the inverse Bidi algorithm.
  * Specifically, runs of text with numeric characters will be treated in a
@@ -610,12 +610,12 @@ U_NAMESPACE_END
  * the runs of the logically ordered output.</p>
  *
  * <p>Calling this function with argument <code>isInverse</code> set to
- * <code>TRUE</code> is equivalent to calling
+ * <code>true</code> is equivalent to calling
  * <code>ubidi_setReorderingMode</code> with argument
  * <code>reorderingMode</code>
  * set to <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>.<br>
  * Calling this function with argument <code>isInverse</code> set to
- * <code>FALSE</code> is equivalent to calling
+ * <code>false</code> is equivalent to calling
  * <code>ubidi_setReorderingMode</code> with argument
  * <code>reorderingMode</code>
  * set to <code>#UBIDI_REORDER_DEFAULT</code>.
@@ -635,12 +635,12 @@ ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
 /**
  * Is this Bidi object set to perform the inverse Bidi algorithm?
  * <p>Note: calling this function after setting the reordering mode with
- * <code>ubidi_setReorderingMode</code> will return <code>TRUE</code> if the
+ * <code>ubidi_setReorderingMode</code> will return <code>true</code> if the
  * reordering mode was set to <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code>,
- * <code>FALSE</code> for all other values.</p>
+ * <code>false</code> for all other values.</p>
  *
  * @param pBiDi is a <code>UBiDi</code> object.
- * @return TRUE if the Bidi object is set to perform the inverse Bidi algorithm
+ * @return true if the Bidi object is set to perform the inverse Bidi algorithm
  * by handling numbers as L.
  *
  * @see ubidi_setInverse
@@ -679,7 +679,7 @@ ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool orderParagraphsLTR);
  * successive paragraphs progress from left to right?
  *
  * @param pBiDi is a <code>UBiDi</code> object.
- * @return TRUE if the Bidi object is set to allocate level 0 to block
+ * @return true if the Bidi object is set to allocate level 0 to block
  *         separators.
  *
  * @see ubidi_orderParagraphsLTR
@@ -717,7 +717,7 @@ typedef enum UBiDiReorderingMode {
       * @stable ICU 3.6 */
     UBIDI_REORDER_RUNS_ONLY,
     /** Visual to Logical algorithm which handles numbers like L
-      * (same algorithm as selected by <code>ubidi_setInverse(TRUE)</code>.
+      * (same algorithm as selected by <code>ubidi_setInverse(true)</code>.
       * @see ubidi_setInverse
       * @stable ICU 3.6 */
     UBIDI_REORDER_INVERSE_NUMBERS_AS_L,
@@ -836,7 +836,7 @@ typedef enum UBiDiReorderingMode {
  * reordered sequence (the option <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code> can
  * be used with function <code>ubidi_writeReordered</code> to this end. This
  * mode is equivalent to calling <code>ubidi_setInverse()</code> with
- * argument <code>isInverse</code> set to <code>TRUE</code>.</li>
+ * argument <code>isInverse</code> set to <code>true</code>.</li>
  *
  * <li>When the reordering mode is set to
  * <code>#UBIDI_REORDER_INVERSE_LIKE_DIRECT</code>, the "direct" Logical to Visual
@@ -938,7 +938,7 @@ typedef enum UBiDiReorderingOption {
      *
      * <p>If this option is set in conjunction with reordering mode
      * <code>#UBIDI_REORDER_INVERSE_NUMBERS_AS_L</code> or with calling
-     * <code>ubidi_setInverse(TRUE)</code>, it implies
+     * <code>ubidi_setInverse(true)</code>, it implies
      * option <code>#UBIDI_INSERT_LRM_FOR_NUMERIC</code>
      * in calls to function <code>ubidi_writeReordered()</code>.</p>
      *
@@ -1019,7 +1019,7 @@ typedef enum UBiDiReorderingOption {
      *
      * <p>When the <code>UBIDI_OPTION_STREAMING</code> option is used,
      * it is recommended to call <code>ubidi_orderParagraphsLTR()</code> with
-     * argument <code>orderParagraphsLTR</code> set to <code>TRUE</code> before
+     * argument <code>orderParagraphsLTR</code> set to <code>true</code> before
      * calling <code>ubidi_setPara</code> so that later paragraphs may be
      * concatenated to previous paragraphs on the right.</p>
      *

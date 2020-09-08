@@ -253,7 +253,7 @@ public:
     /**
      * Construct a locale from language, country, variant.
      * If an error occurs, then the constructed object will be "bogus"
-     * (isBogus() will return TRUE).
+     * (isBogus() will return true).
      *
      * @param language Lowercase two-letter or three-letter ISO-639 code.
      *  This parameter can instead be an ICU style C locale (e.g. "en_US"),
@@ -799,14 +799,14 @@ public:
     /**
      * Returns whether this locale's script is written right-to-left.
      * If there is no script subtag, then the likely script is used, see uloc_addLikelySubtags().
-     * If no likely script is known, then FALSE is returned.
+     * If no likely script is known, then false is returned.
      *
      * A script is right-to-left according to the CLDR script metadata
      * which corresponds to whether the script's letters have Bidi_Class=R or AL.
      *
-     * Returns TRUE for "ar" and "en-Hebr", FALSE for "zh" and "fa-Cyrl".
+     * Returns true for "ar" and "en-Hebr", false for "zh" and "fa-Cyrl".
      *
-     * @return TRUE if the locale's script is written right-to-left
+     * @return true if the locale's script is written right-to-left
      * @stable ICU 54
      */
     UBool isRightToLeft() const;
@@ -960,7 +960,7 @@ public:
 
     /**
      * Gets the bogus state. Locale object can be bogus if it doesn't exist
-     * @return FALSE if it is a real locale, TRUE if it is a bogus locale
+     * @return false if it is a real locale, true if it is a bogus locale
      * @stable ICU 2.1
      */
     inline UBool isBogus(void) const;
@@ -1020,7 +1020,7 @@ public:
         virtual ~Iterator();
 
         /**
-         * @return TRUE if next() can be called again.
+         * @return true if next() can be called again.
          * @draft ICU 65
          */
         virtual UBool hasNext() const = 0;
@@ -1051,7 +1051,7 @@ public:
         RangeIterator(Iter begin, Iter end) : it_(begin), end_(end) {}
 
         /**
-         * @return TRUE if next() can be called again.
+         * @return true if next() can be called again.
          * @draft ICU 65
          */
         UBool hasNext() const override { return it_ != end_; }
@@ -1089,7 +1089,7 @@ public:
                 it_(begin), end_(end), converter_(converter) {}
 
         /**
-         * @return TRUE if next() can be called again.
+         * @return true if next() can be called again.
          * @draft ICU 65
          */
         UBool hasNext() const override { return it_ != end_; }

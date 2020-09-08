@@ -452,12 +452,12 @@ ucol_openRules( const UChar        *rules,
  *                   state for a locale.
  * @param parseError if not NULL, structure that will get filled with error's pre
  *                   and post context in case of error.
- * @param forceDefaults if FALSE, the settings that are the same as the collator 
+ * @param forceDefaults if false, the settings that are the same as the collator 
  *                   default settings will not be applied (for example, setting
  *                   French secondary on a French collator would not be executed). 
- *                   If TRUE, all the settings will be applied regardless of the 
+ *                   If true, all the settings will be applied regardless of the 
  *                   collator default value. If the definition
- *                   strings are to be cached, should be set to FALSE.
+ *                   strings are to be cached, should be set to false.
  * @param status     Error code. Apart from regular error conditions connected to 
  *                   instantiating collators (like out of memory or similar), this
  *                   API will return an error if an invalid attribute or attribute/value
@@ -603,7 +603,7 @@ ucol_strcollUTF8(
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
  * @param targetLength The length of target, or -1 if null-terminated.
- * @return TRUE if source is greater than target, FALSE otherwise.
+ * @return true if source is greater than target, false otherwise.
  * @see ucol_strcoll
  * @see ucol_greaterOrEqual
  * @see ucol_equal
@@ -622,7 +622,7 @@ ucol_greater(const UCollator *coll,
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
  * @param targetLength The length of target, or -1 if null-terminated.
- * @return TRUE if source is greater than or equal to target, FALSE otherwise.
+ * @return true if source is greater than or equal to target, false otherwise.
  * @see ucol_strcoll
  * @see ucol_greater
  * @see ucol_equal
@@ -641,7 +641,7 @@ ucol_greaterOrEqual(const UCollator *coll,
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
  * @param targetLength The length of target, or -1 if null-terminated.
- * @return TRUE if source is equal to target, FALSE otherwise
+ * @return true if source is equal to target, false otherwise
  * @see ucol_strcoll
  * @see ucol_greater
  * @see ucol_greaterOrEqual
@@ -1439,12 +1439,12 @@ ucol_getUnsafeSet( const UCollator *coll,
  *                   state for a locale.
  * @param parseError if not NULL, structure that will get filled with error's pre
  *                   and post context in case of error.
- * @param forceDefaults if FALSE, the settings that are the same as the collator 
+ * @param forceDefaults if false, the settings that are the same as the collator 
  *                   default settings will not be applied (for example, setting
  *                   French secondary on a French collator would not be executed). 
- *                   If TRUE, all the settings will be applied regardless of the 
+ *                   If true, all the settings will be applied regardless of the 
  *                   collator default value. If the definition
- *                   strings are to be cached, should be set to FALSE.
+ *                   strings are to be cached, should be set to false.
  * @param status     Error code. Apart from regular error conditions connected to 
  *                   instantiating collators (like out of memory or similar), this
  *                   API will return an error if an invalid attribute or attribute/value

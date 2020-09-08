@@ -169,8 +169,8 @@ typedef struct UDataMemory UDataMemory;
  * @param pInfo A pointer to the <code>UDataInfo</code> structure
  *              of data that has been loaded and will be returned
  *              by <code>udata_openChoice()</code> if this function
- *              returns <code>TRUE</code>.
- * @return TRUE if the current data memory is acceptable
+ *              returns <code>true</code>.
+ * @return true if the current data memory is acceptable
  * @stable ICU 2.0
  */
 typedef UBool U_CALLCONV
@@ -242,7 +242,7 @@ udata_open(const char *path, const char *type, const char *name,
  *             This may be <code>NULL</code> or empty.
  * @param name A string that specifies the name of the data.
  * @param isAcceptable This function is called to verify that loaded data
- *                     is useful for the client code. If it returns FALSE
+ *                     is useful for the client code. If it returns false
  *                     for all data items, then <code>udata_openChoice()</code>
  *                     will return with an error.
  * @param context Arbitrary parameter to be passed into isAcceptable.

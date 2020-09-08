@@ -447,12 +447,12 @@ public:
                        UErrorCode& status);
 
     /**
-     * Returns TRUE if the given keyword is defined in this
+     * Returns true if the given keyword is defined in this
      * <code>PluralRules</code> object.
      *
      * @param keyword  the input keyword.
-     * @return         TRUE if the input keyword is defined.
-     *                 Otherwise, return FALSE.
+     * @return         true if the input keyword is defined.
+     *                 Otherwise, return false.
      * @stable ICU 4.0
      */
     UBool isKeyword(const UnicodeString& keyword) const;

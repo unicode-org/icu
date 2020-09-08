@@ -444,7 +444,7 @@ uregex_refreshUText(URegularExpression *regexp,
   *    @param  startIndex  The input string (native) index at which to begin matching, or -1
   *                        to match the input Region.
   *    @param  status      Receives errors detected by this function.
-  *    @return             TRUE if there is a match
+  *    @return             true if there is a match
   *    @stable ICU 3.0
   */
 U_STABLE UBool U_EXPORT2 
@@ -470,7 +470,7 @@ uregex_matches(URegularExpression *regexp,
   *    @param  startIndex  The input string (native) index at which to begin matching, or -1
   *                        to match the input Region.
   *    @param  status      Receives errors detected by this function.
-  *    @return             TRUE if there is a match
+  *    @return             true if there is a match
   *   @stable ICU 4.6
   */
 U_STABLE UBool U_EXPORT2 
@@ -498,7 +498,7 @@ uregex_matches64(URegularExpression *regexp,
   *    @param   startIndex  The input string (native) index at which to begin matching, or
   *                         -1 to match the Input Region
   *    @param   status      A reference to a UErrorCode to receive any errors.
-  *    @return  TRUE if there is a match.
+  *    @return  true if there is a match.
   *    @stable ICU 3.0
   */
 U_STABLE UBool U_EXPORT2 
@@ -527,7 +527,7 @@ uregex_lookingAt(URegularExpression *regexp,
   *    @param   startIndex  The input string (native) index at which to begin matching, or
   *                         -1 to match the Input Region
   *    @param   status      A reference to a UErrorCode to receive any errors.
-  *    @return  TRUE if there is a match.
+  *    @return  true if there is a match.
   *    @stable ICU 4.6
   */
 U_STABLE UBool U_EXPORT2 
@@ -551,7 +551,7 @@ uregex_lookingAt64(URegularExpression *regexp,
   *   @param   startIndex  The position (native) in the input string to begin the search, or
   *                        -1 to search within the Input Region.
   *   @param   status      A reference to a UErrorCode to receive any errors.
-  *   @return              TRUE if a match is found.
+  *   @return              true if a match is found.
   *   @stable ICU 3.0
   */
 U_STABLE UBool U_EXPORT2 
@@ -576,7 +576,7 @@ uregex_find(URegularExpression *regexp,
   *   @param   startIndex  The position (native) in the input string to begin the search, or
   *                        -1 to search within the Input Region.
   *   @param   status      A reference to a UErrorCode to receive any errors.
-  *   @return              TRUE if a match is found.
+  *   @return              true if a match is found.
   *   @stable ICU 4.6
   */
 U_STABLE UBool U_EXPORT2 
@@ -593,7 +593,7 @@ uregex_find64(URegularExpression *regexp,
   *
   *  @param   regexp      The compiled regular expression.
   *  @param   status      A reference to a UErrorCode to receive any errors.
-  *  @return              TRUE if a match is found.
+  *  @return              true if a match is found.
   *  @see uregex_reset
   *  @stable ICU 3.0
   */
@@ -960,7 +960,7 @@ uregex_regionEnd64(const  URegularExpression   *regexp,
   *
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
-  * @return TRUE if this matcher is using opaque bounds, false if it is not.
+  * @return true if this matcher is using opaque bounds, false if it is not.
   * @stable ICU 4.0
   */
 U_STABLE UBool U_EXPORT2
@@ -970,8 +970,8 @@ uregex_hasTransparentBounds(const  URegularExpression   *regexp,
 
 /**
   * Sets the transparency of region bounds for this URegularExpression.
-  * Invoking this function with an argument of TRUE will set matches to use transparent bounds.
-  * If the boolean argument is FALSE, then opaque bounds will be used.
+  * Invoking this function with an argument of true will set matches to use transparent bounds.
+  * If the boolean argument is false, then opaque bounds will be used.
   *
   * Using transparent bounds, the boundaries of the matching region are transparent
   * to lookahead, lookbehind, and boundary matching constructs. Those constructs can
@@ -983,7 +983,7 @@ uregex_hasTransparentBounds(const  URegularExpression   *regexp,
   * By default, opaque bounds are used.
   *
   * @param   regexp The compiled regular expression.
-  * @param   b      TRUE for transparent bounds; FALSE for opaque bounds
+  * @param   b      true for transparent bounds; false for opaque bounds
   * @param   status A pointer to a UErrorCode to receive any errors.
   * @stable ICU 4.0
   **/
@@ -999,7 +999,7 @@ uregex_useTransparentBounds(URegularExpression   *regexp,
   *
   * @param  regexp The compiled regular expression.
   * @param  status A pointer to a UErrorCode to receive any errors.
-  * @return TRUE if this matcher is using anchoring bounds.
+  * @return true if this matcher is using anchoring bounds.
   * @stable ICU 4.0
   */
 U_STABLE UBool U_EXPORT2
@@ -1016,7 +1016,7 @@ uregex_hasAnchoringBounds(const  URegularExpression   *regexp,
   * Anchoring Bounds are the default for regions.
   *
   * @param regexp The compiled regular expression.
-  * @param b      TRUE if to enable anchoring bounds; FALSE to disable them.
+  * @param b      true if to enable anchoring bounds; false to disable them.
   * @param status A pointer to a UErrorCode to receive any errors.
   * @stable ICU 4.0
   */
@@ -1026,13 +1026,13 @@ uregex_useAnchoringBounds(URegularExpression   *regexp,
                           UErrorCode           *status);
 
 /**
-  * Return TRUE if the most recent matching operation touched the
+  * Return true if the most recent matching operation touched the
   *  end of the text being processed.  In this case, additional input text could
   *  change the results of that match.
   *
   *  @param regexp The compiled regular expression.
   *  @param status A pointer to a UErrorCode to receive any errors.
-  *  @return  TRUE if the most recent match hit the end of input
+  *  @return  true if the most recent match hit the end of input
   *  @stable ICU 4.0
   */
 U_STABLE UBool U_EXPORT2
@@ -1040,14 +1040,14 @@ uregex_hitEnd(const  URegularExpression   *regexp,
                      UErrorCode           *status);
 
 /**
-  * Return TRUE the most recent match succeeded and additional input could cause
+  * Return true the most recent match succeeded and additional input could cause
   * it to fail. If this function returns false and a match was found, then more input
   * might change the match but the match won't be lost. If a match was not found,
   * then requireEnd has no meaning.
   *
   * @param regexp The compiled regular expression.
   * @param status A pointer to a UErrorCode to receive any errors.
-  * @return TRUE  if more input could cause the most recent match to no longer match.
+  * @return true  if more input could cause the most recent match to no longer match.
   * @stable ICU 4.0
   */
 U_STABLE UBool U_EXPORT2   
@@ -1483,7 +1483,7 @@ uregex_getStackLimit(const URegularExpression      *regexp,
 /**
  * Function pointer for a regular expression matching callback function.
  * When set, a callback function will be called periodically during matching
- * operations.  If the call back function returns FALSE, the matching
+ * operations.  If the call back function returns false, the matching
  * operation will be terminated early.
  *
  * Note:  the callback function must not call other functions on this
@@ -1494,8 +1494,8 @@ uregex_getStackLimit(const URegularExpression      *regexp,
  *                 uregex_setMatchCallback() is called.
  * @param steps    the accumulated processing time, in match steps, 
  *                 for this matching operation.
- * @return         TRUE to continue the matching operation.
- *                 FALSE to terminate the matching operation.
+ * @return         true to continue the matching operation.
+ *                 false to terminate the matching operation.
  * @stable ICU 4.0
  */
 U_CDECL_BEGIN
@@ -1557,7 +1557,7 @@ uregex_getMatchCallback(const URegularExpression    *regexp,
  * to be attempted, giving the application the opportunity to terminate a long-running
  * find operation.
  * 
- * If the call back function returns FALSE, the find operation will be terminated early.
+ * If the call back function returns false, the find operation will be terminated early.
  *
  * Note:  the callback function must not call other functions on this
  *        URegularExpression
@@ -1568,8 +1568,8 @@ uregex_getMatchCallback(const URegularExpression    *regexp,
  * @param matchIndex  the next index at which a match attempt will be attempted for this
  *                 find operation.  If this callback interrupts the search, this is the
  *                 index at which a find/findNext operation may be re-initiated.
- * @return         TRUE to continue the matching operation.
- *                 FALSE to terminate the matching operation.
+ * @return         true to continue the matching operation.
+ *                 false to terminate the matching operation.
  * @stable ICU 4.6
  */
 U_CDECL_BEGIN

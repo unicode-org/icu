@@ -253,20 +253,20 @@ public:
     RuleBasedBreakIterator& operator=(const RuleBasedBreakIterator& that);
 
     /**
-     * Equality operator.  Returns TRUE if both BreakIterators are of the
+     * Equality operator.  Returns true if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      * @param that The BreakIterator to be compared for equality
-     * @return TRUE if both BreakIterators are of the
+     * @return true if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      *  @stable ICU 2.0
      */
     virtual UBool operator==(const BreakIterator& that) const;
 
     /**
-     * Not-equal operator.  If operator== returns TRUE, this returns FALSE,
+     * Not-equal operator.  If operator== returns true, this returns false,
      * and vice versa.
      * @param that The BreakIterator to be compared for inequality
-     * @return TRUE if both BreakIterators are not same.
+     * @return true if both BreakIterators are not same.
      *  @stable ICU 2.0
      */
     inline UBool operator!=(const BreakIterator& that) const;

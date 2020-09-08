@@ -220,7 +220,7 @@ ucfpos_constrainField(
  *
  * If a category or field constraint was set, this function returns the constrained
  * category. Otherwise, the return value is well-defined only after
- * ufmtval_nextPosition returns TRUE.
+ * ufmtval_nextPosition returns true.
  *
  * @param ucfpos The instance of UConstrainedFieldPosition.
  * @param ec Set if an error occurs.
@@ -238,7 +238,7 @@ ucfpos_getCategory(
  *
  * If a field constraint was set, this function returns the constrained
  * field. Otherwise, the return value is well-defined only after
- * ufmtval_nextPosition returns TRUE.
+ * ufmtval_nextPosition returns true.
  *
  * @param ucfpos The instance of UConstrainedFieldPosition.
  * @param ec Set if an error occurs.
@@ -254,7 +254,7 @@ ucfpos_getField(
 /**
  * Gets the INCLUSIVE start and EXCLUSIVE end index stored for the current position.
  *
- * The output values are well-defined only after ufmtval_nextPosition returns TRUE.
+ * The output values are well-defined only after ufmtval_nextPosition returns true.
  *
  * @param ucfpos The instance of UConstrainedFieldPosition.
  * @param pStart Set to the start index saved in the instance. Ignored if nullptr.
@@ -401,7 +401,7 @@ ufmtval_getString(
  *         see ucfpos_constrainCategory
  *         and ucfpos_constrainField.
  * @param ec Set if an error occurs.
- * @return TRUE if another position was found; FALSE otherwise.
+ * @return true if another position was found; false otherwise.
  * @stable ICU 64
  */
 U_STABLE UBool U_EXPORT2

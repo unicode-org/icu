@@ -360,7 +360,7 @@ ucsdet_getAllDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *statu
   *  heuristics.
   *
   *  @param ucsd  The charset detector to check.
-  *  @return TRUE if filtering is enabled.
+  *  @return true if filtering is enabled.
   *  @stable ICU 3.6
   */
 
@@ -406,7 +406,7 @@ ucsdet_getDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status);
   *
   * @param ucsd a Charset detector.
   * @param encoding encoding the name of charset encoding.
-  * @param enabled <code>TRUE</code> to enable, or <code>FALSE</code> to disable the
+  * @param enabled <code>true</code> to enable, or <code>false</code> to disable the
   *   charset encoding.
   * @param status receives the return status. When the name of charset encoding
   *   is not supported, U_ILLEGAL_ARGUMENT_ERROR is set.

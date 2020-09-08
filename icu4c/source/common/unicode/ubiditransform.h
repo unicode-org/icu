@@ -150,10 +150,10 @@ typedef struct UBiDiTransform UBiDiTransform;
  * calling <code>ubidi_setPara</code> with
  * <code>paraLevel == UBIDI_DEFAULT_RTL</code>,</li>
  * <li><Visual LTR, Logical LTR>: this is equivalent to
- * calling <code>ubidi_setInverse(UBiDi*, TRUE)</code> and then
+ * calling <code>ubidi_setInverse(UBiDi*, true)</code> and then
  * <code>ubidi_setPara</code> with <code>paraLevel == UBIDI_LTR</code>,</li>
  * <li><Visual LTR, Logical RTL>: this is equivalent to
- * calling <code>ubidi_setInverse(UBiDi*, TRUE)</code> and then
+ * calling <code>ubidi_setInverse(UBiDi*, true)</code> and then
  * <code>ubidi_setPara</code> with <code>paraLevel == UBIDI_RTL</code>.</li>
  * </ul>
  * All combinations that involve the Visual RTL scheme are unsupported by

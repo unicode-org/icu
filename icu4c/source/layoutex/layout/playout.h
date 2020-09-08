@@ -82,7 +82,7 @@ typedef void pl_visualRun;
  *
  * @param paragraphLevel is the directionality of the paragraph, as in the UBiDi object.
  *
- * @param vertical is <code>TRUE</code> if the paragraph should be set vertically.
+ * @param vertical is <code>true</code> if the paragraph should be set vertically.
  *
  * @param status will be set to any error code encountered during construction.
  *
@@ -126,7 +126,7 @@ pl_close(pl_paragraph *paragraph);
  *
  * @param count is the number of characters in the paragraph.
  *
- * @return <code>TRUE</code> if any of the text requires complex processing.
+ * @return <code>true</code> if any of the text requires complex processing.
  *
  * @internal
  */

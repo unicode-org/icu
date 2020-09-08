@@ -171,7 +171,7 @@ public:
                  UErrorCode &errorCode);
     UBool appendBMP(UChar c, uint8_t cc, UErrorCode &errorCode) {
         if(remainingCapacity==0 && !resize(1, errorCode)) {
-            return FALSE;
+            return false;
         }
         if(lastCC<=cc || cc==0) {
             *limit++=c;
@@ -183,7 +183,7 @@ public:
             insert(c, cc);
         }
         --remainingCapacity;
-        return TRUE;
+        return true;
     }
     UBool appendZeroCC(UChar32 c, UErrorCode &errorCode);
     UBool appendZeroCC(const UChar *s, const UChar *sLimit, UErrorCode &errorCode);

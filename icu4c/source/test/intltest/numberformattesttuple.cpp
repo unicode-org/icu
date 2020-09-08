@@ -11,6 +11,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/testlog.h"
 #include "ustrfmt.h"
 #include "charstr.h"
 #include "cstring.h"

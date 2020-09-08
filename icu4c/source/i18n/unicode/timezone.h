@@ -707,8 +707,8 @@ public:
      * there are time zones that used daylight savings time in the
      * past, but no longer used currently. For example, Asia/Tokyo has
      * never used daylight savings time since 1951. Most clients would
-     * expect that this method to return <code>FALSE</code> for such case.
-     * The default implementation of this method returns <code>TRUE</code>
+     * expect that this method to return <code>false</code> for such case.
+     * The default implementation of this method returns <code>true</code>
      * when the time zone uses daylight savings time in the current
      * (Gregorian) calendar year.
      * <p>In Java 7, <code>observesDaylightTime()</code> was added in
@@ -925,7 +925,7 @@ private:
      * @param hour Receives parsed hour field
      * @param minute Receives parsed minute field
      * @param second Receives parsed second field
-     * @return Returns TRUE when the given custom id is valid.
+     * @return Returns true when the given custom id is valid.
      */
     static UBool parseCustomID(const UnicodeString& id, int32_t& sign, int32_t& hour,
         int32_t& minute, int32_t& second);
@@ -948,7 +948,7 @@ private:
      * @param hour offset hours
      * @param min offset minutes
      * @param sec offset seconds
-     * @param negative sign of the offset, TRUE for negative offset.
+     * @param negative sign of the offset, true for negative offset.
      * @param id Receves the format result (normalized custom ID)
      * @return The reference to id
      */

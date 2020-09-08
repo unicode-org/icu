@@ -286,7 +286,7 @@ public:
      * @param outErrorCode Set to an error code that occurred while setting subtags.
      *                  Unchanged if there is no such error or if outErrorCode
      *                  already contained an error.
-     * @return TRUE if U_FAILURE(outErrorCode)
+     * @return true if U_FAILURE(outErrorCode)
      * @draft ICU 65
      */
     UBool copyErrorTo(UErrorCode &outErrorCode) const;

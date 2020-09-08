@@ -462,8 +462,8 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
  * @param s2 Second source string.
  * @param length2 Length of second source string, or -1 if NUL-terminated.
  *
- * @param codePointOrder Choose between code unit order (FALSE)
- *                       and code point order (TRUE).
+ * @param codePointOrder Choose between code unit order (false)
+ *                       and code point order (true).
  *
  * @return <0 or 0 or >0 as usual for string comparisons
  *
@@ -485,8 +485,8 @@ u_strCompare(const UChar *s1, int32_t length1,
  *
  * @param iter1 First source string iterator.
  * @param iter2 Second source string iterator.
- * @param codePointOrder Choose between code unit order (FALSE)
- *                       and code point order (TRUE).
+ * @param codePointOrder Choose between code unit order (false)
+ *                       and code point order (true).
  *
  * @return <0 or 0 or >0 as usual for string comparisons
  *
@@ -903,13 +903,13 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  *
  *     U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
  *     U_STRING_DECL(ustringVar2, "jumps 5%", 8);
- *     static UBool didInit=FALSE;
+ *     static UBool didInit=false;
  *
  *     int32_t function() {
  *         if(!didInit) {
  *             U_STRING_INIT(ustringVar1, "Quick-Fox 2", 11);
  *             U_STRING_INIT(ustringVar2, "jumps 5%", 8);
- *             didInit=TRUE;
+ *             didInit=true;
  *         }
  *         return u_strcmp(ustringVar1, ustringVar2);
  *     }

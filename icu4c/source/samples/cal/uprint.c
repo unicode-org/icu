@@ -18,6 +18,7 @@
 */
 
 #include "uprint.h"
+#include <stdbool.h>
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 
@@ -61,7 +62,7 @@ uprint(const UChar *s,
     /* perform the conversion */
     ucnv_fromUnicode(converter, &myTarget, myTarget + arraySize,
              &mySource, mySourceEnd, NULL,
-             TRUE, status);
+             true, status);
 
     /* Write the converted data to the FILE* */
     fwrite(buf, sizeof(char), myTarget - buf, f);

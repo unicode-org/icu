@@ -23,6 +23,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
+#include "toolutil.h"
 #include "unicode/udata.h"
 #include "unicode/utf16.h"
 #include "utrie.h"
