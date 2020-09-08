@@ -2085,36 +2085,34 @@ void NumberFormatTest::TestCurrencyNames(void) {
                                              possibleDataError);
     assertSuccess("ucurr_getName", ec);
 
+    // No resource file for es_ES, fallback to es
     ec = U_ZERO_ERROR;
-
-    // Test that a default or fallback warning is being returned. JB 4239.
     ucurr_getName(CAD, "es_ES", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (es_ES fallback)",
                     U_USING_FALLBACK_WARNING == ec, TRUE, possibleDataError);
 
+    // No resource file for zh_TW, fallback to zh_Hant_TW
+    ec = U_ZERO_ERROR;
     ucurr_getName(CAD, "zh_TW", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (zh_TW fallback)",
                     U_USING_FALLBACK_WARNING == ec, TRUE, possibleDataError);
 
-    ucurr_getName(CAD, "en_US", UCURR_LONG_NAME, &isChoiceFormat,
-                            &len, &ec);
-    assertTrue("ucurr_getName (en_US default)",
-                    U_USING_DEFAULT_WARNING == ec || U_USING_FALLBACK_WARNING == ec, TRUE);
-
+    // No value for CAD in ti, use value from root
+    ec = U_ZERO_ERROR;
     ucurr_getName(CAD, "ti", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
     assertTrue("ucurr_getName (ti default)",
                     U_USING_DEFAULT_WARNING == ec, TRUE);
 
-    // Test that a default warning is being returned when falling back to root. JB 4536.
-    ucurr_getName(ITL, "cy", UCURR_LONG_NAME, &isChoiceFormat,
+    // No resource file for zz, fallback to root
+    ec = U_ZERO_ERROR;
+    ucurr_getName(CAD, "zz", UCURR_LONG_NAME, &isChoiceFormat,
                             &len, &ec);
-    assertTrue("ucurr_getName (cy default to root)",
+    assertTrue("ucurr_getName (zz default to root)",
                     U_USING_DEFAULT_WARNING == ec, TRUE);
 
-    // TODO add more tests later
 }
 
 void NumberFormatTest::TestCurrencyVariants(){
