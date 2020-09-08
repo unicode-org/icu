@@ -925,7 +925,7 @@ unum_parseToUFormattable(const UNumberFormat* fmt,
  * on a DecimalFormat, other formats return U_UNSUPPORTED_ERROR
  * in the status.
  * @param format The formatter to set.
- * @param localized TRUE if the pattern is localized, FALSE otherwise.
+ * @param localized true if the pattern is localized, false otherwise.
  * @param pattern The new pattern
  * @param patternLength The length of pattern, or -1 if null-terminated.
  * @param parseError A pointer to UParseError to receive information
@@ -1300,8 +1300,8 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
  * Extract the pattern from a UNumberFormat.  The pattern will follow
  * the DecimalFormat pattern syntax.
  * @param fmt The formatter to query.
- * @param isPatternLocalized TRUE if the pattern should be localized,
- * FALSE otherwise.  This is ignored if the formatter is a rule-based
+ * @param isPatternLocalized true if the pattern should be localized,
+ * false otherwise.  This is ignored if the formatter is a rule-based
  * formatter.
  * @param result A pointer to a buffer to receive the pattern.
  * @param resultLength The maximum size of result.

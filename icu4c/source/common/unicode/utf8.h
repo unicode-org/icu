@@ -34,6 +34,7 @@
 #ifndef __UTF8_H__
 #define __UTF8_H__
 
+#include <stdbool.h>
 #include "unicode/umachine.h"
 #ifndef __UTF_H__
 #   include "unicode/utf.h"
@@ -166,7 +167,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 /**
  * Does this code unit (byte) encode a code point by itself (US-ASCII 0..0x7f)?
  * @param c 8-bit code unit (byte)
- * @return TRUE or FALSE
+ * @return true or false
  * @stable ICU 2.4
  */
 #define U8_IS_SINGLE(c) (((c)&0x80)==0)
@@ -174,7 +175,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 /**
  * Is this code unit (byte) a UTF-8 lead byte? (0xC2..0xF4)
  * @param c 8-bit code unit (byte)
- * @return TRUE or FALSE
+ * @return true or false
  * @stable ICU 2.4
  */
 #define U8_IS_LEAD(c) ((uint8_t)((c)-0xc2)<=0x32)
@@ -183,7 +184,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 /**
  * Is this code unit (byte) a UTF-8 trail byte? (0x80..0xBF)
  * @param c 8-bit code unit (byte)
- * @return TRUE or FALSE
+ * @return true or false
  * @stable ICU 2.4
  */
 #define U8_IS_TRAIL(c) ((int8_t)(c)<-0x40)
@@ -445,13 +446,13 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * "Safe" macro, checks for a valid code point.
  * If a non-ASCII code point is written, checks for sufficient space in the string.
  * If the code point is not valid or trail bytes do not fit,
- * then isError is set to TRUE.
+ * then isError is set to true.
  *
  * @param s const uint8_t * string buffer
  * @param i int32_t string offset, must be i<capacity
  * @param capacity int32_t size of the string buffer
  * @param c UChar32 code point to append
- * @param isError output UBool set to TRUE if an error occurs, otherwise not modified
+ * @param isError output UBool set to true if an error occurs, otherwise not modified
  * @see U8_APPEND_UNSAFE
  * @stable ICU 2.4
  */
@@ -472,7 +473,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
         (s)[(i)++]=(uint8_t)(((__uc>>6)&0x3f)|0x80); \
         (s)[(i)++]=(uint8_t)((__uc&0x3f)|0x80); \
     } else { \
-        (isError)=TRUE; \
+        (isError)=true; \
     } \
 } UPRV_BLOCK_MACRO_END
 

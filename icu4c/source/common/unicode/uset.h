@@ -161,7 +161,7 @@ typedef enum USetSpanCondition {
      * Continues a span() while there is no set element at the current position.
      * Increments by one code point at a time.
      * Stops before the first set element (character or string).
-     * (For code points only, this is like while contains(current)==FALSE).
+     * (For code points only, this is like while contains(current)==false).
      *
      * When span() returns, the substring between where it started and the position
      * it returned consists only of characters that are not in the set,
@@ -172,7 +172,7 @@ typedef enum USetSpanCondition {
     USET_SPAN_NOT_CONTAINED = 0,
     /**
      * Spans the longest substring that is a concatenation of set elements (characters or strings).
-     * (For characters only, this is like while contains(current)==TRUE).
+     * (For characters only, this is like while contains(current)==true).
      *
      * When span() returns, the substring between where it started and the position
      * it returned consists only of set elements (characters or strings) that are in the set.
@@ -188,7 +188,7 @@ typedef enum USetSpanCondition {
     /**
      * Continues a span() while there is a set element at the current position.
      * Increments by the longest matching element at each position.
-     * (For characters only, this is like while contains(current)==TRUE).
+     * (For characters only, this is like while contains(current)==true).
      *
      * When span() returns, the substring between where it started and the position
      * it returned consists only of set elements (characters or strings) that are in the set.
@@ -352,7 +352,7 @@ uset_clone(const USet *set);
  * Determines whether the set has been frozen (made immutable) or not.
  * See the ICU4J Freezable interface for details.
  * @param set the set
- * @return TRUE/FALSE for whether the set has been frozen
+ * @return true/false for whether the set has been frozen
  * @see uset_freeze
  * @see uset_cloneAsThawed
  * @stable ICU 3.8
@@ -517,7 +517,7 @@ uset_resemblesPattern(const UChar *pattern, int32_t patternLength,
  * @param set the set
  * @param result the string to receive the rules, may be NULL
  * @param resultCapacity the capacity of result, may be 0 if result is NULL
- * @param escapeUnprintable if TRUE then convert unprintable
+ * @param escapeUnprintable if true then convert unprintable
  * character to their hex escape representations, \\uxxxx or
  * \\Uxxxxxxxx.  Unprintable characters are those other than
  * U+000A, U+0020..U+007E.
@@ -533,7 +533,7 @@ uset_toPattern(const USet* set,
 
 /**
  * Adds the given character to the given USet.  After this call,
- * uset_contains(set, c) will return TRUE.
+ * uset_contains(set, c) will return true.
  * A frozen set will not be modified.
  * @param set the object to which to add the character
  * @param c the character to add
@@ -559,7 +559,7 @@ uset_addAll(USet* set, const USet *additionalSet);
 
 /**
  * Adds the given range of characters to the given USet.  After this call,
- * uset_contains(set, start, end) will return TRUE.
+ * uset_contains(set, start, end) will return true.
  * A frozen set will not be modified.
  * @param set the object to which to add the character
  * @param start the first character of the range to add, inclusive
@@ -571,7 +571,7 @@ uset_addRange(USet* set, UChar32 start, UChar32 end);
 
 /**
  * Adds the given string to the given USet.  After this call,
- * uset_containsString(set, str, strLen) will return TRUE.
+ * uset_containsString(set, str, strLen) will return true.
  * A frozen set will not be modified.
  * @param set the object to which to add the character
  * @param str the string to add
@@ -595,7 +595,7 @@ uset_addAllCodePoints(USet* set, const UChar *str, int32_t strLen);
 
 /**
  * Removes the given character from the given USet.  After this call,
- * uset_contains(set, c) will return FALSE.
+ * uset_contains(set, c) will return false.
  * A frozen set will not be modified.
  * @param set the object from which to remove the character
  * @param c the character to remove
@@ -606,7 +606,7 @@ uset_remove(USet* set, UChar32 c);
 
 /**
  * Removes the given range of characters from the given USet.  After this call,
- * uset_contains(set, start, end) will return FALSE.
+ * uset_contains(set, start, end) will return false.
  * A frozen set will not be modified.
  * @param set the object to which to add the character
  * @param start the first character of the range to remove, inclusive
@@ -618,7 +618,7 @@ uset_removeRange(USet* set, UChar32 start, UChar32 end);
 
 /**
  * Removes the given string to the given USet.  After this call,
- * uset_containsString(set, str, strLen) will return FALSE.
+ * uset_containsString(set, str, strLen) will return false.
  * A frozen set will not be modified.
  * @param set the object to which to add the character
  * @param str the string to remove
@@ -759,7 +759,7 @@ U_STABLE void U_EXPORT2
 uset_removeAllStrings(USet* set);
 
 /**
- * Returns TRUE if the given USet contains no characters and no
+ * Returns true if the given USet contains no characters and no
  * strings.
  * @param set the set
  * @return true if set is empty
@@ -769,7 +769,7 @@ U_STABLE UBool U_EXPORT2
 uset_isEmpty(const USet* set);
 
 /**
- * Returns TRUE if the given USet contains the given character.
+ * Returns true if the given USet contains the given character.
  * This function works faster with a frozen set.
  * @param set the set
  * @param c The codepoint to check for within the set
@@ -780,19 +780,19 @@ U_STABLE UBool U_EXPORT2
 uset_contains(const USet* set, UChar32 c);
 
 /**
- * Returns TRUE if the given USet contains all characters c
+ * Returns true if the given USet contains all characters c
  * where start <= c && c <= end.
  * @param set the set
  * @param start the first character of the range to test, inclusive
  * @param end the last character of the range to test, inclusive
- * @return TRUE if set contains the range
+ * @return true if set contains the range
  * @stable ICU 2.2
  */
 U_STABLE UBool U_EXPORT2
 uset_containsRange(const USet* set, UChar32 start, UChar32 end);
 
 /**
- * Returns TRUE if the given USet contains the given string.
+ * Returns true if the given USet contains the given string.
  * @param set the set
  * @param str the string
  * @param strLen the length of the string or -1 if null terminated.
@@ -1095,7 +1095,7 @@ U_STABLE void U_EXPORT2
 uset_setSerializedToOne(USerializedSet* fillSet, UChar32 c);
 
 /**
- * Returns TRUE if the given USerializedSet contains the given
+ * Returns true if the given USerializedSet contains the given
  * character.
  * @param set the serialized set
  * @param c The codepoint to check for within the set

@@ -796,7 +796,7 @@ private:
      *                          to be formatted into date interval string
      * @param toCalendar        calendar set to the to date in date interval
      *                          to be formatted into date interval string
-     * @param fromToOnSameDay   TRUE iff from and to dates are on the same day
+     * @param fromToOnSameDay   true iff from and to dates are on the same day
      *                          (any difference is in ampm/hours or below)
      * @param appendTo          Output parameter to receive result.
      *                          Result is appended to existing contents.
@@ -932,8 +932,8 @@ private:
      * @param dateSkeleton   normalized date skeleton
      * @param timeSkeleton   normalized time skeleton
      * @return               whether the resource is found for the skeleton.
-     *                       TRUE if interval pattern found for the skeleton,
-     *                       FALSE otherwise.
+     *                       true if interval pattern found for the skeleton,
+     *                       false otherwise.
      */
     UBool setSeparateDateTimePtn(const UnicodeString& dateSkeleton,
                                  const UnicodeString& timeSkeleton);
@@ -961,8 +961,8 @@ private:
      * @param extendedBestSkeleton  extended best match skeleton
      * @return                      whether the interval pattern is found
      *                              through extending skeleton or not.
-     *                              TRUE if interval pattern is found by
-     *                              extending skeleton, FALSE otherwise.
+     *                              true if interval pattern is found by
+     *                              extending skeleton, false otherwise.
      */
     UBool setIntervalPattern(UCalendarDateFields field,
                              const UnicodeString* skeleton,

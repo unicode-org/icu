@@ -363,7 +363,7 @@ U_NAMESPACE_END
 /**
  * Tests if the UFILE is at the end of the file stream.
  * @param f The UFILE from which to read.
- * @return Returns TRUE after the first read operation that attempts to
+ * @return Returns true after the first read operation that attempts to
  * read past the end of the file. It returns FALSE if the current position is
  * not end of file.
  * @stable ICU 3.0

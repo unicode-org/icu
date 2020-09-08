@@ -918,7 +918,7 @@ ucnv_getType(const UConverter * converter);
  * Gets the "starter" (lead) bytes for converters of type MBCS.
  * Will fill in an <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> if converter passed in
  * is not MBCS. Fills in an array of type UBool, with the value of the byte
- * as offset to the array. For example, if (starters[0x20] == TRUE) at return,
+ * as offset to the array. For example, if (starters[0x20] == true) at return,
  * it means that the byte 0x20 is a starter byte in this converter.
  * Context pointers are always owned by the caller.
  *
@@ -1103,7 +1103,7 @@ ucnv_setFromUCallBack (UConverter * converter,
  *  consumed. At that point, the caller should reset the source and
  *  sourceLimit pointers to point to the next chunk.
  *
- * At the end of the stream (flush==TRUE), the input is completely consumed
+ * At the end of the stream (flush==true), the input is completely consumed
  * when *source==sourceLimit and no error code is set.
  * The converter object is then automatically reset by this function.
  * (This means that a converter need not be reset explicitly between data
@@ -1128,9 +1128,9 @@ ucnv_setFromUCallBack (UConverter * converter,
  * e.g: <TT>offsets[3]</TT> is equal to 6, it means that the <TT>target[3]</TT> was a result of transcoding <TT>source[6]</TT>
  * For output data carried across calls, and other data without a specific source character
  * (such as from escape sequences or callbacks)  -1 will be placed for offsets.
- * @param flush set to <TT>TRUE</TT> if the current source buffer is the last available
- * chunk of the source, <TT>FALSE</TT> otherwise. Note that if a failing status is returned,
- * this function may have to be called multiple times with flush set to <TT>TRUE</TT> until
+ * @param flush set to <TT>true</TT> if the current source buffer is the last available
+ * chunk of the source, <TT>false</TT> otherwise. Note that if a failing status is returned,
+ * this function may have to be called multiple times with flush set to <TT>true</TT> until
  * the source buffer is consumed.
  * @param err the error status.  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be set if the
  * converter is <TT>NULL</TT>.
@@ -1172,7 +1172,7 @@ ucnv_fromUnicode (UConverter * converter,
  *  consumed. At that point, the caller should reset the source and
  *  sourceLimit pointers to point to the next chunk.
  *
- * At the end of the stream (flush==TRUE), the input is completely consumed
+ * At the end of the stream (flush==true), the input is completely consumed
  * when *source==sourceLimit and no error code is set
  * The converter object is then automatically reset by this function.
  * (This means that a converter need not be reset explicitly between data
@@ -1196,9 +1196,9 @@ ucnv_fromUnicode (UConverter * converter,
  * e.g: <TT>offsets[3]</TT> is equal to 6, it means that the <TT>target[3]</TT> was a result of transcoding <TT>source[6]</TT>
  * For output data carried across calls, and other data without a specific source character
  * (such as from escape sequences or callbacks)  -1 will be placed for offsets.
- * @param flush set to <TT>TRUE</TT> if the current source buffer is the last available
- * chunk of the source, <TT>FALSE</TT> otherwise. Note that if a failing status is returned,
- * this function may have to be called multiple times with flush set to <TT>TRUE</TT> until
+ * @param flush set to <TT>true</TT> if the current source buffer is the last available
+ * chunk of the source, <TT>false</TT> otherwise. Note that if a failing status is returned,
+ * this function may have to be called multiple times with flush set to <TT>true</TT> until
  * the source buffer is consumed.
  * @param err the error status.  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be set if the
  * converter is <TT>NULL</TT>.
@@ -1298,7 +1298,7 @@ ucnv_toUChars(UConverter *cnv,
  * - Convenient.
  *
  * Limitations compared to ucnv_toUnicode():
- * - Always assumes flush=TRUE.
+ * - Always assumes flush=true.
  *   This makes ucnv_getNextUChar() unsuitable for "streaming" conversion,
  *   that is, for where the input is supplied in multiple buffers,
  *   because ucnv_getNextUChar() will assume the end of the input at the end
@@ -1309,7 +1309,7 @@ ucnv_toUChars(UConverter *cnv,
  * ucnv_getNextUChar() uses the current state of the converter
  * (unlike ucnv_toUChars() which always resets first).
  * However, if ucnv_getNextUChar() is called after ucnv_toUnicode()
- * stopped in the middle of a character sequence (with flush=FALSE),
+ * stopped in the middle of a character sequence (with flush=false),
  * then ucnv_getNextUChar() will always use the slower ucnv_toUnicode()
  * internally until the next character boundary.
  * (This is new in ICU 2.6. In earlier releases, ucnv_getNextUChar() had to
@@ -1388,7 +1388,7 @@ ucnv_getNextUChar(UConverter * converter,
  *
  * ucnv_convertEx() also provides further convenience:
  * - an option to reset the converters at the beginning
- *   (if reset==TRUE, see parameters;
+ *   (if reset==true, see parameters;
  *    also sets *pivotTarget=*pivotSource=pivotStart)
  * - allow NUL-terminated input
  *   (only a single NUL byte, will not work for charsets with multi-byte NULs)
@@ -1445,7 +1445,7 @@ ucnv_getNextUChar(UConverter * converter,
  *                    &target, u8+capacity,
  *                    &s, s+length,
  *                    NULL, NULL, NULL, NULL,
- *                    TRUE, TRUE,
+ *                    true, true,
  *                    pErrorCode);
  *
  *     myReleaseCachedUTF8Converter(utf8Cnv);
@@ -1477,7 +1477,7 @@ ucnv_getNextUChar(UConverter * converter,
  *                      It must be pivotStart<=*pivotSource<=*pivotTarget<=pivotLimit
  *                      and pivotStart<pivotLimit (unless pivotStart==NULL).
  * @param pivotLimit    Pointer to the first unit after the pivot buffer.
- * @param reset         If TRUE, then ucnv_resetToUnicode(sourceCnv) and
+ * @param reset         If true, then ucnv_resetToUnicode(sourceCnv) and
  *                      ucnv_resetFromUnicode(targetCnv) are called, and the
  *                      pivot pointers are reset (*pivotTarget=*pivotSource=pivotStart).
  * @param flush         If true, indicates the end of the input.
@@ -1921,8 +1921,8 @@ ucnv_fixFileSeparator(const UConverter *cnv, UChar *source, int32_t sourceLen);
  * Determines if the converter contains ambiguous mappings of the same
  * character or not.
  * @param cnv the converter to be tested
- * @return TRUE if the converter contains ambiguous mapping of the same
- * character, FALSE otherwise.
+ * @return true if the converter contains ambiguous mapping of the same
+ * character, false otherwise.
  * @stable ICU 2.0
  */
 U_STABLE UBool U_EXPORT2
@@ -1938,8 +1938,8 @@ ucnv_isAmbiguous(const UConverter *cnv);
  * http://www.icu-project.org/userguide/conversion-data.html#ucmformat
  *
  * @param cnv The converter to set the fallback mapping usage on.
- * @param usesFallback TRUE if the user wants the converter to take advantage of the fallback
- * mapping, FALSE otherwise.
+ * @param usesFallback true if the user wants the converter to take advantage of the fallback
+ * mapping, false otherwise.
  * @stable ICU 2.0
  * @see ucnv_usesFallback
  */
@@ -1951,7 +1951,7 @@ ucnv_setFallback(UConverter *cnv, UBool usesFallback);
  * This flag has restrictions, see ucnv_setFallback().
  *
  * @param cnv The converter to be tested
- * @return TRUE if the converter uses fallback, FALSE otherwise.
+ * @return true if the converter uses fallback, false otherwise.
  * @stable ICU 2.0
  * @see ucnv_setFallback
  */
@@ -2030,10 +2030,10 @@ ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
  * but a UTF-32 converter encodes each code point with 4 bytes.
  * Note: This method is not intended to be used to determine whether the charset has a
  * fixed ratio of bytes to Unicode codes <i>units</i> for any particular Unicode encoding form.
- * FALSE is returned with the UErrorCode if error occurs or cnv is NULL.
+ * false is returned with the UErrorCode if error occurs or cnv is NULL.
  * @param cnv       The converter to be tested
  * @param status    ICU error code in/out paramter
- * @return TRUE if the converter is fixed-width
+ * @return true if the converter is fixed-width
  * @stable ICU 4.8
  */
 U_STABLE UBool U_EXPORT2

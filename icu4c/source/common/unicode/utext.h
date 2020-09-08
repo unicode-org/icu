@@ -323,7 +323,7 @@ utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *s
   *  shallow clones provide some protection against errors of this type by
   *  disabling text modification via the cloned UText.
   *
-  *  A shallow clone made with the readOnly parameter == FALSE will preserve the 
+  *  A shallow clone made with the readOnly parameter == false will preserve the 
   *  utext_isWritable() state of the source object.  Note, however, that
   *  write operations must be avoided while more than one UText exists that refer
   *  to the same underlying text.
@@ -339,8 +339,8 @@ utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *s
   *                If non-NULL, must refer to an already existing UText, which will then
   *                be reset to become the clone.
   *  @param src    The UText to be cloned.
-  *  @param deep   TRUE to request a deep clone, FALSE for a shallow clone.
-  *  @param readOnly TRUE to request that the cloned UText have read only access to the 
+  *  @param deep   true to request a deep clone, false for a shallow clone.
+  *  @param readOnly true to request that the cloned UText have read only access to the 
   *                underlying text.  
 
   *  @param status Errors are returned here.  For deep clones, U_UNSUPPORTED_ERROR
@@ -357,11 +357,11 @@ utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCod
   *  Compare two UText objects for equality.
   *  UTexts are equal if they are iterating over the same text, and
   *    have the same iteration position within the text.
-  *    If either or both of the parameters are NULL, the comparison is FALSE.
+  *    If either or both of the parameters are NULL, the comparison is false.
   *
   *  @param a   The first of the two UTexts to compare.
   *  @param b   The other UText to be compared.
-  *  @return    TRUE if the two UTexts are equal.
+  *  @return    true if the two UTexts are equal.
   *  @stable ICU 3.6
   */
 U_STABLE UBool U_EXPORT2
@@ -389,7 +389,7 @@ U_STABLE int64_t U_EXPORT2
 utext_nativeLength(UText *ut);
 
 /**
- *  Return TRUE if calculating the length of the text could be expensive.
+ *  Return true if calculating the length of the text could be expensive.
  *  Finding the length of NUL terminated strings is considered to be expensive.
  *
  *  Note that the value of this function may change
@@ -398,7 +398,7 @@ utext_nativeLength(UText *ut);
  *  be expensive to report it.
  *
  * @param ut the text to be accessed.
- * @return TRUE if determining the length of the text could be time consuming.
+ * @return true if determining the length of the text could be time consuming.
  * @stable ICU 3.4
  */
 U_STABLE UBool U_EXPORT2
@@ -584,7 +584,7 @@ utext_setNativeIndex(UText *ut, int64_t nativeIndex);
  *
  * @param ut the text to be accessed.
  * @param delta the signed number of code points to move the iteration position.
- * @return TRUE if the position could be moved the requested number of positions while
+ * @return true if the position could be moved the requested number of positions while
  *              staying within the range [0 - text length].
  * @stable ICU 3.4
  */
@@ -768,16 +768,16 @@ utext_extract(UText *ut,
 
 
 /**
- *  Return TRUE if the text can be written (modified) with utext_replace() or
+ *  Return true if the text can be written (modified) with utext_replace() or
  *  utext_copy().  For the text to be writable, the text provider must
  *  be of a type that supports writing and the UText must not be frozen.
  *
- *  Attempting to modify text when utext_isWriteable() is FALSE will fail -
+ *  Attempting to modify text when utext_isWriteable() is false will fail -
  *  the text will not be modified, and an error will be returned from the function
  *  that attempted the modification.
  *
  * @param  ut   the UText to be tested.
- * @return TRUE if the text is modifiable.
+ * @return true if the text is modifiable.
  *
  * @see    utext_freeze()
  * @see    utext_replace()
@@ -794,7 +794,7 @@ utext_isWritable(const UText *ut);
   * @see Replaceable::hasMetaData()
   *
   * @param ut The UText to be tested
-  * @return TRUE if the underlying text includes meta data.
+  * @return true if the underlying text includes meta data.
   * @stable ICU 3.4
   */
 U_STABLE UBool U_EXPORT2
@@ -808,7 +808,7 @@ utext_hasMetaData(const UText *ut);
  *  newly inserted replacement text.
  *
  * This function is only available on UText types that support writing,
- * that is, ones where utext_isWritable() returns TRUE.
+ * that is, ones where utext_isWritable() returns true.
  *
  * When using this function, there should be only a single UText opened onto the
  * underlying native text string.  Behavior after a replace operation
@@ -850,7 +850,7 @@ utext_replace(UText *ut,
  * at the destination position.
  *
  * This function is only available on UText types that support writing,
- * that is, ones where utext_isWritable() returns TRUE.
+ * that is, ones where utext_isWritable() returns true.
  *
  * When using this function, there should be only a single UText opened onto the
  * underlying native text string.  Behavior after a copy operation
@@ -863,7 +863,7 @@ utext_replace(UText *ut,
  *                     to be copied.
  * @param destIndex    The native destination index to which the source substring is
  *                     copied or moved.
- * @param move         If TRUE, then the substring is moved, not copied/duplicated.
+ * @param move         If true, then the substring is moved, not copied/duplicated.
  * @param status       receives any error status.  Possible errors include U_NO_WRITE_PERMISSION
  *                       
  * @stable ICU 3.4
@@ -972,7 +972,7 @@ enum {
   *  @param dest   A UText struct to be filled in with the result of the clone operation,
   *                or NULL if the clone function should heap-allocate a new UText struct.
   *  @param src    The UText to be cloned.
-  *  @param deep   TRUE to request a deep clone, FALSE for a shallow clone.
+  *  @param deep   true to request a deep clone, false for a shallow clone.
   *  @param status Errors are returned here.  For deep clones, U_UNSUPPORTED_ERROR
   *                should be returned if the text provider is unable to clone the
   *                original text.
@@ -1008,9 +1008,9 @@ UTextNativeLength(UText *ut);
  *
  * @param ut          the UText being accessed.
  * @param nativeIndex Requested index of the text to be accessed.
- * @param forward     If TRUE, then the returned chunk must contain text
+ * @param forward     If true, then the returned chunk must contain text
  *                    starting from the index, so that start<=index<limit.
- *                    If FALSE, then the returned chunk must contain text
+ *                    If false, then the returned chunk must contain text
  *                    before the index, so that start<index<=limit.
  * @return            True if the requested index could be accessed.  The chunk
  *                    will contain the requested text.
@@ -1114,7 +1114,7 @@ UTextReplace(UText *ut,
  * @param nativeStart  The index of the start of the region to be copied or moved
  * @param nativeLimit  The index of the character following the region to be replaced.
  * @param nativeDest   The destination index to which the source substring is copied or moved.
- * @param move         If TRUE, then the substring is moved, not copied/duplicated.
+ * @param move         If true, then the substring is moved, not copied/duplicated.
  * @param status       receives any error status.  Possible errors include U_NO_WRITE_PERMISSION
  *
  * @stable ICU 3.4

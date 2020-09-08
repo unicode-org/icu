@@ -80,7 +80,7 @@ U_CDECL_BEGIN
  * and the ICU User Guide chapter on Properties (http://icu-project.org/userguide/properties.html).
  *
  * Many properties are accessible via generic functions that take a UProperty selector.
- * - u_hasBinaryProperty() returns a binary value (TRUE/FALSE) per property and code point.
+ * - u_hasBinaryProperty() returns a binary value (true/false) per property and code point.
  * - u_getIntPropertyValue() returns an integer value per property and code point.
  *   For each supported enumerated or catalog property, there is
  *   an enum type for all of the property's values, and
@@ -2586,8 +2586,8 @@ typedef enum UVerticalOrientation {
  * @param c Code point to test.
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT.
- * @return TRUE or FALSE according to the binary Unicode property value for c.
- *         Also FALSE if 'which' is out of bounds or if the Unicode version
+ * @return true or false according to the binary Unicode property value for c.
+ *         Also false if 'which' is out of bounds or if the Unicode version
  *         does not have data for the property at all, or not for this code point.
  *
  * @see UProperty
@@ -2708,7 +2708,7 @@ u_isUWhiteSpace(UChar32 c);
  *         for enumerated properties, corresponds to the numeric value of the enumerated
  *         constant of the respective property value enumeration type
  *         (cast to enum type if necessary).
- *         Returns 0 or 1 (for FALSE/TRUE) for binary Unicode properties.
+ *         Returns 0 or 1 (for false/true) for binary Unicode properties.
  *         Returns a bit-mask for mask properties.
  *         Returns 0 if 'which' is out of bounds or if the Unicode version
  *         does not have data for the property at all, or not for this code point.
@@ -2754,7 +2754,7 @@ u_getIntPropertyMinValue(UProperty which);
  *
  * - UCHAR_BIDI_CLASS:    0/18 (U_LEFT_TO_RIGHT/U_BOUNDARY_NEUTRAL)
  * - UCHAR_SCRIPT:        0/45 (USCRIPT_COMMON/USCRIPT_TAGBANWA)
- * - UCHAR_IDEOGRAPHIC:   0/1  (FALSE/TRUE)
+ * - UCHAR_IDEOGRAPHIC:   0/1  (false/true)
  *
  * For undefined UProperty constant values, min/max values will be 0/-1.
  *
@@ -2842,7 +2842,7 @@ u_getNumericValue(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is an Ll lowercase letter
+ * @return true if the code point is an Ll lowercase letter
  *
  * @see UCHAR_LOWERCASE
  * @see u_isupper
@@ -2868,7 +2868,7 @@ u_islower(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is an Lu uppercase letter
+ * @return true if the code point is an Lu uppercase letter
  *
  * @see UCHAR_UPPERCASE
  * @see u_islower
@@ -2886,7 +2886,7 @@ u_isupper(UChar32 c);
  * Same as java.lang.Character.isTitleCase().
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is an Lt titlecase letter
+ * @return true if the code point is an Lt titlecase letter
  *
  * @see u_isupper
  * @see u_islower
@@ -2910,7 +2910,7 @@ u_istitle(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a digit character according to Character.isDigit()
+ * @return true if the code point is a digit character according to Character.isDigit()
  *
  * @stable ICU 2.0
  */
@@ -2929,7 +2929,7 @@ u_isdigit(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a letter character
+ * @return true if the code point is a letter character
  *
  * @see u_isdigit
  * @see u_isalnum
@@ -2952,7 +2952,7 @@ u_isalpha(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is an alphanumeric character according to Character.isLetterOrDigit()
+ * @return true if the code point is an alphanumeric character according to Character.isLetterOrDigit()
  *
  * @stable ICU 2.0
  */
@@ -2975,7 +2975,7 @@ u_isalnum(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a hexadecimal digit
+ * @return true if the code point is a hexadecimal digit
  *
  * @stable ICU 2.6
  */
@@ -2991,7 +2991,7 @@ u_isxdigit(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a punctuation character
+ * @return true if the code point is a punctuation character
  *
  * @stable ICU 2.6
  */
@@ -3001,7 +3001,7 @@ u_ispunct(UChar32 c);
 /**
  * Determines whether the specified code point is a "graphic" character
  * (printable, excluding spaces).
- * TRUE for all characters except those with general categories
+ * true for all characters except those with general categories
  * "Cc" (control codes), "Cf" (format controls), "Cs" (surrogates),
  * "Cn" (unassigned), and "Z" (separators).
  *
@@ -3010,7 +3010,7 @@ u_ispunct(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a "graphic" character
+ * @return true if the code point is a "graphic" character
  *
  * @stable ICU 2.6
  */
@@ -3022,13 +3022,13 @@ u_isgraph(UChar32 c);
  * a character that visibly separates words on a line.
  * The following are equivalent definitions:
  *
- * TRUE for Unicode White_Space characters except for "vertical space controls"
+ * true for Unicode White_Space characters except for "vertical space controls"
  * where "vertical space controls" are the following characters:
  * U+000A (LF) U+000B (VT) U+000C (FF) U+000D (CR) U+0085 (NEL) U+2028 (LS) U+2029 (PS)
  *
  * same as
  *
- * TRUE for U+0009 (TAB) and characters with general category "Zs" (space separators).
+ * true for U+0009 (TAB) and characters with general category "Zs" (space separators).
  *
  * Note: There are several ICU whitespace functions; please see the uchar.h
  * file documentation for a detailed comparison.
@@ -3038,7 +3038,7 @@ u_isgraph(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a "blank"
+ * @return true if the code point is a "blank"
  *
  * @stable ICU 2.6
  */
@@ -3057,7 +3057,7 @@ u_isblank(UChar32 c);
  * Same as java.lang.Character.isDefined().
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is assigned a character
+ * @return true if the code point is assigned a character
  *
  * @see u_isdigit
  * @see u_isalpha
@@ -3102,7 +3102,7 @@ u_isspace(UChar32 c);
  * file documentation for a detailed comparison.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a space character according to Character.isSpaceChar()
+ * @return true if the code point is a space character according to Character.isSpaceChar()
  *
  * @see u_isspace
  * @see u_isWhitespace
@@ -3142,7 +3142,7 @@ u_isJavaSpaceChar(UChar32 c);
  * file documentation for a detailed comparison.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a whitespace character according to Java/ICU
+ * @return true if the code point is a whitespace character according to Java/ICU
  *
  * @see u_isspace
  * @see u_isJavaSpaceChar
@@ -3167,7 +3167,7 @@ u_isWhitespace(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a control character
+ * @return true if the code point is a control character
  *
  * @see UCHAR_DEFAULT_IGNORABLE_CODE_POINT
  * @see u_isprint
@@ -3183,7 +3183,7 @@ u_iscntrl(UChar32 c);
  * Same as java.lang.Character.isISOControl().
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is an ISO control code
+ * @return true if the code point is an ISO control code
  *
  * @see u_iscntrl
  * @stable ICU 2.6
@@ -3200,7 +3200,7 @@ u_isISOControl(UChar32 c);
  * documentation at the top of this header file.
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a printable character
+ * @return true if the code point is a printable character
  *
  * @see UCHAR_DEFAULT_IGNORABLE_CODE_POINT
  * @see u_iscntrl
@@ -3220,7 +3220,7 @@ u_isprint(UChar32 c);
  * Letter (L), Number (N), Punctuation (P), Symbol (S), or Space Separator (Zs).
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is a base character according to this function
+ * @return true if the code point is a base character according to this function
  *
  * @see u_isalpha
  * @see u_isdigit
@@ -3258,7 +3258,7 @@ u_charDirection(UChar32 c);
  * Same as UCHAR_BIDI_MIRRORED
  *
  * @param c the code point to be tested
- * @return TRUE if the character has the Bidi_Mirrored property
+ * @return true if the character has the Bidi_Mirrored property
  *
  * @see UCHAR_BIDI_MIRRORED
  * @stable ICU 2.0
@@ -3341,13 +3341,13 @@ u_charType(UChar32 c);
  * of code points c (where start<=c<limit)
  * with the same Unicode general category ("character type").
  *
- * The callback function can stop the enumeration by returning FALSE.
+ * The callback function can stop the enumeration by returning false.
  *
  * @param context an opaque pointer, as passed into utrie_enum()
  * @param start the first code point in a contiguous range with value
  * @param limit one past the last code point in a contiguous range with value
  * @param type the general category for all code points in [start..limit[
- * @return FALSE to stop the enumeration
+ * @return false to stop the enumeration
  *
  * @stable ICU 2.1
  * @see UCharCategory
@@ -3521,14 +3521,14 @@ u_charFromName(UCharNameChoice nameChoice,
  * Type of a callback function for u_enumCharNames() that gets called
  * for each Unicode character with the code point value and
  * the character name.
- * If such a function returns FALSE, then the enumeration is stopped.
+ * If such a function returns false, then the enumeration is stopped.
  *
  * @param context The context pointer that was passed to u_enumCharNames().
  * @param code The Unicode code point for the character with this name.
  * @param nameChoice Selector for which kind of names is enumerated.
  * @param name The character's name, zero-terminated.
  * @param length The length of the name.
- * @return TRUE if the enumeration should continue, FALSE to stop it.
+ * @return true if the enumeration should continue, false to stop it.
  *
  * @see UCharNameChoice
  * @see u_enumCharNames
@@ -3722,7 +3722,7 @@ u_getPropertyValueEnum(UProperty property,
  * Same as UCHAR_ID_START
  *
  * @param c the code point to be tested
- * @return TRUE if the code point may start an identifier
+ * @return true if the code point may start an identifier
  *
  * @see UCHAR_ID_START
  * @see u_isalpha
@@ -3746,7 +3746,7 @@ u_isIDStart(UChar32 c);
  * u_isIDIgnorable(c).
  *
  * @param c the code point to be tested
- * @return TRUE if the code point may occur in an identifier according to Java
+ * @return true if the code point may occur in an identifier according to Java
  *
  * @see UCHAR_ID_CONTINUE
  * @see u_isIDStart
@@ -3769,7 +3769,7 @@ u_isIDPart(UChar32 c);
  * Note that Unicode just recommends to ignore Cf (format controls).
  *
  * @param c the code point to be tested
- * @return TRUE if the code point is ignorable in identifiers according to Java
+ * @return true if the code point is ignorable in identifiers according to Java
  *
  * @see UCHAR_DEFAULT_IGNORABLE_CODE_POINT
  * @see u_isIDStart
@@ -3788,7 +3788,7 @@ u_isIDIgnorable(UChar32 c);
  * Same as java.lang.Character.isJavaIdentifierStart().
  *
  * @param c the code point to be tested
- * @return TRUE if the code point may start a Java identifier
+ * @return true if the code point may start a Java identifier
  *
  * @see     u_isJavaIDPart
  * @see     u_isalpha
@@ -3807,7 +3807,7 @@ u_isJavaIDStart(UChar32 c);
  * Same as java.lang.Character.isJavaIdentifierPart().
  *
  * @param c the code point to be tested
- * @return TRUE if the code point may occur in a Java identifier
+ * @return true if the code point may occur in a Java identifier
  *
  * @see     u_isIDIgnorable
  * @see     u_isJavaIDStart

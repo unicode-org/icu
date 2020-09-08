@@ -562,7 +562,7 @@ uscript_getScript(UChar32 codepoint, UErrorCode *err);
  * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
  * @param c code point
  * @param sc script code
- * @return TRUE if sc is in Script_Extensions(c)
+ * @return true if sc is in Script_Extensions(c)
  * @stable ICU 49
  */
 U_STABLE UBool U_EXPORT2
@@ -672,34 +672,34 @@ U_STABLE UScriptUsage U_EXPORT2
 uscript_getUsage(UScriptCode script);
 
 /**
- * Returns TRUE if the script is written right-to-left.
+ * Returns true if the script is written right-to-left.
  * For example, Arab and Hebr.
  *
  * @param script script code
- * @return TRUE if the script is right-to-left
+ * @return true if the script is right-to-left
  * @stable ICU 51
  */
 U_STABLE UBool U_EXPORT2
 uscript_isRightToLeft(UScriptCode script);
 
 /**
- * Returns TRUE if the script allows line breaks between letters (excluding hyphenation).
+ * Returns true if the script allows line breaks between letters (excluding hyphenation).
  * Such a script typically requires dictionary-based line breaking.
  * For example, Hani and Thai.
  *
  * @param script script code
- * @return TRUE if the script allows line breaks between letters
+ * @return true if the script allows line breaks between letters
  * @stable ICU 51
  */
 U_STABLE UBool U_EXPORT2
 uscript_breaksBetweenLetters(UScriptCode script);
 
 /**
- * Returns TRUE if in modern (or most recent) usage of the script case distinctions are customary.
+ * Returns true if in modern (or most recent) usage of the script case distinctions are customary.
  * For example, Latn and Cyrl.
  *
  * @param script script code
- * @return TRUE if the script is cased
+ * @return true if the script is cased
  * @stable ICU 51
  */
 U_STABLE UBool U_EXPORT2

@@ -625,7 +625,7 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
  *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
  *            input "endIndex", and "endIndex" is set to the end of that occurrence of the field
  *            (exclusive index). If a field position is not found, the FieldPosition is not changed and
- *            the method returns FALSE.
+ *            the method returns false.
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
