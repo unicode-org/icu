@@ -28,6 +28,7 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.Output;
@@ -484,6 +485,10 @@ public class DateIntervalFormat extends UFormat {
     private String fTimePattern = null;
     private String fDateTimeFormat = null;
 
+    /*
+     * Capitalization context, new in ICU 68
+     */
+    private DisplayContext fCapitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
 
     /*
      * default constructor; private because we don't want anyone to use
@@ -722,6 +727,7 @@ public class DateIntervalFormat extends UFormat {
         other.fDatePattern = fDatePattern;
         other.fTimePattern = fTimePattern;
         other.fDateTimeFormat = fDateTimeFormat;
+        other.fCapitalizationSetting = fCapitalizationSetting;
         return other;
     }
 
@@ -920,6 +926,10 @@ public class DateIntervalFormat extends UFormat {
             throw new IllegalArgumentException("can not format on two different calendars");
         }
 
+        // Set up fDateFormat to handle the first or only part of the interval
+        // (override later for any second part).
+        fDateFormat.setContext(fCapitalizationSetting);
+
         // First, find the largest different calendar field.
         int field = -1; //init with an invalid value.
 
@@ -1008,6 +1018,8 @@ public class DateIntervalFormat extends UFormat {
         }
         if ( intervalPattern.getSecondPart() != null ) {
             fDateFormat.applyPattern(intervalPattern.getSecondPart());
+            // No capitalization for second part of interval
+            fDateFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
             fDateFormat.format(secondCal, appendTo, pos, attributes);
         }
         fDateFormat.applyPattern(originalPattern);
@@ -1045,6 +1057,8 @@ public class DateIntervalFormat extends UFormat {
             if (pos.getEndIndex() > 0) {
                 pos = new FieldPosition(0);
             }
+            // No capitalization for second portion
+            fDateFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
         }
     }
 
@@ -1099,6 +1113,8 @@ public class DateIntervalFormat extends UFormat {
                 if (pos.getEndIndex() > 0) {
                     pos = new FieldPosition(0);
                 }
+                // No capitalization for second portion
+                fDateFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
             }
 
             // restore full pattern
@@ -1242,6 +1258,39 @@ public class DateIntervalFormat extends UFormat {
         if (fToCalendar != null) {
             fToCalendar.setTimeZone(zoneToSet);
         }
+    }
+
+    /**
+     * {@icu} Set a particular DisplayContext value in the formatter,
+     * such as CAPITALIZATION_FOR_STANDALONE. This causes the formatted
+     * result to be capitalized appropriately for the context in which
+     * it is intended to be used, considering both the locale and the
+     * type of field at the beginning of the formatted result.
+     *
+     * @param context The DisplayContext value to set.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setContext(DisplayContext context)
+    {
+        if (context.type() == DisplayContext.Type.CAPITALIZATION) {
+            fCapitalizationSetting = context;
+        }
+    }
+
+    /**
+     * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
+     * such as CAPITALIZATION.
+     *
+     * @param type the DisplayContext.Type whose value to return
+     * @return the current DisplayContext setting for the specified type
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public DisplayContext getContext(DisplayContext.Type type)
+    {
+        return (type == DisplayContext.Type.CAPITALIZATION && fCapitalizationSetting != null)?
+                fCapitalizationSetting: DisplayContext.CAPITALIZATION_NONE;
     }
 
     /**
@@ -2197,6 +2246,10 @@ public class DateIntervalFormat extends UFormat {
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         initializePattern(isDateIntervalInfoDefault ? LOCAL_PATTERN_CACHE : null);
+        // if deserialized from a release that didn't have fCapitalizationSetting, set it to default
+        if (fCapitalizationSetting == null) {
+            fCapitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+        }
     }
 
     /**

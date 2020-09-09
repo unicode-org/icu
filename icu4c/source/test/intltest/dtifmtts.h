@@ -47,6 +47,11 @@ public:
      */
     void testFormatUserDII();
 
+    /*
+     * Test format using UDisplayContext
+     */
+    void testContext();
+
     /**
      * Test for no unwanted side effects when setting
      * interval patterns.

@@ -31,6 +31,7 @@
 #include "unicode/dtitvinf.h"
 #include "unicode/dtptngen.h"
 #include "unicode/formattedvalue.h"
+#include "unicode/udisplaycontext.h"
 
 U_NAMESPACE_BEGIN
 
@@ -652,6 +653,32 @@ public:
     virtual void setTimeZone(const TimeZone& zone);
 
     /**
+     * Set a particular UDisplayContext value in the formatter, such as
+     * UDISPCTX_CAPITALIZATION_FOR_STANDALONE. This causes the formatted
+     * result to be capitalized appropriately for the context in which
+     * it is intended to be used, considering both the locale and the
+     * type of field at the beginning of the formatted result.
+     * @param value The UDisplayContext value to set.
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function.
+     * @draft ICU 68
+     */
+    virtual void setContext(UDisplayContext value, UErrorCode& status);
+
+    /**
+     * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
+     * such as UDISPCTX_TYPE_CAPITALIZATION.
+     * @param type The UDisplayContextType whose value to return
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function.
+     * @return The UDisplayContextValue for the specified type.
+     * @draft ICU 68
+     */
+    virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
+
+    /**
      * Return the class ID for this class. This is useful only for comparing to
      * a return value from getDynamicClassID(). For example:
      * <pre>
@@ -1152,6 +1179,11 @@ private:
     UnicodeString* fDatePattern;
     UnicodeString* fTimePattern;
     UnicodeString* fDateTimeFormat;
+
+    /**
+     * Other formatting information
+     */
+    UDisplayContext fCapitalizationContext;
 };
 
 inline UBool
