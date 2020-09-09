@@ -216,9 +216,9 @@ jobs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_ARM64_Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_Debug
-  displayName: 'C: MSVC 64-bit Debug (VS 2019)'
-  timeoutInMinutes: 30
+- job: ICU4C_MSVC_x64_ARM64_Debug
+  displayName: 'C: MSVC x64 ARM64 Debug (VS 2019)'
+  timeoutInMinutes: 45
   pool:
     vmImage: 'windows-2019'
     demands: 
@@ -236,10 +236,16 @@ jobs:
         platform: x64
         configuration: Debug
     - task: BatchScript@1
-      displayName: 'Run Tests (icucheck.bat)'
+      displayName: 'Run x64 Debug Tests (icucheck.bat)'
       inputs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Debug'
+    - task: VSBuild@1
+      displayName: 'Build ARM64 Debug'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: ARM64
+        configuration: Debug
 #-------------------------------------------------------------------------
 # VS 2017 Builds
 #-------------------------------------------------------------------------
