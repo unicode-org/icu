@@ -582,11 +582,11 @@ enum {
 // Do not conditionalize with #ifndef U_HIDE_INTERNAL_API, needed for public API
 
 /** @internal */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucptrie_internalSmallIndex(const UCPTrie *trie, UChar32 c);
 
 /** @internal */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucptrie_internalSmallU8Index(const UCPTrie *trie, int32_t lt1, uint8_t t2, uint8_t t3);
 
 /**
@@ -594,7 +594,7 @@ ucptrie_internalSmallU8Index(const UCPTrie *trie, int32_t lt1, uint8_t t2, uint8
  * Do not call directly.
  * @internal
  */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
                             const uint8_t *start, const uint8_t *src);
 

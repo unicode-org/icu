@@ -517,7 +517,7 @@ Have one line that has the return type and place all the import declarations,
 extern declarations, export declarations, the function name, and function
 signature at the beginning of the next line.
 
-Function declarations need to be in the form CAPI return-type `U_EXPORT2` to
+Function declarations need to be in the form `U_CAPI` return-type `U_EXPORT2` to
 satisfy all the compilers' requirements.
 
 For example, use the following
@@ -528,9 +528,9 @@ U_CAPI int32_t U_EXPORT2
 u_formatMessage(...);
 ```
 
-> :point_right: **Note**: The `U_CAPI`/`U_DRAFT`/... and `U_EXPORT2` qualifiers
+> :point_right: **Note**: The `U_CAPI`/`U_DEPRECATED` and `U_EXPORT2` qualifiers
 > are required for both the declaration and the definiton of *exported C and
-> static C++ functions*. Use `U_CAPI` (or `U_DRAFT` etc.) before and `U_EXPORT2`
+> static C++ functions*. Use `U_CAPI` (or `U_DEPRECATED`) before and `U_EXPORT2`
 > after the return type of *exported C and static C++ functions*.
 > 
 > Internal functions that are visible outside a compilation unit need a `U_CFUNC`
@@ -538,6 +538,12 @@ u_formatMessage(...);
 > 
 > *Non-static C++ class member functions* do *not* get `U_CAPI`/`U_EXPORT2`
 > because they are exported and declared together with their class exports.
+
+> :point_right: **Note**: Before ICU 68 (2020q4) we used to use alternate qualifiers
+> like `U_DRAFT`, `U_STABLE` etc. rather than `U_CAPI`,
+> but keeping these in sync with API doc tags `@draft` and guard switches like `U_HIDE_DRAFT_API`
+> was tedious and error-prone and added no value.
+> Since ICU 68 (ICU-9961) we only use `U_CAPI` and `U_DEPRECATED`.
 
 #### Use Anonymous Namesapces or Static For File Scope
 

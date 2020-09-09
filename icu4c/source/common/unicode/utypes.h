@@ -723,7 +723,7 @@ typedef enum UErrorCode {
  * in the UErrorCode enum above.
  * @stable ICU 2.0
  */
-U_STABLE const char * U_EXPORT2
+U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
 

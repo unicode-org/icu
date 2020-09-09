@@ -116,7 +116,7 @@ udtitvfmt_format(const UDateIntervalFormat* formatter,
 }
 
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 udtitvfmt_formatToResult(
                 const UDateIntervalFormat* formatter,
                 UDate           fromDate,
@@ -134,7 +134,7 @@ udtitvfmt_formatToResult(
     }
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 udtitvfmt_formatCalendarToResult(
                 const UDateIntervalFormat* formatter,
                 UCalendar*      fromCalendar,

@@ -45,7 +45,7 @@ struct UConverter;          // unicode/ucnv.h
 /**
  * \ingroup ustring_ustrlen
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 u_strlen(const UChar *s);
 #endif
 

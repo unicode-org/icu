@@ -1625,7 +1625,7 @@ ucurr_getDefaultFractionDigits(const UChar* currency, UErrorCode* ec) {
     return ucurr_getDefaultFractionDigitsForUsage(currency,UCURR_USAGE_STANDARD,ec);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucurr_getDefaultFractionDigitsForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
     int32_t fracDigits = 0;
     if (U_SUCCESS(*ec)) {
@@ -1648,7 +1648,7 @@ ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
     return ucurr_getRoundingIncrementForUsage(currency, UCURR_USAGE_STANDARD, ec);
 }
 
-U_DRAFT double U_EXPORT2
+U_CAPI double U_EXPORT2
 ucurr_getRoundingIncrementForUsage(const UChar* currency, const UCurrencyUsage usage, UErrorCode* ec) {
     double result = 0.0;
 

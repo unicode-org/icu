@@ -1654,7 +1654,7 @@ udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* st
 * @see udat_applyPatternRelative
 * @internal ICU 4.2 technology preview
 */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 udat_toPatternRelativeDate(const UDateFormat *fmt,
                            UChar             *result,
                            int32_t           resultLength,
@@ -1671,7 +1671,7 @@ udat_toPatternRelativeDate(const UDateFormat *fmt,
 * @see udat_applyPatternRelative
 * @internal ICU 4.2 technology preview
 */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 udat_toPatternRelativeTime(const UDateFormat *fmt,
                            UChar             *result,
                            int32_t           resultLength,
@@ -1689,7 +1689,7 @@ udat_toPatternRelativeTime(const UDateFormat *fmt,
 * @see udat_toPatternRelativeDate, udat_toPatternRelativeTime
 * @internal ICU 4.2 technology preview
 */
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 udat_applyPatternRelative(UDateFormat *format,
                           const UChar *datePattern,
                           int32_t     datePatternLength,
@@ -1714,14 +1714,14 @@ typedef UDateFormat* (U_EXPORT2 *UDateFormatOpener) (UDateFormatStyle  timeStyle
  * Register a provider factory
  * @internal ICU 49
  */
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 udat_registerOpener(UDateFormatOpener opener, UErrorCode *status);
 
 /**
  * Un-Register a provider factory
  * @internal ICU 49
  */
-U_INTERNAL UDateFormatOpener U_EXPORT2
+U_CAPI UDateFormatOpener U_EXPORT2
 udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status);
 #endif  /* U_HIDE_INTERNAL_API */
 

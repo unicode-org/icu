@@ -44,7 +44,7 @@ U_NAMESPACE_BEGIN
 * Note: We use the Win32 API GetDynamicTimeZoneInformation to get the current time zone info.
 * This API returns a non-localized time zone name, which we can then map to an ICU time zone name.
 */
-U_INTERNAL const char* U_EXPORT2
+U_CAPI const char* U_EXPORT2
 uprv_detectWindowsTimeZone()
 {
     UErrorCode status = U_ZERO_ERROR;

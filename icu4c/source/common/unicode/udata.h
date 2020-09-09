@@ -200,7 +200,7 @@ UDataMemoryIsAcceptable(void *context,
  * @see udata_openChoice
  * @stable ICU 2.0
  */
-U_STABLE UDataMemory * U_EXPORT2
+U_CAPI UDataMemory * U_EXPORT2
 udata_open(const char *path, const char *type, const char *name,
            UErrorCode *pErrorCode);
 
@@ -252,7 +252,7 @@ udata_open(const char *path, const char *type, const char *name,
  *         to get a pointer to the actual data.
  * @stable ICU 2.0
  */
-U_STABLE UDataMemory * U_EXPORT2
+U_CAPI UDataMemory * U_EXPORT2
 udata_openChoice(const char *path, const char *type, const char *name,
                  UDataMemoryIsAcceptable *isAcceptable, void *context,
                  UErrorCode *pErrorCode);
@@ -264,7 +264,7 @@ udata_openChoice(const char *path, const char *type, const char *name,
  * @param pData The pointer to data memory object
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 udata_close(UDataMemory *pData);
 
 /**
@@ -276,7 +276,7 @@ udata_close(UDataMemory *pData);
  * @param pData The pointer to data memory object
  * @stable ICU 2.0
  */
-U_STABLE const void * U_EXPORT2
+U_CAPI const void * U_EXPORT2
 udata_getMemory(UDataMemory *pData);
 
 /**
@@ -297,7 +297,7 @@ udata_getMemory(UDataMemory *pData);
  * adjusted and only part of the structure will be filled.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
 
 /**
@@ -343,7 +343,7 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
  * @param err outgoing error status <code>U_USING_DEFAULT_WARNING, U_UNSUPPORTED_ERROR</code>
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 udata_setCommonData(const void *data, UErrorCode *err);
 
 
@@ -374,7 +374,7 @@ udata_setCommonData(const void *data, UErrorCode *err);
  * @see udata_setCommonData
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 udata_setAppData(const char *packageName, const void *data, UErrorCode *err);
 
 /**
@@ -413,7 +413,7 @@ typedef enum UDataFileAccess {
  * @see UDataFileAccess
  * @stable ICU 3.4 
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 udata_setFileAccess(UDataFileAccess access, UErrorCode *status);
 
 U_CDECL_END

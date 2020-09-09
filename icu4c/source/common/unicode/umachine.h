@@ -53,9 +53,9 @@
 #include <stddef.h>
 
 /*==========================================================================*/
-/* For C wrappers, we use the symbol U_STABLE.                                */
+/* For C wrappers, we use the symbol U_CAPI.                                */
 /* This works properly if the includer is C or C++.                         */
-/* Functions are declared   U_STABLE return-type U_EXPORT2 function-name()... */
+/* Functions are declared   U_CAPI return-type U_EXPORT2 function-name()... */
 /*==========================================================================*/
 
 /**
@@ -108,15 +108,15 @@
 
 /** This is used to declare a function as a public ICU C API @stable ICU 2.0*/
 #define U_CAPI U_CFUNC U_EXPORT
-/** This is used to declare a function as a stable public ICU C API*/
+/** Obsolete/same as U_CAPI; was used to declare a function as a stable public ICU C API*/
 #define U_STABLE U_CAPI
-/** This is used to declare a function as a draft public ICU C API  */
+/** Obsolete/same as U_CAPI; was used to declare a function as a draft public ICU C API  */
 #define U_DRAFT  U_CAPI
 /** This is used to declare a function as a deprecated public ICU C API  */
 #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED
-/** This is used to declare a function as an obsolete public ICU C API  */
+/** Obsolete/same as U_CAPI; was used to declare a function as an obsolete public ICU C API  */
 #define U_OBSOLETE U_CAPI
-/** This is used to declare a function as an internal ICU C API  */
+/** Obsolete/same as U_CAPI; was used to declare a function as an internal ICU C API  */
 #define U_INTERNAL U_CAPI
 
 /**

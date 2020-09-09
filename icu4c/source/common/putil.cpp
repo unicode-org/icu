@@ -2351,7 +2351,7 @@ u_getVersion(UVersionInfo versionArray) {
 #include <dlfcn.h>
 #endif /* HAVE_DLFCN_H */
 
-U_INTERNAL void * U_EXPORT2
+U_CAPI void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
   void *ret = NULL;
   if(U_FAILURE(*status)) return ret;
@@ -2365,13 +2365,13 @@ uprv_dl_open(const char *libName, UErrorCode *status) {
   return ret;
 }
 
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 uprv_dl_close(void *lib, UErrorCode *status) {
   if(U_FAILURE(*status)) return;
   dlclose(lib);
 }
 
-U_INTERNAL UVoidFunction* U_EXPORT2
+U_CAPI UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   union {
       UVoidFunction *fp;
@@ -2394,7 +2394,7 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
 /* Windows API implementation. */
 // Note: UWP does not expose/allow these APIs, so the UWP version gets the null implementation. */
 
-U_INTERNAL void * U_EXPORT2
+U_CAPI void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
   HMODULE lib = NULL;
 
@@ -2409,7 +2409,7 @@ uprv_dl_open(const char *libName, UErrorCode *status) {
   return (void*)lib;
 }
 
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 uprv_dl_close(void *lib, UErrorCode *status) {
   HMODULE handle = (HMODULE)lib;
   if(U_FAILURE(*status)) return;
@@ -2419,7 +2419,7 @@ uprv_dl_close(void *lib, UErrorCode *status) {
   return;
 }
 
-U_INTERNAL UVoidFunction* U_EXPORT2
+U_CAPI UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   HMODULE handle = (HMODULE)lib;
   UVoidFunction* addr = NULL;
@@ -2444,7 +2444,7 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
 
 /* No dynamic loading, null (nonexistent) implementation. */
 
-U_INTERNAL void * U_EXPORT2
+U_CAPI void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
     (void)libName;
     if(U_FAILURE(*status)) return NULL;
@@ -2452,7 +2452,7 @@ uprv_dl_open(const char *libName, UErrorCode *status) {
     return NULL;
 }
 
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 uprv_dl_close(void *lib, UErrorCode *status) {
     (void)lib;
     if(U_FAILURE(*status)) return;
@@ -2460,7 +2460,7 @@ uprv_dl_close(void *lib, UErrorCode *status) {
     return;
 }
 
-U_INTERNAL UVoidFunction* U_EXPORT2
+U_CAPI UVoidFunction* U_EXPORT2
 uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
   (void)lib;
   (void)sym;

@@ -109,7 +109,7 @@ typedef struct UCollationElements UCollationElements;
  * @return a struct containing collation element information
  * @stable ICU 2.0
  */
-U_STABLE UCollationElements* U_EXPORT2 
+U_CAPI UCollationElements* U_EXPORT2 
 ucol_openElements(const UCollator  *coll,
                   const UChar      *text,
                         int32_t    textLength,
@@ -123,7 +123,7 @@ ucol_openElements(const UCollator  *coll,
  * @return       the hash code.
  * @stable ICU 2.0
  */
-U_STABLE int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_keyHashCode(const uint8_t* key, int32_t length);
 
 /**
@@ -132,7 +132,7 @@ ucol_keyHashCode(const uint8_t* key, int32_t length);
  * @param elems The UCollationElements to close.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 ucol_closeElements(UCollationElements *elems);
 
 /**
@@ -144,7 +144,7 @@ ucol_closeElements(UCollationElements *elems);
  * @see ucol_previous
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 ucol_reset(UCollationElements *elems);
 
 /**
@@ -156,7 +156,7 @@ ucol_reset(UCollationElements *elems);
  *         if an error has occured or if the end of string has been reached
  * @stable ICU 2.0
  */
-U_STABLE int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_next(UCollationElements *elems, UErrorCode *status);
 
 /**
@@ -172,7 +172,7 @@ ucol_next(UCollationElements *elems, UErrorCode *status);
  *         been reached.
  * @stable ICU 2.0
  */
-U_STABLE int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_previous(UCollationElements *elems, UErrorCode *status);
 
 /**
@@ -186,7 +186,7 @@ ucol_previous(UCollationElements *elems, UErrorCode *status);
  *         expansion sequence
  * @stable ICU 2.0
  */
-U_STABLE int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
 
 /**
@@ -201,7 +201,7 @@ ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
  * @see ucol_getText
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 ucol_setText(      UCollationElements *elems, 
              const UChar              *text,
                    int32_t            textLength,
@@ -216,7 +216,7 @@ ucol_setText(      UCollationElements *elems,
  * @see ucol_setOffset
  * @stable ICU 2.0
  */
-U_STABLE int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_getOffset(const UCollationElements *elems);
 
 /**
@@ -231,7 +231,7 @@ ucol_getOffset(const UCollationElements *elems);
  * @see ucol_getOffset
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 ucol_setOffset(UCollationElements *elems,
                int32_t        offset,
                UErrorCode         *status);
@@ -242,7 +242,7 @@ ucol_setOffset(UCollationElements *elems,
 * @return the primary order of a collation order.
 * @stable ICU 2.6
 */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucol_primaryOrder (int32_t order); 
 
 /**
@@ -251,7 +251,7 @@ ucol_primaryOrder (int32_t order);
 * @return the secondary order of a collation order.
 * @stable ICU 2.6
 */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucol_secondaryOrder (int32_t order); 
 
 /**
@@ -260,7 +260,7 @@ ucol_secondaryOrder (int32_t order);
 * @return the tertiary order of a collation order.
 * @stable ICU 2.6
 */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucol_tertiaryOrder (int32_t order); 
 
 #endif /* #if !UCONFIG_NO_COLLATION */

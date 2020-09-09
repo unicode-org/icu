@@ -57,7 +57,7 @@ typedef struct UNumberingSystem UNumberingSystem;  /**< C typedef for struct UNu
  *                  occurred.
  * @stable ICU 52
  */
-U_STABLE UNumberingSystem * U_EXPORT2
+U_CAPI UNumberingSystem * U_EXPORT2
 unumsys_open(const char *locale, UErrorCode *status);
 
 /**
@@ -78,7 +78,7 @@ unumsys_open(const char *locale, UErrorCode *status);
  *                  occurred.
  * @stable ICU 52
  */
-U_STABLE UNumberingSystem * U_EXPORT2
+U_CAPI UNumberingSystem * U_EXPORT2
 unumsys_openByName(const char *name, UErrorCode *status);
 
 /**
@@ -86,7 +86,7 @@ unumsys_openByName(const char *name, UErrorCode *status);
  * @param unumsys   The UNumberingSystem object to close.
  * @stable ICU 52
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumsys_close(UNumberingSystem *unumsys);
 
 #if U_SHOW_CPLUSPLUS_API
@@ -114,7 +114,7 @@ U_NAMESPACE_END
  *                  or NULL if an error occurred.
  * @stable ICU 52
  */
-U_STABLE UEnumeration * U_EXPORT2
+U_CAPI UEnumeration * U_EXPORT2
 unumsys_openAvailableNames(UErrorCode *status);
 
 /**
@@ -126,7 +126,7 @@ unumsys_openAvailableNames(UErrorCode *status);
  *                  is only valid for the lifetime of the UNumberingSystem object.
  * @stable ICU 52
  */
-U_STABLE const char * U_EXPORT2
+U_CAPI const char * U_EXPORT2
 unumsys_getName(const UNumberingSystem *unumsys);
 
 /**
@@ -137,7 +137,7 @@ unumsys_getName(const UNumberingSystem *unumsys);
  *                  system.
  * @stable ICU 52
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 unumsys_isAlgorithmic(const UNumberingSystem *unumsys);
 
 /**
@@ -148,7 +148,7 @@ unumsys_isAlgorithmic(const UNumberingSystem *unumsys);
  * @return          The radix of the specified UNumberingSystem object.
  * @stable ICU 52
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unumsys_getRadix(const UNumberingSystem *unumsys);
 
 /**
@@ -167,7 +167,7 @@ unumsys_getRadix(const UNumberingSystem *unumsys);
  *                  output was truncated.
  * @stable ICU 52
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unumsys_getDescription(const UNumberingSystem *unumsys, UChar *result,
                        int32_t resultLength, UErrorCode *status);
 

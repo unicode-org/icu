@@ -233,7 +233,7 @@ typedef struct {
  * @param err This should always be set to a failure status prior to calling.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
                   const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
@@ -257,7 +257,7 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
  * @param err This should always be set to a failure status prior to calling.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
                   const void *context,
                   UConverterToUnicodeArgs *toUArgs,
                   const char* codeUnits,
@@ -284,7 +284,7 @@ U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
                   const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
@@ -314,7 +314,7 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
  * @see ucnv_setSubstChars
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
                   const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
@@ -370,7 +370,7 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
                   const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
@@ -398,7 +398,7 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
                   const void *context,
                   UConverterToUnicodeArgs *toUArgs,
                   const char* codeUnits,
@@ -424,7 +424,7 @@ U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
                   const void *context,
                   UConverterToUnicodeArgs *toUArgs,
                   const char* codeUnits,
@@ -450,7 +450,7 @@ U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
  * @stable ICU 2.0
  */
 
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (
                   const void *context,
                   UConverterToUnicodeArgs *toUArgs,
                   const char* codeUnits,
