@@ -59,11 +59,11 @@ public:
      * @param currency null-terminated 3-letter ISO 4217 code
      * @param nameStyle selector for the type of name to return
      * @param status error code
-     * @return UnicodeString. If there is no data for the ISO code, substitutes
+     * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    UnicodeString *getName(const UChar* isoCode,
+    const UChar *getName(const UChar* isoCode,
         UCurrNameStyle nameStyle,
         UErrorCode& status) const;
 
@@ -71,23 +71,21 @@ public:
      * Returns the 'long name' for the currency with the provided ISO code.
      * @param currency null-terminated 3-letter ISO 4217 code
      * @param status error code
-     * @return UnicodeString. If there is no data for the ISO code, substitutes
+     * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    UnicodeString *getName(const UChar* isoCode,
-        UErrorCode& status) const;
+    const UChar *getName(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the symbol for the currency with the provided ISO code.
      * @param currency null-terminated 3-letter ISO 4217 code
      * @param status error code
-     * @return UnicodeString. If there is no data for the ISO code, substitutes
+     * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    UnicodeString *getSymbol(const UChar* isoCode,
-        UErrorCode& status) const;
+    const UChar *getSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the narrow symbol for the currency with the provided ISO code.
@@ -96,12 +94,11 @@ public:
      * for example, "$" instead of "US$" for USD in en-CA.
      * @param currency null-terminated 3-letter ISO 4217 code
      * @param status error code
-     * @return UnicodeString. If there is no data for the ISO code, substitutes
+     * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    UnicodeString *getNarrowSymbol(const UChar* isoCode,
-        UErrorCode& status) const;
+    const UChar *getNarrowSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the formal symbol for the currency with the provided ISO code.
@@ -110,12 +107,11 @@ public:
      * for example, "NT$" instead of "$" for TWD in zh-TW.
      * @param currency null-terminated 3-letter ISO 4217 code
      * @param status error code
-     * @return UnicodeString. If there is no data for the ISO code, substitutes
+     * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    UnicodeString *getFormalSymbol(const UChar* isoCode,
-        UErrorCode& status) const;
+    const UChar *getFormalSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the variant symbol for the currency with the provided ISO code.
@@ -123,12 +119,11 @@ public:
      * necessarily as widely used as the regular symbol.
      * @param currency null-terminated 3-letter ISO 4217 code
      * @param status error code
-     * @return UnicodeString. If there is no data for the ISO code, substitutes
+     * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    UnicodeString *getVariantSymbol(const UChar* isoCode,
-        UErrorCode& status) const;
+    const UChar *getVariantSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the plural name for the currency with the provided ISO code.
@@ -136,15 +131,14 @@ public:
      * en_US locale is "US dollar" or "US dollars".
      * @param currency null-terminated 3-letter ISO 4217 code
      * @param status error code
-     * @return UnicodeString. If there is no data for the ISO code, substitutes
+     * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * If there is data for the ISO code but no data for the plural key,
      * substitutes the 'other' value (and failing that the isoCode) or returns null.
      * @draft ICU 6X
      */
-    UnicodeString *getPluralName(const UChar* isoCode,
-        const char* pluralCount,
-        UErrorCode& status) const;
+    const UChar *getPluralName(const UChar *isoCode,
+        const char* pluralCount, UErrorCode &status) const;
 
     /**
      * Returns the locale used to determine how to translate the currency names.
