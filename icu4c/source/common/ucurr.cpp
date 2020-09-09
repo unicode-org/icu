@@ -643,9 +643,9 @@ ucurr_getName(const UChar* currency,
     }
     Locale loc = Locale::createFromName(locale);
     const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&loc, *ec);
-    UnicodeString *uString = currencyDisplayNames->getName(currency, nameStyle, *ec);
-    *len = uString->length();
-    return uString->getBuffer();
+    const UChar *displayName = currencyDisplayNames->getName(currency, nameStyle, *ec);
+    *len = u_strlen(displayName);
+    return displayName;
 }
 
 U_CAPI const UChar* U_EXPORT2
