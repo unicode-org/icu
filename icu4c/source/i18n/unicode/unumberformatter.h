@@ -457,7 +457,7 @@ typedef struct UFormattedNumber UFormattedNumber;
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE UNumberFormatter* U_EXPORT2
+U_CAPI UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
                                UErrorCode* ec);
 
@@ -474,7 +474,7 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
  * @param ec Set if an error occurs.
  * @stable ICU 64
  */
-U_STABLE UNumberFormatter* U_EXPORT2
+U_CAPI UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocaleWithError(
        const UChar* skeleton, int32_t skeletonLen, const char* locale, UParseError* perror, UErrorCode* ec);
 
@@ -487,7 +487,7 @@ unumf_openForSkeletonAndLocaleWithError(
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE UFormattedNumber* U_EXPORT2
+U_CAPI UFormattedNumber* U_EXPORT2
 unumf_openResult(UErrorCode* ec);
 
 
@@ -506,7 +506,7 @@ unumf_openResult(UErrorCode* ec);
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNumber* uresult,
                 UErrorCode* ec);
 
@@ -526,7 +526,7 @@ unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNum
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedNumber* uresult,
                    UErrorCode* ec);
 
@@ -550,7 +550,7 @@ unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedN
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32_t valueLen,
                     UFormattedNumber* uresult, UErrorCode* ec);
 
@@ -568,7 +568,7 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
  * @return A UFormattedValue owned by the input object.
  * @stable ICU 64
  */
-U_STABLE const UFormattedValue* U_EXPORT2
+U_CAPI const UFormattedValue* U_EXPORT2
 unumf_resultAsValue(const UFormattedNumber* uresult, UErrorCode* ec);
 
 
@@ -591,7 +591,7 @@ unumf_resultAsValue(const UFormattedNumber* uresult, UErrorCode* ec);
  * @return The required length.
  * @stable ICU 62
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t bufferCapacity,
                      UErrorCode* ec);
 
@@ -629,7 +629,7 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec);
 
 
@@ -654,14 +654,14 @@ unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* u
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
                                  UErrorCode* ec);
 
 
 // TODO(ICU-20775): Propose this as API.
 // NOTE: This is not currently implemented.
-// U_DRAFT int32_t U_EXPORT2
+// U_CAPI int32_t U_EXPORT2
 // unumf_resultToDecimalNumber(const UFormattedNumber* uresult, char* buffer, int32_t bufferCapacity,
 //                             UErrorCode* ec);
 
@@ -672,7 +672,7 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
  * @param uformatter An object created by unumf_openForSkeletonAndLocale().
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_close(UNumberFormatter* uformatter);
 
 
@@ -682,7 +682,7 @@ unumf_close(UNumberFormatter* uformatter);
  * @param uresult An object created by unumf_openResult().
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_closeResult(UFormattedNumber* uresult);
 
 

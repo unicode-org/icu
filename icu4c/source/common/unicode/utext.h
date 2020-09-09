@@ -180,7 +180,7 @@ typedef struct UText UText; /**< C typedef for struct UText. @stable ICU 3.6 */
   *
   * @stable ICU 3.4
   */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_close(UText *ut);
 
 /**
@@ -204,7 +204,7 @@ utext_close(UText *ut);
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status);
 
 
@@ -222,7 +222,7 @@ utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status);
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
 
 
@@ -239,7 +239,7 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
  *                 will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_openUnicodeString(UText *ut, icu::UnicodeString *s, UErrorCode *status);
 
 
@@ -255,7 +255,7 @@ utext_openUnicodeString(UText *ut, icu::UnicodeString *s, UErrorCode *status);
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_openConstUnicodeString(UText *ut, const icu::UnicodeString *s, UErrorCode *status);
 
 
@@ -271,7 +271,7 @@ utext_openConstUnicodeString(UText *ut, const icu::UnicodeString *s, UErrorCode 
  * @see Replaceable
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_openReplaceable(UText *ut, icu::Replaceable *rep, UErrorCode *status);
 
 /**
@@ -286,7 +286,7 @@ utext_openReplaceable(UText *ut, icu::Replaceable *rep, UErrorCode *status);
  * @see Replaceable
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *status);
 
 #endif
@@ -349,7 +349,7 @@ utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *s
   *  @return       The newly created clone, or NULL if the clone operation failed.
   *  @stable ICU 3.4
   */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCode *status);
 
 
@@ -364,7 +364,7 @@ utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCod
   *  @return    true if the two UTexts are equal.
   *  @stable ICU 3.6
   */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 utext_equals(const UText *a, const UText *b);
 
 
@@ -385,7 +385,7 @@ utext_equals(const UText *a, const UText *b);
   *
   * @stable ICU 3.4
   */
-U_STABLE int64_t U_EXPORT2
+U_CAPI int64_t U_EXPORT2
 utext_nativeLength(UText *ut);
 
 /**
@@ -401,7 +401,7 @@ utext_nativeLength(UText *ut);
  * @return true if determining the length of the text could be time consuming.
  * @stable ICU 3.4
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 utext_isLengthExpensive(const UText *ut);
 
 /**
@@ -429,7 +429,7 @@ utext_isLengthExpensive(const UText *ut);
  * @return the code point at the specified index.
  * @stable ICU 3.4
  */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utext_char32At(UText *ut, int64_t nativeIndex);
 
 
@@ -443,7 +443,7 @@ utext_char32At(UText *ut, int64_t nativeIndex);
  * @return the Unicode code point at the current iterator position.
  * @stable ICU 3.4
  */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utext_current32(UText *ut);
 
 
@@ -465,7 +465,7 @@ utext_current32(UText *ut);
  * @see UTEXT_NEXT32
  * @stable ICU 3.4
  */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utext_next32(UText *ut);
 
 
@@ -486,7 +486,7 @@ utext_next32(UText *ut);
  *  @see UTEXT_PREVIOUS32
  *  @stable ICU 3.4
  */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utext_previous32(UText *ut);
 
 
@@ -508,7 +508,7 @@ utext_previous32(UText *ut);
   *         or U_SENTINEL (-1) if it is out of bounds.
   * @stable ICU 3.4
   */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utext_next32From(UText *ut, int64_t nativeIndex);
 
 
@@ -528,7 +528,7 @@ utext_next32From(UText *ut, int64_t nativeIndex);
   *
   * @stable ICU 3.4
   */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utext_previous32From(UText *ut, int64_t nativeIndex);
 
 /**
@@ -543,7 +543,7 @@ utext_previous32From(UText *ut, int64_t nativeIndex);
   * @return the current index position, in the native units of the text provider.
   * @stable ICU 3.4
   */
-U_STABLE int64_t U_EXPORT2
+U_CAPI int64_t U_EXPORT2
 utext_getNativeIndex(const UText *ut);
 
 /**
@@ -569,7 +569,7 @@ utext_getNativeIndex(const UText *ut);
  * @param nativeIndex the native unit index of the new iteration position.
  * @stable ICU 3.4
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 utext_setNativeIndex(UText *ut, int64_t nativeIndex);
 
 /**
@@ -588,7 +588,7 @@ utext_setNativeIndex(UText *ut, int64_t nativeIndex);
  *              staying within the range [0 - text length].
  * @stable ICU 3.4
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 utext_moveIndex32(UText *ut, int32_t delta);
 
 /**
@@ -613,7 +613,7 @@ utext_moveIndex32(UText *ut, int32_t delta);
  *         or zero if the current position is at the start of the text.
  * @stable ICU 3.6
  */
-U_STABLE int64_t U_EXPORT2
+U_CAPI int64_t U_EXPORT2
 utext_getPreviousNativeIndex(UText *ut); 
 
 
@@ -651,7 +651,7 @@ utext_getPreviousNativeIndex(UText *ut);
  *
  * @stable ICU 3.4
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 utext_extract(UText *ut,
              int64_t nativeStart, int64_t nativeLimit,
              UChar *dest, int32_t destCapacity,
@@ -785,7 +785,7 @@ utext_extract(UText *ut,
  * @stable ICU 3.4
  *
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 utext_isWritable(const UText *ut);
 
 
@@ -797,7 +797,7 @@ utext_isWritable(const UText *ut);
   * @return true if the underlying text includes meta data.
   * @stable ICU 3.4
   */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 utext_hasMetaData(const UText *ut);
 
 
@@ -828,7 +828,7 @@ utext_hasMetaData(const UText *ut);
  *
  * @stable ICU 3.4
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 utext_replace(UText *ut,
              int64_t nativeStart, int64_t nativeLimit,
              const UChar *replacementText, int32_t replacementLength,
@@ -868,7 +868,7 @@ utext_replace(UText *ut,
  *                       
  * @stable ICU 3.4
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 utext_copy(UText *ut,
           int64_t nativeStart, int64_t nativeLimit,
           int64_t destIndex,
@@ -897,7 +897,7 @@ utext_copy(UText *ut,
   *  @see   utext_isWritable()
   *  @stable ICU 3.6
   */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 utext_freeze(UText *ut);
 
 
@@ -1535,7 +1535,7 @@ struct UText {
  * @return pointer to the UText, allocated if necessary, with extra space set up if requested.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
+U_CAPI UText * U_EXPORT2
 utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 
 // do not use #ifndef U_HIDE_INTERNAL_API around the following!

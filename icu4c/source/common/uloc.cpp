@@ -1842,7 +1842,7 @@ uloc_getName(const char* localeID,
     return reslen;
 }
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getName(const char* localeID,
                 ByteSink& sink,
                 UErrorCode* err)
@@ -1878,7 +1878,7 @@ uloc_getBaseName(const char* localeID,
     return reslen;
 }
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getBaseName(const char* localeID,
                     ByteSink& sink,
                     UErrorCode* err)
@@ -1914,7 +1914,7 @@ uloc_canonicalize(const char* localeID,
     return reslen;
 }
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_canonicalize(const char* localeID,
                      ByteSink& sink,
                      UErrorCode* err)

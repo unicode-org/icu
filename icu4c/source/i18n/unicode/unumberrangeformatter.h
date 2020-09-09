@@ -243,7 +243,7 @@ typedef struct UFormattedNumberRange UFormattedNumberRange;
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE UNumberRangeFormatter* U_EXPORT2
+U_CAPI UNumberRangeFormatter* U_EXPORT2
 unumrf_openForSkeletonWithCollapseAndIdentityFallback(
     const UChar* skeleton,
     int32_t skeletonLen,
@@ -262,7 +262,7 @@ unumrf_openForSkeletonWithCollapseAndIdentityFallback(
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE UFormattedNumberRange* U_EXPORT2
+U_CAPI UFormattedNumberRange* U_EXPORT2
 unumrf_openResult(UErrorCode* ec);
 
 
@@ -281,7 +281,7 @@ unumrf_openResult(UErrorCode* ec);
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_formatDoubleRange(
     const UNumberRangeFormatter* uformatter,
     double first,
@@ -309,7 +309,7 @@ unumrf_formatDoubleRange(
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_formatDecimalRange(
     const UNumberRangeFormatter* uformatter,
     const char* first,
@@ -334,7 +334,7 @@ unumrf_formatDecimalRange(
  * @return A UFormattedValue owned by the input object.
  * @draft ICU 68
  */
-U_STABLE const UFormattedValue* U_EXPORT2
+U_CAPI const UFormattedValue* U_EXPORT2
 unumrf_resultAsValue(const UFormattedNumberRange* uresult, UErrorCode* ec);
 
 
@@ -348,7 +348,7 @@ unumrf_resultAsValue(const UFormattedNumberRange* uresult, UErrorCode* ec);
  * @return The identity result; see UNumberRangeIdentityResult.
  * @draft ICU 68
  */
-U_STABLE UNumberRangeIdentityResult U_EXPORT2
+U_CAPI UNumberRangeIdentityResult U_EXPORT2
 unumrf_resultGetIdentityResult(
     const UFormattedNumberRange* uresult,
     UErrorCode* ec);
@@ -357,10 +357,10 @@ unumrf_resultGetIdentityResult(
 
 // TODO(ICU-20775): Propose these as API.
 // NOTE: This is not currently implemented.
-// U_DRAFT int32_t U_EXPORT2
+// U_CAPI int32_t U_EXPORT2
 // unumf_resultGetFirstDecimal(const UFormattedNumberRange* uresult, char* buffer, int32_t bufferCapacity,
 //                             UErrorCode* ec);
-// U_DRAFT int32_t U_EXPORT2
+// U_CAPI int32_t U_EXPORT2
 // unumf_resultGetSecondDecimal(const UFormattedNumberRange* uresult, char* buffer, int32_t bufferCapacity,
 //                              UErrorCode* ec);
 
@@ -371,7 +371,7 @@ unumrf_resultGetIdentityResult(
  * @param uformatter An object created by unumf_openForSkeletonAndLocale().
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_close(UNumberRangeFormatter* uformatter);
 
 
@@ -381,7 +381,7 @@ unumrf_close(UNumberRangeFormatter* uformatter);
  * @param uresult An object created by unumf_openResult().
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_closeResult(UFormattedNumberRange* uresult);
 
 

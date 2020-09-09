@@ -796,7 +796,7 @@ enum {
  * Do not call directly.
  * @internal
  */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 utrie2_internalU8NextIndex(const UTrie2 *trie, UChar32 c,
                            const uint8_t *src, const uint8_t *limit);
 
@@ -805,7 +805,7 @@ utrie2_internalU8NextIndex(const UTrie2 *trie, UChar32 c,
  * Do not call directly.
  * @internal
  */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 utrie2_internalU8PrevIndex(const UTrie2 *trie, UChar32 c,
                            const uint8_t *start, const uint8_t *src);
 

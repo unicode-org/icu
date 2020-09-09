@@ -514,7 +514,7 @@ typedef enum UScriptCode {
  * @return The number of script codes filled in the buffer passed in
  * @stable ICU 2.4
  */
-U_STABLE int32_t  U_EXPORT2
+U_CAPI int32_t  U_EXPORT2
 uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capacity,UErrorCode *err);
 
 /**
@@ -527,7 +527,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capac
  * or NULL if scriptCode is invalid
  * @stable ICU 2.4
  */
-U_STABLE const char*  U_EXPORT2
+U_CAPI const char*  U_EXPORT2
 uscript_getName(UScriptCode scriptCode);
 
 /**
@@ -539,7 +539,7 @@ uscript_getName(UScriptCode scriptCode);
  * @return short script name (4-letter code), or NULL if scriptCode is invalid
  * @stable ICU 2.4
  */
-U_STABLE const char*  U_EXPORT2
+U_CAPI const char*  U_EXPORT2
 uscript_getShortName(UScriptCode scriptCode);
 
 /**
@@ -550,7 +550,7 @@ uscript_getShortName(UScriptCode scriptCode);
  * @return The UScriptCode, or 0 if codepoint is invalid
  * @stable ICU 2.4
  */
-U_STABLE UScriptCode  U_EXPORT2
+U_CAPI UScriptCode  U_EXPORT2
 uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
 /**
@@ -565,7 +565,7 @@ uscript_getScript(UChar32 codepoint, UErrorCode *err);
  * @return true if sc is in Script_Extensions(c)
  * @stable ICU 49
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 uscript_hasScript(UChar32 c, UScriptCode sc);
 
 /**
@@ -597,7 +597,7 @@ uscript_hasScript(UChar32 c, UScriptCode sc);
  *         written to scripts unless U_BUFFER_OVERFLOW_ERROR indicates insufficient capacity
  * @stable ICU 49
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uscript_getScriptExtensions(UChar32 c,
                             UScriptCode *scripts, int32_t capacity,
                             UErrorCode *errorCode);
@@ -636,7 +636,7 @@ typedef enum UScriptUsage {
  * @return the string length, even if U_BUFFER_OVERFLOW_ERROR
  * @stable ICU 51
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uscript_getSampleString(UScriptCode script, UChar *dest, int32_t capacity, UErrorCode *pErrorCode);
 
 #if U_SHOW_CPLUSPLUS_API
@@ -668,7 +668,7 @@ uscript_getSampleUnicodeString(UScriptCode script);
  * @see UScriptUsage
  * @stable ICU 51
  */
-U_STABLE UScriptUsage U_EXPORT2
+U_CAPI UScriptUsage U_EXPORT2
 uscript_getUsage(UScriptCode script);
 
 /**
@@ -679,7 +679,7 @@ uscript_getUsage(UScriptCode script);
  * @return true if the script is right-to-left
  * @stable ICU 51
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 uscript_isRightToLeft(UScriptCode script);
 
 /**
@@ -691,7 +691,7 @@ uscript_isRightToLeft(UScriptCode script);
  * @return true if the script allows line breaks between letters
  * @stable ICU 51
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 uscript_breaksBetweenLetters(UScriptCode script);
 
 /**
@@ -702,7 +702,7 @@ uscript_breaksBetweenLetters(UScriptCode script);
  * @return true if the script is cased
  * @stable ICU 51
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 uscript_isCased(UScriptCode script);
 
 #endif

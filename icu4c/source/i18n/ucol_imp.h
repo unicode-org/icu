@@ -44,7 +44,7 @@
  *  @return TRUE or FALSE
  *  @internal ICU 3.0
  */
-U_INTERNAL UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 ucol_equals(const UCollator *source, const UCollator *target);
 
 /**

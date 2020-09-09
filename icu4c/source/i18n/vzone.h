@@ -283,7 +283,7 @@ vzone_useDaylightTime(VZone* zone);
  * @return true if the given date is in daylight savings time,
  * false, otherwise.
  */
-U_INTERNAL UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 vzone_inDaylightTime(VZone* zone, UDate date, UErrorCode& status);
 
 /**

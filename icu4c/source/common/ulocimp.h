@@ -71,17 +71,17 @@ ulocimp_getCountry(const char *localeID,
                    const char **pEnd,
                    UErrorCode &status);
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getName(const char* localeID,
                 icu::ByteSink& sink,
                 UErrorCode* err);
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getBaseName(const char* localeID,
                     icu::ByteSink& sink,
                     UErrorCode* err);
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_canonicalize(const char* localeID,
                      icu::ByteSink& sink,
                      UErrorCode* err);
@@ -111,7 +111,7 @@ ulocimp_getKeywordValue(const char* localeID,
  *
  * @internal ICU 64
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_toLanguageTag(const char* localeID,
                       icu::ByteSink& sink,
                       UBool strict,
@@ -208,7 +208,7 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
  * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
  * @internal ICU 64
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_addLikelySubtags(const char* localeID,
                          icu::ByteSink& sink,
                          UErrorCode* err);
@@ -242,7 +242,7 @@ ulocimp_addLikelySubtags(const char* localeID,
  * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
  * @internal ICU 64
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_minimizeSubtags(const char* localeID,
                         icu::ByteSink& sink,
                         UErrorCode* err);

@@ -118,48 +118,48 @@
  * Function for handling "next code point" with error-checking.
  *
  * This is internal since it is not meant to be called directly by external clients;
- * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * however it is called by public macros in this
  * file and thus must remain stable, and should not be hidden when other internal
  * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict);
 
 /**
  * Function for handling "append code point" with error-checking.
  *
  * This is internal since it is not meant to be called directly by external clients;
- * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * however it is called by public macros in this
  * file and thus must remain stable, and should not be hidden when other internal
  * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError);
 
 /**
  * Function for handling "previous code point" with error-checking.
  *
  * This is internal since it is not meant to be called directly by external clients;
- * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * however it is called by public macros in this
  * file and thus must remain stable, and should not be hidden when other internal
  * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_STABLE UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, UBool strict);
 
 /**
  * Function for handling "skip backward one code point" with error-checking.
  *
  * This is internal since it is not meant to be called directly by external clients;
- * however it is U_STABLE (not U_INTERNAL) since it is called by public macros in this
+ * however it is called by public macros in this
  * file and thus must remain stable, and should not be hidden when other internal
  * functions are hidden (otherwise public macros would fail to compile).
  * @internal
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 
 /* single-code point definitions -------------------------------------------- */

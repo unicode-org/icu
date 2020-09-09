@@ -20,7 +20,7 @@
 /**
  * Calculate the standardized sieve time (1 run)
  */
-U_INTERNAL double uprv_calcSieveTime(void);
+U_CAPI double uprv_calcSieveTime(void);
 
 /**
  * Calculate the mean time, with margin of error
@@ -29,13 +29,13 @@ U_INTERNAL double uprv_calcSieveTime(void);
  * @param marginOfError out parameter: gives +/- margin of err at 95% confidence
  * @return the mean time, or negative if error/imprecision.
  */
-U_INTERNAL double uprv_getMeanTime(double *times, uint32_t *timeCount, double *marginOfError);
+U_CAPI double uprv_getMeanTime(double *times, uint32_t *timeCount, double *marginOfError);
 
 /**
  * Get the standardized sieve time. (Doesn't recalculate if already computed.
  * @param marginOfError out parameter: gives +/- margin of error at 95% confidence.
  * @return the mean time, or negative if error/imprecision.
  */
-U_INTERNAL double uprv_getSieveTime(double *marginOfError);
+U_CAPI double uprv_getSieveTime(double *marginOfError);
 
 #endif

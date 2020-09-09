@@ -191,7 +191,7 @@ typedef struct UTransPosition {
  *         utrans_xxx() functions, or NULL if the open call fails.
  * @stable ICU 2.8
  */
-U_STABLE UTransliterator* U_EXPORT2
+U_CAPI UTransliterator* U_EXPORT2
 utrans_openU(const UChar *id,
              int32_t idLength,
              UTransDirection dir,
@@ -215,7 +215,7 @@ utrans_openU(const UChar *id,
  * inverse of trans, or NULL if the open call fails.
  * @stable ICU 2.0
  */
-U_STABLE UTransliterator* U_EXPORT2 
+U_CAPI UTransliterator* U_EXPORT2 
 utrans_openInverse(const UTransliterator* trans,
                    UErrorCode* status);
 
@@ -229,7 +229,7 @@ utrans_openInverse(const UTransliterator* trans,
  * utrans_xxx() functions, or NULL if the clone call fails.
  * @stable ICU 2.0
  */
-U_STABLE UTransliterator* U_EXPORT2 
+U_CAPI UTransliterator* U_EXPORT2 
 utrans_clone(const UTransliterator* trans,
              UErrorCode* status);
 
@@ -239,7 +239,7 @@ utrans_clone(const UTransliterator* trans,
  * @param trans the transliterator to be closed.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 utrans_close(UTransliterator* trans);
 
 #if U_SHOW_CPLUSPLUS_API
@@ -275,7 +275,7 @@ U_NAMESPACE_END
  *
  * @stable ICU 2.8
  */
-U_STABLE const UChar * U_EXPORT2
+U_CAPI const UChar * U_EXPORT2
 utrans_getUnicodeID(const UTransliterator *trans,
                     int32_t *resultLength);
 
@@ -293,7 +293,7 @@ utrans_getUnicodeID(const UTransliterator *trans,
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 utrans_register(UTransliterator* adoptedTrans,
                 UErrorCode* status);
 
@@ -306,7 +306,7 @@ utrans_register(UTransliterator* adoptedTrans,
  * @param idLength the length of id, or -1 if id is zero-terminated
  * @stable ICU 2.8
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 utrans_unregisterID(const UChar* id, int32_t idLength);
 
 /**
@@ -327,7 +327,7 @@ utrans_unregisterID(const UChar* id, int32_t idLength);
  * @see UnicodeSet
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 utrans_setFilter(UTransliterator* trans,
                  const UChar* filterPattern,
                  int32_t filterPatternLen,
@@ -340,7 +340,7 @@ utrans_setFilter(UTransliterator* trans,
  * @return the number of system transliterators.
  * @stable ICU 2.0
  */
-U_STABLE int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 utrans_countAvailableIDs(void);
 
 /**
@@ -352,7 +352,7 @@ utrans_countAvailableIDs(void);
  *
  * @stable ICU 2.8
  */
-U_STABLE UEnumeration * U_EXPORT2
+U_CAPI UEnumeration * U_EXPORT2
 utrans_openIDs(UErrorCode *pErrorCode);
 
 /********************************************************************
@@ -382,7 +382,7 @@ utrans_openIDs(UErrorCode *pErrorCode);
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 utrans_trans(const UTransliterator* trans,
              UReplaceable* rep,
              const UReplaceableCallbacks* repFunc,
@@ -433,7 +433,7 @@ utrans_trans(const UTransliterator* trans,
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 utrans_transIncremental(const UTransliterator* trans,
                         UReplaceable* rep,
                         const UReplaceableCallbacks* repFunc,
@@ -470,7 +470,7 @@ utrans_transIncremental(const UTransliterator* trans,
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 utrans_transUChars(const UTransliterator* trans,
                    UChar* text,
                    int32_t* textLength,
@@ -505,7 +505,7 @@ utrans_transUChars(const UTransliterator* trans,
  * @see utrans_transIncremental
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 utrans_transIncrementalUChars(const UTransliterator* trans,
                               UChar* text,
                               int32_t* textLength,
@@ -530,7 +530,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
  *                  in which case an error is returned).
  * @stable ICU 53
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 utrans_toRules(     const UTransliterator* trans,
                     UBool escapeUnprintable,
                     UChar* result, int32_t resultLength,
@@ -555,7 +555,7 @@ utrans_toRules(     const UTransliterator* trans,
  *                  error, NULL is returned.
  * @stable ICU 53
  */
-U_STABLE USet* U_EXPORT2
+U_CAPI USet* U_EXPORT2
 utrans_getSourceSet(const UTransliterator* trans,
                     UBool ignoreFilter,
                     USet* fillIn,

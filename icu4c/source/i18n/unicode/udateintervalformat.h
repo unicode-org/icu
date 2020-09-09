@@ -117,7 +117,7 @@ typedef struct UFormattedDateInterval UFormattedDateInterval;
  *            or NULL if an error occurred.
  * @stable ICU 4.8
  */
-U_STABLE UDateIntervalFormat* U_EXPORT2
+U_CAPI UDateIntervalFormat* U_EXPORT2
 udtitvfmt_open(const char*  locale,
               const UChar* skeleton,
               int32_t      skeletonLength,
@@ -131,7 +131,7 @@ udtitvfmt_open(const char*  locale,
  *            The UDateIntervalFormat object to close.
  * @stable ICU 4.8
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 udtitvfmt_close(UDateIntervalFormat *formatter);
 
 /**
@@ -241,7 +241,7 @@ U_NAMESPACE_END
  *            output was truncated.
  * @stable ICU 4.8
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 udtitvfmt_format(const UDateIntervalFormat* formatter,
                 UDate           fromDate,
                 UDate           toDate,
@@ -268,7 +268,7 @@ udtitvfmt_format(const UDateIntervalFormat* formatter,
  *            A pointer to a UErrorCode to receive any errors.
  * @draft ICU 67
  */
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 udtitvfmt_formatToResult(
                 const UDateIntervalFormat* formatter,
                 UDate           fromDate,
@@ -293,7 +293,7 @@ udtitvfmt_formatToResult(
  * @draft ICU 67
  */
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 udtitvfmt_formatCalendarToResult(
                 const UDateIntervalFormat* formatter,
                 UCalendar*      fromCalendar,
