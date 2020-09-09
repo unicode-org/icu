@@ -61,6 +61,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(12, testTicket20707);
         TESTCASE(13, testFormatMillisecond);
         TESTCASE(14, testHourMetacharacters);
+        TESTCASE(15, testContext);
         default: name = ""; break;
     }
 }
@@ -1275,6 +1276,83 @@ void DateIntervalFormatTest::testFormatUserDII() {
     expectUserDII(DATA, UPRV_LENGTHOF(DATA));
 }
 
+/*
+ * Test format using UDisplayContext
+ */
+#define CAP_NONE  UDISPCTX_CAPITALIZATION_NONE
+#define CAP_BEGIN UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE
+#define CAP_LIST  UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU
+#define CAP_ALONE UDISPCTX_CAPITALIZATION_FOR_STANDALONE
+#define _DAY    (24.0*60.0*60.0*1000.0)
+
+void DateIntervalFormatTest::testContext() {
+    static const UDate startDate = 1285599629000.0; // 2010-Sep-27 0800 in America/Los_Angeles
+    typedef struct {
+        const char * locale;
+        const char * skeleton;
+        UDisplayContext context;
+        const UDate  deltaDate;
+        const UChar* expectResult;
+    } DateIntervalContextItem;
+    static const DateIntervalContextItem testItems[] = {
+        { "cs",    "MMMEd",    CAP_NONE,  60.0*_DAY,  u"po 27. 9. – pá 26. 11." },
+        { "cs",    "yMMMM",    CAP_NONE,  60.0*_DAY,  u"září–listopad 2010" },
+        { "cs",    "yMMMM",    CAP_NONE,  1.0*_DAY,   u"září 2010" },
+        { "cs",    "MMMEd",    CAP_BEGIN, 60.0*_DAY,  u"Po 27. 9. – pá 26. 11." },
+        { "cs",    "yMMMM",    CAP_BEGIN, 60.0*_DAY,  u"Září–listopad 2010" },
+        { "cs",    "yMMMM",    CAP_BEGIN, 1.0*_DAY,   u"Září 2010" },
+        { "cs",    "MMMEd",    CAP_LIST,  60.0*_DAY,  u"Po 27. 9. – pá 26. 11." },
+        { "cs",    "yMMMM",    CAP_LIST,  60.0*_DAY,  u"Září–listopad 2010" },
+        { "cs",    "yMMMM",    CAP_LIST,  1.0*_DAY,   u"Září 2010" },
+        { "cs",    "MMMEd",    CAP_ALONE, 60.0*_DAY,  u"po 27. 9. – pá 26. 11." },
+        { "cs",    "yMMMM",    CAP_ALONE, 60.0*_DAY,  u"září–listopad 2010" },
+        { "cs",    "yMMMM",    CAP_ALONE, 1.0*_DAY,   u"září 2010" },
+        { nullptr, nullptr,    CAP_NONE,  0,          nullptr }
+    };
+    const DateIntervalContextItem* testItemPtr;
+    for ( testItemPtr = testItems; testItemPtr->locale != nullptr; ++testItemPtr ) {
+        UErrorCode status = U_ZERO_ERROR;
+        Locale locale(testItemPtr->locale);
+        UnicodeString skeleton(testItemPtr->skeleton, -1, US_INV);
+        LocalPointer<DateIntervalFormat> fmt(DateIntervalFormat::createInstance(skeleton, locale, status));
+        if (U_FAILURE(status)) {
+            errln("createInstance failed for locale %s skeleton %s: %s",
+                    testItemPtr->locale, testItemPtr->skeleton, u_errorName(status));
+            continue;
+        }
+        fmt->adoptTimeZone(TimeZone::createTimeZone("America/Los_Angeles"));
+
+        fmt->setContext(testItemPtr->context, status);
+        if (U_FAILURE(status)) {
+            errln("setContext failed for locale %s skeleton %s context %04X: %s",
+                    testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, u_errorName(status));
+        } else {
+            UDisplayContext getContext = fmt->getContext(UDISPCTX_TYPE_CAPITALIZATION, status);
+            if (U_FAILURE(status)) {
+                errln("getContext failed for locale %s skeleton %s context %04X: %s",
+                        testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, u_errorName(status));
+            } else if (getContext != testItemPtr->context) {
+                errln("getContext failed for locale %s skeleton %s context %04X: got context %04X",
+                        testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, (unsigned)getContext);
+            }
+        }
+
+        status = U_ZERO_ERROR;
+        DateInterval interval(startDate, startDate + testItemPtr->deltaDate);
+        UnicodeString getResult;
+        FieldPosition pos(FieldPosition::DONT_CARE);
+        fmt->format(&interval, getResult, pos, status);
+        if (U_FAILURE(status)) {
+            errln("format failed for locale %s skeleton %s context %04X: %s",
+                    testItemPtr->locale, testItemPtr->skeleton, (unsigned)testItemPtr->context, u_errorName(status));
+            continue;
+        }
+        UnicodeString expectResult(true, testItemPtr->expectResult, -1);
+        if (getResult != expectResult) {
+            errln(UnicodeString("format expected ") + expectResult + UnicodeString(" but got ") + getResult);
+        }
+    }
+}
 
 void DateIntervalFormatTest::testSetIntervalPatternNoSideEffect() {
     UErrorCode ec = U_ZERO_ERROR;

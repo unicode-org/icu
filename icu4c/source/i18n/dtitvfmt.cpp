@@ -23,6 +23,7 @@
 #include "unicode/dtptngen.h"
 #include "unicode/dtitvinf.h"
 #include "unicode/simpleformatter.h"
+#include "unicode/udisplaycontext.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "dtitv_impl.h"
@@ -143,7 +144,8 @@ DateIntervalFormat::DateIntervalFormat()
     fLocale(Locale::getRoot()),
     fDatePattern(nullptr),
     fTimePattern(nullptr),
-    fDateTimeFormat(nullptr)
+    fDateTimeFormat(nullptr),
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {}
 
 
@@ -156,7 +158,8 @@ DateIntervalFormat::DateIntervalFormat(const DateIntervalFormat& itvfmt)
     fLocale(itvfmt.fLocale),
     fDatePattern(nullptr),
     fTimePattern(nullptr),
-    fDateTimeFormat(nullptr) {
+    fDateTimeFormat(nullptr),
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE) {
     *this = itvfmt;
 }
 
@@ -203,6 +206,7 @@ DateIntervalFormat::operator=(const DateIntervalFormat& itvfmt) {
         fDatePattern    = (itvfmt.fDatePattern)?    itvfmt.fDatePattern->clone(): nullptr;
         fTimePattern    = (itvfmt.fTimePattern)?    itvfmt.fTimePattern->clone(): nullptr;
         fDateTimeFormat = (itvfmt.fDateTimeFormat)? itvfmt.fDateTimeFormat->clone(): nullptr;
+        fCapitalizationContext = itvfmt.fCapitalizationContext;
     }
     return *this;
 }
@@ -254,6 +258,7 @@ DateIntervalFormat::operator==(const Format& other) const {
         if (fIntervalPatterns[i].secondPart != fmt->fIntervalPatterns[i].secondPart ) {return FALSE;}
         if (fIntervalPatterns[i].laterDateFirst != fmt->fIntervalPatterns[i].laterDateFirst) {return FALSE;}
     }
+    if (fCapitalizationContext != fmt->fCapitalizationContext) {return FALSE;}
     return TRUE;
 }
 
@@ -409,6 +414,7 @@ UnicodeString& DateIntervalFormat::formatIntervalImpl(
 }
 
 
+// The following is only called from within the gFormatterMutex lock
 UnicodeString&
 DateIntervalFormat::formatImpl(Calendar& fromCalendar,
                            Calendar& toCalendar,
@@ -464,6 +470,11 @@ DateIntervalFormat::formatImpl(Calendar& fromCalendar,
     if ( U_FAILURE(status) ) {
         return appendTo;
     }
+    UErrorCode tempStatus = U_ZERO_ERROR; // for setContext, ignored
+    // Set up fDateFormat to handle the first or only part of the interval
+    // (override later for any second part). Inside lock, OK to modify fDateFormat.
+    fDateFormat->setContext(fCapitalizationContext, tempStatus);
+
     if ( field == UCAL_FIELD_COUNT ) {
         /* ignore the millisecond etc. small fields' difference.
          * use single date when all the above are the same.
@@ -521,6 +532,9 @@ DateIntervalFormat::formatImpl(Calendar& fromCalendar,
 
     if ( !intervalPattern.secondPart.isEmpty() ) {
         fDateFormat->applyPattern(intervalPattern.secondPart);
+        // No capitalization for second part of interval
+        tempStatus = U_ZERO_ERROR;
+        fDateFormat->setContext(UDISPCTX_CAPITALIZATION_NONE, tempStatus);
         fDateFormat->_format(*secondCal, appendTo, fphandler, status);
     }
     fDateFormat->applyPattern(originalPattern);
@@ -622,6 +636,30 @@ DateIntervalFormat::getTimeZone() const
     return *(TimeZone::createDefault());
 }
 
+void
+DateIntervalFormat::setContext(UDisplayContext value, UErrorCode& status)
+{
+    if (U_FAILURE(status))
+        return;
+    if ( (UDisplayContextType)((uint32_t)value >> 8) == UDISPCTX_TYPE_CAPITALIZATION ) {
+        fCapitalizationContext = value;
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+}
+
+UDisplayContext
+DateIntervalFormat::getContext(UDisplayContextType type, UErrorCode& status) const
+{
+    if (U_FAILURE(status))
+        return (UDisplayContext)0;
+    if (type != UDISPCTX_TYPE_CAPITALIZATION) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return (UDisplayContext)0;
+    }
+    return fCapitalizationContext;
+}
+
 DateIntervalFormat::DateIntervalFormat(const Locale& locale,
                                        DateIntervalInfo* dtItvInfo,
                                        const UnicodeString* skeleton,
@@ -633,7 +671,8 @@ DateIntervalFormat::DateIntervalFormat(const Locale& locale,
     fLocale(locale),
     fDatePattern(nullptr),
     fTimePattern(nullptr),
-    fDateTimeFormat(nullptr)
+    fDateTimeFormat(nullptr),
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     LocalPointer<DateIntervalInfo> info(dtItvInfo, status);
     LocalPointer<SimpleDateFormat> dtfmt(static_cast<SimpleDateFormat *>(
@@ -1506,6 +1545,7 @@ DateIntervalFormat::splitPatternInto2Part(const UnicodeString& intervalPattern) 
     return (i - count);
 }
 
+// The following is only called from fallbackFormat, i.e. within the gFormatterMutex lock
 void DateIntervalFormat::fallbackFormatRange(
         Calendar& fromCalendar,
         Calendar& toCalendar,
@@ -1522,12 +1562,15 @@ void DateIntervalFormat::fallbackFormatRange(
     int32_t offsets[2];
     UnicodeString patternBody = sf.getTextWithNoArguments(offsets, 2);
 
+    UErrorCode tempStatus = U_ZERO_ERROR; // for setContext, ignored
     // TODO(ICU-20406): Use SimpleFormatter Iterator interface when available.
     if (offsets[0] < offsets[1]) {
         firstIndex = 0;
         appendTo.append(patternBody.tempSubStringBetween(0, offsets[0]));
         fDateFormat->_format(fromCalendar, appendTo, fphandler, status);
         appendTo.append(patternBody.tempSubStringBetween(offsets[0], offsets[1]));
+        // No capitalization for second part of interval
+        fDateFormat->setContext(UDISPCTX_CAPITALIZATION_NONE, tempStatus);
         fDateFormat->_format(toCalendar, appendTo, fphandler, status);
         appendTo.append(patternBody.tempSubStringBetween(offsets[1]));
     } else {
@@ -1535,11 +1578,14 @@ void DateIntervalFormat::fallbackFormatRange(
         appendTo.append(patternBody.tempSubStringBetween(0, offsets[1]));
         fDateFormat->_format(toCalendar, appendTo, fphandler, status);
         appendTo.append(patternBody.tempSubStringBetween(offsets[1], offsets[0]));
+        // No capitalization for second part of interval
+        fDateFormat->setContext(UDISPCTX_CAPITALIZATION_NONE, tempStatus);
         fDateFormat->_format(fromCalendar, appendTo, fphandler, status);
         appendTo.append(patternBody.tempSubStringBetween(offsets[0]));
     }
 }
 
+// The following is only called from formatImpl, i.e. within the gFormatterMutex lock
 UnicodeString&
 DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
                                    Calendar& toCalendar,
@@ -1564,6 +1610,7 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
         UnicodeString fullPattern; // for saving the pattern in fDateFormat
         fDateFormat->toPattern(fullPattern); // save current pattern, restore later
 
+        UErrorCode tempStatus = U_ZERO_ERROR; // for setContext, ignored
         // {0} is time range
         // {1} is single date portion
         // TODO(ICU-20406): Use SimpleFormatter Iterator interface when available.
@@ -1573,6 +1620,8 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
             fallbackFormatRange(fromCalendar, toCalendar, appendTo, firstIndex, fphandler, status);
             appendTo.append(patternBody.tempSubStringBetween(offsets[0], offsets[1]));
             fDateFormat->applyPattern(*fDatePattern);
+            // No capitalization for second portion
+            fDateFormat->setContext(UDISPCTX_CAPITALIZATION_NONE, tempStatus);
             fDateFormat->_format(fromCalendar, appendTo, fphandler, status);
             appendTo.append(patternBody.tempSubStringBetween(offsets[1]));
         } else {
@@ -1581,6 +1630,8 @@ DateIntervalFormat::fallbackFormat(Calendar& fromCalendar,
             fDateFormat->_format(fromCalendar, appendTo, fphandler, status);
             appendTo.append(patternBody.tempSubStringBetween(offsets[1], offsets[0]));
             fDateFormat->applyPattern(*fTimePattern);
+            // No capitalization for second portion
+            fDateFormat->setContext(UDISPCTX_CAPITALIZATION_NONE, tempStatus);
             fallbackFormatRange(fromCalendar, toCalendar, appendTo, firstIndex, fphandler, status);
             appendTo.append(patternBody.tempSubStringBetween(offsets[0]));
         }

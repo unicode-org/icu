@@ -36,6 +36,7 @@ import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalFormat.FormattedDateInterval;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
@@ -943,7 +944,65 @@ public class DateIntervalFormatTest extends TestFmwk {
         }
     }
 
+    /*
+     * Test format using DisplayContext
+     */
+    @Test
+    public void TestContext() {
+        final long startDate = 1285599629000L; // 2010-Sep-27 0800 in America/Los_Angeles
+        final long day = 24*60*60*1000; // milliseconds in a day
 
+        class DateIntervalContextItem {
+            public String locale;
+            public String skeleton;
+            public DisplayContext context;
+            public long deltaDate;
+            public String expectResult;
+             // Simple constructor
+            public DateIntervalContextItem(String loc, String skel, DisplayContext ctxt, long delta, String expect) {
+                locale = loc;
+                skeleton = skel;
+                context = ctxt;
+                deltaDate = delta;
+                expectResult = expect;
+            }
+        };
+
+        final DateIntervalContextItem[] testItems = {
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_NONE,                      60*day, "po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_NONE,                      60*day, "září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_NONE,                       1*day, "září 2010" ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 60*day, "Po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 60*day, "Září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,  1*day, "Září 2010" ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       60*day, "Po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       60*day, "Září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,        1*day, "Září 2010" ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_STANDALONE,            60*day, "po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_STANDALONE,            60*day, "září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_STANDALONE,             1*day, "září 2010" ),
+        };
+
+        for (DateIntervalContextItem item: testItems) {
+            DateIntervalFormat difmt = DateIntervalFormat.getInstance(item.skeleton, new ULocale(item.locale));
+            difmt.setTimeZone(TimeZone.getFrozenTimeZone("America/Los_Angeles"));
+
+            difmt.setContext(item.context);
+            DisplayContext getContext = difmt.getContext(DisplayContext.Type.CAPITALIZATION);
+            if (getContext != item.context) {
+                errln("For locale "  + item.locale + ", skeleton " + item.skeleton + ", context " + item.context +
+                        ": getContext returned " + getContext);
+            }
+            DateInterval interval = new DateInterval(startDate, startDate + item.deltaDate);
+            FieldPosition pos = new FieldPosition(0);
+            StringBuffer getResult = new StringBuffer();
+            difmt.format(interval, getResult, pos);
+            if (!getResult.toString().equals(item.expectResult)) {
+                errln("For locale "  + item.locale + ", skeleton " + item.skeleton + ", context " + item.context +
+                       ": expected " + item.expectResult + ", got " + getResult.toString());
+            }
+        }
+    }
 
     /*
      * Test format using user defined DateIntervalInfo
