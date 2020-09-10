@@ -168,7 +168,12 @@ ARM_CROSSBUILD_TS=$(ICUTMP)\$(ARM_CROSS_BUILD).timestamp
 !IF "$(ARM_CROSS_BUILD)" == ""
 CFGTOOLS=$(CFG)
 !ELSE
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM64\Release"
 CFGTOOLS=x64\Release
+!ENDIF
+!IF "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM64\Debug"
+CFGTOOLS=x64\Debug
+!ENDIF
 !ENDIF
 !MESSAGE ICU tools CFG subpath is $(CFGTOOLS)
 
