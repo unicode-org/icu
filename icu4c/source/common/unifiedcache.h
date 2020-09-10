@@ -34,13 +34,13 @@ class UnifiedCache;
  */
 class U_COMMON_API CacheKeyBase : public UObject {
  public:
-   CacheKeyBase() : fCreationStatus(U_ZERO_ERROR), fIsPrimary(FALSE) {}
+   CacheKeyBase() : fCreationStatus(U_ZERO_ERROR), fIsPrimary(false) {}
 
    /**
     * Copy constructor. Needed to support cloning.
     */
    CacheKeyBase(const CacheKeyBase &other) 
-           : UObject(other), fCreationStatus(other.fCreationStatus), fIsPrimary(FALSE) { }
+           : UObject(other), fCreationStatus(other.fCreationStatus), fIsPrimary(false) { }
    virtual ~CacheKeyBase();
 
    /**
@@ -147,10 +147,10 @@ class LocaleCacheKey : public CacheKey<T> {
    virtual UBool operator == (const CacheKeyBase &other) const {
        // reflexive
        if (this == &other) {
-           return TRUE;
+           return true;
        }
        if (!CacheKey<T>::operator == (other)) {
-           return FALSE;
+           return false;
        }
        // We know this and other are of same class because operator== on
        // CacheKey returned true.
@@ -359,7 +359,7 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
    
    /**
     * Flushes the contents of the cache. If cache values hold references to other
-    * cache values then _flush should be called in a loop until it returns FALSE.
+    * cache values then _flush should be called in a loop until it returns false.
     * 
     * On entry, gCacheMutex must be held.
     * On exit, those values with are evictable are flushed.
@@ -370,7 +370,7 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
     *                     hard (external) references are not deleted, but are detached from
     *                     the cache, so that a subsequent removeRefs can delete them.
     *                     _flush is not thread safe when all is true.
-    *   @return TRUE if any value in cache was flushed or FALSE otherwise.
+    *   @return true if any value in cache was flushed or false otherwise.
     */
    UBool _flush(UBool all) const;
    
@@ -395,11 +395,11 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
      * Attempts to fetch value and status for key from cache.
      * On entry, gCacheMutex must not be held value must be NULL and status must
      * be U_ZERO_ERROR.
-     * On exit, either returns FALSE (In this
-     * case caller should try to create the object) or returns TRUE with value
+     * On exit, either returns false (In this
+     * case caller should try to create the object) or returns true with value
      * pointing to the fetched value and status set to fetched status. When
-     * FALSE is returned status may be set to failure if an in progress hash
-     * entry could not be made but value will remain unchanged. When TRUE is
+     * false is returned status may be set to failure if an in progress hash
+     * entry could not be made but value will remain unchanged. When true is
      * returned, caller must call removeRef() on value.
      */
     UBool _poll(

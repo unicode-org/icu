@@ -101,7 +101,7 @@ public:
      * This is a fast and imprecise test.
      *
      * @param c a code point
-     * @return TRUE if c is U+0F73, U+0F75 or U+0F81 or one of several other Tibetan characters
+     * @return true if c is U+0F73, U+0F75 or U+0F81 or one of several other Tibetan characters
      */
     static inline UBool maybeTibetanCompositeVowel(UChar32 c) {
         return (c & 0x1fff01) == 0xf01;
@@ -116,7 +116,7 @@ public:
      * They have distinct lccc/tccc combinations: 129/130 or 129/132.
      *
      * @param fcd16 the FCD value (lccc/tccc combination) of a code point
-     * @return TRUE if fcd16 is from U+0F73, U+0F75 or U+0F81
+     * @return true if fcd16 is from U+0F73, U+0F75 or U+0F81
      */
     static inline UBool isFCD16OfTibetanCompositeVowel(uint16_t fcd16) {
         return fcd16 == 0x8182 || fcd16 == 0x8184;

@@ -295,7 +295,7 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     void init(double n, int32_t v, int64_t f);
     void init(double n);
     UBool quickInit(double n);  // Try a fast-path only initialization,
-                                //    return TRUE if successful.
+                                //    return true if successful.
     void adjustForMinFractionDigits(int32_t min);
     static int64_t getFractionalDigits(double n, int32_t v);
     static int32_t decimals(double n);

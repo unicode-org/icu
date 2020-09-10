@@ -251,9 +251,9 @@ protected:
     virtual UBool foundNULTerminator();
 
     /**
-     * @return FALSE if surrogate code points U+D800..U+DFFF
+     * @return false if surrogate code points U+D800..U+DFFF
      *         map to their own implicit primary weights (for UTF-16),
-     *         or TRUE if they map to CE(U+FFFD) (for UTF-8)
+     *         or true if they map to CE(U+FFFD) (for UTF-8)
      */
     virtual UBool forbidSurrogateCodePoints() const;
 
