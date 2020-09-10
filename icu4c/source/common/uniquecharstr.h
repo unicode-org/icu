@@ -8,6 +8,7 @@
 #define __UNIQUECHARSTR_H__
 
 #include "charstr.h"
+#include "uassert.h"
 #include "uhash.h"
 
 U_NAMESPACE_BEGIN
