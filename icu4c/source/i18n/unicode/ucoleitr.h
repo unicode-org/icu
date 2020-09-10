@@ -23,7 +23,7 @@
 #if !UCONFIG_NO_COLLATION
 
 /**  
- * This indicates an error has occured during processing or if no more CEs is 
+ * This indicates an error has occurred during processing or if no more CEs is 
  * to be returned.
  * @stable ICU 2.0
  */
@@ -66,14 +66,14 @@ typedef struct UCollationElements UCollationElements;
  * .      UCollationElements *c;
  * .      UCollatorOld *coll;
  * .      UErrorCode success = U_ZERO_ERROR;
- * .      s=(UChar*)malloc(sizeof(UChar) * (strlen("This is a test")+1) );
- * .      u_uastrcpy(s, "This is a test");
+ * .      str=(UChar*)malloc(sizeof(UChar) * (strlen("This is a test")+1) );
+ * .      u_uastrcpy(str, "This is a test");
  * .      coll = ucol_open(NULL, &success);
  * .      c = ucol_openElements(coll, str, u_strlen(str), &status);
  * .      order = ucol_next(c, &success);
  * .      ucol_reset(c);
  * .      order = ucol_prev(c, &success);
- * .      free(s);
+ * .      free(str);
  * .      ucol_close(coll);
  * .      ucol_closeElements(c);
  * .  }
@@ -102,6 +102,10 @@ typedef struct UCollationElements UCollationElements;
 /**
  * Open the collation elements for a string.
  *
+ * The UCollationElements retains a pointer to the supplied text.
+ * The caller must not modify or delete the text while the UCollationElements
+ * object is used to iterate over this text.
+ *
  * @param coll The collator containing the desired collation rules.
  * @param text The text to iterate over.
  * @param textLength The number of characters in text, or -1 if null-terminated
@@ -114,7 +118,6 @@ ucol_openElements(const UCollator  *coll,
                   const UChar      *text,
                         int32_t    textLength,
                         UErrorCode *status);
-
 
 /**
  * get a hash code for a key... Not very useful!
@@ -153,7 +156,7 @@ ucol_reset(UCollationElements *elems);
  * @param elems The UCollationElements containing the text.
  * @param status A pointer to a UErrorCode to receive any errors.
  * @return The next collation elements ordering, otherwise returns UCOL_NULLORDER 
- *         if an error has occured or if the end of string has been reached
+ *         if an error has occurred or if the end of string has been reached
  * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
@@ -168,7 +171,7 @@ ucol_next(UCollationElements *elems, UErrorCode *status);
  *               a U_BUFFER_OVERFLOW_ERROR is returned if the internal stack
  *               buffer has been exhausted.
  * @return The previous collation elements ordering, otherwise returns 
- *         UCOL_NULLORDER if an error has occured or if the start of string has 
+ *         UCOL_NULLORDER if an error has occurred or if the start of string has 
  *         been reached.
  * @stable ICU 2.0
  */
@@ -194,6 +197,11 @@ ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
  * Property settings for collation will remain the same.
  * In order to reset the iterator to the current collation property settings,
  * the API reset() has to be called.
+ *
+ * The UCollationElements retains a pointer to the supplied text.
+ * The caller must not modify or delete the text while the UCollationElements
+ * object is used to iterate over this text.
+ *
  * @param elems The UCollationElements to set.
  * @param text The source text containing the collation elements.
  * @param textLength The length of text, or -1 if null-terminated.
@@ -202,7 +210,7 @@ ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
  * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
-ucol_setText(      UCollationElements *elems, 
+ucol_setText(      UCollationElements *elems,
              const UChar              *text,
                    int32_t            textLength,
                    UErrorCode         *status);
@@ -233,7 +241,7 @@ ucol_getOffset(const UCollationElements *elems);
  */
 U_CAPI void U_EXPORT2 
 ucol_setOffset(UCollationElements *elems,
-               int32_t        offset,
+               int32_t             offset,
                UErrorCode         *status);
 
 /**
