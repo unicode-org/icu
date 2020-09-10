@@ -90,22 +90,23 @@ namespace number {
 namespace impl {
 
 /**
- * A MicroPropsGenerator which converts a measurement from a simple MeasureUnit
- * to a Mixed MeasureUnit.
+ * A MicroPropsGenerator which converts a measurement from one MeasureUnit to
+ * another. In particular, the output MeasureUnit may be a mixed unit. (The
+ * input unit may not be a mixed unit.)
  */
 class U_I18N_API UnitConversionHandler : public MicroPropsGenerator, public UMemory {
   public:
     /**
      * Constructor.
      *
-     * @param unit Specifies both the input and output MeasureUnit: if it is a
-     *     MIXED unit, the input MeasureUnit will be just the biggest unit of
-     *     the sequence.
+     * @param inputUnit Specifies the input MeasureUnit. Mixed units are not
+     *     supported as input (because input is just a single decimal quantity).
+     * @param outputUnit Specifies the output MeasureUnit.
      * @param parent The parent MicroPropsGenerator.
      * @param status Receives status.
      */
-    UnitConversionHandler(const MeasureUnit &unit, const MicroPropsGenerator *parent,
-                          UErrorCode &status);
+    UnitConversionHandler(const MeasureUnit &inputUnit, const MeasureUnit &outputUnit,
+                          const MicroPropsGenerator *parent, UErrorCode &status);
 
     /**
      * Obtains the appropriate output values from the Unit Converter.

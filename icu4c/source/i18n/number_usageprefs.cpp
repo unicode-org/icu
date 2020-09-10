@@ -183,21 +183,14 @@ Precision UsagePrefsHandler::parseSkeletonToPrecision(icu::UnicodeString precisi
     return macros.precision;
 }
 
-UnitConversionHandler::UnitConversionHandler(const MeasureUnit &unit, const MicroPropsGenerator *parent,
-                                             UErrorCode &status)
-    : fOutputUnit(unit), fParent(parent) {
-    MeasureUnitImpl temp;
-    const MeasureUnitImpl &outputUnit = MeasureUnitImpl::forMeasureUnit(unit, temp, status);
-    const MeasureUnitImpl *inputUnit = &outputUnit;
-    MaybeStackVector<MeasureUnitImpl> singleUnits;
-    U_ASSERT(outputUnit.complexity == UMEASURE_UNIT_MIXED);
-    // When we wish to support unit conversion, replace the above assert with this if:
-    // if (outputUnit.complexity == UMEASURE_UNIT_MIXED) {
-    {
-        singleUnits = outputUnit.extractIndividualUnits(status);
-        U_ASSERT(singleUnits.length() > 0);
-        inputUnit = singleUnits[0];
-    }
+UnitConversionHandler::UnitConversionHandler(const MeasureUnit &inputUnit, const MeasureUnit &outputUnit,
+                                             const MicroPropsGenerator *parent, UErrorCode &status)
+    : fOutputUnit(outputUnit), fParent(parent) {
+    MeasureUnitImpl tempInput, tempOutput;
+    const MeasureUnitImpl &inputUnitImpl = MeasureUnitImpl::forMeasureUnit(inputUnit, tempInput, status);
+    const MeasureUnitImpl &outputUnitImpl =
+        MeasureUnitImpl::forMeasureUnit(outputUnit, tempOutput, status);
+
     // TODO: this should become an initOnce thing? Review with other
     // ConversionRates usages.
     ConversionRates conversionRates(status);
@@ -205,7 +198,7 @@ UnitConversionHandler::UnitConversionHandler(const MeasureUnit &unit, const Micr
         return;
     }
     fUnitConverter.adoptInsteadAndCheckErrorCode(
-        new ComplexUnitsConverter(*inputUnit, outputUnit, conversionRates, status), status);
+        new ComplexUnitsConverter(inputUnitImpl, outputUnitImpl, conversionRates, status), status);
 }
 
 void UnitConversionHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,

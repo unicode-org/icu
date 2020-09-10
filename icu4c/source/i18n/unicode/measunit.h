@@ -447,7 +447,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_INTERNAL_API
     /**
-     * Gets the list of SINGLE units contained within a MIXED of COMPOUND unit.
+     * Gets the list of SINGLE units contained within a MIXED or COMPOUND unit.
      *
      * Examples:
      * - Given "meter-kilogram-per-second", three units will be returned: "meter",
