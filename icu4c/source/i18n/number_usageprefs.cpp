@@ -28,21 +28,33 @@ using icu::StringSegment;
 using icu::units::ConversionRates;
 
 // Copy constructor
-Usage::Usage(const Usage &other) : fUsage(nullptr), fLength(other.fLength), fError(other.fError) {
-    if (other.fUsage != nullptr) {
-        fUsage = (char *)uprv_malloc(fLength + 1);
-        uprv_strncpy(fUsage, other.fUsage, fLength + 1);
-    }
+Usage::Usage(const Usage &other) : Usage() {
+    this->operator=(other);
 }
 
 // Copy assignment operator
 Usage &Usage::operator=(const Usage &other) {
-    fLength = other.fLength;
-    if (other.fUsage != nullptr) {
-        fUsage = (char *)uprv_malloc(fLength + 1);
-        uprv_strncpy(fUsage, other.fUsage, fLength + 1);
-    }
+    fLength = 0;
     fError = other.fError;
+    if (fUsage != nullptr) {
+        uprv_free(fUsage);
+        fUsage = nullptr;
+    }
+    if (other.fUsage == nullptr) {
+        return *this;
+    }
+    if (U_FAILURE(other.fError)) {
+        // We don't bother trying to allocating memory if we're in any case busy
+        // copying an errored Usage.
+        return *this;
+    }
+    fUsage = (char *)uprv_malloc(other.fLength + 1);
+    if (fUsage == nullptr) {
+        fError = U_MEMORY_ALLOCATION_ERROR;
+        return *this;
+    }
+    fLength = other.fLength;
+    uprv_strncpy(fUsage, other.fUsage, fLength + 1);
     return *this;
 }
 
@@ -82,6 +94,11 @@ void Usage::set(StringPiece value) {
     }
     fLength = value.length();
     fUsage = (char *)uprv_malloc(fLength + 1);
+    if (fUsage == nullptr) {
+        fLength = 0;
+        fError = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     uprv_strncpy(fUsage, value.data(), fLength);
     fUsage[fLength] = 0;
 }

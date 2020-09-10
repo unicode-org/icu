@@ -1094,7 +1094,7 @@ class U_I18N_API Scale : public UMemory {
     }
 
     UBool copyErrorTo(UErrorCode &status) const {
-        if (fError != U_ZERO_ERROR) {
+        if (U_FAILURE(fError)) {
             status = fError;
             return true;
         }
@@ -1154,12 +1154,14 @@ class U_I18N_API Usage : public UMemory {
     int16_t length() const { return fLength; }
 
     /** @internal
-     * Makes a copy of value.
+     * Makes a copy of value. Set to "" to unset.
      */
     void set(StringPiece value);
 
     /** @internal */
     bool isSet() const { return fLength > 0; }
+
+#endif // U_HIDE_INTERNAL_API
 
   private:
     char *fUsage;
@@ -1168,16 +1170,24 @@ class U_I18N_API Usage : public UMemory {
 
     Usage() : fUsage(nullptr), fLength(0), fError(U_ZERO_ERROR) {}
 
+    /** @internal */
+    UBool copyErrorTo(UErrorCode &status) const {
+        if (U_FAILURE(fError)) {
+            status = fError;
+            return true;
+        }
+        return false;
+    }
+
     // Allow NumberFormatterImpl to access fUsage.
     friend class impl::NumberFormatterImpl;
 
     // Allow skeleton generation code to access private members.
     friend class impl::GeneratorHelpers;
 
-    // Allow MacroProps/MicroProps to initialize empty instances.
+    // Allow MacroProps/MicroProps to initialize empty instances and to call
+    // copyErrorTo().
     friend struct impl::MacroProps;
-
-#endif // U_HIDE_INTERNAL_API
 };
 
 // Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
@@ -1487,7 +1497,7 @@ struct U_I18N_API MacroProps : public UMemory {
     bool copyErrorTo(UErrorCode &status) const {
         return notation.copyErrorTo(status) || precision.copyErrorTo(status) ||
                padder.copyErrorTo(status) || integerWidth.copyErrorTo(status) ||
-               symbols.copyErrorTo(status) || scale.copyErrorTo(status);
+               symbols.copyErrorTo(status) || scale.copyErrorTo(status) || usage.copyErrorTo(status);
     }
 };
 
