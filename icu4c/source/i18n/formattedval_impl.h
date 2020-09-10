@@ -231,7 +231,7 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
         return fData->appendTo(appendable, status); \
     } \
     UBool Name::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const { \
-        UPRV_FORMATTED_VALUE_METHOD_GUARD(FALSE) \
+        UPRV_FORMATTED_VALUE_METHOD_GUARD(false) \
         return fData->nextPosition(cfpos, status); \
     }
 

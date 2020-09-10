@@ -463,7 +463,7 @@ U_CAPI UDate U_EXPORT2 uprv_getRawUTCtime(void);
 /**
  * Determine whether a pathname is absolute or not, as defined by the platform.
  * @param path Pathname to test
- * @return TRUE if the path is absolute
+ * @return true if the path is absolute
  * @internal (ICU 3.0)
  */
 U_CAPI UBool U_EXPORT2 uprv_pathIsAbsolute(const char *path);

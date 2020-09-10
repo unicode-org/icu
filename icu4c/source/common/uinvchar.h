@@ -33,7 +33,7 @@
  *
  * @param s Input string pointer.
  * @param length Length of the string, can be -1 if NUL-terminated.
- * @return TRUE if s contains only invariant characters.
+ * @return true if s contains only invariant characters.
  *
  * @internal (ICU 2.8)
  */
@@ -46,7 +46,7 @@ uprv_isInvariantString(const char *s, int32_t length);
  *
  * @param s Input string pointer.
  * @param length Length of the string, can be -1 if NUL-terminated.
- * @return TRUE if s contains only invariant characters.
+ * @return true if s contains only invariant characters.
  *
  * @internal (ICU 2.8)
  */

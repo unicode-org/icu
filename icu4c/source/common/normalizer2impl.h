@@ -359,7 +359,7 @@ public:
         return getFCD16FromNormData(c);
     }
 
-    /** Returns TRUE if the single-or-lead code unit c might have non-zero FCD data. */
+    /** Returns true if the single-or-lead code unit c might have non-zero FCD data. */
     UBool singleLeadMightHaveNonZeroFCD16(UChar32 lead) const {
         // 0<=lead<=0xffff
         uint8_t bits=smallFCD[lead>>8];
@@ -397,8 +397,8 @@ public:
         MIN_YES_YES_WITH_CC=0xfe02,
         JAMO_VT=0xfe00,
         MIN_NORMAL_MAYBE_YES=0xfc00,
-        JAMO_L=2,  // offset=1 hasCompBoundaryAfter=FALSE
-        INERT=1,  // offset=0 hasCompBoundaryAfter=TRUE
+        JAMO_L=2,  // offset=1 hasCompBoundaryAfter=false
+        INERT=1,  // offset=0 hasCompBoundaryAfter=true
 
         // norm16 bit 0 is comp-boundary-after.
         HAS_COMP_BOUNDARY_AFTER=1,

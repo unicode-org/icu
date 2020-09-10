@@ -29,7 +29,7 @@
 /**
  * Compare two strings in code point order or code unit order.
  * Works in strcmp style (both lengths -1),
- * strncmp style (lengths equal and >=0, flag TRUE),
+ * strncmp style (lengths equal and >=0, flag true),
  * and memcmp/UnicodeString style (at least one length >=0).
  */
 U_CFUNC int32_t U_EXPORT2
@@ -133,7 +133,7 @@ public:
      * @param t The i-th byte following the lead byte.
      * @param i The index (1..3) of byte t in the byte sequence. 0<i<length
      * @param length The length (2..4) of the byte sequence according to the lead byte.
-     * @return TRUE if t is a valid trail byte in this context.
+     * @return true if t is a valid trail byte in this context.
      */
     static inline UBool isValidTrail(int32_t prev, uint8_t t, int32_t i, int32_t length) {
         // The first trail byte after a 3- or 4-byte lead byte

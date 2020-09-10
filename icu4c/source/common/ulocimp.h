@@ -40,7 +40,7 @@ uloc_getTableStringWithFallback(
     int32_t *pLength,
     UErrorCode *pErrorCode);
 
-/*returns TRUE if a is an ID separator FALSE otherwise*/
+/*returns true if a is an ID separator false otherwise*/
 #define _isIDSeparator(a) (a == '_' || a == '-')
 
 U_CFUNC const char* 
@@ -95,9 +95,9 @@ ulocimp_getKeywordValue(const char* localeID,
 /**
  * Writes a well-formed language tag for this locale ID.
  *
- * **Note**: When `strict` is FALSE, any locale fields which do not satisfy the
+ * **Note**: When `strict` is false, any locale fields which do not satisfy the
  * BCP47 syntax requirement will be omitted from the result.  When `strict` is
- * TRUE, this function sets U_ILLEGAL_ARGUMENT_ERROR to the `err` if any locale
+ * true, this function sets U_ILLEGAL_ARGUMENT_ERROR to the `err` if any locale
  * fields do not satisfy the BCP47 syntax requirement.
  *
  * @param localeID  the input locale ID
@@ -154,7 +154,7 @@ ulocimp_forLanguageTag(const char* langtag,
  * Get the region to use for supplemental data lookup. Uses
  * (1) any region specified by locale tag "rg"; if none then
  * (2) any unicode_region_tag in the locale ID; if none then
- * (3) if inferRegion is TRUE, the region suggested by
+ * (3) if inferRegion is true, the region suggested by
  * getLikelySubtags on the localeID.
  * If no region is found, returns length 0.
  * 
@@ -162,7 +162,7 @@ ulocimp_forLanguageTag(const char* langtag,
  *     The complete locale ID (with keywords) from which
  *     to get the region to use for supplemental data.
  * @param inferRegion
- *     If TRUE, will try to infer region from localeID if
+ *     If true, will try to infer region from localeID if
  *     no other region is found.
  * @param region
  *     Buffer in which to put the region ID found; should
