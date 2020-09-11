@@ -352,7 +352,7 @@ public abstract class Precision {
     }
 
     /** Package-private clone method */
-    abstract Precision createCopy();
+    public abstract Precision createCopy();
 
     /**
      * @internal

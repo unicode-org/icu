@@ -5,21 +5,9 @@ package com.ibm.icu.number;
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData.CompactType;
-import com.ibm.icu.impl.number.ConstantAffixModifier;
-import com.ibm.icu.impl.number.DecimalQuantity;
-import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.impl.number.Grouper;
-import com.ibm.icu.impl.number.LongNameHandler;
-import com.ibm.icu.impl.number.MacroProps;
-import com.ibm.icu.impl.number.MicroProps;
-import com.ibm.icu.impl.number.MicroPropsGenerator;
-import com.ibm.icu.impl.number.MultiplierFormatHandler;
-import com.ibm.icu.impl.number.MutablePatternModifier;
+import com.ibm.icu.impl.number.*;
 import com.ibm.icu.impl.number.MutablePatternModifier.ImmutablePatternModifier;
-import com.ibm.icu.impl.number.Padder;
-import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
-import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -192,6 +180,8 @@ class NumberFormatterImpl {
         }
         boolean isCldrUnit = !isCurrency && !isBaseUnit &&
             (unitWidth == UnitWidth.FULL_NAME || !(isPercent || isPermille));
+        boolean isMixedUnit = isCldrUnit && macros.unit.getType() == null &&
+                macros.unit.getComplexity() == MeasureUnit.Complexity.MIXED;
         PluralRules rules = macros.rules;
 
         // Select the numbering system.
@@ -243,6 +233,18 @@ class NumberFormatterImpl {
         /////////////////////////////////////////////////////////////////////////////////////
         /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
         /////////////////////////////////////////////////////////////////////////////////////
+
+        // Unit Preferences and Conversions as our first step
+        if (macros.usage != null) {
+            if (!isCldrUnit) {
+                throw new AssertionError("We only support \"usage\" when the input unit is specified, and is a CLDR Unit.");
+            }
+
+            chain = new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
+
+        } else if (isMixedUnit) {
+            chain = new UnitConversionHandler(macros.unit, chain);
+        }
 
         // Multiplier
         if (macros.scale != null) {

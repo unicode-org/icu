@@ -8,12 +8,12 @@
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.Pair;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * `UnitsRouter` responsible for converting from a single unit (such as `meter` or `meter-per-second`) to
@@ -44,18 +44,13 @@ import java.util.ArrayList;
  * desired complex units and to check the limit too.
  */
 public class UnitsRouter {
-    public class RouteResult {
-        public ArrayList<Measure> measures;
-        public String precision;
-        public ArrayList<Pair<MeasureUnitImpl, BigDecimal>> tempResults; // TODO: remove this after implementing build function.
+    // List of possible output units. TODO: converterPreferences_ now also has
+    // this data available. Maybe drop outputUnits_ and have getOutputUnits
+    // construct a the list from data in converterPreferences_ instead?
+    private ArrayList<MeasureUnit> outputUnits_ = new ArrayList<>();
+    private ArrayList<ConverterPreference> converterPreferences_ = new ArrayList<>();
 
-        RouteResult(Pair<ArrayList<Measure>, ArrayList<Pair<MeasureUnitImpl, BigDecimal>>> results, String precision) {
-            this.measures = results.first;
-            ;
-            this.precision = precision;
-            this.tempResults = results.second;
-        }
-    }
+    private MeasureUnitImpl complexOutputUnit_;
 
     public UnitsRouter(MeasureUnitImpl inputUnitImpl, String region, String usage) {
         // TODO: do we want to pass in ConversionRates and UnitPreferences instead?
@@ -64,12 +59,12 @@ public class UnitsRouter {
 
         //MeasureUnitImpl inputUnitImpl = MeasureUnitImpl.forMeasureUnitMaybeCopy(inputUnit);
         String category = data.getCategory(inputUnitImpl);
-        UnitPreferences.UnitPreference[] unitPreferences = data.getPreferencesFor(category,  usage, region);
+        UnitPreferences.UnitPreference[] unitPreferences = data.getPreferencesFor(category, usage, region);
 
         for (int i = 0; i < unitPreferences.length; ++i) {
             UnitPreferences.UnitPreference preference = unitPreferences[i];
 
-            MeasureUnitImpl complexTargetUnitImpl =
+            this.complexOutputUnit_ =
                     MeasureUnitImpl.UnitsParser.parseForIdentifier(preference.getUnit());
 
             String precision = preference.getSkeleton();
@@ -83,8 +78,8 @@ public class UnitsRouter {
                 Assert.fail("Only `precision-increment` is allowed");
             }
 
-            outputUnits_.add(complexTargetUnitImpl.build());
-            converterPreferences_.add(new ConverterPreference(inputUnitImpl, complexTargetUnitImpl,
+            outputUnits_.add(this.complexOutputUnit_.build());
+            converterPreferences_.add(new ConverterPreference(inputUnitImpl, this.complexOutputUnit_,
                     preference.getGeq(), precision,
                     data.getConversionRates()));
         }
@@ -94,13 +89,13 @@ public class UnitsRouter {
         for (ConverterPreference converterPreference :
                 converterPreferences_) {
             if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-                return new RouteResult(converterPreference.converter.convert(quantity), converterPreference.precision);
+                return new RouteResult(converterPreference.converter.convert(quantity), this.complexOutputUnit_, converterPreference.precision);
             }
         }
 
         // In case of the `quantity` does not fit in any converter limit, use the last converter.
         ConverterPreference lastConverterPreference = converterPreferences_.get(converterPreferences_.size() - 1);
-        return new RouteResult(lastConverterPreference.converter.convert(quantity), lastConverterPreference.precision);
+        return new RouteResult(lastConverterPreference.converter.convert(quantity), this.complexOutputUnit_, lastConverterPreference.precision);
     }
 
     /**
@@ -114,21 +109,14 @@ public class UnitsRouter {
         return this.outputUnits_;
     }
 
-
-    // List of possible output units. TODO: converterPreferences_ now also has
-    // this data available. Maybe drop outputUnits_ and have getOutputUnits
-    // construct a the list from data in converterPreferences_ instead?
-    private ArrayList<MeasureUnit> outputUnits_ = new ArrayList<>();
-    private ArrayList<ConverterPreference> converterPreferences_ = new ArrayList<>();
-
     /**
      * Contains the complex unit converter and the limit which representing the smallest value that the
      * converter should accept. For example, if the converter is converting to `foot+inch` and the limit
      * equals 3.0, thus means the converter should not convert to a value less than `3.0 feet`.
-     *
+     * <p>
      * NOTE:
-     *    if the limit doest not has a value `i.e. (std::numeric_limits<double>::lowest())`, this mean there
-     *    is no limit for the converter.
+     * if the limit doest not has a value `i.e. (std::numeric_limits<double>::lowest())`, this mean there
+     * is no limit for the converter.
      */
     public static class ConverterPreference {
         ComplexUnitsConverter converter;
@@ -146,6 +134,30 @@ public class UnitsRouter {
                                    BigDecimal limit, String precision, ConversionRates conversionRates) {
             this.converter = new ComplexUnitsConverter(source, outputUnits, conversionRates);
             this.limit = limit;
+            this.precision = precision;
+        }
+    }
+
+    public class RouteResult {
+        // A list of measures: a single measure for single units, multiple measures
+        // for mixed units.
+        //
+        // TODO(icu-units/icu#21): figure out the right mixed unit API.
+        public List<Measure> measures;
+
+        // A skeleton string starting with a precision-increment.
+        //
+        // TODO(hugovdm): generalise? or narrow down to only a precision-increment?
+        // or document that other skeleton elements are ignored?
+        public String precision;
+
+        // The output unit for this RouteResult. This may be a MIXED unit - for
+        // example: "yard-and-foot-and-inch", for which `measures` will have three
+        // elements.
+        public MeasureUnitImpl outputUnit;
+
+        RouteResult(List<Measure> measures, MeasureUnitImpl outputUnit, String precision) {
+            this.measures = measures;
             this.precision = precision;
         }
     }

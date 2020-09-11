@@ -2,10 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.number;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Set;
-
 import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SoftCache;
@@ -18,14 +14,12 @@ import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
-import com.ibm.icu.util.BytesTrie;
-import com.ibm.icu.util.CharsTrie;
-import com.ibm.icu.util.CharsTrieBuilder;
-import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.*;
 import com.ibm.icu.util.Currency.CurrencyUsage;
-import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.NoUnit;
-import com.ibm.icu.util.StringTrieBuilder;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Set;
 
 /**
  * @author sffc
@@ -33,10 +27,12 @@ import com.ibm.icu.util.StringTrieBuilder;
  */
 class NumberSkeletonImpl {
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // NOTE: For an example of how to add a new stem to the number skeleton parser, see: //
-    // http://bugs.icu-project.org/trac/changeset/41193                                  //
-    ///////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // NOTE: For examples of how to add a new stem to the number skeleton parser, see:      //
+    // https://github.com/unicode-org/icu/commit/a2a7982216b2348070dc71093775ac7195793d73   //
+    // and                                                                                  //
+    // https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28   //
+    //////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * While parsing a skeleton, this enum records what type of option we expect to find next.
@@ -54,6 +50,7 @@ class NumberSkeletonImpl {
         STATE_MEASURE_UNIT,
         STATE_PER_MEASURE_UNIT,
         STATE_IDENTIFIER_UNIT,
+        STATE_UNIT_USAGE,
         STATE_CURRENCY_UNIT,
         STATE_INTEGER_WIDTH,
         STATE_NUMBERING_SYSTEM,
@@ -118,6 +115,7 @@ class NumberSkeletonImpl {
         STEM_MEASURE_UNIT,
         STEM_PER_MEASURE_UNIT,
         STEM_UNIT,
+        STEM_UNIT_USAGE,
         STEM_CURRENCY,
         STEM_INTEGER_WIDTH,
         STEM_NUMBERING_SYSTEM,
@@ -1047,6 +1045,10 @@ class NumberSkeletonImpl {
             macros.unit = numerator;
         }
 
+        /**
+         * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
+         * specified via a "unit/" concise skeleton.
+         */
         private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
             MeasureUnit[] units = MeasureUnit.parseCoreUnitIdentifier(segment.asString());
             if (units == null) {
@@ -1056,6 +1058,10 @@ class NumberSkeletonImpl {
             if (units.length == 2) {
                 macros.perUnit = units[1];
             }
+        }
+
+        private static void parseUnitUsageOption(StringSegment segment, MacroProps macros) {
+            // TODO: implement
         }
 
         private static void parseFractionStem(StringSegment segment, MacroProps macros) {
@@ -1459,6 +1465,11 @@ class NumberSkeletonImpl {
                 BlueprintHelpers.generateMeasureUnitOption(macros.perUnit, sb);
                 return true;
             }
+        }
+
+        private static boolean usage(MacroProps macros, StringBuilder sb) {
+            // TODO: implement
+            return false;
         }
 
         private static boolean precision(MacroProps macros, StringBuilder sb) {
