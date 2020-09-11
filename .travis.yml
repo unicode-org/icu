@@ -186,3 +186,12 @@ matrix:
       cache:
         directories:
         - $HOME/.m2
+
+    # Check compilation of internal headers.
+    - name: "internal header compilation check"
+      language: cpp
+      os:       linux
+      before_script:
+        - cd icu4c/source
+      script:
+        - test/hdrtst/testinternalheaders.sh
