@@ -5,12 +5,14 @@ import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.UnitsRouter;
+import com.ibm.icu.util.Measure;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UnitRouterTest {
     @Test
@@ -80,7 +82,7 @@ public class UnitRouterTest {
         for (TestCase testCase :
                 tests) {
             UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.region, testCase.usage);
-            ArrayList<Pair<MeasureUnitImpl, BigDecimal>> outputs = router.route(testCase.input).tempResults;
+            List<Measure> outputs = router.route(testCase.input).measures;
 
             Assert.assrt(outputs.size() == testCase.expectedInOrder.size()
                     && outputs.size() == testCase.outputUnitInOrder.size());
@@ -88,7 +90,7 @@ public class UnitRouterTest {
             for (int i = 0; i < outputs.size(); i++) {
                 if (!UnitConverterTest
                         .compareTwoBigDecimal(testCase.expectedInOrder.get(i),
-                                outputs.get(i).second,
+                                BigDecimal.valueOf(outputs.get(i).getNumber().doubleValue()),
                                 BigDecimal.valueOf(0.0001))) {
                     Assert.fail(testCase.toString() + outputs.toString());
                 }

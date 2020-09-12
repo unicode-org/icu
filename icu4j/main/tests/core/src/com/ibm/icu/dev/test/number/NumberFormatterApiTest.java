@@ -2,11 +2,24 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.dev.test.number;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import com.ibm.icu.dev.test.format.FormattedValueTest;
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
+import com.ibm.icu.impl.number.*;
+import com.ibm.icu.impl.number.Padder.PadPosition;
+import com.ibm.icu.number.*;
+import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
+import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
+import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
+import com.ibm.icu.text.ConstrainedFieldPosition;
+import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.NumberingSystem;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.Currency.CurrencyUsage;
+import com.ibm.icu.util.*;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,49 +27,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.FieldPosition;
 import java.text.Format;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
-import com.ibm.icu.dev.test.format.FormattedValueTest;
-import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
-import com.ibm.icu.impl.number.Grouper;
-import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
-import com.ibm.icu.impl.number.MacroProps;
-import com.ibm.icu.impl.number.Padder;
-import com.ibm.icu.impl.number.Padder.PadPosition;
-import com.ibm.icu.impl.number.PatternStringParser;
-import com.ibm.icu.number.CompactNotation;
-import com.ibm.icu.number.FormattedNumber;
-import com.ibm.icu.number.FractionPrecision;
-import com.ibm.icu.number.IntegerWidth;
-import com.ibm.icu.number.LocalizedNumberFormatter;
-import com.ibm.icu.number.Notation;
-import com.ibm.icu.number.NumberFormatter;
-import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
-import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
-import com.ibm.icu.number.NumberFormatter.SignDisplay;
-import com.ibm.icu.number.NumberFormatter.UnitWidth;
-import com.ibm.icu.number.Precision;
-import com.ibm.icu.number.Scale;
-import com.ibm.icu.number.ScientificNotation;
-import com.ibm.icu.number.UnlocalizedNumberFormatter;
-import com.ibm.icu.text.ConstrainedFieldPosition;
-import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.NumberingSystem;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.Currency.CurrencyUsage;
-import com.ibm.icu.util.CurrencyAmount;
-import com.ibm.icu.util.Measure;
-import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.NoUnit;
-import com.ibm.icu.util.ULocale;
+import static org.junit.Assert.*;
 
 public class NumberFormatterApiTest {
 
@@ -635,6 +608,81 @@ public class NumberFormatterApiTest {
                 ULocale.forLanguageTag("es-MX"),
                 1,
                 "kelvin");
+
+        // TODO(icu-units#35): skeleton generation.
+        assertFormatSingle(
+                "Mixed unit",
+                null,
+                "unit/yard-and-foot-and-inch",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("yard-and-foot-and-inch")),
+                new ULocale("en-US"),
+                3.65,
+                "3 yd, 1 ft, 11.4 in");
+
+        // TODO(icu-units#35): skeleton generation.
+        assertFormatSingle(
+                "Mixed unit, Scientific",
+                null,
+                "unit/yard-and-foot-and-inch E0",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("yard-and-foot-and-inch"))
+                        .notation(Notation.scientific()),
+        new ULocale("en-US"),
+                3.65,
+                "3 yd, 1 ft, 1.14E1 in");
+
+        // TODO(icu-units#35): skeleton generation.
+        assertFormatSingle(
+                "Mixed Unit (Narrow Version)",
+                null,
+                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unitWidth(UnitWidth.NARROW),
+                new ULocale("en-US"),
+                4.28571,
+                "4t 285kg 710g");
+
+        // TODO(icu-units#35): skeleton generation.
+        assertFormatSingle(
+                "Mixed Unit (Short Version)",
+                null,
+                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unitWidth(UnitWidth.SHORT),
+                new ULocale("en-US"),
+                4.28571,
+                "4 t, 285 kg, 710 g");
+
+        // TODO(icu-units#35): skeleton generation.
+        assertFormatSingle(
+                "Mixed Unit (Full Name Version)",
+                null,
+                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-US"),
+                4.28571,
+                "4 metric tons, 285 kilograms, 710 grams");
+
+//     // TODO(icu-units#73): deal with this "1 foot 12 inches" problem.
+//     // At the time of writing, this test would pass, but is commented out
+//     // because it reflects undesired behaviour:
+//     assertFormatSingle(
+//             u"Demonstrating the \"1 foot 12 inches\" problem",
+//             nullptr,
+//             u"unit/foot-and-inch",
+//             NumberFormatter::with()
+//                 .unit(MeasureUnit::forIdentifier("foot-and-inch"))
+//                 .precision(Precision::maxSignificantDigits(4))
+//                 .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+//             Locale("en-US"),
+//             1.9999,
+//             // This is undesireable but current behaviour:
+//             u"1 foot, 12 inches");
     }
 
     @Test
@@ -686,7 +734,458 @@ public class NumberFormatterApiTest {
                 "0.08765 J/fur",
                 "0.008765 J/fur",
                 "0 J/fur");
+
+        // TODO(icu-units#35): does not normalize as desired: while "unit/*" does
+        // get split into unit/perUnit, ".unit(*)" and "measure-unit/*" don't:
+        assertFormatSingle(
+                "Built-in unit, meter-per-second",
+                "measure-unit/speed-meter-per-second",
+                "~unit/meter-per-second",
+                NumberFormatter.with().unit(MeasureUnit.METER_PER_SECOND),
+                new ULocale("en-GB"),
+                2.4,
+                "2.4 m/s");
+
+        // TODO(icu-units#59): THIS UNIT TEST DEMONSTRATES UNDESIRABLE BEHAVIOUR!
+        // When specifying built-in types, one can give both a unit and a perUnit.
+        // Resolving to a built-in unit does not always work.
+        //
+        // (Unit-testing philosophy: do we leave this enabled to demonstrate current
+        // behaviour, and changing behaviour in the future? Or comment it out to
+        // avoid asserting this is "correct"?)
+        assertFormatSingle(
+                "DEMONSTRATING BAD BEHAVIOUR, TODO(icu-units#59)",
+                "measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+                "measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER_PER_SECOND)
+                        .perUnit(MeasureUnit.SECOND),
+                new ULocale("en-GB"),
+                2.4,
+                "2.4 m/s/s");
+
+        // Testing the rejection of invalid specifications
+
+        // If .unit() is not given a built-in type, .perUnit() is not allowed
+        // (because .unit is now flexible enough to handle compound units,
+        // .perUnit() is supported for backward compatibility).
+        LocalizedNumberFormatter nf = NumberFormatter.with()
+                .unit(MeasureUnit.forIdentifier("furlong-pascal"))
+                .perUnit(MeasureUnit.METER)
+                .locale(new ULocale("en-GB"));
+
+        try {
+            nf.format(2.4d);
+            fail("Expected failure, got: " + nf.format(2.4d) + ".");
+        } catch (UnsupportedOperationException e) {
+            // Pass
+        }
+
+        // .perUnit() may only be passed a built-in type, "square-second" is not a
+        // built-in type.
+        nf = NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .perUnit(MeasureUnit.forIdentifier("square-second"))
+                .locale(new ULocale("en-GB"));
+
+        try {
+            nf.format(2.4d);
+            fail("Expected failure, got: " + nf.format(2.4d) + ".");
+        } catch (UnsupportedOperationException e) {
+            // pass
+        }
     }
+
+
+    @Test
+    public void unitUsage() {
+        UnlocalizedNumberFormatter unloc_formatter;
+        LocalizedNumberFormatter formatter;
+        FormattedNumber formattedNum;
+        String uTestCase;
+
+        unloc_formatter = NumberFormatter.with().usage("road").unit(MeasureUnit.METER);
+
+        uTestCase = "unitUsage() en-ZA road";
+        formatter = unloc_formatter.locale(new ULocale("en-ZA"));
+        formattedNum = formatter.format(321d);
+
+        // status.errIfFailureAndReset("unitUsage() en-ZA road formatDouble");
+
+        assertTrue(
+                uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit().getIdentifier() + "\"",
+                MeasureUnit.METER.equals(formattedNum.getOutputUnit()));
+        assertEquals(uTestCase, "300 m", formattedNum.toString());
+        {
+            final Object[][] expectedFieldPositions = {
+                    {NumberFormat.INTEGER_FIELD, 0, 3},
+                    {NumberFormat.MEASURE_UNIT_FIELD, 4, 5} /* TODO: Shall we add NumberFormat.MEASURE_UNIT_FIELD */
+            };
+
+            assertNumberFieldPositions(
+                    uTestCase + " field positions",
+                    formattedNum,
+                    expectedFieldPositions);
+        }
+
+        assertFormatDescendingBig(
+                uTestCase,
+                "measure-unit/length-meter usage/road",
+                "unit/meter usage/road",
+                unloc_formatter,
+                new ULocale("en-ZA"),
+                "87\u00A0650 km",
+                "8\u00A0765 km",
+                "876 km", // 6.5 rounds down, 7.5 rounds up.
+                "88 km",
+                "8,8 km",
+                "900 m",
+                "90 m",
+                "10 m",
+                "0 m");
+
+        uTestCase = "unitUsage() en-GB road";
+        formatter = unloc_formatter.locale(new ULocale("en-GB"));
+        formattedNum = formatter.format(321d);
+
+        // status.errIfFailureAndReset("unitUsage() en-GB road, formatDouble(...)");
+
+        assertTrue(
+                uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit().getIdentifier() + "\"",
+                MeasureUnit.YARD.equals(formattedNum.getOutputUnit()));
+        // status.errIfFailureAndReset("unitUsage() en-GB road, getOutputUnit(...)");
+        assertEquals(uTestCase, "350 yd", formattedNum.toString());
+        //status.errIfFailureAndReset("unitUsage() en-GB road, toString(...)");
+        {
+            final Object[][] expectedFieldPositions = {
+                    {NumberFormat.INTEGER_FIELD, 0, 3},
+                    {NumberFormat.MEASURE_UNIT_FIELD, 4, 6}};
+            assertNumberFieldPositions(
+                    (uTestCase + " field positions"),
+                    formattedNum,
+                    expectedFieldPositions);
+        }
+
+        assertFormatDescendingBig(
+                uTestCase,
+                "measure-unit/length-meter usage/road",
+                "unit/meter usage/road",
+                unloc_formatter,
+                new ULocale("en-GB"),
+                "54,463 mi",
+                "5,446 mi",
+                "545 mi",
+                "54 mi",
+                "5.4 mi",
+                "0.54 mi",
+                "96 yd",
+                "9.6 yd",
+                "0 yd");
+
+        uTestCase = "unitUsage() en-US road";
+        formatter = unloc_formatter.locale(new ULocale("en-US"));
+        formattedNum = formatter.format(321d);
+        // status.errIfFailureAndReset("unitUsage() en-US road, formatDouble(...)");
+
+        assertTrue(
+                uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit().getIdentifier() + "\"",
+                MeasureUnit.FOOT == formattedNum.getOutputUnit());
+        // status.errIfFailureAndReset("unitUsage() en-US road, getOutputUnit(...)");
+
+        assertEquals(uTestCase, "1,050 ft", formattedNum.toString());
+        // status.errIfFailureAndReset("unitUsage() en-US road, toString(...)");
+        {
+            final Object[][] expectedFieldPositions = {
+                    {NumberFormat.GROUPING_SEPARATOR_FIELD, 1, 2}, /* TODO: shall we add NumberFormat.GROUPING_SEPARATOR_FIELD*/
+                    {NumberFormat.INTEGER_FIELD, 0, 5},
+                    {NumberFormat.MEASURE_UNIT_FIELD, 6, 8}};
+            assertNumberFieldPositions(
+                    uTestCase + " field positions",
+                    formattedNum,
+                    expectedFieldPositions);
+        }
+        assertFormatDescendingBig(
+                uTestCase,
+                "measure-unit/length-meter usage/road",
+                "unit/meter usage/road",
+                unloc_formatter,
+                new ULocale("en-US"),
+                "54,463 mi",
+                "5,446 mi",
+                "545 mi",
+                "54 mi",
+                "5.4 mi",
+                "0.54 mi",
+                "300 ft",
+                "30 ft",
+                "0 ft");
+
+        unloc_formatter = NumberFormatter.with().usage("person").unit(MeasureUnit.KILOGRAM);
+        uTestCase = "unitUsage() en-GB person";
+        formatter = unloc_formatter.locale(new ULocale("en-GB"));
+        formattedNum = formatter.format(80d);
+        // status.errIfFailureAndReset("unitUsage() en-GB person formatDouble");
+
+        assertTrue(
+                uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit().getIdentifier() + "\"",
+                MeasureUnit.forIdentifier("stone-and-pound") == formattedNum.getOutputUnit());
+        // status.errIfFailureAndReset("unitUsage() en-GB person - formattedNum.getOutputUnit(status)");
+
+        assertEquals(uTestCase, "12 st, 8.4 lb", formattedNum.toString());
+        //status.errIfFailureAndReset("unitUsage() en-GB person, toString(...)");
+        {
+            final Object[][] expectedFieldPositions = {
+                    // // Desired output: TODO(icu-units#67)
+                    // {NumberFormat.INTEGER_FIELD, 0, 2},
+                    // {NumberFormat.MEASURE_UNIT_FIELD, 3, 5},
+                    // {NumberFormat.ULISTFMT_LITERAL_FIELD, 5, 6},
+                    // {NumberFormat.INTEGER_FIELD, 7, 8},
+                    // {NumberFormat.DECIMAL_SEPARATOR_FIELD, 8, 9},
+                    // {NumberFormat.FRACTION_FIELD, 9, 10},
+                    // {NumberFormat.MEASURE_UNIT_FIELD, 11, 13}};
+
+                    // Current output: rather no fields than wrong fields
+                    {NumberFormat.INTEGER_FIELD, 7, 8},
+                    {NumberFormat.DECIMAL_SEPARATOR_FIELD, 8, 9},
+                    {NumberFormat.FRACTION_FIELD, 9, 10},
+            };
+
+            assertNumberFieldPositions(
+                    uTestCase + " field positions",
+                    formattedNum,
+                    expectedFieldPositions);
+        }
+        assertFormatDescending(
+                uTestCase,
+                "measure-unit/mass-kilogram usage/person",
+                "unit/kilogram usage/person",
+                unloc_formatter,
+                new ULocale("en-GB"),
+                "13,802 st, 7.2 lb",
+                "1,380 st, 3.5 lb",
+                "138 st, 0.35 lb",
+                "13 st, 11 lb",
+                "1 st, 5.3 lb",
+                "1 lb, 15 oz",
+                "0 lb, 3.1 oz",
+                "0 lb, 0.31 oz",
+                "0 lb, 0 oz");
+
+        assertFormatDescending(
+                uTestCase,
+                "usage/person unit-width-narrow measure-unit/mass-kilogram",
+                "usage/person unit-width-narrow unit/kilogram",
+                unloc_formatter.unitWidth(UnitWidth.NARROW),
+                new ULocale("en-GB"),
+                "13,802st 7.2lb",
+                "1,380st 3.5lb",
+                "138st 0.35lb",
+                "13st 11lb",
+                "1st 5.3lb",
+                "1lb 15oz",
+                "0lb 3.1oz",
+                "0lb 0.31oz",
+                "0lb 0oz");
+
+        assertFormatDescending(
+                uTestCase,
+                "usage/person unit-width-short measure-unit/mass-kilogram",
+                "usage/person unit-width-short unit/kilogram",
+                unloc_formatter.unitWidth(UnitWidth.SHORT),
+                new ULocale("en-GB"),
+                "13,802 st, 7.2 lb",
+                "1,380 st, 3.5 lb",
+                "138 st, 0.35 lb",
+                "13 st, 11 lb",
+                "1 st, 5.3 lb",
+                "1 lb, 15 oz",
+                "0 lb, 3.1 oz",
+                "0 lb, 0.31 oz",
+                "0 lb, 0 oz");
+
+        assertFormatDescending(
+                uTestCase,
+                "usage/person unit-width-full-name measure-unit/mass-kilogram",
+                "usage/person unit-width-full-name unit/kilogram",
+                unloc_formatter.unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-GB"),
+                "13,802 stone, 7.2 pounds",
+                "1,380 stone, 3.5 pounds",
+                "138 stone, 0.35 pounds",
+                "13 stone, 11 pounds",
+                "1 stone, 5.3 pounds",
+                "1 pound, 15 ounces",
+                "0 pounds, 3.1 ounces",
+                "0 pounds, 0.31 ounces",
+                "0 pounds, 0 ounces");
+
+        assertFormatDescendingBig(
+                "Scientific notation with Usage: possible when using a reasonable Precision",
+                "scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
+                "scientific @### usage/default unit/square-meter unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.SQUARE_METER)
+                        .usage("default")
+                        .notation(Notation.scientific())
+                        .precision(Precision.minMaxSignificantDigits(1, 4))
+                        .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-ZA"),
+                "8,765E1 square kilometres",
+                "8,765E0 square kilometres",
+                "8,765E1 hectares",
+                "8,765E0 hectares",
+                "8,765E3 square metres",
+                "8,765E2 square metres",
+                "8,765E1 square metres",
+                "8,765E0 square metres",
+                "0E0 square centimetres");
+    }
+
+
+    @Test
+    public void unitUsageErrorCodes() {
+        UnlocalizedNumberFormatter unloc_formatter;
+
+        try {
+            NumberFormatter.forSkeleton("unit/foobar");
+            fail("should give an error, because foobar is an invalid unit");
+        } catch (NumberFormatException e) { /*TODO: shall we have `U_NUMBER_SKELETON_SYNTAX_ERROR` in exception form*/
+            // Pass
+        }
+
+        unloc_formatter = NumberFormatter.forSkeleton("usage/foobar");
+        // This does not give an error, because usage is not looked up yet.
+        //status.errIfFailureAndReset("Expected behaviour: no immediate error for invalid usage");
+
+        try {
+            // Lacking a unit results in a failure. The skeleton is "incomplete", but we
+            // support adding the unit via the fluent API, so it is not an error until
+            // we build the formatting pipeline itself.
+            unloc_formatter.locale(new ULocale("en-GB")).format(1);
+            fail("should throw IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // Pass
+        }
+
+        // Adding the unit as part of the fluent chain leads to success.
+        unloc_formatter.unit(MeasureUnit.METER).locale(new ULocale("en-GB")).format(1); /* No Exception should be thrown */
+
+    }
+
+
+    // Tests for the "skeletons" field in unitPreferenceData, as well as precision
+    // and notation overrides.
+    @Test
+    public void unitUsageSkeletons() {
+        assertFormatSingle(
+                "Default >300m road preference skeletons round to 50m",
+                "usage/road measure-unit/length-meter",
+                "usage/road unit/meter",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("road"),
+                new ULocale("en-ZA"),
+                321,
+                "300 m");
+
+        assertFormatSingle(
+                "Precision can be overridden: override takes precedence",
+                "usage/road measure-unit/length-meter @#",
+                "usage/road unit/meter @#",
+                NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .usage("road")
+                .precision(Precision.maxSignificantDigits(2)),
+       new ULocale("en-ZA"),
+                321,
+                "320 m");
+
+        assertFormatSingle(
+                "Compact notation with Usage: bizarre, but possible (short)",
+                "compact-short usage/road measure-unit/length-meter",
+                "compact-short usage/road unit/meter",
+                NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .usage("road")
+                .notation(Notation.compactShort()),
+        new ULocale("en-ZA"),
+                987654321,
+                "988K km");
+
+        assertFormatSingle(
+                "Compact notation with Usage: bizarre, but possible (short, precision override)",
+                "compact-short usage/road measure-unit/length-meter @#",
+                "compact-short usage/road unit/meter @#",
+                NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .usage("road")
+                .notation(Notation.compactShort())
+                .precision(Precision.maxSignificantDigits(2)),
+        new ULocale("en-ZA"),
+                987654321,
+                "990K km");
+
+        assertFormatSingle(
+                "Compact notation with Usage: unusual but possible (long)",
+                "compact-long usage/road measure-unit/length-meter @#",
+                "compact-long usage/road unit/meter @#",
+                NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .usage("road")
+                .notation(Notation.compactLong())
+                .precision(Precision.maxSignificantDigits(2)),
+        new ULocale("en-ZA"),
+                987654321,
+                "990 thousand km");
+
+        assertFormatSingle(
+                "Compact notation with Usage: unusual but possible (long, precision override)",
+                "compact-long usage/road measure-unit/length-meter @#",
+                "compact-long usage/road unit/meter @#",
+                NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .usage("road")
+                .notation(Notation.compactLong())
+                .precision(Precision.maxSignificantDigits(2)),
+        new ULocale("en-ZA"),
+                987654321,
+                "990 thousand km");
+
+        assertFormatSingle(
+                "Scientific notation, not recommended, requires precision override for road",
+                "scientific usage/road measure-unit/length-meter",
+                "scientific usage/road unit/meter",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("road").notation(Notation.scientific()),
+        new ULocale("en-ZA"),
+                321.45,
+                // Rounding to the nearest "50" is not exponent-adjusted in scientific notation:
+                "0E2 m");
+
+        assertFormatSingle(
+                "Scientific notation with Usage: possible when using a reasonable Precision",
+                "scientific usage/road measure-unit/length-meter @###",
+                "scientific usage/road unit/meter @###",
+                NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .usage("road")
+                .notation(Notation.scientific())
+                .precision(Precision.maxSignificantDigits(4)),
+        new ULocale("en-ZA"),
+                321.45, // 0.45 rounds down, 0.55 rounds up.
+                "3,214E2 m");
+
+        assertFormatSingle(
+                "Scientific notation with Usage: possible when using a reasonable Precision",
+                "scientific usage/default measure-unit/length-astronomical-unit unit-width-full-name",
+                "scientific usage/default unit/astronomical-unit unit-width-full-name",
+                NumberFormatter.with()
+                .unit(MeasureUnit.forIdentifier("astronomical-unit"))
+                .usage("default")
+                .notation(Notation.scientific())
+                .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-ZA"),
+                1e20,
+                "1,5E28 kilometres");
+    }
+
 
     @Test
     public void unitCurrency() {
@@ -914,6 +1413,7 @@ public class NumberFormatterApiTest {
                 123.12,
                 "123,12 CN¥");
     }
+
 
     @Test
     public void unitPercent() {
@@ -3122,6 +3622,48 @@ public class NumberFormatterApiTest {
             // Pass
         }
     }
+
+
+
+    /* TODO: do we need this test case in Java */
+//    @Test
+//    public void microPropsInternals() {
+//    // Verify copy construction and assignment operators.
+//    int[] testValues = {4, 61};
+//
+//    MicroProps mp = new MicroProps(true); /* TODO: Shall we use true? */
+//    mp.mixedMeasures = new ArrayList<>();
+//
+//    mp.mixedMeasures.set(0 ,new Measure( testValues[0] , MeasureUnit.FOOT));
+//    mp.mixedMeasures.set(1 , new Measure(testValues[1], MeasureUnit.INCH));
+//
+//    MicroProps copyConstructed = (MicroProps) mp.clone(); /* TODO: Check if clone is used. */
+//    MicroProps copyAssigned;
+//
+//    int64_t *resizeResult = mp.mixedMeasures.resize(4, 4);
+//    assertTrue("Resize success", resizeResult != NULL);
+//    copyAssigned = mp;
+//
+//    assertTrue("MicroProps success status", U_SUCCESS(mp.mixedMeasures.status));
+//    assertTrue("Copy Constructed success status", U_SUCCESS(copyConstructed.mixedMeasures.status));
+//    assertTrue("Copy Assigned success status", U_SUCCESS(copyAssigned.mixedMeasures.status));
+//    assertEquals("Original values[0]", testValues[0], mp.mixedMeasures[0]);
+//    assertEquals("Original values[1]", testValues[1], mp.mixedMeasures[1]);
+//    assertEquals("Copy Constructed[0]", testValues[0], copyConstructed.mixedMeasures[0]);
+//    assertEquals("Copy Constructed[1]", testValues[1], copyConstructed.mixedMeasures[1]);
+//    assertEquals("Copy Assigned[0]", testValues[0], copyAssigned.mixedMeasures[0]);
+//    assertEquals("Copy Assigned[1]", testValues[1], copyAssigned.mixedMeasures[1]);
+//    assertEquals("Original capacity", 4, mp.mixedMeasures.getCapacity());
+//    assertEquals("Copy Constructed capacity", 2, copyConstructed.mixedMeasures.getCapacity());
+//    assertEquals("Copy Assigned capacity", 4, copyAssigned.mixedMeasures.getCapacity());
+//}
+
+
+
+
+
+
+
 
     static void assertFormatDescending(
             String message,

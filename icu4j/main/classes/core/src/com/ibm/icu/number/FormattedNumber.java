@@ -2,9 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.number;
 
-import java.math.BigDecimal;
-import java.text.AttributedCharacterIterator;
-
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.Utility;
@@ -12,6 +9,10 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
+import com.ibm.icu.util.MeasureUnit;
+
+import java.math.BigDecimal;
+import java.text.AttributedCharacterIterator;
 
 /**
  * The result of a number formatting operation. This class allows the result to be exported in several
@@ -112,6 +113,23 @@ public class FormattedNumber implements FormattedValue {
      */
     public BigDecimal toBigDecimal() {
         return fq.toBigDecimal();
+    }
+
+    /**
+     * Gets the resolved output unit.
+     * <p>
+     * The output unit is dependent upon the localized preferences for the usage
+     * specified via NumberFormatterSettings.usage(), and may be a unit with
+     * MeasureUnit.Complexity.MIXED unit complexity (MeasureUnit.getComplexity()), such
+     * as "foot-and-inch" or "hour-and-minute-and-second".
+     *
+     * @return `MeasureUnit`.
+     * @draft ICU 68
+     */
+    public MeasureUnit getOutputUnit() {
+        // TODO: how to get the output unit
+        // TODO: implement
+        return null;
     }
 
     /**
