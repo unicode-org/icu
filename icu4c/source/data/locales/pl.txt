@@ -1,5 +1,5 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pl{
     AuxExemplarCharacters{"[à â å ä æ ç é è ê ë î ï ô ö œ q ß ù û ü v x ÿ]"}

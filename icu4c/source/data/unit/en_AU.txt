@@ -1,5 +1,5 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_AU{
     %%Parent{"en_001"}
@@ -51,19 +51,10 @@ en_AU{
             }
         }
         volume{
-            dessert-spoon{
-                one{"{0} US dessertspoon"}
-                other{"{0} dessert spoons"}
-            }
             fluid-ounce{
                 dnam{"fluid ounces"}
                 one{"{0} fluid ounce"}
                 other{"{0} fluid ounces"}
-            }
-            quart{
-                dnam{"quarts"}
-                one{"{0} quart"}
-                other{"{0} quarts"}
             }
         }
     }
@@ -346,11 +337,6 @@ en_AU{
                 dnam{"mL"}
                 one{"{0} mL"}
                 other{"{0} mL"}
-            }
-            quart{
-                dnam{"qts"}
-                one{"{0} qt"}
-                other{"{0} qt"}
             }
         }
     }

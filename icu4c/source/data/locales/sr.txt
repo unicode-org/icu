@@ -1,5 +1,5 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sr{
     AuxExemplarCharacters{"[{а\u0302} {е\u0302} ё й {и\u0302} {о\u0302} {у\u0302} щ ъ ы ь э ю я]"}

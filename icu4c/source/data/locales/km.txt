@@ -1,5 +1,5 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 km{
     AuxExemplarCharacters{"[\u17B4\u17B5\u200B \u17CC \u17CE \u17CF \u17D1 ឝ ឞ]"}
