@@ -2679,7 +2679,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     explicit FormattedNumber(UErrorCode errorCode)
         : fData(nullptr), fErrorCode(errorCode) {}
 
-    // TODO(ICU-20775): Propose this as API.
     void toDecimalNumber(ByteSink& sink, UErrorCode& status) const;
 
     // To give LocalizedNumberFormatter format methods access to this class's constructor:

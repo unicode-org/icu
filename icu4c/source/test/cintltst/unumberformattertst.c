@@ -28,6 +28,8 @@ static void TestFormattedValue(void);
 
 static void TestSkeletonParseError(void);
 
+static void TestToDecimalNumber(void);
+
 static void TestPerUnitInArabic(void);
 
 void addUNumberFormatterTest(TestNode** root);
@@ -40,6 +42,7 @@ void addUNumberFormatterTest(TestNode** root) {
     TESTCASE(TestExampleCode);
     TESTCASE(TestFormattedValue);
     TESTCASE(TestSkeletonParseError);
+    TESTCASE(TestToDecimalNumber);
     TESTCASE(TestPerUnitInArabic);
 }
 
@@ -258,6 +261,35 @@ static void TestSkeletonParseError() {
     // cleanup:
     unumf_close(uformatter);
 }
+
+
+static void TestToDecimalNumber() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UNumberFormatter* uformatter = unumf_openForSkeletonAndLocale(
+        u"currency/USD",
+        -1,
+        "en-US",
+        &ec);
+    assertSuccessCheck("Should create without error", &ec, TRUE);
+    UFormattedNumber* uresult = unumf_openResult(&ec);
+    assertSuccess("Should create result without error", &ec);
+
+    unumf_formatDouble(uformatter, 3.0, uresult, &ec);
+    const UChar* str = ufmtval_getString(unumf_resultAsValue(uresult, &ec), NULL, &ec);
+    assertSuccessCheck("Formatting should succeed", &ec, TRUE);
+    assertUEquals("Should produce expected string result", u"$3.00", str);
+
+    char buffer[CAPACITY];
+
+    int32_t len = unumf_resultToDecimalNumber(uresult, buffer, CAPACITY, &ec);
+    assertIntEquals("Length should be as expected", strlen(buffer), len);
+    assertEquals("Decimal should be as expected", "3", buffer);
+
+    // cleanup:
+    unumf_closeResult(uresult);
+    unumf_close(uformatter);
+}
+
 
 static void TestPerUnitInArabic() {
     const char* simpleMeasureUnits[] = {

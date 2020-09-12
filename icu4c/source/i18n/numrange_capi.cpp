@@ -14,6 +14,7 @@
 #include "numparse_types.h"
 #include "formattedval_impl.h"
 #include "numrange_impl.h"
+#include "number_decnum.h"
 #include "unicode/numberrangeformatter.h"
 #include "unicode/unumberrangeformatter.h"
 
@@ -136,6 +137,39 @@ unumrf_resultGetIdentityResult(
         return UNUM_IDENTITY_RESULT_COUNT;
     }
     return result->fData.identityResult;
+}
+
+U_CAPI int32_t U_EXPORT2
+unumrf_resultGetFirstDecimalNumber(
+        const UFormattedNumberRange* uresult,
+        char* dest,
+        int32_t destCapacity,
+        UErrorCode* ec) {
+    const auto* result = UFormattedNumberRangeApiHelper::validate(uresult, *ec);
+    if (U_FAILURE(*ec)) {
+        return 0;
+    }
+    DecNum decnum;
+    return result->fData.quantity1.toDecNum(decnum, *ec)
+        .toCharString(*ec)
+        .extract(dest, destCapacity, *ec);
+}
+
+U_CAPI int32_t U_EXPORT2
+unumrf_resultGetSecondDecimalNumber(
+        const UFormattedNumberRange* uresult,
+        char* dest,
+        int32_t destCapacity,
+        UErrorCode* ec) {
+    const auto* result = UFormattedNumberRangeApiHelper::validate(uresult, *ec);
+    if (U_FAILURE(*ec)) {
+        return 0;
+    }
+    DecNum decnum;
+    return result->fData.quantity2
+        .toDecNum(decnum, *ec)
+        .toCharString(*ec)
+        .extract(dest, destCapacity, *ec);
 }
 
 U_CAPI void U_EXPORT2

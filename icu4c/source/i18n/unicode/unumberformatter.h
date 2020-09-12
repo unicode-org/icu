@@ -659,11 +659,32 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
                                  UErrorCode* ec);
 
 
-// TODO(ICU-20775): Propose this as API.
-// NOTE: This is not currently implemented.
-// U_CAPI int32_t U_EXPORT2
-// unumf_resultToDecimalNumber(const UFormattedNumber* uresult, char* buffer, int32_t bufferCapacity,
-//                             UErrorCode* ec);
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Extracts the formatted number as a "numeric string" conforming to the
+ * syntax defined in the Decimal Arithmetic Specification, available at
+ * http://speleotrove.com/decimal
+ *
+ * This endpoint is useful for obtaining the exact number being printed
+ * after scaling and rounding have been applied by the number formatter.
+ *
+ * @param uresult        The input object containing the formatted number.
+ * @param  dest          the 8-bit char buffer into which the decimal number is placed
+ * @param  destCapacity  The size, in chars, of the destination buffer.  May be zero
+ *                       for precomputing the required size.
+ * @param  ec            receives any error status.
+ *                       If U_BUFFER_OVERFLOW_ERROR: Returns number of chars for
+ *                       preflighting.
+ * @return Number of chars in the data.  Does not include a trailing NUL.
+ * @draft ICU 68
+ */
+U_CAPI int32_t U_EXPORT2
+unumf_resultToDecimalNumber(
+       const UFormattedNumber* uresult,
+       char* dest,
+       int32_t destCapacity,
+       UErrorCode* ec);
+#endif // U_HIDE_DRAFT_API
 
 
 /**
