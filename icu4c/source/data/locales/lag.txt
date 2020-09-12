@@ -1,5 +1,5 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lag{
     ExemplarCharacters{"[a á b c d e é f g h i í ɨ j k l m n o ó p q r s t u ú ʉ v w x y z]"}

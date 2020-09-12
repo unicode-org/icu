@@ -1,5 +1,5 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fr_CA{
     Languages{
@@ -30,7 +30,6 @@ fr_CA{
         fr_CH{"français suisse"}
         frc{"cajun"}
         frp{"franco-provençal"}
-        gbz{"dari"}
         goh{"vieux haut-allemand"}
         gu{"gujarati"}
         ii{"yi de Sichuan"}
