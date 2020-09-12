@@ -354,15 +354,60 @@ unumrf_resultGetIdentityResult(
     UErrorCode* ec);
 
 
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Extracts the first formatted number as a decimal number. This endpoint
+ * is useful for obtaining the exact number being printed after scaling
+ * and rounding have been applied by the number range formatting pipeline.
+ * 
+ * The syntax of the unformatted number is a "numeric string"
+ * as defined in the Decimal Arithmetic Specification, available at
+ * http://speleotrove.com/decimal
+ *
+ * @param  uresult       The input object containing the formatted number range.
+ * @param  dest          the 8-bit char buffer into which the decimal number is placed
+ * @param  destCapacity  The size, in chars, of the destination buffer.  May be zero
+ *                       for precomputing the required size.
+ * @param  ec            receives any error status.
+ *                       If U_BUFFER_OVERFLOW_ERROR: Returns number of chars for
+ *                       preflighting.
+ * @return Number of chars in the data.  Does not include a trailing NUL.
+ * @draft ICU 68
+ */
+U_CAPI int32_t U_EXPORT2
+unumrf_resultGetFirstDecimalNumber(
+    const UFormattedNumberRange* uresult,
+    char* dest,
+    int32_t destCapacity,
+    UErrorCode* ec);
 
-// TODO(ICU-20775): Propose these as API.
-// NOTE: This is not currently implemented.
-// U_CAPI int32_t U_EXPORT2
-// unumf_resultGetFirstDecimal(const UFormattedNumberRange* uresult, char* buffer, int32_t bufferCapacity,
-//                             UErrorCode* ec);
-// U_CAPI int32_t U_EXPORT2
-// unumf_resultGetSecondDecimal(const UFormattedNumberRange* uresult, char* buffer, int32_t bufferCapacity,
-//                              UErrorCode* ec);
+
+/**
+ * Extracts the second formatted number as a decimal number. This endpoint
+ * is useful for obtaining the exact number being printed after scaling
+ * and rounding have been applied by the number range formatting pipeline.
+ * 
+ * The syntax of the unformatted number is a "numeric string"
+ * as defined in the Decimal Arithmetic Specification, available at
+ * http://speleotrove.com/decimal
+ *
+ * @param  uresult       The input object containing the formatted number range.
+ * @param  dest          the 8-bit char buffer into which the decimal number is placed
+ * @param  destCapacity  The size, in chars, of the destination buffer.  May be zero
+ *                       for precomputing the required size.
+ * @param  ec            receives any error status.
+ *                       If U_BUFFER_OVERFLOW_ERROR: Returns number of chars for
+ *                       preflighting.
+ * @return Number of chars in the data.  Does not include a trailing NUL.
+ * @draft ICU 68
+ */
+U_CAPI int32_t U_EXPORT2
+unumrf_resultGetSecondDecimalNumber(
+    const UFormattedNumberRange* uresult,
+    char* dest,
+    int32_t destCapacity,
+    UErrorCode* ec);
+#endif // U_HIDE_DRAFT_API
 
 
 /**

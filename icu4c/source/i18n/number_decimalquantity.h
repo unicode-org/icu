@@ -209,7 +209,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     double toDouble() const;
 
     /** Computes a DecNum representation of this DecimalQuantity, saving it to the output parameter. */
-    void toDecNum(DecNum& output, UErrorCode& status) const;
+    DecNum& toDecNum(DecNum& output, UErrorCode& status) const;
 
     DecimalQuantity &setToInt(int32_t n);
 

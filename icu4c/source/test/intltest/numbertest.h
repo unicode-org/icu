@@ -286,6 +286,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testFieldPositions();
     void testCopyMove();
     void toObject();
+    void testGetDecimalNumbers();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

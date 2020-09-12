@@ -627,7 +627,7 @@ double DecimalQuantity::toDouble() const {
             &count);
 }
 
-void DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
+DecNum& DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
     // Special handling for zero
     if (precision == 0) {
         output.setTo("0", status);
@@ -637,12 +637,13 @@ void DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
     // The decNumber constructor expects most-significant first, but we store least-significant first.
     MaybeStackArray<uint8_t, 20> ubcd(precision, status);
     if (U_FAILURE(status)) {
-        return;
+        return output;
     }
     for (int32_t m = 0; m < precision; m++) {
         ubcd[precision - m - 1] = static_cast<uint8_t>(getDigitPos(m));
     }
     output.setTo(ubcd.getAlias(), precision, scale, isNegative(), status);
+    return output;
 }
 
 void DecimalQuantity::truncate() {

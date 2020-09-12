@@ -12,6 +12,7 @@
 #include "numrange_impl.h"
 #include "util.h"
 #include "number_utypes.h"
+#include "number_decnum.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -387,6 +388,14 @@ UnicodeString FormattedNumberRange::getFirstDecimal(UErrorCode& status) const {
 UnicodeString FormattedNumberRange::getSecondDecimal(UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(ICU_Utility::makeBogusString())
     return fData->quantity2.toScientificString();
+}
+
+void FormattedNumberRange::getDecimalNumbers(ByteSink& sink1, ByteSink& sink2, UErrorCode& status) const {
+    UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
+    impl::DecNum decnum1;
+    impl::DecNum decnum2;
+    fData->quantity1.toDecNum(decnum1, status).toString(sink1, status);
+    fData->quantity2.toDecNum(decnum2, status).toString(sink2, status);
 }
 
 UNumberRangeIdentityResult FormattedNumberRange::getIdentityResult(UErrorCode& status) const {
