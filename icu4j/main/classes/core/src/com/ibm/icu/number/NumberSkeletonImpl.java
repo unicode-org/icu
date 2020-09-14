@@ -1061,7 +1061,9 @@ class NumberSkeletonImpl {
         }
 
         private static void parseUnitUsageOption(StringSegment segment, MacroProps macros) {
-            // TODO: implement
+            macros.usage = segment.asString();
+            // We do not do any validation of the usage string: it depends on the
+            // unitPreferenceData in the units resources.
         }
 
         private static void parseFractionStem(StringSegment segment, MacroProps macros) {
@@ -1468,7 +1470,11 @@ class NumberSkeletonImpl {
         }
 
         private static boolean usage(MacroProps macros, StringBuilder sb) {
-            // TODO: implement
+            if (macros.usage != null  && macros.usage.length() > 0) {
+                sb.append("usage/" + macros.usage);
+
+                return true;
+            }
             return false;
         }
 

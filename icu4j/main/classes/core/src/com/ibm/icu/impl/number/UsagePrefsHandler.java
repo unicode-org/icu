@@ -53,7 +53,7 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
     public MicroProps processQuantity(DecimalQuantity quantity) {
         fParent.processQuantity(quantity);
 
-        MicroProps result = new MicroProps(true); /* TODO: what is the correct value for immutable */
+        MicroProps result = new MicroProps(false); /* TODO: what is the correct value for immutable */
 
         quantity.roundToInfinity(); // Enables toDouble
         final UnitsRouter.RouteResult routed = fUnitsRouter.route(quantity.toBigDecimal());

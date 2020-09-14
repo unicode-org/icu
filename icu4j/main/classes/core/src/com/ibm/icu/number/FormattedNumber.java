@@ -118,7 +118,7 @@ public class FormattedNumber implements FormattedValue {
     /**
      * Gets the resolved output unit.
      * <p>
-     * The output unit is dependent upon the localized preferences for the usage
+ * The output unit is dependent upon the localized preferences for the usage
      * specified via NumberFormatterSettings.usage(), and may be a unit with
      * MeasureUnit.Complexity.MIXED unit complexity (MeasureUnit.getComplexity()), such
      * as "foot-and-inch" or "hour-and-minute-and-second".
