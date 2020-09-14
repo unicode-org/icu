@@ -1,23 +1,44 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+
+
 package com.ibm.icu.dev.test.number;
 
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
-import com.ibm.icu.impl.number.*;
+import com.ibm.icu.impl.number.Grouper;
+import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
+import com.ibm.icu.impl.number.MacroProps;
+import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
-import com.ibm.icu.number.*;
+import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.number.CompactNotation;
+import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.FractionPrecision;
+import com.ibm.icu.number.IntegerWidth;
+import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.Notation;
+import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
+import com.ibm.icu.number.Precision;
+import com.ibm.icu.number.Scale;
+import com.ibm.icu.number.ScientificNotation;
+import com.ibm.icu.number.SkeletonSyntaxException;
+import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
-import com.ibm.icu.util.*;
+import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.Measure;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
+import com.ibm.icu.util.ULocale;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,7 +48,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.FieldPosition;
 import java.text.Format;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -819,7 +844,7 @@ public class NumberFormatterApiTest {
         {
             final Object[][] expectedFieldPositions = {
                     {NumberFormat.INTEGER_FIELD, 0, 3},
-                    {NumberFormat.MEASURE_UNIT_FIELD, 4, 5} /* TODO: Shall we add NumberFormat.MEASURE_UNIT_FIELD */
+                    {NumberFormat.Field.MEASURE_UNIT, 4, 5}
             };
 
             assertNumberFieldPositions(
@@ -859,7 +884,7 @@ public class NumberFormatterApiTest {
         {
             final Object[][] expectedFieldPositions = {
                     {NumberFormat.INTEGER_FIELD, 0, 3},
-                    {NumberFormat.MEASURE_UNIT_FIELD, 4, 6}};
+                    {NumberFormat.Field.MEASURE_UNIT, 4, 6}};
             assertNumberFieldPositions(
                     (uTestCase + " field positions"),
                     formattedNum,
@@ -896,9 +921,9 @@ public class NumberFormatterApiTest {
         // status.errIfFailureAndReset("unitUsage() en-US road, toString(...)");
         {
             final Object[][] expectedFieldPositions = {
-                    {NumberFormat.GROUPING_SEPARATOR_FIELD, 1, 2}, /* TODO: shall we add NumberFormat.GROUPING_SEPARATOR_FIELD*/
+                    {NumberFormat.Field.GROUPING_SEPARATOR, 1, 2},
                     {NumberFormat.INTEGER_FIELD, 0, 5},
-                    {NumberFormat.MEASURE_UNIT_FIELD, 6, 8}};
+                    {NumberFormat.Field.MEASURE_UNIT, 6, 8}};
             assertNumberFieldPositions(
                     uTestCase + " field positions",
                     formattedNum,
@@ -937,16 +962,16 @@ public class NumberFormatterApiTest {
             final Object[][] expectedFieldPositions = {
                     // // Desired output: TODO(icu-units#67)
                     // {NumberFormat.INTEGER_FIELD, 0, 2},
-                    // {NumberFormat.MEASURE_UNIT_FIELD, 3, 5},
+                    // {NumberFormat.Field.MEASURE_UNIT, 3, 5},
                     // {NumberFormat.ULISTFMT_LITERAL_FIELD, 5, 6},
                     // {NumberFormat.INTEGER_FIELD, 7, 8},
                     // {NumberFormat.DECIMAL_SEPARATOR_FIELD, 8, 9},
                     // {NumberFormat.FRACTION_FIELD, 9, 10},
-                    // {NumberFormat.MEASURE_UNIT_FIELD, 11, 13}};
+                    // {NumberFormat.Field.MEASURE_UNIT, 11, 13}};
 
                     // Current output: rather no fields than wrong fields
                     {NumberFormat.INTEGER_FIELD, 7, 8},
-                    {NumberFormat.DECIMAL_SEPARATOR_FIELD, 8, 9},
+                    {NumberFormat.Field.DECIMAL_SEPARATOR, 8, 9},
                     {NumberFormat.FRACTION_FIELD, 9, 10},
             };
 
@@ -1049,7 +1074,7 @@ public class NumberFormatterApiTest {
         try {
             NumberFormatter.forSkeleton("unit/foobar");
             fail("should give an error, because foobar is an invalid unit");
-        } catch (NumberFormatException e) { /*TODO: shall we have `U_NUMBER_SKELETON_SYNTAX_ERROR` in exception form*/
+        } catch (SkeletonSyntaxException e) {
             // Pass
         }
 
@@ -3622,47 +3647,6 @@ public class NumberFormatterApiTest {
             // Pass
         }
     }
-
-
-
-    /* TODO: do we need this test case in Java */
-//    @Test
-//    public void microPropsInternals() {
-//    // Verify copy construction and assignment operators.
-//    int[] testValues = {4, 61};
-//
-//    MicroProps mp = new MicroProps(true); /* TODO: Shall we use true? */
-//    mp.mixedMeasures = new ArrayList<>();
-//
-//    mp.mixedMeasures.set(0 ,new Measure( testValues[0] , MeasureUnit.FOOT));
-//    mp.mixedMeasures.set(1 , new Measure(testValues[1], MeasureUnit.INCH));
-//
-//    MicroProps copyConstructed = (MicroProps) mp.clone(); /* TODO: Check if clone is used. */
-//    MicroProps copyAssigned;
-//
-//    int64_t *resizeResult = mp.mixedMeasures.resize(4, 4);
-//    assertTrue("Resize success", resizeResult != NULL);
-//    copyAssigned = mp;
-//
-//    assertTrue("MicroProps success status", U_SUCCESS(mp.mixedMeasures.status));
-//    assertTrue("Copy Constructed success status", U_SUCCESS(copyConstructed.mixedMeasures.status));
-//    assertTrue("Copy Assigned success status", U_SUCCESS(copyAssigned.mixedMeasures.status));
-//    assertEquals("Original values[0]", testValues[0], mp.mixedMeasures[0]);
-//    assertEquals("Original values[1]", testValues[1], mp.mixedMeasures[1]);
-//    assertEquals("Copy Constructed[0]", testValues[0], copyConstructed.mixedMeasures[0]);
-//    assertEquals("Copy Constructed[1]", testValues[1], copyConstructed.mixedMeasures[1]);
-//    assertEquals("Copy Assigned[0]", testValues[0], copyAssigned.mixedMeasures[0]);
-//    assertEquals("Copy Assigned[1]", testValues[1], copyAssigned.mixedMeasures[1]);
-//    assertEquals("Original capacity", 4, mp.mixedMeasures.getCapacity());
-//    assertEquals("Copy Constructed capacity", 2, copyConstructed.mixedMeasures.getCapacity());
-//    assertEquals("Copy Assigned capacity", 4, copyAssigned.mixedMeasures.getCapacity());
-//}
-
-
-
-
-
-
 
 
     static void assertFormatDescending(

@@ -17,6 +17,7 @@ import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
 
 /**
  * A NumberFormatter that has a locale associated with it; this means .format() methods are available.
@@ -101,7 +102,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         MeasureUnit unit = input.getUnit();
         FormattedStringBuilder string = new FormattedStringBuilder();
         formatImpl(fq, unit, string);
-        return new FormattedNumber(string, fq);
+        return new FormattedNumber(string, fq, input.getUnit());
     }
 
     /**
@@ -124,7 +125,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     private FormattedNumber format(DecimalQuantity fq) {
         FormattedStringBuilder string = new FormattedStringBuilder();
         formatImpl(fq, string);
-        return new FormattedNumber(string, fq);
+        return new FormattedNumber(string, fq, NoUnit.BASE); /* TODO: shall we pass the MeasureUnit here? */
     }
 
     /**

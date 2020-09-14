@@ -14,8 +14,14 @@ import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
-import com.ibm.icu.util.*;
+import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.CharsTrie;
+import com.ibm.icu.util.CharsTrieBuilder;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
+import com.ibm.icu.util.StringTrieBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -191,6 +197,7 @@ class NumberSkeletonImpl {
         b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
         b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
         b.add("unit", StemEnum.STEM_UNIT.ordinal());
+        b.add("usage", StemEnum.STEM_UNIT_USAGE.ordinal());
         b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
         b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
         b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
@@ -611,6 +618,7 @@ class NumberSkeletonImpl {
                 case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
+                case STATE_UNIT_USAGE:
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
@@ -784,6 +792,10 @@ class NumberSkeletonImpl {
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_IDENTIFIER_UNIT;
 
+        case STEM_UNIT_USAGE:
+            checkNull(macros.usage, segment);
+            return ParseState.STATE_UNIT_USAGE;
+
         case STEM_CURRENCY:
             checkNull(macros.unit, segment);
             return ParseState.STATE_CURRENCY_UNIT;
@@ -827,6 +839,9 @@ class NumberSkeletonImpl {
             return ParseState.STATE_NULL;
         case STATE_IDENTIFIER_UNIT:
             BlueprintHelpers.parseIdentifierUnitOption(segment, macros);
+            return ParseState.STATE_NULL;
+        case STATE_UNIT_USAGE:
+            BlueprintHelpers.parseUnitUsageOption(segment, macros);
             return ParseState.STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);

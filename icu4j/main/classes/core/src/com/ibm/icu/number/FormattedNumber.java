@@ -9,6 +9,7 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
+import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
 import java.math.BigDecimal;
@@ -26,10 +27,12 @@ import java.text.AttributedCharacterIterator;
 public class FormattedNumber implements FormattedValue {
     final FormattedStringBuilder string;
     final DecimalQuantity fq;
+    final MeasureUnit outputUnit;
 
-    FormattedNumber(FormattedStringBuilder nsb, DecimalQuantity fq) {
+    FormattedNumber(FormattedStringBuilder nsb, DecimalQuantity fq, MeasureUnit outputUnit) {
         this.string = nsb;
         this.fq = fq;
+        this.outputUnit = outputUnit;
     }
 
     /**
@@ -127,9 +130,7 @@ public class FormattedNumber implements FormattedValue {
      * @draft ICU 68
      */
     public MeasureUnit getOutputUnit() {
-        // TODO: how to get the output unit
-        // TODO: implement
-        return null;
+        return this.outputUnit;
     }
 
     /**

@@ -1,9 +1,10 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+
+
 package com.ibm.icu.impl.number;
 
 import java.math.RoundingMode;
-import java.util.Locale;
 import java.util.Objects;
 
 import com.ibm.icu.number.IntegerWidth;

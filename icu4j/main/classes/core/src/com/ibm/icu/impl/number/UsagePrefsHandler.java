@@ -42,6 +42,31 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
         return Precision.increment(num.divide(den, MathContext.DECIMAL128));
     }
 
+    protected static void mixedMeasuresToMicros(List<Measure> measures, DecimalQuantity quantity, MicroProps micros) {
+        if (measures.size() > 1) {
+            // For debugging
+            assert (micros.outputUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
+
+            // Check that we received measurements with the expected MeasureUnits:
+            List<MeasureUnit> singleUnits =
+                    micros.outputUnit.splitToSingleUnits();
+
+            assert measures.size() == singleUnits.size();
+
+            // Mixed units: except for the last value, we pass all values to the
+            // LongNameHandler via micros->mixedMeasures.
+            for (int i = 0, n = measures.size(); i < n; i++) {
+                if (i == n - 1) {
+                    // The last value (potentially the only value) gets passed on via quantity.
+                    quantity.setToBigDecimal(BigDecimal.valueOf(measures.get(i).getNumber().doubleValue()));
+                    break;
+                }
+
+                micros.mixedMeasures.add(measures.get(i));
+            }
+        }
+    }
+
     /**
      * Obtains the appropriate output value, MeasureUnit and
      * rounding/precision behaviour from the UnitsRouter.
@@ -53,11 +78,11 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
     public MicroProps processQuantity(DecimalQuantity quantity) {
         fParent.processQuantity(quantity);
 
-        MicroProps result = new MicroProps(false); /* TODO: what is the correct value for immutable */
 
         quantity.roundToInfinity(); // Enables toDouble
         final UnitsRouter.RouteResult routed = fUnitsRouter.route(quantity.toBigDecimal());
 
+        MicroProps result = (MicroProps) this.fParent;
         final List<Measure> routedMeasures = routed.measures;
         result.outputUnit = routed.outputUnit.build();
         result.mixedMeasures = new ArrayList<>();
@@ -77,30 +102,5 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
         }
 
         return result;
-    }
-
-    protected static void mixedMeasuresToMicros(List<Measure> measures, DecimalQuantity quantity, MicroProps micros) {
-        if (measures.size() > 1) {
-            // For debugging
-            assert (micros.outputUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
-
-            // Check that we received measurements with the expected MeasureUnits:
-            List<MeasureUnit> singleUnits =
-                    micros.outputUnit.splitToSingleUnits();
-
-            assert measures.size() == singleUnits.size();
-
-            // Mixed units: except for the last value, we pass all values to the
-            // LongNameHandler via micros->mixedMeasures.
-            for (int i = 0 , n = measures.size(); i < n; i++) {
-                if (i == n -1) {
-                    // The last value (potentially the only value) gets passed on via quantity.
-                    quantity.setToBigDecimal(BigDecimal.valueOf( measures.get(i).getNumber().doubleValue()));
-                    break;
-                }
-
-                micros.mixedMeasures.add(measures.get(i));
-            }
-        }
     }
 }

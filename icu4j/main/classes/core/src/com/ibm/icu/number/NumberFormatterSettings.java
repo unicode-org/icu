@@ -676,6 +676,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
                     macros.perUnit = (MeasureUnit) current.value;
                 }
                 break;
+            case KEY_USAGE:
+                if(macros.usage == null) {
+                    macros.usage = (String) current.value;
+                }
+                break;
             default:
                 throw new AssertionError("Unknown key: " + current.key);
             }

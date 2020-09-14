@@ -2,10 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.MissingResourceException;
-
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -21,6 +17,10 @@ import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.MissingResourceException;
 
 public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
@@ -101,7 +101,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
         // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
         // TODO(ICU-20400): Get duration-*-person data properly with aliases.
-        if (unit.getSubtype().endsWith("-person")) {
+        if (unit.getType() != null && unit.getSubtype().endsWith("-person")) {
             key.append(unit.getSubtype(), 0, unit.getSubtype().length() - 7);
         } else {
             key.append(unit.getSubtype());
