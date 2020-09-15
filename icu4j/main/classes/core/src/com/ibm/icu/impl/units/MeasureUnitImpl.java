@@ -4,8 +4,14 @@
 
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.util.*;
+import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.CharsTrie;
+import com.ibm.icu.util.CharsTrieBuilder;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.StringTrieBuilder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -112,6 +118,17 @@ public class MeasureUnitImpl {
 
         result.add(this.clone());
         return result;
+    }
+
+    /**
+     * Applies dimensionality to all the internal single units.
+     * For example: <b>square-meter-per-second</b>, when we apply dimensionality -2, it will be <b>square-second-per-p4-meter</b>
+     */
+    public void applyDimensionality(int dimensionality) {
+        for (SingleUnitImpl singleUnit :
+                singleUnits) {
+            singleUnit.setDimensionality(singleUnit.getDimensionality() * dimensionality);
+        }
     }
 
     /**
@@ -728,7 +745,21 @@ public class MeasureUnitImpl {
         }
     }
 
-    class SingleUnitComparator implements Comparator<SingleUnitImpl> {
+    static class MeasureUnitImplComparator implements Comparator<MeasureUnitImpl> {
+        private ConversionRates conversionRates;
+
+        public MeasureUnitImplComparator(ConversionRates conversionRates) {
+            this.conversionRates = conversionRates;
+        }
+
+        @Override
+        public int compare(MeasureUnitImpl o1, MeasureUnitImpl o2) {
+            UnitConverter fromO1toO2 = new UnitConverter(o1, o2, conversionRates);
+            return fromO1toO2.convert(BigDecimal.valueOf(1)).compareTo(BigDecimal.valueOf(1));
+        }
+    }
+
+    static class SingleUnitComparator implements Comparator<SingleUnitImpl> {
         @Override
         public int compare(SingleUnitImpl o1, SingleUnitImpl o2) {
             return o1.compareTo(o2);
