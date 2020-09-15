@@ -112,7 +112,7 @@ public:
 
     /**
      * Selects the standard plural form for the number/formatter/rules.
-     * TODO(13591): Remove this method.
+     * Used in MeasureFormat for backwards compatibility with NumberFormat.
      */
     static StandardPlural::Form selectPlural(
             const Formattable &number,
