@@ -94,14 +94,14 @@ void mixedMeasuresToMicros(const MaybeStackVector<Measure> &measures, DecimalQua
         U_ASSERT(micros->outputUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
         U_ASSERT(U_SUCCESS(status));
         // Check that we received measurements with the expected MeasureUnits:
-        int32_t singleUnitsCount;
-        LocalArray<MeasureUnit> singleUnits =
-            micros->outputUnit.splitToSingleUnits(singleUnitsCount, status);
+        MeasureUnitImpl temp;
+        const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(micros->outputUnit, temp, status);
         U_ASSERT(U_SUCCESS(status));
-        U_ASSERT(measures.length() == singleUnitsCount);
+        U_ASSERT(measures.length() == impl.units.length());
         for (int32_t i = 0; i < measures.length(); i++) {
-            U_ASSERT(measures[i]->getUnit() == singleUnits[i]);
+            U_ASSERT(measures[i]->getUnit() == impl.units[i]->build(status));
         }
+        (void)impl;
 #endif
         // Mixed units: except for the last value, we pass all values to the
         // LongNameHandler via micros->mixedMeasures.

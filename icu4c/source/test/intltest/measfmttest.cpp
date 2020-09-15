@@ -3933,8 +3933,8 @@ void MeasureFormatTest::TestDimensionlessBehaviour() {
     // Parser::from("") to be called:
 
     // splitToSingleUnits
-    int32_t count;
-    LocalArray<MeasureUnit> singles = dimensionless.splitToSingleUnits(count, status);
+    auto pair = dimensionless.splitToSingleUnits(status);
+    int32_t count = pair.second;
     status.errIfFailureAndReset("dimensionless.splitToSingleUnits(...)");
     assertEquals("no singles in dimensionless", 0, count);
 
@@ -3952,7 +3952,8 @@ void MeasureFormatTest::TestDimensionlessBehaviour() {
     // dimensionless.withSIPrefix()
     modified = dimensionless.withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
     status.errIfFailureAndReset("dimensionless.withSIPrefix(...)");
-    singles = modified.splitToSingleUnits(count, status);
+    pair = dimensionless.splitToSingleUnits(status);
+    count = pair.second;
     assertEquals("no singles in modified", 0, count);
     siPrefix = modified.getSIPrefix(status);
     status.errIfFailureAndReset("modified.getSIPrefix(...)");
@@ -4154,8 +4155,9 @@ void MeasureFormatTest::verifyCompoundUnit(
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    int32_t length;
-    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(length, status);
+    auto pair = unit.splitToSingleUnits(status);
+    const LocalArray<MeasureUnit>& subUnits = pair.first;
+    int32_t length = pair.second;
     assertEquals(uid + ": Length", subIdentifierCount, length);
     for (int32_t i = 0;; i++) {
         if (i >= subIdentifierCount || i >= length) break;
@@ -4187,8 +4189,9 @@ void MeasureFormatTest::verifyMixedUnit(
         unit.getComplexity(status));
     status.errIfFailureAndReset("%s: Complexity", identifier);
 
-    int32_t length;
-    LocalArray<MeasureUnit> subUnits = unit.splitToSingleUnits(length, status);
+    auto pair = unit.splitToSingleUnits(status);
+    const LocalArray<MeasureUnit>& subUnits = pair.first;
+    int32_t length = pair.second;
     assertEquals(uid + ": Length", subIdentifierCount, length);
     for (int32_t i = 0;; i++) {
         if (i >= subIdentifierCount || i >= length) break;

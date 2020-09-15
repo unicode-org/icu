@@ -445,7 +445,7 @@ class U_I18N_API MeasureUnit: public UObject {
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
 #endif // U_HIDE_DRAFT_API
 
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the list of SINGLE units contained within a MIXED of COMPOUND unit.
      *
@@ -457,15 +457,12 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * If this is a SINGLE unit, an array of length 1 will be returned.
      *
-     * TODO(ICU-21021): Finalize this API and propose it as draft.
-     *
-     * @param outCount The number of elements in the return array.
      * @param status Set if an error occurs.
-     * @return An array of single units, owned by the caller.
-     * @internal ICU 67 Technical Preview
+     * @return A pair with the list of units as a LocalArray and the number of units in the list.
+     * @draft ICU 68
      */
-    LocalArray<MeasureUnit> splitToSingleUnits(int32_t& outCount, UErrorCode& status) const;
-#endif // U_HIDE_INTERNAL_API
+    inline std::pair<LocalArray<MeasureUnit>, int32_t> splitToSingleUnits(UErrorCode& status) const;
+#endif // U_HIDE_DRAFT_API
 
     /**
      * getAvailable gets all of the available units.
@@ -3576,8 +3573,20 @@ private:
      */
     static bool findBySubType(StringPiece subType, MeasureUnit* output);
 
+    /** Internal version of public API */
+    LocalArray<MeasureUnit> splitToSingleUnitsImpl(int32_t& outCount, UErrorCode& status) const;
+
     friend struct MeasureUnitImpl;
 };
+
+#ifndef U_HIDE_DRAFT_API  // @draft ICU 68
+inline std::pair<LocalArray<MeasureUnit>, int32_t>
+MeasureUnit::splitToSingleUnits(UErrorCode& status) const {
+    int32_t length;
+    auto array = splitToSingleUnitsImpl(length, status);
+    return std::make_pair(std::move(array), length);
+}
+#endif // U_HIDE_DRAFT_API
 
 U_NAMESPACE_END
 
