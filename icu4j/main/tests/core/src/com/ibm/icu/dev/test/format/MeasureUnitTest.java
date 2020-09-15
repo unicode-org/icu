@@ -3493,7 +3493,7 @@ public class MeasureUnitTest extends TestFmwk {
                 new TestCase(
                         "kilogram-per-meter-per-second", "kilogram-per-meter-second"),
 
-                // TODO(ICU-20920): Add more test cases once the proper ranking is available.
+                // TODO(ICU-21284): Add more test cases once the proper ranking is available.
         };
 
 
