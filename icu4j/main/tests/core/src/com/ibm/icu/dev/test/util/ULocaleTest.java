@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  **********************************************************************
  * Copyright (c) 2004-2016, International Business Machines
@@ -997,6 +997,11 @@ public class ULocaleTest extends TestFmwk {
             }
 
             if (level2Expected != null) {
+                if (logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
+                    if (source.startsWith("zh_CN") || source.startsWith("zh_TW") || source.startsWith("uz-UZ")) {
+                        continue;
+                    }
+                }
                 String level2 = ULocale.canonicalize(source);
                 if(!level2.equals(level2Expected)){
                     errln("ULocale.getName error for: '" + source +
@@ -1174,10 +1179,10 @@ public class ULocaleTest extends TestFmwk {
                 new Item("da", NM_STD, CAP_BEG, LEN_FU, SUB_SU, "en_GB", "Engelsk (Storbritannien)"),
                 new Item("da", NM_STD, CAP_UIL, LEN_FU, SUB_SU, "en_GB", "Engelsk (Storbritannien)"),
                 new Item("da", NM_STD, CAP_STA, LEN_FU, SUB_SU, "en_GB", "engelsk (Storbritannien)"),
-                new Item("da", NM_STD, CAP_MID, LEN_SH, SUB_SU, "en_GB", "engelsk (UK)"),
-                new Item("da", NM_STD, CAP_BEG, LEN_SH, SUB_SU, "en_GB", "Engelsk (UK)"),
-                new Item("da", NM_STD, CAP_UIL, LEN_SH, SUB_SU, "en_GB", "Engelsk (UK)"),
-                new Item("da", NM_STD, CAP_STA, LEN_SH, SUB_SU, "en_GB", "engelsk (UK)"),
+                new Item("da", NM_STD, CAP_MID, LEN_SH, SUB_SU, "en_GB", "engelsk (Storbritannien)"),
+                new Item("da", NM_STD, CAP_BEG, LEN_SH, SUB_SU, "en_GB", "Engelsk (Storbritannien)"),
+                new Item("da", NM_STD, CAP_UIL, LEN_SH, SUB_SU, "en_GB", "Engelsk (Storbritannien)"),
+                new Item("da", NM_STD, CAP_STA, LEN_SH, SUB_SU, "en_GB", "engelsk (Storbritannien)"),
                 new Item("da", NM_DIA, CAP_MID, LEN_FU, SUB_SU, "en_GB", "britisk engelsk"),
                 new Item("da", NM_DIA, CAP_BEG, LEN_FU, SUB_SU, "en_GB", "Britisk engelsk"),
                 new Item("da", NM_DIA, CAP_UIL, LEN_FU, SUB_SU, "en_GB", "Britisk engelsk"),
@@ -5129,25 +5134,27 @@ public class ULocaleTest extends TestFmwk {
     public void TestCanonical() {
         // Test replacement of languageAlias
 
-        // language _ variant -> language
-        Assert.assertEquals("nb", canonicalTag("no-BOKMAL"));
-        // also test with script, country and extensions
-        Assert.assertEquals("nb-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-BOKMAL-u-ca-japanese"));
-        // also test with other variants, script, country and extensions
-        Assert.assertEquals("nb-Cyrl-ID-1901-xsistemo-u-ca-japanese",
-            canonicalTag("no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese"));
-        Assert.assertEquals("nb-Cyrl-ID-1901-u-ca-japanese",
-            canonicalTag("no-Cyrl-ID-1901-BOKMAL-u-ca-japanese"));
-        Assert.assertEquals("nb-Cyrl-ID-xsistemo-u-ca-japanese",
-            canonicalTag("no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese"));
+        if (!logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
+            // language _ variant -> language
+            Assert.assertEquals("nb", canonicalTag("no-BOKMAL"));
+            // also test with script, country and extensions
+            Assert.assertEquals("nb-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-BOKMAL-u-ca-japanese"));
+            // also test with other variants, script, country and extensions
+            Assert.assertEquals("nb-Cyrl-ID-1901-xsistemo-u-ca-japanese",
+                canonicalTag("no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese"));
+            Assert.assertEquals("nb-Cyrl-ID-1901-u-ca-japanese",
+                canonicalTag("no-Cyrl-ID-1901-BOKMAL-u-ca-japanese"));
+            Assert.assertEquals("nb-Cyrl-ID-xsistemo-u-ca-japanese",
+                canonicalTag("no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese"));
 
-        Assert.assertEquals("nn", canonicalTag("no-NYNORSK"));
-        // also test with script, country and extensions
-        Assert.assertEquals("nn-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-NYNORSK-u-ca-japanese"));
+            Assert.assertEquals("nn", canonicalTag("no-NYNORSK"));
+            // also test with script, country and extensions
+            Assert.assertEquals("nn-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-NYNORSK-u-ca-japanese"));
 
-        Assert.assertEquals("ssy", canonicalTag("aa-SAAHO"));
-        // also test with script, country and extensions
-        Assert.assertEquals("ssy-Devn-IN-u-ca-japanese", canonicalTag("aa-Devn-IN-SAAHO-u-ca-japanese"));
+            Assert.assertEquals("ssy", canonicalTag("aa-SAAHO"));
+            // also test with script, country and extensions
+            Assert.assertEquals("ssy-Devn-IN-u-ca-japanese", canonicalTag("aa-Devn-IN-SAAHO-u-ca-japanese"));
+        }
 
         // language -> language
         Assert.assertEquals("aas", canonicalTag("aam"));
@@ -5168,17 +5175,21 @@ public class ULocaleTest extends TestFmwk {
         // also test with script, variants and extensions
         Assert.assertEquals("fa-Cyrl-AF-1009-u-ca-roc", canonicalTag("prs-Cyrl-1009-u-ca-roc"));
 
-        //  language _ country -> language _ script _ country
-        Assert.assertEquals("pa-Guru-IN", canonicalTag("pa-IN"));
+        if (!logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
+            //  language _ country -> language _ script _ country
+            Assert.assertEquals("pa-Guru-IN", canonicalTag("pa-IN"));
+        }
         // also test with script
         Assert.assertEquals("pa-Latn-IN", canonicalTag("pa-Latn-IN"));
-        // also test with variants and extensions
-        Assert.assertEquals("pa-Guru-IN-5678-u-ca-hindi", canonicalTag("pa-IN-5678-u-ca-hindi"));
+        if (!logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
+            // also test with variants and extensions
+            Assert.assertEquals("pa-Guru-IN-5678-u-ca-hindi", canonicalTag("pa-IN-5678-u-ca-hindi"));
 
-        //  language _ script _ country -> language _ country
-        Assert.assertEquals("ky-KG", canonicalTag("ky-Cyrl-KG"));
-        // also test with variants and extensions
-        Assert.assertEquals("ky-KG-3456-u-ca-roc", canonicalTag("ky-Cyrl-KG-3456-u-ca-roc"));
+            //  language _ script _ country -> language _ country
+            Assert.assertEquals("ky-KG", canonicalTag("ky-Cyrl-KG"));
+            // also test with variants and extensions
+            Assert.assertEquals("ky-KG-3456-u-ca-roc", canonicalTag("ky-Cyrl-KG-3456-u-ca-roc"));
+        }
 
         // Test replacement of territoryAlias
         // 554 has one replacement

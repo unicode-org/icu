@@ -40,7 +40,7 @@ uloc_getTableStringWithFallback(
     int32_t *pLength,
     UErrorCode *pErrorCode);
 
-/*returns TRUE if a is an ID separator FALSE otherwise*/
+/*returns true if a is an ID separator false otherwise*/
 #define _isIDSeparator(a) (a == '_' || a == '-')
 
 U_CFUNC const char* 
@@ -71,27 +71,33 @@ ulocimp_getCountry(const char *localeID,
                    const char **pEnd,
                    UErrorCode &status);
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getName(const char* localeID,
                 icu::ByteSink& sink,
                 UErrorCode* err);
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getBaseName(const char* localeID,
                     icu::ByteSink& sink,
                     UErrorCode* err);
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_canonicalize(const char* localeID,
                      icu::ByteSink& sink,
                      UErrorCode* err);
 
+U_CAPI void U_EXPORT2
+ulocimp_getKeywordValue(const char* localeID,
+                        const char* keywordName,
+                        icu::ByteSink& sink,
+                        UErrorCode* status);
+
 /**
  * Writes a well-formed language tag for this locale ID.
  *
- * **Note**: When `strict` is FALSE, any locale fields which do not satisfy the
+ * **Note**: When `strict` is false, any locale fields which do not satisfy the
  * BCP47 syntax requirement will be omitted from the result.  When `strict` is
- * TRUE, this function sets U_ILLEGAL_ARGUMENT_ERROR to the `err` if any locale
+ * true, this function sets U_ILLEGAL_ARGUMENT_ERROR to the `err` if any locale
  * fields do not satisfy the BCP47 syntax requirement.
  *
  * @param localeID  the input locale ID
@@ -105,7 +111,7 @@ ulocimp_canonicalize(const char* localeID,
  *
  * @internal ICU 64
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_toLanguageTag(const char* localeID,
                       icu::ByteSink& sink,
                       UBool strict,
@@ -148,7 +154,7 @@ ulocimp_forLanguageTag(const char* langtag,
  * Get the region to use for supplemental data lookup. Uses
  * (1) any region specified by locale tag "rg"; if none then
  * (2) any unicode_region_tag in the locale ID; if none then
- * (3) if inferRegion is TRUE, the region suggested by
+ * (3) if inferRegion is true, the region suggested by
  * getLikelySubtags on the localeID.
  * If no region is found, returns length 0.
  * 
@@ -156,7 +162,7 @@ ulocimp_forLanguageTag(const char* langtag,
  *     The complete locale ID (with keywords) from which
  *     to get the region to use for supplemental data.
  * @param inferRegion
- *     If TRUE, will try to infer region from localeID if
+ *     If true, will try to infer region from localeID if
  *     no other region is found.
  * @param region
  *     Buffer in which to put the region ID found; should
@@ -202,7 +208,7 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
  * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
  * @internal ICU 64
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_addLikelySubtags(const char* localeID,
                          icu::ByteSink& sink,
                          UErrorCode* err);
@@ -236,7 +242,7 @@ ulocimp_addLikelySubtags(const char* localeID,
  * or the localeId is not well-formed, the error code is U_ILLEGAL_ARGUMENT_ERROR.
  * @internal ICU 64
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_minimizeSubtags(const char* localeID,
                         icu::ByteSink& sink,
                         UErrorCode* err);

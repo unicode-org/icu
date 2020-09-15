@@ -588,6 +588,9 @@
     <ClCompile Include="formatted_string_builder.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="number_usageprefs.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="number_utils.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -601,6 +604,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="number_skeletons.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="number_symbolswrapper.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="number_capi.cpp">
@@ -649,6 +655,18 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="erarules.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="units_complexconverter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="units_converter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="units_data.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="units_router.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
   </ItemGroup>
@@ -902,6 +920,9 @@
     <ClInclude Include="number_utypes.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="number_usageprefs.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="number_utils.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -915,6 +936,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="number_skeletons.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="number_symbolswrapper.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="string_segment.h">
@@ -993,6 +1017,18 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="umsg_imp.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="units_complexconverter.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="units_converter.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="units_data.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="units_router.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="vzone.h">

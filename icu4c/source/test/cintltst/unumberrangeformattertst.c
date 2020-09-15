@@ -25,6 +25,8 @@ static void TestFormattedValue(void);
 
 static void TestSkeletonParseError(void);
 
+static void TestGetDecimalNumbers(void);
+
 void addUNumberRangeFormatterTest(TestNode** root);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/unumberrangeformatter/" #x)
@@ -33,7 +35,11 @@ void addUNumberRangeFormatterTest(TestNode** root) {
     TESTCASE(TestExampleCode);
     TESTCASE(TestFormattedValue);
     TESTCASE(TestSkeletonParseError);
+    TESTCASE(TestGetDecimalNumbers);
 }
+
+
+#define CAPACITY 30
 
 
 static void TestExampleCode() {
@@ -61,6 +67,7 @@ static void TestExampleCode() {
     const UChar* str = ufmtval_getString(unumrf_resultAsValue(uresult, &ec), &len, &ec);
     assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
     assertUEquals("Should produce expected string result", u"$3 – $5", str);
+    assertIntEquals("Length should be as expected", u_strlen(str), len);
 
     // Cleanup:
     unumrf_close(uformatter);
@@ -146,6 +153,41 @@ static void TestSkeletonParseError() {
     assertUEquals("Should have correct post context", u"typo", perror.postContext);
 
     // cleanup:
+    unumrf_close(uformatter);
+}
+
+
+static void TestGetDecimalNumbers() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UNumberRangeFormatter* uformatter = unumrf_openForSkeletonWithCollapseAndIdentityFallback(
+        u"currency/USD",
+        -1,
+        UNUM_RANGE_COLLAPSE_AUTO,
+        UNUM_IDENTITY_FALLBACK_APPROXIMATELY,
+        "en-US",
+        NULL,
+        &ec);
+    assertSuccessCheck("Should create without error", &ec, TRUE);
+    UFormattedNumberRange* uresult = unumrf_openResult(&ec);
+    assertSuccess("Should create result without error", &ec);
+
+    unumrf_formatDoubleRange(uformatter, 3.0, 5.0, uresult, &ec);
+    const UChar* str = ufmtval_getString(unumrf_resultAsValue(uresult, &ec), NULL, &ec);
+    assertSuccessCheck("Formatting should succeed", &ec, TRUE);
+    assertUEquals("Should produce expected string result", u"$3.00 \u2013 $5.00", str);
+
+    char buffer[CAPACITY];
+
+    int32_t len = unumrf_resultGetFirstDecimalNumber(uresult, buffer, CAPACITY, &ec);
+    assertIntEquals("First len should be as expected", strlen(buffer), len);
+    assertEquals("First decimal should be as expected", "3", buffer);
+
+    len = unumrf_resultGetSecondDecimalNumber(uresult, buffer, CAPACITY, &ec);
+    assertIntEquals("Second len should be as expected", strlen(buffer), len);
+    assertEquals("Second decimal should be as expected", "5", buffer);
+
+    // cleanup:
+    unumrf_closeResult(uresult);
     unumrf_close(uformatter);
 }
 

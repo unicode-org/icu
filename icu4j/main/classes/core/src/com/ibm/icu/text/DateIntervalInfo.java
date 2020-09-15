@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2008-2016, International Business Machines Corporation and
@@ -532,13 +532,19 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
 
             // Check that the pattern letter is accepted
             char letter = patternLetter.charAt(0);
-            if (ACCEPTED_PATTERN_LETTERS.indexOf(letter) < 0) {
+            if (ACCEPTED_PATTERN_LETTERS.indexOf(letter) < 0 && letter != 'B') {
                 return null;
             }
 
             // Replace 'h' for 'H'
             if (letter == CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR_OF_DAY].charAt(0)) {
                 patternLetter = CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR];
+            }
+            
+            // Replace 'a' for 'B'
+            // TODO: Using AM/PM as a proxy for flexible day period isn’t really correct, but it’s close
+            if (letter == 'B') {
+                patternLetter = CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.AM_PM];
             }
 
             return patternLetter;
@@ -1081,20 +1087,25 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         final int STRING_NUMERIC_DIFFERENCE = 0x100;
         final int BASE = 0x41;
 
-        // TODO: this is a hack for 'v' and 'z'
-        // resource bundle only have time skeletons ending with 'v',
-        // but not for time skeletons ending with 'z'.
-        boolean replaceZWithV = false;
-        if ( inputSkeleton.indexOf('z') != -1 ) {
+        // hack for certain alternate characters
+        // resource bundles only have time skeletons containing 'v', 'h', and 'H'
+        // but not time skeletons containing 'z', 'K', or 'k'
+        // the skeleton may also include 'a' or 'b', which never occur in the resource bundles, so strip them out too
+        boolean replacedAlternateChars = false;
+        if ( inputSkeleton.indexOf('z') != -1 || inputSkeleton.indexOf('k') != -1 || inputSkeleton.indexOf('K') != -1 || inputSkeleton.indexOf('a') != -1 || inputSkeleton.indexOf('b') != -1 ) {
             inputSkeleton = inputSkeleton.replace('z', 'v');
-            replaceZWithV = true;
+            inputSkeleton = inputSkeleton.replace('k', 'H');
+            inputSkeleton = inputSkeleton.replace('K', 'h');
+            inputSkeleton = inputSkeleton.replace("a", "");
+            inputSkeleton = inputSkeleton.replace("b", "");
+            replacedAlternateChars = true;
         }
 
         parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
         int bestDistance = Integer.MAX_VALUE;
         // 0 means exact the same skeletons;
         // 1 means having the same field, but with different length,
-        // 2 means only z/v differs
+        // 2 means only z/v, h/K, or H/k differs
         // -1 means having different field.
         int bestFieldDifference = 0;
         for (String skeleton : fIntervalPatterns.keySet()) {
@@ -1135,7 +1146,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 break;
             }
         }
-        if ( replaceZWithV && bestFieldDifference != -1 ) {
+        if ( replacedAlternateChars && bestFieldDifference != -1 ) {
             bestFieldDifference = 2;
         }
         return new DateIntervalFormat.BestMatchInfo(bestSkeleton, bestFieldDifference);

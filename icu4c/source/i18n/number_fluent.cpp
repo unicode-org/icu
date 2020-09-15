@@ -275,6 +275,20 @@ Derived NumberFormatterSettings<Derived>::scale(const Scale& scale)&& {
 }
 
 template<typename Derived>
+Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage) const& {
+    Derived copy(*this);
+    copy.fMacros.usage.set(usage);
+    return copy;
+}
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
+    Derived move(std::move(*this));
+    move.fMacros.usage.set(usage);
+    return move;
+}
+
+template<typename Derived>
 Derived NumberFormatterSettings<Derived>::padding(const Padder& padder) const& {
     Derived copy(*this);
     copy.fMacros.padder = padder;
@@ -506,123 +520,6 @@ LocalizedNumberFormatter UnlocalizedNumberFormatter::locale(const Locale& locale
     return LocalizedNumberFormatter(std::move(fMacros), locale);
 }
 
-SymbolsWrapper::SymbolsWrapper(const SymbolsWrapper& other) {
-    doCopyFrom(other);
-}
-
-SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&& src) U_NOEXCEPT {
-    doMoveFrom(std::move(src));
-}
-
-SymbolsWrapper& SymbolsWrapper::operator=(const SymbolsWrapper& other) {
-    if (this == &other) {
-        return *this;
-    }
-    doCleanup();
-    doCopyFrom(other);
-    return *this;
-}
-
-SymbolsWrapper& SymbolsWrapper::operator=(SymbolsWrapper&& src) U_NOEXCEPT {
-    if (this == &src) {
-        return *this;
-    }
-    doCleanup();
-    doMoveFrom(std::move(src));
-    return *this;
-}
-
-SymbolsWrapper::~SymbolsWrapper() {
-    doCleanup();
-}
-
-void SymbolsWrapper::setTo(const DecimalFormatSymbols& dfs) {
-    doCleanup();
-    fType = SYMPTR_DFS;
-    fPtr.dfs = new DecimalFormatSymbols(dfs);
-}
-
-void SymbolsWrapper::setTo(const NumberingSystem* ns) {
-    doCleanup();
-    fType = SYMPTR_NS;
-    fPtr.ns = ns;
-}
-
-void SymbolsWrapper::doCopyFrom(const SymbolsWrapper& other) {
-    fType = other.fType;
-    switch (fType) {
-        case SYMPTR_NONE:
-            // No action necessary
-            break;
-        case SYMPTR_DFS:
-            // Memory allocation failures are exposed in copyErrorTo()
-            if (other.fPtr.dfs != nullptr) {
-                fPtr.dfs = new DecimalFormatSymbols(*other.fPtr.dfs);
-            } else {
-                fPtr.dfs = nullptr;
-            }
-            break;
-        case SYMPTR_NS:
-            // Memory allocation failures are exposed in copyErrorTo()
-            if (other.fPtr.ns != nullptr) {
-                fPtr.ns = new NumberingSystem(*other.fPtr.ns);
-            } else {
-                fPtr.ns = nullptr;
-            }
-            break;
-    }
-}
-
-void SymbolsWrapper::doMoveFrom(SymbolsWrapper&& src) {
-    fType = src.fType;
-    switch (fType) {
-        case SYMPTR_NONE:
-            // No action necessary
-            break;
-        case SYMPTR_DFS:
-            fPtr.dfs = src.fPtr.dfs;
-            src.fPtr.dfs = nullptr;
-            break;
-        case SYMPTR_NS:
-            fPtr.ns = src.fPtr.ns;
-            src.fPtr.ns = nullptr;
-            break;
-    }
-}
-
-void SymbolsWrapper::doCleanup() {
-    switch (fType) {
-        case SYMPTR_NONE:
-            // No action necessary
-            break;
-        case SYMPTR_DFS:
-            delete fPtr.dfs;
-            break;
-        case SYMPTR_NS:
-            delete fPtr.ns;
-            break;
-    }
-}
-
-bool SymbolsWrapper::isDecimalFormatSymbols() const {
-    return fType == SYMPTR_DFS;
-}
-
-bool SymbolsWrapper::isNumberingSystem() const {
-    return fType == SYMPTR_NS;
-}
-
-const DecimalFormatSymbols* SymbolsWrapper::getDecimalFormatSymbols() const {
-    U_ASSERT(fType == SYMPTR_DFS);
-    return fPtr.dfs;
-}
-
-const NumberingSystem* SymbolsWrapper::getNumberingSystem() const {
-    U_ASSERT(fType == SYMPTR_NS);
-    return fPtr.ns;
-}
-
-
 FormattedNumber LocalizedNumberFormatter::formatInt(int64_t value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
     auto results = new UFormattedNumberData();
@@ -702,9 +599,9 @@ LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErro
 
 void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const {
     if (computeCompiled(status)) {
-        fCompiled->format(results->quantity, results->getStringRef(), status);
+        fCompiled->format(results, status);
     } else {
-        NumberFormatterImpl::formatStatic(fMacros, results->quantity, results->getStringRef(), status);
+        NumberFormatterImpl::formatStatic(fMacros, results, status);
     }
     if (U_FAILURE(status)) {
         return;

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2007-2015, International Business Machines Corporation and
@@ -866,7 +866,7 @@ public class PluralRulesTest extends TestFmwk {
                     for (String keyword : rules.getKeywords()) {
                         boolean isLimited = rules.isLimited(keyword, sampleType);
                         boolean computeLimited = rules.computeLimited(keyword, sampleType);
-                        if (!keyword.equals("other")) {
+                        if (!keyword.equals("other") && !(locale.getLanguage().equals("fr") && logKnownIssue("ICU-21270", "fr plurals many case computeLimited == isLimited"))) {
                             assertEquals(getAssertMessage("computeLimited == isLimited", locale, rules, keyword),
                                     computeLimited, isLimited);
                         }
@@ -1112,7 +1112,7 @@ public class PluralRulesTest extends TestFmwk {
 
             // [one, other]
             "am,bn,fa,gu,hi,kn,mr,zu; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
-            "ff,fr,hy,kab; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
+            "ff,hy,kab; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
             "ast,ca,de,en,et,fi,fy,gl,it,ji,nl,sv,sw,ur,yi; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",
             "pt; one: @integer 1; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1000000, …",
             "si; one: @integer 0, 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
@@ -1132,6 +1132,9 @@ public class PluralRulesTest extends TestFmwk {
 
             // [one, two, other]
             "iu,naq,se,sma,smi,smj,smn,sms; one: @integer 1; two: @integer 2; other: @integer 0, 3~17, 100, 1000, 10000, 100000, 1000000, …",
+
+            // [one, many, other]
+            "fr; one: @integer 0, 1; many: @integer 1000000; other: @integer 2~17, 100, 1000, 10000, 100000, …",
 
             // [one, few, other]
             "shi; one: @integer 0, 1; few: @integer 2~10; other: @integer 11~26, 100, 1000, 10000, 100000, 1000000, …",

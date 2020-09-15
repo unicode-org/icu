@@ -209,7 +209,7 @@ class U_COMMON_API StringPiece : public UMemory {
   int32_t length() const { return length_; }
   /**
    * Returns whether the string is empty.
-   * @return TRUE if the string is empty
+   * @return true if the string is empty
    * @stable ICU 4.2
    */
   UBool empty() const { return length_ == 0; }
@@ -331,7 +331,7 @@ class U_COMMON_API StringPiece : public UMemory {
  * Global operator == for StringPiece
  * @param x The first StringPiece to compare.
  * @param y The second StringPiece to compare.
- * @return TRUE if the string data is equal
+ * @return true if the string data is equal
  * @stable ICU 4.8
  */
 U_EXPORT UBool U_EXPORT2 
@@ -341,7 +341,7 @@ operator==(const StringPiece& x, const StringPiece& y);
  * Global operator != for StringPiece
  * @param x The first StringPiece to compare.
  * @param y The second StringPiece to compare.
- * @return TRUE if the string data is not equal
+ * @return true if the string data is not equal
  * @stable ICU 4.8
  */
 inline UBool operator!=(const StringPiece& x, const StringPiece& y) {

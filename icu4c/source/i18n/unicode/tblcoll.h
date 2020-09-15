@@ -752,7 +752,7 @@ public:
      * Implements ucol_getContractionsAndExpansions().
      * Gets this collator's sets of contraction strings and/or
      * characters and strings that map to multiple collation elements (expansions).
-     * If addPrefixes is TRUE, then contractions that are expressed as
+     * If addPrefixes is true, then contractions that are expressed as
      * prefix/pre-context rules are included.
      * @param contractions if not NULL, the set to hold the contractions
      * @param expansions if not NULL, the set to hold the expansions
@@ -857,7 +857,7 @@ private:
      * Tests whether a character is "unsafe" for use as a collation starting point.
      *
      * @param c code point or code unit
-     * @return TRUE if c is unsafe
+     * @return true if c is unsafe
      * @see CollationElementIterator#setOffset(int)
      */
     UBool isUnsafe(UChar32 c) const;

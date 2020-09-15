@@ -1,8 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 es_GT{
     %%Parent{"es_419"}
-    Version{"37"}
+    Version{"38"}
     units{
         duration{
             day{
@@ -63,9 +64,19 @@ es_GT{
         }
     }
     unitsShort{
+        electric{
+            volt{
+                dnam{"voltios"}
+            }
+        }
         length{
             foot{
                 dnam{"pie"}
+            }
+        }
+        power{
+            watt{
+                dnam{"vatios"}
             }
         }
         volume{

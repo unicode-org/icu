@@ -1,8 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sd_Deva{
     %%Parent{"root"}
-    Version{"37"}
+    Version{"38"}
     zoneStrings{
         "Etc:UTC"{
             ls{"आस्थानी चालू टाइमु"}

@@ -788,6 +788,14 @@ const char *SingleUnitImpl::getSimpleUnitID() const {
     return gSimpleUnits[index];
 }
 
+MeasureUnitImpl::MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status) {
+    *this = other.copy(status);
+}
+
+MeasureUnitImpl::MeasureUnitImpl(const SingleUnitImpl &singleUnit, UErrorCode &status) {
+    this->append(singleUnit, status);
+}
+
 MeasureUnitImpl MeasureUnitImpl::forIdentifier(StringPiece identifier, UErrorCode& status) {
     return Parser::from(identifier, status).parse(status);
 }
@@ -823,11 +831,25 @@ bool MeasureUnitImpl::append(const SingleUnitImpl& singleUnit, UErrorCode& statu
     return appendImpl(*this, singleUnit, status);
 }
 
+MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::extractIndividualUnits(UErrorCode &status) const {
+    MaybeStackVector<MeasureUnitImpl> result;
+
+    if (this->complexity != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        result.emplaceBackAndCheckErrorCode(status, *this, status);
+        return result;
+    }
+
+    for (int32_t i = 0; i < units.length(); i++) {
+        result.emplaceBackAndCheckErrorCode(status, *units[i], status);
+    }
+
+    return result;
+}
+
 MeasureUnit MeasureUnitImpl::build(UErrorCode& status) && {
     serialize(*this, status);
     return MeasureUnit(std::move(*this));
 }
-
 
 MeasureUnit MeasureUnit::forIdentifier(StringPiece identifier, UErrorCode& status) {
     return Parser::from(identifier, status).parse(status).build(status);

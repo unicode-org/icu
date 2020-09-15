@@ -893,7 +893,7 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString&
             err = localStatus;
             return;
         }
-        if (calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
+        if (calendarTypeLen > 0 && calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
             destination.clear().append(calendarType, -1, err);
             if (U_FAILURE(err)) { return; }
         }

@@ -243,7 +243,7 @@ typedef struct UFormattedNumberRange UFormattedNumberRange;
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE UNumberRangeFormatter* U_EXPORT2
+U_CAPI UNumberRangeFormatter* U_EXPORT2
 unumrf_openForSkeletonWithCollapseAndIdentityFallback(
     const UChar* skeleton,
     int32_t skeletonLen,
@@ -262,7 +262,7 @@ unumrf_openForSkeletonWithCollapseAndIdentityFallback(
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE UFormattedNumberRange* U_EXPORT2
+U_CAPI UFormattedNumberRange* U_EXPORT2
 unumrf_openResult(UErrorCode* ec);
 
 
@@ -281,7 +281,7 @@ unumrf_openResult(UErrorCode* ec);
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_formatDoubleRange(
     const UNumberRangeFormatter* uformatter,
     double first,
@@ -309,7 +309,7 @@ unumrf_formatDoubleRange(
  * @param ec Set if an error occurs.
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_formatDecimalRange(
     const UNumberRangeFormatter* uformatter,
     const char* first,
@@ -334,7 +334,7 @@ unumrf_formatDecimalRange(
  * @return A UFormattedValue owned by the input object.
  * @draft ICU 68
  */
-U_STABLE const UFormattedValue* U_EXPORT2
+U_CAPI const UFormattedValue* U_EXPORT2
 unumrf_resultAsValue(const UFormattedNumberRange* uresult, UErrorCode* ec);
 
 
@@ -348,21 +348,66 @@ unumrf_resultAsValue(const UFormattedNumberRange* uresult, UErrorCode* ec);
  * @return The identity result; see UNumberRangeIdentityResult.
  * @draft ICU 68
  */
-U_STABLE UNumberRangeIdentityResult U_EXPORT2
+U_CAPI UNumberRangeIdentityResult U_EXPORT2
 unumrf_resultGetIdentityResult(
     const UFormattedNumberRange* uresult,
     UErrorCode* ec);
 
 
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Extracts the first formatted number as a decimal number. This endpoint
+ * is useful for obtaining the exact number being printed after scaling
+ * and rounding have been applied by the number range formatting pipeline.
+ * 
+ * The syntax of the unformatted number is a "numeric string"
+ * as defined in the Decimal Arithmetic Specification, available at
+ * http://speleotrove.com/decimal
+ *
+ * @param  uresult       The input object containing the formatted number range.
+ * @param  dest          the 8-bit char buffer into which the decimal number is placed
+ * @param  destCapacity  The size, in chars, of the destination buffer.  May be zero
+ *                       for precomputing the required size.
+ * @param  ec            receives any error status.
+ *                       If U_BUFFER_OVERFLOW_ERROR: Returns number of chars for
+ *                       preflighting.
+ * @return Number of chars in the data.  Does not include a trailing NUL.
+ * @draft ICU 68
+ */
+U_CAPI int32_t U_EXPORT2
+unumrf_resultGetFirstDecimalNumber(
+    const UFormattedNumberRange* uresult,
+    char* dest,
+    int32_t destCapacity,
+    UErrorCode* ec);
 
-// TODO(ICU-20775): Propose these as API.
-// NOTE: This is not currently implemented.
-// U_DRAFT int32_t U_EXPORT2
-// unumf_resultGetFirstDecimal(const UFormattedNumberRange* uresult, char* buffer, int32_t bufferCapacity,
-//                             UErrorCode* ec);
-// U_DRAFT int32_t U_EXPORT2
-// unumf_resultGetSecondDecimal(const UFormattedNumberRange* uresult, char* buffer, int32_t bufferCapacity,
-//                              UErrorCode* ec);
+
+/**
+ * Extracts the second formatted number as a decimal number. This endpoint
+ * is useful for obtaining the exact number being printed after scaling
+ * and rounding have been applied by the number range formatting pipeline.
+ * 
+ * The syntax of the unformatted number is a "numeric string"
+ * as defined in the Decimal Arithmetic Specification, available at
+ * http://speleotrove.com/decimal
+ *
+ * @param  uresult       The input object containing the formatted number range.
+ * @param  dest          the 8-bit char buffer into which the decimal number is placed
+ * @param  destCapacity  The size, in chars, of the destination buffer.  May be zero
+ *                       for precomputing the required size.
+ * @param  ec            receives any error status.
+ *                       If U_BUFFER_OVERFLOW_ERROR: Returns number of chars for
+ *                       preflighting.
+ * @return Number of chars in the data.  Does not include a trailing NUL.
+ * @draft ICU 68
+ */
+U_CAPI int32_t U_EXPORT2
+unumrf_resultGetSecondDecimalNumber(
+    const UFormattedNumberRange* uresult,
+    char* dest,
+    int32_t destCapacity,
+    UErrorCode* ec);
+#endif // U_HIDE_DRAFT_API
 
 
 /**
@@ -371,7 +416,7 @@ unumrf_resultGetIdentityResult(
  * @param uformatter An object created by unumf_openForSkeletonAndLocale().
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_close(UNumberRangeFormatter* uformatter);
 
 
@@ -381,7 +426,7 @@ unumrf_close(UNumberRangeFormatter* uformatter);
  * @param uresult An object created by unumf_openResult().
  * @draft ICU 68
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumrf_closeResult(UFormattedNumberRange* uresult);
 
 

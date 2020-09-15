@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2014, International Business Machines Corporation and
@@ -47,6 +47,7 @@ import com.ibm.icu.util.DateTimeRule;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.ICUException;
+import com.ibm.icu.util.ICUInputTooLongException;
 import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.InitialTimeZoneRule;
 import com.ibm.icu.util.RuleBasedTimeZone;
@@ -749,6 +750,18 @@ public class SerializableTestUtility {
         }
     }
 
+    private static class ICUInputTooLongExceptionHandler extends ExceptionHandlerBase {
+        @Override
+        public Object[] getTestObjects() {
+            return new ICUInputTooLongException[] {
+                    new ICUInputTooLongException(),
+                    new ICUInputTooLongException("msg1"),
+                    new ICUInputTooLongException(new RuntimeException("rte1")),
+                    new ICUInputTooLongException("msg2", new RuntimeException("rte2"))
+            };
+        }
+    }
+
     private static HashMap map = new HashMap();
 
     static {
@@ -843,6 +856,7 @@ public class SerializableTestUtility {
         map.put("com.ibm.icu.util.ICUException", new ICUExceptionHandler());
         map.put("com.ibm.icu.util.ICUUncheckedIOException", new ICUUncheckedIOExceptionHandler());
         map.put("com.ibm.icu.util.ICUCloneNotSupportedException", new ICUCloneNotSupportedExceptionHandler());
+        map.put("com.ibm.icu.util.ICUInputTooLongException", new ICUInputTooLongExceptionHandler());
     }
 
     /*

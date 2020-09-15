@@ -719,14 +719,38 @@ uloc_getKeywordValue(const char* localeID,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
 {
-    if (buffer != nullptr) {
-        buffer[0] = '\0';
+    if (U_FAILURE(*status)) {
+        return 0;
     }
+
+    CheckedArrayByteSink sink(buffer, bufferCapacity);
+    ulocimp_getKeywordValue(localeID, keywordName, sink, status);
+
+    int32_t reslen = sink.NumberOfBytesAppended();
+
+    if (U_FAILURE(*status)) {
+        return reslen;
+    }
+
+    if (sink.Overflowed()) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+    } else {
+        u_terminateChars(buffer, bufferCapacity, reslen, status);
+    }
+
+    return reslen;
+}
+
+U_CAPI void U_EXPORT2
+ulocimp_getKeywordValue(const char* localeID,
+                        const char* keywordName,
+                        icu::ByteSink& sink,
+                        UErrorCode* status)
+{
     const char* startSearchHere = NULL;
     const char* nextSeparator = NULL;
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
-    int32_t result = 0;
 
     if(status && U_SUCCESS(*status) && localeID) {
       char tempBuffer[ULOC_FULLNAME_CAPACITY];
@@ -734,12 +758,12 @@ uloc_getKeywordValue(const char* localeID,
 
       if (keywordName == NULL || keywordName[0] == 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return;
       }
 
       locale_canonKeywordName(keywordNameBuffer, keywordName, status);
       if(U_FAILURE(*status)) {
-        return 0;
+        return;
       }
 
       if (_hasBCP47Extension(localeID)) {
@@ -751,7 +775,7 @@ uloc_getKeywordValue(const char* localeID,
       startSearchHere = locale_getKeywordsStart(tmpLocaleID);
       if(startSearchHere == NULL) {
           /* no keywords, return at once */
-          return 0;
+          return;
       }
 
       /* find the first keyword */
@@ -763,7 +787,7 @@ uloc_getKeywordValue(const char* localeID,
           nextSeparator = uprv_strchr(startSearchHere, '=');
           if(!nextSeparator) {
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* key must have =value */
-              return 0;
+              return;
           }
           /* strip leading & trailing spaces (TC decided to tolerate these) */
           while(*startSearchHere == ' ') {
@@ -777,20 +801,20 @@ uloc_getKeywordValue(const char* localeID,
           /* copy & normalize keyName from locale */
           if (startSearchHere == keyValueTail) {
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* empty keyword name in passed-in locale */
-              return 0;
+              return;
           }
           keyValueLen = 0;
           while (startSearchHere < keyValueTail) {
             if (!UPRV_ISALPHANUM(*startSearchHere)) {
               *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed keyword name */
-              return 0;
+              return;
             }
             if (keyValueLen < ULOC_KEYWORD_BUFFER_LEN - 1) {
               localeKeywordNameBuffer[keyValueLen++] = uprv_tolower(*startSearchHere++);
             } else {
               /* keyword name too long for internal buffer */
               *status = U_INTERNAL_PROGRAM_ERROR;
-              return 0;
+              return;
             }
           }
           localeKeywordNameBuffer[keyValueLen] = 0; /* terminate */
@@ -811,28 +835,20 @@ uloc_getKeywordValue(const char* localeID,
               /* Now copy the value, but check well-formedness */
               if (nextSeparator == keyValueTail) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR; /* empty key value name in passed-in locale */
-                return 0;
+                return;
               }
-              keyValueLen = 0;
               while (nextSeparator < keyValueTail) {
                 if (!UPRV_ISALPHANUM(*nextSeparator) && !UPRV_OK_VALUE_PUNCTUATION(*nextSeparator)) {
                   *status = U_ILLEGAL_ARGUMENT_ERROR; /* malformed key value */
-                  return 0;
+                  return;
                 }
-                if (keyValueLen < bufferCapacity) {
-                  /* Should we lowercase value to return here? Tests expect as-is. */
-                  buffer[keyValueLen++] = *nextSeparator++;
-                } else { /* keep advancing so we return correct length in case of overflow */
-                  keyValueLen++;
-                  nextSeparator++;
-                }
+                /* Should we lowercase value to return here? Tests expect as-is. */
+                sink.Append(nextSeparator++, 1);
               }
-              result = u_terminateChars(buffer, bufferCapacity, keyValueLen, status);
-              return result;
+              return;
           }
       }
     }
-    return 0;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -1221,10 +1237,10 @@ ulocimp_getCountry(const char *localeID,
  * are added to 'variant'
  */
 static void
-_getVariantEx(const char *localeID,
-              char prev,
-              ByteSink& sink,
-              UBool needSeparator) {
+_getVariant(const char *localeID,
+            char prev,
+            ByteSink& sink,
+            UBool needSeparator) {
     UBool hasVariant = FALSE;
 
     /* get one or more variant tags and separate them with '_' */
@@ -1263,23 +1279,6 @@ _getVariantEx(const char *localeID,
             localeID++;
         }
     }
-}
-
-static int32_t
-_getVariantEx(const char *localeID,
-              char prev,
-              char *variant, int32_t variantCapacity,
-              UBool needSeparator) {
-    CheckedArrayByteSink sink(variant, variantCapacity);
-    _getVariantEx(localeID, prev, sink, needSeparator);
-    return sink.NumberOfBytesAppended();
-}
-
-static int32_t
-_getVariant(const char *localeID,
-            char prev,
-            char *variant, int32_t variantCapacity) {
-    return _getVariantEx(localeID, prev, variant, variantCapacity, FALSE);
 }
 
 /* Keyword enumeration */
@@ -1417,9 +1416,6 @@ uloc_openKeywords(const char* localeID,
             if (U_FAILURE(*status)) {
                 return 0;
             }
-            if(_isIDSeparator(*tmpLocaleID)) {
-                _getVariant(tmpLocaleID+1, *tmpLocaleID, NULL, 0);
-            }
         }
     }
 
@@ -1525,7 +1521,7 @@ _canonicalize(const char* localeID,
                 variantSize = -tag.length();
                 {
                     CharStringByteSink s(&tag);
-                    _getVariantEx(tmpLocaleID+1, *tmpLocaleID, s, FALSE);
+                    _getVariant(tmpLocaleID+1, *tmpLocaleID, s, FALSE);
                 }
                 variantSize += tag.length();
                 if (variantSize > 0) {
@@ -1587,7 +1583,7 @@ _canonicalize(const char* localeID,
             int32_t posixVariantSize = -tag.length();
             {
                 CharStringByteSink s(&tag);
-                _getVariantEx(tmpLocaleID+1, '@', s, (UBool)(variantSize > 0));
+                _getVariant(tmpLocaleID+1, '@', s, (UBool)(variantSize > 0));
             }
             posixVariantSize += tag.length();
             if (posixVariantSize > 0) {
@@ -1797,18 +1793,24 @@ uloc_getVariant(const char* localeID,
                 if (tmpLocaleID != cntryID && _isIDSeparator(tmpLocaleID[1])) {
                     tmpLocaleID++;
                 }
-                i=_getVariant(tmpLocaleID+1, *tmpLocaleID, variant, variantCapacity);
+
+                CheckedArrayByteSink sink(variant, variantCapacity);
+                _getVariant(tmpLocaleID+1, *tmpLocaleID, sink, FALSE);
+
+                i = sink.NumberOfBytesAppended();
+
+                if (U_FAILURE(*err)) {
+                    return i;
+                }
+
+                if (sink.Overflowed()) {
+                    *err = U_BUFFER_OVERFLOW_ERROR;
+                    return i;
+                }
             }
         }
     }
 
-    /* removed by weiv. We don't want to handle POSIX variants anymore. Use canonicalization function */
-    /* if we do not have a variant tag yet then try a POSIX variant after '@' */
-/*
-    if(!haveVariant && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
-        i=_getVariant(localeID+1, '@', variant, variantCapacity);
-    }
-*/
     return u_terminateChars(variant, variantCapacity, i, err);
 }
 
@@ -1840,7 +1842,7 @@ uloc_getName(const char* localeID,
     return reslen;
 }
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getName(const char* localeID,
                 ByteSink& sink,
                 UErrorCode* err)
@@ -1876,7 +1878,7 @@ uloc_getBaseName(const char* localeID,
     return reslen;
 }
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_getBaseName(const char* localeID,
                     ByteSink& sink,
                     UErrorCode* err)
@@ -1912,7 +1914,7 @@ uloc_canonicalize(const char* localeID,
     return reslen;
 }
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_canonicalize(const char* localeID,
                      ByteSink& sink,
                      UErrorCode* err)
@@ -1993,22 +1995,22 @@ uloc_getLCID(const char* localeID)
         // uprv_convertToLCID does not support keywords other than collation.
         // Remove all keywords except collation.
         int32_t len;
-        char collVal[ULOC_KEYWORDS_CAPACITY];
         char tmpLocaleID[ULOC_FULLNAME_CAPACITY];
 
-        len = uloc_getKeywordValue(localeID, "collation", collVal,
-            UPRV_LENGTHOF(collVal) - 1, &status);
+        CharString collVal;
+        {
+            CharStringByteSink sink(&collVal);
+            ulocimp_getKeywordValue(localeID, "collation", sink, &status);
+        }
 
-        if (U_SUCCESS(status) && len > 0) {
-            collVal[len] = 0;
-
+        if (U_SUCCESS(status) && !collVal.isEmpty()) {
             len = uloc_getBaseName(localeID, tmpLocaleID,
                 UPRV_LENGTHOF(tmpLocaleID) - 1, &status);
 
             if (U_SUCCESS(status) && len > 0) {
                 tmpLocaleID[len] = 0;
 
-                len = uloc_setKeywordValue("collation", collVal, tmpLocaleID,
+                len = uloc_setKeywordValue("collation", collVal.data(), tmpLocaleID,
                     UPRV_LENGTHOF(tmpLocaleID) - len - 1, &status);
 
                 if (U_SUCCESS(status) && len > 0) {

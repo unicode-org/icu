@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pa{
     AuxExemplarCharacters{"[\u200C\u200D ਃ \u0A02 \u0A01 {ਲ\u0A3C}]"}
     Ellipsis{
@@ -257,7 +258,7 @@ pa{
         minimumGroupingDigits{"1"}
         native{"guru"}
     }
-    Version{"37"}
+    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -908,7 +909,7 @@ pa{
                     "ਸੰਨ",
                 }
                 abbreviated%variant{
-                    "ਈ. ਪੂ. ਸੰ.",
+                    "ਈ. ਪੂ.",
                     "ਈ. ਸੰ.",
                 }
                 narrow{
@@ -916,7 +917,7 @@ pa{
                     "ਸੰਨ",
                 }
                 narrow%variant{
-                    "ਈ.ਪੂ.ਸੰ.",
+                    "ਈ. ਪੂ.",
                     "ਈ.ਸੰ.",
                 }
                 wide{
@@ -2536,7 +2537,7 @@ pa{
     listPattern{
         or{
             2{"{0} ਜਾਂ {1}"}
-            end{"{0}, or {1}"}
+            end{"{0} ਜਾਂ {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }

@@ -11,7 +11,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
         echo "Building ICU4J" && cd icu4j && ant init && ant check 
       displayName: 'Build and Test'
@@ -30,7 +30,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
         cd icu4c/source && ./runConfigureICU Linux && make -j2 check
       displayName: 'Build and Test'
@@ -52,7 +52,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
         export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
       displayName: 'Build only (WarningsAsErrors)'
@@ -68,7 +68,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
         cd icu4c/source && \
         ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && \
@@ -88,7 +88,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
         export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux --disable-layout --disable-layoutex && make -j2 check
       displayName: 'Build and Test C++14'
@@ -96,11 +96,13 @@ jobs:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
+# VS 2019 Builds
+#-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_Distrelease
-  displayName: 'C: MSVC 64-bit Release (VS 2017) + Distrelease'
+  displayName: 'C: MSVC 64-bit Release (VS 2019) + Distrelease'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -108,7 +110,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
@@ -134,10 +136,10 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Release_Distrelease
-  displayName: 'C: MSVC 32-bit Release (VS 2017) + Distrelease'
+  displayName: 'C: MSVC 32-bit Release (VS 2019) + Distrelease'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -145,13 +147,18 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
         solution: icu4c/source/allinone/allinone.sln
         platform: Win32
         configuration: Release
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x86 Release'
     - task: PowerShell@2
       displayName: 'PowerShell: Distrelease script (x86)'
       inputs:
@@ -166,10 +173,10 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x86_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_ARM32_ARM64_Release_Distrelease
-  displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2017) + Distrelease ARM64'
+  displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2019) + Distrelease ARM64'
   timeoutInMinutes: 60
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -177,7 +184,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
@@ -209,8 +216,41 @@ jobs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_ARM64_Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_Release_DataFilter
-  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2017)'
+- job: ICU4C_MSVC_x64_ARM64_Debug
+  displayName: 'C: MSVC x64 ARM64 Debug (VS 2019)'
+  timeoutInMinutes: 45
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Run x64 Debug Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Debug'
+    - task: VSBuild@1
+      displayName: 'Build ARM64 Debug'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: ARM64
+        configuration: Debug
+#-------------------------------------------------------------------------
+# VS 2017 Builds
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_VS2017
+  displayName: 'C: MSVC 64-bit Release (VS 2017)'
   timeoutInMinutes: 30
   pool:
     vmImage: 'vs2017-win2016'
@@ -221,20 +261,20 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
-    - powershell: |
-        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.ci-builds\data-filter.json"
-        $vstsCommandString = "vso[task.setvariable variable=ICU_DATA_FILTER_FILE]" + $filterPath
-        Write-Host "##$vstsCommandString"
+      fetchDepth: 10
     - task: VSBuild@1
-      displayName: 'Build Solution with Data Filter'
+      displayName: 'Build Solution'
       inputs:
         solution: icu4c/source/allinone/allinone.sln
         platform: x64
         configuration: Release
-        msbuildArgs: '/p:SkipUWP=true'
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x86_Debug
+- job: ICU4C_MSVC_x86_Debug_VS2017
   displayName: 'C: MSVC 32-bit Debug (VS 2017)'
   timeoutInMinutes: 60
   pool:
@@ -246,7 +286,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
@@ -259,6 +299,34 @@ jobs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x86 Debug'
 #-------------------------------------------------------------------------
+# VS2019 using the VS2015 toolset
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_VS2015
+  displayName: 'C: MSVC 64-bit Release (VS 2015)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+        msbuildArgs: /p:SkipUWP=true /p:DefaultPlatformToolset=v140 /p:AutodetectWin10SDK=true
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
+#-------------------------------------------------------------------------
 - job: ICU4C_MSYS2_GCC_x86_64_Release
   displayName: 'C: MSYS2 GCC x86_64 Release'
   timeoutInMinutes: 45
@@ -269,7 +337,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
        choco install -y msys2
        rem refreshenv
@@ -302,7 +370,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
         export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 check
       displayName: 'Build and Test (WarningsAsErrors)'

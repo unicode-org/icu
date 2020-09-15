@@ -99,7 +99,7 @@ udat_toCalendarDateField(UDateFormatField field) {
 /* For now- one opener. */
 static UDateFormatOpener gOpener = NULL;
 
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 udat_registerOpener(UDateFormatOpener opener, UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
@@ -112,7 +112,7 @@ udat_registerOpener(UDateFormatOpener opener, UErrorCode *status)
   umtx_unlock(NULL);
 }
 
-U_INTERNAL UDateFormatOpener U_EXPORT2
+U_CAPI UDateFormatOpener U_EXPORT2
 udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status)
 {
   if(U_FAILURE(*status)) return NULL;
@@ -424,7 +424,7 @@ udat_setLenient(    UDateFormat*    fmt,
     ((DateFormat*)fmt)->setLenient(isLenient);
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 udat_getBooleanAttribute(const UDateFormat* fmt, 
                          UDateFormatBooleanAttribute attr, 
                          UErrorCode* status)
@@ -434,7 +434,7 @@ udat_getBooleanAttribute(const UDateFormat* fmt,
     //return FALSE;
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 udat_setBooleanAttribute(UDateFormat *fmt, 
                          UDateFormatBooleanAttribute attr, 
                          UBool newValue, 
@@ -457,7 +457,7 @@ udat_setCalendar(UDateFormat*    fmt,
     ((DateFormat*)fmt)->setCalendar(*((Calendar*)calendarToSet));
 }
 
-U_DRAFT const UNumberFormat* U_EXPORT2 
+U_CAPI const UNumberFormat* U_EXPORT2 
 udat_getNumberFormatForField(const UDateFormat* fmt, UChar field)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -472,7 +472,7 @@ udat_getNumberFormat(const UDateFormat* fmt)
     return (const UNumberFormat*) ((DateFormat*)fmt)->getNumberFormat();
 }
 
-U_DRAFT void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 udat_adoptNumberFormatForFields(           UDateFormat*    fmt,
                                     const  UChar*          fields,
                                            UNumberFormat*  numberFormatToSet,
@@ -494,7 +494,7 @@ udat_setNumberFormat(UDateFormat*    fmt,
     ((DateFormat*)fmt)->setNumberFormat(*((NumberFormat*)numberFormatToSet));
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 udat_adoptNumberFormat(      UDateFormat*    fmt,
                              UNumberFormat*  numberFormatToAdopt)
 {

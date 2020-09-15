@@ -122,7 +122,7 @@
 # 1a. Java and ant variables, adjust for your system
 
 export JAVA_HOME=`/usr/libexec/java_home`
-export ANT_OPTS="-Xmx4096m
+export ANT_OPTS="-Xmx4096m"
 
 # 1b. CLDR variables, adjust for your setup; with cygwin it might be e.g.
 # CLDR_DIR=`cygpath -wp /build/cldr`
@@ -190,7 +190,7 @@ ant -f build-icu-data.xml -DcldrDataDir="$CLDR_TMP_DIR/production" | tee /tmp/cl
 # they're representative of the newest CLDR data.
 
 cd $TOOLS_ROOT/cldr
-ant update-cldr-testdata
+ant copy-cldr-testdata
 
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the
@@ -232,9 +232,11 @@ make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 # may fail.
 # Repeat steps 4-7 until there are no errors.
 
-# 9. You can also run the make check tests in exhaustive mode (these will also
-# be run automatically on the default branch after the merge resulting from this
-# integration):
+# 9. You can also run the make check tests in exhaustive mode. As an alternative
+# you can run them as part of the pre-merge tests by adding the following as a
+# comment in the pull request: "/azp run CI-Exhaustive". You should do one or the
+# other; the exhaustive tests are *not* run automatically on each pull request,
+# and are only run occasionally on the default branch.
 
 cd $ICU4C_DIR/source
 export INTLTEST_OPTS="-e"
@@ -249,7 +251,6 @@ make check 2>&1 | tee /tmp/icu4c-newData-makeCheckEx.txt
 # as a base for comparison):
 
 cd $ICU4J_ROOT
-ant all 2>&1 | tee /tmp/icu4j-oldData-antAll.txt
 ant check 2>&1 | tee /tmp/icu4j-oldData-antCheck.txt
 
 # 12. Transfer the data to ICU4J:

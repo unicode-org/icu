@@ -439,11 +439,29 @@ includes other header files. The most common types are `uint8_t`, `uint16_t`,
 `uint32_t`, `int8_t`, `int16_t`, `int32_t`, `char16_t`,
 `UChar` (same as `char16_t`), `UChar32` (signed, 32-bit), and `UErrorCode`.
 
-The language built-in type bool and constants true and false may be used
+The language built-in type `bool` and constants `true` and `false` may be used
 internally, for local variables and parameters of internal functions. The ICU
 type `UBool` must be used in public APIs and in the definition of any persistent
-data structures. `UBool` is guaranteed to be one byte in size and signed; bool is
+data structures. `UBool` is guaranteed to be one byte in size and signed; `bool` is
 not.
+
+Traditionally, ICU4C has defined its own `FALSE`=0 / `TRUE`=1 macros for use with `UBool`.
+Starting with ICU 68 (2020q4), we no longer define these in public header files
+(unless `U_DEFINE_FALSE_AND_TRUE`=1),
+in order to avoid name collisions with code outside ICU defining enum constants and similar
+with these names.
+
+Instead, the versions of the C and C++ standards we require now do define type `bool`
+and values `false` & `true`, and we and our users can use these values.
+
+As of ICU 68, we are not changing ICU4C API from `UBool` to `bool`.
+Doing so in C API, or in structs that cross the library boundary,
+would break binary compatibility.
+Doing so only in other places in C++ could be confusingly inconsistent.
+We may revisit this.
+
+Note that the details of type `bool` (e.g., `sizeof`) depend on the compiler and
+may differ between C and C++.
 
 #### File Names (.h, .c, .cpp, data files if possible, etc.)
 
@@ -499,7 +517,7 @@ Have one line that has the return type and place all the import declarations,
 extern declarations, export declarations, the function name, and function
 signature at the beginning of the next line.
 
-Function declarations need to be in the form CAPI return-type `U_EXPORT2` to
+Function declarations need to be in the form `U_CAPI` return-type `U_EXPORT2` to
 satisfy all the compilers' requirements.
 
 For example, use the following
@@ -510,9 +528,9 @@ U_CAPI int32_t U_EXPORT2
 u_formatMessage(...);
 ```
 
-> :point_right: **Note**: The `U_CAPI`/`U_DRAFT`/... and `U_EXPORT2` qualifiers
+> :point_right: **Note**: The `U_CAPI`/`U_DEPRECATED` and `U_EXPORT2` qualifiers
 > are required for both the declaration and the definiton of *exported C and
-> static C++ functions*. Use `U_CAPI` (or `U_DRAFT` etc.) before and `U_EXPORT2`
+> static C++ functions*. Use `U_CAPI` (or `U_DEPRECATED`) before and `U_EXPORT2`
 > after the return type of *exported C and static C++ functions*.
 > 
 > Internal functions that are visible outside a compilation unit need a `U_CFUNC`
@@ -520,6 +538,12 @@ u_formatMessage(...);
 > 
 > *Non-static C++ class member functions* do *not* get `U_CAPI`/`U_EXPORT2`
 > because they are exported and declared together with their class exports.
+
+> :point_right: **Note**: Before ICU 68 (2020q4) we used to use alternate qualifiers
+> like `U_DRAFT`, `U_STABLE` etc. rather than `U_CAPI`,
+> but keeping these in sync with API doc tags `@draft` and guard switches like `U_HIDE_DRAFT_API`
+> was tedious and error-prone and added no value.
+> Since ICU 68 (ICU-9961) we only use `U_CAPI` and `U_DEPRECATED`.
 
 #### Use Anonymous Namesapces or Static For File Scope
 

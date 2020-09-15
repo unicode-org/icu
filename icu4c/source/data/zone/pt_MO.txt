@@ -1,8 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pt_MO{
     %%Parent{"pt_PT"}
-    Version{"37"}
+    Version{"38"}
     zoneStrings{
         "meta:Azores"{
             sd{"∅∅∅"}

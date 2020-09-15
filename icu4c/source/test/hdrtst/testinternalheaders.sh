@@ -15,21 +15,21 @@ for file in `ls common/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -O0 ht_temp.cpp ;
+    $CXX -c -std=c++11 -I common -DU_COMMON_IMPLEMENTATION -O0 ht_temp.cpp ;
 done ;
 
 for file in `ls i18n/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -O0 ht_temp.cpp ;
+    $CXX -c -std=c++11 -I common -I i18n -DU_I18N_IMPLEMENTATION -O0 ht_temp.cpp ;
 done ;
 
 for file in `ls io/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -I io -O0 ht_temp.cpp ;
+    $CXX -c -std=c++11 -I common -I i18n -I io -DU_IO_IMPLEMENTATION -O0 ht_temp.cpp ;
 done ;
 
 # layout is removed.

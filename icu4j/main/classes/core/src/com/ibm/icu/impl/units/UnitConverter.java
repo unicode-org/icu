@@ -1,13 +1,9 @@
-/*
- *******************************************************************************
- * Copyright (C) 2004-2020, Google Inc, International Business Machines
- * Corporation and others. All Rights Reserved.
- *******************************************************************************
- */
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
 
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.impl.Assert;
 import com.ibm.icu.util.MeasureUnit;
 
 import java.math.BigDecimal;
@@ -33,7 +29,7 @@ public class UnitConverter {
      */
     public UnitConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
-        Assert.assrt(convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
+        assert (convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
 
         Factor sourceToBase = conversionRates.getFactorToBase(source);
         Factor targetToBase = conversionRates.getFactorToBase(target);
@@ -49,8 +45,8 @@ public class UnitConverter {
     }
 
     static public Convertibility extractConvertibility(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
-        ArrayList<SingleUnitImpl> sourceSingleUnits = conversionRates.getBasicUnitsWithoutSIPrefix(source);
-        ArrayList<SingleUnitImpl> targetSingleUnits = conversionRates.getBasicUnitsWithoutSIPrefix(target);
+        ArrayList<SingleUnitImpl> sourceSingleUnits = conversionRates.extractBaseUnits(source);
+        ArrayList<SingleUnitImpl> targetSingleUnits = conversionRates.extractBaseUnits(target);
 
         HashMap<String, Integer> dimensionMap = new HashMap<>();
 
@@ -62,7 +58,7 @@ public class UnitConverter {
         insertInMap(dimensionMap, targetSingleUnits, 2);
         if (areDimensionsZeroes(dimensionMap)) return Convertibility.RECIPROCAL;
 
-        return Convertibility.INCONVERTIBLE;
+        return Convertibility.UNCONVERTIBLE;
     }
 
     /**
@@ -89,16 +85,22 @@ public class UnitConverter {
     }
 
     public BigDecimal convert(BigDecimal inputValue) {
-        // Multiply the result by 1.000,000,000,000,001 to fix the deterioration from using `BigDecimal`
-        return inputValue.multiply(this.conversionRate).add(offset).multiply(BigDecimal.valueOf(1.000000000000001));
+        return inputValue.multiply(this.conversionRate).add(offset);
     }
 
     public enum Convertibility {
         CONVERTIBLE,
         RECIPROCAL,
-        INCONVERTIBLE,
+        UNCONVERTIBLE,
     }
 
+    // TODO: improve documentation and Constant implementation
+
+    /**
+     * Responsible for all the Factor operation
+     * NOTE:
+     * This class is immutable
+     */
     static class Factor {
         private BigDecimal factorNum;
         private BigDecimal factorDen;
@@ -120,31 +122,14 @@ public class UnitConverter {
             this.factorDen = BigDecimal.valueOf(1);
         }
 
-        /**
-         * Copy another factor.
-         *
-         * @param other
-         */
-        private Factor(Factor other) {
-            this.factorNum = other.factorNum;
-            this.factorDen = other.factorDen;
-
-            this.CONSTANT_FT2M = other.CONSTANT_FT2M;
-            this.CONSTANT_PI = other.CONSTANT_PI;
-            this.CONSTANT_GRAVITY = other.CONSTANT_GRAVITY;
-            this.CONSTANT_G = other.CONSTANT_G;
-            this.CONSTANT_GAL_IMP2M3 = other.CONSTANT_GAL_IMP2M3;
-            this.CONSTANT_LB2KG = other.CONSTANT_LB2KG;
-        }
-
-        public static Factor precessFactor(String factor) {
-            Assert.assrt(!factor.isEmpty());
+        public static Factor processFactor(String factor) {
+            assert (!factor.isEmpty());
 
             // Remove all spaces in the factor
             factor.replaceAll("\\s+", "");
 
             String[] fractions = factor.split("/");
-            Assert.assrt(fractions.length == 1 || fractions.length == 2);
+            assert (fractions.length == 1 || fractions.length == 2);
 
             if (fractions.length == 1) {
                 return processFactorWithoutDivision(fractions[0]);
@@ -166,19 +151,37 @@ public class UnitConverter {
         }
 
         /**
+         * Clone this <code>Factor</code>.
+         */
+        protected Factor clone() {
+            Factor result = new Factor();
+            result.factorNum = this.factorNum;
+            result.factorDen = this.factorDen;
+
+            result.CONSTANT_FT2M = this.CONSTANT_FT2M;
+            result.CONSTANT_PI = this.CONSTANT_PI;
+            result.CONSTANT_GRAVITY = this.CONSTANT_GRAVITY;
+            result.CONSTANT_G = this.CONSTANT_G;
+            result.CONSTANT_GAL_IMP2M3 = this.CONSTANT_GAL_IMP2M3;
+            result.CONSTANT_LB2KG = this.CONSTANT_LB2KG;
+
+            return result;
+        }
+
+        /**
          * Returns a single `BigDecimal` that represent the conversion rate after substituting all the constants.
          *
          * @return
          */
         public BigDecimal getConversionRate() {
-            Factor resultCollector = new Factor(this);
+            Factor resultCollector = this.clone();
 
-            resultCollector.substitute(BigDecimal.valueOf(0.3048), this.CONSTANT_FT2M);
-            resultCollector.substitute(BigDecimal.valueOf(411557987.0).divide(BigDecimal.valueOf(131002976.0), DECIMAL128), this.CONSTANT_PI);
-            resultCollector.substitute(BigDecimal.valueOf(9.80665), this.CONSTANT_GRAVITY);
+            resultCollector.substitute(new BigDecimal("0.3048"), this.CONSTANT_FT2M);
+            resultCollector.substitute(new BigDecimal("411557987.0").divide(new BigDecimal("131002976.0"), DECIMAL128), this.CONSTANT_PI);
+            resultCollector.substitute(new BigDecimal("9.80665"), this.CONSTANT_GRAVITY);
             resultCollector.substitute(new BigDecimal("6.67408E-11"), this.CONSTANT_G);
-            resultCollector.substitute(BigDecimal.valueOf(0.00454609), this.CONSTANT_GAL_IMP2M3);
-            resultCollector.substitute(BigDecimal.valueOf(0.45359237), this.CONSTANT_LB2KG);
+            resultCollector.substitute(new BigDecimal("0.00454609"), this.CONSTANT_GAL_IMP2M3);
+            resultCollector.substitute(new BigDecimal("0.45359237"), this.CONSTANT_LB2KG);
 
             return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
         }
@@ -195,7 +198,7 @@ public class UnitConverter {
         }
 
         public Factor applySiPrefix(MeasureUnit.SIPrefix siPrefix) {
-            Factor result = new Factor(this);
+            Factor result = this.clone();
             if (siPrefix == MeasureUnit.SIPrefix.ONE) {
                 return result;
             }
@@ -269,7 +272,7 @@ public class UnitConverter {
          */
         private void addPoweredEntity(String poweredEntity) {
             String[] entities = poweredEntity.split(Pattern.quote("^"));
-            Assert.assrt(entities.length == 1 || entities.length == 2);
+            assert (entities.length == 1 || entities.length == 2);
 
             int power = entities.length == 2 ? Integer.parseInt(entities[1]) : 1;
             this.addEntity(entities[0], power);
@@ -306,5 +309,3 @@ public class UnitConverter {
         }
     }
 }
-
-

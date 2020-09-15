@@ -1,13 +1,9 @@
-/*
- *******************************************************************************
- * Copyright (C) 2004-2020, Google Inc, International Business Machines
- * Corporation and others. All Rights Reserved.
- *******************************************************************************
- */
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
 
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.impl.Assert;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
@@ -50,8 +46,6 @@ public class UnitsRouter {
     private ArrayList<MeasureUnit> outputUnits_ = new ArrayList<>();
     private ArrayList<ConverterPreference> converterPreferences_ = new ArrayList<>();
 
-    private MeasureUnitImpl complexOutputUnit_;
-
     public UnitsRouter(MeasureUnitImpl inputUnitImpl, String region, String usage) {
         // TODO: do we want to pass in ConversionRates and UnitPreferences instead?
         // of loading in each UnitsRouter instance? (Or make global?)
@@ -64,7 +58,7 @@ public class UnitsRouter {
         for (int i = 0; i < unitPreferences.length; ++i) {
             UnitPreferences.UnitPreference preference = unitPreferences[i];
 
-            this.complexOutputUnit_ =
+            MeasureUnitImpl complexTargetUnitImpl =
                     MeasureUnitImpl.UnitsParser.parseForIdentifier(preference.getUnit());
 
             String precision = preference.getSkeleton();
@@ -75,11 +69,11 @@ public class UnitsRouter {
             // NOTE:
             //  It is allowed to have an empty precision.
             if (!precision.isEmpty() && !precision.startsWith("precision-increment")) {
-                Assert.fail("Only `precision-increment` is allowed");
+                throw new AssertionError("Only `precision-increment` is allowed");
             }
 
-            outputUnits_.add(this.complexOutputUnit_.build());
-            converterPreferences_.add(new ConverterPreference(inputUnitImpl, this.complexOutputUnit_,
+            outputUnits_.add(complexTargetUnitImpl.build());
+            converterPreferences_.add(new ConverterPreference(inputUnitImpl, complexTargetUnitImpl,
                     preference.getGeq(), precision,
                     data.getConversionRates()));
         }
@@ -89,13 +83,13 @@ public class UnitsRouter {
         for (ConverterPreference converterPreference :
                 converterPreferences_) {
             if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-                return new RouteResult(converterPreference.converter.convert(quantity), this.complexOutputUnit_, converterPreference.precision);
+                return new RouteResult(converterPreference.converter.convert(quantity), converterPreference.precision);
             }
         }
 
         // In case of the `quantity` does not fit in any converter limit, use the last converter.
         ConverterPreference lastConverterPreference = converterPreferences_.get(converterPreferences_.size() - 1);
-        return new RouteResult(lastConverterPreference.converter.convert(quantity), this.complexOutputUnit_, lastConverterPreference.precision);
+        return new RouteResult(lastConverterPreference.converter.convert(quantity), lastConverterPreference.precision);
     }
 
     /**
@@ -139,28 +133,12 @@ public class UnitsRouter {
     }
 
     public class RouteResult {
-        // A list of measures: a single measure for single units, multiple measures
-        // for mixed units.
-        //
-        // TODO(icu-units/icu#21): figure out the right mixed unit API.
         public List<Measure> measures;
-
-        // A skeleton string starting with a precision-increment.
-        //
-        // TODO(hugovdm): generalise? or narrow down to only a precision-increment?
-        // or document that other skeleton elements are ignored?
         public String precision;
 
-        // The output unit for this RouteResult. This may be a MIXED unit - for
-        // example: "yard-and-foot-and-inch", for which `measures` will have three
-        // elements.
-        public MeasureUnitImpl outputUnit;
-
-        RouteResult(List<Measure> measures, MeasureUnitImpl outputUnit, String precision) {
+        RouteResult(List<Measure> measures, String precision) {
             this.measures = measures;
             this.precision = precision;
         }
     }
 }
-
-

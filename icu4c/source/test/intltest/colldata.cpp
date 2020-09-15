@@ -22,6 +22,7 @@
 
 #include "unicode/regex.h"        // TODO: make conditional on regexp being built.
 
+#include "unicode/testlog.h"
 #include "unicode/uniset.h"
 #include "unicode/uset.h"
 #include "unicode/usetiter.h"

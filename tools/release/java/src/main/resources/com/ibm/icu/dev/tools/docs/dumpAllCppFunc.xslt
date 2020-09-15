@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 * © 2017 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 -->
 <!-- Copyright (C) 2009-2011, International Business Machines Corporation and others. All Rights Reserved. -->
 <!-- List all cpp public functions generated from the 'index.xml' -->

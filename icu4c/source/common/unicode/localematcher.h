@@ -1,5 +1,5 @@
 // © 2019 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 
 // localematcher.h
 // created: 2019may08 Markus W. Scherer
@@ -512,7 +512,7 @@ public:
          * @param outErrorCode Set to an error code if it does not contain one already
          *                  and an error occurred while setting parameters.
          *                  Otherwise unchanged.
-         * @return TRUE if U_FAILURE(outErrorCode)
+         * @return true if U_FAILURE(outErrorCode)
          * @draft ICU 65
          */
         UBool copyErrorTo(UErrorCode &outErrorCode) const;

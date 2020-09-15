@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 * © 2017 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">

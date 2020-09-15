@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2006-2016, Google, International Business Machines Corporation
@@ -446,11 +446,11 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
         new ULocale("es"),
         new String[] {"yM", "1/1999"},
-        new String[] {"yMMM", "ene. 1999"},
+        new String[] {"yMMM", "ene 1999"},
         new String[] {"yMd", "13/1/1999"},
-        new String[] {"yMMMd", "13 ene. 1999"},
+        new String[] {"yMMMd", "13 ene 1999"},
         new String[] {"Md", "13/1"},
-        new String[] {"MMMd", "13 ene."},
+        new String[] {"MMMd", "13 ene"},
         new String[] {"MMMMd", "13 de enero"},
         new String[] {"yQQQ", "T1 1999"},
         new String[] {"hhmm", "11:58 p.\u00A0m."},
@@ -458,8 +458,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "enero de 1999"},
-        new String[] {"MMMEd", "mi\u00E9., 13 ene."},
-        new String[] {"Ed", "mi\u00E9. 13"},
+        new String[] {"MMMEd", "mi\u00E9, 13 ene"},
+        new String[] {"Ed", "mi\u00E9 13"},
         new String[] {"jmmssSSS", "23:58:59,123"},
         new String[] {"JJmm", "23:58"},
 

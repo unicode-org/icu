@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  *
@@ -782,6 +782,7 @@ public final class UCaseProps {
     static final int LOC_LITHUANIAN=3;
     static final int LOC_GREEK=4;
     public static final int LOC_DUTCH=5;
+    static final int LOC_ARMENIAN=6;
 
     public static final int getCaseLocale(Locale locale) {
         return getCaseLocale(locale.getLanguage());
@@ -806,6 +807,8 @@ public final class UCaseProps {
                 return LOC_LITHUANIAN;
             } else if(language.equals("nl")) {
                 return LOC_DUTCH;
+            } else if(language.equals("hy")) {
+                return LOC_ARMENIAN;
             }
         } else if(language.length()==3) {
             if(language.equals("tur") || language.equals("aze")) {
@@ -816,6 +819,8 @@ public final class UCaseProps {
                 return LOC_LITHUANIAN;
             } else if(language.equals("nld")) {
                 return LOC_DUTCH;
+            } else if(language.equals("hye")) {  // *not* hyw
+                return LOC_ARMENIAN;
             }
         }
         return LOC_ROOT;
@@ -1190,6 +1195,21 @@ public final class UCaseProps {
                         0307; 0307; ; ; lt After_Soft_Dotted; # COMBINING DOT ABOVE
                      */
                     return 0; /* remove the dot (continue without output) */
+                } else if(c==0x0587) {
+                    // See ICU-13416:
+                    // և ligature ech-yiwn
+                    // uppercases to ԵՒ=ech+yiwn by default and in Western Armenian,
+                    // but to ԵՎ=ech+vew in Eastern Armenian.
+                    try {
+                        if(loc==LOC_ARMENIAN) {
+                            out.append(upperNotTitle ? "ԵՎ" : "Եվ");
+                        } else {
+                            out.append(upperNotTitle ? "ԵՒ" : "Եւ");
+                        }
+                        return 2;
+                    } catch (IOException e) {
+                        throw new ICUUncheckedIOException(e);
+                    }
                 } else {
                     /* no known conditional special case mapping, use a normal mapping */
                 }

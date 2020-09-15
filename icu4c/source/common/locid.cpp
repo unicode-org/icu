@@ -1488,48 +1488,7 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
         return;
     }
 
-    LocalMemory<char> scratch;
-    int32_t scratch_capacity = 16;  // Arbitrarily chosen default size.
-
-    char* buffer;
-    int32_t result_capacity, reslen;
-
-    for (;;) {
-        if (scratch.allocateInsteadAndReset(scratch_capacity) == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-
-        buffer = sink.GetAppendBuffer(
-                /*min_capacity=*/scratch_capacity,
-                /*desired_capacity_hint=*/scratch_capacity,
-                scratch.getAlias(),
-                scratch_capacity,
-                &result_capacity);
-
-        reslen = uloc_getKeywordValue(
-                fullName,
-                keywordName_nul.data(),
-                buffer,
-                result_capacity,
-                &status);
-
-        if (status != U_BUFFER_OVERFLOW_ERROR) {
-            break;
-        }
-
-        scratch_capacity = reslen;
-        status = U_ZERO_ERROR;
-    }
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    sink.Append(buffer, reslen);
-    if (status == U_STRING_NOT_TERMINATED_WARNING) {
-        status = U_ZERO_ERROR;  // Terminators not used.
-    }
+    ulocimp_getKeywordValue(fullName, keywordName_nul.data(), sink, &status);
 }
 
 void

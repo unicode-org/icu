@@ -14,8 +14,12 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/localpointer.h"
 #include "unicode/uenum.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
+
 #ifndef U_HIDE_INTERNAL_API
 #include "unicode/unum.h"
 #endif  /* U_HIDE_INTERNAL_API */
@@ -194,7 +198,7 @@ uplrules_selectFormatted(const UPluralRules *uplrules,
  * @return The length of keyword.
  * @internal ICU 59 technology preview, may be removed in the future
  */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uplrules_selectWithFormat(const UPluralRules *uplrules,
                           double number,
                           const UNumberFormat *fmt,
@@ -213,7 +217,7 @@ uplrules_selectWithFormat(const UPluralRules *uplrules,
  * upon error. The caller is responsible for closing the result.
  * @stable ICU 59
  */
-U_STABLE UEnumeration* U_EXPORT2
+U_CAPI UEnumeration* U_EXPORT2
 uplrules_getKeywords(const UPluralRules *uplrules,
                      UErrorCode *status);
 

@@ -158,6 +158,7 @@ struct UFormattedNumberImpl;
 class MutablePatternModifier;
 class ImmutablePatternModifier;
 struct DecimalFormatWarehouse;
+class UsagePrefsHandler;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -372,9 +373,9 @@ class U_I18N_API Notation : public UMemory {
     UBool copyErrorTo(UErrorCode &status) const {
         if (fType == NTN_ERROR) {
             status = fUnion.errorCode;
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     // To allow MacroProps to initialize empty instances:
@@ -706,12 +707,8 @@ class U_I18N_API Precision : public UMemory {
     typedef PrecisionUnion::FractionSignificantSettings FractionSignificantSettings;
     typedef PrecisionUnion::IncrementSettings IncrementSettings;
 
-    /** The Precision encapsulates the RoundingMode when used within the implementation. */
-    UNumberFormatRoundingMode fRoundingMode;
-
-    Precision(const PrecisionType& type, const PrecisionUnion& union_,
-              UNumberFormatRoundingMode roundingMode)
-            : fType(type), fUnion(union_), fRoundingMode(roundingMode) {}
+    Precision(const PrecisionType& type, const PrecisionUnion& union_)
+            : fType(type), fUnion(union_) {}
 
     Precision(UErrorCode errorCode) : fType(RND_ERROR) {
         fUnion.errorCode = errorCode;
@@ -726,9 +723,9 @@ class U_I18N_API Precision : public UMemory {
     UBool copyErrorTo(UErrorCode &status) const {
         if (fType == RND_ERROR) {
             status = fUnion.errorCode;
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     // On the parent type so that this method can be called internally on Precision instances.
@@ -744,8 +741,6 @@ class U_I18N_API Precision : public UMemory {
     static IncrementPrecision constructIncrement(double increment, int32_t minFrac);
 
     static CurrencyPrecision constructCurrency(UCurrencyUsage usage);
-
-    static Precision constructPassThrough();
 
     // To allow MacroProps/MicroProps to initialize bogus instances:
     friend struct impl::MacroProps;
@@ -767,6 +762,9 @@ class U_I18N_API Precision : public UMemory {
 
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
+
+    // To allow access to isBogus and the default (bogus) constructor:
+    friend class impl::UsagePrefsHandler;
 };
 
 /**
@@ -970,9 +968,9 @@ class U_I18N_API IntegerWidth : public UMemory {
     UBool copyErrorTo(UErrorCode &status) const {
         if (fHasError) {
             status = fUnion.errorCode;
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     void apply(impl::DecimalQuantity &quantity, UErrorCode &status) const;
@@ -1098,9 +1096,9 @@ class U_I18N_API Scale : public UMemory {
     UBool copyErrorTo(UErrorCode &status) const {
         if (fError != U_ZERO_ERROR) {
             status = fError;
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     void applyTo(impl::DecimalQuantity& quantity) const;
@@ -1126,6 +1124,61 @@ class U_I18N_API Scale : public UMemory {
 };
 
 namespace impl {
+
+// Do not enclose entire Usage with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
+/**
+ * Manages NumberFormatterSettings::usage()'s char* instance on the heap.
+ * @internal
+ */
+class U_I18N_API Usage : public UMemory {
+
+#ifndef U_HIDE_INTERNAL_API
+
+  public:
+    /** @internal */
+    Usage(const Usage& other);
+
+    /** @internal */
+    Usage& operator=(const Usage& other);
+
+    /** @internal */
+    Usage(Usage &&src) U_NOEXCEPT;
+
+    /** @internal */
+    Usage& operator=(Usage&& src) U_NOEXCEPT;
+
+    /** @internal */
+    ~Usage();
+
+    /** @internal */
+    int16_t length() const { return fLength; }
+
+    /** @internal
+     * Makes a copy of value.
+     */
+    void set(StringPiece value);
+
+    /** @internal */
+    bool isSet() const { return fLength > 0; }
+
+  private:
+    char *fUsage;
+    int16_t fLength;
+    UErrorCode fError;
+
+    Usage() : fUsage(nullptr), fLength(0), fError(U_ZERO_ERROR) {}
+
+    // Allow NumberFormatterImpl to access fUsage.
+    friend class impl::NumberFormatterImpl;
+
+    // Allow skeleton generation code to access private members.
+    friend class impl::GeneratorHelpers;
+
+    // Allow MacroProps/MicroProps to initialize empty instances.
+    friend struct impl::MacroProps;
+
+#endif // U_HIDE_INTERNAL_API
+};
 
 // Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
@@ -1193,12 +1246,12 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     UBool copyErrorTo(UErrorCode &status) const {
         if (fType == SYMPTR_DFS && fPtr.dfs == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return TRUE;
+            return true;
         } else if (fType == SYMPTR_NS && fPtr.ns == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
   private:
@@ -1342,9 +1395,9 @@ class U_I18N_API Padder : public UMemory {
     UBool copyErrorTo(UErrorCode &status) const {
         if (fWidth == -3) {
             status = fUnion.errorCode;
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     bool isValid() const {
@@ -1409,6 +1462,9 @@ struct U_I18N_API MacroProps : public UMemory {
 
     /** @internal */
     Scale scale;  // = Scale();  (benign value)
+
+    /** @internal */
+    Usage usage;  // = Usage();  (no usage)
 
     /** @internal */
     const AffixPatternProvider* affixProvider = nullptr;  // no ownership
@@ -1508,10 +1564,15 @@ class U_I18N_API NumberFormatterSettings {
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
      * rounding precisions, and other number formatter settings.
      *
+     * \note If the usage() is set, the output unit **will be changed** to
+     *       produce localised units, according to usage, locale and unit. See
+     *       FormattedNumber::getOutputUnit().
+     *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
      * <pre>
      * NumberFormatter::with().unit(MeasureUnit::getMeter())
+     * NumberFormatter::with().unit(MeasureUnit::forIdentifier("foot-per-second", status))
      * </pre>
      *
      * Currency:
@@ -2039,6 +2100,61 @@ class U_I18N_API NumberFormatterSettings {
      */
     Derived scale(const Scale &scale) &&;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Specifies the usage for which numbers will be formatted ("person-height",
+     * "road", "rainfall", etc.)
+     *
+     * When a `usage` is specified, the output unit will change depending on the
+     * `Locale` and the unit quantity. For example, formatting length
+     * measurements specified in meters:
+     *
+     * `NumberFormatter::with().usage("person").unit(MeasureUnit::getMeter()).locale("en-US")`
+     *   * When formatting 0.25, the output will be "10 inches".
+     *   * When formatting 1.50, the output will be "4 feet and 11 inches".
+     *
+     * The input unit specified via unit() determines the type of measurement
+     * being formatted (e.g. "length" when the unit is "foot"). The usage
+     * requested will be looked for only within this category of measurement
+     * units.
+     *
+     * The output unit can be found via FormattedNumber::getOutputUnit().
+     *
+     * If the usage has multiple parts (e.g. "land-agriculture-grain") and does
+     * not match a known usage preference, the last part will be dropped
+     * repeatedly until a match is found (e.g. trying "land-agriculture", then
+     * "land"). If a match is still not found, usage will fall back to
+     * "default".
+     *
+     * Setting usage to an empty string clears the usage (disables usage-based
+     * localized formatting).
+     *
+     * Setting a usage string but not a correct input unit will result in an
+     * U_ILLEGAL_ARGUMENT_ERROR.
+     *
+     * When using usage, specifying rounding or precision is unnecessary.
+     * Specifying a precision in some manner will override the default
+     * formatting.
+     *
+     * @param usage A `usage` parameter from the units resource. See the
+     * unitPreferenceData in *source/data/misc/units.txt*, generated from
+     * `unitPreferenceData` in [CLDR's
+     * supplemental/units.xml](https://github.com/unicode-org/cldr/blob/master/common/supplemental/units.xml).
+     * @return The fluent chain.
+     * @draft ICU 68
+     */
+    Derived usage(StringPiece usage) const &;
+
+    /**
+     * Overload of usage() for use on an rvalue reference.
+     *
+     * @param usage The unit `usage`.
+     * @return The fluent chain.
+     * @draft ICU 68
+     */
+    Derived usage(StringPiece usage) &&;
+#endif // U_HIDE_DRAFT_API
+
 #ifndef U_HIDE_INTERNAL_API
 
     /**
@@ -2121,13 +2237,13 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Sets the UErrorCode if an error occurred in the fluent chain.
      * Preserves older error codes in the outErrorCode.
-     * @return TRUE if U_FAILURE(outErrorCode)
+     * @return true if U_FAILURE(outErrorCode)
      * @stable ICU 60
      */
     UBool copyErrorTo(UErrorCode &outErrorCode) const {
         if (U_FAILURE(outErrorCode)) {
             // Do not overwrite the older error code
-            return TRUE;
+            return true;
         }
         fMacros.copyErrorTo(outErrorCode);
         return U_FAILURE(outErrorCode);
@@ -2515,6 +2631,21 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     inline StringClass toDecimalNumber(UErrorCode& status) const;
 #endif // U_HIDE_DRAFT_API
 
+#ifndef U_HIDE_DRAFT_API
+	/**
+     * Gets the resolved output unit.
+     *
+     * The output unit is dependent upon the localized preferences for the usage
+     * specified via NumberFormatterSettings::usage(), and may be a unit with
+     * UMEASURE_UNIT_MIXED unit complexity (MeasureUnit::getComplexity()), such
+     * as "foot-and-inch" or "hour-and-minute-and-second".
+     *
+     * @return `MeasureUnit`.
+     * @draft ICU 68
+     */
+    MeasureUnit getOutputUnit(UErrorCode& status) const;
+#endif // U_HIDE_DRAFT_API
+
 #ifndef U_HIDE_INTERNAL_API
 
     /**
@@ -2548,7 +2679,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     explicit FormattedNumber(UErrorCode errorCode)
         : fData(nullptr), fErrorCode(errorCode) {}
 
-    // TODO(ICU-20775): Propose this as API.
     void toDecimalNumber(ByteSink& sink, UErrorCode& status) const;
 
     // To give LocalizedNumberFormatter format methods access to this class's constructor:
@@ -2646,4 +2776,3 @@ U_NAMESPACE_END
 #endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // __NUMBERFORMATTER_H__
-

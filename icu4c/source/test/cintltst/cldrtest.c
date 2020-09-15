@@ -1092,11 +1092,11 @@ static void VerifyTranslation(void) {
                if (U_FAILURE(errorCode)) {
                    log_err("ulocdata_getMeasurementSystem failed for locale %s with error: %s \n", currLoc, u_errorName(errorCode));
                } else {
-                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_MM")!=NULL || strstr(fullLoc, "_LR")!=NULL ) {
+                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_LR")!=NULL ) {
                        if(measurementSystem != UMS_US){
                             log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                        }
-                   } else if ( strstr(fullLoc, "_GB")!=NULL ) {
+                   } else if ( strstr(fullLoc, "_GB")!=NULL || strstr(fullLoc, "_MM")!=NULL ) {
                        if(measurementSystem != UMS_UK){
                             log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                        }

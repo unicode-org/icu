@@ -32,6 +32,7 @@ private:
     void testGetSamples();
     void testWithin();
     void testGetAllKeywordValues();
+    void testCompactDecimalPluralKeyword();
     void testOrdinal();
     void testSelect();
     void testAvailbleLocales();
@@ -43,6 +44,8 @@ private:
     void assertRuleValue(const UnicodeString& rule, double expected);
     void assertRuleKeyValue(const UnicodeString& rule, const UnicodeString& key,
                             double expected);
+    UnicodeString getPluralKeyword(const LocalPointer<PluralRules> &rules,
+                                   Locale locale, double number, const char16_t* skeleton);
     void checkSelect(const LocalPointer<PluralRules> &rules, UErrorCode &status, 
                                   int32_t line, const char *keyword, ...);
     void compareLocaleResults(const char* loc1, const char* loc2, const char* loc3);

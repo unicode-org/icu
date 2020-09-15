@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, Google, International Business Machines Corporation and
@@ -698,9 +698,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
         // Check currency formatting as well
         cdf = CompactDecimalFormat.getInstance(new ULocale("ar-EG"), CompactDecimalFormat.CompactStyle.SHORT);
         result = cdf.format(new CurrencyAmount(43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format 43000 with currency in 'ar-EG'", "US$ ٤٣ ألف", result);
+        assertEquals("CDF should correctly format 43000 with currency in 'ar-EG'", "٤٣ ألف US$", result);
         result = cdf.format(new CurrencyAmount(-43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format -43000 with currency in 'ar-EG'", "؜-US$ ٤٣ ألف", result);
+        assertEquals("CDF should correctly format -43000 with currency in 'ar-EG'", "؜-٤٣ ألف US$", result);
 
         // Extra locale with different positive/negative formats
         cdf = CompactDecimalFormat.getInstance(new ULocale("fi"), CompactDecimalFormat.CompactStyle.SHORT);

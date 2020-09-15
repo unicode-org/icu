@@ -292,7 +292,7 @@ public:
     /**
      * Default constructor initializes with internal T[stackCapacity] buffer.
      */
-    MaybeStackArray() : ptr(stackArray), capacity(stackCapacity), needToRelease(FALSE) {}
+    MaybeStackArray() : ptr(stackArray), capacity(stackCapacity), needToRelease(false) {}
     /**
      * Automatically allocates the heap array if the argument is larger than the stack capacity.
      * Intended for use when an approximate capacity is known at compile time but the true
@@ -362,7 +362,7 @@ public:
             releaseArray();
             ptr=otherArray;
             capacity=otherCapacity;
-            needToRelease=FALSE;
+            needToRelease=false;
         }
     }
     /**
@@ -387,6 +387,20 @@ public:
      *         caller becomes responsible for deleting the array
      */
     inline T *orphanOrClone(int32_t length, int32_t &resultCapacity);
+
+protected:
+    // Resizes the array to the size of src, then copies the contents of src.
+    void copyFrom(const MaybeStackArray &src, UErrorCode &status) {
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (this->resize(src.capacity, 0) == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        uprv_memcpy(this->ptr, src.ptr, (size_t)capacity * sizeof(T));
+    }
+
 private:
     T *ptr;
     int32_t capacity;
@@ -400,7 +414,7 @@ private:
     void resetToStackArray() {
         ptr=stackArray;
         capacity=stackCapacity;
-        needToRelease=FALSE;
+        needToRelease=false;
     }
     /* No comparison operators with other MaybeStackArray's. */
     bool operator==(const MaybeStackArray & /*other*/) = delete;
@@ -458,7 +472,7 @@ inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t
             releaseArray();
             ptr=p;
             capacity=newCapacity;
-            needToRelease=TRUE;
+            needToRelease=true;
         }
         return p;
     } else {
@@ -514,7 +528,7 @@ public:
     /**
      * Default constructor initializes with internal H+T[stackCapacity] buffer.
      */
-    MaybeStackHeaderAndArray() : ptr(&stackHeader), capacity(stackCapacity), needToRelease(FALSE) {}
+    MaybeStackHeaderAndArray() : ptr(&stackHeader), capacity(stackCapacity), needToRelease(false) {}
     /**
      * Destructor deletes the memory (if owned).
      */
@@ -563,7 +577,7 @@ public:
             releaseMemory();
             ptr=otherMemory;
             capacity=otherCapacity;
-            needToRelease=FALSE;
+            needToRelease=false;
         }
     }
     /**
@@ -602,8 +616,8 @@ private:
         }
     }
     /* No comparison operators with other MaybeStackHeaderAndArray's. */
-    bool operator==(const MaybeStackHeaderAndArray & /*other*/) {return FALSE;}
-    bool operator!=(const MaybeStackHeaderAndArray & /*other*/) {return TRUE;}
+    bool operator==(const MaybeStackHeaderAndArray & /*other*/) {return false;}
+    bool operator!=(const MaybeStackHeaderAndArray & /*other*/) {return true;}
     /* No ownership transfer: No copy constructor, no assignment operator. */
     MaybeStackHeaderAndArray(const MaybeStackHeaderAndArray & /*other*/) {}
     void operator=(const MaybeStackHeaderAndArray & /*other*/) {}
@@ -632,7 +646,7 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::resize(int32_t newCapac
             releaseMemory();
             ptr=p;
             capacity=newCapacity;
-            needToRelease=TRUE;
+            needToRelease=true;
         }
         return p;
     } else {
@@ -664,7 +678,7 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
     resultCapacity=length;
     ptr=&stackHeader;
     capacity=stackCapacity;
-    needToRelease=FALSE;
+    needToRelease=false;
     return p;
 }
 
@@ -825,19 +839,6 @@ public:
      */
     T* operator[](ptrdiff_t i) {
         return this->fPool[i];
-    }
-
-    /**
-     * Append copies of all the items from another MaybeStackVector to this one.
-     */
-    void appendAll(const MaybeStackVector& other, UErrorCode& status) {
-        for (int32_t i = 0; i < other.fCount; i++) {
-            T* item = emplaceBack(*other[i]);
-            if (!item) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-        }
     }
 };
 

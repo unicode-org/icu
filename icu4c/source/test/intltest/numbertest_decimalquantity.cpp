@@ -573,10 +573,6 @@ void DecimalQuantityTest::testCompactDecimalSuppressedExponent() {
         double actualIOperand = dq.getPluralOperand(PLURAL_OPERAND_I);
         double actualEOperand = dq.getPluralOperand(PLURAL_OPERAND_E);
 
-        assertEquals(
-                u"formatted number " + cas.skeleton + u" toString: " + cas.input,
-                cas.expectedString,
-                actualString);
         assertDoubleEquals(
                 u"compact decimal " + cas.skeleton + u" n operand: " + cas.input,
                 expectedNOperand,

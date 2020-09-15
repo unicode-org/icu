@@ -148,7 +148,7 @@ private:
     virtual int32_t skipElementsBySomeUnits(int32_t i, int32_t unitIndex, int32_t count) const;
     virtual int32_t indexOfElementWithNextUnit(int32_t i, int32_t unitIndex, char16_t unit) const;
 
-    virtual UBool matchNodesCanHaveValues() const { return TRUE; }
+    virtual UBool matchNodesCanHaveValues() const { return true; }
 
     virtual int32_t getMaxBranchLinearSubNodeLength() const { return UCharsTrie::kMaxBranchLinearSubNodeLength; }
     virtual int32_t getMinLinearMatch() const { return UCharsTrie::kMinLinearMatch; }

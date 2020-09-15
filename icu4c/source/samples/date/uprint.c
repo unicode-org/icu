@@ -1,7 +1,7 @@
 /*
 ***********************************************************************
 * © 2016 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 ***********************************************************************
 **********************************************************************
 * Copyright (C) 1998-2001, International Business Machines Corporation
@@ -19,6 +19,7 @@
 
 #include "uprint.h"
 
+#include <stdbool.h>
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 
@@ -62,7 +63,7 @@ uprint(const UChar *s,
 	/* perform the conversion */
 	ucnv_fromUnicode(converter, &myTarget,	myTarget + arraySize,
 			 &mySource, mySourceEnd, NULL,
-			 TRUE, status);
+			 true, status);
 
 	/* Write the converted data to the FILE* */
 	fwrite(buf, sizeof(char), myTarget - buf, f);

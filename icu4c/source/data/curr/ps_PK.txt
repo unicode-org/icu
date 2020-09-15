@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ps_PK{
     Currencies{
         PKR{
@@ -21,5 +22,5 @@ ps_PK{
             other{"(نامعلومه مروجه پېسے)"}
         }
     }
-    Version{"37"}
+    Version{"38"}
 }

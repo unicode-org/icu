@@ -1,14 +1,15 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 se{
-    Version{"37"}
+    Version{"38"}
     collations{
         search{
             Sequence{
                 "[import und-u-co-search]"
                 "[import se-u-co-standard]"
             }
-            Version{"37"}
+            Version{"38"}
         }
         standard{
             Sequence{
@@ -53,7 +54,7 @@ se{
                 "<<<Ô<<ǫ"
                 "<<<Ǫ"
             }
-            Version{"37"}
+            Version{"38"}
         }
     }
 }

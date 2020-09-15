@@ -14,11 +14,15 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/localpointer.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
 #include "unicode/udisplaycontext.h"
 #include "unicode/ufieldpositer.h"
+
+#if U_SHOW_CPLUSPLUS_API
+#include "unicode/localpointer.h"
+#endif   // U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C API: DateFormat
@@ -1231,7 +1235,7 @@ udat_parseCalendar(const    UDateFormat*    format,
 * With lenient parsing, the parser may use heuristics to interpret inputs that do not
 * precisely match the pattern. With strict parsing, inputs must match the pattern.
 * @param fmt The formatter to query
-* @return TRUE if fmt is set to perform lenient parsing, FALSE otherwise.
+* @return true if fmt is set to perform lenient parsing, false otherwise.
 * @see udat_setLenient
 * @stable ICU 2.0
 */
@@ -1243,7 +1247,7 @@ udat_isLenient(const UDateFormat* fmt);
 * With lenient parsing, the parser may use heuristics to interpret inputs that do not
 * precisely match the pattern. With strict parsing, inputs must match the pattern.
 * @param fmt The formatter to set
-* @param isLenient TRUE if fmt should perform lenient parsing, FALSE otherwise.
+* @param isLenient true if fmt should perform lenient parsing, false otherwise.
 * @see dat_isLenient
 * @stable ICU 2.0
 */
@@ -1403,7 +1407,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 * Extract the pattern from a UDateFormat.
 * The pattern will follow the pattern syntax rules.
 * @param fmt The formatter to query.
-* @param localized TRUE if the pattern should be localized, FALSE otherwise.
+* @param localized true if the pattern should be localized, false otherwise.
 * @param result A pointer to a buffer to receive the pattern.
 * @param resultLength The maximum size of result.
 * @param status A pointer to an UErrorCode to receive any errors
@@ -1422,7 +1426,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 * Set the pattern used by an UDateFormat.
 * The pattern should follow the pattern syntax rules.
 * @param format The formatter to set.
-* @param localized TRUE if the pattern is localized, FALSE otherwise.
+* @param localized true if the pattern is localized, false otherwise.
 * @param pattern The new pattern
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see udat_toPattern
@@ -1650,7 +1654,7 @@ udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* st
 * @see udat_applyPatternRelative
 * @internal ICU 4.2 technology preview
 */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 udat_toPatternRelativeDate(const UDateFormat *fmt,
                            UChar             *result,
                            int32_t           resultLength,
@@ -1667,7 +1671,7 @@ udat_toPatternRelativeDate(const UDateFormat *fmt,
 * @see udat_applyPatternRelative
 * @internal ICU 4.2 technology preview
 */
-U_INTERNAL int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 udat_toPatternRelativeTime(const UDateFormat *fmt,
                            UChar             *result,
                            int32_t           resultLength,
@@ -1685,7 +1689,7 @@ udat_toPatternRelativeTime(const UDateFormat *fmt,
 * @see udat_toPatternRelativeDate, udat_toPatternRelativeTime
 * @internal ICU 4.2 technology preview
 */
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 udat_applyPatternRelative(UDateFormat *format,
                           const UChar *datePattern,
                           int32_t     datePatternLength,
@@ -1710,14 +1714,14 @@ typedef UDateFormat* (U_EXPORT2 *UDateFormatOpener) (UDateFormatStyle  timeStyle
  * Register a provider factory
  * @internal ICU 49
  */
-U_INTERNAL void U_EXPORT2
+U_CAPI void U_EXPORT2
 udat_registerOpener(UDateFormatOpener opener, UErrorCode *status);
 
 /**
  * Un-Register a provider factory
  * @internal ICU 49
  */
-U_INTERNAL UDateFormatOpener U_EXPORT2
+U_CAPI UDateFormatOpener U_EXPORT2
 udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status);
 #endif  /* U_HIDE_INTERNAL_API */
 

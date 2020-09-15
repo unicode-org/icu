@@ -39,7 +39,7 @@ jobs:
   steps:
     - checkout: self
       lfs: true
-      fetchDepth: 1
+      fetchDepth: 10
     - script: |
         set -ex
         sudo apt -y update

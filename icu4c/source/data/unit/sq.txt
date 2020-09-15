@@ -1,7 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sq{
-    Version{"37"}
+    Version{"38"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -408,6 +409,11 @@ sq{
             }
         }
         graphics{
+            dot{
+                dnam{"pika"}
+                one{"{0} pikë"}
+                other{"{0} pika"}
+            }
             dot-per-centimeter{
                 dnam{"pika për centimetër"}
                 one{"{0} pikë për centimetër"}
@@ -460,6 +466,11 @@ sq{
                 dnam{"decimetra"}
                 one{"{0} decimetër"}
                 other{"{0} decimetra"}
+            }
+            earth-radius{
+                dnam{"rreze toke"}
+                one{"{0} rreze toke"}
+                other{"{0} rreze toke"}
             }
             foot{
                 dnam{"këmbë"}
@@ -547,6 +558,16 @@ sq{
             }
         }
         light{
+            candela{
+                dnam{"kandela"}
+                one{"{0} kandelë"}
+                other{"{0} kandela"}
+            }
+            lumen{
+                dnam{"lumen"}
+                one{"{0} lumen"}
+                other{"{0} lumenë"}
+            }
             lux{
                 dnam{"luks"}
                 one{"{0} luks"}
@@ -831,6 +852,11 @@ sq{
                 dnam{"decilitra"}
                 one{"{0} decilitër"}
                 other{"{0} decilitra"}
+            }
+            dram{
+                dnam{"drahma të lëngshme"}
+                one{"{0} drahmë i lëngshëm"}
+                other{"{0} drahma të lëngshme"}
             }
             fluid-ounce{
                 dnam{"onsë të lëngshëm"}
@@ -1566,6 +1592,9 @@ sq{
                 one{"{0} dm"}
                 other{"{0} dm"}
             }
+            fathom{
+                dnam{"fth"}
+            }
             foot{
                 dnam{"këmbë"}
                 one{"{0} ft"}
@@ -1753,7 +1782,6 @@ sq{
                 other{"{0} hPa"}
             }
             inch-ofhg{
-                dnam{"inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
             }

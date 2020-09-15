@@ -31,6 +31,7 @@
 #include "number_decimalquantity.h"
 
 using icu::number::impl::DecimalQuantity;
+using namespace icu::number;
 
 void setupResult(const int32_t testSource[], char result[], int32_t* max);
 UBool checkEqual(const PluralRules &test, char *result, int32_t max);
@@ -49,6 +50,7 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testGetSamples);
     TESTCASE_AUTO(testWithin);
     TESTCASE_AUTO(testGetAllKeywordValues);
+    TESTCASE_AUTO(testCompactDecimalPluralKeyword);
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
     TESTCASE_AUTO(testAvailbleLocales);
@@ -593,6 +595,88 @@ PluralRulesTest::testGetAllKeywordValues() {
     #endif
     delete p;
     }
+}
+
+void
+PluralRulesTest::testCompactDecimalPluralKeyword() {
+    IcuTestErrorCode errorCode(*this, "testCompactDecimalPluralKeyword");
+
+    LocalPointer<PluralRules> rules(PluralRules::createRules(
+        u"one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  "
+        u"many: e = 0 and i % 1000000 = 0 and v = 0 or e != 0 .. 5;  "
+        u"other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000,  "
+        u"  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …", errorCode));
+
+    if (U_FAILURE(errorCode)) {
+        errln("Couldn't instantiate plurals rules from string, with error = %s", u_errorName(errorCode));
+        return;
+    }
+
+    const char* localeName = "fr-FR";
+    Locale locale = Locale::createFromName(localeName);
+
+    struct TestCase {
+        const char16_t* skeleton;
+        const int input;
+        const char16_t* expectedFormattedOutput;
+        const char16_t* expectedPluralRuleKeyword;
+    } cases[] = {
+        // unlocalized formatter skeleton, input, string output, plural rule keyword
+        {u"",             0, u"0", u"one"},
+        {u"compact-long", 0, u"0", u"one"},
+
+        {u"",             1, u"1", u"one"},
+        {u"compact-long", 1, u"1", u"one"},
+
+        {u"",             2, u"2", u"other"},
+        {u"compact-long", 2, u"2", u"other"},
+
+        {u"",             1000000, u"1 000 000", u"many"},
+        {u"compact-long", 1000000, u"1 million", u"many"},
+
+        {u"",             1000001, u"1 000 001", u"other"},
+        {u"compact-long", 1000001, u"1 million", u"many"},
+
+        {u"",             120000,  u"1 200 000",    u"other"},
+        {u"compact-long", 1200000, u"1,2 millions", u"many"},
+
+        {u"",             1200001, u"1 200 001",    u"other"},
+        {u"compact-long", 1200001, u"1,2 millions", u"many"},
+
+        {u"",             2000000, u"2 000 000",  u"many"},
+        {u"compact-long", 2000000, u"2 millions", u"many"},
+    };
+    for (const auto& cas : cases) {
+        const char16_t* skeleton = cas.skeleton;
+        const int input = cas.input;
+        const char16_t* expectedPluralRuleKeyword = cas.expectedPluralRuleKeyword;
+
+        UnicodeString actualPluralRuleKeyword =
+            getPluralKeyword(rules, locale, input, skeleton);
+
+        UnicodeString message(UnicodeString(localeName) + u" " + DoubleToUnicodeString(input));
+        assertEquals(message, expectedPluralRuleKeyword, actualPluralRuleKeyword);
+    }
+}
+
+UnicodeString PluralRulesTest::getPluralKeyword(const LocalPointer<PluralRules> &rules, Locale locale, double number, const char16_t* skeleton) {
+    IcuTestErrorCode errorCode(*this, "getPluralKeyword");
+    UnlocalizedNumberFormatter ulnf = NumberFormatter::forSkeleton(skeleton, errorCode);
+    if (errorCode.errIfFailureAndReset("PluralRules::getPluralKeyword(<PluralRules>, <locale>, %d, %s) failed", number, skeleton)) {
+        return nullptr;
+    }
+    LocalizedNumberFormatter formatter = ulnf.locale(locale);
+    
+    const FormattedNumber fn = formatter.formatDouble(number, errorCode);
+    if (errorCode.errIfFailureAndReset("NumberFormatter::formatDouble(%d) failed", number)) {
+        return nullptr;
+    }
+
+    UnicodeString pluralKeyword = rules->select(fn, errorCode);
+    if (errorCode.errIfFailureAndReset("PluralRules->select(FormattedNumber of %d) failed", number)) {
+        return nullptr;
+    }
+    return pluralKeyword;
 }
 
 void PluralRulesTest::testOrdinal() {

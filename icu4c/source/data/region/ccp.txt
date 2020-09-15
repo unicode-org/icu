@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ccp{
     Countries{
         001{"𑄛𑄨𑄖𑄴𑄗𑄨𑄟𑄨"}
@@ -320,5 +321,5 @@ ccp{
         }
         TL{"𑄛𑄪𑄉𑄮 𑄖𑄨𑄟𑄪𑄢𑄴"}
     }
-    Version{"37"}
+    Version{"38"}
 }

@@ -72,7 +72,7 @@ class CompactUnicodeString {
     }
 
     inline UnicodeString toAliasedUnicodeString() const {
-        return UnicodeString(TRUE, fBuffer.getAlias(), -1);
+        return UnicodeString(true, fBuffer.getAlias(), -1);
     }
 
     bool operator==(const CompactUnicodeString& other) const {

@@ -1,17 +1,14 @@
-/*
- *******************************************************************************
- * Copyright (C) 2004-2020, Google Inc, International Business Machines
- * Corporation and others. All Rights Reserved.
- *******************************************************************************
- */
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
 
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.impl.Assert;
-import com.ibm.icu.impl.Pair;
+
 import com.ibm.icu.util.Measure;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +23,11 @@ import java.util.List;
  * instances of the `UnitConverter` to perform the conversion.
  */
 public class ComplexUnitsConverter {
+    public static final BigDecimal EPSILON = BigDecimal.valueOf(Math.ulp(1.0));
+    public static final BigDecimal EPSILON_MULTIPLIER = BigDecimal.valueOf(1).add(EPSILON);
+    private ArrayList<UnitConverter> unitConverters_;
+    private ArrayList<MeasureUnitImpl> units_;
+
     /**
      * Constructor of `ComplexUnitsConverter`.
      * NOTE:
@@ -38,11 +40,12 @@ public class ComplexUnitsConverter {
     public ComplexUnitsConverter(MeasureUnitImpl inputUnit, MeasureUnitImpl outputUnits,
                                  ConversionRates conversionRates) {
         units_ = outputUnits.extractIndividualUnits();
-        Assert.assrt(!units_.isEmpty());
+        assert (!units_.isEmpty());
 
         // Sort the units in a descending order.
-        MeasureUnitImpl.MeasureUnitImplComparator.setConversionRates(conversionRates);
-        Collections.sort(this.units_, Collections.reverseOrder(new MeasureUnitImpl.MeasureUnitImplComparator()));
+        Collections.sort(
+                this.units_,
+                Collections.reverseOrder(new MeasureUnitImpl.MeasureUnitImplComparator(conversionRates)));
 
 
         // If the `outputUnits` is `UMEASURE_UNIT_MIXED` such as `foot+inch`. Thus means there is more than one unit
@@ -78,10 +81,10 @@ public class ComplexUnitsConverter {
      * `foot` with the `limit`.
      */
     public boolean greaterThanOrEqual(BigDecimal quantity, BigDecimal limit) {
-        Assert.assrt(!units_.isEmpty());
+        assert !units_.isEmpty();
 
         // NOTE: First converter converts to the biggest quantity.
-        return unitConverters_.get(0).convert(quantity).compareTo(limit) >= 0;
+        return unitConverters_.get(0).convert(quantity).multiply(EPSILON_MULTIPLIER).compareTo(limit) >= 0;
     }
 
     /**
@@ -93,19 +96,28 @@ public class ComplexUnitsConverter {
      * other elements are floored to the nearest integer
      */
     public List<Measure> convert(BigDecimal quantity) {
-        ArrayList<Measure> result = new ArrayList<>();
+        List<Measure> result = new ArrayList<>();
 
         for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
             quantity = (unitConverters_.get(i)).convert(quantity);
 
             if (i < n - 1) {
-                Number newQuantity = Math.floor(quantity.doubleValue());
+                // The double type has 15 decimal digits of precision. For choosing
+                // whether to use the current unit or the next smaller unit, we
+                // therefore nudge up the number with which the thresholding
+                // decision is made. However after the thresholding, we use the
+                // original values to ensure unbiased accuracy (to the extent of
+                // double's capabilities).
+                BigDecimal newQuantity = quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR);
 
                 result.add(new Measure(newQuantity, units_.get(i).build()));
 
                 // Keep the residual of the quantity.
                 //   For example: `3.6 feet`, keep only `0.6 feet`
-                quantity = quantity.subtract(BigDecimal.valueOf(newQuantity.longValue()));
+                quantity = quantity.subtract(newQuantity);
+                if (quantity.compareTo(BigDecimal.ZERO) == -1) {
+                    quantity = BigDecimal.ZERO;
+                }
             } else { // LAST ELEMENT
                 result.add(new Measure(quantity, units_.get(i).build()));
             }
@@ -113,8 +125,4 @@ public class ComplexUnitsConverter {
 
         return result;
     }
-
-    private ArrayList<UnitConverter> unitConverters_;
-    private ArrayList<MeasureUnitImpl> units_;
 }
-

@@ -1,7 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 units:table(nofallback){
-    cldrVersion{"37"}
+    cldrVersion{"38"}
     convertUnits{
         100-kilometer{
             factor{"100000"}
@@ -104,9 +105,25 @@ units:table(nofallback){
             factor{"1/360"}
             target{"revolution"}
         }
+        dessert-spoon{
+            factor{"gal_to_m3/16*128"}
+            target{"cubic-meter"}
+        }
+        dessert-spoon-imperial{
+            factor{"gal_imp_to_m3/16*128"}
+            target{"cubic-meter"}
+        }
         dot{
             factor{"1"}
             target{"pixel"}
+        }
+        dram{
+            factor{"gal_to_m3/128*8"}
+            target{"cubic-meter"}
+        }
+        drop{
+            factor{"gal_to_m3/128*576"}
+            target{"cubic-meter"}
         }
         dunam{
             factor{"1000"}
@@ -169,6 +186,10 @@ units:table(nofallback){
             factor{"gal_imp_to_m3"}
             target{"cubic-meter"}
         }
+        grain{
+            factor{"lb_to_kg/7000"}
+            target{"kilogram"}
+        }
         gram{
             factor{"0.001"}
             target{"kilogram"}
@@ -196,6 +217,10 @@ units:table(nofallback){
         item{
             factor{"1"}
             target{"item"}
+        }
+        jigger{
+            factor{"gal_to_m3*3/128*2"}
+            target{"cubic-meter"}
         }
         joule{
             factor{"1"}
@@ -225,9 +250,13 @@ units:table(nofallback){
             factor{"0.001"}
             target{"cubic-meter"}
         }
-        lux{
+        lumen{
             factor{"1"}
             target{"candela-square-meter-per-square-meter"}
+        }
+        lux{
+            factor{"1"}
+            target{"candela-per-square-meter"}
         }
         meter{
             factor{"1"}
@@ -309,6 +338,10 @@ units:table(nofallback){
             factor{"1/10000"}
             target{"portion"}
         }
+        pinch{
+            factor{"gal_to_m3/128*128"}
+            target{"cubic-meter"}
+        }
         pint{
             factor{"gal_to_m3/8"}
             target{"cubic-meter"}
@@ -339,6 +372,10 @@ units:table(nofallback){
         }
         quart{
             factor{"gal_to_m3/4"}
+            target{"cubic-meter"}
+        }
+        quart-imperial{
+            factor{"gal_imp_to_m3/4"}
             target{"cubic-meter"}
         }
         radian{
@@ -1041,6 +1078,13 @@ units:table(nofallback){
                     }
                     {
                         unit{"inch"}
+                    }
+                }
+            }
+            "focal-length"{
+                001{
+                    {
+                        unit{"millimeter"}
                     }
                 }
             }
@@ -1859,7 +1903,7 @@ units:table(nofallback){
         ampere-per-square-meter{"current-density"}
         bit{"digital"}
         candela{"luminous-intensity"}
-        candela-per-square-meter{"luminance"}
+        candela-per-square-meter{"illuminance"}
         candela-square-meter-per-square-meter{"luminous-flux"}
         cubic-meter{"volume"}
         cubic-meter-per-kilogram{"specific-volume"}

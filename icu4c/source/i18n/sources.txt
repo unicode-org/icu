@@ -121,6 +121,8 @@ number_patternstring.cpp
 number_rounding.cpp
 number_scientific.cpp
 number_skeletons.cpp
+number_symbolswrapper.cpp
+number_usageprefs.cpp
 number_utils.cpp
 numfmt.cpp
 numparse_affixes.cpp
@@ -208,6 +210,10 @@ ulocdata.cpp
 umsg.cpp
 unesctrn.cpp
 uni2name.cpp
+units_data.cpp
+units_complexconverter.cpp
+units_converter.cpp
+units_router.cpp
 unum.cpp
 unumsys.cpp
 upluralrules.cpp

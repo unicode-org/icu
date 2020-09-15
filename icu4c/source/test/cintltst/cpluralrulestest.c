@@ -180,7 +180,7 @@ typedef struct {
 static const KeywordsForLang getKeywordsItems[] = {
     { "zh", { "other" } },
     { "en", { "one", "other" } },
-    { "fr", { "one", "other" } },
+    { "fr", { "one", "many", "other" } },
     { "lv", { "zero", "one", "other" } },
     { "hr", { "one", "few", "other" } },
     { "sl", { "one", "two", "few", "other" } },

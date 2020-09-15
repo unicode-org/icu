@@ -889,15 +889,20 @@ int main(int argc, char* argv[])
     nerrors = runTestRequest(root, argc, argv);
 
 #if 1
+    static const char* filenamesToRemove[] = { STANDARD_TEST_FILE, MEDIUMNAME_TEST_FILE, LONGNAME_TEST_FILE, nullptr };
+    const char** filenamesToRemovePtr = filenamesToRemove;
+    const char* filenameToRemove;
+    while ((filenameToRemove = *filenamesToRemovePtr++) != nullptr)
     {
-        FILE* fileToRemove = fopen(STANDARD_TEST_FILE, "r");
+
+        FILE* fileToRemove = fopen(filenameToRemove, "r");
         /* This should delete any temporary files. */
         if (fileToRemove) {
             fclose(fileToRemove);
-            log_verbose("Deleting: %s\n", STANDARD_TEST_FILE);
-            if (remove(STANDARD_TEST_FILE) != 0) {
+            log_verbose("Deleting: %s\n", filenameToRemove);
+            if (remove(filenameToRemove) != 0) {
                 /* Maybe someone didn't close the file correctly. */
-                fprintf(stderr, "FAIL: Could not delete %s\n", STANDARD_TEST_FILE);
+                fprintf(stderr, "FAIL: Could not delete %s\n", filenameToRemove);
                 nerrors += 1;
             }
         }

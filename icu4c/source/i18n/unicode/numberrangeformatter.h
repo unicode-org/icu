@@ -354,13 +354,13 @@ class U_I18N_API NumberRangeFormatterSettings {
     /**
      * Sets the UErrorCode if an error occurred in the fluent chain.
      * Preserves older error codes in the outErrorCode.
-     * @return TRUE if U_FAILURE(outErrorCode)
+     * @return true if U_FAILURE(outErrorCode)
      * @stable ICU 63
      */
     UBool copyErrorTo(UErrorCode &outErrorCode) const {
         if (U_FAILURE(outErrorCode)) {
             // Do not overwrite the older error code
-            return TRUE;
+            return true;
         }
         fMacros.copyErrorTo(outErrorCode);
         return U_FAILURE(outErrorCode);
@@ -605,18 +605,22 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
-#ifndef U_HIDE_DRAFT_API
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Export the first formatted number as a decimal number. This endpoint
      * is useful for obtaining the exact number being printed after scaling
      * and rounding have been applied by the number range formatting pipeline.
-     * 
+     *
      * The syntax of the unformatted number is a "numeric string"
      * as defined in the Decimal Arithmetic Specification, available at
      * http://speleotrove.com/decimal
      *
+     * TODO(ICU-21275): This function will be removed in ICU 69.
+     * Use getDecimalNumbers() instead.
+     *
+     * @param status Set if an error occurs.
      * @return A decimal representation of the first formatted number.
-     * @draft ICU 63
+     * @deprecated ICU 68 Use getDecimalNumbers instead.
      * @see NumberRangeFormatter
      * @see #getSecondDecimal
      */
@@ -626,17 +630,46 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      * Export the second formatted number as a decimal number. This endpoint
      * is useful for obtaining the exact number being printed after scaling
      * and rounding have been applied by the number range formatting pipeline.
-     * 
+     *
      * The syntax of the unformatted number is a "numeric string"
      * as defined in the Decimal Arithmetic Specification, available at
      * http://speleotrove.com/decimal
      *
+     * TODO(ICU-21275): This function will be removed in ICU 69.
+     * Use getDecimalNumbers() instead.
+     *
+     * @param status Set if an error occurs.
      * @return A decimal representation of the second formatted number.
-     * @draft ICU 63
+     * @deprecated ICU 68 Use getDecimalNumbers instead.
      * @see NumberRangeFormatter
      * @see #getFirstDecimal
      */
     UnicodeString getSecondDecimal(UErrorCode& status) const;
+#endif // U_HIDE_DEPRECATED_API
+
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Extracts the formatted range as a pair of decimal numbers. This endpoint
+     * is useful for obtaining the exact number being printed after scaling
+     * and rounding have been applied by the number range formatting pipeline.
+     * 
+     * The syntax of the unformatted numbers is a "numeric string"
+     * as defined in the Decimal Arithmetic Specification, available at
+     * http://speleotrove.com/decimal
+     *
+     * Example C++17 call site:
+     *
+     *     auto [ first, second ] = range.getDecimalNumbers<std::string>(status);
+     *
+     * @tparam StringClass A string class compatible with StringByteSink;
+     *         for example, std::string.
+     * @param status Set if an error occurs.
+     * @return A pair of StringClasses containing the numeric strings.
+     * @draft ICU 68
+     */
+    template<typename StringClass>
+    inline std::pair<StringClass, StringClass> getDecimalNumbers(UErrorCode& status) const;
 #endif // U_HIDE_DRAFT_API
 
     /**
@@ -698,12 +731,27 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
 
     void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
+    void getDecimalNumbers(ByteSink& sink1, ByteSink& sink2, UErrorCode& status) const;
+
     // To give LocalizedNumberRangeFormatter format methods access to this class's constructor:
     friend class LocalizedNumberRangeFormatter;
 
     // To give C API access to internals
     friend struct impl::UFormattedNumberRangeImpl;
 };
+
+#ifndef U_HIDE_DRAFT_API
+// Note: This is draft ICU 68
+template<typename StringClass>
+std::pair<StringClass, StringClass> FormattedNumberRange::getDecimalNumbers(UErrorCode& status) const {
+    StringClass str1;
+    StringClass str2;
+    StringByteSink<StringClass> sink1(&str1);
+    StringByteSink<StringClass> sink2(&str2);
+    getDecimalNumbers(sink1, sink2, status);
+    return std::make_pair(str1, str2);
+}
+#endif // U_HIDE_DRAFT_API
 
 /**
  * See the main description in numberrangeformatter.h for documentation and examples.

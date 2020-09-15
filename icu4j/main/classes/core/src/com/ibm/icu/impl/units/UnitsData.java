@@ -1,26 +1,23 @@
-/*
- *******************************************************************************
- * Copyright (C) 2004-2020, Google Inc, International Business Machines
- * Corporation and others. All Rights Reserved.
- *******************************************************************************
- */
+// © 2020 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
 
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.UResourceBundle;
 
 import java.util.ArrayList;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 /**
  * Responsible for all units data operations (retriever, analysis, extraction certain data ... etc.).
  */
 public class UnitsData {
-    private static String[] simpleUnits = null;
+    private volatile static String[] simpleUnits = null;
     private ConversionRates conversionRates;
     private UnitPreferences unitPreferences;
     /**
@@ -42,7 +39,7 @@ public class UnitsData {
         // Read simple units
         ICUResourceBundle resource;
         resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
-        SimpleUnitsSink sink = new SimpleUnitsSink();
+        SimpleUnitIdentifiersSink sink = new SimpleUnitIdentifiersSink();
         resource.getAllItemsWithFallback("convertUnits", sink);
         simpleUnits = sink.simpleUnits;
 
@@ -58,15 +55,13 @@ public class UnitsData {
     }
 
     /**
-     * TODO: add comment
-     *
      * @param measureUnit
-     * @return
+     * @return the corresponding category.
      */
     public String getCategory(MeasureUnitImpl measureUnit) {
         MeasureUnitImpl baseMeasureUnit
-                = this.getConversionRates().getBasicMeasureUnitImplWithoutSIPrefix(measureUnit);
-        String baseUnitIdentifier = baseMeasureUnit.getIdentifier();
+                = this.getConversionRates().extractCompoundBaseUnit(measureUnit);
+        String baseUnitIdentifier = MeasureUnit.fromMeasureUnitImpl(baseMeasureUnit).getIdentifier();
 
         if (baseUnitIdentifier.equals("meter-per-cubic-meter")) {
             // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
@@ -83,17 +78,26 @@ public class UnitsData {
         return this.unitPreferences.getPreferencesFor(category, usage, region);
     }
 
-    public static class SimpleUnitsSink extends UResource.Sink {
+    public static class SimpleUnitIdentifiersSink extends UResource.Sink {
         String[] simpleUnits = null;
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-            Assert.assrt(key.toString().equals(Constants.CONVERSION_UNIT_TABLE_NAME));
-            Assert.assrt(value.getType() == UResourceBundle.TABLE);
+            assert key.toString().equals(Constants.CONVERSION_UNIT_TABLE_NAME);
+            assert value.getType() == UResourceBundle.TABLE;
 
             UResource.Table simpleUnitsTable = value.getTable();
             ArrayList<String> simpleUnits = new ArrayList<>();
             for (int i = 0; simpleUnitsTable.getKeyAndValue(i, key, value); i++) {
+                if (key.toString().equals("kilogram")) {
+
+                    // For parsing, we use "gram", the prefixless metric mass unit. We
+                    // thus ignore the SI Base Unit of Mass: it exists due to being the
+                    // mass conversion target unit, but not needed for MeasureUnit
+                    // parsing.
+                    continue;
+                }
+
                 simpleUnits.add(key.toString());
             }
 
@@ -138,7 +142,7 @@ public class UnitsData {
          * Contains the map between units in their base units into their category.
          * For example:  meter-per-second --> "speed"
          */
-        TreeMap<String, String> mapFromUnitToCategory;
+        HashMap<String, String> mapFromUnitToCategory;
 
 
         public Categories() {
@@ -156,25 +160,25 @@ public class UnitsData {
          * Contains the map between units in their base units into their category.
          * For example:  meter-per-second --> "speed"
          */
-        TreeMap<String, String> mapFromUnitToCategory;
+        HashMap<String, String> mapFromUnitToCategory;
 
         public CategoriesSink() {
-            mapFromUnitToCategory = new TreeMap<>();
+            mapFromUnitToCategory = new HashMap<>();
         }
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-            Assert.assrt(key.toString() == Constants.CATEGORY_TABLE_NAME);
-            Assert.assrt(value.getType() == UResourceBundle.TABLE);
+            assert (key.toString() == Constants.CATEGORY_TABLE_NAME);
+            assert (value.getType() == UResourceBundle.TABLE);
 
             UResource.Table categoryTable = value.getTable();
             for (int i = 0; categoryTable.getKeyAndValue(i, key, value); i++) {
-                Assert.assrt(value.getType() == UResourceBundle.STRING);
+                assert (value.getType() == UResourceBundle.STRING);
                 mapFromUnitToCategory.put(key.toString(), value.toString());
             }
         }
 
-        public TreeMap<String, String> getMapFromUnitToCategory() {
+        public HashMap<String, String> getMapFromUnitToCategory() {
             return mapFromUnitToCategory;
         }
     }

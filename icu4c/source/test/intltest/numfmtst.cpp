@@ -931,8 +931,8 @@ NumberFormatTest::TestCurrency(void)
 
     UnicodeString s; currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre ici a..........." + s);
-    if (!(s==CharsToUnicodeString("1,50\\u00A0$")))
-        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$ but got " + s);
+    if (!(s==CharsToUnicodeString("1,50\\u00A0$\\u00A0CA")))
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$<nbsp>CA but got " + s);
     delete currencyFmt;
     s.truncate(0);
     char loc[256]={0};
@@ -10013,7 +10013,13 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
         ParsePosition ppos;
 
         DecimalFormatSymbols dfs(Locale::getEnglish(), status);
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
         DecimalFormat df(patternString, dfs, status);
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
         df.setLenient(FALSE);
         LocalPointer<CurrencyAmount> ca_strict(df.parseCurrency(inputString, ppos));
         if (ca_strict != nullptr) {

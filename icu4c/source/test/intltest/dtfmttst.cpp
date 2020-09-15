@@ -2858,13 +2858,13 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+5:30", "+5:30" },
-        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "Indische Zeit", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "Indische Normalzeit", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+5:30", "+05:30" },
-        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "Indische Zeit", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "Indische Normalzeit", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "Indien Zeit", "Asia/Calcutta" },
-        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "Indische Zeit", "Asia/Calcutta" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "Indische Normalzeit", "Asia/Calcutta" },
 
         // ==========
 
@@ -3360,7 +3360,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
-        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "GMT+01:00", "+1:00" },
+        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "British Summer Time", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u12A5\\u1295\\u130D\\u120A\\u12DD", "Europe/London" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u12A5\\u1295\\u130D\\u120A\\u12DD", "Europe/London" },
 
@@ -3478,6 +3478,7 @@ void DateFormatTest::TestTimeZoneInLocale()
         UnicodeString actual;
 
         SimpleDateFormat smptfmt("Z", locale, status);
+        ASSERT_OK(status);
         assertEquals("TimeZone from SimpleDateFormat constructor",
                      expectedTimezone, smptfmt.getTimeZone().getID(actual));
         assertEquals("Calendar from SimpleDateFormat constructor",
@@ -3485,13 +3486,20 @@ void DateFormatTest::TestTimeZoneInLocale()
 
         LocalPointer<DateFormat> datefmt(
                 DateFormat::createDateInstance(DateFormat::kDefault, locale));
+        if (datefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createDateInstance()");
+            return;
+        }
         assertEquals("TimeZone from DateFormat::createDateInstance",
                      expectedTimezone, datefmt->getTimeZone().getID(actual));
         assertEquals("Calendar from DateFormat::createDateInstance",
                      testLine[2], datefmt->getCalendar()->getType());
-
         LocalPointer<DateFormat> timefmt(
                 DateFormat::createTimeInstance(DateFormat::kDefault, locale));
+        if (timefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createTimeInstance()");
+            return;
+        }
         assertEquals("TimeZone from TimeFormat::createTimeInstance",
                      expectedTimezone, timefmt->getTimeZone().getID(actual));
         assertEquals("Calendar from DateFormat::createTimeInstance",
@@ -3500,6 +3508,10 @@ void DateFormatTest::TestTimeZoneInLocale()
         LocalPointer<DateFormat> datetimefmt(
                 DateFormat::createDateTimeInstance(
                     DateFormat::kDefault, DateFormat::kDefault, locale));
+        if (datetimefmt == nullptr) {
+            dataerrln("Error calling DateFormat::createDateTimeInstance()");
+            return;
+        }
         assertEquals("TimeZone from DateTimeFormat::createDateTimeInstance",
                      expectedTimezone, datetimefmt->getTimeZone().getID(actual));
         assertEquals("Calendar from DateFormat::createDateTimeInstance",

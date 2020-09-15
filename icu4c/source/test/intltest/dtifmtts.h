@@ -34,12 +34,23 @@ public:
      */
     void testFormat();
 
+    
+    /**
+     * Test handling of hour and day period metacharacters
+     */
+    void testHourMetacharacters();
+
     void testFormatMillisecond();
 
     /**
      * Test formatting using user defined DateIntervalInfo
      */
     void testFormatUserDII();
+
+    /*
+     * Test format using UDisplayContext
+     */
+    void testContext();
 
     /**
      * Test for no unwanted side effects when setting
