@@ -2015,10 +2015,10 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * {@icu} Constant for {@link #setMinimumGroupingDigits()} to specify display
+   * {@icu} Constant for {@link #setMinimumGroupingDigits(int)} to specify display
    * grouping using the default strategy for all locales.
    *
-   * @see #setMinimumGroupingDigits
+   * @see #setMinimumGroupingDigits(int)
    * @see #MINIMUM_GROUPING_DIGITS_MIN2
    * @category Separators
    * @provisional This API might change or be removed in a future release.
@@ -2027,11 +2027,11 @@ public class DecimalFormat extends NumberFormat {
   public static final int MINIMUM_GROUPING_DIGITS_AUTO = -2;
 
   /**
-   * {@icu} Constant for {@link #setMinimumGroupingDigits()} to specify display
+   * {@icu} Constant for {@link #setMinimumGroupingDigits(int)} to specify display
    * grouping using locale defaults, except do not show grouping on values smaller than
    * 10000 (such that there is a minimum of two digits before the first separator).
    *
-   * @see #setMinimumGroupingDigits
+   * @see #setMinimumGroupingDigits(int)
    * @see #MINIMUM_GROUPING_DIGITS_AUTO
    * @category Separators
    * @provisional This API might change or be removed in a future release.

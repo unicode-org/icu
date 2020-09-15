@@ -1,0 +1,40 @@
+name: Publish icu4j.jar/utilities.jar to GH Maven
+on:
+  release:
+    types: [created]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: icu4j ant releaseCLDR
+        run: ant -noinput releaseCLDR -f icu4j/build.xml
+      - name: deploy it
+        run: |
+          MYVERSION=$(sed -n -e 's%^\s*maven.pom.ver[ =]*%%p' < icu4j/build.properties)-$(echo ${GITHUB_REF} | cut -d/ -f3- | tr ./ _-)
+          echo Github Ref ${GITHUB_REF} @ ${GITHUB_SHA}, version ${MYVERSION}
+          mvn deploy:deploy-file -DgroupId=com.ibm.icu \
+            -DartifactId=icu4j-for-cldr \
+            -Dversion=${MYVERSION} \
+            -Dpackaging=jar \
+            -Dfile=icu4j/release_cldr/icu4j.jar \
+            -Dsources=icu4j/release_cldr/icu4j-src.jar \
+            -DrepositoryId=github \
+            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY}
+          mvn deploy:deploy-file -DgroupId=com.ibm.icu \
+            -DartifactId=utilities-for-cldr \
+            -Dversion=${MYVERSION} \
+            -Dpackaging=jar \
+            -Dfile=icu4j/release_cldr/utilities.jar \
+            -Dsources=icu4j/release_cldr/utilities-src.jar \
+            -DrepositoryId=github \
+            -Durl=https://maven.pkg.github.com/${GITHUB_REPOSITORY}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# Note: can use 0.0.0-${GITHUB_SHA} as the version for hash-based.
+# i.e. build on every commit
