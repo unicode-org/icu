@@ -8839,7 +8839,7 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
     // Test two ways to set a currency via API
 
     Locale loc1 = Locale("pt_PT");
-    LocalPointer<NumberFormat> fmt1(NumberFormat::createCurrencyInstance("loc1", status),
+    LocalPointer<NumberFormat> fmt1(NumberFormat::createCurrencyInstance(loc1, status),
                                     status);
     if (U_FAILURE(status)) {
       dataerrln("%s %d NumberFormat instance fmt1 is null",  __FILE__, __LINE__);
@@ -8856,10 +8856,8 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
     UnicodeString actualLocaleString;
     fmt2->format(amount, actualLocaleString);
 
-    // TODO: The following test will fail until DecimalFormat wraps NumberFormatter.
-    if (!logKnownIssue("13574")) {
-        assertEquals("Custom Currency Pattern, Set Currency", expected, actualSetCurrency);
-    }
+    assertEquals("Custom Currency Pattern, Set Currency", expected, actualSetCurrency);
+    assertEquals("Custom Currency Pattern, Locale String", expected, actualLocaleString);
 }
 
 void NumberFormatTest::Test11318_DoubleConversion() {
