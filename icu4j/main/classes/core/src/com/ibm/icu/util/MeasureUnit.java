@@ -32,7 +32,6 @@ import com.ibm.icu.impl.units.SingleUnitImpl;
 import com.ibm.icu.text.UnicodeSet;
 
 
-
 /**
  * A unit such as length, mass, volume, currency, etc.  A unit is
  * coupled with a numeric amount to produce a Measure. MeasureUnit objects are immutable.
