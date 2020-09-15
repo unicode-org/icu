@@ -267,6 +267,8 @@
             <mkdir dir="${junit.out.dir}/checkTest"/>
 
             <junit printsummary="yes" fork="yes">
+                <jvmarg value="-ea"/>
+                <jvmarg value="-Djava.awt.headless=true"/>
                 <jvmarg value="-DICU.exhaustive=10"/>
                 <classpath>
                     <path refid="junit.jars"/>
