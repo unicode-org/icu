@@ -41,12 +41,11 @@ public class UnitConversionHandler implements MicroPropsGenerator {
      */
     @Override
     public MicroProps processQuantity(DecimalQuantity quantity) {
-        this.fParent.processQuantity(quantity);
+        MicroProps result = this.fParent.processQuantity(quantity);
 
         quantity.roundToInfinity(); // Enables toDouble
         List<Measure> measures = this.fComplexUnitConverter.convert(quantity.toBigDecimal());
 
-        MicroProps result = (MicroProps) this.fParent;
         result.outputUnit = this.fOutputUnit;
         result.mixedMeasures = new ArrayList<>();
         UsagePrefsHandler.mixedMeasuresToMicros(measures, quantity, result);

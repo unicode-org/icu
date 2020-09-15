@@ -76,13 +76,12 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
      */
     @Override
     public MicroProps processQuantity(DecimalQuantity quantity) {
-        fParent.processQuantity(quantity);
+        MicroProps result =  fParent.processQuantity(quantity);
 
 
         quantity.roundToInfinity(); // Enables toDouble
         final UnitsRouter.RouteResult routed = fUnitsRouter.route(quantity.toBigDecimal());
 
-        MicroProps result = (MicroProps) this.fParent;
         final List<Measure> routedMeasures = routed.measures;
         result.outputUnit = routed.outputUnit.build();
         result.mixedMeasures = new ArrayList<>();
