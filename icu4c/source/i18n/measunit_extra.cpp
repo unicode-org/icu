@@ -908,7 +908,7 @@ MeasureUnit MeasureUnit::product(const MeasureUnit& other, UErrorCode& status) c
     return std::move(impl).build(status);
 }
 
-LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnits(int32_t& outCount, UErrorCode& status) const {
+LocalArray<MeasureUnit> MeasureUnit::splitToSingleUnitsImpl(int32_t& outCount, UErrorCode& status) const {
     MeasureUnitImpl temp;
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(*this, temp, status);
     outCount = impl.units.length();
