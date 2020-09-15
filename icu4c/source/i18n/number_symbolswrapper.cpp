@@ -1,6 +1,10 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "number_microprops.h"
 #include "unicode/numberformatter.h"
 
@@ -123,3 +127,5 @@ const NumberingSystem *SymbolsWrapper::getNumberingSystem() const {
     U_ASSERT(fType == SYMPTR_NS);
     return fPtr.ns;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
