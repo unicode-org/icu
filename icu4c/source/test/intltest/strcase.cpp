@@ -829,10 +829,11 @@ void StringCaseTest::TestArmenian() {
     assertEquals("upper root", u"ԵՒ ԵՐԵՒԱՆԻ", UnicodeString(s).toUpper(root));
     assertEquals("upper hy", u"ԵՎ ԵՐԵՎԱՆԻ", UnicodeString(s).toUpper(hy));
     assertEquals("upper hyw", u"ԵՒ ԵՐԵՒԱՆԻ", UnicodeString(s).toUpper(hyw));
-
+#if !UCONFIG_NO_BREAK_ITERATION
     assertEquals("title root", u"Եւ Երևանի", UnicodeString(s).toTitle(nullptr, root));
     assertEquals("title hy", u"Եվ Երևանի", UnicodeString(s).toTitle(nullptr, hy));
     assertEquals("title hyw", u"Եւ Երևանի", UnicodeString(s).toTitle(nullptr, hyw));
+#endif
 }
 
 void
