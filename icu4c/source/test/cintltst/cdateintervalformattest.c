@@ -74,6 +74,7 @@ static const DateIntervalFormatTestItem testItems[] = {
     { "cs", "MMMEd",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  "po 27. 9. \\u2013 p\\u00E1 26. 11." },
     { "cs", "yMMMM",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  "z\\u00E1\\u0159\\u00ED\\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   "z\\u00E1\\u0159\\u00ED 2010" },
+#if !UCONFIG_NO_BREAK_ITERATION
     { "cs", "MMMEd",    CAP_BEGIN, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  "Po 27. 9. \\u2013 p\\u00E1 26. 11." },
     { "cs", "yMMMM",    CAP_BEGIN, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  "Z\\u00E1\\u0159\\u00ED\\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_BEGIN, tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   "Z\\u00E1\\u0159\\u00ED 2010" },
@@ -81,6 +82,7 @@ static const DateIntervalFormatTestItem testItems[] = {
     { "cs", "yMMMM",    CAP_LIST,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  "Z\\u00E1\\u0159\\u00ED\\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_LIST,  tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   "Z\\u00E1\\u0159\\u00ED 2010" },
     { "cs", "MMMEd",    CAP_ALONE, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  "po 27. 9. \\u2013 p\\u00E1 26. 11." },
+#endif
     { "cs", "yMMMM",    CAP_ALONE, tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  "z\\u00E1\\u0159\\u00ED\\u2013listopad 2010" },
     { "cs", "yMMMM",    CAP_ALONE, tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   "z\\u00E1\\u0159\\u00ED 2010" },
     { NULL, NULL,       CAP_NONE,  NULL,        0,                0,                             NULL }
