@@ -4,21 +4,23 @@
 #ifndef _CURRENCYDISPLAYNAMES_H_
 #define _CURRENCYDISPLAYNAMES_H_
 
-#include "unicode/uobject.h"
-#include "unicode/ucurr.h"
+#include "pluralmap.h"
 #include "unicode/locid.h"
+#include "unicode/ucurr.h"
+#include "unicode/uobject.h"
 #include "unicode/ures.h"
 
 U_NAMESPACE_BEGIN
 
 struct CurrencyDisplayNamesDataSink;
 
-class CurrencyDisplayNames : public UMemory{
+class CurrencyDisplayNames : public UMemory {
     friend struct CurrencyDisplayNamesDataSink;
     friend struct FormattingData;
     friend struct VariantSymbol;
-public:
+    friend struct PluralsData;
 
+  public:
 #ifndef U_HIDE_DRAFT_API
 
     /**
@@ -34,7 +36,7 @@ public:
      *                  failure code upon return.
      * @draft ICU 6X
      */
-    static const CurrencyDisplayNames *getInstance(Locale* locale, UErrorCode& status);
+    U_COMMON_API static const CurrencyDisplayNames *getInstance(Locale *locale, UErrorCode &status);
 
     /**
      * Return an instance of CurrencyDisplayNames that provides information
@@ -52,7 +54,8 @@ public:
      *                      failure code upon return.
      * @draft ICU 6X
      */
-    static const CurrencyDisplayNames *getInstance(Locale* locale, UBool noSubstitute, UErrorCode& status);
+    U_COMMON_API static const CurrencyDisplayNames *getInstance(Locale *locale, UBool noSubstitute,
+                                                                UErrorCode &status);
 
     /**
      * Returns the name or symbol for the given currency corresponding to nameStyle.
@@ -63,9 +66,8 @@ public:
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    const UChar *getName(const UChar* isoCode,
-        UCurrNameStyle nameStyle,
-        UErrorCode& status) const;
+    U_COMMON_API const UChar *getName(const UChar *isoCode, UCurrNameStyle nameStyle,
+                                      UErrorCode &status) const;
 
     /**
      * Returns the 'long name' for the currency with the provided ISO code.
@@ -75,7 +77,7 @@ public:
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    const UChar *getName(const UChar *isoCode, UErrorCode &status) const;
+    U_COMMON_API const UChar *getName(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the symbol for the currency with the provided ISO code.
@@ -85,7 +87,7 @@ public:
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    const UChar *getSymbol(const UChar *isoCode, UErrorCode &status) const;
+    U_COMMON_API const UChar *getSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the narrow symbol for the currency with the provided ISO code.
@@ -98,7 +100,7 @@ public:
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    const UChar *getNarrowSymbol(const UChar *isoCode, UErrorCode &status) const;
+    U_COMMON_API const UChar *getNarrowSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the formal symbol for the currency with the provided ISO code.
@@ -111,7 +113,7 @@ public:
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    const UChar *getFormalSymbol(const UChar *isoCode, UErrorCode &status) const;
+    U_COMMON_API const UChar *getFormalSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the variant symbol for the currency with the provided ISO code.
@@ -123,13 +125,14 @@ public:
      * isoCode, or returns null if noSubstitute was set when getting the instance.
      * @draft ICU 6X
      */
-    const UChar *getVariantSymbol(const UChar *isoCode, UErrorCode &status) const;
+    U_COMMON_API const UChar *getVariantSymbol(const UChar *isoCode, UErrorCode &status) const;
 
     /**
      * Returns the plural name for the currency with the provided ISO code.
      * For example, the plural name for the USD currency object in the
      * en_US locale is "US dollar" or "US dollars".
-     * @param currency null-terminated 3-letter ISO 4217 code
+     * @param isoCode null-terminated 3-letter ISO 4217 code
+     * @param pluralCategory category from PluralMapBase
      * @param status error code
      * @return UChar. If there is no data for the ISO code, substitutes
      * isoCode, or returns null if noSubstitute was set when getting the instance.
@@ -137,8 +140,9 @@ public:
      * substitutes the 'other' value (and failing that the isoCode) or returns null.
      * @draft ICU 6X
      */
-    const UChar *getPluralName(const UChar *isoCode,
-        const char* pluralCount, UErrorCode &status) const;
+    U_COMMON_API const UChar *getPluralName(const UChar *isoCode,
+                                            const PluralMapBase::Category pluralCategory,
+                                            UErrorCode &status) const;
 
     /**
      * Returns the locale used to determine how to translate the currency names.
@@ -148,22 +152,19 @@ public:
      */
     Locale *getLocale();
 
-
-
-private:
-    CurrencyDisplayNames(Locale* locale, UBool noSubstitute);
+  private:
+    CurrencyDisplayNames(Locale *locale, UBool noSubstitute);
     ~CurrencyDisplayNames();
-    Locale* locale;
+    Locale *locale;
     const UBool noSubstitute;
-    //FormattingData formattingDataCache;
-    //VariantSymbol variantSymbolCache;
 
-    FormattingData* fetchFormattingData(const UChar* isoCode, UErrorCode& errorCode) const;
-    VariantSymbol* fetchVariantSymbol(const UChar* isoCode, const char* variant, UErrorCode& errorCode) const;
+    FormattingData *fetchFormattingData(const UChar *isoCode, UErrorCode &errorCode) const;
+    VariantSymbol *fetchVariantSymbol(const UChar *isoCode, const char *variant,
+                                      UErrorCode &errorCode) const;
+    PluralsData *fetchPluralsData(const UChar *isoCode, UErrorCode &errorCode) const;
 };
 
-
-#endif  // U_HIDE_DRAFT_API
+#endif // U_HIDE_DRAFT_API
 U_NAMESPACE_END
 
 #endif //_CURRENCYDISPLAYNAMES_H_

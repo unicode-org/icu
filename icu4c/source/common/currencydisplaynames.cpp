@@ -6,12 +6,14 @@
 #include "cstring.h"
 #include "uassert.h"
 #include "uhash.h"
-#include "uresimp.h"
-#include "ureslocs.h"
 #include "umutex.h"
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
+#include "uresimp.h"
+#include "ureslocs.h"
+
+struct UHashtable;
 
 U_NAMESPACE_BEGIN
 
@@ -35,6 +37,7 @@ static const char CURRENCYPLURALS[] = "CurrencyPlurals";
 static CurrencyDisplayNames *currencyDisplayDataCache = nullptr;
 static FormattingData *formattingDataCache = nullptr;
 static VariantSymbol *variantSymbolCache = nullptr;
+static PluralsData *pluralsDataCache = nullptr;
 
 static UInitOnce initOnce = U_INITONCE_INITIALIZER;
 
@@ -47,9 +50,9 @@ struct FormattingData : public UMemory {
     UBool isDefault = false;
     UnicodeString displayName = UnicodeString();
     UnicodeString symbol = UnicodeString();
-    //Only implementing Currency Display Names.
-    //Handle Currency Formatting later.
-    //CurrencyFormatInfo formatInfo = nullptr;
+    // Only implementing Currency Display Names.
+    // Handle Currency Formatting later.
+    // CurrencyFormatInfo formatInfo = nullptr;
 
     FormattingData(const UChar *isoCode) : isoCode(isoCode) {}
 };
@@ -62,6 +65,15 @@ struct VariantSymbol : public UMemory {
     UnicodeString symbol = UnicodeString();
 
     VariantSymbol(const UChar *isoCode, const char *variant) : isoCode(isoCode), variant(variant) {}
+};
+
+struct PluralsData : public UMemory {
+    const UChar *isoCode;
+    UBool isFallback = false;
+    UBool isDefault = false;
+    UHashtable *pluralsStringTable = nullptr;
+    
+    PluralsData(const UChar *isoCode) : isoCode(isoCode) {}
 };
 
 struct CurrencySink : public ResourceSink {
@@ -79,6 +91,7 @@ struct CurrencySink : public ResourceSink {
     const EntrypointTable entrypointTable;
     FormattingData *formattingData = nullptr;
     VariantSymbol *variantSymbol = nullptr;
+    PluralsData *pluralsData = nullptr;
 
     virtual ~CurrencySink();
 
@@ -97,13 +110,17 @@ struct CurrencySink : public ResourceSink {
         case CURRENCY_VARIANT_TABLE:
             consumeCurrenciesVariantEntry(key, value, isRoot, errorCode);
             break;
+        case CURRENCY_PLURALS_TABLE:
+            consumeCurrencyPluralsEntry(key, value, isRoot, errorCode);
+            break;
         default:
             errorCode = U_UNSUPPORTED_ERROR;
             return;
         }
     }
 
-    void consumeCurrenciesEntry(const char *key, ResourceValue &value, UBool isRoot, UErrorCode &errorCode) {
+    void consumeCurrenciesEntry(const char *key, ResourceValue &value, UBool isRoot,
+                                UErrorCode &errorCode) {
         U_ASSERT(formattingData != nullptr);
 
         if (value.getType() != UResType::RES_ARRAY) {
@@ -135,7 +152,8 @@ struct CurrencySink : public ResourceSink {
         // If present, the third element is the currency format info.
     }
 
-    void consumeCurrenciesVariantEntry(const char *key, ResourceValue &value, UBool isRoot, UErrorCode &errorCode) {
+    void consumeCurrenciesVariantEntry(const char *key, ResourceValue &value, UBool isRoot,
+                                       UErrorCode &errorCode) {
         U_ASSERT(variantSymbol != nullptr);
 
         if (variantSymbol->symbol.isEmpty()) {
@@ -149,35 +167,60 @@ struct CurrencySink : public ResourceSink {
         }
     }
 
+    void consumeCurrencyPluralsEntry(const char *key, ResourceValue &value, UBool isRoot,
+                                     UErrorCode &errorCode) {
+        U_ASSERT(pluralsData != nullptr);
+
+        if (value.getType() != UResType::RES_TABLE) {
+            errorCode = U_INVALID_FORMAT_ERROR;
+            return;
+        }
+        if (pluralsData->pluralsStringTable == nullptr) {
+            pluralsData->pluralsStringTable =
+                uhash_openSize(uhash_hashLong, uhash_compareLong, uhash_compareUnicodeString,
+                               (int32_t)PluralMapBase::CATEGORY_COUNT, &errorCode);
+            ResourceTable pluralsTable = value.getTable(errorCode);
+            for (int j = 0; pluralsTable.getKeyAndValue(j, key, value); j++) {
+                PluralMapBase::Category pluralCategory = PluralMapBase::toCategory(key);
+                if (pluralCategory == PluralMapBase::NONE) {
+                    errorCode = U_UNSUPPORTED_ERROR;
+                }
+                if (uhash_get(pluralsData->pluralsStringTable, (int32_t *)pluralCategory) == NULL) {
+                    UnicodeString *pluralString = new UnicodeString(value.getUnicodeString(errorCode));
+                    uhash_put(pluralsData->pluralsStringTable, (int32_t *)pluralCategory, pluralString,
+                              &errorCode);
+                }
+            }
+        }
+        if (errorCode == U_USING_FALLBACK_WARNING) {
+            pluralsData->isFallback = true;
+        }
+        if (isRoot) {
+            pluralsData->isDefault = true;
+        }
+    }
 };
 
 CurrencySink::~CurrencySink() {}
 
 CurrencyDisplayNames::CurrencyDisplayNames(Locale *locale, UBool noSubstitute)
-    : locale(locale), noSubstitute(noSubstitute) {
-}
+    : locale(locale), noSubstitute(noSubstitute) {}
 
-CurrencyDisplayNames::~CurrencyDisplayNames() {
-}
+CurrencyDisplayNames::~CurrencyDisplayNames() {}
 
 const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UErrorCode &errorCode) {
     return getInstance(loc, false, errorCode);
 }
 
-const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UBool noSubstitute, UErrorCode &errorCode) {
-    //TODO: Implement cache
-    //umtx_initOnce(initOnce, &CurrencyDisplayData_initCache, errorCode);
-    //if (U_FAILURE(errorCode)) {
-    //    return nullptr;
-    //}
-
+const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UBool noSubstitute,
+                                                              UErrorCode &errorCode) {
     CurrencyDisplayNames *instance = currencyDisplayDataCache;
-    if (instance == nullptr || strcmp((instance->locale)->getName(), loc->getName()) != 0 || instance->noSubstitute != noSubstitute) {
+    if (instance == nullptr || strcmp((instance->locale)->getName(), loc->getName()) != 0 ||
+        instance->noSubstitute != noSubstitute) {
         Locale *internalLocale;
         if (loc->isBogus()) {
             internalLocale = new Locale();
-        }
-        else {
+        } else {
             internalLocale = new Locale(*loc);
         }
         instance = new CurrencyDisplayNames(internalLocale, noSubstitute);
@@ -189,9 +232,7 @@ const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UBool
     return instance;
 }
 
-Locale *CurrencyDisplayNames::getLocale() {
-    return locale;
-}
+Locale *CurrencyDisplayNames::getLocale() { return locale; }
 
 const UChar *CurrencyDisplayNames::getName(const UChar *isoCode, UErrorCode &errorCode) const {
     FormattingData *formattingData = fetchFormattingData(isoCode, errorCode);
@@ -265,8 +306,7 @@ const UChar *CurrencyDisplayNames::getVariantSymbol(const UChar *isoCode, UError
 
 const UChar *CurrencyDisplayNames::getName(const UChar *isoCode, UCurrNameStyle nameStyle,
                                            UErrorCode &errorCode) const {
-    switch (nameStyle)
-    {
+    switch (nameStyle) {
     case UCURR_SYMBOL_NAME:
         return getSymbol(isoCode, errorCode);
     case UCURR_LONG_NAME:
@@ -283,13 +323,31 @@ const UChar *CurrencyDisplayNames::getName(const UChar *isoCode, UCurrNameStyle 
     }
 }
 
-FormattingData *CurrencyDisplayNames::fetchFormattingData(const UChar *isoCode, UErrorCode &errorCode) const
-{
+const UChar *CurrencyDisplayNames::getPluralName(const UChar *isoCode,
+                                                 const PluralMapBase::Category pluralCategory,
+                                                 UErrorCode &errorCode) const {
+    PluralsData *pluralsData = fetchPluralsData(isoCode, errorCode);
+    if (pluralsData->isDefault) {
+        errorCode = U_USING_DEFAULT_WARNING;
+    } else if (pluralsData->isFallback) {
+        errorCode = U_USING_FALLBACK_WARNING;
+    }
+    void *temp = uhash_get(pluralsData->pluralsStringTable, (int32_t *)pluralCategory);
+    if (temp == NULL) {
+        return nullptr;
+    } else {
+        return ((UnicodeString *)temp)->getBuffer();
+    }
+}
+
+FormattingData *CurrencyDisplayNames::fetchFormattingData(const UChar *isoCode,
+                                                          UErrorCode &errorCode) const {
     FormattingData *result = formattingDataCache;
     if (result == nullptr || u_strcmp(result->isoCode, isoCode) != 0) {
         UErrorCode ec2 = U_ZERO_ERROR;
         result = new FormattingData(isoCode);
-        LocalUResourceBundlePointer currencyResources(ures_open(U_ICUDATA_CURR, locale->getName(), &ec2));
+        LocalUResourceBundlePointer currencyResources(
+            ures_open(U_ICUDATA_CURR, locale->getName(), &ec2));
         if (U_SUCCESS(ec2)) {
             if ((ec2 == U_USING_DEFAULT_WARNING || ec2 == U_USING_FALLBACK_WARNING) && noSubstitute) {
                 // If we fall back and noSubstitute is set then return null.
@@ -311,10 +369,10 @@ FormattingData *CurrencyDisplayNames::fetchFormattingData(const UChar *isoCode, 
             if (noSubstitute) {
                 errorCode = ec2;
                 result = nullptr;
+            } else {
+                errorCode = U_USING_FALLBACK_WARNING;
             }
-            else { errorCode = U_USING_FALLBACK_WARNING; }
-        }
-        else {
+        } else {
             errorCode = ec2;
         }
         formattingDataCache = result;
@@ -322,8 +380,8 @@ FormattingData *CurrencyDisplayNames::fetchFormattingData(const UChar *isoCode, 
     return result;
 }
 
-VariantSymbol *CurrencyDisplayNames::fetchVariantSymbol(const UChar *isoCode, const char *variant, UErrorCode &errorCode) const
-{
+VariantSymbol *CurrencyDisplayNames::fetchVariantSymbol(const UChar *isoCode, const char *variant,
+                                                        UErrorCode &errorCode) const {
     VariantSymbol *result = variantSymbolCache;
     if (result == nullptr || u_strcmp(result->isoCode, isoCode) != 0 ||
         strcmp(result->variant, variant) != 0) {
@@ -352,10 +410,10 @@ VariantSymbol *CurrencyDisplayNames::fetchVariantSymbol(const UChar *isoCode, co
             if (noSubstitute) {
                 errorCode = ec2;
                 result = nullptr;
+            } else {
+                errorCode = U_USING_FALLBACK_WARNING;
             }
-            else { errorCode = U_USING_FALLBACK_WARNING; }
-        }
-        else {
+        } else {
             errorCode = ec2;
         }
         variantSymbolCache = result;
@@ -363,4 +421,42 @@ VariantSymbol *CurrencyDisplayNames::fetchVariantSymbol(const UChar *isoCode, co
     return result;
 }
 
+PluralsData *CurrencyDisplayNames::fetchPluralsData(const UChar *isoCode, UErrorCode &errorCode) const {
+    PluralsData *result = pluralsDataCache;
+    if (result == nullptr || u_strcmp(result->isoCode, isoCode) != 0) {
+        UErrorCode ec2 = U_ZERO_ERROR;
+        result = new PluralsData(isoCode);
+        LocalUResourceBundlePointer currencyResources(
+            ures_open(U_ICUDATA_CURR, locale->getName(), &ec2));
+        if (U_SUCCESS(ec2)) {
+            if ((ec2 == U_USING_DEFAULT_WARNING || ec2 == U_USING_FALLBACK_WARNING) && noSubstitute) {
+                // If we fall back and noSubstitute is set then return null.
+                errorCode = ec2;
+                return nullptr;
+            } else {
+                errorCode = ec2;
+            }
+        }
+
+        CurrencySink sink(noSubstitute, CurrencySink::EntrypointTable::CURRENCY_PLURALS_TABLE);
+        sink.pluralsData = result;
+        CharString path;
+        path.append(CURRENCYPLURALS, errorCode)
+            .append('/', errorCode)
+            .appendInvariantChars(isoCode, u_strlen(isoCode), errorCode);
+        ures_getAllItemsWithFallback(currencyResources.getAlias(), path.data(), sink, ec2);
+        if (ec2 == U_MISSING_RESOURCE_ERROR) {
+            if (noSubstitute) {
+                errorCode = ec2;
+                result = nullptr;
+            } else {
+                errorCode = U_USING_FALLBACK_WARNING;
+            }
+        } else {
+            errorCode = ec2;
+        }
+        pluralsDataCache = result;
+    }
+    return result;
+}
 U_NAMESPACE_END
