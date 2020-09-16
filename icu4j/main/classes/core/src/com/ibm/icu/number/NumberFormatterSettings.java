@@ -44,8 +44,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_SCALE = 13;
     static final int KEY_THRESHOLD = 14;
     static final int KEY_PER_UNIT = 15;
-    static final int KEY_MAX = 16;
-    static final int KEY_USAGE = 17;
+    static final int KEY_USAGE = 16;
+    static final int KEY_MAX = 17;
 
     private final NumberFormatterSettings<?> parent;
     private final int key;
@@ -134,7 +134,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * <p>
      * The default is to render without units (equivalent to {@link NoUnit#BASE}).
      *
-     * <P>
+     * <p>
      * If the input usage is correctly set the output unit <b>will change</b>
      * according to `usage`, `locale` and `unit` value.
      * </p>
@@ -492,44 +492,57 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         return create(KEY_SCALE, scale);
     }
 
-   /**
+    /**
      * Specifies the usage for which numbers will be formatted ("person-height",
      * "road", "rainfall", etc.)
      *
+     * <p>
      * When a `usage` is specified, the output unit will change depending on the
      * `Locale` and the unit quantity. For example, formatting length
      * measurements specified in meters:
      *
-     * `NumberFormatter.with().usage("person").unit(MeasureUnit.METER).locale(new ULocale("en-US"))`
-     *   * When formatting 0.25, the output will be "10 inches".
-     *   * When formatting 1.50, the output will be "4 feet and 11 inches".
+     * <p>
+     * <pre>
+     * NumberFormatter.with().usage("person").unit(MeasureUnit.METER).locale(new ULocale("en-US"))
+     * </pre>
+     * <ul>
+     *   <li> When formatting 0.25, the output will be "10 inches".
+     *   <li> When formatting 1.50, the output will be "4 feet and 11 inches".
+     * </li>
      *
+     * <p>
      * The input unit specified via unit() determines the type of measurement
      * being formatted (e.g. "length" when the unit is "foot"). The usage
      * requested will be looked for only within this category of measurement
      * units.
      *
+     * <p>
      * The output unit can be found via FormattedNumber.getOutputUnit().
      *
+     * <p>
      * If the usage has multiple parts (e.g. "land-agriculture-grain") and does
      * not match a known usage preference, the last part will be dropped
      * repeatedly until a match is found (e.g. trying "land-agriculture", then
      * "land"). If a match is still not found, usage will fall back to
      * "default".
      *
+     * <p>
      * Setting usage to an empty string clears the usage (disables usage-based
      * localized formatting).
      *
+     * <p>
+     * Setting a usage string but not a correct input unit will result in an
+     * U_ILLEGAL_ARGUMENT_ERROR.
      *
+     * <p>
      * When using usage, specifying rounding or precision is unnecessary.
      * Specifying a precision in some manner will override the default
      * formatting.
      *
-     *
      * @param usage A usage parameter from the units resource.
      * @return The fluent chain
      * @throws IllegalArgumentException in case of Setting a usage string but not a correct input unit.
-     * @draft ICU 67
+     * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
      */
     public T usage(String usage) {

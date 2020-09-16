@@ -22,11 +22,12 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
+public class LongNameHandler
+    implements MicroPropsGenerator, ModifierStore, LongNameMultiplexer.ParentlessMicroPropsGenerator {
 
     private static final int DNAM_INDEX = StandardPlural.COUNT;
     private static final int PER_INDEX = StandardPlural.COUNT + 1;
-    protected static final int ARRAY_LENGTH = StandardPlural.COUNT + 2;
+    static final int ARRAY_LENGTH = StandardPlural.COUNT + 2;
 
     private static int getIndex(String pluralKeyword) {
         // pluralKeyword can also be "dnam" or "per"
@@ -39,7 +40,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
         }
     }
 
-    protected static String getWithPlural(String[] strings, StandardPlural plural) {
+    static String getWithPlural(String[] strings, StandardPlural plural) {
         String result = strings[plural.ordinal()];
         if (result == null) {
             result = strings[StandardPlural.OTHER.ordinal()];
@@ -79,7 +80,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
     // NOTE: outArray MUST have at least ARRAY_LENGTH entries. No bounds checking is performed.
 
-    protected static void getMeasureData(
+    static void getMeasureData(
             ULocale locale,
             MeasureUnit unit,
             UnitWidth width,
@@ -199,13 +200,13 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
      * <p>
      * Mixed units are not supported, use MixedUnitLongNameHandler.forMeasureUnit.
      *
-     * @param locale  The desired locale.
-     * @param unit    The measure unit to construct a LongNameHandler for. If
-     *                `perUnit` is also defined, `unit` must not be a mixed unit.
-     * @param perUnit If `unit` is a mixed unit, `perUnit` must be "none".
-     * @param width   Specifies the desired unit rendering.
-     * @param rules   Does not take ownership.
-     * @param parent  Does not take ownership.
+     * @param locale The desired locale.
+     * @param unit The measure unit to construct a LongNameHandler for. If
+     *     `perUnit` is also defined, `unit` must not be a mixed unit.
+     * @param perUnit If `unit` is a mixed unit, `perUnit` must be null.
+     * @param width Specifies the desired unit rendering.
+     * @param rules Plural rules.
+     * @param parent Plural rules.
      */
     public static LongNameHandler forMeasureUnit(
             ULocale locale,
@@ -214,6 +215,12 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
             UnitWidth width,
             PluralRules rules,
             MicroPropsGenerator parent) {
+        if (unit.getType() == null || (perUnit != null && perUnit.getType() == null)) {
+            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
+            // error code. Once we support not-built-in units here, unitRef may be
+            // anything, but if not built-in, perUnit has to be "none".
+            throw new UnsupportedOperationException("Unsanctioned units, not yet supported");
+        }
         if (perUnit != null) {
             // Compound unit: first try to simplify (e.g., meters per second is its own unit).
             MeasureUnit simplified = MeasureUnit.resolveUnitPerUnit(unit, perUnit);
@@ -309,6 +316,20 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
     @Override
     public MicroProps processQuantity(DecimalQuantity quantity) {
         MicroProps micros = parent.processQuantity(quantity);
+        StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
+        micros.modOuter = modifiers.get(pluralForm);
+        return micros;
+    }
+
+    /**
+     * Produces a plural-appropriate Modifier for a unit: `quantity` is taken as
+     * the final smallest unit, while the larger unit values must be provided
+     * via `micros.mixedMeasures`.
+     *
+     * Does not call parent.processQuantity, so cannot get a MicroProps instance
+     * that way. Instead, the instance is passed in as a parameter.
+     */
+    public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros) {
         StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
         micros.modOuter = modifiers.get(pluralForm);
         return micros;

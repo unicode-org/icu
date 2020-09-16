@@ -21,6 +21,7 @@ import org.junit.Test;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
 import com.ibm.icu.impl.number.MacroProps;
@@ -644,6 +645,17 @@ public class NumberFormatterApiTest extends TestFmwk {
                 1,
                 "kelvin");
 
+        assertFormatSingle(
+                "Person unit not in short form",
+                "measure-unit/duration-year-person unit-width-full-name",
+                "unit/year-person unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.YEAR_PERSON)
+                        .unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("es-MX"),
+                5,
+                "5 a\u00F1os");
+            
         // TODO(icu-units#35): skeleton generation.
         assertFormatSingle(
                 "Mixed unit",
@@ -738,6 +750,17 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.008765 m/s",
                 "0 m/s");
 
+        // TODO(icu-units#35): does not normalize as desired: while "unit/*" does
+        // get split into unit/perUnit, ".unit(*)" and "measure-unit/*" don't:
+        assertFormatSingle(
+                "Built-in unit, meter-per-second",
+                "measure-unit/speed-meter-per-second",
+                "~unit/meter-per-second",
+                NumberFormatter.with().unit(MeasureUnit.METER_PER_SECOND),
+                new ULocale("en-GB"),
+                2.4,
+                "2.4 m/s");
+
         assertFormatDescending(
                 "Pounds Per Square Mile Short (secondary unit has per-format)",
                 "measure-unit/mass-pound per-measure-unit/area-square-mile",
@@ -770,16 +793,22 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.008765 J/fur",
                 "0 J/fur");
 
-        // TODO(icu-units#35): does not normalize as desired: while "unit/*" does
-        // get split into unit/perUnit, ".unit(*)" and "measure-unit/*" don't:
-        assertFormatSingle(
-                "Built-in unit, meter-per-second",
-                "measure-unit/speed-meter-per-second",
-                "~unit/meter-per-second",
-                NumberFormatter.with().unit(MeasureUnit.METER_PER_SECOND),
-                new ULocale("en-GB"),
-                2.4,
-                "2.4 m/s");
+        // // TODO(ICU-20941): Support constructions such as this one.
+        // assertFormatDescending(
+        //         "Joules Per Furlong Short with unit identifier via API",
+        //         "measure-unit/energy-joule per-measure-unit/length-furlong",
+        //         "unit/joule-per-furlong",
+        //         NumberFormatter.with().unit(MeasureUnit.forIdentifier("joule-per-furlong")),
+        //         ULocale.ENGLISH,
+        //         "87,650 J/fur",
+        //         "8,765 J/fur",
+        //         "876.5 J/fur",
+        //         "87.65 J/fur",
+        //         "8.765 J/fur",
+        //         "0.8765 J/fur",
+        //         "0.08765 J/fur",
+        //         "0.008765 J/fur",
+        //         "0 J/fur");
 
         // TODO(icu-units#59): THIS UNIT TEST DEMONSTRATES UNDESIRABLE BEHAVIOUR!
         // When specifying built-in types, one can give both a unit and a perUnit.
@@ -839,6 +868,13 @@ public class NumberFormatterApiTest extends TestFmwk {
         FormattedNumber formattedNum;
         String uTestCase;
 
+        try {
+            NumberFormatter.with().usage("road").locale(ULocale.ENGLISH).format(1);
+            fail("should give an error, usage() without unit() is invalid");
+        } catch (IllegalIcuArgumentException e) {
+            // Pass
+        }
+
         unloc_formatter = NumberFormatter.with().usage("road").unit(MeasureUnit.METER);
 
         uTestCase = "unitUsage() en-ZA road";
@@ -881,15 +917,10 @@ public class NumberFormatterApiTest extends TestFmwk {
         uTestCase = "unitUsage() en-GB road";
         formatter = unloc_formatter.locale(new ULocale("en-GB"));
         formattedNum = formatter.format(321d);
-
-        // status.errIfFailureAndReset("unitUsage() en-GB road, formatDouble(...)");
-
         assertTrue(
                 uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit().getIdentifier() + "\"",
                 MeasureUnit.YARD.equals(formattedNum.getOutputUnit()));
-        // status.errIfFailureAndReset("unitUsage() en-GB road, getOutputUnit(...)");
         assertEquals(uTestCase, "350 yd", formattedNum.toString());
-        //status.errIfFailureAndReset("unitUsage() en-GB road, toString(...)");
         {
             final Object[][] expectedFieldPositions = {
                     {NumberFormat.Field.INTEGER, 0, 3},
@@ -919,15 +950,10 @@ public class NumberFormatterApiTest extends TestFmwk {
         uTestCase = "unitUsage() en-US road";
         formatter = unloc_formatter.locale(new ULocale("en-US"));
         formattedNum = formatter.format(321d);
-        // status.errIfFailureAndReset("unitUsage() en-US road, formatDouble(...)");
-
         assertTrue(
                 uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit().getIdentifier() + "\"",
                 MeasureUnit.FOOT == formattedNum.getOutputUnit());
-        // status.errIfFailureAndReset("unitUsage() en-US road, getOutputUnit(...)");
-
         assertEquals(uTestCase, "1,050 ft", formattedNum.toString());
-        // status.errIfFailureAndReset("unitUsage() en-US road, toString(...)");
         {
             final Object[][] expectedFieldPositions = {
                     {NumberFormat.Field.GROUPING_SEPARATOR, 1, 2},
@@ -958,15 +984,10 @@ public class NumberFormatterApiTest extends TestFmwk {
         uTestCase = "unitUsage() en-GB person";
         formatter = unloc_formatter.locale(new ULocale("en-GB"));
         formattedNum = formatter.format(80d);
-        // status.errIfFailureAndReset("unitUsage() en-GB person formatDouble");
-
         assertTrue(
                 uTestCase + ", got outputUnit: \"" + formattedNum.getOutputUnit().getIdentifier() + "\"",
                 MeasureUnit.forIdentifier("stone-and-pound").equals(formattedNum.getOutputUnit()));
-        // status.errIfFailureAndReset("unitUsage() en-GB person - formattedNum.getOutputUnit(status)");
-
         assertEquals(uTestCase, "12 st, 8.4 lb", formattedNum.toString());
-        //status.errIfFailureAndReset("unitUsage() en-GB person, toString(...)");
         {
             final Object[][] expectedFieldPositions = {
                     // // Desired output: TODO(icu-units#67)
@@ -1053,29 +1074,51 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0 pounds, 0.31 ounces",
                 "0 pounds, 0 ounces");
 
-        // TODO: this is about the user overriding the usage precision.
-        // TODO: should be done!
-//        assertFormatDescendingBig(
-//                "Scientific notation with Usage: possible when using a reasonable Precision",
-//                "scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
-//                "scientific @### usage/default unit/square-meter unit-width-full-name",
-//                NumberFormatter.with()
-//                        .unit(MeasureUnit.SQUARE_METER)
-//                        .usage("default")
-//                        .notation(Notation.scientific())
-//                        .precision(Precision.minMaxSignificantDigits(1, 4))
-//                        .unitWidth(UnitWidth.FULL_NAME),
-//                new ULocale("en-ZA"),
-//                "8,765E1 square kilometres",
-//                "8,765E0 square kilometres",
-//                "8,765E1 hectares",
-//                "8,765E0 hectares",
-//                "8,765E3 square metres",
-//                "8,765E2 square metres",
-//                "8,765E1 square metres",
-//                "8,765E0 square metres",
-//                "0E0 square centimetres");
-    }
+       assertFormatDescendingBig(
+               "Scientific notation with Usage: possible when using a reasonable Precision",
+               "scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
+               "scientific @### usage/default unit/square-meter unit-width-full-name",
+               NumberFormatter.with()
+                       .unit(MeasureUnit.SQUARE_METER)
+                       .usage("default")
+                       .notation(Notation.scientific())
+                       .precision(Precision.minMaxSignificantDigits(1, 4))
+                       .unitWidth(UnitWidth.FULL_NAME),
+               new ULocale("en-ZA"),
+               "8,765E1 square kilometres",
+               "8,765E0 square kilometres",
+               "8,765E1 hectares",
+               "8,765E0 hectares",
+               "8,765E3 square metres",
+               "8,765E2 square metres",
+               "8,765E1 square metres",
+               "8,765E0 square metres",
+               "0E0 square centimetres");
+
+        assertFormatSingle(
+                "Rounding Mode propagates: rounding down",
+                "usage/road measure-unit/length-centimeter rounding-mode-floor",
+                "usage/road unit/centimeter rounding-mode-floor",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("centimeter"))
+                        .usage("road")
+                        .roundingMode(RoundingMode.FLOOR),
+                new ULocale("en-ZA"),
+                34500,
+                "300 m");
+
+        assertFormatSingle(
+                "Rounding Mode propagates: rounding up",
+                "usage/road measure-unit/length-centimeter rounding-mode-ceiling",
+                "usage/road unit/centimeter rounding-mode-ceiling",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("centimeter"))
+                        .usage("road")
+                        .roundingMode(RoundingMode.CEILING),
+                new ULocale("en-ZA"),
+                30500,
+                "350 m");
+}
 
 
     @Test
@@ -1122,18 +1165,17 @@ public class NumberFormatterApiTest extends TestFmwk {
                 321,
                 "300 m");
 
-        // TODO(younies): enable this test case
-//        assertFormatSingle(
-//                "Precision can be overridden: override takes precedence",
-//                "usage/road measure-unit/length-meter @#",
-//                "usage/road unit/meter @#",
-//                NumberFormatter.with()
-//                .unit(MeasureUnit.METER)
-//                .usage("road")
-//                .precision(Precision.maxSignificantDigits(2)),
-//       new ULocale("en-ZA"),
-//                321,
-//                "320 m");
+        assertFormatSingle(
+                "Precision can be overridden: override takes precedence",
+                "usage/road measure-unit/length-meter @#",
+                "usage/road unit/meter @#",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .usage("road")
+                        .precision(Precision.maxSignificantDigits(2)),
+                new ULocale("en-ZA"),
+                321,
+                "320 m");
 
         assertFormatSingle(
                 "Compact notation with Usage: bizarre, but possible (short)",
@@ -1147,74 +1189,70 @@ public class NumberFormatterApiTest extends TestFmwk {
                 987654321L,
                 "988K km");
 
+        assertFormatSingle(
+                "Compact notation with Usage: bizarre, but possible (short, precision override)",
+                "compact-short usage/road measure-unit/length-meter @#",
+                "compact-short usage/road unit/meter @#",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .usage("road")
+                        .notation(Notation.compactShort())
+                        .precision(Precision.maxSignificantDigits(2)),
+                new ULocale("en-ZA"),
+                987654321L,
+                "990K km");
 
+        assertFormatSingle(
+                "Compact notation with Usage: unusual but possible (long)",
+                "compact-long usage/road measure-unit/length-meter @#",
+                "compact-long usage/road unit/meter @#",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .usage("road")
+                        .notation(Notation.compactLong())
+                        .precision(Precision.maxSignificantDigits(2)),
+                new ULocale("en-ZA"),
+                987654321,
+                "990 thousand km");
 
-        // TODO(younies): enable override precision test cases.
-//        assertFormatSingle(
-//                "Compact notation with Usage: bizarre, but possible (short, precision override)",
-//                "compact-short usage/road measure-unit/length-meter @#",
-//                "compact-short usage/road unit/meter @#",
-//                NumberFormatter.with()
-//                .unit(MeasureUnit.METER)
-//                .usage("road")
-//                .notation(Notation.compactShort())
-//                .precision(Precision.maxSignificantDigits(2)),
-//        new ULocale("en-ZA"),
-//                987654321L,
-//                "990K km");
+        assertFormatSingle(
+                "Compact notation with Usage: unusual but possible (long, precision override)",
+                "compact-long usage/road measure-unit/length-meter @#",
+                "compact-long usage/road unit/meter @#",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .usage("road")
+                        .notation(Notation.compactLong())
+                        .precision(Precision.maxSignificantDigits(2)),
+                new ULocale("en-ZA"),
+                987654321,
+                "990 thousand km");
 
-                // TODO(younies): enable override precision test cases.
-//        assertFormatSingle(
-//                "Compact notation with Usage: unusual but possible (long)",
-//                "compact-long usage/road measure-unit/length-meter @#",
-//                "compact-long usage/road unit/meter @#",
-//                NumberFormatter.with()
-//                .unit(MeasureUnit.METER)
-//                .usage("road")
-//                .notation(Notation.compactLong())
-//                .precision(Precision.maxSignificantDigits(2)),
-//        new ULocale("en-ZA"),
-//                987654321,
-//                "990 thousand km");
+        assertFormatSingle(
+                "Scientific notation, not recommended, requires precision override for road",
+                "scientific usage/road measure-unit/length-meter",
+                "scientific usage/road unit/meter",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .usage("road")
+                        .notation(Notation.scientific()),
+                new ULocale("en-ZA"),
+                321.45,
+                // Rounding to the nearest "50" is not exponent-adjusted in scientific notation:
+                "0E2 m");
 
-        // TODO(younies): enable override precision test cases.
-//        assertFormatSingle(
-//                "Compact notation with Usage: unusual but possible (long, precision override)",
-//                "compact-long usage/road measure-unit/length-meter @#",
-//                "compact-long usage/road unit/meter @#",
-//                NumberFormatter.with()
-//                .unit(MeasureUnit.METER)
-//                .usage("road")
-//                .notation(Notation.compactLong())
-//                .precision(Precision.maxSignificantDigits(2)),
-//        new ULocale("en-ZA"),
-//                987654321,
-//                "990 thousand km");
-
-        // TODO(younies): enable override precision test cases.
-//        assertFormatSingle(
-//                "Scientific notation, not recommended, requires precision override for road",
-//                "scientific usage/road measure-unit/length-meter",
-//                "scientific usage/road unit/meter",
-//                NumberFormatter.with().unit(MeasureUnit.METER).usage("road").notation(Notation.scientific()),
-//        new ULocale("en-ZA"),
-//                321.45,
-//                // Rounding to the nearest "50" is not exponent-adjusted in scientific notation:
-//                "0E2 m");
-
-        // TODO(younies): enable override precision test cases.
-//        assertFormatSingle(
-//                "Scientific notation with Usage: possible when using a reasonable Precision",
-//                "scientific usage/road measure-unit/length-meter @###",
-//                "scientific usage/road unit/meter @###",
-//                NumberFormatter.with()
-//                .unit(MeasureUnit.METER)
-//                .usage("road")
-//                .notation(Notation.scientific())
-//                .precision(Precision.maxSignificantDigits(4)),
-//        new ULocale("en-ZA"),
-//                321.45, // 0.45 rounds down, 0.55 rounds up.
-//                "3,214E2 m");
+        assertFormatSingle(
+                "Scientific notation with Usage: possible when using a reasonable Precision",
+                "scientific usage/road measure-unit/length-meter @###",
+                "scientific usage/road unit/meter @###",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .usage("road")
+                        .notation(Notation.scientific())
+                        .precision(Precision.maxSignificantDigits(4)),
+                new ULocale("en-ZA"),
+                321.45, // 0.45 rounds down, 0.55 rounds up.
+                "3,214E2 m");
 
         assertFormatSingle(
                 "Scientific notation with Usage: possible when using a reasonable Precision",

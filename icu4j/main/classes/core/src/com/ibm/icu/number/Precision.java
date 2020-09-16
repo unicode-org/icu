@@ -20,7 +20,6 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
  *
  * @stable ICU 62
  * @see NumberFormatter
- * @internal
  */
 public abstract class Precision {
 
@@ -366,6 +365,13 @@ public abstract class Precision {
     // PACKAGE-PRIVATE APIS //
     //////////////////////////
 
+    /**
+     * @internal
+     * @deprecated ICU internal only.
+     */
+    @Deprecated
+    public static final BogusRounder BOGUS_PRECISION = new BogusRounder();
+
     static final InfiniteRounderImpl NONE = new InfiniteRounderImpl();
 
     static final FractionRounderImpl FIXED_FRAC_0 = new FractionRounderImpl(0, 0);
@@ -544,6 +550,40 @@ public abstract class Precision {
     ///////////////
     // INTERNALS //
     ///////////////
+
+    /**
+     * An BogusRounder's MathContext into precision.
+     *
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static class BogusRounder extends Precision {
+        @Override
+        public void apply(DecimalQuantity value) {
+            throw new AssertionError("BogusRounder must not be applied");
+        }
+
+        @Override
+        BogusRounder createCopy() {
+            BogusRounder copy = new BogusRounder();
+            copy.mathContext = mathContext;
+            return copy;
+        }
+
+        /**
+         * Copies the BogusRounder's MathContext into precision.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public Precision into(Precision precision) {
+            Precision copy = precision.createCopy();
+            copy.mathContext = mathContext;
+            return copy;
+        }
+    }
 
     static class InfiniteRounderImpl extends Precision {
 

@@ -1,6 +1,5 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
@@ -47,15 +46,18 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
         return Precision.increment(num.divide(den, MathContext.DECIMAL128));
     }
 
+    /**
+     * Populates micros.mixedMeasures and modifies quantity, based on the values
+     * in measures.
+     */
     protected static void mixedMeasuresToMicros(List<Measure> measures, DecimalQuantity quantity, MicroProps micros) {
+        micros.mixedMeasures = new ArrayList<>();
         if (measures.size() > 1) {
             // For debugging
             assert (micros.outputUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
 
-            // Check that we received measurements with the expected MeasureUnits:
-            List<MeasureUnit> singleUnits = micros.outputUnit.splitToSingleUnits();
-
-            assert measures.size() == singleUnits.size();
+            // Check that we received the expected number of measurements:
+            assert measures.size() == micros.outputUnit.splitToSingleUnits().size();
 
             // Mixed units: except for the last value, we pass all values to the
             // LongNameHandler via micros->mixedMeasures.
@@ -95,7 +97,6 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
 
         final List<Measure> routedMeasures = routed.measures;
         micros.outputUnit = routed.outputUnit.build();
-        micros.mixedMeasures = new ArrayList<>();
 
         UsagePrefsHandler.mixedMeasuresToMicros(routedMeasures, quantity, micros);
 
@@ -103,14 +104,16 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
 
         assert micros.rounder != null;
 
-        // TODO: use the user precision if the user already set precision.
-        if (precisionSkeleton != null && precisionSkeleton.length() > 0) {
-            micros.rounder = parseSkeletonToPrecision(precisionSkeleton);
-        } else {
-            // We use the same rounding mode as COMPACT notation: known to be a
-            // human-friendly rounding mode: integers, but add a decimal digit
-            // as needed to ensure we have at least 2 significant digits.
-            micros.rounder = Precision.integer().withMinDigits(2);
+        if (micros.rounder instanceof Precision.BogusRounder) {
+            Precision.BogusRounder rounder = (Precision.BogusRounder)micros.rounder;
+            if (precisionSkeleton != null && precisionSkeleton.length() > 0) {
+                micros.rounder = rounder.into(parseSkeletonToPrecision(precisionSkeleton));
+            } else {
+                // We use the same rounding mode as COMPACT notation: known to be a
+                // human-friendly rounding mode: integers, but add a decimal digit
+                // as needed to ensure we have at least 2 significant digits.
+                micros.rounder = rounder.into(Precision.integer().withMinDigits(2));
+            }
         }
 
         return micros;

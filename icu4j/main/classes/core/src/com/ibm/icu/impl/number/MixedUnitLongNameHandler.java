@@ -1,10 +1,9 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -13,26 +12,28 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.SimpleFormatter;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class MixedUnitLongNameHandler implements MicroPropsGenerator, ModifierStore {
-    // Not owned
+/** Similar to LongNameHandler, but only for MIXED units. */
+public class MixedUnitLongNameHandler
+    implements MicroPropsGenerator, ModifierStore, LongNameMultiplexer.ParentlessMicroPropsGenerator {
     private final PluralRules rules;
-    // Not owned
     private final MicroPropsGenerator parent;
 
-    // If this LongNameHandler is for a mixed unit, this stores unit data for
-    // each of the individual units. For each unit, it stores ARRAY_LENGTH
-    // strings, as returned by getMeasureData.
+    /**
+     * Stores unit data for each of the individual units. For each unit, it
+     * stores ARRAY_LENGTH strings, as returned by getMeasureData.
+     */
     private List<String[]> fMixedUnitData;
 
-    // A localized NumberFormatter used to format the integer-valued bigger
-    // units of Mixed Unit measurements.
+    /**
+     * A localized NumberFormatter used to format the integer-valued bigger
+     * units of Mixed Unit measurements.
+     */
     private LocalizedNumberFormatter fIntegerFormatter;
 
-    // A localised list formatter for joining mixed units together.
+    /** A localised list formatter for joining mixed units together. */
     private ListFormatter fListFormatter;
 
     private MixedUnitLongNameHandler(PluralRules rules, MicroPropsGenerator parent) {
@@ -49,8 +50,8 @@ public class MixedUnitLongNameHandler implements MicroPropsGenerator, ModifierSt
      * @param mixedUnit The mixed measure unit to construct a
      *                  MixedUnitLongNameHandler for.
      * @param width     Specifies the desired unit rendering.
-     * @param rules     Does not take ownership.
-     * @param parent    Does not take ownership.
+     * @param rules     PluralRules instance.
+     * @param parent    MicroPropsGenerator instance.
      */
     public static MixedUnitLongNameHandler forMeasureUnit(ULocale locale, MeasureUnit mixedUnit,
                                                           NumberFormatter.UnitWidth width, PluralRules rules,
@@ -89,42 +90,60 @@ public class MixedUnitLongNameHandler implements MicroPropsGenerator, ModifierSt
     /**
      * Produces a plural-appropriate Modifier for a mixed unit: `quantity` is
      * taken as the final smallest unit, while the larger unit values must be
-     * provided via `micros.mixedMeasures`.
+     * provided by `micros.mixedMeasures`, micros being the MicroProps instance
+     * returned by the parent.
+     *
+     * This function must not be called if this instance has no parent: call
+     * processQuantityWithMicros() instead.
      */
     @Override
     public MicroProps processQuantity(DecimalQuantity quantity) {
         assert (fMixedUnitData.size() > 1);
         MicroProps micros;
-        // if (parent != null)
         micros = parent.processQuantity(quantity);
         micros.modOuter = getMixedUnitModifier(quantity, micros);
         return micros;
     }
 
-    // Required for ModifierStore. And ModifierStore is required by
-    // SimpleModifier constructor's last parameter. We assert his will never get
-    // called though.
+    /**
+     * Produces a plural-appropriate Modifier for a mixed unit: `quantity` is
+     * taken as the final smallest unit, while the larger unit values must be
+     * provided via `micros.mixedMeasures`.
+     *
+     * Does not call parent.processQuantity, so cannot get a MicroProps instance
+     * that way. Instead, the instance is passed in as a parameter.
+     */
+    public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros) {
+        assert (fMixedUnitData.size() > 1);
+        micros.modOuter = getMixedUnitModifier(quantity, micros);
+        return micros;
+    }
+
+    /**
+     * Required for ModifierStore. And ModifierStore is required by
+     * SimpleModifier constructor's last parameter. We assert his will never get
+     * called though.
+     */
     @Override
     public Modifier getModifier(Modifier.Signum signum, StandardPlural plural) {
         // TODO(units): investigate this method while investigating where
         // LongNameHandler.getModifier() gets used. To be sure it remains
         // unreachable:
-
+        assert false : "should be unreachable";
         return null;
     }
 
-    // For a mixed unit, returns a Modifier that takes only one parameter: the
-    // smallest and final unit of the set. The bigger units' values and labels
-    // get baked into this Modifier, together with the unit label of the final
-    // unit.
+    /**
+     * For a mixed unit, returns a Modifier that takes only one parameter: the
+     * smallest and final unit of the set. The bigger units' values and labels
+     * get baked into this Modifier, together with the unit label of the final
+     * unit.
+     */
     private Modifier getMixedUnitModifier(DecimalQuantity quantity, MicroProps micros) {
-        // TODO(icu-units#21): mixed units without usage() is not yet supported.
-        // That should be the only reason why this happens, so delete this whole if
-        // once fixed:
         if (micros.mixedMeasures.size() == 0) {
+            assert false : "Mixed unit: we must have more than one unit value";
             throw new UnsupportedOperationException();
         }
-
 
         // Algorithm:
         //
@@ -153,30 +172,30 @@ public class MixedUnitLongNameHandler implements MicroPropsGenerator, ModifierSt
             String simpleFormat = LongNameHandler.getWithPlural(this.fMixedUnitData.get(i), pluralForm);
             SimpleFormatter compiledFormatter = SimpleFormatter.compileMinMaxArguments(simpleFormat, 0, 1);
 
-
             FormattedStringBuilder appendable = new FormattedStringBuilder();
             this.fIntegerFormatter.formatImpl(fdec, appendable);
             outputMeasuresList.add(compiledFormatter.format(appendable.toString()));
-            // TODO: fix this issue https://github.com/icu-units/icu/issues/67
+            // TODO(icu-units#67): fix field positions
         }
 
         String[] finalSimpleFormats = this.fMixedUnitData.get(this.fMixedUnitData.size() - 1);
         StandardPlural finalPlural = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
         String finalSimpleFormat = LongNameHandler.getWithPlural(finalSimpleFormats, finalPlural);
         SimpleFormatter finalFormatter = SimpleFormatter.compileMinMaxArguments(finalSimpleFormat, 0, 1);
-        finalFormatter.format("{0}", outputMeasuresList.get(outputMeasuresList.size() -1));
+        outputMeasuresList.add(finalFormatter.format("{0}"));
 
         // Combine list into a "premixed" pattern
         String premixedFormatPattern = this.fListFormatter.format(outputMeasuresList);
-        SimpleFormatter premixedCompiled = SimpleFormatter.compileMinMaxArguments(premixedFormatPattern, 0, 1);
+        StringBuilder sb = new StringBuilder();
+        String premixedCompiled =
+            SimpleFormatterImpl.compileToStringMinMaxArguments(premixedFormatPattern, sb, 0, 1);
 
-        // Return a SimpleModifier for the "premixed" pattern
+        // TODO(icu-units#67): fix field positions
         Modifier.Parameters params = new Modifier.Parameters();
         params.obj = this;
         params.signum = Modifier.Signum.POS_ZERO;
         params.plural = finalPlural;
-
-        return new SimpleModifier(premixedCompiled.getTextWithNoArguments(), null, false, params);
-        /*TODO: it was SimpleModifier(premixedCompiled, kUndefinedField, false, {this, SIGNUM_POS_ZERO, finalPlural});*/
+        // Return a SimpleModifier for the "premixed" pattern
+        return new SimpleModifier(premixedCompiled, null, false, params);
     }
 }
