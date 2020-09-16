@@ -86,6 +86,8 @@ void Usage::set(StringPiece value) {
     fUsage[fLength] = 0;
 }
 
+// Populates micros.mixedMeasures and modifies quantity, based on the values in
+// measures.
 void mixedMeasuresToMicros(const MaybeStackVector<Measure> &measures, DecimalQuantity *quantity,
                            MicroProps *micros, UErrorCode status) {
     micros->mixedMeasuresCount = measures.length() - 1;
@@ -142,13 +144,13 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     if (U_FAILURE(status)) {
         return;
     }
-    const MaybeStackVector<Measure>& routedUnits = routed.measures;
+    const MaybeStackVector<Measure>& routedMeasures = routed.measures;
     micros.outputUnit = routed.outputUnit.copy(status).build(status);
     if (U_FAILURE(status)) {
         return;
     }
 
-    mixedMeasuresToMicros(routedUnits, &quantity, &micros, status);
+    mixedMeasuresToMicros(routedMeasures, &quantity, &micros, status);
 
     UnicodeString precisionSkeleton = routed.precision;
     if (micros.rounder.fPrecision.isBogus()) {

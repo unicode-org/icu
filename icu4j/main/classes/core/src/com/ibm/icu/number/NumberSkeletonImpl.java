@@ -1468,10 +1468,13 @@ class NumberSkeletonImpl {
             } else if (macros.unit == MeasureUnit.PERMILLE) {
                 sb.append("permille");
                 return true;
-            } else {
+            } else if (macros.unit.getType() != null) {
                 sb.append("measure-unit/");
                 BlueprintHelpers.generateMeasureUnitOption(macros.unit, sb);
                 return true;
+            } else {
+                // TODO(icu-units#35): add support for not-built-in units.
+                throw new UnsupportedOperationException();
             }
         }
 

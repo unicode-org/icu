@@ -1,7 +1,5 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.number.NumberFormatter;
@@ -13,10 +11,27 @@ import com.ibm.icu.util.ULocale;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A MicroPropsGenerator that multiplexes between different LongNameHandlers,
+ * depending on the outputUnit.
+ *
+ * See processQuantity() for the input requirements.
+ */
 public class LongNameMultiplexer implements MicroPropsGenerator {
+    /**
+     * LongNameMultiplexer calls the parent MicroPropsGenerator itself,
+     * receiving the MicroProps instance in use for this formatting pipeline.
+     * Next it multiplexes between name handlers (fHandlers) which are not given
+     * access to a parent. Consequently LongNameMultiplexer must give these
+     * handlers the MicroProps instance.
+     */
+    public static interface ParentlessMicroPropsGenerator {
+        public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros);
+    }
+
     private final MicroPropsGenerator fParent;
 
-    private List<MicroPropsGenerator> fHandlers;
+    private List<ParentlessMicroPropsGenerator> fHandlers;
 
     // Each MeasureUnit corresponds to the same-index MicroPropsGenerator
     // pointed to in fHandlers.
@@ -50,7 +65,7 @@ public class LongNameMultiplexer implements MicroPropsGenerator {
                 result.fHandlers.add(mlnh);
             } else {
                 LongNameHandler lnh = LongNameHandler
-                        .forMeasureUnit(locale, unit, NoUnit.BASE, width, rules, null );
+                        .forMeasureUnit(locale, unit, NoUnit.BASE, width, rules, null);
                 result.fHandlers.add(lnh);
             }
         }
@@ -62,7 +77,6 @@ public class LongNameMultiplexer implements MicroPropsGenerator {
     // one of the units provided to the factory function.
     @Override
     public MicroProps processQuantity(DecimalQuantity quantity) {
-
         // We call parent->processQuantity() from the Multiplexer, instead of
         // letting LongNameHandler handle it: we don't know which LongNameHandler to
         // call until we've called the parent!
@@ -70,12 +84,11 @@ public class LongNameMultiplexer implements MicroPropsGenerator {
 
         // Call the correct LongNameHandler based on outputUnit
         for (int i = 0; i < this.fHandlers.size(); i++) {
-            if (fMeasureUnits.get(i).equals( micros.outputUnit)) {
-                return fHandlers.get(i).processQuantity(quantity);
+            if (fMeasureUnits.get(i).equals(micros.outputUnit)) {
+                ParentlessMicroPropsGenerator handler = fHandlers.get(i);
+                return handler.processQuantityWithMicros(quantity, micros);
             }
-
         }
-
         throw new AssertionError
                 (" We shouldn't receive any outputUnit for which we haven't already got a LongNameHandler");
     }
