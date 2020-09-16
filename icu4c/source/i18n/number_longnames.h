@@ -188,12 +188,6 @@ class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStor
     // the private constructors.
     friend class MemoryPool<MixedUnitLongNameHandler>;
 
-    // Fills in LongNameHandler fields for formatting mixed units. Each unit in
-    // a mixed unit must be a built-in unit.
-    static void forMixedUnit(const Locale &loc, const MeasureUnit &unit, const UNumberUnitWidth &width,
-                             const PluralRules *rules, const MicroPropsGenerator *parent,
-                             MixedUnitLongNameHandler *fillIn, UErrorCode &status);
-
     // For a mixed unit, returns a Modifier that takes only one parameter: the
     // smallest and final unit of the set. The bigger units' values and labels
     // get baked into this Modifier, together with the unit label of the final
