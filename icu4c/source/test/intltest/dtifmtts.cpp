@@ -1298,12 +1298,14 @@ void DateIntervalFormatTest::testContext() {
         { "cs",    "MMMEd",    CAP_NONE,  60.0*_DAY,  u"po 27. 9. – pá 26. 11." },
         { "cs",    "yMMMM",    CAP_NONE,  60.0*_DAY,  u"září–listopad 2010" },
         { "cs",    "yMMMM",    CAP_NONE,  1.0*_DAY,   u"září 2010" },
+#if !UCONFIG_NO_BREAK_ITERATION
         { "cs",    "MMMEd",    CAP_BEGIN, 60.0*_DAY,  u"Po 27. 9. – pá 26. 11." },
         { "cs",    "yMMMM",    CAP_BEGIN, 60.0*_DAY,  u"Září–listopad 2010" },
         { "cs",    "yMMMM",    CAP_BEGIN, 1.0*_DAY,   u"Září 2010" },
         { "cs",    "MMMEd",    CAP_LIST,  60.0*_DAY,  u"Po 27. 9. – pá 26. 11." },
         { "cs",    "yMMMM",    CAP_LIST,  60.0*_DAY,  u"Září–listopad 2010" },
         { "cs",    "yMMMM",    CAP_LIST,  1.0*_DAY,   u"Září 2010" },
+#endif
         { "cs",    "MMMEd",    CAP_ALONE, 60.0*_DAY,  u"po 27. 9. – pá 26. 11." },
         { "cs",    "yMMMM",    CAP_ALONE, 60.0*_DAY,  u"září–listopad 2010" },
         { "cs",    "yMMMM",    CAP_ALONE, 1.0*_DAY,   u"září 2010" },
