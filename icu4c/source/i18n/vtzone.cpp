@@ -1047,7 +1047,7 @@ VTimeZone::operator=(const VTimeZone& right) {
     return *this;
 }
 
-UBool
+bool
 VTimeZone::operator==(const TimeZone& that) const {
     if (this == &that) {
         return TRUE;
@@ -1066,7 +1066,7 @@ VTimeZone::operator==(const TimeZone& that) const {
     return FALSE;
 }
 
-UBool
+bool
 VTimeZone::operator!=(const TimeZone& that) const {
     return !operator==(that);
 }

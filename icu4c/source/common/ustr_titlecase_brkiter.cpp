@@ -44,7 +44,7 @@ class WholeStringBreakIterator : public BreakIterator {
 public:
     WholeStringBreakIterator() : BreakIterator(), length(0) {}
     ~WholeStringBreakIterator() U_OVERRIDE;
-    UBool operator==(const BreakIterator&) const U_OVERRIDE;
+    bool operator==(const BreakIterator&) const U_OVERRIDE;
     WholeStringBreakIterator *clone() const U_OVERRIDE;
     static UClassID U_EXPORT2 getStaticClassID();
     UClassID getDynamicClassID() const U_OVERRIDE;
@@ -73,7 +73,7 @@ private:
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(WholeStringBreakIterator)
 
 WholeStringBreakIterator::~WholeStringBreakIterator() {}
-UBool WholeStringBreakIterator::operator==(const BreakIterator&) const { return FALSE; }
+bool WholeStringBreakIterator::operator==(const BreakIterator&) const { return FALSE; }
 WholeStringBreakIterator *WholeStringBreakIterator::clone() const { return nullptr; }
 
 CharacterIterator &WholeStringBreakIterator::getText() const {

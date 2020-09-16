@@ -291,7 +291,7 @@ RegexPattern  *RegexPattern::clone() const {
 //                                 characters can still be considered different.
 //
 //--------------------------------------------------------------------------
-UBool   RegexPattern::operator ==(const RegexPattern &other) const {
+bool    RegexPattern::operator ==(const RegexPattern &other) const {
     if (this->fFlags == other.fFlags && this->fDeferredStatus == other.fDeferredStatus) {
         if (this->fPatternString != NULL && other.fPatternString != NULL) {
             return *(this->fPatternString) == *(other.fPatternString);

@@ -532,21 +532,21 @@ public:
      * Compares the equality of two PluralRules objects.
      *
      * @param other The other PluralRules object to be compared with.
-     * @return      True if the given PluralRules is the same as this
+     * @return      true if the given PluralRules is the same as this
      *              PluralRules; false otherwise.
      * @stable ICU 4.0
      */
-    virtual UBool operator==(const PluralRules& other) const;
+    virtual bool operator==(const PluralRules& other) const;
 
     /**
      * Compares the inequality of two PluralRules objects.
      *
      * @param other The PluralRules object to be compared with.
-     * @return      True if the given PluralRules is not the same as this
+     * @return      true if the given PluralRules is not the same as this
      *              PluralRules; false otherwise.
      * @stable ICU 4.0
      */
-    UBool operator!=(const PluralRules& other) const  {return !operator==(other);}
+    bool operator!=(const PluralRules& other) const  {return !operator==(other);}
 
 
     /**

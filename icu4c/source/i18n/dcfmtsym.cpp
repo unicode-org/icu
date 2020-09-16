@@ -174,7 +174,7 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
 
 // -------------------------------------
 
-UBool
+bool
 DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
 {
     if (this == &that) {

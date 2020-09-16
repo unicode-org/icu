@@ -170,7 +170,7 @@ RBBIDataWrapper::~RBBIDataWrapper() {
 //                  should still be ==.
 //
 //-----------------------------------------------------------------------------
-UBool RBBIDataWrapper::operator ==(const RBBIDataWrapper &other) const {
+bool RBBIDataWrapper::operator ==(const RBBIDataWrapper &other) const {
     if (fHeader == other.fHeader) {
         return TRUE;
     }

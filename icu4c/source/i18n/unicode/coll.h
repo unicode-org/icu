@@ -253,7 +253,7 @@ public:
      * @return true if other is the same as this.
      * @stable ICU 2.0
      */
-    virtual UBool operator==(const Collator& other) const;
+    virtual bool operator==(const Collator& other) const;
 
     /**
      * Returns true if "other" is not the same as "this".
@@ -262,7 +262,7 @@ public:
      * @return true if other is not the same as this.
      * @stable ICU 2.0
      */
-    virtual UBool operator!=(const Collator& other) const;
+    virtual bool operator!=(const Collator& other) const;
 
     /**
      * Makes a copy of this object.

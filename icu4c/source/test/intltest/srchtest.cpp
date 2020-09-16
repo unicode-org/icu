@@ -2284,7 +2284,7 @@ public:
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
-    UBool operator!=(const TestSearch &that) const;
+    bool operator!=(const TestSearch &that) const;
 
     UnicodeString m_pattern_;
 
@@ -2347,7 +2347,7 @@ SearchIterator * TestSearch::safeClone() const
     return new TestSearch(m_text_, m_breakiterator_, m_pattern_);
 }
 
-UBool TestSearch::operator!=(const TestSearch &that) const
+bool TestSearch::operator!=(const TestSearch &that) const
 {
     if (SearchIterator::operator !=(that)) {
         return FALSE;

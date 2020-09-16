@@ -107,11 +107,11 @@ public:
      * the same ID, raw GMT offset, and DST rules.
      *
      * @param that  The SimpleTimeZone object to be compared with.
-     * @return      True if the given time zone is equal to this time zone; false
+     * @return      true if the given time zone is equal to this time zone; false
      *              otherwise.
      * @stable ICU 2.0
      */
-    virtual UBool operator==(const TimeZone& that) const;
+    virtual bool operator==(const TimeZone& that) const;
 
     /**
      * Constructs a SimpleTimeZone with the given raw GMT offset and time zone ID,

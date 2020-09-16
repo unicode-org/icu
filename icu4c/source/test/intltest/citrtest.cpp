@@ -53,8 +53,8 @@ public:
         return getStaticClassID(); 
     }
 
-    virtual UBool operator==(const ForwardCharacterIterator& /*that*/) const{
-        return TRUE;
+    virtual bool operator==(const ForwardCharacterIterator& /*that*/) const{
+        return true;
     }
 
     virtual SCharacterIterator* clone(void) const {
@@ -1082,7 +1082,7 @@ public:
     }
 
     // dummy implementations of other pure virtual base class functions
-    virtual UBool operator==(const ForwardCharacterIterator &that) const {
+    virtual bool operator==(const ForwardCharacterIterator &that) const {
         return
             this==&that ||
             (typeid(*this)==typeid(that) && pos==((SubCharIter &)that).pos);
