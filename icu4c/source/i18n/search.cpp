@@ -178,7 +178,7 @@ const UnicodeString & SearchIterator::getText(void) const
 
 // operator overloading ----------------------------------------------
 
-UBool SearchIterator::operator==(const SearchIterator &that) const
+bool SearchIterator::operator==(const SearchIterator &that) const
 {
     if (this == &that) {
         return TRUE;

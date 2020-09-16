@@ -2045,7 +2045,7 @@ public:
     virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
                              uint8_t*result, int32_t resultLength) const;
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
-    virtual UBool operator==(const Collator& other) const;
+    virtual bool operator==(const Collator& other) const;
     // Collator::operator!= calls !Collator::operator== which works for all subclasses.
     virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale);
     TestCollator() : Collator() {}
@@ -2053,7 +2053,7 @@ public:
            UNormalizationMode decompositionMode) : Collator(collationStrength, decompositionMode) {}
 };
 
-inline UBool TestCollator::operator==(const Collator& other) const {
+inline bool TestCollator::operator==(const Collator& other) const {
     // TestCollator has no fields, so we test for identity.
     return this == &other;
 

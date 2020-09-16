@@ -636,15 +636,15 @@ Collator::Collator(const Collator &other)
 {
 }
 
-UBool Collator::operator==(const Collator& other) const
+bool Collator::operator==(const Collator& other) const
 {
     // Subclasses: Call this method and then add more specific checks.
     return typeid(*this) == typeid(other);
 }
 
-UBool Collator::operator!=(const Collator& other) const
+bool Collator::operator!=(const Collator& other) const
 {
-    return (UBool)!(*this == other);
+    return !operator==(other);
 }
 
 int32_t U_EXPORT2 Collator::getBound(const uint8_t       *source,

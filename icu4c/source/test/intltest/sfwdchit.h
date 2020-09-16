@@ -23,7 +23,7 @@ public:
    * Returns true when both iterators refer to the same
    * character in the same character-storage object.  
    */
-  // not used -- virtual UBool operator==(const ForwardCharacterIterator& that) const;
+  // not used -- virtual bool operator==(const ForwardCharacterIterator& that) const;
         
   /**
    * Generates a hash code for this iterator.  

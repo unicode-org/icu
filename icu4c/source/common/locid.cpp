@@ -483,7 +483,7 @@ Locale::clone() const {
     return new Locale(*this);
 }
 
-UBool
+bool
 Locale::operator==( const   Locale& other) const
 {
     return (uprv_strcmp(other.fullName, fullName) == 0);

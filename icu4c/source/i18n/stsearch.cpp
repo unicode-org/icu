@@ -205,7 +205,7 @@ StringSearch & StringSearch::operator=(const StringSearch &that)
     return *this;
 }
 
-UBool StringSearch::operator==(const SearchIterator &that) const
+bool StringSearch::operator==(const SearchIterator &that) const
 {
     if (this == &that) {
         return TRUE;

@@ -86,7 +86,7 @@ class Integer : public UObject {
         return getStaticClassID();
     }
 
-    virtual UBool operator==(const UObject& other) const 
+    virtual bool operator==(const UObject& other) const
     {
         return typeid(*this) == typeid(other) &&
             _val == ((Integer&)other)._val;
