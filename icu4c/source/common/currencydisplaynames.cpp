@@ -48,6 +48,7 @@ struct FormattingData : public UMemory {
     const UChar *isoCode;
     UBool isFallback = false;
     UBool isDefault = false;
+    UBool isMissing = false;
     UnicodeString displayName = UnicodeString();
     UnicodeString symbol = UnicodeString();
     // Only implementing Currency Display Names.
@@ -62,6 +63,7 @@ struct VariantSymbol : public UMemory {
     const char *variant;
     UBool isFallback = false;
     UBool isDefault = false;
+    UBool isMissing = false;
     UnicodeString symbol = UnicodeString();
 
     VariantSymbol(const UChar *isoCode, const char *variant) : isoCode(isoCode), variant(variant) {}
@@ -71,6 +73,7 @@ struct PluralsData : public UMemory {
     const UChar *isoCode;
     UBool isFallback = false;
     UBool isDefault = false;
+    UBool isMissing = false;
     UHashtable *pluralsStringTable = nullptr;
     
     PluralsData(const UChar *isoCode) : isoCode(isoCode) {}
@@ -203,8 +206,9 @@ struct CurrencySink : public ResourceSink {
 
 CurrencySink::~CurrencySink() {}
 
-CurrencyDisplayNames::CurrencyDisplayNames(Locale *locale, UBool noSubstitute)
-    : locale(locale), noSubstitute(noSubstitute) {}
+CurrencyDisplayNames::CurrencyDisplayNames(Locale *locale,
+                                           UResourceBundle *rb, UBool noSubstitute)
+    : locale(locale), rb(rb), noSubstitute(noSubstitute) {}
 
 CurrencyDisplayNames::~CurrencyDisplayNames() {}
 
@@ -219,16 +223,41 @@ const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UBool
         instance->noSubstitute != noSubstitute) {
         Locale *internalLocale;
         if (loc->isBogus()) {
+            if (noSubstitute) {
+                return nullptr;
+            }
             internalLocale = new Locale();
+            errorCode = U_USING_DEFAULT_WARNING;
         } else {
             internalLocale = new Locale(*loc);
         }
-        instance = new CurrencyDisplayNames(internalLocale, noSubstitute);
-
-        currencyDisplayDataCache = instance;
-        formattingDataCache = nullptr;
-        variantSymbolCache = nullptr;
-    }
+        UErrorCode ec2 = U_ZERO_ERROR;
+        UResourceBundle *currencyResources = ures_open(U_ICUDATA_CURR, internalLocale->getName(), &ec2);
+        if (U_SUCCESS(ec2)) {
+            if ((ec2 == U_USING_DEFAULT_WARNING || ec2 == U_USING_FALLBACK_WARNING) && noSubstitute) {
+                // If we fall back and noSubstitute is set then return null.
+                return nullptr;
+            }
+            instance = new CurrencyDisplayNames(internalLocale, currencyResources, noSubstitute);
+            currencyDisplayDataCache = instance;
+            formattingDataCache = nullptr;
+            variantSymbolCache = nullptr;
+            pluralsDataCache = nullptr;
+            if (ec2 == U_USING_DEFAULT_WARNING) {
+                instance->isDefault = true;
+            }
+            if (ec2 == U_USING_FALLBACK_WARNING) {
+                instance->isFallback = true;
+            }
+            errorCode = ec2;
+        }
+    } else {
+        if (instance->isDefault) {
+            errorCode = U_USING_DEFAULT_WARNING;
+        } else if (instance->isFallback) {
+            errorCode = U_USING_FALLBACK_WARNING;
+        }
+    }     
     return instance;
 }
 
@@ -237,25 +266,33 @@ Locale *CurrencyDisplayNames::getLocale() { return locale; }
 const UChar *CurrencyDisplayNames::getName(const UChar *isoCode, UErrorCode &errorCode) const {
     FormattingData *formattingData = fetchFormattingData(isoCode, errorCode);
 
-    if (formattingData->isDefault) {
-        errorCode = U_USING_DEFAULT_WARNING;
-    } else if (formattingData->isFallback) {
-        errorCode = U_USING_FALLBACK_WARNING;
-    }
-    if (formattingData->displayName.isEmpty() && !noSubstitute) {
-        return isoCode;
-    }
-    return (&formattingData->displayName)->getBuffer();
+   if (formattingData->isMissing && noSubstitute) {
+        errorCode = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
+   } else if (formattingData->isDefault || isDefault) {
+       errorCode = U_USING_DEFAULT_WARNING;
+   } else if (formattingData->isFallback || isFallback) {
+       errorCode = U_USING_FALLBACK_WARNING;
+   }
+
+   if (formattingData->displayName.isEmpty() && !noSubstitute) {
+       return isoCode;
+   }
+   return (&formattingData->displayName)->getBuffer();
 }
 
 const UChar *CurrencyDisplayNames::getSymbol(const UChar *isoCode, UErrorCode &errorCode) const {
     FormattingData *formattingData = fetchFormattingData(isoCode, errorCode);
 
-    if (formattingData->isDefault) {
+   if (formattingData->isMissing && noSubstitute) {
+        errorCode = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
+    } else if (formattingData->isDefault || isDefault) {
         errorCode = U_USING_DEFAULT_WARNING;
-    } else if (formattingData->isFallback) {
+    } else if (formattingData->isFallback || isFallback) {
         errorCode = U_USING_FALLBACK_WARNING;
     }
+
     if (formattingData->symbol.isEmpty() && !noSubstitute) {
         return isoCode;
     }
@@ -265,12 +302,17 @@ const UChar *CurrencyDisplayNames::getSymbol(const UChar *isoCode, UErrorCode &e
 const UChar *CurrencyDisplayNames::getNarrowSymbol(const UChar *isoCode, UErrorCode &errorCode) const {
     VariantSymbol *variantSymbol = fetchVariantSymbol(isoCode, CURRENCIES_NARROW, errorCode);
 
-    if (variantSymbol->isDefault) {
+   if (variantSymbol->isMissing && noSubstitute) {
+        errorCode = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
+    } else if (variantSymbol->isDefault || isDefault) {
         errorCode = U_USING_DEFAULT_WARNING;
-    } else if (variantSymbol->isFallback) {
+    } else if (variantSymbol->isFallback || isFallback) {
         errorCode = U_USING_FALLBACK_WARNING;
     }
+
     if (variantSymbol->symbol.isEmpty() && !noSubstitute) {
+        errorCode = U_USING_FALLBACK_WARNING;
         return getSymbol(isoCode, errorCode);
     }
     return (&variantSymbol->symbol)->getBuffer();
@@ -279,12 +321,17 @@ const UChar *CurrencyDisplayNames::getNarrowSymbol(const UChar *isoCode, UErrorC
 const UChar *CurrencyDisplayNames::getFormalSymbol(const UChar *isoCode, UErrorCode &errorCode) const {
     VariantSymbol *variantSymbol = fetchVariantSymbol(isoCode, CURRENCIES_FORMAL, errorCode);
 
-    if (variantSymbol->isDefault) {
+   if (variantSymbol->isMissing && noSubstitute) {
+        errorCode = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
+    } else if (variantSymbol->isDefault || isDefault) {
         errorCode = U_USING_DEFAULT_WARNING;
-    } else if (variantSymbol->isFallback) {
+    } else if (variantSymbol->isFallback || isFallback) {
         errorCode = U_USING_FALLBACK_WARNING;
     }
+
     if (variantSymbol->symbol.isEmpty() && !noSubstitute) {
+        errorCode = U_USING_FALLBACK_WARNING;
         return getSymbol(isoCode, errorCode);
     }
     return (&variantSymbol->symbol)->getBuffer();
@@ -293,12 +340,17 @@ const UChar *CurrencyDisplayNames::getFormalSymbol(const UChar *isoCode, UErrorC
 const UChar *CurrencyDisplayNames::getVariantSymbol(const UChar *isoCode, UErrorCode &errorCode) const {
     VariantSymbol *variantSymbol = fetchVariantSymbol(isoCode, CURRENCIES_VARIANT, errorCode);
 
-    if (variantSymbol->isDefault) {
+   if (variantSymbol->isMissing && noSubstitute) {
+        errorCode = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
+    } else if (variantSymbol->isDefault || isDefault) {
         errorCode = U_USING_DEFAULT_WARNING;
-    } else if (variantSymbol->isFallback) {
+    } else if (variantSymbol->isFallback || isFallback) {
         errorCode = U_USING_FALLBACK_WARNING;
     }
+
     if (variantSymbol->symbol.isEmpty() && !noSubstitute) {
+        errorCode = U_USING_FALLBACK_WARNING;
         return getSymbol(isoCode, errorCode);
     }
     return (&variantSymbol->symbol)->getBuffer();
@@ -327,51 +379,57 @@ const UChar *CurrencyDisplayNames::getPluralName(const UChar *isoCode,
                                                  const PluralMapBase::Category pluralCategory,
                                                  UErrorCode &errorCode) const {
     PluralsData *pluralsData = fetchPluralsData(isoCode, errorCode);
-    if (pluralsData->isDefault) {
+
+    if (pluralsData->isMissing && noSubstitute) {
+        errorCode = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
+    } else if (pluralsData->isDefault || isDefault) {
         errorCode = U_USING_DEFAULT_WARNING;
-    } else if (pluralsData->isFallback) {
+    } else if (pluralsData->isFallback || isFallback) {
         errorCode = U_USING_FALLBACK_WARNING;
     }
-    void *temp = uhash_get(pluralsData->pluralsStringTable, (int32_t *)pluralCategory);
-    if (temp == NULL) {
-        return nullptr;
-    } else {
-        return ((UnicodeString *)temp)->getBuffer();
+
+    void *result = nullptr;
+    if (!pluralsData->isMissing) {
+        result = uhash_get(pluralsData->pluralsStringTable, (int32_t *)pluralCategory);
     }
+    if (result == nullptr && noSubstitute) {
+        return nullptr;
+    }
+    if (result == nullptr && !pluralsData->isMissing) {
+        // First fall back to the "other" plural variant
+        // Note: If plural is already "other", this fallback is benign
+        result = uhash_get(pluralsData->pluralsStringTable, (int32_t *)PluralMapBase::Category::OTHER);
+    }
+    if (result == nullptr) {
+        // If that fails, fall back to the display name
+        FormattingData *formattingData = fetchFormattingData(isoCode, errorCode);
+        if (!formattingData->isMissing) {
+            result = &formattingData->displayName;
+        }
+    }
+    if (result == nullptr) {
+        // If all else fails, return the ISO code
+        return isoCode;
+    }
+    return ((UnicodeString *)result)->getBuffer();
 }
 
 FormattingData *CurrencyDisplayNames::fetchFormattingData(const UChar *isoCode,
                                                           UErrorCode &errorCode) const {
     FormattingData *result = formattingDataCache;
     if (result == nullptr || u_strcmp(result->isoCode, isoCode) != 0) {
-        UErrorCode ec2 = U_ZERO_ERROR;
+        UErrorCode ec2 = errorCode;
         result = new FormattingData(isoCode);
-        LocalUResourceBundlePointer currencyResources(
-            ures_open(U_ICUDATA_CURR, locale->getName(), &ec2));
-        if (U_SUCCESS(ec2)) {
-            if ((ec2 == U_USING_DEFAULT_WARNING || ec2 == U_USING_FALLBACK_WARNING) && noSubstitute) {
-                // If we fall back and noSubstitute is set then return null.
-                errorCode = ec2;
-                return nullptr;
-            } else {
-                errorCode = ec2;
-            }
-        }
-
         CurrencySink sink(noSubstitute, CurrencySink::EntrypointTable::CURRENCIES_TABLE);
         sink.formattingData = result;
         CharString path;
-        path.append(CURRENCIES, errorCode)
-            .append('/', errorCode)
-            .appendInvariantChars(isoCode, u_strlen(isoCode), errorCode);
-        ures_getAllItemsWithFallback(currencyResources.getAlias(), path.data(), sink, ec2);
+        path.append(CURRENCIES, ec2)
+            .append('/', ec2)
+            .appendInvariantChars(isoCode, u_strlen(isoCode), ec2);
+        ures_getAllItemsWithFallback(rb, path.data(), sink, ec2);
         if (ec2 == U_MISSING_RESOURCE_ERROR) {
-            if (noSubstitute) {
-                errorCode = ec2;
-                result = nullptr;
-            } else {
-                errorCode = U_USING_FALLBACK_WARNING;
-            }
+            result->isMissing = true;
         } else {
             errorCode = ec2;
         }
@@ -385,34 +443,18 @@ VariantSymbol *CurrencyDisplayNames::fetchVariantSymbol(const UChar *isoCode, co
     VariantSymbol *result = variantSymbolCache;
     if (result == nullptr || u_strcmp(result->isoCode, isoCode) != 0 ||
         strcmp(result->variant, variant) != 0) {
-        UErrorCode ec2 = U_ZERO_ERROR;
-        LocalUResourceBundlePointer currencyResources(
-            ures_open(U_ICUDATA_CURR, locale->getName(), &ec2));
-        if (U_SUCCESS(ec2)) {
-            if ((ec2 == U_USING_DEFAULT_WARNING || ec2 == U_USING_FALLBACK_WARNING) && noSubstitute) {
-                // If we fall back and noSubstitute is set then return null.
-                errorCode = ec2;
-                return nullptr;
-            } else {
-                errorCode = ec2;
-            }
-        }
 
+        UErrorCode ec2 = errorCode;
         result = new VariantSymbol(isoCode, variant);
         CurrencySink sink(noSubstitute, CurrencySink::EntrypointTable::CURRENCY_VARIANT_TABLE);
         sink.variantSymbol = result;
         CharString path;
-        path.append(variant, errorCode)
-            .append('/', errorCode)
-            .appendInvariantChars(isoCode, u_strlen(isoCode), errorCode);
-        ures_getAllItemsWithFallback(currencyResources.getAlias(), path.data(), sink, ec2);
+        path.append(variant, ec2)
+            .append('/', ec2)
+            .appendInvariantChars(isoCode, u_strlen(isoCode), ec2);
+        ures_getAllItemsWithFallback(rb, path.data(), sink, ec2);
         if (ec2 == U_MISSING_RESOURCE_ERROR) {
-            if (noSubstitute) {
-                errorCode = ec2;
-                result = nullptr;
-            } else {
-                errorCode = U_USING_FALLBACK_WARNING;
-            }
+            result->isMissing = true;
         } else {
             errorCode = ec2;
         }
@@ -424,34 +466,18 @@ VariantSymbol *CurrencyDisplayNames::fetchVariantSymbol(const UChar *isoCode, co
 PluralsData *CurrencyDisplayNames::fetchPluralsData(const UChar *isoCode, UErrorCode &errorCode) const {
     PluralsData *result = pluralsDataCache;
     if (result == nullptr || u_strcmp(result->isoCode, isoCode) != 0) {
-        UErrorCode ec2 = U_ZERO_ERROR;
         result = new PluralsData(isoCode);
-        LocalUResourceBundlePointer currencyResources(
-            ures_open(U_ICUDATA_CURR, locale->getName(), &ec2));
-        if (U_SUCCESS(ec2)) {
-            if ((ec2 == U_USING_DEFAULT_WARNING || ec2 == U_USING_FALLBACK_WARNING) && noSubstitute) {
-                // If we fall back and noSubstitute is set then return null.
-                errorCode = ec2;
-                return nullptr;
-            } else {
-                errorCode = ec2;
-            }
-        }
 
+        UErrorCode ec2 = errorCode;
         CurrencySink sink(noSubstitute, CurrencySink::EntrypointTable::CURRENCY_PLURALS_TABLE);
         sink.pluralsData = result;
         CharString path;
-        path.append(CURRENCYPLURALS, errorCode)
-            .append('/', errorCode)
-            .appendInvariantChars(isoCode, u_strlen(isoCode), errorCode);
-        ures_getAllItemsWithFallback(currencyResources.getAlias(), path.data(), sink, ec2);
+        path.append(CURRENCYPLURALS, ec2)
+            .append('/', ec2)
+            .appendInvariantChars(isoCode, u_strlen(isoCode), ec2);
+        ures_getAllItemsWithFallback(rb, path.data(), sink, ec2);
         if (ec2 == U_MISSING_RESOURCE_ERROR) {
-            if (noSubstitute) {
-                errorCode = ec2;
-                result = nullptr;
-            } else {
-                errorCode = U_USING_FALLBACK_WARNING;
-            }
+            result->isMissing = true;
         } else {
             errorCode = ec2;
         }

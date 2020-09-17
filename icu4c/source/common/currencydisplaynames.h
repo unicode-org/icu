@@ -153,9 +153,12 @@ class CurrencyDisplayNames : public UMemory {
     Locale *getLocale();
 
   private:
-    CurrencyDisplayNames(Locale *locale, UBool noSubstitute);
+    CurrencyDisplayNames(Locale *locale, UResourceBundle *rb, UBool noSubstitute);
     ~CurrencyDisplayNames();
     Locale *locale;
+    UResourceBundle *rb;
+    UBool isFallback = false;
+    UBool isDefault = false;
     const UBool noSubstitute;
 
     FormattingData *fetchFormattingData(const UChar *isoCode, UErrorCode &errorCode) const;
