@@ -22,6 +22,8 @@
 #  The tool operates recursively on the directory from which it is run.
 #  Only files from the ICU github repository are checked.
 #  No changes are made to the repository; only the working copy will be altered.
+#  The script checks all source files and returns a non-zero exit code if any of
+#  the checked files contain a non-UTF-8 character.
 
 from __future__ import print_function
 
@@ -31,6 +33,10 @@ import os.path
 import re
 import getopt
 
+
+# List of directories to check for UTF-8 and BOM. Currently covers
+# all of icu/. Modify as needed.
+icu_directories_to_be_scanned = ["."]
 
 def runCommand(cmd):
     output_file = os.popen(cmd);
@@ -45,13 +51,14 @@ def runCommand(cmd):
 def usage():
     print("usage: " + sys.argv[0] + " [-h | --help]")
 
-    
+
 #
 #  File check.         Check source code files for UTF-8 and all except text files for not containing a BOM
 #    file_name:        name of a text file.
 #    is_source:        Flag, set to True if file is a source code file (.c, .cpp, .h, .java).
 #
 def check_file(file_name, is_source):
+    rc = 0
     f = open(file_name, 'rb')
     bytes = f.read()
     f.close()
@@ -61,16 +68,19 @@ def check_file(file_name, is_source):
             bytes.decode("UTF-8")
         except UnicodeDecodeError:
             print("Error: %s is a source code file but contains non-utf-8 bytes." % file_name)
-    
+            rc = 1
+
     if bytes[0] == 0xef:
         if not (file_name.endswith(".txt") or file_name.endswith(".sln")
-                    or file_name.endswith(".targets")
-                    or ".vcxproj" in file_name):
+                    or file_name.endswith(".targets") or ".vcxproj" in file_name):
             print("Warning: file %s contains a UTF-8 BOM: " % file_name)
+            rc = 1
 
-    return
+    return rc
 
 def main(argv):
+    exit_status = 0
+
     try:
         opts, args = getopt.getopt(argv, "h", ("help"))
     except getopt.GetoptError:
@@ -84,23 +94,30 @@ def main(argv):
     if args:
         print("unexpected command line argument")
         usage()
-        sys.exit()
-
-    output = runCommand("git ls-files ");
-    file_list = output.splitlines()
+        sys.exit(2)
 
     source_file_re = re.compile(".*((?:\\.c$)|(?:\\.cpp$)|(?:\\.h$)|(?:\\.java$))")
-    
-    for f in file_list:
-        if os.path.isdir(f):
-            print("Skipping dir " + f)
-            continue
-        if not os.path.isfile(f):
-            print("Repository file not in working copy: " + f)
-            continue;
+    git_cmd = "git ls-files DIR"
 
-        source_file = source_file_re.match(f)
-        check_file(f, source_file)
+    for dir in icu_directories_to_be_scanned:
+        print('Scanning ' + dir)
+        output = runCommand(git_cmd.replace("DIR", dir))
+        file_list = output.splitlines()
+
+        for f in file_list:
+            if os.path.isdir(f):
+                print("Skipping dir " + f)
+                continue
+            if not os.path.isfile(f):
+                print("Repository file not in working copy: " + f)
+                continue;
+
+            source_file = source_file_re.match(f)
+            if check_file(f, source_file) != 0:
+                exit_status = 1
+
+    print(exit_status)
+    sys.exit(exit_status)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
