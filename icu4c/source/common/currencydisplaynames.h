@@ -36,7 +36,7 @@ class CurrencyDisplayNames : public UMemory {
      *                  failure code upon return.
      * @draft ICU 6X
      */
-    U_COMMON_API static const CurrencyDisplayNames *getInstance(Locale *locale, UErrorCode &status);
+    U_COMMON_API static const CurrencyDisplayNames *getInstance(const Locale *locale, UErrorCode &status);
 
     /**
      * Return an instance of CurrencyDisplayNames that provides information
@@ -54,7 +54,7 @@ class CurrencyDisplayNames : public UMemory {
      *                      failure code upon return.
      * @draft ICU 6X
      */
-    U_COMMON_API static const CurrencyDisplayNames *getInstance(Locale *locale, UBool noSubstitute,
+    U_COMMON_API static const CurrencyDisplayNames *getInstance(const Locale *locale, UBool noSubstitute,
                                                                 UErrorCode &status);
 
     /**
@@ -150,12 +150,12 @@ class CurrencyDisplayNames : public UMemory {
      * @return the display locale
      * @draft ICU 6X
      */
-    Locale *getLocale();
+    const Locale *getLocale();
 
   private:
     CurrencyDisplayNames(Locale *locale, UResourceBundle *rb, UBool noSubstitute);
     ~CurrencyDisplayNames();
-    Locale *locale;
+    const Locale *locale;
     UResourceBundle *rb;
     UBool isFallback = false;
     UBool isDefault = false;

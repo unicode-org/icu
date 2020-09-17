@@ -135,6 +135,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
   TESTCASE_AUTO(TestCurrencyNames);
   TESTCASE_AUTO(TestCurrencyVariants);
+  TESTCASE_AUTO(TestCurrencyPlurals);
   TESTCASE_AUTO(TestCurrencyAmount);
   TESTCASE_AUTO(TestCurrencyUnit);
   TESTCASE_AUTO(TestCoverage);
@@ -2185,7 +2186,51 @@ void NumberFormatTest::TestCurrencyVariants(){
     }
 }
 
-void NumberFormatTest::TestCurrencyUnit(void){
+void NumberFormatTest::TestCurrencyPlurals() {
+    IcuTestErrorCode status(*this, "TestCurrencyPlurals");
+
+    static const UChar USD[] = {0x55, 0x53, 0x44, 0}; /*USD*/
+    static const UChar USX[] = {0x55, 0x53, 0x58, 0}; /*USX*/
+    static const UChar AFA[] = {0x41, 0x46, 0x41, 0}; /*AFA*/
+    static const char *locale_ru = "ru";
+    UBool choiceFormatIgnored;
+    int32_t lengthIgnored;
+
+    assertEquals("USD.getPlural(FEW, ru)", u"доллара США",
+                 ucurr_getPluralName(USD, locale_ru, &choiceFormatIgnored,
+                                     PluralMapBase::getCategoryName(PluralMapBase::FEW), &lengthIgnored,
+                                     status));
+    assertEquals("USD.getPlural(MANY, ru)", u"долларов США",
+                 ucurr_getPluralName(USD, locale_ru, &choiceFormatIgnored,
+                                     PluralMapBase::getCategoryName(PluralMapBase::MANY), &lengthIgnored,
+                                     status));
+    assertEquals("USD.getPlural(ONE, ru)", u"доллар США",
+                 ucurr_getPluralName(USD, locale_ru, &choiceFormatIgnored,
+                                     PluralMapBase::getCategoryName(PluralMapBase::ONE), &lengthIgnored,
+                                     status));
+    assertEquals("USD.getPlural(OTHER, ru)", u"доллара США",
+                 ucurr_getPluralName(USD, locale_ru, &choiceFormatIgnored,
+                                     PluralMapBase::getCategoryName(PluralMapBase::OTHER),
+                                     &lengthIgnored, status));
+    // Fallback to OTHER
+    assertEquals("USD.getPlural(fallback: TWO to OTHER, ru)", u"доллара США",
+                 ucurr_getPluralName(USD, locale_ru, &choiceFormatIgnored,
+                                     PluralMapBase::getCategoryName(PluralMapBase::TWO), &lengthIgnored,
+                                     status));
+    // Fallback to display name
+    assertEquals("AFA.getPlural(fallback: OTHER to display name, ru)", u"Афгани (1927–2002)",
+                 ucurr_getPluralName(AFA, locale_ru, &choiceFormatIgnored,
+                                     PluralMapBase::getCategoryName(PluralMapBase::OTHER),
+                                     &lengthIgnored, status));
+    // Fallback to ISO code
+    assertEquals("USX.getPlural(fallback: OTHER to ISOCode, ru)", u"USX",
+                 ucurr_getPluralName(USX, locale_ru, &choiceFormatIgnored,
+                                     PluralMapBase::getCategoryName(PluralMapBase::OTHER),
+                                     &lengthIgnored, status));
+    assertSuccess("getPlural", status);
+}
+
+void NumberFormatTest::TestCurrencyUnit(void) {
     UErrorCode ec = U_ZERO_ERROR;
     static const UChar USD[]  = u"USD";
     static const char USD8[]  =  "USD";
@@ -10074,11 +10119,18 @@ void NumberFormatTest::Test8144_TestCurrencyNames() {
     static const UChar CAD[] = {0x43, 0x41, 0x44, 0}; /*CAD*/
     static const UChar ITL[] = {0x49, 0x54, 0x4C, 0}; /*ITL*/
     const UBool possibleDataError = TRUE;
+    static const Locale locale_en = Locale::createFromName("en");
+    static const Locale locale_enCA = Locale::createFromName("en_CA");
+    static const Locale locale_enNZ = Locale::createFromName("en_NZ");
+    static const Locale locale_enUS = Locale::createFromName("en_US");
+    static const Locale locale_esES = Locale::createFromName("es_ES");
+    static const Locale locale_zhTW = Locale::createFromName("zh_TW");
+    static const Locale locale_ti = Locale::createFromName("ti");
+    static const Locale locale_zz = Locale::createFromName("zz");
     // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
     // THE LOCALE DATA before diving into the code.
 
-    Locale locale = Locale::createFromName("en");
-    const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_en, ec);
     ec = U_ZERO_ERROR;
     assertEquals("USD.getName(SYMBOL_NAME, en)", UnicodeString("$"),
                  currencyDisplayNames->getName(USD, UCURR_SYMBOL_NAME, ec), possibleDataError);
@@ -10091,8 +10143,7 @@ void NumberFormatTest::Test8144_TestCurrencyNames() {
     assertEquals("CAD.getName(NARROW_SYMBOL_NAME, en)", UnicodeString("$"),
                  currencyDisplayNames->getName(CAD, UCURR_NARROW_SYMBOL_NAME, ec), possibleDataError);
 
-    locale = Locale::createFromName("en_CA");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_enCA, ec);
     assertEquals("CAD.getName(SYMBOL_NAME, en_CA)", UnicodeString("$"),
                  currencyDisplayNames->getName(CAD, UCURR_SYMBOL_NAME, ec), possibleDataError);
     assertEquals("USD.getName(SYMBOL_NAME, en_CA)", UnicodeString("US$"),
@@ -10101,15 +10152,13 @@ void NumberFormatTest::Test8144_TestCurrencyNames() {
                  currencyDisplayNames->getName(USD, UCURR_NARROW_SYMBOL_NAME, ec),
                  possibleDataError);
 
-    locale = Locale::createFromName("en_NZ");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_enNZ, ec);
     assertEquals("USD.getName(SYMBOL_NAME) in en_NZ", UnicodeString("US$"),
                  currencyDisplayNames->getName(USD, UCURR_SYMBOL_NAME, ec), possibleDataError);
     assertEquals("CAD.getName(SYMBOL_NAME)", UnicodeString("CA$"),
                  currencyDisplayNames->getName(CAD, UCURR_SYMBOL_NAME, ec), possibleDataError);
 
-    locale = Locale::createFromName("en_US");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_enUS, ec);
     assertEquals("USX.getName(SYMBOL_NAME)", UnicodeString("USX"),
                  currencyDisplayNames->getName(USX, UCURR_SYMBOL_NAME, ec), possibleDataError);
     assertEquals("USX.getName(NARROW_SYMBOL_NAME)", UnicodeString("USX"),
@@ -10121,48 +10170,41 @@ void NumberFormatTest::Test8144_TestCurrencyNames() {
 
     // No resource file for es_ES, fallback to es
     ec = U_ZERO_ERROR;
-    locale = Locale::createFromName("es_ES");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_esES, ec);
     currencyDisplayNames->getName(CAD, ec);
     assertTrue("getName (es_ES fallback)", U_USING_FALLBACK_WARNING == ec, TRUE,
                possibleDataError);
 
     // No resource file for zh_TW, fallback to zh_Hant_TW
     ec = U_ZERO_ERROR;
-    locale = Locale::createFromName("zh_TW");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_zhTW, ec);
     currencyDisplayNames->getName(CAD, ec);
     assertTrue("getName (zh_TW fallback)", U_USING_FALLBACK_WARNING == ec, TRUE,
                possibleDataError);
 
     // No value for CAD in ti, use value from root
     ec = U_ZERO_ERROR;
-    locale = Locale::createFromName("ti");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_ti, ec);
     currencyDisplayNames->getName(CAD, ec);
     assertTrue("getName (ti default)", U_USING_DEFAULT_WARNING == ec, TRUE);
 
     // No resource file for zz, fallback to root
     ec = U_ZERO_ERROR;
-    locale = Locale::createFromName("zz");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_zz, ec);
     currencyDisplayNames->getName(CAD, ec);
     assertTrue("getName (zz default to root)", U_USING_DEFAULT_WARNING == ec, TRUE);
 
 
     //noSubstitute tests
     ec = U_ZERO_ERROR;
-    locale = Locale::createFromName("en_US");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, TRUE, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_enUS, TRUE, ec);
     assertTrue("getInstance (en_US no fallback)", currencyDisplayNames == nullptr);
 
     ec = U_ZERO_ERROR;
-    locale = Locale::createFromName("zz");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, TRUE, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_zz, TRUE, ec);
     assertTrue("getInstance (zz no resource)", currencyDisplayNames == nullptr);
 
-    locale = Locale::createFromName("en");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, true, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_en, true, ec);
     assertTrue("getName (USX no entry)", currencyDisplayNames->getName(USX, ec) == NULL);
     assertTrue("getName (USX no entry)", currencyDisplayNames->getSymbol(USX, ec) == NULL);
     assertTrue("getName (USX no entry)", currencyDisplayNames->getNarrowSymbol(USX, ec) == NULL);
@@ -10193,7 +10235,7 @@ void NumberFormatTest::Test8144_TestCurrencyVariants() {
     };
     for (const auto &cas : cases) {
         status.setScope(cas.isoCode);
-        Locale locale = Locale::createFromName(cas.locale);
+        const Locale locale = Locale::createFromName(cas.locale);
         const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, status);
 
         const UChar *actualShort = currencyDisplayNames->getSymbol(cas.isoCode, status);
@@ -10219,9 +10261,10 @@ void NumberFormatTest::Test8144_TestCurrencyPlurals() {
     static const UChar USD[] = {0x55, 0x53, 0x44, 0}; /*USD*/
     static const UChar USX[] = {0x55, 0x53, 0x58, 0}; /*USX*/
     static const UChar AFA[] = {0x41, 0x46, 0x41, 0}; /*AFA*/
+    static const Locale locale_ru = Locale::createFromName("ru");
 
-    Locale locale = Locale::createFromName("ru");
-    const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, status);
+    const CurrencyDisplayNames *currencyDisplayNames =
+        CurrencyDisplayNames::getInstance(&locale_ru, status);
 
     assertEquals("USD.getPlural(FEW, ru)", u"доллара США",
                  currencyDisplayNames->getPluralName(USD, PluralMapBase::FEW, status));
@@ -10243,7 +10286,7 @@ void NumberFormatTest::Test8144_TestCurrencyPlurals() {
     assertSuccess("getPlural", status);
 
     // No fallback
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, true, status);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale_ru, true, status);
     assertTrue("USD.getPlural(no fallback: TWO, ru)", 
         currencyDisplayNames->getPluralName(USD, PluralMapBase::TWO, status) == nullptr);
     assertTrue("AFA.getPlural(no fallback: AFA, ru)",

@@ -212,11 +212,11 @@ CurrencyDisplayNames::CurrencyDisplayNames(Locale *locale,
 
 CurrencyDisplayNames::~CurrencyDisplayNames() {}
 
-const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UErrorCode &errorCode) {
+const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(const Locale *loc, UErrorCode &errorCode) {
     return getInstance(loc, false, errorCode);
 }
 
-const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UBool noSubstitute,
+const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(const Locale *loc, UBool noSubstitute,
                                                               UErrorCode &errorCode) {
     CurrencyDisplayNames *instance = currencyDisplayDataCache;
     if (instance == nullptr || strcmp((instance->locale)->getName(), loc->getName()) != 0 ||
@@ -261,7 +261,7 @@ const CurrencyDisplayNames *CurrencyDisplayNames::getInstance(Locale *loc, UBool
     return instance;
 }
 
-Locale *CurrencyDisplayNames::getLocale() { return locale; }
+const Locale *CurrencyDisplayNames::getLocale() { return locale; }
 
 const UChar *CurrencyDisplayNames::getName(const UChar *isoCode, UErrorCode &errorCode) const {
     FormattingData *formattingData = fetchFormattingData(isoCode, errorCode);

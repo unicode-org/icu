@@ -641,7 +641,7 @@ ucurr_getName(const UChar* currency,
     if (isChoiceFormat != NULL) {
         *isChoiceFormat = FALSE;
     }
-    Locale loc = Locale::createFromName(locale);
+    const Locale loc = Locale::createFromName(locale);
     const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&loc, *ec);
     const UChar *displayName = currencyDisplayNames->getName(currency, nameStyle, *ec);
     *len = u_strlen(displayName);
@@ -655,73 +655,13 @@ ucurr_getPluralName(const UChar* currency,
                     const char* pluralCount,
                     int32_t* len, // fillin
                     UErrorCode* ec) {
-    // Look up the Currencies resource for the given locale.  The
-    // Currencies locale data looks like this:
-    //|en {
-    //|  CurrencyPlurals {
-    //|    USD{
-    //|      one{"US dollar"}
-    //|      other{"US dollars"}
-    //|    }
-    //|  }
-    //|}
 
-    if (U_FAILURE(*ec)) {
-        return 0;
-    }
-
-    // Use a separate UErrorCode here that does not propagate out of
-    // this function.
-    UErrorCode ec2 = U_ZERO_ERROR;
-
-    char loc[ULOC_FULLNAME_CAPACITY];
-    uloc_getName(locale, loc, sizeof(loc), &ec2);
-    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
-        *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    char buf[ISO_CURRENCY_CODE_LENGTH+1];
-    myUCharsToChars(buf, currency);
-
-    const UChar* s = NULL;
-    ec2 = U_ZERO_ERROR;
-    UResourceBundle* rb = ures_open(U_ICUDATA_CURR, loc, &ec2);
-
-    rb = ures_getByKey(rb, CURRENCYPLURALS, rb, &ec2);
-
-    // Fetch resource with multi-level resource inheritance fallback
-    rb = ures_getByKeyWithFallback(rb, buf, rb, &ec2);
-
-    s = ures_getStringByKeyWithFallback(rb, pluralCount, len, &ec2);
-    if (U_FAILURE(ec2)) {
-        //  fall back to "other"
-        ec2 = U_ZERO_ERROR;
-        s = ures_getStringByKeyWithFallback(rb, "other", len, &ec2);     
-        if (U_FAILURE(ec2)) {
-            ures_close(rb);
-            // fall back to long name in Currencies
-            return ucurr_getName(currency, locale, UCURR_LONG_NAME, 
-                                 isChoiceFormat, len, ec);
-        }
-    }
-    ures_close(rb);
-
-    // If we've succeeded we're done.  Otherwise, try to fallback.
-    // If that fails (because we are already at root) then exit.
-    if (U_SUCCESS(ec2)) {
-        if (ec2 == U_USING_DEFAULT_WARNING
-            || (ec2 == U_USING_FALLBACK_WARNING && *ec != U_USING_DEFAULT_WARNING)) {
-            *ec = ec2;
-        }
-        U_ASSERT(s != NULL);
-        return s;
-    }
-
-    // If we fail to find a match, use the ISO 4217 code
-    *len = u_strlen(currency); // Should == ISO_CURRENCY_CODE_LENGTH, but maybe not...?
-    *ec = U_USING_DEFAULT_WARNING;
-    return currency;
+    const Locale loc = Locale::createFromName(locale);
+    const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&loc, *ec);
+    const UChar *pluralName =
+        currencyDisplayNames->getPluralName(currency, PluralMapBase::toCategory(pluralCount), *ec);
+    *len = u_strlen(pluralName);
+    return pluralName;
 }
 
 
