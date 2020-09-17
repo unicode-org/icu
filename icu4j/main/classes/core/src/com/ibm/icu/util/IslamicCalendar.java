@@ -872,8 +872,8 @@ public class IslamicCalendar extends Calendar {
                 months--;
             }
 
-            year = months / 12 + 1;
-            month = months % 12;
+            year = months >=  0 ? ((months / 12) + 1) : ((months + 1 ) / 12);
+            month = ((months % 12) + 12 ) % 12;
         } else if (cType == CalculationType.ISLAMIC_UMALQURA) {
             long umalquraStartdays = yearStart(UMALQURA_YEAR_START);
             if( days < umalquraStartdays) {
