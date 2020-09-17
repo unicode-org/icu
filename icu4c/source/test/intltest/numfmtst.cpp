@@ -10079,6 +10079,7 @@ void NumberFormatTest::Test8144_TestCurrencyNames() {
 
     Locale locale = Locale::createFromName("en");
     const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, ec);
+    ec = U_ZERO_ERROR;
     assertEquals("USD.getName(SYMBOL_NAME, en)", UnicodeString("$"),
                  currencyDisplayNames->getName(USD, UCURR_SYMBOL_NAME, ec), possibleDataError);
     assertEquals("USD.getName(NARROW_SYMBOL_NAME, en)", UnicodeString("$"),
@@ -10116,7 +10117,7 @@ void NumberFormatTest::Test8144_TestCurrencyNames() {
                  possibleDataError);
     assertEquals("USX.getName(LONG_NAME)", UnicodeString("USX"),
                  currencyDisplayNames->getName(USX, UCURR_LONG_NAME, ec), possibleDataError);
-    assertSuccess("ucurr_getName", ec);
+    assertSuccess("getName", ec);
 
     // No resource file for es_ES, fallback to es
     ec = U_ZERO_ERROR;
@@ -10160,9 +10161,8 @@ void NumberFormatTest::Test8144_TestCurrencyNames() {
     currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, TRUE, ec);
     assertTrue("getInstance (zz no resource)", currencyDisplayNames == nullptr);
 
-    ec = U_ZERO_ERROR;
     locale = Locale::createFromName("en");
-    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, TRUE, ec);
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, true, ec);
     assertTrue("getName (USX no entry)", currencyDisplayNames->getName(USX, ec) == NULL);
     assertTrue("getName (USX no entry)", currencyDisplayNames->getSymbol(USX, ec) == NULL);
     assertTrue("getName (USX no entry)", currencyDisplayNames->getNarrowSymbol(USX, ec) == NULL);
@@ -10217,11 +10217,39 @@ void NumberFormatTest::Test8144_TestCurrencyPlurals() {
     IcuTestErrorCode status(*this, "Test8144_TestCurrencyPlurals");
 
     static const UChar USD[] = {0x55, 0x53, 0x44, 0}; /*USD*/
+    static const UChar USX[] = {0x55, 0x53, 0x58, 0}; /*USX*/
+    static const UChar AFA[] = {0x41, 0x46, 0x41, 0}; /*AFA*/
 
     Locale locale = Locale::createFromName("ru");
     const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, status);
 
-    assertEquals("USD.getPlural(MANY, en)", u"долларов США",
+    assertEquals("USD.getPlural(FEW, ru)", u"доллара США",
+                 currencyDisplayNames->getPluralName(USD, PluralMapBase::FEW, status));
+    assertEquals("USD.getPlural(MANY, ru)", u"долларов США",
                  currencyDisplayNames->getPluralName(USD, PluralMapBase::MANY, status));
+    assertEquals("USD.getPlural(ONE, ru)", u"доллар США",
+                 currencyDisplayNames->getPluralName(USD, PluralMapBase::ONE, status));
+    assertEquals("USD.getPlural(OTHER, ru)", u"доллара США",
+                 currencyDisplayNames->getPluralName(USD, PluralMapBase::OTHER, status));
+    //Fallback to OTHER
+    assertEquals("USD.getPlural(fallback: TWO to OTHER, ru)", u"доллара США",
+                 currencyDisplayNames->getPluralName(USD, PluralMapBase::TWO, status));
+    // Fallback to display name
+    assertEquals("AFA.getPlural(fallback: OTHER to display name, ru)", u"Афгани (1927–2002)",
+                 currencyDisplayNames->getPluralName(AFA, PluralMapBase::OTHER, status));
+    // Fallback to ISO code
+    assertEquals("USX.getPlural(fallback: OTHER to ISOCode, ru)", u"USX",
+                 currencyDisplayNames->getPluralName(USX, PluralMapBase::OTHER, status));
+    assertSuccess("getPlural", status);
+
+    // No fallback
+    currencyDisplayNames = CurrencyDisplayNames::getInstance(&locale, true, status);
+    assertTrue("USD.getPlural(no fallback: TWO, ru)", 
+        currencyDisplayNames->getPluralName(USD, PluralMapBase::TWO, status) == nullptr);
+    assertTrue("AFA.getPlural(no fallback: AFA, ru)",
+               currencyDisplayNames->getPluralName(AFA, PluralMapBase::OTHER, status) == nullptr);
+    assertTrue("USX.getPlural(no fallback: USX, ru)",
+               currencyDisplayNames->getPluralName(USX, PluralMapBase::OTHER, status) == nullptr);
+    status.expectErrorAndReset(U_MISSING_RESOURCE_ERROR);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
