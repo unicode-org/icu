@@ -58,9 +58,9 @@ void u_write(const UChar *what, int len);
  */
 int main(int argc, char **argv)
 {
-    UBool              displayUsage  = FALSE;    /* Set true if command line err or help      */
+    UBool              displayUsage  = false;    /* Set true if command line err or help      */
                                                  /*   option was requested.                   */
-    UBool              verbose       = FALSE;    /* Set true if -v command line option.       */
+    UBool              verbose       = false;    /* Set true if -v command line option.       */
     char              *optionError   = NULL;     /* If command line contains an unrecognized  */
                                                  /*   option, this will point to it.          */
     char              *locale=NULL;              /* Locale name.  Null for system default,    */
@@ -95,14 +95,14 @@ int main(int argc, char **argv)
             continue;
         }
         if (strcmp(argv[i], "-v") == 0) {
-            verbose = TRUE;
+            verbose = true;
             continue;}
         if (strcmp(argv[i], "-?") == 0 ||
             strcmp(argv[i], "--help") == 0) {
-            displayUsage = TRUE;
+            displayUsage = true;
             continue;}
         optionError = argv[i];
-        displayUsage = TRUE;
+        displayUsage = true;
         break;
     }
 
