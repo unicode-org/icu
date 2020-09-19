@@ -2,16 +2,13 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.UnitsRouter;
-import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,46 +25,29 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
                 new UnitsRouter(MeasureUnitImpl.forIdentifier(inputUnit.getIdentifier()), locale.getCountry(), usage);
     }
 
-    private static Precision parseSkeletonToPrecision(String precisionSkeleton) {
-        final String kSuffixPrefix = "precision-increment/";
-        if (!precisionSkeleton.startsWith(kSuffixPrefix)) {
-            throw new IllegalIcuArgumentException("precisionSkeleton is only precision-increment");
-        }
-
-        String skeleton = precisionSkeleton.substring(kSuffixPrefix.length());
-        String skeletons[] = skeleton.split("/");
-        BigDecimal num = new BigDecimal(skeletons[0]);
-        BigDecimal den =
-                skeletons.length == 2 ?
-                        new BigDecimal(skeletons[1]) :
-                        new BigDecimal("1");
-
-
-        return Precision.increment(num.divide(den, MathContext.DECIMAL128));
-    }
-
     /**
      * Populates micros.mixedMeasures and modifies quantity, based on the values
      * in measures.
      */
-    protected static void mixedMeasuresToMicros(List<Measure> measures, DecimalQuantity quantity, MicroProps micros) {
-        micros.mixedMeasures = new ArrayList<>();
+    protected static void
+    mixedMeasuresToMicros(List<Measure> measures, DecimalQuantity outQuantity, MicroProps outMicros) {
+        outMicros.mixedMeasures = new ArrayList<>();
         if (measures.size() > 1) {
             // For debugging
-            assert (micros.outputUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
+            assert (outMicros.outputUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
 
             // Check that we received the expected number of measurements:
-            assert measures.size() == micros.outputUnit.splitToSingleUnits().size();
+            assert measures.size() == outMicros.outputUnit.splitToSingleUnits().size();
 
             // Mixed units: except for the last value, we pass all values to the
             // LongNameHandler via micros->mixedMeasures.
             for (int i = 0, n = measures.size() - 1; i < n; i++) {
-                micros.mixedMeasures.add(measures.get(i));
+                outMicros.mixedMeasures.add(measures.get(i));
             }
         }
 
         // The last value (potentially the only value) gets passed on via quantity.
-        quantity.setToBigDecimal((BigDecimal) measures.get(measures.size()- 1).getNumber());
+        outQuantity.setToBigDecimal((BigDecimal) measures.get(measures.size()- 1).getNumber());
     }
 
     /**
@@ -93,29 +73,12 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
         MicroProps micros = this.fParent.processQuantity(quantity);
 
         quantity.roundToInfinity(); // Enables toDouble
-        final UnitsRouter.RouteResult routed = fUnitsRouter.route(quantity.toBigDecimal());
+        final UnitsRouter.RouteResult routed = fUnitsRouter.route(quantity.toBigDecimal(), micros);
 
         final List<Measure> routedMeasures = routed.measures;
         micros.outputUnit = routed.outputUnit.build();
 
         UsagePrefsHandler.mixedMeasuresToMicros(routedMeasures, quantity, micros);
-
-        String precisionSkeleton = routed.precision;
-
-        assert micros.rounder != null;
-
-        if (micros.rounder instanceof Precision.BogusRounder) {
-            Precision.BogusRounder rounder = (Precision.BogusRounder)micros.rounder;
-            if (precisionSkeleton != null && precisionSkeleton.length() > 0) {
-                micros.rounder = rounder.into(parseSkeletonToPrecision(precisionSkeleton));
-            } else {
-                // We use the same rounding mode as COMPACT notation: known to be a
-                // human-friendly rounding mode: integers, but add a decimal digit
-                // as needed to ensure we have at least 2 significant digits.
-                micros.rounder = rounder.into(Precision.integer().withMinDigits(2));
-            }
-        }
-
         return micros;
     }
 }

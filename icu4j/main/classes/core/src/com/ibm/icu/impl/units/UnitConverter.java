@@ -1,7 +1,5 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.util.MeasureUnit;
@@ -86,6 +84,10 @@ public class UnitConverter {
 
     public BigDecimal convert(BigDecimal inputValue) {
         return inputValue.multiply(this.conversionRate).add(offset);
+    }
+
+    public BigDecimal convertInverse(BigDecimal inputValue) {
+        return inputValue.subtract(offset).divide(this.conversionRate, DECIMAL128);
     }
 
     public enum Convertibility {
@@ -307,5 +309,10 @@ public class UnitConverter {
                 this.factorNum = this.factorNum.multiply(decimalEntity);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "UnitConverter [conversionRate=" + conversionRate + ", offset=" + offset + "]";
     }
 }
