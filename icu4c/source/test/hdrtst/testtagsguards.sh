@@ -2,7 +2,7 @@
 # License & terms of use: http://www.unicode.org/copyright.html
 
 # Run this script from $ICU_ROOT/icu4c.
-# ~/icu/mine/src/icu4c$ source/test/hdrtest/testtagsguards.sh
+# ~/icu/mine/src/icu4c$ source/test/hdrtst/testtagsguards.sh
 
 # set -x # echo on
 

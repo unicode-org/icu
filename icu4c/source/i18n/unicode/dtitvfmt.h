@@ -652,6 +652,7 @@ public:
      */
     virtual void setTimeZone(const TimeZone& zone);
 
+#ifndef U_FORCE_HIDE_DRAFT_API
     /**
      * Set a particular UDisplayContext value in the formatter, such as
      * UDISPCTX_CAPITALIZATION_FOR_STANDALONE. This causes the formatted
@@ -677,6 +678,7 @@ public:
      * @draft ICU 68
      */
     virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
+#endif  // U_FORCE_HIDE_DRAFT_API
 
     /**
      * Return the class ID for this class. This is useful only for comparing to
