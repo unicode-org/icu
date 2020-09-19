@@ -144,13 +144,22 @@ class U_I18N_API UnitConverter : public UMemory {
                   const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
-     * Convert a value in the source unit to another value in the target unit.
+     * Convert a measurement expressed in the source unit to a measurement
+     * expressed in the target unit.
      *
-     * @param input_value the value that needs to be converted.
-     * @param output_value the value that holds the result of the conversion.
-     * @param status
+     * @param inputValue the value to be converted.
+     * @return the converted value.
      */
     double convert(double inputValue) const;
+
+    /**
+     * The inverse of convert(): convert a measurement expressed in the target
+     * unit to a measurement expressed in the source unit.
+     *
+     * @param inputValue the value to be converted.
+     * @return the converted value.
+     */
+    double convertInverse(double inputValue) const;
 
   private:
     ConversionRate conversionRate_;

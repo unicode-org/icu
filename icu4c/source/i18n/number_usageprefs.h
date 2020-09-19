@@ -60,8 +60,6 @@ class U_I18N_API UsagePrefsHandler : public MicroPropsGenerator, public UMemory 
   private:
     UnitsRouter fUnitsRouter;
     const MicroPropsGenerator *fParent;
-
-    static Precision parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton, UErrorCode status);
 };
 
 } // namespace impl

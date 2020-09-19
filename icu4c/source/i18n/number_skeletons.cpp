@@ -10,6 +10,7 @@
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include "number_decnum.h"
+#include "number_roundingutils.h"
 #include "number_skeletons.h"
 #include "umutex.h"
 #include "ucln_in.h"
@@ -1333,8 +1334,10 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     return true;
 }
 
-// blueprint_helpers::parseIncrementOption lives in number_rounding.cpp for
-// dependencies reasons.
+void blueprint_helpers::parseIncrementOption(const StringSegment &segment, MacroProps &macros,
+                                             UErrorCode &status) {
+    number::impl::parseIncrementOption(segment, macros.precision, status);
+}
 
 void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
                                                 UErrorCode&) {
