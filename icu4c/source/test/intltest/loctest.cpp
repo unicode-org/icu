@@ -32,6 +32,8 @@
 #include "putilimp.h"
 #include "hash.h"
 #include "locmap.h"
+#include "uparse.h"
+#include "ulocimp.h"
 
 static const char* const rawData[33][8] = {
 
@@ -257,6 +259,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO(TestBug20410);
     TESTCASE_AUTO(TestBug20900);
+    TESTCASE_AUTO(TestLocaleCanonicalizationFromFile);
+    TESTCASE_AUTO(TestKnownCanonicalizedListCorrect);
     TESTCASE_AUTO(TestConstructorAcceptsBCP47);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
@@ -4707,10 +4711,10 @@ void LocaleTest::TestCanonicalization(void)
     } testCases[] = {
         { "ca_ES-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
           "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE",
-          "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
+          "ca_ES_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_WITH_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
         { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
-        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_Hans_CN@collation=pinyin" },
-        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_Hans_CN_CA@collation=pinyin" },
+        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
+        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
         { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
         { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
         { "no_NO_NY", "no_NO_NY", "nb_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
@@ -4729,13 +4733,17 @@ void LocaleTest::TestCanonicalization(void)
         { "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML" },
         { "i-cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US" },
         { "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA" },
-        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "nb_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
+        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "nb_NO_B_NY" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
 
         /* fleshing out canonicalization */
         /* trim space and sort keywords, ';' is separator so not present at end in canonical form */
-        { "en_Hant_IL_VALLEY_GIRL@ currency = EUR; calendar = Japanese ;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+        { "en_Hant_IL_VALLEY_GIRL@ currency = EUR; calendar = Japanese ;",
+          "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR",
+          "en_Hant_IL_GIRL_VALLEY@calendar=Japanese;currency=EUR" },
         /* already-canonical ids are not changed */
-        { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+        { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR",
+          "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR",
+          "en_Hant_IL_GIRL_VALLEY@calendar=Japanese;currency=EUR" },
         /* norwegian is just too weird, if we handle things in their full generality */
         { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "nb_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
 
@@ -4776,13 +4784,13 @@ void LocaleTest::TestCanonicalization(void)
         { "hi__DIRECT", "hi__DIRECT", "hi__DIRECT" },
         { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL" },
         { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH_TRADITIONAL" },
-        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_Hant_TW_STROKE" },
+        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW_STROKE" },
         { "zh__PINYIN", "zh__PINYIN", "zh__PINYIN" },
         { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_SP_CYRL" }, /* .NET name */
         { "sr-SP-Latn", "sr_SP_LATN", "sr_SP_LATN" }, /* .NET name */
         { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_RS_CYRILLIC" }, /* Linux name */
-        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Latn_UZ_CYRL" }, /* .NET name */
-        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ_LATN" }, /* .NET name */
+        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_UZ_CYRL" }, /* .NET name */
+        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_UZ_LATN" }, /* .NET name */
         { "zh-CHS", "zh_CHS", "zh_CHS" }, /* .NET name */
         { "zh-CHT", "zh_CHT", "zh_CHT" }, /* .NET name This may change back to zh_Hant */
         /* PRE_EURO and EURO conversions don't affect other keywords */
@@ -4799,13 +4807,6 @@ void LocaleTest::TestCanonicalization(void)
     
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
         for (j=0; j<3; ++j) {
-            if (j==1 && logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
-                if (uprv_strncmp(testCases[i].localeID, "zh_CN", 5) == 0 ||
-                    uprv_strncmp(testCases[i].localeID, "zh_TW", 5) == 0 ||
-                    uprv_strncmp(testCases[i].localeID, "uz-UZ", 5) == 0 ) {
-                        continue;
-                    }
-            }
             const char* expected = (j==1) ? testCases[i].canonicalID : testCases[i].getNameID;
             Locale loc = _canonicalize(j, testCases[i].localeID);
             const char* getName = loc.isBogus() ? "BOGUS" : loc.getName();
@@ -4858,17 +4859,18 @@ void LocaleTest::TestCanonicalize(void)
         // also test with script, variants and extensions
         { "prs-Cyrl-1009-u-ca-roc", "fa-Cyrl-AF-1009-u-ca-roc" },
 
-        //  language _ country -> language _ script _ country
-        { "pa-IN", "pa-Guru-IN" },
+        { "pa-IN", "pa-IN" },
         // also test with script
         { "pa-Latn-IN", "pa-Latn-IN" },
         // also test with variants and extensions
-        { "pa-IN-5678-u-ca-hindi", "pa-Guru-IN-5678-u-ca-hindi" },
+        { "pa-IN-5678-u-ca-hindi", "pa-IN-5678-u-ca-hindi" },
 
-        //  language _ script _ country -> language _ country
-        { "ky-Cyrl-KG", "ky-KG" },
+        { "ky-Cyrl-KG", "ky-Cyrl-KG" },
         // also test with variants and extensions
-        { "ky-Cyrl-KG-3456-u-ca-roc", "ky-KG-3456-u-ca-roc" },
+        { "ky-Cyrl-KG-3456-u-ca-roc", "ky-Cyrl-KG-3456-u-ca-roc" },
+
+        // Test replacement of scriptAlias
+        { "en-Qaai", "en-Zinh" },
 
         // Test replacement of territoryAlias
         // 554 has one replacement
@@ -4887,18 +4889,14 @@ void LocaleTest::TestCanonicalize(void)
         { "uz-Cyrl-172-5678-u-nu-latn", "uz-Cyrl-UZ-5678-u-nu-latn" },
         // a language not used in this region
         { "fr-172", "fr-RU" },
+
+        // variant
+        { "ja-Latn-hepburn-heploc", "ja-Latn-alalc97"},
+
+        { "aaa-Fooo-SU", "aaa-Fooo-RU"},
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
-        if (logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
-            if (uprv_strstr(testCases[i].localeID, "-BOKMAL") != 0 ||
-                uprv_strstr(testCases[i].localeID, "-NYNORSK") != 0 ||
-                uprv_strstr(testCases[i].localeID, "-SAAHO") != 0 ||
-                uprv_strncmp(testCases[i].localeID, "pa-IN", 5) == 0 ||
-                uprv_strncmp(testCases[i].localeID, "ky-Cyrl", 7) == 0 ) {
-                     continue;
-               }
-        }
         UErrorCode status = U_ZERO_ERROR;
         std::string otag = testCases[i].localeID;
         Locale loc = Locale::forLanguageTag(otag.c_str(), status);
@@ -5348,6 +5346,73 @@ void LocaleTest::TestBug20900() {
         status.errIfFailureAndReset("FAIL: createCanonical(%s).toLanguageTag() expected \"%s\"",
                     testCases[i].localeID, tag);
         assertEquals("createCanonical", testCases[i].canonicalID, tag);
+    }
+}
+
+U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
+void LocaleTest::TestLocaleCanonicalizationFromFile()
+{
+    IcuTestErrorCode status(*this, "TestLocaleCanonicalizationFromFile");
+    const char *sourceTestDataPath=getSourceTestData(status);
+    if(status.errIfFailureAndReset("unable to find the source/test/testdata "
+                                      "folder (getSourceTestData())")) {
+        return;
+    }
+    char testPath[400];
+    char line[256];
+    strcpy(testPath, sourceTestDataPath);
+    strcat(testPath, "localeCanonicalization.txt");
+    LocalStdioFilePointer testFile(fopen(testPath, "r"));
+    if(testFile.isNull()) {
+        errln("unable to open %s", testPath);
+        return;
+    }
+    // Format:
+    // <source locale identifier>	;	<expected canonicalized locale identifier>
+    while (fgets(line, (int)sizeof(line), testFile.getAlias())!=NULL) {
+        if (line[0] == '#') {
+            // ignore any lines start with #
+            continue;
+        }
+        char *semi = strchr(line, ';');
+        if (semi == nullptr) {
+            // ignore any lines without ;
+            continue;
+        }
+        *semi = '\0'; // null terminiate on the spot of semi
+        const char* from = u_skipWhitespace((const char*)line);
+        u_rtrim((char*)from);
+        const char* to = u_skipWhitespace((const char*)semi + 1);
+        u_rtrim((char*)to);
+        std::string expect(to);
+        // Change the _ to -
+        std::transform(expect.begin(), expect.end(), expect.begin(),
+                       [](unsigned char c){ return c == '_' ? '-' : c; });
+
+        Locale loc = Locale::createCanonical(from);
+        std::string result = loc.toLanguageTag<std::string>(status);
+        const char* tag = loc.isBogus() ? "BOGUS" : result.c_str();
+        status.errIfFailureAndReset(
+            "FAIL: createCanonical(%s).toLanguageTag() expected \"%s\" locale is %s",
+            from, tag, loc.getName());
+        std::string msg("createCanonical(");
+        msg += from;
+        msg += ") locale = ";
+        msg += loc.getName();
+        assertEquals(msg.c_str(), expect.c_str(), tag);
+    }
+}
+
+void LocaleTest::TestKnownCanonicalizedListCorrect()
+{
+    IcuTestErrorCode status(*this, "TestKnownCanonicalizedListCorrect");
+    int32_t numOfKnownCanonicalized;
+    const char* const* knownCanonicalized =
+        ulocimp_getKnownCanonicalizedLocaleForTest(&numOfKnownCanonicalized);
+    for (int32_t i = 0; i < numOfKnownCanonicalized; i++) {
+        std::string msg("Known Canonicalized Locale is not canonicalized: ");
+        assertTrue((msg + knownCanonicalized[i]).c_str(),
+                   ulocimp_isCanonicalizedLocaleForTest(knownCanonicalized[i]));
     }
 }
 

@@ -78,7 +78,7 @@ public class LanguageTag {
         final String[][] entries = {
           //{"tag",         "preferred"},
             {"art-lojban",  "jbo"},
-            {"cel-gaulish", "xtg-x-cel-gaulish"},   // fallback
+            {"cel-gaulish", "xtg"},   // fallback
             {"en-GB-oed",   "en-GB-x-oed"},         // fallback
             {"i-ami",       "ami"},
             {"i-bnn",       "bnn"},
