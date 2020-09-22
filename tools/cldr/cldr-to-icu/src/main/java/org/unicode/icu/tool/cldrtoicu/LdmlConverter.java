@@ -348,7 +348,9 @@ public final class LdmlConverter {
                 });
 
                 if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
-                    splitData.setVersion(cldrVersion);
+                    if (id.equals("root")) {
+                        splitData.setVersion(cldrVersion);
+                    }
                     write(splitData, outDir, false);
                     writtenLocaleIds.put(dir, id);
                 }
@@ -561,7 +563,7 @@ public final class LdmlConverter {
         } else {
             // These empty files only exist because the target of an alias has a parent locale
             // which is itself not in the set of written ICU files. An "indirect alias target".
-            icuData.setVersion(config.getVersionInfo().getCldrVersion());
+            // No need to add data: Just write a resource bundle with an empty top-level table.
         }
         write(icuData, dir, false);
     }
