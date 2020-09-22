@@ -44,6 +44,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(8, test20640_HourCyclArsEnNH);
         TESTCASE(9, testFallbackWithDefaultRootLocale);
         TESTCASE(10, testGetDefaultHourCycle_OnEmptyInstance);
+        TESTCASE(11, test_jConsistencyOddLocales);
         default: name = ""; break;
     }
 }
@@ -1396,7 +1397,9 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
                      shortPattern.extract(0, shortPattern.length(), spBuf, 32);
                      jPattern.extract(0, jPattern.length(), jpBuf, 32);
                      const char* dfmtCalType = (dfmt->getCalendar())->getType();
-                     errln("ERROR: locale %s, expected j resolved char %s to occur in short time pattern '%s' for %s (best pattern: '%s')", localeID, jcBuf, spBuf, dfmtCalType, jpBuf);
+                     const char* validLoc = dfmt->getLocaleID(ULOC_VALID_LOCALE, status);
+                     errln("ERROR: locale %s (valid %s), expected j resolved char %s to occur in short time pattern '%s' for %s (best pattern: '%s')",
+                             localeID, validLoc, jcBuf, spBuf, dfmtCalType, jpBuf);
                  }
                  break;
              }
@@ -1420,8 +1423,7 @@ void IntlTestDateTimePatternGeneratorAPI::test20640_HourCyclArsEnNH() {
         // formerly New Hebrides, now Vanuatu => VU => h.
         {"en_NH", u"h a", u"h:mm a", UDAT_HOUR_CYCLE_12},
         // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.
-        // {"cn_ZH", u"HH", u"H:mm"}, // TODO(ICU-20653): Desired behavior
-        {"cn_ZH", u"HH", u"h:mm a", UDAT_HOUR_CYCLE_23 }, // Actual behavior
+        {"cn_ZH", u"HH", u"HH:mm", UDAT_HOUR_CYCLE_23 }, // Desired & now actual behavior (does this fix ICU-20653?)
         // a non-BCP47 locale without a country code should not fail
         {"ja_TRADITIONAL", u"H時", u"H:mm", UDAT_HOUR_CYCLE_23},
     };
@@ -1504,6 +1506,54 @@ void IntlTestDateTimePatternGeneratorAPI::testGetDefaultHourCycle_OnEmptyInstanc
     if (status != U_USELESS_COLLATOR_ERROR) {
         errln("ERROR: getDefaultHourCycle shouldn't modify status if it is already failed, status: %s", u_errorName(status));
         return;
+    }
+}
+
+void IntlTestDateTimePatternGeneratorAPI::test_jConsistencyOddLocales() { // ICU-20590
+    static const char* localeIDs[] = {
+        "en", "ro", // known languages 12h / 24h
+        "en-RO", "ro-US",  // known languages with known regions, hour conflict language vs region
+        "en-XZ", "ro-XZ", // known languages 12h / 24h, unknown region
+        "xz-RO", "xz-US",  // unknown language with known regions
+        "xz", // unknown language
+        "xz-ZX",  // unknown language with unknown country
+        "ars", "wuu" // aliased locales
+    };
+    static const UChar* skeleton = u"jm";
+    for (const char* localeID: localeIDs) {
+        UErrorCode status = U_ZERO_ERROR;
+        Locale locale(localeID);
+        LocalPointer<DateFormat> dtfShort(DateFormat::createTimeInstance(DateFormat::kShort, locale), status);
+        if (U_FAILURE(status)) {
+            errln("DateFormat::createTimeInstance failed for locale %s: %s", localeID, u_errorName(status));
+            continue;
+        }
+        LocalPointer<DateFormat> dtfSkel(DateFormat::createInstanceForSkeleton(skeleton, locale, status));
+        if (U_FAILURE(status)) {
+            errln("DateFormat::createInstanceForSkeleton failed for locale %s: %s", localeID, u_errorName(status));
+            continue;
+        }
+        LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(locale, status));
+        if (U_FAILURE(status)) {
+            errln("DateTimePatternGenerator::createInstance failed for locale %s: %s", localeID, u_errorName(status));
+            continue;
+        }
+        UnicodeString dtfShortPattern, dtfSkelPattern;
+        dynamic_cast<SimpleDateFormat*>(dtfShort.getAlias())->toPattern(dtfShortPattern);
+        dynamic_cast<SimpleDateFormat*>(dtfSkel.getAlias())->toPattern(dtfSkelPattern);
+        UnicodeString dtpgPattern = (dtpg.getAlias())->getBestPattern(skeleton, status);
+        if (U_FAILURE(status)) {
+            errln("DateTimePatternGenerator::getBestPattern failed for locale %s: %s", localeID, u_errorName(status));
+            continue;
+        }
+        if (dtfShortPattern != dtfSkelPattern || dtfSkelPattern != dtpgPattern) {
+            const char* dtfShortValidLoc = dtfShort->getLocaleID(ULOC_VALID_LOCALE, status);
+            const char* dtfShortActualLoc = dtfShort->getLocaleID(ULOC_ACTUAL_LOCALE, status);
+            errln(UnicodeString("For locale ") + localeID +
+                    " expected same pattern from DateTimePatGen: " + dtpgPattern +
+                    ", DateFmt-forSkel: " + dtfSkelPattern + ", DateFmt-short: "  + dtfShortPattern +
+                    "; latter has validLoc " + dtfShortValidLoc + ", actualLoc " + dtfShortActualLoc);
+        }
     }
 }
 
