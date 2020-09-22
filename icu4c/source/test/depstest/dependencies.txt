@@ -974,7 +974,7 @@ group: number_representation
 group: number_output
     # PluralRules and FormattedNumber
     number_output.o
-    standardplural.o plurrule.o
+    standardplural.o plurrule.o pluralranges.o
   deps
     # FormattedNumber internals:
     number_representation format formatted_value_sbimpl units

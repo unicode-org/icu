@@ -26,6 +26,7 @@
 
 // Forward-declaration
 struct UFormattedNumber;
+struct UFormattedNumberRange;
 
 /**
  * \file
@@ -167,7 +168,7 @@ uplrules_select(const UPluralRules *uplrules,
  * @param uplrules The UPluralRules object specifying the rules.
  * @param number The formatted number for which the rule has to be determined.
  * @param keyword The destination buffer for the keyword of the rule that
- *         applies to number.
+ *         applies to the number.
  * @param capacity The capacity of the keyword buffer.
  * @param status A pointer to a UErrorCode to receive any errors.
  * @return The length of the keyword.
@@ -178,6 +179,29 @@ uplrules_selectFormatted(const UPluralRules *uplrules,
                const struct UFormattedNumber* number,
                UChar *keyword, int32_t capacity,
                UErrorCode *status);
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Given a formatted number range, returns the overall plural form of the
+ * range. For example, "3-5" returns "other" in English.
+ *
+ * To get a UFormattedNumberRange, see UNumberRangeFormatter.
+ *
+ * @param uplrules The UPluralRules object specifying the rules.
+ * @param urange The number range onto which the rules will be applied.
+ * @param keyword The destination buffer for the keyword of the rule that
+ *         applies to the number range.
+ * @param capacity The capacity of the keyword buffer.
+ * @param status A pointer to a UErrorCode to receive any errors.
+ * @return The length of the keyword.
+ * @draft ICU 68
+ */
+U_CAPI int32_t U_EXPORT2
+uplrules_selectForRange(const UPluralRules *uplrules,
+               const struct UFormattedNumberRange* urange,
+               UChar *keyword, int32_t capacity,
+               UErrorCode *status);
+#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
 /**
