@@ -547,6 +547,8 @@ public class PluralRules implements Serializable {
 
         final boolean isNegative;
 
+        final int exponent;
+
         private final int baseFactor;
 
         /**
@@ -639,9 +641,10 @@ public class PluralRules implements Serializable {
          * @param v number of digits to the right of the decimal place. e.g 1.00 = 2 25. = 0
          * @param f Corresponds to f in the plural rules grammar.
          *   The digits to the right of the decimal place as an integer. e.g 1.10 = 10
+         * @param e Suppressed exponent for scientific and compact notation
          */
         @Deprecated
-        public FixedDecimal(double n, int v, long f) {
+        public FixedDecimal(double n, int v, long f, int e) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
             visibleDecimalDigitCount = v;
@@ -649,6 +652,7 @@ public class PluralRules implements Serializable {
             integerValue = n > MAX
                     ? MAX
                             : (long)n;
+            exponent = e;
             hasIntegerValue = source == integerValue;
             // check values. TODO make into unit test.
             //
@@ -677,6 +681,24 @@ public class PluralRules implements Serializable {
                 visibleDecimalDigitCountWithoutTrailingZeros = trimmedCount;
             }
             baseFactor = (int) Math.pow(10, v);
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public FixedDecimal(double n, int v, long f) {
+            this(n, v, f, 0);
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static FixedDecimal createWithExponent(double n, int v, int e) {
+            return new FixedDecimal(n,v,getFractionalDigits(n, v), e);
         }
 
         /**
@@ -773,12 +795,56 @@ public class PluralRules implements Serializable {
 
         /**
          * @internal CLDR
+         * @deprecated This API is ICU internal only
+         */
+        @Deprecated
+        private FixedDecimal (FixedDecimal other) {
+            // Ugly, but necessary, because constructors must only call other
+            // constructors in the first line of the body, and
+            // FixedDecimal(String) was refactored to support exponents.
+            this.source = other.source;
+            this.visibleDecimalDigitCount = other.visibleDecimalDigitCount;
+            this.visibleDecimalDigitCountWithoutTrailingZeros =
+                    other.visibleDecimalDigitCountWithoutTrailingZeros;
+            this.decimalDigits = other.decimalDigits;
+            this.decimalDigitsWithoutTrailingZeros =
+                    other.decimalDigitsWithoutTrailingZeros;
+            this.integerValue = other.integerValue;
+            this.hasIntegerValue = other.hasIntegerValue;
+            this.isNegative = other.isNegative;
+            this.exponent = other.exponent;
+            this.baseFactor = other.baseFactor;
+        }
+
+        /**
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public FixedDecimal (String n) {
             // Ugly, but for samples we don't care.
-            this(Double.parseDouble(n), getVisibleFractionCount(n));
+            this(parseDecimalSampleRangeNumString(n));
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only
+         */
+        @Deprecated
+        private static FixedDecimal parseDecimalSampleRangeNumString(String num) {
+            if (num.contains("e")) {
+                int ePos = num.lastIndexOf('e');
+                int expNumPos = ePos + 1;
+                String exponentStr = num.substring(expNumPos);
+                int exponent = Integer.parseInt(exponentStr);
+                String fractionStr = num.substring(0, ePos);
+                return FixedDecimal.createWithExponent(
+                        Double.parseDouble(fractionStr),
+                        getVisibleFractionCount(fractionStr),
+                        exponent);
+            } else {
+                return new FixedDecimal(Double.parseDouble(num), getVisibleFractionCount(num));
+            }
         }
 
         private static int getVisibleFractionCount(String value) {
@@ -807,7 +873,7 @@ public class PluralRules implements Serializable {
             case t: return decimalDigitsWithoutTrailingZeros;
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
-            case e: return 0;
+            case e: return exponent;
             default: return source;
             }
         }
@@ -829,6 +895,9 @@ public class PluralRules implements Serializable {
         @Override
         @Deprecated
         public int compareTo(FixedDecimal other) {
+            if (exponent != other.exponent) {
+                return doubleValue() < other.doubleValue() ? -1 : 1;
+            }
             if (integerValue != other.integerValue) {
                 return integerValue < other.integerValue ? -1 : 1;
             }
@@ -862,7 +931,8 @@ public class PluralRules implements Serializable {
                 return false;
             }
             FixedDecimal other = (FixedDecimal)arg0;
-            return source == other.source && visibleDecimalDigitCount == other.visibleDecimalDigitCount && decimalDigits == other.decimalDigits;
+            return source == other.source && visibleDecimalDigitCount == other.visibleDecimalDigitCount && decimalDigits == other.decimalDigits
+                    && exponent == other.exponent;
         }
 
         /**
@@ -883,7 +953,12 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public String toString() {
-            return String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
+            String baseString = String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
+            if (exponent == 0) {
+                return baseString;
+            } else {
+                return baseString + "e" + exponent;
+            }
         }
 
         /**
@@ -903,7 +978,7 @@ public class PluralRules implements Serializable {
         @Override
         public int intValue() {
             // TODO Auto-generated method stub
-            return (int)integerValue;
+            return (int) longValue();
         }
 
         /**
@@ -913,7 +988,11 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public long longValue() {
-            return integerValue;
+            if (exponent == 0) {
+                return integerValue;
+            } else {
+                return (long) (Math.pow(10, exponent) * integerValue);
+            }
         }
 
         /**
@@ -923,7 +1002,7 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public float floatValue() {
-            return (float) source;
+            return (float) (source * Math.pow(10, exponent));
         }
 
         /**
@@ -933,7 +1012,7 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public double doubleValue() {
-            return isNegative ? -source : source;
+            return (isNegative ? -source : source) * Math.pow(10, exponent);
         }
 
         /**
