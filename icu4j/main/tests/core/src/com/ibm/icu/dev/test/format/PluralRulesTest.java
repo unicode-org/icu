@@ -190,6 +190,35 @@ public class PluralRulesTest extends TestFmwk {
         checkOldSamples(description, test, "other", SampleType.DECIMAL, 99d, 99.1, 99.2d, 999d);
     }
 
+    /**
+     * This test is for the support of X.YeZ scientific notation of numbers in
+     * the plural sample string.
+     */
+    @Test
+    public void testSamplesWithExponent() {
+        String description = "one: i = 0,1 @integer 0, 1, 1e5 @decimal 0.0~1.5, 1.1e5; "
+                + "many: e = 0 and i != 0 and i % 1000000 = 0 and v = 0 or e != 0..5"
+                + " @integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, … @decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …; "
+                + "other:  @integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …"
+                + " @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …"
+                ;
+        // Creating the PluralRules object means being able to parse numbers
+        // like 1e5 and 1.1e5
+        PluralRules test = PluralRules.createRules(description);
+        checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 0, 1, 1e5", true,
+                new FixedDecimal(0));
+        checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 0.0~1.5, 1.1e5", true,
+                new FixedDecimal(0, 1));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.INTEGER, "@integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, …", false,
+                new FixedDecimal(1000000));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.DECIMAL, "@decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …", false,
+                FixedDecimal.createWithExponent(2.1, 1, 6));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "@integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …", false,
+                new FixedDecimal(2));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …", false,
+                new FixedDecimal(2.0, 1));
+    }
+
     public void checkOldSamples(String description, PluralRules rules, String keyword, SampleType sampleType,
             Double... expected) {
         Collection<Double> oldSamples = rules.getSamples(keyword, sampleType);
