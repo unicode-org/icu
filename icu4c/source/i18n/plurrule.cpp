@@ -19,6 +19,7 @@
 #include "unicode/ures.h"
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h"
+#include "unicode/numberrangeformatter.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -36,6 +37,8 @@
 #include "unifiedcache.h"
 #include "number_decimalquantity.h"
 #include "util.h"
+#include "pluralranges.h"
+#include "numrange_impl.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -68,6 +71,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 PluralRules::PluralRules(UErrorCode& /*status*/)
 :   UObject(),
     mRules(nullptr),
+    mStandardPluralRanges(nullptr),
     mInternalStatus(U_ZERO_ERROR)
 {
 }
@@ -75,6 +79,7 @@ PluralRules::PluralRules(UErrorCode& /*status*/)
 PluralRules::PluralRules(const PluralRules& other)
 : UObject(other),
     mRules(nullptr),
+    mStandardPluralRanges(nullptr),
     mInternalStatus(U_ZERO_ERROR)
 {
     *this=other;
@@ -82,6 +87,7 @@ PluralRules::PluralRules(const PluralRules& other)
 
 PluralRules::~PluralRules() {
     delete mRules;
+    delete mStandardPluralRanges;
 }
 
 SharedPluralRules::~SharedPluralRules() {
@@ -90,14 +96,20 @@ SharedPluralRules::~SharedPluralRules() {
 
 PluralRules*
 PluralRules::clone() const {
-    PluralRules* newObj = new PluralRules(*this);
     // Since clone doesn't have a 'status' parameter, the best we can do is return nullptr if
     // the newly created object was not fully constructed properly (an error occurred).
-    if (newObj != nullptr && U_FAILURE(newObj->mInternalStatus)) {
-        delete newObj;
-        newObj = nullptr;
+    UErrorCode localStatus = U_ZERO_ERROR;
+    return clone(localStatus);
+}
+
+PluralRules*
+PluralRules::clone(UErrorCode& status) const {
+    LocalPointer<PluralRules> newObj(new PluralRules(*this), status);
+    if (U_SUCCESS(status) && U_FAILURE(newObj->mInternalStatus)) {
+        status = newObj->mInternalStatus;
+        newObj.adoptInstead(nullptr);
     }
-    return newObj;
+    return newObj.orphan();
 }
 
 PluralRules&
@@ -105,6 +117,8 @@ PluralRules::operator=(const PluralRules& other) {
     if (this != &other) {
         delete mRules;
         mRules = nullptr;
+        delete mStandardPluralRanges;
+        mStandardPluralRanges = nullptr;
         mInternalStatus = other.mInternalStatus;
         if (U_FAILURE(mInternalStatus)) {
             // bail out early if the object we were copying from was already 'invalid'.
@@ -119,6 +133,11 @@ PluralRules::operator=(const PluralRules& other) {
                 // If the RuleChain wasn't fully copied, then set our status to failure as well.
                 mInternalStatus = mRules->fInternalStatus;
             }
+        }
+        if (other.mStandardPluralRanges != nullptr) {
+            mStandardPluralRanges = other.mStandardPluralRanges->copy(mInternalStatus)
+                .toPointer(mInternalStatus)
+                .orphan();
         }
     }
     return *this;
@@ -212,11 +231,8 @@ PluralRules::forLocale(const Locale& locale, UPluralType type, UErrorCode& statu
     if (U_FAILURE(status)) {
         return nullptr;
     }
-    PluralRules *result = (*shared)->clone();
+    PluralRules *result = (*shared)->clone(status);
     shared->removeRef();
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
     return result;
 }
 
@@ -253,6 +269,10 @@ PluralRules::internalForLocale(const Locale& locale, UPluralType type, UErrorCod
         //        Original impl used default rules.
         //        Ask the question to ICU Core.
 
+    newObj->mStandardPluralRanges = StandardPluralRanges::forLocale(locale, status)
+        .toPointer(status)
+        .orphan();
+
     return newObj.orphan();
 }
 
@@ -273,6 +293,10 @@ PluralRules::select(const number::FormattedNumber& number, UErrorCode& status) c
     if (U_FAILURE(status)) {
         return ICU_Utility::makeBogusString();
     }
+    if (U_FAILURE(mInternalStatus)) {
+        status = mInternalStatus;
+        return ICU_Utility::makeBogusString();
+    }
     return select(dq);
 }
 
@@ -286,6 +310,33 @@ PluralRules::select(const IFixedDecimal &number) const {
     }
 }
 
+UnicodeString
+PluralRules::select(const number::FormattedNumberRange& range, UErrorCode& status) const {
+    return select(range.getData(status), status);
+}
+
+UnicodeString
+PluralRules::select(const number::impl::UFormattedNumberRangeData* impl, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    if (U_FAILURE(mInternalStatus)) {
+        status = mInternalStatus;
+        return ICU_Utility::makeBogusString();
+    }
+    if (mStandardPluralRanges == nullptr) {
+        // Happens if PluralRules was constructed via createRules()
+        status = U_UNSUPPORTED_ERROR;
+        return ICU_Utility::makeBogusString();
+    }
+    auto form1 = StandardPlural::fromString(select(impl->quantity1), status);
+    auto form2 = StandardPlural::fromString(select(impl->quantity2), status);
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    auto result = mStandardPluralRanges->resolve(form1, form2);
+    return UnicodeString(StandardPlural::getKeyword(result), -1, US_INV);
+}
 
 
 StringEnumeration*

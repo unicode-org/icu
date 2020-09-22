@@ -35,6 +35,7 @@ private:
     void testCompactDecimalPluralKeyword();
     void testOrdinal();
     void testSelect();
+    void testSelectRange();
     void testAvailbleLocales();
     void testParseErrors();
     void testFixedDecimal();

@@ -29,7 +29,10 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.PluralRulesLoader;
+import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.range.StandardPluralRanges;
 import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.FormattedNumberRange;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
@@ -181,6 +184,7 @@ public class PluralRules implements Serializable {
 
     private final RuleList rules;
     private final transient Set<String> keywords;
+    private final transient StandardPluralRanges standardPluralRanges;
 
     /**
      * Provides a factory for returning plural rules
@@ -377,9 +381,7 @@ public class PluralRules implements Serializable {
      */
     public static PluralRules parseDescription(String description)
             throws ParseException {
-
-        description = description.trim();
-        return description.length() == 0 ? DEFAULT : new PluralRules(parseRuleChain(description));
+        return newInternal(description, null);
     }
 
     /**
@@ -398,11 +400,24 @@ public class PluralRules implements Serializable {
     }
 
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static PluralRules newInternal(String description, StandardPluralRanges ranges)
+            throws ParseException {
+        description = description.trim();
+        return description.length() == 0
+            ? DEFAULT
+            : new PluralRules(parseRuleChain(description), ranges);
+    }
+
+    /**
      * The default rules that accept any number and return
      * {@link #KEYWORD_OTHER}.
      * @stable ICU 3.8
      */
-    public static final PluralRules DEFAULT = new PluralRules(new RuleList().addRule(DEFAULT_RULE));
+    public static final PluralRules DEFAULT = new PluralRules(
+        new RuleList().addRule(DEFAULT_RULE), StandardPluralRanges.DEFAULT);
 
     /**
      * @internal CLDR
@@ -2016,9 +2031,10 @@ public class PluralRules implements Serializable {
     /*
      * Creates a new <code>PluralRules</code> object.  Immutable.
      */
-    private PluralRules(RuleList rules) {
+    private PluralRules(RuleList rules, StandardPluralRanges standardPluralRanges) {
         this.rules = rules;
         this.keywords = Collections.unmodifiableSet(rules.getKeywords());
+        this.standardPluralRanges = standardPluralRanges;
     }
 
     /**
@@ -2056,6 +2072,34 @@ public class PluralRules implements Serializable {
      */
     public String select(FormattedNumber number) {
         return rules.select(number.getFixedDecimal());
+    }
+
+    /**
+     * Given a formatted number range, returns the overall plural form of the
+     * range. For example, "3-5" returns "other" in English.
+     *
+     * To get a FormattedNumberRange, see {@link com.ibm.icu.number.NumberRangeFormatter}.
+     *
+     * This method only works if PluralRules was created with a locale. If it was created
+     * from PluralRules.createRules(), or if it was deserialized, this method throws
+     * UnsupportedOperationException.
+     *
+     * @param range  The number range onto which the rules will be applied.
+     * @return       The keyword of the selected rule.
+     * @throws UnsupportedOperationException If called on an instance without plural ranges data.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String select(FormattedNumberRange range) {
+        if (standardPluralRanges == null) {
+            throw new UnsupportedOperationException("Plural ranges are unavailable on this instance");
+        }
+        StandardPlural form1 = StandardPlural.fromString(
+            select(range.getFirstFixedDecimal()));
+        StandardPlural form2 = StandardPlural.fromString(
+            select(range.getSecondFixedDecimal()));
+        StandardPlural result = standardPluralRanges.resolve(form1, form2);
+        return result.getKeyword();
     }
 
     /**

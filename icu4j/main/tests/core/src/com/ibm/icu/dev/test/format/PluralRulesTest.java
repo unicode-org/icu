@@ -42,8 +42,10 @@ import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.FormattedNumberRange;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.number.NumberRangeFormatter;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.NumberFormat;
@@ -1278,5 +1280,38 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("FixedDecimal toString", expected, fd.toString());
         Locale.setDefault(Locale.GERMAN);
         assertEquals("FixedDecimal toString", expected, fd.toString());
+    }
+
+    @Test
+    public void testSelectRange() {
+        int d1 = 102;
+        int d2 = 201;
+        ULocale locale = new ULocale("sl");
+
+        // Locale sl has interesting data: one + two => few
+        FormattedNumberRange range = NumberRangeFormatter.withLocale(locale).formatRange(d1, d2);
+        PluralRules rules = PluralRules.forLocale(locale);
+
+        // For testing: get plural form of first and second numbers
+        FormattedNumber a = NumberFormatter.withLocale(locale).format(d1);
+        FormattedNumber b = NumberFormatter.withLocale(locale).format(d2);
+        assertEquals("First plural", "two", rules.select(a));
+        assertEquals("Second plural", "one", rules.select(b));
+
+        // Check the range plural now:
+        String form = rules.select(range);
+        assertEquals("Range plural", "few", form);
+
+        // Test when plural ranges data is unavailable:
+        PluralRules bare = PluralRules.createRules("a: i = 0,1");
+        try {
+            form = bare.select(range);
+            fail("Expected exception");
+        } catch (UnsupportedOperationException e) {}
+
+        // However, they should not throw when no data is available for a language.
+        PluralRules xyz = PluralRules.forLocale(new ULocale("xyz"));
+        form = xyz.select(range);
+        assertEquals("Fallback form", "other", form);
     }
 }

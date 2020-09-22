@@ -140,6 +140,7 @@ numrange_impl.cpp
 numsys.cpp
 olsontz.cpp
 persncal.cpp
+pluralranges.cpp
 plurfmt.cpp
 plurrule.cpp
 quant.cpp
