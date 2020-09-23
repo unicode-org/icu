@@ -38,14 +38,18 @@ import getopt
 # all of icu/. Modify as needed.
 icu_directories_to_be_scanned = ["."]
 
+# Files that are allowed to contain \r line endings. If this list
+# grows too long consider a file instead.
+ignore_cr_in_files = [
+    "vendor/double-conversion/upstream/msvc/testrunner.cmd"
+    ]
+
 def runCommand(cmd):
     output_file = os.popen(cmd);
     output_text = output_file.read();
     exit_status = output_file.close();
-    if exit_status:
-        print('"', cmd, '" failed.  Exiting.', file=sys.stderr)
-        sys.exit(exit_status)
-    return output_text
+
+    return output_text, exit_status
 
 
 def usage():
@@ -80,6 +84,7 @@ def check_file(file_name, is_source):
 
 def main(argv):
     exit_status = 0
+    rc = 0
 
     try:
         opts, args = getopt.getopt(argv, "h", ("help"))
@@ -101,7 +106,10 @@ def main(argv):
 
     for dir in icu_directories_to_be_scanned:
         print('Scanning ' + dir)
-        output = runCommand(git_cmd.replace("DIR", dir))
+        cmd = git_cmd.replace("DIR", dir)
+        output, rc = runCommand(cmd)
+        if rc:
+            print('"', cmd, '" failed. Exiting.', file=sys.stderr)
         file_list = output.splitlines()
 
         for f in file_list:
@@ -115,6 +123,15 @@ def main(argv):
             source_file = source_file_re.match(f)
             if check_file(f, source_file) != 0:
                 exit_status = 1
+
+            # Lastly, check the line endings of the file.
+            # Note that 'grep' returns null if it reports a file,
+            # a non-null value otherwise.
+            output, rc = runCommand("grep -rPIl \"\\r\" " + f)
+            if (rc is None):
+                if f not in ignore_cr_in_files:
+                    print("File ", f, " has \\r line ending")
+                    exit_status = 1
 
     print(exit_status)
     sys.exit(exit_status)
