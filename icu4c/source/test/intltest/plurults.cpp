@@ -1160,6 +1160,11 @@ void PluralRulesTest::testSelectTrailingZeros() {
         status.setScope(message);
         Locale locale(cas.localeName);
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locale, status));
+        if (U_FAILURE(status)) {
+            dataerrln("Failed to create PluralRules by PluralRules::forLocale(%s): %s\n",
+                      cas.localeName, u_errorName(status));
+            return;
+        }
         assertEquals(message, cas.expectedDoubleKeyword, rules->select(cas.number));
         number::FormattedNumber fn = unf.locale(locale).formatDouble(cas.number, status);
         assertEquals(message, cas.expectedFormattedKeyword, rules->select(fn, status));

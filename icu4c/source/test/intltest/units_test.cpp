@@ -455,12 +455,14 @@ void UnitsTest::testComplexUnitsConverter() {
     // Significantly less than 2.0.
     MaybeStackVector<Measure> measures = converter.convert(1.9999, nullptr, status);
     assertEquals("measures length", 2, measures.length());
-    assertEquals("1.9999: measures[0] value", 1.0, measures[0]->getNumber().getDouble(status));
-    assertEquals("1.9999: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
-                 measures[0]->getUnit().getIdentifier());
-    assertEqualsNear("1.9999: measures[1] value", 11.9988, measures[1]->getNumber().getDouble(status), 0.0001);
-    assertEquals("1.9999: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
-                 measures[1]->getUnit().getIdentifier());
+    if (2 == measures.length()) {
+        assertEquals("1.9999: measures[0] value", 1.0, measures[0]->getNumber().getDouble(status));
+        assertEquals("1.9999: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
+                     measures[0]->getUnit().getIdentifier());
+        assertEqualsNear("1.9999: measures[1] value", 11.9988, measures[1]->getNumber().getDouble(status), 0.0001);
+        assertEquals("1.9999: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
+                     measures[1]->getUnit().getIdentifier());
+    }
 
     // TODO(icu-units#100): consider factoring out the set of tests to make this function more
     // data-driven, *after* dealing appropriately with the memory leaks that can
@@ -470,12 +472,14 @@ void UnitsTest::testComplexUnitsConverter() {
     // A minimal nudge under 2.0.
     MaybeStackVector<Measure> measures2 = converter.convert((2.0 - DBL_EPSILON), nullptr, status);
     assertEquals("measures length", 2, measures2.length());
-    assertEquals("1 - eps: measures[0] value", 2.0, measures2[0]->getNumber().getDouble(status));
-    assertEquals("1 - eps: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
-                 measures2[0]->getUnit().getIdentifier());
-    assertEquals("1 - eps: measures[1] value", 0.0, measures2[1]->getNumber().getDouble(status));
-    assertEquals("1 - eps: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
-                 measures2[1]->getUnit().getIdentifier());
+    if (2 == measures2.length()) {
+        assertEquals("1 - eps: measures[0] value", 2.0, measures2[0]->getNumber().getDouble(status));
+        assertEquals("1 - eps: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
+                     measures2[0]->getUnit().getIdentifier());
+        assertEquals("1 - eps: measures[1] value", 0.0, measures2[1]->getNumber().getDouble(status));
+        assertEquals("1 - eps: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
+                     measures2[1]->getUnit().getIdentifier());
+    }
 
     // Testing precision with meter and light-year. 1e-16 light years is
     // 0.946073 meters, and double precision can provide only ~15 decimal
@@ -493,37 +497,43 @@ void UnitsTest::testComplexUnitsConverter() {
     // TODO(icu-units#100): reusing measures results in a leak.
     MaybeStackVector<Measure> measures3 = converter3.convert((2.0 - DBL_EPSILON), nullptr, status);
     assertEquals("measures length", 2, measures3.length());
-    assertEquals("light-year test: measures[0] value", 2.0, measures3[0]->getNumber().getDouble(status));
-    assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                 measures3[0]->getUnit().getIdentifier());
-    assertEquals("light-year test: measures[1] value", 0.0, measures3[1]->getNumber().getDouble(status));
-    assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                 measures3[1]->getUnit().getIdentifier());
+    if (2 == measures3.length()) {
+        assertEquals("light-year test: measures[0] value", 2.0, measures3[0]->getNumber().getDouble(status));
+        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
+                     measures3[0]->getUnit().getIdentifier());
+        assertEquals("light-year test: measures[1] value", 0.0, measures3[1]->getNumber().getDouble(status));
+        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
+                     measures3[1]->getUnit().getIdentifier());
+    }
 
     // 1e-15 light years is 9.46073 meters (calculated using "bc" and the CLDR
     // conversion factor). With double-precision maths, we get 10.5. In this
     // case, we're off by almost 1 meter.
     MaybeStackVector<Measure> measures4 = converter3.convert((1.0 + 1e-15), nullptr, status);
     assertEquals("measures length", 2, measures4.length());
-    assertEquals("light-year test: measures[0] value", 1.0, measures4[0]->getNumber().getDouble(status));
-    assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                 measures4[0]->getUnit().getIdentifier());
-    assertEqualsNear("light-year test: measures[1] value", 10,
-                     measures4[1]->getNumber().getDouble(status), 1);
-    assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                 measures4[1]->getUnit().getIdentifier());
+    if (2 == measures4.length()) {
+        assertEquals("light-year test: measures[0] value", 1.0, measures4[0]->getNumber().getDouble(status));
+        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
+                     measures4[0]->getUnit().getIdentifier());
+        assertEqualsNear("light-year test: measures[1] value", 10,
+                         measures4[1]->getNumber().getDouble(status), 1);
+        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
+                     measures4[1]->getUnit().getIdentifier());
+    }
 
     // 2e-16 light years is 1.892146 meters. We consider this in the noise, and
     // thus expect a 0. (This test fails when 2e-16 is increased to 4e-16.)
     MaybeStackVector<Measure> measures5 = converter3.convert((1.0 + 2e-16), nullptr, status);
     assertEquals("measures length", 2, measures5.length());
-    assertEquals("light-year test: measures[0] value", 1.0, measures5[0]->getNumber().getDouble(status));
-    assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                 measures5[0]->getUnit().getIdentifier());
-    assertEquals("light-year test: measures[1] value", 0.0,
-                     measures5[1]->getNumber().getDouble(status));
-    assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                 measures5[1]->getUnit().getIdentifier());
+    if (2 == measures5.length()) {
+        assertEquals("light-year test: measures[0] value", 1.0, measures5[0]->getNumber().getDouble(status));
+        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
+                     measures5[0]->getUnit().getIdentifier());
+        assertEquals("light-year test: measures[1] value", 0.0,
+                         measures5[1]->getNumber().getDouble(status));
+        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
+                     measures5[1]->getUnit().getIdentifier());
+    }
 
     // TODO(icu-units#63): test negative numbers!
 }
@@ -538,12 +548,13 @@ void UnitsTest::testComplexUnitConverterSorting() {
     ComplexUnitsConverter complexConverter(source, target, conversionRates, status);
     auto measures = complexConverter.convert(10.0, nullptr, status);
 
-    U_ASSERT(measures.length() == 2);
-    assertEquals("inch-and-foot unit 0", "inch", measures[0]->getUnit().getIdentifier());
-    assertEquals("inch-and-foot unit 1", "foot", measures[1]->getUnit().getIdentifier());
+    if (2 == measures.length()) {
+        assertEquals("inch-and-foot unit 0", "inch", measures[0]->getUnit().getIdentifier());
+        assertEquals("inch-and-foot unit 1", "foot", measures[1]->getUnit().getIdentifier());
 
-    assertEqualsNear("inch-and-foot value 0", 9.7008, measures[0]->getNumber().getDouble(), 0.0001);
-    assertEqualsNear("inch-and-foot value 1", 32, measures[1]->getNumber().getInt64(), 0.00001);
+        assertEqualsNear("inch-and-foot value 0", 9.7008, measures[0]->getNumber().getDouble(), 0.0001);
+        assertEqualsNear("inch-and-foot value 1", 32, measures[1]->getNumber().getInt64(), 0.00001);
+    }
 }
 
 /**
