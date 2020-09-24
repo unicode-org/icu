@@ -633,7 +633,11 @@ private:
  */
 class AliasData : public UMemory {
 public:
-    static const AliasData* singleton(UErrorCode status) {
+    static const AliasData* singleton(UErrorCode& status) {
+        if (U_FAILURE(status)) {
+            // Do not get into loadData if the status already has error.
+            return nullptr;
+        }
         umtx_initOnce(AliasData::gInitOnce, &AliasData::loadData, status);
         return gSingleton;
     }
@@ -881,9 +885,6 @@ AliasData::loadData(UErrorCode &status)
     UDate end = uprv_getRawUTCtime();
     printf("AliasData::loadData took total %f ms\n", end - start);
 #endif  // LOCALE_CANONICALIZATION_DEBUG
-    if (gSingleton == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
 }
 
 /**
@@ -904,6 +905,9 @@ AliasDataBuilder::build(UErrorCode &status) {
     LocalUResourceBundlePointer variantAlias(
         ures_getByKey(metadataAlias.getAlias(), "variant", nullptr, &status));
 
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     int32_t languagesLength = 0, scriptLength = 0, territoryLength = 0,
             variantLength = 0;
 
@@ -989,13 +993,22 @@ AliasDataBuilder::build(UErrorCode &status) {
                        status);
     }
 
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+
     // copy hashtables
-    return new AliasData(
+    auto *data = new AliasData(
         std::move(languageMap),
         std::move(scriptMap),
         std::move(territoryMap),
         std::move(variantMap),
         strings.orphanCharStrings());
+
+    if (data == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return data;
 }
 
 /**
@@ -1460,6 +1473,7 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode status)
     if (U_FAILURE(status)) {
         return false;
     }
+    U_ASSERT(data != nullptr);
     out.clear();
     language = locale.getLanguage();
     if (!notEmpty(language)) {
