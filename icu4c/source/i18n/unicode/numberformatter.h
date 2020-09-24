@@ -2624,7 +2624,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Export the formatted number as a "numeric string" conforming to the
      * syntax defined in the Decimal Arithmetic Specification, available at
@@ -2641,11 +2640,10 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      *         for example, std::string.
      * @param status Set if an error occurs.
      * @return A StringClass containing the numeric string.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     template<typename StringClass>
     inline StringClass toDecimalNumber(UErrorCode& status) const;
-#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
 	/**

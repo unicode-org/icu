@@ -662,8 +662,6 @@ ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec);
 U_CAPI void U_EXPORT2
 ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Return the current host time zone. The host time zone is detected from
  * the current host system configuration by querying the host operating
@@ -691,12 +689,10 @@ ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
  * 
  * @see #UCAL_UNKNOWN_ZONE_ID
  * 
- * @draft ICU 65
+ * @stable ICU 65
  */
 U_CAPI int32_t U_EXPORT2
 ucal_getHostTimeZone(UChar *result, int32_t resultCapacity, UErrorCode *ec);
-
-#endif // U_HIDE_DRAFT_API
 
 /**
  * Return the amount of time in milliseconds that the clock is
