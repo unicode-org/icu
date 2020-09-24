@@ -6,7 +6,6 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.Measure;
-import com.ibm.icu.util.MeasureUnit;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -129,8 +128,6 @@ public class ComplexUnitsConverter {
      * other elements are floored to the nearest integer
      */
     public List<Measure> convert(BigDecimal quantity, Precision rounder) {
-        List<Measure> result = new ArrayList<>(unitConverters_.size());
-
         // For N converters:
         // - the first converter converts from the input unit to the largest
         //   unit,
@@ -150,7 +147,7 @@ public class ComplexUnitsConverter {
                 // original values to ensure unbiased accuracy (to the extent of
                 // double's capabilities).
                 BigDecimal roundedQuantity =
-                    quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR);
+                        quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR);
                 intValues.add(roundedQuantity);
 
                 // Keep the residual of the quantity.
@@ -177,9 +174,9 @@ public class ComplexUnitsConverter {
 
                 // Check if there's a carry, and bubble it back up the resulting intValues.
                 BigDecimal carry = unitConverters_.get(i)
-                                       .convertInverse(quantity)
-                                       .multiply(EPSILON_MULTIPLIER)
-                                       .setScale(0, RoundingMode.FLOOR);
+                        .convertInverse(quantity)
+                        .multiply(EPSILON_MULTIPLIER)
+                        .setScale(0, RoundingMode.FLOOR);
                 if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
                     break;
                 }
@@ -189,9 +186,9 @@ public class ComplexUnitsConverter {
                 // We don't use the first converter: that one is for the input unit
                 for (int j = i - 1; j > 0; j--) {
                     carry = unitConverters_.get(j)
-                                .convertInverse(intValues.get(j))
-                                .multiply(EPSILON_MULTIPLIER)
-                                .setScale(0, RoundingMode.FLOOR);
+                            .convertInverse(intValues.get(j))
+                            .multiply(EPSILON_MULTIPLIER)
+                            .setScale(0, RoundingMode.FLOOR);
                     if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
                         break;
                     }
@@ -201,28 +198,21 @@ public class ComplexUnitsConverter {
             }
         }
 
+        // Initialize empty result.
+        List<Measure> result = new ArrayList<>(unitConverters_.size());
+        for (int i = 0; i < unitConverters_.size(); i++) {
+            result.add(null);
+        }
+
         // Package values into Measure instances in result:
         for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
             if (i < n - 1) {
-                result.add(new Measure(intValues.get(i), units_.get(i).build()));
+                result.set(this.units_.get(i).index, new Measure(intValues.get(i), units_.get(i).build()));
             } else {
-                result.add(new Measure(quantity, units_.get(i).build()));
+                result.set(this.units_.get(i).index, new Measure(quantity, units_.get(i).build()));
             }
         }
 
-        for (int i = 0; i < result.size(); i++) {
-            for (int j = i; j < result.size(); j++) {
-                // Find the next expected unit, and swap it into place.
-                if (result.get(j).getUnit().equals(outputUnits_.get(i))) {
-                    if (j != i) {
-                        Measure tmp = result.get(j);
-                        result.set(j, result.get(i));
-                        result.set(i, tmp);
-                    }
-                }
-            }
-        }
-    
         return result;
     }
 
