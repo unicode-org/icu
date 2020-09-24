@@ -111,7 +111,6 @@ class U_COMMON_API StringPiece : public UMemory {
 #endif
 #endif  // U_HIDE_DRAFT_API
 
-#ifndef U_HIDE_DRAFT_API
   /**
    * Constructs from some other implementation of a string piece class, from any
    * C++ record type that has these two methods:
@@ -132,7 +131,7 @@ class U_COMMON_API StringPiece : public UMemory {
    * as from std::u8string_view.
    *
    * @param str the other string piece
-   * @draft ICU 65
+   * @stable ICU 65
    */
   template <typename T,
             typename = typename std::enable_if<
@@ -145,7 +144,6 @@ class U_COMMON_API StringPiece : public UMemory {
   StringPiece(T str)
       : ptr_(reinterpret_cast<const char*>(str.data())),
         length_(static_cast<int32_t>(str.size())) {}
-#endif  // U_HIDE_DRAFT_API
 
   /**
    * Constructs from a const char * pointer and a specified length.
