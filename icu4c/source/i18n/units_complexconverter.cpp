@@ -8,6 +8,8 @@
 #include <cmath>
 
 #include "cmemory.h"
+#include "number_decimalquantity.h"
+#include "number_roundingutils.h"
 #include "uarrsort.h"
 #include "uassert.h"
 #include "unicode/fmtable.h"
@@ -105,10 +107,23 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
     return newQuantity >= limit;
 }
 
-MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UErrorCode &status) const {
+MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
+                                                         icu::number::impl::RoundingImpl *rounder,
+                                                         UErrorCode &status) const {
     // TODO(icu-units#63): test negative numbers!
     // TODO(hugovdm): return an error for "foot-and-foot"?
     MaybeStackVector<Measure> result;
+
+    // For N converters:
+    // - the first converter converts from the input unit to the largest unit,
+    // - N-1 converters convert to bigger units for which we want integers,
+    // - the Nth converter (index N-1) converts to the smallest unit, for which
+    //   we keep a double.
+    MaybeStackArray<int64_t, 5> intValues(unitConverters_.length() - 1, status);
+    if (U_FAILURE(status)) {
+        return result;
+    }
+    uprv_memset(intValues.getAlias(), 0, (unitConverters_.length() - 1) * sizeof(int64_t));
 
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
         quantity = (*unitConverters_[i]).convert(quantity);
@@ -120,11 +135,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
             // original values to ensure unbiased accuracy (to the extent of
             // double's capabilities).
             int64_t roundedQuantity = floor(quantity * (1 + DBL_EPSILON));
-            Formattable formattableNewQuantity(roundedQuantity);
-
-            // NOTE: Measure would own its MeasureUnit.
-            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
-            result.emplaceBackAndCheckErrorCode(status, formattableNewQuantity, type, status);
+            intValues[i] = roundedQuantity;
 
             // Keep the residual of the quantity.
             //   For example: `3.6 feet`, keep only `0.6 feet`
@@ -137,11 +148,76 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
                 quantity -= roundedQuantity;
             }
         } else { // LAST ELEMENT
-            Formattable formattableQuantity(quantity);
+            if (rounder == nullptr) {
+                // Nothing to do for the last element.
+                break;
+            }
 
-            // NOTE: Measure would own its MeasureUnit.
+            // Round the last value
+            // TODO(ICU-21288): get smarter about precision for mixed units.
+            number::impl::DecimalQuantity quant;
+            quant.setToDouble(quantity);
+            rounder->apply(quant, status);
+            if (U_FAILURE(status)) {
+                return result;
+            }
+            quantity = quant.toDouble();
+            if (i == 0) {
+                // Last element is also the first element, so we're done
+                break;
+            }
+
+            // Check if there's a carry, and bubble it back up the resulting intValues.
+            int64_t carry = floor(unitConverters_[i]->convertInverse(quantity) * (1 + DBL_EPSILON));
+            if (carry <= 0) {
+                break;
+            }
+            quantity -= unitConverters_[i]->convert(carry);
+            intValues[i - 1] += carry;
+
+            // We don't use the first converter: that one is for the input unit
+            for (int32_t j = i - 1; j > 0; j--) {
+                carry = floor(unitConverters_[j]->convertInverse(intValues[j]) * (1 + DBL_EPSILON));
+                if (carry <= 0) {
+                    break;
+                }
+                intValues[j] -= round(unitConverters_[j]->convert(carry));
+                intValues[j - 1] += carry;
+            }
+        }
+    }
+
+    // Package values into Measure instances in result:
+    for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
+        if (i < n - 1) {
+            Formattable formattableQuantity(intValues[i]);
+            // Measure takes ownership of the MeasureUnit*
             MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
-            result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status);
+            if (result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status) ==
+                nullptr) {
+                // Ownership wasn't taken
+                U_ASSERT(U_FAILURE(status));
+                delete type;
+            }
+            if (U_FAILURE(status)) {
+                return result;
+            }
+        } else { // LAST ELEMENT
+            // Add the last element, not an integer:
+            Formattable formattableQuantity(quantity);
+            // Measure takes ownership of the MeasureUnit*
+            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
+            if (result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status) ==
+                nullptr) {
+                // Ownership wasn't taken
+                U_ASSERT(U_FAILURE(status));
+                delete type;
+            }
+            if (U_FAILURE(status)) {
+                return result;
+            }
+            U_ASSERT(result.length() == i + 1);
+            U_ASSERT(result[i] != nullptr);
         }
     }
 
@@ -153,6 +229,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity, UError
     for (int32_t i = 0; i < unitsCount; i++) {
         for (int32_t j = i; j < unitsCount; j++) {
             // Find the next expected unit, and swap it into place.
+            U_ASSERT(result[j] != nullptr);
             if (result[j]->getUnit() == *outputUnits_[i]) {
                 if (j != i) {
                     Measure *tmp = arr[j];

@@ -157,7 +157,7 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     }
 
     quantity.roundToInfinity(); // Enables toDouble
-    const auto routed = fUnitsRouter.route(quantity.toDouble(), status);
+    const units::RouteResult routed = fUnitsRouter.route(quantity.toDouble(), &micros.rounder, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -168,38 +168,6 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     }
 
     mixedMeasuresToMicros(routedMeasures, &quantity, &micros, status);
-
-    UnicodeString precisionSkeleton = routed.precision;
-    if (micros.rounder.fPrecision.isBogus()) {
-        if (precisionSkeleton.length() > 0) {
-            micros.rounder.fPrecision = parseSkeletonToPrecision(precisionSkeleton, status);
-        } else {
-            // We use the same rounding mode as COMPACT notation: known to be a
-            // human-friendly rounding mode: integers, but add a decimal digit
-            // as needed to ensure we have at least 2 significant digits.
-            micros.rounder.fPrecision = Precision::integer().withMinDigits(2);
-        }
-    }
-}
-
-Precision UsagePrefsHandler::parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton,
-                                                      UErrorCode status) {
-    if (U_FAILURE(status)) {
-        // As a member of UsagePrefsHandler, which is a friend of Precision, we
-        // get access to the default constructor.
-        return {};
-    }
-    constexpr int32_t kSkelPrefixLen = 20;
-    if (!precisionSkeleton.startsWith(UNICODE_STRING_SIMPLE("precision-increment/"))) {
-        status = U_INVALID_FORMAT_ERROR;
-        return {};
-    }
-    U_ASSERT(precisionSkeleton[kSkelPrefixLen - 1] == u'/');
-    StringSegment segment(precisionSkeleton, false);
-    segment.adjustOffset(kSkelPrefixLen);
-    MacroProps macros;
-    blueprint_helpers::parseIncrementOption(segment, macros, status);
-    return macros.precision;
 }
 
 UnitConversionHandler::UnitConversionHandler(const MeasureUnit &inputUnit, const MeasureUnit &outputUnit,
@@ -227,19 +195,14 @@ void UnitConversionHandler::processQuantity(DecimalQuantity &quantity, MicroProp
         return;
     }
     quantity.roundToInfinity(); // Enables toDouble
-    MaybeStackVector<Measure> measures = fUnitConverter->convert(quantity.toDouble(), status);
+    MaybeStackVector<Measure> measures =
+        fUnitConverter->convert(quantity.toDouble(), &micros.rounder, status);
     micros.outputUnit = fOutputUnit;
     if (U_FAILURE(status)) {
         return;
     }
 
     mixedMeasuresToMicros(measures, &quantity, &micros, status);
-
-    // TODO: add tests to explore behaviour that may suggest a more
-    // human-centric default rounder?
-    // if (micros.rounder.fPrecision.isBogus()) {
-    //     micros.rounder.fPrecision = Precision::integer().withMinDigits(2);
-    // }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

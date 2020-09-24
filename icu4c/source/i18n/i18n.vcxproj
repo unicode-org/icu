@@ -221,6 +221,7 @@
     <ClCompile Include="numsys.cpp" />
     <ClCompile Include="olsontz.cpp" />
     <ClCompile Include="persncal.cpp" />
+    <ClCompile Include="pluralranges.cpp" />
     <ClCompile Include="plurfmt.cpp" />
     <ClCompile Include="plurrule.cpp" />
     <ClCompile Include="quantityformatter.cpp" />
@@ -391,6 +392,7 @@
     <ClInclude Include="nfsubs.h" />
     <ClInclude Include="olsontz.h" />
     <ClInclude Include="persncal.h" />
+    <ClInclude Include="pluralranges.h" />
     <ClInclude Include="plurrule_impl.h" />
     <ClInclude Include="quantityformatter.h" />
     <ClInclude Include="sharedbreakiterator.h" />

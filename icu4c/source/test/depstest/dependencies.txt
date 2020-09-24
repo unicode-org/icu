@@ -974,7 +974,7 @@ group: number_representation
 group: number_output
     # PluralRules and FormattedNumber
     number_output.o
-    standardplural.o plurrule.o
+    standardplural.o plurrule.o pluralranges.o
   deps
     # FormattedNumber internals:
     number_representation format formatted_value_sbimpl units
@@ -1110,6 +1110,7 @@ group: unitsformatter
     units_data.o units_converter.o units_complexconverter.o units_router.o
   deps
     resourcebundle units_extra double_conversion number_representation formattable sort
+    number_rounding
 
 group: decnumber
     decContext.o decNumber.o

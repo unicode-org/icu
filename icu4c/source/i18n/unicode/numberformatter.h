@@ -99,6 +99,13 @@ class MultiplierParseHandler;
 }
 }
 
+namespace units {
+
+// Forward declarations:
+class UnitsRouter;
+
+} // namespace units
+
 namespace number {  // icu::number
 
 // Forward declarations:
@@ -158,7 +165,6 @@ struct UFormattedNumberImpl;
 class MutablePatternModifier;
 class ImmutablePatternModifier;
 struct DecimalFormatWarehouse;
-class UsagePrefsHandler;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -764,7 +770,7 @@ class U_I18N_API Precision : public UMemory {
     friend class impl::GeneratorHelpers;
 
     // To allow access to isBogus and the default (bogus) constructor:
-    friend class impl::UsagePrefsHandler;
+    friend class units::UnitsRouter;
 };
 
 /**

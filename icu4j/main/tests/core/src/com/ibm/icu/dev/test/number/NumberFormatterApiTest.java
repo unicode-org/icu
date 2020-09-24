@@ -751,6 +751,18 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-US"),
                 4.38571,
                 "1.88556 inches, 4 yards, 1 foot");
+
+        assertFormatSingle(
+                "Testing \"1 foot 12 inches\"",
+                null,
+                "unit/foot-and-inch",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("foot-and-inch"))
+                        .precision(Precision.maxSignificantDigits(4))
+                        .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-US"),
+                1.9999,
+                "2 feet, 0 inches");
     }
 
 
@@ -1141,7 +1153,11 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-ZA"),
                 30500,
                 "350 m");
-}
+
+        // TODO(icu-units#38): improve unit testing coverage. E.g. add
+        // vehicle-fuel triggering inversion conversion code. Test with 0 too,
+        // to see divide-by-zero behaviour.
+    }
 
 
     @Test

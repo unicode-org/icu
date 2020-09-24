@@ -23,6 +23,7 @@
 #include "unicode/plurrule.h"
 #include "unicode/stringpiece.h"
 #include "unicode/numberformatter.h"
+#include "unicode/numberrangeformatter.h"
 
 #include "cmemory.h"
 #include "plurrule_impl.h"
@@ -53,6 +54,7 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testCompactDecimalPluralKeyword);
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
+    TESTCASE_AUTO(testSelectRange);
     TESTCASE_AUTO(testAvailbleLocales);
     TESTCASE_AUTO(testParseErrors);
     TESTCASE_AUTO(testFixedDecimal);
@@ -922,6 +924,50 @@ void PluralRulesTest::testSelect() {
     pr.adoptInstead(PluralRules::createRules("a:n % 10 != 1", status));
     checkSelect(pr, status, __LINE__, "a", "2", "6", "7", "8", END_MARK);
     checkSelect(pr, status, __LINE__, "other", "1", "21", "211", "91", END_MARK);
+}
+
+
+void PluralRulesTest::testSelectRange() {
+    IcuTestErrorCode status(*this, "testSelectRange");
+
+    int32_t d1 = 102;
+    int32_t d2 = 201;
+    Locale locale("sl");
+
+    // Locale sl has interesting data: one + two => few
+    auto range = NumberRangeFormatter::withLocale(locale).formatFormattableRange(d1, d2, status);
+    auto rules = LocalPointer<PluralRules>(PluralRules::forLocale(locale, status), status);
+    if (status.errIfFailureAndReset()) {
+        return;
+    }
+
+    // For testing: get plural form of first and second numbers
+    auto a = NumberFormatter::withLocale(locale).formatDouble(d1, status);
+    auto b = NumberFormatter::withLocale(locale).formatDouble(d2, status);
+    assertEquals("First plural", u"two", rules->select(a, status));
+    assertEquals("Second plural", u"one", rules->select(b, status));
+
+    // Check the range plural now:
+    auto form = rules->select(range, status);
+    assertEquals("Range plural", u"few", form);
+
+    // Test after copying:
+    PluralRules copy(*rules);
+    form = copy.select(range, status);
+    assertEquals("Range plural after copying", u"few", form);
+
+    // Test when plural ranges data is unavailable:
+    auto bare = LocalPointer<PluralRules>(
+        PluralRules::createRules(u"a: i = 0,1", status), status);
+    if (status.errIfFailureAndReset()) { return; }
+    form = bare->select(range, status);
+    status.expectErrorAndReset(U_UNSUPPORTED_ERROR);
+
+    // However, they should not set an error when no data is available for a language.
+    auto xyz = LocalPointer<PluralRules>(
+        PluralRules::forLocale("xyz", status));
+    form = xyz->select(range, status);
+    assertEquals("Fallback form", u"other", form);
 }
 
 

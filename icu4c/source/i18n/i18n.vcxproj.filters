@@ -234,6 +234,9 @@
     <ClCompile Include="persncal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="pluralranges.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="plurfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -981,6 +984,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="persncal.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="pluralranges.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="plurrule_impl.h">

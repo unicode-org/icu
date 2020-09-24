@@ -1,7 +1,5 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.units;
 
 import com.ibm.icu.util.BytesTrie;
@@ -797,5 +795,10 @@ public class MeasureUnitImpl {
         public int compare(SingleUnitImpl o1, SingleUnitImpl o2) {
             return o1.compareTo(o2);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MeasureUnitImpl [" + build().getIdentifier() + "]";
     }
 }

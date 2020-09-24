@@ -44,7 +44,7 @@ public class UnitConversionHandler implements MicroPropsGenerator {
         MicroProps result = this.fParent.processQuantity(quantity);
 
         quantity.roundToInfinity(); // Enables toDouble
-        List<Measure> measures = this.fComplexUnitConverter.convert(quantity.toBigDecimal());
+        List<Measure> measures = this.fComplexUnitConverter.convert(quantity.toBigDecimal(), result.rounder);
 
         result.outputUnit = this.fOutputUnit;
         UsagePrefsHandler.mixedMeasuresToMicros(measures, quantity, result);

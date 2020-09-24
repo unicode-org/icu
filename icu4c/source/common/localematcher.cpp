@@ -4,9 +4,6 @@
 // localematcher.cpp
 // created: 2019may08 Markus W. Scherer
 
-#ifndef __LOCMATCHER_H__
-#define __LOCMATCHER_H__
-
 #include "unicode/utypes.h"
 #include "unicode/localebuilder.h"
 #include "unicode/localematcher.h"
@@ -847,5 +844,3 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
     return acceptLanguage(*availableLocales, desiredLocales,
                           result, resultAvailable, outResult, *status);
 }
-
-#endif  // __LOCMATCHER_H__
