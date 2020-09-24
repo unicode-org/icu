@@ -25,6 +25,8 @@ import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.impl.number.UnitConversionHandler;
 import com.ibm.icu.impl.number.UsagePrefsHandler;
+import com.ibm.icu.impl.units.ConversionRates;
+import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -35,6 +37,9 @@ import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in a
@@ -274,9 +279,9 @@ class NumberFormatterImpl {
             }
             chain = usagePrefsHandler = new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
         } else if (isMixedUnit) {
-            // TODO(icu-units#97): The input unit should be the largest unit, not the first unit, in the identifier.
-            MeasureUnit inputUnit = macros.unit.splitToSingleUnits().get(0);
-            chain = new UnitConversionHandler(inputUnit, macros.unit, chain);
+            // In case of MixedUnit,
+            List<MeasureUnit> singleUnits = macros.unit.splitToSingleUnits();
+            chain = new UnitConversionHandler(macros.unit, chain);
         }
 
         // Multiplier

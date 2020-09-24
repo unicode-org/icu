@@ -15,8 +15,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class MeasureUnitImpl {
+    /**
+     * Represents the index of the unit in the list of <code>MeasureUnitImpl</code>, if equals -1, this means
+     * the field is not set.
+     */
+    protected int index = -1;
 
     /**
      * The full unit identifier.  Null if not computed.
@@ -104,8 +110,8 @@ public class MeasureUnitImpl {
      *
      * @return a list of <code>MeasureUnitImpl</code>
      */
-    public ArrayList<MeasureUnitImpl> extractIndividualUnits() {
-        ArrayList<MeasureUnitImpl> result = new ArrayList<MeasureUnitImpl>();
+    public List<MeasureUnitImpl> extractIndividualUnits() {
+        List<MeasureUnitImpl> result = new ArrayList<>();
         if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
             // In case of mixed units, each single unit can be considered as a stand alone MeasureUnitImpl.
             for (SingleUnitImpl singleUnit :
@@ -117,6 +123,15 @@ public class MeasureUnitImpl {
         }
 
         result.add(this.clone());
+        return result;
+    }
+
+    public List<MeasureUnitImpl> extractIndividualUnitsWithIndex() {
+        List<MeasureUnitImpl> result = this.extractIndividualUnits();
+        for (int i = 0; i < result.size(); i++) {
+            result.get(i).index = i;
+        }
+
         return result;
     }
 
@@ -754,8 +769,26 @@ public class MeasureUnitImpl {
 
         @Override
         public int compare(MeasureUnitImpl o1, MeasureUnitImpl o2) {
-            UnitConverter fromO1toO2 = new UnitConverter(o1, o2, conversionRates);
-            return fromO1toO2.convert(BigDecimal.valueOf(1)).compareTo(BigDecimal.valueOf(1));
+            BigDecimal factor1 = this.conversionRates.getFactorToBase(o1).getConversionRate();
+            BigDecimal factor2 = this.conversionRates.getFactorToBase(o2).getConversionRate();
+
+            return factor1.compareTo(factor2);
+        }
+    }
+
+    public static class MeasureUnitComparator implements Comparator<MeasureUnit> {
+        private MeasureUnitImplComparator measureUnitImplComparator;
+
+        public MeasureUnitComparator(ConversionRates conversionRates) {
+            this.measureUnitImplComparator = new MeasureUnitImplComparator(conversionRates);
+        }
+
+        @Override
+        public int compare(MeasureUnit o1, MeasureUnit o2) {
+            MeasureUnitImpl o1Impl = MeasureUnitImpl.forIdentifier(o1.getIdentifier());
+            MeasureUnitImpl o2Impl = MeasureUnitImpl.forIdentifier(o2.getIdentifier());
+
+            return this.measureUnitImplComparator.compare(o1Impl, o2Impl);
         }
     }
 

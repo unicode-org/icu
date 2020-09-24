@@ -26,10 +26,36 @@ public class ComplexUnitsConverter {
     public static final BigDecimal EPSILON = BigDecimal.valueOf(Math.ulp(1.0));
     public static final BigDecimal EPSILON_MULTIPLIER = BigDecimal.valueOf(1).add(EPSILON);
     private ArrayList<UnitConverter> unitConverters_;
-    private ArrayList<MeasureUnitImpl> units_;
+    private List<MeasureUnitImpl> units_;
+    private MeasureUnitImpl inputUnit_;
 
     /**
-     * Constructor of `ComplexUnitsConverter`.
+     * Constructs <code>ComplexUnitsConverter</code> for an <code>inputUnit</code> that could be Single, Compound or Mixed.
+     * In case of:
+     * 1- Single and Compound units,
+     * the conversion will not perform anything, the input will be equal to the output.
+     * 2- Mixed Unit
+     * the conversion will consider the input in the biggest unit. and will convert it to be spread throw
+     * the input units. For example: if input unit is "inch-and-foot", and the input is 2.5. The converter
+     * will consider the input value in "foot", because foot is the biggest unit. Then, it will convert
+     * 2.5 feet to "inch-and-foot".
+     *
+     * @param inputUnit represents the input unit. could be any type. (single, compound or mixed).
+     */
+    public ComplexUnitsConverter(MeasureUnitImpl inputUnit, ConversionRates conversionRates) {
+        this.units_ = inputUnit.extractIndividualUnitsWithIndex();
+        // Sort the units in a descending order.
+        Collections.sort(
+                this.units_,
+                Collections.reverseOrder(new MeasureUnitImpl.MeasureUnitImplComparator(conversionRates)));
+        assert (!this.units_.isEmpty());
+
+        this.inputUnit_ = this.units_.get(0);
+        this.init(conversionRates);
+    }
+
+    /**
+     * Constructs <code>ComplexUnitsConverter</code>
      * NOTE:
      * - inputUnit and outputUnits must be under the same category
      * - e.g. meter to feet and inches --> all of them are length units.
@@ -39,14 +65,19 @@ public class ComplexUnitsConverter {
      */
     public ComplexUnitsConverter(MeasureUnitImpl inputUnit, MeasureUnitImpl outputUnits,
                                  ConversionRates conversionRates) {
-        units_ = outputUnits.extractIndividualUnits();
-        assert (!units_.isEmpty());
+        this.inputUnit_ = inputUnit;
+        this.units_ = outputUnits.extractIndividualUnitsWithIndex();
+        assert (!this.units_.isEmpty());
 
         // Sort the units in a descending order.
         Collections.sort(
                 this.units_,
                 Collections.reverseOrder(new MeasureUnitImpl.MeasureUnitImplComparator(conversionRates)));
 
+        this.init(conversionRates);
+    }
+
+    private void init(ConversionRates conversionRates) {
 
         // If the `outputUnits` is `UMEASURE_UNIT_MIXED` such as `foot+inch`. Thus means there is more than one unit
         //  and In this case we need more converters to convert from the `inputUnit` to the first unit in the
@@ -65,7 +96,7 @@ public class ComplexUnitsConverter {
         unitConverters_ = new ArrayList<>();
         for (int i = 0, n = units_.size(); i < n; i++) {
             if (i == 0) { // first element
-                unitConverters_.add(new UnitConverter(inputUnit, units_.get(i), conversionRates));
+                unitConverters_.add(new UnitConverter(this.inputUnit_, units_.get(i), conversionRates));
             } else {
                 unitConverters_.add(new UnitConverter(units_.get(i - 1), units_.get(i), conversionRates));
             }
@@ -96,7 +127,10 @@ public class ComplexUnitsConverter {
      * other elements are floored to the nearest integer
      */
     public List<Measure> convert(BigDecimal quantity) {
-        List<Measure> result = new ArrayList<>();
+        // Initialize the result array list.
+        assert this.units_.size() == this.unitConverters_.size();
+        List<Measure> result = new ArrayList<>(this.unitConverters_.size());
+        for (int i = 0; i < this.unitConverters_.size(); i++) { result.add(null); }
 
         for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
             quantity = (unitConverters_.get(i)).convert(quantity);
@@ -110,7 +144,7 @@ public class ComplexUnitsConverter {
                 // double's capabilities).
                 BigDecimal newQuantity = quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR);
 
-                result.add(new Measure(newQuantity, units_.get(i).build()));
+                result.set(this.units_.get(i).index, new Measure(newQuantity, units_.get(i).build()));
 
                 // Keep the residual of the quantity.
                 //   For example: `3.6 feet`, keep only `0.6 feet`
@@ -119,7 +153,7 @@ public class ComplexUnitsConverter {
                     quantity = BigDecimal.ZERO;
                 }
             } else { // LAST ELEMENT
-                result.add(new Measure(quantity, units_.get(i).build()));
+                result.set(this.units_.get(i).index, new Measure(quantity, units_.get(i).build()));
             }
         }
 

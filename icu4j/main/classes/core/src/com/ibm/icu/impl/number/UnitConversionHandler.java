@@ -1,14 +1,15 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
+
+
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
+import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
-import com.ibm.icu.impl.units.UnitsData;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,22 +24,16 @@ public class UnitConversionHandler implements MicroPropsGenerator {
     private ComplexUnitsConverter fComplexUnitConverter;
 
     /**
-     * Constructor.
-     *
-     * @param inputUnit Specifies the input MeasureUnit. Mixed units are not
-     *     supported as input (because input is just a single decimal quantity).
-     * @param outputUnit Specifies the output MeasureUnit.
-     * @param parent The parent MicroPropsGenerator.
+     * @param inputUnit Specifies the input MeasureUnit. In case of Mixed unit, the input unit will be the biggest unit
+     *                  in the Mixed unit and the output will be the input unit. Otherwise, the input unit will be
+     *                  the output unit.
+     * @param parent    The parent MicroPropsGenerator.
      */
-    public UnitConversionHandler(MeasureUnit inputUnit,
-                                 MeasureUnit outputUnit,
-                                 MicroPropsGenerator parent) {
-        this.fOutputUnit = outputUnit;
+    public UnitConversionHandler(MeasureUnit inputUnit, MicroPropsGenerator parent) {
+        this.fOutputUnit = inputUnit;
         this.fParent = parent;
         MeasureUnitImpl inputUnitImpl = MeasureUnitImpl.forIdentifier(inputUnit.getIdentifier());
-        MeasureUnitImpl outputUnitImpl = MeasureUnitImpl.forIdentifier(outputUnit.getIdentifier());
-        this.fComplexUnitConverter = new ComplexUnitsConverter(inputUnitImpl, outputUnitImpl,
-                                                               new UnitsData().getConversionRates());
+        this.fComplexUnitConverter = new ComplexUnitsConverter(inputUnitImpl, new ConversionRates());
     }
 
     /**
