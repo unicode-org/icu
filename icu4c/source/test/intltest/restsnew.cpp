@@ -535,32 +535,28 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("copy construction failed\n");
     }
 
-    // Due to ICU-21028 the following tests involving defaultSub are no longer valid.
-    // defaultresource is typically en_US; this used to be empty except for a Version resource
-    // (which is what would be returned by defaultresource.get(0, err) ). However:
-    // In ICU-21028 the Version resource was removed; and now defaultresource.get(0, err)
-    // sets U_MISSING_RESOURCE_ERROR and returns an invalide resource in defaultSub.
-    // For now just comment out...
-    //ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
-    //ResourceBundle defSubCopy(defaultSub);
-    //if(strcmp(defSubCopy.getName(), defaultSub.getName() ) !=0  ||
-    //    strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) !=0  ){
-    //    errln("copy construction for subresource failed\n");
-    //}
-
-    ResourceBundle *p;
-
-    p = defaultresource.clone();
-    if(p == &defaultresource || !equalRB(*p, defaultresource)) {
-        errln("ResourceBundle.clone() failed");
+    {
+        LocalPointer<ResourceBundle> p(defaultresource.clone());
+        if(p.getAlias() == &defaultresource || !equalRB(*p, defaultresource)) {
+            errln("ResourceBundle.clone() failed");
+        }
     }
-    delete p;
 
-    //p = defaultSub.clone();
-    //if(p == &defaultSub || !equalRB(*p, defaultSub)) {
-    //    errln("2nd ResourceBundle.clone() failed");
-    //}
-    //delete p;
+    // The following tests involving defaultSub may no longer be exercised if
+    // defaultresource is for a locale like en_US with an empty resource bundle.
+    // (Before ICU-21028 such a bundle would have contained at least a Version string.)
+    if(defaultresource.getSize() != 0) {
+        ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
+        ResourceBundle defSubCopy(defaultSub);
+        if(strcmp(defSubCopy.getName(), defaultSub.getName()) != 0 ||
+                strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) != 0) {
+            errln("copy construction for subresource failed\n");
+        }
+        LocalPointer<ResourceBundle> p(defaultSub.clone());
+        if(p.getAlias() == &defaultSub || !equalRB(*p, defaultSub)) {
+            errln("2nd ResourceBundle.clone() failed");
+        }
+    }
 
     UVersionInfo ver;
     copyRes.getVersion(ver);

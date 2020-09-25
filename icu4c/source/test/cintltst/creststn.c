@@ -2160,27 +2160,27 @@ static void TestFallback()
     /* Test Jitterbug 552 fallback mechanism of aliased data */
     {
         UErrorCode err =U_ZERO_ERROR;
-        // Per ICU-21028 the Version resource no longer exists in most files, so the
-        // Version tests below are obsolete. For now just comment out...
-        //
-        //UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
-        //UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
-        //const UChar* version = NULL;
-        //static const UChar versionStr[] = u"38"; // 38 in nn_NO
+        UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
+        UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
+        const UChar* version = NULL;
+        static const UChar versionStr[] = u"38"; // 38 in nn_NO or in a parent bundle/root
 
-        //if(err != U_ZERO_ERROR){
-        //    log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
-        //    return;
-        //}
-        //version = tres_getString(resLocID, -1, NULL, &resultLen, &err);
-        //if(u_strcmp(version, versionStr) != 0){
-        //    char x[100];
-        //    char g[100];
-        //    u_austrcpy(x, versionStr);
-        //    u_austrcpy(g, version);
-        //    log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value. Expected '%s', but got '%s'\n",
-        //            x, g);
-        //}
+        if(U_FAILURE(err)) {
+            log_data_err("Expected success when trying to test no_NO_NY aliased to nn_NO for Version "
+                         "err=%s\n",
+                         u_errorName(err));
+            return;
+        }
+        version = tres_getString(resLocID, -1, NULL, &resultLen, &err);
+        if(u_strcmp(version, versionStr) != 0){
+            char x[100];
+            char g[100];
+            u_austrcpy(x, versionStr);
+            u_austrcpy(g, version);
+            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected "
+                         "version value. Expected '%s', but got '%s'\n",
+                         x, g);
+        }
         UResourceBundle* zoneResource = ures_open(U_ICUDATA_ZONE, "no_NO_NY", &err);
         UResourceBundle* tResB = ures_getByKey(zoneResource, "zoneStrings", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
@@ -2188,8 +2188,8 @@ static void TestFallback()
         }
         ures_close(tResB);
         ures_close(zoneResource);
-        //ures_close(resLocID);
-        //ures_close(myResB);
+        ures_close(resLocID);
+        ures_close(myResB);
     }
 
 }
