@@ -12,7 +12,6 @@ fr_CH{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

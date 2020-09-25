@@ -183,5 +183,4 @@ de{
             "0: =%spellout-ordinal=s;",
         }
     }
-    Version{"38"}
 }

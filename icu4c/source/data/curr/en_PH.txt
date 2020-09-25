@@ -9,5 +9,4 @@ en_PH{
             "Philippine Peso",
         }
     }
-    Version{"38"}
 }

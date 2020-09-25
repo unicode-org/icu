@@ -49,5 +49,4 @@ rn{
         zh{"Igishinwa"}
         zu{"Ikizulu"}
     }
-    Version{"38"}
 }

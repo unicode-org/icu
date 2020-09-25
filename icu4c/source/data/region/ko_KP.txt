@@ -5,5 +5,4 @@ ko_KP{
     Countries{
         KP{"조선민주주의인민공화국"}
     }
-    Version{"38"}
 }

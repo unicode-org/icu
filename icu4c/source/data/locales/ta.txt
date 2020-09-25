@@ -240,7 +240,6 @@ ta{
         }
         traditional{"taml"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

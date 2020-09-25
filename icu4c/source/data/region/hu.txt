@@ -314,5 +314,4 @@ hu{
         SZ{"Eswatini"}
         TL{"Timor-Leste"}
     }
-    Version{"38"}
 }

@@ -6,5 +6,4 @@ ro_MD{
         sw_CD{"swahili (R. D. Congo)"}
         wal{"wolaytta"}
     }
-    Version{"38"}
 }

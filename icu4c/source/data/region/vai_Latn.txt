@@ -227,5 +227,4 @@ vai_Latn{
         ZM{"Zambiya"}
         ZW{"Zimbabhuwe"}
     }
-    Version{"38"}
 }

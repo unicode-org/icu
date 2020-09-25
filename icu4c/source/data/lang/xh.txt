@@ -5,5 +5,4 @@ xh{
     Languages{
         xh{"isiXhosa"}
     }
-    Version{"38"}
 }

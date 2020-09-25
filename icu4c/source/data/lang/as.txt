@@ -554,7 +554,6 @@ as{
             tibt{"তিব্বতী অংক"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — সকলো"}
         category-list{"{0}: {1}"}

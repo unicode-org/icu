@@ -9,5 +9,4 @@ en_ZM{
             "Zambian Kwacha",
         }
     }
-    Version{"38"}
 }

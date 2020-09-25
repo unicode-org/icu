@@ -37,7 +37,6 @@ brx{
         }
         native{"deva"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

@@ -639,7 +639,6 @@ ur{
             vaii{"وائی ہندسے"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — تمام"}
         category-list{"{0}: {1}"}

@@ -14,7 +14,6 @@ es_CL{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

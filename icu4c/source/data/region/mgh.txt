@@ -140,5 +140,4 @@ mgh{
         ZM{"Uzambia"}
         ZW{"Uzimbabwe"}
     }
-    Version{"38"}
 }

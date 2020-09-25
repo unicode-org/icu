@@ -8,5 +8,4 @@ sq_MK{
             "Denari maqedonas",
         }
     }
-    Version{"38"}
 }

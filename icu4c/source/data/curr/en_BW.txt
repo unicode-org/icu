@@ -9,5 +9,4 @@ en_BW{
             "Botswanan Pula",
         }
     }
-    Version{"38"}
 }

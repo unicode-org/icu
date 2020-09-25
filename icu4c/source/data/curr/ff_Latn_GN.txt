@@ -8,5 +8,4 @@ ff_Latn_GN{
             "GNF",
         }
     }
-    Version{"38"}
 }

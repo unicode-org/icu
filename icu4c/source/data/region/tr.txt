@@ -315,5 +315,4 @@ tr{
         SZ{"Svaziland"}
         TL{"Doğu Timor"}
     }
-    Version{"38"}
 }

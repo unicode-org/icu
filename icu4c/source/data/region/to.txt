@@ -311,5 +311,4 @@ to{
         FK{"ʻOtumotu Malivina"}
         SZ{"Suasilani"}
     }
-    Version{"38"}
 }

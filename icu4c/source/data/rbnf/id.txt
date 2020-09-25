@@ -46,5 +46,4 @@ id{
             "0: ke=%spellout-cardinal=;",
         }
     }
-    Version{"38"}
 }

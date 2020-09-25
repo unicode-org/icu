@@ -253,7 +253,6 @@ gu{
         minimumGroupingDigits{"1"}
         native{"gujr"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

@@ -310,5 +310,4 @@ mt{
         FK{"Il-Gżejjer Falkland (il-Gżejjer Malvinas)"}
         TL{"Timor tal-Lvant"}
     }
-    Version{"38"}
 }

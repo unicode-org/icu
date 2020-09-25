@@ -261,7 +261,6 @@ yue_Hans{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -921,7 +921,6 @@ mk{
         PINYIN{"Пинјин романизација"}
         WADEGILE{"Вејд-Џајлс романизација"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} - сите"}
         category-list{"{0}: {1}"}

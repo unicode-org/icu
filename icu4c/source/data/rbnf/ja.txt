@@ -79,5 +79,4 @@ ja{
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"38"}
 }

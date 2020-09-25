@@ -12,5 +12,4 @@ es_SV{
         ss{"siswati"}
         wo{"wolof"}
     }
-    Version{"38"}
 }

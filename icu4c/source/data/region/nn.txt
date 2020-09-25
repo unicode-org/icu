@@ -309,5 +309,4 @@ nn{
         FK{"Falklandsøyane (Islas Malvinas)"}
         SZ{"Swaziland"}
     }
-    Version{"38"}
 }

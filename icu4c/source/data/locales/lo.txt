@@ -263,7 +263,6 @@ lo{
         }
         native{"laoo"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

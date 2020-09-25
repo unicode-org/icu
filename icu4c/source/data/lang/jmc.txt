@@ -49,5 +49,4 @@ jmc{
         zh{"Kyichina"}
         zu{"Kyizulu"}
     }
-    Version{"38"}
 }

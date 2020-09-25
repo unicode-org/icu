@@ -6,5 +6,4 @@ mgo{
         CM{"Kamalun"}
         ZZ{"aba aben tisɔ̀"}
     }
-    Version{"38"}
 }

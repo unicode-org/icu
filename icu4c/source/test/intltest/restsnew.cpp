@@ -535,12 +535,18 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("copy construction failed\n");
     }
 
-    ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
-    ResourceBundle defSubCopy(defaultSub);
-    if(strcmp(defSubCopy.getName(), defaultSub.getName() ) !=0  ||
-        strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) !=0  ){
-        errln("copy construction for subresource failed\n");
-    }
+    // Due to ICU-21028 the following tests involving defaultSub are no longer valid.
+    // defaultresource is typically en_US; this used to be empty except for a Version resource
+    // (which is what would be returned by defaultresource.get(0, err) ). However:
+    // In ICU-21028 the Version resource was removed; and now defaultresource.get(0, err)
+    // sets U_MISSING_RESOURCE_ERROR and returns an invalide resource in defaultSub.
+    // For now just comment out...
+    //ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
+    //ResourceBundle defSubCopy(defaultSub);
+    //if(strcmp(defSubCopy.getName(), defaultSub.getName() ) !=0  ||
+    //    strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) !=0  ){
+    //    errln("copy construction for subresource failed\n");
+    //}
 
     ResourceBundle *p;
 
@@ -550,11 +556,11 @@ NewResourceBundleTest::TestOtherAPI(){
     }
     delete p;
 
-    p = defaultSub.clone();
-    if(p == &defaultSub || !equalRB(*p, defaultSub)) {
-        errln("2nd ResourceBundle.clone() failed");
-    }
-    delete p;
+    //p = defaultSub.clone();
+    //if(p == &defaultSub || !equalRB(*p, defaultSub)) {
+    //    errln("2nd ResourceBundle.clone() failed");
+    //}
+    //delete p;
 
     UVersionInfo ver;
     copyRes.getVersion(ver);

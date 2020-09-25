@@ -315,5 +315,4 @@ hr{
         SZ{"Svazi"}
         TL{"Istočni Timor"}
     }
-    Version{"38"}
 }

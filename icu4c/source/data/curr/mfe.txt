@@ -236,5 +236,4 @@ mfe{
             "dolar zimbawe",
         }
     }
-    Version{"38"}
 }

@@ -660,7 +660,6 @@ sw{
             vaii{"Dijiti za Vai"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — zote"}
         category-list{"{0}: {1}"}

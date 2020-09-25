@@ -55,5 +55,4 @@ nus{
         TD{"Ca̱d"}
         VG{"Burutic dhuɔ̱ɔ̱l be̱rgin"}
     }
-    Version{"38"}
 }

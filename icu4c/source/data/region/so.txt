@@ -311,5 +311,4 @@ so{
         SZ{"Iswaasilaan"}
         TL{"Bariga Timor"}
     }
-    Version{"38"}
 }

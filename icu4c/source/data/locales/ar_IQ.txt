@@ -5,7 +5,6 @@ ar_IQ{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
     calendar{
         gregorian{
             monthNames{

@@ -246,5 +246,4 @@ ia{
     Countries%variant{
         CZ{"Republica Chec"}
     }
-    Version{"38"}
 }

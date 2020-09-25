@@ -8,5 +8,4 @@ es_PH{
             "peso filipino",
         }
     }
-    Version{"38"}
 }

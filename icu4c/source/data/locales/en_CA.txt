@@ -10,7 +10,6 @@ en_CA{
             }
         }
     }
-    Version{"38"}
     calendar{
         chinese{
             DateTimePatterns{

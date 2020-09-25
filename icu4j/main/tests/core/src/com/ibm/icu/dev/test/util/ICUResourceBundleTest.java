@@ -1117,9 +1117,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if (rb7.getKey() != null) {
             errln("getKey() call should have returned null.");
         }
-        if (((ICUResourceBundle)rb1).findTopLevel(0) == null) {
-            errln("Error calling findTopLevel().");
-        }
+        // Due to ICU-21028 the following test is no longer valid.
+        // rb1 would typically be en_US; this used to be empty except for a Version
+        // resource (which is what would be returned by findTopLevel(0) ). However:
+        // In ICU-21028 the Version resource was removed; and now even index=0 is
+        // out of range. For now just comment out the test...
+        //if (((ICUResourceBundle)rb1).findTopLevel(0) == null) {
+        //    errln("Error calling findTopLevel().");
+        //}
         if (ICUResourceBundle.getFullLocaleNameSet() == null) {
             errln("Error calling getFullLocaleNameSet().");
         }

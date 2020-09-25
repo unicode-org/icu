@@ -285,5 +285,4 @@ gsw{
         HK{"Hongkong"}
         MO{"Macao"}
     }
-    Version{"38"}
 }

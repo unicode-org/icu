@@ -5,7 +5,6 @@ ar_AE{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
     calendar{
         gregorian{
             eras{

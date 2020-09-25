@@ -313,5 +313,4 @@ tk{
         SZ{"Swazilend"}
         TL{"Gündogar Timor"}
     }
-    Version{"38"}
 }

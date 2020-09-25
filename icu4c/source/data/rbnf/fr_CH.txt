@@ -182,5 +182,4 @@ fr_CH{
             "2: =%%spellout-ordinal=;",
         }
     }
-    Version{"38"}
 }

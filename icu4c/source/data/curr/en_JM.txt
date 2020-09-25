@@ -9,5 +9,4 @@ en_JM{
             "Jamaican Dollar",
         }
     }
-    Version{"38"}
 }

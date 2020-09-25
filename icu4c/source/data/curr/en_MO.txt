@@ -9,5 +9,4 @@ en_MO{
             "Macanese Pataca",
         }
     }
-    Version{"38"}
 }

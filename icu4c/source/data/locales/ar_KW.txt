@@ -5,5 +5,4 @@ ar_KW{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

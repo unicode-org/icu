@@ -27,5 +27,4 @@ se_FI{
     Countries%variant{
         CI{"Côte d’Ivoire"}
     }
-    Version{"38"}
 }

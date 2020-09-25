@@ -248,7 +248,6 @@ bn{
         minimumGroupingDigits{"1"}
         native{"beng"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

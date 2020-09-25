@@ -49,5 +49,4 @@ seh{
         zh{"chinês"}
         zu{"zulu"}
     }
-    Version{"38"}
 }

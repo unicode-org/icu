@@ -9,5 +9,4 @@ es_PE{
             "sol peruano",
         }
     }
-    Version{"38"}
 }

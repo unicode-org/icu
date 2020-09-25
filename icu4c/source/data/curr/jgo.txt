@@ -24,5 +24,4 @@ jgo{
             "ntɛ-ŋkáp yi pɛ́ ká kɛ́ jínɛ",
         }
     }
-    Version{"38"}
 }

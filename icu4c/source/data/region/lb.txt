@@ -305,5 +305,4 @@ lb{
         CG{"Kongo (Republik)"}
         CI{"Elfebeeküst"}
     }
-    Version{"38"}
 }

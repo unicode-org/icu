@@ -171,7 +171,6 @@ yi{
             gregorian{"גרעגארישער קאַלענדאַר"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"שפראַך: {0}"}
         script{"שריפֿט: {0}"}

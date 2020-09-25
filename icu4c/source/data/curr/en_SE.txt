@@ -9,5 +9,4 @@ en_SE{
             "Swedish Krona",
         }
     }
-    Version{"38"}
 }

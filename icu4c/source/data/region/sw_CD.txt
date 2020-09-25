@@ -29,5 +29,4 @@ sw_CD{
         TD{"Chadi"}
         TL{"Timori ya Mashariki"}
     }
-    Version{"38"}
 }

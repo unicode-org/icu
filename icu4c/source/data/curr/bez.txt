@@ -232,5 +232,4 @@ bez{
             "Lupila lwa Huzimbabwe",
         }
     }
-    Version{"38"}
 }

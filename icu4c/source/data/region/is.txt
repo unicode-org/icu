@@ -311,5 +311,4 @@ is{
         FK{"Falklandseyjar (Malvinas)"}
         TL{"Austur-Tímor"}
     }
-    Version{"38"}
 }

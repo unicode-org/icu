@@ -8,5 +8,4 @@ ms_ID{
             "Rupiah Indonesia",
         }
     }
-    Version{"38"}
 }

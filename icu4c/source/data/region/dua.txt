@@ -5,5 +5,4 @@ dua{
     Countries{
         CM{"Cameroun"}
     }
-    Version{"38"}
 }

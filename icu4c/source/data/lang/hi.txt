@@ -857,7 +857,6 @@ hi{
         REVISED{"संशोधित वर्तनी"}
         WADEGILE{"वेड-जाइल्स रोमनाइज़ेशन"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — सभी"}
         category-list{"{0}: {1}"}

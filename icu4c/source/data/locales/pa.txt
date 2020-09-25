@@ -258,7 +258,6 @@ pa{
         minimumGroupingDigits{"1"}
         native{"guru"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{

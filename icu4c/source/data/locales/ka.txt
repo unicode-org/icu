@@ -223,7 +223,6 @@ ka{
         native{"latn"}
         traditional{"geor"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

@@ -49,5 +49,4 @@ lag{
         zh{"Kɨchíina"}
         zu{"Kɨzúulu"}
     }
-    Version{"38"}
 }

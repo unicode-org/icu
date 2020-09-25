@@ -106,7 +106,6 @@ ti{
         Ethi{"ፊደል"}
         Latn{"ላቲን"}
     }
-    Version{"38"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

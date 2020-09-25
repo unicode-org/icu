@@ -35,5 +35,4 @@ sw_CD{
         udm{"Kiudumurti"}
         yi{"Kiyidi"}
     }
-    Version{"38"}
 }

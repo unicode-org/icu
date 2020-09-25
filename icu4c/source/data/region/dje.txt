@@ -226,5 +226,4 @@ dje{
         ZM{"Zambi"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

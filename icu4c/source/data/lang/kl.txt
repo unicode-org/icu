@@ -5,7 +5,6 @@ kl{
     Languages{
         kl{"kalaallisut"}
     }
-    Version{"38"}
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}

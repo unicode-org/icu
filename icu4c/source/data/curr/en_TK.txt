@@ -9,5 +9,4 @@ en_TK{
             "New Zealand Dollar",
         }
     }
-    Version{"38"}
 }

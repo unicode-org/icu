@@ -84,7 +84,6 @@ ccp{
         minimumGroupingDigits{"1"}
         native{"cakm"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

@@ -5,5 +5,4 @@ ar_SD{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

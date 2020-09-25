@@ -30,7 +30,6 @@ yi{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

@@ -49,5 +49,4 @@ cgg{
         zh{"Oruchaina"}
         zu{"Oruzuru"}
     }
-    Version{"38"}
 }

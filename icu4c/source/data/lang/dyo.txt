@@ -49,5 +49,4 @@ dyo{
         zh{"sinua"}
         zu{"sulu"}
     }
-    Version{"38"}
 }

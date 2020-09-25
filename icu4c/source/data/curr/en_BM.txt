@@ -9,5 +9,4 @@ en_BM{
             "Bermudian Dollar",
         }
     }
-    Version{"38"}
 }

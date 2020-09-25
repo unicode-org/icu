@@ -888,7 +888,6 @@ lo{
         VALLADER{"ວັລລາເດີ"}
         WADEGILE{"ການຖອດອັກສອນແບບເວດ-ໄຈລ໌"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — ທັງໝົດ"}
         category-list{"{0}: {1}"}

@@ -6,5 +6,4 @@ en_001{
         UM{"US Outlying Islands"}
         VI{"US Virgin Islands"}
     }
-    Version{"38"}
 }
