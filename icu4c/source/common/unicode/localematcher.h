@@ -25,7 +25,7 @@
 /**
  * Builder option for whether the language subtag or the script subtag is most important.
  *
- * @see Builder#setFavorSubtag(ULocMatchFavorSubtag)
+ * @see LocaleMatcher::Builder#setFavorSubtag(ULocMatchFavorSubtag)
  * @draft ICU 65
  */
 enum ULocMatchFavorSubtag {
@@ -51,7 +51,7 @@ typedef enum ULocMatchFavorSubtag ULocMatchFavorSubtag;
  * Builder option for whether all desired locales are treated equally or
  * earlier ones are preferred.
  *
- * @see Builder#setDemotionPerDesiredLocale(ULocMatchDemotion)
+ * @see LocaleMatcher::Builder#setDemotionPerDesiredLocale(ULocMatchDemotion)
  * @draft ICU 65
  */
 enum ULocMatchDemotion {
@@ -107,7 +107,7 @@ typedef enum ULocMatchDemotion ULocMatchDemotion;
  * if there is a decent match for the original UI language, we want to use it,
  * but not if it is merely a fallback.
  *
- * @see Builder#setDirection(ULocMatchDirection)
+ * @see LocaleMatcher::Builder#setDirection(ULocMatchDirection)
  * @draft ICU 67
  */
 enum ULocMatchDirection {
@@ -298,7 +298,6 @@ public:
      * LocaleMatcher builder.
      * Movable but not copyable.
      *
-     * @see LocaleMatcher#builder()
      * @draft ICU 65
      */
     class U_COMMON_API Builder : public UMemory {
@@ -524,7 +523,7 @@ public:
          * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
          *                  or else the function returns immediately. Check for U_FAILURE()
          *                  on output or use with function chaining. (See User Guide for details.)
-         * @return new LocaleMatcher.
+         * @return LocaleMatcher
          * @draft ICU 65
          */
         LocaleMatcher build(UErrorCode &errorCode) const;
