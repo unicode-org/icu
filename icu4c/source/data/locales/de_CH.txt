@@ -16,7 +16,6 @@ de_CH{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             dayNames{

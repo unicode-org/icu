@@ -848,7 +848,6 @@ kn{
         PINYIN{"ಪಿನ್‌ಯಿನ್ ರೋಮನೈಸೇಶನ್"}
         WADEGILE{"ವೇಡ್-ಗೈಲ್ಸ್ ರೋಮನೈಸೇಶನ್"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — ಎಲ್ಲ"}
         category-list{"{0}: {1}"}

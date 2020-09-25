@@ -75,7 +75,6 @@ ff_Adlm{
         minimumGroupingDigits{"1"}
         native{"adlm"}
     }
-    Version{"38"}
     calendar{
         gregorian{
             AmPmMarkers{

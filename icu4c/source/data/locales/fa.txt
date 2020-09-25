@@ -245,7 +245,6 @@ fa{
         minimumGroupingDigits{"1"}
         native{"arabext"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

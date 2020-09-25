@@ -560,7 +560,6 @@ kok{
             tibt{"तिबेतियन अंक"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — सगळें"}
         category-list{"{0}: {1}"}

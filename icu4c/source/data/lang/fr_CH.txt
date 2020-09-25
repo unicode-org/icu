@@ -7,5 +7,4 @@ fr_CH{
         pdc{"allemand de Pennsylvanie"}
         sdh{"kurde méridional"}
     }
-    Version{"38"}
 }

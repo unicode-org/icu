@@ -8,5 +8,4 @@ ro_MD{
             "leu moldovenesc",
         }
     }
-    Version{"38"}
 }

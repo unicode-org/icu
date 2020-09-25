@@ -8,5 +8,4 @@ en_AE{
             "United Arab Emirates Dirham",
         }
     }
-    Version{"38"}
 }

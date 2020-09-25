@@ -43,5 +43,4 @@ qu{
             "0: =%spellout-cardinal=-\u00F1iqin;",
         }
     }
-    Version{"38"}
 }

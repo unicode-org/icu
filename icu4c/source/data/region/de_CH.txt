@@ -12,5 +12,4 @@ de_CH{
         TL{"Osttimor"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

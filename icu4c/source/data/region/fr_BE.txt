@@ -5,5 +5,4 @@ fr_BE{
     Countries{
         GS{"Îles Géorgie du Sud et Sandwich du Sud"}
     }
-    Version{"38"}
 }

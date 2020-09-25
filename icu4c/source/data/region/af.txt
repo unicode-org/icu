@@ -312,5 +312,4 @@ af{
         CZ{"Tsjeggiese Republiek"}
         FK{"Falklandeilande (Malvinas)"}
     }
-    Version{"38"}
 }

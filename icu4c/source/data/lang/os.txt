@@ -97,7 +97,6 @@ os{
             latn{"Нырыккон цифрӕтӕ"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Ӕвзаг: {0}"}
         script{"Скрипт: {0}"}

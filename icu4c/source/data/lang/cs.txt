@@ -972,7 +972,6 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – vše"}
         category-list{"{0}: {1}"}

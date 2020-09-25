@@ -5,5 +5,4 @@ bo_IN{
     Countries{
         009{"ཨོཤི་ཡཱན་ན།"}
     }
-    Version{"38"}
 }

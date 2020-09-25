@@ -5,5 +5,4 @@ ar_OM{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

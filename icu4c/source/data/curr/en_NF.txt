@@ -9,5 +9,4 @@ en_NF{
             "Australian Dollar",
         }
     }
-    Version{"38"}
 }

@@ -49,5 +49,4 @@ kab{
         zh{"Tacinwat, Tamundarint"}
         zu{"Tazulut"}
     }
-    Version{"38"}
 }

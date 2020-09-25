@@ -270,7 +270,6 @@ yue{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{

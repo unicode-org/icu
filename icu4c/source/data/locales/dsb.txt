@@ -197,7 +197,6 @@ dsb{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

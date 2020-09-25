@@ -313,5 +313,4 @@ lv{
         FK{"Folklenda (Malvinu) salas"}
         SZ{"Svazilenda"}
     }
-    Version{"38"}
 }

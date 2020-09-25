@@ -232,5 +232,4 @@ kam{
             "Ndola ya Zimbabwe",
         }
     }
-    Version{"38"}
 }

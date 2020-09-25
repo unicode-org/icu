@@ -49,5 +49,4 @@ vun{
         zh{"Kyichina"}
         zu{"Kyizulu"}
     }
-    Version{"38"}
 }

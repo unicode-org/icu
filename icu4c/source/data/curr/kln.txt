@@ -232,5 +232,4 @@ kln{
             "Dolaitab ya Zimbabwe",
         }
     }
-    Version{"38"}
 }

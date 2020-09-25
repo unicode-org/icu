@@ -232,5 +232,4 @@ teo{
             "Edola lok’Zimbabwe",
         }
     }
-    Version{"38"}
 }

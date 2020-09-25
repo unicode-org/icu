@@ -13,5 +13,4 @@ en_SS{
             "South Sudanese Pound",
         }
     }
-    Version{"38"}
 }

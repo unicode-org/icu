@@ -227,5 +227,4 @@ ff{
         ZM{"Sammbi"}
         ZW{"Simbaabuwe"}
     }
-    Version{"38"}
 }

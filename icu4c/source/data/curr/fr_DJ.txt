@@ -8,5 +8,4 @@ fr_DJ{
             "franc djiboutien",
         }
     }
-    Version{"38"}
 }

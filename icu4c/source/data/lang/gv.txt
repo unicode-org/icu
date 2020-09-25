@@ -5,5 +5,4 @@ gv{
     Languages{
         gv{"Gaelg"}
     }
-    Version{"38"}
 }

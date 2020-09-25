@@ -9,5 +9,4 @@ en_GH{
             "Ghanaian Cedi",
         }
     }
-    Version{"38"}
 }

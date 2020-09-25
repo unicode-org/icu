@@ -112,5 +112,4 @@ dyo{
         TG{"Togo"}
         TH{"Tailand"}
     }
-    Version{"38"}
 }

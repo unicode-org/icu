@@ -5,7 +5,6 @@ ar_IL{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
     calendar{
         gregorian{
             DateTimePatterns{

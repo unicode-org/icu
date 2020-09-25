@@ -19,7 +19,6 @@ fa_AF{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             appendItems{

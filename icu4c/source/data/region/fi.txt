@@ -315,5 +315,4 @@ fi{
         SZ{"Swazimaa"}
         TL{"Timor-Leste"}
     }
-    Version{"38"}
 }

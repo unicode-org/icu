@@ -314,5 +314,4 @@ ceb{
         SZ{"Swaziland"}
         TL{"East Timor"}
     }
-    Version{"38"}
 }

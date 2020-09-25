@@ -9,5 +9,4 @@ pt_AO{
             "kwanza angolano",
         }
     }
-    Version{"38"}
 }

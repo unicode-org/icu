@@ -5,5 +5,4 @@ ar_ER{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

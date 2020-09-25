@@ -15,5 +15,4 @@ en_GG{
             other{"UK pounds"}
         }
     }
-    Version{"38"}
 }

@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 yo_BJ{
-    Version{"38"}
     zoneStrings{
         "America:Anchorage"{
             ec{"ìlú Ankɔ́réèjì"}

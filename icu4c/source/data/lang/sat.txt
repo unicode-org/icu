@@ -67,7 +67,6 @@ sat{
             latn{"ᱣᱮᱥᱴᱟᱨᱱ ᱮᱞ"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"ᱯᱟᱹᱨᱥᱤ: {0}"}
         script{"ᱪᱤᱠᱤ/ᱦᱟᱨᱚᱯᱺ {0}"}

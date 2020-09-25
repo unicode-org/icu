@@ -227,5 +227,4 @@ naq{
         ZM{"Zambiab"}
         ZW{"Zimbabweb"}
     }
-    Version{"38"}
 }

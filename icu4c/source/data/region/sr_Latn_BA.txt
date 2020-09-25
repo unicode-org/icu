@@ -39,5 +39,4 @@ sr_Latn_BA{
     Countries%variant{
         FK{"Folklandska (Malvinska) ostrva"}
     }
-    Version{"38"}
 }

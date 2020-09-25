@@ -227,5 +227,4 @@ nmg{
         ZM{"Zambia"}
         ZW{"Zimbabwǝ"}
     }
-    Version{"38"}
 }

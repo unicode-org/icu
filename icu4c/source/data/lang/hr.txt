@@ -930,7 +930,6 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – sve"}
         category-list{"{0}: {1}"}

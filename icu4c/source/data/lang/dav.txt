@@ -49,5 +49,4 @@ dav{
         zh{"Kichina"}
         zu{"Kizulu"}
     }
-    Version{"38"}
 }

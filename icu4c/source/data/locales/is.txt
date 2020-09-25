@@ -222,7 +222,6 @@ is{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{

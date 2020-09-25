@@ -3,7 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 es_UY{
     %%Parent{"es_419"}
-    Version{"38"}
     zoneStrings{
         "meta:Uruguay"{
             sd{"UYST"}

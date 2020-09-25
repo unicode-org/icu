@@ -9,7 +9,6 @@ fr_RE{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             dayPeriod{

@@ -50,16 +50,16 @@ eu{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00000"}
-                        other{"00000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000000"}
-                        other{"000000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 milioi"}
@@ -102,16 +102,16 @@ eu{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0000 ¤"}
-                        other{"0000 ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00000 ¤"}
-                        other{"00000 ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000000 ¤"}
-                        other{"000000 ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 M ¤"}
@@ -152,16 +152,16 @@ eu{
                 }
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00000"}
-                        other{"00000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000000"}
-                        other{"000000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 M"}
@@ -224,7 +224,6 @@ eu{
             }
         }
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

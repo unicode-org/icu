@@ -8,5 +8,4 @@ hr_BA{
             "konvertibilna marka",
         }
     }
-    Version{"38"}
 }

@@ -8,5 +8,4 @@ fr_BE{
         gu{"gujarati"}
         njo{"ao"}
     }
-    Version{"38"}
 }

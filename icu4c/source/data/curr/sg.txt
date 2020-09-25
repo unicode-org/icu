@@ -232,5 +232,4 @@ sg{
             "dolära tî Zimbäbwe",
         }
     }
-    Version{"38"}
 }

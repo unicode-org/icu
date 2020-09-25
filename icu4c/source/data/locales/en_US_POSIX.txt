@@ -17,5 +17,4 @@ en_US_POSIX{
             }
         }
     }
-    Version{"38"}
 }

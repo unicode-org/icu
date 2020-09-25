@@ -12,5 +12,4 @@ se_SE{
             "ruoŧŧa kruvdno",
         }
     }
-    Version{"38"}
 }

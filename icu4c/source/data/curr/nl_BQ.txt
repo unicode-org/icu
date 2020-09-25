@@ -8,5 +8,4 @@ nl_BQ{
             "Amerikaanse dollar",
         }
     }
-    Version{"38"}
 }

@@ -8,5 +8,4 @@ fo_DK{
             "donsk króna",
         }
     }
-    Version{"38"}
 }

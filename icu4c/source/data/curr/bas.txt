@@ -236,5 +236,4 @@ bas{
             "Dɔ̀lâr sìmbàbwê",
         }
     }
-    Version{"38"}
 }

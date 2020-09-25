@@ -18,7 +18,6 @@ shi_Latn{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

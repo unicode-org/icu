@@ -40,5 +40,4 @@ su{
             "0: ka=%spellout-cardinal=;",
         }
     }
-    Version{"38"}
 }

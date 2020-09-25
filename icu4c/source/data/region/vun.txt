@@ -227,5 +227,4 @@ vun{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

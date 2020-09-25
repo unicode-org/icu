@@ -1000,7 +1000,6 @@ vi{
         VALENCIA{"Tiếng Valencia"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — tất cả"}
         category-list{"{0}: {1}"}

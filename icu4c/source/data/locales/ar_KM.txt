@@ -5,7 +5,6 @@ ar_KM{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
     calendar{
         gregorian{
             DateTimePatterns{

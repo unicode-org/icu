@@ -9,5 +9,4 @@ en_FJ{
             "Fijian Dollar",
         }
     }
-    Version{"38"}
 }

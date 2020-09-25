@@ -314,5 +314,4 @@ kea{
         SZ{"Suazilándia"}
         TL{"Timor-Leste"}
     }
-    Version{"38"}
 }

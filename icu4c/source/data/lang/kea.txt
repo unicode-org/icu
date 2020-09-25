@@ -336,7 +336,6 @@ kea{
             latn{"Nunbru osidental"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}

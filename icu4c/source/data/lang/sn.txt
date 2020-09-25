@@ -49,5 +49,4 @@ sn{
         zh{"chiChinese"}
         zu{"chiZulu"}
     }
-    Version{"38"}
 }

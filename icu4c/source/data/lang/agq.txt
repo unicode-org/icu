@@ -49,5 +49,4 @@ agq{
         zh{"Chàenê"}
         zu{"Zulù"}
     }
-    Version{"38"}
 }

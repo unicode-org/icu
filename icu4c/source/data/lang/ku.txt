@@ -269,7 +269,6 @@ ku{
             roman{"hejmarên romî"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"ziman: {0}"}
         script{"nivîs: {0}"}

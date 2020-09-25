@@ -49,5 +49,4 @@ mg{
         zh{"Sinoa, Mandarin"}
         zu{"Zolò"}
     }
-    Version{"38"}
 }

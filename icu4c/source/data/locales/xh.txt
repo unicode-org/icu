@@ -21,7 +21,6 @@ xh{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             AmPmMarkers{
