@@ -8,20 +8,6 @@
  */
 package com.ibm.icu.util;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.ibm.icu.impl.CollectionSet;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -30,6 +16,20 @@ import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.SingleUnitImpl;
 import com.ibm.icu.text.UnicodeSet;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -293,20 +293,32 @@ public class MeasureUnit implements Serializable {
          */
         YOCTO(-24, "yocto");
 
-        private final int siPrefixPower;
+        private final int power;
         private final String identifier;
 
-        SIPrefix(int siPrefixPower, String identifier) {
-            this.siPrefixPower = siPrefixPower;
+        SIPrefix(int power, String identifier) {
+            this.power = power;
             this.identifier = identifier;
         }
 
+        /*
+         * Returns the identifier of the prefix.
+         *
+         * @draft ICU 68
+         * @provisional This API might change or be removed in a future release.
+         */
         public String getIdentifier() {
             return identifier;
         }
 
-        public int getSiPrefixPower() {
-            return siPrefixPower;
+        /*
+         * Returns the power of 10 of the prefix. For example, if the prefix is "centi", the power will be -2.
+         *
+         * @draft ICU 68
+         * @provisional This API might change or be removed in a future release.
+         */
+        public int getPower() {
+            return power;
         }
     }
 

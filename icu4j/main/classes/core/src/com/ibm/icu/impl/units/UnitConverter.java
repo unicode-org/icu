@@ -205,9 +205,9 @@ public class UnitConverter {
                 return result;
             }
 
-            BigDecimal siApplied = BigDecimal.valueOf(Math.pow(10.0, Math.abs(siPrefix.getSiPrefixPower())));
+            BigDecimal siApplied = BigDecimal.valueOf(Math.pow(10.0, Math.abs(siPrefix.getPower())));
 
-            if (siPrefix.getSiPrefixPower() < 0) {
+            if (siPrefix.getPower() < 0) {
                 result.factorDen = this.factorDen.multiply(siApplied);
                 return result;
             }

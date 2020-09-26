@@ -474,7 +474,7 @@ public class MeasureUnitImpl {
         }
 
         private static int getTrieIndex(MeasureUnit.SIPrefix prefix) {
-            return prefix.getSiPrefixPower() + UnitsData.Constants.kSIPrefixOffset;
+            return prefix.getPower() + UnitsData.Constants.kSIPrefixOffset;
         }
 
         private MeasureUnitImpl parse() {
