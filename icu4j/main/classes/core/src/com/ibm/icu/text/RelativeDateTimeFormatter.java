@@ -252,15 +252,13 @@ public final class RelativeDateTimeFormatter {
 
         /**
          * Hour
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         HOUR,
 
         /**
          * Minute
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         MINUTE,
     }

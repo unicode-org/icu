@@ -28,7 +28,6 @@ import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.text.TimeZoneNames;
 import com.ibm.icu.text.TimeZoneNames.NameType;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -924,7 +923,9 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return A <code>TimeZone</code>. Clients are responsible for deleting the
      *   <code>TimeZone</code> object returned.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static TimeZone forULocaleOrDefault(ULocale locale) {
         String tz = locale.getKeywordValue("timezone");
         return (tz == null) ? getDefault() : getTimeZone(tz);
@@ -938,7 +939,9 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return A <code>TimeZone</code>. Clients are responsible for deleting the
      *   <code>TimeZone</code> object returned.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static TimeZone forLocaleOrDefault(Locale locale) {
         return forULocaleOrDefault(ULocale.forLocale(locale));
     }

@@ -130,16 +130,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * Types for {@link ULocale#getAvailableLocalesByType}
      *
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static enum AvailableType {
         /**
          * Locales that return data when passed to ICU APIs,
          * but not including legacy or alias locales.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         DEFAULT,
 
@@ -159,16 +157,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
          * DEFAULT. To get both sets at the same time, use
          * WITH_LEGACY_ALIASES.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         ONLY_LEGACY_ALIASES,
 
         /**
          * The union of the locales in DEFAULT and ONLY_LEGACY_ALIASES.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         WITH_LEGACY_ALIASES,
     }
@@ -854,8 +850,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * Returns a list of all installed locales according to the specified type.
      *
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static Collection<ULocale> getAvailableLocalesByType(AvailableType type) {
         if (type == null) {
@@ -1227,7 +1222,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             this.region = region;
             if (!variants.isEmpty()) {
                 this.variants =
-                    new ArrayList<String>(Arrays.asList(variants.split("_")));
+                    new ArrayList<>(Arrays.asList(variants.split("_")));
             }
             this.extensions = extensions;
         }
@@ -1301,10 +1296,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             if (aliasDataIsLoaded) {
                 return;
             }
-            languageAliasMap = new HashMap<String, String>();
-            scriptAliasMap = new HashMap<String, String>();
-            territoryAliasMap = new HashMap<String, List<String>>();
-            variantAliasMap = new HashMap<String, String>();
+            languageAliasMap = new HashMap<>();
+            scriptAliasMap = new HashMap<>();
+            territoryAliasMap = new HashMap<>();
+            variantAliasMap = new HashMap<>();
 
             UResourceBundle metadata = UResourceBundle.getBundleInstance(
                 ICUData.ICU_BASE_NAME, "metadata",
@@ -1349,7 +1344,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                         "Incorrect key [" + aliasFrom + "] in alias:territory.");
                 }
                 territoryAliasMap.put(aliasFrom,
-                    new ArrayList<String>(Arrays.asList(aliasTo.split(" "))));
+                    new ArrayList<>(Arrays.asList(aliasTo.split(" "))));
             }
             for (int i = 0 ; i < variantAlias.getSize(); i++) {
                 UResourceBundle res = variantAlias.get(i);
@@ -1673,7 +1668,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 "uk_UA", "ur", "ur_PK", "uz", "uz_UZ", "vi", "vi_VN", "yue", "yue_Hant",
                 "yue_Hant_HK", "yue_HK", "zh", "zh_CN", "zh_Hans", "zh_Hans_CN", "zh_Hant",
                 "zh_Hant_TW", "zh_TW", "zu", "zu_ZA");
-            gKnownCanonicalizedCases = new HashSet<String>(items);
+            gKnownCanonicalizedCases = new HashSet<>(items);
 
         }
         return gKnownCanonicalizedCases.contains(name);
