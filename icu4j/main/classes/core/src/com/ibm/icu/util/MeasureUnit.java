@@ -304,8 +304,8 @@ public class MeasureUnit implements Serializable {
         /*
          * Returns the identifier of the prefix.
          *
-         * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
         public String getIdentifier() {
             return identifier;
