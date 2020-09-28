@@ -88,23 +88,20 @@ public final class LocaleMatcher {
      * Builder option for whether the language subtag or the script subtag is most important.
      *
      * @see LocaleMatcher.Builder#setFavorSubtag(LocaleMatcher.FavorSubtag)
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public enum FavorSubtag {
         /**
          * Language differences are most important, then script differences, then region differences.
          * (This is the default behavior.)
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         LANGUAGE,
         /**
          * Makes script differences matter relatively more than language differences.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         SCRIPT
     }
@@ -114,15 +111,13 @@ public final class LocaleMatcher {
      * earlier ones are preferred.
      *
      * @see LocaleMatcher.Builder#setDemotionPerDesiredLocale(LocaleMatcher.Demotion)
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public enum Demotion {
         /**
          * All desired locales are treated equally.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         NONE,
         /**
@@ -149,8 +144,7 @@ public final class LocaleMatcher {
          *        this is possible in future versions of the data.)
          * </ul>
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         REGION
     }
@@ -194,8 +188,7 @@ public final class LocaleMatcher {
     /**
      * Data for the best-matching pair of a desired and a supported locale.
      *
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static final class Result {
         private final ULocale desiredULocale;
@@ -221,8 +214,7 @@ public final class LocaleMatcher {
          * null if the list of desired locales is empty or if none matched well enough.
          *
          * @return the best-matching desired locale, or null.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public ULocale getDesiredULocale() {
             return desiredULocale == null && desiredLocale != null ?
@@ -233,8 +225,7 @@ public final class LocaleMatcher {
          * null if the list of desired locales is empty or if none matched well enough.
          *
          * @return the best-matching desired locale, or null.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Locale getDesiredLocale() {
             return desiredLocale == null && desiredULocale != null ?
@@ -248,8 +239,7 @@ public final class LocaleMatcher {
          * or if the list of supported locales is empty and no explicit default locale is set.
          *
          * @return the best-matching supported locale, or null.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public ULocale getSupportedULocale() { return supportedULocale; }
         /**
@@ -259,8 +249,7 @@ public final class LocaleMatcher {
          * or if the list of supported locales is empty and no explicit default locale is set.
          *
          * @return the best-matching supported locale, or null.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Locale getSupportedLocale() { return supportedLocale; }
 
@@ -269,8 +258,7 @@ public final class LocaleMatcher {
          * -1 if the list of desired locales is empty or if none matched well enough.
          *
          * @return the index of the best-matching desired locale, or -1.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public int getDesiredIndex() { return desiredIndex; }
 
@@ -282,8 +270,7 @@ public final class LocaleMatcher {
          * -1 if the list of supported locales is empty or if none matched well enough.
          *
          * @return the index of the best-matching supported locale, or -1.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public int getSupportedIndex() { return supportedIndex; }
 
@@ -297,8 +284,7 @@ public final class LocaleMatcher {
          * <p>Example: desired=ar-SA-u-nu-latn, supported=ar-EG, resolved locale=ar-SA-u-nu-latn
          *
          * @return a locale combining the best-matching desired and supported locales.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public ULocale makeResolvedULocale() {
             ULocale bestDesired = getDesiredULocale();
@@ -343,8 +329,7 @@ public final class LocaleMatcher {
          * <p>Example: desired=ar-SA-u-nu-latn, supported=ar-EG, resolved locale=ar-SA-u-nu-latn
          *
          * @return a locale combining the best-matching desired and supported locales.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Locale makeResolvedLocale() {
             ULocale resolved = makeResolvedULocale();
@@ -374,8 +359,7 @@ public final class LocaleMatcher {
      * LocaleMatcher Builder.
      *
      * @see LocaleMatcher#builder()
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static final class Builder {
         private List<ULocale> supportedLocales;
@@ -397,8 +381,7 @@ public final class LocaleMatcher {
          *
          * @param locales the string of locales to set, to be parsed like LocalePriorityList does
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder setSupportedLocales(String locales) {
             return setSupportedULocales(LocalePriorityList.add(locales).build().getULocales());
@@ -411,8 +394,7 @@ public final class LocaleMatcher {
          *
          * @param locales the list of locales
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder setSupportedULocales(Collection<ULocale> locales) {
             supportedLocales = new ArrayList<>(locales);
@@ -426,8 +408,7 @@ public final class LocaleMatcher {
          *
          * @param locales the list of locale
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder setSupportedLocales(Collection<Locale> locales) {
             supportedLocales = new ArrayList<>(locales.size());
@@ -443,8 +424,7 @@ public final class LocaleMatcher {
          *
          * @param locale another locale
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder addSupportedULocale(ULocale locale) {
             if (supportedLocales == null) {
@@ -460,8 +440,7 @@ public final class LocaleMatcher {
          *
          * @param locale another locale
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder addSupportedLocale(Locale locale) {
             return addSupportedULocale(ULocale.forLocale(locale));
@@ -490,8 +469,7 @@ public final class LocaleMatcher {
          *
          * @param defaultLocale the default locale
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder setDefaultULocale(ULocale defaultLocale) {
             this.defaultLocale = defaultLocale;
@@ -507,8 +485,7 @@ public final class LocaleMatcher {
          *
          * @param defaultLocale the default locale
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder setDefaultLocale(Locale defaultLocale) {
             this.defaultLocale = ULocale.forLocale(defaultLocale);
@@ -523,8 +500,7 @@ public final class LocaleMatcher {
          *
          * @param subtag the subtag to favor
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder setFavorSubtag(FavorSubtag subtag) {
             this.favor = subtag;
@@ -537,8 +513,7 @@ public final class LocaleMatcher {
          *
          * @param demotion the demotion per desired locale to set.
          * @return this Builder object
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public Builder setDemotionPerDesiredLocale(Demotion demotion) {
             this.demotion = demotion;
@@ -641,8 +616,7 @@ public final class LocaleMatcher {
          * This builder can continue to be used.
          *
          * @return new LocaleMatcher.
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         public LocaleMatcher build() {
             return new LocaleMatcher(this);
@@ -650,8 +624,7 @@ public final class LocaleMatcher {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         @Override
         public String toString() {
@@ -679,8 +652,7 @@ public final class LocaleMatcher {
      * Returns a builder used in chaining parameters for building a LocaleMatcher.
      *
      * @return a new Builder object
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static Builder builder() {
         return new Builder();
@@ -945,8 +917,7 @@ public final class LocaleMatcher {
      *
      * @param desiredLocale Typically a user's language.
      * @return the best-matching supported locale.
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public Locale getBestLocale(Locale desiredLocale) {
         LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
@@ -959,8 +930,7 @@ public final class LocaleMatcher {
      *
      * @param desiredLocales Typically a user's languages, in order of preference (descending).
      * @return the best-matching supported locale.
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public Locale getBestLocale(Iterable<Locale> desiredLocales) {
         Iterator<Locale> desiredIter = desiredLocales.iterator();
@@ -1007,8 +977,7 @@ public final class LocaleMatcher {
      *
      * @param desiredLocale Typically a user's language.
      * @return the best-matching pair of the desired and a supported locale.
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public Result getBestMatchResult(ULocale desiredLocale) {
         LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
@@ -1021,8 +990,7 @@ public final class LocaleMatcher {
      *
      * @param desiredLocales Typically a user's languages, in order of preference (descending).
      * @return the best-matching pair of a desired and a supported locale.
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public Result getBestMatchResult(Iterable<ULocale> desiredLocales) {
         Iterator<ULocale> desiredIter = desiredLocales.iterator();
@@ -1040,8 +1008,7 @@ public final class LocaleMatcher {
      *
      * @param desiredLocale Typically a user's language.
      * @return the best-matching pair of the desired and a supported locale.
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public Result getBestLocaleResult(Locale desiredLocale) {
         LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
@@ -1054,8 +1021,7 @@ public final class LocaleMatcher {
      *
      * @param desiredLocales Typically a user's languages, in order of preference (descending).
      * @return the best-matching pair of a desired and a supported locale.
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public Result getBestLocaleResult(Iterable<Locale> desiredLocales) {
         Iterator<Locale> desiredIter = desiredLocales.iterator();

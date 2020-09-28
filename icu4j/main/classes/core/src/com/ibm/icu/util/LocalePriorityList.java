@@ -142,8 +142,7 @@ public class LocalePriorityList implements Iterable<ULocale> {
      * The set has the same iteration order as this object itself.
      *
      * @return the locales
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public Set<ULocale> getULocales() {
         return languagesAndWeights.keySet();

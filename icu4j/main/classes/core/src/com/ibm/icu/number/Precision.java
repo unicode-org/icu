@@ -559,7 +559,22 @@ public abstract class Precision {
      */
     @Deprecated
     public static class BogusRounder extends Precision {
+        /**
+         * Default constructor.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public BogusRounder() {
+        }
+
+        /**
+         * {@inheritDoc}
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         @Override
+        @Deprecated
         public void apply(DecimalQuantity value) {
             throw new AssertionError("BogusRounder must not be applied");
         }
