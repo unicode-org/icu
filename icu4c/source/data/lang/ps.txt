@@ -548,7 +548,6 @@ ps{
             tibt{"تبتي اعداد"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} - ټول"}
         compatibility{"{0} - مطابقت"}

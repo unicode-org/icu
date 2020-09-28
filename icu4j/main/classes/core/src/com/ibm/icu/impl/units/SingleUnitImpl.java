@@ -105,10 +105,10 @@ public class SingleUnitImpl {
         if (index > other.index) {
             return 1;
         }
-        if (this.getSiPrefix().getSiPrefixPower() < other.getSiPrefix().getSiPrefixPower()) {
+        if (this.getSiPrefix().getPower() < other.getSiPrefix().getPower()) {
             return -1;
         }
-        if (this.getSiPrefix().getSiPrefixPower() > other.getSiPrefix().getSiPrefixPower()) {
+        if (this.getSiPrefix().getPower() > other.getSiPrefix().getPower()) {
             return 1;
         }
         return 0;

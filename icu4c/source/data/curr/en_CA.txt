@@ -13,5 +13,4 @@ en_CA{
             "Venezuelan Bolívar",
         }
     }
-    Version{"38"}
 }

@@ -8,5 +8,4 @@ bem{
             "ZMW",
         }
     }
-    Version{"38"}
 }

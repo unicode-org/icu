@@ -109,5 +109,4 @@ yo_BJ{
         CZ{"Shɛ́ɛ́kì"}
         TL{"Ìlà Òòrùn Tímɔ̀"}
     }
-    Version{"38"}
 }

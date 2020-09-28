@@ -3,7 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sd_Deva{
     %%Parent{"root"}
-    Version{"38"}
     zoneStrings{
         "Etc:UTC"{
             ls{"आस्थानी चालू टाइमु"}

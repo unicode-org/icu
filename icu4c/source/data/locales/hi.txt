@@ -239,7 +239,6 @@ hi{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             availableFormats{

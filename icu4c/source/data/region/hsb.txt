@@ -307,5 +307,4 @@ hsb{
         FK{"Falklandske kupy (Malwiny)"}
         TL{"Wuchodny Timor"}
     }
-    Version{"38"}
 }

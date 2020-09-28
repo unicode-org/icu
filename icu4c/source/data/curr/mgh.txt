@@ -8,5 +8,4 @@ mgh{
             "MZN",
         }
     }
-    Version{"38"}
 }

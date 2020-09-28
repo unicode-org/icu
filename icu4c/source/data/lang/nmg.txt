@@ -48,5 +48,4 @@ nmg{
         zh{"Kiɛl bó chinois"}
         zu{"Zulu"}
     }
-    Version{"38"}
 }

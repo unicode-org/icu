@@ -24,7 +24,6 @@ gv{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             AmPmMarkers{

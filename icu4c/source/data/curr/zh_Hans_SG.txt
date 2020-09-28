@@ -27,5 +27,4 @@ zh_Hans_SG{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"38"}
 }

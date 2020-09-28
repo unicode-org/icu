@@ -183,7 +183,6 @@ km{
         minimumGroupingDigits{"1"}
         native{"khmr"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

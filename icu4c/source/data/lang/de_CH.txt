@@ -44,5 +44,4 @@ de_CH{
             ussystem{"US Mass-System"}
         }
     }
-    Version{"38"}
 }

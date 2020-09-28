@@ -5,5 +5,4 @@ bem{
     Countries{
         ZM{"Zambia"}
     }
-    Version{"38"}
 }

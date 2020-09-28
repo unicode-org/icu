@@ -17,5 +17,4 @@ mi{
         US{"Hononga o Amerika"}
         ZZ{"Rohe Tē Mōhiotia"}
     }
-    Version{"38"}
 }

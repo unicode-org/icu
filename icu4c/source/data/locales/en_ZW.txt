@@ -3,7 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_ZW{
     %%Parent{"en_001"}
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

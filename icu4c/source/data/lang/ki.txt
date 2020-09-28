@@ -49,5 +49,4 @@ ki{
         zh{"Kĩcaina"}
         zu{"Kizulu"}
     }
-    Version{"38"}
 }

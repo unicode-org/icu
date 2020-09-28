@@ -5,5 +5,4 @@ ar_EG{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

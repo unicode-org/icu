@@ -312,5 +312,4 @@ rm{
         FK{"Inslas Falkland"}
         SZ{"Swaziland"}
     }
-    Version{"38"}
 }

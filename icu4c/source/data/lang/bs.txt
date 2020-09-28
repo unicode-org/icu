@@ -887,7 +887,6 @@ bs{
         VALENCIA{"Valencijski"}
         WADEGILE{"Vejd-Žajl romanizacija"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – sve"}
         category-list{"{0}: {1}"}

@@ -314,5 +314,4 @@ gl{
         FK{"Illas Malvinas (Falkland)"}
         SZ{"Swazilandia"}
     }
-    Version{"38"}
 }

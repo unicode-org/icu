@@ -874,7 +874,6 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — همه"}
         category-list{"{0}: {1}"}

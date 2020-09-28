@@ -9,7 +9,6 @@ fr_ML{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             DateTimePatterns{

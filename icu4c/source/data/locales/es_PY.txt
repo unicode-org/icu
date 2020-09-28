@@ -14,7 +14,6 @@ es_PY{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             dayNames{

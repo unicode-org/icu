@@ -221,7 +221,6 @@ hy{
         native{"latn"}
         traditional{"armn"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

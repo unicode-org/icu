@@ -184,7 +184,6 @@ th{
         minimumGroupingDigits{"1"}
         native{"thai"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{

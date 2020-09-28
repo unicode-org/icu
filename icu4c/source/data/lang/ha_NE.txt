@@ -24,5 +24,4 @@ ha_NE{
         en_GB{"Turancin Ingila"}
         en_US{"Turancin Amurka"}
     }
-    Version{"38"}
 }

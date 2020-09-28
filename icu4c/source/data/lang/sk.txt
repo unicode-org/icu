@@ -775,7 +775,6 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – všetko"}
         category-list{"{0}: {1}"}

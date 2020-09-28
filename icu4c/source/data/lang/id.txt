@@ -954,7 +954,6 @@ id{
         VALENCIA{"Valencia"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — semua"}
         category-list{"{0}: {1}"}

@@ -67,7 +67,6 @@ mai{
             latn{"पश्चिमी अंक"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपि: {0}"}

@@ -39,5 +39,4 @@ sr_Cyrl_BA{
     Countries%variant{
         FK{"Фолкландска (Малвинска) острва"}
     }
-    Version{"38"}
 }

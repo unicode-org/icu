@@ -27,5 +27,4 @@ es_US{
     Countries%short{
         GB{"RU"}
     }
-    Version{"38"}
 }

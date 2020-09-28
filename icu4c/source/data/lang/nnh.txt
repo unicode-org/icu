@@ -25,5 +25,4 @@ nnh{
         yav{"Shwóŋò pʉa shÿó Mbafìa"}
         ybb{"Shwóŋò Tsaŋ"}
     }
-    Version{"38"}
 }

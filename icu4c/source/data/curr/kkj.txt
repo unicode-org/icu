@@ -8,5 +8,4 @@ kkj{
             "Franc CFA",
         }
     }
-    Version{"38"}
 }

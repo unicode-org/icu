@@ -672,5 +672,4 @@ yo_BJ{
             other{"àwɔn kàwasà Sámbíà"}
         }
     }
-    Version{"38"}
 }

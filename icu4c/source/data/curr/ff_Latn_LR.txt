@@ -8,5 +8,4 @@ ff_Latn_LR{
             "Dolaar Liberiyaa",
         }
     }
-    Version{"38"}
 }

@@ -5,5 +5,4 @@ de_AT{
     Countries{
         SJ{"Svalbard und Jan Mayen"}
     }
-    Version{"38"}
 }

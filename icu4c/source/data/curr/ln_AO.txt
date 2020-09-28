@@ -8,5 +8,4 @@ ln_AO{
             "Kwanza ya Angóla",
         }
     }
-    Version{"38"}
 }

@@ -400,6 +400,10 @@ void PluralRulesTest::testGetSamples() {
 
   double values[1000];
   for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
+    if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
+            logKnownIssue("21299", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+        continue;
+    }
     PluralRules *rules = PluralRules::forLocale(locales[i], status);
     if (U_FAILURE(status)) {
       break;
@@ -1160,6 +1164,11 @@ void PluralRulesTest::testSelectTrailingZeros() {
         status.setScope(message);
         Locale locale(cas.localeName);
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locale, status));
+        if (U_FAILURE(status)) {
+            dataerrln("Failed to create PluralRules by PluralRules::forLocale(%s): %s\n",
+                      cas.localeName, u_errorName(status));
+            return;
+        }
         assertEquals(message, cas.expectedDoubleKeyword, rules->select(cas.number));
         number::FormattedNumber fn = unf.locale(locale).formatDouble(cas.number, status);
         assertEquals(message, cas.expectedFormattedKeyword, rules->select(fn, status));

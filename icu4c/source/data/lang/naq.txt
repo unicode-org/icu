@@ -49,5 +49,4 @@ naq{
         zh{"Chineesǁî gowab, Mandarinni"}
         zu{"Zulub"}
     }
-    Version{"38"}
 }

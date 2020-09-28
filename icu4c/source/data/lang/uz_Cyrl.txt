@@ -403,7 +403,6 @@ uz_Cyrl{
             tibt{"Тибет рақамлари"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Тил: {0}"}
         script{"{0}"}

@@ -469,5 +469,4 @@ zh_Hant_HK{
             other{"贊比亞克瓦查"}
         }
     }
-    Version{"38"}
 }

@@ -306,5 +306,4 @@ ha{
         CG{"Jamhuriyar Kongo"}
         SZ{"Suwazilan"}
     }
-    Version{"38"}
 }

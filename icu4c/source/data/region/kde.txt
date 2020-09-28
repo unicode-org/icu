@@ -227,5 +227,4 @@ kde{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

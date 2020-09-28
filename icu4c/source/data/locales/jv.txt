@@ -157,7 +157,6 @@ jv{
         }
         native{"java"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

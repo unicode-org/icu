@@ -48,5 +48,4 @@ mua{
         zh{"zah Syiŋ"}
         zu{"Zulu"}
     }
-    Version{"38"}
 }

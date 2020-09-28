@@ -9,5 +9,4 @@ pt_LU{
             "Franco luxemburguês",
         }
     }
-    Version{"38"}
 }

@@ -153,5 +153,4 @@ lkt{
         zu{"Zulu Iyápi"}
         zza{"Zaza Iyápi"}
     }
-    Version{"38"}
 }

@@ -8,5 +8,4 @@ fr_VU{
             "vatu vanuatuan",
         }
     }
-    Version{"38"}
 }

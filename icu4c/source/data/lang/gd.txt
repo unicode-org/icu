@@ -1077,7 +1077,6 @@ gd{
         WADEGILE{"Ròmanachadh Wade-Giles"}
         XSISTEMO{"Roghainn-èiginn stannardach litreachadh na h-Esperanto le x"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – na h-uile"}
         category-list{"{0}: {1}"}

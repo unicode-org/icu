@@ -313,5 +313,4 @@ lt{
         CZ{"Čekijos Respublika"}
         FK{"Folklando (Malvinų) Salos"}
     }
-    Version{"38"}
 }

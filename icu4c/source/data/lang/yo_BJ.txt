@@ -178,7 +178,6 @@ yo_BJ{
             tibt{"Àwɔn díjíìtì Tibetán"}
         }
     }
-    Version{"38"}
     codePatterns{
         script{"Ìshɔwɔ́kɔ̀wé: {0}"}
     }

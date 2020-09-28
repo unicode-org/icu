@@ -9,5 +9,4 @@ en_MG{
             "Malagasy Ariary",
         }
     }
-    Version{"38"}
 }

@@ -638,7 +638,6 @@ gl{
             vaii{"Díxitos Vai"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} (todo)"}
         category-list{"{0}: {1}"}

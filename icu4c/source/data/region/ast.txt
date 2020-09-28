@@ -309,5 +309,4 @@ ast{
         FK{"Islles Malvines (Falkland Islands)"}
         TL{"Timor Este"}
     }
-    Version{"38"}
 }

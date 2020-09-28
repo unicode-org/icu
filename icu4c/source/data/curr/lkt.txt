@@ -8,5 +8,4 @@ lkt{
             "USD",
         }
     }
-    Version{"38"}
 }

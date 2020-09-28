@@ -314,5 +314,4 @@ zu{
         FK{"i-Falkland Islands (Islas Malvinas)"}
         TL{"i-East Timor"}
     }
-    Version{"38"}
 }

@@ -631,7 +631,6 @@ af{
             vaii{"Vai-syfers"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – alle"}
         category-list{"{0}: {1}"}

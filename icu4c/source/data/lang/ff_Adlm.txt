@@ -294,7 +294,6 @@ ff_Adlm{
             tibt{"𞤂𞤭𞤥𞤫 𞤚𞤭𞤦𞤫𞤼𞤭𞤲𞤳𞤮"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -8,5 +8,4 @@ nl_CW{
             "Nederlands-Antilliaanse gulden",
         }
     }
-    Version{"38"}
 }

@@ -12,7 +12,6 @@ ar_LY{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             dayPeriod{

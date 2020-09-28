@@ -709,6 +709,10 @@ public class PluralRulesTest extends TestFmwk {
             uniqueRuleSet.add(PluralRules.getFunctionalEquivalent(locale, null));
         }
         for (ULocale locale : uniqueRuleSet) {
+            if (locale.getLanguage().equals("fr") &&
+                    logKnownIssue("21299", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+                continue;
+            }
             PluralRules rules = factory.forLocale(locale);
             logln("\nlocale: " + (locale == ULocale.ROOT ? "root" : locale.toString()) + ", rules: " + rules);
             Set<String> keywords = rules.getKeywords();

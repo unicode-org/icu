@@ -49,5 +49,4 @@ ebu{
         zh{"Kĩchina"}
         zu{"Kĩzulu"}
     }
-    Version{"38"}
 }

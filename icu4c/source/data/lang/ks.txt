@@ -611,7 +611,6 @@ ks{
         SOLBA{"ثٹولوِزا/سولبِکا بوٗلۍ"}
         TARASK{"تاراسکیٖوِکا علمہ ہِجاِ"}
     }
-    Version{"38"}
     codePatterns{
         language{"زَبان: {0}"}
         script{"رَسم الخط: {0}"}

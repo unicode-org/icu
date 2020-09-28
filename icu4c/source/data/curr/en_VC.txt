@@ -9,5 +9,4 @@ en_VC{
             "East Caribbean Dollar",
         }
     }
-    Version{"38"}
 }

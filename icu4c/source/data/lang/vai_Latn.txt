@@ -50,5 +50,4 @@ vai_Latn{
         zh{"Chaniĩ"}
         zu{"Zúlu"}
     }
-    Version{"38"}
 }

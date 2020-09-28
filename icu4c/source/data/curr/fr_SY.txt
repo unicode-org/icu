@@ -8,5 +8,4 @@ fr_SY{
             "livre syrienne",
         }
     }
-    Version{"38"}
 }

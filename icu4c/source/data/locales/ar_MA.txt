@@ -13,7 +13,6 @@ ar_MA{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             DateTimePatterns{

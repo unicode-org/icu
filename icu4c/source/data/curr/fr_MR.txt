@@ -8,5 +8,4 @@ fr_MR{
             "ouguiya mauritanien",
         }
     }
-    Version{"38"}
 }

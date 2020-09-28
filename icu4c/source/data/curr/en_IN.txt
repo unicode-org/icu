@@ -27,5 +27,4 @@ en_IN{
             other{"VES"}
         }
     }
-    Version{"38"}
 }

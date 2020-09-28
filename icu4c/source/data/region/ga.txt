@@ -314,5 +314,4 @@ ga{
         FK{"Oileáin Fháclainne (Islas Malvinas)"}
         SZ{"an tSuasalainn"}
     }
-    Version{"38"}
 }

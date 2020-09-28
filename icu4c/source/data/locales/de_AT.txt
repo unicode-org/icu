@@ -15,7 +15,6 @@ de_AT{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             dayPeriod{

@@ -5,5 +5,4 @@ bn_IN{
     Languages{
         ksh{"কোলোনিয়ান"}
     }
-    Version{"38"}
 }

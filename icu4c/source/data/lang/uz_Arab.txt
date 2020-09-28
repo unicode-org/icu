@@ -11,5 +11,4 @@ uz_Arab{
     Scripts{
         Arab{"عربی"}
     }
-    Version{"38"}
 }

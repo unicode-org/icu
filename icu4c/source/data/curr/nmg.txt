@@ -236,5 +236,4 @@ nmg{
             "Dɔ́llɔ Zimbabwǝ (1980–2008)",
         }
     }
-    Version{"38"}
 }

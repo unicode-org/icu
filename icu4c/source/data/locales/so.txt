@@ -340,7 +340,6 @@ so{
             }
         }
     }
-    Version{"38"}
     calendar{
         chinese{
             cyclicNameSets{
