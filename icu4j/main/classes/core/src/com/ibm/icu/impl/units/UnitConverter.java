@@ -2,14 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.util.MeasureUnit;
+import static java.math.MathContext.DECIMAL128;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import static java.math.MathContext.DECIMAL128;
+import com.ibm.icu.util.MeasureUnit;
 
 public class UnitConverter {
     private BigDecimal conversionRate;

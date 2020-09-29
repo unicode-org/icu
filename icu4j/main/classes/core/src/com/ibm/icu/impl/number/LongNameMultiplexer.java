@@ -2,14 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A MicroPropsGenerator that multiplexes between different LongNameHandlers,

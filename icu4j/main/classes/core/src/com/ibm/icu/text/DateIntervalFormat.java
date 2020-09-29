@@ -28,7 +28,6 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
-import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.Output;
