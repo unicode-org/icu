@@ -307,6 +307,7 @@ public class MeasureUnit implements Serializable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public String getIdentifier() {
             return identifier;
         }
@@ -567,7 +568,7 @@ public class MeasureUnit implements Serializable {
      * If this is a SINGLE unit, a list of length 1 will be returned.
      *
      * @return An unmodifiable list of single units
-     * @internal ICU 68 Technology Preview
+     * @draft ICU 68 Technology Preview
      * @provisional This API might change or be removed in a future release.
      */
     public List<MeasureUnit> splitToSingleUnits() {
