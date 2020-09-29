@@ -552,13 +552,13 @@ public abstract class Precision {
     ///////////////
 
     /**
-     * An BogusRounder's MathContext into precision.
+     * BogusRounder does not support rounding, but holds a MathContext which can
+     * be copied into a proper Precision object at a later time.
      *
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
-    public static class BogusRounder extends Precision {
+    static class BogusRounder extends Precision {
         @Override
         public void apply(DecimalQuantity value) {
             throw new AssertionError("BogusRounder must not be applied");
