@@ -37,6 +37,7 @@ import com.ibm.icu.impl.ICUResourceTableAccess;
 import com.ibm.icu.impl.LocaleIDParser;
 import com.ibm.icu.impl.LocaleIDs;
 import com.ibm.icu.impl.SoftCache;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.impl.locale.BaseLocale;
 import com.ibm.icu.impl.locale.Extension;
@@ -1245,7 +1246,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                     throw new IllegalArgumentException(
                         "Have problem to resolve locale alias of " +
                         lscvToID(language, script, region,
-                            ((variants == null) ? "" : String.join("_", variants))) +
+                            ((variants == null) ? "" : Utility.joinStrings("_", variants))) +
                         extensions);
                 }
                 // Anytime we replace something, we need to start over again.
@@ -1268,7 +1269,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }  // while(1)
             if (changed) {
                 String result =  lscvToID(language, script, region,
-                    ((variants == null) ? "" : String.join("_", variants)));
+                    ((variants == null) ? "" : Utility.joinStrings("_", variants)));
                 if (extensions != null) {
                     result += extensions;
                 }
