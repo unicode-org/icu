@@ -2,6 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
@@ -12,8 +15,6 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.SimpleFormatter;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
-import java.util.ArrayList;
-import java.util.List;
 
 /** Similar to LongNameHandler, but only for MIXED units. */
 public class MixedUnitLongNameHandler

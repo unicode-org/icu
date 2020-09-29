@@ -2,17 +2,17 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.impl.number.DecimalQuantity;
-import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.number.Precision;
-import com.ibm.icu.util.Measure;
-import com.ibm.icu.util.MeasureUnit;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.number.Precision;
+import com.ibm.icu.util.Measure;
+import com.ibm.icu.util.MeasureUnit;
 
 /**
  * Converts from single or compound unit to single, compound or mixed units.

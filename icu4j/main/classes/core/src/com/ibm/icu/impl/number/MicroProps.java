@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
+import java.util.List;
+
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -9,8 +11,6 @@ import com.ibm.icu.number.Precision;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-
-import java.util.List;
 
 /**
  * MicroProps is the first MicroPropsGenerator that should be should be called,

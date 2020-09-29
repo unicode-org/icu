@@ -4,14 +4,14 @@
 
 package com.ibm.icu.impl.units;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.UResourceBundle;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Responsible for all units data operations (retriever, analysis, extraction certain data ... etc.).
