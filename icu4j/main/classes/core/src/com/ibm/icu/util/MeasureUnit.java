@@ -301,7 +301,7 @@ public class MeasureUnit implements Serializable {
             this.identifier = identifier;
         }
 
-        /*
+        /**
          * Returns the identifier of the prefix.
          *
          * @internal
@@ -312,7 +312,7 @@ public class MeasureUnit implements Serializable {
             return identifier;
         }
 
-        /*
+        /**
          * Returns the power of 10 of the prefix. For example, if the prefix is "centi", the power will be -2.
          *
          * @draft ICU 68
