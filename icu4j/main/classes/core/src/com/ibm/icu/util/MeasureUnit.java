@@ -301,17 +301,18 @@ public class MeasureUnit implements Serializable {
             this.identifier = identifier;
         }
 
-        /*
+        /**
          * Returns the identifier of the prefix.
          *
-         * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         public String getIdentifier() {
             return identifier;
         }
 
-        /*
+        /**
          * Returns the power of 10 of the prefix. For example, if the prefix is "centi", the power will be -2.
          *
          * @draft ICU 68
@@ -360,6 +361,7 @@ public class MeasureUnit implements Serializable {
      * @param measureUnitImpl
      * @deprecated Internal API for ICU use only.
      */
+    @Deprecated
     public static MeasureUnit fromMeasureUnitImpl(MeasureUnitImpl measureUnitImpl) {
         measureUnitImpl.serialize();
         String identifier = measureUnitImpl.getIdentifier();
@@ -567,7 +569,7 @@ public class MeasureUnit implements Serializable {
      * If this is a SINGLE unit, a list of length 1 will be returned.
      *
      * @return An unmodifiable list of single units
-     * @internal ICU 68 Technology Preview
+     * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
      */
     public List<MeasureUnit> splitToSingleUnits() {
