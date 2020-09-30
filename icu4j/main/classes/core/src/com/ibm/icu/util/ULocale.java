@@ -1544,7 +1544,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             } else {
                 replacedRegion = replacement.get(0);
             }
-            assert this.region != replacedRegion;
+            assert !this.region.equals(replacedRegion);
             this.region = replacedRegion;
             // The region is changed by data in territory alias.
             return true;
@@ -1557,7 +1557,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 // Found no replacement data for this script.
                 return false;
             }
-            assert this.script != replacement;
+            assert !this.script.equals(replacement);
             this.script = replacement;
             // The script is changed by data in script alias.
             return true;

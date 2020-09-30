@@ -168,7 +168,7 @@ public class UnitsData {
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-            assert (key.toString() == Constants.CATEGORY_TABLE_NAME);
+            assert (key.toString().equals(Constants.CATEGORY_TABLE_NAME));
             assert (value.getType() == UResourceBundle.TABLE);
 
             UResource.Table categoryTable = value.getTable();

@@ -128,7 +128,7 @@ public class UnitConverter {
             assert (!factor.isEmpty());
 
             // Remove all spaces in the factor
-            factor.replaceAll("\\s+", "");
+            factor = factor.replaceAll("\\s+", "");
 
             String[] fractions = factor.split("/");
             assert (fractions.length == 1 || fractions.length == 2);
@@ -153,10 +153,9 @@ public class UnitConverter {
         }
 
         /**
-         * Clone this <code>Factor</code>.
+         * Copy this <code>Factor</code>.
          */
-        @Override
-        protected Factor clone() {
+        protected Factor copy() {
             Factor result = new Factor();
             result.factorNum = this.factorNum;
             result.factorDen = this.factorDen;
@@ -175,7 +174,7 @@ public class UnitConverter {
          * Returns a single `BigDecimal` that represent the conversion rate after substituting all the constants.
          */
         public BigDecimal getConversionRate() {
-            Factor resultCollector = this.clone();
+            Factor resultCollector = this.copy();
 
             resultCollector.substitute(new BigDecimal("0.3048"), this.CONSTANT_FT2M);
             resultCollector.substitute(new BigDecimal("411557987.0").divide(new BigDecimal("131002976.0"), DECIMAL128), this.CONSTANT_PI);
@@ -199,7 +198,7 @@ public class UnitConverter {
         }
 
         public Factor applySiPrefix(MeasureUnit.SIPrefix siPrefix) {
-            Factor result = this.clone();
+            Factor result = this.copy();
             if (siPrefix == MeasureUnit.SIPrefix.ONE) {
                 return result;
             }
