@@ -54,6 +54,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void notationCompact();
     void unitMeasure();
     void unitCompoundMeasure();
+    void unitSkeletons();
     void unitUsage();
     void unitUsageErrorCodes();
     void unitUsageSkeletons();
@@ -104,12 +105,15 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit CNY;
 
     MeasureUnit METER;
+    MeasureUnit METER_PER_SECOND;
     MeasureUnit DAY;
     MeasureUnit SQUARE_METER;
     MeasureUnit FAHRENHEIT;
     MeasureUnit SECOND;
     MeasureUnit POUND;
+    MeasureUnit POUND_FORCE;
     MeasureUnit SQUARE_MILE;
+    MeasureUnit SQUARE_INCH;
     MeasureUnit JOULE;
     MeasureUnit FURLONG;
     MeasureUnit KELVIN;

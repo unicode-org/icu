@@ -223,29 +223,29 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
                                      LongNameHandler *fillIn, UErrorCode &status) {
     // Not valid for mixed units that aren't built-in units, and there should
     // not be any built-in mixed units!
-    U_ASSERT(uprv_strlen(unitRef.getType()) > 0 || unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
+    U_ASSERT(uprv_strcmp(unitRef.getType(), "") != 0 ||
+             unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
-    if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
-        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
-        // error code. Once we support not-built-in units here, unitRef may be
-        // anything, but if not built-in, perUnit has to be "none".
-        status = U_UNSUPPORTED_ERROR;
-        return;
-    }
 
     MeasureUnit unit = unitRef;
     if (uprv_strcmp(perUnit.getType(), "none") != 0) {
-        // Compound unit: first try to simplify (e.g. "meter per second" is a
-        // built-in unit).
-        bool isResolved = false;
-        MeasureUnit resolved = MeasureUnit::resolveUnitPerUnit(unit, perUnit, &isResolved);
-        if (isResolved) {
-            unit = resolved;
+        // Compound unit: first try to simplify (e.g., meters per second is its own unit).
+        MeasureUnit simplified = unit.product(perUnit.reciprocal(status), status);
+        if (uprv_strcmp(simplified.getType(), "") != 0) {
+            unit = simplified;
         } else {
             // No simplified form is available.
             forCompoundUnit(loc, unit, perUnit, width, rules, parent, fillIn, status);
             return;
         }
+    }
+
+    if (uprv_strcmp(unit.getType(), "") == 0) {
+        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
+        // error code. Once we support not-built-in units here, unitRef may be
+        // anything, but if not built-in, perUnit has to be "none".
+        status = U_UNSUPPORTED_ERROR;
+        return;
     }
 
     UnicodeString simpleFormats[ARRAY_LENGTH];
@@ -263,6 +263,13 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
                                       const MeasureUnit &perUnit, const UNumberUnitWidth &width,
                                       const PluralRules *rules, const MicroPropsGenerator *parent,
                                       LongNameHandler *fillIn, UErrorCode &status) {
+    if (uprv_strcmp(unit.getType(), "") == 0 || uprv_strcmp(perUnit.getType(), "") == 0) {
+        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
+        // error code. Once we support not-built-in units here, unitRef may be
+        // anything, but if not built-in, perUnit has to be "none".
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
     if (fillIn == nullptr) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;

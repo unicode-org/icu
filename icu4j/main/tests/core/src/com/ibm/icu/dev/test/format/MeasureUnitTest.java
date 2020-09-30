@@ -2652,7 +2652,7 @@ public class MeasureUnitTest extends TestFmwk {
         // This fails unless we resolve to MeasureUnit.POUND_PER_SQUARE_INCH
         assertEquals("", "50 psi",
                 fmt.formatMeasurePerUnit(
-                        new Measure(50, MeasureUnit.POUND),
+                        new Measure(50, MeasureUnit.POUND_FORCE),
                         MeasureUnit.SQUARE_INCH,
                         new StringBuilder(),
                         new FieldPosition(0)).toString());

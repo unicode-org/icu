@@ -70,7 +70,9 @@ public class MeasureUnitImpl {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.complexity = this.complexity;
         result.identifier = this.identifier;
-        result.singleUnits = new ArrayList<>(this.singleUnits);
+        for (SingleUnitImpl single : this.singleUnits) {
+            result.singleUnits.add(single.copy());
+        }
         return result;
     }
 

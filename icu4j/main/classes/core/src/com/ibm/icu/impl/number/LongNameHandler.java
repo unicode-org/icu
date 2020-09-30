@@ -215,21 +215,21 @@ public class LongNameHandler
             UnitWidth width,
             PluralRules rules,
             MicroPropsGenerator parent) {
-        if (unit.getType() == null || (perUnit != null && perUnit.getType() == null)) {
-            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
-            // error code. Once we support not-built-in units here, unitRef may be
-            // anything, but if not built-in, perUnit has to be "none".
-            throw new UnsupportedOperationException("Unsanctioned units, not yet supported");
-        }
         if (perUnit != null) {
             // Compound unit: first try to simplify (e.g., meters per second is its own unit).
-            MeasureUnit simplified = MeasureUnit.resolveUnitPerUnit(unit, perUnit);
-            if (simplified != null) {
+            MeasureUnit simplified = unit.product(perUnit.reciprocal());
+            if (simplified.getType() != null) {
                 unit = simplified;
             } else {
                 // No simplified form is available.
                 return forCompoundUnit(locale, unit, perUnit, width, rules, parent);
             }
+        }
+
+        if (unit.getType() == null) {
+            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported.
+            throw new UnsupportedOperationException("Unsanctioned unit, not yet supported: " +
+                                                    unit.getIdentifier());
         }
 
         String[] simpleFormats = new String[ARRAY_LENGTH];
@@ -249,6 +249,13 @@ public class LongNameHandler
             UnitWidth width,
             PluralRules rules,
             MicroPropsGenerator parent) {
+        if (unit.getType() == null || perUnit.getType() == null) {
+            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
+            // error code.
+            throw new UnsupportedOperationException(
+                "Unsanctioned units, not yet supported: " + unit.getIdentifier() + "/" +
+                perUnit.getIdentifier());
+        }
         String[] primaryData = new String[ARRAY_LENGTH];
         getMeasureData(locale, unit, width, primaryData);
         String[] secondaryData = new String[ARRAY_LENGTH];

@@ -3494,7 +3494,7 @@ void MeasureFormatTest::TestUnitPerUnitResolution() {
     UErrorCode status = U_ZERO_ERROR;
     Locale en("en");
     MeasureFormat fmt("en", UMEASFMT_WIDTH_SHORT, status);
-    Measure measure(50.0, MeasureUnit::createPound(status), status);
+    Measure measure(50.0, MeasureUnit::createPoundForce(status), status);
     LocalPointer<MeasureUnit> sqInch(MeasureUnit::createSquareInch(status));
     if (!assertSuccess("Create of format unit and per unit", status)) {
         return;

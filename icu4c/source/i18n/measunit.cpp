@@ -612,21 +612,7 @@ static const char * const gSubTypes[] = {
     "teaspoon"
 };
 
-// Must be sorted by first value and then second value.
-static int32_t unitPerUnitToSingleUnit[][4] = {
-        {374, 383, 12, 1},
-        {374, 389, 12, 2},
-        {379, 383, 12, 6},
-        {379, 389, 12, 7},
-        {390, 343, 19, 0},
-        {392, 350, 19, 2},
-        {394, 343, 19, 3},
-        {394, 472, 4, 2},
-        {394, 473, 4, 3},
-        {416, 465, 3, 1},
-        {419, 12, 18, 9},
-        {476, 390, 4, 1}
-};
+// unitPerUnitToSingleUnit no longer in use! TODO: remove from code-generation code.
 
 // Shortcuts to the base unit in order to make the default constructor fast
 static const int32_t kBaseTypeIdx = 16;
@@ -2299,41 +2285,6 @@ bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
         }
     }
     return false;
-}
-
-MeasureUnit MeasureUnit::resolveUnitPerUnit(
-        const MeasureUnit &unit, const MeasureUnit &perUnit, bool* isResolved) {
-    int32_t unitOffset = unit.getOffset();
-    int32_t perUnitOffset = perUnit.getOffset();
-    if (unitOffset == -1 || perUnitOffset == -1) {
-        *isResolved = false;
-        return MeasureUnit();
-    }
-
-    // binary search for (unitOffset, perUnitOffset)
-    int32_t start = 0;
-    int32_t end = UPRV_LENGTHOF(unitPerUnitToSingleUnit);
-    while (start < end) {
-        int32_t mid = (start + end) / 2;
-        int32_t *midRow = unitPerUnitToSingleUnit[mid];
-        if (unitOffset < midRow[0]) {
-            end = mid;
-        } else if (unitOffset > midRow[0]) {
-            start = mid + 1;
-        } else if (perUnitOffset < midRow[1]) {
-            end = mid;
-        } else if (perUnitOffset > midRow[1]) {
-            start = mid + 1;
-        } else {
-            // We found a resolution for our unit / per-unit combo
-            // return it.
-            *isResolved = true;
-            return MeasureUnit(midRow[2], midRow[3]);
-        }
-    }
-
-    *isResolved = false;
-    return MeasureUnit();
 }
 
 MeasureUnit *MeasureUnit::create(int typeId, int subTypeId, UErrorCode &status) {
