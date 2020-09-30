@@ -1252,11 +1252,11 @@ AliasReplacer::replaceLanguage(
             continue;
         }
 
-        const char* replacedLanguage;
-        const char* replacedScript;
-        const char* replacedRegion;
-        const char* replacedVariant;
-        const char* replacedExtensions;
+        const char* replacedLanguage = nullptr;
+        const char* replacedScript = nullptr;
+        const char* replacedRegion = nullptr;
+        const char* replacedVariant = nullptr;
+        const char* replacedExtensions = nullptr;
         parseLanguageReplacement(replacement,
                                  replacedLanguage,
                                  replacedScript,
@@ -1266,7 +1266,7 @@ AliasReplacer::replaceLanguage(
                                  toBeFreed,
                                  status);
         replacedLanguage =
-            uprv_strcmp(replacedLanguage, "und") == 0 ?
+            (replacedLanguage != nullptr && uprv_strcmp(replacedLanguage, "und") == 0) ?
             language : replacedLanguage;
         replacedScript = deleteOrReplace(script, nullptr, replacedScript);
         replacedRegion = deleteOrReplace(region, searchRegion, replacedRegion);
