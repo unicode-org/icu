@@ -148,7 +148,7 @@
  * Until ICU 4.8, this was the combination of the single-digit major and minor ICU version numbers
  * into one string without dots ("48").
  * Since ICU 49, it is the double-digit major ICU version number.
- * See http://userguide.icu-project.org/design#TOC-Version-Numbers-in-ICU
+ * See https://unicode-org.github.io/icu/userguide/design#version-numbers-in-icu
  *
  * @stable ICU 2.6
  */

@@ -275,7 +275,7 @@ typedef enum UNumberFormatStyle {
  *
  * <p>
  * For more detail on rounding modes, see:
- * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+ * https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes
  *
  * @stable ICU 2.0
  */

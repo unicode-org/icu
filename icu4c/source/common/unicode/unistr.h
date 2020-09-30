@@ -227,7 +227,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * The UnicodeString class is not suitable for subclassing.
  *
  * For an overview of Unicode strings in C and C++ see the
- * [User Guide Strings chapter](http://userguide.icu-project.org/strings#TOC-Strings-in-C-C-).
+ * [User Guide Strings chapter](https://unicode-org.github.io/icu/userguide/strings#strings-in-cc).
  *
  * In ICU, a Unicode string consists of 16-bit Unicode *code units*.
  * A Unicode character may be stored with either one code unit
@@ -285,7 +285,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * significant performance improvements.
  * Also, the internal buffer is accessible via special functions.
  * For details see the
- * [User Guide Strings chapter](http://userguide.icu-project.org/strings#TOC-Maximizing-Performance-with-the-UnicodeString-Storage-Model).
+ * [User Guide Strings chapter](https://unicode-org.github.io/icu/userguide/strings#maximizing-performance-with-the-unicodestring-storage-model).
  *
  * @see utf.h
  * @see CharacterIterator

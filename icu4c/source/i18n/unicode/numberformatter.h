@@ -1771,7 +1771,7 @@ class U_I18N_API NumberFormatterSettings {
      *
      * The default is HALF_EVEN. For more information on rounding mode, see the ICU userguide here:
      *
-     * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes
      *
      * @param roundingMode The rounding mode to use.
      * @return The fluent chain.
