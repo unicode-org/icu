@@ -105,6 +105,11 @@ public class ComplexUnitsConverter {
      */
     public List<Measure> convert(BigDecimal quantity, Precision rounder) {
         List<Measure> result = new ArrayList<>(unitConverters_.size());
+        BigDecimal sign = BigDecimal.ONE;
+        if (quantity.compareTo(BigDecimal.ZERO) < 0) {
+            quantity = quantity.abs();
+            sign = sign.negate();
+        }
 
         // For N converters:
         // - the first converter converts from the input unit to the largest
@@ -179,9 +184,9 @@ public class ComplexUnitsConverter {
         // Package values into Measure instances in result:
         for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
             if (i < n - 1) {
-                result.add(new Measure(intValues.get(i), units_.get(i).build()));
+                result.add(new Measure(intValues.get(i).multiply(sign), units_.get(i).build()));
             } else {
-                result.add(new Measure(quantity, units_.get(i).build()));
+                result.add(new Measure(quantity.multiply(sign), units_.get(i).build()));
             }
         }
 

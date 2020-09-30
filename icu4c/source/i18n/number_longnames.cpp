@@ -455,6 +455,8 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         status = U_UNSUPPORTED_ERROR;
         return &micros.helpers.emptyWeakModifier;
     }
+    // If we don't have at least one mixedMeasure, the LongNameHandler would be
+    // sufficient and we shouldn't be running MixedUnitLongNameHandler code:
     U_ASSERT(micros.mixedMeasuresCount > 0);
     // mixedMeasures does not contain the last value:
     U_ASSERT(fMixedUnitCount == micros.mixedMeasuresCount + 1);
@@ -486,6 +488,11 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
     for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
         DecimalQuantity fdec;
         fdec.setToLong(micros.mixedMeasures[i]);
+        if (i > 0 && fdec.isNegative()) {
+            // If numbers are negative, only the first number needs to have its
+            // negative sign formatted.
+            fdec.negate();
+        }
         StandardPlural::Form pluralForm = utils::getStandardPlural(rules, fdec);
 
         UnicodeString simpleFormat =
@@ -497,6 +504,13 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         fIntegerFormatter.formatDecimalQuantity(fdec, status).appendTo(appendable, status);
         compiledFormatter.format(num, outputMeasuresList[i], status);
         // TODO(icu-units#67): fix field positions
+    }
+
+    // Reiterated: we have at least one mixedMeasure:
+    U_ASSERT(micros.mixedMeasuresCount > 0);
+    // Thus if negative, a negative has already been formatted:
+    if (quantity.isNegative()) {
+        quantity.negate();
     }
 
     UnicodeString *finalSimpleFormats = &fMixedUnitData[(fMixedUnitCount - 1) * ARRAY_LENGTH];

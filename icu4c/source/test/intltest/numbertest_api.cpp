@@ -764,6 +764,24 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("en-US"),
             1.9999,
             u"2 feet, 0 inches");
+
+    assertFormatSingle(
+            u"Negative numbers: temperature",
+            u"measure-unit/temperature-celsius",
+            u"unit/celsius",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("celsius", status)),
+            Locale("nl-NL"),
+            -6.5,
+            u"-6,5\u00B0C");
+
+    assertFormatSingle(
+            u"Negative numbers: time",
+            nullptr, // submitting after TODO(icu-units#35) is fixed: fill in skeleton!
+            u"unit/hour-and-minute-and-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("hour-and-minute-and-second", status)),
+            Locale("de-DE"),
+            -1.24,
+            u"-1 Std., 14 Min. und 24 Sek.");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
@@ -862,6 +880,16 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             Locale("en-GB"),
             2.4,
             "2.4 m/s/s");
+
+    assertFormatSingle(
+            u"Negative numbers: acceleration",
+            u"measure-unit/acceleration-meter-per-square-second",
+            // TODO: when other PRs are merged, try: u"unit/meter-per-second-second" instead:
+            u"measure-unit/acceleration-meter-per-square-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("meter-per-pow2-second", status)),
+            Locale("af-ZA"),
+            -9.81,
+            u"-9,81 m/s\u00B2");
 
     // Testing the rejection of invalid specifications
 
@@ -1133,6 +1161,15 @@ void NumberFormatterApiTest::unitUsage() {
             u"8,765E1 square metres",
             u"8,765E0 square metres",
             u"0E0 square centimetres");
+
+    assertFormatSingle(
+            u"Negative numbers: minute-and-second",
+            u"measure-unit/duration-second usage/media",
+            u"unit/second usage/media",
+            NumberFormatter::with().unit(SECOND).usage("media"),
+            Locale("nl-NL"),
+            -77.7,
+            u"-1 min, 18 sec");
 
     assertFormatSingle(
             u"Rounding Mode propagates: rounding down",
