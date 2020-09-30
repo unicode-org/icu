@@ -45,37 +45,6 @@ Tip: Check that these tickets have the correct fixVersion tag.
 	- Committed at 2020-07-06T10:11:20-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/c9037ca8d3c0738f1a044dd845bdc0dc646f3e97
 
-#### Issue ICU-20465
-
-- ICU-20465: `Locale timezone extension should be used for time formatting`
-	- Assigned to Frank Yung-Fong Tang
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20465
-
-##### Commits with Issue ICU-20465
-
-- 863582c `ICU-20465 Calendar/DateFormat listen to tz extension`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-08-04T13:33:03-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/863582c2a48de428389b2b2b615daf9c92b2636d
-
-#### Issue ICU-20545
-
-- ICU-20545: `Compilation with MSYS2 + MSVC 2019 "Couldn't create the udata mappings/cns-11643-1992.cnv"`
-	- Assigned to Jeff Genovy
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20545
-
-##### Commits with Issue ICU-20545
-
-- ed56301 `ICU-20545 Ensure that path ends with detected file separator`
-	- Authored by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
-	- Committed at 2020-06-24T11:38:41-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/ed56301abd8ba11463b340b4c5c6f7af57ed6623
-
-- cd5b025 `ICU-20545 Detect file separator char from dir`
-	- Authored by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
-	- Committed at 2020-06-18T10:54:25-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/cd5b025ef85075f502fd52813dcc56ce9c8ce3cf
-
 #### Issue ICU-21051
 
 - ICU-21051: `Need to speed up Locale::setUnicodeKeywordValue`
@@ -93,6 +62,19 @@ Tip: Check that these tickets have the correct fixVersion tag.
 	- Authored by Frank Tang <ftang@chromium.org>
 	- Committed at 2020-08-29T02:29:58-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/cad3903cc25c0db7f392adbc024829aea6591a50
+
+#### Issue ICU-21076
+
+- ICU-21076: `MeasureUnit: review manually-modified generated code and unit identifiers`
+	- Assigned to Hugo van der Merwe
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21076
+
+##### Commits with Issue ICU-21076
+
+- 6b595d1 `ICU-21076 Delete unneeded MeasureUnit data & code`
+	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
+	- Committed at 2020-08-05T01:48:32+02:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/6b595d1c01220802ca7420471e8ac6ae2db17f4f
 
 #### Issue ICU-21137
 
@@ -123,37 +105,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Authored by Makoto Kato <m_kato@ga2.so-net.ne.jp>
 	- Committed at 2020-07-06T10:11:20-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/c9037ca8d3c0738f1a044dd845bdc0dc646f3e97
-
-#### Issue ICU-20465
-
-- ICU-20465: `Locale timezone extension should be used for time formatting`
-	- Assigned to Frank Yung-Fong Tang
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20465
-
-##### Commits with Issue ICU-20465
-
-- 863582c `ICU-20465 Calendar/DateFormat listen to tz extension`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-08-04T13:33:03-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/863582c2a48de428389b2b2b615daf9c92b2636d
-
-#### Issue ICU-20545
-
-- ICU-20545: `Compilation with MSYS2 + MSVC 2019 "Couldn't create the udata mappings/cns-11643-1992.cnv"`
-	- Assigned to Jeff Genovy
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20545
-
-##### Commits with Issue ICU-20545
-
-- ed56301 `ICU-20545 Ensure that path ends with detected file separator`
-	- Authored by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
-	- Committed at 2020-06-24T11:38:41-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/ed56301abd8ba11463b340b4c5c6f7af57ed6623
-
-- cd5b025 `ICU-20545 Detect file separator char from dir`
-	- Authored by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
-	- Committed at 2020-06-18T10:54:25-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/cd5b025ef85075f502fd52813dcc56ce9c8ce3cf
 
 #### Issue ICU-20568
 
@@ -278,19 +229,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Authored by Steven R. Loomis <srl295@gmail.com>
 	- Committed at 2020-09-17T11:09:48-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/6b35e70b680c403230c13df6e433aaf4c8c53fa9
-
-#### Issue ICU-20826
-
-- ICU-20826: `Optimize sorting algorithm in ListFormatter format to fields`
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20826
-
-##### Commits with Issue ICU-20826
-
-- caadb34 `ICU-20826 Updating C++ ListFormatter impl to be more like Java`
-	- Authored by Shane F. Carr <shane@unicode.org>
-	- Committed at 2020-09-03T17:52:03-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/caadb345e59a05b21884f020d939f6742fd871b4
 
 #### Issue ICU-20963
 
@@ -455,24 +393,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-06-18T03:15:42+02:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/8e2651828a1177495e0d252bb9eddf7c64500703
 
-#### Issue ICU-21140
-
-- ICU-21140: `Fix cldr-to-icu tooling to work on Windows`
-	- Assigned to David Beaumont
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21140
-
-##### Commits with Issue ICU-21140
-
-- a29369b `ICU-21140 Make UTF-8 explicit for all file access.`
-	- Authored by David Beaumont <dbeaumont@google.com>
-	- Committed at 2020-06-03T11:09:02-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/a29369b5867947a3a3d9423903b810c39e1a40bd
-
-- bb7b848 `ICU-21140 Fix cldr-to-icu tooling to work on Windows`
-	- Authored by daniel-ju <daju@microsoft.com>
-	- Committed at 2020-06-02T22:29:31+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/bb7b8481bdce7eb8ac40b3dbfd0a567b3c754cd6
-
 #### Issue ICU-21142
 
 - ICU-21142: `Allow other tools to utilize the CLDR API in ICU`
@@ -513,45 +433,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Authored by David Beaumont <dbeaumont@google.com>
 	- Committed at 2020-06-16T00:53:48+02:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/03bb079d3f990d5b0a61f7c2e5c8e5b18df1f016
-
-#### Issue ICU-21155
-
-- ICU-21155: `UDateIntervalFormat doesn't resolve "j" skeleton character correctly`
-	- Assigned to Rich Gillam
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21155
-
-##### Commits with Issue ICU-21155
-
-- edaebfa `ICU-21155 Add support for all hour and day-period skeleton characters to DateIntervalFormat`
-	- Authored by Rich Gillam <62772518+richgillam@users.noreply.github.com>
-	- Committed at 2020-09-03T16:14:08-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/edaebfa64ee673ed580f464123d3afd4deffc693
-
-#### Issue ICU-21164
-
-- ICU-21164: `OlsonTimeZone constructor can fail to initialize properly`
-	- Assigned to Rich Gillam
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21164
-
-##### Commits with Issue ICU-21164
-
-- ff2272d `ICU-21164 Fixed bug in OlsonTimeZone constructor that could leave the object in a not-fully-initialized state.`
-	- Authored by Rich Gillam <62772518+richgillam@users.noreply.github.com>
-	- Committed at 2020-09-04T10:09:39-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/ff2272d7e16c9cb92123ca97931fcee2c919c3e4
-
-#### Issue ICU-21175
-
-- ICU-21175: `Parallel races in genrb`
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21175
-
-##### Commits with Issue ICU-21175
-
-- ee2d8b0 `ICU-21175 Add cnvalias as a dependency of misc_res`
-	- Authored by Shane F. Carr <shane@unicode.org>
-	- Committed at 2020-08-04T18:50:43-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/ee2d8b01034c3101de2bd58f9328daa076995e9e
 
 #### Issue ICU-21178
 
@@ -816,4 +697,4 @@ Tip: Consider closing the ticket if it is fixed.
 	- GitHub Link: https://github.com/unicode-org/icu/commit/ad32263a23ad0c2b14905a264c65defee15c5517
 
 
-## Total Problems: 38
+## Total Problems: 30
