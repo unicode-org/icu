@@ -541,13 +541,6 @@ class U_I18N_API MeasureUnit: public UObject {
      * @internal
      */
     int32_t getOffset() const;
-
-    /**
-     * ICU use only.
-     * @internal
-     */
-    static MeasureUnit resolveUnitPerUnit(
-            const MeasureUnit &unit, const MeasureUnit &perUnit, bool* isResolved);
 #endif /* U_HIDE_INTERNAL_API */
 
 // All code between the "Start generated createXXX methods" comment and
