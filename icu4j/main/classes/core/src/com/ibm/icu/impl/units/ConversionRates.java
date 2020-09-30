@@ -96,8 +96,8 @@ public class ConversionRates {
     }
 
     /**
-     * @param singleUnit
-     * @return The bese units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
+     * @param singleUnit An instance of SingleUnitImpl.
+     * @return The base units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
      * <p>
      * NOTE:
      * This method is helpful when checking the convertibility because no need to check convertibility.
@@ -184,6 +184,7 @@ public class ConversionRates {
 
     public static class ConversionRateInfo {
 
+        @SuppressWarnings("unused")
         private final String simpleUnit;
         private final String target;
         private final String conversionRate;

@@ -241,13 +241,14 @@ public class UnitsTest {
         }
 
         String codePage = "UTF-8";
-        BufferedReader f = TestUtil.getDataReader("cldr/units/unitsTest.txt", codePage);
         ArrayList<TestCase> tests = new ArrayList<>();
-        while (true) {
-            String line = f.readLine();
-            if (line == null) break;
-            if (line.isEmpty() || line.startsWith("#")) continue;
-            tests.add(new TestCase(line));
+        try (BufferedReader f = TestUtil.getDataReader("cldr/units/unitsTest.txt", codePage)) {
+            while (true) {
+                String line = f.readLine();
+                if (line == null) break;
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                tests.add(new TestCase(line));
+            }
         }
 
         ConversionRates conversionRates = new ConversionRates();
@@ -297,6 +298,7 @@ public class UnitsTest {
             /**
              * Test Case Data
              */
+            @SuppressWarnings("unused")
             String category;
             String usage;
             String region;
@@ -349,13 +351,15 @@ public class UnitsTest {
 
         // Read Test data from the unitPreferencesTest
         String codePage = "UTF-8";
-        BufferedReader f = TestUtil.getDataReader("cldr/units/unitPreferencesTest.txt", codePage);
         ArrayList<TestCase> tests = new ArrayList<>();
-        while (true) {
-            String line = f.readLine();
-            if (line == null) break;
-            if (line.isEmpty() || line.startsWith("#")) continue;
-            tests.add(new TestCase(line));
+
+        try (BufferedReader f = TestUtil.getDataReader("cldr/units/unitPreferencesTest.txt", codePage)) {
+            while (true) {
+                String line = f.readLine();
+                if (line == null) break;
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                tests.add(new TestCase(line));
+            }
         }
 
         for (TestCase testCase :

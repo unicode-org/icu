@@ -51,7 +51,7 @@ public class MeasureUnitImpl {
      *
      * @param identifier The unit identifier string.
      * @return A newly parsed object.
-     * @throws <code>IllegalArgumentException</code> in case of incorrect/non-parsed identifier.
+     * @throws IllegalArgumentException in case of incorrect/non-parsed identifier.
      */
     public static MeasureUnitImpl forIdentifier(String identifier) {
         return UnitsParser.parseForIdentifier(identifier);
@@ -66,11 +66,11 @@ public class MeasureUnitImpl {
         return result;
     }
 
-    public MeasureUnitImpl clone() {
+    public MeasureUnitImpl copy() {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.complexity = this.complexity;
         result.identifier = this.identifier;
-        result.singleUnits = (ArrayList<SingleUnitImpl>) this.singleUnits.clone();
+        result.singleUnits = new ArrayList<>(this.singleUnits);
         return result;
     }
 
@@ -103,7 +103,7 @@ public class MeasureUnitImpl {
      * @return a list of <code>MeasureUnitImpl</code>
      */
     public ArrayList<MeasureUnitImpl> extractIndividualUnits() {
-        ArrayList<MeasureUnitImpl> result = new ArrayList<MeasureUnitImpl>();
+        ArrayList<MeasureUnitImpl> result = new ArrayList<>();
         if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
             // In case of mixed units, each single unit can be considered as a stand alone MeasureUnitImpl.
             for (SingleUnitImpl singleUnit :
@@ -114,7 +114,7 @@ public class MeasureUnitImpl {
             return result;
         }
 
-        result.add(this.clone());
+        result.add(this.copy());
         return result;
     }
 
@@ -162,7 +162,7 @@ public class MeasureUnitImpl {
         }
 
         // Add a copy of singleUnit
-        this.singleUnits.add(singleUnit.clone());
+        this.singleUnits.add(singleUnit.copy());
 
         // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits are more
         // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
@@ -191,7 +191,7 @@ public class MeasureUnitImpl {
             return new SingleUnitImpl();
         }
         if (this.singleUnits.size() == 1) {
-            return this.singleUnits.get(0).clone();
+            return this.singleUnits.get(0).copy();
         }
 
         throw new UnsupportedOperationException();

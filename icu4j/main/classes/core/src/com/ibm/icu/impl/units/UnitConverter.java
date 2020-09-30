@@ -155,6 +155,7 @@ public class UnitConverter {
         /**
          * Clone this <code>Factor</code>.
          */
+        @Override
         protected Factor clone() {
             Factor result = new Factor();
             result.factorNum = this.factorNum;
@@ -172,8 +173,6 @@ public class UnitConverter {
 
         /**
          * Returns a single `BigDecimal` that represent the conversion rate after substituting all the constants.
-         *
-         * @return
          */
         public BigDecimal getConversionRate() {
             Factor resultCollector = this.clone();
