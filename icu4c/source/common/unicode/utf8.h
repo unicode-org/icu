@@ -23,7 +23,7 @@
  * This file defines macros to deal with 8-bit Unicode (UTF-8) code units (bytes) and strings.
  *
  * For more information see utf.h and the ICU User Guide Strings chapter
- * (http://userguide.icu-project.org/strings).
+ * (https://unicode-org.github.io/icu/userguide/strings).
  *
  * <em>Usage:</em>
  * ICU coding guidelines for if() statements should be followed when using these macros.

@@ -280,7 +280,7 @@ import com.ibm.icu.util.ULocale.Category;
  * or preformatted values, but not pattern strings or custom format objects.</p>
  *
  * <p>For more details, see the
- * <a href="http://userguide.icu-project.org/formatparse/messages">ICU User Guide</a>.</p>
+ * <a href="https://unicode-org.github.io/icu/userguide/format_parse/messages">ICU User Guide</a>.</p>
  *
  * <h4>Usage Information</h4>
  *

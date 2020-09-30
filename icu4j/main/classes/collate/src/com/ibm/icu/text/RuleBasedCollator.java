@@ -50,7 +50,7 @@ import com.ibm.icu.util.VersionInfo;
  * <p>A Collator is thread-safe only when frozen. See {{@link #isFrozen()} and {@link com.ibm.icu.util.Freezable}.
  *
  * <p>
- * Users are strongly encouraged to read the <a href="http://userguide.icu-project.org/collation">User
+ * Users are strongly encouraged to read the <a href="https://unicode-org.github.io/icu/userguide/collation">User
  * Guide</a> for more information about the collation service before using this class.
  *
  * <p>
@@ -67,8 +67,8 @@ import com.ibm.icu.util.VersionInfo;
  *
  * <p>
  * For information about the collation rule syntax and details about customization, please refer to the <a
- * href="http://userguide.icu-project.org/collation/customization">Collation customization</a> section of the
- * User Guide.
+ * href="https://unicode-org.github.io/icu/userguide/collation/customization">Collation customization</a>
+ * section of the User Guide.
  *
  * <p>
  * <strong>Note</strong> that there are some differences between the Collation rule syntax used in Java and ICU4J:
@@ -193,7 +193,7 @@ public final class RuleBasedCollator extends Collator {
      * The collator will be based on the CLDR root collation, with the
      * attributes and re-ordering of the characters specified in the argument rules.
      * <p>
-     * See the User Guide's section on <a href="http://userguide.icu-project.org/collation/customization">
+     * See the User Guide's section on <a href="https://unicode-org.github.io/icu/userguide/collation/customization">
      * Collation Customization</a> for details on the rule syntax.
      *
      * @param rules
@@ -570,7 +570,7 @@ public final class RuleBasedCollator extends Collator {
     /**
      * Sets the mode for the direction of SECONDARY weights to be used in French collation. The default value is false,
      * which treats SECONDARY weights in the order they appear. If set to true, the SECONDARY weights will be sorted
-     * backwards. See the section on <a href="http://userguide.icu-project.org/collation/architecture">
+     * backwards. See the section on <a href="https://unicode-org.github.io/icu/userguide/collation/architecture">
      * French collation</a> for more information.
      *
      * @param flag
@@ -619,7 +619,7 @@ public final class RuleBasedCollator extends Collator {
      * first mode. A simple way to ignore accent differences in a string is to set the strength to PRIMARY and enable
      * case level.
      * <p>
-     * See the section on <a href="http://userguide.icu-project.org/collation/architecture">case
+     * See the section on <a href="https://unicode-org.github.io/icu/userguide/collation/architecture">case
      * level</a> for more information.
      *
      * @param flag
@@ -963,7 +963,7 @@ public final class RuleBasedCollator extends Collator {
      *
      * <p>The root collation rules are an <i>approximation</i> of the root collator's sort order.
      * They are almost never used or useful at runtime and can be removed from the data.
-     * See <a href="http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales">User Guide:
+     * See <a href="https://unicode-org.github.io/icu/userguide/collation/customization#building-on-existing-locales">User Guide:
      * Collation Customization, Building on Existing Locales</a>
      *
      * <p>{@link #getRules()} should normally be used instead.

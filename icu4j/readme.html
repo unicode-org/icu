@@ -76,60 +76,60 @@ internationalization API design.</p>
 </p>
 <ul>
   <li><a
- href="http://userguide.icu-project.org/collation"><b>Collation</b></a>
+ href="https://unicode-org.github.io/icu/userguide/collation"><b>Collation</b></a>
 &#8211; rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order<br>
 &nbsp;&nbsp;&nbsp;&nbsp;For fast multilingual string comparison; faster
 and more complete than
 the J2SE implementation</li>
-  <li><a href="http://userguide.icu-project.org/conversion/detection"><b>Charset
+  <li><a href="https://unicode-org.github.io/icu/userguide/conversion/detection"><b>Charset
 Detection</b></a> &#8211; Recognition of various single and multibyte charsets<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Useful for recognizing untagged text data</li>
   <li><a
- href="http://userguide.icu-project.org/strings/unicodeset"><b>UnicodeSet</b></a>
+ href="https://unicode-org.github.io/icu/userguide/strings/unicodeset"><b>UnicodeSet</b></a>
 &#8211; standard set operations optimized for sets of Unicode characters<br>
 &nbsp;&nbsp;&nbsp;&nbsp;UnicodeSets can be built from string patterns
 using any Unicode properties.</li>
-  <li><a href="http://userguide.icu-project.org/transforms"><b>Transforms</b></a>
+  <li><a href="https://unicode-org.github.io/icu/userguide/transforms"><b>Transforms</b></a>
 &#8211; a flexible mechanism for Unicode text conversions<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Including Full/Halfwidth conversions,
 Normalization, Case conversions, Hex
 conversions, and transliterations between scripts (50+ pairs)</li>
   <li><a
- href="http://userguide.icu-project.org/transforms/normalization"><b>Unicode
+ href="https://unicode-org.github.io/icu/userguide/transforms/normalization"><b>Unicode
 Normalization</b></a> &#8211; NFC, NFD, NFKD, NFKC<br>
 &nbsp;&nbsp;&nbsp;&nbsp;For canonical text representations, needed for
 XML and the net</li>
   <li><a
- href="http://userguide.icu-project.org/datetime/calendar"><b>International
+ href="https://unicode-org.github.io/icu/userguide/datetime/calendar"><b>International
 Calendars</b></a> &#8211; Arabic, Buddhist, Chinese, Hebrew, Japanese, Ethiopic, Islamic, Coptic and other calendars<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in
 certain countries</li>
   <li><a
- href="http://userguide.icu-project.org/formatparse/datetime"><b>Date
+ href="https://unicode-org.github.io/icu/userguide/format_parse/datetime"><b>Date
 Format
 Enhancements</b></a> &#8211; Date/time pattern generator, Relative date formatting, etc.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Enhancements to the normal Java date
 formatting.</li>
   <li><a
- href="http://userguide.icu-project.org/formatparse/numbers"><b>Number
+ href="https://unicode-org.github.io/icu/userguide/format_parse/numbers"><b>Number
 Format
 Enhancements</b></a> &#8211; Scientific Notation, Spelled-out, Compact decimal format, etc.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Enhancements to the normal Java number
 formatting. The spell-out format is
 used for checks and similar documents</li>
   <li><a
- href="http://userguide.icu-project.org/boundaryanalysis"><b>Enhanced
+ href="https://unicode-org.github.io/icu/userguide/boundaryanalysis"><b>Enhanced
 Word-Break Detection</b></a> &#8211; Rule-based, supports Thai, Khmer, Chinese, etc.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct support of Thai</li>
   <li><a
- href="http://userguide.icu-project.org/conversion/compression"><b>Unicode
+ href="https://unicode-org.github.io/icu/userguide/conversion/compression"><b>Unicode
 Text
 Compression</b></a> &#8211; Standard compression of Unicode text<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Suitable for large numbers of small fields,
 where LZW and similar schemes
 do not apply</li>
   <li><a
- href="http://userguide.icu-project.org/conversion"><b>Charset Conversion</b></a> &#8211; Conversion to and from different charsets.<br>
+ href="https://unicode-org.github.io/icu/userguide/conversion"><b>Charset Conversion</b></a> &#8211; Conversion to and from different charsets.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Plugs into Java CharsetProvider Service Provider Interface (SPI)</li>
 
 </ul>
@@ -440,7 +440,7 @@ ICU4J source archive is extracted.
 </table>
 
 <h2 class="doc"><a name="API"></a>Where to get Documentation</h2>
-<p>The <a href="http://userguide.icu-project.org/">ICU user's
+<p>The <a href="https://unicode-org.github.io/icu/userguide/">ICU user's
 guide</a> contains lots of general information about ICU, in its C,
 C++, and Java incarnations.</p>
 <p>The complete API documentation for ICU4J (javadoc) is available on
@@ -692,7 +692,7 @@ to the appropriate java options.</p>
 how to configure Eclipse</a> to build and develop ICU4J on Eclipse IDE.</p>
 
 <p><b>Note:</b> To install and configure ICU4J Locale Service Provider, please refer the user guide
-page <a href="http://userguide.icu-project.org/icu4j-locale-service-provider">ICU4J Locale
+page <a href="https://unicode-org.github.io/icu/userguide/icu4j-locale-service-provider">ICU4J Locale
 Service Provider</a>.</p>
 
 <h2 class="doc"><a name="tryingout"></a>Trying Out ICU4J</h2>
@@ -891,7 +891,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in icu4c/sourc
 However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
-<a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">Updating the Time Zone Data</a>.</p>
+<a href="https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data">Updating the Time Zone Data</a>.</p>
 <p>You can optionally configure ICU4J date and time
 service classes to use underlying JDK TimeZone implementation (see the ICU4J API reference
 <a href="http://www.icu-project.org/apiref/icu4j/com/ibm/icu/util/TimeZone.html">TimeZone</a>
