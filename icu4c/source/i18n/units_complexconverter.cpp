@@ -110,9 +110,13 @@ UBool ComplexUnitsConverter::greaterThanOrEqual(double quantity, double limit) c
 MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
                                                          icu::number::impl::RoundingImpl *rounder,
                                                          UErrorCode &status) const {
-    // TODO(icu-units#63): test negative numbers!
     // TODO(hugovdm): return an error for "foot-and-foot"?
     MaybeStackVector<Measure> result;
+    int sign = 1;
+    if (quantity < 0) {
+        quantity *= -1;
+        sign = -1;
+    }
 
     // For N converters:
     // - the first converter converts from the input unit to the largest unit,
@@ -190,7 +194,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
     // Package values into Measure instances in result:
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
         if (i < n - 1) {
-            Formattable formattableQuantity(intValues[i]);
+            Formattable formattableQuantity(intValues[i] * sign);
             // Measure takes ownership of the MeasureUnit*
             MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
             if (result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status) ==
@@ -204,7 +208,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
             }
         } else { // LAST ELEMENT
             // Add the last element, not an integer:
-            Formattable formattableQuantity(quantity);
+            Formattable formattableQuantity(quantity * sign);
             // Measure takes ownership of the MeasureUnit*
             MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
             if (result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status) ==

@@ -86,7 +86,8 @@ public class UnitsRouter {
         ConverterPreference converterPreference = null;
         for (ConverterPreference itr : converterPreferences_) {
             converterPreference = itr;
-            if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
+            if (converterPreference.converter.greaterThanOrEqual(quantity.abs(),
+                                                                 converterPreference.limit)) {
                 break;
             }
         }

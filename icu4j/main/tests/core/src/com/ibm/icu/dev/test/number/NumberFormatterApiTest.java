@@ -726,6 +726,24 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-US"),
                 1.9999,
                 "2 feet, 0 inches");
+
+        assertFormatSingle(
+                "Negative numbers: temperature",
+                "measure-unit/temperature-celsius",
+                "unit/celsius",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("celsius")),
+                new ULocale("nl-NL"),
+                -6.5,
+                "-6,5\u00B0C");
+
+        assertFormatSingle(
+                "Negative numbers: time",
+                null, // submitting after TODO(icu-units#35) is fixed: fill in skeleton!
+                "unit/hour-and-minute-and-second",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("hour-and-minute-and-second")),
+                new ULocale("de-DE"),
+                -1.24,
+                "-1 Std., 14 Min. und 24 Sek.");
     }
 
     @Test
@@ -823,6 +841,16 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-GB"),
                 2.4,
                 "2.4 m/s/s");
+
+        assertFormatSingle(
+                "Negative numbers: acceleration",
+                "measure-unit/acceleration-meter-per-square-second",
+                // TODO: when other PRs are merged, try: u"unit/meter-per-second-second" instead:
+                "measure-unit/acceleration-meter-per-square-second",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("meter-per-pow2-second")),
+                new ULocale("af-ZA"),
+                -9.81,
+                "-9,81 m/s\u00B2");
 
         // Testing the rejection of invalid specifications
 
@@ -1090,6 +1118,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                "8,765E1 square metres",
                "8,765E0 square metres",
                "0E0 square centimetres");
+
+        assertFormatSingle(
+                "Negative numbers: minute-and-second",
+                "measure-unit/duration-second usage/media",
+                "unit/second usage/media",
+                NumberFormatter.with().unit(MeasureUnit.SECOND).usage("media"),
+                new ULocale("nl-NL"),
+                -77.7,
+                "-1 min, 18 sec");
 
         assertFormatSingle(
                 "Rounding Mode propagates: rounding down",

@@ -141,6 +141,8 @@ public class MixedUnitLongNameHandler
      * unit.
      */
     private Modifier getMixedUnitModifier(DecimalQuantity quantity, MicroProps micros) {
+        // If we don't have at least one mixedMeasure, the LongNameHandler would be
+        // sufficient and we shouldn't be running MixedUnitLongNameHandler code:
         if (micros.mixedMeasures.size() == 0) {
             assert false : "Mixed unit: we must have more than one unit value";
             throw new UnsupportedOperationException();
@@ -168,6 +170,11 @@ public class MixedUnitLongNameHandler
 
         for (int i = 0; i < micros.mixedMeasures.size(); i++) {
             DecimalQuantity fdec = new DecimalQuantity_DualStorageBCD(micros.mixedMeasures.get(i).getNumber());
+            if (i > 0 && fdec.isNegative()) {
+                // If numbers are negative, only the first number needs to have its
+                // negative sign formatted.
+                fdec.negate();
+            }
             StandardPlural pluralForm = fdec.getStandardPlural(rules);
 
             String simpleFormat = LongNameHandler.getWithPlural(this.fMixedUnitData.get(i), pluralForm);
@@ -177,6 +184,13 @@ public class MixedUnitLongNameHandler
             this.fIntegerFormatter.formatImpl(fdec, appendable);
             outputMeasuresList.add(compiledFormatter.format(appendable.toString()));
             // TODO(icu-units#67): fix field positions
+        }
+
+        // Reiterated: we have at least one mixedMeasure:
+        assert micros.mixedMeasures.size() > 0;
+        // Thus if negative, a negative has already been formatted:
+        if (quantity.isNegative()) {
+            quantity.negate();
         }
 
         String[] finalSimpleFormats = this.fMixedUnitData.get(this.fMixedUnitData.size() - 1);
