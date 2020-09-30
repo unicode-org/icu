@@ -33,7 +33,7 @@ public class SingleUnitImpl {
      */
     private MeasureUnit.SIPrefix siPrefix = MeasureUnit.SIPrefix.ONE;
 
-    public SingleUnitImpl clone() {
+    public SingleUnitImpl copy() {
         SingleUnitImpl result = new SingleUnitImpl();
         result.index = this.index;
         result.dimensionality = this.dimensionality;
@@ -50,8 +50,6 @@ public class SingleUnitImpl {
 
     /**
      * Generates an neutral identifier string for a single unit which means we do not include the dimension signal.
-     *
-     * @throws IllegalArgumentException
      */
     public String getNeutralIdentifier() {
         StringBuilder result = new StringBuilder();
@@ -70,6 +68,7 @@ public class SingleUnitImpl {
             result.append(posPower);
             result.append('-');
         } else {
+            // TODO: IllegalArgumentException might not be appropriate here
             throw new IllegalArgumentException("Unit Identifier Syntax Error");
         }
 

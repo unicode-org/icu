@@ -358,7 +358,6 @@ public class MeasureUnit implements Serializable {
 
     /**
      * @internal
-     * @param measureUnitImpl
      * @deprecated Internal API for ICU use only.
      */
     @Deprecated
@@ -376,7 +375,7 @@ public class MeasureUnit implements Serializable {
     private MeasureUnit(MeasureUnitImpl measureUnitImpl) {
         type = null;
         subType = null;
-        this.measureUnitImpl = measureUnitImpl.clone();
+        this.measureUnitImpl = measureUnitImpl.copy();
     }
 
 
@@ -2056,7 +2055,7 @@ public class MeasureUnit implements Serializable {
     private MeasureUnitImpl getCopyOfMeasureUnitImpl() {
         return this.measureUnitImpl == null ?
                 MeasureUnitImpl.forIdentifier(getIdentifier()) :
-                this.measureUnitImpl.clone();
+                this.measureUnitImpl.copy();
     }
 
     /**

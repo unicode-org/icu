@@ -326,11 +326,11 @@ public class NumberSkeletonTest {
             { "scientific/*ee", "scientific/+ee" },
             { "integer-width/*00", "integer-width/+00" },
         };
-    
+
         for (String[] cas : cases) {
             String star = cas[0];
             String plus = cas[1];
-    
+
             String normalized = NumberFormatter.forSkeleton(plus)
                 .toSkeleton();
             assertEquals("Plus should normalize to star", star, normalized);
@@ -404,6 +404,7 @@ public class NumberSkeletonTest {
                 String skeleton = "measure-unit/";
                 skeleton += cas1[0] + "-" + cas1[1] + " per-measure-unit/" + cas2[0] + "-" + cas2[1];
 
+                @SuppressWarnings("unused")
                 String actual = NumberFormatter.forSkeleton(skeleton).locale(arabic).format(5142.3)
                         .toString();
                 // Just make sure it won't throw exception

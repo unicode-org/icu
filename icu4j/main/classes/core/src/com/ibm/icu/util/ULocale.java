@@ -1628,7 +1628,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }
         }
 
-        boolean knownCanonicalized = false;
         String name = parser.getName();
         if (!isKnownCanonicalizedLocale(name)) {
             AliasReplacer replacer = new AliasReplacer(

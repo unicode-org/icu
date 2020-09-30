@@ -55,7 +55,7 @@ public class UnitsData {
     }
 
     /**
-     * @param measureUnit
+     * @param measureUnit An instance of MeasureUnitImpl.
      * @return the corresponding category.
      */
     public String getCategory(MeasureUnitImpl measureUnit) {
