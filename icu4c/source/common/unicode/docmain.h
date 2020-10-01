@@ -149,7 +149,7 @@
  *   </tr>
  *   <tr>
  *     <td>Number Range Formatting<br />(includes currency and unit ranges)</td>
- *     <td>(no C API)</td>
+ *     <td>unumberrangeformatter.h</td>
  *     <td>icu::number::NumberRangeFormatter</td>
  *   </tr>
  *   <tr>
