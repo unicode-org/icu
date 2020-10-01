@@ -502,6 +502,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @param locale the ULocale to canonicalize
      * @return the ULocale created from the canonical version of the ULocale.
      * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale createCanonical(ULocale locale) {
         return createCanonical(locale.getName());
