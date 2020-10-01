@@ -672,7 +672,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.forLanguageTag("es-MX"),
                 5,
                 "5 a\u00F1os");
-            
+
         assertFormatSingle(
                 "Mixed unit",
                 "unit/yard-and-foot-and-inch",
@@ -988,7 +988,6 @@ public class NumberFormatterApiTest extends TestFmwk {
             assertEquals(msg, normalizedSkeleton, nf.toSkeleton());
         }
 
-        Object NoException = new Object();
         Object[][] failCases = {
             {"Parsing measure-unit/* results in failure if not built-in unit",
              "measure-unit/hectometer", //
