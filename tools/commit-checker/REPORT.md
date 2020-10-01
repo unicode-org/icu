@@ -7,7 +7,7 @@ Commit Report
 =============
 
 Environment:
-- Latest Commit: 61f0e16b11a709616630e3d9010ea2d22e349f28
+- Latest Commit: a84fdd0e903fb20acd93ed186a0da4c0c071a0e6
 - Jira Query: project=ICU AND fixVersion=68.1
 - Rev Range: release-67-1..origin/master
 - Authenticated: Yes
@@ -32,50 +32,6 @@ Tip: If you see your name here, make sure to label your commits correctly in the
 ### Commits with Jira Issue Not Found
 Tip: Check that these tickets have the correct fixVersion tag.
 
-#### Issue ICU-11992
-
-- ICU-11992: `Incorrect timezones for specific countries on Firefox OS (and potentially Android)`
-	- No assignee!
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-11992
-
-##### Commits with Issue ICU-11992
-
-- c9037ca `ICU-11992 uprv_tzname doesn't return valid time zone on Android`
-	- Authored by Makoto Kato <m_kato@ga2.so-net.ne.jp>
-	- Committed at 2020-07-06T10:11:20-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/c9037ca8d3c0738f1a044dd845bdc0dc646f3e97
-
-#### Issue ICU-21051
-
-- ICU-21051: `Need to speed up Locale::setUnicodeKeywordValue`
-	- Assigned to Frank Yung-Fong Tang
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21051
-
-##### Commits with Issue ICU-21051
-
-- bc864ae `ICU-21051 Add copyright Remove License from sh`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-09-01T13:26:41-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/bc864aeac6cd6279ef99b43468ab7799b32f8ce6
-
-- cad3903 `ICU-21051 Add Locale::createCanonical performance test`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-08-29T02:29:58-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/cad3903cc25c0db7f392adbc024829aea6591a50
-
-#### Issue ICU-21076
-
-- ICU-21076: `MeasureUnit: review manually-modified generated code and unit identifiers`
-	- Assigned to Hugo van der Merwe
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21076
-
-##### Commits with Issue ICU-21076
-
-- 6b595d1 `ICU-21076 Delete unneeded MeasureUnit data & code`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-08-05T01:48:32+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/6b595d1c01220802ca7420471e8ac6ae2db17f4f
-
 #### Issue ICU-21137
 
 - ICU-21137: `Improve VSCode configuration for ICU4C build and test`
@@ -89,22 +45,32 @@ Tip: Check that these tickets have the correct fixVersion tag.
 	- Committed at 2020-06-18T03:15:42+02:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/8e2651828a1177495e0d252bb9eddf7c64500703
 
+#### Issue ICU-21142
+
+- ICU-21142: `Allow other tools to utilize the CLDR API in ICU`
+	- No assignee!
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21142
+
+##### Commits with Issue ICU-21142
+
+- 17f889b `ICU-21142 Hopefully fixing the install script (bash only)`
+	- Authored by David Beaumont <dbeaumont@google.com>
+	- Committed at 2020-06-22T19:46:32+02:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/17f889bd0e2f5a23a8539febbacac872740024d6
+
+- 3b17a49 `ICU-21142 Improving Maven handling of CLDR API Jar file for new tools.`
+	- Authored by David Beaumont <dbeaumont@google.com>
+	- Committed at 2020-06-19T14:03:36+02:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/3b17a492be7d54b47768c4ab9815754987e7805f
+
+- 56bb01b `ICU-21142 Moving CLDR jar file to common location`
+	- Authored by David Beaumont <dbeaumont@google.com>
+	- Committed at 2020-06-04T12:26:57+02:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/56bb01ba84f072ac38e9fdea4abdfb13bdd7c906
+
 
 ### Commits with Open Jira Issue
 Tip: Consider closing the ticket if it is fixed.
-
-#### Issue ICU-11992
-
-- ICU-11992: `Incorrect timezones for specific countries on Firefox OS (and potentially Android)`
-	- No assignee!
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-11992
-
-##### Commits with Issue ICU-11992
-
-- c9037ca `ICU-11992 uprv_tzname doesn't return valid time zone on Android`
-	- Authored by Makoto Kato <m_kato@ga2.so-net.ne.jp>
-	- Committed at 2020-07-06T10:11:20-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/c9037ca8d3c0738f1a044dd845bdc0dc646f3e97
 
 #### Issue ICU-20568
 
@@ -113,6 +79,11 @@ Tip: Consider closing the ticket if it is fixed.
 	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20568
 
 ##### Commits with Issue ICU-20568
+
+- 9cb611d `ICU-20568 Improve negative measure handling for mixed units`
+	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
+	- Committed at 2020-10-01T00:12:09+02:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/9cb611d09f82e77a5001f6329de532ef918574c9
 
 - 81d43a2 `ICU-20568 Fix "1 foot 12 inches" behaviour`
 	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
@@ -204,19 +175,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-09-10T22:39:18+02:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/adcc646e5144ffec55df727e98fcc919b67a0dec
 
-#### Issue ICU-20697
-
-- ICU-20697: `Save supplementalMetadata aliases instead of ICU deprecates in locale_dependencies?`
-	- Assigned to David Beaumont
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20697
-
-##### Commits with Issue ICU-20697
-
-- dfc8b8b `ICU-20697 Delete now unused files and documentation for the old ICU LDML tooling.`
-	- Authored by David Beaumont <dbeaumont@google.com>
-	- Committed at 2020-07-14T20:27:28+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/dfc8b8b746a132aed7d2c63c7940cbb95ae2a611
-
 #### Issue ICU-20717
 
 - ICU-20717: `remove more files from git-lfs`
@@ -261,50 +219,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-09-14T21:24:14+04:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/d1490314337ac074166adbad86d2416fba41c8f5
 
-#### Issue ICU-21034
-
-- ICU-21034: `minimize ICU4C & ICU4J readmes`
-	- Assigned to Elango Cheran
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21034
-
-##### Commits with Issue ICU-21034
-
-- ce90c38 `ICU-21034 Convert part of ICU4C Readme info to User Guide`
-	- Authored by Elango Cheran <elango@unicode.org>
-	- Committed at 2020-09-23T10:13:33-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/ce90c383f162aa49cdcc36ecf0ab47f7a8577321
-
-#### Issue ICU-21051
-
-- ICU-21051: `Need to speed up Locale::setUnicodeKeywordValue`
-	- Assigned to Frank Yung-Fong Tang
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21051
-
-##### Commits with Issue ICU-21051
-
-- bc864ae `ICU-21051 Add copyright Remove License from sh`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-09-01T13:26:41-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/bc864aeac6cd6279ef99b43468ab7799b32f8ce6
-
-- cad3903 `ICU-21051 Add Locale::createCanonical performance test`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-08-29T02:29:58-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/cad3903cc25c0db7f392adbc024829aea6591a50
-
-#### Issue ICU-21076
-
-- ICU-21076: `MeasureUnit: review manually-modified generated code and unit identifiers`
-	- Assigned to Hugo van der Merwe
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21076
-
-##### Commits with Issue ICU-21076
-
-- 6b595d1 `ICU-21076 Delete unneeded MeasureUnit data & code`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-08-05T01:48:32+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/6b595d1c01220802ca7420471e8ac6ae2db17f4f
-
 #### Issue ICU-21078
 
 - ICU-21078: `Better instructions for installing CLDR JARs and managing Maven build.`
@@ -327,32 +241,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Authored by David Beaumont <dbeaumont@google.com>
 	- Committed at 2020-04-16T20:14:24+02:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/b0fb4839c24b743a6786b8c6b3a7e066478f0bad
-
-#### Issue ICU-21084
-
-- ICU-21084: `Refactor ICU tools to use PathMatcher API from CLDR code (and delete ICU version)`
-	- Assigned to David Beaumont
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21084
-
-##### Commits with Issue ICU-21084
-
-- 566e0f8 `ICU-21084 Migrating ICU tools to use PathMatcher`
-	- Authored by David Beaumont <david.beaumont+github@gmail.com>
-	- Committed at 2020-05-26T23:38:23+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/566e0f86866cc7f16122b56b40d61b3d2430b317
-
-#### Issue ICU-21096
-
-- ICU-21096: `Adjust ICU4C logKnownIssue skips for RBBI issues closed as fixed`
-	- Assigned to Peter Edberg
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21096
-
-##### Commits with Issue ICU-21096
-
-- 6fdd303 `ICU-21096 adjust logKnownIssues for ICU rbbitst`
-	- Authored by Peter Edberg <pedberg@unicode.org>
-	- Committed at 2020-05-06T17:29:49-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/6fdd3035322e061b94dda2f553803dd5492194f2
 
 #### Issue ICU-21098
 
@@ -396,7 +284,7 @@ Tip: Consider closing the ticket if it is fixed.
 #### Issue ICU-21142
 
 - ICU-21142: `Allow other tools to utilize the CLDR API in ICU`
-	- Assigned to David Beaumont
+	- No assignee!
 	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21142
 
 ##### Commits with Issue ICU-21142
@@ -415,55 +303,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Authored by David Beaumont <dbeaumont@google.com>
 	- Committed at 2020-06-04T12:26:57+02:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/56bb01ba84f072ac38e9fdea4abdfb13bdd7c906
-
-#### Issue ICU-21149
-
-- ICU-21149: `Integrate LocaleDistanceBuilder into CLDR-to-ICU tooling and run with non-staging data.`
-	- Assigned to David Beaumont
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21149
-
-##### Commits with Issue ICU-21149
-
-- 9c965ff `ICU-21149 Integrating LocaleDistanceBuilder functionality into LDML tooling`
-	- Authored by David Beaumont <dbeaumont@google.com>
-	- Committed at 2020-08-19T18:42:27+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/9c965ff7570fa8ee209ee628133c9146a4f78722
-
-- 03bb079 `ICU-21149 Adding a helper to allow simpler debugging of mappers.`
-	- Authored by David Beaumont <dbeaumont@google.com>
-	- Committed at 2020-06-16T00:53:48+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/03bb079d3f990d5b0a61f7c2e5c8e5b18df1f016
-
-#### Issue ICU-21178
-
-- ICU-21178: `Rbbitst.txt seems to have dropped trailing whitespace on a grapheme cluster test pulled from the CLDR`
-	- Assigned to Andy Heninger
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21178
-
-##### Commits with Issue ICU-21178
-
-- 895aff3 `ICU-21178 Add check for corrupt rbbitst.txt data.`
-	- Authored by Andy Heninger <andy.heninger@gmail.com>
-	- Committed at 2020-07-24T15:16:12-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/895aff3bff8f5ea1560cc7f5e5aaea17f5815bbc
-
-- f917c43 `ICU-21178 Adding the trailing space back into two RBBI test cases.`
-	- Authored by Michael Block <mikamikem457@gmail.com>
-	- Committed at 2020-07-07T16:05:05-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/f917c43cf153bfca7ffd60fc1cdcbb32360967ce
-
-#### Issue ICU-21192
-
-- ICU-21192: `Make Unit Identifiers spec-compliant`
-	- Assigned to Hugo van der Merwe
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21192
-
-##### Commits with Issue ICU-21192
-
-- e734111 `ICU-21192 MeasureUnit Identifier spec compliance: s/p/pow/`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-07-16T01:58:32+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/e734111ee5bcde609f7cb419d0c51bfd9957cb71
 
 #### Issue ICU-21248
 
@@ -495,6 +334,21 @@ Tip: Consider closing the ticket if it is fixed.
 	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21249
 
 ##### Commits with Issue ICU-21249
+
+- 75e7e0b `ICU-21249 Change AppVeyor to not use parallel build due to Cygwin stability issues.`
+	- Authored by Jeff Genovy <29107334+jefgen@users.noreply.github.com>
+	- Committed at 2020-09-30T15:06:48-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/75e7e0bb08121fd90b0704d4b6dc54d99902c4ca
+
+- 8caba0e `ICU-21249 Fixed some coding problems found by Spotbugs`
+	- Authored by Yoshito Umaoka <yumaoka@users.noreply.github.com>
+	- Committed at 2020-09-30T15:55:29-04:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/8caba0e6c96be7850e0c13eecd1a142f8938e670
+
+- 54e7bac `ICU-21249 Fixing java/javadoc compiler warnings.`
+	- Authored by yumaoka <y.umaoka@gmail.com>
+	- Committed at 2020-09-30T14:10:10-04:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/54e7bace04bd661676ea3290dc14bacfec06950e
 
 - 61f0e16 `ICU-21249 Fixing javadoc errors`
 	- Authored by yumaoka <y.umaoka@gmail.com>
@@ -631,32 +485,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-08-26T19:09:54-05:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/4767be7f4ff361612a5d62caa92884cfa9d8c224
 
-#### Issue ICU-21251
-
-- ICU-21251: `deploy icu4j and "utilities.jar" to Github maven on tag`
-	- No assignee!
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21251
-
-##### Commits with Issue ICU-21251
-
-- e3a43c7 `ICU-21251 release icu4j.jar/utilities.jar to GH Maven`
-	- Authored by Steven R. Loomis <srl295@gmail.com>
-	- Committed at 2020-09-21T15:32:30-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/e3a43c7fb8df41d353e10dfeaff61346823805c2
-
-#### Issue ICU-21254
-
-- ICU-21254: `Cannot parse plural rules with 'e' for suppressed exponent`
-	- Assigned to Elango Cheran
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21254
-
-##### Commits with Issue ICU-21254
-
-- cb7f197 `ICU-21254 Add plural rule parsing for exponent operand in C++`
-	- Authored by Elango Cheran <elango@unicode.org>
-	- Committed at 2020-09-03T09:17:15-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/cb7f19782183968b43f59ee05c5656e73f0748d8
-
 #### Issue ICU-21258
 
 - ICU-21258: `StandardPlural cannot handle plural keywords '1' or '0'`
@@ -669,6 +497,19 @@ Tip: Consider closing the ticket if it is fixed.
 	- Authored by Shane F. Carr <shane@unicode.org>
 	- Committed at 2020-09-03T16:17:40-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/4f18ef2ef857738e977c211873a7b157bcdb87ea
+
+#### Issue ICU-21266
+
+- ICU-21266: `Improve NumberFormatter .unit().perUnit() and skeleton behaviour`
+	- Assigned to Hugo van der Merwe
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21266
+
+##### Commits with Issue ICU-21266
+
+- a84fdd0 `ICU-21266 Support toSkeleton() for all functional Unit Formatters`
+	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
+	- Committed at 2020-10-01T02:51:27+02:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/a84fdd0e903fb20acd93ed186a0da4c0c071a0e6
 
 #### Issue ICU-21270
 
@@ -683,18 +524,18 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-09-22T21:16:12-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/47230019c6e43f5924ca3325aaea3492cfa96a69
 
-#### Issue ICU-21307
+#### Issue ICU-21304
 
-- ICU-21307: `ULocale.java changes for ICU 68 includes code not compatible with Java 7`
-	- Assigned to Yoshito Umaoka
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21307
+- ICU-21304: `ICU4C links need porting to new ICU user guide location`
+	- Assigned to Hugo van der Merwe
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21304
 
-##### Commits with Issue ICU-21307
+##### Commits with Issue ICU-21304
 
-- ad32263 `ICU-21307 Java 7 compatibility support in ULocale.java`
-	- Authored by Yoshito Umaoka <yumaoka@users.noreply.github.com>
-	- Committed at 2020-09-29T20:24:20-04:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/ad32263a23ad0c2b14905a264c65defee15c5517
+- a08ac00 `ICU-21304 Update old userguide links to unicode-org.github.io`
+	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
+	- Committed at 2020-10-01T01:28:05+02:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/a08ac00c6757c117f33c319f50388c869b730bfe
 
 
-## Total Problems: 30
+## Total Problems: 17
