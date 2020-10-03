@@ -317,6 +317,7 @@ public:
      */
     static TimeZone* U_EXPORT2 createDefault(void);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * If the locale contains the timezone keyword, creates a copy of that TimeZone.
      * Otherwise, create the default timezone.
@@ -327,6 +328,7 @@ public:
      * @internal
      */
     static TimeZone* U_EXPORT2 forLocaleOrDefault(const Locale& locale);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Sets the default time zone (i.e., what's returned by createDefault()) to be the

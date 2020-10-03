@@ -1309,13 +1309,13 @@ class U_I18N_API Grouper : public UMemory {
               fGrouping2(grouping2),
               fMinGrouping(minGrouping),
               fStrategy(strategy) {}
-#endif  // U_HIDE_INTERNAL_API
 
     /** @internal */
     int16_t getPrimary() const;
 
     /** @internal */
     int16_t getSecondary() const;
+#endif  // U_HIDE_INTERNAL_API
 
   private:
     /**
@@ -1379,10 +1379,10 @@ class U_I18N_API Padder : public UMemory {
 
     /** @internal */
     static Padder codePoints(UChar32 cp, int32_t targetWidth, UNumberFormatPadPosition position);
-#endif  // U_HIDE_INTERNAL_API
 
     /** @internal */
     static Padder forProperties(const DecimalFormatProperties& properties);
+#endif  // U_HIDE_INTERNAL_API
 
   private:
     UChar32 fWidth;  // -3 = error; -2 = bogus; -1 = no padding
