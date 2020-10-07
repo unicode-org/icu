@@ -12,9 +12,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
 subdir = extra/scrptrun
 
@@ -22,7 +19,7 @@ subdir = extra/scrptrun
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = srtest
+TARGET = srtest$(EXEEXT)
 
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir) 
