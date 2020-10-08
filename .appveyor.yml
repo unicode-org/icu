@@ -66,7 +66,7 @@ for:
       - "%CYG_ROOT%\\bin\\sh -lc 'uname -a'"
 
     build_script:
-      - '%CYG_ROOT%\\bin\\bash -lc "cd $(cygpath ${APPVEYOR_BUILD_FOLDER}) && cd icu4c/source && ./runConfigureICU Cygwin && make check"'
+      - '%CYG_ROOT%\\bin\\bash -lc "cd $(cygpath ${APPVEYOR_BUILD_FOLDER}) && cd icu4c/source && ./runConfigureICU Cygwin && make -j2 check"'
 
 #  -
 #    matrix:
