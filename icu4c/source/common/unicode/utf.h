@@ -103,7 +103,7 @@
  * code point values (0..U+10ffff). They are indicated with negative values instead.
  *
  * For more information see the ICU User Guide Strings chapter
- * (http://userguide.icu-project.org/strings).
+ * (https://unicode-org.github.io/icu/userguide/strings).
  *
  * <em>Usage:</em>
  * ICU coding guidelines for if() statements should be followed when using these macros.

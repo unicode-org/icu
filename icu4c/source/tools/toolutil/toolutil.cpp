@@ -33,7 +33,7 @@
 #include "unicode/utypes.h"
 
 #ifndef U_TOOLUTIL_IMPLEMENTATION
-#error U_TOOLUTIL_IMPLEMENTATION not set - must be set for all ICU source files in common/ - see http://userguide.icu-project.org/howtouseicu
+#error U_TOOLUTIL_IMPLEMENTATION not set - must be set for all ICU source files in common/ - see https://unicode-org.github.io/icu/userguide/howtouseicu
 #endif
 
 #if U_PLATFORM_USES_ONLY_WIN32_API

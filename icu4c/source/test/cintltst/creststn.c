@@ -1509,6 +1509,15 @@ static void TestGetVersionColl(){
 
 static void TestResourceBundles()
 {
+    // The test expectation only works if the default locale is not one of the
+    // locale bundle in the testdata which have those info. Therefore, we skip
+    // the test if the default locale is te, sh, mc, or them with subtags.
+    if (    uprv_strncmp(uloc_getDefault(), "te", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "sh", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "mc", 2) == 0) {
+        return;
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     loadTestData(&status);
     if(U_FAILURE(status)) {
@@ -1532,6 +1541,15 @@ static void TestResourceBundles()
 
 static void TestConstruction1()
 {
+    // The test expectation only works if the default locale is not one of the
+    // locale bundle in the testdata which have those info. Therefore, we skip
+    // the test if the default locale is te, sh, mc, or them with subtags.
+    if (    uprv_strncmp(uloc_getDefault(), "te", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "sh", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "mc", 2) == 0) {
+        return;
+    }
+
     UResourceBundle *test1 = 0, *test2 = 0,*empty = 0;
     const UChar *result1, *result2;
     UErrorCode status= U_ZERO_ERROR;

@@ -403,6 +403,7 @@ public class PluralRules implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public static PluralRules newInternal(String description, StandardPluralRanges ranges)
             throws ParseException {
         description = description.trim();

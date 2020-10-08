@@ -12,6 +12,8 @@ import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.RoundingUtils;
+import com.ibm.icu.impl.units.MeasureUnitImpl;
+import com.ibm.icu.impl.units.SingleUnitImpl;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -904,9 +906,6 @@ class NumberSkeletonImpl {
         if (macros.unit != null && GeneratorHelpers.unit(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.perUnit != null && GeneratorHelpers.perUnit(macros, sb)) {
-            sb.append(' ');
-        }
         if (macros.usage != null && GeneratorHelpers.usage(macros, sb)) {
             sb.append(' ');
         }
@@ -1026,6 +1025,7 @@ class NumberSkeletonImpl {
             sb.append(currency.getCurrencyCode());
         }
 
+        // "measure-unit/" is deprecated in favour of "unit/".
         private static void parseMeasureUnitOption(StringSegment segment, MacroProps macros) {
             // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
             // http://unicode.org/reports/tr35/#Validity_Data
@@ -1048,12 +1048,7 @@ class NumberSkeletonImpl {
             throw new SkeletonSyntaxException("Unknown measure unit", segment);
         }
 
-        private static void generateMeasureUnitOption(MeasureUnit unit, StringBuilder sb) {
-            sb.append(unit.getType());
-            sb.append("-");
-            sb.append(unit.getSubtype());
-        }
-
+        // "per-measure-unit/" is deprecated in favour of "unit/".
         private static void parseMeasurePerUnitOption(StringSegment segment, MacroProps macros) {
             // A little bit of a hack: save the current unit (numerator), call the main measure unit
             // parsing code, put back the numerator unit, and put the new unit into per-unit.
@@ -1068,13 +1063,44 @@ class NumberSkeletonImpl {
          * specified via a "unit/" concise skeleton.
          */
         private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
-            MeasureUnit[] units = MeasureUnit.parseCoreUnitIdentifier(segment.asString());
-            if (units == null) {
-                throw new SkeletonSyntaxException("Invalid core unit identifier", segment);
+            MeasureUnitImpl fullUnit;
+            try {
+                fullUnit = MeasureUnitImpl.forIdentifier(segment.asString());
+            } catch (IllegalArgumentException e) {
+                throw new SkeletonSyntaxException("Invalid unit stem", segment);
             }
-            macros.unit = units[0];
-            if (units.length == 2) {
-                macros.perUnit = units[1];
+
+            // Mixed units can only be represented by full MeasureUnit instances, so we
+            // don't split the denominator into macros.perUnit.
+            if (fullUnit.getComplexity() == MeasureUnit.Complexity.MIXED) {
+                macros.unit = fullUnit.build();
+                return;
+            }
+
+            // When we have a built-in unit (e.g. meter-per-second), we don't split it up
+            MeasureUnit testBuiltin = fullUnit.build();
+            if (testBuiltin.getType() != null) {
+                macros.unit = testBuiltin;
+                return;
+            }
+
+            // TODO(ICU-20941): Clean this up.
+            for (SingleUnitImpl subUnit : fullUnit.getSingleUnits()) {
+                if (subUnit.getDimensionality() > 0) {
+                    if (macros.unit == null) {
+                        macros.unit = subUnit.build();
+                    } else {
+                        macros.unit = macros.unit.product(subUnit.build());
+                    }
+                } else {
+                    // It's okay to mutate fullUnit, we're throwing it away after this:
+                    subUnit.setDimensionality(subUnit.getDimensionality() * -1);
+                    if (macros.perUnit == null) {
+                        macros.perUnit = subUnit.build();
+                    } else {
+                        macros.perUnit = macros.perUnit.product(subUnit.build());
+                    }
+                }
             }
         }
 
@@ -1468,24 +1494,17 @@ class NumberSkeletonImpl {
             } else if (macros.unit == MeasureUnit.PERMILLE) {
                 sb.append("permille");
                 return true;
-            } else if (macros.unit.getType() != null) {
-                sb.append("measure-unit/");
-                BlueprintHelpers.generateMeasureUnitOption(macros.unit, sb);
-                return true;
             } else {
-                // TODO(icu-units#35): add support for not-built-in units.
-                throw new UnsupportedOperationException();
-            }
-        }
-
-        private static boolean perUnit(MacroProps macros, StringBuilder sb) {
-            // Per-units are currently expected to be only MeasureUnits.
-            if (macros.perUnit instanceof Currency) {
-                throw new UnsupportedOperationException(
-                        "Cannot generate number skeleton with per-unit that is not a standard measure unit");
-            } else {
-                sb.append("per-measure-unit/");
-                BlueprintHelpers.generateMeasureUnitOption(macros.perUnit, sb);
+                MeasureUnit unit = macros.unit;
+                if (macros.perUnit != null) {
+                    if (macros.perUnit instanceof Currency) {
+                        throw new UnsupportedOperationException(
+                            "Cannot generate number skeleton with per-unit that is not a standard measure unit");
+                    }
+                    unit = unit.product(macros.perUnit.reciprocal());
+                }
+                sb.append("unit/");
+                sb.append(unit.getIdentifier());
                 return true;
             }
         }

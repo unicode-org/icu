@@ -37,6 +37,7 @@ import com.ibm.icu.impl.ICUResourceTableAccess;
 import com.ibm.icu.impl.LocaleIDParser;
 import com.ibm.icu.impl.LocaleIDs;
 import com.ibm.icu.impl.SoftCache;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.impl.locale.BaseLocale;
 import com.ibm.icu.impl.locale.Extension;
@@ -130,16 +131,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * Types for {@link ULocale#getAvailableLocalesByType}
      *
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static enum AvailableType {
         /**
          * Locales that return data when passed to ICU APIs,
          * but not including legacy or alias locales.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         DEFAULT,
 
@@ -159,16 +158,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
          * DEFAULT. To get both sets at the same time, use
          * WITH_LEGACY_ALIASES.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         ONLY_LEGACY_ALIASES,
 
         /**
          * The union of the locales in DEFAULT and ONLY_LEGACY_ALIASES.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         WITH_LEGACY_ALIASES,
     }
@@ -505,6 +502,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @param locale the ULocale to canonicalize
      * @return the ULocale created from the canonical version of the ULocale.
      * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale createCanonical(ULocale locale) {
         return createCanonical(locale.getName());
@@ -854,8 +852,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * Returns a list of all installed locales according to the specified type.
      *
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static Collection<ULocale> getAvailableLocalesByType(AvailableType type) {
         if (type == null) {
@@ -1227,7 +1224,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             this.region = region;
             if (!variants.isEmpty()) {
                 this.variants =
-                    new ArrayList<String>(Arrays.asList(variants.split("_")));
+                    new ArrayList<>(Arrays.asList(variants.split("_")));
             }
             this.extensions = extensions;
         }
@@ -1250,7 +1247,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                     throw new IllegalArgumentException(
                         "Have problem to resolve locale alias of " +
                         lscvToID(language, script, region,
-                            ((variants == null) ? "" : String.join("_", variants))) +
+                            ((variants == null) ? "" : Utility.joinStrings("_", variants))) +
                         extensions);
                 }
                 // Anytime we replace something, we need to start over again.
@@ -1273,7 +1270,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }  // while(1)
             if (changed) {
                 String result =  lscvToID(language, script, region,
-                    ((variants == null) ? "" : String.join("_", variants)));
+                    ((variants == null) ? "" : Utility.joinStrings("_", variants)));
                 if (extensions != null) {
                     result += extensions;
                 }
@@ -1301,10 +1298,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             if (aliasDataIsLoaded) {
                 return;
             }
-            languageAliasMap = new HashMap<String, String>();
-            scriptAliasMap = new HashMap<String, String>();
-            territoryAliasMap = new HashMap<String, List<String>>();
-            variantAliasMap = new HashMap<String, String>();
+            languageAliasMap = new HashMap<>();
+            scriptAliasMap = new HashMap<>();
+            territoryAliasMap = new HashMap<>();
+            variantAliasMap = new HashMap<>();
 
             UResourceBundle metadata = UResourceBundle.getBundleInstance(
                 ICUData.ICU_BASE_NAME, "metadata",
@@ -1349,7 +1346,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                         "Incorrect key [" + aliasFrom + "] in alias:territory.");
                 }
                 territoryAliasMap.put(aliasFrom,
-                    new ArrayList<String>(Arrays.asList(aliasTo.split(" "))));
+                    new ArrayList<>(Arrays.asList(aliasTo.split(" "))));
             }
             for (int i = 0 ; i < variantAlias.getSize(); i++) {
                 UResourceBundle res = variantAlias.get(i);
@@ -1548,7 +1545,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             } else {
                 replacedRegion = replacement.get(0);
             }
-            assert this.region != replacedRegion;
+            assert !this.region.equals(replacedRegion);
             this.region = replacedRegion;
             // The region is changed by data in territory alias.
             return true;
@@ -1561,7 +1558,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 // Found no replacement data for this script.
                 return false;
             }
-            assert this.script != replacement;
+            assert !this.script.equals(replacement);
             this.script = replacement;
             // The script is changed by data in script alias.
             return true;
@@ -1632,7 +1629,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }
         }
 
-        boolean knownCanonicalized = false;
         String name = parser.getName();
         if (!isKnownCanonicalizedLocale(name)) {
             AliasReplacer replacer = new AliasReplacer(
@@ -1673,7 +1669,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 "uk_UA", "ur", "ur_PK", "uz", "uz_UZ", "vi", "vi_VN", "yue", "yue_Hant",
                 "yue_Hant_HK", "yue_HK", "zh", "zh_CN", "zh_Hans", "zh_Hans_CN", "zh_Hant",
                 "zh_Hant_TW", "zh_TW", "zu", "zu_ZA");
-            gKnownCanonicalizedCases = new HashSet<String>(items);
+            gKnownCanonicalizedCases = new HashSet<>(items);
 
         }
         return gKnownCanonicalizedCases.contains(name);

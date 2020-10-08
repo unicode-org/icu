@@ -217,7 +217,7 @@ In the descriptions below, `<ICU>` is the full path name of the ICU directory (t
           environment variable to the out/ or the out/build/ directories, but
           this is generally discouraged because most people set it incorrectly.
           You can view the <a href=
-          "http://userguide.icu-project.org/icudata">ICU Data
+          "https://unicode-org.github.io/icu/userguide/icudata">ICU Data
           Management</a> section of the ICU User's Guide for details.</p>
         </td>
       </tr>
@@ -396,7 +396,7 @@ Depending on the platform and the type of installation, we recommend a small num
     Note: The ICU test suites _can_ be compiled with this setting.
 *   **.dat file:** By default, the ICU data is built into a shared library (DLL). This is convenient because it requires no install-time or runtime configuration, but the library is platform-specific and cannot be modified. A .dat package file makes the opposite trade-off: Platform-portable (except for endianness and charset family, which can be changed with the icupkg tool) and modifiable (also with the icupkg tool). If a path is set, then single data files (e.g., .res files) can be copied to that location to provide new locale data or conversion tables etc.  
     The only drawback with a .dat package file is that the application needs to provide ICU with the file system path to the package file (e.g., by calling `u_setDataDirectory()`) or with a pointer to the data (`udata_setCommonData()`) before other ICU API calls. This is usually easy if ICU is used from an application where `main()` takes care of such initialization. It may be hard if ICU is shipped with another shared library (such as the Xerces-C++ XML parser) which does not control `main()`.  
-    See the [User Guide ICU Data](http://userguide.icu-project.org/icudata) chapter for more details.  
+    See the [User Guide ICU Data](https://unicode-org.github.io/icu/userguide/icudata) chapter for more details.
     If possible, we recommend building the .dat package. Specify `--with-data-packaging=archive` on the configure command line, as in  
     `runConfigureICU Linux --with-data-packaging=archive`  
     (Read the configure script's output for further instructions. On Windows, the Visual Studio build generates both the .dat package and the data DLL.)  
@@ -416,7 +416,7 @@ Depending on the platform and the type of installation, we recommend a small num
 
 #### ICU as a System-Level Library
 
-If ICU is installed as a system-level library, there are further opportunities and restrictions to consider. For details, see the _Using ICU as an Operating System Level Library_ section of the [User Guide ICU Architectural Design](http://userguide.icu-project.org/design) chapter.
+If ICU is installed as a system-level library, there are further opportunities and restrictions to consider. For details, see the _Using ICU as an Operating System Level Library_ section of the [User Guide ICU Architectural Design](https://unicode-org.github.io/icu/userguide/design) chapter.
 
 *   **Data path:** For a system-level library, it is best to load ICU data from the .dat package file because the file system path to the .dat package file can be hardcoded. ICU will automatically set the path to the final install location using U_ICU_DATA_DEFAULT_DIR. Alternatively, you can set `-DICU_DATA_DIR=/path/to/icu/data` when building the ICU code. (Used by source/common/putil.c.)  
     Consider also setting `-DICU_NO_USER_DATA_OVERRIDE` if you do not want the "ICU_DATA" environment variable to be used. (An application can still override the data path via `u_setDataDirectory()` or `udata_setCommonData()`.
@@ -808,7 +808,7 @@ When changes have been made to the standard ICU distribution, it is recommended 
 1.  Add a suffix name to the library names. This can be done with the --with-library-suffix configure option.
 2.  The installation script should install the ICU libraries into the application's directory.
 
-Following these guidelines prevents other applications that use a standard ICU distribution from conflicting with any libraries that you need. On operating systems that do not have a standard C++ ABI (name mangling) for compilers, it is recommended to do this special packaging anyway. More details on customizing ICU are available in the [User's Guide](http://userguide.icu-project.org/). The [ICU Source Code Organization](#SourceCode) section of this readme.html gives a more complete description of the libraries.
+Following these guidelines prevents other applications that use a standard ICU distribution from conflicting with any libraries that you need. On operating systems that do not have a standard C++ ABI (name mangling) for compilers, it is recommended to do this special packaging anyway. More details on customizing ICU are available in the [User's Guide](https://unicode-org.github.io/icu/userguide/). The [ICU Source Code Organization](#SourceCode) section of this readme.html gives a more complete description of the libraries.
 
 <table class="docTable" summary="ICU has several libraries for you to use."><caption>Here is an example of libraries that are frequently packaged.</caption>
 
@@ -834,7 +834,7 @@ Following these guidelines prevents other applications that use a standard ICU d
 
 <td>libicudata.so._XY_._Z_</td>
 
-<td>Data required by the Common and I18n libraries. There are many ways to package and [customize this data](http://userguide.icu-project.org/icudata), but by default this is all you need.</td>
+<td>Data required by the Common and I18n libraries. There are many ways to package and [customize this data](https://unicode-org.github.io/icu/userguide/icudata), but by default this is all you need.</td>
 
 </tr>
 
@@ -982,7 +982,7 @@ If you are using ICU's Makefiles to build ICU on a new platform, there are a few
 
 For some people, it may not be necessary for completely build ICU. Most of the makefiles and build targets are for tools that are used for building ICU's data, and an application's data (when an application uses ICU resource bundles for its data).
 
-Data files can be built on a different platform when both platforms share the same endianness and the same charset family. This assertion does not include platform dependent DLLs/shared/static libraries. For details see the User Guide [ICU Data](http://userguide.icu-project.org/icudata) chapter.
+Data files can be built on a different platform when both platforms share the same endianness and the same charset family. This assertion does not include platform dependent DLLs/shared/static libraries. For details see the User Guide [ICU Data](https://unicode-org.github.io/icu/userguide/icudata) chapter.
 
 ICU 3.6 removes the requirement that ICU be completely built in the native operating environment. It adds the icupkg tool which can be run on any platform to turn binary ICU data files from any one of the three formats into any one of the other data formats. This allows a application to use ICU data built anywhere to be used for any other target platform.
 

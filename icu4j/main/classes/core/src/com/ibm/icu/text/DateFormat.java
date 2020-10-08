@@ -538,29 +538,34 @@ public abstract class DateFormat extends UFormat {
     /**
      * Hour Cycle
      * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
      */
     public enum HourCycle {
         /**
          * hour in am/pm (0~11)
          * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
          */
         HOUR_CYCLE_11,
 
         /**
          * hour in am/pm (1~12)
          * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
          */
         HOUR_CYCLE_12,
 
         /**
          * hour in day (0~23)
          * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
          */
         HOUR_CYCLE_23,
 
         /**
          * hour in day (1~24)
          * @draft ICU 67
+         * @provisional This API might change or be removed in a future release.
          */
         HOUR_CYCLE_24;
     };
@@ -2354,7 +2359,7 @@ public abstract class DateFormat extends UFormat {
             GregorianCalendar cal = new GregorianCalendar();
             CAL_FIELD_COUNT = cal.getFieldCount();
             CAL_FIELDS = new Field[CAL_FIELD_COUNT];
-            FIELD_NAME_MAP = new HashMap<String, Field>(CAL_FIELD_COUNT);
+            FIELD_NAME_MAP = new HashMap<>(CAL_FIELD_COUNT);
         }
 
         // Java fields -------------------

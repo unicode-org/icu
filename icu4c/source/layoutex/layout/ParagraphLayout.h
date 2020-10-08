@@ -46,7 +46,7 @@ U_NAMESPACE_BEGIN
  * You may use this class with the HarfBuzz icu-le-hb wrapper,
  *  see http://www.freedesktop.org/wiki/Software/HarfBuzz/
  *
- *  See http://userguide.icu-project.org/layoutengine for special build instructions.
+ *  See https://unicode-org.github.io/icu/userguide/layoutengine for special build instructions.
  */
 class U_LAYOUTEX_API ParagraphLayout : public UObject
 {

@@ -535,6 +535,23 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.0088 meters",
                 "0 meters");
 
+        // // TODO(ICU-20941): Support formatting for not-built-in units
+        // assertFormatDescending(
+        //         "Hectometers",
+        //         "measure-unit/length-hectometer",
+        //         "unit/hectometer",
+        //         NumberFormatter.with().unit(MeasureUnit.forIdentifier("hectometer")),
+        //         ULocale.ENGLISH,
+        //         "87,650 hm",
+        //         "8,765 ham",
+        //         "876.5 hm",
+        //         "87.65 hm",
+        //         "8.765 hm",
+        //         "0.8765 hm",
+        //         "0.08765 hm",
+        //         "0.008765 hm",
+        //         "0 hm");
+
         assertFormatSingleMeasure(
                 "Meters with Measure Input",
                 "unit-width-full-name",
@@ -654,11 +671,10 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.forLanguageTag("es-MX"),
                 5,
                 "5 a\u00F1os");
-            
-        // TODO(icu-units#35): skeleton generation.
+
         assertFormatSingle(
                 "Mixed unit",
-                null,
+                "unit/yard-and-foot-and-inch",
                 "unit/yard-and-foot-and-inch",
                 NumberFormatter.with()
                         .unit(MeasureUnit.forIdentifier("yard-and-foot-and-inch")),
@@ -666,10 +682,9 @@ public class NumberFormatterApiTest extends TestFmwk {
                 3.65,
                 "3 yd, 1 ft, 11.4 in");
 
-        // TODO(icu-units#35): skeleton generation.
         assertFormatSingle(
                 "Mixed unit, Scientific",
-                null,
+                "unit/yard-and-foot-and-inch E0",
                 "unit/yard-and-foot-and-inch E0",
                 NumberFormatter.with()
                         .unit(MeasureUnit.forIdentifier("yard-and-foot-and-inch"))
@@ -678,10 +693,9 @@ public class NumberFormatterApiTest extends TestFmwk {
                 3.65,
                 "3 yd, 1 ft, 1.14E1 in");
 
-        // TODO(icu-units#35): skeleton generation.
         assertFormatSingle(
                 "Mixed Unit (Narrow Version)",
-                null,
+                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
                 "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
                 NumberFormatter.with()
                         .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
@@ -690,10 +704,9 @@ public class NumberFormatterApiTest extends TestFmwk {
                 4.28571,
                 "4t 285kg 710g");
 
-        // TODO(icu-units#35): skeleton generation.
         assertFormatSingle(
                 "Mixed Unit (Short Version)",
-                null,
+                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
                 "unit/metric-ton-and-kilogram-and-gram unit-width-short",
                 NumberFormatter.with()
                         .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
@@ -702,10 +715,9 @@ public class NumberFormatterApiTest extends TestFmwk {
                 4.28571,
                 "4 t, 285 kg, 710 g");
 
-        // TODO(icu-units#35): skeleton generation.
         assertFormatSingle(
                 "Mixed Unit (Full Name Version)",
-                null,
+                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
                 "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
                 NumberFormatter.with()
                         .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
@@ -754,8 +766,8 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Testing \"1 foot 12 inches\"",
-                null,
-                "unit/foot-and-inch",
+                "unit/foot-and-inch @### unit-width-full-name",
+                "unit/foot-and-inch @### unit-width-full-name",
                 NumberFormatter.with()
                         .unit(MeasureUnit.forIdentifier("foot-and-inch"))
                         .precision(Precision.maxSignificantDigits(4))
@@ -763,6 +775,24 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-US"),
                 1.9999,
                 "2 feet, 0 inches");
+
+        assertFormatSingle(
+                "Negative numbers: temperature",
+                "measure-unit/temperature-celsius",
+                "unit/celsius",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("celsius")),
+                new ULocale("nl-NL"),
+                -6.5,
+                "-6,5\u00B0C");
+
+        assertFormatSingle(
+                "Negative numbers: time",
+                "unit/hour-and-minute-and-second",
+                "unit/hour-and-minute-and-second",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("hour-and-minute-and-second")),
+                new ULocale("de-DE"),
+                -1.24,
+                "-1 Std., 14 Min. und 24 Sek.");
     }
 
 
@@ -772,7 +802,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         assertFormatDescending(
                 "Meters Per Second Short (unit that simplifies) and perUnit method",
                 "measure-unit/length-meter per-measure-unit/duration-second",
-                "~unit/meter-per-second", // does not round-trip to the full skeleton above
+                "unit/meter-per-second",
                 NumberFormatter.with().unit(MeasureUnit.METER).perUnit(MeasureUnit.SECOND),
                 ULocale.ENGLISH,
                 "87,650 m/s",
@@ -785,16 +815,21 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.008765 m/s",
                 "0 m/s");
 
-        // TODO(icu-units#35): does not normalize as desired: while "unit/*" does
-        // get split into unit/perUnit, ".unit(*)" and "measure-unit/*" don't:
-        assertFormatSingle(
-                "Built-in unit, meter-per-second",
+        assertFormatDescending(
+                "Meters Per Second Short, built-in m/s",
                 "measure-unit/speed-meter-per-second",
-                "~unit/meter-per-second",
+                "unit/meter-per-second",
                 NumberFormatter.with().unit(MeasureUnit.METER_PER_SECOND),
-                new ULocale("en-GB"),
-                2.4,
-                "2.4 m/s");
+                ULocale.ENGLISH,
+                "87,650 m/s",
+                "8,765 m/s",
+                "876.5 m/s",
+                "87.65 m/s",
+                "8.765 m/s",
+                "0.8765 m/s",
+                "0.08765 m/s",
+                "0.008765 m/s",
+                "0 m/s");
 
         assertFormatDescending(
                 "Pounds Per Square Mile Short (secondary unit has per-format)",
@@ -845,23 +880,57 @@ public class NumberFormatterApiTest extends TestFmwk {
         //         "0.008765 J/fur",
         //         "0 J/fur");
 
-        // TODO(icu-units#59): THIS UNIT TEST DEMONSTRATES UNDESIRABLE BEHAVIOUR!
-        // When specifying built-in types, one can give both a unit and a perUnit.
-        // Resolving to a built-in unit does not always work.
-        //
-        // (Unit-testing philosophy: do we leave this enabled to demonstrate current
-        // behaviour, and changing behaviour in the future? Or comment it out to
-        // avoid asserting this is "correct"?)
+        assertFormatDescending(
+                "Pounds per Square Inch: composed",
+                "measure-unit/force-pound-force per-measure-unit/area-square-inch",
+                "unit/pound-force-per-square-inch",
+                NumberFormatter.with().unit(MeasureUnit.POUND_FORCE).perUnit(MeasureUnit.SQUARE_INCH),
+                ULocale.ENGLISH,
+                "87,650 psi",
+                "8,765 psi",
+                "876.5 psi",
+                "87.65 psi",
+                "8.765 psi",
+                "0.8765 psi",
+                "0.08765 psi",
+                "0.008765 psi",
+                "0 psi");
+
+        assertFormatDescending(
+                "Pounds per Square Inch: built-in",
+                "measure-unit/force-pound-force per-measure-unit/area-square-inch",
+                "unit/pound-force-per-square-inch",
+                NumberFormatter.with().unit(MeasureUnit.POUND_PER_SQUARE_INCH),
+                ULocale.ENGLISH,
+                "87,650 psi",
+                "8,765 psi",
+                "876.5 psi",
+                "87.65 psi",
+                "8.765 psi",
+                "0.8765 psi",
+                "0.08765 psi",
+                "0.008765 psi",
+                "0 psi");
+
         assertFormatSingle(
-                "DEMONSTRATING BAD BEHAVIOUR, TODO(icu-units#59)",
+                "m/s/s simplifies to m/s^2",
                 "measure-unit/speed-meter-per-second per-measure-unit/duration-second",
-                "measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+                "unit/meter-per-square-second",
                 NumberFormatter.with()
                         .unit(MeasureUnit.METER_PER_SECOND)
                         .perUnit(MeasureUnit.SECOND),
                 new ULocale("en-GB"),
                 2.4,
-                "2.4 m/s/s");
+                "2.4 m/s\u00B2");
+
+        assertFormatSingle(
+                "Negative numbers: acceleration",
+                "measure-unit/acceleration-meter-per-square-second",
+                "unit/meter-per-second-second",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("meter-per-pow2-second")),
+                new ULocale("af-ZA"),
+                -9.81,
+                "-9,81 m/s\u00B2");
 
         // Testing the rejection of invalid specifications
 
@@ -880,21 +949,124 @@ public class NumberFormatterApiTest extends TestFmwk {
             // Pass
         }
 
-        // .perUnit() may only be passed a built-in type, "square-second" is not a
-        // built-in type.
+        // .perUnit() may only be passed a built-in type, or something that
+        // combines to a built-in type together with .unit().
         nf = NumberFormatter.with()
-                .unit(MeasureUnit.METER)
+                .unit(MeasureUnit.FURLONG)
                 .perUnit(MeasureUnit.forIdentifier("square-second"))
                 .locale(new ULocale("en-GB"));
-
         try {
             nf.format(2.4d);
             fail("Expected failure, got: " + nf.format(2.4d) + ".");
         } catch (UnsupportedOperationException e) {
             // pass
         }
+        // As above, "square-second" is not a built-in type, however this time,
+        // meter-per-square-second is a built-in type.
+        assertFormatSingle(
+                "meter per square-second works as a composed unit",
+                "measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+                "unit/meter-per-square-second",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.METER)
+                        .perUnit(MeasureUnit.forIdentifier("square-second")),
+                new ULocale("en-GB"),
+                2.4,
+                "2.4 m/s\u00B2");
     }
 
+    @Test
+    public void unitSkeletons() {
+        Object[][] cases = {
+            {"old-form built-in compound unit",     //
+             "measure-unit/speed-meter-per-second", //
+             "unit/meter-per-second"},
+
+            {"old-form compound construction, converts to built-in",       //
+             "measure-unit/length-meter per-measure-unit/duration-second", //
+             "unit/meter-per-second"},
+
+            {"old-form compound construction which does not simplify to a built-in", //
+             "measure-unit/energy-joule per-measure-unit/length-meter",              //
+             "unit/joule-per-meter"},
+
+            {"old-form compound-compound ugliness resolves neatly",                  //
+             "measure-unit/speed-meter-per-second per-measure-unit/duration-second", //
+             "unit/meter-per-square-second"},
+
+            {"short-form built-in units stick with the built-in", //
+             "unit/meter-per-second",                             //
+             "unit/meter-per-second"},
+
+            {"short-form compound units stay as is", //
+             "unit/square-meter-per-square-meter",  //
+             "unit/square-meter-per-square-meter"},
+
+            {"short-form compound units stay as is", //
+             "unit/joule-per-furlong",              //
+             "unit/joule-per-furlong"},
+
+            {"short-form that doesn't consist of built-in units", //
+             "unit/hectometer-per-second",                        //
+             "unit/hectometer-per-second"},
+
+            {"short-form that doesn't consist of built-in units", //
+             "unit/meter-per-hectosecond",                        //
+             "unit/meter-per-hectosecond"},
+
+            // // TODO: binary prefixes not supported yet!
+            // {"Round-trip example from icu-units#35", //
+            //  "unit/kibijoule-per-furlong",           //
+            //  "unit/kibijoule-per-furlong"},
+        };
+        for (Object[] cas : cases) {
+            String msg = (String)cas[0];
+            String inputSkeleton = (String)cas[1];
+            String normalizedSkeleton = (String)cas[2];
+            UnlocalizedNumberFormatter nf = NumberFormatter.forSkeleton(inputSkeleton);
+            assertEquals(msg, normalizedSkeleton, nf.toSkeleton());
+        }
+
+        Object[][] failCases = {
+            {"Parsing measure-unit/* results in failure if not built-in unit",
+             "measure-unit/hectometer", //
+             true,                      //
+             false},
+
+            {"Parsing per-measure-unit/* results in failure if not built-in unit",
+             "measure-unit/meter per-measure-unit/hectosecond", //
+             true,                                              //
+             false},
+        };
+        for (Object[] cas : failCases) {
+            String msg = (String)cas[0];
+            String inputSkeleton = (String)cas[1];
+            boolean forSkeletonExpectFailure = (boolean)cas[2];
+            boolean toSkeletonExpectFailure = (boolean)cas[3];
+            UnlocalizedNumberFormatter nf = null;
+            try {
+                nf = NumberFormatter.forSkeleton(inputSkeleton);
+                if (forSkeletonExpectFailure) {
+                    fail("forSkeleton() should have failed: " + msg);
+                }
+            } catch (Exception e) {
+                if (!forSkeletonExpectFailure) {
+                    fail("forSkeleton() should not have failed: " + msg);
+                }
+                continue;
+            }
+            try {
+                nf.toSkeleton();
+                if (toSkeletonExpectFailure) {
+                    fail("toSkeleton() should have failed: " + msg);
+                }
+            } catch (Exception e) {
+                if (!toSkeletonExpectFailure) {
+                    fail("toSkeleton() should not have failed: " + msg);
+                }
+            }
+        }
+    }
 
     @Test
     public void unitUsage() {
@@ -1131,6 +1303,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                "0E0 square centimetres");
 
         assertFormatSingle(
+                "Negative numbers: minute-and-second",
+                "measure-unit/duration-second usage/media",
+                "unit/second usage/media",
+                NumberFormatter.with().unit(MeasureUnit.SECOND).usage("media"),
+                new ULocale("nl-NL"),
+                -77.7,
+                "-1 min, 18 sec");
+
+        assertFormatSingle(
                 "Rounding Mode propagates: rounding down",
                 "usage/road measure-unit/length-centimeter rounding-mode-floor",
                 "usage/road unit/centimeter rounding-mode-floor",
@@ -1158,7 +1339,6 @@ public class NumberFormatterApiTest extends TestFmwk {
         // vehicle-fuel triggering inversion conversion code. Test with 0 too,
         // to see divide-by-zero behaviour.
     }
-
 
     @Test
     public void unitUsageErrorCodes() {
@@ -3411,12 +3591,33 @@ public class NumberFormatterApiTest extends TestFmwk {
         }
 
         {
-            String message = "Measure unit field position with prefix and suffix";
+            String message = "Measure unit field position with prefix and suffix, composed m/s";
             FormattedNumber result = assertFormatSingle(
                     message,
                     "measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
-                    "~unit/meter-per-second unit-width-full-name", // does not round-trip to the full skeleton above
+                    "measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
                     NumberFormatter.with().unit(MeasureUnit.METER).perUnit(MeasureUnit.SECOND).unitWidth(UnitWidth.FULL_NAME),
+                    new ULocale("ky"), // locale with the interesting data
+                    68,
+                    "секундасына 68 метр");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.MEASURE_UNIT, 0, 11},
+                    {NumberFormat.Field.INTEGER, 12, 14},
+                    {NumberFormat.Field.MEASURE_UNIT, 15, 19}};
+            assertNumberFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Measure unit field position with prefix and suffix, built-in m/s";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "measure-unit/speed-meter-per-second unit-width-full-name",
+                    "unit/meter-per-second unit-width-full-name",
+                    NumberFormatter.with().unit(MeasureUnit.METER_PER_SECOND).unitWidth(UnitWidth.FULL_NAME),
                     new ULocale("ky"), // locale with the interesting data
                     68,
                     "секундасына 68 метр");

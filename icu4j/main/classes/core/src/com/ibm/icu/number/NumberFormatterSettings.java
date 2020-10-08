@@ -225,7 +225,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *
      * The default is HALF_EVEN. For more information on rounding mode, see the ICU userguide here:
      *
-     * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes
      *
      * @param roundingMode
      *            The rounding mode to use.
@@ -501,14 +501,13 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * `Locale` and the unit quantity. For example, formatting length
      * measurements specified in meters:
      *
-     * <p>
      * <pre>
      * NumberFormatter.with().usage("person").unit(MeasureUnit.METER).locale(new ULocale("en-US"))
      * </pre>
      * <ul>
      *   <li> When formatting 0.25, the output will be "10 inches".
      *   <li> When formatting 1.50, the output will be "4 feet and 11 inches".
-     * </li>
+     * </ul>
      *
      * <p>
      * The input unit specified via unit() determines the type of measurement

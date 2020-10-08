@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.number.Precision;
+import com.ibm.icu.util.Measure;
+import com.ibm.icu.util.MeasureUnit;
+
 /**
  * Converts from single or compound unit to single, compound or mixed units.
  * For example, from `meter` to `foot+inch`.
@@ -128,6 +134,13 @@ public class ComplexUnitsConverter {
      * other elements are floored to the nearest integer
      */
     public List<Measure> convert(BigDecimal quantity, Precision rounder) {
+        List<Measure> result = new ArrayList<>(unitConverters_.size());
+        BigDecimal sign = BigDecimal.ONE;
+        if (quantity.compareTo(BigDecimal.ZERO) < 0) {
+            quantity = quantity.abs();
+            sign = sign.negate();
+        }
+
         // For N converters:
         // - the first converter converts from the input unit to the largest
         //   unit,
@@ -207,9 +220,9 @@ public class ComplexUnitsConverter {
         // Package values into Measure instances in result:
         for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
             if (i < n - 1) {
-                result.set(this.units_.get(i).index, new Measure(intValues.get(i), units_.get(i).build()));
+                result.set (units_.get(i).index , new Measure(intValues.get(i).multiply(sign), units_.get(i).build()));
             } else {
-                result.set(this.units_.get(i).index, new Measure(quantity, units_.get(i).build()));
+                result.set (units_.get(i).index , new Measure(quantity.multiply(sign), units_.get(i).build()));
             }
         }
 

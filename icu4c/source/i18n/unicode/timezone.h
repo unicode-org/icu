@@ -317,6 +317,7 @@ public:
      */
     static TimeZone* U_EXPORT2 createDefault(void);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * If the locale contains the timezone keyword, creates a copy of that TimeZone.
      * Otherwise, create the default timezone.
@@ -327,6 +328,7 @@ public:
      * @internal
      */
     static TimeZone* U_EXPORT2 forLocaleOrDefault(const Locale& locale);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Sets the default time zone (i.e., what's returned by createDefault()) to be the
@@ -403,7 +405,7 @@ public:
     *
     * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
     * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
-    * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+    * please read the ICU user guide section <a href="https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data">
     * Updating the Time Zone Data</a>.
     *
     * @param id        A system time zone ID.
@@ -431,7 +433,7 @@ public:
     *
     * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
     * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
-    * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+    * please read the ICU user guide section <a href="https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data">
     * Updating the Time Zone Data</a>.
     *
     * @param winid     A Windows time zone ID.

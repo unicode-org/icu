@@ -843,10 +843,6 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
-    if (GeneratorHelpers::perUnit(macros, sb, status)) {
-        sb.append(u' ');
-    }
-    if (U_FAILURE(status)) { return; }
     if (GeneratorHelpers::usage(macros, sb, status)) {
         sb.append(u' ');
     }
@@ -1025,14 +1021,6 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     status = U_NUMBER_SKELETON_SYNTAX_ERROR;
 }
 
-void blueprint_helpers::generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb,
-                                                  UErrorCode&) {
-    // Need to do char <-> UChar conversion...
-    sb.append(UnicodeString(measureUnit.getType(), -1, US_INV));
-    sb.append(u'-');
-    sb.append(UnicodeString(measureUnit.getSubtype(), -1, US_INV));
-}
-
 void blueprint_helpers::parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros,
                                                   UErrorCode& status) {
     // A little bit of a hack: save the current unit (numerator), call the main measure unit
@@ -1059,15 +1047,21 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
         return;
     }
 
-    // Mixed units can only be represented by a full MeasureUnit instances, so
-    // we ignore macros.perUnit.
+    // Mixed units can only be represented by full MeasureUnit instances, so we
+    // don't split the denominator into macros.perUnit.
     if (fullUnit.complexity == UMEASURE_UNIT_MIXED) {
         macros.unit = std::move(fullUnit).build(status);
         return;
     }
 
-    // TODO(ICU-20941): Clean this up (see also
-    // https://github.com/icu-units/icu/issues/35).
+    // When we have a built-in unit (e.g. meter-per-second), we don't split it up
+    MeasureUnit testBuiltin = fullUnit.copy(status).build(status);
+    if (uprv_strcmp(testBuiltin.getType(), "") != 0) {
+        macros.unit = std::move(testBuiltin);
+        return;
+    }
+
+    // TODO(ICU-20941): Clean this up.
     for (int32_t i = 0; i < fullUnit.units.length(); i++) {
         SingleUnitImpl* subUnit = fullUnit.units[i];
         if (subUnit->dimensionality > 0) {
@@ -1523,28 +1517,17 @@ bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorC
     } else if (utils::unitIsPermille(macros.unit)) {
         sb.append(u"permille", -1);
         return true;
-    } else if (uprv_strcmp(macros.unit.getType(), "") != 0) {
-        sb.append(u"measure-unit/", -1);
-        blueprint_helpers::generateMeasureUnitOption(macros.unit, sb, status);
-        return true;
     } else {
-        // TODO(icu-units#35): add support for not-built-in units.
-        status = U_UNSUPPORTED_ERROR;
-        return false;
-    }
-}
-
-bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    // Per-units are currently expected to be only MeasureUnits.
-    if (utils::unitIsBaseUnit(macros.perUnit)) {
-        // Default value: ok to ignore
-        return false;
-    } else if (utils::unitIsCurrency(macros.perUnit)) {
-        status = U_UNSUPPORTED_ERROR;
-        return false;
-    } else {
-        sb.append(u"per-measure-unit/", -1);
-        blueprint_helpers::generateMeasureUnitOption(macros.perUnit, sb, status);
+        MeasureUnit unit = macros.unit;
+        if (utils::unitIsCurrency(macros.perUnit)) {
+            status = U_UNSUPPORTED_ERROR;
+            return false;
+        }
+        if (!utils::unitIsBaseUnit(macros.perUnit)) {
+            unit = unit.product(macros.perUnit.reciprocal(status), status);
+        }
+        sb.append(u"unit/", -1);
+        sb.append(unit.getIdentifier());
         return true;
     }
 }

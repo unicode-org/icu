@@ -127,6 +127,7 @@ public class FormattedNumber implements FormattedValue {
      *
      * @return `MeasureUnit`.
      * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
      */
     public MeasureUnit getOutputUnit() {
         return this.outputUnit;

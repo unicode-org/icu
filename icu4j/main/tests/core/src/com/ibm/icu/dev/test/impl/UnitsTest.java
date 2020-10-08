@@ -2,6 +2,19 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
@@ -11,16 +24,6 @@ import com.ibm.icu.impl.units.UnitConverter;
 import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-import org.junit.Test;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 
 public class UnitsTest {
@@ -238,13 +241,14 @@ public class UnitsTest {
         }
 
         String codePage = "UTF-8";
-        BufferedReader f = TestUtil.getDataReader("cldr/units/unitsTest.txt", codePage);
         ArrayList<TestCase> tests = new ArrayList<>();
-        while (true) {
-            String line = f.readLine();
-            if (line == null) break;
-            if (line.isEmpty() || line.startsWith("#")) continue;
-            tests.add(new TestCase(line));
+        try (BufferedReader f = TestUtil.getDataReader("cldr/units/unitsTest.txt", codePage)) {
+            while (true) {
+                String line = f.readLine();
+                if (line == null) break;
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                tests.add(new TestCase(line));
+            }
         }
 
         ConversionRates conversionRates = new ConversionRates();
@@ -294,6 +298,7 @@ public class UnitsTest {
             /**
              * Test Case Data
              */
+            @SuppressWarnings("unused")
             String category;
             String usage;
             String region;
@@ -346,13 +351,15 @@ public class UnitsTest {
 
         // Read Test data from the unitPreferencesTest
         String codePage = "UTF-8";
-        BufferedReader f = TestUtil.getDataReader("cldr/units/unitPreferencesTest.txt", codePage);
         ArrayList<TestCase> tests = new ArrayList<>();
-        while (true) {
-            String line = f.readLine();
-            if (line == null) break;
-            if (line.isEmpty() || line.startsWith("#")) continue;
-            tests.add(new TestCase(line));
+
+        try (BufferedReader f = TestUtil.getDataReader("cldr/units/unitPreferencesTest.txt", codePage)) {
+            while (true) {
+                String line = f.readLine();
+                if (line == null) break;
+                if (line.isEmpty() || line.startsWith("#")) continue;
+                tests.add(new TestCase(line));
+            }
         }
 
         for (TestCase testCase :

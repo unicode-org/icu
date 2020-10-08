@@ -46,6 +46,7 @@ U_NAMESPACE_BEGIN
 
 class Hashtable;
 class IFixedDecimal;
+class FixedDecimal;
 class RuleChain;
 class PluralRuleParser;
 class PluralKeywordEnumeration;
@@ -474,6 +475,32 @@ public:
     int32_t getSamples(const UnicodeString &keyword,
                        double *dest, int32_t destCapacity,
                        UErrorCode& status);
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Internal-only function that returns FixedDecimals instead of doubles.
+     *
+     * Returns sample values for which select() would return the keyword.  If
+     * the keyword is unknown, returns no values, but this is not an error.
+     *
+     * The number of returned values is typically small.
+     *
+     * @param keyword      The keyword.
+     * @param dest         Array into which to put the returned values.  May
+     *                     be NULL if destCapacity is 0.
+     * @param destCapacity The capacity of the array, must be at least 0.
+     * @param status       The error code.
+     * @return             The count of values written.
+     *                     If more than destCapacity samples are available, then
+     *                     only destCapacity are written, and destCapacity is returned as the count,
+     *                     rather than setting a U_BUFFER_OVERFLOW_ERROR.
+     *                     (The actual number of keyword values could be unlimited.)
+     * @internal
+     */
+    int32_t getSamples(const UnicodeString &keyword,
+                       FixedDecimal *dest, int32_t destCapacity,
+                       UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Returns true if the given keyword is defined in this

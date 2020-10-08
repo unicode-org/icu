@@ -2,15 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * `UnitsRouter` responsible for converting from a single unit (such as `meter` or `meter-per-second`) to
@@ -86,7 +86,8 @@ public class UnitsRouter {
         ConverterPreference converterPreference = null;
         for (ConverterPreference itr : converterPreferences_) {
             converterPreference = itr;
-            if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
+            if (converterPreference.converter.greaterThanOrEqual(quantity.abs(),
+                                                                 converterPreference.limit)) {
                 break;
             }
         }

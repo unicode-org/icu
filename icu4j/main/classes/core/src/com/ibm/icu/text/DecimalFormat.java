@@ -131,8 +131,8 @@ import com.ibm.icu.util.ULocale.Category;
  * <p>It is also possible to specify the <em>rounding mode</em> to use. The default rounding mode is
  * "half even", which rounds numbers to their closest increment, with ties broken in favor of
  * trailing numbers being even. For more information, see {@link #setRoundingMode} and <a
- * href="http://userguide.icu-project.org/formatparse/numbers/rounding-modes">the ICU User
- * Guide</a>.
+ * href="https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes">the ICU
+ * User Guide</a>.
  *
  * <h3>Pattern Strings</h3>
  *
@@ -1272,8 +1272,8 @@ public class DecimalFormat extends NumberFormat {
    * number, and rounds to the closest even number if at the midpoint.
    *
    * <p>For more detail on rounding modes, see <a
-   * href="http://userguide.icu-project.org/formatparse/numbers/rounding-modes">the ICU User
-   * Guide</a>.
+   * href="https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes">the ICU
+   * User Guide</a>.
    *
    * <p>For backwards compatibility, the rounding mode is specified as an int argument, which can be
    * from either the constants in {@link BigDecimal} or the ordinal value of {@link RoundingMode}.

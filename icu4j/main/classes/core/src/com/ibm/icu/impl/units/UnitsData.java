@@ -4,14 +4,14 @@
 
 package com.ibm.icu.impl.units;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.UResourceBundle;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Responsible for all units data operations (retriever, analysis, extraction certain data ... etc.).
@@ -55,7 +55,7 @@ public class UnitsData {
     }
 
     /**
-     * @param measureUnit
+     * @param measureUnit An instance of MeasureUnitImpl.
      * @return the corresponding category.
      */
     public String getCategory(MeasureUnitImpl measureUnit) {
@@ -168,7 +168,7 @@ public class UnitsData {
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-            assert (key.toString() == Constants.CATEGORY_TABLE_NAME);
+            assert (key.toString().equals(Constants.CATEGORY_TABLE_NAME));
             assert (value.getType() == UResourceBundle.TABLE);
 
             UResource.Table categoryTable = value.getTable();

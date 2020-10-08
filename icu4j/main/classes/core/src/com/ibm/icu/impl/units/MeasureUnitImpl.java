@@ -2,6 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
@@ -57,7 +62,7 @@ public class MeasureUnitImpl {
      *
      * @param identifier The unit identifier string.
      * @return A newly parsed object.
-     * @throws <code>IllegalArgumentException</code> in case of incorrect/non-parsed identifier.
+     * @throws IllegalArgumentException in case of incorrect/non-parsed identifier.
      */
     public static MeasureUnitImpl forIdentifier(String identifier) {
         return UnitsParser.parseForIdentifier(identifier);
@@ -72,11 +77,13 @@ public class MeasureUnitImpl {
         return result;
     }
 
-    public MeasureUnitImpl clone() {
+    public MeasureUnitImpl copy() {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.complexity = this.complexity;
         result.identifier = this.identifier;
-        result.singleUnits = (ArrayList<SingleUnitImpl>) this.singleUnits.clone();
+        for (SingleUnitImpl single : this.singleUnits) {
+            result.singleUnits.add(single.copy());
+        }
         return result;
     }
 
@@ -120,7 +127,7 @@ public class MeasureUnitImpl {
             return result;
         }
 
-        result.add(this.clone());
+        result.add(this.copy());
         return result;
     }
 
@@ -177,7 +184,7 @@ public class MeasureUnitImpl {
         }
 
         // Add a copy of singleUnit
-        this.singleUnits.add(singleUnit.clone());
+        this.singleUnits.add(singleUnit.copy());
 
         // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits are more
         // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
@@ -206,7 +213,7 @@ public class MeasureUnitImpl {
             return new SingleUnitImpl();
         }
         if (this.singleUnits.size() == 1) {
-            return this.singleUnits.get(0).clone();
+            return this.singleUnits.get(0).copy();
         }
 
         throw new UnsupportedOperationException();
