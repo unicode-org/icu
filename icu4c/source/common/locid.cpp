@@ -1333,7 +1333,10 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
     if (firstSpace != nullptr) {
         // If there are are more than one region in the replacement.
         // We need to check which one match based on the language.
-        Locale l(language, nullptr, script);
+        // Cannot use nullptr for language because that will construct
+        // the default locale, in that case, use "und" to get the correct
+        // locale.
+        Locale l(language == nullptr ? "und" : language, nullptr, script);
         l.addLikelySubtags(status);
         const char* likelyRegion = l.getCountry();
         CharString* item = nullptr;
