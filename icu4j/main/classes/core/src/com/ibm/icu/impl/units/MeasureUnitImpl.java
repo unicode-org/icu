@@ -4,7 +4,6 @@ package com.ibm.icu.impl.units;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 import com.ibm.icu.util.BytesTrie;
@@ -35,7 +34,7 @@ public class MeasureUnitImpl {
      * <p>
      * The "dimensionless" <code>MeasureUnitImpl</code> has an empty <code>singleUnits</code>.
      */
-    private ArrayList<SingleUnitImpl> singleUnits;
+    private final ArrayList<SingleUnitImpl> singleUnits;
 
     public MeasureUnitImpl() {
         singleUnits = new ArrayList<>();
@@ -147,8 +146,7 @@ public class MeasureUnitImpl {
 
         // Find a similar unit that already exists, to attempt to coalesce
         SingleUnitImpl oldUnit = null;
-        for (int i = 0, n = this.singleUnits.size(); i < n; i++) {
-            SingleUnitImpl candidate = this.singleUnits.get(i);
+        for (SingleUnitImpl candidate : this.singleUnits) {
             if (candidate.isCompatibleWith(singleUnit)) {
                 oldUnit = candidate;
                 break;
@@ -226,7 +224,7 @@ public class MeasureUnitImpl {
         }
         if (this.complexity == MeasureUnit.Complexity.COMPOUND) {
             // Note: don't sort a MIXED unit
-            Collections.sort(this.getSingleUnits(), new SingleUnitComparator());
+            this.getSingleUnits().sort(new SingleUnitComparator());
         }
 
         StringBuilder result = new StringBuilder();
@@ -372,34 +370,32 @@ public class MeasureUnitImpl {
     public static class UnitsParser {
         // This used only to not build the trie each time we use the parser
         private volatile static CharsTrie savedTrie = null;
-        private final String[] simpleUnits;
+
         // This trie used in the parsing operation.
-        private CharsTrie trie;
+        private final CharsTrie trie;
+        private final String fSource;
         // Tracks parser progress: the offset into fSource.
         private int fIndex = 0;
         // Set to true when we've seen a "-per-" or a "per-", after which all units
         // are in the denominator. Until we find an "-and-", at which point the
         // identifier is invalid pending TODO(CLDR-13700).
         private boolean fAfterPer = false;
-        private String fSource;
         // If an "-and-" was parsed prior to finding the "single
         //     * unit", sawAnd is set to true. If not, it is left as is.
         private boolean fSawAnd = false;
 
         private UnitsParser(String identifier) {
-            this.simpleUnits = UnitsData.getSimpleUnits();
             this.fSource = identifier;
 
-            if (UnitsParser.savedTrie != null) {
-                try {
-                    this.trie = UnitsParser.savedTrie.clone();
-                } catch (CloneNotSupportedException e) {
-                    throw new ICUCloneNotSupportedException();
-                }
-                return;
+            try {
+                this.trie = UnitsParser.savedTrie.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new ICUCloneNotSupportedException();
             }
+        }
 
-            // Building the trie.
+        static {
+            // Build Units trie.
             CharsTrieBuilder trieBuilder;
             trieBuilder = new CharsTrieBuilder();
 
@@ -432,6 +428,7 @@ public class MeasureUnitImpl {
             }
 
             // Add simple units
+            String[] simpleUnits = UnitsData.getSimpleUnits();
             for (int i = 0; i < simpleUnits.length; i++) {
                 trieBuilder.add(simpleUnits[i], i + UnitsData.Constants.kSimpleUnitOffset);
 
@@ -439,14 +436,7 @@ public class MeasureUnitImpl {
 
             // TODO: Use SLOW or FAST here?
             UnitsParser.savedTrie = trieBuilder.build(StringTrieBuilder.Option.FAST);
-
-            try {
-                this.trie = UnitsParser.savedTrie.clone();
-            } catch (CloneNotSupportedException e) {
-                throw new ICUCloneNotSupportedException();
-            }
         }
-
 
         /**
          * Construct a MeasureUnit from a CLDR Unit Identifier, defined in UTS 35.
@@ -607,7 +597,7 @@ public class MeasureUnitImpl {
                         break;
 
                     case TYPE_SIMPLE_UNIT:
-                        result.setSimpleUnit(token.getSimpleUnitIndex(), simpleUnits);
+                        result.setSimpleUnit(token.getSimpleUnitIndex(), UnitsData.getSimpleUnits());
                         return result;
 
                     default:
@@ -746,7 +736,7 @@ public class MeasureUnitImpl {
     }
 
     static class MeasureUnitImplComparator implements Comparator<MeasureUnitImpl> {
-        private ConversionRates conversionRates;
+        private final ConversionRates conversionRates;
 
         public MeasureUnitImplComparator(ConversionRates conversionRates) {
             this.conversionRates = conversionRates;
