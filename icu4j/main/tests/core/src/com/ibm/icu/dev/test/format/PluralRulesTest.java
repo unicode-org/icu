@@ -399,7 +399,10 @@ public class PluralRulesTest extends TestFmwk {
                             }
                             String old = collisionTest.get(item);
                             if (old != null) {
-                                errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
+                                if (!locale.getLanguage().equals("fr") ||
+                                        !logKnownIssue("21328", "fr Non-unique rules: 1e6 => one & many")) {
+                                    errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
+                                }
                                 rule.select(item);
                             } else {
                                 collisionTest.put(item, foundKeyword);
