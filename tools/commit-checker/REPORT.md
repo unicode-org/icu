@@ -7,7 +7,7 @@ Commit Report
 =============
 
 Environment:
-- Latest Commit: 5de5cabfb06970d543e2b8f06959489ebd5810f8
+- Latest Commit: d1dcb6931884dcf4b8b9a88fa17d19159a95a04c
 - Jira Query: project=ICU AND fixVersion=68.1
 - Rev Range: release-67-1..origin/master
 - Authenticated: Yes
@@ -15,6 +15,14 @@ Environment:
 ## Problem Categories
 ### Closed Issues with No Commit
 Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.
+
+- ICU-21318: `CLONE - The Locale Explorer Help page still has the IBM logo`
+	- Assigned to Steven R. Loomis
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21318
+
+- ICU-21299: `PluralRules::getSamples fails to distinguish between 1e5 and 100000`
+	- Assigned to Elango Cheran
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21299
 
 - ICU-21070: `The Locale Explorer Help page still has the IBM logo`
 	- Assigned to Steven R. Loomis
@@ -24,6 +32,14 @@ Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Tick
 Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.
 Duplicate tickets should have their fixVersion tag removed.
 Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.
+
+- ICU-21318: `CLONE - The Locale Explorer Help page still has the IBM logo`
+	- Assigned to Steven R. Loomis
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21318
+
+- ICU-21299: `PluralRules::getSamples fails to distinguish between 1e5 and 100000`
+	- Assigned to Elango Cheran
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21299
 
 - ICU-21070: `The Locale Explorer Help page still has the IBM logo`
 	- Assigned to Steven R. Loomis
@@ -38,112 +54,23 @@ Tip: If you see your name here, make sure to label your commits correctly in the
 ### Commits with Jira Issue Not Found
 Tip: Check that these tickets have the correct fixVersion tag.
 
-#### Issue ICU-21137
-
-- ICU-21137: `Improve VSCode configuration for ICU4C build and test`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21137
-
-##### Commits with Issue ICU-21137
-
-- 8e26518 `ICU-21137 Adjust VSCode IDE settings and README.`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-06-18T03:15:42+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/8e2651828a1177495e0d252bb9eddf7c64500703
-
-#### Issue ICU-21270
-
-- ICU-21270: `test failure with "fr" plural rules case "many": computeLimited == isLimited`
-	- Assigned to Elango Cheran
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21270
-
-##### Commits with Issue ICU-21270
-
-- 6700602 `ICU-21270 Support exponent in FixedDecimal and samples in C++`
-	- Authored by Elango Cheran <elango@unicode.org>
-	- Committed at 2020-10-02T09:21:29-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/6700602974c0a7ece4c2adced6629010dd1f7bc1
-
-- 4723001 `ICU-21270 Update FixedDecimal in Java to support exponent`
-	- Authored by Elango Cheran <elango@unicode.org>
-	- Committed at 2020-09-22T21:16:12-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/47230019c6e43f5924ca3325aaea3492cfa96a69
-
+*Success: No problems in this category!*
 
 ### Commits with Open Jira Issue
 Tip: Consider closing the ticket if it is fixed.
 
-#### Issue ICU-20717
+#### Issue ICU-13259
 
-- ICU-20717: `remove more files from git-lfs`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20717
+- ICU-13259: `ulocdata_getDelimiter(... ULOCDATA_QUOTATION_START ...) fails for e.g. fr_CA`
+	- Assigned to Peter Edberg
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-13259
 
-##### Commits with Issue ICU-20717
+##### Commits with Issue ICU-13259
 
-- 6b35e70 `ICU-20717 move small files out of lfs: .dat, .gz, .gif`
-	- Authored by Steven R. Loomis <srl295@gmail.com>
-	- Committed at 2020-09-17T11:09:48-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/6b35e70b680c403230c13df6e433aaf4c8c53fa9
-
-#### Issue ICU-20963
-
-- ICU-20963: `Add .clang-format file to icu4c source to unify the style among icu4c`
-	- Assigned to Younies Mahmoud
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-20963
-
-##### Commits with Issue ICU-20963
-
-- 692005d `ICU-20963 Remove executable bit from .clang-format file.`
-	- Authored by Fredrik Roubert <roubert@google.com>
-	- Committed at 2020-10-01T10:58:04-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/692005d3485afdaeb090015dee518c0c815c1161
-
-- 1574782 `ICU-20963 Add .clang-format file to icu4c/source`
-	- Authored by younies <younies@chromium.org>
-	- Committed at 2020-09-01T21:19:06+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/15747825bc5024dddf0bc3c6d0d1a22a1cd1d950
-
-#### Issue ICU-21010
-
-- ICU-21010: `ICU4J: Add support for CLDR 37 unit identifiers`
-	- Assigned to Younies Mahmoud
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21010
-
-##### Commits with Issue ICU-21010
-
-- 9a06bdb `ICU-21010 add the @draft to the public methods`
-	- Authored by younies <younies@chromium.org>
-	- Committed at 2020-09-26T22:17:50+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/9a06bdb651ee5571cc660ed624b92d79ef4b5e26
-
-- d149031 `ICU-21010 MeasureUnit extension in Java`
-	- Authored by younies <younies@chromium.org>
-	- Committed at 2020-09-14T21:24:14+04:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/d1490314337ac074166adbad86d2416fba41c8f5
-
-#### Issue ICU-21078
-
-- ICU-21078: `Better instructions for installing CLDR JARs and managing Maven build.`
-	- Assigned to David Beaumont
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21078
-
-##### Commits with Issue ICU-21078
-
-- 85aee40 `ICU-21078 Improve instructions and gitignore files for cldr-to-icu.`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-06-16T20:09:46+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/85aee40cc3b25eeaccba6ef59fca124fd9ee5100
-
-- bf9421f `ICU-21078 Adding missing copyright notice (sorry!)`
-	- Authored by David Beaumont <david.beaumont+github@gmail.com>
-	- Committed at 2020-04-22T01:33:40+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/bf9421f8e48abf5455cc9fa11d69c015c34eebb4
-
-- b0fb483 `ICU-21078 Adding script and updating docs for CLDR jars`
-	- Authored by David Beaumont <dbeaumont@google.com>
-	- Committed at 2020-04-16T20:14:24+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/b0fb4839c24b743a6786b8c6b3a7e066478f0bad
+- 0583afe `ICU-13259 Check whether ulocdata_getDelimiter works in various locales including fr_CA`
+	- Authored by Peter Edberg <pedberg@unicode.org>
+	- Committed at 2020-10-09T10:01:30-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/0583afebf33cffe4a8560f64acfa75b3e14f34d8
 
 #### Issue ICU-21098
 
@@ -158,55 +85,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-05-20T15:58:51-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/4231ca5be053a22a1be24eb891817458c97db709
 
-#### Issue ICU-21135
-
-- ICU-21135: `Pseudo locale functionality broken for Android integration.`
-	- Assigned to David Beaumont
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21135
-
-##### Commits with Issue ICU-21135
-
-- 87bbd3d `ICU-21135 Fix pseudo locales to filter only non-root paths and avoid aliases.`
-	- Authored by David Beaumont <dbeaumont@google.com>
-	- Committed at 2020-06-03T17:32:23+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/87bbd3d067f32375d939b35df8a0dc5a2e9e7771
-
-#### Issue ICU-21137
-
-- ICU-21137: `Improve VSCode configuration for ICU4C build and test`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21137
-
-##### Commits with Issue ICU-21137
-
-- 8e26518 `ICU-21137 Adjust VSCode IDE settings and README.`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-06-18T03:15:42+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/8e2651828a1177495e0d252bb9eddf7c64500703
-
-#### Issue ICU-21248
-
-- ICU-21248: `Automate selected BRS tasks `
-	- Assigned to Norbert Runge
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21248
-
-##### Commits with Issue ICU-21248
-
-- 5a92254 `ICU-21248 Adds line ending check to Travis CI check. The eol check fits`
-	- Authored by gnrunge <nrunge@google.com>
-	- Committed at 2020-09-24T09:56:55-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/5a922544be05285a7408a9f1c99499e5205039d0
-
-- 5e0cec2 `ICU-21248 Adds source file check (UTF-8 and absence of BOM) to`
-	- Authored by gnrunge <nrunge@google.com>
-	- Committed at 2020-09-18T13:17:50-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/5e0cec2c2b3426d633e7a65899abbad1f9ad3b4c
-
-- 7bdc26e `ICU-21248 Adds internal header check to Travis Continued Integration.`
-	- Authored by gnrunge <nrunge@google.com>
-	- Committed at 2020-09-15T09:33:08-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/7bdc26e2a1fe665bae70c44e8ade14d4b0925125
-
 #### Issue ICU-21249
 
 - ICU-21249: `ICU 68 RC BRS`
@@ -214,6 +92,16 @@ Tip: Consider closing the ticket if it is fixed.
 	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21249
 
 ##### Commits with Issue ICU-21249
+
+- d1dcb69 `ICU-21249 integrate CLDR release-38-beta2 to ICU trunk`
+	- Authored by Peter Edberg <pedberg@unicode.org>
+	- Committed at 2020-10-09T14:54:02-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/d1dcb6931884dcf4b8b9a88fa17d19159a95a04c
+
+- a3d83de `ICU-21249 Update instructions for generating C++ API change reports`
+	- Authored by Craig Cornelius <cwcornelius@gmail.com>
+	- Committed at 2020-10-07T21:24:21-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/a3d83dedbafc2a02838274dc9174780b127c9195
 
 - 5de5cab `ICU-21249 Add new U_HIDE_INTERNAL_API guards`
 	- Authored by Richard Gillam <richard_gillam@apple.com>
@@ -423,49 +311,5 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-09-03T16:17:40-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/4f18ef2ef857738e977c211873a7b157bcdb87ea
 
-#### Issue ICU-21266
 
-- ICU-21266: `Improve NumberFormatter .unit().perUnit() and skeleton behaviour`
-	- Assigned to Hugo van der Merwe
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21266
-
-##### Commits with Issue ICU-21266
-
-- a84fdd0 `ICU-21266 Support toSkeleton() for all functional Unit Formatters`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-10-01T02:51:27+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/a84fdd0e903fb20acd93ed186a0da4c0c071a0e6
-
-#### Issue ICU-21270
-
-- ICU-21270: `test failure with "fr" plural rules case "many": computeLimited == isLimited`
-	- Assigned to Elango Cheran
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21270
-
-##### Commits with Issue ICU-21270
-
-- 6700602 `ICU-21270 Support exponent in FixedDecimal and samples in C++`
-	- Authored by Elango Cheran <elango@unicode.org>
-	- Committed at 2020-10-02T09:21:29-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/6700602974c0a7ece4c2adced6629010dd1f7bc1
-
-- 4723001 `ICU-21270 Update FixedDecimal in Java to support exponent`
-	- Authored by Elango Cheran <elango@unicode.org>
-	- Committed at 2020-09-22T21:16:12-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/47230019c6e43f5924ca3325aaea3492cfa96a69
-
-#### Issue ICU-21304
-
-- ICU-21304: `ICU4C links need porting to new ICU user guide location`
-	- Assigned to Hugo van der Merwe
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21304
-
-##### Commits with Issue ICU-21304
-
-- a08ac00 `ICU-21304 Update old userguide links to unicode-org.github.io`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-10-01T01:28:05+02:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/a08ac00c6757c117f33c319f50388c869b730bfe
-
-
-## Total Problems: 17
+## Total Problems: 10
