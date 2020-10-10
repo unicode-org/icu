@@ -16,35 +16,13 @@ Environment:
 ### Closed Issues with No Commit
 Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.
 
-- ICU-21318: `CLONE - The Locale Explorer Help page still has the IBM logo`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21318
-
-- ICU-21299: `PluralRules::getSamples fails to distinguish between 1e5 and 100000`
-	- Assigned to Elango Cheran
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21299
-
-- ICU-21070: `The Locale Explorer Help page still has the IBM logo`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21070
-
+*Success: No problems in this category!*
 ### Closed Issues with Illegal Resolution or Commit
 Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.
 Duplicate tickets should have their fixVersion tag removed.
 Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.
 
-- ICU-21318: `CLONE - The Locale Explorer Help page still has the IBM logo`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21318
-
-- ICU-21299: `PluralRules::getSamples fails to distinguish between 1e5 and 100000`
-	- Assigned to Elango Cheran
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21299
-
-- ICU-21070: `The Locale Explorer Help page still has the IBM logo`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21070
-
+*Success: No problems in this category!*
 
 ### Commits without Jira Issue Tag
 Tip: If you see your name here, make sure to label your commits correctly in the future.
@@ -298,18 +276,5 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-08-26T19:09:54-05:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/4767be7f4ff361612a5d62caa92884cfa9d8c224
 
-#### Issue ICU-21258
 
-- ICU-21258: `StandardPlural cannot handle plural keywords '1' or '0'`
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21258
-
-##### Commits with Issue ICU-21258
-
-- 4f18ef2 `ICU-21258 Refactor code and tests for compact data known issue`
-	- Authored by Shane F. Carr <shane@unicode.org>
-	- Committed at 2020-09-03T16:17:40-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/4f18ef2ef857738e977c211873a7b157bcdb87ea
-
-
-## Total Problems: 10
+## Total Problems: 3
