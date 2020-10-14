@@ -38,6 +38,7 @@ public:
     void TestUldnDisplayContext(void);
     void TestUldnWithGarbage(void);
     void TestSubstituteHandling(void);
+    void TestNumericRegionID(void);
 
     void VerifySubstitute(LocaleDisplayNames* ldn);
     void VerifyNoSubstitute(LocaleDisplayNames* ldn);
