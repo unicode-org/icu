@@ -86,7 +86,7 @@ uprv_detectWindowsTimeZone()
             // Note '-' before 'utcOffsetMin'. The timezone ID's sign convention
             // is that a timezone ahead of UTC is Etc/GMT-<offset> and a timezone
             // behind UTC is Etc/GMT+<offset>.
-            int ret = snprintf(gmtOffsetTz, UPRV_LENGTHOF(gmtOffsetTz), "Etc/GMT%+d", -utcOffsetMins / 60);
+            int ret = snprintf(gmtOffsetTz, UPRV_LENGTHOF(gmtOffsetTz), "Etc/GMT%+ld", -utcOffsetMins / 60);
             if (ret > 0 && ret < UPRV_LENGTHOF(gmtOffsetTz)) {
                 return uprv_strdup(gmtOffsetTz);
             }
