@@ -274,6 +274,7 @@ class NumberSkeletonTest : public IntlTest {
     void flexibleSeparators();
     void wildcardCharacters();
     void perUnitInArabic();
+    void perUnitToSkeleton();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
