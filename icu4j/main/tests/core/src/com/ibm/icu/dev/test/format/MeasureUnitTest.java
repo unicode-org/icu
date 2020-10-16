@@ -2898,6 +2898,7 @@ public class MeasureUnitTest extends TestFmwk {
     // for MeasureFormat during the release process.
     static void generateCXXHConstants(String thisVersion) {
         Map<String, MeasureUnit> seen = new HashMap<>();
+        System.out.println("// Start generated createXXX methods");
         System.out.println();
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
@@ -2929,13 +2930,15 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println("    /**");
                 System.out.println("     * Returns by value, unit of " + type + ": " + code + ".");
                 System.out.printf("     * Also see {@link #create%s()}.\n", name);
-                // TODO: When the get* methods become stable in ICU 66, update their
-                // @draft code to be more like that for the create* methods above.
                 String getterVersion = getVersion(javaName, thisVersion);
                 if (Integer.valueOf(getterVersion) < 64) {
                     getterVersion = "64";
                 }
-                System.out.println("     * @draft ICU " + getterVersion);
+                if (isDraft(javaName)) {
+                    System.out.println("     * @draft ICU " + getterVersion);
+                } else {
+                    System.out.println("     * @stable ICU " + getterVersion);
+                }
                 System.out.println("     */");
                 System.out.printf("    static MeasureUnit get%s();\n", name);
                 if (isDraft(javaName)) {
@@ -2944,6 +2947,7 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println("");
             }
         }
+        System.out.println("// End generated createXXX methods");
     }
 
     private static void checkForDup(
@@ -2998,34 +3002,34 @@ public class MeasureUnitTest extends TestFmwk {
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static void generateCXXConstants() {
+        System.out.println("// Start generated code for measunit.cpp");
         System.out.println("");
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
 
-        // Hack: for C++, add NoUnits here, but ignore them when printing the create methods.
-        // ALso keep track of the base unit offset to make the C++ default constructor faster.
-        allUnits.put("none", Arrays.asList(new MeasureUnit[]{NoUnit.BASE, NoUnit.PERCENT, NoUnit.PERMILLE}));
+        // Hack: for C++, add base unit here, but ignore them when printing the create methods.
+        // Also keep track of the base unit offset to make the C++ default constructor faster.
+        allUnits.put("none", Arrays.asList(new MeasureUnit[] {NoUnit.BASE}));
         int baseTypeIdx = -1;
         int baseSubTypeIdx = -1;
 
+        System.out.println("// Maps from Type ID to offset in gSubTypes.");
         System.out.println("static const int32_t gOffsets[] = {");
         int index = 0;
+        int typeCount = 0;
+        int currencyIndex = -1;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
             System.out.printf("    %d,\n", index);
+            if (entry.getKey() == "currency") {
+                currencyIndex = typeCount;
+            }
+            typeCount++;
             index += entry.getValue().size();
         }
+        assertTrue("currency present", currencyIndex >= 0);
         System.out.printf("    %d\n", index);
         System.out.println("};");
         System.out.println();
-        System.out.println("static const int32_t gIndexes[] = {");
-        index = 0;
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            System.out.printf("    %d,\n", index);
-            if (!entry.getKey().equals("currency")) {
-                index += entry.getValue().size();
-            }
-        }
-        System.out.printf("    %d\n", index);
-        System.out.println("};");
+        System.out.println("static const int32_t kCurrencyOffset = " + currencyIndex + ";");
         System.out.println();
         System.out.println("// Must be sorted alphabetically.");
         System.out.println("static const char * const gTypes[] = {");
@@ -3054,7 +3058,12 @@ public class MeasureUnitTest extends TestFmwk {
                 if (!first) {
                     System.out.println(",");
                 }
-                System.out.print("    \"" + unit.getSubtype() + "\"");
+                if (unit != null) {
+                    System.out.print("    \"" + unit.getSubtype() + "\"");
+                } else {
+                    assertEquals("unit only null for \"none\" type", "none", entry.getKey());
+                    System.out.print("    \"\"");
+                }
                 first = false;
                 measureUnitToOffset.put(unit, offset);
                 measureUnitToTypeSubType.put(unit, Pair.of(typeIdx, subTypeIdx));
@@ -3084,27 +3093,6 @@ public class MeasureUnitTest extends TestFmwk {
                             measureUnitToOffset.get(unitPerUnit.second)),
                     measureUnitToTypeSubType.get(entry.getKey()));
         }
-
-        System.out.println("// Must be sorted by first value and then second value.");
-        System.out.println("static int32_t unitPerUnitToSingleUnit[][4] = {");
-        first = true;
-        for (Map.Entry<OrderedPair<Integer, Integer>, Pair<Integer, Integer>> entry
-                : unitPerUnitOffsetsToTypeSubType.entrySet()) {
-            if (!first) {
-                System.out.println(",");
-            }
-            first = false;
-            OrderedPair<Integer, Integer> unitPerUnitOffsets = entry.getKey();
-            Pair<Integer, Integer> typeSubType = entry.getValue();
-            System.out.printf("        {%d, %d, %d, %d}",
-                    unitPerUnitOffsets.first,
-                    unitPerUnitOffsets.second,
-                    typeSubType.first,
-                    typeSubType.second);
-        }
-        System.out.println();
-        System.out.println("};");
-        System.out.println();
 
         // Print out the fast-path for the default constructor
         System.out.println("// Shortcuts to the base unit in order to make the default constructor fast");
@@ -3138,6 +3126,7 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println();
             }
         }
+        System.out.println("// End generated code for measunit.cpp");
     }
 
     private static String toCamelCase(MeasureUnit unit) {
@@ -3243,6 +3232,7 @@ public class MeasureUnitTest extends TestFmwk {
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static void generateConstants(String thisVersion) {
+        System.out.println("    // Start generated MeasureUnit constants");
         System.out.println();
         Map<String, MeasureUnit> seen = new HashMap<>();
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
@@ -3269,7 +3259,7 @@ public class MeasureUnitTest extends TestFmwk {
                 } else {
                     System.out.println("     * @stable ICU " + getVersion(name, thisVersion));
                 }
-                System.out.println("    */");
+                System.out.println("     */");
                 if ("duration".equals(type) && TIME_CODES.contains(code)) {
                     System.out.println("    public static final TimeUnit " + name + " = (TimeUnit) MeasureUnit.internalGetInstance(\"" +
                             type +
@@ -3286,16 +3276,7 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println();
             }
         }
-        System.out.println("    private static HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>unitPerUnitToSingleUnit =");
-        System.out.println("            new HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>();");
-        System.out.println();
-        System.out.println("    static {");
-        for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> unitPerUnitEntry
-                : getUnitsToPerParts().entrySet()) {
-            Pair<MeasureUnit, MeasureUnit> unitPerUnit = unitPerUnitEntry.getValue();
-            System.out.println("        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit." + toJAVAName(unitPerUnit.first) + ", MeasureUnit." + toJAVAName(unitPerUnit.second) + "), MeasureUnit." + toJAVAName(unitPerUnitEntry.getKey()) + ");");
-        }
-        System.out.println("    }");
+        System.out.println("    // End generated MeasureUnit constants");
     }
 
     private static String getVersion(String javaName, String thisVersion) {

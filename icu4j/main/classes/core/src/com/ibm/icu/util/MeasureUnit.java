@@ -1306,7 +1306,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of graphics: dot
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DOT = MeasureUnit.internalGetInstance("graphics", "dot");
 
     /**
@@ -1373,7 +1373,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: earth-radius
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit EARTH_RADIUS = MeasureUnit.internalGetInstance("length", "earth-radius");
 
     /**
@@ -1488,14 +1488,14 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of light: candela
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit CANDELA = MeasureUnit.internalGetInstance("light", "candela");
 
     /**
      * Constant for unit of light: lumen
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit LUMEN = MeasureUnit.internalGetInstance("light", "lumen");
 
     /**
@@ -1532,7 +1532,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of mass: grain
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit GRAIN = MeasureUnit.internalGetInstance("mass", "grain");
 
     /**
@@ -1845,28 +1845,28 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: dessert-spoon
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DESSERT_SPOON = MeasureUnit.internalGetInstance("volume", "dessert-spoon");
 
     /**
      * Constant for unit of volume: dessert-spoon-imperial
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DESSERT_SPOON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "dessert-spoon-imperial");
 
     /**
      * Constant for unit of volume: dram
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DRAM = MeasureUnit.internalGetInstance("volume", "dram");
 
     /**
      * Constant for unit of volume: drop
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DROP = MeasureUnit.internalGetInstance("volume", "drop");
 
     /**
@@ -1903,7 +1903,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: jigger
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit JIGGER = MeasureUnit.internalGetInstance("volume", "jigger");
 
     /**
@@ -1928,7 +1928,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: pinch
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit PINCH = MeasureUnit.internalGetInstance("volume", "pinch");
 
     /**
@@ -1953,7 +1953,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: quart-imperial
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit QUART_IMPERIAL = MeasureUnit.internalGetInstance("volume", "quart-imperial");
 
     /**
@@ -1968,9 +1968,8 @@ public class MeasureUnit implements Serializable {
      */
     public static final MeasureUnit TEASPOON = MeasureUnit.internalGetInstance("volume", "teaspoon");
 
-    // unitPerUnitToSingleUnit no longer in use! TODO: remove from code-generation code.
-
     // End generated MeasureUnit constants
+
     /* Private */
 
     private Object writeReplace() throws ObjectStreamException {
