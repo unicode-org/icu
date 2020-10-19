@@ -94,7 +94,7 @@ struct U_I18N_API ConversionRate : public UMemory {
         : source(std::move(source)), target(std::move(target)) {}
 };
 
-enum U_I18N_API Convertibility {
+enum Convertibility {
     RECIPROCAL,
     CONVERTIBLE,
     UNCONVERTIBLE,
