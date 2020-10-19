@@ -2,11 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
-import com.ibm.icu.impl.number.DecimalQuantity;
-import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.number.Precision;
-import com.ibm.icu.util.Measure;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -17,7 +12,6 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.Measure;
-import com.ibm.icu.util.MeasureUnit;
 
 /**
  * Converts from single or compound unit to single, compound or mixed units.
@@ -134,7 +128,6 @@ public class ComplexUnitsConverter {
      * other elements are floored to the nearest integer
      */
     public List<Measure> convert(BigDecimal quantity, Precision rounder) {
-        List<Measure> result = new ArrayList<>(unitConverters_.size());
         BigDecimal sign = BigDecimal.ONE;
         if (quantity.compareTo(BigDecimal.ZERO) < 0) {
             quantity = quantity.abs();
