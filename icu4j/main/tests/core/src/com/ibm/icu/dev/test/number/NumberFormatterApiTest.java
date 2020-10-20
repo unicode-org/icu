@@ -936,6 +936,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "2.4 m/s\u00B2");
     }
 
+    // TODO: merge these tests into NumberSkeletonTest.java instead of here:
     @Test
     public void unitSkeletons() {
         Object[][] cases = {
@@ -960,11 +961,11 @@ public class NumberFormatterApiTest extends TestFmwk {
              "unit/meter-per-second"},
 
             {"short-form compound units stay as is", //
-             "unit/square-meter-per-square-meter",  //
+             "unit/square-meter-per-square-meter",   //
              "unit/square-meter-per-square-meter"},
 
             {"short-form compound units stay as is", //
-             "unit/joule-per-furlong",              //
+             "unit/joule-per-furlong",               //
              "unit/joule-per-furlong"},
 
             {"short-form that doesn't consist of built-in units", //
@@ -974,6 +975,22 @@ public class NumberFormatterApiTest extends TestFmwk {
             {"short-form that doesn't consist of built-in units", //
              "unit/meter-per-hectosecond",                        //
              "unit/meter-per-hectosecond"},
+
+            {"percent compound skeletons handled correctly", //
+             "unit/percent-per-meter",                       //
+             "unit/percent-per-meter"},
+
+            {"permille compound skeletons handled correctly",                //
+             "measure-unit/concentr-permille per-measure-unit/length-meter", //
+             "unit/permille-per-meter"},
+
+            {"percent simple unit is not actually considered a unit", //
+             "unit/percent",                                          //
+             "percent"},
+
+            {"permille simple unit is not actually considered a unit", //
+             "measure-unit/concentr-permille",                         //
+             "permille"},
 
             // // TODO: binary prefixes not supported yet!
             // {"Round-trip example from icu-units#35", //
@@ -997,6 +1014,21 @@ public class NumberFormatterApiTest extends TestFmwk {
             {"Parsing per-measure-unit/* results in failure if not built-in unit",
              "measure-unit/meter per-measure-unit/hectosecond", //
              true,                                              //
+             false},
+
+            {"\"currency/EUR measure-unit/length-meter\" fails, conflicting skeleton.",
+             "currency/EUR measure-unit/length-meter", //
+             true,                                     //
+             false},
+
+            {"\"measure-unit/length-meter currency/EUR\" fails, conflicting skeleton.",
+             "measure-unit/length-meter currency/EUR", //
+             true,                                     //
+             false},
+
+            {"\"currency/EUR per-measure-unit/meter\" fails, conflicting skeleton.",
+             "currency/EUR per-measure-unit/length-meter", //
+             true,                                         //
              false},
         };
         for (Object[] cas : failCases) {
@@ -1026,6 +1058,39 @@ public class NumberFormatterApiTest extends TestFmwk {
                     fail("toSkeleton() should not have failed: " + msg);
                 }
             }
+        }
+
+        assertEquals(                                //
+            ".unit(METER_PER_SECOND) normalization", //
+            "unit/meter-per-second",                 //
+            NumberFormatter.with().unit(MeasureUnit.METER_PER_SECOND).toSkeleton());
+        assertEquals(                                     //
+            ".unit(METER).perUnit(SECOND) normalization", //
+            "unit/meter-per-second",
+            NumberFormatter.with().unit(MeasureUnit.METER).perUnit(MeasureUnit.SECOND).toSkeleton());
+        assertEquals(                                                         //
+            ".unit(MeasureUnit.forIdentifier(\"hectometer\")) normalization", //
+            "unit/hectometer",
+            NumberFormatter.with().unit(MeasureUnit.forIdentifier("hectometer")).toSkeleton());
+        assertEquals(                                                         //
+            ".unit(MeasureUnit.forIdentifier(\"hectometer\")) normalization", //
+            "unit/meter-per-hectosecond",
+            NumberFormatter.with()
+                .unit(MeasureUnit.METER)
+                .perUnit(MeasureUnit.forIdentifier("hectosecond"))
+                .toSkeleton());
+
+        assertEquals(                                                //
+            ".unit(CURRENCY) produces a currency/CURRENCY skeleton", //
+            "currency/GBP",                                          //
+            NumberFormatter.with().unit(GBP).toSkeleton());
+
+        // .unit(CURRENCY).perUnit(ANYTHING) is not supported.
+        try {
+            NumberFormatter.with().unit(GBP).perUnit(MeasureUnit.METER).toSkeleton();
+            fail("should give an error, unit(currency) with perUnit() is invalid.");
+        } catch (UnsupportedOperationException e) {
+            // Pass
         }
     }
 

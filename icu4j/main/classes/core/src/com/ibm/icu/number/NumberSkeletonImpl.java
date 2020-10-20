@@ -620,6 +620,7 @@ class NumberSkeletonImpl {
                 case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
+                case STATE_IDENTIFIER_UNIT:
                 case STATE_UNIT_USAGE:
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
@@ -661,7 +662,7 @@ class NumberSkeletonImpl {
             BlueprintHelpers.parseScientificStem(segment, macros);
             return ParseState.STATE_NULL;
         case '0':
-            checkNull(macros.notation, segment);
+            checkNull(macros.integerWidth, segment);
             BlueprintHelpers.parseIntegerStem(segment, macros);
             return ParseState.STATE_NULL;
         }
@@ -786,6 +787,11 @@ class NumberSkeletonImpl {
             return ParseState.STATE_MEASURE_UNIT;
 
         case STEM_PER_MEASURE_UNIT:
+            // In C++, STEM_CURRENCY's checks mark perUnit as "seen". Here we do
+            // the inverse: checking that macros.unit is not set to a currency.
+            if (macros.unit instanceof Currency) {
+                throw new SkeletonSyntaxException("Duplicated setting", segment);
+            }
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_PER_MEASURE_UNIT;
 
@@ -800,6 +806,7 @@ class NumberSkeletonImpl {
 
         case STEM_CURRENCY:
             checkNull(macros.unit, segment);
+            checkNull(macros.perUnit, segment);
             return ParseState.STATE_CURRENCY_UNIT;
 
         case STEM_INTEGER_WIDTH:
@@ -1484,25 +1491,25 @@ class NumberSkeletonImpl {
         }
 
         private static boolean unit(MacroProps macros, StringBuilder sb) {
-            if (macros.unit instanceof Currency) {
+            MeasureUnit unit = macros.unit;
+            if (macros.perUnit != null) {
+                if (macros.unit instanceof Currency || macros.perUnit instanceof Currency) {
+                    throw new UnsupportedOperationException(
+                        "Cannot generate number skeleton with currency unit and per-unit");
+                }
+                unit = unit.product(macros.perUnit.reciprocal());
+            }
+            if (unit instanceof Currency) {
                 sb.append("currency/");
-                BlueprintHelpers.generateCurrencyOption((Currency) macros.unit, sb);
+                BlueprintHelpers.generateCurrencyOption((Currency)unit, sb);
                 return true;
-            } else if (macros.unit == MeasureUnit.PERCENT) {
+            } else if (unit.equals(MeasureUnit.PERCENT)) {
                 sb.append("percent");
                 return true;
-            } else if (macros.unit == MeasureUnit.PERMILLE) {
+            } else if (unit.equals(MeasureUnit.PERMILLE)) {
                 sb.append("permille");
                 return true;
             } else {
-                MeasureUnit unit = macros.unit;
-                if (macros.perUnit != null) {
-                    if (macros.perUnit instanceof Currency) {
-                        throw new UnsupportedOperationException(
-                            "Cannot generate number skeleton with per-unit that is not a standard measure unit");
-                    }
-                    unit = unit.product(macros.perUnit.reciprocal());
-                }
                 sb.append("unit/");
                 sb.append(unit.getIdentifier());
                 return true;

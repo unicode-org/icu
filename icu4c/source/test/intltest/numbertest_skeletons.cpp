@@ -31,6 +31,7 @@ void NumberSkeletonTest::runIndexedTest(int32_t index, UBool exec, const char*& 
         TESTCASE_AUTO(flexibleSeparators);
         TESTCASE_AUTO(wildcardCharacters);
         TESTCASE_AUTO(perUnitInArabic);
+        TESTCASE_AUTO(perUnitToSkeleton);
     TESTCASE_AUTO_END;
 }
 
@@ -432,6 +433,61 @@ void NumberSkeletonTest::perUnitInArabic() {
                                    .formatDouble(5142.3, status)
                                    .toString(status);
             status.errIfFailureAndReset();
+        }
+    }
+}
+
+void NumberSkeletonTest::perUnitToSkeleton() {
+    IcuTestErrorCode status(*this, "perUnitToSkeleton");
+    struct TestCase {
+        const char16_t* type;
+        const char16_t* subtype;
+    } cases[] = {
+        {u"area", u"acre"},
+        {u"concentr", u"percent"},
+        {u"concentr", u"permille"},
+        {u"concentr", u"permillion"},
+        {u"concentr", u"permyriad"},
+        {u"digital", u"bit"},
+        {u"length", u"yard"},
+    };
+
+    for (const auto& cas1 : cases) {
+        for (const auto& cas2 : cases) {
+            UnicodeString skeleton(u"measure-unit/");
+            skeleton += cas1.type;
+            skeleton += u"-";
+            skeleton += cas1.subtype;
+            skeleton += u" ";
+            skeleton += u"per-measure-unit/";
+            skeleton += cas2.type;
+            skeleton += u"-";
+            skeleton += cas2.subtype;
+
+            status.setScope(skeleton);
+            if (cas1.type != cas2.type && cas1.subtype != cas2.subtype) {
+                UnicodeString toSkeleton = NumberFormatter::forSkeleton(
+                    skeleton, status).toSkeleton(status);
+                if (status.errIfFailureAndReset()) {
+                    continue;
+                }
+                // Ensure both subtype are in the toSkeleton.
+                UnicodeString msg;
+                msg.append(toSkeleton)
+                    .append(" should contain '")
+                    .append(UnicodeString(cas1.subtype))
+                    .append("' when constructed from ")
+                    .append(skeleton);
+                assertTrue(msg, toSkeleton.indexOf(cas1.subtype) >= 0);
+
+                msg.remove();
+                msg.append(toSkeleton)
+                    .append(" should contain '")
+                    .append(UnicodeString(cas2.subtype))
+                    .append("' when constructed from ")
+                    .append(skeleton);
+                assertTrue(msg, toSkeleton.indexOf(cas2.subtype) >= 0);
+            }
         }
     }
 }
