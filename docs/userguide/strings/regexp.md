@@ -160,14 +160,14 @@ complete a complete description of the API.
 | .         | ✓               |                 | Match any character.
 | ^         | ✓               |                 | Match at the beginning of a line.
 | $         | ✓               |                 | Match at the end of a line. Line terminating characters are \\u000a, \\u000b, \\u000c, \\u000d, \\u0085, \\u2028, \\u2029 and the sequence \\u000d \\u000a.
-| \\        | ✓               |                 | Quotes the following character. Characters that must be quoted to be treated as literals are \* ? + \[ ( ) { } ^ $ | \\ .
+| \\        | ✓               |                 | Quotes the following character. Characters that must be quoted to be treated as literals are \* ? + \[ ( ) { } ^ $ \| \\ .
 | \\        |                 | ✓               | Quotes the following character. Characters that must be quoted to be treated as literals are \[ \] \\ Characters that may need to be quoted, depending on the context are - &
 
 ## Regular Expression Operators
 
 | Operator      | Description
 |:--------------|:---------------------------------------------------------------|
-| `\|`          | Alternation. A\|B matches either A or B.
+| `|`           | Alternation. A\|B matches either A or B.
 | `*`           | Match 0 or more times. Match as many times as possible.
 | `+`           | Match 1 or more times. Match as many times as possible.
 | `?`           | Match zero or one times. Prefer one.
@@ -193,7 +193,7 @@ complete a complete description of the API.
 | `(?= ...)`    | Look-ahead assertion. True if the parenthesized pattern matches at the current input position, but does not advance the input position.
 | `(?! ...)`    | Negative look-ahead assertion. True if the parenthesized pattern does not match at the current input position. Does not advance the input position.
 | `(?<= ...)`   | Look-behind assertion. True if the parenthesized pattern matches text preceding the current input position, with the last character of the match being the input character just before the current position. Does not alter the input position. The length of possible strings matched by the look-behind pattern must not be unbounded (no \* or + operators.)
-| `(?<\! ...)`  | Negative Look-behind assertion. True if the parenthesized pattern does not match text preceding the current input position, with the last character of the match being the input character just before the current position. Does not alter the input position. The length of possible strings matched by the look-behind pattern must not be unbounded (no \* or + operators.)
+| `(?<! ...)`   | Negative Look-behind assertion. True if the parenthesized pattern does not match text preceding the current input position, with the last character of the match being the input character just before the current position. Does not alter the input position. The length of possible strings matched by the look-behind pattern must not be unbounded (no \* or + operators.)
 | `(?<name>...)` | Named capture group. The <angle brackets> are literal - they appear in the pattern.
 | `(?ismwx-ismwx:...)`  | Flag settings. Evaluate the parenthesized expression with the specified flags enabled or -disabled.
 | `(?ismwx-ismwx)`      | Flag settings. Change the flag settings. Changes apply to the portion of the pattern following the setting. For example, (?i) changes to a case insensitive match.
@@ -211,7 +211,7 @@ complete a complete description of the API.
 | `[\p{numeric_value=9}]`              | Match all numbers with a numeric value of 9. Any Unicode Property may be used in set expressions.
 | `[\p{Letter}&&\p{script=cyrillic}]`  | Logical AND or intersection. Match the set of all Cyrillic letters.
 | `[\p{Letter}--\p{script=latin}]`     | Subtraction. Match all non-Latin letters.
-| `[[a-z][A-Z][0-9]]` `[a-zA-Z0-9]]`   | Implicit Logical OR or Union of Sets. The examples match ASCII letters and digits. The two forms are equivalent.
+| `[[a-z][A-Z][0-9]]` `[a-zA-Z0-9]`    | Implicit Logical OR or Union of Sets. The examples match ASCII letters and digits. The two forms are equivalent.
 | `[:script=Greek:]`                   | Alternate POSIX-like syntax for properties. Equivalent to \\p{script=Greek}.
 
 ## Case Insensitive Matching
@@ -441,8 +441,8 @@ Examples from actual bug reports,
 
 The pattern
 
-        (?:[A-Za-z0-9]+[._]?){1,}[A-Za-z0-9]+\@(?:(?:[A-Za-z0-9]+[-]?){1,}[A-Za-z0-9]+\.){1,}`
-                      ^^^^^^^^^^^  `
+        (?:[A-Za-z0-9]+[._]?){1,}[A-Za-z0-9]+\@(?:(?:[A-Za-z0-9]+[-]?){1,}[A-Za-z0-9]+\.){1,}
+                      ^^^^^^^^^^^
 
 and the text
 
@@ -452,11 +452,11 @@ cause an infinite loop.
 
 The problem is in the region marked with `^^^^^^^^^^`. The `"[._]?"` term can be ignored, because
 it need not match anything. `{1,}` is the same as `+`. So we effectively have
-`(?:\[A-Za-z0-9\]+)+`, which is trouble.
+`(?:[A-Za-z0-9]+)+`, which is trouble.
 
 The initial part of the expression can be recast as
 
-`[A-Za-z0-9\]+([._][A-Za-z0-9]+)*`
+`[A-Za-z0-9]+([._][A-Za-z0-9]+)*`
 
 which matches the same thing. The nested `+` and `*` qualifiers do not cause a
 problem because the `[._]` term is not optional and contains no characters that
@@ -504,7 +504,7 @@ processes, can be a problem with some regular expression packages.
     implementation, which was based on ICU UnicodeSet pattern syntax.
 *   The property expression `\p{punct}` differs in what it matches. Java matches
     matches any of ```!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~```. From that list,
-    ICU omits ```$+<=>^\`|~``` &nbsp; &nbsp;
+    ICU omits ```$+<=>^`|~``` &nbsp; &nbsp;
     ICU follows the recommendations from Unicode UTS-18,
     <http://www.unicode.org/reports/tr18/#Compatibility_Properties>. See also
     <https://unicode-org.atlassian.net/browse/ICU-20095>.
