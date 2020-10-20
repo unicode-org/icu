@@ -157,7 +157,7 @@ windowsZones:table(nofallback){
         }
         "Central Pacific Standard Time"{
             001{"Pacific/Guadalcanal"}
-            AU{"Antarctica/Macquarie"}
+            AQ{"Antarctica/Casey"}
             FM{"Pacific/Ponape Pacific/Kosrae"}
             NC{"Pacific/Noumea"}
             SB{"Pacific/Guadalcanal"}
@@ -594,7 +594,6 @@ windowsZones:table(nofallback){
         }
         "Singapore Standard Time"{
             001{"Asia/Singapore"}
-            AQ{"Antarctica/Casey"}
             BN{"Asia/Brunei"}
             ID{"Asia/Makassar"}
             MY{"Asia/Kuala_Lumpur Asia/Kuching"}
@@ -635,7 +634,7 @@ windowsZones:table(nofallback){
         }
         "Tasmania Standard Time"{
             001{"Australia/Hobart"}
-            AU{"Australia/Hobart Australia/Currie"}
+            AU{"Australia/Hobart Australia/Currie Antarctica/Macquarie"}
         }
         "Tocantins Standard Time"{
             001{"America/Araguaina"}
