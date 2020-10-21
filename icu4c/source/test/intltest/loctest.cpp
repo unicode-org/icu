@@ -4894,6 +4894,9 @@ void LocaleTest::TestCanonicalize(void)
         { "ja-Latn-hepburn-heploc", "ja-Latn-alalc97"},
 
         { "aaa-Fooo-SU", "aaa-Fooo-RU"},
+
+        // ICU-21344
+        { "ku-Arab-NT", "ku-Arab-IQ"},
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
