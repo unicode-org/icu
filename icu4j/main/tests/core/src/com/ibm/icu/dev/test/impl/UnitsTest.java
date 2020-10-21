@@ -162,6 +162,14 @@ public class UnitsTest {
 
         TestData[] tests = {
                 new TestData("meter", "foot", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("kilometer", "foot", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("hectare", "square-foot", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("kilometer-per-second", "second-per-meter", UnitConverter.Convertibility.RECIPROCAL),
+                new TestData("square-meter", "square-foot", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("kilometer-per-second", "foot-per-second", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("square-hectare", "pow4-foot", UnitConverter.Convertibility.CONVERTIBLE),
+                new TestData("square-kilometer-per-second", "second-per-square-meter", UnitConverter.Convertibility.RECIPROCAL),
+                new TestData("cubic-kilometer-per-second-meter", "second-per-square-meter", UnitConverter.Convertibility.RECIPROCAL),
                 new TestData("square-meter-per-square-hour", "hectare-per-square-second", UnitConverter.Convertibility.CONVERTIBLE),
                 new TestData("hertz", "revolution-per-second", UnitConverter.Convertibility.CONVERTIBLE),
                 new TestData("millimeter", "meter", UnitConverter.Convertibility.CONVERTIBLE),
@@ -169,7 +177,6 @@ public class UnitsTest {
                 new TestData("ounce-troy", "kilogram", UnitConverter.Convertibility.CONVERTIBLE),
                 new TestData("percent", "portion", UnitConverter.Convertibility.CONVERTIBLE),
                 new TestData("ofhg", "kilogram-per-square-meter-square-second", UnitConverter.Convertibility.CONVERTIBLE),
-
                 new TestData("second-per-meter", "meter-per-second", UnitConverter.Convertibility.RECIPROCAL),
         };
         ConversionRates conversionRates = new ConversionRates();
@@ -180,6 +187,7 @@ public class UnitsTest {
         }
     }
 
+    // TODO(icu-units#92): add UnitsTest::testConverter(), to replace or extend this test.
     @Test
     public void testConverterForTemperature() {
         class TestData {
@@ -213,7 +221,7 @@ public class UnitsTest {
     }
 
     @Test
-    public void testConverterFromUnitTests() throws IOException {
+    public void testConverterWithCLDRTests() throws IOException {
         class TestCase {
             String category;
             String sourceString;
@@ -290,7 +298,7 @@ public class UnitsTest {
     }
 
     @Test
-    public void testUnitPreferencesFromUnitTests() throws IOException {
+    public void testUnitPreferencesWithCLDRTests() throws IOException {
         class TestCase {
 
             final ArrayList<Pair<String, MeasureUnitImpl>> outputUnitInOrder = new ArrayList<>();

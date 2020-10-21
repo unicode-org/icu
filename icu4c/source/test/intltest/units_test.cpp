@@ -43,15 +43,12 @@ class UnitsTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
     void testUnitConstantFreshness();
-    void testConversionCapability();
-    void testConversions();
+    void testExtractConvertibility();
+    void testConverterWithCLDRTests();
     void testComplexUnitsConverter();
     void testComplexUnitConverterSorting();
-    void testPreferences();
-    void testSiPrefixes();
-    void testMass();
-    void testTemperature();
-    void testArea();
+    void testUnitPreferencesWithCLDRTests();
+    void testConverter();
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -62,15 +59,12 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testUnitConstantFreshness);
-    TESTCASE_AUTO(testConversionCapability);
-    TESTCASE_AUTO(testConversions);
+    TESTCASE_AUTO(testExtractConvertibility);
+    TESTCASE_AUTO(testConverterWithCLDRTests);
     TESTCASE_AUTO(testComplexUnitsConverter);
     TESTCASE_AUTO(testComplexUnitConverterSorting);
-    TESTCASE_AUTO(testPreferences);
-    TESTCASE_AUTO(testSiPrefixes);
-    TESTCASE_AUTO(testMass);
-    TESTCASE_AUTO(testTemperature);
-    TESTCASE_AUTO(testArea);
+    TESTCASE_AUTO(testUnitPreferencesWithCLDRTests);
+    TESTCASE_AUTO(testConverter);
     TESTCASE_AUTO_END;
 }
 
@@ -122,7 +116,9 @@ void UnitsTest::testUnitConstantFreshness() {
     }
 }
 
-void UnitsTest::testConversionCapability() {
+void UnitsTest::testExtractConvertibility() {
+    IcuTestErrorCode status(*this, "UnitsTest::testExtractConvertibility");
+
     struct TestCase {
         const char *const source;
         const char *const target;
@@ -137,16 +133,37 @@ void UnitsTest::testConversionCapability() {
         {"square-hectare", "pow4-foot", CONVERTIBLE},                                //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},      //
         {"cubic-kilometer-per-second-meter", "second-per-square-meter", RECIPROCAL}, //
+        {"square-meter-per-square-hour", "hectare-per-square-second", CONVERTIBLE},  //
+        {"hertz", "revolution-per-second", CONVERTIBLE},                             //
+        {"millimeter", "meter", CONVERTIBLE},                                        //
+        {"yard", "meter", CONVERTIBLE},                                              //
+        {"ounce-troy", "kilogram", CONVERTIBLE},                                     //
+        {"percent", "portion", CONVERTIBLE},                                         //
+        {"ofhg", "kilogram-per-square-meter-square-second", CONVERTIBLE},            //
+        {"second-per-meter", "meter-per-second", RECIPROCAL},                        //
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
         MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        if (status.errIfFailureAndReset("source MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.source)) {
+            continue;
+        }
         MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        if (status.errIfFailureAndReset("target MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.target)) {
+            continue;
+        }
 
         ConversionRates conversionRates(status);
+        if (status.errIfFailureAndReset("conversionRates(status)")) {
+            continue;
+        }
         auto convertibility = extractConvertibility(source, target, conversionRates, status);
+        if (status.errIfFailureAndReset("extractConvertibility(<%s>, <%s>, ...)", testCase.source,
+                                        testCase.target)) {
+            continue;
+        }
 
         assertEquals(UnicodeString("Conversion Capability: ") + testCase.source + " to " +
                          testCase.target,
@@ -154,43 +171,8 @@ void UnitsTest::testConversionCapability() {
     }
 }
 
-void UnitsTest::testSiPrefixes() {
-    IcuTestErrorCode status(*this, "Units testSiPrefixes");
-    // Test Cases
-    struct TestCase {
-        const char *source;
-        const char *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {"gram", "kilogram", 1.0, 0.001},            //
-        {"milligram", "kilogram", 1.0, 0.000001},    //
-        {"microgram", "kilogram", 1.0, 0.000000001}, //
-        {"megagram", "gram", 1.0, 1000000},          //
-        {"megagram", "kilogram", 1.0, 1000},         //
-        {"gigabyte", "byte", 1.0, 1000000000},       //
-        // TODO: Fix `watt` probelms.
-        // {"megawatt", "watt", 1.0, 1000000},          //
-        // {"megawatt", "kilowatt", 1.0, 1000},         //
-    };
-
-    for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
-        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
-        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
-
-        ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
-
-        assertEqualsNear(UnicodeString("testSiPrefixes: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * testCase.expectedValue);
-    }
-}
-
-void UnitsTest::testMass() {
-    IcuTestErrorCode status(*this, "Units testMass");
+void UnitsTest::testConverter() {
+    IcuTestErrorCode status(*this, "UnitsTest::testConverter");
 
     // Test Cases
     struct TestCase {
@@ -199,100 +181,74 @@ void UnitsTest::testMass() {
         const double inputValue;
         const double expectedValue;
     } testCases[]{
-        {"gram", "kilogram", 1.0, 0.001},      //
-        {"pound", "kilogram", 1.0, 0.453592},  //
-        {"pound", "kilogram", 2.0, 0.907185},  //
-        {"ounce", "pound", 16.0, 1.0},         //
-        {"ounce", "kilogram", 16.0, 0.453592}, //
-        {"ton", "pound", 1.0, 2000},           //
-        {"stone", "pound", 1.0, 14},           //
-        {"stone", "kilogram", 1.0, 6.35029}    //
+        // SI Prefixes
+        {"gram", "kilogram", 1.0, 0.001},
+        {"milligram", "kilogram", 1.0, 0.000001},
+        {"microgram", "kilogram", 1.0, 0.000000001},
+        {"megagram", "gram", 1.0, 1000000},
+        {"megagram", "kilogram", 1.0, 1000},
+        {"gigabyte", "byte", 1.0, 1000000000},
+        {"megawatt", "watt", 1.0, 1000000},
+        {"megawatt", "kilowatt", 1.0, 1000},
+        // Mass
+        {"gram", "kilogram", 1.0, 0.001},
+        {"pound", "kilogram", 1.0, 0.453592},
+        {"pound", "kilogram", 2.0, 0.907185},
+        {"ounce", "pound", 16.0, 1.0},
+        {"ounce", "kilogram", 16.0, 0.453592},
+        {"ton", "pound", 1.0, 2000},
+        {"stone", "pound", 1.0, 14},
+        {"stone", "kilogram", 1.0, 6.35029},
+        // Temperature
+        {"celsius", "fahrenheit", 0.0, 32.0},
+        {"celsius", "fahrenheit", 10.0, 50.0},
+        {"celsius", "fahrenheit", 1000, 1832},
+        {"fahrenheit", "celsius", 32.0, 0.0},
+        {"fahrenheit", "celsius", 89.6, 32},
+        {"fahrenheit", "fahrenheit", 1000, 1000},
+        {"kelvin", "fahrenheit", 0.0, -459.67},
+        {"kelvin", "fahrenheit", 300, 80.33},
+        {"kelvin", "celsius", 0.0, -273.15},
+        {"kelvin", "celsius", 300.0, 26.85},
+        // Area
+        {"square-meter", "square-yard", 10.0, 11.9599},
+        {"hectare", "square-yard", 1.0, 11959.9},
+        {"square-mile", "square-foot", 0.0001, 2787.84},
+        {"hectare", "square-yard", 1.0, 11959.9},
+        {"hectare", "square-meter", 1.0, 10000},
+        {"hectare", "square-meter", 0.0, 0.0},
+        {"square-mile", "square-foot", 0.0001, 2787.84},
+        {"square-yard", "square-foot", 10, 90},
+        {"square-yard", "square-foot", 0, 0},
+        {"square-yard", "square-foot", 0.000001, 0.000009},
+        {"square-mile", "square-foot", 0.0, 0.0},
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
         MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        if (status.errIfFailureAndReset("source MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.source)) {
+            continue;
+        }
         MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        if (status.errIfFailureAndReset("target MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.target)) {
+            continue;
+        }
 
         ConversionRates conversionRates(status);
+        if (status.errIfFailureAndReset("conversionRates(status)")) {
+            continue;
+        }
         UnitConverter converter(source, target, conversionRates, status);
+        if (status.errIfFailureAndReset("UnitConverter(<%s>, <%s>, ...)", testCase.source,
+                                        testCase.target)) {
+            continue;
+        }
 
-        assertEqualsNear(UnicodeString("testMass: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * testCase.expectedValue);
-    }
-}
-
-void UnitsTest::testTemperature() {
-    IcuTestErrorCode status(*this, "Units testTemperature");
-    // Test Cases
-    struct TestCase {
-        const char *source;
-        const char *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {"celsius", "fahrenheit", 0.0, 32.0},   //
-        {"celsius", "fahrenheit", 10.0, 50.0},  //
-        {"fahrenheit", "celsius", 32.0, 0.0},   //
-        {"fahrenheit", "celsius", 89.6, 32},    //
-        {"kelvin", "fahrenheit", 0.0, -459.67}, //
-        {"kelvin", "fahrenheit", 300, 80.33},   //
-        {"kelvin", "celsius", 0.0, -273.15},    //
-        {"kelvin", "celsius", 300.0, 26.85}     //
-    };
-
-    for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
-        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
-        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
-
-        ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
-
-        assertEqualsNear(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
+        assertEqualsNear(UnicodeString("testConverter: ") + testCase.source + " to " + testCase.target,
                          testCase.expectedValue, converter.convert(testCase.inputValue),
                          0.0001 * uprv_fabs(testCase.expectedValue));
-    }
-}
-
-void UnitsTest::testArea() {
-    IcuTestErrorCode status(*this, "Units Area");
-
-    // Test Cases
-    struct TestCase {
-        const char *source;
-        const char *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {"square-meter", "square-yard", 10.0, 11.9599},     //
-        {"hectare", "square-yard", 1.0, 11959.9},           //
-        {"square-mile", "square-foot", 0.0001, 2787.84},    //
-        {"hectare", "square-yard", 1.0, 11959.9},           //
-        {"hectare", "square-meter", 1.0, 10000},            //
-        {"hectare", "square-meter", 0.0, 0.0},              //
-        {"square-mile", "square-foot", 0.0001, 2787.84},    //
-        {"square-yard", "square-foot", 10, 90},             //
-        {"square-yard", "square-foot", 0, 0},               //
-        {"square-yard", "square-foot", 0.000001, 0.000009}, //
-        {"square-mile", "square-foot", 0.0, 0.0},           //
-    };
-
-    for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
-        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
-        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
-
-        ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
-
-        assertEqualsNear(UnicodeString("testArea: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * testCase.expectedValue);
     }
 }
 
@@ -400,8 +356,8 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
 
     // Conversion:
     UnitConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
-    if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-                                    sourceIdent.data(), targetIdent.data())) {
+    if (status.errIfFailureAndReset("UnitConverter(<%s>, <%s>, ...)", sourceIdent.data(),
+                                    targetIdent.data())) {
         return;
     }
     double got = converter.convert(1000);
@@ -418,12 +374,12 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
  * Runs data-driven unit tests for unit conversion. It looks for the test cases
  * in source/test/testdata/cldr/units/unitsTest.txt, which originates in CLDR.
  */
-void UnitsTest::testConversions() {
+void UnitsTest::testConverterWithCLDRTests() {
     const char *filename = "unitsTest.txt";
     const int32_t kNumFields = 5;
     char *fields[kNumFields][2];
 
-    IcuTestErrorCode errorCode(*this, "UnitsTest::testConversions");
+    IcuTestErrorCode errorCode(*this, "UnitsTest::testConverterWithCLDRTests");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
     if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                        "folder (getSourceTestData())")) {
@@ -862,12 +818,12 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
  * in source/test/testdata/cldr/units/unitPreferencesTest.txt, which originates
  * in CLDR.
  */
-void UnitsTest::testPreferences() {
+void UnitsTest::testUnitPreferencesWithCLDRTests() {
     const char *filename = "unitPreferencesTest.txt";
     const int32_t maxFields = 11;
     char *fields[maxFields][2];
 
-    IcuTestErrorCode errorCode(*this, "UnitsTest::testPreferences");
+    IcuTestErrorCode errorCode(*this, "UnitsTest::testUnitPreferencesWithCLDRTests");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
     if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                        "folder (getSourceTestData())")) {
