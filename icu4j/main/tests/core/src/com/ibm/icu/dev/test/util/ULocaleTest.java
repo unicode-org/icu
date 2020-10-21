@@ -5212,6 +5212,9 @@ public class ULocaleTest extends TestFmwk {
         Assert.assertEquals("ja-Latn-alalc97", canonicalTag("ja-Latn-hepburn-heploc"));
 
         Assert.assertEquals("aaa-Fooo-RU", canonicalTag("aaa-Fooo-SU"));
+
+        // ICU-21344
+        Assert.assertEquals("ku-Arab-IQ", canonicalTag("ku-Arab-NT"));
     }
 
     @Test

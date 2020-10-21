@@ -35,6 +35,7 @@
 
 #include "unicode/bytestream.h"
 #include "unicode/locid.h"
+#include "unicode/localebuilder.h"
 #include "unicode/strenum.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uloc.h"
@@ -1336,7 +1337,10 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
         // Cannot use nullptr for language because that will construct
         // the default locale, in that case, use "und" to get the correct
         // locale.
-        Locale l(language == nullptr ? "und" : language, nullptr, script);
+        Locale l = LocaleBuilder()
+            .setLanguage(language == nullptr ? "und" : language)
+            .setScript(script)
+            .build(status);
         l.addLikelySubtags(status);
         const char* likelyRegion = l.getCountry();
         CharString* item = nullptr;
