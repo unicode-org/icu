@@ -1982,6 +1982,14 @@ public class DateIntervalFormat extends UFormat {
                  pattern = fInfo.getIntervalPattern(bestSkeleton,
                                                          Calendar.HOUR);
                  if ( pattern != null ) {
+                    boolean suppressDayPeriodField = fSkeleton.indexOf('J') != -1;
+                    String part1 = adjustFieldWidth(skeleton, bestSkeleton,
+                                       pattern.getFirstPart(), differenceInfo, suppressDayPeriodField);
+                    String part2 = adjustFieldWidth(skeleton, bestSkeleton,
+                                       pattern.getSecondPart(), differenceInfo, suppressDayPeriodField);
+                    pattern =  new PatternInfo(part1, part2,
+                                               pattern.firstDateInPtnIsLaterDate());
+                                               
                       // share
                       intervalPatterns.put(DateIntervalInfo.
                           CALENDAR_FIELD_TO_PATTERN_LETTER[field],
