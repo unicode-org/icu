@@ -1166,6 +1166,9 @@ void DateIntervalFormatTest::testHourMetacharacters() {
          "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 11:00:00", "kk", "24\\u201311",
          "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 12:00:00", "kk", "24\\u201312",
          "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 13:00:00", "kk", "24\\u201313",
+
+         // regression test for ICU-21343
+         "de", "CE 2010 09 27 01:00:00", "CE 2010 09 27 10:00:00", "KK", "1 \\u2013 10 Uhr AM",
     };
     expect(DATA, UPRV_LENGTHOF(DATA));
 }
