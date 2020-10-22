@@ -1422,7 +1422,11 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
         if ( field == UCAL_AM_PM ) {
             fInfo->getIntervalPattern(*bestSkeleton, UCAL_HOUR, pattern,status);
             if ( !pattern.isEmpty() ) {
-                setIntervalPattern(field, pattern);
+                UBool suppressDayPeriodField = fSkeleton.indexOf(CAP_J) != -1;
+                UnicodeString adjustIntervalPattern;
+                adjustFieldWidth(*skeleton, *bestSkeleton, pattern, differenceInfo,
+                                 suppressDayPeriodField, adjustIntervalPattern);
+                setIntervalPattern(field, adjustIntervalPattern);
             }
             return false;
         }
