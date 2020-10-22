@@ -4,6 +4,7 @@ package com.ibm.icu.impl.units;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import com.ibm.icu.util.BytesTrie;
@@ -224,7 +225,7 @@ public class MeasureUnitImpl {
         }
         if (this.complexity == MeasureUnit.Complexity.COMPOUND) {
             // Note: don't sort a MIXED unit
-            this.getSingleUnits().sort(new SingleUnitComparator());
+            Collections.sort(this.getSingleUnits(), new SingleUnitComparator());
         }
 
         StringBuilder result = new StringBuilder();
