@@ -184,7 +184,7 @@ library: common
     uinit utypes errorcode
     icuplug
     platform
-    localebuilder localematcher
+    localematcher
 
 group: pluralmap
     # TODO: Move to i18n library, ticket #11926.
@@ -634,6 +634,7 @@ group: resourcebundle
     # Do we need class LocaleBased? https://unicode-org.atlassian.net/browse/ICU-8608
     locbased.o
     loclikely.o
+    localebuilder.o
   deps
     udata ucol_swp
     sort stringenumeration uhash uvector
@@ -641,15 +642,10 @@ group: resourcebundle
     bytesinkutil
     errorcode
 
-group: localebuilder
-    localebuilder.o
-  deps
-    resourcebundle
-
 group: localematcher
     localematcher.o
   deps
-    localebuilder localeprioritylist loclikelysubtags locdistance lsr
+    resourcebundle localeprioritylist loclikelysubtags locdistance lsr
 
 group: localeprioritylist
     localeprioritylist.o
