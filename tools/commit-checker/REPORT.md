@@ -7,9 +7,9 @@ Commit Report
 =============
 
 Environment:
-- Latest Commit: d1dcb6931884dcf4b8b9a88fa17d19159a95a04c
+- Latest Commit: c7024d5faa366f1f26a5b6e4fa974acdc5a6790f
 - Jira Query: project=ICU AND fixVersion=68.1
-- Rev Range: release-67-1..origin/master
+- Rev Range: release-67-1..origin/maint/maint-68
 - Authenticated: Yes
 
 ## Problem Categories
@@ -36,32 +36,6 @@ Tip: Check that these tickets have the correct fixVersion tag.
 
 ### Commits with Open Jira Issue
 Tip: Consider closing the ticket if it is fixed.
-
-#### Issue ICU-13259
-
-- ICU-13259: `ulocdata_getDelimiter(... ULOCDATA_QUOTATION_START ...) fails for e.g. fr_CA`
-	- Assigned to Peter Edberg
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-13259
-
-##### Commits with Issue ICU-13259
-
-- 0583afe `ICU-13259 Check whether ulocdata_getDelimiter works in various locales including fr_CA`
-	- Authored by Peter Edberg <pedberg@unicode.org>
-	- Committed at 2020-10-09T10:01:30-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/0583afebf33cffe4a8560f64acfa75b3e14f34d8
-
-#### Issue ICU-21098
-
-- ICU-21098: `ICU4C logKnownIssue does not return false for closed issues`
-	- Assigned to Steven R. Loomis
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21098
-
-##### Commits with Issue ICU-21098
-
-- 4231ca5 `ICU-21098 fix ticket URLs for logKnownIssue tickets.`
-	- Authored by Steven R. Loomis <srloomis@us.ibm.com>
-	- Committed at 2020-05-20T15:58:51-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/4231ca5be053a22a1be24eb891817458c97db709
 
 #### Issue ICU-21249
 
@@ -276,5 +250,121 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-08-26T19:09:54-05:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/4767be7f4ff361612a5d62caa92884cfa9d8c224
 
+#### Issue ICU-21250
 
-## Total Problems: 3
+- ICU-21250: `ICU 68.1 Release BRS`
+	- Assigned to Markus Scherer
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21250
+
+##### Commits with Issue ICU-21250
+
+- c7024d5 `ICU-21250 Update ICU4J and ICU4C APIChangeReports`
+	- Authored by Craig Cornelius <cwcornelius@gmail.com>
+	- Committed at 2020-10-23T22:18:19-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/c7024d5faa366f1f26a5b6e4fa974acdc5a6790f
+
+- 97eec04 `ICU-21250 integrate CLDR release-38-final0 to ICU trunk`
+	- Authored by Peter Edberg <pedberg@unicode.org>
+	- Committed at 2020-10-23T08:45:50-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/97eec046dfa789e51488b47fc3439d8d3d9c8cb8
+
+- acd571a `ICU-21250 integrate CLDR release-38-beta3 to ICU trunk`
+	- Authored by Peter Edberg <pedberg@unicode.org>
+	- Committed at 2020-10-19T19:27:52-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/acd571a4d2297c7f8ba7b4e7892f2e612cfe519f
+
+- 93deb0e `ICU-21250 BRS68GA Update version numbers for 68GA and regenerate jar files`
+	- Authored by Erik Torres Aguilar <26077674+erik0686@users.noreply.github.com>
+	- Committed at 2020-10-14T11:38:45-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/93deb0e4487164e4bf12a3e7ecc5afb222a0aad0
+
+#### Issue ICU-21308
+
+- ICU-21308: `MeasureUnitImpl$UnitParser thread safety issue`
+	- Assigned to Younies Mahmoud
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21308
+
+##### Commits with Issue ICU-21308
+
+- dd87efa `ICU-21308 Fix icu4j build for Java 7 in MeasureUnitImpl`
+	- Authored by younies <younies@chromium.org>
+	- Committed at 2020-10-22T21:31:31+04:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/dd87efa2994cf47f390e2c6a3af65dae4a68e898
+
+- 1a47279 `ICU-21308 Fix units parser thread safety issue`
+	- Authored by younies <younies@chromium.org>
+	- Committed at 2020-10-20T20:10:47+04:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/1a4727924ff4823c6fc58f8b1ba6d70b3475bde0
+
+#### Issue ICU-21333
+
+- ICU-21333: `API failing for CLDR testing`
+	- Assigned to Shane Carr
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21333
+
+##### Commits with Issue ICU-21333
+
+- 766088d `ICU-21333 Port fix from ICU-21258 to internal CLDR API`
+	- Authored by Shane F. Carr <shane@unicode.org>
+	- Committed at 2020-10-21T11:16:48-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/766088ddb360a3494acbd140cf6c2625008f6bbf
+
+#### Issue ICU-21334
+
+- ICU-21334: `Promote ICU4C ListFormatter openForType to stable in ICU 68`
+	- Assigned to Shane Carr
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21334
+
+##### Commits with Issue ICU-21334
+
+- 340271c `ICU-21334 Promote ICU4C ListFormatter openForType to stable.`
+	- Authored by Shane F. Carr <shane@unicode.org>
+	- Committed at 2020-10-22T01:48:50-05:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/340271c225cbbd8e1f554108b668e6da7af25dfe
+
+#### Issue ICU-21340
+
+- ICU-21340: `icu::ListFormatter nextPosition() need to report one per input in "zh" locale with "unit", "unit-narrow", "unit-short" `
+	- Assigned to Shane Carr
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21340
+
+##### Commits with Issue ICU-21340
+
+- 86f00ad `ICU-21340 Don't coalesce adjacent list formatter fields in ICU4C`
+	- Authored by Shane F. Carr <sffc@google.com>
+	- Committed at 2020-10-23T20:37:07-05:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/86f00ad7fb6030fcd42f0d242c8e36ca2a732667
+
+#### Issue ICU-21344
+
+- ICU-21344: `AliasReplacer::replaceTerritory calls the Locale constructor with wrong arguments`
+	- Assigned to Frank Yung-Fong Tang
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21344
+
+##### Commits with Issue ICU-21344
+
+- 9a82de7 `ICU-21344 merge localebuilder into resourcebundle`
+	- Authored by Frank Tang <ftang@chromium.org>
+	- Committed at 2020-10-22T17:44:34-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/9a82de789f7a8afc77673d3fcf719a50e51e56ff
+
+- 9ab5487 `ICU-21344 Fix wrong passing of script in Locale.`
+	- Authored by Frank Tang <ftang@chromium.org>
+	- Committed at 2020-10-21T16:46:01-07:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/9ab5487eb8eae94dcacb810c6ed3318f7f3c1262
+
+#### Issue ICU-21348
+
+- ICU-21348: `tzdata2020c updates`
+	- Assigned to Yoshito Umaoka
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21348
+
+##### Commits with Issue ICU-21348
+
+- 9dcac1b `ICU-21348 tz database 2020c updates`
+	- Authored by yumaoka <y.umaoka@gmail.com>
+	- Committed at 2020-10-21T20:29:11-04:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/9dcac1b6ca78fcf1357af05e6db209a357cb5cae
+
+
+## Total Problems: 8
