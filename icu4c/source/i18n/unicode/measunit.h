@@ -23,10 +23,10 @@
 #include "unicode/localpointer.h"
 
 /**
- * \file 
+ * \file
  * \brief C++ API: A unit for measuring a quantity.
  */
- 
+
 U_NAMESPACE_BEGIN
 
 class StringEnumeration;
@@ -35,7 +35,7 @@ struct MeasureUnitImpl;
 #ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for unit complexity. There are three levels:
- * 
+ *
  * - SINGLE: A single unit, optionally with a power and/or SI prefix. Examples: hectare,
  *           square-kilometer, kilojoule, per-second.
  * - COMPOUND: A unit composed of the product of multiple single units. Examples:
@@ -58,7 +58,7 @@ enum UMeasureUnitComplexity {
 
     /**
      * A compound unit, like meter-per-second.
-     * 
+     *
      * @draft ICU 67
      */
     UMEASURE_UNIT_COMPOUND,
@@ -243,7 +243,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 3.0
      */
     MeasureUnit();
-    
+
     /**
      * Copy constructor.
      * @stable ICU 3.0
@@ -3518,7 +3518,6 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 64
      */
     static MeasureUnit getTeaspoon();
-
 
 // End generated createXXX methods
 
