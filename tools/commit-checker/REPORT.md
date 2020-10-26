@@ -7,7 +7,7 @@ Commit Report
 =============
 
 Environment:
-- Latest Commit: c7024d5faa366f1f26a5b6e4fa974acdc5a6790f
+- Latest Commit: df72f8cbaf81cf9dcd94071961f198e1fa416ff8
 - Jira Query: project=ICU AND fixVersion=68.1
 - Rev Range: release-67-1..origin/maint/maint-68
 - Authenticated: Yes
