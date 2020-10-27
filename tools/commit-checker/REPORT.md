@@ -16,19 +16,13 @@ Environment:
 ### Closed Issues with No Commit
 Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.
 
-- ICU-21286: `Compilation error in listformatter.cpp when UCONFIG_NO_FORMATTING is set`
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21286
-
+*Success: No problems in this category!*
 ### Closed Issues with Illegal Resolution or Commit
 Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.
 Duplicate tickets should have their fixVersion tag removed.
 Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.
 
-- ICU-21286: `Compilation error in listformatter.cpp when UCONFIG_NO_FORMATTING is set`
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21286
-
+*Success: No problems in this category!*
 
 ### Commits without Jira Issue Tag
 Tip: If you see your name here, make sure to label your commits correctly in the future.
@@ -321,4 +315,4 @@ Tip: Consider closing the ticket if it is fixed.
 	- GitHub Link: https://github.com/unicode-org/icu/commit/9ab5487eb8eae94dcacb810c6ed3318f7f3c1262
 
 
-## Total Problems: 6
+## Total Problems: 4
