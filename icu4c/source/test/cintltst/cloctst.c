@@ -1243,6 +1243,7 @@ static void TestDisplayNameBrackets()
 
 static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UChar getName[kDisplayNameBracketsMax];
     UDisplayContext contexts[] = {
@@ -1299,6 +1300,7 @@ static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
     }
 
     uldn_close(ldn);
+#endif
 }
 
 /*------------------------------
