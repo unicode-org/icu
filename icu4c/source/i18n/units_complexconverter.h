@@ -79,10 +79,9 @@ class U_I18N_API ComplexUnitsConverter : public UMemory {
 
   private:
     MaybeStackVector<UnitConverter> unitConverters_;
-    // Individual units of mixed units, sorted big to small
-    MaybeStackVector<MeasureUnitImpl> units_;
-    // Individual units of mixed units, sorted in desired output order
-    MaybeStackVector<MeasureUnit> outputUnits_;
+
+    // Individual units of mixed units attached with there indices, sorted big to small according to the units.
+    MaybeStackVector<std::pair<int32_t, MeasureUnitImpl>> units_;
 };
 
 } // namespace units

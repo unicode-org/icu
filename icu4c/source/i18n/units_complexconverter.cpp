@@ -25,17 +25,12 @@ namespace units {
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
                                              const MeasureUnitImpl &outputUnits,
                                              const ConversionRates &ratesInfo, UErrorCode &status)
-    : units_(outputUnits.extractIndividualUnits(status)) {
+    : units_(outputUnits.extractIndividualUnitsWithIndecies(status)) {
     if (U_FAILURE(status)) {
         return;
     }
 
     U_ASSERT(units_.length() != 0);
-
-    // Save the desired order of output units before we sort units_
-    for (int32_t i = 0; i < units_.length(); i++) {
-        outputUnits_.emplaceBackAndCheckErrorCode(status, units_[i]->copy(status).build(status));
-    }
 
     // NOTE:
     //  This comparator is used to sort the units in a descending order. Therefore, we return -1 if
@@ -43,11 +38,11 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
     auto descendingCompareUnits = [](const void *context, const void *left, const void *right) {
         UErrorCode status = U_ZERO_ERROR;
 
-        const auto *leftPointer = static_cast<const MeasureUnitImpl *const *>(left);
-        const auto *rightPointer = static_cast<const MeasureUnitImpl *const *>(right);
+        const auto *leftPointer = static_cast<const std::pair<int32_t, MeasureUnitImpl> *const *>(left);
+        const auto *rightPointer = static_cast<const std::pair<int32_t, MeasureUnitImpl> *const *>(right);
 
-        UnitConverter fromLeftToRight(**leftPointer,                                  //
-                                      **rightPointer,                                 //
+        UnitConverter fromLeftToRight((**leftPointer).second /* left unit*/,                                  //
+                                      (**rightPointer).second /* right unit */,                                 //
                                       *static_cast<const ConversionRates *>(context), //
                                       status);
 

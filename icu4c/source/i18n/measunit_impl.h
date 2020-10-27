@@ -206,6 +206,16 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      */
     MaybeStackVector<MeasureUnitImpl> extractIndividualUnits(UErrorCode &status) const;
 
+    /**
+     * Extracts the list of all the individual units inside the `MeasureUnitImpl`. with their indices.
+     *      For example:    
+     *          -   if the `MeasureUnitImpl` is `foot-per-hour`
+     *                  it will return a list of 1 { (0, `foot-per-hour`)} 
+     *          -   if the `MeasureUnitImpl` is `foot-and-inch` 
+     *                  it will return a list of 2 { (0, `foot`), (1, `inch`)}
+     */
+    MaybeStackVector<std::pair<int32_t, MeasureUnitImpl>> extractIndividualUnitsWithIndecies(UErrorCode &status) const;
+
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);
 

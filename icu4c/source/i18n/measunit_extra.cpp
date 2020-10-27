@@ -846,6 +846,23 @@ MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::extractIndividualUnits(UError
     return result;
 }
 
+MaybeStackVector<std::pair<int32_t, MeasureUnitImpl>> MeasureUnitImpl::extractIndividualUnitsWithIndecies(UErrorCode &status) const {
+        MaybeStackVector<std::pair<int32_t, MeasureUnitImpl>> result;
+        
+        auto singleUnits = extractIndividualUnits(status);
+        if (U_FAILURE(status)) {
+            return result;
+        }
+
+        for (int32_t i = 0; i < singleUnits.length() ; ++i) {
+            result.emplaceBackAndCheckErrorCode(status, std::make_pair(i , std::move(*singleUnits[i])));
+        }
+
+        // all elements of `singleUnits` has been moved
+
+        return result;
+}
+
 MeasureUnit MeasureUnitImpl::build(UErrorCode& status) && {
     serialize(*this, status);
     return MeasureUnit(std::move(*this));
