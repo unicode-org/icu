@@ -2,6 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.units;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
@@ -9,18 +14,7 @@ import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.StringTrieBuilder;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 public class MeasureUnitImpl {
-    /**
-     * Represents the index of the unit in the list of <code>MeasureUnitImpl</code>, if equals -1, this means
-     * the field is not set.
-     */
-    protected int index = -1;
 
     /**
      * The full unit identifier.  Null if not computed.
@@ -110,8 +104,8 @@ public class MeasureUnitImpl {
      *
      * @return a list of <code>MeasureUnitImpl</code>
      */
-    public List<MeasureUnitImpl> extractIndividualUnits() {
-        List<MeasureUnitImpl> result = new ArrayList<>();
+    public ArrayList<MeasureUnitImpl> extractIndividualUnits() {
+        ArrayList<MeasureUnitImpl> result = new ArrayList<>();
         if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
             // In case of mixed units, each single unit can be considered as a stand alone MeasureUnitImpl.
             for (SingleUnitImpl singleUnit :
@@ -123,15 +117,6 @@ public class MeasureUnitImpl {
         }
 
         result.add(this.copy());
-        return result;
-    }
-
-    public List<MeasureUnitImpl> extractIndividualUnitsWithIndex() {
-        List<MeasureUnitImpl> result = this.extractIndividualUnits();
-        for (int i = 0; i < result.size(); i++) {
-            result.get(i).index = i;
-        }
-
         return result;
     }
 
@@ -279,11 +264,6 @@ public class MeasureUnitImpl {
         }
 
         this.identifier = result.toString();
-    }
-
-    @Override
-    public String toString() {
-        return "MeasureUnitImpl [" + build().getIdentifier() + "]";
     }
 
     public enum CompoundPart {
@@ -776,24 +756,7 @@ public class MeasureUnitImpl {
         public int compare(MeasureUnitImpl o1, MeasureUnitImpl o2) {
             BigDecimal factor1 = this.conversionRates.getFactorToBase(o1).getConversionRate();
             BigDecimal factor2 = this.conversionRates.getFactorToBase(o2).getConversionRate();
-
             return factor1.compareTo(factor2);
-        }
-    }
-
-    public static class MeasureUnitComparator implements Comparator<MeasureUnit> {
-        private MeasureUnitImplComparator measureUnitImplComparator;
-
-        public MeasureUnitComparator(ConversionRates conversionRates) {
-            this.measureUnitImplComparator = new MeasureUnitImplComparator(conversionRates);
-        }
-
-        @Override
-        public int compare(MeasureUnit o1, MeasureUnit o2) {
-            MeasureUnitImpl o1Impl = MeasureUnitImpl.forIdentifier(o1.getIdentifier());
-            MeasureUnitImpl o2Impl = MeasureUnitImpl.forIdentifier(o2.getIdentifier());
-
-            return this.measureUnitImplComparator.compare(o1Impl, o2Impl);
         }
     }
 
@@ -802,5 +765,10 @@ public class MeasureUnitImpl {
         public int compare(SingleUnitImpl o1, SingleUnitImpl o2) {
             return o1.compareTo(o2);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MeasureUnitImpl [" + build().getIdentifier() + "]";
     }
 }
