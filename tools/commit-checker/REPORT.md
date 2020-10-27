@@ -16,13 +16,19 @@ Environment:
 ### Closed Issues with No Commit
 Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.
 
-*Success: No problems in this category!*
+- ICU-21286: `Compilation error in listformatter.cpp when UCONFIG_NO_FORMATTING is set`
+	- Assigned to Shane Carr
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21286
+
 ### Closed Issues with Illegal Resolution or Commit
 Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.
 Duplicate tickets should have their fixVersion tag removed.
 Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.
 
-*Success: No problems in this category!*
+- ICU-21286: `Compilation error in listformatter.cpp when UCONFIG_NO_FORMATTING is set`
+	- Assigned to Shane Carr
+	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21286
+
 
 ### Commits without Jira Issue Tag
 Tip: If you see your name here, make sure to label your commits correctly in the future.
@@ -296,45 +302,6 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-10-20T20:10:47+04:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/1a4727924ff4823c6fc58f8b1ba6d70b3475bde0
 
-#### Issue ICU-21333
-
-- ICU-21333: `API failing for CLDR testing`
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21333
-
-##### Commits with Issue ICU-21333
-
-- 766088d `ICU-21333 Port fix from ICU-21258 to internal CLDR API`
-	- Authored by Shane F. Carr <shane@unicode.org>
-	- Committed at 2020-10-21T11:16:48-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/766088ddb360a3494acbd140cf6c2625008f6bbf
-
-#### Issue ICU-21334
-
-- ICU-21334: `Promote ICU4C ListFormatter openForType to stable in ICU 68`
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21334
-
-##### Commits with Issue ICU-21334
-
-- 340271c `ICU-21334 Promote ICU4C ListFormatter openForType to stable.`
-	- Authored by Shane F. Carr <shane@unicode.org>
-	- Committed at 2020-10-22T01:48:50-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/340271c225cbbd8e1f554108b668e6da7af25dfe
-
-#### Issue ICU-21340
-
-- ICU-21340: `icu::ListFormatter nextPosition() need to report one per input in "zh" locale with "unit", "unit-narrow", "unit-short" `
-	- Assigned to Shane Carr
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21340
-
-##### Commits with Issue ICU-21340
-
-- 86f00ad `ICU-21340 Don't coalesce adjacent list formatter fields in ICU4C`
-	- Authored by Shane F. Carr <sffc@google.com>
-	- Committed at 2020-10-23T20:37:07-05:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/86f00ad7fb6030fcd42f0d242c8e36ca2a732667
-
 #### Issue ICU-21344
 
 - ICU-21344: `AliasReplacer::replaceTerritory calls the Locale constructor with wrong arguments`
@@ -353,18 +320,5 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-10-21T16:46:01-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/9ab5487eb8eae94dcacb810c6ed3318f7f3c1262
 
-#### Issue ICU-21348
 
-- ICU-21348: `tzdata2020c updates`
-	- Assigned to Yoshito Umaoka
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21348
-
-##### Commits with Issue ICU-21348
-
-- 9dcac1b `ICU-21348 tz database 2020c updates`
-	- Authored by yumaoka <y.umaoka@gmail.com>
-	- Committed at 2020-10-21T20:29:11-04:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/9dcac1b6ca78fcf1357af05e6db209a357cb5cae
-
-
-## Total Problems: 8
+## Total Problems: 6
