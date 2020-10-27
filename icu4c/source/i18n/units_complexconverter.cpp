@@ -38,12 +38,14 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
     auto descendingCompareUnits = [](const void *context, const void *left, const void *right) {
         UErrorCode status = U_ZERO_ERROR;
 
-        const auto *leftPointer = static_cast<const std::pair<int32_t, MeasureUnitImpl> *const *>(left);
-        const auto *rightPointer = static_cast<const std::pair<int32_t, MeasureUnitImpl> *const *>(right);
+        const auto *leftPointer =
+            static_cast<const std::pair<int32_t, MeasureUnitImpl *> *const *>(left);
+        const auto *rightPointer =
+            static_cast<const std::pair<int32_t, MeasureUnitImpl *> *const *>(right);
 
         // Return -ve the result because we are sorting in descending order.
-        return -1 * UnitConverter::compareTwoUnits((**leftPointer).second /* left unit*/,                                  //
-                                                   (**rightPointer).second /* right unit */,                                 //
+        return -1 * UnitConverter::compareTwoUnits(*((**leftPointer).second) /* left unit*/,       //
+                                                   *((**rightPointer).second) /* right unit */,    //
                                                    *static_cast<const ConversionRates *>(context), //
                                                    status);
     };
@@ -73,10 +75,10 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
     //              3. then, the final result will be (6 feet and 6.74016 inches)
     for (int i = 0, n = units_.length(); i < n; i++) {
         if (i == 0) { // first element
-            unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, *units_[i], ratesInfo,
+            unitConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, *(units_[i]->second), ratesInfo,
                                                          status);
         } else {
-            unitConverters_.emplaceBackAndCheckErrorCode(status, *units_[i - 1], *units_[i], ratesInfo,
+            unitConverters_.emplaceBackAndCheckErrorCode(status, *(units_[i - 1]->second), *(units_[i]->second), ratesInfo,
                                                          status);
         }
 
@@ -107,7 +109,7 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
 
     // For N converters:
     // - the first converter converts from the input unit to the largest unit,
-    // - N-1 converters convert to bigger units for which we want integers,
+    // - the following N-2 converters convert to bigger units for which we want integers,
     // - the Nth converter (index N-1) converts to the smallest unit, for which
     //   we keep a double.
     MaybeStackArray<int64_t, 5> intValues(unitConverters_.length() - 1, status);
@@ -178,13 +180,14 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
         }
     }
 
-    // Package values into Measure instances in result:
-    for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
+    // Package values into Measure instances in unordered_result:
+    MaybeStackVector<std::pair<int32_t, Measure> > unordered_result;
+    for (int i = 0, n = units_.length(); i < n; ++i) {
         if (i < n - 1) {
             Formattable formattableQuantity(intValues[i] * sign);
             // Measure takes ownership of the MeasureUnit*
-            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
-            if (result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status) ==
+            MeasureUnit *type = new MeasureUnit(units_[i]->second->copy(status).build(status));
+            if (unordered_result.emplaceBackAndCheckErrorCode(status, std::make_pair(units_[i]->first,  Measure(formattableQuantity, type, status))) ==
                 nullptr) {
                 // Ownership wasn't taken
                 U_ASSERT(U_FAILURE(status));
@@ -197,8 +200,8 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
             // Add the last element, not an integer:
             Formattable formattableQuantity(quantity * sign);
             // Measure takes ownership of the MeasureUnit*
-            MeasureUnit *type = new MeasureUnit(units_[i]->copy(status).build(status));
-            if (result.emplaceBackAndCheckErrorCode(status, formattableQuantity, type, status) ==
+            MeasureUnit *type = new MeasureUnit((units_[i])->second->copy(status).build(status));
+            if (unordered_result.emplaceBackAndCheckErrorCode(status, std::make_pair(units_[i]->first, Measure( formattableQuantity, type, status))) ==
                 nullptr) {
                 // Ownership wasn't taken
                 U_ASSERT(U_FAILURE(status));
@@ -207,27 +210,37 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
             if (U_FAILURE(status)) {
                 return result;
             }
-            U_ASSERT(result.length() == i + 1);
-            U_ASSERT(result[i] != nullptr);
+            U_ASSERT(unordered_result.length() == i + 1);
+            U_ASSERT(unordered_result[i] != nullptr);
         }
     }
 
-    MaybeStackVector<Measure> orderedResult;
-    int32_t unitsCount = outputUnits_.length();
-    U_ASSERT(unitsCount == units_.length());
-    Measure **arr = result.getAlias();
-    // O(N^2) is fine: mixed units' unitsCount is usually 2 or 3.
-    for (int32_t i = 0; i < unitsCount; i++) {
-        for (int32_t j = i; j < unitsCount; j++) {
-            // Find the next expected unit, and swap it into place.
-            U_ASSERT(result[j] != nullptr);
-            if (result[j]->getUnit() == *outputUnits_[i]) {
-                if (j != i) {
-                    Measure *tmp = arr[j];
-                    arr[j] = arr[i];
-                    arr[i] = tmp;
-                }
-            }
+    // Sort the unordered_result
+    
+    // NOTE:
+    //  This comparator is used to sort the units in ascending order according to their indices. 
+    auto ascendingOrderByIndexComparator = [](const void *, const void *left, const void *right) {
+        const auto *leftPointer = static_cast<const std::pair<int32_t, MeasureUnitImpl> *const *>(left);
+        const auto *rightPointer = static_cast<const std::pair<int32_t, MeasureUnitImpl> *const *>(right);
+
+       int32_t diff = (*leftPointer)->first -(*rightPointer)->first;
+       if (diff == 0) { return 0;}
+       return diff > 0? 1 : -1;
+    };
+
+    uprv_sortArray(unordered_result.getAlias(), //
+                   unordered_result.length(),   //
+                   sizeof unordered_result[0],  //
+                   ascendingOrderByIndexComparator,      //
+                   nullptr,                     //
+                   false,                       //
+                   &status                      //
+    );
+
+    for(int32_t i = 0, n = unordered_result.length(); i < n; ++i) {
+        result.emplaceBackAndCheckErrorCode(status, std::move( unordered_result[i]->second));
+        if(U_FAILURE(status)) {
+            return result;
         }
     }
 

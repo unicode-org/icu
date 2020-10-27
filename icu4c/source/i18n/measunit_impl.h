@@ -214,7 +214,7 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      *          -   if the `MeasureUnitImpl` is `foot-and-inch` 
      *                  it will return a list of 2 { (0, `foot`), (1, `inch`)}
      */
-    MaybeStackVector<std::pair<int32_t, MeasureUnitImpl>> extractIndividualUnitsWithIndecies(UErrorCode &status) const;
+    MaybeStackVector<std::pair<int32_t, const MeasureUnitImpl*>>extractIndividualUnitsWithIndecies(UErrorCode &status) const;
 
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);
