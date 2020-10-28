@@ -17,6 +17,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "charstr.h"
+#include "cstr.h"
+#include "measunit_impl.h"
 #include "unicode/decimfmt.h"
 #include "unicode/measfmt.h"
 #include "unicode/measure.h"
@@ -25,8 +28,6 @@
 #include "unicode/tmunit.h"
 #include "unicode/plurrule.h"
 #include "unicode/ustring.h"
-#include "charstr.h"
-#include "cstr.h"
 #include "unicode/reldatefmt.h"
 #include "unicode/rbnf.h"
 
@@ -88,6 +89,7 @@ private:
     void TestDimensionlessBehaviour();
     void Test21060_AddressSanitizerProblem();
     void Test21223_FrenchDuration();
+    void TestInternalMeasureUnitImpl();
 
     void verifyFormat(
         const char *description,
@@ -216,6 +218,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestDimensionlessBehaviour);
     TESTCASE_AUTO(Test21060_AddressSanitizerProblem);
     TESTCASE_AUTO(Test21223_FrenchDuration);
+    TESTCASE_AUTO(TestInternalMeasureUnitImpl);
     TESTCASE_AUTO_END;
 }
 
@@ -4035,6 +4038,56 @@ void MeasureFormatTest::Test21223_FrenchDuration() {
     //     mf1.formatMeasures(H5M10, UPRV_LENGTHOF(H5M10), result.remove(), pos, status);
     //     assertFalse(result + u" " + loc.getName(), TRUE);
     // }
+}
+
+void MeasureFormatTest::TestInternalMeasureUnitImpl() {
+    IcuTestErrorCode status(*this, "TestInternalMeasureUnitImpl");
+    MeasureUnitImpl mu1 = MeasureUnitImpl::forIdentifier("meter", status);
+    status.assertSuccess();
+    assertEquals("mu1 initial identifier", "", mu1.identifier.data());
+    assertEquals("mu1 initial complexity", UMEASURE_UNIT_SINGLE, mu1.complexity);
+    assertEquals("mu1 initial units length", 1, mu1.units.length());
+    assertEquals("mu1 initial units[0]", "meter", mu1.units[0]->getSimpleUnitID());
+
+    // Producing identifier via build(): the std::move() means mu1 gets modified
+    // while it also gets assigned to tmp's internal fImpl.
+    MeasureUnit tmp = std::move(mu1).build(status);
+    status.assertSuccess();
+    assertEquals("mu1 post-move-build identifier", "meter", mu1.identifier.data());
+    assertEquals("mu1 post-move-build complexity", UMEASURE_UNIT_SINGLE, mu1.complexity);
+    assertEquals("mu1 post-move-build units length", 1, mu1.units.length());
+    assertEquals("mu1 post-move-build units[0]", "meter", mu1.units[0]->getSimpleUnitID());
+    assertEquals("MeasureUnit tmp identifier", "meter", tmp.getIdentifier());
+
+    // This temporary variable is used when forMeasureUnit's first parameter
+    // lacks an fImpl instance:
+    MeasureUnitImpl tmpMemory;
+    const MeasureUnitImpl &tmpImplRef = MeasureUnitImpl::forMeasureUnit(tmp, tmpMemory, status);
+    status.assertSuccess();
+    assertEquals("tmpMemory identifier", "", tmpMemory.identifier.data());
+    assertEquals("tmpMemory complexity", UMEASURE_UNIT_SINGLE, tmpMemory.complexity);
+    assertEquals("tmpMemory units length", 1, tmpMemory.units.length());
+    assertEquals("tmpMemory units[0]", "meter", tmpMemory.units[0]->getSimpleUnitID());
+    assertEquals("tmpImplRef identifier", "", tmpImplRef.identifier.data());
+    assertEquals("tmpImplRef complexity", UMEASURE_UNIT_SINGLE, tmpImplRef.complexity);
+
+    MeasureUnitImpl mu2 = MeasureUnitImpl::forIdentifier("newton-meter", status);
+    status.assertSuccess();
+    mu1 = std::move(mu2);
+    assertEquals("mu1 = move(mu2): identifier", "", mu1.identifier.data());
+    assertEquals("mu1 = move(mu2): complexity", UMEASURE_UNIT_COMPOUND, mu1.complexity);
+    assertEquals("mu1 = move(mu2): units length", 2, mu1.units.length());
+    assertEquals("mu1 = move(mu2): units[0]", "newton", mu1.units[0]->getSimpleUnitID());
+    assertEquals("mu1 = move(mu2): units[1]", "meter", mu1.units[1]->getSimpleUnitID());
+
+    mu1 = MeasureUnitImpl::forIdentifier("hour-and-minute-and-second", status);
+    status.assertSuccess();
+    assertEquals("mu1 = HMS: identifier", "", mu1.identifier.data());
+    assertEquals("mu1 = HMS: complexity", UMEASURE_UNIT_MIXED, mu1.complexity);
+    assertEquals("mu1 = HMS: units length", 3, mu1.units.length());
+    assertEquals("mu1 = HMS: units[0]", "hour", mu1.units[0]->getSimpleUnitID());
+    assertEquals("mu1 = HMS: units[1]", "minute", mu1.units[1]->getSimpleUnitID());
+    assertEquals("mu1 = HMS: units[2]", "second", mu1.units[2]->getSimpleUnitID());
 }
 
 
