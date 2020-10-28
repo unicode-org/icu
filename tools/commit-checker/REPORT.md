@@ -7,7 +7,7 @@ Commit Report
 =============
 
 Environment:
-- Latest Commit: df72f8cbaf81cf9dcd94071961f198e1fa416ff8
+- Latest Commit: 5d81f6f9a0edc47892a1d2af7024f835b47deb82
 - Jira Query: project=ICU AND fixVersion=68.1
 - Rev Range: release-67-1..origin/maint/maint-68
 - Authenticated: Yes
@@ -258,6 +258,11 @@ Tip: Consider closing the ticket if it is fixed.
 
 ##### Commits with Issue ICU-21250
 
+- 5d81f6f `ICU-21250 Update Apache Ant to 1.10.9`
+	- Authored by Jeff Genovy <29107334+jefgen@users.noreply.github.com>
+	- Committed at 2020-10-27T23:51:24-04:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/5d81f6f9a0edc47892a1d2af7024f835b47deb82
+
 - c7024d5 `ICU-21250 Update ICU4J and ICU4C APIChangeReports`
 	- Authored by Craig Cornelius <cwcornelius@gmail.com>
 	- Committed at 2020-10-23T22:18:19-07:00
@@ -278,41 +283,5 @@ Tip: Consider closing the ticket if it is fixed.
 	- Committed at 2020-10-14T11:38:45-07:00
 	- GitHub Link: https://github.com/unicode-org/icu/commit/93deb0e4487164e4bf12a3e7ecc5afb222a0aad0
 
-#### Issue ICU-21308
 
-- ICU-21308: `MeasureUnitImpl$UnitParser thread safety issue`
-	- Assigned to Younies Mahmoud
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21308
-
-##### Commits with Issue ICU-21308
-
-- dd87efa `ICU-21308 Fix icu4j build for Java 7 in MeasureUnitImpl`
-	- Authored by younies <younies@chromium.org>
-	- Committed at 2020-10-22T21:31:31+04:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/dd87efa2994cf47f390e2c6a3af65dae4a68e898
-
-- 1a47279 `ICU-21308 Fix units parser thread safety issue`
-	- Authored by younies <younies@chromium.org>
-	- Committed at 2020-10-20T20:10:47+04:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/1a4727924ff4823c6fc58f8b1ba6d70b3475bde0
-
-#### Issue ICU-21344
-
-- ICU-21344: `AliasReplacer::replaceTerritory calls the Locale constructor with wrong arguments`
-	- Assigned to Frank Yung-Fong Tang
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21344
-
-##### Commits with Issue ICU-21344
-
-- 9a82de7 `ICU-21344 merge localebuilder into resourcebundle`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-10-22T17:44:34-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/9a82de789f7a8afc77673d3fcf719a50e51e56ff
-
-- 9ab5487 `ICU-21344 Fix wrong passing of script in Locale.`
-	- Authored by Frank Tang <ftang@chromium.org>
-	- Committed at 2020-10-21T16:46:01-07:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/9ab5487eb8eae94dcacb810c6ed3318f7f3c1262
-
-
-## Total Problems: 4
+## Total Problems: 2
