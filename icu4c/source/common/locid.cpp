@@ -1457,7 +1457,7 @@ AliasReplacer::outputToString(
         int32_t variantsStart = out.length();
         for (int32_t i = 0; i < variants.size(); i++) {
              out.append(SEP_CHAR, status)
-                 .append((const char*)((UVector*)variants.elementAt(i)),
+                 .append((const char*)(variants.elementAt(i)),
                          status);
         }
         T_CString_toUpperCase(out.data() + variantsStart);
