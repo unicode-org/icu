@@ -16,6 +16,7 @@
 #include "putilimp.h"
 #include "unicode/ctest.h"
 #include "unicode/measunit.h"
+#include "unicode/measure.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "unicode/ures.h"
@@ -400,95 +401,129 @@ void UnitsTest::testConverterWithCLDRTests() {
 
 void UnitsTest::testComplexUnitsConverter() {
     IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitsConverter");
+
+    struct TestCase {
+        const char* msg;
+        const char* input;
+        const char* output;
+        double value;
+        Measure expected[2];
+        int32_t expectedCount;
+        // For mixed units, accuracy of the smallest unit
+        double accuracy;
+    } testCases[]{
+        // Significantly less than 2.0.
+        {"1.9999",
+         "foot",
+         "foot-and-inch",
+         1.9999,
+         {Measure(1, MeasureUnit::createFoot(status), status),
+          Measure(11.9988, MeasureUnit::createInch(status), status)},
+         2,
+         0},
+
+        // TODO(icu-units#108): reconsider whether desireable to round up:
+        // A minimal nudge under 2.0, rounding up to 2.0 ft, 0 in.
+        {"2-eps",
+         "foot",
+         "foot-and-inch",
+         2.0 - DBL_EPSILON,
+         {Measure(2, MeasureUnit::createFoot(status), status),
+          Measure(0, MeasureUnit::createInch(status), status)},
+         2,
+         0},
+
+        // Testing precision with meter and light-year. 1e-16 light years is
+        // 0.946073 meters, and double precision can provide only ~15 decimal
+        // digits, so we don't expect to get anything less than 1 meter.
+
+        // TODO(icu-units#108): reconsider whether desireable to round up:
+        // A nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
+        {"2-eps",
+         "light-year",
+         "light-year-and-meter",
+         2.0 - DBL_EPSILON,
+         {Measure(2, MeasureUnit::createLightYear(status), status),
+          Measure(0, MeasureUnit::createMeter(status), status)},
+         2,
+         0},
+
+        // TODO(icu-units#108): reconsider whether desireable to round up:
+        // A nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
+        {"1-eps",
+         "light-year",
+         "light-year-and-meter",
+         1.0 - DBL_EPSILON,
+         {Measure(1, MeasureUnit::createLightYear(status), status),
+          Measure(0, MeasureUnit::createMeter(status), status)},
+         2,
+         0},
+
+        // 1e-15 light years is 9.46073 meters (calculated using "bc" and the
+        // CLDR conversion factor). With double-precision maths in C++, we get
+        // 10.5. In this case, we're off by a bit more than 1 meter. With Java
+        // BigDecimal, we get accurate results.
+        {"1 + 1e-15",
+         "light-year",
+         "light-year-and-meter",
+         1.0 + 1e-15,
+         {Measure(1, MeasureUnit::createLightYear(status), status),
+          Measure(9.46073, MeasureUnit::createMeter(status), status)},
+         2,
+         1.5 /* meters, precision */},
+
+        // TODO(icu-units#108): reconsider whether epsilon rounding is desirable:
+        //
+        // 2e-16 light years is 1.892146 meters. For C++ double, we consider
+        // this in the noise, and thus expect a 0. (This test fails when
+        // 2e-16 is increased to 4e-16.) For Java, using BigDecimal, we
+        // actually get a good result.
+        {"1 + 2e-16",
+         "light-year",
+         "light-year-and-meter",
+         1.0 + 2e-16,
+         {Measure(1, MeasureUnit::createLightYear(status), status),
+          Measure(0, MeasureUnit::createMeter(status), status)},
+         2,
+         0},
+    };
+    status.assertSuccess();
+
     ConversionRates rates(status);
-    MeasureUnit input = MeasureUnit::getFoot();
-    MeasureUnit output = MeasureUnit::forIdentifier("foot-and-inch", status);
+    MeasureUnit input, output;
     MeasureUnitImpl tempInput, tempOutput;
-    const MeasureUnitImpl &inputImpl = MeasureUnitImpl::forMeasureUnit(input, tempInput, status);
-    const MeasureUnitImpl &outputImpl = MeasureUnitImpl::forMeasureUnit(output, tempOutput, status);
-    auto converter = ComplexUnitsConverter(inputImpl, outputImpl, rates, status);
+    MaybeStackVector<Measure> measures;
+    for (const TestCase &testCase : testCases) {
+        input = MeasureUnit::forIdentifier(testCase.input, status);
+        output = MeasureUnit::forIdentifier(testCase.output, status);
+        const MeasureUnitImpl& inputImpl = MeasureUnitImpl::forMeasureUnit(input, tempInput, status);
+        const MeasureUnitImpl& outputImpl = MeasureUnitImpl::forMeasureUnit(output, tempOutput, status);
+        auto converter = ComplexUnitsConverter(inputImpl, outputImpl, rates, status);
+        measures = converter.convert(testCase.value, nullptr, status);
 
-    // Significantly less than 2.0.
-    MaybeStackVector<Measure> measures = converter.convert(1.9999, nullptr, status);
-    assertEquals("measures length", 2, measures.length());
-    if (2 == measures.length()) {
-        assertEquals("1.9999: measures[0] value", 1.0, measures[0]->getNumber().getDouble(status));
-        assertEquals("1.9999: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
-                     measures[0]->getUnit().getIdentifier());
-        assertEqualsNear("1.9999: measures[1] value", 11.9988,
-                         measures[1]->getNumber().getDouble(status), 0.0001);
-        assertEquals("1.9999: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
-                     measures[1]->getUnit().getIdentifier());
+        CharString msg;
+        msg.append(testCase.msg, status);
+        msg.append(" ", status);
+        msg.append(testCase.input, status);
+        msg.append(" -> ", status);
+        msg.append(testCase.output, status);
+
+        CharString msgCount(msg, status);
+        msgCount.append(", measures.length()", status);
+        assertEquals(msgCount.data(), testCase.expectedCount, measures.length());
+        for (int i = 0; i < measures.length() && i < testCase.expectedCount; i++) {
+            if (i == testCase.expectedCount-1) {
+                assertEqualsNear(msg.data(), testCase.expected[i].getNumber().getDouble(status),
+                                 measures[i]->getNumber().getDouble(status), testCase.accuracy);
+            } else {
+                assertEquals(msg.data(), testCase.expected[i].getNumber().getDouble(status),
+                             measures[i]->getNumber().getDouble(status));
+            }
+            assertEquals(msg.data(), testCase.expected[i].getUnit().getIdentifier(),
+                         measures[i]->getUnit().getIdentifier());
+        }
     }
-
-    // TODO(icu-units#100): consider factoring out the set of tests to make this function more
-    // data-driven.
-
-    // A minimal nudge under 2.0.
-    measures = converter.convert((2.0 - DBL_EPSILON), nullptr, status);
-    assertEquals("measures length", 2, measures.length());
-    if (2 == measures.length()) {
-        assertEquals("1 - eps: measures[0] value", 2.0, measures[0]->getNumber().getDouble(status));
-        assertEquals("1 - eps: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
-                     measures[0]->getUnit().getIdentifier());
-        assertEquals("1 - eps: measures[1] value", 0.0, measures[1]->getNumber().getDouble(status));
-        assertEquals("1 - eps: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
-                     measures[1]->getUnit().getIdentifier());
-    }
-
-    // Testing precision with meter and light-year. 1e-16 light years is
-    // 0.946073 meters, and double precision can provide only ~15 decimal
-    // digits, so we don't expect to get anything less than 1 meter.
-
-    // An epsilon's nudge under one light-year: should give 1 ly, 0 m.
-    input = MeasureUnit::getLightYear();
-    output = MeasureUnit::forIdentifier("light-year-and-meter", status);
-    const MeasureUnitImpl &inputImpl3 = MeasureUnitImpl::forMeasureUnit(input, tempInput, status);
-    const MeasureUnitImpl &outputImpl3 = MeasureUnitImpl::forMeasureUnit(output, tempOutput, status);
-    converter = ComplexUnitsConverter(inputImpl3, outputImpl3, rates, status);
-    measures = converter.convert((2.0 - DBL_EPSILON), nullptr, status);
-    assertEquals("measures length", 2, measures.length());
-    if (2 == measures.length()) {
-        assertEquals("light-year test: measures[0] value", 2.0,
-                     measures[0]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                     measures[0]->getUnit().getIdentifier());
-        assertEquals("light-year test: measures[1] value", 0.0,
-                     measures[1]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                     measures[1]->getUnit().getIdentifier());
-    }
-
-    // 1e-15 light years is 9.46073 meters (calculated using "bc" and the CLDR
-    // conversion factor). With double-precision maths, we get 10.5. In this
-    // case, we're off by almost 1 meter.
-    measures = converter.convert((1.0 + 1e-15), nullptr, status);
-    assertEquals("measures length", 2, measures.length());
-    if (2 == measures.length()) {
-        assertEquals("light-year test: measures[0] value", 1.0,
-                     measures[0]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                     measures[0]->getUnit().getIdentifier());
-        assertEqualsNear("light-year test: measures[1] value", 10,
-                         measures[1]->getNumber().getDouble(status), 1);
-        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                     measures[1]->getUnit().getIdentifier());
-    }
-
-    // 2e-16 light years is 1.892146 meters. We consider this in the noise, and
-    // thus expect a 0. (This test fails when 2e-16 is increased to 4e-16.)
-    measures = converter.convert((1.0 + 2e-16), nullptr, status);
-    assertEquals("measures length", 2, measures.length());
-    if (2 == measures.length()) {
-        assertEquals("light-year test: measures[0] value", 1.0,
-                     measures[0]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                     measures[0]->getUnit().getIdentifier());
-        assertEquals("light-year test: measures[1] value", 0.0,
-                     measures[1]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                     measures[1]->getUnit().getIdentifier());
-    }
+    status.assertSuccess();
 
     // TODO(icu-units#63): test negative numbers!
 }
