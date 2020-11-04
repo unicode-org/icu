@@ -867,22 +867,21 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             u"0.008765 J/fur",
             u"0 J/fur");
 
-    // TODO(ICU-20941): Support constructions such as this one.
-    // assertFormatDescending(
-    //         u"Joules Per Furlong Short with unit identifier via API",
-    //         u"measure-unit/energy-joule per-measure-unit/length-furlong",
-    //         u"unit/joule-per-furlong",
-    //         NumberFormatter::with().unit(MeasureUnit::forIdentifier("joule-per-furlong", status)),
-    //         Locale::getEnglish(),
-    //         u"87,650 J/fur",
-    //         u"8,765 J/fur",
-    //         u"876.5 J/fur",
-    //         u"87.65 J/fur",
-    //         u"8.765 J/fur",
-    //         u"0.8765 J/fur",
-    //         u"0.08765 J/fur",
-    //         u"0.008765 J/fur",
-    //         u"0 J/fur");
+    assertFormatDescending(
+            u"Joules Per Furlong Short with unit identifier via API",
+            u"measure-unit/energy-joule per-measure-unit/length-furlong",
+            u"unit/joule-per-furlong",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("joule-per-furlong", status)),
+            Locale::getEnglish(),
+            u"87,650 J/fur",
+            u"8,765 J/fur",
+            u"876.5 J/fur",
+            u"87.65 J/fur",
+            u"8.765 J/fur",
+            u"0.8765 J/fur",
+            u"0.08765 J/fur",
+            u"0.008765 J/fur",
+            u"0 J/fur");
 
     assertFormatDescending(
             u"Pounds per Square Inch: composed",

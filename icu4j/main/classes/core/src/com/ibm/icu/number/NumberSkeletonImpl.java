@@ -12,8 +12,6 @@ import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.RoundingUtils;
-import com.ibm.icu.impl.units.MeasureUnitImpl;
-import com.ibm.icu.impl.units.SingleUnitImpl;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -1063,44 +1061,10 @@ class NumberSkeletonImpl {
          * specified via a "unit/" concise skeleton.
          */
         private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
-            MeasureUnitImpl fullUnit;
             try {
-                fullUnit = MeasureUnitImpl.forIdentifier(segment.asString());
+                macros.unit = MeasureUnit.forIdentifier(segment.asString());
             } catch (IllegalArgumentException e) {
                 throw new SkeletonSyntaxException("Invalid unit stem", segment);
-            }
-
-            // Mixed units can only be represented by full MeasureUnit instances, so we
-            // don't split the denominator into macros.perUnit.
-            if (fullUnit.getComplexity() == MeasureUnit.Complexity.MIXED) {
-                macros.unit = fullUnit.build();
-                return;
-            }
-
-            // When we have a built-in unit (e.g. meter-per-second), we don't split it up
-            MeasureUnit testBuiltin = fullUnit.build();
-            if (testBuiltin.getType() != null) {
-                macros.unit = testBuiltin;
-                return;
-            }
-
-            // TODO(ICU-20941): Clean this up.
-            for (SingleUnitImpl subUnit : fullUnit.getSingleUnits()) {
-                if (subUnit.getDimensionality() > 0) {
-                    if (macros.unit == null) {
-                        macros.unit = subUnit.build();
-                    } else {
-                        macros.unit = macros.unit.product(subUnit.build());
-                    }
-                } else {
-                    // It's okay to mutate fullUnit, we're throwing it away after this:
-                    subUnit.setDimensionality(subUnit.getDimensionality() * -1);
-                    if (macros.perUnit == null) {
-                        macros.perUnit = subUnit.build();
-                    } else {
-                        macros.perUnit = macros.perUnit.product(subUnit.build());
-                    }
-                }
             }
         }
 

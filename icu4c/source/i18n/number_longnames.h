@@ -38,9 +38,6 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     /**
      * Construct a localized LongNameHandler for the specified MeasureUnit.
      *
-     * Compound units can be constructed via `unit` and `perUnit`. Both of these
-     * must then be built-in units.
-     *
      * Mixed units are not supported, use MixedUnitLongNameHandler::forMeasureUnit.
      *
      * This function uses a fillIn intead of returning a pointer, because we
@@ -48,15 +45,13 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
      * didn't create itself).
      *
      * @param loc The desired locale.
-     * @param unit The measure unit to construct a LongNameHandler for. If
-     *     `perUnit` is also defined, `unit` must not be a mixed unit.
-     * @param perUnit If `unit` is a mixed unit, `perUnit` must be "none".
+     * @param unitRef The measure unit to construct a LongNameHandler for.
      * @param width Specifies the desired unit rendering.
      * @param rules Does not take ownership.
      * @param parent Does not take ownership.
      * @param fillIn Required.
      */
-    static void forMeasureUnit(const Locale &loc, const MeasureUnit &unit, const MeasureUnit &perUnit,
+    static void forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
                                const UNumberUnitWidth &width, const PluralRules *rules,
                                const MicroPropsGenerator *parent, LongNameHandler *fillIn,
                                UErrorCode &status);

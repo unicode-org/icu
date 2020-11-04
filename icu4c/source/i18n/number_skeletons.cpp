@@ -1040,36 +1040,11 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     ErrorCode internalStatus;
-    auto fullUnit = MeasureUnitImpl::forIdentifier(buffer.toStringPiece(), internalStatus);
+    macros.unit = MeasureUnit::forIdentifier(buffer.toStringPiece(), internalStatus);
     if (internalStatus.isFailure()) {
         // throw new SkeletonSyntaxException("Invalid core unit identifier", segment, e);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
-    }
-
-    // Mixed units can only be represented by full MeasureUnit instances, so we
-    // don't split the denominator into macros.perUnit.
-    if (fullUnit.complexity == UMEASURE_UNIT_MIXED) {
-        macros.unit = std::move(fullUnit).build(status);
-        return;
-    }
-
-    // When we have a built-in unit (e.g. meter-per-second), we don't split it up
-    MeasureUnit testBuiltin = fullUnit.copy(status).build(status);
-    if (uprv_strcmp(testBuiltin.getType(), "") != 0) {
-        macros.unit = std::move(testBuiltin);
-        return;
-    }
-
-    // TODO(ICU-20941): Clean this up.
-    for (int32_t i = 0; i < fullUnit.units.length(); i++) {
-        SingleUnitImpl* subUnit = fullUnit.units[i];
-        if (subUnit->dimensionality > 0) {
-            macros.unit = macros.unit.product(subUnit->build(status), status);
-        } else {
-            subUnit->dimensionality *= -1;
-            macros.perUnit = macros.perUnit.product(subUnit->build(status), status);
-        }
     }
 }
 

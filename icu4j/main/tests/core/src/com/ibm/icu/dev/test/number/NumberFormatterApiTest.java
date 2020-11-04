@@ -824,22 +824,21 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.008765 J/fur",
                 "0 J/fur");
 
-        // // TODO(ICU-20941): Support constructions such as this one.
-        // assertFormatDescending(
-        //         "Joules Per Furlong Short with unit identifier via API",
-        //         "measure-unit/energy-joule per-measure-unit/length-furlong",
-        //         "unit/joule-per-furlong",
-        //         NumberFormatter.with().unit(MeasureUnit.forIdentifier("joule-per-furlong")),
-        //         ULocale.ENGLISH,
-        //         "87,650 J/fur",
-        //         "8,765 J/fur",
-        //         "876.5 J/fur",
-        //         "87.65 J/fur",
-        //         "8.765 J/fur",
-        //         "0.8765 J/fur",
-        //         "0.08765 J/fur",
-        //         "0.008765 J/fur",
-        //         "0 J/fur");
+        assertFormatDescending(
+                "Joules Per Furlong Short with unit identifier via API",
+                "measure-unit/energy-joule per-measure-unit/length-furlong",
+                "unit/joule-per-furlong",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("joule-per-furlong")),
+                ULocale.ENGLISH,
+                "87,650 J/fur",
+                "8,765 J/fur",
+                "876.5 J/fur",
+                "87.65 J/fur",
+                "8.765 J/fur",
+                "0.8765 J/fur",
+                "0.08765 J/fur",
+                "0.008765 J/fur",
+                "0 J/fur");
 
         assertFormatDescending(
                 "Pounds per Square Inch: composed",

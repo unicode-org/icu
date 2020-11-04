@@ -400,12 +400,11 @@ class NumberFormatterImpl {
                         pluralRules,
                         chain);
             } else {
-                chain = LongNameHandler.forMeasureUnit(macros.loc,
-                        macros.unit,
-                        macros.perUnit,
-                        unitWidth,
-                        pluralRules,
-                        chain);
+                MeasureUnit unit = macros.unit;
+                if (macros.perUnit != null) {
+                    unit = unit.product(macros.perUnit.reciprocal());
+                }
+                chain = LongNameHandler.forMeasureUnit(macros.loc, unit, unitWidth, pluralRules, chain);
             }
         } else if (isCurrency && unitWidth == UnitWidth.FULL_NAME) {
             if (rules == null) {

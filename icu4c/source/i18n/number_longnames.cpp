@@ -218,38 +218,38 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
 } // namespace
 
 void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
-                                     const MeasureUnit &perUnit, const UNumberUnitWidth &width,
-                                     const PluralRules *rules, const MicroPropsGenerator *parent,
-                                     LongNameHandler *fillIn, UErrorCode &status) {
+                                     const UNumberUnitWidth &width, const PluralRules *rules,
+                                     const MicroPropsGenerator *parent, LongNameHandler *fillIn,
+                                     UErrorCode &status) {
     // Not valid for mixed units that aren't built-in units, and there should
     // not be any built-in mixed units!
     U_ASSERT(uprv_strcmp(unitRef.getType(), "") != 0 ||
              unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
 
-    MeasureUnit unit = unitRef;
-    if (uprv_strcmp(perUnit.getType(), "none") != 0) {
-        // Compound unit: first try to simplify (e.g., meters per second is its own unit).
-        MeasureUnit simplified = unit.product(perUnit.reciprocal(status), status);
-        if (uprv_strcmp(simplified.getType(), "") != 0) {
-            unit = simplified;
-        } else {
-            // No simplified form is available.
-            forCompoundUnit(loc, unit, perUnit, width, rules, parent, fillIn, status);
-            return;
+    if (uprv_strcmp(unitRef.getType(), "") == 0) {
+        // Not a built-in unit. Split it up, since we can already format
+        // "builtin-per-builtin".
+        // TODO(ICU-20941): support more generic case than builtin-per-builtin.
+        MeasureUnitImpl fullUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(unitRef, status);
+        MeasureUnitImpl unit;
+        MeasureUnitImpl perUnit;
+        for (int32_t i = 0; i < fullUnit.units.length(); i++) {
+            SingleUnitImpl *subUnit = fullUnit.units[i];
+            if (subUnit->dimensionality > 0) {
+                unit.append(*subUnit, status);
+            } else {
+                subUnit->dimensionality *= -1;
+                perUnit.append(*subUnit, status);
+            }
         }
-    }
-
-    if (uprv_strcmp(unit.getType(), "") == 0) {
-        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
-        // error code. Once we support not-built-in units here, unitRef may be
-        // anything, but if not built-in, perUnit has to be "none".
-        status = U_UNSUPPORTED_ERROR;
+        forCompoundUnit(loc, std::move(unit).build(status), std::move(perUnit).build(status), width,
+                        rules, parent, fillIn, status);
         return;
     }
 
     UnicodeString simpleFormats[ARRAY_LENGTH];
-    getMeasureData(loc, unit, width, simpleFormats, status);
+    getMeasureData(loc, unitRef, width, simpleFormats, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -574,7 +574,7 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
             result->fHandlers[i] = mlnh;
         } else {
             LongNameHandler *lnh = result->fLongNameHandlers.createAndCheckErrorCode(status);
-            LongNameHandler::forMeasureUnit(loc, unit, MeasureUnit(), width, rules, NULL, lnh, status);
+            LongNameHandler::forMeasureUnit(loc, unit, width, rules, NULL, lnh, status);
             result->fHandlers[i] = lnh;
         }
         if (U_FAILURE(status)) {

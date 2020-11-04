@@ -542,7 +542,7 @@ public class MeasureUnit implements Serializable {
             return implCopy.build();
         }
 
-        final MeasureUnitImpl otherImplRef = other.getMayBeReferenceOfMeasureUnitImpl();
+        final MeasureUnitImpl otherImplRef = other.getMaybeReferenceOfMeasureUnitImpl();
         if (implCopy.getComplexity() == Complexity.MIXED || otherImplRef.getComplexity() == Complexity.MIXED) {
             throw new UnsupportedOperationException();
         }
@@ -571,7 +571,8 @@ public class MeasureUnit implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public List<MeasureUnit> splitToSingleUnits() {
-        final ArrayList<SingleUnitImpl> singleUnits = getMayBeReferenceOfMeasureUnitImpl().getSingleUnits();
+        final ArrayList<SingleUnitImpl> singleUnits =
+            getMaybeReferenceOfMeasureUnitImpl().getSingleUnits();
         List<MeasureUnit> result = new ArrayList<>(singleUnits.size());
         for (SingleUnitImpl singleUnit : singleUnits) {
             result.add(singleUnit.build());
@@ -1992,8 +1993,11 @@ public class MeasureUnit implements Serializable {
     /**
      *
      * @return this object in a MeasureUnitImpl form.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    private MeasureUnitImpl getCopyOfMeasureUnitImpl() {
+    @Deprecated
+    public MeasureUnitImpl getCopyOfMeasureUnitImpl() {
         return this.measureUnitImpl == null ?
                 MeasureUnitImpl.forIdentifier(getIdentifier()) :
                 this.measureUnitImpl.copy();
@@ -2003,7 +2007,7 @@ public class MeasureUnit implements Serializable {
      *
      * @return this object in a MeasureUnitImpl form.
      */
-    private MeasureUnitImpl getMayBeReferenceOfMeasureUnitImpl(){
+    private MeasureUnitImpl getMaybeReferenceOfMeasureUnitImpl() {
         return this.measureUnitImpl == null ?
                 MeasureUnitImpl.forIdentifier(getIdentifier()) :
                 this.measureUnitImpl;

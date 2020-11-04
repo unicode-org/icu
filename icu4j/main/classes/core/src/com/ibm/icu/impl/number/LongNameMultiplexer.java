@@ -8,7 +8,6 @@ import java.util.List;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -64,8 +63,7 @@ public class LongNameMultiplexer implements MicroPropsGenerator {
                         .forMeasureUnit(locale, unit, width, rules, null);
                 result.fHandlers.add(mlnh);
             } else {
-                LongNameHandler lnh = LongNameHandler
-                        .forMeasureUnit(locale, unit, NoUnit.BASE, width, rules, null);
+                LongNameHandler lnh = LongNameHandler.forMeasureUnit(locale, unit, width, rules, null);
                 result.fHandlers.add(lnh);
             }
         }
