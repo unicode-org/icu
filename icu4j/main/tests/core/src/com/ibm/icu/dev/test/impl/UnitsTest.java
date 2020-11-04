@@ -40,88 +40,106 @@ public class UnitsTest {
 
     @Test
     public void testComplexUnitsConverter() {
+        class TestCase {
+            String input;
+            String output;
+            BigDecimal value;
+            Measure[] expected;
+            // For mixed units, accuracy of the smallest unit
+            double accuracy;
+
+            TestCase(String input, String output, BigDecimal value, Measure[] expected, double accuracy) {
+                this.input = input;
+                this.output = output;
+                this.value = value;
+                this.expected = expected;
+                this.accuracy = accuracy;
+            }
+        }
+        TestCase[] testCases = new TestCase[] {
+            // Significantly less than 2.0.
+            new TestCase(
+                "foot", "foot-and-inch", BigDecimal.valueOf(1.9999),
+                new Measure[] {new Measure(1, MeasureUnit.FOOT), new Measure(11.9988, MeasureUnit.INCH)},
+                0),
+
+            // A minimal nudge under 2.0, rounding up to 2.0 ft, 0 in.
+            new TestCase(
+                "foot", "foot-and-inch", BigDecimal.valueOf(2.0).subtract(ComplexUnitsConverter.EPSILON),
+                new Measure[] {new Measure(2, MeasureUnit.FOOT), new Measure(0, MeasureUnit.INCH)}, 0),
+
+            // Testing precision with meter and light-year. 1e-16 light years is
+            // 0.946073 meters, and double precision can provide only ~15 decimal
+            // digits, so we don't expect to get anything less than 1 meter.
+
+            // TODO(icu-units#108): figure out precision thresholds for BigDecimal?
+            // A nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
+            new TestCase("light-year", "light-year-and-meter",
+                         BigDecimal.valueOf(2.0).subtract(ComplexUnitsConverter.EPSILON),
+                         new Measure[] {new Measure(2, MeasureUnit.LIGHT_YEAR),
+                                        new Measure(0, MeasureUnit.METER)},
+                         0),
+
+            // // TODO(icu-units#108): figure out precision thresholds for BigDecimal?
+            // // This test is passing in C++ but failing in Java:
+            // // A nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
+            // new TestCase("light-year", "light-year-and-meter",
+            //              BigDecimal.valueOf(1.0).subtract(ComplexUnitsConverter.EPSILON),
+            //              new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),
+            //                             new Measure(0, MeasureUnit.METER)},
+            //              0),
+
+            // 1e-15 light years is 9.46073 meters (calculated using "bc" and
+            // the CLDR conversion factor). With double-precision maths in C++,
+            // we get 10.5. In this case, we're off by a bit more than 1 meter.
+            // With Java BigDecimal, we get accurate results.
+            new TestCase("light-year", "light-year-and-meter", BigDecimal.valueOf(1.0 + 1e-15),
+                         new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),
+                                        new Measure(9.46073, MeasureUnit.METER)},
+                         0 /* meters, precision */),
+
+            // TODO(icu-units#108): reconsider whether epsilon rounding is desirable:
+            //
+            // 2e-16 light years is 1.892146 meters. For C++ double, we consider
+            // this in the noise, and thus expect a 0. (This test fails when
+            // 2e-16 is increased to 4e-16.) For Java, using BigDecimal, we
+            // actually get a good result.
+            new TestCase("light-year", "light-year-and-meter", BigDecimal.valueOf(1.0 + 2e-16),
+                         new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),
+                                        new Measure(1.892146, MeasureUnit.METER)},
+                         0),
+        };
+
         ConversionRates rates = new ConversionRates();
-        MeasureUnit input = MeasureUnit.FOOT;
-        MeasureUnit output = MeasureUnit.forIdentifier("foot-and-inch");
-        final MeasureUnitImpl inputImpl = MeasureUnitImpl.forIdentifier(input.getIdentifier());
-        final MeasureUnitImpl outputImpl = MeasureUnitImpl.forIdentifier(output.getIdentifier());
-        ComplexUnitsConverter converter = new ComplexUnitsConverter(inputImpl, outputImpl, rates);
+        MeasureUnit input, output;
+        List<Measure> measures;
+        for (TestCase testCase : testCases) {
+            input = MeasureUnit.forIdentifier(testCase.input);
+            output = MeasureUnit.forIdentifier(testCase.output);
+            final MeasureUnitImpl inputImpl = MeasureUnitImpl.forIdentifier(input.getIdentifier());
+            final MeasureUnitImpl outputImpl = MeasureUnitImpl.forIdentifier(output.getIdentifier());
+            ComplexUnitsConverter converter = new ComplexUnitsConverter(inputImpl, outputImpl, rates);
+            measures = converter.convert(testCase.value, null);
 
-        // Significantly less than 2.0.
-        List<Measure> measures = converter.convert(BigDecimal.valueOf(1.9999), null);
-        assertEquals("measures length", 2, measures.size());
-        assertEquals("1.9999: measures[0] value", BigDecimal.valueOf(1), measures.get(0).getNumber());
-        assertEquals("1.9999: measures[0] unit", MeasureUnit.FOOT.getIdentifier(),
-                measures.get(0).getUnit().getIdentifier());
-
-        assertTrue("1.9999: measures[1] value", compareTwoBigDecimal(BigDecimal.valueOf(11.9988),
-                BigDecimal.valueOf(measures.get(1).getNumber().doubleValue()), BigDecimal.valueOf(0.0001)));
-        assertEquals("1.9999: measures[1] unit", MeasureUnit.INCH.getIdentifier(),
-                measures.get(1).getUnit().getIdentifier());
-
-        // TODO(icu-units#100): consider factoring out the set of tests to make
-        // this function more data-driven, *after* dealing appropriately with
-        // the C++ memory leaks that can be demonstrated by the C++ version of
-        // this code.
-
-        // A minimal nudge under 2.0.
-        List<Measure> measures2 =
-            converter.convert(BigDecimal.valueOf(2.0).subtract(ComplexUnitsConverter.EPSILON), null);
-        assertEquals("measures length", 2, measures2.size());
-        assertEquals("1 - eps: measures[0] value", BigDecimal.valueOf(2), measures2.get(0).getNumber());
-        assertEquals("1 - eps: measures[0] unit", MeasureUnit.FOOT.getIdentifier(),
-                measures2.get(0).getUnit().getIdentifier());
-        assertEquals("1 - eps: measures[1] value", BigDecimal.ZERO, measures2.get(1).getNumber());
-        assertEquals("1 - eps: measures[1] unit", MeasureUnit.INCH.getIdentifier(),
-                measures2.get(1).getUnit().getIdentifier());
-
-        // Testing precision with meter and light-year. 1e-16 light years is
-        // 0.946073 meters, and double precision can provide only ~15 decimal
-        // digits, so we don't expect to get anything less than 1 meter.
-
-        // An epsilon's nudge under one light-year: should give 1 ly, 0 m.
-        input = MeasureUnit.LIGHT_YEAR;
-        output = MeasureUnit.forIdentifier("light-year-and-meter");
-        final MeasureUnitImpl inputImpl3 = MeasureUnitImpl.forIdentifier(input.getIdentifier());
-        final MeasureUnitImpl outputImpl3 = MeasureUnitImpl.forIdentifier(output.getIdentifier());
-
-        ComplexUnitsConverter converter3 = new ComplexUnitsConverter(inputImpl3, outputImpl3, rates);
-
-        List<Measure> measures3 =
-            converter3.convert(BigDecimal.valueOf(2.0).subtract(ComplexUnitsConverter.EPSILON), null);
-        assertEquals("measures length", 2, measures3.size());
-        assertEquals("light-year test: measures[0] value", BigDecimal.valueOf(2), measures3.get(0).getNumber());
-        assertEquals("light-year test: measures[0] unit", MeasureUnit.LIGHT_YEAR.getIdentifier(),
-                measures3.get(0).getUnit().getIdentifier());
-        assertEquals("light-year test: measures[1] value", BigDecimal.ZERO, measures3.get(1).getNumber());
-        assertEquals("light-year test: measures[1] unit", MeasureUnit.METER.getIdentifier(),
-                measures3.get(1).getUnit().getIdentifier());
-
-        // 1e-15 light years is 9.46073 meters (calculated using "bc" and the CLDR
-        // conversion factor). With double-precision maths, we get 10.5. In this
-        // case, we're off by almost 1 meter.
-        List<Measure> measures4 = converter3.convert(BigDecimal.valueOf(1.0 + 1e-15), null);
-        assertEquals("measures length", 2, measures4.size());
-        assertEquals("light-year test: measures[0] value", BigDecimal.ONE, measures4.get(0).getNumber());
-        assertEquals("light-year test: measures[0] unit", MeasureUnit.LIGHT_YEAR.getIdentifier(),
-                measures4.get(0).getUnit().getIdentifier());
-        assertTrue("light-year test: measures[1] value", compareTwoBigDecimal(BigDecimal.valueOf(10),
-                BigDecimal.valueOf(measures4.get(1).getNumber().doubleValue()),
-                BigDecimal.valueOf(1)));
-        assertEquals("light-year test: measures[1] unit", MeasureUnit.METER.getIdentifier(),
-                measures4.get(1).getUnit().getIdentifier());
-
-        // 2e-16 light years is 1.892146 meters. We consider this in the noise, and
-        // thus expect a 0. (This test fails when 2e-16 is increased to 4e-16.)
-        List<Measure> measures5 = converter3.convert(BigDecimal.valueOf(1.0 + 2e-17), null);
-        assertEquals("measures length", 2, measures5.size());
-        assertEquals("light-year test: measures[0] value", BigDecimal.ONE, measures5.get(0).getNumber());
-        assertEquals("light-year test: measures[0] unit", MeasureUnit.LIGHT_YEAR.getIdentifier(),
-                measures5.get(0).getUnit().getIdentifier());
-        assertEquals("light-year test: measures[1] value", BigDecimal.valueOf(0.0),
-                measures5.get(1).getNumber());
-        assertEquals("light-year test: measures[1] unit", MeasureUnit.METER.getIdentifier(),
-                measures5.get(1).getUnit().getIdentifier());
+            assertEquals("measures length", testCase.expected.length, measures.size());
+            int i = 0;
+            for (Measure measure : measures) {
+                double accuracy = 0.0;
+                if (i == testCase.expected.length - 1) {
+                    accuracy = testCase.accuracy;
+                }
+                assertTrue("input " + testCase.value + ", output measure " + i + ": expected " +
+                               testCase.expected[i] + ", expected unit " +
+                               testCase.expected[i].getUnit() + " got unit " + measure.getUnit(),
+                           testCase.expected[i].getUnit().equals(measure.getUnit()));
+                assertEquals("input " + testCase.value + ", output measure " + i + ": expected " +
+                                 testCase.expected[i] + ", expected number " +
+                                 testCase.expected[i].getNumber() + " got number " + measure.getNumber(),
+                             testCase.expected[i].getNumber().doubleValue(),
+                             measure.getNumber().doubleValue(), accuracy);
+                i++;
+            }
+        }
 
         // TODO(icu-units#63): test negative numbers!
     }
