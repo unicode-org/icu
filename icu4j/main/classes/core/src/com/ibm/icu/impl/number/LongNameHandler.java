@@ -13,6 +13,8 @@ import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.number.Modifier.Signum;
+import com.ibm.icu.impl.units.MeasureUnitImpl;
+import com.ibm.icu.impl.units.SingleUnitImpl;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
@@ -195,15 +197,10 @@ public class LongNameHandler
     /**
      * Construct a localized LongNameHandler for the specified MeasureUnit.
      * <p>
-     * Compound units can be constructed via `unit` and `perUnit`. Both of these
-     * must then be built-in units.
-     * <p>
      * Mixed units are not supported, use MixedUnitLongNameHandler.forMeasureUnit.
      *
      * @param locale The desired locale.
-     * @param unit The measure unit to construct a LongNameHandler for. If
-     *     `perUnit` is also defined, `unit` must not be a mixed unit.
-     * @param perUnit If `unit` is a mixed unit, `perUnit` must be null.
+     * @param unit The measure unit to construct a LongNameHandler for.
      * @param width Specifies the desired unit rendering.
      * @param rules Plural rules.
      * @param parent Plural rules.
@@ -211,25 +208,34 @@ public class LongNameHandler
     public static LongNameHandler forMeasureUnit(
             ULocale locale,
             MeasureUnit unit,
-            MeasureUnit perUnit,
             UnitWidth width,
             PluralRules rules,
             MicroPropsGenerator parent) {
-        if (perUnit != null) {
-            // Compound unit: first try to simplify (e.g., meters per second is its own unit).
-            MeasureUnit simplified = unit.product(perUnit.reciprocal());
-            if (simplified.getType() != null) {
-                unit = simplified;
-            } else {
-                // No simplified form is available.
-                return forCompoundUnit(locale, unit, perUnit, width, rules, parent);
-            }
-        }
-
         if (unit.getType() == null) {
-            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported.
-            throw new UnsupportedOperationException("Unsanctioned unit, not yet supported: " +
-                                                    unit.getIdentifier());
+            // Not a built-in unit. Split it up, since we can already format
+            // "builtin-per-builtin".
+            // TODO(ICU-20941): support more generic case than builtin-per-builtin.
+            MeasureUnitImpl fullUnit = unit.getCopyOfMeasureUnitImpl();
+            unit = null;
+            MeasureUnit perUnit = null;
+            for (SingleUnitImpl subUnit : fullUnit.getSingleUnits()) {
+                if (subUnit.getDimensionality() > 0) {
+                    if (unit == null) {
+                        unit = subUnit.build();
+                    } else {
+                        unit = unit.product(subUnit.build());
+                    }
+                } else {
+                    // It's okay to mutate fullUnit, we made a temporary copy:
+                    subUnit.setDimensionality(subUnit.getDimensionality() * -1);
+                    if (perUnit == null) {
+                        perUnit = subUnit.build();
+                    } else {
+                        perUnit = perUnit.product(subUnit.build());
+                    }
+                }
+            }
+            return forCompoundUnit(locale, unit, perUnit, width, rules, parent);
         }
 
         String[] simpleFormats = new String[ARRAY_LENGTH];
@@ -336,6 +342,7 @@ public class LongNameHandler
      * Does not call parent.processQuantity, so cannot get a MicroProps instance
      * that way. Instead, the instance is passed in as a parameter.
      */
+    @Override
     public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros) {
         StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
         micros.modOuter = modifiers.get(pluralForm);
