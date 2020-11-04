@@ -93,3 +93,7 @@ gh_edit_view_mode: "tree"
 exclude:
   - Gemfile
   - Gemfile.lock
+
+# Google Analytics
+ga_tracking: UA-7670256-1
+ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings
