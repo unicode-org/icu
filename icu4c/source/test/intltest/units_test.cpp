@@ -405,6 +405,13 @@ void UnitsTest::testConverterWithCLDRTests() {
 void UnitsTest::testComplexUnitsConverter() {
     IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitsConverter");
 
+    // DBL_EPSILON is aproximately 2.22E-16, and is the precision of double for
+    // values in the range [1.0, 2.0), but half the precision of double for
+    // [2.0, 4.0).
+    U_ASSERT(1.0 + DBL_EPSILON > 1.0);
+    U_ASSERT(2.0 - DBL_EPSILON < 2.0);
+    U_ASSERT(2.0 + DBL_EPSILON == 2.0);
+
     struct TestCase {
         const char* msg;
         const char* input;
@@ -425,7 +432,6 @@ void UnitsTest::testComplexUnitsConverter() {
          2,
          0},
 
-        // TODO(icu-units#108): reconsider whether desireable to round up:
         // A minimal nudge under 2.0, rounding up to 2.0 ft, 0 in.
         {"2-eps",
          "foot",
@@ -436,12 +442,27 @@ void UnitsTest::testComplexUnitsConverter() {
          2,
          0},
 
-        // Testing precision with meter and light-year. 1e-16 light years is
-        // 0.946073 meters, and double precision can provide only ~15 decimal
-        // digits, so we don't expect to get anything less than 1 meter.
+        // A slightly bigger nudge under 2.0, *not* rounding up to 2.0 ft!
+        {"2-3eps",
+         "foot",
+         "foot-and-inch",
+         2.0 - 3 * DBL_EPSILON,
+         {Measure(1, MeasureUnit::createFoot(status), status),
+          // We expect 12*3*DBL_EPSILON inches (7.92e-15) less than 12.
+          Measure(12 - 36 * DBL_EPSILON, MeasureUnit::createInch(status), status)},
+         2,
+         // Might accuracy be lacking with some compilers or on some systems? In
+         // case it is somehow lacking, we'll allow a delta of 12 * DBL_EPSILON.
+         12 * DBL_EPSILON},
 
-        // TODO(icu-units#108): reconsider whether desireable to round up:
-        // A nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
+        // Testing precision with meter and light-year.
+        //
+        // DBL_EPSILON light-years, ~2.22E-16 light-years, is ~2.1 meters
+        // (maximum precision when exponent is 0).
+        //
+        // 1e-16 light years is 0.946073 meters.
+
+        // A 2.1 meter nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
         {"2-eps",
          "light-year",
          "light-year-and-meter",
@@ -451,8 +472,7 @@ void UnitsTest::testComplexUnitsConverter() {
          2,
          0},
 
-        // TODO(icu-units#108): reconsider whether desireable to round up:
-        // A nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
+        // A 2.1 meter nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
         {"1-eps",
          "light-year",
          "light-year-and-meter",
@@ -475,20 +495,15 @@ void UnitsTest::testComplexUnitsConverter() {
          2,
          1.5 /* meters, precision */},
 
-        // TODO(icu-units#108): reconsider whether epsilon rounding is desirable:
-        //
-        // 2e-16 light years is 1.892146 meters. For C++ double, we consider
-        // this in the noise, and thus expect a 0. (This test fails when
-        // 2e-16 is increased to 4e-16.) For Java, using BigDecimal, we
-        // actually get a good result.
-        {"1 + 2e-16",
+        // 2.1 meters more than 1 light year is not rounded away.
+        {"1 + eps",
          "light-year",
          "light-year-and-meter",
-         1.0 + 2e-16,
+         1.0 + DBL_EPSILON,
          {Measure(1, MeasureUnit::createLightYear(status), status),
-          Measure(0, MeasureUnit::createMeter(status), status)},
+          Measure(2.1, MeasureUnit::createMeter(status), status)},
          2,
-         0},
+         0.001},
     };
     status.assertSuccess();
 
