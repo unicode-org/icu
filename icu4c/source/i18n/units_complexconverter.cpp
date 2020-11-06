@@ -132,24 +132,20 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
     for (int i = 0, n = unitConverters_.length(); i < n; ++i) {
         quantity = (*unitConverters_[i]).convert(quantity);
         if (i < n - 1) {
-            // The double type has 15 decimal digits of precision. For choosing
-            // whether to use the current unit or the next smaller unit, we
-            // therefore nudge up the number with which the thresholding
-            // decision is made. However after the thresholding, we use the
-            // original values to ensure unbiased accuracy (to the extent of
-            // double's capabilities).
-            int64_t roundedQuantity = floor(quantity * (1 + DBL_EPSILON));
-            intValues[i] = roundedQuantity;
+            // If quantity is at the limits of double's precision from an
+            // integer value, we take that integer value.
+            int64_t flooredQuantity = floor(quantity * (1 + DBL_EPSILON));
+            intValues[i] = flooredQuantity;
 
             // Keep the residual of the quantity.
             //   For example: `3.6 feet`, keep only `0.6 feet`
-            //
-            // When the calculation is near enough +/- DBL_EPSILON, we round to
-            // zero. (We also ensure no negative values here.)
-            if ((quantity - roundedQuantity) / quantity < DBL_EPSILON) {
+            double remainder = quantity - flooredQuantity;
+            if (remainder < 0) {
+                // Because we nudged flooredQuantity up by eps, remainder may be
+                // negative: we must treat such a remainder as zero.
                 quantity = 0;
             } else {
-                quantity -= roundedQuantity;
+                quantity = remainder;
             }
         } else { // LAST ELEMENT
             if (rounder == nullptr) {

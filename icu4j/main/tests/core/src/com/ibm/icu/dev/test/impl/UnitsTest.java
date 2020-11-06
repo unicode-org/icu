@@ -64,16 +64,35 @@ public class UnitsTest {
                 0),
 
             // A minimal nudge under 2.0, rounding up to 2.0 ft, 0 in.
+            // TODO(icu-units#108): this matches double precision calculations
+            // from C++, but BigDecimal is in use: do we want Java to be more
+            // precise than C++?
             new TestCase(
                 "foot", "foot-and-inch", BigDecimal.valueOf(2.0).subtract(ComplexUnitsConverter.EPSILON),
                 new Measure[] {new Measure(2, MeasureUnit.FOOT), new Measure(0, MeasureUnit.INCH)}, 0),
 
-            // Testing precision with meter and light-year. 1e-16 light years is
-            // 0.946073 meters, and double precision can provide only ~15 decimal
-            // digits, so we don't expect to get anything less than 1 meter.
+            // A slightly bigger nudge under 2.0, *not* rounding up to 2.0 ft!
+            new TestCase("foot", "foot-and-inch",
+                         BigDecimal.valueOf(2.0).subtract(
+                             ComplexUnitsConverter.EPSILON.multiply(BigDecimal.valueOf(3.0))),
+                         new Measure[] {new Measure(1, MeasureUnit.FOOT),
+                                        new Measure(BigDecimal.valueOf(12.0).subtract(
+                                                        ComplexUnitsConverter.EPSILON.multiply(
+                                                            BigDecimal.valueOf(36.0))),
+                                                    MeasureUnit.INCH)},
+                         0),
 
-            // TODO(icu-units#108): figure out precision thresholds for BigDecimal?
-            // A nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
+            // Testing precision with meter and light-year.
+            //
+            // DBL_EPSILON light-years, ~2.22E-16 light-years, is ~2.1 meters
+            // (maximum precision when exponent is 0).
+            //
+            // 1e-16 light years is 0.946073 meters.
+
+            // A 2.1 meter nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
+            // TODO(icu-units#108): this matches double precision calculations
+            // from C++, but BigDecimal is in use: do we want Java to be more
+            // precise than C++?
             new TestCase("light-year", "light-year-and-meter",
                          BigDecimal.valueOf(2.0).subtract(ComplexUnitsConverter.EPSILON),
                          new Measure[] {new Measure(2, MeasureUnit.LIGHT_YEAR),
@@ -81,8 +100,8 @@ public class UnitsTest {
                          0),
 
             // // TODO(icu-units#108): figure out precision thresholds for BigDecimal?
-            // // This test is passing in C++ but failing in Java:
-            // // A nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
+            // // This test passes in C++ due to double-precision rounding.
+            // // A 2.1 meter nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
             // new TestCase("light-year", "light-year-and-meter",
             //              BigDecimal.valueOf(1.0).subtract(ComplexUnitsConverter.EPSILON),
             //              new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),

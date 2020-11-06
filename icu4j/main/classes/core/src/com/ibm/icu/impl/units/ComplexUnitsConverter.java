@@ -129,15 +129,17 @@ public class ComplexUnitsConverter {
                 // decision is made. However after the thresholding, we use the
                 // original values to ensure unbiased accuracy (to the extent of
                 // double's capabilities).
-                BigDecimal roundedQuantity =
+                BigDecimal flooredQuantity =
                     quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR);
-                intValues.add(roundedQuantity);
+                intValues.add(flooredQuantity);
 
                 // Keep the residual of the quantity.
                 //   For example: `3.6 feet`, keep only `0.6 feet`
-                quantity = quantity.subtract(roundedQuantity);
-                if (quantity.compareTo(BigDecimal.ZERO) == -1) {
+                BigDecimal remainder = quantity.subtract(flooredQuantity);
+                if (remainder.compareTo(BigDecimal.ZERO) == -1) {
                     quantity = BigDecimal.ZERO;
+                } else {
+                    quantity = remainder;
                 }
             } else { // LAST ELEMENT
                 if (rounder == null) {
