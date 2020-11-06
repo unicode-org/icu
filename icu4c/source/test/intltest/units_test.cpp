@@ -247,9 +247,12 @@ void UnitsTest::testConverter() {
             continue;
         }
 
+        double maxDelta = 1e-6 * uprv_fabs(testCase.expectedValue);
+        if (testCase.expectedValue == 0) {
+            maxDelta = 1e-12;
+        }
         assertEqualsNear(UnicodeString("testConverter: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * uprv_fabs(testCase.expectedValue));
+                         testCase.expectedValue, converter.convert(testCase.inputValue), maxDelta);
     }
 }
 
