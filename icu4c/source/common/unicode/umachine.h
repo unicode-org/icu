@@ -362,6 +362,7 @@ typedef int8_t UBool;
  * If 1, then char16_t is a typedef and not a real type (yet)
  * @internal
  */
+#ifndef U_CHAR16_IS_TYPEDEF
 #if (U_PLATFORM == U_PF_AIX) && defined(__cplusplus) &&(U_CPLUSPLUS_VERSION < 11)
 // for AIX, uchar.h needs to be included
 # include <uchar.h>
@@ -373,7 +374,7 @@ typedef int8_t UBool;
 #else
 # define U_CHAR16_IS_TYPEDEF 0
 #endif
-
+#endif
 
 /**
  * \var UChar
