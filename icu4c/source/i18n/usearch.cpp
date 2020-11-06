@@ -2972,7 +2972,8 @@ usearch_getBreakIterator(const UStringSearch *strsrch)
 U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
                                       const UChar         *text,
                                             int32_t        textlength,
-                                            UErrorCode    *status)
+                                            UErrorCode    *status,
+                                            bool          fastMode)
 {
     if (U_SUCCESS(*status)) {
         if (strsrch == NULL || text == NULL || textlength < -1 ||
@@ -2985,7 +2986,7 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
             }
             strsrch->search->text       = text;
             strsrch->search->textLength = textlength;
-            ucol_setText(strsrch->textIter, text, textlength, status);
+            ucol_setText(strsrch->textIter, text, textlength, status, fastMode);
             strsrch->search->matchedIndex  = USEARCH_DONE;
             strsrch->search->matchedLength = 0;
             strsrch->search->reset         = TRUE;

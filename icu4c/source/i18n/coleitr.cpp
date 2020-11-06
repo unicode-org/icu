@@ -271,13 +271,22 @@ void CollationElementIterator::setOffset(int32_t newOffset,
 * Sets the source to the new source string.
 */
 void CollationElementIterator::setText(const UnicodeString& source,
-                                       UErrorCode& status)
+                                       UErrorCode& status,
+                                       bool fastMode)
 {
     if (U_FAILURE(status)) {
         return;
     }
 
-    string_ = source;
+    if (fastMode)
+    {
+        string_ = string_.fastCopyFrom(source);
+    }
+    else
+    {
+        string_ = source;
+    }
+
     const UChar *s = string_.getBuffer();
     CollationIterator *newIter;
     UBool numeric = rbc_->settings->isNumeric();

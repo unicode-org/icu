@@ -478,7 +478,8 @@ U_CAPI void U_EXPORT2
 ucol_setText(      UCollationElements *elems,
              const UChar              *text,
                    int32_t            textLength,
-                   UErrorCode         *status)
+                   UErrorCode         *status,
+                   bool fastMode)
 {
     if (U_FAILURE(*status)) {
         return;
@@ -489,7 +490,7 @@ ucol_setText(      UCollationElements *elems,
         return;
     }
     UnicodeString s((UBool)(textLength < 0), text, textLength);
-    return CollationElementIterator::fromUCollationElements(elems)->setText(s, *status);
+    return CollationElementIterator::fromUCollationElements(elems)->setText(s, *status, fastMode);
 }
 
 U_CAPI int32_t U_EXPORT2

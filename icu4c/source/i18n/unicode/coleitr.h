@@ -240,7 +240,7 @@ public:
     * @param status the error code status.
     * @stable ICU 2.0
     */
-    void setText(const UnicodeString& str, UErrorCode& status);
+    void setText(const UnicodeString& str, UErrorCode& status, bool fastMode = false );
 
     /**
     * Sets the source string.

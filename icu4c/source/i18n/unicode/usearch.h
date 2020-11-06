@@ -566,7 +566,8 @@ U_CAPI const UBreakIterator * U_EXPORT2 usearch_getBreakIterator(
 U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch, 
                                       const UChar         *text,
                                             int32_t        textlength,
-                                            UErrorCode    *status);
+                                            UErrorCode    *status,
+                                            bool          fastMode = false );
 
 /**
 * Return the string text to be searched.
