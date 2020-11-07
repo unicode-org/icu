@@ -4,7 +4,7 @@ image: Visual Studio 2017
 platform: x64
 
 # Don't clone the entire repo.
-clone_depth: 10
+clone_depth: 5
 
 # Cache things between builds to speed things up and save bandwidth.
 cache:
@@ -54,8 +54,14 @@ for:
           if ( !(Test-Path "${env:CYG_CACHED_SETUP}" -NewerThan (Get-Date).AddDays(-7)) )
           {
             Write-Host "Cached Cygwin setup does not exist or is older than 7 days, downloading from external site."
+            
             New-Item -Force -Type Directory $env:CYG_CACHE
-            Invoke-WebRequest $env:CYG_URL -OutFile $env:CYG_CACHED_SETUP
+            Write-Host "Downloading Cygwin setup..."
+            
+            $start_time = Get-Date
+            (New-Object System.Net.WebClient).DownloadFile($env:CYG_URL, $env:CYG_CACHED_SETUP)
+
+            Write-Output "Download took: $((Get-Date).Subtract($start_time).Seconds) second(s)."
           }
       - cmd: >-
           %CYG_CACHED_SETUP% --no-verify --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site "%CYG_MIRROR%" --root "%CYG_ROOT%"  --local-package-dir "%CYG_CACHE%" --packages "%CYG_PACKAGES%"
