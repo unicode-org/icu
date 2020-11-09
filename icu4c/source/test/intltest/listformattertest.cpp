@@ -739,7 +739,9 @@ void ListFormatterTest::TestNextPosition() {
         ULISTFMT_TYPE_AND, ULISTFMT_TYPE_OR, ULISTFMT_TYPE_UNITS
     };
     const char* typeStr [] = {"and", "or", "units"};
-    const UnicodeString inputs[] = { u"A1", u"B2", u"C3", u"D4" };
+    const UnicodeString inputs[] = { u"A1", u"B2", u"C3", u"D4",
+        u"E5", u"F6", u"G7", u"H8", u"I9"
+    };
     for (auto width : widths) {
         for (auto type : types) {
             for (auto locale : locales) {
