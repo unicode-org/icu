@@ -551,6 +551,60 @@ void ListFormatterTest::TestFormattedValue() {
             expectedFieldPositions,
             UPRV_LENGTHOF(expectedFieldPositions));
     }
+
+    {
+        LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_SHORT, status));
+        if (status.errIfFailureAndReset()) { return; }
+        const char16_t* message = u"ICU-21383 Long list";
+        const char16_t* expectedString = u"a, b, c, d, e, f, g, h, i";
+        const UnicodeString inputs[] = {
+            u"a",
+            u"b",
+            u"c",
+            u"d",
+            u"e",
+            u"f",
+            u"g",
+            u"h",
+            u"i",
+        };
+        FormattedList result = fmt->formatStringsToValue(inputs, UPRV_LENGTHOF(inputs), status);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_LIST_SPAN, 0, 0, 1},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0, 1},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 1, 3},
+            {UFIELD_CATEGORY_LIST_SPAN, 1, 3, 4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 3, 4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 4, 6},
+            {UFIELD_CATEGORY_LIST_SPAN, 2, 6, 7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 6, 7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 7, 9},
+            {UFIELD_CATEGORY_LIST_SPAN, 3, 9, 10},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 9, 10},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 10, 12},
+            {UFIELD_CATEGORY_LIST_SPAN, 4, 12, 13},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 12, 13},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 13, 15},
+            {UFIELD_CATEGORY_LIST_SPAN, 5, 15, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 15, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 18},
+            {UFIELD_CATEGORY_LIST_SPAN, 6, 18, 19},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 18, 19},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 19, 21},
+            {UFIELD_CATEGORY_LIST_SPAN, 7, 21, 22},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 21, 22},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 22, 24},
+            {UFIELD_CATEGORY_LIST_SPAN, 8, 24, 25},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 24, 25},
+            };
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
 }
 
 void ListFormatterTest::DoTheRealListStyleTesting(Locale locale,

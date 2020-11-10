@@ -567,7 +567,7 @@ public:
                 start,
                 {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD},
                 status);
-            data->appendSpanInfo(0, start.length());
+            data->appendSpanInfo(0, start.length(), status);
         }
     }
 
@@ -603,7 +603,7 @@ public:
                 next,
                 {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD},
                 status);
-            data->appendSpanInfo(position, next.length());
+            data->appendSpanInfo(position, next.length(), status);
             data->getStringRef().append(
                 temp.tempSubString(offsets[1]),
                 {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD},
@@ -622,7 +622,7 @@ public:
                 next,
                 {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD},
                 status);
-            data->prependSpanInfo(position, next.length());
+            data->prependSpanInfo(position, next.length(), status);
             data->getStringRef().insert(
                 0,
                 temp.tempSubStringBetween(0, offsets[1]),
