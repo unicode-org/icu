@@ -219,19 +219,35 @@ bool FormattedValueStringBuilderImpl::nextPositionImpl(ConstrainedFieldPosition&
     }
 
     U_ASSERT(currField == kUndefinedField);
+    // Always set the position to the end so that we don't revisit previous sections
+    cfpos.setState(
+        cfpos.getCategory(),
+        cfpos.getField(),
+        fString.fLength,
+        fString.fLength);
     return false;
 }
 
-void FormattedValueStringBuilderImpl::appendSpanInfo(int32_t spanValue, int32_t length) {
-    if (spanIndices.getCapacity() <= spanValue) {
-        spanIndices.resize(spanValue * 2);
+void FormattedValueStringBuilderImpl::appendSpanInfo(int32_t spanValue, int32_t length, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+    U_ASSERT(spanIndices.getCapacity() >= spanValue);
+    if (spanIndices.getCapacity() == spanValue) {
+        if (!spanIndices.resize(spanValue * 2, spanValue)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
     spanIndices[spanValue] = {spanValue, length};
 }
 
-void FormattedValueStringBuilderImpl::prependSpanInfo(int32_t spanValue, int32_t length) {
-    if (spanIndices.getCapacity() <= spanValue) {
-        spanIndices.resize(spanValue * 2);
+void FormattedValueStringBuilderImpl::prependSpanInfo(int32_t spanValue, int32_t length, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+    U_ASSERT(spanIndices.getCapacity() >= spanValue);
+    if (spanIndices.getCapacity() == spanValue) {
+        if (!spanIndices.resize(spanValue * 2, spanValue)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
     for (int32_t i = spanValue - 1; i >= 0; i--) {
         spanIndices[i+1] = spanIndices[i];

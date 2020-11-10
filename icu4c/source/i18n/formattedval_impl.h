@@ -174,8 +174,8 @@ public:
      * spanValue: the index of the list item, for example.
      * length: the length of the span, used to split adjacent fields.
      */
-    void appendSpanInfo(int32_t spanValue, int32_t length);
-    void prependSpanInfo(int32_t spanValue, int32_t length);
+    void appendSpanInfo(int32_t spanValue, int32_t length, UErrorCode& status);
+    void prependSpanInfo(int32_t spanValue, int32_t length, UErrorCode& status);
 
 private:
     FormattedStringBuilder fString;
