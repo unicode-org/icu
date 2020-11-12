@@ -4154,7 +4154,7 @@ LocaleTest::TestSetKeywordValue(void) {
         { "calendar", "buddhist" }
     };
 
-    UErrorCode status = U_ZERO_ERROR;
+    IcuTestErrorCode status(*this, "TestSetKeywordValue()");
 
     int32_t i = 0;
     int32_t resultLen = 0;
@@ -4175,6 +4175,24 @@ LocaleTest::TestSetKeywordValue(void) {
             err("Expected to extract \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
                 testCases[i].value, testCases[i].keyword, buffer);
         }
+    }
+
+    // Test long locale
+    {
+        status.errIfFailureAndReset();
+        const char* input =
+            "de__POSIX@colnormalization=no;colstrength=primary;currency=eur;"
+            "em=default;kv=space;lb=strict;lw=normal;measure=metric;"
+            "numbers=latn;rg=atzzzz;sd=atat1";
+        const char* expected =
+            "de__POSIX@colnormalization=no;colstrength=primary;currency=eur;"
+            "em=default;kv=space;lb=strict;lw=normal;measure=metric;"
+            "numbers=latn;rg=atzzzz;sd=atat1;ss=none";
+        // Bug ICU-21385
+        Locale l2(input);
+        l2.setKeywordValue("ss", "none", status);
+        assertEquals("", expected, l2.getName());
+        status.errIfFailureAndReset();
     }
 }
 
