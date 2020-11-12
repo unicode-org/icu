@@ -35,7 +35,7 @@ UBool BitSet::get(int32_t bitIndex) const {
     uint32_t longIndex = bitIndex >> 5;
     int32_t bitInLong = bitIndex & 0x1F;
     return (longIndex < len) ? (((data[longIndex] >> bitInLong) & 1) != 0)
-        : FALSE;
+        : false;
 }
 
 void BitSet::set(int32_t bitIndex) {

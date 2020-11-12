@@ -255,7 +255,7 @@ double NormalizeUTF16::call(int32_t iterations, int32_t pieceLength) {
     UErrorCode errorCode = U_ZERO_ERROR;
     utimer_getTime(&startTime);
     for (int32_t i = 0; i < iterations; ++i) {
-        piece.setTo(FALSE, s + start, pieceLength);
+        piece.setTo(false, s + start, pieceLength);
         norm2.normalize(piece, dest, errorCode);
         start = (start + pieceLength) % limit;
     }

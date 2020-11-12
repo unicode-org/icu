@@ -190,12 +190,12 @@ U_CAPI double uprv_getMeanTime(double *times, uint32_t *timeCount, double *margi
   return meanTime;
 }
 
-UBool calcSieveTime = FALSE;
+UBool calcSieveTime = false;
 double meanSieveTime = 0.0;
 double meanSieveME = 0.0;
 
 U_CAPI double uprv_getSieveTime(double *marginOfError) {
-  if(calcSieveTime==FALSE) {
+  if(!calcSieveTime) {
 #define SAMPLES 50
     uint32_t samples = SAMPLES;
     double times[SAMPLES];
@@ -208,7 +208,7 @@ U_CAPI double uprv_getSieveTime(double *marginOfError) {
     }
     
     meanSieveTime = uprv_getMeanTime(times, &samples,&meanSieveME);
-    calcSieveTime=TRUE;
+    calcSieveTime=true;
   }
   if(marginOfError!=NULL) {
     *marginOfError = meanSieveME;
