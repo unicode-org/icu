@@ -280,18 +280,29 @@ uprv_detectWindowsTimeZone()
     int regionCodeLen = GetGeoInfoW(geoId, GEO_ISO2, regionCodeW, UPRV_LENGTHOF(regionCodeW), 0);
 
     const UChar *icuTZ16 = nullptr;
-    int32_t tzLen;
+    int32_t tzListLen = 0;
 
     if (regionCodeLen != 0) {
         for (int i = 0; i < UPRV_LENGTHOF(regionCodeW); i++) {
             regionCode[i] = static_cast<char>(regionCodeW[i]);
         }
-        icuTZ16 = ures_getStringByKey(winTZBundle.getAlias(), regionCode, &tzLen, &status);
+        icuTZ16 = ures_getStringByKey(winTZBundle.getAlias(), regionCode, &tzListLen, &status);
     }
     if (regionCodeLen == 0 || U_FAILURE(status)) {
         // fallback to default "001" (world)
         status = U_ZERO_ERROR;
-        icuTZ16 = ures_getStringByKey(winTZBundle.getAlias(), "001", &tzLen, &status);
+        icuTZ16 = ures_getStringByKey(winTZBundle.getAlias(), "001", &tzListLen, &status);
+    }
+
+    // Note: We want the first entry in the string returned by ures_getStringByKey.
+    // However this string can be a space delimited list of timezones:
+    //  Ex: "America/New_York America/Detroit America/Indiana/Petersburg ..."
+    // We need to stop at the first space, so we pass tzLen (instead of tzListLen) to appendInvariantChars below.
+    int32_t tzLen = 0;
+    if (tzListLen > 0) {
+        while (!(icuTZ16[tzLen] == u'\0' || icuTZ16[tzLen] == u' ')) {
+            tzLen++;
+        }
     }
 
     // Note: cloneData returns nullptr if the status is a failure, so this
