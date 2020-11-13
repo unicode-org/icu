@@ -144,6 +144,16 @@ class U_I18N_API UnitConverter : public UMemory {
                   const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
+     * Compares two single units and returns 1 if the first one is greater, -1 if the second
+     * one is greater and 0 if they are equal.
+     *
+     * NOTE:
+     *  Compares only single units that are convertible.
+     */
+    static int32_t compareTwoUnits(const MeasureUnitImpl &firstUnit, const MeasureUnitImpl &SecondUnit,
+                                   const ConversionRates &ratesInfo, UErrorCode &status);
+
+    /**
      * Convert a measurement expressed in the source unit to a measurement
      * expressed in the target unit.
      *

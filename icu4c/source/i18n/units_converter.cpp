@@ -502,6 +502,52 @@ UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImp
                        ratesInfo, status);
 }
 
+int32_t UnitConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
+                                       const MeasureUnitImpl &secondUnit,
+                                       const ConversionRates &ratesInfo, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
+    if (firstUnit.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        secondUnit.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
+    }
+
+    Convertibility unitsState = extractConvertibility(firstUnit, secondUnit, ratesInfo, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
+    if (unitsState == Convertibility::UNCONVERTIBLE || unitsState == Convertibility::RECIPROCAL) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
+    }
+
+    // Represents the conversion factor from the firstUnit to the base unit that specified in the
+    // conversion data which is considered as the root of the firstUnit and the secondUnit.
+    Factor firstUnitToBase = loadCompoundFactor(firstUnit, ratesInfo, status);
+    Factor secondUnitToBase = loadCompoundFactor(secondUnit, ratesInfo, status);
+
+    firstUnitToBase.substituteConstants();
+    secondUnitToBase.substituteConstants();
+
+    double firstUnitToBaseConversionRate = firstUnitToBase.factorNum / firstUnitToBase.factorDen;
+    double secondUnitToBaseConversionRate = secondUnitToBase.factorNum / secondUnitToBase.factorDen;
+
+    double diff = firstUnitToBaseConversionRate - secondUnitToBaseConversionRate;
+    if (diff > 0) {
+        return 1;
+    }
+
+    if (diff < 0) {
+        return -1;
+    }
+
+    return 0;
+}
+
 double UnitConverter::convert(double inputValue) const {
     double result =
         inputValue + conversionRate_.sourceOffset; // Reset the input to the target zero index.
