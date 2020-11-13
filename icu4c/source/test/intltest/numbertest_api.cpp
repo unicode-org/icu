@@ -798,6 +798,15 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("de-DE"),
             -1.24,
             u"-1 Std., 14 Min. und 24 Sek.");
+
+    assertFormatSingle(
+            u"Zero out the unit field",
+            u"",
+            u"",
+            NumberFormatter::with().unit(KELVIN).unit(MeasureUnit()),
+            Locale("en"),
+            100,
+            u"100");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {

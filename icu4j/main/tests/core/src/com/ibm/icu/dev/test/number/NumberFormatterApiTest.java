@@ -756,6 +756,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("de-DE"),
                 -1.24,
                 "-1 Std., 14 Min. und 24 Sek.");
+
+        assertFormatSingle(
+                "Zero out the unit field",
+                "",
+                "",
+                NumberFormatter.with().unit(MeasureUnit.KELVIN).unit(NoUnit.BASE),
+                new ULocale("en"),
+                100,
+                "100");
     }
 
     @Test
