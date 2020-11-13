@@ -22,11 +22,6 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Overview
 
-> :construction: **TODO**: Adjust this page for use of GitHub Markdown (since 2020)
-rather than Google Sites.
-See the [migration page](https://docs.google.com/document/d/1uK91cxv1amCrt75TBw1PlCC5wZhJH_w3dW_8unWL9EQ/edit)
-for details and tips.
-
 This version of the ICU User Guide is generated directly from the Markdown
 files in the `/docs` directory of the main repository. In particular, the
 Markdown files are customized to work with the Jekyll static site generator,
@@ -94,6 +89,7 @@ should be lowercased.
 
 > :point_right: **Note**: Notes should be made by starting the line with the
 following Markdown:
+
 ~~~
 > :point_right: **Note**:
 ~~~
@@ -102,6 +98,7 @@ following Markdown:
 
 "TODO" items should be marked by starting the line with the
 following Markdown:
+
 ~~~
 > :construction: **TODO**:
 ~~~
