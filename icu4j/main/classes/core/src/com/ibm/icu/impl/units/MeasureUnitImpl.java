@@ -754,8 +754,9 @@ public class MeasureUnitImpl {
 
         @Override
         public int compare(MeasureUnitImpl o1, MeasureUnitImpl o2) {
-            UnitConverter fromO1toO2 = new UnitConverter(o1, o2, conversionRates);
-            return fromO1toO2.convert(BigDecimal.valueOf(1)).compareTo(BigDecimal.valueOf(1));
+            BigDecimal factor1 = this.conversionRates.getFactorToBase(o1).getConversionRate();
+            BigDecimal factor2 = this.conversionRates.getFactorToBase(o2).getConversionRate();
+            return factor1.compareTo(factor2);
         }
     }
 

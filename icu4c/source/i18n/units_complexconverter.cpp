@@ -37,28 +37,18 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,
         outputUnits_.emplaceBackAndCheckErrorCode(status, units_[i]->copy(status).build(status));
     }
 
-    // NOTE:
-    //  This comparator is used to sort the units in a descending order. Therefore, we return -1 if
-    //  the left is bigger than right and so on.
+    // Sorts units in descending order. Therefore, we return -1 if
+    // the left is bigger than right and so on.
     auto descendingCompareUnits = [](const void *context, const void *left, const void *right) {
         UErrorCode status = U_ZERO_ERROR;
 
         const auto *leftPointer = static_cast<const MeasureUnitImpl *const *>(left);
         const auto *rightPointer = static_cast<const MeasureUnitImpl *const *>(right);
 
-        UnitConverter fromLeftToRight(**leftPointer,                                  //
-                                      **rightPointer,                                 //
-                                      *static_cast<const ConversionRates *>(context), //
-                                      status);
-
-        double rightFromOneLeft = fromLeftToRight.convert(1.0);
-        if (std::abs(rightFromOneLeft - 1.0) < 0.0000000001) { // Equals To
-            return 0;
-        } else if (rightFromOneLeft > 1.0) { // Greater Than
-            return -1;
-        }
-
-        return 1; // Less Than
+        return -1 * UnitConverter::compareTwoUnits(**leftPointer,                                  //
+                                                   **rightPointer,                                 //
+                                                   *static_cast<const ConversionRates *>(context), //
+                                                   status);
     };
 
     uprv_sortArray(units_.getAlias(),                                                                  //
