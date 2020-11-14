@@ -206,35 +206,92 @@ service objects, organized according to locale. Then, if a particular locale's
 formatter is in high demand, that formatter can be used, and then returned to
 the pool.
 
-#### ICU Memory Usage
+### ICU Memory Usage
 
 ICU4C APIs are designed to allow separate heaps for its libraries vs. the
 application. This is achieved by providing functions to allocate and release
 objects owned by ICU4C using only ICU4C library functions. For more details see
-the Memory Usage section in the [Coding Guidelines](dev/codingguidelines.md).
+the Memory Usage section in the [Coding Guidelines](dev/codingguidelines.md#memory-usage).
 
-#### ICU Initialization and Termination
+### ICU4C Initialization and Termination
 
 The ICU library does not normally require any explicit initialization prior to
 use. An application begins use simply by calling any ICU API in the usual way.
-(There is one exception to this, described below.)
+There are, however, a few functions affecting ICU's configuration, that, if used,
+must be called first, before other use of ICU in a process. These are outlined below.
 
-In C++ programs, ICU objects and APIs may safely be used during static
-initialization of other application-defined classes or objects. There are no
-order-of-initialization problems between ICU and static objects from other
-libraries because ICU does not rely on C++ static object initialization for its
-normal operation.
+1. `u_setMemoryFunctions()`. This function replaces the standard library heap
+allocation functions used by ICU with alternate versions, provided by the
+application. If it is needed, `u_setMemoryFunctions()` must be called first, before
+any other use of ICU. This functionality is not commonly used.
 
-When an application is terminating, it may optionally call the function
-`u_cleanup(void)`, which will free any heap storage that has been allocated and
-held by the ICU library. The main benefit of `u_cleanup()` occurs when using
-memory leak checking tools while debugging or testing an application. Without
-`u_cleanup()`, memory being held by the ICU library will be reported as leaks.
+2. ICU Data Locating Functions, `u_setCommonData()`, `u_setDataDirectory()`, and
+`u_setAppData()`. One or more of these functions will be required when ICU is
+configured to load its data directly from files rather than taking it from the
+default data DLL, and the files are not in the default location. Again, this is
+not common. See [ICU Data](icudata#icu-data-directory).
 
-(For some platforms, the configure option `--enable-auto-cleanup` (or
-defining the option `UCLN_NO_AUTO_CLEANUP` to 0) will add code which
-automatically cleans up ICU when its shared library is unloaded. See comments in
-`ucln_imp.h`)
+3. Sanity check that ICU is functioning and able to access data. This is
+important because configuration or installation problems that leave ICU unable
+to load its data do occur, and the resulting failures can be confusing.
+Since not all ICU APIs have UErrorCode parameters, in the absence of data they
+may sometimes silently return incorrect results.
+
+   The function `ulocdata_getCLDRVersion()` is suitable; it is small and light
+weight, requires data, and reports the error in the absence of data.
+
+
+When an application is terminating it should call the function `u_cleanup()`,
+which frees all heap storage and other system resources that are held internally
+by the ICU library. While the use of `u_cleanup()` is not strictly required,
+failure to call it will cause memory leak checking tools to report problems for
+resources being held by ICU library.
+
+Before calling `u_cleanup()`, all ICU objects that were created by the
+application must be deleted, and all ICU services (plain C APIs) must be closed.
+
+For some platforms the configure option `--enable-auto-cleanup`, or defining
+the option `UCLN_NO_AUTO_CLEANUP` to 0, will add code which automatically cleans
+up ICU when its shared library is unloaded. See comments in `ucln_imp.h`
+
+#### C++ Static Initialization and Destruction
+
+The ICU library itself does not rely on C++ static initializers, meaning that
+applications will not encounter order-of-initialization problems from the use of
+ICU.
+
+There are, however, some significant limitations for applications that make use
+of ICU at C++ static initialization time:
+
+1.  `u_setMemoryFunctions()` and the data locating functions, if needed, must
+still be called before any other use of ICU. Which includes any use during the
+construction of static objects.
+
+2.  `u_cleanup()` can only be called after all other ICU-using objects have been
+deleted. Finding a suitable time and place for the call to `u_cleanup()` may be
+difficult, however. Refer to the C++ literature on the order of static
+initialization and destruction.
+
+3.  Destruction of static objects that are scoped to a code block. These, by the
+conventions of C++, are lazily initialized when the code block is first entered,
+so there are no issues during static initialization. But object destruction
+happens when the program terminates, leaving the problem of where to call
+`u_cleanup()`, as discussed above.
+
+#### Dynamically Loading and Unloading ICU
+
+Applications may arrange to dynamically load the ICU library when it is needed,
+and unload it when through, repeating the process as required. The specific
+details for loading and unloading, and accessing such libraries, are operating
+system dependent.
+
+For ICU to be used in this way, before unloading, all ICU objects and services
+must be closed or deleted, and `u_cleanup()` must be called.
+
+On Windows, the loading and unloading of ICU should never be done inside
+[DllMain](https://docs.microsoft.com/en-us/windows/win32/dlls/dllmain). Loading
+one of the ICU libraries can cause other libraries or files to be loaded,
+leading to potential dead-lock.
 
 #### Initializing ICU in Multithreaded Environments
 
@@ -251,45 +308,13 @@ ICU. This situation will arise only when ALL of the following conditions occur:
 
 To safely initialize the ICU library when all of the above conditions apply, the
 application must explicitly arrange for a first-use of ICU from a single thread
-before the multi-threaded use of ICU begins (see below for basic steps in safely
-initializing the ICU library). A convenient ICU operation for this purpose is
-`uloc_getDefault()` , declared in the header file `unicode/uloc.h`.
+before the multi-threaded use of ICU begins. A convenient ICU operation for this
+purpose is `uloc_getDefault()`, declared in the header file `unicode/uloc.h`.
 
-#### Steps in Safely Initializing ICU in Single and Multi-threaded Environments
+> :point_right: **Note**: The status of this situation needs further
+investigation. See issue
+[ICU-21380](https://unicode-org.atlassian.net/browse/ICU-21380)
 
-1. If needed, certain data loading functions, such as `u_setCommonData()`,
-   `u_setAppData()`, and `u_setDataDirectory()`, must be called before any other
-   ICU function. In addition there are some other heap, mutex, and trace
-   functions, such as `u_setMemoryFunctions()` and `u_setMutexFunctions()`, which
-   also must be called during the initial and unused state of ICU.
-2. Next, `u_init()` can be called to ensure proper loading and initialization of
-   data that are required internally by various ICU functions. Explicit use of
-   this function is needed in a multi-threaded application by the main thread.
-   Each subsequent thread does not need to call `u_init()` again after the main
-   thread has successfully executed this function. In a single threaded
-   program, calls to this function is not needed but
-   recommended.
-3. After the successful initialization of ICU, normal use of ICU, whether using
-   multiple threads or just a single one, is permitted.
-4. When the application is done using ICU, the individual threads must cease
-   all ICU services leaving only the main thread.
-5. After all but the main thread have released ICU, `u_cleanup()` can be called.
-   The releasing of the individual threads to ICU is necessary because
-   `u_cleanup()` is not thread safe. In addition, all ICU items, including
-   collators, resource bundles, and converters, must be closed before calling
-   this function. `u_cleanup()` will free/delete all memory owned by the ICU
-   libraries returning them to their original load state. Generally, this
-   function should be called only once just before an application exits.
-   However, applications needing to dynamically load and unload the ICU
-   libraries can call this function just before the library unloads.
-   `u_cleanup()` also clears any ICU heap functions, mutex functions, or trace
-   functions that may haven been set for the process. If ICU is to be
-   reinitialized after calling `u_cleanup()`, these runtime override functions
-   will need to be setup again if they are still required. Great care needs to
-   be exercised when using `u_cleanup()` and should only be implemented by those
-   who know what they are doing. In any event, if the application doesn't exit
-   and requires ICU again after correctly calling `u_cleanup()`, go back to step
-   (1).
 
 ### Error Handling
 
