@@ -1243,6 +1243,7 @@ static void TestDisplayNameBrackets()
 
 static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UChar getName[kDisplayNameBracketsMax];
     UDisplayContext contexts[] = {
@@ -1299,6 +1300,7 @@ static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
     }
 
     uldn_close(ldn);
+#endif
 }
 
 /*------------------------------
@@ -2243,12 +2245,7 @@ static void TestKeywordSetError(void)
         strcpy(buffer,kwSetTestCases[i].l);
         status = U_ZERO_ERROR;
         res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
-        if(res == blen) {
-            if(status != U_STRING_NOT_TERMINATED_WARNING) {
-                log_err("expected not terminated warning on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
-                return;
-            }
-        } else if(status != U_BUFFER_OVERFLOW_ERROR) {
+        if(status != U_BUFFER_OVERFLOW_ERROR) {
             log_err("expected buffer overflow on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
             return;
         }

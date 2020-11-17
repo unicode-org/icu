@@ -46,11 +46,19 @@
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto">LocalArray&lt;MeasureUnit&gt; icu::MeasureUnit::splitToSingleUnits(int32_t&amp;, UErrorCode&amp;) const</td><td class="">Internal<br>ICU 67</td><td>(missing)<br>
+<td class="file">fmtable.h</td><td class="proto">const UFormattable* icu::Formattable::toUFormattable()</td><td class="stabchange">Stable<br>ICU 52</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">measunit.h</td><td class="proto">LocalArray&lt;MeasureUnit&gt; icu::MeasureUnit::splitToSingleUnits(int32_t&amp;, UErrorCode&amp;) const</td><td class="">Internal<br>ICU 67</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto">int32_t icu::MeasureUnit::getIndex() const</td><td class="">Internal</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::resolveUnitPerUnit(const MeasureUnit&amp;, const MeasureUnit&amp;, bool*)</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
@@ -91,6 +99,10 @@
 </tr>
 <tr class="row0">
 <td class="file">nounit.h</td><td class="proto">void* icu::NoUnit::clone() const</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">uniset.h</td><td class="proto">const USet* icu::UnicodeSet::toUSet()</td><td class="stabchange">Stable<br>ICU 4.2</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
 </table>
@@ -140,231 +152,255 @@
 <td class="file">bytestrie.h</td><td class="proto">uint64_t icu::BytesTrie::getState64() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
 <tr class="row1">
+<td class="file">listformatter.h</td><td class="proto"><tt>static</tt> ListFormatter* icu::ListFormatter::createInstance(const Locale&amp;, UListFormatterType, UListFormatterWidth, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row0">
 <td class="file">localebuilder.h</td><td class="proto">UBool icu::LocaleBuilder::copyErrorTo(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::addSupportedLocale(const Locale&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::operator=(Builder&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setDefaultLocale(const Locale*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setDemotionPerDesiredLocale(ULocMatchDemotion)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setFavorSubtag(ULocMatchFavorSubtag)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setSupportedLocales(Iter, Iter)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setSupportedLocales(Locale::Iterator&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setSupportedLocalesFromListString(StringPiece)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setSupportedLocalesViaConverter(Iter, Iter, Conv)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">Locale icu::LocaleMatcher::Result::makeResolvedLocale(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">LocaleMatcher icu::LocaleMatcher::Builder::build(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">LocaleMatcher&amp; icu::LocaleMatcher::operator=(LocaleMatcher&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Result icu::LocaleMatcher::getBestMatchResult(Locale::Iterator&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">Result icu::LocaleMatcher::getBestMatchResult(const Locale&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Result&amp; icu::LocaleMatcher::Result::operator=(Result&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">UBool icu::LocaleMatcher::Builder::copyErrorTo(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">const Locale* icu::LocaleMatcher::Result::getDesiredLocale() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">const Locale* icu::LocaleMatcher::Result::getSupportedLocale() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">const Locale* icu::LocaleMatcher::getBestMatch(Locale::Iterator&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">const Locale* icu::LocaleMatcher::getBestMatch(const Locale&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">const Locale* icu::LocaleMatcher::getBestMatchForListString(StringPiece, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto"><tt>enum</tt> ULocMatchDemotion::ULOCMATCH_DEMOTION_NONE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto"><tt>enum</tt> ULocMatchDemotion::ULOCMATCH_DEMOTION_REGION</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto"><tt>enum</tt> ULocMatchFavorSubtag::ULOCMATCH_FAVOR_LANGUAGE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto"><tt>enum</tt> ULocMatchFavorSubtag::ULOCMATCH_FAVOR_SCRIPT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">icu::LocaleMatcher::Builder::Builder()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">icu::LocaleMatcher::Builder::Builder(Builder&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">icu::LocaleMatcher::Builder::~Builder()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">icu::LocaleMatcher::LocaleMatcher(LocaleMatcher&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">icu::LocaleMatcher::Result::Result(Result&amp;&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">icu::LocaleMatcher::Result::~Result()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">icu::LocaleMatcher::~LocaleMatcher()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">int32_t icu::LocaleMatcher::Result::getDesiredIndex() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">int32_t icu::LocaleMatcher::Result::getSupportedIndex() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locid.h</td><td class="proto">UBool icu::Locale::ConvertingIterator&lt; Iter, Conv &gt;::hasNext() const override</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locid.h</td><td class="proto">UBool icu::Locale::Iterator::hasNext() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locid.h</td><td class="proto">UBool icu::Locale::RangeIterator&lt; Iter &gt;::hasNext() const override</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locid.h</td><td class="proto">const Locale&amp; icu::Locale::ConvertingIterator&lt; Iter, Conv &gt;::next() override</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locid.h</td><td class="proto">const Locale&amp; icu::Locale::Iterator::next()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locid.h</td><td class="proto">const Locale&amp; icu::Locale::RangeIterator&lt; Iter &gt;::next() override</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locid.h</td><td class="proto">icu::Locale::ConvertingIterator&lt; Iter, Conv &gt;::ConvertingIterator(Iter, Iter, Conv)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">locid.h</td><td class="proto">icu::Locale::Iterator::~Iterator()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locid.h</td><td class="proto">icu::Locale::RangeIterator&lt; Iter &gt;::RangeIterator(Iter, Iter)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getBar()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDecade()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDotPerCentimeter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDotPerInch()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getEm()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getMegapixel()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getPascal()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getPixel()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getPixelPerCentimeter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getPixelPerInch()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getThermUs()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createBar(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDecade(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDotPerCentimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDotPerInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createEm(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMegapixel(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPascal(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPixel(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPixelPerCentimeter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPixelPerInch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createThermUs(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">StringClass icu::number::FormattedNumber::toDecimalNumber(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberrangeformatter.h</td><td class="proto">UnicodeString icu::number::FormattedNumberRange::getFirstDecimal(UErrorCode&amp;) const</td><td class="">Draft<br>ICU 63</td><td>Deprecated<br>
 <span class="verchange"><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberrangeformatter.h</td><td class="proto">UnicodeString icu::number::FormattedNumberRange::getSecondDecimal(UErrorCode&amp;) const</td><td class="">Draft<br>ICU 63</td><td>Deprecated<br>
 <span class="verchange"><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateAbsoluteUnit::UDAT_ABSOLUTE_HOUR</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">reldatefmt.h</td><td class="proto"><tt>enum</tt> UDateAbsoluteUnit::UDAT_ABSOLUTE_MINUTE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">stringpiece.h</td><td class="proto">icu::StringPiece::StringPiece(T)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ucal.h</td><td class="proto">int32_t ucal_getHostTimeZone(UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">ucharstrie.h</td><td class="proto">UCharsTrie&amp; icu::UCharsTrie::resetToState64(uint64_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">ucharstrie.h</td><td class="proto">uint64_t icu::UCharsTrie::getState64() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+</tr>
+<tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto">UListFormatter* ulistfmt_openForType(const char*, UListFormatterType, UListFormatterWidth, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row0">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_AND</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_OR</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row0">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_UNITS</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row0">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_WIDE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
 </tr>
 <tr class="row0">
 <td class="file">uloc.h</td><td class="proto">UEnumeration* uloc_openAvailableByType(ULocAvailableType, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
@@ -417,6 +453,13 @@
 <td class="file">bytestrie.h</td><td class="proto">uint64_t icu::BytesTrie::getState64() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
 <tr class="row1">
+<td class="file">fmtable.h</td><td class="proto">UFormattable* icu::Formattable::toUFormattable()</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 52</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">listformatter.h</td><td class="proto"><tt>static</tt> ListFormatter* icu::ListFormatter::createInstance(const Locale&amp;, UListFormatterType, UListFormatterWidth, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row1">
 <td class="file">localebuilder.h</td><td class="proto">UBool icu::LocaleBuilder::copyErrorTo(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
 <tr class="row0">
@@ -636,16 +679,41 @@
 <td class="file">ucharstrie.h</td><td class="proto">uint64_t icu::UCharsTrie::getState64() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
 </tr>
 <tr class="row0">
-<td class="file">uloc.h</td><td class="proto">UEnumeration* uloc_openAvailableByType(ULocAvailableType, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+<td class="file">ulistformatter.h</td><td class="proto">UListFormatter* ulistfmt_openForType(const char*, UListFormatterType, UListFormatterWidth, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
 </tr>
 <tr class="row1">
-<td class="file">uloc.h</td><td class="proto"><tt>enum</tt> ULocAvailableType::ULOC_AVAILABLE_DEFAULT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_AND</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
 </tr>
 <tr class="row0">
-<td class="file">uloc.h</td><td class="proto"><tt>enum</tt> ULocAvailableType::ULOC_AVAILABLE_ONLY_LEGACY_ALIASES</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_OR</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
 </tr>
 <tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_UNITS</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row0">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_NARROW</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row1">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_SHORT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row0">
+<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_WIDE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 67</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto">UEnumeration* uloc_openAvailableByType(ULocAvailableType, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+</tr>
+<tr class="row0">
+<td class="file">uloc.h</td><td class="proto"><tt>enum</tt> ULocAvailableType::ULOC_AVAILABLE_DEFAULT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+</tr>
+<tr class="row1">
+<td class="file">uloc.h</td><td class="proto"><tt>enum</tt> ULocAvailableType::ULOC_AVAILABLE_ONLY_LEGACY_ALIASES</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+</tr>
+<tr class="row0">
 <td class="file">uloc.h</td><td class="proto"><tt>enum</tt> ULocAvailableType::ULOC_AVAILABLE_WITH_LEGACY_ALIASES</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
+</tr>
+<tr class="row1">
+<td class="file">uniset.h</td><td class="proto">USet* icu::UnicodeSet::toUSet()</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 4.2</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">utrace.h</td><td class="proto"><tt>enum</tt> UTraceFunctionNumber::UTRACE_UDATA_BUNDLE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 65</td>
@@ -684,175 +752,183 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">fmtable.h</td><td class="proto">UFormattable* icu::Formattable::toUFormattable()</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 52</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setMaxDistance(const Locale&amp;, const Locale&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setNoDefaultLocale()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">UBool icu::LocaleMatcher::isMatch(const Locale&amp;, const Locale&amp;, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto">int32_t icu::MeasureUnit::getOffset() const</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getCandela()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoon()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoonImperial()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDot()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDram()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDrop()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getEarthRadius()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getGrain()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getJigger()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getLumen()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getPinch()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getQuartImperial()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCandela(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoon(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoonImperial(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDot(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDram(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDrop(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createEarthRadius(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGrain(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createJigger(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLumen(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPinch(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuartImperial(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto">std::pair&lt; LocalArray&lt; MeasureUnit &gt;, int32_t &gt; icu::MeasureUnit::splitToSingleUnits(UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">MeasureUnit icu::number::FormattedNumber::getOutputUnit(UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Usage&amp; icu::number::impl::Usage::operator=(Usage&amp;&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Usage&amp; icu::number::impl::Usage::operator=(const Usage&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">bool icu::number::impl::Usage::isSet() const</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::impl::Usage::Usage(Usage&amp;&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::impl::Usage::Usage(const Usage&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::impl::Usage::~Usage()</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">int16_t icu::number::impl::Usage::length() const</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">void icu::number::impl::Usage::set(StringPiece)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberrangeformatter.h</td><td class="proto">std::pair&lt; StringClass, StringClass &gt; icu::number::FormattedNumberRange::getDecimalNumbers(UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">plurrule.h</td><td class="proto">UnicodeString icu::PluralRules::select(const number::FormattedNumberRange&amp;, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">plurrule.h</td><td class="proto">UnicodeString icu::PluralRules::select(const number::impl::UFormattedNumberRangeData*, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Internal<br>
+<span class=""><span></span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">plurrule.h</td><td class="proto">int32_t icu::PluralRules::getSamples(const UnicodeString&amp;, FixedDecimal*, int32_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
@@ -880,66 +956,70 @@
 <span class=""><span>ICU 68</span></span></td>
 </tr>
 <tr class="row1">
+<td class="file">uniset.h</td><td class="proto">USet* icu::UnicodeSet::toUSet()</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 4.2</span></span></td>
+</tr>
+<tr class="row0">
 <td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_AUTO</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_MIN2</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_FORMAL</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_VARIANT</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unumberformatter.h</td><td class="proto">int32_t unumf_resultToDecimalNumber(const UFormattedNumber*, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unumberrangeformatter.h</td><td class="proto">UFormattedNumberRange* unumrf_openResult(UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unumberrangeformatter.h</td><td class="proto">UNumberRangeFormatter* unumrf_openForSkeletonWithCollapseAndIdentityFallback(const UChar*, int32_t, UNumberRangeCollapse, UNumberRangeIdentityFallback, const char*, UParseError*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unumberrangeformatter.h</td><td class="proto">UNumberRangeIdentityResult unumrf_resultGetIdentityResult(const UFormattedNumberRange*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unumberrangeformatter.h</td><td class="proto">const UFormattedValue* unumrf_resultAsValue(const UFormattedNumberRange*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unumberrangeformatter.h</td><td class="proto">int32_t unumrf_resultGetFirstDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unumberrangeformatter.h</td><td class="proto">int32_t unumrf_resultGetSecondDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_close(UNumberRangeFormatter*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_closeResult(UFormattedNumberRange*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_formatDecimalRange(const UNumberRangeFormatter*, const char*, int32_t, const char*, int32_t, UFormattedNumberRange*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_formatDoubleRange(const UNumberRangeFormatter*, double, double, UFormattedNumberRange*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">upluralrules.h</td><td class="proto">int32_t uplrules_selectForRange(const UPluralRules*, const struct UFormattedNumberRange*, UChar*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 68</span></span></td>
 </tr>
@@ -966,121 +1046,97 @@
 <td class="file">dtptngen.h</td><td class="proto">UDateFormatHourCycle icu::DateTimePatternGenerator::getDefaultHourCycle(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
 <tr class="row0">
-<td class="file">listformatter.h</td><td class="proto"><tt>static</tt> ListFormatter* icu::ListFormatter::createInstance(const Locale&amp;, UListFormatterType, UListFormatterWidth, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setDirection(ULocMatchDirection)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">localematcher.h</td><td class="proto"><tt>enum</tt> ULocMatchDirection::ULOCMATCH_DIRECTION_ONLY_TWO_WAY</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">localematcher.h</td><td class="proto"><tt>enum</tt> ULocMatchDirection::ULOCMATCH_DIRECTION_WITH_ONE_WAY</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">locid.h</td><td class="proto">void icu::Locale::canonicalize(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measfmt.h</td><td class="proto">void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 53</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::product(const MeasureUnit&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::reciprocal(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::withDimensionality(int32_t, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::withSIPrefix(UMeasureSIPrefix, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto">MeasureUnit&amp; icu::MeasureUnit::operator=(MeasureUnit&amp;&amp;) noexcept</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto">UMeasureSIPrefix icu::MeasureUnit::getSIPrefix(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto">UMeasureUnitComplexity icu::MeasureUnit::getComplexity(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto">const char* icu::MeasureUnit::getIdentifier() const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto">icu::MeasureUnit::MeasureUnit(MeasureUnit&amp;&amp;) noexcept</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">measunit.h</td><td class="proto">int32_t icu::MeasureUnit::getDimensionality(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::forIdentifier(StringPiece, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">stringpiece.h</td><td class="proto">icu::StringPiece::StringPiece(const char8_t*)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">stringpiece.h</td><td class="proto">icu::StringPiece::StringPiece(const char8_t*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">stringpiece.h</td><td class="proto">icu::StringPiece::StringPiece(const std::u8string&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">stringpiece.h</td><td class="proto">icu::StringPiece::StringPiece(std::nullptr_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">stringpiece.h</td><td class="proto">int32_t icu::StringPiece::compare(StringPiece)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">stringpiece.h</td><td class="proto">int32_t icu::StringPiece::find(StringPiece, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">stringpiece.h</td><td class="proto">void icu::StringPiece::set(const char8_t*)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">stringpiece.h</td><td class="proto">void icu::StringPiece::set(const char8_t*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_11</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_12</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_23</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_24</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">udateintervalformat.h</td><td class="proto">void udtitvfmt_formatCalendarToResult(const UDateIntervalFormat*, UCalendar*, UCalendar*, UFormattedDateInterval*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">udateintervalformat.h</td><td class="proto">void udtitvfmt_formatToResult(const UDateIntervalFormat*, UDate, UDate, UFormattedDateInterval*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">udatpg.h</td><td class="proto">UDateFormatHourCycle udatpg_getDefaultHourCycle(const UDateTimePatternGenerator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row0">
-<td class="file">ulistformatter.h</td><td class="proto">UListFormatter* ulistfmt_openForType(const char*, UListFormatterType, UListFormatterWidth, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row1">
-<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_AND</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row0">
-<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_OR</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row1">
-<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterType::ULISTFMT_TYPE_UNITS</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row0">
-<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_NARROW</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row1">
-<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_SHORT</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
-</tr>
-<tr class="row0">
-<td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterWidth::ULISTFMT_WIDTH_WIDE</td><td class="" colspan="2" align="center">Draft<br>ICU 67</td>
 </tr>
 <tr class="row1">
 <td class="file">uregex.h</td><td class="proto"><tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ</td><td class="" colspan="2" align="center">Draft<br>ICU 2.4</td>
@@ -1122,7 +1178,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Wed Sep 30 17:55:30 PDT 2020<br>
+<i><font size="-1">Contents generated by StableAPI tool on Fri Oct 23 11:35:16 PDT 2020<br>
         Copyright &copy; 2017 and later: Unicode, Inc. and others.<br>
         License &amp; terms of use: http://www.unicode.org/copyright.html
     </font></i>

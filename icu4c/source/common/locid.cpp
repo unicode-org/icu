@@ -35,6 +35,7 @@
 
 #include "unicode/bytestream.h"
 #include "unicode/locid.h"
+#include "unicode/localebuilder.h"
 #include "unicode/strenum.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uloc.h"
@@ -1336,7 +1337,10 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
         // Cannot use nullptr for language because that will construct
         // the default locale, in that case, use "und" to get the correct
         // locale.
-        Locale l(language == nullptr ? "und" : language, nullptr, script);
+        Locale l = LocaleBuilder()
+            .setLanguage(language == nullptr ? "und" : language)
+            .setScript(script)
+            .build(status);
         l.addLikelySubtags(status);
         const char* likelyRegion = l.getCountry();
         CharString* item = nullptr;
@@ -1453,7 +1457,7 @@ AliasReplacer::outputToString(
         int32_t variantsStart = out.length();
         for (int32_t i = 0; i < variants.size(); i++) {
              out.append(SEP_CHAR, status)
-                 .append((const char*)((UVector*)variants.elementAt(i)),
+                 .append((const char*)(variants.elementAt(i)),
                          status);
         }
         T_CString_toUpperCase(out.data() + variantsStart);
@@ -2453,9 +2457,13 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
     if (U_FAILURE(status)) {
         return;
     }
+    if (status == U_STRING_NOT_TERMINATED_WARNING) {
+        status = U_ZERO_ERROR;
+    }
     int32_t bufferLength = uprv_max((int32_t)(uprv_strlen(fullName) + 1), ULOC_FULLNAME_CAPACITY);
     int32_t newLength = uloc_setKeywordValue(keywordName, keywordValue, fullName,
                                              bufferLength, &status) + 1;
+    U_ASSERT(status != U_STRING_NOT_TERMINATED_WARNING);
     /* Handle the case the current buffer is not enough to hold the new id */
     if (status == U_BUFFER_OVERFLOW_ERROR) {
         U_ASSERT(newLength > bufferLength);
@@ -2472,6 +2480,7 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
         fullName = newFullName;
         status = U_ZERO_ERROR;
         uloc_setKeywordValue(keywordName, keywordValue, fullName, newLength, &status);
+        U_ASSERT(status != U_STRING_NOT_TERMINATED_WARNING);
     } else {
         U_ASSERT(newLength <= bufferLength);
     }

@@ -798,6 +798,15 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("de-DE"),
             -1.24,
             u"-1 Std., 14 Min. und 24 Sek.");
+
+    assertFormatSingle(
+            u"Zero out the unit field",
+            u"",
+            u"",
+            NumberFormatter::with().unit(KELVIN).unit(MeasureUnit()),
+            Locale("en"),
+            100,
+            u"100");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
@@ -973,6 +982,7 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             u"2.4 m/s\u00B2");
 }
 
+// TODO: merge these tests into numbertest_skeletons.cpp instead of here:
 void NumberFormatterApiTest::unitSkeletons() {
     const struct TestCase {
         const char *msg;
@@ -1015,6 +1025,22 @@ void NumberFormatterApiTest::unitSkeletons() {
          u"unit/meter-per-hectosecond",                       //
          u"unit/meter-per-hectosecond"},
 
+        {"percent compound skeletons handled correctly", //
+         u"unit/percent-per-meter",                      //
+         u"unit/percent-per-meter"},
+
+        {"permille compound skeletons handled correctly",                 //
+         u"measure-unit/concentr-permille per-measure-unit/length-meter", //
+         u"unit/permille-per-meter"},
+
+        {"percent simple unit is not actually considered a unit", //
+         u"unit/percent",                                         //
+         u"percent"},
+
+        {"permille simple unit is not actually considered a unit", //
+         u"measure-unit/concentr-permille",                        //
+         u"permille"},
+
         // // TODO: binary prefixes not supported yet!
         // {"Round-trip example from icu-units#35", //
         //  u"unit/kibijoule-per-furlong",          //
@@ -1048,20 +1074,33 @@ void NumberFormatterApiTest::unitSkeletons() {
          u"measure-unit/meter per-measure-unit/hectosecond", //
          U_NUMBER_SKELETON_SYNTAX_ERROR,                     //
          U_ZERO_ERROR},
+
+        {"\"currency/EUR measure-unit/length-meter\" fails, conflicting skeleton.",
+         u"currency/EUR measure-unit/length-meter", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,            //
+         U_ZERO_ERROR},
+
+        {"\"measure-unit/length-meter currency/EUR\" fails, conflicting skeleton.",
+         u"measure-unit/length-meter currency/EUR", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,            //
+         U_ZERO_ERROR},
+
+        {"\"currency/EUR per-measure-unit/meter\" fails, conflicting skeleton.",
+         u"currency/EUR per-measure-unit/length-meter", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,                //
+         U_ZERO_ERROR},
     };
     for (auto &cas : failCases) {
         IcuTestErrorCode status(*this, cas.msg);
         auto nf = NumberFormatter::forSkeleton(cas.inputSkeleton, status);
         if (status.expectErrorAndReset(cas.expectedForSkelStatus, cas.msg)) {
-                continue;
+            continue;
         }
         nf.toSkeleton(status);
         status.expectErrorAndReset(cas.expectedToSkelStatus, cas.msg);
     }
 
     IcuTestErrorCode status(*this, "unitSkeletons");
-    MeasureUnit METER_PER_SECOND = MeasureUnit::forIdentifier("meter-per-second", status);
-
     assertEquals(                                //
         ".unit(METER_PER_SECOND) normalization", //
         u"unit/meter-per-second",                //
@@ -1083,6 +1122,16 @@ void NumberFormatterApiTest::unitSkeletons() {
             .unit(METER)
             .perUnit(MeasureUnit::forIdentifier("hectosecond", status))
             .toSkeleton(status));
+
+    status.assertSuccess();
+    assertEquals(                                                //
+        ".unit(CURRENCY) produces a currency/CURRENCY skeleton", //
+        u"currency/GBP",                                         //
+        NumberFormatter::with().unit(GBP).toSkeleton(status));
+    status.assertSuccess();
+    // .unit(CURRENCY).perUnit(ANYTHING) is not supported.
+    NumberFormatter::with().unit(GBP).perUnit(METER).toSkeleton(status);
+    status.expectErrorAndReset(U_UNSUPPORTED_ERROR);
 }
 
 void NumberFormatterApiTest::unitUsage() {

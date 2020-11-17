@@ -98,7 +98,12 @@ public class CompactData implements MultiplierProducer {
                 .entrySet()) {
             byte magnitude = (byte) (magnitudeEntry.getKey().length() - 1);
             for (Map.Entry<String, String> pluralEntry : magnitudeEntry.getValue().entrySet()) {
-                StandardPlural plural = StandardPlural.fromString(pluralEntry.getKey().toString());
+                String pluralString = pluralEntry.getKey().toString();
+                if ("0".equals(pluralString) || "1".equals(pluralString)) {
+                    // TODO(ICU-21258): Handle this case. For now, skip.
+                    continue;
+                }
+                StandardPlural plural = StandardPlural.fromString(pluralString);
                 String patternString = pluralEntry.getValue().toString();
                 patterns[getIndex(magnitude, plural)] = patternString;
                 int numZeros = countZeros(patternString);

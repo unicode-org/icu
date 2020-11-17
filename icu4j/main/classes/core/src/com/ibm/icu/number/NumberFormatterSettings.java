@@ -613,91 +613,67 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         // of a MacroProps object at each step.
         // TODO: Remove the reference to the parent after the macros are resolved?
         MacroProps macros = new MacroProps();
+        // Bitmap: 1 if seen; 0 if unseen
+        long seen = 0;
         NumberFormatterSettings<?> current = this;
         while (current != null) {
+            long keyBitmask = (1L << current.key);
+            if (0 != (seen & keyBitmask)) {
+                current = current.parent;
+                continue;
+            }
+            seen |= keyBitmask;
             switch (current.key) {
             case KEY_MACROS:
                 macros.fallback((MacroProps) current.value);
                 break;
             case KEY_LOCALE:
-                if (macros.loc == null) {
-                    macros.loc = (ULocale) current.value;
-                }
+                macros.loc = (ULocale) current.value;
                 break;
             case KEY_NOTATION:
-                if (macros.notation == null) {
-                    macros.notation = (Notation) current.value;
-                }
+                macros.notation = (Notation) current.value;
                 break;
             case KEY_UNIT:
-                if (macros.unit == null) {
-                    macros.unit = (MeasureUnit) current.value;
-                }
+                macros.unit = (MeasureUnit) current.value;
                 break;
             case KEY_PRECISION:
-                if (macros.precision == null) {
-                    macros.precision = (Precision) current.value;
-                }
+                macros.precision = (Precision) current.value;
                 break;
             case KEY_ROUNDING_MODE:
-                if (macros.roundingMode == null) {
-                    macros.roundingMode = (RoundingMode) current.value;
-                }
+                macros.roundingMode = (RoundingMode) current.value;
                 break;
             case KEY_GROUPING:
-                if (macros.grouping == null) {
-                    macros.grouping = /* (Object) */ current.value;
-                }
+                macros.grouping = /* (Object) */ current.value;
                 break;
             case KEY_PADDER:
-                if (macros.padder == null) {
-                    macros.padder = (Padder) current.value;
-                }
+                macros.padder = (Padder) current.value;
                 break;
             case KEY_INTEGER:
-                if (macros.integerWidth == null) {
-                    macros.integerWidth = (IntegerWidth) current.value;
-                }
+                macros.integerWidth = (IntegerWidth) current.value;
                 break;
             case KEY_SYMBOLS:
-                if (macros.symbols == null) {
-                    macros.symbols = /* (Object) */ current.value;
-                }
+                macros.symbols = /* (Object) */ current.value;
                 break;
             case KEY_UNIT_WIDTH:
-                if (macros.unitWidth == null) {
-                    macros.unitWidth = (UnitWidth) current.value;
-                }
+                macros.unitWidth = (UnitWidth) current.value;
                 break;
             case KEY_SIGN:
-                if (macros.sign == null) {
-                    macros.sign = (SignDisplay) current.value;
-                }
+                macros.sign = (SignDisplay) current.value;
                 break;
             case KEY_DECIMAL:
-                if (macros.decimal == null) {
-                    macros.decimal = (DecimalSeparatorDisplay) current.value;
-                }
+                macros.decimal = (DecimalSeparatorDisplay) current.value;
                 break;
             case KEY_SCALE:
-                if (macros.scale == null) {
-                    macros.scale = (Scale) current.value;
-                }
+                macros.scale = (Scale) current.value;
                 break;
             case KEY_THRESHOLD:
-                if (macros.threshold == null) {
-                    macros.threshold = (Long) current.value;
-                }
+                macros.threshold = (Long) current.value;
                 break;
             case KEY_PER_UNIT:
-                if (macros.perUnit == null) {
-                    macros.perUnit = (MeasureUnit) current.value;
-                }
+                macros.perUnit = (MeasureUnit) current.value;
                 break;
             case KEY_USAGE:
-                if(macros.usage == null) {
-                    macros.usage = (String) current.value;
-                }
+                macros.usage = (String) current.value;
                 break;
             default:
                 throw new AssertionError("Unknown key: " + current.key);
