@@ -129,7 +129,6 @@ static const char* const LEGACY[] = {
     // Legacy tags with no preferred value in the IANA
     // registry. Kept for now for the backward compatibility
     // because ICU has mapped them this way.
-    "cel-gaulish",  "xtg-x-cel-gaulish",
     "i-default",    "en-x-i-default",
     "i-enochian",   "und-x-i-enochian",
     "i-mingo",      "see-x-i-mingo",
