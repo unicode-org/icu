@@ -4915,6 +4915,9 @@ void LocaleTest::TestCanonicalize(void)
 
         // ICU-21344
         { "ku-Arab-NT", "ku-Arab-IQ"},
+
+        // ICU-21401
+        { "cel-gaulish", "xtg"},
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {

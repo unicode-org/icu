@@ -5215,6 +5215,9 @@ public class ULocaleTest extends TestFmwk {
 
         // ICU-21344
         Assert.assertEquals("ku-Arab-IQ", canonicalTag("ku-Arab-NT"));
+
+        // ICU-21401
+        Assert.assertEquals("xtg", canonicalTag("cel-gaulish"));
     }
 
     @Test
