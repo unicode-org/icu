@@ -26,7 +26,7 @@ void U_I18N_API Factor::multiplyBy(const Factor &rhs) {
     factorNum *= rhs.factorNum;
     factorDen *= rhs.factorDen;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] += rhs.constants[i];
+        constantExponents[i] += rhs.constantExponents[i];
     }
 
     // NOTE
@@ -39,7 +39,7 @@ void U_I18N_API Factor::divideBy(const Factor &rhs) {
     factorNum *= rhs.factorDen;
     factorDen *= rhs.factorNum;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] -= rhs.constants[i];
+        constantExponents[i] -= rhs.constantExponents[i];
     }
 
     // NOTE
@@ -51,7 +51,7 @@ void U_I18N_API Factor::divideBy(const Factor &rhs) {
 void U_I18N_API Factor::power(int32_t power) {
     // multiply all the constant by the power.
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] *= power;
+        constantExponents[i] *= power;
     }
 
     bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
@@ -63,14 +63,6 @@ void U_I18N_API Factor::power(int32_t power) {
     if (shouldFlip) {
         // Flip Numerator and Denominator.
         std::swap(factorNum, factorDen);
-    }
-}
-
-void U_I18N_API Factor::flip() {
-    std::swap(factorNum, factorDen);
-
-    for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] *= -1;
     }
 }
 
@@ -89,12 +81,12 @@ void U_I18N_API Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
 
 void U_I18N_API Factor::substituteConstants() {
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        if (this->constants[i] == 0) {
+        if (this->constantExponents[i] == 0) {
             continue;
         }
 
-        auto absPower = std::abs(this->constants[i]);
-        Signum powerSig = this->constants[i] < 0 ? Signum::NEGATIVE : Signum::POSITIVE;
+        auto absPower = std::abs(this->constantExponents[i]);
+        Signum powerSig = this->constantExponents[i] < 0 ? Signum::NEGATIVE : Signum::POSITIVE;
         double absConstantValue = std::pow(constantsValues[i], absPower);
 
         if (powerSig == Signum::NEGATIVE) {
@@ -103,7 +95,7 @@ void U_I18N_API Factor::substituteConstants() {
             this->factorNum *= absConstantValue;
         }
 
-        this->constants[i] = 0;
+        this->constantExponents[i] = 0;
     }
 }
 
@@ -273,6 +265,7 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
 /**
  *  Extract conversion rate from `source` to `target`
  */
+// In ICU4J, this function is partially inlined in the UnitConverter constructor.
 void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &source,
                         const MeasureUnitImpl &target, Convertibility unitsState,
                         const ConversionRates &ratesInfo, UErrorCode &status) {
@@ -361,28 +354,28 @@ UBool checkAllDimensionsAreZeros(const MaybeStackVector<UnitIndexAndDimension> &
 void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Signum signum,
                                         Factor &factor, UErrorCode &status) {
     if (baseStr == "ft_to_m") {
-        factor.constants[CONSTANT_FT2M] += power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += power * signum;
     } else if (baseStr == "ft2_to_m2") {
-        factor.constants[CONSTANT_FT2M] += 2 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 2 * power * signum;
     } else if (baseStr == "ft3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
     } else if (baseStr == "in3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "gal_to_m3") {
         factor.factorNum *= 231;
-        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "gal_imp_to_m3") {
-        factor.constants[CONSTANT_GAL_IMP2M3] += power * signum;
+        factor.constantExponents[CONSTANT_GAL_IMP2M3] += power * signum;
     } else if (baseStr == "G") {
-        factor.constants[CONSTANT_G] += power * signum;
+        factor.constantExponents[CONSTANT_G] += power * signum;
     } else if (baseStr == "gravity") {
-        factor.constants[CONSTANT_GRAVITY] += power * signum;
+        factor.constantExponents[CONSTANT_GRAVITY] += power * signum;
     } else if (baseStr == "lb_to_kg") {
-        factor.constants[CONSTANT_LB2KG] += power * signum;
+        factor.constantExponents[CONSTANT_LB2KG] += power * signum;
     } else if (baseStr == "PI") {
-        factor.constants[CONSTANT_PI] += power * signum;
+        factor.constantExponents[CONSTANT_PI] += power * signum;
     } else {
         if (signum == Signum::NEGATIVE) {
             factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
