@@ -273,11 +273,37 @@ void CollationElementIterator::setOffset(int32_t newOffset,
 void CollationElementIterator::setText(const UnicodeString& source,
                                        UErrorCode& status)
 {
+    setText(source, false, status);
+}
+
+void CollationElementIterator::setText(const UnicodeString& source,
+                                       UBool readOnly,
+                                       UErrorCode& status)
+{
     if (U_FAILURE(status)) {
         return;
     }
 
-    string_ = source;
+    if (readOnly) {
+        // Set our string to be a read-only alias of the input source string.
+        string_.fastCopyFrom(source);
+    } else {
+        // Note: This class predates the change in ICU 2.4, which made the UnicodeString's 
+        // assignment operator and copy constructor always allocate and copy even for
+        // readonly aliases.
+        // We could possibly *always* use a readonly alias here with fastCopyFrom, but the
+        // CollationElementIterator class doesn't explicitly specify if the string being
+        // iterated over needs to outlive the CollationElementIterator itself. It seems
+        // like it should outlive it though, but for now, this feels like a safer approach.
+
+        // This makes a copy of the input source string, so we need to check for OOM here.
+        string_ = source;
+        if (string_.isBogus() && !source.isBogus()) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+    }
+
     const UChar *s = string_.getBuffer();
     CollationIterator *newIter;
     UBool numeric = rbc_->settings->isNumeric();
@@ -329,11 +355,18 @@ int32_t CollationElementIterator::strengthOrder(int32_t order) const
 */
 CollationElementIterator::CollationElementIterator(
                                                const UnicodeString &source,
+                                               UBool readOnly,
                                                const RuleBasedCollator *coll,
                                                UErrorCode &status)
         : iter_(NULL), rbc_(coll), otherHalf_(0), dir_(0), offsets_(NULL) {
-    setText(source, status);
+    setText(source, readOnly, status);
 }
+
+CollationElementIterator::CollationElementIterator(
+                                               const UnicodeString &source,
+                                               const RuleBasedCollator *coll,
+                                               UErrorCode &status)
+        : CollationElementIterator(source, false, coll, status) {}
 
 /** 
 * This is the "real" constructor for this class; it constructs an iterator over 

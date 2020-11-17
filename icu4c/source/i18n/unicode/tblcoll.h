@@ -234,8 +234,8 @@ public:
 
     /**
      * Creates a collation element iterator for the source string. The caller of
-     * this method is responsible for the memory management of the return
-     * pointer.
+     * this method is responsible for the memory management of the returned pointer.
+     * 
      * @param source the string over which the CollationElementIterator will
      *        iterate.
      * @return the collation element iterator of the source string using this as
@@ -244,6 +244,25 @@ public:
      */
     virtual CollationElementIterator* createCollationElementIterator(
                                            const UnicodeString& source) const;
+
+#ifndef U_HIDE_INTERNAL_API
+     /**
+     * Creates a collation element iterator for the source string. The caller of
+     * this method is responsible for the memory management of the returned pointer.
+     * 
+     * This method is like the above createCollationElementIterator, but instead uses
+     * a read-only alias of the input source string.
+     * The input source string must outlive the returned object's lifetime.
+     * 
+     * @param source the string over which the CollationElementIterator will
+     *        iterate.
+     * @return the collation element iterator of the source string using this as
+     *         the based Collator.
+     * @internal
+     */
+    virtual CollationElementIterator* createCollationElementIteratorReadOnlyAlias(
+                                           const UnicodeString& source) const;
+#endif
 
     /**
      * Creates a collation element iterator for the source. The caller of this

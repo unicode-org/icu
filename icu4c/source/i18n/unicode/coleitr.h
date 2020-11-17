@@ -242,6 +242,19 @@ public:
     */
     void setText(const UnicodeString& str, UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API
+    /**
+    * Sets the source string. Same as the above setText method, but if readOnly
+    * is true then it uses a read-only alias of the input str string.
+    * The str string must outlive this object's lifetime.
+    * @param str the source string.
+    * @param readOnly use a read-only alias of the str string.
+    * @param status the error code status.
+    * @internal
+    */
+    void setText(const UnicodeString &str, UBool readOnly, UErrorCode &status);
+#endif
+
     /**
     * Sets the source string.
     * @param str the source character iterator.
@@ -322,6 +335,19 @@ private:
     */
     CollationElementIterator(const UnicodeString& sourceText,
         const RuleBasedCollator* order, UErrorCode& status);
+
+   /**
+    * CollationElementIterator read-only alias constructor. Same as the above constructor,
+    * but if readOnly is true then it uses a read-only alias of the sourceText string.
+    * The input source string must outlive this object's lifetime.
+    * @param sourceText    the source string.
+    * @param readOnly      if true, uses a read-only alias of sourceText.
+    * @param order         the collation object.
+    * @param status        the error code status.
+    */
+    CollationElementIterator(const UnicodeString& sourceText, UBool readOnly,
+        const RuleBasedCollator* order, UErrorCode& status);
+
     // Note: The constructors should take settings & tailoring, not a collator,
     // to avoid circular dependencies.
     // However, for operator==() we would need to be able to compare tailoring data for equality
