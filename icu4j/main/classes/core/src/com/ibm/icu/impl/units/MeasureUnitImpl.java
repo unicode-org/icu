@@ -423,9 +423,8 @@ public class MeasureUnitImpl {
             trieBuilder.add("pow15-", PowerPart.P15.getTrieIndex());
 
             // Add SI prefixes
-            for (MeasureUnit.SIPrefix siPrefix :
-                    MeasureUnit.SIPrefix.values()) {
-                trieBuilder.add(siPrefix.getIdentifier(), getTrieIndex(siPrefix));
+            for (MeasureUnit.MeasurePrefix unitPrefix : MeasureUnit.MeasurePrefix.values()) {
+                trieBuilder.add(unitPrefix.getIdentifier(), getTrieIndexForPrefix(unitPrefix));
             }
 
             // Add simple units
@@ -456,18 +455,20 @@ public class MeasureUnitImpl {
 
         }
 
-        private static MeasureUnit.SIPrefix getSiPrefixFromTrieIndex(int trieIndex) {
-            for (MeasureUnit.SIPrefix element :
-                    MeasureUnit.SIPrefix.values()) {
-                if (getTrieIndex(element) == trieIndex)
+        // TODO: make this O(1) instead of O(N) for number of prefixes.
+        private static MeasureUnit.MeasurePrefix getPrefixFromTrieIndex(int trieIndex) {
+            for (MeasureUnit.MeasurePrefix element : MeasureUnit.MeasurePrefix.values()) {
+                if (getTrieIndexForPrefix(element) == trieIndex)
                     return element;
             }
 
             throw new IllegalArgumentException("Incorrect trieIndex");
         }
 
-        private static int getTrieIndex(MeasureUnit.SIPrefix prefix) {
-            return prefix.getPower() + UnitsData.Constants.kSIPrefixOffset;
+        // FIXME: move to MeasurePrefix
+        private static int getTrieIndexForPrefix(MeasureUnit.MeasurePrefix prefix) {
+            // FIXME: cache values() array
+            return prefix.ordinal() + UnitsData.Constants.kPrefixOffset;
         }
 
         private MeasureUnitImpl parse() {
@@ -593,7 +594,7 @@ public class MeasureUnitImpl {
                             throw new IllegalArgumentException();
                         }
 
-                        result.setSiPrefix(token.getSIPrefix());
+                        result.setPrefix(token.getPrefix());
                         state = 2;
                         break;
 
@@ -671,9 +672,9 @@ public class MeasureUnitImpl {
                 return this.type;
             }
 
-            public MeasureUnit.SIPrefix getSIPrefix() {
+            public MeasureUnit.MeasurePrefix getPrefix() {
                 assert this.type == Type.TYPE_SI_PREFIX;
-                return getSiPrefixFromTrieIndex(this.fMatch);
+                return getPrefixFromTrieIndex(this.fMatch);
             }
 
             // Valid only for tokens with type TYPE_COMPOUND_PART.
@@ -697,6 +698,7 @@ public class MeasureUnitImpl {
             }
 
             public int getSimpleUnitIndex() {
+                assert this.type == Type.TYPE_SIMPLE_UNIT;
                 return this.fMatch - UnitsData.Constants.kSimpleUnitOffset;
             }
 

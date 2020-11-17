@@ -36,15 +36,15 @@ struct MeasureUnitImpl;
 /**
  * Enumeration for unit complexity. There are three levels:
  *
- * - SINGLE: A single unit, optionally with a power and/or SI prefix. Examples: hectare,
- *           square-kilometer, kilojoule, per-second.
+ * - SINGLE: A single unit, optionally with a power and/or SI or binary prefix.
+ *           Examples: hectare, square-kilometer, kilojoule, per-second, mebibyte.
  * - COMPOUND: A unit composed of the product of multiple single units. Examples:
  *             meter-per-second, kilowatt-hour, kilogram-meter-per-square-second.
  * - MIXED: A unit composed of the sum of multiple single units. Examples: foot+inch,
  *          hour+minute+second, degree+arcminute+arcsecond.
  *
  * The complexity determines which operations are available. For example, you cannot set the power
- * or SI prefix of a compound unit.
+ * or prefix of a compound unit.
  *
  * @draft ICU 67
  */
@@ -71,160 +71,242 @@ enum UMeasureUnitComplexity {
     UMEASURE_UNIT_MIXED
 };
 
+constexpr int32_t kUMPOffsetSI = -30; // FIXME
+constexpr int32_t kUMPOffsetBinary = -64; // FIXME
 /**
- * Enumeration for SI prefixes, such as "kilo".
+ * Enumeration for SI or binary prefixes, such as "kilo" or "mebi".
  *
- * @draft ICU 67
+ * @draft ICU 69
  */
-typedef enum UMeasureSIPrefix {
+typedef enum UMeasurePrefix {
+    // TODO/FIXME: with or without _SI_ and _BIN_?
 
     /**
      * SI prefix: yotta, 10^24.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_YOTTA = 24,
+    UMEASURE_SI_PREFIX_YOTTA = kUMPOffsetSI + 24,
+    UMEASURE_SI_PREFIX_MAX = UMEASURE_SI_PREFIX_YOTTA, // FIXME
 
     /**
      * SI prefix: zetta, 10^21.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_ZETTA = 21,
+    UMEASURE_SI_PREFIX_ZETTA = kUMPOffsetSI + 21,
 
     /**
      * SI prefix: exa, 10^18.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_EXA = 18,
+    UMEASURE_SI_PREFIX_EXA = kUMPOffsetSI + 18,
 
     /**
      * SI prefix: peta, 10^15.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_PETA = 15,
+    UMEASURE_SI_PREFIX_PETA = kUMPOffsetSI + 15,
 
     /**
      * SI prefix: tera, 10^12.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_TERA = 12,
+    UMEASURE_SI_PREFIX_TERA = kUMPOffsetSI + 12,
 
     /**
      * SI prefix: giga, 10^9.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_GIGA = 9,
+    UMEASURE_SI_PREFIX_GIGA = kUMPOffsetSI + 9,
 
     /**
      * SI prefix: mega, 10^6.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_MEGA = 6,
+    UMEASURE_SI_PREFIX_MEGA = kUMPOffsetSI + 6,
 
     /**
      * SI prefix: kilo, 10^3.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_KILO = 3,
+    UMEASURE_SI_PREFIX_KILO = kUMPOffsetSI + 3,
 
     /**
      * SI prefix: hecto, 10^2.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_HECTO = 2,
+    UMEASURE_SI_PREFIX_HECTO = kUMPOffsetSI + 2,
 
     /**
      * SI prefix: deka, 10^1.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_DEKA = 1,
+    UMEASURE_SI_PREFIX_DEKA = kUMPOffsetSI + 1,
 
     /**
-     * The absence of an SI prefix.
+     * The absence of an SI or binary prefix.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_ONE = 0,
+    UMEASURE_SI_PREFIX_ONE = kUMPOffsetSI + 0,
 
     /**
      * SI prefix: deci, 10^-1.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_DECI = -1,
+    UMEASURE_SI_PREFIX_DECI = kUMPOffsetSI + -1,
 
     /**
      * SI prefix: centi, 10^-2.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_CENTI = -2,
+    UMEASURE_SI_PREFIX_CENTI = kUMPOffsetSI + -2,
 
     /**
      * SI prefix: milli, 10^-3.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_MILLI = -3,
+    UMEASURE_SI_PREFIX_MILLI = kUMPOffsetSI + -3,
 
     /**
      * SI prefix: micro, 10^-6.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_MICRO = -6,
+    UMEASURE_SI_PREFIX_MICRO = kUMPOffsetSI + -6,
 
     /**
      * SI prefix: nano, 10^-9.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_NANO = -9,
+    UMEASURE_SI_PREFIX_NANO = kUMPOffsetSI + -9,
 
     /**
      * SI prefix: pico, 10^-12.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_PICO = -12,
+    UMEASURE_SI_PREFIX_PICO = kUMPOffsetSI + -12,
 
     /**
      * SI prefix: femto, 10^-15.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_FEMTO = -15,
+    UMEASURE_SI_PREFIX_FEMTO = kUMPOffsetSI + -15,
 
     /**
      * SI prefix: atto, 10^-18.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_ATTO = -18,
+    UMEASURE_SI_PREFIX_ATTO = kUMPOffsetSI + -18,
 
     /**
      * SI prefix: zepto, 10^-21.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_ZEPTO = -21,
+    UMEASURE_SI_PREFIX_ZEPTO = kUMPOffsetSI + -21,
 
     /**
      * SI prefix: yocto, 10^-24.
      *
      * @draft ICU 67
      */
-    UMEASURE_SI_PREFIX_YOCTO = -24
-} UMeasureSIPrefix;
+    UMEASURE_SI_PREFIX_YOCTO = kUMPOffsetSI + -24,
+    UMEASURE_SI_PREFIX_MIN = UMEASURE_SI_PREFIX_YOCTO, // FIXME
+
+    /**
+     * Binary prefix: yobi, 1024^8.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_YOBI = kUMPOffsetBinary + 8,
+    UMEASURE_BIN_PREFIX_MAX = UMEASURE_BIN_PREFIX_YOBI, // FIXME
+
+    /**
+     * Binary prefix: zebi, 1024^7.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_ZEBI = kUMPOffsetBinary + 7,
+
+    /**
+     * Binary prefix: exbi, 1024^6.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_EXBI = kUMPOffsetBinary + 6,
+
+    /**
+     * Binary prefix: pebi, 1024^5.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_PEBI = kUMPOffsetBinary + 5,
+
+    /**
+     * Binary prefix: tebi, 1024^4.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_TEBI = kUMPOffsetBinary + 4,
+
+    /**
+     * Binary prefix: gibi, 1024^3.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_GIBI = kUMPOffsetBinary + 3,
+
+    /**
+     * Binary prefix: mebi, 1024^2.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_MEBI = kUMPOffsetBinary + 2,
+
+    /**
+     * Binary prefix: kibi, 1024^1.
+     *
+     * @draft ICU 69
+     */
+    UMEASURE_BIN_PREFIX_KIBI = kUMPOffsetBinary + 1,
+    UMEASURE_BIN_PREFIX_MIN = UMEASURE_BIN_PREFIX_KIBI, // FIXME
+} UMeasurePrefix;
+static_assert(UMEASURE_SI_PREFIX_MIN > UMEASURE_BIN_PREFIX_MAX, "Binary and SI prefixes should not overlap");
+
+// /**
+//  * Returns true if prefix is an SI prefix.
+//  *
+//  * @draft ICU 69
+//  */
+// bool isSIPrefix(UMeasurePrefix prefix);
+
+// /**
+//  * Returns true if prefix is a binary prefix.
+//  *
+//  * @draft ICU 69
+//  */
+// bool isBinaryPrefix(UMeasurePrefix prefix);
+
+// FIXME: we either need isSIPrefix and isBinaryPrefix and functions to extract
+// the powers, or we need a single function that extracts the factor (possibly
+// either Num or Den?)
 #endif // U_HIDE_DRAFT_API
 
 /**
@@ -352,33 +434,34 @@ class U_I18N_API MeasureUnit: public UObject {
     UMeasureUnitComplexity getComplexity(UErrorCode& status) const;
 
     /**
-     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified SI prefix.
-     * For example, UMEASURE_SI_PREFIX_KILO for "kilo".
+     * Creates a MeasureUnit which is this SINGLE unit augmented with the specified prefix.
+     * For example, UMEASURE_SI_PREFIX_KILO for "kilo", or UMEASURE_PREFIX_KIBI for "kibi".
      *
      * There is sufficient locale data to format all standard SI prefixes.
+     * (FIXME: check if this claim applies to binary prefixes too!)
      *
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param prefix The SI prefix, from UMeasureSIPrefix.
+     * @param prefix The prefix, from UMeasurePrefix.
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    MeasureUnit withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const;
+    MeasureUnit withPrefix(UMeasurePrefix prefix, UErrorCode& status) const;
 
     /**
-     * Gets the current SI prefix of this SINGLE unit. For example, if the unit has the SI prefix
+     * Returns the current SI or binary prefix of this SINGLE unit. For example, if the unit has the prefix
      * "kilo", then UMEASURE_SI_PREFIX_KILO is returned.
      *
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
-     * @return The SI prefix of this SINGLE unit, from UMeasureSIPrefix.
-     * @draft ICU 67
+     * @return The prefix of this SINGLE unit, from UMeasurePrefix.
+     * @draft ICU 69
      */
-    UMeasureSIPrefix getSIPrefix(UErrorCode& status) const;
+    UMeasurePrefix getPrefix(UErrorCode& status) const;
 
     /**
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality

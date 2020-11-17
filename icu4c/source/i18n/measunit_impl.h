@@ -18,9 +18,8 @@ U_NAMESPACE_BEGIN
 static const char16_t kDefaultCurrency[] = u"XXX";
 static const char kDefaultCurrency8[] = "XXX";
 
-
 /**
- * A struct representing a single unit (optional SI prefix and dimensionality).
+ * A struct representing a single unit (optional SI or binary prefix, and dimensionality).
  */
 struct U_I18N_API SingleUnitImpl : public UMemory {
     /**
@@ -68,10 +67,10 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
         if (index > other.index) {
             return 1;
         }
-        if (siPrefix < other.siPrefix) {
+        if (unitPrefix < other.unitPrefix) {
             return -1;
         }
-        if (siPrefix > other.siPrefix) {
+        if (unitPrefix > other.unitPrefix) {
             return 1;
         }
         return 0;
@@ -80,8 +79,8 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
     /**
      * Return whether this SingleUnitImpl is compatible with another for the purpose of coalescing.
      *
-     * Units with the same base unit and SI prefix should match, except that they must also have
-     * the same dimensionality sign, such that we don't merge numerator and denominator.
+     * Units with the same base unit and SI or binary prefix should match, except that they must also
+     * have the same dimensionality sign, such that we don't merge numerator and denominator.
      */
     bool isCompatibleWith(const SingleUnitImpl& other) const {
         return (compareTo(other) == 0);
@@ -106,11 +105,11 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
     int32_t index = -1;
 
     /**
-     * SI prefix.
+     * SI or binary prefix.
      *
      * This is ignored for the dimensionless unit.
      */
-    UMeasureSIPrefix siPrefix = UMEASURE_SI_PREFIX_ONE;
+    UMeasurePrefix unitPrefix = UMEASURE_SI_PREFIX_ONE;
 
     /**
      * Dimensionality.

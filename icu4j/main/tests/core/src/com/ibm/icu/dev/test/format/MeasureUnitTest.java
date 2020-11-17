@@ -3562,21 +3562,38 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
+    public void TestIdentifierDetails() {
+        MeasureUnit joule = MeasureUnit.forIdentifier("joule");
+        assertEquals("Initial joule", "joule", joule.getIdentifier());
+    
+        // "Invalid prefix" test not needed: in Java we cannot pass a
+        // non-existant enum instance. (In C++ an int can be typecast.)
+
+        MeasureUnit unit = joule.withPrefix(MeasureUnit.MeasurePrefix.HECTO);
+        assertEquals("Joule with hecto prefix", "hectojoule", unit.getIdentifier());
+
+        unit = unit.withPrefix(MeasureUnit.MeasurePrefix.EXBI);
+        assertEquals("Joule with exbi prefix", "exbijoule", unit.getIdentifier());
+    }
+
+    // TODO: TestParseToBuiltIn(); is missing!
+
+    @Test
     public void TestCompoundUnitOperations() {
         MeasureUnit.forIdentifier("kilometer-per-second-joule");
 
         MeasureUnit kilometer = MeasureUnit.KILOMETER;
         MeasureUnit cubicMeter = MeasureUnit.CUBIC_METER;
-        MeasureUnit meter = kilometer.withSIPrefix(MeasureUnit.SIPrefix.ONE);
-        MeasureUnit centimeter1 = kilometer.withSIPrefix(MeasureUnit.SIPrefix.CENTI);
-        MeasureUnit centimeter2 = meter.withSIPrefix(MeasureUnit.SIPrefix.CENTI);
-        MeasureUnit cubicDecimeter = cubicMeter.withSIPrefix(MeasureUnit.SIPrefix.DECI);
+        MeasureUnit meter = kilometer.withPrefix(MeasureUnit.MeasurePrefix.ONE);
+        MeasureUnit centimeter1 = kilometer.withPrefix(MeasureUnit.MeasurePrefix.CENTI);
+        MeasureUnit centimeter2 = meter.withPrefix(MeasureUnit.MeasurePrefix.CENTI);
+        MeasureUnit cubicDecimeter = cubicMeter.withPrefix(MeasureUnit.MeasurePrefix.DECI);
 
-        verifySingleUnit(kilometer, MeasureUnit.SIPrefix.KILO, 1, "kilometer");
-        verifySingleUnit(meter, MeasureUnit.SIPrefix.ONE, 1, "meter");
-        verifySingleUnit(centimeter1, MeasureUnit.SIPrefix.CENTI, 1, "centimeter");
-        verifySingleUnit(centimeter2, MeasureUnit.SIPrefix.CENTI, 1, "centimeter");
-        verifySingleUnit(cubicDecimeter, MeasureUnit.SIPrefix.DECI, 3, "cubic-decimeter");
+        verifySingleUnit(kilometer, MeasureUnit.MeasurePrefix.KILO, 1, "kilometer");
+        verifySingleUnit(meter, MeasureUnit.MeasurePrefix.ONE, 1, "meter");
+        verifySingleUnit(centimeter1, MeasureUnit.MeasurePrefix.CENTI, 1, "centimeter");
+        verifySingleUnit(centimeter2, MeasureUnit.MeasurePrefix.CENTI, 1, "centimeter");
+        verifySingleUnit(cubicDecimeter, MeasureUnit.MeasurePrefix.DECI, 3, "cubic-decimeter");
 
         assertTrue("centimeter equality", centimeter1.equals( centimeter2));
         assertTrue("kilometer inequality", !centimeter1.equals( kilometer));
@@ -3586,10 +3603,10 @@ public class MeasureUnitTest extends TestFmwk {
         MeasureUnit quarticKilometer = kilometer.withDimensionality(4);
         MeasureUnit overQuarticKilometer1 = kilometer.withDimensionality(-4);
 
-        verifySingleUnit(squareMeter, MeasureUnit.SIPrefix.ONE, 2, "square-meter");
-        verifySingleUnit(overCubicCentimeter, MeasureUnit.SIPrefix.CENTI, -3, "per-cubic-centimeter");
-        verifySingleUnit(quarticKilometer, MeasureUnit.SIPrefix.KILO, 4, "pow4-kilometer");
-        verifySingleUnit(overQuarticKilometer1, MeasureUnit.SIPrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(squareMeter, MeasureUnit.MeasurePrefix.ONE, 2, "square-meter");
+        verifySingleUnit(overCubicCentimeter, MeasureUnit.MeasurePrefix.CENTI, -3, "per-cubic-centimeter");
+        verifySingleUnit(quarticKilometer, MeasureUnit.MeasurePrefix.KILO, 4, "pow4-kilometer");
+        verifySingleUnit(overQuarticKilometer1, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
 
         assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
 
@@ -3600,26 +3617,26 @@ public class MeasureUnitTest extends TestFmwk {
                 .reciprocal();
         MeasureUnit overQuarticKilometer4 = meter.withDimensionality(4)
                 .reciprocal()
-                .withSIPrefix(MeasureUnit.SIPrefix.KILO);
+                .withPrefix(MeasureUnit.MeasurePrefix.KILO);
 
-        verifySingleUnit(overQuarticKilometer2, MeasureUnit.SIPrefix.KILO, -4, "per-pow4-kilometer");
-        verifySingleUnit(overQuarticKilometer3, MeasureUnit.SIPrefix.KILO, -4, "per-pow4-kilometer");
-        verifySingleUnit(overQuarticKilometer4, MeasureUnit.SIPrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(overQuarticKilometer2, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(overQuarticKilometer3, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
+        verifySingleUnit(overQuarticKilometer4, MeasureUnit.MeasurePrefix.KILO, -4, "per-pow4-kilometer");
 
         assertTrue("reciprocal equality", overQuarticKilometer1.equals(overQuarticKilometer2));
         assertTrue("reciprocal equality", overQuarticKilometer1.equals(overQuarticKilometer3));
         assertTrue("reciprocal equality", overQuarticKilometer1.equals(overQuarticKilometer4));
 
         MeasureUnit kiloSquareSecond = MeasureUnit.SECOND
-                .withDimensionality(2).withSIPrefix(MeasureUnit.SIPrefix.KILO);
+                .withDimensionality(2).withPrefix(MeasureUnit.MeasurePrefix.KILO);
         MeasureUnit meterSecond = meter.product(kiloSquareSecond);
         MeasureUnit cubicMeterSecond1 = meter.withDimensionality(3).product(kiloSquareSecond);
-        MeasureUnit centimeterSecond1 = meter.withSIPrefix(MeasureUnit.SIPrefix.CENTI).product(kiloSquareSecond);
+        MeasureUnit centimeterSecond1 = meter.withPrefix(MeasureUnit.MeasurePrefix.CENTI).product(kiloSquareSecond);
         MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withDimensionality(3));
-        MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withSIPrefix(MeasureUnit.SIPrefix.CENTI));
+        MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withPrefix(MeasureUnit.MeasurePrefix.CENTI));
         MeasureUnit secondCentimeterPerKilometer = secondCentimeter.product(kilometer.reciprocal());
 
-        verifySingleUnit(kiloSquareSecond, MeasureUnit.SIPrefix.KILO, 2, "square-kilosecond");
+        verifySingleUnit(kiloSquareSecond, MeasureUnit.MeasurePrefix.KILO, 2, "square-kilosecond");
         String meterSecondSub[] = {
                 "meter", "square-kilosecond"
         };
@@ -3654,7 +3671,7 @@ public class MeasureUnitTest extends TestFmwk {
         assertTrue("reordering equality", cubicMeterSecond1.equals(secondCubicMeter));
         assertTrue("additional simple units inequality", !secondCubicMeter.equals(secondCentimeter));
 
-        // Don't allow get/set power or SI prefix on compound units
+        // Don't allow get/set power or SI or binary prefix on compound units
         try {
             meterSecond.getDimensionality();
             fail("UnsupportedOperationException must be thrown");
@@ -3670,14 +3687,14 @@ public class MeasureUnitTest extends TestFmwk {
         }
 
         try {
-            meterSecond.getSIPrefix();
+            meterSecond.getPrefix();
             fail("UnsupportedOperationException must be thrown");
         } catch (UnsupportedOperationException e) {
             // Expecting an exception to be thrown
         }
 
         try {
-            meterSecond.withSIPrefix(MeasureUnit.SIPrefix.CENTI);
+            meterSecond.withPrefix(MeasureUnit.MeasurePrefix.CENTI);
             fail("UnsupportedOperationException must be thrown");
         } catch (UnsupportedOperationException e) {
             // Expecting an exception to be thrown
@@ -3708,12 +3725,12 @@ public class MeasureUnitTest extends TestFmwk {
         // with others via product:
         MeasureUnit kilometer2 = kilometer.product(dimensionless);
 
-        verifySingleUnit(kilometer2, MeasureUnit.SIPrefix.KILO, 1, "kilometer");
+        verifySingleUnit(kilometer2, MeasureUnit.MeasurePrefix.KILO, 1, "kilometer");
         assertTrue("kilometer equality", kilometer.equals(kilometer2));
 
         // Test out-of-range powers
         MeasureUnit power15 = MeasureUnit.forIdentifier("pow15-kilometer");
-        verifySingleUnit(power15, MeasureUnit.SIPrefix.KILO, 15, "pow15-kilometer");
+        verifySingleUnit(power15, MeasureUnit.MeasurePrefix.KILO, 15, "pow15-kilometer");
 
         try {
             MeasureUnit.forIdentifier("pow16-kilometer");
@@ -3730,7 +3747,7 @@ public class MeasureUnitTest extends TestFmwk {
         }
 
         MeasureUnit powerN15 = MeasureUnit.forIdentifier("per-pow15-kilometer");
-        verifySingleUnit(powerN15, MeasureUnit.SIPrefix.KILO, -15, "per-pow15-kilometer");
+        verifySingleUnit(powerN15, MeasureUnit.MeasurePrefix.KILO, -15, "per-pow15-kilometer");
 
         try {
             MeasureUnit.forIdentifier("per-pow16-kilometer");
@@ -3761,11 +3778,11 @@ public class MeasureUnitTest extends TestFmwk {
         // product(dimensionless)
         MeasureUnit mile = MeasureUnit.MILE;
         mile = mile.product(dimensionless);
-        verifySingleUnit(mile, MeasureUnit.SIPrefix.ONE, 1, "mile");
+        verifySingleUnit(mile, MeasureUnit.MeasurePrefix.ONE, 1, "mile");
     }
 
-    private void verifySingleUnit(MeasureUnit singleMeasureUnit, MeasureUnit.SIPrefix prefix, int power, String identifier) {
-        assertEquals(identifier + ": SI prefix", prefix, singleMeasureUnit.getSIPrefix());
+    private void verifySingleUnit(MeasureUnit singleMeasureUnit, MeasureUnit.MeasurePrefix prefix, int power, String identifier) {
+        assertEquals(identifier + ": SI or binary prefix", prefix, singleMeasureUnit.getPrefix());
 
         assertEquals(identifier + ": Power", power, singleMeasureUnit.getDimensionality());
 
@@ -3804,12 +3821,12 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("nanogram", null, nanogram.getType());
         assertEquals("nanogram", "nanogram", nanogram.getIdentifier());
 
-        assertEquals("prefix of kilogram", MeasureUnit.SIPrefix.KILO, kilogram.getSIPrefix());
-        assertEquals("prefix of gram", MeasureUnit.SIPrefix.ONE, gram.getSIPrefix());
-        assertEquals("prefix of microgram", MeasureUnit.SIPrefix.MICRO, microgram.getSIPrefix());
-        assertEquals("prefix of nanogram", MeasureUnit.SIPrefix.NANO, nanogram.getSIPrefix());
+        assertEquals("prefix of kilogram", MeasureUnit.MeasurePrefix.KILO, kilogram.getPrefix());
+        assertEquals("prefix of gram", MeasureUnit.MeasurePrefix.ONE, gram.getPrefix());
+        assertEquals("prefix of microgram", MeasureUnit.MeasurePrefix.MICRO, microgram.getPrefix());
+        assertEquals("prefix of nanogram", MeasureUnit.MeasurePrefix.NANO, nanogram.getPrefix());
 
-        MeasureUnit tmp = kilogram.withSIPrefix(MeasureUnit.SIPrefix.MILLI);
+        MeasureUnit tmp = kilogram.withPrefix(MeasureUnit.MeasurePrefix.MILLI);
         assertEquals("Kilogram + milli should be milligram, got: " + tmp.getIdentifier(),
                 MeasureUnit.MILLIGRAM.getIdentifier(), tmp.getIdentifier());
     }

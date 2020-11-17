@@ -66,9 +66,22 @@ void U_I18N_API Factor::power(int32_t power) {
     }
 }
 
-void U_I18N_API Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
-    if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
+void U_I18N_API Factor::applyPrefix(UMeasurePrefix unitPrefix) {
+    if (unitPrefix == UMeasurePrefix::UMEASURE_SI_PREFIX_ONE) {
+        // No need to do anything
+        return;
+    }
 
+    // FIXME: don't directly use value of unitPrefix in calculations!
+    if (unitPrefix >= UMEASURE_BIN_PREFIX_MIN && unitPrefix <= UMEASURE_BIN_PREFIX_MAX) {
+        double binApplied = std::pow(1024.0, unitPrefix - kUMPOffsetBinary);
+        factorNum *= binApplied;
+        return;
+    }
+
+    U_ASSERT(unitPrefix >= UMEASURE_SI_PREFIX_MIN && unitPrefix <= UMEASURE_SI_PREFIX_MAX);
+    // FIXME: don't directly use value of unitPrefix in calculations!
+    int32_t siPrefix = unitPrefix - kUMPOffsetSI;
     double siApplied = std::pow(10.0, std::abs(siPrefix));
 
     if (siPrefix < 0) {
@@ -213,6 +226,7 @@ Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UE
 }
 
 // Load Factor of a compound source unit.
+// In ICU4J, this is a pair of ConversionRates.getFactorToBase() functions.
 Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &ratesInfo,
                           UErrorCode &status) {
 
@@ -223,8 +237,10 @@ Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &
         Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
 
-        // Apply SiPrefix before the power, because the power may be will flip the factor.
-        singleFactor.applySiPrefix(singleUnit.siPrefix);
+        // Prefix before power, because:
+        // - square-kilometer to square-meter: (1000)^2
+        // - square-kilometer to square-foot (approximate): (3.28*1000)^2
+        singleFactor.applyPrefix(singleUnit.unitPrefix);
 
         // Apply the power of the `dimensionality`
         singleFactor.power(singleUnit.dimensionality);
@@ -255,7 +271,7 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
 
     auto singleUnit = *(unit.units[0]);
 
-    if (singleUnit.dimensionality != 1 || singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
+    if (singleUnit.dimensionality != 1 || singleUnit.unitPrefix != UMEASURE_SI_PREFIX_ONE) {
         return false;
     }
 
@@ -293,6 +309,7 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &s
     conversionRate.factorNum = finalFactor.factorNum;
     conversionRate.factorDen = finalFactor.factorDen;
 
+    // This code corresponds to ICU4J's ConversionRates.getOffset().
     // In case of simple units (such as: celsius or fahrenheit), offsets are considered.
     if (checkSimpleUnit(source, status) && checkSimpleUnit(target, status)) {
         conversionRate.sourceOffset =
@@ -300,6 +317,8 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &s
         conversionRate.targetOffset =
             targetToBase.offset * targetToBase.factorDen / targetToBase.factorNum;
     }
+    // TODO: should we consider failure if there's an offset for a
+    // not-simple-unit? What about kilokelvin / kilocelsius?
 
     conversionRate.reciprocal = unitsState == Convertibility::RECIPROCAL;
 }

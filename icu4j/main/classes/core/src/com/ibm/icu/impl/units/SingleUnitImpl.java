@@ -5,6 +5,9 @@ package com.ibm.icu.impl.units;
 
 import com.ibm.icu.util.MeasureUnit;
 
+/**
+ * A class representing a single unit (optional SI or binary prefix, and dimensionality).
+ */
 public class SingleUnitImpl {
     /**
      * Simple unit index, unique for every simple unit, -1 for the dimensionless
@@ -29,16 +32,16 @@ public class SingleUnitImpl {
      */
     private int dimensionality = 1;
     /**
-     * SI Prefix
+     * SI or binary prefix.
      */
-    private MeasureUnit.SIPrefix siPrefix = MeasureUnit.SIPrefix.ONE;
+    private MeasureUnit.MeasurePrefix unitPrefix = MeasureUnit.MeasurePrefix.ONE;
 
     public SingleUnitImpl copy() {
         SingleUnitImpl result = new SingleUnitImpl();
         result.index = this.index;
         result.dimensionality = this.dimensionality;
         result.simpleUnit = this.simpleUnit;
-        result.siPrefix = this.siPrefix;
+        result.unitPrefix = this.unitPrefix;
 
         return result;
     }
@@ -72,7 +75,7 @@ public class SingleUnitImpl {
             throw new IllegalArgumentException("Unit Identifier Syntax Error");
         }
 
-        result.append(this.getSiPrefix().getIdentifier());
+        result.append(this.getPrefix().getIdentifier());
         result.append(this.getSimpleUnit());
 
         return result.toString();
@@ -104,10 +107,14 @@ public class SingleUnitImpl {
         if (index > other.index) {
             return 1;
         }
-        if (this.getSiPrefix().getPower() < other.getSiPrefix().getPower()) {
+        // FIXME: use a comparator? Or getBigDecimal() or similar? Something
+        // producing the specifications-dictated sort order!
+        if (this.getPrefix().getBaseAndPower().second < other.getPrefix().getBaseAndPower().second) {
             return -1;
         }
-        if (this.getSiPrefix().getPower() > other.getSiPrefix().getPower()) {
+        // FIXME: use a comparator? Or getBigDecimal() or similar? Something
+        // producing the specifications-dictated sort order!
+        if (this.getPrefix().getBaseAndPower().second > other.getPrefix().getBaseAndPower().second) {
             return 1;
         }
         return 0;
@@ -116,8 +123,8 @@ public class SingleUnitImpl {
     /**
      * Checks whether this SingleUnitImpl is compatible with another for the purpose of coalescing.
      * <p>
-     * Units with the same base unit and SI prefix should match, except that they must also have
-     * the same dimensionality sign, such that we don't merge numerator and denominator.
+     * Units with the same base unit and SI or binary prefix should match, except that they must also
+     * have the same dimensionality sign, such that we don't merge numerator and denominator.
      */
     boolean isCompatibleWith(SingleUnitImpl other) {
         return (compareTo(other) == 0);
@@ -140,12 +147,14 @@ public class SingleUnitImpl {
         this.dimensionality = dimensionality;
     }
 
-    public MeasureUnit.SIPrefix getSiPrefix() {
-        return siPrefix;
+    // TODO: why getter and setter, in contrast to C++? Java Style vs more
+    // consistency between C and J code?
+    public MeasureUnit.MeasurePrefix getPrefix() {
+        return unitPrefix;
     }
 
-    public void setSiPrefix(MeasureUnit.SIPrefix siPrefix) {
-        this.siPrefix = siPrefix;
+    public void setPrefix(MeasureUnit.MeasurePrefix unitPrefix) {
+        this.unitPrefix = unitPrefix;
     }
 
     public int getIndex() {

@@ -4,12 +4,12 @@ package com.ibm.icu.impl.units;
 
 import static java.math.MathContext.DECIMAL128;
 
+import com.ibm.icu.impl.Pair;
+import com.ibm.icu.util.MeasureUnit;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
-
-import com.ibm.icu.util.MeasureUnit;
 
 public class UnitConverter {
     private BigDecimal conversionRate;
@@ -211,20 +211,25 @@ public class UnitConverter {
             }
         }
 
-        public Factor applySiPrefix(MeasureUnit.SIPrefix siPrefix) {
+        /** Apply SI or binary prefix to the Factor. */
+        public Factor applyPrefix(MeasureUnit.MeasurePrefix unitPrefix) {
             Factor result = this.copy();
-            if (siPrefix == MeasureUnit.SIPrefix.ONE) {
+            if (unitPrefix == MeasureUnit.MeasurePrefix.ONE) {
                 return result;
             }
 
-            BigDecimal siApplied = BigDecimal.valueOf(Math.pow(10.0, Math.abs(siPrefix.getPower())));
+            // FIXME: does the num/den split help much with accuracy if we're doing BigDecimal anyway?
+            // DECIMAL128 vs no-MathContext (arbitrary precision)?
+            Pair<Integer, Integer> baseAndPower = unitPrefix.getBaseAndPower();
+            BigDecimal absFactor =
+                BigDecimal.valueOf(baseAndPower.first).pow(Math.abs(baseAndPower.second), DECIMAL128);
 
-            if (siPrefix.getPower() < 0) {
-                result.factorDen = this.factorDen.multiply(siApplied);
+            if (baseAndPower.second < 0) {
+                result.factorDen = this.factorDen.multiply(absFactor);
                 return result;
             }
 
-            result.factorNum = this.factorNum.multiply(siApplied);
+            result.factorNum = this.factorNum.multiply(absFactor);
             return result;
         }
 

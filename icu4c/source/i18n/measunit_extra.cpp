@@ -40,9 +40,9 @@ namespace {
 // TODO: Propose a new error code for this?
 constexpr UErrorCode kUnitIdentifierSyntaxError = U_ILLEGAL_ARGUMENT_ERROR;
 
-// Trie value offset for SI Prefixes. This is big enough to ensure we only
+// Trie value offset for SI or binary prefixes. This is big enough to ensure we only
 // insert positive integers into the trie.
-constexpr int32_t kSIPrefixOffset = 64;
+constexpr int32_t kPrefixOffset = 64;
 
 // Trie value offset for compound parts, e.g. "-per-", "-", "-and-".
 constexpr int32_t kCompoundPartOffset = 128;
@@ -89,10 +89,13 @@ enum PowerPart {
 // "fluid-ounce-imperial".
 constexpr int32_t kSimpleUnitOffset = 512;
 
-const struct SIPrefixStrings {
+struct UnitPrefixStrings {
     const char* const string;
-    UMeasureSIPrefix value;
-} gSIPrefixStrings[] = {
+    UMeasurePrefix value;
+};
+// TODO/FIXME: perhaps split into SI and BIN strings, and static_assert first and last elements match chosen thresholds?
+const UnitPrefixStrings gUnitPrefixStrings[] = {
+    // SI prefixes
     { "yotta", UMEASURE_SI_PREFIX_YOTTA },
     { "zetta", UMEASURE_SI_PREFIX_ZETTA },
     { "exa", UMEASURE_SI_PREFIX_EXA },
@@ -113,7 +116,26 @@ const struct SIPrefixStrings {
     { "atto", UMEASURE_SI_PREFIX_ATTO },
     { "zepto", UMEASURE_SI_PREFIX_ZEPTO },
     { "yocto", UMEASURE_SI_PREFIX_YOCTO },
+    // Binary prefixes
+    { "yobi", UMEASURE_BIN_PREFIX_YOBI },
+    { "zebi", UMEASURE_BIN_PREFIX_ZEBI },
+    { "exbi", UMEASURE_BIN_PREFIX_EXBI },
+    { "pebi", UMEASURE_BIN_PREFIX_PEBI },
+    { "tebi", UMEASURE_BIN_PREFIX_TEBI },
+    { "gibi", UMEASURE_BIN_PREFIX_GIBI },
+    { "mebi", UMEASURE_BIN_PREFIX_MEBI },
+    { "kibi", UMEASURE_BIN_PREFIX_KIBI },
 };
+static_assert(kPrefixOffset + UMEASURE_SI_PREFIX_MIN > 0,
+              "kPrefixOffset is inadequate for UMEASURE_SI_PREFIX_YOCTO");
+static_assert(kPrefixOffset + UMEASURE_BIN_PREFIX_MIN > 0,
+              "kPrefixOffset is inadequate for UMEASURE_BIN_PREFIX_KIBI");
+static_assert(
+    kPrefixOffset + UMEASURE_SI_PREFIX_MAX < kCompoundPartOffset,
+    "Difference between kCompoundPartOffset and kPrefixOffset inadequate for max SI prefix");
+static_assert(
+    kPrefixOffset + UMEASURE_BIN_PREFIX_MAX < kCompoundPartOffset,
+    "Difference between kCompoundPartOffset and kPrefixOffset inadequate for max binary prefix");
 
 /**
  * A ResourceSink that collects simple unit identifiers from the keys of the
@@ -220,9 +242,9 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     BytesTrieBuilder b(status);
     if (U_FAILURE(status)) { return; }
 
-    // Add SI prefixes
-    for (const auto& siPrefixInfo : gSIPrefixStrings) {
-        b.add(siPrefixInfo.string, siPrefixInfo.value + kSIPrefixOffset, status);
+    // Add SI and binary prefixes
+    for (const auto& unitPrefixInfo : gUnitPrefixStrings) {
+        b.add(unitPrefixInfo.string, unitPrefixInfo.value + kPrefixOffset, status);
     }
     if (U_FAILURE(status)) { return; }
 
@@ -294,7 +316,7 @@ public:
 
     enum Type {
         TYPE_UNDEFINED,
-        TYPE_SI_PREFIX,
+        TYPE_PREFIX,
         // Token type for "-per-", "-", and "-and-".
         TYPE_COMPOUND_PART,
         // Token type for "per-".
@@ -308,7 +330,7 @@ public:
     Type getType() const {
         U_ASSERT(fMatch > 0);
         if (fMatch < kCompoundPartOffset) {
-            return TYPE_SI_PREFIX;
+            return TYPE_PREFIX;
         }
         if (fMatch < kInitialCompoundPartOffset) {
             return TYPE_COMPOUND_PART;
@@ -322,9 +344,9 @@ public:
         return TYPE_SIMPLE_UNIT;
     }
 
-    UMeasureSIPrefix getSIPrefix() const {
-        U_ASSERT(getType() == TYPE_SI_PREFIX);
-        return static_cast<UMeasureSIPrefix>(fMatch - kSIPrefixOffset);
+    UMeasurePrefix getUnitPrefix() const {
+        U_ASSERT(getType() == TYPE_PREFIX);
+        return static_cast<UMeasurePrefix>(fMatch - kPrefixOffset);
     }
 
     // Valid only for tokens with type TYPE_COMPOUND_PART.
@@ -463,9 +485,9 @@ private:
         }
 
         // state:
-        // 0 = no tokens seen yet (will accept power, SI prefix, or simple unit)
+        // 0 = no tokens seen yet (will accept power, SI or binary prefix, or simple unit)
         // 1 = power token seen (will not accept another power token)
-        // 2 = SI prefix token seen (will not accept a power or SI prefix token)
+        // 2 = SI or binary prefix token seen (will not accept a power, or SI or binary prefix token)
         int32_t state = 0;
 
         bool atStart = fIndex == 0;
@@ -535,12 +557,12 @@ private:
                     state = 1;
                     break;
 
-                case Token::TYPE_SI_PREFIX:
+                case Token::TYPE_PREFIX:
                     if (state > 1) {
                         status = kUnitIdentifierSyntaxError;
                         return;
                     }
-                    result.siPrefix = token.getSIPrefix();
+                    result.unitPrefix = token.getUnitPrefix();
                     state = 2;
                     break;
 
@@ -661,12 +683,19 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
         return;
     }
 
-    if (singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
-        for (const auto& siPrefixInfo : gSIPrefixStrings) {
-            if (siPrefixInfo.value == singleUnit.siPrefix) {
-                output.append(siPrefixInfo.string, status);
+    if (singleUnit.unitPrefix != UMEASURE_SI_PREFIX_ONE) {
+        bool found = false;
+        for (const auto& unitPrefixInfo : gUnitPrefixStrings) {
+            // TODO: consider using binary search?
+            if (unitPrefixInfo.value == singleUnit.unitPrefix) {
+                output.append(unitPrefixInfo.string, status);
+                found = true;
                 break;
             }
+        }
+        if (!found) {
+            status = U_UNSUPPORTED_ERROR;
+            return;
         }
     }
     if (U_FAILURE(status)) {
@@ -860,13 +889,13 @@ UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
     return MeasureUnitImpl::forMeasureUnit(*this, temp, status).complexity;
 }
 
-UMeasureSIPrefix MeasureUnit::getSIPrefix(UErrorCode& status) const {
-    return SingleUnitImpl::forMeasureUnit(*this, status).siPrefix;
+UMeasurePrefix MeasureUnit::getPrefix(UErrorCode& status) const {
+    return SingleUnitImpl::forMeasureUnit(*this, status).unitPrefix;
 }
 
-MeasureUnit MeasureUnit::withSIPrefix(UMeasureSIPrefix prefix, UErrorCode& status) const {
+MeasureUnit MeasureUnit::withPrefix(UMeasurePrefix prefix, UErrorCode& status) const {
     SingleUnitImpl singleUnit = SingleUnitImpl::forMeasureUnit(*this, status);
-    singleUnit.siPrefix = prefix;
+    singleUnit.unitPrefix = prefix;
     return singleUnit.build(status);
 }
 
