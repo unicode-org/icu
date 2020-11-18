@@ -135,8 +135,8 @@ struct USearch {
           UBool               isOverlap;
           UBool               isCanonicalMatch;
           int16_t             elementComparisonType;
-          UBreakIterator     *internalBreakIter;  //internal character breakiterator
-          UBreakIterator     *breakIter;
+          UBreakIterator     *internalBreakIter;  // internal character breakiterator, lazily created.
+          UBreakIterator     *breakIter;          // caller provided character breakiterator
     // value USEARCH_DONE is the default value
     // if we are not at the start of the text or the end of the text, 
     // depending on the iteration direction and matchedIndex is USEARCH_DONE 
