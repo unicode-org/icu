@@ -2139,7 +2139,9 @@ MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     if (this == &other) {
         return *this;
     }
-    delete fImpl;
+    if (fImpl != nullptr) {
+        delete fImpl;
+    }
     if (other.fImpl) {
         ErrorCode localStatus;
         fImpl = new MeasureUnitImpl(other.fImpl->copy(localStatus));
@@ -2160,7 +2162,9 @@ MeasureUnit &MeasureUnit::operator=(MeasureUnit &&other) noexcept {
     if (this == &other) {
         return *this;
     }
-    delete fImpl;
+    if (fImpl != nullptr) {
+        delete fImpl;
+    }
     fImpl = other.fImpl;
     other.fImpl = nullptr;
     fTypeId = other.fTypeId;
@@ -2173,8 +2177,10 @@ MeasureUnit *MeasureUnit::clone() const {
 }
 
 MeasureUnit::~MeasureUnit() {
-    delete fImpl;
-    fImpl = nullptr;
+    if (fImpl != nullptr) {
+        delete fImpl;
+        fImpl = nullptr;
+    }
 }
 
 const char *MeasureUnit::getType() const {
@@ -2330,8 +2336,10 @@ void MeasureUnit::initCurrency(StringPiece isoCurrency) {
 void MeasureUnit::setTo(int32_t typeId, int32_t subTypeId) {
     fTypeId = typeId;
     fSubTypeId = subTypeId;
-    delete fImpl;
-    fImpl = nullptr;
+    if (fImpl != nullptr) {
+        delete fImpl;
+        fImpl = nullptr;
+    }
 }
 
 int32_t MeasureUnit::getOffset() const {
