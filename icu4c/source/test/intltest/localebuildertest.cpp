@@ -1375,7 +1375,7 @@ void LocaleBuilderTest::TestSetExtensionValidateTIllFormed() {
         "9-",
         "-9",
         "-z",
-        // "Latn", // Per 2019-01-23 ICUTC, still accept 4alpha. See ICU-20321
+        "Latn",
         "Latn-",
         "en-",
         "nob-",
@@ -1400,6 +1400,8 @@ void LocaleBuilderTest::TestSetExtensionValidateTIllFormed() {
         "gab-Thai-TH-0bde-z9-abcde123-a1-",
         "gab-Thai-TH-0bde-z9-abcde123-a1-a",
         "gab-Thai-TH-0bde-z9-abcde123-a1-ab",
+        // ICU-21408
+        "root",
     };
     for (const char* ill : illFormed) {
         UErrorCode status = U_ZERO_ERROR;
