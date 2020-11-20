@@ -87,7 +87,8 @@ void UnitsTest::testUnitConstantFreshness() {
         if (status.errDataIfFailureAndReset(
                 "addSingleFactorConstant(<%s>, ...).\n\n"
                 "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/units_converter.cpp\" "
-                "has all constants? Is \"%s\" a new constant?\n",
+                "has all constants? Is \"%s\" a new constant?\n"
+                "See docs/processes/release/tasks/updating-measure-unit.md for more information.\n",
                 constant, constant)) {
             continue;
         }
