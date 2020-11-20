@@ -49,6 +49,7 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestCreateStyled);
     TESTCASE_AUTO(TestContextual);
     TESTCASE_AUTO(TestNextPosition);
+    TESTCASE_AUTO(TestInt32Overflow);
     TESTCASE_AUTO_END;
 }
 
@@ -826,6 +827,22 @@ void ListFormatterTest::TestNextPosition() {
             }
         }
     }
+}
+
+void ListFormatterTest::TestInt32Overflow() {
+    if (quick) {
+        return;
+    }
+    IcuTestErrorCode status(*this, "TestInt32Overflow");
+    LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status), status);
+    std::vector<UnicodeString> inputs;
+    UnicodeString input(0xAAAFF00, 0x00000042, 0xAAAFF00);
+    for (int32_t i = 0; i < 16; i++) {
+      inputs.push_back(input);
+    }
+    FormattedList result = fmt->formatStringsToValue(
+        inputs.data(), static_cast<int32_t>(inputs.size()), status);
+    status.expectErrorAndReset(U_INPUT_TOO_LONG_ERROR);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
