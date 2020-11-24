@@ -4916,8 +4916,24 @@ void LocaleTest::TestCanonicalize(void)
         // ICU-21344
         { "ku-Arab-NT", "ku-Arab-IQ"},
 
+        // ICU-21402
+        { "und-u-rg-no23", "und-u-rg-no50"},
+        { "und-u-rg-cn11", "und-u-rg-cnbj"},
+        { "und-u-rg-cz10a", "und-u-rg-cz110"},
+        { "und-u-rg-fra", "und-u-rg-frges"},
+        { "und-u-rg-frg", "und-u-rg-frges"},
+        { "und-u-rg-lud", "und-u-rg-lucl"},
+
+        { "und-NO-u-sd-no23", "und-NO-u-sd-no50"},
+        { "und-CN-u-sd-cn11", "und-CN-u-sd-cnbj"},
+        { "und-CZ-u-sd-cz10a", "und-CZ-u-sd-cz110"},
+        { "und-FR-u-sd-fra", "und-FR-u-sd-frges"},
+        { "und-FR-u-sd-frg", "und-FR-u-sd-frges"},
+        { "und-LU-u-sd-lud", "und-LU-u-sd-lucl"},
+
         // ICU-21401
         { "cel-gaulish", "xtg"},
+
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {

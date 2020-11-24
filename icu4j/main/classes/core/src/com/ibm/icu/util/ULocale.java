@@ -1268,12 +1268,33 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 // Nothing changed in this iteration, break out the loop
                 break;
             }  // while(1)
-            if (changed) {
-                String result =  lscvToID(language, script, region,
+            if (extensions == null && !changed) {
+                return null;
+            }
+            String result =  lscvToID(language, script, region,
                     ((variants == null) ? "" : Utility.joinStrings("_", variants)));
-                if (extensions != null) {
-                    result += extensions;
+            if (extensions != null) {
+                boolean keywordChanged = false;
+                ULocale temp = new ULocale(result + extensions);
+                Iterator<String> keywords = temp.getKeywords();
+                while (keywords != null && keywords.hasNext()) {
+                    String key = keywords.next();
+                    if (key.equals("rg") || key.equals("sd")) {
+                        String value = temp.getKeywordValue(key);
+                        String replacement = replaceSubdivision(value);
+                        if (replacement != null) {
+                            temp = temp.setKeywordValue(key, replacement);
+                            keywordChanged = true;
+                        }
+                    }
                 }
+                if (keywordChanged) {
+                    extensions = temp.getName().substring(temp.getBaseName().length());
+                    changed = true;
+                }
+                result += extensions;
+            }
+            if (changed) {
                 return result;
             }
             // Nothing changed in any iteration of the loop.
@@ -1285,6 +1306,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         private static Map<String, String> scriptAliasMap = null;
         private static Map<String, List<String>> territoryAliasMap = null;
         private static Map<String, String> variantAliasMap = null;
+        private static Map<String, String> subdivisionAliasMap = null;
 
         /*
          * Initializes the alias data from the ICU resource bundles. The alias
@@ -1302,6 +1324,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             scriptAliasMap = new HashMap<>();
             territoryAliasMap = new HashMap<>();
             variantAliasMap = new HashMap<>();
+            subdivisionAliasMap = new HashMap<>();
 
             UResourceBundle metadata = UResourceBundle.getBundleInstance(
                 ICUData.ICU_BASE_NAME, "metadata",
@@ -1311,6 +1334,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             UResourceBundle scriptAlias = metadataAlias.get("script");
             UResourceBundle territoryAlias = metadataAlias.get("territory");
             UResourceBundle variantAlias = metadataAlias.get("variant");
+            UResourceBundle subdivisionAlias = metadataAlias.get("subdivision");
 
             for (int i = 0 ; i < languageAlias.getSize(); i++) {
                 UResourceBundle res = languageAlias.get(i);
@@ -1368,6 +1392,22 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                         "] in alias:variant.");
                 }
                 variantAliasMap.put(aliasFrom, aliasTo);
+            }
+            for (int i = 0 ; i < subdivisionAlias.getSize(); i++) {
+                UResourceBundle res = subdivisionAlias.get(i);
+                String aliasFrom = res.getKey();
+                String aliasTo = res.get("replacement").getString().split(" ")[0];
+                if (aliasFrom.length() < 3 || aliasFrom.length() > 8) {
+                    throw new IllegalArgumentException(
+                        "Incorrect key [" + aliasFrom + "] in alias:territory.");
+                }
+                if (aliasTo.length() < 3 || aliasTo.length() > 8) {
+                    // Ignore replacement < 3 for now. see CLDR-14312
+                    // throw new IllegalArgumentException(
+                    //    "Incorrect value [" + aliasTo + "] in alias:subdivision.");
+                    continue;
+                }
+                subdivisionAliasMap.put(aliasFrom, aliasTo);
             }
 
             aliasDataIsLoaded = true;
@@ -1591,6 +1631,11 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }
             return false;
         }
+
+        private String replaceSubdivision(String subdivision) {
+            return subdivisionAliasMap.get(subdivision);
+        }
+
     };
 
     /**
