@@ -326,6 +326,10 @@
 //ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /unitsShort/compound/$1
 //ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /units/compound/$1
 
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /unitsNarrow/compound/$1
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /unitsShort/compound/$1
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /units/compound/$1
+
 //ldml/units/unitLength[@type="narrow"]/coordinateUnit/displayName ; /unitsNarrow/coordinate/dnam
 //ldml/units/unitLength[@type="short"]/coordinateUnit/displayName ; /unitsShort/coordinate/dnam
 //ldml/units/unitLength[@type="long"]/coordinateUnit/displayName ; /units/coordinate/dnam
