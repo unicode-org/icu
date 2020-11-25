@@ -335,7 +335,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Get the CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
+     * Get CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
      * @return The string form of this unit, owned by this MeasureUnit.
      * @draft ICU 67
