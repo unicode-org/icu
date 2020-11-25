@@ -342,7 +342,7 @@ public class MeasureUnit implements Serializable {
      * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
      * </pre>
      *
-     * @param identifier The CLDR Sequence Unit Identifier
+     * @param identifier CLDR Unit Identifier
      * @throws IllegalArgumentException if the identifier is invalid.
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
@@ -399,7 +399,7 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Gets the CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
+     * Get CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
      * @return The string form of this unit.
      * @draft ICU 68
