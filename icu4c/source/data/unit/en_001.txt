@@ -30,6 +30,9 @@ en_001{
                 per{"{0} per square metre"}
             }
         }
+        compound{
+            10p1{"deca{0}"}
+        }
         concentr{
             karat{
                 dnam{"carat"}

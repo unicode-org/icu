@@ -99,6 +99,15 @@ so{
                 other{"{0} yaardi jibaaran"}
             }
         }
+        compound{
+            1024p8{"dheer{0}"}
+            10p-1{"deci{0}"}
+            10p-2{"senti{0}"}
+            10p15{"peta{0}"}
+            10p18{"exa{0}"}
+            10p21{"zetta{0}"}
+            10p24{"yotta{0}"}
+        }
         concentr{
             karat{
                 dnam{"karaatis"}
