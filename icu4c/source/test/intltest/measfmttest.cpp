@@ -3731,20 +3731,87 @@ void MeasureFormatTest::TestIdentifierDetails() {
     status.assertSuccess();
     assertEquals("Initial joule", "joule", joule.getIdentifier());
 
-    // FIXME: how do we ensure 99 is not a valid prefix?
-    MeasureUnit unit = joule.withPrefix((UMeasurePrefix)99, status);
-    if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
-        errln("Invalid prefix should result in an error.");
-    }
-    assertEquals("Invalid prefix results in no identifier", "", unit.getIdentifier());
-
-    unit = joule.withPrefix(UMEASURE_SI_PREFIX_HECTO, status);
+    MeasureUnit unit = joule.withPrefix(UMEASURE_SI_PREFIX_HECTO, status);
     status.assertSuccess();
     assertEquals("foo identifier", "hectojoule", unit.getIdentifier());
 
     unit = unit.withPrefix(UMEASURE_BIN_PREFIX_EXBI, status);
     status.assertSuccess();
     assertEquals("foo identifier", "exbijoule", unit.getIdentifier());
+
+    // FIXME: test and implement desireable sorting behaviour.
+    // Sort order of prefixes
+    UMeasurePrefix prefixes[] = {
+        UMEASURE_SI_PREFIX_YOTTA, //
+        UMEASURE_SI_PREFIX_ZETTA, //
+        UMEASURE_SI_PREFIX_EXA,   //
+        UMEASURE_SI_PREFIX_PETA,  //
+        UMEASURE_SI_PREFIX_TERA,  //
+        UMEASURE_SI_PREFIX_GIGA,  //
+        UMEASURE_SI_PREFIX_MEGA,  //
+        UMEASURE_SI_PREFIX_KILO,  //
+        UMEASURE_SI_PREFIX_HECTO, //
+        UMEASURE_SI_PREFIX_DEKA,  //
+        UMEASURE_SI_PREFIX_ONE,   //
+        UMEASURE_SI_PREFIX_DECI,  //
+        UMEASURE_SI_PREFIX_CENTI, //
+        UMEASURE_SI_PREFIX_MILLI, //
+        UMEASURE_SI_PREFIX_MICRO, //
+        UMEASURE_SI_PREFIX_NANO,  //
+        UMEASURE_SI_PREFIX_PICO,  //
+        UMEASURE_SI_PREFIX_FEMTO, //
+        UMEASURE_SI_PREFIX_ATTO,  //
+        UMEASURE_SI_PREFIX_ZEPTO, //
+        UMEASURE_SI_PREFIX_YOCTO, //
+        UMEASURE_BIN_PREFIX_YOBI, //
+        UMEASURE_BIN_PREFIX_ZEBI, //
+        UMEASURE_BIN_PREFIX_EXBI, //
+        UMEASURE_BIN_PREFIX_PEBI, //
+        UMEASURE_BIN_PREFIX_TEBI, //
+        UMEASURE_BIN_PREFIX_GIBI, //
+        UMEASURE_BIN_PREFIX_MEBI, //
+        UMEASURE_BIN_PREFIX_KIBI, //
+    };
+    for (int i = 0; i < UPRV_LENGTHOF(prefixes)-1; i++) {
+        assertTrue("prefix order", prefixes[i] > prefixes[i+1]);
+    }
+
+    // FIXME: test and implement desireable sorting behaviour.
+    // Sort order of prefixes
+    UMeasurePrefix prefixes2[] = {
+        UMeasurePrefix::YOTTA, //
+        UMeasurePrefix::ZETTA, //
+        UMeasurePrefix::EXA,   //
+        UMeasurePrefix::PETA,  //
+        UMeasurePrefix::TERA,  //
+        UMeasurePrefix::GIGA,  //
+        UMeasurePrefix::MEGA,  //
+        UMeasurePrefix::KILO,  //
+        UMeasurePrefix::HECTO, //
+        UMeasurePrefix::DEKA,  //
+        UMeasurePrefix::ONE,   //
+        UMeasurePrefix::DECI,  //
+        UMeasurePrefix::CENTI, //
+        UMeasurePrefix::MILLI, //
+        UMeasurePrefix::MICRO, //
+        UMeasurePrefix::NANO,  //
+        UMeasurePrefix::PICO,  //
+        UMeasurePrefix::FEMTO, //
+        UMeasurePrefix::ATTO,  //
+        UMeasurePrefix::ZEPTO, //
+        UMeasurePrefix::YOCTO, //
+        UMeasurePrefix::YOBI,  //
+        UMeasurePrefix::ZEBI,  //
+        UMeasurePrefix::EXBI,  //
+        UMeasurePrefix::PEBI,  //
+        UMeasurePrefix::TEBI,  //
+        UMeasurePrefix::GIBI,  //
+        UMeasurePrefix::MEBI,  //
+        UMeasurePrefix::KIBI,  //
+    };
+    for (int i = 0; i < UPRV_LENGTHOF(prefixes2)-1; i++) {
+        assertTrue("prefix order", prefixes2[i] > prefixes2[i+1]);
+    }
 }
 
 void MeasureFormatTest::TestParseToBuiltIn() {
@@ -3803,10 +3870,10 @@ void MeasureFormatTest::TestKilogramIdentifier() {
     assertEquals("nanogram", "", nanogram.getType());
     assertEquals("nanogram", "nanogram", nanogram.getIdentifier());
 
-    assertEquals("prefix of kilogram", UMEASURE_SI_PREFIX_KILO, kilogram.getPrefix(status));
-    assertEquals("prefix of gram", UMEASURE_SI_PREFIX_ONE, gram.getPrefix(status));
-    assertEquals("prefix of microgram", UMEASURE_SI_PREFIX_MICRO, microgram.getPrefix(status));
-    assertEquals("prefix of nanogram", UMEASURE_SI_PREFIX_NANO, nanogram.getPrefix(status));
+    assertTrue("prefix of kilogram", UMEASURE_SI_PREFIX_KILO == kilogram.getPrefix(status));
+    assertTrue("prefix of gram", UMeasurePrefix::ONE == gram.getPrefix(status));
+    assertTrue("prefix of microgram", UMEASURE_SI_PREFIX_MICRO == microgram.getPrefix(status));
+    assertTrue("prefix of nanogram", UMEASURE_SI_PREFIX_NANO == nanogram.getPrefix(status));
 
     MeasureUnit tmp = kilogram.withPrefix(UMEASURE_SI_PREFIX_MILLI, status);
     assertEquals(UnicodeString("Kilogram + milli should be milligram, got: ") + tmp.getIdentifier(),
@@ -3975,7 +4042,7 @@ void MeasureFormatTest::TestDimensionlessBehaviour() {
     // dimensionless.getPrefix()
     UMeasurePrefix unitPrefix = dimensionless.getPrefix(status);
     status.errIfFailureAndReset("dimensionless.getPrefix(...)");
-    assertEquals("dimensionless SIPrefix", UMEASURE_SI_PREFIX_ONE, unitPrefix);
+    assertTrue("dimensionless SIPrefix", UMEASURE_SI_PREFIX_ONE == unitPrefix);
 
     // dimensionless.withPrefix()
     modified = dimensionless.withPrefix(UMEASURE_SI_PREFIX_KILO, status);
@@ -3985,7 +4052,7 @@ void MeasureFormatTest::TestDimensionlessBehaviour() {
     assertEquals("no singles in modified", 0, count);
     unitPrefix = modified.getPrefix(status);
     status.errIfFailureAndReset("modified.getPrefix(...)");
-    assertEquals("modified SIPrefix", UMEASURE_SI_PREFIX_ONE, unitPrefix);
+    assertTrue("modified SIPrefix", UMEASURE_SI_PREFIX_ONE == unitPrefix);
 
     // dimensionless.getComplexity()
     UMeasureUnitComplexity complexity = dimensionless.getComplexity(status);
@@ -4193,9 +4260,8 @@ void MeasureFormatTest::verifySingleUnit(
         const char* identifier) {
     IcuTestErrorCode status(*this, "verifySingleUnit");
     UnicodeString uid(identifier, -1, US_INV);
-    assertEquals(uid + ": SI or binary prefix",
-        unitPrefix,
-        unit.getPrefix(status));
+    assertTrue(uid + ": SI or binary prefix",
+        unitPrefix == unit.getPrefix(status));
     status.errIfFailureAndReset("%s: SI or binary prefix", identifier);
     assertEquals(uid + ": Power",
         static_cast<int32_t>(power),

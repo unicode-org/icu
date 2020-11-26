@@ -67,29 +67,20 @@ void U_I18N_API Factor::power(int32_t power) {
 }
 
 void U_I18N_API Factor::applyPrefix(UMeasurePrefix unitPrefix) {
-    if (unitPrefix == UMeasurePrefix::UMEASURE_SI_PREFIX_ONE) {
+    if (unitPrefix == UMEASURE_SI_PREFIX_ONE) {
         // No need to do anything
         return;
     }
 
-    // FIXME: don't directly use value of unitPrefix in calculations!
-    if (unitPrefix >= UMEASURE_BIN_PREFIX_MIN && unitPrefix <= UMEASURE_BIN_PREFIX_MAX) {
-        double binApplied = std::pow(1024.0, unitPrefix - kUMPOffsetBinary);
-        factorNum *= binApplied;
+    auto baseAndPower(unitPrefix.getBaseAndPower());
+    int32_t power = baseAndPower.second;
+    double prefixApplied = std::pow(baseAndPower.first, std::abs(power));
+
+    if (power < 0) {
+        factorDen *= prefixApplied;
         return;
     }
-
-    U_ASSERT(unitPrefix >= UMEASURE_SI_PREFIX_MIN && unitPrefix <= UMEASURE_SI_PREFIX_MAX);
-    // FIXME: don't directly use value of unitPrefix in calculations!
-    int32_t siPrefix = unitPrefix - kUMPOffsetSI;
-    double siApplied = std::pow(10.0, std::abs(siPrefix));
-
-    if (siPrefix < 0) {
-        factorDen *= siApplied;
-        return;
-    }
-
-    factorNum *= siApplied;
+    factorNum *= prefixApplied;
 }
 
 void U_I18N_API Factor::substituteConstants() {
