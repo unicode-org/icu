@@ -109,7 +109,7 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
      *
      * This is ignored for the dimensionless unit.
      */
-    UMeasurePrefix unitPrefix = UMEASURE_SI_PREFIX_ONE;
+    MeasurePrefix unitPrefix = UMEASURE_SI_PREFIX_ONE;
 
     /**
      * Dimensionality.

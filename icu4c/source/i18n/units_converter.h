@@ -69,7 +69,7 @@ struct U_I18N_API Factor {
     void power(int32_t power);
 
     // Apply SI or binary prefix to the Factor.
-    void applyPrefix(UMeasurePrefix unitPrefix);
+    void applyPrefix(MeasurePrefix unitPrefix);
 
     // Does an in-place substition of the "symbolic constants" based on
     // constantExponents (resetting the exponents).

@@ -66,7 +66,7 @@ void U_I18N_API Factor::power(int32_t power) {
     }
 }
 
-void U_I18N_API Factor::applyPrefix(UMeasurePrefix unitPrefix) {
+void U_I18N_API Factor::applyPrefix(MeasurePrefix unitPrefix) {
     if (unitPrefix == UMEASURE_SI_PREFIX_ONE) {
         // No need to do anything
         return;

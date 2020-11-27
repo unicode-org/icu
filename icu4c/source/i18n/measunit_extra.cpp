@@ -94,7 +94,7 @@ constexpr int32_t kSimpleUnitOffset = 512;
 // TODO: move and reformat this code block to avoid having to close and reopen
 // the anonymous namespace. For now I'm leaving it here, with the extra spaces,
 // to ease review.
-const UMeasurePrefix::UnitPrefixStrings UMeasurePrefix::gUnitPrefixStrings[] = {
+const MeasurePrefix::UnitPrefixStrings MeasurePrefix::gUnitPrefixStrings[] = {
     // SI prefixes
     { "yotta", Prefix::SI_YOTTA },
     { "zetta", Prefix::SI_ZETTA },
@@ -127,35 +127,35 @@ const UMeasurePrefix::UnitPrefixStrings UMeasurePrefix::gUnitPrefixStrings[] = {
     { "kibi", Prefix::BIN_KIBI },
 };
 
-const UMeasurePrefix UMeasurePrefix::YOTTA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_YOTTA);
-const UMeasurePrefix UMeasurePrefix::ZETTA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_ZETTA);
-const UMeasurePrefix UMeasurePrefix::EXA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_EXA);
-const UMeasurePrefix UMeasurePrefix::PETA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_PETA);
-const UMeasurePrefix UMeasurePrefix::TERA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_TERA);
-const UMeasurePrefix UMeasurePrefix::GIGA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_GIGA);
-const UMeasurePrefix UMeasurePrefix::MEGA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_MEGA);
-const UMeasurePrefix UMeasurePrefix::KILO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_KILO);
-const UMeasurePrefix UMeasurePrefix::HECTO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_HECTO);
-const UMeasurePrefix UMeasurePrefix::DEKA = UMeasurePrefix(UMeasurePrefix::Prefix::SI_DEKA);
-const UMeasurePrefix UMeasurePrefix::ONE = UMeasurePrefix(UMeasurePrefix::Prefix::SI_ONE);
-const UMeasurePrefix UMeasurePrefix::DECI = UMeasurePrefix(UMeasurePrefix::Prefix::SI_DECI);
-const UMeasurePrefix UMeasurePrefix::CENTI = UMeasurePrefix(UMeasurePrefix::Prefix::SI_CENTI);
-const UMeasurePrefix UMeasurePrefix::MILLI = UMeasurePrefix(UMeasurePrefix::Prefix::SI_MILLI);
-const UMeasurePrefix UMeasurePrefix::MICRO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_MICRO);
-const UMeasurePrefix UMeasurePrefix::NANO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_NANO);
-const UMeasurePrefix UMeasurePrefix::PICO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_PICO);
-const UMeasurePrefix UMeasurePrefix::FEMTO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_FEMTO);
-const UMeasurePrefix UMeasurePrefix::ATTO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_ATTO);
-const UMeasurePrefix UMeasurePrefix::ZEPTO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_ZEPTO);
-const UMeasurePrefix UMeasurePrefix::YOCTO = UMeasurePrefix(UMeasurePrefix::Prefix::SI_YOCTO);
-const UMeasurePrefix UMeasurePrefix::YOBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_YOBI);
-const UMeasurePrefix UMeasurePrefix::ZEBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_ZEBI);
-const UMeasurePrefix UMeasurePrefix::EXBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_EXBI);
-const UMeasurePrefix UMeasurePrefix::PEBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_PEBI);
-const UMeasurePrefix UMeasurePrefix::TEBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_TEBI);
-const UMeasurePrefix UMeasurePrefix::GIBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_GIBI);
-const UMeasurePrefix UMeasurePrefix::MEBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_MEBI);
-const UMeasurePrefix UMeasurePrefix::KIBI = UMeasurePrefix(UMeasurePrefix::Prefix::BIN_KIBI);
+const MeasurePrefix MeasurePrefix::YOTTA = MeasurePrefix(MeasurePrefix::Prefix::SI_YOTTA);
+const MeasurePrefix MeasurePrefix::ZETTA = MeasurePrefix(MeasurePrefix::Prefix::SI_ZETTA);
+const MeasurePrefix MeasurePrefix::EXA = MeasurePrefix(MeasurePrefix::Prefix::SI_EXA);
+const MeasurePrefix MeasurePrefix::PETA = MeasurePrefix(MeasurePrefix::Prefix::SI_PETA);
+const MeasurePrefix MeasurePrefix::TERA = MeasurePrefix(MeasurePrefix::Prefix::SI_TERA);
+const MeasurePrefix MeasurePrefix::GIGA = MeasurePrefix(MeasurePrefix::Prefix::SI_GIGA);
+const MeasurePrefix MeasurePrefix::MEGA = MeasurePrefix(MeasurePrefix::Prefix::SI_MEGA);
+const MeasurePrefix MeasurePrefix::KILO = MeasurePrefix(MeasurePrefix::Prefix::SI_KILO);
+const MeasurePrefix MeasurePrefix::HECTO = MeasurePrefix(MeasurePrefix::Prefix::SI_HECTO);
+const MeasurePrefix MeasurePrefix::DEKA = MeasurePrefix(MeasurePrefix::Prefix::SI_DEKA);
+const MeasurePrefix MeasurePrefix::ONE = MeasurePrefix(MeasurePrefix::Prefix::SI_ONE);
+const MeasurePrefix MeasurePrefix::DECI = MeasurePrefix(MeasurePrefix::Prefix::SI_DECI);
+const MeasurePrefix MeasurePrefix::CENTI = MeasurePrefix(MeasurePrefix::Prefix::SI_CENTI);
+const MeasurePrefix MeasurePrefix::MILLI = MeasurePrefix(MeasurePrefix::Prefix::SI_MILLI);
+const MeasurePrefix MeasurePrefix::MICRO = MeasurePrefix(MeasurePrefix::Prefix::SI_MICRO);
+const MeasurePrefix MeasurePrefix::NANO = MeasurePrefix(MeasurePrefix::Prefix::SI_NANO);
+const MeasurePrefix MeasurePrefix::PICO = MeasurePrefix(MeasurePrefix::Prefix::SI_PICO);
+const MeasurePrefix MeasurePrefix::FEMTO = MeasurePrefix(MeasurePrefix::Prefix::SI_FEMTO);
+const MeasurePrefix MeasurePrefix::ATTO = MeasurePrefix(MeasurePrefix::Prefix::SI_ATTO);
+const MeasurePrefix MeasurePrefix::ZEPTO = MeasurePrefix(MeasurePrefix::Prefix::SI_ZEPTO);
+const MeasurePrefix MeasurePrefix::YOCTO = MeasurePrefix(MeasurePrefix::Prefix::SI_YOCTO);
+const MeasurePrefix MeasurePrefix::YOBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_YOBI);
+const MeasurePrefix MeasurePrefix::ZEBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_ZEBI);
+const MeasurePrefix MeasurePrefix::EXBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_EXBI);
+const MeasurePrefix MeasurePrefix::PEBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_PEBI);
+const MeasurePrefix MeasurePrefix::TEBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_TEBI);
+const MeasurePrefix MeasurePrefix::GIBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_GIBI);
+const MeasurePrefix MeasurePrefix::MEBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_MEBI);
+const MeasurePrefix MeasurePrefix::KIBI = MeasurePrefix(MeasurePrefix::Prefix::BIN_KIBI);
 
 namespace {
 
@@ -263,21 +263,21 @@ UBool U_CALLCONV cleanupUnitExtras() {
 // FIXME: maybe move code block to not need to close and reopen anonymous namespace?
 void U_CALLCONV initUnitExtras(UErrorCode& status) {
     // Verify that constant values provide suitable trie value ranges:
-    static_assert(kPrefixOffset + (int32_t)UMeasurePrefix::Prefix::kSIMinimum > 0,
+    static_assert(kPrefixOffset + (int32_t)MeasurePrefix::Prefix::kSIMinimum > 0,
                   "kPrefixOffset is inadequate for kSIMinimum");
-    static_assert(kPrefixOffset + (int32_t)UMeasurePrefix::Prefix::kBinMinimum > 0,
+    static_assert(kPrefixOffset + (int32_t)MeasurePrefix::Prefix::kBinMinimum > 0,
                   "kPrefixOffset is inadequate for kBinMinimum");
-    static_assert(kPrefixOffset + (int32_t)UMeasurePrefix::Prefix::kSIMaximum < kCompoundPartOffset,
+    static_assert(kPrefixOffset + (int32_t)MeasurePrefix::Prefix::kSIMaximum < kCompoundPartOffset,
                   "Difference between kCompoundPartOffset and kPrefixOffset inadequate for kSIMaximum");
-    static_assert(kPrefixOffset + (int32_t)UMeasurePrefix::Prefix::kBinMaximum < kCompoundPartOffset,
+    static_assert(kPrefixOffset + (int32_t)MeasurePrefix::Prefix::kBinMaximum < kCompoundPartOffset,
                   "Difference between kCompoundPartOffset and kPrefixOffset inadequate for kBinMaximum");
 
     // While we're at it, sanity-check within prefixes:
-    static_assert(UMeasurePrefix::Prefix::kBinMinimum < UMeasurePrefix::Prefix::kBinMaximum,
+    static_assert(MeasurePrefix::Prefix::kBinMinimum < MeasurePrefix::Prefix::kBinMaximum,
                   "Prefix enum min values must be less than max values");
-    static_assert(UMeasurePrefix::Prefix::kBinMaximum < UMeasurePrefix::Prefix::kSIMinimum,
+    static_assert(MeasurePrefix::Prefix::kBinMaximum < MeasurePrefix::Prefix::kSIMinimum,
                   "Prefix enum SI and binary prefix ranges must not overlap");
-    static_assert(UMeasurePrefix::Prefix::kSIMinimum < UMeasurePrefix::Prefix::kSIMaximum,
+    static_assert(MeasurePrefix::Prefix::kSIMinimum < MeasurePrefix::Prefix::kSIMaximum,
                   "Prefix enum min values must be less than max values");
 
     ucln_i18n_registerCleanup(UCLN_I18N_UNIT_EXTRAS, cleanupUnitExtras);
@@ -286,7 +286,7 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
 
     // Add SI and binary prefixes
-    for (const auto& unitPrefixInfo : UMeasurePrefix::gUnitPrefixStrings) {
+    for (const auto& unitPrefixInfo : MeasurePrefix::gUnitPrefixStrings) {
         b.add(unitPrefixInfo.string, (int32_t)unitPrefixInfo.value + kPrefixOffset, status);
     }
     if (U_FAILURE(status)) { return; }
@@ -387,9 +387,9 @@ public:
         return TYPE_SIMPLE_UNIT;
     }
 
-    UMeasurePrefix getUnitPrefix() const {
+    MeasurePrefix getUnitPrefix() const {
         U_ASSERT(getType() == TYPE_PREFIX);
-        return UMeasurePrefix((UMeasurePrefix::Prefix)(fMatch - kPrefixOffset));
+        return MeasurePrefix((MeasurePrefix::Prefix)(fMatch - kPrefixOffset));
     }
 
     // Valid only for tokens with type TYPE_COMPOUND_PART.
@@ -733,7 +733,7 @@ void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& o
 
     if (singleUnit.unitPrefix != UMEASURE_SI_PREFIX_ONE) {
         bool found = false;
-        for (const auto& unitPrefixInfo : UMeasurePrefix::gUnitPrefixStrings) {
+        for (const auto& unitPrefixInfo : MeasurePrefix::gUnitPrefixStrings) {
             // TODO: consider using binary search?
             if (unitPrefixInfo.value == singleUnit.unitPrefix.fPrefix) {
                 output.append(unitPrefixInfo.string, status);
@@ -939,11 +939,11 @@ UMeasureUnitComplexity MeasureUnit::getComplexity(UErrorCode& status) const {
     return MeasureUnitImpl::forMeasureUnit(*this, temp, status).complexity;
 }
 
-UMeasurePrefix MeasureUnit::getPrefix(UErrorCode& status) const {
+MeasurePrefix MeasureUnit::getPrefix(UErrorCode& status) const {
     return SingleUnitImpl::forMeasureUnit(*this, status).unitPrefix;
 }
 
-MeasureUnit MeasureUnit::withPrefix(UMeasurePrefix prefix, UErrorCode& status) const {
+MeasureUnit MeasureUnit::withPrefix(MeasurePrefix prefix, UErrorCode& status) const {
     SingleUnitImpl singleUnit = SingleUnitImpl::forMeasureUnit(*this, status);
     singleUnit.unitPrefix = prefix;
     return singleUnit.build(status);

@@ -153,7 +153,7 @@ private:
         int32_t end);
     void verifySingleUnit(
         const MeasureUnit& unit,
-        UMeasurePrefix unitPrefix,
+        MeasurePrefix unitPrefix,
         int8_t power,
         const char* identifier);
     void verifyCompoundUnit(
@@ -3741,7 +3741,7 @@ void MeasureFormatTest::TestIdentifierDetails() {
 
     // FIXME: test and implement desireable sorting behaviour.
     // Sort order of prefixes
-    UMeasurePrefix prefixes[] = {
+    MeasurePrefix prefixes[] = {
         UMEASURE_SI_PREFIX_YOTTA, //
         UMEASURE_SI_PREFIX_ZETTA, //
         UMEASURE_SI_PREFIX_EXA,   //
@@ -3778,36 +3778,36 @@ void MeasureFormatTest::TestIdentifierDetails() {
 
     // FIXME: test and implement desireable sorting behaviour.
     // Sort order of prefixes
-    UMeasurePrefix prefixes2[] = {
-        UMeasurePrefix::YOTTA, //
-        UMeasurePrefix::ZETTA, //
-        UMeasurePrefix::EXA,   //
-        UMeasurePrefix::PETA,  //
-        UMeasurePrefix::TERA,  //
-        UMeasurePrefix::GIGA,  //
-        UMeasurePrefix::MEGA,  //
-        UMeasurePrefix::KILO,  //
-        UMeasurePrefix::HECTO, //
-        UMeasurePrefix::DEKA,  //
-        UMeasurePrefix::ONE,   //
-        UMeasurePrefix::DECI,  //
-        UMeasurePrefix::CENTI, //
-        UMeasurePrefix::MILLI, //
-        UMeasurePrefix::MICRO, //
-        UMeasurePrefix::NANO,  //
-        UMeasurePrefix::PICO,  //
-        UMeasurePrefix::FEMTO, //
-        UMeasurePrefix::ATTO,  //
-        UMeasurePrefix::ZEPTO, //
-        UMeasurePrefix::YOCTO, //
-        UMeasurePrefix::YOBI,  //
-        UMeasurePrefix::ZEBI,  //
-        UMeasurePrefix::EXBI,  //
-        UMeasurePrefix::PEBI,  //
-        UMeasurePrefix::TEBI,  //
-        UMeasurePrefix::GIBI,  //
-        UMeasurePrefix::MEBI,  //
-        UMeasurePrefix::KIBI,  //
+    MeasurePrefix prefixes2[] = {
+        MeasurePrefix::YOTTA, //
+        MeasurePrefix::ZETTA, //
+        MeasurePrefix::EXA,   //
+        MeasurePrefix::PETA,  //
+        MeasurePrefix::TERA,  //
+        MeasurePrefix::GIGA,  //
+        MeasurePrefix::MEGA,  //
+        MeasurePrefix::KILO,  //
+        MeasurePrefix::HECTO, //
+        MeasurePrefix::DEKA,  //
+        MeasurePrefix::ONE,   //
+        MeasurePrefix::DECI,  //
+        MeasurePrefix::CENTI, //
+        MeasurePrefix::MILLI, //
+        MeasurePrefix::MICRO, //
+        MeasurePrefix::NANO,  //
+        MeasurePrefix::PICO,  //
+        MeasurePrefix::FEMTO, //
+        MeasurePrefix::ATTO,  //
+        MeasurePrefix::ZEPTO, //
+        MeasurePrefix::YOCTO, //
+        MeasurePrefix::YOBI,  //
+        MeasurePrefix::ZEBI,  //
+        MeasurePrefix::EXBI,  //
+        MeasurePrefix::PEBI,  //
+        MeasurePrefix::TEBI,  //
+        MeasurePrefix::GIBI,  //
+        MeasurePrefix::MEBI,  //
+        MeasurePrefix::KIBI,  //
     };
     for (int i = 0; i < UPRV_LENGTHOF(prefixes2)-1; i++) {
         assertTrue("prefix order", prefixes2[i] > prefixes2[i+1]);
@@ -3871,7 +3871,7 @@ void MeasureFormatTest::TestKilogramIdentifier() {
     assertEquals("nanogram", "nanogram", nanogram.getIdentifier());
 
     assertTrue("prefix of kilogram", UMEASURE_SI_PREFIX_KILO == kilogram.getPrefix(status));
-    assertTrue("prefix of gram", UMeasurePrefix::ONE == gram.getPrefix(status));
+    assertTrue("prefix of gram", MeasurePrefix::ONE == gram.getPrefix(status));
     assertTrue("prefix of microgram", UMEASURE_SI_PREFIX_MICRO == microgram.getPrefix(status));
     assertTrue("prefix of nanogram", UMEASURE_SI_PREFIX_NANO == nanogram.getPrefix(status));
 
@@ -4040,7 +4040,7 @@ void MeasureFormatTest::TestDimensionlessBehaviour() {
     verifySingleUnit(mile, UMEASURE_SI_PREFIX_ONE, 1, "mile");
 
     // dimensionless.getPrefix()
-    UMeasurePrefix unitPrefix = dimensionless.getPrefix(status);
+    MeasurePrefix unitPrefix = dimensionless.getPrefix(status);
     status.errIfFailureAndReset("dimensionless.getPrefix(...)");
     assertTrue("dimensionless SIPrefix", UMEASURE_SI_PREFIX_ONE == unitPrefix);
 
@@ -4255,7 +4255,7 @@ void MeasureFormatTest::verifyFormat(
 
 void MeasureFormatTest::verifySingleUnit(
         const MeasureUnit& unit,
-        UMeasurePrefix unitPrefix,
+        MeasurePrefix unitPrefix,
         int8_t power,
         const char* identifier) {
     IcuTestErrorCode status(*this, "verifySingleUnit");

@@ -86,10 +86,10 @@ enum UMeasureUnitComplexity {
  *
  * @draft ICU 69
  */
-class UMeasurePrefix {
+class MeasurePrefix {
   private:
-    static constexpr int32_t kSIOffset = -30;
-    static constexpr int32_t kBinaryOffset = -64;
+    static constexpr int16_t kSIOffset = -30;
+    static constexpr int16_t kBinaryOffset = -64;
 
     enum class Prefix {
         // SI Prefixes
@@ -132,7 +132,7 @@ class UMeasurePrefix {
         kBinMinimum = BIN_KIBI,
     };
 
-    constexpr UMeasurePrefix(Prefix prefix) : fPrefix(prefix) {
+    constexpr MeasurePrefix(Prefix prefix) : fPrefix(prefix) {
         // C++14 (abort() in a constexpr constructor):
         // U_ASSERT((Prefix::kSIMinimum <= prefix && prefix <= Prefix::kSIMaximum) ||
         //          (Prefix::kBinMinimum <= prefix && prefix <= Prefix::kBinMaximum));
@@ -141,28 +141,28 @@ class UMeasurePrefix {
   public:
     inline std::pair<int16_t, int16_t> getBaseAndPower() const {
         if (Prefix::kSIMinimum <= fPrefix && fPrefix <= Prefix::kSIMaximum) {
-            return {10, (int32_t)fPrefix - kSIOffset};
+            return {10, (int16_t)fPrefix - kSIOffset};
         } else if (Prefix::kBinMinimum <= fPrefix && fPrefix <= Prefix::kBinMaximum) {
-            return {1024, (int32_t)fPrefix - kBinaryOffset};
+            return {1024, (int16_t)fPrefix - kBinaryOffset};
         }
         UPRV_UNREACHABLE;
     }
 
-    inline bool operator<(const UMeasurePrefix other) const {
-        // FIXME: test and implement desireable sorting behaviour.
+    inline bool operator<(const MeasurePrefix other) const {
+        // FIXME: test and implement desirable sorting behaviour.
         return fPrefix < other.fPrefix;
     }
 
-    inline bool operator>(const UMeasurePrefix other) const {
-        // FIXME: test and implement desireable sorting behaviour.
+    inline bool operator>(const MeasurePrefix other) const {
+        // FIXME: test and implement desirable sorting behaviour.
         return fPrefix > other.fPrefix;
     }
 
-    inline bool operator==(const UMeasurePrefix other) const {
+    inline bool operator==(const MeasurePrefix other) const {
         return fPrefix == other.fPrefix;
     }
 
-    inline bool operator!=(const UMeasurePrefix other) const {
+    inline bool operator!=(const MeasurePrefix other) const {
         return fPrefix != other.fPrefix;
     }
 
@@ -178,292 +178,292 @@ class UMeasurePrefix {
     /**
      * SI prefix: yotta, 10^24.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIYotta() {
-        return UMeasurePrefix(Prefix::SI_YOTTA);
+    static constexpr MeasurePrefix getSIYotta() {
+        return MeasurePrefix(Prefix::SI_YOTTA);
     }
-    static const UMeasurePrefix YOTTA;
+    static const MeasurePrefix YOTTA;
 
     /**
      * SI prefix: zetta, 10^21.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIZetta() {
-        return UMeasurePrefix(Prefix::SI_ZETTA);
+    static constexpr MeasurePrefix getSIZetta() {
+        return MeasurePrefix(Prefix::SI_ZETTA);
     }
-    static const UMeasurePrefix ZETTA;
+    static const MeasurePrefix ZETTA;
 
     /**
      * SI prefix: exa, 10^18.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIExa() {
-        return UMeasurePrefix(Prefix::SI_EXA);
+    static constexpr MeasurePrefix getSIExa() {
+        return MeasurePrefix(Prefix::SI_EXA);
     }
-    static const UMeasurePrefix EXA;
+    static const MeasurePrefix EXA;
 
     /**
      * SI prefix: peta, 10^15.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIPeta() {
-        return UMeasurePrefix(Prefix::SI_PETA);
+    static constexpr MeasurePrefix getSIPeta() {
+        return MeasurePrefix(Prefix::SI_PETA);
     }
-    static const UMeasurePrefix PETA;
+    static const MeasurePrefix PETA;
 
     /**
      * SI prefix: tera, 10^12.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSITera() {
-        return UMeasurePrefix(Prefix::SI_TERA);
+    static constexpr MeasurePrefix getSITera() {
+        return MeasurePrefix(Prefix::SI_TERA);
     }
-    static const UMeasurePrefix TERA;
+    static const MeasurePrefix TERA;
 
     /**
      * SI prefix: giga, 10^9.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIGiga() {
-        return UMeasurePrefix(Prefix::SI_GIGA);
+    static constexpr MeasurePrefix getSIGiga() {
+        return MeasurePrefix(Prefix::SI_GIGA);
     }
-    static const UMeasurePrefix GIGA;
+    static const MeasurePrefix GIGA;
 
     /**
      * SI prefix: mega, 10^6.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIMega() {
-        return UMeasurePrefix(Prefix::SI_MEGA);
+    static constexpr MeasurePrefix getSIMega() {
+        return MeasurePrefix(Prefix::SI_MEGA);
     }
-    static const UMeasurePrefix MEGA;
+    static const MeasurePrefix MEGA;
 
     /**
      * SI prefix: kilo, 10^3.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIKilo() {
-        return UMeasurePrefix(Prefix::SI_KILO);
+    static constexpr MeasurePrefix getSIKilo() {
+        return MeasurePrefix(Prefix::SI_KILO);
     }
-    static const UMeasurePrefix KILO;
+    static const MeasurePrefix KILO;
 
     /**
      * SI prefix: hecto, 10^2.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIHecto() {
-        return UMeasurePrefix(Prefix::SI_HECTO);
+    static constexpr MeasurePrefix getSIHecto() {
+        return MeasurePrefix(Prefix::SI_HECTO);
     }
-    static const UMeasurePrefix HECTO;
+    static const MeasurePrefix HECTO;
 
     /**
      * SI prefix: deka, 10^1.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIDeka() {
-        return UMeasurePrefix(Prefix::SI_DEKA);
+    static constexpr MeasurePrefix getSIDeka() {
+        return MeasurePrefix(Prefix::SI_DEKA);
     }
-    static const UMeasurePrefix DEKA;
+    static const MeasurePrefix DEKA;
 
     /**
      * The absence of an SI or binary prefix.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIOne() {
-        return UMeasurePrefix(Prefix::SI_ONE);
+    static constexpr MeasurePrefix getSIOne() {
+        return MeasurePrefix(Prefix::SI_ONE);
     }
-    static const UMeasurePrefix ONE;
+    static const MeasurePrefix ONE;
 
     /**
      * SI prefix: deci, 10^-1.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIDeci() {
-        return UMeasurePrefix(Prefix::SI_DECI);
+    static constexpr MeasurePrefix getSIDeci() {
+        return MeasurePrefix(Prefix::SI_DECI);
     }
-    static const UMeasurePrefix DECI;
+    static const MeasurePrefix DECI;
 
     /**
      * SI prefix: centi, 10^-2.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSICenti() {
-        return UMeasurePrefix(Prefix::SI_CENTI);
+    static constexpr MeasurePrefix getSICenti() {
+        return MeasurePrefix(Prefix::SI_CENTI);
     }
-    static const UMeasurePrefix CENTI;
+    static const MeasurePrefix CENTI;
 
     /**
      * SI prefix: milli, 10^-3.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIMilli() {
-        return UMeasurePrefix(Prefix::SI_MILLI);
+    static constexpr MeasurePrefix getSIMilli() {
+        return MeasurePrefix(Prefix::SI_MILLI);
     }
-    static const UMeasurePrefix MILLI;
+    static const MeasurePrefix MILLI;
 
     /**
      * SI prefix: micro, 10^-6.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIMicro() {
-        return UMeasurePrefix(Prefix::SI_MICRO);
+    static constexpr MeasurePrefix getSIMicro() {
+        return MeasurePrefix(Prefix::SI_MICRO);
     }
-    static const UMeasurePrefix MICRO;
+    static const MeasurePrefix MICRO;
 
     /**
      * SI prefix: nano, 10^-9.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSINano() {
-        return UMeasurePrefix(Prefix::SI_NANO);
+    static constexpr MeasurePrefix getSINano() {
+        return MeasurePrefix(Prefix::SI_NANO);
     }
-    static const UMeasurePrefix NANO;
+    static const MeasurePrefix NANO;
 
     /**
      * SI prefix: pico, 10^-12.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIPico() {
-        return UMeasurePrefix(Prefix::SI_PICO);
+    static constexpr MeasurePrefix getSIPico() {
+        return MeasurePrefix(Prefix::SI_PICO);
     }
-    static const UMeasurePrefix PICO;
+    static const MeasurePrefix PICO;
 
     /**
      * SI prefix: femto, 10^-15.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIFemto() {
-        return UMeasurePrefix(Prefix::SI_FEMTO);
+    static constexpr MeasurePrefix getSIFemto() {
+        return MeasurePrefix(Prefix::SI_FEMTO);
     }
-    static const UMeasurePrefix FEMTO;
+    static const MeasurePrefix FEMTO;
 
     /**
      * SI prefix: atto, 10^-18.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIAtto() {
-        return UMeasurePrefix(Prefix::SI_ATTO);
+    static constexpr MeasurePrefix getSIAtto() {
+        return MeasurePrefix(Prefix::SI_ATTO);
     }
-    static const UMeasurePrefix ATTO;
+    static const MeasurePrefix ATTO;
 
     /**
      * SI prefix: zepto, 10^-21.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIZepto() {
-        return UMeasurePrefix(Prefix::SI_ZEPTO);
+    static constexpr MeasurePrefix getSIZepto() {
+        return MeasurePrefix(Prefix::SI_ZEPTO);
     }
-    static const UMeasurePrefix ZEPTO;
+    static const MeasurePrefix ZEPTO;
 
     /**
      * SI prefix: yocto, 10^-24.
      *
-     * @draft ICU 67
+     * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getSIYocto() {
-        return UMeasurePrefix(Prefix::SI_YOCTO);
+    static constexpr MeasurePrefix getSIYocto() {
+        return MeasurePrefix(Prefix::SI_YOCTO);
     }
-    static const UMeasurePrefix YOCTO;
+    static const MeasurePrefix YOCTO;
 
     /**
      * Binary prefix: yobi, 1024^8.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinYobi() {
-        return UMeasurePrefix(Prefix::BIN_YOBI);
+    static constexpr MeasurePrefix getBinYobi() {
+        return MeasurePrefix(Prefix::BIN_YOBI);
     }
-    static const UMeasurePrefix YOBI;
+    static const MeasurePrefix YOBI;
 
     /**
      * Binary prefix: zebi, 1024^7.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinZebi() {
-        return UMeasurePrefix(Prefix::BIN_ZEBI);
+    static constexpr MeasurePrefix getBinZebi() {
+        return MeasurePrefix(Prefix::BIN_ZEBI);
     }
-    static const UMeasurePrefix ZEBI;
+    static const MeasurePrefix ZEBI;
 
     /**
      * Binary prefix: exbi, 1024^6.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinExbi() {
-        return UMeasurePrefix(Prefix::BIN_EXBI);
+    static constexpr MeasurePrefix getBinExbi() {
+        return MeasurePrefix(Prefix::BIN_EXBI);
     }
-    static const UMeasurePrefix EXBI;
+    static const MeasurePrefix EXBI;
 
     /**
      * Binary prefix: pebi, 1024^5.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinPebi() {
-        return UMeasurePrefix(Prefix::BIN_PEBI);
+    static constexpr MeasurePrefix getBinPebi() {
+        return MeasurePrefix(Prefix::BIN_PEBI);
     }
-    static const UMeasurePrefix PEBI;
+    static const MeasurePrefix PEBI;
 
     /**
      * Binary prefix: tebi, 1024^4.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinTebi() {
-        return UMeasurePrefix(Prefix::BIN_TEBI);
+    static constexpr MeasurePrefix getBinTebi() {
+        return MeasurePrefix(Prefix::BIN_TEBI);
     }
-    static const UMeasurePrefix TEBI;
+    static const MeasurePrefix TEBI;
 
     /**
      * Binary prefix: gibi, 1024^3.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinGibi() {
-        return UMeasurePrefix(Prefix::BIN_GIBI);
+    static constexpr MeasurePrefix getBinGibi() {
+        return MeasurePrefix(Prefix::BIN_GIBI);
     }
-    static const UMeasurePrefix GIBI;
+    static const MeasurePrefix GIBI;
 
     /**
      * Binary prefix: mebi, 1024^2.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinMebi() {
-        return UMeasurePrefix(Prefix::BIN_MEBI);
+    static constexpr MeasurePrefix getBinMebi() {
+        return MeasurePrefix(Prefix::BIN_MEBI);
     }
-    static const UMeasurePrefix MEBI;
+    static const MeasurePrefix MEBI;
 
     /**
      * Binary prefix: kibi, 1024^1.
      *
      * @draft ICU 69
      */
-    static constexpr UMeasurePrefix getBinKibi() {
-        return UMeasurePrefix(Prefix::BIN_KIBI);
+    static constexpr MeasurePrefix getBinKibi() {
+        return MeasurePrefix(Prefix::BIN_KIBI);
     }
-    static const UMeasurePrefix KIBI;
+    static const MeasurePrefix KIBI;
 
   private:
     Prefix fPrefix;
@@ -476,7 +476,7 @@ class UMeasurePrefix {
     // Maps from prefix string to prefix value. (Defined in measunit_extra.cpp.)
     static const UnitPrefixStrings gUnitPrefixStrings[];
 
-    // For access to UMeasurePrefix::Prefix:
+    // For access to MeasurePrefix::Prefix:
     friend class Token;
     // For access to gUnitPrefixStrings[]:
     friend void initUnitExtras(UErrorCode &);
@@ -484,35 +484,35 @@ class UMeasurePrefix {
     friend void serializeSingle(const SingleUnitImpl &, bool, CharString &, UErrorCode &);
 };
 
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_YOTTA = UMeasurePrefix::getSIYotta();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_ZETTA = UMeasurePrefix::getSIZetta();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_EXA = UMeasurePrefix::getSIExa();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_PETA = UMeasurePrefix::getSIPeta();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_TERA = UMeasurePrefix::getSITera();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_GIGA = UMeasurePrefix::getSIGiga();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_MEGA = UMeasurePrefix::getSIMega();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_KILO = UMeasurePrefix::getSIKilo();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_HECTO = UMeasurePrefix::getSIHecto();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_DEKA = UMeasurePrefix::getSIDeka();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_ONE = UMeasurePrefix::getSIOne();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_DECI = UMeasurePrefix::getSIDeci();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_CENTI = UMeasurePrefix::getSICenti();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_MILLI = UMeasurePrefix::getSIMilli();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_MICRO = UMeasurePrefix::getSIMicro();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_NANO = UMeasurePrefix::getSINano();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_PICO = UMeasurePrefix::getSIPico();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_FEMTO = UMeasurePrefix::getSIFemto();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_ATTO = UMeasurePrefix::getSIAtto();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_ZEPTO = UMeasurePrefix::getSIZepto();
-constexpr UMeasurePrefix UMEASURE_SI_PREFIX_YOCTO = UMeasurePrefix::getSIYocto();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_YOBI = UMeasurePrefix::getBinYobi();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_ZEBI = UMeasurePrefix::getBinZebi();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_EXBI = UMeasurePrefix::getBinExbi();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_PEBI = UMeasurePrefix::getBinPebi();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_TEBI = UMeasurePrefix::getBinTebi();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_GIBI = UMeasurePrefix::getBinGibi();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_MEBI = UMeasurePrefix::getBinMebi();
-constexpr UMeasurePrefix UMEASURE_BIN_PREFIX_KIBI = UMeasurePrefix::getBinKibi();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_YOTTA = MeasurePrefix::getSIYotta();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_ZETTA = MeasurePrefix::getSIZetta();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_EXA = MeasurePrefix::getSIExa();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_PETA = MeasurePrefix::getSIPeta();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_TERA = MeasurePrefix::getSITera();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_GIGA = MeasurePrefix::getSIGiga();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_MEGA = MeasurePrefix::getSIMega();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_KILO = MeasurePrefix::getSIKilo();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_HECTO = MeasurePrefix::getSIHecto();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_DEKA = MeasurePrefix::getSIDeka();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_ONE = MeasurePrefix::getSIOne();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_DECI = MeasurePrefix::getSIDeci();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_CENTI = MeasurePrefix::getSICenti();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_MILLI = MeasurePrefix::getSIMilli();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_MICRO = MeasurePrefix::getSIMicro();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_NANO = MeasurePrefix::getSINano();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_PICO = MeasurePrefix::getSIPico();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_FEMTO = MeasurePrefix::getSIFemto();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_ATTO = MeasurePrefix::getSIAtto();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_ZEPTO = MeasurePrefix::getSIZepto();
+constexpr MeasurePrefix UMEASURE_SI_PREFIX_YOCTO = MeasurePrefix::getSIYocto();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_YOBI = MeasurePrefix::getBinYobi();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_ZEBI = MeasurePrefix::getBinZebi();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_EXBI = MeasurePrefix::getBinExbi();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_PEBI = MeasurePrefix::getBinPebi();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_TEBI = MeasurePrefix::getBinTebi();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_GIBI = MeasurePrefix::getBinGibi();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_MEBI = MeasurePrefix::getBinMebi();
+constexpr MeasurePrefix UMEASURE_BIN_PREFIX_KIBI = MeasurePrefix::getBinKibi();
 
 #endif // U_HIDE_DRAFT_API
 
@@ -650,12 +650,12 @@ class U_I18N_API MeasureUnit: public UObject {
      * NOTE: Only works on SINGLE units. If this is a COMPOUND or MIXED unit, an error will
      * occur. For more information, see UMeasureUnitComplexity.
      *
-     * @param prefix The prefix, from UMeasurePrefix.
+     * @param prefix The prefix, from MeasurePrefix.
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
      * @draft ICU 69
      */
-    MeasureUnit withPrefix(UMeasurePrefix prefix, UErrorCode& status) const;
+    MeasureUnit withPrefix(MeasurePrefix prefix, UErrorCode& status) const;
 
     /**
      * Returns the current SI or binary prefix of this SINGLE unit. For example, if the unit has the prefix
@@ -665,10 +665,10 @@ class U_I18N_API MeasureUnit: public UObject {
      * occur. For more information, see UMeasureUnitComplexity.
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
-     * @return The prefix of this SINGLE unit, from UMeasurePrefix.
+     * @return The prefix of this SINGLE unit, from MeasurePrefix.
      * @draft ICU 69
      */
-    UMeasurePrefix getPrefix(UErrorCode& status) const;
+    MeasurePrefix getPrefix(UErrorCode& status) const;
 
     /**
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
