@@ -1325,7 +1325,7 @@ class TransliteratorParser {
 
     /**
      * Assert that the given character is NOT within the variable range.
-     * If it is, signal an error.  This is neccesary to ensure that the
+     * If it is, signal an error.  This is necessary to ensure that the
      * variable range does not overlap characters used in a rule.
      */
     private void checkVariableRange(int ch, String rule, int start) {

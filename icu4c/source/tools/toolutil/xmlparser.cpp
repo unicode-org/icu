@@ -79,7 +79,7 @@ UXMLParser::UXMLParser(UErrorCode &status) :
       //       or      "<!DOCTYPE foo [internal dtd]>
       //    TODO:  we don't actually parse the DOCTYPE or internal subsets.
       //           Some internal dtd subsets could confuse this simple-minded
-      //           attempt at skipping over them, specifically, occcurences
+      //           attempt at skipping over them, specifically, occurrences
       //           of closeing square brackets.  These could appear in comments, 
       //           or in parameter entity declarations, for example.
       mXMLDoctype(UnicodeString(

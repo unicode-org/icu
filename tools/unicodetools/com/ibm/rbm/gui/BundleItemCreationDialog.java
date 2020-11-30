@@ -214,7 +214,7 @@ class BundleItemCreationDialog extends JDialog {
 				lookups.remove(name);
 			}
 		}
-		// Add new lookups if neccesary
+		// Add new lookups if necessary
 		if (currentTrans != null && currentTrans.indexOf("{") >= 0) {
 			while (currentTrans.indexOf("{") >= 0) {
 				currentTrans = currentTrans.substring(currentTrans.indexOf("{")+1,currentTrans.length());

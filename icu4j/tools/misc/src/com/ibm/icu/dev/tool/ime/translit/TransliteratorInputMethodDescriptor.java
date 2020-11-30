@@ -26,7 +26,7 @@ public class TransliteratorInputMethodDescriptor implements InputMethodDescripto
     private ResourceBundle rb = null;
 
     /**
-    * Creates the Transliterator IME this is automatically callled by the
+    * Creates the Transliterator IME this is automatically called by the
     * JVM when the Transliterator IME is selected from the input method list.
     *
     * @return InputMethod The Transliterator IME object.

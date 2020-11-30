@@ -1440,7 +1440,7 @@ public abstract class NumberFormat extends UFormat {
     static NumberFormat createInstance(ULocale desiredLocale, int choice) {
         // If the choice is PLURALCURRENCYSTYLE, the pattern is not a single
         // pattern, it is a pattern set, so we do not need to get them here.
-        // If the choice is ISOCURRENCYSTYLE, the pattern is the currrency
+        // If the choice is ISOCURRENCYSTYLE, the pattern is the currency
         // pattern in the locale but by replacing the single currency sign
         // with double currency sign.
         String pattern = getPattern(desiredLocale, choice);

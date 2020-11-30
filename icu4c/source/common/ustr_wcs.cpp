@@ -387,7 +387,7 @@ _strFromWCS( UChar   *dest,
                  * null terminate it and convert wchar_ts to chars
                  */
                 if(nulLen >= _STACK_BUFFER_CAPACITY){
-                    /* Should rarely occcur */
+                    /* Should rarely occur */
                     /* allocate new buffer buffer */
                     pWStack =(wchar_t*) uprv_malloc(sizeof(wchar_t) * (nulLen + 1));
                     if(pWStack==NULL){

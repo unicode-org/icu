@@ -1159,7 +1159,7 @@ void TransliteratorParser::setVariableRange(int32_t start, int32_t end, UErrorCo
 
 /**
  * Assert that the given character is NOT within the variable range.
- * If it is, return FALSE.  This is neccesary to ensure that the
+ * If it is, return FALSE.  This is necessary to ensure that the
  * variable range does not overlap characters used in a rule.
  */
 UBool TransliteratorParser::checkVariableRange(UChar32 ch) const {
