@@ -27,7 +27,7 @@ public class MeasureUnitImpl {
     private MeasureUnit.Complexity complexity = MeasureUnit.Complexity.SINGLE;
 
     /**
-     * The list of simple units. These may be summed or multiplied, based on the
+     * The list of single units. These may be summed or multiplied, based on the
      * value of the complexity field.
      * <p>
      * The "dimensionless" unit (SingleUnitImpl default constructor) must not be
@@ -141,7 +141,7 @@ public class MeasureUnitImpl {
         identifier = null;
 
         if (singleUnit == null) {
-            // We don't append dimensionless units.
+            // Do not append dimensionless units.
             return false;
         }
 
@@ -165,8 +165,8 @@ public class MeasureUnitImpl {
         // Add a copy of singleUnit
         this.singleUnits.add(singleUnit.copy());
 
-        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits are more
-        // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
+        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits contains
+        // more than one. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
         if (this.singleUnits.size() > 1 && this.complexity == MeasureUnit.Complexity.SINGLE) {
             this.setComplexity(MeasureUnit.Complexity.COMPOUND);
         }
@@ -495,7 +495,7 @@ public class MeasureUnitImpl {
                     MeasureUnit.Complexity complexity =
                             fSawAnd ? MeasureUnit.Complexity.MIXED : MeasureUnit.Complexity.COMPOUND;
                     if (result.getSingleUnits().size() == 2) {
-                        // After appending two singleUnits, the complexity will be `UMEASURE_UNIT_COMPOUND`
+                        // After appending two singleUnits, the complexity will be MeasureUnit.Complexity.COMPOUND
                         assert result.getComplexity() == MeasureUnit.Complexity.COMPOUND;
                         result.setComplexity(complexity);
                     } else if (result.getComplexity() != complexity) {

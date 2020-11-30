@@ -2321,8 +2321,8 @@ MeasureUnitImpl MeasureUnitImpl::copy(UErrorCode &status) const {
     MeasureUnitImpl result;
     result.complexity = complexity;
     result.identifier.append(identifier, status);
-    for (int32_t i = 0; i < units.length(); i++) {
-        SingleUnitImpl *item = result.units.emplaceBack(*units[i]);
+    for (int32_t i = 0; i < singleUnits.length(); i++) {
+        SingleUnitImpl *item = result.singleUnits.emplaceBack(*singleUnits[i]);
         if (!item) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return result;

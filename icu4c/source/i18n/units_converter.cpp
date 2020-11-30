@@ -217,8 +217,8 @@ Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &
                           UErrorCode &status) {
 
     Factor result;
-    for (int32_t i = 0, n = source.units.length(); i < n; i++) {
-        SingleUnitImpl singleUnit = *source.units[i];
+    for (int32_t i = 0, n = source.singleUnits.length(); i < n; i++) {
+        SingleUnitImpl singleUnit = *source.singleUnits[i];
 
         Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
@@ -248,12 +248,12 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
     if (unit.complexity != UMEASURE_UNIT_SINGLE) {
         return false;
     }
-    if (unit.units.length() == 0) {
+    if (unit.singleUnits.length() == 0) {
         // Empty units means simple unit.
         return true;
     }
 
-    auto singleUnit = *(unit.units[0]);
+    auto singleUnit = *(unit.singleUnits[0]);
 
     if (singleUnit.dimensionality != 1 || singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
         return false;
@@ -329,8 +329,8 @@ void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitI
 
 void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDimension,
                              const MeasureUnitImpl &shouldBeMerged, int32_t multiplier) {
-    for (int32_t unit_i = 0; unit_i < shouldBeMerged.units.length(); unit_i++) {
-        auto singleUnit = *shouldBeMerged.units[unit_i];
+    for (int32_t unit_i = 0; unit_i < shouldBeMerged.singleUnits.length(); unit_i++) {
+        auto singleUnit = *shouldBeMerged.singleUnits[unit_i];
         mergeSingleUnitWithDimension(unitIndicesWithDimension, singleUnit, multiplier);
     }
 }
@@ -396,7 +396,7 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
     MeasureUnitImpl result;
     if (U_FAILURE(status)) return result;
 
-    const auto &singleUnits = source.units;
+    const auto &singleUnits = source.singleUnits;
     for (int i = 0, count = singleUnits.length(); i < count; ++i) {
         const auto &singleUnit = *singleUnits[i];
         // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
@@ -414,11 +414,11 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
         // must be pow4-meter. (NOTE: hectare --> square-meter)
         auto baseUnits =
-            MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).units;
+            MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).singleUnits;
         for (int32_t i = 0, baseUnitsCount = baseUnits.length(); i < baseUnitsCount; i++) {
             baseUnits[i]->dimensionality *= singleUnit.dimensionality;
             // TODO: Deal with SI-prefix
-            result.append(*baseUnits[i], status);
+            result.appendSingleUnit(*baseUnits[i], status);
 
             if (U_FAILURE(status)) {
                 return result;

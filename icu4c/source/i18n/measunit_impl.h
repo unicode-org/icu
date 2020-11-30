@@ -215,19 +215,19 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      * @return true if a new item was added. If unit is the dimensionless unit,
      * it is never added: the return value will always be false.
      */
-    bool append(const SingleUnitImpl& singleUnit, UErrorCode& status);
+    bool appendSingleUnit(const SingleUnitImpl& singleUnit, UErrorCode& status);
 
     /** The complexity, either SINGLE, COMPOUND, or MIXED. */
     UMeasureUnitComplexity complexity = UMEASURE_UNIT_SINGLE;
 
     /**
-     * The list of simple units. These may be summed or multiplied, based on the
+     * The list of single units. These may be summed or multiplied, based on the
      * value of the complexity field.
      *
      * The "dimensionless" unit (SingleUnitImpl default constructor) must not be
      * added to this list.
      */
-    MaybeStackVector<SingleUnitImpl> units;
+    MaybeStackVector<SingleUnitImpl> singleUnits;
 
     /**
      * The full unit identifier.  Owned by the MeasureUnitImpl.  Empty if not computed.
