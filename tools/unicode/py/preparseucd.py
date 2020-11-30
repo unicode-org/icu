@@ -290,7 +290,7 @@ def UpdateProps(start, end, update):
 
 def NeedToSetProps(props, start, end, c_props):
   """Returns True if props is not a sub-dict of c_props."""
-  for (pname, value) in props.iteritems():
+  for (pname, value) in props.items():
     if pname not in c_props or value != c_props[pname]: return True
   return False
 
@@ -369,7 +369,7 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
         match = _missing_re.match(line)
         if match:
           fields = match.group(1).split(";")
-          for i in xrange(len(fields)): fields[i] = fields[i].strip()
+          for i in range(len(fields)): fields[i] = fields[i].strip()
           yield ("missing", line, fields)
           continue
       if want_comments: yield ("comment", line)
@@ -379,7 +379,7 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
       line = line[:comment_start].rstrip()
       if not line: continue
     fields = line.split(";")
-    for i in xrange(len(fields)): fields[i] = fields[i].strip()
+    for i in range(len(fields)): fields[i] = fields[i].strip()
     if want_ranges:
       first = fields[0]
       match = _stripped_range_re.match(first)
@@ -988,14 +988,14 @@ def CompactBlock(b, i):
       # except for the blk=Block property.
       assert props["blk"] == b_props["blk"]
       del props["blk"]
-      for pname in props.keys():  # .keys() is a copy so we can del props[pname].
+      for pname in list(props.keys()):  # .keys() is a copy so we can del props[pname].
         if props[pname] == _null_or_defaults[pname]: del props[pname]
       # What remains are unusual default values for unassigned code points.
       # For example, bc=R or lb=ID.
       # See http://www.unicode.org/reports/tr44/#Default_Values_Table
       props["unassigned"] = True
     else:
-      for (pname, value) in props.iteritems():
+      for (pname, value) in props.items():
         if pname in prop_counters:
           counter = prop_counters[pname]
         else:
@@ -1017,13 +1017,13 @@ def CompactBlock(b, i):
   # For each property that occurs within this block,
   # set the value that reduces the file size the most as a block property value.
   # This is usually the most common value.
-  for (pname, counter) in prop_counters.iteritems():
+  for (pname, counter) in prop_counters.items():
     default_value = _null_or_defaults[pname]
     default_size = PrintedSize(pname, default_value) * counter[default_value]
     max_value = None
     max_count = 0
     max_savings = 0
-    for (value, count) in counter.iteritems():
+    for (value, count) in counter.items():
       if value != default_value and count > 1:
         # Does the file get smaller by setting the block default?
         # We save writing the block value as often as it occurs,
@@ -1081,7 +1081,7 @@ def CompactNonBlock(limit, i):
       is_unassigned = props["gc"] == "Cn"
     else:
       is_unassigned = default_is_unassigned
-    for pname in props.keys():  # .keys() is a copy so we can del props[pname].
+    for pname in list(props.keys()):  # .keys() is a copy so we can del props[pname].
       if props[pname] == _null_or_defaults[pname]: del props[pname]
     assert "blk" not in props
     # If there are no props left, then nothing will be printed.
@@ -1197,7 +1197,7 @@ def WritePreparsedUCD(out_file):
   i_h1 = 0
   i_h2 = 0
   b_end = -1
-  for i in xrange(len(_starts) - 1):
+  for i in range(len(_starts) - 1):
     start = _starts[i]
     end = _starts[i + 1] - 1
     # Block with default properties.
@@ -1248,7 +1248,7 @@ def WriteAllCC(out_file):
   out_file.write("# Canonical_Combining_Class (ccc) values\n");
   prev_start = 0
   prev_cc = 0
-  for i in xrange(len(_starts)):
+  for i in range(len(_starts)):
     start = _starts[i]
     props = _props[i]
     cc = props.get("ccc")
@@ -1318,7 +1318,7 @@ def WriteNorm2NFCTextFile(path):
 """)
     WriteAllCC(out_file)
     out_file.write("\n# Canonical decomposition mappings\n")
-    for i in xrange(len(_starts) - 1):
+    for i in range(len(_starts) - 1):
       start = _starts[i]
       end = _starts[i + 1] - 1
       props = _props[i]
@@ -1348,7 +1348,7 @@ def WriteNorm2NFKCTextFile(path):
 * Unicode """ + _ucd_version + """
 
 """)
-    for i in xrange(len(_starts) - 1):
+    for i in range(len(_starts) - 1):
       start = _starts[i]
       end = _starts[i + 1] - 1
       props = _props[i]
@@ -1382,7 +1382,7 @@ def WriteNorm2NFKC_CFTextFile(path):
     prev_start = 0
     prev_end = 0
     prev_nfkc_cf = None
-    for i in xrange(len(_starts) - 1):
+    for i in range(len(_starts) - 1):
       start = _starts[i]
       end = _starts[i + 1] - 1
       props = _props[i]
@@ -1660,20 +1660,20 @@ def PreprocessFiles(source_files, icu4c_src_root):
     if match:
       new_basename = match.group(1) + match.group(2)
       if new_basename != basename:
-        print "Removing version suffix from " + source_file
+        print("Removing version suffix from " + source_file)
         # ... so that we can easily compare UCD files.
         new_source_file = os.path.join(folder, new_basename)
         shutil.move(source_file, new_source_file)
         basename = new_basename
         source_file = new_source_file
     if basename in _files:
-      print "Preprocessing %s" % basename
+      print("Preprocessing %s" % basename)
       if basename in files_processed:
         raise Exception("duplicate file basename %s!" % basename)
       files_processed.add(basename)
       value = _files[basename]
       preprocessor = value[0]
-      if len(value) >= 2 and isinstance(value[1], (str, unicode)):
+      if len(value) >= 2 and isinstance(value[1], (str)):
         # The value was [preprocessor, dest_folder, ...], leave [...].
         dest_folder = value[1]
         value = value[2:]
@@ -1743,7 +1743,7 @@ def SplitName(name, tokens):
       token = name[:start]
       IncCounter(tokens, token)
       break
-  for i in xrange(start, len(name)):
+  for i in range(start, len(name)):
     c = name[i]
     if c == ' ' or c == '-':
       token = name[start:i + 1]
@@ -1766,7 +1766,7 @@ def PrintNameStats():
   num_digits = 0
   token_counters = {}
   char_counters = {}
-  for i in xrange(len(_starts) - 1):
+  for i in range(len(_starts) - 1):
     start = _starts[i]
     # end = _starts[i + 1] - 1
     props = _props[i]
@@ -1786,25 +1786,25 @@ def PrintNameStats():
           IncCounter(char_counters, c)
   print
   for pname in name_pnames:
-    print ("'%s' character names: %d / %d bytes" %
-           (pname, counts[pname], total_lengths[pname]))
-  print "%d total bytes in character names" % sum(total_lengths.itervalues())
-  print ("%d name-characters: %s" %
-         (len(name_chars), "".join(sorted(name_chars))))
-  print "%d digits 0-9" % num_digits
-  count_chars = [(count, c) for (c, count) in char_counters.iteritems()]
+    print("'%s' character names: %d / %d bytes" %
+          (pname, counts[pname], total_lengths[pname]))
+  print("%d total bytes in character names" % sum(total_lengths.itervalues()))
+  print("%d name-characters: %s" %
+        (len(name_chars), "".join(sorted(name_chars))))
+  print("%d digits 0-9" % num_digits)
+  count_chars = [(count, c) for (c, count) in char_counters.items()]
   count_chars.sort(reverse=True)
   for cc in count_chars:
-    print "name-chars: %6d * '%s'" % cc
-  print "max. name length: %d" % max_length
-  print "max. length of all (names+NUL) per cp: %d" % max_per_cp
+    print("name-chars: %6d * '%s'" % cc)
+  print("max. name length: %d" % max_length)
+  print("max. length of all (names+NUL) per cp: %d" % max_per_cp)
 
   token_lengths = sum([len(t) + 1 for t in token_counters])
-  print ("%d total tokens, %d bytes with NUL" %
-         (len(token_counters), token_lengths))
+  print("%d total tokens, %d bytes with NUL" %
+        (len(token_counters), token_lengths))
 
   counts_tokens = []
-  for (token, count) in token_counters.iteritems():
+  for (token, count) in token_counters.items():
     # If we encode a token with a 1-byte code, then we save len(t)-1 bytes each time
     # but have to store the token string itself with a length or terminator byte,
     # plus a 2-byte entry in an token index table.
@@ -1812,7 +1812,7 @@ def PrintNameStats():
     if savings > 0:
       counts_tokens.append((savings, count, token))
   counts_tokens.sort(reverse=True)
-  print "%d tokens might save space with 1-byte codes" % len(counts_tokens)
+  print("%d tokens might save space with 1-byte codes" % len(counts_tokens))
 
   # Codes=bytes, 40 byte values for name_chars.
   # That leaves 216 units for 1-byte tokens or lead bytes of 2-byte tokens.
@@ -1823,11 +1823,11 @@ def PrintNameStats():
   max_lead = (token_lengths + 255) / 256
   max_token_units = num_units - len(name_chars)
   results = []
-  for num_lead in xrange(min(max_lead, max_token_units) + 1):
+  for num_lead in range(min(max_lead, max_token_units) + 1):
     max1 = max_token_units - num_lead
     ct = counts_tokens[:max1]
     tokens1 = set([t for (s, c, t) in ct])
-    for (token, count) in token_counters.iteritems():
+    for (token, count) in token_counters.items():
       if token in tokens1: continue
       # If we encode a token with a 2-byte code, then we save len(t)-2 bytes each time
       # but have to store the token string itself with a length or terminator byte.
@@ -1838,7 +1838,7 @@ def PrintNameStats():
     # A 2-byte-code-token index cannot be limit_t_lengths or higher.
     limit_t_lengths = num_lead * 256
     token2_index = 0
-    for i in xrange(max1, len(ct)):
+    for i in range(max1, len(ct)):
       if token2_index >= limit_t_lengths:
         del ct[i:]
         break
@@ -1850,17 +1850,17 @@ def PrintNameStats():
   best = max(results)  # (cumul_savings, max1, ct)
 
   max1 = best[1]
-  print ("maximum savings: %d bytes with %d 1-byte codes & %d lead bytes" %
+  print("maximum savings: %d bytes with %d 1-byte codes & %d lead bytes" %
          (best[0], max1, max_token_units - max1))
   counts_tokens = best[2]
   cumul_savings = 0
-  for i in xrange(len(counts_tokens)):
+  for i in range(len(counts_tokens)):
     n = 1 if i < max1 else 2
     i1 = i + 1
     t = counts_tokens[i]
     cumul_savings += t[0]
     if i1 <= 250 or (i1 % 100) == 0 or i1 == len(counts_tokens):
-      print (("%04d. cumul. %6d bytes save %6d bytes from " +
+      print(("%04d. cumul. %6d bytes save %6d bytes from " +
               "%5d * %d-byte token for %2d='%s'") %
           (i1, cumul_savings, t[0], t[1], n, len(t[2]), t[2]))
 
@@ -2154,7 +2154,7 @@ def main():
     only_ppucd = True
     icu_src_root = "/tmp/ppucd"
   else:
-    print ("Usage: %s  path/to/UCD/root  path/to/ICU/src/root" % sys.argv[0])
+    print("Usage: %s  path/to/UCD/root  path/to/ICU/src/root" % sys.argv[0])
     return
   icu4c_src_root = os.path.join(icu_src_root, "icu4c")
   icu_tools_root = os.path.join(icu_src_root, "tools")
@@ -2166,7 +2166,7 @@ def main():
   # Parse the processed files in a particular order.
   for files in _files_to_parse:
     for (basename, path, parser) in files:
-      print "Parsing %s" % basename
+      print("Parsing %s" % basename)
       value = _files[basename]
       # Unicode data files are in UTF-8.
       charset = "UTF-8"
@@ -2181,7 +2181,7 @@ def main():
   _null_or_defaults.update(_defaults)
   # Every Catalog and Enumerated property must have a default value,
   # from a @missing line. "nv" = "null value".
-  pnv = [pname for (pname, nv) in _null_or_defaults.iteritems() if nv == "??"]
+  pnv = [pname for (pname, nv) in _null_or_defaults.items() if nv == "??"]
   if pnv:
     raise Exception("no default values (@missing lines) for " +
                     "some Catalog or Enumerated properties: %s " % pnv)
