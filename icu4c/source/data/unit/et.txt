@@ -134,6 +134,30 @@ et{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} {1} kohta"}
+            power2{
+                one{
+                    _{
+                        _{"ruut{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"ruut{0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"kuup{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kuup{0}"}
+                    }
+                }
+            }
             times{"{0}⋅{1}"}
         }
         concentr{

@@ -134,6 +134,30 @@ ca{
             10p6{"megà{0}"}
             10p9{"gigà{0}"}
             per{"{0} per {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} quadrat"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} quadrats"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cúbic"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cúbics"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

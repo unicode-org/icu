@@ -55,6 +55,20 @@ zh_Hant_HK{
             10p21{"{0} 澤米"}
             10p6{"{0} 百萬米"}
             per{"{0}每{1}"}
+            power2{
+                other{
+                    _{
+                        _{"{0}二次方"}
+                    }
+                }
+            }
+            power3{
+                other{
+                    _{
+                        _{"{0}三次方"}
+                    }
+                }
+            }
         }
         concentr{
             millimole-per-liter{

@@ -133,6 +133,30 @@ tk{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{1} başyna {0}"}
+            power2{
+                one{
+                    _{
+                        _{"kwadrat {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kwadrat {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"kub {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kub {0}"}
+                    }
+                }
+            }
             times{"{0}.{1}"}
         }
         concentr{

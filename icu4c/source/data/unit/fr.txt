@@ -134,6 +134,42 @@ fr{
             10p6{"méga{0}"}
             10p9{"giga{0}"}
             per{"{0} par {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} carré"}
+                    }
+                    feminine{
+                        _{"{0} carrée"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} carrés"}
+                    }
+                    feminine{
+                        _{"{0} carrées"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cube"}
+                    }
+                    feminine{
+                        _{"{0} cube"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cubes"}
+                    }
+                    feminine{
+                        _{"{0} cubes"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

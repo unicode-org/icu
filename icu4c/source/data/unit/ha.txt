@@ -121,6 +121,30 @@ ha{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} a {1}"}
+            power2{
+                one{
+                    _{
+                        _{"sikwaya {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"sikwaya {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"kubic {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kubic {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

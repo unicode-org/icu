@@ -134,6 +134,30 @@ sq{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} në {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} katror"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} katror"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} kub"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} kub"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

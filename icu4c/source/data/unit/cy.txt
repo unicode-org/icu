@@ -202,6 +202,70 @@ cy{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0}/{1}"}
+            power2{
+                few{
+                    _{
+                        _{"{0} sgwâr"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} sgwâr"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} sgwâr"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} sgwâr"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} sgwâr"}
+                    }
+                }
+                zero{
+                    _{
+                        _{"{0} sgwâr"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"{0} ciwbig"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} ciwbig"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} ciwbig"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} ciwbig"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} ciwbig"}
+                    }
+                }
+                zero{
+                    _{
+                        _{"{0} ciwbig"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

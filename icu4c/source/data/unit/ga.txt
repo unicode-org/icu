@@ -178,6 +178,60 @@ ga{
             10p6{"meigi{0}"}
             10p9{"gigi{0}"}
             per{"{0} sa {1}"}
+            power2{
+                few{
+                    _{
+                        _{"{0} chearnacha"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} chearnacha"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} cearnaithe"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} chearnaithe"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} chearnacha"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"{0} chiúbacha"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} chiúbacha"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} ciúbach"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} ciúbach"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} chiúbacha"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

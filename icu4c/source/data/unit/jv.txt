@@ -113,6 +113,20 @@ jv{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} saben {1}"}
+            power2{
+                other{
+                    _{
+                        _{"pesagi {0}"}
+                    }
+                }
+            }
+            power3{
+                other{
+                    _{
+                        _{"kubik {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

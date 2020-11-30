@@ -151,6 +151,40 @@ hr{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0}/{1}"}
+            power2{
+                few{
+                    _{
+                        _{"četvorna {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"četvorni {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"četvornih {0}"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"kubna {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"kubni {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kubnih {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

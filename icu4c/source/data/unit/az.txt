@@ -134,6 +134,30 @@ az{
             10p6{"meqa{0}"}
             10p9{"giqa{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"kvadrat {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kvadrat {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"kub {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kub {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

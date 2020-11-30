@@ -168,6 +168,50 @@ lt{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0}/{1}"}
+            power2{
+                few{
+                    _{
+                        _{"{0} kvadratu"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} kvadratu"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} kvadratu"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} kvadratu"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"{0} kubu"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} kubu"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} kubu"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} kubu"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

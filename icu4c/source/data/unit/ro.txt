@@ -151,6 +151,40 @@ ro{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} pe {1}"}
+            power2{
+                few{
+                    _{
+                        _{"{0} pătrați/pătrate"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} pătrat/ă"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} pătrați/pătrate"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"{0} cubi"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} cub"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cubi"}
+                    }
+                }
+            }
             times{"{0}-{1}"}
         }
         concentr{

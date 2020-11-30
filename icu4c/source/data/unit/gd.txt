@@ -168,6 +168,50 @@ gd{
             10p6{"meaga-{0}"}
             10p9{"giga-{0}"}
             per{"{0} / {1}"}
+            power2{
+                few{
+                    _{
+                        _{"{0} ceàrnagach"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} ceàrnagach"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} ceàrnagach"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} cheàrnagach"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"{0} ciùbach"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} ciùbach"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} ciùbach"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} chiùbach"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
