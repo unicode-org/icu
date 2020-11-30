@@ -126,6 +126,30 @@ af{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} per {1}"}
+            power2{
+                one{
+                    _{
+                        _{"vierkante {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"vierkante {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"kubieke {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kubieke {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

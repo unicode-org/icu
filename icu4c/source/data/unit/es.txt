@@ -134,6 +134,42 @@ es{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} por {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} cuadrado"}
+                    }
+                    feminine{
+                        _{"{0} cuadrada"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cuadrados"}
+                    }
+                    feminine{
+                        _{"{0} cuadradas"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cúbico"}
+                    }
+                    feminine{
+                        _{"{0} cúbica"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cúbicos"}
+                    }
+                    feminine{
+                        _{"{0} cúbicas"}
+                    }
+                }
+            }
             times{"{0}⋅{1}"}
         }
         concentr{
@@ -1086,6 +1122,30 @@ es{
             10p6{"M{0}"}
             10p9{"G{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+            }
             times{"{0}⋅{1}"}
         }
         concentr{
@@ -1504,6 +1564,30 @@ es{
             10p6{"M{0}"}
             10p9{"G{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+            }
             times{"{0}⋅{1}"}
         }
         concentr{

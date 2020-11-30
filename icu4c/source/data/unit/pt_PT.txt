@@ -44,6 +44,30 @@ pt_PT{
             10p3{"quiló{0}"}
             10p6{"megâ{0}"}
             10p9{"gigâ{0}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} quadrado"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} quadrados"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cúbico"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cúbicos"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

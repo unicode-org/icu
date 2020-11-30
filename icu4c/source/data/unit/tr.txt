@@ -134,6 +134,30 @@ tr{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}kare"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}kare"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}küp"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}küp"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

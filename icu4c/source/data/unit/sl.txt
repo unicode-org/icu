@@ -168,6 +168,50 @@ sl{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} na {1}"}
+            power2{
+                few{
+                    _{
+                        _{"kvadratni {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"kvadratni {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kvadratnih {0}"}
+                    }
+                }
+                two{
+                    _{
+                        _{"kvadratna {0}"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"kubični {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"kubični {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kubičnih {0}"}
+                    }
+                }
+                two{
+                    _{
+                        _{"kubična {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

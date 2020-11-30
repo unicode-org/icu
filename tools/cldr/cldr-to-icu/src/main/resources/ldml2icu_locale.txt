@@ -326,6 +326,19 @@
 //ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /unitsShort/compound/$1
 //ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /units/compound/$1
 
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /unitsNarrow/compound/$1/$2/$3/$4
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /unitsShort/compound/$1/$2/$3/$4
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /units/compound/$1/$2/$3/$4
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@case="(%A)"] ; /unitsNarrow/compound/$1/$2/_/$3
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@case="(%A)"] ; /unitsShort/compound/$1/$2/_/$3
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@case="(%A)"] ; /units/compound/$1/$2/_/$3
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"] ; /unitsNarrow/compound/$1/$2/$3/_
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"] ; /unitsShort/compound/$1/$2/$3/_
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"] ; /units/compound/$1/$2/$3/_
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"] ; /unitsNarrow/compound/$1/$2/_/_
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"] ; /unitsShort/compound/$1/$2/_/_
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"] ; /units/compound/$1/$2/_/_
+
 //ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /unitsNarrow/compound/$1
 //ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /unitsShort/compound/$1
 //ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /units/compound/$1
@@ -349,5 +362,5 @@
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/alias[@source="locale"][@path="../unit[@type='(\w++)-(%A)']"] ; /units/$1/$2:alias ; values=/LOCALE/units/$3/$4
 
 //ldml/characterLabels/characterLabelPattern[@type="(%A)"][@count="(%A)"] ; /characterLabelPattern/$1/$2
-//ldml/characterLabels/characterLabelPattern[@type="(%A)"] ; /characterLabelPattern/$1 
-//ldml/characterLabels/characterLabel[@type="(%A)"] ; /characterLabel/$1 
+//ldml/characterLabels/characterLabelPattern[@type="(%A)"] ; /characterLabelPattern/$1
+//ldml/characterLabels/characterLabel[@type="(%A)"] ; /characterLabel/$1

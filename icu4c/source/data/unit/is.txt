@@ -134,6 +134,30 @@ is{
             10p6{"mega{0}"}
             10p9{"gíga{0}"}
             per{"{0} á {1}"}
+            power2{
+                one{
+                    _{
+                        _{"fer{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"fer{0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"rúm{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"rúm{0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

@@ -134,6 +134,30 @@ gl{
             10p6{"mega{0}"}
             10p9{"xiga{0}"}
             per{"{0} por {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} cadrado"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cadrados"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cúbico"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cúbicos"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

@@ -91,6 +91,20 @@ qu{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} sapa {1}"}
+            power2{
+                other{
+                    _{
+                        _{"cuadrado {0}"}
+                    }
+                }
+            }
+            power3{
+                other{
+                    _{
+                        _{"cubico {0}"}
+                    }
+                }
+            }
         }
         concentr{
             permillion{

@@ -164,6 +164,242 @@ pl{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} na {1}"}
+            power2{
+                few{
+                    _{
+                        _{"{0} kwadratowe"}
+                        accusative{"{0} kwadratowe"}
+                        dative{"{0} kwadratowym"}
+                        genitive{"{0} kwadratowych"}
+                        instrumental{"{0} kwadratowymi"}
+                        locative{"{0} kwadratowych"}
+                        vocative{"{0} kwadratowe"}
+                    }
+                    feminine{
+                        _{"{0} kwadratowe"}
+                        accusative{"{0} kwadratowe"}
+                        dative{"{0} kwadratowym"}
+                        genitive{"{0} kwadratowych"}
+                        instrumental{"{0} kwadratowymi"}
+                        locative{"{0} kwadratowych"}
+                        vocative{"{0} kwadratowe"}
+                    }
+                    inanimate{
+                        _{"{0} kwadratowe"}
+                        accusative{"{0} kwadratowe"}
+                        dative{"{0} kwadratowym"}
+                        genitive{"{0} kwadratowych"}
+                        instrumental{"{0} kwadratowymi"}
+                        locative{"{0} kwadratowych"}
+                        vocative{"{0} kwadratowe"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} kwadratowych"}
+                        accusative{"{0} kwadratowych"}
+                        dative{"{0} kwadratowym"}
+                        genitive{"{0} kwadratowych"}
+                        instrumental{"{0} kwadratowymi"}
+                        locative{"{0} kwadratowych"}
+                        vocative{"{0} kwadratowych"}
+                    }
+                    feminine{
+                        _{"{0} kwadratowych"}
+                        accusative{"{0} kwadratowych"}
+                        dative{"{0} kwadratowym"}
+                        genitive{"{0} kwadratowych"}
+                        instrumental{"{0} kwadratowymi"}
+                        locative{"{0} kwadratowych"}
+                        vocative{"{0} kwadratowych"}
+                    }
+                    inanimate{
+                        _{"{0} kwadratowych"}
+                        accusative{"{0} kwadratowych"}
+                        dative{"{0} kwadratowym"}
+                        genitive{"{0} kwadratowych"}
+                        instrumental{"{0} kwadratowymi"}
+                        locative{"{0} kwadratowych"}
+                        vocative{"{0} kwadratowych"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} kwadratowe"}
+                        accusative{"{0} kwadratowe"}
+                        dative{"{0} kwadratowemu"}
+                        genitive{"{0} kwadratowego"}
+                        instrumental{"{0} kwadratowym"}
+                        locative{"{0} kwadratowym"}
+                        vocative{"{0} kwadratowe"}
+                    }
+                    feminine{
+                        _{"{0} kwadratowa"}
+                        accusative{"{0} kwadratową"}
+                        dative{"{0} kwadratowej"}
+                        genitive{"{0} kwadratowej"}
+                        instrumental{"{0} kwadratową"}
+                        locative{"{0} kwadratowej"}
+                        vocative{"{0} kwadratowa"}
+                    }
+                    inanimate{
+                        _{"{0} kwadratowy"}
+                        accusative{"{0} kwadratowy"}
+                        dative{"{0} kwadratowemu"}
+                        genitive{"{0} kwadratowego"}
+                        instrumental{"{0} kwadratowym"}
+                        locative{"{0} kwadratowym"}
+                        vocative{"{0} kwadratowy"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} kwadratowego"}
+                        accusative{"{0} kwadratowego"}
+                        dative{"{0} kwadratowego"}
+                        genitive{"{0} kwadratowego"}
+                        instrumental{"{0} kwadratowego"}
+                        locative{"{0} kwadratowego"}
+                        vocative{"{0} kwadratowego"}
+                    }
+                    feminine{
+                        _{"{0} kwadratowej"}
+                        accusative{"{0} kwadratowej"}
+                        dative{"{0} kwadratowej"}
+                        genitive{"{0} kwadratowej"}
+                        instrumental{"{0} kwadratowej"}
+                        locative{"{0} kwadratowej"}
+                        vocative{"{0} kwadratowej"}
+                    }
+                    inanimate{
+                        _{"{0} kwadratowego"}
+                        accusative{"{0} kwadratowego"}
+                        dative{"{0} kwadratowego"}
+                        genitive{"{0} kwadratowego"}
+                        instrumental{"{0} kwadratowego"}
+                        locative{"{0} kwadratowego"}
+                        vocative{"{0} kwadratowego"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"{0} sześcienne"}
+                        accusative{"{0} sześcienne"}
+                        dative{"{0} sześciennym"}
+                        genitive{"{0} sześciennych"}
+                        instrumental{"{0} sześciennymi"}
+                        locative{"{0} sześciennych"}
+                        vocative{"{0} sześcienne"}
+                    }
+                    feminine{
+                        _{"{0} sześcienne"}
+                        accusative{"{0} sześcienne"}
+                        dative{"{0} sześciennym"}
+                        genitive{"{0} sześciennych"}
+                        instrumental{"{0} sześciennymi"}
+                        locative{"{0} sześciennych"}
+                        vocative{"{0} sześcienne"}
+                    }
+                    inanimate{
+                        _{"{0} sześcienne"}
+                        accusative{"{0} sześcienne"}
+                        dative{"{0} sześciennym"}
+                        genitive{"{0} sześciennych"}
+                        instrumental{"{0} sześciennymi"}
+                        locative{"{0} sześciennych"}
+                        vocative{"{0} sześcienne"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} sześciennych"}
+                        accusative{"{0} sześciennych"}
+                        dative{"{0} sześciennym"}
+                        genitive{"{0} sześciennych"}
+                        instrumental{"{0} sześciennymi"}
+                        locative{"{0} sześciennych"}
+                        vocative{"{0} sześciennych"}
+                    }
+                    feminine{
+                        _{"{0} sześciennych"}
+                        accusative{"{0} sześciennych"}
+                        dative{"{0} sześciennym"}
+                        genitive{"{0} sześciennych"}
+                        instrumental{"{0} sześciennymi"}
+                        locative{"{0} sześciennych"}
+                        vocative{"{0} sześciennych"}
+                    }
+                    inanimate{
+                        _{"{0} sześciennych"}
+                        accusative{"{0} sześciennych"}
+                        dative{"{0} sześciennym"}
+                        genitive{"{0} sześciennych"}
+                        instrumental{"{0} sześciennymi"}
+                        locative{"{0} sześciennych"}
+                        vocative{"{0} sześciennych"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} sześcienne"}
+                        accusative{"{0} sześcienne"}
+                        dative{"{0} sześciennemu"}
+                        genitive{"{0} sześciennego"}
+                        instrumental{"{0} sześciennym"}
+                        locative{"{0} sześciennym"}
+                        vocative{"{0} sześcienne"}
+                    }
+                    feminine{
+                        _{"{0} sześcienna"}
+                        accusative{"{0} sześcienną"}
+                        dative{"{0} sześciennej"}
+                        genitive{"{0} sześciennej"}
+                        instrumental{"{0} sześcienną"}
+                        locative{"{0} sześciennej"}
+                        vocative{"{0} sześcienna"}
+                    }
+                    inanimate{
+                        _{"{0} sześcienny"}
+                        accusative{"{0} sześcienny"}
+                        dative{"{0} sześciennemu"}
+                        genitive{"{0} sześciennego"}
+                        instrumental{"{0} sześciennym"}
+                        locative{"{0} sześciennym"}
+                        vocative{"{0} sześcienny"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} sześciennego"}
+                        accusative{"{0} sześciennego"}
+                        dative{"{0} sześciennego"}
+                        genitive{"{0} sześciennego"}
+                        instrumental{"{0} sześciennego"}
+                        locative{"{0} sześciennego"}
+                        vocative{"{0} sześciennego"}
+                    }
+                    feminine{
+                        _{"{0} sześciennej"}
+                        accusative{"{0} sześciennej"}
+                        dative{"{0} sześciennej"}
+                        genitive{"{0} sześciennej"}
+                        instrumental{"{0} sześciennej"}
+                        locative{"{0} sześciennej"}
+                        vocative{"{0} sześciennej"}
+                    }
+                    inanimate{
+                        _{"{0} sześciennego"}
+                        accusative{"{0} sześciennego"}
+                        dative{"{0} sześciennego"}
+                        genitive{"{0} sześciennego"}
+                        instrumental{"{0} sześciennego"}
+                        locative{"{0} sześciennego"}
+                        vocative{"{0} sześciennego"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

@@ -168,6 +168,50 @@ sk{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0}/{1}"}
+            power2{
+                few{
+                    _{
+                        _{"štvorcové {0}"}
+                    }
+                }
+                many{
+                    _{
+                        _{"štvorcového {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"štvorcový {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"štvorcových {0}"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"kubické {0}"}
+                    }
+                }
+                many{
+                    _{
+                        _{"kubického {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"kubický {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kubických {0}"}
+                    }
+                }
+            }
             times{"{0}{1}"}
         }
         concentr{

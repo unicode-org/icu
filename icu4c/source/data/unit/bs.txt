@@ -131,6 +131,40 @@ bs{
             1024p7{"zebi{0}"}
             1024p8{"yobe{0}"}
             per{"{0}/{1}"}
+            power2{
+                few{
+                    _{
+                        _{"kvadratna {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"kvadratni {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kvadratnih {0}"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"kubna {0}"}
+                    }
+                }
+                one{
+                    _{
+                        _{"kubni {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kubnih {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

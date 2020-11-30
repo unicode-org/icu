@@ -102,6 +102,20 @@ vi{
             10p3{"kilo{0}"}
             10p6{"mega{0}"}
             10p9{"giga{0}"}
+            power2{
+                other{
+                    _{
+                        _{"{0} vuông"}
+                    }
+                }
+            }
+            power3{
+                other{
+                    _{
+                        _{"{0} khối"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

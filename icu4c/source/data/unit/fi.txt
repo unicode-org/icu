@@ -134,6 +134,30 @@ fi{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"neliö{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"neliö{0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"kuutio{0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"kuutio{0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
@@ -1073,6 +1097,30 @@ fi{
         }
         compound{
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
@@ -1960,6 +2008,30 @@ fi{
         }
         compound{
             per{"{0}/{1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}²"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0}³"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

@@ -134,6 +134,42 @@ it{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} al {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} quadrato"}
+                    }
+                    feminine{
+                        _{"{0} quadrata"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} quadrati"}
+                    }
+                    feminine{
+                        _{"{0} quadrate"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cubo"}
+                    }
+                    feminine{
+                        _{"{0} cubica"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cubi"}
+                    }
+                    feminine{
+                        _{"{0} cubiche"}
+                    }
+                }
+            }
             times{"{0} {1}"}
         }
         concentr{

@@ -105,6 +105,20 @@ kea{
             10p6{"mega{0}"}
             10p9{"jiga{0}"}
             per{"{0} pur {1}"}
+            power2{
+                other{
+                    _{
+                        _{"{0} kuadradu"}
+                    }
+                }
+            }
+            power3{
+                other{
+                    _{
+                        _{"{0} kúbiku"}
+                    }
+                }
+            }
             times{"{0}-{1}"}
         }
         concentr{

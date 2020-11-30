@@ -169,6 +169,60 @@ br{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} dre {1}"}
+            power2{
+                few{
+                    _{
+                        _{"{0} karrez"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} karrez"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} karrez"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} karrez"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} karrez"}
+                    }
+                }
+            }
+            power3{
+                few{
+                    _{
+                        _{"{0} diñs"}
+                    }
+                }
+                many{
+                    _{
+                        _{"{0} diñs"}
+                    }
+                }
+                one{
+                    _{
+                        _{"{0} diñs"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} diñs"}
+                    }
+                }
+                two{
+                    _{
+                        _{"{0} diñs"}
+                    }
+                }
+            }
             times{"{0}-{1}"}
         }
         concentr{

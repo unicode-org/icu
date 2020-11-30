@@ -113,6 +113,20 @@ ms{
             10p6{"mega{0}"}
             10p9{"giga{0}"}
             per{"{0} per {1}"}
+            power2{
+                other{
+                    _{
+                        _{"{0} persegi"}
+                    }
+                }
+            }
+            power3{
+                other{
+                    _{
+                        _{"{0} padu"}
+                    }
+                }
+            }
         }
         concentr{
             karat{

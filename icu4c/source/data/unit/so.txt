@@ -107,6 +107,30 @@ so{
             10p18{"exa{0}"}
             10p21{"zetta{0}"}
             10p24{"yotta{0}"}
+            power2{
+                one{
+                    _{
+                        _{"laba-jibaar {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"laba-jibaar {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"saddex-jibaar {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"saddex-jibaar {0}"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
