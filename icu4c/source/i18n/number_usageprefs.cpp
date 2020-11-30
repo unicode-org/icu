@@ -116,9 +116,9 @@ void mixedMeasuresToMicros(const MaybeStackVector<Measure> &measures, DecimalQua
         MeasureUnitImpl temp;
         const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(micros->outputUnit, temp, status);
         U_ASSERT(U_SUCCESS(status));
-        U_ASSERT(measures.length() == impl.units.length());
+        U_ASSERT(measures.length() == impl.singleUnits.length());
         for (int32_t i = 0; i < measures.length(); i++) {
-            U_ASSERT(measures[i]->getUnit() == impl.units[i]->build(status));
+            U_ASSERT(measures[i]->getUnit() == impl.singleUnits[i]->build(status));
         }
         (void)impl;
 #endif

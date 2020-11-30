@@ -4046,8 +4046,8 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
     status.assertSuccess();
     assertEquals("mu1 initial identifier", "", mu1.identifier.data());
     assertEquals("mu1 initial complexity", UMEASURE_UNIT_SINGLE, mu1.complexity);
-    assertEquals("mu1 initial units length", 1, mu1.units.length());
-    assertEquals("mu1 initial units[0]", "meter", mu1.units[0]->getSimpleUnitID());
+    assertEquals("mu1 initial units length", 1, mu1.singleUnits.length());
+    assertEquals("mu1 initial units[0]", "meter", mu1.singleUnits[0]->getSimpleUnitID());
 
     // Producing identifier via build(): the std::move() means mu1 gets modified
     // while it also gets assigned to tmp's internal fImpl.
@@ -4055,8 +4055,8 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
     status.assertSuccess();
     assertEquals("mu1 post-move-build identifier", "meter", mu1.identifier.data());
     assertEquals("mu1 post-move-build complexity", UMEASURE_UNIT_SINGLE, mu1.complexity);
-    assertEquals("mu1 post-move-build units length", 1, mu1.units.length());
-    assertEquals("mu1 post-move-build units[0]", "meter", mu1.units[0]->getSimpleUnitID());
+    assertEquals("mu1 post-move-build units length", 1, mu1.singleUnits.length());
+    assertEquals("mu1 post-move-build units[0]", "meter", mu1.singleUnits[0]->getSimpleUnitID());
     assertEquals("MeasureUnit tmp identifier", "meter", tmp.getIdentifier());
 
     // This temporary variable is used when forMeasureUnit's first parameter
@@ -4066,8 +4066,8 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
     status.assertSuccess();
     assertEquals("tmpMemory identifier", "", tmpMemory.identifier.data());
     assertEquals("tmpMemory complexity", UMEASURE_UNIT_SINGLE, tmpMemory.complexity);
-    assertEquals("tmpMemory units length", 1, tmpMemory.units.length());
-    assertEquals("tmpMemory units[0]", "meter", tmpMemory.units[0]->getSimpleUnitID());
+    assertEquals("tmpMemory units length", 1, tmpMemory.singleUnits.length());
+    assertEquals("tmpMemory units[0]", "meter", tmpMemory.singleUnits[0]->getSimpleUnitID());
     assertEquals("tmpImplRef identifier", "", tmpImplRef.identifier.data());
     assertEquals("tmpImplRef complexity", UMEASURE_UNIT_SINGLE, tmpImplRef.complexity);
 
@@ -4076,18 +4076,39 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
     mu1 = std::move(mu2);
     assertEquals("mu1 = move(mu2): identifier", "", mu1.identifier.data());
     assertEquals("mu1 = move(mu2): complexity", UMEASURE_UNIT_COMPOUND, mu1.complexity);
-    assertEquals("mu1 = move(mu2): units length", 2, mu1.units.length());
-    assertEquals("mu1 = move(mu2): units[0]", "newton", mu1.units[0]->getSimpleUnitID());
-    assertEquals("mu1 = move(mu2): units[1]", "meter", mu1.units[1]->getSimpleUnitID());
+    assertEquals("mu1 = move(mu2): units length", 2, mu1.singleUnits.length());
+    assertEquals("mu1 = move(mu2): units[0]", "newton", mu1.singleUnits[0]->getSimpleUnitID());
+    assertEquals("mu1 = move(mu2): units[1]", "meter", mu1.singleUnits[1]->getSimpleUnitID());
 
     mu1 = MeasureUnitImpl::forIdentifier("hour-and-minute-and-second", status);
     status.assertSuccess();
     assertEquals("mu1 = HMS: identifier", "", mu1.identifier.data());
     assertEquals("mu1 = HMS: complexity", UMEASURE_UNIT_MIXED, mu1.complexity);
-    assertEquals("mu1 = HMS: units length", 3, mu1.units.length());
-    assertEquals("mu1 = HMS: units[0]", "hour", mu1.units[0]->getSimpleUnitID());
-    assertEquals("mu1 = HMS: units[1]", "minute", mu1.units[1]->getSimpleUnitID());
-    assertEquals("mu1 = HMS: units[2]", "second", mu1.units[2]->getSimpleUnitID());
+    assertEquals("mu1 = HMS: units length", 3, mu1.singleUnits.length());
+    assertEquals("mu1 = HMS: units[0]", "hour", mu1.singleUnits[0]->getSimpleUnitID());
+    assertEquals("mu1 = HMS: units[1]", "minute", mu1.singleUnits[1]->getSimpleUnitID());
+    assertEquals("mu1 = HMS: units[2]", "second", mu1.singleUnits[2]->getSimpleUnitID());
+
+    MeasureUnitImpl m2 = MeasureUnitImpl::forIdentifier("", status);
+    m2.appendSingleUnit(SingleUnitImpl::forMeasureUnit(MeasureUnit::getMeter(), status), status);
+    m2.appendSingleUnit(SingleUnitImpl::forMeasureUnit(MeasureUnit::getMeter(), status), status);
+    status.assertSuccess();
+    assertEquals("append meter twice: complexity", UMEASURE_UNIT_SINGLE, m2.complexity);
+    assertEquals("append meter twice: units length", 1, m2.singleUnits.length());
+    assertEquals("append meter twice: units[0]", "meter", m2.singleUnits[0]->getSimpleUnitID());
+    assertEquals("append meter twice: identifier", "square-meter",
+                 std::move(m2).build(status).getIdentifier());
+
+    MeasureUnitImpl mcm = MeasureUnitImpl::forIdentifier("", status);
+    mcm.appendSingleUnit(SingleUnitImpl::forMeasureUnit(MeasureUnit::getMeter(), status), status);
+    mcm.appendSingleUnit(SingleUnitImpl::forMeasureUnit(MeasureUnit::getCentimeter(), status), status);
+    status.assertSuccess();
+    assertEquals("append meter & centimeter: complexity", UMEASURE_UNIT_COMPOUND, mcm.complexity);
+    assertEquals("append meter & centimeter: units length", 2, mcm.singleUnits.length());
+    assertEquals("append meter & centimeter: units[0]", "meter", mcm.singleUnits[0]->getSimpleUnitID());
+    assertEquals("append meter & centimeter: units[1]", "meter", mcm.singleUnits[1]->getSimpleUnitID());
+    assertEquals("append meter & centimeter: identifier", "centimeter-meter",
+                 std::move(mcm).build(status).getIdentifier());
 }
 
 

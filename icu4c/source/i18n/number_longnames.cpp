@@ -234,13 +234,13 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
         MeasureUnitImpl fullUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(unitRef, status);
         MeasureUnitImpl unit;
         MeasureUnitImpl perUnit;
-        for (int32_t i = 0; i < fullUnit.units.length(); i++) {
-            SingleUnitImpl *subUnit = fullUnit.units[i];
+        for (int32_t i = 0; i < fullUnit.singleUnits.length(); i++) {
+            SingleUnitImpl *subUnit = fullUnit.singleUnits[i];
             if (subUnit->dimensionality > 0) {
-                unit.append(*subUnit, status);
+                unit.appendSingleUnit(*subUnit, status);
             } else {
                 subUnit->dimensionality *= -1;
-                perUnit.append(*subUnit, status);
+                perUnit.appendSingleUnit(*subUnit, status);
             }
         }
         forCompoundUnit(loc, std::move(unit).build(status), std::move(perUnit).build(status), width,
@@ -420,12 +420,12 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
 
     MeasureUnitImpl temp;
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(mixedUnit, temp, status);
-    fillIn->fMixedUnitCount = impl.units.length();
+    fillIn->fMixedUnitCount = impl.singleUnits.length();
     fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
     for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
         // Grab data for each of the components.
         UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
-        getMeasureData(loc, impl.units[i]->build(status), width, unitData, status);
+        getMeasureData(loc, impl.singleUnits[i]->build(status), width, unitData, status);
     }
 
     UListFormatterWidth listWidth = ULISTFMT_WIDTH_SHORT;
