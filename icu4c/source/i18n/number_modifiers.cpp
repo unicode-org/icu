@@ -421,6 +421,20 @@ CurrencySpacingEnabledModifier::applyCurrencySpacing(FormattedStringBuilder &out
     return length;
 }
 
+int32_t CurrencySpacingEnabledModifier::applyCurrencySpacingToAffixPattern(
+        FormattedStringBuilder &output,
+        int32_t position,
+        bool currencyAfter,
+        const DecimalFormatSymbols &symbols,
+        UErrorCode& status) {
+    return applyCurrencySpacingAffix(
+        output,
+        position,
+        currencyAfter ? SUFFIX : PREFIX,
+        symbols,
+        status);
+}
+
 int32_t
 CurrencySpacingEnabledModifier::applyCurrencySpacingAffix(FormattedStringBuilder &output, int32_t index,
                                                           EAffix affix,
@@ -441,6 +455,7 @@ CurrencySpacingEnabledModifier::applyCurrencySpacingAffix(FormattedStringBuilder
     int numberCp = (affix == PREFIX) ? output.codePointAt(index) : output.codePointBefore(index);
     UnicodeSet numberUniset = getUnicodeSet(symbols, IN_NUMBER, affix, status);
     if (!numberUniset.contains(numberCp)) {
+        // TODO(ICU-21420): This doesn't hit "M" in "0 MUS$"
         return 0;
     }
     UnicodeString spacingString = getInsertString(symbols, affix, status);
