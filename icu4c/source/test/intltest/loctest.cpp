@@ -281,6 +281,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestSetUnicodeKeywordValueInLongLocale);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
     TESTCASE_AUTO(TestCanonicalize);
+    TESTCASE_AUTO(TestLeak21419);
     TESTCASE_AUTO_END;
 }
 
@@ -6386,4 +6387,10 @@ void LocaleTest::TestSetUnicodeKeywordValueNullInLongLocale() {
                   tag.data(), l.getName());
         }
     }
+}
+
+void LocaleTest::TestLeak21419() {
+    IcuTestErrorCode status(*this, "TestLeak21419");
+    Locale l = Locale("s-yU");
+    l.canonicalize(status);
 }
