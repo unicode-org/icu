@@ -40,6 +40,7 @@ import com.ibm.icu.dev.test.serializable.FormatHandler;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -3812,6 +3813,54 @@ public class MeasureUnitTest extends TestFmwk {
         MeasureUnit tmp = kilogram.withSIPrefix(MeasureUnit.SIPrefix.MILLI);
         assertEquals("Kilogram + milli should be milligram, got: " + tmp.getIdentifier(),
                 MeasureUnit.MILLIGRAM.getIdentifier(), tmp.getIdentifier());
+    }
+
+    @Test
+    public void TestInternalMeasureUnitImpl() {
+        MeasureUnitImpl mu1 = MeasureUnitImpl.forIdentifier("meter");
+        assertEquals("mu1 initial identifier", null, mu1.getIdentifier());
+        assertEquals("mu1 initial complexity", MeasureUnit.Complexity.SINGLE, mu1.getComplexity());
+        assertEquals("mu1 initial units length", 1, mu1.getSingleUnits().size());
+        assertEquals("mu1 initial units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
+
+        // Producing identifier via build(): the MeasureUnitImpl instance gets modified
+        // while it also gets assigned to tmp's internal measureUnitImpl.
+        MeasureUnit tmp = mu1.build();
+        assertEquals("mu1 post-build identifier", "meter", mu1.getIdentifier());
+        assertEquals("mu1 post-build complexity", MeasureUnit.Complexity.SINGLE, mu1.getComplexity());
+        assertEquals("mu1 post-build units length", 1, mu1.getSingleUnits().size());
+        assertEquals("mu1 post-build units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("MeasureUnit tmp identifier", "meter", tmp.getIdentifier());
+
+        mu1 = MeasureUnitImpl.forIdentifier("hour-and-minute-and-second");
+        assertEquals("mu1 = HMS: identifier", null, mu1.getIdentifier());
+        assertEquals("mu1 = HMS: complexity", MeasureUnit.Complexity.MIXED, mu1.getComplexity());
+        assertEquals("mu1 = HMS: units length", 3, mu1.getSingleUnits().size());
+        assertEquals("mu1 = HMS: units[0]", "hour", mu1.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("mu1 = HMS: units[1]", "minute", mu1.getSingleUnits().get(1).getSimpleUnitID());
+        assertEquals("mu1 = HMS: units[2]", "second", mu1.getSingleUnits().get(2).getSimpleUnitID());
+
+        MeasureUnitImpl m2 = MeasureUnitImpl.forIdentifier("meter");
+        m2.appendSingleUnit(MeasureUnit.METER.getCopyOfMeasureUnitImpl().getSingleUnitImpl());
+        assertEquals("append meter twice: complexity", MeasureUnit.Complexity.SINGLE, m2.getComplexity());
+        assertEquals("append meter twice: units length", 1, m2.getSingleUnits().size());
+        assertEquals("append meter twice: units[0]", "meter", m2.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("append meter twice: identifier", "square-meter", m2.build().getIdentifier());
+
+        MeasureUnitImpl mcm = MeasureUnitImpl.forIdentifier("meter");
+        mcm.appendSingleUnit(MeasureUnit.CENTIMETER.getCopyOfMeasureUnitImpl().getSingleUnitImpl());
+        assertEquals("append meter & centimeter: complexity", MeasureUnit.Complexity.COMPOUND, mcm.getComplexity());
+        assertEquals("append meter & centimeter: units length", 2, mcm.getSingleUnits().size());
+        assertEquals("append meter & centimeter: units[0]", "meter", mcm.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("append meter & centimeter: units[1]", "meter", mcm.getSingleUnits().get(1).getSimpleUnitID());
+        assertEquals("append meter & centimeter: identifier", "centimeter-meter", mcm.build().getIdentifier());
+
+        MeasureUnitImpl m2m = MeasureUnitImpl.forIdentifier("meter-square-meter");
+        assertEquals("meter-square-meter: complexity", MeasureUnit.Complexity.SINGLE, m2m.getComplexity());
+        assertEquals("meter-square-meter: units length", 1, m2m.getSingleUnits().size());
+        assertEquals("meter-square-meter: units[0]", "meter", m2m.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("meter-square-meter: identifier", "cubic-meter", m2m.build().getIdentifier());
+
     }
 
     private void verifyCompoundUnit(

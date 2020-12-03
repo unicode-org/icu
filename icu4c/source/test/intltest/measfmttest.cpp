@@ -4109,6 +4109,14 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
     assertEquals("append meter & centimeter: units[1]", "meter", mcm.singleUnits[1]->getSimpleUnitID());
     assertEquals("append meter & centimeter: identifier", "centimeter-meter",
                  std::move(mcm).build(status).getIdentifier());
+
+    MeasureUnitImpl m2m = MeasureUnitImpl::forIdentifier("meter-square-meter", status);
+    status.assertSuccess();
+    assertEquals("meter-square-meter: complexity", UMEASURE_UNIT_SINGLE, m2m.complexity);
+    assertEquals("meter-square-meter: units length", 1, m2m.singleUnits.length());
+    assertEquals("meter-square-meter: units[0]", "meter", m2m.singleUnits[0]->getSimpleUnitID());
+    assertEquals("meter-square-meter: identifier", "cubic-meter",
+                 std::move(m2m).build(status).getIdentifier());
 }
 
 
