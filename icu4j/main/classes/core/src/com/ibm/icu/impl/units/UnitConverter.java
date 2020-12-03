@@ -65,10 +65,10 @@ public class UnitConverter {
     private static void insertInMap(HashMap<String, Integer> dimensionMap, ArrayList<SingleUnitImpl> singleUnits, int multiplier) {
         for (SingleUnitImpl singleUnit :
                 singleUnits) {
-            if (dimensionMap.containsKey(singleUnit.getSimpleUnit())) {
-                dimensionMap.put(singleUnit.getSimpleUnit(), dimensionMap.get(singleUnit.getSimpleUnit()) + singleUnit.getDimensionality() * multiplier);
+            if (dimensionMap.containsKey(singleUnit.getSimpleUnitID())) {
+                dimensionMap.put(singleUnit.getSimpleUnitID(), dimensionMap.get(singleUnit.getSimpleUnitID()) + singleUnit.getDimensionality() * multiplier);
             } else {
-                dimensionMap.put(singleUnit.getSimpleUnit(), singleUnit.getDimensionality() * multiplier);
+                dimensionMap.put(singleUnit.getSimpleUnitID(), singleUnit.getDimensionality() * multiplier);
             }
         }
     }

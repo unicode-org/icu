@@ -20,7 +20,7 @@ public class SingleUnitImpl {
      * The default value is "", meaning the dimensionless unit:
      * isDimensionless() will return true, until index is changed.
      */
-    private String simpleUnit = "";
+    private String simpleUnitID = "";
     /**
      * Determine the power of the `SingleUnit`. For example, for "square-meter", the dimensionality will be `2`.
      * <p>
@@ -37,7 +37,7 @@ public class SingleUnitImpl {
         SingleUnitImpl result = new SingleUnitImpl();
         result.index = this.index;
         result.dimensionality = this.dimensionality;
-        result.simpleUnit = this.simpleUnit;
+        result.simpleUnitID = this.simpleUnitID;
         result.siPrefix = this.siPrefix;
 
         return result;
@@ -73,7 +73,7 @@ public class SingleUnitImpl {
         }
 
         result.append(this.getSiPrefix().getIdentifier());
-        result.append(this.getSimpleUnit());
+        result.append(this.getSimpleUnitID());
 
         return result.toString();
     }
@@ -123,13 +123,13 @@ public class SingleUnitImpl {
         return (compareTo(other) == 0);
     }
 
-    public String getSimpleUnit() {
-        return simpleUnit;
+    public String getSimpleUnitID() {
+        return simpleUnitID;
     }
 
     public void setSimpleUnit(int simpleUnitIndex, String[] simpleUnits) {
         this.index = simpleUnitIndex;
-        this.simpleUnit = simpleUnits[simpleUnitIndex];
+        this.simpleUnitID = simpleUnits[simpleUnitIndex];
     }
 
     public int getDimensionality() {
