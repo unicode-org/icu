@@ -20,8 +20,9 @@
 
   <licenses>
     <license>
-      <name>Unicode/ICU License</name>
-      <url>https://raw.githubusercontent.com/unicode-org/icu/master/icu4c/LICENSE</url>
+      <name>Unicode-DFS-2016</name>
+      <url>https://www.unicode.org/copyright.html</url>
+      <comment>Unicode License Agreement - Data Files and Software (2016)</comment>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -62,7 +63,6 @@
     <developer>
       <id>srl295</id>
       <name>Steven Loomis</name>
-      <organization>IBM Corporation</organization>
       <roles>
         <role>PMC Member</role>
       </roles>
