@@ -19,11 +19,7 @@
   <inceptionYear>2001</inceptionYear>
 
   <licenses>
-    <license>
-      <name>Unicode/ICU License</name>
-      <url>https://raw.githubusercontent.com/unicode-org/icu/master/icu4c/LICENSE</url>
-      <distribution>repo</distribution>
-    </license>
+    <license>Unicode-DFS-2016</license>
   </licenses>
 
   <developers>
@@ -62,7 +58,6 @@
     <developer>
       <id>srl295</id>
       <name>Steven Loomis</name>
-      <organization>IBM Corporation</organization>
       <roles>
         <role>PMC Member</role>
       </roles>
