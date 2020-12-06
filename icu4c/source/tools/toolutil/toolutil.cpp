@@ -30,6 +30,7 @@
 
 #include <stdio.h>
 #include <sys/stat.h>
+#include <time.h>
 #include "unicode/utypes.h"
 
 #ifndef U_TOOLUTIL_IMPLEMENTATION
@@ -67,7 +68,6 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "toolutil.h"
-#include "unicode/ucal.h"
 
 U_NAMESPACE_BEGIN
 
@@ -86,19 +86,11 @@ U_NAMESPACE_END
 static int32_t currentYear = -1;
 
 U_CAPI int32_t U_EXPORT2 getCurrentYear() {
-#if !UCONFIG_NO_FORMATTING
-    UErrorCode status=U_ZERO_ERROR;    
-    UCalendar *cal = NULL;
-
     if(currentYear == -1) {
-        cal = ucal_open(NULL, -1, NULL, UCAL_TRADITIONAL, &status);
-        ucal_setMillis(cal, ucal_getNow(), &status);
-        currentYear = ucal_get(cal, UCAL_YEAR, &status);
-        ucal_close(cal);
+        time_t now = time(nullptr);
+        tm *fields = gmtime(&now);
+        currentYear = 1900 + fields->tm_year;
     }
-#else
-    /* No formatting- no way to set the current year. */
-#endif
     return currentYear;
 }
 

@@ -32,6 +32,7 @@
 *.vcxproj.user
 *_debug
 *_release
+bazel-*
 cygicudata*
 libicu*
 libicutest*
