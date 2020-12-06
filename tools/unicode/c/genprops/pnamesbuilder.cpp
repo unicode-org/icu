@@ -552,7 +552,7 @@ int32_t PNamesPropertyNames::findProperty(int32_t property) const {
 
 UBool PNamesPropertyNames::containsName(BytesTrie &trie, const char *name) const {
     if(name==NULL) {
-        return FALSE;
+        return false;
     }
     UStringTrieResult result=USTRINGTRIE_NO_VALUE;
     char c;
@@ -563,7 +563,7 @@ UBool PNamesPropertyNames::containsName(BytesTrie &trie, const char *name) const
             continue;
         }
         if(!USTRINGTRIE_HAS_NEXT(result)) {
-            return FALSE;
+            return false;
         }
         result=trie.next((uint8_t)c);
     }
