@@ -776,6 +776,8 @@ For example, here is how an API might be tagged in various versions:
 
 ### ICU Binary Compatibility
 
+*Using ICU as an Operating System Level Library*
+
 ICU4C may be configured for use as a system library in an environment where
 applications that are built with one version of ICU must continue to run without
 change with later versions of the ICU shared library.
@@ -788,6 +790,7 @@ Here are the requirements for enabling binary compatibility for ICU4C:
 4. Applications must be built using an ICU that was configured for binary
    compatibility.
 5. Use ICU version 3.0 or later.
+6. Provide both “common” and “i18n” libraries, or build a combined library.
 
 **Stable APIs Only.** APIs in the ICU library that are tagged as being stable
 will be maintained in future versions of the library. Stable functions will
@@ -839,6 +842,32 @@ libraries that resulted from the `–-disable-renaming` ICU build
 **ICU Version 3.0 or Later.** Binary compatibility of ICU releases is supported
 beginning with ICU version 3.0. Older versions of ICU (2.8 and earlier) do not
 provide for binary compatibility between versions.
+
+**Provide both “common” and “i18n” libraries, or build a combined library.**
+It is rare but possible that services/APIs move from one library to another.
+For example, many years ago we moved the BreakIterator APIs from i18n to common,
+so that word titlecasing functions no longer needed separate code to find
+titlecasing or word break opportunities.
+
+More recently, the ListFormatter moved from the common library to i18n
+when its features grew beyond primitive patterns to also support
+FieldPosition and FormattedValue features.
+
+There is also a third, “io” library.
+It is possible that some of its functionality may be moved to the i18n or common
+libraries.
+(A likely candidate might be `operator<<(std::ostream& stream, const UnicodeString& s)`,
+although there are no actual plans to do so at the time of this writing.)
+
+One can build a combined library which provides the exports from
+both the “common” and “i18n” libraries,
+in order to provide a single library for linking against.
+
+This may be needed for some platforms where there is a strong relationship
+between an API and the library that implements it.
+For example, on Windows platforms, attempting to find an API that has been moved
+with a `LoadLibrary`/`GetProcAddress` approach will fail,
+unless you are using a combined library.
 
 #### Linking against multiple versions of ICU4C
 
