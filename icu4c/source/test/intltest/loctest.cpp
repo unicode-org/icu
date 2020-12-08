@@ -5584,6 +5584,31 @@ void LocaleTest::TestForLanguageTag() {
     Locale result_ext = Locale::forLanguageTag(tag_ext, status);
     status.errIfFailureAndReset("\"%s\"", tag_ext);
     assertEquals(tag_ext, loc_ext.getName(), result_ext.getName());
+
+    static const struct {
+        const char *inputTag;    /* input */
+        const char *expectedID; /* expected forLanguageTag().getName() result */
+    } testCases[] = {
+      // ICU-21433
+      {"und-1994-biske-rozaj", "__1994_BISKE_ROZAJ"},
+      {"de-1994-biske-rozaj", "de__1994_BISKE_ROZAJ"},
+      {"und-x-private", "@x=private"},
+      {"de-1994-biske-rozaj-x-private", "de__1994_BISKE_ROZAJ@x=private"},
+      {"und-1994-biske-rozaj-x-private", "__1994_BISKE_ROZAJ@x=private"},
+    };
+    int32_t i;
+    for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        std::string otag = testCases[i].inputTag;
+        std::string tag = Locale::forLanguageTag(otag.c_str(), status).getName();
+        if (tag != testCases[i].expectedID) {
+            errcheckln(status, "FAIL: %s should be toLanguageTag to %s but got %s - %s",
+                       otag.c_str(),
+                       testCases[i].expectedID,
+                       tag.c_str(),
+                       u_errorName(status));
+        }
+    }
 }
 
 void LocaleTest::TestToLanguageTag() {
@@ -5643,6 +5668,33 @@ void LocaleTest::TestToLanguageTag() {
     std::string result_bogus = loc_bogus.toLanguageTag<std::string>(status);
     assertEquals("bogus", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
     assertTrue(result_bogus.c_str(), result_bogus.empty());
+
+    static const struct {
+        const char *localeID;    /* input */
+        const char *expectedID; /* expected toLanguageTag() result */
+    } testCases[] = {
+      /* ICU-21414 */
+      {"und-x-abc-private", "und-x-abc-private"},
+      {"und-x-private", "und-x-private"},
+      {"und-u-ca-roc-x-private", "und-u-ca-roc-x-private"},
+      {"und-US-x-private", "und-US-x-private"},
+      {"und-Latn-x-private", "und-Latn-x-private"},
+      {"und-1994-biske-rozaj", "und-1994-biske-rozaj"},
+      {"und-1994-biske-rozaj-x-private", "und-1994-biske-rozaj-x-private"},
+    };
+    int32_t i;
+    for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        std::string otag = testCases[i].localeID;
+        std::string tag = Locale::forLanguageTag(otag.c_str(), status).toLanguageTag<std::string>(status);
+        if (tag != testCases[i].expectedID) {
+            errcheckln(status, "FAIL: %s should be toLanguageTag to %s but got %s - %s",
+                       otag.c_str(),
+                       testCases[i].expectedID,
+                       tag.c_str(),
+                       u_errorName(status));
+        }
+    }
 }
 
 /* ICU-20310 */

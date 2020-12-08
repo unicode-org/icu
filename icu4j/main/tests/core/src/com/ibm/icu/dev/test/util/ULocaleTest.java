@@ -4092,7 +4092,7 @@ public class ULocaleTest extends TestFmwk {
                 {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-cu-usd-eur-ks-identic"},
                 {"en_US_POSIX", "en-US-u-va-posix"},
                 {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix"},
-                {"@x=elmer",    "x-elmer"},
+                {"@x=elmer",    "und-x-elmer"},
                 {"_US@x=elmer", "und-US-x-elmer"},
                 /* #12671 */
                 {"en@a=bar;attribute=baz",  "en-a-bar-u-baz"},
@@ -4113,6 +4113,17 @@ public class ULocaleTest extends TestFmwk {
                 {"de-u-co",   "de-u-co"},
                 {"de@collation=yes",   "de-u-co"},
                 {"cmn-hans-cn-u-ca-t-ca-x-t-u",   "cmn-Hans-CN-t-ca-u-ca-x-t-u"},
+                /* ICU-21414 */
+                {"und-CN", "und-CN"},
+                {"und-Latn", "und-Latn"},
+                {"und-u-ca-roc", "und-u-ca-roc"},
+                {"und-x-abc-private", "und-x-abc-private"},
+                {"und-x-private", "und-x-private"},
+                {"und-u-ca-roc-x-private", "und-u-ca-roc-x-private"},
+                {"und-US-x-private", "und-US-x-private"},
+                {"und-Latn-x-private", "und-Latn-x-private"},
+                {"und-1994-biske-rozaj", "und-1994-biske-rozaj"},
+                {"und-1994-biske-rozaj-x-private", "und-1994-biske-rozaj-x-private"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -4266,6 +4277,12 @@ public class ULocaleTest extends TestFmwk {
                 {"sl-1994-biske-rozaj",    "sl__1994_BISKE_ROZAJ",       NOERROR},
                 {"en-fonipa-scouse",    "en__FONIPA_SCOUSE",       NOERROR},
                 {"en-scouse-fonipa",    "en__FONIPA_SCOUSE",       NOERROR},
+                /* ICU-21433 */
+                {"und-1994-biske-rozaj", "__1994_BISKE_ROZAJ", NOERROR},
+                {"de-1994-biske-rozaj", "de__1994_BISKE_ROZAJ", NOERROR},
+                {"und-x-private", "@x=private", NOERROR},
+                {"de-1994-biske-rozaj-x-private", "de__1994_BISKE_ROZAJ@x=private", NOERROR},
+                {"und-1994-biske-rozaj-x-private", "__1994_BISKE_ROZAJ@x=private", NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
