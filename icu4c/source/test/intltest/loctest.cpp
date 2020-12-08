@@ -6393,4 +6393,5 @@ void LocaleTest::TestLeak21419() {
     IcuTestErrorCode status(*this, "TestLeak21419");
     Locale l = Locale("s-yU");
     l.canonicalize(status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
