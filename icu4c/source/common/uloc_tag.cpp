@@ -1794,11 +1794,6 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
         return;
     }
 
-    /* Determine if variants already exists */
-    if (ultag_getVariantsSize(langtag)) {
-        posixVariant = TRUE;
-    }
-
     n = ultag_getExtensionsSize(langtag);
 
     /* resolve locale keywords and reordering keys */
@@ -1806,6 +1801,11 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
         key = ultag_getExtensionKey(langtag, i);
         type = ultag_getExtensionValue(langtag, i);
         if (*key == LDMLEXT) {
+            /* Determine if variants already exists */
+            if (ultag_getVariantsSize(langtag)) {
+                posixVariant = TRUE;
+            }
+
             _appendLDMLExtensionAsKeywords(type, &kwdFirst, extPool, kwdBuf, &posixVariant, status);
             if (U_FAILURE(*status)) {
                 break;
@@ -2711,8 +2711,7 @@ ulocimp_toLanguageTag(const char* localeID,
                     if (U_SUCCESS(tmpStatus)) {
                         if (ultag_isPrivateuseValueSubtags(buf.data(), buf.length())) {
                             /* return private use only tag */
-                            static const char PREFIX[] = { PRIVATEUSE, SEP };
-                            sink.Append(PREFIX, sizeof(PREFIX));
+                            sink.Append("und-x-", 6);
                             sink.Append(buf.data(), buf.length());
                             done = TRUE;
                         } else if (strict) {

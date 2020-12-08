@@ -3544,9 +3544,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
         subtag = tag.getPrivateuse();
         if (subtag.length() > 0) {
-            if (buf.length() > 0) {
-                buf.append(LanguageTag.SEP);
+            if (buf.length() == 0) {
+               buf.append(UNDEFINED_LANGUAGE);
             }
+            buf.append(LanguageTag.SEP);
             buf.append(LanguageTag.PRIVATEUSE).append(LanguageTag.SEP);
             buf.append(LanguageTag.canonicalizePrivateuse(subtag));
         }
