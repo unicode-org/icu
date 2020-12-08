@@ -1171,7 +1171,12 @@ private:
     bool replaceVariant(UErrorCode& status);
 
     // Replace by using subdivisionAlias.
-    bool replaceSubdivision(CharString& subdivision, UErrorCode& status);
+    bool replaceSubdivision(StringPiece subdivision,
+                            CharString& output, UErrorCode& status);
+
+    // Replace transformed extensions.
+    bool replaceTransformedExtensions(
+        CharString& transformedExtensions, CharString& output, UErrorCode& status);
 };
 
 CharString&
@@ -1501,7 +1506,8 @@ AliasReplacer::replaceVariant(UErrorCode& status)
 }
 
 bool
-AliasReplacer::replaceSubdivision(CharString& subdivision, UErrorCode& status)
+AliasReplacer::replaceSubdivision(
+    StringPiece subdivision, CharString& output, UErrorCode& status)
 {
     if (U_FAILURE(status)) {
         return false;
@@ -1514,11 +1520,82 @@ AliasReplacer::replaceSubdivision(CharString& subdivision, UErrorCode& status)
             (firstSpace - replacement) : uprv_strlen(replacement);
         // Ignore len == 2, see CLDR-14312
         if (3 <= len && len <= 8) {
-            subdivision.clear().append(replacement, (int32_t)len, status);
+            output.append(replacement, (int32_t)len, status);
         }
         return true;
     }
     return false;
+}
+
+bool
+AliasReplacer::replaceTransformedExtensions(
+    CharString& transformedExtensions, CharString& output, UErrorCode& status)
+{
+    // The content of the transformedExtensions will be modified in this
+    // function to NULL-terminating (tkey-tvalue) pairs.
+    if (U_FAILURE(status)) {
+        return false;
+    }
+    int32_t len = transformedExtensions.length();
+    const char* str = transformedExtensions.data();
+    const char* tkey = ultag_getTKeyStart(str);
+    int32_t tlangLen = (tkey == str) ? 0 :
+        ((tkey == nullptr) ? len : (tkey - str - 1));
+    CharStringByteSink sink(&output);
+    if (tlangLen > 0) {
+        Locale tlang = LocaleBuilder()
+            .setLanguageTag(StringPiece(str, tlangLen))
+            .build(status);
+        tlang.canonicalize(status);
+        tlang.toLanguageTag(sink, status);
+        if (U_FAILURE(status)) {
+            return false;
+        }
+        T_CString_toLowerCase(output.data());
+    }
+    if (tkey != nullptr) {
+        // We need to sort the tfields by tkey
+        UVector tfields(status);
+        if (U_FAILURE(status)) {
+            return false;
+        }
+        do {
+            const char* tvalue = uprv_strchr(tkey, '-');
+            if (tvalue == nullptr) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+            }
+            const char* nextTKey = ultag_getTKeyStart(tvalue);
+            if (nextTKey != nullptr) {
+                *((char*)(nextTKey-1)) = '\0';  // NULL terminate tvalue
+            }
+            tfields.insertElementAt((void*)tkey, tfields.size(), status);
+            if (U_FAILURE(status)) {
+                return false;
+            }
+            tkey = nextTKey;
+        } while (tkey != nullptr);
+        tfields.sort([](UElement e1, UElement e2) -> int8_t {
+            return uprv_strcmp(
+                (const char*)e1.pointer, (const char*)e2.pointer);
+        }, status);
+        for (int32_t i = 0; i < tfields.size(); i++) {
+             if (output.length() > 0) {
+                 output.append('-', status);
+             }
+             const char* tfield = (const char*) tfields.elementAt(i);
+             const char* tvalue = uprv_strchr(tfield, '-');
+             // Split the "tkey-tvalue" pair string so that we can canonicalize the tvalue.
+             U_ASSERT(tvalue != nullptr);
+             *((char*)tvalue++) = '\0'; // NULL terminate tkey
+             output.append(tfield, status).append('-', status);
+             const char* bcpTValue = ulocimp_toBcpType(tfield, tvalue, nullptr, nullptr);
+             output.append((bcpTValue == nullptr) ? tvalue : bcpTValue, status);
+        }
+    }
+    if (U_FAILURE(status)) {
+        return false;
+    }
+    return true;
 }
 
 CharString&
@@ -1661,7 +1738,8 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode status)
         if (U_SUCCESS(status) && !iter.isNull()) {
             const char* key;
             while ((key = iter->next(nullptr, status)) != nullptr) {
-                if (uprv_strcmp("sd", key) == 0 || uprv_strcmp("rg", key) == 0) {
+                if (uprv_strcmp("sd", key) == 0 || uprv_strcmp("rg", key) == 0 ||
+                        uprv_strcmp("t", key) == 0) {
                     CharString value;
                     CharStringByteSink valueSink(&value);
                     locale.getKeywordValue(key, valueSink, status);
@@ -1669,10 +1747,19 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode status)
                         status = U_ZERO_ERROR;
                         continue;
                     }
-                    if (replaceSubdivision(value, status)) {
-                        changed++;
+                    CharString replacement;
+                    if (uprv_strlen(key) == 2) {
+                        if (replaceSubdivision(value.toStringPiece(), replacement, status)) {
+                            changed++;
+                            temp.setKeywordValue(key, replacement.data(), status);
+                        }
+                    } else {
+                        U_ASSERT(uprv_strcmp(key, "t") == 0);
+                        if (replaceTransformedExtensions(value, replacement, status)) {
+                            changed++;
+                            temp.setKeywordValue(key, replacement.data(), status);
+                        }
                     }
-                    temp.setKeywordValue(key, value.data(), status);
                     if (U_FAILURE(status)) {
                         return false;
                     }
@@ -1689,7 +1776,6 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode status)
     }
     // If the tag is not changed, return.
     if (uprv_strcmp(out.data(), locale.getName()) == 0) {
-        U_ASSERT(changed == 0);
         out.clear();
         return false;
     }

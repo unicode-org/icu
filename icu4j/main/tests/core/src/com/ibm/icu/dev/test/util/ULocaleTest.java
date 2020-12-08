@@ -5233,6 +5233,38 @@ public class ULocaleTest extends TestFmwk {
 
         // ICU-21401
         Assert.assertEquals("xtg", canonicalTag("cel-gaulish"));
+
+        // ICU-21406
+        // Inside T extension
+        //  Case of Script and Region
+        Assert.assertEquals("ja-Kana-JP-t-it-latn-it", canonicalTag("ja-kana-jp-t-it-latn-it"));
+        Assert.assertEquals("und-t-zh-hani-tw", canonicalTag("und-t-zh-hani-tw"));
+        Assert.assertEquals("und-Cyrl-t-und-latn", canonicalTag("und-cyrl-t-und-Latn"));
+        //  Order of singleton
+        Assert.assertEquals("und-t-zh-u-ca-roc", canonicalTag("und-u-ca-roc-t-zh"));
+        //  Variant subtags are alphabetically ordered.
+        Assert.assertEquals("sl-1994-biske-rozaj", canonicalTag("sl-rozaj-biske-1994"));
+        Assert.assertEquals("sl-t-sl-1994-biske-rozaj", canonicalTag("sl-t-sl-rozaj-biske-1994"));
+        // tfield subtags are alphabetically ordered.
+        // (Also tests subtag case normalisation.)
+        Assert.assertEquals("de-t-lv-m0-din", canonicalTag("DE-T-lv-M0-DIN"));
+        Assert.assertEquals("de-t-k0-qwertz-m0-din", canonicalTag("DE-T-M0-DIN-K0-QWERTZ"));
+        Assert.assertEquals("de-t-lv-k0-qwertz-m0-din", canonicalTag("DE-T-lv-M0-DIN-K0-QWERTZ"));
+        // "true" tvalue subtags aren't removed.
+        // (UTS 35 version 36, §3.2.1 claims otherwise, but tkey must be followed by
+        // tvalue, so that's likely a spec bug in UTS 35.)
+        Assert.assertEquals("en-t-m0-true", canonicalTag("en-t-m0-true"));
+        // tlang subtags are canonicalised.
+        Assert.assertEquals("en-t-he", canonicalTag("en-t-iw"));
+        Assert.assertEquals("en-t-hy-latn-am", canonicalTag("en-t-hy-latn-SU"));
+        Assert.assertEquals("ru-t-ru-cyrl-ru", canonicalTag("ru-t-ru-cyrl-SU"));
+        Assert.assertEquals("fr-t-fr-ru", canonicalTag("fr-t-fr-172"));
+        Assert.assertEquals("und-t-nb-latn", canonicalTag("und-t-no-latn-BOKMAL"));
+        Assert.assertEquals("und-t-dse-zinh", canonicalTag("und-t-sgn-qAAi-NL"));
+        // alias of tvalue should be replaced
+        Assert.assertEquals("en-t-m0-prprname", canonicalTag("en-t-m0-NaMeS"));
+        Assert.assertEquals("en-t-d0-charname-s0-ascii", canonicalTag("en-t-s0-ascii-d0-nAmE"));
+
     }
 
     @Test

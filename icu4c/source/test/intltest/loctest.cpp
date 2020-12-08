@@ -4934,6 +4934,36 @@ void LocaleTest::TestCanonicalize(void)
         // ICU-21401
         { "cel-gaulish", "xtg"},
 
+        // ICU-21406
+        // Inside T extension
+        //  Case of Script and Region
+        { "ja-kana-jp-t-it-latn-it", "ja-Kana-JP-t-it-latn-it"},
+        { "und-t-zh-hani-tw", "und-t-zh-hani-tw"},
+        { "und-cyrl-t-und-Latn", "und-Cyrl-t-und-latn"},
+        //  Order of singleton
+        { "und-u-ca-roc-t-zh", "und-t-zh-u-ca-roc"},
+        //  Variant subtags are alphabetically ordered.
+        { "sl-t-sl-rozaj-biske-1994", "sl-t-sl-1994-biske-rozaj"},
+        // tfield subtags are alphabetically ordered.
+        // (Also tests subtag case normalisation.)
+        { "DE-T-lv-M0-DIN", "de-t-lv-m0-din"},
+        { "DE-T-M0-DIN-K0-QWERTZ", "de-t-k0-qwertz-m0-din"},
+        { "DE-T-lv-M0-DIN-K0-QWERTZ", "de-t-lv-k0-qwertz-m0-din"},
+        // "true" tvalue subtags aren't removed.
+        // (UTS 35 version 36, §3.2.1 claims otherwise, but tkey must be followed by
+        // tvalue, so that's likely a spec bug in UTS 35.)
+        { "en-t-m0-true", "en-t-m0-true"},
+        // tlang subtags are canonicalised.
+        { "en-t-iw", "en-t-he"},
+        { "en-t-hy-latn-SU", "en-t-hy-latn-am"},
+        { "ru-t-ru-cyrl-SU", "ru-t-ru-cyrl-ru"},
+        { "fr-t-fr-172", "fr-t-fr-ru"},
+        { "und-t-no-latn-BOKMAL", "und-t-nb-latn" },
+        { "und-t-sgn-qAAi-NL", "und-t-dse-zinh" },
+        // alias of tvalue should be replaced
+        { "en-t-m0-NaMeS", "en-t-m0-prprname" },
+        { "en-t-s0-ascii-d0-NaMe", "en-t-d0-charname-s0-ascii" },
+
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {

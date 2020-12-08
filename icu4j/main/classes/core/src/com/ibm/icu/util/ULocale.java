@@ -1279,9 +1279,11 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 Iterator<String> keywords = temp.getKeywords();
                 while (keywords != null && keywords.hasNext()) {
                     String key = keywords.next();
-                    if (key.equals("rg") || key.equals("sd")) {
+                    if (key.equals("rg") || key.equals("sd") || key.equals("t")) {
                         String value = temp.getKeywordValue(key);
-                        String replacement = replaceSubdivision(value);
+                        String replacement = key.equals("t") ?
+                            replaceTransformedExtensions(value) :
+                            replaceSubdivision(value);
                         if (replacement != null) {
                             temp = temp.setKeywordValue(key, replacement);
                             keywordChanged = true;
@@ -1636,6 +1638,58 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             return subdivisionAliasMap.get(subdivision);
         }
 
+        private String replaceTransformedExtensions(String extensions) {
+            StringBuilder builder = new StringBuilder();
+            List<String> subtags = new ArrayList<>(Arrays.asList(extensions.split(LanguageTag.SEP)));
+            List<String> tfields = new ArrayList<>();
+            int processedLength = 0;
+            int tlangLength = 0;
+            String tkey = "";
+            for (String subtag : subtags) {
+                if (LanguageTag.isTKey(subtag)) {
+                    if (tlangLength == 0) {
+                        // Found the first tkey. Record the total length of the preceding
+                        // tlang subtags. -1 if there is no tlang before the first tkey.
+                        tlangLength = processedLength-1;
+                    }
+                    if (builder.length() > 0) {
+                        // Finish & store the previous tkey with its tvalue subtags.
+                        tfields.add(builder.toString());
+                        builder.setLength(0);
+                    }
+                    // Start collecting subtags for this new tkey.
+                    tkey = subtag;
+                    builder.append(subtag);
+                } else {
+                    if (tlangLength != 0) {
+                        builder.append(LanguageTag.SEP).append(toUnicodeLocaleType(tkey, subtag));
+                    }
+                }
+                processedLength += subtag.length() + 1;
+            }
+            if (builder.length() > 0) {
+                // Finish & store the previous=last tkey with its tvalue subtags.
+                tfields.add(builder.toString());
+                builder.setLength(0);
+            }
+            String tlang = (tlangLength > 0) ? extensions.substring(0, tlangLength) :
+                ((tfields.size() == 0) ? extensions :  "");
+            if (tlang.length() > 0) {
+                String canonicalized = ULocale.createCanonical(
+                    ULocale.forLanguageTag(extensions)).toLanguageTag();
+                builder.append(AsciiUtil.toLowerString(canonicalized));
+            }
+
+            if (tfields.size() > 0) {
+                if (builder.length() > 0) {
+                    builder.append(LanguageTag.SEP);
+                }
+                // tfields are sorted by alphabetical order of their keys
+                Collections.sort(tfields);
+                builder.append(Utility.joinStrings(LanguageTag.SEP, tfields));
+            }
+            return builder.toString();
+        }
     };
 
     /**
