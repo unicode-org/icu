@@ -595,6 +595,12 @@ public class LanguageTag {
         return false;
     }
 
+    public static boolean isTKey(String s) {
+        // tkey        =  = alpha digit ;
+        return (s.length() == 2) && AsciiUtil.isAlpha(s.charAt(0))
+            && AsciiUtil.isNumeric(s.charAt(1));
+    }
+
     public static boolean isExtensionSingleton(String s) {
         // singleton     = DIGIT               ; 0 - 9
         //               / %x41-57             ; A - W
@@ -657,18 +663,20 @@ public class LanguageTag {
 
     public static String canonicalizeExtension(String s) {
         s = AsciiUtil.toLowerString(s);
-        int found;
-        while (s.endsWith("-true")) {
-            s = s.substring(0, s.length() - 5);  // length of "-true" is 5
-        }
-        while ((found = s.indexOf("-true-")) > 0) {
-            s = s.substring(0, found) + s.substring(found + 5);  // length of "-true" is 5
-        }
-        while (s.endsWith("-yes")) {
-            s = s.substring(0, s.length() - 4);  // length of "-yes" is 4
-        }
-        while ((found = s.indexOf("-yes-")) > 0) {
-            s = s.substring(0, found) + s.substring(found + 4);  // length of "-yes" is 5
+        if (s.startsWith("u-")) {
+            int found;
+            while (s.endsWith("-true")) {
+                s = s.substring(0, s.length() - 5);  // length of "-true" is 5
+            }
+            while ((found = s.indexOf("-true-")) > 0) {
+                s = s.substring(0, found) + s.substring(found + 5);  // length of "-true" is 5
+            }
+            while (s.endsWith("-yes")) {
+                s = s.substring(0, s.length() - 4);  // length of "-yes" is 4
+            }
+            while ((found = s.indexOf("-yes-")) > 0) {
+                s = s.substring(0, found) + s.substring(found + 4);  // length of "-yes" is 5
+            }
         }
         return s;
     }

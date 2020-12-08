@@ -646,6 +646,22 @@ _isTKey(const char* s, int32_t len)
     return FALSE;
 }
 
+U_CAPI const char * U_EXPORT2
+ultag_getTKeyStart(const char *localeID) {
+    const char *result = localeID;
+    const char *sep;
+    while((sep = uprv_strchr(result, SEP)) != nullptr) {
+        if (_isTKey(result, sep - result)) {
+            return result;
+        }
+        result = ++sep;
+    }
+    if (_isTKey(result, -1)) {
+        return result;
+    }
+    return nullptr;
+}
+
 static UBool
 _isTValue(const char* s, int32_t len)
 {
