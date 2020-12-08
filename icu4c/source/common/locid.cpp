@@ -1093,7 +1093,7 @@ public:
     // place the the replaced locale ID in out and return true.
     // Otherwise return false for no replacement or error.
     bool replace(
-        const Locale& locale, CharString& out, UErrorCode status);
+        const Locale& locale, CharString& out, UErrorCode& status);
 
 private:
     const char* language;
@@ -1564,7 +1564,7 @@ AliasReplacer::outputToString(
 }
 
 bool
-AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode status)
+AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status)
 {
     data = AliasData::singleton(status);
     if (U_FAILURE(status)) {
