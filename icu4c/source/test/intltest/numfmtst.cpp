@@ -10069,6 +10069,9 @@ void NumberFormatTest::Test10997_FormatCurrency() {
 
     UErrorCode error = U_ZERO_ERROR;
     NumberFormat* fmt = NumberFormat::createCurrencyInstance(Locale::getUS(), error);
+    if (U_FAILURE(error)) {
+        return;
+    }
     fmt->setMinimumFractionDigits(4);
     fmt->setMaximumFractionDigits(4);
 
