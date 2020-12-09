@@ -2049,7 +2049,10 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    uprv_memcpy(tagBuf, tag, tagLen);
+    
+    if (tagLen > 0) {
+        uprv_memcpy(tagBuf, tag, tagLen);
+    }
     *(tagBuf + tagLen) = 0;
 
     /* create a ULanguageTag */
