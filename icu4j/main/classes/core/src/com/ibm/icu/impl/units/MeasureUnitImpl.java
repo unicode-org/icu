@@ -223,6 +223,8 @@ public class MeasureUnitImpl {
             // to this.result, we wish it to contain the zero-length string.
             return;
         }
+
+
         if (this.complexity == MeasureUnit.Complexity.COMPOUND) {
             // Note: don't sort a MIXED unit
             Collections.sort(this.getSingleUnits(), new SingleUnitComparator());
@@ -240,7 +242,6 @@ public class MeasureUnitImpl {
                 firstTimeNegativeDimension = false;
             }
 
-            String singleUnitIdentifier = singleUnit.getNeutralIdentifier();
             if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
                 if (result.length() != 0) {
                     result.append("-and-");
@@ -259,7 +260,7 @@ public class MeasureUnitImpl {
                 }
             }
 
-            result.append(singleUnitIdentifier);
+            result.append(singleUnit.getNeutralIdentifier());
         }
 
         this.identifier = result.toString();

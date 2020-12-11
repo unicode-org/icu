@@ -30,6 +30,7 @@
 #include "unicode/ures.h"
 #include "unicode/ustringtrie.h"
 #include "uresimp.h"
+#include "util.h"
 #include <cstdlib>
 
 U_NAMESPACE_BEGIN
@@ -628,107 +629,6 @@ compareSingleUnits(const void* /*context*/, const void* left, const void* right)
     return (*realLeft)->compareTo(**realRight);
 }
 
-/**
- * Generate the identifier string for a single unit in place.
- *
- * Does not support the dimensionless SingleUnitImpl: calling serializeSingle
- * with the dimensionless unit results in an U_INTERNAL_PROGRAM_ERROR.
- *
- * @param first If singleUnit is part of a compound unit, and not its first
- * single unit, set this to false. Otherwise: set to true.
- */
-void serializeSingle(const SingleUnitImpl& singleUnit, bool first, CharString& output, UErrorCode& status) {
-    if (first && singleUnit.dimensionality < 0) {
-        // Essentially the "unary per". For compound units with a numerator, the
-        // caller takes care of the "binary per".
-        output.append("per-", status);
-    }
-
-    if (singleUnit.isDimensionless()) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-        return;
-    }
-    int8_t posPower = std::abs(singleUnit.dimensionality);
-    if (posPower == 0) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-    } else if (posPower == 1) {
-        // no-op
-    } else if (posPower == 2) {
-        output.append("square-", status);
-    } else if (posPower == 3) {
-        output.append("cubic-", status);
-    } else if (posPower < 10) {
-        output.append("pow", status);
-        output.append(posPower + '0', status);
-        output.append('-', status);
-    } else if (posPower <= 15) {
-        output.append("pow1", status);
-        output.append('0' + (posPower % 10), status);
-        output.append('-', status);
-    } else {
-        status = kUnitIdentifierSyntaxError;
-    }
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    if (singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
-        for (const auto& siPrefixInfo : gSIPrefixStrings) {
-            if (siPrefixInfo.value == singleUnit.siPrefix) {
-                output.append(siPrefixInfo.string, status);
-                break;
-            }
-        }
-    }
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    output.append(singleUnit.getSimpleUnitID(), status);
-}
-
-/**
- * Normalize a MeasureUnitImpl and generate the identifier string in place.
- */
-void serialize(MeasureUnitImpl& impl, UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    U_ASSERT(impl.identifier.isEmpty());
-    if (impl.singleUnits.length() == 0) {
-        // Dimensionless, constructed by the default constructor: no appending
-        // to impl.identifier, we wish it to contain the zero-length string.
-        return;
-    }
-    if (impl.complexity == UMEASURE_UNIT_COMPOUND) {
-        // Note: don't sort a MIXED unit
-        uprv_sortArray(impl.singleUnits.getAlias(), impl.singleUnits.length(),
-                       sizeof(impl.singleUnits[0]), compareSingleUnits, nullptr, false, &status);
-        if (U_FAILURE(status)) {
-            return;
-        }
-    }
-    serializeSingle(*impl.singleUnits[0], true, impl.identifier, status);
-    if (impl.singleUnits.length() == 1) {
-        return;
-    }
-    for (int32_t i = 1; i < impl.singleUnits.length(); i++) {
-        const SingleUnitImpl &prev = *impl.singleUnits[i - 1];
-        const SingleUnitImpl &curr = *impl.singleUnits[i];
-        if (impl.complexity == UMEASURE_UNIT_MIXED) {
-            impl.identifier.append("-and-", status);
-            serializeSingle(curr, true, impl.identifier, status);
-        } else {
-            if (prev.dimensionality > 0 && curr.dimensionality < 0) {
-                impl.identifier.append("-per-", status);
-            } else {
-                impl.identifier.append('-', status);
-            }
-            serializeSingle(curr, false, impl.identifier, status);
-        }
-    }
-}
-
 } // namespace
 
 
@@ -756,6 +656,42 @@ MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
 
 const char *SingleUnitImpl::getSimpleUnitID() const {
     return gSimpleUnits[index];
+}
+
+void SingleUnitImpl::appendNeutralIdentifier(CharString &result, UErrorCode &status) const {
+    int32_t absPower = std::abs(this->dimensionality);
+
+    U_ASSERT(absPower > 0); // "this function does not support the dimensionless single units";
+    
+    if (absPower == 1) {
+        // no-op
+    } else if (absPower == 2) {
+        result.append(StringPiece("square-"), status);
+    } else if (absPower == 3) {
+        result.append(StringPiece("cubic-"), status);
+    } else if (absPower <= 15) {
+        result.append(StringPiece("pow"), status);
+        result.appendNumber(absPower, status);
+        result.append(StringPiece("-"), status);
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR; // Unit Identifier Syntax Error
+        return;
+    }
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (this->siPrefix != UMEASURE_SI_PREFIX_ONE) {
+        for (const auto &siPrefixInfo : gSIPrefixStrings) {
+            if (siPrefixInfo.value == this->siPrefix) {
+                result.append(siPrefixInfo.string, status);
+                break;
+            }
+        }
+    }
+
+    result.append(StringPiece(this->getSimpleUnitID()), status);
 }
 
 MeasureUnitImpl::MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status) {
@@ -853,8 +789,69 @@ MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::extractIndividualUnits(UError
     return result;
 }
 
+/**
+ * Normalize a MeasureUnitImpl and generate the identifier string in place.
+ */
+void MeasureUnitImpl::serialize(UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (this->singleUnits.length() == 0) {
+        // Dimensionless, constructed by the default constructor.
+        return;
+    }
+
+    if (this->complexity == UMEASURE_UNIT_COMPOUND) {
+        // Note: don't sort a MIXED unit
+        uprv_sortArray(this->singleUnits.getAlias(), this->singleUnits.length(),
+                       sizeof(this->singleUnits[0]), compareSingleUnits, nullptr, false, &status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+    }
+
+    CharString result;
+    bool beforePer = true;
+    bool firstTimeNegativeDimension = false;
+    for (int32_t i = 0; i < this->singleUnits.length(); i++) {
+        if (beforePer && (*this->singleUnits[i]).dimensionality < 0) {
+            beforePer = false;
+            firstTimeNegativeDimension = true;
+        } else if ((*this->singleUnits[i]).dimensionality < 0) {
+            firstTimeNegativeDimension = false;
+        }
+
+        if (U_FAILURE(status)) {
+            return;
+        }
+
+        if (this->complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+            if (result.length() != 0) {
+                result.append(StringPiece("-and-"), status);
+            }
+        } else {
+            if (firstTimeNegativeDimension) {
+                if (result.length() == 0) {
+                    result.append(StringPiece("per-"), status);
+                } else {
+                    result.append(StringPiece("-per-"), status);
+                }
+            } else {
+                if (result.length() != 0) {
+                    result.append(StringPiece("-"), status);
+                }
+            }
+        }
+
+        this->singleUnits[i]->appendNeutralIdentifier(result, status);
+    }
+
+    this->identifier = CharString(result, status);
+}
+
 MeasureUnit MeasureUnitImpl::build(UErrorCode& status) && {
-    serialize(*this, status);
+    this->serialize(status);
     return MeasureUnit(std::move(*this));
 }
 

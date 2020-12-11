@@ -30,7 +30,7 @@
 U_NAMESPACE_BEGIN
 
 class StringEnumeration;
-struct MeasureUnitImpl;
+class MeasureUnitImpl;
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -3568,7 +3568,7 @@ private:
     /** Internal version of public API */
     LocalArray<MeasureUnit> splitToSingleUnitsImpl(int32_t& outCount, UErrorCode& status) const;
 
-    friend struct MeasureUnitImpl;
+    friend class MeasureUnitImpl;
 };
 
 #ifndef U_HIDE_DRAFT_API  // @draft ICU 68
