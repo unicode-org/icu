@@ -49,26 +49,25 @@ public class SingleUnitImpl {
     }
 
     /**
-     * Generates an neutral identifier string for a single unit which means we do not include the dimension signal.
+     * Generates a neutral identifier string for a single unit which means we do not include the dimension signal.
      */
     public String getNeutralIdentifier() {
         StringBuilder result = new StringBuilder();
-        int posPower = Math.abs(this.getDimensionality());
+        int absPower = Math.abs(this.getDimensionality());
 
-        assert posPower > 0 : "getIdentifier does not support the dimensionless";
+        assert absPower > 0 : "this function does not support the dimensionless single units";
 
-        if (posPower == 1) {
+        if (absPower == 1) {
             // no-op
-        } else if (posPower == 2) {
+        } else if (absPower == 2) {
             result.append("square-");
-        } else if (posPower == 3) {
+        } else if (absPower == 3) {
             result.append("cubic-");
-        } else if (posPower <= 15) {
+        } else if (absPower <= 15) {
             result.append("pow");
-            result.append(posPower);
+            result.append(absPower);
             result.append('-');
         } else {
-            // TODO: IllegalArgumentException might not be appropriate here
             throw new IllegalArgumentException("Unit Identifier Syntax Error");
         }
 

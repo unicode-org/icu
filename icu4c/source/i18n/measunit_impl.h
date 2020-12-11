@@ -43,6 +43,12 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
     const char *getSimpleUnitID() const;
 
     /**
+     * Generates and append a neutral identifier string for a single unit which means we do not include
+     * the dimension signal.
+     */
+    void appendNeutralIdentifier(CharString &result, UErrorCode &status) const;
+
+    /**
      * Compare this SingleUnitImpl to another SingleUnitImpl for the sake of
      * sorting and coalescing.
      *
@@ -133,7 +139,8 @@ template class U_I18N_API MaybeStackVector<SingleUnitImpl, 8>;
  * Internal representation of measurement units. Capable of representing all complexities of units,
  * including mixed and compound units.
  */
-struct U_I18N_API MeasureUnitImpl : public UMemory {
+class U_I18N_API MeasureUnitImpl : public UMemory {
+  public:
     MeasureUnitImpl() = default;
     MeasureUnitImpl(MeasureUnitImpl &&other) = default;
     MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status);
@@ -233,6 +240,12 @@ struct U_I18N_API MeasureUnitImpl : public UMemory {
      * The full unit identifier.  Owned by the MeasureUnitImpl.  Empty if not computed.
      */
     CharString identifier;
+
+  private:
+    /**
+     * Normalizes a MeasureUnitImpl and generate the identifier string in place.
+     */
+    void serialize(UErrorCode &status);
 };
 
 U_NAMESPACE_END
