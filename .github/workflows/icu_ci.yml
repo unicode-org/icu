@@ -1,0 +1,80 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: '*'
+
+jobs:
+
+  # ICU4J build and unit test
+  icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant check;
+
+  # clang release build with some options to enforce useful constraints.
+  # Includes dependency checker on an in-source, optimized build.
+  # Includes checking @draft etc. API tags vs. ifndef guards like
+  # U_HIDE_DRAFT_API and U_FORCE_HIDE_DRAFT_API.
+  # (FORCE guards make this tool pass but won't compile to working code.
+  # See the testtagsguards.sh script for details.)
+  clang-release-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang
+        run: |
+          sudo apt-get -y install doxygen;
+          cd icu4c/source;
+          ./runConfigureICU Linux --enable-layoutex=no;
+          make -j 2;
+          make -j 2 check;
+          ( cd test/depstest && python3 depstest.py ../../../source/ );
+          ( cd .. && source/test/hdrtst/testtagsguards.sh );
+          make dist
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
+
+  # Copyright scan
+  copyright-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: perl tools/scripts/cpysearch/cpyscan.pl
+
+  # Check compilation of internal headers.
+  internal-header-compilation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
+
+  # Check source files for valid UTF-8 and for absence of BOM.
+  valid-UTF-8-and-no-BOM-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: tools/scripts/icu-file-utf8-check.py
