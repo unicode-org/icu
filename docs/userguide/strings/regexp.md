@@ -211,7 +211,7 @@ complete a complete description of the API.
 | `[\p{numeric_value=9}]`              | Match all numbers with a numeric value of 9. Any Unicode Property may be used in set expressions.
 | `[\p{Letter}&&\p{script=cyrillic}]`  | Logical AND or intersection. Match the set of all Cyrillic letters.
 | `[\p{Letter}--\p{script=latin}]`     | Subtraction. Match all non-Latin letters.
-| `[[a-z][A-Z][0-9]]` `[a-zA-Z0-9]]`   | Implicit Logical OR or Union of Sets. The examples match ASCII letters and digits. The two forms are equivalent.
+| `[[a-z][A-Z][0-9]]` `[a-zA-Z0-9]`    | Implicit Logical OR or Union of Sets. The examples match ASCII letters and digits. The two forms are equivalent.
 | `[:script=Greek:]`                   | Alternate POSIX-like syntax for properties. Equivalent to \\p{script=Greek}.
 
 ## Case Insensitive Matching
