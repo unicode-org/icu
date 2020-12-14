@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo apt-get -y install doxygen;
           cd icu4c/source;
-          ./runConfigureICU Linux --enable-layoutex=no;
+          ./runConfigureICU Linux;
           make -j 2;
           make -j 2 check;
           ( cd test/depstest && python3 depstest.py ../../../source/ );

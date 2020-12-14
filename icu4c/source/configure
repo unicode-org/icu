@@ -1455,7 +1455,7 @@ Optional Features:
   --enable-weak-threads   weakly reference the threading library default=no
   --enable-extras         build ICU extras default=yes
   --enable-icuio          build ICU's icuio library default=yes
-  --enable-layoutex         build ICU's Paragraph Layout library default=yes.
+  --enable-layoutex         build ICU's Paragraph Layout library default=no.
             icu-le-hb must be installed via pkg-config. See http://harfbuzz.org
 
   --enable-tools         build ICU's tools default=yes
@@ -7702,7 +7702,7 @@ if test "${enable_layoutex+set}" = set; then :
 		*) as_fn_error $? "bad value ${enableval} for --enable-layoutex" "$LINENO" 5 ;;
 		esac
 else
-  layoutex=$have_icu_le_hb
+  layoutex=false
 fi
 
 
