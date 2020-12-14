@@ -90,7 +90,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux --disable-layout --disable-layoutex && make -j2 check
+        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
       displayName: 'Build and Test C++14'
       env:
         CC: clang

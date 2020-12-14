@@ -47,7 +47,7 @@ jobs:
       displayName: 'Install valgrind'
       timeoutInMinutes: 5
     - script: |
-        cd icu4c/source && ./runConfigureICU --enable-debug Linux --disable-renaming --disable-layout --disable-layoutex && make -j2 tests
+        cd icu4c/source && ./runConfigureICU --enable-debug Linux --disable-renaming && make -j2 tests
       displayName: 'Build'
       timeoutInMinutes: 10
       env:
