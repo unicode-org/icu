@@ -7,7 +7,7 @@ Commit Report
 =============
 
 Environment:
-- Latest Commit: 157467ea16abc14b408d36f84217b6b2f6a5b809
+- Latest Commit: ef8b015f47f05e05dd246c60a2ecf53cad1f939e
 - Jira Query: project=ICU AND fixVersion=68.2
 - Rev Range: release-68-1..upstream/maint/maint-68
 - Authenticated: Yes
@@ -63,6 +63,11 @@ Tip: Consider closing the ticket if it is fixed.
 	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21405
 
 ##### Commits with Issue ICU-21405
+
+- ef8b015 `ICU-21405 integrate CLDR release-38-1-beta to ICU maint/maint-68`
+	- Authored by Peter Edberg <pedberg@unicode.org>
+	- Committed at 2020-12-11T10:36:49-08:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/ef8b015f47f05e05dd246c60a2ecf53cad1f939e
 
 - 50e96ce `ICU-21405 Update ICU4J Readme for BRS 68.2`
 	- Authored by Elango Cheran <elango@unicode.org>
