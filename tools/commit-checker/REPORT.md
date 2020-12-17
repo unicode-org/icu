@@ -7,7 +7,7 @@ Commit Report
 =============
 
 Environment:
-- Latest Commit: ef8b015f47f05e05dd246c60a2ecf53cad1f939e
+- Latest Commit: 84e1f26ea77152936e70d53178a816dbfbf69989
 - Jira Query: project=ICU AND fixVersion=68.2
 - Rev Range: release-68-1..upstream/maint/maint-68
 - Authenticated: Yes
@@ -37,19 +37,6 @@ Tip: Check that these tickets have the correct fixVersion tag.
 ### Commits with Open Jira Issue
 Tip: Consider closing the ticket if it is fixed.
 
-#### Issue ICU-21387
-
-- ICU-21387: `Number and Date Format in 68 is  slower than 67`
-	- Assigned to Hugo van der Merwe
-	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21387
-
-##### Commits with Issue ICU-21387
-
-- f3bf3d4 `ICU-21387 measunit: check for nullptr before calling delete`
-	- Authored by Hugo van der Merwe <17109322+hugovdm@users.noreply.github.com>
-	- Committed at 2020-12-09T13:43:31-06:00
-	- GitHub Link: https://github.com/unicode-org/icu/commit/f3bf3d4f0ddf20d36f2f6b2037217eb0fd7c2065
-
 #### Issue ICU-21405
 
 - ICU-21405: `ICU 68.2 BRS`
@@ -57,6 +44,11 @@ Tip: Consider closing the ticket if it is fixed.
 	- Jira Link: https://unicode-org.atlassian.net/browse/ICU-21405
 
 ##### Commits with Issue ICU-21405
+
+- 84e1f26 `ICU-21405 brs 68.2, update urename.h`
+	- Authored by Peter Edberg <pedberg@unicode.org>
+	- Committed at 2020-12-16T18:13:17-06:00
+	- GitHub Link: https://github.com/unicode-org/icu/commit/84e1f26ea77152936e70d53178a816dbfbf69989
 
 - ef8b015 `ICU-21405 integrate CLDR release-38-1-beta to ICU maint/maint-68`
 	- Authored by Peter Edberg <pedberg@unicode.org>
@@ -74,4 +66,4 @@ Tip: Consider closing the ticket if it is fixed.
 	- GitHub Link: https://github.com/unicode-org/icu/commit/0768b26e8652b48ae335aca378df4f13c71b2d5c
 
 
-## Total Problems: 2
+## Total Problems: 1
