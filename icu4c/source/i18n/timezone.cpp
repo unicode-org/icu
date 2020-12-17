@@ -749,6 +749,17 @@ void TimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
     }
 }
 
+/**
+ * This is the default implementation for subclasses that will be overrid
+ * by subclass.
+ */
+void TimeZone::getOffsetForJavaScript(UDate date, UBool local,
+    int32_t& rawOffset, int32_t& dstOffset, UErrorCode& ec) const
+{
+    return getOffset(date, local, rawOffset, dstOffset, ec);
+}
+
+
 // -------------------------------------
 
 // New available IDs API as of ICU 2.4.  Uses StringEnumeration API.

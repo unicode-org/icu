@@ -529,6 +529,23 @@ public:
      * Gregorian calendar.  The default implementation in the TimeZone
      * class delegates to the 8-argument getOffset().
      *
+     * Differ from getOffsetForJavaScript(), when the date represent a
+     * local time that repeating multiple times at a negative time zone
+     * transition (e.g.  when the daylight saving time ends or the time
+     * zone offset is decreased due to a time zone rule change):
+     * - getOffset() interprets the date using the time zone offset AFTER
+     *   the transition, but
+     * - getOffsetForJavaScript() interprets the date using the time zone
+     *   offset BEFORE the transition.
+     *
+     * When the date represent a local time that skipped at a positive
+     * time zone transitions (e.g. when the daylight saving time starts or
+     * the time zone offset is increased due to a time zone rule change),
+     * both getOffset() and getOffsetForJavaScript() interprets the date
+     * using as the time zone offset BEFORE the transition.
+     *
+     * @param date moment in time for which to return offsets, in
+     *
      * @param date moment in time for which to return offsets, in
      * units of milliseconds from January 1, 1970 0:00 GMT, either GMT
      * time or local wall time, depending on `local'.
@@ -547,6 +564,49 @@ public:
      */
     virtual void getOffset(UDate date, UBool local, int32_t& rawOffset,
                            int32_t& dstOffset, UErrorCode& ec) const;
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns the time zone raw and GMT offset for the given moment
+     * in time.  Upon return, local-millis = GMT-millis + rawOffset +
+     * dstOffset.  All computations are performed in the proleptic
+     * Gregorian calendar.  The default implementation in the TimeZone
+     * class delegates to the 8-argument getOffset().
+     *
+     * Differ from getOffset(), when the date represent a local time that
+     * repeating multiple times at a negative time zone transition (e.g.
+     * when the daylight saving time ends or the time zone offset is
+     * decreased due to a time zone rule change):
+     * - getOffset() interprets the date using the time zone offset AFTER
+     *   the transition, but
+     * - getOffsetForJavaScript() interprets the date using the time zone
+     *   offset BEFORE the transition.
+     *
+     * When the date represent a local time that skipped at a positive
+     * time zone transitions (e.g. when the daylight saving time starts or
+     * the time zone offset is increased due to a time zone rule change),
+     * both getOffset() and getOffsetForJavaScript() interprets the date
+     * using as the time zone offset BEFORE the transition.
+     *
+     * @param date moment in time for which to return offsets, in
+     * units of milliseconds from January 1, 1970 0:00 GMT, either GMT
+     * time or local wall time, depending on `local'.
+     * @param local if true, `date' is local wall time; otherwise it
+     * is in GMT time.
+     * @param rawOffset output parameter to receive the raw offset, that
+     * is, the offset not including DST adjustments
+     * @param dstOffset output parameter to receive the DST offset,
+     * that is, the offset to be added to `rawOffset' to obtain the
+     * total offset between local and GMT time. If DST is not in
+     * effect, this value is zero; otherwise it is a positive value,
+     * typically one hour.
+     * @param ec input-output error code
+     *
+     * @draft ICU 69
+     */
+    virtual void getOffsetForJavaScript(UDate date, UBool local, int32_t& rawOffset,
+                                        int32_t& dstOffset, UErrorCode& ec) const;
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Sets the TimeZone's raw GMT offset (i.e., the number of milliseconds to add

@@ -1557,6 +1557,46 @@ U_CAPI UBool U_EXPORT2
 ucal_getTimeZoneTransitionDate(const UCalendar* cal, UTimeZoneTransitionType type,
                                UDate* transition, UErrorCode* status);
 
+#ifndef U_HIDE_DRAFT_API
+/**
+* Returns the time zone raw and GMT offset for the given moment
+* in time.  Upon return, local-millis = GMT-millis + rawOffset +
+* dstOffset.  All computations are performed in the proleptic
+* Gregorian calendar.
+* When the date and time in the calendar represent a local time that
+* repeating multiple times at a negative time zone transition (e.g.
+* when the daylight saving time ends or the time zone offset is decreased
+* due to a time zone rule change), this function interprets the `dateTime`
+* using the time zone offset BEFORE the transition.
+* When the date and time in the calendar represent a local time that
+* skipped at a positive time zone transitions (e.g. when the daylight saving
+* time starts or the time zone offset is increased due to a time zone
+* rule change), this function interprets the date using as the time
+* zone offset BEFORE the transition.
+*
+* @param cal The UCalendar to query.
+* @param local if true, `dateTime' is local wall time; otherwise it
+* is in GMT time.
+* @param rawOffset output parameter to receive the raw offset, that
+* is, the offset not including DST adjustments
+* If the function returns false, the value set is unspecified.
+* @param dstOffset output parameter to receive the DST offset,
+* that is, the offset to be added to `rawOffset' to obtain the
+* total offset between local and GMT time. If DST is not in
+* effect, this value is zero; otherwise it is a positive value,
+* typically one hour.
+* If the function returns false, the value set is unspecified.
+* @param status A pointer to a UErrorCode to receive any errors.
+* @return true if a valid transition time is set in *transition, false
+*         otherwise.
+* @draft ICU 69
+*/
+U_CAPI UBool U_EXPORT2
+ucal_getTimeZoneOffsetForJavaScript(const UCalendar* cal,
+                                    UBool local, int32_t* rawOffset,
+                                    int32_t* dstOffset, UErrorCode* status);
+#endif  /* U_HIDE_DRAFT_API */
+
 /**
 * Converts a system time zone ID to an equivalent Windows time zone ID. For example,
 * Windows time zone ID "Pacific Standard Time" is returned for input "America/Los_Angeles".

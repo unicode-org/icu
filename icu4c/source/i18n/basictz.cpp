@@ -555,6 +555,16 @@ BasicTimeZone::getOffsetFromLocal(UDate /*date*/, int32_t /*nonExistingTimeOpt*/
     status = U_UNSUPPORTED_ERROR;
 }
 
+void
+BasicTimeZone::getOffsetForJavaScript(UDate date, UBool local, int32_t& rawOffset,
+                                      int32_t& dstOffset, UErrorCode& ec) const {
+    if (local) {
+        getOffsetFromLocal(date, kFormer, kFormer, rawOffset, dstOffset, ec);
+    } else {
+        getOffset(date, local, rawOffset, dstOffset, ec);
+    }
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

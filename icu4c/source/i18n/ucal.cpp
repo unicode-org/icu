@@ -792,6 +792,25 @@ ucal_getTimeZoneTransitionDate(const UCalendar* cal, UTimeZoneTransitionType typ
     return FALSE;
 }
 
+U_CAPI UBool U_EXPORT2
+ucal_getTimeZoneOffsetForJavaScript(const UCalendar* cal,
+                                    UBool local, int32_t* rawOffset,
+                                    int32_t* dstOffset, UErrorCode* status)
+{
+    if (U_FAILURE(*status)) {
+        return FALSE;
+    }
+    UDate time = ((Calendar*)cal)->getTime(*status);
+    const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
+    if (U_SUCCESS(*status)) {
+        tz.getOffsetForJavaScript(time, local, *rawOffset, *dstOffset, *status);
+        if (U_SUCCESS(*status)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 U_CAPI int32_t U_EXPORT2
 ucal_getWindowsTimeZoneID(const UChar* id, int32_t len, UChar* winid, int32_t winidCapacity, UErrorCode* status) {
     if (U_FAILURE(*status)) {
