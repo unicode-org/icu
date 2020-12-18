@@ -3161,47 +3161,10 @@ double Calendar::computeMillisInDay() {
 int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCode &ec) {
     int32_t rawOffset, dstOffset;
     UDate wall = millis + millisInDay;
-    BasicTimeZone* btz = getBasicTimeZone();
-    if (btz) {
-        int duplicatedTimeOpt = (fRepeatedWallTime == UCAL_WALLTIME_FIRST) ? BasicTimeZone::kFormer : BasicTimeZone::kLatter;
-        int nonExistingTimeOpt = (fSkippedWallTime == UCAL_WALLTIME_FIRST) ? BasicTimeZone::kLatter : BasicTimeZone::kFormer;
-        btz->getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, rawOffset, dstOffset, ec);
-    } else {
-        const TimeZone& tz = getTimeZone();
-        // By default, TimeZone::getOffset behaves UCAL_WALLTIME_LAST for both.
-        tz.getOffset(wall, TRUE, rawOffset, dstOffset, ec);
-
-        UBool sawRecentNegativeShift = FALSE;
-        if (fRepeatedWallTime == UCAL_WALLTIME_FIRST) {
-            // Check if the given wall time falls into repeated time range
-            UDate tgmt = wall - (rawOffset + dstOffset);
-
-            // Any negative zone transition within last 6 hours?
-            // Note: The maximum historic negative zone transition is -3 hours in the tz database.
-            // 6 hour window would be sufficient for this purpose.
-            int32_t tmpRaw, tmpDst;
-            tz.getOffset(tgmt - 6*60*60*1000, FALSE, tmpRaw, tmpDst, ec);
-            int32_t offsetDelta = (rawOffset + dstOffset) - (tmpRaw + tmpDst);
-
-            U_ASSERT(offsetDelta < -6*60*60*1000);
-            if (offsetDelta < 0) {
-                sawRecentNegativeShift = TRUE;
-                // Negative shift within last 6 hours. When UCAL_WALLTIME_FIRST is used and the given wall time falls
-                // into the repeated time range, use offsets before the transition.
-                // Note: If it does not fall into the repeated time range, offsets remain unchanged below.
-                tz.getOffset(wall + offsetDelta, TRUE, rawOffset, dstOffset, ec);
-            }
-        }
-        if (!sawRecentNegativeShift && fSkippedWallTime == UCAL_WALLTIME_FIRST) {
-            // When skipped wall time option is WALLTIME_FIRST,
-            // recalculate offsets from the resolved time (non-wall).
-            // When the given wall time falls into skipped wall time,
-            // the offsets will be based on the zone offsets AFTER
-            // the transition (which means, earliest possibe interpretation).
-            UDate tgmt = wall - (rawOffset + dstOffset);
-            tz.getOffset(tgmt, FALSE, rawOffset, dstOffset, ec);
-        }
-    }
+    const TimeZone& tz = getTimeZone();
+    int duplicatedTimeOpt = (fRepeatedWallTime == UCAL_WALLTIME_FIRST) ? TimeZone::kFormer : TimeZone::kLatter;
+    int nonExistingTimeOpt = (fSkippedWallTime == UCAL_WALLTIME_FIRST) ? TimeZone::kLatter : TimeZone::kFormer;
+    tz.getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, rawOffset, dstOffset, ec);
     return rawOffset + dstOffset;
 }
 

@@ -2551,18 +2551,12 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // Make sure parsed time zone type (Standard or Daylight)
             // matches the rule used by the parsed time zone.
             int32_t raw, dst;
-            if (btz != NULL) {
-                if (tzTimeType == UTZFMT_TIME_TYPE_STANDARD) {
-                    btz->getOffsetFromLocal(localMillis,
-                        BasicTimeZone::kStandard, BasicTimeZone::kStandard, raw, dst, status);
-                } else {
-                    btz->getOffsetFromLocal(localMillis,
-                        BasicTimeZone::kDaylight, BasicTimeZone::kDaylight, raw, dst, status);
-                }
+            if (tzTimeType == UTZFMT_TIME_TYPE_STANDARD) {
+                tz.getOffsetFromLocal(localMillis,
+                    BasicTimeZone::kStandard, BasicTimeZone::kStandard, raw, dst, status);
             } else {
-                // No good way to resolve ambiguous time at transition,
-                // but following code work in most case.
-                tz.getOffset(localMillis, TRUE, raw, dst, status);
+                tz.getOffsetFromLocal(localMillis,
+                    BasicTimeZone::kDaylight, BasicTimeZone::kDaylight, raw, dst, status);
             }
 
             // Now, compare the results with parsed type, either standard or daylight saving time

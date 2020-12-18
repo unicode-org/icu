@@ -68,6 +68,8 @@ static char gStrBuf[256];
 #define U_DEBUG_TZ_MSG(x)
 #endif
 
+#include "unicode/timezone.h"
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/simpletz.h"
@@ -1311,6 +1313,56 @@ TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, const Locale& loc
         result.remove();
     }
     return  result;
+}
+
+void
+TimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt, int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+   // By default, getOffset behaves as if nonExistingTimeOpt is kFormer and
+   // duplicatedTimeOpt is kLatter. When nonExistingTimeOpt or duplicatedTimeOpt
+   // is kStandard or kDaylight, treat it as the default case because this class
+   // does not support kStandard or kDaylight.
+
+    if ((nonExistingTimeOpt & kStandard))
+      nonExistingTimeOpt = kFormer;
+    if ((duplicatedTimeOpt & kStandard))
+      duplicatedTimeOpt = kLatter;
+
+    getOffset(date, TRUE, rawOffset, dstOffset, status);
+
+    UBool sawRecentNegativeShift = FALSE;
+    if (duplicatedTimeOpt == kFormer) {
+        // Check if the given wall time falls into repeated time range
+        UDate tgmt = date - (rawOffset + dstOffset);
+
+        // Any negative zone transition within last 6 hours?
+        // Note: The maximum historic negative zone transition is -3 hours in the tz database.
+        // 6 hour window would be sufficient for this purpose.
+        int32_t tmpRaw, tmpDst;
+        getOffset(tgmt - 6*60*60*1000, FALSE, tmpRaw, tmpDst, status);
+        int32_t offsetDelta = (rawOffset + dstOffset) - (tmpRaw + tmpDst);
+
+        U_ASSERT(offsetDelta < -6*60*60*1000);
+        if (offsetDelta < 0) {
+            sawRecentNegativeShift = TRUE;
+            // Negative shift within last 6 hours. When kFormer is specified and the given wall time falls
+            // into the repeated time range, use offsets before the transition.
+            // Note: If it does not fall into the repeated time range, offsets remain unchanged below.
+            getOffset(date + offsetDelta, TRUE, rawOffset, dstOffset, status);
+        }
+    }
+    if (!sawRecentNegativeShift && nonExistingTimeOpt == kLatter) {
+        // When skipped wall time option is kLatter,
+        // recalculate offsets from the resolved time (non-wall).
+        // When the given wall time falls into skipped wall time,
+        // the offsets will be based on the zone offsets AFTER
+        // the transition (which means, earliest possibe interpretation).
+        UDate tgmt = date - (rawOffset + dstOffset);
+        getOffset(tgmt, FALSE, rawOffset, dstOffset, status);
+    }
 }
 
 /**
