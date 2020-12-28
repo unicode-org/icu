@@ -30,24 +30,6 @@
 #include "bmpset.h"
 #include "unisetspan.h"
 
-// Define UChar constants using hex for EBCDIC compatibility
-// Used #define to reduce private static exports and memory access time.
-#define SET_OPEN        ((UChar)0x005B) /*[*/
-#define SET_CLOSE       ((UChar)0x005D) /*]*/
-#define HYPHEN          ((UChar)0x002D) /*-*/
-#define COMPLEMENT      ((UChar)0x005E) /*^*/
-#define COLON           ((UChar)0x003A) /*:*/
-#define BACKSLASH       ((UChar)0x005C) /*\*/
-#define INTERSECTION    ((UChar)0x0026) /*&*/
-#define UPPER_U         ((UChar)0x0055) /*U*/
-#define LOWER_U         ((UChar)0x0075) /*u*/
-#define OPEN_BRACE      ((UChar)123)    /*{*/
-#define CLOSE_BRACE     ((UChar)125)    /*}*/
-#define UPPER_P         ((UChar)0x0050) /*P*/
-#define LOWER_P         ((UChar)0x0070) /*p*/
-#define UPPER_N         ((UChar)78)     /*N*/
-#define EQUALS          ((UChar)0x003D) /*=*/
-
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
 
@@ -1989,22 +1971,22 @@ escapeUnprintable) {
     }
     // Okay to let ':' pass through
     switch (c) {
-    case SET_OPEN:
-    case SET_CLOSE:
-    case HYPHEN:
-    case COMPLEMENT:
-    case INTERSECTION:
-    case BACKSLASH:
-    case OPEN_BRACE:
-    case CLOSE_BRACE:
-    case COLON:
+    case u'[':
+    case u']':
+    case u'-':
+    case u'^':
+    case u'&':
+    case u'\\':
+    case u'{':
+    case u'}':
+    case u':':
     case SymbolTable::SYMBOL_REF:
-        buf.append(BACKSLASH);
+        buf.append(u'\\');
         break;
     default:
         // Escape whitespace
         if (PatternProps::isWhiteSpace(c)) {
-            buf.append(BACKSLASH);
+            buf.append(u'\\');
         }
         break;
     }
@@ -2037,7 +2019,7 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
                 backslashCount = 0;
             } else {
                 result.append(c);
-                if (c == BACKSLASH) {
+                if (c == u'\\') {
                     ++backslashCount;
                 } else {
                     backslashCount = 0;
@@ -2070,13 +2052,13 @@ UnicodeString& UnicodeSet::toPattern(UnicodeString& result,
 UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
                                             UBool escapeUnprintable) const
 {
-    result.append(SET_OPEN);
+    result.append(u'[');
 
 //  // Check against the predefined categories.  We implicitly build
 //  // up ALL category sets the first time toPattern() is called.
 //  for (int8_t cat=0; cat<Unicode::GENERAL_TYPES_COUNT; ++cat) {
 //      if (*this == getCategorySet(cat)) {
-//          result.append(COLON);
+//          result.append(u':');
 //          result.append(CATEGORY_NAMES, cat*2, 2);
 //          return result.append(CATEGORY_CLOSE);
 //      }
@@ -2092,7 +2074,7 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
         getRangeEnd(count-1) == MAX_VALUE) {
 
         // Emit the inverse
-        result.append(COMPLEMENT);
+        result.append(u'^');
 
         for (int32_t i = 1; i < count; ++i) {
             UChar32 start = getRangeEnd(i-1)+1;
@@ -2100,7 +2082,7 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
             _appendToPat(result, start, escapeUnprintable);
             if (start != end) {
                 if ((start+1) != end) {
-                    result.append(HYPHEN);
+                    result.append(u'-');
                 }
                 _appendToPat(result, end, escapeUnprintable);
             }
@@ -2115,7 +2097,7 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
             _appendToPat(result, start, escapeUnprintable);
             if (start != end) {
                 if ((start+1) != end) {
-                    result.append(HYPHEN);
+                    result.append(u'-');
                 }
                 _appendToPat(result, end, escapeUnprintable);
             }
@@ -2124,14 +2106,14 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
 
     if (strings != nullptr) {
         for (int32_t i = 0; i<strings->size(); ++i) {
-            result.append(OPEN_BRACE);
+            result.append(u'{');
             _appendToPat(result,
                          *(const UnicodeString*) strings->elementAt(i),
                          escapeUnprintable);
-            result.append(CLOSE_BRACE);
+            result.append(u'}');
         }
     }
-    return result.append(SET_CLOSE);
+    return result.append(u']');
 }
 
 /**
