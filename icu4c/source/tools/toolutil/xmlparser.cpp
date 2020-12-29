@@ -658,7 +658,7 @@ UXMLParser::intern(const UnicodeString &s, UErrorCode &errorCode) {
         return (const UnicodeString *)he->key.pointer;
     } else {
         // add this new name and return its hashed key pointer
-        fNames.puti(s, 0, errorCode);
+        fNames.puti(s, 1, errorCode);
         he=fNames.find(s);
         return (const UnicodeString *)he->key.pointer;
     }
