@@ -25,15 +25,25 @@ Here are a few examples of sets:
 | `[abc123]` | The six characters a,b,c,1,2 and 3 |
 | `[\p{Letter}]` | All characters with the Unicode General Category of Letter. |
 
-String Values In addition to being a set of characters (of Unicode code points),
+### String Values
+
+In addition to being a set of characters (of Unicode code points),
 a UnicodeSet may also contain string values. Conceptually, the UnicodeSet is
 always a set of strings, not a set of characters, although in many common use
 cases the strings are all of length one, which reduces to being a set of
 characters.
 
 This concept can be confusing when first encountered, probably because similar
-set constructs from other environments (regular expressions) can only contain
-characters.
+set constructs from other environments
+(e.g., character classes in most regular expression implementations)
+can only contain characters.
+
+Until ICU 68, it was not possible for a UnicodeSet to contain the empty string.
+In Java, an exception was thrown. In C++, the empty string was silently ignored.
+
+Starting with ICU 69 [ICU-13702](https://unicode-org.atlassian.net/browse/ICU-13702)
+the empty string is supported as a set element;
+however, it is ignored in matching functions such as `span(string)`.
 
 ## UnicodeSet Patterns
 

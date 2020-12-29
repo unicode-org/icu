@@ -186,8 +186,6 @@ import com.ibm.icu.util.VersionInfo;
  * Unicode property
  * </table>
  *
- * <p><b>Warning</b>: you cannot add an empty string ("") to a UnicodeSet.</p>
- *
  * <p><b>Formal syntax</b></p>
  *
  * <blockquote>
@@ -892,11 +890,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         if (hasStrings()) {
             for (String s : strings) {
-                //if (s.length() == 0) {
-                //    // Empty strings match everything
-                //    return true;
-                //}
-                // assert(s.length() != 0); // We enforce this elsewhere
+                if (s.isEmpty()) {
+                    continue;  // skip the empty string
+                }
                 int c = UTF16.charAt(s, 0);
                 if ((c & 0xFF) == v) {
                     return true;
@@ -918,9 +914,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             boolean incremental) {
 
         if (offset[0] == limit) {
-            // Strings, if any, have length != 0, so we don't worry
-            // about them here.  If we ever allow zero-length strings
-            // we much check for them here.
             if (contains(UnicodeMatcher.ETHER)) {
                 return incremental ? U_PARTIAL_MATCH : U_MATCH;
             } else {
@@ -948,10 +941,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 int highWaterLength = 0;
 
                 for (String trial : strings) {
-                    //if (trial.length() == 0) {
-                    //    return U_MATCH; // null-string always matches
-                    //}
-                    // assert(trial.length() != 0); // We ensure this elsewhere
+                    if (trial.isEmpty()) {
+                        continue;  // skip the empty string
+                    }
 
                     char c = trial.charAt(forward ? 0 : trial.length() - 1);
 
@@ -1363,7 +1355,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" =&gt; {"ch"}
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     *
      * @param s the source string
      * @return this object, for chaining
      * @stable ICU 2.0
@@ -1392,22 +1384,19 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Utility for getting code point from single code point CharSequence.
-     * See the public UTF16.getSingleCodePoint()
+     * See the public UTF16.getSingleCodePoint() (which returns -1 for null rather than throwing NPE).
+     *
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
      * @param s to test
      */
     private static int getSingleCP(CharSequence s) {
-        if (s.length() < 1) {
-            throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
-        }
-        if (s.length() > 2) return -1;
         if (s.length() == 1) return s.charAt(0);
-
-        // at this point, len = 2
-        int cp = UTF16.charAt(s, 0);
-        if (cp > 0xFFFF) { // is surrogate pair
-            return cp;
+        if (s.length() == 2) {
+            int cp = Character.codePointAt(s, 0);
+            if (cp > 0xFFFF) { // is surrogate pair
+                return cp;
+            }
         }
         return -1;
     }
@@ -1478,7 +1467,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Makes a set from a multicharacter string. Thus "ch" =&gt; {"ch"}
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     *
      * @param s the source string
      * @return a newly created set containing the given string
      * @stable ICU 2.0
@@ -1686,7 +1675,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Complement the specified string in this set.
      * The set will not contain the specified string once the call
      * returns.
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     *
      * @param s the string to complement
      * @return this object, for chaining
      * @stable ICU 2.0
@@ -2056,7 +2045,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             return true;
         }
         for (String setStr : strings) {
-            if (s.startsWith(setStr, i) &&  containsAll(s, i+setStr.length())) {
+            if (!setStr.isEmpty() &&  // skip the empty string
+                    s.startsWith(setStr, i) &&  containsAll(s, i+setStr.length())) {
                 return true;
             }
         }
@@ -2801,7 +2791,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         }
                         appendCodePoint(buf, c);
                     }
-                    if (buf.length() < 1 || !ok) {
+                    if (!ok) {
                         syntaxError(chars, "Invalid multicharacter string");
                     }
                     // We have new string. Add it to set and continue;

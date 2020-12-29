@@ -444,7 +444,6 @@ UBool UnicodeSet::contains(UChar32 start, UChar32 end) const {
  * @return <tt>true</tt> if this set contains the specified string
  */
 UBool UnicodeSet::contains(const UnicodeString& s) const {
-    if (s.length() == 0) return FALSE;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         return stringsContains(s);
@@ -559,11 +558,9 @@ UBool UnicodeSet::matchesIndexValue(uint8_t v) const {
     if (hasStrings()) {
         for (i=0; i<strings->size(); ++i) {
             const UnicodeString& s = *(const UnicodeString*)strings->elementAt(i);
-            //if (s.length() == 0) {
-            //    // Empty strings match everything
-            //    return TRUE;
-            //}
-            // assert(s.length() != 0); // We enforce this elsewhere
+            if (s.isEmpty()) {
+                continue;  // skip the empty string
+            }
             UChar32 c = s.char32At(0);
             if ((c & 0xFF) == v) {
                 return TRUE;
@@ -582,9 +579,6 @@ UMatchDegree UnicodeSet::matches(const Replaceable& text,
                                  int32_t limit,
                                  UBool incremental) {
     if (offset == limit) {
-        // Strings, if any, have length != 0, so we don't worry
-        // about them here.  If we ever allow zero-length strings
-        // we much check for them here.
         if (contains(U_ETHER)) {
             return incremental ? U_PARTIAL_MATCH : U_MATCH;
         } else {
@@ -614,11 +608,9 @@ UMatchDegree UnicodeSet::matches(const Replaceable& text,
 
             for (i=0; i<strings->size(); ++i) {
                 const UnicodeString& trial = *(const UnicodeString*)strings->elementAt(i);
-
-                //if (trial.length() == 0) {
-                //    return U_MATCH; // null-string always matches
-                //}
-                // assert(trial.length() != 0); // We ensure this elsewhere
+                if (trial.isEmpty()) {
+                    continue;  // skip the empty string
+                }
 
                 UChar c = trial.charAt(forward ? 0 : trial.length() - 1);
 
@@ -971,12 +963,12 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
  * present.  If this set already contains the multicharacter,
  * the call leaves this set unchanged.
  * Thus "ch" => {"ch"}
- * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+ *
  * @param s the source string
  * @return the modified set, for chaining
  */
 UnicodeSet& UnicodeSet::add(const UnicodeString& s) {
-    if (s.length() == 0 || isFrozen() || isBogus()) return *this;
+    if (isFrozen() || isBogus()) return *this;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         if (!stringsContains(s)) {
@@ -991,8 +983,7 @@ UnicodeSet& UnicodeSet::add(const UnicodeString& s) {
 
 /**
  * Adds the given string, in order, to 'strings'.  The given string
- * must have been checked by the caller to not be empty and to not
- * already be in 'strings'.
+ * must have been checked by the caller to not already be in 'strings'.
  */
 void UnicodeSet::_add(const UnicodeString& s) {
     if (isFrozen() || isBogus()) {
@@ -1021,16 +1012,13 @@ void UnicodeSet::_add(const UnicodeString& s) {
  * @param string to test
  */
 int32_t UnicodeSet::getSingleCP(const UnicodeString& s) {
-    //if (s.length() < 1) {
-    //    throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
-    //}
-    if (s.length() > 2) return -1;
-    if (s.length() == 1) return s.charAt(0);
-
-    // at this point, len = 2
-    UChar32 cp = s.char32At(0);
-    if (cp > 0xFFFF) { // is surrogate pair
-        return cp;
+    int32_t sLength = s.length();
+    if (sLength == 1) return s.charAt(0);
+    if (sLength == 2) {
+        UChar32 cp = s.char32At(0);
+        if (cp > 0xFFFF) { // is surrogate pair
+            return cp;
+        }
     }
     return -1;
 }
@@ -1186,7 +1174,7 @@ UnicodeSet& UnicodeSet::remove(UChar32 c) {
  * @return the modified set, for chaining
  */
 UnicodeSet& UnicodeSet::remove(const UnicodeString& s) {
-    if (s.length() == 0 || isFrozen() || isBogus()) return *this;
+    if (isFrozen() || isBogus()) return *this;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         if (strings != nullptr && strings->removeElement((void*) &s)) {
@@ -1252,12 +1240,12 @@ UnicodeSet& UnicodeSet::complement(void) {
  * Complement the specified string in this set.
  * The set will not contain the specified string once the call
  * returns.
- * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+ *
  * @param s the string to complement
  * @return this object, for chaining
  */
 UnicodeSet& UnicodeSet::complement(const UnicodeString& s) {
-    if (s.length() == 0 || isFrozen() || isBogus()) return *this;
+    if (isFrozen() || isBogus()) return *this;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
         if (stringsContains(s)) {

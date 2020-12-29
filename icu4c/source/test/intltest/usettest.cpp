@@ -98,6 +98,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestIntOverflow);
     TESTCASE_AUTO(TestUnusedCcc);
     TESTCASE_AUTO(TestDeepPattern);
+    TESTCASE_AUTO(TestEmptyString);
     TESTCASE_AUTO_END;
 }
 
@@ -3983,4 +3984,47 @@ void UnicodeSetTest::TestDeepPattern() {
     UnicodeSet set(pattern, errorCode);
     assertTrue("[a[a[a...1000s...]]] -> error", errorCode.isFailure());
     errorCode.reset();
+}
+
+void UnicodeSetTest::TestEmptyString() {
+    IcuTestErrorCode errorCode(*this, "TestEmptyString");
+    // Starting with ICU 69, the empty string is allowed in UnicodeSet. ICU-13702
+    UnicodeSet set(u"[{}]", errorCode);
+    if (!assertSuccess("set from pattern with {}", errorCode)) { return; }
+    assertTrue("set from pattern with {}", set.contains(u""));
+    assertEquals("set from pattern with {}: size", 1, set.size());
+    assertFalse("set from pattern with {}: isEmpty", set.isEmpty());
+
+    // Remove, add back, ...
+    assertFalse("remove empty string", set.remove(u"").contains(u""));
+    assertEquals("remove empty string: size", 0, set.size());
+    assertTrue("remove empty string: isEmpty", set.isEmpty());
+    assertTrue("add empty string", set.add(u"").contains(u""));
+    // missing API -- assertTrue("retain empty string", set.retain(u"").contains(u""));
+    assertFalse("complement-remove empty string", set.complement(u"").contains(u""));
+    assertTrue("complement-add empty string", set.complement(u"").contains(u""));
+
+    assertFalse("clear", set.clear().contains(u""));
+    assertTrue("add empty string 2", set.add(u"").contains(u""));
+    assertFalse("removeAllStrings", set.removeAllStrings().contains(u""));
+    assertTrue("add empty string 3", set.add(u"").contains(u""));
+    // Note that this leaves the set containing exactly the empty string.
+
+    // strings() access and iteration
+    // no C++ equivalent for Java strings() -- assertTrue("strings()", set.strings().contains(u""));
+    UnicodeSetIterator sit(set);
+    assertTrue("set iterator.next()", sit.next());
+    assertTrue("set iterator has empty string", sit.isString() && sit.getString().isEmpty());
+
+    // The empty string is ignored in matching.
+    set.add(u'a').add(u'c');
+    assertEquals("span", 1, set.span(u"abc", 3, USET_SPAN_SIMPLE));
+    assertEquals("spanBack", 2, set.spanBack(u"abc", 3, USET_SPAN_SIMPLE));
+    assertTrue("containsNone", set.containsNone(u"def"));
+    assertFalse("containsSome", set.containsSome(u"def"));
+    set.freeze();
+    assertEquals("frozen span", 1, set.span(u"abc", 3, USET_SPAN_SIMPLE));
+    assertEquals("frozen spanBack", 2, set.spanBack(u"abc", 3, USET_SPAN_SIMPLE));
+    assertTrue("frozen containsNone", set.containsNone(u"def"));
+    assertFalse("frozen containsSome", set.containsSome(u"def"));
 }

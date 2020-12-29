@@ -1528,12 +1528,12 @@ public class UnicodeSetTest extends TestFmwk {
 
         //public Iterator<String> iterator() {
 
-        ArrayList<String> oldList = new ArrayList<String>();
+        ArrayList<String> oldList = new ArrayList<>();
         for (UnicodeSetIterator it = new UnicodeSetIterator(set1); it.next();) {
             oldList.add(it.getString());
         }
 
-        ArrayList<String> list1 = new ArrayList<String>();
+        ArrayList<String> list1 = new ArrayList<>();
         for (String s : set1) {
             list1.add(s);
         }
@@ -1613,11 +1613,11 @@ public class UnicodeSetTest extends TestFmwk {
         List<UnicodeSet> goalLongest = Arrays.asList(set1, set3, set2);
         List<UnicodeSet> goalLex = Arrays.asList(set1, set2, set3);
 
-        List<UnicodeSet> sorted = new ArrayList(new TreeSet<UnicodeSet>(unsorted));
+        List<UnicodeSet> sorted = new ArrayList(new TreeSet<>(unsorted));
         assertNotEquals("compareTo-shorter-first", unsorted, sorted);
         assertEquals("compareTo-shorter-first", goalShortest, sorted);
 
-        TreeSet<UnicodeSet> sorted1 = new TreeSet<UnicodeSet>(new Comparator<UnicodeSet>(){
+        TreeSet<UnicodeSet> sorted1 = new TreeSet<>(new Comparator<UnicodeSet>(){
             @Override
             public int compare(UnicodeSet o1, UnicodeSet o2) {
                 // TODO Auto-generated method stub
@@ -1628,7 +1628,7 @@ public class UnicodeSetTest extends TestFmwk {
         assertNotEquals("compareTo-longer-first", unsorted, sorted);
         assertEquals("compareTo-longer-first", goalLongest, sorted);
 
-        sorted1 = new TreeSet<UnicodeSet>(new Comparator<UnicodeSet>(){
+        sorted1 = new TreeSet<>(new Comparator<UnicodeSet>(){
             @Override
             public int compare(UnicodeSet o1, UnicodeSet o2) {
                 // TODO Auto-generated method stub
@@ -1642,7 +1642,7 @@ public class UnicodeSetTest extends TestFmwk {
         //compare(String, int)
         // make a list of interesting combinations
         List<String> sources = Arrays.asList("\u0000", "a", "b", "\uD7FF", "\uD800", "\uDBFF", "\uDC00", "\uDFFF", "\uE000", "\uFFFD", "\uFFFF");
-        TreeSet<String> target = new TreeSet<String>();
+        TreeSet<String> target = new TreeSet<>();
         for (String s : sources) {
             target.add(s);
             for (String t : sources) {
@@ -1685,8 +1685,8 @@ public class UnicodeSetTest extends TestFmwk {
 
         //compare(Iterable<T>, Iterable<T>)
         int max = 10;
-        List<String> test1 = new ArrayList<String>(max);
-        List<String> test2 = new ArrayList<String>(max);
+        List<String> test1 = new ArrayList<>(max);
+        List<String> test2 = new ArrayList<>(max);
         for (int i = 0; i <= max; ++i) {
             test1.add("a" + i);
             test2.add("a" + (max - i)); // add in reverse order
@@ -2791,5 +2791,48 @@ public class UnicodeSetTest extends TestFmwk {
             fail("[a[a[a...1000s...]]] did not throw an exception");
         } catch(RuntimeException expected) {
         }
+    }
+
+    @Test
+    public void TestEmptyString() {
+        // Starting with ICU 69, the empty string is allowed in UnicodeSet. ICU-13702
+        UnicodeSet set = new UnicodeSet("[{}]");
+        assertTrue("set from pattern with {}", set.contains(""));
+        assertEquals("set from pattern with {}: size", 1, set.size());
+        assertFalse("set from pattern with {}: isEmpty", set.isEmpty());
+
+        // Remove, add back, ...
+        assertFalse("remove empty string", set.remove("").contains(""));
+        assertEquals("remove empty string: size", 0, set.size());
+        assertTrue("remove empty string: isEmpty", set.isEmpty());
+        assertTrue("add empty string", set.add("").contains(""));
+        assertTrue("retain empty string", set.retain("").contains(""));
+        assertFalse("complement-remove empty string", set.complement("").contains(""));
+        assertTrue("complement-add empty string", set.complement("").contains(""));
+
+        assertFalse("clear", set.clear().contains(""));
+        assertTrue("add empty string 2", set.add("").contains(""));
+        assertFalse("removeAllStrings", set.removeAllStrings().contains(""));
+        assertTrue("add empty string 3", set.add("").contains(""));
+        // Note that this leaves the set containing exactly the empty string.
+
+        // strings() access and iteration
+        assertTrue("strings()", set.strings().contains(""));
+        UnicodeSetIterator sit = new UnicodeSetIterator(set);
+        assertTrue("set iterator.next()", sit.next());
+        assertTrue("set iterator has empty string",
+                sit.codepoint == UnicodeSetIterator.IS_STRING && sit.getString().isEmpty());
+
+        // The empty string is ignored in matching.
+        set.add('a').add('c');
+        assertEquals("span", 1, set.span("abc", SpanCondition.SIMPLE));
+        assertEquals("spanBack", 2, set.spanBack("abc", SpanCondition.SIMPLE));
+        assertTrue("containsNone", set.containsNone("def"));
+        assertFalse("containsSome", set.containsSome("def"));
+        set.freeze();
+        assertEquals("frozen span", 1, set.span("abc", SpanCondition.SIMPLE));
+        assertEquals("frozen spanBack", 2, set.spanBack("abc", SpanCondition.SIMPLE));
+        assertTrue("frozen containsNone", set.containsNone("def"));
+        assertFalse("frozen containsSome", set.containsSome("def"));
     }
 }
