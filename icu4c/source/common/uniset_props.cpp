@@ -555,7 +555,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                         }
                         buf.append(c);
                     }
-                    if (buf.length() < 1 || !ok) {
+                    if (!ok) {
                         // syntaxError(chars, "Invalid multicharacter string");
                         ec = U_MALFORMED_SET;
                         return;

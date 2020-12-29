@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
-import static com.ibm.icu.impl.number.parse.ParsingUtils.safeContains;
-
 import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -18,7 +16,7 @@ public class InfinityMatcher extends SymbolMatcher {
 
     public static InfinityMatcher getInstance(DecimalFormatSymbols symbols) {
         String symbolString = symbols.getInfinity();
-        if (safeContains(DEFAULT.uniSet, symbolString)) {
+        if (DEFAULT.uniSet.contains(symbolString)) {
             return DEFAULT;
         } else {
             return new InfinityMatcher(symbolString);
