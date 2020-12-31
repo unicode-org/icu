@@ -135,6 +135,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestTable_8_16_Bits);
     TESTCASE_AUTO(TestBug13590);
     TESTCASE_AUTO(TestUnpairedSurrogate);
+    TESTCASE_AUTO(TestThaiWordBreak);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -244,6 +245,40 @@ void RBBITest::TestBug3818() {
             __FILE__, __LINE__, startOfSecondWord);
     }
     delete bi;
+}
+
+
+//---------------------------------------------
+void RBBITest::TestThaiWordBreak() {
+    UErrorCode  status = U_ZERO_ERROR;
+
+    // Four Thai words...
+    UnicodeString  thaiStr(u"พิธีสาบานตนของไบเดนและแฮร์ริสเป็นไปด้วยความเรียบร้อยไม่มีเหตุไม่คาดฝันอย่างที่กังวล"); // thai3
+    // UnicodeString  thaiStr(u"พิธีส"); // thai4
+    //UnicodeString  thaiStr(u"ไทยรัฐออนไลน์"); // thai1
+
+    LocalPointer<BreakIterator> bi(BreakIterator::createWordInstance(Locale("th"), status));
+    if (U_FAILURE(status) || bi.getAlias() == nullptr) {
+        errcheckln(status, "Fail at file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    bi->setText(thaiStr);
+
+    int32_t bk;
+    int32_t last = 0;
+    int32_t total = 0;
+    std::string text;
+    printf("%s (len=%d)\n", thaiStr.toUTF8String<std::string>(text).c_str(), thaiStr.length());
+    while ((bk = bi->next()) != BreakIterator::DONE) {
+      total++;
+      text.clear();
+      printf("%s|", thaiStr.tempSubString(last, bk-last).toUTF8String<std::string>(text).c_str());
+      //printf("%d\n", bk);
+      last = bk;
+    }
+    text.clear();
+    printf("%s\n", thaiStr.tempSubString(last).toUTF8String<std::string>(text).c_str());
+    printf("total %d\n", total);
 }
 
 

@@ -108,6 +108,26 @@ public class BreakIteratorTest extends TestFmwk
     //=========================================================================
 
 
+    @Test
+    public void TestThaiWordBreak() {
+        BreakIterator bi = BreakIterator.getWordInstance(new Locale("th"));
+        String str = "พิธีสาบานตนของไบเดนและแฮร์ริสเป็นไปด้วยความเรียบร้อย ไม่มีเหตุไม่คาดฝันอย่างที่กังวล";
+        bi.setText(str);
+        System.out.println(str);
+        System.out.println("str len:" + str.length());
+        int bk = 0;
+        int last = 0;
+        int total = 0;
+        while ((bk = bi.next()) != BreakIterator.DONE) {
+            System.out.print(str.substring(last, bk));
+            System.out.print("|");
+            total++;
+            last = bk;
+        }
+        System.out.println(str.substring(last));
+        System.out.println("total: " + total);
+    }
+
     /*
      * @bug 4153072
      */

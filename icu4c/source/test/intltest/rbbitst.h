@@ -48,7 +48,7 @@ public:
     void TestEndBehaviour();
     void TestBug4153072();
     void TestJapaneseLineBreak();
-    void TestThaiLineBreak();
+    void TestThaiWordBreak();
     void TestMixedThaiLineBreak();
     void TestMaiyamok();
     void TestMonkey();

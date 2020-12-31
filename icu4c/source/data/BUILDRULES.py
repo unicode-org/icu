@@ -25,6 +25,7 @@ def generate(config, io, common_vars):
     requests += generate_confusables(config, io, common_vars)
     requests += generate_conversion_mappings(config, io, common_vars)
     requests += generate_brkitr_brk(config, io, common_vars)
+    requests += generate_brkitr_lstm(config, io, common_vars)
     requests += generate_stringprep(config, io, common_vars)
     requests += generate_brkitr_dictionaries(config, io, common_vars)
     requests += generate_normalization(config, io, common_vars)
@@ -180,7 +181,7 @@ def generate_brkitr_brk(config, io, common_vars):
         RepeatedExecutionRequest(
             name = "brkitr_brk",
             category = "brkitr_rules",
-            dep_targets = [DepTarget("cnvalias"), DepTarget("ulayout")],
+            dep_targets = [DepTarget("cnvalias"), DepTarget("ulayout"), DepTarget("lstm_res")],
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("genbrk"),
@@ -446,6 +447,35 @@ def generate_translit(config, io, common_vars):
             output_files = output_files,
             tool = IcuTool("genrb"),
             args = "-s {IN_DIR}/translit -d {OUT_DIR}/translit -i {OUT_DIR} "
+                "-k "
+                "{INPUT_BASENAME}",
+            format_with = {
+            },
+            repeat_with = {
+                "INPUT_BASENAME": utils.SpaceSeparatedList(input_basenames)
+            }
+        )
+    ]
+
+def generate_brkitr_lstm(config, io, common_vars):
+    input_files = [InFile(filename) for filename in io.glob("brkitr/lstm/*.txt")]
+    dep_files = set(InFile(filename) for filename in io.glob("brkitr/lstm/*.txt"))
+    dep_files -= set(input_files)
+    dep_files = list(sorted(dep_files))
+    input_basenames = [v.filename[12:] for v in input_files]
+    output_files = [
+        OutFile("brkitr/%s.res" % v[:-4])
+        for v in input_basenames
+    ]
+    return [
+        RepeatedOrSingleExecutionRequest(
+            name = "lstm_res",
+            category = "brkitr_lstm",
+            dep_targets = dep_files,
+            input_files = input_files,
+            output_files = output_files,
+            tool = IcuTool("genrb"),
+            args = "-s {IN_DIR}/brkitr/lstm -d {OUT_DIR}/brkitr -i {OUT_DIR} "
                 "-k "
                 "{INPUT_BASENAME}",
             format_with = {

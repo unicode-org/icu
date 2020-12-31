@@ -25,6 +25,7 @@
 #include "brkeng.h"
 #include "cmemory.h"
 #include "dictbe.h"
+#include "lstmbe.h"
 #include "charstr.h"
 #include "dictionarydata.h"
 #include "mutex.h"
@@ -158,14 +159,36 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c) {
     return lbe;
 }
 
+UnicodeString defaultLSTM(UScriptCode script, UErrorCode& status) {
+    // open root from brkitr tree.
+    UResourceBundle *b = ures_open(U_ICUDATA_BRKITR, "", &status);
+    b = ures_getByKeyWithFallback(b, "lstm", b, &status);
+    return ures_getUnicodeStringByKey(b, uscript_getShortName(script), &status);
+}
+
 const LanguageBreakEngine *
 ICULanguageBreakFactory::loadEngineFor(UChar32 c) {
     UErrorCode status = U_ZERO_ERROR;
     UScriptCode code = uscript_getScript(c, &status);
     if (U_SUCCESS(status)) {
+        // Use LSTM
+        if (code == USCRIPT_THAI) {
+            const LanguageBreakEngine *engine = new ThaiLSTMBreakEngine(defaultLSTM(code, status), status);
+            if (U_SUCCESS(status) && engine != nullptr) {
+                return engine;
+            }
+            status = U_ZERO_ERROR;
+        }
+        if (code == USCRIPT_MYANMAR) {
+            const LanguageBreakEngine *engine = new BurmeseLSTMBreakEngine(defaultLSTM(code, status), status);
+            if (U_SUCCESS(status) && engine != nullptr) {
+                return engine;
+            }
+            status = U_ZERO_ERROR;
+        }
         DictionaryMatcher *m = loadDictionaryMatcherFor(code);
-        if (m != NULL) {
-            const LanguageBreakEngine *engine = NULL;
+        if (m != nullptr) {
+            const LanguageBreakEngine *engine = nullptr;
             switch(code) {
             case USCRIPT_THAI:
                 engine = new ThaiBreakEngine(m, status);
