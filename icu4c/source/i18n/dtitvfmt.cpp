@@ -704,7 +704,7 @@ DateIntervalFormat::create(const Locale& locale,
         status = U_MEMORY_ALLOCATION_ERROR;
         delete dtitvinf;
     } else if ( U_FAILURE(status) ) {
-        // safe to delete f, although nothing acutally is saved
+        // safe to delete f, although nothing actually is saved
         delete f;
         f = 0;
     }

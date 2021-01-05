@@ -209,7 +209,7 @@ class RBBIRuleScanner {
             break;
 
         case RBBIRuleParseTable.doEndAssign: {
-            // We have reached the end of an assignement statement.
+            // We have reached the end of an assignment statement.
             //   Current scan char is the ';' that terminates the assignment.
 
             // Terminate expression, leaves expression parse tree rooted in TOS

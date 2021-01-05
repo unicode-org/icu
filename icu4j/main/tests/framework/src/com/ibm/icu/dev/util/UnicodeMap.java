@@ -245,7 +245,7 @@ public final class UnicodeMap<T> implements Cloneable, Freezable<UnicodeMap<T>>,
     /**
      * Add a gap from index to index+count-1.
      * The values there are undefined, and must be set.
-     * Logically grows arrays to accomodate. Actual growth is limited
+     * Logically grows arrays to accommodate. Actual growth is limited
      * @param index
      * @param count
      */

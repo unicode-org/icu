@@ -157,7 +157,7 @@ public:
     void write(UnicodeString& result, UErrorCode& status) const;
 
     /**
-     * Writes RFC2445 VTIMEZONE data for this time zone applicalbe
+     * Writes RFC2445 VTIMEZONE data for this time zone applicable
      * for dates after the specified start time.
      * @param start The start date.
      * @param result Output param to filled in with the VTIMEZONE data.
@@ -167,7 +167,7 @@ public:
     void write(UDate start, UnicodeString& result, UErrorCode& status) const;
 
     /**
-     * Writes RFC2445 VTIMEZONE data applicalbe for the specified date.
+     * Writes RFC2445 VTIMEZONE data applicable for the specified date.
      * Some common iCalendar implementations can only handle a single time
      * zone property or a pair of standard and daylight time properties using
      * BYDAY rule with day of week (such as BYDAY=1SUN).  This method produce

@@ -1702,7 +1702,7 @@ ucnv_countAvailable(void);
  * all available converters contained in the alias file. All converters
  * in this list can be opened.
  *
- * @param n the index to a converter available on the system (in the range <TT>[0..ucnv_countAvaiable()]</TT>)
+ * @param n the index to a converter available on the system (in the range <TT>[0..ucnv_countAvailable()]</TT>)
  * @return a pointer a string (library owned), or <TT>NULL</TT> if the index is out of bounds.
  * @see ucnv_countAvailable
  * @stable ICU 2.0

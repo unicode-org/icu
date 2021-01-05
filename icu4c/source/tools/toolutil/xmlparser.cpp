@@ -243,7 +243,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
                 UnicodeString attValue = mAttrValue.group(2, errorCode);
 
                 // Trim the quotes from the att value.  These are left over from the original regex
-                //   that parsed the attribue, which couldn't conveniently strip them.
+                //   that parsed the attribute, which couldn't conveniently strip them.
                 attValue.remove(0,1);                    // one char from the beginning
                 attValue.truncate(attValue.length()-1);  // and one from the end.
 
@@ -498,7 +498,7 @@ UXMLParser::createElement(RegexMatcher  &mEl, UErrorCode &status) {
         UnicodeString attValue = mAttrValue.group(2, status);
 
         // Trim the quotes from the att value.  These are left over from the original regex
-        //   that parsed the attribue, which couldn't conveniently strip them.
+        //   that parsed the attribute, which couldn't conveniently strip them.
         attValue.remove(0,1);                    // one char from the beginning
         attValue.truncate(attValue.length()-1);  // and one from the end.
         

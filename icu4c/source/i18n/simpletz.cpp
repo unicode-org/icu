@@ -42,7 +42,7 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleTimeZone)
 
 // Use only for decodeStartRule() and decodeEndRule() where the year is not
-// available. Set February to 29 days to accomodate rules with that date
+// available. Set February to 29 days to accommodate rules with that date
 // and day-of-week-on-or-before-that-date mode (DOW_LE_DOM_MODE).
 // The compareToRule() method adjusts to February 28 in non-leap years.
 //

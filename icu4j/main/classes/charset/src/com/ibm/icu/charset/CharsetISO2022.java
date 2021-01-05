@@ -2566,7 +2566,7 @@ class CharsetISO2022 extends CharsetICU {
     /*
      *   Rules for ISO-2022-KR encoding
      *   i) The KSC5601 designator sequence should appear only once in a file,
-     *      at the begining of a line before any KSC5601 characters. This usually
+     *      at the beginning of a line before any KSC5601 characters. This usually
      *      means that it appears by itself on the first line of the file
      *  ii) There are only 2 shifting sequences SO to shift into double byte mode
      *      and SI to shift into single byte mode

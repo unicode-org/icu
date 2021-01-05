@@ -128,7 +128,7 @@ Rulesets are invoked by first applying negative and fractional rules, and then
 using a recursive process. It starts by finding the rule whose range includes
 the current value and applying that rule. If the rule so directs, it emits text,
 including text obtained by recursing on new values as directed by the rule. As
-you can see, the rules are designed to accomodate recursive processing of
+you can see, the rules are designed to accommodate recursive processing of
 numbers, and so are best suited for formatting numbers in ways that are
 inherently recursive.
 

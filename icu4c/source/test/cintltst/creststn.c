@@ -2373,7 +2373,7 @@ static void TestResourceLevelAliasing(void) {
                 }
                 uBufferLen = u_unescape(strings[i], uBuffer, 256);
                 if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
-                  log_err("(2) Didn't get correct string while accesing alias table by index (%s)\n", strings[i]);
+                  log_err("(2) Didn't get correct string while accessing alias table by index (%s)\n", strings[i]);
                 }
             }
             for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
@@ -2400,7 +2400,7 @@ static void TestResourceLevelAliasing(void) {
                 }
                 uBufferLen = u_unescape(strings[i], uBuffer, 256);
                 if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
-                  log_err("Didn't get correct string while accesing alias by index in an array (%s)\n", strings[i]);
+                  log_err("Didn't get correct string while accessing alias by index in an array (%s)\n", strings[i]);
                 }
             }
             for(i = 0; i < UPRV_LENGTHOF(strings); i++) {

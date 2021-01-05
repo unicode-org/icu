@@ -1045,7 +1045,7 @@ public final class Utility {
      * this character are not included in the output
      * @param output an array to receive the substrings between
      * instances of divider.  It must be large enough on entry to
-     * accomodate all output.  Adjacent instances of the divider
+     * accommodate all output.  Adjacent instances of the divider
      * character will place empty strings into output.  Before
      * returning, output is padded out with empty strings.
      */

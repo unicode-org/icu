@@ -364,7 +364,7 @@ _strFromWCS( UChar   *dest,
                 }
 
                 /* we have found a null  so convert the 
-                 * chunk from begining of non-null char to null
+                 * chunk from beginning of non-null char to null
                  */
                 retVal = uprv_wcstombs(pCSrc,pSrc,remaining);
 

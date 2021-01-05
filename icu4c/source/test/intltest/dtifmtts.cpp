@@ -252,7 +252,7 @@ void DateIntervalFormatTest::testAPI() {
 
     // ====== test constructor/copy constructor and assignment
     /* they are protected, no test
-    logln("Testing DateIntervalFormat constructor and assigment operator");
+    logln("Testing DateIntervalFormat constructor and assignment operator");
     status = U_ZERO_ERROR;
 
     DateFormat* constFmt = dtitvfmt->getDateFormat()->clone();

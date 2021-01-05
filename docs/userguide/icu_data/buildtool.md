@@ -610,7 +610,7 @@ files are not in such a directory, derb fails with U_MISSING_RESOURCE_ERROR.
 of the filter rules matters a great deal in how effective your data size
 reduction can be, and the wildcard `*` can sometimes produce behavior that is
 tricky to reason about. For example, these three lists of filter rules look
-similar on first glance but acutally produce different output:
+similar on first glance but actually produce different output:
 
 <table>
 <tr>

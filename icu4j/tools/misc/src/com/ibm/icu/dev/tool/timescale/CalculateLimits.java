@@ -46,7 +46,7 @@ public class CalculateLimits {
      * 
      * @see com.ibm.icu.util.UniversalTimeScale
      * 
-     * @param args - the command line arugments
+     * @param args - the command line arguments
      */
     public static void main(String[] args)
     {

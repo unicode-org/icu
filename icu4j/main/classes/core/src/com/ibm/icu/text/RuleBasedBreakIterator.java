@@ -1349,7 +1349,7 @@ class BreakCache {
                 previous();
             } else {
                 // seek() leaves the BreakCache positioned at the preceding boundary
-                //        if the requested position is between two bounaries.
+                //        if the requested position is between two boundaries.
                 // current() pushes the BreakCache position out to the BreakIterator itself.
                 assert(startPos > fTextIdx);
                 current();

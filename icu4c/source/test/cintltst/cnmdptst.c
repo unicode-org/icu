@@ -93,7 +93,7 @@ static void TestPatterns(void)
         }
         u_uastrcpy(unewpat, newpat[i]);
         if(u_strcmp(unewp, unewpat) != 0)
-            log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
+            log_err("FAIL: Pattern  %s should be transmuted to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
 
         lneed=0;
         lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
