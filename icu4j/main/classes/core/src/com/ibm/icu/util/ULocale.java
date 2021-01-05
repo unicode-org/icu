@@ -621,7 +621,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * user.language property, a security exception will be thrown,
      * and the default ULocale will remain unchanged.
      * <p>
-     * By setting the default ULocale with this method, all of the default categoy locales
+     * By setting the default ULocale with this method, all of the default category locales
      * are also set to the specified default ULocale.
      * @param newLocale the new default locale
      * @throws SecurityException if a security manager exists and its
@@ -4008,7 +4008,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
          * effect.  The attribute must not be null and must be well-formed
          * or an exception is thrown.
          *
-         * <p>Attribute comparision for removal is case-insensitive.
+         * <p>Attribute comparison for removal is case-insensitive.
          *
          * @param attribute the attribute
          * @return This builder.

@@ -147,7 +147,7 @@ class CharsetISO2022 extends CharsetICU {
         maxBytesPerChar = 8;
         minBytesPerChar = 1;
         maxCharsPerByte = 1;
-        // open the required coverters and cache them.
+        // open the required converters and cache them.
         myConverterData.myConverterArray[GB2312_1] = ((CharsetMBCS)CharsetICU.forNameICU("ibm-5478")).sharedData;
         if (version == 1) {
             myConverterData.myConverterArray[ISO_IR_165] = ((CharsetMBCS)CharsetICU.forNameICU("iso-ir-165")).sharedData;
@@ -2533,7 +2533,7 @@ class CharsetISO2022 extends CharsetICU {
              * are handled by the framework, but for ISO-2022-CN conversion
              * we need to be in ASCII mode at the very end
              *
-             * condtions:
+             * conditions:
              *   succesful
              *   not in ASCII mode
              *   end of input and no truncated input
@@ -2976,7 +2976,7 @@ class CharsetISO2022 extends CharsetICU {
                 } else if(variant==ISO_2022_JP && i == JISX208){
                     /*
                      * Only add code points that map to Shift-JIS codes
-                     * corrosponding to JIS X 208
+                     * corresponding to JIS X 208
                      */
                     filter=CharsetMBCS.UCNV_SET_FILTER_SJIS;
                 } else if(i==KSC5601){

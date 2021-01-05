@@ -432,7 +432,7 @@ public final class StringPrep {
                     ch -= val.value;
                 }
             }else if(val.type == DELETE){
-                // just consume the codepoint and contine
+                // just consume the codepoint and continue
                 continue;
             }
             //copy the source into destination

@@ -375,7 +375,7 @@ class TransliteratorIDParser;
  *
  * <p>It is also possible to match the beginning or the end of the text using a <code>UnicodeSet</code>.
  * This is done by including a virtual anchor character '<code>$</code>' at the end of the
- * set pattern. Although this is usually the match chafacter for the end anchor, the set will
+ * set pattern. Although this is usually the match character for the end anchor, the set will
  * match either the beginning or the end of the text, depending on its placement. For
  * example:
  *

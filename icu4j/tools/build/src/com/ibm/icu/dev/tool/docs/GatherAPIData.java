@@ -234,7 +234,7 @@ public class GatherAPIData {
         if (doc.isMethod() && doc.containingClass().isEnum()) {
             // System.out.println("*** " + doc.qualifiedName() + " pos: " +
             //                    doc.position().line() +
-            //                    " containined by: " +
+            //                    " contained by: " +
             //                    doc.containingClass().name() +
             //                    " pos: " +
             //                    doc.containingClass().position().line());

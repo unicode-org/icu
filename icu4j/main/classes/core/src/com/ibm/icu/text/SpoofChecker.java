@@ -801,7 +801,7 @@ public class SpoofChecker {
 
         /*
          * *****************************************************************************
-         * Internal classes for compililing confusable data into its binary (runtime) form.
+         * Internal classes for compiling confusable data into its binary (runtime) form.
          * *****************************************************************************
          */
         // ---------------------------------------------------------------------
@@ -1773,7 +1773,7 @@ public class SpoofChecker {
     //
     // String Table:
     //     The strings table contains all of the value strings (those of length two or greater)
-    //     concatentated together into one long char (UTF-16) array.
+    //     concatenated together into one long char (UTF-16) array.
     //
     //     There is no nul character or other mark between adjacent strings.
     //

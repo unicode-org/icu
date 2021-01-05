@@ -133,7 +133,7 @@ public class CanonGSUBBuilder
                     break;
                     
                 case UCharacter.DecompositionType.CANONICAL:
-                    //cannonicalTree.insert(decomposition + UCharacter.toString(ligature));
+                    //canonicalTree.insert(decomposition + UCharacter.toString(ligature));
                     break;
                 }
             }

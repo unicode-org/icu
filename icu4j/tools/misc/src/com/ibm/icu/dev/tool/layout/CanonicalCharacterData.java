@@ -35,7 +35,7 @@ public class CanonicalCharacterData
             
             for (String equiv = iterator.next(); equiv != null; equiv = iterator.next()) {
                 // Skip all equivalents of length 1; it's either the original
-                // characeter or something like Angstrom for A-Ring, which we don't care about
+                // character or something like Angstrom for A-Ring, which we don't care about
                 if (UTF16.countCodePoint(equiv) > 1) {
                     equivs.add(equiv);
                 }

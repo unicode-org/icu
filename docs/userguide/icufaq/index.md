@@ -130,7 +130,7 @@ upgrade-friendly.
     item changes, new support is added, or if a country changes its currency.
     Try not to depend on specific translations, or be prepared to change test
     cases. Also, a newer version may support additional translations,
-    currencies, types of calenders
+    currencies, types of calendars
 *   **Building/Deploying your Application (ICU4C):** ICU4C usually builds with
     symbol renaming (See:
     [binary compatibility](../design#icu-binary-compatibility)

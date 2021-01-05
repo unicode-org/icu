@@ -1503,7 +1503,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 && arrayOfArrayEquals(zoneStrings, that.zoneStrings)
                 // getDiplayName maps deprecated country and language codes to the current ones
                 // too bad there is no way to get the current codes!
-                // I thought canolicalize() would map the codes but .. alas! it doesn't.
+                // I thought canonicalize() would map the codes but .. alas! it doesn't.
                 && requestedLocale.getDisplayName().equals(that.requestedLocale.getDisplayName())
                 && Utility.arrayEquals(localPatternChars,
                                        that.localPatternChars));

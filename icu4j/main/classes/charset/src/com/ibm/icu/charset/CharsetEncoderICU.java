@@ -87,7 +87,7 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
     };
 
     /*
-     * Construcs a new encoder for the given charset
+     * Constructs a new encoder for the given charset
      *
      * @param cs
      *            for which the decoder is created

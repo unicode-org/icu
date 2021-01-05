@@ -177,7 +177,7 @@ interface SCSU
         0x0100,  // Latin Extended-A
         0x0300,  // Combining Diacritical Marks
         0x2000,  // General Punctuation
-        0x2080,  // Curency Symbols
+        0x2080,  // Currency Symbols
         0x2100,  // Letterlike Symbols and Number Forms
         0x3000   // CJK Symbols and Punctuation
     };

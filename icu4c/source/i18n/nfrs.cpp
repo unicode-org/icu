@@ -647,7 +647,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
 /**
  * Parses a string.  Matches the string to be parsed against each
  * of its rules (with a base value less than upperBound) and returns
- * the value produced by the rule that matched the most charcters
+ * the value produced by the rule that matched the most characters
  * in the source string.
  * @param text The string to parse
  * @param parsePosition The initial position is ignored and assumed

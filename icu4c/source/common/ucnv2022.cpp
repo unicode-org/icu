@@ -820,7 +820,7 @@ getKey_2022(char c,int32_t* key,int32_t* offset){
     return INVALID_2022;
 }
 
-/*runs through a state machine to determine the escape sequence - codepage correspondance
+/*runs through a state machine to determine the escape sequence - codepage correspondence
  */
 static void
 changeState_2022(UConverter* _this,

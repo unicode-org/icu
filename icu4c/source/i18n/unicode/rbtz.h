@@ -107,7 +107,7 @@ public:
 
     /**
      * Makes the <code>TimeZoneRule</code> ready to handle actual timezone
-     * calcuation APIs.  This method collects time zone rules specified
+     * calculation APIs.  This method collects time zone rules specified
      * by the caller via the constructor and addTransitionRule() and
      * builds internal structure for making the object ready to support
      * time zone APIs such as getOffset(), getNextTransition() and others.

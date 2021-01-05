@@ -308,7 +308,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
 
     calTypeBuf[0] = 0;
     if (U_SUCCESS(status) && order != NULL) {
-        // the first calender type is the default for the region
+        // the first calendar type is the default for the region
         int32_t len = 0;
         const UChar *uCalType = ures_getStringByIndex(order, 0, &len, &status);
         if (len < (int32_t)sizeof(calTypeBuf)) {

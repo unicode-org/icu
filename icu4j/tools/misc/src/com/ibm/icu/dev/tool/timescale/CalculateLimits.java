@@ -40,7 +40,7 @@ public class CalculateLimits {
      * the (internal) <code>toBigDecimalTrunc()</code> method. Any values outside
      * of the range of a <code>long</code> are pinned.
      * 
-     * The mimimum and maximum values for <code>toLong</code> are calulated by passing
+     * The mimimum and maximum values for <code>toLong</code> are calculated by passing
      * the min and max values calculated above to <code>BigDecimalFrom()</code>. Because
      * this method will round, the returned values are adjusted to take this into account.
      * 
