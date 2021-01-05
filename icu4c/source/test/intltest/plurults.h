@@ -38,7 +38,7 @@ private:
     void testOrdinal();
     void testSelect();
     void testSelectRange();
-    void testAvailbleLocales();
+    void testAvailableLocales();
     void testParseErrors();
     void testFixedDecimal();
     void testSelectTrailingZeros();

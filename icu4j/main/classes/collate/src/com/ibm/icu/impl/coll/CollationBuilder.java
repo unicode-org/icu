@@ -468,7 +468,7 @@ public final class CollationBuilder extends CollationRuleParser.Sink {
             // A Hangul syllable completely inside a contraction is ok.
         }
         // Note: If there is a prefix, then the parser checked that
-        // both the prefix and the string beging with NFC boundaries (not Jamo V or T).
+        // both the prefix and the string begin with NFC boundaries (not Jamo V or T).
         // Therefore: prefix.isEmpty() || !isJamoVOrT(nfdString.charAt(0))
         // (While handling a Hangul syllable, prefixes on Jamo V or T
         // would not see the previous Jamo of that syllable.)

@@ -730,7 +730,7 @@ public class DumbTextComponent extends Canvas
         if (visibleWidth(fMtr, subject) <= width)
           return len;
 
-        // LIU: Remainder of this method rewritten to accomodate lines
+        // LIU: Remainder of this method rewritten to accommodate lines
         // longer than the component width by first trying to break
         // into lines; then words; finally chars.
         int n = findFittingBreak(fMtr, subject, width, lineBreaker);

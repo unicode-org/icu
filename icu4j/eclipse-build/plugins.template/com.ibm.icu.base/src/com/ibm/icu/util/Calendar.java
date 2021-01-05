@@ -342,7 +342,7 @@ import com.ibm.icu.util.ULocale.Category;
  *     numbers must be restricted to a 32-bit <code>int</code>.  This
  *     restricts the overall supported range. Furthermore, restricting
  *     the supported range simplifies the computations by removing
- *     special case code that was used to accomodate arithmetic overflow
+ *     special case code that was used to accommodate arithmetic overflow
  *     at millis near <code>Long.MIN_VALUE</code> and
  *     <code>Long.MAX_VALUE</code>.</li>
  *
@@ -1922,7 +1922,7 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
         int min = 0;
         long startMs = getTimeInMillis();
         long targetMs = when.getTime();
-        // Always add from the start millis.  This accomodates
+        // Always add from the start millis.  This accommodates
         // operations like adding years from February 29, 2000 up to
         // February 29, 2004.  If 1, 1, 1, 1 is added to the year
         // field, the DOM gets pinned to 28 and stays there, giving an
@@ -2056,7 +2056,7 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
 //    /**
 //     * {@icu}Sets the behavior for handling wall time repeating multiple times
 //     * at negative time zone offset transitions. For example, 1:30 AM on
-//     * November 6, 2011 in US Eastern time (Ameirca/New_York) occurs twice;
+//     * November 6, 2011 in US Eastern time (America/New_York) occurs twice;
 //     * 1:30 AM EDT, then 1:30 AM EST one hour later. When <code>WALLTIME_FIRST</code>
 //     * is used, the wall time 1:30AM in this example will be interpreted as 1:30 AM EDT
 //     * (first occurrence). When <code>WALLTIME_LAST</code> is used, it will be

@@ -49,7 +49,7 @@ import com.ibm.icu.util.RangeValueIterator;
  * <p>There are basically 3 usage scenarios for porting:</p>
  * <p>1) UTrieEnumValue is the only implemented callback then just implement a
  * subclass of TrieIterator and override the extract(int) method. The
- * extract(int) method is analogus to UTrieEnumValue callback.
+ * extract(int) method is analogous to UTrieEnumValue callback.
  * </p>
  * <p>2) UTrieEnumValue and UTrieEnumRange both are implemented then implement
  * a subclass of TrieIterator, override the extract method and iterate, e.g
@@ -114,7 +114,7 @@ public class TrieIterator implements RangeValueIterator
     * <p>Returns true if we are not at the end of the iteration, false
     * otherwise.</p>
     * <p>The next set of codepoints with the same value type will be
-    * calculated during this call and returned in the arguement element.</p>
+    * calculated during this call and returned in the argument element.</p>
     * @param element return result
     * @return true if we are not at the end of the iteration, false otherwise.
     * @exception NoSuchElementException - if no more elements exist.

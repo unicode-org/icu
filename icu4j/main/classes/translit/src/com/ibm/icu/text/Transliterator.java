@@ -1038,7 +1038,7 @@ public abstract class Transliterator implements StringTransform  {
      * @param text the text to be transliterated
      * @param index the position indices
      * @param incremental if TRUE, then assume more characters may be inserted
-     * at index.limit, and postpone processing to accomodate future incoming
+     * at index.limit, and postpone processing to accommodate future incoming
      * characters
      * @param rollback if TRUE and if incremental is TRUE, then perform special
      * incremental processing, as described above, and undo partial
@@ -1355,7 +1355,7 @@ public abstract class Transliterator implements StringTransform  {
      * @param text the text to be transliterated
      * @param index the position indices
      * @param incremental if TRUE, then assume more characters may be inserted
-     * at index.limit, and postpone processing to accomodate future incoming
+     * at index.limit, and postpone processing to accommodate future incoming
      * characters
      * @stable ICU 2.0
      */

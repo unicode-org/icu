@@ -55,13 +55,13 @@ public class CharsetCallback {
 
     /*
      * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to C (\\uXXXX \\UXXXXXXXX)
-     * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to C (\\xXXXX)
+     * TO_U_CALLBACK_ESCAPE option to escape the character value according to C (\\xXXXX)
      */
     private static final String ESCAPE_C        = "C";
 
     /*
      * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Decimal escape \htmlonly(&amp;#DDDD;)\endhtmlonly
-     * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Decimal escape \htmlonly(&amp;#DDDD;)\endhtmlonly
+     * TO_U_CALLBACK_ESCAPE context option to escape the character value according to XML Decimal escape \htmlonly(&amp;#DDDD;)\endhtmlonly
      */
     private static final String ESCAPE_XML_DEC  = "D";
 

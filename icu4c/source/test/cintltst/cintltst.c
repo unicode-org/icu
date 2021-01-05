@@ -210,7 +210,7 @@ int main(int argc, const char* const argv[])
         root = NULL;
         addAllTests(&root);
 
-        /*  Tests acutally run HERE.   TODO:  separate command line option parsing & setting from test execution!! */
+        /*  Tests actually run HERE.   TODO:  separate command line option parsing & setting from test execution!! */
         nerrors = runTestRequest(root, argc, argv);
 
         setTestOption(REPEAT_TESTS_OPTION, DECREMENT_OPTION_VALUE);

@@ -551,7 +551,7 @@ void RBBIAPITest::TestIteration()
     //
     bi->first();
     if (bi->isBoundary(3) != TRUE) {
-        errln("%s:%d Incorrect value from bi->isBoudary().  Expected TRUE, got FALSE", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->isBoundary().  Expected TRUE, got FALSE", __FILE__, __LINE__, i);
     }
     i = bi->current();
     if (i != 3) {
@@ -560,7 +560,7 @@ void RBBIAPITest::TestIteration()
 
 
     if (bi->isBoundary(11) != FALSE) {
-        errln("%s:%d Incorrect value from bi->isBoudary().  Expected FALSE, got TRUE", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->isBoundary().  Expected FALSE, got TRUE", __FILE__, __LINE__, i);
     }
     i = bi->current();
     if (i != 10) {

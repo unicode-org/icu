@@ -642,7 +642,7 @@ positionExpansions(Line **gLines, int32_t size, CompareFn comparer) {
     Line *prevL = &prevTestLine;
     // This can be further optimized, since we now know that we have a 
     // sorted list of expansions, so current can start from toMove, since all
-    // the elements before it are already smaller. In the beggining it needs to 
+    // the elements before it are already smaller. In the beginning it needs to 
     // be on gLines, though.
     Line *current = *gLines;
     while(current) {
@@ -964,7 +964,7 @@ detectExpansions(Line **gLines, int32_t size, CompareFn comparer) {
     for(k = 0; k < size; k++) { // k is index of a thing that is not doubled
       current = *(gLines+k);
       // see if we have moved to front
-      // has it moved to the very beggining
+      // has it moved to the very beginning
       if((startStrength = probeStrength((gLines+k), &startP, comparer)) != UCOL_OFF) {
         continue; // this one is in the front
       }

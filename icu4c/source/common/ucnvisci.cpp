@@ -1147,7 +1147,7 @@ static const uint16_t lookupTable[][2]={
     /* is the code point valid in current script? */                                     \
     if(sourceChar> ASCII_END &&                                                          \
             (validityTable[(targetUniChar & 0x7F)] & data->currentMaskToUnicode)==0){    \
-        /* Vocallic RR is assigne in ISCII Telugu and Unicode */                         \
+        /* Vocallic RR is assigned in ISCII Telugu and Unicode */                         \
         if(data->currentDeltaToUnicode!=(TELUGU_DELTA) ||                                \
                     targetUniChar!=VOCALLIC_RR){                                         \
             targetUniChar=missingCharMarker;                                             \
@@ -1272,7 +1272,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args, UErrorCo
                 goto CALLBACK;
             } else if (*contextCharToUnicode==ISCII_INV) {
                 if (sourceChar==ISCII_HALANT) {
-                    targetUniChar = 0x0020; /* replace with space accoding to Indic FAQ */
+                    targetUniChar = 0x0020; /* replace with space according to Indic FAQ */
                 } else {
                     targetUniChar = ZWJ;
                 }

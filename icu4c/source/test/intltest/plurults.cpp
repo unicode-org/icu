@@ -58,7 +58,7 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
     TESTCASE_AUTO(testSelectRange);
-    TESTCASE_AUTO(testAvailbleLocales);
+    TESTCASE_AUTO(testAvailableLocales);
     TESTCASE_AUTO(testParseErrors);
     TESTCASE_AUTO(testFixedDecimal);
     TESTCASE_AUTO(testSelectTrailingZeros);
@@ -1099,7 +1099,7 @@ void PluralRulesTest::testSelectRange() {
 }
 
 
-void PluralRulesTest::testAvailbleLocales() {
+void PluralRulesTest::testAvailableLocales() {
     
     // Hash set of (char *) strings.
     UErrorCode status = U_ZERO_ERROR;

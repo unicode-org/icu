@@ -231,7 +231,7 @@ NFRuleSet::parseRules(UnicodeString& description, UErrorCode& status)
 
     // (this isn't a for loop because we might be deleting items from
     // the vector-- we want to make sure we only increment i when
-    // we _didn't_ delete aything from the vector)
+    // we _didn't_ delete anything from the vector)
     int32_t rulesSize = rules.size();
     for (int32_t i = 0; i < rulesSize; i++) {
         NFRule* rule = rules[i];
