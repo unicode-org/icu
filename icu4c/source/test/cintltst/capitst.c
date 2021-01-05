@@ -1174,7 +1174,7 @@ void TestSortKey()
     free(sortk2);
     free(sortk3);
 
-    log_verbose("Use secondary comparision level testing ...\n");
+    log_verbose("Use secondary comparison level testing ...\n");
     ucol_setStrength(col, UCOL_SECONDARY);
     sortklen=ucol_getSortKey(col, test1, u_strlen(test1),  NULL, 0);
     sortk1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklen+1));

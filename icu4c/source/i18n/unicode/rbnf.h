@@ -653,7 +653,7 @@ public:
 
   /**
    * Creates a RuleBasedNumberFormat from a predefined ruleset.  The selector
-   * code choosed among three possible predefined formats: spellout, ordinal,
+   * code chose among three possible predefined formats: spellout, ordinal,
    * and duration.
    * @param tag A selector code specifying which kind of formatter to create for that
    * locale.  There are four legal values: URBNF_SPELLOUT, which creates a formatter that

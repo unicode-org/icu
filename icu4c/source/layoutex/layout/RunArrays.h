@@ -140,7 +140,7 @@ public:
      *
      * @param limit is the limit index to add to the array.
      *
-     * @return the run index where the limit index was stored, or -1 if the limit index cannt be stored.
+     * @return the run index where the limit index was stored, or -1 if the limit index cannot be stored.
      *
      * @see init
      * @see grow

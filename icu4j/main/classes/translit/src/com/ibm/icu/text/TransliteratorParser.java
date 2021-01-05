@@ -943,7 +943,7 @@ class TransliteratorParser {
                 if (c == RULE_COMMENT_CHAR) {
                     pos = rule.indexOf("\n", pos) + 1;
                     if (pos == 0) {
-                        break; // No "\n" found; rest of rule is a commnet
+                        break; // No "\n" found; rest of rule is a comment
                     }
                     continue; // Either fall out or restart with next line
                 }

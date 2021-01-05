@@ -518,7 +518,7 @@ import com.ibm.icu.util.ULocale.Category;
  *     between days at sunset or at other times, all ICU4J calendars
  *     transition between days at <em>local zone midnight</em>.  This
  *     allows ICU4J to centralize the time computations in
- *     <code>Calendar</code> and to maintain basic correpsondences
+ *     <code>Calendar</code> and to maintain basic correspondences
  *     between calendar systems. Affected fields: {@link #AM_PM},
  *     {@link #HOUR}, {@link #HOUR_OF_DAY}, {@link #MINUTE},
  *     {@link #SECOND}, {@link #MILLISECOND},

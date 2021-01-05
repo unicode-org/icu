@@ -917,7 +917,7 @@ public class MessageFormat extends UFormat {
 //     * <p>
 //     * The text substituted for the individual format elements is derived from
 //     * the current subformat of the format element and the
-//     * <code>arguments</code> value corresopnding to the format element's
+//     * <code>arguments</code> value corresponding to the format element's
 //     * argument name.
 //     * <p>
 //     * This API may be called on formats that do not use named arguments.

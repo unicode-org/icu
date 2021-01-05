@@ -20,7 +20,7 @@ public class UResourceTypeMismatchException extends RuntimeException {
     static final long serialVersionUID = 1286569061095434541L;
     
     /**
-     * Constuct the exception with the given message
+     * Construct the exception with the given message
      * @param msg the error message for this exception
      * @stable ICU 3.0
      */

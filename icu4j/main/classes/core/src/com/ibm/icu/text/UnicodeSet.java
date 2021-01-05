@@ -1313,7 +1313,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         else if (i > 0 && c == list[i-1]) {
             // c is after end of prior range
             list[i-1]++;
-            // no need to chcek for collapse here
+            // no need to check for collapse here
         }
 
         else {

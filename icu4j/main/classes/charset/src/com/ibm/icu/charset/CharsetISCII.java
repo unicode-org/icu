@@ -1300,7 +1300,7 @@ class CharsetISCII extends CharsetICU {
                             }
                             if (converterData.currentDeltaFromUnicode == PNJ_DELTA) {
                                 if (sourceChar == PNJ_TIPPI) {
-                                    /* Make sure Tippi is converterd to Bindi. */
+                                    /* Make sure Tippi is converted to Bindi. */
                                     sourceChar = PNJ_BINDI;
                                 } else if (sourceChar == PNJ_ADHAK) {
                                     /* This is for consonant cluster handling. */

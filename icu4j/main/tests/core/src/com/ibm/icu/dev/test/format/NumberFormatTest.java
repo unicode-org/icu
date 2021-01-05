@@ -3746,7 +3746,7 @@ public class NumberFormatTest extends TestFmwk {
             errln("Comparison should return false.");
         }
         if (!ca.equals(ca)) {
-            errln("Comparision should return true.");
+            errln("comparison should return true.");
         }
         if (ca.equals(cb)) {
             errln("Comparison should return false.");

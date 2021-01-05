@@ -305,7 +305,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
             // INNER MODIFIER
             collapseInner = micros1.modInner->semanticallyEquivalent(*micros2.modInner);
 
-            // All done checking for collapsability.
+            // All done checking for collapsibility.
             break;
         }
 
