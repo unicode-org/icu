@@ -2381,6 +2381,13 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
+     * Maximum range for detecting daylight offset of a time zone when parsed time zone
+     * string indicates it's daylight saving time, but the detected time zone does not
+     * observe daylight saving time at the parsed date.
+     */
+    private static final long MAX_DAYLIGHT_DETECTION_RANGE = 30*365*24*60*60*1000L;
+
+    /**
      * Overrides DateFormat
      * @see DateFormat
      * @stable ICU 2.0
@@ -2735,50 +2742,46 @@ public class SimpleDateFormat extends DateFormat {
                     } else { // tztype == TZTYPE_DST
                         if (offsets[1] == 0) {
                             if (btz != null) {
-                                long time = localMillis + offsets[0];
-                                // We use the nearest daylight saving time rule.
-                                TimeZoneTransition beforeTrs, afterTrs;
-                                long beforeT = time, afterT = time;
-                                int beforeSav = 0, afterSav = 0;
+                                // This implementation resolves daylight saving time offset
+                                // closest rule after the given time.
+                                long baseTime = localMillis + offsets[0];
+                                long time = baseTime;
+                                long limit = baseTime + MAX_DAYLIGHT_DETECTION_RANGE;
+                                TimeZoneTransition trs = null;
 
-                                // Search for DST rule before or on the time
-                                while (true) {
-                                    beforeTrs = btz.getPreviousTransition(beforeT, true);
-                                    if (beforeTrs == null) {
+                                // Search for DST rule after the given time
+                                while (time < limit) {
+                                    trs = btz.getNextTransition(time, false);
+                                    if (trs == null) {
                                         break;
                                     }
-                                    beforeT = beforeTrs.getTime() - 1;
-                                    beforeSav = beforeTrs.getFrom().getDSTSavings();
-                                    if (beforeSav != 0) {
+                                    resolvedSavings = trs.getTo().getDSTSavings();
+                                    if (resolvedSavings != 0) {
                                         break;
                                     }
+                                    time = trs.getTime();
                                 }
 
-                                // Search for DST rule after the time
-                                while (true) {
-                                    afterTrs = btz.getNextTransition(afterT, false);
-                                    if (afterTrs == null) {
-                                        break;
+                                if (resolvedSavings == 0) {
+                                    // If no DST rule after the given time was found, search for
+                                    // DST rule before.
+                                    time = baseTime;
+                                    limit = baseTime - MAX_DAYLIGHT_DETECTION_RANGE;
+                                    while (time > limit) {
+                                        trs = btz.getPreviousTransition(time, true);
+                                        if (trs == null) {
+                                            break;
+                                        }
+                                        resolvedSavings = trs.getFrom().getDSTSavings();
+                                        if (resolvedSavings != 0) {
+                                            break;
+                                        }
+                                        time = trs.getTime() - 1;
                                     }
-                                    afterT = afterTrs.getTime();
-                                    afterSav = afterTrs.getTo().getDSTSavings();
-                                    if (afterSav != 0) {
-                                        break;
-                                    }
-                                }
 
-                                if (beforeTrs != null && afterTrs != null) {
-                                    if (time - beforeT > afterT - time) {
-                                        resolvedSavings = afterSav;
-                                    } else {
-                                        resolvedSavings = beforeSav;
+                                    if (resolvedSavings == 0) {
+                                        resolvedSavings = btz.getDSTSavings();
                                     }
-                                } else if (beforeTrs != null && beforeSav != 0) {
-                                    resolvedSavings = beforeSav;
-                                } else if (afterTrs != null && afterSav != 0) {
-                                    resolvedSavings = afterSav;
-                                } else {
-                                    resolvedSavings = btz.getDSTSavings();
                                 }
                             } else {
                                 resolvedSavings = tz.getDSTSavings();
