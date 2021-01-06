@@ -1572,6 +1572,8 @@ public class TimeZoneTest extends TestFmwk
                 {"Asia/Vientiane", "Asia/Bangkok"},
                 {"Atlantic/Jan_Mayen", "Europe/Oslo"},
                 {"Atlantic/St_Helena", "Africa/Abidjan"},
+                {"Australia/Currie", "Australia/Hobart"},
+                {"Australia/Tasmania", "Australia/Hobart"},
                 {"Europe/Bratislava", "Europe/Prague"},
                 {"Europe/Busingen", "Europe/Zurich"},
                 {"Europe/Guernsey", "Europe/London"},
