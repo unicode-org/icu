@@ -144,7 +144,8 @@ public class FormattedValueStringBuilderImpl {
                     int end = i - self.zero;
                     // Handle span fields; don't trim them
                     if (currField instanceof SpanFieldPlaceholder) {
-                        assert handleSpan(currField, cfpos, fieldStart, end);
+                        boolean handleResult = handleSpan(currField, cfpos, fieldStart, end);
+                        assert handleResult;
                         return true;
                     }
                     // Grouping separators can be whitespace; don't throw them out!
