@@ -412,8 +412,9 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Construct a MeasureUnit from a CLDR Unit Identifier, defined in UTS 35.
-     * Validates and canonicalizes the identifier.
+     * Construct a MeasureUnit from a CLDR Core Unit Identifier, defined in UTS
+     * 35. (Core unit identifiers and mixed unit identifiers are supported, long
+     * unit identifiers are not.) Validates and canonicalizes the identifier.
      *
      * Note: dimensionless <code>MeasureUnit</code> is <code>null</code>
      *
