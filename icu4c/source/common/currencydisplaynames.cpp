@@ -44,41 +44,6 @@ static UInitOnce initOnce = U_INITONCE_INITIALIZER;
 //------------------------------------------------------------
 // Code
 
-struct FormattingData : public UMemory {
-    const UChar *isoCode;
-    UBool isFallback = false;
-    UBool isDefault = false;
-    UBool isMissing = false;
-    UnicodeString displayName = UnicodeString();
-    UnicodeString symbol = UnicodeString();
-    // Only implementing Currency Display Names.
-    // Handle Currency Formatting later.
-    // CurrencyFormatInfo formatInfo = nullptr;
-
-    FormattingData(const UChar *isoCode) : isoCode(isoCode) {}
-};
-
-struct VariantSymbol : public UMemory {
-    const UChar *isoCode;
-    const char *variant;
-    UBool isFallback = false;
-    UBool isDefault = false;
-    UBool isMissing = false;
-    UnicodeString symbol = UnicodeString();
-
-    VariantSymbol(const UChar *isoCode, const char *variant) : isoCode(isoCode), variant(variant) {}
-};
-
-struct PluralsData : public UMemory {
-    const UChar *isoCode;
-    UBool isFallback = false;
-    UBool isDefault = false;
-    UBool isMissing = false;
-    UHashtable *pluralsStringTable = nullptr;
-    
-    PluralsData(const UChar *isoCode) : isoCode(isoCode) {}
-};
-
 struct CurrencySink : public ResourceSink {
 
     enum EntrypointTable {
