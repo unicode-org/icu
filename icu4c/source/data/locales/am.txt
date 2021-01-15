@@ -223,7 +223,6 @@ am{
         minimumGroupingDigits{"1"}
         traditional{"ethi"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{

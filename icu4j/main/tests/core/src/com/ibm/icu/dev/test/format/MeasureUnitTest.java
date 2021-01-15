@@ -8,27 +8,51 @@
  */
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.serializable.FormatHandler;
-import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
-import com.ibm.icu.impl.Pair;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.text.MeasureFormat;
-import com.ibm.icu.text.MeasureFormat.FormatWidth;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.text.FieldPosition;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.text.FieldPosition;
-import java.text.ParseException;
-import java.util.*;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.serializable.FormatHandler;
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
+import com.ibm.icu.impl.Pair;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.units.MeasureUnitImpl;
+import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.MeasureFormat;
+import com.ibm.icu.text.MeasureFormat.FormatWidth;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.Measure;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
+import com.ibm.icu.util.TimeUnit;
+import com.ibm.icu.util.TimeUnitAmount;
+import com.ibm.icu.util.ULocale;
 
 /**
  * See https://sites.google.com/site/icusite/processes/release/tasks/standards?pli=1
@@ -2629,7 +2653,7 @@ public class MeasureUnitTest extends TestFmwk {
         // This fails unless we resolve to MeasureUnit.POUND_PER_SQUARE_INCH
         assertEquals("", "50 psi",
                 fmt.formatMeasurePerUnit(
-                        new Measure(50, MeasureUnit.POUND),
+                        new Measure(50, MeasureUnit.POUND_FORCE),
                         MeasureUnit.SQUARE_INCH,
                         new StringBuilder(),
                         new FieldPosition(0)).toString());
@@ -2875,6 +2899,7 @@ public class MeasureUnitTest extends TestFmwk {
     // for MeasureFormat during the release process.
     static void generateCXXHConstants(String thisVersion) {
         Map<String, MeasureUnit> seen = new HashMap<>();
+        System.out.println("// Start generated createXXX methods");
         System.out.println();
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
@@ -2906,13 +2931,15 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println("    /**");
                 System.out.println("     * Returns by value, unit of " + type + ": " + code + ".");
                 System.out.printf("     * Also see {@link #create%s()}.\n", name);
-                // TODO: When the get* methods become stable in ICU 66, update their
-                // @draft code to be more like that for the create* methods above.
                 String getterVersion = getVersion(javaName, thisVersion);
                 if (Integer.valueOf(getterVersion) < 64) {
                     getterVersion = "64";
                 }
-                System.out.println("     * @draft ICU " + getterVersion);
+                if (isDraft(javaName)) {
+                    System.out.println("     * @draft ICU " + getterVersion);
+                } else {
+                    System.out.println("     * @stable ICU " + getterVersion);
+                }
                 System.out.println("     */");
                 System.out.printf("    static MeasureUnit get%s();\n", name);
                 if (isDraft(javaName)) {
@@ -2921,6 +2948,7 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println("");
             }
         }
+        System.out.println("// End generated createXXX methods");
     }
 
     private static void checkForDup(
@@ -2975,34 +3003,34 @@ public class MeasureUnitTest extends TestFmwk {
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static void generateCXXConstants() {
+        System.out.println("// Start generated code for measunit.cpp");
         System.out.println("");
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
 
-        // Hack: for C++, add NoUnits here, but ignore them when printing the create methods.
-        // ALso keep track of the base unit offset to make the C++ default constructor faster.
-        allUnits.put("none", Arrays.asList(new MeasureUnit[]{NoUnit.BASE, NoUnit.PERCENT, NoUnit.PERMILLE}));
+        // Hack: for C++, add base unit here, but ignore them when printing the create methods.
+        // Also keep track of the base unit offset to make the C++ default constructor faster.
+        allUnits.put("none", Arrays.asList(new MeasureUnit[] {NoUnit.BASE}));
         int baseTypeIdx = -1;
         int baseSubTypeIdx = -1;
 
+        System.out.println("// Maps from Type ID to offset in gSubTypes.");
         System.out.println("static const int32_t gOffsets[] = {");
         int index = 0;
+        int typeCount = 0;
+        int currencyIndex = -1;
         for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
             System.out.printf("    %d,\n", index);
+            if (entry.getKey() == "currency") {
+                currencyIndex = typeCount;
+            }
+            typeCount++;
             index += entry.getValue().size();
         }
+        assertTrue("currency present", currencyIndex >= 0);
         System.out.printf("    %d\n", index);
         System.out.println("};");
         System.out.println();
-        System.out.println("static const int32_t gIndexes[] = {");
-        index = 0;
-        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
-            System.out.printf("    %d,\n", index);
-            if (!entry.getKey().equals("currency")) {
-                index += entry.getValue().size();
-            }
-        }
-        System.out.printf("    %d\n", index);
-        System.out.println("};");
+        System.out.println("static const int32_t kCurrencyOffset = " + currencyIndex + ";");
         System.out.println();
         System.out.println("// Must be sorted alphabetically.");
         System.out.println("static const char * const gTypes[] = {");
@@ -3031,7 +3059,12 @@ public class MeasureUnitTest extends TestFmwk {
                 if (!first) {
                     System.out.println(",");
                 }
-                System.out.print("    \"" + unit.getSubtype() + "\"");
+                if (unit != null) {
+                    System.out.print("    \"" + unit.getSubtype() + "\"");
+                } else {
+                    assertEquals("unit only null for \"none\" type", "none", entry.getKey());
+                    System.out.print("    \"\"");
+                }
                 first = false;
                 measureUnitToOffset.put(unit, offset);
                 measureUnitToTypeSubType.put(unit, Pair.of(typeIdx, subTypeIdx));
@@ -3061,27 +3094,6 @@ public class MeasureUnitTest extends TestFmwk {
                             measureUnitToOffset.get(unitPerUnit.second)),
                     measureUnitToTypeSubType.get(entry.getKey()));
         }
-
-        System.out.println("// Must be sorted by first value and then second value.");
-        System.out.println("static int32_t unitPerUnitToSingleUnit[][4] = {");
-        first = true;
-        for (Map.Entry<OrderedPair<Integer, Integer>, Pair<Integer, Integer>> entry
-                : unitPerUnitOffsetsToTypeSubType.entrySet()) {
-            if (!first) {
-                System.out.println(",");
-            }
-            first = false;
-            OrderedPair<Integer, Integer> unitPerUnitOffsets = entry.getKey();
-            Pair<Integer, Integer> typeSubType = entry.getValue();
-            System.out.printf("        {%d, %d, %d, %d}",
-                    unitPerUnitOffsets.first,
-                    unitPerUnitOffsets.second,
-                    typeSubType.first,
-                    typeSubType.second);
-        }
-        System.out.println();
-        System.out.println("};");
-        System.out.println();
 
         // Print out the fast-path for the default constructor
         System.out.println("// Shortcuts to the base unit in order to make the default constructor fast");
@@ -3115,6 +3127,7 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println();
             }
         }
+        System.out.println("// End generated code for measunit.cpp");
     }
 
     private static String toCamelCase(MeasureUnit unit) {
@@ -3220,6 +3233,7 @@ public class MeasureUnitTest extends TestFmwk {
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static void generateConstants(String thisVersion) {
+        System.out.println("    // Start generated MeasureUnit constants");
         System.out.println();
         Map<String, MeasureUnit> seen = new HashMap<>();
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
@@ -3246,7 +3260,7 @@ public class MeasureUnitTest extends TestFmwk {
                 } else {
                     System.out.println("     * @stable ICU " + getVersion(name, thisVersion));
                 }
-                System.out.println("    */");
+                System.out.println("     */");
                 if ("duration".equals(type) && TIME_CODES.contains(code)) {
                     System.out.println("    public static final TimeUnit " + name + " = (TimeUnit) MeasureUnit.internalGetInstance(\"" +
                             type +
@@ -3263,16 +3277,7 @@ public class MeasureUnitTest extends TestFmwk {
                 System.out.println();
             }
         }
-        System.out.println("    private static HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>unitPerUnitToSingleUnit =");
-        System.out.println("            new HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>();");
-        System.out.println();
-        System.out.println("    static {");
-        for (Map.Entry<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> unitPerUnitEntry
-                : getUnitsToPerParts().entrySet()) {
-            Pair<MeasureUnit, MeasureUnit> unitPerUnit = unitPerUnitEntry.getValue();
-            System.out.println("        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit." + toJAVAName(unitPerUnit.first) + ", MeasureUnit." + toJAVAName(unitPerUnit.second) + "), MeasureUnit." + toJAVAName(unitPerUnitEntry.getKey()) + ");");
-        }
-        System.out.println("    }");
+        System.out.println("    // End generated MeasureUnit constants");
     }
 
     private static String getVersion(String javaName, String thisVersion) {
@@ -3808,6 +3813,54 @@ public class MeasureUnitTest extends TestFmwk {
         MeasureUnit tmp = kilogram.withSIPrefix(MeasureUnit.SIPrefix.MILLI);
         assertEquals("Kilogram + milli should be milligram, got: " + tmp.getIdentifier(),
                 MeasureUnit.MILLIGRAM.getIdentifier(), tmp.getIdentifier());
+    }
+
+    @Test
+    public void TestInternalMeasureUnitImpl() {
+        MeasureUnitImpl mu1 = MeasureUnitImpl.forIdentifier("meter");
+        assertEquals("mu1 initial identifier", null, mu1.getIdentifier());
+        assertEquals("mu1 initial complexity", MeasureUnit.Complexity.SINGLE, mu1.getComplexity());
+        assertEquals("mu1 initial units length", 1, mu1.getSingleUnits().size());
+        assertEquals("mu1 initial units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
+
+        // Producing identifier via build(): the MeasureUnitImpl instance gets modified
+        // while it also gets assigned to tmp's internal measureUnitImpl.
+        MeasureUnit tmp = mu1.build();
+        assertEquals("mu1 post-build identifier", "meter", mu1.getIdentifier());
+        assertEquals("mu1 post-build complexity", MeasureUnit.Complexity.SINGLE, mu1.getComplexity());
+        assertEquals("mu1 post-build units length", 1, mu1.getSingleUnits().size());
+        assertEquals("mu1 post-build units[0]", "meter", mu1.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("MeasureUnit tmp identifier", "meter", tmp.getIdentifier());
+
+        mu1 = MeasureUnitImpl.forIdentifier("hour-and-minute-and-second");
+        assertEquals("mu1 = HMS: identifier", null, mu1.getIdentifier());
+        assertEquals("mu1 = HMS: complexity", MeasureUnit.Complexity.MIXED, mu1.getComplexity());
+        assertEquals("mu1 = HMS: units length", 3, mu1.getSingleUnits().size());
+        assertEquals("mu1 = HMS: units[0]", "hour", mu1.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("mu1 = HMS: units[1]", "minute", mu1.getSingleUnits().get(1).getSimpleUnitID());
+        assertEquals("mu1 = HMS: units[2]", "second", mu1.getSingleUnits().get(2).getSimpleUnitID());
+
+        MeasureUnitImpl m2 = MeasureUnitImpl.forIdentifier("meter");
+        m2.appendSingleUnit(MeasureUnit.METER.getCopyOfMeasureUnitImpl().getSingleUnitImpl());
+        assertEquals("append meter twice: complexity", MeasureUnit.Complexity.SINGLE, m2.getComplexity());
+        assertEquals("append meter twice: units length", 1, m2.getSingleUnits().size());
+        assertEquals("append meter twice: units[0]", "meter", m2.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("append meter twice: identifier", "square-meter", m2.build().getIdentifier());
+
+        MeasureUnitImpl mcm = MeasureUnitImpl.forIdentifier("meter");
+        mcm.appendSingleUnit(MeasureUnit.CENTIMETER.getCopyOfMeasureUnitImpl().getSingleUnitImpl());
+        assertEquals("append meter & centimeter: complexity", MeasureUnit.Complexity.COMPOUND, mcm.getComplexity());
+        assertEquals("append meter & centimeter: units length", 2, mcm.getSingleUnits().size());
+        assertEquals("append meter & centimeter: units[0]", "meter", mcm.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("append meter & centimeter: units[1]", "meter", mcm.getSingleUnits().get(1).getSimpleUnitID());
+        assertEquals("append meter & centimeter: identifier", "centimeter-meter", mcm.build().getIdentifier());
+
+        MeasureUnitImpl m2m = MeasureUnitImpl.forIdentifier("meter-square-meter");
+        assertEquals("meter-square-meter: complexity", MeasureUnit.Complexity.SINGLE, m2m.getComplexity());
+        assertEquals("meter-square-meter: units length", 1, m2m.getSingleUnits().size());
+        assertEquals("meter-square-meter: units[0]", "meter", m2m.getSingleUnits().get(0).getSimpleUnitID());
+        assertEquals("meter-square-meter: identifier", "cubic-meter", m2m.build().getIdentifier());
+
     }
 
     private void verifyCompoundUnit(

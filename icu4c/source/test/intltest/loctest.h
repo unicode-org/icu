@@ -122,6 +122,8 @@ public:
     void TestBug13554();
     void TestBug20410();
     void TestBug20900();
+    void TestLocaleCanonicalizationFromFile();
+    void TestKnownCanonicalizedListCorrect();
     void TestConstructorAcceptsBCP47();
 
     void TestAddLikelySubtags();
@@ -151,6 +153,7 @@ public:
     void TestCapturingTagConvertingIterator();
     void TestSetUnicodeKeywordValueInLongLocale();
     void TestSetUnicodeKeywordValueNullInLongLocale();
+    void TestLeak21419();
 
 private:
     void _checklocs(const char* label,

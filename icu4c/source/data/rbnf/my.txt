@@ -52,5 +52,4 @@ my{
             "11: =%spellout-cardinal=;",
         }
     }
-    Version{"38"}
 }

@@ -90,11 +90,27 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux --disable-layout --disable-layoutex && make -j2 check
+        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
       displayName: 'Build and Test C++14'
       env:
         CC: clang
         CXX: clang++
+#-------------------------------------------------------------------------
+- job: ICU4C_GCC_Ubuntu_2004
+  displayName: 'C: Linux GCC (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: gcc
+        CXX: g++
 #-------------------------------------------------------------------------
 # VS 2019 Builds
 #-------------------------------------------------------------------------

@@ -49,5 +49,4 @@ xog{
         zh{"Olucayina"}
         zu{"Oluzzulu"}
     }
-    Version{"38"}
 }

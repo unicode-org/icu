@@ -314,5 +314,4 @@ ca{
         FK{"Illes Malvines (Illes Falkland)"}
         SZ{"Swazilàndia"}
     }
-    Version{"38"}
 }

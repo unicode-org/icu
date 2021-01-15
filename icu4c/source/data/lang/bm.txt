@@ -49,5 +49,4 @@ bm{
         zh{"siniwakan"}
         zu{"zulukan"}
     }
-    Version{"38"}
 }

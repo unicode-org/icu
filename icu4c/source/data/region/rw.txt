@@ -7,5 +7,4 @@ rw{
         RW{"U Rwanda"}
         TO{"Tonga"}
     }
-    Version{"38"}
 }

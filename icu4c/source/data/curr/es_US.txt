@@ -94,5 +94,4 @@ es_US{
             other{"kwachas zambianos"}
         }
     }
-    Version{"38"}
 }

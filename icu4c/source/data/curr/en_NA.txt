@@ -9,5 +9,4 @@ en_NA{
             "Namibian Dollar",
         }
     }
-    Version{"38"}
 }

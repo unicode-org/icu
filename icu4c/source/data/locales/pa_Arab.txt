@@ -24,7 +24,6 @@ pa_Arab{
         }
         native{"arabext"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

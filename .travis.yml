@@ -195,3 +195,9 @@ matrix:
         - cd icu4c/source
       script:
         - test/hdrtst/testinternalheaders.sh
+
+    # Check source files for valid UTF-8 and for absence of BOM.
+    - name: "UTF-8 and BOM check"
+      os:   linux
+      script:
+        - tools/scripts/icu-file-utf8-check.py

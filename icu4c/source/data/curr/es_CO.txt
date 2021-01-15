@@ -13,5 +13,4 @@ es_CO{
             "dólar estadounidense",
         }
     }
-    Version{"38"}
 }

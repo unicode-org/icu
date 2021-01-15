@@ -117,7 +117,7 @@ public class CollationAPITest extends TestFmwk {
 
         byte key2identical[] = key2.toByteArray();
 
-        logln("Use secondary comparision level testing ...");
+        logln("Use secondary comparison level testing ...");
         col.setStrength(Collator.SECONDARY);
 
         key1 = col.getCollationKey(test1);
@@ -234,17 +234,17 @@ public class CollationAPITest extends TestFmwk {
         // there is no reason to have canonical decomposition in en_US OR default locale */
         if (vi_VN.getDecomposition() != Collator.CANONICAL_DECOMPOSITION)
         {
-            errln("vi_VN collation did not have cannonical decomposition for normalization!");
+            errln("vi_VN collation did not have canonical decomposition for normalization!");
         }
 
         if (el_GR.getDecomposition() != Collator.CANONICAL_DECOMPOSITION)
         {
-            errln("el_GR collation did not have cannonical decomposition for normalization!");
+            errln("el_GR collation did not have canonical decomposition for normalization!");
         }
 
         if (en_US.getDecomposition() != Collator.NO_DECOMPOSITION)
         {
-            errln("en_US collation had cannonical decomposition for normalization!");
+            errln("en_US collation had canonical decomposition for normalization!");
         }
     }
 

@@ -49,5 +49,4 @@ ff{
         zh{"Sinuwaare"}
         zu{"Suluŋkoore"}
     }
-    Version{"38"}
 }

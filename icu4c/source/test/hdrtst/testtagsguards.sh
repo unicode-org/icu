@@ -1,16 +1,17 @@
+#/usr/bin/env bash
 # Copyright © 2019 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
 # Run this script from $ICU_ROOT/icu4c.
-# ~/icu/mine/src/icu4c$ source/test/hdrtest/testtagsguards.sh
+# ~/icu/mine/src/icu4c$ source/test/hdrtst/testtagsguards.sh
 
 # set -x # echo on
 
-DEF:=-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
-INCL:="-Isource/common -Isource/i18n -Isource/io"
-TMPDIR:=`mktemp -d`
-DIFF:="diff -u --minimal"
-CXX:="clang++"
+: ${DEF:=-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1}
+: ${INCL:="-Isource/common -Isource/i18n -Isource/io"}
+: ${TMPDIR:=`mktemp -d`}
+: ${DIFF:="diff -u --minimal"}
+: ${CXX:="clang++"}
 
 echo "*** testtagsguards.sh TMPDIR=$TMPDIR"
 

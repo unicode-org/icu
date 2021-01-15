@@ -9,5 +9,4 @@ en_VU{
             "Vanuatu Vatu",
         }
     }
-    Version{"38"}
 }

@@ -33,5 +33,4 @@ sr_Latn_BA{
             other{"sjevernokorejskih vona"}
         }
     }
-    Version{"38"}
 }

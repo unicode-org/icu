@@ -5,5 +5,4 @@ kkj{
     Countries{
         CM{"Kamɛrun"}
     }
-    Version{"38"}
 }

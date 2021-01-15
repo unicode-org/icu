@@ -324,7 +324,7 @@ class UnicodeSetCloseOver {
 
         // Make sure the CaseEquivClass data can fit.
         if (maxLen > 8) {
-            throw new RuntimeException("Must adjust CaseEquivClass to accomodate " + maxLen + " UChars");
+            throw new RuntimeException("Must adjust CaseEquivClass to accommodate " + maxLen + " UChars");
         }
 
         // Also make sure that we can map into this array using a

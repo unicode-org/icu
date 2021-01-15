@@ -5,5 +5,4 @@ ar_DJ{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

@@ -49,5 +49,4 @@ kde{
         zh{"Chichina"}
         zu{"Chizulu"}
     }
-    Version{"38"}
 }

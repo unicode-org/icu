@@ -237,6 +237,8 @@ void IntlTestWithFieldPosition::checkMixedFormattedValue(
     }
     UBool afterLoopResult = fv.nextPosition(cfpos, status);
     assertFalse(baseMessage + u"A after loop: " + CFPosToUnicodeString(cfpos), afterLoopResult);
+    afterLoopResult = fv.nextPosition(cfpos, status);
+    assertFalse(baseMessage + u"A after loop again: " + CFPosToUnicodeString(cfpos), afterLoopResult);
 
     // Check nextPosition constrained over each category one at a time
     for (int32_t category=0; category<UFIELD_CATEGORY_COUNT+1; category++) {
@@ -266,6 +268,8 @@ void IntlTestWithFieldPosition::checkMixedFormattedValue(
         }
         UBool afterLoopResult = fv.nextPosition(cfpos, status);
         assertFalse(baseMessage + u"B after loop @ " + CFPosToUnicodeString(cfpos), afterLoopResult);
+        afterLoopResult = fv.nextPosition(cfpos, status);
+        assertFalse(baseMessage + u"B after loop again @ " + CFPosToUnicodeString(cfpos), afterLoopResult);
     }
 
     // Check nextPosition constrained over each field one at a time
@@ -300,6 +304,8 @@ void IntlTestWithFieldPosition::checkMixedFormattedValue(
         }
         UBool afterLoopResult = fv.nextPosition(cfpos, status);
         assertFalse(baseMessage + u"C after loop: " + CFPosToUnicodeString(cfpos), afterLoopResult);
+        afterLoopResult = fv.nextPosition(cfpos, status);
+        assertFalse(baseMessage + u"C after loop again: " + CFPosToUnicodeString(cfpos), afterLoopResult);
     }
 }
 

@@ -18,5 +18,4 @@ kl{
             other{"euro"}
         }
     }
-    Version{"38"}
 }

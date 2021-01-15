@@ -8,5 +8,4 @@ fr_RW{
             "franc rwandais",
         }
     }
-    Version{"38"}
 }

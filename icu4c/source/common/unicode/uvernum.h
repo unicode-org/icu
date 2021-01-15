@@ -66,7 +66,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 1
+#define U_ICU_VERSION_MINOR_NUM 2
 
 /** The current ICU patchlevel version as an integer.
  *  This value will change in the subsequent releases of ICU
@@ -139,7 +139,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "68.1"
+#define U_ICU_VERSION "68.2"
 
 /**
  * The current ICU library major version number as a string, for library name suffixes.
@@ -148,7 +148,7 @@
  * Until ICU 4.8, this was the combination of the single-digit major and minor ICU version numbers
  * into one string without dots ("48").
  * Since ICU 49, it is the double-digit major ICU version number.
- * See http://userguide.icu-project.org/design#TOC-Version-Numbers-in-ICU
+ * See https://unicode-org.github.io/icu/userguide/design#version-numbers-in-icu
  *
  * @stable ICU 2.6
  */
@@ -158,7 +158,7 @@
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
-#define U_ICU_DATA_VERSION "68.1"
+#define U_ICU_DATA_VERSION "68.2"
 #endif  /* U_HIDE_INTERNAL_API */
 
 /*===========================================================================

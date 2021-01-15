@@ -20,7 +20,7 @@ public class SingleUnitImpl {
      * The default value is "", meaning the dimensionless unit:
      * isDimensionless() will return true, until index is changed.
      */
-    private String simpleUnit = "";
+    private String simpleUnitID = "";
     /**
      * Determine the power of the `SingleUnit`. For example, for "square-meter", the dimensionality will be `2`.
      * <p>
@@ -33,11 +33,11 @@ public class SingleUnitImpl {
      */
     private MeasureUnit.SIPrefix siPrefix = MeasureUnit.SIPrefix.ONE;
 
-    public SingleUnitImpl clone() {
+    public SingleUnitImpl copy() {
         SingleUnitImpl result = new SingleUnitImpl();
         result.index = this.index;
         result.dimensionality = this.dimensionality;
-        result.simpleUnit = this.simpleUnit;
+        result.simpleUnitID = this.simpleUnitID;
         result.siPrefix = this.siPrefix;
 
         return result;
@@ -49,32 +49,30 @@ public class SingleUnitImpl {
     }
 
     /**
-     * Generates an neutral identifier string for a single unit which means we do not include the dimension signal.
-     *
-     * @throws IllegalArgumentException
+     * Generates a neutral identifier string for a single unit which means we do not include the dimension signal.
      */
     public String getNeutralIdentifier() {
         StringBuilder result = new StringBuilder();
-        int posPower = Math.abs(this.getDimensionality());
+        int absPower = Math.abs(this.getDimensionality());
 
-        assert posPower > 0 : "getIdentifier does not support the dimensionless";
+        assert absPower > 0 : "this function does not support the dimensionless single units";
 
-        if (posPower == 1) {
+        if (absPower == 1) {
             // no-op
-        } else if (posPower == 2) {
+        } else if (absPower == 2) {
             result.append("square-");
-        } else if (posPower == 3) {
+        } else if (absPower == 3) {
             result.append("cubic-");
-        } else if (posPower <= 15) {
+        } else if (absPower <= 15) {
             result.append("pow");
-            result.append(posPower);
+            result.append(absPower);
             result.append('-');
         } else {
             throw new IllegalArgumentException("Unit Identifier Syntax Error");
         }
 
         result.append(this.getSiPrefix().getIdentifier());
-        result.append(this.getSimpleUnit());
+        result.append(this.getSimpleUnitID());
 
         return result.toString();
     }
@@ -105,10 +103,10 @@ public class SingleUnitImpl {
         if (index > other.index) {
             return 1;
         }
-        if (this.getSiPrefix().getSiPrefixPower() < other.getSiPrefix().getSiPrefixPower()) {
+        if (this.getSiPrefix().getPower() < other.getSiPrefix().getPower()) {
             return -1;
         }
-        if (this.getSiPrefix().getSiPrefixPower() > other.getSiPrefix().getSiPrefixPower()) {
+        if (this.getSiPrefix().getPower() > other.getSiPrefix().getPower()) {
             return 1;
         }
         return 0;
@@ -124,13 +122,13 @@ public class SingleUnitImpl {
         return (compareTo(other) == 0);
     }
 
-    public String getSimpleUnit() {
-        return simpleUnit;
+    public String getSimpleUnitID() {
+        return simpleUnitID;
     }
 
     public void setSimpleUnit(int simpleUnitIndex, String[] simpleUnits) {
         this.index = simpleUnitIndex;
-        this.simpleUnit = simpleUnits[simpleUnitIndex];
+        this.simpleUnitID = simpleUnits[simpleUnitIndex];
     }
 
     public int getDimensionality() {

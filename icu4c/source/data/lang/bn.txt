@@ -882,7 +882,6 @@ bn{
             wara{"ওয়ারেং সিটি সংখ্যা"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — সমস্ত"}
         category-list{"{0}: {1}"}

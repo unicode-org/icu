@@ -290,5 +290,4 @@ se{
     Countries%short{
         US{"USA"}
     }
-    Version{"38"}
 }

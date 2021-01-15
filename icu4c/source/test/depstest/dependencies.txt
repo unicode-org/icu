@@ -58,6 +58,8 @@ group: c_strings
     # We must not use tolower and toupper because they are system-locale-sensitive (Turkish i).
     strlen strchr strrchr strstr strcmp strncmp strcpy strncpy strcat strncat
     memchr memcmp memcpy memmove memset
+    # BSD version of memcmp().
+    bcmp
     # Additional symbols in an optimized build.
     __strcpy_chk __strncpy_chk __strcat_chk __strncat_chk
     __rawmemchr __memcpy_chk __memmove_chk __memset_chk
@@ -184,7 +186,7 @@ library: common
     uinit utypes errorcode
     icuplug
     platform
-    localebuilder localematcher
+    localematcher
 
 group: pluralmap
     # TODO: Move to i18n library, ticket #11926.
@@ -634,6 +636,7 @@ group: resourcebundle
     # Do we need class LocaleBased? https://unicode-org.atlassian.net/browse/ICU-8608
     locbased.o
     loclikely.o
+    localebuilder.o
   deps
     udata ucol_swp
     sort stringenumeration uhash uvector
@@ -641,15 +644,10 @@ group: resourcebundle
     bytesinkutil
     errorcode
 
-group: localebuilder
-    localebuilder.o
-  deps
-    resourcebundle
-
 group: localematcher
     localematcher.o
   deps
-    localebuilder localeprioritylist loclikelysubtags locdistance lsr
+    resourcebundle localeprioritylist loclikelysubtags locdistance lsr
 
 group: localeprioritylist
     localeprioritylist.o
@@ -974,7 +972,7 @@ group: number_representation
 group: number_output
     # PluralRules and FormattedNumber
     number_output.o
-    standardplural.o plurrule.o
+    standardplural.o plurrule.o pluralranges.o
   deps
     # FormattedNumber internals:
     number_representation format formatted_value_sbimpl units
@@ -1110,6 +1108,7 @@ group: unitsformatter
     units_data.o units_converter.o units_complexconverter.o units_router.o
   deps
     resourcebundle units_extra double_conversion number_representation formattable sort
+    number_rounding
 
 group: decnumber
     decContext.o decNumber.o

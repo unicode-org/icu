@@ -49,5 +49,4 @@ yav{
         zh{"sinúɛ"}
         zu{"nusulú"}
     }
-    Version{"38"}
 }

@@ -1063,7 +1063,6 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade’i-Gilesi latinisatsioon"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – kõik"}
         category-list{"{0}: {1}"}

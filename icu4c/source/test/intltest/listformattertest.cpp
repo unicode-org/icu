@@ -48,6 +48,8 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestBadStylesFail);
     TESTCASE_AUTO(TestCreateStyled);
     TESTCASE_AUTO(TestContextual);
+    TESTCASE_AUTO(TestNextPosition);
+    TESTCASE_AUTO(TestInt32Overflow);
     TESTCASE_AUTO_END;
 }
 
@@ -494,10 +496,10 @@ void ListFormatterTest::TestOutOfOrderPatterns() {
 
 void ListFormatterTest::TestFormattedValue() {
     IcuTestErrorCode status(*this, "TestFormattedValue");
-    LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status));
-    if (status.errIfFailureAndReset()) { return; }
 
     {
+        LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status));
+        if (status.errIfFailureAndReset()) { return; }
         const char16_t* message = u"Field position test 1";
         const char16_t* expectedString = u"hello, wonderful, and world";
         const UnicodeString inputs[] = {
@@ -516,6 +518,87 @@ void ListFormatterTest::TestFormattedValue() {
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22},
             {UFIELD_CATEGORY_LIST_SPAN, 2, 22, 27},
             {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 27}};
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    {
+        LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("zh", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_SHORT, status));
+        if (status.errIfFailureAndReset()) { return; }
+        const char16_t* message = u"Field position test 2 (ICU-21340)";
+        const char16_t* expectedString = u"aabbbbbbbccc";
+        const UnicodeString inputs[] = {
+            u"aa",
+            u"bbbbbbb",
+            u"ccc"
+        };
+        FormattedList result = fmt->formatStringsToValue(inputs, UPRV_LENGTHOF(inputs), status);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_LIST_SPAN, 0, 0, 2},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0, 2},
+            {UFIELD_CATEGORY_LIST_SPAN, 1, 2, 9},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 2, 9},
+            {UFIELD_CATEGORY_LIST_SPAN, 2, 9, 12},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 9, 12}};
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    {
+        LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_SHORT, status));
+        if (status.errIfFailureAndReset()) { return; }
+        const char16_t* message = u"ICU-21383 Long list";
+        const char16_t* expectedString = u"a, b, c, d, e, f, g, h, i";
+        const UnicodeString inputs[] = {
+            u"a",
+            u"b",
+            u"c",
+            u"d",
+            u"e",
+            u"f",
+            u"g",
+            u"h",
+            u"i",
+        };
+        FormattedList result = fmt->formatStringsToValue(inputs, UPRV_LENGTHOF(inputs), status);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_LIST_SPAN, 0, 0, 1},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0, 1},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 1, 3},
+            {UFIELD_CATEGORY_LIST_SPAN, 1, 3, 4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 3, 4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 4, 6},
+            {UFIELD_CATEGORY_LIST_SPAN, 2, 6, 7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 6, 7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 7, 9},
+            {UFIELD_CATEGORY_LIST_SPAN, 3, 9, 10},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 9, 10},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 10, 12},
+            {UFIELD_CATEGORY_LIST_SPAN, 4, 12, 13},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 12, 13},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 13, 15},
+            {UFIELD_CATEGORY_LIST_SPAN, 5, 15, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 15, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 18},
+            {UFIELD_CATEGORY_LIST_SPAN, 6, 18, 19},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 18, 19},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 19, 21},
+            {UFIELD_CATEGORY_LIST_SPAN, 7, 21, 22},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 21, 22},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 22, 24},
+            {UFIELD_CATEGORY_LIST_SPAN, 8, 24, 25},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 24, 25},
+            };
         checkMixedFormattedValue(
             message,
             result,
@@ -698,6 +781,68 @@ void ListFormatterTest::TestContextual() {
             }
         }
     }
+}
+
+void ListFormatterTest::TestNextPosition() {
+    IcuTestErrorCode status(*this, "TestNextPosition");
+    std::vector<std::string> locales = { "en", "es", "zh", "ja" };
+    UListFormatterWidth widths [] = {
+        ULISTFMT_WIDTH_WIDE, ULISTFMT_WIDTH_SHORT, ULISTFMT_WIDTH_NARROW
+    };
+    const char* widthStr [] = {"wide", "short", "narrow"};
+    UListFormatterType types [] = {
+        ULISTFMT_TYPE_AND, ULISTFMT_TYPE_OR, ULISTFMT_TYPE_UNITS
+    };
+    const char* typeStr [] = {"and", "or", "units"};
+    const UnicodeString inputs[] = { u"A1", u"B2", u"C3", u"D4" };
+    for (auto width : widths) {
+        for (auto type : types) {
+            for (auto locale : locales) {
+                LocalPointer<ListFormatter> fmt(
+                        ListFormatter::createInstance(locale.c_str(), type, width, status),
+                    status);
+                if (status.errIfFailureAndReset()) {
+                    continue;
+                }
+                for (int32_t n = 1; n <= UPRV_LENGTHOF(inputs); n++) {
+                    FormattedList result = fmt->formatStringsToValue(
+                        inputs, n, status);
+                    int32_t elements = 0;
+                    icu::ConstrainedFieldPosition cfpos;
+                    cfpos.constrainCategory(UFIELD_CATEGORY_LIST);
+                    while (result.nextPosition(cfpos, status) && U_SUCCESS(status)) {
+                        if (cfpos.getField() == ULISTFMT_ELEMENT_FIELD) {
+                            elements++;
+                        }
+                    }
+                    std::string msg = locale;
+                    // Test that if there are n elements (n=1..4) in the input, then the
+                    // nextPosition() should iterate through exactly n times
+                    // with field == ULISTFMT_ELEMENT_FIELD.
+                    assertEquals((msg
+                                  .append(" w=").append(widthStr[width])
+                                  .append(" t=").append(typeStr[type])).c_str(),
+                                 n, elements);
+                }
+            }
+        }
+    }
+}
+
+void ListFormatterTest::TestInt32Overflow() {
+    if (quick) {
+        return;
+    }
+    IcuTestErrorCode status(*this, "TestInt32Overflow");
+    LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status), status);
+    std::vector<UnicodeString> inputs;
+    UnicodeString input(0xAAAFF00, 0x00000042, 0xAAAFF00);
+    for (int32_t i = 0; i < 16; i++) {
+      inputs.push_back(input);
+    }
+    FormattedList result = fmt->formatStringsToValue(
+        inputs.data(), static_cast<int32_t>(inputs.size()), status);
+    status.expectErrorAndReset(U_INPUT_TOO_LONG_ERROR);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

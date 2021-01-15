@@ -232,5 +232,4 @@ lag{
             "Dóola ya Simbáabwe",
         }
     }
-    Version{"38"}
 }

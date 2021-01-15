@@ -31,14 +31,25 @@
 #include <stddef.h>
 #include <string.h>
 #include "unicode/localpointer.h"
+#include "uassert.h"
 
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
 #include <stdio.h>
 #endif
 
 
-#define uprv_memcpy(dst, src, size) U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size)
-#define uprv_memmove(dst, src, size) U_STANDARD_CPP_NAMESPACE memmove(dst, src, size)
+#define uprv_memcpy(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
+    U_ASSERT(dst != NULL); \
+    U_ASSERT(src != NULL); \
+    U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size); \
+} UPRV_BLOCK_MACRO_END
+
+#define uprv_memmove(dst, src, size) UPRV_BLOCK_MACRO_BEGIN { \
+    U_ASSERT(dst != NULL); \
+    U_ASSERT(src != NULL); \
+    U_STANDARD_CPP_NAMESPACE memmove(dst, src, size); \
+} UPRV_BLOCK_MACRO_END
+
 
 /**
  * \def UPRV_LENGTHOF
@@ -725,9 +736,14 @@ public:
     }
 
     MemoryPool& operator=(MemoryPool&& other) U_NOEXCEPT {
-        fCount = other.fCount;
-        fPool = std::move(other.fPool);
-        other.fCount = 0;
+        // Since `this` may contain instances that need to be deleted, we can't
+        // just throw them away and replace them with `other`. The normal way of
+        // dealing with this in C++ is to swap `this` and `other`, rather than
+        // simply overwrite: the destruction of `other` can then take care of
+        // running MemoryPool::~MemoryPool() over the still-to-be-deallocated
+        // instances.
+        std::swap(fCount, other.fCount);
+        std::swap(fPool, other.fPool);
         return *this;
     }
 
@@ -796,9 +812,6 @@ protected:
 template<typename T, int32_t stackCapacity = 8>
 class MaybeStackVector : protected MemoryPool<T, stackCapacity> {
 public:
-    using MemoryPool<T, stackCapacity>::MemoryPool;
-    using MemoryPool<T, stackCapacity>::operator=;
-
     template<typename... Args>
     T* emplaceBack(Args&&... args) {
         return this->create(args...);

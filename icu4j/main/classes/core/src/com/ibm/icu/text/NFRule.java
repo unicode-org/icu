@@ -722,7 +722,7 @@ final class NFRule {
     }
 
     /**
-     * Returns the rule's divisor (the value that cotrols the behavior
+     * Returns the rule's divisor (the value that controls the behavior
      * of its substitutions)
      * @return The rule's divisor
      */

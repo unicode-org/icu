@@ -62,16 +62,16 @@ gl{
                         other{"000 millóns"}
                     }
                     1000000000{
-                        one{"0"}
-                        other{"0"}
+                        one{"0000 millóns"}
+                        other{"0000 millóns"}
                     }
                     10000000000{
-                        one{"0"}
-                        other{"0"}
+                        one{"00000 millóns"}
+                        other{"00000 millóns"}
                     }
                     100000000000{
-                        one{"0"}
-                        other{"0"}
+                        one{"000000 millóns"}
+                        other{"000000 millóns"}
                     }
                     1000000000000{
                         one{"0 billón"}
@@ -90,16 +90,16 @@ gl{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 ¤"}
-                        other{"0 ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"0 ¤"}
-                        other{"0 ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"0 ¤"}
-                        other{"0 ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 M¤"}
@@ -114,16 +114,16 @@ gl{
                         other{"000 M¤"}
                     }
                     1000000000{
-                        one{"0 ¤"}
-                        other{"0 ¤"}
+                        one{"0000 M¤"}
+                        other{"0000 M¤"}
                     }
                     10000000000{
-                        one{"0 ¤"}
-                        other{"0 ¤"}
+                        one{"00000 M¤"}
+                        other{"00000 M¤"}
                     }
                     100000000000{
-                        one{"0 ¤"}
-                        other{"0 ¤"}
+                        one{"00000 M¤"}
+                        other{"00000 M¤"}
                     }
                     1000000000000{
                         one{"0 B¤"}
@@ -164,16 +164,16 @@ gl{
                         other{"000 M"}
                     }
                     1000000000{
-                        one{"0"}
-                        other{"0"}
+                        one{"0000 M"}
+                        other{"0000 M"}
                     }
                     10000000000{
-                        one{"0"}
-                        other{"0"}
+                        one{"00000 M"}
+                        other{"00000 M"}
                     }
                     100000000000{
-                        one{"0"}
-                        other{"0"}
+                        one{"000000 M"}
+                        other{"000000 M"}
                     }
                     1000000000000{
                         one{"0 B"}
@@ -217,7 +217,6 @@ gl{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

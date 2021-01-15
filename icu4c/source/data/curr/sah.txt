@@ -26,5 +26,4 @@ sah{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"38"}
 }

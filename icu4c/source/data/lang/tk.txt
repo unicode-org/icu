@@ -536,7 +536,6 @@ tk{
             tibt{"Tibet sanlary"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — ähli"}
         category-list{"{0}: {1}"}

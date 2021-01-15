@@ -49,5 +49,4 @@ nus{
         zh{"Thok cayna"}
         zu{"Thok dhuluni"}
     }
-    Version{"38"}
 }

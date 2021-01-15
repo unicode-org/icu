@@ -1202,7 +1202,7 @@ public class FormatHandler
                    // beginning at 20, we use the >> to mark the position where
                    // the result of formatting the number's ones digit.  Thus,
                    // we only need a new rule at every multiple of 10.  Text in
-                   // backets is omitted if the value being formatted is an
+                   // brackets is omitted if the value being formatted is an
                    // even multiple of 10.
                 "20: twenty[->>];\n" +
                 "30: thirty[->>];\n" +
@@ -1359,7 +1359,7 @@ public class FormatHandler
                 "40: quarante[->%%alt-ones>];\n" +
                 "50: cinquante[->%%alt-ones>];\n" +
                    // rule for 60.  The /20 causes this rule's multiplier to be
-                   // 20 rather than 10, allowinhg us to recurse for all values
+                   // 20 rather than 10, allowing us to recurse for all values
                    // from 60 to 79...
                 "60/20: soixante[->%%alt-ones>];\n" +
                    // ...except for 71, which must be special-cased

@@ -1,17 +1,15 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.units;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.UResourceBundle;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class UnitPreferences {
 

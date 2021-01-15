@@ -9,5 +9,4 @@ en_LS{
             "South African Rand",
         }
     }
-    Version{"38"}
 }

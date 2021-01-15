@@ -6,5 +6,4 @@ en_NZ{
     Languages{
         mi{"Māori"}
     }
-    Version{"38"}
 }

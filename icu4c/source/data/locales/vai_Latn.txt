@@ -24,7 +24,6 @@ vai_Latn{
         }
         native{"vaii"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

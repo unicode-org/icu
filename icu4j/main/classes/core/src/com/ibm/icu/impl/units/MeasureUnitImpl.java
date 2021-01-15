@@ -1,8 +1,11 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.units;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
@@ -10,11 +13,6 @@ import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.StringTrieBuilder;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class MeasureUnitImpl {
 
@@ -29,7 +27,7 @@ public class MeasureUnitImpl {
     private MeasureUnit.Complexity complexity = MeasureUnit.Complexity.SINGLE;
 
     /**
-     * The list of simple units. These may be summed or multiplied, based on the
+     * The list of single units. These may be summed or multiplied, based on the
      * value of the complexity field.
      * <p>
      * The "dimensionless" unit (SingleUnitImpl default constructor) must not be
@@ -37,7 +35,7 @@ public class MeasureUnitImpl {
      * <p>
      * The "dimensionless" <code>MeasureUnitImpl</code> has an empty <code>singleUnits</code>.
      */
-    private ArrayList<SingleUnitImpl> singleUnits;
+    private final ArrayList<SingleUnitImpl> singleUnits;
 
     public MeasureUnitImpl() {
         singleUnits = new ArrayList<>();
@@ -53,7 +51,7 @@ public class MeasureUnitImpl {
      *
      * @param identifier The unit identifier string.
      * @return A newly parsed object.
-     * @throws <code>IllegalArgumentException</code> in case of incorrect/non-parsed identifier.
+     * @throws IllegalArgumentException in case of incorrect/non-parsed identifier.
      */
     public static MeasureUnitImpl forIdentifier(String identifier) {
         return UnitsParser.parseForIdentifier(identifier);
@@ -68,11 +66,13 @@ public class MeasureUnitImpl {
         return result;
     }
 
-    public MeasureUnitImpl clone() {
+    public MeasureUnitImpl copy() {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.complexity = this.complexity;
         result.identifier = this.identifier;
-        result.singleUnits = (ArrayList<SingleUnitImpl>) this.singleUnits.clone();
+        for (SingleUnitImpl single : this.singleUnits) {
+            result.singleUnits.add(single.copy());
+        }
         return result;
     }
 
@@ -105,7 +105,7 @@ public class MeasureUnitImpl {
      * @return a list of <code>MeasureUnitImpl</code>
      */
     public ArrayList<MeasureUnitImpl> extractIndividualUnits() {
-        ArrayList<MeasureUnitImpl> result = new ArrayList<MeasureUnitImpl>();
+        ArrayList<MeasureUnitImpl> result = new ArrayList<>();
         if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
             // In case of mixed units, each single unit can be considered as a stand alone MeasureUnitImpl.
             for (SingleUnitImpl singleUnit :
@@ -116,7 +116,7 @@ public class MeasureUnitImpl {
             return result;
         }
 
-        result.add(this.clone());
+        result.add(this.copy());
         return result;
     }
 
@@ -141,14 +141,13 @@ public class MeasureUnitImpl {
         identifier = null;
 
         if (singleUnit == null) {
-            // We don't append dimensionless units.
+            // Do not append dimensionless units.
             return false;
         }
 
         // Find a similar unit that already exists, to attempt to coalesce
         SingleUnitImpl oldUnit = null;
-        for (int i = 0, n = this.singleUnits.size(); i < n; i++) {
-            SingleUnitImpl candidate = this.singleUnits.get(i);
+        for (SingleUnitImpl candidate : this.singleUnits) {
             if (candidate.isCompatibleWith(singleUnit)) {
                 oldUnit = candidate;
                 break;
@@ -164,10 +163,10 @@ public class MeasureUnitImpl {
         }
 
         // Add a copy of singleUnit
-        this.singleUnits.add(singleUnit.clone());
+        this.singleUnits.add(singleUnit.copy());
 
-        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits are more
-        // than one singleUnit. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
+        // If the MeasureUnitImpl is `UMEASURE_UNIT_SINGLE` and after the appending a unit, the singleUnits contains
+        // more than one. thus means the complexity should be `UMEASURE_UNIT_COMPOUND`
         if (this.singleUnits.size() > 1 && this.complexity == MeasureUnit.Complexity.SINGLE) {
             this.setComplexity(MeasureUnit.Complexity.COMPOUND);
         }
@@ -193,7 +192,7 @@ public class MeasureUnitImpl {
             return new SingleUnitImpl();
         }
         if (this.singleUnits.size() == 1) {
-            return this.singleUnits.get(0).clone();
+            return this.singleUnits.get(0).copy();
         }
 
         throw new UnsupportedOperationException();
@@ -224,6 +223,8 @@ public class MeasureUnitImpl {
             // to this.result, we wish it to contain the zero-length string.
             return;
         }
+
+
         if (this.complexity == MeasureUnit.Complexity.COMPOUND) {
             // Note: don't sort a MIXED unit
             Collections.sort(this.getSingleUnits(), new SingleUnitComparator());
@@ -241,7 +242,6 @@ public class MeasureUnitImpl {
                 firstTimeNegativeDimension = false;
             }
 
-            String singleUnitIdentifier = singleUnit.getNeutralIdentifier();
             if (this.getComplexity() == MeasureUnit.Complexity.MIXED) {
                 if (result.length() != 0) {
                     result.append("-and-");
@@ -260,7 +260,7 @@ public class MeasureUnitImpl {
                 }
             }
 
-            result.append(singleUnitIdentifier);
+            result.append(singleUnit.getNeutralIdentifier());
         }
 
         this.identifier = result.toString();
@@ -372,34 +372,32 @@ public class MeasureUnitImpl {
     public static class UnitsParser {
         // This used only to not build the trie each time we use the parser
         private volatile static CharsTrie savedTrie = null;
-        private final String[] simpleUnits;
+
         // This trie used in the parsing operation.
-        private CharsTrie trie;
+        private final CharsTrie trie;
+        private final String fSource;
         // Tracks parser progress: the offset into fSource.
         private int fIndex = 0;
         // Set to true when we've seen a "-per-" or a "per-", after which all units
         // are in the denominator. Until we find an "-and-", at which point the
         // identifier is invalid pending TODO(CLDR-13700).
         private boolean fAfterPer = false;
-        private String fSource;
         // If an "-and-" was parsed prior to finding the "single
         //     * unit", sawAnd is set to true. If not, it is left as is.
         private boolean fSawAnd = false;
 
         private UnitsParser(String identifier) {
-            this.simpleUnits = UnitsData.getSimpleUnits();
             this.fSource = identifier;
 
-            if (UnitsParser.savedTrie != null) {
-                try {
-                    this.trie = UnitsParser.savedTrie.clone();
-                } catch (CloneNotSupportedException e) {
-                    throw new ICUCloneNotSupportedException();
-                }
-                return;
+            try {
+                this.trie = UnitsParser.savedTrie.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new ICUCloneNotSupportedException();
             }
+        }
 
-            // Building the trie.
+        static {
+            // Build Units trie.
             CharsTrieBuilder trieBuilder;
             trieBuilder = new CharsTrieBuilder();
 
@@ -432,6 +430,7 @@ public class MeasureUnitImpl {
             }
 
             // Add simple units
+            String[] simpleUnits = UnitsData.getSimpleUnits();
             for (int i = 0; i < simpleUnits.length; i++) {
                 trieBuilder.add(simpleUnits[i], i + UnitsData.Constants.kSimpleUnitOffset);
 
@@ -439,14 +438,7 @@ public class MeasureUnitImpl {
 
             // TODO: Use SLOW or FAST here?
             UnitsParser.savedTrie = trieBuilder.build(StringTrieBuilder.Option.FAST);
-
-            try {
-                this.trie = UnitsParser.savedTrie.clone();
-            } catch (CloneNotSupportedException e) {
-                throw new ICUCloneNotSupportedException();
-            }
         }
-
 
         /**
          * Construct a MeasureUnit from a CLDR Unit Identifier, defined in UTS 35.
@@ -476,7 +468,7 @@ public class MeasureUnitImpl {
         }
 
         private static int getTrieIndex(MeasureUnit.SIPrefix prefix) {
-            return prefix.getSiPrefixPower() + UnitsData.Constants.kSIPrefixOffset;
+            return prefix.getPower() + UnitsData.Constants.kSIPrefixOffset;
         }
 
         private MeasureUnitImpl parse() {
@@ -504,7 +496,7 @@ public class MeasureUnitImpl {
                     MeasureUnit.Complexity complexity =
                             fSawAnd ? MeasureUnit.Complexity.MIXED : MeasureUnit.Complexity.COMPOUND;
                     if (result.getSingleUnits().size() == 2) {
-                        // After appending two singleUnits, the complexity will be `UMEASURE_UNIT_COMPOUND`
+                        // After appending two singleUnits, the complexity will be MeasureUnit.Complexity.COMPOUND
                         assert result.getComplexity() == MeasureUnit.Complexity.COMPOUND;
                         result.setComplexity(complexity);
                     } else if (result.getComplexity() != complexity) {
@@ -607,7 +599,7 @@ public class MeasureUnitImpl {
                         break;
 
                     case TYPE_SIMPLE_UNIT:
-                        result.setSimpleUnit(token.getSimpleUnitIndex(), simpleUnits);
+                        result.setSimpleUnit(token.getSimpleUnitIndex(), UnitsData.getSimpleUnits());
                         return result;
 
                     default:
@@ -746,7 +738,7 @@ public class MeasureUnitImpl {
     }
 
     static class MeasureUnitImplComparator implements Comparator<MeasureUnitImpl> {
-        private ConversionRates conversionRates;
+        private final ConversionRates conversionRates;
 
         public MeasureUnitImplComparator(ConversionRates conversionRates) {
             this.conversionRates = conversionRates;
@@ -754,8 +746,9 @@ public class MeasureUnitImpl {
 
         @Override
         public int compare(MeasureUnitImpl o1, MeasureUnitImpl o2) {
-            UnitConverter fromO1toO2 = new UnitConverter(o1, o2, conversionRates);
-            return fromO1toO2.convert(BigDecimal.valueOf(1)).compareTo(BigDecimal.valueOf(1));
+            BigDecimal factor1 = this.conversionRates.getFactorToBase(o1).getConversionRate();
+            BigDecimal factor2 = this.conversionRates.getFactorToBase(o2).getConversionRate();
+            return factor1.compareTo(factor2);
         }
     }
 
@@ -764,5 +757,10 @@ public class MeasureUnitImpl {
         public int compare(SingleUnitImpl o1, SingleUnitImpl o2) {
             return o1.compareTo(o2);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MeasureUnitImpl [" + build().getIdentifier() + "]";
     }
 }

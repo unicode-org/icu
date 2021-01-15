@@ -8,5 +8,4 @@ ckb{
             "IQD",
         }
     }
-    Version{"38"}
 }

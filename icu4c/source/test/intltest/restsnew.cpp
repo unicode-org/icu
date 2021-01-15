@@ -535,26 +535,28 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("copy construction failed\n");
     }
 
-    ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
-    ResourceBundle defSubCopy(defaultSub);
-    if(strcmp(defSubCopy.getName(), defaultSub.getName() ) !=0  ||
-        strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) !=0  ){
-        errln("copy construction for subresource failed\n");
+    {
+        LocalPointer<ResourceBundle> p(defaultresource.clone());
+        if(p.getAlias() == &defaultresource || !equalRB(*p, defaultresource)) {
+            errln("ResourceBundle.clone() failed");
+        }
     }
 
-    ResourceBundle *p;
-
-    p = defaultresource.clone();
-    if(p == &defaultresource || !equalRB(*p, defaultresource)) {
-        errln("ResourceBundle.clone() failed");
+    // The following tests involving defaultSub may no longer be exercised if
+    // defaultresource is for a locale like en_US with an empty resource bundle.
+    // (Before ICU-21028 such a bundle would have contained at least a Version string.)
+    if(defaultresource.getSize() != 0) {
+        ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
+        ResourceBundle defSubCopy(defaultSub);
+        if(strcmp(defSubCopy.getName(), defaultSub.getName()) != 0 ||
+                strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) != 0) {
+            errln("copy construction for subresource failed\n");
+        }
+        LocalPointer<ResourceBundle> p(defaultSub.clone());
+        if(p.getAlias() == &defaultSub || !equalRB(*p, defaultSub)) {
+            errln("2nd ResourceBundle.clone() failed");
+        }
     }
-    delete p;
-
-    p = defaultSub.clone();
-    if(p == &defaultSub || !equalRB(*p, defaultSub)) {
-        errln("2nd ResourceBundle.clone() failed");
-    }
-    delete p;
 
     UVersionInfo ver;
     copyRes.getVersion(ver);

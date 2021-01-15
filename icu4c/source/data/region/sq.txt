@@ -314,5 +314,4 @@ sq{
         SZ{"Suazilend"}
         TL{"Timori Lindor"}
     }
-    Version{"38"}
 }

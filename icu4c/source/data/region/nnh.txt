@@ -5,5 +5,4 @@ nnh{
     Countries{
         CM{"Kàmalûm"}
     }
-    Version{"38"}
 }

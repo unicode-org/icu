@@ -9,5 +9,4 @@ en_LR{
             "Liberian Dollar",
         }
     }
-    Version{"38"}
 }

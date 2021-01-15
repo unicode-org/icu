@@ -11,7 +11,6 @@ es_BO{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             DateTimePatterns{

@@ -311,5 +311,4 @@ nb{
         SZ{"Swaziland"}
         TL{"Timor-Leste"}
     }
-    Version{"38"}
 }

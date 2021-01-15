@@ -240,10 +240,10 @@ void parseCurrencyOption(const StringSegment& segment, MacroProps& macros, UErro
 
 void generateCurrencyOption(const CurrencyUnit& currency, UnicodeString& sb, UErrorCode& status);
 
+// "measure-unit/" is deprecated in favour of "unit/".
 void parseMeasureUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb, UErrorCode& status);
-
+// "per-measure-unit/" is deprecated in favour of "unit/".
 void parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 /**
@@ -313,8 +313,6 @@ class GeneratorHelpers {
     static bool notation(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
     static bool unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
-
-    static bool perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
     static bool usage(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 

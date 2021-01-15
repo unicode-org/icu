@@ -49,5 +49,4 @@ rwk{
         zh{"Kyichina"}
         zu{"Kyizulu"}
     }
-    Version{"38"}
 }

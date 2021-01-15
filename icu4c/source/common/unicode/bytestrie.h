@@ -97,14 +97,13 @@ public:
         return *this;
     }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the state of this trie as a 64-bit integer.
      * The state value is never 0.
      *
      * @return opaque state value
      * @see resetToState64
-     * @draft ICU 65
+     * @stable ICU 65
      */
     uint64_t getState64() const {
         return (static_cast<uint64_t>(remainingMatchLength_ + 2) << kState64RemainingShift) |
@@ -123,14 +122,13 @@ public:
      * @see getState64
      * @see resetToState
      * @see reset
-     * @draft ICU 65
+     * @stable ICU 65
      */
     BytesTrie &resetToState64(uint64_t state) {
         remainingMatchLength_ = static_cast<int32_t>(state >> kState64RemainingShift) - 2;
         pos_ = bytes_ + (state & kState64PosMask);
         return *this;
     }
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * BytesTrie state object, for saving a trie's current state

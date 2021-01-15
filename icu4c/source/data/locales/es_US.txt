@@ -98,7 +98,6 @@ es_US{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             availableFormats{

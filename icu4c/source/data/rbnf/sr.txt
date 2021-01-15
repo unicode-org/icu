@@ -148,5 +148,4 @@ sr{
             "400: <%spellout-cardinal-feminine<\u0441\u0442\u043E>%%ordti>;",
         }
     }
-    Version{"38"}
 }

@@ -227,5 +227,4 @@ mua{
         ZM{"Zambiya"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

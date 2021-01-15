@@ -8,5 +8,4 @@ de_LI{
             "Euro",
         }
     }
-    Version{"38"}
 }

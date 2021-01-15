@@ -1,15 +1,16 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.units;
-
-import com.ibm.icu.util.Measure;
-import com.ibm.icu.util.MeasureUnit;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ibm.icu.impl.IllegalIcuArgumentException;
+import com.ibm.icu.impl.number.MicroProps;
+import com.ibm.icu.number.Precision;
+import com.ibm.icu.util.Measure;
+import com.ibm.icu.util.MeasureUnit;
 
 /**
  * `UnitsRouter` responsible for converting from a single unit (such as `meter` or `meter-per-second`) to
@@ -79,17 +80,54 @@ public class UnitsRouter {
         }
     }
 
-    public RouteResult route(BigDecimal quantity) {
-        for (ConverterPreference converterPreference :
-                converterPreferences_) {
-            if (converterPreference.converter.greaterThanOrEqual(quantity, converterPreference.limit)) {
-                return new RouteResult(converterPreference.converter.convert(quantity), converterPreference.precision);
+    /** If micros.rounder is a BogusRounder, this function replaces it with a valid one. */
+    public RouteResult route(BigDecimal quantity, MicroProps micros) {
+        Precision rounder = micros == null ? null : micros.rounder;
+        ConverterPreference converterPreference = null;
+        for (ConverterPreference itr : converterPreferences_) {
+            converterPreference = itr;
+            if (converterPreference.converter.greaterThanOrEqual(quantity.abs(),
+                                                                 converterPreference.limit)) {
+                break;
+            }
+        }
+        assert converterPreference != null;
+        assert converterPreference.precision != null;
+
+        // Set up the rounder for this preference's precision
+        if (rounder != null && rounder instanceof Precision.BogusRounder) {
+            Precision.BogusRounder bogus = (Precision.BogusRounder)rounder;
+            if (converterPreference.precision.length() > 0) {
+                rounder = bogus.into(parseSkeletonToPrecision(converterPreference.precision));
+            } else {
+                // We use the same rounding mode as COMPACT notation: known to be a
+                // human-friendly rounding mode: integers, but add a decimal digit
+                // as needed to ensure we have at least 2 significant digits.
+                rounder = bogus.into(Precision.integer().withMinDigits(2));
             }
         }
 
-        // In case of the `quantity` does not fit in any converter limit, use the last converter.
-        ConverterPreference lastConverterPreference = converterPreferences_.get(converterPreferences_.size() - 1);
-        return new RouteResult(lastConverterPreference.converter.convert(quantity), lastConverterPreference.precision);
+        if (micros != null) {
+            micros.rounder = rounder;
+        }
+        return new RouteResult(
+                converterPreference.converter.convert(quantity, rounder),
+                converterPreference.targetUnit
+        );
+    }
+
+    private static Precision parseSkeletonToPrecision(String precisionSkeleton) {
+        final String kSkeletonPrefix = "precision-increment/";
+        if (!precisionSkeleton.startsWith(kSkeletonPrefix)) {
+            throw new IllegalIcuArgumentException("precisionSkeleton is only precision-increment");
+        }
+
+        // TODO(icu-units#104): the C++ code uses a more sophisticated
+        // parseIncrementOption which supports "withMinFraction" - e.g.
+        // "precision-increment/0.5". Test with a unit preference that uses
+        // this, and fix Java.
+        String incrementValue = precisionSkeleton.substring(kSkeletonPrefix.length());
+        return Precision.increment(new BigDecimal(incrementValue));
     }
 
     /**
@@ -99,7 +137,7 @@ public class UnitsRouter {
      * The returned pointer should be valid for the lifetime of the
      * UnitsRouter instance.
      */
-    public ArrayList<MeasureUnit> getOutputUnits() {
+    public List<MeasureUnit> getOutputUnits() {
         return this.outputUnits_;
     }
 
@@ -113,32 +151,45 @@ public class UnitsRouter {
      * is no limit for the converter.
      */
     public static class ConverterPreference {
-        ComplexUnitsConverter converter;
-        BigDecimal limit;
-        String precision;
+        // The output unit for this ConverterPreference. This may be a MIXED unit -
+        // for example: "yard-and-foot-and-inch".
+        final MeasureUnitImpl targetUnit;
+        final ComplexUnitsConverter converter;
+        final BigDecimal limit;
+        final String precision;
 
         // In case there is no limit, the limit will be -inf.
-        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl outputUnits,
+        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl targetUnit,
                                    String precision, ConversionRates conversionRates) {
-            this(source, outputUnits, BigDecimal.valueOf(Double.MIN_VALUE), precision,
+            this(source, targetUnit, BigDecimal.valueOf(Double.MIN_VALUE), precision,
                     conversionRates);
         }
 
-        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl outputUnits,
+        public ConverterPreference(MeasureUnitImpl source, MeasureUnitImpl targetUnit,
                                    BigDecimal limit, String precision, ConversionRates conversionRates) {
-            this.converter = new ComplexUnitsConverter(source, outputUnits, conversionRates);
+            this.converter = new ComplexUnitsConverter(source, targetUnit, conversionRates);
             this.limit = limit;
             this.precision = precision;
+            this.targetUnit = targetUnit;
+
         }
     }
 
     public class RouteResult {
-        public List<Measure> measures;
-        public String precision;
+        // A list of measures: a single measure for single units, multiple measures
+        // for mixed units.
+        //
+        // TODO(icu-units/icu#21): figure out the right mixed unit API.
+        public final List<Measure> measures;
 
-        RouteResult(List<Measure> measures, String precision) {
+        // The output unit for this RouteResult. This may be a MIXED unit - for
+        // example: "yard-and-foot-and-inch", for which `measures` will have three
+        // elements.
+        public final MeasureUnitImpl outputUnit;
+
+        RouteResult(List<Measure> measures, MeasureUnitImpl outputUnit) {
             this.measures = measures;
-            this.precision = precision;
+            this.outputUnit = outputUnit;
         }
     }
 }

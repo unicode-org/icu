@@ -8,5 +8,4 @@ ti_ER{
             "ERN",
         }
     }
-    Version{"38"}
 }

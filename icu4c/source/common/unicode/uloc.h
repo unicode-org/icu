@@ -796,19 +796,17 @@ uloc_getAvailable(int32_t n);
  */
 U_CAPI int32_t U_EXPORT2 uloc_countAvailable(void);
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Types for uloc_getAvailableByType and uloc_countAvailableByType.
  *
- * @draft ICU 65
+ * @stable ICU 65
  */
 typedef enum ULocAvailableType {
   /**
    * Locales that return data when passed to ICU APIs,
    * but not including legacy or alias locales.
    *
-   * @draft ICU 65
+   * @stable ICU 65
    */
   ULOC_AVAILABLE_DEFAULT,
 
@@ -826,7 +824,7 @@ typedef enum ULocAvailableType {
    * ULOC_AVAILABLE_DEFAULT. To get both sets at the same time, use
    * ULOC_AVAILABLE_WITH_LEGACY_ALIASES.
    *
-   * @draft ICU 65
+   * @stable ICU 65
    */
   ULOC_AVAILABLE_ONLY_LEGACY_ALIASES,
 
@@ -834,7 +832,7 @@ typedef enum ULocAvailableType {
    * The union of the locales in ULOC_AVAILABLE_DEFAULT and
    * ULOC_AVAILABLE_ONLY_LEGACY_ALIAS.
    *
-   * @draft ICU 65
+   * @stable ICU 65
    */
   ULOC_AVAILABLE_WITH_LEGACY_ALIASES,
 
@@ -855,12 +853,10 @@ typedef enum ULocAvailableType {
  * @param type Type choice from ULocAvailableType.
  * @param status Set if an error occurred.
  * @return a UEnumeration owned by the caller, or nullptr on failure.
- * @draft ICU 65
+ * @stable ICU 65
  */
 U_CAPI UEnumeration* U_EXPORT2
 uloc_openAvailableByType(ULocAvailableType type, UErrorCode* status);
-
-#endif // U_HIDE_DRAFT_API
 
 /**
  *

@@ -8,5 +8,4 @@ fr_HT{
             "gourde haïtienne",
         }
     }
-    Version{"38"}
 }

@@ -17,7 +17,6 @@ sg{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

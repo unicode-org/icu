@@ -227,5 +227,4 @@ nyn{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

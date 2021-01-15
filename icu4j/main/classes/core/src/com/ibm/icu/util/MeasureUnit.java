@@ -16,16 +16,15 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.CollectionSet;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.SingleUnitImpl;
@@ -73,7 +72,7 @@ public class MeasureUnit implements Serializable {
      *
      * @internal
      */
-    private MeasureUnitImpl measureUnitImpl = null;
+    private MeasureUnitImpl measureUnitImpl;
 
     /**
      * Enumeration for unit complexity. There are three levels:
@@ -293,20 +292,33 @@ public class MeasureUnit implements Serializable {
          */
         YOCTO(-24, "yocto");
 
-        private final int siPrefixPower;
+        private final int power;
         private final String identifier;
 
-        SIPrefix(int siPrefixPower, String identifier) {
-            this.siPrefixPower = siPrefixPower;
+        SIPrefix(int power, String identifier) {
+            this.power = power;
             this.identifier = identifier;
         }
 
+        /**
+         * Returns the identifier of the prefix.
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         public String getIdentifier() {
             return identifier;
         }
 
-        public int getSiPrefixPower() {
-            return siPrefixPower;
+        /**
+         * Returns the power of 10 of the prefix. For example, if the prefix is "centi", the power will be -2.
+         *
+         * @draft ICU 68
+         * @provisional This API might change or be removed in a future release.
+         */
+        public int getPower() {
+            return power;
         }
     }
 
@@ -330,7 +342,7 @@ public class MeasureUnit implements Serializable {
      * MeasureUnit example = MeasureUnit::forIdentifier("furlong-per-nanosecond")
      * </pre>
      *
-     * @param identifier The CLDR Sequence Unit Identifier
+     * @param identifier CLDR Unit Identifier
      * @throws IllegalArgumentException if the identifier is invalid.
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
@@ -345,8 +357,9 @@ public class MeasureUnit implements Serializable {
 
     /**
      * @internal
-     * @param measureUnitImpl
+     * @deprecated Internal API for ICU use only.
      */
+    @Deprecated
     public static MeasureUnit fromMeasureUnitImpl(MeasureUnitImpl measureUnitImpl) {
         measureUnitImpl.serialize();
         String identifier = measureUnitImpl.getIdentifier();
@@ -361,13 +374,13 @@ public class MeasureUnit implements Serializable {
     private MeasureUnit(MeasureUnitImpl measureUnitImpl) {
         type = null;
         subType = null;
-        this.measureUnitImpl = measureUnitImpl.clone();
+        this.measureUnitImpl = measureUnitImpl.copy();
     }
 
 
 
     /**
-     * Get the type, such as "length"
+     * Get the type, such as "length". May return null.
      *
      * @stable ICU 53
      */
@@ -377,7 +390,7 @@ public class MeasureUnit implements Serializable {
 
 
     /**
-     * Get the subType, such as “foot”.
+     * Get the subType, such as “foot”. May return null.
      *
      * @stable ICU 53
      */
@@ -386,7 +399,7 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Gets the CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
+     * Get CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
      * @return The string form of this unit.
      * @draft ICU 68
@@ -529,7 +542,7 @@ public class MeasureUnit implements Serializable {
             return implCopy.build();
         }
 
-        final MeasureUnitImpl otherImplRef = other.getMayBeReferenceOfMeasureUnitImpl();
+        final MeasureUnitImpl otherImplRef = other.getMaybeReferenceOfMeasureUnitImpl();
         if (implCopy.getComplexity() == Complexity.MIXED || otherImplRef.getComplexity() == Complexity.MIXED) {
             throw new UnsupportedOperationException();
         }
@@ -554,11 +567,12 @@ public class MeasureUnit implements Serializable {
      * If this is a SINGLE unit, a list of length 1 will be returned.
      *
      * @return An unmodifiable list of single units
-     * @internal ICU 68 Technology Preview
+     * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
      */
     public List<MeasureUnit> splitToSingleUnits() {
-        final ArrayList<SingleUnitImpl> singleUnits = getMayBeReferenceOfMeasureUnitImpl().getSingleUnits();
+        final ArrayList<SingleUnitImpl> singleUnits =
+            getMaybeReferenceOfMeasureUnitImpl().getSingleUnits();
         List<MeasureUnit> result = new ArrayList<>(singleUnits.size());
         for (SingleUnitImpl singleUnit : singleUnits) {
             result.add(singleUnit.build());
@@ -686,47 +700,6 @@ public class MeasureUnit implements Serializable {
             }
         }
         return null;
-    }
-
-    /**
-     * For ICU use only.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static MeasureUnit[] parseCoreUnitIdentifier(String coreUnitIdentifier) {
-        // First search for the whole code unit identifier as a subType
-        MeasureUnit whole = findBySubType(coreUnitIdentifier);
-        if (whole != null) {
-            return new MeasureUnit[] { whole }; // found a numerator but not denominator
-        }
-
-        // If not found, try breaking apart numerator and denominator
-        int perIdx = coreUnitIdentifier.indexOf("-per-");
-        if (perIdx == -1) {
-            // String does not contain "-per-"
-            return null;
-        }
-        String numeratorStr = coreUnitIdentifier.substring(0, perIdx);
-        String denominatorStr = coreUnitIdentifier.substring(perIdx + 5);
-        MeasureUnit numerator = findBySubType(numeratorStr);
-        MeasureUnit denominator = findBySubType(denominatorStr);
-        if (numerator != null && denominator != null) {
-            return new MeasureUnit[] { numerator, denominator }; // found both a numerator and denominator
-        }
-
-        // The numerator or denominator were invalid
-        return null;
-    }
-
-    /**
-     * For ICU use only.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static MeasureUnit resolveUnitPerUnit(MeasureUnit unit, MeasureUnit perUnit) {
-        return unitPerUnitToSingleUnit.get(Pair.of(unit, perUnit));
     }
 
     static final UnicodeSet ASCII = new UnicodeSet('a', 'z').freeze();
@@ -1334,7 +1307,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of graphics: dot
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DOT = MeasureUnit.internalGetInstance("graphics", "dot");
 
     /**
@@ -1401,7 +1374,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of length: earth-radius
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit EARTH_RADIUS = MeasureUnit.internalGetInstance("length", "earth-radius");
 
     /**
@@ -1516,14 +1489,14 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of light: candela
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit CANDELA = MeasureUnit.internalGetInstance("light", "candela");
 
     /**
      * Constant for unit of light: lumen
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit LUMEN = MeasureUnit.internalGetInstance("light", "lumen");
 
     /**
@@ -1560,7 +1533,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of mass: grain
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit GRAIN = MeasureUnit.internalGetInstance("mass", "grain");
 
     /**
@@ -1873,28 +1846,28 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: dessert-spoon
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DESSERT_SPOON = MeasureUnit.internalGetInstance("volume", "dessert-spoon");
 
     /**
      * Constant for unit of volume: dessert-spoon-imperial
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DESSERT_SPOON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "dessert-spoon-imperial");
 
     /**
      * Constant for unit of volume: dram
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DRAM = MeasureUnit.internalGetInstance("volume", "dram");
 
     /**
      * Constant for unit of volume: drop
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit DROP = MeasureUnit.internalGetInstance("volume", "drop");
 
     /**
@@ -1931,7 +1904,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: jigger
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit JIGGER = MeasureUnit.internalGetInstance("volume", "jigger");
 
     /**
@@ -1956,7 +1929,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: pinch
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit PINCH = MeasureUnit.internalGetInstance("volume", "pinch");
 
     /**
@@ -1981,7 +1954,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of volume: quart-imperial
      * @draft ICU 68
      * @provisional This API might change or be removed in a future release.
-    */
+     */
     public static final MeasureUnit QUART_IMPERIAL = MeasureUnit.internalGetInstance("volume", "quart-imperial");
 
     /**
@@ -1996,25 +1969,8 @@ public class MeasureUnit implements Serializable {
      */
     public static final MeasureUnit TEASPOON = MeasureUnit.internalGetInstance("volume", "teaspoon");
 
-    private static HashMap<Pair<MeasureUnit, MeasureUnit>, MeasureUnit>unitPerUnitToSingleUnit =
-            new HashMap<>();
-
-    static {
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.LITER, MeasureUnit.KILOMETER), MeasureUnit.LITER_PER_KILOMETER);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.POUND, MeasureUnit.SQUARE_INCH), MeasureUnit.POUND_PER_SQUARE_INCH);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.PIXEL, MeasureUnit.CENTIMETER), MeasureUnit.PIXEL_PER_CENTIMETER);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.DOT, MeasureUnit.CENTIMETER), MeasureUnit.DOT_PER_CENTIMETER);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.HOUR), MeasureUnit.MILE_PER_HOUR);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILLIGRAM, MeasureUnit.DECILITER), MeasureUnit.MILLIGRAM_PER_DECILITER);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON_IMPERIAL), MeasureUnit.MILE_PER_GALLON_IMPERIAL);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.KILOMETER, MeasureUnit.HOUR), MeasureUnit.KILOMETER_PER_HOUR);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.MILE, MeasureUnit.GALLON), MeasureUnit.MILE_PER_GALLON);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.PIXEL, MeasureUnit.INCH), MeasureUnit.PIXEL_PER_INCH);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.DOT, MeasureUnit.INCH), MeasureUnit.DOT_PER_INCH);
-        unitPerUnitToSingleUnit.put(Pair.<MeasureUnit, MeasureUnit>of(MeasureUnit.METER, MeasureUnit.SECOND), MeasureUnit.METER_PER_SECOND);
-    }
-
     // End generated MeasureUnit constants
+
     /* Private */
 
     private Object writeReplace() throws ObjectStreamException {
@@ -2037,18 +1993,21 @@ public class MeasureUnit implements Serializable {
     /**
      *
      * @return this object in a MeasureUnitImpl form.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    private MeasureUnitImpl getCopyOfMeasureUnitImpl() {
+    @Deprecated
+    public MeasureUnitImpl getCopyOfMeasureUnitImpl() {
         return this.measureUnitImpl == null ?
                 MeasureUnitImpl.forIdentifier(getIdentifier()) :
-                this.measureUnitImpl.clone();
+                this.measureUnitImpl.copy();
     }
 
     /**
      *
      * @return this object in a MeasureUnitImpl form.
      */
-    private MeasureUnitImpl getMayBeReferenceOfMeasureUnitImpl(){
+    private MeasureUnitImpl getMaybeReferenceOfMeasureUnitImpl() {
         return this.measureUnitImpl == null ?
                 MeasureUnitImpl.forIdentifier(getIdentifier()) :
                 this.measureUnitImpl;

@@ -398,7 +398,6 @@ pcm{
             tibt{"Tíbẹt Nọ́mba-dẹm"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — ọl"}
         category-list{"{0}: {1}"}

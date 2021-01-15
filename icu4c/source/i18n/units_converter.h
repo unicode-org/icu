@@ -20,11 +20,12 @@ namespace units {
 
 /* Internal Structure */
 
+// Constants corresponding to unitConstants in CLDR's units.xml.
 enum Constants {
-    CONSTANT_FT2M,    // ft2m stands for foot to meter.
-    CONSTANT_PI,      // PI
-    CONSTANT_GRAVITY, // Gravity
-    CONSTANT_G,
+    CONSTANT_FT2M,       // ft_to_m
+    CONSTANT_PI,         // PI
+    CONSTANT_GRAVITY,    // Gravity of earth (9.80665 m/s^2), "g".
+    CONSTANT_G,          // Newtonian constant of gravitation, "G".
     CONSTANT_GAL_IMP2M3, // Gallon imp to m3
     CONSTANT_LB2KG,      // Pound to Kilogram
 
@@ -36,6 +37,7 @@ enum Constants {
 // resources file. A unit test checks that all constants in the resource
 // file are at least recognised by the code. Derived constants' values or
 // hard-coded derivations are not checked.
+// In ICU4J, these constants live in UnitConverter.Factor.getConversionRate().
 static const double constantsValues[CONSTANTS_COUNT] = {
     0.3048,                    // CONSTANT_FT2M
     411557987.0 / 131002976.0, // CONSTANT_PI
@@ -56,7 +58,9 @@ struct U_I18N_API Factor {
     double factorDen = 1;
     double offset = 0;
     bool reciprocal = false;
-    int32_t constants[CONSTANTS_COUNT] = {};
+
+    // Exponents for the symbolic constants
+    int32_t constantExponents[CONSTANTS_COUNT] = {};
 
     void multiplyBy(const Factor &rhs);
     void divideBy(const Factor &rhs);
@@ -64,11 +68,13 @@ struct U_I18N_API Factor {
     // Apply the power to the factor.
     void power(int32_t power);
 
-    // Flip the `Factor`, for example, factor= 2/3, flippedFactor = 3/2
-    void flip();
-
     // Apply SI prefix to the `Factor`
     void applySiPrefix(UMeasureSIPrefix siPrefix);
+
+    // Does an in-place substition of the "symbolic constants" based on
+    // constantExponents (resetting the exponents).
+    //
+    // In ICU4J, see UnitConverter.Factor.getConversionRate().
     void substituteConstants();
 };
 
@@ -94,7 +100,7 @@ struct U_I18N_API ConversionRate : public UMemory {
         : source(std::move(source)), target(std::move(target)) {}
 };
 
-enum U_I18N_API Convertibility {
+enum Convertibility {
     RECIPROCAL,
     CONVERTIBLE,
     UNCONVERTIBLE,
@@ -144,13 +150,32 @@ class U_I18N_API UnitConverter : public UMemory {
                   const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
-     * Convert a value in the source unit to another value in the target unit.
+     * Compares two single units and returns 1 if the first one is greater, -1 if the second
+     * one is greater and 0 if they are equal.
      *
-     * @param input_value the value that needs to be converted.
-     * @param output_value the value that holds the result of the conversion.
-     * @param status
+     * NOTE:
+     *  Compares only single units that are convertible.
+     */
+    static int32_t compareTwoUnits(const MeasureUnitImpl &firstUnit, const MeasureUnitImpl &SecondUnit,
+                                   const ConversionRates &ratesInfo, UErrorCode &status);
+
+    /**
+     * Convert a measurement expressed in the source unit to a measurement
+     * expressed in the target unit.
+     *
+     * @param inputValue the value to be converted.
+     * @return the converted value.
      */
     double convert(double inputValue) const;
+
+    /**
+     * The inverse of convert(): convert a measurement expressed in the target
+     * unit to a measurement expressed in the source unit.
+     *
+     * @param inputValue the value to be converted.
+     * @return the converted value.
+     */
+    double convertInverse(double inputValue) const;
 
   private:
     ConversionRate conversionRate_;

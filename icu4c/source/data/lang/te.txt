@@ -855,7 +855,6 @@ te{
         REVISED{"సవరించబడిన వర్ణక్రమం"}
         WADEGILE{"వేడ్-గైల్స్ రోమనైజేషన్"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — అన్ని"}
         category-list{"{0}: {1}"}

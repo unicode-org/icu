@@ -17,5 +17,4 @@ es_UY{
             "unidad previsional uruguayo",
         }
     }
-    Version{"38"}
 }

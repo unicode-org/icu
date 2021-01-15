@@ -8,5 +8,4 @@ fr_BI{
             "franc burundais",
         }
     }
-    Version{"38"}
 }

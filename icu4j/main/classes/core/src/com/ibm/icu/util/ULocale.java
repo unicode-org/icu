@@ -16,12 +16,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.MissingResourceException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -34,6 +37,7 @@ import com.ibm.icu.impl.ICUResourceTableAccess;
 import com.ibm.icu.impl.LocaleIDParser;
 import com.ibm.icu.impl.LocaleIDs;
 import com.ibm.icu.impl.SoftCache;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.AsciiUtil;
 import com.ibm.icu.impl.locale.BaseLocale;
 import com.ibm.icu.impl.locale.Extension;
@@ -127,16 +131,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * Types for {@link ULocale#getAvailableLocalesByType}
      *
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static enum AvailableType {
         /**
          * Locales that return data when passed to ICU APIs,
          * but not including legacy or alias locales.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         DEFAULT,
 
@@ -156,16 +158,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
          * DEFAULT. To get both sets at the same time, use
          * WITH_LEGACY_ALIASES.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         ONLY_LEGACY_ALIASES,
 
         /**
          * The union of the locales in DEFAULT and ONLY_LEGACY_ALIASES.
          *
-         * @draft ICU 65
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 65
          */
         WITH_LEGACY_ALIASES,
     }
@@ -502,6 +502,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @param locale the ULocale to canonicalize
      * @return the ULocale created from the canonical version of the ULocale.
      * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale createCanonical(ULocale locale) {
         return createCanonical(locale.getName());
@@ -620,7 +621,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * user.language property, a security exception will be thrown,
      * and the default ULocale will remain unchanged.
      * <p>
-     * By setting the default ULocale with this method, all of the default categoy locales
+     * By setting the default ULocale with this method, all of the default category locales
      * are also set to the specified default ULocale.
      * @param newLocale the new default locale
      * @throws SecurityException if a security manager exists and its
@@ -851,8 +852,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * Returns a list of all installed locales according to the specified type.
      *
-     * @draft ICU 65
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 65
      */
     public static Collection<ULocale> getAvailableLocalesByType(AvailableType type) {
         if (type == null) {
@@ -1203,6 +1203,495 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         return new LocaleIDParser(localeID).getKeywordValue(keywordName);
     }
 
+    static private class AliasReplacer {
+        /**
+         * @param language language subtag to be replaced. Cannot be null but could be empty.
+         * @param script script subtag to be replaced. Cannot be null but could be empty.
+         * @param region region subtag to be replaced. Cannot be null but could be empty.
+         * @param variants variant subtags to be replaced. Cannot be null but could be empty.
+         * @param extensions extensions in string to be replaced. Cannot be null but could be empty.
+         */
+        public AliasReplacer(String language, String script, String region,
+                String variants, String extensions) {
+
+            assert language != null;
+            assert script != null;
+            assert region != null;
+            assert variants != null;
+            assert extensions != null;
+            this.language = language;
+            this.script = script;
+            this.region = region;
+            if (!variants.isEmpty()) {
+                this.variants =
+                    new ArrayList<>(Arrays.asList(variants.split("_")));
+            }
+            this.extensions = extensions;
+        }
+
+        private String language;
+        private String script;
+        private String region;
+        private List<String> variants;
+        private String extensions;
+
+        public String replace() {
+            boolean changed = false;
+            loadAliasData();
+            int count = 0;
+            while (true) {
+                if (count++ > 10) {
+                    // Throw exception when we loop through too many time
+                    // stop to avoid infinity loop cauesd by incorrect data
+                    // in resource.
+                    throw new IllegalArgumentException(
+                        "Have problem to resolve locale alias of " +
+                        lscvToID(language, script, region,
+                            ((variants == null) ? "" : Utility.joinStrings("_", variants))) +
+                        extensions);
+                }
+                // Anytime we replace something, we need to start over again.
+                //                      lang  REGION  variant
+                if (    replaceLanguage(true,  true,  true) ||
+                        replaceLanguage(true,  true,  false) ||
+                        replaceLanguage(true,  false, true) ||
+                        replaceLanguage(true,  false, false) ||
+                        replaceLanguage(false, false, true) ||
+                        replaceRegion() ||
+                        replaceScript() ||
+                        replaceVariant()) {
+                    // Some values in data is changed, try to match from the
+                    // beginning again.
+                    changed = true;
+                    continue;
+                }
+                // Nothing changed in this iteration, break out the loop
+                break;
+            }  // while(1)
+            if (extensions == null && !changed) {
+                return null;
+            }
+            String result =  lscvToID(language, script, region,
+                    ((variants == null) ? "" : Utility.joinStrings("_", variants)));
+            if (extensions != null) {
+                boolean keywordChanged = false;
+                ULocale temp = new ULocale(result + extensions);
+                Iterator<String> keywords = temp.getKeywords();
+                while (keywords != null && keywords.hasNext()) {
+                    String key = keywords.next();
+                    if (key.equals("rg") || key.equals("sd") || key.equals("t")) {
+                        String value = temp.getKeywordValue(key);
+                        String replacement = key.equals("t") ?
+                            replaceTransformedExtensions(value) :
+                            replaceSubdivision(value);
+                        if (replacement != null) {
+                            temp = temp.setKeywordValue(key, replacement);
+                            keywordChanged = true;
+                        }
+                    }
+                }
+                if (keywordChanged) {
+                    extensions = temp.getName().substring(temp.getBaseName().length());
+                    changed = true;
+                }
+                result += extensions;
+            }
+            if (changed) {
+                return result;
+            }
+            // Nothing changed in any iteration of the loop.
+            return null;
+        };
+
+        private static boolean aliasDataIsLoaded = false;
+        private static Map<String, String> languageAliasMap = null;
+        private static Map<String, String> scriptAliasMap = null;
+        private static Map<String, List<String>> territoryAliasMap = null;
+        private static Map<String, String> variantAliasMap = null;
+        private static Map<String, String> subdivisionAliasMap = null;
+
+        /*
+         * Initializes the alias data from the ICU resource bundles. The alias
+         * data contains alias of language, country, script and variants.
+         *
+         * If the alias data has already loaded, then this method simply
+         * returns without doing anything meaningful.
+         *
+         */
+        private static synchronized void loadAliasData() {
+            if (aliasDataIsLoaded) {
+                return;
+            }
+            languageAliasMap = new HashMap<>();
+            scriptAliasMap = new HashMap<>();
+            territoryAliasMap = new HashMap<>();
+            variantAliasMap = new HashMap<>();
+            subdivisionAliasMap = new HashMap<>();
+
+            UResourceBundle metadata = UResourceBundle.getBundleInstance(
+                ICUData.ICU_BASE_NAME, "metadata",
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle metadataAlias = metadata.get("alias");
+            UResourceBundle languageAlias = metadataAlias.get("language");
+            UResourceBundle scriptAlias = metadataAlias.get("script");
+            UResourceBundle territoryAlias = metadataAlias.get("territory");
+            UResourceBundle variantAlias = metadataAlias.get("variant");
+            UResourceBundle subdivisionAlias = metadataAlias.get("subdivision");
+
+            for (int i = 0 ; i < languageAlias.getSize(); i++) {
+                UResourceBundle res = languageAlias.get(i);
+                String aliasFrom = res.getKey();
+                String aliasTo = res.get("replacement").getString();
+                Locale testLocale = new Locale(aliasFrom);
+                // if there are script in the aliasFrom
+                // or we have both a und as language and a region code.
+                if (    ! testLocale.getScript().isEmpty() ||
+                        (aliasFrom.startsWith("und") && ! testLocale.getCountry().isEmpty())) {
+                    throw new IllegalArgumentException(
+                        "key [" + aliasFrom +
+                        "] in alias:language contains unsupported fields combination.");
+                }
+                languageAliasMap.put(aliasFrom, aliasTo);
+            }
+            for (int i = 0 ; i < scriptAlias.getSize(); i++) {
+                UResourceBundle res = scriptAlias.get(i);
+                String aliasFrom = res.getKey();
+                String aliasTo = res.get("replacement").getString();
+                if (aliasFrom.length() != 4) {
+                    throw new IllegalArgumentException(
+                        "Incorrect key [" + aliasFrom + "] in alias:script.");
+                }
+                scriptAliasMap.put(aliasFrom, aliasTo);
+            }
+            for (int i = 0 ; i < territoryAlias.getSize(); i++) {
+                UResourceBundle res = territoryAlias.get(i);
+                String aliasFrom = res.getKey();
+                String aliasTo = res.get("replacement").getString();
+                if (aliasFrom.length() < 2 || aliasFrom.length() > 3) {
+                    throw new IllegalArgumentException(
+                        "Incorrect key [" + aliasFrom + "] in alias:territory.");
+                }
+                territoryAliasMap.put(aliasFrom,
+                    new ArrayList<>(Arrays.asList(aliasTo.split(" "))));
+            }
+            for (int i = 0 ; i < variantAlias.getSize(); i++) {
+                UResourceBundle res = variantAlias.get(i);
+                String aliasFrom = res.getKey();
+                String aliasTo = res.get("replacement").getString();
+                if (    aliasFrom.length() < 4 ||
+                        aliasFrom.length() > 8 ||
+                        (aliasFrom.length() == 4 &&
+                         (aliasFrom.charAt(0) < '0' || aliasFrom.charAt(0) > '9'))) {
+                    throw new IllegalArgumentException(
+                        "Incorrect key [" + aliasFrom + "] in alias:variant.");
+                }
+                if (    aliasTo.length() < 4 ||
+                        aliasTo.length() > 8 ||
+                        (aliasTo.length() == 4 &&
+                         (aliasTo.charAt(0) < '0' || aliasTo.charAt(0) > '9'))) {
+                    throw new IllegalArgumentException(
+                        "Incorrect variant [" + aliasTo + "] for the key [" + aliasFrom +
+                        "] in alias:variant.");
+                }
+                variantAliasMap.put(aliasFrom, aliasTo);
+            }
+            for (int i = 0 ; i < subdivisionAlias.getSize(); i++) {
+                UResourceBundle res = subdivisionAlias.get(i);
+                String aliasFrom = res.getKey();
+                String aliasTo = res.get("replacement").getString().split(" ")[0];
+                if (aliasFrom.length() < 3 || aliasFrom.length() > 8) {
+                    throw new IllegalArgumentException(
+                        "Incorrect key [" + aliasFrom + "] in alias:territory.");
+                }
+                if (aliasTo.length() < 3 || aliasTo.length() > 8) {
+                    // Ignore replacement < 3 for now. see CLDR-14312
+                    // throw new IllegalArgumentException(
+                    //    "Incorrect value [" + aliasTo + "] in alias:subdivision.");
+                    continue;
+                }
+                subdivisionAliasMap.put(aliasFrom, aliasTo);
+            }
+
+            aliasDataIsLoaded = true;
+        }
+
+        private static String generateKey(
+                String language, String region, String variant) {
+            assert variant == null || variant.length() >= 4;
+            StringBuilder buf = new StringBuilder();
+            buf.append(language);
+            if (region != null && !region.isEmpty()) {
+                buf.append(UNDERSCORE);
+                buf.append(region);
+            }
+            if (variant != null && !variant.isEmpty()) {
+                buf.append(UNDERSCORE);
+                buf.append(variant);
+            }
+            return buf.toString();
+        }
+
+        /**
+         * If replacement is neither null nor empty and input is either null or empty,
+         * return replacement.
+         * If replacement is neither null nor empty but input is not empty, return input.
+         * If replacement is either null or empty and type is either null or empty,
+         * return input.
+         * Otherwise return null.
+         *   replacement  input  type   return
+         *       AAA       ""     *      AAA
+         *       AAA       BBB    *      BBB
+         *       ""        CCC    ""     CCC
+         *       ""        *  i   DDD    ""
+         */
+        private static String deleteOrReplace(
+                String input, String type, String replacement) {
+            return (replacement != null && !replacement.isEmpty()) ?
+                    ((input == null || input.isEmpty()) ? replacement : input) :
+                    ((type == null || type.isEmpty()) ? input : null);
+        }
+
+        private boolean replaceLanguage(boolean checkLanguage,
+                boolean checkRegion, boolean checkVariants) {
+            if (    (checkRegion && (region == null || region.isEmpty())) ||
+                    (checkVariants && (variants == null))) {
+                // Nothing to search
+                return false;
+            }
+            int variantSize = checkVariants ? variants.size() : 1;
+            // Since we may have more than one variant, we need to loop through
+            // them.
+            String searchLanguage = checkLanguage ? language : UNDEFINED_LANGUAGE;
+            String searchRegion = checkRegion ? region : null;
+            String searchVariant = null;
+            for (int variantIndex = 0; variantIndex < variantSize; ++variantIndex) {
+                if (checkVariants) {
+                    searchVariant = variants.get(variantIndex);
+                }
+                if (searchVariant != null && searchVariant.length() < 4) {
+                    // Do not consider  ill-formed variant subtag.
+                    searchVariant = null;
+                }
+                String typeKey = generateKey(
+                    searchLanguage, searchRegion, searchVariant);
+                String replacement = languageAliasMap.get(typeKey);
+                if (replacement == null) {
+                    // Found no replacement data.
+                    continue;
+                }
+                String replacedScript = null;
+                String replacedRegion = null;
+                String replacedVariant = null;
+                String replacedExtensions = null;
+                String replacedLanguage = null;
+
+                if (replacement.indexOf('_') < 0) {
+                    replacedLanguage = replacement.equals(UNDEFINED_LANGUAGE) ?
+                        language : replacement;
+                } else {
+                    String[] replacementFields = replacement.split("_");
+                    replacedLanguage = replacementFields[0];
+                    int index = 1;
+
+                    if (replacedLanguage.equals(UNDEFINED_LANGUAGE)) {
+                        replacedLanguage = language;
+                    }
+                    int consumed = replacementFields[0].length() + 1;
+                    while (replacementFields.length > index) {
+                        String field = replacementFields[index];
+                        int len = field.length();
+                        if (1 == len) {
+                            replacedExtensions = replacement.substring(consumed);
+                            break;
+                        } else if (len >= 2 && len <= 3) {
+                            assert replacedRegion == null;
+                            replacedRegion = field;
+                        } else if (len >= 5 && len <= 8) {
+                            assert replacedVariant == null;
+                            replacedVariant = field;
+                        } else if (len == 4) {
+                            if (field.charAt(0) >= '0' && field.charAt(0) <= '9') {
+                                assert replacedVariant == null;
+                                replacedVariant = field;
+                            } else {
+                                assert replacedScript == null;
+                                replacedScript = field;
+                            }
+                        }
+                        index++;
+                        consumed += len + 1;
+                    }
+                }
+
+                replacedScript = deleteOrReplace(script, null, replacedScript);
+                replacedRegion = deleteOrReplace(region, searchRegion, replacedRegion);
+                replacedVariant = deleteOrReplace(searchVariant, searchVariant, replacedVariant);
+
+                if (    this.language.equals(replacedLanguage) &&
+                        this.script.equals(replacedScript) &&
+                        this.region.equals(replacedRegion) &&
+                        Objects.equals(searchVariant, replacedVariant) &&
+                        replacedExtensions == null) {
+                    // Replacement produce no changes on search.
+                    // For example, apply pa_IN=> pa_Guru_IN on pa_Guru_IN.
+                    continue;
+                }
+                this.language = replacedLanguage;
+                this.script = replacedScript;
+                this.region = replacedRegion;
+                if (searchVariant != null && !searchVariant.isEmpty()) {
+                    if (replacedVariant != null && !replacedVariant.isEmpty()) {
+                        this.variants.set(variantIndex, replacedVariant);
+                    } else {
+                        this.variants.remove(variantIndex);
+                        if (this.variants.isEmpty()) {
+                            this.variants = null;
+                        }
+                    }
+                }
+                if (replacedExtensions != null && !replacedExtensions.isEmpty()) {
+                    // TODO(ICU-21292)
+                    // DO NOTHING
+                    // UTS35 does not specifiy what should we do if we have extensions in the
+                    // replacement. Currently we know only the following 4 "BCP47 LegacyRules" have
+                    // extensions in them languageAlias:
+                    //  i_default => en_x_i_default
+                    //  i_enochian => und_x_i_enochian
+                    //  i_mingo => see_x_i_mingo
+                    //  zh_min => nan_x_zh_min
+                    // But all of them are already changed by code inside LanguageTag before
+                    // hitting this code.
+                }
+                // Something in search changed by language alias data.
+                return true;
+            }
+            // Nothing changed in search by language alias data.
+            return false;
+        }
+
+        private boolean replaceRegion() {
+            if (region == null || region.isEmpty()) return false;
+            List<String> replacement = territoryAliasMap.get(region);
+            if (replacement == null) {
+                // Found no replacement data for this region.
+                return false;
+            }
+            String replacedRegion;
+            if (replacement.size() > 1) {
+                String regionOfLanguageAndScript =
+                    ULocale.addLikelySubtags(
+                        new ULocale(this.language, this.script, null))
+                    .getCountry();
+                replacedRegion = replacement.contains(regionOfLanguageAndScript) ?
+                    regionOfLanguageAndScript : replacement.get(0);
+            } else {
+                replacedRegion = replacement.get(0);
+            }
+            assert !this.region.equals(replacedRegion);
+            this.region = replacedRegion;
+            // The region is changed by data in territory alias.
+            return true;
+        }
+
+        private boolean replaceScript() {
+            if (script == null || script.isEmpty()) return false;
+            String replacement = scriptAliasMap.get(script);
+            if (replacement == null) {
+                // Found no replacement data for this script.
+                return false;
+            }
+            assert !this.script.equals(replacement);
+            this.script = replacement;
+            // The script is changed by data in script alias.
+            return true;
+        }
+
+        private boolean replaceVariant() {
+            if (variants == null) return false;
+            for (int i = 0; i < variants.size(); i++) {
+                 String variant = variants.get(i);
+                 String replacement = variantAliasMap.get(variant);
+                 if (replacement == null) {
+                     // Found no replacement data for this variant.
+                     continue;
+                 }
+                 assert replacement.length() >= 4;
+                 assert replacement.length() <= 8;
+                 assert replacement.length() != 4 ||
+                     ( replacement.charAt(0) >= '0' && replacement.charAt(0) <= '9');
+                 if (!variant.equals(replacement)) {
+                     variants.set(i, replacement);
+                     // Special hack to handle hepburn-heploc => alalc97
+                     if (variant.equals("heploc")) {
+                         variants.remove("hepburn");
+                         if (variants.isEmpty()) {
+                             variants = null;
+                         }
+                     }
+                     return true;
+                 }
+            }
+            return false;
+        }
+
+        private String replaceSubdivision(String subdivision) {
+            return subdivisionAliasMap.get(subdivision);
+        }
+
+        private String replaceTransformedExtensions(String extensions) {
+            StringBuilder builder = new StringBuilder();
+            List<String> subtags = new ArrayList<>(Arrays.asList(extensions.split(LanguageTag.SEP)));
+            List<String> tfields = new ArrayList<>();
+            int processedLength = 0;
+            int tlangLength = 0;
+            String tkey = "";
+            for (String subtag : subtags) {
+                if (LanguageTag.isTKey(subtag)) {
+                    if (tlangLength == 0) {
+                        // Found the first tkey. Record the total length of the preceding
+                        // tlang subtags. -1 if there is no tlang before the first tkey.
+                        tlangLength = processedLength-1;
+                    }
+                    if (builder.length() > 0) {
+                        // Finish & store the previous tkey with its tvalue subtags.
+                        tfields.add(builder.toString());
+                        builder.setLength(0);
+                    }
+                    // Start collecting subtags for this new tkey.
+                    tkey = subtag;
+                    builder.append(subtag);
+                } else {
+                    if (tlangLength != 0) {
+                        builder.append(LanguageTag.SEP).append(toUnicodeLocaleType(tkey, subtag));
+                    }
+                }
+                processedLength += subtag.length() + 1;
+            }
+            if (builder.length() > 0) {
+                // Finish & store the previous=last tkey with its tvalue subtags.
+                tfields.add(builder.toString());
+                builder.setLength(0);
+            }
+            String tlang = (tlangLength > 0) ? extensions.substring(0, tlangLength) :
+                ((tfields.size() == 0) ? extensions :  "");
+            if (tlang.length() > 0) {
+                String canonicalized = ULocale.createCanonical(
+                    ULocale.forLanguageTag(extensions)).toLanguageTag();
+                builder.append(AsciiUtil.toLowerString(canonicalized));
+            }
+
+            if (tfields.size() > 0) {
+                if (builder.length() > 0) {
+                    builder.append(LanguageTag.SEP);
+                }
+                // tfields are sorted by alphabetical order of their keys
+                Collections.sort(tfields);
+                builder.append(Utility.joinStrings(LanguageTag.SEP, tfields));
+            }
+            return builder.toString();
+        }
+    };
+
     /**
      * {@icu} Returns the canonical name according to CLDR for the specified locale ID.
      * This is used to convert POSIX and other legacy IDs to standard ICU form.
@@ -1239,146 +1728,53 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }
         }
 
-        // If the BCP 47 primary language subtag matches the type attribute of a languageAlias
-        // element in Supplemental Data, replace the language subtag with the replacement value.
-        // If there are additional subtags in the replacement value, add them to the result, but
-        // only if there is no corresponding subtag already in the tag.
-        // Five special deprecated codes (such as i-default) are in type attributes, and are also replaced.
-        try {
-            UResourceBundle languageAlias = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER)
-                .get("alias")
-                .get("language");
-            // language _ variant
-            if (!parser.getVariant().isEmpty()) {
-                String [] variants = parser.getVariant().split("_");
-                for (String variant : variants) {
-                    try {
-                        // Note the key in the metadata.txt is formatted as language_variant
-                        // instead of language__variant but lscvToID will generate
-                        // language__variant so we have to build the string ourselves.
-                        ULocale replaceLocale = new ULocale(languageAlias.get(
-                            (new StringBuilder(parser.getLanguage().length() + 1 + parser.getVariant().length()))
-                                .append(parser.getLanguage())
-                                .append("_")
-                                .append(variant)
-                                .toString())
-                            .get("replacement")
-                            .getString());
-                        StringBuilder replacedVariant = new StringBuilder(parser.getVariant().length());
-                        for (String current : variants) {
-                            if (current.equals(variant)) continue;
-                            if (replacedVariant.length() > 0) replacedVariant.append("_");
-                            replacedVariant.append(current);
-                        }
-                        parser = new LocaleIDParser(
-                            (new StringBuilder(localeID.length()))
-                                .append(lscvToID(replaceLocale.getLanguage(),
-                                    !parser.getScript().isEmpty() ? parser.getScript() : replaceLocale.getScript(),
-                                    !parser.getCountry().isEmpty() ? parser.getCountry() : replaceLocale.getCountry(),
-                                    replacedVariant.toString()))
-                                .append(parser.getName().substring(parser.getBaseName().length()))
-                                .toString());
-                    } catch (MissingResourceException e) {
-                    }
-                }
-            }
-
-            // language _ script _ country
-            // ug_Arab_CN -> ug_CN
-            if (!parser.getScript().isEmpty() && !parser.getCountry().isEmpty()) {
-                try {
-                    ULocale replaceLocale = new ULocale(languageAlias.get(
-                        lscvToID(parser.getLanguage(), parser.getScript(), parser.getCountry(), null))
-                        .get("replacement")
-                        .getString());
-                    parser = new LocaleIDParser((new StringBuilder(localeID.length()))
-                        .append(lscvToID(replaceLocale.getLanguage(),
-                            replaceLocale.getScript(),
-                            replaceLocale.getCountry(),
-                            parser.getVariant()))
-                        .append(parser.getName().substring(parser.getBaseName().length()))
-                        .toString());
-                } catch (MissingResourceException e) {
-                }
-            }
-            // language _ country
-            // eg. az_AZ -> az_Latn_AZ
-            if (!parser.getCountry().isEmpty()) {
-                try {
-                    ULocale replaceLocale = new ULocale(languageAlias.get(
-                        lscvToID(parser.getLanguage(), null, parser.getCountry(), null))
-                        .get("replacement")
-                        .getString());
-                    parser = new LocaleIDParser((new StringBuilder(localeID.length()))
-                        .append(lscvToID(replaceLocale.getLanguage(),
-                            parser.getScript().isEmpty() ? replaceLocale.getScript() : parser.getScript(),
-                            replaceLocale.getCountry(),
-                            parser.getVariant()))
-                        .append(parser.getName().substring(parser.getBaseName().length()))
-                        .toString());
-                } catch (MissingResourceException e) {
-                }
-            }
-            // only language
-            // e.g. twi -> ak
-            try {
-                ULocale replaceLocale = new ULocale(languageAlias.get(parser.getLanguage())
-                    .get("replacement")
-                    .getString());
-                parser = new LocaleIDParser((new StringBuilder(localeID.length()))
-                    .append(lscvToID(replaceLocale.getLanguage(),
-                        parser.getScript().isEmpty() ? replaceLocale.getScript() : parser.getScript() ,
-                        parser.getCountry().isEmpty() ? replaceLocale.getCountry() : parser.getCountry() ,
-                        parser.getVariant()))
-                    .append(parser.getName().substring(parser.getBaseName().length()))
-                    .toString());
-            } catch (MissingResourceException e) {
-            }
-        } catch (MissingResourceException e) {
-        }
-
-        // If the BCP 47 region subtag matches the type attribute of a
-        // territoryAlias element in Supplemental Data, replace the language
-        // subtag with the replacement value, as follows:
-        if (!parser.getCountry().isEmpty()) {
-            try {
-                String replacements[] = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
-                    "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER)
-                    .get("alias")
-                    .get("territory")
-                    .get(parser.getCountry())
-                    .get("replacement")
-                    .getString()
-                    .split(" ");
-                String replacement = replacements[0];
-                // If there is a single territory in the replacement, use it.
-                // If there are multiple territories:
-                // Look up the most likely territory for the base language code (and script, if there is one).
-                // If that likely territory is in the list, use it.
-                // Otherwise, use the first territory in the list.
-                if (replacements.length > 1) {
-                    String likelyCountry = ULocale.addLikelySubtags(
-                        new ULocale(lscvToID(parser.getLanguage(), parser.getScript(), null, parser.getVariant())))
-                        .getCountry();
-                    for (String country : replacements) {
-                        if (country.equals(likelyCountry)) {
-                            replacement = likelyCountry;
-                            break;
-                        }
-                    }
-                }
-                parser = new LocaleIDParser(
-                    (new StringBuilder(localeID.length()))
-                    .append(lscvToID(parser.getLanguage(), parser.getScript(), replacement, parser.getVariant()))
-                    .append(parser.getName().substring(parser.getBaseName().length()))
-                    .toString());
-            } catch (MissingResourceException e) {
+        String name = parser.getName();
+        if (!isKnownCanonicalizedLocale(name)) {
+            AliasReplacer replacer = new AliasReplacer(
+                parser.getLanguage(), parser.getScript(), parser.getCountry(),
+                AsciiUtil.toLowerString(parser.getVariant()),
+                parser.getName().substring(parser.getBaseName().length()));
+            String replaced = replacer.replace();
+            if (replaced != null) {
+                parser =  new LocaleIDParser(replaced);
             }
         }
 
         return parser.getName();
     }
+
+    private static synchronized boolean isKnownCanonicalizedLocale(String name) {
+        if (name.equals("c") || name.equals("en") || name.equals("en_US")) {
+            return true;
+        }
+        if (gKnownCanonicalizedCases == null) {
+            List<String> items = Arrays.asList(
+                "af", "af_ZA", "am", "am_ET", "ar", "ar_001", "as", "as_IN", "az", "az_AZ",
+                "be", "be_BY", "bg", "bg_BG", "bn", "bn_IN", "bs", "bs_BA", "ca", "ca_ES",
+                "cs", "cs_CZ", "cy", "cy_GB", "da", "da_DK", "de", "de_DE", "el", "el_GR",
+                "en", "en_GB", "en_US", "es", "es_419", "es_ES", "et", "et_EE", "eu",
+                "eu_ES", "fa", "fa_IR", "fi", "fi_FI", "fil", "fil_PH", "fr", "fr_FR",
+                "ga", "ga_IE", "gl", "gl_ES", "gu", "gu_IN", "he", "he_IL", "hi", "hi_IN",
+                "hr", "hr_HR", "hu", "hu_HU", "hy", "hy_AM", "id", "id_ID", "is", "is_IS",
+                "it", "it_IT", "ja", "ja_JP", "jv", "jv_ID", "ka", "ka_GE", "kk", "kk_KZ",
+                "km", "km_KH", "kn", "kn_IN", "ko", "ko_KR", "ky", "ky_KG", "lo", "lo_LA",
+                "lt", "lt_LT", "lv", "lv_LV", "mk", "mk_MK", "ml", "ml_IN", "mn", "mn_MN",
+                "mr", "mr_IN", "ms", "ms_MY", "my", "my_MM", "nb", "nb_NO", "ne", "ne_NP",
+                "nl", "nl_NL", "or", "or_IN", "pa", "pa_IN", "pl", "pl_PL", "ps", "ps_AF",
+                "pt", "pt_BR", "pt_PT", "ro", "ro_RO", "ru", "ru_RU", "sd", "sd_IN", "si",
+                "si_LK", "sk", "sk_SK", "sl", "sl_SI", "so", "so_SO", "sq", "sq_AL", "sr",
+                "sr_Cyrl_RS", "sr_Latn", "sr_RS", "sv", "sv_SE", "sw", "sw_TZ", "ta",
+                "ta_IN", "te", "te_IN", "th", "th_TH", "tk", "tk_TM", "tr", "tr_TR", "uk",
+                "uk_UA", "ur", "ur_PK", "uz", "uz_UZ", "vi", "vi_VN", "yue", "yue_Hant",
+                "yue_Hant_HK", "yue_HK", "zh", "zh_CN", "zh_Hans", "zh_Hans_CN", "zh_Hant",
+                "zh_Hant_TW", "zh_TW", "zu", "zu_ZA");
+            gKnownCanonicalizedCases = new HashSet<>(items);
+
+        }
+        return gKnownCanonicalizedCases.contains(name);
+    }
+
+    private static Set<String> gKnownCanonicalizedCases = null;
 
     /**
      * {@icu} Given a keyword and a value, return a new locale with an updated
@@ -3148,9 +3544,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
         subtag = tag.getPrivateuse();
         if (subtag.length() > 0) {
-            if (buf.length() > 0) {
-                buf.append(LanguageTag.SEP);
+            if (buf.length() == 0) {
+               buf.append(UNDEFINED_LANGUAGE);
             }
+            buf.append(LanguageTag.SEP);
             buf.append(LanguageTag.PRIVATEUSE).append(LanguageTag.SEP);
             buf.append(LanguageTag.canonicalizePrivateuse(subtag));
         }
@@ -3666,7 +4063,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
          * effect.  The attribute must not be null and must be well-formed
          * or an exception is thrown.
          *
-         * <p>Attribute comparision for removal is case-insensitive.
+         * <p>Attribute comparison for removal is case-insensitive.
          *
          * @param attribute the attribute
          * @return This builder.

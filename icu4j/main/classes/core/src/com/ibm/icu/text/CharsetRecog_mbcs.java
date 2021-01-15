@@ -86,7 +86,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                 if (doubleByteCharCount == 0 && totalCharCount < 10) {
                     // There weren't any multibyte sequences, and there was a low density of non-ASCII single bytes.
                     // We don't have enough data to have any confidence.
-                    // Statistical analysis of single byte non-ASCII charcters would probably help here.
+                    // Statistical analysis of single byte non-ASCII characters would probably help here.
                     confidence = 0;
                 }
                 else {

@@ -8,5 +8,4 @@ om_KE{
             "KES",
         }
     }
-    Version{"38"}
 }

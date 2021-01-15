@@ -9,5 +9,4 @@ es_NI{
             "córdoba nicaragüense",
         }
     }
-    Version{"38"}
 }

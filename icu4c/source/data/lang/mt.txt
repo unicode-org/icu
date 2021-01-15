@@ -558,7 +558,6 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"38"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skript: {0}"}

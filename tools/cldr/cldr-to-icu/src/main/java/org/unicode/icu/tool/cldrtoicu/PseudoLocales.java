@@ -190,6 +190,9 @@ public final class PseudoLocales {
         private static final PathMatcher NUMBERING_SYSTEM =
             ldml("numbers/defaultNumberingSystem");
 
+        private static final PathMatcher GREGORIAN_SHORT_STANDARD_PATTERN =
+            ldml("dates/calendars/calendar[@type=\"gregorian\"]/timeFormats/timeFormatLength[@type=\"short\"]/timeFormat[@type=\"standard\"]/pattern[@type=\"standard\"]");
+
         // These paths were mostly derived from looking at the previous implementation's behaviour
         // and can be modified as needed.
         private static final Predicate<CldrPath> IS_PSEUDO_PATH =
@@ -283,7 +286,15 @@ public final class PseudoLocales {
             if (IS_NARROW.test(fullPath)) {
                 return defaultReturnValue;
             }
+            // Explicitly return 24 hrs format pattern for the Gregorian short standard pattern
+            // entry to be consistent with the time cycle specified in supplemental.xml for
+            // region 001. 001 is the region the pseudolocales en_XA/ar_XB default to.
+            // This prevents ICU unit test failure.
+            if (GREGORIAN_SHORT_STANDARD_PATTERN.matches(path)) {
+                return CldrValue.parseValue(fullPath, "[H:mm]");
+            }
             String text = createMessage(value.getValue(), IS_PATTERN_PATH.test(path));
+
             return CldrValue.parseValue(fullPath, text);
         }
 

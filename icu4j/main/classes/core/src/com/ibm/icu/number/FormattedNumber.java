@@ -12,6 +12,7 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
+import com.ibm.icu.util.MeasureUnit;
 
 /**
  * The result of a number formatting operation. This class allows the result to be exported in several
@@ -25,10 +26,12 @@ import com.ibm.icu.text.PluralRules.IFixedDecimal;
 public class FormattedNumber implements FormattedValue {
     final FormattedStringBuilder string;
     final DecimalQuantity fq;
+    final MeasureUnit outputUnit;
 
-    FormattedNumber(FormattedStringBuilder nsb, DecimalQuantity fq) {
+    FormattedNumber(FormattedStringBuilder nsb, DecimalQuantity fq, MeasureUnit outputUnit) {
         this.string = nsb;
         this.fq = fq;
+        this.outputUnit = outputUnit;
     }
 
     /**
@@ -112,6 +115,22 @@ public class FormattedNumber implements FormattedValue {
      */
     public BigDecimal toBigDecimal() {
         return fq.toBigDecimal();
+    }
+
+    /**
+     * Gets the resolved output unit.
+     * <p>
+     * The output unit is dependent upon the localized preferences for the usage
+     * specified via NumberFormatterSettings.usage(), and may be a unit with
+     * MeasureUnit.Complexity.MIXED unit complexity (MeasureUnit.getComplexity()), such
+     * as "foot-and-inch" or "hour-and-minute-and-second".
+     *
+     * @return `MeasureUnit`.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public MeasureUnit getOutputUnit() {
+        return this.outputUnit;
     }
 
     /**

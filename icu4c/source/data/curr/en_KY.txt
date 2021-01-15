@@ -9,5 +9,4 @@ en_KY{
             "Cayman Islands Dollar",
         }
     }
-    Version{"38"}
 }

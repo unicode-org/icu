@@ -5,5 +5,4 @@ kw{
     Countries{
         GB{"Rywvaneth Unys"}
     }
-    Version{"38"}
 }

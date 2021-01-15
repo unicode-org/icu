@@ -226,5 +226,4 @@ seh{
         ZM{"Zâmbia"}
         ZW{"Zimbábue"}
     }
-    Version{"38"}
 }

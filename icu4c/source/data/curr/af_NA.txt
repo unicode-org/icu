@@ -8,5 +8,4 @@ af_NA{
             "Namibiese dollar",
         }
     }
-    Version{"38"}
 }

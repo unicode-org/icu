@@ -375,7 +375,7 @@ class TransliteratorIDParser;
  *
  * <p>It is also possible to match the beginning or the end of the text using a <code>UnicodeSet</code>.
  * This is done by including a virtual anchor character '<code>$</code>' at the end of the
- * set pattern. Although this is usually the match chafacter for the end anchor, the set will
+ * set pattern. Although this is usually the match character for the end anchor, the set will
  * match either the beginning or the end of the text, depending on its placement. For
  * example:
  *
@@ -883,7 +883,7 @@ public:
      * @param text the text to be transliterated
      * @param index the position indices
      * @param incremental if true, then assume more characters may be inserted
-     * at index.limit, and postpone processing to accomodate future incoming
+     * at index.limit, and postpone processing to accommodate future incoming
      * characters
      * @stable ICU 2.4
      */
@@ -913,7 +913,7 @@ private:
      * @param text the text to be transliterated
      * @param index the position indices
      * @param incremental if true, then assume more characters may be inserted
-     * at index.limit, and postpone processing to accomodate future incoming
+     * at index.limit, and postpone processing to accommodate future incoming
      * characters
      * @param rollback if true and if incremental is true, then perform special
      * incremental processing, as described above, and undo partial

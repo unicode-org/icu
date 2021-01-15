@@ -19,5 +19,4 @@ es_BO{
         wo{"wolof"}
         zgh{"tamazight marroquí estándar"}
     }
-    Version{"38"}
 }

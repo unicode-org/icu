@@ -315,5 +315,4 @@ sr_Latn{
         FK{"Foklandska (Malvinska) ostrva"}
         TL{"Istočni Timor"}
     }
-    Version{"38"}
 }

@@ -1509,6 +1509,15 @@ static void TestGetVersionColl(){
 
 static void TestResourceBundles()
 {
+    // The test expectation only works if the default locale is not one of the
+    // locale bundle in the testdata which have those info. Therefore, we skip
+    // the test if the default locale is te, sh, mc, or them with subtags.
+    if (    uprv_strncmp(uloc_getDefault(), "te", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "sh", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "mc", 2) == 0) {
+        return;
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     loadTestData(&status);
     if(U_FAILURE(status)) {
@@ -1532,6 +1541,15 @@ static void TestResourceBundles()
 
 static void TestConstruction1()
 {
+    // The test expectation only works if the default locale is not one of the
+    // locale bundle in the testdata which have those info. Therefore, we skip
+    // the test if the default locale is te, sh, mc, or them with subtags.
+    if (    uprv_strncmp(uloc_getDefault(), "te", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "sh", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "mc", 2) == 0) {
+        return;
+    }
+
     UResourceBundle *test1 = 0, *test2 = 0,*empty = 0;
     const UChar *result1, *result2;
     UErrorCode status= U_ZERO_ERROR;
@@ -2162,13 +2180,13 @@ static void TestFallback()
         UErrorCode err =U_ZERO_ERROR;
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
-        UResourceBundle* tResB;
-        UResourceBundle* zoneResource;
         const UChar* version = NULL;
-        static const UChar versionStr[] = u"38"; // 38 in nn_NO
+        static const UChar versionStr[] = u"38"; // 38 in nn_NO or in a parent bundle/root
 
-        if(err != U_ZERO_ERROR){
-            log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
+        if(U_FAILURE(err)) {
+            log_data_err("Expected success when trying to test no_NO_NY aliased to nn_NO for Version "
+                         "err=%s\n",
+                         u_errorName(err));
             return;
         }
         version = tres_getString(resLocID, -1, NULL, &resultLen, &err);
@@ -2177,11 +2195,12 @@ static void TestFallback()
             char g[100];
             u_austrcpy(x, versionStr);
             u_austrcpy(g, version);
-            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value. Expected '%s', but got '%s'\n",
-                    x, g);
+            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected "
+                         "version value. Expected '%s', but got '%s'\n",
+                         x, g);
         }
-        zoneResource = ures_open(U_ICUDATA_ZONE, "no_NO_NY", &err);
-        tResB = ures_getByKey(zoneResource, "zoneStrings", NULL, &err);
+        UResourceBundle* zoneResource = ures_open(U_ICUDATA_ZONE, "no_NO_NY", &err);
+        UResourceBundle* tResB = ures_getByKey(zoneResource, "zoneStrings", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
             log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for zoneStrings err=%s\n",u_errorName(err));
         }
@@ -2354,7 +2373,7 @@ static void TestResourceLevelAliasing(void) {
                 }
                 uBufferLen = u_unescape(strings[i], uBuffer, 256);
                 if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
-                  log_err("(2) Didn't get correct string while accesing alias table by index (%s)\n", strings[i]);
+                  log_err("(2) Didn't get correct string while accessing alias table by index (%s)\n", strings[i]);
                 }
             }
             for(i = 0; i < UPRV_LENGTHOF(strings); i++) {
@@ -2381,7 +2400,7 @@ static void TestResourceLevelAliasing(void) {
                 }
                 uBufferLen = u_unescape(strings[i], uBuffer, 256);
                 if(result==NULL || resultLen != uBufferLen || u_strncmp(result, uBuffer, resultLen) != 0) {
-                  log_err("Didn't get correct string while accesing alias by index in an array (%s)\n", strings[i]);
+                  log_err("Didn't get correct string while accessing alias by index in an array (%s)\n", strings[i]);
                 }
             }
             for(i = 0; i < UPRV_LENGTHOF(strings); i++) {

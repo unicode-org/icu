@@ -15,5 +15,4 @@ en_IM{
             other{"UK pounds"}
         }
     }
-    Version{"38"}
 }

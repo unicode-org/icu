@@ -5,7 +5,7 @@ information on contributing to ICU.
 
 You will be automatically asked to sign the contributors license before the PR is accepted.
 - sign: https://cla-assistant.io/unicode-org/icu
-- license: http://www.unicode.org/copyright.html#License
+- license: http://www.unicode.org/copyright.html
 -->
 
 ##### Checklist

@@ -236,5 +236,4 @@ asa{
             "dola ya Dhimbabwe",
         }
     }
-    Version{"38"}
 }

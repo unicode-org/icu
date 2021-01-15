@@ -9,5 +9,4 @@ en_BZ{
             "Belize Dollar",
         }
     }
-    Version{"38"}
 }

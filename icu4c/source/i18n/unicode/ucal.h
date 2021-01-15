@@ -662,8 +662,6 @@ ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec);
 U_CAPI void U_EXPORT2
 ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
 
-#ifndef U_HIDE_DRAFT_API
-
 /**
  * Return the current host time zone. The host time zone is detected from
  * the current host system configuration by querying the host operating
@@ -691,12 +689,10 @@ ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
  * 
  * @see #UCAL_UNKNOWN_ZONE_ID
  * 
- * @draft ICU 65
+ * @stable ICU 65
  */
 U_CAPI int32_t U_EXPORT2
 ucal_getHostTimeZone(UChar *result, int32_t resultCapacity, UErrorCode *ec);
-
-#endif // U_HIDE_DRAFT_API
 
 /**
  * Return the amount of time in milliseconds that the clock is
@@ -1572,7 +1568,7 @@ ucal_getTimeZoneTransitionDate(const UCalendar* cal, UTimeZoneTransitionType typ
 *
 * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
 * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
-* please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+* please read the ICU user guide section <a href="https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data">
 * Updating the Time Zone Data</a>.
 *
 * @param id            A system time zone ID.
@@ -1603,7 +1599,7 @@ ucal_getWindowsTimeZoneID(const UChar* id, int32_t len,
 *
 * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
 * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
-* please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+* please read the ICU user guide section <a href="https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data">
 * Updating the Time Zone Data</a>.
 *
 * @param winid         A Windows time zone ID.

@@ -232,5 +232,4 @@ ksf{
             "mɔni mǝ á zimbabwɛ́",
         }
     }
-    Version{"38"}
 }

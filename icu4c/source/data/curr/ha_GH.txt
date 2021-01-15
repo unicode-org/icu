@@ -8,5 +8,4 @@ ha_GH{
             "Sidi na Ghana",
         }
     }
-    Version{"38"}
 }

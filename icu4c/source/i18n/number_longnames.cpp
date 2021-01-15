@@ -220,38 +220,38 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
 } // namespace
 
 void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
-                                     const MeasureUnit &perUnit, const UNumberUnitWidth &width,
-                                     const PluralRules *rules, const MicroPropsGenerator *parent,
-                                     LongNameHandler *fillIn, UErrorCode &status) {
+                                     const UNumberUnitWidth &width, const PluralRules *rules,
+                                     const MicroPropsGenerator *parent, LongNameHandler *fillIn,
+                                     UErrorCode &status) {
     // Not valid for mixed units that aren't built-in units, and there should
     // not be any built-in mixed units!
-    U_ASSERT(uprv_strlen(unitRef.getType()) > 0 || unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
+    U_ASSERT(uprv_strcmp(unitRef.getType(), "") != 0 ||
+             unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
-    if (uprv_strlen(unitRef.getType()) == 0 || uprv_strlen(perUnit.getType()) == 0) {
-        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
-        // error code. Once we support not-built-in units here, unitRef may be
-        // anything, but if not built-in, perUnit has to be "none".
-        status = U_UNSUPPORTED_ERROR;
+
+    if (uprv_strcmp(unitRef.getType(), "") == 0) {
+        // Not a built-in unit. Split it up, since we can already format
+        // "builtin-per-builtin".
+        // TODO(ICU-20941): support more generic case than builtin-per-builtin.
+        MeasureUnitImpl fullUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(unitRef, status);
+        MeasureUnitImpl unit;
+        MeasureUnitImpl perUnit;
+        for (int32_t i = 0; i < fullUnit.singleUnits.length(); i++) {
+            SingleUnitImpl *subUnit = fullUnit.singleUnits[i];
+            if (subUnit->dimensionality > 0) {
+                unit.appendSingleUnit(*subUnit, status);
+            } else {
+                subUnit->dimensionality *= -1;
+                perUnit.appendSingleUnit(*subUnit, status);
+            }
+        }
+        forCompoundUnit(loc, std::move(unit).build(status), std::move(perUnit).build(status), width,
+                        rules, parent, fillIn, status);
         return;
     }
 
-    MeasureUnit unit = unitRef;
-    if (uprv_strcmp(perUnit.getType(), "none") != 0) {
-        // Compound unit: first try to simplify (e.g. "meter per second" is a
-        // built-in unit).
-        bool isResolved = false;
-        MeasureUnit resolved = MeasureUnit::resolveUnitPerUnit(unit, perUnit, &isResolved);
-        if (isResolved) {
-            unit = resolved;
-        } else {
-            // No simplified form is available.
-            forCompoundUnit(loc, unit, perUnit, width, rules, parent, fillIn, status);
-            return;
-        }
-    }
-
     UnicodeString simpleFormats[ARRAY_LENGTH];
-    getMeasureData(loc, unit, width, simpleFormats, status);
+    getMeasureData(loc, unitRef, width, simpleFormats, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -265,6 +265,13 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
                                       const MeasureUnit &perUnit, const UNumberUnitWidth &width,
                                       const PluralRules *rules, const MicroPropsGenerator *parent,
                                       LongNameHandler *fillIn, UErrorCode &status) {
+    if (uprv_strcmp(unit.getType(), "") == 0 || uprv_strcmp(perUnit.getType(), "") == 0) {
+        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
+        // error code. Once we support not-built-in units here, unitRef may be
+        // anything, but if not built-in, perUnit has to be "none".
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
     if (fillIn == nullptr) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
@@ -415,12 +422,12 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
 
     MeasureUnitImpl temp;
     const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(mixedUnit, temp, status);
-    fillIn->fMixedUnitCount = impl.units.length();
+    fillIn->fMixedUnitCount = impl.singleUnits.length();
     fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
     for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
         // Grab data for each of the components.
         UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
-        getMeasureData(loc, impl.units[i]->build(status), width, unitData, status);
+        getMeasureData(loc, impl.singleUnits[i]->build(status), width, unitData, status);
     }
 
     UListFormatterWidth listWidth = ULISTFMT_WIDTH_SHORT;
@@ -452,13 +459,13 @@ void MixedUnitLongNameHandler::processQuantity(DecimalQuantity &quantity, MicroP
 const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &quantity,
                                                                MicroProps &micros,
                                                                UErrorCode &status) const {
-    // TODO(icu-units#21): mixed units without usage() is not yet supported.
-    // That should be the only reason why this happens, so delete this whole if
-    // once fixed:
     if (micros.mixedMeasuresCount == 0) {
+        U_ASSERT(micros.mixedMeasuresCount > 0); // Mixed unit: we must have more than one unit value
         status = U_UNSUPPORTED_ERROR;
         return &micros.helpers.emptyWeakModifier;
     }
+    // If we don't have at least one mixedMeasure, the LongNameHandler would be
+    // sufficient and we shouldn't be running MixedUnitLongNameHandler code:
     U_ASSERT(micros.mixedMeasuresCount > 0);
     // mixedMeasures does not contain the last value:
     U_ASSERT(fMixedUnitCount == micros.mixedMeasuresCount + 1);
@@ -490,6 +497,11 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
     for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
         DecimalQuantity fdec;
         fdec.setToLong(micros.mixedMeasures[i]);
+        if (i > 0 && fdec.isNegative()) {
+            // If numbers are negative, only the first number needs to have its
+            // negative sign formatted.
+            fdec.negate();
+        }
         StandardPlural::Form pluralForm = utils::getStandardPlural(rules, fdec);
 
         UnicodeString simpleFormat =
@@ -500,6 +512,14 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         auto appendable = UnicodeStringAppendable(num);
         fIntegerFormatter.formatDecimalQuantity(fdec, status).appendTo(appendable, status);
         compiledFormatter.format(num, outputMeasuresList[i], status);
+        // TODO(icu-units#67): fix field positions
+    }
+
+    // Reiterated: we have at least one mixedMeasure:
+    U_ASSERT(micros.mixedMeasuresCount > 0);
+    // Thus if negative, a negative has already been formatted:
+    if (quantity.isNegative()) {
+        quantity.negate();
     }
 
     UnicodeString *finalSimpleFormats = &fMixedUnitData[(fMixedUnitCount - 1) * ARRAY_LENGTH];
@@ -517,6 +537,7 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         return &micros.helpers.emptyWeakModifier;
     }
 
+    // TODO(icu-units#67): fix field positions
     // Return a SimpleModifier for the "premixed" pattern
     micros.helpers.mixedUnitModifier =
         SimpleModifier(premixedCompiled, kUndefinedField, false, {this, SIGNUM_POS_ZERO, finalPlural});
@@ -555,7 +576,7 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
             result->fHandlers[i] = mlnh;
         } else {
             LongNameHandler *lnh = result->fLongNameHandlers.createAndCheckErrorCode(status);
-            LongNameHandler::forMeasureUnit(loc, unit, MeasureUnit(), width, rules, NULL, lnh, status);
+            LongNameHandler::forMeasureUnit(loc, unit, width, rules, NULL, lnh, status);
             result->fHandlers[i] = lnh;
         }
         if (U_FAILURE(status)) {

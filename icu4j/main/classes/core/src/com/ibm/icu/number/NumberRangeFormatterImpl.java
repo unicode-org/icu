@@ -148,7 +148,7 @@ class NumberRangeFormatterImpl {
         getNumberRangeData(macros.loc, nsName, this);
 
         // TODO: Get locale from PluralRules instead?
-        fPluralRanges = new StandardPluralRanges(macros.loc);
+        fPluralRanges = StandardPluralRanges.forLocale(macros.loc);
     }
 
     public FormattedNumberRange format(DecimalQuantity quantity1, DecimalQuantity quantity2, boolean equalBeforeRounding) {
@@ -297,7 +297,7 @@ class NumberRangeFormatterImpl {
                 // INNER MODIFIER
                 collapseInner = micros1.modInner.semanticallyEquivalent(micros2.modInner);
 
-                // All done checking for collapsability.
+                // All done checking for collapsibility.
                 break;
             }
 

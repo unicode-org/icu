@@ -57,7 +57,6 @@ se_FI{
             gregorian{"gregorialaš kalendar"}
         }
     }
-    Version{"38"}
     codePatterns{
         script{"čállin: {0}"}
     }

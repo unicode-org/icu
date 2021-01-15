@@ -247,5 +247,4 @@ ko{
             "3: =%%spellout-ordinal-native-smaller=;",
         }
     }
-    Version{"38"}
 }

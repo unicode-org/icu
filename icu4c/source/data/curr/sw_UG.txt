@@ -8,5 +8,4 @@ sw_UG{
             "Shilingi ya Uganda",
         }
     }
-    Version{"38"}
 }

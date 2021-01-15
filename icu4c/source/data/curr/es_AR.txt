@@ -16,5 +16,4 @@ es_AR{
     Currencies%variant{
         GEL{"GEL"}
     }
-    Version{"38"}
 }

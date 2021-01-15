@@ -49,5 +49,4 @@ asa{
         zh{"Kichina"}
         zu{"Kidhulu"}
     }
-    Version{"38"}
 }

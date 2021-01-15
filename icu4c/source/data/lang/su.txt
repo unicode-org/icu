@@ -63,7 +63,6 @@ su{
             latn{"Digit Barat"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Basa: {0}"}
         script{"Skrip: {0}"}

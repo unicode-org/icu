@@ -1027,7 +1027,7 @@ static void TestAddRollExtensive()
     checkDate(cal, y, m, d);
     ucal_roll(cal, (UCalendarDateFields)-1, 10, &status);
     if(status==U_ILLEGAL_ARGUMENT_ERROR)
-        log_verbose("Pass: illegal arguement error as expected\n");
+        log_verbose("Pass: illegal argument error as expected\n");
     else{
         log_err("Fail: no illegal argument error got..: %s\n", u_errorName(status));
         return;

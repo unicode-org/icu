@@ -49,5 +49,4 @@ sg{
         zh{"Shinuäa"}
         zu{"Zûlu"}
     }
-    Version{"38"}
 }

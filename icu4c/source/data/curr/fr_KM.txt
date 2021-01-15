@@ -8,5 +8,4 @@ fr_KM{
             "franc comorien",
         }
     }
-    Version{"38"}
 }

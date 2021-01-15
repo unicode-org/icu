@@ -15,7 +15,6 @@ es_AR{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             availableFormats{

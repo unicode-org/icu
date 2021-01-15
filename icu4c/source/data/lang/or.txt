@@ -760,7 +760,6 @@ or{
         VAIDIKA{"ବୈଦିକ"}
         VALENCIA{"ଭେଲେନସିଆନ୍"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — ସମସ୍ତ"}
         category-list{"{0}: {1}"}

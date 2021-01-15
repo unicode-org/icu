@@ -47,6 +47,9 @@
 
 U_NAMESPACE_BEGIN
 
+// Forward declarations:
+class PluralRules;
+
 namespace number {  // icu::number
 
 // Forward declarations:
@@ -732,6 +735,11 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
     void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
     void getDecimalNumbers(ByteSink& sink1, ByteSink& sink2, UErrorCode& status) const;
+
+    const impl::UFormattedNumberRangeData* getData(UErrorCode& status) const;
+
+    // To allow PluralRules to access the underlying data
+    friend class ::icu::PluralRules;
 
     // To give LocalizedNumberRangeFormatter format methods access to this class's constructor:
     friend class LocalizedNumberRangeFormatter;

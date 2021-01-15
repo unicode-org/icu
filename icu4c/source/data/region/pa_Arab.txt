@@ -6,5 +6,4 @@ pa_Arab{
     Countries{
         PK{"پاکستان"}
     }
-    Version{"38"}
 }

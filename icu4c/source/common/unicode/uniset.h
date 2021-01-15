@@ -178,8 +178,6 @@ class RuleCharacterIterator;
  * Unicode property
  * </table>
  *
- * <p><b>Warning</b>: you cannot add an empty string ("") to a UnicodeSet.</p>
- *
  * <p><b>Formal syntax</b></p>
  *
  * \htmlonly<blockquote>\endhtmlonly
@@ -1104,8 +1102,8 @@ public:
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" => {"ch"}
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * A frozen set will not be modified.
+     *
      * @param s the source string
      * @return this object, for chaining
      * @stable ICU 2.4
@@ -1165,7 +1163,7 @@ public:
 
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     *
      * @param s the source string
      * @return a newly created set containing the given string.
      * The caller owns the return object and is responsible for deleting it.
@@ -1279,8 +1277,8 @@ public:
      * Complement the specified string in this set.
      * The set will not contain the specified string once the call
      * returns.
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * A frozen set will not be modified.
+     *
      * @param s the string to complement
      * @return this object, for chaining
      * @stable ICU 2.4

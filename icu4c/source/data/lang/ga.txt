@@ -734,7 +734,6 @@ ga{
         WADEGILE{"Rómhánú Wade-Giles"}
         XSISTEMO{"Xsistemo"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — Uile"}
         category-list{"{0}: {1}"}

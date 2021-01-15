@@ -40,8 +40,8 @@ he{
                 range{"{0}–{1}"}
             }
             patterns{
-                accountingFormat{"¤#,##0.00;¤-#,##0.00"}
-                currencyFormat{"¤#,##0.00;¤-#,##0.00"}
+                accountingFormat{"#,##0.00 ¤"}
+                currencyFormat{"‏#,##0.00 ¤;‏-#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -302,7 +302,6 @@ he{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

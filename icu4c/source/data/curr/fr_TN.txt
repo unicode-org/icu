@@ -8,5 +8,4 @@ fr_TN{
             "dinar tunisien",
         }
     }
-    Version{"38"}
 }

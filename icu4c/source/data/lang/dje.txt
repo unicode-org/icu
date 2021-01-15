@@ -49,5 +49,4 @@ dje{
         zh{"Sinuwa senni"}
         zu{"Zulu senni"}
     }
-    Version{"38"}
 }

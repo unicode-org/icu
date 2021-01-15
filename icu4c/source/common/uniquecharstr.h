@@ -16,10 +16,17 @@ U_NAMESPACE_BEGIN
 /**
  * Stores NUL-terminated strings with duplicate elimination.
  * Checks for unique UTF-16 string pointers and converts to invariant characters.
+ *
+ * Intended to be stack-allocated. Add strings, get a unique number for each,
+ * freeze the object, get a char * pointer for each string,
+ * call orphanCharStrings() to capture the string storage, and let this object go out of scope.
  */
 class UniqueCharStrings {
 public:
     UniqueCharStrings(UErrorCode &errorCode) : strings(nullptr) {
+        // Note: We hash on string contents but store stable char16_t * pointers.
+        // If the strings are stored in resource bundles which should be built with
+        // duplicate elimination, then we should be able to hash on just the pointer values.
         uhash_init(&map, uhash_hashUChars, uhash_compareUChars, uhash_compareLong, &errorCode);
         if (U_FAILURE(errorCode)) { return; }
         strings = new CharString();
@@ -39,7 +46,15 @@ public:
         return result;
     }
 
-    /** Adds a string and returns a unique number for it. */
+    /**
+     * Adds a string and returns a unique number for it.
+     * The string's buffer contents must not change, nor move around in memory,
+     * while this UniqueCharStrings is in use.
+     * The string contents must be NUL-terminated exactly at s.length().
+     *
+     * Best used with read-only-alias UnicodeString objects that point to
+     * stable storage, such as strings returned by resource bundle functions.
+     */
     int32_t add(const UnicodeString &s, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) { return 0; }
         if (isFrozen) {

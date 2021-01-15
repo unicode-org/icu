@@ -232,5 +232,4 @@ luy{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"38"}
 }

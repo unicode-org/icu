@@ -232,5 +232,4 @@ rof{
             "heleri sa Zimbabwe",
         }
     }
-    Version{"38"}
 }

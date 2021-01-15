@@ -286,6 +286,9 @@ ultag_isUnicodeLocaleType(const char* s, int32_t len);
 U_CFUNC UBool
 ultag_isVariantSubtags(const char* s, int32_t len);
 
+U_CAPI const char * U_EXPORT2
+ultag_getTKeyStart(const char *localeID);
+
 U_CFUNC const char*
 ulocimp_toBcpKey(const char* key);
 
@@ -297,5 +300,11 @@ ulocimp_toBcpType(const char* key, const char* type, UBool* isKnownKey, UBool* i
 
 U_CFUNC const char*
 ulocimp_toLegacyType(const char* key, const char* type, UBool* isKnownKey, UBool* isSpecialType);
+
+/* Function for testing purpose */
+U_CAPI const char* const* ulocimp_getKnownCanonicalizedLocaleForTest(int32_t* length);
+
+// Return true if the value is already canonicalized.
+U_CAPI bool ulocimp_isCanonicalizedLocaleForTest(const char* localeName);
 
 #endif

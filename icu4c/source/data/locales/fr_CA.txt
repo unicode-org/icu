@@ -106,7 +106,6 @@ fr_CA{
             }
         }
     }
-    Version{"38"}
     calendar{
         coptic{
             monthNames{

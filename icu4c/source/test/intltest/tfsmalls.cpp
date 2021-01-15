@@ -60,7 +60,7 @@ void test_ParsePosition( void )
     pp3 = 5;
     ParsePosition pp4( pp3 );
     if ((pp2 != pp3) && (pp3 == pp4)) {
-        it_logln("PP copy contructor, operator== and operator != tested.");
+        it_logln("PP copy constructor, operator== and operator != tested.");
     }else{
         it_errln("*** PP operator== or operator != result");
     }

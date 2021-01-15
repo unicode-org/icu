@@ -314,5 +314,4 @@ pt{
         SZ{"Suazilândia"}
         TL{"República Democrática de Timor-Leste"}
     }
-    Version{"38"}
 }

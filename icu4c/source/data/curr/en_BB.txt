@@ -9,5 +9,4 @@ en_BB{
             "Barbadian Dollar",
         }
     }
-    Version{"38"}
 }

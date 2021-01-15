@@ -9,5 +9,4 @@ es_EC{
             "dólar estadounidense",
         }
     }
-    Version{"38"}
 }

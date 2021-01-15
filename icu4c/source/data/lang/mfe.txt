@@ -49,5 +49,4 @@ mfe{
         zh{"sinwa, mandarin"}
         zu{"zoulou"}
     }
-    Version{"38"}
 }

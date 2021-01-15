@@ -306,5 +306,4 @@ qu{
     Countries%variant{
         CZ{"República Checa"}
     }
-    Version{"38"}
 }

@@ -315,5 +315,4 @@ sl{
         SZ{"Svazi"}
         TL{"Vzhodni Timor"}
     }
-    Version{"38"}
 }

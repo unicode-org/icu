@@ -300,7 +300,6 @@ ee{
             tibt{"tibet digitwo"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}

@@ -22,78 +22,176 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Overview
 
-> :construction: **TODO**: Adjust this page for use of GitHub Markdown (since 2020)
-rather than Google Sites.
-See the [migration page](https://docs.google.com/document/d/1uK91cxv1amCrt75TBw1PlCC5wZhJH_w3dW_8unWL9EQ/edit)
-for details and tips.
+This version of the ICU User Guide is generated directly from the Markdown
+files in the `/docs` directory of the main repository. In particular, the
+Markdown files are customized to work with the Jekyll static site generator,
+which benefits from [GitHub's built-in support](https://docs.github.com/en/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll)
+for Jekyll sites.
 
-This version of the ICU User Guide is maintained via Google Sites. The Site
-address is <http://sites.google.com/site/icuprojectuserguide/>
+## How to Contribute
 
-Editors are also usually ICU committers. Edit rights are granted by other Site
-owners and collaborators.
+Because ICU User Guide source files are now contained within the main
+repository, changes can now be made through the same process for contributing 
+code patches. See [Contributions to the ICU Library](constributions.md) for the
+current process of filing an issue and submitting a pull request.
 
-The change from editing of Open Office Writer documents and generating HTML and
-PDF to editing a Google Site simplifies the User Guide maintenance and
-encourages us to keep it more up to date than before, at the cost of not being
-able to easily generate a single PDF document with the entire contents.
+In the case of a single file edit (ex: typo correction), a convenient way to
+create the pull request is to follow the "Edit this page on Github" link at
+the bottom of the page and [use GitHub to edit the file](https://docs.github.com/en/github/managing-files-in-a-repository/editing-files-in-your-repository)
+and create the new pull request.
+
+After the source branch for a potential pull request is made, the changes can 
+be previewed using the fork repository that contains the source branch.  The
+fork repository must be [configured to serve GitHub Pages](https://docs.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#choosing-a-publishing-source)
+from the branch and the Markdown pages root directory (`/docs`).
+> :point_right: **Note**:  there is a
+latency of several minutes before GitHub Pages renders new changes, and 
+[errors](https://docs.github.com/en/github/working-with-github-pages/about-jekyll-build-errors-for-github-pages-sites)
+prevent the changes from being rendered.
+
+## Jekyll Theme Configuration
+
+Jekyll site-wide configurations are stored
+in the `_config.yml` file. The current theme being used is
+[Just the Docs](https://pmarsceill.github.io/just-the-docs/).
+
+Due to incompatibilities between this theme and GitHub’s built-in implementation of the
+CommonMark Markdown parser, the default Jekyll Markdown parser, Kramdown, is
+used.
 
 ## Document Structure
 
 Major chapters have Introduction pages, and further sections in a chapter are
-subpages of that main chapter page. The navigation bar is a manually edited
-sidebar accessible (if you are logged in and have edit rights) from Site
-settings/Change appearance.
+subpages of that main chapter page. The navigation bar is generated from the
+information provided in the header section of the Markdown file according to
+the theme's [navigation annotations](https://pmarsceill.github.io/just-the-docs/docs/navigation-structure/).
 
-Page URLs should use lowercase letters and no hyphens.
+## Syntax
 
-See the sitemap linked from the bottom of the navigation bar.
-
-Most pages have an automatic Table of contents. On a new page, after entering
-some contents, return to the very top of the page contents, select Insert/Table
-of contents, save, then change it to Right-aligned and turn on Wrap.
+[Markdown](https://kramdown.gettalong.org/syntax.html) should be preferred over custom
+HTML to create content wherever possible.
 
 ## Common Styles
 
-We want to use common styles for code samples, notes and such. Since Google
-Sites does not offer a site-wide CSS style sheet, please copy special items from
-here, paste and modify their text, rather than creating them from scratch.
+Styles are provided by the theme's settings, which can be modified in `_config.yml`.
 
-For headings, and for standard text styles like **bold**, *italic*,
-~~strike-through~~, ... please use standard headings styles from Sites.
+## Code
 
-### Code
+Use the markdown notation of [single backtick](https://kramdown.gettalong.org/quickref.html#inline-code)
+code spans (inline) and [tilde line-demarcated](https://kramdown.gettalong.org/quickref.html#code-blocks)
+fenced code blocks (multi-line).
 
-**New:** Use the Format menu styles for Code (inline) and Blockquote Code
-(multi-line).
+Unlike Github-flavored Markdown, in multi-line fenced code
+blocks, the programming language in the [info string](https://spec.commonmark.org/0.29/#info-string)
+should be lowercased.
 
-**Obsolete:**
+## Notes
 
-For inline class/type/function/constant names and similar use Sites' Courier New
-font which is close enough to the Courier font we used to use.
+> :point_right: **Note**: Notes should be made by starting the line with the
+following Markdown:
 
-For a block of code, please copy/paste the following and edit its contents:
+~~~
+> :point_right: **Note**:
+~~~
 
-U16_NEXT(s, i, length, c)
-U16_PREV(s, start, i, c)
-U16_APPEND(s, i, length, c, isError)
+## TODOs
 
-### Notes
+"TODO" items should be marked by starting the line with the
+following Markdown:
 
-*Endianness is not an issue on this level because the interpretation of an
-integer is fixed within any given platform.*
+~~~
+> :construction: **TODO**:
+~~~
+
+This will result in a "TODO" item like this:
+
+> :construction: **TODO**: Adjust this page for use of GitHub Markdown (since 2020)
+
+## Emoji
+
+GitHub-flavored emoji are enabled using the
+[Jemoji](https://github.com/jekyll/jemoji) Ruby gem.
 
 ## Bookmarks & Links
 
-For internal links, please select the Sites page as a destination rather than
-specifying the full URL as a generic web link.
-Unfortunately, Sites makes it hard to define an anchor on a page and create a
-link to that specific anchor (whether from the same page or another one).
+For internal links, please used relative paths to the corresponding Markdown 
+file as the Markdown link path rather than specifying the full URL.
 
-*   For links to a specific section on the same page, please remove the link,
-    underline the former link text, and put "(§)" right after it.
-*   For links to a specific section on another page, just link to the page and
-    name the section. Please also put "(§)" right after it.
+Anchors are generated by Jekyll for sections using the section header text in
+lowercase with hyphens instead of spaces.
 
-If and when Sites offers a reasonable way of defining anchors and linking to
-them, we can search our pages for "(§)" and fix the links.
+> :construction: **TODO**: search our pages for "(§)" and fix the links.
+
+## Previewing Changes Locally
+
+Because of the latency in GitHub Pages rendering changes, it can be useful to 
+run a Jekyll instance locally to preview changes.
+
+### Setup
+
+GitHub Pages provides a list of
+[dependency versions](https://pages.github.com/versions/) used in order
+to allow local environments to match exactly. Since Jekyll is a Ruby project,
+setup details depend on gems (code packages), Bundler (dependency management for
+execution), and the version of Ruby.
+
+[rbenv](https://www.ruby-lang.org/en/documentation/installation/#rbenv) is one
+of the few different ways to install and control the version of Ruby.  To 
+install it and the required `ruby-build` plugin:
+```bash
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+cd ~/.rbenv && src/configure && make -C src # Optional but greatly speeds up certain operations
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+```
+```bash
+mkdir -p "$(rbenv root)"/plugins
+git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+```
+
+To install specific Ruby version that GitHub Pages uses:
+```bash
+rbenv versions  # list all Ruby versions available
+rbenv install <version-num>  # install GH Pages Ruby version
+rbenv versions  # list all Ruby versions after installing
+```
+
+To activate the version of Ruby:
+```bash
+rbenv init  # OR:  eval "$(rbenv init -)"
+rbenv shell <version-num>
+```
+
+To install [Bundler](https://bundler.io/):
+```bash
+gem install bundler
+```
+
+The simplest way to ensure that
+transitive dependency versions are included correctly is to just specify the
+`github-pages` gem. This is already configured in `Gemfile` in the root
+directory. Thus, to ensure that the Ruby shell has the correct versions of
+dependencies downloaded and cached, in the root directory, run:
+```bash
+bundle update
+```
+
+### Running
+
+Ensure that the specific version of Ruby has been activated. Then use Bundler
+to ensure that the dependencies are downloaded in the current Ruby "shell"
+instance.  Then use Bundler to execute the Jekyll server.
+```bash
+rbenv init  # OR:  eval "$(rbenv init -)"
+rbenv shell <version-num>
+bundle update
+bundle exec jekyll server
+```
+
+Jekyll will take several seconds to generate HTML from the Markdown, so the
+Jekyll server will wait for that before being ready. Then, the rendered pages
+will be available at <http://localhost:4000/icu/>.
+
+## Previous version
+
+The previous version of the ICU User Guide has been maintained via Google Sites. The Site
+address is <http://sites.google.com/site/icuprojectuserguide/>

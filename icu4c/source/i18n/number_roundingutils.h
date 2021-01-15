@@ -8,6 +8,7 @@
 #define __NUMBER_ROUNDINGUTILS_H__
 
 #include "number_types.h"
+#include "string_segment.h"
 
 U_NAMESPACE_BEGIN
 namespace number {
@@ -192,12 +193,20 @@ class RoundingImpl {
     bool fPassThrough = true;  // default value
 
     // Permits access to fPrecision.
-    friend class UsagePrefsHandler;
+    friend class units::UnitsRouter;
 
     // Permits access to fPrecision.
     friend class UnitConversionHandler;
 };
 
+/**
+ * Parses Precision-related skeleton strings without knowledge of MacroProps
+ * - see blueprint_helpers::parseIncrementOption().
+ *
+ * Referencing MacroProps means needing to pull in the .o files that have the
+ * destructors for the SymbolsWrapper, Usage, and Scale classes.
+ */
+void parseIncrementOption(const StringSegment &segment, Precision &outPrecision, UErrorCode &status);
 
 } // namespace impl
 } // namespace number

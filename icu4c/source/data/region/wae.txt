@@ -298,5 +298,4 @@ wae{
         FK{"Falklandinslä (Malwine)"}
         TL{"Wešttimor"}
     }
-    Version{"38"}
 }

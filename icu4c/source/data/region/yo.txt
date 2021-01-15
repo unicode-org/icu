@@ -309,5 +309,4 @@ yo{
         SZ{"Síwásìlandì"}
         TL{"Ìlà Òòrùn Tímọ̀"}
     }
-    Version{"38"}
 }

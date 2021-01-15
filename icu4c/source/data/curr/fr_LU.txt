@@ -12,5 +12,4 @@ fr_LU{
             "franc luxembourgeois",
         }
     }
-    Version{"38"}
 }

@@ -9,5 +9,4 @@ en_KE{
             "Kenyan Shilling",
         }
     }
-    Version{"38"}
 }

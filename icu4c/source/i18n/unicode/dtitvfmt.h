@@ -652,6 +652,7 @@ public:
      */
     virtual void setTimeZone(const TimeZone& zone);
 
+#ifndef U_FORCE_HIDE_DRAFT_API
     /**
      * Set a particular UDisplayContext value in the formatter, such as
      * UDISPCTX_CAPITALIZATION_FOR_STANDALONE. This causes the formatted
@@ -677,6 +678,7 @@ public:
      * @draft ICU 68
      */
     virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
+#endif  // U_FORCE_HIDE_DRAFT_API
 
     /**
      * Return the class ID for this class. This is useful only for comparing to
@@ -1034,6 +1036,17 @@ private:
                             int8_t differenceInfo,
                             UBool suppressDayPeriodField,
                             UnicodeString& adjustedIntervalPattern);
+
+    /**
+     * Does the same thing as UnicodeString::findAndReplace(), except that it won't perform
+     * the substitution inside quoted literal text.
+     * @param targetString The string to perform the find-replace operation on.
+     * @param strToReplace The string to search for and replace in the target string.
+     * @param strToReplaceWith The string to substitute in wherever `stringToReplace` was found.
+     */
+    static void U_EXPORT2 findReplaceInPattern(UnicodeString& targetString,
+                                               const UnicodeString& strToReplace,
+                                               const UnicodeString& strToReplaceWith);
 
     /**
      * Concat a single date pattern with a time interval pattern,

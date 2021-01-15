@@ -3,7 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ff_Adlm{
     %%Parent{"root"}
-    Version{"38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"𞤀𞤦𞤭𞤶𞤢𞤲"}

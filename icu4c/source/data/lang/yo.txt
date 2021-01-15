@@ -389,7 +389,6 @@ yo{
             tibt{"Àwọn díjíìtì Tibetán"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Èdè: {0}"}
         script{"Ìṣọwọ́kọ̀wé: {0}"}

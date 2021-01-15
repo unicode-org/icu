@@ -33,7 +33,9 @@ public class ParsingUtils {
             output.add(range.codepoint, range.codepointEnd);
         }
         for (String str : input.strings()) {
-            output.add(str.codePointAt(0));
+            if (!str.isEmpty()) {
+                output.add(str.codePointAt(0));
+            }
         }
     }
 
@@ -42,10 +44,4 @@ public class ParsingUtils {
             output.add(input.codePointAt(0));
         }
     }
-
-    // TODO: Remove this helper function (and update call sites) when #13805 is fixed
-    public static boolean safeContains(UnicodeSet uniset, CharSequence str) {
-        return str.length() != 0 && uniset.contains(str);
-    }
-
 }

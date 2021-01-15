@@ -313,5 +313,4 @@ id{
         FK{"Kepulauan Falkland (Malvinas)"}
         TL{"Timor Timur"}
     }
-    Version{"38"}
 }

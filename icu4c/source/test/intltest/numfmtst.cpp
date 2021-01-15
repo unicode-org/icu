@@ -253,6 +253,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test8144_TestCurrencyNames);
   TESTCASE_AUTO(Test8144_TestCurrencyVariants);
   TESTCASE_AUTO(Test8144_TestCurrencyPlurals);
+  TESTCASE_AUTO(Test10997_FormatCurrency);
   TESTCASE_AUTO_END;
 }
 
@@ -10295,4 +10296,30 @@ void NumberFormatTest::Test8144_TestCurrencyPlurals() {
                currencyDisplayNames->getPluralName(USX, PluralMapBase::OTHER, status) == nullptr);
     status.expectErrorAndReset(U_MISSING_RESOURCE_ERROR);
 }
+void NumberFormatTest::Test10997_FormatCurrency() {
+    IcuTestErrorCode status(*this, "Test10997_FormatCurrency");
+
+    UErrorCode error = U_ZERO_ERROR;
+    NumberFormat* fmt = NumberFormat::createCurrencyInstance(Locale::getUS(), error);
+    if (U_FAILURE(error)) {
+        return;
+    }
+    fmt->setMinimumFractionDigits(4);
+    fmt->setMaximumFractionDigits(4);
+
+    FieldPosition fp;
+
+    UnicodeString str;
+    Formattable usdAmnt(new CurrencyAmount(123.45, u"USD", status));
+    fmt->format(usdAmnt, str, fp, status);
+    assertEquals("minFrac 4 should be respected in default currency", u"$123.4500", str);
+
+    UnicodeString str2;
+    Formattable eurAmnt(new CurrencyAmount(123.45, u"EUR", status));
+    fmt->format(eurAmnt, str2, fp, status);
+    assertEquals("minFrac 4 should be respected in different currency", u"€123.4500", str2);
+
+    delete fmt;
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

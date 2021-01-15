@@ -265,5 +265,4 @@ smn{
         CG{"Kongo täsiväldi"}
         FK{"Falklandsuolluuh (Malvinassuolluuh)"}
     }
-    Version{"38"}
 }

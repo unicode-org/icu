@@ -102,9 +102,9 @@ hr{
             patternsShort{
                 currencyFormat{
                     1000{
-                        few{"0000¤"}
-                        one{"0000¤"}
-                        other{"0000¤"}
+                        few{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
                         few{"00 tis'.' ¤"}
@@ -254,7 +254,6 @@ hr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

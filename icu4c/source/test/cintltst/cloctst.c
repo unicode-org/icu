@@ -704,9 +704,19 @@ static void TestDisplayNames()
     /* test that the default locale has a display name for its own language */
     errorCode=U_ZERO_ERROR;
     length=uloc_getDisplayLanguage(NULL, NULL, buffer, UPRV_LENGTHOF(buffer), &errorCode);
+    /* check <=3 to reject getting the language code as a display name */
     if(U_FAILURE(errorCode) || (length<=3 && buffer[0]<=0x7f)) {
-        /* check <=3 to reject getting the language code as a display name */
-        log_data_err("unable to get a display string for the language of the default locale - %s (Are you missing data?)\n", u_errorName(errorCode));
+        const char* defaultLocale = uloc_getDefault();
+        for (int32_t i = 0, count = uloc_countAvailable(); i < count; i++) {
+            /* Only report error if the default locale is in the available list */
+            if (uprv_strcmp(defaultLocale, uloc_getAvailable(i)) == 0) {
+                log_data_err(
+                    "unable to get a display string for the language of the "
+                    "default locale - %s (Are you missing data?)\n",
+                    u_errorName(errorCode));
+                break;
+            }
+        }
     }
 
     /* test that we get the language code itself for an unknown language, and a default warning */
@@ -1233,6 +1243,7 @@ static void TestDisplayNameBrackets()
 
 static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UChar getName[kDisplayNameBracketsMax];
     UDisplayContext contexts[] = {
@@ -1289,6 +1300,7 @@ static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
     }
 
     uldn_close(ldn);
+#endif
 }
 
 /*------------------------------
@@ -2233,12 +2245,7 @@ static void TestKeywordSetError(void)
         strcpy(buffer,kwSetTestCases[i].l);
         status = U_ZERO_ERROR;
         res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
-        if(res == blen) {
-            if(status != U_STRING_NOT_TERMINATED_WARNING) {
-                log_err("expected not terminated warning on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
-                return;
-            }
-        } else if(status != U_BUFFER_OVERFLOW_ERROR) {
+        if(status != U_BUFFER_OVERFLOW_ERROR) {
             log_err("expected buffer overflow on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
             return;
         }
@@ -6157,7 +6164,7 @@ const char* const locale_to_langtag[][3] = {
     {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-cu-usd-eur-ks-identic",  NULL},
     {"en_US_POSIX", "en-US-u-va-posix", "en-US-u-va-posix"},
     {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix", "en-US-u-ca-japanese-cu-eur-va-posix"},
-    {"@x=elmer",    "x-elmer",      "x-elmer"},
+    {"@x=elmer",    "und-x-elmer",      "und-x-elmer"},
     {"en@x=elmer",  "en-x-elmer",   "en-x-elmer"},
     {"@x=elmer;a=exta", "und-a-exta-x-elmer",   "und-a-exta-x-elmer"},
     {"en_US@attribute=attr1-attr2;calendar=gregorian", "en-US-u-attr1-attr2-ca-gregory", "en-US-u-attr1-attr2-ca-gregory"},

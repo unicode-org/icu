@@ -848,7 +848,6 @@ mr{
         PINYIN{"पिनयिन रोमनायझेशन"}
         WADEGILE{"वादे-गिलेस रोमनायझेशन"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — सर्व"}
         category-list{"{0}: {1}"}

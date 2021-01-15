@@ -260,5 +260,4 @@ vai{
     Countries%short{
         MO{"ꕮꗛꖺ"}
     }
-    Version{"38"}
 }

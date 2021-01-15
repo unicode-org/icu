@@ -8,5 +8,4 @@ nl_SX{
             "Nederlands-Antilliaanse gulden",
         }
     }
-    Version{"38"}
 }

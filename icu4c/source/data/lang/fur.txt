@@ -300,7 +300,6 @@ fur{
         SOLBA{"dialet di Stolvize"}
         VALENCIA{"valenzian"}
     }
-    Version{"38"}
     codePatterns{
         language{"Lenghe: {0}"}
         script{"Scriture: {0}"}

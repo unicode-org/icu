@@ -7,5 +7,4 @@ kkj{
         fr{"numbu buy"}
         kkj{"kakɔ"}
     }
-    Version{"38"}
 }

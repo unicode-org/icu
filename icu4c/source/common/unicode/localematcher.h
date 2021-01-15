@@ -20,26 +20,24 @@
  * \brief C++ API: Locale matcher: User's desired locales vs. application's supported locales.
  */
 
-#ifndef U_FORCE_HIDE_DRAFT_API
-
 /**
  * Builder option for whether the language subtag or the script subtag is most important.
  *
- * @see Builder#setFavorSubtag(ULocMatchFavorSubtag)
- * @draft ICU 65
+ * @see LocaleMatcher::Builder#setFavorSubtag(ULocMatchFavorSubtag)
+ * @stable ICU 65
  */
 enum ULocMatchFavorSubtag {
     /**
      * Language differences are most important, then script differences, then region differences.
      * (This is the default behavior.)
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     ULOCMATCH_FAVOR_LANGUAGE,
     /**
      * Makes script differences matter relatively more than language differences.
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     ULOCMATCH_FAVOR_SCRIPT
 };
@@ -51,14 +49,14 @@ typedef enum ULocMatchFavorSubtag ULocMatchFavorSubtag;
  * Builder option for whether all desired locales are treated equally or
  * earlier ones are preferred.
  *
- * @see Builder#setDemotionPerDesiredLocale(ULocMatchDemotion)
- * @draft ICU 65
+ * @see LocaleMatcher::Builder#setDemotionPerDesiredLocale(ULocMatchDemotion)
+ * @stable ICU 65
  */
 enum ULocMatchDemotion {
     /**
      * All desired locales are treated equally.
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     ULOCMATCH_DEMOTION_NONE,
     /**
@@ -85,13 +83,15 @@ enum ULocMatchDemotion {
      *        this is possible in future versions of the data.)
      * </ul>
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     ULOCMATCH_DEMOTION_REGION
 };
 #ifndef U_IN_DOXYGEN
 typedef enum ULocMatchDemotion ULocMatchDemotion;
 #endif
+
+#ifndef U_FORCE_HIDE_DRAFT_API
 
 /**
  * Builder option for whether to include or ignore one-way (fallback) match data.
@@ -107,7 +107,7 @@ typedef enum ULocMatchDemotion ULocMatchDemotion;
  * if there is a decent match for the original UI language, we want to use it,
  * but not if it is merely a fallback.
  *
- * @see Builder#setDirection(ULocMatchDirection)
+ * @see LocaleMatcher::Builder#setDirection(ULocMatchDirection)
  * @draft ICU 67
  */
 enum ULocMatchDirection {
@@ -128,6 +128,8 @@ enum ULocMatchDirection {
 #ifndef U_IN_DOXYGEN
 typedef enum ULocMatchDirection ULocMatchDirection;
 #endif
+
+#endif  // U_FORCE_HIDE_DRAFT_API
 
 struct UHashtable;
 
@@ -181,7 +183,7 @@ class XLikelySubtags;
  *
  * <p>This class is not intended for public subclassing.
  *
- * @draft ICU 65
+ * @stable ICU 65
  */
 class U_COMMON_API LocaleMatcher : public UMemory {
 public:
@@ -189,7 +191,7 @@ public:
      * Data for the best-matching pair of a desired and a supported locale.
      * Movable but not copyable.
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     class U_COMMON_API Result : public UMemory {
     public:
@@ -198,14 +200,14 @@ public:
          * This object will have the same contents that the source object had.
          *
          * @param src Result to move contents from.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Result(Result &&src) U_NOEXCEPT;
 
         /**
          * Destructor.
          *
-         * @draft ICU 65
+         * @stable ICU 65
          */
         ~Result();
 
@@ -214,17 +216,16 @@ public:
          * This object will have the same contents that the source object had.
          *
          * @param src Result to move contents from.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Result &operator=(Result &&src) U_NOEXCEPT;
 
-#ifndef U_HIDE_DRAFT_API
         /**
          * Returns the best-matching desired locale.
          * nullptr if the list of desired locales is empty or if none matched well enough.
          *
          * @return the best-matching desired locale, or nullptr.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         inline const Locale *getDesiredLocale() const { return desiredLocale; }
 
@@ -235,7 +236,7 @@ public:
          * or if the list of supported locales is empty and no explicit default locale is set.
          *
          * @return the best-matching supported locale, or nullptr.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         inline const Locale *getSupportedLocale() const { return supportedLocale; }
 
@@ -244,7 +245,7 @@ public:
          * -1 if the list of desired locales is empty or if none matched well enough.
          *
          * @return the index of the best-matching desired locale, or -1.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         inline int32_t getDesiredIndex() const { return desiredIndex; }
 
@@ -256,7 +257,7 @@ public:
          * -1 if the list of supported locales is empty or if none matched well enough.
          *
          * @return the index of the best-matching supported locale, or -1.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         inline int32_t getSupportedIndex() const { return supportedIndex; }
 
@@ -270,10 +271,9 @@ public:
          * <p>Example: desired=ar-SA-u-nu-latn, supported=ar-EG, resolved locale=ar-SA-u-nu-latn
          *
          * @return a locale combining the best-matching desired and supported locales.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Locale makeResolvedLocale(UErrorCode &errorCode) const;
-#endif  // U_HIDE_DRAFT_API
 
     private:
         Result(const Locale *desired, const Locale *supported,
@@ -298,8 +298,7 @@ public:
      * LocaleMatcher builder.
      * Movable but not copyable.
      *
-     * @see LocaleMatcher#builder()
-     * @draft ICU 65
+     * @stable ICU 65
      */
     class U_COMMON_API Builder : public UMemory {
     public:
@@ -307,7 +306,7 @@ public:
          * Constructs a builder used in chaining parameters for building a LocaleMatcher.
          *
          * @return a new Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder() {}
 
@@ -316,14 +315,14 @@ public:
          * This builder will have the same contents that the source builder had.
          *
          * @param src Builder to move contents from.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder(Builder &&src) U_NOEXCEPT;
 
         /**
          * Destructor.
          *
-         * @draft ICU 65
+         * @stable ICU 65
          */
         ~Builder();
 
@@ -332,11 +331,10 @@ public:
          * This builder will have the same contents that the source builder had.
          *
          * @param src Builder to move contents from.
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder &operator=(Builder &&src) U_NOEXCEPT;
 
-#ifndef U_HIDE_DRAFT_API
         /**
          * Parses an Accept-Language string
          * (<a href="https://tools.ietf.org/html/rfc2616#section-14.4">RFC 2616 Section 14.4</a>),
@@ -346,7 +344,7 @@ public:
          *
          * @param locales the Accept-Language string of locales to set
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder &setSupportedLocalesFromListString(StringPiece locales);
 
@@ -357,7 +355,7 @@ public:
          *
          * @param locales the list of locale
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder &setSupportedLocales(Locale::Iterator &locales);
 
@@ -372,7 +370,7 @@ public:
          * @param begin Start of range.
          * @param end Exclusive end of range.
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         template<typename Iter>
         Builder &setSupportedLocales(Iter begin, Iter end) {
@@ -397,7 +395,7 @@ public:
          * @param end Exclusive end of range.
          * @param converter Converter from *begin to const Locale & or compatible.
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         template<typename Iter, typename Conv>
         Builder &setSupportedLocalesViaConverter(Iter begin, Iter end, Conv converter) {
@@ -415,7 +413,7 @@ public:
          *
          * @param locale another locale
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder &addSupportedLocale(const Locale &locale);
 
@@ -439,7 +437,7 @@ public:
          *
          * @param defaultLocale the default locale (will be copied)
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder &setDefaultLocale(const Locale *defaultLocale);
 
@@ -451,7 +449,7 @@ public:
          *
          * @param subtag the subtag to favor
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder &setFavorSubtag(ULocMatchFavorSubtag subtag);
 
@@ -461,10 +459,11 @@ public:
          *
          * @param demotion the demotion per desired locale to set.
          * @return this Builder object
-         * @draft ICU 65
+         * @stable ICU 65
          */
         Builder &setDemotionPerDesiredLocale(ULocMatchDemotion demotion);
 
+#ifndef U_HIDE_DRAFT_API
         /**
          * Option for whether to include or ignore one-way (fallback) match data.
          * By default, they are included.
@@ -479,6 +478,7 @@ public:
             }
             return *this;
         }
+#endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
         /**
@@ -513,7 +513,7 @@ public:
          *                  and an error occurred while setting parameters.
          *                  Otherwise unchanged.
          * @return true if U_FAILURE(outErrorCode)
-         * @draft ICU 65
+         * @stable ICU 65
          */
         UBool copyErrorTo(UErrorCode &outErrorCode) const;
 
@@ -524,11 +524,10 @@ public:
          * @param errorCode ICU error code. Its input value must pass the U_SUCCESS() test,
          *                  or else the function returns immediately. Check for U_FAILURE()
          *                  on output or use with function chaining. (See User Guide for details.)
-         * @return new LocaleMatcher.
-         * @draft ICU 65
+         * @return LocaleMatcher
+         * @stable ICU 65
          */
         LocaleMatcher build(UErrorCode &errorCode) const;
-#endif  // U_HIDE_DRAFT_API
 
     private:
         friend class LocaleMatcher;
@@ -557,13 +556,13 @@ public:
      * Move copy constructor; might modify the source.
      * This matcher will have the same settings that the source matcher had.
      * @param src source matcher
-     * @draft ICU 65
+     * @stable ICU 65
      */
     LocaleMatcher(LocaleMatcher &&src) U_NOEXCEPT;
 
     /**
      * Destructor.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     ~LocaleMatcher();
 
@@ -573,11 +572,10 @@ public:
      * The behavior is undefined if *this and src are the same object.
      * @param src source matcher
      * @return *this
-     * @draft ICU 65
+     * @stable ICU 65
      */
     LocaleMatcher &operator=(LocaleMatcher &&src) U_NOEXCEPT;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the supported locale which best matches the desired locale.
      *
@@ -586,7 +584,7 @@ public:
      *                  or else the function returns immediately. Check for U_FAILURE()
      *                  on output or use with function chaining. (See User Guide for details.)
      * @return the best-matching supported locale.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     const Locale *getBestMatch(const Locale &desiredLocale, UErrorCode &errorCode) const;
 
@@ -598,7 +596,7 @@ public:
      *                  or else the function returns immediately. Check for U_FAILURE()
      *                  on output or use with function chaining. (See User Guide for details.)
      * @return the best-matching supported locale.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     const Locale *getBestMatch(Locale::Iterator &desiredLocales, UErrorCode &errorCode) const;
 
@@ -614,7 +612,7 @@ public:
      *                  or else the function returns immediately. Check for U_FAILURE()
      *                  on output or use with function chaining. (See User Guide for details.)
      * @return the best-matching supported locale.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     const Locale *getBestMatchForListString(StringPiece desiredLocaleList, UErrorCode &errorCode) const;
 
@@ -628,7 +626,7 @@ public:
      *                  or else the function returns immediately. Check for U_FAILURE()
      *                  on output or use with function chaining. (See User Guide for details.)
      * @return the best-matching pair of the desired and a supported locale.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     Result getBestMatchResult(const Locale &desiredLocale, UErrorCode &errorCode) const;
 
@@ -642,10 +640,9 @@ public:
      *                  or else the function returns immediately. Check for U_FAILURE()
      *                  on output or use with function chaining. (See User Guide for details.)
      * @return the best-matching pair of a desired and a supported locale.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     Result getBestMatchResult(Locale::Iterator &desiredLocales, UErrorCode &errorCode) const;
-#endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -707,7 +704,7 @@ private:
     LSR *lsrs;
     int32_t supportedLocalesLength;
     // These are in preference order: 1. Default locale 2. paradigm locales 3. others.
-    UHashtable *supportedLsrToIndex;  // Map<LSR, Integer> stores index+1 because 0 is "not found"
+    UHashtable *supportedLsrToIndex;  // Map<LSR, Integer>
     // Array versions of the supportedLsrToIndex keys and values.
     // The distance lookup loops over the supportedLSRs and returns the index of the best match.
     const LSR **supportedLSRs;
@@ -719,6 +716,5 @@ private:
 
 U_NAMESPACE_END
 
-#endif  // U_FORCE_HIDE_DRAFT_API
 #endif  // U_SHOW_CPLUSPLUS_API
 #endif  // __LOCALEMATCHER_H__

@@ -315,5 +315,4 @@ pl{
         SZ{"Suazi"}
         TL{"Timor-Leste"}
     }
-    Version{"38"}
 }

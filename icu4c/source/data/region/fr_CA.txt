@@ -45,5 +45,4 @@ fr_CA{
         FK{"îles Falkland (Malouines)"}
         TL{"Timor oriental"}
     }
-    Version{"38"}
 }

@@ -1843,7 +1843,6 @@ likelySubtags:table(nofallback){
     zh_Hant{"zh_Hant_TW"}
     zh_ID{"zh_Hant_ID"}
     zh_MO{"zh_Hant_MO"}
-    zh_MY{"zh_Hant_MY"}
     zh_PA{"zh_Hant_PA"}
     zh_PF{"zh_Hant_PF"}
     zh_PH{"zh_Hant_PH"}

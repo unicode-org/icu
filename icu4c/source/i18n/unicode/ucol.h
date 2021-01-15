@@ -35,14 +35,14 @@
  * searching and sorting routines for natural language text.
  * <p>
  * For more information about the collation service see 
- * <a href="http://userguide.icu-project.org/collation">the User Guide</a>.
+ * <a href="https://unicode-org.github.io/icu/userguide/collation">the User Guide</a>.
  * <p>
  * Collation service provides correct sorting orders for most locales supported in ICU. 
  * If specific data for a locale is not available, the orders eventually falls back
  * to the <a href="http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Collation">CLDR root sort order</a>. 
  * <p>
  * Sort ordering may be customized by providing your own set of rules. For more on
- * this subject see the <a href="http://userguide.icu-project.org/collation/customization">
+ * this subject see the <a href="https://unicode-org.github.io/icu/userguide/collation/customization">
  * Collation Customization</a> section of the User Guide.
  * <p>
  * @see         UCollationResult
@@ -83,7 +83,7 @@ typedef enum {
 } UCollationResult ;
 
 
-/** Enum containing attribute values for controling collation behavior.
+/** Enum containing attribute values for controlling collation behavior.
  * Here are all the allowable values. Not every attribute can take every value. The only
  * universal value is UCOL_DEFAULT, which resets the attribute value to the predefined  
  * value for that locale 
@@ -370,7 +370,7 @@ typedef enum {
    * Retrieves the "UCA rules" concatenated with the tailoring rules.
    * The "UCA rules" are an <i>approximation</i> of the root collator's sort order.
    * They are almost never used or useful at runtime and can be removed from the data.
-   * See http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales
+   * See https://unicode-org.github.io/icu/userguide/collation/customization#building-on-existing-locales
    * @stable ICU 2.0
    */
   UCOL_FULL_RULES 
@@ -384,7 +384,7 @@ typedef enum {
  * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
  * in the old locale extension syntax ("el@colCaseFirst=upper")
  * or in language tag syntax ("el-u-kf-upper").
- * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+ * See <a href="https://unicode-org.github.io/icu/userguide/collation/api">User Guide: Collation API</a>.
  *
  * The UCollator pointer is used in all the calls to the Collation 
  * service. After finished, collator must be disposed of by calling
@@ -442,7 +442,7 @@ ucol_openRules( const UChar        *rules,
  * Open a collator defined by a short form string.
  * The structure and the syntax of the string is defined in the "Naming collators"
  * section of the users guide: 
- * http://userguide.icu-project.org/collation/concepts#TOC-Collator-naming-scheme
+ * https://unicode-org.github.io/icu/userguide/collation/concepts#collator-naming-scheme
  * Attributes are overriden by the subsequent attributes. So, for "S2_S3", final
  * strength will be 3. 3066bis locale overrides individual locale parts.
  * The call to this function is equivalent to a call to ucol_open, followed by a 
@@ -904,7 +904,7 @@ ucol_getKeywordValuesForLocale(const char* key,
  * applications who wish to cache collators, or otherwise reuse
  * collators when possible. The functional equivalent may change
  * over time. For more information, please see the <a
- * href="http://userguide.icu-project.org/locale#TOC-Locales-and-Services">
+ * href="https://unicode-org.github.io/icu/userguide/locale#locales-and-services">
  * Locales and Services</a> section of the ICU User Guide.
  * @param result fillin for the functionally equivalent result locale
  * @param resultCapacity capacity of the fillin buffer
@@ -945,7 +945,7 @@ ucol_getRules(    const    UCollator    *coll,
  *  This string will be normalized.
  *  The structure and the syntax of the string is defined in the "Naming collators"
  *  section of the users guide: 
- *  http://userguide.icu-project.org/collation/concepts#TOC-Collator-naming-scheme
+ *  https://unicode-org.github.io/icu/userguide/collation/concepts#collator-naming-scheme
  *  This API supports preflighting.
  *  @param coll a collator
  *  @param locale a locale that will appear as a collators locale in the resulting
@@ -1158,7 +1158,7 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
  * Using strings with U+FFFE may yield shorter sort keys.
  *
  * For details about Sort Key Features see
- * http://userguide.icu-project.org/collation/api#TOC-Sort-Key-Features
+ * https://unicode-org.github.io/icu/userguide/collation/api#sort-key-features
  *
  * It is possible to merge multiple sort keys by consecutively merging
  * another one with the intermediate result.
@@ -1354,7 +1354,7 @@ ucol_safeClone(const UCollator *coll,
  * to store rules, will store up to available space.
  *
  * ucol_getRules() should normally be used instead.
- * See http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales
+ * See https://unicode-org.github.io/icu/userguide/collation/customization#building-on-existing-locales
  * @param coll collator to get the rules from
  * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
  * @param buffer buffer to store the result in. If NULL, you'll get no rules.

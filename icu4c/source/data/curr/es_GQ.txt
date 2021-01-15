@@ -8,5 +8,4 @@ es_GQ{
             "franco CFA de África Central",
         }
     }
-    Version{"38"}
 }

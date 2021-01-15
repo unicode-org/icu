@@ -9,5 +9,4 @@ es_BO{
             "boliviano",
         }
     }
-    Version{"38"}
 }

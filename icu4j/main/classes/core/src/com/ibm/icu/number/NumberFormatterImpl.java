@@ -3,6 +3,7 @@
 package com.ibm.icu.number;
 
 import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
@@ -10,9 +11,11 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.LongNameHandler;
+import com.ibm.icu.impl.number.LongNameMultiplexer;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
+import com.ibm.icu.impl.number.MixedUnitLongNameHandler;
 import com.ibm.icu.impl.number.MultiplierFormatHandler;
 import com.ibm.icu.impl.number.MutablePatternModifier;
 import com.ibm.icu.impl.number.MutablePatternModifier.ImmutablePatternModifier;
@@ -20,6 +23,8 @@ import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.RoundingUtils;
+import com.ibm.icu.impl.number.UnitConversionHandler;
+import com.ibm.icu.impl.number.UsagePrefsHandler;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -41,7 +46,9 @@ import com.ibm.icu.util.MeasureUnit;
  */
 class NumberFormatterImpl {
 
-    /** Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly. */
+    /**
+     * Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly.
+     */
     public NumberFormatterImpl(MacroProps macros) {
         micros = new MicroProps(true);
         microPropsGenerator = macrosToMicroGenerator(macros, micros, true);
@@ -50,14 +57,14 @@ class NumberFormatterImpl {
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
-    public static int formatStatic(
+    public static MicroProps formatStatic(
             MacroProps macros,
             DecimalQuantity inValue,
             FormattedStringBuilder outString) {
         MicroProps micros = preProcessUnsafe(macros, inValue);
         int length = writeNumber(micros, inValue, outString, 0);
-        length += writeAffixes(micros, outString, 0, length);
-        return length;
+        writeAffixes(micros, outString, 0, length);
+        return micros;
     }
 
     /**
@@ -84,11 +91,11 @@ class NumberFormatterImpl {
     /**
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
-    public int format(DecimalQuantity inValue, FormattedStringBuilder outString) {
+    public MicroProps format(DecimalQuantity inValue, FormattedStringBuilder outString) {
         MicroProps micros = preProcess(inValue);
         int length = writeNumber(micros, inValue, outString, 0);
-        length += writeAffixes(micros, outString, 0, length);
-        return length;
+        writeAffixes(micros, outString, 0, length);
+        return micros;
     }
 
     /**
@@ -203,6 +210,9 @@ class NumberFormatterImpl {
                 || !(isPercent || isPermille)
                 || isCompactNotation
             );
+        boolean isMixedUnit = isCldrUnit && macros.unit.getType() == null &&
+                              macros.unit.getComplexity() == MeasureUnit.Complexity.MIXED;
+
         PluralRules rules = macros.rules;
 
         // Select the numbering system.
@@ -255,6 +265,20 @@ class NumberFormatterImpl {
         /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
         /////////////////////////////////////////////////////////////////////////////////////
 
+        // Unit Preferences and Conversions as our first step
+        UsagePrefsHandler usagePrefsHandler = null;
+        if (macros.usage != null) {
+            if (!isCldrUnit) {
+                throw new IllegalIcuArgumentException(
+                        "We only support \"usage\" when the input unit is specified, and is a CLDR Unit.");
+            }
+            chain = usagePrefsHandler = new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
+        } else if (isMixedUnit) {
+            // TODO(icu-units#97): The input unit should be the largest unit, not the first unit, in the identifier.
+            MeasureUnit inputUnit = macros.unit.splitToSingleUnits().get(0);
+            chain = new UnitConversionHandler(inputUnit, macros.unit, chain);
+        }
+
         // Multiplier
         if (macros.scale != null) {
             chain = new MultiplierFormatHandler(macros.scale, chain);
@@ -267,6 +291,9 @@ class NumberFormatterImpl {
             micros.rounder = Precision.COMPACT_STRATEGY;
         } else if (isCurrency) {
             micros.rounder = Precision.MONETARY_STANDARD;
+        } else if (macros.usage != null) {
+            // Bogus Precision - it will get set in the UsagePrefsHandler instead
+            micros.rounder = Precision.BOGUS_PRECISION;
         } else {
             micros.rounder = Precision.DEFAULT_MAX_FRAC_6;
         }
@@ -353,8 +380,32 @@ class NumberFormatterImpl {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
             }
-            chain = LongNameHandler
-                    .forMeasureUnit(macros.loc, macros.unit, macros.perUnit, unitWidth, rules, chain);
+            PluralRules pluralRules = macros.rules != null ?
+                    macros.rules :
+                    PluralRules.forLocale(macros.loc);
+
+            if (macros.usage != null) {
+                assert usagePrefsHandler != null;
+                chain = LongNameMultiplexer.forMeasureUnits(
+                        macros.loc,
+                        usagePrefsHandler.getOutputUnits(),
+                        unitWidth,
+                        pluralRules,
+                        chain);
+            } else if (isMixedUnit) {
+                chain = MixedUnitLongNameHandler.forMeasureUnit(
+                        macros.loc,
+                        macros.unit,
+                        unitWidth,
+                        pluralRules,
+                        chain);
+            } else {
+                MeasureUnit unit = macros.unit;
+                if (macros.perUnit != null) {
+                    unit = unit.product(macros.perUnit.reciprocal());
+                }
+                chain = LongNameHandler.forMeasureUnit(macros.loc, unit, unitWidth, pluralRules, chain);
+            }
         } else if (isCurrency && unitWidth == UnitWidth.FULL_NAME) {
             if (rules == null) {
                 // Lazily create PluralRules

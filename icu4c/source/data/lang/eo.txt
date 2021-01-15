@@ -156,5 +156,4 @@ eo{
         zu{"zulua"}
         zxx{"nelingvaĵo"}
     }
-    Version{"38"}
 }

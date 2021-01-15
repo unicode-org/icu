@@ -30,7 +30,6 @@ uz_Arab{
         }
         native{"arabext"}
     }
-    Version{"38"}
     calendar{
         default{"persian"}
         gregorian{

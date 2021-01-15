@@ -313,5 +313,4 @@ sk{
         FK{"Falklandy (Malvíny)"}
         SZ{"Svazijsko"}
     }
-    Version{"38"}
 }

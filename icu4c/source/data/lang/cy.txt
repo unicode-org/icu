@@ -725,7 +725,6 @@ cy{
         POSIX{"Cyfrifiadur"}
         SCOTLAND{"Saesneg Safonol yr Alban"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — y cwbl"}
         category-list{"{0}: {1}"}

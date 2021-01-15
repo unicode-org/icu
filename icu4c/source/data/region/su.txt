@@ -15,5 +15,4 @@ su{
         US{"Amérika Sarikat"}
         ZZ{"Wilayah Teu Dikenal"}
     }
-    Version{"38"}
 }

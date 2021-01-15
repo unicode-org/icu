@@ -216,7 +216,6 @@ sd{
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

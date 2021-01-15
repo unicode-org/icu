@@ -423,7 +423,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
                         goto error;
                     }
                 } else {
-                    // Colllect transitions after the start time
+                    // Collect transitions after the start time
                     int32_t startTimes;
                     DateTimeRule::TimeRuleType timeType;
                     int32_t idx;

@@ -314,5 +314,4 @@ nl{
         SZ{"Swaziland"}
         TL{"Democratische Republiek Oost-Timor"}
     }
-    Version{"38"}
 }

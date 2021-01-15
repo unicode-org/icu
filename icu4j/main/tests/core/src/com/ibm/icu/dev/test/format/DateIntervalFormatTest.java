@@ -732,7 +732,7 @@ public class DateIntervalFormatTest extends TestFmwk {
         // Note that from_data/to_data are specified using era names from root, for the calendar specified by locale.
         String[] DATA = {
             "GGGGG y MM dd HH:mm:ss", // pattern for from_data/to_data
-        
+
             // This test is for tickets ICU-21154, ICU-21155, and ICU-21156 and is intended to verify
             // that all of the special skeleton characters for hours and day periods work as expected
             // with date intervals:
@@ -748,7 +748,7 @@ public class DateIntervalFormatTest extends TestFmwk {
             // baseline (h and H)
             "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "12 \\u2013 1 AM",
             "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "HH", "00\\u201301 Uhr",
-        
+
             // k and K (ICU-21154 and ICU-21156)
             "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "0 \\u2013 1 AM",
             "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "24\\u201301 Uhr",
@@ -758,7 +758,7 @@ public class DateIntervalFormatTest extends TestFmwk {
             "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "ha", "12 \\u2013 1 AM",
             "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "haaaaa", "10 a \\u2013 12 p",
             "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "haaaaa", "12 \\u2013 1 a",
-        
+
             // j (ICU-21155)
             "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10 AM \\u2013 1 PM",
             "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12 \\u2013 1 AM",
@@ -768,20 +768,20 @@ public class DateIntervalFormatTest extends TestFmwk {
             "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "00\\u201301 Uhr",
             "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jjjjj", "10\\u201313 Uhr",
             "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jjjjj", "00\\u201301 Uhr",
-        
+
             // b and B
             "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "hb", "10 AM \\u2013 12 noon",
             "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "hbbbbb", "10 a \\u2013 12 n",
             "en", "CE 2010 09 27 13:00:00", "CE 2010 09 27 14:00:00", "hb", "1 \\u2013 2 PM",
             "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "10 in the morning \\u2013 1 in the afternoon",
             "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "12 \\u2013 1 at night",
-        
+
             // J
             "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "J", "10 \\u2013 1",
             "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "J", "12 \\u2013 1",
             "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "J", "10\\u201313 Uhr",
             "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "J", "00\\u201301 Uhr",
-        
+
             // C
             // (for English and German, C should do the same thing as j)
             "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "10 AM \\u2013 1 PM",
@@ -805,6 +805,15 @@ public class DateIntervalFormatTest extends TestFmwk {
         "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "\\u0930\\u093E\\u0924 12\\u20131",
         "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u0938\\u0941\\u092C\\u0939 10 \\u2013 \\u0926\\u094B\\u092A\\u0939\\u0930 1",
         "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u0930\\u093E\\u0924 12\\u20131",
+
+         // regression test for ICU-21342
+         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 10:00:00", "kk", "24\\u201310",
+         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 11:00:00", "kk", "24\\u201311",
+         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 12:00:00", "kk", "24\\u201312",
+         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 13:00:00", "kk", "24\\u201313",
+
+         // regression test for ICU-21343
+         "de", "CE 2010 09 27 01:00:00", "CE 2010 09 27 10:00:00", "KK", "1 \\u2013 10 Uhr AM",
         };
         expect(DATA, DATA.length);
     }
@@ -2187,6 +2196,7 @@ public class DateIntervalFormatTest extends TestFmwk {
                 ULocale.AvailableType.WITH_LEGACY_ALIASES)) {
             // Only test 1/5 of the locale in quick mode.
             if (quick && (count++ % 5 > 0)) continue;
+            @SuppressWarnings("unused")
             DateIntervalFormat fmt = DateIntervalFormat.getInstance("dMMMMy", locale);
             for (String calendar : Calendar.getKeywordValuesForLocale(
                     "calendar", locale, false)) {

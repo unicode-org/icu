@@ -1356,5 +1356,4 @@ so{
             other{"Kawajada Sambiya"}
         }
     }
-    Version{"38"}
 }

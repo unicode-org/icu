@@ -40,7 +40,6 @@ mgo{
         }
         native{"latn"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

@@ -8,5 +8,4 @@ bn_IN{
     Countries%variant{
         CD{"কঙ্গো (DRC)"}
     }
-    Version{"38"}
 }

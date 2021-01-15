@@ -8,5 +8,4 @@ fr_CD{
             "franc congolais",
         }
     }
-    Version{"38"}
 }

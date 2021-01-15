@@ -8,5 +8,4 @@ teo_KE{
             "Ango’otol lok’ Kenya",
         }
     }
-    Version{"38"}
 }

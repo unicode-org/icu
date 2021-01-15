@@ -12,7 +12,6 @@ sw_CD{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             availableFormats{

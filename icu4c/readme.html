@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 68.1</title>
+    <title>ReadMe for ICU 68.2</title>
     <meta name="COPYRIGHT" content=
     "Copyright (C) 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html"/>
     <!-- meta name="COPYRIGHT" content=
@@ -33,7 +33,7 @@
       <span class="only-rc">Release Candidate</span>
       <!-- <span class="only-milestone">(Milestone Release)</span> -->
       <span class="only-milestone">(Preview Release)</span>
-      <abbr title="International Components for Unicode">ICU</abbr> 68.1 ReadMe
+      <abbr title="International Components for Unicode">ICU</abbr> 68.2 ReadMe
     </h1>
 
     <!-- Most of the time we shouldn't need to comment/uncomment this paragraph, just change the body class -->
@@ -47,7 +47,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2020-Aug-27<br/>
+    <p>Last updated: 2020-Dec-02<br/>
       Copyright &copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use:
       <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a><br/>
       Copyright &copy; 1997-2016 International Business Machines Corporation and others.
@@ -185,20 +185,21 @@
         <td>FAQ - Frequently Asked Questions about ICU</td>
 
         <td><a href=
-        "http://userguide.icu-project.org/icufaq">http://userguide.icu-project.org/icufaq</a></td>
+        "https://unicode-org.github.io/icu/userguide/icufaq">https://unicode-org.github.io/icu/userguide/icufaq</a></td>
       </tr>
 
       <tr>
         <td>ICU User's Guide</td>
 
         <td><a href=
-        "http://userguide.icu-project.org/">http://userguide.icu-project.org/</a></td>
+        "https://unicode-org.github.io/icu/userguide/">https://unicode-org.github.io/icu/userguide/</a></td>
       </tr>
 
       <tr>
         <td>How To Use ICU</td>
 
-        <td><a href="http://userguide.icu-project.org/howtouseicu">http://userguide.icu-project.org/howtouseicu</a></td>
+        <td><a href=
+        "https://unicode-org.github.io/icu/userguide/howtouseicu">https://unicode-org.github.io/icu/userguide/howtouseicu</a></td>
       </tr>
 
       <tr>
@@ -284,7 +285,7 @@
     <p>In the descriptions below, <strong><i>&lt;ICU&gt;</i></strong> is the full
     path name of the ICU directory (the top level directory from the distribution
     archives) in your file system. You can also view the <a href=
-    "http://userguide.icu-project.org/design">ICU Architectural
+    "https://unicode-org.github.io/icu/userguide/design">ICU Architectural
     Design</a> section of the User's Guide to see which libraries you need for
     your software product. You need at least the data (<code>[lib]icudt</code>)
     and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
@@ -443,7 +444,7 @@
           environment variable to the out/ or the out/build/ directories, but
           this is generally discouraged because most people set it incorrectly.
           You can view the <a href=
-          "http://userguide.icu-project.org/icudata">ICU Data
+          "https://unicode-org.github.io/icu/userguide/icudata">ICU Data
           Management</a> section of the ICU User's Guide for details.</p>
         </td>
       </tr>
@@ -687,7 +688,7 @@
         It may be hard if ICU is shipped with
         another shared library (such as the Xerces-C++ XML parser)
         which does not control <code>main()</code>.<br />
-        See the <a href="http://userguide.icu-project.org/icudata">User Guide ICU Data</a>
+        See the <a href="https://unicode-org.github.io/icu/userguide/icudata">User Guide ICU Data</a>
         chapter for more details.<br />
         If possible, we recommend building the .dat package.
         Specify <code>--with-data-packaging=archive</code>
@@ -723,7 +724,7 @@
     <p>If ICU is installed as a system-level library, there are further
       opportunities and restrictions to consider.
       For details, see the <em>Using ICU as an Operating System Level Library</em>
-      section of the <a href="http://userguide.icu-project.org/design">User Guide ICU Architectural Design</a> chapter.</p>
+      section of the <a href="https://unicode-org.github.io/icu/userguide/design">User Guide ICU Architectural Design</a> chapter.</p>
     <ul>
       <li><b>Data path:</b> For a system-level library, it is best to load
         ICU data from the .dat package file because the file system path
@@ -1507,7 +1508,7 @@ gnumake</pre>
     operating systems that do not have a standard C++ ABI (name mangling) for
     compilers, it is recommended to do this special packaging anyway. More
     details on customizing ICU are available in the <a href=
-    "http://userguide.icu-project.org/">User's Guide</a>. The <a href=
+    "https://unicode-org.github.io/icu/userguide/">User's Guide</a>. The <a href=
     "#SourceCode">ICU Source Code Organization</a> section of this readme.html
     gives a more complete description of the libraries.</p>
 
@@ -1536,7 +1537,7 @@ gnumake</pre>
 
         <td>Data required by the Common and I18n libraries. There are many ways
         to package and <a href=
-        "http://userguide.icu-project.org/icudata">customize this
+        "https://unicode-org.github.io/icu/userguide/icudata">customize this
         data</a>, but by default this is all you need.</td>
       </tr>
 
@@ -1790,7 +1791,7 @@ gnumake</pre>
     <p>Data files can be built on a different platform when both platforms share
     the same endianness and the same charset family. This assertion does not
     include platform dependent DLLs/shared/static libraries. For details see the
-    User Guide <a href="http://userguide.icu-project.org/icudata">ICU
+    User Guide <a href="https://unicode-org.github.io/icu/userguide/icudata">ICU
     Data</a> chapter.</p>
 
     <p>ICU 3.6 removes the requirement that ICU be completely built in the native

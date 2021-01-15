@@ -5,5 +5,4 @@ kw{
     Languages{
         kw{"kernewek"}
     }
-    Version{"38"}
 }

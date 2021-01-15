@@ -9,5 +9,4 @@ en_NG{
             "Nigerian Naira",
         }
     }
-    Version{"38"}
 }

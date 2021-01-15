@@ -10,6 +10,7 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -1044,7 +1045,7 @@ public final class Utility {
      * this character are not included in the output
      * @param output an array to receive the substrings between
      * instances of divider.  It must be large enough on entry to
-     * accomodate all output.  Adjacent instances of the divider
+     * accommodate all output.  Adjacent instances of the divider
      * character will place empty strings into output.  Before
      * returning, output is padded out with empty strings.
      */
@@ -1857,5 +1858,33 @@ public final class Utility {
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
         }
+    }
+
+    /**
+     * Java 8+ String#join(CharSequence, Iterable<? extends CharSequence>) compatible method for Java 7 env.
+     * @param delimiter the delimiter that separates each element
+     * @param elements the elements to join together.
+     * @return a new String that is composed of the elements separated by the delimiter
+     * @throws NullPointerException If delimiter or elements is null
+     */
+    public static String joinStrings(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
+        if (delimiter == null || elements == null) {
+            throw new NullPointerException("Delimiter or elements is null");
+        }
+        StringBuilder buf = new StringBuilder();
+        Iterator<? extends CharSequence> itr = elements.iterator();
+        boolean isFirstElem = true;
+        while (itr.hasNext()) {
+            CharSequence element = itr.next();
+            if (element != null) {
+                if (!isFirstElem) {
+                    buf.append(delimiter);
+                } else {
+                    isFirstElem = false;
+                }
+                buf.append(element);
+            }
+        }
+        return buf.toString();
     }
 }

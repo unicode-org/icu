@@ -10,7 +10,6 @@ fr_MA{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             AmPmMarkers{

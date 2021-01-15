@@ -8,5 +8,4 @@ ms_BN{
             "Dolar Brunei",
         }
     }
-    Version{"38"}
 }

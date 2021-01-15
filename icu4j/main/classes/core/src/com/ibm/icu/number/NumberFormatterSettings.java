@@ -44,7 +44,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_SCALE = 13;
     static final int KEY_THRESHOLD = 14;
     static final int KEY_PER_UNIT = 15;
-    static final int KEY_MAX = 16;
+    static final int KEY_USAGE = 16;
+    static final int KEY_MAX = 17;
 
     private final NumberFormatterSettings<?> parent;
     private final int key;
@@ -133,6 +134,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * <p>
      * The default is to render without units (equivalent to {@link NoUnit#BASE}).
      *
+     * <p>
+     * If the input usage is correctly set the output unit <b>will change</b>
+     * according to `usage`, `locale` and `unit` value.
+     * </p>
+     *
      * @param unit
      *            The unit to render.
      * @return The fluent chain.
@@ -219,7 +225,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *
      * The default is HALF_EVEN. For more information on rounding mode, see the ICU userguide here:
      *
-     * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes
      *
      * @param roundingMode
      *            The rounding mode to use.
@@ -487,6 +493,62 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     }
 
     /**
+     * Specifies the usage for which numbers will be formatted ("person-height",
+     * "road", "rainfall", etc.)
+     *
+     * <p>
+     * When a `usage` is specified, the output unit will change depending on the
+     * `Locale` and the unit quantity. For example, formatting length
+     * measurements specified in meters:
+     *
+     * <pre>
+     * NumberFormatter.with().usage("person").unit(MeasureUnit.METER).locale(new ULocale("en-US"))
+     * </pre>
+     * <ul>
+     *   <li> When formatting 0.25, the output will be "10 inches".
+     *   <li> When formatting 1.50, the output will be "4 feet and 11 inches".
+     * </ul>
+     *
+     * <p>
+     * The input unit specified via unit() determines the type of measurement
+     * being formatted (e.g. "length" when the unit is "foot"). The usage
+     * requested will be looked for only within this category of measurement
+     * units.
+     *
+     * <p>
+     * The output unit can be found via FormattedNumber.getOutputUnit().
+     *
+     * <p>
+     * If the usage has multiple parts (e.g. "land-agriculture-grain") and does
+     * not match a known usage preference, the last part will be dropped
+     * repeatedly until a match is found (e.g. trying "land-agriculture", then
+     * "land"). If a match is still not found, usage will fall back to
+     * "default".
+     *
+     * <p>
+     * Setting usage to an empty string clears the usage (disables usage-based
+     * localized formatting).
+     *
+     * <p>
+     * Setting a usage string but not a correct input unit will result in an
+     * U_ILLEGAL_ARGUMENT_ERROR.
+     *
+     * <p>
+     * When using usage, specifying rounding or precision is unnecessary.
+     * Specifying a precision in some manner will override the default
+     * formatting.
+     *
+     * @param usage A usage parameter from the units resource.
+     * @return The fluent chain
+     * @throws IllegalArgumentException in case of Setting a usage string but not a correct input unit.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public T usage(String usage) {
+        return create(KEY_USAGE, usage);
+    }
+
+    /**
      * Internal method to set a starting macros.
      *
      * @internal
@@ -551,86 +613,67 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         // of a MacroProps object at each step.
         // TODO: Remove the reference to the parent after the macros are resolved?
         MacroProps macros = new MacroProps();
+        // Bitmap: 1 if seen; 0 if unseen
+        long seen = 0;
         NumberFormatterSettings<?> current = this;
         while (current != null) {
+            long keyBitmask = (1L << current.key);
+            if (0 != (seen & keyBitmask)) {
+                current = current.parent;
+                continue;
+            }
+            seen |= keyBitmask;
             switch (current.key) {
             case KEY_MACROS:
                 macros.fallback((MacroProps) current.value);
                 break;
             case KEY_LOCALE:
-                if (macros.loc == null) {
-                    macros.loc = (ULocale) current.value;
-                }
+                macros.loc = (ULocale) current.value;
                 break;
             case KEY_NOTATION:
-                if (macros.notation == null) {
-                    macros.notation = (Notation) current.value;
-                }
+                macros.notation = (Notation) current.value;
                 break;
             case KEY_UNIT:
-                if (macros.unit == null) {
-                    macros.unit = (MeasureUnit) current.value;
-                }
+                macros.unit = (MeasureUnit) current.value;
                 break;
             case KEY_PRECISION:
-                if (macros.precision == null) {
-                    macros.precision = (Precision) current.value;
-                }
+                macros.precision = (Precision) current.value;
                 break;
             case KEY_ROUNDING_MODE:
-                if (macros.roundingMode == null) {
-                    macros.roundingMode = (RoundingMode) current.value;
-                }
+                macros.roundingMode = (RoundingMode) current.value;
                 break;
             case KEY_GROUPING:
-                if (macros.grouping == null) {
-                    macros.grouping = /* (Object) */ current.value;
-                }
+                macros.grouping = /* (Object) */ current.value;
                 break;
             case KEY_PADDER:
-                if (macros.padder == null) {
-                    macros.padder = (Padder) current.value;
-                }
+                macros.padder = (Padder) current.value;
                 break;
             case KEY_INTEGER:
-                if (macros.integerWidth == null) {
-                    macros.integerWidth = (IntegerWidth) current.value;
-                }
+                macros.integerWidth = (IntegerWidth) current.value;
                 break;
             case KEY_SYMBOLS:
-                if (macros.symbols == null) {
-                    macros.symbols = /* (Object) */ current.value;
-                }
+                macros.symbols = /* (Object) */ current.value;
                 break;
             case KEY_UNIT_WIDTH:
-                if (macros.unitWidth == null) {
-                    macros.unitWidth = (UnitWidth) current.value;
-                }
+                macros.unitWidth = (UnitWidth) current.value;
                 break;
             case KEY_SIGN:
-                if (macros.sign == null) {
-                    macros.sign = (SignDisplay) current.value;
-                }
+                macros.sign = (SignDisplay) current.value;
                 break;
             case KEY_DECIMAL:
-                if (macros.decimal == null) {
-                    macros.decimal = (DecimalSeparatorDisplay) current.value;
-                }
+                macros.decimal = (DecimalSeparatorDisplay) current.value;
                 break;
             case KEY_SCALE:
-                if (macros.scale == null) {
-                    macros.scale = (Scale) current.value;
-                }
+                macros.scale = (Scale) current.value;
                 break;
             case KEY_THRESHOLD:
-                if (macros.threshold == null) {
-                    macros.threshold = (Long) current.value;
-                }
+                macros.threshold = (Long) current.value;
                 break;
             case KEY_PER_UNIT:
-                if (macros.perUnit == null) {
-                    macros.perUnit = (MeasureUnit) current.value;
-                }
+                macros.perUnit = (MeasureUnit) current.value;
+                break;
+            case KEY_USAGE:
+                macros.usage = (String) current.value;
                 break;
             default:
                 throw new AssertionError("Unknown key: " + current.key);

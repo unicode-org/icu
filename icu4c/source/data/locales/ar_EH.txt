@@ -5,5 +5,4 @@ ar_EH{
     NumberElements{
         default{"latn"}
     }
-    Version{"38"}
 }

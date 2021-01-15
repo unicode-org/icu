@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 zh{
-    Version{"38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -1605,7 +1604,7 @@ zh{
             ls{"印度洋时间"}
         }
         "meta:Indochina"{
-            ls{"印度中国时间"}
+            ls{"印度支那时间"}
         }
         "meta:Indonesia_Central"{
             ls{"印度尼西亚中部时间"}

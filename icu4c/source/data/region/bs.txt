@@ -313,5 +313,4 @@ bs{
         FK{"Folklandska (Malvinska) ostrva"}
         SZ{"Svazilend"}
     }
-    Version{"38"}
 }

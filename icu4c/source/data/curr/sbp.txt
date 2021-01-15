@@ -232,5 +232,4 @@ sbp{
             "Ihela ya Simbabwe",
         }
     }
-    Version{"38"}
 }

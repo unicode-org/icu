@@ -4,16 +4,16 @@
 
 package com.ibm.icu.impl.units;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.UResourceBundle;
-
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ConversionRates {
 
@@ -40,7 +40,7 @@ public class ConversionRates {
     private UnitConverter.Factor getFactorToBase(SingleUnitImpl singleUnit) {
         int power = singleUnit.getDimensionality();
         MeasureUnit.SIPrefix siPrefix = singleUnit.getSiPrefix();
-        UnitConverter.Factor result = UnitConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnit()).getConversionRate());
+        UnitConverter.Factor result = UnitConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnitID()).getConversionRate());
 
         return result.applySiPrefix(siPrefix).power(power); // NOTE: you must apply the SI prefixes before the power.
     }
@@ -60,8 +60,8 @@ public class ConversionRates {
         if (convertibility != UnitConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
         if (!(checkSimpleUnit(source) && checkSimpleUnit(target))) return BigDecimal.valueOf(0);
 
-        String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnit();
-        String targetSimpleIdentifier = target.getSingleUnits().get(0).getSimpleUnit();
+        String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnitID();
+        String targetSimpleIdentifier = target.getSingleUnits().get(0).getSimpleUnitID();
 
         BigDecimal sourceOffset = this.mapToConversionRate.get(sourceSimpleIdentifier).getOffset();
         BigDecimal targetOffset = this.mapToConversionRate.get(targetSimpleIdentifier).getOffset();
@@ -96,14 +96,14 @@ public class ConversionRates {
     }
 
     /**
-     * @param singleUnit
-     * @return The bese units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
+     * @param singleUnit An instance of SingleUnitImpl.
+     * @return The base units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
      * <p>
      * NOTE:
      * This method is helpful when checking the convertibility because no need to check convertibility.
      */
     public ArrayList<SingleUnitImpl> extractBaseUnits(SingleUnitImpl singleUnit) {
-        String target = mapToConversionRate.get(singleUnit.getSimpleUnit()).getTarget();
+        String target = mapToConversionRate.get(singleUnit.getSimpleUnitID()).getTarget();
         MeasureUnitImpl targetImpl = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
 
         // Each unit must be powered by the same dimension
@@ -184,6 +184,7 @@ public class ConversionRates {
 
     public static class ConversionRateInfo {
 
+        @SuppressWarnings("unused")
         private final String simpleUnit;
         private final String target;
         private final String conversionRate;

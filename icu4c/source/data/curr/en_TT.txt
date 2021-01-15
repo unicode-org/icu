@@ -9,5 +9,4 @@ en_TT{
             "Trinidad & Tobago Dollar",
         }
     }
-    Version{"38"}
 }

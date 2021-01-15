@@ -9,5 +9,4 @@ en_UG{
             "Ugandan Shilling",
         }
     }
-    Version{"38"}
 }

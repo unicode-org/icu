@@ -313,5 +313,4 @@ he{
             "11: =%spellout-numbering=;",
         }
     }
-    Version{"38"}
 }

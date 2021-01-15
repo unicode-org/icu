@@ -9,5 +9,4 @@ en_NZ{
             "New Zealand Dollar",
         }
     }
-    Version{"38"}
 }

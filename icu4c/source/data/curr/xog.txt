@@ -232,5 +232,4 @@ xog{
             "Doola ey’eZimbabwe",
         }
     }
-    Version{"38"}
 }

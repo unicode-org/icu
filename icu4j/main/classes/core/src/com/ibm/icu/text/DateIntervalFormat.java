@@ -28,7 +28,6 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
-import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.Output;
@@ -1983,6 +1982,14 @@ public class DateIntervalFormat extends UFormat {
                  pattern = fInfo.getIntervalPattern(bestSkeleton,
                                                          Calendar.HOUR);
                  if ( pattern != null ) {
+                    boolean suppressDayPeriodField = fSkeleton.indexOf('J') != -1;
+                    String part1 = adjustFieldWidth(skeleton, bestSkeleton,
+                                       pattern.getFirstPart(), differenceInfo, suppressDayPeriodField);
+                    String part2 = adjustFieldWidth(skeleton, bestSkeleton,
+                                       pattern.getSecondPart(), differenceInfo, suppressDayPeriodField);
+                    pattern =  new PatternInfo(part1, part2,
+                                               pattern.firstDateInPtnIsLaterDate());
+                                               
                       // share
                       intervalPatterns.put(DateIntervalInfo.
                           CALENDAR_FIELD_TO_PATTERN_LETTER[field],
@@ -2098,24 +2105,24 @@ public class DateIntervalFormat extends UFormat {
         DateIntervalInfo.parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
         if (suppressDayPeriodField) {
             if (bestMatchIntervalPattern.indexOf(" a") != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace(" a", "");
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, " a", "");
             } else if (bestMatchIntervalPattern.indexOf("a ") != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace("a ", "");
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a ", "");
             }
-            bestMatchIntervalPattern = bestMatchIntervalPattern.replace("a", "");
+            bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a", "");
         }
         if ( differenceInfo == 2 ) {
             if (inputSkeleton.indexOf('z') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('v', 'z');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "v", "z");
             }
             if (inputSkeleton.indexOf('K') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('h', 'K');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "h", "K");
             }
             if (inputSkeleton.indexOf('k') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('H', 'k');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "H", "k");
             }
             if (inputSkeleton.indexOf('b') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('a', 'b');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a", "b");
             }
         }
         if (bestMatchIntervalPattern.indexOf('a') != -1 && bestMatchSkeletonFieldWidth['a' - PATTERN_CHAR_BASE] == 0) {
@@ -2190,6 +2197,43 @@ public class DateIntervalFormat extends UFormat {
         }
         return adjustedPtn.toString();
     }
+    
+    /**
+     * Does the same thing as String.replace(), except that it won't perform the
+     * substitution inside quoted literal text.
+     * @param targetString The string to perform the find-replace operation on.
+     * @param strToReplace The string to search for and replace in the target string.
+     * @param strToReplaceWith The string to substitute in wherever `stringToReplace` was found.
+     */
+    private static String findReplaceInPattern(String targetString,
+                                               String strToReplace,
+                                               String strToReplaceWith) {
+        int firstQuoteIndex = targetString.indexOf("\'");
+        if (firstQuoteIndex < 0) {
+            return targetString.replace(strToReplace, strToReplaceWith);
+        } else {
+            StringBuilder result = new StringBuilder();
+            String source = targetString;
+    
+            while (firstQuoteIndex >= 0) {
+                int secondQuoteIndex = source.indexOf("\'", firstQuoteIndex + 1);
+                if (secondQuoteIndex < 0) {
+                    secondQuoteIndex = source.length() - 1;
+                }
+        
+                String unquotedText = source.substring(0, firstQuoteIndex);
+                String quotedText = source.substring(firstQuoteIndex, secondQuoteIndex + 1);
+        
+                result.append(unquotedText.replace(strToReplace, strToReplaceWith));
+                result.append(quotedText);
+        
+                source = source.substring(secondQuoteIndex + 1);
+                firstQuoteIndex = source.indexOf("\'");
+            }
+            result.append(source.replace(strToReplace, strToReplaceWith));
+            return result.toString();
+        }
+  }
 
 
     /*

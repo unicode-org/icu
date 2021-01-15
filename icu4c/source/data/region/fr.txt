@@ -315,5 +315,4 @@ fr{
         SZ{"Swaziland"}
         TL{"Timor-Oriental"}
     }
-    Version{"38"}
 }

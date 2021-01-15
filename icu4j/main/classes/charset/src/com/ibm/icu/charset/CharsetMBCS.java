@@ -265,7 +265,7 @@ class CharsetMBCS extends CharsetICU {
             try {
                 baseNameString = reader.readBaseTableName();
                 if (offset != 0) {
-                    // agljport:commment subtract 32 for sizeof(_MBCSHeader) and length of baseNameString and 1 null
+                    // agljport:comment subtract 32 for sizeof(_MBCSHeader) and length of baseNameString and 1 null
                     // terminator byte all already read;
                     mbcsTable.extIndexes = reader.readExtIndexes(offset - reader.bytesReadAfterStaticData());
                 }
@@ -441,7 +441,7 @@ class CharsetMBCS extends CharsetICU {
 
             if (offset != 0) {
                 try {
-                    // agljport:commment subtract 32 for sizeof(_MBCSHeader) and length of baseNameString and 1 null
+                    // agljport:comment subtract 32 for sizeof(_MBCSHeader) and length of baseNameString and 1 null
                     // terminator byte all already read;
                     // int namelen = baseNameString != null? baseNameString.length() + 1: 0;
                     mbcsTable.extIndexes = reader.readExtIndexes(offset - reader.bytesReadAfterStaticData());
@@ -4903,7 +4903,7 @@ class CharsetMBCS extends CharsetICU {
                                 }while((++c&0xf)!=0);
                                 break;
                             case UCNV_SET_FILTER_SJIS:
-                                /* only add code points that map tp Shift-JIS codes corrosponding to JIS X 0280. */
+                                /* only add code points that map tp Shift-JIS codes corresponding to JIS X 0280. */
                                 do{
                                     if(((st3&1) != 0 || useFallBack) && (value=chars[stage3 / 2])>=0x8140 && value<=0xeffc){
                                         setFillIn.add(c);

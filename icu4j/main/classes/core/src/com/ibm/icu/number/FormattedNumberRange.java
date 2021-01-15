@@ -13,6 +13,7 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
+import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
@@ -188,5 +189,23 @@ public class FormattedNumberRange implements FormattedValue {
                 && Arrays.equals(string.toFieldArray(), _other.string.toFieldArray())
                 && quantity1.toBigDecimal().equals(_other.quantity1.toBigDecimal())
                 && quantity2.toBigDecimal().equals(_other.quantity2.toBigDecimal());
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public IFixedDecimal getFirstFixedDecimal() {
+        return quantity1;
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public IFixedDecimal getSecondFixedDecimal() {
+        return quantity2;
     }
 }

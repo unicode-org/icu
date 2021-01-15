@@ -5,5 +5,4 @@ ar_AE{
     Currencies%narrow{
         BND{"$"}
     }
-    Version{"38"}
 }

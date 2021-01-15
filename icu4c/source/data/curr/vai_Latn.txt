@@ -229,5 +229,4 @@ vai_Latn{
             "Zimbhabhuwe Dala",
         }
     }
-    Version{"38"}
 }

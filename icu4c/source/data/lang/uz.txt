@@ -549,7 +549,6 @@ uz{
             tibt{"tibet raqamlari"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — hammasi"}
         category-list{"{0}: {1}"}

@@ -388,7 +388,6 @@ ha{
             tibt{"Lambobin yaren Tibet"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Harshe: {0}"}
         script{"Rubutu: {0}"}

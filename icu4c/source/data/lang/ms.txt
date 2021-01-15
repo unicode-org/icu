@@ -901,7 +901,6 @@ ms{
         VALENCIA{"Valencia"}
         WADEGILE{"Perumian Wade-Giles"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}

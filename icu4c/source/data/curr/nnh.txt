@@ -8,5 +8,4 @@ nnh{
             "feláŋ CFA",
         }
     }
-    Version{"38"}
 }

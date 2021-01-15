@@ -8,5 +8,4 @@ so_DJ{
             "Faran Jabuuti",
         }
     }
-    Version{"38"}
 }

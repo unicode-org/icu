@@ -9,5 +9,4 @@ en_MU{
             "Mauritian Rupee",
         }
     }
-    Version{"38"}
 }

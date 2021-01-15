@@ -46,5 +46,4 @@ sr_Latn_BA{
             mymr{"mjanmarske cifre"}
         }
     }
-    Version{"38"}
 }

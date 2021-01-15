@@ -6,5 +6,4 @@ xh{
         MK{"uMntla Macedonia"}
         ZA{"eMzantsi Afrika"}
     }
-    Version{"38"}
 }

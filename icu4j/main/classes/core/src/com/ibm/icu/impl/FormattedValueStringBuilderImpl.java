@@ -144,7 +144,8 @@ public class FormattedValueStringBuilderImpl {
                     int end = i - self.zero;
                     // Handle span fields; don't trim them
                     if (currField instanceof SpanFieldPlaceholder) {
-                        assert handleSpan(currField, cfpos, fieldStart, end);
+                        boolean handleResult = handleSpan(currField, cfpos, fieldStart, end);
+                        assert handleResult;
                         return true;
                     }
                     // Grouping separators can be whitespace; don't throw them out!
@@ -226,6 +227,12 @@ public class FormattedValueStringBuilderImpl {
         }
 
         assert currField == null;
+        // Always set the position to the end so that we don't revisit previous sections
+        cfpos.setState(
+            cfpos.getField(),
+            cfpos.getFieldValue(),
+            self.length,
+            self.length);
         return false;
     }
 

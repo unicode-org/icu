@@ -5,7 +5,6 @@ ar_PS{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
     calendar{
         gregorian{
             monthNames{

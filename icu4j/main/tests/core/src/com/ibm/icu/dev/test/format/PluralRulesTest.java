@@ -42,8 +42,10 @@ import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.FormattedNumberRange;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.number.NumberRangeFormatter;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.NumberFormat;
@@ -186,6 +188,35 @@ public class PluralRulesTest extends TestFmwk {
                 false, new FixedDecimal(99d, 1));
         checkOldSamples(description, test, "other", SampleType.INTEGER);
         checkOldSamples(description, test, "other", SampleType.DECIMAL, 99d, 99.1, 99.2d, 999d);
+    }
+
+    /**
+     * This test is for the support of X.YeZ scientific notation of numbers in
+     * the plural sample string.
+     */
+    @Test
+    public void testSamplesWithExponent() {
+        String description = "one: i = 0,1 @integer 0, 1, 1e5 @decimal 0.0~1.5, 1.1e5; "
+                + "many: e = 0 and i != 0 and i % 1000000 = 0 and v = 0 or e != 0..5"
+                + " @integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, … @decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …; "
+                + "other:  @integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …"
+                + " @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …"
+                ;
+        // Creating the PluralRules object means being able to parse numbers
+        // like 1e5 and 1.1e5
+        PluralRules test = PluralRules.createRules(description);
+        checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 0, 1, 1e5", true,
+                new FixedDecimal(0));
+        checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 0.0~1.5, 1.1e5", true,
+                new FixedDecimal(0, 1));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.INTEGER, "@integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, …", false,
+                new FixedDecimal(1000000));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.DECIMAL, "@decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …", false,
+                FixedDecimal.createWithExponent(2.1, 1, 6));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "@integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …", false,
+                new FixedDecimal(2));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …", false,
+                new FixedDecimal(2.0, 1));
     }
 
     public void checkOldSamples(String description, PluralRules rules, String keyword, SampleType sampleType,
@@ -368,7 +399,10 @@ public class PluralRulesTest extends TestFmwk {
                             }
                             String old = collisionTest.get(item);
                             if (old != null) {
-                                errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
+                                if (!locale.getLanguage().equals("fr") ||
+                                        !logKnownIssue("21328", "fr Non-unique rules: 1e6 => one & many")) {
+                                    errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
+                                }
                                 rule.select(item);
                             } else {
                                 collisionTest.put(item, foundKeyword);
@@ -678,6 +712,10 @@ public class PluralRulesTest extends TestFmwk {
             uniqueRuleSet.add(PluralRules.getFunctionalEquivalent(locale, null));
         }
         for (ULocale locale : uniqueRuleSet) {
+            if (locale.getLanguage().equals("fr") &&
+                    logKnownIssue("21299", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+                continue;
+            }
             PluralRules rules = factory.forLocale(locale);
             logln("\nlocale: " + (locale == ULocale.ROOT ? "root" : locale.toString()) + ", rules: " + rules);
             Set<String> keywords = rules.getKeywords();
@@ -1278,5 +1316,38 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("FixedDecimal toString", expected, fd.toString());
         Locale.setDefault(Locale.GERMAN);
         assertEquals("FixedDecimal toString", expected, fd.toString());
+    }
+
+    @Test
+    public void testSelectRange() {
+        int d1 = 102;
+        int d2 = 201;
+        ULocale locale = new ULocale("sl");
+
+        // Locale sl has interesting data: one + two => few
+        FormattedNumberRange range = NumberRangeFormatter.withLocale(locale).formatRange(d1, d2);
+        PluralRules rules = PluralRules.forLocale(locale);
+
+        // For testing: get plural form of first and second numbers
+        FormattedNumber a = NumberFormatter.withLocale(locale).format(d1);
+        FormattedNumber b = NumberFormatter.withLocale(locale).format(d2);
+        assertEquals("First plural", "two", rules.select(a));
+        assertEquals("Second plural", "one", rules.select(b));
+
+        // Check the range plural now:
+        String form = rules.select(range);
+        assertEquals("Range plural", "few", form);
+
+        // Test when plural ranges data is unavailable:
+        PluralRules bare = PluralRules.createRules("a: i = 0,1");
+        try {
+            form = bare.select(range);
+            fail("Expected exception");
+        } catch (UnsupportedOperationException e) {}
+
+        // However, they should not throw when no data is available for a language.
+        PluralRules xyz = PluralRules.forLocale(new ULocale("xyz"));
+        form = xyz.select(range);
+        assertEquals("Fallback form", "other", form);
     }
 }

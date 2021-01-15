@@ -557,7 +557,7 @@ UBool RegexCompile::doParseActions(int32_t action)
         //
         //   Note:   Addition of transparent input regions, with the need to
         //           restore the original regions when failing out of a lookahead
-        //           block, complicated this sequence.  Some conbined opcodes
+        //           block, complicated this sequence.  Some combined opcodes
         //           might make sense - or might not, lookahead aren't that common.
         //
         //      Caution:  min match length optimization knows about this
@@ -2397,7 +2397,7 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
     }
     //  Remove any strings from the set.
     //  There shoudn't be any, but just in case.
-    //     (Case Closure can add them; if we had a simple case closure avaialble that
+    //     (Case Closure can add them; if we had a simple case closure available that
     //      ignored strings, that would be better.)
     theSet->removeAllStrings();
     int32_t  setSize = theSet->size();
@@ -2485,7 +2485,7 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
     fRXPat->fCompiledPat->setElementAt(fIntervalLow, topOfBlock+2);
     fRXPat->fCompiledPat->setElementAt(fIntervalUpper, topOfBlock+3);
 
-    // Apend the CTR_LOOP op.  The operand is the location of the CTR_INIT op.
+    // Append the CTR_LOOP op.  The operand is the location of the CTR_INIT op.
     //   Goes at end of the block being looped over, so just append to the code so far.
     appendOp(LoopOp, topOfBlock);
 

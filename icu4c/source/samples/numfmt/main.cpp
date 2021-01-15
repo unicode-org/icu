@@ -35,8 +35,8 @@ int main(int argc, char **argv) {
     printf("C API\n");
     capi();
 
-    showCurrencyFormatting(FALSE);
-    showCurrencyFormatting(TRUE);
+    showCurrencyFormatting(false);
+    showCurrencyFormatting(true);
 
     u_cleanup();    // Release any additional storage held by ICU.  
 

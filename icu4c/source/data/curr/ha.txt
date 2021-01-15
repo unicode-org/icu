@@ -1157,5 +1157,4 @@ ha{
             other{"Riyal ɗin Yemen"}
         }
     }
-    Version{"38"}
 }

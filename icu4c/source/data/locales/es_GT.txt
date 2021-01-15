@@ -47,7 +47,6 @@ es_GT{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

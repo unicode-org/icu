@@ -9,5 +9,4 @@ zh_Hant_MO{
             "澳門元",
         }
     }
-    Version{"38"}
 }

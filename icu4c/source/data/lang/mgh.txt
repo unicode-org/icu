@@ -48,5 +48,4 @@ mgh{
         zh{"Ichina"}
         zu{"Izulu"}
     }
-    Version{"38"}
 }

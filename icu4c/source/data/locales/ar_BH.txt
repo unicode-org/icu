@@ -5,5 +5,4 @@ ar_BH{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

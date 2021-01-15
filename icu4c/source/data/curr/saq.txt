@@ -232,5 +232,4 @@ saq{
             "Dola eel Zimbabwe",
         }
     }
-    Version{"38"}
 }

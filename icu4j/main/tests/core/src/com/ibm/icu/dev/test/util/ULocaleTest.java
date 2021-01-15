@@ -12,6 +12,8 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -892,8 +894,8 @@ public class ULocaleTest extends TestFmwk {
     public void TestCanonicalization(){
         final String[][]testCases = new String[][]{
                 { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
-                { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_Hans_CN@collation=pinyin" },
-                { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_Hans_CN_CA@collation=pinyin" },
+                { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
+                { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
                 { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" },
                 { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" },
                 { "no_NO_NY", "no_NO_NY", "nb_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
@@ -956,14 +958,14 @@ public class ULocaleTest extends TestFmwk {
                 { "hi__DIRECT", "hi__DIRECT", "hi__DIRECT" },
                 { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL" },
                 { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH_TRADITIONAL" },
-                { "zh_TW_STROKE", "zh_TW_STROKE", "zh_Hant_TW_STROKE" },
+                { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW_STROKE" },
                 { "zh__PINYIN", "zh__PINYIN", "zh__PINYIN" },
                 { "qz-qz@Euro", null, "qz_QZ_EURO" }, /* qz-qz uses private use iso codes */
                 { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_SP_CYRL" }, /* .NET name */
                 { "sr-SP-Latn", "sr_SP_LATN", "sr_SP_LATN" }, /* .NET name */
                 { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_RS_CYRILLIC" }, /* Linux name */
-                { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Latn_UZ_CYRL" }, /* .NET name */
-                { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ_LATN" }, /* .NET name */
+                { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_UZ_CYRL" }, /* .NET name */
+                { "uz-UZ-Latn", "uz_UZ_LATN", "uz_UZ_LATN" }, /* .NET name */
                 { "zh-CHS", "zh_CHS", "zh_CHS" }, /* .NET name */
                 { "zh-CHT", "zh_CHT", "zh_CHT" }, /* .NET name This may change back to zh_Hant */
                 /* PRE_EURO and EURO conversions don't affect other keywords */
@@ -4090,7 +4092,7 @@ public class ULocaleTest extends TestFmwk {
                 {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-cu-usd-eur-ks-identic"},
                 {"en_US_POSIX", "en-US-u-va-posix"},
                 {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix"},
-                {"@x=elmer",    "x-elmer"},
+                {"@x=elmer",    "und-x-elmer"},
                 {"_US@x=elmer", "und-US-x-elmer"},
                 /* #12671 */
                 {"en@a=bar;attribute=baz",  "en-a-bar-u-baz"},
@@ -4111,6 +4113,17 @@ public class ULocaleTest extends TestFmwk {
                 {"de-u-co",   "de-u-co"},
                 {"de@collation=yes",   "de-u-co"},
                 {"cmn-hans-cn-u-ca-t-ca-x-t-u",   "cmn-Hans-CN-t-ca-u-ca-x-t-u"},
+                /* ICU-21414 */
+                {"und-CN", "und-CN"},
+                {"und-Latn", "und-Latn"},
+                {"und-u-ca-roc", "und-u-ca-roc"},
+                {"und-x-abc-private", "und-x-abc-private"},
+                {"und-x-private", "und-x-private"},
+                {"und-u-ca-roc-x-private", "und-u-ca-roc-x-private"},
+                {"und-US-x-private", "und-US-x-private"},
+                {"und-Latn-x-private", "und-Latn-x-private"},
+                {"und-1994-biske-rozaj", "und-1994-biske-rozaj"},
+                {"und-1994-biske-rozaj-x-private", "und-1994-biske-rozaj-x-private"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -4264,6 +4277,12 @@ public class ULocaleTest extends TestFmwk {
                 {"sl-1994-biske-rozaj",    "sl__1994_BISKE_ROZAJ",       NOERROR},
                 {"en-fonipa-scouse",    "en__FONIPA_SCOUSE",       NOERROR},
                 {"en-scouse-fonipa",    "en__FONIPA_SCOUSE",       NOERROR},
+                /* ICU-21433 */
+                {"und-1994-biske-rozaj", "__1994_BISKE_ROZAJ", NOERROR},
+                {"de-1994-biske-rozaj", "de__1994_BISKE_ROZAJ", NOERROR},
+                {"und-x-private", "@x=private", NOERROR},
+                {"de-1994-biske-rozaj-x-private", "de__1994_BISKE_ROZAJ@x=private", NOERROR},
+                {"und-1994-biske-rozaj-x-private", "__1994_BISKE_ROZAJ@x=private", NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
@@ -5175,21 +5194,18 @@ public class ULocaleTest extends TestFmwk {
         // also test with script, variants and extensions
         Assert.assertEquals("fa-Cyrl-AF-1009-u-ca-roc", canonicalTag("prs-Cyrl-1009-u-ca-roc"));
 
-        if (!logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
-            //  language _ country -> language _ script _ country
-            Assert.assertEquals("pa-Guru-IN", canonicalTag("pa-IN"));
-        }
+        Assert.assertEquals("pa-IN", canonicalTag("pa-IN"));
         // also test with script
         Assert.assertEquals("pa-Latn-IN", canonicalTag("pa-Latn-IN"));
-        if (!logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
-            // also test with variants and extensions
-            Assert.assertEquals("pa-Guru-IN-5678-u-ca-hindi", canonicalTag("pa-IN-5678-u-ca-hindi"));
+        // also test with variants and extensions
+        Assert.assertEquals("pa-IN-5678-u-ca-hindi", canonicalTag("pa-IN-5678-u-ca-hindi"));
 
-            //  language _ script _ country -> language _ country
-            Assert.assertEquals("ky-KG", canonicalTag("ky-Cyrl-KG"));
-            // also test with variants and extensions
-            Assert.assertEquals("ky-KG-3456-u-ca-roc", canonicalTag("ky-Cyrl-KG-3456-u-ca-roc"));
-        }
+        Assert.assertEquals("ky-Cyrl-KG", canonicalTag("ky-Cyrl-KG"));
+        // also test with variants and extensions
+        Assert.assertEquals("ky-Cyrl-KG-3456-u-ca-roc", canonicalTag("ky-Cyrl-KG-3456-u-ca-roc"));
+
+        // Test replacement of scriptAlias
+        Assert.assertEquals("en-Zinh", canonicalTag("en-Qaai"));
 
         // Test replacement of territoryAlias
         // 554 has one replacement
@@ -5209,5 +5225,88 @@ public class ULocaleTest extends TestFmwk {
         Assert.assertEquals("uz-Cyrl-UZ-5678-u-nu-latn", canonicalTag("uz-Cyrl-172-5678-u-nu-latn"));
         // a language not used in this region
         Assert.assertEquals("fr-RU", canonicalTag("fr-172"));
+
+        Assert.assertEquals("ja-Latn-alalc97", canonicalTag("ja-Latn-hepburn-heploc"));
+
+        Assert.assertEquals("aaa-Fooo-RU", canonicalTag("aaa-Fooo-SU"));
+
+        // ICU-21344
+        Assert.assertEquals("ku-Arab-IQ", canonicalTag("ku-Arab-NT"));
+
+        // ICU-21402
+        Assert.assertEquals("und-u-rg-no50", canonicalTag("und-u-rg-no23"));
+        Assert.assertEquals("und-u-rg-cnbj", canonicalTag("und-u-rg-cn11"));
+        Assert.assertEquals("und-u-rg-cz110", canonicalTag("und-u-rg-cz10a"));
+        Assert.assertEquals("und-u-rg-frges", canonicalTag("und-u-rg-fra"));
+        Assert.assertEquals("und-u-rg-frges", canonicalTag("und-u-rg-frg"));
+        Assert.assertEquals("und-u-rg-lucl", canonicalTag("und-u-rg-lud"));
+
+        Assert.assertEquals("und-NO-u-sd-no50", canonicalTag("und-NO-u-sd-no23"));
+        Assert.assertEquals("und-CN-u-sd-cnbj", canonicalTag("und-CN-u-sd-cn11"));
+        Assert.assertEquals("und-CZ-u-sd-cz110", canonicalTag("und-CZ-u-sd-cz10a"));
+        Assert.assertEquals("und-FR-u-sd-frges", canonicalTag("und-FR-u-sd-fra"));
+        Assert.assertEquals("und-FR-u-sd-frges", canonicalTag("und-FR-u-sd-frg"));
+        Assert.assertEquals("und-LU-u-sd-lucl", canonicalTag("und-LU-u-sd-lud"));
+
+        // ICU-21401
+        Assert.assertEquals("xtg", canonicalTag("cel-gaulish"));
+
+        // ICU-21406
+        // Inside T extension
+        //  Case of Script and Region
+        Assert.assertEquals("ja-Kana-JP-t-it-latn-it", canonicalTag("ja-kana-jp-t-it-latn-it"));
+        Assert.assertEquals("und-t-zh-hani-tw", canonicalTag("und-t-zh-hani-tw"));
+        Assert.assertEquals("und-Cyrl-t-und-latn", canonicalTag("und-cyrl-t-und-Latn"));
+        //  Order of singleton
+        Assert.assertEquals("und-t-zh-u-ca-roc", canonicalTag("und-u-ca-roc-t-zh"));
+        //  Variant subtags are alphabetically ordered.
+        Assert.assertEquals("sl-1994-biske-rozaj", canonicalTag("sl-rozaj-biske-1994"));
+        Assert.assertEquals("sl-t-sl-1994-biske-rozaj", canonicalTag("sl-t-sl-rozaj-biske-1994"));
+        // tfield subtags are alphabetically ordered.
+        // (Also tests subtag case normalisation.)
+        Assert.assertEquals("de-t-lv-m0-din", canonicalTag("DE-T-lv-M0-DIN"));
+        Assert.assertEquals("de-t-k0-qwertz-m0-din", canonicalTag("DE-T-M0-DIN-K0-QWERTZ"));
+        Assert.assertEquals("de-t-lv-k0-qwertz-m0-din", canonicalTag("DE-T-lv-M0-DIN-K0-QWERTZ"));
+        // "true" tvalue subtags aren't removed.
+        // (UTS 35 version 36, §3.2.1 claims otherwise, but tkey must be followed by
+        // tvalue, so that's likely a spec bug in UTS 35.)
+        Assert.assertEquals("en-t-m0-true", canonicalTag("en-t-m0-true"));
+        // tlang subtags are canonicalised.
+        Assert.assertEquals("en-t-he", canonicalTag("en-t-iw"));
+        Assert.assertEquals("en-t-hy-latn-am", canonicalTag("en-t-hy-latn-SU"));
+        Assert.assertEquals("ru-t-ru-cyrl-ru", canonicalTag("ru-t-ru-cyrl-SU"));
+        Assert.assertEquals("fr-t-fr-ru", canonicalTag("fr-t-fr-172"));
+        Assert.assertEquals("und-t-nb-latn", canonicalTag("und-t-no-latn-BOKMAL"));
+        Assert.assertEquals("und-t-dse-zinh", canonicalTag("und-t-sgn-qAAi-NL"));
+        // alias of tvalue should be replaced
+        Assert.assertEquals("en-t-m0-prprname", canonicalTag("en-t-m0-NaMeS"));
+        Assert.assertEquals("en-t-d0-charname-s0-ascii", canonicalTag("en-t-s0-ascii-d0-nAmE"));
+
+    }
+
+    @Test
+    public void TestLocaleCanonicalizationFromFile() throws IOException {
+        BufferedReader testFile = TestUtil.getDataReader("unicode/localeCanonicalization.txt");
+        try {
+            String line;
+            while ((line = testFile.readLine()) != null) {
+                if (line.startsWith("#")) {
+                    // ignore any lines start with #
+                    continue;
+                }
+                String[] fields = line.split("\t;\t");
+                if (fields.length != 2) {
+                    // ignore any lines without TAB ; TAB
+                    continue;
+                }
+                String from = fields[0].replace("_", "-");
+                String to = fields[1].replace("_", "-");
+                Assert.assertEquals("canonicalTag(" + from + ")",
+                    to, canonicalTag(from));
+            }
+        } finally {
+            testFile.close();
+        }
+
     }
 }

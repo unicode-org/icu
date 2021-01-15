@@ -49,5 +49,4 @@ ewo{
         zh{"Ǹkɔ́bɔ tsainís"}
         zu{"ǹkɔ́bɔ zulú"}
     }
-    Version{"38"}
 }

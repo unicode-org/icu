@@ -23,7 +23,7 @@ package com.ibm.icu.text;
  * <p>Both the method
  * <code>CollationKey.compareTo(CollationKey)</code> and the method
  * <code>Collator.compare(String, String)</code> compare two strings
- * and returns their relative order.  The performance characterictics
+ * and returns their relative order.  The performance characteristics
  * of these two approaches can differ.</p>
  *
  * <p>During the construction of a <code>CollationKey</code>, the

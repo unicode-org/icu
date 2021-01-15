@@ -68,7 +68,6 @@ mni{
             latn{"ৱেস্তর্ন দিজিট"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"লোল: {0}"}
         script{"স্ক্রিপ্ট: {0}"}

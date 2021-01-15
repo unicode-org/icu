@@ -919,7 +919,6 @@ uk{
         VALENCIA{"Валенсійська"}
         WADEGILE{"Романізація Вейда-Джайлза"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — усі"}
         category-list{"{0}: {1}"}

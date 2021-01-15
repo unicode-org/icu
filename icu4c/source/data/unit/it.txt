@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 it{
-    Version{"38"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -106,7 +105,71 @@ it{
             }
         }
         compound{
+            1024p1{"kibi{0}"}
+            1024p2{"mebi{0}"}
+            1024p3{"gibi{0}"}
+            1024p4{"tebi{0}"}
+            1024p5{"pebi{0}"}
+            1024p6{"exbi{0}"}
+            1024p7{"zebi{0}"}
+            1024p8{"yobi{0}"}
+            10p-1{"deci{0}"}
+            10p-12{"pico{0}"}
+            10p-15{"femto{0}"}
+            10p-18{"atto{0}"}
+            10p-2{"centi{0}"}
+            10p-21{"zepto{0}"}
+            10p-24{"yocto{0}"}
+            10p-3{"milli{0}"}
+            10p-6{"micro{0}"}
+            10p-9{"nano{0}"}
+            10p1{"deca{0}"}
+            10p12{"tera{0}"}
+            10p15{"peta{0}"}
+            10p18{"exa{0}"}
+            10p2{"etto{0}"}
+            10p21{"zetta{0}"}
+            10p24{"yotta{0}"}
+            10p3{"kilo{0}"}
+            10p6{"mega{0}"}
+            10p9{"giga{0}"}
             per{"{0} al {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} quadrato"}
+                    }
+                    feminine{
+                        _{"{0} quadrata"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} quadrati"}
+                    }
+                    feminine{
+                        _{"{0} quadrate"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cubo"}
+                    }
+                    feminine{
+                        _{"{0} cubica"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cubi"}
+                    }
+                    feminine{
+                        _{"{0} cubiche"}
+                    }
+                }
+            }
             times{"{0} {1}"}
         }
         concentr{
@@ -1022,6 +1085,7 @@ it{
             }
         }
         compound{
+            10p1{"da{0}"}
             per{"{0}/{1}"}
         }
         concentr{
@@ -1318,6 +1382,7 @@ it{
             }
         }
         compound{
+            10p1{"da{0}"}
             per{"{0}/{1}"}
         }
         concentr{

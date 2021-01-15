@@ -99,6 +99,13 @@ class MultiplierParseHandler;
 }
 }
 
+namespace units {
+
+// Forward declarations:
+class UnitsRouter;
+
+} // namespace units
+
 namespace number {  // icu::number
 
 // Forward declarations:
@@ -158,7 +165,6 @@ struct UFormattedNumberImpl;
 class MutablePatternModifier;
 class ImmutablePatternModifier;
 struct DecimalFormatWarehouse;
-class UsagePrefsHandler;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -764,7 +770,7 @@ class U_I18N_API Precision : public UMemory {
     friend class impl::GeneratorHelpers;
 
     // To allow access to isBogus and the default (bogus) constructor:
-    friend class impl::UsagePrefsHandler;
+    friend class units::UnitsRouter;
 };
 
 /**
@@ -1303,13 +1309,13 @@ class U_I18N_API Grouper : public UMemory {
               fGrouping2(grouping2),
               fMinGrouping(minGrouping),
               fStrategy(strategy) {}
-#endif  // U_HIDE_INTERNAL_API
 
     /** @internal */
     int16_t getPrimary() const;
 
     /** @internal */
     int16_t getSecondary() const;
+#endif  // U_HIDE_INTERNAL_API
 
   private:
     /**
@@ -1373,10 +1379,10 @@ class U_I18N_API Padder : public UMemory {
 
     /** @internal */
     static Padder codePoints(UChar32 cp, int32_t targetWidth, UNumberFormatPadPosition position);
-#endif  // U_HIDE_INTERNAL_API
 
     /** @internal */
     static Padder forProperties(const DecimalFormatProperties& properties);
+#endif  // U_HIDE_INTERNAL_API
 
   private:
     UChar32 fWidth;  // -3 = error; -2 = bogus; -1 = no padding
@@ -1765,7 +1771,7 @@ class U_I18N_API NumberFormatterSettings {
      *
      * The default is HALF_EVEN. For more information on rounding mode, see the ICU userguide here:
      *
-     * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes
      *
      * @param roundingMode The rounding mode to use.
      * @return The fluent chain.
@@ -2618,7 +2624,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Export the formatted number as a "numeric string" conforming to the
      * syntax defined in the Decimal Arithmetic Specification, available at
@@ -2635,11 +2640,10 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      *         for example, std::string.
      * @param status Set if an error occurs.
      * @return A StringClass containing the numeric string.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     template<typename StringClass>
     inline StringClass toDecimalNumber(UErrorCode& status) const;
-#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
 	/**

@@ -6,5 +6,4 @@ gv{
         GB{"Rywvaneth Unys"}
         IM{"Ellan Vannin"}
     }
-    Version{"38"}
 }

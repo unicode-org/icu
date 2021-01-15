@@ -75,7 +75,6 @@ sd_Deva{
             latn{"मग़रबी डिजिट"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपि: {0}"}

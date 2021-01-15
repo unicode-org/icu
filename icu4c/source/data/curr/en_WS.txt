@@ -9,5 +9,4 @@ en_WS{
             "Samoan Tala",
         }
     }
-    Version{"38"}
 }

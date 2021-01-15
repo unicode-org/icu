@@ -49,5 +49,4 @@ nd{
         zh{"isi-China"}
         zu{"isi-Zulu"}
     }
-    Version{"38"}
 }

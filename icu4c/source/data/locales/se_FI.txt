@@ -63,7 +63,6 @@ se_FI{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

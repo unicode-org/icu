@@ -30290,7 +30290,7 @@ supplementalData:table(nofallback){
                 49931000,
                 57326521,
             }
-            zh_Hant{
+            zh{
                 populationShareF:int{49170000}
             }
             zmi{

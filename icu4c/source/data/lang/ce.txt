@@ -460,7 +460,6 @@ ce{
             persian{"гӀажарийн"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Мотт: {0}"}
         script{"Скрипт: {0}"}

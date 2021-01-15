@@ -166,7 +166,6 @@ uz_Cyrl{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

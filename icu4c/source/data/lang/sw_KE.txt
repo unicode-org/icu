@@ -82,5 +82,4 @@ sw_KE{
             tamldec{"Nambari za Kitamili"}
         }
     }
-    Version{"38"}
 }

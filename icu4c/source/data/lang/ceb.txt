@@ -79,7 +79,6 @@ ceb{
             latn{"Mga Western Digit"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"Lengguwahe: {0}"}
         script{"Script: {0}"}

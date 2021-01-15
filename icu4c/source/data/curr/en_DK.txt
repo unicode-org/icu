@@ -9,5 +9,4 @@ en_DK{
             "Danish Krone",
         }
     }
-    Version{"38"}
 }

@@ -9,5 +9,4 @@ en_KI{
             "Australian Dollar",
         }
     }
-    Version{"38"}
 }

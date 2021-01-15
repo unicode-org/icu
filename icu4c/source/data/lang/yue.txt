@@ -1032,7 +1032,6 @@ yue{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — 全部"}
         category-list{"{0}: {1}"}

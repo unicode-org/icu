@@ -9,5 +9,4 @@ en_TO{
             "Tongan Paʻanga",
         }
     }
-    Version{"38"}
 }

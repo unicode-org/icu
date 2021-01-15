@@ -194,7 +194,6 @@ ia{
         }
         minimumGroupingDigits{"2"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

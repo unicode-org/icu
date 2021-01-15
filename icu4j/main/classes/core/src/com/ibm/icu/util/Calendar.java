@@ -27,6 +27,7 @@ import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -377,7 +378,7 @@ import com.ibm.icu.util.ULocale.Category;
  *     numbers must be restricted to a 32-bit <code>int</code>.  This
  *     restricts the overall supported range. Furthermore, restricting
  *     the supported range simplifies the computations by removing
- *     special case code that was used to accomodate arithmetic overflow
+ *     special case code that was used to accommodate arithmetic overflow
  *     at millis near <code>Long.MIN_VALUE</code> and
  *     <code>Long.MAX_VALUE</code>.</li>
  *
@@ -553,7 +554,7 @@ import com.ibm.icu.util.ULocale.Category;
  *     between days at sunset or at other times, all ICU4J calendars
  *     transition between days at <em>local zone midnight</em>.  This
  *     allows ICU4J to centralize the time computations in
- *     <code>Calendar</code> and to maintain basic correpsondences
+ *     <code>Calendar</code> and to maintain basic correspondences
  *     between calendar systems. Affected fields: {@link #AM_PM},
  *     {@link #HOUR}, {@link #HOUR_OF_DAY}, {@link #MINUTE},
  *     {@link #SECOND}, {@link #MILLISECOND},
@@ -1934,7 +1935,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         for (int i = 0; i < caltypes.length; i++) {
             values.add(caltypes[i]);
         }
-        // then, add other available clanedars
+        // then, add other available calendars
         for (CalType t : CalType.values()) {
             if (!values.contains(t.getId())) {
                 values.add(t.getId());
@@ -3514,6 +3515,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         "{1} {0}",
         "{1} {0}"
     };
+    // final fallback patterns
+    private static final String[] TIME_SKELETONS = {
+        "jmmsszzzz",    // Full
+        "jmmssz",       // Long
+        "jmmss",        // Medium
+        "jmm"           // Short
+    };
 
     static private DateFormat formatHelper(Calendar cal, ULocale loc, int dateStyle,
             int timeStyle) {
@@ -3615,7 +3623,39 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         int patternsSize = dtPatternsRb.getSize();
         String[] dateTimePatterns = new String[patternsSize];
         String[] dateTimePatternsOverrides = new String[patternsSize];
-        for (int i = 0; i < patternsSize; i++) {
+        int i = 0; // index for dateTimePatterns, dateTimePatternsOverrides
+
+        String baseLocID = locale.getBaseName();
+        if (baseLocID.length() > 0 && !baseLocID.equals("und")) {
+            ULocale baseLoc = new ULocale(baseLocID);
+            // The following is different from ICU4C, where we can get the valid locale
+            // for the SimpleDateFormat object. Here we do not have a SimpleDateFormat and
+            // valid locale for the Calendar is a bit meaningless.
+            ULocale validLoc = ULocale.addLikelySubtags(dtPatternsRb.getULocale());
+            if (validLoc != baseLoc) {
+                String baseReg = baseLoc.getCountry();
+                if ((baseReg.length() > 0 && !baseReg.equals(validLoc.getCountry()))
+                        || !baseLoc.getLanguage().equals(validLoc.getLanguage())) {
+                    // use DTPG if the standard time formats may have the wrong time cycle,
+                    // because the valid locale differs in important ways (region, language)
+                    // from the base locale.
+                    // We could *also* check whether they do actually have a mismatch with
+                    // the time cycle preferences for the region, but that is a lot more
+                    // work for little or no additional benefit, since just going ahead
+                    // and always synthesizing the time format as per the following should
+                    // create a locale-appropriate pattern with cycle that matches the
+                    // region preferences anyway.
+                    // In this case we get the first 4 entries of dateTimePatterns using
+                    // DateTimePatternGenerator, not resource data.
+                    DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstanceNoStdPat(locale);
+                    for (; i < 4; i++) {
+                        dateTimePatterns[i] = dtpg.getBestPattern(TIME_SKELETONS[i]);
+                    }
+                }
+            }
+        }
+
+        for (; i < patternsSize; i++) { // get all or remaining dateTimePatterns entries
             ICUResourceBundle concatenationPatternRb = (ICUResourceBundle) dtPatternsRb.get(i);
             switch (concatenationPatternRb.getType()) {
                 case UResourceBundle.STRING:
@@ -3971,7 +4011,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         int min = 0;
         long startMs = getTimeInMillis();
         long targetMs = when.getTime();
-        // Always add from the start millis.  This accomodates
+        // Always add from the start millis.  This accommodates
         // operations like adding years from February 29, 2000 up to
         // February 29, 2004.  If 1, 1, 1, 1 is added to the year
         // field, the DOM gets pinned to 28 and stays there, giving an
@@ -4119,7 +4159,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     /**
      * {@icu}Sets the behavior for handling wall time repeating multiple times
      * at negative time zone offset transitions. For example, 1:30 AM on
-     * November 6, 2011 in US Eastern time (Ameirca/New_York) occurs twice;
+     * November 6, 2011 in US Eastern time (America/New_York) occurs twice;
      * 1:30 AM EDT, then 1:30 AM EST one hour later. When <code>WALLTIME_FIRST</code>
      * is used, the wall time 1:30AM in this example will be interpreted as 1:30 AM EDT
      * (first occurrence). When <code>WALLTIME_LAST</code> is used, it will be

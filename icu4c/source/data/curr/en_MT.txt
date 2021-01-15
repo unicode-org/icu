@@ -9,5 +9,4 @@ en_MT{
             "British Pound",
         }
     }
-    Version{"38"}
 }

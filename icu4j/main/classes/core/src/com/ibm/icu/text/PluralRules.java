@@ -29,7 +29,10 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.PluralRulesLoader;
+import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.range.StandardPluralRanges;
 import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.FormattedNumberRange;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
@@ -181,6 +184,7 @@ public class PluralRules implements Serializable {
 
     private final RuleList rules;
     private final transient Set<String> keywords;
+    private final transient StandardPluralRanges standardPluralRanges;
 
     /**
      * Provides a factory for returning plural rules
@@ -377,9 +381,7 @@ public class PluralRules implements Serializable {
      */
     public static PluralRules parseDescription(String description)
             throws ParseException {
-
-        description = description.trim();
-        return description.length() == 0 ? DEFAULT : new PluralRules(parseRuleChain(description));
+        return newInternal(description, null);
     }
 
     /**
@@ -398,11 +400,25 @@ public class PluralRules implements Serializable {
     }
 
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static PluralRules newInternal(String description, StandardPluralRanges ranges)
+            throws ParseException {
+        description = description.trim();
+        return description.length() == 0
+            ? DEFAULT
+            : new PluralRules(parseRuleChain(description), ranges);
+    }
+
+    /**
      * The default rules that accept any number and return
      * {@link #KEYWORD_OTHER}.
      * @stable ICU 3.8
      */
-    public static final PluralRules DEFAULT = new PluralRules(new RuleList().addRule(DEFAULT_RULE));
+    public static final PluralRules DEFAULT = new PluralRules(
+        new RuleList().addRule(DEFAULT_RULE), StandardPluralRanges.DEFAULT);
 
     /**
      * @internal CLDR
@@ -547,6 +563,8 @@ public class PluralRules implements Serializable {
 
         final boolean isNegative;
 
+        final int exponent;
+
         private final int baseFactor;
 
         /**
@@ -639,9 +657,10 @@ public class PluralRules implements Serializable {
          * @param v number of digits to the right of the decimal place. e.g 1.00 = 2 25. = 0
          * @param f Corresponds to f in the plural rules grammar.
          *   The digits to the right of the decimal place as an integer. e.g 1.10 = 10
+         * @param e Suppressed exponent for scientific and compact notation
          */
         @Deprecated
-        public FixedDecimal(double n, int v, long f) {
+        public FixedDecimal(double n, int v, long f, int e) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
             visibleDecimalDigitCount = v;
@@ -649,6 +668,7 @@ public class PluralRules implements Serializable {
             integerValue = n > MAX
                     ? MAX
                             : (long)n;
+            exponent = e;
             hasIntegerValue = source == integerValue;
             // check values. TODO make into unit test.
             //
@@ -677,6 +697,24 @@ public class PluralRules implements Serializable {
                 visibleDecimalDigitCountWithoutTrailingZeros = trimmedCount;
             }
             baseFactor = (int) Math.pow(10, v);
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public FixedDecimal(double n, int v, long f) {
+            this(n, v, f, 0);
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public static FixedDecimal createWithExponent(double n, int v, int e) {
+            return new FixedDecimal(n,v,getFractionalDigits(n, v), e);
         }
 
         /**
@@ -773,12 +811,56 @@ public class PluralRules implements Serializable {
 
         /**
          * @internal CLDR
+         * @deprecated This API is ICU internal only
+         */
+        @Deprecated
+        private FixedDecimal (FixedDecimal other) {
+            // Ugly, but necessary, because constructors must only call other
+            // constructors in the first line of the body, and
+            // FixedDecimal(String) was refactored to support exponents.
+            this.source = other.source;
+            this.visibleDecimalDigitCount = other.visibleDecimalDigitCount;
+            this.visibleDecimalDigitCountWithoutTrailingZeros =
+                    other.visibleDecimalDigitCountWithoutTrailingZeros;
+            this.decimalDigits = other.decimalDigits;
+            this.decimalDigitsWithoutTrailingZeros =
+                    other.decimalDigitsWithoutTrailingZeros;
+            this.integerValue = other.integerValue;
+            this.hasIntegerValue = other.hasIntegerValue;
+            this.isNegative = other.isNegative;
+            this.exponent = other.exponent;
+            this.baseFactor = other.baseFactor;
+        }
+
+        /**
+         * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         public FixedDecimal (String n) {
             // Ugly, but for samples we don't care.
-            this(Double.parseDouble(n), getVisibleFractionCount(n));
+            this(parseDecimalSampleRangeNumString(n));
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only
+         */
+        @Deprecated
+        private static FixedDecimal parseDecimalSampleRangeNumString(String num) {
+            if (num.contains("e")) {
+                int ePos = num.lastIndexOf('e');
+                int expNumPos = ePos + 1;
+                String exponentStr = num.substring(expNumPos);
+                int exponent = Integer.parseInt(exponentStr);
+                String fractionStr = num.substring(0, ePos);
+                return FixedDecimal.createWithExponent(
+                        Double.parseDouble(fractionStr),
+                        getVisibleFractionCount(fractionStr),
+                        exponent);
+            } else {
+                return new FixedDecimal(Double.parseDouble(num), getVisibleFractionCount(num));
+            }
         }
 
         private static int getVisibleFractionCount(String value) {
@@ -807,7 +889,7 @@ public class PluralRules implements Serializable {
             case t: return decimalDigitsWithoutTrailingZeros;
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
-            case e: return 0;
+            case e: return exponent;
             default: return source;
             }
         }
@@ -829,6 +911,9 @@ public class PluralRules implements Serializable {
         @Override
         @Deprecated
         public int compareTo(FixedDecimal other) {
+            if (exponent != other.exponent) {
+                return doubleValue() < other.doubleValue() ? -1 : 1;
+            }
             if (integerValue != other.integerValue) {
                 return integerValue < other.integerValue ? -1 : 1;
             }
@@ -862,7 +947,8 @@ public class PluralRules implements Serializable {
                 return false;
             }
             FixedDecimal other = (FixedDecimal)arg0;
-            return source == other.source && visibleDecimalDigitCount == other.visibleDecimalDigitCount && decimalDigits == other.decimalDigits;
+            return source == other.source && visibleDecimalDigitCount == other.visibleDecimalDigitCount && decimalDigits == other.decimalDigits
+                    && exponent == other.exponent;
         }
 
         /**
@@ -883,7 +969,12 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public String toString() {
-            return String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
+            String baseString = String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
+            if (exponent == 0) {
+                return baseString;
+            } else {
+                return baseString + "e" + exponent;
+            }
         }
 
         /**
@@ -903,7 +994,7 @@ public class PluralRules implements Serializable {
         @Override
         public int intValue() {
             // TODO Auto-generated method stub
-            return (int)integerValue;
+            return (int) longValue();
         }
 
         /**
@@ -913,7 +1004,11 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public long longValue() {
-            return integerValue;
+            if (exponent == 0) {
+                return integerValue;
+            } else {
+                return (long) (Math.pow(10, exponent) * integerValue);
+            }
         }
 
         /**
@@ -923,7 +1018,7 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public float floatValue() {
-            return (float) source;
+            return (float) (source * Math.pow(10, exponent));
         }
 
         /**
@@ -933,7 +1028,7 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public double doubleValue() {
-            return isNegative ? -source : source;
+            return (isNegative ? -source : source) * Math.pow(10, exponent);
         }
 
         /**
@@ -2016,9 +2111,10 @@ public class PluralRules implements Serializable {
     /*
      * Creates a new <code>PluralRules</code> object.  Immutable.
      */
-    private PluralRules(RuleList rules) {
+    private PluralRules(RuleList rules, StandardPluralRanges standardPluralRanges) {
         this.rules = rules;
         this.keywords = Collections.unmodifiableSet(rules.getKeywords());
+        this.standardPluralRanges = standardPluralRanges;
     }
 
     /**
@@ -2056,6 +2152,34 @@ public class PluralRules implements Serializable {
      */
     public String select(FormattedNumber number) {
         return rules.select(number.getFixedDecimal());
+    }
+
+    /**
+     * Given a formatted number range, returns the overall plural form of the
+     * range. For example, "3-5" returns "other" in English.
+     *
+     * To get a FormattedNumberRange, see {@link com.ibm.icu.number.NumberRangeFormatter}.
+     *
+     * This method only works if PluralRules was created with a locale. If it was created
+     * from PluralRules.createRules(), or if it was deserialized, this method throws
+     * UnsupportedOperationException.
+     *
+     * @param range  The number range onto which the rules will be applied.
+     * @return       The keyword of the selected rule.
+     * @throws UnsupportedOperationException If called on an instance without plural ranges data.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String select(FormattedNumberRange range) {
+        if (standardPluralRanges == null) {
+            throw new UnsupportedOperationException("Plural ranges are unavailable on this instance");
+        }
+        StandardPlural form1 = StandardPlural.fromString(
+            select(range.getFirstFixedDecimal()));
+        StandardPlural form2 = StandardPlural.fromString(
+            select(range.getSecondFixedDecimal()));
+        StandardPlural result = standardPluralRanges.resolve(form1, form2);
+        return result.getKeyword();
     }
 
     /**

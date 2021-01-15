@@ -314,5 +314,4 @@ ro{
         SZ{"Swaziland"}
         TL{"Timorul de Est"}
     }
-    Version{"38"}
 }

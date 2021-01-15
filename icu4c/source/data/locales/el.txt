@@ -217,7 +217,6 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -8,5 +8,4 @@ nl_SR{
             "Surinaamse dollar",
         }
     }
-    Version{"38"}
 }

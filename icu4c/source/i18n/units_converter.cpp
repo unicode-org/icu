@@ -26,7 +26,7 @@ void U_I18N_API Factor::multiplyBy(const Factor &rhs) {
     factorNum *= rhs.factorNum;
     factorDen *= rhs.factorDen;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] += rhs.constants[i];
+        constantExponents[i] += rhs.constantExponents[i];
     }
 
     // NOTE
@@ -39,7 +39,7 @@ void U_I18N_API Factor::divideBy(const Factor &rhs) {
     factorNum *= rhs.factorDen;
     factorDen *= rhs.factorNum;
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] -= rhs.constants[i];
+        constantExponents[i] -= rhs.constantExponents[i];
     }
 
     // NOTE
@@ -51,7 +51,7 @@ void U_I18N_API Factor::divideBy(const Factor &rhs) {
 void U_I18N_API Factor::power(int32_t power) {
     // multiply all the constant by the power.
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] *= power;
+        constantExponents[i] *= power;
     }
 
     bool shouldFlip = power < 0; // This means that after applying the absolute power, we should flip
@@ -63,14 +63,6 @@ void U_I18N_API Factor::power(int32_t power) {
     if (shouldFlip) {
         // Flip Numerator and Denominator.
         std::swap(factorNum, factorDen);
-    }
-}
-
-void U_I18N_API Factor::flip() {
-    std::swap(factorNum, factorDen);
-
-    for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        constants[i] *= -1;
     }
 }
 
@@ -89,12 +81,12 @@ void U_I18N_API Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
 
 void U_I18N_API Factor::substituteConstants() {
     for (int i = 0; i < CONSTANTS_COUNT; i++) {
-        if (this->constants[i] == 0) {
+        if (this->constantExponents[i] == 0) {
             continue;
         }
 
-        auto absPower = std::abs(this->constants[i]);
-        Signum powerSig = this->constants[i] < 0 ? Signum::NEGATIVE : Signum::POSITIVE;
+        auto absPower = std::abs(this->constantExponents[i]);
+        Signum powerSig = this->constantExponents[i] < 0 ? Signum::NEGATIVE : Signum::POSITIVE;
         double absConstantValue = std::pow(constantsValues[i], absPower);
 
         if (powerSig == Signum::NEGATIVE) {
@@ -103,7 +95,7 @@ void U_I18N_API Factor::substituteConstants() {
             this->factorNum *= absConstantValue;
         }
 
-        this->constants[i] = 0;
+        this->constantExponents[i] = 0;
     }
 }
 
@@ -225,8 +217,8 @@ Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &
                           UErrorCode &status) {
 
     Factor result;
-    for (int32_t i = 0, n = source.units.length(); i < n; i++) {
-        SingleUnitImpl singleUnit = *source.units[i];
+    for (int32_t i = 0, n = source.singleUnits.length(); i < n; i++) {
+        SingleUnitImpl singleUnit = *source.singleUnits[i];
 
         Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
@@ -256,12 +248,12 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
     if (unit.complexity != UMEASURE_UNIT_SINGLE) {
         return false;
     }
-    if (unit.units.length() == 0) {
+    if (unit.singleUnits.length() == 0) {
         // Empty units means simple unit.
         return true;
     }
 
-    auto singleUnit = *(unit.units[0]);
+    auto singleUnit = *(unit.singleUnits[0]);
 
     if (singleUnit.dimensionality != 1 || singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
         return false;
@@ -273,6 +265,7 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
 /**
  *  Extract conversion rate from `source` to `target`
  */
+// In ICU4J, this function is partially inlined in the UnitConverter constructor.
 void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &source,
                         const MeasureUnitImpl &target, Convertibility unitsState,
                         const ConversionRates &ratesInfo, UErrorCode &status) {
@@ -336,8 +329,8 @@ void mergeSingleUnitWithDimension(MaybeStackVector<UnitIndexAndDimension> &unitI
 
 void mergeUnitsAndDimensions(MaybeStackVector<UnitIndexAndDimension> &unitIndicesWithDimension,
                              const MeasureUnitImpl &shouldBeMerged, int32_t multiplier) {
-    for (int32_t unit_i = 0; unit_i < shouldBeMerged.units.length(); unit_i++) {
-        auto singleUnit = *shouldBeMerged.units[unit_i];
+    for (int32_t unit_i = 0; unit_i < shouldBeMerged.singleUnits.length(); unit_i++) {
+        auto singleUnit = *shouldBeMerged.singleUnits[unit_i];
         mergeSingleUnitWithDimension(unitIndicesWithDimension, singleUnit, multiplier);
     }
 }
@@ -361,28 +354,28 @@ UBool checkAllDimensionsAreZeros(const MaybeStackVector<UnitIndexAndDimension> &
 void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Signum signum,
                                         Factor &factor, UErrorCode &status) {
     if (baseStr == "ft_to_m") {
-        factor.constants[CONSTANT_FT2M] += power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += power * signum;
     } else if (baseStr == "ft2_to_m2") {
-        factor.constants[CONSTANT_FT2M] += 2 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 2 * power * signum;
     } else if (baseStr == "ft3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
     } else if (baseStr == "in3_to_m3") {
-        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "gal_to_m3") {
         factor.factorNum *= 231;
-        factor.constants[CONSTANT_FT2M] += 3 * power * signum;
+        factor.constantExponents[CONSTANT_FT2M] += 3 * power * signum;
         factor.factorDen *= 12 * 12 * 12;
     } else if (baseStr == "gal_imp_to_m3") {
-        factor.constants[CONSTANT_GAL_IMP2M3] += power * signum;
+        factor.constantExponents[CONSTANT_GAL_IMP2M3] += power * signum;
     } else if (baseStr == "G") {
-        factor.constants[CONSTANT_G] += power * signum;
+        factor.constantExponents[CONSTANT_G] += power * signum;
     } else if (baseStr == "gravity") {
-        factor.constants[CONSTANT_GRAVITY] += power * signum;
+        factor.constantExponents[CONSTANT_GRAVITY] += power * signum;
     } else if (baseStr == "lb_to_kg") {
-        factor.constants[CONSTANT_LB2KG] += power * signum;
+        factor.constantExponents[CONSTANT_LB2KG] += power * signum;
     } else if (baseStr == "PI") {
-        factor.constants[CONSTANT_PI] += power * signum;
+        factor.constantExponents[CONSTANT_PI] += power * signum;
     } else {
         if (signum == Signum::NEGATIVE) {
             factor.factorDen *= std::pow(strToDouble(baseStr, status), power);
@@ -403,7 +396,7 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
     MeasureUnitImpl result;
     if (U_FAILURE(status)) return result;
 
-    const auto &singleUnits = source.units;
+    const auto &singleUnits = source.singleUnits;
     for (int i = 0, count = singleUnits.length(); i < count; ++i) {
         const auto &singleUnit = *singleUnits[i];
         // Extract `ConversionRateInfo` using the absolute unit. For example: in case of `square-meter`,
@@ -421,11 +414,11 @@ MeasureUnitImpl U_I18N_API extractCompoundBaseUnit(const MeasureUnitImpl &source
         // Multiply the power of the singleUnit by the power of the baseUnit. For example, square-hectare
         // must be pow4-meter. (NOTE: hectare --> square-meter)
         auto baseUnits =
-            MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).units;
+            MeasureUnitImpl::forIdentifier(rateInfo->baseUnit.toStringPiece(), status).singleUnits;
         for (int32_t i = 0, baseUnitsCount = baseUnits.length(); i < baseUnitsCount; i++) {
             baseUnits[i]->dimensionality *= singleUnit.dimensionality;
             // TODO: Deal with SI-prefix
-            result.append(*baseUnits[i], status);
+            result.appendSingleUnit(*baseUnits[i], status);
 
             if (U_FAILURE(status)) {
                 return result;
@@ -502,6 +495,52 @@ UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImp
                        ratesInfo, status);
 }
 
+int32_t UnitConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
+                                       const MeasureUnitImpl &secondUnit,
+                                       const ConversionRates &ratesInfo, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
+    if (firstUnit.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        secondUnit.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
+    }
+
+    Convertibility unitsState = extractConvertibility(firstUnit, secondUnit, ratesInfo, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
+    if (unitsState == Convertibility::UNCONVERTIBLE || unitsState == Convertibility::RECIPROCAL) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
+    }
+
+    // Represents the conversion factor from the firstUnit to the base unit that specified in the
+    // conversion data which is considered as the root of the firstUnit and the secondUnit.
+    Factor firstUnitToBase = loadCompoundFactor(firstUnit, ratesInfo, status);
+    Factor secondUnitToBase = loadCompoundFactor(secondUnit, ratesInfo, status);
+
+    firstUnitToBase.substituteConstants();
+    secondUnitToBase.substituteConstants();
+
+    double firstUnitToBaseConversionRate = firstUnitToBase.factorNum / firstUnitToBase.factorDen;
+    double secondUnitToBaseConversionRate = secondUnitToBase.factorNum / secondUnitToBase.factorDen;
+
+    double diff = firstUnitToBaseConversionRate - secondUnitToBaseConversionRate;
+    if (diff > 0) {
+        return 1;
+    }
+
+    if (diff < 0) {
+        return -1;
+    }
+
+    return 0;
+}
+
 double UnitConverter::convert(double inputValue) const {
     double result =
         inputValue + conversionRate_.sourceOffset; // Reset the input to the target zero index.
@@ -510,12 +549,33 @@ double UnitConverter::convert(double inputValue) const {
 
     result -= conversionRate_.targetOffset; // Set the result to its index.
 
-    if (result == 0)
-        return 0.0; // If the result is zero, it does not matter if the conversion are reciprocal or not.
     if (conversionRate_.reciprocal) {
+        if (result == 0) {
+            // TODO: demonstrate the resulting behaviour in tests... and figure
+            // out desired behaviour. (Theoretical result should be infinity,
+            // not 0.)
+            return 0.0;
+        }
         result = 1.0 / result;
     }
 
+    return result;
+}
+
+double UnitConverter::convertInverse(double inputValue) const {
+    double result = inputValue;
+    if (conversionRate_.reciprocal) {
+        if (result == 0) {
+            // TODO: demonstrate the resulting behaviour in tests... and figure
+            // out desired behaviour. (Theoretical result should be infinity,
+            // not 0.)
+            return 0.0;
+        }
+        result = 1.0 / result;
+    }
+    result += conversionRate_.targetOffset;
+    result *= conversionRate_.factorDen / conversionRate_.factorNum;
+    result -= conversionRate_.sourceOffset;
     return result;
 }
 

@@ -124,5 +124,4 @@ dyo{
             "seefa yati BCEAO",
         }
     }
-    Version{"38"}
 }

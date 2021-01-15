@@ -315,5 +315,4 @@ it{
         SZ{"Regno di eSwatini"}
         TL{"Timor Leste"}
     }
-    Version{"38"}
 }

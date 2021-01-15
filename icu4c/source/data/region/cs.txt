@@ -315,5 +315,4 @@ cs{
         SZ{"Svazijsko"}
         TL{"Timor-Leste"}
     }
-    Version{"38"}
 }

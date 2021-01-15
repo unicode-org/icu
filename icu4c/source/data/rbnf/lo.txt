@@ -44,5 +44,4 @@ lo{
             "0: \u0E17\u0E35\u0E48\u200B=%spellout-cardinal=;",
         }
     }
-    Version{"38"}
 }

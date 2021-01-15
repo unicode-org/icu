@@ -243,5 +243,4 @@ ga{
             "20: =%%is= =%%quadrillions=;",
         }
     }
-    Version{"38"}
 }

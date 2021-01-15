@@ -19,7 +19,6 @@ mgo{
             latn{"inu"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -5,5 +5,4 @@ ar_EG{
     Languages{
         da{"الدنماركية"}
     }
-    Version{"38"}
 }

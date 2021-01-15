@@ -30,5 +30,4 @@ es_MX{
     Countries%short{
         GB{"RU"}
     }
-    Version{"38"}
 }

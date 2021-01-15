@@ -315,5 +315,4 @@ et{
         SZ{"eSwatini"}
         TL{"Timor-Leste"}
     }
-    Version{"38"}
 }

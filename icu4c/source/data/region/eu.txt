@@ -312,5 +312,4 @@ eu{
         CZ{"Txekiar Errepublika"}
         FK{"Falklandak (Malvinak)"}
     }
-    Version{"38"}
 }

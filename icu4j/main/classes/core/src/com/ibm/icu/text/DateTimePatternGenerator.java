@@ -125,7 +125,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         result = new DateTimePatternGenerator();
-        result.initData(uLocale);
+        result.initData(uLocale, false);
 
         // freeze and cache
         result.freeze();
@@ -133,16 +133,39 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return result;
     }
 
-    private void initData(ULocale uLocale) {
+    /**
+     * Construct a non-frozen instance of DateTimePatternGenerator for a
+     * given locale that skips using the standard date and time patterns.
+     * Because this is different than the normal instance for the locale,
+     * it does not set or use the cache.
+     * @param uLocale The locale to pass.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static DateTimePatternGenerator getInstanceNoStdPat(ULocale uLocale) {
+        DateTimePatternGenerator result = new DateTimePatternGenerator();
+        result.initData(uLocale, true);
+        return result;
+    }
+
+    private void initData(ULocale uLocale, boolean skipStdPatterns) {
         // This instance of PatternInfo is required for calling some functions.  It is used for
         // passing additional information to the caller.  We won't use this extra information, but
         // we still need to make a temporary instance.
         PatternInfo returnInfo = new PatternInfo();
 
         addCanonicalItems();
-        addICUPatterns(returnInfo, uLocale);
+        if (!skipStdPatterns) { // skip to prevent circular dependency when used by Calendar
+            addICUPatterns(returnInfo, uLocale);
+        }
         addCLDRData(returnInfo, uLocale);
-        setDateTimeFromCalendar(uLocale);
+        if (!skipStdPatterns) { // also skip to prevent circular dependency from Calendar
+            setDateTimeFromCalendar(uLocale);
+        } else {
+            // instead, since from Calendar we do not care about dateTimePattern, use a fallback
+            setDateTimeFormat("{1} {0}");
+        }
         setDecimalSymbols(uLocale);
         getAllowedHourFormats(uLocale);
         fillInMissing();
@@ -1335,6 +1358,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Return the default hour cycle.
      * @draft ICU 67
+     * @provisional This API might change or be removed in a future release.
      */
     public DateFormat.HourCycle getDefaultHourCycle() {
       switch(getDefaultHourFormatChar()) {

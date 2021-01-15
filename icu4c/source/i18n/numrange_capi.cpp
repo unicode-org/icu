@@ -59,8 +59,8 @@ UFormattedNumberRangeImpl::~UFormattedNumberRangeImpl() {
     fImpl.fData = nullptr;
 }
 
-}
-}
+} // namespace impl
+} // namespace number
 U_NAMESPACE_END
 
 
@@ -69,6 +69,16 @@ UPRV_FORMATTED_VALUE_CAPI_NO_IMPLTYPE_AUTO_IMPL(
     UFormattedNumberRangeImpl,
     UFormattedNumberRangeApiHelper,
     unumrf)
+
+
+const UFormattedNumberRangeData* number::impl::validateUFormattedNumberRange(
+        const UFormattedNumberRange* uresult, UErrorCode& status) {
+    auto* result = UFormattedNumberRangeApiHelper::validate(uresult, status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    return &result->fData;
+}
 
 
 U_CAPI UNumberRangeFormatter* U_EXPORT2

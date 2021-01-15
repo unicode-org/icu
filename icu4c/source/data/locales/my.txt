@@ -204,7 +204,6 @@ my{
         }
         native{"mymr"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

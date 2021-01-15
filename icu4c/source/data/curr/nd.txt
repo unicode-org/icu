@@ -236,5 +236,4 @@ nd{
             "Dola yase Zimbabwe",
         }
     }
-    Version{"38"}
 }

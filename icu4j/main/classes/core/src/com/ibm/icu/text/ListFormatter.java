@@ -80,7 +80,7 @@ final public class ListFormatter {
         @Deprecated
         UNIT("unit"),
         /**
-         * Style for units in abbrevated form
+         * Style for units in abbreviated form
          * @internal
          * @deprecated This API is ICU internal only.
          */

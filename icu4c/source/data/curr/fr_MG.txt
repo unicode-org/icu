@@ -8,5 +8,4 @@ fr_MG{
             "ariary malgache",
         }
     }
-    Version{"38"}
 }

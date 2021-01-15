@@ -9,5 +9,4 @@ es_BZ{
             "dólar beliceño",
         }
     }
-    Version{"38"}
 }

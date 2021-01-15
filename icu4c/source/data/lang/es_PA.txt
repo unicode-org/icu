@@ -19,5 +19,4 @@ es_PA{
         wo{"wolof"}
         zgh{"tamazight marroquí estándar"}
     }
-    Version{"38"}
 }

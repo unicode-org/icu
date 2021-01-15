@@ -113,5 +113,4 @@ en_001{
             other{"Vanuatu vatu"}
         }
     }
-    Version{"38"}
 }

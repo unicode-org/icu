@@ -232,5 +232,4 @@ agq{
             "Dɔlà è Zìmbagbɛ̀",
         }
     }
-    Version{"38"}
 }

@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 so{
-    Version{"38"}
     units{
         acceleration{
             g-force{
@@ -98,6 +97,39 @@ so{
                 dnam{"yaardi jibaaran"}
                 one{"{0} yaardi jibaaran"}
                 other{"{0} yaardi jibaaran"}
+            }
+        }
+        compound{
+            1024p8{"dheer{0}"}
+            10p-1{"deci{0}"}
+            10p-2{"senti{0}"}
+            10p15{"peta{0}"}
+            10p18{"exa{0}"}
+            10p21{"zetta{0}"}
+            10p24{"yotta{0}"}
+            power2{
+                one{
+                    _{
+                        _{"laba-jibaar {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"laba-jibaar {0}"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"saddex-jibaar {0}"}
+                    }
+                }
+                other{
+                    _{
+                        _{"saddex-jibaar {0}"}
+                    }
+                }
             }
         }
         concentr{

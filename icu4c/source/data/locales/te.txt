@@ -241,7 +241,6 @@ te{
             }
         }
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

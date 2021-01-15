@@ -224,5 +224,4 @@ bas{
         ZM{"Zàmbià"}
         ZW{"Zìmbàbwê"}
     }
-    Version{"38"}
 }

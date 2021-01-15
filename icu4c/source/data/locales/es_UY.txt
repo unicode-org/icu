@@ -15,7 +15,6 @@ es_UY{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             monthNames{

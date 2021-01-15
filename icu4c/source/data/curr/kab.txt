@@ -232,5 +232,4 @@ kab{
             "Adular Azimbabwi",
         }
     }
-    Version{"38"}
 }

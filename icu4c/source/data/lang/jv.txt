@@ -382,7 +382,6 @@ jv{
             tibt{"Digit Tibet"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — kabeh"}
         compatibility{"{0} — kompatibilitas"}

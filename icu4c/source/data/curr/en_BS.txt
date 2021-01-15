@@ -9,5 +9,4 @@ en_BS{
             "Bahamian Dollar",
         }
     }
-    Version{"38"}
 }

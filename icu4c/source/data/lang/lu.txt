@@ -47,5 +47,4 @@ lu{
         zh{"shinɛ"}
         zu{"Nzulu"}
     }
-    Version{"38"}
 }

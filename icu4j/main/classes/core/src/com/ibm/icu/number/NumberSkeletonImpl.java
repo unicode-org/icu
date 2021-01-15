@@ -33,10 +33,12 @@ import com.ibm.icu.util.StringTrieBuilder;
  */
 class NumberSkeletonImpl {
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // NOTE: For an example of how to add a new stem to the number skeleton parser, see: //
-    // http://bugs.icu-project.org/trac/changeset/41193                                  //
-    ///////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // NOTE: For examples of how to add a new stem to the number skeleton parser, see:      //
+    // https://github.com/unicode-org/icu/commit/a2a7982216b2348070dc71093775ac7195793d73   //
+    // and                                                                                  //
+    // https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28   //
+    //////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * While parsing a skeleton, this enum records what type of option we expect to find next.
@@ -54,6 +56,7 @@ class NumberSkeletonImpl {
         STATE_MEASURE_UNIT,
         STATE_PER_MEASURE_UNIT,
         STATE_IDENTIFIER_UNIT,
+        STATE_UNIT_USAGE,
         STATE_CURRENCY_UNIT,
         STATE_INTEGER_WIDTH,
         STATE_NUMBERING_SYSTEM,
@@ -118,6 +121,7 @@ class NumberSkeletonImpl {
         STEM_MEASURE_UNIT,
         STEM_PER_MEASURE_UNIT,
         STEM_UNIT,
+        STEM_UNIT_USAGE,
         STEM_CURRENCY,
         STEM_INTEGER_WIDTH,
         STEM_NUMBERING_SYSTEM,
@@ -193,6 +197,7 @@ class NumberSkeletonImpl {
         b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
         b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
         b.add("unit", StemEnum.STEM_UNIT.ordinal());
+        b.add("usage", StemEnum.STEM_UNIT_USAGE.ordinal());
         b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
         b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
         b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
@@ -613,6 +618,8 @@ class NumberSkeletonImpl {
                 case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
+                case STATE_IDENTIFIER_UNIT:
+                case STATE_UNIT_USAGE:
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
@@ -653,7 +660,7 @@ class NumberSkeletonImpl {
             BlueprintHelpers.parseScientificStem(segment, macros);
             return ParseState.STATE_NULL;
         case '0':
-            checkNull(macros.notation, segment);
+            checkNull(macros.integerWidth, segment);
             BlueprintHelpers.parseIntegerStem(segment, macros);
             return ParseState.STATE_NULL;
         }
@@ -778,6 +785,11 @@ class NumberSkeletonImpl {
             return ParseState.STATE_MEASURE_UNIT;
 
         case STEM_PER_MEASURE_UNIT:
+            // In C++, STEM_CURRENCY's checks mark perUnit as "seen". Here we do
+            // the inverse: checking that macros.unit is not set to a currency.
+            if (macros.unit instanceof Currency) {
+                throw new SkeletonSyntaxException("Duplicated setting", segment);
+            }
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_PER_MEASURE_UNIT;
 
@@ -786,8 +798,13 @@ class NumberSkeletonImpl {
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_IDENTIFIER_UNIT;
 
+        case STEM_UNIT_USAGE:
+            checkNull(macros.usage, segment);
+            return ParseState.STATE_UNIT_USAGE;
+
         case STEM_CURRENCY:
             checkNull(macros.unit, segment);
+            checkNull(macros.perUnit, segment);
             return ParseState.STATE_CURRENCY_UNIT;
 
         case STEM_INTEGER_WIDTH:
@@ -829,6 +846,9 @@ class NumberSkeletonImpl {
             return ParseState.STATE_NULL;
         case STATE_IDENTIFIER_UNIT:
             BlueprintHelpers.parseIdentifierUnitOption(segment, macros);
+            return ParseState.STATE_NULL;
+        case STATE_UNIT_USAGE:
+            BlueprintHelpers.parseUnitUsageOption(segment, macros);
             return ParseState.STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);
@@ -891,7 +911,7 @@ class NumberSkeletonImpl {
         if (macros.unit != null && GeneratorHelpers.unit(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.perUnit != null && GeneratorHelpers.perUnit(macros, sb)) {
+        if (macros.usage != null && GeneratorHelpers.usage(macros, sb)) {
             sb.append(' ');
         }
         if (macros.precision != null && GeneratorHelpers.precision(macros, sb)) {
@@ -1010,6 +1030,7 @@ class NumberSkeletonImpl {
             sb.append(currency.getCurrencyCode());
         }
 
+        // "measure-unit/" is deprecated in favour of "unit/".
         private static void parseMeasureUnitOption(StringSegment segment, MacroProps macros) {
             // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
             // http://unicode.org/reports/tr35/#Validity_Data
@@ -1032,12 +1053,7 @@ class NumberSkeletonImpl {
             throw new SkeletonSyntaxException("Unknown measure unit", segment);
         }
 
-        private static void generateMeasureUnitOption(MeasureUnit unit, StringBuilder sb) {
-            sb.append(unit.getType());
-            sb.append("-");
-            sb.append(unit.getSubtype());
-        }
-
+        // "per-measure-unit/" is deprecated in favour of "unit/".
         private static void parseMeasurePerUnitOption(StringSegment segment, MacroProps macros) {
             // A little bit of a hack: save the current unit (numerator), call the main measure unit
             // parsing code, put back the numerator unit, and put the new unit into per-unit.
@@ -1047,15 +1063,22 @@ class NumberSkeletonImpl {
             macros.unit = numerator;
         }
 
+        /**
+         * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
+         * specified via a "unit/" concise skeleton.
+         */
         private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
-            MeasureUnit[] units = MeasureUnit.parseCoreUnitIdentifier(segment.asString());
-            if (units == null) {
-                throw new SkeletonSyntaxException("Invalid core unit identifier", segment);
+            try {
+                macros.unit = MeasureUnit.forIdentifier(segment.asString());
+            } catch (IllegalArgumentException e) {
+                throw new SkeletonSyntaxException("Invalid unit stem", segment);
             }
-            macros.unit = units[0];
-            if (units.length == 2) {
-                macros.perUnit = units[1];
-            }
+        }
+
+        private static void parseUnitUsageOption(StringSegment segment, MacroProps macros) {
+            macros.usage = segment.asString();
+            // We do not do any validation of the usage string: it depends on the
+            // unitPreferenceData in the units resources.
         }
 
         private static void parseFractionStem(StringSegment segment, MacroProps macros) {
@@ -1432,33 +1455,39 @@ class NumberSkeletonImpl {
         }
 
         private static boolean unit(MacroProps macros, StringBuilder sb) {
-            if (macros.unit instanceof Currency) {
+            MeasureUnit unit = macros.unit;
+            if (macros.perUnit != null) {
+                if (macros.unit instanceof Currency || macros.perUnit instanceof Currency) {
+                    throw new UnsupportedOperationException(
+                        "Cannot generate number skeleton with currency unit and per-unit");
+                }
+                unit = unit.product(macros.perUnit.reciprocal());
+            }
+            if (unit instanceof Currency) {
                 sb.append("currency/");
-                BlueprintHelpers.generateCurrencyOption((Currency) macros.unit, sb);
+                BlueprintHelpers.generateCurrencyOption((Currency)unit, sb);
                 return true;
-            } else if (macros.unit == MeasureUnit.PERCENT) {
+            } else if (unit.equals(MeasureUnit.PERCENT)) {
                 sb.append("percent");
                 return true;
-            } else if (macros.unit == MeasureUnit.PERMILLE) {
+            } else if (unit.equals(MeasureUnit.PERMILLE)) {
                 sb.append("permille");
                 return true;
             } else {
-                sb.append("measure-unit/");
-                BlueprintHelpers.generateMeasureUnitOption(macros.unit, sb);
+                sb.append("unit/");
+                sb.append(unit.getIdentifier());
                 return true;
             }
         }
 
-        private static boolean perUnit(MacroProps macros, StringBuilder sb) {
-            // Per-units are currently expected to be only MeasureUnits.
-            if (macros.perUnit instanceof Currency) {
-                throw new UnsupportedOperationException(
-                        "Cannot generate number skeleton with per-unit that is not a standard measure unit");
-            } else {
-                sb.append("per-measure-unit/");
-                BlueprintHelpers.generateMeasureUnitOption(macros.perUnit, sb);
+        private static boolean usage(MacroProps macros, StringBuilder sb) {
+            if (macros.usage != null  && macros.usage.length() > 0) {
+                sb.append("usage/");
+                sb.append(macros.usage);
+
                 return true;
             }
+            return false;
         }
 
         private static boolean precision(MacroProps macros, StringBuilder sb) {

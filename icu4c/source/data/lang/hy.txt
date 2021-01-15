@@ -628,7 +628,6 @@ hy{
         AREVELA{"արևելահայերեն"}
         AREVMDA{"արեւմտահայերէն"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — բոլորը"}
         category-list{"{0}․ {1}"}

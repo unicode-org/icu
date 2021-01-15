@@ -49,5 +49,4 @@ bez{
         zh{"Hichina"}
         zu{"Hizulu"}
     }
-    Version{"38"}
 }

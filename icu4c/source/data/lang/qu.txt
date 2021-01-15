@@ -403,5 +403,4 @@ qu{
             tibt{"Tibetano Sananpakuna"}
         }
     }
-    Version{"38"}
 }

@@ -3,7 +3,6 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 zh_Hant{
     %%Parent{"root"}
-    Version{"38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比讓"}
@@ -1628,7 +1627,7 @@ zh_Hant{
             ls{"印度洋時間"}
         }
         "meta:Indochina"{
-            ls{"印度中國時間"}
+            ls{"印度支那時間"}
         }
         "meta:Indonesia_Central"{
             ls{"印尼中部時間"}

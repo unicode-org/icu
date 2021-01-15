@@ -3,8 +3,21 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 es_US{
     %%Parent{"es_419"}
-    Version{"38"}
     units{
+        compound{
+            power3{
+                one{
+                    _{
+                        _{"{0} cúbico"}
+                    }
+                }
+                other{
+                    _{
+                        _{"cúbico{0}"}
+                    }
+                }
+            }
+        }
         concentr{
             milligram-per-deciliter{
                 dnam{"miligramos por decilitro"}

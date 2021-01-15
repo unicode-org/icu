@@ -62,7 +62,6 @@ es_PE{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

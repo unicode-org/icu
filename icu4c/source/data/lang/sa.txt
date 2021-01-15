@@ -69,7 +69,6 @@ sa{
             latn{"पाश्चात्य अङ्कः"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपि: {0}"}

@@ -24,7 +24,6 @@ kl{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             DateTimePatterns{

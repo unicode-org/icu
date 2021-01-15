@@ -9,5 +9,4 @@ en_PK{
             "Pakistani Rupee",
         }
     }
-    Version{"38"}
 }

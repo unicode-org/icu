@@ -109,5 +109,4 @@ rw{
         yi{"Inyeyidishi"}
         zu{"Inyezulu"}
     }
-    Version{"38"}
 }

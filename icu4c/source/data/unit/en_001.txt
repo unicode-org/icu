@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_001{
-    Version{"38"}
     units{
         acceleration{
             meter-per-square-second{
@@ -30,6 +29,9 @@ en_001{
                 other{"{0} square metres"}
                 per{"{0} per square metre"}
             }
+        }
+        compound{
+            10p1{"deca{0}"}
         }
         concentr{
             karat{

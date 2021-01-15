@@ -810,7 +810,6 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — visas"}
         category-list{"{0}: {1}"}

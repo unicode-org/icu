@@ -192,6 +192,12 @@ ant -f build-icu-data.xml -DcldrDataDir="$CLDR_TMP_DIR/production" | tee /tmp/cl
 cd $TOOLS_ROOT/cldr
 ant copy-cldr-testdata
 
+# 4d. Copy from CLDR common/testData/localeIdentifiers/localeCanonicalization.txt
+# into icu4c/source/test/testdata/localeCanonicalization.txt
+# and icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/localeCanonicalization.txt
+# and add the following line to the begginning of these two files
+# # File copied from cldr common/testData/localeIdentifiers/localeCanonicalization.txt
+
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the
 # list seems reasonable.

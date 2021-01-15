@@ -236,5 +236,4 @@ ses{
             "Zimbabwe Dollar",
         }
     }
-    Version{"38"}
 }

@@ -1354,5 +1354,4 @@ pt_PT{
             other{"kwachas zambianos"}
         }
     }
-    Version{"38"}
 }

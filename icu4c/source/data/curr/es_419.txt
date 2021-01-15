@@ -81,5 +81,4 @@ es_419{
             other{"(moneda desconocida)"}
         }
     }
-    Version{"38"}
 }

@@ -16,6 +16,9 @@ trigger:
     include:
     - '*'
     exclude:
+    - .github/*
+    - .ci-builds/.azure-pipelines.yml
+    - .ci-builds/.azure-valgrind.yml
     - docs/*
     - tools/*
     - vendor/*
@@ -27,11 +30,10 @@ trigger:
 
 jobs:
 #-------------------------------------------------------------------------
-# Note: The exhaustive tests for J take longer than the C tests. They 
-# take roughly 85 min to complete on the Azure VMs.
+# Note: The exhaustive tests can take more than 1 hour to complete.
 - job: ICU4J_OpenJDK_Ubuntu_1604
   displayName: 'J: Linux OpenJDK (Ubuntu 16.04)'
-  timeoutInMinutes: 100
+  timeoutInMinutes: 120
   pool:
     vmImage: 'Ubuntu 16.04'
     demands: ant
@@ -50,11 +52,10 @@ jobs:
       displayName: 'List failures (if any)'
       timeoutInMinutes: 2
 #-------------------------------------------------------------------------
-# Note: The exhaustive tests take roughly 65 mins to complete on the
-# Azure VMs.
+# Note: The exhaustive tests can take more than 1 hour to complete.
 - job: ICU4C_Clang_Exhaustive_Ubuntu_1604
   displayName: 'C: Linux Clang Exhaustive Tests (Ubuntu 16.04)'
-  timeoutInMinutes: 80
+  timeoutInMinutes: 120
   pool:
     vmImage: 'Ubuntu 16.04'
   steps:

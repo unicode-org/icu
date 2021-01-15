@@ -60,5 +60,4 @@ vi{
             "5: th\u1EE9 =%spellout-cardinal=;",
         }
     }
-    Version{"38"}
 }

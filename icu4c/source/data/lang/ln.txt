@@ -49,5 +49,4 @@ ln{
         zh{"lisinwa"}
         zu{"zulu"}
     }
-    Version{"38"}
 }

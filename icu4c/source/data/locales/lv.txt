@@ -252,7 +252,6 @@ lv{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"38"}
     calendar{
         buddhist{
             eras{

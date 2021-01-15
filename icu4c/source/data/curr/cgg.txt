@@ -232,5 +232,4 @@ cgg{
             "Doora ya Zimbabwe",
         }
     }
-    Version{"38"}
 }

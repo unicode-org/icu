@@ -9,5 +9,4 @@ en_SG{
             "Singapore Dollar",
         }
     }
-    Version{"38"}
 }

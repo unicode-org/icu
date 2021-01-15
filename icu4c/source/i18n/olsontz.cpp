@@ -812,7 +812,7 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
         if (finalZone->useDaylightTime()) {
             /*
              * Note: When an OlsonTimeZone is constructed, we should set the final year
-             * as the start year of finalZone.  However, the bounday condition used for
+             * as the start year of finalZone.  However, the boundary condition used for
              * getting offset from finalZone has some problems.
              * For now, we do not set the valid start year when the construction time
              * and create a clone and set the start year when extracting rules.

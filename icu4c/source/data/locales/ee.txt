@@ -201,7 +201,6 @@ ee{
         }
         minimumGroupingDigits{"3"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

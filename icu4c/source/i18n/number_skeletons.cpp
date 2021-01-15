@@ -10,6 +10,7 @@
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include "number_decnum.h"
+#include "number_roundingutils.h"
 #include "number_skeletons.h"
 #include "umutex.h"
 #include "ucln_in.h"
@@ -731,6 +732,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
 
         case STEM_CURRENCY:
             CHECK_NULL(seen, unit, status);
+            CHECK_NULL(seen, perUnit, status);
             return STATE_CURRENCY_UNIT;
 
         case STEM_INTEGER_WIDTH:
@@ -839,10 +841,6 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
     }
     if (U_FAILURE(status)) { return; }
     if (GeneratorHelpers::unit(macros, sb, status)) {
-        sb.append(u' ');
-    }
-    if (U_FAILURE(status)) { return; }
-    if (GeneratorHelpers::perUnit(macros, sb, status)) {
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
@@ -1024,14 +1022,6 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     status = U_NUMBER_SKELETON_SYNTAX_ERROR;
 }
 
-void blueprint_helpers::generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb,
-                                                  UErrorCode&) {
-    // Need to do char <-> UChar conversion...
-    sb.append(UnicodeString(measureUnit.getType(), -1, US_INV));
-    sb.append(u'-');
-    sb.append(UnicodeString(measureUnit.getSubtype(), -1, US_INV));
-}
-
 void blueprint_helpers::parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros,
                                                   UErrorCode& status) {
     // A little bit of a hack: save the current unit (numerator), call the main measure unit
@@ -1051,30 +1041,11 @@ void blueprint_helpers::parseIdentifierUnitOption(const StringSegment& segment, 
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     ErrorCode internalStatus;
-    auto fullUnit = MeasureUnitImpl::forIdentifier(buffer.toStringPiece(), internalStatus);
+    macros.unit = MeasureUnit::forIdentifier(buffer.toStringPiece(), internalStatus);
     if (internalStatus.isFailure()) {
         // throw new SkeletonSyntaxException("Invalid core unit identifier", segment, e);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
-    }
-
-    // Mixed units can only be represented by a full MeasureUnit instances, so
-    // we ignore macros.perUnit.
-    if (fullUnit.complexity == UMEASURE_UNIT_MIXED) {
-        macros.unit = std::move(fullUnit).build(status);
-        return;
-    }
-
-    // TODO(ICU-20941): Clean this up (see also
-    // https://github.com/icu-units/icu/issues/35).
-    for (int32_t i = 0; i < fullUnit.units.length(); i++) {
-        SingleUnitImpl* subUnit = fullUnit.units[i];
-        if (subUnit->dimensionality > 0) {
-            macros.unit = macros.unit.product(subUnit->build(status), status);
-        } else {
-            subUnit->dimensionality *= -1;
-            macros.perUnit = macros.perUnit.product(subUnit->build(status), status);
-        }
     }
 }
 
@@ -1333,8 +1304,10 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     return true;
 }
 
-// blueprint_helpers::parseIncrementOption lives in number_rounding.cpp for
-// dependencies reasons.
+void blueprint_helpers::parseIncrementOption(const StringSegment &segment, MacroProps &macros,
+                                             UErrorCode &status) {
+    number::impl::parseIncrementOption(segment, macros.precision, status);
+}
 
 void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
                                                 UErrorCode&) {
@@ -1503,45 +1476,35 @@ bool GeneratorHelpers::notation(const MacroProps& macros, UnicodeString& sb, UEr
 }
 
 bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    if (utils::unitIsCurrency(macros.unit)) {
+    MeasureUnit unit = macros.unit;
+    if (!utils::unitIsBaseUnit(macros.perUnit)) {
+        if (utils::unitIsCurrency(macros.unit) || utils::unitIsCurrency(macros.perUnit)) {
+            status = U_UNSUPPORTED_ERROR;
+            return false;
+        }
+        unit = unit.product(macros.perUnit.reciprocal(status), status);
+    }
+
+    if (utils::unitIsCurrency(unit)) {
         sb.append(u"currency/", -1);
-        CurrencyUnit currency(macros.unit, status);
+        CurrencyUnit currency(unit, status);
         if (U_FAILURE(status)) {
             return false;
         }
         blueprint_helpers::generateCurrencyOption(currency, sb, status);
         return true;
-    } else if (utils::unitIsBaseUnit(macros.unit)) {
+    } else if (utils::unitIsBaseUnit(unit)) {
         // Default value is not shown in normalized form
         return false;
-    } else if (utils::unitIsPercent(macros.unit)) {
+    } else if (utils::unitIsPercent(unit)) {
         sb.append(u"percent", -1);
         return true;
-    } else if (utils::unitIsPermille(macros.unit)) {
+    } else if (utils::unitIsPermille(unit)) {
         sb.append(u"permille", -1);
         return true;
-    } else if (uprv_strcmp(macros.unit.getType(), "") != 0) {
-        sb.append(u"measure-unit/", -1);
-        blueprint_helpers::generateMeasureUnitOption(macros.unit, sb, status);
-        return true;
     } else {
-        // TODO(icu-units#35): add support for not-built-in units.
-        status = U_UNSUPPORTED_ERROR;
-        return false;
-    }
-}
-
-bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    // Per-units are currently expected to be only MeasureUnits.
-    if (utils::unitIsBaseUnit(macros.perUnit)) {
-        // Default value: ok to ignore
-        return false;
-    } else if (utils::unitIsCurrency(macros.perUnit)) {
-        status = U_UNSUPPORTED_ERROR;
-        return false;
-    } else {
-        sb.append(u"per-measure-unit/", -1);
-        blueprint_helpers::generateMeasureUnitOption(macros.perUnit, sb, status);
+        sb.append(u"unit/", -1);
+        sb.append(unit.getIdentifier());
         return true;
     }
 }

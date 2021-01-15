@@ -9,5 +9,4 @@ pt_MO{
             "pataca macaense",
         }
     }
-    Version{"38"}
 }

@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ca{
-    Version{"38"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -106,7 +105,59 @@ ca{
             }
         }
         compound{
+            1024p1{"kibi{0}"}
+            1024p2{"mebi{0}"}
+            1024p3{"gibi{0}"}
+            1024p4{"tebi{0}"}
+            1024p5{"pebi{0}"}
+            1024p6{"exbi{0}"}
+            1024p7{"zebi{0}"}
+            1024p8{"yobe{0}"}
+            10p-1{"decí{0}"}
+            10p-12{"picò{0}"}
+            10p-15{"femtò{0}"}
+            10p-18{"attò{0}"}
+            10p-2{"centí{0}"}
+            10p-21{"zeptò{0}"}
+            10p-24{"yoctò{0}"}
+            10p-3{"mil·lí{0}"}
+            10p-6{"micrò{0}"}
+            10p-9{"nanò{0}"}
+            10p1{"decà{0}"}
+            10p12{"terà{0}"}
+            10p15{"petà{0}"}
+            10p18{"exà{0}"}
+            10p2{"hectò{0}"}
+            10p21{"zetà{0}"}
+            10p24{"yotà{0}"}
+            10p3{"quilò{0}"}
+            10p6{"megà{0}"}
+            10p9{"gigà{0}"}
             per{"{0} per {1}"}
+            power2{
+                one{
+                    _{
+                        _{"{0} quadrat"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} quadrats"}
+                    }
+                }
+            }
+            power3{
+                one{
+                    _{
+                        _{"{0} cúbic"}
+                    }
+                }
+                other{
+                    _{
+                        _{"{0} cúbics"}
+                    }
+                }
+            }
         }
         concentr{
             karat{
@@ -1025,6 +1076,12 @@ ca{
             }
         }
         compound{
+            1024p1{"Ki{0}"}
+            1024p2{"Mi{0}"}
+            1024p3{"Gi{0}"}
+            1024p4{"Ti{0}"}
+            1024p5{"Pi{0}"}
+            1024p8{"Yi{0}"}
             per{"{0}/{1}"}
         }
         concentr{
@@ -1344,6 +1401,12 @@ ca{
             }
         }
         compound{
+            1024p1{"Ki{0}"}
+            1024p2{"Mi{0}"}
+            1024p3{"Gi{0}"}
+            1024p4{"Ti{0}"}
+            1024p5{"Pi{0}"}
+            1024p8{"Yi{0}"}
             per{"{0}/{1}"}
             times{"{0}⋅{1}"}
         }

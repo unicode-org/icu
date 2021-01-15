@@ -37,7 +37,6 @@ ks{
         }
         native{"arabext"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

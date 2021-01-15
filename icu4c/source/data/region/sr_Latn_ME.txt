@@ -15,5 +15,4 @@ sr_Latn_ME{
         VG{"Britanska Djevičanska Ostrva"}
         VI{"Američka Djevičanska Ostrva"}
     }
-    Version{"38"}
 }

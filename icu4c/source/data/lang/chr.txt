@@ -550,7 +550,6 @@ chr{
             tibt{"ᏘᏇᏔᏂ ᏗᏎᏍᏗ"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — ᏂᎦᏓ"}
         category-list{"{0}: {1}"}

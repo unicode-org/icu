@@ -35,7 +35,6 @@ ceb{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

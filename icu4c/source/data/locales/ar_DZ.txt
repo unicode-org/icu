@@ -12,7 +12,6 @@ ar_DZ{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             monthNames{

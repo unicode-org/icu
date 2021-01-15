@@ -910,7 +910,6 @@ ml{
         POSIX{"കമ്പ്യൂട്ടർ"}
         REVISED{"പരിഷ്ക്കരിച്ച ലിപി"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — എല്ലാം"}
         category-list{"{0}: {1}"}

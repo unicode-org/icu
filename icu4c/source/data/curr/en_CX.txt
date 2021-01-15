@@ -9,5 +9,4 @@ en_CX{
             "Australian Dollar",
         }
     }
-    Version{"38"}
 }

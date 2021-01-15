@@ -921,7 +921,6 @@ zu{
         WADEGILE{"i-Wade-Giles Romanization"}
         XSISTEMO{"i-XSISTEMO"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — All"}
         category-list{"{0}: {1}"}

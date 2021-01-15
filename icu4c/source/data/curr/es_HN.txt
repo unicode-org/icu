@@ -9,5 +9,4 @@ es_HN{
             "lempira hondureño",
         }
     }
-    Version{"38"}
 }

@@ -5,5 +5,4 @@ ro_MD{
     Countries{
         MM{"Myanmar"}
     }
-    Version{"38"}
 }

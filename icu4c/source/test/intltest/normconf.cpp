@@ -365,6 +365,10 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
             pass = FALSE;
         }
     }
+    if(options==0 && !isNormalizedUTF8(*nfd, field[2], status)) {
+        dataerrln("Normalizer error: nfd.isNormalizedUTF8(NFD(s)) is FALSE");
+        pass = FALSE;
+    }
     if(!Normalizer::isNormalized(field[3], UNORM_NFKC, options, status)) {
         dataerrln("Normalizer error: isNormalized(NFKC(s), UNORM_NFKC) is FALSE");
         pass = FALSE;
@@ -383,6 +387,10 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
                 pass = FALSE;
             }
         }
+    }
+    if(options==0 && !isNormalizedUTF8(*nfkd, field[4], status)) {
+        dataerrln("Normalizer error: nfkd.isNormalizedUTF8(NFKD(s)) is FALSE");
+        pass = FALSE;
     }
 
     // test FCD quick check and "makeFCD"
@@ -481,7 +489,7 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
     exp.toUTF8String(exp8);
     std::string out8;
     Edits edits;
-    Edits *editsPtr = (mode == UNORM_NFC || mode == UNORM_NFKC) ? &edits : nullptr;
+    Edits *editsPtr = mode != UNORM_FCD ? &edits : nullptr;
     StringByteSink<std::string> sink(&out8, static_cast<int32_t>(exp8.length()));
     norm2->normalizeUTF8(0, s8, sink, editsPtr, errorCode);
     if (U_FAILURE(errorCode)) {

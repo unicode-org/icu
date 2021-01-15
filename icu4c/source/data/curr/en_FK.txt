@@ -13,5 +13,4 @@ en_FK{
             "British Pound",
         }
     }
-    Version{"38"}
 }

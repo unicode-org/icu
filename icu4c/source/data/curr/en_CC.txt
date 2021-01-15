@@ -9,5 +9,4 @@ en_CC{
             "Australian Dollar",
         }
     }
-    Version{"38"}
 }

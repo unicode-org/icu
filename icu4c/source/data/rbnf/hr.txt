@@ -203,5 +203,4 @@ hr{
             "0: =%%spellout-ordinal-base=a;",
         }
     }
-    Version{"38"}
 }

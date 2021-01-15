@@ -8,5 +8,4 @@ nl_AW{
             "Arubaanse gulden",
         }
     }
-    Version{"38"}
 }

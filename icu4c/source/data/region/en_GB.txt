@@ -12,5 +12,4 @@ en_GB{
         SH{"St Helena"}
         VC{"St Vincent & the Grenadines"}
     }
-    Version{"38"}
 }

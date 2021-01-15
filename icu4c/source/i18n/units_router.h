@@ -21,6 +21,9 @@ U_NAMESPACE_BEGIN
 
 // Forward declarations
 class Measure;
+namespace number {
+class Precision;
+}
 
 namespace units {
 
@@ -31,19 +34,13 @@ struct RouteResult : UMemory {
     // TODO(icu-units/icu#21): figure out the right mixed unit API.
     MaybeStackVector<Measure> measures;
 
-    // A skeleton string starting with a precision-increment.
-    //
-    // TODO(hugovdm): generalise? or narrow down to only a precision-increment?
-    // or document that other skeleton elements are ignored?
-    UnicodeString precision;
-
     // The output unit for this RouteResult. This may be a MIXED unit - for
     // example: "yard-and-foot-and-inch", for which `measures` will have three
     // elements.
     MeasureUnitImpl outputUnit;
 
-    RouteResult(MaybeStackVector<Measure> measures, UnicodeString precision, MeasureUnitImpl outputUnit)
-        : measures(std::move(measures)), precision(std::move(precision)), outputUnit(std::move(outputUnit)) {}
+    RouteResult(MaybeStackVector<Measure> measures, MeasureUnitImpl outputUnit)
+        : measures(std::move(measures)), outputUnit(std::move(outputUnit)) {}
 };
 
 /**
@@ -125,7 +122,16 @@ class U_I18N_API UnitsRouter {
   public:
     UnitsRouter(MeasureUnit inputUnit, StringPiece locale, StringPiece usage, UErrorCode &status);
 
-    RouteResult route(double quantity, UErrorCode &status) const;
+    /**
+     * Performs locale and usage sensitive unit conversion.
+     * @param quantity The quantity to convert, expressed in terms of inputUnit.
+     * @param rounder If not null, this RoundingImpl will be used to do rounding
+     *     on the converted value. If the rounder lacks an fPrecision, the
+     *     rounder will be modified to use the preferred precision for the usage
+     *     and locale preference, alternatively with the default precision.
+     * @param status Receives status.
+     */
+    RouteResult route(double quantity, icu::number::impl::RoundingImpl *rounder, UErrorCode &status) const;
 
     /**
      * Returns the list of possible output units, i.e. the full set of
@@ -143,6 +149,9 @@ class U_I18N_API UnitsRouter {
     MaybeStackVector<MeasureUnit> outputUnits_;
 
     MaybeStackVector<ConverterPreference> converterPreferences_;
+
+    static number::Precision parseSkeletonToPrecision(icu::UnicodeString precisionSkeleton,
+                                                      UErrorCode &status);
 };
 
 } // namespace units

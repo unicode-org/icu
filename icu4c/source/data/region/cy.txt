@@ -315,5 +315,4 @@ cy{
         SZ{"Gwlad Swazi"}
         TL{"Dwyrain Timor"}
     }
-    Version{"38"}
 }

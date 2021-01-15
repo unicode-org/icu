@@ -58,7 +58,7 @@ $iotasub → ;
 ψ ↔ ps ;
 ω ↔ o $under ;
 Ω ↔  O $under;
-# at begining or end of word, convert mp to b
+# at beginning or end of word, convert mp to b
 [^[:L:]$accent] { μπ → b ;
 μπ } [^[:L:]$accent] → b ;
 [^[:L:]$accent] { [Μμ][Ππ] → B ;

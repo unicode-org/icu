@@ -17,5 +17,4 @@ en_IN{
             orya{"Oriya Digits"}
         }
     }
-    Version{"38"}
 }

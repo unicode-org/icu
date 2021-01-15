@@ -1737,8 +1737,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             // en_NH is interesting because NH is a depregated region code.
             {"en_NH", "h a", "h:mm a", "HOUR_CYCLE_12"},
             // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.
-            // {"cn_ZH", "HH", "H:mm"}, // TODO(ICU-20653): Desired behavior
-            {"cn_ZH", "HH", "h:mm a", "HOUR_CYCLE_23"}, // Actual behavior
+            {"cn_ZH", "HH", "HH:mm", "HOUR_CYCLE_23"}, // Desired & now actual behavior (does this fix ICU-20653?)
             // a non-BCP47 locale without a country code should not fail
             {"ja_TRADITIONAL", "H時", "H:mm", "HOUR_CYCLE_23"},
         };
@@ -1757,6 +1756,41 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 cas[2], timePattern);
             assertEquals("default hour cycle " + cas[3],
                 cas[3], dtpg.getDefaultHourCycle().toString());
+        }
+    }
+
+    @Test
+    public void test_jConsistencyOddLocales() { // ICU-20590
+        String[] localeIDs = {
+            "en", "ro", // known languages 12h / 24h
+            "en-RO", "ro-US",  // known languages with known regions, hour conflict language vs region
+            "en-XZ", "ro-XZ", // known languages 12h / 24h, unknown region
+            "xz-RO", "xz-US",  // unknown language with known regions
+            "xz", // unknown language
+            "xz-ZX",  // unknown language with unknown country
+            "ars", "wuu" // aliased locales
+        };
+        final String skeleton = "jm";
+        for (String localeID : localeIDs) {
+            ULocale locale = new ULocale(localeID);
+
+            DateFormat dtfShort = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+            String dtfShortPattern = ((SimpleDateFormat)dtfShort).toPattern();
+
+            DateFormat dtfSkel = DateFormat.getInstanceForSkeleton(skeleton, locale);
+            String dtfSkelPattern = ((SimpleDateFormat)dtfSkel).toPattern();
+
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
+            String dtpgPattern = dtpg.getBestPattern(skeleton);
+
+            if (!dtfShortPattern.equals(dtfSkelPattern) || !dtfSkelPattern.equals(dtpgPattern)) {
+                String dtfShortValidLoc = dtfShort.getLocale(ULocale.VALID_LOCALE).getName();
+                String dtfShortActualLoc = dtfShort.getLocale(ULocale.ACTUAL_LOCALE).getName();
+                errln("For locale " + localeID +
+                        " expected same pattern from DateTimePatGen: " + dtpgPattern +
+                        ", DateFmt-forSkel: " + dtfSkelPattern + ", DateFmt-short: "  + dtfShortPattern +
+                        "; latter has validLoc " + dtfShortValidLoc + ", actualLoc " + dtfShortActualLoc);
+            }
         }
     }
 }

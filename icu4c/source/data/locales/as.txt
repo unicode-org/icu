@@ -240,7 +240,6 @@ as{
         }
         native{"beng"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

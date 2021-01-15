@@ -202,5 +202,4 @@ lb{
             "1: ' =%spellout-ordinal-neuter=;",
         }
     }
-    Version{"38"}
 }

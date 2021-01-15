@@ -8,5 +8,4 @@ ff_Latn_MR{
             "Ugiyya Muritani",
         }
     }
-    Version{"38"}
 }

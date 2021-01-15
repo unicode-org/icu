@@ -16,7 +16,6 @@ en_DK{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             availableFormats{

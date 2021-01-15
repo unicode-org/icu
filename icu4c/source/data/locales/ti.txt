@@ -206,7 +206,6 @@ ti{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

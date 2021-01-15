@@ -38,9 +38,6 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     /**
      * Construct a localized LongNameHandler for the specified MeasureUnit.
      *
-     * Compound units can be constructed via `unit` and `perUnit`. Both of these
-     * must then be built-in units.
-     *
      * Mixed units are not supported, use MixedUnitLongNameHandler::forMeasureUnit.
      *
      * This function uses a fillIn intead of returning a pointer, because we
@@ -48,15 +45,13 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
      * didn't create itself).
      *
      * @param loc The desired locale.
-     * @param unit The measure unit to construct a LongNameHandler for. If
-     *     `perUnit` is also defined, `unit` must not be a mixed unit.
-     * @param perUnit If `unit` is a mixed unit, `perUnit` must be "none".
+     * @param unitRef The measure unit to construct a LongNameHandler for.
      * @param width Specifies the desired unit rendering.
      * @param rules Does not take ownership.
      * @param parent Does not take ownership.
      * @param fillIn Required.
      */
-    static void forMeasureUnit(const Locale &loc, const MeasureUnit &unit, const MeasureUnit &perUnit,
+    static void forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
                                const UNumberUnitWidth &width, const PluralRules *rules,
                                const MicroPropsGenerator *parent, LongNameHandler *fillIn,
                                UErrorCode &status);
@@ -159,14 +154,13 @@ class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStor
     // Not owned
     const MicroPropsGenerator *parent;
 
-    // Total number of units in the MeasureUnit this LongNameHandler was
-    // configured for: for "foot-and-inch", this will be 2. (If not a mixed unit,
-    // this will be 1.)
+    // Total number of units in the MeasureUnit this handler was configured for:
+    // for "foot-and-inch", this will be 2.
     int32_t fMixedUnitCount = 1;
-    // If this LongNameHandler is for a mixed unit, this stores unit data for
-    // each of the individual units. For each unit, it stores ARRAY_LENGTH
-    // strings, as returned by getMeasureData. (Each unit with index `i` has
-    // ARRAY_LENGTH strings starting at index `i*ARRAY_LENGTH` in this array.)
+    // Stores unit data for each of the individual units. For each unit, it
+    // stores ARRAY_LENGTH strings, as returned by getMeasureData. (Each unit
+    // with index `i` has ARRAY_LENGTH strings starting at index
+    // `i*ARRAY_LENGTH` in this array.)
     LocalArray<UnicodeString> fMixedUnitData;
     // A localized NumberFormatter used to format the integer-valued bigger
     // units of Mixed Unit measurements.

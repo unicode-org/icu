@@ -9,7 +9,6 @@ sv_FI{
             }
         }
     }
-    Version{"38"}
     calendar{
         gregorian{
             availableFormats{

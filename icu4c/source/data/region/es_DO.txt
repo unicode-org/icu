@@ -11,5 +11,4 @@ es_DO{
     Countries%short{
         GB{"RU"}
     }
-    Version{"38"}
 }

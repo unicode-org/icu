@@ -6,5 +6,4 @@ pt_AO{
     NumberElements{
         minimumGroupingDigits{"1"}
     }
-    Version{"38"}
 }

@@ -175,9 +175,9 @@ generate data for a calendar when parsing.
 The Date Field Symbol Table below contains the characters used in patterns to
 show the appropriate formats for a given locale, such as `yyyy` for the year.
 Characters may be used multiple times. For example, if `y` is used for the year,
-`'yy'` might produce '99', whereas `'yyyy'` produces '1999'. For most numerical
+`"yy"` might produce "99", whereas `"yyyy"` produces "1999". For most numerical
 fields, the number of characters specifies the field width. For example, if `h` is
-the hour, `'h'` might produce '5', but `'hh'` produces '05'. For some characters,
+the hour, `"h"` might produce "5", but `"hh"` produces "05". For some characters,
 the count specifies whether an abbreviated or full form should be used, but may
 have other choices, as given below.
 
@@ -186,14 +186,14 @@ single quotes. Text within single quotes is not interpreted in any way (except
 for two adjacent single quotes). Otherwise all ASCII letter from **a** to **z** and **A** to
 **Z** are reserved as syntax characters, and require quoting if they are to
 represent literal characters. In addition, certain ASCII punctuation characters
-may become variable in the future (eg `":"` being interpreted as the time
+may become variable in the future (eg `':'` being interpreted as the time
 separator and `'/'` as a date separator, and replaced by respective
 locale-sensitive characters in display).
 
 "Stand-alone" values refer to those designed to stand on their own independently, as opposed
 to being with other formatted values. "2nd quarter" would use the wide stand-alone
-format `(qqqq)`, whereas "2nd quarter 2007" would use the regular format `(QQQQ
-yyyy)`. For more information about format and stand-alone forms, see [CLDR Calendar Elements](https://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras).
+format `"qqqq"`, whereas "2nd quarter 2007" would use the regular format `"QQQQ
+yyyy"`. For more information about format and stand-alone forms, see [CLDR Calendar Elements](https://www.unicode.org/reports/tr35/tr35-dates.html#months_days_quarters_eras).
 
 The pattern characters used in the Date Field Symbol Table are defined by CLDR; for more information see [CLDR Date Field Symbol Table](https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
 
@@ -204,7 +204,7 @@ Note that the examples may not reflect current CLDR data.
 | Symbol | Meaning | Pattern | Example Output |
 | --- | --- | --- | --- |
 | `G` | era designator | `G`, `GG`, or `GGG`<br/>`GGGG`<br/>`GGGGG` | AD<br/>Anno Domini<br/>A |
-| `y` | year | yy<br/>`y` or `yyyy` | 96<br/>1996 |
+| `y` | year | `yy`<br/>`y` or `yyyy` | 96<br/>1996 |
 | `Y` | year of "Week of Year" | `Y` | 1997 |
 | `u` | extended year | `u` | 4601 |
 | `U` | cyclic year name, as in Chinese lunar calendar | `U` | 甲子 |
@@ -253,12 +253,12 @@ result during formatting or parsing.*
 
 | Format Pattern | Result |
 | --- | --- |
-| yyyy.MM.dd G 'at' HH:mm:ss zzz | 1996.07.10 AD at 15:08:56 PDT |
-| EEE, MMM d, ''yy | Wed, July 10, '96 |
-| h:mm a | 12:08 PM |
-| hh 'o''clock' a, zzzz | 12 o'clock PM, Pacific Daylight Time |
-| K:mm a, z | 0:00 PM, PST |
-| yyyyy.MMMM.dd GGG hh:mm aaa | 01996.July.10 AD 12:08 PM |
+| `"yyyy.MM.dd G 'at' HH:mm:ss zzz"` | "1996.07.10 AD at 15:08:56 PDT" |
+| `"EEE, MMM d, ''yy"` | "Wed, July 10, '96" |
+| `"h:mm a"` | "12:08 PM" |
+| `"hh 'o''clock' a, zzzz"` | "12 o'clock PM, Pacific Daylight Time" |
+| `"K:mm a, z"` | "0:00 PM, PST" |
+| `"yyyyy.MMMM.dd GGG hh:mm aaa"` | "01996.July.10 AD 12:08 PM" |
 
 ### Time Zone Display Names
 
@@ -283,7 +283,7 @@ zone ID was in 1-to-1 relationship always. Therefore, a time zone name produced
 by `DateFormat` can be parsed back to the original time zone. This assumption no
 longer applies to ICU 3.8 and later releases for all time zone format types. If
 you program requires to roundtrip specific time zone ID, you must use the
-generic location format `(“VVVV”)` explained below.*
+generic location format `VVVV` explained below.*
 
 There are several different display name types available in the LDML
 specification.
@@ -307,11 +307,11 @@ and its characteristics.
 
 | Pattern | Behavior | Round-trip time at daylight transitions(\*) | Round-trip Time Zone | Suggested Usage |
 | --- | --- | --- | --- | --- |
-| `z`, `zz`, `zzz` | Short specific non-location format (e.g. “PST”). If the localized data is not available or the short abbreviation is not commonly used for the locale, localized GMT format is used (e.g. GMT-08:00). | yes | no | For displaying a time with a user friendly time zone name. |
-| `zzzz` | Long specific non-location format (e.g. “Pacific Standard Time”). If the localized data is not available, localized GMT format is used (e.g. GMT-08:00). | yes | no | Same as `“z”`, but longer format. |
+| `z`, `zz`, `zzz` | Short specific non-location format (e.g. “PST”). If the localized data is not available or the short abbreviation is not commonly used for the locale, localized GMT format is used (e.g. "GMT-08:00"). | yes | no | For displaying a time with a user friendly time zone name. |
+| `zzzz` | Long specific non-location format (e.g. “Pacific Standard Time”). If the localized data is not available, localized GMT format is used (e.g. "GMT-08:00"). | yes | no | Same as `z`, but longer format. |
 | `v` | Short generic non-location format (e.g. “PT”). If the localized data is not available or the short abbreviation is not commonly used for the locale, generic location format (e.g. “United States(Los Angeles) Time”) is used. If the localized data comes from metazone and the GMT offset at the given time in the specified time zone differs from the preferred time zone of the metazone for the locale, generic partial location format (e.g. “PT (Canada)”) is used. | no | no | For displaying a recurring wall time (e.g. events, meetings) or anywhere people do not want to be overly specific. |
-| `vvvv` | Long generic non-location format (e.g. “Pacific Time”). If the localized data is not available, generic location format (e.g. “United States(Los Angeles) Time”) is used. | no | no | Same as `“v”`, but longer format. |
-| `V` | Same as `“z”`, except using the short abbreviation even it is not commonly used for the locale. | yes | no | Same as `“z”`. |
+| `vvvv` | Long generic non-location format (e.g. “Pacific Time”). If the localized data is not available, generic location format (e.g. “United States(Los Angeles) Time”) is used. | no | no | Same as `v`, but longer format. |
+| `V` | Same as `z`, except using the short abbreviation even it is not commonly used for the locale. | yes | no | Same as `z`. |
 | `VVVV` | Generic location format (e.g. “United States (Los Angeles) Time”). | no | yes | For populating a choice list for time zones, because it supports 1-to-1 name/zone ID mapping and is more uniform than other text formats. Also, this is only the pattern supporting time zone round-trip. If your program requires to preserve the original time zone information, use this pattern. |
 | `Z`, `ZZ`, `ZZZ` | Localized GMT format (e.g. “GMT-08:00”). | yes | no | For displaying a time in UI in a uniformed manner. |
 | `ZZZZ` | RFC822 GMT format (e.g. “-0800”). | yes | no | For formatting a time for non-user-facing data. |
@@ -327,18 +327,18 @@ pattern. The request is in the form of a “skeleton” which just contains patt
 letters for the desired fields using the representation for the desired width.
 In a skeleton, anything other than a pattern letter is ignored, field order is
 insignificant, and there are two special additional pattern letters that may be
-used: `'j'` requests the preferred hour-cycle type for the locale (it gets mapped
-to one of `'H'`, `'h'`, `'k'`, or `'K'`); `'J'` is similar but requests no AM/PM marker
-even if the locale’s preferred hour-cycle type is `'h'` or `'K'`.
+used: `j` requests the preferred hour-cycle type for the locale (it gets mapped
+to one of `H`, `h`, `k`, or `K`); `J` is similar but requests no AM/PM marker
+even if the locale’s preferred hour-cycle type is `h` or `K`.
 
 For example, a skeleton of `“MMMMdjmm”` might result in the following format
 patterns for different locales:
 
-| locale | format pattern for skeleton `“MMMMdjmm”` | example            |
-| ------ | -------------------------------------- | ------------------ |
-| en_US  | "MMMM d  'at'  h:mm a"                 | April 2 at 5:00 PM |
-| es_ES  | "d 'de' MMMM, H:mm"                    | 2 de abril, 17:00  |
-| ja_JP  | "M月d日 H:mm"                            | 4月2日 17:00         |
+| locale | format pattern for skeleton `“MMMMdjmm”` | example              |
+| ------ | ---------------------------------------- | -------------------- |
+| en_US  | `"MMMM d  'at'  h:mm a"`                 | "April 2 at 5:00 PM" |
+| es_ES  | `"d 'de' MMMM, H:mm"`                    | "2 de abril, 17:00"  |
+| ja_JP  | `"M月d日 H:mm"`                            | "4月2日 17:00"         |
 
 The most important DateTimePatternGenerator methods are the varieties of
 getBestPattern.
@@ -347,11 +347,11 @@ Note that the fields in the format pattern may be adjusted as appropriate for
 the locale and may not exactly match those in the skeleton. For example:
 
 *   In Russian (locale "ru"), the skeleton `"yMMMM"` will produce the format
-    pattern `"LLLL y"` (or "LLLL y 'г'.") since a month name without a day number
+    pattern `"LLLL y"` (or `"LLLL y 'г'."`) since a month name without a day number
     must be in nominative form, as indicated by `LLLL`.
 *   When using the Japanese calendar in the Japanese locale (locale
     "ja@calendar=japanese"), the skeleton `"yMMMd"` will produce the format
-    pattern "Gy年M月d日" since the era must always be shown with the year in the
+    pattern `"Gy年M月d日"` since the era must always be shown with the year in the
     Japanese calendar.
 
 ## `DateFormatSymbols`

@@ -8,5 +8,4 @@ fr_MU{
             "roupie mauricienne",
         }
     }
-    Version{"38"}
 }

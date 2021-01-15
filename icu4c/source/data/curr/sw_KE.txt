@@ -554,5 +554,4 @@ sw_KE{
             other{"riali za Yemeni"}
         }
     }
-    Version{"38"}
 }

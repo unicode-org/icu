@@ -20,6 +20,10 @@ package com.ibm.icu.impl.number;
  * calls {@link #processQuantity} on its "parent", then does its work, and then returns the result.
  *
  * <p>
+ * This chain of MicroPropsGenerators is typically constructed by NumberFormatterImpl::macrosToMicroGenerator() when
+ * constructing a NumberFormatter.
+ *
+ * <p>
  * A class implementing MicroPropsGenerator looks something like this:
  *
  * <pre>

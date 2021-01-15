@@ -826,7 +826,6 @@ ro{
         VALENCIA{"valenciană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} – toate"}
         category-list{"{0}: {1}"}

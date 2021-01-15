@@ -314,5 +314,4 @@ es{
         SZ{"Suazilandia"}
         TL{"Timor Oriental"}
     }
-    Version{"38"}
 }

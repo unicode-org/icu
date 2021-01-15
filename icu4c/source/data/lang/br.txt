@@ -889,7 +889,6 @@ br{
         WADEGILE{"romanekadur Wade-Giles"}
         XSISTEMO{"esperanteg sistem X"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — holl"}
         category-list{"{0} : {1}"}

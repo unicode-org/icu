@@ -10,7 +10,6 @@ es_DO{
             }
         }
     }
-    Version{"38"}
     calendar{
         generic{
             DateTimePatterns{

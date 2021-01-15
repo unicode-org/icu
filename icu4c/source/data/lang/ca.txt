@@ -1013,7 +1013,6 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — tot"}
         category-list{"{0}: {1}"}

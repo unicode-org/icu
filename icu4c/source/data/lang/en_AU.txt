@@ -50,5 +50,4 @@ en_AU{
             ethiopic{"Ethiopian Calendar"}
         }
     }
-    Version{"38"}
 }

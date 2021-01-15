@@ -232,5 +232,4 @@ mas{
             "Iropiyianí e Simbabwe",
         }
     }
-    Version{"38"}
 }

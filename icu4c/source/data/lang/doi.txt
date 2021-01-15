@@ -68,7 +68,6 @@ doi{
             latn{"पच्छमी अंक"}
         }
     }
-    Version{"38"}
     codePatterns{
         language{"भाशा: {0}"}
         script{"लिपि: {0}"}

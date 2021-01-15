@@ -59,7 +59,6 @@ es_US{
             gujr{"dígitos en gujarati"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         miscellaneous{"{0} — Varios"}
     }

@@ -90,7 +90,7 @@ import com.ibm.icu.lang.UCharacter;
 /*            constructor, no blanks in string constructor, add       */
 /*            offset and length version of char[] constructor;        */
 /*            add valueOf(double); drop booleanValue, charValue;      */
-/*            add ...Exact versions of remaining convertors           */
+/*            add ...Exact versions of remaining converters           */
 /* 1999.03.13 add toBigIntegerExact                                   */
 /* 1999.03.13 1.00 release to IBM Centre for Java Technology          */
 /* 1999.05.27 1.01 correct 0-0.2 bug under scaled arithmetic          */

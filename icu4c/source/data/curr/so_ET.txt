@@ -8,5 +8,4 @@ so_ET{
             "Birta Itoobbiya",
         }
     }
-    Version{"38"}
 }

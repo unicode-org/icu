@@ -892,7 +892,6 @@ to{
             tibt{"fika fakatipeti"}
         }
     }
-    Version{"38"}
     characterLabelPattern{
         all{"{0} — kotoa"}
         category-list{"{0}: {1}"}

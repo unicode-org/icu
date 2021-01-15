@@ -1,17 +1,18 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
-
-
 package com.ibm.icu.impl.units;
-
-
-import com.ibm.icu.util.Measure;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.number.Precision;
+import com.ibm.icu.util.Measure;
+import com.ibm.icu.util.MeasureUnit;
 
 /**
  * Converts from single or compound unit to single, compound or mixed units.
@@ -26,7 +27,10 @@ public class ComplexUnitsConverter {
     public static final BigDecimal EPSILON = BigDecimal.valueOf(Math.ulp(1.0));
     public static final BigDecimal EPSILON_MULTIPLIER = BigDecimal.valueOf(1).add(EPSILON);
     private ArrayList<UnitConverter> unitConverters_;
+    // Individual units of mixed units, sorted big to small
     private ArrayList<MeasureUnitImpl> units_;
+    // Individual units of mixed units, sorted in desired output order
+    private ArrayList<MeasureUnit> outputUnits_;
 
     /**
      * Constructor of `ComplexUnitsConverter`.
@@ -40,6 +44,10 @@ public class ComplexUnitsConverter {
     public ComplexUnitsConverter(MeasureUnitImpl inputUnit, MeasureUnitImpl outputUnits,
                                  ConversionRates conversionRates) {
         units_ = outputUnits.extractIndividualUnits();
+        outputUnits_ = new ArrayList<>(units_.size());
+        for (MeasureUnitImpl itr : units_) {
+            outputUnits_.add(itr.build());
+        }
         assert (!units_.isEmpty());
 
         // Sort the units in a descending order.
@@ -95,8 +103,21 @@ public class ComplexUnitsConverter {
      * the smallest element is the only element that could have fractional values. And all
      * other elements are floored to the nearest integer
      */
-    public List<Measure> convert(BigDecimal quantity) {
-        List<Measure> result = new ArrayList<>();
+    public List<Measure> convert(BigDecimal quantity, Precision rounder) {
+        List<Measure> result = new ArrayList<>(unitConverters_.size());
+        BigDecimal sign = BigDecimal.ONE;
+        if (quantity.compareTo(BigDecimal.ZERO) < 0) {
+            quantity = quantity.abs();
+            sign = sign.negate();
+        }
+
+        // For N converters:
+        // - the first converter converts from the input unit to the largest
+        //   unit,
+        // - N-1 converters convert to bigger units for which we want integers,
+        // - the Nth converter (index N-1) converts to the smallest unit, which
+        //   isn't (necessarily) an integer.
+        List<BigDecimal> intValues = new ArrayList<>(unitConverters_.size() - 1);
 
         for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
             quantity = (unitConverters_.get(i)).convert(quantity);
@@ -108,21 +129,87 @@ public class ComplexUnitsConverter {
                 // decision is made. However after the thresholding, we use the
                 // original values to ensure unbiased accuracy (to the extent of
                 // double's capabilities).
-                BigDecimal newQuantity = quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR);
-
-                result.add(new Measure(newQuantity, units_.get(i).build()));
+                BigDecimal flooredQuantity =
+                    quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR);
+                intValues.add(flooredQuantity);
 
                 // Keep the residual of the quantity.
                 //   For example: `3.6 feet`, keep only `0.6 feet`
-                quantity = quantity.subtract(newQuantity);
-                if (quantity.compareTo(BigDecimal.ZERO) == -1) {
+                BigDecimal remainder = quantity.subtract(flooredQuantity);
+                if (remainder.compareTo(BigDecimal.ZERO) == -1) {
                     quantity = BigDecimal.ZERO;
+                } else {
+                    quantity = remainder;
                 }
             } else { // LAST ELEMENT
-                result.add(new Measure(quantity, units_.get(i).build()));
+                if (rounder == null) {
+                    // Nothing to do for the last element.
+                    break;
+                }
+
+                // Round the last value
+                // TODO(ICU-21288): get smarter about precision for mixed units.
+                DecimalQuantity quant = new DecimalQuantity_DualStorageBCD(quantity);
+                rounder.apply(quant);
+                quantity = quant.toBigDecimal();
+                if (i == 0) {
+                    // Last element is also the first element, so we're done
+                    break;
+                }
+
+                // Check if there's a carry, and bubble it back up the resulting intValues.
+                BigDecimal carry = unitConverters_.get(i)
+                                       .convertInverse(quantity)
+                                       .multiply(EPSILON_MULTIPLIER)
+                                       .setScale(0, RoundingMode.FLOOR);
+                if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
+                    break;
+                }
+                quantity = quantity.subtract(unitConverters_.get(i).convert(carry));
+                intValues.set(i - 1, intValues.get(i - 1).add(carry));
+
+                // We don't use the first converter: that one is for the input unit
+                for (int j = i - 1; j > 0; j--) {
+                    carry = unitConverters_.get(j)
+                                .convertInverse(intValues.get(j))
+                                .multiply(EPSILON_MULTIPLIER)
+                                .setScale(0, RoundingMode.FLOOR);
+                    if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
+                        break;
+                    }
+                    intValues.set(j, intValues.get(j).subtract(unitConverters_.get(j).convert(carry)));
+                    intValues.set(j - 1, intValues.get(j - 1).add(carry));
+                }
+            }
+        }
+
+        // Package values into Measure instances in result:
+        for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
+            if (i < n - 1) {
+                result.add(new Measure(intValues.get(i).multiply(sign), units_.get(i).build()));
+            } else {
+                result.add(new Measure(quantity.multiply(sign), units_.get(i).build()));
+            }
+        }
+
+        for (int i = 0; i < result.size(); i++) {
+            for (int j = i; j < result.size(); j++) {
+                // Find the next expected unit, and swap it into place.
+                if (result.get(j).getUnit().equals(outputUnits_.get(i))) {
+                    if (j != i) {
+                        Measure tmp = result.get(j);
+                        result.set(j, result.get(i));
+                        result.set(i, tmp);
+                    }
+                }
             }
         }
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ComplexUnitsConverter [unitConverters_=" + unitConverters_ + ", units_=" + units_ + "]";
     }
 }

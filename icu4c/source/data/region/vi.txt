@@ -312,5 +312,4 @@ vi{
         SZ{"Swaziland"}
         TL{"Đông Timor"}
     }
-    Version{"38"}
 }

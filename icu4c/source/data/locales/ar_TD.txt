@@ -5,5 +5,4 @@ ar_TD{
     NumberElements{
         default{"arab"}
     }
-    Version{"38"}
 }

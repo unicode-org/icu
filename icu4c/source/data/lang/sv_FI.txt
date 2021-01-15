@@ -8,5 +8,4 @@ sv_FI{
     Scripts%variant{
         Arab{"persisk-arabiska"}
     }
-    Version{"38"}
 }

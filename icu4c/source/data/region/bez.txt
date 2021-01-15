@@ -227,5 +227,4 @@ bez{
         ZM{"Huzambia"}
         ZW{"Huzimbabwe"}
     }
-    Version{"38"}
 }

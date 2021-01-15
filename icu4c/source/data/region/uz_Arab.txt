@@ -6,5 +6,4 @@ uz_Arab{
     Countries{
         AF{"افغانستان"}
     }
-    Version{"38"}
 }

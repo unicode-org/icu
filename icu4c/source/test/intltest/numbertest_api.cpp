@@ -53,12 +53,15 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
     }
     METER = *unit;
 
+    METER_PER_SECOND = *LocalPointer<MeasureUnit>(MeasureUnit::createMeterPerSecond(status));
     DAY = *LocalPointer<MeasureUnit>(MeasureUnit::createDay(status));
     SQUARE_METER = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareMeter(status));
     FAHRENHEIT = *LocalPointer<MeasureUnit>(MeasureUnit::createFahrenheit(status));
     SECOND = *LocalPointer<MeasureUnit>(MeasureUnit::createSecond(status));
     POUND = *LocalPointer<MeasureUnit>(MeasureUnit::createPound(status));
+    POUND_FORCE = *LocalPointer<MeasureUnit>(MeasureUnit::createPoundForce(status));
     SQUARE_MILE = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareMile(status));
+    SQUARE_INCH = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareInch(status));
     JOULE = *LocalPointer<MeasureUnit>(MeasureUnit::createJoule(status));
     FURLONG = *LocalPointer<MeasureUnit>(MeasureUnit::createFurlong(status));
     KELVIN = *LocalPointer<MeasureUnit>(MeasureUnit::createKelvin(status));
@@ -77,6 +80,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(notationCompact);
         TESTCASE_AUTO(unitMeasure);
         TESTCASE_AUTO(unitCompoundMeasure);
+        TESTCASE_AUTO(unitSkeletons);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitUsageErrorCodes);
         TESTCASE_AUTO(unitUsageSkeletons);
@@ -578,6 +582,23 @@ void NumberFormatterApiTest::unitMeasure() {
             u"0.0088 meters",
             u"0 meters");
 
+//     // TODO(ICU-20941): Support formatting for not-built-in units
+//     assertFormatDescending(
+//             u"Hectometers",
+//             u"measure-unit/length-hectometer",
+//             u"unit/hectometer",
+//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("hectometer", status)),
+//             Locale::getEnglish(),
+//             u"87,650 hm",
+//             u"8,765 hm",
+//             u"876.5 hm",
+//             u"87.65 hm",
+//             u"8.765 hm",
+//             u"0.8765 hm",
+//             u"0.08765 hm",
+//             u"0.008765 hm",
+//             u"0 hm");
+
 //    TODO: Implement Measure in C++
 //    assertFormatSingleMeasure(
 //            u"Meters with Measure Input",
@@ -694,10 +715,9 @@ void NumberFormatterApiTest::unitMeasure() {
             5,
             u"5 a\u00F1os");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed unit",
-            nullptr,
+            u"unit/yard-and-foot-and-inch",
             u"unit/yard-and-foot-and-inch",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("yard-and-foot-and-inch", status)),
@@ -705,10 +725,9 @@ void NumberFormatterApiTest::unitMeasure() {
             3.65,
             "3 yd, 1 ft, 11.4 in");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed unit, Scientific",
-            nullptr,
+            u"unit/yard-and-foot-and-inch E0",
             u"unit/yard-and-foot-and-inch E0",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("yard-and-foot-and-inch", status))
@@ -717,10 +736,9 @@ void NumberFormatterApiTest::unitMeasure() {
             3.65,
             "3 yd, 1 ft, 1.14E1 in");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed Unit (Narrow Version)",
-            nullptr,
+            u"unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
             u"unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
@@ -729,10 +747,9 @@ void NumberFormatterApiTest::unitMeasure() {
             4.28571,
             u"4t 285kg 710g");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed Unit (Short Version)",
-            nullptr,
+            u"unit/metric-ton-and-kilogram-and-gram unit-width-short",
             u"unit/metric-ton-and-kilogram-and-gram unit-width-short",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
@@ -741,10 +758,9 @@ void NumberFormatterApiTest::unitMeasure() {
             4.28571,
             u"4 t, 285 kg, 710 g");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed Unit (Full Name Version)",
-            nullptr,
+            u"unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
             u"unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
@@ -753,21 +769,44 @@ void NumberFormatterApiTest::unitMeasure() {
             4.28571,
             u"4 metric tons, 285 kilograms, 710 grams");
 
-//     // TODO(icu-units#73): deal with this "1 foot 12 inches" problem.
-//     // At the time of writing, this test would pass, but is commented out
-//     // because it reflects undesired behaviour:
-//     assertFormatSingle(
-//             u"Demonstrating the \"1 foot 12 inches\" problem",
-//             nullptr,
-//             u"unit/foot-and-inch",
-//             NumberFormatter::with()
-//                 .unit(MeasureUnit::forIdentifier("foot-and-inch", status))
-//                 .precision(Precision::maxSignificantDigits(4))
-//                 .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
-//             Locale("en-US"),
-//             1.9999,
-//             // This is undesireable but current behaviour:
-//             u"1 foot, 12 inches");
+    assertFormatSingle(
+            u"Testing  \"1 foot 12 inches\"",
+            u"unit/foot-and-inch @### unit-width-full-name",
+            u"unit/foot-and-inch @### unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("foot-and-inch", status))
+                .precision(Precision::maxSignificantDigits(4))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-US"),
+            1.9999,
+            u"2 feet, 0 inches");
+
+    assertFormatSingle(
+            u"Negative numbers: temperature",
+            u"measure-unit/temperature-celsius",
+            u"unit/celsius",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("celsius", status)),
+            Locale("nl-NL"),
+            -6.5,
+            u"-6,5\u00B0C");
+
+    assertFormatSingle(
+            u"Negative numbers: time",
+            u"unit/hour-and-minute-and-second",
+            u"unit/hour-and-minute-and-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("hour-and-minute-and-second", status)),
+            Locale("de-DE"),
+            -1.24,
+            u"-1 Std., 14 Min. und 24 Sek.");
+
+    assertFormatSingle(
+            u"Zero out the unit field",
+            u"",
+            u"",
+            NumberFormatter::with().unit(KELVIN).unit(MeasureUnit()),
+            Locale("en"),
+            100,
+            u"100");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
@@ -789,16 +828,21 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             u"0.008765 m/s",
             u"0 m/s");
 
-    // TODO(icu-units#35): does not normalize as desired: while "unit/*" does
-    // get split into unit/perUnit, ".unit(*)" and "measure-unit/*" don't:
-    assertFormatSingle(
-        u"Built-in unit, meter-per-second",
-        u"measure-unit/speed-meter-per-second",
-        u"~unit/meter-per-second",
-        NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()),
-        Locale("en-GB"),
-        2.4,
-        u"2.4 m/s");
+    assertFormatDescending(
+            u"Meters Per Second Short, built-in m/s",
+            u"measure-unit/speed-meter-per-second",
+            u"unit/meter-per-second",
+            NumberFormatter::with().unit(METER_PER_SECOND),
+            Locale::getEnglish(),
+            u"87,650 m/s",
+            u"8,765 m/s",
+            u"876.5 m/s",
+            u"87.65 m/s",
+            u"8.765 m/s",
+            u"0.8765 m/s",
+            u"0.08765 m/s",
+            u"0.008765 m/s",
+            u"0 m/s");
 
     assertFormatDescending(
             u"Pounds Per Square Mile Short (secondary unit has per-format) and adoptPerUnit method",
@@ -832,40 +876,71 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             u"0.008765 J/fur",
             u"0 J/fur");
 
-    // TODO(ICU-20941): Support constructions such as this one.
-    // assertFormatDescending(
-    //         u"Joules Per Furlong Short with unit identifier via API",
-    //         u"measure-unit/energy-joule per-measure-unit/length-furlong",
-    //         u"unit/joule-per-furlong",
-    //         NumberFormatter::with().unit(MeasureUnit::forIdentifier("joule-per-furlong", status)),
-    //         Locale::getEnglish(),
-    //         u"87,650 J/fur",
-    //         u"8,765 J/fur",
-    //         u"876.5 J/fur",
-    //         u"87.65 J/fur",
-    //         u"8.765 J/fur",
-    //         u"0.8765 J/fur",
-    //         u"0.08765 J/fur",
-    //         u"0.008765 J/fur",
-    //         u"0 J/fur");
+    assertFormatDescending(
+            u"Joules Per Furlong Short with unit identifier via API",
+            u"measure-unit/energy-joule per-measure-unit/length-furlong",
+            u"unit/joule-per-furlong",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("joule-per-furlong", status)),
+            Locale::getEnglish(),
+            u"87,650 J/fur",
+            u"8,765 J/fur",
+            u"876.5 J/fur",
+            u"87.65 J/fur",
+            u"8.765 J/fur",
+            u"0.8765 J/fur",
+            u"0.08765 J/fur",
+            u"0.008765 J/fur",
+            u"0 J/fur");
 
-    // TODO(icu-units#59): THIS UNIT TEST DEMONSTRATES UNDESIREABLE BEHAVIOUR!
-    // When specifying built-in types, one can give both a unit and a perUnit.
-    // Resolving to a built-in unit does not always work.
-    //
-    // (Unit-testing philosophy: do we leave this enabled to demonstrate current
-    // behaviour, and changing behaviour in the future? Or comment it out to
-    // avoid asserting this is "correct"?)
+    assertFormatDescending(
+            u"Pounds per Square Inch: composed",
+            u"measure-unit/force-pound-force per-measure-unit/area-square-inch",
+            u"unit/pound-force-per-square-inch",
+            NumberFormatter::with().unit(POUND_FORCE).perUnit(SQUARE_INCH),
+            Locale::getEnglish(),
+            u"87,650 psi",
+            u"8,765 psi",
+            u"876.5 psi",
+            u"87.65 psi",
+            u"8.765 psi",
+            u"0.8765 psi",
+            u"0.08765 psi",
+            u"0.008765 psi",
+            u"0 psi");
+
+    assertFormatDescending(
+            u"Pounds per Square Inch: built-in",
+            u"measure-unit/force-pound-force per-measure-unit/area-square-inch",
+            u"unit/pound-force-per-square-inch",
+            NumberFormatter::with().unit(MeasureUnit::getPoundPerSquareInch()),
+            Locale::getEnglish(),
+            u"87,650 psi",
+            u"8,765 psi",
+            u"876.5 psi",
+            u"87.65 psi",
+            u"8.765 psi",
+            u"0.8765 psi",
+            u"0.08765 psi",
+            u"0.008765 psi",
+            u"0 psi");
+
     assertFormatSingle(
-            u"DEMONSTRATING BAD BEHAVIOUR, TODO(icu-units#59)",
+            u"m/s/s simplifies to m/s^2",
             u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
-            u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
-            NumberFormatter::with()
-                .unit(MeasureUnit::getMeterPerSecond())
-                .perUnit(MeasureUnit::getSecond()),
+            u"unit/meter-per-square-second",
+            NumberFormatter::with().unit(METER_PER_SECOND).perUnit(SECOND),
             Locale("en-GB"),
             2.4,
-            "2.4 m/s/s");
+            u"2.4 m/s\u00B2");
+
+    assertFormatSingle(
+            u"Negative numbers: acceleration",
+            u"measure-unit/acceleration-meter-per-square-second",
+            u"unit/meter-per-second-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("meter-per-pow2-second", status)),
+            Locale("af-ZA"),
+            -9.81,
+            u"-9,81 m/s\u00B2");
 
     // Testing the rejection of invalid specifications
 
@@ -884,12 +959,10 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
         status.assertSuccess();
     }
 
-    // .perUnit() may only be passed a built-in type, "square-second" is not a
-    // built-in type.
-    nf = NumberFormatter::with()
-             .unit(MeasureUnit::getMeter())
-             .perUnit(MeasureUnit::forIdentifier("square-second", status))
-             .locale("en-GB");
+    // .perUnit() may only be passed a built-in type, or something that combines
+    // to a built-in type together with .unit().
+    MeasureUnit SQUARE_SECOND = MeasureUnit::forIdentifier("square-second", status);
+    nf = NumberFormatter::with().unit(FURLONG).perUnit(SQUARE_SECOND).locale("en-GB");
     status.assertSuccess(); // Error is only returned once we try to format.
     num = nf.formatDouble(2.4, status);
     if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
@@ -897,6 +970,168 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
               nf.formatDouble(2.4, status).toString(status) + "\".");
         status.assertSuccess();
     }
+    // As above, "square-second" is not a built-in type, however this time,
+    // meter-per-square-second is a built-in type.
+    assertFormatSingle(
+            u"meter per square-second works as a composed unit",
+            u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+            u"unit/meter-per-square-second",
+            NumberFormatter::with().unit(METER).perUnit(SQUARE_SECOND),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 m/s\u00B2");
+}
+
+// TODO: merge these tests into numbertest_skeletons.cpp instead of here:
+void NumberFormatterApiTest::unitSkeletons() {
+    const struct TestCase {
+        const char *msg;
+        const char16_t *inputSkeleton;
+        const char16_t *normalizedSkeleton;
+    } cases[] = {
+        {"old-form built-in compound unit",      //
+         u"measure-unit/speed-meter-per-second", //
+         u"unit/meter-per-second"},
+
+        {"old-form compound construction, converts to built-in",        //
+         u"measure-unit/length-meter per-measure-unit/duration-second", //
+         u"unit/meter-per-second"},
+
+        {"old-form compound construction which does not simplify to a built-in", //
+         u"measure-unit/energy-joule per-measure-unit/length-meter",             //
+         u"unit/joule-per-meter"},
+
+        {"old-form compound-compound ugliness resolves neatly",                   //
+         u"measure-unit/speed-meter-per-second per-measure-unit/duration-second", //
+         u"unit/meter-per-square-second"},
+
+        {"short-form built-in units stick with the built-in", //
+         u"unit/meter-per-second",                            //
+         u"unit/meter-per-second"},
+
+        {"short-form compound units stay as is", //
+         u"unit/square-meter-per-square-meter",  //
+         u"unit/square-meter-per-square-meter"},
+
+        {"short-form compound units stay as is", //
+         u"unit/joule-per-furlong",              //
+         u"unit/joule-per-furlong"},
+
+        {"short-form that doesn't consist of built-in units", //
+         u"unit/hectometer-per-second",                       //
+         u"unit/hectometer-per-second"},
+
+        {"short-form that doesn't consist of built-in units", //
+         u"unit/meter-per-hectosecond",                       //
+         u"unit/meter-per-hectosecond"},
+
+        {"percent compound skeletons handled correctly", //
+         u"unit/percent-per-meter",                      //
+         u"unit/percent-per-meter"},
+
+        {"permille compound skeletons handled correctly",                 //
+         u"measure-unit/concentr-permille per-measure-unit/length-meter", //
+         u"unit/permille-per-meter"},
+
+        {"percent simple unit is not actually considered a unit", //
+         u"unit/percent",                                         //
+         u"percent"},
+
+        {"permille simple unit is not actually considered a unit", //
+         u"measure-unit/concentr-permille",                        //
+         u"permille"},
+
+        // // TODO: binary prefixes not supported yet!
+        // {"Round-trip example from icu-units#35", //
+        //  u"unit/kibijoule-per-furlong",          //
+        //  u"unit/kibijoule-per-furlong"},
+    };
+    for (auto &cas : cases) {
+        IcuTestErrorCode status(*this, cas.msg);
+        auto nf = NumberFormatter::forSkeleton(cas.inputSkeleton, status);
+        if (status.errIfFailureAndReset("NumberFormatter::forSkeleton failed")) {
+            continue;
+        }
+        assertEquals(                                                       //
+            UnicodeString(TRUE, cas.inputSkeleton, -1) + u" normalization", //
+            cas.normalizedSkeleton,                                         //
+            nf.toSkeleton(status));
+        status.errIfFailureAndReset("NumberFormatter::toSkeleton failed");
+    }
+
+    const struct FailCase {
+        const char *msg;
+        const char16_t *inputSkeleton;
+        UErrorCode expectedForSkelStatus;
+        UErrorCode expectedToSkelStatus;
+    } failCases[] = {
+        {"Parsing measure-unit/* results in failure if not built-in unit",
+         u"measure-unit/hectometer",     //
+         U_NUMBER_SKELETON_SYNTAX_ERROR, //
+         U_ZERO_ERROR},
+
+        {"Parsing per-measure-unit/* results in failure if not built-in unit",
+         u"measure-unit/meter per-measure-unit/hectosecond", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,                     //
+         U_ZERO_ERROR},
+
+        {"\"currency/EUR measure-unit/length-meter\" fails, conflicting skeleton.",
+         u"currency/EUR measure-unit/length-meter", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,            //
+         U_ZERO_ERROR},
+
+        {"\"measure-unit/length-meter currency/EUR\" fails, conflicting skeleton.",
+         u"measure-unit/length-meter currency/EUR", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,            //
+         U_ZERO_ERROR},
+
+        {"\"currency/EUR per-measure-unit/meter\" fails, conflicting skeleton.",
+         u"currency/EUR per-measure-unit/length-meter", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,                //
+         U_ZERO_ERROR},
+    };
+    for (auto &cas : failCases) {
+        IcuTestErrorCode status(*this, cas.msg);
+        auto nf = NumberFormatter::forSkeleton(cas.inputSkeleton, status);
+        if (status.expectErrorAndReset(cas.expectedForSkelStatus, cas.msg)) {
+            continue;
+        }
+        nf.toSkeleton(status);
+        status.expectErrorAndReset(cas.expectedToSkelStatus, cas.msg);
+    }
+
+    IcuTestErrorCode status(*this, "unitSkeletons");
+    assertEquals(                                //
+        ".unit(METER_PER_SECOND) normalization", //
+        u"unit/meter-per-second",                //
+        NumberFormatter::with().unit(METER_PER_SECOND).toSkeleton(status));
+    assertEquals(                                     //
+        ".unit(METER).perUnit(SECOND) normalization", //
+        u"unit/meter-per-second",
+        NumberFormatter::with().unit(METER).perUnit(SECOND).toSkeleton(status));
+    assertEquals(                                                                  //
+        ".unit(MeasureUnit::forIdentifier(\"hectometer\", status)) normalization", //
+        u"unit/hectometer",
+        NumberFormatter::with()
+            .unit(MeasureUnit::forIdentifier("hectometer", status))
+            .toSkeleton(status));
+    assertEquals(                                                                  //
+        ".unit(MeasureUnit::forIdentifier(\"hectometer\", status)) normalization", //
+        u"unit/meter-per-hectosecond",
+        NumberFormatter::with()
+            .unit(METER)
+            .perUnit(MeasureUnit::forIdentifier("hectosecond", status))
+            .toSkeleton(status));
+
+    status.assertSuccess();
+    assertEquals(                                                //
+        ".unit(CURRENCY) produces a currency/CURRENCY skeleton", //
+        u"currency/GBP",                                         //
+        NumberFormatter::with().unit(GBP).toSkeleton(status));
+    status.assertSuccess();
+    // .unit(CURRENCY).perUnit(ANYTHING) is not supported.
+    NumberFormatter::with().unit(GBP).perUnit(METER).toSkeleton(status);
+    status.expectErrorAndReset(U_UNSUPPORTED_ERROR);
 }
 
 void NumberFormatterApiTest::unitUsage() {
@@ -905,6 +1140,11 @@ void NumberFormatterApiTest::unitUsage() {
     LocalizedNumberFormatter formatter;
     FormattedNumber formattedNum;
     UnicodeString uTestCase;
+
+    status.assertSuccess();
+    formattedNum =
+        NumberFormatter::with().usage("road").locale(Locale::getEnglish()).formatInt(1, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 
     unloc_formatter = NumberFormatter::with().usage("road").unit(MeasureUnit::getMeter());
 
@@ -1113,25 +1353,62 @@ void NumberFormatterApiTest::unitUsage() {
             u"0 pounds, 0 ounces");
 
     assertFormatDescendingBig(
-        u"Scientific notation with Usage: possible when using a reasonable Precision",
-        u"scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
-        u"scientific @### usage/default unit/square-meter unit-width-full-name",
-        NumberFormatter::with()
-            .unit(SQUARE_METER)
-            .usage("default")
-            .notation(Notation::scientific())
-            .precision(Precision::minMaxSignificantDigits(1, 4))
-            .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
-        Locale("en-ZA"),
-        u"8,765E1 square kilometres",
-        u"8,765E0 square kilometres",
-        u"8,765E1 hectares",
-        u"8,765E0 hectares",
-        u"8,765E3 square metres",
-        u"8,765E2 square metres",
-        u"8,765E1 square metres",
-        u"8,765E0 square metres",
-        u"0E0 square centimetres");
+            u"Scientific notation with Usage: possible when using a reasonable Precision",
+            u"scientific @### usage/default measure-unit/area-square-meter unit-width-full-name",
+            u"scientific @### usage/default unit/square-meter unit-width-full-name",
+            NumberFormatter::with()
+                    .unit(SQUARE_METER)
+                    .usage("default")
+                    .notation(Notation::scientific())
+                    .precision(Precision::minMaxSignificantDigits(1, 4))
+                    .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            u"8,765E1 square kilometres",
+            u"8,765E0 square kilometres",
+            u"8,765E1 hectares",
+            u"8,765E0 hectares",
+            u"8,765E3 square metres",
+            u"8,765E2 square metres",
+            u"8,765E1 square metres",
+            u"8,765E0 square metres",
+            u"0E0 square centimetres");
+
+    assertFormatSingle(
+            u"Negative numbers: minute-and-second",
+            u"measure-unit/duration-second usage/media",
+            u"unit/second usage/media",
+            NumberFormatter::with().unit(SECOND).usage("media"),
+            Locale("nl-NL"),
+            -77.7,
+            u"-1 min, 18 sec");
+
+    assertFormatSingle(
+            u"Rounding Mode propagates: rounding down",
+            u"usage/road measure-unit/length-centimeter rounding-mode-floor",
+            u"usage/road unit/centimeter rounding-mode-floor",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("centimeter", status))
+                .usage("road")
+                .roundingMode(UNUM_ROUND_FLOOR),
+            Locale("en-ZA"),
+            34500,
+            u"300 m");
+
+    assertFormatSingle(
+            u"Rounding Mode propagates: rounding up",
+            u"usage/road measure-unit/length-centimeter rounding-mode-ceiling",
+            u"usage/road unit/centimeter rounding-mode-ceiling",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("centimeter", status))
+                .usage("road")
+                .roundingMode(UNUM_ROUND_CEILING),
+            Locale("en-ZA"),
+            30500,
+            u"350 m");
+
+    // TODO(icu-units#38): improve unit testing coverage. E.g. add vehicle-fuel
+    // triggering inversion conversion code. Test with 0 too, to see
+    // divide-by-zero behaviour.
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {
@@ -3466,12 +3743,34 @@ void NumberFormatterApiTest::fieldPositionCoverage() {
     }
 
     {
-        const char16_t* message = u"Measure unit field position with prefix and suffix";
+        const char16_t* message = u"Measure unit field position with prefix and suffix, composed m/s";
         FormattedNumber result = assertFormatSingle(
                 message,
                 u"measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
-                u"unit/meter-per-second unit-width-full-name",
+                u"measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
                 NumberFormatter::with().unit(METER).perUnit(SECOND).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+                "ky", // locale with the interesting data
+                68,
+                u"секундасына 68 метр");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_MEASURE_UNIT_FIELD, 0, 11},
+                {UNUM_INTEGER_FIELD, 12, 14},
+                {UNUM_MEASURE_UNIT_FIELD, 15, 19}};
+        assertNumberFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Measure unit field position with prefix and suffix, built-in m/s";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/speed-meter-per-second unit-width-full-name",
+                u"unit/meter-per-second unit-width-full-name",
+                NumberFormatter::with().unit(METER_PER_SECOND).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
                 "ky", // locale with the interesting data
                 68,
                 u"секундасына 68 метр");
@@ -4075,6 +4374,15 @@ void NumberFormatterApiTest::microPropsInternals() {
     assertEquals("Copy Assigned capacity", 4, copyAssigned.mixedMeasures.getCapacity());
 }
 
+/* For skeleton comparisons: this checks the toSkeleton output for `f` and for
+ * `conciseSkeleton` against the normalized version of `uskeleton` - this does
+ * not round-trip uskeleton itself.
+ *
+ * If `conciseSkeleton` starts with a "~", its round-trip check is skipped.
+ *
+ * If `uskeleton` is nullptr, toSkeleton is expected to return an
+ * U_UNSUPPORTED_ERROR.
+ */
 void NumberFormatterApiTest::assertFormatDescending(
         const char16_t* umessage,
         const char16_t* uskeleton,
@@ -4136,6 +4444,15 @@ void NumberFormatterApiTest::assertFormatDescending(
     }
 }
 
+/* For skeleton comparisons: this checks the toSkeleton output for `f` and for
+ * `conciseSkeleton` against the normalized version of `uskeleton` - this does
+ * not round-trip uskeleton itself.
+ *
+ * If `conciseSkeleton` starts with a "~", its round-trip check is skipped.
+ *
+ * If `uskeleton` is nullptr, toSkeleton is expected to return an
+ * U_UNSUPPORTED_ERROR.
+ */
 void NumberFormatterApiTest::assertFormatDescendingBig(
         const char16_t* umessage,
         const char16_t* uskeleton,
@@ -4197,6 +4514,15 @@ void NumberFormatterApiTest::assertFormatDescendingBig(
     }
 }
 
+/* For skeleton comparisons: this checks the toSkeleton output for `f` and for
+ * `conciseSkeleton` against the normalized version of `uskeleton` - this does
+ * not round-trip uskeleton itself.
+ *
+ * If `conciseSkeleton` starts with a "~", its round-trip check is skipped.
+ *
+ * If `uskeleton` is nullptr, toSkeleton is expected to return an
+ * U_UNSUPPORTED_ERROR.
+ */
 FormattedNumber
 NumberFormatterApiTest::assertFormatSingle(
         const char16_t* umessage,

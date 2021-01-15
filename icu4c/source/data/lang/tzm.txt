@@ -49,5 +49,4 @@ tzm{
         zh{"Tacinwit,Mandarin"}
         zu{"tazulut"}
     }
-    Version{"38"}
 }

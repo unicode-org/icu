@@ -225,5 +225,4 @@ cgg{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

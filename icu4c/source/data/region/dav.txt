@@ -227,5 +227,4 @@ dav{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"38"}
 }

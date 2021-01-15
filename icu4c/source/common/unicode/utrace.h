@@ -112,11 +112,9 @@ typedef enum UTraceFunctionNumber {
     UTRACE_COLLATION_LIMIT,
 #endif  // U_HIDE_DEPRECATED_API
 
-#ifndef U_HIDE_DRAFT_API
-
     /**
      * The lowest resource/data location.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     UTRACE_UDATA_START=0x3000,
 
@@ -133,7 +131,7 @@ typedef enum UTraceFunctionNumber {
      * - "get" (a path was loaded, but the value was not accessed)
      * - "getalias" (a path was loaded, and an alias was resolved)
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     UTRACE_UDATA_RESOURCE=UTRACE_UDATA_START,
 
@@ -141,7 +139,7 @@ typedef enum UTraceFunctionNumber {
      * Indicates that a resource bundle was opened.
      *
      * Provides one C-style string to UTraceData: file name.
-     * @draft ICU 65
+     * @stable ICU 65
      */
     UTRACE_UDATA_BUNDLE,
 
@@ -150,7 +148,7 @@ typedef enum UTraceFunctionNumber {
      *
      * Provides one C-style string to UTraceData: file name.
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     UTRACE_UDATA_DATA_FILE,
 
@@ -163,11 +161,9 @@ typedef enum UTraceFunctionNumber {
      *
      * Provides one C-style string to UTraceData: file name.
      *
-     * @draft ICU 65
+     * @stable ICU 65
      */
     UTRACE_UDATA_RES_FILE,
-
-#endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
     /**
