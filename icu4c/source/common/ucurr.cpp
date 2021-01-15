@@ -91,9 +91,6 @@ static const char VAR_DELIM = '_';
 
 // Tag for localized display names (symbols) of currencies
 static const char CURRENCIES[] = "Currencies";
-static const char CURRENCIES_NARROW[] = "Currencies%narrow";
-static const char CURRENCIES_FORMAL[] = "Currencies%formal";
-static const char CURRENCIES_VARIANT[] = "Currencies%variant";
 static const char CURRENCYPLURALS[] = "CurrencyPlurals";
 
 // ISO codes mapping table
@@ -656,6 +653,11 @@ ucurr_getPluralName(const UChar* currency,
                     int32_t* len, // fillin
                     UErrorCode* ec) {
 
+    // We no longer support choice format data in names.  Data should not contain
+    // choice patterns.
+    if (isChoiceFormat != NULL) {
+        *isChoiceFormat = FALSE;
+    }
     const Locale loc = Locale::createFromName(locale);
     const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&loc, *ec);
     const UChar *pluralName =
