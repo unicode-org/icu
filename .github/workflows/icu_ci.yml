@@ -32,6 +32,33 @@ jobs:
           ant init;
           ant check;
 
+  # gcc debug build.
+  # Includes dependency checker.
+  # Note - the dependency checker needs to be run on both a debug and an optimized build.
+  # This one (gcc) for debug, and linux clang (see job below) for optimized.
+  #
+  # Test both out-of-source and in-source builds. This one (gcc) for out-of-source,
+  # and linux clang (below) for in-source.
+  #
+  # Invokes test/hdrtst to check public headers compliance.
+  gcc-debug-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with gcc
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=$PREFIX --enable-tracing;
+          make -j2;
+          make -j2 check;
+          ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ );
+          make install;
+          PATH=$PREFIX/bin:$PATH make -C test/hdrtst check
+        env:
+          PREFIX: /tmp/icu-prefix
+
   # clang release build with some options to enforce useful constraints.
   # Includes dependency checker on an in-source, optimized build.
   # Includes checking @draft etc. API tags vs. ifndef guards like
@@ -58,6 +85,62 @@ jobs:
           CFLAGS: -Wimplicit-fallthrough
           CXXFLAGS: -Wimplicit-fallthrough
 
+  # Out of source build with gcc 8 and c++14; executes icuinfo.
+  gcc-8-stdlib14:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with gcc 8 and c++14
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU Linux --disable-layout --disable-layoutex --prefix=$PREFIX;
+          make -j2;
+          make -j2 check;
+          make install;
+          cd $PREFIX/bin;
+          LD_LIBRARY_PATH=../lib ./icuinfo
+        env:
+          PREFIX: /tmp/icu-prefix
+          CC: gcc-8
+          CXX: g++-8
+          CXXFLAGS: -std=c++14
+
+  # Clang Linux with address sanitizer.
+  clang-asan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang and asan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
+          make -j2;
+          make -j2 check
+        env:
+          CPPFLAGS: -fsanitize=address
+          LDFLAGS: -fsanitize=address
+
+  # Clang Linux with thread sanitizer.
+  clang-tsan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang and tsan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+          make -j2;
+          make -j2 -C test;
+          make -j2 -C test/intltest check
+        env:
+          INTLTEST_OPTS: utility/MultithreadTest
+          CPPFLAGS: -fsanitize=thread
+          LDFLAGS: -fsanitize=thread
+
   # Copyright scan
   copyright-scan:
     runs-on: ubuntu-latest
@@ -78,3 +161,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: tools/scripts/icu-file-utf8-check.py
+
+  # Verify icu4c release tools buildability.
+  icu4c-release-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mvn -f tools/release/java/pom.xml package dependency:analyze
