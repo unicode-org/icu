@@ -224,9 +224,8 @@ public class UnitsTest {
         }
     }
 
-    // TODO(icu-units#92): add UnitsTest::testConverter(), to replace or extend this test.
     @Test
-    public void testConverterForTemperature() {
+    public void testConverter() {
         class TestData {
             MeasureUnitImpl source;
             MeasureUnitImpl target;
@@ -239,22 +238,56 @@ public class UnitsTest {
                 this.input = BigDecimal.valueOf(input);
                 this.expected = BigDecimal.valueOf(expected);
             }
-
         }
-
         TestData[] tests = {
+                // SI Prefixes
+                new TestData("gram", "kilogram", 1.0, 0.001),
+                new TestData("milligram", "kilogram", 1.0, 0.000001),
+                new TestData("microgram", "kilogram", 1.0, 0.000000001),
+                new TestData("megagram", "gram", 1.0, 1000000),
+                new TestData("megagram", "kilogram", 1.0, 1000),
+                new TestData("gigabyte", "byte", 1.0, 1000000000),
+                new TestData("megawatt", "watt", 1.0, 1000000),
+                new TestData("megawatt", "kilowatt", 1.0, 1000),
+                // Mass
+                new TestData("gram", "kilogram", 1.0, 0.001),
+                new TestData("pound", "kilogram", 1.0, 0.453592),
+                new TestData("pound", "kilogram", 2.0, 0.907185),
+                new TestData("ounce", "pound", 16.0, 1.0),
+                new TestData("ounce", "kilogram", 16.0, 0.453592),
+                new TestData("ton", "pound", 1.0, 2000),
+                new TestData("stone", "pound", 1.0, 14),
+                new TestData("stone", "kilogram", 1.0, 6.35029),
+                // Temperature
+                new TestData("celsius", "fahrenheit", 0.0, 32.0),
+                new TestData("celsius", "fahrenheit", 10.0, 50.0),
                 new TestData("celsius", "fahrenheit", 1000, 1832),
+                new TestData("fahrenheit", "celsius", 32.0, 0.0),
+                new TestData("fahrenheit", "celsius", 89.6, 32),
                 new TestData("fahrenheit", "fahrenheit", 1000, 1000),
+                new TestData("kelvin", "fahrenheit", 0.0, -459.67),
+                new TestData("kelvin", "fahrenheit", 300, 80.33),
+                new TestData("kelvin", "celsius", 0.0, -273.15),
+                new TestData("kelvin", "celsius", 300.0, 26.85),
+                // Area
+                new TestData("square-meter", "square-yard", 10.0, 11.9599),
+                new TestData("hectare", "square-yard", 1.0, 11959.9),
+                new TestData("square-mile", "square-foot", 0.0001, 2787.84),
+                new TestData("hectare", "square-yard", 1.0, 11959.9),
+                new TestData("hectare", "square-meter", 1.0, 10000),
+                new TestData("hectare", "square-meter", 0.0, 0.0),
+                new TestData("square-mile", "square-foot", 0.0001, 2787.84),
+                new TestData("square-yard", "square-foot", 10, 90),
+                new TestData("square-yard", "square-foot", 0, 0),
+                new TestData("square-yard", "square-foot", 0.000001, 0.000009),
+                new TestData("square-mile", "square-foot", 0.0, 0.0),
         };
 
         ConversionRates conversionRates = new ConversionRates();
-
-        for (TestData test :
-                tests) {
+        for (TestData test : tests) {
             UnitConverter converter = new UnitConverter(test.source, test.target, conversionRates);
             assertEquals(test.expected.doubleValue(), converter.convert(test.input).doubleValue(), (0.001));
         }
-
     }
 
     @Test
