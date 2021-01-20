@@ -47,6 +47,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: ICU4C with gcc
+        env:
+          PREFIX: /tmp/icu-prefix
         run: |
           mkdir build;
           cd build;
@@ -56,8 +58,6 @@ jobs:
           ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ );
           make install;
           PATH=$PREFIX/bin:$PATH make -C test/hdrtst check
-        env:
-          PREFIX: /tmp/icu-prefix
 
   # clang release build with some options to enforce useful constraints.
   # Includes dependency checker on an in-source, optimized build.
@@ -71,6 +71,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: ICU4C with clang
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
         run: |
           sudo apt-get -y install doxygen;
           cd icu4c/source;
@@ -80,18 +84,19 @@ jobs:
           ( cd test/depstest && python3 depstest.py ../../../source/ );
           ( cd .. && source/test/hdrtst/testtagsguards.sh );
           make dist
-        env:
-          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
-          CFLAGS: -Wimplicit-fallthrough
-          CXXFLAGS: -Wimplicit-fallthrough
 
-  # Out of source build with gcc 8 and c++14; executes icuinfo.
-  gcc-8-stdlib14:
+  # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
+  gcc-10-stdlib14:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: ICU4C with gcc 8 and c++14
+      - name: ICU4C with gcc 10 and c++14 and extra warnings.
+        env:
+          PREFIX: /tmp/icu-prefix
+          CC: gcc-10
+          CXX: g++-10
+          CXXFLAGS: -std=c++14 -Wextra
         run: |
           mkdir build;
           cd build;
@@ -101,11 +106,6 @@ jobs:
           make install;
           cd $PREFIX/bin;
           LD_LIBRARY_PATH=../lib ./icuinfo
-        env:
-          PREFIX: /tmp/icu-prefix
-          CC: gcc-8
-          CXX: g++-8
-          CXXFLAGS: -std=c++14
 
   # Clang Linux with address sanitizer.
   clang-asan:
@@ -140,6 +140,18 @@ jobs:
           INTLTEST_OPTS: utility/MultithreadTest
           CPPFLAGS: -fsanitize=thread
           LDFLAGS: -fsanitize=thread
+
+  # MacOS with clang
+  macos-clang:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang on MacOS
+        run: |
+          cd icu4c/source;
+          PYTHON=python3 ./runConfigureICU MacOSX;
+          make -j2 check
 
   # Copyright scan
   copyright-scan:
