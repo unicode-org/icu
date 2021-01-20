@@ -769,6 +769,67 @@ void NumberFormatterApiTest::unitMeasure() {
             4.28571,
             u"4 metric tons, 285 kilograms, 710 grams");
 
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [metric]",                               //
+                       u"unit/gram-and-kilogram unit-width-full-name",                    //
+                       u"unit/gram-and-kilogram unit-width-full-name",                    //
+                       NumberFormatter::with()                                            //
+                           .unit(MeasureUnit::forIdentifier("gram-and-kilogram", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                         //
+                       Locale("en-US"),                                                   //
+                       4.28571,                                                           //
+                       u"285.71 grams, 4 kilograms");                                     //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial]",                                  //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                              //
+                       Locale("en-US"),                                                        //
+                       4.28571,                                                                //
+                       u"10.28556 inches, 4 yards, 0 feet");                                   //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial full]",                             //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                              //
+                       Locale("en-US"),                                                        //
+                       4.38571,                                                                //
+                       u"1.88556 inches, 4 yards, 1 foot");                                    //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial full integers]",                    //
+                       u"unit/inch-and-yard-and-foot @# unit-width-full-name",                 //
+                       u"unit/inch-and-yard-and-foot @# unit-width-full-name",                 //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)                               //
+                           .precision(Precision::maxSignificantDigits(2)),                     //
+                       Locale("en-US"),                                                        //
+                       4.36112,                                                                //
+                       u"1 inch, 4 yards, 1 foot");                                            //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial full] with `And` in the end",       //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                              //
+                       Locale("fr-FR"),                                                        //
+                       4.38571,                                                                //
+                       u"1,88556\u00A0pouce, 4\u00A0yards et 1\u00A0pied");                    //
+
+    assertFormatSingle(u"Mixed unit, Scientific [Not in Order]",                               //
+                       u"unit/foot-and-inch-and-yard E0",                                      //
+                       u"unit/foot-and-inch-and-yard E0",                                      //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("foot-and-inch-and-yard", status)) //
+                           .notation(Notation::scientific()),                                  //
+                       Locale("en-US"),                                                        //
+                       3.65,                                                                   //
+                       "1 ft, 1.14E1 in, 3 yd");                                               //
+
     assertFormatSingle(
             u"Testing  \"1 foot 12 inches\"",
             u"unit/foot-and-inch @### unit-width-full-name",

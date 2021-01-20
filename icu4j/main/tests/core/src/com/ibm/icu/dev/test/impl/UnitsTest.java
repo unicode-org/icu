@@ -138,7 +138,7 @@ public class UnitsTest {
             final MeasureUnitImpl inputImpl = MeasureUnitImpl.forIdentifier(input.getIdentifier());
             final MeasureUnitImpl outputImpl = MeasureUnitImpl.forIdentifier(output.getIdentifier());
             ComplexUnitsConverter converter = new ComplexUnitsConverter(inputImpl, outputImpl, rates);
-            measures = converter.convert(testCase.value, null);
+            measures = converter.convert(testCase.value, null).measures;
 
             assertEquals("measures length", testCase.expected.length, measures.size());
             int i = 0;
@@ -166,20 +166,67 @@ public class UnitsTest {
 
     @Test
     public void testComplexUnitConverterSorting() {
+        class TestCase {
+            String message;
+            String inputUnit;
+            String outputUnit;
+            double inputValue;
+            Measure[] expectedMeasures;
+            double accuracy;
 
-        MeasureUnitImpl source = MeasureUnitImpl.forIdentifier("meter");
-        MeasureUnitImpl target = MeasureUnitImpl.forIdentifier("inch-and-foot");
+            public TestCase(String message, String inputUnit, String outputUnit, double inputValue, Measure[] expectedMeasures, double accuracy) {
+                this.message = message;
+                this.inputUnit = inputUnit;
+                this.outputUnit = outputUnit;
+                this.inputValue = inputValue;
+                this.expectedMeasures = expectedMeasures;
+                this.accuracy = accuracy;
+            }
+        }
+
+        TestCase[] testCases = new TestCase[]{
+                new TestCase(
+                        "inch-and-foot",
+                        "meter",
+                        "inch-and-foot",
+                        10.0,
+                        new Measure[]{
+                                new Measure(9.70079, MeasureUnit.INCH),
+                                new Measure(32, MeasureUnit.FOOT),
+                        },
+                        0.0001
+                ),
+                new TestCase(
+                        "inch-and-yard-and-foot",
+                        "meter",
+                        "inch-and-yard-and-foot",
+                        100.0,
+                        new Measure[]{
+                                new Measure(1.0079, MeasureUnit.INCH),
+                                new Measure(109, MeasureUnit.YARD),
+                                new Measure(1, MeasureUnit.FOOT),
+                        },
+                        0.0001
+                ),
+        };
+
         ConversionRates conversionRates = new ConversionRates();
+        for (TestCase testCase : testCases) {
+            MeasureUnitImpl input = MeasureUnitImpl.forIdentifier(testCase.inputUnit);
+            MeasureUnitImpl output = MeasureUnitImpl.forIdentifier(testCase.outputUnit);
 
-        ComplexUnitsConverter complexConverter = new ComplexUnitsConverter(source, target, conversionRates);
-        List<Measure> measures = complexConverter.convert(BigDecimal.valueOf(10.0), null);
+            ComplexUnitsConverter converter = new ComplexUnitsConverter(input, output, conversionRates);
+            List<Measure> actualMeasures = converter.convert(BigDecimal.valueOf(testCase.inputValue), null).measures;
 
-        assertEquals(measures.size(), 2);
-        assertEquals("inch-and-foot unit 0", "inch", measures.get(0).getUnit().getIdentifier());
-        assertEquals("inch-and-foot unit 1", "foot", measures.get(1).getUnit().getIdentifier());
-
-        assertEquals("inch-and-foot value 0", 9.7008, measures.get(0).getNumber().doubleValue(), 0.0001);
-        assertEquals("inch-and-foot value 1", 32, measures.get(1).getNumber().doubleValue(), 0.0001);
+            assertEquals(testCase.message, testCase.expectedMeasures.length, actualMeasures.size());
+            for (int i = 0; i < testCase.expectedMeasures.length; i++) {
+                assertEquals(testCase.message, testCase.expectedMeasures[i].getUnit(), actualMeasures.get(i).getUnit());
+                assertEquals(testCase.message,
+                        testCase.expectedMeasures[i].getNumber().doubleValue(),
+                        actualMeasures.get(i).getNumber().doubleValue(),
+                        testCase.accuracy);
+            }
+        }
     }
 
 
@@ -443,7 +490,7 @@ public class UnitsTest {
         for (TestCase testCase :
                 tests) {
             UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.region, testCase.usage);
-            List<Measure> measures = router.route(testCase.input, null).measures;
+            List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
 
             assertEquals("Measures size must be the same as expected units",
                     measures.size(), testCase.expectedInOrder.size());

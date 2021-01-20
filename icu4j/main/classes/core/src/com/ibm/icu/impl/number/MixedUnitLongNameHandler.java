@@ -168,14 +168,33 @@ public class MixedUnitLongNameHandler
 
         List<String> outputMeasuresList = new ArrayList<>();
 
+        StandardPlural quantityPlural = StandardPlural.OTHER;
         for (int i = 0; i < micros.mixedMeasures.size(); i++) {
+
+            if ( i  == micros.indexOfQuantity) {
+                if (i > 0 && quantity.isNegative()) {
+                    // If numbers are negative, only the first number needs to have its
+                    // negative sign formatted.
+                    quantity.negate();
+                }
+
+                quantityPlural = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
+                String quantitySimpleFormat = LongNameHandler.getWithPlural(this.fMixedUnitData.get(i), quantityPlural);
+                SimpleFormatter finalFormatter = SimpleFormatter.compileMinMaxArguments(quantitySimpleFormat, 0, 1);
+                outputMeasuresList.add(finalFormatter.format("{0}"));
+
+                continue;
+            }
+
+
             DecimalQuantity fdec = new DecimalQuantity_DualStorageBCD(micros.mixedMeasures.get(i).getNumber());
             if (i > 0 && fdec.isNegative()) {
                 // If numbers are negative, only the first number needs to have its
                 // negative sign formatted.
                 fdec.negate();
             }
-            StandardPlural pluralForm = fdec.getStandardPlural(rules);
+
+            StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, fdec);
 
             String simpleFormat = LongNameHandler.getWithPlural(this.fMixedUnitData.get(i), pluralForm);
             SimpleFormatter compiledFormatter = SimpleFormatter.compileMinMaxArguments(simpleFormat, 0, 1);
@@ -186,18 +205,6 @@ public class MixedUnitLongNameHandler
             // TODO(icu-units#67): fix field positions
         }
 
-        // Reiterated: we have at least one mixedMeasure:
-        assert micros.mixedMeasures.size() > 0;
-        // Thus if negative, a negative has already been formatted:
-        if (quantity.isNegative()) {
-            quantity.negate();
-        }
-
-        String[] finalSimpleFormats = this.fMixedUnitData.get(this.fMixedUnitData.size() - 1);
-        StandardPlural finalPlural = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
-        String finalSimpleFormat = LongNameHandler.getWithPlural(finalSimpleFormats, finalPlural);
-        SimpleFormatter finalFormatter = SimpleFormatter.compileMinMaxArguments(finalSimpleFormat, 0, 1);
-        outputMeasuresList.add(finalFormatter.format("{0}"));
 
         // Combine list into a "premixed" pattern
         String premixedFormatPattern = this.fListFormatter.format(outputMeasuresList);
@@ -209,7 +216,7 @@ public class MixedUnitLongNameHandler
         Modifier.Parameters params = new Modifier.Parameters();
         params.obj = this;
         params.signum = Modifier.Signum.POS_ZERO;
-        params.plural = finalPlural;
+        params.plural = quantityPlural;
         // Return a SimpleModifier for the "premixed" pattern
         return new SimpleModifier(premixedCompiled, null, false, params);
     }

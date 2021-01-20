@@ -36,6 +36,7 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 
+
 /**
  * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in a
  * MacroProps and a DecimalQuantity and outputting a properly formatted number string.
@@ -274,9 +275,7 @@ class NumberFormatterImpl {
             }
             chain = usagePrefsHandler = new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
         } else if (isMixedUnit) {
-            // TODO(icu-units#97): The input unit should be the largest unit, not the first unit, in the identifier.
-            MeasureUnit inputUnit = macros.unit.splitToSingleUnits().get(0);
-            chain = new UnitConversionHandler(inputUnit, macros.unit, chain);
+            chain = new UnitConversionHandler(macros.unit, chain);
         }
 
         // Multiplier

@@ -14,10 +14,32 @@
 
 U_NAMESPACE_BEGIN
 
+// Export an explicit template instantiation of the LocalPointer that is used as a
+// data member of MeasureUnitImpl.
+// (When building DLLs for Windows this is required.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+#if defined(_MSC_VER)
+// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
+#pragma warning(push)
+#pragma warning(disable : 4661)
+#endif
+template class U_I18N_API LocalPointerBase<MeasureUnitImpl>;
+template class U_I18N_API LocalPointer<MeasureUnitImpl>;
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+#endif
 
 static const char16_t kDefaultCurrency[] = u"XXX";
 static const char kDefaultCurrency8[] = "XXX";
 
+struct U_I18N_API MeasureUnitImplWithIndex : public UMemory {
+    const int32_t index;
+    LocalPointer<MeasureUnitImpl> unitImpl;
+    // Takes ownership of unitImpl.
+    MeasureUnitImplWithIndex(int32_t index, MeasureUnitImpl *unitImpl)
+        : index(index), unitImpl(unitImpl) {}
+};
 
 /**
  * A struct representing a single unit (optional SI prefix and dimensionality).
@@ -130,9 +152,12 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
 // MaybeStackVector. This is required when building DLLs for Windows. (See
 // datefmt.h, collationiterator.h, erarules.h and others for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-template class U_I18N_API MaybeStackArray<SingleUnitImpl*, 8>;
+template class U_I18N_API MaybeStackArray<SingleUnitImpl *, 8>;
 template class U_I18N_API MemoryPool<SingleUnitImpl, 8>;
 template class U_I18N_API MaybeStackVector<SingleUnitImpl, 8>;
+template class U_I18N_API MaybeStackArray<MeasureUnitImplWithIndex *, 8>;
+template class U_I18N_API MemoryPool<MeasureUnitImplWithIndex, 8>;
+template class U_I18N_API MaybeStackVector<MeasureUnitImplWithIndex, 8>;
 #endif
 
 /**
@@ -149,7 +174,7 @@ class U_I18N_API MeasureUnitImpl : public UMemory {
     MeasureUnitImpl &operator=(MeasureUnitImpl &&other) noexcept = default;
 
     /** Extract the MeasureUnitImpl from a MeasureUnit. */
-    static inline const MeasureUnitImpl* get(const MeasureUnit& measureUnit) {
+    static inline const MeasureUnitImpl *get(const MeasureUnit &measureUnit) {
         return measureUnit.fImpl;
     }
 
@@ -204,14 +229,15 @@ class U_I18N_API MeasureUnitImpl : public UMemory {
     MeasureUnitImpl copy(UErrorCode& status) const;
 
     /**
-     * Extracts the list of all the individual units inside the `MeasureUnitImpl`.
+     * Extracts the list of all the individual units inside the `MeasureUnitImpl` with their indices.
      *      For example:    
      *          -   if the `MeasureUnitImpl` is `foot-per-hour`
-     *                  it will return a list of 1 {`foot-per-hour`} 
+     *                  it will return a list of 1 {(0, `foot-per-hour`)} 
      *          -   if the `MeasureUnitImpl` is `foot-and-inch` 
-     *                  it will return a list of 2 { `foot`, `inch`}
+     *                  it will return a list of 2 {(0, `foot`), (1, `inch`)}
      */
-    MaybeStackVector<MeasureUnitImpl> extractIndividualUnits(UErrorCode &status) const;
+    MaybeStackVector<MeasureUnitImplWithIndex>
+    extractIndividualUnitsWithIndices(UErrorCode &status) const;
 
     /** Mutates this MeasureUnitImpl to take the reciprocal. */
     void takeReciprocal(UErrorCode& status);

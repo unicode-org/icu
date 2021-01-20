@@ -549,10 +549,65 @@ void UnitsTest::testComplexUnitsConverter() {
 
 void UnitsTest::testComplexUnitConverterSorting() {
     IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitConverterSorting");
+    ConversionRates conversionRates(status);
+
+    status.assertSuccess();
+
+    struct TestCase {
+        const char *msg;
+        const char *input;
+        const char *output;
+        double inputValue;
+        Measure expected[3];
+        int32_t expectedCount;
+        // For mixed units, accuracy of the smallest unit
+        double accuracy;
+    } testCases[]{{"inch-and-foot",
+                   "meter",
+                   "inch-and-foot",
+                   10.0,
+                   {
+                       Measure(9.70079, MeasureUnit::createInch(status), status),
+                       Measure(32, MeasureUnit::createFoot(status), status),
+                       Measure(0, MeasureUnit::createBit(status), status),
+                   },
+                   2,
+                   0.00001},
+                  {"inch-and-yard-and-foot",
+                   "meter",
+                   "inch-and-yard-and-foot",
+                   100.0,
+                   {
+                       Measure(1.0079, MeasureUnit::createInch(status), status),
+                       Measure(109, MeasureUnit::createYard(status), status),
+                       Measure(1, MeasureUnit::createFoot(status), status),
+                   },
+                   3,
+                   0.0001}};
+
+    for (const auto &testCase : testCases) {
+        MeasureUnitImpl inputImpl = MeasureUnitImpl::forIdentifier(testCase.input, status);
+        MeasureUnitImpl outputImpl = MeasureUnitImpl::forIdentifier(testCase.output, status);
+        ComplexUnitsConverter converter(inputImpl, outputImpl, conversionRates, status);
+
+        auto actual = converter.convert(testCase.inputValue, nullptr, status);
+
+        for (int i = 0; i < testCase.expectedCount; i++) {
+            assertEquals(testCase.msg, testCase.expected[i].getUnit().getIdentifier(),
+                         actual[i]->getUnit().getIdentifier());
+
+            if (testCase.expected[i].getNumber().getType() == Formattable::Type::kInt64) {
+                assertEquals(testCase.msg, testCase.expected[i].getNumber().getInt64(),
+                             actual[i]->getNumber().getInt64());
+            } else {
+                assertEqualsNear(testCase.msg, testCase.expected[i].getNumber().getDouble(),
+                                 actual[i]->getNumber().getDouble(), testCase.accuracy);
+            }
+        }
+    }
 
     MeasureUnitImpl source = MeasureUnitImpl::forIdentifier("meter", status);
     MeasureUnitImpl target = MeasureUnitImpl::forIdentifier("inch-and-foot", status);
-    ConversionRates conversionRates(status);
 
     ComplexUnitsConverter complexConverter(source, target, conversionRates, status);
     auto measures = complexConverter.convert(10.0, nullptr, status);

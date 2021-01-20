@@ -107,37 +107,42 @@ void Usage::set(StringPiece value) {
 // measures.
 void mixedMeasuresToMicros(const MaybeStackVector<Measure> &measures, DecimalQuantity *quantity,
                            MicroProps *micros, UErrorCode status) {
-    micros->mixedMeasuresCount = measures.length() - 1;
-    if (micros->mixedMeasuresCount > 0) {
-#ifdef U_DEBUG
-        U_ASSERT(micros->outputUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
-        U_ASSERT(U_SUCCESS(status));
-        // Check that we received measurements with the expected MeasureUnits:
-        MeasureUnitImpl temp;
-        const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(micros->outputUnit, temp, status);
-        U_ASSERT(U_SUCCESS(status));
-        U_ASSERT(measures.length() == impl.singleUnits.length());
-        for (int32_t i = 0; i < measures.length(); i++) {
-            U_ASSERT(measures[i]->getUnit() == impl.singleUnits[i]->build(status));
+    micros->mixedMeasuresCount = measures.length();
+
+    if (micros->mixedMeasures.getCapacity() < micros->mixedMeasuresCount) {
+        if (micros->mixedMeasures.resize(micros->mixedMeasuresCount) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         }
-        (void)impl;
-#endif
-        // Mixed units: except for the last value, we pass all values to the
-        // LongNameHandler via micros->mixedMeasures.
-        if (micros->mixedMeasures.getCapacity() < micros->mixedMeasuresCount) {
-            if (micros->mixedMeasures.resize(micros->mixedMeasuresCount) == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-        }
-        for (int32_t i = 0; i < micros->mixedMeasuresCount; i++) {
-            micros->mixedMeasures[i] = measures[i]->getNumber().getInt64();
-        }
-    } else {
-        micros->mixedMeasuresCount = 0;
     }
-    // The last value (potentially the only value) gets passed on via quantity.
-    quantity->setToDouble(measures[measures.length() - 1]->getNumber().getDouble());
+
+    for (int32_t i = 0; i < micros->mixedMeasuresCount; i++) {
+        switch (measures[i]->getNumber().getType()) {
+        case Formattable::kInt64:
+            micros->mixedMeasures[i] = measures[i]->getNumber().getInt64();
+            break;
+
+        case Formattable::kDouble:
+            U_ASSERT(micros->indexOfQuantity < 0);
+            quantity->setToDouble(measures[i]->getNumber().getDouble());
+            micros->indexOfQuantity = i;
+            break;
+
+        default:
+            U_ASSERT(0 == "Found a Measure Number which is neither a double nor an int");
+            UPRV_UNREACHABLE;
+            break;
+        }
+
+        if (U_FAILURE(status)) {
+            return;
+        }
+    }
+
+    if (micros->indexOfQuantity < 0) {
+        // There is no quantity.
+        status = U_INTERNAL_PROGRAM_ERROR;
+    }
 }
 
 UsagePrefsHandler::UsagePrefsHandler(const Locale &locale,
@@ -170,22 +175,20 @@ void UsagePrefsHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     mixedMeasuresToMicros(routedMeasures, &quantity, &micros, status);
 }
 
-UnitConversionHandler::UnitConversionHandler(const MeasureUnit &inputUnit, const MeasureUnit &outputUnit,
+UnitConversionHandler::UnitConversionHandler(const MeasureUnit &targetUnit,
                                              const MicroPropsGenerator *parent, UErrorCode &status)
-    : fOutputUnit(outputUnit), fParent(parent) {
+    : fOutputUnit(targetUnit), fParent(parent) {
     MeasureUnitImpl tempInput, tempOutput;
-    const MeasureUnitImpl &inputUnitImpl = MeasureUnitImpl::forMeasureUnit(inputUnit, tempInput, status);
-    const MeasureUnitImpl &outputUnitImpl =
-        MeasureUnitImpl::forMeasureUnit(outputUnit, tempOutput, status);
 
-    // TODO: this should become an initOnce thing? Review with other
-    // ConversionRates usages.
     ConversionRates conversionRates(status);
     if (U_FAILURE(status)) {
         return;
     }
+
+    const MeasureUnitImpl &targetUnitImpl =
+        MeasureUnitImpl::forMeasureUnit(targetUnit, tempOutput, status);
     fUnitConverter.adoptInsteadAndCheckErrorCode(
-        new ComplexUnitsConverter(inputUnitImpl, outputUnitImpl, conversionRates, status), status);
+        new ComplexUnitsConverter(targetUnitImpl, conversionRates, status), status);
 }
 
 void UnitConversionHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,

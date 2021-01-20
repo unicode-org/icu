@@ -774,16 +774,20 @@ bool MeasureUnitImpl::appendSingleUnit(const SingleUnitImpl &singleUnit, UErrorC
     return true;
 }
 
-MaybeStackVector<MeasureUnitImpl> MeasureUnitImpl::extractIndividualUnits(UErrorCode &status) const {
-    MaybeStackVector<MeasureUnitImpl> result;
+MaybeStackVector<MeasureUnitImplWithIndex>
+MeasureUnitImpl::extractIndividualUnitsWithIndices(UErrorCode &status) const {
+    MaybeStackVector<MeasureUnitImplWithIndex> result;
 
     if (this->complexity != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
-        result.emplaceBackAndCheckErrorCode(status, *this, status);
+        result.emplaceBackAndCheckErrorCode(status, 0, new MeasureUnitImpl(*this, status));
         return result;
     }
 
-    for (int32_t i = 0; i < singleUnits.length(); i++) {
-        result.emplaceBackAndCheckErrorCode(status, *singleUnits[i], status);
+    for (int32_t i = 0; i < singleUnits.length(); ++i) {
+        result.emplaceBackAndCheckErrorCode(status, i, new MeasureUnitImpl(*singleUnits[i], status));
+        if (U_FAILURE(status)) {
+            return result;
+        }
     }
 
     return result;
