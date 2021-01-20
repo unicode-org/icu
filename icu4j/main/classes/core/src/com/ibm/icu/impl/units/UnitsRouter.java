@@ -176,19 +176,15 @@ public class UnitsRouter {
     }
 
     public class RouteResult {
-        // A list of measures: a single measure for single units, multiple measures
-        // for mixed units.
-        //
-        // TODO(icu-units/icu#21): figure out the right mixed unit API.
-        public final List<Measure> measures;
+        public final ComplexUnitsConverter.ComplexConverterResult complexConverterResult;
 
         // The output unit for this RouteResult. This may be a MIXED unit - for
         // example: "yard-and-foot-and-inch", for which `measures` will have three
         // elements.
         public final MeasureUnitImpl outputUnit;
 
-        RouteResult(List<Measure> measures, MeasureUnitImpl outputUnit) {
-            this.measures = measures;
+        RouteResult(ComplexUnitsConverter.ComplexConverterResult complexConverterResult, MeasureUnitImpl outputUnit) {
+            this.complexConverterResult = complexConverterResult;
             this.outputUnit = outputUnit;
         }
     }

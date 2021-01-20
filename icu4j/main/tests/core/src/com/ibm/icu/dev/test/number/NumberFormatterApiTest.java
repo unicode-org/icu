@@ -728,6 +728,73 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "4 metric tons, 285 kilograms, 710 grams");
 
         assertFormatSingle(
+                "Mixed Unit (Not Sorted) [metric]",
+                "unit/gram-and-kilogram unit-width-full-name",
+                "unit/gram-and-kilogram unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("gram-and-kilogram"))
+                        .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-US"),
+                4.28571,
+                "285.71 grams, 4 kilograms");
+
+        assertFormatSingle(
+                "Mixed Unit (Not Sorted) [imperial]",
+                "unit/inch-and-yard-and-foot unit-width-full-name",
+                "unit/inch-and-yard-and-foot unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("inch-and-yard-and-foot"))
+                        .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-US"),
+                4.28571,
+                "10.28556 inches, 4 yards, 0 feet");
+
+        assertFormatSingle(
+                "Mixed Unit (Not Sorted) [imperial full]",
+                "unit/inch-and-yard-and-foot unit-width-full-name",
+                "unit/inch-and-yard-and-foot unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("inch-and-yard-and-foot"))
+                        .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-US"),
+                4.38571,
+                "1.88556 inches, 4 yards, 1 foot");
+
+        assertFormatSingle(
+                "Mixed Unit (Not Sorted) [imperial full integers]",
+                "unit/inch-and-yard-and-foot @# unit-width-full-name",
+                "unit/inch-and-yard-and-foot @# unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("inch-and-yard-and-foot"))
+                        .unitWidth(UnitWidth.FULL_NAME)
+                        .precision(Precision.maxSignificantDigits(2)),
+                new ULocale("en-US"),
+                4.36112,
+                "1 inch, 4 yards, 1 foot");
+
+        assertFormatSingle(
+                "Mixed Unit (Not Sorted) [imperial full] with `And` in the end",
+                "unit/inch-and-yard-and-foot unit-width-full-name",
+                "unit/inch-and-yard-and-foot unit-width-full-name",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("inch-and-yard-and-foot"))
+                        .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("fr-FR"),
+                4.38571,
+                "1,88556\u00A0pouce, 4\u00A0yards et 1\u00A0pied");
+
+        assertFormatSingle(
+                "Mixed unit, Scientific [Not in Order]",
+                "unit/foot-and-inch-and-yard E0",
+                "unit/foot-and-inch-and-yard E0",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("foot-and-inch-and-yard"))
+                        .notation(Notation.scientific()),
+                new ULocale("en-US"),
+                3.65,
+                "1 ft, 1.14E1 in, 3 yd");
+
+        assertFormatSingle(
                 "Testing \"1 foot 12 inches\"",
                 "unit/foot-and-inch @### unit-width-full-name",
                 "unit/foot-and-inch @### unit-width-full-name",

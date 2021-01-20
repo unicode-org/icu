@@ -151,21 +151,24 @@ class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStor
   private:
     // Not owned
     const PluralRules *rules;
+
     // Not owned
     const MicroPropsGenerator *parent;
 
     // Total number of units in the MeasureUnit this handler was configured for:
     // for "foot-and-inch", this will be 2.
     int32_t fMixedUnitCount = 1;
+
     // Stores unit data for each of the individual units. For each unit, it
     // stores ARRAY_LENGTH strings, as returned by getMeasureData. (Each unit
     // with index `i` has ARRAY_LENGTH strings starting at index
     // `i*ARRAY_LENGTH` in this array.)
     LocalArray<UnicodeString> fMixedUnitData;
-    // A localized NumberFormatter used to format the integer-valued bigger
-    // units of Mixed Unit measurements.
-    LocalizedNumberFormatter fIntegerFormatter;
-    // A localised list formatter for joining mixed units together.
+
+    // Formats the larger units of Mixed Unit measurements.
+    LocalizedNumberFormatter fNumberFormatter;
+
+    // Joins mixed units together.
     LocalPointer<ListFormatter> fListFormatter;
 
     MixedUnitLongNameHandler(const PluralRules *rules, const MicroPropsGenerator *parent)

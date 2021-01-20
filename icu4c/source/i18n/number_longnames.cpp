@@ -440,9 +440,9 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
     fillIn->rules = rules;
     fillIn->parent = parent;
 
-    // We need a localised NumberFormatter for the integers of the bigger units
+    // We need a localised NumberFormatter for the numbers of the bigger units
     // (providing Arabic numerals, for example).
-    fillIn->fIntegerFormatter = NumberFormatter::withLocale(loc);
+    fillIn->fNumberFormatter = NumberFormatter::withLocale(loc);
 }
 
 void MixedUnitLongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
@@ -462,12 +462,6 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         status = U_UNSUPPORTED_ERROR;
         return &micros.helpers.emptyWeakModifier;
     }
-    // If we don't have at least one mixedMeasure, the LongNameHandler would be
-    // sufficient and we shouldn't be running MixedUnitLongNameHandler code:
-    U_ASSERT(micros.mixedMeasuresCount > 0);
-    // mixedMeasures does not contain the last value:
-    U_ASSERT(fMixedUnitCount == micros.mixedMeasuresCount + 1);
-    U_ASSERT(fListFormatter.isValid());
 
     // Algorithm:
     //
@@ -492,39 +486,41 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         return &micros.helpers.emptyWeakModifier;
     }
 
+    StandardPlural::Form quantityPlural = StandardPlural::Form::OTHER;
     for (int32_t i = 0; i < micros.mixedMeasuresCount; i++) {
         DecimalQuantity fdec;
-        fdec.setToLong(micros.mixedMeasures[i]);
-        if (i > 0 && fdec.isNegative()) {
-            // If numbers are negative, only the first number needs to have its
-            // negative sign formatted.
-            fdec.negate();
+
+        // If numbers are negative, only the first number needs to have its
+        // negative sign formatted.
+        int64_t number = i > 0 ? std::abs(micros.mixedMeasures[i]) : micros.mixedMeasures[i];
+
+        if (micros.indexOfQuantity == i) { // Insert placeholder for `quantity`
+            // If quantity is not the first value and quantity is negative
+            if (micros.indexOfQuantity > 0 && quantity.isNegative()) {
+                quantity.negate();
+            }
+
+            StandardPlural::Form quantityPlural =
+                utils::getPluralSafe(micros.rounder, rules, quantity, status);
+            UnicodeString quantityFormatWithPlural =
+                getWithPlural(&fMixedUnitData[i * ARRAY_LENGTH], quantityPlural, status);
+            SimpleFormatter quantityFormatter(quantityFormatWithPlural, 0, 1, status);
+            quantityFormatter.format(UnicodeString(u"{0}"), outputMeasuresList[i], status);
+        } else {
+            fdec.setToLong(number);
+            StandardPlural::Form pluralForm = utils::getStandardPlural(rules, fdec);
+            UnicodeString simpleFormat =
+                getWithPlural(&fMixedUnitData[i * ARRAY_LENGTH], pluralForm, status);
+            SimpleFormatter compiledFormatter(simpleFormat, 0, 1, status);
+            UnicodeString num;
+            auto appendable = UnicodeStringAppendable(num);
+
+            fNumberFormatter.formatDecimalQuantity(fdec, status).appendTo(appendable, status);
+            compiledFormatter.format(num, outputMeasuresList[i], status);
         }
-        StandardPlural::Form pluralForm = utils::getStandardPlural(rules, fdec);
-
-        UnicodeString simpleFormat =
-            getWithPlural(&fMixedUnitData[i * ARRAY_LENGTH], pluralForm, status);
-        SimpleFormatter compiledFormatter(simpleFormat, 0, 1, status);
-
-        UnicodeString num;
-        auto appendable = UnicodeStringAppendable(num);
-        fIntegerFormatter.formatDecimalQuantity(fdec, status).appendTo(appendable, status);
-        compiledFormatter.format(num, outputMeasuresList[i], status);
-        // TODO(icu-units#67): fix field positions
     }
 
-    // Reiterated: we have at least one mixedMeasure:
-    U_ASSERT(micros.mixedMeasuresCount > 0);
-    // Thus if negative, a negative has already been formatted:
-    if (quantity.isNegative()) {
-        quantity.negate();
-    }
 
-    UnicodeString *finalSimpleFormats = &fMixedUnitData[(fMixedUnitCount - 1) * ARRAY_LENGTH];
-    StandardPlural::Form finalPlural = utils::getPluralSafe(micros.rounder, rules, quantity, status);
-    UnicodeString finalSimpleFormat = getWithPlural(finalSimpleFormats, finalPlural, status);
-    SimpleFormatter finalFormatter(finalSimpleFormat, 0, 1, status);
-    finalFormatter.format(UnicodeString(u"{0}"), outputMeasuresList[fMixedUnitCount - 1], status);
 
     // Combine list into a "premixed" pattern
     UnicodeString premixedFormatPattern;
@@ -535,10 +531,8 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         return &micros.helpers.emptyWeakModifier;
     }
 
-    // TODO(icu-units#67): fix field positions
-    // Return a SimpleModifier for the "premixed" pattern
     micros.helpers.mixedUnitModifier =
-        SimpleModifier(premixedCompiled, kUndefinedField, false, {this, SIGNUM_POS_ZERO, finalPlural});
+        SimpleModifier(premixedCompiled, kUndefinedField, false, {this, SIGNUM_POS_ZERO, quantityPlural});
     return &micros.helpers.mixedUnitModifier;
 }
 
