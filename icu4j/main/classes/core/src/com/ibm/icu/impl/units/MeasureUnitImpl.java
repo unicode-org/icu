@@ -388,6 +388,11 @@ public class MeasureUnitImpl {
         //     * unit", sawAnd is set to true. If not, it is left as is.
         private boolean fSawAnd = false;
 
+        // Cache the MeasurePrefix values array to make getPrefixFromTrieIndex()
+        // more efficient
+        private static MeasureUnit.MeasurePrefix[] measurePrefixValues =
+            MeasureUnit.MeasurePrefix.values();
+
         private UnitsParser(String identifier) {
             this.fSource = identifier;
 
@@ -402,6 +407,11 @@ public class MeasureUnitImpl {
             // Build Units trie.
             CharsTrieBuilder trieBuilder;
             trieBuilder = new CharsTrieBuilder();
+
+            // Add SI and binary prefixes
+            for (MeasureUnit.MeasurePrefix unitPrefix : measurePrefixValues) {
+                trieBuilder.add(unitPrefix.getIdentifier(), getTrieIndexForPrefix(unitPrefix));
+            }
 
             // Add syntax parts (compound, power prefixes)
             trieBuilder.add("-per-", CompoundPart.PER.getTrieIndex());
@@ -424,12 +434,6 @@ public class MeasureUnitImpl {
             trieBuilder.add("pow13-", PowerPart.P13.getTrieIndex());
             trieBuilder.add("pow14-", PowerPart.P14.getTrieIndex());
             trieBuilder.add("pow15-", PowerPart.P15.getTrieIndex());
-
-            // Add SI prefixes
-            for (MeasureUnit.SIPrefix siPrefix :
-                    MeasureUnit.SIPrefix.values()) {
-                trieBuilder.add(siPrefix.getIdentifier(), getTrieIndex(siPrefix));
-            }
 
             // Add simple units
             String[] simpleUnits = UnitsData.getSimpleUnits();
@@ -459,18 +463,12 @@ public class MeasureUnitImpl {
 
         }
 
-        private static MeasureUnit.SIPrefix getSiPrefixFromTrieIndex(int trieIndex) {
-            for (MeasureUnit.SIPrefix element :
-                    MeasureUnit.SIPrefix.values()) {
-                if (getTrieIndex(element) == trieIndex)
-                    return element;
-            }
-
-            throw new IllegalArgumentException("Incorrect trieIndex");
+        private static MeasureUnit.MeasurePrefix getPrefixFromTrieIndex(int trieIndex) {
+            return measurePrefixValues[trieIndex - UnitsData.Constants.kPrefixOffset];
         }
 
-        private static int getTrieIndex(MeasureUnit.SIPrefix prefix) {
-            return prefix.getPower() + UnitsData.Constants.kSIPrefixOffset;
+        private static int getTrieIndexForPrefix(MeasureUnit.MeasurePrefix prefix) {
+            return prefix.ordinal() + UnitsData.Constants.kPrefixOffset;
         }
 
         private MeasureUnitImpl parse() {
@@ -524,9 +522,9 @@ public class MeasureUnitImpl {
             SingleUnitImpl result = new SingleUnitImpl();
 
             // state:
-            // 0 = no tokens seen yet (will accept power, SI prefix, or simple unit)
+            // 0 = no tokens seen yet (will accept power, SI or binary prefix, or simple unit)
             // 1 = power token seen (will not accept another power token)
-            // 2 = SI prefix token seen (will not accept a power or SI prefix token)
+            // 2 = SI or binary prefix token seen (will not accept a power, or SI or binary prefix token)
             int state = 0;
 
             boolean atStart = fIndex == 0;
@@ -591,12 +589,12 @@ public class MeasureUnitImpl {
                         state = 1;
                         break;
 
-                    case TYPE_SI_PREFIX:
+                    case TYPE_PREFIX:
                         if (state > 1) {
                             throw new IllegalArgumentException();
                         }
 
-                        result.setSiPrefix(token.getSIPrefix());
+                        result.setPrefix(token.getPrefix());
                         state = 2;
                         break;
 
@@ -674,9 +672,9 @@ public class MeasureUnitImpl {
                 return this.type;
             }
 
-            public MeasureUnit.SIPrefix getSIPrefix() {
-                assert this.type == Type.TYPE_SI_PREFIX;
-                return getSiPrefixFromTrieIndex(this.fMatch);
+            public MeasureUnit.MeasurePrefix getPrefix() {
+                assert this.type == Type.TYPE_PREFIX;
+                return getPrefixFromTrieIndex(this.fMatch);
             }
 
             // Valid only for tokens with type TYPE_COMPOUND_PART.
@@ -700,6 +698,7 @@ public class MeasureUnitImpl {
             }
 
             public int getSimpleUnitIndex() {
+                assert this.type == Type.TYPE_SIMPLE_UNIT;
                 return this.fMatch - UnitsData.Constants.kSimpleUnitOffset;
             }
 
@@ -711,7 +710,7 @@ public class MeasureUnitImpl {
                 }
 
                 if (fMatch < UnitsData.Constants.kCompoundPartOffset) {
-                    return Type.TYPE_SI_PREFIX;
+                    return Type.TYPE_PREFIX;
                 }
                 if (fMatch < UnitsData.Constants.kInitialCompoundPartOffset) {
                     return Type.TYPE_COMPOUND_PART;
@@ -728,7 +727,7 @@ public class MeasureUnitImpl {
 
             enum Type {
                 TYPE_UNDEFINED,
-                TYPE_SI_PREFIX,
+                TYPE_PREFIX,
                 // Token type for "-per-", "-", and "-and-".
                 TYPE_COMPOUND_PART,
                 // Token type for "per-".

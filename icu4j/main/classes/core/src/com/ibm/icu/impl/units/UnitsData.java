@@ -109,6 +109,9 @@ public class UnitsData {
      * Contains all the needed constants.
      */
     public static class Constants {
+        // TODO: consider moving the Trie-offset-related constants into
+        // MeasureUnitImpl.java, the only place they're being used?
+
         // Trie value offset for simple units, e.g. "gram", "nautical-mile",
         // "fluid-ounce-imperial".
         public static final int kSimpleUnitOffset = 512;
@@ -123,9 +126,9 @@ public class UnitsData {
         // Trie value offset for compound parts, e.g. "-per-", "-", "-and-".
         public final static int kCompoundPartOffset = 128;
 
-        // Trie value offset for SI Prefixes. This is big enough to ensure we only
-        // insert positive integers into the trie.
-        public static final int kSIPrefixOffset = 64;
+        // Trie value offset for SI or binary prefixes. This is big enough to
+        // ensure we only insert positive integers into the trie.
+        public static final int kPrefixOffset = 64;
 
 
         /* Tables Names*/

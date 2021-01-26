@@ -192,6 +192,14 @@ void UnitsTest::testConverter() {
         {"gigabyte", "byte", 1.0, 1000000000},
         {"megawatt", "watt", 1.0, 1000000},
         {"megawatt", "kilowatt", 1.0, 1000},
+        // Binary Prefixes
+        {"kilobyte", "byte", 1, 1000},
+        {"kibibyte", "byte", 1, 1024},
+        {"mebibyte", "byte", 1, 1048576},
+        {"gibibyte", "kibibyte", 1, 1048576},
+        {"pebibyte", "tebibyte", 4, 4096},
+        {"zebibyte", "pebibyte", 1.0/16, 65536.0},
+        {"yobibyte", "exbibyte", 1, 1048576},
         // Mass
         {"gram", "kilogram", 1.0, 0.001},
         {"pound", "kilogram", 1.0, 0.453592},

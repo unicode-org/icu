@@ -296,6 +296,14 @@ public class UnitsTest {
                 new TestData("gigabyte", "byte", 1.0, 1000000000),
                 new TestData("megawatt", "watt", 1.0, 1000000),
                 new TestData("megawatt", "kilowatt", 1.0, 1000),
+                // Binary Prefixes
+                new TestData("kilobyte", "byte", 1, 1000),
+                new TestData("kibibyte", "byte", 1, 1024),
+                new TestData("mebibyte", "byte", 1, 1048576),
+                new TestData("gibibyte", "kibibyte", 1, 1048576),
+                new TestData("pebibyte", "tebibyte", 4, 4096),
+                new TestData("zebibyte", "pebibyte", 1.0/16, 65536.0),
+                new TestData("yobibyte", "exbibyte", 1, 1048576),
                 // Mass
                 new TestData("gram", "kilogram", 1.0, 0.001),
                 new TestData("pound", "kilogram", 1.0, 0.453592),
@@ -333,7 +341,13 @@ public class UnitsTest {
         ConversionRates conversionRates = new ConversionRates();
         for (TestData test : tests) {
             UnitConverter converter = new UnitConverter(test.source, test.target, conversionRates);
-            assertEquals(test.expected.doubleValue(), converter.convert(test.input).doubleValue(), (0.001));
+            double maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
+            if (test.expected.doubleValue() == 0) {
+                maxDelta = 1e-12;
+            }
+            assertEquals("testConverter: " + test.source + " to " + test.target,
+                         test.expected.doubleValue(), converter.convert(test.input).doubleValue(),
+                         maxDelta);
         }
     }
 

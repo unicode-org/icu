@@ -1067,10 +1067,9 @@ public class NumberFormatterApiTest extends TestFmwk {
              "measure-unit/concentr-permille",                         //
              "permille"},
 
-            // // TODO: binary prefixes not supported yet!
-            // {"Round-trip example from icu-units#35", //
-            //  "unit/kibijoule-per-furlong",           //
-            //  "unit/kibijoule-per-furlong"},
+            {"Round-trip example from icu-units#35", //
+             "unit/kibijoule-per-furlong",           //
+             "unit/kibijoule-per-furlong"},
         };
         for (Object[] cas : cases) {
             String msg = (String)cas[0];

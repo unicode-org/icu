@@ -211,20 +211,24 @@ public class UnitConverter {
             }
         }
 
-        public Factor applySiPrefix(MeasureUnit.SIPrefix siPrefix) {
+        /** Apply SI or binary prefix to the Factor. */
+        public Factor applyPrefix(MeasureUnit.MeasurePrefix unitPrefix) {
             Factor result = this.copy();
-            if (siPrefix == MeasureUnit.SIPrefix.ONE) {
+            if (unitPrefix == MeasureUnit.MeasurePrefix.ONE) {
                 return result;
             }
 
-            BigDecimal siApplied = BigDecimal.valueOf(Math.pow(10.0, Math.abs(siPrefix.getPower())));
+            int base = unitPrefix.getBase();
+            int power = unitPrefix.getPower();
+            BigDecimal absFactor =
+                BigDecimal.valueOf(base).pow(Math.abs(power), DECIMAL128);
 
-            if (siPrefix.getPower() < 0) {
-                result.factorDen = this.factorDen.multiply(siApplied);
+            if (power < 0) {
+                result.factorDen = this.factorDen.multiply(absFactor);
                 return result;
             }
 
-            result.factorNum = this.factorNum.multiply(siApplied);
+            result.factorNum = this.factorNum.multiply(absFactor);
             return result;
         }
 
