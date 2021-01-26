@@ -83,6 +83,8 @@ private:
     void TestNumericTimeSomeSpecialFormats();
     void TestIdentifiers();
     void TestInvalidIdentifiers();
+    void TestIdentifierDetails();
+    void TestPrefixes();
     void TestParseToBuiltIn();
     void TestKilogramIdentifier();
     void TestCompoundUnitOperations();
@@ -152,7 +154,7 @@ private:
         int32_t end);
     void verifySingleUnit(
         const MeasureUnit& unit,
-        UMeasureSIPrefix siPrefix,
+        UMeasurePrefix unitPrefix,
         int8_t power,
         const char* identifier);
     void verifyCompoundUnit(
@@ -212,6 +214,8 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestNumericTimeSomeSpecialFormats);
     TESTCASE_AUTO(TestIdentifiers);
     TESTCASE_AUTO(TestInvalidIdentifiers);
+    TESTCASE_AUTO(TestIdentifierDetails);
+    TESTCASE_AUTO(TestPrefixes);
     TESTCASE_AUTO(TestParseToBuiltIn);
     TESTCASE_AUTO(TestKilogramIdentifier);
     TESTCASE_AUTO(TestCompoundUnitOperations);
@@ -3664,6 +3668,45 @@ void MeasureFormatTest::TestIdentifiers() {
         {"kilogram-per-meter-per-second", "kilogram-per-meter-second"},
 
         // TODO(ICU-21284): Add more test cases once the proper ranking is available.
+
+        // Testing prefixes are parsed and produced correctly (ensures no
+        // collisions in the enum values)
+        {"yoctofoot", "yoctofoot"},
+        {"zeptofoot", "zeptofoot"},
+        {"attofoot", "attofoot"},
+        {"femtofoot", "femtofoot"},
+        {"picofoot", "picofoot"},
+        {"nanofoot", "nanofoot"},
+        {"microfoot", "microfoot"},
+        {"millifoot", "millifoot"},
+        {"centifoot", "centifoot"},
+        {"decifoot", "decifoot"},
+        {"foot", "foot"},
+        {"dekafoot", "dekafoot"},
+        {"hectofoot", "hectofoot"},
+        {"kilofoot", "kilofoot"},
+        {"megafoot", "megafoot"},
+        {"gigafoot", "gigafoot"},
+        {"terafoot", "terafoot"},
+        {"petafoot", "petafoot"},
+        {"exafoot", "exafoot"},
+        {"zettafoot", "zettafoot"},
+        {"yottafoot", "yottafoot"},
+        {"kibibyte", "kibibyte"},
+        {"mebibyte", "mebibyte"},
+        {"gibibyte", "gibibyte"},
+        {"tebibyte", "tebibyte"},
+        {"pebibyte", "pebibyte"},
+        {"exbibyte", "exbibyte"},
+        {"zebibyte", "zebibyte"},
+        {"yobibyte", "yobibyte"},
+
+        // Testing sort order of prefixes.
+        //
+        // TODO(icu-units#70): revisit when fixing normalization. For now we're
+        // just checking some consistency between C&J.
+        {"megafoot-mebifoot-kibifoot-kilofoot", "kibifoot-mebifoot-kilofoot-megafoot"},
+
     };
     for (const auto &cas : cases) {
         status.setScope(cas.id);
@@ -3719,6 +3762,77 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
         status.setScope(input);
         MeasureUnit::forIdentifier(input, status);
         status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    }
+}
+
+void MeasureFormatTest::TestIdentifierDetails() {
+    IcuTestErrorCode status(*this, "TestIdentifierDetails()");
+
+    MeasureUnit joule = MeasureUnit::forIdentifier("joule", status);
+    status.assertSuccess();
+    assertEquals("Initial joule", "joule", joule.getIdentifier());
+
+    static_assert(UMEASURE_PREFIX_INTERNAL_MAX_SI < 99, "Tests assume there is no prefix 99.");
+    static_assert(UMEASURE_PREFIX_INTERNAL_MAX_BIN < 99, "Tests assume there is no prefix 99.");
+    MeasureUnit unit = joule.withPrefix((UMeasurePrefix)99, status);
+    if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
+        errln("Invalid prefix should result in an error.");
+    }
+    assertEquals("Invalid prefix results in no identifier", "", unit.getIdentifier());
+
+    unit = joule.withPrefix(UMEASURE_PREFIX_HECTO, status);
+    status.assertSuccess();
+    assertEquals("foo identifier", "hectojoule", unit.getIdentifier());
+
+    unit = unit.withPrefix(UMEASURE_PREFIX_EXBI, status);
+    status.assertSuccess();
+    assertEquals("foo identifier", "exbijoule", unit.getIdentifier());
+}
+
+void MeasureFormatTest::TestPrefixes() {
+    IcuTestErrorCode status(*this, "TestPrefixes()");
+    const struct TestCase {
+        UMeasurePrefix prefix;
+        int32_t expectedBase;
+        int32_t expectedPower;
+    } cases[] = {
+        {UMEASURE_PREFIX_YOCTO, 10, -24},
+        {UMEASURE_PREFIX_ZEPTO, 10, -21},
+        {UMEASURE_PREFIX_ATTO, 10, -18},
+        {UMEASURE_PREFIX_FEMTO, 10, -15},
+        {UMEASURE_PREFIX_PICO, 10, -12},
+        {UMEASURE_PREFIX_NANO, 10, -9},
+        {UMEASURE_PREFIX_MICRO, 10, -6},
+        {UMEASURE_PREFIX_MILLI, 10, -3},
+        {UMEASURE_PREFIX_CENTI, 10, -2},
+        {UMEASURE_PREFIX_DECI, 10, -1},
+        {UMEASURE_PREFIX_ONE, 10, 0},
+        {UMEASURE_PREFIX_DEKA, 10, 1},
+        {UMEASURE_PREFIX_HECTO, 10, 2},
+        {UMEASURE_PREFIX_KILO, 10, 3},
+        {UMEASURE_PREFIX_MEGA, 10, 6},
+        {UMEASURE_PREFIX_GIGA, 10, 9},
+        {UMEASURE_PREFIX_TERA, 10, 12},
+        {UMEASURE_PREFIX_PETA, 10, 15},
+        {UMEASURE_PREFIX_EXA, 10, 18},
+        {UMEASURE_PREFIX_ZETTA, 10, 21},
+        {UMEASURE_PREFIX_YOTTA, 10, 24},
+        {UMEASURE_PREFIX_KIBI, 1024, 1},
+        {UMEASURE_PREFIX_MEBI, 1024, 2},
+        {UMEASURE_PREFIX_GIBI, 1024, 3},
+        {UMEASURE_PREFIX_TEBI, 1024, 4},
+        {UMEASURE_PREFIX_PEBI, 1024, 5},
+        {UMEASURE_PREFIX_EXBI, 1024, 6},
+        {UMEASURE_PREFIX_ZEBI, 1024, 7},
+        {UMEASURE_PREFIX_YOBI, 1024, 8},
+    };
+
+    for (auto cas : cases) {
+        MeasureUnit m = MeasureUnit::getAmpere().withPrefix(cas.prefix, status);
+        assertEquals("umeas_getPrefixPower()", cas.expectedPower,
+                     umeas_getPrefixPower(m.getPrefix(status)));
+        assertEquals("umeas_getPrefixBase()", cas.expectedBase,
+                     umeas_getPrefixBase(m.getPrefix(status)));
     }
 }
 
@@ -3778,12 +3892,12 @@ void MeasureFormatTest::TestKilogramIdentifier() {
     assertEquals("nanogram", "", nanogram.getType());
     assertEquals("nanogram", "nanogram", nanogram.getIdentifier());
 
-    assertEquals("prefix of kilogram", UMEASURE_SI_PREFIX_KILO, kilogram.getSIPrefix(status));
-    assertEquals("prefix of gram", UMEASURE_SI_PREFIX_ONE, gram.getSIPrefix(status));
-    assertEquals("prefix of microgram", UMEASURE_SI_PREFIX_MICRO, microgram.getSIPrefix(status));
-    assertEquals("prefix of nanogram", UMEASURE_SI_PREFIX_NANO, nanogram.getSIPrefix(status));
+    assertEquals("prefix of kilogram", UMEASURE_PREFIX_KILO, kilogram.getPrefix(status));
+    assertEquals("prefix of gram", UMEASURE_PREFIX_ONE, gram.getPrefix(status));
+    assertEquals("prefix of microgram", UMEASURE_PREFIX_MICRO, microgram.getPrefix(status));
+    assertEquals("prefix of nanogram", UMEASURE_PREFIX_NANO, nanogram.getPrefix(status));
 
-    MeasureUnit tmp = kilogram.withSIPrefix(UMEASURE_SI_PREFIX_MILLI, status);
+    MeasureUnit tmp = kilogram.withPrefix(UMEASURE_PREFIX_MILLI, status);
     assertEquals(UnicodeString("Kilogram + milli should be milligram, got: ") + tmp.getIdentifier(),
                  MeasureUnit::getMilligram().getIdentifier(), tmp.getIdentifier());
 }
@@ -3795,16 +3909,16 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
 
     MeasureUnit kilometer = MeasureUnit::getKilometer();
     MeasureUnit cubicMeter = MeasureUnit::getCubicMeter();
-    MeasureUnit meter = kilometer.withSIPrefix(UMEASURE_SI_PREFIX_ONE, status);
-    MeasureUnit centimeter1 = kilometer.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
-    MeasureUnit centimeter2 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
-    MeasureUnit cubicDecimeter = cubicMeter.withSIPrefix(UMEASURE_SI_PREFIX_DECI, status);
+    MeasureUnit meter = kilometer.withPrefix(UMEASURE_PREFIX_ONE, status);
+    MeasureUnit centimeter1 = kilometer.withPrefix(UMEASURE_PREFIX_CENTI, status);
+    MeasureUnit centimeter2 = meter.withPrefix(UMEASURE_PREFIX_CENTI, status);
+    MeasureUnit cubicDecimeter = cubicMeter.withPrefix(UMEASURE_PREFIX_DECI, status);
 
-    verifySingleUnit(kilometer, UMEASURE_SI_PREFIX_KILO, 1, "kilometer");
-    verifySingleUnit(meter, UMEASURE_SI_PREFIX_ONE, 1, "meter");
-    verifySingleUnit(centimeter1, UMEASURE_SI_PREFIX_CENTI, 1, "centimeter");
-    verifySingleUnit(centimeter2, UMEASURE_SI_PREFIX_CENTI, 1, "centimeter");
-    verifySingleUnit(cubicDecimeter, UMEASURE_SI_PREFIX_DECI, 3, "cubic-decimeter");
+    verifySingleUnit(kilometer, UMEASURE_PREFIX_KILO, 1, "kilometer");
+    verifySingleUnit(meter, UMEASURE_PREFIX_ONE, 1, "meter");
+    verifySingleUnit(centimeter1, UMEASURE_PREFIX_CENTI, 1, "centimeter");
+    verifySingleUnit(centimeter2, UMEASURE_PREFIX_CENTI, 1, "centimeter");
+    verifySingleUnit(cubicDecimeter, UMEASURE_PREFIX_DECI, 3, "cubic-decimeter");
 
     assertTrue("centimeter equality", centimeter1 == centimeter2);
     assertTrue("kilometer inequality", centimeter1 != kilometer);
@@ -3814,10 +3928,10 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     MeasureUnit quarticKilometer = kilometer.withDimensionality(4, status);
     MeasureUnit overQuarticKilometer1 = kilometer.withDimensionality(-4, status);
 
-    verifySingleUnit(squareMeter, UMEASURE_SI_PREFIX_ONE, 2, "square-meter");
-    verifySingleUnit(overCubicCentimeter, UMEASURE_SI_PREFIX_CENTI, -3, "per-cubic-centimeter");
-    verifySingleUnit(quarticKilometer, UMEASURE_SI_PREFIX_KILO, 4, "pow4-kilometer");
-    verifySingleUnit(overQuarticKilometer1, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
+    verifySingleUnit(squareMeter, UMEASURE_PREFIX_ONE, 2, "square-meter");
+    verifySingleUnit(overCubicCentimeter, UMEASURE_PREFIX_CENTI, -3, "per-cubic-centimeter");
+    verifySingleUnit(quarticKilometer, UMEASURE_PREFIX_KILO, 4, "pow4-kilometer");
+    verifySingleUnit(overQuarticKilometer1, UMEASURE_PREFIX_KILO, -4, "per-pow4-kilometer");
 
     assertTrue("power inequality", quarticKilometer != overQuarticKilometer1);
 
@@ -3828,26 +3942,26 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
         .reciprocal(status);
     MeasureUnit overQuarticKilometer4 = meter.withDimensionality(4, status)
         .reciprocal(status)
-        .withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
+        .withPrefix(UMEASURE_PREFIX_KILO, status);
 
-    verifySingleUnit(overQuarticKilometer2, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
-    verifySingleUnit(overQuarticKilometer3, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
-    verifySingleUnit(overQuarticKilometer4, UMEASURE_SI_PREFIX_KILO, -4, "per-pow4-kilometer");
+    verifySingleUnit(overQuarticKilometer2, UMEASURE_PREFIX_KILO, -4, "per-pow4-kilometer");
+    verifySingleUnit(overQuarticKilometer3, UMEASURE_PREFIX_KILO, -4, "per-pow4-kilometer");
+    verifySingleUnit(overQuarticKilometer4, UMEASURE_PREFIX_KILO, -4, "per-pow4-kilometer");
 
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer2);
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer3);
     assertTrue("reciprocal equality", overQuarticKilometer1 == overQuarticKilometer4);
 
     MeasureUnit kiloSquareSecond = MeasureUnit::getSecond()
-        .withDimensionality(2, status).withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
+        .withDimensionality(2, status).withPrefix(UMEASURE_PREFIX_KILO, status);
     MeasureUnit meterSecond = meter.product(kiloSquareSecond, status);
     MeasureUnit cubicMeterSecond1 = meter.withDimensionality(3, status).product(kiloSquareSecond, status);
-    MeasureUnit centimeterSecond1 = meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status).product(kiloSquareSecond, status);
+    MeasureUnit centimeterSecond1 = meter.withPrefix(UMEASURE_PREFIX_CENTI, status).product(kiloSquareSecond, status);
     MeasureUnit secondCubicMeter = kiloSquareSecond.product(meter.withDimensionality(3, status), status);
-    MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status), status);
+    MeasureUnit secondCentimeter = kiloSquareSecond.product(meter.withPrefix(UMEASURE_PREFIX_CENTI, status), status);
     MeasureUnit secondCentimeterPerKilometer = secondCentimeter.product(kilometer.reciprocal(status), status);
 
-    verifySingleUnit(kiloSquareSecond, UMEASURE_SI_PREFIX_KILO, 2, "square-kilosecond");
+    verifySingleUnit(kiloSquareSecond, UMEASURE_PREFIX_KILO, 2, "square-kilosecond");
     const char* meterSecondSub[] = {"meter", "square-kilosecond"};
     verifyCompoundUnit(meterSecond, "meter-square-kilosecond",
         meterSecondSub, UPRV_LENGTHOF(meterSecondSub));
@@ -3870,20 +3984,20 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     assertTrue("reordering equality", cubicMeterSecond1 == secondCubicMeter);
     assertTrue("additional simple units inequality", secondCubicMeter != secondCentimeter);
 
-    // Don't allow get/set power or SI prefix on compound units
+    // Don't allow get/set power or SI or binary prefix on compound units
     status.errIfFailureAndReset();
     meterSecond.getDimensionality(status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     meterSecond.withDimensionality(3, status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
-    meterSecond.getSIPrefix(status);
+    meterSecond.getPrefix(status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
-    meterSecond.withSIPrefix(UMEASURE_SI_PREFIX_CENTI, status);
+    meterSecond.withPrefix(UMEASURE_PREFIX_CENTI, status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 
     // Test that StringPiece does not overflow
     MeasureUnit centimeter3 = MeasureUnit::forIdentifier({secondCentimeter.getIdentifier(), 10}, status);
-    verifySingleUnit(centimeter3, UMEASURE_SI_PREFIX_CENTI, 1, "centimeter");
+    verifySingleUnit(centimeter3, UMEASURE_PREFIX_CENTI, 1, "centimeter");
     assertTrue("string piece equality", centimeter1 == centimeter3);
 
     MeasureUnit footInch = MeasureUnit::forIdentifier("foot-and-inch", status);
@@ -3907,19 +4021,19 @@ void MeasureFormatTest::TestCompoundUnitOperations() {
     // with others via product:
     MeasureUnit kilometer2 = dimensionless.product(kilometer, status);
     status.errIfFailureAndReset("dimensionless.product(kilometer, status)");
-    verifySingleUnit(kilometer2, UMEASURE_SI_PREFIX_KILO, 1, "kilometer");
+    verifySingleUnit(kilometer2, UMEASURE_PREFIX_KILO, 1, "kilometer");
     assertTrue("kilometer equality", kilometer == kilometer2);
 
     // Test out-of-range powers
     MeasureUnit power15 = MeasureUnit::forIdentifier("pow15-kilometer", status);
-    verifySingleUnit(power15, UMEASURE_SI_PREFIX_KILO, 15, "pow15-kilometer");
+    verifySingleUnit(power15, UMEASURE_PREFIX_KILO, 15, "pow15-kilometer");
     status.errIfFailureAndReset();
     MeasureUnit power16a = MeasureUnit::forIdentifier("pow16-kilometer", status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     MeasureUnit power16b = power15.product(kilometer, status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
     MeasureUnit powerN15 = MeasureUnit::forIdentifier("per-pow15-kilometer", status);
-    verifySingleUnit(powerN15, UMEASURE_SI_PREFIX_KILO, -15, "per-pow15-kilometer");
+    verifySingleUnit(powerN15, UMEASURE_PREFIX_KILO, -15, "per-pow15-kilometer");
     status.errIfFailureAndReset();
     MeasureUnit powerN16a = MeasureUnit::forIdentifier("per-pow16-kilometer", status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
@@ -3945,22 +4059,22 @@ void MeasureFormatTest::TestDimensionlessBehaviour() {
     MeasureUnit mile = MeasureUnit::getMile();
     mile = mile.product(dimensionless, status);
     status.errIfFailureAndReset("mile.product(dimensionless, ...)");
-    verifySingleUnit(mile, UMEASURE_SI_PREFIX_ONE, 1, "mile");
+    verifySingleUnit(mile, UMEASURE_PREFIX_ONE, 1, "mile");
 
-    // dimensionless.getSIPrefix()
-    UMeasureSIPrefix siPrefix = dimensionless.getSIPrefix(status);
-    status.errIfFailureAndReset("dimensionless.getSIPrefix(...)");
-    assertEquals("dimensionless SIPrefix", UMEASURE_SI_PREFIX_ONE, siPrefix);
+    // dimensionless.getPrefix()
+    UMeasurePrefix unitPrefix = dimensionless.getPrefix(status);
+    status.errIfFailureAndReset("dimensionless.getPrefix(...)");
+    assertEquals("dimensionless SIPrefix", UMEASURE_PREFIX_ONE, unitPrefix);
 
-    // dimensionless.withSIPrefix()
-    modified = dimensionless.withSIPrefix(UMEASURE_SI_PREFIX_KILO, status);
-    status.errIfFailureAndReset("dimensionless.withSIPrefix(...)");
+    // dimensionless.withPrefix()
+    modified = dimensionless.withPrefix(UMEASURE_PREFIX_KILO, status);
+    status.errIfFailureAndReset("dimensionless.withPrefix(...)");
     pair = dimensionless.splitToSingleUnits(status);
     count = pair.second;
     assertEquals("no singles in modified", 0, count);
-    siPrefix = modified.getSIPrefix(status);
-    status.errIfFailureAndReset("modified.getSIPrefix(...)");
-    assertEquals("modified SIPrefix", UMEASURE_SI_PREFIX_ONE, siPrefix);
+    unitPrefix = modified.getPrefix(status);
+    status.errIfFailureAndReset("modified.getPrefix(...)");
+    assertEquals("modified SIPrefix", UMEASURE_PREFIX_ONE, unitPrefix);
 
     // dimensionless.getComplexity()
     UMeasureUnitComplexity complexity = dimensionless.getComplexity(status);
@@ -4192,15 +4306,15 @@ void MeasureFormatTest::verifyFormat(
 
 void MeasureFormatTest::verifySingleUnit(
         const MeasureUnit& unit,
-        UMeasureSIPrefix siPrefix,
+        UMeasurePrefix unitPrefix,
         int8_t power,
         const char* identifier) {
     IcuTestErrorCode status(*this, "verifySingleUnit");
     UnicodeString uid(identifier, -1, US_INV);
-    assertEquals(uid + ": SI prefix",
-        siPrefix,
-        unit.getSIPrefix(status));
-    status.errIfFailureAndReset("%s: SI prefix", identifier);
+    assertEquals(uid + ": SI or binary prefix",
+        unitPrefix,
+        unit.getPrefix(status));
+    status.errIfFailureAndReset("%s: SI or binary prefix", identifier);
     assertEquals(uid + ": Power",
         static_cast<int32_t>(power),
         static_cast<int32_t>(unit.getDimensionality(status)));

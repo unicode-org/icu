@@ -37,12 +37,16 @@ public class ConversionRates {
      * @param singleUnit
      * @return
      */
+    // In ICU4C, this is called loadCompoundFactor().
     private UnitConverter.Factor getFactorToBase(SingleUnitImpl singleUnit) {
         int power = singleUnit.getDimensionality();
-        MeasureUnit.SIPrefix siPrefix = singleUnit.getSiPrefix();
+        MeasureUnit.MeasurePrefix unitPrefix = singleUnit.getPrefix();
         UnitConverter.Factor result = UnitConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnitID()).getConversionRate());
 
-        return result.applySiPrefix(siPrefix).power(power); // NOTE: you must apply the SI prefixes before the power.
+        // Prefix before power, because:
+        // - square-kilometer to square-meter: (1000)^2
+        // - square-kilometer to square-foot (approximate): (3.28*1000)^2
+        return result.applyPrefix(unitPrefix).power(power);
     }
 
     public UnitConverter.Factor getFactorToBase(MeasureUnitImpl measureUnit) {
@@ -55,6 +59,7 @@ public class ConversionRates {
         return result;
     }
 
+    // In ICU4C, this functionality is found in loadConversionRate().
     protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, UnitConverter.Factor
             sourceToBase, UnitConverter.Factor targetToBase, UnitConverter.Convertibility convertibility) {
         if (convertibility != UnitConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
@@ -124,7 +129,7 @@ public class ConversionRates {
         if (measureUnitImpl.getComplexity() != MeasureUnit.Complexity.SINGLE) return false;
         SingleUnitImpl singleUnit = measureUnitImpl.getSingleUnits().get(0);
 
-        if (singleUnit.getSiPrefix() != MeasureUnit.SIPrefix.ONE) return false;
+        if (singleUnit.getPrefix() != MeasureUnit.MeasurePrefix.ONE) return false;
         if (singleUnit.getDimensionality() != 1) return false;
 
         return true;

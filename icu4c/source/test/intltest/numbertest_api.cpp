@@ -1102,10 +1102,9 @@ void NumberFormatterApiTest::unitSkeletons() {
          u"measure-unit/concentr-permille",                        //
          u"permille"},
 
-        // // TODO: binary prefixes not supported yet!
-        // {"Round-trip example from icu-units#35", //
-        //  u"unit/kibijoule-per-furlong",          //
-        //  u"unit/kibijoule-per-furlong"},
+        {"Round-trip example from icu-units#35", //
+         u"unit/kibijoule-per-furlong",          //
+         u"unit/kibijoule-per-furlong"},
     };
     for (auto &cas : cases) {
         IcuTestErrorCode status(*this, cas.msg);
