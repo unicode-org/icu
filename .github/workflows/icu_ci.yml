@@ -7,9 +7,11 @@ name: GHA CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - 'maint/maint*'
   pull_request:
-    branches: '*'
+    branches: '**'
 
 jobs:
 
