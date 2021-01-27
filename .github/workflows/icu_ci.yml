@@ -1,0 +1,197 @@
+# Copyright (C) 2016 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action configuration script for ICU continuous integration tasks.
+
+name: GHA CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: '*'
+
+jobs:
+
+  # ICU4C docs build using doxygen..
+  icu4c-docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C doc
+        run: |
+          sudo apt-get -y install doxygen;
+          cd icu4c/source;
+          ./runConfigureICU Linux --disable-renaming;
+           # Fail if 'warning:' appears in doxygen's output, but ignore warnings from file Doxyfile.
+           # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
+          set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
+
+  # ICU4J build and unit test
+  icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant check;
+
+  # gcc debug build.
+  # Includes dependency checker.
+  # Note - the dependency checker needs to be run on both a debug and an optimized build.
+  # This one (gcc) for debug, and linux clang (see job below) for optimized.
+  #
+  # Test both out-of-source and in-source builds. This one (gcc) for out-of-source,
+  # and linux clang (below) for in-source.
+  #
+  # Invokes test/hdrtst to check public headers compliance.
+  gcc-debug-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with gcc
+        env:
+          PREFIX: /tmp/icu-prefix
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=$PREFIX --enable-tracing;
+          make -j2;
+          make -j2 check;
+          ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ );
+          make install;
+          PATH=$PREFIX/bin:$PATH make -C test/hdrtst check
+
+  # clang release build with some options to enforce useful constraints.
+  # Includes dependency checker on an in-source, optimized build.
+  # Includes checking @draft etc. API tags vs. ifndef guards like
+  # U_HIDE_DRAFT_API and U_FORCE_HIDE_DRAFT_API.
+  # (FORCE guards make this tool pass but won't compile to working code.
+  # See the testtagsguards.sh script for details.)
+  clang-release-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang
+        env:
+          CPPFLAGS: -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1
+          CFLAGS: -Wimplicit-fallthrough
+          CXXFLAGS: -Wimplicit-fallthrough
+        run: |
+          sudo apt-get -y install doxygen;
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j 2;
+          make -j 2 check;
+          ( cd test/depstest && python3 depstest.py ../../../source/ );
+          ( cd .. && source/test/hdrtst/testtagsguards.sh );
+          make dist
+
+  # Out of source build with gcc 10, c++14, and extra warnings; executes icuinfo.
+  gcc-10-stdlib14:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with gcc 10 and c++14 and extra warnings.
+        env:
+          PREFIX: /tmp/icu-prefix
+          CC: gcc-10
+          CXX: g++-10
+          CXXFLAGS: -std=c++14 -Wextra
+        run: |
+          mkdir build;
+          cd build;
+          ../icu4c/source/runConfigureICU Linux --disable-layout --disable-layoutex --prefix=$PREFIX;
+          make -j2;
+          make -j2 check;
+          make install;
+          cd $PREFIX/bin;
+          LD_LIBRARY_PATH=../lib ./icuinfo
+
+  # Clang Linux with address sanitizer.
+  clang-asan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang and asan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
+          make -j2;
+          make -j2 check
+        env:
+          CPPFLAGS: -fsanitize=address
+          LDFLAGS: -fsanitize=address
+
+  # Clang Linux with thread sanitizer.
+  clang-tsan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang and tsan
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+          make -j2;
+          make -j2 -C test;
+          make -j2 -C test/intltest check
+        env:
+          INTLTEST_OPTS: utility/MultithreadTest
+          CPPFLAGS: -fsanitize=thread
+          LDFLAGS: -fsanitize=thread
+
+  # MacOS with clang
+  macos-clang:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang on MacOS
+        run: |
+          cd icu4c/source;
+          PYTHON=python3 ./runConfigureICU MacOSX;
+          make -j2 check
+
+  # Copyright scan
+  copyright-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: perl tools/scripts/cpysearch/cpyscan.pl
+
+  # Check compilation of internal headers.
+  internal-header-compilation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd icu4c/source; test/hdrtst/testinternalheaders.sh
+
+  # Check source files for valid UTF-8 and for absence of BOM.
+  valid-UTF-8-and-no-BOM-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: tools/scripts/icu-file-utf8-check.py
+
+  # Verify icu4c release tools buildability.
+  icu4c-release-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mvn -f tools/release/java/pom.xml package dependency:analyze

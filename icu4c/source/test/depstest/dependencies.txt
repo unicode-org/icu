@@ -59,6 +59,8 @@ group: c_strings
     strlen strchr strrchr strstr strcmp strncmp strcpy strncpy strcat strncat
     memchr memcmp memcpy memmove memset
     # Additional symbols in an optimized build.
+    # BSD version of memcmp().
+    bcmp
     __strcpy_chk __strncpy_chk __strcat_chk __strncat_chk
     __rawmemchr __memcpy_chk __memmove_chk __memset_chk
 
