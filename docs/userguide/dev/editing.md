@@ -171,8 +171,9 @@ The simplest way to ensure that
 transitive dependency versions are included correctly is to just specify the
 `github-pages` gem. This is already configured in `Gemfile` in the root
 directory. Thus, to ensure that the Ruby shell has the correct versions of
-dependencies downloaded and cached, in the root directory, run:
+dependencies downloaded and cached, in the root directory (`/docs`), run:
 ```bash
+cd <ICU>/docs  # change to User Guide docs root directory
 bundle update
 ```
 
