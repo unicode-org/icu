@@ -28,6 +28,8 @@ enum Constants {
     CONSTANT_G,          // Newtonian constant of gravitation, "G".
     CONSTANT_GAL_IMP2M3, // Gallon imp to m3
     CONSTANT_LB2KG,      // Pound to Kilogram
+    CONSTANT_GLUCOSE_MOLAR_MASS,
+    CONSTANT_ITEM_PER_MOLE,
 
     // Must be the last element.
     CONSTANTS_COUNT
@@ -45,6 +47,8 @@ static const double constantsValues[CONSTANTS_COUNT] = {
     6.67408E-11,               // CONSTANT_G
     0.00454609,                // CONSTANT_GAL_IMP2M3
     0.45359237,                // CONSTANT_LB2KG
+    180.1557,                  // CONSTANT_GLUCOSE_MOLAR_MASS
+    6.02214076E+23,            // CONSTANT_ITEM_PER_MOLE
 };
 
 typedef enum Signum {

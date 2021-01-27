@@ -119,6 +119,8 @@ public class UnitConverter {
         private int exponentGalImpToM3 = 0;
         /** Exponent for the pound to kilogram conversion rate constant */
         private int exponentLbToKg = 0;
+        private int exponentGlucoseMolarMass = 0;
+        private int exponentItemPerMole = 0;
 
         /**
          * Creates Empty Factor
@@ -170,6 +172,8 @@ public class UnitConverter {
             result.exponentG = this.exponentG;
             result.exponentGalImpToM3 = this.exponentGalImpToM3;
             result.exponentLbToKg = this.exponentLbToKg;
+            result.exponentGlucoseMolarMass = this.exponentGlucoseMolarMass;
+            result.exponentItemPerMole = this.exponentItemPerMole;
 
             return result;
         }
@@ -195,6 +199,8 @@ public class UnitConverter {
             resultCollector.multiply(new BigDecimal("6.67408E-11"), this.exponentG);
             resultCollector.multiply(new BigDecimal("0.00454609"), this.exponentGalImpToM3);
             resultCollector.multiply(new BigDecimal("0.45359237"), this.exponentLbToKg);
+            resultCollector.multiply(new BigDecimal("180.1557"), this.exponentGlucoseMolarMass);
+            resultCollector.multiply(new BigDecimal("6.02214076E+23"), this.exponentItemPerMole);
 
             return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
         }
@@ -249,6 +255,8 @@ public class UnitConverter {
             result.exponentG = this.exponentG * power;
             result.exponentGalImpToM3 = this.exponentGalImpToM3 * power;
             result.exponentLbToKg = this.exponentLbToKg * power;
+            result.exponentGlucoseMolarMass = this.exponentGlucoseMolarMass * power;
+            result.exponentItemPerMole = this.exponentItemPerMole * power;
 
             return result;
         }
@@ -264,6 +272,9 @@ public class UnitConverter {
             result.exponentG = this.exponentG - other.exponentG;
             result.exponentGalImpToM3 = this.exponentGalImpToM3 - other.exponentGalImpToM3;
             result.exponentLbToKg = this.exponentLbToKg - other.exponentLbToKg;
+            result.exponentGlucoseMolarMass =
+                this.exponentGlucoseMolarMass - other.exponentGlucoseMolarMass;
+            result.exponentItemPerMole = this.exponentItemPerMole - other.exponentItemPerMole;
 
             return result;
         }
@@ -279,6 +290,9 @@ public class UnitConverter {
             result.exponentG = this.exponentG + other.exponentG;
             result.exponentGalImpToM3 = this.exponentGalImpToM3 + other.exponentGalImpToM3;
             result.exponentLbToKg = this.exponentLbToKg + other.exponentLbToKg;
+            result.exponentGlucoseMolarMass =
+                this.exponentGlucoseMolarMass + other.exponentGlucoseMolarMass;
+            result.exponentItemPerMole = this.exponentItemPerMole + other.exponentItemPerMole;
 
             return result;
         }
@@ -318,6 +332,10 @@ public class UnitConverter {
                 this.exponentGravity += power;
             } else if ("lb_to_kg".equals(entity)) {
                 this.exponentLbToKg += power;
+            } else if ("glucose_molar_mass".equals(entity)) {
+                this.exponentGlucoseMolarMass += power;
+            } else if ("item_per_mole".equals(entity)) {
+                this.exponentItemPerMole += power;
             } else if ("PI".equals(entity)) {
                 this.exponentPi += power;
             } else {

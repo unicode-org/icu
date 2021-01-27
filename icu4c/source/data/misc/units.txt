@@ -279,7 +279,7 @@ units:table(nofallback){
             target{"second"}
         }
         mole{
-            factor{"6.02214076E+23"}
+            factor{"item_per_mole"}
             target{"item"}
         }
         month{
@@ -297,6 +297,10 @@ units:table(nofallback){
         newton{
             factor{"1"}
             target{"kilogram-meter-per-square-second"}
+        }
+        ofglucose{
+            factor{"1000*item_per_mole/glucose_molar_mass"}
+            target{"item-per-kilogram"}
         }
         ofhg{
             factor{"13595.1*gravity"}
@@ -459,8 +463,10 @@ units:table(nofallback){
         ft_to_m{"0.3048"}
         gal_imp_to_m3{"0.00454609"}
         gal_to_m3{"231*in3_to_m3"}
+        glucose_molar_mass{"180.1557"}
         gravity{"9.80665"}
         in3_to_m3{"ft3_to_m3/12*12*12"}
+        item_per_mole{"6.02214076E+23"}
         lb_to_kg{"0.45359237"}
     }
     unitPreferenceData{
@@ -546,6 +552,11 @@ units:table(nofallback){
         }
         "concentration"{
             "blood-glucose"{
+                001{
+                    {
+                        unit{"milligram-ofglucose-per-deciliter"}
+                    }
+                }
                 AG{
                     {
                         unit{"millimole-per-liter"}
@@ -1543,13 +1554,6 @@ units:table(nofallback){
             }
         }
         "mass-density"{
-            "blood-glucose"{
-                001{
-                    {
-                        unit{"milligram-per-deciliter"}
-                    }
-                }
-            }
             "default"{
                 001{
                     {
@@ -1912,9 +1916,9 @@ units:table(nofallback){
         em{"typewidth"}
         item{"substance-amount"}
         item-per-cubic-meter{"concentration"}
+        item-per-kilogram{"concentration-mass"}
         kelvin{"temperature"}
         kilogram{"mass"}
-        kilogram-meter-per-meter-square-second{"torque"}
         kilogram-meter-per-square-second{"force"}
         kilogram-per-cubic-meter{"mass-density"}
         kilogram-per-kilogram{"mass-fraction"}
