@@ -14,7 +14,7 @@ The ICU project is under the stewardship of [The Unicode Consortium](https://www
 
 Build | Status
 ------|-------
-TravisCI | [![Build Status](https://travis-ci.org/unicode-org/icu.svg?branch=master)](https://travis-ci.org/unicode-org/icu)
+GitHub Actions | [![GHA CI](https://github.com/unicode-org/icu/workflows/GHA%20CI/badge.svg)](https://github.com/unicode-org/icu/actions?query=workflow%3A%22GHA+CI%22)
 Azure Pipelines | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI?branchName=master)](https://dev.azure.com/ms/icu/_build/latest?definitionId=360&branchName=master)
 Azure Pipelines (Exhaustive Tests) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Exhaustive-Main?branchName=master)](https://dev.azure.com/ms/icu/_build/latest?definitionId=361&branchName=master)
 Azure Pipelines (Valgrind ICU4C) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Valgrind-Main?branchName=master)](https://dev.azure.com/ms/icu/_build/latest?definitionId=362&branchName=master)
