@@ -69,7 +69,7 @@ jobs:
         run: |
           mkdir build;
           cd build;
-          ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux/gcc --prefix=$PREFIX --enable-tracing;
+          ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux/gcc --enable-layoutex=no --prefix=$PREFIX --enable-tracing;
           make -j2;
           make -j2 check;
           ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ );
@@ -95,7 +95,7 @@ jobs:
         run: |
           sudo apt-get -y install doxygen;
           cd icu4c/source;
-          ./runConfigureICU Linux;
+          ./runConfigureICU Linux --enable-layoutex=no;
           make -j 2;
           make -j 2 check;
           ( cd test/depstest && python3 depstest.py ../../../source/ );
@@ -133,7 +133,7 @@ jobs:
       - name: ICU4C with clang and asan
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
+          ./runConfigureICU --enable-debug --disable-release Linux --enable-layoutex=no --disable-renaming --enable-tracing;
           make -j2;
           make -j2 check
         env:
@@ -149,7 +149,7 @@ jobs:
       - name: ICU4C with clang and tsan
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+          ./runConfigureICU --enable-debug --disable-release Linux --enable-layoutex=no --disable-renaming
           make -j2;
           make -j2 -C test;
           make -j2 -C test/intltest check
