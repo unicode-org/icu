@@ -1,5 +1,5 @@
 # Test data for unit preferences
-#  Copyright © 1991-2020 Unicode, Inc.
+#  Copyright © 1991-2021 Unicode, Inc.
 #  For terms of use, see http://www.unicode.org/copyright.html
 #  Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 #  CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
@@ -62,6 +62,10 @@ area;	land;	GB;	1422722961 / 390625;	3642.17078016;	square-meter;	9 / 10;	0.9;	a
 concentration;	blood-glucose;	AG;	662435483600000000000000;	6.624354836E23;	item-per-cubic-meter;	11 / 10;	1.1;	millimole-per-liter
 concentration;	blood-glucose;	AG;	602214076000000000000000;	6.02214076E23;	item-per-cubic-meter;	1;	1.0;	millimole-per-liter
 concentration;	blood-glucose;	AG;	541992668400000000000000;	5.419926684E23;	item-per-cubic-meter;	9 / 10;	0.9;	millimole-per-liter
+
+concentration;	blood-glucose;	001;	66243548360000000000000000000 / 1801557;	3.67701651182838E22;	item-per-cubic-meter;	11 / 10;	1.1;	milligram-ofglucose-per-deciliter
+concentration;	blood-glucose;	001;	60221407600000000000000000000 / 1801557;	3.342742283480345E22;	item-per-cubic-meter;	1;	1.0;	milligram-ofglucose-per-deciliter
+concentration;	blood-glucose;	001;	6022140760000000000000000000 / 200173;	3.008468055132311E22;	item-per-cubic-meter;	9 / 10;	0.9;	milligram-ofglucose-per-deciliter
 
 concentration;	default;	001;	11 / 10;	1.1;	item-per-cubic-meter;	11 / 10;	1.1;	item-per-cubic-meter
 concentration;	default;	001;	1;	1.0;	item-per-cubic-meter;	1;	1.0;	item-per-cubic-meter
@@ -188,6 +192,8 @@ length;	road;	001;	900;	900.0;	meter;	9 / 10;	0.9;	kilometer
 length;	road;	001;	800;	800.0;	meter;	800;	800.0;	meter
 length;	road;	001;	300;	300.0;	meter;	300;	300.0;	meter
 length;	road;	001;	2999 / 10;	299.9;	meter;	2999 / 10;	299.9;	meter
+length;	road;	001;	10;	10.0;	meter;	10;	10.0;	meter
+length;	road;	001;	99 / 10;	9.9;	meter;	99 / 10;	9.9;	meter
 length;	road;	001;	1;	1.0;	meter;	1;	1.0;	meter
 length;	road;	001;	9 / 10;	0.9;	meter;	9 / 10;	0.9;	meter
 
@@ -196,6 +202,8 @@ length;	road;	US;	100584 / 125;	804.672;	meter;	1 / 2;	0.5;	mile
 length;	road;	US;	402336 / 625;	643.7376;	meter;	2112;	2112.0;	foot
 length;	road;	US;	762 / 25;	30.48;	meter;	100;	100.0;	foot
 length;	road;	US;	380619 / 12500;	30.44952;	meter;	999 / 10;	99.9;	foot
+length;	road;	US;	381 / 125;	3.048;	meter;	10;	10.0;	foot
+length;	road;	US;	37719 / 12500;	3.01752;	meter;	99 / 10;	9.9;	foot
 length;	road;	US;	381 / 1250;	0.3048;	meter;	1;	1.0;	foot
 length;	road;	US;	3429 / 12500;	0.27432;	meter;	9 / 10;	0.9;	foot
 
@@ -204,6 +212,8 @@ length;	road;	GB;	100584 / 125;	804.672;	meter;	1 / 2;	0.5;	mile
 length;	road;	GB;	402336 / 625;	643.7376;	meter;	704;	704.0;	yard
 length;	road;	GB;	2286 / 25;	91.44;	meter;	100;	100.0;	yard
 length;	road;	GB;	1141857 / 12500;	91.34856;	meter;	999 / 10;	99.9;	yard
+length;	road;	GB;	1143 / 125;	9.144;	meter;	10;	10.0;	yard
+length;	road;	GB;	113157 / 12500;	9.05256;	meter;	99 / 10;	9.9;	yard
 length;	road;	GB;	1143 / 1250;	0.9144;	meter;	1;	1.0;	yard
 length;	road;	GB;	10287 / 12500;	0.82296;	meter;	9 / 10;	0.9;	yard
 
@@ -214,6 +224,8 @@ length;	road;	SE;	1000;	1000.0;	meter;	1;	1.0;	kilometer
 length;	road;	SE;	900;	900.0;	meter;	900;	900.0;	meter
 length;	road;	SE;	300;	300.0;	meter;	300;	300.0;	meter
 length;	road;	SE;	2999 / 10;	299.9;	meter;	2999 / 10;	299.9;	meter
+length;	road;	SE;	10;	10.0;	meter;	10;	10.0;	meter
+length;	road;	SE;	99 / 10;	9.9;	meter;	99 / 10;	9.9;	meter
 length;	road;	SE;	1;	1.0;	meter;	1;	1.0;	meter
 length;	road;	SE;	9 / 10;	0.9;	meter;	9 / 10;	0.9;	meter
 
@@ -296,10 +308,6 @@ mass;	person;	GB;	408233133 / 1000000000;	0.408233133;	kilogram;	0;	pound;	72 / 
 mass;	person;	HK;	498951607 / 1000000000;	0.498951607;	kilogram;	1;	pound;	8 / 5;	1.6;	ounce
 mass;	person;	HK;	45359237 / 100000000;	0.45359237;	kilogram;	1;	pound;	0;	0.0;	ounce
 mass;	person;	HK;	408233133 / 1000000000;	0.408233133;	kilogram;	0;	pound;	72 / 5;	14.4;	ounce
-
-mass-density;	blood-glucose;	001;	11 / 1000;	0.011;	kilogram-per-cubic-meter;	11 / 10;	1.1;	milligram-per-deciliter
-mass-density;	blood-glucose;	001;	1 / 100;	0.01;	kilogram-per-cubic-meter;	1;	1.0;	milligram-per-deciliter
-mass-density;	blood-glucose;	001;	9 / 1000;	0.009;	kilogram-per-cubic-meter;	9 / 10;	0.9;	milligram-per-deciliter
 
 mass-density;	default;	001;	11 / 10;	1.1;	kilogram-per-cubic-meter;	11 / 10;	1.1;	kilogram-per-cubic-meter
 mass-density;	default;	001;	1;	1.0;	kilogram-per-cubic-meter;	1;	1.0;	kilogram-per-cubic-meter

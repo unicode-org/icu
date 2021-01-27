@@ -384,6 +384,10 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
         factor.constantExponents[CONSTANT_GRAVITY] += power * signum;
     } else if (baseStr == "lb_to_kg") {
         factor.constantExponents[CONSTANT_LB2KG] += power * signum;
+    } else if (baseStr == "glucose_molar_mass") {
+        factor.constantExponents[CONSTANT_GLUCOSE_MOLAR_MASS] += power * signum;
+    } else if (baseStr == "item_per_mole") {
+        factor.constantExponents[CONSTANT_ITEM_PER_MOLE] += power * signum;
     } else if (baseStr == "PI") {
         factor.constantExponents[CONSTANT_PI] += power * signum;
     } else {
