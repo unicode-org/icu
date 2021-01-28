@@ -1908,6 +1908,8 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                             } else {
                               break;
                             }
+                        } else if (res == RES_BOGUS) {
+                            break;
                         }
                     } while(*myPath); /* Continue until the whole path is consumed */
                 }
