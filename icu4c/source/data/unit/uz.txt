@@ -160,7 +160,7 @@ uz{
                 one{"{0} karat"}
                 other{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligramm/detsilitr"}
                 one{"{0} milligramm/detsilitr"}
                 other{"{0} milligramm/detsilitr"}
@@ -1078,7 +1078,7 @@ uz{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -1426,7 +1426,7 @@ uz{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -1471,7 +1471,7 @@ uz{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1869,9 +1869,9 @@ uz{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µmetr"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μmetr"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mil"}
@@ -1985,9 +1985,9 @@ uz{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

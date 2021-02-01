@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -40,7 +41,7 @@ import com.ibm.icu.util.UResourceBundle;
  * @author sffc
  *
  */
-public class NumberRangeFormatterTest {
+public class NumberRangeFormatterTest extends TestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency GBP = Currency.getInstance("GBP");
@@ -823,6 +824,9 @@ public class NumberRangeFormatterTest {
     public void testNumberingSystemRangeData() {
         RangePatternSink sink = new RangePatternSink();
         for (ULocale locale : ULocale.getAvailableLocales()) {
+            if (locale.getLanguage().equals("nn") && logKnownIssue("cldrbug:14477", "nn inherits inconsistent number range patterns")) {
+                continue;
+            }
             ICUResourceBundle resource = (ICUResourceBundle)
                     UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
             resource.getAllItemsWithFallback("NumberElements", sink);

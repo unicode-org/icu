@@ -137,7 +137,7 @@ th{
                 dnam{"กะรัต"}
                 other{"{0} กะรัต"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"มิลลิกรัมต่อเดซิลิตร"}
                 other{"{0} มิลลิกรัมต่อเดซิลิตร"}
             }
@@ -1198,7 +1198,7 @@ th{
                 dnam{"กะรัต"}
                 other{"{0} กะรัต"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"มก./ดล."}
                 other{"{0} มก./ดล."}
             }

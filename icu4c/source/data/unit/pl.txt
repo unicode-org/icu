@@ -683,7 +683,7 @@ pl{
                 one{"{0} karat"}
                 other{"{0} karata"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligramy na decylitr"}
                 few{"{0} miligramy na decylitr"}
                 many{"{0} miligramów na decylitr"}
@@ -4617,7 +4617,7 @@ pl{
             karat{
                 dnam{"karaty"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 few{"{0} mg/dl"}
                 many{"{0} mg/dl"}

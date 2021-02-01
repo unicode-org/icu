@@ -137,7 +137,7 @@ yue{
                 dnam{"克拉"}
                 other{"{0} 克拉"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"毫克/公合"}
                 other{"{0} 毫克/公合"}
             }
@@ -1131,7 +1131,7 @@ yue{
                 other{"{0} 米"}
             }
             micrometer{
-                other{"{0}µm"}
+                other{"{0}μm"}
             }
             mile{
                 other{"{0}英里"}
@@ -1177,7 +1177,7 @@ yue{
                 other{"{0}t"}
             }
             microgram{
-                other{"{0}µg"}
+                other{"{0}μg"}
             }
             milligram{
                 other{"{0}mg"}
@@ -1462,7 +1462,7 @@ yue{
                 dnam{"克拉"}
                 other{"{0} 克拉"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"毫克/公合"}
                 other{"{0} 毫克/公合"}
             }

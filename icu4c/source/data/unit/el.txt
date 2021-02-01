@@ -165,7 +165,7 @@ el{
                 one{"{0} καράτι"}
                 other{"{0} καράτια"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"χιλιοστόγραμμα ανά δεκατόλιτρο"}
                 one{"{0} χιλιοστόγραμμο ανά δεκατόλιτρο"}
                 other{"{0} χιλιοστόγραμμα ανά δεκατόλιτρο"}
@@ -1441,7 +1441,7 @@ el{
             10p-21{"ζπτ-{0}"}
             10p-24{"γκτ-{0}"}
             10p-3{"χλστ-{0}"}
-            10p-6{"µκρ-{0}"}
+            10p-6{"μκρ-{0}"}
             10p-9{"νν-{0}"}
             10p1{"δκ-{0}"}
             10p12{"τρ-{0}"}
@@ -1473,7 +1473,7 @@ el{
                 one{"{0} κρτ"}
                 other{"{0} κρτ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1835,8 +1835,8 @@ el{
             }
             micrometer{
                 dnam{"μικρόμετρα"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"μίλια"}
@@ -1948,9 +1948,9 @@ el{
                 other{"{0} τ."}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

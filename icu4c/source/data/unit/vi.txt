@@ -972,7 +972,7 @@ vi{
             1024p8{"Yi{0}"}
         }
         concentr{
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
             }
             mole{
@@ -1231,7 +1231,7 @@ vi{
                 dnam{"t"}
             }
             microgram{
-                dnam{"µg"}
+                dnam{"μg"}
             }
             milligram{
                 dnam{"mg"}

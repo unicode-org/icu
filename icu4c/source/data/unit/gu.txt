@@ -166,7 +166,7 @@ gu{
                 one{"{0} કૅરેટ"}
                 other{"{0} કૅરેટ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"મિલિગ્રામ પ્રતિ ડેસિલિટર"}
                 one{"{0} મિલિગ્રામ પ્રતિ ડેસિલિટર"}
                 other{"{0} મિલિગ્રામ પ્રતિ ડેસિલિટર"}
@@ -463,7 +463,7 @@ gu{
         graphics{
             dot{
                 dnam{"ડૉટ"}
-                one{"{0} ડૉટ"}
+                one{"{0} px"}
                 other{"{0} ડૉટ"}
             }
             dot-per-centimeter{
@@ -1429,7 +1429,7 @@ gu{
                 one{"{0} કૅરેટ"}
                 other{"{0} કૅરેટ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1726,7 +1726,7 @@ gu{
         graphics{
             dot{
                 dnam{"ડૉટ"}
-                one{"{0} ડૉટ"}
+                one{"{0} px"}
                 other{"{0} ડૉટ"}
             }
             pixel{
@@ -1787,8 +1787,8 @@ gu{
             }
             micrometer{
                 dnam{"માઇક્રોમીટર"}
-                one{"{0} µમી"}
-                other{"{0} µમી"}
+                one{"{0} μમી"}
+                other{"{0} μમી"}
             }
             mile{
                 dnam{"માઇલ"}
@@ -1892,9 +1892,9 @@ gu{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µગ્રામ"}
-                one{"{0} µગ્રામ"}
-                other{"{0} µગ્રામ"}
+                dnam{"μગ્રામ"}
+                one{"{0} μગ્રામ"}
+                other{"{0} μગ્રામ"}
             }
             milligram{
                 dnam{"મિગ્રા"}

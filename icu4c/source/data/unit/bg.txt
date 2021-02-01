@@ -165,7 +165,7 @@ bg{
                 one{"{0} карат"}
                 other{"{0} карата"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"милиграми на децилитър"}
                 one{"{0} милиграм на децилитър"}
                 other{"{0} милиграма на децилитър"}
@@ -1096,7 +1096,7 @@ bg{
             10p-21{"з{0}"}
             10p-24{"й{0}"}
             10p-3{"м{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"н{0}"}
             10p1{"дк{0}"}
             10p12{"Т{0}"}
@@ -1419,7 +1419,7 @@ bg{
             10p-21{"з{0}"}
             10p-24{"й{0}"}
             10p-3{"м{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"н{0}"}
             10p1{"дк{0}"}
             10p12{"Т{0}"}
@@ -1450,7 +1450,7 @@ bg{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1806,9 +1806,9 @@ bg{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 one{"{0} mi"}
@@ -1915,9 +1915,9 @@ bg{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

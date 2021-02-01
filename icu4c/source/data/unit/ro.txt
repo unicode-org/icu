@@ -194,7 +194,7 @@ ro{
                 one{"{0} karată"}
                 other{"{0} de karate"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligrame pe decilitru"}
                 few{"{0} miligrame pe decilitru"}
                 one{"{0} miligram pe decilitru"}
@@ -1298,7 +1298,7 @@ ro{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -1466,10 +1466,10 @@ ro{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                few{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                few{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mi"}
@@ -1554,10 +1554,10 @@ ro{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                few{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -1835,7 +1835,7 @@ ro{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -1857,7 +1857,7 @@ ro{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 few{"{0} mg/dl"}
                 one{"{0} mg/dl"}
@@ -2278,10 +2278,10 @@ ro{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                few{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                few{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mi"}
@@ -2398,10 +2398,10 @@ ro{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                few{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

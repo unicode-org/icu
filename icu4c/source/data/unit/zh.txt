@@ -126,7 +126,7 @@ zh{
                 dnam{"克拉"}
                 other{"{0}克拉"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"毫克/分升"}
                 other{"每分升{0}毫克"}
             }

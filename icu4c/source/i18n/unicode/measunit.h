@@ -668,7 +668,7 @@ class U_I18N_API MeasureUnit: public UObject {
 // the "End generated createXXX methods" comment is auto generated code
 // and must not be edited manually. For instructions on how to correctly
 // update this code, refer to:
-// http://site.icu-project.org/design/formatting/measureformat/updating-measure-unit
+// docs/processes/release/tasks/updating-measure-unit.md
 //
 // Start generated createXXX methods
 
@@ -959,6 +959,24 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 64
      */
     static MeasureUnit getKarat();
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns by pointer, unit of concentr: milligram-ofglucose-per-deciliter.
+     * Caller owns returned value and must free it.
+     * Also see {@link #getMilligramOfglucosePerDeciliter()}.
+     * @param status ICU error code.
+     * @draft ICU 69
+     */
+    static MeasureUnit *createMilligramOfglucosePerDeciliter(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of concentr: milligram-ofglucose-per-deciliter.
+     * Also see {@link #createMilligramOfglucosePerDeciliter()}.
+     * @draft ICU 69
+     */
+    static MeasureUnit getMilligramOfglucosePerDeciliter();
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: milligram-per-deciliter.

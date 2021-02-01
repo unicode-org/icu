@@ -165,7 +165,7 @@ te{
                 one{"{0} కేరట్"}
                 other{"{0} కేరట్లు"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"మిల్లీగ్రాములు/డెసిలీటర్"}
                 one{"{0} మిల్లీగ్రాము/డెసిలీటర్"}
                 other{"{0} మిల్లీగ్రాములు/డెసిలీటర్"}
@@ -1518,7 +1518,7 @@ te{
                 one{"{0} కేర."}
                 other{"{0} కేర."}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"మి.గ్రా./డె.లీ."}
                 one{"{0} మి.గ్రా./డె.లీ."}
                 other{"{0} మి.గ్రా./డె.లీ."}

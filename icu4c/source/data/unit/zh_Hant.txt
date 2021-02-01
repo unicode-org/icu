@@ -138,7 +138,7 @@ zh_Hant{
                 dnam{"克拉"}
                 other{"{0} 克拉"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"每分升毫克"}
                 other{"每分升 {0} 毫克"}
             }
@@ -919,7 +919,7 @@ zh_Hant{
                 dnam{"克拉"}
                 other{"{0}kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"毫克/分升"}
                 other{"{0}mg/dL"}
             }
@@ -1166,7 +1166,7 @@ zh_Hant{
             }
             micrometer{
                 dnam{"微米"}
-                other{"{0}µm"}
+                other{"{0}μm"}
             }
             mile{
                 dnam{"英里"}
@@ -1229,7 +1229,7 @@ zh_Hant{
             }
             microgram{
                 dnam{"微克"}
-                other{"{0}µg"}
+                other{"{0}μg"}
             }
             milligram{
                 dnam{"毫克"}
@@ -1554,7 +1554,7 @@ zh_Hant{
                 dnam{"克拉"}
                 other{"{0} 克拉"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"毫克/分升"}
                 other{"{0} 毫克/分升"}
             }

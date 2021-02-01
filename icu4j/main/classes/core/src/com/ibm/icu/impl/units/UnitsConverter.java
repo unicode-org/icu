@@ -165,7 +165,9 @@ public class UnitsConverter {
         private int exponentGalImpToM3 = 0;
         /** Exponent for the pound to kilogram conversion rate constant */
         private int exponentLbToKg = 0;
+        /** Exponent for the glucose molar mass conversion rate constant */
         private int exponentGlucoseMolarMass = 0;
+        /** Exponent for the item per mole conversion rate constant */
         private int exponentItemPerMole = 0;
 
         /**

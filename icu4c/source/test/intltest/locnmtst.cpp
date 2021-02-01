@@ -408,7 +408,7 @@ void LocaleDisplayNamesTest::TestRootEtc() {
   UnicodeString temp;
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "@collation=phonebook";
-  const char *target = "Root (Phonebook Sort Order)";
+  const char *target = "root (Phonebook Sort Order)";
   ldn->localeDisplayName(locname, temp);
   test_assert_equal(target, temp);
 

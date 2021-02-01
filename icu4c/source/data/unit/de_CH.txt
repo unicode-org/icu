@@ -24,18 +24,8 @@ de_CH{
                 other{"{0} Quadratfuss"}
             }
         }
-        compound{
-            1024p1{"kibi{0}"}
-            1024p2{"mebi{0}"}
-            1024p3{"gibi{0}"}
-            1024p4{"tebi{0}"}
-            1024p5{"pebi{0}"}
-            1024p6{"exbi{0}"}
-            1024p7{"zebi{0}"}
-            1024p8{"yobe{0}"}
-        }
         concentr{
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
             }
         }

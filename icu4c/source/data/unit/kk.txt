@@ -165,7 +165,7 @@ kk{
                 one{"{0} карат"}
                 other{"{0} карат"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"миллиграмм/децилитр"}
                 one{"{0} миллиграмм/децилитр"}
                 other{"{0} миллиграмм/децилитр"}
@@ -1450,7 +1450,7 @@ kk{
                 one{"{0} кар."}
                 other{"{0} кар."}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"мг/дл"}
                 one{"{0} мг/дл"}
                 other{"{0} мг/дл"}

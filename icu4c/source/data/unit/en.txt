@@ -161,7 +161,7 @@ en{
                 one{"{0} karat"}
                 other{"{0} karats"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligrams per deciliter"}
                 one{"{0} milligram per deciliter"}
                 other{"{0} milligrams per deciliter"}
@@ -1131,7 +1131,7 @@ en{
                 one{"{0}kt"}
                 other{"{0}kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0}mg/dL"}
                 other{"{0}mg/dL"}
@@ -1275,8 +1275,8 @@ en{
             }
             microsecond{
                 dnam{"μsec"}
-                one{"{0}µs"}
-                other{"{0}µs"}
+                one{"{0}μs"}
+                other{"{0}μs"}
             }
             millisecond{
                 dnam{"msec"}
@@ -1516,9 +1516,9 @@ en{
                 other{"{0}m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0}µm"}
-                other{"{0}µm"}
+                dnam{"μm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
             }
             mile{
                 dnam{"mi"}
@@ -1630,9 +1630,9 @@ en{
                 other{"{0}t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0}µg"}
-                other{"{0}µg"}
+                dnam{"μg"}
+                one{"{0}μg"}
+                other{"{0}μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -2089,7 +2089,7 @@ en{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -2235,9 +2235,9 @@ en{
                 per{"{0}/h"}
             }
             microsecond{
-                dnam{"µsecs"}
-                one{"{0} µs"}
-                other{"{0} µs"}
+                dnam{"μsecs"}
+                one{"{0} μs"}
+                other{"{0} μs"}
             }
             millisecond{
                 dnam{"millisecs"}
@@ -2477,9 +2477,9 @@ en{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µmeters"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μmeters"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"miles"}
@@ -2578,9 +2578,9 @@ en{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

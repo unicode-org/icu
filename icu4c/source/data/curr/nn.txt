@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 nn{
+    %%Parent{"no"}
     Currencies{
         ADP{
             "ADP",
@@ -1040,7 +1041,7 @@ nn{
             "franske UIC-franc",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "vestafrikanske CFA-franc",
         }
         XPD{

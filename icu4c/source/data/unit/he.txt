@@ -221,7 +221,7 @@ he{
                 other{"{0} קראט"}
                 two{"{0} קראט"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"מיליגרם/דציליטר"}
                 many{"{0} מיליגרם/דציליטר"}
                 one{"{0} מיליגרם/דציליטר"}
@@ -1711,11 +1711,11 @@ he{
                 two{"{0} מ′"}
             }
             micrometer{
-                dnam{"µm"}
-                many{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
-                two{"{0} µm"}
+                dnam{"μm"}
+                many{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
+                two{"{0} μm"}
             }
             mile{
                 dnam{"מייל"}
@@ -2158,7 +2158,7 @@ he{
                 other{"{0} kt"}
                 two{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 many{"{0} mg/dL"}
                 one{"{0} mg/dL"}
@@ -2624,11 +2624,11 @@ he{
                 two{"{0} מ׳"}
             }
             micrometer{
-                dnam{"µm"}
-                many{"‎{0} µm‎"}
-                one{"‎{0} µm‎"}
-                other{"‎{0} µm‎"}
-                two{"‎{0} µm‎"}
+                dnam{"μm"}
+                many{"‎{0} μm‎"}
+                one{"‎{0} μm‎"}
+                other{"‎{0} μm‎"}
+                two{"‎{0} μm‎"}
             }
             mile{
                 dnam{"מייל"}

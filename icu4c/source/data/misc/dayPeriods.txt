@@ -56,9 +56,9 @@ dayPeriods:table(nofallback){
         mr{"set37"}
         ms{"set60"}
         my{"set56"}
-        nb{"set8"}
         ne{"set38"}
         nl{"set4"}
+        no{"set8"}
         pa{"set39"}
         pl{"set30"}
         pt{"set11"}
@@ -138,9 +138,9 @@ dayPeriods:table(nofallback){
         mr{"set121"}
         ms{"set146"}
         my{"set155"}
-        nb{"set87"}
         ne{"set122"}
         nl{"set83"}
+        no{"set87"}
         pa{"set123"}
         pl{"set105"}
         pt{"set90"}
@@ -375,7 +375,7 @@ dayPeriods:table(nofallback){
                 from{"12:00"}
             }
             evening1{
-                before{"24:00"}
+                before{"22:00"}
                 from{"18:00"}
             }
             morning1{
@@ -384,7 +384,7 @@ dayPeriods:table(nofallback){
             }
             night1{
                 before{"04:00"}
-                from{"00:00"}
+                from{"22:00"}
             }
         }
         set109{
@@ -1697,7 +1697,7 @@ dayPeriods:table(nofallback){
                 from{"12:00"}
             }
             evening1{
-                before{"24:00"}
+                before{"22:00"}
                 from{"18:00"}
             }
             midnight{
@@ -1709,7 +1709,7 @@ dayPeriods:table(nofallback){
             }
             night1{
                 before{"04:00"}
-                from{"00:00"}
+                from{"22:00"}
             }
             noon{
                 at{"12:00"}

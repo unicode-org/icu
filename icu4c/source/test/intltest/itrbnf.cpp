@@ -1522,8 +1522,8 @@ IntlTestRBNF::TestPortugueseSpellout()
             { "1,000", "mil" },
             { "2,000", "dois mil" },
             { "3,004", "tr\\u00EAs mil e quatro" },
-            { "4,567", "quatro mil e quinhentos e sessenta e sete" },
-            { "15,943", "quinze mil e novecentos e quarenta e tr\\u00EAs" },
+            { "4,567", "quatro mil quinhentos e sessenta e sete" },
+            { "15,943", "quinze mil novecentos e quarenta e tr\\u00EAs" },
             { "-36", "menos trinta e seis" },
             { "234.567", "duzentos e trinta e quatro v\\u00EDrgula cinco seis sete" },
             { NULL, NULL}

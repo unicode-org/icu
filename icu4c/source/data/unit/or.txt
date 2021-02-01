@@ -158,7 +158,7 @@ or{
                 one{"{0} କ୍ୟାରେଟ୍"}
                 other{"{0} କ୍ୟାରେଟ୍"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ମିଲିଗ୍ରାମ୍ ପ୍ରତି ଡେସିଲିଟର୍"}
                 one{"{0} ମିଲିଗ୍ରାମ୍ ପ୍ରତି ଡେସିଲିଟର୍"}
                 other{"{0} ମିଲିଗ୍ରାମ୍ ପ୍ରତି ଡେସିଲିଟର୍"}
@@ -1187,7 +1187,7 @@ or{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ମିଗ୍ରା/ଡେଲି"}
                 one{"{0} ମିଗ୍ରା/ଡେଲି"}
                 other{"{0} ମିଗ୍ରା/ଡେଲି"}
@@ -1520,9 +1520,9 @@ or{
                 per{"{0}/ମି"}
             }
             micrometer{
-                dnam{"µମିଟର୍"}
-                one{"{0} µମି"}
-                other{"{0} µମି"}
+                dnam{"μମିଟର୍"}
+                one{"{0} μମି"}
+                other{"{0} μମି"}
             }
             mile{
                 dnam{"ମାଇଲ୍"}
@@ -1615,9 +1615,9 @@ or{
                 other{"{0} ଟ"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"ମିଗ୍ରା"}

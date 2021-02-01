@@ -164,7 +164,7 @@ ceb{
                 one{"{0} ka karat"}
                 other{"{0} ka mga karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mga milligram kada deciliter"}
                 one{"{0} ka milligram kada deciliter"}
                 other{"{0} ka mga milligram kada deciliter"}
@@ -461,7 +461,7 @@ ceb{
         graphics{
             dot{
                 one{"{0} dot"}
-                other{"{0} dot"}
+                other{"{0} px"}
             }
             dot-per-centimeter{
                 dnam{"mga dot kada sentimetro"}
@@ -1180,7 +1180,7 @@ ceb{
             karat{
                 dnam{"mga karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
             }
@@ -1400,7 +1400,7 @@ ceb{
                 dnam{"m"}
             }
             micrometer{
-                dnam{"mga µmeter"}
+                dnam{"mga μmeter"}
             }
             mile{
                 dnam{"mga milya"}

@@ -138,7 +138,7 @@ so{
                 one{"{0} karaat"}
                 other{"{0} karaat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligaraam disilitirkiiba"}
                 one{"{0} miligaraam disilitirkiiba"}
                 other{"{0} miligaraam disilitirkiiba"}
@@ -1327,7 +1327,7 @@ so{
                 dnam{"m"}
             }
             micrometer{
-                dnam{"µmitir"}
+                dnam{"μmitir"}
             }
             mile{
                 dnam{"meyl"}

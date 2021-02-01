@@ -547,8 +547,8 @@ fr_CA{
                 other{"´{0}s."}
             }
             microsecond{
-                one{"{0}µs"}
-                other{"{0}µs"}
+                one{"{0}μs"}
+                other{"{0}μs"}
             }
             minute{
                 one{"{0}m"}
@@ -589,8 +589,8 @@ fr_CA{
                 other{"{0}al"}
             }
             micrometer{
-                one{"{0}µm"}
-                other{"{0}µm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
             }
             mile-scandinavian{
                 one{"{0}smi"}
@@ -625,8 +625,8 @@ fr_CA{
                 other{"{0}t"}
             }
             microgram{
-                one{"{0}µg"}
-                other{"{0}µg"}
+                one{"{0}μg"}
+                other{"{0}μg"}
             }
             milligram{
                 one{"{0}mg"}
@@ -979,8 +979,8 @@ fr_CA{
                 other{"{0} m"}
             }
             micrometer{
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 one{"{0} mi"}
@@ -1041,8 +1041,8 @@ fr_CA{
                 other{"{0} t"}
             }
             microgram{
-                one{"{0} µg"}
-                other{"{0} µg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 one{"{0} mg"}

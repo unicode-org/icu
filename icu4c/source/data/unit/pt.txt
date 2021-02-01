@@ -185,7 +185,7 @@ pt{
                 one{"{0} kilate"}
                 other{"{0} kilates"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligramas por decilitro"}
                 one{"{0} miligrama por decilitro"}
                 other{"{0} miligramas por decilitro"}
@@ -1415,7 +1415,7 @@ pt{
                 one{"{0} k"}
                 other{"{0} k"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}

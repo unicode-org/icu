@@ -4109,6 +4109,10 @@ const char* const full_data[][3] = {
     "nn_Latn_NO",
     "nn"
   }, {
+    "no",
+    "no_Latn_NO",
+    "no"
+  }, {
     "nr",
     "nr_Latn_ZA",
     "nr"
@@ -4938,8 +4942,8 @@ const char* const full_data[][3] = {
     "nl"
   }, {
     "und_NO",
-    "nb_Latn_NO",
-    "nb"
+    "no_Latn_NO",
+    "no"
   }, {
     "und_NP",
     "ne_Deva_NP",
@@ -5054,8 +5058,8 @@ const char* const full_data[][3] = {
     "sl"
   }, {
     "und_SJ",
-    "nb_Latn_SJ",
-    "nb_SJ"
+    "no_Latn_SJ",
+    "no_SJ"
   }, {
     "und_SK",
     "sk_Latn_SK",
