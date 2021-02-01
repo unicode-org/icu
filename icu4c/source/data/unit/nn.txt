@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 nn{
+    %%Parent{"no"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -161,7 +162,7 @@ nn{
                 one{"{0} karat"}
                 other{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligram per desiliter"}
                 one{"{0} milligram per desiliter"}
                 other{"{0} milligram per desiliter"}
@@ -1280,7 +1281,7 @@ nn{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1564,7 +1565,7 @@ nn{
             }
             dot-per-centimeter{
                 one{"{0} dpcm"}
-                other{"{0} dpcm"}
+                other{"{0} ppcm"}
             }
             dot-per-inch{
                 dnam{"ppt"}
@@ -1647,9 +1648,9 @@ nn{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"engelske mil"}
@@ -1741,9 +1742,9 @@ nn{
                 other{"{0} tonn"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

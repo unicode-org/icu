@@ -70,7 +70,12 @@ public class LongNameHandler
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             UResource.Table pluralsTable = value.getTable();
             for (int i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {
-                int index = getIndex(key.toString());
+                String keyString = key.toString();
+                if (keyString.equals("case") || keyString.equals("gender")) {
+                    // TODO: @Hugo to fix for new grammatical stuff
+                    continue;
+                }
+                int index = getIndex(keyString);
                 if (outArray[index] != null) {
                     continue;
                 }

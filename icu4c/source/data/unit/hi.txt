@@ -241,7 +241,7 @@ hi{
                 one{"{0} कैरट"}
                 other{"{0} कैरट"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"मिलिग्राम प्रति डेसीलीटर"}
                 one{"{0} मिलिग्राम प्रति डेसीलीटर"}
                 other{"{0} मिलिग्राम प्रति डेसीलीटर"}
@@ -2017,7 +2017,7 @@ hi{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"मि॰ग्रा॰/डे॰ली॰"}
                 one{"{0} मि॰ग्रा॰/डे॰ली॰"}
                 other{"{0} मि॰ग्रा॰/डे॰ली॰"}
@@ -2361,9 +2361,9 @@ hi{
                 per{"{0}/मी"}
             }
             micrometer{
-                dnam{"µ मा॰मी॰"}
-                one{"{0} µ मा॰मी॰"}
-                other{"{0} µ मा॰मी॰"}
+                dnam{"μ मा॰मी॰"}
+                one{"{0} μ मा॰मी॰"}
+                other{"{0} μ मा॰मी॰"}
             }
             mile{
                 dnam{"मील"}

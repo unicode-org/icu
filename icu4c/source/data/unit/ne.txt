@@ -165,7 +165,7 @@ ne{
                 one{"{0}कराट"}
                 other{"{0}कराट"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1475,7 +1475,7 @@ ne{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1775,12 +1775,12 @@ ne{
             }
             dot-per-centimeter{
                 dnam{"dpcm"}
-                one{"{0} dpcm"}
+                one{"{0} ppcm"}
                 other{"{0} dpcm"}
             }
             dot-per-inch{
                 dnam{"dpi"}
-                one{"{0} dpi"}
+                one{"{0} ppi"}
                 other{"{0} dpi"}
             }
             em{
@@ -1871,9 +1871,9 @@ ne{
                 per{"{0} प्रति मिटर"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"माइल"}
@@ -1983,9 +1983,9 @@ ne{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"मिलिग्राम"}

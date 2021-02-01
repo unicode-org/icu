@@ -437,8 +437,8 @@ void LocaleMatcherTest::testMatch() {
     double matchEnHantTw = matcher.internalMatch(en_Hant_TW, zh_Hant, errorCode);
     assertTrue("zh_Hant should be closer to und_TW than to en_Hant_TW",
                matchEnHantTw < matchZhHant);
-    assertTrue("zh should be closer to und_TW than to en_Hant_TW",
-               matchEnHantTw < matchZh);
+    assertTrue("zh should not match und_TW or en_Hant_TW",
+               matchZh == 0.0 && matchEnHantTw == 0.0); // with changes in CLDR-1435
 }
 
 void LocaleMatcherTest::testResolvedLocale() {

@@ -157,7 +157,7 @@ af{
                 one{"{0} karaat"}
                 other{"{0} karaat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligram per desiliter"}
                 one{"{0} milligram per desiliter"}
                 other{"{0} milligram per desiliter"}
@@ -1368,7 +1368,7 @@ af{
                 one{"{0} kar."}
                 other{"{0} kar."}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dℓ"}
                 one{"{0} mg/dℓ"}
                 other{"{0} mg/dℓ"}
@@ -1761,9 +1761,9 @@ af{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"myl"}
@@ -1867,9 +1867,9 @@ af{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

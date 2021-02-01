@@ -166,7 +166,7 @@ mk{
                 one{"{0} карат"}
                 other{"{0} карати"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"милиграм по децилитар"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1293,8 +1293,8 @@ mk{
                 per{"{0}/м"}
             }
             micrometer{
-                one{"{0} µм"}
-                other{"{0} µм"}
+                one{"{0} μм"}
+                other{"{0} μм"}
             }
             mile{
                 dnam{"ми"}
@@ -1367,8 +1367,8 @@ mk{
                 other{"{0} т"}
             }
             microgram{
-                one{"{0} µг"}
-                other{"{0} µг"}
+                one{"{0} μг"}
+                other{"{0} μг"}
             }
             milligram{
                 dnam{"мг"}
@@ -1694,7 +1694,7 @@ mk{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1991,17 +1991,17 @@ mk{
         graphics{
             dot{
                 dnam{"тчк."}
-                one{"{0} тчк."}
+                one{"{0} px"}
                 other{"{0} тчк."}
             }
             dot-per-centimeter{
                 dnam{"dpcm"}
-                one{"{0} dpcm"}
+                one{"{0} ppcm"}
                 other{"{0} dpcm"}
             }
             dot-per-inch{
                 dnam{"dpi"}
-                one{"{0} dpi"}
+                one{"{0} ppi"}
                 other{"{0} dpi"}
             }
             em{
@@ -2087,9 +2087,9 @@ mk{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"милји"}
@@ -2193,9 +2193,9 @@ mk{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

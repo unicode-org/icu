@@ -930,7 +930,7 @@ public class MeasureUnit implements Serializable {
 // the "End generated MeasureUnit constants" comment is auto generated code
 // and must not be edited manually. For instructions on how to correctly
 // update this code, refer to:
-// http://site.icu-project.org/design/formatting/measureformat/updating-measure-unit
+// docs/processes/release/tasks/updating-measure-unit.md
 //
     // Start generated MeasureUnit constants
 
@@ -1041,6 +1041,13 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit KARAT = MeasureUnit.internalGetInstance("concentr", "karat");
+
+    /**
+     * Constant for unit of concentr: milligram-ofglucose-per-deciliter
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
 
     /**
      * Constant for unit of concentr: milligram-per-deciliter

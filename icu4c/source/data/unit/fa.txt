@@ -163,7 +163,7 @@ fa{
                 one{"{0} عیار"}
                 other{"{0} عیار"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"میلی‌گرم در دسی‌لیتر"}
                 one{"{0} میلی‌گرم در دسی‌لیتر"}
                 other{"{0} میلی‌گرم در دسی‌لیتر"}
@@ -1267,8 +1267,8 @@ fa{
                 per{"{0}/متر"}
             }
             micrometer{
-                one{"{0}µm"}
-                other{"{0}µm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
             }
             mile{
                 dnam{"مایل"}
@@ -1571,7 +1571,7 @@ fa{
                 one{"{0} عیار"}
                 other{"{0} عیار"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"میلی‌گرم در دسی‌لیتر"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1653,7 +1653,7 @@ fa{
                 other{"{0} <LRM>Gb"}
             }
             gigabyte{
-                dnam{"گیگابایت"}
+                dnam{"GB"}
                 one{"{0} <LRM>GB"}
                 other{"{0} <LRM>GB"}
             }
@@ -1673,7 +1673,7 @@ fa{
                 other{"{0} <LRM>Mb"}
             }
             megabyte{
-                dnam{"مگابایت"}
+                dnam{"MB"}
                 one{"{0} <LRM>MB"}
                 other{"{0} <LRM>MB"}
             }
@@ -1719,7 +1719,7 @@ fa{
             microsecond{
                 dnam{"میکروثانیه"}
                 one{"{0} میکروثانیه"}
-                other{"{0} <LRM>µs"}
+                other{"{0} <LRM>μs"}
             }
             millisecond{
                 dnam{"میلی‌ثانیه"}
@@ -1962,8 +1962,8 @@ fa{
             }
             micrometer{
                 dnam{"میکرومتر"}
-                one{"{0} <LRM>µm"}
-                other{"{0} <LRM>µm"}
+                one{"{0} <LRM>μm"}
+                other{"{0} <LRM>μm"}
             }
             mile{
                 dnam{"مایل"}
@@ -2063,8 +2063,8 @@ fa{
                 other{"{0} <LRM>t"}
             }
             microgram{
-                one{"{0} <LRM>µg"}
-                other{"{0} <LRM>µg"}
+                one{"{0} <LRM>μg"}
+                other{"{0} <LRM>μg"}
             }
             milligram{
                 one{"{0} <LRM>mg"}

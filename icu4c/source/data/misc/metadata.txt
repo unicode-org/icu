@@ -1096,6 +1096,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"nv"}
             }
+            nb{
+                reason{"macrolanguage"}
+                replacement{"no"}
+            }
             nbf{
                 reason{"deprecated"}
                 replacement{"nru"}
@@ -1148,17 +1152,13 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"ngv"}
             }
-            no{
-                reason{"legacy"}
-                replacement{"nb"}
-            }
             no_bok{
                 reason{"deprecated"}
-                replacement{"nb"}
+                replacement{"no"}
             }
             no_bokmal{
                 reason{"deprecated"}
-                replacement{"nb"}
+                replacement{"no"}
             }
             no_nyn{
                 reason{"deprecated"}
@@ -1170,7 +1170,7 @@ metadata:table(nofallback){
             }
             nob{
                 reason{"overlong"}
-                replacement{"nb"}
+                replacement{"no"}
             }
             noo{
                 reason{"deprecated"}
@@ -1178,7 +1178,7 @@ metadata:table(nofallback){
             }
             nor{
                 reason{"overlong"}
-                replacement{"nb"}
+                replacement{"no"}
             }
             npi{
                 reason{"macrolanguage"}
@@ -5274,7 +5274,6 @@ metadata:table(nofallback){
         "myv_RU",
         "mzn_IR",
         "naq_NA",
-        "nb_NO",
         "nd_ZW",
         "nds_DE",
         "ne_NP",
@@ -5282,6 +5281,7 @@ metadata:table(nofallback){
         "nmg_CM",
         "nn_NO",
         "nnh_CM",
+        "no_NO",
         "nqo_GN",
         "nr_ZA",
         "nso_ZA",

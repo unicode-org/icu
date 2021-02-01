@@ -165,7 +165,7 @@ hy{
                 one{"{0} կարատ"}
                 other{"{0} կարատ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"միլիգրամներ դեցիլիտրի վրա"}
                 one{"{0} միլիգրամ դեցիլիտրի վրա"}
                 other{"{0} միլիգրամ դեցիլիտրի վրա"}
@@ -1477,7 +1477,7 @@ hy{
                 one{"{0} կար"}
                 other{"{0} կար"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"մգ/դլ"}
                 one{"{0} մգ/դլ"}
                 other{"{0} մգ/դլ"}

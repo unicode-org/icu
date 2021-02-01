@@ -197,7 +197,7 @@
                 mt, mua, my, mzn
 
                 // N
-                naq, nb, nd, ne, nl, nmg, nn, nnh, no, no_NO, no_NO_NY, nus, nyn
+                naq, nb, nb_NO, nb_SJ, nd, ne, nl, nmg, nn, nnh, no, no_NO_NY, nus, nyn
 
                 // O
                 om, or, os
@@ -290,7 +290,7 @@
 
                     // K-P
                     ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lkt, ln, lo, lt, lv,
-                    mk, ml, mn, mo, mr, ms, mt, my, nb, ne, nl, nn, no_NO, no,
+                    mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO,
                     om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
 
                     // R-T

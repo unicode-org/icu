@@ -185,7 +185,7 @@ fr{
                 one{"{0} carat"}
                 other{"{0} carats"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligrammes par décilitre"}
                 one{"{0} milligramme par décilitre"}
                 other{"{0} milligrammes par décilitre"}
@@ -1322,7 +1322,7 @@ fr{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
+                dnam{"μm"}
             }
             mile{
                 dnam{"mi"}
@@ -1379,7 +1379,7 @@ fr{
                 dnam{"t"}
             }
             microgram{
-                dnam{"µg"}
+                dnam{"μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -1673,7 +1673,7 @@ fr{
                 one{"{0} ct"}
                 other{"{0} ct"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -2061,9 +2061,9 @@ fr{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mi"}
@@ -2165,9 +2165,9 @@ fr{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

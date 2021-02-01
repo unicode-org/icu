@@ -162,7 +162,7 @@ pcm{
                 one{"{0} Karat"}
                 other{"{0} Karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"Mílígram-dẹm Fọ Ẹ́vrí Dẹsílíta"}
                 one{"{0} Mílígram Fọ Ẹ́vrí Dẹsílíta"}
                 other{"{0} Mílígram Fọ Ẹ́vrí Dẹsílíta"}
@@ -1054,7 +1054,7 @@ pcm{
             10p-21{"Zẹ́{0}"}
             10p-24{"Yó{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"Dẹ́{0}"}
             10p12{"T{0}"}
@@ -1326,7 +1326,7 @@ pcm{
             10p-21{"Zẹ{0}"}
             10p-24{"Yo{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"Dẹ́{0}"}
             10p12{"T{0}"}
@@ -1371,7 +1371,7 @@ pcm{
                 one{"{0} kar"}
                 other{"{0} kar"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1764,9 +1764,9 @@ pcm{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µmíta"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μmíta"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"Mails"}
@@ -1880,9 +1880,9 @@ pcm{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

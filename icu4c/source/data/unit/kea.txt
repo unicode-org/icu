@@ -126,7 +126,7 @@ kea{
                 dnam{"kilati"}
                 other{"{0} kilati"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligrama pur desilitru"}
                 other{"{0} miligrama pur desilitru"}
             }
@@ -966,7 +966,7 @@ kea{
                 dnam{"kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 other{"{0} mg/dl"}
             }
@@ -1207,8 +1207,8 @@ kea{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mi"}

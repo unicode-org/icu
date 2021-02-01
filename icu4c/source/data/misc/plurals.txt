@@ -283,9 +283,9 @@ plurals:table(nofallback){
         mr{"set52"}
         ms{"set39"}
         my{"set37"}
-        nb{"set37"}
         ne{"set41"}
         nl{"set37"}
+        no{"set37"}
         or{"set59"}
         pa{"set37"}
         pl{"set37"}

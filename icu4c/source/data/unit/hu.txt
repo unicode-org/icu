@@ -160,7 +160,7 @@ hu{
                 one{"{0} karát"}
                 other{"{0} karát"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligramm/deciliter"}
                 one{"{0} milligramm/deciliter"}
                 other{"{0} milligramm/deciliter"}
@@ -1516,7 +1516,7 @@ hu{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1787,7 +1787,7 @@ hu{
             dot-per-centimeter{
                 dnam{"dpcm"}
                 one{"{0} dpcm"}
-                other{"{0} dpcm"}
+                other{"{0} ppcm"}
             }
             em{
                 dnam{"em"}
@@ -1858,9 +1858,9 @@ hu{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mf"}
@@ -1947,9 +1947,9 @@ hu{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

@@ -2105,7 +2105,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"38"}
+    cldrVersion{"39"}
     codeMappings{
         {
             "AA",
@@ -4812,6 +4812,7 @@ supplementalData:table(nofallback){
                 "myq",
                 "myt",
                 "nad",
+                "nb",
                 "nbf",
                 "nbx",
                 "ncp",
@@ -4819,7 +4820,6 @@ supplementalData:table(nofallback){
                 "nlr",
                 "nns",
                 "nnx",
-                "no",
                 "noo",
                 "npi",
                 "nts",
@@ -6241,7 +6241,6 @@ supplementalData:table(nofallback){
                 "naa~c",
                 "nae~t",
                 "naw~z",
-                "nb",
                 "nba~e",
                 "nbg~k",
                 "nbm~w",
@@ -6295,6 +6294,7 @@ supplementalData:table(nofallback){
                 "nnp~r",
                 "nnt~w",
                 "nny~z",
+                "no",
                 "noa",
                 "noc~n",
                 "nop~q",
@@ -11280,6 +11280,7 @@ supplementalData:table(nofallback){
                 "pressure-millimeter-of-mercury",
                 "proportion-karat",
                 "torque-pound-foot",
+                "concentr-milligram-per-deciliter",
             }
             regular{
                 "acceleration-g-force",
@@ -11300,7 +11301,7 @@ supplementalData:table(nofallback){
                 "area-square-yard",
                 "area-dunam",
                 "concentr-karat",
-                "concentr-milligram-per-deciliter",
+                "concentr-milligram-ofglucose-per-deciliter",
                 "concentr-millimole-per-liter",
                 "concentr-percent",
                 "concentr-permille",
@@ -11309,6 +11310,7 @@ supplementalData:table(nofallback){
                 "concentr-mole",
                 "concentr-item",
                 "concentr-portion",
+                "concentr-ofglucose",
                 "consumption-liter-per-100-kilometer",
                 "consumption-liter-per-kilometer",
                 "consumption-mile-per-gallon",
@@ -15138,15 +15140,6 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
-        nb{
-            primary{
-                scripts{"Latn"}
-                territories{
-                    "NO",
-                    "SJ",
-                }
-            }
-        }
         nch{
             primary{
                 scripts{"Latn"}
@@ -15272,6 +15265,15 @@ supplementalData:table(nofallback){
         nnh{
             primary{
                 scripts{"Latn"}
+            }
+        }
+        no{
+            primary{
+                scripts{"Latn"}
+                territories{
+                    "NO",
+                    "SJ",
+                }
             }
         }
         nod{
@@ -17344,8 +17346,8 @@ supplementalData:table(nofallback){
     languageMatchingNew{
         written{
             {
-                "no",
                 "nb",
+                "no",
                 "1",
                 "0",
             }
@@ -17428,6 +17430,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "am",
+                "en",
+                "30",
+                "1",
+            }
+            {
                 "ay",
                 "es",
                 "20",
@@ -17437,6 +17445,12 @@ supplementalData:table(nofallback){
                 "az",
                 "ru",
                 "30",
+                "1",
+            }
+            {
+                "bal",
+                "ur",
+                "20",
                 "1",
             }
             {
@@ -17464,8 +17478,20 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "bo",
+                "zh",
+                "20",
+                "1",
+            }
+            {
                 "br",
                 "fr",
+                "20",
+                "1",
+            }
+            {
+                "ca",
+                "es",
                 "20",
                 "1",
             }
@@ -17498,6 +17524,12 @@ supplementalData:table(nofallback){
                 "fr",
                 "20",
                 "1",
+            }
+            {
+                "cs",
+                "sk",
+                "20",
+                "0",
             }
             {
                 "cy",
@@ -17701,6 +17733,12 @@ supplementalData:table(nofallback){
                 "lua",
                 "fr",
                 "30",
+                "1",
+            }
+            {
+                "mai",
+                "hi",
+                "20",
                 "1",
             }
             {
@@ -17974,6 +18012,12 @@ supplementalData:table(nofallback){
                 "1",
             }
             {
+                "uk",
+                "ru",
+                "20",
+                "1",
+            }
+            {
                 "ur",
                 "en",
                 "30",
@@ -18007,6 +18051,12 @@ supplementalData:table(nofallback){
                 "yo",
                 "en",
                 "30",
+                "1",
+            }
+            {
+                "za",
+                "zh",
+                "20",
                 "1",
             }
             {
@@ -19138,6 +19188,12 @@ supplementalData:table(nofallback){
                 "0",
             }
             {
+                "am_Ethi",
+                "en_Latn",
+                "10",
+                "1",
+            }
+            {
                 "az_Latn",
                 "ru_Cyrl",
                 "10",
@@ -19146,6 +19202,12 @@ supplementalData:table(nofallback){
             {
                 "bn_Beng",
                 "en_Latn",
+                "10",
+                "1",
+            }
+            {
+                "bo_Tibt",
+                "zh_Hans",
                 "10",
                 "1",
             }
@@ -19276,15 +19338,9 @@ supplementalData:table(nofallback){
                 "0",
             }
             {
+                "za_Latn",
                 "zh_Hans",
-                "zh_Hant",
-                "15",
-                "1",
-            }
-            {
-                "zh_Hant",
-                "zh_Hans",
-                "19",
+                "10",
                 "1",
             }
             {
@@ -19788,6 +19844,7 @@ supplementalData:table(nofallback){
             "es_UY",
             "es_VE",
         }
+        no{"nn"}
         pt_PT{
             "pt_AO",
             "pt_CH",
@@ -30556,13 +30613,13 @@ supplementalData:table(nofallback){
             }
         }
         NO{
-            nb{
-                officialStatus{"official"}
-                populationShareF:int{50100000}
-            }
             nn{
                 officialStatus{"official"}
                 populationShareF:int{49250000}
+            }
+            no{
+                officialStatus{"official"}
+                populationShareF:int{50100000}
             }
             se{
                 officialStatus{"official_regional"}
@@ -31570,7 +31627,7 @@ supplementalData:table(nofallback){
             }
         }
         SJ{
-            nb{
+            no{
                 officialStatus{"official"}
                 populationShareF:int{49510000}
             }

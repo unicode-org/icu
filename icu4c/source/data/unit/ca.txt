@@ -165,7 +165,7 @@ ca{
                 one{"{0} quirat"}
                 other{"{0} quirats"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mil·ligrams per decilitre"}
                 one{"{0} mil·ligram per decilitre"}
                 other{"{0} mil·ligrams per decilitre"}
@@ -1416,7 +1416,7 @@ ca{
                 one{"{0} ct"}
                 other{"{0} ct"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1785,9 +1785,9 @@ ca{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"milles"}
@@ -1886,9 +1886,9 @@ ca{
                 other{"{0} t mètr."}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

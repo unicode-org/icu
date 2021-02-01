@@ -2053,6 +2053,10 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "nn_Latn_NO",
             "nn"
         }, {
+            "no",
+            "no_Latn_NO",
+            "no"
+        }, {
             "nr",
             "nr_Latn_ZA",
             "nr"
@@ -2870,8 +2874,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "nl"
         }, {
             "und_NO",
-            "nb_Latn_NO",
-            "nb"
+            "no_Latn_NO",
+            "no"
         }, {
             "und_NP",
             "ne_Deva_NP",
@@ -2982,8 +2986,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "sl"
         }, {
             "und_SJ",
-            "nb_Latn_SJ",
-            "nb_SJ"
+            "no_Latn_SJ",
+            "no_SJ"
         }, {
             "und_SK",
             "sk_Latn_SK",
@@ -4736,15 +4740,17 @@ void LocaleTest::TestCanonicalization(void)
         { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
         { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
         { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
-        { "no_NO_NY", "no_NO_NY", "nb_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
-        { "no@ny", "no@ny", "nb__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
-        { "no-no.utf32@B", "no_NO.utf32@B", "nb_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
+        { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
+        { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
+        { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" }, /* POSIX ID */
         { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ_EURO" }, /* qz-qz uses private use iso codes */
         // NOTE: uloc_getName() works on en-BOONT, but Locale() parser considers it BOGUS
         // TODO: unify this behavior
         { "en-BOONT", "en__BOONT", "en__BOONT" }, /* registered name */
         { "de-1901", "de__1901", "de__1901" }, /* registered name */
         { "de-1906", "de__1906", "de__1906" }, /* registered name */
+        // New in CLDR 39 / ICU 69
+        { "nb", "nb", "no" },
 
         /* posix behavior that used to be performed by getName */
         { "mr.utf8", "mr.utf8", "mr" },
@@ -4752,7 +4758,7 @@ void LocaleTest::TestCanonicalization(void)
         { "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML" },
         { "i-cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US" },
         { "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA" },
-        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "nb_NO_B_NY" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
+        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "no_NO_B_NY" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
 
         /* fleshing out canonicalization */
         /* trim space and sort keywords, ';' is separator so not present at end in canonical form */
@@ -4764,7 +4770,7 @@ void LocaleTest::TestCanonicalization(void)
           "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR",
           "en_Hant_IL_GIRL_VALLEY@calendar=Japanese;currency=EUR" },
         /* norwegian is just too weird, if we handle things in their full generality */
-        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "nb_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
+        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
 
         /* test cases reflecting internal resource bundle usage */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
@@ -4847,12 +4853,12 @@ void LocaleTest::TestCanonicalize(void)
         const char *canonicalID; /* expected canonicalize() result */
     } testCases[] = {
         // language _ variant -> language
-        { "no-BOKMAL", "nb" },
+        { "no-BOKMAL", "no" },
         // also test with script, country and extensions
-        { "no-Cyrl-ID-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-u-ca-japanese" },
-        { "no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-1901-xsistemo-u-ca-japanese" },
-        { "no-Cyrl-ID-1901-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-1901-u-ca-japanese" },
-        { "no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-xsistemo-u-ca-japanese" },
+        { "no-Cyrl-ID-BOKMAL-u-ca-japanese", "no-Cyrl-ID-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese", "no-Cyrl-ID-1901-xsistemo-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-u-ca-japanese", "no-Cyrl-ID-1901-u-ca-japanese" },
+        { "no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese", "no-Cyrl-ID-xsistemo-u-ca-japanese" },
         { "no-NYNORSK", "nn" },
         { "no-Cyrl-ID-NYNORSK-u-ca-japanese", "nn-Cyrl-ID-u-ca-japanese" },
         { "aa-SAAHO", "ssy" },
@@ -4959,7 +4965,7 @@ void LocaleTest::TestCanonicalize(void)
         { "en-t-hy-latn-SU", "en-t-hy-latn-am"},
         { "ru-t-ru-cyrl-SU", "ru-t-ru-cyrl-ru"},
         { "fr-t-fr-172", "fr-t-fr-ru"},
-        { "und-t-no-latn-BOKMAL", "und-t-nb-latn" },
+        { "und-t-no-latn-BOKMAL", "und-t-no-latn" },
         { "und-t-sgn-qAAi-NL", "und-t-dse-zinh" },
         // alias of tvalue should be replaced
         { "en-t-m0-NaMeS", "en-t-m0-prprname" },

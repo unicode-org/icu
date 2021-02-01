@@ -133,7 +133,7 @@ id{
                 dnam{"karat"}
                 other{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligram per desiliter"}
                 other{"{0} milligram per desiliter"}
             }
@@ -973,8 +973,8 @@ id{
                 other{"{0}m"}
             }
             micrometer{
-                dnam{"µmeter"}
-                other{"{0}µm"}
+                dnam{"μmeter"}
+                other{"{0}μm"}
             }
             mile{
                 dnam{"mil"}
@@ -1153,7 +1153,7 @@ id{
                 dnam{"karat"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 other{"{0} mg/dL"}
             }
@@ -1439,8 +1439,8 @@ id{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µmeter"}
-                other{"{0} µm"}
+                dnam{"μmeter"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mil"}
@@ -1529,8 +1529,8 @@ id{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

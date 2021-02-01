@@ -163,7 +163,7 @@ ml{
                 one{"{0} ക്യാരറ്റ്"}
                 other{"{0} ക്യാരറ്റ്"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"മില്ലിഗ്രാം / ഡെസിലിറ്റർ"}
                 one{"{0} മില്ലിഗ്രാം / ഡെസിലിറ്റർ"}
                 other{"{0} മില്ലിഗ്രാം / ഡെസിലിറ്റർ"}
@@ -1132,9 +1132,9 @@ ml{
                 per{"{0}/മീ."}
             }
             micrometer{
-                dnam{"µമീ."}
-                one{"{0}µമീ."}
-                other{"{0}µമീ."}
+                dnam{"μമീ."}
+                one{"{0}μമീ."}
+                other{"{0}μമീ."}
             }
             mile{
                 dnam{"മൈൽ"}
@@ -1206,9 +1206,9 @@ ml{
                 other{"{0}ട."}
             }
             microgram{
-                dnam{"µ.ഗ്രാം."}
-                one{"{0}µ.ഗ്രാം."}
-                other{"{0}µ.ഗ്രാം."}
+                dnam{"μ.ഗ്രാം."}
+                one{"{0}μ.ഗ്രാം."}
+                other{"{0}μ.ഗ്രാം."}
             }
             milligram{
                 dnam{"മി.ഗ്രാം."}
@@ -1445,7 +1445,7 @@ ml{
                 one{"{0} ക്യാ."}
                 other{"{0} ക്യാ."}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"മി.ഗ്രാം/ഡെ.ലി."}
                 one{"{0} മി.ഗ്രാം/ഡെ.ലി."}
                 other{"{0} മി.ഗ്രാം/ഡെ.ലി."}
@@ -1732,12 +1732,12 @@ ml{
         graphics{
             dot-per-centimeter{
                 dnam{"dpcm"}
-                one{"{0} dpcm"}
+                one{"{0} ppcm"}
                 other{"{0} dpcm"}
             }
             dot-per-inch{
                 dnam{"dpi"}
-                one{"{0} dpi"}
+                one{"{0} ppi"}
                 other{"{0} dpi"}
             }
             em{
@@ -1823,9 +1823,9 @@ ml{
                 per{"{0}/മീ."}
             }
             micrometer{
-                dnam{"µമീറ്റർ"}
-                one{"µമീ."}
-                other{"{0} µമീ."}
+                dnam{"μമീറ്റർ"}
+                one{"μമീ."}
+                other{"{0} μമീ."}
             }
             mile{
                 dnam{"മൈൽ"}
@@ -1920,9 +1920,9 @@ ml{
                 other{"{0} ട."}
             }
             microgram{
-                dnam{"µ.ഗ്രാം."}
-                one{"{0} µ.ഗ്രാം."}
-                other{"{0} µ.ഗ്രാം."}
+                dnam{"μ.ഗ്രാം."}
+                one{"{0} μ.ഗ്രാം."}
+                other{"{0} μ.ഗ്രാം."}
             }
             milligram{
                 dnam{"മി.ഗ്രാം."}

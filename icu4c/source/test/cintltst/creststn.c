@@ -267,12 +267,12 @@ static const char* norwayNames[] = {
 
 static const char* norwayLocales[] = {
     "nn_NO",
-    "nb_NO",
-    "nb",
+    "no_NO",
+    "no",
     "nn_NO",
     "nn",
-    "nb_NO",
-    "nb"
+    "no_NO",
+    "no"
 };
 
 static void checkStatus(int32_t line, UErrorCode expected, UErrorCode status) {
@@ -2181,7 +2181,7 @@ static void TestFallback()
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         const UChar* version = NULL;
-        static const UChar versionStr[] = u"38"; // 38 in nn_NO or in a parent bundle/root
+        static const UChar versionStr[] = u"39"; // 39 in nn_NO or in a parent bundle/root
 
         if(U_FAILURE(err)) {
             log_data_err("Expected success when trying to test no_NO_NY aliased to nn_NO for Version "
