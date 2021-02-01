@@ -295,8 +295,12 @@ We do not `#ifndef` APIs where that would be problematic:
   struct/class fields, virtual methods)
 * enum constants where that would modify the numeric values of following
   constants
-* C++ class boilerplate (e.g., default/copy constructors) because otherwise
-  the compiler would create public ones
+  * actually, best to use `#ifndef` together with explicitly defining the
+    numeric value of the next constant
+* C++ class boilerplate (e.g., default/copy constructors), if
+  the compiler would auto-create public functions to replace `#ifndef`’ed ones
+  * For example, the compiler automatically creates a default constructor if
+    the class does not specify any other constructors.
 * private class members
 * definitions in internal/test/tools header files (that would be pointless;
   they should probably not have API tags in the first place)
