@@ -28,7 +28,7 @@ vice versa (such as an English letter with a Hebrew address nested within it.)
 The predominant direction is called the global orientation.
 
 Languages involving bidirectional text are used mainly in the Middle East. They
-include Arabic, Urdu, Farsi, Hebrew, and Yiddish.
+include Arabic, Urdu, Persian, Hebrew, and Yiddish.
 
 In such a language, the general flow of text proceeds horizontally from right to
 left, but numbers are written from left to right, the same way as they are
@@ -43,18 +43,19 @@ Engines". *
 
 ## Countries with Languages that Require Bidirectional Scripting
 
-There are over 300 million people who depend on bidirectional scripts, including
-Farsi and Urdu which share the same script as Arabic, but have additional
-characters.
+There are over 600 million people whose languages are written right-to-left, including
+Persian and Urdu which use the Arabic script with additional characters.
 
-| Language | Number of Countries |
+| Language | Countries (examples) |
 |----------|------------------------------------------------------|
-| Arabic | 18 |
-| Farsi | 1 (Iran) |
-| Urdu | 2 (India, Pakistan) |
-| Hebrew | 1 (Israel) |
-| Yiddish | Israel, North America, South America, Russia, Europe |
+| Arabic   | Egypt, Jordan, Morocco, Saudi Arabia, ... Middle East & North Africa |
+| Persian  | Iran, Afghanistan |
+| Urdu     | India, Pakistan |
+| Hebrew   | Israel |
+| Yiddish  | Israel, North America, South America, Russia, Europe |
 
+This list of languages is far from complete. Other languages with RTL scripts include
+Divehi (Maldives), Kurdish (Iraq), Kashmiri (India), Sindhi (Pakistan and India), Uighur (China), and Pashto (Afghanistan), etc.
 
 ## Logical Order versus Visual Order
 
