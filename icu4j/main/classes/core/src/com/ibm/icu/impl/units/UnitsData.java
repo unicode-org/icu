@@ -64,11 +64,10 @@ public class UnitsData {
         String baseUnitIdentifier = MeasureUnit.fromMeasureUnitImpl(baseMeasureUnit).getIdentifier();
 
         if (baseUnitIdentifier.equals("meter-per-cubic-meter")) {
-            // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
-            // case. Once CLDR-13787 is clarified, this should be generalised (or
-            // possibly removed):
-
-            return "consumption-inverse";
+            // TODO(icu-units#130): support inverting any unit, with correct
+            // fallback logic: inversion and fallback may depend on presence or
+            // absence of a usage for that category.
+            return "consumption";
         }
 
         return this.categories.mapFromUnitToCategory.get(baseUnitIdentifier);

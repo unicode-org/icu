@@ -432,6 +432,7 @@ public class UnitsTest {
     public void testUnitPreferencesWithCLDRTests() throws IOException {
         class TestCase {
 
+            // TODO: content of outputUnitInOrder isn't checked? Only size?
             final ArrayList<Pair<String, MeasureUnitImpl>> outputUnitInOrder = new ArrayList<>();
             final ArrayList<BigDecimal> expectedInOrder = new ArrayList<>();
             /**
@@ -486,6 +487,11 @@ public class UnitsTest {
                     expectedInOrder.add(new BigDecimal(output.second));
                 }
             }
+
+            public String toString() {
+                return "TestCase: " + category + ", " + usage + ", " + region +
+                    "; Input: " + input + " " + inputUnit.first + "; Expected Values: " + expectedInOrder;
+            }
         }
 
         // Read Test data from the unitPreferencesTest
@@ -517,7 +523,7 @@ public class UnitsTest {
                         .compareTwoBigDecimal(testCase.expectedInOrder.get(i),
                                 BigDecimal.valueOf(measures.get(i).getNumber().doubleValue()),
                                 BigDecimal.valueOf(0.00001))) {
-                    fail(testCase.toString() + measures.toString());
+                    fail("Test failed: " + testCase + "; Got unexpected result: " + measures);
                 }
             }
         }

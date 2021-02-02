@@ -83,14 +83,22 @@ consumption;	vehicle-fuel;	BR;	11 / 10000000;	1.1E-6;	cubic-meter-per-meter;	11 
 consumption;	vehicle-fuel;	BR;	1 / 1000000;	1.0E-6;	cubic-meter-per-meter;	1;	1.0;	liter-per-kilometer
 consumption;	vehicle-fuel;	BR;	9 / 10000000;	9.0E-7;	cubic-meter-per-meter;	9 / 10;	0.9;	liter-per-kilometer
 
-consumption-inverse;	default;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	11 / 10;	1.1;	kilometer-per-centiliter
-consumption-inverse;	default;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	kilometer-per-centiliter
-consumption-inverse;	default;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	9 / 10;	0.9;	kilometer-per-centiliter
+# TODO: these are local ICU-specific edits until the CLDR test file is updated:
+# consumption-inverse;	default;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	11 / 10;	1.1;	kilometer-per-centiliter
+consumption;	default;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	10 / 11;	0.90909090909090906;	liter-per-100-kilometer
+# consumption-inverse;	default;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	kilometer-per-centiliter
+consumption;	default;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	liter-per-100-kilometer
+# consumption-inverse;	default;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	9 / 10;	0.9;	kilometer-per-centiliter
+consumption;	default;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	10 / 9;	1.1111111111111112;	liter-per-100-kilometer
 
-consumption-inverse;	vehicle-fuel;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	11 / 10;	1.1;	kilometer-per-centiliter
-consumption-inverse;	vehicle-fuel;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	kilometer-per-centiliter
-consumption-inverse;	vehicle-fuel;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	9 / 10;	0.9;	kilometer-per-centiliter
+# consumption-inverse;	vehicle-fuel;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	11 / 10;	1.1;	kilometer-per-centiliter
+consumption;	vehicle-fuel;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	10 / 11;	0.90909090909090906;	liter-per-100-kilometer
+# consumption-inverse;	vehicle-fuel;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	kilometer-per-centiliter
+consumption;	vehicle-fuel;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	liter-per-100-kilometer
+# consumption-inverse;	vehicle-fuel;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	9 / 10;	0.9;	kilometer-per-centiliter
+consumption;	vehicle-fuel;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	10 / 9;	1.1111111111111112;	liter-per-100-kilometer
 
+# TODO: these still pass, as expected/desired. Leaving them categorised as consumption-inverse, this is ignored by tests anyway
 consumption-inverse;	vehicle-fuel;	US;	52800000000 / 112903;	467658.0781732992;	meter-per-cubic-meter;	11 / 10;	1.1;	mile-per-gallon
 consumption-inverse;	vehicle-fuel;	US;	48000000000 / 112903;	425143.707430272;	meter-per-cubic-meter;	1;	1.0;	mile-per-gallon
 consumption-inverse;	vehicle-fuel;	US;	43200000000 / 112903;	382629.3366872448;	meter-per-cubic-meter;	9 / 10;	0.9;	mile-per-gallon

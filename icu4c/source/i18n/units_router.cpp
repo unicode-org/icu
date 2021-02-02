@@ -56,7 +56,7 @@ UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece 
     CharString category = getUnitCategory(baseUnit.getIdentifier(), status);
 
     const UnitPreference *const *unitPreferences;
-    int32_t preferencesCount;
+    int32_t preferencesCount = 0;
     prefs.getPreferencesFor(category.data(), usage, region, unitPreferences, preferencesCount, status);
 
     for (int i = 0; i < preferencesCount; ++i) {

@@ -1239,7 +1239,7 @@ void NumberFormatterApiTest::unitUsage() {
             u"8,8 km",
             u"900 m",
             u"90 m",
-            u"10 m",
+            u"9 m",
             u"0 m");
 
     uTestCase = u"unitUsage() en-GB road";
@@ -1274,8 +1274,8 @@ void NumberFormatterApiTest::unitUsage() {
             u"54 mi",
             u"5.4 mi",
             u"0.54 mi",
-            u"96 yd",
-            u"9.6 yd",
+            u"100 yd",
+            u"10 yd",
             u"0 yd");
 
     uTestCase = u"unitUsage() en-US road";

@@ -10,6 +10,7 @@
 
 using namespace ::icu::units;
 
+// These test are no in ICU4J. TODO: consider porting them to Java?
 class UnitsDataTest : public IntlTest {
   public:
     UnitsDataTest() {}
@@ -38,12 +39,14 @@ void UnitsDataTest::testGetUnitCategory() {
         const char *expectedCategory;
     } testCases[]{
         {"kilogram-per-cubic-meter", "mass-density"},
+        {"cubic-meter-per-kilogram", "specific-volume"},
+        {"meter-per-second", "speed"},
+        // TODO(icu-units#130): inverse-speed
+        // {"second-per-meter", "speed"},
+        // Consumption specifically supports inverse units (mile-per-galon,
+        // liter-per-100-kilometer):
         {"cubic-meter-per-meter", "consumption"},
-        // TODO(CLDR-13787,hugovdm): currently we're treating
-        // consumption-inverse as a separate category. Once consumption
-        // preference handling has been clarified by CLDR-13787, this function
-        // should be fixed.
-        {"meter-per-cubic-meter", "consumption-inverse"},
+        {"meter-per-cubic-meter", "consumption"},
     };
 
     IcuTestErrorCode status(*this, "testGetUnitCategory");
