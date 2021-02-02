@@ -282,6 +282,10 @@ int32_t getPreferenceMetadataIndex(const MaybeStackVector<UnitPreferenceMetadata
     if (U_FAILURE(status)) { return -1; }
     if (idx >= 0) { return idx; }
     if (!foundCategory) {
+        // TODO: failures can happen if units::getUnitCategory returns a category
+        // that does not appear in unitPreferenceData. Do we want a unit test that
+        // checks unitPreferenceData has full coverage of categories? Or just trust
+        // CLDR?
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
@@ -370,12 +374,12 @@ CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode
     const UChar *uCategory =
         ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier, &categoryLength, &status);
     if (U_FAILURE(status)) {
-        // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
-        // case. Once CLDR-13787 is clarified, this should be generalised (or
-        // possibly removed):
+        // TODO(icu-units#130): support inverting any unit, with correct
+        // fallback logic: inversion and fallback may depend on presence or
+        // absence of a usage for that category.
         if (uprv_strcmp(baseUnitIdentifier, "meter-per-cubic-meter") == 0) {
             status = U_ZERO_ERROR;
-            result.append("consumption-inverse", status);
+            result.append("consumption", status);
             return result;
         }
     }
@@ -415,7 +419,11 @@ void U_I18N_API UnitPreferences::getPreferencesFor(StringPiece category, StringP
                                                    const UnitPreference *const *&outPreferences,
                                                    int32_t &preferenceCount, UErrorCode &status) const {
     int32_t idx = getPreferenceMetadataIndex(&metadata_, category, usage, region, status);
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) {
+        outPreferences = nullptr;
+        preferenceCount = 0;
+        return;
+    }
     U_ASSERT(idx >= 0); // Failures should have been taken care of by `status`.
     const UnitPreferenceMetadata *m = metadata_[idx];
     outPreferences = unitPrefs_.getAlias() + m->prefsOffset;

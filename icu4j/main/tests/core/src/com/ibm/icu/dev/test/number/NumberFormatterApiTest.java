@@ -1218,7 +1218,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "8,8 km",
                 "900 m",
                 "90 m",
-                "10 m",
+                "9 m",
                 "0 m");
 
         uTestCase = "unitUsage() en-GB road";
@@ -1250,8 +1250,8 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "54 mi",
                 "5.4 mi",
                 "0.54 mi",
-                "96 yd",
-                "9.6 yd",
+                "100 yd",
+                "10 yd",
                 "0 yd");
 
         uTestCase = "unitUsage() en-US road";

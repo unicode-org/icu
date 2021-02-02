@@ -925,6 +925,16 @@ units:table(nofallback){
                         unit{"liter-per-kilometer"}
                     }
                 }
+                CA{
+                    {
+                        unit{"mile-per-gallon-imperial"}
+                    }
+                }
+                GB{
+                    {
+                        unit{"mile-per-gallon-imperial"}
+                    }
+                }
                 IT{
                     {
                         unit{"liter-per-kilometer"}
@@ -963,32 +973,6 @@ units:table(nofallback){
                 TR{
                     {
                         unit{"liter-per-kilometer"}
-                    }
-                }
-            }
-        }
-        "consumption-inverse"{
-            "default"{
-                001{
-                    {
-                        unit{"kilometer-per-centiliter"}
-                    }
-                }
-            }
-            "vehicle-fuel"{
-                001{
-                    {
-                        unit{"kilometer-per-centiliter"}
-                    }
-                }
-                CA{
-                    {
-                        unit{"mile-per-gallon-imperial"}
-                    }
-                }
-                GB{
-                    {
-                        unit{"mile-per-gallon-imperial"}
                     }
                 }
                 US{
@@ -1328,10 +1312,12 @@ units:table(nofallback){
                         unit{"meter"}
                     }
                     {
+                        geq{"10"}
                         skeleton{"precision-increment/10"}
                         unit{"meter"}
                     }
                     {
+                        skeleton{"precision-increment/1"}
                         unit{"meter"}
                     }
                 }
@@ -1346,6 +1332,12 @@ units:table(nofallback){
                         unit{"yard"}
                     }
                     {
+                        geq{"10"}
+                        skeleton{"precision-increment/10"}
+                        unit{"yard"}
+                    }
+                    {
+                        skeleton{"precision-increment/1"}
                         unit{"yard"}
                     }
                 }
@@ -1362,7 +1354,12 @@ units:table(nofallback){
                         unit{"meter"}
                     }
                     {
+                        geq{"10"}
                         skeleton{"precision-increment/10"}
+                        unit{"meter"}
+                    }
+                    {
+                        skeleton{"precision-increment/1"}
                         unit{"meter"}
                     }
                 }
@@ -1377,7 +1374,12 @@ units:table(nofallback){
                         unit{"foot"}
                     }
                     {
+                        geq{"10"}
                         skeleton{"precision-increment/10"}
+                        unit{"foot"}
+                    }
+                    {
+                        skeleton{"precision-increment/1"}
                         unit{"foot"}
                     }
                 }
