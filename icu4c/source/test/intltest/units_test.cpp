@@ -47,7 +47,7 @@ class UnitsTest : public IntlTest {
     void testExtractConvertibility();
     void testConverterWithCLDRTests();
     void testComplexUnitsConverter();
-    void testComplexUnitConverterSorting();
+    void testComplexUnitsConverterSorting();
     void testUnitPreferencesWithCLDRTests();
     void testConverter();
 };
@@ -63,7 +63,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(testExtractConvertibility);
     TESTCASE_AUTO(testConverterWithCLDRTests);
     TESTCASE_AUTO(testComplexUnitsConverter);
-    TESTCASE_AUTO(testComplexUnitConverterSorting);
+    TESTCASE_AUTO(testComplexUnitsConverterSorting);
     TESTCASE_AUTO(testUnitPreferencesWithCLDRTests);
     TESTCASE_AUTO(testConverter);
     TESTCASE_AUTO_END;
@@ -250,8 +250,8 @@ void UnitsTest::testConverter() {
         if (status.errIfFailureAndReset("conversionRates(status)")) {
             continue;
         }
-        UnitConverter converter(source, target, conversionRates, status);
-        if (status.errIfFailureAndReset("UnitConverter(<%s>, <%s>, ...)", testCase.source,
+        UnitsConverter converter(source, target, conversionRates, status);
+        if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", testCase.source,
                                         testCase.target)) {
             continue;
         }
@@ -368,8 +368,8 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     unitsTest->assertNotEquals(msg.data(), UNCONVERTIBLE, convertibility);
 
     // Conversion:
-    UnitConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
-    if (status.errIfFailureAndReset("UnitConverter(<%s>, <%s>, ...)", sourceIdent.data(),
+    UnitsConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
+    if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", sourceIdent.data(),
                                     targetIdent.data())) {
         return;
     }
@@ -555,8 +555,8 @@ void UnitsTest::testComplexUnitsConverter() {
     // TODO(icu-units#63): test negative numbers!
 }
 
-void UnitsTest::testComplexUnitConverterSorting() {
-    IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitConverterSorting");
+void UnitsTest::testComplexUnitsConverterSorting() {
+    IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitsConverterSorting");
     ConversionRates conversionRates(status);
 
     status.assertSuccess();

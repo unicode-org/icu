@@ -38,10 +38,10 @@ public class ConversionRates {
      * @return
      */
     // In ICU4C, this is called loadCompoundFactor().
-    private UnitConverter.Factor getFactorToBase(SingleUnitImpl singleUnit) {
+    private UnitsConverter.Factor getFactorToBase(SingleUnitImpl singleUnit) {
         int power = singleUnit.getDimensionality();
         MeasureUnit.MeasurePrefix unitPrefix = singleUnit.getPrefix();
-        UnitConverter.Factor result = UnitConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnitID()).getConversionRate());
+        UnitsConverter.Factor result = UnitsConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnitID()).getConversionRate());
 
         // Prefix before power, because:
         // - square-kilometer to square-meter: (1000)^2
@@ -49,8 +49,8 @@ public class ConversionRates {
         return result.applyPrefix(unitPrefix).power(power);
     }
 
-    public UnitConverter.Factor getFactorToBase(MeasureUnitImpl measureUnit) {
-        UnitConverter.Factor result = new UnitConverter.Factor();
+    public UnitsConverter.Factor getFactorToBase(MeasureUnitImpl measureUnit) {
+        UnitsConverter.Factor result = new UnitsConverter.Factor();
         for (SingleUnitImpl singleUnit :
                 measureUnit.getSingleUnits()) {
             result = result.multiply(getFactorToBase(singleUnit));
@@ -60,9 +60,9 @@ public class ConversionRates {
     }
 
     // In ICU4C, this functionality is found in loadConversionRate().
-    protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, UnitConverter.Factor
-            sourceToBase, UnitConverter.Factor targetToBase, UnitConverter.Convertibility convertibility) {
-        if (convertibility != UnitConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
+    protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, UnitsConverter.Factor
+            sourceToBase, UnitsConverter.Factor targetToBase, UnitsConverter.Convertibility convertibility) {
+        if (convertibility != UnitsConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
         if (!(checkSimpleUnit(source) && checkSimpleUnit(target))) return BigDecimal.valueOf(0);
 
         String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnitID();

@@ -24,9 +24,9 @@ U_NAMESPACE_BEGIN
 // Note: These need to be outside of the units namespace, or Clang will generate
 // a compile error.
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-template class U_I18N_API MaybeStackArray<units::UnitConverter*, 8>;
-template class U_I18N_API MemoryPool<units::UnitConverter, 8>;
-template class U_I18N_API MaybeStackVector<units::UnitConverter, 8>;
+template class U_I18N_API MaybeStackArray<units::UnitsConverter*, 8>;
+template class U_I18N_API MemoryPool<units::UnitsConverter, 8>;
+template class U_I18N_API MaybeStackVector<units::UnitsConverter, 8>;
 template class U_I18N_API MaybeStackArray<MeasureUnitImpl*, 8>;
 template class U_I18N_API MemoryPool<MeasureUnitImpl, 8>;
 template class U_I18N_API MaybeStackVector<MeasureUnitImpl, 8>;
@@ -42,9 +42,9 @@ namespace units {
  * For example, from `meter` to `foot+inch`.
  *
  *  DESIGN:
- *    This class uses `UnitConverter` in order to perform the single converter (i.e. converters from a
+ *    This class uses `UnitsConverter` in order to perform the single converter (i.e. converters from a
  *    single unit to another single unit). Therefore, `ComplexUnitsConverter` class contains multiple
- *    instances of the `UnitConverter` to perform the conversion.
+ *    instances of the `UnitsConverter` to perform the conversion.
  */
 class U_I18N_API ComplexUnitsConverter : public UMemory {
   public:
@@ -94,14 +94,14 @@ class U_I18N_API ComplexUnitsConverter : public UMemory {
     convert(double quantity, icu::number::impl::RoundingImpl *rounder, UErrorCode &status) const;
 
   private:
-    MaybeStackVector<UnitConverter> unitConverters_;
+    MaybeStackVector<UnitsConverter> unitsConverters_;
 
     // Individual units of mixed units, sorted big to small, with indices
     // indicating the requested output mixed unit order.
     MaybeStackVector<MeasureUnitImplWithIndex> units_;
 
     // Sorts units_, which must be populated before calling this, and populates
-    // unitConverters_.
+    // unitsConverters_.
     void init(const MeasureUnitImpl &inputUnit, const ConversionRates &ratesInfo, UErrorCode &status);
 
     // Applies the rounder to the quantity (last element) and bubble up any carried value to all the

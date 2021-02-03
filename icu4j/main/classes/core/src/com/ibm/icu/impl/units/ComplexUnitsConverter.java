@@ -17,14 +17,14 @@ import com.ibm.icu.util.Measure;
 /**
  * Converts from single or compound unit to single, compound or mixed units. For example, from `meter` to `foot+inch`.
  * <p>
- * DESIGN: This class uses `UnitConverter` in order to perform the single converter (i.e. converters from a single unit
- * to another single unit). Therefore, `ComplexUnitsConverter` class contains multiple instances of the `UnitConverter`
- * to perform the conversion.
+ * DESIGN: This class uses <code>UnitsConverter</code> in order to perform the single converter (i.e. converters from
+ * a single unit to another single unit). Therefore, <code>ComplexUnitsConverter</code> class contains multiple
+ * instances of the <code>UnitsConverter</code> to perform the conversion.
  */
 public class ComplexUnitsConverter {
     public static final BigDecimal EPSILON = BigDecimal.valueOf(Math.ulp(1.0));
     public static final BigDecimal EPSILON_MULTIPLIER = BigDecimal.valueOf(1).add(EPSILON);
-    private ArrayList<UnitConverter> unitConverters_;
+    private ArrayList<UnitsConverter> unitsConverters_;
     /**
      * Individual units of mixed units, sorted big to small, with indices
      * indicating the requested output mixed unit order.
@@ -80,7 +80,7 @@ public class ComplexUnitsConverter {
 
     /**
      * Sorts units_, which must be populated before calling this, and populates
-     * unitConverters_.
+     * unitsConverters_.
      */
     private void init(ConversionRates conversionRates) {
         // Sort the units in a descending order.
@@ -101,13 +101,13 @@ public class ComplexUnitsConverter {
         //              2. convert the residual of 6.56168 feet (0.56168) to inches, which will be (6.74016
         //              inches)
         //              3. then, the final result will be (6 feet and 6.74016 inches)
-        unitConverters_ = new ArrayList<>();
+        unitsConverters_ = new ArrayList<>();
         for (int i = 0, n = units_.size(); i < n; i++) {
             if (i == 0) { // first element
-                unitConverters_.add(new UnitConverter(this.inputUnit_, units_.get(i).unitImpl, conversionRates));
+                unitsConverters_.add(new UnitsConverter(this.inputUnit_, units_.get(i).unitImpl, conversionRates));
             } else {
-                unitConverters_
-                        .add(new UnitConverter(units_.get(i - 1).unitImpl, units_.get(i).unitImpl, conversionRates));
+                unitsConverters_
+                        .add(new UnitsConverter(units_.get(i - 1).unitImpl, units_.get(i).unitImpl, conversionRates));
             }
         }
     }
@@ -123,7 +123,7 @@ public class ComplexUnitsConverter {
         assert !units_.isEmpty();
 
         // NOTE: First converter converts to the biggest quantity.
-        return unitConverters_.get(0).convert(quantity).multiply(EPSILON_MULTIPLIER).compareTo(limit) >= 0;
+        return unitsConverters_.get(0).convert(quantity).multiply(EPSILON_MULTIPLIER).compareTo(limit) >= 0;
     }
 
     public static class ComplexConverterResult {
@@ -157,9 +157,9 @@ public class ComplexUnitsConverter {
         // - N-1 converters convert to bigger units for which we want integers,
         // - the Nth converter (index N-1) converts to the smallest unit, which
         //   isn't (necessarily) an integer.
-        List<BigInteger> intValues = new ArrayList<>(unitConverters_.size() - 1);
-        for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
-            quantity = (unitConverters_.get(i)).convert(quantity);
+        List<BigInteger> intValues = new ArrayList<>(unitsConverters_.size() - 1);
+        for (int i = 0, n = unitsConverters_.size(); i < n; ++i) {
+            quantity = (unitsConverters_.get(i)).convert(quantity);
 
             if (i < n - 1) {
                 // The double type has 15 decimal digits of precision. For choosing
@@ -185,14 +185,14 @@ public class ComplexUnitsConverter {
         quantity = applyRounder(intValues, quantity, rounder);
 
         // Initialize empty measures.
-        List<Measure> measures = new ArrayList<>(unitConverters_.size());
-        for (int i = 0; i < unitConverters_.size(); i++) {
+        List<Measure> measures = new ArrayList<>(unitsConverters_.size());
+        for (int i = 0; i < unitsConverters_.size(); i++) {
             measures.add(null);
         }
 
         // Package values into Measure instances in measures:
         int indexOfQuantity = -1;
-        for (int i = 0, n = unitConverters_.size(); i < n; ++i) {
+        for (int i = 0, n = unitsConverters_.size(); i < n; ++i) {
             if (i < n - 1) {
                 Measure measure = new Measure(intValues.get(i).multiply(sign), units_.get(i).unitImpl.build());
                 measures.set(units_.get(i).index, measure);
@@ -228,25 +228,25 @@ public class ComplexUnitsConverter {
         }
 
         // Check if there's a carry, and bubble it back up the resulting intValues.
-        int lastIndex = unitConverters_.size() - 1;
-        BigDecimal carry = unitConverters_.get(lastIndex).convertInverse(quantity).multiply(EPSILON_MULTIPLIER)
+        int lastIndex = unitsConverters_.size() - 1;
+        BigDecimal carry = unitsConverters_.get(lastIndex).convertInverse(quantity).multiply(EPSILON_MULTIPLIER)
                 .setScale(0, RoundingMode.FLOOR);
         if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
             return quantity;
         }
-        quantity = quantity.subtract(unitConverters_.get(lastIndex).convert(carry));
+        quantity = quantity.subtract(unitsConverters_.get(lastIndex).convert(carry));
         intValues.set(lastIndex - 1, intValues.get(lastIndex - 1).add(carry.toBigInteger()));
 
         // We don't use the first converter: that one is for the input unit
         for (int j = lastIndex - 1; j > 0; j--) {
-            carry = unitConverters_.get(j)
+            carry = unitsConverters_.get(j)
                     .convertInverse(BigDecimal.valueOf(intValues.get(j).longValue()))
                     .multiply(EPSILON_MULTIPLIER)
                     .setScale(0, RoundingMode.FLOOR);
             if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
                 break;
             }
-            intValues.set(j, intValues.get(j).subtract(unitConverters_.get(j).convert(carry).toBigInteger()));
+            intValues.set(j, intValues.get(j).subtract(unitsConverters_.get(j).convert(carry).toBigInteger()));
             intValues.set(j - 1, intValues.get(j - 1).add(carry.toBigInteger()));
         }
 
@@ -255,6 +255,6 @@ public class ComplexUnitsConverter {
 
     @Override
     public String toString() {
-        return "ComplexUnitsConverter [unitConverters_=" + unitConverters_ + ", units_=" + units_ + "]";
+        return "ComplexUnitsConverter [unitsConverters_=" + unitsConverters_ + ", units_=" + units_ + "]";
     }
 }

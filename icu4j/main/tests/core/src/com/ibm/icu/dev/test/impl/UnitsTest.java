@@ -20,7 +20,7 @@ import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
 import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
-import com.ibm.icu.impl.units.UnitConverter;
+import com.ibm.icu.impl.units.UnitsConverter;
 import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
@@ -235,9 +235,9 @@ public class UnitsTest {
         class TestData {
             MeasureUnitImpl source;
             MeasureUnitImpl target;
-            UnitConverter.Convertibility expected;
+            UnitsConverter.Convertibility expected;
 
-            TestData(String source, String target, UnitConverter.Convertibility convertibility) {
+            TestData(String source, String target, UnitsConverter.Convertibility convertibility) {
                 this.source = MeasureUnitImpl.UnitsParser.parseForIdentifier(source);
                 this.target = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
                 this.expected = convertibility;
@@ -245,29 +245,29 @@ public class UnitsTest {
         }
 
         TestData[] tests = {
-                new TestData("meter", "foot", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("kilometer", "foot", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("hectare", "square-foot", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("kilometer-per-second", "second-per-meter", UnitConverter.Convertibility.RECIPROCAL),
-                new TestData("square-meter", "square-foot", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("kilometer-per-second", "foot-per-second", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("square-hectare", "pow4-foot", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("square-kilometer-per-second", "second-per-square-meter", UnitConverter.Convertibility.RECIPROCAL),
-                new TestData("cubic-kilometer-per-second-meter", "second-per-square-meter", UnitConverter.Convertibility.RECIPROCAL),
-                new TestData("square-meter-per-square-hour", "hectare-per-square-second", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("hertz", "revolution-per-second", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("millimeter", "meter", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("yard", "meter", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("ounce-troy", "kilogram", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("percent", "portion", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("ofhg", "kilogram-per-square-meter-square-second", UnitConverter.Convertibility.CONVERTIBLE),
-                new TestData("second-per-meter", "meter-per-second", UnitConverter.Convertibility.RECIPROCAL),
+                new TestData("meter", "foot", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("kilometer", "foot", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("hectare", "square-foot", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("kilometer-per-second", "second-per-meter", UnitsConverter.Convertibility.RECIPROCAL),
+                new TestData("square-meter", "square-foot", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("kilometer-per-second", "foot-per-second", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("square-hectare", "pow4-foot", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("square-kilometer-per-second", "second-per-square-meter", UnitsConverter.Convertibility.RECIPROCAL),
+                new TestData("cubic-kilometer-per-second-meter", "second-per-square-meter", UnitsConverter.Convertibility.RECIPROCAL),
+                new TestData("square-meter-per-square-hour", "hectare-per-square-second", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("hertz", "revolution-per-second", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("millimeter", "meter", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("yard", "meter", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("ounce-troy", "kilogram", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("percent", "portion", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("ofhg", "kilogram-per-square-meter-square-second", UnitsConverter.Convertibility.CONVERTIBLE),
+                new TestData("second-per-meter", "meter-per-second", UnitsConverter.Convertibility.RECIPROCAL),
         };
         ConversionRates conversionRates = new ConversionRates();
 
         for (TestData test :
                 tests) {
-            assertEquals(test.expected, UnitConverter.extractConvertibility(test.source, test.target, conversionRates));
+            assertEquals(test.expected, UnitsConverter.extractConvertibility(test.source, test.target, conversionRates));
         }
     }
 
@@ -340,7 +340,7 @@ public class UnitsTest {
 
         ConversionRates conversionRates = new ConversionRates();
         for (TestData test : tests) {
-            UnitConverter converter = new UnitConverter(test.source, test.target, conversionRates);
+            UnitsConverter converter = new UnitsConverter(test.source, test.target, conversionRates);
             double maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
             if (test.expected.doubleValue() == 0) {
                 maxDelta = 1e-12;
@@ -394,7 +394,7 @@ public class UnitsTest {
 
         for (TestCase testCase :
                 tests) {
-            UnitConverter converter = new UnitConverter(testCase.source, testCase.target, conversionRates);
+            UnitsConverter converter = new UnitsConverter(testCase.source, testCase.target, conversionRates);
             BigDecimal got = converter.convert(testCase.input);
             if (compareTwoBigDecimal(testCase.expected, got, BigDecimal.valueOf(0.000001))) {
                 continue;
