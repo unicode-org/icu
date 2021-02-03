@@ -11,12 +11,12 @@ import java.util.regex.Pattern;
 
 import com.ibm.icu.util.MeasureUnit;
 
-public class UnitConverter {
+public class UnitsConverter {
     private BigDecimal conversionRate;
     private BigDecimal offset;
 
     /**
-     * Constructor of `UnitConverter`.
+     * Constructor of <code>UnitsConverter</code>.
      * NOTE:
      * - source and target must be under the same category
      * - e.g. meter to mile --> both of them are length units.
@@ -25,7 +25,7 @@ public class UnitConverter {
      * @param target          represents the target unit.
      * @param conversionRates contains all the needed conversion rates.
      */
-    public UnitConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
+    public UnitsConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
         assert (convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
 
@@ -347,6 +347,6 @@ public class UnitConverter {
 
     @Override
     public String toString() {
-        return "UnitConverter [conversionRate=" + conversionRate + ", offset=" + offset + "]";
+        return "UnitsConverter [conversionRate=" + conversionRate + ", offset=" + offset + "]";
     }
 }

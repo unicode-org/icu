@@ -272,7 +272,7 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
 /**
  *  Extract conversion rate from `source` to `target`
  */
-// In ICU4J, this function is partially inlined in the UnitConverter constructor.
+// In ICU4J, this function is partially inlined in the UnitsConverter constructor.
 void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &source,
                         const MeasureUnitImpl &target, Convertibility unitsState,
                         const ConversionRates &ratesInfo, UErrorCode &status) {
@@ -489,7 +489,7 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
     return UNCONVERTIBLE;
 }
 
-UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+UnitsConverter::UnitsConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
                              const ConversionRates &ratesInfo, UErrorCode &status)
     : conversionRate_(source.copy(status), target.copy(status)) {
     if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
@@ -509,7 +509,7 @@ UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImp
                        ratesInfo, status);
 }
 
-int32_t UnitConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
+int32_t UnitsConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
                                        const MeasureUnitImpl &secondUnit,
                                        const ConversionRates &ratesInfo, UErrorCode &status) {
     if (U_FAILURE(status)) {
@@ -555,7 +555,7 @@ int32_t UnitConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
     return 0;
 }
 
-double UnitConverter::convert(double inputValue) const {
+double UnitsConverter::convert(double inputValue) const {
     double result =
         inputValue + conversionRate_.sourceOffset; // Reset the input to the target zero index.
     // Convert the quantity to from the source scale to the target scale.
@@ -576,7 +576,7 @@ double UnitConverter::convert(double inputValue) const {
     return result;
 }
 
-double UnitConverter::convertInverse(double inputValue) const {
+double UnitsConverter::convertInverse(double inputValue) const {
     double result = inputValue;
     if (conversionRate_.reciprocal) {
         if (result == 0) {

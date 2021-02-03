@@ -137,7 +137,7 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
  *    Only works with SINGLE and COMPOUND units. If one of the units is a
  *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
-class U_I18N_API UnitConverter : public UMemory {
+class U_I18N_API UnitsConverter : public UMemory {
   public:
     /**
      * Constructor of `UnitConverter`.
@@ -150,7 +150,7 @@ class U_I18N_API UnitConverter : public UMemory {
      * @param ratesInfo Contains all the needed conversion rates.
      * @param status
      */
-    UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+    UnitsConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
                   const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
