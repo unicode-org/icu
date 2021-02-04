@@ -715,6 +715,16 @@ void NumberFormatterApiTest::unitMeasure() {
             5,
             u"5 a\u00F1os");
 
+    // TODO(ICU-20941): arbitrary unit formatting
+//     assertFormatSingle(
+//             u"Hubble Constant",
+//             u"unit/kilometer-per-megaparsec-second",
+//             u"unit/kilometer-per-megaparsec-second",
+//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("kilometer-per-megaparsec-second", status)),
+//             Locale("en"),
+//             74, // Approximate 2019-03-18 measurement
+//             u"74 km/s.Mpc");
+
     assertFormatSingle(
             u"Mixed unit",
             u"unit/yard-and-foot-and-inch",
@@ -849,7 +859,7 @@ void NumberFormatterApiTest::unitMeasure() {
             NumberFormatter::with().unit(MeasureUnit::forIdentifier("celsius", status)),
             Locale("nl-NL"),
             -6.5,
-            u"-6,5\u00B0C");
+            u"-6,5°C");
 
     assertFormatSingle(
             u"Negative numbers: time",
@@ -868,6 +878,39 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("en"),
             100,
             u"100");
+
+    // TODO: desired behaviour for this "pathological" case?
+    // Since this is pointless, we don't test that its behaviour doesn't change.
+    // As of January 2021, the produced result has a missing sign: 23.5 Kelvin
+    // is "23 Kelvin and -272.65 degrees Celsius":
+//     assertFormatSingle(
+//             u"Meaningless: kelvin-and-celcius",
+//             u"unit/kelvin-and-celsius",
+//             u"unit/kelvin-and-celsius",
+//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("kelvin-and-celsius", status)),
+//             Locale("en"),
+//             23.5,
+//             u"23 K, 272.65°C");
+
+    if (uprv_getNaN() != 0.0) {
+        assertFormatSingle(
+                u"Measured -Inf",
+                u"measure-unit/electric-ampere",
+                u"unit/ampere",
+                NumberFormatter::with().unit(MeasureUnit::getAmpere()),
+                Locale("en"),
+                -uprv_getInfinity(),
+                u"-∞ A");
+
+        assertFormatSingle(
+                u"Measured NaN",
+                u"measure-unit/temperature-celsius",
+                u"unit/celsius",
+                NumberFormatter::with().unit(MeasureUnit::forIdentifier("celsius", status)),
+                Locale("en"),
+                uprv_getNaN(),
+                u"NaN°C");
+    }
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
@@ -1434,6 +1477,26 @@ void NumberFormatterApiTest::unitUsage() {
             u"0E0 square centimetres");
 
     assertFormatSingle(
+            u"Negative Infinity with Unit Preferences",
+            u"measure-unit/area-acre usage/default",
+            u"unit/acre usage/default",
+            NumberFormatter::with().unit(MeasureUnit::getAcre()).usage("default"),
+            Locale::getEnglish(),
+            -uprv_getInfinity(),
+            u"-∞ km²");
+
+//     // TODO(icu-units#131): do we care about NaN?
+//     // TODO: on some platforms with MSVC, "-NaN sec" is returned.
+//     assertFormatSingle(
+//             u"NaN with Unit Preferences",
+//             u"measure-unit/area-acre usage/default",
+//             u"unit/acre usage/default",
+//             NumberFormatter::with().unit(MeasureUnit::getAcre()).usage("default"),
+//             Locale::getEnglish(),
+//             uprv_getNaN(),
+//             u"NaN cm²");
+
+    assertFormatSingle(
             u"Negative numbers: minute-and-second",
             u"measure-unit/duration-second usage/media",
             u"unit/second usage/media",
@@ -1441,6 +1504,34 @@ void NumberFormatterApiTest::unitUsage() {
             Locale("nl-NL"),
             -77.7,
             u"-1 min, 18 sec");
+
+    assertFormatSingle(
+            u"Negative numbers: media seconds",
+            u"measure-unit/duration-second usage/media",
+            u"unit/second usage/media",
+            NumberFormatter::with().unit(SECOND).usage("media"),
+            Locale("nl-NL"),
+            -2.7,
+            u"-2,7 sec");
+
+//     // TODO: on some platforms with MSVC, "-NaN sec" is returned.
+//     assertFormatSingle(
+//             u"NaN minute-and-second",
+//             u"measure-unit/duration-second usage/media",
+//             u"unit/second usage/media",
+//             NumberFormatter::with().unit(SECOND).usage("media"),
+//             Locale("nl-NL"),
+//             uprv_getNaN(),
+//             u"NaN sec");
+
+    assertFormatSingle(
+            u"NaN meter-and-centimeter",
+            u"measure-unit/length-meter usage/person-height",
+            u"unit/meter usage/person-height",
+            NumberFormatter::with().unit(METER).usage("person-height"),
+            Locale("de-DE"),
+            uprv_getNaN(),
+            u"0 m, NaN cm");
 
     assertFormatSingle(
             u"Rounding Mode propagates: rounding down",
@@ -1490,6 +1581,13 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
     // Adding the unit as part of the fluent chain leads to success.
     unloc_formatter.unit(MeasureUnit::getMeter()).locale("en-GB").formatInt(1, status);
     status.assertSuccess();
+
+    // Setting unit to the "base dimensionless unit" is like clearing unit.
+    unloc_formatter = NumberFormatter::with().unit(MeasureUnit()).usage("default");
+    // This does not give an error, because usage-vs-unit isn't resolved yet.
+    status.errIfFailureAndReset("Expected behaviour: no immediate error for invalid unit");
+    unloc_formatter.locale("en-GB").formatInt(1, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 // Tests for the "skeletons" field in unitPreferenceData, as well as precision

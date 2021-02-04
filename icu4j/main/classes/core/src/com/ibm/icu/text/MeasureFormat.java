@@ -62,7 +62,8 @@ import com.ibm.icu.util.UResourceBundle;
  * <p>
  * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
  * {@link NumberFormatter} fits their use case.  Although not deprecated, this
- * class, MeasureFormat, is provided for backwards compatibility only.
+ * class, MeasureFormat, is provided for backwards compatibility only, and has
+ * much more limited capabilities.
  * <hr>
  *
  * <p>

@@ -673,6 +673,17 @@ public class NumberFormatterApiTest extends TestFmwk {
                 5,
                 "5 a\u00F1os");
 
+        // TODO(ICU-20941): arbitrary unit formatting
+        // assertFormatSingle(
+        //         "Hubble Constant",
+        //         "unit/kilometer-per-megaparsec-second",
+        //         "unit/kilometer-per-megaparsec-second",
+        //         NumberFormatter.with()
+        //                 .unit(MeasureUnit.forIdentifier("kilometer-per-megaparsec-second")),
+        //         new ULocale("en"),
+        //         74, // Approximate 2019-03-18 measurement
+        //         "74 km/s.Mpc");
+
         assertFormatSingle(
                 "Mixed unit",
                 "unit/yard-and-foot-and-inch",
@@ -813,7 +824,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(MeasureUnit.forIdentifier("celsius")),
                 new ULocale("nl-NL"),
                 -6.5,
-                "-6,5\u00B0C");
+                "-6,5°C");
 
         assertFormatSingle(
                 "Negative numbers: time",
@@ -832,6 +843,37 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en"),
                 100,
                 "100");
+
+        // TODO: desired behaviour for this "pathological" case?
+        // Since this is pointless, we don't test that its behaviour doesn't change.
+        // As of January 2021, the produced result has a missing sign: 23.5 Kelvin
+        // is "23 Kelvin and -272.65 degrees Celsius":
+        // assertFormatSingle(
+        //         "Meaningless: kelvin-and-celcius",
+        //         "unit/kelvin-and-celsius",
+        //         "unit/kelvin-and-celsius",
+        //         NumberFormatter.with().unit(MeasureUnit.forIdentifier("kelvin-and-celsius")),
+        //         new ULocale("en"),
+        //         23.5,
+        //         "23 K, 272.65°C");
+
+        assertFormatSingle(
+                "Measured -Inf",
+                "measure-unit/electric-ampere",
+                "unit/ampere",
+                NumberFormatter.with().unit(MeasureUnit.AMPERE),
+                new ULocale("en"),
+                Double.NEGATIVE_INFINITY,
+                "-∞ A");
+
+        assertFormatSingle(
+                "Measured NaN",
+                "measure-unit/temperature-celsius",
+                "unit/celsius",
+                NumberFormatter.with().unit(MeasureUnit.forIdentifier("celsius")),
+                new ULocale("en"),
+                Double.NaN,
+                "NaN°C");
     }
 
     @Test
@@ -1402,6 +1444,30 @@ public class NumberFormatterApiTest extends TestFmwk {
                "8,765E0 square metres",
                "0E0 square centimetres");
 
+        // TODO(icu-units#132): Java BigDecimal does not support Inf and NaN, so
+        // we get a misleading "0" out of this:
+        assertFormatSingle(
+                "Negative Infinity with Unit Preferences",
+                "measure-unit/area-acre usage/default",
+                "unit/acre usage/default",
+                NumberFormatter.with().unit(MeasureUnit.ACRE).usage("default"),
+                ULocale.ENGLISH,
+                Double.NEGATIVE_INFINITY,
+                // "-∞ km²");
+                "0 cm²");
+
+        // TODO(icu-units#132): Java BigDecimal does not support Inf and NaN, so
+        // we get a misleading "0" out of this:
+        assertFormatSingle(
+                "NaN with Unit Preferences",
+                "measure-unit/area-acre usage/default",
+                "unit/acre usage/default",
+                NumberFormatter.with().unit(MeasureUnit.ACRE).usage("default"),
+                ULocale.ENGLISH,
+                Double.NaN,
+                // "NaN cm²");
+                "0 cm²");
+
         assertFormatSingle(
                 "Negative numbers: minute-and-second",
                 "measure-unit/duration-second usage/media",
@@ -1410,6 +1476,39 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("nl-NL"),
                 -77.7,
                 "-1 min, 18 sec");
+
+        assertFormatSingle(
+                "Negative numbers: media seconds",
+                "measure-unit/duration-second usage/media",
+                "unit/second usage/media",
+                NumberFormatter.with().unit(MeasureUnit.SECOND).usage("media"),
+                new ULocale("nl-NL"),
+                -2.7,
+                "-2,7 sec");
+
+        // TODO(icu-units#132): Java BigDecimal does not support Inf and NaN, so
+        // we get a misleading "0" out of this:
+        assertFormatSingle(
+                "NaN minute-and-second",
+                "measure-unit/duration-second usage/media",
+                "unit/second usage/media",
+                NumberFormatter.with().unit(MeasureUnit.SECOND).usage("media"),
+                new ULocale("nl-NL"),
+                Double.NaN,
+                // "NaN sec");
+                "0 sec");
+
+        // TODO(icu-units#132): Java BigDecimal does not support Inf and NaN, so
+        // we get a misleading "0" out of this:
+        assertFormatSingle(
+                "NaN meter-and-centimeter",
+                "measure-unit/length-meter usage/person-height",
+                "unit/meter usage/person-height",
+                NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height"),
+                new ULocale("en-DE"),
+                Double.NaN,
+                // "0 m, NaN cm");
+                "0 m, 0 cm");
 
         assertFormatSingle(
                 "Rounding Mode propagates: rounding down",
@@ -1468,6 +1567,14 @@ public class NumberFormatterApiTest extends TestFmwk {
         // Adding the unit as part of the fluent chain leads to success.
         unloc_formatter.unit(MeasureUnit.METER).locale(new ULocale("en-GB")).format(1); /* No Exception should be thrown */
 
+        // Setting unit to the "base dimensionless unit" is like clearing unit.
+        unloc_formatter = NumberFormatter.with().unit(NoUnit.BASE).usage("default");
+        try {
+            unloc_formatter.locale(new ULocale("en-GB")).format(1);
+            fail("should throw IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // Pass
+        }
     }
 
 
