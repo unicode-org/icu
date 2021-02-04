@@ -3494,8 +3494,16 @@ public class MeasureUnitTest extends TestFmwk {
             new TestCase("pow2-foot-and-pow2-mile", "square-foot-and-square-mile"),
             new TestCase("gram-square-gram-per-dekagram", "cubic-gram-per-dekagram"),
             new TestCase("kilogram-per-meter-per-second", "kilogram-per-meter-second"),
+            new TestCase("kilometer-per-second-per-megaparsec", "kilometer-per-megaparsec-second"),
 
             // TODO(ICU-21284): Add more test cases once the proper ranking is available.
+            // TODO(ICU-21284,icu-units#70): These cases are the wrong way around:
+            new TestCase("pound-force-foot", "foot-pound-force"),
+            new TestCase("foot-pound-force", "foot-pound-force"),
+            new TestCase("kilowatt-hour", "hour-kilowatt"),
+            new TestCase("hour-kilowatt", "hour-kilowatt"),
+            new TestCase("newton-meter", "meter-newton"),
+            new TestCase("meter-newton", "meter-newton"),
 
             // Testing prefixes are parsed and produced correctly (ensures no
             // collisions in the enum values)
@@ -3661,6 +3669,35 @@ public class MeasureUnitTest extends TestFmwk {
             MeasureUnit m = MeasureUnit.AMPERE.withPrefix(testCase.prefix);
             assertEquals("getPrefixPower()", testCase.expectedPower, m.getPrefix().getPower());
             assertEquals("getPrefixBase()", testCase.expectedBase, m.getPrefix().getBase());
+        }
+    }
+
+    @Test
+    public void TestParseBuiltIns() {
+        for (MeasureUnit unit : MeasureUnit.getAvailable()) {
+            System.out.println("unit ident: " + unit.getIdentifier() + ", type: " + unit.getType());
+            if (unit.getType() == "currency") {
+                continue;
+            }
+
+            // TODO(ICU-21284,icu-units#70): fix normalization. Until then, ignore:
+            if (unit.getIdentifier() == "pound-force-foot") continue;
+            if (unit.getIdentifier() == "kilowatt-hour") continue;
+            if (unit.getIdentifier() == "newton-meter") continue;
+
+            // Prove that all built-in units are parseable, except "generic" temperature:
+            if (unit == MeasureUnit.GENERIC_TEMPERATURE) {
+                try {
+                    MeasureUnit.forIdentifier(unit.getIdentifier());
+                    Assert.fail("GENERIC_TEMPERATURE should not be parseable");
+                } catch (IllegalArgumentException e) {
+                    continue;
+                }
+            } else {
+                MeasureUnit parsed = MeasureUnit.forIdentifier(unit.getIdentifier());
+                assertTrue("parsed MeasureUnit '" + parsed + "'' should equal built-in '" + unit + "'",
+                           unit.equals(parsed));
+            }
         }
     }
 

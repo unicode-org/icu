@@ -695,7 +695,8 @@ public class MeasureUnit implements Serializable {
      */
     @Override
     public String toString() {
-        return type + "-" + subType;
+        String result = measureUnitImpl == null ? type + "-" + subType : measureUnitImpl.getIdentifier();
+        return result == null ? "" : result;
     }
 
     /**

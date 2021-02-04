@@ -10,6 +10,7 @@
 #include "cmemory.h"
 #include "number_decimalquantity.h"
 #include "number_roundingutils.h"
+#include "putilimp.h"
 #include "uarrsort.h"
 #include "uassert.h"
 #include "unicode/fmtable.h"
@@ -149,6 +150,12 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
             // If quantity is at the limits of double's precision from an
             // integer value, we take that integer value.
             int64_t flooredQuantity = floor(quantity * (1 + DBL_EPSILON));
+            if (uprv_isNaN(quantity)) {
+                // With clang on Linux: floor does not support NaN, resulting in
+                // a giant negative number. For now, we produce "0 feet, NaN
+                // inches". TODO(icu-units#131): revisit desired output.
+                flooredQuantity = 0;
+            }
             intValues[i] = flooredQuantity;
 
             // Keep the residual of the quantity.

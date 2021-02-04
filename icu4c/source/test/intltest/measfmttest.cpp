@@ -19,6 +19,7 @@
 
 #include "charstr.h"
 #include "cstr.h"
+#include "cstring.h"
 #include "measunit_impl.h"
 #include "unicode/decimfmt.h"
 #include "unicode/measfmt.h"
@@ -85,6 +86,7 @@ private:
     void TestInvalidIdentifiers();
     void TestIdentifierDetails();
     void TestPrefixes();
+    void TestParseBuiltIns();
     void TestParseToBuiltIn();
     void TestKilogramIdentifier();
     void TestCompoundUnitOperations();
@@ -216,6 +218,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestInvalidIdentifiers);
     TESTCASE_AUTO(TestIdentifierDetails);
     TESTCASE_AUTO(TestPrefixes);
+    TESTCASE_AUTO(TestParseBuiltIns);
     TESTCASE_AUTO(TestParseToBuiltIn);
     TESTCASE_AUTO(TestKilogramIdentifier);
     TESTCASE_AUTO(TestCompoundUnitOperations);
@@ -3666,8 +3669,16 @@ void MeasureFormatTest::TestIdentifiers() {
         {"pow2-foot-and-pow2-mile", "square-foot-and-square-mile"},
         {"gram-square-gram-per-dekagram", "cubic-gram-per-dekagram"},
         {"kilogram-per-meter-per-second", "kilogram-per-meter-second"},
+        {"kilometer-per-second-per-megaparsec", "kilometer-per-megaparsec-second"},
 
         // TODO(ICU-21284): Add more test cases once the proper ranking is available.
+        // TODO(ICU-21284,icu-units#70): These cases are the wrong way around:
+        {"pound-force-foot", "foot-pound-force"},
+        {"foot-pound-force", "foot-pound-force"},
+        {"kilowatt-hour", "hour-kilowatt"},
+        {"hour-kilowatt", "hour-kilowatt"},
+        {"newton-meter", "meter-newton"},
+        {"meter-newton", "meter-newton"},
 
         // Testing prefixes are parsed and produced correctly (ensures no
         // collisions in the enum values)
@@ -3706,7 +3717,6 @@ void MeasureFormatTest::TestIdentifiers() {
         // TODO(icu-units#70): revisit when fixing normalization. For now we're
         // just checking some consistency between C&J.
         {"megafoot-mebifoot-kibifoot-kilofoot", "kibifoot-mebifoot-kilofoot-megafoot"},
-
     };
     for (const auto &cas : cases) {
         status.setScope(cas.id);
@@ -3833,6 +3843,42 @@ void MeasureFormatTest::TestPrefixes() {
                      umeas_getPrefixPower(m.getPrefix(status)));
         assertEquals("umeas_getPrefixBase()", cas.expectedBase,
                      umeas_getPrefixBase(m.getPrefix(status)));
+    }
+}
+
+void MeasureFormatTest::TestParseBuiltIns() {
+    IcuTestErrorCode status(*this, "TestParseBuiltIns()");
+    int32_t totalCount = MeasureUnit::getAvailable(nullptr, 0, status);
+    status.expectErrorAndReset(U_BUFFER_OVERFLOW_ERROR);
+    std::unique_ptr<MeasureUnit[]> units(new MeasureUnit[totalCount]);
+    totalCount = MeasureUnit::getAvailable(units.get(), totalCount, status);
+    status.assertSuccess();
+    for (int32_t i = 0; i < totalCount; i++) {
+        MeasureUnit &unit = units[i];
+        if (uprv_strcmp(unit.getType(), "currency") == 0) {
+            continue;
+        }
+
+        // TODO(ICU-21284,icu-units#70): fix normalization. Until then, ignore:
+        if (uprv_strcmp(unit.getIdentifier(), "pound-force-foot") == 0) continue;
+        if (uprv_strcmp(unit.getIdentifier(), "kilowatt-hour") == 0) continue;
+        if (uprv_strcmp(unit.getIdentifier(), "newton-meter") == 0) continue;
+
+        // Prove that all built-in units are parseable, except "generic" temperature:
+        MeasureUnit parsed = MeasureUnit::forIdentifier(unit.getIdentifier(), status);
+        if (unit == MeasureUnit::getGenericTemperature()) {
+            status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+        } else {
+            status.assertSuccess();
+            CharString msg;
+            msg.append("parsed MeasureUnit '", status);
+            msg.append(parsed.getIdentifier(), status);
+            msg.append("' should equal built-in '", status);
+            msg.append(unit.getIdentifier(), status);
+            msg.append("'", status);
+            status.assertSuccess();
+            assertTrue(msg.data(), unit == parsed);
+        }
     }
 }
 
