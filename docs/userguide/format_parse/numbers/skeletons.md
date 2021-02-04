@@ -349,6 +349,8 @@ The following stems specify sign display:
 - `sign-accounting-always` or `()!` (concise)
 - `sign-except-zero` or `+?` (concise)
 - `sign-accounting-except-zero` or `()?` (concise)
+- `sign-negative` or `+-` (concise)
+- `sign-accounting-negative` or `()-` (concise)
 
 For more details, see
 [`UNumberSignDisplay`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unumberformatter_8h.html).

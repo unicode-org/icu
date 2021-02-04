@@ -302,6 +302,9 @@ public final class NumberFormatter {
          * Show the minus sign on negative numbers, and do not show the sign on positive numbers. This is
          * the default behavior.
          *
+         * If using this option, a sign will be displayed on negative zero, including negative numbers
+         * that round to zero. To hide the sign on negative zero, use the NEGATIVE option.
+         *
          * @stable ICU 60
          * @see NumberFormatter
          */
@@ -371,6 +374,22 @@ public final class NumberFormatter {
          * @see NumberFormatter
          */
         ACCOUNTING_EXCEPT_ZERO,
+
+        /**
+         * Same as AUTO, but do not show the sign on negative zero.
+         *
+         * @draft ICU 69
+         * @provisional This API might change or be removed in a future release.
+         */
+        NEGATIVE,
+
+        /**
+         * Same as ACCOUNTING, but do not show the sign on negative zero.
+         *
+         * @draft ICU 69
+         * @provisional This API might change or be removed in a future release.
+         */
+        ACCOUNTING_NEGATIVE,
     }
 
     /**

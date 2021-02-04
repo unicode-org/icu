@@ -529,6 +529,18 @@ public class PatternStringUtils {
                 }
                 break;
 
+            case NEGATIVE:
+            case ACCOUNTING_NEGATIVE:
+                switch (signum) {
+                    case NEG:
+                        return PatternSignType.NEG;
+                    case NEG_ZERO:
+                    case POS_ZERO:
+                    case POS:
+                        return PatternSignType.POS;
+                }
+                break;
+
             case NEVER:
                 return PatternSignType.POS;
 
