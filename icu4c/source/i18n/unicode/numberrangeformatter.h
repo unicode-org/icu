@@ -608,49 +608,6 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Export the first formatted number as a decimal number. This endpoint
-     * is useful for obtaining the exact number being printed after scaling
-     * and rounding have been applied by the number range formatting pipeline.
-     *
-     * The syntax of the unformatted number is a "numeric string"
-     * as defined in the Decimal Arithmetic Specification, available at
-     * http://speleotrove.com/decimal
-     *
-     * TODO(ICU-21275): This function will be removed in ICU 69.
-     * Use getDecimalNumbers() instead.
-     *
-     * @param status Set if an error occurs.
-     * @return A decimal representation of the first formatted number.
-     * @deprecated ICU 68 Use getDecimalNumbers instead.
-     * @see NumberRangeFormatter
-     * @see #getSecondDecimal
-     */
-    UnicodeString getFirstDecimal(UErrorCode& status) const;
-
-    /**
-     * Export the second formatted number as a decimal number. This endpoint
-     * is useful for obtaining the exact number being printed after scaling
-     * and rounding have been applied by the number range formatting pipeline.
-     *
-     * The syntax of the unformatted number is a "numeric string"
-     * as defined in the Decimal Arithmetic Specification, available at
-     * http://speleotrove.com/decimal
-     *
-     * TODO(ICU-21275): This function will be removed in ICU 69.
-     * Use getDecimalNumbers() instead.
-     *
-     * @param status Set if an error occurs.
-     * @return A decimal representation of the second formatted number.
-     * @deprecated ICU 68 Use getDecimalNumbers instead.
-     * @see NumberRangeFormatter
-     * @see #getFirstDecimal
-     */
-    UnicodeString getSecondDecimal(UErrorCode& status) const;
-#endif // U_HIDE_DEPRECATED_API
-
-
 #ifndef U_HIDE_DRAFT_API
     /**
      * Extracts the formatted range as a pair of decimal numbers. This endpoint

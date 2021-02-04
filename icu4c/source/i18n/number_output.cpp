@@ -52,16 +52,6 @@ UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedNumberRange)
 
 #define UPRV_NOARG
 
-UnicodeString FormattedNumberRange::getFirstDecimal(UErrorCode& status) const {
-    UPRV_FORMATTED_VALUE_METHOD_GUARD(ICU_Utility::makeBogusString())
-    return fData->quantity1.toScientificString();
-}
-
-UnicodeString FormattedNumberRange::getSecondDecimal(UErrorCode& status) const {
-    UPRV_FORMATTED_VALUE_METHOD_GUARD(ICU_Utility::makeBogusString())
-    return fData->quantity2.toScientificString();
-}
-
 void FormattedNumberRange::getDecimalNumbers(ByteSink& sink1, ByteSink& sink2, UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
     impl::DecNum decnum1;
