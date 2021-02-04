@@ -45,7 +45,6 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestFieldPositionIteratorWith3ItemsPatternShift);
     TESTCASE_AUTO(TestFormattedValue);
     TESTCASE_AUTO(TestDifferentStyles);
-    TESTCASE_AUTO(TestBadStylesFail);
     TESTCASE_AUTO(TestCreateStyled);
     TESTCASE_AUTO(TestContextual);
     TESTCASE_AUTO(TestNextPosition);
@@ -276,8 +275,11 @@ void ListFormatterTest::RunTestFieldPositionIteratorWithNItemsPatternShift(
         const char16_t *expectedFormatted,
         const char* testName) {
     IcuTestErrorCode errorCode(*this, testName);
-    LocalPointer<ListFormatter> formatter(
-        ListFormatter::createInstance(Locale("ur", "IN"), "unit-narrow", errorCode));
+    LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(
+        Locale("ur", "IN"),
+        ULISTFMT_TYPE_UNITS,
+        ULISTFMT_WIDTH_NARROW,
+        errorCode));
     if (U_FAILURE(errorCode)) {
         dataerrln(
             "ListFormatter::createInstance(Locale(\"ur\", \"IN\"), \"unit-narrow\", errorCode) failed in "
@@ -608,16 +610,22 @@ void ListFormatterTest::TestFormattedValue() {
     }
 }
 
-void ListFormatterTest::DoTheRealListStyleTesting(Locale locale,
-        UnicodeString items[], int itemCount,
-        const char* style, const char* expected, IcuTestErrorCode status) {
+void ListFormatterTest::DoTheRealListStyleTesting(
+        Locale locale,
+        UnicodeString items[],
+        int itemCount,
+        UListFormatterType type,
+        UListFormatterWidth width,
+        const char* expected,
+        IcuTestErrorCode status) {
 
     LocalPointer<ListFormatter> formatter(
-            ListFormatter::createInstance(locale, style, status));
+            ListFormatter::createInstance(locale, type, width, status));
 
     UnicodeString actualResult;
     formatter->format(items, itemCount, actualResult, status);
-    assertEquals(style, UnicodeString(expected), actualResult);
+    assertEquals(Int64ToUnicodeString(type) + "-" + Int64ToUnicodeString(width),
+        UnicodeString(expected), actualResult);
 }
 
 void ListFormatterTest::TestDifferentStyles() {
@@ -625,24 +633,11 @@ void ListFormatterTest::TestDifferentStyles() {
     UnicodeString input[4] = { u"rouge", u"jaune", u"bleu", u"vert" };
     IcuTestErrorCode status(*this, "TestDifferentStyles()");
 
-    DoTheRealListStyleTesting(locale, input, 4, "standard", "rouge, jaune, bleu et vert", status);
-    DoTheRealListStyleTesting(locale, input, 4, "or", "rouge, jaune, bleu ou vert", status);
-    DoTheRealListStyleTesting(locale, input, 4, "unit", "rouge, jaune, bleu et vert", status);
-    DoTheRealListStyleTesting(locale, input, 4, "unit-narrow", "rouge jaune bleu vert", status);
-    DoTheRealListStyleTesting(locale, input, 4, "unit-short", "rouge, jaune, bleu et vert", status);
-}
-
-void ListFormatterTest::TestBadStylesFail() {
-    Locale locale("fr");
-    const char * badStyles[4] = { "", "duration", "duration-short", "something-clearly-wrong" };
-    IcuTestErrorCode status(*this, "TestBadStylesFail()");
-
-    for (int i = 0; i < 4; ++i) {
-      LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(locale, badStyles[i], status));
-      if (!status.expectErrorAndReset(U_MISSING_RESOURCE_ERROR, "style \"%s\"", badStyles[i])) {
-        // Do nothing, expectErrorAndReset already reports the error
-      }
-    }
+    DoTheRealListStyleTesting(locale, input, 4, ULISTFMT_TYPE_AND, ULISTFMT_WIDTH_WIDE, "rouge, jaune, bleu et vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_WIDE, "rouge, jaune, bleu ou vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_WIDE, "rouge, jaune, bleu et vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_NARROW, "rouge jaune bleu vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, ULISTFMT_TYPE_UNITS, ULISTFMT_WIDTH_SHORT, "rouge, jaune, bleu et vert", status);
 }
 
 void ListFormatterTest::TestCreateStyled() {

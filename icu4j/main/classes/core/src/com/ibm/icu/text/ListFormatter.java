@@ -51,66 +51,6 @@ final public class ListFormatter {
     private final PatternHandler patternHandler;
 
     /**
-     * Indicates the style of Listformatter
-     * TODO(ICU-20888): Remove this in ICU 68.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public enum Style {
-        /**
-         * Standard, conjunction style.
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        STANDARD("standard"),
-        /**
-         * Disjunction style.
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        OR("or"),
-        /**
-         * Style for full units
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        UNIT("unit"),
-        /**
-         * Style for units in abbreviated form
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        UNIT_SHORT("unit-short"),
-        /**
-         * Style for units in narrow form
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        UNIT_NARROW("unit-narrow");
-
-        private final String name;
-
-        Style(String name) {
-            this.name = name;
-        }
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
-        public String getName() {
-            return name;
-        }
-
-    }
-
-    /**
      * Type of meaning expressed by the list.
      *
      * @draft ICU 67
@@ -417,20 +357,6 @@ final public class ListFormatter {
     }
 
     /**
-     * Create a list formatter that is appropriate for a locale and style.
-     *
-     * @param locale the locale in question.
-     * @param style the style
-     * @return ListFormatter
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static ListFormatter getInstance(ULocale locale, Style style) {
-        return cache.get(locale, style.getName());
-    }
-
-    /**
      * Create a list formatter that is appropriate for a locale.
      *
      * @param locale
@@ -439,7 +365,7 @@ final public class ListFormatter {
      * @stable ICU 50
      */
     public static ListFormatter getInstance(ULocale locale) {
-      return getInstance(locale, Style.STANDARD);
+      return getInstance(locale, Type.AND, Width.WIDE);
     }
 
     /**
@@ -451,7 +377,7 @@ final public class ListFormatter {
      * @stable ICU 50
      */
     public static ListFormatter getInstance(Locale locale) {
-        return getInstance(ULocale.forLocale(locale), Style.STANDARD);
+        return getInstance(ULocale.forLocale(locale), Type.AND, Width.WIDE);
     }
 
     /**
