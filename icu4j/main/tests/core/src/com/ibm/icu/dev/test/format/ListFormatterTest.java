@@ -262,15 +262,15 @@ public class ListFormatterTest extends TestFmwk {
                 {ListFormatter.Field.ELEMENT, 2, 9},
                 {ListFormatter.SpanField.LIST_SPAN, 9, 12, 2},
                 {ListFormatter.Field.ELEMENT, 9, 12}};
-            if (!logKnownIssue("21351", "Java still coalesces adjacent elements")) {
-                FormattedValueTest.checkFormattedValue(
-                    message,
-                    result,
-                    expectedString,
-                    expectedFieldPositions);
-            }
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions,
+                // Adjacent fields: skip AttributedCharacterIterator test
+                true);
         }
-    
+
         {
             ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH, Type.UNITS, Width.SHORT);
             String message = "ICU-21383 Long list";
