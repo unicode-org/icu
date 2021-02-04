@@ -704,7 +704,7 @@ public class MeasureUnit implements Serializable {
      *
      * @stable ICU 53
      */
-    public synchronized static Set<String> getAvailableTypes() {
+    public static Set<String> getAvailableTypes() {
         populateCache();
         return Collections.unmodifiableSet(cache.keySet());
     }
@@ -715,7 +715,7 @@ public class MeasureUnit implements Serializable {
      * @return the available units for type. Returned set is unmodifiable.
      * @stable ICU 53
      */
-    public synchronized static Set<MeasureUnit> getAvailable(String type) {
+    public static Set<MeasureUnit> getAvailable(String type) {
         populateCache();
         Map<String, MeasureUnit> units = cache.get(type);
         // Train users not to modify returned set from the start giving us more
@@ -867,11 +867,9 @@ public class MeasureUnit implements Serializable {
      * Adding of others is deferred until later to avoid circular static init
      * dependencies with classes Currency and TimeUnit.
      *
-     * <p>Synchronization: this function must be called from static synchronized methods only.
-     *
      * @internal
      */
-    static private void populateCache() {
+    static synchronized private void populateCache() {
         if (cacheIsPopulated) {
             return;
         }
