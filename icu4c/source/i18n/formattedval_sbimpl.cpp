@@ -170,7 +170,10 @@ bool FormattedValueStringBuilderImpl::nextPositionImpl(ConstrainedFieldPosition&
             auto elementField = fString.getFieldPtr()[i-1];
             if (elementField == Field(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD)
                     && cfpos.matchesField(elementField.getCategory(), elementField.getField())
-                    && (cfpos.getLimit() < i - fString.fZero || cfpos.getCategory() != elementField.getCategory())) {
+                    && (
+                        cfpos.getLimit() < i - fString.fZero
+                        || cfpos.getCategory() != elementField.getCategory()
+                        || cfpos.getField() != elementField.getField())) {
                 int64_t si = cfpos.getInt64IterationContext() - 1;
                 cfpos.setState(
                     elementField.getCategory(),

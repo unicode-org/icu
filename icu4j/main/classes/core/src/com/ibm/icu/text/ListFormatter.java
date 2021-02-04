@@ -724,14 +724,16 @@ final public class ListFormatter {
         }
 
         private void appendElement(Object element, int position) {
+            String elementString = element.toString();
             if (needsFields) {
                 SpanFieldPlaceholder field = new SpanFieldPlaceholder();
                 field.spanField = SpanField.LIST_SPAN;
                 field.normalField = Field.ELEMENT;
                 field.value = position;
-                string.append(element.toString(), field);
+                field.length = elementString.length();
+                string.append(elementString, field);
             } else {
-                string.append(element.toString(), null);
+                string.append(elementString, null);
             }
         }
 
