@@ -91,6 +91,8 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"sign-accounting-always", STEM_SIGN_ACCOUNTING_ALWAYS, status);
     b.add(u"sign-except-zero", STEM_SIGN_EXCEPT_ZERO, status);
     b.add(u"sign-accounting-except-zero", STEM_SIGN_ACCOUNTING_EXCEPT_ZERO, status);
+    b.add(u"sign-negative", STEM_SIGN_NEGATIVE, status);
+    b.add(u"sign-accounting-negative", STEM_SIGN_ACCOUNTING_NEGATIVE, status);
     b.add(u"decimal-auto", STEM_DECIMAL_AUTO, status);
     b.add(u"decimal-always", STEM_DECIMAL_ALWAYS, status);
     if (U_FAILURE(status)) { return; }
@@ -121,6 +123,8 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"()!", STEM_SIGN_ACCOUNTING_ALWAYS, status);
     b.add(u"+?", STEM_SIGN_EXCEPT_ZERO, status);
     b.add(u"()?", STEM_SIGN_ACCOUNTING_EXCEPT_ZERO, status);
+    b.add(u"+-", STEM_SIGN_NEGATIVE, status);
+    b.add(u"()-", STEM_SIGN_ACCOUNTING_NEGATIVE, status);
     if (U_FAILURE(status)) { return; }
 
     // Build the CharsTrie
@@ -278,6 +282,10 @@ UNumberSignDisplay stem_to_object::signDisplay(skeleton::StemEnum stem) {
             return UNUM_SIGN_EXCEPT_ZERO;
         case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
             return UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO;
+        case STEM_SIGN_NEGATIVE:
+            return UNUM_SIGN_NEGATIVE;
+        case STEM_SIGN_ACCOUNTING_NEGATIVE:
+            return UNUM_SIGN_ACCOUNTING_NEGATIVE;
         default:
             return UNUM_SIGN_COUNT; // for objects, throw; for enums, return COUNT
     }
@@ -398,6 +406,12 @@ void enum_to_stem_string::signDisplay(UNumberSignDisplay value, UnicodeString& s
             break;
         case UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO:
             sb.append(u"sign-accounting-except-zero", -1);
+            break;
+        case UNUM_SIGN_NEGATIVE:
+            sb.append(u"sign-negative", -1);
+            break;
+        case UNUM_SIGN_ACCOUNTING_NEGATIVE:
+            sb.append(u"sign-accounting-negative", -1);
             break;
         default:
             UPRV_UNREACHABLE;
@@ -697,6 +711,8 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_SIGN_ACCOUNTING_ALWAYS:
         case STEM_SIGN_EXCEPT_ZERO:
         case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
+        case STEM_SIGN_NEGATIVE:
+        case STEM_SIGN_ACCOUNTING_NEGATIVE:
             CHECK_NULL(seen, sign, status);
             macros.sign = stem_to_object::signDisplay(stem);
             return STATE_NULL;
@@ -1205,6 +1221,7 @@ void blueprint_helpers::parseScientificStem(const StringSegment& segment, MacroP
             } else if (segment.charAt(offset) == u'?') {
                 signDisplay = UNUM_SIGN_EXCEPT_ZERO;
             } else {
+                // NOTE: Other sign displays are not included because they aren't useful in this context
                 goto fail;
             }
             offset++;

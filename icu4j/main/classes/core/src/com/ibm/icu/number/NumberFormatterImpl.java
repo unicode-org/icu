@@ -193,7 +193,8 @@ class NumberFormatterImpl {
         boolean isCompactNotation = (macros.notation instanceof CompactNotation);
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
                 || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
-                || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO;
+                || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO
+                || macros.sign == SignDisplay.ACCOUNTING_NEGATIVE;
         Currency currency = isCurrency ? (Currency) macros.unit : DEFAULT_CURRENCY;
         UnitWidth unitWidth = UnitWidth.SHORT;
         if (macros.unitWidth != null) {

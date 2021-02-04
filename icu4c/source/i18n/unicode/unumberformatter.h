@@ -314,9 +314,12 @@ typedef enum UNumberSignDisplay {
      * Show the minus sign on negative numbers, and do not show the sign on positive numbers. This is the default
      * behavior.
      *
+     * If using this option, a sign will be displayed on negative zero, including negative numbers
+     * that round to zero. To hide the sign on negative zero, use the NEGATIVE option.
+     *
      * @stable ICU 60
      */
-            UNUM_SIGN_AUTO,
+    UNUM_SIGN_AUTO,
 
     /**
      * Show the minus sign on negative numbers and the plus sign on positive numbers, including zero.
@@ -324,14 +327,14 @@ typedef enum UNumberSignDisplay {
      *
      * @stable ICU 60
      */
-            UNUM_SIGN_ALWAYS,
+    UNUM_SIGN_ALWAYS,
 
     /**
      * Do not show the sign on positive or negative numbers.
      *
      * @stable ICU 60
      */
-            UNUM_SIGN_NEVER,
+    UNUM_SIGN_NEVER,
 
     /**
      * Use the locale-dependent accounting format on negative numbers, and do not show the sign on positive numbers.
@@ -347,7 +350,7 @@ typedef enum UNumberSignDisplay {
      *
      * @stable ICU 60
      */
-            UNUM_SIGN_ACCOUNTING,
+    UNUM_SIGN_ACCOUNTING,
 
     /**
      * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
@@ -357,7 +360,7 @@ typedef enum UNumberSignDisplay {
      *
      * @stable ICU 60
      */
-            UNUM_SIGN_ACCOUNTING_ALWAYS,
+    UNUM_SIGN_ACCOUNTING_ALWAYS,
 
     /**
      * Show the minus sign on negative numbers and the plus sign on positive numbers. Do not show a
@@ -365,7 +368,7 @@ typedef enum UNumberSignDisplay {
      *
      * @stable ICU 61
      */
-            UNUM_SIGN_EXCEPT_ZERO,
+    UNUM_SIGN_EXCEPT_ZERO,
 
     /**
      * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
@@ -374,14 +377,30 @@ typedef enum UNumberSignDisplay {
      *
      * @stable ICU 61
      */
-            UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO,
+    UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO,
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Same as AUTO, but do not show the sign on negative zero.
+     *
+     * @draft ICU 69
+     */
+    UNUM_SIGN_NEGATIVE,
+
+    /**
+     * Same as ACCOUNTING, but do not show the sign on negative zero.
+     *
+     * @draft ICU 69
+     */
+    UNUM_SIGN_ACCOUNTING_NEGATIVE,
+#endif // U_HIDE_DRAFT_API
 
     /**
      * One more than the highest UNumberSignDisplay value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
-            UNUM_SIGN_COUNT
+    UNUM_SIGN_COUNT = 9,
 } UNumberSignDisplay;
 
 /**

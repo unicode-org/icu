@@ -139,8 +139,10 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     bool isPermille = utils::unitIsPermille(macros.unit);
     bool isCompactNotation = macros.notation.fType == Notation::NTN_COMPACT;
     bool isAccounting =
-            macros.sign == UNUM_SIGN_ACCOUNTING || macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS ||
-            macros.sign == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO;
+            macros.sign == UNUM_SIGN_ACCOUNTING ||
+            macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS ||
+            macros.sign == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO ||
+            macros.sign == UNUM_SIGN_ACCOUNTING_NEGATIVE;
     CurrencyUnit currency(u"", status);
     if (isCurrency) {
         currency = CurrencyUnit(macros.unit, status); // Restore CurrencyUnit from MeasureUnit

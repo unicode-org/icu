@@ -113,6 +113,8 @@ class NumberSkeletonImpl {
         STEM_SIGN_ACCOUNTING_ALWAYS,
         STEM_SIGN_EXCEPT_ZERO,
         STEM_SIGN_ACCOUNTING_EXCEPT_ZERO,
+        STEM_SIGN_NEGATIVE,
+        STEM_SIGN_ACCOUNTING_NEGATIVE,
         STEM_DECIMAL_AUTO,
         STEM_DECIMAL_ALWAYS,
 
@@ -189,6 +191,8 @@ class NumberSkeletonImpl {
         b.add("sign-accounting-always", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
         b.add("sign-except-zero", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
         b.add("sign-accounting-except-zero", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
+        b.add("sign-negative", StemEnum.STEM_SIGN_NEGATIVE.ordinal());
+        b.add("sign-accounting-negative", StemEnum.STEM_SIGN_ACCOUNTING_NEGATIVE.ordinal());
         b.add("decimal-auto", StemEnum.STEM_DECIMAL_AUTO.ordinal());
         b.add("decimal-always", StemEnum.STEM_DECIMAL_ALWAYS.ordinal());
 
@@ -217,6 +221,8 @@ class NumberSkeletonImpl {
         b.add("()!", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
         b.add("+?", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
         b.add("()?", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
+        b.add("+-", StemEnum.STEM_SIGN_NEGATIVE.ordinal());
+        b.add("()-", StemEnum.STEM_SIGN_ACCOUNTING_NEGATIVE.ordinal());
 
         // Build the CharsTrie
         // TODO: Use SLOW or FAST here?
@@ -351,6 +357,10 @@ class NumberSkeletonImpl {
                 return SignDisplay.EXCEPT_ZERO;
             case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
                 return SignDisplay.ACCOUNTING_EXCEPT_ZERO;
+            case STEM_SIGN_NEGATIVE:
+                return SignDisplay.NEGATIVE;
+            case STEM_SIGN_ACCOUNTING_NEGATIVE:
+                return SignDisplay.ACCOUNTING_NEGATIVE;
             default:
                 return null; // for objects, throw; for enums, return null
             }
@@ -477,6 +487,12 @@ class NumberSkeletonImpl {
                 break;
             case ACCOUNTING_EXCEPT_ZERO:
                 sb.append("sign-accounting-except-zero");
+                break;
+            case NEGATIVE:
+                sb.append("sign-negative");
+                break;
+            case ACCOUNTING_NEGATIVE:
+                sb.append("sign-accounting-negative");
                 break;
             default:
                 throw new AssertionError();
@@ -764,6 +780,8 @@ class NumberSkeletonImpl {
         case STEM_SIGN_ACCOUNTING_ALWAYS:
         case STEM_SIGN_EXCEPT_ZERO:
         case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
+        case STEM_SIGN_NEGATIVE:
+        case STEM_SIGN_ACCOUNTING_NEGATIVE:
             checkNull(macros.sign, segment);
             macros.sign = StemToObject.signDisplay(stem);
             return ParseState.STATE_NULL;
@@ -1219,6 +1237,7 @@ class NumberSkeletonImpl {
                     } else if (segment.charAt(offset) == '?') {
                         signDisplay = SignDisplay.EXCEPT_ZERO;
                     } else {
+                        // NOTE: Other sign displays are not included because they aren't useful in this context
                         break block;
                     }
                     offset++;

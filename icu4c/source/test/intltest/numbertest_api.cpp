@@ -3783,6 +3783,60 @@ void NumberFormatterApiTest::sign() {
             u"$0.00");
 
     assertFormatSingle(
+            u"Sign Negative Positive",
+            u"sign-negative",
+            u"+-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_NEGATIVE),
+            Locale::getEnglish(),
+            444444,
+            u"444,444");
+
+    assertFormatSingle(
+            u"Sign Negative Negative",
+            u"sign-negative",
+            u"+-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_NEGATIVE),
+            Locale::getEnglish(),
+            -444444,
+            u"-444,444");
+
+    assertFormatSingle(
+            u"Sign Negative Negative Zero",
+            u"sign-negative",
+            u"+-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_NEGATIVE),
+            Locale::getEnglish(),
+            -0.0000001,
+            u"0");
+
+    assertFormatSingle(
+            u"Sign Accounting-Negative Positive",
+            u"currency/USD sign-accounting-negative",
+            u"currency/USD ()-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE).unit(USD),
+            Locale::getEnglish(),
+            444444,
+            u"$444,444.00");
+        
+    assertFormatSingle(
+            u"Sign Accounting-Negative Negative",
+            u"currency/USD sign-accounting-negative",
+            u"currency/USD ()-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE).unit(USD),
+            Locale::getEnglish(),
+            -444444,
+            "($444,444.00)");
+
+    assertFormatSingle(
+            u"Sign Accounting-Negative Negative Zero",
+            u"currency/USD sign-accounting-negative",
+            u"currency/USD ()-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE).unit(USD),
+            Locale::getEnglish(),
+            -0.0000001,
+            u"$0.00");
+
+    assertFormatSingle(
             u"Sign Accounting Negative Hidden",
             u"currency/USD unit-width-hidden sign-accounting",
             u"currency/USD unit-width-hidden ()",
@@ -3871,6 +3925,12 @@ void NumberFormatterApiTest::signNearZero() {
         { UNUM_SIGN_EXCEPT_ZERO, -0.1, u"0" }, // interesting case
         { UNUM_SIGN_EXCEPT_ZERO, -0.9, u"-1" },
         { UNUM_SIGN_EXCEPT_ZERO, -1.1, u"-1" },
+        { UNUM_SIGN_NEGATIVE,  1.1, u"1" },
+        { UNUM_SIGN_NEGATIVE,  0.9, u"1" },
+        { UNUM_SIGN_NEGATIVE,  0.1, u"0" },
+        { UNUM_SIGN_NEGATIVE, -0.1, u"0" }, // interesting case
+        { UNUM_SIGN_NEGATIVE, -0.9, u"-1" },
+        { UNUM_SIGN_NEGATIVE, -1.1, u"-1" },
     };
     for (auto& cas : cases) {
         auto sign = cas.sign;

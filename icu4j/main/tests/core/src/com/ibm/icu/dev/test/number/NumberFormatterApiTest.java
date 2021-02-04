@@ -3574,6 +3574,60 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "$0.00");
 
         assertFormatSingle(
+                "Sign Negative Positive",
+                "sign-negative",
+                "+-",
+                NumberFormatter.with().sign(SignDisplay.NEGATIVE),
+                ULocale.ENGLISH,
+                444444,
+                "444,444");
+        
+        assertFormatSingle(
+                "Sign Negative Negative",
+                "sign-negative",
+                "+-",
+                NumberFormatter.with().sign(SignDisplay.NEGATIVE),
+                ULocale.ENGLISH,
+                -444444,
+                "-444,444");
+        
+        assertFormatSingle(
+                "Sign Negative Negative Zero",
+                "sign-negative",
+                "+-",
+                NumberFormatter.with().sign(SignDisplay.NEGATIVE),
+                ULocale.ENGLISH,
+                -0.0000001,
+                "0");
+        
+        assertFormatSingle(
+                "Sign Accounting-Negative Positive",
+                "currency/USD sign-accounting-negative",
+                "currency/USD ()-",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING_NEGATIVE).unit(USD),
+                ULocale.ENGLISH,
+                444444,
+                "$444,444.00");
+        
+        assertFormatSingle(
+                "Sign Accounting-Negative Negative",
+                "currency/USD sign-accounting-negative",
+                "currency/USD ()-",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING_NEGATIVE).unit(USD),
+                ULocale.ENGLISH,
+                -444444,
+                "($444,444.00)");
+
+        assertFormatSingle(
+                "Sign Accounting-Negative Negative Zero",
+                "currency/USD sign-accounting-negative",
+                "currency/USD ()-",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING_NEGATIVE).unit(USD),
+                ULocale.ENGLISH,
+                -0.0000001,
+                "$0.00");
+
+        assertFormatSingle(
                 "Sign Accounting Negative Hidden",
                 "currency/USD unit-width-hidden sign-accounting",
                 "currency/USD unit-width-hidden ()",
@@ -3643,6 +3697,12 @@ public class NumberFormatterApiTest extends TestFmwk {
             { SignDisplay.EXCEPT_ZERO, -0.1, "0" }, // interesting case
             { SignDisplay.EXCEPT_ZERO, -0.9, "-1" },
             { SignDisplay.EXCEPT_ZERO, -1.1, "-1" },
+            { SignDisplay.NEGATIVE,  1.1, "1" },
+            { SignDisplay.NEGATIVE,  0.9, "1" },
+            { SignDisplay.NEGATIVE,  0.1, "0" },
+            { SignDisplay.NEGATIVE, -0.1, "0" }, // interesting case
+            { SignDisplay.NEGATIVE, -0.9, "-1" },
+            { SignDisplay.NEGATIVE, -1.1, "-1" },
         };
         for (Object[] cas : cases) {
             SignDisplay sign = (SignDisplay) cas[0];
