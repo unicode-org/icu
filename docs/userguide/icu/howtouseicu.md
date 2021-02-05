@@ -24,19 +24,19 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ICU builds and installs as relatively standard libraries. For details about
 building, installing and porting see the [ICU4C
-readme](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html) and the
-[ICU4J readme](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4j/readme.html).
+readme](../icu4c/) and the
+[ICU4J readme](../icu4j/).
 In addition, ICU4C installs several scripts and makefile fragments that help
 build other code using ICU.
 
 For C++, note that there are [Recommended Build
-Options](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#RecBuild)
+Options](icu4c/build#recommended-build-options)
 (both for normal use and for ICU as system-level libraries) which are not
 default simply for compatibility with older ICU-using code.
 
-Starting with ICU 49, the ICU4C readme has a short section about
+Starting with ICU 49, the ICU4C Readme has a short section about
 [User-Configurable
-Settings](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#UserConfig).
+Settings](icu4c/build#user-configurable-settings).
 
 ## C++ Makefiles
 
@@ -50,7 +50,7 @@ This table shows the package names used within pkg-config.
 |**Package**|**Contents**|
 |------|--------------------|
 |icu-uc|Common (uc) and Data (dt/data) libraries|
-|icu-i18n|Internationalization (in/i18n) library|icu-le [Layout Engine](layoutengine/index.md)|
+|icu-i18n|Internationalization (in/i18n) library|icu-le [Layout Engine](../layoutengine/index.md)|
 |icu-lx|Paragraph Layout|
 |icu-io|[Ustdio](io/ustdio.md)/[iostream](io/ustream.md) library (icuio)
 
@@ -154,13 +154,13 @@ ICU C++ APIs are normally defined in a versioned namespace, for example
 "icu_50". There is a stable "icu" alias which should be used instead. (Entry
 point versioning is only to allow for multiple ICU versions linked into one
 program. [It is optional and should be off for system
-libraries.](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#RecBuild))
+libraries.](icu4c/build#recommended-build-options))
 
 By default, and only for backward compatibility, the ICU headers contain a line
 `using namespace icu_50;` which makes all ICU APIs visible in/with the global
 namespace (and potentially collide with non-ICU APIs there). One of the
 [Recommended Build
-Options](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#RecBuild)
+Options](icu4c/build#recommended-build-options)
 is to turn this off.
 
 To write forward declarations, use

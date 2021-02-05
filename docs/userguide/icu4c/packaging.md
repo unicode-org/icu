@@ -2,7 +2,7 @@
 layout: default
 title: Packaging ICU4C
 nav_order: 3
-parent: ICU Data
+parent: ICU4C
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -25,6 +25,37 @@ License & terms of use: http://www.unicode.org/copyright.html
 This chapter describes, for the advanced user, how to package ICU4C for
 distribution, whether alone, as part of an application, or as part of the
 operating system.
+
+There are many ways that a person can package ICU with their software products. Usually only the libraries need to be considered for packaging.
+
+On UNIX, you should use `gmake install` to make it easier to develop and package ICU. The bin, lib and include directories are needed to develop applications that use ICU. These directories will be created relative to the `--prefix=`dir" configure option (See the [UNIX build instructions](#how-to-build-and-install-on-unix)). When ICU is built on Windows, a similar directory structure is built.
+
+When changes have been made to the standard ICU distribution, it is recommended that at least one of the following guidelines be followed for special packaging.
+
+1.  Add a suffix name to the library names. This can be done with the `--with-library-suffix` configure option.
+2.  The installation script should install the ICU libraries into the application's directory.
+
+Following these guidelines prevents other applications that use a standard ICU
+distribution from conflicting with any libraries that you need. On operating systems
+that do not have a standard C++ ABI (name mangling) for compilers, it is recommended to
+do this special packaging anyway. More details on customizing ICU are available in the
+[User's Guide](https://unicode-org.github.io/icu/userguide/).
+The [ICU Source Code Organization](./index/#icu-source-code-organization) section of
+the ICU4C gives a more complete description of the libraries.
+
+ICU has several libraries for you to use. Here is an example of libraries that are frequently packaged.
+
+| Library Name                        | Windows Filename | Linux Filename         | Comment                                                                                                                                                                                             |
+|-------------------------------------|------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Data Library                        | icudtXYl.dll   | libicudata.so.XY.Z | Data required by the Common and I18n libraries. There are many ways to package and [customize this data](https://unicode-org.github.io/icu/userguide/icudata), but by default this is all you need. |
+| Common Library                      | icuucXY.dll    | libicuuc.so.XY.Z   | Base library required by all other ICU libraries.                                                                                                                                                   |
+| Internationalization (i18n) Library | icuinXY.dll    | libicui18n.so.XY.Z | A library that contains many locale based internationalization (i18n) functions.                                                                                                                    |
+| Layout Extensions Engine            | iculxXY.dll    | libiculx.so.XY.Z   | An optional engine for doing paragraph layout that uses parts of ICU. HarfBuzz is required.                                                                                                         |
+| ICU I/O (Unicode stdio) Library     | icuioXY.dll    | libicuio.so.XY.Z   | An optional library that provides a stdio like API with Unicode support.                                                                                                                            |
+| Tool Utility Library                | icutuXY.dll    | libicutu.so.XY.Z   | An internal library that contains internal APIs that are only used by ICU's tools. If you do not use ICU's tools, you do not need this library.                                                     |
+
+
+Normally only the above ICU libraries need to be considered for packaging. The versionless symbolic links to these libraries are only needed for easier development. The _X_, _Y_ and _Z_ parts of the name are the version numbers of ICU. For example, ICU 2.0.2 would have the name libicuuc.so.20.2 for the common library. The exact format of the library names can vary between platforms due to how each platform can handles library versioning.
 
 ## Making ICU Smaller
 
@@ -118,11 +149,9 @@ data to be installed and removed without rebuilding ICU. For details, see the
 
 ## ICU Versions
 
-(This section assumes the reader is familiar with ICU version numbers (§) as
+(This section assumes the reader is familiar with [ICU version numbers](../design#version-numbers-in-icu) as
 covered in the [Design](../design.md) chapter, and filename conventions for
-libraries in the
-[ReadMe](https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#HowToPackage)
-.)
+libraries as described above.)
 
 ### POSIX Library Names
 

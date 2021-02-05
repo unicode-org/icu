@@ -1,8 +1,8 @@
 ---
 layout: default
 title: ICU4J FAQ
-nav_order: 7
-parent: Misc
+nav_order: 1
+parent: ICU4J
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -94,9 +94,8 @@ generate a change report page by following steps.
 1.  Download [ICU4J 64 source package
     archive](http://site.icu-project.org/download/64#TOC-ICU4J-Download)
     from the ICU 64 download page and extract files to your local system.
-2.  Set up ICU4J build environment as explained in
-    [readme.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4j/readme.html)
-    included in the root directory of the ICU4J source package archive.
+2.  Set up ICU4J build environment as explained in the
+    [ICU4C Readme](./index).
 3.  Edit
     [build.properties](https://github.com/unicode-org/icu/blob/main/icu4j/build.properties)
     in the root directory and change the property value api.report.prev.version

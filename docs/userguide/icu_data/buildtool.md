@@ -75,8 +75,8 @@ print messages when errors are found in your config file.
     $ pip3 install --user hjson jsonschema
 
 To build ICU4J with custom data, you must first build ICU4C with custom data
-and then generate the JAR file.  For more information, read
-[icu4j-readme.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/icu4j-readme.txt).
+and then generate the JAR file.  For more information on building ICU4J, read the
+[ICU4J Readme](../icu4j/).
 
 ### Locale Slicing
 

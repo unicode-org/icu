@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Glossary
+parent: ICU
 nav_order: 9000
 ---
 <!--

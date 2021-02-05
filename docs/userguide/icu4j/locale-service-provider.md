@@ -1,8 +1,8 @@
 ---
 layout: default
 title: ICU4J Locale Service Provider
-nav_order: 7
-parent: ICU
+nav_order: 2
+parent: ICU4J
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.

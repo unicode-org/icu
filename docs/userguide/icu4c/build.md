@@ -1,15 +1,15 @@
 ---
 layout: default
-title: ICU4C Readme
-nav_order: 8
-parent: ICU
+title: Building ICU4C
+nav_order: 2
+parent: ICU4C
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# ICU4C Readme
+# Building ICU4C
 {: .no_toc }
 
 ## Contents
@@ -20,306 +20,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ---
 
-
-## Introduction
-
-Today's software market is a global one in which it is desirable to develop and maintain one application (single source/single binary) that supports a wide variety of languages. The International Components for Unicode (ICU) libraries provide robust and full-featured Unicode services on a wide variety of platforms to help this design goal. The ICU libraries provide support for:
-
-* The latest version of the Unicode standard
-* Character set conversions with support for over 220 codepages
-* Locale data for more than 300 locales
-* Language sensitive text collation (sorting) and searching based on the Unicode Collation Algorithm (=ISO 14651)
-* Regular expression matching and Unicode sets
-* Transformations for normalization, upper/lowercase, script transliterations (50+ pairs)
-* Resource bundles for storing and accessing localized information
-* Date/Number/Message formatting and parsing of culture specific input/output formats
-* Calendar specific date and time manipulation
-* Text boundary analysis for finding characters, word and sentence boundaries
-
-ICU has a sister project ICU4J that extends the internationalization capabilities of Java to a level similar to ICU. The ICU C/C++ project is also called ICU4C when a distinction is necessary.
-
-## Getting started
-
-This document describes how to build and install ICU on your machine. For other information about ICU please see the following table of links.
-The ICU homepage also links to related information about writing internationalized software.
-
-**Here are some useful links regarding ICU and internationalization in general.**
-
-
-| ICU, ICU4C & ICU4J Homepage                | <http://icu-project.org/>                                      |
-| FAQ - Frequently Asked Questions about ICU | <https://unicode-org.github.io/icu/userguide/icufaq/>          |
-| ICU User's Guide                           | <https://unicode-org.github.io/icu/>                           |
-| How To Use ICU                             | <https://unicode-org.github.io/icu/userguide/howtouseicu.html> |
-| Download ICU Releases                      | <http://site.icu-project.org/download>                         |
-| ICU4C API Documentation Online             | <http://icu-project.org/apiref/icu4c/>                         |
-| Online ICU Demos                           | <http://demo.icu-project.org/icu-bin/icudemos>                 |
-| Contacts and Bug Reports/Feature Requests  | <http://site.icu-project.org/contacts>                         |
-
-**Important:** Please make sure you understand the [Copyright and License Information](http://source.icu-project.org/repos/icu/trunk/icu4c/LICENSE).
-
-## What Is New In The Current Release?
-
-See the [ICU download page](http://site.icu-project.org/download/) to find the subpage for the current release, including any other changes, bug fixes, known issues, changes to supported platforms and build environments, and migration issues for existing applications migrating from previous ICU releases.
-
-The subpage for the current release will also include an API Change Report, both for ICU4C and ICU4J, for a complete list of APIs added, removed, or changed in this release.
-
-The list of API changes since the previous ICU4C release is available [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/unicode-org/icu/main/icu4c/APIChangeReport.html).
-
-Changes in previous releases can also be found on the main [ICU download page](http://site.icu-project.org/download) in its version-specific subpages.
-
-## How To Download the Source Code
-
-There are two ways to download ICU releases:
-
-*   **Official Release Snapshot:**
-    If you want to use ICU (as opposed to developing it), you should download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. These packaged files can be found at [http://site.icu-project.org/download](http://site.icu-project.org/download).
-    The packaged snapshots are named `icu-nnnn.zip` or `icu-nnnn.tgz`, where `nnnn` is the version number. The .zip file is used for Windows platforms, while the .tgz file is preferred on most other platforms.
-    Please unzip this file.
-    > :point_right: **Note**: There may be additional commits on the `maint-*` branch for a particular version that are not included in the prepackaged download files.
-*   **GitHub Source Repository:**
-    If you are interested in developing features, patches, or bug fixes for ICU, you should probably be working with the latest version of the ICU source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. See our [source repository](http://site.icu-project.org/repository) for details.
-
-## ICU Source Code Organization
-
-In the descriptions below, `<ICU>` is the full path name of the ICU directory (the top level directory from the distribution archives) in your file system. You can also view the [ICU Architectural Design](design.md) section of the User's Guide to see which libraries you need for your software product. You need at least the data (`[lib]icudt`) and the common (`[lib]icuuc`) libraries in order to use ICU.
-
-**The following files describe the code drop.**
-
-| File        | Description                                                    |
-|-------------|----------------------------------------------------------------|
-| readme.html | Describes the International Components for Unicode (this file) |
-| LICENSE     | Contains the text of the ICU license                           |
-
-**The following directories contain source code and data files.**
-
-<table>
-
-      <tr>
-        <th scope="col">Directory</th>
-
-        <th scope="col">Description</th>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>common</b>/</td>
-
-        <td>The core Unicode and support functionality, such as resource bundles,
-        character properties, locales, codepage conversion, normalization,
-        Unicode properties, Locale, and UnicodeString.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>i18n</b>/</td>
-
-        <td>Modules in i18n are generally the more data-driven, that is to say
-        resource bundle driven, components. These deal with higher-level
-        internationalization issues such as formatting, collation, text break
-        analysis, and transliteration.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>layoutex</b>/</td>
-
-        <td>Contains the ICU paragraph layout engine.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>io</b>/</td>
-
-        <td>Contains the ICU I/O library.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>data</b>/</td>
-
-        <td>
-          <p>This directory contains the source data in text format, which is
-          compiled into binary form during the ICU build process. It contains
-          several subdirectories, in which the data files are grouped by
-          function. Note that the build process must be run again after any
-          changes are made to this directory.</p>
-
-          <p>If some of the following directories are missing, it's probably
-          because you got an official download. If you need the data source files
-          for customization, then please download the complete ICU source code from <a
-          href="http://site.icu-project.org/repository">the ICU repository</a>.</p>
-
-          <ul>
-            <li><b>in/</b> A directory that contains a pre-built data library for
-            ICU. A standard source code package will contain this file without
-            several of the following directories. This is to simplify the build
-            process for the majority of users and to reduce platform porting
-            issues.</li>
-
-            <li><b>brkitr/</b> Data files for character, word, sentence, title
-            casing and line boundary analysis.</li>
-
-            <li><b>coll/</b> Data for collation tailorings. The makefile
-            <b>colfiles.mk</b> contains the list of resource bundle files.</li>
-
-            <li><b>locales/</b> These .txt files contain ICU language and
-            culture-specific localization data. Two special bundles are
-            <b>root</b>, which is the fallback data and parent of other bundles,
-            and <b>index</b>, which contains a list of installed bundles. The
-            makefile <b>resfiles.mk</b> contains the list of resource bundle
-            files. Some of the locale data is split out into the type-specific
-            directories curr, lang, region, unit, and zone, described below.</li>
-
-            <li><b>curr/</b> Locale data for currency symbols and names (including
-            plural forms), with its own makefile <b>resfiles.mk</b>.</li>
-
-            <li><b>lang/</b> Locale data for names of languages, scripts, and locale
-            key names and values, with its own makefile <b>resfiles.mk</b>.</li>
-
-            <li><b>region/</b> Locale data for names of regions, with its own
-            makefile <b>resfiles.mk</b>.</li>
-
-            <li><b>unit/</b> Locale data for measurement unit patterns and names,
-            with its own makefile <b>resfiles.mk</b>.</li>
-
-            <li><b>zone/</b> Locale data for time zone names, with its own
-            makefile <b>resfiles.mk</b>.</li>
-
-            <li><b>mappings/</b> Here are the code page converter tables. These
-            .ucm files contain mappings to and from Unicode. These are compiled
-            into .cnv files. <b>convrtrs.txt</b> is the alias mapping table from
-            various converter name formats to ICU internal format and vice versa.
-            It produces cnvalias.icu. The makefiles <b>ucmfiles.mk,
-            ucmcore.mk,</b> and <b>ucmebcdic.mk</b> contain the list of
-            converters to be built.</li>
-
-            <li><b>translit/</b> This directory contains transliterator rules as
-            resource bundles, a makefile <b>trnsfiles.mk</b> containing the list
-            of installed system translitaration files, and as well the special
-            bundle <b>translit_index</b> which lists the system transliterator
-            aliases.</li>
-
-            <li><b>unidata/</b> This directory contains the Unicode data files.
-            Please see <a href=
-            "http://www.unicode.org/">http://www.unicode.org/</a> for more
-            information.</li>
-
-            <li><b>misc/</b> The misc directory contains other data files which
-            did not fit into the above categories, including time zone
-            information, region-specific data, and other data derived from CLDR
-            supplemental data.</li>
-
-            <li><b>out/</b> This directory contains the assembled memory mapped
-            files.</li>
-
-            <li><b>out/build/</b> This directory contains intermediate (compiled)
-            files, such as .cnv, .res, etc.</li>
-          </ul>
-
-          <p>If you are creating a special ICU build, you can set the ICU_DATA
-          environment variable to the out/ or the out/build/ directories, but
-          this is generally discouraged because most people set it incorrectly.
-          You can view the <a href=
-          "https://unicode-org.github.io/icu/userguide/icudata">ICU Data
-          Management</a> section of the ICU User's Guide for details.</p>
-        </td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/test/<b>intltest</b>/</td>
-
-        <td>A test suite including all C++ APIs. For information about running
-        the test suite, see the build instructions specific to your platform
-        later in this document.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/test/<b>cintltst</b>/</td>
-
-        <td>A test suite written in C, including all C APIs. For information
-        about running the test suite, see the build instructions specific to your
-        platform later in this document.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/test/<b>iotest</b>/</td>
-
-        <td>A test suite written in C and C++ to test the icuio library. For
-        information about running the test suite, see the build instructions
-        specific to your platform later in this document.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/test/<b>testdata</b>/</td>
-
-        <td>Source text files for data, which are read by the tests. It contains
-        the subdirectories <b>out/build/</b> which is used for intermediate
-        files, and <b>out/</b> which contains <b>testdata.dat.</b></td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>tools</b>/</td>
-
-        <td>Tools for generating the data files. Data files are generated by
-        invoking <i>&lt;ICU&gt;</i>/source/data/build/makedata.bat on Win32 or
-        <i>&lt;ICU&gt;</i>/source/make on UNIX.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>samples</b>/</td>
-
-        <td>Various sample programs that use ICU</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>extra</b>/</td>
-
-        <td>Non-supported API additions. Currently, it contains the 'uconv' tool
-        to perform codepage conversion on files.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/<b>packaging</b>/</td>
-
-        <td>This directory contain scripts and tools for packaging the final
-        ICU build for various release platforms.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>config</b>/</td>
-
-        <td>Contains helper makefiles for platform specific build commands. Used
-        by 'configure'.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/source/<b>allinone</b>/</td>
-
-        <td>Contains top-level ICU workspace and project files, for instance to
-        build all of ICU under one MSVC project.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/<b>include</b>/</td>
-
-        <td>Contains the headers needed for developing software that uses ICU on
-        Windows.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/<b>lib</b>/</td>
-
-        <td>Contains the import libraries for linking ICU into your Windows
-        application.</td>
-      </tr>
-
-      <tr>
-        <td><i>&lt;ICU&gt;</i>/<b>bin</b>/</td>
-
-        <td>Contains the libraries and executables for using ICU on Windows.</td>
-      </tr>
-    </table>
-
-
-
-## How To Build And Install ICU
-
-### Recommended Build Options
+## Recommended Build Options
 
 Depending on the platform and the type of installation, we recommend a small number of modifications and build options. Note that C99 compatibility is now required.
 
@@ -413,7 +114,7 @@ Depending on the platform and the type of installation, we recommend a small num
 ```
     > :point_right: **Note**:  this example shows a relative path to `runConfigureICU`. If you experience difficulty, try using an absolute path to `runConfigureICU` instead.
 
-#### ICU as a System-Level Library
+### ICU as a System-Level Library
 
 If ICU is installed as a system-level library, there are further opportunities and restrictions to consider. For details, see the _Using ICU as an Operating System Level Library_ section of the [User Guide ICU Architectural Design](https://unicode-org.github.io/icu/userguide/design) chapter.
 
@@ -425,13 +126,13 @@ If ICU is installed as a system-level library, there are further opportunities a
     `runConfigureICU Linux --disable-renaming`
     The public header files from this configuration must be installed for applications to include and get the correct entry point names.
 
-### User-Configurable Settings
+## User-Configurable Settings
 
 ICU4C can be customized via a number of user-configurable settings. Many of them are controlled by preprocessor macros which are defined in the `source/common/unicode/uconfig.h` header file. Some turn off parts of ICU, for example conversion or collation, trading off a smaller library for reduced functionality. Other settings are recommended (see previous section) but their default values are set for better source code compatibility.
 
 In order to change such user-configurable settings, you can either modify the `uconfig.h` header file by adding a specific `#define ...` for one or more of the macros before they are first tested, or set the compiler's preprocessor flags (`CPPFLAGS`) to include an equivalent `-D` macro definition.
 
-### How To Build And Install On Windows
+## How To Build And Install On Windows
 
 Building International Components for Unicode requires:
 
@@ -485,7 +186,7 @@ The steps are:
     3.  Run the I/O test suite, `iotest`. To do this: set the active startup project to "iotest", and press Ctrl+F5 to run it. Make sure that it passes without any errors.
 8.  You are now able to develop applications with ICU by using the libraries and tools in `<ICU>\bin\`. The headers are in `<ICU>\include\` and the link libraries are in `<ICU>\lib\`. To install the ICU runtime on a machine, or ship it with your application, copy the needed components from `<ICU>\bin\` to a location on the system PATH or to your application directory.
 
-#### Building with other versions of Visual Studio
+### Building with other versions of Visual Studio
 
 The particular version of the MSVC compiler tool-set (and thus the corresponding version of Visual Studio) that is used to compile ICU is determined by the `PlatformToolset` property. This property is stored in two different shared files that are used to set common configuration settings amongst the various ICU `*.vcxproj` project files. For the non-UWP projects, this setting is in the shared file called `Build.Windows.ProjectConfiguration.props` located in the `allinone` directory. For the UWP projects, this setting is in the shared file called `Build.Windows.UWP.ProjectConfiguration.props`, also located in the `allinone` directory.
 
@@ -495,14 +196,14 @@ In order to build the non-UWP projects with Visual Studio 2015 you will need to 
 
 > :point_right: **Note**: Using older versions of the MSVC compiler is generally not recommended due to the improved support for the C++11 standard in newer versions of the compiler.
 
-#### Re-targeting the Windows 10 SDK for the UWP projects
+### Re-targeting the Windows 10 SDK for the UWP projects
 
 If the version of the Windows 10 SDK that you have installed does not match the version used by the UWP projects, then you will need to "retarget" them to use the version of the SDK that you have installed instead. There are two ways to do this:
 
 * In Visual Studio you can right-click on the UWP projects in the 'Solution Explorer' and select the option 'Retarget Projects' from the context menu. This will open up a window where you can select the SDK version to target from a drop-down list of the various SDKs that are installed on the machine.
 * Alternatively, you can manually edit the shared file called `Build.Windows.UWP.ProjectConfiguration.props` which is located in the `allinone` directory. You will need to change the of the `WindowsTargetPlatformVersion` property to the version of the SDK that you would like to use instead.
 
-#### Using MSBUILD At The Command Line
+### Using MSBUILD At The Command Line
 
 You can build ICU from the command line instead of using the Visual Studio GUI. Assuming that you have properly installed Visual Studio to support command line building, you should have a shortcut for the "Developer Command Prompt" listed in the Start Menu. (For Visual Studio 2017 you will need to install the "Desktop development with C++" option).
 
@@ -528,7 +229,7 @@ You can build ICU from the command line instead of using the Visual Studio GUI. 
     devenv.com source\allinone\allinone.sln /build "Release|x64"
     ```
 
-#### Skipping the UWP Projects on the Command Line
+### Skipping the UWP Projects on the Command Line
 
 You can skip (or omit) building the UWP projects on the command line by passing the argument '`SkipUWP=true`' to either MSBUILD or devenv.
 
@@ -544,25 +245,25 @@ You can skip (or omit) building the UWP projects on the command line by passing 
 
 You can also use Cygwin with the MSVC compiler to build ICU, and you can refer to the [How To Build And Install On Windows with Cygwin](#how-to-build-and-install-on-windows-with-cygwin) section for more details.
 
-#### Setting Active Platform
+### Setting Active Platform
 
 Even though you are able to select "x64" as the active platform, if your operating system is not a 64 bit version of Windows, the build will fail. To set the active platform, two different possibilities are:
 
 * Choose "Build" menu, select "Configuration Manager...", and select "Win32" or "x64" for the Active Platform Solution.
 * Another way is to select the desired build configuration from "Solution Platforms" dropdown menu from the standard toolbar. It will say "Win32" or "x64" in the dropdown list.
 
-#### Setting Active Configuration
+### Setting Active Configuration
 
 To set the active configuration, two different possibilities are:
 
 *   Choose "Build" menu, select "Configuration Manager...", and select "Release" or "Debug" for the Active Configuration Solution.
 *   Another way is to select the desired build configuration from "Solution Configurations" dropdown menu from the standard toolbar. It will say "Release" or "Debug" in the dropdown list.
 
-#### Batch Configuration
+### Batch Configuration
 
 If you want to build the Win32 and x64 platforms and Debug and Release configurations at the same time, choose "Build" menu, and select "Batch Build...". Click the "Select All" button, and then click the "Rebuild" button.
 
-### How To Build And Install On Windows with Cygwin
+## How To Build And Install On Windows with Cygwin
 
 Building International Components for Unicode with this configuration requires:
 
@@ -589,7 +290,7 @@ There are two ways you can build ICU with Cygwin. You can build with gcc or Micr
 7.  Optionally, type `make check` to run the test suite, which checks for ICU's functionality integrity (See [testing note](#running-the-tests-from-the-command-line) below).
 8.  Type `make install` to install ICU. If you used the `--prefix=` option on `configure` or `runConfigureICU`, ICU will be installed to the directory you specified. (See [installation note](#installing-icu) below).
 
-#### Configuring ICU on Windows
+### Configuring ICU on Windows
 
 Ensure that the order of the PATH is MSVC, Cygwin, and then other PATHs. The configure script needs certain tools in Cygwin (e.g. grep).
 
@@ -603,7 +304,7 @@ In addition to the Unix [configuration note](#configuring-icu) the following con
 *   `--enable-static` (Requires that U_STATIC_IMPLEMENTATION be defined in user code that links against ICU's static libraries.)
 *   `--with-data-packaging=files` (The pkgdata tool currently does not work in this mode. Manual packaging is required to use this mode.)
 
-### How To Build And Install On UNIX
+## How To Build And Install On UNIX
 
 Building International Components for Unicode on UNIX requires:
 
@@ -645,21 +346,21 @@ gmake install
 ```
     to install ICU. If you used the `--prefix=` option on `configure` or `runConfigureICU`, ICU will be installed to the directory you specified. (See [installation note](#installing-icu) below).
 
-#### Configuring ICU
+### Configuring ICU
 
 Type `"./runConfigureICU --help"` for help on how to run it and a list of supported platforms. You may also want to type `"./configure --help"` to print the available configure options that you may want to give `runConfigureICU`. If you are not using the `runConfigureICU` script, or your platform is not supported by the script, you may need to set your `CC`, `CXX`, `CFLAGS` and `CXXFLAGS` environment variables, and type `"./configure"`. HP-UX users, please see this [note regarding HP-UX multithreaded build issues](#using-icu-in-a-multithreaded-environment-on-hp-ux) with newer compilers. Solaris users, please see this [note regarding Solaris multithreaded build issues](#linking-on-solaris).
 
 ICU is built with strict compiler warnings enabled by default. If this causes excessive numbers of warnings on your platform, use the `--disable-strict` option to configure to reduce the warning level.
 
-#### Running The Tests From The Command Line
+### Running The Tests From The Command Line
 
 You may have to set certain variables if you with to run test programs individually, that is apart from "gmake check". The environment variable **ICU_DATA** can be set to the full pathname of the data directory to indicate where the locale data files and conversion mapping tables are when you are not using the shared library (e.g. by using the .dat archive or the individual data files). The trailing "/" is required after the directory name (e.g. `$Root/source/data/out/` will work, but the value `$Root/source/data/out` is not acceptable). You do not need to set **ICU_DATA** if the complete shared data library is in your library path.
 
-#### Installing ICU
+### Installing ICU
 
 Some platforms use package management tools to control the installation and uninstallation of files on the system, as well as the integrity of the system configuration. You may want to check if ICU can be packaged for your package management tools by looking into the `packaging` directory. (Please note that if you are using a snapshot of ICU from Git, it is probable that the packaging scripts or related files are not up to date with the contents of ICU at this time, so use them with caution).
 
-### How To Build And Install On z/OS (OS/390)
+## How To Build And Install On z/OS (OS/390)
 
 You can install ICU on z/OS or OS/390 (the previous name of z/OS), but IBM tests only the z/OS installation. You install ICU in a z/OS UNIX system services file system such as HFS or zFS. On this platform, it is important that you understand a few details:
 
@@ -683,7 +384,7 @@ export _CEE_RUNOPTS="HEAPPOOLS(ON),HEAP(4M,1M,ANY,FREE,0K,4080)"
 
 *   The rest of the instructions for building and testing ICU on z/OS with UNIX System Services are the same as the [How To Build And Install On UNIX](#how-to-build-and-install-on-unix) section.
 
-#### z/OS (Batch/PDS) support outside the UNIX system services environment
+### z/OS (Batch/PDS) support outside the UNIX system services environment
 
 By default, ICU builds its libraries into the UNIX file system (HFS). In addition, there is a z/OS specific environment variable (OS390BATCH) to build some libraries into the z/OS native file system. This is useful, for example, when your application is externalized via Job Control Language (JCL).
 
@@ -745,7 +446,7 @@ Secondary cylinders : 3
 Data set name type  : PDS
 ```
 
-### How To Build And Install On The IBM i Family (IBM i, i5/OS OS/400)
+## How To Build And Install On The IBM i Family (IBM i, i5/OS OS/400)
 
 Before you start building ICU, ICU requires the following:
 
@@ -804,7 +505,7 @@ gmake check
 ```
 (The `QIBM_MULTI_THREADED=Y` flag will be automatically applied to intltest - you can look at the [iSeries Information Center](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_73/rzahw/rzahwceeco.htm) for more details regarding the running of multiple threads on IBM i.)
 
-### How To Cross Compile ICU
+## How To Cross Compile ICU
 
 This section will explain how to build ICU on one platform, but to produce binaries intended to run on another. This is commonly known as a cross compile.
 
@@ -837,148 +538,6 @@ gnumake
 > :point_right: **Note**: `--with-cross-build` takes an absolute path.
 5.  Tests and testdata can be built with `gnumake tests`.
 
-## How To Package ICU
-
-There are many ways that a person can package ICU with their software products. Usually only the libraries need to be considered for packaging.
-
-On UNIX, you should use `gmake install` to make it easier to develop and package ICU. The bin, lib and include directories are needed to develop applications that use ICU. These directories will be created relative to the `--prefix=`dir" configure option (See the [UNIX build instructions](#how-to-build-and-install-on-unix)). When ICU is built on Windows, a similar directory structure is built.
-
-When changes have been made to the standard ICU distribution, it is recommended that at least one of the following guidelines be followed for special packaging.
-
-1.  Add a suffix name to the library names. This can be done with the `--with-library-suffix` configure option.
-2.  The installation script should install the ICU libraries into the application's directory.
-
-Following these guidelines prevents other applications that use a standard ICU distribution from conflicting with any libraries that you need. On operating systems that do not have a standard C++ ABI (name mangling) for compilers, it is recommended to do this special packaging anyway. More details on customizing ICU are available in the [User's Guide](https://unicode-org.github.io/icu/userguide/). The [ICU Source Code Organization](#SourceCode) section of this readme.html gives a more complete description of the libraries.
-
-ICU has several libraries for you to use. Here is an example of libraries that are frequently packaged.
-
-| Library Name                        | Windows Filename | Linux Filename         | Comment                                                                                                                                                                                             |
-|-------------------------------------|------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Data Library                        | icudtXYl.dll   | libicudata.so.XY.Z | Data required by the Common and I18n libraries. There are many ways to package and [customize this data](https://unicode-org.github.io/icu/userguide/icudata), but by default this is all you need. |
-| Common Library                      | icuucXY.dll    | libicuuc.so.XY.Z   | Base library required by all other ICU libraries.                                                                                                                                                   |
-| Internationalization (i18n) Library | icuinXY.dll    | libicui18n.so.XY.Z | A library that contains many locale based internationalization (i18n) functions.                                                                                                                    |
-| Layout Extensions Engine            | iculxXY.dll    | libiculx.so.XY.Z   | An optional engine for doing paragraph layout that uses parts of ICU. HarfBuzz is required.                                                                                                         |
-| ICU I/O (Unicode stdio) Library     | icuioXY.dll    | libicuio.so.XY.Z   | An optional library that provides a stdio like API with Unicode support.                                                                                                                            |
-| Tool Utility Library                | icutuXY.dll    | libicutu.so.XY.Z   | An internal library that contains internal APIs that are only used by ICU's tools. If you do not use ICU's tools, you do not need this library.                                                     |
-
-
-Normally only the above ICU libraries need to be considered for packaging. The versionless symbolic links to these libraries are only needed for easier development. The _X_, _Y_ and _Z_ parts of the name are the version numbers of ICU. For example, ICU 2.0.2 would have the name libicuuc.so.20.2 for the common library. The exact format of the library names can vary between platforms due to how each platform can handles library versioning.
-
-## Important Notes About Using ICU
-
-### Using ICU in a Multithreaded Environment
-
-Some versions of ICU require calling the `u_init()` function from `uclean.h` to ensure that ICU is initialized properly. In those ICU versions, `u_init()` must be called before ICU is used from multiple threads. There is no harm in calling `u_init()` in a single-threaded application, on a single-CPU machine, or in other cases where `u_init()` is not required.
-
-In addition to ensuring thread safety, `u_init()` also attempts to load at least one ICU data file. Assuming that all data files are packaged together (or are in the same folder in files mode), a failure code from `u_init()` usually means that the data cannot be found. In this case, the data may not be installed properly, or the application may have failed to call `udata_setCommonData()` or `u_setDataDirectory()` which specify to ICU where it can find its data.
-
-Since `u_init()` will load only one or two data files, it cannot guarantee that all of the data that an application needs is available. It cannot check for all data files because the set of files is customizable, and some ICU services work without loading any data at all. An application should always check for error codes when opening ICU service objects (using `ucnv_open()`, `ucol_open()`, C++ constructors, etc.).
-
-#### ICU 3.4 and later
-
-ICU 3.4 self-initializes properly for multi-threaded use. It achieves this without performance penalty by hardcoding the core Unicode properties data, at the cost of some flexibility. (For details see Jitterbug 4497.)
-
-`u_init()` can be used to check for data loading. It tries to load the converter alias table (`cnvalias.icu`).
-
-#### ICU 2.6..3.2
-
-These ICU versions require a call to `u_init()` before multi-threaded use. The services that are directly affected are those that don't have a service object and need to be fast: normalization and character properties.
-
-`u_init()` loads and initializes the data files for normalization and character properties (`unorm.icu` and `uprops.icu`) and can therefore also be used to check for data loading.
-
-#### ICU 2.4 and earlier
-
-ICU 2.4 and earlier versions were not prepared for multithreaded use on multi-CPU platforms where the CPUs implement weak memory coherency. These CPUs include: Power4, Power5, Alpha, Itanium. `u_init()` was not defined yet.
-
-#### Using ICU in a Multithreaded Environment on HP-UX
-
-When ICU is built with aCC on HP-UX, the [`-AA`](http://h21007.www2.hp.com/portal/site/dspp/menuitem.863c3e4cbcdc3f3515b49c108973a801?ciid=eb08b3f1eee02110b3f1eee02110275d6e10RCRD) compiler flag is used. It is required in order to use the latest `<iostream>` API in a thread safe manner. This compiler flag affects the version of the C++ library being used. Your applications will also need to be compiled with `-AA` in order to use ICU.
-
-#### Using ICU in a Multithreaded Environment on Solaris
-
-##### Linking on Solaris
-
-In order to avoid synchronization and threading issues, developers are **suggested** to strictly follow the compiling and linking guidelines for multithreaded applications, specified in the following SUn Solaris document available from Oracle. Most notably, pay strict attention to the following statements from Sun:
-
-> To use libthread, specify `-lthread` before `-lc` on the ld command line, or last on the cc command line.
->
-> To use libpthread, specify `-lpthread` before `-lc` on the ld command line, or last on the cc command line.
-
-Failure to do this may cause spurious lock conflicts, recursive mutex failure, and deadlock.
-
-Source: "_Multithreaded Programming Guide, Compiling and Debugging_", Sun Microsystems, 2002
-[https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html](https://docs.oracle.com/cd/E19683-01/806-6867/compile-74765/index.html)
-
-Note, a version of that chapter from a 2008 document update covering both Solaris 9 and Solaris 10 is available here:
-[http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html](http://docs.oracle.com/cd/E19253-01/816-5137/compile-94179/index.html)
-
-### Windows Platform
-
-If you are building on the Windows platform, it is important that you understand a few of the following build details.
-
-#### DLL directories and the PATH setting
-
-As delivered, the International Components for Unicode build as several DLLs, which are placed in the `<ICU>\bin64` directory. You must add this directory to the PATH environment variable in your system, or any executables you build will not be able to access International Components for Unicode libraries. Alternatively, you can copy the DLL files into a directory already in your PATH, but we do not recommend this. You can wind up with multiple copies of the DLL and wind up using the wrong one.
-
-#### Changing your PATH
-
-##### Windows 2000/XP and above
-
-Use the System Icon in the Control Panel. Pick the "Advanced" tab. Select the "Environment Variables..." button. Select the variable `PATH` in the lower box, and select the lower "Edit..." button. In the "Variable Value" box, append the string `;<ICU>\bin64` to the end of the path string. If there is nothing there, just type in `<ICU>\bin64`. Click the Set button, then the OK button.
-
-> :point_right: **Note**:  When packaging a Windows application for distribution and installation on user systems, copies of the ICU DLLs should be included with the application, and installed for exclusive use by the application. This is the only way to insure that your application is running with the same version of ICU, built with exactly the same options, that you developed and tested with. Refer to Microsoft's guidelines on the usage of DLLs, or search for the phrase "DLL hell" on [msdn.microsoft.com](http://msdn.microsoft.com/).
-
-### UNIX Type Platform
-
-If you are building on a UNIX platform, and if you are installing ICU in a non-standard location, you may need to add the location of your ICU libraries to your `LD_LIBRARY_PATH` or `LIBPATH` environment variable (or the equivalent runtime library path environment variable for your system). The ICU libraries may not link or load properly without doing this.
-
-> :point_right: **Note**:  If you do not want to have to set this variable, you may instead use the `--enable-rpath` option at configuration time. This option will instruct the linker to always look for the libraries where they are installed. You will need to use the appropriate linker options when linking your own applications and libraries against ICU, too. Please refer to your system's linker manual for information about runtime paths. The use of rpath also means that when building a new version of ICU you should not have an older version installed in the same place as the new version's installation directory, as the older libraries will used during the build, instead of the new ones, likely leading to an incorrectly build ICU. This is the proper behavior of rpath.
-
-## Platform Dependencies
-
-### Porting To A New Platform
-
-If you are using ICU's Makefiles to build ICU on a new platform, there are a few places where you will need to add or modify some files. If you need more help, you can always ask the [icu-support mailing list](http://site.icu-project.org/contacts). Once you have finished porting ICU to a new platform, it is recommended that you contribute your changes back to ICU via the icu-support mailing list. This will make it easier for everyone to benefit from your work.
-
-#### Data For a New Platform
-
-For some people, it may not be necessary for completely build ICU. Most of the makefiles and build targets are for tools that are used for building ICU's data, and an application's data (when an application uses ICU resource bundles for its data).
-
-Data files can be built on a different platform when both platforms share the same endianness and the same charset family. This assertion does not include platform dependent DLLs/shared/static libraries. For details see the User Guide [ICU Data](https://unicode-org.github.io/icu/userguide/icudata) chapter.
-
-ICU 3.6 removes the requirement that ICU be completely built in the native operating environment. It adds the icupkg tool which can be run on any platform to turn binary ICU data files from any one of the three formats into any one of the other data formats. This allows a application to use ICU data built anywhere to be used for any other target platform.
-
-**WARNING!** Building ICU without running the tests is not recommended. The tests verify that ICU is safe to use. It is recommended that you try to completely port and test ICU before using the libraries for your own application.
-
-#### Adapting Makefiles For a New Platform
-
-Try to follow the build steps from the [UNIX](#how-to-build-and-install-on-unix) build instructions. If the configure script fails, then you will need to modify some files. Here are the usual steps for porting to a new platform:
-
-1.  Create an mh file in `<ICU>/source/config/`. You can use mh-linux or a similar mh file as your base configuration.
-2.  Modify `<ICU>/source/aclocal.m4` to recognize your platform's mh file.
-3.  Modify `<ICU>/source/configure.in` to properly set your **platform** C Macro define.
-4.  Run [autoconf](http://www.gnu.org/software/autoconf/) in `<ICU>/source/` without any options. The autoconf tool is standard on most Linux systems.
-5.  If you have any optimization options that you want to normally use, you can modify `<ICU>/source/runConfigureICU` to specify those options for your platform.
-6.  Build and test ICU on your platform. It is very important that you run the tests. If you don't run the tests, there is no guarentee that you have properly ported ICU.
-
-### Platform Dependent Implementations
-
-The platform dependencies have been mostly isolated into the following files in the common library. This information can be useful if you are porting ICU to a new platform.
-
-*   **unicode/platform.h.in** (autoconf'ed platforms)
-    **unicode/p_XXXX_.h** (others: pwin32.h, ppalmos.h, ..): Platform-dependent typedefs and defines:
-    *   Generic types like `UBool`, `int8_t`, `int16_t`, `int32_t`, `int64_t`, `uint64_t` etc.
-    *   `U_EXPORT` and `U_IMPORT` for specifying dynamic library import and export
-    *   String handling support for the `char16_t` and `wchar_t` types.
-*   **unicode/putil.h, putil.c**: platform-dependent implementations of various functions that are platform dependent:
-    *   `uprv_isNaN`, `uprv_isInfinite`, `uprv_getNaN` and `uprv_getInfinity` for handling special floating point values.
-    *   `uprv_tzset`, `uprv_timezone`, `uprv_tzname` and `time` for getting platform specific time and time zone information.
-    *   `u_getDataDirectory` for getting the default data directory.
-    *   `uprv_getDefaultLocaleID` for getting the default locale setting.
-    *   `uprv_getDefaultCodepage` for getting the default codepage encoding.
-*   **umutex.h, umutex.c**: Code for doing synchronization in multithreaded applications. If you wish to use International Components for Unicode in a multithreaded application, you must provide a synchronization primitive that the classes can use to protect their global data against simultaneous modifications. We already supply working implementations for many platforms that ICU builds on.
-*   **umapfile.h, umapfile.c**: functions for mapping or otherwise reading or loading files into memory. All access by ICU to data from files makes use of these functions.
-*   Using platform specific `#ifdef` macros are highly discouraged outside of the scope of these files. When the source code gets updated in the future, these `#ifdef`'s can cause testing problems for your platform.
 
 * * *
 

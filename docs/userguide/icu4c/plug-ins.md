@@ -2,7 +2,7 @@
 layout: default
 title: Plug-ins
 nav_order: 4
-parent: ICU Data
+parent: ICU4C
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.

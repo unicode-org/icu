@@ -1,7 +1,7 @@
 ---
 layout: default
 title: ICU Data
-nav_order: 13
+nav_order: 15
 has_children: true
 ---
 <!--
@@ -1127,15 +1127,14 @@ corresponding resource files already in that directory.
 
 1.  [ICU4C](http://icu-project.org/download/)
 
-2.  Compilers and tools required for [building ICU4C](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#HowToBuild).
+2.  Compilers and tools required for [building ICU4C](../icu4c/build).
 
 3.  J2SE SDK version 5 or above
 
 #### Procedure
 
 1.  Download and build ICU4C on a Windows or Linux machine. For instructions on downloading and building ICU4C, please click
-    [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#HowToBuild).
+    [here](../icu4c/build).
 
 2.  Follow the remaining instructions in
-    [*$icu4c_root*/source/data/icu4j-readme.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/icu4j-readme.txt).
-    *$icu4c_root* is the root directory of ICU4C source package.
+    the [ICU4J Readme](../icu4j/).

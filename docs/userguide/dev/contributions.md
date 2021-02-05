@@ -2,7 +2,7 @@
 layout: default
 title: Contributions
 nav_order: 4
-parent: Misc
+parent: Contributors
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
