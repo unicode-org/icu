@@ -2,7 +2,7 @@
 layout: default
 title: Synchronization
 nav_order: 2
-parent: Misc
+parent: Contributors
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.

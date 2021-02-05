@@ -2,7 +2,7 @@
 layout: default
 title: Custom ICU4C Synchronization
 nav_order: 3
-parent: Misc
+parent: Contributors
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.

@@ -1,8 +1,8 @@
 ---
 layout: default
-title: ICU4J Readme
-nav_order: 8
-parent: ICU
+title: ICU4J
+nav_order: 4
+has_children: true
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -53,20 +53,6 @@ ICU4J is an add-on to the regular JRE that provides:
 
 > :point_right: **Note:** We continue to provide assistance to Java, and in some cases, ICU4J support has been rolled into a later release of Java. For example, BCP47 language tag support including Unicode locale extensions is now in Java 7\. However, the most current and complete version is always found in ICU4J.
 
-## What Is New In The Current Release?
-
-See the [ICU download page](http://site.icu-project.org/download/) to find the subpage for the current release, including any other changes, bug fixes, known issues, changes to supported platforms and build environments, and migration issues for existing applications migrating from previous ICU releases.
-
-The subpage for the current release will also include an API Change Report, both for ICU4C and ICU4J, for a complete list of APIs added, removed, or changed in this release.
-
-The list of API changes since the previous ICU4J release is available [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/unicode-org/icu/main/icu4j/APIChangeReport.html).
-
-Changes in previous releases can also be found the main [ICU download page](http://site.icu-project.org/download) in its version-specific subpages.
-
-## License Information
-
-The ICU projects (ICU4C and ICU4J) are hosted by the [Unicode Consortium](http://www.unicode.org/). The ICU binary and source files are distributed under the [UNICODE DATA FILES AND SOFTWARE LICENSE](http://www.unicode.org/copyright.html). The full copy of the license and third party software licenses are available in [LICENSE](https://github.com/unicode-org/icu/blob/main/icu4j/main/shared/licenses/LICENSE) file included in this package.
-
 ## Platform Dependencies
 
 The minimum Java runtime version supported by ICU4J 68 is version 7\. Java runtime version 6 is not supported.
@@ -115,8 +101,7 @@ Below, all directory paths are relative to the directory where the ICU4J source 
 
 | Path                         | Description                                                                             |
 |------------------------------|-----------------------------------------------------------------------------------------|
-| readme.html                  | A description of ICU4J (International Components for Unicode for Java)                  |
-| build.html                   | The main Ant build file for ICU4J. See [How to Install and Build](#how-to-install-and-build) for more information |
+| build.xml                   | The main Ant build file for ICU4J. See [How to Install and Build](#how-to-install-and-build) for more information |
 | main/shared/licenses/LICENSE | ICU license                                                                             |
 
 ### ICU4J runtime class files
@@ -339,7 +324,7 @@ For more information, read the Ant documentation and the **build.xml** file.
 
 > :point_right: **Note**: **Eclipse users:** See the ICU4J site for information on [how to configure Eclipse](http://site.icu-project.org/setup/eclipse) to build and develop ICU4J on Eclipse IDE.
 
-> :point_right: **Note**: To install and configure ICU4J Locale Service Provider, please refer the user guide page [ICU4J Locale Service Provider](https://unicode-org.github.io/icu/userguide/icu4j-locale-service-provider).
+> :point_right: **Note**: To install and configure ICU4J Locale Service Provider, please refer the user guide page [ICU4J Locale Service Provider](./locale-service-provider).
 
 ## Trying Out ICU4J
 
@@ -412,7 +397,7 @@ The files in `icudata.jar` get extracted to `com/ibm/icu/impl/data` in the build
 
 ### Building ICU4J Resources from ICU4C
 
-ICU4J data is built by ICU4C tools. Please see [`icu4j-readme.txt`](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/icu4j-readme.txt) in `icu4c/source/data` for the procedures.
+ICU4J data is built by ICU4C tools. Please see [ICU Data Build Tool](../icu_data/buildtool) for the procedures.
 
 #### Generating Data from CLDR
 
@@ -426,7 +411,7 @@ ICU4J data is built by ICU4C tools. Please see [`icu4j-readme.txt`](https://gith
 4.  Follow the instructions in [`icu4c/source/data/cldr-icu-readme.txt`](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/cldr-icu-readme.txt)
 5.  Rebuild ICU4C with the newly generated data.
 6.  Run ICU4C tests to verify that the new data is good.
-7.  Build ICU4J data from ICU4C data by following the procedures in [`icu4j/source/data/icu4j-readme.txt`](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/icu4j-readme.txt)
+7.  Build ICU4J data from ICU4C data by following the procedures in [ICU Data Build Tool](../icu_data/buildtool)
 8.  cd to `icu4j` dir
 9.  Build and test icu4j
 
@@ -445,8 +430,6 @@ You can optionally configure ICU4J date and time service classes to use underlyi
 Your comments are important to making ICU4J successful. We are committed to investigate any bug reports or suggestions, and will use your feedback to help plan future releases.
 
 To submit comments, request features and report bugs, please see [ICU bug database information](http://site.icu-project.org/bugs) or contact us through the [ICU Support mailing list](http://site.icu-project.org/contacts). While we are not able to respond individually to each comment, we do review all comments.
-
-## Thank you for your interest in ICU4J!
 
 * * *
 

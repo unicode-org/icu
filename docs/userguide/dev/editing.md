@@ -2,7 +2,7 @@
 layout: default
 title: User Guide Editing
 nav_order: 5
-parent: Misc
+parent: Contributors
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -159,6 +159,7 @@ To activate the version of Ruby:
 ```bash
 rbenv init  # OR:  eval "$(rbenv init -)"
 rbenv shell <version-num>
+rbenv versions  # verify the specified version is in use
 ```
 
 To install [Bundler](https://bundler.io/):
@@ -183,6 +184,7 @@ instance.  Then use Bundler to execute the Jekyll server.
 ```bash
 rbenv init  # OR:  eval "$(rbenv init -)"
 rbenv shell <version-num>
+cd <ICU>/docs  # change to User Guide docs root directory
 bundle update
 bundle exec jekyll server
 ```

@@ -2,7 +2,7 @@
 layout: default
 title: Coding Guidelines
 nav_order: 1
-parent: Misc
+parent: Contributors
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -1726,8 +1726,7 @@ must be set to 0 (default).
 ### Building cintltst
 
 To compile this test suite using Microsoft Visual C++ (MSVC), follow the
-instructions in `icu4c/source/readme.html#HowToInstall` for building the `allC`
-workspace. This builds the libraries as well as the `cintltst` executable.
+instructions in [How To Build And Install On Windows](../icu4c/build#how-to-build-and-install-on-windows). This builds the libraries as well as the `cintltst` executable.
 
 ### Executing cintltst
 
