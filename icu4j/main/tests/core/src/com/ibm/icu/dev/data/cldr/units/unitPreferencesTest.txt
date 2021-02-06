@@ -83,21 +83,13 @@ consumption;	vehicle-fuel;	BR;	11 / 10000000;	1.1E-6;	cubic-meter-per-meter;	11 
 consumption;	vehicle-fuel;	BR;	1 / 1000000;	1.0E-6;	cubic-meter-per-meter;	1;	1.0;	liter-per-kilometer
 consumption;	vehicle-fuel;	BR;	9 / 10000000;	9.0E-7;	cubic-meter-per-meter;	9 / 10;	0.9;	liter-per-kilometer
 
-consumption-inverse;	default;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	11 / 10;	1.1;	kilometer-per-centiliter
-consumption-inverse;	default;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	kilometer-per-centiliter
-consumption-inverse;	default;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	9 / 10;	0.9;	kilometer-per-centiliter
+consumption;	vehicle-fuel;	US;	112903 / 52800000000;	2.1383143939394E-6;	cubic-meter-per-meter;	11 / 10;	1.1;	mile-per-gallon
+consumption;	vehicle-fuel;	US;	112903 / 48000000000;	2.3521458333333E-6;	cubic-meter-per-meter;	1;	1.0;	mile-per-gallon
+consumption;	vehicle-fuel;	US;	112903 / 43200000000;	2.6134953703704E-6;	cubic-meter-per-meter;	9 / 10;	0.9;	mile-per-gallon
 
-consumption-inverse;	vehicle-fuel;	001;	110000000;	1.1E8;	meter-per-cubic-meter;	11 / 10;	1.1;	kilometer-per-centiliter
-consumption-inverse;	vehicle-fuel;	001;	100000000;	1.0E8;	meter-per-cubic-meter;	1;	1.0;	kilometer-per-centiliter
-consumption-inverse;	vehicle-fuel;	001;	90000000;	9.0E7;	meter-per-cubic-meter;	9 / 10;	0.9;	kilometer-per-centiliter
-
-consumption-inverse;	vehicle-fuel;	US;	52800000000 / 112903;	467658.0781732992;	meter-per-cubic-meter;	11 / 10;	1.1;	mile-per-gallon
-consumption-inverse;	vehicle-fuel;	US;	48000000000 / 112903;	425143.707430272;	meter-per-cubic-meter;	1;	1.0;	mile-per-gallon
-consumption-inverse;	vehicle-fuel;	US;	43200000000 / 112903;	382629.3366872448;	meter-per-cubic-meter;	9 / 10;	0.9;	mile-per-gallon
-
-consumption-inverse;	vehicle-fuel;	CA;	177027840000 / 454609;	389406.8089281118;	meter-per-cubic-meter;	11 / 10;	1.1;	mile-per-gallon-imperial
-consumption-inverse;	vehicle-fuel;	CA;	160934400000 / 454609;	354006.1899346471;	meter-per-cubic-meter;	1;	1.0;	mile-per-gallon-imperial
-consumption-inverse;	vehicle-fuel;	CA;	144840960000 / 454609;	318605.5709411824;	meter-per-cubic-meter;	9 / 10;	0.9;	mile-per-gallon-imperial
+consumption;	vehicle-fuel;	CA;	454609 / 177027840000;	2.5680085121075E-6;	cubic-meter-per-meter;	11 / 10;	1.1;	mile-per-gallon-imperial
+consumption;	vehicle-fuel;	CA;	454609 / 160934400000;	2.8248093633182E-6;	cubic-meter-per-meter;	1;	1.0;	mile-per-gallon-imperial
+consumption;	vehicle-fuel;	CA;	454609 / 144840960000;	3.1386770703536E-6;	cubic-meter-per-meter;	9 / 10;	0.9;	mile-per-gallon-imperial
 
 duration;	default;	001;	95040;	95040.0;	second;	11 / 10;	1.1;	day
 duration;	default;	001;	86400;	86400.0;	second;	1;	1.0;	day

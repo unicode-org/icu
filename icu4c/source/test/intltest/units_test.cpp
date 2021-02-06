@@ -198,7 +198,7 @@ void UnitsTest::testConverter() {
         {"mebibyte", "byte", 1, 1048576},
         {"gibibyte", "kibibyte", 1, 1048576},
         {"pebibyte", "tebibyte", 4, 4096},
-        {"zebibyte", "pebibyte", 1.0/16, 65536.0},
+        {"zebibyte", "pebibyte", 1.0 / 16, 65536.0},
         {"yobibyte", "exbibyte", 1, 1048576},
         // Mass
         {"gram", "kilogram", 1.0, 0.001},
@@ -232,6 +232,9 @@ void UnitsTest::testConverter() {
         {"square-yard", "square-foot", 0, 0},
         {"square-yard", "square-foot", 0.000001, 0.000009},
         {"square-mile", "square-foot", 0.0, 0.0},
+        // Fuel Consumption
+        {"cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1},
+        {"cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9},
     };
 
     for (const auto &testCase : testCases) {
@@ -262,6 +265,14 @@ void UnitsTest::testConverter() {
         }
         assertEqualsNear(UnicodeString("testConverter: ") + testCase.source + " to " + testCase.target,
                          testCase.expectedValue, converter.convert(testCase.inputValue), maxDelta);
+
+        maxDelta = 1e-6 * uprv_fabs(testCase.inputValue);
+        if (testCase.inputValue == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(
+            UnicodeString("testConverter inverse: ") + testCase.target + " back to " + testCase.source,
+            testCase.inputValue, converter.convertInverse(testCase.expectedValue), maxDelta);
     }
 }
 
