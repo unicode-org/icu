@@ -336,17 +336,29 @@ public class UnitsTest {
                 new TestData("square-yard", "square-foot", 0, 0),
                 new TestData("square-yard", "square-foot", 0.000001, 0.000009),
                 new TestData("square-mile", "square-foot", 0.0, 0.0),
+                // Fuel Consumption
+                new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1),
+                new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9),
         };
 
         ConversionRates conversionRates = new ConversionRates();
         for (TestData test : tests) {
             UnitsConverter converter = new UnitsConverter(test.source, test.target, conversionRates);
+
             double maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
             if (test.expected.doubleValue() == 0) {
                 maxDelta = 1e-12;
             }
             assertEquals("testConverter: " + test.source + " to " + test.target,
                          test.expected.doubleValue(), converter.convert(test.input).doubleValue(),
+                         maxDelta);
+
+            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
+            if (test.input.doubleValue() == 0) {
+                maxDelta = 1e-12;
+            }
+            assertEquals("testConverter inverse: " + test.target + " back to " + test.source,
+                         test.input.doubleValue(), converter.convertInverse(test.expected).doubleValue(),
                          maxDelta);
         }
     }
@@ -489,8 +501,13 @@ public class UnitsTest {
             }
 
             public String toString() {
-                return "TestCase: " + category + ", " + usage + ", " + region +
-                    "; Input: " + input + " " + inputUnit.first + "; Expected Values: " + expectedInOrder;
+                ArrayList<MeasureUnitImpl> outputUnits = new ArrayList<>();
+                for (Pair<String, MeasureUnitImpl> unit : outputUnitInOrder) {
+                    outputUnits.add(unit.second);
+                }
+                return "TestCase: " + category + ", " + usage + ", " + region + "; Input: " + input +
+                    " " + inputUnit.first + "; Expected Values: " + expectedInOrder +
+                    ", Expected Units: " + outputUnits;
             }
         }
 

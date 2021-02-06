@@ -13,6 +13,7 @@ import com.ibm.icu.util.MeasureUnit;
 
 public class UnitsConverter {
     private BigDecimal conversionRate;
+    private boolean reciprocal;
     private BigDecimal offset;
 
     /**
@@ -27,6 +28,7 @@ public class UnitsConverter {
      */
     public UnitsConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
+        // TODO(icu-units#82): throw exception if conversion between incompatible types was requested?
         assert (convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
 
         Factor sourceToBase = conversionRates.getFactorToBase(source);
@@ -35,11 +37,15 @@ public class UnitsConverter {
         if (convertibility == Convertibility.CONVERTIBLE) {
             this.conversionRate = sourceToBase.divide(targetToBase).getConversionRate();
         } else {
+            assert convertibility == Convertibility.RECIPROCAL;
             this.conversionRate = sourceToBase.multiply(targetToBase).getConversionRate();
         }
+        this.reciprocal = convertibility == Convertibility.RECIPROCAL;
 
         // calculate the offset
         this.offset = conversionRates.getOffset(source, target, sourceToBase, targetToBase, convertibility);
+        // We should see no offsets for reciprocal conversions - they don't make sense:
+        assert convertibility != Convertibility.RECIPROCAL || this.offset == BigDecimal.ZERO;
     }
 
     static public Convertibility extractConvertibility(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
@@ -83,11 +89,36 @@ public class UnitsConverter {
     }
 
     public BigDecimal convert(BigDecimal inputValue) {
-        return inputValue.multiply(this.conversionRate).add(offset);
+        BigDecimal result = inputValue.multiply(this.conversionRate).add(offset);
+        if (this.reciprocal) {
+            // We should see no offsets for reciprocal conversions - they don't make sense:
+            assert offset == BigDecimal.ZERO;
+            if (result == BigDecimal.ZERO) {
+                // TODO: demonstrate the resulting behaviour in tests... and
+                // figure out desired behaviour. (Theoretical result should be
+                // infinity, not 0, but BigDecimal does not support infinity.)
+                return BigDecimal.ZERO;
+            }
+            result = BigDecimal.ONE.divide(result, DECIMAL128);
+        }
+        return result;
     }
 
     public BigDecimal convertInverse(BigDecimal inputValue) {
-        return inputValue.subtract(offset).divide(this.conversionRate, DECIMAL128);
+        BigDecimal result = inputValue;
+        if (this.reciprocal) {
+            // We should see no offsets for reciprocal conversions - they don't make sense:
+            assert offset == BigDecimal.ZERO;
+            if (result == BigDecimal.ZERO) {
+                // TODO: demonstrate the resulting behaviour in tests... and
+                // figure out desired behaviour. (Theoretical result should be
+                // infinity, not 0, but BigDecimal does not support infinity.)
+                return BigDecimal.ZERO;
+            }
+            result = BigDecimal.ONE.divide(result, DECIMAL128);
+        }
+        result = result.subtract(offset).divide(this.conversionRate, DECIMAL128);
+        return result;
     }
 
     public enum Convertibility {
