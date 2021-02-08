@@ -42,6 +42,20 @@ struct U_I18N_API MeasureUnitImplWithIndex : public UMemory {
 };
 
 /**
+ * Looks up the "unitQuantity" (aka "type" or "category") of a base unit
+ * identifier. The category is returned via `result`, which must initially be
+ * empty.
+ *
+ * This only supports base units: other units must be resolved to base units
+ * before passing to this function, otherwise U_UNSUPPORTED_ERROR status will be
+ * returned.
+ *
+ * Categories are found in `unitQuantities` in the `units` resource (see
+ * `units.txt`).
+ */
+CharString U_I18N_API getUnitQuantity(StringPiece baseUnitIdentifier, UErrorCode &status);
+
+/**
  * A struct representing a single unit (optional SI or binary prefix, and dimensionality).
  */
 struct U_I18N_API SingleUnitImpl : public UMemory {
@@ -71,8 +85,18 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
     void appendNeutralIdentifier(CharString &result, UErrorCode &status) const;
 
     /**
+     * Returns the index of this unit's "quantity" in unitQuantities (in
+     * measunit_extra.cpp). The value of this index determines sort order for
+     * normalization of unit identifiers.
+     */
+    int32_t getUnitCategoryIndex() const;
+
+    /**
      * Compare this SingleUnitImpl to another SingleUnitImpl for the sake of
      * sorting and coalescing.
+     *
+     * Sort order of units is specified by UTS #35
+     * (https://unicode.org/reports/tr35/tr35-info.html#Unit_Identifier_Normalization).
      *
      * Takes the sign of dimensionality into account, but not the absolute
      * value: per-meter is not considered the same as meter, but meter is
@@ -90,6 +114,16 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
         if (dimensionality > 0 && other.dimensionality < 0) {
             return -1;
         }
+        // Sort by official quantity order
+        int32_t thisQuantity = this->getUnitCategoryIndex();
+        int32_t otherQuantity = other.getUnitCategoryIndex();
+        if (thisQuantity < otherQuantity) {
+            return -1;
+        }
+        if (thisQuantity > otherQuantity) {
+            return 1;
+        }
+        // If quantity order didn't help, then we go by index.
         if (index < other.index) {
             return -1;
         }
@@ -128,7 +162,8 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
 
     /**
      * Simple unit index, unique for every simple unit, -1 for the dimensionless
-     * unit. This is an index into a string list in measunit_extra.cpp.
+     * unit. This is an index into a string list in measunit_extra.cpp, as
+     * loaded by SimpleUnitIdentifiersSink.
      *
      * The default value is -1, meaning the dimensionless unit:
      * isDimensionless() will return true, until index is changed.

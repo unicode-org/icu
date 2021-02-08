@@ -5,7 +5,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "measunit_impl.h"
 #include "units_data.h"
+
 #include "intltest.h"
 
 using namespace ::icu::units;
@@ -51,9 +53,10 @@ void UnitsDataTest::testGetUnitCategory() {
 
     IcuTestErrorCode status(*this, "testGetUnitCategory");
     for (const auto &t : testCases) {
-        CharString category = getUnitCategory(t.unit, status);
-        status.errIfFailureAndReset("getUnitCategory(%s)", t.unit);
-        assertEquals("category", t.expectedCategory, category.data());
+        CharString category = getUnitQuantity(t.unit, status);
+        if (!status.errIfFailureAndReset("getUnitCategory(%s)", t.unit)) {
+            assertEquals("category", t.expectedCategory, category.data());
+        }
     }
 }
 

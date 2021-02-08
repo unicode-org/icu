@@ -146,7 +146,7 @@
     ; /unitConstants/$1 ; values="$2"
 
 //supplementalData/unitQuantities/unitQuantity[@baseUnit="(%W)"][@quantity="(%W)"](?:[@status="%W"])?
-    ; /unitQuantities/$1 ; values="$2"
+    ; /unitQuantities/<FIFO>/$1 ; values="$2"
 
 //supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"](?:[@systems="%W"])?
     ; /convertUnits/$1/target ; values=$2

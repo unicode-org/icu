@@ -364,29 +364,6 @@ int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other, b
     return cmp;
 }
 
-CharString U_I18N_API getUnitCategory(const char *baseUnitIdentifier, UErrorCode &status) {
-    CharString result;
-    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
-    LocalUResourceBundlePointer unitQuantities(
-        ures_getByKey(unitsBundle.getAlias(), "unitQuantities", NULL, &status));
-    int32_t categoryLength;
-    if (U_FAILURE(status)) { return result; }
-    const UChar *uCategory =
-        ures_getStringByKey(unitQuantities.getAlias(), baseUnitIdentifier, &categoryLength, &status);
-    if (U_FAILURE(status)) {
-        // TODO(icu-units#130): support inverting any unit, with correct
-        // fallback logic: inversion and fallback may depend on presence or
-        // absence of a usage for that category.
-        if (uprv_strcmp(baseUnitIdentifier, "meter-per-cubic-meter") == 0) {
-            status = U_ZERO_ERROR;
-            result.append("consumption", status);
-            return result;
-        }
-    }
-    result.appendInvariantChars(uCategory, categoryLength, status);
-    return result;
-}
-
 // TODO: this may be unnecessary. Fold into ConversionRates class? Or move to anonymous namespace?
 void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status) {
     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
