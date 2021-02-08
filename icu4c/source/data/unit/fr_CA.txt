@@ -312,6 +312,7 @@ fr_CA{
             }
             yard{
                 dnam{"verges"}
+                gender{"feminine"}
                 one{"{0} verge"}
                 other{"{0} verges"}
             }
@@ -503,11 +504,13 @@ fr_CA{
             }
             quart{
                 dnam{"pintes"}
+                gender{"feminine"}
                 one{"{0} pinte"}
                 other{"{0} pintes"}
             }
             quart-imperial{
                 dnam{"pinte impériale"}
+                gender{"feminine"}
                 one{"{0} pinte impériale"}
                 other{"{0} pintes impériales"}
             }

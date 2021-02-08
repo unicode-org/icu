@@ -39,19 +39,36 @@ constexpr int32_t DNAM_INDEX = StandardPlural::Form::COUNT;
  * `per` forms.
  */
 constexpr int32_t PER_INDEX = StandardPlural::Form::COUNT + 1;
+/**
+ * Gender of the word, in languages with grammatical gender.
+ */
+constexpr int32_t GENDER_INDEX = StandardPlural::Form::COUNT + 2;
 // Number of keys in the array populated by PluralTableSink.
-constexpr int32_t ARRAY_LENGTH = StandardPlural::Form::COUNT + 2;
+constexpr int32_t ARRAY_LENGTH = StandardPlural::Form::COUNT + 3;
 
 static int32_t getIndex(const char* pluralKeyword, UErrorCode& status) {
-    // pluralKeyword can also be "dnam" or "per"
-    if (uprv_strcmp(pluralKeyword, "dnam") == 0) {
-        return DNAM_INDEX;
-    } else if (uprv_strcmp(pluralKeyword, "per") == 0) {
-        return PER_INDEX;
-    } else {
-        StandardPlural::Form plural = StandardPlural::fromString(pluralKeyword, status);
-        return plural;
+    // pluralKeyword can also be "dnam", "per", or "gender"
+    switch (*pluralKeyword) {
+    case 'd':
+        if (uprv_strcmp(pluralKeyword + 1, "nam") == 0) {
+            return DNAM_INDEX;
+        }
+        break;
+    case 'g':
+        if (uprv_strcmp(pluralKeyword + 1, "ender") == 0) {
+            return GENDER_INDEX;
+        }
+        break;
+    case 'p':
+        if (uprv_strcmp(pluralKeyword + 1, "er") == 0) {
+            return PER_INDEX;
+        }
+        break;
+    default:
+        break;
     }
+    StandardPlural::Form plural = StandardPlural::fromString(pluralKeyword, status);
+    return plural;
 }
 
 // Selects a string out of the `strings` array which corresponds to the
@@ -92,6 +109,10 @@ class PluralTableSink : public ResourceSink {
         ResourceTable pluralsTable = value.getTable(status);
         if (U_FAILURE(status)) { return; }
         for (int32_t i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {
+            // TODO(ICU-21123): Load the correct inflected form, possibly from the "case" structure.
+            if (uprv_strcmp(key, "case") == 0) {
+                continue;
+            }
             int32_t index = getIndex(key, status);
             if (U_FAILURE(status)) { return; }
             if (!outArray[index].isBogus()) {

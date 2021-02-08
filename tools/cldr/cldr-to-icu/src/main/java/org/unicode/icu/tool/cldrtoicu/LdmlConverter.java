@@ -113,6 +113,8 @@ public final class LdmlConverter {
             "unitConstants",
             "unitQuantities",
             "unitPreferenceData");
+    private static final Predicate<CldrPath> GRAMMATICAL_FEATURES_PATHS =
+        supplementalMatcher("grammaticalData");
     private static final Predicate<CldrPath> NUMBERING_SYSTEMS_PATHS =
         supplementalMatcher("numberingSystems");
     private static final Predicate<CldrPath> WINDOWS_ZONES_PATHS =
@@ -154,6 +156,7 @@ public final class LdmlConverter {
         SUPPLEMENTAL_DATA(SUPPLEMENTAL),
         UNITS(SUPPLEMENTAL),
         CURRENCY_DATA(SUPPLEMENTAL),
+        GRAMMATICAL_FEATURES(SUPPLEMENTAL),
         METADATA(SUPPLEMENTAL),
         META_ZONES(SUPPLEMENTAL),
         NUMBERING_SYSTEMS(SUPPLEMENTAL),
@@ -483,6 +486,9 @@ public final class LdmlConverter {
             case CURRENCY_DATA:
                 processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", false);
                 break;
+
+            case GRAMMATICAL_FEATURES:
+                processSupplemental("grammaticalFeatures", GRAMMATICAL_FEATURES_PATHS, "misc", false);
 
             case METADATA:
                 processSupplemental("metadata", METADATA_PATHS, "misc", false);
