@@ -3672,13 +3672,12 @@ void MeasureFormatTest::TestIdentifiers() {
         {"kilometer-per-second-per-megaparsec", "kilometer-per-megaparsec-second"},
 
         // TODO(ICU-21284): Add more test cases once the proper ranking is available.
-        // TODO(ICU-21284,icu-units#70): These cases are the wrong way around:
-        {"pound-force-foot", "foot-pound-force"},
-        {"foot-pound-force", "foot-pound-force"},
-        {"kilowatt-hour", "hour-kilowatt"},
-        {"hour-kilowatt", "hour-kilowatt"},
-        {"newton-meter", "meter-newton"},
-        {"meter-newton", "meter-newton"},
+        {"newton-meter", "newton-meter"},
+        {"meter-newton", "newton-meter"},
+        {"pound-force-foot", "pound-force-foot"},
+        {"foot-pound-force", "pound-force-foot"},
+        {"kilowatt-hour", "kilowatt-hour"},
+        {"hour-kilowatt", "kilowatt-hour"},
 
         // Testing prefixes are parsed and produced correctly (ensures no
         // collisions in the enum values)
