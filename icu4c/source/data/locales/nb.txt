@@ -751,6 +751,10 @@ nb{
             }
         }
         minimalPairs{
+            gender{
+                masculine{"Min {0} den har tre kanter"}
+                neuter{"Mitt {0} det har tre kanter"}
+            }
             ordinal{
                 other{"Ta {0}. sving til høyre."}
             }

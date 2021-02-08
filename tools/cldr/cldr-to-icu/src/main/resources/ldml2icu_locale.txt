@@ -298,6 +298,8 @@
 //ldml/numbers/decimalFormats[@numberSystem="(%W)"]/decimalFormatLength[@type="long"]/decimalFormat[@type="standard"]/pattern[@type="(%N)"][@count="(%W)"] ; /NumberElements/$1/patternsLong/decimalFormat/$2/$3
 
 //ldml/numbers/miscPatterns[@numberSystem="(%W)"]/pattern[@type="(%W)"] ; /NumberElements/$1/miscPatterns/$2
+//ldml/numbers/minimalPairs/caseMinimalPairs[@case="(%A)"] ; /NumberElements/minimalPairs/case/$1
+//ldml/numbers/minimalPairs/genderMinimalPairs[@gender="(%A)"] ; /NumberElements/minimalPairs/gender/$1
 //ldml/numbers/minimalPairs/ordinalMinimalPairs[@ordinal="(%A)"] ; /NumberElements/minimalPairs/ordinal/$1
 //ldml/numbers/minimalPairs/pluralMinimalPairs[@count="(%A)"] ; /NumberElements/minimalPairs/plural/$1
 
@@ -318,10 +320,20 @@
 //ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/displayName ; /unitsShort/$1/$2/dnam
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/displayName ; /units/$1/$2/dnam
 
+//ldml/units/unitLength[@type="narrow"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /unitsNarrow/$1/$2/case/$4/$3
+//ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /unitsShort/$1/$2/case/$4/$3
+//ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /units/$1/$2/case/$4/$3
 //ldml/units/unitLength[@type="narrow"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"] ; /unitsNarrow/$1/$2/$3
 //ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"] ; /unitsShort/$1/$2/$3
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"] ; /units/$1/$2/$3
 
+//ldml/units/unitLength[@type="narrow"]/unit[@type="(\w++)-(%A)"]/gender ; /unitsNarrow/$1/$2/gender
+//ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/gender ; /unitsShort/$1/$2/gender
+//ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/gender ; /units/$1/$2/gender
+
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern[@case="(%A)"] ; /unitsNarrow/compound/$1
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern[@case="(%A)"] ; /unitsShort/compound/$1
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern[@case="(%A)"] ; /units/compound/$1/
 //ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /unitsNarrow/compound/$1
 //ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /unitsShort/compound/$1
 //ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /units/compound/$1
