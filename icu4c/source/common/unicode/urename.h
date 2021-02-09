@@ -482,6 +482,7 @@
 #define ubiditransform_open U_ICU_ENTRY_POINT_RENAME(ubiditransform_open)
 #define ubiditransform_transform U_ICU_ENTRY_POINT_RENAME(ubiditransform_transform)
 #define ublock_getCode U_ICU_ENTRY_POINT_RENAME(ublock_getCode)
+#define ubrk_clone U_ICU_ENTRY_POINT_RENAME(ubrk_clone)
 #define ubrk_close U_ICU_ENTRY_POINT_RENAME(ubrk_close)
 #define ubrk_countAvailable U_ICU_ENTRY_POINT_RENAME(ubrk_countAvailable)
 #define ubrk_current U_ICU_ENTRY_POINT_RENAME(ubrk_current)
