@@ -171,6 +171,7 @@ static void TestUTextAPI(void);
 static void TestRefreshInput(void);
 static void TestBug8421(void);
 static void TestBug10815(void);
+static void TestURegexOpenCrash(void);
 
 void addURegexTest(TestNode** root);
 
@@ -182,6 +183,7 @@ void addURegexTest(TestNode** root)
     addTest(root, &TestRefreshInput, "regex/TestRefreshInput");
     addTest(root, &TestBug8421,   "regex/TestBug8421");
     addTest(root, &TestBug10815,   "regex/TestBug10815");
+    addTest(root, &TestURegexOpenCrash,   "regex/TestURegexOpenCrash");
 }
 
 /*
@@ -2318,6 +2320,13 @@ static void TestBug10815() {
     TEST_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
 
     uregex_close(re);
+}
+
+static void TestURegexOpenCrash() {
+    UErrorCode           status = U_ZERO_ERROR;
+    URegularExpression  *re;
+    TEST_SETUP("(?<=(?:(?<=(?:(?<=(?:(?<=)){2})){3})){4}", "0123456789ABCDEF", 0);
+    TEST_TEARDOWN;
 }
 
     
