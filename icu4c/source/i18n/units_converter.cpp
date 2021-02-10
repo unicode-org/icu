@@ -593,6 +593,17 @@ double UnitsConverter::convertInverse(double inputValue) const {
     return result;
 }
 
+ConversionInfo UnitsConverter::getConversionInfo() const {
+    ConversionInfo result;
+    result.conversionRate = conversionRate_.factorNum / conversionRate_.factorDen;
+    result.offset =
+        (conversionRate_.sourceOffset * (conversionRate_.factorNum / conversionRate_.factorDen)) -
+        conversionRate_.targetOffset;
+    result.reciprocal = conversionRate_.reciprocal;
+
+    return result;
+}
+
 } // namespace units
 U_NAMESPACE_END
 
