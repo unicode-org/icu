@@ -1538,6 +1538,74 @@ enum UTimeZoneTransitionType {
 
 typedef enum UTimeZoneTransitionType UTimeZoneTransitionType; /**< @stable ICU 50 */
 
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Time zone local option for ucal_getTimeZoneOffsetFromLocal
+ * @draft ICU 69
+ */
+enum UTimeZoneLocalOption {
+    /**
+     * The time type option for standard time used by
+     * ucal_getTimeZoneLocal().
+     * @draft ICU 69
+     */
+    UCAL_TZ_LOCAL_STANDARD = 0x01,
+    /**
+     * The time type option for daylight saving time used by
+     * ucal_getTimeZoneLocal().
+     * @draft ICU 69
+     */
+    UCAL_TZ_LOCAL_DAYLIGHT = 0x03,
+    /**
+     * The option designate former time to be used by
+     * ucal_getTimeZoneLocal().
+     * @draft ICU 69
+     */
+    UCAL_TZ_LOCAL_FORMER = 0x04,
+    /**
+     * The option designate latter time to be used by
+     * ucal_getTimeZoneLocal().
+     * @draft ICU 69
+     */
+    UCAL_TZ_LOCAL_LATTER = 0x0C,
+};
+typedef enum UTimeZoneLocalOption UTimeZoneLocalOption; /**< @draft ICU 69 */
+
+/**
+* Returns the time zone raw and GMT offset for the given moment
+* in time.  Upon return, local-millis = GMT-millis + rawOffset +
+* dstOffset.  All computations are performed in the proleptic
+* Gregorian calendar.
+*
+* @param cal The UCalendar which specify the local date and time value to query.
+* @param nonExistingTimeOpt The option to indicate how to interpret the date and
+* time in the calendar represent a local time that skipped at a positive time
+* zone transitions (e.g. when the daylight saving time starts or the time zone
+* offset is increased due to a time zone rule change).
+* @param duplicatedTimeOpt The option to indicate how to interpret the date and
+* time in the calendar represent a local time that repeating multiple times at a
+* negative time zone transition (e.g. when the daylight saving time ends or the
+* time zone offset is decreased due to a time zone rule change)
+* @param rawOffset output parameter to receive the raw offset, that
+* is, the offset not including DST adjustments.
+* If the status is set to one of the error code, the value set is unspecified.
+* @param dstOffset output parameter to receive the DST offset,
+* that is, the offset to be added to `rawOffset' to obtain the
+* total offset between local and GMT time. If DST is not in
+* effect, this value is zero; otherwise it is a positive value,
+* typically one hour.
+* If the status is set to one of the error code, the value set is unspecified.
+* @param status A pointer to a UErrorCode to receive any errors.
+* @draft ICU 69
+*/
+U_CAPI void U_EXPORT2
+ucal_getTimeZoneOffsetFromLocal(
+    const UCalendar* cal,
+    UTimeZoneLocalOption nonExistingTimeOpt,
+    UTimeZoneLocalOption duplicatedTimeOpt,
+    int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status);
+#endif  /* U_HIDE_DRAFT_API */
+
 /**
 * Get the UDate for the next/previous time zone transition relative to
 * the calendar's current date, in the time zone to which the calendar

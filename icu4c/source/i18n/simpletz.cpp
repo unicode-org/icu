@@ -509,8 +509,10 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
 }
 
 void
-SimpleTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
-                                   int32_t& rawOffsetGMT, int32_t& savingsDST, UErrorCode& status) const {
+SimpleTimeZone::getOffsetFromLocal(
+        UDate date, UTimeZoneLocalOption nonExistingTimeOpt,
+        UTimeZoneLocalOption duplicatedTimeOpt,
+        int32_t& rawOffsetGMT, int32_t& savingsDST, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }

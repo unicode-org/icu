@@ -400,8 +400,10 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
 }
 
 void
-OlsonTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
-                                  int32_t& rawoff, int32_t& dstoff, UErrorCode& ec) const {
+OlsonTimeZone::getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt,
+                                  UTimeZoneLocalOption duplicatedTimeOpt,
+                                  int32_t& rawoff, int32_t& dstoff,
+                                  UErrorCode& ec) const {
     if (U_FAILURE(ec)) {
         return;
     }

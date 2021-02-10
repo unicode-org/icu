@@ -768,7 +768,32 @@ ucal_getKeywordValuesForLocale(const char * /* key */, const char* locale, UBool
     return en;
 }
 
-U_CAPI UBool U_EXPORT2 
+U_CAPI void U_EXPORT2
+ucal_getTimeZoneOffsetFromLocal(
+    const UCalendar* cal,
+    UTimeZoneLocalOption nonExistingTimeOpt,
+    UTimeZoneLocalOption duplicatedTimeOpt,
+    int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status)
+{
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    UDate date = ((Calendar*)cal)->getTime(*status);
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
+    const BasicTimeZone * btz = dynamic_cast<const BasicTimeZone *>(&tz);
+    if (btz == nullptr) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    btz->getOffsetFromLocal(
+        date, nonExistingTimeOpt, duplicatedTimeOpt,
+        *rawOffset, *dstOffset, *status);
+}
+
+U_CAPI UBool U_EXPORT2
 ucal_getTimeZoneTransitionDate(const UCalendar* cal, UTimeZoneTransitionType type,
                                UDate* transition, UErrorCode* status)
 {

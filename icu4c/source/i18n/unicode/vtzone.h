@@ -282,6 +282,17 @@ public:
      */
     virtual int32_t getRawOffset(void) const;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Get time zone offsets from local wall time.
+     * @draft ICU 69
+     */
+    virtual void getOffsetFromLocal(
+        UDate date, UTimeZoneLocalOption nonExistingTimeOpt,
+        UTimeZoneLocalOption duplicatedTimeOpt,
+        int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) const;
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
