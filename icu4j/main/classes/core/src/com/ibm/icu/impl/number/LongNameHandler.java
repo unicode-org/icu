@@ -29,7 +29,8 @@ public class LongNameHandler
 
     private static final int DNAM_INDEX = StandardPlural.COUNT;
     private static final int PER_INDEX = StandardPlural.COUNT + 1;
-    static final int ARRAY_LENGTH = StandardPlural.COUNT + 2;
+    private static final int GENDER_INDEX = StandardPlural.COUNT + 2;
+    static final int ARRAY_LENGTH = StandardPlural.COUNT + 3;
 
     private static int getIndex(String pluralKeyword) {
         // pluralKeyword can also be "dnam" or "per"
@@ -37,6 +38,8 @@ public class LongNameHandler
             return DNAM_INDEX;
         } else if (pluralKeyword.equals("per")) {
             return PER_INDEX;
+        } else if (pluralKeyword.equals("gender")) {
+            return GENDER_INDEX;
         } else {
             return StandardPlural.fromString(pluralKeyword).ordinal();
         }
@@ -71,8 +74,8 @@ public class LongNameHandler
             UResource.Table pluralsTable = value.getTable();
             for (int i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {
                 String keyString = key.toString();
-                if (keyString.equals("case") || keyString.equals("gender")) {
-                    // TODO: @Hugo to fix for new grammatical stuff
+                // TODO(ICU-21123): Load the correct inflected form, possibly from the "case" structure.
+                if (keyString.equals("case")) {
                     continue;
                 }
                 int index = getIndex(keyString);
