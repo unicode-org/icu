@@ -45,6 +45,7 @@ class UnitsTest : public IntlTest {
 
     void testUnitConstantFreshness();
     void testExtractConvertibility();
+    void testConversionInfo();
     void testConverterWithCLDRTests();
     void testComplexUnitsConverter();
     void testComplexUnitsConverterSorting();
@@ -61,6 +62,7 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testUnitConstantFreshness);
     TESTCASE_AUTO(testExtractConvertibility);
+    TESTCASE_AUTO(testConversionInfo);
     TESTCASE_AUTO(testConverterWithCLDRTests);
     TESTCASE_AUTO(testComplexUnitsConverter);
     TESTCASE_AUTO(testComplexUnitsConverterSorting);
@@ -170,6 +172,94 @@ void UnitsTest::testExtractConvertibility() {
         assertEquals(UnicodeString("Conversion Capability: ") + testCase.source + " to " +
                          testCase.target,
                      testCase.expectedState, convertibility);
+    }
+}
+
+void UnitsTest::testConversionInfo() {
+    IcuTestErrorCode status(*this, "UnitsTest::testExtractConvertibility");
+    // Test Cases
+    struct TestCase {
+        const char *source;
+        const char *target;
+        const ConversionInfo expectedConversionInfo;
+    } testCases[]{
+        {
+            "meter",
+            "meter",
+            {1.0, 0, false},
+        },
+        {
+            "meter",
+            "foot",
+            {3.28084, 0, false},
+        },
+        {
+            "foot",
+            "meter",
+            {0.3048, 0, false},
+        },
+        {
+            "celsius",
+            "kelvin",
+            {1, 273.15, false},
+        },
+        {
+            "fahrenheit",
+            "kelvin",
+            {5.0 / 9.0, 255.372, false},
+        },
+        {
+            "fahrenheit",
+            "celsius",
+            {5.0 / 9.0, -17.7777777778, false},
+        },
+        {
+            "celsius",
+            "fahrenheit",
+            {9.0 / 5.0, 32, false},
+        },
+        {
+            "fahrenheit",
+            "fahrenheit",
+            {1.0, 0, false},
+        },
+        {
+            "mile-per-gallon",
+            "liter-per-100-kilometer",
+            {0.00425143707, 0, true},
+        },
+    };
+
+    ConversionRates rates(status);
+    for (const auto &testCase : testCases) {
+        auto sourceImpl = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        auto targetImpl = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        UnitsConverter unitsConverter(sourceImpl, targetImpl, rates, status);
+
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+
+        ConversionInfo actualConversionInfo = unitsConverter.getConversionInfo();
+        UnicodeString message =
+            UnicodeString("testConverter: ") + testCase.source + " to " + testCase.target;
+
+        double maxDelta = 1e-6 * uprv_fabs(testCase.expectedConversionInfo.conversionRate);
+        if (testCase.expectedConversionInfo.conversionRate == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(message + ", conversion rate: ", testCase.expectedConversionInfo.conversionRate,
+                         actualConversionInfo.conversionRate, maxDelta);
+
+        maxDelta = 1e-6 * uprv_fabs(testCase.expectedConversionInfo.offset);
+        if (testCase.expectedConversionInfo.offset == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(message + ", offset: ", testCase.expectedConversionInfo.offset, actualConversionInfo.offset,
+                         maxDelta);
+
+        assertEquals(message + ", reciprocal: ", testCase.expectedConversionInfo.reciprocal,
+                     actualConversionInfo.reciprocal);
     }
 }
 

@@ -82,6 +82,12 @@ struct U_I18N_API Factor {
     void substituteConstants();
 };
 
+struct U_I18N_API ConversionInfo {
+    double conversionRate;
+    double offset;
+    bool reciprocal;
+};
+
 /*
  * Adds a single factor element to the `Factor`. e.g "ft3m", "2.333" or "cup2m3". But not "cup2m3^3".
  */
@@ -180,6 +186,8 @@ class U_I18N_API UnitsConverter : public UMemory {
      * @return the converted value.
      */
     double convertInverse(double inputValue) const;
+
+    ConversionInfo getConversionInfo() const;
 
   private:
     ConversionRate conversionRate_;

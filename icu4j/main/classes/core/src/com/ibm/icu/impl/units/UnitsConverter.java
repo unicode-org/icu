@@ -127,6 +127,21 @@ public class UnitsConverter {
         UNCONVERTIBLE,
     }
 
+    public ConversionInfo getConversionInfo() {
+        ConversionInfo result = new ConversionInfo();
+        result.conversionRate = this.conversionRate;
+        result.offset = this.offset;
+        result.reciprocal = this.reciprocal;
+
+        return result;
+    }
+
+    public static class ConversionInfo {
+        public BigDecimal conversionRate;
+        public BigDecimal offset;
+        public boolean reciprocal;
+    }
+
     /**
      * Responsible for all the Factor operation
      * NOTE:

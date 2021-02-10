@@ -272,6 +272,93 @@ public class UnitsTest {
     }
 
     @Test
+    public void testConversionInfo() {
+        class TestData {
+            String source;
+            String target;
+            UnitsConverter.ConversionInfo expected = new UnitsConverter.ConversionInfo();
+
+            public TestData(String source, String target, double conversionRate, double offset, Boolean reciprocal) {
+                this.source = source;
+                this.target = target;
+                this.expected.conversionRate = BigDecimal.valueOf(conversionRate);
+                this.expected.offset = BigDecimal.valueOf(offset);
+                this.expected.reciprocal = reciprocal;
+            }
+        }
+
+        TestData[] tests = {
+                new TestData(
+                        "meter",
+                        "meter",
+                        1.0, 0, false),
+                new TestData(
+                        "meter",
+                        "foot",
+                        3.28084, 0, false),
+                new TestData(
+                        "foot",
+                        "meter",
+                        0.3048, 0, false),
+                new TestData(
+                        "celsius",
+                        "kelvin",
+                        1, 273.15, false),
+                new TestData(
+                        "fahrenheit",
+                        "kelvin",
+                        5.0 / 9.0, 255.372, false),
+                new TestData(
+                        "fahrenheit",
+                        "celsius",
+                        5.0 / 9.0, -17.7777777778, false),
+                new TestData(
+                        "celsius",
+                        "fahrenheit",
+                        9.0 / 5.0, 32, false),
+                new TestData(
+                        "fahrenheit",
+                        "fahrenheit",
+                        1.0, 0, false),
+                new TestData(
+                        "mile-per-gallon",
+                        "liter-per-100-kilometer",
+                        0.00425143707, 0, true),
+        };
+
+        ConversionRates conversionRates = new ConversionRates();
+        for (TestData test : tests) {
+            MeasureUnitImpl sourceImpl = MeasureUnitImpl.forIdentifier(test.source);
+            MeasureUnitImpl targetImpl = MeasureUnitImpl.forIdentifier(test.target);
+            UnitsConverter unitsConverter = new UnitsConverter(sourceImpl, targetImpl, conversionRates);
+
+            UnitsConverter.ConversionInfo actual = unitsConverter.getConversionInfo();
+
+            // Test conversion Rate
+            double maxDelta = 1e-6 * Math.abs(test.expected.conversionRate.doubleValue());
+            if (test.expected.conversionRate.doubleValue() == 0) {
+                maxDelta = 1e-12;
+            }
+            assertEquals("testConversionInfo for conversion rate: " + test.source + " to " + test.target,
+                    test.expected.conversionRate.doubleValue(), actual.conversionRate.doubleValue(),
+                    maxDelta);
+
+            // Test offset
+            maxDelta = 1e-6 * Math.abs(test.expected.offset.doubleValue());
+            if (test.expected.offset.doubleValue() == 0) {
+                maxDelta = 1e-12;
+            }
+            assertEquals("testConversionInfo for offset: " + test.source + " to " + test.target,
+                    test.expected.offset.doubleValue(), actual.offset.doubleValue(),
+                    maxDelta);
+
+            // Test Reciprocal
+            assertEquals("testConversionInfo for reciprocal: " + test.source + " to " + test.target,
+                    test.expected.reciprocal, actual.reciprocal);
+        }
+    }
+
+    @Test
     public void testConverter() {
         class TestData {
             MeasureUnitImpl source;
