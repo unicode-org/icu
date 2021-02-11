@@ -14,23 +14,23 @@ h3.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h1>International Components for Unicode for Java (ICU4J)</h1>
-<h2>Read Me for ICU4J 68.2</h2>
+<h2>Read Me for ICU4J 69.1</h2>
 (Last Update: 2020-Dec-02)
 <hr size="2" width="100%">
 
 <p>
 <b>Note:</b> This is a major release of ICU4J. It contains bug fixes and adds implementations
 of inherited API and introduces new API or functionality.
-<!-- <b>Note:</b> This is a preview release of ICU4J 68.
+<!-- <b>Note:</b> This is a preview release of ICU4J 69.
 The contents of this document may not reflect the recent changes done
-for ICU 68 development. It is not recommended for production use. -->
-<!-- <b>Note:</b> This is a development milestone of ICU4J 68.
+for ICU 69 development. It is not recommended for production use. -->
+<!-- <b>Note:</b> This is a development milestone of ICU4J 69.
 The contents of this document may not reflect the recent changes done
-for ICU 68 development. It is not recommended for production use. -->
-<!-- <b>Note:</b> This is a release candidate of ICU4J 68.
+for ICU 69 development. It is not recommended for production use. -->
+<!-- <b>Note:</b> This is a release candidate of ICU4J 69.
 The contents of this document may not reflect the recent changes done
-for ICU 68 development. This release candidate is intended for those
-wishing to verify ICU 68 integration before final release. It is not
+for ICU 69 development. This release candidate is intended for those
+wishing to verify ICU 69 integration before final release. It is not
 recommended for production use. -->
 </p>
 <p>For the most recent release, see the <a
@@ -143,7 +143,7 @@ found in ICU4J.</p>
 
 <h2 class="doc"><a name="changes"></a>Changes In This Release</h2>
 
-<p>See the <a href="http://site.icu-project.org/download/68">ICU 68 download page</a>
+<p>See the <a href="http://site.icu-project.org/download/69">ICU 69 download page</a>
 for more informantion about changes in this release.</p>
 <p>The list of API changes since the previous ICU4J release is available
 <a href="APIChangeReport.html">here</a>.</p>
@@ -160,11 +160,11 @@ file included in this package.
 </p>
 <h2 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h2>
 <p>
-The minimum Java runtime version supported by ICU4J 68 is version 7. Java runtime version 6 is not supported.
+The minimum Java runtime version supported by ICU4J 69 is version 7. Java runtime version 6 is not supported.
 </p>
 <p>
 ICU4J since version 63 depend on J2SE 7 functionality. Therefore, ICU4J only runs on
-JRE version 7 or later. ICU4J 68 is tested on JRE 7, 8, 9, 10 and 11.
+JRE version 7 or later. ICU4J 69 is tested on JRE 7, 8, 9, 10 and 11.
 </p>
 
 <h2 class="doc"><a name="download"></a>How to Download ICU4J</h2>
@@ -183,19 +183,19 @@ builds, and they are packaged in jar files for convenient download.
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
     &lt;artifactId&gt;icu4j&lt;/artifactId&gt;
-    &lt;version&gt;68.2&lt;/version&gt;
+    &lt;version&gt;69.1&lt;/version&gt;
 &lt;/dependency&gt;
 
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
     &lt;artifactId&gt;icu4j-charset&lt;/artifactId&gt;
-    &lt;version&gt;68.2&lt;/version&gt;
+    &lt;version&gt;69.1&lt;/version&gt;
 &lt;/dependency&gt;
 
 &lt;dependency&gt;
     &lt;groupId&gt;com.ibm.icu&lt;/groupId&gt;
     &lt;artifactId&gt;icu4j-localespi&lt;/artifactId&gt;
-    &lt;version&gt;68.2&lt;/version&gt;
+    &lt;version&gt;69.1&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
   </ul>
@@ -730,54 +730,54 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt68b</tt>,
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt69b</tt>,
   as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
   Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
   class, and the use of these names in searching for resources is documented 
   in <code>com.ibm.icu.util.UResourceBundle</code>.</li>
 
-  <li>The <b>break iterator data</b> is under the directory <tt>icudt68b/brkitr</tt>,
+  <li>The <b>break iterator data</b> is under the directory <tt>icudt69b/brkitr</tt>,
   as a set of <tt>".res"</tt>, <tt>".brk"</tt> and <tt>".dict"</tt> files.</li>
 
-  <li>The <b>collation data</b> is under the directory <tt>icudt68b/coll</tt>,
+  <li>The <b>collation data</b> is under the directory <tt>icudt69b/coll</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>currency display name data</b> is under the directory <tt>icudt68b/curr</tt>,
+  <li>The <b>currency display name data</b> is under the directory <tt>icudt69b/curr</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>language display name data</b> is under the directory <tt>icudt68b/lang</tt>,
+  <li>The <b>language display name data</b> is under the directory <tt>icudt69b/lang</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based number format data</b> is under the directory
-  <tt>icudt68b/rbnf</tt>, as a set of <tt>".res"</tt> files.
+  <tt>icudt69b/rbnf</tt>, as a set of <tt>".res"</tt> files.
 
-  <li>The <b>region display name data</b> is under the directory <tt>icudt68b/region</tt>,
+  <li>The <b>region display name data</b> is under the directory <tt>icudt69b/region</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based transliterator data</b> is under the directory
-  <tt>icudt68b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt69b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>measurement unit data</b> is under the directory <tt>icudt68b/unit</tt>,
+  <li>The <b>measurement unit data</b> is under the directory <tt>icudt69b/unit</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>time zone display name data</b> is under the directory
-  <tt>icudt68b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt69b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>character property data</b> and default <b>unicode collation algorithm
-  (UCA) data</b> is found under the directory <tt>icudt68b</tt>, as a set of
+  (UCA) data</b> is found under the directory <tt>icudt69b</tt>, as a set of
   <tt>".icu"</tt> files. </li>
 
-  <li>The <b>normalization data</b> is found under the directory <tt>icudt68b</tt>,
+  <li>The <b>normalization data</b> is found under the directory <tt>icudt69b</tt>,
   as a set of <tt>".nrm"</tt> files. </li>
 
   <li>The <b>character set converter data</b> is under the directory
-  <tt>icudt68b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
+  <tt>icudt69b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
 
   <li>The <b>time zone rule data</b> is under the directory 
-  <tt>icudt68b</tt>, as <tt>zoneinfo64.res</tt>.</li>
+  <tt>icudt69b</tt>, as <tt>zoneinfo64.res</tt>.</li>
 
-  <li>The <b>holiday data</b> is under the directory <tt>icudt68b</tt>,
+  <li>The <b>holiday data</b> is under the directory <tt>icudt69b</tt>,
   as a set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
   followed by the locale ID.</li>
 
@@ -875,8 +875,8 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in icu4c/sourc
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-38'</li>
-    <li>Checkout ICU with tag 'release-68-2'</li>
+    <li>Checkout or download CLDR version 'release-39'</li>
+    <li>Checkout ICU with tag 'release-69-1'</li>
     <li>cd to icu4c/source/data directory</li>
     <li>Follow the instructions in icu4c/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
