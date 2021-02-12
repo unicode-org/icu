@@ -735,8 +735,10 @@ public class NumberRangeFormatterTest {
                     5000,
                     expectedString);
             Object[][] expectedFieldPositions = new Object[][]{
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 0, 2, 0},
                     {NumberFormat.Field.INTEGER, 0, 1},
                     {NumberFormat.Field.COMPACT, 1, 2},
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 5, 7, 1},
                     {NumberFormat.Field.INTEGER, 5, 6},
                     {NumberFormat.Field.COMPACT, 6, 7},
                     {NumberFormat.Field.MEASURE_UNIT, 8, 9}};
@@ -753,9 +755,11 @@ public class NumberRangeFormatterTest {
                     98765432,
                     expectedString);
             Object[][] expectedFieldPositions = new Object[][]{
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 0, 10, 0},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 2, 3},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 6, 7},
                     {NumberFormat.Field.INTEGER, 0, 10},
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 11, 21, 1},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 13, 14},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 17, 18},
                     {NumberFormat.Field.INTEGER, 11, 21}};
