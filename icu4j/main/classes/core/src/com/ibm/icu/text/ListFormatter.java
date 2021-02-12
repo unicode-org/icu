@@ -656,6 +656,7 @@ final public class ListFormatter {
                 field.spanField = SpanField.LIST_SPAN;
                 field.normalField = Field.ELEMENT;
                 field.value = position;
+                field.start = -1;
                 field.length = elementString.length();
                 string.append(elementString, field);
             } else {

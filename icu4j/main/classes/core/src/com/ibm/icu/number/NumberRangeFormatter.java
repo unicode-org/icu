@@ -2,9 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
+import java.io.InvalidObjectException;
 import java.util.Locale;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.text.UFormat;
 
 /**
  * The main entrypoint to the formatting of ranges of numbers, including currencies and other units of measurement.
@@ -151,6 +153,46 @@ public abstract class NumberRangeFormatter {
          * @see NumberRangeFormatter
          */
         NOT_EQUAL
+    }
+
+    /**
+     * Class for span fields in FormattedNumberRange.
+     *
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final class SpanField extends UFormat.SpanField {
+        private static final long serialVersionUID = 8750397196515368729L;
+
+        /**
+         * The concrete field used for spans in FormattedNumberRange.
+         *
+         * Instances of NUMBER_RANGE_SPAN should have an associated value, the index within the input
+         * list that is represented by the span.
+         *
+         * @draft ICU 69
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final SpanField NUMBER_RANGE_SPAN = new SpanField("number-range-span");
+
+        private SpanField(String name) {
+            super(name);
+        }
+
+        /**
+         * Serialization method resolve instances to the constant
+         * NumberRangeFormatter.SpanField values
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        @Override
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.getName().equals(NUMBER_RANGE_SPAN.getName()))
+                return NUMBER_RANGE_SPAN;
+
+            throw new InvalidObjectException("An invalid object.");
+        }
     }
 
     private static final UnlocalizedNumberRangeFormatter BASE = new UnlocalizedNumberRangeFormatter();

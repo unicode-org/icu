@@ -185,8 +185,7 @@ public class FormattedNumberRange implements FormattedValue {
         // FormattedStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
         FormattedNumberRange _other = (FormattedNumberRange) other;
-        return Arrays.equals(string.toCharArray(), _other.string.toCharArray())
-                && Arrays.equals(string.toFieldArray(), _other.string.toFieldArray())
+        return string.contentEquals(_other.string)
                 && quantity1.toBigDecimal().equals(_other.quantity1.toBigDecimal())
                 && quantity2.toBigDecimal().equals(_other.quantity2.toBigDecimal());
     }
