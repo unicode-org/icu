@@ -3475,6 +3475,9 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
 //                     value may be longer than the actual maximum; it must
 //                     never be shorter.
 //
+//                     start, end: the range of the pattern to check.
+//                     end is inclusive.
+//
 //------------------------------------------------------------------------------
 int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
     if (U_FAILURE(*fStatus)) {
@@ -3720,14 +3723,14 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
                 // Look-behind.  Scan forward until the matching look-around end,
                 //   without processing the look-behind block.
                 int32_t dataLoc = URX_VAL(op);
-                for (loc = loc + 1; loc < end; ++loc) {
+                for (loc = loc + 1; loc <= end; ++loc) {
                     op = (int32_t)fRXPat->fCompiledPat->elementAti(loc);
                     int32_t opType = URX_TYPE(op);
                     if ((opType == URX_LA_END || opType == URX_LBN_END) && (URX_VAL(op) == dataLoc)) {
                         break;
                     }
                 }
-                U_ASSERT(loc < end);
+                U_ASSERT(loc <= end);
             }
             break;
 
