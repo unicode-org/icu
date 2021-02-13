@@ -38,7 +38,6 @@ class LongNameHandler;
 }
 } // namespace number
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for unit complexity. There are three levels:
  *
@@ -52,31 +51,33 @@ class LongNameHandler;
  * The complexity determines which operations are available. For example, you cannot set the power
  * or prefix of a compound unit.
  *
- * @draft ICU 67
+ * @stable ICU 67
  */
 enum UMeasureUnitComplexity {
     /**
      * A single unit, like kilojoule.
      *
-     * @draft ICU 67
+     * @stable ICU 67
      */
     UMEASURE_UNIT_SINGLE,
 
     /**
      * A compound unit, like meter-per-second.
      *
-     * @draft ICU 67
+     * @stable ICU 67
      */
     UMEASURE_UNIT_COMPOUND,
 
     /**
      * A mixed unit, like hour+minute.
      *
-     * @draft ICU 67
+     * @stable ICU 67
      */
     UMEASURE_UNIT_MIXED
 };
 
+
+#ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for SI and binary prefixes, e.g. "kilo-", "nano-", "mebi-".
  *
@@ -373,10 +374,9 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit(const MeasureUnit &other);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Move constructor.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     MeasureUnit(MeasureUnit &&other) noexcept;
 
@@ -391,10 +391,9 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param identifier The CLDR Unit Identifier.
      * @param status Set if the identifier is invalid.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     static MeasureUnit forIdentifier(StringPiece identifier, UErrorCode& status);
-#endif // U_HIDE_DRAFT_API
 
     /**
      * Copy assignment operator.
@@ -402,13 +401,11 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit &operator=(const MeasureUnit &other);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Move assignment operator.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     MeasureUnit &operator=(MeasureUnit &&other) noexcept;
-#endif // U_HIDE_DRAFT_API
 
     /**
      * Returns a polymorphic clone of this object.  The result will
@@ -457,12 +454,11 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     const char *getSubtype() const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Get CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
      * @return The string form of this unit, owned by this MeasureUnit.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     const char* getIdentifier() const;
 
@@ -471,10 +467,11 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if an error occurs.
      * @return The unit complexity.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     UMeasureUnitComplexity getComplexity(UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified prefix.
      * For example, UMEASURE_PREFIX_KILO for "kilo", or UMEASURE_PREFIX_KIBI for "kibi".
@@ -506,6 +503,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 69
      */
     UMeasurePrefix getPrefix(UErrorCode& status) const;
+#endif // U_HIDE_DRAFT_API
 
     /**
      * Creates a MeasureUnit which is this SINGLE unit augmented with the specified dimensionality
@@ -519,7 +517,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param dimensionality The dimensionality (power).
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return A new SINGLE unit.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     MeasureUnit withDimensionality(int32_t dimensionality, UErrorCode& status) const;
 
@@ -534,7 +532,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if this is not a SINGLE unit or if another error occurs.
      * @return The dimensionality (power) of this simple unit.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     int32_t getDimensionality(UErrorCode& status) const;
 
@@ -548,7 +546,7 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if this is a MIXED unit or if another error occurs.
      * @return The reciprocal of the target unit.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     MeasureUnit reciprocal(UErrorCode& status) const;
 
@@ -567,10 +565,9 @@ class U_I18N_API MeasureUnit: public UObject {
      * @param other The MeasureUnit to multiply with the target.
      * @param status Set if this or other is a MIXED unit or if another error occurs.
      * @return The product of the target unit with the provided unit.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
-#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DRAFT_API
     /**
