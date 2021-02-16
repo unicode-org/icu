@@ -4050,7 +4050,7 @@ void MeasureFormatTest::TestIdentifiers() {
         {"kilogram-per-meter-per-second", "kilogram-per-meter-second"},
         {"kilometer-per-second-per-megaparsec", "kilometer-per-megaparsec-second"},
 
-        // TODO(ICU-21284): Add more test cases once the proper ranking is available.
+        // Correct order of units, as per unitQuantities in CLDR's units.xml
         {"newton-meter", "newton-meter"},
         {"meter-newton", "newton-meter"},
         {"pound-force-foot", "pound-force-foot"},
@@ -4236,11 +4236,6 @@ void MeasureFormatTest::TestParseBuiltIns() {
         if (uprv_strcmp(unit.getType(), "currency") == 0) {
             continue;
         }
-
-        // TODO(ICU-21284,icu-units#70): fix normalization. Until then, ignore:
-        if (uprv_strcmp(unit.getIdentifier(), "pound-force-foot") == 0) continue;
-        if (uprv_strcmp(unit.getIdentifier(), "kilowatt-hour") == 0) continue;
-        if (uprv_strcmp(unit.getIdentifier(), "newton-meter") == 0) continue;
 
         // Prove that all built-in units are parseable, except "generic" temperature:
         MeasureUnit parsed = MeasureUnit::forIdentifier(unit.getIdentifier(), status);
