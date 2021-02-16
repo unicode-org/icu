@@ -180,7 +180,7 @@ no{
                 one{"{0} karat"}
                 other{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligram per desiliter"}
                 one{"{0} milligram per desiliter"}
                 other{"{0} milligram per desiliter"}
@@ -1175,7 +1175,7 @@ no{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -1314,8 +1314,8 @@ no{
                 other{"{0}m"}
             }
             micrometer{
-                one{"{0}µm"}
-                other{"{0}µm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
             }
             mile{
                 dnam{"mile"}
@@ -1373,8 +1373,8 @@ no{
                 other{"{0}t"}
             }
             microgram{
-                one{"{0}µg"}
-                other{"{0}µg"}
+                one{"{0}μg"}
+                other{"{0}μg"}
             }
             milligram{
                 one{"{0}mg"}
@@ -1581,7 +1581,7 @@ no{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -1601,7 +1601,7 @@ no{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1974,9 +1974,9 @@ no{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"miles"}
@@ -2081,9 +2081,9 @@ no{
                 other{"{0} tonn"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

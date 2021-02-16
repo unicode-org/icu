@@ -4812,7 +4812,6 @@ supplementalData:table(nofallback){
                 "myq",
                 "myt",
                 "nad",
-                "nb",
                 "nbf",
                 "nbx",
                 "ncp",
@@ -6241,6 +6240,7 @@ supplementalData:table(nofallback){
                 "naa~c",
                 "nae~t",
                 "naw~z",
+                "nb",
                 "nba~e",
                 "nbg~k",
                 "nbm~w",
@@ -15140,6 +15140,15 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        nb{
+            primary{
+                scripts{"Latn"}
+                territories{
+                    "NO",
+                    "SJ",
+                }
+            }
+        }
         nch{
             primary{
                 scripts{"Latn"}
@@ -19844,7 +19853,10 @@ supplementalData:table(nofallback){
             "es_UY",
             "es_VE",
         }
-        no{"nn"}
+        no{
+            "nb",
+            "nn",
+        }
         pt_PT{
             "pt_AO",
             "pt_CH",
@@ -30613,13 +30625,13 @@ supplementalData:table(nofallback){
             }
         }
         NO{
+            nb{
+                officialStatus{"official"}
+                populationShareF:int{50100000}
+            }
             nn{
                 officialStatus{"official"}
                 populationShareF:int{49250000}
-            }
-            no{
-                officialStatus{"official"}
-                populationShareF:int{50100000}
             }
             se{
                 officialStatus{"official_regional"}
@@ -31627,7 +31639,7 @@ supplementalData:table(nofallback){
             }
         }
         SJ{
-            no{
+            nb{
                 officialStatus{"official"}
                 populationShareF:int{49510000}
             }
@@ -36366,6 +36378,11 @@ supplementalData:table(nofallback){
             "weekOfYear",
             "weekOfInterval",
             "weekOfDate",
+        }
+        nb{
+            "weekOfYear",
+            "weekOfMonth",
+            "weekOfInterval",
         }
         nl{
             "weekOfDate",

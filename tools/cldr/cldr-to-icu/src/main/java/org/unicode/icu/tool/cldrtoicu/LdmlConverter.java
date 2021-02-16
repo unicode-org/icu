@@ -288,6 +288,7 @@ public final class LdmlConverter {
         SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
         Path baseDir = config.getOutputDir();
 
+        System.out.println("processing standard ldml files");
         for (String id : config.getAllLocaleIds()) {
             // Skip "target" IDs that are aliases (they are handled later).
             if (!availableIds.contains(id)) {
@@ -360,6 +361,7 @@ public final class LdmlConverter {
             }
         }
 
+        System.out.println("processing alias ldml files");
         for (IcuLocaleDir dir : splitDirs) {
             Path outDir = baseDir.resolve(dir.getOutputDir());
             Set<String> targetIds = config.getTargetLocaleIds(dir);
@@ -462,6 +464,7 @@ public final class LdmlConverter {
             if (type.getCldrType() == LDML) {
                 continue;
             }
+            System.out.println("processing supplemental type " + type);
             switch (type) {
             case DAY_PERIODS:
                 write(DayPeriodsMapper.process(src), "misc");
@@ -489,6 +492,7 @@ public final class LdmlConverter {
 
             case GRAMMATICAL_FEATURES:
                 processSupplemental("grammaticalFeatures", GRAMMATICAL_FEATURES_PATHS, "misc", false);
+                break;
 
             case METADATA:
                 processSupplemental("metadata", METADATA_PATHS, "misc", false);

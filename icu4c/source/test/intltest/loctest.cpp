@@ -2874,8 +2874,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "nl"
         }, {
             "und_NO",
-            "no_Latn_NO",
-            "no"
+            "nb_Latn_NO",
+            "nb"
         }, {
             "und_NP",
             "ne_Deva_NP",
@@ -2986,8 +2986,8 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "sl"
         }, {
             "und_SJ",
-            "no_Latn_SJ",
-            "no_SJ"
+            "nb_Latn_SJ",
+            "nb_SJ"
         }, {
             "und_SK",
             "sk_Latn_SK",
@@ -4750,7 +4750,7 @@ void LocaleTest::TestCanonicalization(void)
         { "de-1901", "de__1901", "de__1901" }, /* registered name */
         { "de-1906", "de__1906", "de__1906" }, /* registered name */
         // New in CLDR 39 / ICU 69
-        { "nb", "nb", "no" },
+        { "nb", "nb", "nb" },
 
         /* posix behavior that used to be performed by getName */
         { "mr.utf8", "mr.utf8", "mr" },
@@ -4853,12 +4853,12 @@ void LocaleTest::TestCanonicalize(void)
         const char *canonicalID; /* expected canonicalize() result */
     } testCases[] = {
         // language _ variant -> language
-        { "no-BOKMAL", "no" },
+        { "no-BOKMAL", "nb" },
         // also test with script, country and extensions
-        { "no-Cyrl-ID-BOKMAL-u-ca-japanese", "no-Cyrl-ID-u-ca-japanese" },
-        { "no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese", "no-Cyrl-ID-1901-xsistemo-u-ca-japanese" },
-        { "no-Cyrl-ID-1901-BOKMAL-u-ca-japanese", "no-Cyrl-ID-1901-u-ca-japanese" },
-        { "no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese", "no-Cyrl-ID-xsistemo-u-ca-japanese" },
+        { "no-Cyrl-ID-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-1901-xsistemo-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-1901-u-ca-japanese" },
+        { "no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-xsistemo-u-ca-japanese" },
         { "no-NYNORSK", "nn" },
         { "no-Cyrl-ID-NYNORSK-u-ca-japanese", "nn-Cyrl-ID-u-ca-japanese" },
         { "aa-SAAHO", "ssy" },
@@ -4965,7 +4965,7 @@ void LocaleTest::TestCanonicalize(void)
         { "en-t-hy-latn-SU", "en-t-hy-latn-am"},
         { "ru-t-ru-cyrl-SU", "ru-t-ru-cyrl-ru"},
         { "fr-t-fr-172", "fr-t-fr-ru"},
-        { "und-t-no-latn-BOKMAL", "und-t-no-latn" },
+        { "und-t-no-latn-BOKMAL", "und-t-nb-latn" },
         { "und-t-sgn-qAAi-NL", "und-t-dse-zinh" },
         // alias of tvalue should be replaced
         { "en-t-m0-NaMeS", "en-t-m0-prprname" },

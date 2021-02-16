@@ -56,6 +56,7 @@ dayPeriods:table(nofallback){
         mr{"set37"}
         ms{"set60"}
         my{"set56"}
+        nb{"set8"}
         ne{"set38"}
         nl{"set4"}
         no{"set8"}
@@ -138,6 +139,7 @@ dayPeriods:table(nofallback){
         mr{"set121"}
         ms{"set146"}
         my{"set155"}
+        nb{"set87"}
         ne{"set122"}
         nl{"set83"}
         no{"set87"}
