@@ -130,8 +130,9 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
         if (index > other.index) {
             return 1;
         }
-        // TODO(icu-units#70): revisit when fixing normalization. For now we're
-        // sorting binary prefixes before SI prefixes, as per enum values order.
+        // TODO: revisit if the spec dictates prefix sort order - it doesn't
+        // currently. For now we're sorting binary prefixes before SI prefixes,
+        // as per enum values order.
         if (unitPrefix < other.unitPrefix) {
             return -1;
         }

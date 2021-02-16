@@ -3496,7 +3496,7 @@ public class MeasureUnitTest extends TestFmwk {
             new TestCase("kilogram-per-meter-per-second", "kilogram-per-meter-second"),
             new TestCase("kilometer-per-second-per-megaparsec", "kilometer-per-megaparsec-second"),
 
-            // TODO(ICU-21284): Add more test cases once the proper ranking is available.
+            // Correct order of units, as per unitQuantities in CLDR's units.xml
             new TestCase("newton-meter", "newton-meter"),
             new TestCase("meter-newton", "newton-meter"),
             new TestCase("pound-force-foot", "pound-force-foot"),
@@ -3678,11 +3678,6 @@ public class MeasureUnitTest extends TestFmwk {
             if (unit.getType() == "currency") {
                 continue;
             }
-
-            // TODO(ICU-21284,icu-units#70): fix normalization. Until then, ignore:
-            if (unit.getIdentifier() == "pound-force-foot") continue;
-            if (unit.getIdentifier() == "kilowatt-hour") continue;
-            if (unit.getIdentifier() == "newton-meter") continue;
 
             // Prove that all built-in units are parseable, except "generic" temperature:
             if (unit == MeasureUnit.GENERIC_TEMPERATURE) {
