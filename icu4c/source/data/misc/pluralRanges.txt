@@ -59,6 +59,7 @@ pluralRanges:table(nofallback){
         mr{"set01"}
         ms{"set00"}
         my{"set00"}
+        nb{"set04"}
         ne{"set03"}
         nl{"set03"}
         no{"set04"}

@@ -905,7 +905,7 @@ public class ULocaleTest extends TestFmwk {
                 { "de-1901", "de__1901", "de__1901" }, /* registered name */
                 { "de-1906", "de__1906", "de__1906" }, /* registered name */
                 // New in CLDR 39 / ICU 69
-                { "nb", "nb", "no" },
+                { "nb", "nb", "nb" },
 
                 /* posix behavior that used to be performed by getName */
                 { "mr.utf8", null, "mr" },
@@ -3039,8 +3039,8 @@ public class ULocaleTest extends TestFmwk {
                     "nl"
                 }, {
                     "und_NO",
-                    "no_Latn_NO",
-                    "no"
+                    "nb_Latn_NO",
+                    "nb"
                 }, {
                     "und_NP",
                     "ne_Deva_NP",
@@ -3151,8 +3151,8 @@ public class ULocaleTest extends TestFmwk {
                     "sl"
                 }, {
                     "und_SJ",
-                    "no_Latn_SJ",
-                    "no_SJ"
+                    "nb_Latn_SJ",
+                    "nb_SJ"
                 }, {
                     "und_SK",
                     "sk_Latn_SK",
@@ -5161,15 +5161,15 @@ public class ULocaleTest extends TestFmwk {
 
         if (!logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
             // language _ variant -> language
-            Assert.assertEquals("no", canonicalTag("no-BOKMAL"));
+            Assert.assertEquals("nb", canonicalTag("no-BOKMAL"));
             // also test with script, country and extensions
-            Assert.assertEquals("no-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-BOKMAL-u-ca-japanese"));
+            Assert.assertEquals("nb-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-BOKMAL-u-ca-japanese"));
             // also test with other variants, script, country and extensions
-            Assert.assertEquals("no-Cyrl-ID-1901-xsistemo-u-ca-japanese",
+            Assert.assertEquals("nb-Cyrl-ID-1901-xsistemo-u-ca-japanese",
                 canonicalTag("no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese"));
-            Assert.assertEquals("no-Cyrl-ID-1901-u-ca-japanese",
+            Assert.assertEquals("nb-Cyrl-ID-1901-u-ca-japanese",
                 canonicalTag("no-Cyrl-ID-1901-BOKMAL-u-ca-japanese"));
-            Assert.assertEquals("no-Cyrl-ID-xsistemo-u-ca-japanese",
+            Assert.assertEquals("nb-Cyrl-ID-xsistemo-u-ca-japanese",
                 canonicalTag("no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese"));
 
             Assert.assertEquals("nn", canonicalTag("no-NYNORSK"));
@@ -5282,7 +5282,7 @@ public class ULocaleTest extends TestFmwk {
         Assert.assertEquals("en-t-hy-latn-am", canonicalTag("en-t-hy-latn-SU"));
         Assert.assertEquals("ru-t-ru-cyrl-ru", canonicalTag("ru-t-ru-cyrl-SU"));
         Assert.assertEquals("fr-t-fr-ru", canonicalTag("fr-t-fr-172"));
-        Assert.assertEquals("und-t-no-latn", canonicalTag("und-t-no-latn-BOKMAL"));
+        Assert.assertEquals("und-t-nb-latn", canonicalTag("und-t-no-latn-BOKMAL"));
         Assert.assertEquals("und-t-dse-zinh", canonicalTag("und-t-sgn-qAAi-NL"));
         // alias of tvalue should be replaced
         Assert.assertEquals("en-t-m0-prprname", canonicalTag("en-t-m0-NaMeS"));

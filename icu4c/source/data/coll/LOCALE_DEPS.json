@@ -11,8 +11,7 @@
         "iw": "he",
         "iw_IL": "he_IL",
         "mo": "ro",
-        "nb": "no",
-        "nb_NO": "no_NO",
+        "no_NO": "no",
         "pa_IN": "pa_Guru_IN",
         "sh": "sr_Latn",
         "sh_BA": "sr_Latn_BA",
@@ -34,6 +33,7 @@
     },
     "parents": {
         "ff_Adlm": "root",
+        "nb": "no",
         "nn": "no"
     }
 }

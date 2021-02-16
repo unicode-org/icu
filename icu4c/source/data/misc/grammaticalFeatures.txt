@@ -132,6 +132,28 @@ grammaticalFeatures:table(nofallback){
             }
         }
         features{
+            am{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "accusative",
+                        }
+                    }
+                    definiteness{
+                        _{
+                            "definite",
+                            "indefinite",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                        }
+                    }
+                }
+            }
             ar{
                 nominal{
                     case{
@@ -157,6 +179,21 @@ grammaticalFeatures:table(nofallback){
                     }
                 }
             }
+            az{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "ablative",
+                            "locative",
+                        }
+                        units{""}
+                    }
+                }
+            }
             bn{
                 nominal{
                     case{
@@ -173,6 +210,16 @@ grammaticalFeatures:table(nofallback){
                             "indefinite",
                         }
                     }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                        }
+                    }
+                }
+            }
+            ca{
+                nominal{
                     gender{
                         _{
                             "masculine",
@@ -247,12 +294,42 @@ grammaticalFeatures:table(nofallback){
                     }
                 }
             }
+            el{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "accusative",
+                            "vocative",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                            "neuter",
+                        }
+                    }
+                }
+            }
             es{
                 nominal{
                     gender{
                         _{
                             "masculine",
                             "feminine",
+                        }
+                    }
+                }
+            }
+            fa{
+                nominal{
+                    definiteness{
+                        _{
+                            "definite",
+                            "indefinite",
+                            "construct",
                         }
                     }
                 }
@@ -322,12 +399,98 @@ grammaticalFeatures:table(nofallback){
                     }
                 }
             }
+            hr{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "instrumental",
+                            "vocative",
+                            "locative",
+                        }
+                    }
+                    gender{
+                        _{
+                            "animate",
+                            "inanimate",
+                            "feminine",
+                            "neuter",
+                        }
+                    }
+                }
+            }
+            hu{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "ablative",
+                            "accusative",
+                            "adessive",
+                            "allative",
+                            "causal",
+                            "dative",
+                            "delative",
+                            "elative",
+                            "essive",
+                            "illative",
+                            "inessive",
+                            "instrumental",
+                            "sublative",
+                            "superessive",
+                            "terminative",
+                            "translative",
+                        }
+                    }
+                }
+            }
+            hy{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "ablative",
+                            "dative",
+                            "locative",
+                            "instrumental",
+                        }
+                    }
+                }
+            }
             id{
                 nominal{
                     definiteness{
                         _{
                             "definite",
                             "indefinite",
+                        }
+                    }
+                }
+            }
+            is{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                        }
+                    }
+                    definiteness{
+                        _{
+                            "definite",
+                            "indefinite",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                            "neuter",
                         }
                     }
                 }
@@ -339,6 +502,22 @@ grammaticalFeatures:table(nofallback){
                             "masculine",
                             "feminine",
                         }
+                    }
+                }
+            }
+            kk{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "instrumental",
+                            "ablative",
+                            "locative",
+                        }
+                        units{""}
                     }
                 }
             }
@@ -364,8 +543,64 @@ grammaticalFeatures:table(nofallback){
                     }
                 }
             }
+            ky{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "ablative",
+                            "locative",
+                        }
+                        units{""}
+                    }
+                }
+            }
             lij{
                 nominal{
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                        }
+                    }
+                }
+            }
+            lt{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "instrumental",
+                            "vocative",
+                            "locative",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                        }
+                    }
+                }
+            }
+            lv{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "vocative",
+                            "locative",
+                        }
+                    }
                     gender{
                         _{
                             "masculine",
@@ -455,6 +690,34 @@ grammaticalFeatures:table(nofallback){
                     gender{
                         _{
                             "common",
+                            "neuter",
+                        }
+                    }
+                }
+            }
+            no{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                        }
+                        units{""}
+                    }
+                    definiteness{
+                        _{
+                            "definite",
+                            "indefinite",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                            "neuter",
+                        }
+                        units{
+                            "masculine",
                             "neuter",
                         }
                     }
@@ -583,7 +846,77 @@ grammaticalFeatures:table(nofallback){
                     }
                 }
             }
+            si{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "ablative",
+                            "accusative",
+                            "dative",
+                        }
+                    }
+                    definiteness{
+                        _{
+                            "definite",
+                            "indefinite",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                            "neuter",
+                        }
+                    }
+                }
+            }
             sk{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "instrumental",
+                            "vocative",
+                            "locative",
+                        }
+                    }
+                    gender{
+                        _{
+                            "animate",
+                            "inanimate",
+                            "feminine",
+                            "neuter",
+                        }
+                    }
+                }
+            }
+            sl{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "accusative",
+                            "dative",
+                            "instrumental",
+                            "locative",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                            "neuter",
+                        }
+                    }
+                }
+            }
+            sr{
                 nominal{
                     case{
                         _{
@@ -675,6 +1008,28 @@ grammaticalFeatures:table(nofallback){
                     }
                 }
             }
+            uk{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "instrumental",
+                            "vocative",
+                            "locative",
+                        }
+                    }
+                    gender{
+                        _{
+                            "masculine",
+                            "feminine",
+                            "neuter",
+                        }
+                    }
+                }
+            }
             ur{
                 nominal{
                     case{
@@ -688,6 +1043,21 @@ grammaticalFeatures:table(nofallback){
                             "masculine",
                             "feminine",
                         }
+                    }
+                }
+            }
+            uz{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "genitive",
+                            "dative",
+                            "accusative",
+                            "ablative",
+                            "locative",
+                        }
+                        units{""}
                     }
                 }
             }

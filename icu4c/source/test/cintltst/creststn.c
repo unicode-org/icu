@@ -267,12 +267,12 @@ static const char* norwayNames[] = {
 
 static const char* norwayLocales[] = {
     "nn_NO",
-    "no_NO",
+    "no",
     "no",
     "nn_NO",
     "nn",
-    "no_NO",
-    "no"
+    "nb_NO",
+    "nb"
 };
 
 static void checkStatus(int32_t line, UErrorCode expected, UErrorCode status) {

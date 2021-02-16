@@ -674,6 +674,7 @@ windowsZones:table(nofallback){
         }
         "US Mountain Standard Time"{
             001{"America/Phoenix"}
+            CA{"America/Creston America/Dawson_Creek America/Fort_Nelson"}
             MX{"America/Hermosillo"}
             US{"America/Phoenix"}
             ZZ{"Etc/GMT+7"}
@@ -812,10 +813,7 @@ windowsZones:table(nofallback){
         }
         "Yukon Standard Time"{
             001{"America/Whitehorse"}
-            CA{
-                "America/Whitehorse America/Creston America/Dawson America/Dawson_Cre"
-                "ek America/Fort_Nelson"
-            }
+            CA{"America/Whitehorse America/Dawson"}
         }
     }
 }

@@ -526,8 +526,8 @@ ILCID_POSIX_SUBTABLE(nl) {
 ILCID_POSIX_SUBTABLE(no) {
     {0x14,   "no"},     /* really nb_NO - actually Windows differentiates between neutral (no region) and specific (with region) */ 
     {0x7c14, "nb"},     /* really nb */
-    {0x0414, "no_NO"},  /* really no_NO. Keep first in the 414 list. */
-    {0x0414, "nb_NO"},  /* really no_NO */
+    {0x0414, "nb_NO"},  /* really nb_NO. Keep first in the 414 list. */
+    {0x0414, "no_NO"},  /* really nb_NO */
     {0x0814, "nn_NO"},  /* really nn_NO. Keep first in the 814 list.  */
     {0x7814, "nn"},     /* It's 0x14 or 0x814, pick one to make the test program happy. */
     {0x0814, "no_NO_NY"}/* really nn_NO */

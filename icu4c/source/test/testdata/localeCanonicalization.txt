@@ -36,8 +36,8 @@ hy_arevela	;	hy
 hy_arevmda	;	hyw
 hy_arevmda_arevela	;	hyw
 hye_arevmda	;	hyw
-no_bokmal_nynorsk	;	nn
-no_nynorsk_bokmal	;	nn
+no_bokmal_nynorsk	;	nb
+no_nynorsk_bokmal	;	nb
 zh_guoyu_hakka_xiang	;	hak
 zh_hakka_xiang	;	hak
 
@@ -276,9 +276,9 @@ nno	;	nn
 nns	;	nbr
 nnx	;	ngv
 no	;	no
-no_bokmal	;	no
+no_bokmal	;	nb
 no_nynorsk	;	nn
-nob	;	no
+nob	;	nb
 nor	;	no
 npi	;	ne
 nts	;	pij
@@ -1460,11 +1460,11 @@ nld_Adlm_AC_fonipa	;	nl_Adlm_AC_fonipa
 nno_Adlm_AC_fonipa	;	nn_Adlm_AC_fonipa
 nns_Adlm_AC_fonipa	;	nbr_Adlm_AC_fonipa
 nnx_Adlm_AC_fonipa	;	ngv_Adlm_AC_fonipa
-no_Adlm_AC_bokmal_fonipa	;	no_Adlm_AC_fonipa
-no_Adlm_AC_bokmal_fonipa_nynorsk	;	nn_Adlm_AC_fonipa
+no_Adlm_AC_bokmal_fonipa	;	nb_Adlm_AC_fonipa
+no_Adlm_AC_bokmal_fonipa_nynorsk	;	nb_Adlm_AC_fonipa
 no_Adlm_AC_fonipa	;	no_Adlm_AC_fonipa
 no_Adlm_AC_fonipa_nynorsk	;	nn_Adlm_AC_fonipa
-nob_Adlm_AC_fonipa	;	no_Adlm_AC_fonipa
+nob_Adlm_AC_fonipa	;	nb_Adlm_AC_fonipa
 nor_Adlm_AC_fonipa	;	no_Adlm_AC_fonipa
 npi_Adlm_AC_fonipa	;	ne_Adlm_AC_fonipa
 nts_Adlm_AC_fonipa	;	pij_Adlm_AC_fonipa

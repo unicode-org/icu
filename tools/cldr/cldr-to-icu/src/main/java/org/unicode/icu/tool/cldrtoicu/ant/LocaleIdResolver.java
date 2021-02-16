@@ -103,6 +103,8 @@ final class LocaleIdResolver {
     }
 
     private void addRecursively(String id, Set<String> dst) {
+        // One of the strings we get here is "no_NO_NY", need to make sure that
+        // supplementalData.getParent properly canonicalizes that before determining parent
         while (!id.equals("root") && dst.add(id)) {
             id = supplementalData.getParent(id);
         }
