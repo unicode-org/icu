@@ -39,6 +39,11 @@ MeasureUnit FormattedNumber::getOutputUnit(UErrorCode& status) const {
     return fData->outputUnit;
 }
 
+const char *FormattedNumber::getGender(UErrorCode &status) const {
+    UPRV_FORMATTED_VALUE_METHOD_GUARD("")
+    return fData->gender;
+}
+
 void FormattedNumber::getDecimalQuantity(impl::DecimalQuantity& output, UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
     output = fData->quantity;

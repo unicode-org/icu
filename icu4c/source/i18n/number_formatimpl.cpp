@@ -39,6 +39,7 @@ int32_t NumberFormatterImpl::formatStatic(const MacroProps &macros, UFormattedNu
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
     results->outputUnit = std::move(micros.outputUnit);
+    results->gender = micros.gender;
     return length;
 }
 
@@ -63,6 +64,7 @@ int32_t NumberFormatterImpl::format(UFormattedNumberData *results, UErrorCode &s
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
     results->outputUnit = std::move(micros.outputUnit);
+    results->gender = micros.gender;
     return length;
 }
 
@@ -177,6 +179,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     uprv_strncpy(fMicros.nsName, nsName, 8);
     fMicros.nsName[8] = 0; // guarantee NUL-terminated
 
+    // Default gender: none.
+    fMicros.gender = "";
+
     // Resolve the symbols. Do this here because currency may need to customize them.
     if (macros.symbols.isDecimalFormatSymbols()) {
         fMicros.symbols = macros.symbols.getDecimalFormatSymbols();
@@ -246,7 +251,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             return nullptr;
         }
         auto usagePrefsHandler =
-            new UsagePrefsHandler(macros.locale, macros.unit, macros.usage.fUsage, chain, status);
+            new UsagePrefsHandler(macros.locale, macros.unit, macros.usage.fValue, chain, status);
         fUsagePrefsHandler.adoptInsteadAndCheckErrorCode(usagePrefsHandler, status);
         chain = fUsagePrefsHandler.getAlias();
     } else if (isMixedUnit) {
@@ -370,10 +375,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
+        StringPiece unitDisplayCase("");
+        if (macros.unitDisplayCase.isSet()) {
+            unitDisplayCase = macros.unitDisplayCase.fValue;
+        }
         if (macros.usage.isSet()) {
             fLongNameMultiplexer.adoptInsteadAndCheckErrorCode(
                 LongNameMultiplexer::forMeasureUnits(
-                    macros.locale, *fUsagePrefsHandler->getOutputUnits(), unitWidth,
+                    macros.locale, *fUsagePrefsHandler->getOutputUnits(), unitWidth, unitDisplayCase,
                     resolvePluralRules(macros.rules, macros.locale, status), chain, status),
                 status);
             chain = fLongNameMultiplexer.getAlias();
@@ -381,7 +390,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             fMixedUnitLongNameHandler.adoptInsteadAndCheckErrorCode(new MixedUnitLongNameHandler(),
                                                                     status);
             MixedUnitLongNameHandler::forMeasureUnit(
-                macros.locale, macros.unit, unitWidth,
+                macros.locale, macros.unit, unitWidth, unitDisplayCase,
                 resolvePluralRules(macros.rules, macros.locale, status), chain,
                 fMixedUnitLongNameHandler.getAlias(), status);
             chain = fMixedUnitLongNameHandler.getAlias();
@@ -391,7 +400,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
                 unit = unit.product(macros.perUnit.reciprocal(status), status);
             }
             fLongNameHandler.adoptInsteadAndCheckErrorCode(new LongNameHandler(), status);
-            LongNameHandler::forMeasureUnit(macros.locale, unit, unitWidth,
+            LongNameHandler::forMeasureUnit(macros.locale, unit, unitWidth, unitDisplayCase,
                                             resolvePluralRules(macros.rules, macros.locale, status),
                                             chain, fLongNameHandler.getAlias(), status);
             chain = fLongNameHandler.getAlias();

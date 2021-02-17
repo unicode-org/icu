@@ -85,6 +85,8 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitUsageErrorCodes);
         TESTCASE_AUTO(unitUsageSkeletons);
         TESTCASE_AUTO(unitCurrency);
+        TESTCASE_AUTO(unitInflections);
+        TESTCASE_AUTO(unitGender);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
             // Slow test: run in exhaustive mode only
@@ -1924,6 +1926,197 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("lu"),
             123.12,
             u"123,12 CN¥");
+}
+
+void NumberFormatterApiTest::runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,
+                                                         const UChar *skeleton,
+                                                         const UChar *conciseSkeleton,
+                                                         const UnitInflectionTestCase *cases,
+                                                         int32_t numCases) {
+    for (int32_t i = 0; i < numCases; i++) {
+        UnitInflectionTestCase t = cases[i];
+        const UChar *skel;
+        const UChar *cSkel;
+        if (t.unitDisplayCase == nullptr || t.unitDisplayCase[0] == 0) {
+            unf = unf.unitDisplayCase("");
+            skel = skeleton;
+            cSkel = conciseSkeleton;
+        } else {
+            unf = unf.unitDisplayCase(t.unitDisplayCase);
+            skel = nullptr;
+            cSkel = nullptr;
+        }
+        assertFormatSingle((UnicodeString("\"") + skeleton + u"\", locale=\"" + t.locale +
+                            u"\", case=\"" + (t.unitDisplayCase ? t.unitDisplayCase : "") +
+                            u"\", value=" + t.value)
+                               .getTerminatedBuffer(),
+                           skel, cSkel, unf, Locale(t.locale), t.value, t.expected);
+    }
+}
+
+void NumberFormatterApiTest::unitInflections() {
+    IcuTestErrorCode status(*this, "unitInflections");
+
+    UnlocalizedNumberFormatter unf;
+    const UChar *skeleton;
+    const UChar *conciseSkeleton;
+    {
+        // Simple inflected form test - test case based on the example in CLDR's
+        // grammaticalFeatures.xml
+        unf = NumberFormatter::with().unit(NoUnit::percent()).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"percent unit-width-full-name";
+        conciseSkeleton = u"% unit-width-full-name";
+        const UnitInflectionTestCase percentCases[] = {
+            {"ru", nullptr, 10, u"10 процентов"},    // many
+            {"ru", "genitive", 10, u"10 процентов"}, // many
+            {"ru", nullptr, 33, u"33 процента"},     // few
+            {"ru", "genitive", 33, u"33 процентов"}, // few
+            {"ru", nullptr, 1, u"1 процент"},        // one
+            {"ru", "genitive", 1, u"1 процента"},    // one
+        };
+        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, percentCases,
+                                    UPRV_LENGTHOF(percentCases));
+    }
+    {
+        // Testing "de" rules:
+        // <deriveComponent feature="case" structure="per" value0="compound" value1="accusative"/>
+        // <deriveComponent feature="plural" structure="per" value0="compound" value1="one"/>
+        //
+        // per-patterns use accusative, but happen to match nominative, so we're
+        // not testing value1 in the first rule above.
+
+        unf = NumberFormatter::with().unit(MeasureUnit::getMeter()).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit/meter unit-width-full-name";
+        conciseSkeleton = u"unit/meter unit-width-full-name";
+        const UnitInflectionTestCase meterCases[] = {
+            {"de", nullptr, 1, u"1 Meter"},
+            {"de", "genitive", 1, u"1 Meters"},
+            {"de", nullptr, 2, u"2 Meter"},
+            {"de", "dative", 2, u"2 Metern"},
+        };
+        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterCases,
+                                    UPRV_LENGTHOF(meterCases));
+
+        unf = NumberFormatter::with().unit(MeasureUnit::getDay()).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit/day unit-width-full-name";
+        conciseSkeleton = u"unit/day unit-width-full-name";
+        const UnitInflectionTestCase dayCases[] = {
+            {"de", nullptr, 1, u"1 Tag"},
+            {"de", "genitive", 1, u"1 Tages"},
+            {"de", nullptr, 2, u"2 Tage"},
+            {"de", "dative", 2, u"2 Tagen"},
+        };
+        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, dayCases, UPRV_LENGTHOF(dayCases));
+
+        // Day has a perUnitPattern
+        unf = NumberFormatter::with()
+                  .unit(MeasureUnit::forIdentifier("meter-per-day", status))
+                  .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit/meter-per-day unit-width-full-name";
+        conciseSkeleton = u"unit/meter-per-day unit-width-full-name";
+        const UnitInflectionTestCase meterPerDayCases[] = {
+            {"de", nullptr, 1, u"1 Meter pro Tag"},
+            {"de", "genitive", 1, u"1 Meters pro Tag"},
+            {"de", nullptr, 2, u"2 Meter pro Tag"},
+            {"de", "dative", 2, u"2 Metern pro Tag"},
+            // testing code path that falls back to "root" but does not inflect:
+            {"af", nullptr, 1, u"1 meter per dag"},
+            {"af", "dative", 1, u"1 meter per dag"},
+        };
+        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterPerDayCases,
+                                    UPRV_LENGTHOF(meterPerDayCases));
+
+        // Decade does not have a perUnitPattern at this time (CLDR 39 / ICU
+        // 69), so we can test for the correct form of the per part:
+        unf = NumberFormatter::with()
+                  .unit(MeasureUnit::forIdentifier("parsec-per-decade", status))
+                  .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit/parsec-per-decade unit-width-full-name";
+        conciseSkeleton = u"unit/parsec-per-decade unit-width-full-name";
+        // Fragile test cases: these cases will break when whitespace is more
+        // consistently applied.
+        const UnitInflectionTestCase parsecPerDecadeCases[] = {
+            {"de", nullptr, 1, u"1\u00A0Parsec pro Jahrzehnt"},
+            {"de", "genitive", 1, u"1 Parsec pro Jahrzehnt"},
+            {"de", nullptr, 2, u"2\u00A0Parsec pro Jahrzehnt"},
+            {"de", "dative", 2, u"2 Parsec pro Jahrzehnt"},
+        };
+        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, parsecPerDecadeCases,
+                                    UPRV_LENGTHOF(parsecPerDecadeCases));
+    }
+    {
+        // Testing inflection of mixed units:
+        unf = NumberFormatter::with()
+                  .unit(MeasureUnit::forIdentifier("meter-and-centimeter", status))
+                  .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit/meter-and-centimeter unit-width-full-name";
+        conciseSkeleton = u"unit/meter-and-centimeter unit-width-full-name";
+        const UnitInflectionTestCase meterPerDayCases[] = {
+            // TODO(CLDR-14502): check that these inflections are correct, and
+            // whether CLDR needs any rules for them (presumably CLDR spec
+            // should mention it, if it's a consistent rule):
+            {"de", nullptr, 1.01, u"1 Meter, 1 Zentimeter"},
+            {"de", "genitive", 1.01, u"1 Meters, 1 Zentimeters"},
+            {"de", "genitive", 1.1, u"1 Meters, 10 Zentimeter"},
+            {"de", "dative", 1.1, u"1 Meter, 10 Zentimetern"},
+            {"de", "dative", 2.1, u"2 Metern, 10 Zentimetern"},
+        };
+        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterPerDayCases,
+                                    UPRV_LENGTHOF(meterPerDayCases));
+    }
+    // TODO: add a usage case that selects between preferences with different
+    // genders (e.g. year, month, day, hour).
+    // TODO: look at "↑↑↑" cases: check that inheritance is done right.
+}
+
+void NumberFormatterApiTest::unitGender() {
+    IcuTestErrorCode status(*this, "unitGender");
+
+    const struct TestCase {
+        const char *locale;
+        const char *unitIdentifier;
+        const char *expectedGender;
+    } cases[] = {
+        {"de", "meter", "masculine"},
+        {"de", "minute", "feminine"},
+        {"de", "hour", "feminine"},
+        {"de", "day", "masculine"},
+        {"de", "year", "neuter"},
+        {"fr", "minute", "feminine"},
+        {"fr", "hour", "feminine"},
+        {"fr", "day", "masculine"},
+        // grammaticalFeatures deriveCompound "per" rule:
+        {"de", "meter-per-hour", "masculine"},
+        {"af", "meter-per-hour", ""},
+        // TODO(ICU-21494): determine whether list genders behave as follows,
+        // and implement proper getListGender support (covering more than just
+        // two genders):
+        // // gender rule for lists of people: de "neutral", fr "maleTaints"
+        // {"de", "day-and-hour-and-minute", "neuter"},
+        // {"de", "hour-and-minute", "feminine"},
+        // {"fr", "day-and-hour-and-minute", "masculine"},
+        // {"fr", "hour-and-minute", "feminine"},
+    };
+    LocalizedNumberFormatter formatter;
+    FormattedNumber fn;
+    for (const TestCase &t : cases) {
+        // TODO(icu-units#140): make this work for more than just UNUM_UNIT_WIDTH_FULL_NAME
+        formatter = NumberFormatter::with()
+                        .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
+                        .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+                        .locale(Locale(t.locale));
+        fn = formatter.formatDouble(1.1, status);
+        assertEquals(UnicodeString("Testing gender, unit: ") + t.unitIdentifier +
+                         ", locale: " + t.locale,
+                     t.expectedGender, fn.getGender(status));
+        status.assertSuccess();
+    }
+
+    // Make sure getGender does not return garbage for genderless languages
+    formatter = NumberFormatter::with().locale(Locale::getEnglish());
+    fn = formatter.formatDouble(1.1, status);
+    status.assertSuccess();
+    assertEquals("getGender for a genderless language", "", fn.getGender(status));
 }
 
 void NumberFormatterApiTest::unitPercent() {

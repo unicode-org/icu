@@ -320,6 +320,7 @@
 //ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/displayName ; /unitsShort/$1/$2/dnam
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/displayName ; /units/$1/$2/dnam
 
+# TODO(icu-units#138): homogenize with compoundUnitPattern1 rules below by using "_" as case when case is absent in XML.
 //ldml/units/unitLength[@type="narrow"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /unitsNarrow/$1/$2/case/$4/$3
 //ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /unitsShort/$1/$2/case/$4/$3
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /units/$1/$2/case/$4/$3
@@ -338,6 +339,7 @@
 //ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /unitsShort/compound/$1
 //ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /units/compound/$1
 
+# TODO(icu-units#138): the style of output paths used in these rules is the proposed format for all count/gender/case lateral inheritance rules.
 //ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /unitsNarrow/compound/$1/$2/$3/$4
 //ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /unitsShort/compound/$1/$2/$3/$4
 //ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /units/compound/$1/$2/$3/$4

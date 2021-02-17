@@ -1974,6 +1974,8 @@ UBool IntlTest::assertEquals(const char* message,
 UBool IntlTest::assertEquals(const char* message,
                              const char* expected,
                              const char* actual) {
+    U_ASSERT(expected != nullptr);
+    U_ASSERT(actual != nullptr);
     if (uprv_strcmp(expected, actual) != 0) {
         errln((UnicodeString)"FAIL: " + message + "; got \"" +
               actual +

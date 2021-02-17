@@ -46,6 +46,34 @@ constexpr int32_t GENDER_INDEX = StandardPlural::Form::COUNT + 2;
 // Number of keys in the array populated by PluralTableSink.
 constexpr int32_t ARRAY_LENGTH = StandardPlural::Form::COUNT + 3;
 
+// TODO(inflections): load this list from resources, after creating a "&set"
+// function for use in ldml2icu rules.
+const int32_t GENDER_COUNT = 7;
+const char *gGenders[GENDER_COUNT] = {"animate",   "common", "feminine", "inanimate",
+                                      "masculine", "neuter", "personal"};
+
+const char *getGenderString(UnicodeString uGender, UErrorCode status) {
+    CharString gender;
+    gender.appendInvariantChars(uGender, status);
+    if (U_FAILURE(status)) {
+        return "";
+    }
+    int32_t first = 0;
+    int32_t last = GENDER_COUNT;
+    while (first < last) {
+        int32_t mid = (first + last) / 2;
+        int32_t cmp = uprv_strcmp(gender.data(), gGenders[mid]);
+        if (cmp == 0) {
+            return gGenders[mid];
+        } else if (cmp > 0) {
+            first = mid + 1;
+        } else if (cmp < 0) {
+            last = mid;
+        }
+    }
+    return "";
+}
+
 static int32_t getIndex(const char* pluralKeyword, UErrorCode& status) {
     // pluralKeyword can also be "dnam", "per", or "gender"
     switch (*pluralKeyword) {
@@ -109,7 +137,6 @@ class PluralTableSink : public ResourceSink {
         ResourceTable pluralsTable = value.getTable(status);
         if (U_FAILURE(status)) { return; }
         for (int32_t i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {
-            // TODO(ICU-21123): Load the correct inflected form, possibly from the "case" structure.
             if (uprv_strcmp(key, "case") == 0) {
                 continue;
             }
@@ -137,12 +164,19 @@ class PluralTableSink : public ResourceSink {
  * UNUM_UNIT_WIDTH_NARROW), or just *unitsShort* (for width
  * UNUM_UNIT_WIDTH_SHORT). For other widths, it reads just "units".
  *
- * @param unit must have a type and subtype (i.e. it must be a unit listed in
- *     gTypes and gSubTypes in measunit.cpp).
+ * @param unit must be a built-in unit, i.e. must have a type and subtype,
+ *     listed in gTypes and gSubTypes in measunit.cpp.
+ * @param unitDisplayCase the empty string and "nominative" are treated the
+ *     same. For other cases, strings for the requested case are used if found.
+ *     (For any missing case-specific data, we fall back to nominative.)
  * @param outArray must be of fixed length ARRAY_LENGTH.
  */
-void getMeasureData(const Locale &locale, const MeasureUnit &unit, const UNumberUnitWidth &width,
-                    UnicodeString *outArray, UErrorCode &status) {
+void getMeasureData(const Locale &locale,
+                    const MeasureUnit &unit,
+                    const UNumberUnitWidth &width,
+                    StringPiece unitDisplayCase,
+                    UnicodeString *outArray,
+                    UErrorCode &status) {
     PluralTableSink sink(outArray);
     LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, locale.getName(), &status));
     if (U_FAILURE(status)) { return; }
@@ -159,6 +193,7 @@ void getMeasureData(const Locale &locale, const MeasureUnit &unit, const UNumber
 
     CharString key;
     key.append("units", status);
+    // TODO(icu-units#140): support gender for other unit widths.
     if (width == UNUM_UNIT_WIDTH_NARROW) {
         key.append("Narrow", status);
     } else if (width == UNUM_UNIT_WIDTH_SHORT) {
@@ -168,6 +203,23 @@ void getMeasureData(const Locale &locale, const MeasureUnit &unit, const UNumber
     key.append(unit.getType(), status);
     key.append("/", status);
     key.append(subtypeForResource, status);
+
+    // Grab desired case first, if available. Then grab no-case data to fill in
+    // the gaps.
+    if (width == UNUM_UNIT_WIDTH_FULL_NAME && !unitDisplayCase.empty()) {
+        CharString caseKey;
+        caseKey.append(key, status);
+        caseKey.append("/case/", status);
+        caseKey.append(unitDisplayCase, status);
+
+        UErrorCode localStatus = U_ZERO_ERROR;
+        ures_getAllItemsWithFallback(unitsBundle.getAlias(), caseKey.data(), sink, localStatus);
+        // TODO(icu-units#138): our fallback logic is not spec-compliant: we
+        // check the given case, then go straight to the no-case data. The spec
+        // states we should first look for case="nominative". As part of #138,
+        // either get the spec changed, or add unit tests that warn us if
+        // case="nominative" data differs from no-case data?
+    }
 
     UErrorCode localStatus = U_ZERO_ERROR;
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, localStatus);
@@ -232,15 +284,156 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
     return UnicodeString(ptr, len);
 }
 
+/**
+ * Loads and applies deriveComponent rules from CLDR's grammaticalFeatures.xml.
+ *
+ * Consider a deriveComponent rule that looks like this:
+ *
+ *     <deriveComponent feature="case" structure="per" value0="compound" value1="nominative"/>
+ *
+ * Instantiating an instance as follows:
+ *
+ *     DerivedComponents d(loc, "case", "per", "foo");
+ *
+ * Applying the rule in the XML element above, `d.value0()` will be "foo", and
+ * `d.value1()` will be "nominative".
+ *
+ * In case of any kind of failure, value0() and value1() will simply return "".
+ */
+class DerivedComponents {
+  public:
+    /**
+     * Constructor.
+     *
+     * The feature and structure parameters must be null-terminated. The string
+     * referenced by compoundValue must exist for longer than the
+     * DerivedComponents instance.
+     */
+    DerivedComponents(const Locale &locale,
+                      const char *feature,
+                      const char *structure,
+                      const StringPiece compoundValue) {
+        StackUResourceBundle derivationsBundle, stackBundle;
+        ures_openDirectFillIn(derivationsBundle.getAlias(), NULL, "grammaticalFeatures", &status);
+        ures_getByKey(derivationsBundle.getAlias(), "grammaticalData", derivationsBundle.getAlias(),
+                      &status);
+        ures_getByKey(derivationsBundle.getAlias(), "derivations", derivationsBundle.getAlias(),
+                      &status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        UErrorCode localStatus = U_ZERO_ERROR;
+        // TODO: use standard normal locale resolution algorithms rather than just grabbing language:
+        ures_getByKey(derivationsBundle.getAlias(), locale.getLanguage(), stackBundle.getAlias(),
+                      &localStatus);
+        // TODO:
+        // - code currently assumes if the locale exists, the rules are there -
+        //   instead of falling back to root when the requested rule is missing.
+        // - investigate ures.h functions, see if one that uses res_findResource()
+        //   might be better (or use res_findResource directly), or maybe help
+        //   improve ures documentation to guide function selection?
+        if (localStatus == U_MISSING_RESOURCE_ERROR) {
+            ures_getByKey(derivationsBundle.getAlias(), "root", stackBundle.getAlias(), &status);
+        } else {
+            status = localStatus;
+        }
+        ures_getByKey(stackBundle.getAlias(), "component", stackBundle.getAlias(), &status);
+        ures_getByKey(stackBundle.getAlias(), feature, stackBundle.getAlias(), &status);
+        ures_getByKey(stackBundle.getAlias(), structure, stackBundle.getAlias(), &status);
+        UnicodeString val0 = ures_getUnicodeStringByIndex(stackBundle.getAlias(), 0, &status);
+        UnicodeString val1 = ures_getUnicodeStringByIndex(stackBundle.getAlias(), 1, &status);
+        if (U_SUCCESS(status)) {
+            if (val0.compare(UnicodeString(u"compound")) == 0) {
+                sp0 = compoundValue;
+            } else {
+                memory0.appendInvariantChars(val0, status);
+                sp0 = memory0.toStringPiece();
+            }
+            if (val1.compare(UnicodeString(u"compound")) == 0) {
+                sp1 = compoundValue;
+            } else {
+                memory1.appendInvariantChars(val1, status);
+                sp1 = memory1.toStringPiece();
+            }
+        }
+    }
+    // The returned StringPiece is only valid as long as both the instance
+    // exists, and the compoundValue passed to the constructor is valid.
+    StringPiece value0() const {
+        return sp0;
+    }
+    // The returned StringPiece is only valid as long as both the instance
+    // exists, and the compoundValue passed to the constructor is valid.
+    StringPiece value1() const {
+        return sp1;
+    }
+
+  private:
+    UErrorCode status = U_ZERO_ERROR;
+
+    // Holds strings referred to by value0 and value1;
+    CharString memory0, memory1;
+    StringPiece sp0, sp1;
+};
+
+UnicodeString
+getDeriveCompoundRule(Locale locale, const char *feature, const char *structure, UErrorCode &status) {
+    StackUResourceBundle derivationsBundle, stackBundle;
+    ures_openDirectFillIn(derivationsBundle.getAlias(), NULL, "grammaticalFeatures", &status);
+    ures_getByKey(derivationsBundle.getAlias(), "grammaticalData", derivationsBundle.getAlias(),
+                  &status);
+    ures_getByKey(derivationsBundle.getAlias(), "derivations", derivationsBundle.getAlias(), &status);
+    // TODO: use standard normal locale resolution algorithms rather than just grabbing language:
+    ures_getByKey(derivationsBundle.getAlias(), locale.getLanguage(), stackBundle.getAlias(), &status);
+    // TODO:
+    // - code currently assumes if the locale exists, the rules are there -
+    //   instead of falling back to root when the requested rule is missing.
+    // - investigate ures.h functions, see if one that uses res_findResource()
+    //   might be better (or use res_findResource directly), or maybe help
+    //   improve ures documentation to guide function selection?
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        ures_getByKey(derivationsBundle.getAlias(), "root", stackBundle.getAlias(), &status);
+    }
+    ures_getByKey(stackBundle.getAlias(), "compound", stackBundle.getAlias(), &status);
+    ures_getByKey(stackBundle.getAlias(), feature, stackBundle.getAlias(), &status);
+    return ures_getUnicodeStringByKey(stackBundle.getAlias(), structure, &status);
+}
+
 ////////////////////////
 /// END DATA LOADING ///
 ////////////////////////
 
+// TODO: promote this somewhere? It's based on patternprops.cpp' trimWhitespace
+const UChar *trimSpaceChars(const UChar *s, int32_t &length) {
+    if (length <= 0 || (!u_isJavaSpaceChar(s[0]) && !u_isJavaSpaceChar(s[length - 1]))) {
+        return s;
+    }
+    int32_t start = 0;
+    int32_t limit = length;
+    while (start < limit && u_isJavaSpaceChar(s[start])) {
+        ++start;
+    }
+    if (start < limit) {
+        // There is non-white space at start; we will not move limit below that,
+        // so we need not test start<limit in the loop.
+        while (u_isJavaSpaceChar(s[limit - 1])) {
+            --limit;
+        }
+    }
+    length = limit - start;
+    return s + start;
+}
+
 } // namespace
 
-void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef,
-                                     const UNumberUnitWidth &width, const PluralRules *rules,
-                                     const MicroPropsGenerator *parent, LongNameHandler *fillIn,
+void LongNameHandler::forMeasureUnit(const Locale &loc,
+                                     const MeasureUnit &unitRef,
+                                     const UNumberUnitWidth &width,
+                                     StringPiece unitDisplayCase,
+                                     const PluralRules *rules,
+                                     const MicroPropsGenerator *parent,
+                                     LongNameHandler *fillIn,
                                      UErrorCode &status) {
     // Not valid for mixed units that aren't built-in units, and there should
     // not be any built-in mixed units!
@@ -253,6 +446,9 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
         // "builtin-per-builtin".
         // TODO(ICU-20941): support more generic case than builtin-per-builtin.
         MeasureUnitImpl fullUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(unitRef, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
         MeasureUnitImpl unit;
         MeasureUnitImpl perUnit;
         for (int32_t i = 0; i < fullUnit.singleUnits.length(); i++) {
@@ -265,12 +461,12 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
             }
         }
         forCompoundUnit(loc, std::move(unit).build(status), std::move(perUnit).build(status), width,
-                        rules, parent, fillIn, status);
+                        unitDisplayCase, rules, parent, fillIn, status);
         return;
     }
 
     UnicodeString simpleFormats[ARRAY_LENGTH];
-    getMeasureData(loc, unitRef, width, simpleFormats, status);
+    getMeasureData(loc, unitRef, width, unitDisplayCase, simpleFormats, status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -278,12 +474,23 @@ void LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitR
     fillIn->parent = parent;
     fillIn->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD},
                                      status);
+    if (!simpleFormats[GENDER_INDEX].isBogus()) {
+        fillIn->gender = getGenderString(simpleFormats[GENDER_INDEX], status);
+    }
 }
 
-void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit,
-                                      const MeasureUnit &perUnit, const UNumberUnitWidth &width,
-                                      const PluralRules *rules, const MicroPropsGenerator *parent,
-                                      LongNameHandler *fillIn, UErrorCode &status) {
+void LongNameHandler::forCompoundUnit(const Locale &loc,
+                                      const MeasureUnit &unit,
+                                      const MeasureUnit &perUnit,
+                                      const UNumberUnitWidth &width,
+                                      StringPiece unitDisplayCase,
+                                      const PluralRules *rules,
+                                      const MicroPropsGenerator *parent,
+                                      LongNameHandler *fillIn,
+                                      UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (uprv_strcmp(unit.getType(), "") == 0 || uprv_strcmp(perUnit.getType(), "") == 0) {
         // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
         // error code. Once we support not-built-in units here, unitRef may be
@@ -295,17 +502,24 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
+
+    DerivedComponents derivedPerCases(loc, "case", "per", unitDisplayCase);
+
     UnicodeString primaryData[ARRAY_LENGTH];
-    getMeasureData(loc, unit, width, primaryData, status);
+    getMeasureData(loc, unit, width, derivedPerCases.value0(), primaryData, status);
     if (U_FAILURE(status)) {
         return;
     }
     UnicodeString secondaryData[ARRAY_LENGTH];
-    getMeasureData(loc, perUnit, width, secondaryData, status);
+    getMeasureData(loc, perUnit, width, derivedPerCases.value1(), secondaryData, status);
     if (U_FAILURE(status)) {
         return;
     }
 
+    // TODO(icu-units#139): implement these rules:
+    // <deriveComponent feature="plural" structure="per" ...>
+    // This has impact on multiSimpleFormatsToModifiers(...) below too.
+    // These rules are currently (ICU 69) all the same and hard-coded below.
     UnicodeString perUnitFormat;
     if (!secondaryData[PER_INDEX].isBogus()) {
         perUnitFormat = secondaryData[PER_INDEX];
@@ -314,7 +528,7 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
         if (U_FAILURE(status)) {
             return;
         }
-        // rawPerUnitFormat is something like "{0}/{1}"; we need to substitute in the secondary unit.
+        // rawPerUnitFormat is something like "{0} per {1}"; we need to substitute in the secondary unit.
         SimpleFormatter compiled(rawPerUnitFormat, 2, 2, status);
         if (U_FAILURE(status)) {
             return;
@@ -328,7 +542,11 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
         if (U_FAILURE(status)) {
             return;
         }
-        UnicodeString secondaryString = secondaryCompiled.getTextWithNoArguments().trim();
+        UnicodeString secondaryFormatString = secondaryCompiled.getTextWithNoArguments();
+        int32_t trimmedSecondaryLen = secondaryFormatString.length();
+        const UChar *trimmedSecondaryString =
+            trimSpaceChars(secondaryFormatString.getBuffer(), trimmedSecondaryLen);
+        UnicodeString secondaryString(false, trimmedSecondaryString, trimmedSecondaryLen);
         // TODO: Why does UnicodeString need to be explicit in the following line?
         compiled.format(UnicodeString(u"{0}"), secondaryString, perUnitFormat, status);
         if (U_FAILURE(status)) {
@@ -339,6 +557,24 @@ void LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit
     fillIn->parent = parent;
     fillIn->multiSimpleFormatsToModifiers(primaryData, perUnitFormat,
                                           {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
+
+    // Gender
+    UnicodeString uVal = getDeriveCompoundRule(loc, "gender", "per", status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    U_ASSERT(!uVal.isBogus() && uVal.length() == 1);
+    switch (uVal[0]) {
+    case u'0':
+        fillIn->gender = getGenderString(primaryData[GENDER_INDEX], status);
+        break;
+    case u'1':
+        fillIn->gender = getGenderString(secondaryData[GENDER_INDEX], status);
+        break;
+    default:
+        // Data error. Assert-fail in debug mode, else return no gender.
+        U_ASSERT(false);
+    }
 }
 
 UnicodeString LongNameHandler::getUnitDisplayName(
@@ -350,7 +586,7 @@ UnicodeString LongNameHandler::getUnitDisplayName(
         return ICU_Utility::makeBogusString();
     }
     UnicodeString simpleFormats[ARRAY_LENGTH];
-    getMeasureData(loc, unit, width, simpleFormats, status);
+    getMeasureData(loc, unit, width, "", simpleFormats, status);
     return simpleFormats[DNAM_INDEX];
 }
 
@@ -364,7 +600,7 @@ UnicodeString LongNameHandler::getUnitPattern(
         return ICU_Utility::makeBogusString();
     }
     UnicodeString simpleFormats[ARRAY_LENGTH];
-    getMeasureData(loc, unit, width, simpleFormats, status);
+    getMeasureData(loc, unit, width, "", simpleFormats, status);
     // The above already handles fallback from other widths to short
     if (U_FAILURE(status)) {
         return ICU_Utility::makeBogusString();
@@ -387,6 +623,7 @@ LongNameHandler* LongNameHandler::forCurrencyLongNames(const Locale &loc, const 
     getCurrencyLongNameData(loc, currency, simpleFormats, status);
     if (U_FAILURE(status)) { return nullptr; }
     result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
+    // TODO(inflections): currency gender?
     return result;
 }
 
@@ -426,29 +663,41 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     }
     StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
     micros.modOuter = &fModifiers[pluralForm];
+    micros.gender = gender;
 }
 
 const Modifier* LongNameHandler::getModifier(Signum /*signum*/, StandardPlural::Form plural) const {
     return &fModifiers[plural];
 }
 
-void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &mixedUnit,
-                                              const UNumberUnitWidth &width, const PluralRules *rules,
+void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc,
+                                              const MeasureUnit &mixedUnit,
+                                              const UNumberUnitWidth &width,
+                                              StringPiece unitDisplayCase,
+                                              const PluralRules *rules,
                                               const MicroPropsGenerator *parent,
-                                              MixedUnitLongNameHandler *fillIn, UErrorCode &status) {
+                                              MixedUnitLongNameHandler *fillIn,
+                                              UErrorCode &status) {
     U_ASSERT(mixedUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
 
     MeasureUnitImpl temp;
-    const MeasureUnitImpl& impl = MeasureUnitImpl::forMeasureUnit(mixedUnit, temp, status);
+    const MeasureUnitImpl &impl = MeasureUnitImpl::forMeasureUnit(mixedUnit, temp, status);
     fillIn->fMixedUnitCount = impl.singleUnits.length();
     fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
     for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
         // Grab data for each of the components.
         UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
-        getMeasureData(loc, impl.singleUnits[i]->build(status), width, unitData, status);
+        // TODO(CLDR-14502): check from the CLDR-14502 ticket whether this
+        // propagation of unitDisplayCase is correct:
+        getMeasureData(loc, impl.singleUnits[i]->build(status), width, unitDisplayCase, unitData,
+                       status);
     }
 
+    // TODO(icu-units#120): Make sure ICU doesn't output zero-valued
+    // high-magnitude fields
+    // * for mixed units count N, produce N listFormatters, one for each subset
+    //   that might be formatted.
     UListFormatterWidth listWidth = ULISTFMT_WIDTH_SHORT;
     if (width == UNUM_UNIT_WIDTH_NARROW) {
         listWidth = ULISTFMT_WIDTH_NARROW;
@@ -458,6 +707,8 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUn
     }
     fillIn->fListFormatter.adoptInsteadAndCheckErrorCode(
         ListFormatter::createInstance(loc, ULISTFMT_TYPE_UNITS, listWidth, status), status);
+    // TODO(ICU-21494): grab gender of each unit, calculate the gender
+    // associated with this list formatter, save it for later.
     fillIn->rules = rules;
     fillIn->parent = parent;
 
@@ -541,7 +792,11 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
         }
     }
 
-
+    // TODO(ICU-21494): implement gender for lists of mixed units. Presumably we
+    // can set micros.gender to the gender associated with the list formatter in
+    // use below (once we have correct support for that). And then document this
+    // appropriately? "getMixedUnitModifier" doesn't sound like it would do
+    // something like this.
 
     // Combine list into a "premixed" pattern
     UnicodeString premixedFormatPattern;
@@ -560,16 +815,19 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
 const Modifier *MixedUnitLongNameHandler::getModifier(Signum /*signum*/,
                                                       StandardPlural::Form /*plural*/) const {
     // TODO(units): investigate this method when investigating where
-    // LongNameHandler::getModifier() gets used. To be sure it remains
+    // ModifierStore::getModifier() gets used. To be sure it remains
     // unreachable:
     UPRV_UNREACHABLE;
     return nullptr;
 }
 
-LongNameMultiplexer *
-LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<MeasureUnit> &units,
-                                     const UNumberUnitWidth &width, const PluralRules *rules,
-                                     const MicroPropsGenerator *parent, UErrorCode &status) {
+LongNameMultiplexer *LongNameMultiplexer::forMeasureUnits(const Locale &loc,
+                                                          const MaybeStackVector<MeasureUnit> &units,
+                                                          const UNumberUnitWidth &width,
+                                                          StringPiece unitDisplayCase,
+                                                          const PluralRules *rules,
+                                                          const MicroPropsGenerator *parent,
+                                                          UErrorCode &status) {
     LocalPointer<LongNameMultiplexer> result(new LongNameMultiplexer(parent), status);
     if (U_FAILURE(status)) {
         return nullptr;
@@ -581,15 +839,16 @@ LongNameMultiplexer::forMeasureUnits(const Locale &loc, const MaybeStackVector<M
     }
     result->fMeasureUnits.adoptInstead(new MeasureUnit[units.length()]);
     for (int32_t i = 0, length = units.length(); i < length; i++) {
-        const MeasureUnit& unit = *units[i];
+        const MeasureUnit &unit = *units[i];
         result->fMeasureUnits[i] = unit;
         if (unit.getComplexity(status) == UMEASURE_UNIT_MIXED) {
             MixedUnitLongNameHandler *mlnh = result->fMixedUnitHandlers.createAndCheckErrorCode(status);
-            MixedUnitLongNameHandler::forMeasureUnit(loc, unit, width, rules, NULL, mlnh, status);
+            MixedUnitLongNameHandler::forMeasureUnit(loc, unit, width, unitDisplayCase, rules, NULL,
+                                                     mlnh, status);
             result->fHandlers[i] = mlnh;
         } else {
             LongNameHandler *lnh = result->fLongNameHandlers.createAndCheckErrorCode(status);
-            LongNameHandler::forMeasureUnit(loc, unit, width, rules, NULL, lnh, status);
+            LongNameHandler::forMeasureUnit(loc, unit, width, unitDisplayCase, rules, NULL, lnh, status);
             result->fHandlers[i] = lnh;
         }
         if (U_FAILURE(status)) {

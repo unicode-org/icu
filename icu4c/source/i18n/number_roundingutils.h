@@ -204,7 +204,7 @@ class RoundingImpl {
  * - see blueprint_helpers::parseIncrementOption().
  *
  * Referencing MacroProps means needing to pull in the .o files that have the
- * destructors for the SymbolsWrapper, Usage, and Scale classes.
+ * destructors for the SymbolsWrapper, StringProp, and Scale classes.
  */
 void parseIncrementOption(const StringSegment &segment, Precision &outPrecision, UErrorCode &status);
 

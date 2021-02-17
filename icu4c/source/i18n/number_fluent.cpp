@@ -289,6 +289,20 @@ Derived NumberFormatterSettings<Derived>::usage(const StringPiece usage)&& {
 }
 
 template<typename Derived>
+Derived NumberFormatterSettings<Derived>::unitDisplayCase(const StringPiece unitDisplayCase) const& {
+    Derived copy(*this);
+    copy.fMacros.unitDisplayCase.set(unitDisplayCase);
+    return copy;
+}
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::unitDisplayCase(const StringPiece unitDisplayCase)&& {
+    Derived move(std::move(*this));
+    move.fMacros.unitDisplayCase.set(unitDisplayCase);
+    return move;
+}
+
+template<typename Derived>
 Derived NumberFormatterSettings<Derived>::padding(const Padder& padder) const& {
     Derived copy(*this);
     copy.fMacros.padder = padder;
