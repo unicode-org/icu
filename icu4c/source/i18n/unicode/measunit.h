@@ -32,6 +32,12 @@ U_NAMESPACE_BEGIN
 class StringEnumeration;
 class MeasureUnitImpl;
 
+namespace number {
+namespace impl {
+class LongNameHandler;
+}
+} // namespace number
+
 #ifndef U_HIDE_DRAFT_API
 /**
  * Enumeration for unit complexity. There are three levels:
@@ -3708,6 +3714,9 @@ private:
     LocalArray<MeasureUnit> splitToSingleUnitsImpl(int32_t& outCount, UErrorCode& status) const;
 
     friend class MeasureUnitImpl;
+
+    // For access to findBySubType
+    friend class number::impl::LongNameHandler;
 };
 
 #ifndef U_HIDE_DRAFT_API  // @draft ICU 68

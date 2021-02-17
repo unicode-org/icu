@@ -46,13 +46,19 @@ constexpr int32_t GENDER_INDEX = StandardPlural::Form::COUNT + 2;
 // Number of keys in the array populated by PluralTableSink.
 constexpr int32_t ARRAY_LENGTH = StandardPlural::Form::COUNT + 3;
 
-// TODO(inflections): load this list from resources, after creating a "&set"
+// TODO(icu-units#28): load this list from resources, after creating a "&set"
 // function for use in ldml2icu rules.
 const int32_t GENDER_COUNT = 7;
 const char *gGenders[GENDER_COUNT] = {"animate",   "common", "feminine", "inanimate",
                                       "masculine", "neuter", "personal"};
 
+// Converts a UnicodeString to a const char*, either pointing to a string in
+// gGenders, or pointing to an empty string if an appropriate string was not
+// found.
 const char *getGenderString(UnicodeString uGender, UErrorCode status) {
+    if (uGender.length() == 0) {
+        return "";
+    }
     CharString gender;
     gender.appendInvariantChars(uGender, status);
     if (U_FAILURE(status)) {
@@ -71,9 +77,16 @@ const char *getGenderString(UnicodeString uGender, UErrorCode status) {
             last = mid;
         }
     }
+    // We don't return an error in case our gGenders list is incomplete in
+    // production.
+    //
+    // TODO(icu-units#28): a unit test checking all locales' genders are covered
+    // by gGenders? Else load a complete list of genders found in
+    // grammaticalFeatures in an initOnce.
     return "";
 }
 
+// Returns the array index that corresponds to the given pluralKeyword.
 static int32_t getIndex(const char* pluralKeyword, UErrorCode& status) {
     // pluralKeyword can also be "dnam", "per", or "gender"
     switch (*pluralKeyword) {
@@ -119,13 +132,248 @@ static UnicodeString getWithPlural(
     return result;
 }
 
+enum PlaceholderPosition { PH_EMPTY, PH_NONE, PH_BEGINNING, PH_MIDDLE, PH_END };
+
+/**
+ * Returns three outputs extracted from pattern.
+ *
+ * @param coreUnit is extracted as per Extract(...) in the spec:
+ *   https://unicode.org/reports/tr35/tr35-general.html#compound-units
+ * @param PlaceholderPosition indicates where in the string the placeholder was
+ *   found.
+ * @param joinerChar Iff the placeholder was at the beginning or end, joinerChar
+ *   contains the space character (if any) that separated the placeholder from
+ *   the rest of the pattern. Otherwise, joinerChar is set to NUL.
+ */
+void extractCorePattern(const UnicodeString &pattern,
+                        UnicodeString &coreUnit,
+                        PlaceholderPosition &placeholderPosition,
+                        UChar &joinerChar) {
+    joinerChar = 0;
+    if (pattern.startsWith(u"{0}", 3)) {
+        placeholderPosition = PH_BEGINNING;
+        if (u_isJavaSpaceChar(pattern[3])) {
+            joinerChar = pattern[3];
+            coreUnit.setTo(pattern, 4, pattern.length() - 4);
+            // Expecting no double spaces
+            U_ASSERT(!u_isJavaSpaceChar(pattern[4]));
+        } else {
+            coreUnit.setTo(pattern, 3, pattern.length() - 3);
+        }
+    } else if (pattern.endsWith(u"{0}", 3)) {
+        placeholderPosition = PH_END;
+        int32_t len = pattern.length();
+        if (u_isJavaSpaceChar(pattern[len - 4])) {
+            coreUnit.setTo(pattern, 0, pattern.length() - 4);
+            joinerChar = pattern[len - 4];
+            // Expecting no double spaces
+            U_ASSERT(!u_isJavaSpaceChar(pattern[len - 5]));
+        } else {
+            coreUnit.setTo(pattern, 0, pattern.length() - 3);
+        }
+    } else if (pattern.indexOf(u"{0}", 0, 1, pattern.length() - 2) == -1) {
+        placeholderPosition = PH_NONE;
+        coreUnit = pattern;
+    } else {
+        placeholderPosition = PH_MIDDLE;
+        coreUnit = pattern;
+    }
+}
 
 //////////////////////////
 /// BEGIN DATA LOADING ///
 //////////////////////////
 
+// Gets the gender of a built-in unit: unit must be a built-in. Returns an empty
+// string both in case of unknown gender and in case of unknown unit.
+const char *getGenderForBuiltin(const Locale &locale, MeasureUnit builtinUnit, UErrorCode &status) {
+    LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, locale.getName(), &status));
+    if (U_FAILURE(status)) { return ""; }
+
+    // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
+    // TODO(ICU-20400): Get duration-*-person data properly with aliases.
+    StringPiece subtypeForResource;
+    int32_t subtypeLen = static_cast<int32_t>(uprv_strlen(builtinUnit.getSubtype()));
+    if (subtypeLen > 7 && uprv_strcmp(builtinUnit.getSubtype() + subtypeLen - 7, "-person") == 0) {
+        subtypeForResource = {builtinUnit.getSubtype(), subtypeLen - 7};
+    } else {
+        subtypeForResource = builtinUnit.getSubtype();
+    }
+
+    CharString key;
+    key.append("units/", status);
+    key.append(builtinUnit.getType(), status);
+    key.append("/", status);
+    key.append(subtypeForResource, status);
+    key.append("/gender", status);
+
+    UErrorCode localStatus = status;
+    StackUResourceBundle fillIn;
+    ures_getByKeyWithFallback(unitsBundle.getAlias(), key.data(), fillIn.getAlias(), &localStatus);
+    if (U_SUCCESS(localStatus)) {
+        status = localStatus;
+        UnicodeString directString = ures_getUnicodeString(fillIn.getAlias(), &status);
+        return getGenderString(directString, status);
+    } else {
+        // TODO(icu-units#28): "$unitRes/gender" does not exist. Do we want to
+        // check whether the parent "$unitRes" exists? Then we could return
+        // U_MISSING_RESOURCE_ERROR for incorrect usage (e.g. builtinUnit not
+        // being a builtin).
+        return "";
+    }
+}
+
+// Loads data from a resource tree with paths matching
+// $key/$pluralForm/$gender/$case, with lateral inheritance for missing cases
+// and genders.
+//
+// An InflectedPluralSink is configured to load data for a specific gender and
+// case. It loads all plural forms, because selection between plural forms is
+// dependent upon the value being formatted.
+//
+// TODO(icu-units#138): Conceptually similar to PluralTableSink, however the
+// tree structures are different. After homogenizing the structures, we may be
+// able to unify the two classes.
+//
+// TODO: Spec violation: expects presence of "count" - does not fallback to an
+// absent "count"! If this fallback were added, getCompoundValue could be
+// superseded?
+class InflectedPluralSink : public ResourceSink {
+  public:
+    // Accepts `char*` rather than StringPiece because
+    // ResourceTable::findValue(...) requires a null-terminated `char*`.
+    //
+    // NOTE: outArray MUST have a length of at least ARRAY_LENGTH. No bounds
+    // checking is performed.
+    explicit InflectedPluralSink(const char *gender, const char *caseVariant, UnicodeString *outArray)
+        : gender(gender), caseVariant(caseVariant), outArray(outArray) {
+        // Initialize the array to bogus strings.
+        for (int32_t i = 0; i < ARRAY_LENGTH; i++) {
+            outArray[i].setToBogus();
+        }
+    }
+
+    // See ResourceSink::put().
+    void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) U_OVERRIDE {
+        ResourceTable pluralsTable = value.getTable(status);
+        if (U_FAILURE(status)) { return; }
+        for (int32_t i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {
+            int32_t pluralIndex = getIndex(key, status);
+            if (U_FAILURE(status)) { return; }
+            if (!outArray[pluralIndex].isBogus()) {
+                // We already have a pattern
+                continue;
+            }
+            ResourceTable genderTable = value.getTable(status);
+            if (loadForPluralForm(genderTable, value, status)) {
+                outArray[pluralIndex] = value.getUnicodeString(status);
+            }
+        }
+    }
+
+  private:
+    // Tries to load data for the configured gender from `genderTable`. Returns
+    // true if found, returning the data in `value`. The returned data will be
+    // for the configured gender if found, falling back to "neuter" and
+    // no-gender if not.
+    bool loadForPluralForm(const ResourceTable &genderTable, ResourceValue &value, UErrorCode &status) {
+        if (uprv_strcmp(gender, "") != 0) {
+            if (loadForGender(genderTable, gender, value, status)) {
+                return true;
+            }
+            if (uprv_strcmp(gender, "neuter") != 0 && loadForGender(genderTable, "neuter", value, status)) {
+                return true;
+            }
+        }
+        if (loadForGender(genderTable, "_", value, status)) {
+            return true;
+        }
+        return false;
+    }
+
+    // Tries to load data for the given gender from `genderTable`. Returns true
+    // if found, returning the data in `value`. The returned data will be for
+    // the configured case if found, falling back to "nominative" and no-case if
+    // not.
+    bool loadForGender(const ResourceTable &genderTable,
+                   const char *genderVal,
+                   ResourceValue &value,
+                   UErrorCode &status) {
+        if (!genderTable.findValue(genderVal, value)) {
+            return false;
+        }
+        ResourceTable caseTable = value.getTable(status);
+        if (uprv_strcmp(caseVariant, "") != 0) {
+            if (loadForCase(caseTable, caseVariant, value)) {
+                return true;
+            }
+            if (uprv_strcmp(caseVariant, "nominative") != 0 &&
+                loadForCase(caseTable, "nominative", value)) {
+                return true;
+            }
+        }
+        if (loadForCase(caseTable, "_", value)) {
+            return true;
+        }
+        return false;
+    }
+
+    // Tries to load data for the given case from `caseTable`. Returns true if
+    // found, returning the data in `value`.
+    bool loadForCase(const ResourceTable &caseTable,
+                 const char *caseValue,
+                 ResourceValue &value) {
+        if (!caseTable.findValue(caseValue, value)) {
+            return false;
+        }
+        return true;
+    }
+
+    const char *gender;
+    const char *caseVariant;
+    UnicodeString *outArray;
+};
+
+void getInflectedMeasureData(StringPiece subKey,
+                             const Locale &locale,
+                             const UNumberUnitWidth &width,
+                             const char *gender,
+                             const char *caseVariant,
+                             UnicodeString *outArray,
+                             UErrorCode &status) {
+    InflectedPluralSink sink(gender, caseVariant, outArray);
+    LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, locale.getName(), &status));
+    if (U_FAILURE(status)) { return; }
+
+    CharString key;
+    key.append("units", status);
+    if (width == UNUM_UNIT_WIDTH_NARROW) {
+        key.append("Narrow", status);
+    } else if (width == UNUM_UNIT_WIDTH_SHORT) {
+        key.append("Short", status);
+    }
+    key.append("/", status);
+    key.append(subKey, status);
+
+    UErrorCode localStatus = status;
+    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
+    if (width == UNUM_UNIT_WIDTH_SHORT) {
+        status = localStatus;
+        return;
+    }
+
+    // TODO(ICU-13353): The fallback to short does not work in ICU4C.
+    // Manually fall back to short (this is done automatically in Java).
+    key.clear();
+    key.append("unitsShort/", status);
+    key.append(subKey, status);
+    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
+}
+
 class PluralTableSink : public ResourceSink {
   public:
+    // NOTE: outArray MUST have a length of at least ARRAY_LENGTH. No bounds
+    // checking is performed.
     explicit PluralTableSink(UnicodeString *outArray) : outArray(outArray) {
         // Initialize the array to bogus strings.
         for (int32_t i = 0; i < ARRAY_LENGTH; i++) {
@@ -154,8 +402,6 @@ class PluralTableSink : public ResourceSink {
     UnicodeString *outArray;
 };
 
-// NOTE: outArray MUST have room for all StandardPlural values.  No bounds checking is performed.
-
 /**
  * Populates outArray with `locale`-specific values for `unit` through use of
  * PluralTableSink. Only the set of basic units are supported!
@@ -174,7 +420,7 @@ class PluralTableSink : public ResourceSink {
 void getMeasureData(const Locale &locale,
                     const MeasureUnit &unit,
                     const UNumberUnitWidth &width,
-                    StringPiece unitDisplayCase,
+                    const char *unitDisplayCase,
                     UnicodeString *outArray,
                     UErrorCode &status) {
     PluralTableSink sink(outArray);
@@ -206,21 +452,26 @@ void getMeasureData(const Locale &locale,
 
     // Grab desired case first, if available. Then grab no-case data to fill in
     // the gaps.
-    if (width == UNUM_UNIT_WIDTH_FULL_NAME && !unitDisplayCase.empty()) {
+    if (width == UNUM_UNIT_WIDTH_FULL_NAME && unitDisplayCase[0] != 0) {
         CharString caseKey;
         caseKey.append(key, status);
         caseKey.append("/case/", status);
         caseKey.append(unitDisplayCase, status);
 
         UErrorCode localStatus = U_ZERO_ERROR;
+        // TODO(icu-units#138): our fallback logic is not spec-compliant:
+        // lateral fallback should happen before locale fallback. Switch to
+        // getInflectedMeasureData after homogenizing data format? Find a unit
+        // test case that demonstrates the incorrect fallback logic (via
+        // regional variant of an inflected language?)
         ures_getAllItemsWithFallback(unitsBundle.getAlias(), caseKey.data(), sink, localStatus);
-        // TODO(icu-units#138): our fallback logic is not spec-compliant: we
-        // check the given case, then go straight to the no-case data. The spec
-        // states we should first look for case="nominative". As part of #138,
-        // either get the spec changed, or add unit tests that warn us if
-        // case="nominative" data differs from no-case data?
     }
 
+    // TODO(icu-units#138): our fallback logic is not spec-compliant: we
+    // check the given case, then go straight to the no-case data. The spec
+    // states we should first look for case="nominative". As part of #138,
+    // either get the spec changed, or add unit tests that warn us if
+    // case="nominative" data differs from no-case data?
     UErrorCode localStatus = U_ZERO_ERROR;
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, localStatus);
     if (width == UNUM_UNIT_WIDTH_SHORT) {
@@ -240,6 +491,7 @@ void getMeasureData(const Locale &locale,
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
 }
 
+// NOTE: outArray MUST have a length of at least ARRAY_LENGTH.
 void getCurrencyLongNameData(const Locale &locale, const CurrencyUnit &currency, UnicodeString *outArray,
                              UErrorCode &status) {
     // In ICU4J, this method gets a CurrencyData from CurrencyData.provider.
@@ -268,7 +520,10 @@ void getCurrencyLongNameData(const Locale &locale, const CurrencyUnit &currency,
     }
 }
 
-UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &width, UErrorCode& status) {
+UnicodeString getCompoundValue(StringPiece compoundKey,
+                               const Locale &locale,
+                               const UNumberUnitWidth &width,
+                               UErrorCode &status) {
     LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, locale.getName(), &status));
     if (U_FAILURE(status)) { return {}; }
     CharString key;
@@ -278,9 +533,25 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
     } else if (width == UNUM_UNIT_WIDTH_SHORT) {
         key.append("Short", status);
     }
-    key.append("/compound/per", status);
+    key.append("/compound/", status);
+    key.append(compoundKey, status);
+
+    UErrorCode localStatus = status;
     int32_t len = 0;
-    const UChar* ptr = ures_getStringByKeyWithFallback(unitsBundle.getAlias(), key.data(), &len, &status);
+    const UChar *ptr =
+        ures_getStringByKeyWithFallback(unitsBundle.getAlias(), key.data(), &len, &localStatus);
+    if (U_FAILURE(localStatus) && width != UNUM_UNIT_WIDTH_SHORT) {
+        // Fall back to short, which contains more compound data
+        key.clear();
+        key.append("unitsShort/compound/", status);
+        key.append(compoundKey, status);
+        ptr = ures_getStringByKeyWithFallback(unitsBundle.getAlias(), key.data(), &len, &status);
+    } else {
+        status = localStatus;
+    }
+    if (U_FAILURE(status)) {
+        return {};
+    }
     return UnicodeString(ptr, len);
 }
 
@@ -293,12 +564,14 @@ UnicodeString getPerUnitFormat(const Locale& locale, const UNumberUnitWidth &wid
  *
  * Instantiating an instance as follows:
  *
- *     DerivedComponents d(loc, "case", "per", "foo");
+ *     DerivedComponents d(loc, "case", "per");
  *
- * Applying the rule in the XML element above, `d.value0()` will be "foo", and
- * `d.value1()` will be "nominative".
+ * Applying the rule in the XML element above, `d.value0("foo")` will be "foo",
+ * and `d.value1("foo")` will be "nominative".
  *
- * In case of any kind of failure, value0() and value1() will simply return "".
+ * The values returned by value0(...) and value1(...) are valid only while the
+ * instance exists. In case of any kind of failure, value0(...) and value1(...)
+ * will return "".
  */
 class DerivedComponents {
   public:
@@ -309,10 +582,7 @@ class DerivedComponents {
      * referenced by compoundValue must exist for longer than the
      * DerivedComponents instance.
      */
-    DerivedComponents(const Locale &locale,
-                      const char *feature,
-                      const char *structure,
-                      const StringPiece compoundValue) {
+    DerivedComponents(const Locale &locale, const char *feature, const char *structure) {
         StackUResourceBundle derivationsBundle, stackBundle;
         ures_openDirectFillIn(derivationsBundle.getAlias(), NULL, "grammaticalFeatures", &status);
         ures_getByKey(derivationsBundle.getAlias(), "grammaticalData", derivationsBundle.getAlias(),
@@ -323,10 +593,11 @@ class DerivedComponents {
             return;
         }
         UErrorCode localStatus = U_ZERO_ERROR;
-        // TODO: use standard normal locale resolution algorithms rather than just grabbing language:
+        // TODO(icu-units#28): use standard normal locale resolution algorithms
+        // rather than just grabbing language:
         ures_getByKey(derivationsBundle.getAlias(), locale.getLanguage(), stackBundle.getAlias(),
                       &localStatus);
-        // TODO:
+        // TODO(icu-units#28):
         // - code currently assumes if the locale exists, the rules are there -
         //   instead of falling back to root when the requested rule is missing.
         // - investigate ures.h functions, see if one that uses res_findResource()
@@ -344,38 +615,61 @@ class DerivedComponents {
         UnicodeString val1 = ures_getUnicodeStringByIndex(stackBundle.getAlias(), 1, &status);
         if (U_SUCCESS(status)) {
             if (val0.compare(UnicodeString(u"compound")) == 0) {
-                sp0 = compoundValue;
+                compound0_ = true;
             } else {
-                memory0.appendInvariantChars(val0, status);
-                sp0 = memory0.toStringPiece();
+                compound0_ = false;
+                value0_.appendInvariantChars(val0, status);
             }
             if (val1.compare(UnicodeString(u"compound")) == 0) {
-                sp1 = compoundValue;
+                compound1_ = true;
             } else {
-                memory1.appendInvariantChars(val1, status);
-                sp1 = memory1.toStringPiece();
+                compound1_ = false;
+                value1_.appendInvariantChars(val1, status);
             }
         }
     }
-    // The returned StringPiece is only valid as long as both the instance
-    // exists, and the compoundValue passed to the constructor is valid.
-    StringPiece value0() const {
-        return sp0;
+
+    // Returns a StringPiece that is only valid as long as the instance exists.
+    StringPiece value0(const StringPiece compoundValue) const {
+        return compound0_ ? compoundValue : value0_.toStringPiece();
     }
-    // The returned StringPiece is only valid as long as both the instance
-    // exists, and the compoundValue passed to the constructor is valid.
-    StringPiece value1() const {
-        return sp1;
+
+    // Returns a StringPiece that is only valid as long as the instance exists.
+    StringPiece value1(const StringPiece compoundValue) const {
+        return compound1_ ? compoundValue : value1_.toStringPiece();
+    }
+
+    // Returns a char* that is only valid as long as the instance exists.
+    const char *value0(const char *compoundValue) const {
+        return compound0_ ? compoundValue : value0_.data();
+    }
+
+    // Returns a char* that is only valid as long as the instance exists.
+    const char *value1(const char *compoundValue) const {
+        return compound1_ ? compoundValue : value1_.data();
     }
 
   private:
     UErrorCode status = U_ZERO_ERROR;
 
     // Holds strings referred to by value0 and value1;
-    CharString memory0, memory1;
-    StringPiece sp0, sp1;
+    bool compound0_, compound1_;
+    CharString value0_, value1_;
 };
 
+// TODO(icu-units#28): test somehow? Associate with an ICU ticket for adding
+// testsuite support for testing with synthetic data?
+/**
+ * Loads and returns the value in rules that look like these:
+ *
+ * <deriveCompound feature="gender" structure="per" value="0"/>
+ * <deriveCompound feature="gender" structure="times" value="1"/>
+ *
+ * Currently a fake example, but spec compliant:
+ * <deriveCompound feature="gender" structure="power" value="feminine"/>
+ *
+ * NOTE: If U_FAILURE(status), returns an empty string.
+ */ 
 UnicodeString
 getDeriveCompoundRule(Locale locale, const char *feature, const char *structure, UErrorCode &status) {
     StackUResourceBundle derivationsBundle, stackBundle;
@@ -397,7 +691,45 @@ getDeriveCompoundRule(Locale locale, const char *feature, const char *structure,
     }
     ures_getByKey(stackBundle.getAlias(), "compound", stackBundle.getAlias(), &status);
     ures_getByKey(stackBundle.getAlias(), feature, stackBundle.getAlias(), &status);
-    return ures_getUnicodeStringByKey(stackBundle.getAlias(), structure, &status);
+    UnicodeString uVal = ures_getUnicodeStringByKey(stackBundle.getAlias(), structure, &status);
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    U_ASSERT(!uVal.isBogus());
+    return uVal;
+}
+
+// Returns the gender string for structures following these rules:
+//
+// <deriveCompound feature="gender" structure="per" value="0"/>
+// <deriveCompound feature="gender" structure="times" value="1"/>
+//
+// Fake example:
+// <deriveCompound feature="gender" structure="power" value="feminine"/>
+//
+// data0 and data1 should be pattern arrays (UnicodeString[ARRAY_SIZE]) that
+// correspond to value="0" and value="1".
+//
+// Pass a nullptr to data1 if the structure has no concept of value="1" (e.g.
+// "prefix" doesn't).
+UnicodeString getDerivedGender(Locale locale,
+                               const char *structure,
+                               UnicodeString *data0,
+                               UnicodeString *data1,
+                               UErrorCode &status) {
+    UnicodeString val = getDeriveCompoundRule(locale, "gender", structure, status);
+    if (val.length() == 1) {
+        switch (val[0]) {
+        case u'0':
+            return data0[GENDER_INDEX];
+        case u'1':
+            if (data1 == nullptr) {
+                return {};
+            }
+            return data1[GENDER_INDEX];
+        }
+    }
+    return val;
 }
 
 ////////////////////////
@@ -430,27 +762,84 @@ const UChar *trimSpaceChars(const UChar *s, int32_t &length) {
 void LongNameHandler::forMeasureUnit(const Locale &loc,
                                      const MeasureUnit &unitRef,
                                      const UNumberUnitWidth &width,
-                                     StringPiece unitDisplayCase,
+                                     const char *unitDisplayCase,
                                      const PluralRules *rules,
                                      const MicroPropsGenerator *parent,
                                      LongNameHandler *fillIn,
                                      UErrorCode &status) {
-    // Not valid for mixed units that aren't built-in units, and there should
-    // not be any built-in mixed units!
+    // From https://unicode.org/reports/tr35/tr35-general.html#compound-units -
+    // Points 1 and 2 are mostly handled by MeasureUnit:
+    //
+    // 1. If the unitId is empty or invalid, fail
+    // 2. Put the unitId into normalized order
+    //
+    // We just need to check if it is a MeasureUnit this constructor handles:
+    // this constructor does not handle mixed units
     U_ASSERT(uprv_strcmp(unitRef.getType(), "") != 0 ||
              unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
 
-    if (uprv_strcmp(unitRef.getType(), "") == 0) {
-        // Not a built-in unit. Split it up, since we can already format
-        // "builtin-per-builtin".
-        // TODO(ICU-20941): support more generic case than builtin-per-builtin.
+    if (uprv_strcmp(unitRef.getType(), "") != 0) {
+        // Handling built-in units:
+        //
+        // 3. Set result to be getValue(unitId with length, pluralCategory, caseVariant)
+        //    - If result is not empty, return it
+        UnicodeString simpleFormats[ARRAY_LENGTH];
+        getMeasureData(loc, unitRef, width, unitDisplayCase, simpleFormats, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        fillIn->rules = rules;
+        fillIn->parent = parent;
+        fillIn->simpleFormatsToModifiers(simpleFormats,
+                                         {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
+        if (!simpleFormats[GENDER_INDEX].isBogus()) {
+            fillIn->gender = getGenderString(simpleFormats[GENDER_INDEX], status);
+        }
+        return;
+
+        // TODO(icu-units#145): figure out why this causes a failure in
+        // format/MeasureFormatTest/TestIndividualPluralFallback and other
+        // tests, when it should have been an alternative for the lines above:
+
+        // forArbitraryUnit(loc, unitRef, width, unitDisplayCase, fillIn, status);
+        // fillIn->rules = rules;
+        // fillIn->parent = parent;
+        // return;
+    } else {
+        forArbitraryUnit(loc, unitRef, width, unitDisplayCase, fillIn, status);
+        fillIn->rules = rules;
+        fillIn->parent = parent;
+        return;
+    }
+}
+
+void LongNameHandler::forArbitraryUnit(const Locale &loc,
+                                       const MeasureUnit &unitRef,
+                                       const UNumberUnitWidth &width,
+                                       const char *unitDisplayCase,
+                                       LongNameHandler *fillIn,
+                                       UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (fillIn == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+
+    // Numbered list items are from the algorithms at
+    // https://unicode.org/reports/tr35/tr35-general.html#compound-units:
+    //
+    // 4. Divide the unitId into numerator (the part before the "-per-") and
+    //    denominator (the part after the "-per-). If both are empty, fail
+    MeasureUnitImpl unit;
+    MeasureUnitImpl perUnit;
+    {
         MeasureUnitImpl fullUnit = MeasureUnitImpl::forMeasureUnitMaybeCopy(unitRef, status);
         if (U_FAILURE(status)) {
             return;
         }
-        MeasureUnitImpl unit;
-        MeasureUnitImpl perUnit;
         for (int32_t i = 0; i < fullUnit.singleUnits.length(); i++) {
             SingleUnitImpl *subUnit = fullUnit.singleUnits[i];
             if (subUnit->dimensionality > 0) {
@@ -460,120 +849,454 @@ void LongNameHandler::forMeasureUnit(const Locale &loc,
                 perUnit.appendSingleUnit(*subUnit, status);
             }
         }
-        forCompoundUnit(loc, std::move(unit).build(status), std::move(perUnit).build(status), width,
-                        unitDisplayCase, rules, parent, fillIn, status);
-        return;
     }
 
-    UnicodeString simpleFormats[ARRAY_LENGTH];
-    getMeasureData(loc, unitRef, width, unitDisplayCase, simpleFormats, status);
-    if (U_FAILURE(status)) {
-        return;
+    // TODO(icu-units#28): check placeholder logic, see if it needs to be
+    // present here instead of only in processPatternTimes:
+    //
+    // 5. Set both globalPlaceholder and globalPlaceholderPosition to be empty
+
+    DerivedComponents derivedPerCases(loc, "case", "per");
+
+    // 6. numeratorUnitString
+    UnicodeString numeratorUnitData[ARRAY_LENGTH];
+    processPatternTimes(std::move(unit), loc, width, derivedPerCases.value0(unitDisplayCase),
+                        numeratorUnitData, status);
+
+    // 7. denominatorUnitString
+    UnicodeString denominatorUnitData[ARRAY_LENGTH];
+    processPatternTimes(std::move(perUnit), loc, width, derivedPerCases.value1(unitDisplayCase),
+                        denominatorUnitData, status);
+
+    // TODO(icu-units#139):
+    // - implement DerivedComponents for "plural/times" and "plural/power":
+    //   French has different rules, we'll be producing the wrong results
+    //   currently. (Prove via tests!)
+    // - implement DerivedComponents for "plural/per", "plural/prefix",
+    //   "case/times", "case/power", and "case/prefix" - although they're
+    //   currently hardcoded. Languages with different rules are surely on the
+    //   way.
+    //
+    // Currently we only use "case/per", "plural/times", "case/times", and
+    // "case/power".
+    //
+    // This may have impact on multiSimpleFormatsToModifiers(...) below too?
+    // These rules are currently (ICU 69) all the same and hard-coded below.
+    UnicodeString perUnitPattern;
+    if (!denominatorUnitData[PER_INDEX].isBogus()) {
+        // If we have no denominator, we obtain the empty string:
+        perUnitPattern = denominatorUnitData[PER_INDEX];
+    } else {
+        // 8. Set perPattern to be getValue([per], locale, length)
+        UnicodeString rawPerUnitFormat = getCompoundValue("per", loc, width, status);
+        // rawPerUnitFormat is something like "{0} per {1}"; we need to substitute in the secondary unit.
+        SimpleFormatter perPatternFormatter(rawPerUnitFormat, 2, 2, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        // Plural and placeholder handling for 7. denominatorUnitString:
+        // TODO(icu-units#139): hardcoded:
+        // <deriveComponent feature="plural" structure="per" value0="compound" value1="one"/>
+        UnicodeString denominatorFormat =
+            getWithPlural(denominatorUnitData, StandardPlural::Form::ONE, status);
+        // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
+        SimpleFormatter denominatorFormatter(denominatorFormat, 0, 1, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        UnicodeString denominatorPattern = denominatorFormatter.getTextWithNoArguments();
+        int32_t trimmedLen = denominatorPattern.length();
+        const UChar *trimmed = trimSpaceChars(denominatorPattern.getBuffer(), trimmedLen);
+        UnicodeString denominatorString(false, trimmed, trimmedLen);
+        // 9. If the denominatorString is empty, set result to
+        //    [numeratorString], otherwise set result to format(perPattern,
+        //    numeratorString, denominatorString)
+        //
+        // TODO(icu-units#28): Why does UnicodeString need to be explicit in the
+        // following line?
+        perPatternFormatter.format(UnicodeString(u"{0}"), denominatorString, perUnitPattern, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
     }
-    fillIn->rules = rules;
-    fillIn->parent = parent;
-    fillIn->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD},
-                                     status);
-    if (!simpleFormats[GENDER_INDEX].isBogus()) {
-        fillIn->gender = getGenderString(simpleFormats[GENDER_INDEX], status);
+    if (perUnitPattern.length() == 0) {
+        fillIn->simpleFormatsToModifiers(numeratorUnitData,
+                                         {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
+    } else {
+        fillIn->multiSimpleFormatsToModifiers(numeratorUnitData, perUnitPattern,
+                                              {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
     }
+
+    // Gender
+    //
+    // TODO(icu-units#28): find out what gender to use in the absence of a first
+    // value - e.g. what's the gender of "per-second"? Mentioned in CLDR-14253.
+    //
+    // gender/per deriveCompound rules don't say:
+    // <deriveCompound feature="gender" structure="per" value="0"/> <!-- gender(gram-per-meter) ←  gender(gram) -->
+    fillIn->gender = getGenderString(
+        getDerivedGender(loc, "per", numeratorUnitData, denominatorUnitData, status), status);
 }
 
-void LongNameHandler::forCompoundUnit(const Locale &loc,
-                                      const MeasureUnit &unit,
-                                      const MeasureUnit &perUnit,
-                                      const UNumberUnitWidth &width,
-                                      StringPiece unitDisplayCase,
-                                      const PluralRules *rules,
-                                      const MicroPropsGenerator *parent,
-                                      LongNameHandler *fillIn,
-                                      UErrorCode &status) {
+void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
+                                          Locale loc,
+                                          const UNumberUnitWidth &width,
+                                          const char *caseVariant,
+                                          UnicodeString *outArray,
+                                          UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (uprv_strcmp(unit.getType(), "") == 0 || uprv_strcmp(perUnit.getType(), "") == 0) {
-        // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
-        // error code. Once we support not-built-in units here, unitRef may be
-        // anything, but if not built-in, perUnit has to be "none".
+    if (productUnit.complexity == UMEASURE_UNIT_MIXED) {
+        // These are handled by MixedUnitLongNameHandler
         status = U_UNSUPPORTED_ERROR;
         return;
     }
-    if (fillIn == nullptr) {
-        status = U_INTERNAL_PROGRAM_ERROR;
-        return;
+
+#if U_DEBUG
+    for (int32_t pluralIndex = 0; pluralIndex < ARRAY_LENGTH; pluralIndex++) {
+        U_ASSERT(outArray[pluralIndex].length() == 0);
+        U_ASSERT(!outArray[pluralIndex].isBogus());
     }
+#endif
 
-    DerivedComponents derivedPerCases(loc, "case", "per", unitDisplayCase);
-
-    UnicodeString primaryData[ARRAY_LENGTH];
-    getMeasureData(loc, unit, width, derivedPerCases.value0(), primaryData, status);
+    if (productUnit.identifier.isEmpty()) {
+        // TODO(icu-units#28): consider when serialize should be called.
+        // identifier might also be empty for MeasureUnit().
+        productUnit.serialize(status);
+    }
     if (U_FAILURE(status)) {
         return;
     }
-    UnicodeString secondaryData[ARRAY_LENGTH];
-    getMeasureData(loc, perUnit, width, derivedPerCases.value1(), secondaryData, status);
+    if (productUnit.identifier.length() == 0) {
+        // MeasureUnit(): no units: return empty strings.
+        return;
+    }
+
+    MeasureUnit builtinUnit;
+    if (MeasureUnit::findBySubType(productUnit.identifier.toStringPiece(), &builtinUnit)) {
+        // TODO(icu-units#145): spec doesn't cover builtin-per-builtin, it
+        // breaks them all down. Do we want to drop this?
+        // - findBySubType isn't super efficient, if we skip it and go to basic
+        //   singles, we don't have to construct MeasureUnit's anymore.
+        // - Check all the existing unit tests that fail without this: is it due
+        //   to incorrect fallback via getMeasureData?
+        // - Do those unit tests cover this code path representatively?
+        if (builtinUnit != MeasureUnit()) {
+            getMeasureData(loc, builtinUnit, width, caseVariant, outArray, status);
+        }
+        return;
+    }
+
+    // 2. Set timesPattern to be getValue(times, locale, length)
+    UnicodeString timesPattern = getCompoundValue("times", loc, width, status);
+    SimpleFormatter timesPatternFormatter(timesPattern, 2, 2, status);
     if (U_FAILURE(status)) {
         return;
     }
 
-    // TODO(icu-units#139): implement these rules:
-    // <deriveComponent feature="plural" structure="per" ...>
-    // This has impact on multiSimpleFormatsToModifiers(...) below too.
-    // These rules are currently (ICU 69) all the same and hard-coded below.
-    UnicodeString perUnitFormat;
-    if (!secondaryData[PER_INDEX].isBogus()) {
-        perUnitFormat = secondaryData[PER_INDEX];
-    } else {
-        UnicodeString rawPerUnitFormat = getPerUnitFormat(loc, width, status);
-        if (U_FAILURE(status)) {
-            return;
+    PlaceholderPosition globalPlaceholder[ARRAY_LENGTH];
+    UChar globalJoinerChar = 0;
+    // Numbered list items are from the algorithms at
+    // https://unicode.org/reports/tr35/tr35-general.html#compound-units:
+    //
+    // pattern(...) point 5:
+    // - Set both globalPlaceholder and globalPlaceholderPosition to be empty
+    //
+    // 3. Set result to be empty
+    for (int32_t pluralIndex = 0; pluralIndex < ARRAY_LENGTH; pluralIndex++) {
+        // Initial state: empty string pattern, via all falling back to OTHER:
+        if (pluralIndex == StandardPlural::Form::OTHER) {
+            outArray[pluralIndex].remove();
+        } else {
+            outArray[pluralIndex].setToBogus();
         }
-        // rawPerUnitFormat is something like "{0} per {1}"; we need to substitute in the secondary unit.
-        SimpleFormatter compiled(rawPerUnitFormat, 2, 2, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
-        UnicodeString secondaryFormat = getWithPlural(secondaryData, StandardPlural::Form::ONE, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
-        // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
-        SimpleFormatter secondaryCompiled(secondaryFormat, 0, 1, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
-        UnicodeString secondaryFormatString = secondaryCompiled.getTextWithNoArguments();
-        int32_t trimmedSecondaryLen = secondaryFormatString.length();
-        const UChar *trimmedSecondaryString =
-            trimSpaceChars(secondaryFormatString.getBuffer(), trimmedSecondaryLen);
-        UnicodeString secondaryString(false, trimmedSecondaryString, trimmedSecondaryLen);
-        // TODO: Why does UnicodeString need to be explicit in the following line?
-        compiled.format(UnicodeString(u"{0}"), secondaryString, perUnitFormat, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
+        globalPlaceholder[pluralIndex] = PH_EMPTY;
     }
-    fillIn->rules = rules;
-    fillIn->parent = parent;
-    fillIn->multiSimpleFormatsToModifiers(primaryData, perUnitFormat,
-                                          {UFIELD_CATEGORY_NUMBER, UNUM_MEASURE_UNIT_FIELD}, status);
 
-    // Gender
-    UnicodeString uVal = getDeriveCompoundRule(loc, "gender", "per", status);
-    if (U_FAILURE(status)) {
-        return;
+    // Empty string represents "compound" (propagate the plural form).
+    const char *pluralCategory = "";
+    DerivedComponents derivedTimesPlurals(loc, "plural", "times");
+    DerivedComponents derivedTimesCases(loc, "case", "times");
+    DerivedComponents derivedPowerCases(loc, "case", "power");
+
+    // 4. For each single_unit in product_unit
+    for (int32_t singleUnitIndex = 0; singleUnitIndex < productUnit.singleUnits.length();
+         singleUnitIndex++) {
+        SingleUnitImpl *singleUnit = productUnit.singleUnits[singleUnitIndex];
+        const char *singlePluralCategory;
+        const char *singleCaseVariant;
+        // TODO(icu-units#28): ensure we have unit tests that change/fail if we
+        // assign incorrect case variants here:
+        if (singleUnitIndex < productUnit.singleUnits.length() - 1) {
+            // 4.1. If hasMultiple
+            singlePluralCategory = derivedTimesPlurals.value0(pluralCategory);
+            singleCaseVariant = derivedTimesCases.value0(caseVariant);
+            pluralCategory = derivedTimesPlurals.value1(pluralCategory);
+            caseVariant = derivedTimesCases.value1(caseVariant);
+        } else {
+            singlePluralCategory = derivedTimesPlurals.value1(pluralCategory);
+            singleCaseVariant = derivedTimesCases.value1(caseVariant);
+        }
+
+        // 4.2. Get the gender of that single_unit
+        MeasureUnit builtinUnit;
+        if (!MeasureUnit::findBySubType(singleUnit->getSimpleUnitID(), &builtinUnit)) {
+            // Ideally all simple units should be known, but they're not:
+            // 100-kilometer is internally treated as a simple unit, but it is
+            // not a built-in unit and does not have formatting data in CLDR 39.
+            //
+            // TODO(icu-units#28): test (desirable) invariants in unit tests.
+            status = U_UNSUPPORTED_ERROR;
+            return;
+        }
+        const char *gender = getGenderForBuiltin(loc, builtinUnit, status);
+
+        // 4.3. If singleUnit starts with a dimensionality_prefix, such as 'square-'
+        U_ASSERT(singleUnit->dimensionality > 0);
+        int32_t dimensionality = singleUnit->dimensionality;
+        UnicodeString dimensionalityPrefixPatterns[ARRAY_LENGTH];
+        if (dimensionality != 1) {
+            // 4.3.1. set dimensionalityPrefixPattern to be
+            //   getValue(that dimensionality_prefix, locale, length, singlePluralCategory, singleCaseVariant, gender),
+            //   such as "{0} kwadratowym"
+            CharString dimensionalityKey("compound/power", status);
+            dimensionalityKey.appendNumber(dimensionality, status);
+            getInflectedMeasureData(dimensionalityKey.toStringPiece(), loc, width, gender,
+                                    singleCaseVariant, dimensionalityPrefixPatterns, status);
+            if (U_FAILURE(status)) {
+                // At the time of writing, only power2 and power3 are supported.
+                // Attempting to format other powers results in a
+                // U_RESOURCE_TYPE_MISMATCH. We convert the error if we
+                // understand it:
+                if (status == U_RESOURCE_TYPE_MISMATCH && dimensionality > 3) {
+                    status = U_UNSUPPORTED_ERROR;
+                }
+                return;
+            }
+
+            // TODO(icu-units#139):
+            // 4.3.2. set singlePluralCategory to be power0(singlePluralCategory)
+
+            // 4.3.3. set singleCaseVariant to be power0(singleCaseVariant)
+            singleCaseVariant = derivedPowerCases.value0(singleCaseVariant);
+            // 4.3.4. remove the dimensionality_prefix from singleUnit
+            singleUnit->dimensionality = 1;
+        }
+
+        // 4.4. if singleUnit starts with an si_prefix, such as 'centi'
+        UMeasurePrefix prefix = singleUnit->unitPrefix;
+        UnicodeString prefixPattern;
+        if (prefix != UMEASURE_PREFIX_ONE) {
+            // 4.4.1. set siPrefixPattern to be getValue(that si_prefix, locale,
+            //        length), such as "centy{0}"
+            CharString prefixKey;
+            // prefixKey looks like "1024p3" or "10p-2":
+            prefixKey.appendNumber(umeas_getPrefixBase(prefix), status);
+            prefixKey.append('p', status);
+            prefixKey.appendNumber(umeas_getPrefixPower(prefix), status);
+            // Contains a pattern like "centy{0}".
+            prefixPattern = getCompoundValue(prefixKey.toStringPiece(), loc, width, status);
+
+            // 4.4.2. set singlePluralCategory to be prefix0(singlePluralCategory)
+            //
+            // TODO(icu-units#139): that refers to these rules:
+            // <deriveComponent feature="plural" structure="prefix" value0="one" value1="compound"/>
+            // though I'm not sure what other value they might end up having.
+            //
+            // 4.4.3. set singleCaseVariant to be prefix0(singleCaseVariant)
+            //
+            // TODO(icu-units#139): that refers to:
+            // <deriveComponent feature="case" structure="prefix" value0="nominative"
+            // value1="compound"/> but the prefix (value0) doesn't have case, the rest simply
+            // propagates.
+
+            // 4.4.4. remove the si_prefix from singleUnit
+            singleUnit->unitPrefix = UMEASURE_PREFIX_ONE;
+        }
+
+        // 4.5. Set corePattern to be the getValue(singleUnit, locale, length,
+        //      singlePluralCategory, singleCaseVariant), such as "{0} metrem"
+        UnicodeString singleUnitArray[ARRAY_LENGTH];
+        // At this point we are left with a Simple Unit:
+        U_ASSERT(uprv_strcmp(singleUnit->build(status).getIdentifier(), singleUnit->getSimpleUnitID()) ==
+                 0);
+        getMeasureData(loc, singleUnit->build(status), width, singleCaseVariant, singleUnitArray,
+                       status);
+        if (U_FAILURE(status)) {
+            // Shouldn't happen if we have data for all single units
+            return;
+        }
+
+        // Calculate output gender
+        if (!singleUnitArray[GENDER_INDEX].isBogus()) {
+            U_ASSERT(!singleUnitArray[GENDER_INDEX].isEmpty());
+            UnicodeString uVal;
+
+            if (prefix != UMEASURE_PREFIX_ONE) {
+                singleUnitArray[GENDER_INDEX] =
+                    getDerivedGender(loc, "prefix", singleUnitArray, nullptr, status);
+            }
+
+            // Powers use compoundUnitPattern1, dimensionalityPrefixPatterns may
+            // have a "gender" element
+            //
+            // TODO(icu-units#28): untested: no locale data uses this currently:
+            if (dimensionality != 1) {
+                singleUnitArray[GENDER_INDEX] = getDerivedGender(loc, "power", singleUnitArray,
+                                                                 dimensionalityPrefixPatterns, status);
+            }
+
+            UnicodeString timesGenderRule = getDeriveCompoundRule(loc, "gender", "times", status);
+            if (timesGenderRule.length() == 1) {
+                switch (timesGenderRule[0]) {
+                case u'0':
+                    if (singleUnitIndex == 0) {
+                        U_ASSERT(outArray[GENDER_INDEX].isBogus());
+                        outArray[GENDER_INDEX] = singleUnitArray[GENDER_INDEX];
+                    }
+                    break;
+                case u'1':
+                    if (singleUnitIndex == productUnit.singleUnits.length() - 1) {
+                        U_ASSERT(outArray[GENDER_INDEX].isBogus());
+                        outArray[GENDER_INDEX] = singleUnitArray[GENDER_INDEX];
+                    }
+                }
+            } else {
+                if (outArray[GENDER_INDEX].isBogus()) {
+                    outArray[GENDER_INDEX] = timesGenderRule;
+                }
+            }
+        }
+
+        // Calculate resulting patterns for each plural form
+        for (int32_t pluralIndex = 0; pluralIndex < StandardPlural::Form::COUNT; pluralIndex++) {
+            StandardPlural::Form plural = static_cast<StandardPlural::Form>(pluralIndex);
+
+            // singleUnitArray[pluralIndex] looks something like "{0} Meter"
+            if (outArray[pluralIndex].isBogus()) {
+                if (singleUnitArray[pluralIndex].isBogus()) {
+                    // Let the usual plural fallback mechanism take care of this
+                    // plural form
+                    continue;
+                } else {
+                    // Since our singleUnit can have a plural form that outArray
+                    // doesn't yet have (relying on fallback to OTHER), we start
+                    // by grabbing it with the normal plural fallback mechanism
+                    outArray[pluralIndex] = getWithPlural(outArray, plural, status);
+                    if (U_FAILURE(status)) {
+                        return;
+                    }
+                }
+            }
+
+            if (uprv_strcmp(singlePluralCategory, "") != 0) {
+                plural = static_cast<StandardPlural::Form>(getIndex(singlePluralCategory, status));
+            }
+
+            // 4.6. Extract(corePattern, coreUnit, placeholder, placeholderPosition) from that pattern.
+            UnicodeString coreUnit;
+            PlaceholderPosition placeholderPosition;
+            UChar joinerChar;
+            extractCorePattern(getWithPlural(singleUnitArray, plural, status), coreUnit,
+                               placeholderPosition, joinerChar);
+
+            // 4.7 If the position is middle, then fail
+            if (placeholderPosition == PH_MIDDLE) {
+                status = U_UNSUPPORTED_ERROR;
+                return;
+            }
+
+            // 4.8. If globalPlaceholder is empty
+            if (globalPlaceholder[pluralIndex] == PH_EMPTY) {
+                globalPlaceholder[pluralIndex] = placeholderPosition;
+                globalJoinerChar = joinerChar;
+            } else {
+                // Expect all units involved to have the same placeholder position
+                U_ASSERT(globalPlaceholder[pluralIndex] == placeholderPosition);
+                // TODO(icu-units#28): Do we want to add a unit test that checks
+                // for consistent joiner chars? Probably not, given how
+                // inconsistent they are. File a CLDR ticket with examples?
+            }
+            // Now coreUnit would be just "Meter"
+
+            // 4.9. If siPrefixPattern is not empty
+            if (prefix != UMEASURE_PREFIX_ONE) {
+                SimpleFormatter prefixCompiled(prefixPattern, 1, 1, status);
+                if (U_FAILURE(status)) {
+                    return;
+                }
+
+                // 4.9.1. Set coreUnit to be the combineLowercasing(locale, length, siPrefixPattern,
+                //        coreUnit)
+                UnicodeString tmp;
+                // combineLowercasing(locale, length, prefixPattern, coreUnit)
+                //
+                // TODO(icu-units#28): run this only if prefixPattern does not
+                // contain space characters - do languages "as", "bn", "hi",
+                // "kk", etc have concepts of upper and lower case?:
+                if (width == UNUM_UNIT_WIDTH_FULL_NAME) {
+                    coreUnit.toLower(loc);
+                }
+                prefixCompiled.format(coreUnit, tmp, status);
+                if (U_FAILURE(status)) {
+                    return;
+                }
+                coreUnit = tmp;
+            }
+
+            // 4.10. If dimensionalityPrefixPattern is not empty
+            if (dimensionality != 1) {
+                SimpleFormatter dimensionalityCompiled(
+                    getWithPlural(dimensionalityPrefixPatterns, plural, status), 1, 1, status);
+                if (U_FAILURE(status)) {
+                    return;
+                }
+
+                // 4.10.1. Set coreUnit to be the combineLowercasing(locale, length,
+                //         dimensionalityPrefixPattern, coreUnit)
+                UnicodeString tmp;
+                // combineLowercasing(locale, length, prefixPattern, coreUnit)
+                //
+                // TODO(icu-units#28): run this only if prefixPattern does not
+                // contain space characters - do languages "as", "bn", "hi",
+                // "kk", etc have concepts of upper and lower case?:
+                if (width == UNUM_UNIT_WIDTH_FULL_NAME) {
+                    coreUnit.toLower(loc);
+                }
+                dimensionalityCompiled.format(coreUnit, tmp, status);
+                if (U_FAILURE(status)) {
+                    return;
+                }
+                coreUnit = tmp;
+            }
+
+            if (outArray[pluralIndex].length() == 0) {
+                // 4.11. If the result is empty, set result to be coreUnit
+                outArray[pluralIndex] = coreUnit;
+            } else {
+                // 4.12. Otherwise set result to be format(timesPattern, result, coreUnit)
+                UnicodeString tmp;
+                timesPatternFormatter.format(outArray[pluralIndex], coreUnit, tmp, status);
+                outArray[pluralIndex] = tmp;
+            }
+        }
     }
-    U_ASSERT(!uVal.isBogus() && uVal.length() == 1);
-    switch (uVal[0]) {
-    case u'0':
-        fillIn->gender = getGenderString(primaryData[GENDER_INDEX], status);
-        break;
-    case u'1':
-        fillIn->gender = getGenderString(secondaryData[GENDER_INDEX], status);
-        break;
-    default:
-        // Data error. Assert-fail in debug mode, else return no gender.
-        U_ASSERT(false);
+    for (int32_t pluralIndex = 0; pluralIndex < StandardPlural::Form::COUNT; pluralIndex++) {
+        if (globalPlaceholder[pluralIndex] == PH_BEGINNING) {
+            UnicodeString tmp;
+            tmp.append(u"{0}", 3);
+            if (globalJoinerChar != 0) {
+                tmp.append(globalJoinerChar);
+            }
+            tmp.append(outArray[pluralIndex]);
+            outArray[pluralIndex] = tmp;
+        } else if (globalPlaceholder[pluralIndex] == PH_END) {
+            if (globalJoinerChar != 0) {
+                outArray[pluralIndex].append(globalJoinerChar);
+            }
+            outArray[pluralIndex].append(u"{0}", 3);
+        }
     }
 }
 
@@ -623,7 +1346,7 @@ LongNameHandler* LongNameHandler::forCurrencyLongNames(const Locale &loc, const 
     getCurrencyLongNameData(loc, currency, simpleFormats, status);
     if (U_FAILURE(status)) { return nullptr; }
     result->simpleFormatsToModifiers(simpleFormats, {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD}, status);
-    // TODO(inflections): currency gender?
+    // TODO(icu-units#28): currency gender?
     return result;
 }
 
@@ -648,8 +1371,12 @@ void LongNameHandler::multiSimpleFormatsToModifiers(const UnicodeString *leadFor
         UnicodeString leadFormat = getWithPlural(leadFormats, plural, status);
         if (U_FAILURE(status)) { return; }
         UnicodeString compoundFormat;
-        trailCompiled.format(leadFormat, compoundFormat, status);
-        if (U_FAILURE(status)) { return; }
+        if (leadFormat.length() == 0) {
+            compoundFormat = trailFormat;
+        } else {
+            trailCompiled.format(leadFormat, compoundFormat, status);
+            if (U_FAILURE(status)) { return; }
+        }
         SimpleFormatter compoundCompiled(compoundFormat, 0, 1, status);
         if (U_FAILURE(status)) { return; }
         fModifiers[i] = SimpleModifier(compoundCompiled, field, false, {this, SIGNUM_POS_ZERO, plural});
@@ -673,16 +1400,24 @@ const Modifier* LongNameHandler::getModifier(Signum /*signum*/, StandardPlural::
 void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc,
                                               const MeasureUnit &mixedUnit,
                                               const UNumberUnitWidth &width,
-                                              StringPiece unitDisplayCase,
+                                              const char *unitDisplayCase,
                                               const PluralRules *rules,
                                               const MicroPropsGenerator *parent,
                                               MixedUnitLongNameHandler *fillIn,
                                               UErrorCode &status) {
-    U_ASSERT(mixedUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     MeasureUnitImpl temp;
     const MeasureUnitImpl &impl = MeasureUnitImpl::forMeasureUnit(mixedUnit, temp, status);
+    if (impl.complexity != UMEASURE_UNIT_MIXED) {
+        // Should be using the normal LongNameHandler
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+
     fillIn->fMixedUnitCount = impl.singleUnits.length();
     fillIn->fMixedUnitData.adoptInstead(new UnicodeString[fillIn->fMixedUnitCount * ARRAY_LENGTH]);
     for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
@@ -814,7 +1549,7 @@ const Modifier *MixedUnitLongNameHandler::getMixedUnitModifier(DecimalQuantity &
 
 const Modifier *MixedUnitLongNameHandler::getModifier(Signum /*signum*/,
                                                       StandardPlural::Form /*plural*/) const {
-    // TODO(units): investigate this method when investigating where
+    // TODO(icu-units#28): investigate this method when investigating where
     // ModifierStore::getModifier() gets used. To be sure it remains
     // unreachable:
     UPRV_UNREACHABLE;
@@ -824,7 +1559,7 @@ const Modifier *MixedUnitLongNameHandler::getModifier(Signum /*signum*/,
 LongNameMultiplexer *LongNameMultiplexer::forMeasureUnits(const Locale &loc,
                                                           const MaybeStackVector<MeasureUnit> &units,
                                                           const UNumberUnitWidth &width,
-                                                          StringPiece unitDisplayCase,
+                                                          const char *unitDisplayCase,
                                                           const PluralRules *rules,
                                                           const MicroPropsGenerator *parent,
                                                           UErrorCode &status) {
