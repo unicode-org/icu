@@ -83,6 +83,11 @@ struct MicroProps : public MicroPropsGenerator {
     bool useCurrency;
     char nsName[9];
 
+    // No ownership: must point at a string which will outlive MicroProps
+    // instances, e.g. a string with static storage duration, or just a string
+    // that will never be deallocated or modified.
+    const char *gender;
+
     // Note: This struct has no direct ownership of the following pointers.
     const DecimalFormatSymbols* symbols;
 

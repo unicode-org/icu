@@ -1131,33 +1131,35 @@ class U_I18N_API Scale : public UMemory {
 
 namespace impl {
 
-// Do not enclose entire Usage with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
+// Do not enclose entire StringProp with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /**
  * Manages NumberFormatterSettings::usage()'s char* instance on the heap.
  * @internal
  */
-class U_I18N_API Usage : public UMemory {
+class U_I18N_API StringProp : public UMemory {
 
 #ifndef U_HIDE_INTERNAL_API
 
   public:
     /** @internal */
-    Usage(const Usage& other);
+    StringProp(const StringProp &other);
 
     /** @internal */
-    Usage& operator=(const Usage& other);
+    StringProp &operator=(const StringProp &other);
 
     /** @internal */
-    Usage(Usage &&src) U_NOEXCEPT;
+    StringProp(StringProp &&src) U_NOEXCEPT;
 
     /** @internal */
-    Usage& operator=(Usage&& src) U_NOEXCEPT;
+    StringProp &operator=(StringProp &&src) U_NOEXCEPT;
 
     /** @internal */
-    ~Usage();
+    ~StringProp();
 
     /** @internal */
-    int16_t length() const { return fLength; }
+    int16_t length() const {
+        return fLength;
+    }
 
     /** @internal
      * Makes a copy of value. Set to "" to unset.
@@ -1165,16 +1167,19 @@ class U_I18N_API Usage : public UMemory {
     void set(StringPiece value);
 
     /** @internal */
-    bool isSet() const { return fLength > 0; }
+    bool isSet() const {
+        return fLength > 0;
+    }
 
 #endif // U_HIDE_INTERNAL_API
 
   private:
-    char *fUsage;
+    char *fValue;
     int16_t fLength;
     UErrorCode fError;
 
-    Usage() : fUsage(nullptr), fLength(0), fError(U_ZERO_ERROR) {}
+    StringProp() : fValue(nullptr), fLength(0), fError(U_ZERO_ERROR) {
+    }
 
     /** @internal */
     UBool copyErrorTo(UErrorCode &status) const {
@@ -1185,7 +1190,7 @@ class U_I18N_API Usage : public UMemory {
         return false;
     }
 
-    // Allow NumberFormatterImpl to access fUsage.
+    // Allow NumberFormatterImpl to access fValue.
     friend class impl::NumberFormatterImpl;
 
     // Allow skeleton generation code to access private members.
@@ -1480,7 +1485,10 @@ struct U_I18N_API MacroProps : public UMemory {
     Scale scale;  // = Scale();  (benign value)
 
     /** @internal */
-    Usage usage;  // = Usage();  (no usage)
+    StringProp usage;  // = StringProp();  (no usage)
+
+    /** @internal */
+    StringProp unitDisplayCase;  // = StringProp();  (nominative)
 
     /** @internal */
     const AffixPatternProvider* affixProvider = nullptr;  // no ownership
@@ -1503,7 +1511,8 @@ struct U_I18N_API MacroProps : public UMemory {
     bool copyErrorTo(UErrorCode &status) const {
         return notation.copyErrorTo(status) || precision.copyErrorTo(status) ||
                padder.copyErrorTo(status) || integerWidth.copyErrorTo(status) ||
-               symbols.copyErrorTo(status) || scale.copyErrorTo(status) || usage.copyErrorTo(status);
+               symbols.copyErrorTo(status) || scale.copyErrorTo(status) || usage.copyErrorTo(status) ||
+               unitDisplayCase.copyErrorTo(status);
     }
 };
 
@@ -2169,6 +2178,21 @@ class U_I18N_API NumberFormatterSettings {
      * @draft ICU 68
      */
     Derived usage(StringPiece usage) &&;
+
+    /**
+     * Specifies the desired case for a unit formatter's output (e.g.
+     * accusative, dative, genitive).
+     *
+     * @internal ICU 69 technology preview
+     */
+    Derived unitDisplayCase(StringPiece unitDisplayCase) const &;
+
+    /**
+     * Overload of unitDisplayCase() for use on an rvalue reference.
+     *
+     * @internal ICU 69 technology preview
+     */
+    Derived unitDisplayCase(StringPiece unitDisplayCase) &&;
 #endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
@@ -2658,6 +2682,14 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @draft ICU 68
      */
     MeasureUnit getOutputUnit(UErrorCode& status) const;
+
+    /**
+     * Gets the gender of the formatted output. Returns "" when the gender is
+     * unknown, or for ungendered languages.
+     *
+     * @internal ICU 69 technology preview.
+     */
+    const char *getGender(UErrorCode& status) const;
 #endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
