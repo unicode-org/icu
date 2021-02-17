@@ -1120,6 +1120,26 @@ UnicodeSet& UnicodeSet::retain(UChar32 c) {
     return retain(c, c);
 }
 
+UnicodeSet& UnicodeSet::retain(const UnicodeString &s) {
+    if (isFrozen() || isBogus()) { return *this; }
+    UChar32 cp = getSingleCP(s);
+    if (cp < 0) {
+        bool isIn = stringsContains(s);
+        // Check for getRangeCount() first to avoid somewhat-expensive size()
+        // when there are single code points.
+        if (isIn && getRangeCount() == 0 && size() == 1) {
+            return *this;
+        }
+        clear();
+        if (isIn) {
+            _add(s);
+        }
+    } else {
+        retain(cp, cp);
+    }
+    return *this;
+}
+
 /**
  * Removes the specified range from this set if it is present.
  * The set will not contain the specified range once the call

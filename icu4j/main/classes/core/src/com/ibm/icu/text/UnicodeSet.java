@@ -514,7 +514,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Make this object represent the range <code>start - end</code>.
-     * If <code>end &gt; start</code> then this object is set to an empty range.
+     * If <code>start &gt; end</code> then this object is set to an empty range.
      *
      * @param start first character in the set, inclusive
      * @param end last character in the set, inclusive
@@ -1159,7 +1159,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Adds the specified range to this set if it is not already
      * present.  If this set already contains the specified range,
-     * the call leaves this set unchanged.  If <code>end &gt; start</code>
+     * the call leaves this set unchanged.  If <code>start &gt; end</code>
      * then an empty range is added, leaving the set unchanged.
      *
      * @param start first character, inclusive, of range to be added
@@ -1490,13 +1490,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Retain only the elements in this set that are contained in the
-     * specified range.  If <code>end &gt; start</code> then an empty range is
+     * specified range.  If <code>start &gt; end</code> then an empty range is
      * retained, leaving the set empty.
      *
-     * @param start first character, inclusive, of range to be retained
-     * to this set.
-     * @param end last character, inclusive, of range to be retained
-     * to this set.
+     * @param start first character, inclusive, of range
+     * @param end last character, inclusive, of range
      * @stable ICU 2.0
      */
     public UnicodeSet retain(int start, int end) {
@@ -1541,11 +1539,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             checkFrozen();
             String s = cs.toString();
             boolean isIn = strings.contains(s);
-            if (isIn && size() == 1) {
+            // Check for getRangeCount() first to avoid somewhat-expensive size()
+            // when there are single code points.
+            if (isIn && getRangeCount() == 0 && size() == 1) {
                 return this;
             }
             clear();
-            addString(s);
+            if (isIn) {
+                addString(s);
+            }
             pat = null;
         } else {
             retain(cp, cp);
@@ -1556,7 +1558,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Removes the specified range from this set if it is present.
      * The set will not contain the specified range once the call
-     * returns.  If <code>end &gt; start</code> then an empty range is
+     * returns.  If <code>start &gt; end</code> then an empty range is
      * removed, leaving the set unchanged.
      *
      * @param start first character, inclusive, of range to be removed
@@ -1617,13 +1619,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Complements the specified range in this set.  Any character in
      * the range will be removed if it is in this set, or will be
-     * added if it is not in this set.  If <code>end &gt; start</code>
+     * added if it is not in this set.  If <code>start &gt; end</code>
      * then an empty range is complemented, leaving the set unchanged.
      *
-     * @param start first character, inclusive, of range to be removed
-     * from this set.
-     * @param end last character, inclusive, of range to be removed
-     * from this set.
+     * @param start first character, inclusive, of range
+     * @param end last character, inclusive, of range
      * @stable ICU 2.0
      */
     public UnicodeSet complement(int start, int end) {

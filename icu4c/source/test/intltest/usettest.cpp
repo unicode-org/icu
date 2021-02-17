@@ -696,6 +696,37 @@ void UnicodeSetTest::TestAPI() {
     if (U_FAILURE(status)) { errln("FAIL"); return; }
     if (set != exp) { errln("FAIL: retain('s')"); return; }
 
+    // ICU 2.6 coverage tests
+    // public final UnicodeSet retain(String s);
+    // public final UnicodeSet remove(int c);
+    // public final UnicodeSet remove(String s);
+    // public int hashCode();
+    set.applyPattern(u"[a-z{ab}{cd}]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    set.retain(u"cd");
+    exp.applyPattern(u"[{cd}]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set != exp) { errln("FAIL: (with cd).retain(\"cd\")"); return; }
+
+    set.applyPattern(u"[a-z{ab}{yz}]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    set.retain(u"cd");
+    exp.clear();
+    if (set != exp) { errln("FAIL: (without cd).retain(\"cd\")"); return; }
+
+    set.applyPattern(u"[a-z{ab}{cd}]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    set.remove(u'c');
+    exp.applyPattern(u"[abd-z{ab}{cd}]", status);
+    if (set != exp) { errln("FAIL: remove('c')"); return; }
+
+    set.remove(u"cd");
+    exp.applyPattern(u"[abd-z{ab}]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set != exp) { errln("FAIL: remove(\"cd\")"); return; }
+
+    set.applyPattern("[s]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
     uint16_t buf[32];
     int32_t slen = set.serialize(buf, UPRV_LENGTHOF(buf), status);
     if (U_FAILURE(status)) { errln("FAIL: serialize"); return; }
