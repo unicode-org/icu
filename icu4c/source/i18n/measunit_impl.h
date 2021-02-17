@@ -14,6 +14,12 @@
 
 U_NAMESPACE_BEGIN
 
+namespace number {
+namespace impl {
+class LongNameHandler;
+}
+} // namespace number
+
 // Export an explicit template instantiation of the LocalPointer that is used as a
 // data member of MeasureUnitImpl.
 // (When building DLLs for Windows this is required.)
@@ -310,6 +316,10 @@ class U_I18N_API MeasureUnitImpl : public UMemory {
      * Normalizes a MeasureUnitImpl and generate the identifier string in place.
      */
     void serialize(UErrorCode &status);
+
+    // For calling serialize
+    // TODO(icu-units#147): revisit serialization
+    friend class number::impl::LongNameHandler;
 };
 
 U_NAMESPACE_END

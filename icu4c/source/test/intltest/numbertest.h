@@ -59,6 +59,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void notationCompact();
     void unitMeasure();
     void unitCompoundMeasure();
+    void unitArbitraryMeasureUnits();
     void unitSkeletons();
     void unitUsage();
     void unitUsageErrorCodes();
@@ -174,6 +175,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
       int32_t length);
 
     struct UnitInflectionTestCase {
+        const char *unitIdentifier;
         const char *locale;
         const char *unitDisplayCase;
         double value;
@@ -181,10 +183,10 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     };
 
     void runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,
-                                     const UChar *skeleton,
-                                     const UChar *conciseSkeleton,
+                                     UnicodeString skeleton,
                                      const UnitInflectionTestCase *cases,
-                                     int32_t numCases);
+                                     int32_t numCases,
+                                     IcuTestErrorCode &status);
 };
 
 class DecimalQuantityTest : public IntlTest {

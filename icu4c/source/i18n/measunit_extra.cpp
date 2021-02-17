@@ -894,6 +894,12 @@ SingleUnitImpl SingleUnitImpl::forMeasureUnit(const MeasureUnit& measureUnit, UE
 MeasureUnit SingleUnitImpl::build(UErrorCode& status) const {
     MeasureUnitImpl temp;
     temp.appendSingleUnit(*this, status);
+    // TODO(icu-units#28): the MeasureUnitImpl::build() method uses
+    // findBySubtype, which is relatively slow.
+    // - At the time of loading the simple unit IDs, we could also save a
+    //   mapping to the builtin MeasureUnit type and subtype they correspond to.
+    // - This method could then check dimensionality and index, and if both are
+    //   1, directly return MeasureUnit instances very quickly.
     return std::move(temp).build(status);
 }
 

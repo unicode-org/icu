@@ -62,7 +62,7 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     static void forMeasureUnit(const Locale &loc,
                                const MeasureUnit &unitRef,
                                const UNumberUnitWidth &width,
-                               StringPiece unitDisplayCase,
+                               const char *unitDisplayCase,
                                const PluralRules *rules,
                                const MicroPropsGenerator *parent,
                                LongNameHandler *fillIn,
@@ -102,18 +102,25 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     // Allow macrosToMicroGenerator to call the private default constructor.
     friend class NumberFormatterImpl;
 
-    // Fills in LongNameHandler fields for formatting compound units identified
-    // via `unit` and `perUnit`. Both `unit` and `perUnit` need to be built-in
-    // units (for which data exists).
-    static void forCompoundUnit(const Locale &loc,
-                                const MeasureUnit &unit,
-                                const MeasureUnit &perUnit,
-                                const UNumberUnitWidth &width,
-                                StringPiece unitDisplayCase,
-                                const PluralRules *rules,
-                                const MicroPropsGenerator *parent,
-                                LongNameHandler *fillIn,
-                                UErrorCode &status);
+    // Fills in LongNameHandler fields for formatting units identified `unit`.
+    static void forArbitraryUnit(const Locale &loc,
+                                 const MeasureUnit &unit,
+                                 const UNumberUnitWidth &width,
+                                 const char *unitDisplayCase,
+                                 LongNameHandler *fillIn,
+                                 UErrorCode &status);
+
+    // Roughly corresponds to patternTimes(...) in the spec:
+    // https://unicode.org/reports/tr35/tr35-general.html#compound-units
+    //
+    // productUnit is an rvalue reference to indicate this function consumes it,
+    // leaving it in a not-useful / undefined state.
+    static void processPatternTimes(MeasureUnitImpl &&productUnit,
+                                    Locale loc,
+                                    const UNumberUnitWidth &width,
+                                    const char *caseVariant,
+                                    UnicodeString *outArray,
+                                    UErrorCode &status);
 
     // Sets fModifiers to use the patterns from `simpleFormats`.
     void simpleFormatsToModifiers(const UnicodeString *simpleFormats, Field field, UErrorCode &status);
@@ -122,7 +129,7 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
     // and `trailFormat` appended to each.
     //
     // With a leadFormat of "{0}m" and a trailFormat of "{0}/s", it produces a
-    // pattern of "{0}m/s" by inserting the leadFormat pattern into trailFormat.
+    // pattern of "{0}m/s" by inserting each leadFormat pattern into trailFormat.
     void multiSimpleFormatsToModifiers(const UnicodeString *leadFormats, UnicodeString trailFormat,
                                        Field field, UErrorCode &status);
 };
@@ -153,7 +160,7 @@ class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStor
     static void forMeasureUnit(const Locale &loc,
                                const MeasureUnit &mixedUnit,
                                const UNumberUnitWidth &width,
-                               StringPiece unitDisplayCase,
+                               const char *unitDisplayCase,
                                const PluralRules *rules,
                                const MicroPropsGenerator *parent,
                                MixedUnitLongNameHandler *fillIn,
@@ -230,7 +237,7 @@ class LongNameMultiplexer : public MicroPropsGenerator, public UMemory {
     static LongNameMultiplexer *forMeasureUnits(const Locale &loc,
                                                 const MaybeStackVector<MeasureUnit> &units,
                                                 const UNumberUnitWidth &width,
-                                                StringPiece unitDisplayCase,
+                                                const char *unitDisplayCase,
                                                 const PluralRules *rules,
                                                 const MicroPropsGenerator *parent,
                                                 UErrorCode &status);

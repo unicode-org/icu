@@ -80,6 +80,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(notationCompact);
         TESTCASE_AUTO(unitMeasure);
         TESTCASE_AUTO(unitCompoundMeasure);
+        TESTCASE_AUTO(unitArbitraryMeasureUnits);
         TESTCASE_AUTO(unitSkeletons);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitUsageErrorCodes);
@@ -584,22 +585,21 @@ void NumberFormatterApiTest::unitMeasure() {
             u"0.0088 meters",
             u"0 meters");
 
-//     // TODO(ICU-20941): Support formatting for not-built-in units
-//     assertFormatDescending(
-//             u"Hectometers",
-//             u"measure-unit/length-hectometer",
-//             u"unit/hectometer",
-//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("hectometer", status)),
-//             Locale::getEnglish(),
-//             u"87,650 hm",
-//             u"8,765 hm",
-//             u"876.5 hm",
-//             u"87.65 hm",
-//             u"8.765 hm",
-//             u"0.8765 hm",
-//             u"0.08765 hm",
-//             u"0.008765 hm",
-//             u"0 hm");
+    assertFormatDescending(
+            u"Hectometers",
+            u"unit/hectometer",
+            u"unit/hectometer",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("hectometer", status)),
+            Locale::getEnglish(),
+            u"87,650 hm",
+            u"8,765 hm",
+            u"876.5 hm",
+            u"87.65 hm",
+            u"8.765 hm",
+            u"0.8765 hm",
+            u"0.08765 hm",
+            u"0.008765 hm",
+            u"0 hm");
 
 //    TODO: Implement Measure in C++
 //    assertFormatSingleMeasure(
@@ -717,15 +717,14 @@ void NumberFormatterApiTest::unitMeasure() {
             5,
             u"5 a\u00F1os");
 
-    // TODO(ICU-20941): arbitrary unit formatting
-//     assertFormatSingle(
-//             u"Hubble Constant",
-//             u"unit/kilometer-per-megaparsec-second",
-//             u"unit/kilometer-per-megaparsec-second",
-//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("kilometer-per-megaparsec-second", status)),
-//             Locale("en"),
-//             74, // Approximate 2019-03-18 measurement
-//             u"74 km/s.Mpc");
+    assertFormatSingle(
+            u"Hubble Constant - usually expressed in km/s/Mpc",
+            u"unit/kilometer-per-megaparsec-second",
+            u"unit/kilometer-per-megaparsec-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("kilometer-per-second-per-megaparsec", status)),
+            Locale("en"),
+            74, // Approximate 2019-03-18 measurement
+            u"74 km/Mpc⋅sec");
 
     assertFormatSingle(
             u"Mixed unit",
@@ -1060,7 +1059,7 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
     status.assertSuccess(); // Error is only returned once we try to format.
     FormattedNumber num = nf.formatDouble(2.4, status);
     if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
-        errln(UnicodeString("Expected failure, got: \"") +
+        errln(UnicodeString("Expected failure for unit/furlong-pascal per-unit/length-meter, got: \"") +
               nf.formatDouble(2.4, status).toString(status) + "\".");
         status.assertSuccess();
     }
@@ -1086,6 +1085,167 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             Locale("en-GB"),
             2.4,
             u"2.4 m/s\u00B2");
+}
+
+void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
+    IcuTestErrorCode status(*this, "unitArbitraryMeasureUnits()");
+
+    // TODO: fix after data bug is resolved? See CLDR-14510.
+//     assertFormatSingle(
+//             u"Binary unit prefix: kibibyte",
+//             u"unit/kibibyte",
+//             u"unit/kibibyte",
+//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("kibibyte", status)),
+//             Locale("en-GB"),
+//             2.4,
+//             u"2.4 KiB");
+
+    assertFormatSingle(
+            u"Binary unit prefix: kibibyte full-name",
+            u"unit/kibibyte unit-width-full-name",
+            u"unit/kibibyte unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibibyte", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 kibibytes");
+
+    assertFormatSingle(
+            u"Binary unit prefix: kibibyte full-name",
+            u"unit/kibibyte unit-width-full-name",
+            u"unit/kibibyte unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibibyte", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de"),
+            2.4,
+            u"2,4 Kibibyte");
+
+    assertFormatSingle(
+            u"Binary prefix for non-digital units: kibimeter",
+            u"unit/kibimeter",
+            u"unit/kibimeter",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibimeter", status)),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 Kim");
+
+    assertFormatSingle(
+            u"SI prefix falling back to root: microohm",
+            u"unit/microohm",
+            u"unit/microohm",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("microohm", status)),
+            Locale("de-CH"),
+            2.4,
+            u"2.4 μΩ");
+
+    assertFormatSingle(
+            u"de-CH fallback to de: microohm unit-width-full-name",
+            u"unit/microohm unit-width-full-name",
+            u"unit/microohm unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("microohm", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de-CH"),
+            2.4,
+            u"2.4\u00A0Mikroohm");
+
+    assertFormatSingle(
+            u"No prefixes, 'times' pattern: joule-furlong",
+            u"unit/joule-furlong",
+            u"unit/joule-furlong",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("joule-furlong", status)),
+            Locale("en"),
+            2.4,
+            u"2.4 J⋅fur");
+
+    assertFormatSingle(
+            u"No numeratorUnitString: per-second",
+            u"unit/per-second",
+            u"unit/per-second",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("per-second", status)),
+            Locale("de-CH"),
+            2.4,
+            u"2.4/s");
+
+    assertFormatSingle(
+            u"No numeratorUnitString: per-second unit-width-full-name",
+            u"unit/per-second unit-width-full-name",
+            u"unit/per-second unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("per-second", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de-CH"),
+            2.4,
+            u"2.4 pro Sekunde");
+
+    assertFormatSingle(
+            u"Prefix in the denominator: nanogram-per-picobarrel",
+            u"unit/nanogram-per-picobarrel",
+            u"unit/nanogram-per-picobarrel",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("nanogram-per-picobarrel", status)),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 ng/pbbl");
+
+    assertFormatSingle(
+            u"Prefix in the denominator: nanogram-per-picobarrel unit-width-full-name",
+            u"unit/nanogram-per-picobarrel unit-width-full-name",
+            u"unit/nanogram-per-picobarrel unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("nanogram-per-picobarrel", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 nanograms per picobarrel");
+
+    // Valid MeasureUnit, but unformattable, because we only have patterns for
+    // pow2 and pow3 at this time:
+    LocalizedNumberFormatter lnf = NumberFormatter::with()
+              .unit(MeasureUnit::forIdentifier("pow4-mile", status))
+              .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+              .locale("en-ZA");
+    lnf.formatInt(1, status);
+    status.expectErrorAndReset(U_RESOURCE_TYPE_MISMATCH);
+
+    assertFormatSingle(
+            u"kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibijoule-foot-per-cubic-gigafurlong-square-second",
+                                                 status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 kibijoule-feet per cubic gigafurlong-square second");
+
+    assertFormatSingle(
+            u"kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibijoule-foot-per-cubic-gigafurlong-square-second",
+                                                 status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de-CH"),
+            2.4,
+            u"2.4\u00A0Kibijoule⋅Fuss pro Kubikgigafurlong⋅Quadratsekunde");
+
+    // TODO(ICU-21504): We want to be able to format this, but "100-kilometer"
+    // is not yet supported when it's not part of liter-per-100-kilometer:
+    lnf = NumberFormatter::with()
+              .unit(MeasureUnit::forIdentifier("kilowatt-hour-per-100-kilometer", status))
+              .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+              .locale("en-ZA");
+    lnf.formatInt(1, status);
+    status.expectErrorAndReset(U_UNSUPPORTED_ERROR);
 }
 
 // TODO: merge these tests into numbertest_skeletons.cpp instead of here:
@@ -1929,28 +2089,37 @@ void NumberFormatterApiTest::unitCurrency() {
 }
 
 void NumberFormatterApiTest::runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,
-                                                         const UChar *skeleton,
-                                                         const UChar *conciseSkeleton,
+                                                         UnicodeString skeleton,
                                                          const UnitInflectionTestCase *cases,
-                                                         int32_t numCases) {
+                                                         int32_t numCases,
+                                                         IcuTestErrorCode &status) {
     for (int32_t i = 0; i < numCases; i++) {
         UnitInflectionTestCase t = cases[i];
+        status.assertSuccess();
+        MeasureUnit mu = MeasureUnit::forIdentifier(t.unitIdentifier, status);
+        if (status.errIfFailureAndReset("MeasureUnit::forIdentifier(\"%s\", ...) failed",
+                                        t.unitIdentifier)) {
+            continue;
+        };
+        UnicodeString skelString = UnicodeString("unit/") + t.unitIdentifier + u" " + skeleton;
         const UChar *skel;
         const UChar *cSkel;
         if (t.unitDisplayCase == nullptr || t.unitDisplayCase[0] == 0) {
-            unf = unf.unitDisplayCase("");
-            skel = skeleton;
-            cSkel = conciseSkeleton;
+            unf = unf.unit(mu).unitDisplayCase("");
+            skel = skelString.getTerminatedBuffer();
+            cSkel = skelString.getTerminatedBuffer();
         } else {
-            unf = unf.unitDisplayCase(t.unitDisplayCase);
+            unf = unf.unit(mu).unitDisplayCase(t.unitDisplayCase);
+            // No skeleton support for unitDisplayCase yet.
             skel = nullptr;
             cSkel = nullptr;
         }
-        assertFormatSingle((UnicodeString("\"") + skeleton + u"\", locale=\"" + t.locale +
-                            u"\", case=\"" + (t.unitDisplayCase ? t.unitDisplayCase : "") +
-                            u"\", value=" + t.value)
+        assertFormatSingle((UnicodeString("Unit: \"") + t.unitIdentifier + ("\", \"") + skeleton +
+                            u"\", locale=\"" + t.locale + u"\", case=\"" +
+                            (t.unitDisplayCase ? t.unitDisplayCase : "") + u"\", value=" + t.value)
                                .getTerminatedBuffer(),
                            skel, cSkel, unf, Locale(t.locale), t.value, t.expected);
+        status.assertSuccess();
     }
 }
 
@@ -1959,110 +2128,122 @@ void NumberFormatterApiTest::unitInflections() {
 
     UnlocalizedNumberFormatter unf;
     const UChar *skeleton;
-    const UChar *conciseSkeleton;
     {
         // Simple inflected form test - test case based on the example in CLDR's
         // grammaticalFeatures.xml
-        unf = NumberFormatter::with().unit(NoUnit::percent()).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
-        skeleton = u"percent unit-width-full-name";
-        conciseSkeleton = u"% unit-width-full-name";
+        unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit-width-full-name";
         const UnitInflectionTestCase percentCases[] = {
-            {"ru", nullptr, 10, u"10 процентов"},    // many
-            {"ru", "genitive", 10, u"10 процентов"}, // many
-            {"ru", nullptr, 33, u"33 процента"},     // few
-            {"ru", "genitive", 33, u"33 процентов"}, // few
-            {"ru", nullptr, 1, u"1 процент"},        // one
-            {"ru", "genitive", 1, u"1 процента"},    // one
+            {"percent", "ru", nullptr, 10, u"10 процентов"},    // many
+            {"percent", "ru", "genitive", 10, u"10 процентов"}, // many
+            {"percent", "ru", nullptr, 33, u"33 процента"},     // few
+            {"percent", "ru", "genitive", 33, u"33 процентов"}, // few
+            {"percent", "ru", nullptr, 1, u"1 процент"},        // one
+            {"percent", "ru", "genitive", 1, u"1 процента"},    // one
         };
-        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, percentCases,
-                                    UPRV_LENGTHOF(percentCases));
+        runUnitInflectionsTestCases(unf, skeleton, percentCases, UPRV_LENGTHOF(percentCases), status);
     }
     {
-        // Testing "de" rules:
-        // <deriveComponent feature="case" structure="per" value0="compound" value1="accusative"/>
-        // <deriveComponent feature="plural" structure="per" value0="compound" value1="one"/>
-        //
-        // per-patterns use accusative, but happen to match nominative, so we're
-        // not testing value1 in the first rule above.
-
-        unf = NumberFormatter::with().unit(MeasureUnit::getMeter()).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
-        skeleton = u"unit/meter unit-width-full-name";
-        conciseSkeleton = u"unit/meter unit-width-full-name";
+        // General testing of inflection rules
+        unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit-width-full-name";
         const UnitInflectionTestCase meterCases[] = {
-            {"de", nullptr, 1, u"1 Meter"},
-            {"de", "genitive", 1, u"1 Meters"},
-            {"de", nullptr, 2, u"2 Meter"},
-            {"de", "dative", 2, u"2 Metern"},
-        };
-        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterCases,
-                                    UPRV_LENGTHOF(meterCases));
+            // Check up on the basic values that the compound patterns below are
+            // derived from:
+            {"meter", "de", nullptr, 1, u"1 Meter"},
+            {"meter", "de", "genitive", 1, u"1 Meters"},
+            {"meter", "de", nullptr, 2, u"2 Meter"},
+            {"meter", "de", "dative", 2, u"2 Metern"},
+            {"mile", "de", nullptr, 1, u"1 Meile"},
+            {"mile", "de", nullptr, 2, u"2 Meilen"},
+            {"day", "de", nullptr, 1, u"1 Tag"},
+            {"day", "de", "genitive", 1, u"1 Tages"},
+            {"day", "de", nullptr, 2, u"2 Tage"},
+            {"day", "de", "dative", 2, u"2 Tagen"},
+            {"decade", "de", nullptr, 1, u"1\u00A0Jahrzehnt"},
+            {"decade", "de", nullptr, 2, u"2\u00A0Jahrzehnte"},
 
-        unf = NumberFormatter::with().unit(MeasureUnit::getDay()).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
-        skeleton = u"unit/day unit-width-full-name";
-        conciseSkeleton = u"unit/day unit-width-full-name";
-        const UnitInflectionTestCase dayCases[] = {
-            {"de", nullptr, 1, u"1 Tag"},
-            {"de", "genitive", 1, u"1 Tages"},
-            {"de", nullptr, 2, u"2 Tage"},
-            {"de", "dative", 2, u"2 Tagen"},
-        };
-        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, dayCases, UPRV_LENGTHOF(dayCases));
+            // Testing de "per" rules:
+            //   <deriveComponent feature="case" structure="per" value0="compound" value1="accusative"/>
+            //   <deriveComponent feature="plural" structure="per" value0="compound" value1="one"/>
+            // per-patterns use accusative, but since the accusative form
+            // matches the nominative form, we're not effectively testing value1
+            // in the "case & per" rule above.
 
-        // Day has a perUnitPattern
-        unf = NumberFormatter::with()
-                  .unit(MeasureUnit::forIdentifier("meter-per-day", status))
-                  .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
-        skeleton = u"unit/meter-per-day unit-width-full-name";
-        conciseSkeleton = u"unit/meter-per-day unit-width-full-name";
-        const UnitInflectionTestCase meterPerDayCases[] = {
-            {"de", nullptr, 1, u"1 Meter pro Tag"},
-            {"de", "genitive", 1, u"1 Meters pro Tag"},
-            {"de", nullptr, 2, u"2 Meter pro Tag"},
-            {"de", "dative", 2, u"2 Metern pro Tag"},
-            // testing code path that falls back to "root" but does not inflect:
-            {"af", nullptr, 1, u"1 meter per dag"},
-            {"af", "dative", 1, u"1 meter per dag"},
-        };
-        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterPerDayCases,
-                                    UPRV_LENGTHOF(meterPerDayCases));
+            // We have a perUnitPattern for "day" in de, so "per" rules are not
+            // applied for these:
+            {"meter-per-day", "de", nullptr, 1, u"1 Meter pro Tag"},
+            {"meter-per-day", "de", "genitive", 1, u"1 Meters pro Tag"},
+            {"meter-per-day", "de", nullptr, 2, u"2 Meter pro Tag"},
+            {"meter-per-day", "de", "dative", 2, u"2 Metern pro Tag"},
 
-        // Decade does not have a perUnitPattern at this time (CLDR 39 / ICU
-        // 69), so we can test for the correct form of the per part:
-        unf = NumberFormatter::with()
-                  .unit(MeasureUnit::forIdentifier("parsec-per-decade", status))
-                  .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
-        skeleton = u"unit/parsec-per-decade unit-width-full-name";
-        conciseSkeleton = u"unit/parsec-per-decade unit-width-full-name";
-        // Fragile test cases: these cases will break when whitespace is more
-        // consistently applied.
-        const UnitInflectionTestCase parsecPerDecadeCases[] = {
-            {"de", nullptr, 1, u"1\u00A0Parsec pro Jahrzehnt"},
-            {"de", "genitive", 1, u"1 Parsec pro Jahrzehnt"},
-            {"de", nullptr, 2, u"2\u00A0Parsec pro Jahrzehnt"},
-            {"de", "dative", 2, u"2 Parsec pro Jahrzehnt"},
+            // testing code path that falls back to "root" grammaticalFeatures
+            // but does not inflect:
+            {"meter-per-day", "af", nullptr, 1, u"1 meter per dag"},
+            {"meter-per-day", "af", "dative", 1, u"1 meter per dag"},
+
+            // Decade does not have a perUnitPattern at this time (CLDR 39 / ICU
+            // 69), so we can use it to test for selection of correct plural form.
+            // - Note: fragile test cases, these cases will break when
+            //   whitespace is more consistently applied.
+            {"parsec-per-decade", "de", nullptr, 1, u"1\u00A0Parsec pro Jahrzehnt"},
+            {"parsec-per-decade", "de", "genitive", 1, u"1 Parsec pro Jahrzehnt"},
+            {"parsec-per-decade", "de", nullptr, 2, u"2\u00A0Parsec pro Jahrzehnt"},
+            {"parsec-per-decade", "de", "dative", 2, u"2 Parsec pro Jahrzehnt"},
+
+            // Testing de "times", "power" and "prefix" rules:
+            //
+            //   <deriveComponent feature="plural" structure="times" value0="one"  value1="compound"/>
+            //   <deriveComponent feature="case" structure="times" value0="nominative"  value1="compound"/>
+            //
+            //   <deriveComponent feature="plural" structure="prefix" value0="one"  value1="compound"/>
+            //   <deriveComponent feature="case" structure="prefix" value0="nominative"  value1="compound"/>
+            //
+            // Prefixes in German don't change with plural or case, so these
+            // tests can't test value0 of the following two rules:
+            //   <deriveComponent feature="plural" structure="power" value0="one"  value1="compound"/>
+            //   <deriveComponent feature="case" structure="power" value0="nominative"  value1="compound"/>
+            {"square-decimeter-dekameter", "de", nullptr, 1, u"1 Quadratdezimeter⋅Dekameter"},
+            {"square-decimeter-dekameter", "de", "genitive", 1, u"1 Quadratdezimeter⋅Dekameters"},
+            {"square-decimeter-dekameter", "de", nullptr, 2, u"2 Quadratdezimeter⋅Dekameter"},
+            {"square-decimeter-dekameter", "de", "dative", 2, u"2 Quadratdezimeter⋅Dekametern"},
+            // Feminine "Meile" better demonstrates singular-vs-plural form:
+            {"cubic-mile-dekamile", "de", nullptr, 1, u"1 Kubikmeile⋅Dekameile"},
+            {"cubic-mile-dekamile", "de", nullptr, 2, u"2 Kubikmeile⋅Dekameilen"},
+
+            // French handles plural "times" and "power" structures differently:
+            // plural form impacts all "numerator" units (denominator remains
+            // singular like German), and "pow2" prefixes have different forms
+            //   <deriveComponent feature="plural" structure="times" value0="compound"  value1="compound"/>
+            //   <deriveComponent feature="plural" structure="power" value0="compound"  value1="compound"/>
+            // TODO: this looks wrong, and will change if CLDR-14533 causes a change:
+            {"square-decimeter-square-second", "fr", nullptr, 1, u"1\u00A0décimètre carréseconde carrée"},
+            {"square-decimeter-square-second", "fr", nullptr, 2, u"2\u00A0décimètres carréssecondes carrées"},
         };
-        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, parsecPerDecadeCases,
-                                    UPRV_LENGTHOF(parsecPerDecadeCases));
+        runUnitInflectionsTestCases(unf, skeleton, meterCases, UPRV_LENGTHOF(meterCases), status);
     }
     {
         // Testing inflection of mixed units:
-        unf = NumberFormatter::with()
-                  .unit(MeasureUnit::forIdentifier("meter-and-centimeter", status))
-                  .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
-        skeleton = u"unit/meter-and-centimeter unit-width-full-name";
-        conciseSkeleton = u"unit/meter-and-centimeter unit-width-full-name";
+        unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit-width-full-name";
         const UnitInflectionTestCase meterPerDayCases[] = {
+            {"meter", "de", nullptr, 1, u"1 Meter"},
+            {"meter", "de", "genitive", 1, u"1 Meters"},
+            {"meter", "de", "dative", 2, u"2 Metern"},
+            {"centimeter", "de", nullptr, 1, u"1 Zentimeter"},
+            {"centimeter", "de", "genitive", 1, u"1 Zentimeters"},
+            {"centimeter", "de", "dative", 10, u"10 Zentimetern"},
             // TODO(CLDR-14502): check that these inflections are correct, and
             // whether CLDR needs any rules for them (presumably CLDR spec
             // should mention it, if it's a consistent rule):
-            {"de", nullptr, 1.01, u"1 Meter, 1 Zentimeter"},
-            {"de", "genitive", 1.01, u"1 Meters, 1 Zentimeters"},
-            {"de", "genitive", 1.1, u"1 Meters, 10 Zentimeter"},
-            {"de", "dative", 1.1, u"1 Meter, 10 Zentimetern"},
-            {"de", "dative", 2.1, u"2 Metern, 10 Zentimetern"},
+            {"meter-and-centimeter", "de", nullptr, 1.01, u"1 Meter, 1 Zentimeter"},
+            {"meter-and-centimeter", "de", "genitive", 1.01, u"1 Meters, 1 Zentimeters"},
+            {"meter-and-centimeter", "de", "genitive", 1.1, u"1 Meters, 10 Zentimeter"},
+            {"meter-and-centimeter", "de", "dative", 1.1, u"1 Meter, 10 Zentimetern"},
+            {"meter-and-centimeter", "de", "dative", 2.1, u"2 Metern, 10 Zentimetern"},
         };
-        runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterPerDayCases,
-                                    UPRV_LENGTHOF(meterPerDayCases));
+        runUnitInflectionsTestCases(unf, skeleton, meterPerDayCases, UPRV_LENGTHOF(meterPerDayCases),
+                                    status);
     }
     // TODO: add a usage case that selects between preferences with different
     // genders (e.g. year, month, day, hour).
@@ -2078,16 +2259,26 @@ void NumberFormatterApiTest::unitGender() {
         const char *expectedGender;
     } cases[] = {
         {"de", "meter", "masculine"},
+        {"de", "second", "feminine"},
         {"de", "minute", "feminine"},
         {"de", "hour", "feminine"},
         {"de", "day", "masculine"},
         {"de", "year", "neuter"},
+        {"fr", "meter", "masculine"},
+        {"fr", "second", "feminine"},
         {"fr", "minute", "feminine"},
         {"fr", "hour", "feminine"},
         {"fr", "day", "masculine"},
-        // grammaticalFeatures deriveCompound "per" rule:
+        // grammaticalFeatures deriveCompound "per" rule takes the gender of the
+        // numerator unit:
         {"de", "meter-per-hour", "masculine"},
-        {"af", "meter-per-hour", ""},
+        {"fr", "meter-per-hour", "masculine"},
+        {"af", "meter-per-hour", ""}, // ungendered language
+        // French "times" takes gender from first value, German takes the
+        // second. Prefix and power does not have impact on gender for these
+        // languages:
+        {"de", "square-decimeter-square-second", "feminine"},
+        {"fr", "square-decimeter-square-second", "masculine"},
         // TODO(ICU-21494): determine whether list genders behave as follows,
         // and implement proper getListGender support (covering more than just
         // two genders):
@@ -2101,13 +2292,22 @@ void NumberFormatterApiTest::unitGender() {
     FormattedNumber fn;
     for (const TestCase &t : cases) {
         // TODO(icu-units#140): make this work for more than just UNUM_UNIT_WIDTH_FULL_NAME
+        // formatter = NumberFormatter::with()
+        //                 .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
+        //                 .locale(Locale(t.locale));
+        // fn = formatter.formatDouble(1.1, status);
+        // assertEquals(UnicodeString("Testing gender with default width, unit: ") + t.unitIdentifier +
+        //                  ", locale: " + t.locale,
+        //              t.expectedGender, fn.getGender(status));
+        // status.assertSuccess();
+
         formatter = NumberFormatter::with()
                         .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
                         .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
                         .locale(Locale(t.locale));
         fn = formatter.formatDouble(1.1, status);
-        assertEquals(UnicodeString("Testing gender, unit: ") + t.unitIdentifier +
-                         ", locale: " + t.locale,
+        assertEquals(UnicodeString("Testing gender with UNUM_UNIT_WIDTH_FULL_NAME, unit: ") +
+                         t.unitIdentifier + ", locale: " + t.locale,
                      t.expectedGender, fn.getGender(status));
         status.assertSuccess();
     }

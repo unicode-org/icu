@@ -375,7 +375,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
 
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
-        StringPiece unitDisplayCase("");
+        const char *unitDisplayCase = "";
         if (macros.unitDisplayCase.isSet()) {
             unitDisplayCase = macros.unitDisplayCase.fValue;
         }
@@ -398,6 +398,16 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             MeasureUnit unit = macros.unit;
             if (!utils::unitIsBaseUnit(macros.perUnit)) {
                 unit = unit.product(macros.perUnit.reciprocal(status), status);
+                // This isn't strictly necessary, but was what we specced out
+                // when perUnit became a backward-compatibility thing:
+                // unit/perUnit use case is only valid if both units are
+                // built-ins, or the product is a built-in.
+                if (uprv_strcmp(unit.getType(), "") == 0 &&
+                    (uprv_strcmp(macros.unit.getType(), "") == 0 ||
+                     uprv_strcmp(macros.perUnit.getType(), "") == 0)) {
+                    status = U_UNSUPPORTED_ERROR;
+                    return nullptr;
+                }
             }
             fLongNameHandler.adoptInsteadAndCheckErrorCode(new LongNameHandler(), status);
             LongNameHandler::forMeasureUnit(macros.locale, unit, unitWidth, unitDisplayCase,
