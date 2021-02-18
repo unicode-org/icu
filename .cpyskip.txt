@@ -97,6 +97,12 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.tx
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/*
 icu4j/perf-tests/data/conversion/*
+icu4j/perf-tests/data/udhr/*
+icu4j/perf-tests/data/collation/thesis.txt
+icu4j/perf-tests/data/collation/ulyss10.txt
+icu4j/perf-tests/data/collation/2drvb10.txt
+icu4j/perf-tests/data/collation/vfear11a.txt
+icu4j/perf-tests/data/collation/nvsbl10.txt
 #
 # docs
 #

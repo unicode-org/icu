@@ -421,7 +421,7 @@ Bassen, Bartholomeus van
 Bastiani, Lazzaro
 Bastianini, Giovanni
 Bastien-Lepage, Jules
-Bateman 1842-2008, Robert
+Bateman 1842-1922, Robert
 Bateman, James
 Bateman, Robert
 Bates, David
@@ -1484,8 +1484,8 @@ Collins, Charles Allston
 Collins, William
 Collinson, James
 Collot, Marie-Anne
-Colman 1780-2008, Samuel
-Colman 1832-2008, Samuel
+Colman 1780-1845, Samuel
+Colman 1832-1920, Samuel
 Colombe, Michel
 Colquhoun, Alexander
 Colquhoun, Robert
@@ -3003,7 +3003,7 @@ Hale, Ellen Day
 Hale, Josephine
 Hale, Lilian Westcott
 Hale, Philip Leslie
-Hall 1739-2008, John
+Hall 1739-1797, John
 Hall 1885, Douglas
 Hall, Ann
 Hall, Bernard
@@ -4909,7 +4909,7 @@ Montoya, Gustavo
 Monvoisin, Raymond
 Moody, Ronald
 Moon-seup, Shim
-Moore 1831-2008, Henry
+Moore 1831-1895, Henry
 Moore, Albert Joseph
 Moore, Charles
 Moore, Henry
@@ -6607,8 +6607,8 @@ Sterner, Albert Edward
 Steth, Raymond
 Stettheimer, Florine
 Stettner, Louis
-Stevens 1817-2008, Alfred
-Stevens 1823-2008, Alfred
+Stevens 1817-1875, Alfred
+Stevens 1823-1906, Alfred
 Stevens, Ruth Tunander
 Steward, Joseph
 Stewardson, Thomas
@@ -6626,8 +6626,8 @@ Stock, Joseph Whiting
 Stockt, Vrancke van der
 Stockton, Bill
 Stodart, Edward William
-Stokes 1854-2008, Adrian
-Stokes 1902-2008, Adrian
+Stokes 1854-1935, Adrian
+Stokes 1902-1972, Adrian
 Stokes, Marianne
 Stoll, Leopold von
 Stolzl, Gunta
@@ -7336,7 +7336,7 @@ Wheelwright, Joseph
 Wheelwright, Roland
 Whetstone, Dan
 Whistler, James McNeill
-White 1773-2008, Charles
+White 1773-1794, Charles
 White, Charles Wilbert
 White, Randy Lee
 White, Robert
