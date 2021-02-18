@@ -28,10 +28,9 @@
 
 /**
  * \file
- * \brief C++ API: Library for localized number formatting introduced in ICU 60.
- *
- * This library was introduced in ICU 60 to simplify the process of formatting localized number strings.
- * Basic usage examples:
+ * \brief C++ API: All-in-one formatter for localized numbers, currencies, and units.
+ * 
+ * For a full list of options, see icu::number::NumberFormatterSettings.
  *
  * <pre>
  * // Most basic usage:
@@ -2247,6 +2246,9 @@ class U_I18N_API NumberFormatterSettings {
      * The returned skeleton is in normalized form, such that two number formatters with equivalent
      * behavior should produce the same skeleton.
      *
+     * For more information on number skeleton strings, see:
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
+     *
      * @return A number skeleton string with behavior corresponding to this number formatter.
      * @stable ICU 62
      */
@@ -2779,6 +2781,9 @@ class U_I18N_API NumberFormatter final {
      * It is possible for an error to occur while parsing. See the overload of this method if you are
      * interested in the location of a possible parse error.
      *
+     * For more information on number skeleton strings, see:
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
+     *
      * @param skeleton
      *            The skeleton string off of which to base this NumberFormatter.
      * @param status
@@ -2794,6 +2799,9 @@ class U_I18N_API NumberFormatter final {
      *
      * If an error occurs while parsing the skeleton string, the offset into the skeleton string at
      * which the error occurred will be saved into the UParseError, if provided.
+     *
+     * For more information on number skeleton strings, see:
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
      *
      * @param skeleton
      *            The skeleton string off of which to base this NumberFormatter.
