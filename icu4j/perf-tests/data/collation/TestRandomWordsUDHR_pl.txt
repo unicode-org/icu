@@ -1,0 +1,10022 @@
+/**
+# * © 2021 and later: Unicode, Inc. and others.
+# * License & terms of use: http://www.unicode.org/copyright.html
+# *******************************************************************************
+#  Copyright (C) 2013, International Business Machines Corporation and
+#  others. All Rights Reserved.
+# *******************************************************************************
+#
+# This test data file was generated from the UDHR translated to Polish.
+#
+# Each line consists from one or more words collected from the UDHR, and concatenated randomly.
+# Therefore, the generated phrase does not make sense literally.
+#
+# Source file: http://www.unicode.org/udhr/d/udhr_pol.txt
+#
+stopniu
+techniczna grupie obszaru
+wyrażania
+równych pospolitego
+choroby
+dokonania strony
+obrony Krzewi
+Przetłumaczona urlopu różnicy
+nie
+lat krajem
+społecznego Rodzina wyższej
+naukowej zadowalającego
+stale środki
+procesu mieszkanie
+rozumem
+zapewniono współpracę podjęły
+rozwijania zasadami podczas
+słowa Żadnego
+publicznie uwłaczać rozumieć
+rządzi zasięgu
+przy
+Artykuł Krzewi
+godność
+jednostki strony pozbawiać
+organy Zjednoczonych
+którym ostateczności względu
+potrzeby ubezpieczeń płatne
+niego poruszania
+podstawową wyboru
+procesu lat
+zasięgu zbiera jedynie
+ochrony
+zmierzającą wielu czy
+powszechności Mają
+wiarę
+publicznego zarówno
+zrozumienie
+życia słowa postępie
+Celem
+publicznie sprzecznego środków
+większość
+korespondencję obywatelstwa
+była który
+traktować wysiłek Zjednoczone
+warunków wspólnoty
+publicznego rozwój wszędzie
+przywróciły
+publicznie tolerancję aresztować
+życie rasy
+zrozumienie
+płatne
+roku pamięci
+prywatnie
+poszukiwania wszystkimi
+nieludzki pełnej
+osobowości Państw
+poglądów wygnać
+byłyby Organizacji
+wszczętego naukowej
+odpowiadającą prywatne domowe
+rozstrzyganiu niewinnego
+równe
+Każdy
+niniejszych rzeczywiście strony
+małżeństwa
+działalności
+odpowiadającą
+uzupełnianego innymi
+skutecznego przez prawa
+zapewniły obalenia przyjaźń
+Sesja samowolnie członków
+swą dokonania ochrony
+głoszenia czy
+ogłoszono zapewniającego
+godność kultu
+oraz dostępne PRZETO
+pełną
+powszechne grudnia
+zasięgu uzupełnianego
+godności pamięci
+największych
+niemu
+rządzeniu najtrwalszych obalenia
+jakiejkolwiek
+zależności
+największych kulturalnym prawem
+narodów którym wyborów
+godność
+uczynienia celu
+przestępstwo
+osiągnięciu zmierzających
+zaniechania podczas
+uzupełnianego powszechności
+urlopu swego takiego
+każdego
+olbrzymie rozumienie ścigania
+służby religijnymi godność
+postępu innymi sztuki
+Państwa
+postaciach przestępstwa
+Państwu wymogom
+obdarzeni sumienia
+Wszystkie
+postępie rządzi
+oraz ponadto małżonków
+środków urlopy przypadku
+życie
+Rodzice techniczna
+procesu
+najwznioślejszy krajem
+zadowalającego uznanie olbrzymie
+pełną zdecydowanie
+stosowanie opiekę
+wszyscy
+dokonania również obowiązki
+dla
+wszystkich lekarską niezależny
+honorowi można
+najtrwalszych korzyści POWSZECHNA
+jednakowej dyskryminacją
+popieranie Wszyscy niniejszych
+prawem
+pod
+równego
+nikogo Zjednoczonych poszukiwania
+realizowane
+przeciw
+swobodny świadczenia
+wśród mając pracę
+naturalną pełnej buntu
+koloru
+strachu
+ten wśród
+taką należenia musiał
+przynależy wyżywienie tej
+prześladowania
+inny
+życiu powinni któregokolwiek
+środki
+Uroczyście
+większość
+życie jego starości
+względu traktować inny
+swoją systemowi jednakowe
+całkowitej
+honorowi
+samodzielnie bądź
+koloru przynajmniej
+odwoływania jednomyślnie
+Państwu konstytucję
+aby
+godności różnicy
+narodów
+społecznej się
+miejsca niniejszej obradująca
+pamięci
+lat przyjaznych sąd
+być słowa
+podstawą publicznie
+POWSZECHNA
+zrozumienie jedynie prawem
+rodzinne
+własny była
+Nauka postępowych stanowiącego
+uczestniczenia
+życia PRZETO
+międzynarodowej
+okresowo
+obyczajów
+postępie równouprawnienie swej
+bezrobociem wolni wynikających
+zawartych osiągnięcia dążenie
+specjalnej drodze pogwałcenie
+uroczyście jej prześladowania
+korzystać stosunków dzieciom
+wyższej Wola
+wolności jednakowej
+publicznie obszar
+zrozumienie
+swej
+równe poszukiwania
+podstawowych
+dzieciom skazany
+wyborach wśród
+wyrażoną
+obdarzeni
+włączając krajowych
+prawa dziecko względem
+osobistych ubiegać jakikolwiek
+wolni buntu
+niepodległości
+obowiązki
+Wszyscy pogwałcenie
+prawa oni
+zawodowa podejmowania słusznym
+wolność swoją
+człowiek przestępstwa
+działania
+celu
+jakikolwiek sprzeczny
+dążenie Narodów sądów
+tyranii
+swej przestrzeganie byłyby
+międzynarodowej
+sąd ludzkiej
+powoływać zapewnić
+godność podlega
+kary najwznioślejszy podstawowym
+dyskryminacją Powszechna postaciach
+rozpowszechniania egzystencję
+zmuszać przystępowania
+obyczajów należenia Uroczyście
+wyborów
+powszechności sumienia zawartych
+OGÓLNE założenia Sesja
+literackiej
+dobremu
+czynić wynikających swym
+tolerancję
+czynić nauczanie obywatelstwa
+taką pozamałżeńskie
+obszaru bez specjalnej
+niemu
+swe będą zasadami
+Mają większość kulturalnych
+zmuszać środkami
+azyl obrony człowieka
+rozpowszechniania zasadności
+poszanowania obrony
+zawodowa pogwałceniem korespondencję
+toczy porządkuje
+niewinnego
+żadnej aresztować
+wszystkie społeczeństwa Krzewi
+takiego
+roku majątku
+przepisami kraju małżeństwa
+również
+urzeczywistniania skuteczne wolność
+Ogłasza poprawy
+opinii wobec
+narażeniem
+jakiekolwiek Preambuła powiernictwa
+całkowitej
+obszaru swobodny bez
+podstawowe
+rodzinie domowe wyraziły
+politycznych zatrzymać małżeństwa
+krajem
+godzin Organizacją wyższe
+takiego uczestniczenia
+poruszania byłyby
+opiekę popiera jest
+niniejszą zapewniającej wymierzać
+pod działania
+międzynarodowego stanowi rzeczywiście
+strachu
+ingerować wyłącznie
+żadnym urodzenia
+nędzy takim
+wdowieństwa
+zadowalającego korzystać sam
+Trzecia
+wola
+ingerencji pełnoletności
+rządzeniu wypadek
+swym udowodni
+międzynarodowej
+stosunków
+rządu okresowo środków
+udzielającego
+chwili Każdy
+urlopu uczynienia Artykuł
+czy razie utraty
+swobodę
+PRAW rozwoju
+rządu obalenia
+zbiera zgromadzania nieprzestrzeganie
+chwili wdowieństwa
+sprawiedliwie godność
+przynależy czyjekolwiek jakimkolwiek
+otrzymywania nędzy aby
+rozumieć zasięgu DEKLARACJA
+będą zgodnie
+wszystkich dostępna
+przyjaznych moralności
+działalność zbiera sposób
+systemowi przewidziana
+zatrzymać ograniczeniom pełny
+obrony
+socjalne
+doprowadzony
+Artykuł poglądów
+POWSZECHNA sądów
+opartych osiągnięciu Organizacją
+wysuwanego
+kary
+powszechności
+większej traktować dostępu
+wiarę dana okresowe
+zasadności doprowadzony
+współpracy
+jakimkolwiek popełnienie wyborów
+ludu rodzinie obowiązkowa
+poszanowanie prawach organy
+ograniczenie koloru odpowiadającą
+lub jego
+zadowalających można
+okresowo
+osobistych otrzymywania ograniczeniom
+bezrobocia zmuszać narodów
+porządku Rodzina
+rodzinne dziecko
+przeciwko zdecydowanie
+najtrwalszych pracę osiągnięcia
+politycznych względu zrozumienie
+Organizacją moralnych
+płacy dla
+stowarzyszenia wynagrodzenia rasy
+publicznie
+uwłaczaniu
+międzynarodowym rządzi
+niepodległy ścigania
+świata znaczenie swobodnego
+sąd zalet
+stowarzyszenia postulaty
+wszyscy rodzą
+zasobami
+innymi
+Wola niewolnikami własności
+rodzinne
+małżeńskie opieki każdy
+słusznym opieki
+dopóty podejmowania poszanowania
+dopóki
+setek zadość
+zaniechania
+świata
+bezstronny dokonania
+utraty przez lekarską
+winy POWSZECHNA wychowywania
+grupami działania
+koloru przestrzeganie
+również
+wymierzać
+odpowiednich też
+najwyższy małżeństwa taką
+dokonania uznawania skutecznego
+uciskowi czy poruszania
+warunkach nauczania
+swego
+wspólny
+zadość
+OGÓLNE jedynie
+którym wypadek przepisami
+jednakowe socjalne
+jakąkolwiek sąd
+korzystają
+dzieci oskarżenia
+Powszechną żadnym
+najtrwalszych krajowego
+imieniu
+pomocy
+uciekać dzieciom skończoną
+stopniu powszechności popełnienia
+niewolnikami okrutny uznania
+rozwój
+Zjednoczone
+postulaty zapewniły odpowiednich
+potrzeby związków
+doprowadzony
+systemowi uwłaczaniu wysiłek
+społeczeństwa
+buntu
+cel starości
+również taką
+swobodę organizacją obowiązkowa
+powszechności
+zarówno pochodzenia porządku
+społeczeństwa
+środków Członkowskie międzynarodowym
+równego opinii Dokument
+podlega kraj
+nikomu poprawy sąd
+Preambuła równe języków
+ludzkiej kobiet
+wyboru
+sprawiedliwie Państwu procesu
+wola
+stanowiącego
+ONZ obyczajów
+włączając
+publicznie przyrodzonej publicznie
+środki czynić
+przestrzeganie podczas
+świadczenia urlopy
+Nauka aresztować czynom
+podjęły postępu
+organy przestępstwo egzystencję
+posiadania
+postanowień Deklarację
+swe publicznej zbudowania
+musiał rozwoju
+pod Nikogo wyrażania
+zakazane
+postępowych dopóki przestępstwa
+obyczajów przyznanych
+ZWAŻYWSZY pozbawiać czy
+wynikających
+życie korespondencję
+zamieszkania Małżeństwo wysuwanego
+musiał
+zarówno wyłącznie
+rasowymi podejmowania kompetentnych
+trwania mając
+ograniczeniom całkowitej
+społeczeństwa
+opartych
+realizacji
+niewolnikami moralności wypoczynku
+publicznie
+Mężczyźni Nikogo zasięgu
+człowiek barbarzyństwa
+Deklaracja pomocy
+poszanowanie Nie
+być podległe płatne
+Paryżu Uroczyście
+ponadto człowieka
+taką narodami czynom
+obowiązki krajowym
+mężczyzn
+społeczeństwa honorowi
+przyjaźń
+setek Przetłumaczona
+praktykowanie
+wobec jakiegokolwiek strony
+bezrobocia osoby władzy
+procedurze domowe nauczanie
+poszukiwania niezbędnych
+artystycznej korzystaniu wstrząsnęły
+wszystkich ubiegać
+setek
+strony granicach sytuacji
+publicznego dobrobyt socjalne
+Wszystkie Ogólnego przestępstwo
+honorowi wstrząsnęły
+podejmowania popierania
+obszaru informacji
+Żadnego jest
+Mężczyźni
+praw rodzinie pozamałżeńskie
+oskarżenia uznanie obowiązki
+równą
+kulturalnych osoby ich
+bez
+wiarę zawarte stanu
+przyrodzonej bezpłatna
+zrozumienie korzystają
+ograniczenie obszar obszaru
+tajności
+obywatelstwa
+publicznego
+naturalną
+wyłącznie któregokolwiek podejmowania
+wysuwanego zamieszkujących
+zbiera członków rządu
+pogwałcenie popełnienia
+małżeństwa
+zapewnić
+utraty wynikających które
+zatrzymać stanu
+organizacją trwania
+godność
+niewolnikiem
+będącą Artykuł
+można zawarte
+uchwaliła bez
+ustaniu
+Ogólnego
+innych
+pełny niezbędnych pracujący
+przestępstwa zgromadzania
+wybranych ograniczenie
+posiadania krajowym prywatnie
+bezstronny
+urzeczywistniania torturować
+wszystkimi inny
+rzeczywiście
+wola
+cel poszanowania
+komórką samodzielnie
+większej
+międzynarodowej
+swej pracujący
+byłyby aby
+egzystencję
+otrzymywania postanowień
+oraz rządu najwznioślejszy
+Sesja
+żadnym
+poszukiwania
+wyrażania
+podległe ingerować
+podejmowania
+pozamałżeńskie warunkach
+stopniu koloru ingerencji
+krajem zasięgu grupie
+dobremu prawo
+wyboru
+ingerencji
+uczestniczenia procesu dopóty
+dla
+czy pogwałcenie Uroczyście
+mieszkanie kulturalnych opieki
+jeszcze pracy poszanowania
+opinii
+przewidziana zawodowych
+opiekę służebności
+pełni któregokolwiek
+dokonania języka
+znaczenie warunków zrozumienie
+innego moralności rasowymi
+popieranie ugruntowanie
+wespół organizacją
+podstawowym urodzenia
+konieczne
+uprawianie swój azyl
+wychowywania warunków działalność
+uciskowi którego
+tworzenia publicznej
+świadczenia roku
+ludu
+zawarowanie Matka
+społecznych stowarzyszenia doprowadzony
+zawierania dokonania
+korzystają
+nieludzki wypadek Nikt
+zgodnie
+pozbawiać uznawania aktów
+ostateczności azyl Organizacji
+bezpłatna korzystaniu jakiemukolwiek
+ponadto oraz
+aresztować
+procesu
+wyborze wychowywania
+osiągnięciu techniczna urodzenia
+procedurze słusznym
+tajności wychowywania
+nikogo politycznej utraty
+jak nauczania
+Państw publicznej
+lub
+mając
+korzystają
+realizacji jak zdrowie
+dane wyraża wdowieństwa
+publicznie braterstwa
+imieniu
+ograniczony języków wysuwanego
+jak życia kraj
+pełnej ONZ
+popieranie
+jakikolwiek wyborów
+realizowane udowodni dany
+skutecznego
+choroby dany kobiety
+zasadzie swobodny
+pokoju
+społecznych związków
+walkę
+oskarżony
+własności zapewniły jednakowe
+nauczania będącą
+dążyły równego wydawania
+dana życiowej wyrażania
+opinii swój słuchanym
+oraz bezstronny narodami
+zasadzie
+które swych Nikt
+kary
+lat rodzą przestępstwo
+organy wynagrodzenia
+przestępstwa celami
+życiowej zgodnie
+porządkuje Praw zmierzających
+czynu sytuacji prawo
+Nauka
+ustalone
+człowiek ubiegać
+podjęły
+trwania granice
+oraz byłyby
+ludzkości
+społecznych wyraża
+postępowych pełny
+takiej egzystencję środków
+Małżeństwo podstawą
+większość narodowości PRAW
+nędzy
+oni Celem odwoływania
+razie niezależnej
+zdecydowanie
+chwili założenia otrzymywania
+poszanowanie tej okresowo
+egzystencję przyjaźń
+żadnej
+krajowych wiarę
+obszary wszystkimi jeszcze
+postępować lub przy
+pochodzenia DEKLARACJA Powszechna
+spokojnego założenia demokratycznego
+uciekać dzieci wyborze
+godność
+nieludzki dany
+względu korespondencję odpowiadającą
+wolni
+społeczeństwa zdecydowanie opieki
+tajności wolno
+wspólnoty
+jedynie rodzinne
+odmawiać
+wszystkich Rodzina małżonków
+bezpośrednio uwłaczaniu
+zawodowa mają zmierzających
+niewątpliwie
+azyl
+jednostki jakiegoś korzystają
+interesów innego
+imieniu wypoczynku
+działania powodu
+żadnym podstawowych
+literackiej
+takiego popełnienia
+opiekę
+między
+Przetłumaczona nędzy
+odpowiadającą była
+przeciwko
+Narody niewolnikiem zalet
+języków
+słusznym
+konieczne członek małżonków
+bezpłatna nieprzestrzeganie odniesieniu
+środków swe przyjaźń
+dany podstawowa lub
+dziecko Preambuła Narodów
+ograniczony ogłoszono popiera
+powiernictwa imieniu
+międzynarodowym swego
+przestrzeganie dziecko
+życia prawnej aby
+wspólnoty
+kulturalnych krajowym
+powszechnie
+przeprowadzanych rodzą okresowo
+sposób
+techniczna dostępna
+zawodowych pierwszeństwa
+rozwoju publicznej podczas
+rozwój podległe
+studia
+skończoną swobodnego sytuacji
+jakiemukolwiek popiera uciekać
+zawierania
+przestępstwo ono Wola
+zapewniającej słowa
+kulturalnych
+także popiera
+nędzy niniejszą
+ustaniu Deklarację udowodni
+dążenie zatrzymać społecznego
+OGÓLNE obywatelstwa
+chwili
+małżeńskie rasowymi
+poprzez przez poprzez
+realizowane
+Członkowskich obywatelstwa wyborze
+narodami
+nieprzestrzeganie
+swą poszanowania prawem
+przestępstwo krajem Nikt
+wyżywienie obradująca rodziny
+procesu
+małżonków niezbędnych uzupełnianego
+obejmuje
+innego samodzielnie
+utrzymania
+zrozumienie
+ludu Ogólnego zawarte
+rozumienie utraty sytuacji
+zamieszkujących Mężczyźni komórką
+przyznanych oni
+zadowalających swobodnie prywatnie
+niemu Paryżu wespół
+pochodzenia
+przynajmniej tolerancję ZWAŻYWSZY
+samowolnie człowieka
+pod
+egzystencję jakiekolwiek względem
+obdarzeni
+podległe
+najwyższy zamieszkujących
+postulaty pełnoletności
+słuchanym
+Deklaracji Każdy
+podstawowym Zjednoczonych międzynarodowej
+zaniechania jako demokratycznego
+świata Ogłasza
+przedstawicieli ludów
+osobie
+przepisami Organizacji
+niezależny Paryżu innymi
+niezbywalnych konieczne
+egzystencję
+osiągnięcia zapewnienia
+wypadek
+sprzecznego urodzenia
+któregokolwiek wyżywienie
+przy uczestniczenia zbudowania
+kraju najtrwalszych
+uchwaliła
+realizowane uznawano
+wśród sądów uznanie
+Matka która głoszenia
+pogwałceniem
+rzeczywiście pod Preambuła
+wszystkich powinni
+małżonków powodu pracujący
+olbrzymie karać prawnej
+innym
+człowiek
+każdego opinii
+rozwijania
+kobiety Preambuła współpracy
+społecznych pełny urlopy
+poprawy posiada ograniczeniom
+narodów imieniu mając
+krajowych mężczyzn
+podczas oskarżony któregokolwiek
+uciekać zapewnić popieranie
+wypadek nie zaniechania
+najwyższy włączając każdego
+Celem
+korzystać handel pod
+oni
+dostępna Mężczyźni stosowanie
+słuchanym
+krajem jednakowe sprawiedliwie
+obszary Rodzice techniczna
+Deklaracja sytuacji
+powrócić dziecko
+Deklaracja dokonania
+ograniczeniom niezależny moralnych
+Członkowskich wśród
+Państw także
+zobowiązaniach rozwój popełnienia
+także jedno krajowym
+poprzez ludzie PRAW
+Przetłumaczona podczas odzież
+stosowanie
+grudnia
+niewinnego
+obszary środkami warunków
+korzystania przedstawicieli
+pracy jego winy
+którym dany
+pochodzenia tyranii
+osiągnięć wyborów
+zrozumienie popieranie niego
+podstawowe
+swe pracujący
+urodzenia
+doprowadzony
+postanowień przeciw zrozumienie
+wyrażoną
+odmawiać
+wszystkich
+stosowanie którym
+ten
+ono
+różnicy
+swój organy
+ten uzupełnianego
+odpowiedniego dyskryminacją
+dyskryminacją zapewnić pozbawiać
+uchwaliła grudnia prawnej
+niemu ponadto
+każdego
+sprawiedliwie
+rodzinie zawartych
+dobrobytu zapewnić
+czyjekolwiek kultu
+większej imieniu postępowych
+uznawano dla
+Powszechna traktować społecznego
+krajowych urlopy społecznych
+rozumem przewidziana większość
+stosunków
+postanowień
+wdowieństwa
+rozumieć
+życiowej oskarżenia
+wszelkimi
+swą Deklaracja ustaniu
+dana zasadzie swej
+ten wstrząsnęły może
+poszanowanie doprowadzony pokoju
+rasowymi
+również Krzewi jeszcze
+sąd rozumem
+prawach korzystać
+zależności zbudowania
+obowiązkowa również
+Wszyscy
+opieki zakazane komórką
+inny kobiety
+równe kompetentnych
+prawo osiągnięcia
+bezstronny narażeniem
+działalność
+jednakowej dobrobyt moralnych
+pierwszeństwa Mają
+wyłącznie służby podstawowe
+praw
+który
+wyraża Dokument sprzecznego
+także jakiejkolwiek ludzie
+realizowane kobiety
+zmierzającą poprawy jest
+bezrobociem odmawiać stale
+popełnienie pospolitego
+Nikt obszar zawarcia
+celu
+wysuwanego setek prawnej
+zaniechania Zgromadzenia zmierzającą
+uznawania bezpłatna każdego
+służby
+ludzkości aby
+osobowości
+choroby dążyły
+aktów przypadku
+niniejszą uczestniczenia swego
+przyjaznych Powszechna
+ostateczności
+zgodą
+azyl
+wyższej granicach
+spokojnego takim
+uznania
+pełnoletności dzieci
+prawem
+pełną
+stopniu
+uznania także
+ZWAŻYWSZY swego takim
+jakiegoś warunkach zaniechania
+prawnej większość studia
+Powszechną sposób
+myśli sytuacji strony
+przeciw obdarzeni
+przez udowodni
+procedurze
+ograniczony pełnej
+lat wydawania
+odmawiać nędzy poszanowania
+przyrodzonej celu międzynarodowej
+Wszyscy
+zapewniły swej majątku
+dobremu słusznym koloru
+wielu wszelkimi
+opiekę praw zgromadzania
+bezstronny osiągnięcia międzynarodowej
+jakiekolwiek obdarzeni ubezpieczenia
+służebności pierwszeństwa postanowień
+podstawowych konieczne
+oskarżony wyłącznie ani
+nauczanie stosunków
+obalenia okrutny pamięci
+inny zasadami zadowalającego
+zmierzającą przed
+ugruntowanie pełni
+wolni obowiązki Matka
+dążyły jakikolwiek sytuacji
+zawarowanie najtrwalszych zawarowanie
+powrócić popełnienia które
+równorzędnej Matka
+Paryżu przestępstwa równego
+każdego słusznym nikogo
+wspólnoty jakikolwiek
+można działania Nie
+powoływać małżeństwa Małżeństwo
+wyraża
+Krzewi
+stowarzyszania środkami wspólny
+różnice granice drodze
+wydawania choroby Organizacji
+skończoną procedurze uwłaczać
+jakimkolwiek jakiekolwiek
+ludzkości
+równouprawnienie urlopu ich
+innej
+można wszelkimi
+swe Wszyscy
+ugruntowanie własny buntu
+dla poniżający
+godzin domowe wiary
+uciekać
+mając osiągnięcia
+jednomyślnie
+Zgromadzenia
+pełną małżeństwa ustaniu
+zgodnie wyborach interesów
+podstawowa oskarżony sprawiedliwości
+osoba dyskryminacją opinii
+chwili Człowieka
+niż
+się kary Deklaracja
+komórką zależności prawach
+handel wszędzie
+względu zawarowanie
+politycznych
+uwłaczaniu starości życia
+lub obszar uznanie
+barbarzyństwa uznawano
+zawartych Praw
+uczestniczenia poszanowania czyjekolwiek
+rasy
+swoją środków
+własny niniejszej
+literackiej międzynarodowego setek
+języków pamięci
+utraty
+azyl
+postulaty czynom
+innym niewolnikiem
+komórką
+dostępu
+ludu doprowadzony
+Ogłasza skazany powrócić
+imieniu wyborze azyl
+Deklarację poglądów urlopy
+wybranych niniejszą OGÓLNE
+korzystać
+innymi socjalne
+prawnej CZŁOWIEKA barbarzyństwa
+granice
+zasadami
+przestrzeganie
+nie
+zgodnie dzieci poprawy
+wyborze nauczanie narodowy
+Żadnego
+Uroczyście
+współpracy czynu
+walkę godzin przewidziana
+krajowych
+Krzewi pracy
+rozwijania zakazane honorowi
+Wszystkie przy poszanowanie
+bezstronny większość słowa
+kompetentnych osoby starości
+odniesieniu realizowane postępowych
+jednakowe
+osiągnięciu utraty zgromadzania
+oskarżenia oskarżenia
+skuteczne Nauka
+niniejszych wolność
+osiągnięć sprzecznego podstawowych
+popiera porządkuje
+majątku pracę
+kraju zmierzających aktów
+grupie która
+poszanowania założenia honorowi
+sądów
+jednomyślnie warunków
+innym udzielającego najwznioślejszy
+Zjednoczone nieludzki barbarzyństwa
+obszary
+procesu płci
+stale
+niepodległości powiernictwa rozumieć
+lat świadczenia
+skuteczne przyjaźń porządkuje
+płatne
+kraj
+pomocą jednomyślnie
+osoby cel
+zawarcia
+swej
+uznanie
+bezpieczeństwa
+wysuwanego rodziny
+korzystać stanowiącym miejsca
+niezależnej małżeńskie sumieniem
+wymierzać praktykowanie
+poprawy wespół okresowe
+osobie przekonań nauki
+podstawowa pracę
+korespondencję
+zadość rządzeniu
+rozwój wolno Deklaracji
+wygnać nie duchu
+uwłaczać rasowymi
+którego dobremu ludu
+wychowywania
+postępie
+swych aby wolność
+jemu celami wybranych
+rzeczywiście przyznanych bezpłatna
+stosowanie poglądów
+uczestniczenia wydawania
+Organizacji przypadku
+trwania
+wśród swą
+swobodnie wychowywania
+cel demokratycznego narodowości
+korzystania
+uchwaliła
+przywróciły równego grupie
+równouprawnienie otrzymywania narodowości
+sąd swoją powszechnego
+jemu odmawiać zalet
+równorzędnej
+kraj obszary Narody
+swobodnie Artykuł
+ustalone doprowadziło okresowo
+wszędzie
+popełnienia wyborach
+równego
+pozbawiać torturować
+ubezpieczenia popiera
+sam zapewniającej
+swobodny niezbędnych
+wymogom domowe
+międzynarodowego które myśli
+Wszystkie
+pracy obejmuje
+które politycznej olbrzymie
+krajowego czynom niezależny
+przestępstwa potrzeby interesów
+musiał wspólny Państw
+rozsądne
+świadczenia uciskowi
+ograniczony podjęły Małżeństwo
+popełnienie małżeństwa pracujący
+mają można
+ścigania bezstronny
+całkowitej procesu
+aresztować ograniczeniom równorzędnej
+zmiany wymogom
+nauczania udowodni
+prześladowania handel ustalone
+ludów świata
+postanowień
+jakiejkolwiek lub
+ani trwania socjalne
+działalności postępie
+korzystania korzystaniu
+sytuacji pochodzenia Powszechną
+Narodów przyjaznych
+zrozumienie kraj potrzeby
+Narodów kobiety
+Narody tajności
+jakąkolwiek chwili Zgromadzenia
+wspólnoty komórką podstawową
+społeczeństwa przestępstwa pospolitego
+przypadku czynić jego
+pracę
+Narody obalenia mają
+międzynarodowym rozstrzyganiu niewinnego
+społecznej swych
+publicznie musiał
+korzystają Deklarację
+przyszłych odpowiadającą prywatne
+niezbędnych Deklaracja
+wynikających przyszłych sądów
+rzetelnych
+względu przyznanych
+nauki Państwu
+dobrobyt
+przynależy przyszłych rządzi
+chwili Każdy ludów
+społecznej
+konieczne społeczeństwa praktykowanie
+braterstwa jedno
+setek nędzy Rodzina
+Organizacji Przetłumaczona jakiejkolwiek
+nieludzki podlega wespół
+uznawano
+Ogłasza
+wiarę imieniu
+rozumem powodu
+inny
+ogłoszono podstawowa niego
+kobiet
+małżonków celu Nauka
+równych
+Paryżu
+dążenie pozamałżeńskie wyraziły
+którego
+stowarzyszania wszelkimi
+stowarzyszania
+zawarowanie
+Zgromadzenia
+braterstwa
+publicznej opinii niniejszej
+przed obszar Praw
+wymogom
+stale innych
+Zjednoczone świadczenia wszyscy
+setek pierwszeństwa Nie
+nauki
+domowe wyższe będącą
+innego
+pod lat
+czynom większość
+tworzenia
+bezpieczeństwa DEKLARACJA
+kobiety rozpowszechniania
+przeciw powiernictwa
+swych małżeństwa Matka
+rozsądne płci
+czynu popieranie
+niezbędnych
+publicznego egzystencję zdecydowanie
+względem tworzenia
+osobowości ludźmi dostępne
+pierwszeństwa
+traktować interesów demokratycznego
+jako
+trwania
+niniejszą
+zarówno karać
+zasadności lat przyjaznych
+sąd zawierania
+poprawy zadowalającego jakiemukolwiek
+obalenia
+oraz posiada się
+dana pracy
+zawarcia
+jakimkolwiek aresztować
+władzy
+Celem
+osobowości strachu pomocą
+zapewnienia opieki
+najtrwalszych
+wyraziły
+myśli postępować
+obalenia podstawowe
+obowiązkowa poszanowania
+utraty urzeczywistniania
+grudnia osobowości
+niezależny
+godność nie pełnej
+ani niewątpliwie Nauka
+pogwałcenie zdecydowanie
+okresowo
+pozamałżeńskie sąd nikogo
+zasadami tych postaciach
+prywatne środki
+dokonania rozstrzyganiu Organizacją
+uchwaliła pracę
+ogłoszono konstytucję
+niniejszych ZGROMADZENIE
+krajowych zdecydowanie dzieci
+poszukiwania
+poglądów
+ich dążyły
+okresowo słusznym prawnej
+uzupełnianego Państw
+nieprzestrzeganie równości ograniczeniom
+stopy słuchanym
+religijnymi
+zapewniły stale stosunków
+jakiegokolwiek
+Oświata przyjaznych kompetentnych
+Nikt
+innej Paryżu
+równe rzeczywiście obszaru
+międzynarodowego sumienia granice
+Celem
+człowiek korzystaniu
+działania wynikających obradująca
+przekonań posiadania popełnienia
+rodzinie Organizacji obszaru
+sumieniem
+znaczenie przewidziana procesu
+sumienia
+Matka równouprawnienie
+zamieszkujących moralnych
+wydawania
+uroczyście wiarę korzystania
+imieniu pełni stowarzyszania
+Państwu strony mając
+nikogo żadnym
+Organizacji rządzi gospodarczych
+prawem
+Rodzina honorowi
+celu niezależny
+celu
+postulaty wynikających Członkowskich
+zbudowania przestępstwa techniczna
+niego
+swobodnego zawarowanie należenia
+jakimkolwiek Deklaracja
+głoszenia społeczeństwa samodzielnie
+zrozumienie żadnym
+egzystencję
+przedstawicieli
+innej celami
+Państw obradująca równorzędnej
+związków obowiązkowa
+mieszkanie niezależnej małżeństwa
+uwłaczaniu równych
+opartych jest niezbywalnych
+sumieniem wyborach
+powodu wielu
+wiary korespondencję
+również obradująca dyskryminację
+konstytucję poprzez dziecko
+większość stopniu
+krajem nieprzestrzeganie
+międzynarodową przedstawicieli Zgromadzenia
+mają osoba wyraziły
+dobrodziejstw walkę
+kultu DEKLARACJA
+dzieci zaniechania wszelkimi
+wszystkie
+przewidziana
+uznawano utraty uwłaczać
+różnice pełnej
+uwłaczaniu
+narodami rozwój
+przyszłych władzy ugruntowanie
+służby
+swych Powszechną wstrząsnęły
+dokonania studia osoby
+swobodnego
+mieszkanie
+odpowiedniego moralności
+stanu
+wyborach wyborach sumienia
+dobrobytu swój
+Nauka stanowiącego nie
+swych aby
+krajowym małżonków
+uciskowi
+dyskryminacją rzeczywiście wespół
+Rodzina przestrzeganie
+sądów pracy stanu
+służby uwłaczać skończoną
+utrzymania kulturalnych
+Paryżu wyboru
+wolni organizacją płatne
+pełny zapewniono jak
+Deklaracji ochrony
+dążenie powiernictwa poglądów
+stale
+równości domowe nikomu
+osiągnięcia założenia
+nędzy zawodowych
+roku Oświata
+przed byłyby koloru
+równouprawnienie równi majątku
+zapewniającej
+starości obalenia także
+jakiejkolwiek
+też
+równouprawnienie powoływać przy
+przeprowadzanych przynajmniej
+stosowanie
+traktować Wszyscy podejmowania
+prawem Sesja wyborze
+grudnia Artykuł postanowień
+razie
+nędzy celu
+ani swój także
+dostępne społecznej handel
+utraty Rodzice
+wypoczynku pierwszeństwa posiadania
+postulaty wolno
+jakiejkolwiek
+Ogólnego lekarską ludów
+wyborach równej środkami
+równe będą osobie
+techniczna Wszyscy ograniczenie
+wyboru przywróciły miejsca
+zmierzających rozwijania
+osoba
+niezbywalnych którego
+torturować ZWAŻYWSZY postanowień
+wspólnoty
+pracę
+prywatnie uznania Praw
+Państw innymi którego
+płci wszelkimi grudnia
+wynagrodzenia
+czyjekolwiek poprzez nakładać
+Organizacją życia
+wynikających praw uwłaczaniu
+wyrażoną wśród
+azyl celami
+zawarowanie swego
+niewolnictwo różnice ludźmi
+toczy skazany
+dla
+posiadania POWSZECHNA
+kobiet społecznych innymi
+rodzą ono Ogłasza
+prywatnie konieczne świadczenia
+niemu olbrzymie
+niniejszą którego wyraziły
+sprzeczny względu wynagrodzenia
+rzetelnych
+ubezpieczenia
+PRZETO inny zawarte
+dążyły wymogom
+wygnać zawodowa
+stanowiącego
+rozumem demokratycznego poszukiwania
+sprzecznego
+pozbawiać przestępstwa pogwałceniem
+wybranych przypadku azyl
+nakładać przekonań poglądów
+bezpośrednio
+zgromadzania CZŁOWIEKA swym
+taką względem
+konstytucję swoją zapewniono
+kary
+niewątpliwie torturować
+wyborach
+niniejszej gospodarczych
+Mają
+lat
+prywatne azyl wysuwanego
+między
+Sesja
+zasadami swej wolni
+wyborze krajowym
+wydawania
+skutecznego
+krajowego niż
+CZŁOWIEKA
+drodze postaciach
+wolność
+własny jakiejkolwiek
+rządu ZWAŻYWSZY
+przynależy czynom korzystać
+zapewniającego krajowego zgromadzania
+demokratycznego
+azyl
+bezpośrednio
+zależności samodzielnie odpowiadającą
+swą tolerancję OGÓLNE
+buntu narażeniem lekarską
+Nikogo międzynarodowego
+Deklaracji wolności
+nikomu
+tyranii takiej
+obradująca POWSZECHNA jak
+opuścić
+DEKLARACJA wysuwanego
+tolerancję Zgromadzenia według
+rządzeniu życiowej
+jej też będącą
+wola opieki osiągnięciu
+międzynarodowej
+skutecznego głoszenia
+przeciwko
+rozumienie politycznych
+Członkowskich zapewnić wysiłek
+obszaru nikomu starości
+popełnienie
+osoba granice
+rozumem
+niezbędnych życiu Zjednoczone
+toczy kultu
+równi Człowieka domowe
+dopóki
+lekarską Wola
+prawa rządzeniu powodu
+życia
+mają
+będą
+setek
+dostępna rozumem współpracy
+prawo niepodległy 1948
+zadowalających będą osoby
+choroby obszar
+uciekać mieszkanie wyżywienie
+byłyby powszechne sprawiedliwie
+stanu dostępne tajności
+postępowych samodzielnie zbudowania
+niniejszą zamieszkujących powrócić
+odzież Krzewi
+dążenie dostępne
+poniżający rodzą Wszystkie
+sytuacji
+osoba wśród uwłaczać
+pochodzenia organy dyskryminacją
+otrzymywania
+ubezpieczeń
+przez rodziny
+rozwój wypoczynku być
+obdarzeni
+znaczenie strony
+publicznie jednomyślnie poszukiwania
+względu
+krajowych ludzkości
+dana ubezpieczeń
+1948
+równego przynajmniej
+według przywróciły
+nikogo większej grupie
+Nie Artykuł jemu
+podlega
+wyborów sam
+międzynarodową
+dążenie jakiegokolwiek
+kobiety prywatnie
+postulaty
+samowolnie rządu
+rodzą
+doprowadzony niepodległości
+zalet
+rozwój zawierania socjalne
+niemu
+ubezpieczenia
+odpowiadającą
+choroby
+doprowadziło uznawania
+można
+zgodą słuchanym
+prawem sytuacji uczestniczenia
+między podjęły
+zapewniono
+udzielającego
+doprowadzony korzystać przyjaznych
+niewątpliwie
+postulaty
+przepisami
+rozpowszechniania
+sądów niż
+języków
+myśli czy porządku
+rozwoju żadnym
+swój
+zapewniły majątku ten
+urlopy
+przyjaźń
+uroczyście oskarżenia wysuwanego
+wyższe
+osobowości
+bezpłatna
+narodowości stopy dostępna
+zobowiązaniach wszędzie żadnym
+sam
+kraj zdecydowanie torturować
+sądów uznawano
+publicznej pochodzenia ludzkości
+osobistych krajem międzynarodową
+sposób azyl
+przekonań niezbędnych
+POWSZECHNA stowarzyszania dążyły
+pozbawiać społecznych azyl
+spokojnego
+własny świadczenia socjalne
+udzielającego
+społecznej Mężczyźni studia
+sam prywatnie równą
+rozstrzyganiu
+rodzinne zależności religijnymi
+małżeńskie poszukiwania nikomu
+zmierzających przypadku człowiek
+Powszechną największych
+Człowieka
+jednostki uczestniczenia nieposzanowanie
+rzeczywiście systemowi kulturalnych
+doprowadzony Nikt
+jemu rządzi
+służby Państwu
+zasadami grupie zdecydowanie
+czyjekolwiek
+zbudowania
+rządu sprzecznego
+wypoczynku
+głoszenia
+własny musiał tych
+narodów
+popiera międzynarodowej
+udzielającego
+jedno
+zasadami zależności przystępowania
+rozwój mężczyzn
+korespondencję stopniu członek
+wyborów ostateczności
+wyborze winy
+pierwszeństwa
+jego była
+działalność podczas
+okrutny dzieci zrozumienie
+politycznej komórką
+dobrobytu ogłoszono życiowej
+miejsca
+rozwoju
+niemożliwy
+Nauka
+płacy niemożliwy
+innego zgromadzania
+powszechnie pomocą
+poszukiwania
+zapewniły nauki politycznej
+postaciach pracę zawarte
+drodze niewolnikiem oni
+być kobiety prześladowania
+włączając Zjednoczonych
+którego krajem płci
+narodami publicznie jakiegokolwiek
+wyżywienie nauki wynagrodzenia
+Państwa niewolnikami
+Organizacji niezależnej
+podstawowym
+trwania
+barbarzyństwa
+jako mając jest
+zapewniły
+która procesu sprawiedliwie
+specjalnej PRAW POWSZECHNA
+buntu kraj różnice
+osobowości
+korespondencję kobiet
+pracy aktów dążyły
+bez grupie
+skutecznego zawarowanie byłyby
+ingerować
+uznania urlopy małżonków
+też zasięgu
+nieprzestrzeganie przyjaznych sumienia
+Wola przedstawicieli zasadności
+jednakowej jakiemukolwiek ludzie
+niepodległości
+względu kraj pracy
+krajowych
+setek
+interesów
+popierania można
+sprawiedliwie prawach
+starości ludu
+korzystać opuścić pełnoletności
+uwłaczaniu
+literackiej socjalne była
+niezbędnych była
+przepisami
+mają uzupełnianego
+ogłoszono
+rasy grupami
+dzieci ubezpieczenia korzystania
+urlopy odniesieniu innymi
+małżeńskie Państwa
+doprowadzony rozumienie
+wolno międzynarodową
+dzieciom nieprzestrzeganie
+wychowywania zarówno
+wszędzie
+odzież niewątpliwie
+przeciw zasięgu POWSZECHNA
+zalet zapewnić
+osiągnięciu
+człowiek
+ludów
+aresztować porządkuje człowieka
+najwyższy Mężczyźni
+wygnać roku
+Członkowskich dane tyranii
+kobiety
+przedstawicieli kary
+konstytucję Ogólnego
+chwili sam kobiety
+jednostki dostępu PRAW
+Preambuła
+języka dostępne opinii
+buntu
+która
+wespół życia
+rozsądne
+granicach
+żadnej
+Krzewi POWSZECHNA
+zapewnić okresowe którym
+korzystania większość
+wolności będą
+zobowiązaniach socjalne porządku
+należenia
+prywatnie dziecko
+okresowo dobrobyt
+każdego osobie
+ugruntowanie nakładać urlopu
+powszechnie niewinnego Trzecia
+wyrażania
+Ogłasza
+publicznego
+wypoczynku
+członków sąd torturować
+pochodzenia zobowiązaniach
+Małżeństwo małżeńskie poniżający
+innym większej
+posiada należenia Żadnego
+pierwszeństwa członków spokojnego
+Członkowskie innej zależności
+torturować
+nauki
+również przynależy
+Ogłasza urlopy
+pochodzenia korespondencję urodzenia
+własny
+przeprowadzanych dostępu
+poruszania
+słuchanym
+Wszystkie
+koloru aktów
+zapewnienia ugruntowanie zakazane
+pamięci ten
+Nauka
+pochodzenia płatne
+jednakowej swobodę
+uchwaliła poszanowania rozumienie
+wyborów stosowanie
+uznawano swym
+większość
+przyszłych czyjekolwiek
+wymogom niego
+dopóki godności
+wyrażoną Państw korzystaniu
+grudnia
+tej niewątpliwie strachu
+dzieciom przestępstwa
+służby
+pierwszeństwa setek
+popiera
+nie Mężczyźni
+lat aby Sesja
+kobiety
+rozpowszechniania
+obywatelstwa stanu kobiet
+zobowiązaniach
+nakładać Organizacją
+wysiłek niezależnej narodowości
+zamieszkujących udzielającego
+utrzymania społecznej uznanie
+wśród konstytucję
+wyborach postępować celami
+także sztuki
+zamieszkujących prywatne członek
+Deklaracji
+wolność
+przyznanych przestrzeganie
+prawach słusznym opuścić
+bądź
+wyrażania
+zarówno
+oraz podjęły pełnej
+POWSZECHNA powodu zasadzie
+oni podczas zdrowie
+ścigania
+będą pozamałżeńskie zawarte
+swobodnie
+korzystania wyżywienie
+spokojnego służby
+rozwój przyszłych
+kobiety organizacją urlopy
+narażeniem materialnych
+odniesieniu
+podejmowania
+rodzą tych postaciach
+pod
+zmierzających zmierzającą
+Uroczyście
+udzielającego dobrobyt imieniu
+według
+jedynie
+wyznania
+nauczania równego
+jakiegoś
+publicznej trwania
+zadowalającego płacy
+okrutny ludu ubiegać
+1948 świadczenia pełnej
+ludów stosunków uczynienia
+pogwałceniem niewolnikami
+krajem moralnych ani
+podstawowych naukowej dziecko
+obyczajów opinii
+dany artystycznej zadowalającego
+dany niewolnikiem
+moralności
+Wszystkie
+międzynarodowego choroby sąd
+świadczenia
+żadnej
+ograniczenie
+życie grudnia lekarską
+Sesja
+uczestniczenia większość godzin
+zasadności opiekę wespół
+sam
+doprowadzony będącą
+władzy
+narodami
+Zjednoczonych Państwu kultu
+urodzenia przyznanych
+niezależnej komórką dzieciom
+narodami która jakimkolwiek
+sumieniem oskarżenia Człowieka
+sprzeczny granice
+lub dana
+dostępna
+kulturalnych poglądów lekarską
+którego płci
+zasięgu
+stowarzyszenia każdego
+narażeniem równości
+studia pogwałcenie systemowi
+jakiejkolwiek dobremu Powszechna
+Małżeństwo dobrobytu
+karać była jakikolwiek
+innymi ludzkiej rozsądne
+aktów
+się Krzewi
+zgodą środki
+słowa
+popieranie
+powoływać uwłaczać
+prawo
+religijnymi współpracę
+podjęły
+Państwu wdowieństwa
+przynależy
+wyrażoną
+udzielającego służebności
+artystycznej utraty
+współpracę zawarcia postępować
+aby sam
+Państwa ustaniu pogwałceniem
+bezstronny
+społeczeństwa
+zapewniono dany
+przywróciły
+sprzecznego
+okrutny
+nieposzanowanie narodów oskarżony
+zbudowania Państw różnicy
+według
+pełni dziecko stosowanie
+współpracy
+się
+działania sytuacji pełny
+pełny
+ONZ
+rodzinne
+przyjaznych
+równego pospolitego obywatelstwa
+Dokument inny sytuacji
+Narodów niezdolności
+świata
+podejmowania tworzenia równą
+jego odpowiednich
+poniżający
+którego narodami
+względem
+traktować
+dążenie
+odzież
+czy Nikogo
+choroby
+postaciach
+kulturalnych wszelkimi
+ingerencji
+naturalną oraz małżeńskie
+urlopu
+imieniu zamieszkania
+religijnymi języka
+wyborów
+moralności
+niniejszych wszyscy
+niniejszą podstawą wyłącznie
+rozstrzyganiu
+braterstwa dokonania rozumieć
+gospodarczych zgodnie
+rządzi służby
+mają
+interesów jakiekolwiek
+popierania
+podjęły wielu sprzeczny
+obyczajów wdowieństwa
+podległe niewątpliwie
+Człowieka
+dążenie
+poprawy odmawiać
+wygnać sytuacji bezstronny
+wygnać wygnać
+swą sądów techniczna
+postanowień sprzeczny
+handel Zgromadzenia czynu
+zapewnić strachu
+doprowadziło równości
+naukowej niepodległy wszędzie
+olbrzymie powszechnego przez
+międzynarodowej
+sytuacji Rodzina
+najwyższy
+bezrobociem czynu nie
+zapewnić innych przez
+innymi
+demokratycznego
+postępowych utrzymania osiągnięcia
+jednostki
+prywatnie dyskryminacją
+jakimkolwiek
+narodami korzystać
+sumienia takim niepodległości
+stowarzyszenia prześladowania
+sytuacji wartość
+starości wysiłek
+Wszyscy
+opuścić prawo się
+poprawy dyskryminacją dopóty
+wstrząsnęły
+znaczenie
+przywróciły jednomyślnie Nikt
+nauczania
+choroby zawartych
+jej
+zapewniającego przyjaznych
+skutecznego powszechnie
+była pracę
+ONZ ubiegać
+swego
+uczynienia
+wyższe
+wyraziły
+sprzeczny podczas
+aktów
+zdrowie
+uznanie prawach wyższe
+Sesja powszechnego chwili
+zasadności ponadto
+zadość podległe wspólny
+choroby mieszkanie
+osobie
+uznawania największych głoszenia
+przyjaźń
+Nikt
+włączając strony
+ludźmi
+korzystać uprawianie
+Nie
+Nauka wszystkie czynu
+Powszechna
+własności strony władzy
+przyznanych większej
+nieludzki założenia
+narodów zdrowie rozwój
+uciskowi
+zasadzie rozstrzyganiu
+jemu prawem
+podejmowania wyżywienie organy
+bezrobocia granicach postępowych
+podejmowania uczestniczenia
+narodowości najwyższy
+opartych które
+jakiekolwiek zadość
+innego
+dopóty płci
+zdecydowanie przekonań
+wszędzie kulturalnych zadowalającego
+między sumienia
+wielu świata
+wyżywienie zgodnie związków
+jak
+prywatnie urzeczywistniania
+małżonków uciskowi
+obejmuje powszechnego
+korzyści małżeństwa niniejszej
+Preambuła
+przeprowadzanych
+powodu dyskryminację rozumienie
+Sesja
+powszechności
+torturować
+takim
+wola przyjaźń ludzie
+egzystencję
+oskarżony wysiłek
+bezpłatna tej lat
+nie takiego
+niezależny przypadku
+czyjekolwiek wiarę
+obejmuje buntu wszelkimi
+osiągnięcia Każdy
+aresztować każdy zawarcia
+podstawowe obywatelstwa buntu
+poszanowanie sumieniem
+społeczeństwa politycznych
+organy
+azyl uznania wszczętego
+sposób życie
+praw
+zawierania wynikających
+działalność setek dokonania
+przeciw
+Mężczyźni
+poglądów
+niewinnego
+wszystkich warunków
+Krzewi
+popełnienia
+stowarzyszenia mając buntu
+Nauka
+równorzędnej
+barbarzyństwa przestrzeganie swobodę
+niemożliwy
+pełny
+przynajmniej równego
+podstawową
+Matka
+walkę pierwszeństwa rasowymi
+swobodny
+naukowej buntu
+zasadzie powszechności dostępna
+urlopy ZGROMADZENIE
+prywatne
+obrony
+nauki
+zgodnie służby bezpieczeństwa
+zmierzających praktykowanie ani
+okresowe Powszechną
+poruszania najwyższy specjalnej
+równych stowarzyszenia własności
+powoływać zawarowanie
+ich duchu życiu
+rzeczywiście zawodowych
+nikogo
+obejmuje członków
+rozsądne
+samowolnie
+zdrowie
+publicznego nauczania obyczajów
+podstawą nauczania
+stale aktów niż
+swego Preambuła
+niewolnictwo utraty
+indywidualnie pospolitego wszelkimi
+płci tworzenia
+rozumieć udowodni
+Mężczyźni wyłącznie wolności
+uroczyście ścigania
+rozwijania konstytucję ludu
+nauki lekarską
+pokoju
+pełny
+wychowywania systemowi zaniechania
+systemowi ani zasadzie
+niewinnego wszystkich
+zapewniły narodowy jakimkolwiek
+przyznanych jak
+zobowiązaniach realizowane pierwszeństwa
+wyższe
+aby wartość
+Nikogo żadnej
+uznawania Preambuła
+czy
+obalenia
+wyraziły międzynarodową
+politycznej bezpośrednio
+Nikogo takiego ZGROMADZENIE
+ingerować tej samowolnie
+ludzkiej żadnej zapewniającego
+powoływać
+POWSZECHNA włączając ugruntowanie
+jakiegoś dostępu otrzymywania
+przed dokonania
+największych publicznego
+wśród
+obradująca ponadto
+przyszłych niewątpliwie wszczętego
+uchwaliła jakiegoś prywatne
+stosunków
+przeciwko
+też
+niewinnego różnicy zasięgu
+innymi
+wynikających barbarzyństwa życia
+karać
+dzieciom
+literackiej życia
+czy równych
+korzyści nieprzestrzeganie pamięci
+zaniechania
+będą służby
+opartych była zgromadzania
+współpracy
+buntu
+dostępna ubezpieczeń
+zgodnie wynagrodzenia opinii
+sprzecznego
+kulturalnych pomocy będą
+wymierzać także
+toczy wiary wiarę
+uznawano wszelkimi języków
+porządkuje dyskryminację grudnia
+czyjekolwiek ubezpieczenia
+samowolnie prześladowania myśli
+zasięgu
+opartych opieki międzynarodowej
+karać
+zapewniły działalności
+mieszkanie zakazane
+języka każdy
+Zjednoczonych grupie
+techniczna
+Krzewi socjalne bezpośrednio
+wiarę
+rozwoju
+swobodnie
+żadnym
+przedstawicieli kobiet pełnej
+poszukiwania myśli Deklarację
+życia powrócić wstrząsnęły
+czynu odmawiać
+dostępu
+podstawą spokojnego wyraziły
+podczas wszelkimi
+Człowieka udowodni samowolnie
+wszyscy
+sprawiedliwie działalność
+wygnać zatrzymać
+takiej azyl
+prywatne pomocą
+równej służebności
+wdowieństwa nauczanie władzy
+sztuki
+rzeczywiście
+płci postulaty kulturalnych
+Wola Mężczyźni przedstawicieli
+niemu
+dany stanowiącego
+własności obejmuje
+Dokument
+podjęły
+postępować zdecydowanie komórką
+uznania zdrowie przyjaźń
+roku
+odpowiedniego Rodzice Preambuła
+życie wszystkich
+będącą
+jedno ludzie praw
+przyjaźń nauki Narody
+Przetłumaczona najwznioślejszy również
+ani uroczyście
+obszaru poruszania odmawiać
+wartość zależności powrócić
+niezbędnych
+każdy uczynienia niniejszej
+postępie spokojnego ubezpieczeń
+ubiegać przyrodzonej wszczętego
+dostępu stowarzyszania
+wyższej jakiejkolwiek
+innego uprawianie zrozumienie
+członków nieprzestrzeganie zadość
+publicznego uznanie zdecydowanie
+pomocy kulturalnych związków
+religijnymi
+zaniechania
+słusznym rodzinie uciskowi
+równego współpracę oskarżenia
+handel
+Krzewi przyznanych wśród
+postępowych religijnymi
+Narodów jedynie bądź
+być języków podstawowym
+wszczętego zatrzymać choroby
+jako
+przeciwko swoją
+materialnych wyznania urlopu
+narodowości będą przed
+zbudowania uwłaczaniu
+Nikogo
+dzieci
+ludźmi człowiek
+dzieciom skazany rodzinne
+poszanowanie członek korzystać
+podczas
+torturować zapewnienia uciekać
+systemowi krajowego odmawiać
+podstawą
+jednakowej wyborów społecznych
+podległe także
+niezbywalnych obyczajów
+wszystkimi
+PRAW
+dostępne Krzewi
+poprzez wyrażania techniczna
+największych
+każdy świadczenia
+osobie
+jakiegoś
+jakiemukolwiek kompetentnych
+osiągnięcia członek niemożliwy
+setek inny Sesja
+jakiejkolwiek zrozumienie sądów
+Wszyscy
+przeciwko zawarte
+PRZETO wypoczynku skazany
+działania bezpośrednio
+ONZ popełnienia
+kultu najtrwalszych naukowej
+buntu odpowiednich
+niezależnej
+dyskryminację ograniczenie takim
+bezpieczeństwa
+ludzie uciekać zasobami
+wolni równej
+sprawiedliwości innym
+artystycznej życia
+ludów korzystaniu
+Rodzina porządku zasadami
+rozstrzyganiu nędzy przypadku
+głoszenia
+nakładać
+stanowi handel organizacją
+opartych korespondencję
+informacji
+wszyscy
+skazany dobrobyt
+niewolnikiem przyjaznych przewidziana
+czynu jakiekolwiek
+wielu
+lekarską Narodów popieranie
+pospolitego Deklaracja sąd
+zasadności wolno stanowiącym
+większość
+przeciw Deklaracji torturować
+konieczne stanowiącego
+Nauka różnice toczy
+Preambuła
+działalność bądź
+zaniechania wielu działania
+wolno prywatne
+włączając
+wdowieństwa przynależy
+winy aby
+Nauka
+różnicy azyl
+Człowieka
+społecznego powszechne
+dostępu
+innych najtrwalszych
+innej PRZETO wszystkich
+prawo środkami
+rodzinne zasięgu
+języków zawartych
+urodzenia
+Członkowskie kobiety
+jakiegoś
+wszelkimi
+powrócić
+techniczna najtrwalszych publicznego
+czynu politycznej powszechnego
+grudnia nikogo
+równe
+jest pełną zapewniającego
+popiera zbiera
+pierwszeństwa urlopu
+względu swoją nauczania
+postanowień
+wypoczynku słuchanym także
+jest materialnych Państw
+ZGROMADZENIE wszczętego Uroczyście
+sprawiedliwości
+ich przepisami aresztować
+środków
+odwoływania według
+olbrzymie okresowe
+czynu ingerować
+jest stosowanie jest
+ONZ buntu
+powszechne własny tyranii
+traktować obalenia Deklaracja
+Deklaracja poszukiwania
+mieszkanie majątku
+krajowych
+które przyjaźń
+zalet najwyższy procesu
+kobiet wszyscy członków
+kultu
+wyłącznie zasięgu swobodnie
+popiera
+ograniczenie
+swego moralności stale
+prawem
+międzynarodowej
+gospodarczych jakiegoś
+bezpieczeństwa sumieniem współpracy
+obszar honorowi podczas
+powodu studia
+służebności
+bezpośrednio
+poprzez Narody
+trwania rozumieć
+sprawiedliwości wysuwanego kulturalnych
+Człowieka także nikogo
+zasadności jakikolwiek Każdy
+postaciach
+jednakowej osobowości kraj
+prywatne
+rodziny odpowiedniego
+karać grudnia pełny
+obradująca cel członków
+potrzeby Nie
+powodu
+wyraża ONZ stanu
+pracy
+uznawano języka
+utraty
+równego podstawowe przestępstwa
+dyskryminację
+Matka znaczenie przynależy
+tajności podstawowa stosowanie
+udzielającego
+uznania
+społecznej
+najwyższy człowiek
+niezbywalnych
+nieludzki odzież konstytucję
+Nie jakiekolwiek bezstronny
+bezstronny ostateczności taką
+społecznej urodzenia
+pomocy
+narodów
+wśród wyborach zgromadzania
+jeszcze Deklarację poszanowania
+dyskryminację
+członek wielu
+wolność
+korzystania
+zasadami przez
+wynagrodzenia jeszcze jako
+obywatelstwa obszar
+Zjednoczone
+bezpieczeństwa
+odzież zasobami starości
+całkowitej przedstawicieli
+nędzy
+narażeniem
+jakimkolwiek urodzenia wiary
+oskarżony przypadku
+przestrzeganie dopóki
+krajowych przed
+podstawową
+strony będą każdego
+Małżeństwo tolerancję
+krajowego ludu powszechności
+można wdowieństwa potrzeby
+PRAW krajowych choroby
+pomocy
+kobiet żadnej międzynarodowym
+Uroczyście zdecydowanie mając
+życiowej
+podległe
+ubezpieczenia związków wiarę
+Wszystkie między swój
+ludzie
+stowarzyszenia równości artystycznej
+jakiekolwiek
+zawartych korzystać
+zapewniającej
+zatrzymać
+któregokolwiek
+małżeństwa pomocy
+niewolnikami choroby
+życiu służby wszyscy
+małżeńskie
+musiał najwznioślejszy zasadzie
+osoba
+Dokument
+godności niemu jednakowej
+osiągnięcia poprawy artystycznej
+Nauka nauczania przed
+przywróciły Deklaracji otrzymywania
+wszędzie
+równą byłyby
+zdrowie publicznie ścigania
+prześladowania wyborze
+przed Zgromadzenia
+ludu
+nauki
+uchwaliła naukowej byłyby
+1948
+przyznanych
+utraty
+prawa dokonania
+obradująca
+prawach
+opuścić
+sprzeczny
+władzy myśli
+płacy
+swą Deklaracja utrzymania
+chwili
+zgodą krajowym
+bezrobocia warunków podstawowa
+odpowiednich
+wyznania
+korespondencję
+którego małżonków
+służebności ingerencji
+warunków skazany
+przepisami poszanowanie
+postulaty zasobami też
+ani
+międzynarodową zatrzymać
+urodzenia
+opartych
+ZGROMADZENIE
+azyl
+dobrobytu stanowiącym postulaty
+niezbywalnych
+dana dane wiary
+wespół popełnienie
+Nauka
+zapewniły 1948
+także włączając które
+równego egzystencję działalność
+przepisami
+narodowy Narodów nikomu
+Krzewi wolni wespół
+małżeństwa swych
+stosunków rodziny nikogo
+prześladowania
+służby
+innym
+rasy
+jakiegoś pokoju
+nieludzki zgromadzania
+jest Wola obdarzeni
+Wola gospodarczych
+wydawania bezstronny
+większej świadczenia
+dyskryminację Mają rozpowszechniania
+jakikolwiek sytuacji
+Człowieka słuchanym pełnej
+zapewniającego względem
+jednomyślnie trwania
+życiu niniejszej
+tworzenia
+niemu
+się płacy Ogólnego
+stopy
+czyjekolwiek korzystaniu lekarską
+olbrzymie
+razie
+przeciw kobiet niewątpliwie
+zatrzymać uznawania
+rodziny
+skazany rasy włączając
+powoływać kulturalnym
+przedstawicieli majątku pamięci
+społecznych wszystkimi korzystania
+będącą
+podstawą
+powszechnie wyższe
+postępu
+ZWAŻYWSZY swobodę
+kobiet
+handel środki opuścić
+porządkuje mając
+duchu
+musiał innego
+dążenie płci grudnia
+narodami interesów
+opiekę
+zmuszać
+opartych swej
+wobec
+trwania zalet zatrzymać
+jakiegokolwiek osobowości wypoczynku
+Zgromadzenia
+rozumieć bezpłatna celami
+przekonań organy
+zasobami obradująca
+powrócić rozpowszechniania organizacją
+aby granice studia
+osobowości
+wydawania pełnej
+nakładać wszystkich
+winy realizacji bezrobociem
+sposób ingerencji
+podlega
+działalności
+przynależy techniczna
+zawarowanie
+prześladowania zasadności prawa
+któregokolwiek
+pozamałżeńskie
+bezpłatna Państwa
+słuchanym współpracę stopy
+niewinnego życiu
+wiarę wartość
+sądów chwili korzystania
+niezależny
+informacji według kulturalnym
+korzystają pracę zapewniającej
+niewolnikami
+wyraża pod taką
+sumienia dążyły pełni
+bezstronny literackiej
+czy
+słusznym
+sytuacji obowiązkowa społeczeństwa
+niezależny uwłaczaniu zgodą
+potrzeby samodzielnie przystępowania
+Przetłumaczona zamieszkujących
+porządku imieniu
+zmuszać zasięgu jednakowej
+również jakąkolwiek innego
+który porządkuje obradująca
+przekonań społecznych
+uciekać dyskryminacją takiego
+stanowiącego
+zmierzających aktów przestępstwo
+podstawowe międzynarodowym
+kary środków Wola
+włączając społecznej drodze
+niepodległy narodami jednostki
+powodu wespół też
+wola
+urzeczywistniania stopy
+działalności
+Narodów jakimkolwiek
+sprawiedliwości międzynarodowego
+PRZETO
+powiernictwa postaciach
+celami sprawiedliwie zamieszkania
+realizowane
+służebności
+najwyższy
+ten Przetłumaczona
+Członkowskie Oświata
+dyskryminacją przestrzeganie
+obyczajów duchu
+jednomyślnie wszelkimi
+Ogłasza bądź aktów
+osobowości wyrażania
+osoby sąd rządu
+służby mieszkanie
+własności
+zobowiązaniach wymogom barbarzyństwa
+tych
+skuteczne Krzewi
+ograniczony Rodzina
+pomocy prawem
+Ogólnego wartość małżeńskie
+pod się wolno
+bezpłatna
+ugruntowanie
+całkowitej wysuwanego ścigania
+społecznego stale
+skutecznego pamięci DEKLARACJA
+zdrowie wyłącznie
+wszystkie związków środków
+dobrobyt
+potrzeby
+narodów słuchanym podstawowa
+obejmuje działalności
+rozstrzyganiu urlopu
+będącą POWSZECHNA
+Nauka
+języka
+może pracujący publicznej
+równouprawnienie inny pracujący
+Człowieka ludzie zbiera
+społeczeństwa rozumieć swoją
+sprawiedliwie najtrwalszych poszukiwania
+zatrzymać podstawowe ingerować
+uprawianie samodzielnie PRZETO
+swoją zapewnienia jej
+Oświata Państwu dana
+jemu
+życiu
+PRAW wolni narodami
+PRAW uciekać
+pomocy
+praktykowanie kraju Ogólnego
+nie tolerancję
+wspólny
+demokratycznego obszar
+cel pracy ubiegać
+zmiany osiągnięcia socjalne
+wynikających związków winy
+własny
+kultu stosowanie
+grupie Deklaracja wyboru
+osiągnięciu
+rozwijania życiu
+zadość wielu wyłącznie
+narodowości
+celami kompetentnych poszukiwania
+stowarzyszenia
+ograniczeniom
+CZŁOWIEKA
+skuteczne ubezpieczeń
+osoba
+ubezpieczenia
+warunków niego popełnienia
+ONZ
+wolno
+sumieniem specjalnej czy
+wyborze ingerować Matka
+władzy które
+cel naukowej
+sumieniem setek dany
+oni wyrażania
+socjalne
+Przetłumaczona stanowi posiada
+pozamałżeńskie wdowieństwa
+ograniczenie
+ochrony większej
+równouprawnienie będącą
+odpowiadającą przynależy
+ONZ władzy
+pochodzenia niewolnikami
+pracujący PRZETO
+pracę opartych procesu
+się stanu przestępstwo
+wysiłek słowa życia
+Rodzice takiego międzynarodową
+uznanie współpracy
+rządzeniu każdego
+posiadania powoływać rodzinne
+ubiegać którym oni
+równej
+jako słowa
+wszelkimi powszechne Nikt
+mężczyzn wyłącznie będącą
+współpracy swoją wyrażania
+Państwa utrzymania
+olbrzymie prawo
+koloru obdarzeni opieki
+swych
+niezdolności zakazane
+rozwój
+niemu
+zbiera związków niezbywalnych
+specjalnej interesów Paryżu
+systemowi wygnać zgodnie
+równych podstawowym moralności
+drodze międzynarodowego dyskryminację
+rozwój rozumienie
+rozstrzyganiu okresowo społeczeństwa
+własności honorowi
+rozumieć
+się
+nikogo ludzkości
+skazany przynależy Organizacją
+poszanowania
+członków założenia kulturalnym
+osobistych
+społecznego życiu była
+posiada korzystają
+swój strony ochrony
+płacy
+przekonań specjalnej ten
+wespół czyjekolwiek
+okresowo wszczętego
+nieposzanowanie podczas taką
+mając bez narodowości
+może swobodnie Zgromadzenia
+swe
+trwania stanowiącym
+przynależy
+olbrzymie niezależnej jednostki
+dany
+materialnych bezpłatna
+naturalną stopy
+czynom kulturalnych oni
+języka zasięgu
+można
+dokonania podległe samowolnie
+oni
+niewątpliwie odzież zadowalających
+świadczenia sąd podstawowe
+samowolnie Sesja Rodzice
+swej równości
+rasowymi
+opiekę
+wspólny
+nieposzanowanie obowiązkowa
+tyranii
+zmierzającą Nauka
+nauczania jakiekolwiek ubezpieczeń
+pomocą
+obywatelstwa innych niniejszą
+rządzeniu bezpłatna
+oni wolno mężczyzn
+kraj nauczanie prawo
+przyjaznych Rodzice międzynarodowego
+kraju różnice
+dostępne jemu nie
+aktów
+otrzymywania
+nędzy
+członków oraz ubiegać
+mieszkanie
+uprawianie warunkach
+ograniczenie Zjednoczone osobowości
+rozsądne
+samodzielnie stosowanie
+dzieciom wdowieństwa Rodzina
+każdy organy
+zapewniającego
+azyl znaczenie
+wstrząsnęły obalenia korespondencję
+obszar dostępna
+małżeństwa sądów dostępu
+interesów
+sąd
+rozwoju
+dostępu
+czy
+Człowieka
+lat choroby
+działalności
+przeciw politycznej
+krajem
+ludzkiej
+prywatnie ponadto większość
+żadnej wybranych wyborze
+gospodarczych nakładać
+swą pozbawiać
+swój
+Artykuł obszar rozumem
+wszelkimi
+względem godność postulaty
+lekarską demokratycznego
+równouprawnienie publicznie człowieka
+życie uciekać
+podstawowe utraty poruszania
+naukowej warunków
+powiernictwa
+wespół wyborze niezależny
+stopy rządzi konstytucję
+niniejszej
+wyrażoną
+własności
+zaniechania porządkuje
+przynajmniej niniejszej przestrzeganie
+nauczania pracy
+Rodzina
+niego podlega swego
+kraju znaczenie
+nauczania jakikolwiek udzielającego
+wola
+oskarżony władzy
+Przetłumaczona nikogo
+demokratycznego dzieci
+swe Wszystkie bezstronny
+jakiejkolwiek mężczyzn ograniczony
+nakładać
+popierania mając sprawiedliwie
+wypadek jeszcze między
+lekarską życiowej
+różnice ostateczności Krzewi
+stosunków
+wobec niego
+wysuwanego
+barbarzyństwa
+wszystkich
+duchu większość zmuszać
+powszechnie przystępowania bezstronny
+niepodległy Państwa
+różnicy
+wobec
+ludźmi jednomyślnie interesów
+zgodą wszędzie czyjekolwiek
+dostępna ubezpieczeń niniejszej
+swobodę była pozbawiać
+niezależny
+rozpowszechniania strony
+religijnymi roku zapewnienia
+postanowień rozumem gospodarczych
+zakazane
+barbarzyństwa
+zasadami tej
+równorzędnej
+DEKLARACJA jakiemukolwiek ponadto
+jakikolwiek
+zmierzającą którego
+dobrobytu
+Człowieka
+sam
+społecznego
+Człowieka Zgromadzenia
+zawodowych postępowych
+godzin
+słowa obowiązki
+przystępowania osobie obszar
+nikogo zbudowania informacji
+odwoływania indywidualnie społecznych
+winy własności współpracę
+oraz pełnoletności politycznych
+ochrony bezpośrednio
+pełny
+pełny takiego przynajmniej
+ogłoszono praktykowanie Uroczyście
+ponadto poszanowanie osobistych
+popełnienia która pełnej
+tych
+ludzie udzielającego zasadności
+pochodzenia przekonań
+obywatelstwa stosowanie
+sumieniem Preambuła
+udzielającego kraju zamieszkania
+zawodowa korzystania ludów
+służebności postaciach utrzymania
+wyraziły innymi Sesja
+Deklarację ugruntowanie
+dany zadość sąd
+podczas względu przyjaznych
+Celem korzystania sprzeczny
+wartość wysuwanego związków
+demokratycznego
+sumienia
+mieszkanie
+torturować zasadności organy
+zapewniły wielu
+dyskryminacją zatrzymać pełnej
+ponadto
+sprzeczny
+stopy osoby przestępstwa
+choroby władzy publicznego
+urzeczywistniania osoby
+znaczenie mężczyzn byłyby
+słowa zaniechania
+toczy
+egzystencję
+małżeństwa
+każdego
+honorowi zbudowania
+bezrobocia
+moralności
+postulaty kulturalnych
+urlopu przyszłych
+kulturalnym osiągnięć
+zawarcia konieczne
+niezależnej
+będą zawarcia
+powiernictwa
+bezrobocia literackiej
+posiada dana
+postanowień
+poniżający życiowej
+publicznej Celem innych
+mężczyzn przez
+religijnymi niewolnictwo tworzenia
+względem poniżający
+współpracę ograniczony opartych
+ograniczony nędzy nieprzestrzeganie
+jak
+narażeniem pozamałżeńskie swobodnego
+ZGROMADZENIE
+zamieszkania
+stosowanie słuchanym Organizacją
+założenia
+grudnia jak choroby
+każdego poglądów
+przeciwko środków organizacją
+przyjaznych oni zawartych
+drodze utrzymania mają
+nieludzki
+słowa wyrażania skazany
+ostateczności
+powszechności
+tajności narodów innej
+mieszkanie
+bezrobociem niepodległości uznanie
+powinni
+które
+uznanie czynom
+powszechnie zasięgu
+wyższe jej zapewnienia
+swobodę dziecko
+języków
+stanu toczy
+swych
+popełnienie jakiegoś Uroczyście
+nakładać
+przekonań wymierzać
+społecznej zasobami prawo
+popiera
+wolno
+skuteczne człowiek
+publicznej niemożliwy
+specjalnej przeciwko człowieka
+Deklarację ograniczeniom
+wynikających organy pracę
+Żadnego okrutny równości
+przyjaznych zgodą
+pełną
+dopóki
+zapewniono
+wiarę przyznanych zapewnić
+czy organy
+związków prawo
+moralności
+barbarzyństwa dopóty
+stale Członkowskich jemu
+sąd poprawy naturalną
+wolni międzynarodowego
+stanowi Artykuł
+Sesja swą
+słowa ludu
+popierania
+wyższe mieszkanie
+obejmuje
+przed wyrażania jakiegoś
+osoba
+zarówno osobistych dążenie
+setek narodów
+Rodzice Człowieka
+zgodą rasy sprawiedliwości
+niniejszej Organizacji
+małżeńskie znaczenie
+dopóty krajowych informacji
+publicznie
+chwili Człowieka
+należenia
+skończoną
+obszaru powszechnie powszechne
+prawo
+międzynarodowego grupie
+prawa
+dobrobyt
+pokoju wolności
+jedynie
+zbudowania POWSZECHNA własny
+popieranie obyczajów
+honorowi demokratycznego
+uzupełnianego
+ingerować płacy
+wyraża sprawiedliwości
+popełnienia
+zakazane
+moralnych Powszechną swe
+porządku jednakowe wstrząsnęły
+utrzymania
+wymogom będącą
+inny poprzez przez
+przepisami wyznania niezbędnych
+świata środkami
+domowe innymi
+człowieka oskarżenia
+swe zależności popiera
+która władzy
+rodziny uchwaliła
+okresowe
+udzielającego głoszenia
+jedynie kulturalnych
+wartość
+socjalne Narodów
+prawnej uciekać
+wszędzie większej
+przestępstwo podległe
+ich rasy studia
+ingerować płci była
+swój uciekać
+razie
+niniejszych ani
+swobodę dobrobytu udowodni
+między techniczna Rodzina
+pogwałceniem
+odzież ograniczony niemu
+postulaty powiernictwa
+odpowiadającą
+skuteczne stale
+OGÓLNE niego
+środki
+wolni stosunków
+tych
+może posiada
+powinni względem narodowości
+obdarzeni zalet człowieka
+urodzenia sąd
+rozumienie
+popiera
+pełnej granice służebności
+udzielającego
+odwoływania
+wspólnoty
+strachu politycznych
+zarówno
+pozamałżeńskie
+postępować niezdolności
+wolno pospolitego odzież
+wartość
+rzeczywiście
+przyjaznych
+kobiet Państwu zobowiązaniach
+zasadności niniejszych
+słuchanym równe doprowadzony
+zasobami którym postępie
+DEKLARACJA
+nauczania
+zadowalających
+wiary
+przeciwko czyjekolwiek
+udowodni osiągnięciu odwoływania
+Nikogo
+pamięci sytuacji
+stowarzyszania prawnej
+równe przyznanych
+swej pogwałceniem oni
+obdarzeni
+przeprowadzanych społecznego nauczanie
+które Zgromadzenia zasadności
+sprawiedliwie poprzez aresztować
+skuteczne dokonania zmuszać
+pełnej
+według osiągnięć żadnym
+korzystają wspólnoty
+wśród
+jednakowej
+niemu
+warunków OGÓLNE wypoczynku
+większość była przyznanych
+osobistych małżeńskie pozamałżeńskie
+taką rozstrzyganiu bezrobocia
+rasy bezpieczeństwa
+równości
+równej buntu
+wolności wyraziły
+człowieka dobremu każdego
+samowolnie
+wyższe poprawy
+człowieka
+strachu utraty pamięci
+bezpłatna uzupełnianego
+odpowiednich bądź
+się władzy
+jednakowej dany zdrowie
+wdowieństwa
+utraty
+też
+korzystaniu
+pracujący Rodzice OGÓLNE
+lat równej
+podstawowych
+małżeństwa strachu jego
+naukowej niepodległości
+rządzeniu porządkuje
+niewolnictwo
+potrzeby równych
+Preambuła
+procesu
+wspólnoty obejmuje osobowości
+dążenie
+podstawowym winy krajowych
+Deklaracji
+odmawiać roku
+Wszystkie posiadania Państw
+powinni poniżający
+jej każdego
+takiego podczas
+niepodległości
+Paryżu
+starości
+jednakowe społecznej
+ograniczony nieludzki powszechne
+popełnienie
+godność rasowymi
+procedurze drodze
+popełnienie zamieszkujących
+doprowadziło jakąkolwiek
+podejmowania
+płacy
+wyborach służby
+buntu
+socjalne niezbędnych
+uczynienia skazany
+mężczyzn władzy wyższej
+jedno
+podstawą
+stosowanie Oświata
+jakiegokolwiek materialnych
+równorzędnej obowiązki niniejszą
+nędzy wychowywania
+wobec niepodległości wszystkich
+przepisami
+środkami
+przyrodzonej oskarżony Rodzice
+przyszłych rzetelnych koloru
+równego posiada obradująca
+naturalną
+moralnych
+zapewnienia azyl
+niniejszą ludów
+zasięgu
+stanowiącym rodzinne
+ani
+wyższe systemowi
+POWSZECHNA ludzie
+roku równych
+rasowymi
+zawarte
+swobodnego Narody wyraża
+stowarzyszania ono informacji
+korzystania
+zapewniającej
+wiarę wśród przyznanych
+materialnych ubezpieczenia
+obdarzeni zgodą
+wdowieństwa mając
+sprzeczny spokojnego
+wespół celami
+okresowo
+całkowitej skutecznego
+wyborów
+niemu kultu materialnych
+uczynienia pogwałcenie
+Nie aktów założenia
+Państw
+korzystania rozwoju społecznego
+zgodą sytuacji
+pracy
+rasowymi wyraziły Nie
+wymierzać niezdolności oskarżony
+wygnać Paryżu zbudowania
+wyrażania Nikt działalności
+zależności dążyły
+wynikających samowolnie skończoną
+imieniu trwania wyżywienie
+uznania
+poniżający wartość bezrobociem
+jakimkolwiek narażeniem postępować
+kompetentnych warunków skuteczne
+jakiekolwiek stosunków międzynarodowej
+niepodległości
+pospolitego udowodni
+swobodnego
+zasięgu
+zmiany
+podstawą postanowień kobiety
+organizacją ubezpieczeń
+nieludzki opinii
+narażeniem
+porządkuje
+krajowym
+prawnej zdrowie dostępu
+ogłoszono swobodę
+1948 zalet
+przewidziana strony ostateczności
+świadczenia
+którego osiągnięć
+różnice
+innym
+całkowitej barbarzyństwa
+świadczenia podstawowych
+godności
+socjalne dzieci ani
+ludzkiej podczas najwznioślejszy
+stopniu obowiązki naturalną
+stanowiącym prywatnie
+drodze przynajmniej narażeniem
+egzystencję
+ingerencji włączając być
+koloru
+członków
+rasy postępować zapewniającej
+równych odpowiadającą
+wyborów
+powoływać jednakowe pamięci
+Członkowskie uprawianie
+popierania przyjaznych pełni
+według POWSZECHNA
+takiego Sesja społecznych
+wszystkich niniejszych nauczanie
+wspólny poszanowania
+uprawianie sądów
+kary
+skuteczne jej
+postępie innym
+doprowadzony
+czynić rozwoju które
+zakazane wyraziły urodzenia
+sposób słuchanym
+płci zdecydowanie
+bezrobociem
+dyskryminacją postępować nakładać
+publicznie majątku sprzeczny
+pracujący czy kraj
+sumieniem
+swoją popieranie
+opiekę żadnym popełnienia
+zasadami niego Sesja
+którym
+dyskryminację handel stanu
+Sesja
+jemu
+godności była imieniu
+granice rodzą
+urlopy
+materialnych oraz zasobami
+zarówno wygnać
+Trzecia
+narodowy osoby osoba
+międzynarodowym korzyści
+ludzie porządkuje uciskowi
+Ogłasza stanowiącym jedno
+uwłaczaniu
+bezpośrednio niewolnikiem wiary
+obalenia zasadności
+godzin
+udowodni
+stanowiącego wolności największych
+uznawano czynić wolność
+poszukiwania przyznanych strony
+swoją niepodległy
+Wszyscy
+społecznego Małżeństwo stosunków
+żadnej Oświata porządku
+jemu
+popiera ubezpieczenia
+korzystać ogłoszono innej
+przeciw porządku
+dostępne skończoną przyznanych
+rzetelnych podstawowych opieki
+posiadania wymierzać pokoju
+aresztować
+obowiązkowa zawierania
+względem
+osobie
+bezrobociem kary
+zawarcia dla
+przypadku okresowe podejmowania
+życie
+Narody dany organizacją
+przeciw
+Sesja wynagrodzenia stowarzyszania
+Rodzina procedurze Zjednoczone
+wielu osiągnięć pracujący
+obszar Artykuł czynu
+pełni
+urodzenia ich
+zalet krajem rozstrzyganiu
+prawach między skazany
+korzystania
+zawarowanie
+czynić obdarzeni
+Zgromadzenia bądź
+będą
+własności
+małżeństwa praktykowanie zgodnie
+słuchanym
+wszędzie uznawania
+zakazane wysiłek
+wolni osobowości
+nakładać wypoczynku stanowiącego
+wielu
+kulturalnym
+Organizacją
+wobec
+wespół słusznym społeczeństwa
+pogwałceniem zgodnie prześladowania
+drodze
+zmierzających
+się przyjaźń
+sprzeczny
+niepodległości
+poszukiwania
+pracy
+procedurze
+jego pełni
+utraty sprawiedliwie
+grupie osiągnięcia
+systemowi Matka
+stowarzyszenia nauczanie wolności
+znaczenie działania
+podstawowym także współpracy
+swobodnie tajności
+otrzymywania niemu działalności
+ochrony człowieka wolno
+poszanowania rozwój
+niewinnego
+całkowitej
+stowarzyszenia przeciwko
+azyl osoba
+zgodą
+nie samodzielnie
+warunkach
+Nikogo który
+bezrobociem rozwój
+członków
+powszechne wszystkie
+którego uwłaczaniu
+wydawania osiągnięcia jednakowe
+Ogłasza
+słowa czy największych
+uznanie myśli
+zasadzie rasowymi niewolnikiem
+nakładać
+sposób powszechności
+pamięci
+rozumieć razie
+głoszenia pokoju
+utrzymania powszechności
+niezależny czynom
+wyraziły
+również Narody
+procedurze ludzkości bezpośrednio
+Rodzice wyłącznie
+przestępstwo innego
+takiego niemu setek
+większość
+niewolnictwo według
+ubezpieczeń grupie mając
+pozamałżeńskie pracę
+międzynarodowej
+Państwa poszanowania czy
+Zgromadzenia posiada korzystać
+mieszkanie rozpowszechniania Deklarację
+obywatelstwa całkowitej
+naukowej skończoną okresowo
+nikomu
+powiernictwa
+okrutny
+pełnej
+poprawy
+ludzkiej
+służby ubezpieczeń
+kobiety
+aktów
+Nikogo osiągnięciu
+człowieka sytuacji swe
+ugruntowanie
+wypadek
+była ono może
+zgromadzania równi zrozumienie
+takiej własności wymogom
+ograniczeniom zapewniono uznania
+wymogom ono
+własny
+techniczna stopniu
+Państw związków
+zalet ludów
+wola każdego
+postanowień
+utrzymania zależności okresowe
+bezrobociem
+niezależny
+zadowalającego życiu służebności
+kobiet
+osiągnięciu
+uciekać zapewniającej wyborach
+zmierzających okresowe
+założenia tyranii zatrzymać
+utraty powoływać
+Zjednoczonych
+podstawowa czynić słusznym
+między azyl
+obyczajów ludu uczestniczenia
+dążenie dziecko uwłaczać
+odniesieniu równorzędnej
+Celem
+działania
+ludu miejsca
+obszaru artystycznej
+wysiłek płci
+walkę
+swój
+wartość zasadami
+ogłoszono dostępna niniejszej
+małżeńskie postępu zmuszać
+politycznej pospolitego Ogłasza
+odmawiać dla aby
+przedstawicieli powszechności
+będącą majątku
+indywidualnie
+żadnym
+postanowień
+artystycznej ONZ
+braterstwa niewinnego
+celu razie rządu
+dążyły obowiązkowa
+porządkuje poniżający
+bezpieczeństwa konstytucję organizacją
+czy krajowego ograniczony
+kulturalnych ludzie wyraża
+wynikających
+wynikających krajowym
+procedurze zapewnić międzynarodową
+poszukiwania przestrzeganie
+rodziny
+korzystaniu zarówno
+Dokument ani wyrażania
+Paryżu wynagrodzenia jakikolwiek
+sprawiedliwie zawarcia musiał
+uczestniczenia okresowe wyborach
+ludzkiej jakiejkolwiek członków
+powrócić opiekę podejmowania
+wymogom wspólnoty świata
+podstawowych
+Nie stosunków
+zapewniającej
+zakazane
+porządkuje równe międzynarodowym
+jednostki równi rodziny
+zalet konieczne uczynienia
+samodzielnie środki
+stanowiącym
+swobodnego
+Rodzina poglądów
+dane
+pomocą jakiejkolwiek stanu
+stosunków którym
+wyboru karać
+kobiet
+spokojnego osobowości jako
+małżeńskie bezpłatna bezpłatna
+innego zapewnienia prawnej
+buntu
+spokojnego
+ten życia okrutny
+zawartych
+największych majątku
+wysuwanego wspólny
+jako
+PRZETO
+Członkowskie ludu
+wstrząsnęły względem
+wymogom społecznego uciekać
+swoją dane pełnoletności
+zbiera przeciw swą
+przystępowania
+publicznego rzeczywiście
+czyjekolwiek drodze
+bądź
+sąd
+pełną
+pozbawiać Uroczyście
+ludów zawodowych żadnej
+powodu ubezpieczenia małżeństwa
+pospolitego pełny wobec
+zależności życiowej bezpłatna
+zawierania materialnych
+prawnej wśród korzystać
+sytuacji uprawianie
+Deklaracji
+dostępu stopniu jakikolwiek
+będą
+środków dobrobyt
+świadczenia dostępne
+1948 grupami razie
+tajności języka
+zależności
+Ogłasza bądź ten
+dziecko niezbędnych organy
+jakiekolwiek granicach zgodą
+urlopy godzin żadnym
+Żadnego czyjekolwiek
+imieniu CZŁOWIEKA
+prawo
+odniesieniu strony
+rozstrzyganiu
+Członkowskich
+imieniu
+kraju samodzielnie
+doprowadziło Celem
+podjęły
+podejmowania prywatne takim
+stanowiącym
+wynikających osobie
+nieprzestrzeganie
+wysuwanego
+przestrzeganie względu
+gospodarczych utraty
+się
+nauczanie
+pochodzenia Powszechna wolni
+życiu razie odpowiadającą
+uzupełnianego
+nie razie
+sztuki ludzie zawodowych
+pomocą jedno
+wszystkie
+moralnych
+wysuwanego
+samowolnie udzielającego zapewniającej
+zależności
+postanowień otrzymywania publicznego
+wstrząsnęły wiarę
+kulturalnym
+Preambuła trwania braterstwa
+rasy
+jego zależności wyłącznie
+jedynie
+równouprawnienie rozumem naturalną
+osobistych rasowymi sam
+Krzewi zamieszkujących bezstronny
+obrony
+wola Deklaracja
+małżeńskie niewinnego
+wypoczynku pierwszeństwa społecznej
+niż względu
+sądów dokonania jakiejkolwiek
+każdy
+Matka
+takiego własny międzynarodowej
+powodu zdrowie uznanie
+sądów korespondencję rozumem
+godność
+ono zasięgu
+azyl swych
+dyskryminacją wiarę
+duchu głoszenia
+społecznej zależności sprawiedliwie
+wszczętego
+lat organy postulaty
+stowarzyszania roku
+wyżywienie działalność pod
+udowodni
+zalet
+zmuszać narodami majątku
+rodziny wszyscy pełnej
+narażeniem spokojnego
+także Zjednoczone
+służby
+była przestępstwa środkami
+sumieniem żadnym
+utrzymania czyjekolwiek
+wymogom Nikogo związków
+postanowień wychowywania swobodę
+wstrząsnęły Człowieka
+powrócić
+własności obywatelstwa
+utrzymania
+największych cel
+przypadku interesów społeczeństwa
+przyrodzonej swobodnie otrzymywania
+uciekać rodzinne
+Członkowskie
+pracę pospolitego
+czynić środkami
+samodzielnie
+bezpieczeństwa
+zbiera
+znaczenie pracę
+publicznie rodziny
+społecznego
+sądów płatne pierwszeństwa
+ten pracę oskarżenia
+sytuacji sprawiedliwości
+praktykowanie uznawano ubiegać
+postępu tajności
+ugruntowanie
+zgromadzania wydawania
+jakiegokolwiek pod związków
+ścigania czynu podstawowych
+czynom największych uroczyście
+włączając
+powszechnego pozamałżeńskie człowiek
+swobodę wybranych wymogom
+praktykowanie
+wygnać
+opinii taką
+równą
+kraj przeprowadzanych
+ludźmi płacy równości
+sądów nauczania Artykuł
+Preambuła uciekać przystępowania
+pamięci
+grupie poszanowania
+zmierzającą wysuwanego takiej
+uchwaliła jedynie bezpłatna
+niezależny ZWAŻYWSZY
+wspólny między
+takim
+dyskryminację
+ludźmi należenia
+ludzkości pospolitego
+wyrażoną najwznioślejszy
+egzystencję pogwałceniem każdy
+równouprawnienie
+sumienia rozpowszechniania wyższej
+duchu
+strachu przez
+jednakowe niniejszą obejmuje
+obradująca
+należenia
+techniczna innej postanowień
+ono niż
+równą
+Mężczyźni praw
+narażeniem
+swe zalet
+obywatelstwa
+torturować nauczanie
+członków także
+poglądów pełnoletności
+kompetentnych zapewniono
+zgodnie
+uznania
+nikogo
+studia poglądów współpracę
+obszaru
+żadnym narażeniem niewinnego
+osiągnięcia bez dążenie
+utrzymania wszczętego
+uznawania
+Powszechną
+koloru zalet posiadania
+oskarżenia związków
+społeczeństwa
+demokratycznego sprzeczny
+PRZETO jej
+niewolnikami Mają
+względu
+podstawowe niniejszych specjalnej
+sądów materialnych
+materialnych równi
+rozpowszechniania
+jako
+zamieszkania
+obejmuje poprawy różnice
+współpracy uwłaczać
+rzeczywiście poruszania jakimkolwiek
+narodów języków
+ugruntowanie aby
+indywidualnie zbudowania Mężczyźni
+swobodnie środkami
+prywatne postępu
+Powszechna wyższej rozwijania
+narodami
+odpowiedniego odmawiać
+zrozumienie wspólnoty
+Oświata Nikt
+dostępne powszechnego
+niniejszej
+tych zapewniającego
+CZŁOWIEKA ustaniu bądź
+uprawianie winy
+rozwijania ONZ
+nakładać informacji
+stowarzyszenia wyboru najwznioślejszy
+Organizacją setek zrozumienie
+starości
+PRAW jej
+buntu
+społecznej
+barbarzyństwa niniejszej nieprzestrzeganie
+powiernictwa stanowiącym odpowiadającą
+Nikogo oskarżony równej
+tej
+najtrwalszych ubezpieczenia
+grupami
+ostateczności chwili
+ugruntowanie innego
+rozpowszechniania
+społecznego człowiek przypadku
+najtrwalszych zmiany
+OGÓLNE
+wolno
+żadnym
+zadowalających przeprowadzanych
+który różnice
+poszukiwania powinni
+zalet lekarską wysiłek
+sprzeczny powszechnie
+jakiejkolwiek musiał niezbywalnych
+toczy obdarzeni przekonań
+stanowiącego wyrażania
+niezależny poglądów specjalnej
+takiej postaciach powszechnego
+osoba własności
+celu popełnienie bezrobociem
+jeszcze
+postaciach
+Artykuł krajowych
+narażeniem niezależny każdy
+literackiej
+sumieniem tych pomocy
+zatrzymać pracę Zgromadzenia
+korzystaniu dobrobytu
+dostępna działalność współpracy
+własności
+ludzkiej
+była płci rozumienie
+realizacji ograniczony
+wyłącznie przestępstwo wyborze
+ubezpieczenia przypadku Organizacji
+niepodległości stanowi sprzeczny
+podstawą narodowości
+PRZETO materialnych
+zgodą podstawową
+jedynie może społecznych
+obszary
+interesów
+bezpośrednio
+dostępne
+wychowywania poszanowania
+korzystać
+świata realizowane zgodą
+wyrażania skutecznego
+tych
+pomocy jakiekolwiek
+dzieci
+własności
+dopóki wyższe wszystkich
+porządkuje bezrobociem
+doprowadziło
+tyranii dobrobyt
+Organizacji wypadek
+pod poszanowanie między
+Nikt
+literackiej urlopu
+tolerancję
+wyrażania
+społecznego nikogo powrócić
+bezstronny jakiekolwiek ZGROMADZENIE
+prywatne
+wyrażania Preambuła narodami
+swój sprawiedliwości
+stopy taką swobodny
+międzynarodowej Praw niewolnikami
+niniejszych
+wspólny
+gospodarczych uwłaczaniu
+równorzędnej
+Zjednoczone powiernictwa
+myśli
+dobrodziejstw
+rozwijania oskarżony narodów
+krajem przestępstwa pokoju
+uroczyście
+człowiek człowiek będącą
+wynagrodzenia mieszkanie
+Żadnego swobodę
+można słuchanym
+odpowiadającą
+choroby
+działalności Członkowskie dane
+rozsądne
+jedynie pełny
+przepisami Zjednoczone
+naturalną moralności
+barbarzyństwa postulaty
+spokojnego Deklaracja ubezpieczenia
+urlopy wstrząsnęły rozwoju
+choroby zawodowa
+Państwa
+wynagrodzenia
+kary
+jemu spokojnego
+środki świata
+jedno Członkowskich myśli
+Nikogo
+żadnej mężczyzn Powszechna
+języka małżeńskie
+demokratycznego wybranych odwoływania
+Rodzice skazany
+kraj odwoływania informacji
+wyborach będą opartych
+poniżający bezrobocia
+dobrodziejstw powinni
+wyboru odmawiać
+międzynarodowym
+osobie swobodę setek
+Organizacją włączając
+rozsądne
+zdrowie obradująca
+jednakowe ludzkiej
+obszary powoływać konstytucję
+Nikt
+Każdy uprawianie doprowadziło
+udowodni urlopu konstytucję
+członek
+indywidualnie
+zawarte
+swobodę strony
+kultu obdarzeni jej
+skazany skończoną
+rzeczywiście powiernictwa
+niewątpliwie zawartych głoszenia
+dobrodziejstw rozpowszechniania odpowiadającą
+ani
+uznawania
+zależności otrzymywania
+niewątpliwie dostępna
+ludów wszyscy obszary
+Przetłumaczona władzy mieszkanie
+większość rozumem
+dyskryminację wybranych
+setek posiadania największych
+życiu
+domowe uznania
+starości innego bądź
+podstawowa
+swobodnego
+zapewniającego
+różnice
+traktować postępować
+według niewolnictwo
+chwili
+karać
+Powszechna większej
+względem Nauka środkami
+urlopy środków
+ustaniu zawierania względem
+godności działania postaciach
+opuścić uznania doprowadzony
+powinni Nie
+wyższe wszędzie
+wymierzać
+porządku wyznania podległe
+otrzymywania
+zawodowych
+przestrzeganie ustalone
+procedurze ograniczenie
+służby
+tyranii
+Członkowskie zbudowania ubiegać
+zawierania
+wysiłek podjęły prawem
+nikomu
+doprowadziło
+świadczenia
+celu
+pozamałżeńskie realizowane
+zbudowania
+swą świadczenia
+podstawowa dążyły
+starości zawodowych
+ścigania
+płacy
+równi
+sposób
+stowarzyszenia pracę
+Dokument takim przeciwko
+organizacją będącą
+dyskryminacją równouprawnienie
+równouprawnienie
+odzież nieposzanowanie pełną
+zrozumienie niewolnictwo Mężczyźni
+popiera uroczyście
+sztuki
+niepodległości
+również toczy jako
+porządkuje zawarte moralnych
+moralnych niezbędnych porządkuje
+popiera
+aby płatne dążenie
+tyranii korespondencję Ogólnego
+prawnej Artykuł ten
+jednomyślnie
+zmierzających grupie ugruntowanie
+wyborów
+Członkowskich stowarzyszania
+kobiety
+swoją uzupełnianego
+oni
+bezstronny
+własności niniejszej
+przy nieposzanowanie słusznym
+myśli celu
+zapewnienia stopniu
+była
+ludzkości
+grupami uwłaczaniu
+poruszania
+ludu granice
+oraz podstawową
+dane
+ZGROMADZENIE
+sprawiedliwości
+powodu grudnia kulturalnych
+dostępna popełnienia zamieszkania
+pełni
+opartych
+zawarte potrzeby
+starości takiego
+swobodnie
+Państwa się
+swobodny
+wyraziły Preambuła pogwałceniem
+zadowalającego dostępu
+uwłaczaniu środków zakazane
+równorzędnej ustalone
+ludu konieczne zapewnienia
+żadnej
+razie
+która materialnych ubiegać
+wszędzie
+artystycznej czynić stowarzyszenia
+przeciw stosowanie
+wartość praktykowanie zbiera
+postanowień ograniczony socjalne
+ograniczony Nie
+społecznych barbarzyństwa
+systemowi obdarzeni
+stanowiącym
+grudnia
+słowa jednakowe będącą
+walkę
+bezpieczeństwa
+dyskryminację powszechności
+jemu
+przypadku
+Nikogo traktować
+ZGROMADZENIE
+życie
+zapewniającej
+współpracy wynagrodzenia zawierania
+poszanowania ograniczony kultu
+przestępstwo dany
+realizacji Paryżu
+prawem rasowymi
+obowiązki rzeczywiście sprawiedliwie
+korzystaniu
+wyborze dane
+Oświata oraz Wola
+równą ingerować
+naukowej bez wyboru
+zasięgu
+zalet rodzą
+płatne wyborze Członkowskie
+swych równości
+równych oraz posiadania
+udzielającego Artykuł kary
+ludzkości
+doprowadzony krajem niego
+zapewniającego
+Deklaracja czynom
+Nikogo krajem lub
+Zjednoczonych dziecko
+takim niezdolności dostępu
+bezpieczeństwa większość będą
+nauki przestępstwa postanowień
+potrzeby wymogom
+POWSZECHNA obyczajów równości
+korzystają
+obejmuje równouprawnienie praktykowanie
+powrócić
+poszanowanie swój
+podstawowych uroczyście według
+narodami związków prześladowania
+środków moralności
+przekonań ubiegać społeczeństwa
+poruszania niego
+Deklaracja obywatelstwa
+korzystają walkę wyrażania
+płatne życiowej Zgromadzenia
+komórką pokoju niego
+człowiek
+swobodę
+zapewniły takiego
+krajem
+uwłaczać porządkuje
+kulturalnym
+stopniu własności małżeństwa
+pogwałcenie
+niemożliwy
+grudnia stanowi swych
+kraj
+bezpłatna stanowiącym
+wynagrodzenia dzieci
+korzystaniu
+opinii zapewniającej przystępowania
+zgodnie jest Wola
+zaniechania obradująca równych
+jakiegoś stanowi międzynarodowym
+jakiegokolwiek
+naukowej duchu ONZ
+zmierzającą
+społecznej Powszechna wszczętego
+bezrobociem
+obradująca niewątpliwie swobodny
+opuścić oni
+ograniczony prywatne
+grupami obyczajów współpracę
+dostępu
+obszary publicznej
+praktykowanie
+jednakowe jednakowe poszukiwania
+prywatnie korzystaniu
+tolerancję każdy ONZ
+przyjaznych obszary
+kompetentnych
+tolerancję różnice
+korzystają małżeństwa
+powodu
+Wszystkie społecznego była
+wartość
+narodami
+rozpowszechniania
+ludzie popieranie
+przestrzeganie wobec rozumem
+warunkach słuchanym interesów
+swoją powodu prywatne
+samodzielnie
+wybranych
+Zjednoczonych dla materialnych
+ludzkości
+jednakowe Wola opuścić
+ustalone
+jakąkolwiek
+podstawowa obejmuje
+przyszłych
+zgodnie
+innego
+Mają kraju
+wyborze
+świata
+działania
+będącą Wszystkie lat
+uczestniczenia
+sam Zjednoczonych
+członek wiary popierania
+jednomyślnie Organizacją
+aby
+narażeniem przynależy służebności
+porządkuje życiowej czy
+oskarżenia
+obradująca
+popieranie
+rozumem
+sprawiedliwości ubiegać
+karać interesów zapewnienia
+starości
+przeciwko
+osobie
+związków się
+ograniczenie
+Małżeństwo
+skończoną
+płci
+dobrobyt pamięci ustalone
+wynagrodzenia zrozumienie stanowi
+rodzinie bezpłatna dostępna
+Nauka
+zmuszać wypadek
+specjalnej konieczne swobodę
+zgromadzania jakimkolwiek niewątpliwie
+cel
+musiał zakazane toczy
+swą egzystencję
+pomocą rasowymi
+zmuszać społeczeństwa
+dziecko też
+odzież odpowiadającą
+uczestniczenia niniejszych
+pod
+Narody rozumem jemu
+swego dyskryminację
+taką ludzkości niewątpliwie
+obszary
+podstawową
+większość odwoływania sprzecznego
+duchu
+gospodarczych nauki
+przewidziana nikomu
+jako niewolnikiem sumieniem
+wszystkimi
+wyborze słowa swego
+korzystaniu członek
+zasobami skuteczne być
+wśród małżeństwa
+olbrzymie urlopu zawartych
+korzyści
+niż jakiegokolwiek narodów
+małżonków Praw
+równouprawnienie bezstronny
+pracy
+będą międzynarodowego przystępowania
+nauczanie osiągnięć wyraża
+praw
+rozwijania doprowadziło odwoływania
+Zjednoczonych skutecznego
+ich przyznanych
+dzieci
+największych
+sztuki wolności
+sytuacji niniejszych olbrzymie
+postępować
+literackiej
+sprzecznego Zjednoczone
+posiadania największych
+jakiemukolwiek
+zapewniły
+powrócić nie powszechności
+osiągnięciu
+także kobiet
+wola zbiera
+Rodzina przestępstwo
+odniesieniu
+pogwałceniem rodzinie indywidualnie
+środków
+osobistych międzynarodową którym
+Oświata społecznej największych
+przekonań
+POWSZECHNA moralności
+sytuacji jedynie
+lat techniczna
+dobrobyt osiągnięcia aresztować
+Rodzina innym ingerencji
+nie
+ten
+Mężczyźni utrzymania Państw
+podstawowych Państw przeprowadzanych
+winy
+wysuwanego rządzeniu
+realizacji lekarską
+włączając
+zakazane
+również Deklaracji
+celami innych obyczajów
+żadnej swych
+Narodów
+stopy obszary
+jak Celem udzielającego
+dzieci
+przeciw założenia
+zmuszać pełni
+krajowych
+Państw realizacji ZGROMADZENIE
+nie postępowych Nikt
+mając
+specjalnej pospolitego demokratycznego
+życiu
+stopy mężczyzn warunkach
+najtrwalszych Członkowskich uciskowi
+sprzeczny
+osoby krajowego udowodni
+którego cel
+Sesja
+naukowej
+postanowień ogłoszono przyznanych
+odwoływania własny równej
+oskarżenia artystycznej
+osoby oni wolność
+prawo odmawiać
+ludzie braterstwa takiej
+członek swobodnie przynajmniej
+dzieci działalności obszaru
+osobowości ludzkości kobiety
+powodu różnice
+zawarowanie
+człowiek grupami koloru
+zaniechania swoją Człowieka
+opuścić
+małżeńskie powszechnego
+wyższej granicach
+współpracy niezależnej
+dostępu zapewniono czynom
+uznanie
+świata
+religijnymi
+wiarę
+wypadek Państwu rozsądne
+obejmuje urodzenia aresztować
+obalenia postanowień wespół
+Dokument
+korzyści niezbędnych jego
+własny dopóki
+przywróciły
+urlopu narodowy
+jest którym innego
+organizacją
+może
+zdrowie
+przestrzeganie
+kobiet osiągnięciu
+należenia
+zakazane jego
+środki oskarżony
+ponadto starości Oświata
+współpracę pomocą
+wypadek różnice skończoną
+rozstrzyganiu zarówno wszystkimi
+działalności wolni
+pełnoletności imieniu
+zamieszkujących ludu
+Rodzina popieranie dyskryminację
+przestępstwa
+kary
+oskarżenia
+dyskryminacją
+porządkuje wszelkimi praw
+razie skończoną być
+rzetelnych stosowanie prywatne
+okresowo
+dzieciom
+korzyści popełnienia osiągnięć
+odpowiedniego ostateczności
+obradująca niniejszych zmierzającą
+dyskryminację zadość
+zależności
+okresowe stosowanie
+uwłaczać
+własny oraz
+zgromadzania dostępne lub
+POWSZECHNA
+zasobami
+Zjednoczonych
+stale
+moralności
+urodzenia
+płatne
+grupami barbarzyństwa Dokument
+Państwa
+Członkowskie prywatne ono
+przywróciły niniejszych poszanowanie
+traktować
+który
+osoba
+ONZ
+związków osoby
+konstytucję konstytucję
+popełnienia zgodnie
+także Uroczyście dostępne
+dostępna
+pamięci organizacją pod
+postaciach zależności
+związków niniejszej aby
+równych postanowień
+tworzenia rodziny rozwoju
+bezpieczeństwa granice wyborów
+Państw
+przypadku powszechnie zgodą
+sprzeczny
+podstawowa prawem
+opieki niezdolności
+informacji
+stosowanie
+starości niezależny mężczyzn
+jakiemukolwiek
+największych odpowiedniego Preambuła
+przestępstwa
+niewątpliwie
+jedynie dzieciom
+rozsądne PRAW
+ograniczenie
+potrzeby narodów wysiłek
+PRAW
+dzieciom
+obyczajów
+zapewnić
+tyranii osiągnięciu zamieszkujących
+zadowalających współpracę
+publicznej
+bezpośrednio
+niego zasadności
+strony podlega
+imieniu
+prywatnie nauczanie
+tolerancję Trzecia obszar
+Ogólnego
+przystępowania osiągnięć która
+czynom Matka cel
+małżeńskie pełni pracujący
+mając artystycznej
+zadowalającego 1948 mężczyzn
+pomocy osiągnięć
+pochodzenia przewidziana
+bezpieczeństwa
+innego
+Żadnego kulturalnych zawierania
+także pełnej
+pogwałcenie
+zawarowanie życiowej obszary
+społecznej artystycznej
+dziecko
+nauczanie
+zdrowie
+stanowiącym
+przyjaznych niezdolności
+procesu
+pozamałżeńskie
+innych
+Nauka
+jednostki
+wyższej
+zamieszkania skuteczne zadość
+podstawowym
+zobowiązaniach informacji czy
+zawarcia jakiemukolwiek skazany
+międzynarodowej kultu wielu
+popiera
+rozwój obradująca doprowadzony
+społecznego kulturalnych 1948
+świadczenia dopóki
+kompetentnych
+uczynienia dane
+nikogo Przetłumaczona postulaty
+realizacji
+swobodny służebności zmierzających
+niewolnikami międzynarodowej zmuszać
+swych
+granice rządzeniu
+działalność
+prawo
+jednakowe
+duchu postępie
+zawodowa
+wybranych ograniczony
+ich sprzecznego
+Przetłumaczona nie Zjednoczonych
+również
+DEKLARACJA obalenia
+pochodzenia
+niezbywalnych współpracę
+grudnia prawnej przeprowadzanych
+postulaty obalenia
+procedurze
+zasadności Deklarację nauki
+wyższe
+płci wola
+doprowadzony pełnej
+stosunków
+jednostki
+poszanowania Deklarację środków
+ubiegać jednostki
+stale zakazane korzyści
+niniejszą
+potrzeby zasobami sprzeczny
+razie ludzkiej granicach
+zbudowania
+odpowiadającą stopy
+okresowe własny
+każdego informacji osiągnięć
+środki kary
+PRAW powszechne
+prześladowania ubiegać niewątpliwie
+dyskryminację
+Nauka
+przyrodzonej
+tworzenia
+najtrwalszych egzystencję
+dany Preambuła
+powszechnego
+powinni
+które którym uciskowi
+godzin podstawowe sumienia
+oraz
+ograniczony
+korzystać zmuszać
+własny pozbawiać krajowych
+rozstrzyganiu
+działania
+człowieka podejmowania powiernictwa
+realizowane
+skazany pracy ani
+naturalną współpracę
+podczas opartych władzy
+dobremu moralnych
+płatne
+bezpłatna porządkuje
+skazany zrozumienie
+ludzkości honorowi
+wymierzać zawarte względu
+doprowadzony zmierzającą
+takiej
+godność
+swoją postaciach Praw
+wybranych narażeniem podstawową
+Deklaracji
+wyrażania organizacją dobrobytu
+niezbywalnych skończoną
+równorzędnej
+podstawowe ograniczony wszystkich
+dobrodziejstw traktować handel
+konieczne wypoczynku
+Nie wolność człowiek
+społecznej koloru
+warunkach indywidualnie korzystają
+publicznej socjalne głoszenia
+Trzecia
+równorzędnej POWSZECHNA
+prześladowania ścigania swój
+OGÓLNE różnice
+poprawy
+Celem uczynienia języków
+popełnienie pierwszeństwa
+zamieszkania ustaniu
+rasowymi osoby pogwałceniem
+obalenia zalet kulturalnym
+oskarżony płci
+przed niezdolności
+podczas
+bez podstawą
+organy strony
+skazany własności ubiegać
+równej społecznego uciekać
+Mają
+swobodny
+ustaniu wszczętego imieniu
+korespondencję zmierzającą dopóki
+wstrząsnęły opieki kobiet
+lekarską
+uzupełnianego dokonania dla
+swobodę konstytucję
+będą zmuszać jednakowe
+publicznej Dokument
+Wszystkie Członkowskie
+przekonań
+wiary
+wobec poruszania korzystają
+przez okrutny Wszystkie
+wola Żadnego
+stowarzyszania przypadku obszaru
+interesów swych pod
+zadowalającego
+członek zdecydowanie
+politycznej obalenia
+podległe warunkach strony
+według przyszłych
+utrzymania jednostki
+jest dobremu
+zbudowania sprawiedliwości
+powszechności zapewniły
+zapewniającej
+takiego
+ochrony
+międzynarodowym
+swą
+pełnej ten
+dokonania
+dopóty
+winy
+wolność celu
+okrutny zawarte którym
+religijnymi
+najwznioślejszy
+kobiet odpowiednich
+Uroczyście
+przyszłych myśli
+kulturalnych wolność
+setek przestępstwo
+wyboru
+dane okresowe
+życiu
+warunkach
+prawo wyłącznie
+społecznych zatrzymać stanowiącym
+publicznej dostępna
+rodzą uchwaliła
+korespondencję okresowe jakiegoś
+pełny celami
+narodami
+jakiegokolwiek
+osiągnięciu prywatne
+wyłącznie przywróciły
+uroczyście
+sposób uwłaczaniu członków
+osiągnięcia
+korzystaniu winy
+osobistych wybranych dzieci
+pogwałceniem
+wysuwanego
+którego traktować Rodzice
+niemożliwy stanowiącym
+grudnia przestrzeganie tych
+Mają ich
+strony
+rządu wymierzać
+ich przyrodzonej
+podstawą ubezpieczenia tworzenia
+pospolitego dostępna uchwaliła
+poprzez sprawiedliwości
+winy postaciach dostępu
+wymierzać znaczenie społecznej
+warunkach
+sprawiedliwie posiadania
+wynagrodzenia
+buntu powrócić niezdolności
+poszanowanie prawa artystycznej
+organizacją Wola
+włączając tajności organy
+równorzędnej Oświata
+Deklaracja kraj społeczeństwa
+spokojnego podlega prześladowania
+wyboru pracę
+nauki poszanowanie wynagrodzenia
+swych
+ubezpieczeń wielu przestrzeganie
+narażeniem dziecko
+osiągnięcia jego godności
+nie uznawano zawierania
+powrócić
+uznanie Żadnego życiowej
+bezpośrednio
+prawa
+Wola konstytucję wolni
+stopy wynagrodzenia
+która własny
+względu
+wyraża stowarzyszenia podstawowa
+wszystkich Państwu jedynie
+wypadek
+swej powszechne wolność
+zależności
+opuścić obywatelstwa zawarte
+korespondencję zawarte rozwoju
+zamieszkujących osiągnięcia życiu
+obalenia rozstrzyganiu korzystają
+dobrobytu
+wolności zbudowania
+życie informacji płatne
+dostępna
+rodzinne
+Organizacji przystępowania
+realizowane Członkowskich języków
+żadnym ludów
+krajowego systemowi słowa
+ONZ wyborów osiągnięć
+powoływać materialnych wymogom
+stopniu
+tworzenia
+strachu
+specjalnej odpowiedniego zmierzającą
+zawarte wydawania
+wiary
+podejmowania wolności swobodnego
+czy postulaty
+Ogłasza
+równi
+wespół
+przepisami rodziny
+socjalne innej
+zasadami ustaniu chwili
+narodów
+słusznym wszystkimi
+setek potrzeby
+Wola osoba
+obowiązki pomocą Ogłasza
+uczynienia drodze rasy
+ograniczenie
+celami Oświata większość
+Nie przez
+Matka
+słuchanym kary
+równej
+życiowej
+innych granice przynależy
+zamieszkania przynajmniej
+okresowe zgodą
+odniesieniu kobiety
+Nikogo
+niemu
+powszechności ostateczności niemożliwy
+interesów zatrzymać
+kobiety jednostki kulturalnych
+małżonków
+potrzeby względem równi
+krajowym techniczna
+sytuacji
+Powszechną równą uwłaczać
+narodowy wybranych wyraziły
+wszystkie stosowanie warunkach
+cel procesu
+zaniechania
+moralnych
+Ogólnego
+jednostki członków pozbawiać
+celu nieposzanowanie rozumem
+wyrażoną społecznego
+godności
+dla Deklaracji Wszyscy
+ścigania Krzewi korzyści
+indywidualnie podstawowym wymierzać
+kulturalnym olbrzymie
+okrutny uwłaczać uwłaczać
+prawo ostateczności dopóty
+najtrwalszych popierania Państwa
+lekarską
+wyrażania pozamałżeńskie
+odwoływania wypadek
+mając pamięci
+ten
+równi
+wespół
+opuścić ugruntowanie
+narodowy podjęły osiągnięć
+wygnać Ogólnego strony
+dobrobyt Nie
+postępie
+równi
+mając
+sąd dyskryminacją zgodą
+pogwałceniem
+płacy granicach narażeniem
+utraty
+naturalną powoływać niewolnictwo
+grupami
+narodów jednostki większość
+ostateczności wyrażania osobowości
+Powszechną posiadania
+posiadania wyższej
+ludźmi
+służby postulaty obywatelstwa
+Mają prawa przyznanych
+urzeczywistniania obalenia
+praktykowanie
+pracujący
+pozbawiać
+politycznych związków stanowiącym
+będą stale
+zbiera
+jednomyślnie
+ugruntowanie
+pełną prawo
+poniżający
+powrócić któregokolwiek ani
+celu powszechnego Wszystkie
+zaniechania ludów
+postępować pamięci
+opinii wszystkich
+Dokument ugruntowanie handel
+uznawania artystycznej
+spokojnego pracujący
+czynu
+przyjaznych rządzeniu
+społecznych zawodowa
+POWSZECHNA miejsca
+moralności
+przedstawicieli można zasięgu
+którego
+stanowi poniżający chwili
+swobodę między
+wyborów posiada
+czynić wespół
+Żadnego
+ograniczenie skutecznego karać
+zmierzających
+uczynienia
+pogwałcenie Matka Państw
+wyżywienie specjalnej ubezpieczeń
+jakiegokolwiek rozwijania
+obalenia pokoju przyznanych
+Państw też uczestniczenia
+poszanowanie między swój
+sądów
+zgodnie
+prywatnie braterstwa ludu
+drodze jakiejkolwiek
+olbrzymie Państw
+stanowiącym DEKLARACJA wolność
+buntu
+Ogólnego również
+każdego ludzkości
+międzynarodowego także
+przynależy
+każdego zadość
+zgodą wespół powszechnego
+naturalną
+znaczenie wszystkimi
+mając zasobami
+najwyższy zasadzie
+buntu
+ograniczenie
+kraju pełny
+związków wyborach
+moralnych podejmowania pełnoletności
+samodzielnie wolność wolno
+poniżający przy
+buntu słuchanym nieprzestrzeganie
+organy sprawiedliwie
+kary rozwoju
+środków jakiemukolwiek wiarę
+pozbawiać
+powszechnie
+niewątpliwie
+pełnej całkowitej
+najwznioślejszy wspólnoty
+interesów
+ograniczeniom wychowywania politycznych
+wyrażania
+wypoczynku
+prawnej
+zbiera
+przed
+bez
+doprowadziło nie sprawiedliwie
+opuścić zdrowie uwłaczać
+setek wszyscy
+przestępstwo stanowi wyższe
+realizacji jednomyślnie osobie
+postępie
+dobremu
+osiągnięcia
+niemożliwy dane wstrząsnęły
+bezstronny dobrobytu zawodowa
+przed takiego
+jednomyślnie którego
+rzetelnych korzystania poglądów
+równorzędnej
+drodze
+utrzymania przepisami
+postaciach
+popieranie pod Matka
+poniżający
+słusznym nauczanie walkę
+stanowi równych strachu
+niezdolności poszukiwania międzynarodowej
+urlopy tej współpracy
+politycznych udowodni
+pracujący
+będącą rozumienie
+wymogom
+rządzeniu
+swoją
+imieniu życiowej powinni
+wysuwanego własności barbarzyństwa
+wyboru kultu
+byłyby
+takiej
+wyrażoną ponadto Nauka
+rozwój jej imieniu
+jakiemukolwiek popełnienie
+poszukiwania niezbywalnych
+publicznie
+naturalną Dokument egzystencję
+wolności sumienia
+poszukiwania
+zdrowie
+zapewniły ubiegać
+sprawiedliwie zadowalającego
+gospodarczych Deklaracja narażeniem
+jednakowej zbiera
+bezpieczeństwa
+potrzeby Wszystkie
+poszukiwania
+ogłoszono
+zmuszać przeprowadzanych powinni
+Paryżu
+równą zadowalającego narodowości
+swą
+karać obrony zawarte
+innych każdego pospolitego
+sąd ograniczeniom
+krajem niniejszej zasadzie
+byłyby każdego tyranii
+politycznej pełną
+równą dobremu
+ustaniu
+Zjednoczone prześladowania bezpieczeństwa
+Powszechną poprawy
+swych swobodnego dyskryminację
+osiągnięciu największych realizacji
+różnicy
+buntu popiera
+wychowywania zbiera nauczanie
+pełny pochodzenia
+zapewniono POWSZECHNA czynić
+torturować
+jakikolwiek odpowiednich
+osoba
+pracujący jednakowej mają
+sposób poruszania społecznych
+wypadek słuchanym osobistych
+samodzielnie
+można nieludzki prześladowania
+celami działalności
+naukowej sumieniem
+rozpowszechniania
+ludzie
+ubezpieczeń żadnej
+własny obrony zasobami
+Wszystkie
+osobie nauczanie ugruntowanie
+wyższe zapewnić zmierzających
+niepodległości
+innymi
+wyborze zapewniającego pełnej
+realizowane dane swe
+takiego niniejszą
+społeczeństwa innymi
+czynom jej prześladowania
+zgodnie dostępna
+wysiłek uzupełnianego ludów
+uroczyście człowiek
+Żadnego
+winy
+swobodnego
+godności żadnym
+warunków
+swobodnie
+ZGROMADZENIE
+swój
+przystępowania celami środkami
+moralności zadowalającego międzynarodowym
+prawa
+warunków
+uznawano sprzeczny
+swą ich
+swój
+zapewnienia płacy rodzinie
+uznanie konieczne innych
+najtrwalszych Wola
+pokoju kobiet
+swą Małżeństwo
+pełny
+różnicy
+jakikolwiek
+włączając
+przez
+różnice zawodowa obrony
+prześladowania swego
+egzystencję
+Deklarację swobodny miejsca
+niezbywalnych
+władzy także posiadania
+Sesja
+wyższe
+udzielającego techniczna swe
+niewinnego techniczna godność
+specjalnej
+wiarę
+powrócić rasy Krzewi
+pełny świadczenia stanowi
+Preambuła
+dostępu uczynienia służby
+dopóki jednakowej
+wynagrodzenia
+grupami
+uczestniczenia roku
+życia własności niemu
+studia
+barbarzyństwa
+dopóki pełni jak
+tworzenia
+tej
+zapewniono zapewnienia
+znaczenie
+barbarzyństwa Zjednoczone
+względu
+sytuacji równi członków
+przeciwko jakikolwiek organy
+rasowymi
+jeszcze starości jakąkolwiek
+indywidualnie korzystają
+strony
+języków buntu osiągnięcia
+wolno
+mężczyzn
+zrozumienie
+podstawowa płatne wszczętego
+ludzkości opinii powszechnie
+podstawowym równości
+podstawowe
+Ogłasza przywróciły
+torturować
+narażeniem
+bezpłatna krajowym zgromadzania
+kobiet powszechne
+ich skończoną swym
+mieszkanie prześladowania
+stowarzyszenia
+włączając
+przyznanych
+POWSZECHNA
+praktykowanie rozpowszechniania CZŁOWIEKA
+nauki
+urzeczywistniania spokojnego zadowalających
+sąd musiał
+przeciwko Ogłasza skazany
+podstawowa naturalną Żadnego
+świata grupami
+prawa
+azyl nieludzki równe
+ani
+członek zapewnić rządu
+sąd pamięci warunków
+wdowieństwa
+opinii Oświata obywatelstwa
+sumieniem
+organizacją pomocy podstawową
+Matka czynom
+opieki strony politycznej
+pogwałcenie niniejszą
+granice
+Deklaracja przeciwko artystycznej
+bezpłatna niezbywalnych
+udzielającego którego
+wysuwanego jakimkolwiek
+stosowanie prywatne
+sytuacji zgodnie
+bezrobociem dokonania stanowi
+jakiejkolwiek wolni bezpieczeństwa
+oni
+płci
+ludzkiej
+uczestniczenia międzynarodowej Krzewi
+ubezpieczeń przedstawicieli egzystencję
+zbiera materialnych środkami
+uprawianie przestępstwo też
+czynić Powszechna
+niemożliwy
+społecznej rozumienie całkowitej
+Deklaracja
+jakiegoś Dokument
+przepisami wymierzać
+nieposzanowanie płatne osiągnięcia
+poglądów przypadku wyborze
+powiernictwa
+postępować przyjaznych porządkuje
+służby
+razie
+wolni powszechnego
+którego
+ubiegać Członkowskich
+wyrażania opiekę ścigania
+żadnej świadczenia
+jakiegoś warunków kobiety
+moralnych przyjaźń wyrażoną
+dostępne choroby
+wyraża
+środków urlopu jak
+dzieciom
+choroby rozwijania OGÓLNE
+przywróciły jakiegokolwiek swą
+sprawiedliwości
+ludzkiej
+indywidualnie
+olbrzymie skutecznego
+podległe realizowane
+rodzinie
+swobodę zgromadzania
+zapewniły wdowieństwa równego
+zawierania życiowej
+prawo niepodległy DEKLARACJA
+praktykowanie
+wypoczynku zadość potrzeby
+innymi wśród przez
+ludzkiej środki
+wolność
+sprawiedliwie obszary małżeńskie
+grupie przyjaźń Artykuł
+starości obszary
+będą członek krajem
+pozbawiać
+pospolitego dostępne
+rozstrzyganiu pracujący
+dążenie
+przepisami narodowy mając
+ono lat
+społecznej międzynarodową myśli
+stosowanie
+ograniczony wychowywania procedurze
+równej ludu dziecko
+Wszystkie większość rodzinne
+najtrwalszych
+przyznanych wśród
+warunków tyranii zadowalających
+obszaru podczas
+buntu dobrobytu
+ograniczeniom najwznioślejszy ochrony
+rzeczywiście odpowiedniego ugruntowanie
+procesu publicznie którego
+czynu praw
+Nie gospodarczych dzieciom
+zakazane opinii
+osoba poruszania setek
+najwyższy
+chwili przynajmniej wolno
+korzystają taką grupami
+studia naukowej małżeńskie
+przynajmniej poprawy
+potrzeby
+granicach wspólnoty
+jakiegokolwiek jest większość
+torturować według zapewniono
+ograniczeniom osoby
+między osoby była
+duchu wszczętego
+członków obradująca
+dana
+swym egzystencję
+korzyści
+swój wszelkimi
+podstawą CZŁOWIEKA
+przyszłych narodów
+tych publicznego
+zbudowania opuścić
+tych
+słowa mają
+Człowieka
+osiągnięć konieczne
+korzystaniu
+celu
+stale narodowości
+ingerencji
+dzieci
+stopy niemożliwy podstawową
+najtrwalszych wiarę
+pełną
+grupie
+niemu Wszyscy wszystkich
+obrony
+Nikt traktować
+starości wstrząsnęły małżonków
+wartość najwznioślejszy największych
+pełni POWSZECHNA czynom
+OGÓLNE swobodnie pełnej
+nieposzanowanie dostępna wynikających
+Małżeństwo
+obradująca wygnać
+swej praw ten
+wszelkimi walkę
+uchwaliła
+Rodzina ingerować
+krajowym Narody
+ograniczenie kobiety
+również azyl
+Rodzina warunków
+przyszłych będącą rozwijania
+działalności jednomyślnie
+rozwijania
+poglądów
+równorzędnej doprowadziło odmawiać
+zapewniły
+osobie zapewnić
+innym azyl
+zapewnienia jakiekolwiek odpowiednich
+podstawową Deklaracja osiągnięciu
+samowolnie postępowych podjęły
+komórką
+można obradująca ogłoszono
+innego
+płacy zobowiązaniach równości
+stopy odpowiednich wyborach
+Organizacji przestępstwo ogłoszono
+rzetelnych
+największych lekarską korzystania
+jak założenia któregokolwiek
+Państw narodami
+wymogom buntu
+ingerencji człowieka olbrzymie
+koloru
+płatne
+wyrażoną jednostki własności
+nauki Nikogo dostępna
+uznawania niemożliwy
+niezależnej
+świata tej
+korzystaniu
+jedno poniżający życiowej
+różnice dla rozstrzyganiu
+wychowywania urzeczywistniania
+osobie
+uchwaliła dobremu
+niewątpliwie wyboru
+prawem interesów Krzewi
+samowolnie jej
+swobodę Każdy wolni
+obszar
+ubezpieczenia uprawianie takim
+względu
+urlopu takiego Trzecia
+jedynie podstawowych
+jednakowe języka
+kobiet obszaru
+ograniczony korzystaniu
+celu narodowy
+krajowych
+Paryżu
+wszystkie
+niego rozwoju pracy
+Państw wdowieństwa
+sprawiedliwie równouprawnienie
+oskarżenia dostępne
+wymierzać
+założenia uciskowi zasadzie
+samodzielnie
+Nie
+nędzy zgodnie
+pracy rozpowszechniania
+pełną
+wyraziły rządzeniu przyznanych
+dane
+również według
+uwłaczaniu
+pogwałceniem
+jakiejkolwiek obszary dopóki
+lekarską CZŁOWIEKA
+religijnymi rozsądne
+Członkowskich osobowości Organizacji
+wobec
+rodzą zapewniły
+duchu będą przestrzeganie
+Deklarację dokonania
+imieniu braterstwa
+działalności
+Żadnego obradująca
+obalenia
+względu dobrodziejstw
+nakładać prawnej
+moralnych zasadami
+podległe okrutny
+praw ochrony
+dobrobytu poruszania
+egzystencję
+konstytucję zakazane
+stale opiekę większej
+innym
+Deklaracji dyskryminację
+sam
+również
+niezbędnych przeciwko wydawania
+potrzeby małżeńskie
+popiera okresowe aktów
+indywidualnie prawem
+społecznej urzeczywistniania
+zasięgu
+uzupełnianego
+realizowane
+Zjednoczone zasięgu
+przedstawicieli torturować narodowy
+rozwijania niepodległości społecznych
+posiada uznania
+zadowalających
+konstytucję jeszcze
+narodowości Państw obradująca
+wszyscy
+razie domowe jednakowe
+prawo artystycznej innej
+podjęły
+przyznanych dopóki narodami
+sposób Państwu
+Trzecia niezbywalnych
+celami
+przynależy zmuszać wiary
+popełnienia DEKLARACJA społeczeństwa
+poprzez międzynarodową
+wstrząsnęły posiada
+języka
+zmuszać
+konstytucję granice Wszystkie
+wszystkie
+praktykowanie
+naukowej stosowanie poszukiwania
+zawarte
+ZGROMADZENIE
+międzynarodowego moralnych
+Narodów
+nauczanie
+zależności kulturalnym
+korzystania
+wyborów
+tworzenia
+swobodny względu
+religijnymi rzetelnych
+krajowego osobie utraty
+wysiłek Matka
+działalności jakiegoś
+odpowiedniego obdarzeni
+poprzez prawach żadnej
+całkowitej
+handel powrócić założenia
+przez
+dopóty aby Narody
+wszystkie Małżeństwo
+równej rodziny wielu
+innym
+niezależny powodu
+Nikt życia odwoływania
+ludźmi wyraziły
+starości jakiejkolwiek pracujący
+dzieciom międzynarodowym będą
+również doprowadziło
+obyczajów odpowiedniego
+stosowanie
+bezrobocia
+popieranie
+rządzeniu strony
+narodów czyjekolwiek zapewniły
+stale samodzielnie jej
+krajem płacy dostępne
+podstawowym
+korzystają procesu Człowieka
+zapewniającej wygnać
+przedstawicieli wyborze cel
+drodze doprowadzony
+włączając stanowiącego się
+przywróciły wymierzać
+podstawą zrozumienie jemu
+dostępne obszaru
+będą swym działalności
+Wola
+krajem
+Ogłasza swobodę nie
+współpracę
+ludzie
+techniczna pomocą kraj
+niepodległy
+obszar swym
+rozsądne interesów
+odpowiednich
+lat
+zasobami można jednostki
+samowolnie
+ludzie dostępu wypoczynku
+okrutny słusznym obrony
+stopniu
+działania
+zapewniającej kobiet samowolnie
+koloru wypadek
+ono
+zdrowie
+wymogom sprzeczny
+aby ograniczenie ograniczenie
+handel postulaty
+podstawowa
+słowa powrócić wyższej
+była ich
+swobodnego wymogom
+równe bezstronny
+lekarską religijnymi czyjekolwiek
+krajowego wyboru innej
+rozwijania języka przypadku
+dopóki wyłącznie
+oskarżony
+braterstwa innych zawarcia
+poszanowania
+osobistych sądów
+Ogłasza małżonków Mają
+Członkowskie społecznej pogwałceniem
+niewątpliwie dana
+rozsądne
+stanu
+się człowieka swobodę
+kobiet rzetelnych
+politycznej
+innego ingerencji
+mają należenia
+skazany
+choroby
+swej wypadek krajowym
+nikomu uprawianie
+musiał ograniczeniom
+opartych
+musiał
+obszary wespół korzystają
+zalet postanowień
+stopniu roku
+poprawy wynagrodzenia myśli
+gospodarczych człowieka kompetentnych
+zadowalających życie
+stale dostępna ludzkości
+tworzenia rozumienie
+pierwszeństwa narodami osoba
+swobodnego ingerencji
+swobodnego
+uznania
+swobodę pogwałceniem
+podstawowe skutecznego uczestniczenia
+popełnienia
+wyższe
+środki
+ograniczony dopóki
+Sesja publicznego przyrodzonej
+korzystają
+osiągnięć swym sprzecznego
+ograniczeniom
+obradująca lat
+DEKLARACJA całkowitej
+Rodzina braterstwa
+konstytucję domowe
+kraj zakazane zakazane
+powinni
+zarówno powszechne
+jakiemukolwiek
+innej wybranych pomocy
+zapewniono drodze
+poniżający przystępowania wyznania
+wolni zawarte żadnym
+publicznego
+jakąkolwiek
+człowieka
+poszanowania
+wolności wszelkimi
+poniżający
+innych przyrodzonej zawarcia
+osobistych
+godność
+ograniczony
+rozpowszechniania zadowalających Narody
+drodze przeciwko
+ubezpieczenia ograniczony
+zakazane czynom
+zawarte
+niezbywalnych była
+stanowiącym międzynarodowym
+popełnienia żadnym
+Celem swobodny uznania
+Wszyscy swoją
+przestrzeganie oni strony
+powodu postulaty
+bezstronny
+krajowych uznanie
+zawarowanie uczestniczenia
+władzy
+dyskryminacją
+wymierzać
+członków
+korzystania życiowej zadowalającego
+dane
+jedynie życiowej
+Oświata
+wielu wypadek
+życiowej swobodnego podstawowych
+zamieszkujących
+podstawową
+ich olbrzymie równą
+zasadami
+OGÓLNE Wola byłyby
+rozpowszechniania duchu godności
+publicznie ugruntowanie
+godzin kulturalnych
+pospolitego Państwa
+odpowiadającą
+aby odniesieniu ochrony
+ograniczeniom postępowych pogwałcenie
+jednakowe
+POWSZECHNA mieszkanie
+interesów przyjaznych
+podejmowania
+tych
+dany otrzymywania uznania
+znaczenie ten
+procedurze uczestniczenia
+ludzie własności sądów
+przewidziana również kobiet
+jego stanowiącym kraju
+kobiety niniejszej innego
+zasadzie pełny popierania
+jednomyślnie włączając rozwoju
+zaniechania
+narodowości
+równości swobodę
+jako Narodów przy
+odpowiednich
+wstrząsnęły
+małżonków
+ścigania oraz
+całkowitej rzetelnych
+poprawy poszanowania pracy
+zdecydowanie
+władzy ZGROMADZENIE Państwa
+Państwa
+doprowadzony poniżający
+ponadto swego jedno
+spokojnego
+obszary
+zamieszkujących ZGROMADZENIE
+uwłaczaniu pełną okresowo
+braterstwa ZWAŻYWSZY swe
+razie jakąkolwiek uznania
+dobrobyt realizowane ostateczności
+narażeniem
+poniżający
+setek
+interesów
+współpracy uroczyście podstawowe
+lat jego jednakowe
+przekonań Nie przez
+postępu
+opuścić
+podstawowym
+dzieci
+bezpośrednio przeprowadzanych wyrażania
+zawierania
+nieposzanowanie
+bez
+zależności Państw myśli
+Mają sprawiedliwości
+stosowanie
+mając dopóki społeczeństwa
+całkowitej wyborów godność
+środków
+odzież Artykuł korzyści
+poniżający bezpieczeństwa
+roku niezbywalnych sprzecznego
+jego
+ONZ
+społecznego nauki zawarte
+warunkach
+niewolnictwo zgodnie
+Członkowskie
+czyjekolwiek dobrodziejstw
+odpowiedniego rasy służebności
+pracujący
+narodowości doprowadziło
+dopóty jakiejkolwiek niezależnej
+karać
+zapewniającego DEKLARACJA zadość
+wolno Organizacją
+obszaru
+wstrząsnęły poruszania życia
+niezależnej
+choroby członków realizowane
+wyboru poszanowania uroczyście
+wyższej równi pracujący
+sądów
+obszar stopy Artykuł
+zależności
+Zjednoczone
+porządku najwyższy dostępna
+dyskryminację podstawą dla
+postępie
+takim grupie podczas
+większość Deklaracja ONZ
+warunkach wobec
+międzynarodowym odniesieniu prawo
+organizacją
+prywatnie ten władzy
+przystępowania jego tworzenia
+zasadności obalenia
+zapewniającego
+niewinnego pełni równi
+socjalne rozpowszechniania udzielającego
+osiągnięcia
+względem zapewnienia
+żadnej swych zapewniającego
+dyskryminację taką niewinnego
+pomocy
+dokonania człowiek życie
+posiadania
+potrzeby zbiera
+czynom rzeczywiście lub
+ustalone publicznie
+ludzie zakazane rządu
+kulturalnym byłyby
+różnicy
+jakimkolwiek przeciwko wolni
+stowarzyszania
+które
+nieprzestrzeganie jeszcze
+zawarowanie wypadek
+wielu urlopy
+stanowiącego niewolnikami
+czynić
+wola czynić wszystkich
+Zgromadzenia
+wysuwanego Celem rodzinne
+podstawowe
+narodowy
+jemu ubiegać współpracę
+udzielającego
+niewolnictwo ograniczeniom zapewniającego
+wychowywania
+obejmuje
+zgodnie pełną
+bezpośrednio
+chwili dopóty własności
+CZŁOWIEKA jak Deklaracji
+dzieciom osiągnięcia
+Wszyscy
+drodze
+żadnej
+bezstronny dane
+prawach opiekę
+korzyści
+swego
+swego wyborów
+inny samodzielnie
+wolno jednakowej sprawiedliwości
+honorowi ludu
+aktów
+zapewniły
+urlopu korzystać starości
+słowa
+torturować DEKLARACJA
+Powszechna jak
+indywidualnie niewolnikiem
+granicach barbarzyństwa
+organy
+zapewniły
+zbudowania obalenia
+nikomu
+oskarżony cel
+popierania zapewnienia
+niezbywalnych Nikogo
+sposób bądź tolerancję
+zamieszkujących
+osobistych moralnych uprawianie
+zarówno sytuacji Członkowskich
+Rodzina doprowadziło
+popiera
+przez
+małżonków
+zadowalającego
+godności
+niezależnej
+współpracy doprowadzony
+opartych
+zdrowie
+małżeństwa
+która
+wspólnoty
+interesów wdowieństwa
+równych kulturalnym
+życiu procedurze sztuki
+opuścić osoba
+Rodzina
+oskarżony
+środkami samowolnie
+uznawania
+duchu obrony
+założenia
+urodzenia innej
+może
+pozbawiać niezdolności poprawy
+zdrowie granicach odzież
+zmuszać
+porządkuje
+popierania postępowych
+opinii
+zapewnienia znaczenie
+zadowalającego narodami
+okrutny dostępne
+Zjednoczone działania
+udzielającego języków wiarę
+poglądów nauczanie
+stanu ONZ pełną
+według
+takiej każdy wspólny
+Zjednoczone aktów
+obejmuje
+dziecko założenia godności
+założenia przynajmniej czyjekolwiek
+zawodowych powrócić człowiek
+większej
+zgromadzania kompetentnych wyborze
+świadczenia wychowywania swobodny
+procesu równych
+równości
+podczas korzystaniu
+publicznej
+oraz koloru pełnoletności
+Ogłasza według
+narodowości zapewniającej obszar
+udowodni rządzeniu
+odniesieniu bądź
+zmierzających czynom niezależnej
+Ogłasza przed wyższej
+wyższe
+Narodów
+winy swobodny tych
+krajowym służebności
+odpowiednich zdrowie
+wyraziły
+rządzeniu
+względu
+najtrwalszych
+wobec udzielającego
+odmawiać
+sposób
+mieszkanie
+jej OGÓLNE
+czynić rozwoju olbrzymie
+międzynarodową
+niewinnego
+Ogłasza
+Sesja
+wola
+pochodzenia niezbędnych
+olbrzymie języków
+społeczeństwa Wszystkie organizacją
+pracujący równi
+wygnać przynależy przy
+wespół osoby
+również
+dla poszanowanie jako
+wychowywania potrzeby dostępna
+stowarzyszania barbarzyństwa
+wymierzać obdarzeni
+zawarowanie pracujący opartych
+miejsca bezpłatna
+służby sprawiedliwości postępu
+środki rozumienie będą
+swobodnie jakiegoś ograniczony
+urlopy nikomu sprawiedliwie
+winy
+swój ingerencji rodziny
+inny przy religijnymi
+powinni Trzecia
+sprzecznego
+Krzewi razie Organizacją
+podstawowych artystycznej
+wspólnoty
+przyznanych
+zawierania Matka Żadnego
+praktykowanie powszechności
+wespół osiągnięciu zmierzającą
+opinii przeprowadzanych
+Sesja żadnej
+aktów koloru
+obrony uciskowi winy
+przyrodzonej realizacji także
+równej
+oni ludu interesów
+uznawano
+czynom
+działania mają
+systemowi Deklarację tyranii
+jak PRAW Rodzice
+człowiek
+Ogłasza większej
+wysuwanego
+bezrobociem stanu płacy
+Członkowskich swobodę świata
+PRAW wspólny różnicy
+POWSZECHNA
+koloru
+odzież Nie
+równego Rodzina
+przyjaźń ani
+służby
+się zawarowanie podczas
+dokonania
+tajności uznawano
+prywatne nędzy jakiejkolwiek
+każdego czynu
+posiada
+jakiejkolwiek różnicy niewolnikami
+odniesieniu niepodległy domowe
+bezrobocia prawa niż
+korzyści zamieszkujących
+każdego
+mając Mężczyźni korzystania
+społecznego
+skuteczne należenia chwili
+dana
+Każdy
+odwoływania
+procesu kulturalnym
+któregokolwiek wespół
+urlopy poniżający obrony
+podstawowych organizacją
+społeczeństwa rzeczywiście wobec
+krajowym utrzymania
+pracujący powoływać innych
+ZGROMADZENIE
+pełny odpowiadającą celami
+publicznego osoby Narodów
+głoszenia ugruntowanie
+korzystaniu
+rzetelnych Deklaracja ugruntowanie
+ono
+jej pomocy oskarżony
+politycznej ostateczności
+sumienia grupami
+przestępstwo toczy
+konieczne
+większość roku
+wstrząsnęły dyskryminację
+zapewnienia
+oskarżony ostateczności mają
+popieranie popiera
+własny obywatelstwa
+pamięci powszechności
+jeszcze jedno Mają
+przy
+warunkach
+uciskowi posiadania prawo
+Deklaracja
+wydawania ubiegać zapewnić
+pełni drodze słowa
+ochrony demokratycznego przy
+równego politycznych przywróciły
+dostępne granice Krzewi
+wspólnoty
+wygnać realizacji byłyby
+wiarę
+przekonań
+aby
+poglądów starości
+równe stanowiącym podstawowe
+podczas pełnoletności działalność
+zawarowanie zmierzającą
+posiadania służebności
+ponadto zgodnie zamieszkujących
+równe związków Nie
+obowiązkowa wyrażoną
+zbudowania
+kraj osobie działalność
+kompetentnych krajowym
+porządkuje dobrodziejstw
+buntu politycznych
+wespół socjalne przez
+podstawowych
+specjalnej
+korzystać moralnych
+wszyscy urlopy postaciach
+konieczne
+rządu wstrząsnęły udzielającego
+zalet imieniu
+Rodzina
+Państw kobiet czynu
+wszyscy
+członek
+narodowości
+ZWAŻYWSZY jako wespół
+poglądów
+swych
+praw można
+pełną dobrobytu
+tajności dyskryminację moralności
+swój ludu służby
+świata pracę
+godzin PRAW
+wszystkich
+uzupełnianego ubezpieczeń sposób
+opiekę
+korzystają była
+całkowitej postępować wielu
+służby prześladowania
+jednakowej osobistych życiowej
+każdy tolerancję zasadami
+włączając
+głoszenia moralności
+Uroczyście zawierania kobiety
+jakiegoś zgodą
+popierania
+mężczyzn
+otrzymywania swej
+poszanowania
+Każdy prawem
+zawierania
+bezstronny trwania
+pełny zbudowania urlopu
+podejmowania zapewniającego człowiek
+podlega
+ponadto zadowalającego Rodzina
+aresztować jakimkolwiek
+ogłoszono
+publicznie wyraża
+wyraża swe
+rozwoju godzin jako
+którego
+osiągnięcia
+zmierzających
+jednakowej organizacją jedynie
+Deklarację środki sprzecznego
+jeszcze
+musiał poniżający
+Przetłumaczona
+zależności
+przypadku
+rodzinne
+zmierzającą
+olbrzymie Preambuła zaniechania
+prawo
+ponadto
+Krzewi wolno
+ani
+sam płatne
+nieposzanowanie
+domowe
+wartość działalność cel
+czynić przepisami
+międzynarodowego rządu
+stopniu
+Wszystkie
+Krzewi się
+stowarzyszania Ogólnego
+wszystkie
+jest
+rodzą
+POWSZECHNA
+stowarzyszania
+znaczenie Zjednoczone wyboru
+realizowane spokojnego
+jemu powszechności
+jednomyślnie
+języków
+wyrażania handel
+Narody
+wypoczynku
+Państw
+kary urodzenia
+studia wspólnoty
+imieniu
+jakiegokolwiek innym
+ani oskarżony
+starości pełnoletności jednakowej
+środków
+uznawania wiarę byłyby
+miejsca wszystkie Uroczyście
+naukowej
+grupie doprowadzony ich
+postępie
+wyboru godzin wyższej
+kompetentnych barbarzyństwa równorzędnej
+udowodni
+życiu zawartych rodziny
+poglądów
+czy Preambuła
+myśli
+ludzkości
+korzystają rodzą obszar
+osobowości wartość
+starości jego
+niewolnikiem godzin
+obszar człowiek
+braterstwa
+torturować strony powszechne
+Paryżu
+które handel bądź
+prawo
+równych przyjaźń skutecznego
+odpowiadającą honorowi
+ogłoszono grudnia podstawową
+podstawowa Celem okresowo
+przeprowadzanych zapewniono organizacją
+urlopu Mężczyźni wyznania
+dopóty zamieszkujących egzystencję
+razie barbarzyństwa opartych
+postanowień
+indywidualnie przyznanych
+języków innego
+sumienia
+ludzkości obradująca
+aktów politycznych
+CZŁOWIEKA realizacji
+zmierzającą odzież
+wdowieństwa
+krajowym poszukiwania rozwój
+wyboru
+pełni pełną
+wszczętego publicznej
+Zjednoczone innych CZŁOWIEKA
+konstytucję
+Nie Uroczyście rozumieć
+kary najwznioślejszy
+uwłaczać pełni
+osobie niezbędnych ludów
+cel życiu
+bezrobocia stowarzyszenia ludźmi
+jakiegokolwiek
+Zjednoczonych rozstrzyganiu
+niniejszą ingerować socjalne
+podlega małżeństwa zdecydowanie
+będą
+rzeczywiście lat
+języka narodowy
+również publicznego uroczyście
+konieczne
+kulturalnych
+jego
+Deklarację chwili również
+pracę wyraziły
+nakładać grudnia
+odpowiadającą
+mężczyzn Wszyscy zgodnie
+jednostki
+bezrobocia
+procedurze wespół współpracy
+żadnym osobistych
+zgodą
+między
+Członkowskich życiowej posiadania
+związków
+miejsca słuchanym
+okresowe
+doprowadzony człowiek
+podstawowa niewolnictwo
+tworzenia
+prawa międzynarodową rzeczywiście
+doprowadziło
+swej torturować Rodzina
+osiągnięciu służebności
+kulturalnych
+procedurze obejmuje
+niepodległy
+dążyły ani
+popełnienie rasy
+sprzecznego równe
+poprawy
+rządzi stowarzyszania
+odpowiednich założenia
+Nauka swobodnego swoją
+dla
+uczynienia
+poprzez pochodzenia praw
+poszanowania dane
+rozwój przyszłych ingerencji
+ostateczności człowiek zawarcia
+zakazane stowarzyszenia
+mężczyzn działania
+pozamałżeńskie nieludzki
+demokratycznego nieposzanowanie aby
+aby Wszystkie
+CZŁOWIEKA godności
+konieczne
+oskarżenia udzielającego
+ludzkości równych
+Mają kulturalnych uznania
+trwania przynajmniej założenia
+konieczne
+przewidziana grudnia osiągnięcia
+Deklarację uciskowi równorzędnej
+rozwoju urlopu
+względem jakiemukolwiek
+jedno naukowej
+lat
+narodów własności krajowych
+jak bez nakładać
+osobistych płci kompetentnych
+studia Nikt
+niniejszą pospolitego płacy
+prywatne roku poszukiwania
+przestrzeganie poprawy
+egzystencję dobrobyt
+zapewniono
+pierwszeństwa
+także
+postaciach
+bezstronny swobodnie niemożliwy
+pamięci ludzkiej jakiemukolwiek
+udowodni
+wdowieństwa systemowi
+ubezpieczeń ani płci
+Wszystkie
+poniżający
+Sesja
+dostępne Państwu współpracy
+stanowiącego powiernictwa
+wynikających nikogo
+byłyby ograniczenie zasadności
+imieniu
+ten pełnej
+poprawy rozstrzyganiu
+małżeńskie wyboru
+pracujący
+głoszenia handel
+władzy opinii
+organizacją podstawowa takiego
+wyłącznie
+wyborów innym rodzą
+wobec swych
+zapewniono
+prawach Narodów
+Człowieka
+podczas podstawową korzystaniu
+odniesieniu Sesja także
+zasadności
+opieki
+zarówno
+warunkach odmawiać postulaty
+wola wymierzać zapewniły
+wyraża osobie
+torturować
+pomocą środki
+rodziny
+płci razie pokoju
+zgodnie
+dążenie obyczajów płatne
+prywatnie bezpieczeństwa wygnać
+sam wartość
+grupie zawodowa odwoływania
+udzielającego dążyły
+podstawowa Matka
+kobiet międzynarodowej świata
+okresowe barbarzyństwa
+równi osobistych
+poszanowanie stanowiącego uczestniczenia
+które sam wolności
+pokoju niewolnikami
+któregokolwiek innymi konieczne
+ingerencji prawem nie
+dzieciom
+pogwałceniem
+wszystkimi
+jednakowe
+konstytucję
+rozwój wynikających obalenia
+przyznanych przestrzeganie sztuki
+także Małżeństwo domowe
+pomocy będącą
+któregokolwiek
+być inny społeczeństwa
+PRAW godzin kraj
+opiekę materialnych Wola
+poszanowanie ubezpieczeń ubiegać
+korzystaniu
+sposób
+przystępowania imieniu
+przyszłych przyrodzonej zmuszać
+wypoczynku
+rozpowszechniania nakładać
+dany
+informacji
+indywidualnie
+Ogłasza środki rządzi
+takiego oraz
+przy innego
+uciekać zawarowanie
+zmiany aby ochrony
+powinni uznania praktykowanie
+dążyły życiu Państwa
+poprzez
+opiekę
+uczestniczenia pełnoletności podlega
+osiągnięcia podstawowe społecznej
+bezrobociem zawarte
+członków
+zasadzie Każdy postaciach
+zadowalających które działalność
+politycznych godność dopóty
+drodze
+równą Żadnego
+wyższe współpracy
+powszechnego wyżywienie
+jakąkolwiek
+wolności
+poglądów zakazane
+Przetłumaczona jakikolwiek podczas
+oskarżenia Mają
+innego barbarzyństwa
+ostateczności krajem
+Małżeństwo dobrobytu zgodnie
+mężczyzn którego
+korzystania wszędzie podczas
+nieposzanowanie powszechnego jako
+płci
+popełnienia środkami
+niego ZGROMADZENIE wysiłek
+równą grudnia prawnej
+zapewnić
+prawnej ograniczenie
+środkami kobiet względu
+działalności pracy ludu
+dążyły
+dobrobyt
+niż
+wygnać obowiązki
+jeszcze
+wyraża
+wartość wypoczynku
+społecznego zasobami poprawy
+uznawania urlopy imieniu
+obowiązki porządku ograniczony
+wszystkich każdego przestępstwo
+niezależnej małżeńskie jeszcze
+Trzecia
+czynić
+popełnienie
+społeczeństwa
+równości
+dany zasadności
+swych
+względem
+Artykuł swe przynależy
+zawarowanie olbrzymie
+społecznej
+najtrwalszych wyborów swym
+poniżający kraj
+pełną dostępna
+Zjednoczonych Powszechna
+obyczajów byłyby Zgromadzenia
+Przetłumaczona kobiet
+nie osobowości
+wyboru Wszyscy zmiany
+człowiek religijnymi
+rzeczywiście
+karać
+bezpośrednio
+techniczna
+różnice inny
+mając
+rozwoju dobrodziejstw
+podstawowe innymi czyjekolwiek
+ograniczeniom
+społeczeństwa tajności członków
+Żadnego
+niemożliwy odmawiać współpracę
+rządzi
+pogwałceniem największych
+przeciwko społecznego między
+wyborach mając
+zawarte walkę
+ludzie
+pełnoletności poruszania dostępne
+wszczętego wyżywienie skazany
+Członkowskich Nikt przyznanych
+władzy jakiejkolwiek
+obradująca
+przedstawicieli
+opieki torturować
+jednakowej obywatelstwa
+skończoną
+rasowymi zgromadzania Preambuła
+obyczajów rozpowszechniania
+wiarę
+nauczanie członków
+będącą wszystkie niezależny
+razie koloru dyskryminacją
+pełnej
+uznania naukowej niezdolności
+obalenia przyjaznych jakiekolwiek
+1948 pomocą zawartych
+Powszechną swej wyborze
+innych doprowadziło który
+jakiegokolwiek dziecko
+pełną pracujący
+interesów
+powszechnie procesu
+rozwoju osoba
+byłyby
+różnicy
+poruszania
+Rodzice zawartych
+oskarżony będącą krajowym
+korzystania
+nie
+grudnia która
+życiu
+Żadnego dany swoją
+pospolitego
+zarówno oskarżenia
+sam
+przyszłych wstrząsnęły powszechnie
+porządku zapewnienia
+korzystać
+inny jego rządu
+roku
+narodami postępować przyjaźń
+opinii
+moralnych zmierzających
+powszechności prawem
+podstawowe pod
+korzystania nakładać słuchanym
+niego przyjaznych
+odzież własny
+Żadnego
+lub
+przystępowania wolność zgodnie
+grupie czynom
+publicznego nauczanie pod
+zapewniającej sprzeczny wstrząsnęły
+aby Trzecia uzupełnianego
+płci rzetelnych tych
+specjalnej zatrzymać
+uznania
+obdarzeni
+przed
+powiernictwa
+krajowych
+porządku
+wielu
+dziecko
+znaczenie swego
+posiada stosowanie ingerencji
+zmuszać zdrowie który
+zbiera niego
+realizowane różnicy
+informacji ogłoszono równouprawnienie
+rozumem bezpłatna
+utraty
+uzupełnianego pracy
+toczy wszystkich
+tworzenia
+swobodnego pogwałceniem doprowadzony
+postępu
+PRAW kary innymi
+wolność wymierzać
+międzynarodowym
+dany nieludzki Dokument
+człowiek ostateczności taką
+języków Narodów
+podległe osobie
+swobodę jedno
+podstawowym
+karać
+obszaru ludzkiej obszar
+jego
+rozwijania
+dziecko międzynarodową
+swobodnie największych osoby
+uznanie dążyły prawnej
+setek
+wysiłek realizowane
+któregokolwiek
+zobowiązaniach podlega
+zgodą prawach człowieka
+Powszechna
+wyższe wyboru Paryżu
+jego
+dopóty
+wdowieństwa
+płacy
+wygnać
+specjalnej
+toczy
+postanowień zmiany
+traktować bądź razie
+kulturalnym działalność niemożliwy
+powrócić popełnienie jakikolwiek
+Państwa podczas
+jednakowe wiary
+czy
+urlopy
+wszystkimi rozumem mając
+poniżający przekonań dobrodziejstw
+tworzenia stopniu małżeńskie
+karać nauczanie
+jakąkolwiek
+zbudowania najtrwalszych
+stopniu
+demokratycznego aresztować podstawową
+razie podstawowych
+przez najwznioślejszy
+niego drodze
+członek
+najtrwalszych lub wszystkie
+tajności zaniechania korzystaniu
+dobremu urodzenia jakikolwiek
+konieczne udzielającego
+stanowi
+władzy
+niewolnikiem
+ograniczenie Nie
+wydawania bezrobocia przyrodzonej
+korzyści rozwijania
+prywatne równorzędnej
+małżeństwa duchu niezależny
+procedurze dzieci
+posiadania warunkach niniejszych
+rozumieć
+większej
+zapewniającego interesów osobowości
+imieniu doprowadzony bezpłatna
+działalności
+uroczyście postaciach dziecko
+słowa
+aby skutecznego uznania
+życie
+urlopy
+realizowane
+wstrząsnęły
+międzynarodowym odzież wspólny
+jedynie urlopu ani
+między Mają Nikt
+doprowadziło płci podstawowa
+ustalone olbrzymie całkowitej
+jego
+sumienia Nauka
+bezpieczeństwa wysuwanego okresowo
+strony pamięci
+postępie zadowalających
+ZWAŻYWSZY osobistych wartość
+Ogłasza
+publicznie Oświata
+powszechne systemowi
+nie dobrodziejstw
+samowolnie zamieszkania
+Rodzice rozstrzyganiu
+opuścić należenia rodzinne
+warunkach
+grudnia wolność
+prawach
+kary przywróciły
+rozpowszechniania
+ludźmi
+zaniechania
+który opartych
+Wola swobodę niezależny
+komórką ludzie
+takiej między
+dla pełnoletności
+wespół niewolnikami egzystencję
+małżonków Narody korespondencję
+kulturalnym jej niezbywalnych
+uczestniczenia
+dany uroczyście
+skutecznego
+głoszenia pełny
+prawa zdecydowanie stanu
+swobodny musiał przyjaznych
+przedstawicieli
+Zjednoczone
+powodu zasadzie które
+przepisami
+POWSZECHNA słusznym Ogłasza
+uczestniczenia zaniechania
+przepisami literackiej
+działalność informacji
+oraz oraz bezstronny
+może wola Deklaracji
+bez najwyższy
+osiągnięcia
+sumienia
+działalności najtrwalszych
+postanowień
+nauczania zgromadzania według
+sądów
+zawarowanie utraty rozumieć
+podstawową Zjednoczonych władzy
+swą
+podstawową
+rodzą
+komórką zalet uznanie
+wysuwanego setek
+niezbywalnych znaczenie
+ubezpieczenia karać torturować
+wyborach
+wysuwanego zawarcia porządku
+przypadku rozstrzyganiu powszechnego
+mają jedynie zasobami
+postępu inny Wszyscy
+Deklaracja podstawowych jakimkolwiek
+grudnia warunkach
+jedynie którego
+stanowiącego równouprawnienie
+zawarcia
+pracujący równouprawnienie urlopy
+dzieci wiarę Deklaracji
+nikomu zapewnić
+służby ostateczności
+obowiązki
+ono uznawania
+samowolnie krajem
+wolni która
+ogłoszono społeczeństwa
+nieprzestrzeganie Ogłasza choroby
+zdecydowanie uczynienia tej
+rozwoju pogwałcenie
+życia
+jemu godzin artystycznej
+niepodległości Artykuł
+całkowitej dziecko
+ten być nieprzestrzeganie
+dyskryminacją
+potrzeby Nikogo
+religijnymi Zgromadzenia grudnia
+była niezbędnych korzyści
+pozbawiać zasadzie dobrobytu
+najwznioślejszy zmiany
+innymi podstawowym działalność
+nieludzki powszechnie pracy
+osobowości ONZ posiadania
+Narody bezpłatna
+otrzymywania
+bezpieczeństwa
+utraty Człowieka różnice
+stanowiącym tajności
+grudnia
+jego
+ZWAŻYWSZY urzeczywistniania granice
+czynu otrzymywania dobrobyt
+równego przekonań dyskryminację
+przepisami
+Dokument wszystkimi
+którego
+niemu bezpieczeństwa
+moralnych swobodnie różnicy
+ZWAŻYWSZY wartość
+odpowiadającą interesów DEKLARACJA
+konstytucję stopniu dostępne
+dostępu
+słusznym działalności
+PRZETO zadość któregokolwiek
+celu rozsądne międzynarodowej
+jednomyślnie
+Preambuła
+kulturalnych majątku takiego
+jako wymierzać krajem
+środkami czynić
+swych narażeniem
+podstawowa
+tych
+korzystaniu swą aby
+procesu wybranych
+międzynarodowym
+Matka praktykowanie być
+rasy Oświata PRAW
+wyboru
+poszukiwania
+pospolitego powszechności wygnać
+zawarowanie ingerencji tajności
+wszyscy
+dopóty wybranych
+odmawiać uciekać każdego
+sam popiera wiarę
+które bez
+postulaty Wszystkie
+wartość konstytucję
+ZWAŻYWSZY
+równej skuteczne jakiegokolwiek
+czyjekolwiek wymogom
+który powinni artystycznej
+nędzy
+strony Deklaracja skutecznego
+politycznej uznawania
+zdecydowanie niezdolności
+prawach urlopy
+zawierania
+innym narodowy Ogólnego
+strony
+względu każdy
+krajowym przez niemu
+wiary stosowanie
+jakikolwiek Organizacji dane
+założenia płatne ludu
+potrzeby realizacji
+niepodległości wartość pełnoletności
+rozwoju nauczania
+życiowej bezpośrednio równości
+którego dyskryminacją osoby
+korespondencję
+popełnienia dobremu rzeczywiście
+techniczna PRZETO komórką
+powiernictwa
+wespół uczynienia Członkowskie
+ograniczeniom ogłoszono
+bezpieczeństwa wyborów
+obszar stosowanie obszar
+godności
+powrócić
+wola
+tworzenia uwłaczaniu popiera
+tych oraz rodzinne
+własności
+życia niewolnikami
+rozwijania rzeczywiście chwili
+okrutny
+wolni artystycznej
+uroczyście
+innych zapewnić kobiet
+zmuszać wyboru osobie
+sumieniem zasadności stopy
+zapewniającego
+takiej dziecko
+zawierania
+innymi chwili
+wolno również
+równe niniejszej
+wartość prawa Państw
+uciekać buntu
+wśród Członkowskie niewolnictwo
+większość która
+interesów
+wynikających przyjaznych swych
+władzy działania uzupełnianego
+sytuacji
+zależności małżeńskie pozamałżeńskie
+kompetentnych poprawy
+życiu powrócić
+założenia
+równego
+otrzymywania stanu otrzymywania
+nikomu stosowanie osobie
+zapewniono
+urodzenia
+urodzenia kraju
+niezbędnych uroczyście dyskryminację
+Powszechna
+zasobami
+warunkach
+grupami obowiązki tolerancję
+postępowych odniesieniu płatne
+środki zrozumienie wszelkimi
+stosunków
+ludźmi obszar
+Mają
+Trzecia informacji człowieka
+zasadami różnice niewolnictwo
+najwyższy najtrwalszych
+grudnia osiągnięć wychowywania
+wyrażania rządzeniu
+jego należenia
+pomocy przedstawicieli ludzkiej
+okrutny całkowitej wypoczynku
+uciekać każdego
+jakąkolwiek które
+jakiejkolwiek wyrażania korzyści
+posiada
+aktów traktować
+założenia
+Nauka czynu którego
+postępu skończoną pomocą
+musiał równych będą
+Narodów wygnać
+nieposzanowanie ZWAŻYWSZY
+postaciach
+który
+przyszłych pomocy
+toczy
+wypadek
+człowieka zgromadzania zależności
+porządku wysuwanego dopóki
+publicznego granicach rządzeniu
+współpracę
+okresowo zawierania
+zasadności powodu
+przestępstwa
+Krzewi też dokonania
+wysiłek społecznej poszukiwania
+zatrzymać CZŁOWIEKA PRZETO
+prawnej
+bezrobociem Trzecia obalenia
+przeciwko korzystaniu osiągnięć
+sprawiedliwie
+oskarżenia narodowości olbrzymie
+głoszenia zalet przy
+żadnej zasadności choroby
+stale podstawową
+pochodzenia swego
+organy
+swoją prywatne
+strachu niewolnictwo podstawą
+imieniu
+środków wszystkich
+lub
+opartych zaniechania Wszyscy
+mają wszystkie
+uroczyście
+narodów stale
+kraju Trzecia
+urlopu ludów
+całkowitej
+tolerancję Nikt
+osiągnięciu
+niewolnikiem narodami
+stale współpracy
+władzy uwłaczaniu popełnienia
+równą
+rozsądne celami którego
+kultu czynić
+systemowi tyranii
+odniesieniu środkami
+stale posiadania
+korzystaniu
+oskarżony życiowej
+obrony
+Wszyscy większość niewinnego
+mając starości
+koloru
+pełną Krzewi zależności
+zadowalających
+wiary miejsca pochodzenia
+bądź
+spokojnego tolerancję
+nikogo wychowywania
+najtrwalszych ZWAŻYWSZY
+innej
+przyjaźń innego
+tolerancję uznanie równi
+uzupełnianego
+współpracy uznania sprawiedliwości
+służby
+dane musiał dopóki
+swobodę
+ingerować obywatelstwa
+stanu narodowy
+się się
+grupami słowa
+innymi postępu
+któregokolwiek zmierzających rozpowszechniania
+wydawania
+politycznych
+nauki chwili
+wychowywania ścigania żadnej
+niewinnego niemu artystycznej
+pokoju nikogo niniejszej
+rozumienie
+krajowym
+zadowalającego jakikolwiek władzy
+pracy skazany byłyby
+zobowiązaniach urodzenia interesów
+prawach dany niewinnego
+osobie
+Preambuła
+ani urlopu nakładać
+sądów ubiegać interesów
+słuchanym dążyły
+dostępu
+obszaru azyl
+dziecko
+materialnych zalet zaniechania
+wynikających takim
+koloru Powszechna
+zgodą pracy
+dzieci
+przyjaźń
+zatrzymać posiada
+uczynienia trwania wobec
+utraty Wszystkie
+żadnej publicznej ustalone
+obdarzeni
+zasadami dziecko
+przez również
+wyrażoną międzynarodowej wymogom
+Celem Deklaracji
+jednakowej wybranych nikomu
+swego wszelkimi krajem
+będą rozpowszechniania korzystaniu
+narodami lekarską
+narodowości
+winy ustalone byłyby
+kraju
+stosunków wartość Narodów
+studia
+egzystencję publicznie
+postulaty jemu życiu
+stowarzyszenia
+zapewniającej
+który wspólny
+interesów Matka
+rzetelnych rozumem
+pogwałcenie
+oskarżenia wszelkimi czynić
+Każdy
+niezdolności równych nieposzanowanie
+wysiłek ograniczeniom prawo
+dyskryminacją taką
+granice
+uprawianie służby skutecznego
+dążyły nie
+społeczeństwa
+nauczanie zawartych przewidziana
+celami
+obywatelstwa rozsądne przyrodzonej
+wszystkimi
+równi poniżający Rodzice
+wyłącznie organizacją
+Uroczyście pod ograniczony
+powrócić
+świata popieranie
+traktować
+według słusznym
+pierwszeństwa
+podczas
+uczynienia wymogom
+się niemożliwy
+publicznego zasadzie jakiemukolwiek
+jakąkolwiek osiągnięć
+jakiemukolwiek
+zobowiązaniach swych wychowywania
+podstawowa
+ani wyrażania
+sądów
+Ogłasza równej
+miejsca
+rodzą
+ani
+powrócić podjęły
+własny torturować
+języków zadowalających
+zaniechania
+skazany Deklarację
+zmierzających wspólnoty poszanowania
+demokratycznego innymi
+rozumienie zmuszać
+może
+który będą
+zakazane
+rasowymi wyrażania
+utraty tej wybranych
+kobiet zdrowie
+traktować
+olbrzymie takiej swobodnie
+największych
+dostępna poprawy między
+taką honorowi członek
+przeciw człowieka
+przynależy człowieka lekarską
+tych nie zasięgu
+rasy majątku
+przez każdy nauki
+oni
+wartość współpracy czyjekolwiek
+posiadania dobrodziejstw Sesja
+rozumienie wymogom
+odmawiać
+stanowiącym Artykuł organizacją
+jakiejkolwiek
+społecznej handel należenia
+pełną jakiejkolwiek zadowalających
+udzielającego
+byłyby
+całkowitej także
+rozsądne wyższej
+poprzez małżeństwa
+uciskowi artystycznej
+skazany przeciwko
+wyborów
+publicznie
+obowiązkowa rodzinne słusznym
+pogwałceniem ubezpieczenia pochodzenia
+nieprzestrzeganie jakiejkolwiek Deklaracji
+Preambuła odmawiać
+swego
+wielu prywatne
+pełny
+nieposzanowanie doprowadziło
+osobistych podstawą skazany
+praw dostępne życie
+Krzewi środków
+nikomu Wola traktować
+podstawowym tajności
+najwyższy wszystkich
+innymi zależności narodami
+wszystkie ugruntowanie zrozumienie
+ono
+poprawy kobiet
+postępować zobowiązaniach
+wspólny wypoczynku
+pełni swobodny
+Dokument
+pełnoletności podczas niniejszych
+czy własności Państw
+sztuki wobec Państwu
+równorzędnej myśli odpowiadającą
+naukowej nauczania Uroczyście
+mają
+międzynarodową
+dobrodziejstw grupami
+niewolnictwo nikomu słuchanym
+Paryżu
+oskarżenia dobrobytu
+ograniczony
+strony pomocą dany
+jakiemukolwiek
+wielu skuteczne
+sposób ustaniu techniczna
+tej także względem
+Ogłasza
+swobodnego
+zbiera
+rozumem rozwój wdowieństwa
+dana
+przeprowadzanych okrutny
+zapewnienia gospodarczych ludźmi
+Artykuł stosowanie
+musiał toczy
+najtrwalszych
+doprowadzony przypadku
+Rodzice aby wszyscy
+skończoną
+Każdy ani odniesieniu
+wybranych
+środki służby swój
+małżeństwa
+postulaty trwania powrócić
+wstrząsnęły
+korzystać
+Mają stosunków
+swych osiągnięcia
+ludzie podlega strachu
+doprowadzony
+spokojnego czynić
+prywatne
+rodzinie
+jeszcze
+Powszechna
+wyborach ustalone
+niezależnej mieszkanie
+grupie interesów zawarte
+języka
+sumienia
+wartość korzystaniu którym
+Żadnego posiada też
+ten jedno rozumem
+wynagrodzenia posiada okresowo
+była
+zawodowych przeciw przestępstwa
+stosunków jeszcze
+równi
+jakąkolwiek jeszcze pospolitego
+handel Deklaracja wypadek
+Mają jakikolwiek życie
+obdarzeni dyskryminacją
+ten swoją powoływać
+płatne
+będą życie osiągnięć
+równej przyszłych prywatne
+korzystania postulaty
+Paryżu zatrzymać Deklarację
+oni uzupełnianego
+Małżeństwo jakąkolwiek
+PRAW innym
+pomocą
+Praw skuteczne moralnych
+moralności ograniczenie godność
+przyznanych aktów Wola
+przypadku uznawano wyborach
+pełni
+przeciwko
+podlega równą innymi
+ogłoszono
+mają
+prywatne zawierania rodzinie
+zawarcia
+poszanowanie popieranie
+zapewnić wyborach poszukiwania
+stanu przyjaznych pod
+żadnej
+również
+zapewniającego którego
+chwili stanowi kulturalnym
+narodowości podczas
+rasy
+oraz wymogom
+posiada pracujący
+dopóty ich pogwałceniem
+całkowitej obyczajów winy
+wyborów
+wymierzać bezpośrednio
+korzystają
+jakikolwiek Nikt
+cel Wszyscy zmuszać
+chwili barbarzyństwa ZGROMADZENIE
+względu
+społecznych
+konstytucję opiekę
+Członkowskich pomocą rozwoju
+rasy kulturalnych dyskryminację
+współpracę swe
+równe specjalnej rządu
+opieki prawem także
+Przetłumaczona
+kraju uznawania
+ograniczony
+słuchanym założenia PRZETO
+doprowadziło wspólnoty
+tyranii
+Wszyscy Nikogo
+obszary swoją
+równego Mają
+Zgromadzenia
+była
+potrzeby
+olbrzymie członek
+wszystkich dany
+swobodny roku różnicy
+dzieciom aby zmierzających
+sprawiedliwości zadość
+wybranych literackiej
+jeszcze
+człowiek grupami
+bezpłatna
+kompetentnych obszar
+którym sprawiedliwie
+założenia
+przepisami
+stanowi myśli niezdolności
+naukowej mężczyzn jakiemukolwiek
+ponadto uczynienia rozsądne
+poniżający
+winy
+wszystkimi własności małżeńskie
+powszechnego niewolnikiem
+nieprzestrzeganie działalność
+sytuacji dla kraju
+równej myśli
+takim celami okresowo
+Nauka jednomyślnie
+spokojnego
+kulturalnym odmawiać
+języków Ogólnego
+urzeczywistniania wolno
+takiej którego
+jest
+korzystaniu
+Człowieka
+bezstronny wielu
+zobowiązaniach porządkuje
+najtrwalszych świadczenia
+dostępu
+dziecko
+przestrzeganie jakiekolwiek wyraża
+rozumem wśród rodziny
+stopniu zadowalającego
+wypadek opiekę nieposzanowanie
+prywatnie
+która ograniczenie sumieniem
+warunkach ochrony bezpośrednio
+aresztować wszelkimi dany
+zawodowych popełnienie
+zbudowania
+posiadania
+trwania
+Państwu ścigania powszechnie
+swe nakładać
+pracę niniejszej Trzecia
+nauczania narodami przyszłych
+przewidziana człowieka olbrzymie
+kary według otrzymywania
+jednakowe Członkowskie utrzymania
+niepodległy
+czynu swobodny wszystkie
+wobec Nie
+Artykuł ingerować pełni
+sumieniem prawa jakiekolwiek
+życiowej
+przywróciły
+wśród
+Ogólnego niepodległy świadczenia
+zawierania konstytucję
+czynom
+odwoływania krajowego
+postępu jakiejkolwiek
+uciskowi opieki również
+swobodę
+zakazane dobrobytu
+zawierania
+inny
+swobodnego opuścić zobowiązaniach
+Rodzina dany prawem
+swoją poszanowanie
+okrutny każdego
+opiekę sprzecznego wszelkimi
+równe zadowalającego
+zdrowie być
+czyjekolwiek doprowadziło
+przystępowania
+stowarzyszania doprowadziło
+samodzielnie przestępstwa
+Narodów opuścić religijnymi
+swe
+wola
+zamieszkujących
+należenia urlopu godzin
+słuchanym jakiejkolwiek ponadto
+przynależy przed handel
+udowodni sprzecznego strachu
+zmierzających przyjaznych Matka
+posiadania oskarżenia była
+równego
+obradująca uczestniczenia
+uwłaczaniu ONZ PRZETO
+osobie pospolitego
+utraty
+wydawania Nikogo największych
+skazany
+wola Zgromadzenia niepodległy
+swój również
+uznanie procesu torturować
+Sesja
+przez pospolitego poniżający
+słuchanym
+roku taką
+konstytucję
+Członkowskie
+obyczajów
+jego potrzeby
+ludów mają największych
+przyjaznych
+najwznioślejszy bądź
+informacji przeciwko języków
+dla może Nauka
+podległe
+sam osiągnięciu środków
+zasobami obrony
+ochrony
+założenia interesów według
+specjalnej języka
+jednomyślnie zdecydowanie okresowe
+Powszechną
+współpracę
+uciekać zapewniły
+zbiera nauczanie kobiety
+swój opinii też
+Narody obradująca
+tyranii ludzkiej
+krajowych
+ograniczeniom zgromadzania
+zmierzającą doprowadzony swobodnego
+zasobami podstawową
+strachu
+nauczania rozpowszechniania godności
+nieposzanowanie
+pełną
+głoszenia nauczanie Narodów
+przestępstwa handel
+stanowiącym pochodzenia
+poruszania
+ubezpieczeń
+niniejszych
+według rozumienie
+systemowi też
+bezpieczeństwa wyłącznie
+każdego moralnych
+skuteczne
+innego ograniczeniom
+języka związków
+dostępu
+każdy zawierania oni
+sytuacji wyboru pełną
+swobodnie osoba
+wyższe czy niezbędnych
+ograniczeniom
+grudnia opartych
+prawem realizacji przedstawicieli
+zamieszkania
+zasadami
+największych bezpieczeństwa korzystać
+różnicy nauczanie swoją
+wyznania Nikt swobodnie
+bezstronny udowodni
+zrozumienie Każdy obowiązki
+myśli rozwój
+równi przedstawicieli
+dziecko
+rozumem
+wyborze
+Mają
+mężczyzn przypadku
+urlopy
+kobiety związków
+warunkach
+celu zawartych
+dany ani
+obywatelstwa
+wyższej postępie
+przy prywatnie przekonań
+posiadania jakiemukolwiek niezależnej
+własny
+pełny jakimkolwiek
+ludzkiej międzynarodowym
+dopóki niemu utrzymania
+swobodnie działania
+Powszechna zgodnie dla
+swą Członkowskich
+osiągnięcia sprawiedliwości Państwu
+roku posiadania wymierzać
+krajowych rządu
+utrzymania głoszenia posiada
+walkę sumienia
+sztuki dana
+okrutny trwania przeciw
+którym
+zasadzie udzielającego zasadami
+niewolnictwo
+Państwa cel
+wszystkich
+żadnej procedurze Członkowskie
+ONZ
+między
+rzeczywiście
+moralności
+grudnia
+nieludzki różnicy swój
+którym nikogo
+popełnienia pomocą Wszystkie
+nieposzanowanie
+miejsca
+ludu
+zasięgu międzynarodowego
+POWSZECHNA większość
+służebności różnice
+poniżający ZGROMADZENIE
+krajem przyrodzonej miejsca
+prywatne
+dany poglądów
+powiernictwa
+swych aby wychowywania
+wolności
+osoby kulturalnym płci
+głoszenia niepodległy poszanowania
+dostępna byłyby granice
+wyznania wielu
+stosunków politycznej przyznanych
+świata zadość zadość
+niezdolności czynu
+odpowiadającą ludzie
+języków
+swym
+słowa pracę
+sprawiedliwości społecznego
+działania choroby
+godzin środkami samodzielnie
+nauczania
+przestrzeganie
+zamieszkujących międzynarodowym odniesieniu
+pełną narażeniem Człowieka
+wyborów niemożliwy
+opiekę zapewniły
+przestępstwo
+dobrobytu
+jakiejkolwiek postaciach
+Artykuł
+swego samowolnie
+wynikających
+Przetłumaczona
+toczy działalności międzynarodowym
+kraj postępowych zawarowanie
+ich Wola Nikt
+rządzi własny
+uznawano
+wespół pełnej dążyły
+rozstrzyganiu musiał skuteczne
+Organizacji bezpłatna
+popieranie
+ograniczenie
+największych
+oskarżenia podstawą
+ono swej ubezpieczeń
+powinni Nauka słowa
+wdowieństwa społecznej zawarcia
+wśród Deklaracja
+oskarżony
+posiada które
+zbiera
+socjalne stosowanie
+zależności płacy
+aresztować sposób Rodzina
+zawodowych również
+zawodowych Mężczyźni przeciwko
+stanowi
+celu sprzecznego sam
+człowieka
+ochrony
+jak literackiej zawarowanie
+godność godzin aresztować
+pospolitego międzynarodową
+dążenie
+Zgromadzenia zmierzającą
+wyborach Ogłasza
+niezbędnych sprzecznego
+przepisami zapewnienia
+swe
+ostateczności lekarską narodowy
+zasadności
+oni
+popierania
+politycznej które zawarcia
+środki
+działalności powinni narodami
+bezrobocia ogłoszono toczy
+powszechności ingerencji samowolnie
+dostępne
+pochodzenia kary duchu
+sztuki urodzenia tajności
+którym
+członków
+popełnienie każdego
+zapewniającego postaciach
+świadczenia postępie
+prawo równouprawnienie przy
+ścigania największych OGÓLNE
+najwznioślejszy jakikolwiek
+rzeczywiście
+stanowi międzynarodową
+społecznych
+zamieszkujących
+bez
+ustaniu Narody cel
+nie zadowalających
+wyznania
+niewolnictwo Oświata stopy
+osoba
+skutecznego
+OGÓLNE
+obowiązki lat Narody
+CZŁOWIEKA wyższej
+można doprowadzony równych
+niż
+się
+prawnej dostępne
+mężczyzn rozumienie
+zamieszkujących interesów utrzymania
+pełnej obszaru ingerować
+dopóki barbarzyństwa przez
+ani
+wynikających
+powinni
+udzielającego utraty któregokolwiek
+bezpieczeństwa
+służebności koloru ograniczeniom
+okresowe zasadzie posiada
+mężczyzn będą osoby
+mają ludów POWSZECHNA
+pracy stowarzyszenia
+Deklaracji uznanie
+swych starości
+dany religijnymi grupami
+podczas wygnać
+przedstawicieli
+organy równej ludźmi
+uznania
+cel Trzecia 1948
+zapewniającego wolno
+poglądów pod wynagrodzenia
+strony sztuki Państw
+Wszystkie stanowiącego swobodę
+osoba
+będą
+utraty
+zapewnienia porządkuje
+pozbawiać Sesja przestępstwa
+rządzeniu zapewnić dzieci
+kobiet
+naturalną
+odmawiać zapewniono pracy
+swobodnie
+który uznania DEKLARACJA
+międzynarodowego największych powiernictwa
+będą zbudowania wyżywienie
+sam
+torturować dopóki warunkach
+jednakowej swe
+jego mają
+swym
+niewolnikami rodziny zadowalających
+zrozumienie międzynarodowego jedno
+rozwoju działalności oni
+członek wyraziły
+zawierania dążyły zapewnić
+przynajmniej najtrwalszych swobodnego
+postępie indywidualnie dana
+sprawiedliwości jakikolwiek
+uchwaliła uznawania świadczenia
+służebności pierwszeństwa moralności
+wyborach starości
+większość wobec
+chwili tyranii rozwijania
+Powszechną
+większość DEKLARACJA odmawiać
+środkami wszyscy
+narodów procesu
+opinii
+powinni setek niepodległości
+wypoczynku Organizacji
+wyborze
+odniesieniu mają
+wyrażoną Artykuł wespół
+swobodnie
+znaczenie
+miejsca zarówno posiada
+czynić
+urzeczywistniania materialnych wszyscy
+sam popełnienie
+choroby samowolnie
+będą także
+innych stosowanie wyboru
+Powszechną
+korzystaniu niemożliwy
+narodowości uczestniczenia
+pełną
+wybranych jakąkolwiek zalet
+powszechne posiadania
+środki odzież
+literackiej czynić wstrząsnęły
+uczynienia rozwijania
+Rodzina jakiemukolwiek
+obrony zadowalających
+sprawiedliwie
+osobowości opiekę
+przypadku większość jedynie
+niniejszych Każdy rozwijania
+postępie przypadku Celem
+człowiek swych zawarcia
+swobodnego
+narodów odniesieniu równości
+posiada obszary
+rozumem
+międzynarodowym
+wygnać demokratycznego naturalną
+stowarzyszenia
+ludźmi wszyscy krajowym
+takiego uznania
+różnicy
+organy dla specjalnej
+zakazane wynagrodzenia wiarę
+oraz Wola Dokument
+równej podstawową
+głoszenia honorowi
+wygnać
+się również równorzędnej
+będącą
+stosunków
+niezależnej osiągnięć rządzeniu
+razie
+grupie zakazane
+kary była moralności
+poprawy czynom jakimkolwiek
+prawach swą gospodarczych
+granicach międzynarodowego
+względem powinni dopóki
+granice
+jakiegokolwiek
+stanu godności doprowadziło
+starości mieszkanie
+ono
+ponadto podstawowa przy
+postępu
+rzeczywiście bezstronny
+swobodnie
+wyborów bezpieczeństwa
+jemu pokoju
+moralnych wszyscy bądź
+jednostki języka posiadania
+wypoczynku
+przynajmniej swobodny
+członków Zgromadzenia równe
+wszelkimi
+równi osobie
+krajowego który
+odpowiadającą sposób słuchanym
+stanowiącego zapewniającego
+jednomyślnie związków Uroczyście
+zamieszkujących słowa
+przy pracujący
+podlega zarówno podstawowa
+życiowej
+jednakowe Powszechna skazany
+artystycznej uciskowi
+jakimkolwiek
+wyłącznie
+niemu byłyby
+międzynarodowego
+ograniczenie nikomu
+ograniczeniom Preambuła pełną
+jedynie jej
+bezpieczeństwa poszanowania
+narodami wola
+wespół sam którym
+postanowień indywidualnie ingerencji
+okresowe
+kompetentnych przyjaznych sądów
+jedno
+międzynarodowego Organizacji
+praktykowanie
+zmiany wypoczynku okresowo
+postanowień
+tej
+sprzecznego
+poruszania rządu jednomyślnie
+ochrony społecznych prawnej
+pamięci taką
+ustaniu
+obalenia popierania kobiety
+przyjaznych działalności
+uczynienia
+uroczyście współpracę
+odwoływania
+pracę może
+być
+swego olbrzymie równych
+imieniu rządzi
+socjalne moralnych PRZETO
+uchwaliła
+prywatnie wszczętego zawarcia
+traktować płci
+niezależny
+Krzewi pomocą różnice
+opieki utrzymania ingerencji
+względu dopóki jedno
+przypadku
+artystycznej tyranii
+nauki
+wszystkimi międzynarodową
+osoba
+powodu powszechnie
+najtrwalszych
+Trzecia utraty
+wybranych innego
+bezpłatna wypoczynku
+zasadności
+bezpieczeństwa
+jakimkolwiek
+popierania wolność
+zadość zawodowa wspólny
+pełni wyznania
+tworzenia swobodę DEKLARACJA
+Przetłumaczona
+naturalną Rodzice
+różnice
+niż systemowi
+popełnienia Wszyscy wygnać
+najtrwalszych wolno wygnać
+ograniczony obradująca techniczna
+zalet aktów porządkuje
+równości
+poprawy narodami procedurze
+najtrwalszych jakimkolwiek okresowo
+barbarzyństwa
+małżeńskie dostępne życie
+niezależnej honorowi buntu
+jakiejkolwiek przy dążenie
+realizacji
+dobrobytu innymi walkę
+społeczeństwa
+zawodowych Rodzina zaniechania
+nauki
+Organizacją kultu
+niniejszą
+niewolnikiem rodzinne
+przestrzeganie
+wyrażania wyrażoną
+równości może
+który takiej
+być
+pozamałżeńskie
+utraty urzeczywistniania
+międzynarodowego
+równości włączając wartość
+ingerencji bez Narodów
+rozwoju niezbędnych Deklaracja
+postępowych powszechnie nakładać
+pracujący podstawowa swego
+nauki
+według
+prywatnie powszechności
+względem powoływać
+rodzinne przestrzeganie wartość
+życia
+sztuki kompetentnych uznawano
+jednakowej obowiązki bądź
+wszyscy popieranie
+stosunków dobremu swój
+studia kulturalnym
+socjalne wybranych
+względem oraz bez
+pełnej małżeństwa
+stanowiącym Małżeństwo
+podczas
+zobowiązaniach tolerancję
+nieprzestrzeganie procedurze wdowieństwa
+małżeńskie walkę utraty
+wynagrodzenia
+będącą
+realizacji jakiejkolwiek stanowi
+starości niewątpliwie sposób
+przestrzeganie
+POWSZECHNA odwoływania
+ONZ DEKLARACJA niepodległy
+wolność
+dopóty świata
+zdrowie niniejszych lekarską
+warunkach Trzecia
+niezbędnych
+porządkuje czynu
+pod
+ZGROMADZENIE obszar dany
+swobodny
+bez socjalne przynależy
+okresowe majątku społecznej
+barbarzyństwa
+niepodległy Nikt
+przypadku specjalnej jakiegokolwiek
+które
+wyłącznie również barbarzyństwa
+człowieka dobrobyt
+Uroczyście
+wyraziły ich największych
+potrzeby handel drodze
+poszanowania Ogólnego środkami
+wychowywania
+płacy Wszyscy który
+przez
+stale trwania poruszania
+Zjednoczone
+swe artystycznej
+zawarowanie
+jakiemukolwiek mieszkanie
+również poszanowanie
+urzeczywistniania znaczenie zrozumienie
+prawem
+nauczanie
+niego odmawiać Matka
+konieczne
+zakazane
+niezależnej
+wolność konieczne
+dyskryminacją ten
+bezpośrednio otrzymywania jedynie
+kompetentnych pracę moralności
+byłyby równego wszystkich
+Trzecia
+bezstronny jakiemukolwiek jest
+życie gospodarczych Państwa
+okresowo nauczanie
+też techniczna choroby
+urodzenia
+ograniczony
+pozbawiać Małżeństwo
+Deklarację
+karać sądów
+dążyły
+wyborów
+zasadności
+Powszechna międzynarodowym zadość
+nauczania 1948
+rządzeniu
+oni zarówno
+okresowe
+wdowieństwa uznawano
+1948
+rozpowszechniania publicznej swe
+wszystkich Krzewi
+jednakowe
+potrzeby niż
+Zjednoczone osobie wspólny
+przywróciły Praw przynajmniej
+dopóki jej własny
+międzynarodowej innymi
+azyl też
+odmawiać swobodnego jednakowe
+między uciskowi przestępstwo
+pod
+Deklaracja
+Mają powoływać dobremu
+podczas koloru
+wielu działalności wolno
+ugruntowanie wyznania
+techniczna pracę
+lat pochodzenia
+urzeczywistniania opartych
+popełnienia realizowane
+rozumem swego zrozumienie
+wartość
+zasadności
+skutecznego
+stopniu równorzędnej winy
+równą
+popierania niezależny
+współpracę płacy
+techniczna
+swego wszędzie żadnej
+wszystkie największych
+strachu
+ludów skuteczne rozumieć
+najtrwalszych
+obszar oskarżony moralnych
+zrozumienie może pozamałżeńskie
+sprzecznego zadowalających opiekę
+studia
+barbarzyństwa
+świadczenia takim poszanowania
+jedno dopóki
+Deklaracja przy ostateczności
+Deklaracja
+utraty Nauka służebności
+zasięgu Przetłumaczona niezależny
+organy pokoju zasięgu
+zmiany niego równorzędnej
+wygnać
+ich
+uzupełnianego
+się Matka
+postulaty
+traktować korzystają
+dane
+Oświata takiej nauki
+podczas jakiegokolwiek
+moralności względu jemu
+takiej dyskryminacją
+dana niż
+popiera innych
+Rodzice podstawowa
+jeszcze przestrzeganie
+ludzkiej granice uchwaliła
+Członkowskie procesu odmawiać
+popełnienie
+przystępowania realizacji podstawowa
+zadowalającego międzynarodowego
+powinni wszędzie
+nauczania okresowe
+nikomu tworzenia
+bezpośrednio popełnienia
+opartych
+środki dostępna religijnymi
+wiary
+trwania najwznioślejszy
+środkami życiu pomocą
+uchwaliła wszelkimi traktować
+sumienia
+walkę osiągnięciu
+podległe sprzecznego
+komórką przestępstwa
+obowiązki urlopu Deklaracji
+członek społeczeństwa
+podejmowania przeciw ludów
+drodze
+inny
+innym sprzecznego
+socjalne słowa
+społecznej Małżeństwo dopóki
+zapewniły można wynikających
+godność człowiek
+ten
+słusznym działalność
+jakiegoś wyżywienie
+dana PRZETO wyższe
+zasobami zawarowanie też
+wyższej mieszkanie
+życiu wspólny
+który pełnej
+imieniu obalenia żadnym
+kompetentnych
+skutecznego rozumienie
+osiągnięcia równe
+osobistych nędzy narodowości
+czynu zasadności
+wypadek opiekę rozwoju
+powszechności społecznej pomocy
+małżeńskie niż
+rozstrzyganiu wyżywienie
+niezbywalnych Matka obowiązkowa
+dopóki
+powrócić pełnoletności
+świata techniczna
+systemowi pamięci
+tworzenia materialnych
+odmawiać zalet zależności
+uchwaliła prawo mając
+ludów
+dopóki dziecko wyborze
+bezrobocia rozstrzyganiu działalność
+obyczajów
+dana
+nikogo równą rozstrzyganiu
+osobistych innej
+bezpośrednio niezbędnych
+stowarzyszenia zgromadzania obowiązkowa
+innym małżeńskie Małżeństwo
+sprzecznego ogłoszono
+wyraża wszystkimi
+zdrowie dana
+bezpośrednio stowarzyszania nikogo
+wyraziły Organizacji świadczenia
+czy
+społecznego Człowieka
+rządzeniu
+wynikających aktów powszechnie
+tyranii
+jakąkolwiek jakiemukolwiek
+odzież PRZETO pracy
+zapewnić
+swobodny podstawowa międzynarodowego
+Paryżu
+niniejszej pochodzenia powszechnie
+osiągnięć
+jemu zawartych obyczajów
+wszelkimi człowieka
+jakiekolwiek tworzenia wyraziły
+dokonania toczy wolni
+pozbawiać
+godność powiernictwa
+całkowitej
+członek zbudowania
+rozpowszechniania
+służebności
+niepodległy podczas
+prawa
+POWSZECHNA przewidziana
+grupie buntu jako
+granice pomocą
+niepodległy
+barbarzyństwa
+którego tyranii
+podstawową imieniu podstawowych
+obywatelstwa krajowego sprzeczny
+którego imieniu podstawową
+może
+Nikt egzystencję
+uwłaczaniu majątku
+innym
+publicznie
+wespół jakiegoś podstawowym
+ono być słusznym
+przedstawicieli popieranie
+wymierzać
+dla lekarską obejmuje
+płatne Trzecia samowolnie
+korespondencję publicznie
+krajowym
+podstawowych dany
+małżeństwa wymierzać przyznanych
+postępu
+narodowości
+Członkowskie
+dla zaniechania
+wartość dążenie
+tajności zawodowych
+dla wygnać
+poszanowanie wychowywania poszanowanie
+przekonań rządzi
+przepisami podstawową zarówno
+obrony
+rozumem koloru rodziny
+wstrząsnęły obejmuje
+wespół
+takim okresowe
+Matka
+rozsądne ograniczony Nauka
+poszanowanie uznania zawarcia
+procedurze
+przestępstwo korzystają rozpowszechniania
+dostępne równego ograniczenie
+wszystkie Państw POWSZECHNA
+karać utraty
+ingerować obszary
+uznawano rodzinne
+ONZ
+sam mężczyzn publicznego
+kulturalnym publicznie realizacji
+podstawowa pozamałżeńskie
+trwania
+pomocy
+niemu
+przypadku dążenie
+wybranych swobodę wyznania
+odniesieniu powszechnego
+PRAW
+majątku Nauka
+Ogłasza myśli
+zadość
+wszystkich
+nieludzki
+względu popełnienie
+podstawowa
+osoby zapewniającej czynić
+popieranie
+członek
+jego człowiek społecznego
+Krzewi być
+samodzielnie stopy
+wiarę znaczenie
+nieposzanowanie oni działalności
+powoływać tych wyłącznie
+żadnej żadnym zbudowania
+jednostki organizacją
+Żadnego
+włączając stowarzyszania stanowiącego
+granicach uprawianie
+wartość korzystaniu inny
+obradująca udzielającego
+stowarzyszania
+urzeczywistniania braterstwa
+osobowości
+mężczyzn najwznioślejszy wszystkie
+konstytucję żadnym
+równej Mają wdowieństwa
+urzeczywistniania obowiązki służby
+prywatnie
+dobrodziejstw nikomu
+zobowiązaniach
+religijnymi
+zrozumienie sposób uroczyście
+ustalone ich
+ograniczenie
+małżonków działania
+powszechnego
+najwznioślejszy
+ludzkiej korzystają
+setek
+nieludzki kulturalnych
+poruszania przepisami
+koloru jakikolwiek
+życia czynu odpowiednich
+pełny uchwaliła nauczania
+pracy niezależny
+organy procedurze
+ludzkości oskarżenia
+nędzy wola wszczętego
+dla
+kobiety roku
+okrutny zdecydowanie wyborze
+nieludzki politycznej zapewniono
+podstawowa Organizacją niego
+popieranie azyl
+inny jakikolwiek
+słuchanym popierania osiągnięć
+równą
+korzystają procesu
+niewolnictwo wszystkie
+przypadku wymierzać
+założenia równą
+ZWAŻYWSZY karać wobec
+lekarską postulaty niniejszej
+porządkuje tej
+wszystkimi Zjednoczonych wszyscy
+włączając popełnienie
+dostępna
+przyznanych
+Członkowskich przyjaźń dobrobyt
+jakiemukolwiek wypadek Państwu
+postulaty
+wspólny języka
+nikomu
+sztuki publicznie zmuszać
+równouprawnienie jednakowej
+zbiera
+wyraziły praw równą
+poszanowania rodzinne
+zawodowa tyranii
+postępowych
+uchwaliła obowiązki
+postępować przekonań ten
+podstawą
+dążyły
+poprzez wszystkich podstawową
+zasobami stopy
+OGÓLNE zbudowania obyczajów
+Zjednoczonych
+stanu
+wyborów podstawowych choroby
+indywidualnie uznawania swą
+Organizacją korzystają jednomyślnie
+sytuacji
+Preambuła pozamałżeńskie samowolnie
+wychowywania czynom czynom
+stopy
+organizacją dyskryminacją oskarżenia
+zasięgu majątku
+niewątpliwie świata
+czy nauki korzystają
+współpracę studia
+uczynienia innej stanowi
+Przetłumaczona
+wespół odpowiednich
+niewątpliwie popełnienie zawarte
+lub
+setek toczy które
+uprawianie nauki uwłaczać
+traktować może starości
+którym zapewniono Wola
+popieranie pełnej poszanowanie
+doprowadzony dopóki
+jednakowej roku pełny
+wyrażoną niniejszej obdarzeni
+postanowień popieranie jednostki
+różnice zmiany
+aresztować granice tolerancję
+Artykuł rozpowszechniania
+jako nie
+Uroczyście tyranii
+zasobami życie Państwa
+poszukiwania działalność wyższe
+należenia
+rozwijania porządku POWSZECHNA
+najwznioślejszy zbiera
+wolno jakikolwiek
+niewolnikiem komórką kulturalnych
+ugruntowanie aby urodzenia
+którym wszyscy
+pełnoletności Ogłasza
+odniesieniu
+Ogłasza
+wspólnoty rozumienie
+osobie
+poniżający
+dana przypadku
+przestępstwo jakiegoś
+jakiekolwiek popełnienie
+stosowanie Deklarację
+podjęły
+być egzystencję równouprawnienie
+pozamałżeńskie organizacją wdowieństwa
+Zgromadzenia narodowości krajem
+znaczenie
+Narody powinni
+obszar rządzeniu
+Zjednoczonych wypadek tajności
+sprawiedliwie wszyscy
+kraju
+uciekać powiernictwa
+uroczyście
+powoływać przyznanych
+niemożliwy Wszyscy osoby
+wyłącznie pogwałceniem przynależy
+ścigania
+sąd uciskowi
+swobodnie wyborów uprawianie
+większość
+jakimkolwiek pod
+udowodni
+odpowiadającą
+odpowiadającą swój
+swą wszędzie rządu
+stanowiącym ostateczności innej
+Oświata
+ubiegać
+krajowego obszary
+urlopu ingerować człowiek
+obdarzeni międzynarodowego Trzecia
+niniejszą osobie podstawowe
+przestrzeganie
+publicznej
+całkowitej
+wyboru uczynienia
+pozamałżeńskie obowiązki powinni
+najwyższy
+jakiegoś
+postaciach podlega niezbywalnych
+Preambuła
+jemu moralnych
+czy
+drodze podstawową
+korespondencję równych która
+zadowalającego powszechności
+uciskowi
+małżeńskie stanowi ustaniu
+wespół skutecznego domowe
+człowiek honorowi jeszcze
+korespondencję buntu
+uzupełnianego Nie innymi
+narażeniem popiera pełni
+nauczanie czy
+niego
+pracę przypadku obywatelstwa
+ono zmiany
+wyższe
+dopóki obowiązki
+dzieciom zadość
+równych równouprawnienie społecznego
+wolni
+cel powiernictwa
+grupami strachu wyborów
+jakiegokolwiek organy jedynie
+musiał oskarżony życiowej
+poniżający indywidualnie
+taką najtrwalszych
+osoba poglądów grudnia
+wygnać nakładać
+środków niewolnictwo PRAW
+większej
+osiągnięć
+walkę ścigania
+większej pochodzenia
+domowe Oświata
+przyrodzonej
+niewątpliwie kompetentnych zmiany
+pozamałżeńskie niezbędnych
+niepodległości dane artystycznej
+która pełny rozumienie
+grupie Dokument
+postulaty podejmowania
+przestrzeganie jest wyborach
+zarówno
+dopóty wymogom służby
+przeciw nauczania małżeństwa
+stanowiącego sprawiedliwości
+odpowiedniego egzystencję
+ingerować
+tolerancję krajowym wypoczynku
+zmuszać oni
+PRZETO ONZ granicach
+olbrzymie
+obowiązkowa przyznanych
+niniejszych jego niewolnikiem
+sprawiedliwie uznawano
+społecznej
+ścigania starości narodów
+czynić obalenia
+wszczętego przed wspólnoty
+Deklaracja rasowymi
+studia może
+innego działania
+wymierzać praktykowanie swój
+walkę
+rodziny Mężczyźni
+różnice konieczne odmawiać
+wyłącznie postępie
+godność jakiemukolwiek dopóki
+małżeńskie pomocą jedno
+płci ludzkości czynu
+każdy Rodzina
+środkami
+Człowieka
+uczestniczenia przyznanych ZWAŻYWSZY
+wstrząsnęły mają
+dzieci jego innymi
+współpracę uznanie Ogólnego
+różnicy
+pomocą
+dobrobytu
+narodów zobowiązaniach
+sprzeczny
+zgodnie
+bezstronny odpowiednich
+demokratycznego
+pierwszeństwa pełny
+jednostki sam
+niezbywalnych specjalnej
+godność sytuacji wymogom
+sposób
+Małżeństwo wysiłek
+przeprowadzanych publicznie
+1948 Wszystkie
+środki przestępstwo przepisami
+posiadania
+koloru
+Małżeństwo różnicy
+roku Matka
+przeprowadzanych odmawiać
+socjalne najwyższy podstawowych
+rzetelnych krajowych ograniczenie
+prywatnie posiadania
+przez
+utraty dyskryminacją
+społecznego największych skazany
+prywatnie swobodnie rasowymi
+władzy
+języka
+świata
+powrócić Organizacji prywatnie
+korzystać międzynarodową swej
+starości
+własny
+stanowiącym wśród zgromadzania
+ubezpieczenia różnice
+systemowi ich
+odpowiednich dzieci przekonań
+PRAW
+przeciw wynagrodzenia większość
+życiu przewidziana innym
+prawem poprzez posiadania
+jako niego Członkowskich
+członek obowiązki wiarę
+kobiety
+związków
+korzystania czynić języków
+strony czyjekolwiek uciekać
+politycznej
+publicznego pracy utrzymania
+inny
+uznanie
+rozwój
+Nikt artystycznej
+dzieciom wyrażania
+swych ludzkiej swobodnego
+opiekę
+dopóty języków
+podczas czynom
+CZŁOWIEKA doprowadzony
+domowe postulaty praw
+wielu Żadnego moralności
+własności
+lekarską popełnienie
+dążyły
+publicznej stowarzyszania
+zbudowania dobrobytu wypoczynku
+OGÓLNE małżeństwa przystępowania
+bezpośrednio
+wygnać międzynarodowym
+swobodny koloru ludów
+współpracę przewidziana
+wymierzać małżonków
+wyższe ten Organizacji
+Ogłasza uzupełnianego krajowego
+równe uroczyście zatrzymać
+jednakowej
+jemu bezpieczeństwa obejmuje
+powodu Rodzice
+postulaty rozwijania pomocą
+jakiegoś różnicy
+ten Ogłasza
+karać jego Deklaracja
+jest niezbywalnych odpowiednich
+rodziny zapewniły
+też podlega
+popełnienie sąd
+rządzi osiągnięcia wielu
+zamieszkania jakiemukolwiek
+przynajmniej
+obdarzeni posiadania
+Deklaracja lub sztuki
+realizacji
+ograniczenie
+organizacją dopóty
+przyszłych aresztować
+tworzenia
+życiowej
+niemu
+obrony
+kary
+sąd jakiekolwiek
+celami wspólnoty
+wartość walkę
+prawach
+zawodowa choroby
+wychowywania pierwszeństwa
+powrócić którego podjęły
+życiu znaczenie
+obradująca 1948
+każdy
+czyjekolwiek otrzymywania roku
+ubezpieczeń doprowadziło
+podstawowa osiągnięciu
+krajowych
+wyznania jednakowej języków
+nędzy własny
+odmawiać moralności Ogłasza
+wolni międzynarodowym
+urzeczywistniania inny
+przyznanych służebności
+wyraziły przy Państw
+niż
+specjalnej
+niezdolności kary granicach
+nędzy Rodzice warunków
+swoją zależności
+taką Państw mają
+konieczne literackiej
+wyznania
+Zjednoczone ponadto który
+utrzymania
+bezstronny
+pod którym
+swój politycznej
+narodowości bezrobocia musiał
+uznanie
+środków poprzez
+ani współpracy którym
+granicach
+środków przekonań
+zalet
+skutecznego
+ingerencji ogłoszono większość
+Praw równych postępie
+własności wyższej tworzenia
+zmuszać stosowanie
+rządzeniu dążyły świata
+prawnej ugruntowanie Państw
+prywatnie Dokument
+utrzymania Powszechną Małżeństwo
+poszanowanie ubezpieczenia
+jakiegokolwiek
+niewolnikiem podstawowa
+rozumem
+członków międzynarodową
+powodu odzież
+najwyższy rządu
+jego
+artystycznej niniejszych Członkowskich
+sztuki
+wypadek płci
+rządzeniu przeciw
+czy wszelkimi
+naturalną innymi ograniczony
+skończoną zbiera Uroczyście
+walkę
+uwłaczać
+niewolnikami prawa
+między między studia
+powinni
+ludzkiej wysuwanego
+równouprawnienie zapewniły
+wszystkich poprzez
+moralności
+którym rozumieć dostępu
+największych wyraziły małżeństwa
+poniżający
+razie
+zapewniającego setek
+ONZ małżeńskie
+dzieci wyboru
+takiej
+jednakowe najwyższy
+procedurze życiu uznawano
+jakiemukolwiek
+obalenia Ogłasza
+jako
+lekarską
+osobistych języków realizowane
+stowarzyszania innymi członków
+bezrobocia mieszkanie ten
+osiągnięć kultu
+moralnych zawodowa
+Rodzice interesów specjalnej
+przekonań
+zamieszkania Nikt narodowy
+pierwszeństwa
+zarówno
+literackiej międzynarodowego Deklaracji
+dokonania
+moralności
+międzynarodowej
+materialnych Deklaracji
+równej
+bezpłatna
+zasadności ustalone
+moralnych
+procesu prawach
+kraju wynikających zapewniającej
+majątku oni
+grudnia rozumem
+dane
+tych wszystkimi
+będą jakimkolwiek
+pracę naukowej celu
+czynom obowiązki
+stosowanie niezdolności wolności
+posiada takiej dostępne
+ono prawo
+uznania zależności dzieci
+życiowej nieludzki ubiegać
+wybranych
+barbarzyństwa
+rzeczywiście
+jedno swych wyraża
+własności zasobami korzystają
+realizowane
+wszystkich postępu
+współpracę zakazane
+PRAW
+przeciwko
+zaniechania Przetłumaczona sprzeczny
+przez majątku Państwu
+bezpłatna
+Zgromadzenia
+społeczeństwa prawem przez
+przyznanych
+działalności być
+zamieszkania również
+uwłaczać może żadnym
+Każdy
+Artykuł wyborach OGÓLNE
+poszukiwania odzież działalność
+zasadami rzetelnych
+utraty żadnej zapewniającego
+jemu jakiekolwiek osoby
+niepodległy jakiegokolwiek dane
+ZGROMADZENIE
+zapewniły ograniczenie
+organy środki obszary
+POWSZECHNA
+pogwałceniem zawodowych
+życiu
+równorzędnej obalenia procedurze
+PRZETO
+jednomyślnie politycznej
+swego dostępna głoszenia
+równej granice poniżający
+ludzie
+współpracę
+poprawy przestępstwo
+zapewnienia wszczętego
+pełny
+oskarżony torturować
+osobistych
+niemożliwy
+jej obowiązkowa wyższe
+przekonań pozbawiać
+porządkuje
+zmierzających dobremu
+powszechnie służebności swoją
+działalności
+który
+podstawową pełnoletności
+wolni konieczne krajowych
+uzupełnianego rodzą
+uznanie obyczajów
+nauczania
+świadczenia czynom
+zadość być niezdolności
+pełnej zawarte
+skończoną
+okrutny
+wstrząsnęły
+najtrwalszych
+swej osiągnięcia
+sztuki czyjekolwiek
+imieniu CZŁOWIEKA
+należenia sprawiedliwości
+prawem jakiekolwiek
+powszechne międzynarodowym wiarę
+narodami urzeczywistniania
+prywatnie jakiegoś
+ten stosowanie
+uznawano narodowy uprawianie
+ONZ ponadto
+ochrony osiągnięć
+także
+zobowiązaniach
+równouprawnienie większość ZWAŻYWSZY
+krajowych sumieniem dyskryminację
+całkowitej organizacją
+równi
+grupie
+narodów
+Ogłasza wstrząsnęły
+stopniu uzupełnianego prawnej
+popieranie będą wartość
+bezrobocia ogłoszono
+uczestniczenia języków
+niego
+dzieciom
+pełnej
+Deklaracji oskarżenia
+osobie pracy
+rodzinne
+wydawania
+wszystkich DEKLARACJA zgodnie
+przepisami
+korzyści być
+obalenia członków swobodnie
+świadczenia innym jakiegokolwiek
+należenia rządzi
+przez
+udzielającego zapewniły poglądów
+sądów
+byłyby egzystencję
+pracę wyższej
+wyznania dostępna
+swobodnego
+Wszystkie zapewnić
+odzież Rodzina krajowego
+dobrobytu nie
+narodowości zawarcia dana
+warunków rządu konstytucję
+olbrzymie specjalnej
+niezbywalnych Dokument niemożliwy
+korzystaniu posiadania Narodów
+wola kultu wolności
+obyczajów
+setek
+procesu
+miejsca Organizacji zapewnienia
+komórką wyborach
+jednakowe publicznego
+zasadzie nauki publicznie
+stanowiącego poszanowania przyrodzonej
+podstawowe dziecko
+będącą dopóty bezstronny
+poszukiwania zgodnie zawarcia
+przystępowania wyborach
+środki jakąkolwiek zaniechania
+utraty rządu
+socjalne ścigania wolni
+niewinnego
+powszechnego obszaru
+własny wyraziły krajowych
+była wydawania osoba
+spokojnego również grupami
+publicznego stanowiącym które
+rodzinne Każdy
+stopniu niepodległości współpracę
+uczestniczenia doprowadzony
+rodzą poprawy
+czynu niego ochrony
+Ogłasza
+ubezpieczeń postępu sprawiedliwie
+stowarzyszenia nikomu
+utrzymania wymogom
+pamięci nieposzanowanie podstawowym
+wysiłek
+znaczenie Mężczyźni
+rzeczywiście zmierzającą popieranie
+prawa
+rządu przez krajowym
+ograniczenie aby
+Powszechną kobiety
+przestępstwa
+Wszystkie pogwałceniem takiej
+poniżający opartych
+swobodny
+rodzinne pochodzenia
+swoją
+także Państw
+Krzewi
+skazany dobremu
+stopy mając
+oskarżenia równą
+wszelkimi wobec
+urodzenia
+tajności
+1948
+któregokolwiek zależności
+wyrażoną lub jakikolwiek
+własny
+gospodarczych życiu
+wyższej ludzkości rozumieć
+oskarżenia
+ochrony korzystają wypoczynku
+rozsądne Artykuł egzystencję
+pomocą wyłącznie
+socjalne nikogo
+Wszyscy
+strony Celem
+wolności Mają
+okrutny
+Deklaracji
+uroczyście życie bezpieczeństwa
+poszanowanie
+taką odniesieniu Nauka
+zapewniającej pod rządu
+rozwoju
+Deklarację Deklarację choroby
+przestępstwo cel popieranie
+Deklaracja
+wespół
+kobiet postępu wysiłek
+stosowanie
+Preambuła obdarzeni sytuacji
+uciskowi
+ich torturować
+rozumienie
+przestępstwo mają również
+zarówno grupami sumienia
+chwili
+władzy
+wszystkie swoją inny
+nauczania
+wynikających czynu obszar
+kraj
+sprawiedliwie popierania Członkowskie
+społecznego
+zmuszać współpracę byłyby
+innych uznawania
+jako przywróciły choroby
+aresztować Nauka postępowych
+bezrobocia
+niniejszą sam
+rodziny wyboru
+PRZETO
+skutecznego
+bezpieczeństwa strony
+uznawania zawarowanie
+przywróciły swobodę zalet
+religijnymi kulturalnym
+równą
+przyznanych krajowym dany
+wymogom
+wyrażoną rozwijania
+politycznych Paryżu uciskowi
+osiągnięciu
+dane
+wyborze kobiety
+wydawania ponadto
+Zgromadzenia innymi
+wysuwanego samodzielnie
+wobec uwłaczać informacji
+przypadku
+uznanie pospolitego Preambuła
+głoszenia traktować obszaru
+grudnia podlega
+czynu osiągnięciu granicach
+człowiek
+aktów
+życia
+obdarzeni
+społeczeństwa zbudowania
+uprawianie praw nikogo
+sprzecznego stanu okresowe
+Organizacji poszanowania równouprawnienie
+artystycznej studia
+tworzenia wypadek niewinnego
+obalenia
+zadość powszechne
+narodowości
+honorowi zatrzymać Przetłumaczona
+ZGROMADZENIE
+ogłoszono
+mają udowodni
+wyraża obywatelstwa
+systemowi pod
+skuteczne prawem niego
+bądź celu
+działalności wdowieństwa zgromadzania
+urlopu kompetentnych ubiegać
+nieprzestrzeganie
+osobie społecznej dziecko
+Wszyscy zatrzymać
+stosunków dostępu
+przyjaznych
+narodami podjęły
+chwili podstawowa
+komórką Organizacji
+członków
+żadnej czyjekolwiek
+wiary
+pracy
+nieprzestrzeganie stowarzyszania Ogólnego
+ingerować dopóki
+pogwałceniem samodzielnie
+równe nikomu
+pochodzenia świata
+osobowości
+zawarowanie postulaty lat
+socjalne zadość powszechnie
+słusznym
+jakikolwiek wygnać materialnych
+ogłoszono
+postulaty różnice
+podejmowania wespół
+konstytucję Matka buntu
+demokratycznego
+praktykowanie Narody
+wszczętego
+zasadności niż małżeńskie
+oskarżenia
+wybranych
+między
+rasy
+różnicy uznania
+może uchwaliła
+wyraża
+pod rozstrzyganiu
+posiadania względu
+korzystają zalet
+rozwijania
+Powszechna
+niezależny Każdy sprzecznego
+uwłaczać swobodę
+najwznioślejszy
+okresowe prawach którym
+swój lekarską
+środki inny rozwijania
+zatrzymać nędzy Celem
+niż opuścić zarówno
+zawarcia przedstawicieli braterstwa
+rozstrzyganiu ich
+niemożliwy narodów
+imieniu
+braterstwa sumieniem
+równouprawnienie zasięgu ludu
+Organizacją Paryżu
+wiarę
+kraju
+sumienia odniesieniu
+człowieka
+którego dążyły
+jest interesów
+założenia
+najwznioślejszy odniesieniu
+handel wolni
+pamięci
+wszczętego człowiek
+walkę
+środkami ochrony godność
+stanowiącego egzystencję wyboru
+praw członków wynikających
+społecznych stopniu
+jednostki sprawiedliwie socjalne
+naturalną
+rodzinie
+zbiera podstawowych służby
+nauczania
+ograniczeniom
+wyrażania wszędzie
+prawo powrócić
+równej
+bądź
+swe
+rozstrzyganiu dzieci
+takiej
+obszary ludźmi
+nie
+odniesieniu wynikających rozwijania
+zobowiązaniach języków względem
+okresowe
+Ogólnego zobowiązaniach
+oskarżony dziecko
+zmuszać
+które niewątpliwie
+tej
+prawem braterstwa człowiek
+utrzymania CZŁOWIEKA
+bezstronny prawnej
+ludów nakładać takiej
+sumieniem koloru
+granicach ingerować jedynie
+zasobami
+ochrony
+poruszania jakikolwiek zamieszkania
+korzystania Nie
+Każdy wszystkie
+zapewniono rasowymi nauki
+różnice
+ten
+czynom
+środków swobodnego
+organy obszary przedstawicieli
+korzyści barbarzyństwa stanowiącego
+najwyższy praw uznawania
+PRAW
+stowarzyszania
+sprzeczny innymi
+taką byłyby
+narodów niniejszą przez
+dzieciom
+oskarżenia skazany godności
+zależności rodziny
+dana jedno
+tych czynu
+jakąkolwiek Państw
+buntu zawarowanie
+godności Wszystkie
+życiu zakazane
+wszystkie każdy
+stowarzyszania sprzecznego ludu
+ingerować Przetłumaczona takiej
+można
+odniesieniu spokojnego ustaniu
+POWSZECHNA prawnej honorowi
+krajowych buntu większej
+przeciwko
+wolno Narodów
+życiu społecznych olbrzymie
+narodów
+popiera
+ograniczenie ubezpieczeń Rodzice
+trwania
+zbiera osoba
+ponadto każdy podstawowym
+osobowości
+musiał wysuwanego choroby
+podjęły
+kary przywróciły przekonań
+1948 dla
+innym dobremu tajności
+między
+człowiek zdecydowanie
+aby
+moralnych
+uznania
+organizacją niepodległości organy
+zapewniającej
+płacy rasowymi opartych
+okresowe publicznej miejsca
+jego
+dokonania czynić zawarowanie
+oni świadczenia prawa
+wszędzie
+bezpośrednio podległe
+większej jedno obszary
+dobrobytu
+płatne przyznanych równą
+uciekać
+uciskowi pełną
+celu prawnej miejsca
+równouprawnienie
+obrony Powszechna
+skazany procedurze
+prawa tajności
+świadczenia Praw
+lekarską
+moralności
+podstawową władzy
+zaniechania taką wyborów
+rasowymi Trzecia
+większość zdecydowanie zgromadzania
+prywatnie
+dyskryminacją zapewniły jedno
+przestępstwa gospodarczych
+ich swej utrzymania
+przekonań organizacją grupami
+Członkowskie pracę obowiązki
+związków
+pochodzenia
+pokoju azyl
+ubezpieczeń podstawowym nauczania
+praktykowanie
+bez dla niniejszych
+powszechne którym zawartych
+zalet
+członków zasadami niemu
+uprawianie
+zależności lat dążenie
+publicznie popieranie realizowane
+toczy zawartych ludzie
+wiary życiu rozwój
+wielu przed
+innym
+słowa
+osiągnięciu popełnienie
+wychowywania obalenia
+praw języka
+odpowiadającą jedynie jego
+przeprowadzanych rozumienie
+pełni
+Rodzice
+trwania przystępowania życie
+Rodzina
+społecznych niezależnej
+poszanowania założenia języków
+stanu innego
+specjalnej jakikolwiek Artykuł
+jakiejkolwiek
+granice
+podejmowania Ogłasza
+pogwałcenie
+zawodowa poruszania
+rządzi samowolnie
+aresztować tyranii jednakowej
+związków
+Zjednoczone wyższej opiekę
+podstawową zgromadzania krajowym
+urlopu
+konieczne pamięci zalet
+różnice
+niezbędnych
+wdowieństwa POWSZECHNA kultu
+rasy Narody skuteczne
+ingerencji ludzkiej obszar
+naturalną środków warunkach
+oskarżenia który korzystaniu
+poprzez
+podstawą uznanie zasobami
+porządku
+niepodległości Organizacji nieposzanowanie
+rządu dążenie sztuki
+sztuki studia
+niniejszej zawarowanie
+nikogo odpowiadającą ludów
+domowe
+swobodnie zasięgu
+politycznych jakiegokolwiek
+wolność stanowiącym
+osiągnięciu wstrząsnęły nie
+przystępowania niewolnictwo Celem
+należenia
+dla
+zadowalających duchu podstawowa
+sprawiedliwości
+zarówno korzyści
+dostępu
+jakiejkolwiek
+pochodzenia wyborów Rodzina
+Rodzice
+równej według według
+powiernictwa
+krajowym celu rozpowszechniania
+rozpowszechniania
+dana
+narodowości
+prawa
+zadowalającego prawa poniżający
+jakąkolwiek aktów środków
+języka zasobami zasobami
+wydawania
+stowarzyszania wszędzie wyłącznie
+zasadzie bezstronny rządzi
+jedynie które popieranie
+zapewnić 1948 ludzkości
+literackiej
+przyrodzonej
+wszystkie
+jakiegoś
+sprawiedliwie należenia
+prywatne
+swe sytuacji sprawiedliwości
+środków takiej
+oni zapewniającego
+wyborach krajowego rodzinie
+swej systemowi niewinnego
+podstawą osiągnięcia
+ogłoszono literackiej Matka
+sztuki pogwałcenie
+uznawano pełnej
+małżeństwa
+przepisami
+Dokument religijnymi rodzą
+realizowane
+DEKLARACJA uzupełnianego człowiek
+PRZETO powszechności
+bezpłatna wynagrodzenia
+pod
+członków pracę zrozumienie
+potrzeby spokojnego całkowitej
+osiągnięciu wartość przyrodzonej
+zgodnie nieprzestrzeganie
+uprawianie
+wolno swym dobrobytu
+warunków też różnice
+celami
+środkami informacji
+walkę
+życie
+nauczania wszelkimi
+postępie Powszechną
+systemowi specjalnej
+zależności
+ZWAŻYWSZY
+Małżeństwo zbiera
+prawach czynić
+spokojnego obdarzeni
+będą odniesieniu
+Praw
+skuteczne świata zapewnienia
+DEKLARACJA znaczenie sytuacji
+którego równą wszystkie
+tajności wiary wiarę
+oskarżenia lub podjęły
+azyl uczynienia Dokument
+Deklaracji
+niewinnego
+odzież
+naukowej Państw
+dyskryminacją żadnej uznania
+również rozwijania
+zapewniono mają podstawą
+zasadami walkę
+wychowywania
+realizowane obradująca
+grupie
+Preambuła spokojnego Państwa
+wyraża czynom służebności
+Zjednoczonych uznanie
+niezbywalnych
+tolerancję pracy mając
+zmiany
+bezrobociem prześladowania taką
+największych obowiązkowa zgromadzania
+sprzeczny popieranie
+opuścić ostateczności
+wszyscy
+władzy pełny
+koloru dobrobytu
+bezpłatna zmuszać
+urzeczywistniania grupami zasadności
+dopóty
+publicznie korzystają
+Dokument wyrażoną wolni
+sprawiedliwie zadowalającego przepisami
+odpowiednich wychowywania
+ograniczeniom Zjednoczonych
+udowodni aby
+Sesja dostępu
+jakiekolwiek przedstawicieli
+rozwoju wdowieństwa grupami
+osiągnięciu czynom
+czyjekolwiek równi drodze
+stosowanie przewidziana granice
+zasięgu
+roku przed urzeczywistniania
+korzystaniu niniejszych
+głoszenia popiera
+zarówno
+zapewniającego będącą
+stosunków
+skazany
+osobowości tej myśli
+społeczeństwa podstawowe
+pospolitego Nauka
+honorowi celami
+takim obszaru
+jakimkolwiek opuścić tych
+obowiązkowa
+wynagrodzenia
+popiera politycznych porządku
+jedynie czy
+wyborów ani
+większość nauki
+socjalne swe wyższe
+wygnać powszechne
+rozpowszechniania wynikających
+postępowych
+opuścić
+niezdolności
+sprawiedliwości stosunków uchwaliła
+specjalnej braterstwa
+zbiera poszanowania przepisami
+prywatnie wyborze
+procesu
+podstawowe drodze koloru
+walkę równych względem
+rozpowszechniania pod
+świadczenia bezrobociem
+wyznania taką
+innej wszczętego rodzą
+ubiegać Żadnego urlopy
+pomocą
+innym uznania
+ani handel
+społecznej
+byłyby współpracy postulaty
+moralnych nauczanie
+konieczne dzieciom
+wysuwanego prawa uwłaczaniu
+jedno podstawową
+lat obszar miejsca
+stopy
+Państwa stale najtrwalszych
+odpowiedniego zawartych uznania
+rozumieć
+równej środków przystępowania
+poprawy środki Ogólnego
+osoby sam
+wysiłek która
+języka swych osiągnięcia
+materialnych indywidualnie inny
+pierwszeństwa
+zasobami zbudowania konieczne
+osobistych pogwałcenie
+zawierania pełny
+korzystaniu
+majątku niewinnego
+setek zasadzie nędzy
+porządkuje innego popełnienia
+zdecydowanie według niezbędnych
+CZŁOWIEKA rzeczywiście
+roku publicznej
+wyższe rodzinne
+takiego ubezpieczeń kary
+obejmuje zapewniono
+pomocy
+samowolnie setek zgodą
+powiernictwa walkę
+zawartych mężczyzn
+takim
+udowodni setek powodu
+procesu Zgromadzenia
+narodami granicach
+czy
+interesów literackiej takiego
+jakimkolwiek
+równe urlopy
+drodze Rodzice
+niewinnego ludzie zasadzie
+wszędzie doprowadzony realizowane
+człowieka
+moralności
+sumienia obyczajów kraju
+Narody
+Sesja
+wszczętego
+takiej działania
+Zjednoczone
+setek Nie
+majątku
+wszystkimi pełni
+sam
+tolerancję przyjaźń okresowo
+dyskryminację rozumem
+Celem
+postępować
+ludźmi rasy
+zrozumienie
+konieczne razie
+zaniechania ZWAŻYWSZY
+Rodzina Nikogo mając
+uwłaczać traktować
+prześladowania zaniechania
+zmiany
+zawartych sytuacji
+ochrony
+jakiejkolwiek dzieci ludźmi
+całkowitej lekarską
+czynu walkę
+rządzeniu przekonań demokratycznego
+Zgromadzenia pracy jednakowej
+przekonań społecznego ZGROMADZENIE
+strony zawarowanie
+Członkowskie prawa jakiegoś
+uzupełnianego
+wespół
+zakazane
+też przyjaźń
+starości
+sytuacji przeciw Oświata
+ubiegać dopóki Organizacji
+nie niepodległości
+przyjaznych
+dostępne CZŁOWIEKA
+okrutny olbrzymie
+przyszłych
+obowiązki
+utrzymania innego
+opinii wychowywania 1948
+czyjekolwiek ludów wygnać
+roku wspólnoty
+mają
+swym pozamałżeńskie
+Zjednoczonych otrzymywania
+żadnej braterstwa
+swych władzy
+Narody
+ZWAŻYWSZY sprawiedliwości
+przyszłych wolność
+wszyscy ogłoszono czynić
+przez duchu stanowi
+wszędzie
+całkowitej Rodzice
+osobowości
+dobremu największych ingerencji
+wśród
+zapewnienia aresztować kobiet
+honorowi Przetłumaczona Deklaracja
+zapewniającego urzeczywistniania
+jedynie urlopu prawnej
+tajności
+grupie rodzinne
+Wola
+niepodległy oraz czynom
+niewolnikami
+Preambuła rodzinne swego
+narażeniem krajem poprawy
+służebności
+Narodów założenia
+bezpieczeństwa ostateczności
+czynu duchu demokratycznego
+swe traktować godzin
+niepodległy myśli który
+porządkuje prywatne
+uczestniczenia
+popiera środki swym
+jednomyślnie swobodnie poniżający
+dobrobytu rozwijania
+prawa
+tolerancję stosowanie
+uzupełnianego korespondencję pospolitego
+publicznie
+wyżywienie popierania Państwu
+pogwałceniem obradująca
+wyboru Paryżu
+niewolnikiem rządzi uchwaliła
+osiągnięcia
+rodzinne warunków
+wiary podejmowania
+korzyści sprawiedliwości
+jakikolwiek płci służby
+Przetłumaczona zamieszkania
+religijnymi nieprzestrzeganie
+powszechności sumienia osiągnięcia
+jako konieczne
+człowiek
+rozumienie
+czynić Dokument
+Deklarację pełny
+dana strony każdy
+bezpośrednio niepodległy dany
+pozbawiać
+sprzecznego toczy
+dostępna życia niepodległości
+niezbędnych naukowej
+obradująca postulaty
+rozpowszechniania równi przynależy
+słowa
+rządzeniu
+wolności
+jednakowe równouprawnienie
+wyraża służby
+zapewniono realizowane
+politycznej granice wszystkich
+egzystencję prawem zawarowanie
+stowarzyszania grupie dziecko
+przestrzeganie poszukiwania
+jakiegoś
+zadość zobowiązaniach
+Zjednoczone CZŁOWIEKA poszanowania
+każdy tej toczy
+zawarowanie obdarzeni stosowanie
+strony
+wszelkimi podstawą wdowieństwa
+wyższe wstrząsnęły płci
+stosunków dyskryminację
+języków
+być popierania
+stanu
+sprzecznego
+prześladowania religijnymi
+stale Deklaracji
+popełnienia
+wyłącznie sytuacji
+niepodległości
+osoby rodzinie publicznej
+celami jakiekolwiek tajności
+wolności zmuszać
+braterstwa
+doprowadzony sam
+osobowości wymierzać okresowe
+sytuacji osoby
+ograniczony Mają wymogom
+równą narodowości wspólny
+egzystencję
+równej zawarte
+wysuwanego dziecko
+przestrzeganie cel prawo
+poglądów podstawowych praktykowanie
+niepodległości
+takiego
+godności ZGROMADZENIE
+prywatne kultu równe
+urzeczywistniania
+warunkach przyjaznych
+Członkowskich
+sprawiedliwości kulturalnym mają
+nikomu
+zasobami krajowym skazany
+Członkowskie dyskryminacją niemu
+życia Mają Narodów
+uroczyście
+Każdy bezpieczeństwa opieki
+przewidziana pod poglądów
+zatrzymać
+Powszechna osobowości
+narodowy praw wynagrodzenia
+niemu rozsądne
+ogłoszono
+wyraziły
+ustaniu jakiejkolwiek
+realizowane
+dzieciom zawodowych
+zatrzymać
+wobec przestępstwo
+bezpośrednio czyjekolwiek która
+niniejszych
+stowarzyszania kobiety
+jakąkolwiek wdowieństwa
+narodami moralności czyjekolwiek
+języka
+uprawianie
+służebności wszystkimi
+równych gospodarczych
+bezrobociem dla
+poprawy
+korzyści niego
+wymogom
+aresztować
+wspólnoty słowa przeprowadzanych
+jednomyślnie obyczajów zmierzających
+który
+przynależy warunków niezależny
+którym
+własności
+wyższej Deklaracji niezależny
+czynu
+działalności
+jakikolwiek wyłącznie międzynarodowym
+zasadzie prześladowania
+prywatnie wyżywienie
+publicznie żadnej
+powszechne 1948 udzielającego
+koloru lub niepodległy
+obowiązki
+innej wśród swobodę
+wyższe zasięgu
+uroczyście dopóki
+bezrobociem
+bezpieczeństwa
+kraju narodowy nauczania
+takim języków sprawiedliwości
+poniżający lat
+Praw
+powszechne
+pod celami
+sprzeczny Preambuła
+działalności
+takiego
+ludzie
+wolność zbiera
+swym
+godzin prawem
+studia zakazane mężczyzn
+przewidziana
+uciskowi głoszenia
+wszystkie
+rasowymi stopy
+czynom zapewniono sprawiedliwości
+zawierania prześladowania innym
+ludów życiowej walkę
+wolni lekarską
+granicach Rodzice koloru
+takim barbarzyństwa
+czynu
+naturalną
+Organizacją
+grupami przedstawicieli
+niezdolności osiągnięć osobowości
+wyznania azyl
+znaczenie
+politycznych życia korzystania
+krajowego
+godności
+obrony moralnych pierwszeństwa
+najwznioślejszy osoba środki
+podlega
+korzystają
+uchwaliła
+uznanie braterstwa lub
+społecznych swej
+miejsca rozwój
+rzetelnych barbarzyństwa ubezpieczenia
+rozstrzyganiu ponadto
+Państw ustaniu działalności
+równego Państw
+zdrowie Celem
+małżonków grupie powodu
+jakąkolwiek byłyby
+miejsca okresowe zapewniającego
+społecznej pełny całkowitej
+choroby stowarzyszenia procesu
+prawem takiej osobistych
+rodziny
+walkę osobie PRAW
+oraz mając
+członek prawa politycznych
+jej życiowej
+przynależy Krzewi handel
+może powszechne
+zasobami sztuki
+słusznym poniżający przyrodzonej
+buntu
+większej jakikolwiek
+osoba dobrobyt
+języka
+godzin innymi tych
+dopóki braterstwa
+studia
+osiągnięciu społeczeństwa rozumienie
+nikogo niemożliwy
+Organizacją także
+prywatnie wyborów
+korzystać
+rodzinie kobiet
+jedynie CZŁOWIEKA
+podstawowe równorzędnej
+doprowadzony
+postępować
+zapewnić
+równouprawnienie prawach skuteczne
+swym
+niemożliwy zasadności Członkowskie
+zawarcia
+wyrażania potrzeby zdecydowanie
+systemowi
+informacji udzielającego środków
+jako
+zawarcia
+jedno pomocą Deklaracji
+popełnienia przyznanych naukowej
+byłyby Wszyscy
+przed jednakowej
+płacy współpracy
+Rodzice zbiera Uroczyście
+praktykowanie samowolnie
+takiej samowolnie
+powrócić Mają
+kraj sytuacji indywidualnie
+podjęły techniczna
+rozumem
+okresowo Wola okresowe
+zawartych który
+podlega byłyby
+społeczeństwa
+zapewniającego ZGROMADZENIE ludzie
+można pełną dokonania
+Zjednoczone mieszkanie prawnej
+jedynie Nauka dobremu
+urzeczywistniania całkowitej
+niego
+Narody należenia
+kompetentnych
+Zjednoczone niniejszych
+niemożliwy
+sytuacji między okresowo
+pomocą Narodów nauczania
+żadnej
+rodzinne ścigania godność
+wyborach pełny
+Sesja
+jeszcze
+tej
+podległe
+wolności podstawowym
+opiekę politycznej
+podległe
+zmierzających ugruntowanie
+własny Nikt pogwałceniem
+życia wymierzać
+pełnej wyboru ludu
+Narody
+obradująca była
+aresztować życia zatrzymać
+wszystkich
+urlopy
+służby
+ZGROMADZENIE
+ZWAŻYWSZY
+własności
+oskarżony ten
+uznania
+obradująca
+miejsca czynić należenia
+człowiek różnicy politycznych
+rodzinne
+zawarowanie narodów wybranych
+pełnej
+Ogólnego rzeczywiście ludzkości
+środkami podstawą zadość
+niezależnej największych
+uznanie potrzeby
+potrzeby opartych
+wyraziły ochrony
+Organizacji publicznej wynagrodzenia
+trwania postępu
+jeszcze prywatnie
+rasowymi
+prywatnie politycznej
+swej
+człowieka dostępna
+konieczne wypadek
+rządu wyrażoną kobiet
+wiary POWSZECHNA
+podjęły praw
+niewinnego
+międzynarodowej
+przywróciły człowieka zgromadzania
+przed
+ogłoszono
+skutecznego informacji Zgromadzenia
+niniejszą
+bezpieczeństwa
+godzin była
+swój
+dobremu procedurze
+swą
+którym
+Artykuł
+według
+porządkuje zapewniającego
+Rodzina
+odpowiedniego niniejszej
+zamieszkania dokonania narodowości
+gospodarczych
+nikogo swobodę
+założenia zawartych
+grupami
+odpowiadającą międzynarodowym dobrobytu
+podjęły zapewniły
+pomocą kobiet swobodny
+ogłoszono
+odpowiednich któregokolwiek
+pracujący
+równości
+stanowiącego stowarzyszenia Narodów
+uwłaczać
+też obrony
+Zgromadzenia traktować znaczenie
+związków zamieszkujących
+utraty
+członek
+wolni zatrzymać
+pozbawiać narodów Członkowskich
+wyborach
+wysuwanego
+zadowalającego
+przyznanych Ogólnego pracujący
+wyboru
+zapewniającego
+narodów wyraża
+władzy powszechności wspólny
+Nikt
+stanowi Mają ludzkości
+najwyższy wyrażoną
+niniejszej Uroczyście
+obowiązkowa braterstwa
+POWSZECHNA jak Krzewi
+dany dziecko
+niewolnikiem stowarzyszania
+ingerować doprowadzony
+bezpośrednio
+ludźmi
+słuchanym dopóty
+innej innej spokojnego
+która
+uznania jakimkolwiek
+ograniczony zarówno
+płci
+przekonań
+sprawiedliwości zapewnić korespondencję
+opiekę
+własności
+jest każdy
+jak Rodzice
+głoszenia kulturalnych zadowalających
+prawnej demokratycznego
+ludzie
+osoby Wszyscy
+Paryżu Państwu
+jak dostępu popiera
+zapewniającego jedynie
+nieprzestrzeganie zgodnie
+jedno osobie
+socjalne nieprzestrzeganie niepodległy
+urlopu ludzkiej
+praktykowanie
+przynależy ingerować
+korzystają jednostki
+ugruntowanie dobrobytu
+postaciach handel najwyższy
+nieposzanowanie korzystaniu
+podległe
+interesów jak
+dzieciom Ogłasza
+tworzenia ludów Członkowskie
+dyskryminacją głoszenia
+podstawową
+płacy rasowymi imieniu
+zaniechania
+jakiejkolwiek
+grudnia
+które należenia niemu
+którym powiernictwa obszaru
+Oświata kompetentnych zapewniającej
+największych
+byłyby się
+zgodnie
+pracę
+zadowalającego
+przewidziana zdrowie
+zawierania Państwu rasy
+niewolnikiem musiał Nauka
+zasobami rasowymi
+uciekać nikomu własny
+Sesja
+przedstawicieli literackiej
+karać korespondencję pełni
+kultu strony jakiekolwiek
+miejsca prawach
+Nie zadowalających
+cel uwłaczaniu
+będącą wymogom
+społecznej
+rzeczywiście zarówno grudnia
+słowa jest Każdy
+tajności wyborze
+informacji zawodowych
+sposób
+Powszechna nikogo urlopy
+materialnych innego
+ubezpieczenia prywatne udowodni
+dziecko osiągnięciu podstawowych
+prawnej związków obradująca
+byłyby bez tworzenia
+poprzez
+uciskowi środków
+pomocy zmiany lekarską
+narodami
+przestrzeganie skutecznego
+Oświata nędzy
+Państw jak Powszechną
+dla popierania ZGROMADZENIE
+kobiet wygnać
+wymierzać odmawiać olbrzymie
+godności
+płci jej
+prześladowania utrzymania
+uznanie
+zasadności kulturalnym
+urlopy lat
+jedno
+informacji
+korzyści zadowalających
+przynajmniej postanowień
+Członkowskich wszystkie wolności
+Artykuł
+interesów dla stale
+ich uwłaczać
+ich
+tworzenia urlopy jej
+takiej dane
+winy
+ustaniu braterstwa politycznej
+organizacją
+obszaru popiera zadowalającego
+winy dostępne świadczenia
+wymogom wygnać organy
+dopóki
+urlopy
+poprawy nędzy świadczenia
+przynależy
+także
+wymogom
+postępowych życia
+jakiemukolwiek
+postępu
+życie jakikolwiek
+wszędzie różnicy niewinnego
+obowiązki
+sam takim ingerencji
+ludzkiej ludźmi
+tajności dobrodziejstw
+osobowości
+uznawano innego Nikt
+zależności zawarcia
+wszczętego podległe wyższe
+kraju
+publicznej Preambuła
+kompetentnych politycznych
+wyborze dążyły obyczajów
+zobowiązaniach społecznych względem
+człowiek jakimkolwiek
+olbrzymie Państw również
+urzeczywistniania
+wielu
+wyrażoną
+ścigania praktykowanie
+duchu nauki bezpieczeństwa
+członek
+wszczętego niniejszych
+buntu tworzenia stale
+jedynie
+bądź Mają
+studia działalność służebności
+równych
+rzeczywiście krajowych
+podjęły rządzeniu rasowymi
+inny dana Mężczyźni
+którym wyrażoną Mają
+największych
+miejsca różnicy ono
+ingerencji uchwaliła większość
+wyrażania osiągnięć
+sprawiedliwie bezpłatna ograniczony
+które
+publicznego
+prawem stosunków
+przynależy
+przynależy swobodę
+ludzkiej Deklarację
+dostępu strachu dopóty
+pracy zadowalających
+stanowiącym rządu
+demokratycznego
+stopniu uznawania
+podstawowym narażeniem
+równości
+międzynarodowej zatrzymać
+który bezpośrednio osobistych
+przyjaznych każdego
+bądź Małżeństwo ludu
+sumieniem społecznych
+swym postępować
+skończoną
+ludzkości wydawania obdarzeni
+Członkowskich
+rzetelnych interesów
+przyszłych Deklaracja włączając
+Organizacją niezbędnych
+Nikogo
+którego popieranie roku
+nieposzanowanie zadowalającego zapewnienia
+konieczne urodzenia
+osobie czynić
+Krzewi innym
+myśli
+wdowieństwa Preambuła
+moralnych podczas
+wartość własności spokojnego
+ingerencji okrutny
+prywatnie niemu
+należenia aresztować
+najtrwalszych większej techniczna
+Zjednoczone ludu
+PRAW swego
+Państwa
+czynom będącą
+krajowym wiarę
+niniejszą opieki odniesieniu
+przyrodzonej Organizacji języka
+ONZ okrutny
+równej
+narażeniem wyborach
+służby CZŁOWIEKA sumieniem
+odzież miejsca
+obowiązki
+zasadności
+urlopy przed społeczeństwa
+warunków
+jakikolwiek ogłoszono
+obszaru wszystkie postępować
+wiarę
+zaniechania
+1948
+Rodzice podstawowych
+niezależnej tych
+najtrwalszych wspólnoty
+spokojnego jeszcze
+obszaru niż niemu
+pełnoletności rozumem bezstronny
+granicach powszechnego
+procesu wyłącznie
+Matka
+interesów można
+wolno
+życia
+niezbywalnych
+który słowa studia
+innej lekarską można
+roku
+okresowe przez
+politycznej nauki tolerancję
+którym niezbędnych praw
+osobistych Narody poszukiwania
+powiernictwa
+jakiejkolwiek
+osoba ZWAŻYWSZY
+godności
+Mężczyźni wolność
+środki
+jego dobrodziejstw razie
+zadość jakiegokolwiek podjęły
+przyjaźń
+swym aresztować
+swej godność obywatelstwa
+wszystkimi wśród
+komórką najwyższy
+innego zawarte
+krajowych utraty
+skuteczne
+dany tolerancję ograniczeniom
+wdowieństwa
+kultu
+dobrobyt
+służby postępowych
+jednakowe
+prawo
+przystępowania
+opiekę przystępowania
+rzetelnych uwłaczaniu
+jedno takim włączając
+zatrzymać osiągnięcia
+wyrażoną
+dla wyrażoną
+zrozumienie
+wyborze podstawowe
+zdrowie
+Mają
+urlopy
+Sesja zmierzającą
+będą
+przewidziana
+równe zamieszkujących poprawy
+przewidziana pod działalności
+Dokument wyżywienie słusznym
+zatrzymać Rodzice
+działalności
+środków grupie założenia
+swe
+aktów takiej powszechnie
+obejmuje pogwałcenie
+Matka powszechności poruszania
+korespondencję
+stanowi
+członek wypadek
+organizacją sprzeczny przyjaźń
+wdowieństwa zgodą
+przy zatrzymać
+dane podlega
+także
+Organizacją wszelkimi
+prawnej toczy podstawowych
+przedstawicieli pod wyborach
+społecznej Wszystkie
+zgromadzania przeciwko
+obyczajów
+przeciw
+sprzecznego
+między kary
+pospolitego narodów Nie
+pełnoletności zasobami
+publicznej tajności
+przez stopy zawarcia
+małżeńskie uczynienia zmierzających
+różnicy jednakowej narodowy
+zawarcia starości
+wynagrodzenia
+ono
+osiągnięć
+rozpowszechniania
+członków płacy
+narodowy
+każdego jego międzynarodowego
+wyrażania równorzędnej uciekać
+urzeczywistniania
+niewątpliwie
+zapewniono Przetłumaczona dążyły
+innymi oraz
+ubiegać zadość
+zależności każdy
+Artykuł poglądów włączając
+rozumienie roku sumienia
+materialnych jakiemukolwiek
+zmierzającą wyborów
+rozsądne sytuacji
+osiągnięć odpowiedniego dzieciom
+publicznej
+jakiegoś miejsca Przetłumaczona
+ludźmi
+potrzeby wolno pełny
+postępować takim opieki
+społecznych swe uwłaczać
+utraty pospolitego jak
+swe
+jak obyczajów prywatne
+artystycznej przestępstwo
+niemu
+korzystać koloru
+niewolnictwo pod
+nauczania mają trwania
+dana
+uznanie Mężczyźni zawierania
+Każdy obradująca wola
+członek czynić okresowo
+niewątpliwie Rodzina
+społecznej
+swój
+zarówno się
+porządku PRAW żadnym
+domowe konieczne
+wspólny imieniu
+Państwu
+utraty wszelkimi Matka
+kobiet konieczne Sesja
+takiej Nauka
+zdrowie
+interesów utraty odniesieniu
+jej koloru nikogo
+godność
+człowieka postępowych
+aby roku
+procedurze przeprowadzanych korzystania
+czynu
+postępować okresowo
+wyborów Oświata lub
+zakazane dostępne dostępna
+drodze komórką sytuacji
+ludzkiej
+ustalone
+stopy razie literackiej
+kobiety swą prawnej
+nauki Mają
+obrony
+Zgromadzenia
+Deklaracja Ogólnego
+jakąkolwiek
+jego głoszenia Celem
+wolno rodzinie
+zamieszkania
+odzież przepisami
+strony władzy
+dana przyjaźń
+narodami uznanie
+korzystania stosowanie zmuszać
+nikogo dzieci
+publicznie niewolnikiem Zjednoczonych
+odpowiedniego każdego powrócić
+literackiej
+równej zapewniły bezpośrednio
+Matka poszanowania obalenia
+która życiowej
+uwłaczaniu korzystają
+dziecko
+winy
+winy
+publicznego Sesja opieki
+Zgromadzenia zbudowania osiągnięć
+własny
+utraty wspólny
+pozamałżeńskie
+obdarzeni
+każdego
+zmierzających
+płatne opiekę służebności
+socjalne
+pogwałceniem
+współpracę płci stopy
+niezbędnych
+pracę byłyby
+poglądów spokojnego przepisami
+pracę zarówno
+zawarowanie niewinnego
+opieki
+Krzewi Człowieka
+poszukiwania
+dyskryminacją osobie
+Człowieka
+uczynienia postępie
+któregokolwiek Narodów pomocą
+materialnych
+Państw
+niewolnictwo między korzystania
+skuteczne działalności
+komórką Organizacją
+kultu zmuszać
+innego zasobami
+PRZETO Celem Rodzice
+jakimkolwiek olbrzymie równorzędnej
+rozumienie
+zgodnie procesu nie
+ONZ
+dla między byłyby
+wypoczynku słuchanym wyrażoną
+przyrodzonej
+przeciw uroczyście
+grupami najtrwalszych swej
+obejmuje
+płatne samowolnie
+wyborze sąd takim
+Państwa rządzeniu zdecydowanie
+niemożliwy korzystać publicznego
+wybranych sprzeczny
+międzynarodowej
+swoją Mężczyźni
+przestrzeganie
+prawach
+dostępna dostępna działalność
+grupie osoby społecznych
+utraty narodowości
+ugruntowanie wszelkimi ponadto
+wypadek współpracy
+interesów
+pracy udzielającego
+mężczyzn
+świata bezpieczeństwa posiadania
+zgromadzania poprawy obalenia
+pomocy człowiek zawierania
+wartość realizowane
+pracujący
+Przetłumaczona
+publicznej ugruntowanie rodziny
+stosowanie
+celu wyborach moralności
+przystępowania tworzenia
+zbudowania dopóki największych
+zarówno równouprawnienie
+Paryżu tej OGÓLNE
+bezrobociem niepodległy
+zgromadzania prawo
+Wola barbarzyństwa Przetłumaczona
+Deklaracji zapewniającej
+rodzą
+wyborze rozwój
+sprzeczny
+przez ludu zgodnie
+przestępstwa grudnia
+stosunków wielu
+członek
+Krzewi demokratycznego związków
+korzystaniu pospolitego
+braterstwa podstawowa
+Państw wielu oskarżenia
+przestępstwa lub osobistych
+wszystkimi
+Ogólnego traktować
+grupie jakikolwiek
+ONZ przewidziana
+jako niniejszą Członkowskie
+jako
+którym
+popiera indywidualnie uciekać
+Rodzina którym
+jednomyślnie
+inny podstawowa osoby
+rozumieć rozwijania
+założenia kultu
+swych odpowiedniego
+realizowane interesów
+środki może
+popiera
+utrzymania
+ubezpieczenia stosowanie
+gospodarczych
+swego
+uciskowi uprawianie
+nauczania
+inny ZGROMADZENIE duchu
+zasobami powszechnego
+przyszłych posiadania sprawiedliwie
+krajem jakąkolwiek rodzą
+obyczajów prawem
+godzin ostateczności
+któregokolwiek godzin
+nie lub narodów
+starości
+przystępowania
+okresowe wszczętego
+osobistych rodzinne
+rzetelnych któregokolwiek
+trwania
+grupami
+myśli prawa języków
+działalności naukowej Żadnego
+Członkowskie
+bez podstawowym strachu
+CZŁOWIEKA
+również majątku
+wygnać narodowości
+swych demokratycznego
+obdarzeni
+życia zawarowanie Preambuła
+poprawy gospodarczych odpowiednich
+OGÓLNE
+zasobami równych stale
+niezależnej PRZETO
+sądów
+ustaniu ich
+winy niewolnikiem
+wartość odpowiedniego
+pospolitego
+różnicy poszanowania spokojnego
+dzieci moralności
+można krajem
+rozwoju aktów
+można
+dopóki prawa równe
+strony sam słuchanym
+jest tajności opartych
+jeszcze
+dobrobyt Nie
+przed ingerować opartych
+podstawą obradująca małżonków
+oni
+przekonań literackiej
+stopniu zbudowania wola
+poprawy jako
+będą sprawiedliwie
+także Wszyscy największych
+Matka
+przywróciły przepisami
+zasadności
+uchwaliła osiągnięciu
+międzynarodową
+międzynarodowego
+wynikających niewolnikami
+poszanowanie skazany potrzeby
+będącą
+zgodnie skazany kultu
+jednakowej strony nieludzki
+osiągnięciu wyboru rozwijania
+Deklaracja nieludzki świadczenia
+jako oraz być
+uchwaliła demokratycznego ludu
+postaciach życia bezpieczeństwa
+jakąkolwiek moralności między
+urodzenia
+dążyły ograniczony
+obszary
+równouprawnienie
+sam udowodni
+dziecko podjęły
+ludzkości niezależny
+osobowości pomocy odmawiać
+konieczne potrzeby posiada
+zalet zamieszkujących kulturalnych
+wymierzać zdecydowanie CZŁOWIEKA
+procesu konstytucję
+równej
+odpowiadającą
+wszelkimi pamięci opieki
+zalet nieludzki większej
+niezależny
+włączając podległe
+obszaru wszczętego
+pracę zdrowie rozwijania
+honorowi organizacją
+zakazane handel skończoną
+pełnoletności
+powszechności żadnej
+zapewniły
+innego prawem wypoczynku
+Sesja wynagrodzenia
+współpracy uzupełnianego
+niniejszych które toczy
+przy
+swój
+przypadku płacy przestępstwo
+pracujący zadość
+przestępstwa prywatnie jedynie
+wiarę ludzkiej Powszechna
+walkę
+środkami
+jakąkolwiek
+równości środków
+nędzy
+zależności
+będą różnicy stopy
+ubezpieczenia
+życia
+ludów Deklarację
+międzynarodowym rządzeniu udowodni
+politycznej powiernictwa
+Krzewi
+pracy powszechne
+małżeńskie
+swoją realizacji
+opinii małżonków wolność
+głoszenia między jeszcze
+swe
+Deklarację
+postanowień podstawowych porządku
+swych podległe przekonań
+taką zalet którym
+działania niego Rodzina
+jakikolwiek dobrobytu
+religijnymi obywatelstwa
+międzynarodowym małżeństwa obowiązkowa
+nakładać pełni stale
+ingerować niż
+ścigania
+pospolitego zawarcia
+przez granicach uzupełnianego
+stopy dobremu
+podlega poszanowania innych
+przypadku
+grudnia sprawiedliwości
+wdowieństwa
+prawa przestępstwo
+dążyły Państw
+Mają można
+sąd poszanowania
+rodzinie pamięci strachu
+zakazane
+wysiłek naturalną majątku
+wszelkimi obszary
+służebności
+ubezpieczenia prywatne
+zalet
+zapewnienia wysuwanego
+bez obywatelstwa
+przeprowadzanych
+jakiegokolwiek społecznego duchu
+popełnienie powiernictwa jednakowe
+rządu przynajmniej swej
+powszechne popełnienia
+musiał dobrobyt
+wolność
+poszanowanie doprowadzony grupie
+walkę wyrażoną wdowieństwa
+powodu
+przeprowadzanych kulturalnych Człowieka
+niniejszych ugruntowanie
+duchu
+którego Przetłumaczona trwania
+zmierzającą azyl wyznania
+dziecko ustaniu
+ZGROMADZENIE jedynie
+stanowiącym swych
+rodzą kompetentnych OGÓLNE
+osobie wyższej
+zbiera Nie osobie
+wspólny słusznym
+służebności
+wyraża systemowi
+taką
+naukowej ZGROMADZENIE warunków
+przynajmniej stanowi
+Organizacją indywidualnie mają
+stale
+Organizacją egzystencję
+niewolnictwo ograniczony zdecydowanie
+stanowiącego społecznej krajowych
+społecznych
+postępu przez
+zawarte praktykowanie
+jakiegoś prawem
+zasobami równych
+popełnienie
+środkami celu
+człowieka
+swych wyborów
+będą Celem Zjednoczonych
+względem azyl stanowiącym
+słusznym CZŁOWIEKA
+jakiegokolwiek płacy przez
+Organizacji przeciwko sąd
+pracę kultu celami
+niniejszą opiekę
+odwoływania ugruntowanie międzynarodową
+publicznie
+prawo równe niezdolności
+jest
+rozumienie
+względem życiu buntu
+zapewnienia
+życiowej potrzeby
+Celem wdowieństwa ostateczności
+osiągnięć wyborów rodzinne
+inny dzieciom wyżywienie
+ani będą
+ONZ moralności
+stopniu
+jego zrozumienie któregokolwiek
+narodowości pogwałceniem jakiemukolwiek
+któregokolwiek
+wolności
+pomocy postaciach
+jedynie Paryżu
+wyznania
+zbudowania obszar stowarzyszenia
+wspólny braterstwa
+ludzkiej OGÓLNE
+rodzinie
+podjęły prawa
+postępu
+niewolnictwo indywidualnie
+wymogom
+podstawową
+podstawą
+bez
+odmawiać
+włączając dostępne uroczyście
+rządzeniu kobiety
+#
+# Data Statistics:
+#   Number of Unique Words              [700]
+#   Word Length (min/max/avg)           [3 / 17 / 8.32]
+#   Word Count per Phrase (min/max/avg) [1 / 3 / 2.01]
+#   Phrase Length (min/max/avg)         [3 / 46 / 17.74]
+#
