@@ -536,6 +536,43 @@ public abstract class BasicTimeZone extends TimeZone {
     }
 
     /**
+     * Options for {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])}
+     *
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static enum LocalOption {
+        /**
+         * {@icu} The time type option for standard time used by
+         * {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])}
+         * @draft ICU 69
+         * @provisional This API might change or be removed in a future release.
+         */
+        STANDARD,
+        /**
+         * {@icu} The time type option for daylight saving time used by
+         * {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])}
+         * @draft ICU 69
+         * @provisional This API might change or be removed in a future release.
+         */
+        DAYLIGHT,
+        /**
+         * {@icu} The option designate former time to be used by
+         * {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])}
+         * @draft ICU 69
+         * @provisional This API might change or be removed in a future release.
+         */
+        FORMER,
+        /**
+         * {@icu} The option designate latter time to be used by
+         * {@link #getOffsetFromLocal(long, LocalOption, LocalOption, int[])}
+         * @draft ICU 69
+         * @provisional This API might change or be removed in a future release.
+         */
+        LATTER
+    }
+
+    /**
      * {@icu} The time type option for standard time used by
      * {@link #getOffsetFromLocal(long, int, int, int[])}
      * @internal
@@ -590,13 +627,42 @@ public abstract class BasicTimeZone extends TimeZone {
     protected static final int FORMER_LATTER_MASK = 0x0C;
 
     /**
+     * Helper function for the soon to be obsoleted
+     * void getOffsetFromLocal(long, int, int, int[])
+     */
+    static private LocalOption getLocalOption(int option) {
+        switch (option) {
+            case LOCAL_STD:
+                return LocalOption.STANDARD;
+            case LOCAL_DST:
+                return LocalOption.DAYLIGHT;
+            case LOCAL_FORMER:
+                return LocalOption.FORMER;
+            case LOCAL_LATTER:
+                return LocalOption.LATTER;
+            default:
+                throw new IllegalArgumentException("value out of range: " + option);
+        }
+    }
+
+    /**
      * {@icu} Returns time zone offsets from local wall time.
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    @Deprecated
     public void getOffsetFromLocal(long date,
             int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+        getOffsetFromLocal(date, getLocalOption(nonExistingTimeOpt),
+            getLocalOption(duplicatedTimeOpt), offsets);
+    }
+
+    /**
+     * {@icu} Returns time zone offsets from local wall time.
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void getOffsetFromLocal(long date,
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         throw new IllegalStateException("Not implemented");
     }
 

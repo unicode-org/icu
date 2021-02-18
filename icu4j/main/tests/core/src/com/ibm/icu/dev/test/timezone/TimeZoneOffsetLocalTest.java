@@ -188,10 +188,20 @@ public class TimeZoneOffsetLocalTest extends TestFmwk {
         // with nonExistingTimeOpt = LOCAL_STD/duplicatedTimeOpt = LOCAL_STD
         for (int i = 0; i < TESTZONES.length; i++) {
             for (int m = 0; m < MILLIS.length; m++) {
+                // Test the soon-to-be-obsoleted int version.
                 TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
                 if (offsets[0] != OFFSETS2[m][0] || offsets[1] != OFFSETS2[m][1]) {
                     errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
                             + df.format(new Date(MILLIS[m])) + "(wall/STD/STD) - Got: "
+                            + offsets[0] + "/" + offsets[1]
+                            + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
+                }
+
+                // Test the enum version.
+                TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LocalOption.STANDARD, BasicTimeZone.LocalOption.STANDARD, offsets);
+                if (offsets[0] != OFFSETS2[m][0] || offsets[1] != OFFSETS2[m][1]) {
+                    errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
+                            + df.format(new Date(MILLIS[m])) + "(wall/STANDARD/STANDARD) - Got: "
                             + offsets[0] + "/" + offsets[1]
                             + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
                 }
@@ -202,10 +212,20 @@ public class TimeZoneOffsetLocalTest extends TestFmwk {
         // with nonExistingTimeOpt = LOCAL_DST/duplicatedTimeOpt = LOCAL_DST
         for (int i = 0; i < TESTZONES.length; i++) {
             for (int m = 0; m < MILLIS.length; m++) {
+                // Test the soon-to-be-obsoleted int version.
                 TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LOCAL_DST, BasicTimeZone.LOCAL_DST, offsets);
                 if (offsets[0] != OFFSETS3[m][0] || offsets[1] != OFFSETS3[m][1]) {
                     errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
                             + df.format(new Date(MILLIS[m])) + "(wall/DST/DST) - Got: "
+                            + offsets[0] + "/" + offsets[1]
+                            + " Expected: " + OFFSETS3[m][0] + "/" + OFFSETS3[m][1]);
+                }
+
+                // Test the enum version.
+                TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LocalOption.DAYLIGHT, BasicTimeZone.LocalOption.DAYLIGHT, offsets);
+                if (offsets[0] != OFFSETS3[m][0] || offsets[1] != OFFSETS3[m][1]) {
+                    errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
+                            + df.format(new Date(MILLIS[m])) + "(wall/DAYLIGHT/DAYLIGHT) - Got: "
                             + offsets[0] + "/" + offsets[1]
                             + " Expected: " + OFFSETS3[m][0] + "/" + OFFSETS3[m][1]);
                 }
@@ -216,7 +236,17 @@ public class TimeZoneOffsetLocalTest extends TestFmwk {
         // with nonExistingTimeOpt = LOCAL_FORMER/duplicatedTimeOpt = LOCAL_LATTER
         for (int i = 0; i < TESTZONES.length; i++) {
             for (int m = 0; m < MILLIS.length; m++) {
+                // Test the soon-to-be-obsoleted int version.
                 TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LOCAL_FORMER, BasicTimeZone.LOCAL_LATTER, offsets);
+                if (offsets[0] != OFFSETS2[m][0] || offsets[1] != OFFSETS2[m][1]) {
+                    errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
+                            + df.format(new Date(MILLIS[m])) + "(wall/FORMER/LATTER) - Got: "
+                            + offsets[0] + "/" + offsets[1]
+                            + " Expected: " + OFFSETS2[m][0] + "/" + OFFSETS2[m][1]);
+                }
+
+                // Test the enum version.
+                TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LocalOption.FORMER, BasicTimeZone.LocalOption.LATTER, offsets);
                 if (offsets[0] != OFFSETS2[m][0] || offsets[1] != OFFSETS2[m][1]) {
                     errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
                             + df.format(new Date(MILLIS[m])) + "(wall/FORMER/LATTER) - Got: "
@@ -230,7 +260,17 @@ public class TimeZoneOffsetLocalTest extends TestFmwk {
         // with nonExistingTimeOpt = LOCAL_LATTER/duplicatedTimeOpt = LOCAL_FORMER
         for (int i = 0; i < TESTZONES.length; i++) {
             for (int m = 0; m < MILLIS.length; m++) {
+                // Test the soon-to-be-obsoleted int version.
                 TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LOCAL_LATTER, BasicTimeZone.LOCAL_FORMER, offsets);
+                if (offsets[0] != OFFSETS3[m][0] || offsets[1] != OFFSETS3[m][1]) {
+                    errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
+                            + df.format(new Date(MILLIS[m])) + "(wall/LATTER/FORMER) - Got: "
+                            + offsets[0] + "/" + offsets[1]
+                            + " Expected: " + OFFSETS3[m][0] + "/" + OFFSETS3[m][1]);
+                }
+
+                // Test the enum version.
+                TESTZONES[i].getOffsetFromLocal(MILLIS[m], BasicTimeZone.LocalOption.LATTER, BasicTimeZone.LocalOption.FORMER, offsets);
                 if (offsets[0] != OFFSETS3[m][0] || offsets[1] != OFFSETS3[m][1]) {
                     errln("Bad offset returned by " + TESTZONES[i].getID() + " at "
                             + df.format(new Date(MILLIS[m])) + "(wall/LATTER/FORMER) - Got: "

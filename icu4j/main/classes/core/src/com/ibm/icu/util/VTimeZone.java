@@ -98,13 +98,12 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     @Override
     public void getOffsetFromLocal(long date,
-            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         tz.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
     }
 

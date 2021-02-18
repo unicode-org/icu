@@ -2703,10 +2703,10 @@ public class SimpleDateFormat extends DateFormat {
                     if (btz != null) {
                         if (tztype == TimeType.STANDARD) {
                             btz.getOffsetFromLocal(localMillis,
-                                    BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
+                                    BasicTimeZone.LocalOption.STANDARD, BasicTimeZone.LocalOption.STANDARD, offsets);
                         } else {
                             btz.getOffsetFromLocal(localMillis,
-                                    BasicTimeZone.LOCAL_DST, BasicTimeZone.LOCAL_DST, offsets);
+                                    BasicTimeZone.LocalOption.DAYLIGHT, BasicTimeZone.LocalOption.DAYLIGHT, offsets);
                         }
                     } else {
                         // No good way to resolve ambiguous time at transition,

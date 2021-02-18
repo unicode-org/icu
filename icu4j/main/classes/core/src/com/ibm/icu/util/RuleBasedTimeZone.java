@@ -102,7 +102,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         }
         long time = Grego.fieldsToDay(year, month, day) * Grego.MILLIS_PER_DAY + milliseconds;
         int[] offsets = new int[2];
-        getOffset(time, true, LOCAL_DST, LOCAL_STD, offsets);
+        getOffset(time, true, LocalOption.DAYLIGHT, LocalOption.STANDARD, offsets);
         return (offsets[0] + offsets[1]);
     }
 
@@ -113,18 +113,17 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      */
     @Override
     public void getOffset(long time, boolean local, int[] offsets) {
-        getOffset(time, local, LOCAL_FORMER, LOCAL_LATTER, offsets);
+        getOffset(time, local, LocalOption.FORMER, LocalOption.LATTER, offsets);
     }
 
     /**
      * {@inheritDoc}
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     @Override
     public void getOffsetFromLocal(long date,
-            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         getOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
     }
     
@@ -613,7 +612,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
     /*
      * getOffset internal implementation
      */
-    private void getOffset(long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
+    private void getOffset(long time, boolean local, LocalOption NonExistingTimeOpt, LocalOption DuplicatedTimeOpt, int[] offsets) {
         complete();
         TimeZoneRule rule = null;
         if (historicTransitions == null) {
@@ -656,7 +655,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
     /*
      * Find a time zone rule applicable to the specified time
      */
-    private TimeZoneRule findRuleInFinal(long time, boolean local, int NonExistingTimeOpt, int DuplicatedTimeOpt) {
+    private TimeZoneRule findRuleInFinal(long time, boolean local, LocalOption NonExistingTimeOpt, LocalOption DuplicatedTimeOpt) {
         if (finalRules == null || finalRules.length != 2 || finalRules[0] == null || finalRules[1] == null) {
             return null;
         }
@@ -700,7 +699,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * Get the transition time in local wall clock
      */
     private static long getTransitionTime(TimeZoneTransition tzt, boolean local,
-            int NonExistingTimeOpt, int DuplicatedTimeOpt) {
+            LocalOption NonExistingTimeOpt, LocalOption DuplicatedTimeOpt) {
         long time = tzt.getTime();
         if (local) {
             time += getLocalDelta(tzt.getFrom().getRawOffset(), tzt.getFrom().getDSTSavings(),
@@ -714,7 +713,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * Returns amount of local time adjustment used for checking rule transitions
      */
     private static int getLocalDelta(int rawBefore, int dstBefore, int rawAfter, int dstAfter,
-            int NonExistingTimeOpt, int DuplicatedTimeOpt) {
+            LocalOption NonExistingTimeOpt, LocalOption DuplicatedTimeOpt) {
         int delta = 0;
 
         int offsetBefore = rawBefore + dstBefore;
@@ -725,13 +724,13 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
         if (offsetAfter - offsetBefore >= 0) {
             // Positive transition, which makes a non-existing local time range
-            if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+            if (((NonExistingTimeOpt == LocalOption.STANDARD) && dstToStd)
+                    || ((NonExistingTimeOpt == LocalOption.DAYLIGHT) && stdToDst)) {
                 delta = offsetBefore;
-            } else if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+            } else if (((NonExistingTimeOpt == LocalOption.STANDARD) && stdToDst)
+                    || ((NonExistingTimeOpt == LocalOption.DAYLIGHT) && dstToStd)) {
                 delta = offsetAfter;
-            } else if ((NonExistingTimeOpt & FORMER_LATTER_MASK) == LOCAL_LATTER) {
+            } else if (NonExistingTimeOpt == LocalOption.LATTER) {
                 delta = offsetBefore;
             } else {
                 // Interprets the time with rule before the transition,
@@ -740,13 +739,13 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             }
         } else {
             // Negative transition, which makes a duplicated local time range
-            if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+            if (((DuplicatedTimeOpt == LocalOption.STANDARD) && dstToStd)
+                    || ((DuplicatedTimeOpt == LocalOption.DAYLIGHT) && stdToDst)) {
                 delta = offsetAfter;
-            } else if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+            } else if (((DuplicatedTimeOpt == LocalOption.STANDARD) && stdToDst)
+                    || ((DuplicatedTimeOpt == LocalOption.DAYLIGHT) && dstToStd)) {
                 delta = offsetBefore;
-            } else if ((DuplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
+            } else if (DuplicatedTimeOpt == LocalOption.FORMER) {
                 delta = offsetBefore;
             } else {
                 // Interprets the time with rule after the transition,

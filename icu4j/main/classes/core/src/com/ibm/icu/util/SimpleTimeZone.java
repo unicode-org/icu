@@ -790,13 +790,13 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
-    @Deprecated
     public void getOffsetFromLocal(long date,
-            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
+
         offsets[0] = getRawOffset();
         int fields[] = new int[6];
         Grego.timeToFields(date, fields);
@@ -808,16 +808,14 @@ public class SimpleTimeZone extends BasicTimeZone {
 
         // Now, we need some adjustment
         if (offsets[1] > 0) {
-            if ((nonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD
-                || (nonExistingTimeOpt & STD_DST_MASK) != LOCAL_DST
-                && (nonExistingTimeOpt & FORMER_LATTER_MASK) != LOCAL_LATTER) {
+            if (nonExistingTimeOpt == LocalOption.STANDARD
+                || nonExistingTimeOpt == LocalOption.FORMER) {
                 date -= getDSTSavings();
                 recalc = true;
             }
         } else {
-            if ((duplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST
-                || (duplicatedTimeOpt & STD_DST_MASK) != LOCAL_STD
-                && (duplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
+            if (duplicatedTimeOpt == LocalOption.DAYLIGHT
+                || duplicatedTimeOpt == LocalOption.FORMER) {
                 date -= getDSTSavings();
                 recalc = true;
             }

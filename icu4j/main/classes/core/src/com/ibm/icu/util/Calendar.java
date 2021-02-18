@@ -5725,8 +5725,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         int[] offsets = new int[2];
         long wall = millis + millisInDay;
         if (zone instanceof BasicTimeZone) {
-            int duplicatedTimeOpt = (repeatedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LOCAL_FORMER : BasicTimeZone.LOCAL_LATTER;
-            int nonExistingTimeOpt = (skippedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LOCAL_LATTER : BasicTimeZone.LOCAL_FORMER;
+            BasicTimeZone.LocalOption duplicatedTimeOpt = (repeatedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LocalOption.FORMER : BasicTimeZone.LocalOption.LATTER;
+            BasicTimeZone.LocalOption nonExistingTimeOpt = (skippedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LocalOption.LATTER : BasicTimeZone.LocalOption.FORMER;
             ((BasicTimeZone)zone).getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         } else {
             // By default, TimeZone#getOffset behaves WALLTIME_LAST for both.
@@ -5778,8 +5778,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         int[] offsets = new int[2];
         long wall = millis + millisInDay;
         if (zone instanceof BasicTimeZone) {
-            int duplicatedTimeOpt = (repeatedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LOCAL_FORMER : BasicTimeZone.LOCAL_LATTER;
-            int nonExistingTimeOpt = (skippedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LOCAL_LATTER : BasicTimeZone.LOCAL_FORMER;
+            BasicTimeZone.LocalOption duplicatedTimeOpt = (repeatedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LocalOption.FORMER : BasicTimeZone.LocalOption.LATTER;
+            BasicTimeZone.LocalOption nonExistingTimeOpt = (skippedWallTime == WALLTIME_FIRST) ? BasicTimeZone.LocalOption.LATTER : BasicTimeZone.LocalOption.FORMER;
             ((BasicTimeZone)zone).getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         } else {
             // By default, TimeZone#getOffset behaves WALLTIME_LAST for both.

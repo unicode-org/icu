@@ -162,7 +162,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         long time = Grego.fieldsToDay(year, month, dom) * Grego.MILLIS_PER_DAY + millis;
 
         int[] offsets = new int[2];
-        getHistoricalOffset(time, true, LOCAL_DST, LOCAL_STD, offsets);
+        getHistoricalOffset(time, true, LocalOption.DAYLIGHT, LocalOption.STANDARD, offsets);
         return offsets[0] + offsets[1];
     }
 
@@ -271,7 +271,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             finalZone.getOffset(date, local, offsets);
         } else {
             getHistoricalOffset(date, local,
-                    LOCAL_FORMER, LOCAL_LATTER, offsets);
+                    LocalOption.FORMER, LocalOption.LATTER, offsets);
         }
     }
 
@@ -280,7 +280,7 @@ public class OlsonTimeZone extends BasicTimeZone {
      */
     @Override
     public void getOffsetFromLocal(long date,
-            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         if (finalZone != null && date >= finalStartMillis) {
             finalZone.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         } else {
@@ -673,7 +673,7 @@ public class OlsonTimeZone extends BasicTimeZone {
     private static final int MAX_OFFSET_SECONDS = 86400; // 60 * 60 * 24;
 
     private void getHistoricalOffset(long date, boolean local,
-            int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
+            LocalOption NonExistingTimeOpt, LocalOption DuplicatedTimeOpt, int[] offsets) {
         if (transitionCount != 0) {
             long sec = Grego.floorDivide(date, Grego.MILLIS_PER_SECOND);
             if (!local && sec < transitionTimes64[0]) {
@@ -698,13 +698,13 @@ public class OlsonTimeZone extends BasicTimeZone {
 
                         if (offsetAfter - offsetBefore >= 0) {
                             // Positive transition, which makes a non-existing local time range
-                            if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                            if (((NonExistingTimeOpt == LocalOption.STANDARD) && dstToStd)
+                                    || ((NonExistingTimeOpt == LocalOption.DAYLIGHT) && stdToDst)) {
                                 transition += offsetBefore;
-                            } else if (((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                                    || ((NonExistingTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                            } else if (((NonExistingTimeOpt == LocalOption.STANDARD) && stdToDst)
+                                    || ((NonExistingTimeOpt == LocalOption.DAYLIGHT) && dstToStd)) {
                                 transition += offsetAfter;
-                            } else if ((NonExistingTimeOpt & FORMER_LATTER_MASK) == LOCAL_LATTER) {
+                            } else if (NonExistingTimeOpt == LocalOption.LATTER) {
                                 transition += offsetBefore;
                             } else {
                                 // Interprets the time with rule before the transition,
@@ -713,13 +713,13 @@ public class OlsonTimeZone extends BasicTimeZone {
                             }
                         } else {
                             // Negative transition, which makes a duplicated local time range
-                            if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && dstToStd)
-                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && stdToDst)) {
+                            if (((DuplicatedTimeOpt == LocalOption.STANDARD) && dstToStd)
+                                    || ((DuplicatedTimeOpt == LocalOption.DAYLIGHT) && stdToDst)) {
                                 transition += offsetAfter;
-                            } else if (((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_STD && stdToDst)
-                                    || ((DuplicatedTimeOpt & STD_DST_MASK) == LOCAL_DST && dstToStd)) {
+                            } else if (((DuplicatedTimeOpt == LocalOption.STANDARD) && stdToDst)
+                                    || ((DuplicatedTimeOpt == LocalOption.DAYLIGHT) && dstToStd)) {
                                 transition += offsetBefore;
-                            } else if ((DuplicatedTimeOpt & FORMER_LATTER_MASK) == LOCAL_FORMER) {
+                            } else if (DuplicatedTimeOpt == LocalOption.FORMER) {
                                 transition += offsetBefore;
                             } else {
                                 // Interprets the time with rule after the transition,
