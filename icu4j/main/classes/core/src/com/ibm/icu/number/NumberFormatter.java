@@ -9,8 +9,9 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
 /**
- * The main entrypoint to the localized number formatting library introduced in ICU 60. Basic usage
- * examples:
+ * All-in-one formatter for localized numbers, currencies, and units.
+ *
+ * For a full list of options, see {@link NumberFormatterSettings}.
  *
  * <pre>
  * // Most basic usage:
@@ -457,6 +458,9 @@ public final class NumberFormatter {
     /**
      * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
      * on a given number skeleton string.
+     *
+     * For more information on number skeleton strings, see:
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
      *
      * @param skeleton
      *            The skeleton string off of which to base this NumberFormatter.

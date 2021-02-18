@@ -692,6 +692,12 @@ unum_formatDecimal(    const    UNumberFormat*  fmt,
 /**
  * Format a double currency amount using a UNumberFormat.
  * The double will be formatted according to the UNumberFormat's locale.
+ *
+ * To format an exact decimal value with a currency, use
+ * `unum_setTextAttribute(UNUM_CURRENCY_CODE, ...)` followed by unum_formatDecimal.
+ * Your UNumberFormat must be created with the UNUM_CURRENCY style. Alternatively,
+ * consider using unumf_openForSkeletonAndLocale.
+ *
  * @param fmt the formatter to use
  * @param number the number to format
  * @param currency the 3-letter null-terminated ISO 4217 currency code

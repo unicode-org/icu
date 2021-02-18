@@ -13,7 +13,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 # Formatting Numbers
 
 Since ICU 60, the recommended mechanism for formatting numbers is 
-[`NumberFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/numberformatter_8h.html)
+[`NumberFormatter`](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/numberformatter_8h.html#details)
 ([Java](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/number/NumberFormatter.html)).  `NumberFormatter` supports the formatting of:
 
 - Decimal Formatting

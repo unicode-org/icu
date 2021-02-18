@@ -449,6 +449,9 @@ typedef struct UFormattedNumber UFormattedNumber;
  * For more details on skeleton strings, see the documentation in numberformatter.h. For more details on
  * the usage of this API, see the documentation at the top of unumberformatter.h.
  *
+ * For more information on number skeleton strings, see:
+ * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
+ *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @param skeleton The skeleton string, like u"percent precision-integer"
@@ -465,6 +468,9 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
 /**
  * Like unumf_openForSkeletonAndLocale, but accepts a UParseError, which will be populated with the
  * location of a skeleton syntax error if such a syntax error exists.
+ *
+ * For more information on number skeleton strings, see:
+ * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
  *
  * @param skeleton The skeleton string, like u"percent precision-integer"
  * @param skeletonLen The number of UChars in the skeleton string, or -1 if it is NUL-terminated.

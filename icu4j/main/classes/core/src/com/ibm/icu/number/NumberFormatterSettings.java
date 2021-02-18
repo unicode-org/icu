@@ -592,6 +592,9 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * <p>
      * The returned skeleton is in normalized form, such that two number formatters with equivalent
      * behavior should produce the same skeleton.
+     * <p>
+     * For more information on number skeleton strings, see:
+     * https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html
      *
      * @return A number skeleton string with behavior corresponding to this number formatter.
      * @throws UnsupportedOperationException
