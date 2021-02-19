@@ -201,6 +201,14 @@ ant copy-cldr-testdata
 # and add the following line to the beginning of these two files
 # # File copied from cldr common/testData/localeIdentifiers/localeCanonicalization.txt
 
+# 4e. Temporary fix until ICU-21496 is addressed: Need to remove bogus content.
+cd $ICU4C_DIR/source/data
+open rbnf/nb.txt
+# Edit to remove bogus content leaving just the following after header comments, then save:
+nb{
+    %%Parent{"no"}
+}
+
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the
 # list seems reasonable.

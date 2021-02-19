@@ -1325,23 +1325,11 @@ sr_Latn{
                 one{"{0} cm"}
                 other{"{0} cm"}
             }
-            fathom{
-                dnam{"hv"}
-                few{"{0} fth"}
-                one{"{0} fth"}
-                other{"{0} fth"}
-            }
             foot{
                 dnam{"ft"}
                 few{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
-            }
-            furlong{
-                dnam{"furlonzi"}
-                few{"{0} fur"}
-                one{"{0} fur"}
-                other{"{0} fur"}
             }
             inch{
                 few{"{0} inča"}
@@ -2023,7 +2011,6 @@ sr_Latn{
                 dnam{"hv"}
                 few{"{0} fth"}
                 one{"{0} fth"}
-                other{"{0} fth"}
             }
             foot{
                 dnam{"ft"}
@@ -2035,8 +2022,6 @@ sr_Latn{
             furlong{
                 dnam{"furlonzi"}
                 few{"{0} fur"}
-                one{"{0} fur"}
-                other{"{0} fur"}
             }
             inch{
                 dnam{"inči"}

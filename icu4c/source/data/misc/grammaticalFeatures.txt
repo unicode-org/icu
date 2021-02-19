@@ -334,6 +334,28 @@ grammaticalFeatures:table(nofallback){
                     }
                 }
             }
+            fi{
+                nominal{
+                    case{
+                        _{
+                            "nominative",
+                            "abessive",
+                            "ablative",
+                            "adessive",
+                            "allative",
+                            "comitative",
+                            "elative",
+                            "essive",
+                            "genitive",
+                            "illative",
+                            "inessive",
+                            "instrumental",
+                            "partitive",
+                            "translative",
+                        }
+                    }
+                }
+            }
             fr{
                 nominal{
                     gender{
