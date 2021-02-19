@@ -64,14 +64,32 @@ public class ComplexUnitsConverter {
      * Constructs <code>ComplexUnitsConverter</code> NOTE: - inputUnit and outputUnits must be under the same category -
      * e.g. meter to feet and inches --> all of them are length units.
      *
-     * @param targetUnit
+     * @param inputUnitIdentifier
+     *              represents the source unit identifier. (should be single or compound unit).
+     * @param outputUnitsIdentifier
+     *              represents the output unit identifier. could be any type. (single, compound or mixed).
+     */
+    public ComplexUnitsConverter(String inputUnitIdentifier, String outputUnitsIdentifier) {
+        this(
+                MeasureUnitImpl.forIdentifier(inputUnitIdentifier),
+                MeasureUnitImpl.forIdentifier(outputUnitsIdentifier),
+                new ConversionRates()
+        );
+    }
+
+    /**
+     * Constructs <code>ComplexUnitsConverter</code> NOTE: - inputUnit and outputUnits must be under the same category -
+     * e.g. meter to feet and inches --> all of them are length units.
+     *
+     * @param inputUnit
      *            represents the source unit. (should be single or compound unit).
      * @param outputUnits
      *            represents the output unit. could be any type. (single, compound or mixed).
+     * @param conversionRates
      */
-    public ComplexUnitsConverter(MeasureUnitImpl targetUnit, MeasureUnitImpl outputUnits,
+    public ComplexUnitsConverter(MeasureUnitImpl inputUnit, MeasureUnitImpl outputUnits,
             ConversionRates conversionRates) {
-        this.inputUnit_ = targetUnit;
+        this.inputUnit_ = inputUnit;
         this.units_ = outputUnits.extractIndividualUnitsWithIndices();
         assert (!this.units_.isEmpty());
 

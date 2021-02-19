@@ -42,7 +42,22 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &targetUnit,
             return;
         }
     }
+
     this->init(*biggestUnit, ratesInfo, status);
+}
+
+ComplexUnitsConverter::ComplexUnitsConverter(StringPiece inputUnitIdentifier,
+                                             StringPiece outputUnitsIdentifier, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    MeasureUnitImpl inputUnit = MeasureUnitImpl::forIdentifier(inputUnitIdentifier, status);
+    MeasureUnitImpl outputUnits = MeasureUnitImpl::forIdentifier(outputUnitsIdentifier, status);
+
+    this->units_ = outputUnits.extractIndividualUnitsWithIndices(status);
+    U_ASSERT(units_.length() != 0);
+
+    this->init(inputUnit, ConversionRates(status), status);
 }
 
 ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &inputUnit,

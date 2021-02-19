@@ -52,14 +52,15 @@ class U_I18N_API ComplexUnitsConverter : public UMemory {
      * Constructs `ComplexUnitsConverter` for an `targetUnit` that could be Single, Compound or Mixed.
      * In case of:
      * 1- Single and Compound units,
-     * the conversion will not perform anything, the input will be equal to the output.
+     *    the conversion will not perform anything, the input will be equal to the output.
      * 2- Mixed Unit
-     * the conversion will consider the input is the biggest unit. And will convert it to be spread
-     * through the target units. For example: if target unit is "inch-and-foot", and the input is 2.5. The
-     * converter will consider the input value in "foot", because foot is the biggest unit. Then, it
-     * will convert 2.5 feet to "inch-and-foot".
+     *    the conversion will consider the input is the biggest unit. And will convert it to be spread
+     *    through the target units. For example: if target unit is "inch-and-foot", and the input is 2.5.
+     *    The converter will consider the input value in "foot", because foot is the biggest unit.
+     *    Then, it will convert 2.5 feet to "inch-and-foot".
      *
-     * @param targetUnit could be any type. (single, compound or mixed).
+     * @param targetUnit could be any units type (single, compound or mixed).
+     * @param ratesInfo
      * @param status
      */
     ComplexUnitsConverter(const MeasureUnitImpl &targetUnit, const ConversionRates &ratesInfo,
@@ -72,6 +73,20 @@ class U_I18N_API ComplexUnitsConverter : public UMemory {
      *
      * @param inputUnit represents the source unit. (should be single or compound unit).
      * @param outputUnits represents the output unit. could be any type. (single, compound or mixed).
+     * @param status
+     */
+    ComplexUnitsConverter(StringPiece inputUnitIdentifier, StringPiece outputUnitsIdentifier,
+                          UErrorCode &status);
+
+    /**
+     * Constructor of `ComplexUnitsConverter`.
+     * NOTE:
+     *   - inputUnit and outputUnits must be under the same category
+     *      - e.g. meter to feet and inches --> all of them are length units.
+     *
+     * @param inputUnit represents the source unit. (should be single or compound unit).
+     * @param outputUnits represents the output unit. could be any type. (single, compound or mixed).
+     * @param ratesInfo
      * @param status
      */
     ComplexUnitsConverter(const MeasureUnitImpl &inputUnit, const MeasureUnitImpl &outputUnits,
