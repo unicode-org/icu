@@ -361,14 +361,14 @@ public class UnitsTest {
     @Test
     public void testConverter() {
         class TestData {
-            MeasureUnitImpl source;
-            MeasureUnitImpl target;
-            BigDecimal input;
-            BigDecimal expected;
+            final String sourceIdentifier;
+            final String targetIdentifier;
+            final BigDecimal input;
+            final BigDecimal expected;
 
-            TestData(String source, String target, double input, double expected) {
-                this.source = MeasureUnitImpl.UnitsParser.parseForIdentifier(source);
-                this.target = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
+            TestData(String sourceIdentifier, String targetIdentifier, double input, double expected) {
+                this.sourceIdentifier = sourceIdentifier;
+                this.targetIdentifier = targetIdentifier;
                 this.input = BigDecimal.valueOf(input);
                 this.expected = BigDecimal.valueOf(expected);
             }
@@ -430,23 +430,48 @@ public class UnitsTest {
 
         ConversionRates conversionRates = new ConversionRates();
         for (TestData test : tests) {
-            UnitsConverter converter = new UnitsConverter(test.source, test.target, conversionRates);
+            MeasureUnitImpl source = MeasureUnitImpl.forIdentifier(test.sourceIdentifier);
+            MeasureUnitImpl target = MeasureUnitImpl.forIdentifier(test.targetIdentifier);
+
+            UnitsConverter converter = new UnitsConverter(source, target, conversionRates);
 
             double maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
             if (test.expected.doubleValue() == 0) {
                 maxDelta = 1e-12;
             }
-            assertEquals("testConverter: " + test.source + " to " + test.target,
-                         test.expected.doubleValue(), converter.convert(test.input).doubleValue(),
-                         maxDelta);
+            assertEquals("testConverter: " + test.sourceIdentifier + " to " + test.targetIdentifier,
+                    test.expected.doubleValue(), converter.convert(test.input).doubleValue(),
+                    maxDelta);
 
             maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
             if (test.input.doubleValue() == 0) {
                 maxDelta = 1e-12;
             }
-            assertEquals("testConverter inverse: " + test.target + " back to " + test.source,
-                         test.input.doubleValue(), converter.convertInverse(test.expected).doubleValue(),
-                         maxDelta);
+            assertEquals(
+                    "testConverter inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
+                    test.input.doubleValue(), converter.convertInverse(test.expected).doubleValue(),
+                    maxDelta);
+
+
+            // TODO: Test UnitsConverter created using CLDR separately.
+            // Test UnitsConverter created by CLDR unit identifiers
+            UnitsConverter converter2 = new UnitsConverter(test.sourceIdentifier, test.targetIdentifier);
+
+            maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
+            if (test.expected.doubleValue() == 0) {
+                maxDelta = 1e-12;
+            }
+            assertEquals("testConverter2: " + test.sourceIdentifier + " to " + test.targetIdentifier,
+                    test.expected.doubleValue(), converter2.convert(test.input).doubleValue(),
+                    maxDelta);
+
+            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
+            if (test.input.doubleValue() == 0) {
+                maxDelta = 1e-12;
+            }
+            assertEquals("testConverter2 inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
+                    test.input.doubleValue(), converter2.convertInverse(test.expected).doubleValue(),
+                    maxDelta);
         }
     }
 

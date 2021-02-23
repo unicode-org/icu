@@ -490,15 +490,36 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
 }
 
 UnitsConverter::UnitsConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
-                             const ConversionRates &ratesInfo, UErrorCode &status)
+                               const ConversionRates &ratesInfo, UErrorCode &status)
     : conversionRate_(source.copy(status), target.copy(status)) {
-    if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
-        target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+    this->init(ratesInfo, status);
+}
+
+UnitsConverter::UnitsConverter(StringPiece sourceIdentifier, StringPiece targetIdentifier,
+                               UErrorCode &status)
+    : conversionRate_(MeasureUnitImpl::forIdentifier(sourceIdentifier, status),
+                      MeasureUnitImpl::forIdentifier(targetIdentifier, status)) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    ConversionRates ratesInfo(status);
+    this->init(ratesInfo, status);
+}
+
+void UnitsConverter::init(const ConversionRates &ratesInfo, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (this->conversionRate_.source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        this->conversionRate_.target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    Convertibility unitsState = extractConvertibility(source, target, ratesInfo, status);
+    Convertibility unitsState = extractConvertibility(this->conversionRate_.source,
+                                                      this->conversionRate_.target, ratesInfo, status);
     if (U_FAILURE(status)) return;
     if (unitsState == Convertibility::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;
@@ -507,11 +528,12 @@ UnitsConverter::UnitsConverter(const MeasureUnitImpl &source, const MeasureUnitI
 
     loadConversionRate(conversionRate_, conversionRate_.source, conversionRate_.target, unitsState,
                        ratesInfo, status);
+                          
 }
 
 int32_t UnitsConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
-                                       const MeasureUnitImpl &secondUnit,
-                                       const ConversionRates &ratesInfo, UErrorCode &status) {
+                                        const MeasureUnitImpl &secondUnit,
+                                        const ConversionRates &ratesInfo, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -532,8 +554,9 @@ int32_t UnitsConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
         return 0;
     }
 
-    // Represents the conversion factor from the firstUnit to the base unit that specified in the
-    // conversion data which is considered as the root of the firstUnit and the secondUnit.
+    // Represents the conversion factor from the firstUnit to the base
+    // unit that specified in the conversion data which is considered as
+    // the root of the firstUnit and the secondUnit.
     Factor firstUnitToBase = loadCompoundFactor(firstUnit, ratesInfo, status);
     Factor secondUnitToBase = loadCompoundFactor(secondUnit, ratesInfo, status);
 

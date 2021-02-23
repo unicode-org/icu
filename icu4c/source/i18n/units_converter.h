@@ -150,6 +150,20 @@ class U_I18N_API UnitsConverter : public UMemory {
      * NOTE:
      *   - source and target must be under the same category
      *      - e.g. meter to mile --> both of them are length units.
+     * NOTE:
+     *    This constructor creates an instance of `ConversionRates` internally.
+     *
+     * @param sourceIdentifier represents the source unit identifier.
+     * @param targetIdentifier represents the target unit identifier.
+     * @param status
+     */
+    UnitsConverter(StringPiece sourceIdentifier, StringPiece targetIdentifier, UErrorCode &status);
+
+    /**
+     * Constructor of `UnitConverter`.
+     * NOTE:
+     *   - source and target must be under the same category
+     *      - e.g. meter to mile --> both of them are length units.
      *
      * @param source represents the source unit.
      * @param target represents the target unit.
@@ -191,6 +205,11 @@ class U_I18N_API UnitsConverter : public UMemory {
 
   private:
     ConversionRate conversionRate_;
+
+    /**
+     * Initialises the object.
+     */ 
+    void init(const ConversionRates &ratesInfo, UErrorCode &status);
 };
 
 } // namespace units
