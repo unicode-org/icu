@@ -21,6 +21,26 @@ public class UnitsConverter {
      * NOTE:
      * - source and target must be under the same category
      * - e.g. meter to mile --> both of them are length units.
+     * <p>
+     * NOTE:
+     * This constructor creates an instance of <code>UnitsConverter</code> internally.
+     *
+     * @param sourceIdentifier represents the source unit identifier.
+     * @param targetIdentifier represents the target unit identifier.
+     */
+    public UnitsConverter(String sourceIdentifier, String targetIdentifier) {
+        this(
+                MeasureUnitImpl.forIdentifier(sourceIdentifier),
+                MeasureUnitImpl.forIdentifier(targetIdentifier),
+                new ConversionRates()
+        );
+    }
+
+    /**
+     * Constructor of <code>UnitsConverter</code>.
+     * NOTE:
+     * - source and target must be under the same category
+     * - e.g. meter to mile --> both of them are length units.
      *
      * @param source          represents the source unit.
      * @param target          represents the target unit.

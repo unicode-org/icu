@@ -363,6 +363,30 @@ void UnitsTest::testConverter() {
         assertEqualsNear(
             UnicodeString("testConverter inverse: ") + testCase.target + " back to " + testCase.source,
             testCase.inputValue, converter.convertInverse(testCase.expectedValue), maxDelta);
+
+
+        // TODO: Test UnitsConverter created using CLDR separately.
+        // Test UnitsConverter created by CLDR unit identifiers
+        UnitsConverter converter2(testCase.source, testCase.target, status);
+        if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", testCase.source,
+                                        testCase.target)) {
+            continue;
+        }
+
+        maxDelta = 1e-6 * uprv_fabs(testCase.expectedValue);
+        if (testCase.expectedValue == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(UnicodeString("testConverter2: ") + testCase.source + " to " + testCase.target,
+                         testCase.expectedValue, converter2.convert(testCase.inputValue), maxDelta);
+
+        maxDelta = 1e-6 * uprv_fabs(testCase.inputValue);
+        if (testCase.inputValue == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(
+            UnicodeString("testConverter2 inverse: ") + testCase.target + " back to " + testCase.source,
+            testCase.inputValue, converter2.convertInverse(testCase.expectedValue), maxDelta);
     }
 }
 
