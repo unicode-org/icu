@@ -43,8 +43,23 @@ Precision UnitsRouter::parseSkeletonToPrecision(icu::UnicodeString precisionSkel
     return result;
 }
 
-UnitsRouter::UnitsRouter(MeasureUnit inputUnit, StringPiece region, StringPiece usage,
+UnitsRouter::UnitsRouter(StringPiece inputUnitIdentifier, StringPiece region, StringPiece usage,
                          UErrorCode &status) {
+    this->init(MeasureUnit::forIdentifier(inputUnitIdentifier, status), region, usage, status);
+}
+
+UnitsRouter::UnitsRouter(const MeasureUnit &inputUnit, StringPiece region, StringPiece usage,
+                         UErrorCode &status) {
+    this->init(std::move(inputUnit), region, usage, status);
+}
+
+void UnitsRouter::init(const MeasureUnit &inputUnit, StringPiece region, StringPiece usage,
+                       UErrorCode &status) {
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     // TODO: do we want to pass in ConversionRates and UnitPreferences instead
     // of loading in each UnitsRouter instance? (Or make global?)
     ConversionRates conversionRates(status);

@@ -964,6 +964,35 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     }
     // TODO: revisit this experimentally chosen precision:
     checkOutput(unitsTest, msg.data(), expected, routeResult.measures, 0.0000000001);
+
+    // Test UnitsRouter created with CLDR units identifiers.
+    CharString inputUnitIdentifier(inputUnit, status);
+    UnitsRouter router2(inputUnitIdentifier.data(), region, usage, status);
+    if (status.errIfFailureAndReset("UnitsRouter2(<%s>, \"%.*s\", \"%.*s\", status)",
+                                    inputUnitIdentifier.data(), region.length(), region.data(),
+                                    usage.length(), usage.data())) {
+        return;
+    }
+
+    CharString msg2(quantity, status);
+    msg2.append(" ", status);
+    msg2.append(usage, status);
+    msg2.append(" ", status);
+    msg2.append(region, status);
+    msg2.append(" ", status);
+    msg2.append(inputD, status);
+    msg2.append(" ", status);
+    msg2.append(inputUnitIdentifier.data(), status);
+    if (status.errIfFailureAndReset("Failure before router2.route")) {
+        return;
+    }
+
+    RouteResult routeResult2 = router2.route(inputAmount, nullptr, status);
+    if (status.errIfFailureAndReset("router2.route(inputAmount, ...)")) {
+        return;
+    }
+    // TODO: revisit this experimentally chosen precision:
+    checkOutput(unitsTest, msg2.data(), expected, routeResult.measures, 0.0000000001);
 }
 
 /**

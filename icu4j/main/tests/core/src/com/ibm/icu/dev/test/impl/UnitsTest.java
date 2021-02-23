@@ -646,8 +646,7 @@ public class UnitsTest {
             }
         }
 
-        for (TestCase testCase :
-                tests) {
+        for (TestCase testCase : tests) {
             UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.region, testCase.usage);
             List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
 
@@ -661,10 +660,32 @@ public class UnitsTest {
                 if (!UnitsTest
                         .compareTwoBigDecimal(testCase.expectedInOrder.get(i),
                                 BigDecimal.valueOf(measures.get(i).getNumber().doubleValue()),
-                                BigDecimal.valueOf(0.00001))) {
+                                BigDecimal.valueOf(0.0000000001))) {
                     fail("Test failed: " + testCase + "; Got unexpected result: " + measures);
                 }
             }
         }
+
+        // Test UnitsRouter created with CLDR units identifiers.
+        for (TestCase testCase : tests) {
+            UnitsRouter router = new UnitsRouter(testCase.inputUnit.first, testCase.region, testCase.usage);
+            List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
+
+            assertEquals("Measures size must be the same as expected units",
+                    measures.size(), testCase.expectedInOrder.size());
+            assertEquals("Measures size must be the same as output units",
+                    measures.size(), testCase.outputUnitInOrder.size());
+
+
+            for (int i = 0; i < measures.size(); i++) {
+                if (!UnitsTest
+                        .compareTwoBigDecimal(testCase.expectedInOrder.get(i),
+                                BigDecimal.valueOf(measures.get(i).getNumber().doubleValue()),
+                                BigDecimal.valueOf(0.0000000001))) {
+                    fail("Test failed: " + testCase + "; Got unexpected result: " + measures);
+                }
+            }
+        }
+
     }
 }
