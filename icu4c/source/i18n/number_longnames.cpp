@@ -265,7 +265,8 @@ class InflectedPluralSink : public ResourceSink {
                 continue;
             }
             ResourceTable genderTable = value.getTable(status);
-            if (loadForPluralForm(genderTable, value, status)) {
+            ResourceTable caseTable; // This instance has to outlive `value`
+            if (loadForPluralForm(genderTable, caseTable, value, status)) {
                 outArray[pluralIndex] = value.getUnicodeString(status);
             }
         }
@@ -275,17 +276,22 @@ class InflectedPluralSink : public ResourceSink {
     // Tries to load data for the configured gender from `genderTable`. Returns
     // true if found, returning the data in `value`. The returned data will be
     // for the configured gender if found, falling back to "neuter" and
-    // no-gender if not.
-    bool loadForPluralForm(const ResourceTable &genderTable, ResourceValue &value, UErrorCode &status) {
+    // no-gender if not. The caseTable parameter holds the intermediate
+    // ResourceTable for the sake of lifetime management.
+    bool loadForPluralForm(const ResourceTable &genderTable,
+                           ResourceTable &caseTable,
+                           ResourceValue &value,
+                           UErrorCode &status) {
         if (uprv_strcmp(gender, "") != 0) {
-            if (loadForGender(genderTable, gender, value, status)) {
+            if (loadForGender(genderTable, gender, caseTable, value, status)) {
                 return true;
             }
-            if (uprv_strcmp(gender, "neuter") != 0 && loadForGender(genderTable, "neuter", value, status)) {
+            if (uprv_strcmp(gender, "neuter") != 0 &&
+                loadForGender(genderTable, "neuter", caseTable, value, status)) {
                 return true;
             }
         }
-        if (loadForGender(genderTable, "_", value, status)) {
+        if (loadForGender(genderTable, "_", caseTable, value, status)) {
             return true;
         }
         return false;
@@ -296,13 +302,14 @@ class InflectedPluralSink : public ResourceSink {
     // the configured case if found, falling back to "nominative" and no-case if
     // not.
     bool loadForGender(const ResourceTable &genderTable,
-                   const char *genderVal,
-                   ResourceValue &value,
-                   UErrorCode &status) {
+                       const char *genderVal,
+                       ResourceTable &caseTable,
+                       ResourceValue &value,
+                       UErrorCode &status) {
         if (!genderTable.findValue(genderVal, value)) {
             return false;
         }
-        ResourceTable caseTable = value.getTable(status);
+        caseTable = value.getTable(status);
         if (uprv_strcmp(caseVariant, "") != 0) {
             if (loadForCase(caseTable, caseVariant, value)) {
                 return true;
@@ -320,9 +327,7 @@ class InflectedPluralSink : public ResourceSink {
 
     // Tries to load data for the given case from `caseTable`. Returns true if
     // found, returning the data in `value`.
-    bool loadForCase(const ResourceTable &caseTable,
-                 const char *caseValue,
-                 ResourceValue &value) {
+    bool loadForCase(const ResourceTable &caseTable, const char *caseValue, ResourceValue &value) {
         if (!caseTable.findValue(caseValue, value)) {
             return false;
         }
