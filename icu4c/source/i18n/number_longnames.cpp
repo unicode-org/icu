@@ -658,7 +658,7 @@ class DerivedComponents {
     UErrorCode status = U_ZERO_ERROR;
 
     // Holds strings referred to by value0 and value1;
-    bool compound0_, compound1_;
+    bool compound0_ = false, compound1_ = false;
     CharString value0_, value1_;
 };
 
