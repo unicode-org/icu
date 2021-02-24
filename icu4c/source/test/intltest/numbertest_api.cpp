@@ -2216,9 +2216,8 @@ void NumberFormatterApiTest::unitInflections() {
             // singular like German), and "pow2" prefixes have different forms
             //   <deriveComponent feature="plural" structure="times" value0="compound"  value1="compound"/>
             //   <deriveComponent feature="plural" structure="power" value0="compound"  value1="compound"/>
-            // TODO: this looks wrong, and will change if CLDR-14533 causes a change:
-            {"square-decimeter-square-second", "fr", nullptr, 1, u"1\u00A0décimètre carréseconde carrée"},
-            {"square-decimeter-square-second", "fr", nullptr, 2, u"2\u00A0décimètres carréssecondes carrées"},
+            {"square-decimeter-square-second", "fr", nullptr, 1, u"1\u00A0décimètre carré-seconde carrée"},
+            {"square-decimeter-square-second", "fr", nullptr, 2, u"2\u00A0décimètres carrés-secondes carrées"},
         };
         runUnitInflectionsTestCases(unf, skeleton, meterCases, UPRV_LENGTHOF(meterCases), status);
     }
