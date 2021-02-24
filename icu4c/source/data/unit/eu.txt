@@ -1069,7 +1069,7 @@ eu{
             1024p7{"Zi{0}"}
             1024p8{"Yi{0}"}
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
             percent{
@@ -1372,7 +1372,7 @@ eu{
             1024p7{"Zi{0}"}
             1024p8{"Yi{0}"}
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
             karat{

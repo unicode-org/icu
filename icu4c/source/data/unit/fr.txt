@@ -1178,7 +1178,7 @@ fr{
         }
         compound{
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
             percent{
@@ -1665,7 +1665,7 @@ fr{
         }
         compound{
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
             karat{

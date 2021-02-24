@@ -1311,7 +1311,7 @@ ro{
             10p6{"M{0}"}
             10p9{"G{0}"}
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0} {1}"}
         }
         concentr{
             percent{
@@ -1848,7 +1848,7 @@ ro{
             10p6{"M{0}"}
             10p9{"G{0}"}
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0} {1}"}
         }
         concentr{
             karat{
