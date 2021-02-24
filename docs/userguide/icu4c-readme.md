@@ -405,7 +405,7 @@ Depending on the platform and the type of installation, we recommend a small num
     `runConfigureICU Linux --enable-static --disable-shared`
 *   **Out-of-source build:** It is usually desirable to keep the ICU source file tree clean and have build output files written to a different location. This is called an "out-of-source build". Simply invoke the configure script from the target location:
 ```
-    ~/icu$ git clone export https://github.com/unicode-org/icu.git
+    ~/icu$ git clone https://github.com/unicode-org/icu.git
     ~/icu$ mkdir icu4c-build
     ~/icu$ cd icu4c-build
     ~/icu/icu4c-build$ ../icu/icu4c/source/runConfigureICU Linux
