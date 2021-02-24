@@ -3,9 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 nn{
     %%Parent{"no"}
-    AuxExemplarCharacters{"[á ǎ ä č ç đ è ê ń ñ ŋ ö š ŧ ü ž]"}
-    ExemplarCharacters{"[a à å æ b c d e é f g h i j k l m n o ó ò ô ø p q r s t u v w x y z]"}
-    ExemplarCharactersIndex{"[A Å Æ B C D E F G H I J K L M N O Ø P Q R S T U V W X Y Z]"}
+    AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
     ExemplarCharactersPunctuation{
         "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
         "′ ″]"
