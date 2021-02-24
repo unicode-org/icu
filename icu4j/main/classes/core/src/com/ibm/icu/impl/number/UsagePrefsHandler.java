@@ -3,13 +3,11 @@
 package com.ibm.icu.impl.number;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
 import com.ibm.icu.impl.units.UnitsRouter;
-import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 

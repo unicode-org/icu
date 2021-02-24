@@ -62,10 +62,10 @@ class NumberFormatterImpl {
             MacroProps macros,
             DecimalQuantity inValue,
             FormattedStringBuilder outString) {
-        MicroProps micros = preProcessUnsafe(macros, inValue);
-        int length = writeNumber(micros, inValue, outString, 0);
-        writeAffixes(micros, outString, 0, length);
-        return micros;
+        MicroProps result = preProcessUnsafe(macros, inValue);
+        int length = writeNumber(result, inValue, outString, 0);
+        writeAffixes(result, outString, 0, length);
+        return result;
     }
 
     /**
@@ -93,10 +93,10 @@ class NumberFormatterImpl {
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
     public MicroProps format(DecimalQuantity inValue, FormattedStringBuilder outString) {
-        MicroProps micros = preProcess(inValue);
-        int length = writeNumber(micros, inValue, outString, 0);
-        writeAffixes(micros, outString, 0, length);
-        return micros;
+        MicroProps result = preProcess(inValue);
+        int length = writeNumber(result, inValue, outString, 0);
+        writeAffixes(result, outString, 0, length);
+        return result;
     }
 
     /**
@@ -225,6 +225,9 @@ class NumberFormatterImpl {
             ns = NumberingSystem.getInstance(macros.loc);
         }
         micros.nsName = ns.getName();
+
+        // Default gender: none.
+        micros.gender = "";
 
         // Resolve the symbols. Do this here because currency may need to customize them.
         if (macros.symbols instanceof DecimalFormatSymbols) {
@@ -375,6 +378,10 @@ class NumberFormatterImpl {
 
         // Outer modifier (CLDR units and currency long names)
         if (isCldrUnit) {
+            String unitDisplayCase = null;
+            if (macros.unitDisplayCase != null) {
+                unitDisplayCase = macros.unitDisplayCase;
+            }
             if (rules == null) {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
@@ -389,6 +396,7 @@ class NumberFormatterImpl {
                         macros.loc,
                         usagePrefsHandler.getOutputUnits(),
                         unitWidth,
+                        unitDisplayCase,
                         pluralRules,
                         chain);
             } else if (isMixedUnit) {
@@ -396,6 +404,7 @@ class NumberFormatterImpl {
                         macros.loc,
                         macros.unit,
                         unitWidth,
+                        unitDisplayCase,
                         pluralRules,
                         chain);
             } else {
@@ -403,7 +412,13 @@ class NumberFormatterImpl {
                 if (macros.perUnit != null) {
                     unit = unit.product(macros.perUnit.reciprocal());
                 }
-                chain = LongNameHandler.forMeasureUnit(macros.loc, unit, unitWidth, pluralRules, chain);
+                chain = LongNameHandler.forMeasureUnit(
+                        macros.loc,
+                        unit,
+                        unitWidth,
+                        unitDisplayCase,
+                        pluralRules,
+                        chain);
             }
         } else if (isCurrency && unitWidth == UnitWidth.FULL_NAME) {
             if (rules == null) {
