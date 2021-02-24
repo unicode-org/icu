@@ -177,7 +177,7 @@ UTF-8 and UTF-32 are supported with converters (ucnv.h), macros (utf.h), and
 convenience functions (ustring.h), but only a subset of APIs works with UTF-8
 directly as string encoding form.
 
-**See the **[**UTF-8**](utf-8.md)** subpage for details about working with
+**See the [UTF-8](utf-8.md) subpage for details about working with
 UTF-8.** Some of the following sections apply to UTF-8 APIs as well; for example
 sections about handling lengths and overflows.
 
@@ -280,13 +280,13 @@ Strings are either terminated with a NUL character (code point 0, U+0000) or
 their length is specified. In the latter case, it is possible to have one or
 more NUL characters inside the string.
 
-**Input string **arguments are typically passed with two parameters: The (const)
+**Input string** arguments are typically passed with two parameters: The (const)
 `UChar *` pointer and an int32_t length argument. If the length is -1 then the
 string must be NUL-terminated and the ICU function will call the u_strlen()
 method or treat it equivalently. If the input string contains embedded NUL
 characters, then the length must be specified.
 
-**Output string **arguments are typically passed with a destination `UChar *`
+**Output string** arguments are typically passed with a destination `UChar *`
 pointer and an int32_t capacity argument and the function returns the length of
 the output as an int32_t. There is also almost always a UErrorCode argument.
 Essentially, a `UChar[]` array is passed in with its start and the number of
