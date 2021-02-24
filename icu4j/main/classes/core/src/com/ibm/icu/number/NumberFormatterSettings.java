@@ -45,7 +45,8 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_THRESHOLD = 14;
     static final int KEY_PER_UNIT = 15;
     static final int KEY_USAGE = 16;
-    static final int KEY_MAX = 17;
+    static final int KEY_UNIT_DISPLAY_CASE = 17;
+    static final int KEY_MAX = 18;
 
     private final NumberFormatterSettings<?> parent;
     private final int key;
@@ -549,6 +550,18 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     }
 
     /**
+     * Specifies the desired case for a unit formatter's output (e.g.
+     * accusative, dative, genitive).
+     *
+     * @return The fluent chain
+     * @internal ICU 69 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    public T unitDisplayCase(String unitDisplayCase) {
+        return create(KEY_UNIT_DISPLAY_CASE, unitDisplayCase);
+    }
+
+    /**
      * Internal method to set a starting macros.
      *
      * @internal
@@ -674,6 +687,9 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
                 break;
             case KEY_USAGE:
                 macros.usage = (String) current.value;
+                break;
+            case KEY_UNIT_DISPLAY_CASE:
+                macros.unitDisplayCase = (String) current.value;
                 break;
             default:
                 throw new AssertionError("Unknown key: " + current.key);

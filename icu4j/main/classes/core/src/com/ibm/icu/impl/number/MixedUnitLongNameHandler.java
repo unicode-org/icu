@@ -51,11 +51,15 @@ public class MixedUnitLongNameHandler
      * @param mixedUnit The mixed measure unit to construct a
      *                  MixedUnitLongNameHandler for.
      * @param width     Specifies the desired unit rendering.
+     * @param unitDisplayName
      * @param rules     PluralRules instance.
      * @param parent    MicroPropsGenerator instance.
      */
-    public static MixedUnitLongNameHandler forMeasureUnit(ULocale locale, MeasureUnit mixedUnit,
-                                                          NumberFormatter.UnitWidth width, PluralRules rules,
+    public static MixedUnitLongNameHandler forMeasureUnit(ULocale locale,
+                                                          MeasureUnit mixedUnit,
+                                                          NumberFormatter.UnitWidth width,
+                                                          String unitDisplayName,
+                                                          PluralRules rules,
                                                           MicroPropsGenerator parent) {
         assert (mixedUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
 
@@ -66,7 +70,7 @@ public class MixedUnitLongNameHandler
         for (int i = 0; i < individualUnits.size(); i++) {
             // Grab data for each of the components.
             String[] unitData = new String[LongNameHandler.ARRAY_LENGTH];
-            LongNameHandler.getMeasureData(locale, individualUnits.get(i), width, unitData);
+            LongNameHandler.getMeasureData(locale, individualUnits.get(i), width, unitDisplayName, unitData);
             result.fMixedUnitData.add(unitData);
         }
 

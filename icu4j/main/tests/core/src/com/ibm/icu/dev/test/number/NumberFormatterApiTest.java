@@ -1922,6 +1922,220 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "123,12 CN¥");
     }
 
+    public static class UnitInflectionTestCase {
+        public final String locale;
+        public final String unitDisplayCase;
+        public final double value;
+        public final String expected;
+
+        UnitInflectionTestCase(String locale, String unitDisplayCase, double value, String expected) {
+            this.locale = locale;
+            this.unitDisplayCase = unitDisplayCase;
+            this.value = value;
+            this.expected = expected;
+        }
+
+        public static void runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,
+                                                       String skeleton,
+                                                       String conciseSkeleton,
+                                                       UnitInflectionTestCase cases[]) {
+            for (UnitInflectionTestCase t : cases) {
+                String skel;
+                String cSkel;
+                if (t.unitDisplayCase == null || t.unitDisplayCase.isEmpty()) {
+                    unf = unf.unitDisplayCase("");
+                    skel = skeleton;
+                    cSkel = conciseSkeleton;
+                } else {
+                    unf = unf.unitDisplayCase(t.unitDisplayCase);
+                    skel = null;
+                    cSkel = null;
+                }
+
+                assertFormatSingle(
+                        "\"" + skeleton + "\", locale=\"" + t.locale + "\", case=\"" +
+                                (t.unitDisplayCase != null ? t.unitDisplayCase : "")
+                                + "\", value=" + t.value,
+                        skel,
+                        cSkel,
+                        unf, new ULocale(t.locale),
+                        t.value,
+                        t.expected);
+            }
+        }
+    }
+
+    @Test
+    public void unitInflections() {
+        UnlocalizedNumberFormatter unf;
+        String skeleton;
+        String conciseSkeleton;
+
+        {
+            // Simple inflected form test - test case based on the example in CLDR's
+            // grammaticalFeatures.xml
+            unf = NumberFormatter.with().unit(NoUnit.PERCENT).unitWidth(UnitWidth.FULL_NAME);
+            skeleton = "percent unit-width-full-name";
+            conciseSkeleton = "% unit-width-full-name";
+            final UnitInflectionTestCase percentCases[] = {
+                    new UnitInflectionTestCase("ru", null, 10, "10 процентов"),    // many
+                    new UnitInflectionTestCase("ru", "genitive", 10, "10 процентов"), // many
+                    new UnitInflectionTestCase("ru", null, 33, "33 процента"),     // few
+                    new UnitInflectionTestCase("ru", "genitive", 33, "33 процентов"), // few
+                    new UnitInflectionTestCase("ru", null, 1, "1 процент"),        // one
+                    new UnitInflectionTestCase("ru", "genitive", 1, "1 процента"),    // one
+            };
+
+            for (UnitInflectionTestCase testCase :
+                    percentCases) {
+                UnitInflectionTestCase.runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, percentCases);
+            }
+        }
+        {
+            // Testing "de" rules:
+            // <deriveComponent feature="case" structure="per" value0="compound" value1="accusative"/>
+            // <deriveComponent feature="plural" structure="per" value0="compound" value1="one"/>
+            //
+            // per-patterns use accusative, but happen to match nominative, so we're
+            // not testing value1 in the first rule above.
+
+            unf = NumberFormatter.with().unit(MeasureUnit.METER).unitWidth(UnitWidth.FULL_NAME);
+            skeleton = "unit/meter unit-width-full-name";
+            conciseSkeleton = "unit/meter unit-width-full-name";
+            final UnitInflectionTestCase meterCases[] = {
+                    new UnitInflectionTestCase("de", null, 1, "1 Meter"),
+                    new UnitInflectionTestCase("de", "genitive", 1, "1 Meters"),
+                    new UnitInflectionTestCase("de", null, 2, "2 Meter"),
+                    new UnitInflectionTestCase("de", "dative", 2, "2 Metern"),
+            };
+            UnitInflectionTestCase.runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterCases);
+
+            unf = NumberFormatter.with().unit(MeasureUnit.DAY).unitWidth(UnitWidth.FULL_NAME);
+            skeleton = "unit/day unit-width-full-name";
+            conciseSkeleton = "unit/day unit-width-full-name";
+            final UnitInflectionTestCase dayCases[] = {
+                    new UnitInflectionTestCase("de", null, 1, "1 Tag"),
+                    new UnitInflectionTestCase("de", "genitive", 1, "1 Tages"),
+                    new UnitInflectionTestCase("de", null, 2, "2 Tage"),
+                    new UnitInflectionTestCase("de", "dative", 2, "2 Tagen"),
+            };
+            UnitInflectionTestCase.runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, dayCases);
+
+            // Day has a perUnitPattern
+            unf = NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("meter-per-day"))
+                    .unitWidth(UnitWidth.FULL_NAME);
+            skeleton = "unit/meter-per-day unit-width-full-name";
+            conciseSkeleton = "unit/meter-per-day unit-width-full-name";
+            final UnitInflectionTestCase meterPerDayCases[] = {
+                    new UnitInflectionTestCase("de", null, 1, "1 Meter pro Tag"),
+                    new UnitInflectionTestCase("de", "genitive", 1, "1 Meters pro Tag"),
+                    new UnitInflectionTestCase("de", null, 2, "2 Meter pro Tag"),
+                    new UnitInflectionTestCase("de", "dative", 2, "2 Metern pro Tag"),
+                    // testing code path that falls back to "root" but does not inflect:
+                    new UnitInflectionTestCase("af", null, 1, "1 meter per dag"),
+                    new UnitInflectionTestCase("af", "dative", 1, "1 meter per dag"),
+            };
+            UnitInflectionTestCase.runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterPerDayCases);
+
+            // Decade does not have a perUnitPattern at this time (CLDR 39 / ICU
+            // 69), so we can test for the correct form of the per part:
+            unf = NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("parsec-per-decade"))
+                    .unitWidth(UnitWidth.FULL_NAME);
+            skeleton = "unit/parsec-per-decade unit-width-full-name";
+            conciseSkeleton = "unit/parsec-per-decade unit-width-full-name";
+            // Fragile test cases: these cases will break when whitespace is more
+            // consistently applied.
+            final UnitInflectionTestCase parsecPerDecadeCases[] = {
+                    new UnitInflectionTestCase("de", null, 1, "1\u00A0Parsec pro Jahrzehnt"),
+                    new UnitInflectionTestCase("de", "genitive", 1, "1 Parsec pro Jahrzehnt"),
+                    new UnitInflectionTestCase("de", null, 2, "2\u00A0Parsec pro Jahrzehnt"),
+                    new UnitInflectionTestCase("de", "dative", 2, "2 Parsec pro Jahrzehnt"),
+            };
+            UnitInflectionTestCase.runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, parsecPerDecadeCases);
+        }
+        {
+            // Testing inflection of mixed units:
+            unf = NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("meter-and-centimeter"))
+                    .unitWidth(UnitWidth.FULL_NAME);
+            skeleton = "unit/meter-and-centimeter unit-width-full-name";
+            conciseSkeleton = "unit/meter-and-centimeter unit-width-full-name";
+            final UnitInflectionTestCase meterPerDayCases[] = {
+                    // TODO(CLDR-14502): check that these inflections are correct, and
+                    // whether CLDR needs any rules for them (presumably CLDR spec
+                    // should mention it, if it's a consistent rule):
+                    new UnitInflectionTestCase("de", null, 1.01, "1 Meter, 1 Zentimeter"),
+                    new UnitInflectionTestCase("de", "genitive", 1.01, "1 Meters, 1 Zentimeters"),
+                    new UnitInflectionTestCase("de", "genitive", 1.1, "1 Meters, 10 Zentimeter"),
+                    new UnitInflectionTestCase("de", "dative", 1.1, "1 Meter, 10 Zentimetern"),
+                    new UnitInflectionTestCase("de", "dative", 2.1, "2 Metern, 10 Zentimetern"),
+            };
+            UnitInflectionTestCase.runUnitInflectionsTestCases(unf, skeleton, conciseSkeleton, meterPerDayCases);
+        }
+        // TODO: add a usage case that selects between preferences with different
+        // genders (e.g. year, month, day, hour).
+        // TODO: look at "↑↑↑" cases: check that inheritance is done right.
+
+    }
+
+    @Test
+    public void unitGender() {
+        class TestCase {
+            public String locale;
+            public String unitIdentifier;
+            public String expectedGender;
+
+            public TestCase(String locale, String unitIdentifier, String expectedGender) {
+                this.locale = locale;
+                this.unitIdentifier = unitIdentifier;
+                this.expectedGender = expectedGender;
+            }
+        }
+
+        TestCase cases[] = {
+                new TestCase("de", "meter", "masculine"),
+                new TestCase("de", "minute", "feminine"),
+                new TestCase("de", "hour", "feminine"),
+                new TestCase("de", "day", "masculine"),
+                new TestCase("de", "year", "neuter"),
+                new TestCase("fr", "minute", "feminine"),
+                new TestCase("fr", "hour", "feminine"),
+                new TestCase("fr", "day", "masculine"),
+                // grammaticalFeatures deriveCompound "per" rule:
+                new TestCase("de", "meter-per-hour", "masculine"),
+                new TestCase("af", "meter-per-hour", null),
+                // TODO(ICU-21494): determine whether list genders behave as follows,
+                // and implement proper getListGender support (covering more than just
+                // two genders):
+                // // gender rule for lists of people: de "neutral", fr "maleTaints"
+                // new TestCase("de", "day-and-hour-and-minute", "neuter"),
+                // new TestCase("de", "hour-and-minute", "feminine"),
+                // new TestCase("fr", "day-and-hour-and-minute", "masculine"),
+                // new TestCase("fr", "hour-and-minute", "feminine"),
+        };
+
+        LocalizedNumberFormatter formatter;
+        FormattedNumber fn;
+        for (TestCase t : cases) {
+            // TODO(icu-units#140): make this work for more than just UnitWidth.FULL_NAME
+            formatter = NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier(t.unitIdentifier))
+                    .unitWidth(UnitWidth.FULL_NAME)
+                    .locale(new ULocale(t.locale));
+            fn = formatter.format(1.1);
+            assertEquals("Testing gender, unit: " + t.unitIdentifier +
+                            ", locale: " + t.locale,
+                    t.expectedGender, fn.getGender());
+        }
+
+        // Make sure getGender does not return garbage for genderless languages
+        formatter = NumberFormatter.with().locale(ULocale.ENGLISH);
+        fn = formatter.format(1.1);
+        assertEquals("getGender for a genderless language", "", fn.getGender());
+    }
+
     @Test
     public void unitPercent() {
         assertFormatDescending(

@@ -947,6 +947,10 @@ class NumberSkeletonImpl {
             throw new UnsupportedOperationException(
                     "Cannot generate number skeleton with custom padder");
         }
+        if (macros.unitDisplayCase != null && !macros.unitDisplayCase.isEmpty()) {
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom unit display case");
+        }
         if (macros.affixProvider != null) {
             throw new UnsupportedOperationException(
                     "Cannot generate number skeleton with custom affix provider");
