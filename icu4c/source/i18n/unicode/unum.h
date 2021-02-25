@@ -302,7 +302,24 @@ typedef enum UNumberFormatRoundingMode {
       * ROUND_UNNECESSARY reports an error if formatted result is not exact.
       * @stable ICU 4.8
       */
-    UNUM_ROUND_UNNECESSARY
+    UNUM_ROUND_UNNECESSARY,
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Rounds ties toward the odd number.
+     * @draft ICU 69
+     */
+    UNUM_ROUND_HALF_ODD,
+    /**
+     * Rounds ties toward +∞.
+     * @draft ICU 69
+     */
+    UNUM_ROUND_HALF_CEILING,
+    /**
+     * Rounds ties toward -∞.
+     * @draft ICU 69
+     */
+    UNUM_ROUND_HALF_FLOOR,
+#endif
 } UNumberFormatRoundingMode;
 
 /** The possible number format pad positions. 
