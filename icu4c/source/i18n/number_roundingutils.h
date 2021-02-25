@@ -104,6 +104,45 @@ getRoundingDirection(bool isEven, bool isNegative, Section section, RoundingMode
             }
             break;
 
+        case RoundingMode::UNUM_ROUND_HALF_ODD:
+            switch (section) {
+                case SECTION_MIDPOINT:
+                    return !isEven;
+                case SECTION_LOWER:
+                    return true;
+                case SECTION_UPPER:
+                    return false;
+                default:
+                    break;
+            }
+            break;
+
+        case RoundingMode::UNUM_ROUND_HALF_CEILING:
+            switch (section) {
+                case SECTION_MIDPOINT:
+                    return isNegative;
+                case SECTION_LOWER:
+                    return true;
+                case SECTION_UPPER:
+                    return false;
+                default:
+                    break;
+            }
+            break;
+
+        case RoundingMode::UNUM_ROUND_HALF_FLOOR:
+            switch (section) {
+                case SECTION_MIDPOINT:
+                    return !isNegative;
+                case SECTION_LOWER:
+                    return true;
+                case SECTION_UPPER:
+                    return false;
+                default:
+                    break;
+            }
+            break;
+
         default:
             break;
     }

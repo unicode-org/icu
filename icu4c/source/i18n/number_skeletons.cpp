@@ -68,6 +68,9 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"rounding-mode-down", STEM_ROUNDING_MODE_DOWN, status);
     b.add(u"rounding-mode-up", STEM_ROUNDING_MODE_UP, status);
     b.add(u"rounding-mode-half-even", STEM_ROUNDING_MODE_HALF_EVEN, status);
+    b.add(u"rounding-mode-half-odd", STEM_ROUNDING_MODE_HALF_ODD, status);
+    b.add(u"rounding-mode-half-ceiling", STEM_ROUNDING_MODE_HALF_CEILING, status);
+    b.add(u"rounding-mode-half-floor", STEM_ROUNDING_MODE_HALF_FLOOR, status);
     b.add(u"rounding-mode-half-down", STEM_ROUNDING_MODE_HALF_DOWN, status);
     b.add(u"rounding-mode-half-up", STEM_ROUNDING_MODE_HALF_UP, status);
     b.add(u"rounding-mode-unnecessary", STEM_ROUNDING_MODE_UNNECESSARY, status);
@@ -217,6 +220,12 @@ UNumberFormatRoundingMode stem_to_object::roundingMode(skeleton::StemEnum stem) 
             return UNUM_ROUND_UP;
         case STEM_ROUNDING_MODE_HALF_EVEN:
             return UNUM_ROUND_HALFEVEN;
+        case STEM_ROUNDING_MODE_HALF_ODD:
+            return UNUM_ROUND_HALF_ODD;
+        case STEM_ROUNDING_MODE_HALF_CEILING:
+            return UNUM_ROUND_HALF_CEILING;
+        case STEM_ROUNDING_MODE_HALF_FLOOR:
+            return UNUM_ROUND_HALF_FLOOR;
         case STEM_ROUNDING_MODE_HALF_DOWN:
             return UNUM_ROUND_HALFDOWN;
         case STEM_ROUNDING_MODE_HALF_UP:
@@ -319,6 +328,15 @@ void enum_to_stem_string::roundingMode(UNumberFormatRoundingMode value, UnicodeS
             break;
         case UNUM_ROUND_HALFEVEN:
             sb.append(u"rounding-mode-half-even", -1);
+            break;
+        case UNUM_ROUND_HALF_ODD:
+            sb.append(u"rounding-mode-half-odd", -1);
+            break;
+        case UNUM_ROUND_HALF_CEILING:
+            sb.append(u"rounding-mode-half-ceiling", -1);
+            break;
+        case UNUM_ROUND_HALF_FLOOR:
+            sb.append(u"rounding-mode-half-floor", -1);
             break;
         case UNUM_ROUND_HALFDOWN:
             sb.append(u"rounding-mode-half-down", -1);
@@ -672,6 +690,9 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_ROUNDING_MODE_DOWN:
         case STEM_ROUNDING_MODE_UP:
         case STEM_ROUNDING_MODE_HALF_EVEN:
+        case STEM_ROUNDING_MODE_HALF_ODD:
+        case STEM_ROUNDING_MODE_HALF_CEILING:
+        case STEM_ROUNDING_MODE_HALF_FLOOR:
         case STEM_ROUNDING_MODE_HALF_DOWN:
         case STEM_ROUNDING_MODE_HALF_UP:
         case STEM_ROUNDING_MODE_UNNECESSARY:
