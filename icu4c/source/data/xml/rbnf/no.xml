@@ -8,7 +8,7 @@
 <ldml>
     <identity>
         <version number="$Revision$"/>
-        <language type="nn"/>
+        <language type="no"/>
     </identity>
     <rbnf>
         <rulesetGrouping type="SpelloutRules">

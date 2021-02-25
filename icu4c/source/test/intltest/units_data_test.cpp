@@ -113,10 +113,9 @@ void UnitsDataTest::testGetPreferencesFor() {
         {"XX default falls back to 001", "length", "default", "XX", WorldLenMax, WorldLenMin},
         {"Unknown usage US", "length", "foobar", "US", USLenMax, USLenMin},
         {"Unknown usage 001", "length", "foobar", "XX", WorldLenMax, WorldLenMin},
-        {"Fallback", "length", "person-height-xyzzy", "DE", "meter-and-centimeter",
-         "meter-and-centimeter"},
-        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "meter-and-centimeter",
-         "meter-and-centimeter"},
+        {"Fallback", "length", "person-height-xyzzy", "DE", "centimeter", "centimeter"},
+        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter",
+         "centimeter"},
         // Confirming results for some unitPreferencesTest.txt test cases
         {"001 area", "area", "default", "001", "square-kilometer", "square-centimeter"},
         {"GB area", "area", "default", "GB", "square-mile", "square-inch"},
