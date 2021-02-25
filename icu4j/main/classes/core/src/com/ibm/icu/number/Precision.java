@@ -9,6 +9,7 @@ import java.math.MathContext;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MultiplierProducer;
 import com.ibm.icu.impl.number.RoundingUtils;
+import com.ibm.icu.number.NumberFormatter.RoundingPriority;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 
@@ -382,7 +383,7 @@ public abstract class Precision {
     static final SignificantRounderImpl FIXED_SIG_3 = new SignificantRounderImpl(3, 3);
     static final SignificantRounderImpl RANGE_SIG_2_3 = new SignificantRounderImpl(2, 3);
 
-    static final FracSigRounderImpl COMPACT_STRATEGY = new FracSigRounderImpl(0, 0, 2, -1);
+    static final FracSigRounderImpl COMPACT_STRATEGY = new FracSigRounderImpl(0, 0, 1, 2, RoundingPriority.RELAXED);
 
     static final IncrementFiveRounderImpl NICKEL = new IncrementFiveRounderImpl(new BigDecimal("0.05"), 2, 2);
 
@@ -418,14 +419,16 @@ public abstract class Precision {
         }
     }
 
-    static Precision constructFractionSignificant(FractionPrecision base_, int minSig, int maxSig) {
+    static Precision constructFractionSignificant(
+            FractionPrecision base_, int minSig, int maxSig, RoundingPriority priority) {
         assert base_ instanceof FractionRounderImpl;
         FractionRounderImpl base = (FractionRounderImpl) base_;
         Precision returnValue;
-        if (base.minFrac == 0 && base.maxFrac == 0 && minSig == 2 /* && maxSig == -1 */) {
+        if (base.minFrac == 0 && base.maxFrac == 0 && minSig == 1 && maxSig == 2 &&
+                priority == RoundingPriority.RELAXED) {
             returnValue = COMPACT_STRATEGY;
         } else {
-            returnValue = new FracSigRounderImpl(base.minFrac, base.maxFrac, minSig, maxSig);
+            returnValue = new FracSigRounderImpl(base.minFrac, base.maxFrac, minSig, maxSig, priority);
         }
         return returnValue.withMode(base.mathContext);
     }
@@ -683,34 +686,37 @@ public abstract class Precision {
         final int maxFrac;
         final int minSig;
         final int maxSig;
+        final RoundingPriority priority;
 
-        public FracSigRounderImpl(int minFrac, int maxFrac, int minSig, int maxSig) {
+        public FracSigRounderImpl(int minFrac, int maxFrac, int minSig, int maxSig, RoundingPriority priority) {
             this.minFrac = minFrac;
             this.maxFrac = maxFrac;
             this.minSig = minSig;
             this.maxSig = maxSig;
+            this.priority = priority;
         }
 
         @Override
         public void apply(DecimalQuantity value) {
-            int displayMag = getDisplayMagnitudeFraction(minFrac);
-            int roundingMag = getRoundingMagnitudeFraction(maxFrac);
-            if (minSig == -1) {
-                // Max Sig override
-                int candidate = getRoundingMagnitudeSignificant(value, maxSig);
-                roundingMag = Math.max(roundingMag, candidate);
+            int roundingMag1 = getRoundingMagnitudeFraction(maxFrac);
+            int roundingMag2 = getRoundingMagnitudeSignificant(value, maxSig);
+            int roundingMag;
+            if (priority == RoundingPriority.RELAXED) {
+                roundingMag = Math.min(roundingMag1, roundingMag2);
             } else {
-                // Min Sig override
-                int candidate = getDisplayMagnitudeSignificant(value, minSig);
-                roundingMag = Math.min(roundingMag, candidate);
+                roundingMag = Math.max(roundingMag1, roundingMag2);
             }
             value.roundToMagnitude(roundingMag, mathContext);
+
+            int displayMag1 = getDisplayMagnitudeFraction(minFrac);
+            int displayMag2 = getDisplayMagnitudeSignificant(value, minSig);
+            int displayMag = Math.min(displayMag1, displayMag2);
             value.setMinFraction(Math.max(0, -displayMag));
         }
 
         @Override
         FracSigRounderImpl createCopy() {
-            FracSigRounderImpl copy = new FracSigRounderImpl(minFrac, maxFrac, minSig, maxSig);
+            FracSigRounderImpl copy = new FracSigRounderImpl(minFrac, maxFrac, minSig, maxSig, priority);
             copy.mathContext = mathContext;
             return copy;
         }

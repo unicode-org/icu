@@ -1263,21 +1263,14 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
             break;
         }
     }
-    // For the frac-sig option, there must be minSig or maxSig but not both.
-    // Valid: @+, @@+, @@@+
-    // Valid: @#, @##, @###
-    // Invalid: @, @@, @@@
-    // Invalid: @@#, @@##, @@@#
     if (offset < segment.length()) {
         if (isWildcardChar(segment.charAt(offset))) {
+            // @+, @@+, @@@+
             maxSig = -1;
             offset++;
-        } else if (minSig > 1) {
-            // @@#, @@##, @@@#
-            // throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
-            status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-            return false;
         } else {
+            // @#, @##, @###
+            // @@#, @@##, @@@#
             maxSig = minSig;
             for (; offset < segment.length(); offset++) {
                 if (segment.charAt(offset) == u'#') {
@@ -1289,22 +1282,45 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
         }
     } else {
         // @, @@, @@@
-        // throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
-        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-        return false;
+        maxSig = minSig;
     }
+    UNumberRoundingPriority priority;
     if (offset < segment.length()) {
-        // throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+        if (maxSig == -1) {
+            // The wildcard character is not allowed with the priority annotation
+            status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+            return false;
+        }
+        if (segment.codePointAt(offset) == u'r') {
+            priority = UNUM_ROUNDING_PRIORITY_RELAXED;
+            offset++;
+        } else if (segment.codePointAt(offset) == u's') {
+            priority = UNUM_ROUNDING_PRIORITY_STRICT;
+            offset++;
+        } else {
+            U_ASSERT(offset < segment.length());
+        }
+        if (offset < segment.length()) {
+            // Invalid digits option for fraction rounder
+            status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+            return false;
+        }
+    } else if (maxSig == -1) {
+        // withMinDigits
+        maxSig = minSig;
+        minSig = 1;
+        priority = UNUM_ROUNDING_PRIORITY_RELAXED;
+    } else if (minSig == 1) {
+        // withMaxDigits
+        priority = UNUM_ROUNDING_PRIORITY_STRICT;
+    } else {
+        // Digits options with both min and max sig require the priority option
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return false;
     }
 
     auto& oldPrecision = static_cast<const FractionPrecision&>(macros.precision);
-    if (maxSig == -1) {
-        macros.precision = oldPrecision.withMinDigits(minSig);
-    } else {
-        macros.precision = oldPrecision.withMaxDigits(maxSig);
-    }
+    macros.precision = oldPrecision.withSignificantDigits(minSig, maxSig, priority);
     return true;
 }
 
@@ -1535,10 +1551,11 @@ bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UE
         const Precision::FractionSignificantSettings& impl = macros.precision.fUnion.fracSig;
         blueprint_helpers::generateFractionStem(impl.fMinFrac, impl.fMaxFrac, sb, status);
         sb.append(u'/');
-        if (impl.fMinSig == -1) {
-            blueprint_helpers::generateDigitsStem(1, impl.fMaxSig, sb, status);
+        blueprint_helpers::generateDigitsStem(impl.fMinSig, impl.fMaxSig, sb, status);
+        if (impl.fPriority == UNUM_ROUNDING_PRIORITY_RELAXED) {
+            sb.append(u'r');
         } else {
-            blueprint_helpers::generateDigitsStem(impl.fMinSig, -1, sb, status);
+            sb.append(u's');
         }
     } else if (macros.precision.fType == Precision::RND_INCREMENT
             || macros.precision.fType == Precision::RND_INCREMENT_ONE

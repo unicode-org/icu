@@ -78,6 +78,62 @@
  * </pre>
  */
 
+#ifndef U_FORCE_HIDE_DRAFT_API
+/**
+ * An enum declaring how to resolve conflicts between maximum fraction digits and maximum
+ * significant digits.
+ *
+ * There are two modes, RELAXED and STRICT:
+ *
+ * - RELAXED: Relax one of the two constraints (fraction digits or significant digits) in order
+ *   to round the number to a higher level of precision.
+ * - STRICT: Enforce both constraints, resulting in the number being rounded to a lower
+ *   level of precision.
+ *
+ * The default settings for compact notation rounding are Max-Fraction = 0 (round to the nearest
+ * integer), Max-Significant = 2 (round to 2 significant digits), and priority RELAXED (choose
+ * the constraint that results in more digits being displayed).
+ *
+ * Conflicting *minimum* fraction and significant digits are always resolved in the direction that
+ * results in more trailing zeros.
+ *
+ * Example 1: Consider the number 3.141, with various different settings:
+ *
+ * - Max-Fraction = 1: "3.1"
+ * - Max-Significant = 3: "3.14"
+ *
+ * The rounding priority determines how to resolve the conflict when both Max-Fraction and
+ * Max-Significant are set. With RELAXED, the less-strict setting (the one that causes more digits
+ * to be displayed) will be used; Max-Significant wins. With STRICT, the more-strict setting (the
+ * one that causes fewer digits to be displayed) will be used; Max-Fraction wins.
+ *
+ * Example 2: Consider the number 8317, with various different settings:
+ *
+ * - Max-Fraction = 1: "8317"
+ * - Max-Significant = 3: "8320"
+ *
+ * Here, RELAXED favors Max-Fraction and STRICT favors Max-Significant. Note that this larger
+ * number caused the two modes to favor the opposite result.
+ *
+ * @draft ICU 69
+ */
+typedef enum UNumberRoundingPriority {
+    /**
+     * Favor greater precision by relaxing one of the rounding constraints.
+     *
+     * @draft ICU 69
+     */
+    UNUM_ROUNDING_PRIORITY_RELAXED,
+
+    /**
+     * Favor adherence to all rounding constraints by producing lower precision.
+     *
+     * @draft ICU 69
+     */
+    UNUM_ROUNDING_PRIORITY_STRICT,
+} UNumberRoundingPriority;
+#endif // U_FORCE_HIDE_DRAFT_API
+
 /**
  * An enum declaring how to render units, including currencies. Example outputs when formatting 123 USD and 123
  * meters in <em>en-CA</em>:
