@@ -134,13 +134,9 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
                 if (fIter.getIndex() < rangeEnd) {
                   foundBest:
                     do {
-                        int wordsMatched = 1;
                         if (words[(wordsFound+1)%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
-                            if (wordsMatched < 2) {
-                                // Followed by another dictionary word; mark first word as a good candidate
-                                words[wordsFound%THAI_LOOKAHEAD].markCurrent();
-                                wordsMatched = 2;
-                            }
+                            // Followed by another dictionary word; mark first word as a good candidate
+                            words[wordsFound%THAI_LOOKAHEAD].markCurrent();
 
                             // If we're already at the end of the range, we're done
                             if (fIter.getIndex() >= rangeEnd) {

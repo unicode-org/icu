@@ -120,13 +120,9 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
                 // If we're already at the end of the range, we're done
                 if (fIter.getIndex() < rangeEnd) {
                     do {
-                        int wordsMatched = 1;
                         if (words[(wordsFound+1)%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
-                            if (wordsMatched < 2) {
-                                // Followed by another dictionary word; mark first word as a good candidate
-                                words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
-                                wordsMatched = 2;
-                            }
+                            // Followed by another dictionary word; mark first word as a good candidate
+                            words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
 
                             // If we're already at the end of the range, we're done
                             if (fIter.getIndex() >= rangeEnd) {
