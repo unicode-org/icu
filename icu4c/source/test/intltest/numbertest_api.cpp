@@ -2708,6 +2708,71 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             Locale::getEnglish(),
             0.0999999,
             u"0.10");
+
+    assertFormatDescending(
+            u"FracSig withSignificantDigits RELAXED",
+            u"precision-integer/@#r",
+            u"./@#r",
+            NumberFormatter::with().precision(Precision::maxFraction(0)
+                .withSignificantDigits(1, 2, UNUM_ROUNDING_PRIORITY_RELAXED)),
+            Locale::getEnglish(),
+            u"87,650",
+            u"8,765",
+            u"876",
+            u"88",
+            u"8.8",
+            u"0.88",
+            u"0.088",
+            u"0.0088",
+            u"0");
+
+    assertFormatDescending(
+            u"FracSig withSignificantDigits STRICT",
+            u"precision-integer/@#s",
+            u"./@#",
+            NumberFormatter::with().precision(Precision::maxFraction(0)
+                .withSignificantDigits(1, 2, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            u"88,000",
+            u"8,800",
+            u"880",
+            u"88",
+            u"9",
+            u"1",
+            u"0",
+            u"0",
+            u"0");
+
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros RELAXED",
+            u".0/@@@r",
+            u".0/@@@r",
+            NumberFormatter::with().precision(Precision::fixedFraction(1)
+                .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_RELAXED)),
+            Locale::getEnglish(),
+            1,
+            u"1.00");
+
+    // Trailing zeros are always retained:
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros STRICT",
+            u".0/@@@s",
+            u".0/@@@s",
+            NumberFormatter::with().precision(Precision::fixedFraction(1)
+                .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            1,
+            u"1.00");
+
+    assertFormatSingle(
+            u"FracSig withSignificantDigits at rounding boundary",
+            u"precision-integer/@@@s",
+            u"./@@@s",
+            NumberFormatter::with().precision(Precision::fixedFraction(0)
+                    .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            9.99,
+            u"10.0");
 }
 
 void NumberFormatterApiTest::roundingOther() {

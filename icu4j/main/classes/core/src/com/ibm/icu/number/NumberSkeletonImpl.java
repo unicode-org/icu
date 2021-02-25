@@ -14,6 +14,7 @@ import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
+import com.ibm.icu.number.NumberFormatter.RoundingPriority;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -1291,20 +1292,14 @@ class NumberSkeletonImpl {
                     break;
                 }
             }
-            // For the frac-sig option, there must be minSig or maxSig but not both.
-            // Valid: @+, @@+, @@@+
-            // Valid: @#, @##, @###
-            // Invalid: @, @@, @@@
-            // Invalid: @@#, @@##, @@@#
             if (offset < segment.length()) {
                 if (isWildcardChar(segment.charAt(offset))) {
+                    // @+, @@+, @@@+
                     maxSig = -1;
                     offset++;
-                } else if (minSig > 1) {
-                    // @@#, @@##, @@@#
-                    throw new SkeletonSyntaxException("Invalid digits option for fraction rounder",
-                            segment);
                 } else {
+                    // @#, @##, @###
+                    // @@#, @@##, @@@#
                     maxSig = minSig;
                     for (; offset < segment.length(); offset++) {
                         if (segment.charAt(offset) == '#') {
@@ -1316,18 +1311,43 @@ class NumberSkeletonImpl {
                 }
             } else {
                 // @, @@, @@@
-                throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+                maxSig = minSig;
             }
+            RoundingPriority priority;
             if (offset < segment.length()) {
-                throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+                if (maxSig == -1) {
+                    throw new SkeletonSyntaxException(
+                        "Invalid digits option: Wildcard character not allowed with the priority annotation", segment);
+                }
+                if (segment.codePointAt(offset) == 'r') {
+                    priority = RoundingPriority.RELAXED;
+                    offset++;
+                } else if (segment.codePointAt(offset) == 's') {
+                    priority = RoundingPriority.STRICT;
+                    offset++;
+                } else {
+                    assert offset < segment.length();
+                    priority = RoundingPriority.RELAXED; // make compiler happy (uninitialized variable)
+                }
+                if (offset < segment.length()) {
+                    throw new SkeletonSyntaxException(
+                        "Invalid digits option for fraction rounder", segment);
+                }
+            } else if (maxSig == -1) {
+                // withMinDigits
+                maxSig = minSig;
+                minSig = 1;
+                priority = RoundingPriority.RELAXED;
+            } else if (minSig == 1) {
+                // withMaxDigits
+                priority = RoundingPriority.STRICT;
+            } else {
+                throw new SkeletonSyntaxException(
+                    "Invalid digits option: Priority annotation required", segment);
             }
 
             FractionPrecision oldRounder = (FractionPrecision) macros.precision;
-            if (maxSig == -1) {
-                macros.precision = oldRounder.withMinDigits(minSig);
-            } else {
-                macros.precision = oldRounder.withMaxDigits(maxSig);
-            }
+            macros.precision = oldRounder.withSignificantDigits(minSig, maxSig, priority);
             return true;
         }
 
@@ -1526,10 +1546,11 @@ class NumberSkeletonImpl {
                 Precision.FracSigRounderImpl impl = (Precision.FracSigRounderImpl) macros.precision;
                 BlueprintHelpers.generateFractionStem(impl.minFrac, impl.maxFrac, sb);
                 sb.append('/');
-                if (impl.minSig == -1) {
-                    BlueprintHelpers.generateDigitsStem(1, impl.maxSig, sb);
+                BlueprintHelpers.generateDigitsStem(impl.minSig, impl.maxSig, sb);
+                if (impl.priority == RoundingPriority.RELAXED) {
+                    sb.append('r');
                 } else {
-                    BlueprintHelpers.generateDigitsStem(impl.minSig, -1, sb);
+                    sb.append('s');
                 }
             } else if (macros.precision instanceof Precision.IncrementRounderImpl) {
                 Precision.IncrementRounderImpl impl = (Precision.IncrementRounderImpl) macros.precision;

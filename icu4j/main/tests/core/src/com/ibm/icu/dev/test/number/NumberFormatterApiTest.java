@@ -37,6 +37,7 @@ import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
+import com.ibm.icu.number.NumberFormatter.RoundingPriority;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.number.Precision;
@@ -2518,6 +2519,71 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 0.0999999,
                 "0.10");
+
+        assertFormatDescending(
+                "FracSig withSignificantDigits RELAXED",
+                "precision-integer/@#r",
+                "./@#r",
+                NumberFormatter.with().precision(Precision.maxFraction(0)
+                        .withSignificantDigits(1, 2, RoundingPriority.RELAXED)),
+                ULocale.ENGLISH,
+                "87,650",
+                "8,765",
+                "876",
+                "88",
+                "8.8",
+                "0.88",
+                "0.088",
+                "0.0088",
+                "0");
+
+        assertFormatDescending(
+                "FracSig withSignificantDigits STRICT",
+                "precision-integer/@#s",
+                "./@#",
+                NumberFormatter.with().precision(Precision.maxFraction(0)
+                        .withSignificantDigits(1, 2, RoundingPriority.STRICT)),
+                ULocale.ENGLISH,
+                "88,000",
+                "8,800",
+                "880",
+                "88",
+                "9",
+                "1",
+                "0",
+                "0",
+                "0");
+        
+        assertFormatSingle(
+                "FracSig withSignificantDigits Trailing Zeros RELAXED",
+                ".0/@@@r",
+                ".0/@@@r",
+                NumberFormatter.with().precision(Precision.fixedFraction(1)
+                        .withSignificantDigits(3, 3, RoundingPriority.RELAXED)),
+                ULocale.ENGLISH,
+                1,
+                "1.00");
+        
+        // Trailing zeros are always retained:
+        assertFormatSingle(
+                "FracSig withSignificantDigits Trailing Zeros STRICT",
+                ".0/@@@s",
+                ".0/@@@s",
+                NumberFormatter.with().precision(Precision.fixedFraction(1)
+                        .withSignificantDigits(3, 3, RoundingPriority.STRICT)),
+                ULocale.ENGLISH,
+                1,
+                "1.00");
+
+        assertFormatSingle(
+                "FracSig withSignificantDigits at rounding boundary",
+                "precision-integer/@@@s",
+                "./@@@s",
+                NumberFormatter.with().precision(Precision.fixedFraction(0)
+                        .withSignificantDigits(3, 3, RoundingPriority.STRICT)),
+                ULocale.ENGLISH,
+                9.99,
+                "10.0");
     }
 
     @Test

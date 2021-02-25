@@ -40,6 +40,10 @@ public class NumberSkeletonTest {
                 ".00/@@*",
                 ".00/@@+",
                 ".00/@##",
+                ".00/@",
+                ".00/@r",
+                ".00/@@s",
+                ".00/@@#r",
                 "precision-increment/3.14",
                 "precision-currency-standard",
                 "precision-integer rounding-mode-half-up",
@@ -142,13 +146,13 @@ public class NumberSkeletonTest {
                 "@#+",
                 "@@x",
                 "@@##0",
-                ".00/@",
                 ".00/@@",
                 ".00/@@x",
                 ".00/@@#",
                 ".00/@@#*",
                 ".00/floor/@@*", // wrong order
                 ".00/@@#+",
+                ".00/@@@+r",
                 ".00/floor/@@+", // wrong order
                 "precision-increment/français", // non-invariant characters for C++
                 "scientific/ee",
@@ -322,7 +326,6 @@ public class NumberSkeletonTest {
         String[][] cases = {
             { ".00*", ".00+" },
             { "@@*", "@@+" },
-            { ".00/@@*", ".00/@@+" },
             { "scientific/*ee", "scientific/+ee" },
             { "integer-width/*00", "integer-width/+00" },
         };

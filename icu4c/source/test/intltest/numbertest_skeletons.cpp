@@ -56,6 +56,10 @@ void NumberSkeletonTest::validTokens() {
             u".00/@@*",
             u".00/@@+",
             u".00/@##",
+            u".00/@",
+            u".00/@r",
+            u".00/@@s",
+            u".00/@@#r",
             u"precision-increment/3.14",
             u"precision-currency-standard",
             u"precision-integer rounding-mode-half-up",
@@ -159,13 +163,13 @@ void NumberSkeletonTest::invalidTokens() {
             u"@#+",
             u"@@x",
             u"@@##0",
-            u".00/@",
             u".00/@@",
             u".00/@@x",
             u".00/@@#",
             u".00/@@#*",
             u".00/floor/@@*", // wrong order
             u".00/@@#+",
+            u".00/@@@+r",
             u".00/floor/@@+", // wrong order
             u"precision-increment/français", // non-invariant characters for C++
             u"scientific/ee",
@@ -337,7 +341,6 @@ void NumberSkeletonTest::wildcardCharacters() {
     } cases[] = {
         { u".00*", u".00+" },
         { u"@@*", u"@@+" },
-        { u".00/@@*", u".00/@@+" },
         { u"scientific/*ee", u"scientific/+ee" },
         { u"integer-width/*00", u"integer-width/+00" },
     };

@@ -219,20 +219,26 @@ symbols.
 
 Note that the stem `.` is considered valid and is equivalent to `precision-integer`.
 
-Fraction-precision stems accept a single optional option: the minimum or
-maximum number of significant digits.  This allows you to combine fraction
-precision with certain significant digits capabilities.  The following are
-examples:
+Fraction-precision stems accept a single optional option: a number of significant digits.
+The options here correspond to the API functions on `FractionPrecision`. Some options
+require specifying `r` or `s` for relaxed mode or strict mode. For more information, see
+the API docs for UNumberRoundingPriority.
 
 | Skeleton | Explanation | Equivalent C++ Code |
 |---|---|---|
 | `.##/@@@*` | At most 2 fraction digits, but guarantee <br/> at least 3 significant digits | `Precision::maxFraction(2)` <br/> `.withMinDigits(3)` |
+| `.##/@##r` | Same as above | `Precision::maxFraction(2)` <br/> `.withSignificantDigits(1, 3, RELAXED)` |
+| `.##/@@@r` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::maxFraction(2)` <br/> `.withSignificantDigits(3, 3, RELAXED)` |
 | `.00/@##` | Exactly 2 fraction digits, but do not <br/> display more than 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withMaxDigits(3)` |
+| `.00/@##s` | Same as above | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(1, 3, STRICT)` |
+| `.00/@##s` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(3, 3, STRICT)` |
 
-Precisely, the option starts with one or more `@` symbols.  Then it contains
-either a `*`, for `::withMinDigits`, or one or more `#` symbols, for
-`::withMaxDigits`.  If a `#` symbol is present, there must be only one `@`
-symbol.
+Precisely, the option follows the syntax of the significant digits stem (see below),
+but one of the following must be true:
+
+- Option has one or more `@`s followed by the wildcard character (`withMinDigits`)
+- Option has exactly one `@` followed by zero or more `#`s (`withMaxDigits`)
+- Option has one or more `@`s followed by zero or more `#`s and ends in `s` or `r` (`withSignificantDigits`)
 
 #### Significant Digits Precision
 
