@@ -4,6 +4,8 @@
 no{
     RBNFRules{
         SpelloutRules{
+            "%%lenient-parse:",
+            "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
             "-x: minus >>;",
             "x.x: =0.0=;",

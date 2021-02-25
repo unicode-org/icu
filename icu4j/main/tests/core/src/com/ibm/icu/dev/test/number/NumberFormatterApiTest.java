@@ -1505,7 +1505,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "measure-unit/length-meter usage/person-height",
                 "unit/meter usage/person-height",
                 NumberFormatter.with().unit(MeasureUnit.METER).usage("person-height"),
-                new ULocale("en-DE"),
+                new ULocale("sv-SE"),
                 Double.NaN,
                 // "0 m, NaN cm");
                 "0 m, 0 cm");

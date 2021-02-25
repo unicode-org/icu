@@ -237,9 +237,9 @@ length;	vehicle;	001;	11 / 10;	1.1;	meter;	11 / 10;	1.1;	meter
 length;	vehicle;	001;	1;	1.0;	meter;	1;	1.0;	meter
 length;	vehicle;	001;	9 / 10;	0.9;	meter;	9 / 10;	0.9;	meter
 
-length;	vehicle;	MX;	11 / 10;	1.1;	meter;	1;	meter;	10;	10.0;	centimeter
-length;	vehicle;	MX;	1;	1.0;	meter;	1;	meter;	0;	0.0;	centimeter
-length;	vehicle;	MX;	9 / 10;	0.9;	meter;	0;	meter;	90;	90.0;	centimeter
+length;	vehicle;	MX;	11 / 10;	1.1;	meter;	11 / 10;	1.1;	meter
+length;	vehicle;	MX;	1;	1.0;	meter;	1;	1.0;	meter
+length;	vehicle;	MX;	9 / 10;	0.9;	meter;	9 / 10;	0.9;	meter
 
 length;	visiblty;	001;	200;	200.0;	meter;	1 / 5;	0.2;	kilometer
 length;	visiblty;	001;	100;	100.0;	meter;	1 / 10;	0.1;	kilometer
@@ -283,9 +283,9 @@ mass;	person;	001;	9 / 10;	0.9;	kilogram;	900;	900.0;	gram
 mass;	person;	001;	1 / 1000;	0.001;	kilogram;	1;	1.0;	gram
 mass;	person;	001;	9 / 10000;	9.0E-4;	kilogram;	9 / 10;	0.9;	gram
 
-mass;	person;	DZ;	11 / 10;	1.1;	kilogram;	1;	kilogram;	100;	100.0;	gram
-mass;	person;	DZ;	1;	1.0;	kilogram;	1;	kilogram;	0;	0.0;	gram
-mass;	person;	DZ;	9 / 10;	0.9;	kilogram;	0;	kilogram;	900;	900.0;	gram
+mass;	person;	DZ;	11 / 10;	1.1;	kilogram;	11 / 10;	1.1;	kilogram
+mass;	person;	DZ;	1;	1.0;	kilogram;	1;	1.0;	kilogram
+mass;	person;	DZ;	9 / 10;	0.9;	kilogram;	900;	900.0;	gram
 
 mass;	person;	US;	498951607 / 1000000000;	0.498951607;	kilogram;	11 / 10;	1.1;	pound
 mass;	person;	US;	45359237 / 100000000;	0.45359237;	kilogram;	1;	1.0;	pound

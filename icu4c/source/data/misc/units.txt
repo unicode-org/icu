@@ -1126,11 +1126,6 @@ units:table(nofallback){
                         unit{"meter-and-centimeter"}
                     }
                 }
-                BR{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
                 CA{
                     {
                         geq{"3.0"}
@@ -1138,21 +1133,6 @@ units:table(nofallback){
                     }
                     {
                         unit{"inch"}
-                    }
-                }
-                CN{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
-                DE{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
-                DK{
-                    {
-                        unit{"meter-and-centimeter"}
                     }
                 }
                 DZ{
@@ -1218,37 +1198,7 @@ units:table(nofallback){
                         unit{"meter-and-centimeter"}
                     }
                 }
-                MX{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
                 MY{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
-                NL{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
-                NO{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
-                PL{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
-                PT{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
-                RU{
                     {
                         unit{"meter-and-centimeter"}
                     }
@@ -1407,11 +1357,6 @@ units:table(nofallback){
                         unit{"foot-and-inch"}
                     }
                 }
-                MX{
-                    {
-                        unit{"meter-and-centimeter"}
-                    }
-                }
                 US{
                     {
                         unit{"foot-and-inch"}
@@ -1507,21 +1452,6 @@ units:table(nofallback){
                         unit{"gram"}
                     }
                 }
-                DZ{
-                    {
-                        unit{"kilogram-and-gram"}
-                    }
-                }
-                EG{
-                    {
-                        unit{"kilogram-and-gram"}
-                    }
-                }
-                ES{
-                    {
-                        unit{"kilogram-and-gram"}
-                    }
-                }
                 GB{
                     {
                         unit{"stone-and-pound"}
@@ -1533,16 +1463,6 @@ units:table(nofallback){
                 HK{
                     {
                         unit{"pound-and-ounce"}
-                    }
-                }
-                JO{
-                    {
-                        unit{"kilogram-and-gram"}
-                    }
-                }
-                SA{
-                    {
-                        unit{"kilogram-and-gram"}
                     }
                 }
                 US{

@@ -1691,7 +1691,7 @@ void NumberFormatterApiTest::unitUsage() {
             u"measure-unit/length-meter usage/person-height",
             u"unit/meter usage/person-height",
             NumberFormatter::with().unit(METER).usage("person-height"),
-            Locale("de-DE"),
+            Locale("sv-SE"),
             uprv_getNaN(),
             u"0 m, NaN cm");
 

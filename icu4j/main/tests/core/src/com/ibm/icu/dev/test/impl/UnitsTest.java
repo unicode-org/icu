@@ -650,9 +650,9 @@ public class UnitsTest {
             UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.region, testCase.usage);
             List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
 
-            assertEquals("Measures size must be the same as expected units",
+            assertEquals("For " + testCase.toString() + ", Measures size must be the same as expected units",
                     measures.size(), testCase.expectedInOrder.size());
-            assertEquals("Measures size must be the same as output units",
+            assertEquals("For " + testCase.toString() + ", Measures size must be the same as output units",
                     measures.size(), testCase.outputUnitInOrder.size());
 
 
