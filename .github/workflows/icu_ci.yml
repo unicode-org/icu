@@ -170,6 +170,27 @@ jobs:
           PYTHON=python3 ./runConfigureICU MacOSX;
           make -j2 check
 
+  # Run ICU4C tests with stubdata.
+  run-with-stubdata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C tests with stubdata
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j2 check;
+          rm lib/libicudata.so*;
+          cp -P stubdata/libicudata.so* lib;
+          cd test/cintltst;
+          echo 'Running ICU4C cintltst with stubdata.';
+          # Note: 'Elapsed Time: ' is printed by makefile upon final success.
+          CINTLTST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: ';
+          cd ../intltest;
+          echo 'Running ICU4C intltest with stubdata.';
+          INTLTEST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: '
+
   # Copyright scan
   copyright-scan:
     runs-on: ubuntu-latest
