@@ -183,13 +183,6 @@
         <delete dir="${out.dir}"/>
         <delete dir="${module.dir}"/>
         <delete dir="${cldr.release.dir}"/>
-
-        <available file="eclipse-build" type="dir" property="eclipse-build.dir.present"/>
-        <antcall target="_clean.eclipse-build"/>
-    </target>
-
-    <target name="_clean.eclipse-build" if="eclipse-build.dir.present">
-        <ant dir="eclipse-build" target="clean" inheritAll="false"/>
     </target>
 
     <target name="ivy-clean">
