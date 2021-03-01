@@ -37,6 +37,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.TimeZoneFormat.Style;
 import com.ibm.icu.text.TimeZoneFormat.TimeType;
 import com.ibm.icu.util.BasicTimeZone;
+import com.ibm.icu.util.BasicTimeZone.LocalOption;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.Output;
@@ -2710,10 +2711,10 @@ public class SimpleDateFormat extends DateFormat {
                     if (btz != null) {
                         if (tztype == TimeType.STANDARD) {
                             btz.getOffsetFromLocal(localMillis,
-                                    BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
+                                    LocalOption.STANDARD_FORMER, LocalOption.STANDARD_LATTER, offsets);
                         } else {
                             btz.getOffsetFromLocal(localMillis,
-                                    BasicTimeZone.LOCAL_DST, BasicTimeZone.LOCAL_DST, offsets);
+                                    LocalOption.DAYLIGHT_FORMER, LocalOption.DAYLIGHT_LATTER, offsets);
                         }
                     } else {
                         // No good way to resolve ambiguous time at transition,
