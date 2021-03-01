@@ -488,6 +488,33 @@ public final class NumberFormatter {
     }
 
     /**
+     * An enum declaring how to render trailing zeros.
+     *
+     * <ul>
+     * <li>AUTO: 0.90, 1.00, 1.10
+     * <li>HIDE_IF_WHOLE: 0.90, 1, 1.10
+     * </ul>
+     * 
+     * @draft ICU 69
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static enum TrailingZeroDisplay {
+        /**
+         * Display trailing zeros according to the settings for minimum fraction and significant digits.
+         *
+         * @draft ICU 69
+         */
+        AUTO,
+    
+        /**
+         * Same as AUTO, but hide trailing zeros after the decimal separator if they are all zero.
+         *
+         * @draft ICU 69
+         */
+        HIDE_IF_WHOLE,
+    }
+
+    /**
      * Use a default threshold of 3. This means that the third time .format() is called, the data
      * structures get built using the "safe" code path. The first two calls to .format() will trigger the
      * unsafe code path.

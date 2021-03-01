@@ -257,6 +257,16 @@ digits.  Then it contains either a `*`, for unlimited maximum significant
 digits, or zero or more `#` symbols, which implies the minimum significant
 digits when added to the `@` symbols.
 
+#### Trailing Zero Display
+
+***Starting with ICU 69***, a new option called `trailingZeroDisplay` was added.
+To enable this in an ICU number skeleton, append `/w` to any precision token:
+
+| Skeleton | Explanation | Equivalent C++ Code |
+|---|---|---|
+| `.00/w` | Exactly 2 fraction digits, but hide <br/> them if they are all 0 | `Precision::fixedFraction(2)` <br/> `.trailingZeroDisplay(` <br/> `UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)` |
+| `precision-curren` <br/> `cy-standard/w` | Currency rounding, but hide <br/> fraction digits if they are all 0 | `Precision::currency(UCURR_USAGE_STANDARD)` <br/> `.trailingZeroDisplay(` <br/> `UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)` |
+
 #### Wildcard Character
 
 ***Prior to ICU 67***, the symbol `+` was used for unlimited precision, instead

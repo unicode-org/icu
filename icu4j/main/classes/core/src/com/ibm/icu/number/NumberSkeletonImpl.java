@@ -16,6 +16,7 @@ import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.RoundingPriority;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.TrailingZeroDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
@@ -51,6 +52,7 @@ class NumberSkeletonImpl {
         // Section 1: We might accept an option, but it is not required:
         STATE_SCIENTIFIC,
         STATE_FRACTION_PRECISION,
+        STATE_PRECISION,
 
         // Section 2: An option is required:
         STATE_INCREMENT_PRECISION,
@@ -671,7 +673,7 @@ class NumberSkeletonImpl {
         case '@':
             checkNull(macros.precision, segment);
             BlueprintHelpers.parseDigitsStem(segment, macros);
-            return ParseState.STATE_NULL;
+            return ParseState.STATE_PRECISION;
         case 'E':
             checkNull(macros.notation, segment);
             BlueprintHelpers.parseScientificStem(segment, macros);
@@ -734,7 +736,7 @@ class NumberSkeletonImpl {
             case STEM_PRECISION_INTEGER:
                 return ParseState.STATE_FRACTION_PRECISION; // allows for "precision-integer/@##"
             default:
-                return ParseState.STATE_NULL;
+                return ParseState.STATE_PRECISION;
             }
 
         case STEM_ROUNDING_MODE_CEILING:
@@ -871,7 +873,7 @@ class NumberSkeletonImpl {
             return ParseState.STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);
-            return ParseState.STATE_NULL;
+            return ParseState.STATE_PRECISION;
         case STATE_INTEGER_WIDTH:
             BlueprintHelpers.parseIntegerWidthOption(segment, macros);
             return ParseState.STATE_NULL;
@@ -905,6 +907,19 @@ class NumberSkeletonImpl {
         switch (stem) {
         case STATE_FRACTION_PRECISION:
             if (BlueprintHelpers.parseFracSigOption(segment, macros)) {
+                return ParseState.STATE_PRECISION;
+            }
+            // If the fracSig option was not found, try normal precision options.
+            stem = ParseState.STATE_PRECISION;
+            break;
+        default:
+            break;
+        }
+
+        // Trailing zeros option
+        switch (stem) {
+        case STATE_PRECISION:
+            if (BlueprintHelpers.parseTrailingZeroOption(segment, macros)) {
                 return ParseState.STATE_NULL;
             }
             break;
@@ -1351,6 +1366,15 @@ class NumberSkeletonImpl {
             return true;
         }
 
+        /** @return Whether we successfully found and parsed a trailing zero option. */
+        private static boolean parseTrailingZeroOption(StringSegment segment, MacroProps macros) {
+            if (segment.equals("w")) {
+                macros.precision = macros.precision.trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE);
+                return true;
+            }
+            return false;
+        }
+
         private static void parseIncrementOption(StringSegment segment, MacroProps macros) {
             // Call segment.subSequence() because segment.toString() doesn't create a clean string.
             String str = segment.subSequence(0, segment.length()).toString();
@@ -1564,6 +1588,10 @@ class NumberSkeletonImpl {
                 } else {
                     sb.append("precision-currency-cash");
                 }
+            }
+
+            if (macros.precision.trailingZeroDisplay == TrailingZeroDisplay.HIDE_IF_WHOLE) {
+                sb.append("/w");
             }
 
             // NOTE: Always return true for rounding because the default value depends on other options.

@@ -42,6 +42,7 @@ enum ParseState {
 
     STATE_SCIENTIFIC,
     STATE_FRACTION_PRECISION,
+    STATE_PRECISION,
 
     // Section 2: An option is required:
 
@@ -277,6 +278,9 @@ void parseIntegerStem(const StringSegment& segment, MacroProps& macros, UErrorCo
 
 /** @return Whether we successfully found and parsed a frac-sig option. */
 bool parseFracSigOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
+
+/** @return Whether we successfully found and parsed a trailing zero option. */
+bool parseTrailingZeroOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 void parseIncrementOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
