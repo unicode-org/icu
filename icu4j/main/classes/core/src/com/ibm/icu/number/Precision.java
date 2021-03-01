@@ -10,6 +10,8 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MultiplierProducer;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.RoundingPriority;
+import com.ibm.icu.number.NumberFormatter.TrailingZeroDisplay;
+import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 
@@ -25,6 +27,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 public abstract class Precision {
 
     /* package-private final */ MathContext mathContext;
+    /* package-private final */ TrailingZeroDisplay trailingZeroDisplay;
 
     /* package-private */ Precision() {
         mathContext = RoundingUtils.DEFAULT_MATH_CONTEXT_UNLIMITED;
@@ -336,6 +339,12 @@ public abstract class Precision {
         }
     }
 
+    public Precision trailingZeroDisplay(TrailingZeroDisplay trailingZeroDisplay) {
+        Precision result = this.createCopy();
+        result.trailingZeroDisplay = trailingZeroDisplay;
+        return result;
+    }
+
     /**
      * Sets a MathContext to use on this Precision.
      *
@@ -611,7 +620,7 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToInfinity();
-            value.setMinFraction(0);
+            setResolvedMinFraction(value, 0);
         }
 
         @Override
@@ -634,7 +643,7 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeFraction(maxFrac), mathContext);
-            value.setMinFraction(Math.max(0, -getDisplayMagnitudeFraction(minFrac)));
+            setResolvedMinFraction(value, Math.max(0, -getDisplayMagnitudeFraction(minFrac)));
         }
 
         @Override
@@ -657,7 +666,7 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
-            value.setMinFraction(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)));
+            setResolvedMinFraction(value, Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)));
             // Make sure that digits are displayed on zero.
             if (value.isZeroish() && minSig > 0) {
                 value.setMinInteger(1);
@@ -670,7 +679,7 @@ public abstract class Precision {
          */
         public void apply(DecimalQuantity quantity, int minInt) {
             assert quantity.isZeroish();
-            quantity.setMinFraction(minSig - minInt);
+            setResolvedMinFraction(quantity, minSig - minInt);
         }
 
         @Override
@@ -711,7 +720,7 @@ public abstract class Precision {
             int displayMag1 = getDisplayMagnitudeFraction(minFrac);
             int displayMag2 = getDisplayMagnitudeSignificant(value, minSig);
             int displayMag = Math.min(displayMag1, displayMag2);
-            value.setMinFraction(Math.max(0, -displayMag));
+            setResolvedMinFraction(value, Math.max(0, -displayMag));
         }
 
         @Override
@@ -735,7 +744,7 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToIncrement(increment, mathContext);
-            value.setMinFraction(increment.scale());
+            setResolvedMinFraction(value, increment.scale());
         }
 
         @Override
@@ -764,7 +773,7 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(-maxFrac, mathContext);
-            value.setMinFraction(minFrac);
+            setResolvedMinFraction(value, minFrac);
         }
 
         @Override
@@ -791,7 +800,7 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToNickel(-maxFrac, mathContext);
-            value.setMinFraction(minFrac);
+            setResolvedMinFraction(value, minFrac);
         }
 
         @Override
@@ -845,7 +854,17 @@ public abstract class Precision {
         return -minFrac;
     }
 
+    void setResolvedMinFraction(DecimalQuantity value, int resolvedMinFraction) {
+        if (trailingZeroDisplay == null ||
+                trailingZeroDisplay == TrailingZeroDisplay.AUTO ||
+                // PLURAL_OPERAND_T returns fraction digits as an integer
+                value.getPluralOperand(Operand.t) != 0) {
+            value.setMinFraction(resolvedMinFraction);
+        }
+    }
+
     private static int getDisplayMagnitudeSignificant(DecimalQuantity value, int minSig) {
+        // Question: Is it useful to look at trailingZeroDisplay here?
         int magnitude = value.isZeroish() ? 0 : value.getMagnitude();
         return magnitude - minSig + 1;
     }

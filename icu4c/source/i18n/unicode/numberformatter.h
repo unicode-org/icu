@@ -659,6 +659,17 @@ class U_I18N_API Precision : public UMemory {
      */
     static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Configure how trailing zeros are displayed on numbers. For example, to hide trailing zeros
+     * when the number is an integer, use UNUM_TRAILING_ZERO_HIDE_IF_WHOLE.
+     *
+     * @param trailingZeroDisplay Option to configure the display of trailing zeros.
+     * @draft ICU 69
+     */
+    Precision trailingZeroDisplay(UNumberTrailingZeroDisplay trailingZeroDisplay) const;
+#endif // U_HIDE_DRAFT_API
+
   private:
     enum PrecisionType {
         RND_BOGUS,
@@ -710,6 +721,8 @@ class U_I18N_API Precision : public UMemory {
         UCurrencyUsage currencyUsage; // For RND_CURRENCY
         UErrorCode errorCode; // For RND_ERROR
     } fUnion;
+
+    UNumberTrailingZeroDisplay fTrailingZeroDisplay = UNUM_TRAILING_ZERO_AUTO;
 
     typedef PrecisionUnion::FractionSignificantSettings FractionSignificantSettings;
     typedef PrecisionUnion::IncrementSettings IncrementSettings;

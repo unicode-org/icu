@@ -616,7 +616,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case u'@':
             CHECK_NULL(seen, precision, status);
             blueprint_helpers::parseDigitsStem(segment, macros, status);
-            return STATE_NULL;
+            return STATE_PRECISION;
         case u'E':
             CHECK_NULL(seen, notation, status);
             blueprint_helpers::parseScientificStem(segment, macros, status);
@@ -682,7 +682,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
                 case STEM_PRECISION_INTEGER:
                     return STATE_FRACTION_PRECISION; // allows for "precision-integer/@##"
                 default:
-                    return STATE_NULL;
+                    return STATE_PRECISION;
             }
 
         case STEM_ROUNDING_MODE_CEILING:
@@ -813,7 +813,7 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
             return STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             blueprint_helpers::parseIncrementOption(segment, macros, status);
-            return STATE_NULL;
+            return STATE_PRECISION;
         case STATE_INTEGER_WIDTH:
             blueprint_helpers::parseIntegerWidthOption(segment, macros, status);
             return STATE_NULL;
@@ -853,6 +853,22 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
     switch (stem) {
         case STATE_FRACTION_PRECISION:
             if (blueprint_helpers::parseFracSigOption(segment, macros, status)) {
+                return STATE_PRECISION;
+            }
+            if (U_FAILURE(status)) {
+                return {};
+            }
+            // If the fracSig option was not found, try normal precision options.
+            stem = STATE_PRECISION;
+            break;
+        default:
+            break;
+    }
+
+    // Trailing zeros option
+    switch (stem) {
+        case STATE_PRECISION:
+            if (blueprint_helpers::parseTrailingZeroOption(segment, macros, status)) {
                 return STATE_NULL;
             }
             if (U_FAILURE(status)) {
@@ -1362,6 +1378,14 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
     return true;
 }
 
+bool blueprint_helpers::parseTrailingZeroOption(const StringSegment& segment, MacroProps& macros, UErrorCode&) {
+    if (segment == u"w") {
+        macros.precision = macros.precision.trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE);
+        return true;
+    }
+    return false;
+}
+
 void blueprint_helpers::parseIncrementOption(const StringSegment &segment, MacroProps &macros,
                                              UErrorCode &status) {
     number::impl::parseIncrementOption(segment, macros.precision, status);
@@ -1615,6 +1639,10 @@ bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UE
     } else {
         // Bogus or Error
         return false;
+    }
+
+    if (macros.precision.fTrailingZeroDisplay == UNUM_TRAILING_ZERO_HIDE_IF_WHOLE) {
+        sb.append(u"/w", -1);
     }
 
     // NOTE: Always return true for rounding because the default value depends on other options.

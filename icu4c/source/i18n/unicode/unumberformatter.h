@@ -494,6 +494,32 @@ typedef enum UNumberDecimalSeparatorDisplay {
             UNUM_DECIMAL_SEPARATOR_COUNT
 } UNumberDecimalSeparatorDisplay;
 
+#ifndef U_FORCE_HIDE_DRAFT_API
+/**
+ * An enum declaring how to render trailing zeros.
+ * 
+ * - UNUM_TRAILING_ZERO_AUTO: 0.90, 1.00, 1.10
+ * - UNUM_TRAILING_ZERO_HIDE_IF_WHOLE: 0.90, 1, 1.10
+ * 
+ * @draft ICU 69
+ */
+typedef enum UNumberTrailingZeroDisplay {
+    /**
+     * Display trailing zeros according to the settings for minimum fraction and significant digits.
+     *
+     * @draft ICU 69
+     */
+    UNUM_TRAILING_ZERO_AUTO,
+
+    /**
+     * Same as AUTO, but hide trailing zeros after the decimal separator if they are all zero.
+     *
+     * @draft ICU 69
+     */
+    UNUM_TRAILING_ZERO_HIDE_IF_WHOLE,
+} UNumberTrailingZeroDisplay;
+#endif // U_FORCE_HIDE_DRAFT_API
+
 struct UNumberFormatter;
 /**
  * C-compatible version of icu::number::LocalizedNumberFormatter.

@@ -2545,6 +2545,26 @@ void NumberFormatterApiTest::roundingFraction() {
             u"0.088",
             u"0.009",
             u"0.0");
+
+    assertFormatSingle(
+            u"Hide If Whole A",
+            u".00/w",
+            u".00/w",
+            NumberFormatter::with().precision(Precision::fixedFraction(2)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)),
+            Locale::getEnglish(),
+            1.2,
+            "1.20");
+
+    assertFormatSingle(
+            u"Hide If Whole B",
+            u".00/w",
+            u".00/w",
+            NumberFormatter::with().precision(Precision::fixedFraction(2)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)),
+            Locale::getEnglish(),
+            1,
+            "1");
 }
 
 void NumberFormatterApiTest::roundingFigures() {
@@ -2770,6 +2790,16 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             Locale::getEnglish(),
             9.99,
             u"10.0");
+
+    assertFormatSingle(
+            u"FracSig with Trailing Zero Display",
+            u".00/@@@*/w",
+            u".00/@@@+/w",
+            NumberFormatter::with().precision(Precision::fixedFraction(2).withMinDigits(3)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)),
+            Locale::getEnglish(),
+            1,
+            u"1");
 }
 
 void NumberFormatterApiTest::roundingOther() {
@@ -2885,6 +2915,25 @@ void NumberFormatterApiTest::roundingOther() {
             u"CZK 1",
             u"CZK 0",
             u"CZK 0",
+            u"CZK 0");
+
+    assertFormatDescending(
+            u"Currency Standard with Trailing Zero Display",
+            u"currency/CZK precision-currency-standard/w",
+            u"currency/CZK precision-currency-standard/w",
+            NumberFormatter::with().precision(
+                        Precision::currency(UCurrencyUsage::UCURR_USAGE_STANDARD)
+                        .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE))
+                    .unit(CZK),
+            Locale::getEnglish(),
+            u"CZK 87,650",
+            u"CZK 8,765",
+            u"CZK 876.50",
+            u"CZK 87.65",
+            u"CZK 8.76",
+            u"CZK 0.88",
+            u"CZK 0.09",
+            u"CZK 0.01",
             u"CZK 0");
 
     assertFormatDescending(

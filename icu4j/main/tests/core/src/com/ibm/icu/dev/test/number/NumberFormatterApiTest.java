@@ -39,6 +39,7 @@ import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.RoundingPriority;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.TrailingZeroDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.Scale;
@@ -2508,6 +2509,26 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.088",
                 "0.009",
                 "0.0");
+
+        assertFormatSingle(
+                "Hide If Whole A",
+                ".00/w",
+                ".00/w",
+                NumberFormatter.with().precision(Precision.fixedFraction(2)
+                        .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE)),
+                ULocale.ENGLISH,
+                1.2,
+                "1.20");
+        
+        assertFormatSingle(
+                "Hide If Whole B",
+                ".00/w",
+                ".00/w",
+                NumberFormatter.with().precision(Precision.fixedFraction(2)
+                        .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE)),
+                ULocale.ENGLISH,
+                1,
+                "1");
     }
 
     @Test
@@ -2749,6 +2770,16 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 9.99,
                 "10.0");
+
+        assertFormatSingle(
+                "FracSig with Trailing Zero Display",
+                ".00/@@@*/w",
+                ".00/@@@+/w",
+                NumberFormatter.with().precision(Precision.fixedFraction(2).withMinDigits(3)
+                        .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE)),
+                ULocale.ENGLISH,
+                1,
+                "1");
     }
 
     @Test
@@ -2863,6 +2894,25 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "CZK 1",
                 "CZK 0",
                 "CZK 0",
+                "CZK 0");
+
+        assertFormatDescending(
+                "Currency Standard with Trailing Zero Display",
+                "currency/CZK precision-currency-standard/w",
+                "currency/CZK precision-currency-standard/w",
+                NumberFormatter.with().precision(
+                                Precision.currency(CurrencyUsage.STANDARD)
+                                .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE))
+                        .unit(CZK),
+                ULocale.ENGLISH,
+                "CZK 87,650",
+                "CZK 8,765",
+                "CZK 876.50",
+                "CZK 87.65",
+                "CZK 8.76",
+                "CZK 0.88",
+                "CZK 0.09",
+                "CZK 0.01",
                 "CZK 0");
 
         assertFormatDescending(
