@@ -2103,22 +2103,19 @@ void NumberFormatterApiTest::runUnitInflectionsTestCases(UnlocalizedNumberFormat
         };
         UnicodeString skelString = UnicodeString("unit/") + t.unitIdentifier + u" " + skeleton;
         const UChar *skel;
-        const UChar *cSkel;
         if (t.unitDisplayCase == nullptr || t.unitDisplayCase[0] == 0) {
             unf = unf.unit(mu).unitDisplayCase("");
             skel = skelString.getTerminatedBuffer();
-            cSkel = skelString.getTerminatedBuffer();
         } else {
             unf = unf.unit(mu).unitDisplayCase(t.unitDisplayCase);
             // No skeleton support for unitDisplayCase yet.
             skel = nullptr;
-            cSkel = nullptr;
         }
         assertFormatSingle((UnicodeString("Unit: \"") + t.unitIdentifier + ("\", \"") + skeleton +
                             u"\", locale=\"" + t.locale + u"\", case=\"" +
                             (t.unitDisplayCase ? t.unitDisplayCase : "") + u"\", value=" + t.value)
                                .getTerminatedBuffer(),
-                           skel, cSkel, unf, Locale(t.locale), t.value, t.expected);
+                           skel, skel, unf, Locale(t.locale), t.value, t.expected);
         status.assertSuccess();
     }
 }
@@ -2147,7 +2144,7 @@ void NumberFormatterApiTest::unitInflections() {
         // General testing of inflection rules
         unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
         skeleton = u"unit-width-full-name";
-        const UnitInflectionTestCase meterCases[] = {
+        const UnitInflectionTestCase testCases[] = {
             // Check up on the basic values that the compound patterns below are
             // derived from:
             {"meter", "de", nullptr, 1, u"1 Meter"},
@@ -2219,13 +2216,13 @@ void NumberFormatterApiTest::unitInflections() {
             {"square-decimeter-square-second", "fr", nullptr, 1, u"1\u00A0décimètre carré-seconde carrée"},
             {"square-decimeter-square-second", "fr", nullptr, 2, u"2\u00A0décimètres carrés-secondes carrées"},
         };
-        runUnitInflectionsTestCases(unf, skeleton, meterCases, UPRV_LENGTHOF(meterCases), status);
+        runUnitInflectionsTestCases(unf, skeleton, testCases, UPRV_LENGTHOF(testCases), status);
     }
     {
         // Testing inflection of mixed units:
         unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
         skeleton = u"unit-width-full-name";
-        const UnitInflectionTestCase meterPerDayCases[] = {
+        const UnitInflectionTestCase testCases[] = {
             {"meter", "de", nullptr, 1, u"1 Meter"},
             {"meter", "de", "genitive", 1, u"1 Meters"},
             {"meter", "de", "dative", 2, u"2 Metern"},
@@ -2241,7 +2238,7 @@ void NumberFormatterApiTest::unitInflections() {
             {"meter-and-centimeter", "de", "dative", 1.1, u"1 Meter, 10 Zentimetern"},
             {"meter-and-centimeter", "de", "dative", 2.1, u"2 Metern, 10 Zentimetern"},
         };
-        runUnitInflectionsTestCases(unf, skeleton, meterPerDayCases, UPRV_LENGTHOF(meterPerDayCases),
+        runUnitInflectionsTestCases(unf, skeleton, testCases, UPRV_LENGTHOF(testCases),
                                     status);
     }
     // TODO: add a usage case that selects between preferences with different
