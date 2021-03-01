@@ -86,7 +86,7 @@ class U_I18N_API ComplexUnitsConverter : public UMemory {
      *
      * @param inputUnit represents the source unit. (should be single or compound unit).
      * @param outputUnits represents the output unit. could be any type. (single, compound or mixed).
-     * @param ratesInfo
+     * @param ratesInfo a ConversionRates instance containing the unit conversion rates.
      * @param status
      */
     ComplexUnitsConverter(const MeasureUnitImpl &inputUnit, const MeasureUnitImpl &outputUnits,
