@@ -86,6 +86,7 @@ public class ComplexUnitsConverter {
      * @param outputUnits
      *            represents the output unit. could be any type. (single, compound or mixed).
      * @param conversionRates
+     *            a ConversionRates instance containing the unit conversion rates.
      */
     public ComplexUnitsConverter(MeasureUnitImpl inputUnit, MeasureUnitImpl outputUnits,
             ConversionRates conversionRates) {

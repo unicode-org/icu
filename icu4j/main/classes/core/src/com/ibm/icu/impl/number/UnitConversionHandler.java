@@ -2,12 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
-import java.util.List;
-
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
 import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
-import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
 /**

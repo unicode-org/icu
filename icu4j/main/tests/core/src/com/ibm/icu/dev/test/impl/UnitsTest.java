@@ -64,7 +64,7 @@ public class UnitsTest {
                 for (Measure measure : measures) {
                     double accuracy = 0.0;
                     if (i == expected.length - 1) {
-                        accuracy = accuracy;
+                        accuracy = this.accuracy;
                     }
                     assertTrue("input " + value + ", output measure " + i + ": expected " +
                                     expected[i] + ", expected unit " +
@@ -572,7 +572,6 @@ public class UnitsTest {
             /**
              * Test Case Data
              */
-            @SuppressWarnings("unused")
             String category;
             String usage;
             String region;
@@ -622,6 +621,7 @@ public class UnitsTest {
                 }
             }
 
+            @Override
             public String toString() {
                 ArrayList<MeasureUnitImpl> outputUnits = new ArrayList<>();
                 for (Pair<String, MeasureUnitImpl> unit : outputUnitInOrder) {

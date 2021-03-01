@@ -9,7 +9,6 @@ import java.util.List;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.number.Precision;
-import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 
 /**
