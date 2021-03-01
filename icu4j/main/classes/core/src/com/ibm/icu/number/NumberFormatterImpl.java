@@ -412,6 +412,14 @@ class NumberFormatterImpl {
                 MeasureUnit unit = macros.unit;
                 if (macros.perUnit != null) {
                     unit = unit.product(macros.perUnit.reciprocal());
+                    // This isn't strictly necessary, but was what we specced
+                    // out when perUnit became a backward-compatibility thing:
+                    // unit/perUnit use case is only valid if both units are
+                    // built-ins, or the product is a built-in.
+                    if (unit.getType() == null && (macros.unit.getType() == null || macros.perUnit.getType() == null)) {
+                        throw new UnsupportedOperationException(
+                            "perUnit() can only be used if unit and perUnit are both built-ins, or the combination is a built-in");
+                    }
                 }
                 chain = LongNameHandler.forMeasureUnit(
                         macros.loc,

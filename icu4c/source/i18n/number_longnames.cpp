@@ -143,35 +143,32 @@ enum PlaceholderPosition { PH_EMPTY, PH_NONE, PH_BEGINNING, PH_MIDDLE, PH_END };
  *   found.
  * @param joinerChar Iff the placeholder was at the beginning or end, joinerChar
  *   contains the space character (if any) that separated the placeholder from
- *   the rest of the pattern. Otherwise, joinerChar is set to NUL.
+ *   the rest of the pattern. Otherwise, joinerChar is set to NUL. Only one
+ *   space character is considered.
  */
 void extractCorePattern(const UnicodeString &pattern,
                         UnicodeString &coreUnit,
                         PlaceholderPosition &placeholderPosition,
                         UChar &joinerChar) {
     joinerChar = 0;
+    int32_t len = pattern.length();
     if (pattern.startsWith(u"{0}", 3)) {
         placeholderPosition = PH_BEGINNING;
         if (u_isJavaSpaceChar(pattern[3])) {
             joinerChar = pattern[3];
-            coreUnit.setTo(pattern, 4, pattern.length() - 4);
-            // Expecting no double spaces
-            U_ASSERT(!u_isJavaSpaceChar(pattern[4]));
+            coreUnit.setTo(pattern, 4, len - 4);
         } else {
-            coreUnit.setTo(pattern, 3, pattern.length() - 3);
+            coreUnit.setTo(pattern, 3, len - 3);
         }
     } else if (pattern.endsWith(u"{0}", 3)) {
         placeholderPosition = PH_END;
-        int32_t len = pattern.length();
         if (u_isJavaSpaceChar(pattern[len - 4])) {
-            coreUnit.setTo(pattern, 0, pattern.length() - 4);
+            coreUnit.setTo(pattern, 0, len - 4);
             joinerChar = pattern[len - 4];
-            // Expecting no double spaces
-            U_ASSERT(!u_isJavaSpaceChar(pattern[len - 5]));
         } else {
-            coreUnit.setTo(pattern, 0, pattern.length() - 3);
+            coreUnit.setTo(pattern, 0, len - 3);
         }
-    } else if (pattern.indexOf(u"{0}", 0, 1, pattern.length() - 2) == -1) {
+    } else if (pattern.indexOf(u"{0}", 3, 1, len - 2) == -1) {
         placeholderPosition = PH_NONE;
         coreUnit = pattern;
     } else {
@@ -361,7 +358,7 @@ void getInflectedMeasureData(StringPiece subKey,
     key.append(subKey, status);
 
     UErrorCode localStatus = status;
-    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
+    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, localStatus);
     if (width == UNUM_UNIT_WIDTH_SHORT) {
         status = localStatus;
         return;
@@ -777,11 +774,6 @@ void LongNameHandler::forMeasureUnit(const Locale &loc,
     //
     // 1. If the unitId is empty or invalid, fail
     // 2. Put the unitId into normalized order
-    //
-    // We just need to check if it is a MeasureUnit this constructor handles:
-    // this constructor does not handle mixed units
-    U_ASSERT(uprv_strcmp(unitRef.getType(), "") != 0 ||
-             unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
 
     if (uprv_strcmp(unitRef.getType(), "") != 0) {
@@ -812,6 +804,9 @@ void LongNameHandler::forMeasureUnit(const Locale &loc,
         // fillIn->parent = parent;
         // return;
     } else {
+        // Check if it is a MeasureUnit this constructor handles: this
+        // constructor does not handle mixed units
+        U_ASSERT(unitRef.getComplexity(status) != UMEASURE_UNIT_MIXED);
         forArbitraryUnit(loc, unitRef, width, unitDisplayCase, fillIn, status);
         fillIn->rules = rules;
         fillIn->parent = parent;
@@ -1070,7 +1065,7 @@ void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
             getInflectedMeasureData(dimensionalityKey.toStringPiece(), loc, width, gender,
                                     singleCaseVariant, dimensionalityPrefixPatterns, status);
             if (U_FAILURE(status)) {
-                // At the time of writing, only power2 and power3 are supported.
+                // At the time of writing, only pow2 and pow3 are supported.
                 // Attempting to format other powers results in a
                 // U_RESOURCE_TYPE_MISMATCH. We convert the error if we
                 // understand it:
@@ -1410,6 +1405,7 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc,
                                               const MicroPropsGenerator *parent,
                                               MixedUnitLongNameHandler *fillIn,
                                               UErrorCode &status) {
+    U_ASSERT(mixedUnit.getComplexity(status) == UMEASURE_UNIT_MIXED);
     U_ASSERT(fillIn != nullptr);
     if (U_FAILURE(status)) {
         return;
@@ -1417,6 +1413,7 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc,
 
     MeasureUnitImpl temp;
     const MeasureUnitImpl &impl = MeasureUnitImpl::forMeasureUnit(mixedUnit, temp, status);
+    // Defensive, for production code:
     if (impl.complexity != UMEASURE_UNIT_MIXED) {
         // Should be using the normal LongNameHandler
         status = U_UNSUPPORTED_ERROR;

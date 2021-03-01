@@ -773,7 +773,12 @@ public class MeasureUnit implements Serializable {
         return MeasureUnit.addUnit(type, subType, factory);
     }
 
-    private static MeasureUnit findBySubType(String subType) {
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static MeasureUnit findBySubType(String subType) {
         populateCache();
         for (Map<String, MeasureUnit> unitsForType : cache.values()) {
             if (unitsForType.containsKey(subType)) {

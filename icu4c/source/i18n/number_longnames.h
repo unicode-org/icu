@@ -51,10 +51,8 @@ class LongNameHandler : public MicroPropsGenerator, public ModifierStore, public
      * @param loc The desired locale.
      * @param unitRef The measure unit to construct a LongNameHandler for.
      * @param width Specifies the desired unit rendering.
-     * @param unitDisplayCase Specifies the desired grammatical case. The empty
-     *     string and "nominative" are treated the same. For other cases,
-     *     strings for the requested case are used if found. (For any missing
-     *     case-specific data, we fall back to nominative.)
+     * @param unitDisplayCase Specifies the desired grammatical case. If the
+     *     specified case is not found, we fall back to nominative or no-case.
      * @param rules Does not take ownership.
      * @param parent Does not take ownership.
      * @param fillIn Required.
@@ -149,10 +147,8 @@ class MixedUnitLongNameHandler : public MicroPropsGenerator, public ModifierStor
      * @param mixedUnit The mixed measure unit to construct a
      *     MixedUnitLongNameHandler for.
      * @param width Specifies the desired unit rendering.
-     * @param unitDisplayCase Specifies the desired grammatical case. The empty
-     *     string and "nominative" are treated the same. For other cases,
-     *     strings for the requested case are used if found. (For any missing
-     *     case-specific data, we fall back to nominative.)
+     * @param unitDisplayCase Specifies the desired grammatical case. If the
+     *     specified case is not found, we fall back to nominative or no-case.
      * @param rules Does not take ownership.
      * @param parent Does not take ownership.
      * @param fillIn Required.

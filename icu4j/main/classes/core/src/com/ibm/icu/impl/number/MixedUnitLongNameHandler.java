@@ -51,17 +51,24 @@ public class MixedUnitLongNameHandler
      * @param mixedUnit The mixed measure unit to construct a
      *                  MixedUnitLongNameHandler for.
      * @param width     Specifies the desired unit rendering.
-     * @param unitDisplayName
+     * @param unitDisplayCase Specifies the desired grammatical case. If the
+     *     specified case is not found, we fall back to nominative or no-case.
      * @param rules     PluralRules instance.
      * @param parent    MicroPropsGenerator instance.
      */
     public static MixedUnitLongNameHandler forMeasureUnit(ULocale locale,
                                                           MeasureUnit mixedUnit,
                                                           NumberFormatter.UnitWidth width,
-                                                          String unitDisplayName,
+                                                          String unitDisplayCase,
                                                           PluralRules rules,
                                                           MicroPropsGenerator parent) {
-        assert (mixedUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
+        assert mixedUnit.getComplexity() == MeasureUnit.Complexity.MIXED
+            : "MixedUnitLongNameHandler only supports MIXED units";
+        // In ICU4C, in addition to an assert, we return a failure status if the
+        // unit is not mixed (commented by: "Defensive, for production code").
+        // In Java, we don't have efficient access to MeasureUnitImpl, so we
+        // skip this check - relying on unit tests and the assert above to help
+        // enforce the invariant.
 
         MixedUnitLongNameHandler result = new MixedUnitLongNameHandler(rules, parent);
         List<MeasureUnit> individualUnits = mixedUnit.splitToSingleUnits();
@@ -70,7 +77,8 @@ public class MixedUnitLongNameHandler
         for (int i = 0; i < individualUnits.size(); i++) {
             // Grab data for each of the components.
             String[] unitData = new String[LongNameHandler.ARRAY_LENGTH];
-            LongNameHandler.getMeasureData(locale, individualUnits.get(i), width, unitDisplayName, unitData);
+            LongNameHandler.getMeasureData(locale, individualUnits.get(i), width, unitDisplayCase,
+                                           unitData);
             result.fMixedUnitData.add(unitData);
         }
 
@@ -131,7 +139,7 @@ public class MixedUnitLongNameHandler
      */
     @Override
     public Modifier getModifier(Modifier.Signum signum, StandardPlural plural) {
-        // TODO(units): investigate this method while investigating where
+        // TODO(icu-units#28): investigate this method while investigating where
         // LongNameHandler.getModifier() gets used. To be sure it remains
         // unreachable:
         assert false : "should be unreachable";
