@@ -828,4 +828,28 @@ ucal_getTimeZoneIDForWindowsID(const UChar* winid, int32_t len, const char* regi
     return resultLen;
 }
 
+U_CAPI void U_EXPORT2 ucal_getTimeZoneOffsetFromLocal(
+    const UCalendar* cal,
+    UTimeZoneLocalOption nonExistingTimeOpt,
+    UTimeZoneLocalOption duplicatedTimeOpt,
+    int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status)
+{
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    UDate date = ((Calendar*)cal)->getTime(*status);
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
+    const BasicTimeZone* btz = dynamic_cast<const BasicTimeZone *>(&tz);
+    if (btz == nullptr) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    btz->getOffsetFromLocal(
+        date, nonExistingTimeOpt, duplicatedTimeOpt,
+        *rawOffset, *dstOffset, *status);
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
