@@ -191,6 +191,27 @@ jobs:
           echo 'Running ICU4C intltest with stubdata.';
           INTLTEST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: '
 
+  # Test U_CHARSET_IS_UTF8
+  u-charset-is-utf8-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux CPPFLAGS="-DU_CHARSET_IS_UTF8=1";
+          make -j2 check
+
+  # Test U_OVERRIDE_CXX_ALLOCATION-is-0-test
+  u-override-cxx-allocation-is-0-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux CPPFLAGS="-DU_OVERRIDE_CXX_ALLOCATION=0";
+          make clean;
+          make -j2 check
+
   # Copyright scan
   copyright-scan:
     runs-on: ubuntu-latest
