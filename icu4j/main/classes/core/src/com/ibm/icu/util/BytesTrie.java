@@ -794,8 +794,13 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
         return skipValue(pos, leadByte);
     }
 
-    // Reads a jump delta and jumps.
-    private static int jumpByDelta(byte[] bytes, int pos) {
+    /**
+     * Reads a jump delta and jumps.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static int jumpByDelta(byte[] bytes, int pos) {
         int delta=bytes[pos++]&0xff;
         if(delta<kMinTwoByteDeltaLead) {
             // nothing to do
