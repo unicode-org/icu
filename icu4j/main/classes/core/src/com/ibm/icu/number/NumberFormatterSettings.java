@@ -543,7 +543,6 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @return The fluent chain
      * @throws IllegalArgumentException in case of Setting a usage string but not a correct input unit.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public T usage(String usage) {
         return create(KEY_USAGE, usage);
@@ -557,6 +556,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @internal ICU 69 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public T unitDisplayCase(String unitDisplayCase) {
         return create(KEY_UNIT_DISPLAY_CASE, unitDisplayCase);
     }

@@ -3974,20 +3974,17 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Internal class for customizing UnicodeSet parsing of properties.
      * TODO: extend to allow customizing of codepoint ranges
      * @draft ICU3.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      * @author medavis
      */
     abstract public static class XSymbolTable implements SymbolTable {
         /**
          * Default constructor
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         public XSymbolTable(){}
         /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public UnicodeMatcher lookupMatcher(int i) {
@@ -4011,7 +4008,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          *         with that property have been added to the UnicodeSet, and returns false if the
          *         propertyName+propertyValue combination is not recognized (in which case result is unaltered).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
             return false;
@@ -4019,7 +4015,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public char[] lookup(String s) {
@@ -4028,7 +4023,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public String parseReference(String text, ParsePosition pos, int limit) {

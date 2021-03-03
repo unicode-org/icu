@@ -344,7 +344,6 @@ public class MeasureFormat extends UFormat {
      * @throws UnsupportedOperationException
      *             Not supported.
      * @draft ICU 53 (Retain)
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Measure parseObject(String source, ParsePosition pos) {

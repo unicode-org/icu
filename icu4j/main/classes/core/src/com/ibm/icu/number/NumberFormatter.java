@@ -110,22 +110,19 @@ public final class NumberFormatter {
      * <p>Here, RELAXED favors Max-Fraction and STRICT favors Max-Significant. Note that this larger
      * number caused the two modes to favor the opposite result.
      *
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 69
      */
     public static enum RoundingPriority {
         /**
          * Favor greater precision by relaxing one of the rounding constraints.
          *
-         * @provisional This API might change or be removed in a future release.
          * @draft ICU 69
          */
         RELAXED,
-    
+
         /**
          * Favor adherence to all rounding constraints by producing lower precision.
          *
-         * @provisional This API might change or be removed in a future release.
          * @draft ICU 69
          */
         STRICT,
@@ -216,7 +213,6 @@ public final class NumberFormatter {
          * Behavior of this option with non-currency units is not defined at this time.
          *
          * @draft ICU 67
-         * @provisional This API might change or be removed in a future release.
          * @see NumberFormatter
          */
         FORMAL,
@@ -229,7 +225,6 @@ public final class NumberFormatter {
          * Behavior of this option with non-currency units is not defined at this time.
          *
          * @draft ICU 67
-         * @provisional This API might change or be removed in a future release.
          * @see NumberFormatter
          */
         VARIANT,
@@ -443,7 +438,6 @@ public final class NumberFormatter {
          * Same as AUTO, but do not show the sign on negative zero.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         NEGATIVE,
 
@@ -451,7 +445,6 @@ public final class NumberFormatter {
          * Same as ACCOUNTING, but do not show the sign on negative zero.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         ACCOUNTING_NEGATIVE,
     }

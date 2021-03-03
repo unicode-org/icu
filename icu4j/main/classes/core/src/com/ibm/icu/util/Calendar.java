@@ -1882,7 +1882,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * {@icu} Returns the list of locales for which Calendars are installed.
      * @return the list of locales for which Calendars are installed.
      * @draft ICU 3.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales()
     {
@@ -3484,7 +3483,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @param locale the locale for which the symbols should be drawn
      * @return a <code>DateFormat</code> appropriate to this calendar
      * @draft ICU 3.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     protected DateFormat handleGetDateFormat(String pattern, String override, ULocale locale) {
         FormatConfiguration fmtConfig = new FormatConfiguration();
@@ -5934,7 +5932,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @param extendedYear the extendedYear, as returned by handleGetExtendedYear
      * @return the default month
      * @draft ICU 3.6 (retain)
-     * @provisional This API might change or be removed in a future release.
      * @see #MONTH
      */
     protected int getDefaultMonthInYear(int extendedYear) {
@@ -5949,7 +5946,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @param month the month, as returned by getDefaultMonthInYear
      * @return the default day of the month
      * @draft ICU 3.6 (retain)
-     * @provisional This API might change or be removed in a future release.
      * @see #DAY_OF_MONTH
      */
     protected int getDefaultDayInMonth(int extendedYear, int month) {
@@ -6500,7 +6496,6 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

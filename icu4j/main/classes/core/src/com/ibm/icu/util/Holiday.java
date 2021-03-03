@@ -22,13 +22,11 @@ import com.ibm.icu.util.ULocale.Category;
  *
  * An abstract class representing a holiday.
  * @draft ICU 2.8 (retainAll)
- * @provisional This API might change or be removed in a future release.
  */
 public abstract class Holiday implements DateRule
 {
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public static Holiday[] getHolidays()
     {
@@ -37,7 +35,6 @@ public abstract class Holiday implements DateRule
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public static Holiday[] getHolidays(Locale locale)
     {
@@ -46,7 +43,6 @@ public abstract class Holiday implements DateRule
 
     /**
      * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
      */
     public static Holiday[] getHolidays(ULocale locale)
     {
@@ -72,7 +68,6 @@ public abstract class Holiday implements DateRule
      *
      * @see #firstBetween
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Date firstAfter(Date start) {
@@ -91,7 +86,6 @@ public abstract class Holiday implements DateRule
      *
      * @see #firstAfter
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Date firstBetween(Date start, Date end) {
@@ -106,7 +100,6 @@ public abstract class Holiday implements DateRule
      * @param date  The date to check.
      * @return      true if this holiday occurs on the given date.
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public boolean isOn(Date date) {
@@ -118,7 +111,6 @@ public abstract class Holiday implements DateRule
      * Check whether this holiday occurs at least once between the two
      * dates given.
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public boolean isBetween(Date start, Date end) {
@@ -137,7 +129,6 @@ public abstract class Holiday implements DateRule
      *              falls.  Holiday's implementation of the DateRule interface
      *              simply delegates to this DateRule object.
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     protected Holiday(String name, DateRule rule)
     {
@@ -149,7 +140,6 @@ public abstract class Holiday implements DateRule
      * Return the name of this holiday in the language of the default <code>DISPLAY</code> locale.
      * @see Category#DISPLAY
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public String getDisplayName() {
         return getDisplayName(ULocale.getDefault(Category.DISPLAY));
@@ -165,7 +155,6 @@ public abstract class Holiday implements DateRule
      *
      * @see ResourceBundle
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public String getDisplayName(Locale locale)
     {
@@ -182,7 +171,6 @@ public abstract class Holiday implements DateRule
      *
      * @see ResourceBundle
      * @draft ICU 3.2
-     * @provisional This API might change or be removed in a future release.
      */
     public String getDisplayName(ULocale locale)
     {
@@ -199,7 +187,6 @@ public abstract class Holiday implements DateRule
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public DateRule getRule() {
         return rule;
@@ -207,7 +194,6 @@ public abstract class Holiday implements DateRule
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public void setRule(DateRule rule) {
         this.rule = rule;

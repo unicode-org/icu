@@ -791,7 +791,6 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * {@inheritDoc}
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public void getOffsetFromLocal(long date,

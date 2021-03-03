@@ -790,7 +790,6 @@ public class SpoofChecker {
          * @param restrictionLevel
          *            The loosest restriction level allowed.
          * @return self
-         * @provisional This API might change or be removed in a future release.
          * @stable ICU 58
          */
         public Builder setRestrictionLevel(RestrictionLevel restrictionLevel) {

@@ -5,8 +5,8 @@ package com.ibm.icu.number;
 import java.io.InvalidObjectException;
 import java.util.Locale;
 
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.text.UFormat;
+import com.ibm.icu.util.ULocale;
 
 /**
  * The main entrypoint to the formatting of ranges of numbers, including currencies and other units of measurement.
@@ -159,7 +159,6 @@ public abstract class NumberRangeFormatter {
      * Class for span fields in FormattedNumberRange.
      *
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = 8750397196515368729L;
@@ -171,7 +170,6 @@ public abstract class NumberRangeFormatter {
          * list that is represented by the span.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         public static final SpanField NUMBER_RANGE_SPAN = new SpanField("number-range-span");
 

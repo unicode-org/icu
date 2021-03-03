@@ -332,7 +332,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @return An array of <code>ULocale</code>s for which localized
      * <code>DateFormatSymbols</code> instances are available.
      * @draft ICU 3.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         return ICUResourceBundle.getAvailableULocales();
@@ -2346,7 +2345,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

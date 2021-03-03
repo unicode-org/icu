@@ -3449,7 +3449,6 @@ public class MeasureUnitTest extends TestFmwk {
                 }
                 else if (isDraft(name)) {
                     System.out.println("     * @draft ICU " + getVersion(name, thisVersion));
-                    System.out.println("     * @provisional This API might change or be removed in a future release.");
                 } else {
                     System.out.println("     * @stable ICU " + getVersion(name, thisVersion));
                 }
@@ -3800,7 +3799,7 @@ public class MeasureUnitTest extends TestFmwk {
     public void TestIdentifierDetails() {
         MeasureUnit joule = MeasureUnit.forIdentifier("joule");
         assertEquals("Initial joule", "joule", joule.getIdentifier());
-    
+
         // "Invalid prefix" test not needed: in Java we cannot pass a
         // non-existant enum instance. (In C++ an int can be typecast.)
 

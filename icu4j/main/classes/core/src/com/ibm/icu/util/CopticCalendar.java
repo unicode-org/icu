@@ -15,109 +15,109 @@ import java.util.Locale;
 /**
  * Implement the Coptic calendar system.
  * <p>
- * CopticCalendar usually should be instantiated using 
+ * CopticCalendar usually should be instantiated using
  * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
  * with the tag <code>"@calendar=coptic"</code>.</p>
  *
  * @see com.ibm.icu.util.Calendar
  * @stable ICU 3.4
  */
-public final class CopticCalendar extends CECalendar 
+public final class CopticCalendar extends CECalendar
 {
     // jdk1.4.2 serialver
     private static final long serialVersionUID = 5903818751846742911L;
 
-    /** 
+    /**
      * Constant for ωογτ / تﻮﺗ,
-     * the 1st month of the Coptic year. 
+     * the 1st month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int TOUT = 0;
 
-    /** 
+    /**
      * Constant for Παοπι / ﻪﺑﺎﺑ,
-     * the 2nd month of the Coptic year. 
+     * the 2nd month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int BABA = 1;
 
-    /** 
+    /**
      * Constant for Αθορ / رﻮﺗﺎﻫ,
-     * the 3rd month of the Coptic year. 
+     * the 3rd month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int HATOR = 2;
 
-    /** 
+    /**
      * Constant for Χοιακ / ﻚﻬﻴﻛ;,
-     * the 4th month of the Coptic year. 
+     * the 4th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int KIAHK = 3;
 
-    /** 
+    /**
      * Constant for Τωβι / طﻮﺒﻫ,
-     * the 5th month of the Coptic year. 
+     * the 5th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int TOBA = 4;
 
-    /** 
+    /**
      * Constant for Μεϣιρ / ﺮﻴﺸﻣأ,
-     * the 6th month of the Coptic year. 
+     * the 6th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int AMSHIR = 5;
 
-    /** 
+    /**
      * Constant for Παρεμϩατ / تﺎﻬﻣﺮﺑ,
-     * the 7th month of the Coptic year. 
+     * the 7th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int BARAMHAT = 6;
 
-    /** 
-     * Constant for Φαρμοθι / هدﻮﻣﺮﺑ, 
-     * the 8th month of the Coptic year. 
+    /**
+     * Constant for Φαρμοθι / هدﻮﻣﺮﺑ,
+     * the 8th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int BARAMOUDA = 7;
 
-    /** 
+    /**
      * Constant for Παϣαν / ﺲﻨﺸﺑ;,
-     * the 9th month of the Coptic year. 
+     * the 9th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int BASHANS = 8;
 
-    /** 
+    /**
      * Constant for Παωνι / ﻪﻧؤﻮﺑ,
-     * the 10th month of the Coptic year. 
+     * the 10th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int PAONA = 9;
 
-    /** 
+    /**
      * Constant for Επηπ / ﺐﻴﺑأ,
-     * the 11th month of the Coptic year. 
+     * the 11th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int EPEP = 10;
 
-    /** 
+    /**
      * Constant for Μεϲωρη / ىﺮﺴﻣ,
-     * the 12th month of the Coptic year. 
+     * the 12th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int MESRA = 11;
 
-    /** 
+    /**
      * Constant for Πικογϫι μαβοτ / ﺮﻴﻐﺼﻟاﺮﻬﺸﻟا,
-     * the 13th month of the Coptic year. 
+     * the 13th month of the Coptic year.
      * @stable ICU 3.4
      */
     public static final int NASIE = 12;
-  
+
     private static final int JD_EPOCH_OFFSET  = 1824665;
 
     // Eras
@@ -177,7 +177,7 @@ public final class CopticCalendar extends CECalendar
     public CopticCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
     }
-    
+
     /**
      * Constructs a <code>CopticCalendar</code> based on the current time
      * in the given time zone with the given locale.
@@ -189,7 +189,7 @@ public final class CopticCalendar extends CECalendar
     public CopticCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale);
     }
-    
+
     /**
      * Constructs a <code>CopticCalendar</code> with the given date set
      * in the default time zone with the default locale.
@@ -237,6 +237,7 @@ public final class CopticCalendar extends CECalendar
      * {@inheritDoc}
      * @stable ICU 3.8
      */
+    @Override
     public String getType() {
         return "coptic";
     }
@@ -246,6 +247,7 @@ public final class CopticCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     protected int handleGetExtendedYear() {
         int eyear;
@@ -268,6 +270,7 @@ public final class CopticCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     protected void handleComputeFields(int julianDay) {
         int era, year;
@@ -299,6 +302,7 @@ public final class CopticCalendar extends CECalendar
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Override
     @Deprecated
     protected int getJDEpochOffset() {
         return JD_EPOCH_OFFSET;
@@ -311,7 +315,6 @@ public final class CopticCalendar extends CECalendar
      * @param month the month
      * @param date the day
      * @draft ICU 3.4 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     // The equivalent operation can be done by public Calendar API.
     // This API was accidentally marked as @draft, but we have no good
