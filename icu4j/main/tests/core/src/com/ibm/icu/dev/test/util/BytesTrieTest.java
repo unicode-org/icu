@@ -13,6 +13,7 @@
 package com.ibm.icu.dev.test.util;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import org.junit.Test;
@@ -529,6 +530,42 @@ public class BytesTrieTest extends TestFmwk {
         clone = null;
         assertEquals("abc result", BytesTrie.Result.FINAL_VALUE, copy.next('c'));
         assertEquals("abc value", 300, copy.getValue());
+    }
+
+    @Test
+    public void TestDelta() {
+        byte[] intBytes0 = new byte[5];
+        byte[] intBytes1 = new byte[5];
+        int[] sampleDeltas = new int[] {
+            -1, 0, 1, 2, 3, 0xa5, 0xbe, 0xbf,
+            -2, 0xc0, 0xc1, 0xeee, 0x1234, 0x2ffe, 0x2fff,
+            -3, 0x3000, 0x3001, 0x3003, 0x50005, 0xdfffe, 0xdffff,
+            -4, 0xe0000, 0xe0001, 0xef0123, 0xfffffe, 0xffffff,
+            -5, 0x1000000, 0x1000001, 0x7fffffff
+        };
+        int expectedLength = 0;
+        for (int delta : sampleDeltas) {
+            if (delta < 0) {
+                expectedLength = -delta;
+                continue;
+            }
+            // Encoding twice into differently-initialized arrays
+            // catches bytes that are not written to.
+            Arrays.fill(intBytes0, (byte)0);
+            Arrays.fill(intBytes1, (byte)1);
+            int length0 = BytesTrieBuilder.internalEncodeDelta(delta, intBytes0);
+            int length1 = BytesTrieBuilder.internalEncodeDelta(delta, intBytes1);
+            assertTrue("non-zero length to encode delta " + delta, length0 > 0);
+            assertEquals("consistent length to encode delta " + delta, length0, length1);
+            assertEquals("expected length to encode delta " + delta, expectedLength, length0);
+            for (int i = 0; i < length0; ++i) {
+                byte b0 = intBytes0[i];
+                byte b1 = intBytes1[i];
+                assertEquals("differently encoded delta " + delta + " at byte index " + i, b0, b1);
+            }
+            int pos = BytesTrie.jumpByDelta(intBytes0, 0);
+            assertEquals("roundtrip for delta " + delta, delta, pos - length0);
+        }
     }
 
     private void checkData(StringAndValue data[]) {
