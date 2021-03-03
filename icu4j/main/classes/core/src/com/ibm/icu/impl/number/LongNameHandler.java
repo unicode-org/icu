@@ -141,10 +141,8 @@ public class LongNameHandler
         key.append("/gender");
 
         try {
-            ICUResourceBundle stackBundle =
-                (ICUResourceBundle)unitsBundle.getWithFallback(key.toString());
-            return stackBundle.getString();
-        } catch (Exception e) {
+            return unitsBundle.getWithFallback(key.toString()).getString();
+        } catch (MissingResourceException e) {
             // TODO(icu-units#28): "$unitRes/gender" does not exist. Do we want to
             // check whether the parent "$unitRes" exists? Then we could return
             // U_MISSING_RESOURCE_ERROR for incorrect usage (e.g. builtinUnit not
@@ -160,6 +158,10 @@ public class LongNameHandler
     // An InflectedPluralSink is configured to load data for a specific gender and
     // case. It loads all plural forms, because selection between plural forms is
     // dependent upon the value being formatted.
+    //
+    // See data/unit/de.txt and data/unit/fr.txt for examples - take a look at
+    // units/compound/power2: German has case, French has differences for
+    // gender, but no case.
     //
     // TODO(icu-units#138): Conceptually similar to PluralTableSink, however the
     // tree structures are different. After homogenizing the structures, we may be
@@ -259,6 +261,11 @@ public class LongNameHandler
         String[] outArray;
     }
 
+    // Fetches localised formatting patterns for the given subKey. See
+    // documentation for InflectedPluralSink for details.
+    //
+    // Data is loaded for the appropriate unit width, with missing data filled
+    // in from unitsShort.
     static void getInflectedMeasureData(String subKey,
                                         ULocale locale,
                                         UnitWidth width,
@@ -284,7 +291,7 @@ public class LongNameHandler
             if (width == UnitWidth.SHORT) {
                 return;
             }
-        } catch (Exception e) {
+        } catch (MissingResourceException e) {
             // Continue: fall back to short
         }
 
@@ -338,25 +345,40 @@ public class LongNameHandler
         ICUResourceBundle resource;
         resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME,
                 locale);
+
+        StringBuilder subKey = new StringBuilder();
+        subKey.append("/");
+        subKey.append(unit.getType());
+        subKey.append("/");
+
+        // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
+        // TODO(ICU-20400): Get duration-*-person data properly with aliases.
+        if (unit.getSubtype() != null && unit.getSubtype().endsWith("-person")) {
+            subKey.append(unit.getSubtype(), 0, unit.getSubtype().length() - 7);
+        } else {
+            subKey.append(unit.getSubtype());
+        }
+
+        if (width != UnitWidth.FULL_NAME) {
+            StringBuilder genderKey = new StringBuilder();
+            genderKey.append("units");
+            genderKey.append(subKey);
+            genderKey.append("/gender");
+            try {
+                outArray[GENDER_INDEX] = resource.getWithFallback(genderKey.toString()).getString();
+            } catch (MissingResourceException e) {
+                // continue
+            }
+        }
+
         StringBuilder key = new StringBuilder();
         key.append("units");
-        // TODO(icu-units#140): support gender for other unit widths.
         if (width == UnitWidth.NARROW) {
             key.append("Narrow");
         } else if (width == UnitWidth.SHORT) {
             key.append("Short");
         }
-        key.append("/");
-        key.append(unit.getType());
-        key.append("/");
-
-        // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
-        // TODO(ICU-20400): Get duration-*-person data properly with aliases.
-        if (unit.getSubtype() != null && unit.getSubtype().endsWith("-person")) {
-            key.append(unit.getSubtype(), 0, unit.getSubtype().length() - 7);
-        } else {
-            key.append(unit.getSubtype());
-        }
+        key.append(subKey);
 
         // Grab desired case first, if available. Then grab nominative case to fill
         // in the gaps.
@@ -427,7 +449,7 @@ public class LongNameHandler
         key.append(compoundKey);
         try {
             return resource.getStringWithFallback(key.toString());
-        } catch (Exception e) {
+        } catch (MissingResourceException e) {
             if (width == UnitWidth.SHORT) {
                 return "";
             }
@@ -440,7 +462,7 @@ public class LongNameHandler
         key.append(compoundKey);
         try {
             return resource.getStringWithFallback(key.toString());
-        } catch (Exception e) {
+        } catch (MissingResourceException e) {
             return "";
         }
     }
@@ -502,7 +524,7 @@ public class LongNameHandler
                 } else {
                     this.value1 = value;
                 }
-            } catch (Exception e) {
+            } catch (MissingResourceException e) {
                 // Fall back to uninflected.
             }
         }
