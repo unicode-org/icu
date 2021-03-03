@@ -2168,7 +2168,6 @@ public class PluralRules implements Serializable {
      * @return       The keyword of the selected rule.
      * @throws UnsupportedOperationException If called on an instance without plural ranges data.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public String select(FormattedNumberRange range) {
         if (standardPluralRanges == null) {
@@ -2382,7 +2381,6 @@ public class PluralRules implements Serializable {
      * Returns the set of locales for which PluralRules are known.
      * @return the set of locales for which PluralRules are known, as a list
      * @draft ICU 4.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         return Factory.getDefaultFactory().getAvailableULocales();
@@ -2403,7 +2401,6 @@ public class PluralRules implements Serializable {
      * index 0 if locale is directly defined (without fallback) as having plural rules
      * @return the functionally-equivalent locale
      * @draft ICU 4.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
         return Factory.getDefaultFactory().getFunctionalEquivalent(locale, isAvailable);
@@ -2442,42 +2439,36 @@ public class PluralRules implements Serializable {
      * Status of the keyword for the rules, given a set of explicit values.
      *
      * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
      */
     public enum KeywordStatus {
         /**
          * The keyword is not valid for the rules.
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         INVALID,
         /**
          * The keyword is valid, but unused (it is covered by the explicit values, OR has no values for the given {@link SampleType}).
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         SUPPRESSED,
         /**
          * The keyword is valid, used, and has a single possible value (before considering explicit values).
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         UNIQUE,
         /**
          * The keyword is valid, used, not unique, and has a finite set of values.
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         BOUNDED,
         /**
          * The keyword is valid but not bounded; there indefinitely many matching values.
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         UNBOUNDED
     }
@@ -2496,7 +2487,6 @@ public class PluralRules implements Serializable {
      *            If non null, set to the unique value.
      * @return the KeywordStatus
      * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
      */
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
             Output<Double> uniqueValue) {

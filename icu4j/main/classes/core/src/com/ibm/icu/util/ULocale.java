@@ -502,7 +502,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @param locale the ULocale to canonicalize
      * @return the ULocale created from the canonical version of the ULocale.
      * @draft ICU 67
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale createCanonical(ULocale locale) {
         return createCanonical(locale.getName());
@@ -2475,7 +2474,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * locale data, then the valid locale is <i>null</i>.
      *
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static Type ACTUAL_LOCALE = new Type();
 
@@ -2491,7 +2489,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * <p>Note: The valid locale will be returned correctly in ICU
      * 3.0 or later.  In ICU 2.8, it is not returned correctly.
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static Type VALID_LOCALE = new Type();
 
@@ -2501,7 +2498,6 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @draft ICU 2.8 (retainAll)
-     * @provisional This API might change or be removed in a future release.
      */
     public static final class Type {
         private Type() {}

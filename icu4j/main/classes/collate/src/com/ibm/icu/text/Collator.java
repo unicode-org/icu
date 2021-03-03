@@ -1509,7 +1509,6 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public ULocale getLocale(ULocale.Type type) {
         return ULocale.ROOT;

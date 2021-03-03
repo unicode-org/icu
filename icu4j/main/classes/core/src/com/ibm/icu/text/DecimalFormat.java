@@ -2021,7 +2021,6 @@ public class DecimalFormat extends NumberFormat {
    * @see #setMinimumGroupingDigits(int)
    * @see #MINIMUM_GROUPING_DIGITS_MIN2
    * @category Separators
-   * @provisional This API might change or be removed in a future release.
    * @draft ICU 68
    */
   public static final int MINIMUM_GROUPING_DIGITS_AUTO = -2;
@@ -2034,7 +2033,6 @@ public class DecimalFormat extends NumberFormat {
    * @see #setMinimumGroupingDigits(int)
    * @see #MINIMUM_GROUPING_DIGITS_AUTO
    * @category Separators
-   * @provisional This API might change or be removed in a future release.
    * @draft ICU 68
    */
   public static final int MINIMUM_GROUPING_DIGITS_MIN2 = -3;

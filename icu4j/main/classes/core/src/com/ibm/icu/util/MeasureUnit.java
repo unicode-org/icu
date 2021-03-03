@@ -87,14 +87,12 @@ public class MeasureUnit implements Serializable {
      * or prefix of a compound unit.
      *
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public enum Complexity {
         /**
          * A single unit, like kilojoule.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         SINGLE,
 
@@ -102,7 +100,6 @@ public class MeasureUnit implements Serializable {
          * A compound unit, like meter-per-second.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         COMPOUND,
 
@@ -110,7 +107,6 @@ public class MeasureUnit implements Serializable {
          * A mixed unit, like hour-and-minute.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         MIXED
     }
@@ -119,7 +115,6 @@ public class MeasureUnit implements Serializable {
      * Enumeration for SI and binary prefixes, e.g. "kilo-", "nano-", "mebi-".
      *
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public enum MeasurePrefix {
 
@@ -127,7 +122,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: yotta, 10^24.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         YOTTA(24, "yotta", 10),
 
@@ -135,7 +129,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: zetta, 10^21.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         ZETTA(21, "zetta", 10),
 
@@ -143,7 +136,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: exa, 10^18.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         EXA(18, "exa", 10),
 
@@ -151,7 +143,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: peta, 10^15.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         PETA(15, "peta", 10),
 
@@ -159,7 +150,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: tera, 10^12.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         TERA(12, "tera", 10),
 
@@ -167,7 +157,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: giga, 10^9.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         GIGA(9, "giga", 10),
 
@@ -175,7 +164,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: mega, 10^6.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         MEGA(6, "mega", 10),
 
@@ -183,7 +171,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: kilo, 10^3.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         KILO(3, "kilo", 10),
 
@@ -191,7 +178,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: hecto, 10^2.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         HECTO(2, "hecto", 10),
 
@@ -199,7 +185,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: deka, 10^1.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         DEKA(1, "deka", 10),
 
@@ -207,7 +192,6 @@ public class MeasureUnit implements Serializable {
          * The absence of an SI prefix.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         ONE(0, "", 10),
 
@@ -215,7 +199,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: deci, 10^-1.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         DECI(-1, "deci", 10),
 
@@ -223,7 +206,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: centi, 10^-2.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         CENTI(-2, "centi", 10),
 
@@ -231,7 +213,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: milli, 10^-3.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         MILLI(-3, "milli", 10),
 
@@ -239,7 +220,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: micro, 10^-6.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         MICRO(-6, "micro", 10),
 
@@ -247,7 +227,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: nano, 10^-9.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         NANO(-9, "nano", 10),
 
@@ -255,7 +234,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: pico, 10^-12.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         PICO(-12, "pico", 10),
 
@@ -263,7 +241,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: femto, 10^-15.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         FEMTO(-15, "femto", 10),
 
@@ -271,7 +248,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: atto, 10^-18.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         ATTO(-18, "atto", 10),
 
@@ -279,7 +255,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: zepto, 10^-21.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         ZEPTO(-21, "zepto", 10),
 
@@ -287,7 +262,6 @@ public class MeasureUnit implements Serializable {
          * SI prefix: yocto, 10^-24.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         YOCTO(-24, "yocto", 10),
 
@@ -295,7 +269,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: kibi, 1024^1.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         KIBI(1, "kibi", 1024),
 
@@ -303,7 +276,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: mebi, 1024^2.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         MEBI(2, "mebi", 1024),
 
@@ -311,7 +283,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: gibi, 1024^3.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         GIBI(3, "gibi", 1024),
 
@@ -319,7 +290,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: tebi, 1024^4.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         TEBI(4, "tebi", 1024),
 
@@ -327,7 +297,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: pebi, 1024^5.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         PEBI(5, "pebi", 1024),
 
@@ -335,7 +304,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: exbi, 1024^6.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         EXBI(6, "exbi", 1024),
 
@@ -343,7 +311,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: zebi, 1024^7.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         ZEBI(7, "zebi", 1024),
 
@@ -351,7 +318,6 @@ public class MeasureUnit implements Serializable {
          * IEC binary prefix: yobi, 1024^8.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         YOBI(8, "yobi", 1024);
 
@@ -382,7 +348,6 @@ public class MeasureUnit implements Serializable {
          * - if the prefix is "gibi", the base will be 1024.
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         public int getBase() {
             return base;
@@ -394,7 +359,6 @@ public class MeasureUnit implements Serializable {
          * - if the prefix is "gibi", the power will be 3 (for base 1024).
          *
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         public int getPower() {
             return power;
@@ -425,7 +389,6 @@ public class MeasureUnit implements Serializable {
      * @param identifier CLDR Unit Identifier
      * @throws IllegalArgumentException if the identifier is invalid.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static MeasureUnit forIdentifier(String identifier) {
         if (identifier == null || identifier.isEmpty()) {
@@ -483,7 +446,6 @@ public class MeasureUnit implements Serializable {
      *
      * @return The string form of this unit.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public String getIdentifier() {
         String result = measureUnitImpl == null ? getSubtype() : measureUnitImpl.getIdentifier();
@@ -495,7 +457,6 @@ public class MeasureUnit implements Serializable {
      *
      * @return The unit complexity.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public Complexity getComplexity() {
         if (measureUnitImpl == null) {
@@ -519,7 +480,6 @@ public class MeasureUnit implements Serializable {
      * @return A new SINGLE unit.
      * @throws UnsupportedOperationException if this unit is a COMPOUND or MIXED unit.
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public MeasureUnit withPrefix(MeasurePrefix prefix) {
         SingleUnitImpl singleUnit = getSingleUnitImpl();
@@ -537,7 +497,6 @@ public class MeasureUnit implements Serializable {
      * @return The prefix of this SINGLE unit, from MeasurePrefix.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public MeasurePrefix getPrefix() {
         return getSingleUnitImpl().getPrefix();
@@ -553,7 +512,6 @@ public class MeasureUnit implements Serializable {
      * @return The dimensionality (power) of this simple unit.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public int getDimensionality() {
         return getSingleUnitImpl().getDimensionality();
@@ -570,7 +528,6 @@ public class MeasureUnit implements Serializable {
      * @return A new SINGLE unit.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public MeasureUnit withDimensionality(int dimensionality) {
         SingleUnitImpl singleUnit = getSingleUnitImpl();
@@ -589,7 +546,6 @@ public class MeasureUnit implements Serializable {
      * @return The reciprocal of the target unit.
      * @throws UnsupportedOperationException if the unit is MIXED.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public MeasureUnit reciprocal() {
         MeasureUnitImpl measureUnit = getCopyOfMeasureUnitImpl();
@@ -613,7 +569,6 @@ public class MeasureUnit implements Serializable {
      * @return The product of the target unit with the provided unit.
      * @throws UnsupportedOperationException if the unit is MIXED.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public MeasureUnit product(MeasureUnit other) {
         MeasureUnitImpl implCopy = getCopyOfMeasureUnitImpl();
@@ -648,7 +603,6 @@ public class MeasureUnit implements Serializable {
      *
      * @return An unmodifiable list of single units
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public List<MeasureUnit> splitToSingleUnits() {
         final ArrayList<SingleUnitImpl> singleUnits =
@@ -1048,7 +1002,6 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of concentr: milligram-ofglucose-per-deciliter
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
 
@@ -1397,7 +1350,6 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of graphics: dot
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit DOT = MeasureUnit.internalGetInstance("graphics", "dot");
 
@@ -1464,7 +1416,6 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of length: earth-radius
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit EARTH_RADIUS = MeasureUnit.internalGetInstance("length", "earth-radius");
 
@@ -1579,14 +1530,12 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of light: candela
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit CANDELA = MeasureUnit.internalGetInstance("light", "candela");
 
     /**
      * Constant for unit of light: lumen
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit LUMEN = MeasureUnit.internalGetInstance("light", "lumen");
 
@@ -1623,7 +1572,6 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of mass: grain
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit GRAIN = MeasureUnit.internalGetInstance("mass", "grain");
 
@@ -1936,28 +1884,24 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of volume: dessert-spoon
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit DESSERT_SPOON = MeasureUnit.internalGetInstance("volume", "dessert-spoon");
 
     /**
      * Constant for unit of volume: dessert-spoon-imperial
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit DESSERT_SPOON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "dessert-spoon-imperial");
 
     /**
      * Constant for unit of volume: dram
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit DRAM = MeasureUnit.internalGetInstance("volume", "dram");
 
     /**
      * Constant for unit of volume: drop
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit DROP = MeasureUnit.internalGetInstance("volume", "drop");
 
@@ -1994,7 +1938,6 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of volume: jigger
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit JIGGER = MeasureUnit.internalGetInstance("volume", "jigger");
 
@@ -2019,7 +1962,6 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of volume: pinch
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit PINCH = MeasureUnit.internalGetInstance("volume", "pinch");
 
@@ -2044,7 +1986,6 @@ public class MeasureUnit implements Serializable {
     /**
      * Constant for unit of volume: quart-imperial
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public static final MeasureUnit QUART_IMPERIAL = MeasureUnit.internalGetInstance("volume", "quart-imperial");
 

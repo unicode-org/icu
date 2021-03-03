@@ -1609,7 +1609,8 @@
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.collate.dir}/src">
-                <include name="com/ibm/icu/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.charset.dir}/src">
                 <include name="com/ibm/icu/charset/**"/>
@@ -1776,43 +1777,6 @@
             <arg value="${out.dir}/draftAPIs.tsv"/>
             <arg value="-t"/>
             <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
-        </java>
-    </target>
-
-    <target name="swatDeprecated" depends="build-tools" description="Convert @deprecated @draft tags to @provisional">
-        <antcall target="_runSwatDeprecated">
-            <param name="swat.deprecated.opt" value="-dep"/>
-        </antcall>
-    </target>
-
-    <target name="swatProvisional" depends="build-tools" description="Convert @provisional tags to @deprecated @draft">
-        <antcall target="_runSwatDeprecated">
-            <param name="swat.deprecated.opt" value="-prov"/>
-        </antcall>
-    </target>
-
-    <target name="_runSwatDeprecated">
-        <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated"
-                classpath="${icu4j.build-tools.jar}"
-                failonerror="true">
-            <arg value="${swat.deprecated.opt}"/>
-            <arg value="-src"/>
-            <arg value="${icu4j.core.dir}/src"/>
-            <arg value="-dst"/>
-            <arg value="${icu4j.core.dir}/src"/>
-            <arg value="-overwrite"/>
-            <arg value="-verbose"/>
-        </java>
-        <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated"
-                classpath="${icu4j.build-tools.jar}"
-                failonerror="true">
-            <arg value="${swat.deprecated.opt}"/>
-            <arg value="-src"/>
-            <arg value="${icu4j.charset.dir}/src"/>
-            <arg value="-dst"/>
-            <arg value="${icu4j.charset.dir}/src"/>
-            <arg value="-overwrite"/>
-            <arg value="-verbose"/>
         </java>
     </target>
 

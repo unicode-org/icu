@@ -541,21 +541,18 @@ public abstract class BasicTimeZone extends TimeZone {
      * around a time zone transition.
      *
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public static enum LocalOption {
         /**
          * An input time is always interpreted as local time before
          * a time zone transition.
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         FORMER(0x04),
         /**
          * An input time is always interpreted as local time after
          * a time zone transition.
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         LATTER(0x0C),
         /**
@@ -565,7 +562,6 @@ public abstract class BasicTimeZone extends TimeZone {
          * or daylight saving time, the local time before the
          * transition is used.
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         STANDARD_FORMER(0x05),
         /**
@@ -575,7 +571,6 @@ public abstract class BasicTimeZone extends TimeZone {
          * or daylight saving time, the local time after the
          * transition is used.
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         STANDARD_LATTER(0x0D),
         /**
@@ -585,7 +580,6 @@ public abstract class BasicTimeZone extends TimeZone {
          * or daylight saving time, the local time before the
          * transition is used.
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         DAYLIGHT_FORMER(0x07),
         /**
@@ -595,7 +589,6 @@ public abstract class BasicTimeZone extends TimeZone {
          * or daylight saving time, the local time after the
          * transition is used.
          * @draft ICU 69
-         * @provisional This API might change or be removed in a future release.
          */
         DAYLIGHT_LATTER(0x0F);
 
@@ -670,7 +663,6 @@ public abstract class BasicTimeZone extends TimeZone {
     /**
      * {@icu} Returns time zone offsets from local wall time.
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public void getOffsetFromLocal(long date,
             LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {

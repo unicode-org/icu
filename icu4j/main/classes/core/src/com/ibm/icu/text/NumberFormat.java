@@ -1078,7 +1078,6 @@ public abstract class NumberFormat extends UFormat {
      * {@icu} Returns the list of Locales for which NumberFormats are available.
      * @return the available locales
      * @draft ICU 3.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {

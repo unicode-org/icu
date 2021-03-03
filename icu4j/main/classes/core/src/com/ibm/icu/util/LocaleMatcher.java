@@ -165,14 +165,12 @@ public final class LocaleMatcher {
      *
      * @see LocaleMatcher.Builder#setDirection(LocaleMatcher.Direction)
      * @draft ICU 67
-     * @provisional This API might change or be removed in a future release.
      */
     public enum Direction {
         /**
          * Locale matching includes one-way matches such as Breton→French. (default)
          *
          * @draft ICU 67
-         * @provisional This API might change or be removed in a future release.
          */
         WITH_ONE_WAY,
         /**
@@ -180,7 +178,6 @@ public final class LocaleMatcher {
          * but ignoring one-way matches.
          *
          * @draft ICU 67
-         * @provisional This API might change or be removed in a future release.
          */
         ONLY_TWO_WAY
     }
@@ -453,7 +450,6 @@ public final class LocaleMatcher {
          * best supported locale.
          *
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         public Builder setNoDefaultLocale() {
             this.defaultLocale = null;
@@ -527,7 +523,6 @@ public final class LocaleMatcher {
          * @param direction the match direction to set.
          * @return this Builder object
          * @draft ICU 67
-         * @provisional This API might change or be removed in a future release.
          */
         public Builder setDirection(Direction direction) {
             this.direction = direction;
@@ -554,7 +549,6 @@ public final class LocaleMatcher {
          * @param supported the supported locale for distance comparison.
          * @return this Builder object
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         public Builder setMaxDistance(Locale desired, Locale supported) {
             if (desired == null || supported == null) {
@@ -583,7 +577,6 @@ public final class LocaleMatcher {
          * @param supported the supported locale for distance comparison.
          * @return this Builder object
          * @draft ICU 68
-         * @provisional This API might change or be removed in a future release.
          */
         public Builder setMaxDistance(ULocale desired, ULocale supported) {
             if (desired == null || supported == null) {
@@ -1102,7 +1095,6 @@ public final class LocaleMatcher {
      * @param supported The supported locale.
      * @return true if the pair of locales matches acceptably.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public boolean isMatch(Locale desired, Locale supported) {
         int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
@@ -1121,7 +1113,6 @@ public final class LocaleMatcher {
      * @param supported The supported locale.
      * @return true if the pair of locales matches acceptably.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public boolean isMatch(ULocale desired, ULocale supported) {
         int indexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(

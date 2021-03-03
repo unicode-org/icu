@@ -438,7 +438,6 @@ public final class RelativeDateTimeFormatter {
          * Serizalization method resolve instances to the constant Field values
          *
          * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
          */
         @Override
         protected Object readResolve() throws InvalidObjectException {
@@ -1259,7 +1258,7 @@ public final class RelativeDateTimeFormatter {
                     break;
                 case 7:
                     if ("quarter".contentEquals(keyword)) {
-                        return QUARTER;  // TODO: Check @provisional
+                        return QUARTER;  // RelativeUnit.QUARTERS is deprecated
                     }
                     break;
                 default:

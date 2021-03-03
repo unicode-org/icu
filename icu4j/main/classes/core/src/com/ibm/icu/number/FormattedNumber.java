@@ -131,7 +131,6 @@ public class FormattedNumber implements FormattedValue {
      *
      * @return `MeasureUnit`.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public MeasureUnit getOutputUnit() {
         return this.outputUnit;
@@ -143,6 +142,7 @@ public class FormattedNumber implements FormattedValue {
      * @internal ICU 69 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public String getGender() {
         return this.gender;
     }

@@ -107,7 +107,6 @@ public class Currency extends MeasureUnit {
      * for example, "NT$" instead of "$" for TWD in zh-TW.
      *
      * @draft ICU 67
-     * @provisional This API might change or be removed in a future release.
      */
     public static final int FORMAL_SYMBOL_NAME = 4;
 
@@ -118,7 +117,6 @@ public class Currency extends MeasureUnit {
      * necessarily as widely used as the regular symbol.
      *
      * @draft ICU 67
-     * @provisional This API might change or be removed in a future release.
      */
     public static final int VARIANT_SYMBOL_NAME = 5;
 
