@@ -228,6 +228,10 @@ const char *getGenderForBuiltin(const Locale &locale, MeasureUnit builtinUnit, U
 // case. It loads all plural forms, because selection between plural forms is
 // dependent upon the value being formatted.
 //
+// See data/unit/de.txt and data/unit/fr.txt for examples - take a look at
+// units/compound/power2: German has case, French has differences for gender,
+// but no case.
+//
 // TODO(icu-units#138): Conceptually similar to PluralTableSink, however the
 // tree structures are different. After homogenizing the structures, we may be
 // able to unify the two classes.
@@ -336,6 +340,11 @@ class InflectedPluralSink : public ResourceSink {
     UnicodeString *outArray;
 };
 
+// Fetches localised formatting patterns for the given subKey. See documentation
+// for InflectedPluralSink for details.
+//
+// Data is loaded for the appropriate unit width, with missing data filled in
+// from unitsShort.
 void getInflectedMeasureData(StringPiece subKey,
                              const Locale &locale,
                              const UNumberUnitWidth &width,
@@ -429,28 +438,40 @@ void getMeasureData(const Locale &locale,
     LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, locale.getName(), &status));
     if (U_FAILURE(status)) { return; }
 
+    CharString subKey;
+    subKey.append("/", status);
+    subKey.append(unit.getType(), status);
+    subKey.append("/", status);
+
     // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
     // TODO(ICU-20400): Get duration-*-person data properly with aliases.
-    StringPiece subtypeForResource;
     int32_t subtypeLen = static_cast<int32_t>(uprv_strlen(unit.getSubtype()));
     if (subtypeLen > 7 && uprv_strcmp(unit.getSubtype() + subtypeLen - 7, "-person") == 0) {
-        subtypeForResource = {unit.getSubtype(), subtypeLen - 7};
+        subKey.append({unit.getSubtype(), subtypeLen - 7}, status);
     } else {
-        subtypeForResource = unit.getSubtype();
+        subKey.append({unit.getSubtype(), subtypeLen}, status);
+    }
+
+    if (width != UNUM_UNIT_WIDTH_FULL_NAME) {
+        UErrorCode localStatus = status;
+        CharString genderKey;
+        genderKey.append("units", localStatus);
+        genderKey.append(subKey, localStatus);
+        genderKey.append("/gender", localStatus);
+        StackUResourceBundle fillIn;
+        ures_getByKeyWithFallback(unitsBundle.getAlias(), genderKey.data(), fillIn.getAlias(),
+                                  &localStatus);
+        outArray[GENDER_INDEX] = ures_getUnicodeString(fillIn.getAlias(), &localStatus);
     }
 
     CharString key;
     key.append("units", status);
-    // TODO(icu-units#140): support gender for other unit widths.
     if (width == UNUM_UNIT_WIDTH_NARROW) {
         key.append("Narrow", status);
     } else if (width == UNUM_UNIT_WIDTH_SHORT) {
         key.append("Short", status);
     }
-    key.append("/", status);
-    key.append(unit.getType(), status);
-    key.append("/", status);
-    key.append(subtypeForResource, status);
+    key.append(subKey, status);
 
     // Grab desired case first, if available. Then grab no-case data to fill in
     // the gaps.
@@ -486,10 +507,8 @@ void getMeasureData(const Locale &locale,
     // TODO(ICU-13353): The fallback to short does not work in ICU4C.
     // Manually fall back to short (this is done automatically in Java).
     key.clear();
-    key.append("unitsShort/", status);
-    key.append(unit.getType(), status);
-    key.append("/", status);
-    key.append(subtypeForResource, status);
+    key.append("unitsShort", status);
+    key.append(subKey, status);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
 }
 

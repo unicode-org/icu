@@ -2287,15 +2287,14 @@ void NumberFormatterApiTest::unitGender() {
     LocalizedNumberFormatter formatter;
     FormattedNumber fn;
     for (const TestCase &t : cases) {
-        // TODO(icu-units#140): make this work for more than just UNUM_UNIT_WIDTH_FULL_NAME
-        // formatter = NumberFormatter::with()
-        //                 .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
-        //                 .locale(Locale(t.locale));
-        // fn = formatter.formatDouble(1.1, status);
-        // assertEquals(UnicodeString("Testing gender with default width, unit: ") + t.unitIdentifier +
-        //                  ", locale: " + t.locale,
-        //              t.expectedGender, fn.getGender(status));
-        // status.assertSuccess();
+        formatter = NumberFormatter::with()
+                        .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
+                        .locale(Locale(t.locale));
+        fn = formatter.formatDouble(1.1, status);
+        assertEquals(UnicodeString("Testing gender with default width, unit: ") + t.unitIdentifier +
+                         ", locale: " + t.locale,
+                     t.expectedGender, fn.getGender(status));
+        status.assertSuccess();
 
         formatter = NumberFormatter::with()
                         .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
