@@ -45,25 +45,27 @@
 
 void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ ) {
     if (exec) logln("TestSuite DateIntervalFormat");
-    switch (index) {
-        TESTCASE(0, testAPI);
-        TESTCASE(1, testFormat);
-        TESTCASE(2, testFormatUserDII);
-        TESTCASE(3, testSetIntervalPatternNoSideEffect);
-        TESTCASE(4, testYearFormats);
-        TESTCASE(5, testStress);
-        TESTCASE(6, testTicket11583_2);
-        TESTCASE(7, testTicket11985);
-        TESTCASE(8, testTicket11669);
-        TESTCASE(9, testTicket12065);
-        TESTCASE(10, testFormattedDateInterval);
-        TESTCASE(11, testCreateInstanceForAllLocales);
-        TESTCASE(12, testTicket20707);
-        TESTCASE(13, testFormatMillisecond);
-        TESTCASE(14, testHourMetacharacters);
-        TESTCASE(15, testContext);
-        default: name = ""; break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testAPI);
+    TESTCASE_AUTO(testFormat);
+    TESTCASE_AUTO(testFormatUserDII);
+    TESTCASE_AUTO(testSetIntervalPatternNoSideEffect);
+    TESTCASE_AUTO(testYearFormats);
+    TESTCASE_AUTO(testStress);
+    TESTCASE_AUTO(testTicket11583_2);
+    TESTCASE_AUTO(testTicket11985);
+    TESTCASE_AUTO(testTicket11669);
+    TESTCASE_AUTO(testTicket12065);
+    TESTCASE_AUTO(testFormattedDateInterval);
+    TESTCASE_AUTO(testCreateInstanceForAllLocales);
+    TESTCASE_AUTO(testTicket20707);
+    TESTCASE_AUTO(testFormatMillisecond);
+    TESTCASE_AUTO(testHourMetacharacters);
+    TESTCASE_AUTO(testContext);
+    TESTCASE_AUTO(testTicket21222GregorianEraDiff);
+    TESTCASE_AUTO(testTicket21222ROCEraDiff);
+    TESTCASE_AUTO(testTicket21222JapaneseEraDiff);
+    TESTCASE_AUTO_END;
 }
 
 /**
@@ -2133,6 +2135,214 @@ void DateIntervalFormatTest::testTicket20707() {
         }
         i++;
     }
+}
+
+void DateIntervalFormatTest::getCategoryAndField(
+        const FormattedDateInterval& formatted,
+        std::vector<int32_t>& categories,
+        std::vector<int32_t>& fields,
+        IcuTestErrorCode& status) {
+    categories.clear();
+    fields.clear();
+    ConstrainedFieldPosition cfpos;
+    while (formatted.nextPosition(cfpos, status)) {
+        categories.push_back(cfpos.getCategory());
+        fields.push_back(cfpos.getField());
+    }
+}
+
+void DateIntervalFormatTest::verifyCategoryAndField(
+        const FormattedDateInterval& formatted,
+        const std::vector<int32_t>& categories,
+        const std::vector<int32_t>& fields,
+        IcuTestErrorCode& status) {
+    ConstrainedFieldPosition cfpos;
+    int32_t i = 0;
+    while (formatted.nextPosition(cfpos, status)) {
+        assertEquals("Category", cfpos.getCategory(), categories[i]);
+        assertEquals("Field", cfpos.getField(), fields[i]);
+        i++;
+    }
+}
+
+void DateIntervalFormatTest::testTicket21222GregorianEraDiff() {
+    IcuTestErrorCode status(*this, "testTicket21222GregorianEraDiff");
+
+    LocalPointer<Calendar> cal(Calendar::createInstance(*TimeZone::getGMT(), status));
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    std::vector<int32_t> expectedCategory;
+    std::vector<int32_t> expectedField;
+
+    // Test Gregorian calendar
+    LocalPointer<DateIntervalFormat> g(
+        DateIntervalFormat::createInstance(
+            u"h", Locale("en"), status));
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    g->setTimeZone(*(TimeZone::getGMT()));
+    cal->setTime(Calendar::getNow(), status);
+    cal->set(123, UCAL_APRIL, 5, 6, 0);
+    FormattedDateInterval formatted;
+
+    UDate date0123Apr5AD = cal->getTime(status);
+
+    cal->set(UCAL_YEAR, 124);
+    UDate date0124Apr5AD = cal->getTime(status);
+
+    cal->set(UCAL_ERA, 0);
+    UDate date0124Apr5BC = cal->getTime(status);
+
+    cal->set(UCAL_YEAR, 123);
+    UDate date0123Apr5BC = cal->getTime(status);
+
+    DateInterval bothAD(date0123Apr5AD, date0124Apr5AD);
+    DateInterval bothBC(date0124Apr5BC, date0123Apr5BC);
+    DateInterval BCtoAD(date0123Apr5BC, date0124Apr5AD);
+
+    formatted = g->formatToValue(bothAD, status);
+    assertEquals("Gregorian - calendar both dates in AD",
+                 u"4/5/123, 6 AM \u2013 4/5/124, 6 AM",
+                 formatted.toString(status));
+
+    formatted = g->formatToValue(bothBC, status);
+    assertEquals("Gregorian - calendar both dates in BC",
+                 u"4/5/124, 6 AM \u2013 4/5/123, 6 AM",
+                 formatted.toString(status));
+
+    formatted = g->formatToValue(BCtoAD, status);
+    assertEquals("Gregorian - BC to AD",
+                 u"4 5, 123 BC, 6 AM \u2013 4 5, 124 AD, 6 AM",
+                 formatted.toString(status));
+}
+
+void DateIntervalFormatTest::testTicket21222ROCEraDiff() {
+    IcuTestErrorCode status(*this, "testTicket21222ROCEraDiff");
+
+    LocalPointer<Calendar> cal(Calendar::createInstance(*TimeZone::getGMT(), status));
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    std::vector<int32_t> expectedCategory;
+    std::vector<int32_t> expectedField;
+
+    // Test roc calendar
+    LocalPointer<DateIntervalFormat> roc(
+        DateIntervalFormat::createInstance(
+            u"h", Locale("zh-Hant-TW@calendar=roc"), status));
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    roc->setTimeZone(*(TimeZone::getGMT()));
+
+    FormattedDateInterval formatted;
+    // set date1910Jan2 to 1910/1/2 AD which is prior to MG
+    cal->set(1910, UCAL_JANUARY, 2, 6, 0);
+    UDate date1910Jan2 = cal->getTime(status);
+
+    // set date1911Jan2 to 1911/1/2 AD which is also prior to MG
+    cal->set(UCAL_YEAR, 1911);
+    UDate date1911Jan2 = cal->getTime(status);
+
+    // set date1912Jan2 to 1912/1/2 AD which is after MG
+    cal->set(UCAL_YEAR, 1912);
+    UDate date1912Jan2 = cal->getTime(status);
+
+    // set date1913Jan2 to 1913/1/2 AD which is also after MG
+    cal->set(UCAL_YEAR, 1913);
+    UDate date1913Jan2 = cal->getTime(status);
+
+    DateInterval bothBeforeMG(date1910Jan2, date1911Jan2);
+    DateInterval beforeAfterMG(date1911Jan2, date1913Jan2);
+    DateInterval bothAfterMG(date1912Jan2, date1913Jan2);
+
+    formatted = roc->formatToValue(bothAfterMG, status);
+    assertEquals("roc calendar - both dates in MG Era",
+                 u"民國1/1/2 6 上午 – 民國2/1/2 6 上午",
+                 formatted.toString(status));
+    getCategoryAndField(formatted, expectedCategory,
+                        expectedField, status);
+
+    formatted = roc->formatToValue(beforeAfterMG, status);
+    assertEquals("roc calendar - prior MG Era and in MG Era",
+                 u"民國前1年1月2日 6 上午 – 民國2年1月2日 6 上午",
+                 formatted.toString(status));
+    verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
+
+    formatted = roc->formatToValue(bothBeforeMG, status);
+    assertEquals("roc calendar - both dates prior MG Era",
+                 u"民國前2/1/2 6 上午 – 民國前1/1/2 6 上午",
+                 formatted.toString(status));
+    verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
+}
+
+void DateIntervalFormatTest::testTicket21222JapaneseEraDiff() {
+    IcuTestErrorCode status(*this, "testTicket21222JapaneseEraDiff");
+
+    LocalPointer<Calendar> cal(Calendar::createInstance(*TimeZone::getGMT(), status));
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    std::vector<int32_t> expectedCategory;
+    std::vector<int32_t> expectedField;
+
+    // Test roc calendar
+    // Test Japanese calendar
+    LocalPointer<DateIntervalFormat> japanese(
+        DateIntervalFormat::createInstance(
+            u"h", Locale("ja@calendar=japanese"), status));
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    japanese->setTimeZone(*(TimeZone::getGMT()));
+
+    FormattedDateInterval formatted;
+
+    cal->set(2019, UCAL_MARCH, 2, 6, 0);
+    UDate date2019Mar2 = cal->getTime(status);
+
+    cal->set(UCAL_MONTH, UCAL_APRIL);
+    cal->set(UCAL_DAY_OF_MONTH, 3);
+    UDate date2019Apr3 = cal->getTime(status);
+
+    cal->set(UCAL_MONTH, UCAL_MAY);
+    cal->set(UCAL_DAY_OF_MONTH, 4);
+    UDate date2019May4 = cal->getTime(status);
+
+    cal->set(UCAL_MONTH, UCAL_JUNE);
+    cal->set(UCAL_DAY_OF_MONTH, 5);
+    UDate date2019Jun5 = cal->getTime(status);
+
+    DateInterval bothBeforeReiwa(date2019Mar2, date2019Apr3);
+    DateInterval beforeAfterReiwa(date2019Mar2, date2019May4);
+    DateInterval bothAfterReiwa(date2019May4, date2019Jun5);
+
+    formatted = japanese->formatToValue(bothAfterReiwa, status);
+    assertEquals("japanese calendar - both dates in Reiwa",
+                 u"R1/5/4 午前6時～R1/6/5 午前6時",
+                 formatted.toString(status));
+    getCategoryAndField(formatted, expectedCategory,
+                        expectedField, status);
+
+    formatted = japanese->formatToValue(bothBeforeReiwa, status);
+    assertEquals("japanese calendar - both dates before Reiwa",
+                 u"H31/3/2 午前6時～H31/4/3 午前6時",
+                 formatted.toString(status));
+    verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
+
+    formatted = japanese->formatToValue(beforeAfterReiwa, status);
+    assertEquals("japanese calendar - date before and in Reiwa",
+                 u"平成31年3月2日 午前6時～令和元年5月4日 午前6時",
+                 formatted.toString(status));
+    verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

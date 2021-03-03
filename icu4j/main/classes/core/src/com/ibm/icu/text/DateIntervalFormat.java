@@ -1450,6 +1450,12 @@ public class DateIntervalFormat extends UFormat {
                     // share interval pattern
                     intervalPatterns.put(DateIntervalInfo.
                         CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR], ptn);
+
+                    pattern =dtpng.getBestPattern(timeSkeleton + "G");
+                    ptn = new PatternInfo(null, pattern, fInfo.getDefaultOrder());
+                    // share interval pattern
+                    intervalPatterns.put(DateIntervalInfo.
+                        CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA], ptn);
                 } else {
                     //genFallbackForNotFound(Calendar.DATE, skeleton);
                     //genFallbackForNotFound(Calendar.MONTH, skeleton);
@@ -1492,6 +1498,11 @@ public class DateIntervalFormat extends UFormat {
                 CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH], ptn);
             intervalPatterns.put(DateIntervalInfo.
                 CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR], ptn);
+
+            pattern =dtpng.getBestPattern(timeSkeleton + "G");
+            ptn = new PatternInfo(null, pattern, fInfo.getDefaultOrder());
+            intervalPatterns.put(DateIntervalInfo.
+                CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA], ptn);
         } else {
             /* if both present,
              * 1) when the year, month, or day differs,
@@ -1500,7 +1511,7 @@ public class DateIntervalFormat extends UFormat {
              * range expression for the time.
              */
             /*
-             * 1) when the year, month, or day differs,
+             * 1) when the era, year, month, or day differs,
              * concatenate the two original expressions with a separator between,
              */
             // if field exists, use fall back
@@ -1521,6 +1532,12 @@ public class DateIntervalFormat extends UFormat {
                 skeleton = DateIntervalInfo.
                     CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR] + skeleton;
                 genFallbackPattern(Calendar.YEAR, skeleton, intervalPatterns, dtpng);
+            }
+            if ( !fieldExistsInSkeleton(Calendar.ERA, dateSkeleton) ) {
+                // then prefix skeleton with 'G'
+                skeleton = DateIntervalInfo.
+                    CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA] + skeleton;
+                genFallbackPattern(Calendar.ERA, skeleton, intervalPatterns, dtpng);
             }
 
             /*
