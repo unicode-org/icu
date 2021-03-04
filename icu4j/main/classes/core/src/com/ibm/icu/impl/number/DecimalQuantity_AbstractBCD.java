@@ -265,6 +265,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             return fractionCountWithoutTrailingZeros();
         case e:
             return getExponent();
+        case c:
+            // Plural operand `c` is currently an alias for `e`.
+            return getExponent();
         default:
             return Math.abs(toDouble());
         }
