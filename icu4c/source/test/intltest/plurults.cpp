@@ -52,8 +52,10 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testGetSamples);
     TESTCASE_AUTO(testGetFixedDecimalSamples);
     TESTCASE_AUTO(testSamplesWithExponent);
+    TESTCASE_AUTO(testSamplesWithCompactNotation);
     TESTCASE_AUTO(testWithin);
     TESTCASE_AUTO(testGetAllKeywordValues);
+    TESTCASE_AUTO(testScientificPluralKeyword);
     TESTCASE_AUTO(testCompactDecimalPluralKeyword);
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
@@ -404,7 +406,7 @@ void PluralRulesTest::testGetSamples() {
     double values[1000];
     for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
         if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-                logKnownIssue("21299", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
             continue;
         }
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
@@ -465,7 +467,7 @@ void PluralRulesTest::testGetFixedDecimalSamples() {
     FixedDecimal values[1000];
     for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
         if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-                logKnownIssue("21299", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
             continue;
         }
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
@@ -549,6 +551,44 @@ void PluralRulesTest::testSamplesWithExponent() {
     checkNewSamples(description2, test2, u"one", u"@decimal 0.0~1.5, 1.1e5", FixedDecimal(0, 1));
     checkNewSamples(description2, test2, u"many", u"@decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …", FixedDecimal::createWithExponent(2.1, 1, 6));
     checkNewSamples(description2, test2, u"other", u"@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …", FixedDecimal(2.0, 1));
+}
+
+
+void PluralRulesTest::testSamplesWithCompactNotation() {
+    // integer samples
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString description(
+        u"one: i = 0,1 @integer 0, 1, 1c5 @decimal 0.0~1.5, 1.1c5; "
+        u"many: c = 0 and i != 0 and i % 1000000 = 0 and v = 0 or c != 0..5"
+        u" @integer 1000000, 2c6, 3c6, 4c6, 5c6, 6c6, 7c6, … @decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …; "
+        u"other:  @integer 2~17, 100, 1000, 10000, 100000, 2c5, 3c5, 4c5, 5c5, 6c5, 7c5, …"
+        u" @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …"
+    );
+    LocalPointer<PluralRules> test(PluralRules::createRules(description, status));
+    if (U_FAILURE(status)) {
+        errln("Couldn't create plural rules from a string using exponent notation, with error = %s", u_errorName(status));
+        return;
+    }
+    checkNewSamples(description, test, u"one", u"@integer 0, 1, 1c5", FixedDecimal(0));
+    checkNewSamples(description, test, u"many", u"@integer 1000000, 2c6, 3c6, 4c6, 5c6, 6c6, 7c6, …", FixedDecimal(1000000));
+    checkNewSamples(description, test, u"other", u"@integer 2~17, 100, 1000, 10000, 100000, 2c5, 3c5, 4c5, 5c5, 6c5, 7c5, …", FixedDecimal(2));
+
+    // decimal samples
+    status = U_ZERO_ERROR;
+    UnicodeString description2(
+        u"one: i = 0,1 @decimal 0.0~1.5, 1.1c5; "
+        u"many: c = 0 and i != 0 and i % 1000000 = 0 and v = 0 or c != 0..5"
+        u" @decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …; "
+        u"other:  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …"
+    );
+    LocalPointer<PluralRules> test2(PluralRules::createRules(description2, status));
+    if (U_FAILURE(status)) {
+        errln("Couldn't create plural rules from a string using exponent notation, with error = %s", u_errorName(status));
+        return;
+    }
+    checkNewSamples(description2, test2, u"one", u"@decimal 0.0~1.5, 1.1c5", FixedDecimal(0, 1));
+    checkNewSamples(description2, test2, u"many", u"@decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …", FixedDecimal::createWithExponent(2.1, 1, 6));
+    checkNewSamples(description2, test2, u"other", u"@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …", FixedDecimal(2.0, 1));
 }
 
 void PluralRulesTest::checkNewSamples(
@@ -727,13 +767,77 @@ PluralRulesTest::testGetAllKeywordValues() {
     }
 }
 
+// For the time being, the  compact notation exponent operand `c` is an alias
+// for the scientific exponent operand `e` and compact notation.
+void
+PluralRulesTest::testScientificPluralKeyword() {
+    IcuTestErrorCode errorCode(*this, "testScientificPluralKeyword");
+
+    LocalPointer<PluralRules> rules(PluralRules::createRules(
+        u"one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  "
+        u"many: e = 0 and i % 1000000 = 0 and v = 0 or e != 0 .. 5;  "
+        u"other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000,  "
+        u"  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …", errorCode));
+
+    if (U_FAILURE(errorCode)) {
+        errln("Couldn't instantiate plurals rules from string, with error = %s", u_errorName(errorCode));
+        return;
+    }
+
+    const char* localeName = "fr-FR";
+    Locale locale = Locale::createFromName(localeName);
+
+    struct TestCase {
+        const char16_t* skeleton;
+        const int input;
+        const char16_t* expectedFormattedOutput;
+        const char16_t* expectedPluralRuleKeyword;
+    } cases[] = {
+        // unlocalized formatter skeleton, input, string output, plural rule keyword
+        {u"",           0, u"0", u"one"},
+        {u"scientific", 0, u"0", u"one"},
+
+        {u"",           1, u"1", u"one"},
+        {u"scientific", 1, u"1", u"one"},
+
+        {u"",           2, u"2", u"other"},
+        {u"scientific", 2, u"2", u"other"},
+
+        {u"",           1000000, u"1 000 000", u"many"},
+        {u"scientific", 1000000, u"1 million", u"many"},
+
+        {u"",           1000001, u"1 000 001", u"other"},
+        {u"scientific", 1000001, u"1 million", u"many"},
+
+        {u"",           120000,  u"1 200 000",    u"other"},
+        {u"scientific", 1200000, u"1,2 millions", u"many"},
+
+        {u"",           1200001, u"1 200 001",    u"other"},
+        {u"scientific", 1200001, u"1,2 millions", u"many"},
+
+        {u"",           2000000, u"2 000 000",  u"many"},
+        {u"scientific", 2000000, u"2 millions", u"many"},
+    };
+    for (const auto& cas : cases) {
+        const char16_t* skeleton = cas.skeleton;
+        const int input = cas.input;
+        const char16_t* expectedPluralRuleKeyword = cas.expectedPluralRuleKeyword;
+
+        UnicodeString actualPluralRuleKeyword =
+            getPluralKeyword(rules, locale, input, skeleton);
+
+        UnicodeString message(UnicodeString(localeName) + u" " + DoubleToUnicodeString(input));
+        assertEquals(message, expectedPluralRuleKeyword, actualPluralRuleKeyword);
+    }
+}
+
 void
 PluralRulesTest::testCompactDecimalPluralKeyword() {
     IcuTestErrorCode errorCode(*this, "testCompactDecimalPluralKeyword");
 
     LocalPointer<PluralRules> rules(PluralRules::createRules(
         u"one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  "
-        u"many: e = 0 and i % 1000000 = 0 and v = 0 or e != 0 .. 5;  "
+        u"many: c = 0 and i % 1000000 = 0 and v = 0 or c != 0 .. 5;  "
         u"other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000,  "
         u"  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …", errorCode));
 

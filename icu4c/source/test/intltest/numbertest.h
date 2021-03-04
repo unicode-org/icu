@@ -201,7 +201,7 @@ class DecimalQuantityTest : public IntlTest {
     void testToDouble();
     void testMaxDigits();
     void testNickelRounding();
-    void testCompactDecimalSuppressedExponent();
+    void testScientificAndCompactSuppressedExponent();
     void testSuppressedExponentUnchangedByInitialScaling();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);

@@ -481,14 +481,27 @@ public class PluralRules implements Serializable {
         w,
 
         /**
-         * Suppressed exponent for compact notation (exponent needed in
-         * scientific notation with compact notation to approximate i).
+         * Suppressed exponent for scientific notation (exponent needed in
+         * scientific notation to approximate i).
          *
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         e,
+
+        /**
+         * This operand is currently treated as an alias for `PLURAL_OPERAND_E`.
+         * In the future, it will represent:
+         *
+         * Suppressed exponent for compact notation (exponent needed in
+         * compact notation to approximate i).
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        c,
 
         /**
          * THIS OPERAND IS DEPRECATED AND HAS BEEN REMOVED FROM THE SPEC.
@@ -657,10 +670,11 @@ public class PluralRules implements Serializable {
          * @param v number of digits to the right of the decimal place. e.g 1.00 = 2 25. = 0
          * @param f Corresponds to f in the plural rules grammar.
          *   The digits to the right of the decimal place as an integer. e.g 1.10 = 10
-         * @param e Suppressed exponent for scientific and compact notation
+         * @param e Suppressed exponent for scientific notation
+         * @param c Currently: an alias for param `e`
          */
         @Deprecated
-        public FixedDecimal(double n, int v, long f, int e) {
+        public FixedDecimal(double n, int v, long f, int e, int c) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
             visibleDecimalDigitCount = v;
@@ -668,7 +682,11 @@ public class PluralRules implements Serializable {
             integerValue = n > MAX
                     ? MAX
                             : (long)n;
-            exponent = e;
+            int initExpVal = e;
+            if (initExpVal == 0) {
+                initExpVal = c;
+            }
+            exponent = initExpVal;
             hasIntegerValue = source == integerValue;
             // check values. TODO make into unit test.
             //
@@ -697,6 +715,15 @@ public class PluralRules implements Serializable {
                 visibleDecimalDigitCountWithoutTrailingZeros = trimmedCount;
             }
             baseFactor = (int) Math.pow(10, v);
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public FixedDecimal(double n, int v, long f, int e) {
+            this(n, v, f, e, e);
         }
 
         /**
@@ -848,8 +875,11 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         private static FixedDecimal parseDecimalSampleRangeNumString(String num) {
-            if (num.contains("e")) {
+            if (num.contains("e") || num.contains("c")) {
                 int ePos = num.lastIndexOf('e');
+                if (ePos < 0) {
+                    ePos = num.lastIndexOf('c');
+                }
                 int expNumPos = ePos + 1;
                 String exponentStr = num.substring(expNumPos);
                 int exponent = Integer.parseInt(exponentStr);
@@ -890,6 +920,7 @@ public class PluralRules implements Serializable {
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
             case e: return exponent;
+            case c: return exponent;
             default: return source;
             }
         }
@@ -970,10 +1001,10 @@ public class PluralRules implements Serializable {
         @Override
         public String toString() {
             String baseString = String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
-            if (exponent == 0) {
-                return baseString;
-            } else {
+            if (exponent != 0) {
                 return baseString + "e" + exponent;
+            } else {
+                return baseString;
             }
         }
 
