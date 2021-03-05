@@ -905,4 +905,41 @@ public class RBBITest extends TestFmwk {
         assertEquals("Wrong number of breaks found", 2, breaksFound);
     }
 
+    /* Test handling of unpair surrogate.
+     */
+    @Test
+    public void TestUnpairedSurrogate() {
+        // make sure the simple one work first.
+        String rules = "ab;";
+        RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rules);
+        assertEquals("Rules does not match", rules, bi.toString());
+
+        try {
+            new RuleBasedBreakIterator("a\ud800b;");
+            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpair low surrogate.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with unpair surrogate.
+        }
+        catch (Exception e) {
+            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpair low surrogate: " + e);
+        }
+
+        try {
+            new RuleBasedBreakIterator("a\ude00b;");
+            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpair high surrogate.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with unpair surrogate.
+        }
+        catch (Exception e) {
+            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpair high surrogate: " + e);
+        }
+
+
+        // make sure the surrogate one work too.
+        rules = "a😀b;";
+        bi = new RuleBasedBreakIterator(rules);
+        assertEquals("Rules does not match", rules, bi.toString());
+    }
 }
