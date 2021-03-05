@@ -546,6 +546,10 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @provisional This API might change or be removed in a future release.
      */
     public T usage(String usage) {
+        if (usage != null && usage.isEmpty()) {
+            return create(KEY_USAGE, null);
+        }
+
         return create(KEY_USAGE, usage);
     }
 

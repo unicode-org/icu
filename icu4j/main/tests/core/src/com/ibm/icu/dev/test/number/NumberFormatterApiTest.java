@@ -1652,6 +1652,57 @@ public class NumberFormatterApiTest extends TestFmwk {
                 30500,
                 "350 m");
 
+        // Test calling .usage("") or .usage(null) should unset the existing usage.
+        // First: without usage
+        assertFormatSingle("Rounding Mode propagates: rounding up",
+                "measure-unit/length-centimeter rounding-mode-ceiling",
+                "unit/centimeter rounding-mode-ceiling",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("centimeter"))
+                        .roundingMode(RoundingMode.CEILING),
+                new ULocale("en-US"),
+                3048,
+                "3,048 cm");
+
+        // Second: with "road" usage
+        assertFormatSingle("Rounding Mode propagates: rounding up",
+                "usage/road measure-unit/length-centimeter rounding-mode-ceiling",
+                "usage/road unit/centimeter rounding-mode-ceiling",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("centimeter"))
+                        .usage("road")
+                        .roundingMode(RoundingMode.CEILING),
+                new ULocale("en-US"),
+                3048,
+                "100 ft");
+
+        // Third: with "road" usage, then the usage unsetted by calling .usage("")
+        assertFormatSingle("Rounding Mode propagates: rounding up",
+                "measure-unit/length-centimeter rounding-mode-ceiling",
+                "unit/centimeter rounding-mode-ceiling",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("centimeter"))
+                        .usage("road")
+                        .roundingMode(RoundingMode.CEILING)
+                        .usage(""), // unset
+                new ULocale("en-US"),
+                3048,
+                "3,048 cm");
+
+        // Fourth: with "road" usage, then the usage unsetted by calling .usage(nul)
+        assertFormatSingle("Rounding Mode propagates: rounding up",
+                "measure-unit/length-centimeter rounding-mode-ceiling",
+                "unit/centimeter rounding-mode-ceiling",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("centimeter"))
+                        .usage("road")
+                        .roundingMode(RoundingMode.CEILING)
+                        .usage(null), // unset
+                new ULocale("en-US"),
+                3048,
+                "3,048 cm");
+
+
         // TODO(icu-units#38): improve unit testing coverage. E.g. add
         // vehicle-fuel triggering inversion conversion code. Test with 0 too,
         // to see divide-by-zero behaviour.
