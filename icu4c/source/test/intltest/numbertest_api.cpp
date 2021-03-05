@@ -1719,6 +1719,43 @@ void NumberFormatterApiTest::unitUsage() {
             30500,
             u"350 m");
 
+    // Test calling `.usage("")` should unset the existing usage.
+    // First: without usage
+    assertFormatSingle(u"Rounding Mode propagates: rounding up",
+                       u"measure-unit/length-centimeter rounding-mode-ceiling",
+                       u"unit/centimeter rounding-mode-ceiling",
+                       NumberFormatter::with()
+                           .unit(MeasureUnit::forIdentifier("centimeter", status))
+                           .roundingMode(UNUM_ROUND_CEILING),
+                       Locale("en-US"), //
+                       3048,            //
+                       u"3,048 cm");
+
+    // Second: with "road" usage
+    assertFormatSingle(u"Rounding Mode propagates: rounding up",
+                       u"usage/road measure-unit/length-centimeter rounding-mode-ceiling",
+                       u"usage/road unit/centimeter rounding-mode-ceiling",
+                       NumberFormatter::with()
+                           .unit(MeasureUnit::forIdentifier("centimeter", status))
+                           .usage("road")
+                           .roundingMode(UNUM_ROUND_CEILING),
+                       Locale("en-US"), //
+                       3048,            //
+                       u"100 ft");
+
+    // Third: with "road" usage, then the usage unsetted by calling .usage("")
+    assertFormatSingle(u"Rounding Mode propagates: rounding up",
+                       u"measure-unit/length-centimeter rounding-mode-ceiling",
+                       u"unit/centimeter rounding-mode-ceiling",
+                       NumberFormatter::with()
+                           .unit(MeasureUnit::forIdentifier("centimeter", status))
+                           .usage("road")
+                           .roundingMode(UNUM_ROUND_CEILING)
+                           .usage(""),  // unset
+                       Locale("en-US"), //
+                       3048,            //
+                       u"3,048 cm");
+
     // TODO(icu-units#38): improve unit testing coverage. E.g. add vehicle-fuel
     // triggering inversion conversion code. Test with 0 too, to see
     // divide-by-zero behaviour.

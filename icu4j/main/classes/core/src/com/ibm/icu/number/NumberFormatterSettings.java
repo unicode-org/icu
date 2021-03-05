@@ -545,6 +545,10 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @draft ICU 68
      */
     public T usage(String usage) {
+        if (usage != null && usage.isEmpty()) {
+            return create(KEY_USAGE, null);
+        }
+
         return create(KEY_USAGE, usage);
     }
 
