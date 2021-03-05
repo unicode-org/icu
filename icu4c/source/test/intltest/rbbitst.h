@@ -83,6 +83,7 @@ public:
     void TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi);
     void TestBug13692();
     void TestDebugRules();
+    void TestUnpairedSurrogate();
 
     void TestDebug();
     void TestProperties();

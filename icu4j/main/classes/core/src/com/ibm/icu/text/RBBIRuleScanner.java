@@ -723,6 +723,9 @@ class RBBIRuleScanner {
             return -1;
         }
         ch = UTF16.charAt(fRB.fRules, fNextIndex);
+        if (Character.isBmpCodePoint(ch) && Character.isSurrogate((char)ch)) {
+            error(RBBIRuleBuilder.U_ILLEGAL_CHAR_FOUND);
+        }
         fNextIndex = UTF16.moveCodePointOffset(fRB.fRules, fNextIndex, 1);
 
         if (ch == '\r' ||

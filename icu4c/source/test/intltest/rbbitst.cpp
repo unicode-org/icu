@@ -134,6 +134,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(Test16BitsTrieWith16BitStateTable);
     TESTCASE_AUTO(TestTable_8_16_Bits);
     TESTCASE_AUTO(TestBug13590);
+    TESTCASE_AUTO(TestUnpairedSurrogate);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5322,5 +5323,44 @@ void RBBITest::TestTraceCreateBreakEngine(void) {
 
 }
 #endif
+
+void RBBITest::TestUnpairedSurrogate() {
+    UnicodeString rules(u"ab;");
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError pe;
+    RuleBasedBreakIterator bi1(rules, pe, status);
+    assertSuccess(WHERE, status);
+    UnicodeString rtRules = bi1.getRules();
+    // make sure the simple one work first.
+    assertEquals(WHERE, rules,  rtRules);
+
+
+    rules = UnicodeString(u"a\\ud800b;").unescape();
+    pe.line = 0;
+    pe.offset = 0;
+    RuleBasedBreakIterator bi2(rules, pe, status);
+    assertEquals(WHERE "unpaired lead surrogate", U_ILLEGAL_CHAR_FOUND , status);
+    if (pe.line != 1 || pe.offset != 1) {
+        errln("pe (line, offset) expected (1, 1), got (%d, %d)", pe.line, pe.offset);
+    }
+
+    status = U_ZERO_ERROR;
+    rules = UnicodeString(u"a\\ude00b;").unescape();
+    pe.line = 0;
+    pe.offset = 0;
+    RuleBasedBreakIterator bi3(rules, pe, status);
+    assertEquals(WHERE "unpaired tail surrogate", U_ILLEGAL_CHAR_FOUND , status);
+    if (pe.line != 1 || pe.offset != 1) {
+        errln("pe (line, offset) expected (1, 1), got (%d, %d)", pe.line, pe.offset);
+    }
+
+    // make sure the surrogate one work too.
+    status = U_ZERO_ERROR;
+    rules = UnicodeString(u"a😀b;");
+    RuleBasedBreakIterator bi4(rules, pe, status);
+    rtRules = bi4.getRules();
+    assertEquals(WHERE, rules, rtRules);
+}
 
 #endif // #if !UCONFIG_NO_BREAK_ITERATION
