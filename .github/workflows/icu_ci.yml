@@ -212,6 +212,19 @@ jobs:
           make clean;
           make -j2 check
 
+  # Build and run testmap
+  testmap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j2 check;
+          CONFIG_FILES=test/testmap/Makefile ./config.status;
+          cd test/testmap;
+          make check | grep '*** PASS PASS PASS, test PASSED!!!!!!!!'
+
   # Copyright scan
   copyright-scan:
     runs-on: ubuntu-latest
