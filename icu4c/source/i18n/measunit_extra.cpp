@@ -955,10 +955,6 @@ int32_t SingleUnitImpl::getUnitCategoryIndex() const {
     return gSimpleUnitCategories[index];
 }
 
-MeasureUnitImpl::MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status) {
-    *this = other.copy(status);
-}
-
 MeasureUnitImpl::MeasureUnitImpl(const SingleUnitImpl &singleUnit, UErrorCode &status) {
     this->appendSingleUnit(singleUnit, status);
 }
@@ -1040,12 +1036,12 @@ MeasureUnitImpl::extractIndividualUnitsWithIndices(UErrorCode &status) const {
     MaybeStackVector<MeasureUnitImplWithIndex> result;
 
     if (this->complexity != UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
-        result.emplaceBackAndCheckErrorCode(status, 0, new MeasureUnitImpl(*this, status));
+        result.emplaceBackAndCheckErrorCode(status, 0, *this, status);
         return result;
     }
 
     for (int32_t i = 0; i < singleUnits.length(); ++i) {
-        result.emplaceBackAndCheckErrorCode(status, i, new MeasureUnitImpl(*singleUnits[i], status));
+        result.emplaceBackAndCheckErrorCode(status, i, *singleUnits[i], status);
         if (U_FAILURE(status)) {
             return result;
         }

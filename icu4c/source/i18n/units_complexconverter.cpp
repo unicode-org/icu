@@ -31,11 +31,11 @@ ComplexUnitsConverter::ComplexUnitsConverter(const MeasureUnitImpl &targetUnit,
     U_ASSERT(units_.length() != 0);
 
     // Just borrowing a pointer to the instance
-    MeasureUnitImpl *biggestUnit = units_[0]->unitImpl.getAlias();
+    MeasureUnitImpl *biggestUnit = &units_[0]->unitImpl;
     for (int32_t i = 1; i < units_.length(); i++) {
-        if (UnitsConverter::compareTwoUnits(*units_[i]->unitImpl, *biggestUnit, ratesInfo, status) > 0 &&
+        if (UnitsConverter::compareTwoUnits(units_[i]->unitImpl, *biggestUnit, ratesInfo, status) > 0 &&
             U_SUCCESS(status)) {
-            biggestUnit = units_[i]->unitImpl.getAlias();
+            biggestUnit = &units_[i]->unitImpl;
         }
 
         if (U_FAILURE(status)) {
@@ -85,10 +85,10 @@ void ComplexUnitsConverter::init(const MeasureUnitImpl &inputUnit,
         const auto *rightPointer = static_cast<const MeasureUnitImplWithIndex *const *>(right);
 
         // Multiply by -1 to sort in descending order
-        return (-1) * UnitsConverter::compareTwoUnits(*((**leftPointer).unitImpl) /* left unit*/,     //
-                                                     *((**rightPointer).unitImpl) /* right unit */,  //
-                                                     *static_cast<const ConversionRates *>(context), //
-                                                     status);
+        return (-1) * UnitsConverter::compareTwoUnits((**leftPointer).unitImpl,                       //
+                                                      (**rightPointer).unitImpl,                      //
+                                                      *static_cast<const ConversionRates *>(context), //
+                                                      status);
     };
 
     uprv_sortArray(units_.getAlias(),                                                                  //
@@ -116,11 +116,11 @@ void ComplexUnitsConverter::init(const MeasureUnitImpl &inputUnit,
     //              3. then, the final result will be (6 feet and 6.74016 inches)
     for (int i = 0, n = units_.length(); i < n; i++) {
         if (i == 0) { // first element
-            unitsConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, *(units_[i]->unitImpl),
-                                                         ratesInfo, status);
+            unitsConverters_.emplaceBackAndCheckErrorCode(status, inputUnit, units_[i]->unitImpl,
+                                                          ratesInfo, status);
         } else {
-            unitsConverters_.emplaceBackAndCheckErrorCode(status, *(units_[i - 1]->unitImpl),
-                                                         *(units_[i]->unitImpl), ratesInfo, status);
+            unitsConverters_.emplaceBackAndCheckErrorCode(status, units_[i - 1]->unitImpl,
+                                                          units_[i]->unitImpl, ratesInfo, status);
         }
 
         if (U_FAILURE(status)) {
@@ -200,12 +200,12 @@ MaybeStackVector<Measure> ComplexUnitsConverter::convert(double quantity,
         if (i < n - 1) {
             Formattable formattableQuantity(intValues[i] * sign);
             // Measure takes ownership of the MeasureUnit*
-            MeasureUnit *type = new MeasureUnit(units_[i]->unitImpl->copy(status).build(status));
+            MeasureUnit *type = new MeasureUnit(units_[i]->unitImpl.copy(status).build(status));
             tmpResult[units_[i]->index] = new Measure(formattableQuantity, type, status);
         } else { // LAST ELEMENT
             Formattable formattableQuantity(quantity * sign);
             // Measure takes ownership of the MeasureUnit*
-            MeasureUnit *type = new MeasureUnit(units_[i]->unitImpl->copy(status).build(status));
+            MeasureUnit *type = new MeasureUnit(units_[i]->unitImpl.copy(status).build(status));
             tmpResult[units_[i]->index] = new Measure(formattableQuantity, type, status);
         }
     }
