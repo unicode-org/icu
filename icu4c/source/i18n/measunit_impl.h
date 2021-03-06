@@ -39,14 +39,6 @@ template class U_I18N_API LocalPointer<MeasureUnitImpl>;
 static const char16_t kDefaultCurrency[] = u"XXX";
 static const char kDefaultCurrency8[] = "XXX";
 
-struct U_I18N_API MeasureUnitImplWithIndex : public UMemory {
-    const int32_t index;
-    LocalPointer<MeasureUnitImpl> unitImpl;
-    // Takes ownership of unitImpl.
-    MeasureUnitImplWithIndex(int32_t index, MeasureUnitImpl *unitImpl)
-        : index(index), unitImpl(unitImpl) {}
-};
-
 /**
  * Looks up the "unitQuantity" (aka "type" or "category") of a base unit
  * identifier. The category is returned via `result`, which must initially be
@@ -192,6 +184,9 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
     int32_t dimensionality = 1;
 };
 
+// Forward declaration
+struct MeasureUnitImplWithIndex;
+
 // Export explicit template instantiations of MaybeStackArray, MemoryPool and
 // MaybeStackVector. This is required when building DLLs for Windows. (See
 // datefmt.h, collationiterator.h, erarules.h and others for similar examples.)
@@ -212,7 +207,8 @@ class U_I18N_API MeasureUnitImpl : public UMemory {
   public:
     MeasureUnitImpl() = default;
     MeasureUnitImpl(MeasureUnitImpl &&other) = default;
-    MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status);
+    // No copy constructor, use MeasureUnitImpl::copy() to make it explicit.
+    MeasureUnitImpl(const MeasureUnitImpl &other, UErrorCode &status) = delete;
     MeasureUnitImpl(const SingleUnitImpl &singleUnit, UErrorCode &status);
 
     MeasureUnitImpl &operator=(MeasureUnitImpl &&other) noexcept = default;
@@ -320,6 +316,18 @@ class U_I18N_API MeasureUnitImpl : public UMemory {
     // For calling serialize
     // TODO(icu-units#147): revisit serialization
     friend class number::impl::LongNameHandler;
+};
+
+struct U_I18N_API MeasureUnitImplWithIndex : public UMemory {
+    const int32_t index;
+    MeasureUnitImpl unitImpl;
+    // Makes a copy of unitImpl.
+    MeasureUnitImplWithIndex(int32_t index, const MeasureUnitImpl &unitImpl, UErrorCode &status)
+        : index(index), unitImpl(unitImpl.copy(status)) {
+    }
+    MeasureUnitImplWithIndex(int32_t index, const SingleUnitImpl &singleUnitImpl, UErrorCode &status)
+        : index(index), unitImpl(MeasureUnitImpl(singleUnitImpl, status)) {
+    }
 };
 
 U_NAMESPACE_END
