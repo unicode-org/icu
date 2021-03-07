@@ -259,7 +259,7 @@ result is a `ResourceBundle` object. Remarks about informational codes are also
 valid for the C++ APIs.
 
 > :point_right: **Note**: All the data accessing examples in the following
-> sections use ICU's 
+> sections use ICU's
 > [root](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/locales/root.txt)
 > resource bundle.
 
@@ -336,7 +336,8 @@ In order to be able to distinguish between resources, one needs to know the type
 of the resource at hand. To find this out, use the
 `UResType ures_getType(UResourceBundle* resourceBundle)` API, or the C++ analog
 `UResType getType(void)`. The `UResType` is an enumeration defined in the
-[unicode/ures.h](../../../icu4c/source/common/unicode/ures.h) header file.
+[unicode/ures.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/ures.h)
+header file.
 
 > :point_right: **Note**: Indexes of resources in tables do not necessarily
 > correspond to the order of items in a table. Due to the way binary structure is 
@@ -549,7 +550,7 @@ Gets the number of items in a resource. Simple resources always return size 1.
 | C++      | `UResType getType(void)`                                 |
 
 Gets the type of the resource. For a list of resource types, see:
-[unicode/ures.h](../../../icu4c/source/common/unicode/ures.h)
+[unicode/ures.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/ures.h)
 
 | Language | API                                              |
 | -------- | ------------------------------------------------ |
@@ -665,7 +666,8 @@ root {
 }
 ```
 
-Binary format is described in the [uresdata.h](../../../icu4c/source/common/uresdata.h)
+Binary format is described in the
+[uresdata.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/uresdata.h)
 header file.
 
 ### Resources Syntax
@@ -743,8 +745,11 @@ aVeryLongString:string {
 ```
 
 For more examples on syntax, take a look at our resource files for
-[locales](../../../icu4c/source/data/locales) and [test data](../../../icu4c/source/test/testdata),
-especially at the [testtypes resource bundle](../../../icu4c/source/test/testdata/testtypes.txt).
+[locales](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/locales)
+and
+[test data](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/testdata),
+especially at the
+[testtypes resource bundle](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/testdata/testtypes.txt).
 
 ### Making Your Own Resource Bundles
 
@@ -795,9 +800,11 @@ steps:
 
 Rolling out your own data takes some practice, especially if you want to package
 it all together. You might want to take a look at how we package data. Good
-places to start (except of course ICU's own [data](../../../icu4c/source/data/))
-are [source/test/testdata/](../../../icu4c/source/test/testdata/) and
-[source/samples/ufortune/resources/](../../../icu4c/source/samples/ufortune/resources/)
+places to start (except of course ICU's own
+[data](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/)) are
+[source/test/testdata/](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/testdata/)
+and
+[source/samples/ufortune/resources/](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ufortune/resources/)
 directories.
 
 Also, here is a sample Windows batch file that does compiling and packing of

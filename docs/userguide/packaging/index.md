@@ -120,7 +120,8 @@ data to be installed and removed without rebuilding ICU. For details, see the
 
 (This section assumes the reader is familiar with ICU version numbers (§) as
 covered in the [Design](../design.md) chapter, and filename conventions for
-libraries in the [ReadMe](../../../icu4c/readme.html#HowToPackage)
+libraries in the
+[ReadMe](https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToPackage)
 .)
 
 ### POSIX Library Names
