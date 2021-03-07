@@ -55,7 +55,7 @@ uninstall themselves before they are removed from memory and unloaded.
 The current plugin API is documented as
 [icuplug.h](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/icuplug_8h.html)
 Some sample plugins are available at:
-[testplug.c](../../../icu4c/source/tools/icuinfo/testplug.c)
+[testplug.c](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/icuinfo/testplug.c)
 Here is a simple, trivial plugin:
 
 ```c
@@ -92,7 +92,7 @@ SHOULD call `uplug_setPlugName` to indicate a human readable plugin name.
 ## Configuration
 
 You can see a sample configuration file here:
-[icuplugins_windows_sample.txt](../../../icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt)
+[icuplugins_windows_sample.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt)
 At ICU startup time, the environment variable "ICU_PLUGINS" will be
 queried for a directory name. If it is not set, the #define
 `DEFAULT_ICU_PLUGINS` will be checked for a default value.

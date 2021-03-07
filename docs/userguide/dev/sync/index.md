@@ -50,7 +50,7 @@ implementations](custom.md) for other platforms.
 The functions and types listed below are intended for use throughout the ICU
 library code, where ever synchronization is required. They are defined in the
 internal header
-[umutex.h](../../../../icu4c/source/common/umutex.h).
+[umutex.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/umutex.h).
 
 All synchronization within ICU4C implementation code must use these, and avoid
 direct use of functions provided by a particular operating system or compiler.

@@ -768,91 +768,131 @@ loadable data objects.)
 #### ICU.dat package files
 *   Source format: (list of files provided as input to the icupkg tool, or
          on the gencmn tool command line)
-*    Binary format: .dat: [source/tools/toolutil/pkg_gencmn.cpp](../../icu4c/source/tools/toolutil/pkg_gencmn.cpp)
-*    Generator tool: [icupkg](../../icu4c/source/tools/icupkg) or
-         [gencmn](../../icu4c/source/tools/gencmn)
+*    Binary format: .dat:
+     [source/tools/toolutil/pkg_gencmn.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/toolutil/pkg_gencmn.cpp)
+*    Generator tool:
+         [icupkg](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/icupkg)
+         or
+         [gencmn](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gencmn)
          
 #### Resource bundles
-*   Source format: .txt: [icuhtml/design/bnf_rb.txt](https://github.com/unicode-org/icu-docs/blob/master/design/bnf_rb.txt)
-*   Binary format: .res: [source/common/uresdata.h](../../icu4c/source/common/uresdata.h)
-*   Generator tool: [genrb](../../icu4c/source/tools/genrb)
+*   Source format: .txt:
+    [icuhtml/design/bnf_rb.txt](https://github.com/unicode-org/icu-docs/blob/master/design/bnf_rb.txt)
+*   Binary format: .res:
+    [source/common/uresdata.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/uresdata.h)
+*   Generator tool:
+    [genrb](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genrb)
 
 #### Unicode conversion mapping tables
 *   Source format: .ucm: [Conversion Data chapter](conversion/data.md)
-*   Binary format: .cnv: [source/common/ucnvmbcs.h](../../icu4c/source/common/ucnvmbcs.h)
-*   Generator tool: [makeconv](../../icu4c/source/tools/makeconv)
+*   Binary format: .cnv:
+    [source/common/ucnvmbcs.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucnvmbcs.h)
+*   Generator tool:
+    [makeconv](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/makeconv)
 
 #### Conversion (charset) aliases
-*   Source format: [source/data/mappings/convrtrs.txt](../../icu4c/source/data/mappings/convrtrs.txt):
-                   contains format description. The command "uconv -l --canon"
-                   will also generate the alias table from the currently used
-                   copy of ICU.
-*   Binary format: cnvalias.icu: [source/common/ucnv_io.cpp](../../icu4c/source/common/ucnv_io.cpp)
-*   Generator tool: [gencnval](../../icu4c/source/tools/gencnval)
+*   Source format:
+    [source/data/mappings/convrtrs.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/mappings/convrtrs.txt):
+    contains format description. The command "uconv -l --canon" will also
+    generate the alias table from the currently used copy of ICU.
+*   Binary format: cnvalias.icu:
+    [source/common/ucnv_io.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucnv_io.cpp)
+*   Generator tool:
+    [gencnval](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gencnval)
 
 #### Unicode Character Data (Properties; for Java only: hardcoded in C common library)
-*   Source format: [source/data/unidata/ppucd.txt](../../icu4c/source/data/unidata/ppucd.txt):
-                   [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
-*   Binary format: uprops.icu: [tools/unicode/c/genprops/corepropsbuilder.cpp](../../tools/unicode/c/genprops/corepropsbuilder.cpp)
-*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+*   Source format:
+    [source/data/unidata/ppucd.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/ppucd.txt):
+    [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
+*   Binary format: uprops.icu:
+    [tools/unicode/c/genprops/corepropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/corepropsbuilder.cpp)
+*   Generator tool:
+    [genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
 
 #### Unicode Character Data (Case mappings; for Java only: hardcoded in C common library)
-*   Source format: [source/data/unidata/*.txt](../../icu4c/source/data/unidata):
-                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-*   Binary format: ucase.icu: [tools/unicode/c/genprops/casepropsbuilder.cpp](../../tools/unicode/c/genprops/casepropsbuilder.cpp)
-*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+*   Source format:
+    [source/data/unidata/*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata):
+    [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: ucase.icu:
+    [tools/unicode/c/genprops/casepropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/casepropsbuilder.cpp)
+*   Generator tool:
+    [genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
 
 #### Unicode Character Data (BiDi, and Arabic shaping; for Java only: hardcoded in C common library)
-*   Source format: [source/data/unidata/*.txt](../../icu4c/source/data/unidata):
-                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-*   Binary format: ubidi.icu: [tools/unicode/c/genprops/bidipropsbuilder.cpp](../../tools/unicode/c/genprops/bidipropsbuilder.cpp)
-*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+*   Source format:
+    [source/data/unidata/*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata):
+    [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: ubidi.icu:
+    [tools/unicode/c/genprops/bidipropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/bidipropsbuilder.cpp)
+*   Generator tool:
+    [genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
 
 #### Unicode Character Data (Normalization since ICU 4.4) & custom normalization data
-*   Source format: [source/data/unidata/norm2/*.tx](../../icu4c/source/data/unidata/norm2):
-                   Files derived from the [Unicode Character Database](http://www.unicode.org/onlinedat/online.html),
-                   or custom data.
-*   Binary format: .nrm: [source/common/normalizer2impl.h](../../icu4c/source/common/normalizer2impl.h)
-*   Generator tool: [gennorm2](../../icu4c/source/tools/gennorm2)
+*   Source format:
+    [source/data/unidata/norm2/*.tx](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/norm2):
+    Files derived from the [Unicode Character
+    Database](http://www.unicode.org/onlinedat/online.html), or custom data.
+*   Binary format: .nrm:
+    [source/common/normalizer2impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/normalizer2impl.h)
+*   Generator tool:
+    [gennorm2](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gennorm2)
 
 #### Unicode Character Data (Character names)
-*   Source format: [source/data/unidata/UnicodeData.txt](../../icu4c/source/data/unidata/UnicodeData.txt):
-                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-*   Binary format: unames.icu: [tools/unicode/c/genprops/namespropsbuilder.cpp](../../tools/unicode/c/genprops/namespropsbuilder.cpp)
-*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+*   Source format:
+    [source/data/unidata/UnicodeData.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/UnicodeData.txt):
+    [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: unames.icu:
+    [tools/unicode/c/genprops/namespropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/namespropsbuilder.cpp)
+*   Generator tool:
+    [genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
 
 #### Unicode Character Data (Property [value] aliases since ICU 4.8; for Java only: hardcoded in C common library since ICU 4.8)
 *   Source format: [UCD Property*Aliases.txt](http://www.unicode.org/Public/UNIDATA/):
                    [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-*   Binary format: pnames.icu: [source/common/propname.h](../../icu4c/source/common/propname.h)
-*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+*   Binary format: pnames.icu:
+    [source/common/propname.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/propname.h)
+*   Generator tool:
+    [genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
 
 #### Unicode Character Data (Text layout properties since ICU 64)
-*   Source format: [source/data/unidata/ppucd.txt](../../icu4c/source/data/unidata/ppucd.txt):
-                   [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
-*   Binary format: ulayout.icu: [tools/unicode/c/genprops/layoutpropsbuilder.cpp](../../tools/unicode/c/genprops/layoutpropsbuilder.cpp)
-*   Generator tool: [genprops](../../tools/unicode/c/genprops)
+*   Source format:
+    [source/data/unidata/ppucd.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/ppucd.txt):
+    [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
+*   Binary format: ulayout.icu:
+    [tools/unicode/c/genprops/layoutpropsbuilder.cpp](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops/layoutpropsbuilder.cpp)
+*   Generator tool:
+    [genprops](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genprops)
 
 #### Collation data (root collation & tailorings; ICU 53 & later)
-*   Source format: Original data from allkeys_CLDR.txt in [CLDR Root Collation Data Files](http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files)
-                   processed into [source/data/unidata/FractionalUCA.txt](../../icu4c/source/data/unidata/FractionalUCA.txt) by
-                   [tool at unicode.org maintained by Mark Davis](https://sites.google.com/site/unicodetools/#TOC-UCA)
-                   (call the Main class with option writeFractionalUCA);
-                   source tailorings (text rules) in [source/data/coll/*.txt](../../icu4c/source/data/coll) resource bundles:
-                   [Collation Customization chapter](collation/customization/index.md).
+*   Source format: Original data from allkeys_CLDR.txt in
+    [CLDR Root Collation Data Files](http://www.unicode.org/reports/tr35/tr35-collation.html#Root_Data_Files)
+    processed into
+    [source/data/unidata/FractionalUCA.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/FractionalUCA.txt)
+    by
+    [tool at unicode.org maintained by Mark Davis](https://sites.google.com/site/unicodetools/#TOC-UCA)
+    (call the Main class with option writeFractionalUCA); source tailorings (text rules) in
+    [source/data/coll/*.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/coll)
+    resource bundles: [Collation Customization chapter](collation/customization/index.md).
 *   Binary format: ucadata.icu & binary tailorings in resource bundles:
-                   [source/i18n/collationdatareader.h](../../icu4c/source/i18n/collationdatareader.h)
-*   Generator tool: [genuca](../../tools/unicode/c/genuca), [genrb](../../icu4c/source/tools/genrb)
+    [source/i18n/collationdatareader.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/i18n/collationdatareader.h)
+*   Generator tool:
+    [genuca](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genuca),
+    [genrb](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genrb)
 
 #### Rule-based break iterator data
 *   Source format: .txt: [Boundary Analysis chapter](boundaryanalysis/index.md)
-*   Binary format: .brk: [source/common/rbbidata.h](../../icu4c/source/common/rbbidata.h)
-*   Generator tool: [genbrk](../../icu4c/source/tools/genbrk)
+*   Binary format: .brk:
+    [source/common/rbbidata.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/rbbidata.h)
+*   Generator tool:
+    [genbrk](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genbrk)
 
 #### Dictionary-based break iterator data (ICU 50 & later)
-*   Source format: txt: [gendict.cpp comments](../../icu4c/source/tools/gendict/gendict.cpp)
-*   Binary format: .dict: see [source/common/dictionarydata.h](../../icu4c/source/common/dictionarydata.h
-*   Generator tool: [gendict](../../icu4c/source/tools/gendict)
+*   Source format: txt: [gendict.cpp
+    comments](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gendict/gendict.cpp)
+*   Binary format: .dict: see
+    [source/common/dictionarydata.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/dictionarydata.h
+*   Generator tool:
+    [gendict](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gendict)
 
 #### Rule-based transform (transliterator) data
 *   Source format: .txt (in resource bundles): [Transform Rule Tutorial chapter](transforms/general/rules.md)
@@ -860,28 +900,37 @@ loadable data objects.)
 *   Generator tool: Does not apply
 
 #### Time zone data (ICU 4.4 & later)
-*   Source format: [source/data/misc/zoneinfo64.txt](../../icu4c/source/data/misc/zoneinfo64.txt):
+*   Source format:
+    [source/data/misc/zoneinfo64.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/misc/zoneinfo64.txt):
     ftp://elsie.nci.nih.gov/pub/ tzdata<year><rev>.tar.gz
-*   Binary format: zoneinfo64.res (generated by genrb and [tzcode tools](../../icu4c/source/tools/tzcode/readme.txt)).
+*   Binary format: zoneinfo64.res (generated by genrb and
+    [tzcode tools](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/tzcode/readme.txt)).
 *   Generator tool: Does not apply
 
 #### StringPrep profile data
-*   Source format: [source/data/sprep/rfc3491.txt](../../icu4c/source/data/sprep/rfc3491.txt):
-*   Binary format: .spp: [source/tools/gensprep/store.c](../../icu4c/source/tools/gensprep/store.c)
-*   Generator tool: [gensprep](../../icu4c/source/tools/gensprep)
+*   Source format:
+    [source/data/sprep/rfc3491.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/sprep/rfc3491.txt):
+*   Binary format: .spp:
+    [source/tools/gensprep/store.c](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gensprep/store.c)
+*   Generator tool:
+    [gensprep](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gensprep)
 
 #### Confusables data
-*   Source format: [source/data/unidata/confusables.txt](../../icu4c/source/data/unidata/confusables.txt),
-                   [source/data/unidata/confusablesWholeScript.txt](../../icu4c/source/data/unidata/confusablesWholeScript.txt)
-*   Binary format: .spp: [confusables.cfu: source/i18n/uspoof_impl.h](../../icu4c/source/i18n/uspoof_impl.h)
-*   Generator tool: [gencfu](../../icu4c/source/tools/gencfu)
+*   Source format:
+    [source/data/unidata/confusables.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/confusables.txt),
+    [source/data/unidata/confusablesWholeScript.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/confusablesWholeScript.txt)
+*   Binary format: .spp:
+    [confusables.cfu: source/i18n/uspoof_impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/i18n/uspoof_impl.h)
+*   Generator tool: [gencfu](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gencfu)
 
 ### Public Data Files (old versions)
 
 #### Unicode Character Data (Normalization before ICU 4.4; for Java only: was hardcoded in C common library)
-*   Source format: [source/data/unidata/*.txt]((../../icu4c/source/data/unidata):
-                   [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
-*   Binary format: unorm.icu: [source/common/unormimp.h](../../icu4c/source/common/unormimp.h)
+*   Source format:
+    [source/data/unidata/*.txt]((https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata):
+    [Unicode Character Database](http://www.unicode.org/onlinedat/online.html)
+*   Binary format: unorm.icu:
+    [source/common/unormimp.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unormimp.h)
 *   Generator tool: gennorm
 
 #### Unicode Character Data (Property [value] aliases before ICU 4.8)
@@ -892,12 +941,15 @@ loadable data objects.)
 #### Collation data (UCA, code points to weights; ICU 52 & earlier)
 *   Source format: Same as in ICU 53
 *   Binary format: ucadata.icu & binary tailorings in resource bundles: source/i18n/ucol_imp.h (ICU 52)
-*   Generator tool: [genuca](../../tools/unicode/c/genuca), [genrb](../../icu4c/source/tools/genrb)
+*   Generator tool:
+    [genuca](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genuca),
+    [genrb](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/genrb)
 
 #### Collation data (Inverse UCA, weights->code points; ICU 52 & earlier)
 *   Source format: Processed from FractionalUCA.txt like ICU 52 ucadata.icu
 *   Binary format: invuca.icu: source/i18n/ucol_imp.h (ICU 52)
-*   Generator tool: [genuca](../../tools/unicode/c/genuca)
+*   Generator tool:
+    [genuca](https://github.com/unicode-org/icu/blob/master/tools/unicode/c/genuca)
 
 #### Dictionary-based break iterator data (ICU 49 & earlier)
 *   Source format: .txt: genctd.cpp comments
@@ -906,48 +958,56 @@ loadable data objects.)
 
 #### Time zone data (Before ICU 4.4)
 *   Source format: .source/data/misc/zoneinfo.txt (ICU 4.2): ftp://elsie.nci.nih.gov/pub/ tzdata<year><rev>.tar.gz 
-*   Binary format: zoneinfo64.res (generated by genrb and [tzcode tools](../../icu4c/source/tools/tzcode/readme.txt)).
+*   Binary format: zoneinfo64.res (generated by genrb and
+    [tzcode tools](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/tzcode/readme.txt)).
 *   Generator tool: Does not apply
 
 ### Non-File API Binary Data
 
 #### Converter selector data
 *   Source format: none
-*   Binary format: [source/common/ucnvsel.cpp](../../icu4c/source/common/ucnvsel.cpp)
-*   Generator tool: [ucnvsel_open()](../../icu4c/source/common/ucnvsel.cpp)
+*   Binary format:
+    [source/common/ucnvsel.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucnvsel.cpp)
+*   Generator tool:
+    [ucnvsel_open()](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucnvsel.cpp)
 
 ### Test-Only Data Files
 
 #### test.icu (for udata API testing)
 *   Source format: none (fixed output from gentest when not using -r or -j options)
-*   Binary format: test.icu: see `createData()`
-                   in [source/tools/gentest/gentest.c](../../icu4c/source/tools/gentest/gentest.c)
-*   Generator tool: [gentest](../../icu4c/source/tools/gentest/gentest.c)
+*   Binary format: test.icu: see `createData()` in
+                   [source/tools/gentest/gentest.c](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gentest/gentest.c)
+*   Generator tool:
+    [gentest](https://github.com/unicode-org/icu/blob/master/icu4c/source/tools/gentest/gentest.c)
 
 ### Other Data Structures
 
 #### UCPTrie (C)/CodePointTrie (Java) (maps code points to integers)
 *   Source format: (public builder API)
-*   Binary format: [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
-                   [icu4c/source/common/ucptrie_impl.h](../../icu4c/source/common/ucptrie_impl.h)
+*   Binary format:
+    [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
+    [icu4c/source/common/ucptrie_impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/ucptrie_impl.h)
 *   Generator tool: (builder class)
 
 #### UTrie2 (C)/Trie2 (Java) (maps code points to integers)
 *   Source format: (internal builder API)
-*   Binary format: [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
-                   [icu4c/source/common/utrie2_impl.h](../../icu4c/source/common/utrie2_impl.h)
+*   Binary format:
+    [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
+    [icu4c/source/common/utrie2_impl.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/utrie2_impl.h)
 *   Generator tool: (builder class)
 
 #### BytesTrie (maps byte sequences to 32-bit integers)
 *   Source format: (public builder API)
-*   Binary format: [BytesTrie design doc](http://site.icu-project.org/design/struct/tries/bytestrie),
-                   [icu4c/source/common/unicode/bytestrie.h](../../icu4c/source/common/unicode/bytestrie.h)
+*   Binary format:
+    [BytesTrie design doc](http://site.icu-project.org/design/struct/tries/bytestrie),
+    [icu4c/source/common/unicode/bytestrie.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/bytestrie.h)
 *   Generator tool: (builder class)
 
 #### UCharsTrie (C++)/CharsTrie (Java) (maps 16-bit-Unicode strings to 32-bit integers)
 *   Source format: (public builder API)
-*   Binary format: [UCharsTrie design doc](http://site.icu-project.org/design/struct/tries/ucharstrie),
-                   [icu4c/source/common/unicode/ucharstrie.h](../../icu4c/source/common/unicode/ucharstrie.h)
+*   Binary format:
+    [UCharsTrie design doc](http://site.icu-project.org/design/struct/tries/ucharstrie),
+    [icu4c/source/common/unicode/ucharstrie.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/ucharstrie.h)
 *   Generator tool: (builder class)
 
 ## ICU4J Resource Information

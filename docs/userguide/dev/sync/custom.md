@@ -41,7 +41,7 @@ synchronization primitives.
 
 **Low Level Atomics**, a set of platform or compiler dependent typedefs and
 inlines. Provided in the internal header file
-[`umutex.h`](../../../../icu4c/source/common/umutex.h).
+[`umutex.h`](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/umutex.h).
 
 | Type/Function                                           | Description                                                                   |
 |---------------------------------------------------------|-------------------------------------------------------------------------------|
@@ -71,7 +71,7 @@ Provided in a .cpp file.
 `UInitOnce` and `umtx_initOnce()` are used internally by ICU for thread-safe
 one-time initialization. Their implementation is split into a
 platform-independent part (contained in
-[`umutex.h`](../../../../icu4c/source/common/umutex.h)),
+[`umutex.h`](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/umutex.h)),
 and the pair of platform-dependent implementation functions listed above.
 
 **Build Setup**
