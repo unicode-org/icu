@@ -14,7 +14,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -1083,31 +1082,7 @@ public class TimeZoneTest extends TestFmwk
     public void TestFractionalDST() {
         String tzName = "Australia/Lord_Howe"; // 30 min offset
         java.util.TimeZone tz_java = java.util.TimeZone.getTimeZone(tzName);
-        int dst_java = 0;
-        try {
-            // hack so test compiles and runs in both JDK 1.3 and JDK 1.4
-            final Object[] args = new Object[0];
-            final Class[] argtypes = new Class[0];
-            java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes);
-            dst_java = ((Integer) m.invoke(tz_java, args)).intValue();
-            if (dst_java <= 0 || dst_java >= 3600000) { // didn't get the fractional time zone we wanted
-            errln("didn't get fractional time zone!");
-            }
-        } catch (NoSuchMethodException e) {
-            // see JDKTimeZone for the reason for this code
-            dst_java = 3600000;
-        } catch (IllegalAccessException e) {
-            // see JDKTimeZone for the reason for this code
-            errln(e.getMessage());
-            dst_java = 3600000;
-        } catch (InvocationTargetException e) {
-            // see JDKTimeZone for the reason for this code
-            errln(e.getMessage());
-            dst_java = 3600000;
-        } catch (SecurityException e) {
-            warnln(e.getMessage());
-            return;
-        }
+        int dst_java = tz_java.getDSTSavings();
 
         com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);
         int dst_icu = tz_icu.getDSTSavings();
