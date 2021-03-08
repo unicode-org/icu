@@ -1139,7 +1139,7 @@ uprv_tzname(int n)
 #endif
     if (tzid != NULL && isValidOlsonID(tzid)
 #if U_PLATFORM == U_PF_SOLARIS
-    /* When TZ equals localtime on Solaris, check the /etc/localtime file. */
+    /* Don't misinterpret TZ "localtime" on Solaris as a time zone name. */
         && uprv_strcmp(tzid, TZ_ENV_CHECK) != 0
 #endif
     ) {
