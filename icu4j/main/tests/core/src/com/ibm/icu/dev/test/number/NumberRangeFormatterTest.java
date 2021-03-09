@@ -665,6 +665,26 @@ public class NumberRangeFormatterTest extends TestFmwk {
     }
 
     @Test
+    public void test21397_UnsetNull() {
+        assertFormatRange(
+            "Unset identity fallback",
+            NumberRangeFormatter.with()
+                .identityFallback(RangeIdentityFallback.RANGE)
+                .identityFallback(null),
+            new ULocale("en-us"),
+            "1–5",
+            "~5",
+            "~5",
+            "0–3",
+            "~0",
+            "3–3,000",
+            "3,000–5,000",
+            "4,999–5,001",
+            "~5,000",
+            "5,000–5,000,000");
+    }
+
+    @Test
     public void testPlurals() {
         // Locale sl has interesting plural forms:
         // GBP{

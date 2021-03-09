@@ -149,41 +149,37 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
         // of a MacroProps object at each step.
         // TODO: Remove the reference to the parent after the macros are resolved?
         RangeMacroProps macros = new RangeMacroProps();
+        // Bitmap: 1 if seen; 0 if unseen
+        long seen = 0;
         NumberRangeFormatterSettings<?> current = this;
         while (current != null) {
+            long keyBitmask = (1L << current.key);
+            if (0 != (seen & keyBitmask)) {
+                current = current.parent;
+                continue;
+            }
+            seen |= keyBitmask;
             switch (current.key) {
             case KEY_MACROS:
                 // ignored for now
                 break;
             case KEY_LOCALE:
-                if (macros.loc == null) {
-                    macros.loc = (ULocale) current.value;
-                }
+                macros.loc = (ULocale) current.value;
                 break;
             case KEY_FORMATTER_1:
-                if (macros.formatter1 == null) {
-                    macros.formatter1 = (UnlocalizedNumberFormatter) current.value;
-                }
+                macros.formatter1 = (UnlocalizedNumberFormatter) current.value;
                 break;
             case KEY_FORMATTER_2:
-                if (macros.formatter2 == null) {
-                    macros.formatter2 = (UnlocalizedNumberFormatter) current.value;
-                }
+                macros.formatter2 = (UnlocalizedNumberFormatter) current.value;
                 break;
             case KEY_SAME_FORMATTERS:
-                if (macros.sameFormatters == -1) {
-                    macros.sameFormatters = (boolean) current.value ? 1 : 0;
-                }
+                macros.sameFormatters = (boolean) current.value ? 1 : 0;
                 break;
             case KEY_COLLAPSE:
-                if (macros.collapse == null) {
-                    macros.collapse = (RangeCollapse) current.value;
-                }
+                macros.collapse = (RangeCollapse) current.value;
                 break;
             case KEY_IDENTITY_FALLBACK:
-                if (macros.identityFallback == null) {
-                    macros.identityFallback = (RangeIdentityFallback) current.value;
-                }
+                macros.identityFallback = (RangeIdentityFallback) current.value;
                 break;
             default:
                 throw new AssertionError("Unknown key: " + current.key);
