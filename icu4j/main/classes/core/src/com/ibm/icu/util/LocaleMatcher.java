@@ -164,20 +164,20 @@ public final class LocaleMatcher {
      * but not if it is merely a fallback.
      *
      * @see LocaleMatcher.Builder#setDirection(LocaleMatcher.Direction)
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public enum Direction {
         /**
          * Locale matching includes one-way matches such as Breton→French. (default)
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         WITH_ONE_WAY,
         /**
          * Locale matching limited to two-way matches including e.g. Danish↔Norwegian
          * but ignoring one-way matches.
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         ONLY_TWO_WAY
     }
@@ -522,7 +522,7 @@ public final class LocaleMatcher {
          *
          * @param direction the match direction to set.
          * @return this Builder object
-         * @draft ICU 67
+         * @stable ICU 67
          */
         public Builder setDirection(Direction direction) {
             this.direction = direction;
