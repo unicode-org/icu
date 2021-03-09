@@ -79,6 +79,8 @@ public class MixedUnitLongNameHandler
             String[] unitData = new String[LongNameHandler.ARRAY_LENGTH];
             LongNameHandler.getMeasureData(locale, individualUnits.get(i), width, unitDisplayCase,
                                            unitData);
+            // TODO(ICU-21494): if we add support for gender for mixed units, we may
+            // need LongNameHandler.maybeCalculateGender() here.
             result.fMixedUnitData.add(unitData);
         }
 

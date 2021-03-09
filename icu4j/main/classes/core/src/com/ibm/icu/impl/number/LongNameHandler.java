@@ -609,6 +609,129 @@ public class LongNameHandler
     /// END DATA LOADING ///
     ////////////////////////
 
+    /**
+     * Calculates the gender of an arbitrary unit: this is the *second*
+     * implementation of an algorithm to do this:
+     *
+     * Gender is also calculated in "processPatternTimes": that code path is
+     * "bottom up", loading the gender for every component of a compound unit
+     * (at the same time as loading the Long Names formatting patterns), even if
+     * the gender is unneeded, then combining the single units' genders into the
+     * compound unit's gender, according to the rules. This algorithm does a
+     * lazier "top-down" evaluation, starting with the compound unit,
+     * calculating which single unit's gender is needed by breaking it down
+     * according to the rules, and then loading only the gender of the one
+     * single unit who's gender is needed.
+     *
+     * For future refactorings:
+     * 1. we could drop processPatternTimes' gender calculation and just call
+     *    this function: for UNUM_UNIT_WIDTH_FULL_NAME, the unit gender is in
+     *    the very same table as the formatting patterns, so loading it then may
+     *    be efficient. For other unit widths however, it needs to be explicitly
+     *    looked up anyway.
+     * 2. alternatively, if CLDR is providing all the genders we need such that
+     *    we don't need to calculate them in ICU anymore, we could drop this
+     *    function and keep only processPatternTimes' calculation. (And optimise
+     *    it a bit?)
+     *
+     * @param locale The desired locale.
+     * @param unit The measure unit to calculate the gender for.
+     * @return The gender string for the unit, or an empty string if unknown or
+     *     ungendered.
+     */
+    private static String calculateGenderForUnit(ULocale locale, MeasureUnit unit) {
+        MeasureUnitImpl mui = unit.getCopyOfMeasureUnitImpl();
+        ArrayList<SingleUnitImpl> singleUnits = mui.getSingleUnits();
+        int singleUnitIndex = 0;
+        if (mui.getComplexity() == MeasureUnit.Complexity.COMPOUND) {
+            int startSlice = 0;
+            // inclusive
+            int endSlice = singleUnits.size() - 1;
+            assert endSlice > 0 : "COMPOUND units have more than one single unit";
+            if (singleUnits.get(endSlice).getDimensionality() < 0) {
+                // We have a -per- construct
+                String perRule = getDeriveCompoundRule(locale, "gender", "per");
+                if (perRule.length() != 1) {
+                    // Fixed gender for -per- units
+                    return perRule;
+                }
+                if (perRule.charAt(0) == '1') {
+                    // Find the start of the denominator. We already know there is one.
+                    while (singleUnits.get(startSlice).getDimensionality() >= 0) {
+                        startSlice++;
+                    }
+                } else {
+                    // Find the end of the numerator
+                    while (endSlice >= 0 && singleUnits.get(endSlice).getDimensionality() < 0) {
+                        endSlice--;
+                    }
+                    if (endSlice < 0) {
+                        // We have only a denominator, e.g. "per-second".
+                        // TODO(icu-units#28): find out what gender to use in the
+                        // absence of a first value - mentioned in CLDR-14253.
+                        return "";
+                    }
+                }
+            }
+            if (endSlice > startSlice) {
+                // We have a -times- construct
+                String timesRule = getDeriveCompoundRule(locale, "gender", "times");
+                if (timesRule.length() != 1) {
+                    // Fixed gender for -times- units
+                    return timesRule;
+                }
+                if (timesRule.charAt(0) == '0') {
+                    endSlice = startSlice;
+                } else {
+                    // We assume timesRule[0] == u'1'
+                    startSlice = endSlice;
+                }
+            }
+            assert startSlice == endSlice;
+            singleUnitIndex = startSlice;
+        } else if (mui.getComplexity() == MeasureUnit.Complexity.MIXED) {
+            throw new ICUException("calculateGenderForUnit does not support MIXED units");
+        } else {
+            assert mui.getComplexity() == MeasureUnit.Complexity.SINGLE;
+            assert singleUnits.size() == 1;
+        }
+
+        // Now we know which singleUnit's gender we want
+        SingleUnitImpl singleUnit = singleUnits.get(singleUnitIndex);
+        // Check for any power-prefix gender override:
+        if (Math.abs(singleUnit.getDimensionality()) != 1) {
+            String powerRule = getDeriveCompoundRule(locale, "gender", "power");
+            if (powerRule.length() != 1) {
+                // Fixed gender for -powN- units
+                return powerRule;
+            }
+            // powerRule[0] == u'0'; u'1' not currently in spec.
+        }
+        // Check for any SI and binary prefix gender override:
+        if (Math.abs(singleUnit.getDimensionality()) != 1) {
+            String prefixRule = getDeriveCompoundRule(locale, "gender", "prefix");
+            if (prefixRule.length() != 1) {
+                // Fixed gender for -powN- units
+                return prefixRule;
+            }
+            // prefixRule[0] == u'0'; u'1' not currently in spec.
+        }
+        // Now we've boiled it down to the gender of one simple unit identifier:
+        return getGenderForBuiltin(locale, MeasureUnit.forIdentifier(singleUnit.getSimpleUnitID()));
+    }
+
+    private static void maybeCalculateGender(ULocale locale, MeasureUnit unit, String[] outArray) {
+        if (outArray[GENDER_INDEX] == null) {
+            String meterGender = getGenderForBuiltin(locale, MeasureUnit.METER);
+            if (meterGender.isEmpty()) {
+                // No gender for meter: assume ungendered language
+                return;
+            }
+            // We have a gendered language, but are lacking gender for unitRef.
+            outArray[GENDER_INDEX] = calculateGenderForUnit(locale, unit);
+        }
+    }
+
     private final Map<StandardPlural, SimpleModifier> modifiers;
     private final PluralRules rules;
     private final MicroPropsGenerator parent;
@@ -674,6 +797,7 @@ public class LongNameHandler
         if (unit.getType() != null) {
             String[] simpleFormats = new String[ARRAY_LENGTH];
             getMeasureData(locale, unit, width, unitDisplayCase, simpleFormats);
+            maybeCalculateGender(locale, unit, simpleFormats);
             // TODO(ICU4J): Reduce the number of object creations here?
             Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(StandardPlural.class);
             LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
@@ -842,8 +966,8 @@ public class LongNameHandler
             return;
         }
 
-        MeasureUnit builtinUnit = MeasureUnit.findBySubType(productUnit.getIdentifier());
-        if (builtinUnit != null) {
+        MeasureUnit simpleUnit = MeasureUnit.findBySubType(productUnit.getIdentifier());
+        if (simpleUnit != null) {
             // TODO(icu-units#145): spec doesn't cover builtin-per-builtin, it
             // breaks them all down. Do we want to drop this?
             // - findBySubType isn't super efficient, if we skip it and go to basic
@@ -851,7 +975,8 @@ public class LongNameHandler
             // - Check all the existing unit tests that fail without this: is it due
             //   to incorrect fallback via getMeasureData?
             // - Do those unit tests cover this code path representatively?
-            getMeasureData(loc, builtinUnit, width, caseVariant, outArray);
+            getMeasureData(loc, simpleUnit, width, caseVariant, outArray);
+            maybeCalculateGender(loc, simpleUnit, outArray);
             return;
         }
 
@@ -906,8 +1031,8 @@ public class LongNameHandler
             }
 
             // 4.2. Get the gender of that single_unit
-            builtinUnit = MeasureUnit.findBySubType(singleUnit.getSimpleUnitID());
-            if (builtinUnit == null) {
+            simpleUnit = MeasureUnit.findBySubType(singleUnit.getSimpleUnitID());
+            if (simpleUnit == null) {
                 // Ideally all simple units should be known, but they're not:
                 // 100-kilometer is internally treated as a simple unit, but it is
                 // not a built-in unit and does not have formatting data in CLDR 39.
@@ -916,7 +1041,7 @@ public class LongNameHandler
                 throw new UnsupportedOperationException("Unsupported sinlgeUnit: " +
                                                         singleUnit.getSimpleUnitID());
             }
-            String gender = getGenderForBuiltin(loc, builtinUnit);
+            String gender = getGenderForBuiltin(loc, simpleUnit);
 
             // 4.3. If singleUnit starts with a dimensionality_prefix, such as 'square-'
             assert singleUnit.getDimensionality() > 0;
@@ -1003,13 +1128,9 @@ public class LongNameHandler
                         getDerivedGender(loc, "prefix", singleUnitArray, null);
                 }
 
-                // Powers use compoundUnitPattern1, dimensionalityPrefixPatterns may
-                // have a "gender" element
-                //
-                // TODO(icu-units#28): untested: no locale data uses this currently:
                 if (dimensionality != 1) {
                     singleUnitArray[GENDER_INDEX] =
-                        getDerivedGender(loc, "power", singleUnitArray, dimensionalityPrefixPatterns);
+                        getDerivedGender(loc, "power", singleUnitArray, null);
                 }
 
                 String timesGenderRule = getDeriveCompoundRule(loc, "gender", "times");
