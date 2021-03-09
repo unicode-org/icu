@@ -53,13 +53,13 @@ final public class ListFormatter {
     /**
      * Type of meaning expressed by the list.
      *
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public enum Type {
         /**
          * Conjunction formatting, e.g. "Alice, Bob, Charlie, and Delta".
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         AND,
 
@@ -67,14 +67,14 @@ final public class ListFormatter {
          * Disjunction (or alternative, or simply one of) formatting, e.g.
          * "Alice, Bob, Charlie, or Delta".
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         OR,
 
         /**
          * Formatting of a list of values with units, e.g. "5 pounds, 12 ounces".
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         UNITS
     };
@@ -82,27 +82,27 @@ final public class ListFormatter {
     /**
      * Verbosity level of the list patterns.
      *
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public enum Width {
         /**
          * Use list formatting with full words (no abbreviations) when possible.
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         WIDE,
 
         /**
          * Use list formatting of typical length.
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         SHORT,
 
         /**
          * Use list formatting of the shortest possible length.
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         NARROW,
     };
@@ -110,7 +110,7 @@ final public class ListFormatter {
     /**
      * Class for span fields in FormattedList.
      *
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = 3563544214705634403L;
@@ -121,7 +121,7 @@ final public class ListFormatter {
          * Instances of LIST_SPAN should have an associated value, the index
          * within the input list that is represented by the span.
          *
-         * @draft ICU 67
+         * @stable ICU 67
          */
         public static final SpanField LIST_SPAN = new SpanField("list-span");
 
@@ -147,20 +147,20 @@ final public class ListFormatter {
 
     /**
      * Field selectors for format fields defined by ListFormatter.
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public static final class Field extends Format.Field {
         private static final long serialVersionUID = -8071145668708265437L;
 
         /**
          * The literal text in the result which came from the resources.
-         * @draft ICU 67
+         * @stable ICU 67
          */
         public static Field LITERAL = new Field("literal");
 
         /**
          * The element text in the result which came from the input strings.
-         * @draft ICU 67
+         * @stable ICU 67
          */
         public static Field ELEMENT = new Field("element");
 
@@ -191,7 +191,7 @@ final public class ListFormatter {
      *
      * Not intended for public subclassing.
      *
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public static final class FormattedList implements FormattedValue {
         private final FormattedStringBuilder string;
@@ -202,7 +202,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 67
+         * @stable ICU 67
          */
         @Override
         public String toString() {
@@ -211,7 +211,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 67
+         * @stable ICU 67
          */
         @Override
         public int length() {
@@ -220,7 +220,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 67
+         * @stable ICU 67
          */
         @Override
         public char charAt(int index) {
@@ -229,7 +229,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 67
+         * @stable ICU 67
          */
         @Override
         public CharSequence subSequence(int start, int end) {
@@ -238,7 +238,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 67
+         * @stable ICU 67
          */
         @Override
         public <A extends Appendable> A appendTo(A appendable) {
@@ -247,7 +247,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 67
+         * @stable ICU 67
          */
         @Override
         public boolean nextPosition(ConstrainedFieldPosition cfpos) {
@@ -256,7 +256,7 @@ final public class ListFormatter {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 67
+         * @stable ICU 67
          */
         @Override
         public AttributedCharacterIterator toCharacterIterator() {
@@ -310,7 +310,7 @@ final public class ListFormatter {
      * @param locale
      *            the locale in question.
      * @return ListFormatter
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public static ListFormatter getInstance(ULocale locale, Type type, Width width) {
         String styleName = typeWidthToStyleString(type, width);
@@ -326,7 +326,7 @@ final public class ListFormatter {
      * @param locale
      *            the locale in question.
      * @return ListFormatter
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public static ListFormatter getInstance(Locale locale, Type type, Width width) {
         return getInstance(ULocale.forLocale(locale), type, width);
@@ -397,7 +397,7 @@ final public class ListFormatter {
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a FormattedList
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public FormattedList formatToValue(Object... items) {
         return formatToValue(Arrays.asList(items));
@@ -411,7 +411,7 @@ final public class ListFormatter {
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a FormattedList
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public FormattedList formatToValue(Collection<?> items) {
         return formatImpl(items, true).toValue();

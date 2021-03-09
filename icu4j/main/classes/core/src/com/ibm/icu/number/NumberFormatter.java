@@ -212,7 +212,7 @@ public final class NumberFormatter {
          * <p>
          * Behavior of this option with non-currency units is not defined at this time.
          *
-         * @draft ICU 67
+         * @stable ICU 67
          * @see NumberFormatter
          */
         FORMAL,
@@ -224,7 +224,7 @@ public final class NumberFormatter {
          * <p>
          * Behavior of this option with non-currency units is not defined at this time.
          *
-         * @draft ICU 67
+         * @stable ICU 67
          * @see NumberFormatter
          */
         VARIANT,

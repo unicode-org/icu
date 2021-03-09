@@ -537,30 +537,30 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * Hour Cycle
-     * @draft ICU 67
+     * @stable ICU 67
      */
     public enum HourCycle {
         /**
          * hour in am/pm (0~11)
-         * @draft ICU 67
+         * @stable ICU 67
          */
         HOUR_CYCLE_11,
 
         /**
          * hour in am/pm (1~12)
-         * @draft ICU 67
+         * @stable ICU 67
          */
         HOUR_CYCLE_12,
 
         /**
          * hour in day (0~23)
-         * @draft ICU 67
+         * @stable ICU 67
          */
         HOUR_CYCLE_23,
 
         /**
          * hour in day (1~24)
-         * @draft ICU 67
+         * @stable ICU 67
          */
         HOUR_CYCLE_24;
     };
