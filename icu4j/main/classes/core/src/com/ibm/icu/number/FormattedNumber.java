@@ -144,6 +144,9 @@ public class FormattedNumber implements FormattedValue {
      */
     @Deprecated
     public String getGender() {
+        if (this.gender == null) {
+            return "";
+        }
         return this.gender;
     }
 

@@ -183,9 +183,10 @@ void extractCorePattern(const UnicodeString &pattern,
 
 // Gets the gender of a built-in unit: unit must be a built-in. Returns an empty
 // string both in case of unknown gender and in case of unknown unit.
-const char *getGenderForBuiltin(const Locale &locale, MeasureUnit builtinUnit, UErrorCode &status) {
+UnicodeString
+getGenderForBuiltin(const Locale &locale, const MeasureUnit &builtinUnit, UErrorCode &status) {
     LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_UNIT, locale.getName(), &status));
-    if (U_FAILURE(status)) { return ""; }
+    if (U_FAILURE(status)) { return {}; }
 
     // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
     // TODO(ICU-20400): Get duration-*-person data properly with aliases.
@@ -205,18 +206,18 @@ const char *getGenderForBuiltin(const Locale &locale, MeasureUnit builtinUnit, U
     key.append("/gender", status);
 
     UErrorCode localStatus = status;
-    StackUResourceBundle fillIn;
-    ures_getByKeyWithFallback(unitsBundle.getAlias(), key.data(), fillIn.getAlias(), &localStatus);
+    int32_t resultLen = 0;
+    const UChar *result =
+        ures_getStringByKeyWithFallback(unitsBundle.getAlias(), key.data(), &resultLen, &localStatus);
     if (U_SUCCESS(localStatus)) {
         status = localStatus;
-        UnicodeString directString = ures_getUnicodeString(fillIn.getAlias(), &status);
-        return getGenderString(directString, status);
+        return UnicodeString(true, result, resultLen);
     } else {
         // TODO(icu-units#28): "$unitRes/gender" does not exist. Do we want to
         // check whether the parent "$unitRes" exists? Then we could return
         // U_MISSING_RESOURCE_ERROR for incorrect usage (e.g. builtinUnit not
         // being a builtin).
-        return "";
+        return {};
     }
 }
 
@@ -778,6 +779,132 @@ const UChar *trimSpaceChars(const UChar *s, int32_t &length) {
     return s + start;
 }
 
+/**
+ * Calculates the gender of an arbitrary unit: this is the *second*
+ * implementation of an algorithm to do this:
+ *
+ * Gender is also calculated in "processPatternTimes": that code path is "bottom
+ * up", loading the gender for every component of a compound unit (at the same
+ * time as loading the Long Names formatting patterns), even if the gender is
+ * unneeded, then combining the single units' genders into the compound unit's
+ * gender, according to the rules. This algorithm does a lazier "top-down"
+ * evaluation, starting with the compound unit, calculating which single unit's
+ * gender is needed by breaking it down according to the rules, and then loading
+ * only the gender of the one single unit who's gender is needed.
+ *
+ * For future refactorings:
+ * 1. we could drop processPatternTimes' gender calculation and just call this
+ *    function: for UNUM_UNIT_WIDTH_FULL_NAME, the unit gender is in the very
+ *    same table as the formatting patterns, so loading it then may be
+ *    efficient. For other unit widths however, it needs to be explicitly looked
+ *    up anyway.
+ * 2. alternatively, if CLDR is providing all the genders we need such that we
+ *    don't need to calculate them in ICU anymore, we could drop this function
+ *    and keep only processPatternTimes' calculation. (And optimise it a bit?)
+ *
+ * @param locale The desired locale.
+ * @param unit The measure unit to calculate the gender for.
+ * @return The gender string for the unit, or an empty string if unknown or
+ *     ungendered.
+ */
+UnicodeString calculateGenderForUnit(const Locale &locale, const MeasureUnit &unit, UErrorCode &status) {
+    MeasureUnitImpl impl;
+    const MeasureUnitImpl& mui = MeasureUnitImpl::forMeasureUnit(unit, impl, status);
+    int32_t singleUnitIndex = 0;
+    if (mui.complexity == UMEASURE_UNIT_COMPOUND) {
+        int32_t startSlice = 0;
+        // inclusive
+        int32_t endSlice = mui.singleUnits.length()-1;
+        U_ASSERT(endSlice > 0); // Else it would not be COMPOUND
+        if (mui.singleUnits[endSlice]->dimensionality < 0) {
+            // We have a -per- construct
+            UnicodeString perRule = getDeriveCompoundRule(locale, "gender", "per", status);
+            if (perRule.length() != 1) {
+                // Fixed gender for -per- units
+                return perRule;
+            }
+            if (perRule[0] == u'1') {
+                // Find the start of the denominator. We already know there is one.
+                while (mui.singleUnits[startSlice]->dimensionality >= 0) {
+                    startSlice++;
+                }
+            } else {
+                // Find the end of the numerator
+                while (endSlice >= 0 && mui.singleUnits[endSlice]->dimensionality < 0) {
+                    endSlice--;
+                }
+                if (endSlice < 0) {
+                    // We have only a denominator, e.g. "per-second".
+                    // TODO(icu-units#28): find out what gender to use in the
+                    // absence of a first value - mentioned in CLDR-14253.
+                    return {};
+                }
+            }
+        }
+        if (endSlice > startSlice) {
+            // We have a -times- construct
+            UnicodeString timesRule = getDeriveCompoundRule(locale, "gender", "times", status);
+            if (timesRule.length() != 1) {
+                // Fixed gender for -times- units
+                return timesRule;
+            }
+            if (timesRule[0] == u'0') {
+                endSlice = startSlice;
+            } else {
+                // We assume timesRule[0] == u'1'
+                startSlice = endSlice;
+            }
+        }
+        U_ASSERT(startSlice == endSlice);
+        singleUnitIndex = startSlice;
+    } else if (mui.complexity == UMEASURE_UNIT_MIXED) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return {};
+    } else {
+        U_ASSERT(mui.complexity == UMEASURE_UNIT_SINGLE);
+        U_ASSERT(mui.singleUnits.length() == 1);
+    }
+
+    // Now we know which singleUnit's gender we want
+    const SingleUnitImpl *singleUnit = mui.singleUnits[singleUnitIndex];
+    // Check for any power-prefix gender override:
+    if (std::abs(singleUnit->dimensionality) != 1) {
+        UnicodeString powerRule = getDeriveCompoundRule(locale, "gender", "power", status);
+        if (powerRule.length() != 1) {
+            // Fixed gender for -powN- units
+            return powerRule;
+        }
+        // powerRule[0] == u'0'; u'1' not currently in spec.
+    }
+    // Check for any SI and binary prefix gender override:
+    if (std::abs(singleUnit->dimensionality) != 1) {
+        UnicodeString prefixRule = getDeriveCompoundRule(locale, "gender", "prefix", status);
+        if (prefixRule.length() != 1) {
+            // Fixed gender for -powN- units
+            return prefixRule;
+        }
+        // prefixRule[0] == u'0'; u'1' not currently in spec.
+    }
+    // Now we've boiled it down to the gender of one simple unit identifier:
+    return getGenderForBuiltin(locale, MeasureUnit::forIdentifier(singleUnit->getSimpleUnitID(), status),
+                               status);
+}
+
+void maybeCalculateGender(const Locale &locale,
+                          const MeasureUnit &unitRef,
+                          UnicodeString *outArray,
+                          UErrorCode &status) {
+    if (outArray[GENDER_INDEX].isBogus()) {
+        UnicodeString meterGender = getGenderForBuiltin(locale, MeasureUnit::getMeter(), status);
+        if (meterGender.isEmpty()) {
+            // No gender for meter: assume ungendered language
+            return;
+        }
+        // We have a gendered language, but are lacking gender for unitRef.
+        outArray[GENDER_INDEX] = calculateGenderForUnit(locale, unitRef, status);
+    }
+}
+
 } // namespace
 
 void LongNameHandler::forMeasureUnit(const Locale &loc,
@@ -802,6 +929,7 @@ void LongNameHandler::forMeasureUnit(const Locale &loc,
         //    - If result is not empty, return it
         UnicodeString simpleFormats[ARRAY_LENGTH];
         getMeasureData(loc, unitRef, width, unitDisplayCase, simpleFormats, status);
+        maybeCalculateGender(loc, unitRef, simpleFormats, status);
         if (U_FAILURE(status)) {
             return;
         }
@@ -1003,6 +1131,7 @@ void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
         // - Do those unit tests cover this code path representatively?
         if (builtinUnit != MeasureUnit()) {
             getMeasureData(loc, builtinUnit, width, caseVariant, outArray, status);
+            maybeCalculateGender(loc, builtinUnit, outArray, status);
         }
         return;
     }
@@ -1059,8 +1188,8 @@ void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
         }
 
         // 4.2. Get the gender of that single_unit
-        MeasureUnit builtinUnit;
-        if (!MeasureUnit::findBySubType(singleUnit->getSimpleUnitID(), &builtinUnit)) {
+        MeasureUnit simpleUnit;
+        if (!MeasureUnit::findBySubType(singleUnit->getSimpleUnitID(), &simpleUnit)) {
             // Ideally all simple units should be known, but they're not:
             // 100-kilometer is internally treated as a simple unit, but it is
             // not a built-in unit and does not have formatting data in CLDR 39.
@@ -1069,7 +1198,7 @@ void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
             status = U_UNSUPPORTED_ERROR;
             return;
         }
-        const char *gender = getGenderForBuiltin(loc, builtinUnit, status);
+        const char *gender = getGenderString(getGenderForBuiltin(loc, simpleUnit, status), status);
 
         // 4.3. If singleUnit starts with a dimensionality_prefix, such as 'square-'
         U_ASSERT(singleUnit->dimensionality > 0);
@@ -1157,13 +1286,9 @@ void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
                     getDerivedGender(loc, "prefix", singleUnitArray, nullptr, status);
             }
 
-            // Powers use compoundUnitPattern1, dimensionalityPrefixPatterns may
-            // have a "gender" element
-            //
-            // TODO(icu-units#28): untested: no locale data uses this currently:
             if (dimensionality != 1) {
-                singleUnitArray[GENDER_INDEX] = getDerivedGender(loc, "power", singleUnitArray,
-                                                                 dimensionalityPrefixPatterns, status);
+                singleUnitArray[GENDER_INDEX] =
+                    getDerivedGender(loc, "power", singleUnitArray, nullptr, status);
             }
 
             UnicodeString timesGenderRule = getDeriveCompoundRule(loc, "gender", "times", status);
@@ -1448,6 +1573,8 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc,
         // propagation of unitDisplayCase is correct:
         getMeasureData(loc, impl.singleUnits[i]->build(status), width, unitDisplayCase, unitData,
                        status);
+        // TODO(ICU-21494): if we add support for gender for mixed units, we may
+        // need maybeCalculateGender() here.
     }
 
     // TODO(icu-units#120): Make sure ICU doesn't output zero-valued
