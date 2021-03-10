@@ -138,8 +138,7 @@ public class CompactNotation extends Notation {
                 magnitude -= multiplier;
             }
 
-            StandardPlural plural = quantity.getStandardPlural(rules);
-            String patternString = data.getPattern(magnitude, plural);
+            String patternString = data.getPattern(magnitude, rules, quantity);
             if (patternString == null) {
                 // Use the default (non-compact) modifier.
                 // No need to take any action.

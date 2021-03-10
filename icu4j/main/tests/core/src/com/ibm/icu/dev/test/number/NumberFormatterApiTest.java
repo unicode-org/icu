@@ -443,16 +443,14 @@ public class NumberFormatterApiTest extends TestFmwk {
                 1e7,
                 "1000\u842C");
 
-        if (!logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
-            assertFormatSingle(
-                    "Compact with plural form =1 (ICU-21258)",
-                    "compact-long",
-                    "K",
-                    NumberFormatter.with().notation(Notation.compactLong()),
-                    ULocale.FRANCE,
-                    1e3,
-                    "mille");
-        }
+        assertFormatSingle(
+                "Compact with plural form =1 (ICU-21258)",
+                "compact-long",
+                "KK",
+                NumberFormatter.with().notation(Notation.compactLong()),
+                ULocale.FRANCE,
+                1e3,
+                "mille");
 
         assertFormatSingle(
                 "Compact Infinity",

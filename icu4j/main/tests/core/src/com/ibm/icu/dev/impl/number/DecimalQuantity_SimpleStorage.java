@@ -326,6 +326,16 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
   }
 
   @Override
+  public long toLong(boolean truncateIfOverflow) {
+    BigDecimal temp = toBigDecimal().setScale(0, RoundingMode.FLOOR);
+    if (truncateIfOverflow) {
+      return temp.longValue();
+    } else {
+      return temp.longValueExact();
+    }
+  }
+
+  @Override
   public void setMinInteger(int minInt) {
     // Graceful failures for bogus input
     minInt = Math.max(0, minInt);
@@ -939,5 +949,10 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
   @Override
   public void adjustExponent(int delta) {
       origPrimaryScale = origPrimaryScale + delta;
+  }
+
+  @Override
+  public boolean isHasIntegerValue() {
+    return scaleBigDecimal(toBigDecimal()) >= 0;
   }
 }

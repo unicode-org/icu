@@ -550,6 +550,14 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         public boolean isInfinite();
+
+        /**
+         * Whether the number has no nonzero fraction digits.
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public boolean isHasIntegerValue();
     }
 
     /**
@@ -639,6 +647,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @Override
         public boolean isHasIntegerValue() {
             return hasIntegerValue;
         }

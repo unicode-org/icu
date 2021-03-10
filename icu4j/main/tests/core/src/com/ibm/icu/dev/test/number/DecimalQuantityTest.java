@@ -269,6 +269,10 @@ public class DecimalQuantityTest extends TestFmwk {
                 q0.toBigDecimal(),
                 q1.toBigDecimal());
 
+        assertEquals("Different long values (" + q0 + ", " + q1 + ")",
+                q0.toLong(true),
+                q1.toLong(true));
+
         q0.roundToInfinity();
         q1.roundToInfinity();
 
@@ -456,8 +460,16 @@ public class DecimalQuantityTest extends TestFmwk {
         assertTrue("One less than max long should fit", quantity.fitsInLong());
         quantity.setToLong(9223372036854775807L);
         assertTrue("Max long should fit", quantity.fitsInLong());
+        assertEquals("Max long should equal toLong", 9223372036854775807L, quantity.toLong(false));
         quantity.setToBigInteger(new BigInteger("9223372036854775808"));
-        assertFalse("One greater than max long long should not fit", quantity.fitsInLong());
+        assertFalse("One greater than max long should not fit", quantity.fitsInLong());
+        assertEquals("toLong(true) should truncate", 223372036854775808L, quantity.toLong(true));
+        try {
+            quantity.toLong(false);
+            fail("One greater than max long is not convertible to long");
+        } catch (ArithmeticException | AssertionError e) {
+            // expected
+        }
         quantity.setToBigInteger(new BigInteger("9223372046854775806"));
         assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
         quantity.setToBigInteger(new BigInteger("9223372046800000000"));
@@ -652,12 +664,12 @@ public class DecimalQuantityTest extends TestFmwk {
                 {"scientific",    0.012, "1,2E-2",  0L, 0.012, new BigDecimal("0.012"), "0.012", -2, -2},
 
                 {"",              999.9, "999,9",     999L,  999.9,  new BigDecimal("999.9"), "999.9", 0, 0},
-                {"compact-long",  999.9, "1 millier", 1000L, 1000.0, new BigDecimal("1000"),  "1000",  3, 3},
+                {"compact-long",  999.9, "mille",     1000L, 1000.0, new BigDecimal("1000"),  "1000",  3, 3},
                 {"compact-short", 999.9, "1 k",       1000L, 1000.0, new BigDecimal("1000"),  "1000",  3, 3},
                 {"scientific",    999.9, "9,999E2",   999L,  999.9,  new BigDecimal("999.9"), "999.9", 2, 2},
 
                 {"",              1000.0, "1 000",     1000L, 1000.0, new BigDecimal("1000"), "1000", 0, 0},
-                {"compact-long",  1000.0, "1 millier", 1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+                {"compact-long",  1000.0, "mille",     1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
                 {"compact-short", 1000.0, "1 k",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
                 {"scientific",    1000.0, "1E3",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
         };

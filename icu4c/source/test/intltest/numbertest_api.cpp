@@ -498,16 +498,14 @@ void NumberFormatterApiTest::notationCompact() {
             1e7,
             u"1000\u842C");
 
-    if (!logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
-        assertFormatSingle(
-                u"Compact with plural form =1 (ICU-21258)",
-                u"compact-long",
-                u"K",
-                NumberFormatter::with().notation(Notation::compactLong()),
-                Locale("fr-FR"),
-                1e3,
-                u"mille");
-    }
+    assertFormatSingle(
+            u"Compact with plural form =1 (ICU-21258)",
+            u"compact-long",
+            u"KK",
+            NumberFormatter::with().notation(Notation::compactLong()),
+            Locale("fr-FR"),
+            1e3,
+            u"mille");
 
     assertFormatSingle(
             u"Compact Infinity",
