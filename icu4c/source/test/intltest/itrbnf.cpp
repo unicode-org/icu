@@ -77,6 +77,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(25, TestCompactDecimalFormatStyle);
         TESTCASE(26, TestParseFailure);
         TESTCASE(27, TestMinMaxIntegerDigitsIgnored);
+        TESTCASE(28, TestNorwegianSpellout);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1602,6 +1603,38 @@ IntlTestRBNF::TestThaiSpellout()
         doTest(formatter, testData, TRUE);
     }
     delete formatter;
+}
+
+void
+IntlTestRBNF::TestNorwegianSpellout()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat* noFormatter
+        = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("no"), status);
+    RuleBasedNumberFormat* nbFormatter
+        = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("nb"), status);
+
+    if (U_FAILURE(status)) {
+        errcheckln(status, "FAIL: could not construct formatter - %s", u_errorName(status));
+    } else {
+        static const char* testDataDefault[][2] = {
+            { "1", "\\u00E9n" },
+            { "2", "to" },
+            { "3", "tre" },
+            { "4", "fire" },
+            { "101", "hundre og \\u00E9n" },
+            { "123", "hundre og tjue\\u00ADtre" },
+            { "1,001", "tusen og \\u00E9n" },
+            { "1,100", "tusen hundre" },
+            { "6.789", "seks komma sju \\u00E5tte ni" },
+            { "-5.678", "minus fem komma seks sju \\u00E5tte" },
+            { NULL, NULL }
+        };
+        doTest(noFormatter, testDataDefault, TRUE);
+        doTest(nbFormatter, testDataDefault, TRUE);
+    }
+    delete nbFormatter;
+    delete noFormatter;
 }
 
 void
