@@ -377,8 +377,10 @@ public class DateIntervalFormat extends UFormat {
         /**
          * serialization method resolve instances to the constant
          * DateIntervalFormat.SpanField values
-         * @draft ICU 64
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         @Override
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(DATE_INTERVAL_SPAN.getName()))
