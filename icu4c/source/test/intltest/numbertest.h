@@ -198,6 +198,7 @@ class DecimalQuantityTest : public IntlTest {
     void testConvertToAccurateDouble();
     void testUseApproximateDoubleWhenAble();
     void testHardDoubleConversion();
+    void testFitsInLong();
     void testToDouble();
     void testMaxDigits();
     void testNickelRounding();

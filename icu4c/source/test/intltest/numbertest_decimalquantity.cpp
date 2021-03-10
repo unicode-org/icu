@@ -27,6 +27,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         }
         TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
         TESTCASE_AUTO(testHardDoubleConversion);
+        TESTCASE_AUTO(testFitsInLong);
         TESTCASE_AUTO(testToDouble);
         TESTCASE_AUTO(testMaxDigits);
         TESTCASE_AUTO(testNickelRounding);
@@ -357,6 +358,44 @@ void DecimalQuantityTest::testHardDoubleConversion() {
     }
 }
 
+void DecimalQuantityTest::testFitsInLong() {
+    IcuTestErrorCode status(*this, "testFitsInLong");
+    DecimalQuantity quantity;
+    quantity.setToInt(0);
+    assertTrue("Zero should fit", quantity.fitsInLong());
+    quantity.setToInt(42);
+    assertTrue("Small int should fit", quantity.fitsInLong());
+    quantity.setToDouble(0.1);
+    assertFalse("Fraction should not fit", quantity.fitsInLong());
+    quantity.setToDouble(42.1);
+    assertFalse("Fraction should not fit", quantity.fitsInLong());
+    quantity.setToLong(1000000);
+    assertTrue("Large low-precision int should fit", quantity.fitsInLong());
+    quantity.setToLong(1000000000000000000L);
+    assertTrue("10^19 should fit", quantity.fitsInLong());
+    quantity.setToLong(1234567890123456789L);
+    assertTrue("A number between 10^19 and max long should fit", quantity.fitsInLong());
+    quantity.setToLong(1234567890000000000L);
+    assertTrue("A number with trailing zeros less than max long should fit", quantity.fitsInLong());
+    quantity.setToLong(9223372026854775808L);
+    assertTrue("A number less than max long but with similar digits should fit",
+            quantity.fitsInLong());
+    quantity.setToLong(9223372036854775806L);
+    assertTrue("One less than max long should fit", quantity.fitsInLong());
+    quantity.setToLong(9223372036854775807L);
+    assertTrue("Max long should fit", quantity.fitsInLong());
+    assertEquals("Max long should equal toLong", 9223372036854775807L, quantity.toLong(false));
+    quantity.setToDecNumber("9223372036854775808", status);
+    assertFalse("One greater than max long should not fit", quantity.fitsInLong());
+    assertEquals("toLong(true) should truncate", 223372036854775808L, quantity.toLong(true));
+    quantity.setToDecNumber("9223372046854775806", status);
+    assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
+    quantity.setToDecNumber("9223372046800000000", status);
+    assertFalse("A large 10^19 number with trailing zeros should not fit", quantity.fitsInLong());
+    quantity.setToDecNumber("10000000000000000000", status);
+    assertFalse("10^20 should not fit", quantity.fitsInLong());
+}
+
 void DecimalQuantityTest::testToDouble() {
     IcuTestErrorCode status(*this, "testToDouble");
     static const struct TestCase {
@@ -531,12 +570,12 @@ void DecimalQuantityTest::testScientificAndCompactSuppressedExponent() {
         {u"scientific",    0.012, u"1,2E-2",  0L, 0.012, u"0.012", -2, -2},
 
         {u"",              999.9, u"999,9",     999L,  999.9,  u"999.9", 0, 0},
-        {u"compact-long",  999.9, u"1 millier", 1000L, 1000.0, u"1000",  3, 3},
+        {u"compact-long",  999.9, u"mille",     1000L, 1000.0, u"1000",  3, 3},
         {u"compact-short", 999.9, u"1 k",       1000L, 1000.0, u"1000",  3, 3},
         {u"scientific",    999.9, u"9,999E2",   999L,  999.9,  u"999.9", 2, 2},
 
         {u"",              1000.0, u"1 000",     1000L, 1000.0, u"1000", 0, 0},
-        {u"compact-long",  1000.0, u"1 millier", 1000L, 1000.0, u"1000", 3, 3},
+        {u"compact-long",  1000.0, u"mille",     1000L, 1000.0, u"1000", 3, 3},
         {u"compact-short", 1000.0, u"1 k",       1000L, 1000.0, u"1000", 3, 3},
         {u"scientific",    1000.0, u"1E3",       1000L, 1000.0, u"1000", 3, 3},
     };

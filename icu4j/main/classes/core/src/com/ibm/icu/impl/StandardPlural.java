@@ -22,7 +22,9 @@ public enum StandardPlural {
     TWO("two"),
     FEW("few"),
     MANY("many"),
-    OTHER("other");
+    OTHER("other"),
+    EQ_0("=0"),
+    EQ_1("=1");
 
     /**
      * Numeric index of OTHER, same as OTHER.ordinal().
@@ -60,6 +62,20 @@ public enum StandardPlural {
      */
     public static final StandardPlural orNullFromString(CharSequence keyword) {
         switch (keyword.length()) {
+        case 1:
+            if (keyword.charAt(0) == '0') {
+                return EQ_0;
+            } else if (keyword.charAt(0) == '1') {
+                return EQ_1;
+            }
+            break;
+        case 2:
+            if ("=0".contentEquals(keyword)) {
+                return EQ_0;
+            } else if ("=1".contentEquals(keyword)) {
+                return EQ_1;
+            }
+            break;    
         case 3:
             if ("one".contentEquals(keyword)) {
                 return ONE;
