@@ -2319,16 +2319,12 @@ static void TestResourceLevelAliasing(void) {
       
       /* test indexed aliasing */
       
-      tb = ures_getByKey(aliasB, "zoneTests", tb, &status);
-      tb = ures_getByKey(tb, "zoneAlias2", tb, &status);
-      string = tres_getString(tb, -1, NULL, &strLen, &status);
-      
       en = ures_findResource("/ICUDATA-zone/en/zoneStrings/3/0", en, &status);
-      sequence = tres_getString(en, -1, NULL, &seqLen, &status);
       
-      if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-        log_err("Referencing alias didn't get the right string (5)\n");
+      if(status != U_MISSING_RESOURCE_ERROR) {
+        log_err("Index lookup in a table resource didn't get U_MISSING_RESOURCE_ERROR!\n");
       }
+      status  = U_ZERO_ERROR;
     }
     /* test getting aliased string by index */
     {
