@@ -10,6 +10,9 @@ The ICU project is under the stewardship of [The Unicode Consortium](https://www
 
 ![ICU Logo](./tools/images/iculogo_64.png)
 
+### 🔴🔴🔴 Special Notice About Branch Renaming 🔴🔴🔴
+We plan to rename the `master` branch to `main` branch around March 24-25, 2021. You may need to rename your branch in your local git repo and change your normal git command to reflect the changes after that. See also https://github.com/github/renaming
+
 ### Build Status (`master` branch)
 
 Build | Status
