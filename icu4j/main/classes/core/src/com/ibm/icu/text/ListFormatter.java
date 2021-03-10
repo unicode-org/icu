@@ -171,8 +171,10 @@ final public class ListFormatter {
         /**
          * Serialization method resolve instances to the constant Field values
          *
-         * @draft ICU 64
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         @Override
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(LITERAL.getName()))
