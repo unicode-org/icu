@@ -27,6 +27,7 @@ KEYS
 *.dat
 *.DS_Store
 *.doc
+*.fuzz
 *.gif
 *.gz
 *.ico
