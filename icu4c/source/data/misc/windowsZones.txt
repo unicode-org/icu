@@ -304,6 +304,7 @@ windowsZones:table(nofallback){
             BF{"Africa/Ouagadougou"}
             CI{"Africa/Abidjan"}
             GH{"Africa/Accra"}
+            GL{"America/Danmarkshavn"}
             GM{"Africa/Banjul"}
             GN{"Africa/Conakry"}
             GW{"Africa/Bissau"}
@@ -680,9 +681,8 @@ windowsZones:table(nofallback){
             ZZ{"Etc/GMT+7"}
         }
         "UTC"{
-            001{"Etc/GMT"}
-            GL{"America/Danmarkshavn"}
-            ZZ{"Etc/GMT Etc/UTC"}
+            001{"Etc/UTC"}
+            ZZ{"Etc/UTC Etc/GMT"}
         }
         "UTC+12"{
             001{"Etc/GMT-12"}
