@@ -82,8 +82,10 @@
         <!-- ICU4J - which should be kept as up-to-date as possible. -->
         <dependency>
             <groupId>com.ibm.icu</groupId>
-            <artifactId>icu4j</artifactId>
-            <version>67.1</version>
+            <artifactId>icu4j-for-cldr</artifactId>
+            <version>69.1-SNAPSHOT-cldr-2021-03-09</version>
+            <!-- Note: see https://github.com/unicode-org/icu/packages/411079/versions
+                for the icu4j-for-cldr version tag to use -->
         </dependency>
 
         <!-- Useful common libraries. Note that some of the code in the CLDR library is also
@@ -116,4 +118,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>githubcldr</id>
+            <name>GitHub unicode-org/icu Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/unicode-org/icu</url>
+        </repository>
+    </repositories>
 </project>
