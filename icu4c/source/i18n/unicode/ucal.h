@@ -1674,6 +1674,13 @@ enum UTimeZoneLocalOption {
      * @draft ICU 69
      */
     UCAL_TZ_LOCAL_DAYLIGHT_LATTER = UCAL_TZ_LOCAL_LATTER | 0x03,
+#else /* U_HIDE_DRAFT_API */
+    /**
+     * Dummy value to prevent empty enum if U_HIDE_DRAFT_API.
+     * This will go away when draft conditionals are removed.
+     * @internal
+     */
+    UCAL_TZ_LOCAL_NONE = 0,
 #endif /* U_HIDE_DRAFT_API */
 };
 typedef enum UTimeZoneLocalOption UTimeZoneLocalOption; /**< @draft ICU 69 */
