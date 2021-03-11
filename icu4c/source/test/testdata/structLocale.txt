@@ -106,11 +106,13 @@ structLocale:table(nofallback){
         CY{""}
         CZ{""}
         DE{""}
+        DG{""}
         DJ{""}
         DK{""}
         DM{""}
         DO{""}
         DZ{""}
+        EA{""}
         EC{""}
         EE{""}
         EG{""}
@@ -149,6 +151,7 @@ structLocale:table(nofallback){
         HR{""}
         HT{""}
         HU{""}
+        IC{""}
         ID{""}
         IE{""}
         IL{""}
@@ -295,6 +298,7 @@ structLocale:table(nofallback){
         VU{""}
         WF{""}
         WS{""}
+        XK{""}
         YE{""}
         YT{""}
         ZA{""}
@@ -5805,7 +5809,6 @@ structLocale:table(nofallback){
         mn{""}
         mnc{""}
         mni{""}
-        mo{""}
         moh{""}
         mos{""}
         mr{""}
@@ -5963,7 +5966,6 @@ structLocale:table(nofallback){
         sv{""}
         sw{""}
         swb{""}
-        swc{""}
         syc{""}
         syr{""}
         szl{""}
@@ -5982,7 +5984,6 @@ structLocale:table(nofallback){
         tk{""}
         tkl{""}
         tkr{""}
-        tl{""}
         tlh{""}
         tli{""}
         tly{""}
