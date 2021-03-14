@@ -164,7 +164,7 @@ typedef enum UNumberUnitWidth {
      *
      * @stable ICU 60
      */
-            UNUM_UNIT_WIDTH_NARROW,
+            UNUM_UNIT_WIDTH_NARROW = 0,
 
     /**
      * Print an abbreviated version of the unit name. Similar to NARROW, but use a slightly wider abbreviation or
@@ -180,7 +180,7 @@ typedef enum UNumberUnitWidth {
      *
      * @stable ICU 60
      */
-            UNUM_UNIT_WIDTH_SHORT,
+            UNUM_UNIT_WIDTH_SHORT = 1,
 
     /**
      * Print the full name of the unit, without any abbreviations.
@@ -191,7 +191,7 @@ typedef enum UNumberUnitWidth {
      *
      * @stable ICU 60
      */
-            UNUM_UNIT_WIDTH_FULL_NAME,
+            UNUM_UNIT_WIDTH_FULL_NAME = 2,
 
     /**
      * Use the three-digit ISO XXX code in place of the symbol for displaying currencies. The behavior of this
@@ -202,7 +202,7 @@ typedef enum UNumberUnitWidth {
      *
      * @stable ICU 60
      */
-            UNUM_UNIT_WIDTH_ISO_CODE,
+            UNUM_UNIT_WIDTH_ISO_CODE = 3,
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -214,7 +214,7 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 68
      */
-            UNUM_UNIT_WIDTH_FORMAL,
+            UNUM_UNIT_WIDTH_FORMAL = 4,
 
     /**
      * Use the alternate variant of the currency symbol; for example, "TL" for the Turkish
@@ -225,7 +225,7 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 68
      */
-            UNUM_UNIT_WIDTH_VARIANT,
+            UNUM_UNIT_WIDTH_VARIANT = 5,
 #endif  // U_HIDE_DRAFT_API
 
     /**
@@ -235,14 +235,16 @@ typedef enum UNumberUnitWidth {
      *
      * @stable ICU 60
      */
-            UNUM_UNIT_WIDTH_HIDDEN,
+            UNUM_UNIT_WIDTH_HIDDEN = 6,
 
+    // Do not conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
+    // needed for unconditionalized struct MacroProps
     /**
      * One more than the highest UNumberUnitWidth value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
-            UNUM_UNIT_WIDTH_COUNT
+            UNUM_UNIT_WIDTH_COUNT = 7
 } UNumberUnitWidth;
 
 /**
@@ -451,6 +453,8 @@ typedef enum UNumberSignDisplay {
     UNUM_SIGN_ACCOUNTING_NEGATIVE,
 #endif // U_HIDE_DRAFT_API
 
+    // Do not conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
+    // needed for unconditionalized struct MacroProps
     /**
      * One more than the highest UNumberSignDisplay value.
      *
@@ -486,6 +490,8 @@ typedef enum UNumberDecimalSeparatorDisplay {
      */
             UNUM_DECIMAL_SEPARATOR_ALWAYS,
 
+    // Do not conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
+    // needed for unconditionalized struct MacroProps
     /**
      * One more than the highest UNumberDecimalSeparatorDisplay value.
      *

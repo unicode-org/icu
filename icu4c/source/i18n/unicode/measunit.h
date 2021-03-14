@@ -247,13 +247,17 @@ typedef enum UMeasurePrefix {
      */
     UMEASURE_PREFIX_YOCTO = UMEASURE_PREFIX_ONE + -24,
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * ICU use only.
      * Used to determine the set of base-10 SI prefixes.
      * @internal
      */
     UMEASURE_PREFIX_INTERNAL_MIN_SI = UMEASURE_PREFIX_YOCTO,
+#endif  // U_HIDE_INTERNAL_API
 
+    // Cannot conditionalize the following with #ifndef U_HIDE_INTERNAL_API,
+    // used in definitions of non-internal enum values
     /**
      * ICU use only.
      * Sets the arbitrary offset of the base-1024 binary prefixes' enum values.
@@ -268,12 +272,14 @@ typedef enum UMeasurePrefix {
      */
     UMEASURE_PREFIX_KIBI = UMEASURE_PREFIX_INTERNAL_ONE_BIN + 1,
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * ICU use only.
      * Used to determine the set of base-1024 binary prefixes.
      * @internal
      */
     UMEASURE_PREFIX_INTERNAL_MIN_BIN = UMEASURE_PREFIX_KIBI,
+#endif  // U_HIDE_INTERNAL_API
 
     /**
      * Binary prefix: mebi, 1024^2.
@@ -324,12 +330,14 @@ typedef enum UMeasurePrefix {
      */
     UMEASURE_PREFIX_YOBI = UMEASURE_PREFIX_INTERNAL_ONE_BIN + 8,
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * ICU use only.
      * Used to determine the set of base-1024 binary prefixes.
      * @internal
      */
     UMEASURE_PREFIX_INTERNAL_MAX_BIN = UMEASURE_PREFIX_YOBI,
+#endif  // U_HIDE_INTERNAL_API
 } UMeasurePrefix;
 
 /**
@@ -3716,7 +3724,8 @@ private:
     friend class number::impl::LongNameHandler;
 };
 
-#ifndef U_HIDE_DRAFT_API  // @draft ICU 68
+#ifndef U_HIDE_DRAFT_API
+// inline impl of @draft ICU 68 method
 inline std::pair<LocalArray<MeasureUnit>, int32_t>
 MeasureUnit::splitToSingleUnits(UErrorCode& status) const {
     int32_t length;
