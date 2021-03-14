@@ -319,7 +319,7 @@ typedef enum UNumberFormatRoundingMode {
      * @draft ICU 69
      */
     UNUM_ROUND_HALF_FLOOR,
-#endif
+#endif  // U_HIDE_DRAFT_API
 } UNumberFormatRoundingMode;
 
 /** The possible number format pad positions. 
