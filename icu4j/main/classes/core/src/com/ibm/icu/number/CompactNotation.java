@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
