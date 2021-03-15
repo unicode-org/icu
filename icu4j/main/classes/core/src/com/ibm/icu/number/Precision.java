@@ -339,6 +339,13 @@ public abstract class Precision {
         }
     }
 
+    /**
+     * Configure how trailing zeros are displayed on numbers. For example, to hide trailing zeros
+     * when the number is an integer, use HIDE_IF_WHOLE.
+     *
+     * @param trailingZeroDisplay Option to configure the display of trailing zeros.
+     * @draft ICU 69
+     */
     public Precision trailingZeroDisplay(TrailingZeroDisplay trailingZeroDisplay) {
         Precision result = this.createCopy();
         result.trailingZeroDisplay = trailingZeroDisplay;
