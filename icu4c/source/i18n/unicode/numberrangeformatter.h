@@ -706,7 +706,7 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
 };
 
 #ifndef U_HIDE_DRAFT_API
-// Note: This is draft ICU 68
+// inline impl of @draft ICU 68 method
 template<typename StringClass>
 std::pair<StringClass, StringClass> FormattedNumberRange::getDecimalNumbers(UErrorCode& status) const {
     StringClass str1;

@@ -175,7 +175,6 @@ public:
         kFormer = 0x04, /* UCAL_TZ_LOCAL_FORMER */
         kLatter = 0x0C  /* UCAL_TZ_LOCAL_LATTER */
     };
-#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Get time zone offsets from local wall time.
@@ -183,6 +182,7 @@ public:
      */
     void getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
         int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
 protected:
 
