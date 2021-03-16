@@ -1001,10 +1001,8 @@ public class ULocaleTest extends TestFmwk {
             }
 
             if (level2Expected != null) {
-                if (logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
-                    if (source.startsWith("zh_CN") || source.startsWith("zh_TW") || source.startsWith("uz-UZ")) {
-                        continue;
-                    }
+                if (source.startsWith("zh_CN") || source.startsWith("zh_TW") || source.startsWith("uz-UZ")) {
+                    continue;
                 }
                 String level2 = ULocale.canonicalize(source);
                 if(!level2.equals(level2Expected)){
@@ -5159,27 +5157,25 @@ public class ULocaleTest extends TestFmwk {
     public void TestCanonical() {
         // Test replacement of languageAlias
 
-        if (!logKnownIssue("21236", "skip some canonicalization tests until code fixed")) {
-            // language _ variant -> language
-            Assert.assertEquals("nb", canonicalTag("no-BOKMAL"));
-            // also test with script, country and extensions
-            Assert.assertEquals("nb-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-BOKMAL-u-ca-japanese"));
-            // also test with other variants, script, country and extensions
-            Assert.assertEquals("nb-Cyrl-ID-1901-xsistemo-u-ca-japanese",
-                canonicalTag("no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese"));
-            Assert.assertEquals("nb-Cyrl-ID-1901-u-ca-japanese",
-                canonicalTag("no-Cyrl-ID-1901-BOKMAL-u-ca-japanese"));
-            Assert.assertEquals("nb-Cyrl-ID-xsistemo-u-ca-japanese",
-                canonicalTag("no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese"));
+        // language _ variant -> language
+        Assert.assertEquals("nb", canonicalTag("no-BOKMAL"));
+        // also test with script, country and extensions
+        Assert.assertEquals("nb-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-BOKMAL-u-ca-japanese"));
+        // also test with other variants, script, country and extensions
+        Assert.assertEquals("nb-Cyrl-ID-1901-xsistemo-u-ca-japanese",
+            canonicalTag("no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese"));
+        Assert.assertEquals("nb-Cyrl-ID-1901-u-ca-japanese",
+            canonicalTag("no-Cyrl-ID-1901-BOKMAL-u-ca-japanese"));
+        Assert.assertEquals("nb-Cyrl-ID-xsistemo-u-ca-japanese",
+            canonicalTag("no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese"));
 
-            Assert.assertEquals("nn", canonicalTag("no-NYNORSK"));
-            // also test with script, country and extensions
-            Assert.assertEquals("nn-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-NYNORSK-u-ca-japanese"));
+        Assert.assertEquals("nn", canonicalTag("no-NYNORSK"));
+        // also test with script, country and extensions
+        Assert.assertEquals("nn-Cyrl-ID-u-ca-japanese", canonicalTag("no-Cyrl-ID-NYNORSK-u-ca-japanese"));
 
-            Assert.assertEquals("ssy", canonicalTag("aa-SAAHO"));
-            // also test with script, country and extensions
-            Assert.assertEquals("ssy-Devn-IN-u-ca-japanese", canonicalTag("aa-Devn-IN-SAAHO-u-ca-japanese"));
-        }
+        Assert.assertEquals("ssy", canonicalTag("aa-SAAHO"));
+        // also test with script, country and extensions
+        Assert.assertEquals("ssy-Devn-IN-u-ca-japanese", canonicalTag("aa-Devn-IN-SAAHO-u-ca-japanese"));
 
         // language -> language
         Assert.assertEquals("aas", canonicalTag("aam"));
