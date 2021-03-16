@@ -190,8 +190,6 @@ sub setupOutput {
   @headers = split(/ /, $headers);
   my ($t, $rest);
   ($t, $rest) = split(/\.\w+/, $0);
-  $t =~ /^.*\W(\w+)$/;
-  $t = $1;
   if($outType eq 'HTML') {
     $html = $date;
     $html =~ s/://g; # ':' illegal
