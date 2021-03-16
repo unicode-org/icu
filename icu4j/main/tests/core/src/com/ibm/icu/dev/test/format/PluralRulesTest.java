@@ -431,7 +431,7 @@ public class PluralRulesTest extends TestFmwk {
                             String old = collisionTest.get(item);
                             if (old != null) {
                                 if (!locale.getLanguage().equals("fr") ||
-                                        !logKnownIssue("21328", "fr Non-unique rules: 1e6 => one & many")) {
+                                        !logKnownIssue("21322", "fr Non-unique rules: 1e6 => one & many")) {
                                     errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
                                 }
                                 rule.select(item);
@@ -935,7 +935,7 @@ public class PluralRulesTest extends TestFmwk {
                     for (String keyword : rules.getKeywords()) {
                         boolean isLimited = rules.isLimited(keyword, sampleType);
                         boolean computeLimited = rules.computeLimited(keyword, sampleType);
-                        if (!keyword.equals("other") && !(locale.getLanguage().equals("fr") && logKnownIssue("ICU-21270", "fr plurals many case computeLimited == isLimited"))) {
+                        if (!keyword.equals("other") && !(locale.getLanguage().equals("fr") && logKnownIssue("ICU-21322", "fr plurals many case computeLimited == isLimited"))) {
                             assertEquals(getAssertMessage("computeLimited == isLimited", locale, rules, keyword),
                                     computeLimited, isLimited);
                         }
