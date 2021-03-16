@@ -1366,7 +1366,6 @@ AliasReplacer::replaceLanguage(
             }
         }
         if (replacedExtensions != nullptr) {
-            // TODO(ICU-21292)
             // DO NOTHING
             // UTS35 does not specifiy what should we do if we have extensions in the
             // replacement. Currently we know only the following 4 "BCP47 LegacyRules" have
