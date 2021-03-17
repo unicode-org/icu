@@ -48,6 +48,10 @@ jobs:
           cd icu4j;
           ant init;
           ant check;
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
 
   # gcc debug build.
   # Includes dependency checker.
