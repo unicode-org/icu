@@ -169,8 +169,14 @@ public:
          * @stable ICU 54
          */
         kExponentMultiplicationSymbol,
+#ifndef U_HIDE_INTERNAL_API
+        /** Approximately sign.
+         * @internal
+         */
+        kApproximatelySignSymbol,
+#endif
         /** count symbol constants */
-        kFormatSymbolCount = kNineDigitSymbol + 2
+        kFormatSymbolCount = kExponentMultiplicationSymbol + 2
     };
 
     /**

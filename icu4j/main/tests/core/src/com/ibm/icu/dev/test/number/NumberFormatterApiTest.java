@@ -2088,6 +2088,26 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.forLanguageTag("lu"),
                 123.12,
                 "123,12 CN¥");
+
+        // de-CH has currency pattern "¤ #,##0.00;¤-#,##0.00"
+        assertFormatSingle(
+                "Sign position on negative number with pattern spacing",
+                "currency/RON",
+                "currency/RON",
+                NumberFormatter.with().unit(RON),
+                ULocale.forLanguageTag("de-CH"),
+                -123.12,
+                "RON-123.12");
+
+        // TODO(CLDR-13044): Move the sign to the inside of the number
+        assertFormatSingle(
+                "Sign position on negative number with currency spacing",
+                "currency/RON",
+                "currency/RON",
+                NumberFormatter.with().unit(RON),
+                ULocale.forLanguageTag("en"),
+                -123.12,
+                "-RON 123.12");
     }
 
     public static class UnitInflectionTestCase {

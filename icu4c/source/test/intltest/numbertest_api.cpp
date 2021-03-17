@@ -2121,6 +2121,26 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("lu"),
             123.12,
             u"123,12 CN¥");
+
+    // de-CH has currency pattern "¤ #,##0.00;¤-#,##0.00"
+    assertFormatSingle(
+            u"Sign position on negative number with pattern spacing",
+            u"currency/RON",
+            u"currency/RON",
+            NumberFormatter::with().unit(RON),
+            Locale("de-CH"),
+            -123.12,
+            u"RON-123.12");
+
+    // TODO(CLDR-13044): Move the sign to the inside of the number
+    assertFormatSingle(
+            u"Sign position on negative number with currency spacing",
+            u"currency/RON",
+            u"currency/RON",
+            NumberFormatter::with().unit(RON),
+            Locale("en"),
+            -123.12,
+            u"-RON 123.12");
 }
 
 void NumberFormatterApiTest::runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,

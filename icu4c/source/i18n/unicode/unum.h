@@ -1429,12 +1429,19 @@ typedef enum UNumberFormatSymbol {
    */
   UNUM_EXPONENT_MULTIPLICATION_SYMBOL = 27,
 
+#ifndef U_HIDE_INTERNAL_API
+  /** Approximately sign.
+   * @internal
+   */
+  UNUM_APPROXIMATELY_SIGN_SYMBOL = 28,
+#endif
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UNumberFormatSymbol value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-  UNUM_FORMAT_SYMBOL_COUNT = 28
+  UNUM_FORMAT_SYMBOL_COUNT = 29
 #endif  /* U_HIDE_DEPRECATED_API */
 } UNumberFormatSymbol;
 

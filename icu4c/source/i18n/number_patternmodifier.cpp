@@ -28,9 +28,13 @@ void MutablePatternModifier::setPatternInfo(const AffixPatternProvider* patternI
     fField = field;
 }
 
-void MutablePatternModifier::setPatternAttributes(UNumberSignDisplay signDisplay, bool perMille) {
+void MutablePatternModifier::setPatternAttributes(
+        UNumberSignDisplay signDisplay,
+        bool perMille,
+        bool approximately) {
     fSignDisplay = signDisplay;
     fPerMilleReplacesPercent = perMille;
+    fApproximately = approximately;
 }
 
 void MutablePatternModifier::setSymbols(const DecimalFormatSymbols* symbols,
@@ -277,6 +281,7 @@ void MutablePatternModifier::prepareAffix(bool isPrefix) {
             *fPatternInfo,
             isPrefix,
             PatternStringUtils::resolveSignDisplay(fSignDisplay, fSignum),
+            fApproximately,
             fPlural,
             fPerMilleReplacesPercent,
             currentAffix);
@@ -289,6 +294,8 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
             return fSymbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kMinusSignSymbol);
         case AffixPatternType::TYPE_PLUS_SIGN:
             return fSymbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kPlusSignSymbol);
+        case AffixPatternType::TYPE_APPROXIMATELY_SIGN:
+            return fSymbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kApproximatelySignSymbol);
         case AffixPatternType::TYPE_PERCENT:
             return fSymbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kPercentSymbol);
         case AffixPatternType::TYPE_PERMILLE:

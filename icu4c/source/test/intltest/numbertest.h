@@ -315,11 +315,13 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testCopyMove();
     void toObject();
     void testGetDecimalNumbers();
+    void test21358_SignPosition();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
   private:
     CurrencyUnit USD;
+    CurrencyUnit CHF;
     CurrencyUnit GBP;
     CurrencyUnit PTE;
 
