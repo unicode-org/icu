@@ -438,7 +438,7 @@ TEST(DoubleToShortestSingle) {
 
 
 TEST(DoubleToFixed) {
-  const int kBufferSize = 128;
+  const int kBufferSize = 168;
   char buffer[kBufferSize];
   StringBuilder builder(buffer, kBufferSize);
   int flags = DoubleToStringConverter::EMIT_POSITIVE_EXPONENT_SIGN |
@@ -462,25 +462,98 @@ TEST(DoubleToFixed) {
   CHECK_EQ("0.0", builder.Finalize());
 
   DOUBLE_CONVERSION_ASSERT(DoubleToStringConverter::kMaxFixedDigitsBeforePoint == 60);
-  DOUBLE_CONVERSION_ASSERT(DoubleToStringConverter::kMaxFixedDigitsAfterPoint == 60);
+  DOUBLE_CONVERSION_ASSERT(DoubleToStringConverter::kMaxFixedDigitsAfterPoint == 100);
+
+  // Most of the 100 digit tests were copied from
+  // https://searchfox.org/mozilla-central/source/js/src/tests/non262/Number/toFixed-values.js.
+
   builder.Reset();
   CHECK(dc.ToFixed(
       0.0, DoubleToStringConverter::kMaxFixedDigitsAfterPoint, &builder));
-  CHECK_EQ("0.000000000000000000000000000000000000000000000000000000000000",
+  CHECK_EQ("0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
            builder.Finalize());
 
   builder.Reset();
   CHECK(dc.ToFixed(
       9e59, DoubleToStringConverter::kMaxFixedDigitsAfterPoint, &builder));
   CHECK_EQ("899999999999999918767229449717619953810131273674690656206848."
-           "000000000000000000000000000000000000000000000000000000000000",
+           "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
            builder.Finalize());
 
   builder.Reset();
   CHECK(dc.ToFixed(
       -9e59, DoubleToStringConverter::kMaxFixedDigitsAfterPoint, &builder));
   CHECK_EQ("-899999999999999918767229449717619953810131273674690656206848."
-           "000000000000000000000000000000000000000000000000000000000000",
+           "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(
+      1e-100, DoubleToStringConverter::kMaxFixedDigitsAfterPoint, &builder));
+  CHECK_EQ("0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(0.3000000000000000444089209850062616169452667236328125,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("0.3000000000000000444089209850062616169452667236328125000000000000000000000000000000000000000000000000",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(1.5e-100,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(1.15e-99,  // In reality: 1.14999999999999992147301128036734...
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(3.141592653589793,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("3.1415926535897931159979634685441851615905761718750000000000000000000000000000000000000000000000000000",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(1.0,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(-123456.78,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("-123456.7799999999988358467817306518554687500000000000000000000000000000000000000000000000000000000000000000",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(123456.78,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("123456.7799999999988358467817306518554687500000000000000000000000000000000000000000000000000000000000000000",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(100000000000000000000.0,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("100000000000000000000.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+           builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc.ToFixed(-100000000000000000000.0,
+                   DoubleToStringConverter::kMaxFixedDigitsAfterPoint,
+                   &builder));
+  CHECK_EQ("-100000000000000000000.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
            builder.Finalize());
 
   builder.Reset();
@@ -636,6 +709,10 @@ TEST(DoubleToFixed) {
   builder.Reset();
   CHECK(dc5.ToFixed(0.1, 30, &builder));
   CHECK_EQ("0.100000000000000005551115123126", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToFixed(0.1, 100, &builder));
+  CHECK_EQ("0.1000000000000000055511151231257827021181583404541015625000000000000000000000000000000000000000000000", builder.Finalize());
 
   builder.Reset();
   CHECK(dc5.ToFixed(0.1, 17, &builder));
@@ -861,6 +938,33 @@ TEST(DoubleToExponential) {
   builder.Reset();
   CHECK(dc4.ToExponential(-Double::NaN(), 1, &builder));
   CHECK_EQ("NaN", builder.Finalize());
+
+  // Test min_exponent_width
+  DoubleToStringConverter dc5(flags, NULL, NULL, 'e', 0, 0, 0, 0, 2);
+
+  builder.Reset();
+  CHECK(dc5.ToExponential(11111111111.0, 6, &builder));
+  CHECK_EQ("1.111111e10", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToExponential(1111111111.0, 6, &builder));
+  CHECK_EQ("1.111111e09", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToExponential(1111111.0, 6, &builder));
+  CHECK_EQ("1.111111e06", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToExponential(10000000000.0, 6, &builder));
+  CHECK_EQ("1.000000e10", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToExponential(1000000000.0, 6, &builder));
+  CHECK_EQ("1.000000e09", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToExponential(1.0, 6, &builder));
+  CHECK_EQ("1.000000e00", builder.Finalize());
 }
 
 
@@ -1063,6 +1167,98 @@ TEST(DoubleToPrecision) {
   builder.Reset();
   CHECK(dc7.ToPrecision(-Double::NaN(), 1, &builder));
   CHECK_EQ("NaN", builder.Finalize());
+
+  // Test NO_TRAILING_ZERO and its interaction with other flags.
+  flags = DoubleToStringConverter::NO_TRAILING_ZERO;
+  DoubleToStringConverter dc9(flags, "Infinity", "NaN", 'e', 0, 0, 6, 1);
+  flags = DoubleToStringConverter::NO_TRAILING_ZERO |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT;
+  DoubleToStringConverter dc10(flags, "Infinity", "NaN", 'e', 0, 0, 6, 1);
+  flags = DoubleToStringConverter::NO_TRAILING_ZERO |
+      DoubleToStringConverter::EMIT_TRAILING_DECIMAL_POINT |
+      DoubleToStringConverter::EMIT_TRAILING_ZERO_AFTER_POINT;
+  DoubleToStringConverter dc11(flags, "Infinity", "NaN", 'e', 0, 0, 6, 1);
+
+  builder.Reset();
+  CHECK(dc9.ToPrecision(230.001, 5, &builder));
+  CHECK_EQ("230", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc10.ToPrecision(230.001, 5, &builder));
+  CHECK_EQ("230.", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc11.ToPrecision(230.001, 5, &builder));
+  CHECK_EQ("230.0", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToPrecision(230.001, 5, &builder));
+  CHECK_EQ("230.00", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc9.ToPrecision(2300010, 5, &builder));
+  CHECK_EQ("2.3e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc10.ToPrecision(2300010, 5, &builder));
+  CHECK_EQ("2.3e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc11.ToPrecision(2300010, 5, &builder));
+  CHECK_EQ("2.3e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToPrecision(2300010, 5, &builder));
+  CHECK_EQ("2.3000e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc9.ToPrecision(0.02300010, 5, &builder));
+  CHECK_EQ("0.023", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc10.ToPrecision(0.02300010, 5, &builder));
+  CHECK_EQ("0.023", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc11.ToPrecision(0.02300010, 5, &builder));
+  CHECK_EQ("0.023", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToPrecision(0.02300010, 5, &builder));
+  CHECK_EQ("0.023000", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc9.ToPrecision(2000010, 5, &builder));
+  CHECK_EQ("2e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc10.ToPrecision(2000010, 5, &builder));
+  CHECK_EQ("2e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc11.ToPrecision(2000010, 5, &builder));
+  CHECK_EQ("2e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToPrecision(2000010, 5, &builder));
+  CHECK_EQ("2.0000e6", builder.Finalize());
+
+  // Test that rounding up still works with NO_TRAILING_ZERO
+  builder.Reset();
+  CHECK(dc9.ToPrecision(2000080, 5, &builder));
+  CHECK_EQ("2.0001e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc10.ToPrecision(2000080, 5, &builder));
+  CHECK_EQ("2.0001e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc11.ToPrecision(2000080, 5, &builder));
+  CHECK_EQ("2.0001e6", builder.Finalize());
+
+  builder.Reset();
+  CHECK(dc5.ToPrecision(2000080, 5, &builder));
+  CHECK_EQ("2.0001e6", builder.Finalize());
 }
 
 
