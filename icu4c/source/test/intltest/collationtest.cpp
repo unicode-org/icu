@@ -78,6 +78,7 @@ public:
     void TestRootElements();
     void TestTailoredElements();
     void TestDataDriven();
+    void TestLongLocale();
 
 private:
     void checkFCD(const char *name, CollationIterator &ci, CodePointIterator &cpi);
@@ -148,6 +149,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestRootElements);
     TESTCASE_AUTO(TestTailoredElements);
     TESTCASE_AUTO(TestDataDriven);
+    TESTCASE_AUTO(TestLongLocale);
     TESTCASE_AUTO_END;
 }
 
@@ -1850,6 +1852,14 @@ void CollationTest::TestDataDriven() {
             return;
         }
     }
+}
+
+void CollationTest::TestLongLocale() {
+    IcuTestErrorCode errorCode(*this, "TestLongLocale");
+    Locale longLocale("sie__1G_C_CEIE_CEZCX_CSUE_E_EIESZNI2_GB_LM_LMCSUE_LMCSX_"
+                      "LVARIANT_MMCSIE_STEU_SU1GCEIE_SU6G_SU6SU6G_U_UBGE_UC_"
+                      "UCEZCSI_UCIE_UZSIU_VARIANT_X@collation=bcs-ukvsz");
+    LocalPointer<Collator> coll(Collator::createInstance(longLocale, errorCode));
 }
 
 #endif  // !UCONFIG_NO_COLLATION
