@@ -82,26 +82,29 @@ public class AffixUtils {
     /** Represents a plus sign symbol '+'. */
     public static final int TYPE_PLUS_SIGN = -2;
 
+    // Represents an approximately sign symbol '~'.
+    public static final int TYPE_APPROXIMATELY_SIGN = -3;
+
     /** Represents a percent sign symbol '%'. */
-    public static final int TYPE_PERCENT = -3;
+    public static final int TYPE_PERCENT = -4;
 
     /** Represents a permille sign symbol '‰'. */
-    public static final int TYPE_PERMILLE = -4;
+    public static final int TYPE_PERMILLE = -5;
 
     /** Represents a single currency symbol '¤'. */
-    public static final int TYPE_CURRENCY_SINGLE = -5;
+    public static final int TYPE_CURRENCY_SINGLE = -6;
 
     /** Represents a double currency symbol '¤¤'. */
-    public static final int TYPE_CURRENCY_DOUBLE = -6;
+    public static final int TYPE_CURRENCY_DOUBLE = -7;
 
     /** Represents a triple currency symbol '¤¤¤'. */
-    public static final int TYPE_CURRENCY_TRIPLE = -7;
+    public static final int TYPE_CURRENCY_TRIPLE = -8;
 
     /** Represents a quadruple currency symbol '¤¤¤¤'. */
-    public static final int TYPE_CURRENCY_QUAD = -8;
+    public static final int TYPE_CURRENCY_QUAD = -9;
 
     /** Represents a quintuple currency symbol '¤¤¤¤¤'. */
-    public static final int TYPE_CURRENCY_QUINT = -9;
+    public static final int TYPE_CURRENCY_QUINT = -10;
 
     /** Represents a sequence of six or more currency symbols. */
     public static final int TYPE_CURRENCY_OVERFLOW = -15;
@@ -266,6 +269,9 @@ public class AffixUtils {
         case TYPE_MINUS_SIGN:
             return NumberFormat.Field.SIGN;
         case TYPE_PLUS_SIGN:
+            return NumberFormat.Field.SIGN;
+        case TYPE_APPROXIMATELY_SIGN:
+            // TODO: Introduce a new field for the approximately sign?
             return NumberFormat.Field.SIGN;
         case TYPE_PERCENT:
             return NumberFormat.Field.PERCENT;
@@ -503,6 +509,8 @@ public class AffixUtils {
                     return makeTag(offset + count, TYPE_MINUS_SIGN, STATE_BASE, 0);
                 case '+':
                     return makeTag(offset + count, TYPE_PLUS_SIGN, STATE_BASE, 0);
+                case '~':
+                    return makeTag(offset + count, TYPE_APPROXIMATELY_SIGN, STATE_BASE, 0);
                 case '%':
                     return makeTag(offset + count, TYPE_PERCENT, STATE_BASE, 0);
                 case '‰':

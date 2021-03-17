@@ -24,6 +24,8 @@ class DefaultSymbolProvider : public SymbolProvider {
                 return u"−";
             case TYPE_PLUS_SIGN:
                 return fSymbols.getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kPlusSignSymbol);
+            case TYPE_APPROXIMATELY_SIGN:
+                return u"≃";
             case TYPE_PERCENT:
                 return fSymbols.getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kPercentSymbol);
             case TYPE_PERMILLE:
@@ -93,6 +95,7 @@ void AffixUtilsTest::testUnescape() {
                  {u"-!", false, 2, u"−!"},
                  {u"+", false, 1, u"\u061C+"},
                  {u"+!", false, 2, u"\u061C+!"},
+                 {u"~", false, 1, u"≃"},
                  {u"‰", false, 1, u"؉"},
                  {u"‰!", false, 2, u"؉!"},
                  {u"-x", false, 2, u"−x"},
@@ -209,7 +212,7 @@ void AffixUtilsTest::testUnescapeWithSymbolProvider() {
             {u"", u""},
             {u"-", u"1"},
             {u"'-'", u"-"},
-            {u"- + % ‰ ¤ ¤¤ ¤¤¤ ¤¤¤¤ ¤¤¤¤¤", u"1 2 3 4 5 6 7 8 9"},
+            {u"- + ~ % ‰ ¤ ¤¤ ¤¤¤ ¤¤¤¤ ¤¤¤¤¤", u"1 2 3 4 5 6 7 8 9 10"},
             {u"'¤¤¤¤¤¤'", u"¤¤¤¤¤¤"},
             {u"¤¤¤¤¤¤", u"\uFFFD"}
     };
@@ -232,7 +235,7 @@ void AffixUtilsTest::testUnescapeWithSymbolProvider() {
     sb.clear();
     sb.append(u"abcdefg", kUndefinedField, status);
     assertSuccess("Spot 2", status);
-    AffixUtils::unescape(u"-+%", sb, 4, provider, kUndefinedField, status);
+    AffixUtils::unescape(u"-+~", sb, 4, provider, kUndefinedField, status);
     assertSuccess("Spot 3", status);
     assertEquals(u"Symbol provider into middle", u"abcd123efg", sb.toUnicodeString());
 }

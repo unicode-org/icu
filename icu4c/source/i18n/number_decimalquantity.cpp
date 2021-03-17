@@ -289,6 +289,11 @@ void DecimalQuantity::adjustExponent(int delta) {
     exponent = exponent + delta;
 }
 
+void DecimalQuantity::resetExponent() {
+    adjustMagnitude(exponent);
+    exponent = 0;
+}
+
 bool DecimalQuantity::hasIntegerValue() const {
     return scale >= 0;
 }

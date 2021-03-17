@@ -34,6 +34,12 @@ class NumberFormatterImpl : public UMemory {
     NumberFormatterImpl(const MacroProps &macros, UErrorCode &status);
 
     /**
+     * Default constructor; leaves the NumberFormatterImpl in an undefined state.
+     * Takes an error code to prevent the method from being called accidentally.
+     */
+    NumberFormatterImpl(UErrorCode &) {}
+
+    /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
     static int32_t formatStatic(const MacroProps &macros, UFormattedNumberData *results,

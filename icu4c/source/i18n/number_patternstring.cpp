@@ -869,6 +869,7 @@ PatternStringUtils::convertLocalized(const UnicodeString& input, const DecimalFo
     UnicodeString table[LEN][2];
     int standIdx = toLocalized ? 0 : 1;
     int localIdx = toLocalized ? 1 : 0;
+    // TODO: Add approximately sign here?
     table[0][standIdx] = u"%";
     table[0][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kPercentSymbol);
     table[1][standIdx] = u"‰";
@@ -1001,6 +1002,7 @@ PatternStringUtils::convertLocalized(const UnicodeString& input, const DecimalFo
 
 void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& patternInfo, bool isPrefix,
                                                     PatternSignType patternSignType,
+                                                    bool approximately,
                                                     StandardPlural::Form plural,
                                                     bool perMilleReplacesPercent, UnicodeString& output) {
 
@@ -1012,7 +1014,7 @@ void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& 
     // (If not, we will use the positive subpattern.)
     bool useNegativeAffixPattern = patternInfo.hasNegativeSubpattern()
         && (patternSignType == PATTERN_SIGN_TYPE_NEG
-            || (patternInfo.negativeHasMinusSign() && plusReplacesMinusSign));
+            || (patternInfo.negativeHasMinusSign() && (plusReplacesMinusSign || approximately)));
 
     // Resolve the flags for the affix pattern.
     int flags = 0;
@@ -1034,10 +1036,24 @@ void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& 
     } else if (patternSignType == PATTERN_SIGN_TYPE_NEG) {
         prependSign = true;
     } else {
-        prependSign = plusReplacesMinusSign;
+        prependSign = plusReplacesMinusSign || approximately;
     }
 
-    // Compute the length of the affix pattern.
+    // What symbols should take the place of the sign placeholder?
+    const char16_t* signSymbols = u"-";
+    if (approximately) {
+        if (plusReplacesMinusSign) {
+            signSymbols = u"~+";
+        } else if (patternSignType == PATTERN_SIGN_TYPE_NEG) {
+            signSymbols = u"~-";
+        } else {
+            signSymbols = u"~";
+        }
+    } else if (plusReplacesMinusSign) {
+        signSymbols = u"+";
+    }
+
+    // Compute the number of tokens in the affix pattern (signSymbols is considered one token).
     int length = patternInfo.length(flags) + (prependSign ? 1 : 0);
 
     // Finally, set the result into the StringBuilder.
@@ -1051,8 +1067,13 @@ void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& 
         } else {
             candidate = patternInfo.charAt(flags, index);
         }
-        if (plusReplacesMinusSign && candidate == u'-') {
-            candidate = u'+';
+        if (candidate == u'-') {
+            if (u_strlen(signSymbols) == 1) {
+                candidate = signSymbols[0];
+            } else {
+                output.append(signSymbols[0]);
+                candidate = signSymbols[1];
+            }
         }
         if (perMilleReplacesPercent && candidate == u'%') {
             candidate = u'‰';

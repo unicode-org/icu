@@ -42,6 +42,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     Field field;
     SignDisplay signDisplay;
     boolean perMilleReplacesPercent;
+    boolean approximately;
 
     // Symbol details
     DecimalFormatSymbols symbols;
@@ -89,10 +90,13 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
      *            Whether to force a plus sign on positive numbers.
      * @param perMille
      *            Whether to substitute the percent sign in the pattern with a permille sign.
+     * @param approximately
+     *            Whether to prepend approximately to the sign
      */
-    public void setPatternAttributes(SignDisplay signDisplay, boolean perMille) {
+    public void setPatternAttributes(SignDisplay signDisplay, boolean perMille, boolean approximately) {
         this.signDisplay = signDisplay;
         this.perMilleReplacesPercent = perMille;
+        this.approximately = approximately;
     }
 
     /**
@@ -375,6 +379,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         PatternStringUtils.patternInfoToStringBuilder(patternInfo,
                 isPrefix,
                 PatternStringUtils.resolveSignDisplay(signDisplay, signum),
+                approximately,
                 plural,
                 perMilleReplacesPercent,
                 currentAffix);
@@ -390,6 +395,8 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             return symbols.getMinusSignString();
         case AffixUtils.TYPE_PLUS_SIGN:
             return symbols.getPlusSignString();
+        case AffixUtils.TYPE_APPROXIMATELY_SIGN:
+            return symbols.getApproximatelySignString();
         case AffixUtils.TYPE_PERCENT:
             return symbols.getPercentString();
         case AffixUtils.TYPE_PERMILLE:

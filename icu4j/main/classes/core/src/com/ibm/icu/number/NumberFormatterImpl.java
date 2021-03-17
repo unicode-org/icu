@@ -362,7 +362,8 @@ class NumberFormatterImpl {
         // The default middle modifier is weak (thus the false argument).
         MutablePatternModifier patternMod = new MutablePatternModifier(false);
         patternMod.setPatternInfo((macros.affixProvider != null) ? macros.affixProvider : patternInfo, null);
-        patternMod.setPatternAttributes(micros.sign, isPermille);
+        boolean approximately = (macros.approximately != null) ? macros.approximately : false;
+        patternMod.setPatternAttributes(micros.sign, isPermille, approximately);
         if (patternMod.needsPlurals()) {
             if (rules == null) {
                 // Lazily create PluralRules
