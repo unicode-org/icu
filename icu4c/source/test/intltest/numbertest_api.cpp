@@ -870,6 +870,96 @@ void NumberFormatterApiTest::unitMeasure() {
             u"-1 Std., 14 Min. und 24 Sek.");
 
     assertFormatSingle(
+            u"Week and day numbers: time",
+            u"unit/week-and-day",
+            u"unit/week-and-day",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("week-and-day", status)),
+            Locale("en"),
+            1.24,
+            u"1 wk, 1.68 days");
+
+    assertFormatSingle(
+            u"Week and hour numbers: time",
+            u"unit/week-and-hour",
+            u"unit/week-and-hour",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("week-and-hour", status)),
+            Locale("en"),
+            1.24,
+            u"1 wk, 40.32 hr");
+
+    assertFormatSingle(
+            u"Day and hour numbers: time",
+            u"unit/day-and-hour",
+            u"unit/day-and-hour",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("day-and-hour", status)),
+            Locale("en"),
+            1.24,
+            u"1 day, 5.76 hr");
+
+    assertFormatSingle(
+            u"Year and month numbers: time",
+            u"unit/year-and-month",
+            u"unit/year-and-month",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("year-and-month", status)),
+            Locale("en"),
+            1.24,
+            u"1 yr, 2.88 mths");
+
+    assertFormatSingle(
+            u"Year and week numbers: time",
+            u"unit/year-and-week",
+            u"unit/year-and-week",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("year-and-week", status)),
+            Locale("en"),
+            1.24,
+            u"1 yr, 12.51 wk");
+
+    assertFormatSingle(
+            u"Year and day numbers: time",
+            u"unit/year-and-day",
+            u"unit/year-and-day",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("year-and-day", status)),
+            Locale("en"),
+            1.24,
+            u"1 yr, 87.6 days");
+
+    assertFormatSingle(
+            u"Year and hour numbers: time",
+            u"unit/year-and-hour",
+            u"unit/year-and-hour",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("year-and-hour", status)),
+            Locale("en"),
+            1.24,
+            u"1 yr, 2102.4 hr");
+
+    assertFormatSingle(
+            u"Month and week numbers: time",
+            u"unit/month-and-week",
+            u"unit/month-and-week",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("month-and-week", status)),
+            Locale("en"),
+            1.24,
+            u"1 mth, 1.03 wk");
+
+    assertFormatSingle(
+            u"Month and day numbers: time",
+            u"unit/month-and-day",
+            u"unit/month-and-day",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("month-and-day", status)),
+            Locale("en"),
+            1.24,
+            u"1 mth, 7.2 days");
+
+    assertFormatSingle(
+            u"Month and hour numbers: time",
+            u"unit/month-and-hour",
+            u"unit/month-and-hour",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("month-and-hour", status)),
+            Locale("en"),
+            1.24,
+            u"1 day, 172.8 hr");
+
+    assertFormatSingle(
             u"Zero out the unit field",
             u"",
             u"",
