@@ -28,13 +28,14 @@ License & terms of use: http://www.unicode.org/copyright.html
 >
 > Users of ICU Layout are **strongly** encouraged to consider the HarfBuzz project
 > as a replacement for the ICU Layout Engine. An ICU team member responsible for
-> the Layout Engine is contributing fixes and features to HarfBuzz, and a drop in
-> wrapper is available to allow use of HarfBuzz as a direct replacement for the
-> ICU layout engine.
+> the Layout Engine is contributing fixes and features to HarfBuzz, and a 
+> [drop in wrapper](https://github.com/harfbuzz/icu-le-hb) is available to allow
+> use of HarfBuzz as a direct replacement for the ICU layout engine.
 >
 > HarfBuzz has its own active mailing lists, please use those for discussion of
 > HarfBuzz and its use as a replacement for the ICU layout engine.
-> See: [http://www.freedesktop.org/wiki/Software/HarfBuzz](http://www.freedesktop.org/wiki/Software/HarfBuzz)
+> See: [https://harfbuzz.github.io/](https://harfbuzz.github.io/).
+> 
 
 
 > :point_right: **Users of the "layoutex" ParagraphLayout library**: Please see information
