@@ -1015,7 +1015,7 @@ UCARules:process(uca_rules){"../unidata/UCARules.txt"}
 ```
 
 in
-[source/data/coll/root.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/coll/root.txt)
+[source/data/coll/root.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/coll/root.txt)
 can be commented out or deleted.
 
 ## Cautions

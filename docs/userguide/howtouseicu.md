@@ -24,19 +24,19 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ICU builds and installs as relatively standard libraries. For details about
 building, installing and porting see the [ICU4C
-readme](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html) and the
-[ICU4J readme](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4j/readme.html).
+readme](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html) and the
+[ICU4J readme](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4j/readme.html).
 In addition, ICU4C installs several scripts and makefile fragments that help
 build other code using ICU.
 
 For C++, note that there are [Recommended Build
-Options](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#RecBuild)
+Options](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#RecBuild)
 (both for normal use and for ICU as system-level libraries) which are not
 default simply for compatibility with older ICU-using code.
 
 Starting with ICU 49, the ICU4C readme has a short section about
 [User-Configurable
-Settings](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#UserConfig).
+Settings](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#UserConfig).
 
 ## C++ Makefiles
 
@@ -154,13 +154,13 @@ ICU C++ APIs are normally defined in a versioned namespace, for example
 "icu_50". There is a stable "icu" alias which should be used instead. (Entry
 point versioning is only to allow for multiple ICU versions linked into one
 program. [It is optional and should be off for system
-libraries.](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#RecBuild))
+libraries.](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#RecBuild))
 
 By default, and only for backward compatibility, the ICU headers contain a line
 `using namespace icu_50;` which makes all ICU APIs visible in/with the global
 namespace (and potentially collide with non-ICU APIs there). One of the
 [Recommended Build
-Options](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#RecBuild)
+Options](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4c/readme.html#RecBuild)
 is to turn this off.
 
 To write forward declarations, use
@@ -200,7 +200,7 @@ need to modify this file directly to allow `static` and `dll` modes to function.
 
 For building and running trivial (one-compilation-unit) programs with an
 installed ICU4C, the shell script
-[icurun](https://github.com/unicode-org/icu/blob/master/tools/scripts/icurun)
+[icurun](https://github.com/unicode-org/icu/blob/main/tools/scripts/icurun)
 may be used. For detailed help, see the top of that script.
 As an example, if ICU is installed to the prefix **/opt/local** and the current
 directory contains two sample programs "test1.cpp" and "test2.c", they may be

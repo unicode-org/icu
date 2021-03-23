@@ -63,7 +63,7 @@ See the [ICU download page](http://site.icu-project.org/download/) to find the s
 
 The subpage for the current release will also include an API Change Report, both for ICU4C and ICU4J, for a complete list of APIs added, removed, or changed in this release.
 
-The list of API changes since the previous ICU4C release is available [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/unicode-org/icu/master/icu4c/APIChangeReport.html).
+The list of API changes since the previous ICU4C release is available [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/unicode-org/icu/main/icu4c/APIChangeReport.html).
 
 Changes in previous releases can also be found on the main [ICU download page](http://site.icu-project.org/download) in its version-specific subpages.
 
@@ -584,7 +584,7 @@ There are two ways you can build ICU with Cygwin. You can build with gcc or Micr
     `C:\Program Files (x86)\Microsoft Visual Studio 14\VC\bin\x86_amd64\vcvarsx86_amd64.bat` can be used for 64-bit builds on Windows x64.
 3.  Unzip the icu-XXXX.zip file into any convenient location. Using command line zip, type "unzip -a icu-XXXX.zip -d drive:\directory", or just use WinZip.
 4.  Change directory to "icu/source", which is where you unzipped ICU.
-5.  Run `bash ./runConfigureICU Cygwin/MSVC` (See [Windows configuration note](#setting-active-configuration) and non-functional configure options below; see source for [./runConfigureICU](https://github.com/unicode-org/icu/blob/master/icu4c/source/runConfigureICU)).
+5.  Run `bash ./runConfigureICU Cygwin/MSVC` (See [Windows configuration note](#setting-active-configuration) and non-functional configure options below; see source for [./runConfigureICU](https://github.com/unicode-org/icu/blob/main/icu4c/source/runConfigureICU)).
 6.  Type `make` to compile the libraries and all the data files. This make command should be GNU make.
 7.  Optionally, type `make check` to run the test suite, which checks for ICU's functionality integrity (See [testing note](#running-the-tests-from-the-command-line) below).
 8.  Type `make install` to install ICU. If you used the `--prefix=` option on `configure` or `runConfigureICU`, ICU will be installed to the directory you specified. (See [installation note](#installing-icu) below).
@@ -626,7 +626,7 @@ Here are the steps to build ICU:
     ```
     chmod +x runConfigureICU configure install-sh
     ```
-1.  Run the [`runConfigureICU`](https://github.com/unicode-org/icu/blob/master/icu4c/source/runConfigureICU) script for your platform. (See [configuration note](#configuring-icu) below).
+1.  Run the [`runConfigureICU`](https://github.com/unicode-org/icu/blob/main/icu4c/source/runConfigureICU) script for your platform. (See [configuration note](#configuring-icu) below).
 1.  Now build:
 ```
 gmake
@@ -665,7 +665,7 @@ You can install ICU on z/OS or OS/390 (the previous name of z/OS), but IBM tests
 
 *   The makedep and GNU make tools are required for building ICU. If it is not already installed on your system, it is available at the [z/OS UNIX - Tools and Toys](http://www-03.ibm.com/servers/eserver/zseries/zos/unix/bpxa1toy.html) site. The PATH environment variable should be updated to contain the location of this executable prior to build. Failure to add these tools to your PATH will cause ICU build failures or cause pkgdata to fail to run.
 *   Since USS does not support using the mmap() function over NFS, it is recommended that you build ICU on a local filesystem. Once ICU has been built, you should not have this problem while using ICU when the data library has been built as a shared library, which is this is the default setting.
-*   Encoding considerations: The source code assumes that it is compiled with codepage ibm-1047 (to be exact, the UNIX System Services variant of it). The pax command converts all of the source code files from ASCII to codepage ibm-1047 (USS) EBCDIC. However, some files are binary files and must not be converted, or must be converted back to their original state. You can use the [unpax-icu.sh](https://github.com/unicode-org/icu/blob/master/icu4c/as_is/os390/unpax-icu.sh) script to do this for you automatically. It will unpackage the tar file and convert all the necessary files for you automatically.
+*   Encoding considerations: The source code assumes that it is compiled with codepage ibm-1047 (to be exact, the UNIX System Services variant of it). The pax command converts all of the source code files from ASCII to codepage ibm-1047 (USS) EBCDIC. However, some files are binary files and must not be converted, or must be converted back to their original state. You can use the [unpax-icu.sh](https://github.com/unicode-org/icu/blob/main/icu4c/as_is/os390/unpax-icu.sh) script to do this for you automatically. It will unpackage the tar file and convert all the necessary files for you automatically.
 *   z/OS supports both native S/390 hexadecimal floating point and (with OS/390 2.6 and later) IEEE 754 binary floating point. This is a compile time option. Applications built with IEEE should use ICU DLLs that are built with IEEE (and vice versa). The environment variable IEEE390=0 will cause the z/OS version of ICU to be built without IEEE floating point support and use the native hexadecimal floating point. By default ICU is built with IEEE 754 support. Native floating point support is sufficient for codepage conversion, resource bundle and UnicodeString operations, but the Format APIs require IEEE binary floating point.
 *   z/OS introduced the concept of Extra Performance Linkage (XPLINK) to bring performance improvement opportunities to call-intensive C and C++ applications such as ICU. XPLINK is enabled on a DLL-by-DLL basis, so if you are considering using XPLINK in your application that uses ICU, you should consider building the XPLINK-enabled version of ICU. You need to set ICU's environment variable `OS390_XPLINK=1` prior to invoking the make process to produce binaries that are enabled for XPLINK. The XPLINK option, which is available for z/OS 1.2 and later, requires the PTF PQ69418 to build XPLINK enabled binaries.
 *   ICU requires XPLINK for the icuio library. If you want to use the rest of ICU without XPLINK, then you must use the --disable-icuio configure option.
@@ -755,7 +755,7 @@ Before you start building ICU, ICU requires the following:
 
 The following describes how to setup and build ICU. For background information, you should look at the [UNIX build instructions](#how-to-build-and-install-on-unix).
 
-1.  Copy the ICU source .tgz to the IBM i environment, as binary. Also, copy the [unpax-icu.sh](https://github.com/unicode-org/icu/blob/master/icu4c/as_is/os400/unpax-icu.sh) script into the same directory, as a text file.
+1.  Copy the ICU source .tgz to the IBM i environment, as binary. Also, copy the [unpax-icu.sh](https://github.com/unicode-org/icu/blob/main/icu4c/as_is/os400/unpax-icu.sh) script into the same directory, as a text file.
 2.  Create target library. This library will be the target for the resulting modules, programs and service programs. You will specify this library on the OUTPUTDIR environment variable.
 ```
 CRTLIB LIB(_libraryname_)

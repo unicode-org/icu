@@ -92,7 +92,7 @@ def make_commit_wanted(jira_issue):
 
 
 flag_parser = argparse.ArgumentParser(
-    description = "Generates a Markdown report for commits on master since the 'latest' tag.",
+    description = "Generates a Markdown report for commits on main since the 'latest' tag.",
     formatter_class = argparse.ArgumentDefaultsHelpFormatter
 )
 flag_parser.add_argument(
@@ -291,7 +291,7 @@ def print_sectionheader(section):
 
 def main():
     args = flag_parser.parse_args()
-    print("TIP: Have you pulled the latest master? This script only looks at local commits.", file=sys.stderr)
+    print("TIP: Have you pulled the latest main? This script only looks at local commits.", file=sys.stderr)
     if not args.jira_username or not args.jira_password:
         print("WARNING: Jira credentials not supplied. Sensitive tickets will not be found.", file=sys.stderr)
         authenticated = False

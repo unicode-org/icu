@@ -148,7 +148,7 @@ The [ICU Data](../../icudata.md) section of this user guide gives more
 information on how ICU loads resources.
 
 The ICU resource files required for time zone data updates are posted at
-<https://github.com/unicode-org/icu-data/tree/master/tzdata/icunew>. The
+<https://github.com/unicode-org/icu-data/tree/main/tzdata/icunew>. The
 required resource files for ICU version 44 and newer are
 
 * zoneinfo64.res
@@ -162,7 +162,7 @@ For ICU configurations that load data from a .dat package file, replace the time
 zone resources in that file.
 
 1. Download the new .res files from
-   `https://github.com/unicode-org/icu-data/tree/master/tzdata/icunew/<IANA tz version>/44/<platform directory>`.
+   `https://github.com/unicode-org/icu-data/tree/main/tzdata/icunew/<IANA tz version>/44/<platform directory>`.
    * `<IANA tz version>` is a combination of year and letter, such as "2019c".
    * *"44"* is the directory for updates to ICU version 4.4 and newer.
    * `<platform directory>` is "le" for little endian processors, including
@@ -228,7 +228,7 @@ the ICU data path.
 1. Set up the environment necessary to rebuild your specific configuration of
    ICU.
 2. Download the .txt file sources for the updated resources from
-   `https://github.com/unicode-org/icu-data/tree/master/tzdata/icunew/<IANA tz version>/44`
+   `https://github.com/unicode-org/icu-data/tree/main/tzdata/icunew/<IANA tz version>/44`
 3. Copy the downloaded .txt files into the ICU sources for your installation,
    in the subdirectory source/data/misc/
 4. Rebuid ICU.
@@ -248,7 +248,7 @@ sources for general information on building ICU.
 The [ICU4J Time Zone Update Update
 Utility](http://site.icu-project.org/download/icutzu) automates the process of
 updating ICU4J jar files with the latest time zone data. Instructions for use
-are [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-data/blob/master/tzdata/tzu/readme.html).
+are [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-data/blob/main/tzdata/tzu/readme.html).
 
 The updater will work with ICU version 3.4.2 and newer.
 

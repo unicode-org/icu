@@ -41,9 +41,9 @@ Run the tool and save the result into REPORT.md; set fixVersion to the upcoming 
         --rev-range "release-63-1..upstream/maint/maint-64"
         > REPORT.md
 
-If the maintenance branch hasn't been cut yet, use upstream/master as the tip:
+If the maintenance branch hasn't been cut yet, use upstream/main as the tip:
 
-        --rev-range "release-64-2..upstream/master"
+        --rev-range "release-64-2..upstream/main"
 
 Note 1: These examples assume that your remote named "upstream" points to unicode-org/icu, the source of truth.
 
@@ -68,4 +68,4 @@ It should be possible to clear the first two sections of the report simply by co
 
 When ready, create a branch  and push to your fork so others can view the report easily.  Team members should close issues they own that are correctly fixed.  Re-generate the report periodically until it comes back clean.
 
-Note: REPORT.md is not intended to be merged back into master.
+Note: REPORT.md is not intended to be merged back into main.

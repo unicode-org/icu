@@ -46,7 +46,7 @@ Shrew".
 (uppercase) which form case pairs, but are not used in title case.*
 
 Sample code is available in the ICU source code library at
-[icu/source/samples/ustring/ustring.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ustring/ustring.cpp)
+[icu/source/samples/ustring/ustring.cpp](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ustring/ustring.cpp)
 .
 
 Please refer to the following sections in the [The Unicode Standard](http://www.unicode.org/versions/latest/)

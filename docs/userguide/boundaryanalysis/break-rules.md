@@ -35,7 +35,7 @@ ICU includes rules for the standard boundary types (word, line, etc.).
 Applications may also create customized break iterators from their own rules.
 
 ICU's built-in rules are located at
-[icu/icu4c/source/data/brkitr/rules/](https://github.com/unicode-org/icu/tree/master/icu4c/source/data/brkitr/rules).
+[icu/icu4c/source/data/brkitr/rules/](https://github.com/unicode-org/icu/tree/main/icu4c/source/data/brkitr/rules).
 These can serve as examples when writing your own, and as starting point for
 customizations.
 
@@ -271,7 +271,7 @@ The dictionary implementation, on receiving a range of text, will map it to a
 specific dictionary based on script, and then delegate to that dictionary for
 subdividing the range into words.
 
-See, for example, this snippet from the [line break rules](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/brkitr/rules/line.txt):
+See, for example, this snippet from the [line break rules](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/brkitr/rules/line.txt):
 
 ```
     #  Dictionary character set, for triggering language-based break engines. Currently
@@ -401,7 +401,7 @@ Here is the syntax for the boundary rules. (The EBNF Syntax is given below.)
 ## Additional Sample Code
 
 **C/C++**
-See [icu/source/samples/break/](https://github.com/unicode-org/icu/tree/master/icu4c/source/samples/break/)
+See [icu/source/samples/break/](https://github.com/unicode-org/icu/tree/main/icu4c/source/samples/break/)
 in the ICU source distribution for code samples showing the use of ICU boundary analysis.
 
 ## Details about Dictionary-Based Break Iteration

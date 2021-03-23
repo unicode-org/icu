@@ -17,7 +17,7 @@ This is not a cook book process. Familiarity with ICU break iterator behavior an
 The changes will typically come from a proposed update to Unicode UAX 29 or UAX 14,
 or from CLDR based tailorings to these specifications.
 
-As an example, see [CLDR proposal for Extended Indic Grapheme Clusters](https://github.com/unicode-org/cldr/tree/master/common/properties/segments).
+As an example, see [CLDR proposal for Extended Indic Grapheme Clusters](https://github.com/unicode-org/cldr/tree/main/common/properties/segments).
 
 Often ICU will implement draft versions of proposed specification updates, to check that they are complete and consistent, and to identify any issues before they are released.
 
@@ -209,7 +209,7 @@ The rule updates are done first for ICU4C, and then ported (code changes) or mov
     by this test have not yet been.
 
     Make the updates to the test rules and re-run. The rule syntax is described in
-    [icu4c/source/test/testdata/break_rules/README.md](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/testdata/break_rules/README.md)
+    [icu4c/source/test/testdata/break_rules/README.md](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/testdata/break_rules/README.md)
     The test reference rules are in this same directory.
 
     Again, after everything appears to be working, let the test run for an extended length of time. Long runs are especially important with the more complex break rule sets, such as line break.

@@ -6,14 +6,14 @@
 # The Ubuntu images don't have valgrind installed by default, so we need
 # install it first.
 #
-# Only run valgrind on the master and maint branches, and
+# Only run valgrind on the main and maint branches, and
 # batch up any pending changes so that we will only have at most
 # one build running at a given time (since it takes time).
 trigger:
   batch: true
   branches:
     include:
-    - master
+    - main
     - maint/maint-*
   paths:
     include:

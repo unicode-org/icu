@@ -59,13 +59,13 @@ See the [ICU download page](http://site.icu-project.org/download/) to find the s
 
 The subpage for the current release will also include an API Change Report, both for ICU4C and ICU4J, for a complete list of APIs added, removed, or changed in this release.
 
-The list of API changes since the previous ICU4J release is available [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/unicode-org/icu/master/icu4j/APIChangeReport.html).
+The list of API changes since the previous ICU4J release is available [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/unicode-org/icu/main/icu4j/APIChangeReport.html).
 
 Changes in previous releases can also be found the main [ICU download page](http://site.icu-project.org/download) in its version-specific subpages.
 
 ## License Information
 
-The ICU projects (ICU4C and ICU4J) are hosted by the [Unicode Consortium](http://www.unicode.org/). The ICU binary and source files are distributed under the [UNICODE DATA FILES AND SOFTWARE LICENSE](http://www.unicode.org/copyright.html). The full copy of the license and third party software licenses are available in [LICENSE](https://github.com/unicode-org/icu/blob/master/icu4j/main/shared/licenses/LICENSE) file included in this package.
+The ICU projects (ICU4C and ICU4J) are hosted by the [Unicode Consortium](http://www.unicode.org/). The ICU binary and source files are distributed under the [UNICODE DATA FILES AND SOFTWARE LICENSE](http://www.unicode.org/copyright.html). The full copy of the license and third party software licenses are available in [LICENSE](https://github.com/unicode-org/icu/blob/main/icu4j/main/shared/licenses/LICENSE) file included in this package.
 
 ## Platform Dependencies
 
@@ -412,7 +412,7 @@ The files in `icudata.jar` get extracted to `com/ibm/icu/impl/data` in the build
 
 ### Building ICU4J Resources from ICU4C
 
-ICU4J data is built by ICU4C tools. Please see [`icu4j-readme.txt`](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/icu4j-readme.txt) in `icu4c/source/data` for the procedures.
+ICU4J data is built by ICU4C tools. Please see [`icu4j-readme.txt`](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/icu4j-readme.txt) in `icu4c/source/data` for the procedures.
 
 #### Generating Data from CLDR
 
@@ -423,10 +423,10 @@ ICU4J data is built by ICU4C tools. Please see [`icu4j-readme.txt`](https://gith
 1.  Checkout or download CLDR version `release-38`
 2.  Checkout ICU with tag `release-68-1`
 3.  cd to icu4c/source/data directory
-4.  Follow the instructions in [`icu4c/source/data/cldr-icu-readme.txt`](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/cldr-icu-readme.txt)
+4.  Follow the instructions in [`icu4c/source/data/cldr-icu-readme.txt`](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/cldr-icu-readme.txt)
 5.  Rebuild ICU4C with the newly generated data.
 6.  Run ICU4C tests to verify that the new data is good.
-7.  Build ICU4J data from ICU4C data by following the procedures in [`icu4j/source/data/icu4j-readme.txt`](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/icu4j-readme.txt)
+7.  Build ICU4J data from ICU4C data by following the procedures in [`icu4j/source/data/icu4j-readme.txt`](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/icu4j-readme.txt)
 8.  cd to `icu4j` dir
 9.  Build and test icu4j
 

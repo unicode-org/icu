@@ -106,4 +106,4 @@ syntax can be found in the [API
 Documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classRuleBasedNumberFormat.html).
 
 More rule examples can be found in the `RuleBasedNumberFormat` [demo
-source](https://github.com/unicode-org/icu/blob/master/icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java).
+source](https://github.com/unicode-org/icu/blob/main/icu4j/demos/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java).

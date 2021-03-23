@@ -832,4 +832,4 @@ target[targetsize] = 0; /* NULL termination */
 
 ## Conversion Examples
 
-See the [ICU Conversion Examples](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/ucnv/convsamp.cpp) for more information.
+See the [ICU Conversion Examples](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/ucnv/convsamp.cpp) for more information.

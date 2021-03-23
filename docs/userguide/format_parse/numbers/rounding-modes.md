@@ -148,6 +148,6 @@ error if the value cannot be represented exactly without rounding.
 *   Wikipedia article on Rounding:
     <http://en.wikipedia.org/wiki/Rounding#Tie-breaking>
 *   Live rounding mode chart: [Rounding Mode
-    Chart](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-demos/blob/master/roundmode/round.html)
+    Chart](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-demos/blob/main/roundmode/round.html)
     and [Source
-    Code](https://github.com/unicode-org/icu-demos/tree/master/roundmode)
+    Code](https://github.com/unicode-org/icu-demos/tree/main/roundmode)
