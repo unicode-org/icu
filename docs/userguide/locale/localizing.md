@@ -124,7 +124,7 @@ Features:
 
 7. Source files can be in any charset. Unicode signature byte sequences are recognized automatically (UTF-8/16, SCSU, ...), otherwise the tool takes a charset name on the command line.
 
-Defined at: [icu-docs/master/design/bnf_rb.txt](https://raw.githubusercontent.com/unicode-org/icu-docs/master/design/bnf_rb.txt)
+Defined at: [icu-docs/main/design/bnf_rb.txt](https://raw.githubusercontent.com/unicode-org/icu-docs/main/design/bnf_rb.txt)
 
 To use with ICU4C, see the [Resource Bundle APIs](resources#resource-bundle-apis) section of this userguide.
 

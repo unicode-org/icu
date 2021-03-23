@@ -84,7 +84,7 @@ with the pattern in a new version.
 #### How can I see all API changes between two different ICU versions?
 
 For every ICU4J release, we publish
-[APIChangeReport.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4j/APIChangeReport.html)
+[APIChangeReport.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4j/APIChangeReport.html)
 which captures all API changes since previous reference release.
 However, someone may want to see the changes between the
 current release and much older ICU4J version. For example, you're currently
@@ -95,10 +95,10 @@ generate a change report page by following steps.
     archive](http://site.icu-project.org/download/64#TOC-ICU4J-Download)
     from the ICU 64 download page and extract files to your local system.
 2.  Set up ICU4J build environment as explained in
-    [readme.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4j/readme.html)
+    [readme.html](https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/main/icu4j/readme.html)
     included in the root directory of the ICU4J source package archive.
 3.  Edit
-    [build.properties](https://github.com/unicode-org/icu/blob/master/icu4j/build.properties)
+    [build.properties](https://github.com/unicode-org/icu/blob/main/icu4j/build.properties)
     in the root directory and change the property value api.report.prev.version
     from 63 to 60.
 4.  Invoke ant target "apireport".

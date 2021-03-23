@@ -1171,16 +1171,16 @@ pointers to owned memory must always be either NULL or point to owned objects.
 
 Internally:
 
-[cmemory.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/cmemory.h)
+[cmemory.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/cmemory.h)
 defines the `LocalMemory` class for chunks of memory of primitive types which
 will be `uprv_free()`'ed.
 
-[cmemory.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/cmemory.h)
+[cmemory.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/cmemory.h)
 also defines `MaybeStackArray` and `MaybeStackHeaderAndArray` which automate
 management of arrays.
 
 Use `CharString`
-([charstr.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/charstr.h))
+([charstr.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/charstr.h))
 for `char *` strings that you build and modify.
 
 #### Global Inline Functions

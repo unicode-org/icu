@@ -171,5 +171,5 @@ text. The text and the iteration range are set in the implementing subclasses.
 ## Additional Sample Code
 
 C/C++: See
-[icu4c/source/samples/citer/](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/citer/)
+[icu4c/source/samples/citer/](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/citer/)
 in the ICU source distribution for code samples.

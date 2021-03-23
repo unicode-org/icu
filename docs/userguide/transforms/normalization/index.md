@@ -108,7 +108,7 @@ invoke `gennorm2 --help`.
 
 gennorm2 starts with no data. If you want to include standard Unicode
 Normalization data, use the files in
-[{ICU4C}/source/data/unidata/norm2/](https://github.com/unicode-org/icu/tree/master/icu4c/source/data/unidata/norm2)
+[{ICU4C}/source/data/unidata/norm2/](https://github.com/unicode-org/icu/tree/main/icu4c/source/data/unidata/norm2)
 . You can modify one of them, or provide it together with one or more additional
 files that add or remove mappings.
 

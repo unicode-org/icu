@@ -48,7 +48,7 @@ See also
 *   [UCA: Variable
     Weighting](http://www.unicode.org/reports/tr10/#Variable_Weighting)
 *   [LDML: Setting
-    Options](https://htmlpreview.github.io/?https://github.com/unicode-org/cldr/blob/master/docs/ldml/tr35-collation.html#Setting_Options)
+    Options](https://htmlpreview.github.io/?https://github.com/unicode-org/cldr/blob/main/docs/ldml/tr35-collation.html#Setting_Options)
 
 Here is an overview of the sorting results with these options.
 

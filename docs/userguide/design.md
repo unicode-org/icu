@@ -605,7 +605,7 @@ Here are some things to realize about the chart.
 
 Starting with ICU 49, the dependencies of code files (.o files compiled from
 .c/.cpp) are documented in
-[source/test/depstest/dependencies.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/depstest/dependencies.txt).
+[source/test/depstest/dependencies.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/depstest/dependencies.txt).
 Adjacent Python code is used to parse this file and to
 [verify](http://site.icu-project.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies)
 that it matches the actual dependencies of the code files.

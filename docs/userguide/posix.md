@@ -107,14 +107,14 @@ naturally the case because the Java language and the JDK use UTF-16.
 ICU uses and/or provides direct access to all of the [Unicode
 properties](strings/properties.md) which provide a much finer-grained
 classification of characters than [C/POSIX character
-classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/posix_classes.html).
+classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/posix_classes.html).
 
 In C/C++ source code character and string literals, ICU uses only "invariant"
 characters. They are the subset of graphic ASCII characters that are almost
 always encoded with the same byte values on all systems. (One set of byte values
 for ASCII-based systems, and another such set of byte values for EBCDIC
 systems.) See
-[`utypes.h`](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utypes.h)
+[`utypes.h`](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utypes.h)
 for the set of "invariant" characters.
 
 With the use of Unicode, the implementation of many of the Unicode standard
@@ -203,7 +203,7 @@ locale's respective character class.
     Technical Standard #18: Unicode Regular Expressions](http://www.unicode.org/reports/tr18/#Compatibility_Properties)
     and see the mailing list archives for the unicode list (on unicode.org). See
     also the ICU design document about [C/POSIX character
-    classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/posix_classes.html).
+    classes](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/posix_classes.html).
 
 #### ICU
 

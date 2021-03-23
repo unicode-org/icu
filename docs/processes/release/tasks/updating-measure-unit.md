@@ -115,7 +115,7 @@ will be considered new for the next release too.
 ## Updating units.txt and unitConstants
 
 The standard ldml2icu process is used to update ICU's resource files (see
-[cldr-icu-readme.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/cldr-icu-readme.txt)).
+[cldr-icu-readme.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/cldr-icu-readme.txt)).
 CLDR's units.xml defines conversion rates in terms of some constants defined in
 `unitConstants`.
 

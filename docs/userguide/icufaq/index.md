@@ -249,7 +249,7 @@ closer to Java, which is important for porting between ICU4C and ICU4J. We use
 functions and type-safe constants instead of #define, etc. However, we do not
 use exceptions, and we do not use the Standard Template Library (STL), so
 ICU4C's dependencies on the C++ library are minimal. See the new
-[dependencies.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/depstest/dependencies.txt)
+[dependencies.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/depstest/dependencies.txt)
 and search for "group: cplusplus".
 
 As ICU does not use exceptions, the GCC option `-fno-exceptions` will reduce or
@@ -348,10 +348,10 @@ functions are provided for your convenience instead of using the `ucnv_\*` API.
 
 You can also take a look at the `UTF_\*`, `UTF8_\*`, `UTF16_\*` and `UTF32_\*`
 macros, which are defined in
-[unicode/utf.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf.h),
-[unicode/utf8.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf8.h),
-[unicode/utf16.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf16.h)
-and [unicode/utf32.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utf32.h).
+[unicode/utf.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utf.h),
+[unicode/utf8.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utf8.h),
+[unicode/utf16.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utf16.h)
+and [unicode/utf32.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utf32.h).
 These macros are helpful for programmers that need to manipulate and process
 Unicode strings.
 
@@ -431,7 +431,7 @@ to check for errors after calling a function by using the `U_SUCCESS` and
 and `U_FAILURE` returns true when the function did NOT run properly. You may
 handle specific errors from a function by checking the exact value of error. The
 possible values of `UErrorCode` are located in
-[utypes.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utypes.h)
+[utypes.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utypes.h)
 of the common project. Before any function is called with a `UErrorCode`, it
 must be initialized to `U_ZERO_ERROR`.
 

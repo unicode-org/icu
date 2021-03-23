@@ -32,9 +32,9 @@ processing, and the data is publicly provided and kept up-to-date. See
 https://www.unicode.org/ and https://www.unicode.org/main.html for more information.
 
 Sample code is available in the ICU source code library at
-[icu4c/source/samples/props/props.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/samples/props/props.cpp).
+[icu4c/source/samples/props/props.cpp](https://github.com/unicode-org/icu/blob/main/icu4c/source/samples/props/props.cpp).
 See also the source code for the [Unicode
-browser](https://github.com/unicode-org/icu-demos/tree/master/ubrowse) demo
+browser](https://github.com/unicode-org/icu-demos/tree/main/ubrowse) demo
 application, which can be used
 [online](http://demo.icu-project.org/icu-bin/ubrowse) to browse Unicode
 characters with their properties.
@@ -226,7 +226,7 @@ change or add them at build-time. This is doable but not easy.
 
 It is done by modifying the Character Database files copied into the ICU source
 tree at
-[icu4c/source/data/unidata](https://github.com/unicode-org/icu/tree/master/icu4c/source/data/unidata).
+[icu4c/source/data/unidata](https://github.com/unicode-org/icu/tree/main/icu4c/source/data/unidata).
 Since ICU 49, most of the properties have been combined into one file,
 unidata/ppucd.txt (see the [Preparsed
 UCD](http://site.icu-project.org/design/props/ppucd) design doc). Some of the
@@ -238,7 +238,7 @@ site](http://www.unicode.org/reports/tr44/) for more information). After
 modifying one or more of these files, the ICU data needs to be rebuilt, and the
 resulting files need to be checked into the ICU source tree. The files are
 processed by special ICU tools outside of the normal ICU build. The
-[unidata/changes.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/data/unidata/changes.txt)
+[unidata/changes.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/changes.txt)
 file documents the process that has been used for the last several Unicode
 version updates; skip the file preparation and API update steps.
 
