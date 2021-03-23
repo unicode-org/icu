@@ -55,6 +55,10 @@ static float StrtofChar(const char* str, int exponent) {
   return Strtof(StringToVector(str), exponent);
 }
 
+static float StrtofTrimmedChar(const char* str, int exponent) {
+  return StrtofTrimmed(StringToVector(str), exponent);
+}
+
 
 TEST(Strtod) {
   Vector<const char> vector;
@@ -876,6 +880,194 @@ TEST(Strtof) {
 
 }
 
+TEST(StrtofTrimmed) {
+  Vector<const char> vector;
+
+  vector = StringToVector("1");
+  CHECK_EQ(1.0f, StrtofTrimmed(vector, 0));
+  CHECK_EQ(10.0f, StrtofTrimmed(vector, 1));
+  CHECK_EQ(100.0f, StrtofTrimmed(vector, 2));
+  CHECK_EQ(1e20f, StrtofTrimmed(vector, 20));
+  CHECK_EQ(1e22f, StrtofTrimmed(vector, 22));
+  CHECK_EQ(1e23f, StrtofTrimmed(vector, 23));
+  CHECK_EQ(1e35f, StrtofTrimmed(vector, 35));
+  CHECK_EQ(1e36f, StrtofTrimmed(vector, 36));
+  CHECK_EQ(1e37f, StrtofTrimmed(vector, 37));
+  CHECK_EQ(1e-1f, StrtofTrimmed(vector, -1));
+  CHECK_EQ(1e-2f, StrtofTrimmed(vector, -2));
+  CHECK_EQ(1e-5f, StrtofTrimmed(vector, -5));
+  CHECK_EQ(1e-20f, StrtofTrimmed(vector, -20));
+  CHECK_EQ(1e-22f, StrtofTrimmed(vector, -22));
+  CHECK_EQ(1e-23f, StrtofTrimmed(vector, -23));
+  CHECK_EQ(1e-25f, StrtofTrimmed(vector, -25));
+  CHECK_EQ(1e-39f, StrtofTrimmed(vector, -39));
+
+  vector = StringToVector("2");
+  CHECK_EQ(2.0f, StrtofTrimmed(vector, 0));
+  CHECK_EQ(20.0f, StrtofTrimmed(vector, 1));
+  CHECK_EQ(200.0f, StrtofTrimmed(vector, 2));
+  CHECK_EQ(2e20f, StrtofTrimmed(vector, 20));
+  CHECK_EQ(2e22f, StrtofTrimmed(vector, 22));
+  CHECK_EQ(2e23f, StrtofTrimmed(vector, 23));
+  CHECK_EQ(2e35f, StrtofTrimmed(vector, 35));
+  CHECK_EQ(2e36f, StrtofTrimmed(vector, 36));
+  CHECK_EQ(2e37f, StrtofTrimmed(vector, 37));
+  CHECK_EQ(2e-1f, StrtofTrimmed(vector, -1));
+  CHECK_EQ(2e-2f, StrtofTrimmed(vector, -2));
+  CHECK_EQ(2e-5f, StrtofTrimmed(vector, -5));
+  CHECK_EQ(2e-20f, StrtofTrimmed(vector, -20));
+  CHECK_EQ(2e-22f, StrtofTrimmed(vector, -22));
+  CHECK_EQ(2e-23f, StrtofTrimmed(vector, -23));
+  CHECK_EQ(2e-25f, StrtofTrimmed(vector, -25));
+  CHECK_EQ(2e-39f, StrtofTrimmed(vector, -39));
+
+  vector = StringToVector("9");
+  CHECK_EQ(9.0f, StrtofTrimmed(vector, 0));
+  CHECK_EQ(90.0f, StrtofTrimmed(vector, 1));
+  CHECK_EQ(900.0f, StrtofTrimmed(vector, 2));
+  CHECK_EQ(9e20f, StrtofTrimmed(vector, 20));
+  CHECK_EQ(9e22f, StrtofTrimmed(vector, 22));
+  CHECK_EQ(9e23f, StrtofTrimmed(vector, 23));
+  CHECK_EQ(9e35f, StrtofTrimmed(vector, 35));
+  CHECK_EQ(9e36f, StrtofTrimmed(vector, 36));
+  CHECK_EQ(9e37f, StrtofTrimmed(vector, 37));
+  CHECK_EQ(9e-1f, StrtofTrimmed(vector, -1));
+  CHECK_EQ(9e-2f, StrtofTrimmed(vector, -2));
+  CHECK_EQ(9e-5f, StrtofTrimmed(vector, -5));
+  CHECK_EQ(9e-20f, StrtofTrimmed(vector, -20));
+  CHECK_EQ(9e-22f, StrtofTrimmed(vector, -22));
+  CHECK_EQ(9e-23f, StrtofTrimmed(vector, -23));
+  CHECK_EQ(9e-25f, StrtofTrimmed(vector, -25));
+  CHECK_EQ(9e-39f, StrtofTrimmed(vector, -39));
+
+  vector = StringToVector("12345");
+  CHECK_EQ(12345.0f, StrtofTrimmed(vector, 0));
+  CHECK_EQ(123450.0f, StrtofTrimmed(vector, 1));
+  CHECK_EQ(1234500.0f, StrtofTrimmed(vector, 2));
+  CHECK_EQ(12345e20f, StrtofTrimmed(vector, 20));
+  CHECK_EQ(12345e22f, StrtofTrimmed(vector, 22));
+  CHECK_EQ(12345e23f, StrtofTrimmed(vector, 23));
+  CHECK_EQ(12345e30f, StrtofTrimmed(vector, 30));
+  CHECK_EQ(12345e31f, StrtofTrimmed(vector, 31));
+  CHECK_EQ(12345e32f, StrtofTrimmed(vector, 32));
+  CHECK_EQ(12345e-1f, StrtofTrimmed(vector, -1));
+  CHECK_EQ(12345e-2f, StrtofTrimmed(vector, -2));
+  CHECK_EQ(12345e-5f, StrtofTrimmed(vector, -5));
+  CHECK_EQ(12345e-20f, StrtofTrimmed(vector, -20));
+  CHECK_EQ(12345e-22f, StrtofTrimmed(vector, -22));
+  CHECK_EQ(12345e-23f, StrtofTrimmed(vector, -23));
+  CHECK_EQ(12345e-25f, StrtofTrimmed(vector, -25));
+  CHECK_EQ(12345e-39f, StrtofTrimmed(vector, -39));
+
+  vector = StringToVector("12345678901234");
+  CHECK_EQ(12345678901234.0f, StrtofTrimmed(vector, 0));
+  CHECK_EQ(123456789012340.0f, StrtofTrimmed(vector, 1));
+  CHECK_EQ(1234567890123400.0f, StrtofTrimmed(vector, 2));
+  CHECK_EQ(12345678901234e20f, StrtofTrimmed(vector, 20));
+  CHECK_EQ(12345678901234e22f, StrtofTrimmed(vector, 22));
+  CHECK_EQ(12345678901234e23f, StrtofTrimmed(vector, 23));
+  CHECK_EQ(12345678901234e-1f, StrtofTrimmed(vector, -1));
+  CHECK_EQ(12345678901234e-2f, StrtofTrimmed(vector, -2));
+  CHECK_EQ(12345678901234e-5f, StrtofTrimmed(vector, -5));
+  CHECK_EQ(12345678901234e-20f, StrtofTrimmed(vector, -20));
+  CHECK_EQ(12345678901234e-22f, StrtofTrimmed(vector, -22));
+  CHECK_EQ(12345678901234e-23f, StrtofTrimmed(vector, -23));
+  CHECK_EQ(12345678901234e-25f, StrtofTrimmed(vector, -25));
+  CHECK_EQ(12345678901234e-39f, StrtofTrimmed(vector, -39));
+
+  vector = StringToVector("123456789012345");
+  CHECK_EQ(123456789012345.0f, StrtofTrimmed(vector, 0));
+  CHECK_EQ(1234567890123450.0f, StrtofTrimmed(vector, 1));
+  CHECK_EQ(12345678901234500.0f, StrtofTrimmed(vector, 2));
+  CHECK_EQ(123456789012345e20f, StrtofTrimmed(vector, 20));
+  CHECK_EQ(123456789012345e22f, StrtofTrimmed(vector, 22));
+  CHECK_EQ(123456789012345e23f, StrtofTrimmed(vector, 23));
+  CHECK_EQ(123456789012345e-1f, StrtofTrimmed(vector, -1));
+  CHECK_EQ(123456789012345e-2f, StrtofTrimmed(vector, -2));
+  CHECK_EQ(123456789012345e-5f, StrtofTrimmed(vector, -5));
+  CHECK_EQ(123456789012345e-20f, StrtofTrimmed(vector, -20));
+  CHECK_EQ(123456789012345e-22f, StrtofTrimmed(vector, -22));
+  CHECK_EQ(123456789012345e-23f, StrtofTrimmed(vector, -23));
+  CHECK_EQ(123456789012345e-25f, StrtofTrimmed(vector, -25));
+  CHECK_EQ(123456789012345e-39f, StrtofTrimmed(vector, -39));
+
+  CHECK_EQ(0.0f, StrtofTrimmedChar("", 1324));
+  CHECK_EQ(0.0f, StrtofTrimmedChar("2", -324));
+  CHECK_EQ(1e-45f, StrtofTrimmedChar("1", -45));
+  // It would be more readable to put non-zero literals on the left side (i.e.
+  //   CHECK_EQ(1e-46, StrtofChar("1", -45))), but then Gcc complains that
+  // they are truncated to zero.
+  CHECK_EQ(0.0f, StrtofTrimmedChar("1", -46));
+  CHECK_EQ(0.0f, StrtofTrimmedChar("1", -47));
+  CHECK_EQ(1e-45f, StrtofTrimmedChar("1", -45));
+  CHECK_EQ(1e-45f, StrtofTrimmedChar("8", -46));
+
+  // It would be more readable to put the literals (and not Double::Infinity())
+  // on the left side (i.e. CHECK_EQ(3e38, StrtofChar("3", 38))), but then Gcc
+  // complains that the floating constant exceeds range of 'double'.
+  CHECK_EQ(Single::Infinity(), StrtofTrimmedChar("3", 39));
+  CHECK_EQ(3e38f, StrtofTrimmedChar("3", 38));
+  CHECK_EQ(3401e35f, StrtofTrimmedChar("3401", 35));
+  CHECK_EQ(3401e34f, StrtofTrimmedChar("3401", 34));
+  CHECK_EQ(34e37f, StrtofTrimmedChar("34", 37));
+  CHECK_EQ(3.4028234e+38f, StrtofTrimmedChar("34028235676", 28));
+  CHECK_EQ(3.4028234e+38f, StrtofTrimmedChar("34028235677", 28));
+  CHECK_EQ(Single::Infinity(), StrtofTrimmedChar("34028235678", 28));
+
+  // The following number is the result of 89255.0/1e-22. Both floating-point
+  // numbers can be accurately represented with doubles. However on Linux,x86
+  // the floating-point stack is set to 80bits and the double-rounding
+  // introduces an error.
+  CHECK_EQ(89255e-22f, StrtofTrimmedChar("89255", -22));
+
+  // Boundary cases. Boundaries themselves should round to even.
+  //
+  // 0x4f012334 = 2166567936
+  //      next:   2166568192
+  //  boundary:   2166568064 should round down.
+  CHECK_EQ(2166567936.0f, StrtofTrimmedChar("2166567936", 0));
+  CHECK_EQ(2166568192.0f, StrtofTrimmedChar("2166568192", 0));
+  CHECK_EQ(2166567936.0f, StrtofTrimmedChar("2166568064", 0));
+  CHECK_EQ(2166567936.0f, StrtofTrimmedChar("216656806399999", -5));
+  CHECK_EQ(2166568192.0f, StrtofTrimmedChar("216656806400001", -5));
+  // Verify that we don't double round.
+  // Get the boundary of the boundary.
+  CHECK_EQ(2.1665680640000002384185791015625e9, 2166568064.0);
+  // Visual Studio gets this wrong and believes that these two numbers are the
+  // same doubles. We want to test our conversion and not the compiler. We
+  // therefore disable the check.
+#ifndef _MSC_VER
+  CHECK(2.16656806400000023841857910156251e9 != 2166568064.0);
+#endif
+  CHECK_EQ(2166568192.0f, StrtofTrimmedChar("21665680640000002384185791015625", -22));
+
+  // 0x4fffffff = 8589934080
+  //      next:   8589934592
+  //  boundary:   8589934336 should round up.
+  CHECK_EQ(8589934592.0f, StrtofTrimmedChar("8589934592", 0));
+  CHECK_EQ(8589934592.0f, StrtofTrimmedChar("8589934336", 0));
+  CHECK_EQ(8589934080.0f, StrtofTrimmedChar("858993433599999", -5));
+  CHECK_EQ(8589934592.0f, StrtofTrimmedChar("858993433600001", -5));
+  // Verify that we don't double round.
+  // Get the boundary of the boundary.
+  // Visual Studio gets this wrong. To avoid failing tests because of a broken
+  // compiler we disable the following two tests. They were only testing the
+  // compiler. The real test is still active.
+#ifndef _MSC_VER
+  CHECK_EQ(8.589934335999999523162841796875e+09, 8589934336.0);
+  CHECK(8.5899343359999995231628417968749e+09 != 8589934336.0);
+#endif
+  CHECK_EQ(8589934080.0f, StrtofTrimmedChar("8589934335999999523162841796875", -21));
+
+  // 0x4f000000 = 2147483648
+  //      next:   2147483904
+  //  boundary:   2147483776 should round down.
+  CHECK_EQ(2147483648.0f, StrtofTrimmedChar("2147483648", 0));
+  CHECK_EQ(2147483904.0f, StrtofTrimmedChar("2147483904", 0));
+  CHECK_EQ(2147483648.0f, StrtofTrimmedChar("2147483776", 0));
+  CHECK_EQ(2147483648.0f, StrtofTrimmedChar("214748377599999", -5));
+  CHECK_EQ(2147483904.0f, StrtofTrimmedChar("214748377600001", -5));
+}
 
 static int CompareBignumToDiyFp(const Bignum& bignum_digits,
                                 int bignum_exponent,
