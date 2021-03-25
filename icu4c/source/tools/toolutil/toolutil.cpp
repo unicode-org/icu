@@ -30,6 +30,7 @@
 
 #include <stdio.h>
 #include <sys/stat.h>
+#include <fstream>
 #include <time.h>
 #include "unicode/utypes.h"
 
@@ -209,6 +210,37 @@ uprv_fileExists(const char *file) {
   }
 }
 #endif
+
+U_CAPI int32_t U_EXPORT2
+uprv_compareGoldenFiles(
+        const char* buffer, int32_t bufferLen,
+        const char* goldenFilePath,
+        bool overwrite) {
+
+    if (overwrite) {
+        std::ofstream ofs;
+        ofs.open(goldenFilePath);
+        ofs.write(buffer, bufferLen);
+        ofs.close();
+        return -1;
+    }
+
+    std::ifstream ifs(goldenFilePath, std::ifstream::in);
+    int32_t pos = 0;
+    char c;
+    while ((c = ifs.get()) != std::char_traits<char>::eof() && pos < bufferLen) {
+        if (c != buffer[pos]) {
+            // Files differ at this position
+            return pos;
+        }
+        pos++;
+    }
+    if (pos < bufferLen || c != std::char_traits<char>::eof()) {
+        // Files are different lengths
+        return pos;
+    }
+    return -1;
+}
 
 /*U_CAPI UDate U_EXPORT2
 uprv_getModificationDate(const char *pathname, UErrorCode *status)

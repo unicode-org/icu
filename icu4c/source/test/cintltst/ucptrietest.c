@@ -18,6 +18,8 @@
 #include "cmemory.h"
 #include "udataswp.h"
 #include "cintltst.h"
+#include "writesrc.h"
+#include "toolutil.h"
 
 void addUCPTrieTest(TestNode** root);
 
@@ -705,6 +707,61 @@ testBuilder(const char *testName, const UMutableCPTrie *mutableTrie,
     testTrieGetRanges(testName, NULL, mutableTrie, UCPMAP_RANGE_NORMAL, 0, checkRanges, countCheckRanges);
 }
 
+static void
+trieTestGolden(const char *testName,
+             const UCPTrie* trie,
+             const CheckRange checkRanges[],
+             int32_t countCheckRanges) {
+    log_verbose("golden testing Trie '%s'\n", testName);
+
+    UErrorCode status = U_ZERO_ERROR;
+    const char *testdatapath = loadSourceTestData(&status);
+    char goldendatapath[512];
+    // note: snprintf always writes a NUL terminator.
+    snprintf(goldendatapath, 512, "%scodepointtrie%s%s.toml",
+        testdatapath, U_FILE_SEP_STRING, testName);
+
+    // Write the data into a tmpfile (memstream is not portable)
+    FILE* stream = tmpfile();
+    usrc_writeCopyrightHeader(stream, "#", 2021);
+    usrc_writeFileNameGeneratedBy(stream, "#", testName, "ucptrietest.c");
+    fputs("[code_point_trie.struct]\n", stream);
+    usrc_writeUCPTrie(stream, testName, trie, UPRV_TARGET_SYNTAX_TOML);
+    fputs("\n[code_point_trie.testdata]\n", stream);
+    fputs("# Array of (limit, value) pairs\n", stream);
+    usrc_writeArray(stream, "checkRanges = [\n  ",
+        // Note: CheckRange is a tuple of two 32-bit words
+        checkRanges, 32, countCheckRanges*2,
+        "  ", "\n]\n");
+
+    // Convert the stream into a memory buffer
+    long fsize = ftell(stream);
+    void* memoryBuffer = malloc(fsize + 1);
+    if (memoryBuffer == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        log_err_status(status, "Could not allocate buffer: %s", goldendatapath);
+        goto cleanup;
+    }
+    fseek(stream, 0, SEEK_SET);
+    fread(memoryBuffer, 1, fsize, stream);
+
+    int32_t testResult = uprv_compareGoldenFiles(
+        memoryBuffer, fsize,
+        goldendatapath,
+        getTestOption(WRITE_GOLDEN_DATA_OPTION));
+
+    if (testResult >= 0) {
+        log_err(
+            "Golden files for '%s' differ at index %d; "
+            "run cintltst with -G to write new goldens",
+            testName, testResult);
+    }
+
+cleanup:
+    fclose(stream);
+    free(memoryBuffer);
+}
+
 static uint32_t storage[120000];
 static uint32_t swapped[120000];
 
@@ -761,6 +818,19 @@ testTrieSerialize(const char *testName, UMutableCPTrie *mutableTrie,
         }
 
         testTrie(testName, trie, type, valueWidth, checkRanges, countCheckRanges);
+
+        // Compare the tries with golden data, also used for ICU4X
+        // Don't print out cloning tests (redundant data)
+        // Don't print out stress tests (file size too large)
+        // Omit some of the short-all-same tests (~25KB apiece)
+        if (!withSwap &&
+                uprv_strncmp("many-", testName, 5) != 0 &&
+                uprv_strncmp("much-", testName, 5) != 0 &&
+                uprv_strncmp("short-all-same.16", testName, 17) != 0 &&
+                uprv_strncmp("short-all-same.32", testName, 17) != 0) {
+            trieTestGolden(testName, trie, checkRanges, countCheckRanges);
+        }
+
         ucptrie_close(trie);
         trie=NULL;
 
@@ -930,17 +1000,15 @@ testTrieSerializeAllValueWidth(const char *testName,
 static UMutableCPTrie *
 makeTrieWithRanges(const char *testName, UBool withClone,
                    const SetRange setRanges[], int32_t countSetRanges,
-                   const CheckRange checkRanges[], int32_t countCheckRanges) {
+                   uint32_t initialValue, uint32_t errorValue) {
     UMutableCPTrie *mutableTrie;
-    uint32_t initialValue, errorValue;
     uint32_t value;
     UChar32 start, limit;
     int32_t i;
     UErrorCode errorCode;
 
-    log_verbose("\ntesting Trie '%s'\n", testName);
+    log_verbose("testing Trie '%s'\n", testName);
     errorCode=U_ZERO_ERROR;
-    getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);
     mutableTrie = umutablecptrie_open(initialValue, errorValue, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: umutablecptrie_open(%s) failed: %s\n", testName, u_errorName(errorCode));
@@ -985,8 +1053,10 @@ static void
 testTrieRanges(const char *testName, UBool withClone,
                const SetRange setRanges[], int32_t countSetRanges,
                const CheckRange checkRanges[], int32_t countCheckRanges) {
+    uint32_t initialValue, errorValue;
+    getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);
     UMutableCPTrie *mutableTrie = makeTrieWithRanges(
-        testName, withClone, setRanges, countSetRanges, checkRanges, countCheckRanges);
+        testName, withClone, setRanges, countSetRanges, initialValue, errorValue);
     if (mutableTrie != NULL) {
         mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, withClone,
                                                      checkRanges, countCheckRanges);
@@ -1451,9 +1521,13 @@ TrieTestGetRangesFixedSurr(void) {
         { 0x110000, 0 }
     };
 
+    uint32_t initialValue, errorValue;
+    getSpecialValues(
+        checkRangesFixedLeadSurr1, UPRV_LENGTHOF(checkRangesFixedLeadSurr1),
+        &initialValue, &errorValue);
     UMutableCPTrie *mutableTrie = makeTrieWithRanges(
         "fixedSurr", FALSE, setRangesFixedSurr, UPRV_LENGTHOF(setRangesFixedSurr),
-        checkRangesFixedLeadSurr1, UPRV_LENGTHOF(checkRangesFixedLeadSurr1));
+        initialValue, errorValue);
     UErrorCode errorCode = U_ZERO_ERROR;
     if (mutableTrie == NULL) {
         return;
