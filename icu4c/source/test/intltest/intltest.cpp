@@ -1647,7 +1647,10 @@ const char* IntlTest::getTestDataPath(UErrorCode& err) {
     return loadTestData(err);
 }
 
-/* Returns the path to icu/source/test/testdata/ */
+/**
+ * Returns the path to icu/source/test/testdata/
+ * Note: this function is parallel with C loadSourceTestData in cintltst.c
+ */
 const char *IntlTest::getSourceTestData(UErrorCode& /*err*/) {
     const char *srcDataDir = NULL;
 #ifdef U_TOPSRCDIR

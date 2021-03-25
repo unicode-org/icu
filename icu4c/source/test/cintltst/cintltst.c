@@ -576,6 +576,31 @@ const char* loadTestData(UErrorCode* err){
     return _testDataPath;
 }
 
+/**
+ * Returns the path to icu/source/test/testdata/
+ * Note: this function is parallel with C++ getSourceTestData in intltest.cpp
+ */
+const char *loadSourceTestData(UErrorCode* err) {
+    (void)err;
+    const char *srcDataDir = NULL;
+#ifdef U_TOPSRCDIR
+    srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING"test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+#else
+    srcDataDir = ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+    FILE *f = fopen(".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING "rbbitst.txt", "r");
+    if (f) {
+        /* We're in icu/source/test/intltest/ */
+        fclose(f);
+    }
+    else {
+        /* We're in icu/source/test/intltest/Platform/(Debug|Release) */
+        srcDataDir = ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING
+                     "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+    }
+#endif
+    return srcDataDir;
+}
+
 #define CTEST_MAX_TIMEZONE_SIZE 256
 static UChar gOriginalTimeZone[CTEST_MAX_TIMEZONE_SIZE] = {0};
 
