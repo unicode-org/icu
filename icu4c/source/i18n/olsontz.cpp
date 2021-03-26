@@ -274,6 +274,7 @@ OlsonTimeZone::OlsonTimeZone(const OlsonTimeZone& other) :
  * Assignment operator
  */
 OlsonTimeZone& OlsonTimeZone::operator=(const OlsonTimeZone& other) {
+    if (this == &other) { return *this; }  // self-assignment: no-op
     canonicalID = other.canonicalID;
 
     transitionTimesPre32 = other.transitionTimesPre32;
