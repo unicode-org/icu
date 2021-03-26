@@ -34,6 +34,7 @@ StringProp::StringProp(const StringProp &other) : StringProp() {
 
 // Copy assignment operator
 StringProp &StringProp::operator=(const StringProp &other) {
+    if (this == &other) { return *this; }  // self-assignment: no-op
     fLength = 0;
     fError = other.fError;
     if (fValue != nullptr) {
