@@ -5250,6 +5250,20 @@ public class ULocaleTest extends TestFmwk {
         Assert.assertEquals("und-FR-u-sd-frges", canonicalTag("und-FR-u-sd-frg"));
         Assert.assertEquals("und-LU-u-sd-lucl", canonicalTag("und-LU-u-sd-lud"));
 
+        // ICU-21550
+        Assert.assertEquals("und-u-rg-axzzzz", canonicalTag("und-u-rg-fi01"));
+        Assert.assertEquals("und-u-rg-cpzzzz", canonicalTag("und-u-rg-frcp"));
+        Assert.assertEquals("und-u-rg-pmzzzz", canonicalTag("und-u-rg-frpm"));
+        Assert.assertEquals("und-u-rg-vizzzz", canonicalTag("und-u-rg-usvi"));
+        Assert.assertEquals("und-u-rg-hkzzzz", canonicalTag("und-u-rg-cn91"));
+        Assert.assertEquals("und-u-rg-awzzzz", canonicalTag("und-u-rg-nlaw"));
+
+        Assert.assertEquals("und-NO-u-sd-rezzzz", canonicalTag("und-NO-u-sd-frre"));
+        Assert.assertEquals("und-CN-u-sd-cwzzzz", canonicalTag("und-CN-u-sd-nlcw"));
+        Assert.assertEquals("und-CZ-u-sd-guzzzz", canonicalTag("und-CZ-u-sd-usgu"));
+        Assert.assertEquals("und-FR-u-sd-tazzzz", canonicalTag("und-FR-u-sd-shta"));
+        Assert.assertEquals("und-FR-u-sd-twzzzz", canonicalTag("und-FR-u-sd-cn71"));
+
         // ICU-21401
         Assert.assertEquals("xtg", canonicalTag("cel-gaulish"));
 
