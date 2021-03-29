@@ -1519,9 +1519,12 @@ AliasReplacer::replaceSubdivision(
         // Found replacement data for this subdivision.
         size_t len = (firstSpace != nullptr) ?
             (firstSpace - replacement) : uprv_strlen(replacement);
-        // Ignore len == 2, see CLDR-14312
-        if (3 <= len && len <= 8) {
+        if (2 <= len && len <= 8) {
             output.append(replacement, (int32_t)len, status);
+            if (2 == len) {
+                // Add 'zzzz' based on changes to UTS #35 for CLDR-14312.
+                output.append("zzzz", 4, status);
+            }
         }
         return true;
     }

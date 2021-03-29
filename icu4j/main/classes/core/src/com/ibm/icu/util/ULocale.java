@@ -1402,11 +1402,12 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                     throw new IllegalArgumentException(
                         "Incorrect key [" + aliasFrom + "] in alias:territory.");
                 }
-                if (aliasTo.length() < 3 || aliasTo.length() > 8) {
-                    // Ignore replacement < 3 for now. see CLDR-14312
-                    // throw new IllegalArgumentException(
-                    //    "Incorrect value [" + aliasTo + "] in alias:subdivision.");
-                    continue;
+                if (aliasTo.length() == 2) {
+                    // Add 'zzzz' based on changes to UTS #35 for CLDR-14312.
+                    aliasTo += "zzzz";
+                } else if (aliasTo.length() < 2 || aliasTo.length() > 8) {
+                    throw new IllegalArgumentException(
+                        "Incorrect value [" + aliasTo + "] in alias:territory.");
                 }
                 subdivisionAliasMap.put(aliasFrom, aliasTo);
             }
