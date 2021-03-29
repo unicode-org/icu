@@ -28,7 +28,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.ICUData;
@@ -118,8 +117,6 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 public final class ULocale implements Serializable, Comparable<ULocale> {
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;
-
-    private static final Pattern UND_PATTERN = Pattern.compile("^und(?=$|[_-])", Pattern.CASE_INSENSITIVE);
 
     private static CacheBase<String, String, Void> nameCache = new SoftCache<String, String, Void>() {
         @Override
@@ -1144,9 +1141,39 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         } else if ("root".equalsIgnoreCase(localeID)) {
             tmpLocaleID = EMPTY_STRING;
         } else {
-            tmpLocaleID = UND_PATTERN.matcher(localeID).replaceFirst(EMPTY_STRING);
+            tmpLocaleID = stripLeadingUnd(localeID);
         }
         return nameCache.getInstance(tmpLocaleID, null /* unused */);
+    }
+
+    /**
+     * Strips out the leading "und" language code case-insensitively.
+     *
+     * @implNote Avoids creating new local non-primitive objects to reduce GC pressure.
+     */
+    private static String stripLeadingUnd(String localeID) {
+        int length = localeID.length();
+        if (length < 3) {
+            return localeID;
+        }
+
+        // If not starts with "und", return.
+        if (!localeID.regionMatches(/*ignoreCase=*/true, 0, "und", 0, /*len=*/3)) {
+            return localeID;
+        }
+
+        // The string is equals to "und" case-insensitively.
+        if (length == 3) {
+            return EMPTY_STRING;
+        }
+
+        // localeID must have a length >= 4
+        char separator = localeID.charAt(3);
+        if (separator == '-' || separator == '_') { // "und-*" or "und_*"
+            return localeID.substring(3);
+        }
+
+        return localeID;
     }
 
     /**
