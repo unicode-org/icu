@@ -4938,6 +4938,21 @@ void LocaleTest::TestCanonicalize(void)
         { "und-FR-u-sd-frg", "und-FR-u-sd-frges"},
         { "und-LU-u-sd-lud", "und-LU-u-sd-lucl"},
 
+        // ICU-21550
+        { "und-u-rg-fi01", "und-u-rg-axzzzz"},
+        { "und-u-rg-frcp", "und-u-rg-cpzzzz"},
+        { "und-u-rg-frpm", "und-u-rg-pmzzzz"},
+        { "und-u-rg-usvi", "und-u-rg-vizzzz"},
+        { "und-u-rg-cn91", "und-u-rg-hkzzzz"},
+        { "und-u-rg-nlaw", "und-u-rg-awzzzz"},
+
+        { "und-NO-u-sd-frre", "und-NO-u-sd-rezzzz"},
+        { "und-CN-u-sd-nlcw", "und-CN-u-sd-cwzzzz"},
+        { "und-CZ-u-sd-usgu", "und-CZ-u-sd-guzzzz"},
+        { "und-FR-u-sd-shta", "und-FR-u-sd-tazzzz"},
+        { "und-FR-u-sd-cn71", "und-FR-u-sd-twzzzz"},
+
+
         // ICU-21401
         { "cel-gaulish", "xtg"},
 
