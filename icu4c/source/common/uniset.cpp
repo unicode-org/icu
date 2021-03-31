@@ -111,7 +111,7 @@ static void U_CALLCONV cloneUnicodeString(UElement *dst, UElement *src) {
     dst->pointer = new UnicodeString(*(UnicodeString*)src->pointer);
 }
 
-static int8_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
+static int32_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
     const UnicodeString &a = *(const UnicodeString*)t1.pointer;
     const UnicodeString &b = *(const UnicodeString*)t2.pointer;
     return a.compare(b);

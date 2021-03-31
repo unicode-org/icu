@@ -466,7 +466,7 @@ void UVector::sortedInsert(UElement e, UElementComparator *compare, UErrorCode& 
     int32_t min = 0, max = count;
     while (min != max) {
         int32_t probe = (min + max) / 2;
-        int8_t c = (*compare)(elements[probe], e);
+        int32_t c = (*compare)(elements[probe], e);
         if (c > 0) {
             max = probe;
         } else {
