@@ -1578,13 +1578,8 @@ AliasReplacer::replaceTransformedExtensions(
             }
             tkey = nextTKey;
         } while (tkey != nullptr);
-        tfields.sort([](UElement e1, UElement e2) -> int8_t {
-            // uprv_strcmp return int and in some platform, such as arm64-v8a,
-            // it may return positive values > 127 which cause the casted value
-            // of int8_t negative.
-            int res = uprv_strcmp(
-                (const char*)e1.pointer, (const char*)e2.pointer);
-            return (res == 0) ? 0 : ((res > 0) ? 1 : -1);
+        tfields.sort([](UElement e1, UElement e2) -> int32_t {
+            return uprv_strcmp((const char*)e1.pointer, (const char*)e2.pointer);
         }, status);
         for (int32_t i = 0; i < tfields.size(); i++) {
              if (output.length() > 0) {
@@ -1623,13 +1618,8 @@ AliasReplacer::outputToString(
         if (!notEmpty(script) && !notEmpty(region)) {
           out.append(SEP_CHAR, status);
         }
-        variants.sort([](UElement e1, UElement e2) -> int8_t {
-            // uprv_strcmp return int and in some platform, such as arm64-v8a,
-            // it may return positive values > 127 which cause the casted value
-            // of int8_t negative.
-            int res = uprv_strcmp(
-                (const char*)e1.pointer, (const char*)e2.pointer);
-            return (res == 0) ? 0 : ((res > 0) ? 1 : -1);
+        variants.sort([](UElement e1, UElement e2) -> int32_t {
+            return uprv_strcmp((const char*)e1.pointer, (const char*)e2.pointer);
         }, status);
         int32_t variantsStart = out.length();
         for (int32_t i = 0; i < variants.size(); i++) {
@@ -1689,13 +1679,8 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
     if (U_FAILURE(status)) { return false; }
 
     // Sort the variants
-    variants.sort([](UElement e1, UElement e2) -> int8_t {
-        // uprv_strcmp return int and in some platform, such as arm64-v8a,
-        // it may return positive values > 127 which cause the casted value
-        // of int8_t negative.
-        int res = uprv_strcmp(
-            (const char*)e1.pointer, (const char*)e2.pointer);
-        return (res == 0) ? 0 : ((res > 0) ? 1 : -1);
+    variants.sort([](UElement e1, UElement e2) -> int32_t {
+        return uprv_strcmp((const char*)e1.pointer, (const char*)e2.pointer);
     }, status);
 
     // A changed count to assert when loop too many times.

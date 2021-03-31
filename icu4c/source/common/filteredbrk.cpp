@@ -48,7 +48,7 @@ static void _fb_trace(const char *m, const UnicodeString *s, UBool b, int32_t d,
 /**
  * Used with sortedInsert()
  */
-static int8_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
+static int32_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
     const UnicodeString &a = *(const UnicodeString*)t1.pointer;
     const UnicodeString &b = *(const UnicodeString*)t2.pointer;
     return a.compare(b);
