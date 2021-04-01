@@ -39,7 +39,7 @@ Following these guidelines prevents other applications that use a standard ICU
 distribution from conflicting with any libraries that you need. On operating systems
 that do not have a standard C++ ABI (name mangling) for compilers, it is recommended to
 do this special packaging anyway. More details on customizing ICU are available in the
-[User's Guide](https://unicode-org.github.io/icu/userguide/).
+[User Guide](../).
 The [ICU Source Code Organization](./index/#icu-source-code-organization) section of
 the ICU4C gives a more complete description of the libraries.
 
@@ -47,7 +47,7 @@ ICU has several libraries for you to use. Here is an example of libraries that a
 
 | Library Name                        | Windows Filename | Linux Filename         | Comment                                                                                                                                                                                             |
 |-------------------------------------|------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Data Library                        | icudtXYl.dll   | libicudata.so.XY.Z | Data required by the Common and I18n libraries. There are many ways to package and [customize this data](https://unicode-org.github.io/icu/userguide/icudata), but by default this is all you need. |
+| Data Library                        | icudtXYl.dll   | libicudata.so.XY.Z | Data required by the Common and I18n libraries. There are many ways to package and [customize this data](../icu_data), but by default this is all you need. |
 | Common Library                      | icuucXY.dll    | libicuuc.so.XY.Z   | Base library required by all other ICU libraries.                                                                                                                                                   |
 | Internationalization (i18n) Library | icuinXY.dll    | libicui18n.so.XY.Z | A library that contains many locale based internationalization (i18n) functions.                                                                                                                    |
 | Layout Extensions Engine            | iculxXY.dll    | libiculx.so.XY.Z   | An optional engine for doing paragraph layout that uses parts of ICU. HarfBuzz is required.                                                                                                         |

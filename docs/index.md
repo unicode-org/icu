@@ -1,7 +1,7 @@
 ---
 layout: default
 title: ICU Documentation
-nav_order: 1
+nav_order: 100
 description: ICU Documentation
 ---
 

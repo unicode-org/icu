@@ -1,7 +1,7 @@
 ---
 layout: default
 title: ICU4C
-nav_order: 3
+nav_order: 400
 has_children: true
 ---
 <!--
@@ -50,7 +50,7 @@ The ICU homepage also links to related information about writing internationaliz
 | ICU FAQ - Frequently Asked Questions about ICU     | <https://unicode-org.github.io/icu/userguide/icu4c/faq>                  |
 | ICU4J FAQ - Frequently Asked Questions about ICU4J | <https://unicode-org.github.io/icu/userguide/icu4j/faq>                  |
 | ICU User's Guide                                   | <https://unicode-org.github.io/icu/>                                     |
-| How To Use ICU                                     | <https://unicode-org.github.io/icu/userguide/howtouseicu>                |
+| How To Use ICU                                     | <https://unicode-org.github.io/icu/userguide/icu/howtouseicu>            |
 | Download ICU Releases                              | <http://site.icu-project.org/download>                                   |
 | ICU4C API Documentation Online                     | <http://icu-project.org/apiref/icu4c/>                                   |
 | Online ICU Demos                                   | <http://demo.icu-project.org/icu-bin/icudemos>                           |
@@ -82,7 +82,7 @@ There are two ways to download ICU releases:
 
 ## ICU Source Code Organization
 
-In the descriptions below, `<ICU>` is the full path name of the ICU4C directory (the top level directory from the distribution archives) in your file system. You can also view the [ICU Architectural Design](design.md) section of the User's Guide to see which libraries you need for your software product. You need at least the data (`[lib]icudt`) and the common (`[lib]icuuc`) libraries in order to use ICU.
+In the descriptions below, `<ICU>` is the full path name of the ICU4C directory (the top level directory from the distribution archives) in your file system. You can also view the [ICU Architectural Design](../icu/design.md) section of the User's Guide to see which libraries you need for your software product. You need at least the data (`[lib]icudt`) and the common (`[lib]icuuc`) libraries in order to use ICU.
 
 **The following files describe the code drop.**
 
@@ -215,7 +215,7 @@ In the descriptions below, `<ICU>` is the full path name of the ICU4C directory 
           environment variable to the out/ or the out/build/ directories, but
           this is generally discouraged because most people set it incorrectly.
           You can view the <a href=
-          "https://unicode-org.github.io/icu/userguide/icudata">ICU Data
+          "https://unicode-org.github.io/icu/userguide/icu_data">ICU Data
           Management</a> section of the ICU User's Guide for details.</p>
         </td>
       </tr>
@@ -405,7 +405,7 @@ If you are using ICU's Makefiles to build ICU on a new platform, there are a few
 
 For some people, it may not be necessary for completely build ICU. Most of the makefiles and build targets are for tools that are used for building ICU's data, and an application's data (when an application uses ICU resource bundles for its data).
 
-Data files can be built on a different platform when both platforms share the same endianness and the same charset family. This assertion does not include platform dependent DLLs/shared/static libraries. For details see the User Guide [ICU Data](https://unicode-org.github.io/icu/userguide/icudata) chapter.
+Data files can be built on a different platform when both platforms share the same endianness and the same charset family. This assertion does not include platform dependent DLLs/shared/static libraries. For details see the User Guide [ICU Data](../icu_data) chapter.
 
 ICU 3.6 removes the requirement that ICU be completely built in the native operating environment. It adds the icupkg tool which can be run on any platform to turn binary ICU data files from any one of the three formats into any one of the other data formats. This allows a application to use ICU data built anywhere to be used for any other target platform.
 

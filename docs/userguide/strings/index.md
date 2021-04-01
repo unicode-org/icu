@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Chars and Strings
-nav_order: 5
+nav_order: 600
 has_children: true
 ---
 <!--
