@@ -103,6 +103,7 @@ icu4c/source/tools/icuinfo/icuplugins*.txt
 !icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt
 
 # Specific file names
+docs/Gemfile.lock
 icu4c/binARM
 icu4c/bin32uwp
 icu4c/bin64
