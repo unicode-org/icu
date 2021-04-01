@@ -1,7 +1,7 @@
 ---
 layout: default
 title: ICU4J
-nav_order: 4
+nav_order: 500
 has_children: true
 ---
 <!--
@@ -28,27 +28,27 @@ Java provides a strong foundation for global programs, and IBM and the ICU team 
 
 ICU4J is an add-on to the regular JRE that provides:
 
-*   [Collation](https://unicode-org.github.io/icu/userguide/collation) – rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order
+*   [Collation](../collation) – rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order
         For fast multilingual string comparison; faster and more complete than the J2SE implementation
-*   [Charset Detection](https://unicode-org.github.io/icu/userguide/conversion/detection) – Recognition of various single and multibyte charsets
+*   [Charset Detection](../conversion/detection) – Recognition of various single and multibyte charsets
         Useful for recognizing untagged text data
-*   [UnicodeSet](https://unicode-org.github.io/icu/userguide/strings/unicodeset) – standard set operations optimized for sets of Unicode characters
+*   [UnicodeSet](../strings/unicodeset) – standard set operations optimized for sets of Unicode characters
         UnicodeSets can be built from string patterns using any Unicode properties.
-*   [Transforms](https://unicode-org.github.io/icu/userguide/transforms) – a flexible mechanism for Unicode text conversions
+*   [Transforms](../transforms) – a flexible mechanism for Unicode text conversions
         Including Full/Halfwidth conversions, Normalization, Case conversions, Hex conversions, and transliterations between scripts (50+ pairs)
-*   [Unicode Normalization](https://unicode-org.github.io/icu/userguide/transforms/normalization) – NFC, NFD, NFKD, NFKC
+*   [Unicode Normalization](../transforms/normalization) – NFC, NFD, NFKD, NFKC
         For canonical text representations, needed for XML and the net
-*   [International Calendars](https://unicode-org.github.io/icu/userguide/datetime/calendar) – Arabic, Buddhist, Chinese, Hebrew, Japanese, Ethiopic, Islamic, Coptic and other calendars
+*   [International Calendars](../datetime/calendar) – Arabic, Buddhist, Chinese, Hebrew, Japanese, Ethiopic, Islamic, Coptic and other calendars
         Required for correct presentation of dates in certain countries
-*   [Date Format Enhancements](https://unicode-org.github.io/icu/userguide/format_parse/datetime) – Date/time pattern generator, Relative date formatting, etc.
+*   [Date Format Enhancements](../format_parse/datetime) – Date/time pattern generator, Relative date formatting, etc.
         Enhancements to the normal Java date formatting.
-*   [Number Format Enhancements](https://unicode-org.github.io/icu/userguide/format_parse/numbers) – Scientific Notation, Spelled-out, Compact decimal format, etc.
+*   [Number Format Enhancements](../format_parse/numbers) – Scientific Notation, Spelled-out, Compact decimal format, etc.
         Enhancements to the normal Java number formatting. The spell-out format is used for checks and similar documents
-*   [Enhanced Word-Break Detection](https://unicode-org.github.io/icu/userguide/boundaryanalysis) – Rule-based, supports Thai, Khmer, Chinese, etc.
+*   [Enhanced Word-Break Detection](../boundaryanalysis) – Rule-based, supports Thai, Khmer, Chinese, etc.
         Required for correct support of Thai
-*   [Unicode Text Compression](https://unicode-org.github.io/icu/userguide/conversion/compression) – Standard compression of Unicode text
+*   [Unicode Text Compression](../conversion/compression) – Standard compression of Unicode text
         Suitable for large numbers of small fields, where LZW and similar schemes do not apply
-*   [Charset Conversion](https://unicode-org.github.io/icu/userguide/conversion) – Conversion to and from different charsets.
+*   [Charset Conversion](../conversion) – Conversion to and from different charsets.
         Plugs into Java CharsetProvider Service Provider Interface (SPI)
 
 > :point_right: **Note:** We continue to provide assistance to Java, and in some cases, ICU4J support has been rolled into a later release of Java. For example, BCP47 language tag support including Unicode locale extensions is now in Java 7\. However, the most current and complete version is always found in ICU4J.
@@ -163,7 +163,7 @@ Below, all directory paths are relative to the directory where the ICU4J source 
 
 ## Where to get Documentation
 
-The [ICU user's guide](https://unicode-org.github.io/icu/userguide/) contains lots of general information about ICU, in its C, C++, and Java incarnations.
+The [ICU User Guide](../) contains lots of general information about ICU, in its C, C++, and Java incarnations.
 
 The complete API documentation for ICU4J (javadoc) is available on the ICU4J web site, and can be built from the sources:
 
@@ -417,7 +417,7 @@ ICU4J data is built by ICU4C tools. Please see [ICU Data Build Tool](../icu_data
 
 ## About ICU4J Time Zone
 
-ICU4J library includes the latest time zone data, as of the release date. However, time zone data is frequently updated in response to changes made by local governments around the world. If you need to update the time zone data, please refer the ICU user guide topic [Updating the Time Zone Data](https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data).
+ICU4J library includes the latest time zone data, as of the release date. However, time zone data is frequently updated in response to changes made by local governments around the world. If you need to update the time zone data, please refer the ICU user guide topic [Updating the Time Zone Data](../datetime/timezone#updating-the-time-zone-data).
 
 You can optionally configure ICU4J date and time service classes to use underlying JDK TimeZone implementation (see the ICU4J API reference [TimeZone](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/ibm/icu/util/TimeZone.html) for the details). When this configuration is enabled, ICU's own time zone data won't be used and you have to get time zone data patches from the JRE vendor.
 
