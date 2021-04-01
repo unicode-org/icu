@@ -20,33 +20,30 @@
     <groupId>org.unicode.icu</groupId>
     <artifactId>cldr-lib</artifactId>
     <version>1.0</version>
-    
-    <!-- Important: The "${project.basedir}" property is the directory of the
-         child POM file, not this directory (and there's no easy way in Maven
-         to identify the absolute path of a parent POM file). However since
-         child POM files should have a <parent> declaration with the relative
-         path in it, we can use that. Note however that this is a bit fragile
-         and relies on <relativePath> being a directory, not a POM file.
-         
-         In order to allow the local repository to work either when it is used
-         by a child POM file or when it's used directly (e.g. for installing
-         or purging the cache) when it is invoked from this directory, the
-           -Dproject.parent.relativePath=""
-         argument must be given. -->
+
     <repositories>
+        <!--
+            See http://cldr.unicode.org/development/maven#TOC-Configuring-Maven 
+            for configuration and access control.
+            
+            And generally,
+            https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-apache-maven-for-use-with-github-packages
+        -->
         <repository>
-            <id>local-maven-repo</id>
-            <url>file://${project.basedir}/${project.parent.relativePath}</url>
+            <id>githubcldr</id>
+            <name>Maven@unicode-org/cldr</name>
+            <url>https://maven.pkg.github.com/unicode-org/cldr</url>
         </repository>
     </repositories>
     
-    <!-- Ant-built JAR file(s) installed into the local Maven repository in this
-         directory by the 'install-cldr-jars.sh' script. -->
+    <!-- See https://github.com/unicode-org/cldr/packages/521051/versions for possible versions 
+        you can get the XML directly from that page.
+        -->
     <dependencies>
         <dependency>
-            <groupId>org.unicode.cldr</groupId>
-            <artifactId>cldr-api</artifactId>
-            <version>0.1-SNAPSHOT</version>
+        <groupId>org.unicode.cldr</groupId>
+        <artifactId>cldr-code</artifactId>
+        <version>0.0.0-SNAPSHOT-feb602b06b</version>
         </dependency>
     </dependencies>
 </project>
