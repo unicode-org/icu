@@ -32,7 +32,7 @@
 #   [ICU4C]   source/test/testdata/rbbitst.txt
 #   [ICU4J]   main/tests/core/src/com/ibm/icu/dev/test/rbbi/rbbitst.txt
 #
-# ICU4C's copy is the master.  If any changes are made to ICU4J's copy, make sure they
+# ICU4C's copy is the primary one.  If any changes are made to ICU4J's copy, make sure they
 #  are merged back into ICU4C's copy of the file, lest they get overwritten later.
 # TODO:  figure out how to have a single copy of the file for use by both C and Java.
 
@@ -61,6 +61,11 @@
 <sent>
 <data>\
 •Doctor with a D. •As in, Ph.D., you know.•</data>
+
+# ICU-21459 logic error.
+<locale en@ss=standard>
+<sent>
+<data>•on. •But after a day in the arena sun, the metal feels hot enough to blister my hands.•</data>
 
 # same as root (unless some exceptions are added!)
 <locale tfg@ss=standard>
