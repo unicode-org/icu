@@ -154,7 +154,10 @@ bool FormattedValueStringBuilderImpl::nextPositionImpl(ConstrainedFieldPosition&
         if (i > fString.fZero && prevIsSpan) {
             int64_t si = cfpos.getInt64IterationContext() - 1;
             U_ASSERT(si >= 0);
-            if (_field == Field(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD)) {
+            int32_t previ = i - spanIndices[si].length;
+            U_ASSERT(previ >= fString.fZero);
+            Field prevField = fString.getFieldPtr()[previ];
+            if (prevField == Field(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD)) {
                 // Special handling for ULISTFMT_ELEMENT_FIELD
                 if (cfpos.matchesField(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD)) {
                     fieldStart = i - fString.fZero - spanIndices[si].length;
@@ -165,12 +168,13 @@ bool FormattedValueStringBuilderImpl::nextPositionImpl(ConstrainedFieldPosition&
                         fieldStart,
                         end);
                     return true;
+                } else {
+                    prevIsSpan = false;
                 }
             } else {
                 // Re-wind, since there may be multiple fields in the span.
-                i -= spanIndices[si].length;
-                U_ASSERT(i >= fString.fZero);
-                _field = fString.getFieldPtr()[i];
+                i = previ;
+                _field = prevField;
             }
         }
         // Special case: coalesce the INTEGER if we are pointing at the end of the INTEGER.
