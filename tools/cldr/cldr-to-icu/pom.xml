@@ -94,7 +94,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.1-jre</version>
+            <version>30.0-jre</version>
         </dependency>
 
         <!-- Ant: Only used for running the conversion tool, not compiling it. -->
