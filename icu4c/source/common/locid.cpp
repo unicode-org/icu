@@ -2515,16 +2515,16 @@ public:
 
     virtual const char* next(int32_t* resultLength, UErrorCode& status) {
         const char* legacy_key = KeywordEnumeration::next(nullptr, status);
-        if (U_SUCCESS(status) && legacy_key != nullptr) {
+        while (U_SUCCESS(status) && legacy_key != nullptr) {
             const char* key = uloc_toUnicodeLocaleKey(legacy_key);
-            if (key == nullptr) {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-            } else {
+            if (key != nullptr) {
                 if (resultLength != nullptr) {
                     *resultLength = static_cast<int32_t>(uprv_strlen(key));
                 }
                 return key;
             }
+            // Not a Unicode keyword, could be a t, x or other, continue to look at the next one.
+            legacy_key = KeywordEnumeration::next(nullptr, status);
         }
         if (resultLength != nullptr) *resultLength = 0;
         return nullptr;
