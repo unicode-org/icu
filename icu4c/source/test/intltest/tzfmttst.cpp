@@ -745,9 +745,9 @@ void TimeZoneFormatTest::RunAdoptDefaultThreadSafeTests(int32_t threadNumber) {
             date += 6000 * i;
             std::unique_ptr<icu::TimeZone> tz(icu::TimeZone::createDefault());
             status = U_ZERO_ERROR;
-            tz->getOffset(date, TRUE, rawOffset, dstOffset, status);
+            tz->getOffset(static_cast<UDate>(date), TRUE, rawOffset, dstOffset, status);
             status = U_ZERO_ERROR;
-            tz->getOffset(date, FALSE, rawOffset, dstOffset, status);
+            tz->getOffset(static_cast<UDate>(date), FALSE, rawOffset, dstOffset, status);
         }
     }
 }

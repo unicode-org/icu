@@ -1544,7 +1544,7 @@ AliasReplacer::replaceTransformedExtensions(
     const char* str = transformedExtensions.data();
     const char* tkey = ultag_getTKeyStart(str);
     int32_t tlangLen = (tkey == str) ? 0 :
-        ((tkey == nullptr) ? len : (tkey - str - 1));
+        ((tkey == nullptr) ? len : static_cast<int32_t>((tkey - str - 1)));
     CharStringByteSink sink(&output);
     if (tlangLen > 0) {
         Locale tlang = LocaleBuilder()

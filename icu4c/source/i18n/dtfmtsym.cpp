@@ -450,6 +450,7 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
  */
 DateFormatSymbols& DateFormatSymbols::operator=(const DateFormatSymbols& other)
 {
+    if (this == &other) { return *this; }  // self-assignment: no-op
     dispose();
     copyData(other);
 

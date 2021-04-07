@@ -1209,6 +1209,7 @@ void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
               .unit(MeasureUnit::forIdentifier("pow4-mile", status))
               .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
               .locale("en-ZA");
+    lnf.operator=(lnf);  // self-assignment should be a no-op
     lnf.formatInt(1, status);
     status.expectErrorAndReset(U_RESOURCE_TYPE_MISMATCH);
 

@@ -1368,7 +1368,7 @@ class NumberSkeletonImpl {
 
         /** @return Whether we successfully found and parsed a trailing zero option. */
         private static boolean parseTrailingZeroOption(StringSegment segment, MacroProps macros) {
-            if (segment.equals("w")) {
+            if (segment.contentEquals("w")) {
                 macros.precision = macros.precision.trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE);
                 return true;
             }

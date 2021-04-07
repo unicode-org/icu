@@ -5,6 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <cstdlib>
+
 #include "unicode/simpleformatter.h"
 #include "unicode/ures.h"
 #include "ureslocs.h"
