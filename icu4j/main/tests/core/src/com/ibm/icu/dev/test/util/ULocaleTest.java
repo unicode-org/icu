@@ -4433,6 +4433,7 @@ public class ULocaleTest extends TestFmwk {
                 //"<langtag>", "<attr1>,<attr2>,...", "<key1>,<key2>,...", "<type1>", "<type2>", ...},
                 {"en", null, null},
                 {"en-a-ext1-x-privuse", null, null},
+                {"en-a-ext1-u-ca-roc-x-privuse", null, "ca", "roc", null},
                 {"en-u-attr1-attr2", "attr1,attr2", null},
                 {"ja-u-ca-japanese-cu-jpy", null, "ca,cu", "japanese", "jpy"},
                 {"th-TH-u-number-attr-nu-thai-ca-buddhist", "attr,number", "ca,nu", "buddhist", "thai"},

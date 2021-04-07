@@ -239,8 +239,10 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestKeywordVariantParsing);
     TESTCASE_AUTO(TestCreateKeywordSet);
     TESTCASE_AUTO(TestCreateKeywordSetEmpty);
+    TESTCASE_AUTO(TestCreateKeywordSetWithPrivateUse);
     TESTCASE_AUTO(TestCreateUnicodeKeywordSet);
     TESTCASE_AUTO(TestCreateUnicodeKeywordSetEmpty);
+    TESTCASE_AUTO(TestCreateUnicodeKeywordSetWithPrivateUse);
     TESTCASE_AUTO(TestGetKeywordValueStdString);
     TESTCASE_AUTO(TestGetUnicodeKeywordValueStdString);
     TESTCASE_AUTO(TestSetKeywordValue);
@@ -4085,6 +4087,27 @@ LocaleTest::TestCreateKeywordSetEmpty(void) {
 }
 
 void
+LocaleTest::TestCreateKeywordSetWithPrivateUse(void) {
+    IcuTestErrorCode status(*this, "TestCreateKeywordSetWithPrivateUse()");
+
+    static const char tag[] = "en-US-u-ca-gregory-x-foo";
+    static const Locale l = Locale::forLanguageTag(tag, status);
+    std::set<std::string> result;
+    l.getKeywords<std::string>(
+                 std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("getKeywords \"%s\"", l.getName());
+    assertTrue("getKeywords set::find(\"calendar\")",
+               result.find("calendar") != result.end());
+    assertTrue("getKeywords set::find(\"ca\")",
+               result.find("ca") == result.end());
+    assertTrue("getKeywords set::find(\"x\")",
+               result.find("x") != result.end());
+    assertTrue("getKeywords set::find(\"foo\")",
+               result.find("foo") == result.end());
+}
+
+void
 LocaleTest::TestCreateUnicodeKeywordSet(void) {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSet()");
 
@@ -4116,6 +4139,26 @@ LocaleTest::TestCreateUnicodeKeywordSetEmpty(void) {
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
     assertEquals("set::size()", 0, static_cast<int32_t>(result.size()));
+}
+
+void
+LocaleTest::TestCreateUnicodeKeywordSetWithPrivateUse(void) {
+    IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSetWithPrivateUse()");
+
+    static const char tag[] = "en-US-u-ca-gregory-x-foo";
+    static const Locale l = Locale::forLanguageTag(tag, status);
+
+    std::set<std::string> result;
+    l.getUnicodeKeywords<std::string>(
+            std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("getUnicodeKeywords \"%s\"", l.getName());
+    assertTrue("getUnicodeKeywords set::find(\"ca\")",
+               result.find("ca") != result.end());
+    assertTrue("getUnicodeKeywords set::find(\"x\")",
+               result.find("x") == result.end());
+    assertTrue("getUnicodeKeywords set::find(\"foo\")",
+               result.find("foo") == result.end());
 }
 
 void

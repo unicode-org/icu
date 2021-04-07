@@ -82,8 +82,10 @@ public:
    void TestKeywordVariantParsing(void);
    void TestCreateKeywordSet(void);
    void TestCreateKeywordSetEmpty(void);
+   void TestCreateKeywordSetWithPrivateUse(void);
    void TestCreateUnicodeKeywordSet(void);
    void TestCreateUnicodeKeywordSetEmpty(void);
+   void TestCreateUnicodeKeywordSetWithPrivateUse(void);
    void TestGetKeywordValueStdString(void);
    void TestGetUnicodeKeywordValueStdString(void);
 
