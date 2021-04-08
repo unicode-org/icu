@@ -22,7 +22,6 @@ trigger:
     - docs/*
     - tools/*
     - vendor/*
-    - .appveyor.xml
     - .cpyskip.txt
     - .travis.yml
     - KEYS
