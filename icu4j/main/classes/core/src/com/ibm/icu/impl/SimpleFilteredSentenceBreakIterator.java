@@ -19,6 +19,7 @@ import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;
 import com.ibm.icu.util.CharsTrieBuilder;
+import com.ibm.icu.util.ICUCloneNotSupportedException;
 import com.ibm.icu.util.StringTrieBuilder;
 import com.ibm.icu.util.ULocale;
 
@@ -72,8 +73,6 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
         backwardsTrie.reset();
         int uch;
 
-
-
         // Assume a space is following the '.' (so we handle the case: "Mr. /Brown")
         if ((uch = text.previousCodePoint()) == ' ') { // TODO: skip a class of chars here??
             // TODO only do this the 1st time?
@@ -81,20 +80,17 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
             uch = text.nextCodePoint();
         }
 
-        BytesTrie.Result r = BytesTrie.Result.INTERMEDIATE_VALUE;
-
-        while ((uch = text.previousCodePoint()) != UCharacterIterator.DONE && // more to consume backwards and..
-                ((r = backwardsTrie.nextForCodePoint(uch)).hasNext())) {// more in the trie
+        while ((uch = text.previousCodePoint()) >= 0) { // more to consume backwards
+            BytesTrie.Result r = backwardsTrie.nextForCodePoint(uch);
             if (r.hasValue()) { // remember the best match so far
                 bestPosn = text.getIndex();
                 bestValue = backwardsTrie.getValue();
             }
+            if (!r.hasNext()) {
+                break;
+            }
         }
-
-        if (r.matches()) { // exact match?
-            bestValue = backwardsTrie.getValue();
-            bestPosn = text.getIndex();
-        }
+        backwardsTrie.reset(); // for equals() & hashCode()
 
         if (bestPosn >= 0) {
             if (bestValue == Builder.MATCH) { // exact match!
@@ -110,6 +106,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
                 while ((uch = text.nextCodePoint()) != BreakIterator.DONE
                         && ((rfwd = forwardsPartialTrie.nextForCodePoint(uch)).hasNext())) {
                 }
+                forwardsPartialTrie.reset(); // for equals() & hashCode()
                 if (rfwd.matches()) {
                     // Exception here
                     return true;
@@ -186,18 +183,39 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
         if (getClass() != obj.getClass())
             return false;
         SimpleFilteredSentenceBreakIterator other = (SimpleFilteredSentenceBreakIterator) obj;
-        return delegate.equals(other.delegate) && text.equals(other.text) && backwardsTrie.equals(other.backwardsTrie)
+        // TODO(ICU-21575): CharsTrie.equals() is not defined.
+        // Should compare the underlying data, and can then stop resetting after iteration.
+        return delegate.equals(other.delegate) && text.equals(other.text)
+                && backwardsTrie.equals(other.backwardsTrie)
                 && forwardsPartialTrie.equals(other.forwardsPartialTrie);
     }
 
     @Override
     public int hashCode() {
-        return (forwardsPartialTrie.hashCode() * 39) + (backwardsTrie.hashCode() * 11) + delegate.hashCode();
+        // TODO(ICU-21575): CharsTrie.hashCode() is not defined.
+        return (forwardsPartialTrie.hashCode() * 39) + (backwardsTrie.hashCode() * 11)
+                + delegate.hashCode();
     }
 
     @Override
     public Object clone() {
         SimpleFilteredSentenceBreakIterator other = (SimpleFilteredSentenceBreakIterator) super.clone();
+        try {
+            if (delegate != null) {
+                other.delegate = (BreakIterator) delegate.clone();
+            }
+            if (text != null) {
+                other.text = (UCharacterIterator) text.clone();
+            }
+            if (backwardsTrie != null) {
+                other.backwardsTrie = backwardsTrie.clone();
+            }
+            if (forwardsPartialTrie != null) {
+                other.forwardsPartialTrie = forwardsPartialTrie.clone();
+            }
+        } catch (CloneNotSupportedException e) {
+            throw new ICUCloneNotSupportedException(e);
+        }
         return other;
     }
 
@@ -273,7 +291,7 @@ public class SimpleFilteredSentenceBreakIterator extends BreakIterator {
         /**
          * filter set to store all exceptions
          */
-        private HashSet<CharSequence> filterSet = new HashSet<CharSequence>();
+        private HashSet<CharSequence> filterSet = new HashSet<>();
 
         static final int PARTIAL = (1 << 0); // < partial - need to run through forward trie
         static final int MATCH = (1 << 1); // < exact match - skip this one.
