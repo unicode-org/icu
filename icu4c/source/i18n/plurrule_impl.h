@@ -324,6 +324,7 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     static int64_t getFractionalDigits(double n, int32_t v);
     static int32_t decimals(double n);
 
+    FixedDecimal& operator=(const FixedDecimal& other) = default;
     bool operator==(const FixedDecimal &other) const;
 
     UnicodeString toString() const;
