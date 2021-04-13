@@ -469,14 +469,18 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
     if ((baseName != fullName) && (baseName != fullNameBuffer)) uprv_free(baseName);
     if (fullName != fullNameBuffer) uprv_free(fullName);
 
-    if (other.fullName == other.fullNameBuffer) {
+    if (other.fullName == other.fullNameBuffer || other.baseName == other.fullNameBuffer) {
         uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+    }
+    if (other.fullName == other.fullNameBuffer) {
         fullName = fullNameBuffer;
     } else {
         fullName = other.fullName;
     }
 
-    if (other.baseName == other.fullName) {
+    if (other.baseName == other.fullNameBuffer) {
+        baseName = fullNameBuffer;
+    } else if (other.baseName == other.fullName) {
         baseName = fullName;
     } else {
         baseName = other.baseName;
@@ -2681,6 +2685,9 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
         if (fullName != fullNameBuffer) {
             // if full Name is already on the heap, need to free it.
             uprv_free(fullName);
+            if (baseName == fullName) {
+                baseName = newFullName; // baseName should not point to freed memory.
+            }
         }
         fullName = newFullName;
         status = U_ZERO_ERROR;
