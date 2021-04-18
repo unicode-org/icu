@@ -4313,11 +4313,9 @@ SimpleDateFormat::tzFormat(UErrorCode &status) const {
         {
             if (fTimeZoneFormat == NULL) {
                 TimeZoneFormat *tzfmt = TimeZoneFormat::createInstance(fLocale, status);
-                if (U_FAILURE(status)) {
-                    return NULL;
+                if (U_SUCCESS(status)) {
+                    const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
                 }
-
-                const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
             }
         }
         umtx_unlock(&LOCK);
