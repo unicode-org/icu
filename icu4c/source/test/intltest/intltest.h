@@ -416,6 +416,8 @@ public:
     virtual const char* getTestDataPath(UErrorCode& err);
     static const char* getSourceTestData(UErrorCode& err);
     static char *getUnidataPath(char path[]);
+    UChar *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);
+
 
 // static members
 public:

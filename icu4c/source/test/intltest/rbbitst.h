@@ -54,7 +54,6 @@ public:
     void TestMonkey();
 
     void TestExtended();
-    UChar *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);
     void executeTest(TestParams *, UErrorCode &status);
 
     void TestWordBreaks();
