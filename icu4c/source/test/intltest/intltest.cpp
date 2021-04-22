@@ -2312,6 +2312,122 @@ const char* IntlTest::getProperty(const char* prop) {
     return val;
 }
 
+//-------------------------------------------------------------------------------
+//
+//    ReadAndConvertFile   Read a text data file, convert it to UChars, and
+//    return the data in one big UChar * buffer, which the caller must delete.
+//
+//    parameters:
+//          fileName:   the name of the file, with no directory part.  The test data directory
+//                      is assumed.
+//          ulen        an out parameter, receives the actual length (in UChars) of the file data.
+//          encoding    The file encoding.  If the file contains a BOM, that will override the encoding
+//                      specified here.  The BOM, if it exists, will be stripped from the returned data.
+//                      Pass NULL for the system default encoding.
+//          status
+//    returns:
+//                      The file data, converted to UChar.
+//                      The caller must delete this when done with
+//                           delete [] theBuffer;
+//
+//
+//--------------------------------------------------------------------------------
+UChar *IntlTest::ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status) {
+    UChar       *retPtr  = NULL;
+    char        *fileBuf = NULL;
+    UConverter* conv     = NULL;
+    FILE        *f       = NULL;
+
+    ulen = 0;
+    if (U_FAILURE(status)) {
+        return retPtr;
+    }
+
+    //
+    //  Open the file.
+    //
+    f = fopen(fileName, "rb");
+    if (f == 0) {
+        dataerrln("Error opening test data file %s\n", fileName);
+        status = U_FILE_ACCESS_ERROR;
+        return NULL;
+    }
+    //
+    //  Read it in
+    //
+    int   fileSize;
+    int   amt_read;
+
+    fseek( f, 0, SEEK_END);
+    fileSize = ftell(f);
+    fileBuf = new char[fileSize];
+    fseek(f, 0, SEEK_SET);
+    amt_read = static_cast<int>(fread(fileBuf, 1, fileSize, f));
+    if (amt_read != fileSize || fileSize <= 0) {
+        errln("Error reading test data file.");
+        goto cleanUpAndReturn;
+    }
+
+    //
+    // Look for a Unicode Signature (BOM) on the data just read
+    //
+    int32_t        signatureLength;
+    const char *   fileBufC;
+    const char*    bomEncoding;
+
+    fileBufC = fileBuf;
+    bomEncoding = ucnv_detectUnicodeSignature(
+        fileBuf, fileSize, &signatureLength, &status);
+    if(bomEncoding!=NULL ){
+        fileBufC  += signatureLength;
+        fileSize  -= signatureLength;
+        encoding = bomEncoding;
+    }
+
+    //
+    // Open a converter to take the rule file to UTF-16
+    //
+    conv = ucnv_open(encoding, &status);
+    if (U_FAILURE(status)) {
+        goto cleanUpAndReturn;
+    }
+
+    //
+    // Convert the rules to UChar.
+    //  Preflight first to determine required buffer size.
+    //
+    ulen = ucnv_toUChars(conv,
+        NULL,           //  dest,
+        0,              //  destCapacity,
+        fileBufC,
+        fileSize,
+        &status);
+    if (status == U_BUFFER_OVERFLOW_ERROR) {
+        // Buffer Overflow is expected from the preflight operation.
+        status = U_ZERO_ERROR;
+
+        retPtr = new UChar[ulen+1];
+        ucnv_toUChars(conv,
+            retPtr,       //  dest,
+            ulen+1,
+            fileBufC,
+            fileSize,
+            &status);
+    }
+
+cleanUpAndReturn:
+    fclose(f);
+    delete []fileBuf;
+    ucnv_close(conv);
+    if (U_FAILURE(status)) {
+        errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
+        delete []retPtr;
+        retPtr = 0;
+        ulen   = 0;
+    }
+    return retPtr;
+}
+
 /*
  * Hey, Emacs, please set the following:
  *
