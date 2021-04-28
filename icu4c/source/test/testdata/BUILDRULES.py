@@ -44,6 +44,10 @@ def generate_rb(config, io, common_vars):
         "testaliases",
         "testempty",
         "testtypes",
+        # LSTM models
+        "Thai_graphclust_model4_heavy",
+        "Thai_codepoints_exclusive_model5_heavy",
+        "Burmese_graphclust_model5_heavy"
         # "metaZones",
         # "timezoneTypes",
         # "windowsZones",
@@ -59,7 +63,7 @@ def generate_rb(config, io, common_vars):
             input_files = [InFile("%s.txt" % bn) for bn in basenames],
             output_files = [OutFile("%s.res" % bn) for bn in basenames],
             tool = IcuTool("genrb"),
-            args = "-q -s {IN_DIR} -d {OUT_DIR} {INPUT_FILE}",
+            args = "-q -s {IN_DIR} -eUTF-8 -d {OUT_DIR} {INPUT_FILE}",
             format_with = {},
             repeat_with = {}
         ),
@@ -168,7 +172,6 @@ def generate_conv(config, io, common_vars):
             repeat_with = {}
         )
     ]
-
 
 def generate_copy(config, io, common_vars):
     return [
