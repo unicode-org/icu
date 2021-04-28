@@ -352,10 +352,11 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         return nullptr;
     }
     fPatternModifier.adoptInstead(patternModifier);
-    patternModifier->setPatternInfo(
-            macros.affixProvider != nullptr ? macros.affixProvider
-                                            : static_cast<const AffixPatternProvider*>(fPatternInfo.getAlias()),
-            kUndefinedField);
+    const AffixPatternProvider* affixProvider =
+        macros.affixProvider != nullptr
+            ? macros.affixProvider
+            : static_cast<const AffixPatternProvider*>(fPatternInfo.getAlias());
+    patternModifier->setPatternInfo(affixProvider, kUndefinedField);
     patternModifier->setPatternAttributes(fMicros.sign, isPermille);
     if (patternModifier->needsPlurals()) {
         patternModifier->setSymbols(
@@ -374,6 +375,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (U_FAILURE(status)) {
         return nullptr;
     }
+
+    // currencyAsDecimal
+    fMicros.currencyAsDecimal = affixProvider->currencyAsDecimal();
 
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
@@ -524,15 +528,29 @@ int32_t NumberFormatterImpl::writeNumber(const MicroProps& micros, DecimalQuanti
 
         // Add the decimal point
         if (quantity.getLowerDisplayMagnitude() < 0 || micros.decimal == UNUM_DECIMAL_SEPARATOR_ALWAYS) {
-            length += string.insert(
+            if (micros.currencyAsDecimal) {
+                length += string.insert(
                     length + index,
-                    micros.useCurrency ? micros.symbols->getSymbol(
-                            DecimalFormatSymbols::ENumberFormatSymbol::kMonetarySeparatorSymbol) : micros
-                            .symbols
-                            ->getSymbol(
-                                    DecimalFormatSymbols::ENumberFormatSymbol::kDecimalSeparatorSymbol),
+                    // TODO: Get the correct currency symbol
+                    micros.symbols->getSymbol(
+                        DecimalFormatSymbols::ENumberFormatSymbol::kCurrencySymbol),
+                    {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_SYMBOL},
+                    status);
+            } else if (micros.useCurrency) {
+                length += string.insert(
+                    length + index,
+                    micros.symbols->getSymbol(
+                        DecimalFormatSymbols::ENumberFormatSymbol::kMonetarySeparatorSymbol),
                     {UFIELD_CATEGORY_NUMBER, UNUM_DECIMAL_SEPARATOR_FIELD},
                     status);
+            } else {
+                length += string.insert(
+                    length + index,
+                    micros.symbols->getSymbol(
+                        DecimalFormatSymbols::ENumberFormatSymbol::kDecimalSeparatorSymbol),
+                    {UFIELD_CATEGORY_NUMBER, UNUM_DECIMAL_SEPARATOR_FIELD},
+                    status);
+            }
         }
 
         // Add the fraction digits

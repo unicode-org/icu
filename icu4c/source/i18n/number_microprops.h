@@ -81,6 +81,7 @@ struct MicroProps : public MicroPropsGenerator {
     UNumberSignDisplay sign;
     UNumberDecimalSeparatorDisplay decimal;
     bool useCurrency;
+    bool currencyAsDecimal;
     char nsName[9];
 
     // No ownership: must point at a string which will outlive MicroProps

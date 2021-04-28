@@ -115,6 +115,10 @@ bool ParsedPatternInfo::hasBody() const {
     return positive.integerTotal > 0;
 }
 
+bool ParsedPatternInfo::currencyAsDecimal() const {
+    return positive.hasCurrencyDecimal;
+}
+
 /////////////////////////////////////////////////////
 /// BEGIN RECURSIVE DESCENT PARSER IMPLEMENTATION ///
 /////////////////////////////////////////////////////

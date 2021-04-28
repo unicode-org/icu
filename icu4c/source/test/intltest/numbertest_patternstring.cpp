@@ -17,6 +17,7 @@ void PatternStringTest::runIndexedTest(int32_t index, UBool exec, const char*& n
         TESTCASE_AUTO(testToPatternSimple);
         TESTCASE_AUTO(testExceptionOnInvalid);
         TESTCASE_AUTO(testBug13117);
+        TESTCASE_AUTO(testCurrencyDecimal);
     TESTCASE_AUTO_END;
 }
 
@@ -115,6 +116,37 @@ void PatternStringTest::testBug13117() {
             u"0;", IGNORE_ROUNDING_NEVER, status);
     assertSuccess("Spot 1", status);
     assertTrue("Should not consume negative subpattern", expected == actual);
+}
+
+void PatternStringTest::testCurrencyDecimal() {
+    IcuTestErrorCode status(*this, "testCurrencyDecimal");
+
+    // Manually create a NumberFormatterImpl from a specific pattern
+    ParsedPatternInfo patternInfo;
+    PatternParser::parseToPatternInfo(u"a0¤00b", patternInfo, status);
+    MacroProps macros;
+    macros.affixProvider = &patternInfo;
+    NumberFormatterImpl nfi(macros, status);
+
+    // Test that the output is as expected
+    UFormattedNumberData results;
+    results.quantity.setToDouble(3.14);
+    nfi.format(&results, status);
+    assertEquals("", u"a3$14b", results.toTempString(status));
+
+return;
+    // Test field positions
+    static const UFieldPosition expectedFieldPositions[] = {
+            {UNUM_INTEGER_FIELD, 0, 3},
+            {UNUM_MEASURE_UNIT_FIELD, 4, 5}};
+    checkFormattedValue(
+        u"",
+        results,
+        u"",
+        UFIELD_CATEGORY_NUMBER,
+        expectedFieldPositions,
+        UPRV_LENGTHOF(expectedFieldPositions)
+    );
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -105,6 +105,8 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
 
     bool hasBody() const U_OVERRIDE;
 
+    bool currencyAsDecimal() const U_OVERRIDE;
+
   private:
     struct U_I18N_API ParserState {
         const UnicodeString& pattern; // reference to the parent
