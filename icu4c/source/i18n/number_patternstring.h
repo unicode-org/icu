@@ -62,6 +62,7 @@ struct U_I18N_API ParsedSubpatternInfo {
     bool hasPercentSign = false;
     bool hasPerMilleSign = false;
     bool hasCurrencySign = false;
+    bool hasCurrencyDecimal = false;
     bool hasMinusSign = false;
     bool hasPlusSign = false;
 
@@ -120,6 +121,8 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
         }
 
         UChar32 peek();
+
+        UChar32 peek2();
 
         UChar32 next();
 

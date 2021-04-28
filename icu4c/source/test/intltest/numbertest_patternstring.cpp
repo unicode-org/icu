@@ -56,6 +56,9 @@ void PatternStringTest::testToPatternSimple() {
                                   {u"0E0", u"0E0"},
                                   {u"#00E00", u"#00E00"},
                                   {u"#,##0", u"#,##0"},
+                                  {u"0¤", u"0¤"},
+                                  {u"0¤a", u"0¤a"},
+                                  {u"0¤00", u"0¤00"},
                                   {u"#;#", u"0;0"},
             // ignore a negative prefix pattern of '-' since that is the default:
                                   {u"#;-#", u"0"},
@@ -77,6 +80,7 @@ void PatternStringTest::testToPatternSimple() {
         assertSuccess(input, status);
         UnicodeString actual = PatternStringUtils::propertiesToPatternString(properties, status);
         assertEquals(input, output, actual);
+        status = U_ZERO_ERROR;
     }
 }
 
