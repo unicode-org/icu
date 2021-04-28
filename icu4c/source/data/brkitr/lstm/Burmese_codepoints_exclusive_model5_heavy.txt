@@ -1,4 +1,4 @@
-// © 2021 and later: Unicode, Inc. and others.
+﻿// © 2021 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 Burmese_codepoints_exclusive_model5_heavy:table(nofallback){
     model{"Burmese_codepoints_exclusive_model5_heavy"}
