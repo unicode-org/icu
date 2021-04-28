@@ -1,4 +1,4 @@
-// © 2021 and later: Unicode, Inc. and others.
+﻿// © 2021 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 Thai_graphclust_model5_heavy:table(nofallback){
     model{"Thai_graphclust_model5_heavy"}
