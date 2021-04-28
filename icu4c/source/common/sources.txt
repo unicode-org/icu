@@ -40,6 +40,7 @@ locmap.cpp
 locresdata.cpp
 locutil.cpp
 lsr.cpp
+lstmbe.cpp
 messagepattern.cpp
 normalizer2.cpp
 normalizer2impl.cpp

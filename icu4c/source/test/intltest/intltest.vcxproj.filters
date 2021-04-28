@@ -64,6 +64,9 @@
     <ClCompile Include="itrbbi.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
+    <ClCompile Include="lstmbetst.cpp">
+      <Filter>break iteration</Filter>
+    </ClCompile>
     <ClCompile Include="rbbiapts.cpp">
       <Filter>break iteration</Filter>
     </ClCompile>
