@@ -284,6 +284,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
     TESTCASE_AUTO(TestCanonicalize);
     TESTCASE_AUTO(TestLeak21419);
+    TESTCASE_AUTO(TestNullDereferenceWrite21597);
     TESTCASE_AUTO(TestLongLocaleSetKeywordAssign);
     TESTCASE_AUTO(TestLongLocaleSetKeywordMoveAssign);
     TESTCASE_AUTO_END;
@@ -5030,7 +5031,6 @@ void LocaleTest::TestCanonicalize(void)
         // alias of tvalue should be replaced
         { "en-t-m0-NaMeS", "en-t-m0-prprname" },
         { "en-t-s0-ascii-d0-NaMe", "en-t-d0-charname-s0-ascii" },
-
     };
     int32_t i;
     for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
@@ -6583,6 +6583,13 @@ void LocaleTest::TestSetUnicodeKeywordValueNullInLongLocale() {
 void LocaleTest::TestLeak21419() {
     IcuTestErrorCode status(*this, "TestLeak21419");
     Locale l = Locale("s-yU");
+    l.canonicalize(status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+}
+
+void LocaleTest::TestNullDereferenceWrite21597() {
+    IcuTestErrorCode status(*this, "TestNullDereferenceWrite21597");
+    Locale l = Locale("zu-t-q5-X1-vKf-KK-Ks-cO--Kc");
     l.canonicalize(status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
