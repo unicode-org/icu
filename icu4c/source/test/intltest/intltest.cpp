@@ -39,6 +39,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "itmajor.h"
+#include "lstmbe.h"
 #include "mutex.h"
 #include "putilimp.h" // for uprv_getRawUTCtime()
 #include "uassert.h"
@@ -2427,6 +2428,27 @@ cleanUpAndReturn:
     }
     return retPtr;
 }
+
+#if !UCONFIG_NO_BREAK_ITERATION
+UBool LSTMDataIsBuilt() {
+  // If we can find the LSTM data, the RBBI will use the LSTM engine.
+  // So we skip the test which depending on the dictionary data.
+  UErrorCode status = U_ZERO_ERROR;
+  DeleteLSTMData(CreateLSTMDataForScript(USCRIPT_THAI, status));
+  UBool thaiDataIsBuilt = U_SUCCESS(status);
+  status = U_ZERO_ERROR;
+  DeleteLSTMData(CreateLSTMDataForScript(USCRIPT_MYANMAR, status));
+  UBool burmeseDataIsBuilt = U_SUCCESS(status);
+  return thaiDataIsBuilt | burmeseDataIsBuilt;
+}
+
+UBool IntlTest::skipLSTMTest() {
+   return ! LSTMDataIsBuilt();
+}
+UBool IntlTest::skipDictionaryTest() {
+   return LSTMDataIsBuilt();
+}
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 /*
  * Hey, Emacs, please set the following:
