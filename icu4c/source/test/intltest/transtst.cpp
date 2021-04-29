@@ -4678,6 +4678,11 @@ void TransliteratorTest::TestHalfwidthFullwidth(void) {
      */
 void TransliteratorTest::TestThai(void) {
 #if !UCONFIG_NO_BREAK_ITERATION
+    // The expectations in this test heavily depends on the Thai dictionary.
+    // Therefore, we skip this test under the LSTM configuration.
+    if (skipDictionaryTest()) {
+        return;
+    }
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* tr = Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, parseError, status);
