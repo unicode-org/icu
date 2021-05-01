@@ -55,12 +55,14 @@ protected:
      * @param rangeStart The start of the range of dictionary characters
      * @param rangeEnd The end of the range of dictionary characters
      * @param foundBreaks Output of C array of int32_t break positions, or 0
+     * @param status Information on any errors encountered.
      * @return The number of breaks found
      */
      virtual int32_t divideUpDictionaryRange(UText *text,
                                              int32_t rangeStart,
                                              int32_t rangeEnd,
-                                             UVector32 &foundBreaks ) const;
+                                             UVector32 &foundBreaks,
+                                             UErrorCode& status) const;
 private:
     const LSTMData* fData;
     const Vectorizer* fVectorizer;
