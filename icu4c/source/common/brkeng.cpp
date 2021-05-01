@@ -78,7 +78,9 @@ int32_t
 UnhandledEngine::findBreaks( UText *text,
                              int32_t /* startPos */,
                              int32_t endPos,
-                             UVector32 &/*foundBreaks*/ ) const {
+                             UVector32 &/*foundBreaks*/,
+                             UErrorCode &status) const {
+    if (U_FAILURE(status)) return 0;
     UChar32 c = utext_current32(text); 
     while((int32_t)utext_getNativeIndex(text) < endPos && fHandled->contains(c)) {
         utext_next32(text);            // TODO:  recast loop to work with post-increment operations.
