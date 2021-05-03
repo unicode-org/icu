@@ -7,7 +7,7 @@
  *******************************************************************************
  */
 
-package com.ibm.icu.text;
+package com.ibm.icu.impl.breakiter;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

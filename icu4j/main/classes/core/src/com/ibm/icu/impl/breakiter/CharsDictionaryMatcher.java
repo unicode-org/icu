@@ -6,10 +6,11 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl.breakiter;
 
 import java.text.CharacterIterator;
 
+import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.util.BytesTrie.Result;
 import com.ibm.icu.util.CharsTrie;
 
