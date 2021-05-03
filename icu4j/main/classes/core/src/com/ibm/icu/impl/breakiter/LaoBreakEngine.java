@@ -6,7 +6,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl.breakiter;
 
 import java.io.IOException;
 import java.text.CharacterIterator;
@@ -14,39 +14,43 @@ import java.text.CharacterIterator;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.UnicodeSet;
 
-class BurmeseBreakEngine extends DictionaryBreakEngine {
+public class LaoBreakEngine extends DictionaryBreakEngine {
 
-    // Constants for BurmeseBreakIterator
+    // Constants for LaoBreakIterator
     // How many words in a row are "good enough"?
-    private static final byte BURMESE_LOOKAHEAD = 3;
+    private static final byte LAO_LOOKAHEAD = 3;
     // Will not combine a non-word with a preceding dictionary word longer than this
-    private static final byte BURMESE_ROOT_COMBINE_THRESHOLD = 3;
+    private static final byte LAO_ROOT_COMBINE_THRESHOLD = 3;
     // Will not combine a non-word that shares at least this much prefix with a
     // dictionary word with a preceding word
-    private static final byte BURMESE_PREFIX_COMBINE_THRESHOLD = 3;
+    private static final byte LAO_PREFIX_COMBINE_THRESHOLD = 3;
     // Minimum word size
-    private static final byte BURMESE_MIN_WORD = 2;
+    private static final byte LAO_MIN_WORD = 2;
 
     private DictionaryMatcher fDictionary;
-    private static UnicodeSet fBurmeseWordSet;
+    private static UnicodeSet fLaoWordSet;
     private static UnicodeSet fEndWordSet;
     private static UnicodeSet fBeginWordSet;
     private static UnicodeSet fMarkSet;
 
     static {
         // Initialize UnicodeSets
-        fBurmeseWordSet = new UnicodeSet();
+        fLaoWordSet = new UnicodeSet();
         fMarkSet = new UnicodeSet();
         fBeginWordSet = new UnicodeSet();
 
-        fBurmeseWordSet.applyPattern("[[:Mymr:]&[:LineBreak=SA:]]");
-        fBurmeseWordSet.compact();
+        fLaoWordSet.applyPattern("[[:Laoo:]&[:LineBreak=SA:]]");
+        fLaoWordSet.compact();
 
-        fMarkSet.applyPattern("[[:Mymr:]&[:LineBreak=SA:]&[:M:]]");
+        fMarkSet.applyPattern("[[:Laoo:]&[:LineBreak=SA:]&[:M:]]");
         fMarkSet.add(0x0020);
-        fEndWordSet = new UnicodeSet(fBurmeseWordSet);
-        fBeginWordSet.add(0x1000, 0x102A);      // basic consonants and independent vowels
+        fEndWordSet = new UnicodeSet(fLaoWordSet);
+        fEndWordSet.remove(0x0EC0, 0x0EC4); // prefix vowels
+        fBeginWordSet.add(0x0E81, 0x0EAE); // basic consonants (including holes for corresponding Thai characters)
+        fBeginWordSet.add(0x0EDC, 0x0EDD); // digraph consonants (no Thai equivalent)
+        fBeginWordSet.add(0x0EC0, 0x0EC4); // prefix vowels
 
         // Compact for caching
         fMarkSet.compact();
@@ -54,23 +58,23 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
         fBeginWordSet.compact();
 
         // Freeze the static UnicodeSet
-        fBurmeseWordSet.freeze();
+        fLaoWordSet.freeze();
         fMarkSet.freeze();
         fEndWordSet.freeze();
         fBeginWordSet.freeze();
     }
 
-    public BurmeseBreakEngine() throws IOException {
-        setCharacters(fBurmeseWordSet);
+    public LaoBreakEngine() throws IOException {
+        setCharacters(fLaoWordSet);
         // Initialize dictionary
-        fDictionary = DictionaryData.loadDictionaryFor("Mymr");
+        fDictionary = DictionaryData.loadDictionaryFor("Laoo");
     }
 
     @Override
     public boolean equals(Object obj) {
         // Normally is a singleton, but it's possible to have duplicates
         //   during initialization. All are equivalent.
-        return obj instanceof BurmeseBreakEngine;
+        return obj instanceof LaoBreakEngine;
     }
 
     @Override
@@ -81,7 +85,7 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
     @Override
     public boolean handles(int c) {
         int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
-        return (script == UScript.MYANMAR);
+        return (script == UScript.LAO);
     }
 
     @Override
@@ -89,14 +93,14 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
             DequeI foundBreaks) {
 
 
-        if ((rangeEnd - rangeStart) < BURMESE_MIN_WORD) {
+        if ((rangeEnd - rangeStart) < LAO_MIN_WORD) {
             return 0;  // Not enough characters for word
         }
         int wordsFound = 0;
         int wordLength;
         int current;
-        PossibleWord words[] = new PossibleWord[BURMESE_LOOKAHEAD];
-        for (int i = 0; i < BURMESE_LOOKAHEAD; i++) {
+        PossibleWord words[] = new PossibleWord[LAO_LOOKAHEAD];
+        for (int i = 0; i < LAO_LOOKAHEAD; i++) {
             words[i] = new PossibleWord();
         }
         int uc;
@@ -106,11 +110,11 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
             wordLength = 0;
 
             //Look for candidate words at the current position
-            int candidates = words[wordsFound%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
+            int candidates = words[wordsFound%LAO_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
 
             // If we found exactly one, use that
             if (candidates == 1) {
-                wordLength = words[wordsFound%BURMESE_LOOKAHEAD].acceptMarked(fIter);
+                wordLength = words[wordsFound%LAO_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
             }
 
@@ -120,9 +124,9 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
                 // If we're already at the end of the range, we're done
                 if (fIter.getIndex() < rangeEnd) {
                     do {
-                        if (words[(wordsFound+1)%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
+                        if (words[(wordsFound+1)%LAO_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
                             // Followed by another dictionary word; mark first word as a good candidate
-                            words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
+                            words[wordsFound%LAO_LOOKAHEAD].markCurrent();
 
                             // If we're already at the end of the range, we're done
                             if (fIter.getIndex() >= rangeEnd) {
@@ -132,16 +136,16 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
                             // See if any of the possible second words is followed by a third word
                             do {
                                 // If we find a third word, stop right away
-                                if (words[(wordsFound+2)%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
-                                    words[wordsFound%BURMESE_LOOKAHEAD].markCurrent();
+                                if (words[(wordsFound+2)%LAO_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) > 0) {
+                                    words[wordsFound%LAO_LOOKAHEAD].markCurrent();
                                     foundBest = true;
                                     break;
                                 }
-                            } while (words[(wordsFound+1)%BURMESE_LOOKAHEAD].backUp(fIter));
+                            } while (words[(wordsFound+1)%LAO_LOOKAHEAD].backUp(fIter));
                         }
-                    } while (words[wordsFound%BURMESE_LOOKAHEAD].backUp(fIter) && !foundBest);
+                    } while (words[wordsFound%LAO_LOOKAHEAD].backUp(fIter) && !foundBest);
                 }
-                wordLength = words[wordsFound%BURMESE_LOOKAHEAD].acceptMarked(fIter);
+                wordLength = words[wordsFound%LAO_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
             }
 
@@ -150,13 +154,13 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
             // just found (if there is one), but only if the preceding word does not exceed
             // the threshold.
             // The text iterator should now be positioned at the end of the word we found.
-            if (fIter.getIndex() < rangeEnd && wordLength < BURMESE_ROOT_COMBINE_THRESHOLD) {
+            if (fIter.getIndex() < rangeEnd && wordLength < LAO_ROOT_COMBINE_THRESHOLD) {
                 // If it is a dictionary word, do nothing. If it isn't, then if there is
                 // no preceding word, or the non-word shares less than the minimum threshold
                 // of characters with a dictionary word, then scan to resynchronize
-                if (words[wordsFound%BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&
+                if (words[wordsFound%LAO_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&
                         (wordLength == 0 ||
-                                words[wordsFound%BURMESE_LOOKAHEAD].longestPrefix() < BURMESE_PREFIX_COMBINE_THRESHOLD)) {
+                                words[wordsFound%LAO_LOOKAHEAD].longestPrefix() < LAO_PREFIX_COMBINE_THRESHOLD)) {
                     // Look for a plausible word boundary
                     int remaining = rangeEnd - (current + wordLength);
                     int pc = fIter.current();
@@ -170,7 +174,7 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
                         }
                         if (fEndWordSet.contains(pc) && fBeginWordSet.contains(uc)) {
                             // Maybe. See if it's in the dictionary.
-                            int candidate = words[(wordsFound + 1) %BURMESE_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
+                            int candidate = words[(wordsFound + 1) %LAO_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
                             fIter.setIndex(current + wordLength + chars);
                             if (candidate > 0) {
                                 break;
@@ -203,7 +207,7 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
             // We do this in code rather than using a rule so that the heuristic
             // resynch continues to function. For example, one of the suffix characters
             // could be a typo in the middle of a word.
-            // NOT CURRENTLY APPLICABLE TO BURMESE
+            // NOT CURRENTLY APPLICABLE TO LAO
 
             // Did we find a word on this iteration? If so, push it on the break stack
             if (wordLength > 0) {

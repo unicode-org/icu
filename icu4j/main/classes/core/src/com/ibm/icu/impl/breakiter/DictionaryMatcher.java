@@ -6,7 +6,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl.breakiter;
 
 import java.text.CharacterIterator;
 

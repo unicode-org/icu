@@ -6,7 +6,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl.breakiter;
 
 import static com.ibm.icu.impl.CharacterIteration.DONE32;
 import static com.ibm.icu.impl.CharacterIteration.current32;
@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.text.CharacterIterator;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.UnicodeSet;
 
-class CjkBreakEngine extends DictionaryBreakEngine {
+public class CjkBreakEngine extends DictionaryBreakEngine {
     private static final UnicodeSet fHangulWordSet = new UnicodeSet();
     private static final UnicodeSet fHanWordSet = new UnicodeSet();
     private static final UnicodeSet fKatakanaWordSet = new UnicodeSet();

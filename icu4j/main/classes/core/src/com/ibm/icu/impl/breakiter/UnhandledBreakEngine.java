@@ -6,15 +6,16 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl.breakiter;
 
 import java.text.CharacterIterator;
 
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.UnicodeSet;
 
-final class UnhandledBreakEngine implements LanguageBreakEngine {
+public final class UnhandledBreakEngine implements LanguageBreakEngine {
     // TODO: Use two UnicodeSets, one with all frozen sets, one with unfrozen.
     // in handleChar(), update the unfrozen version, clone, freeze, replace the frozen one.
 

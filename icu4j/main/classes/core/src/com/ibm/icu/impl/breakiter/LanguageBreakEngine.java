@@ -6,7 +6,7 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.impl.breakiter;
 
 import java.text.CharacterIterator;
 
@@ -14,7 +14,7 @@ import java.text.CharacterIterator;
  * The LanguageBreakEngine interface is to be used to implement any
  * language-specific logic for break iteration.
  */
-interface LanguageBreakEngine {
+public interface LanguageBreakEngine {
     /**
      * @param c A Unicode codepoint value
      * @return true if the engine can handle this character, false otherwise
