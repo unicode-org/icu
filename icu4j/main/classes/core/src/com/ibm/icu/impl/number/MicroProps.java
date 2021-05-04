@@ -44,6 +44,7 @@ public class MicroProps implements Cloneable, MicroPropsGenerator {
     public Precision rounder;
     public Grouper grouping;
     public boolean useCurrency;
+    public boolean currencyAsDecimal;
     public String gender;
 
     // Internal fields:

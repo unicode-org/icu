@@ -122,10 +122,13 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
             return *this;
         }
 
+        /** Returns the next code point, or -1 if string is too short. */
         UChar32 peek();
 
+        /** Returns the code point after the next code point, or -1 if string is too short. */
         UChar32 peek2();
 
+        /** Returns the next code point and then steps forward. */
         UChar32 next();
 
         // TODO: We don't currently do anything with the message string.

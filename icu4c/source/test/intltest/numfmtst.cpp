@@ -10098,10 +10098,13 @@ void NumberFormatTest::Test21556_CurrencyAsDecimal() {
         }
         df.setCurrency(u"EUR", status);
         UnicodeString result;
-        df.format(3.141, result);
+        FieldPosition fp(UNUM_CURRENCY_FIELD);
+        df.format(3.141, result, fp);
         assertEquals("Basic test: format", u"a3€14b", result);
         UnicodeString pattern;
         assertEquals("Basic test: toPattern", u"a0¤00b", df.toPattern(pattern));
+        assertEquals("Basic test: field position begin", 2, fp.getBeginIndex());
+        assertEquals("Basic test: field position end", 3, fp.getEndIndex());
     }
 
     {
@@ -10109,10 +10112,13 @@ void NumberFormatTest::Test21556_CurrencyAsDecimal() {
         DecimalFormat* df = static_cast<DecimalFormat*>(nf.getAlias());
         df->applyPattern(u"a0¤00b", status);
         UnicodeString result;
-        df->format(3.141, result);
+        FieldPosition fp(UNUM_CURRENCY_FIELD);
+        df->format(3.141, result, fp);
         assertEquals("Via applyPattern: format", u"a3£14b", result);
         UnicodeString pattern;
         assertEquals("Via applyPattern: toPattern", u"a0¤00b", df->toPattern(pattern));
+        assertEquals("Via applyPattern: field position begin", 2, fp.getBeginIndex());
+        assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
     }
 }
 
