@@ -121,20 +121,17 @@ void PatternStringTest::testBug13117() {
 void PatternStringTest::testCurrencyDecimal() {
     IcuTestErrorCode status(*this, "testCurrencyDecimal");
 
-    // Manually create a NumberFormatterImpl from a specific pattern
+    // Manually create a NumberFormatter from a specific pattern
     ParsedPatternInfo patternInfo;
     PatternParser::parseToPatternInfo(u"a0¤00b", patternInfo, status);
     MacroProps macros;
     macros.unit = CurrencyUnit(u"EUR", status);
     macros.affixProvider = &patternInfo;
-    NumberFormatterImpl nfi(macros, status);
+    LocalizedNumberFormatter nf = NumberFormatter::with().macros(macros).locale("und");
 
     // Test that the output is as expected
-    UFormattedNumberData results;
-    results.quantity.setToDouble(3.14);
-    nfi.format(&results, status);
-    results.getStringRef().writeTerminator(status); // add NUL terminator
-    assertEquals("Should substitute currency symbol", u"a3€14b", results.toTempString(status));
+    FormattedNumber fn = nf.formatDouble(3.14, status);
+    assertEquals("Should substitute currency symbol", u"a3€14b", fn.toTempString(status));
 
     // Test field positions
     static const UFieldPosition expectedFieldPositions[] = {
@@ -143,7 +140,7 @@ void PatternStringTest::testCurrencyDecimal() {
             {UNUM_FRACTION_FIELD, 3, 5}};
     checkFormattedValue(
         u"Currency as decimal basic field positions",
-        results,
+        fn,
         u"a3€14b",
         UFIELD_CATEGORY_NUMBER,
         expectedFieldPositions,
