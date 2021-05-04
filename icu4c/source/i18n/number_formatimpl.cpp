@@ -531,10 +531,11 @@ int32_t NumberFormatterImpl::writeNumber(const MicroProps& micros, DecimalQuanti
             if (micros.currencyAsDecimal) {
                 length += string.insert(
                     length + index,
-                    // TODO: Get the correct currency symbol
+                    // Note: This unconditionally substitutes the standard short symbol.
+                    // TODO: Should we support narrow or other variants?
                     micros.symbols->getSymbol(
                         DecimalFormatSymbols::ENumberFormatSymbol::kCurrencySymbol),
-                    {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_SYMBOL},
+                    {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD},
                     status);
             } else if (micros.useCurrency) {
                 length += string.insert(
