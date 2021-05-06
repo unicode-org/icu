@@ -1,16 +1,14 @@
 # Azure Pipelines configuration for Valgrind for ICU4C.
 # 
 # Note: The valgrind test configuration is in a separate file
-# so that it can be run independently from the regular builds.
+# as it used to be run independently from the regular CI builds.
 #
 # The Ubuntu images don't have valgrind installed by default, so we need
 # install it first.
 #
-# Only run valgrind on the main and maint branches, and
-# batch up any pending changes so that we will only have at most
-# one build running at a given time (since it takes time).
-trigger:
-  batch: true
+# Run Valgrind for every Pull Request that goes into main
+# or a maint- branch. This lets us catch any issues sooner rather than later. 
+pr:
   branches:
     include:
     - main
