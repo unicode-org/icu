@@ -62,7 +62,8 @@ import com.ibm.icu.util.UResourceBundle;
  * <p>
  * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
  * {@link NumberFormatter} fits their use case.  Although not deprecated, this
- * class, MeasureFormat, is provided for backwards compatibility only.
+ * class, MeasureFormat, is provided for backwards compatibility only, and has
+ * much more limited capabilities.
  * <hr>
  *
  * <p>
@@ -159,21 +160,21 @@ public class MeasureFormat extends UFormat {
          *
          * @stable ICU 53
          */
-        WIDE(ListFormatter.Style.UNIT, UnitWidth.FULL_NAME, UnitWidth.FULL_NAME),
+        WIDE(ListFormatter.Width.WIDE, UnitWidth.FULL_NAME, UnitWidth.FULL_NAME),
 
         /**
          * Abbreviate when possible.
          *
          * @stable ICU 53
          */
-        SHORT(ListFormatter.Style.UNIT_SHORT, UnitWidth.SHORT, UnitWidth.ISO_CODE),
+        SHORT(ListFormatter.Width.SHORT, UnitWidth.SHORT, UnitWidth.ISO_CODE),
 
         /**
          * Brief. Use only a symbol for the unit when possible.
          *
          * @stable ICU 53
          */
-        NARROW(ListFormatter.Style.UNIT_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
+        NARROW(ListFormatter.Width.NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
 
         /**
          * Identical to NARROW except when formatMeasures is called with an hour and minute; minute and
@@ -182,7 +183,7 @@ public class MeasureFormat extends UFormat {
          *
          * @stable ICU 53
          */
-        NUMERIC(ListFormatter.Style.UNIT_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
+        NUMERIC(ListFormatter.Width.NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
 
         /**
          * The default format width for getCurrencyFormat(), which is to show the symbol for currency
@@ -192,9 +193,9 @@ public class MeasureFormat extends UFormat {
          * @deprecated ICU 61 This API is ICU internal only.
          */
         @Deprecated
-        DEFAULT_CURRENCY(ListFormatter.Style.UNIT, UnitWidth.FULL_NAME, UnitWidth.SHORT);
+        DEFAULT_CURRENCY(ListFormatter.Width.SHORT, UnitWidth.FULL_NAME, UnitWidth.SHORT);
 
-        private final ListFormatter.Style listFormatterStyle;
+        final ListFormatter.Width listWidth;
 
         /**
          * The {@link UnitWidth} (used for newer NumberFormatter API) that corresponds to this
@@ -208,14 +209,13 @@ public class MeasureFormat extends UFormat {
          */
         final UnitWidth currencyWidth;
 
-        private FormatWidth(ListFormatter.Style style, UnitWidth unitWidth, UnitWidth currencyWidth) {
-            this.listFormatterStyle = style;
+        private FormatWidth(
+                ListFormatter.Width listWidth,
+                UnitWidth unitWidth,
+                UnitWidth currencyWidth) {
+            this.listWidth = listWidth;
             this.unitWidth = unitWidth;
             this.currencyWidth = currencyWidth;
-        }
-
-        ListFormatter.Style getListFormatterStyle() {
-            return listFormatterStyle;
         }
     }
 
@@ -344,7 +344,6 @@ public class MeasureFormat extends UFormat {
      * @throws UnsupportedOperationException
      *             Not supported.
      * @draft ICU 53 (Retain)
-     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Measure parseObject(String source, ParsePosition pos) {
@@ -456,7 +455,8 @@ public class MeasureFormat extends UFormat {
         }
 
         ListFormatter listFormatter = ListFormatter.getInstance(getLocale(),
-                formatWidth.getListFormatterStyle());
+                ListFormatter.Type.UNITS,
+                formatWidth.listWidth);
         if (fieldPosition != DontCareFieldPosition.INSTANCE) {
             formatMeasuresSlowTrack(listFormatter, appendTo, fieldPosition, measures);
             return;

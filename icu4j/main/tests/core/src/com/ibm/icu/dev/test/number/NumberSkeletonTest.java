@@ -30,18 +30,28 @@ public class NumberSkeletonTest {
                 "@@@##",
                 "@@*",
                 "@@+",
+                "@@+/w",
                 ".000##",
                 ".00*",
                 ".00+",
                 ".",
+                "./w",
                 ".*",
                 ".+",
+                ".+/w",
                 ".######",
                 ".00/@@*",
                 ".00/@@+",
                 ".00/@##",
+                ".00/@##/w",
+                ".00/@",
+                ".00/@r",
+                ".00/@@s",
+                ".00/@@#r",
                 "precision-increment/3.14",
+                "precision-increment/3.14/w",
                 "precision-currency-standard",
+                "precision-currency-standard/w",
                 "precision-integer rounding-mode-half-up",
                 ".00# rounding-mode-ceiling",
                 ".00/@@* rounding-mode-floor",
@@ -131,6 +141,9 @@ public class NumberSkeletonTest {
     public void invalidTokens() {
         String[] cases = {
                 ".00x",
+                ".00i",
+                ".00/x",
+                ".00/ww",
                 ".00##0",
                 ".##*",
                 ".00##*",
@@ -142,13 +155,13 @@ public class NumberSkeletonTest {
                 "@#+",
                 "@@x",
                 "@@##0",
-                ".00/@",
                 ".00/@@",
                 ".00/@@x",
                 ".00/@@#",
                 ".00/@@#*",
                 ".00/floor/@@*", // wrong order
                 ".00/@@#+",
+                ".00/@@@+r",
                 ".00/floor/@@+", // wrong order
                 "precision-increment/français", // non-invariant characters for C++
                 "scientific/ee",
@@ -221,6 +234,7 @@ public class NumberSkeletonTest {
     @Test
     public void unexpectedTokens() {
         String[] cases = {
+                ".00/w/w",
                 "group-thousands/foo",
                 "precision-integer//@## group-off",
                 "precision-integer//@##  group-off",
@@ -322,7 +336,6 @@ public class NumberSkeletonTest {
         String[][] cases = {
             { ".00*", ".00+" },
             { "@@*", "@@+" },
-            { ".00/@@*", ".00/@@+" },
             { "scientific/*ee", "scientific/+ee" },
             { "integer-width/*00", "integer-width/+00" },
         };

@@ -129,7 +129,7 @@ int countWords(const char *utf8String) {
 ## UText API Functions
 
 The UText API is declared in the ICU header file
-[utext.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utext.h)
+[utext.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utext.h)
 
 ### Opening and Closing.
 
@@ -383,6 +383,6 @@ required.
 
 To fully understand what is required to support a new string type with UText, it
 will be necessary to study both the provider function declarations from
-[utext.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/unicode/utext.h)
+[utext.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/utext.h)
 and the existing text provider implementations in
-[utext.cpp](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/utext.cpp).
+[utext.cpp](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/utext.cpp).

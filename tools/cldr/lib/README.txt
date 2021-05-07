@@ -39,13 +39,13 @@ Only follow these remaining steps if the installation script isn't suitable or
 doesn't work on your system.
 
 To regenerate the CLDR API jar you need to build the "jar" target manually
-using the Ant build.xml file in the "tools/java" directory of the CLDR project:
+using the Maven pom.xml file in the "tools" directory of the CLDR project:
 
-$ cd "$CLDR_ROOT/tools/java"
-$ ant clean jar
+$ cd "$CLDR_ROOT/tools"
+$ mvn package -DskipTests=true
 
-This should result in the cldr.jar file being built into that directory, which
-can then be installed as a Maven dependency as described above.
+This should result in the cldr-code.jar file being built into the cldr-code/target
+sub-directory, which can then be installed as a Maven dependency as described above.
 
 
 Updating local Maven repository
@@ -62,7 +62,7 @@ $ mvn install:install-file \
   -Dpackaging=jar \
   -DgeneratePom=true \
   -DlocalRepositoryPath=. \
-  -Dfile="$CLDR_ROOT/tools/java/cldr.jar"
+  -Dfile="$CLDR_ROOT/tools/cldr-code/target/cldr-code.jar"
 
 And if you have updated one of these libraries then from this directory run:
 

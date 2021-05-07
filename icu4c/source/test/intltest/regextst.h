@@ -71,7 +71,6 @@ public:
                             const UnicodeString &input, const char *srcPath, int32_t line);
     virtual void regex_err(const char *pat, int32_t errline, int32_t errcol,
                             UErrorCode expectedStatus, int32_t line);
-    virtual UChar *ReadAndConvertFile(const char *fileName, int32_t &len, const char *charset, UErrorCode &status);
     virtual const char *getPath(char buffer[2048], const char *filename);
 
     virtual void TestCase11049(const char *pattern, const char *data, UBool expectMatch, int32_t lineNumber);

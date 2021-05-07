@@ -481,14 +481,27 @@ public class PluralRules implements Serializable {
         w,
 
         /**
-         * Suppressed exponent for compact notation (exponent needed in
-         * scientific notation with compact notation to approximate i).
+         * Suppressed exponent for scientific notation (exponent needed in
+         * scientific notation to approximate i).
          *
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         e,
+
+        /**
+         * This operand is currently treated as an alias for `PLURAL_OPERAND_E`.
+         * In the future, it will represent:
+         *
+         * Suppressed exponent for compact notation (exponent needed in
+         * compact notation to approximate i).
+         *
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        c,
 
         /**
          * THIS OPERAND IS DEPRECATED AND HAS BEEN REMOVED FROM THE SPEC.
@@ -537,6 +550,14 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         public boolean isInfinite();
+
+        /**
+         * Whether the number has no nonzero fraction digits.
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public boolean isHasIntegerValue();
     }
 
     /**
@@ -626,6 +647,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @Override
         public boolean isHasIntegerValue() {
             return hasIntegerValue;
         }
@@ -657,10 +679,11 @@ public class PluralRules implements Serializable {
          * @param v number of digits to the right of the decimal place. e.g 1.00 = 2 25. = 0
          * @param f Corresponds to f in the plural rules grammar.
          *   The digits to the right of the decimal place as an integer. e.g 1.10 = 10
-         * @param e Suppressed exponent for scientific and compact notation
+         * @param e Suppressed exponent for scientific notation
+         * @param c Currently: an alias for param `e`
          */
         @Deprecated
-        public FixedDecimal(double n, int v, long f, int e) {
+        public FixedDecimal(double n, int v, long f, int e, int c) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
             visibleDecimalDigitCount = v;
@@ -668,7 +691,11 @@ public class PluralRules implements Serializable {
             integerValue = n > MAX
                     ? MAX
                             : (long)n;
-            exponent = e;
+            int initExpVal = e;
+            if (initExpVal == 0) {
+                initExpVal = c;
+            }
+            exponent = initExpVal;
             hasIntegerValue = source == integerValue;
             // check values. TODO make into unit test.
             //
@@ -697,6 +724,15 @@ public class PluralRules implements Serializable {
                 visibleDecimalDigitCountWithoutTrailingZeros = trimmedCount;
             }
             baseFactor = (int) Math.pow(10, v);
+        }
+
+        /**
+         * @internal CLDR
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        public FixedDecimal(double n, int v, long f, int e) {
+            this(n, v, f, e, e);
         }
 
         /**
@@ -848,8 +884,11 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         private static FixedDecimal parseDecimalSampleRangeNumString(String num) {
-            if (num.contains("e")) {
+            if (num.contains("e") || num.contains("c")) {
                 int ePos = num.lastIndexOf('e');
+                if (ePos < 0) {
+                    ePos = num.lastIndexOf('c');
+                }
                 int expNumPos = ePos + 1;
                 String exponentStr = num.substring(expNumPos);
                 int exponent = Integer.parseInt(exponentStr);
@@ -890,6 +929,7 @@ public class PluralRules implements Serializable {
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
             case e: return exponent;
+            case c: return exponent;
             default: return source;
             }
         }
@@ -970,10 +1010,10 @@ public class PluralRules implements Serializable {
         @Override
         public String toString() {
             String baseString = String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
-            if (exponent == 0) {
-                return baseString;
-            } else {
+            if (exponent != 0) {
                 return baseString + "e" + exponent;
+            } else {
+                return baseString;
             }
         }
 
@@ -2168,7 +2208,6 @@ public class PluralRules implements Serializable {
      * @return       The keyword of the selected rule.
      * @throws UnsupportedOperationException If called on an instance without plural ranges data.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public String select(FormattedNumberRange range) {
         if (standardPluralRanges == null) {
@@ -2382,7 +2421,6 @@ public class PluralRules implements Serializable {
      * Returns the set of locales for which PluralRules are known.
      * @return the set of locales for which PluralRules are known, as a list
      * @draft ICU 4.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         return Factory.getDefaultFactory().getAvailableULocales();
@@ -2403,7 +2441,6 @@ public class PluralRules implements Serializable {
      * index 0 if locale is directly defined (without fallback) as having plural rules
      * @return the functionally-equivalent locale
      * @draft ICU 4.2 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
         return Factory.getDefaultFactory().getFunctionalEquivalent(locale, isAvailable);
@@ -2442,42 +2479,36 @@ public class PluralRules implements Serializable {
      * Status of the keyword for the rules, given a set of explicit values.
      *
      * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
      */
     public enum KeywordStatus {
         /**
          * The keyword is not valid for the rules.
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         INVALID,
         /**
          * The keyword is valid, but unused (it is covered by the explicit values, OR has no values for the given {@link SampleType}).
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         SUPPRESSED,
         /**
          * The keyword is valid, used, and has a single possible value (before considering explicit values).
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         UNIQUE,
         /**
          * The keyword is valid, used, not unique, and has a finite set of values.
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         BOUNDED,
         /**
          * The keyword is valid but not bounded; there indefinitely many matching values.
          *
          * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
          */
         UNBOUNDED
     }
@@ -2496,7 +2527,6 @@ public class PluralRules implements Serializable {
      *            If non null, set to the unique value.
      * @return the KeywordStatus
      * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
      */
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
             Output<Double> uniqueValue) {

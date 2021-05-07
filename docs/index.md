@@ -1,7 +1,7 @@
 ---
 layout: default
 title: ICU Documentation
-nav_order: 1
+nav_order: 100
 description: ICU Documentation
 ---
 
@@ -12,7 +12,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 # ICU Documentation
 
-[![ICU logo](https://github.com/unicode-org/icu-docs/raw/master/img/iculogo_64.png)](http://site.icu-project.org/)
+[![ICU logo](https://github.com/unicode-org/icu-docs/raw/main/img/iculogo_64.png)](http://site.icu-project.org/)
 
 ## ICU User Guide
 

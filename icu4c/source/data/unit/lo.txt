@@ -136,7 +136,7 @@ lo{
                 dnam{"ກະຣັດ"}
                 other{"{0} ກະຣັດ"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ມິລິກຣັມຕໍ່ເດຊິລິດ"}
                 other{"{0} mg/dL"}
             }
@@ -516,8 +516,8 @@ lo{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"ມິນລີກຣາມ"}
@@ -1118,7 +1118,7 @@ lo{
                 dnam{"ກະຣັດ"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 other{"{0} mg/dL"}
             }
@@ -1378,8 +1378,8 @@ lo{
                 per{"{0}/ມ"}
             }
             micrometer{
-                dnam{"µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"ໄມລ໌"}
@@ -1448,8 +1448,8 @@ lo{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"ມກ"}

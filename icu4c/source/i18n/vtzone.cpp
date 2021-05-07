@@ -1217,6 +1217,12 @@ VTimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
     return tz->getOffset(date, local, rawOffset, dstOffset, status);
 }
 
+void VTimeZone::getOffsetFromLocal(UDate date, UTimeZoneLocalOption nonExistingTimeOpt,
+                                   UTimeZoneLocalOption duplicatedTimeOpt,
+                                   int32_t& rawOffset, int32_t& dstOffset, UErrorCode& status) const {
+    tz->getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, rawOffset, dstOffset, status);
+}
+
 void
 VTimeZone::setRawOffset(int32_t offsetMillis) {
     tz->setRawOffset(offsetMillis);

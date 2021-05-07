@@ -211,6 +211,45 @@ static void TestAPI() {
     uset_retainAll(set2, set);
     expect(set2, "ghi", "abcdef{bc}", NULL);
 
+    // ICU 69 added some missing functions for parity with C++ and Java.
+    uset_applyPattern(set, u"[abcdef{ch}{sch}]", -1, 0, &ec);
+    if(U_FAILURE(ec)) {
+        log_err("uset_openPattern([abcdef{ch}{sch}]) failed - %s\n", u_errorName(ec));
+        return;
+    }
+    expect(set, "abcdef{ch}{sch}", "", NULL);
+
+    uset_removeAllCodePoints(set, u"ce", 2);
+    expect(set, "abdf{ch}{sch}", "ce", NULL);
+
+    uset_complementRange(set, u'b', u'f');
+    expect(set, "ace{ch}{sch}", "bdf", NULL);
+
+    uset_complementString(set, u"ch", -1);
+    expect(set, "ace{sch}", "bdf{ch}", NULL);
+
+    uset_complementString(set, u"xy", -1);
+    expect(set, "ace{sch}{xy}", "bdf{ch}", NULL);
+
+    uset_complementAllCodePoints(set, u"abef", 4);
+    expect(set, "bcf{sch}{xy}", "ade{ch}", NULL);
+
+    uset_retainAllCodePoints(set, u"abef", -1);
+    expect(set, "bf", "acde{ch}{sch}{xy}", NULL);
+
+    uset_applyPattern(set, u"[abcdef{ch}{sch}]", -1, 0, &ec);
+    if(U_FAILURE(ec)) {
+        log_err("uset_openPattern([abcdef{ch}{sch}]) failed - %s\n", u_errorName(ec));
+        return;
+    }
+    expect(set, "abcdef{ch}{sch}", "", NULL);
+
+    uset_retainString(set, u"sch", 3);
+    expect(set, "{sch}", "abcdef{ch}", NULL);
+
+    uset_retainString(set, u"ch", 3);
+    expect(set, "", "abcdef{ch}{sch}", NULL);
+
     uset_close(set);
     uset_close(set2);
 }

@@ -219,6 +219,37 @@ public class PluralRulesTest extends TestFmwk {
                 new FixedDecimal(2.0, 1));
     }
 
+    /**
+     * This test is for the support of X.YcZ compactnotation of numbers in
+     * the plural sample string.
+     */
+    @Test
+    public void testSamplesWithCompactNotation() {
+        String description = "one: i = 0,1 @integer 0, 1, 1c5 @decimal 0.0~1.5, 1.1c5; "
+                + "many: c = 0 and i != 0 and i % 1000000 = 0 and v = 0 or c != 0..5"
+                + " @integer 1000000, 2c6, 3c6, 4c6, 5c6, 6c6, 7c6, … @decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …; "
+                + "other:  @integer 2~17, 100, 1000, 10000, 100000, 2c5, 3c5, 4c5, 5c5, 6c5, 7c5, …"
+                + " @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …"
+                ;
+        // Creating the PluralRules object means being able to parse numbers
+        // like 1c5 and 1.1c5.
+        // Note: Since `c` is currently an alias to `e`, the toString() of
+        // FixedDecimal will return "1e5" even when input is "1c5".
+        PluralRules test = PluralRules.createRules(description);
+        checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 0, 1, 1e5", true,
+                new FixedDecimal(0));
+        checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 0.0~1.5, 1.1e5", true,
+                new FixedDecimal(0, 1));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.INTEGER, "@integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, …", false,
+                new FixedDecimal(1000000));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.DECIMAL, "@decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …", false,
+                FixedDecimal.createWithExponent(2.1, 1, 6));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "@integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …", false,
+                new FixedDecimal(2));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …", false,
+                new FixedDecimal(2.0, 1));
+    }
+
     public void checkOldSamples(String description, PluralRules rules, String keyword, SampleType sampleType,
             Double... expected) {
         Collection<Double> oldSamples = rules.getSamples(keyword, sampleType);
@@ -400,7 +431,7 @@ public class PluralRulesTest extends TestFmwk {
                             String old = collisionTest.get(item);
                             if (old != null) {
                                 if (!locale.getLanguage().equals("fr") ||
-                                        !logKnownIssue("21328", "fr Non-unique rules: 1e6 => one & many")) {
+                                        !logKnownIssue("21322", "fr Non-unique rules: 1e6 => one & many")) {
                                     errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
                                 }
                                 rule.select(item);
@@ -713,7 +744,7 @@ public class PluralRulesTest extends TestFmwk {
         }
         for (ULocale locale : uniqueRuleSet) {
             if (locale.getLanguage().equals("fr") &&
-                    logKnownIssue("21299", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+                    logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
                 continue;
             }
             PluralRules rules = factory.forLocale(locale);
@@ -904,7 +935,7 @@ public class PluralRulesTest extends TestFmwk {
                     for (String keyword : rules.getKeywords()) {
                         boolean isLimited = rules.isLimited(keyword, sampleType);
                         boolean computeLimited = rules.computeLimited(keyword, sampleType);
-                        if (!keyword.equals("other") && !(locale.getLanguage().equals("fr") && logKnownIssue("ICU-21270", "fr plurals many case computeLimited == isLimited"))) {
+                        if (!keyword.equals("other") && !(locale.getLanguage().equals("fr") && logKnownIssue("ICU-21322", "fr plurals many case computeLimited == isLimited"))) {
                             assertEquals(getAssertMessage("computeLimited == isLimited", locale, rules, keyword),
                                     computeLimited, isLimited);
                         }
@@ -968,12 +999,61 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    // For the time being, the compact notation exponent operand `c` is an alias
+    // for the scientific exponent operand `e` and compact notation.
+    @Test
+    public void testScientificPluralKeyword() {
+        PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: e = 0 and i % 1000000 = 0 and v = 0 or " +
+                "e != 0 .. 5;  other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000, @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …");
+        ULocale locale = new ULocale("fr-FR");
 
+        Object[][] casesData = {
+                // unlocalized formatter skeleton, input, string output, plural rule keyword
+                {"",           0, "0", "one"},
+                {"scientific", 0, "0", "one"},
+
+                {"",           1, "1", "one"},
+                {"scientific", 1, "1", "one"},
+
+                {"",           2, "2", "other"},
+                {"scientific", 2, "2", "other"},
+
+                {"",           1000000, "1 000 000", "many"},
+                {"scientific", 1000000, "1 million", "many"},
+
+                {"",           1000001, "1 000 001", "other"},
+                {"scientific", 1000001, "1 million", "many"},
+
+                {"",           120000, "1 200 000", "other"},
+                {"scientific", 1200000, "1,2 millions", "many"},
+
+                {"",           1200001, "1 200 001", "other"},
+                {"scientific", 1200001, "1,2 millions", "many"},
+
+                {"",           2000000, "2 000 000", "many"},
+                {"scientific", 2000000, "2 millions", "many"},
+        };
+
+        for (Object[] caseDatum : casesData) {
+            String skeleton = (String) caseDatum[0];
+            int input = (int) caseDatum[1];
+            // String expectedString = (String) caseDatum[2];
+            String expectPluralRuleKeyword = (String) caseDatum[3];
+
+            String actualPluralRuleKeyword =
+                    getPluralKeyword(rules, locale, input, skeleton);
+
+            assertEquals(
+                    String.format("PluralRules select %s: %d", skeleton, input),
+                    expectPluralRuleKeyword,
+                    actualPluralRuleKeyword);
+        }
+    }
 
     @Test
     public void testCompactDecimalPluralKeyword() {
-        PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: e = 0 and i % 1000000 = 0 and v = 0 or " +
-                "e != 0 .. 5;  other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000, @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …");
+        PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: c = 0 and i % 1000000 = 0 and v = 0 or " +
+                "c != 0 .. 5;  other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000, @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …");
         ULocale locale = new ULocale("fr-FR");
 
         Object[][] casesData = {

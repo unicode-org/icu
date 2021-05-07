@@ -821,6 +821,35 @@ public class RbnfTest extends TestFmwk {
     }
 
     @Test
+    public void TestNorwegianSpellout()
+    {
+        Locale noLocale = new Locale("no", "", "");
+        Locale nbLocale = new Locale("nb", "", "");
+        RuleBasedNumberFormat noFormatter = new RuleBasedNumberFormat(noLocale,
+                RuleBasedNumberFormat.SPELLOUT);
+        RuleBasedNumberFormat nbFormatter = new RuleBasedNumberFormat(nbLocale,
+                RuleBasedNumberFormat.SPELLOUT);
+
+        String[][] testDataDefault = {
+                { "1", "\u00E9n" },
+                { "2", "to" },
+                { "3", "tre" },
+                { "4", "fire" },
+                { "101", "hundre og \u00E9n" },
+                { "123", "hundre og tjue\u00ADtre" },
+                { "1,001", "tusen og \u00E9n" },
+                { "1,100", "tusen hundre" },
+                { "6.789", "seks komma sju \u00E5tte ni" },
+                { "-5.678", "minus fem komma seks sju \u00E5tte" },
+        };
+
+        logln("testing default rules");
+        doTest(noFormatter, testDataDefault, true);
+        doTest(nbFormatter, testDataDefault, true);
+
+    }
+
+    @Test
     public void TestSwedishSpellout()
     {
         Locale locale = new Locale("sv", "", "");

@@ -683,8 +683,8 @@ public:
      * unambiguous transliterations.  After the last call to this
      * method, there may be untransliterated text that is waiting for
      * more input to resolve an ambiguity.  In order to perform these
-     * pending transliterations, clients should call {@link
-     * #finishTransliteration } after the last call to this
+     * pending transliterations, clients should call
+     * {@link #finishTransliteration } after the last call to this
      * method has been made.
      *
      * @param text the buffer holding transliterated and untransliterated text
@@ -741,8 +741,7 @@ public:
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly.  This is a convenience method; see
-     * {@link
-     * #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const }
+     * {@link #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const }
      * for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
@@ -761,8 +760,7 @@ public:
      * <code>transliterate()</code>.
      * @param text the buffer holding transliterated and
      * untransliterated text.
-     * @param index the array of indices previously passed to {@link
-     * #transliterate }
+     * @param index the array of indices previously passed to {@link #transliterate }
      * @stable ICU 2.0
      */
     virtual void finishTransliteration(Replaceable& text,
@@ -968,8 +966,8 @@ public:
 
     /**
      * Returns a name for this transliterator that is appropriate for
-     * display to the user in the default locale.  See {@link
-     * #getDisplayName } for details.
+     * display to the user in the default locale.  See {@link #getDisplayName }
+     * for details.
      * @param ID     the string identifier for this transliterator
      * @param result Output param to receive the display name
      * @return       A reference to 'result'.
@@ -1168,8 +1166,8 @@ public:
      * input text by this Transliterator.  This incorporates this
      * object's current filter; if the filter is changed, the return
      * value of this function will change.  The default implementation
-     * returns an empty set.  Some subclasses may override {@link
-     * #handleGetSourceSet } to return a more precise result.  The
+     * returns an empty set.  Some subclasses may override
+     * {@link #handleGetSourceSet } to return a more precise result. The
      * return result is approximate in any case and is intended for
      * use by tests, tools, or utilities.
      * @param result receives result set; previous contents lost

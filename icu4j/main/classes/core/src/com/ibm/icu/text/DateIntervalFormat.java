@@ -377,9 +377,10 @@ public class DateIntervalFormat extends UFormat {
         /**
          * serialization method resolve instances to the constant
          * DateIntervalFormat.SpanField values
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         @Override
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(DATE_INTERVAL_SPAN.getName()))
@@ -1268,7 +1269,6 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param context The DisplayContext value to set.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public void setContext(DisplayContext context)
     {
@@ -1284,7 +1284,6 @@ public class DateIntervalFormat extends UFormat {
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public DisplayContext getContext(DisplayContext.Type type)
     {
@@ -1450,6 +1449,12 @@ public class DateIntervalFormat extends UFormat {
                     // share interval pattern
                     intervalPatterns.put(DateIntervalInfo.
                         CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR], ptn);
+
+                    pattern =dtpng.getBestPattern(timeSkeleton + "G");
+                    ptn = new PatternInfo(null, pattern, fInfo.getDefaultOrder());
+                    // share interval pattern
+                    intervalPatterns.put(DateIntervalInfo.
+                        CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA], ptn);
                 } else {
                     //genFallbackForNotFound(Calendar.DATE, skeleton);
                     //genFallbackForNotFound(Calendar.MONTH, skeleton);
@@ -1492,6 +1497,11 @@ public class DateIntervalFormat extends UFormat {
                 CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH], ptn);
             intervalPatterns.put(DateIntervalInfo.
                 CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR], ptn);
+
+            pattern =dtpng.getBestPattern(timeSkeleton + "G");
+            ptn = new PatternInfo(null, pattern, fInfo.getDefaultOrder());
+            intervalPatterns.put(DateIntervalInfo.
+                CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA], ptn);
         } else {
             /* if both present,
              * 1) when the year, month, or day differs,
@@ -1500,7 +1510,7 @@ public class DateIntervalFormat extends UFormat {
              * range expression for the time.
              */
             /*
-             * 1) when the year, month, or day differs,
+             * 1) when the era, year, month, or day differs,
              * concatenate the two original expressions with a separator between,
              */
             // if field exists, use fall back
@@ -1521,6 +1531,12 @@ public class DateIntervalFormat extends UFormat {
                 skeleton = DateIntervalInfo.
                     CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR] + skeleton;
                 genFallbackPattern(Calendar.YEAR, skeleton, intervalPatterns, dtpng);
+            }
+            if ( !fieldExistsInSkeleton(Calendar.ERA, dateSkeleton) ) {
+                // then prefix skeleton with 'G'
+                skeleton = DateIntervalInfo.
+                    CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA] + skeleton;
+                genFallbackPattern(Calendar.ERA, skeleton, intervalPatterns, dtpng);
             }
 
             /*
@@ -1597,7 +1613,7 @@ public class DateIntervalFormat extends UFormat {
 
     private String normalizeHourMetacharacters(String skeleton, ULocale locale) {
         StringBuilder result = new StringBuilder(skeleton);
-    
+
         char hourMetachar = '\0';
         int metacharStart = 0;
         int metacharCount = 0;
@@ -1615,7 +1631,7 @@ public class DateIntervalFormat extends UFormat {
                 }
             }
         }
-    
+
         if (hourMetachar != '\0') {
             char hourChar = 'H';
             char dayPeriodChar = 'a';
@@ -1633,7 +1649,7 @@ public class DateIntervalFormat extends UFormat {
                 }
                 convertedPattern = convertedPattern.substring(0, firstQuotePos) + convertedPattern.substring(secondQuotePos + 1);
             }
-    
+
             if (convertedPattern.indexOf('h') != -1) {
                 hourChar = 'h';
             } else if (convertedPattern.indexOf('K') != -1) {
@@ -1641,13 +1657,13 @@ public class DateIntervalFormat extends UFormat {
             } else if (convertedPattern.indexOf('k') != -1) {
                 hourChar = 'k';
             }
-        
+
             if (convertedPattern.indexOf('b') != -1) {
                 dayPeriodChar = 'b';
             } else if (convertedPattern.indexOf('B') != -1) {
                 dayPeriodChar = 'B';
             }
-        
+
             if (hourChar == 'H' || hourChar == 'k') {
                 result.replace(metacharStart, metacharStart + metacharCount, String.valueOf(hourChar));
             } else {
@@ -1989,7 +2005,7 @@ public class DateIntervalFormat extends UFormat {
                                        pattern.getSecondPart(), differenceInfo, suppressDayPeriodField);
                     pattern =  new PatternInfo(part1, part2,
                                                pattern.firstDateInPtnIsLaterDate());
-                                               
+
                       // share
                       intervalPatterns.put(DateIntervalInfo.
                           CALENDAR_FIELD_TO_PATTERN_LETTER[field],
@@ -2197,7 +2213,7 @@ public class DateIntervalFormat extends UFormat {
         }
         return adjustedPtn.toString();
     }
-    
+
     /**
      * Does the same thing as String.replace(), except that it won't perform the
      * substitution inside quoted literal text.
@@ -2214,19 +2230,19 @@ public class DateIntervalFormat extends UFormat {
         } else {
             StringBuilder result = new StringBuilder();
             String source = targetString;
-    
+
             while (firstQuoteIndex >= 0) {
                 int secondQuoteIndex = source.indexOf("\'", firstQuoteIndex + 1);
                 if (secondQuoteIndex < 0) {
                     secondQuoteIndex = source.length() - 1;
                 }
-        
+
                 String unquotedText = source.substring(0, firstQuoteIndex);
                 String quotedText = source.substring(firstQuoteIndex, secondQuoteIndex + 1);
-        
+
                 result.append(unquotedText.replace(strToReplace, strToReplaceWith));
                 result.append(quotedText);
-        
+
                 source = source.substring(secondQuoteIndex + 1);
                 firstQuoteIndex = source.indexOf("\'");
             }

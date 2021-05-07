@@ -14,6 +14,8 @@
 *   created by: Markus W. Scherer
 */
 
+#include <cstdlib>
+
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "charstr.h"

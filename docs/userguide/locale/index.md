@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Locales and Resources
-nav_order: 5
+nav_order: 800
 has_children: true
 ---
 <!--

@@ -51,13 +51,24 @@ public class MixedUnitLongNameHandler
      * @param mixedUnit The mixed measure unit to construct a
      *                  MixedUnitLongNameHandler for.
      * @param width     Specifies the desired unit rendering.
+     * @param unitDisplayCase Specifies the desired grammatical case. If the
+     *     specified case is not found, we fall back to nominative or no-case.
      * @param rules     PluralRules instance.
      * @param parent    MicroPropsGenerator instance.
      */
-    public static MixedUnitLongNameHandler forMeasureUnit(ULocale locale, MeasureUnit mixedUnit,
-                                                          NumberFormatter.UnitWidth width, PluralRules rules,
+    public static MixedUnitLongNameHandler forMeasureUnit(ULocale locale,
+                                                          MeasureUnit mixedUnit,
+                                                          NumberFormatter.UnitWidth width,
+                                                          String unitDisplayCase,
+                                                          PluralRules rules,
                                                           MicroPropsGenerator parent) {
-        assert (mixedUnit.getComplexity() == MeasureUnit.Complexity.MIXED);
+        assert mixedUnit.getComplexity() == MeasureUnit.Complexity.MIXED
+            : "MixedUnitLongNameHandler only supports MIXED units";
+        // In ICU4C, in addition to an assert, we return a failure status if the
+        // unit is not mixed (commented by: "Defensive, for production code").
+        // In Java, we don't have efficient access to MeasureUnitImpl, so we
+        // skip this check - relying on unit tests and the assert above to help
+        // enforce the invariant.
 
         MixedUnitLongNameHandler result = new MixedUnitLongNameHandler(rules, parent);
         List<MeasureUnit> individualUnits = mixedUnit.splitToSingleUnits();
@@ -66,7 +77,10 @@ public class MixedUnitLongNameHandler
         for (int i = 0; i < individualUnits.size(); i++) {
             // Grab data for each of the components.
             String[] unitData = new String[LongNameHandler.ARRAY_LENGTH];
-            LongNameHandler.getMeasureData(locale, individualUnits.get(i), width, unitData);
+            LongNameHandler.getMeasureData(locale, individualUnits.get(i), width, unitDisplayCase,
+                                           unitData);
+            // TODO(ICU-21494): if we add support for gender for mixed units, we may
+            // need LongNameHandler.maybeCalculateGender() here.
             result.fMixedUnitData.add(unitData);
         }
 
@@ -127,7 +141,7 @@ public class MixedUnitLongNameHandler
      */
     @Override
     public Modifier getModifier(Modifier.Signum signum, StandardPlural plural) {
-        // TODO(units): investigate this method while investigating where
+        // TODO(icu-units#28): investigate this method while investigating where
         // LongNameHandler.getModifier() gets used. To be sure it remains
         // unreachable:
         assert false : "should be unreachable";
@@ -168,14 +182,33 @@ public class MixedUnitLongNameHandler
 
         List<String> outputMeasuresList = new ArrayList<>();
 
+        StandardPlural quantityPlural = StandardPlural.OTHER;
         for (int i = 0; i < micros.mixedMeasures.size(); i++) {
+
+            if ( i  == micros.indexOfQuantity) {
+                if (i > 0 && quantity.isNegative()) {
+                    // If numbers are negative, only the first number needs to have its
+                    // negative sign formatted.
+                    quantity.negate();
+                }
+
+                quantityPlural = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
+                String quantitySimpleFormat = LongNameHandler.getWithPlural(this.fMixedUnitData.get(i), quantityPlural);
+                SimpleFormatter finalFormatter = SimpleFormatter.compileMinMaxArguments(quantitySimpleFormat, 0, 1);
+                outputMeasuresList.add(finalFormatter.format("{0}"));
+
+                continue;
+            }
+
+
             DecimalQuantity fdec = new DecimalQuantity_DualStorageBCD(micros.mixedMeasures.get(i).getNumber());
             if (i > 0 && fdec.isNegative()) {
                 // If numbers are negative, only the first number needs to have its
                 // negative sign formatted.
                 fdec.negate();
             }
-            StandardPlural pluralForm = fdec.getStandardPlural(rules);
+
+            StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, fdec);
 
             String simpleFormat = LongNameHandler.getWithPlural(this.fMixedUnitData.get(i), pluralForm);
             SimpleFormatter compiledFormatter = SimpleFormatter.compileMinMaxArguments(simpleFormat, 0, 1);
@@ -186,18 +219,6 @@ public class MixedUnitLongNameHandler
             // TODO(icu-units#67): fix field positions
         }
 
-        // Reiterated: we have at least one mixedMeasure:
-        assert micros.mixedMeasures.size() > 0;
-        // Thus if negative, a negative has already been formatted:
-        if (quantity.isNegative()) {
-            quantity.negate();
-        }
-
-        String[] finalSimpleFormats = this.fMixedUnitData.get(this.fMixedUnitData.size() - 1);
-        StandardPlural finalPlural = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
-        String finalSimpleFormat = LongNameHandler.getWithPlural(finalSimpleFormats, finalPlural);
-        SimpleFormatter finalFormatter = SimpleFormatter.compileMinMaxArguments(finalSimpleFormat, 0, 1);
-        outputMeasuresList.add(finalFormatter.format("{0}"));
 
         // Combine list into a "premixed" pattern
         String premixedFormatPattern = this.fListFormatter.format(outputMeasuresList);
@@ -209,7 +230,7 @@ public class MixedUnitLongNameHandler
         Modifier.Parameters params = new Modifier.Parameters();
         params.obj = this;
         params.signum = Modifier.Signum.POS_ZERO;
-        params.plural = finalPlural;
+        params.plural = quantityPlural;
         // Return a SimpleModifier for the "premixed" pattern
         return new SimpleModifier(premixedCompiled, null, false, params);
     }

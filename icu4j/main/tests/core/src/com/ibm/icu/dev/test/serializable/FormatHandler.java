@@ -19,6 +19,7 @@ import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.TimeZoneGenericNames;
 import com.ibm.icu.impl.TimeZoneGenericNames.GenericNameType;
+import com.ibm.icu.number.NumberRangeFormatter;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -1853,6 +1854,21 @@ public class FormatHandler
         public Object[] getTestObjects()
         {
             return new Object[] {ListFormatter.SpanField.LIST_SPAN};
+        }
+
+        @Override
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+
+    public static class NumberRangeFormatterSpanFieldHandler implements SerializableTestUtility.Handler
+    {
+        @Override
+        public Object[] getTestObjects()
+        {
+            return new Object[] {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN};
         }
 
         @Override

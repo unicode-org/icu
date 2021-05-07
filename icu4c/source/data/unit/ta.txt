@@ -165,7 +165,7 @@ ta{
                 one{"{0} காரட்"}
                 other{"{0} காரட்கள்"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"மில்லிகிராம்கள்/டெசிலிட்டர்"}
                 one{"{0} மில்லிகிராம்/டெசிலிட்டர்"}
                 other{"{0} மில்லிகிராம்கள்/டெசிலிட்டர்"}
@@ -1491,7 +1491,7 @@ ta{
                 one{"{0} கார."}
                 other{"{0} கார."}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"மி.கி./டெ.லி."}
                 one{"{0} மி.கி./டெ.லி."}
                 other{"{0} மி.கி./டெ.லி."}
@@ -1880,9 +1880,9 @@ ta{
                 per{"{0}/மீ."}
             }
             micrometer{
-                dnam{"µமீ."}
-                one{"{0} µமீ."}
-                other{"{0} µமீ."}
+                dnam{"μமீ."}
+                one{"{0} μமீ."}
+                other{"{0} μமீ."}
             }
             mile{
                 dnam{"மைல்கள்"}
@@ -1990,9 +1990,9 @@ ta{
                 other{"{0} ட."}
             }
             microgram{
-                dnam{"µகி"}
-                one{"{0} µகி"}
-                other{"{0} µகி"}
+                dnam{"μகி"}
+                one{"{0} μகி"}
+                other{"{0} μகி"}
             }
             milligram{
                 dnam{"மி.கி."}

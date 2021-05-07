@@ -5,28 +5,46 @@ de_CH{
     units{
         area{
             square-foot{
+                case{
+                    accusative{
+                        one{"{0} Quadratfuss"}
+                        other{"{0} Quadratfuss"}
+                    }
+                    dative{
+                        one{"{0} Quadratfuss"}
+                        other{"{0} Quadratfuss"}
+                    }
+                    genitive{
+                        one{"{0} Quadratfusses"}
+                        other{"{0} Quadratfuss"}
+                    }
+                }
                 dnam{"Quadratfuss"}
                 one{"{0} Quadratfuss"}
                 other{"{0} Quadratfuss"}
             }
         }
-        compound{
-            1024p1{"kibi{0}"}
-            1024p2{"mebi{0}"}
-            1024p3{"gibi{0}"}
-            1024p4{"tebi{0}"}
-            1024p5{"pebi{0}"}
-            1024p6{"exbi{0}"}
-            1024p7{"zebi{0}"}
-            1024p8{"yobe{0}"}
-        }
         concentr{
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
             }
         }
         length{
             foot{
+                case{
+                    accusative{
+                        one{"{0} Fuss"}
+                        other{"{0} Fuss"}
+                    }
+                    dative{
+                        one{"{0} Fuss"}
+                        other{"{0} Fuss"}
+                    }
+                    genitive{
+                        one{"{0} Fusses"}
+                        other{"{0} Fuss"}
+                    }
+                }
                 dnam{"Fuss"}
                 one{"{0} Fuss"}
                 other{"{0} Fuss"}
@@ -40,6 +58,20 @@ de_CH{
         }
         volume{
             cubic-foot{
+                case{
+                    accusative{
+                        one{"{0} Kubikfuss"}
+                        other{"{0} Kubikfuss"}
+                    }
+                    dative{
+                        one{"{0} Kubikfuss"}
+                        other{"{0} Kubikfuss"}
+                    }
+                    genitive{
+                        one{"{0} Kubikfusses"}
+                        other{"{0} Kubikfuss"}
+                    }
+                }
                 dnam{"Kubikfuss"}
                 one{"{0} Kubikfuss"}
                 other{"{0} Kubikfuss"}

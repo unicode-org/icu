@@ -32,9 +32,11 @@ private:
     void testGetSamples();
     void testGetFixedDecimalSamples();
     void testSamplesWithExponent();
+    void testSamplesWithCompactNotation();
     void testWithin();
     void testGetAllKeywordValues();
     void testCompactDecimalPluralKeyword();
+    void testScientificPluralKeyword();
     void testOrdinal();
     void testSelect();
     void testSelectRange();

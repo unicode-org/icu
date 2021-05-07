@@ -25,7 +25,7 @@ no-DE ; 	nn ; 	24
 no ; 	no ; 	0
 no ; 	da ; 	12
 da ; 	zh-Hant ; 	100
-zh-Hant ; 	zh-Hans ; 	23 ; 	19
+zh-Hant ; 	zh-Hans ; 	100 ; 	100
 zh-Hans ; 	en ; 	100
 
 en-US ; 	en-AU ; 	5  # across clusters

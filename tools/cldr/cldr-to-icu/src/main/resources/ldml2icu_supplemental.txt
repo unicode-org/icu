@@ -146,7 +146,7 @@
     ; /unitConstants/$1 ; values="$2"
 
 //supplementalData/unitQuantities/unitQuantity[@baseUnit="(%W)"][@quantity="(%W)"](?:[@status="%W"])?
-    ; /unitQuantities/$1 ; values="$2"
+    ; /unitQuantities/<FIFO>/$1 ; values="$2"
 
 //supplementalData/convertUnits/convertUnit[@source="(%W)"][@baseUnit="(%W)"](?:[@systems="%W"])?
     ; /convertUnits/$1/target ; values=$2
@@ -182,6 +182,34 @@
     ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
     ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/geq ; values=$4
     ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/skeleton ; values=$5
+
+# grammaticalFeatures.xml
+
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalCase[@values="(%A)"]
+    ; /grammaticalData/features/$2/$1/case/_ ; values=$3
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalCase[@scope="(%A)"]
+    ; /grammaticalData/features/$2/$1/case/$3
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalCase[@scope="(%A)"][@values="(%A)"]
+    ; /grammaticalData/features/$2/$1/case/$3 ; values=$4
+
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalGender[@values="(%A)"]
+    ; /grammaticalData/features/$2/$1/gender/_ ; values=$3
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalGender[@scope="(%A)"]
+    ; /grammaticalData/features/$2/$1/gender/$3
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalGender[@scope="(%A)"][@values="(%A)"]
+    ; /grammaticalData/features/$2/$1/gender/$3 ; values=$4
+
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalDefiniteness[@values="(%A)"]
+    ; /grammaticalData/features/$2/$1/definiteness/_ ; values=$3
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalDefiniteness[@scope="(%A)"]
+    ; /grammaticalData/features/$2/$1/definiteness/$3
+//supplementalData/grammaticalData/grammaticalFeatures[@targets="(%A)"][@locales="(%A)"]/grammaticalDefiniteness[@scope="(%A)"][@values="(%A)"]
+    ; /grammaticalData/features/$2/$1/definiteness/$3 ; values=$4
+
+//supplementalData/grammaticalData/grammaticalDerivations[@locales="(%A)"]/deriveComponent[@feature="(%A)"][@structure="(%A)"][@value0="(%A)"][@value1="(%A)"]
+    ; /grammaticalData/derivations/$1/component/$2/$3 ; values=$4 $5
+//supplementalData/grammaticalData/grammaticalDerivations[@locales="(%A)"]/deriveCompound[@feature="(%A)"][@structure="(%A)"][@value="(%A)"]
+    ; /grammaticalData/derivations/$1/compound/$2/$3 ; values=$4
 
 # languageInfo.xml
 

@@ -83,7 +83,7 @@ gh_edit_link_text: "Edit this page on GitHub."
 gh_edit_repository: "https://github.com/unicode-org/icu"
 # NOTE: Since we serve the docs out of the "docs" folder, we need to include that here even though
 # it is technically *not* part of the branch name.
-gh_edit_branch: "master/docs"
+gh_edit_branch: "main/docs"
 # Can be "tree" or "edit". Edit takes the user to jump into the editor immediately.
 gh_edit_view_mode: "tree"
 

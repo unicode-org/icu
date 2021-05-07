@@ -193,9 +193,9 @@ public class ListFormatterTest extends TestFmwk {
     }
 
 
-    void DoTheRealListStyleTesting(ULocale locale, String items[], ListFormatter.Style style, String expected) {
-        ListFormatter listFormatter = ListFormatter.getInstance(locale, style);
-        assertEquals("Style \"" + style + "\"", expected, listFormatter.format((Object[])items));
+    void DoTheRealListStyleTesting(ULocale locale, String items[], ListFormatter.Type type, ListFormatter.Width width, String expected) {
+        ListFormatter listFormatter = ListFormatter.getInstance(locale, type, width);
+        assertEquals("Style \"" + type + "/" + width + "\"", expected, listFormatter.format((Object[])items));
     }
 
     @Test
@@ -203,11 +203,11 @@ public class ListFormatterTest extends TestFmwk {
         ULocale locale = ULocale.FRENCH;
         String[] input = { "rouge", "jaune", "bleu", "vert" };
 
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.STANDARD, "rouge, jaune, bleu et vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.OR, "rouge, jaune, bleu ou vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT, "rouge, jaune, bleu et vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT_NARROW, "rouge jaune bleu vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT_SHORT, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.AND, ListFormatter.Width.WIDE, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.OR, ListFormatter.Width.WIDE, "rouge, jaune, bleu ou vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.UNITS, ListFormatter.Width.WIDE, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.UNITS, ListFormatter.Width.NARROW, "rouge jaune bleu vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.UNITS, ListFormatter.Width.SHORT, "rouge, jaune, bleu et vert");
     }
 
     private boolean isDefaultLocaleEnglishLike() {
@@ -262,15 +262,15 @@ public class ListFormatterTest extends TestFmwk {
                 {ListFormatter.Field.ELEMENT, 2, 9},
                 {ListFormatter.SpanField.LIST_SPAN, 9, 12, 2},
                 {ListFormatter.Field.ELEMENT, 9, 12}};
-            if (!logKnownIssue("21351", "Java still coalesces adjacent elements")) {
-                FormattedValueTest.checkFormattedValue(
-                    message,
-                    result,
-                    expectedString,
-                    expectedFieldPositions);
-            }
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions,
+                // Adjacent fields: skip AttributedCharacterIterator test
+                true);
         }
-    
+
         {
             ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH, Type.UNITS, Width.SHORT);
             String message = "ICU-21383 Long list";

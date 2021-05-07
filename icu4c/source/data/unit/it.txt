@@ -11,11 +11,13 @@ it{
         acceleration{
             g-force{
                 dnam{"forza g"}
+                gender{"feminine"}
                 one{"{0} forza g"}
                 other{"{0} forza g"}
             }
             meter-per-square-second{
                 dnam{"metri al secondo quadrato"}
+                gender{"masculine"}
                 one{"{0} metro al secondo quadrato"}
                 other{"{0} metri al secondo quadrato"}
             }
@@ -50,6 +52,7 @@ it{
         area{
             acre{
                 dnam{"acri"}
+                gender{"masculine"}
                 one{"{0} acro"}
                 other{"{0} acri"}
             }
@@ -60,17 +63,20 @@ it{
             }
             hectare{
                 dnam{"ettari"}
+                gender{"masculine"}
                 one{"{0} ettaro"}
                 other{"{0} ettari"}
             }
             square-centimeter{
                 dnam{"centimetri quadrati"}
+                gender{"masculine"}
                 one{"{0} centimetro quadrato"}
                 other{"{0} centimetri quadrati"}
                 per{"{0} per centimetro quadrato"}
             }
             square-foot{
                 dnam{"piedi quadrati"}
+                gender{"masculine"}
                 one{"{0} piede quadrato"}
                 other{"{0} piedi quadrati"}
             }
@@ -82,6 +88,7 @@ it{
             }
             square-kilometer{
                 dnam{"chilometri quadrati"}
+                gender{"masculine"}
                 one{"{0} chilometro quadrato"}
                 other{"{0} chilometri quadrati"}
                 per{"{0} per chilometro quadrato"}
@@ -94,6 +101,7 @@ it{
             }
             square-mile{
                 dnam{"miglia quadrate"}
+                gender{"feminine"}
                 one{"{0} miglio quadrato"}
                 other{"{0} miglia quadrate"}
                 per{"{0} per miglio quadrato"}
@@ -178,7 +186,7 @@ it{
                 one{"{0} carato"}
                 other{"{0} carati"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligrammi per decilitro"}
                 one{"{0} milligrammo per decilitro"}
                 other{"{0} milligrammi per decilitro"}
@@ -195,6 +203,7 @@ it{
             }
             percent{
                 dnam{"percentuale"}
+                gender{"masculine"}
                 one{"{0} percento"}
                 other{"{0} percento"}
             }
@@ -217,6 +226,7 @@ it{
         consumption{
             liter-per-100-kilometer{
                 dnam{"litri per 100 chilometri"}
+                gender{"masculine"}
                 one{"{0} litro per 100 chilometri"}
                 other{"{0} litri per 100 chilometri"}
             }
@@ -227,11 +237,13 @@ it{
             }
             mile-per-gallon{
                 dnam{"miglia per gallone"}
+                gender{"feminine"}
                 one{"{0} miglio per gallone"}
                 other{"{0} miglia per gallone"}
             }
             mile-per-gallon-imperial{
                 dnam{"miglia per gallone imperiale"}
+                gender{"feminine"}
                 one{"{0} miglio per gallone imperiale"}
                 other{"{0} miglia per gallone imperiale"}
             }
@@ -308,6 +320,7 @@ it{
             }
             day{
                 dnam{"giorni"}
+                gender{"masculine"}
                 one{"{0} giorno"}
                 other{"{0} giorni"}
                 per{"{0} al giorno"}
@@ -319,6 +332,7 @@ it{
             }
             hour{
                 dnam{"ore"}
+                gender{"feminine"}
                 one{"{0} ora"}
                 other{"{0} ore"}
                 per{"{0} all’ora"}
@@ -335,12 +349,14 @@ it{
             }
             minute{
                 dnam{"minuti"}
+                gender{"masculine"}
                 one{"{0} minuto"}
                 other{"{0} minuti"}
                 per{"{0} al minuto"}
             }
             month{
                 dnam{"mesi"}
+                gender{"masculine"}
                 one{"{0} mese"}
                 other{"{0} mesi"}
                 per{"{0} al mese"}
@@ -352,18 +368,21 @@ it{
             }
             second{
                 dnam{"secondi"}
+                gender{"masculine"}
                 one{"{0} secondo"}
                 other{"{0} secondi"}
                 per{"{0} al secondo"}
             }
             week{
                 dnam{"settimane"}
+                gender{"feminine"}
                 one{"{0} settimana"}
                 other{"{0} settimane"}
                 per{"{0} alla settimana"}
             }
             year{
                 dnam{"anni"}
+                gender{"masculine"}
                 one{"{0} anno"}
                 other{"{0} anni"}
                 per{"{0} all’anno"}
@@ -409,6 +428,7 @@ it{
             }
             foodcalorie{
                 dnam{"Calorie"}
+                gender{"feminine"}
                 one{"{0} caloria"}
                 other{"{0} calorie"}
             }
@@ -419,6 +439,7 @@ it{
             }
             kilocalorie{
                 dnam{"chilocalorie"}
+                gender{"feminine"}
                 one{"{0} chilocaloria"}
                 other{"{0} chilocalorie"}
             }
@@ -517,6 +538,7 @@ it{
             }
             centimeter{
                 dnam{"centimetri"}
+                gender{"masculine"}
                 one{"{0} centimetro"}
                 other{"{0} centimetri"}
                 per{"{0} per centimetro"}
@@ -538,6 +560,7 @@ it{
             }
             foot{
                 dnam{"piedi"}
+                gender{"masculine"}
                 one{"{0} piede"}
                 other{"{0} piedi"}
                 per{"{0} per piede"}
@@ -549,12 +572,14 @@ it{
             }
             inch{
                 dnam{"pollici"}
+                gender{"masculine"}
                 one{"{0} pollice"}
                 other{"{0} pollici"}
                 per{"{0} per pollice"}
             }
             kilometer{
                 dnam{"chilometri"}
+                gender{"masculine"}
                 one{"{0} chilometro"}
                 other{"{0} chilometri"}
                 per{"{0} per chilometro"}
@@ -566,6 +591,7 @@ it{
             }
             meter{
                 dnam{"metri"}
+                gender{"masculine"}
                 one{"{0} metro"}
                 other{"{0} metri"}
                 per{"{0} per metro"}
@@ -577,6 +603,7 @@ it{
             }
             mile{
                 dnam{"miglia"}
+                gender{"feminine"}
                 one{"{0} miglio"}
                 other{"{0} miglia"}
             }
@@ -587,6 +614,7 @@ it{
             }
             millimeter{
                 dnam{"millimetri"}
+                gender{"masculine"}
                 one{"{0} millimetro"}
                 other{"{0} millimetri"}
             }
@@ -602,11 +630,13 @@ it{
             }
             parsec{
                 dnam{"parsec"}
+                gender{"masculine"}
                 one{"{0} parsec"}
                 other{"{0} parsec"}
             }
             picometer{
                 dnam{"picometri"}
+                gender{"masculine"}
                 one{"{0} picometro"}
                 other{"{0} picometri"}
             }
@@ -617,11 +647,13 @@ it{
             }
             solar-radius{
                 dnam{"raggi solari"}
+                gender{"masculine"}
                 one{"{0} raggio solare"}
                 other{"{0} raggi solari"}
             }
             yard{
                 dnam{"iarde"}
+                gender{"feminine"}
                 one{"{0} iarda"}
                 other{"{0} iarde"}
             }
@@ -644,6 +676,7 @@ it{
             }
             solar-luminosity{
                 dnam{"luminosità solari"}
+                gender{"feminine"}
                 one{"{0} luminosità solare"}
                 other{"{0} luminosità solari"}
             }
@@ -656,27 +689,32 @@ it{
             }
             dalton{
                 dnam{"dalton"}
+                gender{"masculine"}
                 one{"{0} dalton"}
                 other{"{0} dalton"}
             }
             earth-mass{
                 dnam{"masse terrestri"}
+                gender{"feminine"}
                 one{"{0} massa terrestre"}
                 other{"{0} masse terrestri"}
             }
             grain{
                 dnam{"grano"}
+                gender{"masculine"}
                 one{"{0} grano"}
                 other{"{0} grani"}
             }
             gram{
                 dnam{"grammi"}
+                gender{"masculine"}
                 one{"{0} grammo"}
                 other{"{0} grammi"}
                 per{"{0} per grammo"}
             }
             kilogram{
                 dnam{"chilogrammi"}
+                gender{"masculine"}
                 one{"{0} chilogrammo"}
                 other{"{0} chilogrammi"}
                 per{"{0} per chilogrammo"}
@@ -693,11 +731,13 @@ it{
             }
             milligram{
                 dnam{"milligrammi"}
+                gender{"masculine"}
                 one{"{0} milligrammo"}
                 other{"{0} milligrammi"}
             }
             ounce{
                 dnam{"once"}
+                gender{"feminine"}
                 one{"{0} oncia"}
                 other{"{0} once"}
                 per{"{0} per oncia"}
@@ -709,12 +749,14 @@ it{
             }
             pound{
                 dnam{"libbre"}
+                gender{"feminine"}
                 one{"{0} libbra"}
                 other{"{0} libbre"}
                 per{"{0} per libbra"}
             }
             solar-mass{
                 dnam{"masse solari"}
+                gender{"feminine"}
                 one{"{0} massa solare"}
                 other{"{0} masse solari"}
             }
@@ -779,6 +821,7 @@ it{
             }
             kilopascal{
                 dnam{"chilopascal"}
+                gender{"masculine"}
                 one{"{0} chilopascal"}
                 other{"{0} chilopascal"}
             }
@@ -811,6 +854,7 @@ it{
         speed{
             kilometer-per-hour{
                 dnam{"chilometri orari"}
+                gender{"masculine"}
                 one{"{0} chilometro orario"}
                 other{"{0} chilometri orari"}
             }
@@ -821,11 +865,13 @@ it{
             }
             meter-per-second{
                 dnam{"metri al secondo"}
+                gender{"masculine"}
                 one{"{0} metro al secondo"}
                 other{"{0} metri al secondo"}
             }
             mile-per-hour{
                 dnam{"miglia all’ora"}
+                gender{"feminine"}
                 one{"{0} miglio all’ora"}
                 other{"{0} miglia all’ora"}
             }
@@ -833,21 +879,25 @@ it{
         temperature{
             celsius{
                 dnam{"gradi Celsius"}
+                gender{"masculine"}
                 one{"{0} grado Celsius"}
                 other{"{0} gradi Celsius"}
             }
             fahrenheit{
                 dnam{"gradi Fahrenheit"}
+                gender{"masculine"}
                 one{"{0} grado Fahrenheit"}
                 other{"{0} gradi Fahrenheit"}
             }
             generic{
                 dnam{"°"}
+                gender{"masculine"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
             kelvin{
                 dnam{"Kelvin"}
+                gender{"masculine"}
                 one{"{0} Kelvin"}
                 other{"{0} Kelvin"}
             }
@@ -867,11 +917,13 @@ it{
         volume{
             acre-foot{
                 dnam{"acre-feet"}
+                gender{"masculine"}
                 one{"{0} acre-foot"}
                 other{"{0} acre-feet"}
             }
             barrel{
                 dnam{"barile"}
+                gender{"masculine"}
                 one{"{0} barile"}
                 other{"{0} barili"}
             }
@@ -882,38 +934,45 @@ it{
             }
             centiliter{
                 dnam{"centilitri"}
+                gender{"masculine"}
                 one{"{0} centilitro"}
                 other{"{0} centilitri"}
             }
             cubic-centimeter{
                 dnam{"centimetri cubi"}
+                gender{"masculine"}
                 one{"{0} centimetro cubo"}
                 other{"{0} centimetri cubi"}
                 per{"{0} per centimetro cubo"}
             }
             cubic-foot{
                 dnam{"piedi cubi"}
+                gender{"masculine"}
                 one{"{0} piede cubo"}
                 other{"{0} piedi cubi"}
             }
             cubic-inch{
                 dnam{"pollici cubi"}
+                gender{"masculine"}
                 one{"{0} pollice cubo"}
                 other{"{0} pollici cubi"}
             }
             cubic-kilometer{
                 dnam{"chilometri cubi"}
+                gender{"masculine"}
                 one{"{0} chilometro cubo"}
                 other{"{0} chilometri cubi"}
             }
             cubic-meter{
                 dnam{"metri cubi"}
+                gender{"masculine"}
                 one{"{0} metro cubo"}
                 other{"{0} metri cubi"}
                 per{"{0} per metro cubo"}
             }
             cubic-mile{
                 dnam{"miglia cube"}
+                gender{"feminine"}
                 one{"{0} miglio cubo"}
                 other{"{0} miglia cube"}
             }
@@ -924,6 +983,7 @@ it{
             }
             cup{
                 dnam{"tazze"}
+                gender{"feminine"}
                 one{"{0} tazza"}
                 other{"{0} tazze"}
             }
@@ -934,62 +994,74 @@ it{
             }
             deciliter{
                 dnam{"decilitri"}
+                gender{"masculine"}
                 one{"{0} decilitro"}
                 other{"{0} decilitri"}
             }
             dessert-spoon{
                 dnam{"cucchiaino da dessert"}
+                gender{"masculine"}
                 one{"{0} cucchiaino da dessert"}
                 other{"{0} cucchiaini da dessert"}
             }
             dessert-spoon-imperial{
                 dnam{"cucchiaino da dessert imperiale"}
+                gender{"masculine"}
                 one{"{0} cucchiaino da dessert imperiale"}
                 other{"{0} cucchiaini da dessert imperiali"}
             }
             dram{
                 dnam{"dramma"}
+                gender{"feminine"}
                 one{"{0} dramma"}
                 other{"{0} dramme"}
             }
             drop{
                 dnam{"goccia"}
+                gender{"feminine"}
                 one{"{0} goccia"}
                 other{"{0} gocce"}
             }
             fluid-ounce{
                 dnam{"once fluide"}
+                gender{"feminine"}
                 one{"{0} oncia fluida"}
                 other{"{0} once fluide"}
             }
             fluid-ounce-imperial{
                 dnam{"once liquide imperiali"}
+                gender{"feminine"}
                 one{"{0} oncia liquida imperiale"}
                 other{"{0} once liquide imperiali"}
             }
             gallon{
                 dnam{"galloni"}
+                gender{"masculine"}
                 one{"{0} gallone"}
                 other{"{0} galloni"}
                 per{"{0} per gallone"}
             }
             gallon-imperial{
                 dnam{"galloni imperiali"}
+                gender{"masculine"}
                 one{"{0} gallone imperiale"}
                 other{"{0} galloni imperiali"}
                 per{"{0} per gallone imperiale"}
             }
             hectoliter{
                 dnam{"ettolitri"}
+                gender{"masculine"}
                 one{"{0} ettolitro"}
                 other{"{0} ettolitri"}
             }
             jigger{
+                gender{"masculine"}
                 one{"{0} jigger"}
                 other{"{0} jigger"}
             }
             liter{
                 dnam{"litri"}
+                gender{"masculine"}
                 one{"{0} litro"}
                 other{"{0} litri"}
                 per{"{0} per litro"}
@@ -1001,16 +1073,19 @@ it{
             }
             milliliter{
                 dnam{"millilitri"}
+                gender{"masculine"}
                 one{"{0} millilitro"}
                 other{"{0} millilitri"}
             }
             pinch{
                 dnam{"pizzico"}
+                gender{"masculine"}
                 one{"{0} pizzico"}
                 other{"{0} pizzichi"}
             }
             pint{
                 dnam{"pinte"}
+                gender{"feminine"}
                 one{"{0} pinta"}
                 other{"{0} pinte"}
             }
@@ -1021,21 +1096,25 @@ it{
             }
             quart{
                 dnam{"quarti"}
+                gender{"masculine"}
                 one{"{0} quarto"}
                 other{"{0} quarti"}
             }
             quart-imperial{
                 dnam{"quarto imperiale"}
+                gender{"masculine"}
                 one{"{0} quarto imperiale"}
                 other{"{0} quarti imperiali"}
             }
             tablespoon{
                 dnam{"cucchiai da tavola"}
+                gender{"masculine"}
                 one{"{0} cucchiaio da tavola"}
                 other{"{0} cucchiai da tavola"}
             }
             teaspoon{
                 dnam{"cucchiaio da tè"}
+                gender{"masculine"}
                 one{"{0} cucchiaio da tè"}
                 other{"{0} cucchiai da tè"}
             }
@@ -1391,7 +1470,7 @@ it{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1716,9 +1795,9 @@ it{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"miglia"}
@@ -1807,9 +1886,9 @@ it{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

@@ -19,7 +19,7 @@ es_US{
             }
         }
         concentr{
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligramos por decilitro"}
             }
         }

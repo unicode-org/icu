@@ -47,10 +47,10 @@
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
         <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
-        <property name="icuVersion" value="68.2.0.0"/>
+        <property name="icuVersion" value="69.1.0.0"/>
 
         <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
-        <property name="icuDataVersion" value="68.2.0.0"/>
+        <property name="icuDataVersion" value="69.1.0.0"/>
 
         <!-- An override for the CLDR version string (icuver.txt and others). This will be
              extracted from the CLDR library used for building the data if not set here. -->
@@ -290,7 +290,7 @@
 
                     // K-P
                     ka, kk, kl, km, kn, kok, ko, ku, ky, lb, lkt, ln, lo, lt, lv,
-                    mk, ml, mn, mo, mr, ms, mt, my, nb, ne, nl, nn, no_NO, no,
+                    mk, ml, mn, mo, mr, ms, mt, my, nb, nb_NO, ne, nl, nn, no, no_NO,
                     om, or, pa_IN, pa, pa_Guru, pl, ps, pt,
 
                     // R-T
@@ -323,7 +323,7 @@
                     // F-P
                     fa_AF, fa, ff, fil, fi, fo, fr_BE, fr_CH, fr, ga, he, hi, hr,
                     hu, hy, id, in, is, it, iw, ja, ka, kl, km, ko, ky, lb,
-                    lo, lrc, lt, lv, mk, ms, mt, my, nb, nl, nn, no, pl, pt_PT, pt,
+                    lo, lrc, lt, lv, mk, ms, mt, my, nb, ne, nl, nn, no, pl, pt_PT, pt,
 
                     // Q-Z
                     qu, ro, ru, se, sh, sk, sl, sq, sr_Latn, sr, su, sv, sw, ta, th, tr,
@@ -353,6 +353,11 @@
 
             <!-- A legacy global alias (note that "no_NO_NY" is not even structurally valid). -->
             <forcedAlias source="no_NO_NY" target="nn_NO"/>
+
+            <!-- This one is a bit silly, it is just to generate a stub for no_NO, which is
+                 not in CLDR. If we do not do this, then including it in localeIds will generate
+                 empty no_Latn and no_Latn_NO and then no_NO aliasing to no_Latn_NO. -->
+            <forcedAlias source="no_NO" target="no"/>
 
             <!-- ALTERNATE VALUES -->
 

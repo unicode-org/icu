@@ -28,11 +28,11 @@ import com.ibm.icu.impl.Grego;
  * in RFC2445 VTIMEZONE format.  Also, you can create a <code>VTimeZone</code> instance
  * from RFC2445 VTIMEZONE data stream, which allows you to calculate time
  * zone offset by the rules defined by the data.<br><br>
- * 
+ *
  * Note: The consumer of this class reading or writing VTIMEZONE data is responsible to
  * decode or encode Non-ASCII text.  Methods reading/writing VTIMEZONE data in this class
  * do nothing with MIME encoding.
- * 
+ *
  * @stable ICU 3.8
  */
 public class VTimeZone extends BasicTimeZone {
@@ -41,11 +41,11 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * Create a <code>VTimeZone</code> instance by the time zone ID.
-     * 
+     *
      * @param tzid The time zone ID, such as America/New_York
      * @return A <code>VTimeZone</code> initialized by the time zone ID, or null
      * when the ID is unknown.
-     * 
+     *
      * @stable ICU 3.8
      */
     public static VTimeZone create(String tzid) {
@@ -59,14 +59,14 @@ public class VTimeZone extends BasicTimeZone {
 
         return vtz;
     }
-    
+
     /**
      * Create a <code>VTimeZone</code> instance by RFC2445 VTIMEZONE data.
-     * 
+     *
      * @param reader The Reader for VTIMEZONE data input stream
      * @return A <code>VTimeZone</code> initialized by the VTIMEZONE data or
      * null if failed to load the rule from the VTIMEZONE data.
-     * 
+     *
      * @stable ICU 3.8
      */
     public static VTimeZone create(Reader reader) {
@@ -98,13 +98,11 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 69
      */
-    @Deprecated
     @Override
     public void getOffsetFromLocal(long date,
-            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         tz.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
     }
 
@@ -175,9 +173,9 @@ public class VTimeZone extends BasicTimeZone {
      * Gets the RFC2445 TZURL property value.  When a <code>VTimeZone</code> instance was created from
      * VTIMEZONE data, the value is set by the TZURL property value in the data.  Otherwise,
      * the initial value is null.
-     * 
+     *
      * @return The RFC2445 TZURL property value
-     * 
+     *
      * @stable ICU 3.8
      */
     public String getTZURL() {
@@ -186,9 +184,9 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * Sets the RFC2445 TZURL property value.
-     * 
+     *
      * @param url The TZURL property value.
-     * 
+     *
      * @stable ICU 3.8
      */
     public void setTZURL(String url) {
@@ -202,9 +200,9 @@ public class VTimeZone extends BasicTimeZone {
      * Gets the RFC2445 LAST-MODIFIED property value.  When a <code>VTimeZone</code> instance was created
      * from VTIMEZONE data, the value is set by the LAST-MODIFIED property value in the data.
      * Otherwise, the initial value is null.
-     * 
+     *
      * @return The Date represents the RFC2445 LAST-MODIFIED date.
-     * 
+     *
      * @stable ICU 3.8
      */
     public Date getLastModified() {
@@ -213,9 +211,9 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * Sets the date used for RFC2445 LAST-MODIFIED property value.
-     * 
+     *
      * @param date The <code>Date</code> object represents the date for RFC2445 LAST-MODIFIED property value.
-     * 
+     *
      * @stable ICU 3.8
      */
     public void setLastModified(Date date) {
@@ -227,10 +225,10 @@ public class VTimeZone extends BasicTimeZone {
 
     /**
      * Writes RFC2445 VTIMEZONE data for this time zone
-     * 
+     *
      * @param writer A <code>Writer</code> used for the output
      * @throws IOException If there were problems creating a buffered writer or writing to it.
-     * 
+     *
      * @stable ICU 3.8
      */
     public void write(Writer writer) throws IOException {
@@ -270,12 +268,12 @@ public class VTimeZone extends BasicTimeZone {
     /**
      * Writes RFC2445 VTIMEZONE data applicable for dates after
      * the specified start time.
-     * 
+     *
      * @param writer    The <code>Writer</code> used for the output
      * @param start     The start time
-     * 
+     *
      * @throws IOException If there were problems reading and writing to the writer.
-     * 
+     *
      * @stable ICU 3.8
      */
     public void write(Writer writer, long start) throws IOException {
@@ -290,7 +288,7 @@ public class VTimeZone extends BasicTimeZone {
         String[] customProperties = null;
         if (olsonzid != null && ICU_TZVERSION != null) {
             customProperties = new String[1];
-            customProperties[0] = ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION + 
+            customProperties[0] = ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION +
                 "/Partial@" + start + "]";
         }
         writeZone(writer, rbtz, customProperties);
@@ -304,12 +302,12 @@ public class VTimeZone extends BasicTimeZone {
      * the VTIMEZONE data which can be handled these implementations.  The rules
      * produced by this method can be used only for calculating time zone offset
      * around the specified date.
-     * 
+     *
      * @param writer    The <code>Writer</code> used for the output
      * @param time      The date
-     * 
+     *
      * @throws IOException If there were problems reading or writing to the writer.
-     * 
+     *
      * @stable ICU 3.8
      */
     public void writeSimple(Writer writer, long time) throws IOException {
@@ -324,7 +322,7 @@ public class VTimeZone extends BasicTimeZone {
         String[] customProperties = null;
         if (olsonzid != null && ICU_TZVERSION != null) {
             customProperties = new String[1];
-            customProperties[0] = ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION + 
+            customProperties[0] = ICU_TZINFO_PROP + COLON + olsonzid + "[" + ICU_TZVERSION +
                 "/Simple@" + time + "]";
         }
         writeZone(writer, rbtz, customProperties);
@@ -405,7 +403,7 @@ public class VTimeZone extends BasicTimeZone {
 
     // Default DST savings
     private static final int DEF_DSTSAVINGS = 60*60*1000; // 1 hour
-    
+
     // Default time start
     private static final long DEF_TZSTARTTIME = 0;
 
@@ -445,7 +443,7 @@ public class VTimeZone extends BasicTimeZone {
     private static final String ICAL_BYDAY = "BYDAY";
     private static final String ICAL_BYMONTHDAY = "BYMONTHDAY";
 
-    private static final String[] ICAL_DOW_NAMES = 
+    private static final String[] ICAL_DOW_NAMES =
     {"SU", "MO", "TU", "WE", "TH", "FR", "SA"};
 
     // Month length in regular year
@@ -461,7 +459,7 @@ public class VTimeZone extends BasicTimeZone {
             ///CLOVER:ON
         }
     }
-    
+
     /* Hide the constructor */
     private VTimeZone() {
     }
@@ -483,7 +481,7 @@ public class VTimeZone extends BasicTimeZone {
     private boolean load(Reader reader) {
         // Read VTIMEZONE block into string array
         try {
-            vtzlines = new LinkedList<String>();
+            vtzlines = new LinkedList<>();
             boolean eol = false;
             boolean start = false;
             boolean success = false;
@@ -578,7 +576,7 @@ public class VTimeZone extends BasicTimeZone {
         String dtstart = null;  // current zone starts
         boolean isRRULE = false;    // true if the rule is described by RRULE
         List<String> dates = null;  // list of RDATE or RRULE strings
-        List<TimeZoneRule> rules = new ArrayList<TimeZoneRule>();   // rule list
+        List<TimeZoneRule> rules = new ArrayList<>();   // rule list
         int initialRawOffset = 0;  // initial offset
         int initialDSTSavings = 0;  // initial offset
         long firstStart = MAX_TIME; // the earliest rule start time
@@ -649,7 +647,7 @@ public class VTimeZone extends BasicTimeZone {
                         break;
                     }
                     if (dates == null) {
-                        dates = new LinkedList<String>();
+                        dates = new LinkedList<>();
                     }
                     // RDATE value may contain multiple date delimited
                     // by comma
@@ -664,7 +662,7 @@ public class VTimeZone extends BasicTimeZone {
                         state = ERR;
                         break;
                     } else if (dates == null) {
-                        dates = new LinkedList<String>();
+                        dates = new LinkedList<>();
                     }
                     isRRULE = true;
                     dates.add(value);
@@ -699,7 +697,7 @@ public class VTimeZone extends BasicTimeZone {
                             } else {
                                 // This is rare case..  just use 1 hour DST savings
                                 rawOffset = toOffset - DEF_DSTSAVINGS;
-                                dstSavings = DEF_DSTSAVINGS;                                
+                                dstSavings = DEF_DSTSAVINGS;
                             }
                         } else {
                             rawOffset = toOffset;
@@ -797,7 +795,7 @@ public class VTimeZone extends BasicTimeZone {
                 AnnualTimeZoneRule finalRule = (AnnualTimeZoneRule)rules.get(finalRuleIdx);
                 int tmpRaw = finalRule.getRawOffset();
                 int tmpDST = finalRule.getDSTSavings();
-    
+
                 // Find the last non-final rule
                 Date finalStart = finalRule.getFirstStart(initialRawOffset, initialDSTSavings);
                 Date start = finalStart;
@@ -953,7 +951,7 @@ public class VTimeZone extends BasicTimeZone {
                 if (unt[0] > until[0]) {
                     until = unt;
                 }
-                
+
                 // Check if BYMONTH + BYMONTHDAY + BYDAY rule
                 if (fields[0] == -1 || fields[1] == 0 || fields[3] == 0) {
                     return null;
@@ -1050,18 +1048,18 @@ public class VTimeZone extends BasicTimeZone {
 
     /*
      * Parse individual RRULE
-     * 
+     *
      * On return -
-     * 
+     *
      * int[0] month calculated by BYMONTH - 1, or -1 when not found
      * int[1] day of week in BYDAY, or 0 when not found
      * int[2] day of week ordinal number in BYDAY, or 0 when not found
      * int[i >= 3] day of month, which could be multiple values, or 0 when not found
-     * 
+     *
      *  or
-     * 
+     *
      * null on any error cases, for exmaple, FREQ=YEARLY is not available
-     * 
+     *
      * When UNTIL attribute is available, the time will be set to until[0],
      * otherwise, MIN_TIME
      */
@@ -1094,7 +1092,7 @@ public class VTimeZone extends BasicTimeZone {
                     yearly = true;
                 } else {
                     parseError = true;
-                    break;                        
+                    break;
                 }
             } else if (attr.equals(ICAL_UNTIL)) {
                 // ISO8601 UTC format, for example, "20060315T020000Z"
@@ -1214,7 +1212,7 @@ public class VTimeZone extends BasicTimeZone {
         results[2] = nthDayOfWeek;
         return results;
     }
-    
+
     /*
      * Create a TimeZoneRule by the RDATE definition
      */
@@ -1335,7 +1333,7 @@ public class VTimeZone extends BasicTimeZone {
                                     dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime);
                         }
                     }
-                } 
+                }
                 if (!sameRule) {
                     // Reset this DST information
                     dstName = name;
@@ -1407,7 +1405,7 @@ public class VTimeZone extends BasicTimeZone {
             int offset = basictz.getOffset(0 /* any time */);
             boolean isDst = (offset != basictz.getRawOffset());
             writeZonePropsByTime(w, isDst, getDefaultTZName(basictz.getID(), isDst),
-                    offset, offset, DEF_TZSTARTTIME - offset, false);                
+                    offset, offset, DEF_TZSTARTTIME - offset, false);
         } else {
             if (dstCount > 0) {
                 if (finalDstRule == null) {
@@ -1474,12 +1472,12 @@ public class VTimeZone extends BasicTimeZone {
                             if (nextStart != null) {
                                 writeFinalRule(w, false, finalStdRule,
                                         stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, nextStart.getTime());
-                                
+
                             }
                         }
                     }
                 }
-            }            
+            }
         }
         writeFooter(w);
     }
@@ -1599,7 +1597,7 @@ public class VTimeZone extends BasicTimeZone {
             // Check if all days are in the same month
             int startDay = dayOfMonth;
             int currentMonthDays = 7;
-        
+
             if (dayOfMonth <= 0) {
                 // The start day is in previous month
                 int prevMonthDays = 1 - dayOfMonth;
@@ -1621,14 +1619,14 @@ public class VTimeZone extends BasicTimeZone {
                 currentMonthDays -= nextMonthDays;
 
                 int nextMonth = (month + 1) > 11 ? 0 : month + 1;
-                
+
                 writeZonePropsByDOW_GEQ_DOM_sub(writer, nextMonth, 1, dayOfWeek, nextMonthDays, MAX_TIME /* Do not use UNTIL */, fromOffset);
             }
             writeZonePropsByDOW_GEQ_DOM_sub(writer, month, startDay, dayOfWeek, currentMonthDays, untilTime, fromOffset);
             endZoneProps(writer, isDst);
         }
     }
- 
+
     /*
      * Called from writeZonePropsByDOW_GEQ_DOM
      */
@@ -1829,12 +1827,12 @@ public class VTimeZone extends BasicTimeZone {
         writer.write(COLON);
         writer.write(tzname);
         writer.write(NEWLINE);
-        
+
         // DTSTART
         writer.write(ICAL_DTSTART);
         writer.write(COLON);
         writer.write(getDateTimeString(startTime + fromOffset));
-        writer.write(NEWLINE);        
+        writer.write(NEWLINE);
     }
 
     /*
@@ -1933,7 +1931,7 @@ public class VTimeZone extends BasicTimeZone {
         int min = t / Grego.MILLIS_PER_MINUTE;
         t %= Grego.MILLIS_PER_MINUTE;
         int sec = t / Grego.MILLIS_PER_SECOND;
-        
+
         sb.append(numToString(hour, 2));
         sb.append(numToString(min, 2));
         sb.append(numToString(sec, 2));
@@ -2107,6 +2105,7 @@ public class VTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public boolean isFrozen() {
         return isFrozen;
     }
@@ -2115,6 +2114,7 @@ public class VTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone freeze() {
         isFrozen = true;
         return this;
@@ -2124,6 +2124,7 @@ public class VTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone cloneAsThawed() {
         VTimeZone vtz = (VTimeZone)super.cloneAsThawed();
         vtz.tz = (BasicTimeZone)tz.cloneAsThawed();

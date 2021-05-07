@@ -71,13 +71,13 @@ LOG_FILE="${TMPDIR:-/tmp}/cldr2icu_log_$(date '+%m%d_%H%M%S').txt"
 touch $LOG_FILE || die "Cannot create temporary file: ${LOG_FILE}"
 echo -- "---- LOG FILE ---- $(date '+%F %T') ----" >> "${LOG_FILE}"
 
-# Build the cldr.jar in the CLDR tools directory.
-CLDR_TOOLS_DIR="$1/tools/java"
+# Build the cldr-code.jar in the cldr-code/target subdirectory of the CLDR tools directory.
+CLDR_TOOLS_DIR="$1/tools"
 pushd "${CLDR_TOOLS_DIR}" > /dev/null || die "Cannot change directory to: ${CLDR_TOOLS_DIR}"
 
 echo "Building CLDR JAR file..."
-run_with_logging ant -f ./build.xml clean jar
-[[ -f "cldr.jar" ]] || die "Error creating cldr.jar file"
+run_with_logging mvn package -DskipTests=true
+[[ -f "cldr-code/target/cldr-code.jar" ]] || die "Error creating cldr-code.jar file"
 
 popd > /dev/null
 
@@ -91,7 +91,7 @@ run_with_logging mvn -B install:install-file \
   -Dpackaging=jar \
   -DgeneratePom=true \
   -DlocalRepositoryPath=. \
-  -Dfile="${CLDR_TOOLS_DIR}/cldr.jar"
+  -Dfile="${CLDR_TOOLS_DIR}/cldr-code/target/cldr-code.jar"
 
 echo "Syncing local Maven repository..."
 run_with_logging mvn -B dependency:purge-local-repository \

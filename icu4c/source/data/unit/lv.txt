@@ -192,7 +192,7 @@ lv{
                 other{"{0} karāti"}
                 zero{"{0} karātu"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligrami uz decilitru"}
                 one{"{0} miligrams uz decilitru"}
                 other{"{0} miligrami uz decilitru"}
@@ -553,7 +553,7 @@ lv{
                 dnam{"punkti collā"}
                 one{"{0} punkts collā"}
                 other{"{0} punkti collā"}
-                zero{"{0} dpi"}
+                zero{"{0} ppi"}
             }
             megapixel{
                 dnam{"megapikseļi"}
@@ -1716,7 +1716,7 @@ lv{
                 other{"{0} kt"}
                 zero{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -2060,7 +2060,7 @@ lv{
                 dnam{"punkts"}
                 one{"{0} p."}
                 other{"{0} p."}
-                zero{"{0} p."}
+                zero{"{0} px"}
             }
             dot-per-centimeter{
                 dnam{"dpc"}
@@ -2136,10 +2136,10 @@ lv{
                 zero{"{0} m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
-                zero{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
+                zero{"{0} μm"}
             }
             mile{
                 dnam{"jūdzes"}
@@ -2267,10 +2267,10 @@ lv{
                 zero{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
-                zero{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
+                zero{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

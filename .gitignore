@@ -32,6 +32,7 @@
 *.vcxproj.user
 *_debug
 *_release
+bazel-*
 cygicudata*
 libicu*
 libicutest*
@@ -51,6 +52,7 @@ Debug/
 Generated[!!-~]Files/
 Release/
 __pycache__/
+_site/
 arm/
 arm64/
 bin/
@@ -101,6 +103,7 @@ icu4c/source/tools/icuinfo/icuplugins*.txt
 !icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt
 
 # Specific file names
+docs/Gemfile.lock
 icu4c/binARM
 icu4c/bin32uwp
 icu4c/bin64

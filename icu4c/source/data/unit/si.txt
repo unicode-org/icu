@@ -165,7 +165,7 @@ si{
                 one{"ක්‍රාත් {0}"}
                 other{"ක්‍රාත් {0}"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ඩෙසිලීටරයකට මිලිග්‍රෑම්"}
                 one{"ඩෙසිලීටරයකට මිලිග්‍රෑම් {0}"}
                 other{"ඩෙසිලීටරයකට මිලිග්‍රෑම් {0}"}
@@ -1101,7 +1101,7 @@ si{
             10p-21{"සෙ{0}"}
             10p-24{"යො{0}"}
             10p-3{"මි{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"නැ{0}"}
             10p1{"ඩෙ{0}"}
             10p12{"ටෙ{0}"}
@@ -1428,7 +1428,7 @@ si{
             10p-21{"සෙප්{0}"}
             10p-24{"යො{0}"}
             10p-3{"මි{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"නැ{0}"}
             10p1{"ඩෙක{0}"}
             10p12{"ටෙ{0}"}
@@ -1449,7 +1449,7 @@ si{
                 one{"ක්‍රාත් {0}"}
                 other{"ක්‍රාත් {0}"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"මිග්‍රෑ/ඩෙලි"}
                 one{"{0} මිග්‍රෑ/ඩෙලි"}
                 other{"{0} මිග්‍රෑ/ඩෙලි"}
@@ -1751,12 +1751,12 @@ si{
             }
             dot-per-centimeter{
                 dnam{"dpcm"}
-                one{"{0} dpcm"}
+                one{"{0} ppcm"}
                 other{"{0} dpcm"}
             }
             dot-per-inch{
                 dnam{"dpi"}
-                one{"{0} dpi"}
+                one{"{0} ppi"}
                 other{"{0} dpi"}
             }
             em{

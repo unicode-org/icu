@@ -28,6 +28,8 @@ enum Constants {
     CONSTANT_G,          // Newtonian constant of gravitation, "G".
     CONSTANT_GAL_IMP2M3, // Gallon imp to m3
     CONSTANT_LB2KG,      // Pound to Kilogram
+    CONSTANT_GLUCOSE_MOLAR_MASS,
+    CONSTANT_ITEM_PER_MOLE,
 
     // Must be the last element.
     CONSTANTS_COUNT
@@ -45,6 +47,8 @@ static const double constantsValues[CONSTANTS_COUNT] = {
     6.67408E-11,               // CONSTANT_G
     0.00454609,                // CONSTANT_GAL_IMP2M3
     0.45359237,                // CONSTANT_LB2KG
+    180.1557,                  // CONSTANT_GLUCOSE_MOLAR_MASS
+    6.02214076E+23,            // CONSTANT_ITEM_PER_MOLE
 };
 
 typedef enum Signum {
@@ -68,14 +72,20 @@ struct U_I18N_API Factor {
     // Apply the power to the factor.
     void power(int32_t power);
 
-    // Apply SI prefix to the `Factor`
-    void applySiPrefix(UMeasureSIPrefix siPrefix);
+    // Apply SI or binary prefix to the Factor.
+    void applyPrefix(UMeasurePrefix unitPrefix);
 
     // Does an in-place substition of the "symbolic constants" based on
     // constantExponents (resetting the exponents).
     //
     // In ICU4J, see UnitConverter.Factor.getConversionRate().
     void substituteConstants();
+};
+
+struct U_I18N_API ConversionInfo {
+    double conversionRate;
+    double offset;
+    bool reciprocal;
 };
 
 /*
@@ -133,8 +143,22 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
  *    Only works with SINGLE and COMPOUND units. If one of the units is a
  *    MIXED unit, an error will occur. For more information, see UMeasureUnitComplexity.
  */
-class U_I18N_API UnitConverter : public UMemory {
+class U_I18N_API UnitsConverter : public UMemory {
   public:
+    /**
+     * Constructor of `UnitConverter`.
+     * NOTE:
+     *   - source and target must be under the same category
+     *      - e.g. meter to mile --> both of them are length units.
+     * NOTE:
+     *    This constructor creates an instance of `ConversionRates` internally.
+     *
+     * @param sourceIdentifier represents the source unit identifier.
+     * @param targetIdentifier represents the target unit identifier.
+     * @param status
+     */
+    UnitsConverter(StringPiece sourceIdentifier, StringPiece targetIdentifier, UErrorCode &status);
+
     /**
      * Constructor of `UnitConverter`.
      * NOTE:
@@ -146,7 +170,7 @@ class U_I18N_API UnitConverter : public UMemory {
      * @param ratesInfo Contains all the needed conversion rates.
      * @param status
      */
-    UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+    UnitsConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
                   const ConversionRates &ratesInfo, UErrorCode &status);
 
     /**
@@ -177,8 +201,15 @@ class U_I18N_API UnitConverter : public UMemory {
      */
     double convertInverse(double inputValue) const;
 
+    ConversionInfo getConversionInfo() const;
+
   private:
     ConversionRate conversionRate_;
+
+    /**
+     * Initialises the object.
+     */ 
+    void init(const ConversionRates &ratesInfo, UErrorCode &status);
 };
 
 } // namespace units

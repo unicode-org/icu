@@ -75,6 +75,7 @@ static void TestSetMaxFracAndRoundIncr(void);
 static void TestIgnorePadding(void);
 static void TestSciNotationMaxFracCap(void);
 static void TestMinIntMinFracZero(void);
+static void Test21479_ExactCurrency(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -116,6 +117,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestIgnorePadding);
     TESTCASE(TestSciNotationMaxFracCap);
     TESTCASE(TestMinIntMinFracZero);
+    TESTCASE(Test21479_ExactCurrency);
 }
 
 /* test Parse int 64 */
@@ -3574,6 +3576,25 @@ static void TestMinIntMinFracZero(void) {
             unum_close(unum);
         }
     }
+}
+
+static void Test21479_ExactCurrency(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* nf = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status);
+    if ( U_FAILURE(status) ) {
+        log_data_err("unum_open UNUM_CURRENCY for en_US fails with %s\n", u_errorName(status));
+        goto cleanup;
+    }
+    unum_setTextAttribute(nf, UNUM_CURRENCY_CODE, u"EUR", -1, &status);
+    UChar result[40];
+    unum_formatDecimal(nf, "987654321000000000000001", -1, result, 40, NULL, &status);
+    if (!assertSuccess("Formatting currency decimal", &status)) {
+        goto cleanup;
+    }
+    assertUEquals("", u"€987,654,321,000,000,000,000,001.00", result);
+
+    cleanup:
+    unum_close(nf);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

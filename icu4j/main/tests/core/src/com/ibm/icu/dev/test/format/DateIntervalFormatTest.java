@@ -16,6 +16,7 @@
 package com.ibm.icu.dev.test.format;
 
 import java.text.FieldPosition;
+import java.text.Format.Field;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -430,7 +432,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2008 10 10 10:10:10", "EEEEdMMMMy", "2007\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f32008\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e94",
 
-                "zh", "CE 2007 10 10 10:10:10", "CE 2008 10 10 10:10:10", "hm", "2007/10/10\\u4e0a\\u534810:10 \\u2013 2008/10/10\\u4e0a\\u534810:10",
+                "zh", "CE 2007 10 10 10:10:10", "CE 2008 10 10 10:10:10", "hm", "2007/10/10 \\u4e0a\\u534810:10 \\u2013 2008/10/10 \\u4e0a\\u534810:10",
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "dMMMMy", "2007\\u5e7410\\u670810\\u65e5\\u81f311\\u670810\\u65e5",
 
@@ -440,7 +442,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EEEEdMMMM", "10\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f311\\u670810\\u65e5\\u661f\\u671f\\u516d",
 
-                "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "hmv", "2007/10/10\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10 \\u2013 2007/11/10\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10",
+                "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "hmv", "2007/10/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10 \\u2013 2007/11/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10",
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EEEEdMMMMy", "2007\\u5e7411\\u670810\\u65e5\\u661f\\u671f\\u516d\\u81f320\\u65e5\\u661f\\u671f\\u4e8c",
 
@@ -473,9 +475,9 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "MMMM", "\\u5341\\u4E00\\u6708", // (fixed expected result per ticket 6872<-6626 and others)
 
-                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "hmz", "2007/11/10GMT-8 \\u4e0a\\u534810:10 \\u2013 2007/11/20GMT-8 \\u4e0a\\u534810:10",
+                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "hmz", "2007/11/10 GMT-8 \\u4e0a\\u534810:10 \\u2013 2007/11/20 GMT-8 \\u4e0a\\u534810:10",
 
-                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "h", "2007/11/10\\u4e0a\\u534810\\u65f6 \\u2013 2007/11/20\\u4e0a\\u534810\\u65f6",
+                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "h", "2007/11/10 \\u4e0a\\u534810\\u65f6 \\u2013 2007/11/20 \\u4e0a\\u534810\\u65f6",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "EEEEdMMMMy", "2007\\u5e741\\u670810\\u65e5\\u661f\\u671f\\u4e09", // (fixed expected result per ticket 6872<-6626)
 
@@ -2302,5 +2304,154 @@ public class DateIntervalFormatTest extends TestFmwk {
             FormattedDateInterval res = fmt.formatToValue(new DateInterval(from, to));
             assertEquals("Formate for " + testCase[4], testCase[5], res.toString());
         }
+    }
+
+    @Test
+    public void testTicket21222GregorianEraDiff() {
+        Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE);
+        DateIntervalFormat g = DateIntervalFormat.getInstance("h", Locale.ENGLISH);
+        g.setTimeZone(TimeZone.GMT_ZONE);
+
+        cal.set(123, Calendar.APRIL, 5, 6, 0);
+        Date date0123Apr5AD = cal.getTime();
+
+        cal.set(Calendar.YEAR, 124);
+        Date date0124Apr5AD = cal.getTime();
+
+        cal.set(Calendar.ERA, GregorianCalendar.BC);
+        Date date0124Apr5BC = cal.getTime();
+
+        cal.set(Calendar.YEAR, 123);
+        Date date0123Apr5BC = cal.getTime();
+
+        DateInterval bothAD = new DateInterval(date0123Apr5AD.getTime(), date0124Apr5AD.getTime());
+        DateInterval bothBC = new DateInterval(date0124Apr5BC.getTime(), date0123Apr5BC.getTime());
+        DateInterval BCtoAD = new DateInterval(date0123Apr5BC.getTime(), date0124Apr5AD.getTime());
+
+        FormattedDateInterval formatted = g.formatToValue(bothAD);
+        assertEquals("Gregorian - calendar both dates in AD",
+                     "4/5/123, 6 AM \u2013 4/5/124, 6 AM",
+                     formatted.toString());
+
+        formatted = g.formatToValue(bothBC);
+        assertEquals("Gregorian - calendar both dates in BC",
+                     "4/5/124, 6 AM \u2013 4/5/123, 6 AM",
+                     formatted.toString());
+
+        formatted = g.formatToValue(BCtoAD);
+        assertEquals("Gregorian - BC to AD",
+                     "4 5, 123 BC, 6 AM \u2013 4 5, 124 AD, 6 AM",
+                     formatted.toString());
+    }
+
+    private List<Field>  getFields(FormattedDateInterval formatted) {
+        List<Field> fields = new ArrayList<Field>();
+        ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
+        while (formatted.nextPosition(cfpos)) {
+            fields.add(cfpos.getField());
+        }
+        return fields;
+    }
+
+    private void verifyFields(
+            FormattedDateInterval formatted, List<Field> fields) {
+        int i = 0;
+        ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
+        while (formatted.nextPosition(cfpos)) {
+            assertEquals("Field", cfpos.getField(), fields.get(i));
+            i++;
+        }
+    }
+
+    @Test
+    public void testTicket21222ROCEraDiff() {
+        Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE);
+        DateIntervalFormat roc = DateIntervalFormat.getInstance(
+            "h", new ULocale("zh-Hant-TW@calendar=roc"));
+        roc.setTimeZone(TimeZone.GMT_ZONE);
+
+        // set date1910Jan2 to 1910/1/2 AD which is prior to MG
+        cal.set(1910, Calendar.JANUARY, 2, 6, 0);
+        Date date1910Jan2 = cal.getTime();
+
+        // set date1911Jan2 to 1911/1/2 AD which is also prior to MG
+        cal.set(Calendar.YEAR, 1911);
+        Date date1911Jan2 = cal.getTime();
+
+        // set date1912Jan2 to 1912/1/2 AD which is after MG
+        cal.set(Calendar.YEAR, 1912);
+        Date date1912Jan2 = cal.getTime();
+
+        // set date1913Jan2 to 1913/1/2 AD which is also after MG
+        cal.set(Calendar.YEAR, 1913);
+        Date date1913Jan2 = cal.getTime();
+
+        DateInterval bothBeforeMG = new DateInterval(date1910Jan2.getTime(), date1911Jan2.getTime());
+        DateInterval beforeAfterMG = new DateInterval(date1911Jan2.getTime(), date1913Jan2.getTime());
+        DateInterval bothAfterMG = new DateInterval(date1912Jan2.getTime(), date1913Jan2.getTime());
+
+
+        FormattedDateInterval formatted = roc.formatToValue(bothAfterMG);
+        assertEquals("roc calendar - both dates in MG Era",
+                     "民國1/1/2 6 上午 – 民國2/1/2 6 上午",
+                     formatted.toString());
+        List<Field> expectedFields = getFields(formatted);
+
+        formatted = roc.formatToValue(beforeAfterMG);
+        assertEquals("roc calendar - prior MG Era and in MG Era",
+                     "民國前1年1月2日 6 上午 – 民國2年1月2日 6 上午",
+                     formatted.toString());
+        verifyFields(formatted, expectedFields);
+
+        formatted = roc.formatToValue(bothBeforeMG);
+        assertEquals("roc calendar - both dates prior MG Era",
+                     "民國前2/1/2 6 上午 – 民國前1/1/2 6 上午",
+                     formatted.toString());
+        verifyFields(formatted, expectedFields);
+    }
+
+    @Test
+    public void testTicket21222JapaneseEraDiff() {
+        Calendar cal = Calendar.getInstance(TimeZone.GMT_ZONE);
+        DateIntervalFormat japanese = DateIntervalFormat.getInstance(
+            "h", new ULocale("ja@calendar=japanese"));
+        japanese.setTimeZone(TimeZone.GMT_ZONE);
+
+        cal.set(2019, Calendar.MARCH, 2, 6, 0);
+        Date date2019Mar2 = cal.getTime();
+
+        cal.set(Calendar.MONTH, Calendar.APRIL);
+        cal.set(Calendar.DAY_OF_MONTH, 3);
+        Date date2019Apr3 = cal.getTime();
+
+        cal.set(Calendar.MONTH, Calendar.MAY);
+        cal.set(Calendar.DAY_OF_MONTH, 4);
+        Date date2019May4 = cal.getTime();
+
+        cal.set(Calendar.MONTH, Calendar.JUNE);
+        cal.set(Calendar.DAY_OF_MONTH, 5);
+        Date date2019Jun5 = cal.getTime();
+
+        DateInterval bothBeforeReiwa = new DateInterval(date2019Mar2.getTime(), date2019Apr3.getTime());
+        DateInterval beforeAfterReiwa = new DateInterval(date2019Mar2.getTime(), date2019May4.getTime());
+        DateInterval bothAfterReiwa = new DateInterval(date2019May4.getTime(), date2019Jun5.getTime());
+
+        FormattedDateInterval formatted = japanese.formatToValue(bothAfterReiwa);
+        assertEquals("japanese calendar - both dates in Reiwa",
+                     "R1/5/4 午前6時～R1/6/5 午前6時",
+                     formatted.toString());
+        List<Field> expectedFields = getFields(formatted);
+
+        formatted = japanese.formatToValue(bothBeforeReiwa);
+        assertEquals("japanese calendar - both dates before Reiwa",
+                     "H31/3/2 午前6時～H31/4/3 午前6時",
+                     formatted.toString());
+        verifyFields(formatted, expectedFields);
+
+        formatted = japanese.formatToValue(beforeAfterReiwa);
+        assertEquals("japanese calendar - date before and in Reiwa",
+                     "平成31年3月2日 午前6時～令和元年5月4日 午前6時",
+                     formatted.toString());
+        verifyFields(formatted, expectedFields);
     }
 }

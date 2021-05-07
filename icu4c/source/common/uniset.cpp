@@ -111,7 +111,7 @@ static void U_CALLCONV cloneUnicodeString(UElement *dst, UElement *src) {
     dst->pointer = new UnicodeString(*(UnicodeString*)src->pointer);
 }
 
-static int8_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
+static int32_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
     const UnicodeString &a = *(const UnicodeString*)t1.pointer;
     const UnicodeString &b = *(const UnicodeString*)t2.pointer;
     return a.compare(b);
@@ -1118,6 +1118,26 @@ UnicodeSet& UnicodeSet::retain(UChar32 start, UChar32 end) {
 
 UnicodeSet& UnicodeSet::retain(UChar32 c) {
     return retain(c, c);
+}
+
+UnicodeSet& UnicodeSet::retain(const UnicodeString &s) {
+    if (isFrozen() || isBogus()) { return *this; }
+    UChar32 cp = getSingleCP(s);
+    if (cp < 0) {
+        bool isIn = stringsContains(s);
+        // Check for getRangeCount() first to avoid somewhat-expensive size()
+        // when there are single code points.
+        if (isIn && getRangeCount() == 0 && size() == 1) {
+            return *this;
+        }
+        clear();
+        if (isIn) {
+            _add(s);
+        }
+    } else {
+        retain(cp, cp);
+    }
+    return *this;
 }
 
 /**

@@ -160,7 +160,7 @@ fo{
                 one{"{0} karat"}
                 other{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligramm fyri hvønn desilitur"}
                 one{"{0} milligramm fyri hvønn desilitur"}
                 other{"{0} milligramm fyri hvønn desilitur"}
@@ -1313,7 +1313,7 @@ fo{
                 one{"{0} karat"}
                 other{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1656,9 +1656,9 @@ fo{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"míl"}
@@ -1749,9 +1749,9 @@ fo{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

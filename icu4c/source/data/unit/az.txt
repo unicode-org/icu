@@ -165,7 +165,7 @@ az{
                 one{"{0} karat"}
                 other{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milliqram/desilitr"}
                 one{"{0} milliqram/desilitr"}
                 other{"{0} milliqram/desilitr"}
@@ -554,9 +554,9 @@ az{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mil"}
@@ -1399,7 +1399,7 @@ az{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mq/dl"}
                 one{"{0} mq/dl"}
                 other{"{0} mq/dl"}
@@ -1779,9 +1779,9 @@ az{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mil"}
@@ -1887,9 +1887,9 @@ az{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µq"}
-                one{"{0} µq"}
-                other{"{0} µq"}
+                dnam{"μq"}
+                one{"{0} μq"}
+                other{"{0} μq"}
             }
             milligram{
                 dnam{"mq"}

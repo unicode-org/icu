@@ -280,11 +280,11 @@ public class OlsonTimeZone extends BasicTimeZone {
      */
     @Override
     public void getOffsetFromLocal(long date,
-            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         if (finalZone != null && date >= finalStartMillis) {
             finalZone.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
         } else {
-            getHistoricalOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
+            getHistoricalOffset(date, true, getLocalOptionValue(nonExistingTimeOpt), getLocalOptionValue(duplicatedTimeOpt), offsets);
         }
     }
 

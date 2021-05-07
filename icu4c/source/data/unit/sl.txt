@@ -221,7 +221,7 @@ sl{
                 other{"{0} karatov"}
                 two{"{0} karata"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligrami na deciliter"}
                 few{"{0} miligrami na deciliter"}
                 one{"{0} miligram na deciliter"}
@@ -1402,7 +1402,7 @@ sl{
             10p-18{"a{0}"}
             10p-2{"c{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             per{"{0}/{1}"}
         }
@@ -1831,7 +1831,7 @@ sl{
                 other{"{0} kt"}
                 two{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 few{"{0} mg/dl"}
                 one{"{0} mg/dl"}
@@ -2241,17 +2241,17 @@ sl{
             }
             dot-per-centimeter{
                 dnam{"dpcm"}
-                few{"{0} dpcm"}
-                one{"{0} dpcm"}
+                few{"{0} ppcm"}
+                one{"{0} ppcm"}
                 other{"{0} dpcm"}
-                two{"{0} dpcm"}
+                two{"{0} ppcm"}
             }
             dot-per-inch{
                 dnam{"dpi"}
-                few{"{0} dpi"}
-                one{"{0} dpi"}
+                few{"{0} ppi"}
+                one{"{0} ppi"}
                 other{"{0} dpi"}
-                two{"{0} dpi"}
+                two{"{0} ppi"}
             }
             em{
                 dnam{"em"}
@@ -2373,11 +2373,11 @@ sl{
                 two{"{0} m"}
             }
             micrometer{
-                dnam{"µm"}
-                few{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
-                two{"{0} µm"}
+                dnam{"μm"}
+                few{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
+                two{"{0} μm"}
             }
             mile{
                 dnam{"mi"}
@@ -2519,11 +2519,11 @@ sl{
                 two{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
-                two{"{0} µg"}
+                dnam{"μg"}
+                few{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
+                two{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

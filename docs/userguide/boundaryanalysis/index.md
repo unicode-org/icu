@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Boundary Analysis
-nav_order: 10
+nav_order: 1300
 has_children: true
 ---
 <!--
@@ -531,13 +531,13 @@ will generally be slower.
 
 The source code for the ICU break rules for the standard boundary types is
 located in the directory
-[icu4c/source/data/brkitr/rules](https://github.com/unicode-org/icu/tree/master/icu4c/source/data/brkitr/rules).
+[icu4c/source/data/brkitr/rules](https://github.com/unicode-org/icu/tree/main/icu4c/source/data/brkitr/rules).
 These files will be built, and the corresponding binary state tables
 incorporated into ICU's data, by the standard ICU4C build process.
 
 The dictionary word lists used by word break, and for some languages, line break
 are in
-[icu4c/source/data/brkitr/dictionaries](https://github.com/unicode-org/icu/tree/master/icu4c/source/data/brkitr/dictionaries).
+[icu4c/source/data/brkitr/dictionaries](https://github.com/unicode-org/icu/tree/main/icu4c/source/data/brkitr/dictionaries).
 
 The same data is used by both ICU4C and ICU4J. In the normal ICU build process,
 the source data is processed into a binary form using ICU4C, and the resulting

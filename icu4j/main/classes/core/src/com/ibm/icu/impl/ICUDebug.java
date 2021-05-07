@@ -8,8 +8,6 @@
  */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.util.VersionInfo;
-
 public final class ICUDebug {
     private static String params;
     static {
@@ -26,55 +24,6 @@ public final class ICUDebug {
         if (debug) {
             System.out.println("\nICUDebug=" + params);
         }
-    }
-
-    public static final String javaVersionString = System.getProperty("java.version", "0");
-    public static final boolean isJDK14OrHigher;
-    public static final VersionInfo javaVersion;
-
-    public static VersionInfo getInstanceLenient(String s) {
-        // Extracting ASCII numbers up to 4 delimited by
-        // any non digit characters
-        int[] ver = new int[4];
-        boolean numeric = false;
-        int i = 0, vidx = 0;
-        while (i < s.length()) {
-            char c = s.charAt(i++);
-            if (c < '0' || c > '9') {
-                if (numeric) {
-                    if (vidx == 3) {
-                        // up to 4 numbers
-                        break;
-                    }
-                    numeric = false;
-                    vidx++;
-                }
-            } else {
-                if (numeric) {
-                    ver[vidx] = ver[vidx] * 10 + (c - '0');
-                    if (ver[vidx] > 255) {
-                        // VersionInfo does not support numbers
-                        // greater than 255.  In such case, we
-                        // ignore the number and the rest
-                        ver[vidx] = 0;
-                        break;
-                    }
-                } else {
-                    numeric = true;
-                    ver[vidx] = c - '0';
-                }
-            }
-        }
-
-        return VersionInfo.getInstance(ver[0], ver[1], ver[2], ver[3]);
-    }
-
-    static {
-        javaVersion = getInstanceLenient(javaVersionString);
-
-        VersionInfo java14Version = VersionInfo.getInstance("1.4.0");
-
-        isJDK14OrHigher = javaVersion.compareTo(java14Version) >= 0;
     }
 
     public static boolean enabled() {
@@ -109,23 +58,4 @@ public final class ICUDebug {
         }
         return result;
     }
-
-//    static public void main(String[] args) {
-//        // test
-//        String[] tests = {
-//            "1.3.0",
-//            "1.3.0_02",
-//            "1.3.1ea",
-//            "1.4.1b43",
-//            "___41___5",
-//            "x1.4.51xx89ea.7f",
-//            "1.6_2009",
-//            "10-100-1000-10000",
-//            "beta",
-//            "0",
-//        };
-//        for (int i = 0; i < tests.length; ++i) {
-//            System.out.println(tests[i] + " => " + getInstanceLenient(tests[i]));
-//        }
-//    }
 }

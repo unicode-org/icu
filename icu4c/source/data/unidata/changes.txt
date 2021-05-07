@@ -49,6 +49,12 @@ For new script codes see http://www.unicode.org/iso15924/codechanges.html
 
 ---------------------------------------------------------------------------- ***
 
+Unicode 14.0 update for ICU 70
+
+Note: running `bazelisk clean` is optional but not necessary along with running `clean.sh`.
+
+---------------------------------------------------------------------------- ***
+
 Unicode 13.0 update for ICU 66
 
 https://www.unicode.org/versions/Unicode13.0.0/

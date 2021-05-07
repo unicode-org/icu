@@ -46,18 +46,28 @@ void NumberSkeletonTest::validTokens() {
             u"@@@##",
             u"@@*",
             u"@@+",
+            u"@@+/w",
             u".000##",
             u".00*",
             u".00+",
             u".",
+            u"./w",
             u".*",
             u".+",
+            u".+/w",
             u".######",
             u".00/@@*",
             u".00/@@+",
             u".00/@##",
+            u".00/@##/w",
+            u".00/@",
+            u".00/@r",
+            u".00/@@s",
+            u".00/@@#r",
             u"precision-increment/3.14",
+            u"precision-increment/3.14/w",
             u"precision-currency-standard",
+            u"precision-currency-standard/w",
             u"precision-integer rounding-mode-half-up",
             u".00# rounding-mode-ceiling",
             u".00/@@* rounding-mode-floor",
@@ -148,6 +158,9 @@ void NumberSkeletonTest::validTokens() {
 void NumberSkeletonTest::invalidTokens() {
     static const char16_t* cases[] = {
             u".00x",
+            u".00i",
+            u".00/x",
+            u".00/ww",
             u".00##0",
             u".##*",
             u".00##*",
@@ -159,13 +172,13 @@ void NumberSkeletonTest::invalidTokens() {
             u"@#+",
             u"@@x",
             u"@@##0",
-            u".00/@",
             u".00/@@",
             u".00/@@x",
             u".00/@@#",
             u".00/@@#*",
             u".00/floor/@@*", // wrong order
             u".00/@@#+",
+            u".00/@@@+r",
             u".00/floor/@@+", // wrong order
             u"precision-increment/français", // non-invariant characters for C++
             u"scientific/ee",
@@ -222,6 +235,7 @@ void NumberSkeletonTest::unknownTokens() {
 
 void NumberSkeletonTest::unexpectedTokens() {
     static const char16_t* cases[] = {
+            u".00/w/w",
             u"group-thousands/foo",
             u"precision-integer//@## group-off",
             u"precision-integer//@##  group-off",
@@ -337,7 +351,6 @@ void NumberSkeletonTest::wildcardCharacters() {
     } cases[] = {
         { u".00*", u".00+" },
         { u"@@*", u"@@+" },
-        { u".00/@@*", u".00/@@+" },
         { u"scientific/*ee", u"scientific/+ee" },
         { u"integer-width/*00", u"integer-width/+00" },
     };

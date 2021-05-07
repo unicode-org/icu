@@ -345,9 +345,9 @@ public class LocaleMatcherTest extends TestFmwk {
         assertTrue("zh_Hant should be closer to und_TW (" + matchZhHant +
             ") than to en_Hant_TW (" + matchEnHantTw + ")",
             matchEnHantTw < matchZhHant);
-        assertTrue("zh should be closer to und_TW (" + matchZh +
-            ") than to en_Hant_TW (" + matchEnHantTw + ")",
-            matchEnHantTw < matchZh);
+        assertTrue("zh should not match und_TW (" + matchZh +
+            ") or en_Hant_TW (" + matchEnHantTw + ")",
+            matchZh == 0.0 && matchEnHantTw == 0.0);
     }
 
     @Test
@@ -425,12 +425,10 @@ public class LocaleMatcherTest extends TestFmwk {
         // zh_Hans, it wouldn't make much of a difference.
         final LocaleMatcher matcher = newLocaleMatcher("fr, zh_Hans_CN, en_US");
 
-        // The script distance (simplified vs. traditional Han) is considered
-        // small enough
-        // to be an acceptable match. The regional difference is considered
-        // almost insignificant.
-        assertEquals("zh_Hans_CN", matcher.getBestMatch("zh_TW").toString());
-        assertEquals("zh_Hans_CN", matcher.getBestMatch("zh_Hant").toString());
+        // The script distance (simplified vs. traditional Han) is now considered
+        // no match, so we just get the first entry.
+        assertEquals("fr", matcher.getBestMatch("zh_TW").toString());
+        assertEquals("fr", matcher.getBestMatch("zh_Hant").toString());
 
         // For geo_political reasons, you might want to avoid a zh_Hant ->
         // zh_Hans match.

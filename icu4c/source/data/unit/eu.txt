@@ -161,7 +161,7 @@ eu{
                 one{"{0} kilate"}
                 other{"{0} kilate"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligramo dezilitro bakoitzeko"}
                 one{"{0} miligramo dezilitro bakoitzeko"}
                 other{"{0} miligramo dezilitro bakoitzeko"}
@@ -1069,7 +1069,7 @@ eu{
             1024p7{"Zi{0}"}
             1024p8{"Yi{0}"}
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
             percent{
@@ -1372,7 +1372,7 @@ eu{
             1024p7{"Zi{0}"}
             1024p8{"Yi{0}"}
             per{"{0}/{1}"}
-            times{"{0}{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
             karat{
@@ -1380,7 +1380,7 @@ eu{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0} mg/dl"}
                 other{"{0} mg/dl"}
@@ -1751,9 +1751,9 @@ eu{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"milia"}
@@ -1861,9 +1861,9 @@ eu{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

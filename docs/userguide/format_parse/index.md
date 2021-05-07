@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Formatting
-nav_order: 7
+nav_order: 1000
 has_children: true
 ---
 <!--

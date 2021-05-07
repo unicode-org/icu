@@ -165,7 +165,7 @@ kn{
                 one{"{0} ಕಾರಟ್‌"}
                 other{"{0} ಕಾರಟ್‌ಗಳು"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ಪ್ರತಿ ಡೆಸಿಲೀಟರ್‌ಗೆ ಮಿಲಿಗ್ರಾಂಗಳು"}
                 one{"{0} ಪ್ರತಿ ಡೆಸಿಲೀಟರ್‌ಗೆ ಮಿಲಿಗ್ರಾಂ"}
                 other{"{0} ಪ್ರತಿ ಡೆಸಿಲೀಟರ್‌ಗೆ ಮಿಲಿಗ್ರಾಂಗಳು"}
@@ -1520,7 +1520,7 @@ kn{
                 one{"{0} ಕಾರ."}
                 other{"{0} ಕಾರ."}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ಮಿಗ್ರಾಂ/ಡೆಲೀ"}
                 one{"{0} ಮಿಗ್ರಾಂ/ಡೆಲೀ"}
                 other{"{0} ಮಿಗ್ರಾಂ/ಡೆಲೀ"}
@@ -1822,12 +1822,12 @@ kn{
             }
             dot-per-centimeter{
                 dnam{"dpcm"}
-                one{"{0} dpcm"}
+                one{"{0} ppcm"}
                 other{"{0} dpcm"}
             }
             dot-per-inch{
                 dnam{"dpi"}
-                one{"{0} dpi"}
+                one{"{0} ppi"}
                 other{"{0} dpi"}
             }
             em{
@@ -1918,9 +1918,9 @@ kn{
                 per{"{0}/ಮೀ"}
             }
             micrometer{
-                dnam{"µmeters"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μmeters"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"ಮೈಲುಗಳು"}

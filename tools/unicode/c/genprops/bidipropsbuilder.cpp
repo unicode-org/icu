@@ -298,7 +298,7 @@ BiDiPropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     value|=(uint32_t)bpt<<UBIDI_BPT_SHIFT;
     value|=(uint32_t)props.getIntProp(UCHAR_JOINING_TYPE)<<UBIDI_JT_SHIFT;
     value|=(uint32_t)props.getIntProp(UCHAR_BIDI_CLASS);
-    utrie2_setRange32(pTrie, start, end, value, TRUE, &errorCode);
+    utrie2_setRange32(pTrie, start, end, value, true, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: BiDiPropsBuilder utrie2_setRange32() failed - %s\n",
                 u_errorName(errorCode));
@@ -337,7 +337,7 @@ void
 BiDiPropsBuilder::makeMirror(UErrorCode &errorCode) {
     /* sort the mirroring table by source code points */
     uprv_sortArray(mirrors, mirrorTop, 8,
-                   compareMirror, NULL, FALSE, &errorCode);
+                   compareMirror, NULL, false, &errorCode);
     if(U_FAILURE(errorCode)) { return; }
 
     /*

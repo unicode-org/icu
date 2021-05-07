@@ -66,17 +66,19 @@ void U_I18N_API Factor::power(int32_t power) {
     }
 }
 
-void U_I18N_API Factor::applySiPrefix(UMeasureSIPrefix siPrefix) {
-    if (siPrefix == UMeasureSIPrefix::UMEASURE_SI_PREFIX_ONE) return; // No need to do anything
-
-    double siApplied = std::pow(10.0, std::abs(siPrefix));
-
-    if (siPrefix < 0) {
-        factorDen *= siApplied;
+void U_I18N_API Factor::applyPrefix(UMeasurePrefix unitPrefix) {
+    if (unitPrefix == UMeasurePrefix::UMEASURE_PREFIX_ONE) {
+        // No need to do anything
         return;
     }
 
-    factorNum *= siApplied;
+    int32_t prefixPower = umeas_getPrefixPower(unitPrefix);
+    double prefixFactor = std::pow((double)umeas_getPrefixBase(unitPrefix), (double)std::abs(prefixPower));
+    if (prefixPower >= 0) {
+        factorNum *= prefixFactor;
+    } else {
+        factorDen *= prefixFactor;
+    }
 }
 
 void U_I18N_API Factor::substituteConstants() {
@@ -213,6 +215,7 @@ Factor loadSingleFactor(StringPiece source, const ConversionRates &ratesInfo, UE
 }
 
 // Load Factor of a compound source unit.
+// In ICU4J, this is a pair of ConversionRates.getFactorToBase() functions.
 Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &ratesInfo,
                           UErrorCode &status) {
 
@@ -223,8 +226,10 @@ Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &
         Factor singleFactor = loadSingleFactor(singleUnit.getSimpleUnitID(), ratesInfo, status);
         if (U_FAILURE(status)) return result;
 
-        // Apply SiPrefix before the power, because the power may be will flip the factor.
-        singleFactor.applySiPrefix(singleUnit.siPrefix);
+        // Prefix before power, because:
+        // - square-kilometer to square-meter: (1000)^2
+        // - square-kilometer to square-foot (approximate): (3.28*1000)^2
+        singleFactor.applyPrefix(singleUnit.unitPrefix);
 
         // Apply the power of the `dimensionality`
         singleFactor.power(singleUnit.dimensionality);
@@ -241,6 +246,8 @@ Factor loadCompoundFactor(const MeasureUnitImpl &source, const ConversionRates &
  *
  * NOTE:
  *  Empty unit means simple unit.
+ *
+ * In ICU4J, this is ConversionRates.checkSimpleUnit().
  */
 UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
     if (U_FAILURE(status)) return false;
@@ -255,7 +262,7 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
 
     auto singleUnit = *(unit.singleUnits[0]);
 
-    if (singleUnit.dimensionality != 1 || singleUnit.siPrefix != UMEASURE_SI_PREFIX_ONE) {
+    if (singleUnit.dimensionality != 1 || singleUnit.unitPrefix != UMEASURE_PREFIX_ONE) {
         return false;
     }
 
@@ -265,7 +272,7 @@ UBool checkSimpleUnit(const MeasureUnitImpl &unit, UErrorCode &status) {
 /**
  *  Extract conversion rate from `source` to `target`
  */
-// In ICU4J, this function is partially inlined in the UnitConverter constructor.
+// In ICU4J, this function is partially inlined in the UnitsConverter constructor.
 void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &source,
                         const MeasureUnitImpl &target, Convertibility unitsState,
                         const ConversionRates &ratesInfo, UErrorCode &status) {
@@ -293,6 +300,7 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &s
     conversionRate.factorNum = finalFactor.factorNum;
     conversionRate.factorDen = finalFactor.factorDen;
 
+    // This code corresponds to ICU4J's ConversionRates.getOffset().
     // In case of simple units (such as: celsius or fahrenheit), offsets are considered.
     if (checkSimpleUnit(source, status) && checkSimpleUnit(target, status)) {
         conversionRate.sourceOffset =
@@ -300,6 +308,8 @@ void loadConversionRate(ConversionRate &conversionRate, const MeasureUnitImpl &s
         conversionRate.targetOffset =
             targetToBase.offset * targetToBase.factorDen / targetToBase.factorNum;
     }
+    // TODO(icu-units#127): should we consider failure if there's an offset for
+    // a not-simple-unit? What about kilokelvin / kilocelsius?
 
     conversionRate.reciprocal = unitsState == Convertibility::RECIPROCAL;
 }
@@ -374,6 +384,10 @@ void U_I18N_API addSingleFactorConstant(StringPiece baseStr, int32_t power, Sign
         factor.constantExponents[CONSTANT_GRAVITY] += power * signum;
     } else if (baseStr == "lb_to_kg") {
         factor.constantExponents[CONSTANT_LB2KG] += power * signum;
+    } else if (baseStr == "glucose_molar_mass") {
+        factor.constantExponents[CONSTANT_GLUCOSE_MOLAR_MASS] += power * signum;
+    } else if (baseStr == "item_per_mole") {
+        factor.constantExponents[CONSTANT_ITEM_PER_MOLE] += power * signum;
     } else if (baseStr == "PI") {
         factor.constantExponents[CONSTANT_PI] += power * signum;
     } else {
@@ -475,16 +489,37 @@ Convertibility U_I18N_API extractConvertibility(const MeasureUnitImpl &source,
     return UNCONVERTIBLE;
 }
 
-UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
-                             const ConversionRates &ratesInfo, UErrorCode &status)
+UnitsConverter::UnitsConverter(const MeasureUnitImpl &source, const MeasureUnitImpl &target,
+                               const ConversionRates &ratesInfo, UErrorCode &status)
     : conversionRate_(source.copy(status), target.copy(status)) {
-    if (source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
-        target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
+    this->init(ratesInfo, status);
+}
+
+UnitsConverter::UnitsConverter(StringPiece sourceIdentifier, StringPiece targetIdentifier,
+                               UErrorCode &status)
+    : conversionRate_(MeasureUnitImpl::forIdentifier(sourceIdentifier, status),
+                      MeasureUnitImpl::forIdentifier(targetIdentifier, status)) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    ConversionRates ratesInfo(status);
+    this->init(ratesInfo, status);
+}
+
+void UnitsConverter::init(const ConversionRates &ratesInfo, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (this->conversionRate_.source.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED ||
+        this->conversionRate_.target.complexity == UMeasureUnitComplexity::UMEASURE_UNIT_MIXED) {
         status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
-    Convertibility unitsState = extractConvertibility(source, target, ratesInfo, status);
+    Convertibility unitsState = extractConvertibility(this->conversionRate_.source,
+                                                      this->conversionRate_.target, ratesInfo, status);
     if (U_FAILURE(status)) return;
     if (unitsState == Convertibility::UNCONVERTIBLE) {
         status = U_INTERNAL_PROGRAM_ERROR;
@@ -493,11 +528,12 @@ UnitConverter::UnitConverter(const MeasureUnitImpl &source, const MeasureUnitImp
 
     loadConversionRate(conversionRate_, conversionRate_.source, conversionRate_.target, unitsState,
                        ratesInfo, status);
+                          
 }
 
-int32_t UnitConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
-                                       const MeasureUnitImpl &secondUnit,
-                                       const ConversionRates &ratesInfo, UErrorCode &status) {
+int32_t UnitsConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
+                                        const MeasureUnitImpl &secondUnit,
+                                        const ConversionRates &ratesInfo, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -518,8 +554,9 @@ int32_t UnitConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
         return 0;
     }
 
-    // Represents the conversion factor from the firstUnit to the base unit that specified in the
-    // conversion data which is considered as the root of the firstUnit and the secondUnit.
+    // Represents the conversion factor from the firstUnit to the base
+    // unit that specified in the conversion data which is considered as
+    // the root of the firstUnit and the secondUnit.
     Factor firstUnitToBase = loadCompoundFactor(firstUnit, ratesInfo, status);
     Factor secondUnitToBase = loadCompoundFactor(secondUnit, ratesInfo, status);
 
@@ -541,7 +578,7 @@ int32_t UnitConverter::compareTwoUnits(const MeasureUnitImpl &firstUnit,
     return 0;
 }
 
-double UnitConverter::convert(double inputValue) const {
+double UnitsConverter::convert(double inputValue) const {
     double result =
         inputValue + conversionRate_.sourceOffset; // Reset the input to the target zero index.
     // Convert the quantity to from the source scale to the target scale.
@@ -562,7 +599,7 @@ double UnitConverter::convert(double inputValue) const {
     return result;
 }
 
-double UnitConverter::convertInverse(double inputValue) const {
+double UnitsConverter::convertInverse(double inputValue) const {
     double result = inputValue;
     if (conversionRate_.reciprocal) {
         if (result == 0) {
@@ -576,6 +613,17 @@ double UnitConverter::convertInverse(double inputValue) const {
     result += conversionRate_.targetOffset;
     result *= conversionRate_.factorDen / conversionRate_.factorNum;
     result -= conversionRate_.sourceOffset;
+    return result;
+}
+
+ConversionInfo UnitsConverter::getConversionInfo() const {
+    ConversionInfo result;
+    result.conversionRate = conversionRate_.factorNum / conversionRate_.factorDen;
+    result.offset =
+        (conversionRate_.sourceOffset * (conversionRate_.factorNum / conversionRate_.factorDen)) -
+        conversionRate_.targetOffset;
+    result.reciprocal = conversionRate_.reciprocal;
+
     return result;
 }
 

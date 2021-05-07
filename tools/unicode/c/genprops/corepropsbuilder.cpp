@@ -407,10 +407,10 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     /* get a possible minus sign */
     UBool isNegative;
     if(*s=='-') {
-        isNegative=TRUE;
+        isNegative=true;
         ++s;
     } else {
-        isNegative=FALSE;
+        isNegative=false;
     }
 
     int32_t value=0, den=0, exp=0, ntv=0;
@@ -568,7 +568,7 @@ CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newVa
     if(start==end) {
         utrie2_set32(pTrie, start, value, &errorCode);
     } else {
-        utrie2_setRange32(pTrie, start, end, value, TRUE, &errorCode);
+        utrie2_setRange32(pTrie, start, end, value, true, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie2_setRange32(properties trie %04lX..%04lX) failed - %s\n",

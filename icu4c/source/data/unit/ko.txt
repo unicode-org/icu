@@ -137,7 +137,7 @@ ko{
                 dnam{"캐럿"}
                 other{"{0}캐럿"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"데시리터당 밀리그램"}
                 other{"데시리터당 {0}밀리그램"}
             }
@@ -993,8 +993,8 @@ ko{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                other{"{0}µm"}
+                dnam{"μm"}
+                other{"{0}μm"}
             }
             mile{
                 dnam{"mi"}
@@ -1053,8 +1053,8 @@ ko{
                 other{"{0}t"}
             }
             microgram{
-                dnam{"µg"}
-                other{"{0}µg"}
+                dnam{"μg"}
+                other{"{0}μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -1254,7 +1254,7 @@ ko{
                 dnam{"kt"}
                 other{"{0}kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 other{"{0}mg/dL"}
             }
@@ -1572,8 +1572,8 @@ ko{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                other{"{0}µm"}
+                dnam{"μm"}
+                other{"{0}μm"}
             }
             mile{
                 dnam{"mi"}
@@ -1662,8 +1662,8 @@ ko{
                 other{"{0}t"}
             }
             microgram{
-                dnam{"µg"}
-                other{"{0}µg"}
+                dnam{"μg"}
+                other{"{0}μg"}
             }
             milligram{
                 dnam{"mg"}

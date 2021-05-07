@@ -193,7 +193,7 @@ hr{
                 one{"{0} karat"}
                 other{"{0} karata"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligrami po decilitru"}
                 few{"{0} miligrama po decilitru"}
                 one{"{0} miligram po decilitru"}
@@ -1591,9 +1591,9 @@ hr{
                 other{"{0} m"}
             }
             micrometer{
-                few{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                few{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 few{"{0} mi"}
@@ -1663,9 +1663,9 @@ hr{
                 other{"{0} t"}
             }
             microgram{
-                few{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                few{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 few{"{0} mg"}
@@ -2033,7 +2033,7 @@ hr{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 few{"{0} mg/dl"}
                 one{"{0} mg/dl"}
@@ -2481,10 +2481,10 @@ hr{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                few{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                few{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"mi"}
@@ -2586,10 +2586,10 @@ hr{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                few{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

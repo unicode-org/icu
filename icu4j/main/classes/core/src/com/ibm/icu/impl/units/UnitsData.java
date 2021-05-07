@@ -1,11 +1,11 @@
 // © 2020 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-
 package com.ibm.icu.impl.units;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -17,33 +17,38 @@ import com.ibm.icu.util.UResourceBundle;
  * Responsible for all units data operations (retriever, analysis, extraction certain data ... etc.).
  */
 public class UnitsData {
-    private volatile static String[] simpleUnits = null;
+    // TODO(icu-units#122): this class can use static initialization to load the
+    // data once, and provide access to it via static methods. (Partial change
+    // has been done already.)
+
+    // Array of simple unit IDs.
+    private static String[] simpleUnits = null;
+
+    // Maps from the value associated with each simple unit ID to a category
+    // index number.
+    private static int[] simpleUnitCategories = null;
+
     private ConversionRates conversionRates;
     private UnitPreferences unitPreferences;
-    /**
-     * Pairs of categories and the corresponding base units.
-     */
-    private Categories categories;
+
 
     public UnitsData() {
         this.conversionRates = new ConversionRates();
         this.unitPreferences = new UnitPreferences();
-        this.categories = new Categories();
     }
 
     public static String[] getSimpleUnits() {
-        if (simpleUnits != null) {
-            return simpleUnits;
-        }
+        return simpleUnits;
+    }
 
+    static {
         // Read simple units
         ICUResourceBundle resource;
         resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
         SimpleUnitIdentifiersSink sink = new SimpleUnitIdentifiersSink();
         resource.getAllItemsWithFallback("convertUnits", sink);
         simpleUnits = sink.simpleUnits;
-
-        return simpleUnits;
+        simpleUnitCategories = sink.simpleUnitCategories;
     }
 
     public ConversionRates getConversionRates() {
@@ -52,6 +57,10 @@ public class UnitsData {
 
     public UnitPreferences getUnitPreferences() {
         return unitPreferences;
+    }
+
+    public static int getCategoryIndexOfSimpleUnit(int simpleUnitIndex) {
+        return simpleUnitCategories[simpleUnitIndex];
     }
 
     /**
@@ -64,14 +73,14 @@ public class UnitsData {
         String baseUnitIdentifier = MeasureUnit.fromMeasureUnitImpl(baseMeasureUnit).getIdentifier();
 
         if (baseUnitIdentifier.equals("meter-per-cubic-meter")) {
-            // TODO(CLDR-13787,hugovdm): special-casing the consumption-inverse
-            // case. Once CLDR-13787 is clarified, this should be generalised (or
-            // possibly removed):
-
-            return "consumption-inverse";
+            // TODO(icu-units#130): support inverting any unit, with correct
+            // fallback logic: inversion and fallback may depend on presence or
+            // absence of a usage for that category.
+            return "consumption";
         }
 
-        return this.categories.mapFromUnitToCategory.get(baseUnitIdentifier);
+        int index = Categories.baseUnitToIndex.get(baseUnitIdentifier);
+        return Categories.indexToCategory[index];
     }
 
     public UnitPreferences.UnitPreference[] getPreferencesFor(String category, String usage, String region) {
@@ -80,6 +89,7 @@ public class UnitsData {
 
     public static class SimpleUnitIdentifiersSink extends UResource.Sink {
         String[] simpleUnits = null;
+        int[] simpleUnitCategories = null;
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
@@ -88,6 +98,7 @@ public class UnitsData {
 
             UResource.Table simpleUnitsTable = value.getTable();
             ArrayList<String> simpleUnits = new ArrayList<>();
+            ArrayList<Integer> simpleUnitCategories = new ArrayList<>();
             for (int i = 0; simpleUnitsTable.getKeyAndValue(i, key, value); i++) {
                 if (key.toString().equals("kilogram")) {
 
@@ -98,10 +109,28 @@ public class UnitsData {
                     continue;
                 }
 
+                // Find the base target unit for this simple unit
+                UResource.Table table = value.getTable();
+                if (!table.findValue("target", value)) {
+                    // TODO: is there a more idiomatic way to deal with Resource
+                    // Sink data errors in ICU4J? For now we just assert-fail,
+                    // and otherwise skip bad data:
+                    assert false : "Could not find \"target\" for simple unit: " + key;
+                    continue;
+                }
+                String target = value.getString();
+
                 simpleUnits.add(key.toString());
+                simpleUnitCategories.add(Categories.baseUnitToIndex.get(target));
             }
 
             this.simpleUnits = simpleUnits.toArray(new String[0]);
+            this.simpleUnitCategories = new int[simpleUnitCategories.size()];
+            Iterator<Integer> iter = simpleUnitCategories.iterator();
+            for (int i = 0; i < this.simpleUnitCategories.length; i++)
+            {
+                this.simpleUnitCategories[i] = iter.next().intValue();
+            }
         }
     }
 
@@ -109,6 +138,9 @@ public class UnitsData {
      * Contains all the needed constants.
      */
     public static class Constants {
+        // TODO: consider moving the Trie-offset-related constants into
+        // MeasureUnitImpl.java, the only place they're being used?
+
         // Trie value offset for simple units, e.g. "gram", "nautical-mile",
         // "fluid-ounce-imperial".
         public static final int kSimpleUnitOffset = 512;
@@ -123,9 +155,9 @@ public class UnitsData {
         // Trie value offset for compound parts, e.g. "-per-", "-", "-and-".
         public final static int kCompoundPartOffset = 128;
 
-        // Trie value offset for SI Prefixes. This is big enough to ensure we only
-        // insert positive integers into the trie.
-        public static final int kSIPrefixOffset = 64;
+        // Trie value offset for SI or binary prefixes. This is big enough to
+        // ensure we only insert positive integers into the trie.
+        public static final int kPrefixOffset = 64;
 
 
         /* Tables Names*/
@@ -136,50 +168,71 @@ public class UnitsData {
         public static final String DEFAULT_USAGE = "default";
     }
 
+    // Deals with base units and categories, e.g. "meter-per-second" --> "speed".
     public static class Categories {
+        /**
+         * Maps from base unit to an index value: an index into the
+         * indexToCategory array.
+         */
+        static HashMap<String, Integer> baseUnitToIndex;
 
         /**
-         * Contains the map between units in their base units into their category.
-         * For example:  meter-per-second --> "speed"
+         * Our official array of category strings - categories are identified by
+         * indeces into this array.
          */
-        HashMap<String, String> mapFromUnitToCategory;
+        static String[] indexToCategory;
 
-
-        public Categories() {
+        static {
             // Read unit Categories
             ICUResourceBundle resource;
             resource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "units");
             CategoriesSink sink = new CategoriesSink();
             resource.getAllItemsWithFallback(Constants.CATEGORY_TABLE_NAME, sink);
-            this.mapFromUnitToCategory = sink.getMapFromUnitToCategory();
+            baseUnitToIndex = sink.mapFromUnitToIndex;
+            indexToCategory = sink.categories.toArray(new String[0]);
         }
     }
 
+    /**
+     * A Resource Sink that collects information from `unitQuantities` in the
+     * `units` resource to provide key->value lookups from base unit to
+     * category, as well as preserving ordering information for these
+     * categories. See `units.txt`.
+     *
+     * For example: "kilogram" -> "mass", "meter-per-second" -> "speed".
+     *
+     * In Java unitQuantity values are collected in order into an ArrayList,
+     * while unitQuantity key-to-index lookups are handled with a HashMap.
+     */
     public static class CategoriesSink extends UResource.Sink {
         /**
          * Contains the map between units in their base units into their category.
          * For example:  meter-per-second --> "speed"
          */
-        HashMap<String, String> mapFromUnitToCategory;
+        HashMap<String, Integer> mapFromUnitToIndex;
+        ArrayList<String> categories;
 
         public CategoriesSink() {
-            mapFromUnitToCategory = new HashMap<>();
+            mapFromUnitToIndex = new HashMap<>();
+            categories = new ArrayList<>();
         }
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             assert (key.toString().equals(Constants.CATEGORY_TABLE_NAME));
-            assert (value.getType() == UResourceBundle.TABLE);
+            assert (value.getType() == UResourceBundle.ARRAY);
 
-            UResource.Table categoryTable = value.getTable();
-            for (int i = 0; categoryTable.getKeyAndValue(i, key, value); i++) {
-                assert (value.getType() == UResourceBundle.STRING);
-                mapFromUnitToCategory.put(key.toString(), value.toString());
+            UResource.Array categoryArray = value.getArray();
+            for (int i=0; categoryArray.getValue(i, value); i++) {
+                assert (value.getType() == UResourceBundle.TABLE);
+                UResource.Table table = value.getTable();
+                assert (table.getSize() == 1)
+                    : "expecting single-entry table, got size: " + table.getSize();
+                table.getKeyAndValue(0, key, value);
+                assert value.getType() == UResourceBundle.STRING : "expecting category string";
+                mapFromUnitToIndex.put(key.toString(), categories.size());
+                categories.add(value.toString());
             }
-        }
-
-        public HashMap<String, String> getMapFromUnitToCategory() {
-            return mapFromUnitToCategory;
         }
     }
 }

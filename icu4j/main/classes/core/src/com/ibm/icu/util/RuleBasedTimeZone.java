@@ -17,9 +17,9 @@ import com.ibm.icu.impl.Grego;
 /**
  * <code>RuleBasedTimeZone</code> is a concrete subclass of <code>TimeZone</code> that allows users to define
  * custom historic time transition rules.
- * 
+ *
  * @see com.ibm.icu.util.TimeZoneRule
- * 
+ *
  * @stable ICU 3.8
  */
 public class RuleBasedTimeZone extends BasicTimeZone {
@@ -36,10 +36,10 @@ public class RuleBasedTimeZone extends BasicTimeZone {
     /**
      * Constructs a <code>RuleBasedTimeZone</code> object with the ID and the
      * <code>InitialTimeZoneRule</code>
-     * 
+     *
      * @param id                The time zone ID.
      * @param initialRule       The initial time zone rule.
-     * 
+     *
      * @stable ICU 3.8
      */
     public RuleBasedTimeZone(String id, InitialTimeZoneRule initialRule) {
@@ -52,9 +52,9 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * The <code>TimeZoneRule</code> must have start times, that is, the result
      * of {@link com.ibm.icu.util.TimeZoneRule#isTransitionRule()} must be true.
      * Otherwise, <code>IllegalArgumentException</code> is thrown.
-     * 
+     *
      * @param rule The <code>TimeZoneRule</code>.
-     * 
+     *
      * @stable ICU 3.8
      */
     public void addTransitionRule(TimeZoneRule rule) {
@@ -77,9 +77,9 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 throw new IllegalStateException("Too many final rules");
             }
         } else {
-            // If this is not a final rule, add it to the historic rule list 
+            // If this is not a final rule, add it to the historic rule list
             if (historicRules == null) {
-                historicRules = new ArrayList<TimeZoneRule>();
+                historicRules = new ArrayList<>();
             }
             historicRules.add(rule);
         }
@@ -90,7 +90,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -108,7 +108,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -118,19 +118,19 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 69
      */
-    @Deprecated
     @Override
     public void getOffsetFromLocal(long date,
-            int nonExistingTimeOpt, int duplicatedTimeOpt, int[] offsets) {
-        getOffset(date, true, nonExistingTimeOpt, duplicatedTimeOpt, offsets);
+            LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
+        int nonExistingTimeOptVal = getLocalOptionValue(nonExistingTimeOpt);
+        int duplicatedTimeOptVal = getLocalOptionValue(duplicatedTimeOpt);
+        getOffset(date, true, nonExistingTimeOptVal, duplicatedTimeOptVal, offsets);
     }
-    
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -145,7 +145,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -157,7 +157,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -170,7 +170,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -238,7 +238,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -267,7 +267,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                 if (finalRules[i] != null && otherRBTZ.finalRules[i] != null
                         && finalRules[i].isEquivalentTo(otherRBTZ.finalRules[i])) {
                     continue;
-                    
+
                 }
                 return false;
             }
@@ -302,7 +302,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -321,7 +321,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         }
         TimeZoneRule[] rules = new TimeZoneRule[size];
         rules[0] = initialRule;
-        
+
         int idx = 1;
         if (historicRules != null) {
             for (; idx < historicRules.size() + 1; idx++) {
@@ -339,7 +339,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -355,7 +355,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         if (tt > base || (inclusive && tt == base)) {
             result = tzt;
         } else {
-            int idx = historicTransitions.size() - 1;        
+            int idx = historicTransitions.size() - 1;
             tzt = historicTransitions.get(idx);
             tt = tzt.getTime();
             if (inclusive && tt == base) {
@@ -411,7 +411,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @stable ICU 3.8
      */
     @Override
@@ -428,7 +428,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         } else if (tt >= base) {
             return null;
         } else {
-            int idx = historicTransitions.size() - 1;        
+            int idx = historicTransitions.size() - 1;
             tzt = historicTransitions.get(idx);
             tt = tzt.getTime();
             if (inclusive && tt == base) {
@@ -459,7 +459,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                     }
                     idx--;
                 }
-                result = tzt;                
+                result = tzt;
             }
         }
         // For now, this implementation ignore transitions with only zone name changes.
@@ -472,7 +472,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         }
         return result;
     }
-    
+
     /**
      * {@inheritDoc}
      * @stable ICU 3.8
@@ -582,7 +582,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
                     }
 
                     if (historicTransitions == null) {
-                        historicTransitions = new ArrayList<TimeZoneTransition>();
+                        historicTransitions = new ArrayList<>();
                     }
                     historicTransitions.add(new TimeZoneTransition(nextTransitionTime, curRule, nextRule));
                     lastTransitionTime = nextTransitionTime;
@@ -591,7 +591,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
             }
             if (finalRules != null) {
                 if (historicTransitions == null) {
-                    historicTransitions = new ArrayList<TimeZoneTransition>();
+                    historicTransitions = new ArrayList<>();
                 }
                 // Append the first transition for each
                 Date d0 = finalRules[0].getNextStart(lastTransitionTime, curRule.getRawOffset(), curRule.getDSTSavings(), false);
@@ -652,7 +652,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         offsets[0] = rule.getRawOffset();
         offsets[1] = rule.getDSTSavings();
     }
-    
+
     /*
      * Find a time zone rule applicable to the specified time
      */
@@ -764,6 +764,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public boolean isFrozen() {
         return isFrozen;
     }
@@ -772,6 +773,7 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone freeze() {
         complete();
         isFrozen = true;
@@ -782,10 +784,11 @@ public class RuleBasedTimeZone extends BasicTimeZone {
      * {@inheritDoc}
      * @stable ICU 49
      */
+    @Override
     public TimeZone cloneAsThawed() {
         RuleBasedTimeZone tz = (RuleBasedTimeZone)super.cloneAsThawed();
         if (historicRules != null) {
-            tz.historicRules = new ArrayList<TimeZoneRule>(historicRules); // rules are immutable
+            tz.historicRules = new ArrayList<>(historicRules); // rules are immutable
         }
         if (finalRules != null) {
             tz.finalRules = finalRules.clone();
@@ -794,4 +797,3 @@ public class RuleBasedTimeZone extends BasicTimeZone {
         return tz;
     }
 }
-

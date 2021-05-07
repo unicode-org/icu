@@ -195,7 +195,7 @@ sr_Latn{
                 one{"{0} karat"}
                 other{"{0} karata"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligrami po decilitru"}
                 few{"{0} miligrama po decilitru"}
                 one{"{0} miligram po decilitru"}
@@ -1325,23 +1325,11 @@ sr_Latn{
                 one{"{0} cm"}
                 other{"{0} cm"}
             }
-            fathom{
-                dnam{"hv"}
-                few{"{0} fth"}
-                one{"{0} fth"}
-                other{"{0} fth"}
-            }
             foot{
                 dnam{"ft"}
                 few{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
-            }
-            furlong{
-                dnam{"furlonzi"}
-                few{"{0} fur"}
-                one{"{0} fur"}
-                other{"{0} fur"}
             }
             inch{
                 few{"{0} inča"}
@@ -1637,7 +1625,7 @@ sr_Latn{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 few{"{0} mg/dL"}
                 one{"{0} mg/dL"}
@@ -2023,7 +2011,6 @@ sr_Latn{
                 dnam{"hv"}
                 few{"{0} fth"}
                 one{"{0} fth"}
-                other{"{0} fth"}
             }
             foot{
                 dnam{"ft"}
@@ -2035,8 +2022,6 @@ sr_Latn{
             furlong{
                 dnam{"furlonzi"}
                 few{"{0} fur"}
-                one{"{0} fur"}
-                other{"{0} fur"}
             }
             inch{
                 dnam{"inči"}
@@ -2066,10 +2051,10 @@ sr_Latn{
                 per{"{0}/m"}
             }
             micrometer{
-                dnam{"µm"}
-                few{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
+                dnam{"μm"}
+                few{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"milje"}
@@ -2165,10 +2150,10 @@ sr_Latn{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                few{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

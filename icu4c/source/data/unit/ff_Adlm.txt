@@ -157,7 +157,7 @@ ff_Adlm{
             times{"{0}-{1}"}
         }
         concentr{
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"𞤥𞤭𞤤𞤭𞤺𞤢𞤪𞤬𞤭 𞤲𞤣𞤫𞤪 𞤣𞤫𞥅𞤧𞤭𞤤𞤭𞥅𞤼𞤵"}
             }
         }

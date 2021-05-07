@@ -164,11 +164,6 @@ U_CAPI UBiDiDirection U_EXPORT2
 pl_getTextDirection(pl_paragraph *paragraph);
 
 /**
- * Get the max ascent value for all the fonts
- * in the paragraph.
- *
- * @param paragraph the <code>pl_paragraph</code>
- *
  * Return the max ascent value for all the fonts
  * in the paragraph.
  *

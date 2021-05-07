@@ -727,7 +727,12 @@ public class UnicodeSetTest extends TestFmwk {
         set.applyPattern("[a-z{ab}{cd}]");
         set.retain("cd");
         exp.applyPattern("[{cd}]");
-        if (!set.equals(exp)) { errln("FAIL: retain(\"cd\")"); return; }
+        if (!set.equals(exp)) { errln("FAIL: (with cd).retain(\"cd\")"); return; }
+
+        set.applyPattern("[a-z{ab}{yz}]");
+        set.retain("cd");
+        exp.clear();
+        if (!set.equals(exp)) { errln("FAIL: (without cd).retain(\"cd\")"); return; }
 
         set.applyPattern("[a-z{ab}{cd}]");
         set.remove((char)0x63);

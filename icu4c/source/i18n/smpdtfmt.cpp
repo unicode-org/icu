@@ -64,6 +64,7 @@
 #include "uassert.h"
 #include "cmemory.h"
 #include "umutex.h"
+#include "mutex.h"
 #include <float.h>
 #include "smpdtfst.h"
 #include "sharednumberformat.h"
@@ -594,11 +595,29 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     fLocale = other.fLocale;
 
     // TimeZoneFormat can now be set independently via setter.
-    // If it is NULL, it will be lazily initialized from locale
+    // If it is NULL, it will be lazily initialized from locale.
     delete fTimeZoneFormat;
-    fTimeZoneFormat = NULL;
-    if (other.fTimeZoneFormat) {
-        fTimeZoneFormat = new TimeZoneFormat(*other.fTimeZoneFormat);
+    fTimeZoneFormat = nullptr;
+    TimeZoneFormat *otherTZFormat;
+    {
+        // Synchronization is required here, when accessing other.fTimeZoneFormat,
+        // because another thread may be concurrently executing other.tzFormat(),
+        // a logically const function that lazily creates other.fTimeZoneFormat.
+        //
+        // Without synchronization, reordered memory writes could allow us
+        // to see a non-null fTimeZoneFormat before the object itself was
+        // fully initialized. In case of a race, it doesn't matter whether
+        // we see a null or a fully initialized other.fTimeZoneFormat,
+        // only that we avoid seeing a partially initialized object.
+        //
+        // Once initialized, no const function can modify fTimeZoneFormat,
+        // meaning that once we have safely grabbed the other.fTimeZoneFormat
+        // pointer, continued synchronization is not required to use it.
+        Mutex m(&LOCK);
+        otherTZFormat = other.fTimeZoneFormat;
+    }
+    if (otherTZFormat) {
+        fTimeZoneFormat = new TimeZoneFormat(*otherTZFormat);
     }
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -4308,19 +4327,10 @@ SimpleDateFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) const 
 // Lazy TimeZoneFormat instantiation, semantically const.
 TimeZoneFormat *
 SimpleDateFormat::tzFormat(UErrorCode &status) const {
-    if (fTimeZoneFormat == NULL) {
-        umtx_lock(&LOCK);
-        {
-            if (fTimeZoneFormat == NULL) {
-                TimeZoneFormat *tzfmt = TimeZoneFormat::createInstance(fLocale, status);
-                if (U_FAILURE(status)) {
-                    return NULL;
-                }
-
-                const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
-            }
-        }
-        umtx_unlock(&LOCK);
+    Mutex m(&LOCK);
+    if (fTimeZoneFormat == nullptr && U_SUCCESS(status)) {
+        const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat =
+                TimeZoneFormat::createInstance(fLocale, status);
     }
     return fTimeZoneFormat;
 }

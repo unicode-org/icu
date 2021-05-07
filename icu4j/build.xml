@@ -183,13 +183,6 @@
         <delete dir="${out.dir}"/>
         <delete dir="${module.dir}"/>
         <delete dir="${cldr.release.dir}"/>
-
-        <available file="eclipse-build" type="dir" property="eclipse-build.dir.present"/>
-        <antcall target="_clean.eclipse-build"/>
-    </target>
-
-    <target name="_clean.eclipse-build" if="eclipse-build.dir.present">
-        <ant dir="eclipse-build" target="clean" inheritAll="false"/>
     </target>
 
     <target name="ivy-clean">
@@ -1616,7 +1609,8 @@
                 <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.collate.dir}/src">
-                <include name="com/ibm/icu/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
             </packageset>
             <packageset dir="${icu4j.charset.dir}/src">
                 <include name="com/ibm/icu/charset/**"/>
@@ -1783,43 +1777,6 @@
             <arg value="${out.dir}/draftAPIs.tsv"/>
             <arg value="-t"/>
             <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
-        </java>
-    </target>
-
-    <target name="swatDeprecated" depends="build-tools" description="Convert @deprecated @draft tags to @provisional">
-        <antcall target="_runSwatDeprecated">
-            <param name="swat.deprecated.opt" value="-dep"/>
-        </antcall>
-    </target>
-
-    <target name="swatProvisional" depends="build-tools" description="Convert @provisional tags to @deprecated @draft">
-        <antcall target="_runSwatDeprecated">
-            <param name="swat.deprecated.opt" value="-prov"/>
-        </antcall>
-    </target>
-
-    <target name="_runSwatDeprecated">
-        <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated"
-                classpath="${icu4j.build-tools.jar}"
-                failonerror="true">
-            <arg value="${swat.deprecated.opt}"/>
-            <arg value="-src"/>
-            <arg value="${icu4j.core.dir}/src"/>
-            <arg value="-dst"/>
-            <arg value="${icu4j.core.dir}/src"/>
-            <arg value="-overwrite"/>
-            <arg value="-verbose"/>
-        </java>
-        <java classname="com.ibm.icu.dev.tool.docs.SwatDeprecated"
-                classpath="${icu4j.build-tools.jar}"
-                failonerror="true">
-            <arg value="${swat.deprecated.opt}"/>
-            <arg value="-src"/>
-            <arg value="${icu4j.charset.dir}/src"/>
-            <arg value="-dst"/>
-            <arg value="${icu4j.charset.dir}/src"/>
-            <arg value="-overwrite"/>
-            <arg value="-verbose"/>
         </java>
     </target>
 

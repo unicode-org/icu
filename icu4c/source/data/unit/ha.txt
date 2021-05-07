@@ -152,7 +152,7 @@ ha{
                 one{"karat {0}"}
                 other{"karats {0}"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milligrams per deciliter"}
                 one{"milligram per deciliter {0}"}
                 other{"milligrams per deciliter {0}"}
@@ -1198,7 +1198,7 @@ ha{
                 one{"kt {0}"}
                 other{"kt {0}"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 one{"mg/dL {0}"}
                 other{"mg/dL {0}"}
             }
@@ -1337,9 +1337,9 @@ ha{
                 per{"{0}/saʼa"}
             }
             microsecond{
-                dnam{"µsecs"}
-                one{"µs {0}"}
-                other{"µs {0}"}
+                dnam{"μsecs"}
+                one{"μs {0}"}
+                other{"μs {0}"}
             }
             millisecond{
                 dnam{"milseks"}
@@ -1559,9 +1559,9 @@ ha{
                 other{"m {0}"}
             }
             micrometer{
-                dnam{"µmeters"}
-                one{"µm {0}"}
-                other{"µm {0}"}
+                dnam{"μmeters"}
+                one{"μm {0}"}
+                other{"μm {0}"}
             }
             mile{
                 dnam{"mil-mil"}
@@ -1660,8 +1660,8 @@ ha{
                 other{"t {0}"}
             }
             microgram{
-                one{"µg {0}"}
-                other{"µg {0}"}
+                one{"μg {0}"}
+                other{"μg {0}"}
             }
             milligram{
                 one{"mg {0}"}

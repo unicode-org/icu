@@ -408,7 +408,7 @@ void LocaleDisplayNamesTest::TestRootEtc() {
   UnicodeString temp;
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "@collation=phonebook";
-  const char *target = "Root (Phonebook Sort Order)";
+  const char *target = "root (Phonebook Sort Order)";
   ldn->localeDisplayName(locname, temp);
   test_assert_equal(target, temp);
 
@@ -425,14 +425,14 @@ void LocaleDisplayNamesTest::TestNumericRegionID() {
     UErrorCode err = U_ZERO_ERROR;
     ULocaleDisplayNames* ldn = uldn_open("es_MX", ULDN_STANDARD_NAMES, &err);
     UChar displayName[200];
-    int32_t displayNameLength = uldn_regionDisplayName(ldn, "019", displayName, 200, &err);
+    uldn_regionDisplayName(ldn, "019", displayName, 200, &err);
     test_assert(U_SUCCESS(err));
     test_assert_equal(UnicodeString(u"América"), UnicodeString(displayName));
     uldn_close(ldn);    
 
     err = U_ZERO_ERROR; // reset in case the test above returned an error code
     ldn = uldn_open("en_AU", ULDN_STANDARD_NAMES, &err);
-    displayNameLength = uldn_regionDisplayName(ldn, "002", displayName, 200, &err);
+    uldn_regionDisplayName(ldn, "002", displayName, 200, &err);
     test_assert(U_SUCCESS(err));
     test_assert_equal(UnicodeString(u"Africa"), UnicodeString(displayName));
     uldn_close(ldn);    

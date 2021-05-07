@@ -148,6 +148,11 @@ public class FormattedValueTest {
 
     public static void checkFormattedValue(String message, FormattedValue fv, String expectedString,
             Object[][] expectedFieldPositions) {
+        checkFormattedValue(message, fv, expectedString, expectedFieldPositions, false);
+    }
+
+    public static void checkFormattedValue(String message, FormattedValue fv, String expectedString,
+            Object[][] expectedFieldPositions, boolean skipAttributedCharacterIterator) {
         // Calculate some initial expected values
         int stringLength = fv.toString().length();
         HashSet<Format.Field> uniqueFields = new HashSet<>();
@@ -169,6 +174,12 @@ public class FormattedValueTest {
         assertEquals(baseMessage + "Iterator should have length of string output", stringLength, fpi.getEndIndex());
         int i = 0;
         for (char c = fpi.first(); c != AttributedCharacterIterator.DONE; c = fpi.next(), i++) {
+            // Strings with adjacent fields cannot be disambiguated using AttributedCharacterIterator,
+            // so skip this part of the test for strings with adjacent fields.
+            if (skipAttributedCharacterIterator) {
+                i = stringLength;
+                break;
+            }
             Set<AttributedCharacterIterator.Attribute> currentAttributes = fpi.getAttributes().keySet();
             int attributesRemaining = currentAttributes.size();
             for (Object[] cas : expectedFieldPositions) {
@@ -181,22 +192,22 @@ public class FormattedValueTest {
                     continue;
                 }
 
-                assertTrue(baseMessage + "Character at " + i + " should have field " + expectedField,
+                assertTrue(baseMessage + "A Character at " + i + " should have field " + expectedField,
                         currentAttributes.contains(expectedField));
-                assertTrue(baseMessage + "Field " + expectedField + " should be a known attribute",
+                assertTrue(baseMessage + "A Field " + expectedField + " should be a known attribute",
                         allAttributes.contains(expectedField));
                 int actualBeginIndex = fpi.getRunStart(expectedField);
                 int actualEndIndex = fpi.getRunLimit(expectedField);
                 Object actualValue = fpi.getAttribute(expectedField);
-                assertEquals(baseMessage + expectedField + " begin @" + i, expectedBeginIndex, actualBeginIndex);
-                assertEquals(baseMessage + expectedField + " end @" + i, expectedEndIndex, actualEndIndex);
-                assertEquals(baseMessage + expectedField + " value @" + i, expectedValue, actualValue);
+                assertEquals(baseMessage + expectedField + " A begin @" + i, expectedBeginIndex, actualBeginIndex);
+                assertEquals(baseMessage + expectedField + " A end @" + i, expectedEndIndex, actualEndIndex);
+                assertEquals(baseMessage + expectedField + " A value @" + i, expectedValue, actualValue);
                 attributesRemaining--;
             }
-            assertEquals(baseMessage + "Should have looked at every field: " + i + ": " + currentAttributes,
+            assertEquals(baseMessage + "A Should have looked at every field: " + i + ": " + currentAttributes,
                     0, attributesRemaining);
         }
-        assertEquals(baseMessage + "Should have looked at every character", stringLength, i);
+        assertEquals(baseMessage + "A Should have looked at every character", stringLength, i);
 
         // Check nextPosition over all fields
         ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
@@ -207,16 +218,16 @@ public class FormattedValueTest {
             int expectedStart = (Integer) cas[1];
             int expectedLimit = (Integer) cas[2];
             Object expectedValue = cas.length == 4 ? cas[3] : null;
-            assertEquals(baseMessage + "field " + i, expectedField, cfpos.getField());
-            assertEquals(baseMessage + "start " + i, expectedStart, cfpos.getStart());
-            assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
-            assertEquals(baseMessage + "value " + i, expectedValue, cfpos.getFieldValue());
+            assertEquals(baseMessage + "B field " + i, expectedField, cfpos.getField());
+            assertEquals(baseMessage + "B start " + i, expectedStart, cfpos.getStart());
+            assertEquals(baseMessage + "B limit " + i, expectedLimit, cfpos.getLimit());
+            assertEquals(baseMessage + "B value " + i, expectedValue, cfpos.getFieldValue());
             i++;
         }
         boolean afterLoopResult = fv.nextPosition(cfpos);
-        assertFalse(baseMessage + "after loop: " + cfpos, afterLoopResult);
+        assertFalse(baseMessage + "B after loop: " + cfpos, afterLoopResult);
         afterLoopResult = fv.nextPosition(cfpos);
-        assertFalse(baseMessage + "after loop again: " + cfpos, afterLoopResult);
+        assertFalse(baseMessage + "B after loop again: " + cfpos, afterLoopResult);
 
         // Check nextPosition constrained over each class one at a time
         for (Class<?> classConstraint : uniqueFieldClasses) {
@@ -232,22 +243,22 @@ public class FormattedValueTest {
                 int expectedStart = (Integer) cas[1];
                 int expectedLimit = (Integer) cas[2];
                 Object expectedValue = cas.length == 4 ? cas[3] : null;
-                assertEquals(baseMessage + "field " + i, expectedField, cfpos.getField());
-                assertEquals(baseMessage + "start " + i, expectedStart, cfpos.getStart());
-                assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
-                assertEquals(baseMessage + "value " + i, expectedValue, cfpos.getFieldValue());
+                assertEquals(baseMessage + "C field " + i, expectedField, cfpos.getField());
+                assertEquals(baseMessage + "C start " + i, expectedStart, cfpos.getStart());
+                assertEquals(baseMessage + "C limit " + i, expectedLimit, cfpos.getLimit());
+                assertEquals(baseMessage + "C value " + i, expectedValue, cfpos.getFieldValue());
                 i++;
             }
             afterLoopResult = fv.nextPosition(cfpos);
-            assertFalse(baseMessage + "after loop: " + cfpos, afterLoopResult);
+            assertFalse(baseMessage + "C after loop: " + cfpos, afterLoopResult);
             afterLoopResult = fv.nextPosition(cfpos);
-            assertFalse(baseMessage + "after loop again: " + cfpos, afterLoopResult);
+            assertFalse(baseMessage + "C after loop again: " + cfpos, afterLoopResult);
         }
 
         // Check nextPosition constrained over an unrelated class
         cfpos.reset();
         cfpos.constrainClass(HashSet.class);
-        assertFalse(baseMessage + "unrelated class", fv.nextPosition(cfpos));
+        assertFalse(baseMessage + "C unrelated class", fv.nextPosition(cfpos));
 
         // Check nextPosition constrained over each field one at a time
         for (Format.Field field : uniqueFields) {
@@ -263,16 +274,16 @@ public class FormattedValueTest {
                 int expectedStart = (Integer) cas[1];
                 int expectedLimit = (Integer) cas[2];
                 Object expectedValue = cas.length == 4 ? cas[3] : null;
-                assertEquals(baseMessage + "field " + i, expectedField, cfpos.getField());
-                assertEquals(baseMessage + "start " + i, expectedStart, cfpos.getStart());
-                assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
-                assertEquals(baseMessage + "value " + i, expectedValue, cfpos.getFieldValue());
+                assertEquals(baseMessage + "D field " + i, expectedField, cfpos.getField());
+                assertEquals(baseMessage + "D start " + i, expectedStart, cfpos.getStart());
+                assertEquals(baseMessage + "D limit " + i, expectedLimit, cfpos.getLimit());
+                assertEquals(baseMessage + "D value " + i, expectedValue, cfpos.getFieldValue());
                 i++;
             }
             afterLoopResult = fv.nextPosition(cfpos);
-            assertFalse(baseMessage + "after loop: " + cfpos, afterLoopResult);
+            assertFalse(baseMessage + "D after loop: " + cfpos, afterLoopResult);
             afterLoopResult = fv.nextPosition(cfpos);
-            assertFalse(baseMessage + "after loop again: " + cfpos, afterLoopResult);
+            assertFalse(baseMessage + "D after loop again: " + cfpos, afterLoopResult);
         }
     }
 

@@ -277,7 +277,7 @@ ar{
                 two{"قيراطان"}
                 zero{"{0} قيراط"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"مغم/ديسيبل"}
                 few{"{0} مغم/ديسيبل"}
                 many{"{0} مغم/ديسيبل"}
@@ -2468,7 +2468,7 @@ ar{
                 two{"{0} قيراط"}
                 zero{"{0} قيراط"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"مغم/ديسبل"}
                 few{"{0} مغم/ديسبل"}
                 many{"{0} مغم/ديسبل"}
@@ -2597,13 +2597,13 @@ ar{
                 zero{"{0} غيغابت"}
             }
             gigabyte{
-                dnam{"غيغابايت"}
-                few{"{0} غيغابايت"}
-                many{"{0} غيغابايت"}
-                one{"{0} غيغابايت"}
-                other{"{0} غيغابايت"}
-                two{"{0} غيغابايت"}
-                zero{"{0} غيغابايت"}
+                dnam{"GB"}
+                few{"{0} GB"}
+                many{"{0} GB"}
+                one{"{0} GB"}
+                other{"{0} GB"}
+                two{"{0} GB"}
+                zero{"{0} GB"}
             }
             kilobit{
                 dnam{"كيلوبت"}
@@ -2634,12 +2634,12 @@ ar{
             }
             megabyte{
                 dnam{"ميغابايت"}
-                few{"{0} ميغابايت"}
-                many{"{0} ميغابايت"}
-                one{"{0} ميغابايت"}
-                other{"{0} ميغابايت"}
-                two{"{0} ميغابايت"}
-                zero{"{0} ميغابايت"}
+                few{"{0} MB"}
+                many{"{0} MB"}
+                one{"{0} MB"}
+                other{"{0} MB"}
+                two{"{0} MB"}
+                zero{"{0} MB"}
             }
             petabyte{
                 dnam{"بيتابايت"}
@@ -2981,7 +2981,7 @@ ar{
                 many{"{0} نقطة/سم"}
                 one{"{0} نقطة/سم"}
                 other{"{0} نقطة/سم"}
-                two{"{0} نقطة/سم"}
+                two{"{0} بكسل/سم"}
                 zero{"{0} نقطة/سم"}
             }
             dot-per-inch{
@@ -2990,7 +2990,7 @@ ar{
                 many{"{0} نقطة/بوصة"}
                 one{"{0} نقطة/بوصة"}
                 other{"{0} نقطة/بوصة"}
-                two{"{0} نقطة/بوصة"}
+                two{"{0} بكسل/بوصة"}
                 zero{"{0} نقطة/بوصة"}
             }
             em{

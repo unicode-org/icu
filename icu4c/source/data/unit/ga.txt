@@ -242,7 +242,7 @@ ga{
                 other{"{0} carat óir"}
                 two{"{0} charat óir"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"milleagraim sa deicilítear"}
                 few{"{0} mhilleagram sa deicilítear"}
                 many{"{0} milleagram sa deicilítear"}
@@ -1756,7 +1756,7 @@ ga{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -1779,7 +1779,7 @@ ga{
                 other{"{0}kt"}
                 two{"{0}kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 few{"{0} mg/dL"}
                 many{"{0} mg/dL"}
@@ -2237,12 +2237,12 @@ ga{
                 two{"{0}m"}
             }
             micrometer{
-                dnam{"µm"}
-                few{"{0}µm"}
-                many{"{0}µm"}
-                one{"{0}µm"}
-                other{"{0}µm"}
-                two{"{0}µm"}
+                dnam{"μm"}
+                few{"{0}μm"}
+                many{"{0}μm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
+                two{"{0}μm"}
             }
             mile{
                 dnam{"mílte"}
@@ -2363,12 +2363,12 @@ ga{
                 two{"{0}t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0}µg"}
-                many{"{0}µg"}
-                one{"{0}µg"}
-                other{"{0}µg"}
-                two{"{0}µg"}
+                dnam{"μg"}
+                few{"{0}μg"}
+                many{"{0}μg"}
+                one{"{0}μg"}
+                other{"{0}μg"}
+                two{"{0}μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -2950,7 +2950,7 @@ ga{
             10p-21{"z{0}"}
             10p-24{"y{0}"}
             10p-3{"m{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"n{0}"}
             10p1{"da{0}"}
             10p12{"T{0}"}
@@ -2973,7 +2973,7 @@ ga{
                 other{"{0} kt"}
                 two{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 few{"{0} mg/dL"}
                 many{"{0} mg/dL"}
@@ -3529,12 +3529,12 @@ ga{
                 two{"{0} m"}
             }
             micrometer{
-                dnam{"µméadair"}
-                few{"{0} µm"}
-                many{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
-                two{"{0} µm"}
+                dnam{"μméadair"}
+                few{"{0} μm"}
+                many{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
+                two{"{0} μm"}
             }
             mile{
                 dnam{"mílte"}
@@ -3695,12 +3695,12 @@ ga{
                 two{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0} µg"}
-                many{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
-                two{"{0} µg"}
+                dnam{"μg"}
+                few{"{0} μg"}
+                many{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
+                two{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

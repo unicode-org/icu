@@ -136,7 +136,7 @@ my{
                 dnam{"ကာရက်"}
                 other{"{0} ကာရက်"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"တစ်ဒက်စီလီတာရှိ မီလီဂရမ်"}
                 other{"တစ်ဒက်စီလီတာရှိ {0} မီလီဂရမ်"}
             }
@@ -1124,7 +1124,7 @@ my{
                 dnam{"ကာရက်"}
                 other{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 other{"{0} mg/dL"}
             }
@@ -1422,7 +1422,7 @@ my{
             }
             micrometer{
                 dnam{"မိုက်ခရိုမီတာ"}
-                other{"{0} µm"}
+                other{"{0} μm"}
             }
             mile{
                 dnam{"မိုင်"}
@@ -1514,8 +1514,8 @@ my{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"မီလီဂရမ်"}

@@ -16,15 +16,13 @@ import java.util.List;
 /**
  * <b>Note:</b> The Holiday framework is a technology preview.
  * Despite its age, is still draft API, and clients should treat it as such.
- * 
+ *
  * Implementation of DateRule that takes a range.
  * @draft ICU 2.8 (retainAll)
- * @provisional This API might change or be removed in a future release.
  */
 public class RangeDateRule implements DateRule {
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public RangeDateRule() {
     }
@@ -39,7 +37,6 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public void add(DateRule rule) {
         add(new Date(Long.MIN_VALUE), rule);
@@ -47,7 +44,6 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     public void add(Date start, DateRule rule) {
         // TODO: Insert in the right place
@@ -59,8 +55,8 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
+    @Override
     public Date firstAfter(Date start) {
         // Find the range that I should look at
         int index = startIndex(start);
@@ -85,13 +81,13 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
+    @Override
     public Date firstBetween(Date start, Date end) {
         if (end == null) {
             return firstAfter(start);
         }
-        
+
         // Find the range that I should look at
         int index = startIndex(start);
         Date result = null;
@@ -114,8 +110,8 @@ public class RangeDateRule implements DateRule {
 
     /**
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
+    @Override
     public boolean isOn(Date date) {
         Range r = rangeAt(startIndex(date));
         return r != null && r.rule != null && r.rule.isOn(date);
@@ -125,8 +121,8 @@ public class RangeDateRule implements DateRule {
      * Check whether this event occurs at least once between the two
      * dates given.
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
+    @Override
     public boolean isBetween(Date start, Date end) {
         return firstBetween(start,end) == null;
     }
@@ -153,7 +149,7 @@ public class RangeDateRule implements DateRule {
                                       : null;
     }
 
-    List<Range> ranges = new ArrayList<Range>(2);
+    List<Range> ranges = new ArrayList<>(2);
 }
 
 //-----------------------------------------------------------------------

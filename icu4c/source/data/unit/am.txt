@@ -158,7 +158,7 @@ am{
                 one{"{0} ካራት"}
                 other{"{0} ካራት"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"ሚሊ ግራም በ ዴሲ ሊትር"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -635,9 +635,9 @@ am{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -1052,7 +1052,7 @@ am{
             10p-21{"ዜ{0}"}
             10p-24{"ዮ{0}"}
             10p-3{"ሚ{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"ና{0}"}
             10p1{"ዴ{0}"}
             10p2{"ሄ{0}"}
@@ -1376,7 +1376,7 @@ am{
             10p-21{"ዜ{0}"}
             10p-24{"ዮ{0}"}
             10p-3{"ሚ{0}"}
-            10p-6{"µ{0}"}
+            10p-6{"μ{0}"}
             10p-9{"ና{0}"}
             10p1{"ዴ{0}"}
             10p2{"ሄ{0}"}
@@ -1390,7 +1390,7 @@ am{
                 one{"{0} ካራት"}
                 other{"{0} ካራት"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -1858,9 +1858,9 @@ am{
                 other{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
+                dnam{"μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}

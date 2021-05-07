@@ -1357,8 +1357,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Return the default hour cycle.
-     * @draft ICU 67
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 67
      */
     public DateFormat.HourCycle getDefaultHourCycle() {
       switch(getDefaultHourFormatChar()) {

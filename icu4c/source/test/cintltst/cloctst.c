@@ -280,6 +280,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestBug20370);
     TESTCASE(TestBug20321UnicodeLocaleKey);
     TESTCASE(TestUsingDefaultWarning);
+    TESTCASE(TestBug21449InfiniteLoop);
 }
 
 
@@ -4108,6 +4109,10 @@ const char* const full_data[][3] = {
     "nn_Latn_NO",
     "nn"
   }, {
+    "no",
+    "no_Latn_NO",
+    "no"
+  }, {
     "nr",
     "nr_Latn_ZA",
     "nr"
@@ -6978,11 +6983,12 @@ static void TestUsingDefaultWarning() {
         log_err("ERROR: in uloc_getDisplayKeywordValue %s %s return len:%d %s with status %d %s\n",
                 keyword_value, keyword, length, errorOutputBuff, status, myErrorName(status));
       }
-}      
+}
+
 // Test case for ICU-20575
 // This test checks if the environment variable LANG is set, 
 // and if so ensures that both C and C.UTF-8 cause ICU's default locale to be en_US_POSIX.
-static void TestCDefaultLocale(){
+static void TestCDefaultLocale() {
     const char *defaultLocale = uloc_getDefault();
     char *env_var = getenv("LANG");
     if (env_var == NULL) {
@@ -6992,4 +6998,14 @@ static void TestCDefaultLocale(){
     if ((strcmp(env_var, "C") == 0 || strcmp(env_var, "C.UTF-8") == 0) && strcmp(defaultLocale, "en_US_POSIX") != 0) {
       log_err("The default locale for LANG=%s should be en_US_POSIX, not %s\n", env_var, defaultLocale);
     }
+}
+
+// Test case for ICU-21449
+static void TestBug21449InfiniteLoop() {
+    UErrorCode status = U_ZERO_ERROR;
+    const char* invalidLocaleId = RES_PATH_SEPARATOR_S;
+
+    // The issue causes an infinite loop to occur when looking up a non-existent resource for the invalid locale ID,
+    // so the test is considered passed if the call to the API below returns anything at all.
+    uloc_getDisplayLanguage(invalidLocaleId, invalidLocaleId, NULL, 0, &status);
 }

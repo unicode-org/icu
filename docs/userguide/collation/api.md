@@ -60,7 +60,7 @@ language tag syntax ("el-u-kf-upper"). Keywords and values are case-insensitive.
 See the [LDML Collation spec, Collation
 Settings](http://www.unicode.org/reports/tr35/tr35-collation.html#Collation_Settings),
 and the [data
-file](https://github.com/unicode-org/cldr/blob/master/common/bcp47/collation.xml) listing
+file](https://github.com/unicode-org/cldr/blob/main/common/bcp47/collation.xml) listing
 the valid collation keywords and their values. (The deprecated attributes
 kh/colHiraganaQuaternary and vt/variableTop are not supported.)
 
@@ -698,7 +698,7 @@ API is provided. Each attribute has its own setter API of the form
 2.  ICU Design doc: "Collation v2" (<http://site.icu-project.org/design/collation/v2>)
 
 3.  Mark Davis: "ICU Collation Design Document"
-    (<https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/design/collation/ICU_collation_design.htm>)
+    (<https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/collation/ICU_collation_design.htm>)
 
 3.  The Unicode Standard, chapter 5, "Implementation guidelines"
     (<http://www.unicode.org/uni2book/ch05.pdf>)

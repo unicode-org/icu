@@ -30,10 +30,16 @@ public class FormattedValueStringBuilderImpl {
      * Placeholder field used for calculating spans.
      * Does not currently support nested fields beyond one level.
      */
-    public static class SpanFieldPlaceholder {
+    public static class SpanFieldPlaceholder implements FormattedStringBuilder.FieldWrapper {
         public UFormat.SpanField spanField;
         public Field normalField;
         public Object value;
+        public int start;
+        public int length;
+
+        public Field unwrap() {
+            return normalField;
+        }
     }
 
     /**
@@ -52,6 +58,29 @@ public class FormattedValueStringBuilderImpl {
             }
         }
         return -1;
+    }
+
+    /**
+     * Upgrade a range of a string to a span field.
+     *
+     * Similar to appendSpanInfo in ICU4C.
+     */
+    public static void applySpanRange(
+            FormattedStringBuilder self,
+            UFormat.SpanField spanField,
+            Object value,
+            int start,
+            int end) {
+        for (int i = start + self.zero; i < end + self.zero; i++) {
+            Object oldField = self.fields[i];
+            SpanFieldPlaceholder newField = new SpanFieldPlaceholder();
+            newField.spanField = spanField;
+            newField.normalField = (java.text.Format.Field) oldField;
+            newField.value = value;
+            newField.start = start;
+            newField.length = end - start;
+            self.fields[i] = newField;
+        }
     }
 
     public static boolean nextFieldPosition(FormattedStringBuilder self, FieldPosition fp) {
@@ -136,18 +165,23 @@ public class FormattedValueStringBuilderImpl {
     public static boolean nextPosition(FormattedStringBuilder self, ConstrainedFieldPosition cfpos, Field numericField) {
         int fieldStart = -1;
         Object currField = null;
+        boolean prevIsSpan = false;
+        if (cfpos.getLimit() > 0) {
+            prevIsSpan = cfpos.getField() instanceof UFormat.SpanField
+                && cfpos.getStart() < cfpos.getLimit();
+        }
+        boolean prevIsNumeric = false;
+        if (numericField != null) {
+            prevIsNumeric = cfpos.getField() == numericField;
+        }
+        boolean prevIsInteger = cfpos.getField() == NumberFormat.Field.INTEGER;
+
         for (int i = self.zero + cfpos.getLimit(); i <= self.zero + self.length; i++) {
             Object _field = (i < self.zero + self.length) ? self.fields[i] : NullField.END;
             // Case 1: currently scanning a field.
             if (currField != null) {
                 if (currField != _field) {
                     int end = i - self.zero;
-                    // Handle span fields; don't trim them
-                    if (currField instanceof SpanFieldPlaceholder) {
-                        boolean handleResult = handleSpan(currField, cfpos, fieldStart, end);
-                        assert handleResult;
-                        return true;
-                    }
                     // Grouping separators can be whitespace; don't throw them out!
                     if (isTrimmable(currField)) {
                         end = trimBack(self, end);
@@ -168,11 +202,30 @@ public class FormattedValueStringBuilderImpl {
                 }
                 continue;
             }
+            // Special case: emit normalField if we are pointing at the end of spanField.
+            if (i > self.zero && prevIsSpan) {
+                assert self.fields[i-1] instanceof SpanFieldPlaceholder;
+                SpanFieldPlaceholder ph = (SpanFieldPlaceholder) self.fields[i-1];
+                if (ph.normalField == ListFormatter.Field.ELEMENT) {
+                    // Special handling for ULISTFMT_ELEMENT_FIELD
+                    if (cfpos.matchesField(ListFormatter.Field.ELEMENT, null)) {
+                        fieldStart = i - self.zero - ph.length;
+                        int end = fieldStart + ph.length;
+                        cfpos.setState(ListFormatter.Field.ELEMENT, null, fieldStart, end);
+                        return true;
+                    }
+                } else {
+                    // Re-wind, since there may be multiple fields in the span.
+                    i -= ph.length;
+                    assert i >= self.zero;
+                    _field = ((SpanFieldPlaceholder) self.fields[i]).normalField;
+                }
+            }
             // Special case: coalesce the INTEGER if we are pointing at the end of the INTEGER.
             if (cfpos.matchesField(NumberFormat.Field.INTEGER, null)
                     && i > self.zero
-                    // don't return the same field twice in a row:
-                    && i - self.zero > cfpos.getLimit()
+                    && !prevIsInteger
+                    && !prevIsNumeric
                     && isIntOrGroup(self.fields[i - 1])
                     && !isIntOrGroup(_field)) {
                 int j = i - 1;
@@ -184,46 +237,58 @@ public class FormattedValueStringBuilderImpl {
             if (numericField != null
                     && cfpos.matchesField(numericField, null)
                     && i > self.zero
-                    // don't return the same field twice in a row:
-                    && (i - self.zero > cfpos.getLimit() || cfpos.getField() != numericField)
+                    && !prevIsNumeric
                     && isNumericField(self.fields[i - 1])
                     && !isNumericField(_field)) {
+                // Re-wind to the beginning of the field and then emit it
                 int j = i - 1;
                 for (; j >= self.zero && isNumericField(self.fields[j]); j--) {}
                 cfpos.setState(numericField, null, j - self.zero + 1, i - self.zero);
                 return true;
             }
-            // Special case: emit normalField if we are pointing at the end of spanField.
-            if (i > self.zero
-                    && self.fields[i-1] instanceof SpanFieldPlaceholder) {
-                int j = i - 1;
-                for (; j >= self.zero && self.fields[j] == self.fields[i-1]; j--) {}
-                if (handleSpan(self.fields[i-1], cfpos, j - self.zero + 1, i - self.zero)) {
+            // Check for span field
+            SpanFieldPlaceholder ph = null;
+            if (_field instanceof SpanFieldPlaceholder) {
+                ph = (SpanFieldPlaceholder) _field;
+                _field = ph.normalField;
+            }
+            if (ph != null && (ph.start == -1 || ph.start == i - self.zero)) {
+                if (cfpos.matchesField(ph.spanField, ph.value)) {
+                    fieldStart = i - self.zero;
+                    int end = fieldStart + ph.length;
+                    cfpos.setState(ph.spanField, ph.value, fieldStart, end);
                     return true;
+                } else if (ph.normalField == ListFormatter.Field.ELEMENT) {
+                    // Special handling for ListFormatter.Field.ELEMENT
+                    if (cfpos.matchesField(ListFormatter.Field.ELEMENT, null)) {
+                        fieldStart = i - self.zero;
+                        int end = fieldStart + ph.length;
+                        cfpos.setState(ListFormatter.Field.ELEMENT, null, fieldStart, end);
+                        return true;
+                    } else {
+                        // Failed to match; jump ahead
+                        i += ph.length - 1;
+                        // goto loopend
+                    }
                 }
             }
             // Special case: skip over INTEGER; will be coalesced later.
-            if (_field == NumberFormat.Field.INTEGER) {
+            else if (_field == NumberFormat.Field.INTEGER) {
                 _field = null;
             }
-            // Case 2: no field starting at this position.
-            if (_field == null || _field == NullField.END) {
-                continue;
+            // No field starting at this position.
+            else if (_field == null || _field == NullField.END) {
+                // goto loopend
             }
-            // Case 3: check for field starting at this position
-            // Case 3a: SpanField placeholder
-            if (_field instanceof SpanFieldPlaceholder) {
-                SpanFieldPlaceholder ph = (SpanFieldPlaceholder) _field;
-                if (cfpos.matchesField(ph.normalField, null) || cfpos.matchesField(ph.spanField, ph.value)) {
-                    fieldStart = i - self.zero;
-                    currField = _field;
-                }
-            }
-            // Case 3b: No SpanField
+            // No SpanField
             else if (cfpos.matchesField((Field) _field, null)) {
                 fieldStart = i - self.zero;
                 currField = _field;
             }
+            // loopend:
+            prevIsSpan = false;
+            prevIsNumeric = false;
+            prevIsInteger = false;
         }
 
         assert currField == null;
@@ -237,10 +302,12 @@ public class FormattedValueStringBuilderImpl {
     }
 
     private static boolean isIntOrGroup(Object field) {
+        field = FormattedStringBuilder.unwrapField(field);
         return field == NumberFormat.Field.INTEGER || field == NumberFormat.Field.GROUPING_SEPARATOR;
     }
 
     private static boolean isNumericField(Object field) {
+        field = FormattedStringBuilder.unwrapField(field);
         return field == null || NumberFormat.Field.class.isAssignableFrom(field.getClass());
     }
 
@@ -257,20 +324,5 @@ public class FormattedValueStringBuilderImpl {
     private static int trimFront(FormattedStringBuilder self, int start) {
         return StaticUnicodeSets.get(StaticUnicodeSets.Key.DEFAULT_IGNORABLES)
                 .span(self, start, UnicodeSet.SpanCondition.CONTAINED);
-    }
-
-    private static boolean handleSpan(Object field, ConstrainedFieldPosition cfpos, int start, int limit) {
-        SpanFieldPlaceholder ph = (SpanFieldPlaceholder) field;
-        if (cfpos.matchesField(ph.spanField, ph.value)
-                && cfpos.getLimit() < limit) {
-            cfpos.setState(ph.spanField, ph.value, start, limit);
-            return true;
-        }
-        if (cfpos.matchesField(ph.normalField, null)
-                && (cfpos.getLimit() < limit || cfpos.getField() != ph.normalField)) {
-            cfpos.setState(ph.normalField, null, start, limit);
-            return true;
-        }
-        return false;
     }
 }

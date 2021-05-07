@@ -167,6 +167,18 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
 
     public BigDecimal toBigDecimal();
 
+    /**
+     * Returns a long approximating the decimal quantity. A long can only represent the
+     * integral part of the number.  Note: this method incorporates the value of
+     * {@code getExponent} (for cases such as compact notation) to return the proper long
+     * value represented by the result.
+     *
+     * @param truncateIfOverflow if false and the number does NOT fit, fails with an error.
+     *        See comment about call site guards in DecimalQuantity_AbstractBCD.java
+     * @return A 64-bit integer representation of the internal number.
+     */
+    public long toLong(boolean truncateIfOverflow);
+
     public void setToBigDecimal(BigDecimal input);
 
     public int maxRepresentableDigits();

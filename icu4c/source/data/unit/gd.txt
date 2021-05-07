@@ -221,7 +221,7 @@ gd{
                 other{"{0} karat"}
                 two{"{0} karat"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"miligram san deicheamh-liotair"}
                 few{"{0} miligramaichean san deicheamh-liotair"}
                 one{"{0} mhiligram san deicheamh-liotair"}
@@ -1566,7 +1566,7 @@ gd{
                 other{"{0}kt"}
                 two{"{0}kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 few{"{0}mg/dL"}
                 one{"{0}mg/dL"}
@@ -2095,11 +2095,11 @@ gd{
                 two{"{0}m"}
             }
             micrometer{
-                dnam{"µm"}
-                few{"{0}µm"}
-                one{"{0}µm"}
-                other{"{0}µm"}
-                two{"{0}µm"}
+                dnam{"μm"}
+                few{"{0}μm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
+                two{"{0}μm"}
             }
             mile{
                 dnam{"mì"}
@@ -2250,11 +2250,11 @@ gd{
                 two{"{0}t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0}µg"}
-                one{"{0}µg"}
-                other{"{0}µg"}
-                two{"{0}µg"}
+                dnam{"μg"}
+                few{"{0}μg"}
+                one{"{0}μg"}
+                other{"{0}μg"}
+                two{"{0}μg"}
             }
             milligram{
                 dnam{"mg"}
@@ -2891,7 +2891,7 @@ gd{
                 other{"{0} kt"}
                 two{"{0} kt"}
             }
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 few{"{0} mg/dL"}
                 one{"{0} mg/dL"}
@@ -3356,11 +3356,11 @@ gd{
                 two{"{0} m"}
             }
             micrometer{
-                dnam{"µ-meatair"}
-                few{"{0} µm"}
-                one{"{0} µm"}
-                other{"{0} µm"}
-                two{"{0} µm"}
+                dnam{"μ-meatair"}
+                few{"{0} μm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
+                two{"{0} μm"}
             }
             mile{
                 dnam{"mìle"}
@@ -3496,11 +3496,11 @@ gd{
                 two{"{0} t"}
             }
             microgram{
-                dnam{"µg"}
-                few{"{0} µg"}
-                one{"{0} µg"}
-                other{"{0} µg"}
-                two{"{0} µg"}
+                dnam{"μg"}
+                few{"{0} μg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
+                two{"{0} μg"}
             }
             milligram{
                 dnam{"mg"}
