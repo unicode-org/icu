@@ -209,12 +209,11 @@ public:
         return Array1D(data_ + from, size);
     }
 
-    // Dot product of a 1D array and a 2D array into this one.
-    inline Array1D& dotProduct(const ReadArray1D& a, const ReadArray2D& b) {
+    // Add dot product of a 1D array and a 2D array into this one.
+    inline Array1D& addDotProduct(const ReadArray1D& a, const ReadArray2D& b) {
         U_ASSERT(a.d1() == b.d1());
         U_ASSERT(b.d2() == d1());
         for (int32_t i = 0; i < d1(); i++) {
-            data_[i] = 0;
             for (int32_t j = 0; j < a.d1(); j++) {
                 data_[i] += a.get(j) * b.get(j, i);
             }
@@ -227,6 +226,16 @@ public:
         U_ASSERT(a.d1() == d1());
         for (int32_t i = 0; i < d1(); i++) {
             data_[i] *= a.get(i);
+        }
+        return *this;
+    }
+
+    // Add the Hadamard Product of two arrays of the same size into this one.
+    inline Array1D& addHadamardProduct(const ReadArray1D& a, const ReadArray1D& b) {
+        U_ASSERT(a.d1() == d1());
+        U_ASSERT(b.d1() == d1());
+        for (int32_t i = 0; i < d1(); i++) {
+            data_[i] += a.get(i) * b.get(i);
         }
         return *this;
     }
@@ -251,8 +260,14 @@ public:
 
     // Apply tanh to all the elements in the array.
     inline Array1D& tanh() {
+        return tanh(*this);
+    }
+
+    // Apply tanh of a and store into this array.
+    inline Array1D& tanh(const Array1D& a) {
+        U_ASSERT(a.d1() == d1());
         for (int32_t i = 0; i < d1_; i++) {
-            data_[i] = std::tanh(data_[i]);
+            data_[i] = std::tanh(a.get(i));
         }
         return *this;
     }
@@ -589,39 +604,29 @@ void GraphemeClusterVectorizer::vectorize(
 
 // Computing LSTM as stated in
 // https://en.wikipedia.org/wiki/Long_short-term_memory#LSTM_with_a_forget_gate
+// ifco is temp array allocate outside which does not need to be
+// input/output value but could avoid unnecessary memory alloc/free if passing
+// in.
 void compute(
+    int32_t hunits,
     const ReadArray2D& W, const ReadArray2D& U, const ReadArray1D& b,
     const ReadArray1D& x, Array1D& h, Array1D& c,
-    UErrorCode &status)
+    Array1D& ifco)
 {
-    if (U_FAILURE(status)) return;
     // ifco = x * W + h * U + b
-    Array1D ifco(b.d1(), status);
-    {
-        Array1D hU(b.d1(), status);
-        if (U_FAILURE(status)) return;
-        ifco.dotProduct(x, W)
-            .add(hU.dotProduct(h, U))
-            .add(b);
-    } // delocate hU
+    ifco.assign(b)
+        .addDotProduct(x, W)
+        .addDotProduct(h, U);
 
-    int32_t hunits = b.d1() / 4;
     ifco.slice(0*hunits, hunits).sigmoid();  // i: sigmod
     ifco.slice(1*hunits, hunits).sigmoid(); // f: sigmoid
     ifco.slice(2*hunits, hunits).tanh(); // c_: tanh
     ifco.slice(3*hunits, hunits).sigmoid(); // o: sigmod
 
-    {
-        Array1D ic(c.d1(), status);
-        if (U_FAILURE(status)) return;
-        c.hadamardProduct(ifco.slice(hunits, hunits))
-            .add(ic
-                 .assign(ifco.slice(0, hunits))
-                 .hadamardProduct(ifco.slice(2*hunits, hunits)));
-    }
+    c.hadamardProduct(ifco.slice(hunits, hunits))
+        .addHadamardProduct(ifco.slice(0, hunits), ifco.slice(2*hunits, hunits));
 
-    h.assign(c)
-        .tanh()
+    h.tanh(c)
         .hadamardProduct(ifco.slice(3*hunits, hunits));
 }
 
@@ -657,17 +662,28 @@ LSTMBreakEngine::divideUpDictionaryRange( UText *text,
     int32_t input_seq_len = indices.size();
     int32_t hunits = fData->fForwardU.d1();
 
-    // To save the needed memory usage, the following is different from the
-    // Python or ICU4X implementation. We first perform the Backward LSTM
-    // and then merge the iteration of the forward LSTM and the output layer
-    // together because we only neetdto remember the h[t-1] for Forward LSTM.
+    // ----- Begin of all the Array memory allocation needed for this function
+    // Allocate temp array used inside compute()
+    Array1D ifco(4 * hunits, status);
+
     Array1D c(hunits, status);
+    Array1D logp(4, status);
 
     // TODO: limit size of hBackward. If input_seq_len is too big, we could
     // run out of memory.
     // Backward LSTM
     Array2D hBackward(input_seq_len, hunits, status);
+
+    // Allocate fbRow and slice the internal array in two.
+    Array1D fbRow(2 * hunits, status);
+
+    // ----- End of all the Array memory allocation needed for this function
     if (U_FAILURE(status)) return 0;
+
+    // To save the needed memory usage, the following is different from the
+    // Python or ICU4X implementation. We first perform the Backward LSTM
+    // and then merge the iteration of the forward LSTM and the output layer
+    // together because we only neetdto remember the h[t-1] for Forward LSTM.
     for (int32_t i = input_seq_len - 1; i >= 0; i--) {
         Array1D hRow = hBackward.row(i);
         if (i != input_seq_len - 1) {
@@ -680,17 +696,13 @@ LSTMBreakEngine::divideUpDictionaryRange( UText *text,
         printf("fData->fEmbedding.row(indicesBuf[%d]):\n", i);
         fData->fEmbedding.row(indicesBuf[i]).print();
 #endif  // LSTM_DEBUG
-        compute(fData->fBackwardW, fData->fBackwardU, fData->fBackwardB,
+        compute(hunits,
+                fData->fBackwardW, fData->fBackwardU, fData->fBackwardB,
                 fData->fEmbedding.row(indicesBuf[i]),
-                hRow, c, status);
-        if (U_FAILURE(status)) return 0;
+                hRow, c, ifco);
     }
 
-    Array1D logp(4, status);
 
-    // Allocate fbRow and slice the internal array in two.
-    Array1D fbRow(2 * hunits, status);
-    if (U_FAILURE(status)) return 0;
     Array1D forwardRow = fbRow.slice(0, hunits);  // point to first half of data in fbRow.
     Array1D backwardRow = fbRow.slice(hunits, hunits);  // point to second half of data n fbRow.
 
@@ -705,15 +717,15 @@ LSTMBreakEngine::divideUpDictionaryRange( UText *text,
         // Forward LSTM
         // Calculate the result into forwardRow, which point to the data in the first half
         // of fbRow.
-        compute(fData->fForwardW, fData->fForwardU, fData->fForwardB,
+        compute(hunits,
+                fData->fForwardW, fData->fForwardU, fData->fForwardB,
                 fData->fEmbedding.row(indicesBuf[i]),
-                forwardRow, c, status);
-        if (U_FAILURE(status)) return 0;
+                forwardRow, c, ifco);
 
         // assign the data from hBackward.row(i) to second half of fbRowa.
         backwardRow.assign(hBackward.row(i));
 
-        logp.dotProduct(fbRow, fData->fOutputW).add(fData->fOutputB);
+        logp.assign(fData->fOutputB).addDotProduct(fbRow, fData->fOutputW);
 #ifdef LSTM_DEBUG
         printf("backwardRow %d\n", i);
         backwardRow.print();
