@@ -2,15 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 //
-// Remove Burmese and Thai dictionaries and replaced with lstm models.
+// Include Burmese and Thai lstm models.
 {
   "featureFilters": {
-    "brkitr_dictionaries": {
-      "excludelist": [
-        "burmesedict",
-        "thaidict"
-      ]
-    },
     "brkitr_lstm": {
       "includelist": [
 	"Thai_graphclust_model4_heavy",
