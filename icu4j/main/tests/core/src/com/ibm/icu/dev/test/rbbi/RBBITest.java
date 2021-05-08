@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.RBBIDataWrapper;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
@@ -42,6 +43,9 @@ public class RBBITest extends TestFmwk {
 
     @Test
    public void TestThaiDictionaryBreakIterator() {
+       // The expectations in this test heavily depends on the Thai dictionary.
+       // Therefore, we skip this test under the LSTM configuration.
+       org.junit.Assume.assumeTrue(!TestUtil.skipDictionaryTest());
        int position;
        int index;
        int result[] = { 1, 2, 5, 10, 11, 12, 11, 10, 5, 2, 1, 0 };

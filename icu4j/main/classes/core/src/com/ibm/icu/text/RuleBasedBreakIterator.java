@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.impl.ICUBinary;
@@ -30,6 +31,7 @@ import com.ibm.icu.impl.breakiter.BurmeseBreakEngine;
 import com.ibm.icu.impl.breakiter.CjkBreakEngine;
 import com.ibm.icu.impl.breakiter.DictionaryBreakEngine;
 import com.ibm.icu.impl.breakiter.KhmerBreakEngine;
+import com.ibm.icu.impl.breakiter.LSTMBreakEngine;
 import com.ibm.icu.impl.breakiter.LanguageBreakEngine;
 import com.ibm.icu.impl.breakiter.LaoBreakEngine;
 import com.ibm.icu.impl.breakiter.ThaiBreakEngine;
@@ -722,13 +724,21 @@ public class RuleBasedBreakIterator extends BreakIterator {
             try {
                 switch (script) {
                 case UScript.THAI:
-                    eng = new ThaiBreakEngine();
+                    try {
+                        eng = LSTMBreakEngine.create(script, LSTMBreakEngine.createData(script));
+                    } catch (MissingResourceException e) {
+                        eng = new ThaiBreakEngine();
+                    }
                     break;
                 case UScript.LAO:
                     eng = new LaoBreakEngine();
                     break;
                 case UScript.MYANMAR:
-                    eng = new BurmeseBreakEngine();
+                    try {
+                        eng = LSTMBreakEngine.create(script, LSTMBreakEngine.createData(script));
+                    } catch (MissingResourceException e) {
+                        eng = new BurmeseBreakEngine();
+                    }
                     break;
                 case UScript.KHMER:
                     eng = new KhmerBreakEngine();
