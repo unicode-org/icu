@@ -149,7 +149,7 @@ Next, you will notice that the list of group bytes has some gaps.
 These are used in various ways.
 
 We reserve a few special single byte values for common control 
-characters. These are in the same place as their ANSI eqivalents for speed.
+characters. These are in the same place as their ANSI equivalents for speed.
 */
                      
 #define ULMBCS_HT    0x09   /* Fixed control char - Horizontal Tab */

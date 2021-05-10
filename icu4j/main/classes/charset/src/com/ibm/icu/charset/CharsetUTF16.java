@@ -210,7 +210,7 @@ class CharsetUTF16 extends CharsetICU {
             char trail = (char) (((toUBytesArray[2 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK) << 8) | ((toUBytesArray[3 ^ actualEndianXOR] & UConverterConstants.UNSIGNED_BYTE_MASK)));
 
             if (!UTF16.isTrailSurrogate(trail)) {
-                // pretend like we didnt read the last 2 bytes
+                // pretend like we didn't read the last 2 bytes
                 toULength = 2;
                 source.position(source.position() - 2);
 

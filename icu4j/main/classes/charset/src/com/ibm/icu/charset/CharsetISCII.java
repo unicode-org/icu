@@ -801,7 +801,7 @@ class CharsetISCII extends CharsetICU {
      * Post context
      * i) ATR : Attribute code is used to declare the font and script switching.
      *    Currently we only switch scripts and font codes consumed without generating an error
-     * ii) EXT : Extention code is used to declare switching to Sanskrit and for obscure,
+     * ii) EXT : Extension code is used to declare switching to Sanskrit and for obscure,
      *     obsolete characters
      * Pre context
      * i) Halant: if preceeded by a halant then it is a explicit halant

@@ -1046,7 +1046,7 @@ utf8TextAccess(UText *ut, int64_t index, UBool forward) {
 
     //
     // Dispatch to the appropriate action for a
-    //   Backwards Diretion iteration request.
+    //   Backwards Direction iteration request.
     //
     if (ix==ut->chunkNativeStart) {
         // Check for normal sequential iteration cases first.

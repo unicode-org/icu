@@ -302,7 +302,7 @@ public final class PseudoLocales {
         // generate list automatically (rather than having a hard coded list in the type) but
         // https://unicode.org/reports/tr35/tr35-general.html#ExemplarSyntax
         // makes it quite clear that this is infeasible, since there are many equivalent
-        // representations of the examplar characters that could appear in the value
+        // representations of the exemplar characters that could appear in the value
         // (e.g. "[a b ... z]", "[a-z]", "[{a} {b} ... {z}]")
         private CldrValue getExemplarValue(CldrPath path) {
             StringBuilder exemplarList = new StringBuilder("[");

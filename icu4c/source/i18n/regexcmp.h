@@ -228,7 +228,7 @@ private:
                                                      //   in this string while being scanned.
 };
 
-// Constant values to be pushed onto fSetOpStack while scanning & evalueating [set expressions]
+// Constant values to be pushed onto fSetOpStack while scanning & evaluating [set expressions]
 //   The high 16 bits are the operator precedence, and the low 16 are a code for the operation itself.
 
 enum SetOperations {

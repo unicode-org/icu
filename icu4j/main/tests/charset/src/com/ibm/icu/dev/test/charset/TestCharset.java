@@ -2252,7 +2252,7 @@ public class TestCharset extends TestFmwk {
                 public void run() {
                     // commented out since the mehtods on
                     // Charset API are supposed to be thread
-                    // safe ... to test it we dont sync
+                    // safe ... to test it we don't sync
 
                     // synchronized(charset){
                    while (!interrupted()) {

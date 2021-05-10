@@ -1501,7 +1501,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     }
 
     // start by stripping the trailing whitespace from all the rules
-    // (this is all the whitespace follwing each semicolon in the
+    // (this is all the whitespace following each semicolon in the
     // description).  This allows us to look for rule-set boundaries
     // by searching for ";%" without having to worry about whitespace
     // between the ; and the %

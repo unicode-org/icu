@@ -965,7 +965,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (sep.length() == 1) {
             this.monetarySeparator = sep.charAt(0);
         } else {
-            // Use default decimap separator character as fallbacl
+            // Use default decimal separator character as fallback
             this.monetarySeparator = DEF_DECIMAL_SEPARATOR;
         }
     }

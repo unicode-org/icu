@@ -1094,7 +1094,7 @@ protected:
     /**
     * Default constructor.
     * Constructor is different from the old default Collator constructor.
-    * The task for determing the default collation strength and normalization
+    * The task for determining the default collation strength and normalization
     * mode is left to the child class.
     * @stable ICU 2.0
     */

@@ -592,7 +592,7 @@ UXMLParser::replaceCharRefs(UnicodeString &s, UErrorCode &status) {
     mAmps.reset(s);
     // See the initialization for the regex matcher mAmps.
     //    Which entity we've matched is determined by which capture group has content,
-    //      which is flaged by start() of that group not being -1.
+    //      which is flagged by start() of that group not being -1.
     while (mAmps.find()) {
         if (mAmps.start(1, status) != -1) {
             replacement.setTo((UChar)x_AMP);

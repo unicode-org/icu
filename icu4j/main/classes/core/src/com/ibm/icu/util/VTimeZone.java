@@ -1058,7 +1058,7 @@ public class VTimeZone extends BasicTimeZone {
      *
      *  or
      *
-     * null on any error cases, for exmaple, FREQ=YEARLY is not available
+     * null on any error cases, for example, FREQ=YEARLY is not available
      *
      * When UNTIL attribute is available, the time will be set to until[0],
      * otherwise, MIN_TIME

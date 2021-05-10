@@ -585,7 +585,7 @@ SimpleTimeZone::compareToRule(int8_t month, int8_t monthLen, int8_t prevMonthLen
         dayOfWeek = (int8_t)(1 + (dayOfWeek % 7)); // dayOfWeek is one-based
         if (dayOfMonth > monthLen) {
             dayOfMonth = 1;
-            /* When incrementing the month, it is desirible to overflow
+            /* When incrementing the month, it is desirable to overflow
              * from DECEMBER to DECEMBER+1, since we use the result to
              * compare against a real month. Wraparound of the value
              * leads to bug 4173604. */

@@ -987,7 +987,7 @@ UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, int32_t start,
 * Note this is the initial boundary check. If the potential match
 * starts or ends with composite characters, the accents in those
 * characters will be determined later.
-* Not doing backwards iteration here, since discontiguos contraction for
+* Not doing backwards iteration here, since discontiguous contraction for
 * backwards collation element iterator, use up too many characters.
 * E.g. looking for \u030A ring in \u01FA A ring above and acute,
 * should fail since there is a acute at the end of \u01FA

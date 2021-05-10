@@ -142,7 +142,7 @@ if (args.verbose>2):
     print gens
 
 if (args.verbose>3):
-    print "TODO: dependency tracking. For now, dont' care"
+    print "TODO: dependency tracking. For now, don't care"
 
 for gen in gens:
     item = gens[gen]

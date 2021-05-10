@@ -756,7 +756,7 @@ public:
      * names of the months), but not to provide the pattern.
      * <P>
      * A numbering system override is a string containing either the name of a known numbering system,
-     * or a set of field and numbering system pairs that specify which fields are to be formattied with
+     * or a set of field and numbering system pairs that specify which fields are to be formatted with
      * the alternate numbering system.  For example, to specify that all numeric fields in the specified
      * date or time pattern are to be rendered using Thai digits, simply specify the numbering system override
      * as "thai".  To specify that just the year portion of the date be formatted using Hebrew numbering,
@@ -797,7 +797,7 @@ public:
      * names of the months), but not to provide the pattern.
      * <P>
      * A numbering system override is a string containing either the name of a known numbering system,
-     * or a set of field and numbering system pairs that specify which fields are to be formattied with
+     * or a set of field and numbering system pairs that specify which fields are to be formatted with
      * the alternate numbering system.  For example, to specify that all numeric fields in the specified
      * date or time pattern are to be rendered using Thai digits, simply specify the numbering system override
      * as "thai".  To specify that just the year portion of the date be formatted using Hebrew numbering,

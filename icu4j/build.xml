@@ -425,7 +425,7 @@
 
     <target name="secure" depends="icu4jJar" description="(Deprecated)Build ICU4J API and test classes for running the ICU4J test suite with Java security manager enabled"/>
 
-    <!-- Check to see if JVM_OPTIONS enviroment variable is set. This can be use to set the heap size. -->
+    <!-- Check to see if JVM_OPTIONS environment variable is set. This can be use to set the heap size. -->
     <property name="env.JVM_OPTIONS" value=""/>
     <property name="jvm_options" value="${env.JVM_OPTIONS}"/>
 

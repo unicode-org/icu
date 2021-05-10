@@ -406,7 +406,7 @@ private:
      * and the best match skeleton.
      *
      * TODO (xji): set field weight or
-     *             isolate the funtionality in DateTimePatternGenerator
+     *             isolate the functionality in DateTimePatternGenerator
      * @param  skeleton               input skeleton
      * @param  bestMatchDistanceInfo  the difference between input skeleton
      *                                and best match skeleton.

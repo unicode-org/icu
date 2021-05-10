@@ -1612,7 +1612,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
     }
 
     if (pKwds) {
-        const char *pBcpKey = NULL;     /* u extenstion key subtag */
+        const char *pBcpKey = NULL;     /* u extension key subtag */
         const char *pBcpType = NULL;    /* beginning of u extension type subtag(s) */
         int32_t bcpKeyLen = 0;
         int32_t bcpTypeLen = 0;

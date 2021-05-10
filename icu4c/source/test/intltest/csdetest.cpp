@@ -396,7 +396,7 @@ void CharsetDetectionTest::UTF16Test()
     conf = ucsdet_getConfidence(match, &status);
 
     if (strcmp(name, "UTF-16LE") != 0) {
-        errln("Enconding detection failure for UTF-16LE: got %s", name);
+        errln("Encoding detection failure for UTF-16LE: got %s", name);
         return;
     }
 

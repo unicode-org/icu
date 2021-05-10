@@ -5461,7 +5461,7 @@ void RegexTest::Bug7029() {
 }
 
 // Bug 9283
-//   This test is checking for the existance of any supplemental characters that case-fold
+//   This test is checking for the existence of any supplemental characters that case-fold
 //   to a bmp character.
 //
 //   At the time of this writing there are none. If any should appear in a subsequent release

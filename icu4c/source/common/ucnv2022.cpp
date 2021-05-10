@@ -527,7 +527,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
                     ucnv_loadSharedData("ksc_5601", &stackPieces, &stackArgs, errorCode);
             }
 
-            /* set the function pointers to appropriate funtions */
+            /* set the function pointers to appropriate functions */
             cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
             uprv_strcpy(myConverterData->locale,"ja");
 
@@ -578,7 +578,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
                 setInitialStateToUnicodeKR(cnv, myConverterData);
                 setInitialStateFromUnicodeKR(cnv, myConverterData);
 
-                /* set the function pointers to appropriate funtions */
+                /* set the function pointers to appropriate functions */
                 cnv->sharedData=(UConverterSharedData*)&_ISO2022KRData;
                 uprv_strcpy(myConverterData->locale,"ko");
             }
@@ -605,7 +605,7 @@ _ISO2022Open(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
                 ucnv_loadSharedData("cns-11643-1992", &stackPieces, &stackArgs, errorCode);
 
 
-            /* set the function pointers to appropriate funtions */
+            /* set the function pointers to appropriate functions */
             cnv->sharedData=(UConverterSharedData*)&_ISO2022CNData;
             uprv_strcpy(myConverterData->locale,"cn");
 

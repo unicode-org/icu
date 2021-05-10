@@ -69,7 +69,7 @@ public class RBNFParseTest extends TestFmwk {
             ">>",
             ">>>",
             "10:", // formatting any value with a one's digit will fail
-            "11: << x", // formating a multiple of 10 causes rollback rule to fail
+            "11: << x", // formatting a multiple of 10 causes rollback rule to fail
             "%%foo: 0 foo; 10: =%%bar=; %%bar: 0: bar; 10: =%%foo=;",
         };
 
