@@ -16,7 +16,7 @@
 *   04/17/97    aliu        Changed DigitCount to int per code review.
 *    07/20/98    stephen        JDK 1.2 sync up. Added scientific support.
 *                            Changed naming conventions to match C++ guidelines
-*                            Derecated Java style constants (eg, INTEGER_FIELD)
+*                            Deprecated Java style constants (eg, INTEGER_FIELD)
 ********************************************************************************
 */
 

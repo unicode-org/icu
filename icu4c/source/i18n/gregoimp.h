@@ -86,7 +86,7 @@ class ClockMath {
      * 0 <= remainder < divisor.
      *
      * Works around edge-case bugs.  Handles pathological input
-     * (divident >> divisor) reasonably.
+     * (dividend >> divisor) reasonably.
      *
      * Calling with a divisor <= 0 is disallowed.
      */

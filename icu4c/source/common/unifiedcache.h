@@ -293,8 +293,8 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
    void flush() const;
 
    /**
-    * Configures at what point evcition of unused entries will begin.
-    * Eviction is triggered whenever the number of evictable keys exeeds
+    * Configures at what point eviction of unused entries will begin.
+    * Eviction is triggered whenever the number of evictable keys exceeds
     * BOTH count AND (number of in-use items) * (percentageOfInUseItems / 100).
     * Once the number of unused entries drops below one of these,
     * eviction ceases. Because eviction happens incrementally,
@@ -315,7 +315,7 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
     * settings.
     *
     * If a client already holds references to many different unique values
-    * in the cache such that the number of those unique values far exeeds
+    * in the cache such that the number of those unique values far exceeds
     * "count" then the cache may not be able to maintain this maximum.
     * However, if this happens, the cache still guarantees that the number of
     * unused entries will remain only a small percentage of the total cache

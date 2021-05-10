@@ -62,7 +62,7 @@ public class EraRules {
             }
             if (isSet(startDates[eraIdx])) {
                 throw new ICUException(
-                        "Dupulicated era rule for rule key:" + eraIdxStr + " in era rule data for " + calType.getId());
+                        "Duplicated era rule for rule key:" + eraIdxStr + " in era rule data for " + calType.getId());
             }
 
             boolean hasName = true;

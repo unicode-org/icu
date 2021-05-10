@@ -1383,7 +1383,7 @@ public class FormatHandler
                    // of 1,000.  This prevents us from getting "onze cents cent
                    // vingt-deux" ("eleven hundred one hundred twenty-two").
                 "1100>: onze cents[ >>];\n" +
-                   // at 1,200, we go back to formating in thousands, so we
+                   // at 1,200, we go back to formatting in thousands, so we
                    // repeat the rule for 1,000
                 "1200: mille >>;\n" +
                    // at 2,000, the multiplier is added

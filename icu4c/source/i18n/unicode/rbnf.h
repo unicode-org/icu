@@ -108,7 +108,7 @@ enum URBNFRuleSetTag {
  * <p>In these rules, the <em>base value</em> is spelled out explicitly and set off from the
  * rule's output text with a colon. The rules are in a sorted list, and a rule is applicable
  * to all numbers from its own base value to one less than the next rule's base value. The
- * &quot;&gt;&gt;&quot; token is called a <em>substitution</em> and tells the fomatter to
+ * &quot;&gt;&gt;&quot; token is called a <em>substitution</em> and tells the formatter to
  * isolate the number's ones digit, format it using this same set of rules, and place the
  * result at the position of the &quot;&gt;&gt;&quot; token. Text in brackets is omitted if
  * the number being formatted is an even multiple of 10 (the hyphen is a literal hyphen; 24

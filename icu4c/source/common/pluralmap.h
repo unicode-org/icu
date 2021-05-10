@@ -62,7 +62,7 @@ public:
  * A Map of plural categories to values. It maintains ownership of the
  * values.
  *
- * Type T is the value type. T must provide the followng:
+ * Type T is the value type. T must provide the following:
  * 1) Default constructor
  * 2) Copy constructor
  * 3) Assignment operator

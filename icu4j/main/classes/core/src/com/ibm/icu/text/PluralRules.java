@@ -248,7 +248,7 @@ public class PluralRules implements Serializable {
          * Returns the 'functionally equivalent' locale with respect to plural rules. Calling PluralRules.forLocale with
          * the functionally equivalent locale, and with the provided locale, returns rules that behave the same. <br>
          * All locales with the same functionally equivalent locale have plural rules that behave the same. This is not
-         * exaustive; there may be other locales whose plural rules behave the same that do not have the same equivalent
+         * exhaustive; there may be other locales whose plural rules behave the same that do not have the same equivalent
          * locale.
          *
          * @param locale
@@ -2432,7 +2432,7 @@ public class PluralRules implements Serializable {
      * locale, and with the provided locale, returns rules that behave the same.
      * <br>
      * All locales with the same functionally equivalent locale have
-     * plural rules that behave the same.  This is not exaustive;
+     * plural rules that behave the same.  This is not exhaustive;
      * there may be other locales whose plural rules behave the same
      * that do not have the same equivalent locale.
      *

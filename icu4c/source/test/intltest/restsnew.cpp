@@ -1101,7 +1101,7 @@ NewResourceBundleTest::TestNewTypes() {
     /* if everything is working correctly, the size of this string */
     /* should be 7. Everything else is a wrong answer, esp. 3 and 6*/
 
-    strcpy(action, "getting and testing of string with embeded zero");
+    strcpy(action, "getting and testing of string with embedded zero");
     ResourceBundle res = theBundle.get("zerotest", status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
     CONFIRM_EQ(res.getType(), URES_STRING);

@@ -804,11 +804,11 @@ CollationAPITest::TestElemIter(/* char* par */)
     coliter->reset();
     coliter->setText(*chariter, success);
     if(!U_FAILURE(success)){
-        errln("Expeceted error");
+        errln("Expected error");
     }
     iterator1->setText((UnicodeString)"hello there", success);
     if(!U_FAILURE(success)){
-        errln("Expeceted error");
+        errln("Expected error");
     }
 
     delete chariter;

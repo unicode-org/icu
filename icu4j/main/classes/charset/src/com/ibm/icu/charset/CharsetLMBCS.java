@@ -953,7 +953,7 @@ class CharsetLMBCS extends CharsetICU {
              * 2. Look up group in table & try that (could b
              *     A) Unicode group
              *     B) control group
-             *     C) national encodeing
+             *     C) national encoding
              *        or ambiguous SBCS or MBCS group (on to step 4...)
              * 3. If its ambiguous, try this order:
              *     A) The optimization group

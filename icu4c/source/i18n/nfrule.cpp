@@ -115,7 +115,7 @@ NFRule::makeRules(UnicodeString& description,
     // we know we're making at least one rule, so go ahead and
     // new it up and initialize its basevalue and divisor
     // (this also strips the rule descriptor, if any, off the
-    // descripton string)
+    // description string)
     NFRule* rule1 = new NFRule(rbnf, description, status);
     /* test for NULL */
     if (rule1 == 0) {

@@ -703,7 +703,7 @@ public class GregorianCalendar extends Calendar {
 //////////////////////
 
     /**
-     * Return true if the current time for this Calendar is in Daylignt
+     * Return true if the current time for this Calendar is in Daylight
      * Savings Time.
      */
     boolean inDaylightTime() {

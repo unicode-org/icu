@@ -1802,7 +1802,7 @@ public class NumberRegressionTests extends TestFmwk {
     }
 
     /**
-     * 4241880: Decimal format doesnt round a double properly when the number is less than 1
+     * 4241880: Decimal format doesn't round a double properly when the number is less than 1
      */
     @Test
     public void test4241880() {

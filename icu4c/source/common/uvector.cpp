@@ -539,7 +539,7 @@ void UVector::sorti(UErrorCode &ec) {
  *    required by uprv_sortArray().  This is handled by passing the
  *    the UVector sort function pointer via the context pointer to a
  *    sortArray() comparator function, which can then call back to
- *    the original user functtion.
+ *    the original user function.
  *
  *    An additional twist is that it's not safe to pass a pointer-to-function
  *    as  a (void *) data pointer, so instead we pass a (data) pointer to a

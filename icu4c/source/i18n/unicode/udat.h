@@ -1566,7 +1566,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 
 /**
 * Count the number of particular symbols for an UDateFormat.
-* This function is most useful as for detemining the loop termination condition
+* This function is most useful as for determining the loop termination condition
 * for calls to {@link #udat_getSymbols }.
 * @param fmt The formatter to query.
 * @param type The type of symbols to count.  One of UDAT_ERAS, UDAT_MONTHS, UDAT_SHORT_MONTHS,

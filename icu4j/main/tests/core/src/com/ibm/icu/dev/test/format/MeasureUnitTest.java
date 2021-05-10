@@ -3801,7 +3801,7 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("Initial joule", "joule", joule.getIdentifier());
 
         // "Invalid prefix" test not needed: in Java we cannot pass a
-        // non-existant enum instance. (In C++ an int can be typecast.)
+        // non-existent enum instance. (In C++ an int can be typecast.)
 
         MeasureUnit unit = joule.withPrefix(MeasureUnit.MeasurePrefix.HECTO);
         assertEquals("Joule with hecto prefix", "hectojoule", unit.getIdentifier());

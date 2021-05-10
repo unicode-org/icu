@@ -5087,7 +5087,7 @@ class CharsetMBCS extends CharsetICU {
                         }while((++c&0xf) != 0);
 
                     } else {
-                        c+=16;   /* emplty stage3 block */
+                        c+=16;   /* empty stage3 block */
                     }
                 }
             } else {

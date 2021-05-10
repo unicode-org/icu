@@ -519,7 +519,7 @@ static void TestNewTypes() {
     /* if everything is working correctly, the size of this string */
     /* should be 7. Everything else is a wrong answer, esp. 3 and 6*/
 
-    strcpy(action, "getting and testing of string with embeded zero");
+    strcpy(action, "getting and testing of string with embedded zero");
     res = ures_getByKey(theBundle, "zerotest", res, &status);
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
     CONFIRM_INT_EQ(ures_getType(res), URES_STRING);

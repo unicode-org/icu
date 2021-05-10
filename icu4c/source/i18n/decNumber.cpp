@@ -3831,7 +3831,7 @@ static void decToString(const decNumber *dn, char *string, Flag eng) {
 /*                                                                    */
 /* Addition, especially x=x+1, is speed-critical.                     */
 /* The static buffer is larger than might be expected to allow for    */
-/* calls from higher-level funtions (notable exp).                    */
+/* calls from higher-level functions (notable exp).                    */
 /* ------------------------------------------------------------------ */
 static decNumber * decAddOp(decNumber *res, const decNumber *lhs,
                             const decNumber *rhs, decContext *set,
@@ -4247,7 +4247,7 @@ static decNumber * decAddOp(decNumber *res, const decNumber *lhs,
 /* long subtractions.  These are acc and var1 respectively.           */
 /* var1 is a copy of the lhs coefficient, var2 is the rhs coefficient.*/
 /* The static buffers may be larger than might be expected to allow   */
-/* for calls from higher-level funtions (notable exp).                */
+/* for calls from higher-level functions (notable exp).                */
 /* ------------------------------------------------------------------ */
 static decNumber * decDivideOp(decNumber *res,
                                const decNumber *lhs, const decNumber *rhs,

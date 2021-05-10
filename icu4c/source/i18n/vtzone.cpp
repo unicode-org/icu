@@ -479,7 +479,7 @@ static void parseRRULE(const UnicodeString& rrule, int32_t& month, int32_t& dow,
                 goto rruleParseError;
             }
         } else if (attr.compare(ICAL_BYMONTHDAY, -1) == 0) {
-            // Note: BYMONTHDAY may contain multiple days delimitted by comma
+            // Note: BYMONTHDAY may contain multiple days delimited by comma
             //
             // A value of BYMONTHDAY could be negative, for example, -1 means
             // the last day in a month

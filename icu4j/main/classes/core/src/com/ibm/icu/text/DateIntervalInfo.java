@@ -1069,7 +1069,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * which has pre-defined interval pattern in resource file.
      *
      * TODO (xji): set field weight or
-     *             isolate the funtionality in DateTimePatternGenerator
+     *             isolate the functionality in DateTimePatternGenerator
      * @param  inputSkeleton        input skeleton
      * @return 0, if there is exact match for input skeleton
      *         1, if there is only field width difference between

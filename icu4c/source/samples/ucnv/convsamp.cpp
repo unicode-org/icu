@@ -270,7 +270,7 @@ UErrorCode convsample_03()
   What is the best way to determine the buffer size?
 
      The 'buffersize' is in bytes of input.
-    For a given converter, divinding this by the minimum char size
+    For a given converter, dividing this by the minimum char size
     give you the maximum number of Unicode characters that could be
     expected for a given number of input bytes.
      see: ucnv_getMinCharSize()

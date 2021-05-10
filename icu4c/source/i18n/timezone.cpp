@@ -1691,7 +1691,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
         const UChar *tzids = ures_getStringByKey(zones, region, &len, &tmperr); // use tmperr, because
                                                                                 // regional mapping is optional
         if (U_SUCCESS(tmperr)) {
-            // first ID delimited by space is the defasult one
+            // first ID delimited by space is the default one
             const UChar *end = u_strchr(tzids, (UChar)0x20);
             if (end == NULL) {
                 id.setTo(tzids, -1);

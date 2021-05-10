@@ -34,7 +34,7 @@ U_NAMESPACE_USE
 /**
  * Verify that fmt is a SimpleDateFormat. Invalid error if not.
  * @param fmt the UDateFormat, definitely a DateFormat, maybe something else
- * @param status error code, will be set to failure if there is a familure or the fmt is NULL.
+ * @param status error code, will be set to failure if there is a failure or the fmt is NULL.
  */
 static void verifyIsSimpleDateFormat(const UDateFormat* fmt, UErrorCode *status) {
    if(U_SUCCESS(*status) &&
@@ -1247,7 +1247,7 @@ udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* st
 /**
  * Verify that fmt is a RelativeDateFormat. Invalid error if not.
  * @param fmt the UDateFormat, definitely a DateFormat, maybe something else
- * @param status error code, will be set to failure if there is a familure or the fmt is NULL.
+ * @param status error code, will be set to failure if there is a failure or the fmt is NULL.
  */
 static void verifyIsRelativeDateFormat(const UDateFormat* fmt, UErrorCode *status) {
    if(U_SUCCESS(*status) &&

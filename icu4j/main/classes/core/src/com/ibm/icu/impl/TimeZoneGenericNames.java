@@ -462,7 +462,7 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
     /**
      * Private method returning LocaleDisplayNames instance for the locale of this
      * instance. Because LocaleDisplayNames is only used for generic
-     * location formant and partial location format, the LocaleDisplayNames
+     * location format and partial location format, the LocaleDisplayNames
      * is instantiated lazily.
      *
      * @return the instance of LocaleDisplayNames for the locale of this object.

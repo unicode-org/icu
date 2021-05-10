@@ -141,7 +141,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
      */
     @Override
     protected final void implOnUnmappableCharacter(CodingErrorAction newAction) {
-        // dont run infinitely
+        // don't run infinitely
         if (unmappableCharacterCalled)
             return;
 
@@ -156,7 +156,7 @@ public abstract class CharsetDecoderICU extends CharsetDecoder{
     }
 
     /**
-     * Sets the callback encoder method and context to be used if an illegal sequence is encounterd.
+     * Sets the callback encoder method and context to be used if an illegal sequence is encountered.
      * You would normally call this twice to set both the malform and unmappable error. In this case,
      * newContext should remain the same since using a different newContext each time will negate the last
      * one used.
