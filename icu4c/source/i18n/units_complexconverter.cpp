@@ -237,6 +237,11 @@ void ComplexUnitsConverter::applyRounder(MaybeStackArray<int64_t, 5> &intValues,
     }
     quantity = decimalQuantity.toDouble();
 
+    if (uprv_isNaN(quantity) || uprv_isInfinite(quantity)) {
+        // Do nothing for non-finite values, since conversion to int64_t is undefined
+        return;
+    }
+
     int32_t lastIndex = unitsConverters_.length() - 1;
     if (lastIndex == 0) {
         // Only one element, no need to bubble up the carry
