@@ -28,6 +28,8 @@ void LSTMBETest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestThaiGraphclust);
     TESTCASE_AUTO(TestThaiCodepoints);
     TESTCASE_AUTO(TestBurmeseGraphclust);
+    TESTCASE_AUTO(TestThaiGraphclustWithLargeMemory);
+    TESTCASE_AUTO(TestThaiCodepointsWithLargeMemory);
 
     TESTCASE_AUTO_END;
 }
@@ -247,4 +249,48 @@ const LanguageBreakEngine* LSTMBETest::createEngineFromTestData(
     return engine.orphan();
 }
 
+
+void LSTMBETest::TestThaiGraphclustWithLargeMemory() {
+    runTestWithLargeMemory("Thai_graphclust_model4_heavy", USCRIPT_THAI);
+
+}
+
+void LSTMBETest::TestThaiCodepointsWithLargeMemory() {
+    runTestWithLargeMemory("Thai_codepoints_exclusive_model5_heavy", USCRIPT_THAI);
+}
+
+constexpr int32_t MEMORY_TEST_THESHOLD_SHORT = 2 * 1024; // 2 K Unicode Chars.
+constexpr int32_t MEMORY_TEST_THESHOLD = 32 * 1024; // 32 K Unicode Chars.
+
+// Test with very long unicode string.
+void LSTMBETest::runTestWithLargeMemory( const char* model, UScriptCode script) {
+    UErrorCode   status = U_ZERO_ERROR;
+    int32_t test_threshold = quick ? MEMORY_TEST_THESHOLD_SHORT : MEMORY_TEST_THESHOLD;
+    LocalPointer<const LanguageBreakEngine> engine(
+        createEngineFromTestData(model, script, status));
+    if (U_FAILURE(status)) {
+        dataerrln("Could not CreateLSTMBreakEngine for " + UnicodeString(model) + UnicodeString(u_errorName(status)));
+        return;
+    }
+    UnicodeString text(u"อ");  // start with a single Thai char.
+    UVector32 actual(status);
+    if (U_FAILURE(status)) {
+        dataerrln("%s:%d Error %s Could not allocate UVextor32", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    while (U_SUCCESS(status) && text.length() <= test_threshold) {
+        // Construct the UText which is expected by the the engine as
+        // input from the UnicodeString.
+        UText ut = UTEXT_INITIALIZER;
+        utext_openConstUnicodeString(&ut, &text, &status);
+        if (U_FAILURE(status)) {
+            dataerrln("Could not utext_openConstUnicodeString for " + text + UnicodeString(u_errorName(status)));
+            return;
+        }
+
+        engine->findBreaks(&ut, 0, text.length(), actual, status);
+        utext_close(&ut);
+        text += text;
+    }
+}
 #endif // #if !UCONFIG_NO_BREAK_ITERATION

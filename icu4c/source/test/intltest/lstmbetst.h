@@ -35,10 +35,13 @@ public:
     void TestThaiGraphclust();
     void TestThaiCodepoints();
     void TestBurmeseGraphclust();
-    void runTestFromFile(const char* filename);
+    void TestThaiGraphclustWithLargeMemory();
+    void TestThaiCodepointsWithLargeMemory();
 
 private:
     const LanguageBreakEngine* createEngineFromTestData(const char* model, UScriptCode script, UErrorCode& status);
+    void runTestFromFile(const char* filename);
+    void runTestWithLargeMemory(const char* model, UScriptCode script);
 
     // Test parameters, from the test framework and test invocation.
     const char* fTestParams;
