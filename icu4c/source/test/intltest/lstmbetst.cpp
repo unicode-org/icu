@@ -229,7 +229,7 @@ const LanguageBreakEngine* LSTMBETest::createEngineFromTestData(
         return nullptr;
     }
 
-    const LSTMData* data = CreateLSTMData(rb.getAlias(), status);
+    const LSTMData* data = CreateLSTMData(rb.orphan(), status);
     if (U_FAILURE(status)) {
         dataerrln("Could not CreateLSTMData " + UnicodeString(model) + " under " +  UnicodeString(testdatapath) +  ", " +
                   UnicodeString(u_errorName(status)));
