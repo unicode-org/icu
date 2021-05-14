@@ -153,7 +153,8 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
         abstract public void vectorize(CharacterIterator fIter, int rangeStart, int rangeEnd,
                               List<Integer> offsets, List<Integer> indicies);
         protected int getIndex(String token) {
-            return fDict.getOrDefault(token, fDict.size());
+            Integer res = fDict.get(token);
+            return (res == null) ? fDict.size() : res;
         }
         private Map<String, Integer> fDict;
     }
