@@ -408,19 +408,18 @@ LSTMData::LSTMData(UResourceBundle* rb, UErrorCode &status)
     int32_t data_len = 0;
     const int32_t* data = ures_getIntVector(fDataRes, &data_len, &status);
     if (U_FAILURE(status)) return;
-    fDictRes = ures_getByKey(rb, "dict", nullptr, &status);
-    if (U_FAILURE(status)) return;
-    U_ASSERT(fDictRes != nullptr);
-    int32_t num_index = ures_getSize(fDictRes);
+    LocalUResourceBundlePointer fDictRes(
+        ures_getByKey(rb, "dict", nullptr, &status));
+    int32_t num_index = ures_getSize(fDictRes.getAlias());
     fDict = uhash_open(uhash_hashUChars, uhash_compareUChars, nullptr, &status);
     if (U_FAILURE(status)) return;
 
-    ures_resetIterator(fDictRes);
+    ures_resetIterator(fDictRes.getAlias());
     int32_t idx = 0;
     // put dict into hash
-    while(ures_hasNext(fDictRes)) {
+    while(ures_hasNext(fDictRes.getAlias())) {
         const char *tempKey = nullptr;
-        const UChar* str = ures_getNextString(fDictRes, nullptr, &tempKey, &status);
+        const UChar* str = ures_getNextString(fDictRes.getAlias(), nullptr, &tempKey, &status);
         if (U_FAILURE(status)) return;
         uhash_putiAllowZero(fDict, (void*)str, idx++, &status);
         if (U_FAILURE(status)) return;
