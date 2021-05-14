@@ -402,7 +402,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_Cygwin_GCC_x86_64_Release
   displayName: 'C: Cygwin GCC x86_64 Release'
-  timeoutInMinutes: 120
+  timeoutInMinutes: 180
   pool:
     vmImage: 'windows-2019'
   variables:
@@ -456,8 +456,14 @@ jobs:
         %CYG_ROOT%\\bin\\sh -lc 'echo Hello' && %CYG_ROOT%\\bin\\sh -lc 'uname -a'
       displayName: 'Check Cygwin environment'
     - script: |
-        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && ./runConfigureICU Cygwin && make check"
-      displayName: 'Build and test'
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && ./runConfigureICU Cygwin && make tests"
+      displayName: 'Build ICU (source and test)'
+      env:
+        CC: gcc
+        CXX: g++
+    - script: |
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && make check"
+      displayName: 'Run Tests'
       env:
         CC: gcc
         CXX: g++
