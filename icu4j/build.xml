@@ -110,6 +110,34 @@
         <matches string="${java.version}" pattern="12((-.|\.\d).*)?"/>
     </condition>
 
+    <condition property="is.java13">
+        <matches string="${java.version}" pattern="13((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java14">
+        <matches string="${java.version}" pattern="14((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java15">
+        <matches string="${java.version}" pattern="15((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java16">
+        <matches string="${java.version}" pattern="16((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java17">
+        <matches string="${java.version}" pattern="17((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java18">
+        <matches string="${java.version}" pattern="18((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java19">
+        <matches string="${java.version}" pattern="19((-.|\.\d).*)?"/>
+    </condition>
+
     <condition property="is.java8.plus">
         <or>
             <isset property="is.java8"/>
@@ -117,6 +145,13 @@
             <isset property="is.java10"/>
             <isset property="is.java11"/>
             <isset property="is.java12"/>
+            <isset property="is.java13"/>
+            <isset property="is.java14"/>
+            <isset property="is.java15"/>
+            <isset property="is.java16"/>
+            <isset property="is.java17"/>
+            <isset property="is.java18"/>
+            <isset property="is.java19"/>
         </or>
     </condition>
 
