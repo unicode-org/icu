@@ -30,8 +30,8 @@ jobs:
            # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
           set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
 
-  # ICU4J build and unit test
-  icu4j-build-and-test:
+  # ICU4J build and unit test under Java11
+  java11-icu4j-build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -43,6 +43,29 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '11'
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant check;
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
+
+  # ICU4J build and unit test under Java16
+  java16-icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '16'
       - name: ICU4J
         run: |
           cd icu4j;
