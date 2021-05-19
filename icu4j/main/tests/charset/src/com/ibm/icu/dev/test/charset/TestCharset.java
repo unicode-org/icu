@@ -16,6 +16,7 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderMalfunctionError;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.UnsupportedCharsetException;
@@ -5053,12 +5054,22 @@ public class TestCharset extends TestFmwk {
         try {
             encoder.encode(CharBuffer.allocate(10), null, true);
             errln("Illegal argument exception should have been thrown due to null target.");
+        } catch (CoderMalfunctionError err) {
+            // Java 16 updated handling of Exception thrown by encodeLoop(CharBuffer,ByteBuffer).
+            // Previously when encodeLoop is called with null input/output buffer, it throws
+            // IllegalArgumentException, and Java CharsetEncoder does not catch the exception.
+            // In Java 16, a runtime exception thrown by encodeLoop implementation is caught
+            // and wrapped by CoderMalfunctionError. This block is required because CoderMalfunctionError
+            // is not an Exception.
         } catch (Exception ex) {
+            // IllegalArgumentException is thrown by encodeLoop(CharBuffer,ByteBuffer) implementation
+            // is not wrapped by CharsetEncoder up to Java 15.
         }
 
         try {
             decoder.decode(ByteBuffer.allocate(10), null, true);
             errln("Illegal argument exception should have been thrown due to null target.");
+        } catch (CoderMalfunctionError err) {
         } catch (Exception ex) {
         }
     }
