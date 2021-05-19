@@ -6912,7 +6912,7 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat df = new DecimalFormat("##00");
         df.setRoundingIncrement(1);
         String actual = df.format(1235.5);
-        assertEquals("Test", "1236", actual);
+        assertEquals("Should round to integer", "1236", actual);
     }
 
     @Test
