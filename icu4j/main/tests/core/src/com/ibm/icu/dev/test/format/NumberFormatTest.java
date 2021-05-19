@@ -6908,6 +6908,14 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test20425_IntegerIncrement() {
+        DecimalFormat df = new DecimalFormat("##00");
+        df.setRoundingIncrement(1);
+        String actual = df.format(1235.5);
+        assertEquals("Test", "1236", actual);
+    }
+
+    @Test
     public void Test21232_ParseTimeout() throws ParseException {
         DecimalFormat df = new DecimalFormat();
         StringBuilder input = new StringBuilder();
