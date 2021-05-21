@@ -1306,7 +1306,7 @@ void PluralRulesTest::testParseErrors() {
             "A: n is 13",          // Uppercase keywords not allowed.
             "a: n ! = 3",          // spaces in != operator
             "a: n = not 3",        // '=' not exact equivalent of 'is'
-            "a: n ! in 3..4"       // '!' not exact equivalent of 'not'
+            "a: n ! in 3..4",      // '!' not exact equivalent of 'not'
             "a: n % 37 ! in 3..4"
 
             };
