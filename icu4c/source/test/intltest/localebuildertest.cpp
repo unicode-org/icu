@@ -425,7 +425,7 @@ void LocaleBuilderTest::TestSetLanguageIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
@@ -520,7 +520,7 @@ void LocaleBuilderTest::TestSetScriptIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
@@ -619,7 +619,7 @@ void LocaleBuilderTest::TestSetRegionIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
@@ -763,7 +763,7 @@ void LocaleBuilderTest::TestSetVariantIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
