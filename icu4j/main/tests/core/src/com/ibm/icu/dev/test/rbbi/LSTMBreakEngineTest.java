@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.Iterator;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,52 +64,54 @@ public class LSTMBreakEngineTest extends TestFmwk {
             errln("Could not open test data file " + filename);
             return;
         }
-        Stream<String> lines = (new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))).lines();
-        Iterator<String> iterator = lines.iterator();
+        BufferedReader br = (new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8)));
         int caseNum = 0;
         String expected = "";
         String actual = "";
         LSTMBreakEngine engine = null;
-        while (iterator.hasNext()) {
-            String line = iterator.next();
-            String fields[] = line.split("\t");
-            if (fields[0].equals("Model:")) {
-                engine = createEngineFromTestData(fields[1], script);
-            } else if (fields[0].equals("Input:")) {
-                caseNum++;
-                int length = fields[1].length();
-                CharacterIterator input = new StringCharacterIterator(fields[1]);
-                DictionaryBreakEngine.DequeI foundBreaks = new DictionaryBreakEngine.DequeI();
-                int ret = engine.findBreaks(input, 0, length, foundBreaks);
-                StringBuilder sb = new StringBuilder();
-                sb.append('{');
-                for (int i = 0; i < foundBreaks.size(); i++) {
-                    sb.append(foundBreaks.elementAt(i)).append(", ");
-                }
-                sb.append(length).append('}');
-                actual =  sb.toString();
-            } else if (fields[0].equals("Output:")) {
-                StringBuilder sb = new StringBuilder();
-                int sep;
-                int start = 0;
-                int curr = 0;
-                sb.append('{');
-                while ((sep = fields[1].indexOf('|', start)) >= 0) {
-                    int len = sep - start;
-                    if (len > 0) {
-                        if (curr > 0) {
-                            sb.append(", ");
-                        }
-                        curr += len;
-                        sb.append(curr);
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                String fields[] = line.split("\t");
+                if (fields[0].equals("Model:")) {
+                    engine = createEngineFromTestData(fields[1], script);
+                } else if (fields[0].equals("Input:")) {
+                    caseNum++;
+                    int length = fields[1].length();
+                    CharacterIterator input = new StringCharacterIterator(fields[1]);
+                    DictionaryBreakEngine.DequeI foundBreaks = new DictionaryBreakEngine.DequeI();
+                    int ret = engine.findBreaks(input, 0, length, foundBreaks);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append('{');
+                    for (int i = 0; i < foundBreaks.size(); i++) {
+                        sb.append(foundBreaks.elementAt(i)).append(", ");
                     }
-                    start = sep + 1;
+                    sb.append(length).append('}');
+                    actual =  sb.toString();
+                } else if (fields[0].equals("Output:")) {
+                    StringBuilder sb = new StringBuilder();
+                    int sep;
+                    int start = 0;
+                    int curr = 0;
+                    sb.append('{');
+                    while ((sep = fields[1].indexOf('|', start)) >= 0) {
+                        int len = sep - start;
+                        if (len > 0) {
+                            if (curr > 0) {
+                                sb.append(", ");
+                            }
+                            curr += len;
+                            sb.append(curr);
+                        }
+                        start = sep + 1;
+                    }
+                    sb.append('}');
+                    expected =  sb.toString();
+                    assertEquals(line + " Test Case#" + caseNum , expected, actual);
                 }
-                sb.append('}');
-                expected =  sb.toString();
-
-                assertEquals(line + " Test Case#" + caseNum , expected, actual);
             }
+        } catch (IOException e) {
+            errln("Exception while reading lines of test data file " + filename + e.toString());
         }
     }
 }

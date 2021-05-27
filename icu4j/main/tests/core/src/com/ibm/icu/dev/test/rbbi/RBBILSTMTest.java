@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.Iterator;
-import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,63 +54,65 @@ public class RBBILSTMTest extends TestFmwk {
             errln("Could not open test data file " + filename);
             return;
         }
-        Stream<String> lines = (new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))).lines();
-        Iterator<String> iterator = lines.iterator();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         int caseNum = 0;
         String expected = "";
         String actual = "";
         LSTMBreakEngine engine = null;
-        while (iterator.hasNext()) {
-            String line = iterator.next();
-            String fields[] = line.split("\t");
-            if (fields[0].equals("Model:")) {
-                String actualModelName = LSTMBreakEngine.createData(script).fName;
-                if (!actualModelName.equals(fields[1])) {
-                    errln("The name of the built in model " + actualModelName +
-                        " does not match the model (" + fields[1] + ") expected for this test");
-                    return;
-                }
-            } else if (fields[0].equals("Input:")) {
-                caseNum++;
-                int length = fields[1].length();
-                String input = "prefix " + fields[1] + " suffix";
-                bi.setText(input);
-                System.out.println("Input = " + input);
-                StringBuilder sb = new StringBuilder();
-                sb.append('{');
-                for (int bp = bi.first(); bp != BreakIterator.DONE; bp = bi.next()) {
-                    sb.append(bp);
-                    if (bp != input.length()) {
-                        sb.append(", ");
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                String fields[] = line.split("\t");
+                if (fields[0].equals("Model:")) {
+                    String actualModelName = LSTMBreakEngine.createData(script).fName;
+                    if (!actualModelName.equals(fields[1])) {
+                        errln("The name of the built in model " + actualModelName +
+                            " does not match the model (" + fields[1] + ") expected for this test");
+                        return;
                     }
-                }
-                sb.append('}');
-                actual =  sb.toString();
-            } else if (fields[0].equals("Output:")) {
-                StringBuilder sb = new StringBuilder();
-                int sep;
-                int start = 0;
-                int curr = 0;
-                sb.append("{0, ");
-                String input = "prefix| |" + fields[1] + "| |suffix";
-                while ((sep = input.indexOf('|', start)) >= 0) {
-                    int len = sep - start;
-                    if (len > 0) {
-                        if (curr > 0) {
+                } else if (fields[0].equals("Input:")) {
+                    caseNum++;
+                    int length = fields[1].length();
+                    String input = "prefix " + fields[1] + " suffix";
+                    bi.setText(input);
+                    System.out.println("Input = " + input);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append('{');
+                    for (int bp = bi.first(); bp != BreakIterator.DONE; bp = bi.next()) {
+                        sb.append(bp);
+                        if (bp != input.length()) {
                             sb.append(", ");
                         }
-                        curr += len;
-                        sb.append(curr);
                     }
-                    start = sep + 1;
+                    sb.append('}');
+                    actual =  sb.toString();
+                } else if (fields[0].equals("Output:")) {
+                    StringBuilder sb = new StringBuilder();
+                    int sep;
+                    int start = 0;
+                    int curr = 0;
+                    sb.append("{0, ");
+                    String input = "prefix| |" + fields[1] + "| |suffix";
+                    while ((sep = input.indexOf('|', start)) >= 0) {
+                        int len = sep - start;
+                        if (len > 0) {
+                            if (curr > 0) {
+                                sb.append(", ");
+                            }
+                            curr += len;
+                            sb.append(curr);
+                        }
+                        start = sep + 1;
+                    }
+                    sb.append(", ").append(curr + input.length() - start);
+                    sb.append('}');
+                    expected =  sb.toString();
+                    assertEquals(input + " Test Case#" + caseNum , expected, actual);
+                    actual = "";
                 }
-                sb.append(", ").append(curr + input.length() - start);
-                sb.append('}');
-                expected =  sb.toString();
-
-                assertEquals(input + " Test Case#" + caseNum , expected, actual);
-                actual = "";
             }
+        } catch (IOException e) {
+           errln("Exception while reading lines of test data file " + filename + e.toString());
         }
     }
 }
