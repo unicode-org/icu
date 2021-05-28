@@ -76,6 +76,7 @@ ipch
 pkgdata.inc
 pkgdataMakefile
 rules.mk
+.DS_Store
 
 !icu4c/source/samples/csdet/Makefile
 
