@@ -100,7 +100,7 @@
 "(?<!a(?!...z))qq"               "aqqz"
 
 # More nested lookaround: match any two chars preceded and followed by an upper case letter.
-# With gratuitious nesting of look-arounds and capture from the look-arounds.
+# With gratuitous nesting of look-arounds and capture from the look-arounds.
 
 "(?=(?<=(\p{Lu})(?=..(\p{Lu})))).."     "<1>A</1><0>jk</0><2>B</2>"
 "(?=(?<=(\p{Lu})(?=..(\p{Lu})))).."     "ajkB"

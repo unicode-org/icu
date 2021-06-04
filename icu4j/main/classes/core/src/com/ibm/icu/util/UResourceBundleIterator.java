@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  * ICUResourceBundleIterator iterator = resB.getIterator();
  * ICUResourceBundle temp;
  * while (iterator.hasNext()) {
- *    temp = iterartor.next();  
+ *    temp = iterator.next();  
  *    int type = temp.getType();
  *    switch(type){
  *      case UResourceBundle.STRING:

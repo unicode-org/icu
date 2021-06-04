@@ -334,7 +334,7 @@ public class CollationPerformanceTest {
         //int opt2 = 0;
         
         for(;;) {   //not really a loop, just allows "break" to work, to simplify 
-                    //inadvertantly running more than one test through here
+                    //inadvertently running more than one test through here
             if(opt_strcmp) {
                 int r = 0;
                 startTime = System.currentTimeMillis();

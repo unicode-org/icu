@@ -1431,7 +1431,7 @@ void RBBITableBuilder::exportTable(void *where) {
 void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     // The safe table creation has three steps:
 
-    // 1. Identifiy pairs of character classes that are "safe." Safe means that boundaries
+    // 1. Identify pairs of character classes that are "safe." Safe means that boundaries
     // following the pair do not depend on context or state before the pair. To test
     // whether a pair is safe, run it through the main forward state table, starting
     // from each state. If the the final state is the same, no matter what the starting state,

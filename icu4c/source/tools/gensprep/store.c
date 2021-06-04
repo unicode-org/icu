@@ -459,7 +459,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
     mappingDataCapacity += adjustedLen;
 
     if(U_FAILURE(*status)){
-        fprintf(stderr, "Failed to put entries into the hastable. Error: %s\n", u_errorName(*status));
+        fprintf(stderr, "Failed to put entries into the hash table. Error: %s\n", u_errorName(*status));
         exit(*status);
     }
 }

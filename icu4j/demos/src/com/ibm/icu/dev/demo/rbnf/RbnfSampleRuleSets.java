@@ -712,7 +712,7 @@ public class RbnfSampleRuleSets {
      * that are harder to alter than the traditional numerals (one could
      * fairly easily change a one to
      * a three just by adding two strokes, for example).  This is also done in
-     * the other countries using Chinese idographs, but different ideographs
+     * the other countries using Chinese ideographs, but different ideographs
      * are used in those places.
      */
     public static final String japanese =
@@ -1810,7 +1810,7 @@ public class RbnfSampleRuleSets {
             + "that are harder to alter than the traditional numerals (one could "
             + "fairly easily change a one to "
             + "a three just by adding two strokes, for example).  This is also done in "
-            + "the other countries using Chinese idographs, but different ideographs "
+            + "the other countries using Chinese ideographs, but different ideographs "
             + "are used in those places.",
 
             "Again in Greek we have to supply the words "

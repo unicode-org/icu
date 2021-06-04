@@ -152,7 +152,7 @@ import com.ibm.icu.util.UResourceBundle;
  * <P>
  * DateIntervalInfo are not expected to be subclassed.
  * Data for a calendar is loaded out of resource bundles.
- * Through ICU 4.4, date interval patterns are only supported in the Gregoria
+ * Through ICU 4.4, date interval patterns are only supported in the Gregorian
  * calendar; non-Gregorian calendars are supported from ICU 4.4.1.
  *
  * @stable ICU 4.0

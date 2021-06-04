@@ -689,7 +689,7 @@ utext_close(UText *ut) {
     }
 
     // Zero out function table of the closed UText.  This is a defensive move,
-    //   inteded to cause applications that inadvertantly use a closed
+    //   intended to cause applications that inadvertently use a closed
     //   utext to crash with null pointer errors.
     ut->pFuncs        = NULL;
 
@@ -2394,9 +2394,9 @@ ucstrTextClose(UText *ut) {
 static int64_t U_CALLCONV
 ucstrTextLength(UText *ut) {
     if (ut->a < 0) {
-        // null terminated, we don't yet know the length.  Scan for it.
+        // null terminated, we don't yet know the length. Scan for it.
         //    Access is not convenient for doing this
-        //    because the current interation postion can't be changed.
+        //    because the current iteration position can't be changed.
         const UChar  *str = (const UChar *)ut->context;
         for (;;) {
             if (str[ut->chunkNativeLimit] == 0) {

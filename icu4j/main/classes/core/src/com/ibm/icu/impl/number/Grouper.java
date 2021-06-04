@@ -104,7 +104,7 @@ public class Grouper {
     private final short grouping2;
 
     /**
-     * The minimum gropuing size, with the following special values:
+     * The minimum grouping size, with the following special values:
      * <ul>
      * <li>-2 = needs locale data
      * <li>-3 = no less than 2

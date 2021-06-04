@@ -589,7 +589,7 @@ UChar UCharFile::get() {
                 break;
             }
             
-            // Figure out the lenght of the char and read the rest of the bytes
+            // Figure out the length of the char and read the rest of the bytes
             //   into a temp array.
             int nBytes;
             if (ch >= 0xF0) {nBytes=4;}

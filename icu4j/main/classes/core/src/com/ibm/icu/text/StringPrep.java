@@ -221,7 +221,7 @@ public final class StringPrep {
     private static final int INDEX_TOP                        = 16;                          /* changing this requires a new formatVersion */
    
    
-    // CharTrie implmentation for reading the trie data
+    // CharTrie implementation for reading the trie data
     private CharTrie sprepTrie;
     // Indexes read from the data file
     private int[] indexes;

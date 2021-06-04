@@ -182,7 +182,7 @@ public final class IDNA2003 {
         int poLen = processOut.length();
         
         if(poLen==0){
-            throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+            throw new StringPrepParseException("Found zero length label after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
         }
         StringBuffer dest = new StringBuffer();
         
@@ -410,7 +410,7 @@ public final class IDNA2003 {
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
             String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
             if(label.length()==0 && sepIndex!=srcArr.length ){
-                throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
+                throw new StringPrepParseException("Found zero length label after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
             }
             UCharacterIterator iter = UCharacterIterator.getInstance(label);
             result.append(convertToUnicode(iter,options));

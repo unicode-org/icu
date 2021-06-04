@@ -157,7 +157,7 @@ class TransliteratorIDParser;
  * transliterator <b>B</b> decrements character values, then <b>A</b>
  * is an inverse of <b>B</b> and vice versa.  If we compose <b>A</b>
  * with <b>B</b> in a compound transliterator, the result is the
- * indentity transliterator, that is, a transliterator that does not
+ * identity transliterator, that is, a transliterator that does not
  * change its input text.
  *
  * The <code>Transliterator</code> method <code>getInverse()</code>

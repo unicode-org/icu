@@ -208,10 +208,10 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
         goto CleanPartialInitialization;
     }
 
-    // i should initialy be the number of code units at the 
+    // i should initially be the number of code units at the 
     // start of the string
     i = U16_LENGTH(source.char32At(0));
-    //int32_t i = 1;
+    // int32_t i = 1;
     // find the segments
     // This code iterates through the source string and 
     // extracts segments that end up on a codepoint that

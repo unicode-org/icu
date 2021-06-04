@@ -1558,7 +1558,7 @@ void Calendar::computeFields(UErrorCode &ec)
     // fields computed by handleComputeFields().
     computeWeekFields(ec);
 
-    // Compute time-related fields.  These are indepent of the date and
+    // Compute time-related fields.  These are independent of the date and
     // of the subclass algorithm.  They depend only on the local zone
     // wall milliseconds in day.
     int32_t millisInDay =  (int32_t) (localMillis - (days * kOneDay));

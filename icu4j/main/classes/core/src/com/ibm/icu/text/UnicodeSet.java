@@ -4539,7 +4539,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Compares UnicodeSets, where shorter come first, and otherwise lexigraphically
+     * Compares UnicodeSets, where shorter come first, and otherwise lexicographically
      * (according to the comparison of the first characters that differ).
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      * @stable ICU 4.4

@@ -2367,7 +2367,7 @@ public class SimpleDateFormat extends DateFormat {
     private static final String NUMERIC_FORMAT_CHARS = "ADdFgHhKkmrSsuWwYy";
 
     /**
-     * Format characters that indicate numeric fields when pattern lengh
+     * Format characters that indicate numeric fields when pattern length
      * is up to 2.
      */
     private static final String NUMERIC_FORMAT_CHARS2 = "ceLMQq";

@@ -111,7 +111,7 @@ class CharsetSCSU extends CharsetICU{
   //  };
 
     private final static class SCSUData {
-        /* dynamic window offsets, intitialize to default values from initialDynamicOffsets */
+        /* dynamic window offsets, initialize to default values from initialDynamicOffsets */
         int toUDynamicOffsets[] = new int[8] ;
         int fromUDynamicOffsets[] = new int[8] ;
 
