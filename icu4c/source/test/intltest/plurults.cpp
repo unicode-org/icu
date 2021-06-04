@@ -722,7 +722,7 @@ PluralRulesTest::testGetAllKeywordValues() {
                 ok = FALSE;
             }
 
-            // We'll cheat a bit here.  The samples happend to be in order and so are our
+            // We'll cheat a bit here.  The samples happened to be in order and so are our
             // expected values, so we'll just test in order until a failure.  If the
             // implementation changes to return samples in an arbitrary order, this test
             // must change.  There's no actual restriction on the order of the samples.

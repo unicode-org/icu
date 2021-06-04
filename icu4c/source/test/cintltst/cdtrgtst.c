@@ -351,7 +351,7 @@ void Test4061287()
     if(U_FAILURE(status))
         ok = TRUE;
     if(ok!=TRUE) 
-        log_err("Fail: Lenient not working: does lenient parsing in spite of setting Leninent as FALSE ");
+        log_err("Fail: Lenient not working: does lenient parsing in spite of setting Lenient as FALSE ");
 
     udat_close(df);
     

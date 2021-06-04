@@ -376,7 +376,7 @@ public final class ConvertIcuDataTask extends Task {
 
     private static ImmutableSet<String> parseLocaleIds(String localeIds) {
         // Need to filter out '//' style end-of-line comments first (replace with \n to avoid
-        // inadvertantly joining two elements.
+        // inadvertently joining two elements.
         localeIds = localeIds.replaceAll("//[^\n]*\n", "\n");
         return ImmutableSet.copyOf(LIST_SPLITTER.splitToList(localeIds));
     }

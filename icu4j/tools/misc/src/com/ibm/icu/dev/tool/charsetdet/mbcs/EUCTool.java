@@ -45,7 +45,7 @@ public class EUCTool {
     int        fileSize;
 
     boolean    option_d = false;    // data option.  Produce exportable data
-    boolean    option_v = true;     // verbose informaional output.
+    boolean    option_v = true;     // verbose informational output.
 
 
 

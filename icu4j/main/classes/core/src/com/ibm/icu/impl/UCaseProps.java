@@ -400,7 +400,7 @@ public final class UCaseProps {
         if(max==0 || unfold[unfoldOffset]==0) {
             return 0; /* equal to length of both strings */
         } else {
-            return -max; /* return lengh difference */
+            return -max; /* return length difference */
         }
     }
 

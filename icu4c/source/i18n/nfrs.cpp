@@ -630,7 +630,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     // value, then the first one (the one we found above) is used if
     // the numerator of the fraction is 1 and the second one is used if
     // the numerator of the fraction is anything else (this lets us
-    // do things like "one third"/"two thirds" without haveing to define
+    // do things like "one third"/"two thirds" without having to define
     // a whole bunch of extra rule sets)
     if ((unsigned)(winner + 1) < rules.size() &&
         rules[winner + 1]->getBaseValue() == rules[winner]->getBaseValue()) {

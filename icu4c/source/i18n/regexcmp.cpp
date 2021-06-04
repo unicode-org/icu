@@ -748,7 +748,7 @@ UBool RegexCompile::doParseActions(int32_t action)
     case doConditionalExpr:
         // Conditionals such as (?(1)a:b)
     case doPerlInline:
-        // Perl inline-condtionals.  (?{perl code}a|b) We're not perl, no way to do them.
+        // Perl inline-conditionals.  (?{perl code}a|b) We're not perl, no way to do them.
         error(U_REGEX_UNIMPLEMENTED);
         break;
 
@@ -2579,7 +2579,7 @@ UBool RegexCompile::compileInlineInterval() {
 //             The pattern could match a string beginning with a German sharp-s
 //
 //           To the ordinary case closure for a character c, we add all other
-//           characters cx where the case closure of cx incudes a string form that begins
+//           characters cx where the case closure of cx includes a string form that begins
 //           with the original character c.
 //
 //           This function could be made smarter. The full pattern string is available
@@ -2919,7 +2919,7 @@ void   RegexCompile::matchStartType() {
             break;
 
 
-        case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
+        case URX_BACKSLASH_X:   // Grapheme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
         case URX_DOTANY:
         case URX_DOTANY_UNIX:
@@ -3286,7 +3286,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_BACKSLASH_R:
         case URX_BACKSLASH_V:
         case URX_ONECHAR_I:
-        case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
+        case URX_BACKSLASH_X:   // Grapheme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
         case URX_DOTANY:
         case URX_DOTANY_UNIX:
@@ -3406,7 +3406,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
                     loc++;
                     op = (int32_t)fRXPat->fCompiledPat->elementAti(loc);
                     if (URX_TYPE(op) == URX_LA_START) {
-                        // The boilerplate for look-ahead includes two LA_END insturctions,
+                        // The boilerplate for look-ahead includes two LA_END instructions,
                         //    Depth will be decremented by each one when it is seen.
                         depth += 2;
                     }
@@ -3546,7 +3546,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             //   Call the max length unbounded, and stop further checking.
         case URX_BACKREF:         // BackRef.  Must assume that it might be a zero length match
         case URX_BACKREF_I:
-        case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
+        case URX_BACKSLASH_X:   // Grapheme Cluster.  Minimum is 1, max unbounded.
             currentLen = INT32_MAX;
             break;
 

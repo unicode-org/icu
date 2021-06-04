@@ -139,7 +139,7 @@ static const char* const LEGACY[] = {
  Updated on 2018-09-12 from
  https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry .
 
- The table lists redundant tags with preferred value in the IANA languate tag registry.
+ The table lists redundant tags with preferred value in the IANA language tag registry.
  It's generated with the following command:
 
  curl  https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry |\

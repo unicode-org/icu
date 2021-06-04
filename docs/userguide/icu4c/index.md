@@ -420,7 +420,7 @@ Try to follow the build steps from the [UNIX](#how-to-build-and-install-on-unix)
 3.  Modify `<ICU>/source/configure.in` to properly set your **platform** C Macro define.
 4.  Run [autoconf](http://www.gnu.org/software/autoconf/) in `<ICU>/source/` without any options. The autoconf tool is standard on most Linux systems.
 5.  If you have any optimization options that you want to normally use, you can modify `<ICU>/source/runConfigureICU` to specify those options for your platform.
-6.  Build and test ICU on your platform. It is very important that you run the tests. If you don't run the tests, there is no guarentee that you have properly ported ICU.
+6.  Build and test ICU on your platform. It is very important that you run the tests. If you don't run the tests, there is no guarantee that you have properly ported ICU.
 
 ### Platform Dependent Implementations
 

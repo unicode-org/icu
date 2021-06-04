@@ -12,7 +12,7 @@ package com.ibm.icu.text;
 import java.util.Arrays;
 
 /**
- * CharsetRecognizer implemenation for Asian  - double or multi-byte - charsets.
+ * CharsetRecognizer implementation for Asian  - double or multi-byte - charsets.
  *                   Match is determined mostly by the input data adhering to the
  *                   encoding scheme for the charset, and, optionally,
  *                   frequency-of-occurence of characters.

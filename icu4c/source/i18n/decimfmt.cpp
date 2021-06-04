@@ -137,7 +137,7 @@ DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErro
     if (U_FAILURE(status)) { return *this; }
 
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         return *this;
     }
@@ -271,7 +271,7 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
     if (U_FAILURE(status)) { return -1; }
     
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         return -1;
     }
@@ -534,7 +534,7 @@ UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, Fie
         return appendTo; // don't overwrite status if it's already a failure.
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         appendTo.setToBogus();
         return appendTo;
@@ -558,7 +558,7 @@ DecimalFormat::format(double number, UnicodeString& appendTo, FieldPositionItera
         return appendTo; // don't overwrite status if it's already a failure.
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         appendTo.setToBogus();
         return appendTo;
@@ -614,7 +614,7 @@ UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, Fi
         return appendTo; // don't overwrite status if it's already a failure.
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         appendTo.setToBogus();
         return appendTo;
@@ -638,7 +638,7 @@ DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPositionIter
         return appendTo; // don't overwrite status if it's already a failure.
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         appendTo.setToBogus();
         return appendTo;
@@ -662,7 +662,7 @@ DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPosition
         return appendTo; // don't overwrite status if it's already a failure.
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         appendTo.setToBogus();
         return appendTo;
@@ -682,7 +682,7 @@ UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeStrin
         return appendTo; // don't overwrite status if it's already a failure.
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         appendTo.setToBogus();
         return appendTo;
@@ -703,7 +703,7 @@ DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, Fi
         return appendTo; // don't overwrite status if it's already a failure.
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         appendTo.setToBogus();
         return appendTo;
@@ -1304,7 +1304,7 @@ void DecimalFormat::setFormatFailIfMoreThanMaxDigits(UBool value) {
 
 UnicodeString& DecimalFormat::toPattern(UnicodeString& result) const {
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         result.setToBogus();
         return result;
     }
@@ -1333,7 +1333,7 @@ UnicodeString& DecimalFormat::toPattern(UnicodeString& result) const {
 
 UnicodeString& DecimalFormat::toLocalizedPattern(UnicodeString& result) const {
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         result.setToBogus();
         return result;
     }
@@ -1352,7 +1352,7 @@ void DecimalFormat::applyPattern(const UnicodeString& pattern, UErrorCode& statu
     // don't overwrite status if it's already a failure.
     if (U_FAILURE(status)) { return; }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1370,7 +1370,7 @@ void DecimalFormat::applyLocalizedPattern(const UnicodeString& localizedPattern,
     // don't overwrite status if it's already a failure.
     if (U_FAILURE(status)) { return; }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1509,7 +1509,7 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
     // don't overwrite ec if it's already a failure.
     if (U_FAILURE(ec)) { return; }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         ec = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1536,7 +1536,7 @@ void DecimalFormat::setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec) {
     // don't overwrite ec if it's already a failure.
     if (U_FAILURE(*ec)) { return; }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         *ec = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1561,7 +1561,7 @@ DecimalFormat::formatToDecimalQuantity(double number, DecimalQuantity& output, U
     // don't overwrite status if it's already a failure.
     if (U_FAILURE(status)) { return; }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1573,7 +1573,7 @@ void DecimalFormat::formatToDecimalQuantity(const Formattable& number, DecimalQu
     // don't overwrite status if it's already a failure.
     if (U_FAILURE(status)) { return; }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1587,7 +1587,7 @@ const number::LocalizedNumberFormatter* DecimalFormat::toNumberFormatter(UErrorC
     // We sometimes need to return nullptr here (see ICU-20380)
     if (U_FAILURE(status)) { return nullptr; }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
@@ -1600,7 +1600,7 @@ void DecimalFormat::touch(UErrorCode& status) {
         return;
     }
     if (fields == nullptr) {
-        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        // We only get here if an OOM error happened during construction, copy construction, assignment, or modification.
         // For regular construction, the caller should have checked the status variable for errors.
         // For copy construction, there is unfortunately nothing to report the error, so we need to guard against
         // this possible bad state here and set the status to an error.

@@ -21,7 +21,7 @@ U_NAMESPACE_BEGIN
 class CharsetMatch;
 
 /**
- *  class CharsetRecog_2022  part of the ICU charset detection imlementation.
+ *  class CharsetRecog_2022  part of the ICU charset detection implementation.
  *                           This is a superclass for the individual detectors for
  *                           each of the detectable members of the ISO 2022 family
  *                           of encodings.

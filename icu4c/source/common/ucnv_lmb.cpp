@@ -192,7 +192,7 @@ LMBCS, was to use up the spaces of the form
  LOTUS added a new group 0x14 to hold Unicode values not otherwise 
  represented in LMBCS: */
 #define ULMBCS_GRP_UNICODE    0x14   
-/* The two bytes appearing after a 0x14 are intrepreted as UFT-16 BE
+/* The two bytes appearing after a 0x14 are interpreted as UFT-16 BE
 (Big-Endian) characters. The exception comes when the UTF16 
 representation would have a zero as the second byte. In that case,
 'F6' is used in its place, and the bytes are swapped. (This prevents 

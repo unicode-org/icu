@@ -201,7 +201,7 @@ void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPo
 
 
 /*
- *   BreakCache implemetation
+ *   BreakCache implementation
  */
 
 RuleBasedBreakIterator::BreakCache::BreakCache(RuleBasedBreakIterator *bi, UErrorCode &status) :

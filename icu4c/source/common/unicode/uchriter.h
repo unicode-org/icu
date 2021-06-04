@@ -56,7 +56,7 @@ public:
    * The starting
    * position is specified by "position". If "position" is outside the valid
    * iteration range, the behavior of this object is undefined.
-   * @param textPtr The char16_t array to be iteratd over
+   * @param textPtr The char16_t array to be iterated over
    * @param length The length of the char16_t array
    * @param position The starting position of the iteration
    * @stable ICU 2.0

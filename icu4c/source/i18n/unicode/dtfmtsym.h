@@ -926,7 +926,7 @@ private:
      * Copy or alias an array in another object, as appropriate.
      *
      * @param dstArray    the copy destination array.
-     * @param dstCount    fill in with the lenth of 'dstArray'.
+     * @param dstCount    fill in with the length of 'dstArray'.
      * @param srcArray    the source array to be copied.
      * @param srcCount    the length of items to be copied from the 'srcArray'.
      */

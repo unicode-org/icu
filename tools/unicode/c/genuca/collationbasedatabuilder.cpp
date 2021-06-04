@@ -344,7 +344,7 @@ CollationBaseDataBuilder::addScriptStart(int32_t script, uint32_t p) {
     }
     if(script == USCRIPT_UNKNOWN) {
         // The last script start is for unassigned code points
-        // (with high implict primary weights).
+        // (with high implicit primary weights).
         // Add one more entry with the limit of this range,
         // which is the start of the trailing-weights range.
         U_ASSERT(scriptStartsLength < UPRV_LENGTHOF(scriptStarts));

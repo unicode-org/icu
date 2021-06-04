@@ -79,7 +79,7 @@ public final class TimeUnit {
       they are measured */
 
   // hack, initialization long array using expressions with 'L' at end doesn't
-  // compute entire expression using 'long'.  differs from initializtion of
+  // compute entire expression using 'long'.  differs from initialization of
   // a single constant
   static final long[] approxDurations = {
     36525L*24*60*60*10, 3045*24*60*60*10L, 7*24*60*60*1000L, 24*60*60*1000L,

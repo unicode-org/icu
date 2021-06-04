@@ -3959,7 +3959,7 @@ void TransliteratorTest::TestAnyX(void) {
  */
 void TransliteratorTest::TestAny(void) {
     UErrorCode status = U_ZERO_ERROR;
-    // Note: there is a lot of implict construction of UnicodeStrings from (char *) in
+    // Note: there is a lot of implicit construction of UnicodeStrings from (char *) in
     //       function call parameters going on in this test.
     UnicodeSet alphabetic("[:alphabetic:]", status);
     if (U_FAILURE(status)) {

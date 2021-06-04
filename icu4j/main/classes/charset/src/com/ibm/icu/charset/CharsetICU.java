@@ -243,7 +243,7 @@ public abstract class CharsetICU extends Charset{
 
     /**
      * Returns a charset object for the named charset.
-     * This method gurantee that ICU charset is returned when
+     * This method guarantees that ICU charset is returned when
      * available.  If the ICU charset provider does not support
      * the specified charset, then try other charset providers
      * including the standard Java charset provider.
