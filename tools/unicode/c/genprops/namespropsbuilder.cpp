@@ -466,7 +466,7 @@ NamesPropsBuilder::setAlgNamesRange(UChar32 start, UChar32 end,
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    int32_t paddingLength=paddingLength=rangeSize&3;
+    int32_t paddingLength=rangeSize&3;
     if(paddingLength) {
         paddingLength=4-paddingLength;
         rangeSize+=paddingLength;

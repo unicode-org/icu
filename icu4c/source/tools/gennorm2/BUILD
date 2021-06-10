@@ -35,4 +35,5 @@ cc_binary(
         "//icu4c/source/tools/toolutil:uoptions",
         "//icu4c/source/tools/toolutil:uparse",
     ],
+    linkopts = ["-pthread"],
 )

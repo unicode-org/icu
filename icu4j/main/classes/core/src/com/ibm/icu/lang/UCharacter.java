@@ -1242,6 +1242,33 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 66 */
         public static final int YEZIDI_ID = 308; /*[10E80]*/
 
+        // New blocks in Unicode 14.0
+
+        /** @stable ICU 70 */
+        public static final int ARABIC_EXTENDED_B_ID = 309; /*[0870]*/
+        /** @stable ICU 70 */
+        public static final int CYPRO_MINOAN_ID = 310; /*[12F90]*/
+        /** @stable ICU 70 */
+        public static final int ETHIOPIC_EXTENDED_B_ID = 311; /*[1E7E0]*/
+        /** @stable ICU 70 */
+        public static final int KANA_EXTENDED_B_ID = 312; /*[1AFF0]*/
+        /** @stable ICU 70 */
+        public static final int LATIN_EXTENDED_F_ID = 313; /*[10780]*/
+        /** @stable ICU 70 */
+        public static final int LATIN_EXTENDED_G_ID = 314; /*[1DF00]*/
+        /** @stable ICU 70 */
+        public static final int OLD_UYGHUR_ID = 315; /*[10F70]*/
+        /** @stable ICU 70 */
+        public static final int TANGSA_ID = 316; /*[16A70]*/
+        /** @stable ICU 70 */
+        public static final int TOTO_ID = 317; /*[1E290]*/
+        /** @stable ICU 70 */
+        public static final int UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A_ID = 318; /*[11AB0]*/
+        /** @stable ICU 70 */
+        public static final int VITHKUQI_ID = 319; /*[10570]*/
+        /** @stable ICU 70 */
+        public static final int ZNAMENNY_MUSICAL_NOTATION_ID = 320; /*[1CF00]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1249,7 +1276,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 309;
+        public static final int COUNT = 321;
 
         // blocks objects ---------------------------------------------------
 
@@ -2617,6 +2644,45 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 66 */
         public static final UnicodeBlock YEZIDI = new UnicodeBlock("YEZIDI", YEZIDI_ID); /*[10E80]*/
 
+        // New blocks in Unicode 14.0
+
+        /** @stable ICU 70 */
+        public static final UnicodeBlock ARABIC_EXTENDED_B =
+                new UnicodeBlock("ARABIC_EXTENDED_B", ARABIC_EXTENDED_B_ID); /*[0870]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock CYPRO_MINOAN =
+                new UnicodeBlock("CYPRO_MINOAN", CYPRO_MINOAN_ID); /*[12F90]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock ETHIOPIC_EXTENDED_B =
+                new UnicodeBlock("ETHIOPIC_EXTENDED_B", ETHIOPIC_EXTENDED_B_ID); /*[1E7E0]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock KANA_EXTENDED_B =
+                new UnicodeBlock("KANA_EXTENDED_B", KANA_EXTENDED_B_ID); /*[1AFF0]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock LATIN_EXTENDED_F =
+                new UnicodeBlock("LATIN_EXTENDED_F", LATIN_EXTENDED_F_ID); /*[10780]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock LATIN_EXTENDED_G =
+                new UnicodeBlock("LATIN_EXTENDED_G", LATIN_EXTENDED_G_ID); /*[1DF00]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock OLD_UYGHUR =
+                new UnicodeBlock("OLD_UYGHUR", OLD_UYGHUR_ID); /*[10F70]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock TANGSA = new UnicodeBlock("TANGSA", TANGSA_ID); /*[16A70]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock TOTO = new UnicodeBlock("TOTO", TOTO_ID); /*[1E290]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A =
+                new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A",
+                        UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A_ID); /*[11AB0]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock VITHKUQI =
+                new UnicodeBlock("VITHKUQI", VITHKUQI_ID); /*[10570]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock ZNAMENNY_MUSICAL_NOTATION =
+                new UnicodeBlock("ZNAMENNY_MUSICAL_NOTATION",
+                        ZNAMENNY_MUSICAL_NOTATION_ID); /*[1CF00]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -3250,6 +3316,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 62 */
         public static final int HANIFI_ROHINGYA_PA = 101;
 
+        /** @stable ICU 70 */
+        public static final int THIN_YEH = 102;
+        /** @stable ICU 70 */
+        public static final int VERTICAL_TAIL = 103;
+
         /**
          * One more than the highest normal JoiningGroup value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
@@ -3257,7 +3328,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 102;
+        public static final int COUNT = 104;
     }
 
     /**

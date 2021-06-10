@@ -60,7 +60,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "13.0"
+#define U_UNICODE_VERSION "14.0"
 
 /**
  * \file
@@ -1807,6 +1807,33 @@ enum UBlockCode {
     /** @stable ICU 66 */
     UBLOCK_YEZIDI = 308, /*[10E80]*/
 
+    // New blocks in Unicode 14.0
+
+    /** @stable ICU 70 */
+    UBLOCK_ARABIC_EXTENDED_B = 309, /*[0870]*/
+    /** @stable ICU 70 */
+    UBLOCK_CYPRO_MINOAN = 310, /*[12F90]*/
+    /** @stable ICU 70 */
+    UBLOCK_ETHIOPIC_EXTENDED_B = 311, /*[1E7E0]*/
+    /** @stable ICU 70 */
+    UBLOCK_KANA_EXTENDED_B = 312, /*[1AFF0]*/
+    /** @stable ICU 70 */
+    UBLOCK_LATIN_EXTENDED_F = 313, /*[10780]*/
+    /** @stable ICU 70 */
+    UBLOCK_LATIN_EXTENDED_G = 314, /*[1DF00]*/
+    /** @stable ICU 70 */
+    UBLOCK_OLD_UYGHUR = 315, /*[10F70]*/
+    /** @stable ICU 70 */
+    UBLOCK_TANGSA = 316, /*[16A70]*/
+    /** @stable ICU 70 */
+    UBLOCK_TOTO = 317, /*[1E290]*/
+    /** @stable ICU 70 */
+    UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A = 318, /*[11AB0]*/
+    /** @stable ICU 70 */
+    UBLOCK_VITHKUQI = 319, /*[10570]*/
+    /** @stable ICU 70 */
+    UBLOCK_ZNAMENNY_MUSICAL_NOTATION = 320, /*[1CF00]*/
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UBlockCode value.
@@ -1814,7 +1841,7 @@ enum UBlockCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UBLOCK_COUNT = 309,
+    UBLOCK_COUNT = 321,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** @stable ICU 2.0 */
@@ -2105,6 +2132,9 @@ typedef enum UJoiningGroup {
 
     U_JG_HANIFI_ROHINGYA_KINNA_YA,  /**< @stable ICU 62 */
     U_JG_HANIFI_ROHINGYA_PA,  /**< @stable ICU 62 */
+
+    U_JG_THIN_YEH,  /**< @stable ICU 70 */
+    U_JG_VERTICAL_TAIL,  /**< @stable ICU 70 */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**

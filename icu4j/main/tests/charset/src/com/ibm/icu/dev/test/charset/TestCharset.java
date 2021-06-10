@@ -40,6 +40,7 @@ import com.ibm.icu.charset.CharsetProviderICU;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 
 @RunWith(JUnit4.class)
 public class TestCharset extends TestFmwk {
@@ -5824,11 +5825,21 @@ public class TestCharset extends TestFmwk {
 
     }
 
+    // Test that all code points which have the default ignorable Unicode property
+    // are ignored if they have no mapping.
+    // If there are any failures, the hard coded list (IS_DEFAULT_IGNORABLE_CODE_POINT)
+    // in CharsetCallback.java should be updated.
+    // Keep in sync with ICU4C intltest/convtest.cpp.
     @Test
     public void TestDefaultIgnorableCallback() {
         String cnv_name = "euc-jp-2007";
         String pattern_ignorable = "[:Default_Ignorable_Code_Point:]";
-        String pattern_not_ignorable = "[:^Default_Ignorable_Code_Point:]";
+        String pattern_not_ignorable =
+                "[[:^Default_Ignorable_Code_Point:]" +
+                // For test performance, skip large ranges that will likely remain unassigned
+                // for a long time, and private use code points.
+                "-[\\U00040000-\\U000DFFFF]-[:Co:]" +
+                "]";
         UnicodeSet set_ignorable = new UnicodeSet(pattern_ignorable);
         UnicodeSet set_not_ignorable = new UnicodeSet(pattern_not_ignorable);
         CharsetEncoder encoder =  CharsetICU.forNameICU(cnv_name).newEncoder();
@@ -5838,28 +5849,30 @@ public class TestCharset extends TestFmwk {
         encoder.onMalformedInput(CodingErrorAction.REPLACE);
 
         // test ignorable code points are ignored
-        int size = set_ignorable.size();
-        for (int i = 0; i < size; i++) {
+        UnicodeSetIterator iter = new UnicodeSetIterator(set_ignorable);
+        while (iter.next()) {
             encoder.reset();
+            int c = iter.codepoint;
             try {
-                if(encoder.encode(CharBuffer.wrap(Character.toChars(set_ignorable.charAt(i)))).limit() > 0) {
-                    errln("Callback should have ignore default ignorable: U+" + Integer.toHexString(set_ignorable.charAt(i)));
+                if(encoder.encode(CharBuffer.wrap(Character.toChars(c))).limit() > 0) {
+                    errln("Callback should have ignore default ignorable: U+" + Integer.toHexString(c));
                 }
             } catch (Exception ex) {
-                errln("Error received converting +" + Integer.toHexString(set_ignorable.charAt(i)));
+                errln("Error received converting +" + Integer.toHexString(c));
             }
         }
 
         // test non-ignorable code points are not ignored
-        size = set_not_ignorable.size();
-        for (int i = 0; i < size; i++) {
+        iter.reset(set_not_ignorable);
+        while (iter.next()) {
             encoder.reset();
+            int c = iter.codepoint;
             try {
-                if(encoder.encode(CharBuffer.wrap(Character.toChars(set_not_ignorable.charAt(i)))).limit() == 0) {
-                    errln("Callback should not have ignored: U+" + Integer.toHexString(set_not_ignorable.charAt(i)));
+                if(encoder.encode(CharBuffer.wrap(Character.toChars(c))).limit() == 0) {
+                    errln("Callback should not have ignored: U+" + Integer.toHexString(c));
                 }
             } catch (Exception ex) {
-                errln("Error received converting U+" + Integer.toHexString(set_not_ignorable.charAt(i)));
+                errln("Error received converting U+" + Integer.toHexString(c));
             }
         }
     }

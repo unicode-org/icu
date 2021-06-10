@@ -1030,13 +1030,16 @@ def CompactBlock(b, i):
         # minus once for writing it for the block,
         # minus writing the default value instead.
         savings = PrintedSize(pname, value) * (count - 1) - default_size
-        if savings > max_savings:
+        # For two values with the same savings, pick the one that compares lower,
+        # to make this deterministic (avoid flip-flopping).
+        if (savings > max_savings or
+            (savings == max_savings and value < max_value)):
           max_value = value
           max_count = count
           max_savings = savings
     # Do not compress uncompressible properties,
     # with an exception for many empty-string values in a block
-    # (NFCK_CF='' for tags and variation selectors).
+    # (NFKC_CF='' for tags and variation selectors).
     if (max_savings > 0 and
         ((pname not in _uncompressible_props) or
           (max_value == '' and max_count >= 12))):

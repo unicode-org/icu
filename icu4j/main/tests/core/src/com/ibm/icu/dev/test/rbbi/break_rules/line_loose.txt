@@ -6,7 +6,7 @@
 #  file:  line_loose.txt
 #
 # Reference Line Break rules for intltest rbbi/RBBIMonkeyTest.
-# Rules derived from Unicode Standard Annex #14 Revision 44 for Unicode 13.0
+# Rules derived from Unicode Standard Annex #14 for Unicode 14.0.
 #
 # Note: Rule syntax and the monkey test itself are still a work in progress.
 #       They are expected to change with review and the addition of support for rule tailoring.
@@ -197,9 +197,8 @@ LB26.1:      JL CM* (JL | JV | H2 | H3);
 LB26.2:      (JV | H2) CM* (JV | JT);
 LB26.3:      (JT | H3) CM* JT;
 
-LB27.1:      (JL | JV | JT | H2 | H3) CM* IN;
-LB27.2:      (JL | JV | JT | H2 | H3) CM* PO;
-LB27.3:      PR CM* (JL | JV | JT | H2 | H3);
+LB27.1:      (JL | JV | JT | H2 | H3) CM* PO;
+LB27.2:      PR CM* (JL | JV | JT | H2 | H3);
 
 # LB28 Do not break between Alphabetics.
 #      Unattached (leading) CM treated as AL.

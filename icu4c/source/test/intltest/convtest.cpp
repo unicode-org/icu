@@ -35,6 +35,7 @@
 #include "unicode/unistr.h"
 #include "unicode/parsepos.h"
 #include "unicode/uniset.h"
+#include "unicode/usetiter.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "unicode/utf16.h"
@@ -643,14 +644,21 @@ ConversionTest::TestGetUnicodeSet2() {
     delete [] s0;
 }
 
-// Test all codepoints which has the default ignorable Unicode property are ignored if they have no mapping
-// If there are any failures, the hard coded list (IS_DEFAULT_IGNORABLE_CODE_POINT) in ucnv_err.c should be updated
+// Test that all code points which have the default ignorable Unicode property
+// are ignored if they have no mapping.
+// If there are any failures, the hard coded list (IS_DEFAULT_IGNORABLE_CODE_POINT)
+// in ucnv_err.cpp should be updated.
 void
 ConversionTest::TestDefaultIgnorableCallback() {
     UErrorCode status = U_ZERO_ERROR;
     const char *cnv_name = "euc-jp-2007";
     const char *pattern_ignorable = "[:Default_Ignorable_Code_Point:]";
-    const char *pattern_not_ignorable = "[:^Default_Ignorable_Code_Point:]";
+    const char *pattern_not_ignorable =
+        "[[:^Default_Ignorable_Code_Point:]"
+        // For test performance, skip large ranges that will likely remain unassigned
+        // for a long time, and private use code points.
+        "-[\\U00040000-\\U000DFFFF]-[:Co:]"
+        "]";
 
     LocalPointer<UnicodeSet> set_ignorable(new UnicodeSet(pattern_ignorable, status));
     if (U_FAILURE(status)) {
@@ -678,12 +686,12 @@ ConversionTest::TestDefaultIgnorableCallback() {
     int32_t outputLength;
     
     // test default ignorables are ignored
-    int size = set_ignorable->size();
-    for (int i = 0; i < size; i++) {
+    UnicodeSetIterator iter(*set_ignorable);
+    while (iter.next()) {
         status = U_ZERO_ERROR;
         outputLength= 0;
 
-        input[0] = set_ignorable->charAt(i);
+        input[0] = iter.getCodepoint();
 
         outputLength = ucnv_fromUChars(cnv.getAlias(), output, 10, UnicodeString::fromUTF32(input, 1).getTerminatedBuffer(), -1, &status);
         if (U_FAILURE(status) || outputLength != 0) {
@@ -692,12 +700,12 @@ ConversionTest::TestDefaultIgnorableCallback() {
     }
 
     // test non-ignorables are not ignored
-    size = set_not_ignorable->size();
-    for (int i = 0; i < size; i++) {
+    iter.reset(*set_not_ignorable);
+    while (iter.next()) {
         status = U_ZERO_ERROR;
         outputLength= 0;
 
-        input[0] = set_not_ignorable->charAt(i);
+        input[0] = iter.getCodepoint();
 
         if (input[0] == 0) {
             continue;

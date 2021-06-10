@@ -1,9 +1,9 @@
 # © 2021 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
-# This Bazel build file defines a target representing the binary executable,
-# `genprops`, which is used for generating headers needing for bootstrapping
-# the ICU4C build process in a way that integrates core properties data.
+# This Bazel build file defines a target representing the binary executable
+# `genprops`, which is used for generating headers needed for bootstrapping
+# the ICU4C build process in a way that integrates core Unicode properties data.
 
 # Defining a binary executable (done in Bazel using `cc_binary`)
 # enables the use of the output file from executing the binary as a part of
@@ -18,7 +18,6 @@ package(
 cc_binary(
     name = "genprops",
     srcs = glob([
-        "*.c",
         "*.cpp",
         "*.h",   # cannot have hdrs section in cc_binary
     ]),
@@ -46,4 +45,5 @@ cc_binary(
         "//icu4c/source/tools/toolutil:toolutil",
         "//icu4c/source/tools/toolutil:denseranges",
     ],
+    linkopts = ["-pthread"],
 )

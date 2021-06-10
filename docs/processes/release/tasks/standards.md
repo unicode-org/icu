@@ -40,35 +40,45 @@ in the trunk.
 
 ### Update Unicode Data
 
-See the [Unicode Update page](../../unicode-update.md) and the instructions in
-[icu4c/source/data/unidata/changes.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/changes.txt)
-and nearby files, also check the change log for this and related files such as
-UnicodeData.txt.
+See the [Unicode Update page](../../unicode-update.md) for an overview, and the
+[change log for Unicode updates](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/changes.txt)
+for details.
 
 ### Update script code enums
+
+Starting with ICU 55, we do not add UScriptCode constants for new scripts any more
+until they are encoded in Unicode,
+or can be assumed to be encoded in the next Unicode version.
+
+Script enum constant names want to follow the Unicode script property value aliases,
+which are assigned only when the scripts are encoded.
+When we encode scripts early and guess wrong, then we have confusing enum constants
+and have sometimes added aliases.
+
+Normally, we add script codes during the ICU update for a Unicode beta,
+at the same time as we add new API constants for new Unicode blocks and
+for new values of other supported properties.
+
+Variant script codes like Latf and Aran that are not subject to separate encoding
+can be added at any time.
+(For example, Aran could be added as USCRIPT_ARABIC_NASTALIQ.)
+
+We add script codes used in CLDR or in the spoof checker.
+This includes combination/alias codes like Hanb and Jamo.
+See https://unicode.org/reports/tr35/#unicode_script_subtag_validity
+and look for "alias" on https://unicode.org/iso15924/iso15924-codes.html
+
+We add special Z* script codes like Zsye.
+
+For new script codes see https://www.unicode.org/iso15924/codechanges.html
+Check for recent changes with the code highlighted in the left column and
+"Add" in the right column.
 
 Update script code enums with new codes from ISO 15924, send a notice for them
 as public API (born `@stable`) to the icu-design list.
 
-Starting with ICU 55, add script code enum constants only after assignment of
-Unicode script property value aliases; otherwise the names of the constants may
-become confusing.
-
-Soon after a Unicode release, work to assign property value aliases for scripts
-that are known to be added in the next version, then update ICU.
-
-Constants for script codes like Latf and Aran that are not subject to separate
-encoding may be added at any time.
-
-See details in
-[icu4c/source/data/unidata/changes.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/changes.txt)
-and keep the list of script codes not yet in ICU up to date there.
-
-For new codes see <http://www.unicode.org/iso15924/codechanges.html> (check for
-recent changes with the code highlighted in the left column and "Add" in the
-right column) and <http://www.iana.org/assignments/language-subtag-registry>
-(Search for "Type: script" and look for recent "Added:" dates.) Discuss what to
-do if these two sources are out of sync.
+See details in the
+[change log for Unicode updates](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/changes.txt).
 
 ## CLDR
 

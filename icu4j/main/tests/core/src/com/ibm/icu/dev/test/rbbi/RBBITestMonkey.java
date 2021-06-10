@@ -1258,12 +1258,6 @@ public class RBBITestMonkey extends TestFmwk {
 
                 if ((fJL.contains(prevChar) || fJV.contains(prevChar) ||
                         fJT.contains(prevChar) || fH2.contains(prevChar) || fH3.contains(prevChar)) &&
-                        fIN.contains(thisChar)) {
-                    setAppliedRule(pos, "LB 27  Treat a Korean Syllable Block the same as ID.");
-                    continue;
-                }
-                if ((fJL.contains(prevChar) || fJV.contains(prevChar) ||
-                        fJT.contains(prevChar) || fH2.contains(prevChar) || fH3.contains(prevChar)) &&
                         fPO.contains(thisChar)) {
                     setAppliedRule(pos, "LB 27  Treat a Korean Syllable Block the same as ID.");
                     continue;

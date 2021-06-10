@@ -56,7 +56,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Expected Unicode version.
      */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance(13);
+    private final VersionInfo VERSION_ = VersionInfo.getInstance(14);
 
     // constructor ===================================================
 
@@ -200,7 +200,7 @@ public final class UCharacterTest extends TestFmwk
         }
 
         // TODO: propose public API for constants like uchar.h's U_GC_*_MASK
-        // (http://bugs.icu-project.org/trac/ticket/7461)
+        // (https://unicode-org.atlassian.net/browse/ICU-7461)
         int GC_Z_MASK =
             (1 << UCharacter.SPACE_SEPARATOR) |
             (1 << UCharacter.LINE_SEPARATOR) |
@@ -1575,7 +1575,7 @@ public final class UCharacterTest extends TestFmwk
             { 0x07C0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x0860, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x0870, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  // Unicode 10 changes U+0860..U+086F from R to AL.
-            { 0x08A0, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x08A0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  // Unicode 14 changes U+0870..U+089F from R to AL.
             { 0x0900, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
             { 0x20A0, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x20D0, UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR },  /* Unicode 6.3 changes the currency symbols block U+20A0..U+20CF to default to ET not L */
@@ -1940,7 +1940,6 @@ public final class UCharacterTest extends TestFmwk
             { 0x05ed, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07f2, UProperty.BIDI_CLASS, UCharacterDirection.DIR_NON_SPACING_MARK }, /* Nko, new in Unicode 5.0 */
             { 0x07fe, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT }, /* unassigned R */
-            { 0x089f, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xfb37, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xfb42, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x10806, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
@@ -1960,7 +1959,7 @@ public final class UCharacterTest extends TestFmwk
             { 0x155A, UProperty.BLOCK, UCharacter.UnicodeBlock.UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS.getID() },
             { 0x1717, UProperty.BLOCK, UCharacter.UnicodeBlock.TAGALOG.getID() },
             { 0x1900, UProperty.BLOCK, UCharacter.UnicodeBlock.LIMBU.getID() },
-            { 0x0870, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID()},
+            { 0x2FE0, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID()},
             { 0x3040, UProperty.BLOCK, UCharacter.UnicodeBlock.HIRAGANA.getID()},
             { 0x1D0FF, UProperty.BLOCK, UCharacter.UnicodeBlock.BYZANTINE_MUSICAL_SYMBOLS.getID()},
             { 0x50000, UProperty.BLOCK, UCharacter.UnicodeBlock.NO_BLOCK.getID() },

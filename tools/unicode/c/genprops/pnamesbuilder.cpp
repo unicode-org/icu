@@ -501,13 +501,13 @@ PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
 
     usrc_writeArray(f, "const int32_t PropNameData::indexes[%ld]={",
                     indexes, 32, PropNameData::IX_COUNT,
-                    "};\n\n");
+                    "", "};\n\n");
     usrc_writeArray(f, "const int32_t PropNameData::valueMaps[%ld]={\n",
                     valueMaps.getBuffer(), 32, valueMaps.size(),
-                    "\n};\n\n");
+                    "", "\n};\n\n");
     usrc_writeArray(f, "const uint8_t PropNameData::bytesTries[%ld]={\n",
                     bytesTries.data(), 8, bytesTries.length(),
-                    "\n};\n\n");
+                    "", "\n};\n\n");
     usrc_writeArrayOfMostlyInvChars(
         f, "const char PropNameData::nameGroups[%ld]={\n",
         nameGroups.data(), nameGroups.length(),

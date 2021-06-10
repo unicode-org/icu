@@ -10,7 +10,6 @@ package(
     default_visibility = ["//visibility:public"],
 )
 
-
 cc_library(
     name = "toolutil",
     includes = ["."],
@@ -93,7 +92,6 @@ cc_library(
     ],
     deps = [
         ":uparse",
-        "//icu4c/source/common:propname",
         "//icu4c/source/common:platform",
     ],
 )
@@ -109,3 +107,16 @@ cc_library(
     deps = ["//icu4c/source/common:platform"],
 )
 
+cc_library(
+    name = "collationinfo",
+    includes = ["."],
+    hdrs = ["collationinfo.h"],
+    srcs = ["collationinfo.cpp"],
+    local_defines = [
+        "U_TOOLUTIL_IMPLEMENTATION",
+    ],
+    deps = [
+        "//icu4c/source/common:platform",
+        "//icu4c/source/i18n:headers",
+    ],
+)
