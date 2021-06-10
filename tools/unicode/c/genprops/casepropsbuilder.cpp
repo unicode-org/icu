@@ -1195,10 +1195,12 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const UVersionInfo ucase_props_dataVersion={",
         dataInfo.dataVersion, 8, 4,
+        "",
         "};\n\n");
     usrc_writeArray(f,
         "static const int32_t ucase_props_indexes[UCASE_IX_TOP]={",
         indexes, 32, UCASE_IX_TOP,
+        "",
         "};\n\n");
     usrc_writeUTrie2Arrays(f,
         "static const uint16_t ucase_props_trieIndex[%ld]={\n", NULL,
@@ -1207,10 +1209,12 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const uint16_t ucase_props_exceptions[%ld]={\n",
         exceptions.getBuffer(), 16, exceptions.length(),
+        "",
         "\n};\n\n");
     usrc_writeArray(f,
         "static const uint16_t ucase_props_unfold[%ld]={\n",
         unfold.getBuffer(), 16, unfold.length(),
+        "",
         "\n};\n\n");
     fputs(
         "static const UCaseProps ucase_props_singleton={\n"
@@ -1223,7 +1227,7 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "  {\n",
         pTrie, "ucase_props_trieIndex", NULL,
         "  },\n");
-    usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
+    usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, "", " }\n");
     fputs("};\n\n"
           "#endif  // INCLUDED_FROM_UCASE_CPP\n", f);
     fclose(f);

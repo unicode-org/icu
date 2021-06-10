@@ -3235,21 +3235,15 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
         if ((fJL->contains(prevChar) || fJV->contains(prevChar) ||
             fJT->contains(prevChar) || fH2->contains(prevChar) || fH3->contains(prevChar)) &&
-            fIN->contains(thisChar)) {
-            setAppliedRule(pos, "LB 27 Treat a Korean Syllable Block the same as ID.");
-            continue;
-            }
-        if ((fJL->contains(prevChar) || fJV->contains(prevChar) ||
-            fJT->contains(prevChar) || fH2->contains(prevChar) || fH3->contains(prevChar)) &&
             fPO->contains(thisChar)) {
             setAppliedRule(pos, "LB 27 Treat a Korean Syllable Block the same as ID.");
             continue;
-            }
+        }
         if (fPR->contains(prevChar) && (fJL->contains(thisChar) || fJV->contains(thisChar) ||
             fJT->contains(thisChar) || fH2->contains(thisChar) || fH3->contains(thisChar))) {
             setAppliedRule(pos, "LB 27 Treat a Korean Syllable Block the same as ID.");
             continue;
-            }
+        }
 
 
 

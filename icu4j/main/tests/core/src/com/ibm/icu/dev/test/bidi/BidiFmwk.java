@@ -179,10 +179,12 @@ public class BidiFmwk extends TestFmwk {
         - & == RLM
         - A-F == Arabic Letters 0631-0636
         - G-V == Hebrew letters 05d7-05ea
-        - W-Z == Unassigned RTL 08d0-08d3
+        - W-Z == Unassigned RTL 05CC..05CF
+            originally 08D0..08D3
             Unicode 6.1 changes U+08A0..U+08FF from R to AL which works ok.
             Unicode 11 adds U+08D3 ARABIC SMALL LOW WAW which has bc=NSM
                 so we stop using Z in this test.
+            Unicode 14 assigns 08D0..08D2 to diacritics (bc=NSM) so we switch to 05CC..05CF.
         - 0-5 == western digits 0030-0035
         - 6-9 == Arabic-Indic digits 0666-0669
         - ` == Combining Grave Accent 0300 (NSM)
@@ -267,7 +269,7 @@ public class BidiFmwk extends TestFmwk {
             UCharToPseud2[uchar & 0x00ff] = c;
         }
         /* initialize Unassigned code points */
-        for (i = 32, uchar = 0x08D0; i < 36; i++, uchar++) {
+        for (i = 32, uchar = 0x05CC; i < 36; i++, uchar++) {
             c = columns[i];
             pseudoToUChar[c] = uchar;
             UCharToPseud2[uchar & 0x00ff] = c;
